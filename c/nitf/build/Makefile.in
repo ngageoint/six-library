@@ -121,7 +121,7 @@ PLUGINS = \
         JITCID.c \
         TEST_DES.c \
         ACFTA.c \
-        ACFTB.c \ 
+        ACFTB.c \
         AIMIDA.c \
         AIMIDB.c \
         BANDSA.c \
