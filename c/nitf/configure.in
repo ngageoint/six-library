@@ -1,0 +1,776 @@
+dnl Disable cache file creation.
+define([AC_CACHE_LOAD], )
+define([AC_CACHE_SAVE], )
+
+AC_INIT(configure.in)
+
+AC_CONFIG_AUX_DIR(build)
+
+
+# Location of makefiles directory.
+here=`pwd`
+build_dir="${here}/build/"
+
+###########################################################
+# Default variables                                       #
+##########################################################
+def_thread_cc_flags=""
+def_thread_defs="-D_REENTRANT"
+def_thread_layer="-lpthread"
+
+###########################################################
+# Compiler variables:                                     #
+###########################################################
+cc_defs=""
+cc_flags=""
+cc_includes=""
+cc_optz_flags=""
+cc_debug_flags=""
+cc_warn_flags=""
+cc_verb_flags=""
+
+# Threading processing cc stuff
+cc_thread_includes=""
+cc_thread_defs=""
+cc_thread_flags=""
+
+###########################################################
+# We give the compile pre-tool its own section            #
+###########################################################
+pretool=""
+pretool_defs=""
+pretool_flags=""
+
+###########################################################
+#  Archiver                                               #
+###########################################################
+ar_flags="-crs"
+AR="ar"
+
+###########################################################
+# Linker variables:                                       #
+###########################################################
+link_prelibs=""
+link_autolibs=""
+link_postlibs=""
+link_flags=""
+link_libpath=""
+
+# Threading processing lib stuff
+link_thread_libs=""
+link_thread_libpath=""
+
+enabled_64bit="false"
+
+# Do we want to create DSOs?
+make_dsos="false"
+
+# For different compilers
+lib_dir=""
+
+###########################################################
+# DLL variables                                           #
+###########################################################
+dll_flags=""
+
+# Get system type.
+AC_CANONICAL_SYSTEM
+
+# Get install program
+AC_PROG_INSTALL
+AC_C_BIGENDIAN
+
+# Set value of POSIX string; this may be modified, below,
+# based on the system type. This string is placed in Makefiles
+# on compliant systems to indicate POSIX mode.
+POSIX=".POSIX:"
+case "${target}" in
+   rs6000-ibm-*)
+      POSIX=""
+   ;;
+   powerpc-ibm-*)
+      POSIX=""
+   ;;
+esac
+
+
+######################################################################
+# Compiler and platform section:
+#---------------------------------
+# This section contains the meat of the code.  We try and define
+# everything up front, so that IF we enable code later on, we can simply
+# take the defaults if necessary.
+#
+# here are the things we know immediately:
+# def_cc_warn
+# def_cc_verb
+# def_cc_debug
+# def_cc_optz_flags
+#
+
+AC_PROG_CC
+
+######################################################################
+# Process '--enable-gnu' argument.
+######################################################################
+AC_ARG_ENABLE(gnu,
+              [  --enable-gnu			Use GNU compiler rather than native compiler.],
+              CC="gcc",
+              CC="cc")
+
+######################################################################
+# Process '--enable-shared' argument.
+######################################################################
+AC_ARG_ENABLE(shared,
+              [--enable-shared        Make shared DSOs for all libraries],
+              ok="yes",
+              ok="no")
+
+if test "${ok}" != "no"
+then
+    AC_MSG_RESULT(enabling DSOs...)
+    make_dsos="true"
+fi
+
+
+# Make an adjustment for system compiler on AIX systems, which
+# is named xlC.
+case "${target}" in
+   rs6000-ibm-*)
+      case "${CC}" in
+         cc)
+            CC="xlc"
+         ;;
+      esac
+   ;;
+   powerpc-ibm-*)
+      case "${CC}" in
+         cc)
+            CC="xlc"
+         ;;
+      esac
+   ;;
+esac
+
+case "${target}" in
+   x86_64-*-linux-*|i686-pc-*)
+      case "${CC}" in
+         cc)
+	    AC_MSG_RESULT(setting compiler to gcc...)
+            CC="gcc"
+         ;;
+      esac
+   ;;
+esac
+
+
+case "${CXX}" in
+     g++)
+        AC_MSG_RESULT(gnu compiler libdir)
+        lib_dir="gnu"
+     ;;
+esac
+
+
+case "${target}" in
+   mips-sgi-*)
+      case "${CC}" in
+         cc)
+	    AC_MSG_RESULT(selecting the mips compiler...)
+	    AC_MSG_RESULT(selecting the compiler option for the archiver...)
+
+	    sys_cc_debug_flags="-g"
+	    sys_cc_warn_flags="-fullwarn"
+	    sys_cc_verb_flags="-v"
+	    sys_cc_64_flags="-64"
+	    sys_cc_optz_med="-O1"
+	    sys_cc_optz_fast="-O2"
+	    sys_cc_optz_fastest="-O3"
+            dll_flags="${dll_flags} -shared"
+	    def_cc_optz_flags="${sys_cc_optz_med}"
+	    def_cc_thread_defs="-D_REENTRANT"
+	    def_link_thread_libs=""
+
+	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+	    cc_flags="-LANG:std -LANG:ansi-for-init-scope=ON -ptused"
+	    cc_optz_flags="${def_cc_optz_flags}"
+
+	    link_autolibs="-lm"
+	    
+            AR="${CC}"
+            ar_flags=" -ar -o" 
+         ;;
+         gcc)
+            AC_MSG_RESULT(selecting the gnu compiler...)
+	    AC_MSG_RESULT(selecting the compiler option for the archiver...)
+
+	    sys_cc_debug_flags="-g"
+	    sys_cc_warn_flags="-Wall"
+	    sys_cc_verb_flags="-v"
+	    sys_cc_64_flags=""
+	    sys_cc_optz_med="-O1"
+	    sys_cc_optz_fast="-O2"
+	    sys_cc_optz_fastest="-O3"
+
+	    def_cc_optz_flags="${sys_cc_optz_med}"
+	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+	    def_link_thread_libs="-lpthread"
+	    dll_flags="${dll_flags} -fPIC -shared"
+	    cc_defs=""
+	    cc_flags=""
+	    cc_optz_flags="${def_cc_optz_flags}"
+
+	    link_autolibs="-ldl"
+
+            ar_flags="-ru" 
+         ;;
+      esac
+   ;;
+
+   sparc-sun-*)
+      case "${CC}" in
+         cc)
+            AC_MSG_RESULT(selecting the forte compiler...)
+	    AC_MSG_RESULT(selecting the ar archiver...)
+
+	    sys_cc_debug_flags="-g"
+	    sys_cc_warn_flags=""
+	    sys_cc_verb_flags="-v"
+	    sys_cc_64_flags="-xarch=generic64 -KPIC"
+	    sys_cc_optz_med="-xO1"
+	    sys_cc_optz_fast="-fast"
+	    sys_cc_optz_fastest="-fast"
+
+
+	    def_cc_optz_flags="${sys_cc_optz_med}"
+	    def_cc_thread_defs="-mt"
+	    def_link_thread_libs="-lthread"
+
+	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+	    cc_optz_flags="${def_cc_optz_flags}"
+
+            link_autolibs="-ldl"
+
+	    AR="ar"
+	    ar_flags="-ru"
+
+	    dll_flags="${dll_flags} -G -Kpic"
+
+         ;;
+         gcc)
+	    AC_MSG_RESULT(selecting the gnu compiler...)
+	    AC_MSG_RESULT(selecting the ar archiver...)
+
+	    sys_cc_debug_flags="-g"
+	    sys_cc_warn_flags="-Wall"
+	    sys_cc_verb_flags="-v"
+	    sys_cc_64_flags="-m64"
+	    sys_cc_optz_med="-O1"
+	    sys_cc_optz_fast="-O2"
+	    sys_cc_optz_fastest="-O3"
+
+	    def_cc_optz_flags="${sys_cc_optz_med}"
+	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+	    def_link_thread_libs="-lpthread"
+
+	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+            cc_flags="-mcpu=supersparc"
+	    cc_optz_flags="${def_cc_optz_flags}"
+
+            link_autolibs=" -ldl"
+
+	    AR="ar"
+	    ar_flags="-ru"
+	    dll_flags="${dll_flags} -G -Kpic"
+
+         ;;
+      esac
+   ;;
+
+   powerpc-ibm-*)
+      case "${CC}" in
+         xlc)
+            AC_MSG_RESULT(selecting the ibm compiler...)
+            AC_MSG_RESULT(selecting the ar archiver...)
+            dll_flags="${dll_flags} -G"
+            sys_cc_debug_flags="-g"
+            sys_cc_warn_flags=""
+            sys_cc_verb_flags=""
+            sys_cc_64_flags="-q64"
+            sys_cc_optz_med=""
+            sys_cc_optz_fast=""
+            sys_cc_optz_fastest=""
+            cc_flags="-qsuppress=1540-0862 -qsuppress=1540-1052"
+            def_cc_optz_flags="${sys_cc_optz_med}"
+            def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+            def_link_thread_libs="-lpthread"
+            cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D__aix__"
+            cc_flags="-qlonglong -qcheck=all"
+            cc_optz_flags="${def_cc_optz_flags}"
+
+            AR="ar"
+            ar_flags="-ru -Xany"
+
+            link_flags="-berok"
+         ;;
+         gcc)
+
+         ;;
+     esac
+   ;;
+
+   rs6000-ibm-*)
+      case "${CC}" in
+         xlc)
+	    AC_MSG_RESULT(selecting the ibm compiler...)
+	    AC_MSG_RESULT(selecting the ar archiver...)
+	    	   
+            dll_flags = "${dll_flags} -G"
+	    sys_cc_debug_flags="-g"
+	    sys_cc_warn_flags=""
+	    sys_cc_verb_flags=""
+	    sys_cc_64_flags="-q64"
+	    sys_cc_optz_med="-O1"
+	    sys_cc_optz_fast="-O2"
+	    sys_cc_optz_fastest="-O3"
+            cc_flags="-qsuppress=1540-0862 -qsuppress=1540-0152"
+
+            def_cc_optz_flags="${sys_cc_optz_med}"
+	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+	    def_link_thread_libs="-lpthread"
+
+	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+            cc_flags="-qlonglong -qcheck=all"
+	    cc_optz_flags="${def_cc_optz_flags}"
+
+	    AR="ar"
+	    ar_flags="-ru"
+
+            link_flags="-berok"
+         ;;
+         gcc)
+	    AC_MSG_RESULT("selecting the gnu compiler...")
+	    AC_MSG_RESULT("selecting the ar archiver...")
+
+	    sys_cc_debug_flags="-g"
+	    sys_cc_warn_flags="-Wall"
+	    sys_cc_verb_flags="-v"
+	    sys_cc_64_flags="-m64"
+	    sys_cc_optz_med="-O1"
+	    sys_cc_optz_fast="-O2"
+	    sys_cc_optz_fastest="-O3"
+
+	    def_cc_optz_flags="${sys_cc_optz_med}"
+	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+	    def_link_thread_libs="-lpthread"
+
+	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+            cc_flags=""
+	    cc_optz_flags="${def_cc_optz_flags}"
+
+            link_autolibs="-ldl"
+
+	    AR="ar"
+	    ar_flags="-ru"
+	    dll_flags="${dll_flags} -fPIC -shared"
+         ;;
+      esac
+   ;;
+
+   powerpc-apple-*)
+            AC_MSG_RESULT(attempting to configure for the mac...)
+	    AC_MSG_RESULT(selecting the gnu compiler...)
+	    AC_MSG_RESULT(selecting the ar archiver...)
+	    CC="gcc"
+	    sys_cc_debug_flags="-g"
+	    sys_cc_warn_flags="-Wall"
+	    sys_cc_verb_flags="-v"
+	    sys_cc_64_flags="-m64"
+	    sys_cc_optz_med="-O1"
+	    sys_cc_optz_fast="-O2"
+	    sys_cc_optz_fastest="-O3"
+      
+	    def_cc_optz_flags="${sys_cc_optz_med}"
+	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+	    def_link_thread_libs="-lpthread"
+
+	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+            cc_flags=""
+	    cc_optz_flags="${def_cc_optz_flags}"
+            link_autolibs="-ldl"
+
+	    AR="ar"
+	    dll_flags="${dll_flags} -fPIC -shared"
+   ;;
+   x86_64-*-linux-*|i686-pc-*)
+      case "${CC}" in
+         icc)
+            AC_MSG_RESULT(selecting the intel icc compiler...)
+	    AC_MSG_RESULT(selecting the ar archiver...)
+	    sys_cc_debug_flags="-g"
+	    sys_cc_warn_flags=""
+	    sys_cc_verb_flags=""
+	    sys_cc_64_flags=""
+	    sys_cc_optz_med="-tpp7"
+	    sys_cc_optz_fast="-tpp7"
+	    sys_cc_optz_fastest="-tpp7"
+            def_cc_optz_flags="${sys_cc_optz_med}"
+
+            cc_flags="-c99 -align"
+	    cc_optz_flags="${def_cc_optz_flags}"
+	    cc_defs="-D__USE_ISOC99 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE"
+
+            link_defs="${link_defs} -static"
+            def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+	    def_link_thread_libs="-lpthread"
+         ;;
+         gcc)
+	    AC_MSG_RESULT(selecting the gnu compiler...)
+	    AC_MSG_RESULT(selecting the ar archiver...)
+	    sys_cc_debug_flags="-g"
+	    sys_cc_warn_flags="-Wall"
+	    sys_cc_verb_flags="-v"
+	    sys_cc_64_flags="-m64 -fPIC"
+	    sys_cc_optz_med="-O1"
+	    sys_cc_optz_fast="-O2"
+	    sys_cc_optz_fastest="-O3"
+
+	    def_cc_optz_flags="${sys_cc_optz_med}"
+	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+	    def_link_thread_libs="-lpthread"
+
+	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+            cc_flags="-fPIC"
+	    cc_optz_flags="${def_cc_optz_flags}"
+
+            link_autolibs="-ldl"
+
+	    AR="ar"
+	    ar_flags="-ru"
+	    dll_flags="${dll_flags} -fPIC -shared"
+
+         ;;
+      esac
+   ;;
+esac
+
+
+######################################################################
+# Process '--enable-64bit' argument.
+AC_ARG_ENABLE(64bit,
+              [  --enable-64bit		Make a 64-bit build.],
+              ok=${enableval},
+              ok="no")
+if test "${ok}" != "no"
+then
+   AC_MSG_RESULT(enabling 64 bit compiles...)
+   cc_64_flags="${sys_cc_64_flags}"
+   enabled_64bit="true"
+fi
+
+AC_ARG_ENABLE(warnings,
+	      [  --enable-warnings 		Turn on compiler warnings (default is on) ],
+	      ok=$enable_warnings,
+	      ok="yes")
+if test "${ok}" = "no" 
+then 
+     AC_MSG_RESULT(disabling warnings...)
+     cc_warn_flags=""
+else
+     AC_MSG_RESULT(enabling warnings...)
+     cc_warn_flags="${sys_cc_warn_flags}"
+fi
+
+AC_ARG_ENABLE(debugging,
+	      [  --enable-debugging 		Turn on compiler debugging (default is on) ],
+	      ok=$enable_debugging,
+	      ok="no")
+if test "${ok}" = "no" 
+then 
+     AC_MSG_RESULT(disabling debugging...)
+     cc_debug_flags=""
+else
+     AC_MSG_RESULT(enabling debugging...)
+     cc_debug_flags="${sys_cc_debug_flags} -D__DEBUG"
+fi
+
+AC_ARG_ENABLE(optz,
+	       [  --enable-optz			Turn on optimization at default level (default is on) ],
+	       ok=$enable_optz,
+	       ok="yes")
+if test "${ok}" = "no" 
+then 
+     AC_MSG_RESULT(disabling optimizations...)
+     cc_optz_flags=""
+else
+     AC_MSG_RESULT(enabling default level optimizations...)
+     cc_optz_flags="${def_cc_optz_flags}"
+fi
+
+
+AC_ARG_ENABLE(verbose,
+	      [  --enable-verbose 		Turn on compiler verbose (default is on)],
+	      ok=$enable_verbose,
+	      ok="yes")
+if test "${ok}" = "no" 
+then 
+     AC_MSG_RESULT(disabling verbose...)
+     cc_verb_flags=""
+else
+     AC_MSG_RESULT(enabling verbose...)
+     cc_verb_flags="${sys_cc_verb_flags}"
+fi
+
+AC_ARG_ENABLE(threading,
+	      [  --enable-threading 		Turn on threading ],
+	      ok=$enable_threading,
+	      ok="yes")
+if test "${ok}" = "no" 
+then 
+     AC_MSG_RESULT(disabling threading...)
+     cc_thread_defs=""
+     link_thread_libs=""
+else
+     AC_MSG_RESULT(enabling threading...)
+     cc_thread_defs="${def_cc_thread_defs}"
+     link_thread_libs="${def_link_thread_libs}"
+fi
+
+
+AC_ARG_WITH(thread-layer,
+            [  --with-thread-layer=LAYER	Compile with LAYER],
+	    ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   cc_thread_defs="${def_cc_thread_defs}"
+   case "${ok}" in 
+      pthreads)
+         AC_MSG_RESULT(enabling pthreads...)
+         link_thread_libs="-lpthread"
+	 cc_thread_defs="-D_REENTRANT -D__POSIX"
+      ;;
+      solaris)
+         AC_MSG_RESULT(enabling solaris threads...)
+	 cc_thread_libs="-D_REENTRANT -lthread"
+      ;;
+      nspr)
+         AC_MSG_RESULT(enabling nspr portable threads...)
+	 link_thread_libs="-lnspr4"
+	 cc_thread_defs="-D_REENTRANT -DUSE_NSPR_THREADS"
+      ;;
+      irix)
+	AC_MSG_RESULT(enabling irix sproc-based threading...)
+   esac
+fi
+
+
+AC_ARG_WITH(optz,
+            [  --with-optz=OPTZ		Compile with optimization level (med, fast, fastest)],
+	    ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   cc_optz_flags="${def_cc_optz_flags}"
+   case "${ok}" in 
+      med)
+         AC_MSG_RESULT(setting medium optimization flags...)
+	 cc_optz_flags="${sys_cc_optz_med}"
+      ;;
+      fast)
+         AC_MSG_RESULT(setting fast optimization flags...)
+	 cc_optz_flags="${sys_cc_optz_fast}"
+      ;;
+      fastest)
+         AC_MSG_RESULT(setting fastest optimization flags...)
+	 cc_optz_flags="${sys_cc_optz_fastest}"
+      ;;
+
+   esac
+fi
+
+
+AC_ARG_WITH(thread-home,
+            [  --with-thread-home=HOME	Compile with HOME],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+         AC_MSG_RESULT(setting thread home... ${ok})
+	 link_thread_libpath="-L${ok}/lib ${link_thread_libpath}"
+	 cc_thread_includes="-I${ok}/include ${cc_thread_includes}"
+fi
+
+
+#####################################################################
+#  Add additional include and lib dirs
+AC_ARG_WITH(includes,
+            [  --with-includes=INCLUDES	Add INCLUDES],
+	    ok=${withval},
+	    ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+    AC_MSG_RESULT(adding additional includes... ${ok})
+    cc_includes="${cxx_includes} ${ok}"
+fi
+
+AC_ARG_WITH(libpaths,
+	    [  --with-libpaths=LIBPATHs 	Add LIBPATHS],
+	    ok=${withval},
+	    ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+    AC_MSG_RESULT(adding additional libpaths... ${ok})
+    libpath="${libpath} ${ok}"
+fi
+											
+
+######################################################################
+# Process '--with-pretool' option and flags.
+###################################################################### 
+AC_ARG_WITH(dummy,
+            [
+The following groups of options allow your to set various compiler flags, options,
+and definitions individually. These override any options set by the 'enable-<feature>'
+arguments above. 
+
+Multiple arguments should be enclosed in double quotes. Many of these options
+are best set in the indvidual Makefile.in's, but are provided here for completeness.
+
+Compiler tool options. These specify a tool and it's options used before the \$(CC) command.
+The tool and options are built from:
+ (pretool)
+ ])
+
+AC_ARG_WITH(pretool,
+            [  --with-pretool=TOOL		Use TOOL before compile command],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   pretool="${ok}"
+fi
+
+######################################################################
+# Process '--with-<compiler options>' options.
+# ex -g -Wall
+# --with-cc_opts=
+AC_ARG_WITH(dummy,
+            [
+Compiler options. These specify flags passed to the compiler.
+The options are built from:
+ ( (flags) ]
+)
+
+
+AC_ARG_WITH(flags,
+            [  --with-flags=FLAGS		Use FLAGS as compiler options],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   cc_flags="${cc_flags} ${ok}"
+fi
+
+######################################################################
+# Process '--with-<compiler defs>' options.
+AC_ARG_WITH(dummy,
+            [
+Compiler macro definitions. These specify macro definitions passed to the compiler.
+The definitions are built from:
+ (defs)
+ ])
+
+AC_ARG_WITH(defs,
+            [  --with-defs=DEFS		Use DEFS as macro definitions],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   cc_defs="${cc_defs} ${ok}"
+fi
+
+######################################################################
+# Process '--with-<libs>' options.
+###################################################################### 
+AC_ARG_WITH(dummy,
+            [
+Link libraries. These specify libraries that will be linked with the executable.
+The final library options are built from:
+ (pre_libs) (libs) (post_libs)
+ ])
+
+AC_ARG_WITH(prelibs,
+            [  --with-prelibs=LIBS		Link executable with LIBS],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   link_prelibs="${ok} ${link_prelibs}"
+fi
+
+AC_ARG_WITH(autolibs,
+            [  --with-autolibs=LIBS		Link executable with LIBS],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   link_autolibs="${link_autolibs} ${ok}"
+fi
+
+AC_ARG_WITH(postlibs,
+            [  --with-postlibs=LIBS		Link executable with LIBS],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   link_postlibs="${link_postlibs} ${ok}"
+fi
+		  
+
+#disable optz if we are debugging
+if test "${cc_debug_flags}" != ""
+then
+    cc_optz_flags=""
+fi
+
+
+cc_includes="${cc_includes} ${cc_thread_includes}"
+cc_defs="${cc_defs} ${cc_thread_defs}"
+cc_flags="${cc_flags} ${cc_optz_flags} ${cc_thread_flags} ${cc_64_flags} ${cc_verb_flags} ${cc_debug_flags} ${cc_warn_flags}"
+
+if test "${enabled_64bit}" != "false"
+then
+    target="${target}-64"
+fi
+
+link_autolibs="${link_thread_libs} ${link_autolibs}"
+link_libpath="${libpath} ${link_thread_libpath}"
+
+AC_SUBST(cc_includes)
+AC_SUBST(cc_flags)
+AC_SUBST(cc_defs)
+AC_SUBST(pretool)
+AC_SUBST(POSIX)
+AC_SUBST(CC)
+AC_SUBST(ar_flags)
+AC_SUBST(dll_flags)
+AC_SUBST(build_dir)
+AC_SUBST(AR)
+AC_SUBST(link_prelibs)
+AC_SUBST(link_autolibs)
+AC_SUBST(link_postlibs)
+AC_SUBST(link_libpath)
+AC_SUBST(link_flags)
+AC_SUBST(lib_dir)
+AC_SUBST(make_dsos)
+
+# Figure out which Makefile.ins to process; look here and
+# in all subdirectories for any file named Makefile.in, and
+# turn it into a Makefile.
+# If you want to process other files, you can add them
+# along with this variable.
+
+#makefile_in_subs=`find . -name Makefile.in -print | sed 's/Makefile.in$/Makefile/'`
+makefile_in_subs=`find . -name Makefile.in -print | sed 's/.in$//'`
+AC_OUTPUT(${makefile_in_subs})
