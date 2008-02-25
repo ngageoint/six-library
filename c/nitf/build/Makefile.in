@@ -118,6 +118,52 @@ APPS = getNITFVersion.c
 
 
 PLUGINS = \
-JITCID.c \
-TEST_DES.c
-
+        JITCID.c \
+        TEST_DES.c \
+        ACFTA.c \
+        ACFTB.c \ 
+        AIMIDA.c \
+        AIMIDB.c \
+        BANDSA.c \
+        BCKGDA.c \
+        BLOCKA.c \
+        CLCTNA.c \
+        CLCTNB.c \
+        CMETAA.c \
+        ENGRDA.c \
+        EXOPTA.c \
+        EXPLTA.c \
+        EXPLTB.c \
+        HISTOA.c \
+        ICHIPB.c \
+        IMGDTA.c \
+        IOMAPA.c \
+        MENSRA.c \
+        MENSRB.c \
+        MPDSRA.c \
+        MSTGTA.c \
+        MTIRPA.c \
+        MTIRPB.c \
+        NBLOCA.c \
+        OBJCTA.c \
+        OFFSET.c \
+        PATCHA.c \
+        PATCHB.c \
+        PIAEQA.c \
+        PIAEVA.c \
+        PIAIMB.c \
+        PIAIMC.c \
+        PIAPEA.c \
+        PIAPEB.c \
+        PIAPRC.c \
+        PIAPRD.c \
+        PIATGA.c \
+        PIATGB.c \
+        PLTFMA.c \
+        RPC00B.c \
+        SENSRA.c \
+        SNSRA .c \
+        STDIDC.c \
+        STREOB.c \
+        TRGTA.c \
+        USE00A.c
