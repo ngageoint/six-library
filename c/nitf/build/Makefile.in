@@ -162,7 +162,7 @@ PLUGINS = \
         PLTFMA.c \
         RPC00B.c \
         SENSRA.c \
-        SNSRA .c \
+        SNSRA.c \
         STDIDC.c \
         STREOB.c \
         TRGTA.c \
