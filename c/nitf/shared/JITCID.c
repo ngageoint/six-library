@@ -20,6 +20,7 @@
  *
  */
 
+
 #include <nitf/IOHandle.h>
 #include <nitf/TRE.h>
 #include <nitf/Record.h>
