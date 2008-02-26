@@ -107,19 +107,15 @@ TESTS = test_field.c test_dll_1.c test_list_1.c test_list_2.c \
         test_read_acftb.c test_des_read.c test_field_set.c \
         test_text_read.c test_des_write.c
 
-# test_writer_s.c
-# test_writer_2.c
-# test_writer_1.c
-# test_1band_rw_line.c
-# test_read_header21_1.cpp \
-# test_security21.cpp
 
 APPS = getNITFVersion.c
 
 
 PLUGINS = \
-        JITCID.c \
         TEST_DES.c \
+        ACCHZB.c \
+        ACCPOB.c \
+        ACCVTB.c \
         ACFTA.c \
         ACFTB.c \
         AIMIDA.c \
@@ -127,6 +123,7 @@ PLUGINS = \
         BANDSA.c \
         BCKGDA.c \
         BLOCKA.c \
+        BNDPLB.c \
         CLCTNA.c \
         CLCTNB.c \
         CMETAA.c \
@@ -134,10 +131,14 @@ PLUGINS = \
         EXOPTA.c \
         EXPLTA.c \
         EXPLTB.c \
+        GEOLOB.c \
+        GEOPSB.c \
         HISTOA.c \
         ICHIPB.c \
         IMGDTA.c \
         IOMAPA.c \
+        JITCID.c \
+        MAPLOB.c \
         MENSRA.c \
         MENSRB.c \
         MPDSRA.c \
@@ -160,10 +161,15 @@ PLUGINS = \
         PIATGA.c \
         PIATGB.c \
         PLTFMA.c \
+        PRJPSB.c \
+        REGPTB.c \
         RPC00B.c \
         SENSRA.c \
+        SNSPSB.c \
         SNSRA.c \
+        SOURCB.c \
         STDIDC.c \
+        STEROB.c \
         STREOB.c \
         TRGTA.c \
         USE00A.c
