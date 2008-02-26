@@ -164,6 +164,10 @@ PLUGINS = \
         PRJPSB.c \
         REGPTB.c \
         RPC00B.c \
+        RPFDES.c \
+        RPFHDR.c \
+        RPFIMG.c \
+        SECTGA.c \
         SENSRA.c \
         SNSPSB.c \
         SNSRA.c \
