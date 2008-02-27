@@ -1,7 +1,7 @@
 [Setup]
 AppName=NITRO
 VersionInfoVersion = 1.5.0
-AppVerName=NITRO $VersionInfoVersion
+AppVerName=NITRO 1.5.0
 AppPublisherURL=http://sourceforge.net/projects/nitro-nitf/
 AppSupportURL=http://sourceforge.net/projects/nitro-nitf/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
