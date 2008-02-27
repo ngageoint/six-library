@@ -1,4 +1,4 @@
 EXTLIBS =
-EXTINCLUDEPATH = -I@top_srcdir@/../nitf/include
-EXTLIBPATH = -L@top_srcdir@/../nitf/lib/@target@
+EXTINCLUDEPATH = -I@top_srcdir@/../../c/nitf/include
+EXTLIBPATH = -L@top_srcdir@/../../c/nitf/lib/@target@
 PLUGINS = LibjpegDecompress.c 

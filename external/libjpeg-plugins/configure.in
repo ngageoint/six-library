@@ -85,9 +85,10 @@ then
     cc_optz_flags=""
 fi
 
-
-link_nitf_libpath="${link_nitf_libpath}/${target}"
-
+if test "${link_nitf_libpath}" != ""
+then
+    link_nitf_libpath="${link_nitf_libpath}/${target}"
+fi
 
 cc_includes="${cc_includes} ${cc_thread_includes} ${cc_nitf_includes} ${cc_nitf_support_includes}"
 cc_defs="${cc_defs} ${cc_thread_defs}"

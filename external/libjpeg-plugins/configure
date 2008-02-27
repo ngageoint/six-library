@@ -1326,6 +1326,10 @@ The final library options are built from:
   --with-postlibs=LIBS		Link executable with LIBS
   --with-thread-layer=LAYER	Compile with LAYER
   --with-thread-home=HOME	Compile with HOME
+--with-support-home=SUPPORT_HOME
+		specify support home.]
+--with-nitf-module-home=NITF_HOME
+		specify nitf module home.]
 
 Some influential environment variables:
   CC          C compiler command
@@ -4464,6 +4468,12 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+###########################################################
+# Default variables                                       #
+###########################################################
+link_nitf_libs="-lnitf-c"
+
+
 ######################################################################
 # Process '--enable-gnu' argument before doing system setups.
 ######################################################################
@@ -5313,14 +5323,50 @@ echo "${ECHO_T}setting thread home... ${ok}" >&6; }
 fi
 
 
+
+# Check whether --with-support-home was given.
+if test "${with_support_home+set}" = set; then
+  withval=$with_support_home; ok=${withval}
+else
+  ok="no"
+fi
+
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+        cc_nitf_support_includes="${cc_nitf_support_includes} -I${ok}/include"
+        link_nitf_support_libpath="${link_nitf_support_libpath} -L${ok}/lib"
+fi
+
+#  We have to include the NITF module components, so we need
+#  This to specify where libnitf-c.a lives, etc.
+
+# Check whether --with-nitf-module-home was given.
+if test "${with_nitf_module_home+set}" = set; then
+  withval=$with_nitf_module_home; ok=${withval}
+else
+  ok="no"
+fi
+
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+        cc_nitf_includes="-I${ok}/include"
+        link_nitf_libpath="-L${ok}/lib/"
+fi
+
+
+
 #disable optz if we are debugging
 if test "${cc_debug_flags}" != ""
 then
     cc_optz_flags=""
 fi
 
+if test "${link_nitf_libpath}" != ""
+then
+    link_nitf_libpath="${link_nitf_libpath}/${target}"
+fi
 
-cc_includes="${cc_includes} ${cc_thread_includes}"
+cc_includes="${cc_includes} ${cc_thread_includes} ${cc_nitf_includes} ${cc_nitf_support_includes}"
 cc_defs="${cc_defs} ${cc_thread_defs}"
 cc_flags="${cc_flags} ${cc_optz_flags} ${cc_thread_flags} ${cc_64_flags} ${cc_verb_flags} ${cc_debug_flags} ${cc_warn_flags}"
 
@@ -5329,8 +5375,9 @@ then
     target="${target}-64"
 fi
 
-link_autolibs="${link_thread_libs} ${link_autolibs}"
-link_libpath="${libpath} ${link_thread_libpath}"
+
+link_autolibs="${link_nitf_libs} ${link_thread_libs} ${link_autolibs}"
+link_libpath="${libpath} ${link_thread_libpath} ${link_nitf_libpath} ${link_nitf_support_libpath}"
 
 
 
@@ -6329,4 +6376,14 @@ if test "$no_create" != yes; then
   # would make configure fail if this is the last instruction.
   $ac_cs_success || { (exit 1); exit 1; }
 fi
+
+
+
+
+
+
+
+
+
+
 
