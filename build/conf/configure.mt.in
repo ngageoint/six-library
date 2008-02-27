@@ -1,0 +1,67 @@
+###########################################################
+# Default variables                                       #
+###########################################################
+def_thread_cc_flags=""
+def_thread_defs="-D_REENTRANT"
+def_thread_layer="-lpthread"
+
+# Threading processing cc stuff
+cc_thread_includes=""
+cc_thread_defs=""
+cc_thread_flags=""
+
+
+AC_ARG_ENABLE(threading,
+	      [  --enable-threading 		Turn on threading ],
+	      ok=$enable_threading,
+	      ok="yes")
+if test "${ok}" = "no" 
+then 
+     AC_MSG_RESULT(disabling threading...)
+     cc_thread_defs=""
+     link_thread_libs=""
+else
+     AC_MSG_RESULT(enabling threading...)
+     cc_thread_defs="${def_cc_thread_defs}"
+     link_thread_libs="${def_link_thread_libs}"
+fi
+
+
+AC_ARG_WITH(thread-layer,
+            [  --with-thread-layer=LAYER	Compile with LAYER],
+	    ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   cc_thread_defs="${def_cc_thread_defs}"
+   case "${ok}" in 
+      pthreads)
+         AC_MSG_RESULT(enabling pthreads...)
+         link_thread_libs="-lpthread"
+	 cc_thread_defs="-D_REENTRANT -D__POSIX"
+      ;;
+      solaris)
+         AC_MSG_RESULT(enabling solaris threads...)
+	 cc_thread_libs="-D_REENTRANT -lthread"
+      ;;
+      nspr)
+         AC_MSG_RESULT(enabling nspr portable threads...)
+	 link_thread_libs="-lnspr4"
+	 cc_thread_defs="-D_REENTRANT -DUSE_NSPR_THREADS"
+      ;;
+      irix)
+	AC_MSG_RESULT(enabling irix sproc-based threading...)
+   esac
+fi
+
+
+AC_ARG_WITH(thread-home,
+            [  --with-thread-home=HOME	Compile with HOME],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+         AC_MSG_RESULT(setting thread home... ${ok})
+	 link_thread_libpath="-L${ok}/lib ${link_thread_libpath}"
+	 cc_thread_includes="-I${ok}/include ${cc_thread_includes}"
+fi

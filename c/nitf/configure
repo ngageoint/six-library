@@ -675,10 +675,11 @@ OBJEXT
 CPP
 GREP
 EGREP
+pretool
+make_dsos
 cc_includes
 cc_flags
 cc_defs
-pretool
 POSIX
 ar_flags
 dll_flags
@@ -690,7 +691,6 @@ link_postlibs
 link_libpath
 link_flags
 lib_dir
-make_dsos
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -1277,7 +1277,6 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-gnu			Use GNU compiler rather than native compiler.
---enable-shared        Make shared DSOs for all libraries
   --enable-64bit		Make a 64-bit build.
   --enable-warnings 		Turn on compiler warnings (default is on)
   --enable-debugging 		Turn on compiler debugging (default is on)
@@ -1288,9 +1287,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-thread-layer=LAYER	Compile with LAYER
   --with-optz=OPTZ		Compile with optimization level (med, fast, fastest)
-  --with-thread-home=HOME	Compile with HOME
   --with-includes=INCLUDES	Add INCLUDES
   --with-libpaths=LIBPATHs 	Add LIBPATHS
 
@@ -1326,6 +1323,8 @@ The final library options are built from:
   --with-prelibs=LIBS		Link executable with LIBS
   --with-autolibs=LIBS		Link executable with LIBS
   --with-postlibs=LIBS		Link executable with LIBS
+  --with-thread-layer=LAYER	Compile with LAYER
+  --with-thread-home=HOME	Compile with HOME
 
 Some influential environment variables:
   CC          C compiler command
@@ -1743,7 +1742,6 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-
 ac_aux_dir=
 for ac_dir in build "$srcdir"/build; do
   if test -f "$ac_dir/install-sh"; then
@@ -1776,72 +1774,9 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 
-
 # Location of makefiles directory.
 here=`pwd`
 build_dir="${here}/build/"
-
-###########################################################
-# Default variables                                       #
-##########################################################
-def_thread_cc_flags=""
-def_thread_defs="-D_REENTRANT"
-def_thread_layer="-lpthread"
-
-###########################################################
-# Compiler variables:                                     #
-###########################################################
-cc_defs=""
-cc_flags=""
-cc_includes=""
-cc_optz_flags=""
-cc_debug_flags=""
-cc_warn_flags=""
-cc_verb_flags=""
-
-# Threading processing cc stuff
-cc_thread_includes=""
-cc_thread_defs=""
-cc_thread_flags=""
-
-###########################################################
-# We give the compile pre-tool its own section            #
-###########################################################
-pretool=""
-pretool_defs=""
-pretool_flags=""
-
-###########################################################
-#  Archiver                                               #
-###########################################################
-ar_flags="-crs"
-AR="ar"
-
-###########################################################
-# Linker variables:                                       #
-###########################################################
-link_prelibs=""
-link_autolibs=""
-link_postlibs=""
-link_flags=""
-link_libpath=""
-
-# Threading processing lib stuff
-link_thread_libs=""
-link_thread_libpath=""
-
-enabled_64bit="false"
-
-# Do we want to create DSOs?
-make_dsos="false"
-
-# For different compilers
-lib_dir=""
-
-###########################################################
-# DLL variables                                           #
-###########################################################
-dll_flags=""
 
 # Get system type.
 # Make sure we can run config.sub.
@@ -3845,33 +3780,10 @@ presetting ac_cv_c_bigendian=no (or yes) will help" >&2;}
 esac
 
 
-# Set value of POSIX string; this may be modified, below,
-# based on the system type. This string is placed in Makefiles
+
+# Set value of POSIX string; This string is placed in Makefiles
 # on compliant systems to indicate POSIX mode.
 POSIX=".POSIX:"
-case "${target}" in
-   rs6000-ibm-*)
-      POSIX=""
-   ;;
-   powerpc-ibm-*)
-      POSIX=""
-   ;;
-esac
-
-
-######################################################################
-# Compiler and platform section:
-#---------------------------------
-# This section contains the meat of the code.  We try and define
-# everything up front, so that IF we enable code later on, we can simply
-# take the defaults if necessary.
-#
-# here are the things we know immediately:
-# def_cc_warn
-# def_cc_verb
-# def_cc_debug
-# def_cc_optz_flags
-#
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -4550,8 +4462,9 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+
 ######################################################################
-# Process '--enable-gnu' argument.
+# Process '--enable-gnu' argument before doing system setups.
 ######################################################################
 # Check whether --enable-gnu was given.
 if test "${enable_gnu+set}" = set; then
@@ -4561,55 +4474,147 @@ else
 fi
 
 
-######################################################################
-# Process '--enable-shared' argument.
-######################################################################
-# Check whether --enable-shared was given.
-if test "${enable_shared+set}" = set; then
-  enableval=$enable_shared; ok="yes"
-else
-  ok="no"
-fi
 
+###########################################################
+#  Archiver                                               #
+###########################################################
+ar_flags="-crs"
+AR="ar"
 
-if test "${ok}" != "no"
-then
-    { echo "$as_me:$LINENO: result: enabling DSOs..." >&5
-echo "${ECHO_T}enabling DSOs..." >&6; }
-    make_dsos="true"
-fi
-
-
-# Make an adjustment for system compiler on AIX systems, which
-# is named xlC.
 case "${target}" in
-   rs6000-ibm-*)
-      case "${CC}" in
-         cc)
-            CC="xlc"
-         ;;
-      esac
-   ;;
-   powerpc-ibm-*)
-      case "${CC}" in
-         cc)
-            CC="xlc"
-         ;;
-      esac
+    sparc-sun-*)
+        case "${CC}" in
+            cc)
+                { echo "$as_me:$LINENO: result: selecting the forte compiler..." >&5
+echo "${ECHO_T}selecting the forte compiler..." >&6; }
+        	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
+echo "${ECHO_T}selecting the ar archiver..." >&6; }
+
+        	    sys_cc_debug_flags="-g"
+        	    sys_cc_warn_flags=""
+        	    sys_cc_verb_flags="-v"
+        	    sys_cc_64_flags="-xarch=generic64 -KPIC"
+        	    sys_cc_optz_med="-xO1"
+        	    sys_cc_optz_fast="-fast"
+        	    sys_cc_optz_fastest="-fast"
+
+
+        	    def_cc_optz_flags="${sys_cc_optz_med}"
+        	    def_cc_thread_defs="-mt"
+        	    def_link_thread_libs="-lthread"
+
+        	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+        	    cc_optz_flags="${def_cc_optz_flags}"
+
+                link_autolibs="-ldl"
+
+        	    AR="ar"
+        	    ar_flags="-ru"
+
+        	    dll_flags="${dll_flags} -G -Kpic"
+            ;;
+            gcc)
+                { echo "$as_me:$LINENO: result: selecting the gnu compiler..." >&5
+echo "${ECHO_T}selecting the gnu compiler..." >&6; }
+        	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
+echo "${ECHO_T}selecting the ar archiver..." >&6; }
+
+        	    sys_cc_debug_flags="-g"
+        	    sys_cc_warn_flags="-Wall"
+        	    sys_cc_verb_flags="-v"
+        	    sys_cc_64_flags="-m64"
+        	    sys_cc_optz_med="-O1"
+        	    sys_cc_optz_fast="-O2"
+        	    sys_cc_optz_fastest="-O3"
+
+        	    def_cc_optz_flags="${sys_cc_optz_med}"
+        	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+        	    def_link_thread_libs="-lpthread"
+
+        	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+                cc_flags="-mcpu=supersparc"
+        	    cc_optz_flags="${def_cc_optz_flags}"
+
+                link_autolibs=" -ldl"
+
+        	    AR="ar"
+        	    ar_flags="-ru"
+        	    dll_flags="${dll_flags} -G -Kpic"
+            ;;
+        esac
+    ;;
+esac
+###########################################################
+#  Archiver                                               #
+###########################################################
+ar_flags="-crs"
+AR="ar"
+
+case "${target}" in
+    mips-sgi-*)
+        case "${CC}" in
+            cc)
+        	    { echo "$as_me:$LINENO: result: selecting the mips compiler..." >&5
+echo "${ECHO_T}selecting the mips compiler..." >&6; }
+        	    { echo "$as_me:$LINENO: result: selecting the compiler option for the archiver..." >&5
+echo "${ECHO_T}selecting the compiler option for the archiver..." >&6; }
+
+        	    sys_cc_debug_flags="-g"
+        	    sys_cc_warn_flags="-fullwarn"
+        	    sys_cc_verb_flags="-v"
+        	    sys_cc_64_flags="-64"
+        	    sys_cc_optz_med="-O1"
+        	    sys_cc_optz_fast="-O2"
+        	    sys_cc_optz_fastest="-O3"
+                dll_flags="${dll_flags} -shared"
+        	    def_cc_optz_flags="${sys_cc_optz_med}"
+        	    def_cc_thread_defs="-D_REENTRANT"
+        	    def_link_thread_libs=""
+
+        	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+        	    cc_flags="-LANG:std -LANG:ansi-for-init-scope=ON -ptused"
+        	    cc_optz_flags="${def_cc_optz_flags}"
+
+        	    link_autolibs="-lm"
+
+                AR="${CC}"
+                ar_flags=" -ar -o"
+            ;;
+            gcc)
+                { echo "$as_me:$LINENO: result: selecting the gnu compiler..." >&5
+echo "${ECHO_T}selecting the gnu compiler..." >&6; }
+        	    { echo "$as_me:$LINENO: result: selecting the compiler option for the archiver..." >&5
+echo "${ECHO_T}selecting the compiler option for the archiver..." >&6; }
+
+        	    sys_cc_debug_flags="-g"
+        	    sys_cc_warn_flags="-Wall"
+        	    sys_cc_verb_flags="-v"
+        	    sys_cc_64_flags=""
+        	    sys_cc_optz_med="-O1"
+        	    sys_cc_optz_fast="-O2"
+        	    sys_cc_optz_fastest="-O3"
+
+        	    def_cc_optz_flags="${sys_cc_optz_med}"
+        	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+        	    def_link_thread_libs="-lpthread"
+        	    dll_flags="${dll_flags} -fPIC -shared"
+        	    cc_defs=""
+        	    cc_flags=""
+        	    cc_optz_flags="${def_cc_optz_flags}"
+
+        	    link_autolibs="-ldl"
+
+                ar_flags="-ru"
+            ;;
+        esac
    ;;
 esac
 
-case "${target}" in
-   x86_64-*-linux-*|i686-pc-*)
-      case "${CC}" in
-         cc)
-	    { echo "$as_me:$LINENO: result: setting compiler to gcc..." >&5
-echo "${ECHO_T}setting compiler to gcc..." >&6; }
-            CC="gcc"
-         ;;
-      esac
-   ;;
-esac
+###########################################################
+#  Archiver                                               #
+###########################################################
+ar_flags="-crs"
+AR="ar"
 
 
 case "${CXX}" in
@@ -4622,226 +4627,216 @@ esac
 
 
 case "${target}" in
-   mips-sgi-*)
-      case "${CC}" in
-         cc)
-	    { echo "$as_me:$LINENO: result: selecting the mips compiler..." >&5
-echo "${ECHO_T}selecting the mips compiler..." >&6; }
-	    { echo "$as_me:$LINENO: result: selecting the compiler option for the archiver..." >&5
-echo "${ECHO_T}selecting the compiler option for the archiver..." >&6; }
+   x86_64-*-linux-*|i686-pc-*)
+        case "${CC}" in
+            cc)
+                { echo "$as_me:$LINENO: result: setting compiler to gcc..." >&5
+echo "${ECHO_T}setting compiler to gcc..." >&6; }
+                CC="gcc"
+            ;;
+        esac
+   ;;
+esac
 
-	    sys_cc_debug_flags="-g"
-	    sys_cc_warn_flags="-fullwarn"
-	    sys_cc_verb_flags="-v"
-	    sys_cc_64_flags="-64"
-	    sys_cc_optz_med="-O1"
-	    sys_cc_optz_fast="-O2"
-	    sys_cc_optz_fastest="-O3"
-            dll_flags="${dll_flags} -shared"
-	    def_cc_optz_flags="${sys_cc_optz_med}"
-	    def_cc_thread_defs="-D_REENTRANT"
-	    def_link_thread_libs=""
 
-	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-	    cc_flags="-LANG:std -LANG:ansi-for-init-scope=ON -ptused"
-	    cc_optz_flags="${def_cc_optz_flags}"
+case "${target}" in
+    x86_64-*-linux-*|i686-pc-*)
+        case "${CC}" in
+            icc)
+                { echo "$as_me:$LINENO: result: selecting the intel icc compiler..." >&5
+echo "${ECHO_T}selecting the intel icc compiler..." >&6; }
+        	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
+echo "${ECHO_T}selecting the ar archiver..." >&6; }
+        	    sys_cc_debug_flags="-g"
+        	    sys_cc_warn_flags=""
+        	    sys_cc_verb_flags=""
+        	    sys_cc_64_flags=""
+        	    sys_cc_optz_med="-tpp7"
+        	    sys_cc_optz_fast="-tpp7"
+        	    sys_cc_optz_fastest="-tpp7"
+                def_cc_optz_flags="${sys_cc_optz_med}"
 
-	    link_autolibs="-lm"
+                cc_flags="-c99 -align"
+                cc_optz_flags="${def_cc_optz_flags}"
+                cc_defs="-D__USE_ISOC99 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE"
 
-            AR="${CC}"
-            ar_flags=" -ar -o"
-         ;;
-         gcc)
-            { echo "$as_me:$LINENO: result: selecting the gnu compiler..." >&5
+                link_defs="${link_defs} -static"
+                def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+                def_link_thread_libs="-lpthread"
+            ;;
+            gcc)
+        	    { echo "$as_me:$LINENO: result: selecting the gnu compiler..." >&5
 echo "${ECHO_T}selecting the gnu compiler..." >&6; }
-	    { echo "$as_me:$LINENO: result: selecting the compiler option for the archiver..." >&5
-echo "${ECHO_T}selecting the compiler option for the archiver..." >&6; }
+        	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
+echo "${ECHO_T}selecting the ar archiver..." >&6; }
+        	    sys_cc_debug_flags="-g"
+        	    sys_cc_warn_flags="-Wall"
+        	    sys_cc_verb_flags="-v"
+        	    sys_cc_64_flags="-m64 -fPIC"
+        	    sys_cc_optz_med="-O1"
+        	    sys_cc_optz_fast="-O2"
+        	    sys_cc_optz_fastest="-O3"
 
-	    sys_cc_debug_flags="-g"
-	    sys_cc_warn_flags="-Wall"
-	    sys_cc_verb_flags="-v"
-	    sys_cc_64_flags=""
-	    sys_cc_optz_med="-O1"
-	    sys_cc_optz_fast="-O2"
-	    sys_cc_optz_fastest="-O3"
+        	    def_cc_optz_flags="${sys_cc_optz_med}"
+        	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+        	    def_link_thread_libs="-lpthread"
 
-	    def_cc_optz_flags="${sys_cc_optz_med}"
-	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
-	    def_link_thread_libs="-lpthread"
-	    dll_flags="${dll_flags} -fPIC -shared"
-	    cc_defs=""
-	    cc_flags=""
-	    cc_optz_flags="${def_cc_optz_flags}"
+        	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+                cc_flags="-fPIC"
+        	    cc_optz_flags="${def_cc_optz_flags}"
 
-	    link_autolibs="-ldl"
+                link_autolibs="-ldl"
 
-            ar_flags="-ru"
-         ;;
+        	    AR="ar"
+        	    ar_flags="-ru"
+        	    dll_flags="${dll_flags} -fPIC -shared"
+            ;;
       esac
    ;;
-
-   sparc-sun-*)
-      case "${CC}" in
-         cc)
-            { echo "$as_me:$LINENO: result: selecting the forte compiler..." >&5
-echo "${ECHO_T}selecting the forte compiler..." >&6; }
-	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
-echo "${ECHO_T}selecting the ar archiver..." >&6; }
-
-	    sys_cc_debug_flags="-g"
-	    sys_cc_warn_flags=""
-	    sys_cc_verb_flags="-v"
-	    sys_cc_64_flags="-xarch=generic64 -KPIC"
-	    sys_cc_optz_med="-xO1"
-	    sys_cc_optz_fast="-fast"
-	    sys_cc_optz_fastest="-fast"
+esac
+###########################################################
+#  Archiver                                               #
+###########################################################
+ar_flags="-crs"
+AR="ar"
 
 
-	    def_cc_optz_flags="${sys_cc_optz_med}"
-	    def_cc_thread_defs="-mt"
-	    def_link_thread_libs="-lthread"
-
-	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-	    cc_optz_flags="${def_cc_optz_flags}"
-
-            link_autolibs="-ldl"
-
-	    AR="ar"
-	    ar_flags="-ru"
-
-	    dll_flags="${dll_flags} -G -Kpic"
-
-         ;;
-         gcc)
-	    { echo "$as_me:$LINENO: result: selecting the gnu compiler..." >&5
-echo "${ECHO_T}selecting the gnu compiler..." >&6; }
-	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
-echo "${ECHO_T}selecting the ar archiver..." >&6; }
-
-	    sys_cc_debug_flags="-g"
-	    sys_cc_warn_flags="-Wall"
-	    sys_cc_verb_flags="-v"
-	    sys_cc_64_flags="-m64"
-	    sys_cc_optz_med="-O1"
-	    sys_cc_optz_fast="-O2"
-	    sys_cc_optz_fastest="-O3"
-
-	    def_cc_optz_flags="${sys_cc_optz_med}"
-	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
-	    def_link_thread_libs="-lpthread"
-
-	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-            cc_flags="-mcpu=supersparc"
-	    cc_optz_flags="${def_cc_optz_flags}"
-
-            link_autolibs=" -ldl"
-
-	    AR="ar"
-	    ar_flags="-ru"
-	    dll_flags="${dll_flags} -G -Kpic"
-
-         ;;
-      esac
+# Set value of POSIX string; This string is placed in Makefiles
+# on compliant systems to indicate POSIX mode.
+case "${target}" in
+   rs6000-ibm-*)
+      POSIX=""
    ;;
-
    powerpc-ibm-*)
-      case "${CC}" in
-         xlc)
-            { echo "$as_me:$LINENO: result: selecting the ibm compiler..." >&5
-echo "${ECHO_T}selecting the ibm compiler..." >&6; }
-            { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
-echo "${ECHO_T}selecting the ar archiver..." >&6; }
-            dll_flags="${dll_flags} -G"
-            sys_cc_debug_flags="-g"
-            sys_cc_warn_flags=""
-            sys_cc_verb_flags=""
-            sys_cc_64_flags="-q64"
-            sys_cc_optz_med=""
-            sys_cc_optz_fast=""
-            sys_cc_optz_fastest=""
-            cc_flags="-qsuppress=1540-0862 -qsuppress=1540-1052"
-            def_cc_optz_flags="${sys_cc_optz_med}"
-            def_cc_thread_defs="-D_REENTRANT -D__POSIX"
-            def_link_thread_libs="-lpthread"
-            cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D__aix__"
-            cc_flags="-qlonglong -qcheck=all"
-            cc_optz_flags="${def_cc_optz_flags}"
-
-            AR="ar"
-            ar_flags="-ru -Xany"
-
-            link_flags="-berok"
-         ;;
-         gcc)
-
-         ;;
-     esac
+      POSIX=""
    ;;
+esac
 
+
+# Make an adjustment for system compiler on AIX systems, which is named xlC.
+case "${target}" in
    rs6000-ibm-*)
       case "${CC}" in
-         xlc)
-	    { echo "$as_me:$LINENO: result: selecting the ibm compiler..." >&5
-echo "${ECHO_T}selecting the ibm compiler..." >&6; }
-	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
-echo "${ECHO_T}selecting the ar archiver..." >&6; }
-
-            dll_flags = "${dll_flags} -G"
-	    sys_cc_debug_flags="-g"
-	    sys_cc_warn_flags=""
-	    sys_cc_verb_flags=""
-	    sys_cc_64_flags="-q64"
-	    sys_cc_optz_med="-O1"
-	    sys_cc_optz_fast="-O2"
-	    sys_cc_optz_fastest="-O3"
-            cc_flags="-qsuppress=1540-0862 -qsuppress=1540-0152"
-
-            def_cc_optz_flags="${sys_cc_optz_med}"
-	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
-	    def_link_thread_libs="-lpthread"
-
-	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-            cc_flags="-qlonglong -qcheck=all"
-	    cc_optz_flags="${def_cc_optz_flags}"
-
-	    AR="ar"
-	    ar_flags="-ru"
-
-            link_flags="-berok"
-         ;;
-         gcc)
-	    { echo "$as_me:$LINENO: result: \"selecting the gnu compiler...\"" >&5
-echo "${ECHO_T}\"selecting the gnu compiler...\"" >&6; }
-	    { echo "$as_me:$LINENO: result: \"selecting the ar archiver...\"" >&5
-echo "${ECHO_T}\"selecting the ar archiver...\"" >&6; }
-
-	    sys_cc_debug_flags="-g"
-	    sys_cc_warn_flags="-Wall"
-	    sys_cc_verb_flags="-v"
-	    sys_cc_64_flags="-m64"
-	    sys_cc_optz_med="-O1"
-	    sys_cc_optz_fast="-O2"
-	    sys_cc_optz_fastest="-O3"
-
-	    def_cc_optz_flags="${sys_cc_optz_med}"
-	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
-	    def_link_thread_libs="-lpthread"
-
-	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-            cc_flags=""
-	    cc_optz_flags="${def_cc_optz_flags}"
-
-            link_autolibs="-ldl"
-
-	    AR="ar"
-	    ar_flags="-ru"
-	    dll_flags="${dll_flags} -fPIC -shared"
+         cc)
+            CC="xlc"
          ;;
       esac
    ;;
+   powerpc-ibm-*)
+      case "${CC}" in
+         cc)
+            CC="xlc"
+         ;;
+      esac
+   ;;
+esac
 
-   powerpc-apple-*)
-            { echo "$as_me:$LINENO: result: attempting to configure for the mac..." >&5
+
+case "${target}" in
+    powerpc-ibm-*)
+        case "${CC}" in
+            xlc)
+                { echo "$as_me:$LINENO: result: selecting the ibm compiler..." >&5
+echo "${ECHO_T}selecting the ibm compiler..." >&6; }
+                { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
+echo "${ECHO_T}selecting the ar archiver..." >&6; }
+                dll_flags="${dll_flags} -G"
+                sys_cc_debug_flags="-g"
+                sys_cc_warn_flags=""
+                sys_cc_verb_flags=""
+                sys_cc_64_flags="-q64"
+                sys_cc_optz_med=""
+                sys_cc_optz_fast=""
+                sys_cc_optz_fastest=""
+                cc_flags="-qsuppress=1540-0862 -qsuppress=1540-1052"
+                def_cc_optz_flags="${sys_cc_optz_med}"
+                def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+                def_link_thread_libs="-lpthread"
+                cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D__aix__"
+                cc_flags="-qlonglong -qcheck=all"
+                cc_optz_flags="${def_cc_optz_flags}"
+
+                AR="ar"
+                ar_flags="-ru -Xany"
+
+                link_flags="-berok"
+            ;;
+            gcc)
+            ;;
+        esac
+    ;;
+
+   rs6000-ibm-*)
+        case "${CC}" in
+            xlc)
+        	    { echo "$as_me:$LINENO: result: selecting the ibm compiler..." >&5
+echo "${ECHO_T}selecting the ibm compiler..." >&6; }
+        	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
+echo "${ECHO_T}selecting the ar archiver..." >&6; }
+
+                dll_flags = "${dll_flags} -G"
+        	    sys_cc_debug_flags="-g"
+        	    sys_cc_warn_flags=""
+        	    sys_cc_verb_flags=""
+        	    sys_cc_64_flags="-q64"
+        	    sys_cc_optz_med="-O1"
+        	    sys_cc_optz_fast="-O2"
+        	    sys_cc_optz_fastest="-O3"
+                cc_flags="-qsuppress=1540-0862 -qsuppress=1540-0152"
+
+                def_cc_optz_flags="${sys_cc_optz_med}"
+        	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+        	    def_link_thread_libs="-lpthread"
+
+        	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+                cc_flags="-qlonglong -qcheck=all"
+        	    cc_optz_flags="${def_cc_optz_flags}"
+
+        	    AR="ar"
+        	    ar_flags="-ru"
+
+                link_flags="-berok"
+            ;;
+            gcc)
+                { echo "$as_me:$LINENO: result: \"selecting the gnu compiler...\"" >&5
+echo "${ECHO_T}\"selecting the gnu compiler...\"" >&6; }
+        	    { echo "$as_me:$LINENO: result: \"selecting the ar archiver...\"" >&5
+echo "${ECHO_T}\"selecting the ar archiver...\"" >&6; }
+
+        	    sys_cc_debug_flags="-g"
+        	    sys_cc_warn_flags="-Wall"
+        	    sys_cc_verb_flags="-v"
+        	    sys_cc_64_flags="-m64"
+        	    sys_cc_optz_med="-O1"
+        	    sys_cc_optz_fast="-O2"
+        	    sys_cc_optz_fastest="-O3"
+
+        	    def_cc_optz_flags="${sys_cc_optz_med}"
+        	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
+        	    def_link_thread_libs="-lpthread"
+
+        	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+                cc_flags=""
+        	    cc_optz_flags="${def_cc_optz_flags}"
+
+                link_autolibs="-ldl"
+
+        	    AR="ar"
+        	    ar_flags="-ru"
+        	    dll_flags="${dll_flags} -fPIC -shared"
+            ;;
+        esac
+    ;;
+esac
+###########################################################
+#  Archiver                                               #
+###########################################################
+ar_flags="-crs"
+AR="ar"
+
+case "${target}" in
+    powerpc-apple-*)
+        { echo "$as_me:$LINENO: result: attempting to configure for the mac..." >&5
 echo "${ECHO_T}attempting to configure for the mac..." >&6; }
 	    { echo "$as_me:$LINENO: result: selecting the gnu compiler..." >&5
 echo "${ECHO_T}selecting the gnu compiler..." >&6; }
@@ -4861,72 +4856,41 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
 	    def_link_thread_libs="-lpthread"
 
 	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-            cc_flags=""
+        cc_flags=""
 	    cc_optz_flags="${def_cc_optz_flags}"
-            link_autolibs="-ldl"
+        link_autolibs="-ldl"
 
 	    AR="ar"
 	    dll_flags="${dll_flags} -fPIC -shared"
-   ;;
-   x86_64-*-linux-*|i686-pc-*)
-      case "${CC}" in
-         icc)
-            { echo "$as_me:$LINENO: result: selecting the intel icc compiler..." >&5
-echo "${ECHO_T}selecting the intel icc compiler..." >&6; }
-	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
-echo "${ECHO_T}selecting the ar archiver..." >&6; }
-	    sys_cc_debug_flags="-g"
-	    sys_cc_warn_flags=""
-	    sys_cc_verb_flags=""
-	    sys_cc_64_flags=""
-	    sys_cc_optz_med="-tpp7"
-	    sys_cc_optz_fast="-tpp7"
-	    sys_cc_optz_fastest="-tpp7"
-            def_cc_optz_flags="${sys_cc_optz_med}"
-
-            cc_flags="-c99 -align"
-	    cc_optz_flags="${def_cc_optz_flags}"
-	    cc_defs="-D__USE_ISOC99 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE"
-
-            link_defs="${link_defs} -static"
-            def_cc_thread_defs="-D_REENTRANT -D__POSIX"
-	    def_link_thread_libs="-lpthread"
-         ;;
-         gcc)
-	    { echo "$as_me:$LINENO: result: selecting the gnu compiler..." >&5
-echo "${ECHO_T}selecting the gnu compiler..." >&6; }
-	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
-echo "${ECHO_T}selecting the ar archiver..." >&6; }
-	    sys_cc_debug_flags="-g"
-	    sys_cc_warn_flags="-Wall"
-	    sys_cc_verb_flags="-v"
-	    sys_cc_64_flags="-m64 -fPIC"
-	    sys_cc_optz_med="-O1"
-	    sys_cc_optz_fast="-O2"
-	    sys_cc_optz_fastest="-O3"
-
-	    def_cc_optz_flags="${sys_cc_optz_med}"
-	    def_cc_thread_defs="-D_REENTRANT -D__POSIX"
-	    def_link_thread_libs="-lpthread"
-
-	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-            cc_flags="-fPIC"
-	    cc_optz_flags="${def_cc_optz_flags}"
-
-            link_autolibs="-ldl"
-
-	    AR="ar"
-	    ar_flags="-ru"
-	    dll_flags="${dll_flags} -fPIC -shared"
-
-         ;;
-      esac
-   ;;
+    ;;
 esac
 
+###########################################################
+# Compiler variables:                                     #
+###########################################################
+cc_defs=""
+cc_flags=""
+cc_includes=""
+cc_optz_flags=""
+cc_debug_flags=""
+cc_warn_flags=""
+cc_verb_flags=""
 
-######################################################################
-# Process '--enable-64bit' argument.
+###########################################################
+# We give the compile pre-tool its own section            #
+###########################################################
+pretool=""
+pretool_defs=""
+pretool_flags=""
+
+enabled_64bit="false"
+
+# Do we want to create DSOs?
+make_dsos="false"
+
+
+
+
 # Check whether --enable-64bit was given.
 if test "${enable_64bit+set}" = set; then
   enableval=$enable_64bit; ok=${enableval}
@@ -5015,62 +4979,6 @@ echo "${ECHO_T}enabling verbose..." >&6; }
      cc_verb_flags="${sys_cc_verb_flags}"
 fi
 
-# Check whether --enable-threading was given.
-if test "${enable_threading+set}" = set; then
-  enableval=$enable_threading; ok=$enable_threading
-else
-  ok="yes"
-fi
-
-if test "${ok}" = "no"
-then
-     { echo "$as_me:$LINENO: result: disabling threading..." >&5
-echo "${ECHO_T}disabling threading..." >&6; }
-     cc_thread_defs=""
-     link_thread_libs=""
-else
-     { echo "$as_me:$LINENO: result: enabling threading..." >&5
-echo "${ECHO_T}enabling threading..." >&6; }
-     cc_thread_defs="${def_cc_thread_defs}"
-     link_thread_libs="${def_link_thread_libs}"
-fi
-
-
-
-# Check whether --with-thread-layer was given.
-if test "${with_thread_layer+set}" = set; then
-  withval=$with_thread_layer; ok=${withval}
-else
-  ok="no"
-fi
-
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-   cc_thread_defs="${def_cc_thread_defs}"
-   case "${ok}" in
-      pthreads)
-         { echo "$as_me:$LINENO: result: enabling pthreads..." >&5
-echo "${ECHO_T}enabling pthreads..." >&6; }
-         link_thread_libs="-lpthread"
-	 cc_thread_defs="-D_REENTRANT -D__POSIX"
-      ;;
-      solaris)
-         { echo "$as_me:$LINENO: result: enabling solaris threads..." >&5
-echo "${ECHO_T}enabling solaris threads..." >&6; }
-	 cc_thread_libs="-D_REENTRANT -lthread"
-      ;;
-      nspr)
-         { echo "$as_me:$LINENO: result: enabling nspr portable threads..." >&5
-echo "${ECHO_T}enabling nspr portable threads..." >&6; }
-	 link_thread_libs="-lnspr4"
-	 cc_thread_defs="-D_REENTRANT -DUSE_NSPR_THREADS"
-      ;;
-      irix)
-	{ echo "$as_me:$LINENO: result: enabling irix sproc-based threading..." >&5
-echo "${ECHO_T}enabling irix sproc-based threading..." >&6; }
-   esac
-fi
-
 
 
 # Check whether --with-optz was given.
@@ -5101,23 +5009,6 @@ echo "${ECHO_T}setting fastest optimization flags..." >&6; }
       ;;
 
    esac
-fi
-
-
-
-# Check whether --with-thread-home was given.
-if test "${with_thread_home+set}" = set; then
-  withval=$with_thread_home; ok=${withval}
-else
-  ok="no"
-fi
-
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-         { echo "$as_me:$LINENO: result: setting thread home... ${ok}" >&5
-echo "${ECHO_T}setting thread home... ${ok}" >&6; }
-	 link_thread_libpath="-L${ok}/lib ${link_thread_libpath}"
-	 cc_thread_includes="-I${ok}/include ${cc_thread_includes}"
 fi
 
 
@@ -5274,6 +5165,96 @@ then
 fi
 
 
+
+
+
+###########################################################
+# Default variables                                       #
+###########################################################
+def_thread_cc_flags=""
+def_thread_defs="-D_REENTRANT"
+def_thread_layer="-lpthread"
+
+# Threading processing cc stuff
+cc_thread_includes=""
+cc_thread_defs=""
+cc_thread_flags=""
+
+
+# Check whether --enable-threading was given.
+if test "${enable_threading+set}" = set; then
+  enableval=$enable_threading; ok=$enable_threading
+else
+  ok="yes"
+fi
+
+if test "${ok}" = "no"
+then
+     { echo "$as_me:$LINENO: result: disabling threading..." >&5
+echo "${ECHO_T}disabling threading..." >&6; }
+     cc_thread_defs=""
+     link_thread_libs=""
+else
+     { echo "$as_me:$LINENO: result: enabling threading..." >&5
+echo "${ECHO_T}enabling threading..." >&6; }
+     cc_thread_defs="${def_cc_thread_defs}"
+     link_thread_libs="${def_link_thread_libs}"
+fi
+
+
+
+# Check whether --with-thread-layer was given.
+if test "${with_thread_layer+set}" = set; then
+  withval=$with_thread_layer; ok=${withval}
+else
+  ok="no"
+fi
+
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   cc_thread_defs="${def_cc_thread_defs}"
+   case "${ok}" in
+      pthreads)
+         { echo "$as_me:$LINENO: result: enabling pthreads..." >&5
+echo "${ECHO_T}enabling pthreads..." >&6; }
+         link_thread_libs="-lpthread"
+	 cc_thread_defs="-D_REENTRANT -D__POSIX"
+      ;;
+      solaris)
+         { echo "$as_me:$LINENO: result: enabling solaris threads..." >&5
+echo "${ECHO_T}enabling solaris threads..." >&6; }
+	 cc_thread_libs="-D_REENTRANT -lthread"
+      ;;
+      nspr)
+         { echo "$as_me:$LINENO: result: enabling nspr portable threads..." >&5
+echo "${ECHO_T}enabling nspr portable threads..." >&6; }
+	 link_thread_libs="-lnspr4"
+	 cc_thread_defs="-D_REENTRANT -DUSE_NSPR_THREADS"
+      ;;
+      irix)
+	{ echo "$as_me:$LINENO: result: enabling irix sproc-based threading..." >&5
+echo "${ECHO_T}enabling irix sproc-based threading..." >&6; }
+   esac
+fi
+
+
+
+# Check whether --with-thread-home was given.
+if test "${with_thread_home+set}" = set; then
+  withval=$with_thread_home; ok=${withval}
+else
+  ok="no"
+fi
+
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+         { echo "$as_me:$LINENO: result: setting thread home... ${ok}" >&5
+echo "${ECHO_T}setting thread home... ${ok}" >&6; }
+	 link_thread_libpath="-L${ok}/lib ${link_thread_libpath}"
+	 cc_thread_includes="-I${ok}/include ${cc_thread_includes}"
+fi
+
+
 #disable optz if we are debugging
 if test "${cc_debug_flags}" != ""
 then
@@ -5310,14 +5291,12 @@ link_libpath="${libpath} ${link_thread_libpath}"
 
 
 
-
 # Figure out which Makefile.ins to process; look here and
 # in all subdirectories for any file named Makefile.in, and
 # turn it into a Makefile.
 # If you want to process other files, you can add them
 # along with this variable.
 
-#makefile_in_subs=`find . -name Makefile.in -print | sed 's/Makefile.in$/Makefile/'`
 makefile_in_subs=`find . -name Makefile.in -print | sed 's/.in$//'`
 ac_config_files="$ac_config_files ${makefile_in_subs}"
 
@@ -5940,10 +5919,11 @@ OBJEXT!$OBJEXT$ac_delim
 CPP!$CPP$ac_delim
 GREP!$GREP$ac_delim
 EGREP!$EGREP$ac_delim
+pretool!$pretool$ac_delim
+make_dsos!$make_dsos$ac_delim
 cc_includes!$cc_includes$ac_delim
 cc_flags!$cc_flags$ac_delim
 cc_defs!$cc_defs$ac_delim
-pretool!$pretool$ac_delim
 POSIX!$POSIX$ac_delim
 ar_flags!$ar_flags$ac_delim
 dll_flags!$dll_flags$ac_delim
@@ -5955,7 +5935,6 @@ link_postlibs!$link_postlibs$ac_delim
 link_libpath!$link_libpath$ac_delim
 link_flags!$link_flags$ac_delim
 lib_dir!$lib_dir$ac_delim
-make_dsos!$make_dsos$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
