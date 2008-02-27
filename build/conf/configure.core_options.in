@@ -23,6 +23,25 @@ make_dsos="false"
 
 
 
+checkprog ()
+{
+   # The AC_CHECK_PROG macro seems to replace the value of
+   # its argument with dummy sometimes, so we make a copy
+   # of it here.
+   progname="${1}"
+   AC_CHECK_PROG(result, "$1", "found", "not_found")
+
+   if test "${result}" = "not_found"
+   then
+      echo ""
+      echo "########## WARNING! Can't find program: ##########"
+      echo "# ${progname}"
+      echo "########### Value will be used anyway. ###########"
+      echo ""
+   fi
+}
+
+
 
 AC_ARG_ENABLE(64bit,
               [  --enable-64bit		Make a 64-bit build.],
@@ -160,7 +179,8 @@ AC_ARG_WITH(pretool,
             ok="no")
 if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
 then
-   pretool="${ok}"
+    checkprog "${ok}"
+    pretool="${ok}"
 fi
 
 ######################################################################

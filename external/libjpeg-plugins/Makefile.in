@@ -1,0 +1,20 @@
+include build/Makefile
+
+all: plugin
+
+############################################
+#  Make the library
+plugin:
+	cd source;make
+
+install:
+	\mv  source/@target@/${DSO} @prefix@/.
+
+clean:
+	rm -f ./source/@target@/*.so
+	perl @build_dir@/rfk.pl -f
+
+fresh: 
+	make clean
+	make all
+

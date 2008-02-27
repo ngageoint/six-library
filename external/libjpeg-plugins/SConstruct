@@ -1,0 +1,25 @@
+import glob, os, string, sys, shutil
+sys.path.append('../../../utils')
+import scons_utils
+sys.path.pop()
+
+LIB_NAME = 'LibjpegDecompress'
+
+# Handle command-line options
+opts = scons_utils.add_default_options(Options())
+env = Environment(options = opts, ENV = os.environ)
+Help(opts.GenerateHelpText(env))
+
+# Get the target name, and setup all the system-dependent flags and libs
+local_lib = scons_utils.do_configure(env)
+print "Building %s for %s" % (LIB_NAME, env['PLATFORM'])
+
+sourceFiles = scons_utils.get_source_files('./source', ext='.c', platform=env['PLATFORM'])
+build_libs = [{'source':sourceFiles, 'lib':'%s' % LIB_NAME, 'dynamic':True,
+        'depends':['nitf-c']}]
+include_path = ['../../../modules/c/nitf/include']
+env.Append(CPPPATH = include_path)
+env.Append(CCFLAGS = ['-DNITF_MODULE_EXPORTS'])
+lib_path = ['../../../modules/c/nitf/%s' % local_lib]
+
+libs = scons_utils.make_libs(env, build_libs, local_lib, lib_path)
