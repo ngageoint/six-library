@@ -4500,7 +4500,7 @@ int nitf_ImageIO_done_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
 
 int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 {
-    _nitf_ImageIO *nitf;        /* Parent _nitf_ImageIO object */
+    _nitf_ImageIO *nitf = NULL; /* Parent _nitf_ImageIO object */
     nitf_Uint32 startBlockRow;  /* Starting blockRow */
     nitf_Uint32 endBlockRow;    /* Ending blockRow */
     nitf_Uint32 startBlockCol;    /* Starting blockCol */
@@ -4513,8 +4513,8 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     nitf_Uint32 residual;       /* Partial sample columns previous block */
     nitf_Uint32 myResidual;     /* Partial sample columns current block */
     nitf_Uint32 bytes;          /* Bytes per pixel */
-    _nitf_ImageIOBlock **blockIOs;/* The block I/O control structures */
-    _nitf_ImageIOBlock *blockIO; /* The current block I/O control structure */
+    _nitf_ImageIOBlock **blockIOs = NULL;/* The block I/O control structures */
+    _nitf_ImageIOBlock *blockIO = NULL; /* The current block I/O control structure */
     nitf_Uint32 columnCountFR;  /* Remaining column transfer count (bytes) */
     nitf_Uint32 numColsFR;      /* Total number of columns requested FR */
     nitf_Uint32 startRowThisBlock;      /* Start row for current block (pixels) */
@@ -4526,10 +4526,10 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     nitf_Uint32 bandIdx;        /* Current band index */
     nitf_Uint32 blockIdx;       /* Current block index */
     nitf_Uint32 band;           /* Current band */
-    nitf_Uint8 *ioBuffer;       /* I/O buffer */
-    nitf_Uint8 *unpackedBuffer; /* Unpacked data buffer */
+    nitf_Uint8 *ioBuffer = NULL; /* I/O buffer */
+    nitf_Uint8 *unpackedBuffer = NULL; /* Unpacked data buffer */
     nitf_Uint8 blockColIdx;     /* Current block column index */
-    nitf_Uint8 *cacheBuffer;    /* Current cach buffer */
+    nitf_Uint8 *cacheBuffer = NULL; /* Current cach buffer */
     NITF_BOOL freeCacheBuffer;  /* Sets block control free flag */
     /* Resets freeCacheBuffer flag */
     NITF_BOOL freeCacheBufferReset;
