@@ -1,7 +1,13 @@
-import glob, os, string, sys, shutil
-sys.path.append('../../../utils')
+import sys, os, glob
+
+sys.path.append('../../build/scons')
 import scons_utils
 sys.path.pop()
+
+################################################################################
+# PROJECT SPECIFIC VARS/CODE
+################################################################################
+#==============================================================================#
 
 LIB_NAME = 'nitf-jni'
 
@@ -27,10 +33,8 @@ env.Append(CCFLAGS = ['-DNITF_MODULE_EXPORTS'])
 #make the lib(s)
 libs = scons_utils.make_libs(env, build_libs, local_lib, lib_path)
 
-#make the tests
-for test in glob.glob('tests/*.c'):
-    testexe = env.Program(test.strip('.c'), [test], LIBS=['%s' % LIB_NAME] + depends + env['LIBS'], LIBPATH=lib_path + [local_lib] + env['LIBPATH'])
-
 dirname, filename = os.path.split(str(libs[0][0]))
 ext = os.path.splitext(filename)[1]
 env.InstallAs(os.path.join(dirname, 'nitf.jni-c%s' % ext), str(libs[0][0]))
+
+#==============================================================================#
