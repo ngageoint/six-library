@@ -1,7 +1,6 @@
 [Setup]
 AppName=NITRO
-VersionInfoVersion = 1.5.0
-AppVerName=NITRO 1.5.0
+AppVerName=NITRO 1.5-RC2
 AppPublisherURL=http://sourceforge.net/projects/nitro-nitf/
 AppSupportURL=http://sourceforge.net/projects/nitro-nitf/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
@@ -12,21 +11,22 @@ LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=NITRO-1.5.0-setup
+OutputBaseFilename=NITRO-1.5-RC2-setup
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Types]
-Name: "default"; Description: "Default Installation"
-Name: "all"; Description: "Full Installation"
+Name: "full"; Description: "Full Installation"
+Name: "compact"; Description: "Compact Installation"
 Name: "custom"; Description: "Custom Installation"; Flags: iscustom
 
 [Components]
-Name: "core"; Description: "Core Library and Header Files"; Types: all default custom; Flags: fixed
-Name: "tests"; Description: "Tests"; Types: all default
-Name: "tres"; Description: "TRE Plug-Ins"; Types: all default
-Name: "jpeg"; Description: "JPEG Plug-Ins"; Types: all
+Name: "core"; Description: "Core Library and Header Files"; Types: full compact custom; Flags: fixed
+Name: "tres"; Description: "TRE Plug-Ins"; Types: full compact
+Name: "jpeg"; Description: "JPEG Plug-Ins"; Types: full compact
+Name: "tests"; Description: "Tests"; Types: full
+
 
 
 [Files]
