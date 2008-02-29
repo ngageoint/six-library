@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-#if defined(_REENTRANT) && defined(__sgi)
+#if defined(__sgi)
 
 NITFPROT(void) nitf_Mutex_lock(nitf_Mutex * m)
 {

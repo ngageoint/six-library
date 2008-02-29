@@ -23,8 +23,8 @@
 #include "nitf/Sync.h"
 
 NITF_CXX_GUARD
-#if defined(_REENTRANT)
-#   if defined(WIN32)
+#if defined(WIN32)
+
 NITFPROT(void) nitf_Mutex_lock(nitf_Mutex * m)
 {
     LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION) (*m);
@@ -67,22 +67,6 @@ NITFPROT(void) nitf_Mutex_delete(nitf_Mutex * m)
         NITF_FREE(lpCriticalSection);
     }
 }
-#   endif
-#else                           /* We are not re-entrant :( */
-NITFPROT(void) nitf_Mutex_lock(nitf_Mutex * m)
-{}
-
-
-NITFPROT(void) nitf_Mutex_unlock(nitf_Mutex * m)
-{}
-
-
-NITFPROT(void) nitf_Mutex_init(nitf_Mutex * m)
-{}
-
-
-NITFPROT(void) nitf_Mutex_delete(nitf_Mutex * m)
-{}
 #endif
 
 NITF_CXX_ENDGUARD

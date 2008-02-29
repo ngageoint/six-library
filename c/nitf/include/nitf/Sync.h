@@ -29,19 +29,17 @@
 
 NITF_CXX_GUARD
 
-#ifdef _REENTRANT
-#   if defined(WIN32)
-typedef LPCRITICAL_SECTION nitf_Mutex;
-#   elif defined(__sgi)
-#       include <sys/atomic_ops.h>
-#       define NITF_MUTEX_INIT 0
-typedef int nitf_Mutex;
-#   else
-#       include <pthread.h>
-#       define NITF_MUTEX_INIT PTHREAD_MUTEX_INITIALIZER
-typedef pthread_mutex_t nitf_Mutex;
-#   endif
-#endif /* _REENTRANT */
+#if defined(WIN32)
+    typedef LPCRITICAL_SECTION nitf_Mutex;
+#elif defined(__sgi)
+#   include <sys/atomic_ops.h>
+#   define NITF_MUTEX_INIT 0
+    typedef int nitf_Mutex;
+#else
+#   include <pthread.h>
+#   define NITF_MUTEX_INIT PTHREAD_MUTEX_INITIALIZER
+    typedef pthread_mutex_t nitf_Mutex;
+#endif
 
 NITFPROT(void) nitf_Mutex_lock(nitf_Mutex* m);
 NITFPROT(void) nitf_Mutex_unlock(nitf_Mutex* m);
