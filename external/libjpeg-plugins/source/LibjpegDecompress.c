@@ -1267,7 +1267,14 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
 
 
     /*  First we try and create a FILE* to make libjpeg work  */
+#ifdef WIN32
+    {
+        int h = _open_osfhandle((long) implControl->io, 0);
+        jstream = _fdopen(h, "r");
+    }
+#else
     jstream = fdopen(implControl->io, "r");
+#endif
 
     /*  This is our first opportunity to check for failure  */
     if (jstream == NULL)
