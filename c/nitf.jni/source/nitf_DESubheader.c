@@ -1,0 +1,211 @@
+/* =========================================================================
+ * This file is part of NITRO
+ * =========================================================================
+ * 
+ * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ *
+ * NITRO is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this program; if not, If not, 
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#include "nitf_DESubheader.h"
+#include "nitf_JNI.h"
+
+NITF_JNI_DECLARE_OBJ(nitf_DESubheader)
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getFilePartType
+ * Signature: ()Lnitf/Field;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getFilePartType
+    (JNIEnv * env, jobject self)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+    return _GetFieldObj(env, header->filePartType);
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getTypeID
+ * Signature: ()Lnitf/Field;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getTypeID
+    (JNIEnv * env, jobject self)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+    return _GetFieldObj(env, header->typeID);
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getSecurityClass
+ * Signature: ()Lnitf/Field;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getSecurityClass
+    (JNIEnv * env, jobject self)
+{
+
+    nitf_DESubheader *header = _GetObj(env, self);
+    return _GetFieldObj(env, header->securityClass);
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getSecurityGroup
+ * Signature: ()Lnitf/FileSecurity;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getSecurityGroup
+    (JNIEnv * env, jobject self)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+    jclass securityClass = (*env)->FindClass(env, "nitf/FileSecurity");
+    jobject security;
+    jmethodID methodID =
+        (*env)->GetMethodID(env, securityClass, "<init>", "(J)V");
+    security =
+        (*env)->NewObject(env, securityClass, methodID,
+                          (jlong) header->securityGroup);
+    return security;
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getVersion
+ * Signature: ()Lnitf/Field;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getVersion
+    (JNIEnv * env, jobject self)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+    return _GetFieldObj(env, header->version);
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getOverflowedHeaderType
+ * Signature: ()Lnitf/Field;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getOverflowedHeaderType
+    (JNIEnv * env, jobject self)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+    return _GetFieldObj(env, header->overflowedHeaderType);
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getDataItemOverflowed
+ * Signature: ()Lnitf/Field;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getDataItemOverflowed
+    (JNIEnv * env, jobject self)
+{
+
+    nitf_DESubheader *header = _GetObj(env, self);
+    return _GetFieldObj(env, header->dataItemOverflowed);
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getSubheaderFieldsLength
+ * Signature: ()Lnitf/Field;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getSubheaderFieldsLength
+    (JNIEnv * env, jobject self)
+{
+
+    nitf_DESubheader *header = _GetObj(env, self);
+    return _GetFieldObj(env, header->subheaderFieldsLength);
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getSubheaderFields
+ * Signature: ()Lnitf/TRE;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getSubheaderFields
+    (JNIEnv * env, jobject self)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+
+    jclass treClass = (*env)->FindClass(env, "nitf/TRE");
+    jobject tre = NULL;
+    jmethodID methodID =
+        (*env)->GetMethodID(env, treClass, "<init>", "(J)V");
+
+    if (header->subheaderFields)
+    {
+        tre = (*env)->NewObject(env,
+                                treClass,
+                                methodID, (jlong) header->subheaderFields);
+    }
+    return tre;
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getDataLength
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_nitf_DESubheader_getDataLength
+    (JNIEnv * env, jobject self)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+    return header->dataLength;
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    setDataLength
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_nitf_DESubheader_setDataLength
+    (JNIEnv * env, jobject self, jlong dataLength)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+    header->dataLength = dataLength;
+}
+
+
+/*
+ * Class:     nitf_DESubheader
+ * Method:    getUserDefinedSection
+ * Signature: ()Lnitf/Extensions;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getUserDefinedSection
+    (JNIEnv * env, jobject self)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+    jclass extensionsClass = (*env)->FindClass(env, "nitf/Extensions");
+    jmethodID methodID =
+        (*env)->GetMethodID(env, extensionsClass, "<init>", "(J)V");
+    jobject extensions = (*env)->NewObject(env,
+                                           extensionsClass,
+                                           methodID,
+                                           (jlong) header->
+                                           userDefinedSection);
+    return extensions;
+}
+

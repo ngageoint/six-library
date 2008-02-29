@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="nitf" basedir="." default="build">
+
+    <property name="object-dir" location="target/classes"/>
+    <property name="lib-dir" location="target"/>
+
+    <target name="init">
+        <mkdir dir="${object-dir}"/>
+        <mkdir dir="${lib-dir}"/>
+        <loadproperties srcFile="project.properties"/>
+    </target>
+
+
+    <target name="clean">
+        <echo>"====================================================="</echo>
+        <echo>"                        CLEAN                        "</echo>
+        <echo>"====================================================="</echo>
+        <delete dir="${object-dir}"/>
+        <delete dir="${lib-dir}"/>
+        <delete dir="${javadoc-dir}"/>
+    </target>
+
+
+    <target name="compile" depends="init">
+        <echo>"====================================================="</echo>
+        <echo>"                       COMPILE                       "</echo>
+        <echo>"====================================================="</echo>
+        <javac srcdir="${src.dir}" destdir="${object-dir}"
+            failonerror="yes" fork="true"/>
+    </target>
+
+
+    <target name="build" depends="compile">
+        <echo>"====================================================="</echo>
+        <echo>"                        BUILD                        "</echo>
+        <echo>"====================================================="</echo>
+        <jar basedir="${object-dir}" destfile="${lib-dir}/${projectName}-${version}.jar"/>
+    </target>
+
+
+    <target name="tests" depends="build">
+        <echo>"====================================================="</echo>
+        <echo>"                        TESTS                        "</echo>
+        <echo>"====================================================="</echo>
+        <javac srcdir="${test.dir}"
+            destdir="${object-dir}"
+            classpath="${object-dir}"
+            failonerror="yes" fork="true"/>
+    </target>
+
+
+    <target name="javadoc" depends="init">
+        <echo>"====================================================="</echo>
+        <echo>"                       JAVADOC                       "</echo>
+        <echo>"====================================================="</echo>
+        <!--get the current timestamp-->
+        <tstamp>
+            <format property="touch.time" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+        </tstamp>
+
+        <javadoc packagenames="nitf.*"
+            sourcepath="${src.dir}"
+            defaultexcludes="yes"
+            destdir="${javadoc.dir}"
+            author="true"
+            version="true"
+            use="true"
+            windowtitle="NITF API">
+
+            <bottom><![CDATA[<i>Copyright &#169; 2004-2006 General Dynamics All Rights Reserved.</i>]]></bottom>
+            <footer><![CDATA[<b>Created: ${touch.time}</b>]]></footer>
+            <tag name="todo" scope="all" description="To do:"/>
+        </javadoc>
+    </target>
+
+    <!--build the whole thing-->
+    <target name="build-all" depends="build"/>
+
+
+</project>
