@@ -21,7 +21,7 @@
  */
 
 #include <import/nitf.h>
-
+#include "nitf/TREUtils.h"
 #define SHOW(X) printf("%s=[%s]\n", #X, ((X==0)?"(nul)":X))
 #define SHOWI(X) printf("%s=[%ld]\n", #X, X)
 #define SHOWLL(X) printf("%s=[%lld]\n", #X, X)
@@ -42,16 +42,64 @@ int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData, nitf_Err
 
             while (nitf_ListIterator_notEqualTo(&iter, &end))
             {
+				int i = 0;
                 nitf_TRE *tre = (nitf_TRE *) nitf_ListIterator_get(&iter);
-                if (tre->length <= 0)
-                    treLength = nitf_TRE_computeLength(tre);
+				nitf_TREEnumerator* it;
+				if (tre->length <= 0)
+				{
+					perror("Invalid tre->length (0)");
+				}
                 else
                     treLength = tre->length;
-                printf("\n--------------- %s TRE (%d) ---------------\n",
-                       pair->key, treLength);
-                nitf_TRE_print(tre, error);
+                printf("\n--------------- %s TRE (%d) ---------------\n", pair->key, treLength);
+
+
+				
+				
+				for (it = nitf_TRE_begin(tre, error); 
+					it != NULL; it->next(&it, error) )
+				{
+					nitf_Pair* fieldPair;
+					i++;
+					
+					fieldPair = it->get(it, error);
+					printf("%s = [", fieldPair->key);    
+					nitf_Field_print((nitf_Field *) fieldPair->data);
+					printf("]\n");
+/*
+					// If you uncomment this section, it will change them
+					// into ASCII smiley face 1 and 2
+					printf("And now Im changing it!\n");
+					
+					nitf_TRE_setField(tre, fieldPair->key, &i, sizeof(i), error);
+					fieldPair = it->get(it, error);
+					printf("New %s = [", fieldPair->key);    
+					nitf_Field_print((nitf_Field *) fieldPair->data);
+					printf("]\n");
+*/
+
+				}
+				/*
+				do
+				{
+					nitf_Pair* fieldPair;
+					if (!it)
+						break;
+					
+					fieldPair = it->get(it, error);
+					printf("%s = [", fieldPair->key);    
+					nitf_Field_print((nitf_Field *) fieldPair->data);
+					printf("]\n");
+				
+				} while (it->next(&it, error));
+*/
+
+				
+              
+                //nitf_TREUtils_print(tre, error);
                 printf("---------------------------------------------\n");
                 nitf_ListIterator_increment(&iter);
+				
             }
         }
     }
@@ -560,7 +608,7 @@ void showDESubheader(nitf_DESubheader * sub)
     SHOW_VAL(sub->overflowedHeaderType);
     SHOW_VAL(sub->dataItemOverflowed);
     SHOW_VAL(sub->subheaderFieldsLength);
-    nitf_TRE_print(sub->subheaderFields, &error);
+    nitf_TREUtils_print(sub->subheaderFields, &error);
     SHOWI(sub->dataLength);
 
     if (sub->userDefinedSection)
@@ -590,7 +638,7 @@ void showRESubheader(nitf_RESubheader * sub)
         showSecurityGroup(sub->securityGroup);
 
     SHOW_VAL(sub->subheaderFieldsLength);
-    nitf_TRE_print(sub->subheaderFields, &error);
+    //nitf_TREUtils_print(sub->, &error);
     SHOWI(sub->dataLength);
 }
 
@@ -602,7 +650,7 @@ int main(int argc, char **argv)
     /*  This is the reader object  */
     nitf_Reader *reader;
     nitf_Record *record;
-
+	
     /*  The IO handle  */
     nitf_IOHandle io;
     int num;
@@ -613,7 +661,12 @@ int main(int argc, char **argv)
         printf("Usage: %s <nitf-file>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
-
+	
+	if (!nitf_PluginRegistry_loadDir("c:/Documents and Settings/daniel.pressel/My Documents/Visual Studio 2005/Projects/nitf-c/debug/", &error))
+	{
+		nitf_Error_init(&error, "Plugin load failed", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+		//exit(EXIT_FAILURE);
+	}
     io = nitf_IOHandle_create(argv[1], NITF_ACCESS_READONLY,
                               NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
@@ -628,14 +681,7 @@ int main(int argc, char **argv)
         nitf_Error_print(&error, stdout, "Exiting (1) ...");
         exit(EXIT_FAILURE);
     }
-    /*  Not needed
-        record = nitf_Record_construct(&error);
-        if (!record)
-        {
-        nitf_Error_print(&error, stdout, "Exiting (2) ...");
-        nitf_Reader_destruct(&reader);
-        exit( EXIT_FAILURE );
-        } */
+   
 #if NITF_VERBOSE_READER
     printf("Here are the loaded handlers\n");
     printf("* * * * * * * * * * * * * * * *\n");
@@ -774,40 +820,6 @@ int main(int argc, char **argv)
     nitf_IOHandle_close(io);
     nitf_Record_destruct(&record);
 
-    if (!nitf_List_isEmpty(reader->warningList))
-    {
-        /*  Iterator to a list  */
-        nitf_ListIterator it;
-
-        /*  Iterator to the end of list  */
-        nitf_ListIterator endList;
-
-        it = nitf_List_begin(reader->warningList);
-
-        /*  End of list pointer  */
-        endList = nitf_List_end(reader->warningList);
-
-        printf("WARNINGS: ");
-        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-
-        /*  While we are not at the end  */
-        while (nitf_ListIterator_notEqualTo(&it, &endList))
-        {
-            /*  Get the last data  */
-            nitf_FieldWarning *w = (nitf_FieldWarning *) nitf_ListIterator_get(&it);
-            /*  Make sure  */
-            assert(w != NULL);
-
-            /*  Show the data  */
-            printf("\tFound problem: offset %llu: [%s] -- %s\n\n",
-                w->fileOffset, w->fieldName, w->expectation);
-
-            /*  Increment the list iterator  */
-            nitf_ListIterator_increment(&it);
-        }
-        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    }
-
     nitf_Reader_destruct(&reader);
 
     return 0;
@@ -817,3 +829,4 @@ CATCH_ERROR:
     nitf_Error_print(&error, stdout, "Exiting...");
     exit(EXIT_FAILURE);
 }
+
