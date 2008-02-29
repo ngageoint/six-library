@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/3.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
+    <pomVersion>3</pomVersion>
+    <name>${projectName}</name>
+    <id>${projectName}</id>
+    <groupId>nitro-nitf</groupId>
+    <currentVersion>${version}</currentVersion>
+
+    <dependencies>
+    </dependencies>
+
+    <build>
+        <nagEmailAddress>tzellman@users.sourceforge.net</nagEmailAddress>
+        <sourceDirectory>${src.dir}</sourceDirectory>
+        <unitTestSourceDirectory>${test.dir}</unitTestSourceDirectory>
+
+        <unitTest>
+            <includes>
+                <include>**/*Test*.java</include>
+            </includes>
+            <excludes>
+                <exclude>Test*.java</exclude>
+            </excludes>
+        </unitTest>
+    </build>
+</project>

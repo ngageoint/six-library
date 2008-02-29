@@ -15,7 +15,6 @@ LIB_NAME = 'nitf-c'
 opts = scons_utils.add_default_options(Options())
 opts.Add('lib_only', 'only compile the lib', 0)
 opts.Add('no_plugins', 'don\'t compile the plug-ins', 0)
-opts.Add('msvs', 'generate a Visual Studio project', 0)
 env = Environment(options = opts, ENV = os.environ)
 Help(opts.GenerateHelpText(env))
 
@@ -31,13 +30,6 @@ env.Append(CCFLAGS = ['-DNITF_MODULE_EXPORTS'])
 
 #make the lib(s)
 libs = scons_utils.make_libs(env, build_libs, local_lib, [])
-
-if int(env.subst('$msvs')) == 1:
-    env.MSVSProject(target = 'NITRO' + env['MSVSPROJECTSUFFIX'],
-        srcs = glob.glob('source/*.c'),
-        incs = glob.glob('include/*/*.h'),
-        buildtarget = libs[0],
-        variant = 'Debug')
 
 #see if we only want to build the library
 if not int(env.subst('$lib_only')):

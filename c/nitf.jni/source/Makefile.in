@@ -1,0 +1,78 @@
+################################################
+# We include this to get package specific info,
+# more specifically, the LIBNAME and SOURCES
+include ../build/Makefile
+
+#############################################
+# C O M P I L E R
+# The compiler + pretool
+CC = @pretool@ @CC@
+# What are we defining on the compile line?
+CCDEFINES = @cc_defs@
+# Dll Compile flags
+DLLFLAGS = @dll_flags@
+# Generic Compile Flags
+CCFLAGS =  @cc_flags@
+# Where do the includes live?
+INCLUDEPATH = $(EXTINCLUDEPATH) -I../include @cc_includes@
+# The compile command
+COMPILE = $(CC) $(CCFLAGS) $(CCDEFINES) $(INCLUDEPATH)
+
+#############################################
+# A R C H I V E R
+ARCHIVE = @AR@ @ar_flags@
+
+#############################################
+# L I N K E R
+# Link flags
+LFLAGS = @link_flags@
+# THIS library's path
+LIBDIR  = ../lib/@target@
+# The general lib path
+LIBRARYPATH = -L$(LIBDIR) $(EXTLIBPATH) @link_libpath@
+
+# Libs to link with
+LIBS = @link_prelibs@ $(EXTLIBS) @link_autolibs@ @link_postlibs@
+
+# The link suffixes
+LINK = $(LIBRARYPATH) $(LFLAGS) $(LIBS)
+
+OBJS = ${SOURCES:.c=.o}
+
+#################################################
+#  This is the top level rule.  It makes your 
+#  library
+all: $(LIBNAME)
+
+#################################################
+#  This target makes the "library directory" which 
+#  is a platform-specific sub-directory named after 
+#  the OS.  All the target does is create it if
+#  it doesn't exist.  You dont need to touch this
+#  rule, but you should make sure that $(PLUGINS)
+#  depends on it
+
+libdir:
+	\mkdir -p $(LIBDIR)
+
+doxy: 
+	doxygen ../Doxyfile
+
+clean: 
+	perl -w @build_dir@/rfk.pl -f	
+
+fresh:  clean
+	make all
+
+$(LIBNAME): dso
+
+dso: libdir $(OBJS)
+	$(COMPILE) $(DLLFLAGS) -o $(LIBDIR)/$(LIBNAME)-$(VERSION)$(DSOEXT) $(OBJS) $(LINK)
+	rm -f $(LIBNAME)$(DSOEXT)
+	cd $(LIBDIR); rm -f $(LIBNAME)$(DSOEXT); ln -sf $(LIBNAME)-$(VERSION)$(DSOEXT) $(LIBNAME)$(DSOEXT)
+
+.SUFFIXES: .o .c
+.c.o:
+	$(COMPILE) -c $<
+
+
