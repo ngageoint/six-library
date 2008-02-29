@@ -27,10 +27,11 @@
 #include "nitf/HashTable.h"
 #include "nitf/IOHandle.h"
 #include "nitf/TRE.h"
-
+#include "nitf/TREUtils.h"
 
 NITF_CXX_GUARD
 
+typedef struct _nitf_Record;
 /*!
  *  \fn nitf_DefaultTRE_handler
  *  \brief The default TRE handler is what gets run if no handler
@@ -47,11 +48,11 @@ NITF_CXX_GUARD
  *  \return The status
  *
  */
-NITFAPI(int) nitf_DefaultTRE_handler(nitf_IOHandle io,
-                                     nitf_TRE * tre, nitf_Error * error);
+NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error);
 
 
 
 NITF_CXX_ENDGUARD
 
 #endif
+

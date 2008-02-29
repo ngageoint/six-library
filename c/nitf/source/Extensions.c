@@ -99,6 +99,7 @@ NITFAPI(nitf_Extensions *) nitf_Extensions_clone(nitf_Extensions * source,
         /*
          *  First, clone the list of TREs. This is the easiest thing
          *  to do anyway
+         *
          */
         if ( (ext->ref = nitf_List_clone(source->ref,
                                          (NITF_DATA_ITEM_CLONE)
@@ -395,7 +396,7 @@ NITFAPI(nitf_Uint32) nitf_Extensions_computeLength
 
             /* if unknown length, we need to compute it */
             if (tre->length <= 0)
-                dataLength += (nitf_Uint32)nitf_TRE_computeLength(tre);
+				dataLength += (nitf_Uint32)tre->handler->getCurrentSize(tre, error);
             else
                 dataLength += tre->length;
             dataLength += NITF_ETAG_SZ + NITF_EL_SZ;
@@ -459,11 +460,13 @@ NITFPRIV(int) eraseIt(nitf_HashTable * ht,
         return 0;
     else
     {
+
         nitf_List *list = (nitf_List *) pair->data;
         nitf_ListIterator iter = nitf_List_begin(list);
         nitf_ListIterator end = nitf_List_end(list);
         while (nitf_ListIterator_notEqualTo(&iter, &end))
         {
+
             /*  This auto-increments for us  */
             nitf_TRE *tre = (nitf_TRE *) nitf_List_remove(list, &iter);
             nitf_TRE_destruct(&tre);

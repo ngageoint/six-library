@@ -24,7 +24,7 @@
 #define __NITF_DEFINES_H__
 
 /* The version of the NITF library */
-#define NITF_LIB_VERSION    "1.5"
+#define NITF_LIB_VERSION    "2.0"
 
 
 #ifdef __cplusplus
@@ -114,14 +114,14 @@
     NITFAPI(char**) _Tre##_init(nitf_Error* error){return ident;} \
     NITFAPI(void) _Tre##_cleanup(void){}\
     NITFAPI(nitf_TREDescriptionSet*) _Tre##_getDescriptions(void){return &descriptionSet;}\
-    NITFAPI(void) _Tre##_setDescription(nitf_TRE* tre, nitf_Error* error)\
+    NITFAPI(void) _Tre##_nitf_TREUtils_fillData(nitf_TRE* tre, nitf_Error* error)\
     {\
         nitf_TREDescriptionSet *descriptions = NULL;\
         nitf_TREDescriptionInfo *infoPtr = NULL;\
         int numDescriptions = 0;\
         if (!tre)\
         {\
-            nitf_Error_init(error, "setDescription -> invalid tre object",\
+            nitf_Error_init(error, "nitf_TREUtils_fillData -> invalid tre object",\
                             NITF_CTXT, NITF_ERR_INVALID_PARAMETER);\
             return;\
         }\
@@ -178,7 +178,7 @@
         char *data = NULL; \
         NITF_BOOL success; \
         if (!tre) {goto CATCH_ERROR;} \
-        _Tre##_setDescription(tre, error); \
+        _Tre##_nitf_TREUtils_fillData(tre, error); \
         if (!tre->descrip) goto CATCH_ERROR; \
         data = (char*)NITF_MALLOC( tre->length ); \
         if (!data) \

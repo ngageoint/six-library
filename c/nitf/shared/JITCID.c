@@ -20,19 +20,51 @@
  *
  */
 
-
 #include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
+#include <nitf/TREUtils.h>
 #include <nitf/Record.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_A, 200, "File Comment", "FILCMT",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_A, 100, "File Comment", "FILCMT1" },
+	{NITF_BCS_A, 100, "File Comment (part II)", "FILCMT2" },
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(JITCID, description)
+
+/* Define the available descriptions and the default one */
+static nitf_TREDescriptionInfo descriptions[] = {
+    { "JITCID", description, 200 },
+    { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
+};
+static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+
+static char *ident[] = { NITF_PLUGIN_TRE_KEY, "JITCID", NULL }; 
+    
+
+static nitf_TREHandler* gHandler = NULL;
+NITFAPI(char**) JITCID_init(nitf_Error* error)
+{
+	// Init here!
+	gHandler = nitf_TREUtils_createBasicHandler(&descriptionSet, error);
+	if (!gHandler)
+		return NULL;
+
+	return ident;
+} 
+    
+NITFAPI(nitf_TREHandler*) JITCID_handler(nitf_Error* error)
+{
+	return gHandler;
+}
+
+NITFAPI(void) JITCID_cleanup(void)
+{
+	//NITF_FREE(gHandler->data);
+}
+
+
+
 
 NITF_CXX_ENDGUARD

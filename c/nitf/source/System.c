@@ -44,3 +44,20 @@ NITFPROT(nitf_Uint32) nitf_System_swap32(nitf_Uint32 inl)
     obytep[0] = ibytep[3];
     return outl;
 }
+
+NITFPROT(nitf_Uint64) nitf_System_swap64(nitf_Uint64 inl)
+{
+    nitf_Uint64 outl;
+    unsigned char *ibytep = (unsigned char *) & inl;
+    unsigned char *obytep = (unsigned char *) & outl;
+
+	obytep[7] = ibytep[0];
+	obytep[6] = ibytep[1];
+	obytep[5] = ibytep[2];
+	obytep[4] = ibytep[3];
+	obytep[3] = ibytep[4];
+    obytep[2] = ibytep[5];
+    obytep[1] = ibytep[6];
+    obytep[0] = ibytep[7];
+    return outl;
+}

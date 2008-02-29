@@ -641,18 +641,26 @@ NITFPRIV(NITF_BOOL) writeExtension(nitf_Writer * writer,
         goto CATCH_ERROR;
 
     /* we need to free this later on */
-    tre_data = nitf_TRE_getRawData(tre, &length, error);
+    //tre_data = nitf_TRE_getRawData(tre, &length, error);
 
-    if (!tre_data)
-        goto CATCH_ERROR;
+    //if (!tre_data)
+    //    goto CATCH_ERROR;
 
+	length = tre->handler->getCurrentSize(tre, error);
+	if (length == -1)
+		goto CATCH_ERROR;
+		
     success = writeIntField(writer, length,
                             NITF_EL_SZ, ZERO, FILL_LEFT, error);
     if (!success)
         goto CATCH_ERROR;
 
     /* write the data, then free the buf */
-    success = writeField(writer, tre_data, length, error);
+	
+	if (!tre->handler->write(writer->outputHandle, tre, writer->record, error))
+		goto CATCH_ERROR;
+
+	//success = writeField(writer, tre_data, length, error);
     NITF_FREE(tre_data);
 
     return success;
@@ -1477,7 +1485,7 @@ NITFPRIV(NITF_BOOL) writeDESubheader(nitf_Writer * writer,
     /* TODO: Do proper filling */
     NITF_BOOL success;
     nitf_Uint32 subLen;
-    int dataLeft;
+
     char* des_data = NULL;
     char desID[NITF_DESTAG_SZ + 2];     /* DE type ID */
 
@@ -1526,9 +1534,10 @@ NITFPRIV(NITF_BOOL) writeDESubheader(nitf_Writer * writer,
     //get the TRE data, and length
     if (subhdr->subheaderFields)
     {
-        des_data = nitf_TRE_getRawData(subhdr->subheaderFields, &subLen, error);
-        if (des_data == NULL)
-            goto CATCH_ERROR;
+      subLen = subhdr->subheaderFields->handler->getCurrentSize(subhdr->subheaderFields, error);
+      if (subLen == -1)
+	goto CATCH_ERROR;
+	
     }
     else
         subLen = 0;
@@ -1540,7 +1549,7 @@ NITFPRIV(NITF_BOOL) writeDESubheader(nitf_Writer * writer,
 
     if (subLen > 0)
     {
-        success = writeField(writer, des_data, subLen, error);
+	success = subhdr->subheaderFields->handler->write(writer->outputHandle, subhdr->subheaderFields, writer->record, error); 
         if (!success)
             goto CATCH_ERROR;
     }

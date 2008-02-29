@@ -28,6 +28,7 @@
 #include "nitf/Field.h"
 #include "nitf/IntStack.h"
 #include "nitf/Validation.h" /* need this for the TRE Descriptions, for now */
+#include "nitf/TREDescription.h"
 
 #define NITF_ETAG_SZ 6
 #define NITF_EL_SZ 5
@@ -54,17 +55,7 @@
 
 NITF_CXX_GUARD
 
-/*!
- * Enumeration defining different ranges
- */
-typedef enum _nitf_Range
-{
-    NITF_NO_RANGE = 0,
-    NITF_U32_RANGE,
-    NITF_S32_RANGE,
-    NITF_U64_RANGE,
-    NITF_S64_RANGE
-} nitf_Range;
+
 
 /* Control values that are put in the TREDescription data_type field */
 #define NITF_LOOP       NITF_BINARY + 1     /*!< data_type control loop */
@@ -80,44 +71,9 @@ typedef enum _nitf_Range
 /* Example: {NITF_LOOP, 0, NITF_CONST_N, "4096"} */
 #define NITF_CONST_N    "CONSTANT"          /*!< TREDescription label value */
 
-/*!
- * The TREDescription structure encapsulates the metadata that describes one
- * field description in a TRE.
- */
-typedef struct _nitf_TREDescription
-{
-    int data_type;                  /*!< the type of field */
-    int data_count;                 /*!< the size of the field */
-    char *label;                    /*!< description */
-    char *tag;                      /*!< unique tag */
-    const char *pattern;            /*!< regular expression */
-    nitf_Range rangeCategory;       /*!< type of range to apply */
-    const char *minValue;           /*!< minimum range value */
-    const char *maxValue;           /*!< maximum range value */
-} nitf_TREDescription;
+struct _nitf_Record;
 
-
-#define NITF_TRE_DESC_NO_LENGTH      -1
-
-/*!
- * Information about one TREDescription object
- */
-typedef struct _nitf_TREDescriptionInfo
-{
-    char *name; /*! The name to associate with the Description */
-    nitf_TREDescription *description;   /*! The TREDescription */
-    int lengthMatch;    /*! The length to match against TREs with; used to choose TREs */
-} nitf_TREDescriptionInfo;
-
-/*!
- * Contains a set, or array, of TREDescriptionInfos*
- */
-typedef struct _nitf_TREDescriptionSet
-{
-    int defaultIndex;   /*! Set to the index of the default description */
-    nitf_TREDescriptionInfo* descriptions;
-} nitf_TREDescriptionSet;
-
+struct _nitf_TREHandler;
 /*!
  * The TRE structure, which contains the description of the TRE, as well as
  * the Field data.
@@ -125,122 +81,61 @@ typedef struct _nitf_TREDescriptionSet
 typedef struct _nitf_TRE
 {
     size_t length;  /* The length of the tag */
-    nitf_TREDescription *descrip;   /* A structure to guide unraveling the data */
-    nitf_HashTable *hash;   /* key is field, data is char* pointing at tag[field_off] */
+    //nitf_TREDescription *descrip;   /* A structure to guide unraveling the data */
+	struct _nitf_TREHandler* handler;
+	NITF_DATA* priv;
+	nitf_HashTable *hash;   /* key is field, data is char* pointing at tag[field_off] */
     char tag[NITF_ETAG_SZ + 1]; /* the TRE tag */
 } nitf_TRE;
 
 
-/*!
- *  A structure for keeping track of the
- *  state of the TRE Description when processing it
- *
- *  This is currently public, but it may be a good idea
- *  to move everything related to the nitf_TRECursor
- *  out of the public realm.
- */
-typedef struct _nitf_TRECursor
+struct _nitf_TREEnumerator;
+
+typedef NITF_BOOL (*NITF_TRE_ITERATOR_INCREMENT)(struct _nitf_TREEnumerator**, nitf_Error*);
+typedef nitf_Pair* (*NITF_TRE_ITERATOR_GET)(struct _nitf_TREEnumerator*, nitf_Error*);
+// HOW DO I remove() or insert() ???
+
+
+typedef struct _nitf_TREEnumerator
 {
-    /* DO NOT TOUCH THESE! */
-    int numItems;               /* holds the number of descPtr items */
-    int index;                  /* holds the current index to process */
-    int looping;                /* keeps track of how deep we are in the loops */
-    nitf_IntStack *loop;        /* holds loopcount for each level of loops */
-    nitf_IntStack *loop_idx;    /* holds the indexes for each level of loops (arrays) */
-    nitf_IntStack *loop_rtn;    /* holds the endloop bookmark for each level of loops */
-    nitf_TRE *tre;              /* the TRE associated with this cursor */
+	//nitf_TRE* tre;
+	NITF_TRE_ITERATOR_INCREMENT next;
+	NITF_TRE_ITERATOR_GET get;
+	NITF_DATA* data;
+} nitf_TREEnumerator;
 
-    /* YOU CAN REFER TO THE MEMBERS BELOW IN YOUR CODE */
-    nitf_TREDescription *prev_ptr; /* holds the previous description */
-    nitf_TREDescription *desc_ptr;      /* pointer to the current nitf_TREDescription */
-    char tag_str[256];          /* holds the fully qualified tag name of the current tag */
-    int length;                 /* the length of the field
-                                     * This should be used over the TREDescription length because
-                                     * the field may need to be computed. This will contain the
-                                     * actual, possibly computed length. */
-}
-nitf_TRECursor;
+typedef NITF_BOOL (*NITF_TRE_INIT) (nitf_TRE* tre, const char* id, nitf_Error * error);
+
+typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOHandle, nitf_TRE*, struct _nitf_Record*, nitf_Error*);
 
 
-/*!
- *  Defines a function pointer to be used in conjunction with
- *  the nitf_TRE_foreach function. Users can define their own
- *  "hooks" when looping over the TRE.
- *
- *  \param tre The input TRE
- *  \param dptr The TREDescription of the current Field being processed
- *  \param fieldName The fully qualified name of the Field (including brackets)
- *  \param field The current Field object
- *  \param warningList An optional List to use for keeping track of warnings
- *  \param error The error to populate on failure
- *  \return 1 on success, otherwise 0
- */
-typedef int (*NITF_TRE_FUNCTOR) (nitf_TRE * tre,
-                                 nitf_TREDescription * dptr,
-                                 char *fieldName,
-                                 nitf_Field* field,
-                                 nitf_List * warningList,
-                                 NITF_DATA* userData,
-                                 nitf_Error * error);
+typedef NITF_BOOL (*NITF_TRE_FIELD_SET)(nitf_TRE * tre,
+                                    const char *tag,
+                                    NITF_DATA * data,
+                                    size_t dataLength, nitf_Error * error);
 
 
-/*!
- *  This function allows for users to add a hook into the
- *  processing steps of the TRE. The function essentially
- *  performs a cursory loop over the TRE structure, and
- *  calls the passed in function pointer with the appropriate data.
- *
- *  \param tre The input TRE
- *  \param fn The function pointer to the processing function
- *  \param warningList An optional List to use for keeping track of warnings
- *  \param error The error to populate on failure
- *  \return 1 on success, otherwise 0
- */
-NITFAPI(NITF_BOOL) nitf_TRE_foreach(nitf_TRE * tre,
-                                    NITF_TRE_FUNCTOR fn,
-                                    nitf_List * warningList,
-                                    NITF_DATA* userData,
-                                    nitf_Error * error);
+typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle, nitf_TRE* tre, struct _nitf_Record* record, nitf_Error*);
 
-/*!
- *  Initializes the cursor
- *
- *  \param tre The input TRE
- *  \return A cursor for the TRE
- */
-NITFAPI(nitf_TRECursor) nitf_TRE_begin(nitf_TRE * tre);
+typedef int (*NITF_TRE_SIZE)(nitf_TRE*, nitf_Error*);
 
 
-/*!
- *  Returns NITF_BOOL value noting if the cursor has reached the end
- *
- *  \param tre_cursor The TRECursor
- *  \return 1 if done, 0 otherwise
- */
-NITFAPI(NITF_BOOL) nitf_TRE_isDone(nitf_TRECursor * tre_cursor);
+
+typedef nitf_TREEnumerator* (*NITF_TRE_ITERATOR)(nitf_TRE*, nitf_Error*);
 
 
-/*!
- *  Cleans up any allocated members of the TRECursor
- *  This should be called when finished with an cursor
- *
- *  \param tre_cursor The TRECursor
- *  \return 1 if done, 0 otherwise
- */
-NITFAPI(void) nitf_TRE_cleanup(nitf_TRECursor * tre_cursor);
+#define NITF_TRE_END NULL
+typedef struct _nitf_TREHandler
+{
+	NITF_TRE_INIT init;
+	NITF_TRE_READER read;
+	NITF_TRE_FIELD_SET setField;
+	NITF_TRE_WRITER write;
+	NITF_TRE_ITERATOR begin;
+	NITF_TRE_SIZE getCurrentSize;
+	NITF_DATA* data;
 
-
-/*!
- *  Iterate to the next tag in the TRE.
- *  USERS - Please use the nitf_TRE_foreach function instead of this.
- *
- *  \param tre_cursor The cursor to use
- *  \param error The error to populate on failure
- *  \return NITF_SUCCESS on sucess or NITF_FAILURE otherwise
- */
-NITFAPI(int) nitf_TRE_iterate(nitf_TRECursor * tre_cursor,
-                              nitf_Error * error);
-
+} nitf_TREHandler;
 
 /*!
  *  Construct a TRE Skeleton (for Reader).
@@ -265,8 +160,8 @@ NITFPROT(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
  *  \return A new TRE or NULL on failure
  */
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
-                                       const nitf_TREDescription* descrip,
-                                       int length,
+                                       const char* id,
+									   int length,
                                        nitf_Error * error);
 
 
@@ -304,43 +199,6 @@ NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre);
 NITFAPI(int) nitf_TRE_parse(nitf_TRE * tre,
                             char *bufptr, nitf_Error * error);
 
-/*!
- *  Spit out the TRE for debugging purposes
- *  \param tre The TRE
- *  \param desc_ptr The TRE description
- *  \param error The error to populate on failure
- *  \return One on success, zero on failure
- */
-NITFAPI(int) nitf_TRE_print(nitf_TRE * tre, nitf_Error * error);
-
-
-/*!
- *  Wrapper for the IOHandle.read() function
- *  \param tre The TRE
- *  \param fld The buffer to read the data into
- *  \param length The length of data to read
- *  \param error The error to populate on failure
- *  \return One on success, zero on failure
- */
-NITFAPI(NITF_BOOL) nitf_TRE_readField(nitf_IOHandle handle,
-                                      char *fld,
-                                      int length, nitf_Error * error);
-
-/*!
- * Returns a nitf_TREDescriptionSet* for the specified TRE id.
- * 
- * The resulting set provides TREDescriptions choices for the given TRE tag,
- * which can be used when constructing a TRE from scratch.
- *
- * \param tre_id the id of the tre we want a description for
- * \param error The error to populate on failure
- * \return nitf_TREDescriptionSet* on success, NULL on failure
- */
-NITFAPI(nitf_TREDescriptionSet *) nitf_TRE_getDescriptionSet
-(
-    const char *tre_id,
-    nitf_Error *error
-);
 
 
 /*!
@@ -363,7 +221,7 @@ NITFAPI(NITF_BOOL) nitf_TRE_exists(nitf_TRE * tre, const char *tag);
  * \param error The error to populate on failure
  * \return 1 on success, 0 on failure
  */
-NITFAPI(NITF_BOOL) nitf_TRE_setValue(nitf_TRE * tre,
+NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      const char *tag,
                                      NITF_DATA * data,
                                      size_t dataLength,
@@ -378,41 +236,7 @@ NITFAPI(NITF_BOOL) nitf_TRE_setValue(nitf_TRE * tre,
  */
 NITFAPI(NITF_BOOL) nitf_TRE_isSane(nitf_TRE * tre);
 
-
-/*!
- * Return a buffer containing the TRE data.
- *
- * This returns the buffer in the format ready for writing. This means that
- * any data that is meant to be in network byte order for writing is converted.
- *
- * The buffer must be freed using NITF_FREE by the caller
- * \param tre The TRE
- * \param length The length of the data, returned
- * \param error The error to populate on failure
- * \return char* buffer on success, NULL on failure
- */
-NITFPROT(char *) nitf_TRE_getRawData(nitf_TRE * tre, nitf_Uint32* length, nitf_Error * error);
-
-
-/*!
- * Returns the length of the TRE
- * This does NOT return the tre->length parameter.
- * This function computes the length based on the tre description
- *
- * CAUTION: If the length was set to NITF_TRE_DEFAULT_LENGTH,
- * then this function could return different values depending on
- * if there are loops and/or conditions in the TRE description.
- * Loops and conditions depend on certain field being present.
- * If the data in those fields changes, this could return a
- * different size at different times. BEWARE!!!!!!!
- *
- * This should only be called when the structure is full
- * and in a "complete" state.
- * \param tre the TRE
- * \return the length of the TRE
- */
-NITFPROT(int) nitf_TRE_computeLength(nitf_TRE * tre);
-
+NITFAPI(nitf_TREEnumerator*) nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error);
 
 /*!
  * Flushes the contents of the TRE (i.e. flushes the internal hash table)

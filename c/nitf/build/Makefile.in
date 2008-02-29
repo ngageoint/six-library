@@ -88,6 +88,8 @@ SOURCES = BandInfo.c \
           SyncWin32.c \
           System.c \
           TRE.c \
+          TRECursor.c \
+          TREUtils.c \
           TextSegment.c \
           TextSubheader.c \
           UserSegment.c \
@@ -96,12 +98,14 @@ SOURCES = BandInfo.c \
 
 TESTS = test_field.c test_dll_1.c test_list_1.c test_list_2.c \
         test_debug_mem_1.c test_hash_table_1.c \
-        test_plugin_reg_1.c  test_dump_record.c \
+        test_dump_record.c \
         test_extensions_1.c test_image_loading.c \
         test_create.c test_fhdr_clone.c test_list_clone.c \
         test_hash_table_clone.c test_imsub_clone.c \
-        test_des.c test_image_source.c test_writer_3.c \
-        test_file_source.c test_mem_source.c test_ext_iter.c \
+        test_image_source.c test_writer_3.c \
+        test_file_source.c test_mem_source.c
+
+# test_ext_iter.c \
         test_ImageIO_read_data.c test_ImageIO_writePattern.c \
         test_record_clone.c test_tre_mods.c \
         test_read_acftb.c test_des_read.c test_field_set.c \
@@ -111,8 +115,9 @@ TESTS = test_field.c test_dll_1.c test_list_1.c test_list_2.c \
 APPS = getNITFVersion.c
 
 
-PLUGINS = \
-        TEST_DES.c \
+PLUGINS = JITCID.c ACFTA.c 
+
+#        TEST_DES.c \
         ACCHZB.c \
         ACCPOB.c \
         ACCVTB.c \

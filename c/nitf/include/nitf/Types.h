@@ -173,17 +173,21 @@ typedef enum _nitf_Version
 
 NITFPROT(nitf_Uint16) nitf_System_swap16(nitf_Uint16 ins);
 NITFPROT(nitf_Uint32) nitf_System_swap32(nitf_Uint32 inl);
-
+NITFPROT(nitf_Uint64) nitf_System_swap64(nitf_Uint64 inl);
 #   ifdef WORDS_BIGENDIAN
 #       define NITF_NTOHL(x) (x)
 #       define NITF_NTOHS(x) (x)
 #       define NITF_HTONL(x) (x)
 #       define NITF_HTONS(x) (x)
+#       define NITF_HTONLL(x) (x)
+#       define NITF_NTOHLL(x) (x)
 #   else
 #       define NITF_NTOHL(x) nitf_System_swap32 (x)
 #       define NITF_NTOHS(x) nitf_System_swap16 (x)
 #       define NITF_HTONL(x) nitf_System_swap32 (x)
 #       define NITF_HTONS(x) nitf_System_swap16 (x)
+#       define NITF_HTONLL(x) nitf_System_swap64(x)
+#       define NITF_NTOHLL(x) nitf_System_swap64(x)
 #   endif
 typedef void NITF_DATA;
 #endif

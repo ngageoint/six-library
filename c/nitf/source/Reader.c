@@ -855,26 +855,15 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     NITF_TRY_GET_UINT32(subhdr->NITF_DESSHL, &subLen, error);
     if (subLen > 0)
     {
-        userSubheaderData = (char *) NITF_MALLOC(subLen);
-        if (userSubheaderData == NULL)
-            goto CATCH_ERROR;
-        success = nitf_IOHandle_read(reader->inputHandle,
-                                     userSubheaderData, subLen, error);
-        if (!success)
-        {
-            nitf_Error_init(error,
-                            "Unable to read from IO object",
-                            NITF_CTXT, NITF_ERR_READING_FROM_FILE);
+
+	if ((nitf_UserSegment_decodeUserHeader(reader->record,
+					       subhdr, reader->inputHandle,
+					       error)) == NULL)
+	{
+	    NITF_FREE(userSubheaderData);
             goto CATCH_ERROR;
         }
-        if ((nitf_UserSegment_decodeUserHeader(reader->record,
-                                               subhdr, userSubheaderData,
-                                               error)) == NULL)
-        {
-            NITF_FREE(userSubheaderData);
-            goto CATCH_ERROR;
-        }
-        NITF_FREE(userSubheaderData);
+
     }
 
     NITF_TRY_GET_UINT64(reader->record->
@@ -1293,10 +1282,12 @@ CATCH_ERROR:
 NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
                               nitf_TRE * tre, nitf_Error * error)
 {
-    int ok, bad = 0;
+    int ok =1;
+	int bad = 0;
     off_t off;
-    NITF_PLUGIN_TRE_HANDLER_FUNCTION handler =
-        (NITF_PLUGIN_TRE_HANDLER_FUNCTION) NULL;
+    //NITF_PLUGIN_TRE_HANDLER_FUNCTION handler =
+    
+	nitf_TREHandler* handler = NULL;
 
     nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
     if (reg)
@@ -1307,17 +1298,13 @@ NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
             goto CATCH_ERROR;
         if (handler)
         {
+			tre->handler = handler;
             off = nitf_IOHandle_tell(reader->inputHandle, error);
-            ok = (*handler) (reader->inputHandle, tre, reader->record, error);
+			
+			ok = handler->read(reader->inputHandle, tre, reader->record, error);
             if (!ok)
             {
-                nitf_FieldWarning *fieldWarning = NULL;
-                fieldWarning = nitf_FieldWarning_construct(off, tre->tag, NULL,
-                    "Unable to parse TRE with provided plug-in. Using default TRE handler instead.", error);
-                if (fieldWarning == NULL)
-                    goto CATCH_ERROR;
-                if (!nitf_List_pushBack(reader->warningList, fieldWarning, error))
-                    goto CATCH_ERROR;
+				// Also probably warning list makes sense here!
                 
                 /* move the IO Handle back the size of the TRE */
                 nitf_IOHandle_seek(reader->inputHandle, off, NITF_SEEK_SET, error);
@@ -1327,10 +1314,10 @@ NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
 
     /* if we couldn't parse it with the plug-in OR if no plug-in is found,
      * then, we use the default TRE handler */
-    if (!ok || handler == (NITF_PLUGIN_TRE_HANDLER_FUNCTION) NULL)
+    if (!ok || handler == NULL)
     {
-        handler = (NITF_PLUGIN_TRE_HANDLER_FUNCTION) nitf_DefaultTRE_handler;
-        ok = (*handler) (reader->inputHandle, tre, reader->record, error);
+        tre->handler = nitf_DefaultTRE_handler(error);
+		ok = tre->handler->read(reader->inputHandle, tre, reader->record, error);
     }
     
     if (!ok)
