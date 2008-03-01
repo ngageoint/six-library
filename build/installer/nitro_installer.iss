@@ -1,19 +1,19 @@
 [Setup]
 AppName=NITRO
-AppVersion=1.5-RC2
-AppVerName=NITRO 1.5-RC2
+AppVersion=1.5-RC3
+AppVerName=NITRO 1.5-RC3
 AppPublisherURL=http://sourceforge.net/projects/nitro-nitf/
 AppSupportURL=http://sourceforge.net/projects/nitro-nitf/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
-DefaultDirName={pf}\nitro-nitf\NITRO-1.5-RC2
+DefaultDirName={pf}\nitro-nitf\NITRO-1.5-RC3
 DefaultGroupName=NITRO
 AllowNoIcons=yes
 LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=NITRO-1.5-RC2-setup
-UninstallDisplayName=NITRO 1.5-RC2
+OutputBaseFilename=NITRO-1.5-RC3-setup
+UninstallDisplayName=NITRO 1.5-RC3
 SetupIconFile=NITRO.ico
 WizardSmallImageFile=NITRO_small.bmp
 WizardImageFile=NITRO.bmp
