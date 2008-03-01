@@ -102,7 +102,7 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo
 JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
     (JNIEnv * env, jobject self, jobject subWindow, jobjectArray userBuf)
 {
-    nitf_ImageIO *imageIO = _GetObj(env, self);
+    nitf_ImageReader *imReader = _GetObj(env, self);
     jclass subWindowClass = (*env)->FindClass(env, "nitf/SubWindow");
     jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_SubWindow *nitfSubWindow;
@@ -130,7 +130,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
     }
     /* TODO: remove later */
     assert(sizeof(nitf_Uint8) == sizeof(jbyte));
-    if (!nitf_ImageReader_read(imageIO,
+    if (!nitf_ImageReader_read(imReader,
                                nitfSubWindow,
                                (nitf_Uint8 **) data, &padded, &error))
     {
