@@ -28,6 +28,7 @@
 #include <ctype.h>
 #ifdef WIN32
     #include <Winsock2.h>
+    #include <fcntl.h>
 #else
     #include <netinet/in.h>
 #endif
@@ -315,6 +316,7 @@ typedef struct _JPEGImplControl
     nitf_List* markerList;
     int*       quantTable;
     nitf_Uint32 length;          /* Total length of the block in bytes */
+    FILE* fileStream;
 }
 JPEGImplControl;
 
@@ -1046,10 +1048,6 @@ CATCH_ERROR:
  *
  *
  */
-
-
-
-
 NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOHandle      io,
         nitf_Uint64        offset,
         nitf_Uint64        fileLength,
@@ -1059,9 +1057,8 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOHandle      io,
         nitf_Error*        error)
 {
 
-    JPEGImplControl* implControl; /* This is our local storage  */
-    implControl = (JPEGImplControl*)NITF_MALLOC(sizeof(JPEGImplControl));
-
+    JPEGImplControl* implControl =
+        (JPEGImplControl*)NITF_MALLOC(sizeof(JPEGImplControl));
 
     DPRINT("=============================================================\n");
     DPRINT("JPEG decompression\n");
@@ -1080,17 +1077,19 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOHandle      io,
                         "Error creating control object",
                         NITF_CTXT,
                         NITF_ERR_DECOMPRESSION);
-        return NULL;
+        goto CATCH_ERROR;
     }
+    
+    /* null initialize */
+    implControl->markerList = NULL;
+    implControl->quantTable = NULL;
+
 
     /*  For right now, we are storing this silly markerList.  I think
     this will prove to be a useless mechanism  */
     implControl->markerList = nitf_List_construct(error);
     if (!implControl->markerList)
-    {
-        /*  If this fails, the error is already set  */
-        return NULL;
-    }
+        goto CATCH_ERROR;
 
     /*  Seek to our start point, just in case... */
     if ( ! NITF_IO_SUCCESS( nitf_IOHandle_seek(io,
@@ -1098,19 +1097,44 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOHandle      io,
                             NITF_SEEK_SET,
                             error) ))
     {
-        /*  Or puke... */
         nitf_Error_init(error,
                         "Error seeking to necessary offset for JPEG block",
                         NITF_CTXT,
                         NITF_ERR_DECOMPRESSION);
-        return NULL;
+        goto CATCH_ERROR;
     }
+
+#ifdef WIN32
+    {
+        int cHandle = _open_osfhandle((long) io, _O_RDONLY);
+        if (cHandle == -1)
+        {
+            nitf_Error_init(error,
+                            "Unable to get a C run-time file descriptor",
+                            NITF_CTXT,
+                            NITF_ERR_DECOMPRESSION);
+            goto CATCH_ERROR;
+        }
+        implControl->fileStream = _fdopen(cHandle, "r");
+    }
+#else
+    implControl->fileStream = fdopen(io, "r");
+#endif
+    
+    if (!implControl->fileStream)
+    {
+        nitf_Error_init(error,
+                        "Unable to open file stream",
+                        NITF_CTXT,
+                        NITF_ERR_DECOMPRESSION);
+        goto CATCH_ERROR;
+    }
+
 
     /*  Find all marker offsets!!!!  */
     if (!scanOffsets(io, implControl->markerList, fileLength, error))
-    {
-        return NULL;
-    }
+        goto CATCH_ERROR;
+    
     /* Debugging only  */
     {
         nitf_Uint32 nextBlock = 0;
@@ -1149,17 +1173,26 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOHandle      io,
                         "Error seeking to necessary offset for JPEG block",
                         NITF_CTXT,
                         NITF_ERR_DECOMPRESSION);
-        return NULL;
+        goto CATCH_ERROR;
     }
 
-
-    /*  Debugging section only!!!!!  */
     /*  Make sure to copy IOHandle */
     implControl->io = io;
     implControl->length = blockInfo->length;
-    /*  Return void* */
     return (nitf_DecompressionControl*)implControl;
-
+    
+    
+  CATCH_ERROR:
+      if (implControl)
+      {
+          if (implControl->markerList)
+              nitf_List_destruct(&implControl->markerList);
+          if (implControl->quantTable)
+              NITF_FREE(implControl->quantTable);
+          NITF_FREE(implControl); 
+      }
+      implControl = NULL;
+      return (nitf_DecompressionControl*)implControl;
 }
 
 
@@ -1221,7 +1254,6 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     /*  Get out the read object from the opaque handle  */
     JPEGImplControl* implControl = (JPEGImplControl*)control;
     off_t soi;
-    FILE* jstream;
 
     struct jpeg_error_mgr jerr;
     struct jpeg_decompress_struct cinfo;
@@ -1265,48 +1297,6 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     nitf_IOHandle_seek(implControl->io, soi,
                        NITF_SEEK_SET, error);
 
-
-    /*  First we try and create a FILE* to make libjpeg work  */
-#ifdef WIN32
-    {
-        int h = _open_osfhandle((long) implControl->io, 0);
-        jstream = _fdopen(h, "r");
-    }
-#else
-    jstream = fdopen(implControl->io, "r");
-#endif
-
-    /*  This is our first opportunity to check for failure  */
-    if (jstream == NULL)
-#ifdef ZERO_BLOCK
-    {
-        nitf_Uint8 *zeros;   /* Buffer of zeros */
-
-        zeros = NITF_MALLOC(implControl->length);
-        if (zeros == NULL)
-        {
-            nitf_Error_init(error, "Malloc failure for zero block",
-                            NITF_CTXT, NITF_ERR_MEMORY);
-            return(NULL);
-        }
-#ifdef ZERO_BLOCK_WARN
-        fprintf(stderr,
-                "JPEG Decompression error:"
-                " Failure on fdopen for block %d, returning zeros\n",
-                blockNumber);
-#endif
-        memset(zeros, 0, implControl->length);
-        return(zeros);
-    }
-#else
-    {
-        nitf_Error_init(error,
-                        "Failure on fdopen()",
-                        NITF_CTXT,
-                        NITF_ERR_OPENING_FILE);
-        return NULL;
-    }
-#endif
     /*  Set up the error handler  */
     cinfo.err = jpeg_std_error(&jerr);
     DPRINT("Creating decompression struct!\n");
@@ -1314,7 +1304,7 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     jpeg_create_decompress(&cinfo);
 
     /*  Bind up our source location */
-    jpeg_stdio_src(&cinfo, jstream);
+    jpeg_stdio_src(&cinfo, implControl->fileStream);
 
     /*  Read the header  */
     DPRINT("Reading header... ");
