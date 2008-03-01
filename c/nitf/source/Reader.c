@@ -1293,7 +1293,7 @@ CATCH_ERROR:
 NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
                               nitf_TRE * tre, nitf_Error * error)
 {
-    int ok, bad = 0;
+    int ok = 0, bad = 0;
     off_t off;
     NITF_PLUGIN_TRE_HANDLER_FUNCTION handler =
         (NITF_PLUGIN_TRE_HANDLER_FUNCTION) NULL;
