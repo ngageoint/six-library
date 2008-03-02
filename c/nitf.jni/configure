@@ -5085,7 +5085,7 @@ if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
 then
     { echo "$as_me:$LINENO: result: adding additional includes... ${ok}" >&5
 echo "${ECHO_T}adding additional includes... ${ok}" >&6; }
-    cc_includes="${cxx_includes} ${ok}"
+    cc_includes="${cxx_includes} -I${ok}"
 fi
 
 

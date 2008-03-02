@@ -34,7 +34,7 @@ NITF_CXX_GUARD
 
 static char *ident[] = { NITF_PLUGIN_TRE_KEY, "XMLTRE", NULL }; 
   
-struct XMLTREData
+typedef struct _XMLTREData
 {
 	/* This contains the actual document */
 	xmlDoc* doc;
@@ -50,7 +50,7 @@ struct XMLTREData
 	/* This field is only 1 when setField() is called.  It indicates that the current size */
 	/* or write functions must update memory */
 	int dirty;
-};
+} XMLTREData;
 
 NITFPRIV(XMLTREData*) XMLTREData_construct(nitf_Error* error)
 {

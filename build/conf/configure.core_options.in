@@ -142,7 +142,7 @@ AC_ARG_WITH(includes,
 if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
 then
     AC_MSG_RESULT(adding additional includes... ${ok})
-    cc_includes="${cxx_includes} ${ok}"
+    cc_includes="${cxx_includes} -I${ok}"
 fi
 
 AC_ARG_WITH(libpaths,
