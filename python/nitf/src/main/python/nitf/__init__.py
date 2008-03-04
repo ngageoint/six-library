@@ -96,7 +96,6 @@ IMAGE_SUBHEADER_FIELDS = [
     {'id' : 'ICORDS', 'name' : 'imageCoordinateSystem', },
     {'id' : 'IGEOLO', 'name' : 'cornerCoordinates', },
     {'id' : 'NICOM', 'name' : 'numImageComments', },
-    {'id' : 'ICOM', 'name' : 'imageComments', },
     
     {'id' : 'IC', 'name' : 'imageCompression', },
     {'id' : 'COMRAT', 'name' : 'compressionRate', },
@@ -631,6 +630,9 @@ class ImageSubheader(Header):
     def getUDHD(self):
         return Extensions(self.ref.userDefinedSection)
     
+    def getComments(self):
+        return [Field(comment) for comment in self.ref.imageComments]
+    
     def insertComment(self, comment, index=-1):
         """ Inserts a comment. By default, adds it to the end """
         return nitropy.nitf_ImageSubheader_insertImageComment(self.ref, comment, len(comment), index, self.error) and True
@@ -667,8 +669,8 @@ class ImageSubheader(Header):
             ('numImageComments', self['numImageComments']),
         ])
         
-        for i, comment in enumerate(self.ref.imageComments):
-            fields.append(('imageComment[%s]' % i, Field(comment)))
+        for i, comment in enumerate(self.getComments()):
+            fields.append(('imageComment[%s]' % i, comment))
             
         fields.extend([
             ('imageCompression', self['imageCompression']),
