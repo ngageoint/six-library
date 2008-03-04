@@ -27,7 +27,7 @@
 from nitf import *
 import os, sys, logging, glob
 
-logging.basicConfig(level=logging.INFO, format='%(message)s')
+logging.basicConfig(level=logging.INFO, format='%(message)s', stream=sys.stdout)
 
 
 def printTRE(tre):

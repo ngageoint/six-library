@@ -41,7 +41,7 @@ from datetime import datetime
 import logging
 
 
-logging.basicConfig(level=logging.DEBUG, 
+logging.basicConfig(level=logging.DEBUG, stream=sys.stdout,
                     format='%(asctime)s %(levelname)s %(message)s')
 
 

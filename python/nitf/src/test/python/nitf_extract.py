@@ -27,7 +27,7 @@
 from nitf import *
 import os, sys, logging, glob
 
-logging.basicConfig(level=logging.INFO, 
+logging.basicConfig(level=logging.INFO, stream=sys.stdout,
                     format='%(asctime)s %(levelname)s %(message)s')
 
 
