@@ -4,15 +4,6 @@
 ar_flags="-crs"
 AR="ar"
 
-
-case "${CXX}" in
-     g++)
-        AC_MSG_RESULT(gnu compiler libdir)
-        lib_dir="gnu"
-     ;;
-esac
-
-
 case "${target}" in
    x86_64-*-linux-*|i686-pc-*)
         case "${CC}" in

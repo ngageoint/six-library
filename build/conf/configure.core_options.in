@@ -41,6 +41,14 @@ checkprog ()
    fi
 }
 
+#tack on 'gnu' to the lib_dir if using gcc
+#this means that the Makefiles will need to add a lib_dir after @target@
+case "${CC}" in
+    gcc)
+        AC_MSG_RESULT(gnu compiler libdir)
+        lib_dir="gnu"
+    ;;
+esac
 
 
 AC_ARG_ENABLE(64bit,

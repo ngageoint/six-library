@@ -4617,16 +4617,6 @@ esac
 ar_flags="-crs"
 AR="ar"
 
-
-case "${CXX}" in
-     g++)
-        { echo "$as_me:$LINENO: result: gnu compiler libdir" >&5
-echo "${ECHO_T}gnu compiler libdir" >&6; }
-        lib_dir="gnu"
-     ;;
-esac
-
-
 case "${target}" in
    x86_64-*-linux-*|i686-pc-*)
         case "${CC}" in
@@ -4695,6 +4685,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
       esac
    ;;
 esac
+
 ###########################################################
 #  Archiver                                               #
 ###########################################################
@@ -4946,6 +4937,15 @@ fi
    fi
 }
 
+#tack on 'gnu' to the lib_dir if using gcc
+#this means that the Makefiles will need to add a lib_dir after @target@
+case "${CC}" in
+    gcc)
+        { echo "$as_me:$LINENO: result: gnu compiler libdir" >&5
+echo "${ECHO_T}gnu compiler libdir" >&6; }
+        lib_dir="gnu"
+    ;;
+esac
 
 
 # Check whether --enable-64bit was given.

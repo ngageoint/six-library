@@ -64,7 +64,7 @@ def get_platform():
     return platform
 
 
-def do_configure(env, dirname='lib'):
+def do_configure(env, dirname='lib', append_gnu_if_gnu=False):
     """
     This function essentially mimics the configure script, and sets up
     flags/libs based on the sytem in use. We use the config.guess script
@@ -238,7 +238,7 @@ def do_configure(env, dirname='lib'):
     # Due to name mangling, if the compiler is GCC, append the gnu
     # but, only append if it doesn't already end with gnu
 #    if env.subst('$CC') == 'gcc' and not local_lib.endswith('gnu'):
-    if env.subst('$CC') == 'gcc':
+    if env.subst('$CC') == 'gcc' and append_gnu_if_gnu:
         local_lib += '/gnu'
     
 

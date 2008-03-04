@@ -4620,8 +4620,8 @@ ar_flags="-crs"
 AR="ar"
 
 
-case "${CXX}" in
-     g++)
+case "${CC}" in
+     gcc)
         { echo "$as_me:$LINENO: result: gnu compiler libdir" >&5
 echo "${ECHO_T}gnu compiler libdir" >&6; }
         lib_dir="gnu"
@@ -4697,6 +4697,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
       esac
    ;;
 esac
+
 ###########################################################
 #  Archiver                                               #
 ###########################################################
