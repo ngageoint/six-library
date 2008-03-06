@@ -111,92 +111,14 @@
         #_Tre, \
         NULL \
     }; \
-    NITFAPI(char**) _Tre##_init(nitf_Error* error){return ident;} \
-    NITFAPI(void) _Tre##_cleanup(void){}\
-    NITFAPI(nitf_TREDescriptionSet*) _Tre##_getDescriptions(void){return &descriptionSet;}\
-    NITFAPI(void) _Tre##_nitf_TREUtils_fillData(nitf_TRE* tre, nitf_Error* error)\
-    {\
-        nitf_TREDescriptionSet *descriptions = NULL;\
-        nitf_TREDescriptionInfo *infoPtr = NULL;\
-        int numDescriptions = 0;\
-        if (!tre)\
-        {\
-            nitf_Error_init(error, "nitf_TREUtils_fillData -> invalid tre object",\
-                            NITF_CTXT, NITF_ERR_INVALID_PARAMETER);\
-            return;\
-        }\
-        descriptions = _Tre##_getDescriptions();\
-        if (!descriptions)\
-        {\
-            nitf_Error_init(error, "TRE Description Set is NULL",\
-                            NITF_CTXT, NITF_ERR_INVALID_OBJECT);\
-            return;\
-        }\
-        tre->descrip = NULL; /* set to NULL */\
-        /* first try to match against the length */\
-        if (tre->length > NITF_TRE_DEFAULT_LENGTH)\
-        {\
-            infoPtr = descriptions->descriptions;\
-            while (infoPtr && (infoPtr->description != NULL))\
-            {\
-                if (infoPtr->lengthMatch == tre->length)\
-                {\
-                    tre->descrip = infoPtr->description;\
-                    break;\
-                }\
-                infoPtr++;\
-            }\
-        }\
-        /* now, try to assign the default */\
-        if (!tre->descrip)\
-        {\
-            infoPtr = descriptions->descriptions;\
-            while (infoPtr && (infoPtr->description != NULL))\
-            {\
-                if (numDescriptions == descriptions->defaultIndex)\
-                {\
-                    tre->descrip = infoPtr->description;\
-                    if (tre->length == NITF_TRE_DEFAULT_LENGTH &&\
-                        infoPtr->lengthMatch != NITF_TRE_DESC_NO_LENGTH)\
-                        tre->length = infoPtr->lengthMatch;\
-                    break;\
-                }\
-                numDescriptions++;\
-                infoPtr++;\
-            }\
-        }\
-        if (!tre->descrip)\
-        {\
-            nitf_Error_init(error, "TRE Description is NULL",\
-                            NITF_CTXT, NITF_ERR_INVALID_OBJECT);\
-            return;\
-        }\
-    }\
-    NITFAPI(int) _Tre##_handler(nitf_IOHandle io,nitf_TRE* tre,nitf_Record* rec,nitf_Error* error)\
-    { \
-        int ok; \
-        char *data = NULL; \
-        NITF_BOOL success; \
-        if (!tre) {goto CATCH_ERROR;} \
-        _Tre##_nitf_TREUtils_fillData(tre, error); \
-        if (!tre->descrip) goto CATCH_ERROR; \
-        data = (char*)NITF_MALLOC( tre->length ); \
-        if (!data) \
-        { \
-            nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),NITF_CTXT, NITF_ERR_MEMORY );\
-            goto CATCH_ERROR;\
-        }\
-        memset(data, 0, tre->length);\
-        success = nitf_TRE_readField(io, data, (int)tre->length, error);\
-        if (!success) goto CATCH_ERROR;\
-        ok = nitf_TRE_parse(tre, data, error);\
-        NITF_FREE( data );\
-        data = NULL;\
-    if (!ok){goto CATCH_ERROR; }\
-        return NITF_SUCCESS;\
-    CATCH_ERROR:\
-        if (data) NITF_FREE(data);\
-        return NITF_FAILURE;\
+    static nitf_TREHandler* gHandler = NULL; \
+    NITFAPI(char**) _Tre##_init(nitf_Error* error){ \
+       gHandler = nitf_TREUtils_createBasicHandler(&descriptionSet, error); \
+       if (!gHandler) return NULL; return ident; \
+    } \
+    NITFAPI(void) _Tre##_cleanup(void){} \
+    NITFAPI(nitf_TREHandler*) JITCID_handler(nitf_Error* error) { \
+        return gHandler; \
     }
 
 /**
