@@ -28,6 +28,6 @@ case "${target}" in
         link_autolibs="-ldl"
 
 	    AR="ar"
-	    dll_flags="${dll_flags} -fPIC -shared"
+	    dll_flags="${dll_flags} -fPIC -dynamiclib"
     ;;
 esac
