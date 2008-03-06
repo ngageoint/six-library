@@ -20,41 +20,26 @@
  *
  */
 
-#include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
-#include <nitf/Record.h>
+#include <import/nitf.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
     {NITF_BCS_N, 2, "Number of positional accuracy regions",
-     "NUMACPO", NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE,
-     NULL, NULL},
+     "NUMACPO" }, 
     {NITF_LOOP, 0, NULL, "NUMACPO"},
-    {NITF_BCS_A, 3, "Unit of Measure for AAH", "UNIAAH",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 5, "Absolute Horizontal Accuracy", "AAH",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 3, "Unit of Measure for AAV", "UNIAAV",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 5, "Absolute Vertical Accuracy", "AAV",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 3, "Unit of Measure for APH", "UNIAPH",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 5, "Point-to-Point Horizontal Accuracy", "APH",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 3, "Unit of Measure for APV", "UNIAPV",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 5, "Point-to-Point Vertical Accuracy", "APV",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 3, "Number of Points in Bounding Polygon",
-     "NUMPTS", NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE,
-     NULL, NULL},
+    {NITF_BCS_A, 3, "Unit of Measure for AAH", "UNIAAH" },
+    {NITF_BCS_N, 5, "Absolute Horizontal Accuracy", "AAH" },
+    {NITF_BCS_A, 3, "Unit of Measure for AAV", "UNIAAV" },
+    {NITF_BCS_N, 5, "Absolute Vertical Accuracy", "AAV" },
+    {NITF_BCS_A, 3, "Unit of Measure for APH", "UNIAPH" },
+    {NITF_BCS_N, 5, "Point-to-Point Horizontal Accuracy", "APH" },
+    {NITF_BCS_A, 3, "Unit of Measure for APV", "UNIAPV" },
+    {NITF_BCS_N, 5, "Point-to-Point Vertical Accuracy", "APV" },
+    {NITF_BCS_N, 3, "Number of Points in Bounding Polygon" },
     {NITF_LOOP, 0, NULL, "NUMPTS"},
-    {NITF_BCS_N, 15, "Longitude/Easting", "LON",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 15, "Latitude/Northing", "LAT",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_N, 15, "Longitude/Easting", "LON" },
+    {NITF_BCS_N, 15, "Latitude/Northing", "LAT" },
     {NITF_ENDLOOP, 0, NULL, NULL},
     {NITF_ENDLOOP, 0, NULL, NULL},
     {NITF_END, 0, NULL, NULL}

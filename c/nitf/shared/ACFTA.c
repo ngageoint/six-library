@@ -28,8 +28,8 @@ NITF_CXX_GUARD
 
    /* from ACFTA ver 1.0 */
 static nitf_TREDescription descrip_00132[] = {
-	{NITF_BCS_A, 10, "Aircraft Mission ID", "AC_MSN_ID" },
-	{NITF_BCS_A, 1, "Scene Type", "SCTYPE" },
+    {NITF_BCS_A, 10, "Aircraft Mission ID", "AC_MSN_ID" },
+    {NITF_BCS_A, 1, "Scene Type", "SCTYPE" },
     {NITF_BCS_A, 4, "Scene No.", "SCNUM"},
     {NITF_BCS_A, 3, "Sensor ID", "SENSOR_ID"},
     {NITF_BCS_A, 4, "Total No. of Patches", "PATCH_TOT"},
@@ -101,11 +101,11 @@ static nitf_TREDescription descrip_00199[] = {
     {NITF_BCS_A, 7, "Row Spacing", "ROW_SPACING"},
     {NITF_BCS_A, 7, "Col Spacing", "COL_SPACING"},
     {NITF_BCS_A, 6, "Sensor Focal Length", "FOCAL_LENGTH"},
-	{NITF_BCS_A, 6, "Sensor Serial No.", "SENSERIAL" },
-	{NITF_BCS_A, 7, "Airborne SW Version", "ABSWVER"},
-	{NITF_BCS_A, 8, "Calibration Date", "CAL_DATE"},
-	{NITF_BCS_N, 4, "Total No. of Patches", "PATCH_TOT"},
-	{NITF_BCS_A, 3, "Total No. of MTI Packets", "MTI_TOT"},
+    {NITF_BCS_A, 6, "Sensor Serial No.", "SENSERIAL" },
+    {NITF_BCS_A, 7, "Airborne SW Version", "ABSWVER"},
+    {NITF_BCS_A, 8, "Calibration Date", "CAL_DATE"},
+    {NITF_BCS_N, 4, "Total No. of Patches", "PATCH_TOT"},
+    {NITF_BCS_A, 3, "Total No. of MTI Packets", "MTI_TOT"},
     {NITF_END, 0, NULL, NULL}
 };
 
@@ -119,7 +119,9 @@ static nitf_TREDescriptionInfo descriptions[] = {
 static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
 
 
-
+#if 1
+NITF_DECLARE_PLUGIN(ACFTA)
+#else
 static char *ident[] = { NITF_PLUGIN_TRE_KEY, "ACFTA", NULL }; 
     
 
@@ -135,7 +137,7 @@ NITFAPI(char**) ACFTA_init(nitf_Error* error)
 } 
     
 NITFAPI(void) ACFTA_cleanup(void){}
-
+#endif
 
 
 
