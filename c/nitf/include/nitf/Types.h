@@ -174,7 +174,8 @@ typedef enum _nitf_Version
 NITFPROT(nitf_Uint16) nitf_System_swap16(nitf_Uint16 ins);
 NITFPROT(nitf_Uint32) nitf_System_swap32(nitf_Uint32 inl);
 NITFPROT(nitf_Uint64) nitf_System_swap64(nitf_Uint64 inl);
-#   ifdef WORDS_BIGENDIAN
+/* Configure says we are big-endian or we are on a mac */
+#   if defined(WORDS_BIGENDIAN) || defined(__BIG_ENDIAN__)
 #       define NITF_NTOHL(x) (x)
 #       define NITF_NTOHS(x) (x)
 #       define NITF_HTONL(x) (x)
