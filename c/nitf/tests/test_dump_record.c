@@ -42,7 +42,9 @@ int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData, nitf_Err
 
             while (nitf_ListIterator_notEqualTo(&iter, &end))
             {
-				int i = 0;
+
+
+	      int i = 0;
                 nitf_TRE *tre = (nitf_TRE *) nitf_ListIterator_get(&iter);
 				nitf_TREEnumerator* it;
 				if (tre->length <= 0)
@@ -354,7 +356,6 @@ void showFileHeader(nitf_FileHeader * header)
         nitf_HashTable_foreach(header->extendedSection->hash,
                                (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
     }
-
     return;
 
 CATCH_ERROR:
@@ -662,11 +663,6 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 	
-	if (!nitf_PluginRegistry_loadDir("c:/Documents and Settings/daniel.pressel/My Documents/Visual Studio 2005/Projects/nitf-c/debug/", &error))
-	{
-		nitf_Error_init(&error, "Plugin load failed", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-		//exit(EXIT_FAILURE);
-	}
     io = nitf_IOHandle_create(argv[1], NITF_ACCESS_READONLY,
                               NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
