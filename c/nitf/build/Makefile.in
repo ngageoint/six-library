@@ -21,9 +21,9 @@
 #___________________________________________________#
 
 PACKAGE = nitf
-MAJOR_VERSION = 1
-MINOR_VERSION = 5
-VERSION_SUFFIX = RC2
+MAJOR_VERSION = 2
+MINOR_VERSION = 0
+VERSION_SUFFIX = dev
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 LANGUAGE = c
 MAINTAINER = gojira_1@users.sourceforge.net
@@ -114,18 +114,17 @@ TESTS = test_field.c test_dll_1.c test_list_1.c test_list_2.c \
 
 APPS = getNITFVersion.c
 
-
-PLUGINS = JITCID.c ACFTA.c 
-
-#        TEST_DES.c \
+#TEST_DES.c
+PLUGINS = \
         ACCHZB.c \
         ACCPOB.c \
         ACCVTB.c \
         ACFTA.c \
         ACFTB.c \
         AIMIDA.c \
-        AIMIDB.c \
-        BANDSA.c \
+        AIMIDB.c
+
+#        BANDSA.c \
         BCKGDA.c \
         BLOCKA.c \
         BNDPLB.c \
