@@ -1,17 +1,4 @@
 ###########################################################
-# Compiler variables:                                     #
-###########################################################
-cc_defs=""
-cc_flags=""
-cc_includes=""
-cc_optz_flags=""
-cc_debug_flags=""
-cc_warn_flags=""
-cc_verb_flags=""
-
-###########################################################
-# We give the compile pre-tool its own section            #
-###########################################################
 pretool=""
 pretool_defs=""
 pretool_flags=""
@@ -20,7 +7,6 @@ enabled_64bit="false"
 
 # Do we want to create DSOs?
 make_dsos="false"
-
 
 
 checkprog ()
@@ -150,7 +136,7 @@ AC_ARG_WITH(includes,
 if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
 then
     AC_MSG_RESULT(adding additional includes... ${ok})
-    cc_includes="${cxx_includes} ${ok}"
+    cc_includes="${cc_includes} ${ok}"
 fi
 
 AC_ARG_WITH(libpaths,

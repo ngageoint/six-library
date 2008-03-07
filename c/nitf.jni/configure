@@ -4619,16 +4619,6 @@ esac
 ar_flags="-crs"
 AR="ar"
 
-
-case "${CC}" in
-     gcc)
-        { echo "$as_me:$LINENO: result: gnu compiler libdir" >&5
-echo "${ECHO_T}gnu compiler libdir" >&6; }
-        lib_dir="gnu"
-     ;;
-esac
-
-
 case "${target}" in
    x86_64-*-linux-*|i686-pc-*)
         case "${CC}" in
@@ -4860,28 +4850,15 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
 	    def_link_thread_libs="-lpthread"
 
 	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-        cc_flags=""
+            cc_flags=""
 	    cc_optz_flags="${def_cc_optz_flags}"
         link_autolibs="-ldl"
 
 	    AR="ar"
-	    dll_flags="${dll_flags} -fPIC -shared"
+	    dll_flags="${dll_flags} -fPIC -dynamiclib"
     ;;
 esac
 
-###########################################################
-# Compiler variables:                                     #
-###########################################################
-cc_defs=""
-cc_flags=""
-cc_includes=""
-cc_optz_flags=""
-cc_debug_flags=""
-cc_warn_flags=""
-cc_verb_flags=""
-
-###########################################################
-# We give the compile pre-tool its own section            #
 ###########################################################
 pretool=""
 pretool_defs=""
@@ -4891,7 +4868,6 @@ enabled_64bit="false"
 
 # Do we want to create DSOs?
 make_dsos="false"
-
 
 
 checkprog ()
@@ -4949,6 +4925,15 @@ fi
    fi
 }
 
+#tack on 'gnu' to the lib_dir if using gcc
+#this means that the Makefiles will need to add a lib_dir after @target@
+case "${CC}" in
+    gcc)
+        { echo "$as_me:$LINENO: result: gnu compiler libdir" >&5
+echo "${ECHO_T}gnu compiler libdir" >&6; }
+        lib_dir="gnu"
+    ;;
+esac
 
 
 # Check whether --enable-64bit was given.
@@ -5086,7 +5071,7 @@ if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
 then
     { echo "$as_me:$LINENO: result: adding additional includes... ${ok}" >&5
 echo "${ECHO_T}adding additional includes... ${ok}" >&6; }
-    cc_includes="${cxx_includes} ${ok}"
+    cc_includes="${cc_includes} ${ok}"
 fi
 
 

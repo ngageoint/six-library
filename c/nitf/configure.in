@@ -37,13 +37,14 @@ dnl ##############################################
 dnl INCLUDES
 dnl ##############################################
 dnl # first let's configure for the system
-builtin(include, ../../build/conf/configure.core_options.in)
 builtin(include, ../../build/conf/configure.sun.in)
 builtin(include, ../../build/conf/configure.sgi.in)
 builtin(include, ../../build/conf/configure.linux.in)
 builtin(include, ../../build/conf/configure.ibm.in)
 builtin(include, ../../build/conf/configure.apple.in)
 dnl # set some variables/options based on the architecture choices
+dnl # the core_options must go after we do the architecture setup
+builtin(include, ../../build/conf/configure.core_options.in)
 builtin(include, ../../build/conf/configure.mt.in)
 
 
