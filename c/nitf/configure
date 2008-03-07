@@ -3389,6 +3389,364 @@ fi;
 
 
 ###########################################################
+# Compiler variables:                                     #
+###########################################################
+cc_defs=""
+cc_flags=""
+cc_includes=""
+cc_optz_flags=""
+cc_debug_flags=""
+cc_warn_flags=""
+cc_verb_flags=""
+
+###########################################################
+# We give the compile pre-tool its own section            #
+###########################################################
+pretool=""
+pretool_defs=""
+pretool_flags=""
+
+enabled_64bit="false"
+
+# Do we want to create DSOs?
+make_dsos="false"
+
+
+
+checkprog ()
+{
+   # The AC_CHECK_PROG macro seems to replace the value of
+   # its argument with dummy sometimes, so we make a copy
+   # of it here.
+   progname="${1}"
+   # Extract the first word of ""$1"", so it can be a program name with args.
+set dummy "$1"; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_result+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$result"; then
+  ac_cv_prog_result="$result" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_result=""found""
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_prog_result" && ac_cv_prog_result=""not_found""
+fi
+fi
+result=$ac_cv_prog_result
+if test -n "$result"; then
+  echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+
+   if test "${result}" = "not_found"
+   then
+      echo ""
+      echo "########## WARNING! Can't find program: ##########"
+      echo "# ${progname}"
+      echo "########### Value will be used anyway. ###########"
+      echo ""
+   fi
+}
+
+
+
+# Check whether --enable-64bit or --disable-64bit was given.
+if test "${enable_64bit+set}" = set; then
+  enableval="$enable_64bit"
+  ok=${enableval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no"
+then
+   echo "$as_me:$LINENO: result: enabling 64 bit compiles..." >&5
+echo "${ECHO_T}enabling 64 bit compiles..." >&6
+   cc_64_flags="${sys_cc_64_flags}"
+   enabled_64bit="true"
+fi
+
+# Check whether --enable-warnings or --disable-warnings was given.
+if test "${enable_warnings+set}" = set; then
+  enableval="$enable_warnings"
+  ok=$enable_warnings
+else
+  ok="yes"
+fi;
+if test "${ok}" = "no"
+then
+     echo "$as_me:$LINENO: result: disabling warnings..." >&5
+echo "${ECHO_T}disabling warnings..." >&6
+     cc_warn_flags=""
+else
+     echo "$as_me:$LINENO: result: enabling warnings..." >&5
+echo "${ECHO_T}enabling warnings..." >&6
+     cc_warn_flags="${sys_cc_warn_flags}"
+fi
+
+# Check whether --enable-debugging or --disable-debugging was given.
+if test "${enable_debugging+set}" = set; then
+  enableval="$enable_debugging"
+  ok=$enable_debugging
+else
+  ok="no"
+fi;
+if test "${ok}" = "no"
+then
+     echo "$as_me:$LINENO: result: disabling debugging..." >&5
+echo "${ECHO_T}disabling debugging..." >&6
+     cc_debug_flags=""
+else
+     echo "$as_me:$LINENO: result: enabling debugging..." >&5
+echo "${ECHO_T}enabling debugging..." >&6
+     cc_debug_flags="${sys_cc_debug_flags} -D__DEBUG"
+fi
+
+# Check whether --enable-optz or --disable-optz was given.
+if test "${enable_optz+set}" = set; then
+  enableval="$enable_optz"
+  ok=$enable_optz
+else
+  ok="yes"
+fi;
+if test "${ok}" = "no"
+then
+     echo "$as_me:$LINENO: result: disabling optimizations..." >&5
+echo "${ECHO_T}disabling optimizations..." >&6
+     cc_optz_flags=""
+else
+     echo "$as_me:$LINENO: result: enabling default level optimizations..." >&5
+echo "${ECHO_T}enabling default level optimizations..." >&6
+     cc_optz_flags="${def_cc_optz_flags}"
+fi
+
+
+# Check whether --enable-verbose or --disable-verbose was given.
+if test "${enable_verbose+set}" = set; then
+  enableval="$enable_verbose"
+  ok=$enable_verbose
+else
+  ok="yes"
+fi;
+if test "${ok}" = "no"
+then
+     echo "$as_me:$LINENO: result: disabling verbose..." >&5
+echo "${ECHO_T}disabling verbose..." >&6
+     cc_verb_flags=""
+else
+     echo "$as_me:$LINENO: result: enabling verbose..." >&5
+echo "${ECHO_T}enabling verbose..." >&6
+     cc_verb_flags="${sys_cc_verb_flags}"
+fi
+
+
+
+# Check whether --with-optz or --without-optz was given.
+if test "${with_optz+set}" = set; then
+  withval="$with_optz"
+  ok=${withval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   cc_optz_flags="${def_cc_optz_flags}"
+   case "${ok}" in
+      med)
+         echo "$as_me:$LINENO: result: setting medium optimization flags..." >&5
+echo "${ECHO_T}setting medium optimization flags..." >&6
+	 cc_optz_flags="${sys_cc_optz_med}"
+      ;;
+      fast)
+         echo "$as_me:$LINENO: result: setting fast optimization flags..." >&5
+echo "${ECHO_T}setting fast optimization flags..." >&6
+	 cc_optz_flags="${sys_cc_optz_fast}"
+      ;;
+      fastest)
+         echo "$as_me:$LINENO: result: setting fastest optimization flags..." >&5
+echo "${ECHO_T}setting fastest optimization flags..." >&6
+	 cc_optz_flags="${sys_cc_optz_fastest}"
+      ;;
+
+   esac
+fi
+
+
+#####################################################################
+#  Add additional include and lib dirs
+
+# Check whether --with-includes or --without-includes was given.
+if test "${with_includes+set}" = set; then
+  withval="$with_includes"
+  ok=${withval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+    echo "$as_me:$LINENO: result: adding additional includes... ${ok}" >&5
+echo "${ECHO_T}adding additional includes... ${ok}" >&6
+    cc_includes="${cxx_includes} -I${ok}"
+fi
+
+
+# Check whether --with-libpaths or --without-libpaths was given.
+if test "${with_libpaths+set}" = set; then
+  withval="$with_libpaths"
+  ok=${withval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+    echo "$as_me:$LINENO: result: adding additional libpaths... ${ok}" >&5
+echo "${ECHO_T}adding additional libpaths... ${ok}" >&6
+    libpath="${libpath} ${ok}"
+fi
+
+
+######################################################################
+# Process '--with-pretool' option and flags.
+######################################################################
+
+# Check whether --with-dummy or --without-dummy was given.
+if test "${with_dummy+set}" = set; then
+  withval="$with_dummy"
+
+fi;
+
+
+# Check whether --with-pretool or --without-pretool was given.
+if test "${with_pretool+set}" = set; then
+  withval="$with_pretool"
+  ok=${withval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+    checkprog "${ok}"
+    pretool="${ok}"
+fi
+
+######################################################################
+# Process '--with-<compiler options>' options.
+# ex -g -Wall
+# --with-cc_opts=
+
+# Check whether --with-dummy or --without-dummy was given.
+if test "${with_dummy+set}" = set; then
+  withval="$with_dummy"
+
+fi;
+
+
+
+# Check whether --with-flags or --without-flags was given.
+if test "${with_flags+set}" = set; then
+  withval="$with_flags"
+  ok=${withval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   cc_flags="${cc_flags} ${ok}"
+fi
+
+######################################################################
+# Process '--with-<compiler defs>' options.
+
+# Check whether --with-dummy or --without-dummy was given.
+if test "${with_dummy+set}" = set; then
+  withval="$with_dummy"
+
+fi;
+
+
+# Check whether --with-defs or --without-defs was given.
+if test "${with_defs+set}" = set; then
+  withval="$with_defs"
+  ok=${withval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   cc_defs="${cc_defs} ${ok}"
+fi
+
+######################################################################
+# Process '--with-<libs>' options.
+######################################################################
+
+# Check whether --with-dummy or --without-dummy was given.
+if test "${with_dummy+set}" = set; then
+  withval="$with_dummy"
+
+fi;
+
+
+# Check whether --with-prelibs or --without-prelibs was given.
+if test "${with_prelibs+set}" = set; then
+  withval="$with_prelibs"
+  ok=${withval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   link_prelibs="${ok} ${link_prelibs}"
+fi
+
+
+# Check whether --with-autolibs or --without-autolibs was given.
+if test "${with_autolibs+set}" = set; then
+  withval="$with_autolibs"
+  ok=${withval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   link_autolibs="${link_autolibs} ${ok}"
+fi
+
+
+# Check whether --with-postlibs or --without-postlibs was given.
+if test "${with_postlibs+set}" = set; then
+  withval="$with_postlibs"
+  ok=${withval}
+else
+  ok="no"
+fi;
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   link_postlibs="${link_postlibs} ${ok}"
+fi
+
+
+
+
+
+###########################################################
 #  Archiver                                               #
 ###########################################################
 ar_flags="-crs"
@@ -3769,7 +4127,11 @@ echo "${ECHO_T}selecting the ar archiver..." >&6
 	    def_link_thread_libs="-lpthread"
 
 	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-        cc_flags=""
+	    echo "$as_me:$LINENO: result: setting up build for universal binaries..." >&5
+echo "${ECHO_T}setting up build for universal binaries..." >&6
+
+            cc_flags="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc  -arch i386"
+
 	    cc_optz_flags="${def_cc_optz_flags}"
         link_autolibs="-ldl"
 
@@ -3777,364 +4139,6 @@ echo "${ECHO_T}selecting the ar archiver..." >&6
 	    dll_flags="${dll_flags} -fPIC -dynamiclib"
     ;;
 esac
-
-###########################################################
-# Compiler variables:                                     #
-###########################################################
-cc_defs=""
-cc_flags=""
-cc_includes=""
-cc_optz_flags=""
-cc_debug_flags=""
-cc_warn_flags=""
-cc_verb_flags=""
-
-###########################################################
-# We give the compile pre-tool its own section            #
-###########################################################
-pretool=""
-pretool_defs=""
-pretool_flags=""
-
-enabled_64bit="false"
-
-# Do we want to create DSOs?
-make_dsos="false"
-
-
-
-checkprog ()
-{
-   # The AC_CHECK_PROG macro seems to replace the value of
-   # its argument with dummy sometimes, so we make a copy
-   # of it here.
-   progname="${1}"
-   # Extract the first word of ""$1"", so it can be a program name with args.
-set dummy "$1"; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_result+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$result"; then
-  ac_cv_prog_result="$result" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_result=""found""
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_prog_result" && ac_cv_prog_result=""not_found""
-fi
-fi
-result=$ac_cv_prog_result
-if test -n "$result"; then
-  echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-
-   if test "${result}" = "not_found"
-   then
-      echo ""
-      echo "########## WARNING! Can't find program: ##########"
-      echo "# ${progname}"
-      echo "########### Value will be used anyway. ###########"
-      echo ""
-   fi
-}
-
-
-
-# Check whether --enable-64bit or --disable-64bit was given.
-if test "${enable_64bit+set}" = set; then
-  enableval="$enable_64bit"
-  ok=${enableval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no"
-then
-   echo "$as_me:$LINENO: result: enabling 64 bit compiles..." >&5
-echo "${ECHO_T}enabling 64 bit compiles..." >&6
-   cc_64_flags="${sys_cc_64_flags}"
-   enabled_64bit="true"
-fi
-
-# Check whether --enable-warnings or --disable-warnings was given.
-if test "${enable_warnings+set}" = set; then
-  enableval="$enable_warnings"
-  ok=$enable_warnings
-else
-  ok="yes"
-fi;
-if test "${ok}" = "no"
-then
-     echo "$as_me:$LINENO: result: disabling warnings..." >&5
-echo "${ECHO_T}disabling warnings..." >&6
-     cc_warn_flags=""
-else
-     echo "$as_me:$LINENO: result: enabling warnings..." >&5
-echo "${ECHO_T}enabling warnings..." >&6
-     cc_warn_flags="${sys_cc_warn_flags}"
-fi
-
-# Check whether --enable-debugging or --disable-debugging was given.
-if test "${enable_debugging+set}" = set; then
-  enableval="$enable_debugging"
-  ok=$enable_debugging
-else
-  ok="no"
-fi;
-if test "${ok}" = "no"
-then
-     echo "$as_me:$LINENO: result: disabling debugging..." >&5
-echo "${ECHO_T}disabling debugging..." >&6
-     cc_debug_flags=""
-else
-     echo "$as_me:$LINENO: result: enabling debugging..." >&5
-echo "${ECHO_T}enabling debugging..." >&6
-     cc_debug_flags="${sys_cc_debug_flags} -D__DEBUG"
-fi
-
-# Check whether --enable-optz or --disable-optz was given.
-if test "${enable_optz+set}" = set; then
-  enableval="$enable_optz"
-  ok=$enable_optz
-else
-  ok="yes"
-fi;
-if test "${ok}" = "no"
-then
-     echo "$as_me:$LINENO: result: disabling optimizations..." >&5
-echo "${ECHO_T}disabling optimizations..." >&6
-     cc_optz_flags=""
-else
-     echo "$as_me:$LINENO: result: enabling default level optimizations..." >&5
-echo "${ECHO_T}enabling default level optimizations..." >&6
-     cc_optz_flags="${def_cc_optz_flags}"
-fi
-
-
-# Check whether --enable-verbose or --disable-verbose was given.
-if test "${enable_verbose+set}" = set; then
-  enableval="$enable_verbose"
-  ok=$enable_verbose
-else
-  ok="yes"
-fi;
-if test "${ok}" = "no"
-then
-     echo "$as_me:$LINENO: result: disabling verbose..." >&5
-echo "${ECHO_T}disabling verbose..." >&6
-     cc_verb_flags=""
-else
-     echo "$as_me:$LINENO: result: enabling verbose..." >&5
-echo "${ECHO_T}enabling verbose..." >&6
-     cc_verb_flags="${sys_cc_verb_flags}"
-fi
-
-
-
-# Check whether --with-optz or --without-optz was given.
-if test "${with_optz+set}" = set; then
-  withval="$with_optz"
-  ok=${withval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-   cc_optz_flags="${def_cc_optz_flags}"
-   case "${ok}" in
-      med)
-         echo "$as_me:$LINENO: result: setting medium optimization flags..." >&5
-echo "${ECHO_T}setting medium optimization flags..." >&6
-	 cc_optz_flags="${sys_cc_optz_med}"
-      ;;
-      fast)
-         echo "$as_me:$LINENO: result: setting fast optimization flags..." >&5
-echo "${ECHO_T}setting fast optimization flags..." >&6
-	 cc_optz_flags="${sys_cc_optz_fast}"
-      ;;
-      fastest)
-         echo "$as_me:$LINENO: result: setting fastest optimization flags..." >&5
-echo "${ECHO_T}setting fastest optimization flags..." >&6
-	 cc_optz_flags="${sys_cc_optz_fastest}"
-      ;;
-
-   esac
-fi
-
-
-#####################################################################
-#  Add additional include and lib dirs
-
-# Check whether --with-includes or --without-includes was given.
-if test "${with_includes+set}" = set; then
-  withval="$with_includes"
-  ok=${withval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-    echo "$as_me:$LINENO: result: adding additional includes... ${ok}" >&5
-echo "${ECHO_T}adding additional includes... ${ok}" >&6
-    cc_includes="${cxx_includes} -I${ok}"
-fi
-
-
-# Check whether --with-libpaths or --without-libpaths was given.
-if test "${with_libpaths+set}" = set; then
-  withval="$with_libpaths"
-  ok=${withval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-    echo "$as_me:$LINENO: result: adding additional libpaths... ${ok}" >&5
-echo "${ECHO_T}adding additional libpaths... ${ok}" >&6
-    libpath="${libpath} ${ok}"
-fi
-
-
-######################################################################
-# Process '--with-pretool' option and flags.
-######################################################################
-
-# Check whether --with-dummy or --without-dummy was given.
-if test "${with_dummy+set}" = set; then
-  withval="$with_dummy"
-
-fi;
-
-
-# Check whether --with-pretool or --without-pretool was given.
-if test "${with_pretool+set}" = set; then
-  withval="$with_pretool"
-  ok=${withval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-    checkprog "${ok}"
-    pretool="${ok}"
-fi
-
-######################################################################
-# Process '--with-<compiler options>' options.
-# ex -g -Wall
-# --with-cc_opts=
-
-# Check whether --with-dummy or --without-dummy was given.
-if test "${with_dummy+set}" = set; then
-  withval="$with_dummy"
-
-fi;
-
-
-
-# Check whether --with-flags or --without-flags was given.
-if test "${with_flags+set}" = set; then
-  withval="$with_flags"
-  ok=${withval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-   cc_flags="${cc_flags} ${ok}"
-fi
-
-######################################################################
-# Process '--with-<compiler defs>' options.
-
-# Check whether --with-dummy or --without-dummy was given.
-if test "${with_dummy+set}" = set; then
-  withval="$with_dummy"
-
-fi;
-
-
-# Check whether --with-defs or --without-defs was given.
-if test "${with_defs+set}" = set; then
-  withval="$with_defs"
-  ok=${withval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-   cc_defs="${cc_defs} ${ok}"
-fi
-
-######################################################################
-# Process '--with-<libs>' options.
-######################################################################
-
-# Check whether --with-dummy or --without-dummy was given.
-if test "${with_dummy+set}" = set; then
-  withval="$with_dummy"
-
-fi;
-
-
-# Check whether --with-prelibs or --without-prelibs was given.
-if test "${with_prelibs+set}" = set; then
-  withval="$with_prelibs"
-  ok=${withval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-   link_prelibs="${ok} ${link_prelibs}"
-fi
-
-
-# Check whether --with-autolibs or --without-autolibs was given.
-if test "${with_autolibs+set}" = set; then
-  withval="$with_autolibs"
-  ok=${withval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-   link_autolibs="${link_autolibs} ${ok}"
-fi
-
-
-# Check whether --with-postlibs or --without-postlibs was given.
-if test "${with_postlibs+set}" = set; then
-  withval="$with_postlibs"
-  ok=${withval}
-else
-  ok="no"
-fi;
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-   link_postlibs="${link_postlibs} ${ok}"
-fi
-
-
-
-
 
 ###########################################################
 # Default variables                                       #
