@@ -90,15 +90,9 @@ NITF Library Programmers:
 		prefix.  Along these lines, all functions and objects
 		are prefixed with a 'namespace' (nitf/nitf20/nitf21).
 
-	Platforms:
-	~~~~~~~~~~
-		While the ultimate goal is cross-platform, cross-language,
-		for this release, we are focusing only on C/C++.  For TREs,
-		they need to be coded in C (only).  
-
 	SVN Issues:
 	~~~~~~~~~~~
-		Please DONT POLLUTE CVS!  Dont put binaries in there,
+		Please DONT POLLUTE SVN!  Dont put binaries in there,
 		unless you have a very good reason
 
 		IMPORTANT: Before you commit:
