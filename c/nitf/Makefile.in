@@ -48,11 +48,14 @@ install:
 	echo "Installing ${PACKAGE}-${VERSION} to @prefix@"
 	mkdir -p ${_LIBDIR}
 	mkdir -p ${_INCDIR}
+	mkdir -p ${_INCDIR}/import
+	mkdir -p ${_INCDIR}/nitf
 	mkdir -p ${_PLUGDIR}
-	cp -R ./include/* ${_INCDIR}
-	#cp -R ./lib/@target@/* ${_LIBDIR}
+	cp ./include/import/nitf.h ${_INCDIR}/import
+	cp ./include/nitf/*.h ${_INCDIR}/nitf
 	( cd ./lib/@target@; tar cf - . | ( cd ${_LIBDIR} && tar xfB - ) )
-	cp -R ./plugins/@target@/* ${_PLUGDIR}
+	cp ./plugins/@target@/*${DSOEXT} ${_PLUGDIR}
+
 
 
 #############################################
