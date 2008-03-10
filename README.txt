@@ -1,3 +1,20 @@
+NITF C Library Users:
+-------------------
+If you are using the library on a 32-bit system, you will need to turn on 
+Largefile Support (_LARGEFILE_SOURCE and _FILE_OFFSET_BITS=64).  You will
+also need to defined _REENTRANT in your application.  See also the section
+at the bottom, regarding the NITF_PLUGIN_PATH.
+
+
+NITF Java Library Users:
+------------------------
+
+You need to have the nitf.jni bindings (the DSO that provides the JNI
+mapping of the library) and you need to point your java.library.home at that
+location.  You still need to have your NITF_PLUGIN_PATH set -- those
+DSOs do not need to  be in your java.library.path
+
+
 NITF Library Builders:
 ----------------------
 	For the time being, configuration is done with configure
@@ -121,7 +138,7 @@ NITF Library Users: General Issues:
 	Dont forget to set your environment variable: NITF_PLUGIN_PATH.
 	For instance, in my location, it could be:
 	
-	setenv NITF_PLUGIN_PATH ~/nitf/plugins/i686-pc-linux-gnu/
+	setenv NITF_PLUGIN_PATH ~/nitf/lib/plugins/
 	
 	NOTE: If you do not set the NITF_PLUGIN_PATH variable, the parser
 	will assume that the plugin path is "./plugins/" 
