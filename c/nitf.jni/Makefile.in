@@ -18,11 +18,6 @@ all: library
 library:
 	cd source;make
 
-############################################
-#  Make the doxygen
-docs:
-	doxygen Doxyfile_1.3
-
 
 ############################################
 #  Install the library(ies) and include files 
@@ -37,8 +32,7 @@ install:
 	echo "Installing ${PACKAGE}-${VERSION} to @prefix@"
 	mkdir -p ${_LIBDIR}
 	mkdir -p ${_INCDIR}
-	cp -R ./include/* ${_INCDIR}
-	#cp -R ./lib/@target@/* ${_LIBDIR}
+	cp ./include/*.h ${_INCDIR}
 	( cd ./lib/@target@; tar cf - . | ( cd ${_LIBDIR} && tar xfB - ) )
 
 
