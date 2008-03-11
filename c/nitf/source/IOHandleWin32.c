@@ -128,6 +128,7 @@ NITFAPI(off_t) nitf_IOHandle_seek(nitf_IOHandle handle,
                          NITF_CTXT, NITF_ERR_SEEKING_IN_FILE,
                          "SetFilePointer failed with error [%d]",
                          lastError);
+	return (off_t)-1;
     }
     return (off_t) largeInt.QuadPart;
 }
@@ -152,6 +153,7 @@ NITFAPI(off_t) nitf_IOHandle_getSize(nitf_IOHandle handle,
                          NITF_ERR_STAT_FILE,
                          "GetFileSize failed with error [%d]",
                          GetLastError());
+	return (off_t)-1;
     }
     return ((highOff) << 32) + ret;
 }
