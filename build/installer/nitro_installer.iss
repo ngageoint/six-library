@@ -1,19 +1,19 @@
 [Setup]
 AppName=NITRO
-AppVersion=1.5-RC3
-AppVerName=NITRO 1.5-RC3
-AppPublisherURL=http://sourceforge.net/projects/nitro-nitf/
-AppSupportURL=http://sourceforge.net/projects/nitro-nitf/
+AppVersion=1.5-RC4
+AppVerName=NITRO 1.5-RC4
+AppPublisherURL=http://nitro-nitf.sourceforge.net/
+AppSupportURL=http://nitro-nitf.sourceforge.net/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
-DefaultDirName={pf}\nitro-nitf\NITRO-1.5-RC3
+DefaultDirName={pf}\nitro-nitf\
 DefaultGroupName=NITRO
 AllowNoIcons=yes
 LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=NITRO-1.5-RC3-setup
-UninstallDisplayName=NITRO 1.5-RC3
+OutputBaseFilename=nitro-1.5-rc4-setup
+UninstallDisplayName=NITRO 1.5-RC4
 SetupIconFile=NITRO.ico
 WizardSmallImageFile=NITRO_small.bmp
 WizardImageFile=NITRO.bmp
@@ -33,6 +33,7 @@ Name: "java"; Description: "Java Bindings"; Types: full compact
 Name: "plugins"; Description: "Plugins"; Types: full compact
 Name: "plugins\tres"; Description: "TREs"; Types: full compact
 Name: "plugins\jpeg"; Description: "JPEG"; Types: full compact
+Name: "plugins\jasper"; Description: "JasPer JPEG 2000"; Types: full compact
 Name: "samples"; Description: "Code Samples"; Types: full
 Name: "samples\c"; Description: "C"; Types: full
 Name: "samples\java"; Description: "Java"; Types: full
@@ -43,6 +44,7 @@ Source: "..\..\c\nitf\lib\win32\nitf-c.lib"; DestDir: "{app}\lib"; Flags: ignore
 Source: "..\..\c\nitf\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: core;
 Source: "..\..\c\nitf\shared\*.dll"; DestDir: "{app}\plugins"; Flags: ignoreversion recursesubdirs; Components: plugins\tres;
 Source: "..\..\external\libjpeg-plugins\lib\win32\*.dll"; DestDir: "{app}\plugins"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jpeg;
+Source: "..\..\external\jasper-plugins\lib\win32\*.dll"; DestDir: "{app}\plugins"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jasper;
 Source: "..\..\c\nitf\tests\*.c"; DestDir: "{app}\samples\c"; Flags: ignoreversion recursesubdirs; Components: samples\c;
 Source: "..\..\c\nitf\tests\*.exe"; DestDir: "{app}\tests"; Flags: ignoreversion recursesubdirs; Components: tests;
 Source: "..\..\c\nitf.jni\lib\win32\nitf.jni-c.dll"; DestDir: "{app}\bin"; Flags: ignoreversion; Components: java;
