@@ -93,7 +93,7 @@
 #elif __STDC_VERSION__ < 199901
 #    define NITF_FUNC "unknown function"
 #else /* Should be c99 */
-#    define NITF_FUNC __func
+#    define NITF_FUNC __func__
 #endif
 
 
