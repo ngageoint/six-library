@@ -36,14 +36,15 @@ docs:
 
 ############################################
 #  Install the library(ies) and include files 
-#  in the appropriate place...  Notice we have
-#  an external script to do this.  Note the 
-#  "-l" option.  This makes the install script
-#  automatically make the symbolic links between 
-#  canonical names and versioned names.
-_LIBDIR = @prefix@/lib/@target@
+#  in the appropriate place...  
+_LIBDIR = @prefix@/lib
 _INCDIR = @prefix@/include
-_PLUGDIR = @prefix@/plugins/@target@
+_PLUGDIR = @prefix@/share/nitf
+_DOCDIR = @prefix@/share/doc/nitf
+_TESTDIR = @prefix@/tests
+_TESTBINDIR = ${_TESTDIR}/bin
+_APPBINDIR = @prefix@/bin
+
 install:
 	echo "Installing ${PACKAGE}-${VERSION} to @prefix@"
 	mkdir -p ${_LIBDIR}
@@ -51,11 +52,19 @@ install:
 	mkdir -p ${_INCDIR}/import
 	mkdir -p ${_INCDIR}/nitf
 	mkdir -p ${_PLUGDIR}
+	mkdir -p ${_TESTDIR}
+	mkdir -p ${_TESTBINDIR}
+	mkdir -p ${_APPBINDIR}
 	cp ./include/import/nitf.h ${_INCDIR}/import
 	cp ./include/nitf/*.h ${_INCDIR}/nitf
 	( cd ./lib/@target@; tar cf - . | ( cd ${_LIBDIR} && tar xfB - ) )
 	cp ./plugins/@target@/*${DSOEXT} ${_PLUGDIR}
-
+	mkdir -p ${_DOCDIR}
+	cp ../../COPYING* ${_DOCDIR} 
+	cp ../../README* ${_DOCDIR} 
+	cp ./tests/*.c ${_TESTDIR}
+	cp ./tests/@target@/* ${_TESTBINDIR}
+	cp ./apps/@target@/* ${_APPBINDIR}
 
 
 #############################################
