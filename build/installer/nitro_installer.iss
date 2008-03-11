@@ -1,7 +1,7 @@
 [Setup]
 AppName=NITRO
-AppVersion=1.5-RC4
-AppVerName=NITRO 1.5-RC4
+AppVersion=1.5-RC5
+AppVerName=NITRO 1.5-RC5
 AppPublisherURL=http://nitro-nitf.sourceforge.net/
 AppSupportURL=http://nitro-nitf.sourceforge.net/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
@@ -12,8 +12,8 @@ LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=nitro-1.5-rc4-setup
-UninstallDisplayName=NITRO 1.5-RC4
+OutputBaseFilename=nitro-1.5-rc5-setup
+UninstallDisplayName=NITRO 1.5-RC5
 SetupIconFile=NITRO.ico
 WizardSmallImageFile=NITRO_small.bmp
 WizardImageFile=NITRO.bmp
@@ -40,6 +40,7 @@ Name: "samples\java"; Description: "Java"; Types: full
 Name: "tests"; Description: "Test Applications"; Types: full
 
 [Files]
+Source: "..\..\COPYING.LESSER"; DestDir: "{app}"; Flags: ignoreversion; Components: core;
 Source: "..\..\c\nitf\lib\win32\nitf-c.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
 Source: "..\..\c\nitf\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: core;
 Source: "..\..\c\nitf\shared\*.dll"; DestDir: "{app}\plugins"; Flags: ignoreversion recursesubdirs; Components: plugins\tres;
