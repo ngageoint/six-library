@@ -14,8 +14,7 @@
         <property name="jni.gnu" value=""/>
         <property name="jni.debug" value=""/>
         <property name="prefix" value="${lib-dir}/nitro-java-${version}"/>
-        <property name="notWindows" value="true"/>
-        <condition property="notWindows" value="false">
+        <condition property="isWindows">
             <os family="windows"/>
         </condition>
     </target>
@@ -76,7 +75,7 @@
             author="true"
             version="true"
             use="true"
-            windowtitle="NITF API">
+            windowtitle="NITRO API">
 
             <bottom><![CDATA[<i>Copyright &#169; 2004-2008 General Dynamics All Rights Reserved.</i>]]></bottom>
             <footer><![CDATA[<b>Created: ${touch.time}</b>]]></footer>
@@ -85,7 +84,7 @@
     </target>
 
 
-    <target name="jni" depends="init" if="notWindows">
+    <target name="jni" depends="init" unless="isWindows">
         <condition property="jni.debug" value="--enable-debugging">
             <istrue value="${debug}"/>
         </condition>
@@ -104,7 +103,7 @@
     </target>
 
 
-    <target name="install" depends="jni,build" if="notWindows">
+    <target name="install" depends="jni,build" unless="isWindows">
         <copy todir="${prefix}">
             <fileset dir="${lib-dir}" includes="${projectName}-${version}.jar"/>
         </copy>
@@ -113,7 +112,7 @@
         </copy>
     </target>
 
-    <target name="dist" depends="install" if="notWindows">
+    <target name="dist" depends="install" unless="isWindows">
         <basename property="installdir" file="${prefix}"/>
         <tar tarfile="${lib-dir}/${installdir}.tar" basedir="${prefix}"/>
         <gzip zipfile="${lib-dir}/${installdir}.tar.gz" src="${lib-dir}/${installdir}.tar"/>
