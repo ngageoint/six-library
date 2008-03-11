@@ -12,13 +12,21 @@
     <goal name="javadoc">
         <ant antfile="build.xml" target="javadoc"/>
     </goal>
+    
+    <goal name="build">
+        <ant antfile="build.xml" target="build"/>
+    </goal>
 
     <goal name="jni">
         <ant antfile="build.xml" target="jni"/>
     </goal>
 
-    <goal name="build-all">
-        <ant antfile="build.xml" target="jni"/>
+    <goal name="dist">
+        <ant antfile="build.xml" target="dist"/>
+    </goal>
+
+    <goal name="install">
+        <ant antfile="build.xml" target="install"/>
     </goal>
 
 </project>

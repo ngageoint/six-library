@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="nitf" basedir="." default="build">
 
-    <property name="object-dir" location="target/classes"/>
-    <property name="lib-dir" location="target"/>
-
     <target name="init">
+        <property name="object-dir" location="target/classes"/>
+        <property name="lib-dir" location="target"/>
+
         <mkdir dir="${object-dir}"/>
         <mkdir dir="${lib-dir}"/>
         <loadproperties srcFile="project.properties"/>
+
+        <!-- some defaults here -->
+        <property name="jni.dir" location="../../c/nitf.jni/"/>
+        <property name="jni.gnu" value=""/>
+        <property name="jni.debug" value=""/>
+        <property name="prefix" value="${lib-dir}/nitro-java-${version}"/>
+        <property name="notWindows" value="true"/>
+        <condition property="notWindows" value="false">
+            <os family="windows"/>
+        </condition>
     </target>
 
 
-    <target name="clean">
+    <target name="clean" depends="init">
         <echo>"====================================================="</echo>
         <echo>"                        CLEAN                        "</echo>
         <echo>"====================================================="</echo>
         <delete dir="${object-dir}"/>
         <delete dir="${lib-dir}"/>
+        <delete dir="${javadoc-dir}"/>
         <delete dir="${javadoc-dir}"/>
     </target>
 
@@ -73,8 +84,40 @@
         </javadoc>
     </target>
 
-    <!--build the whole thing-->
-    <target name="build-all" depends="build"/>
+
+    <target name="jni" depends="init" if="notWindows">
+        <condition property="jni.debug" value="--enable-debugging">
+            <istrue value="${debug}"/>
+        </condition>
+
+        <condition property="jni.gnu" value="--enable-gnu">
+            <istrue value="${gnu}"/>
+        </condition>
+
+        <exec dir="${jni.dir}" executable="sh">
+            <arg line="configure --prefix=${prefix} ${jni.debug} ${jni.gnu}"/>
+        </exec>
+        <exec dir="${jni.dir}" executable="make"/>
+        <exec dir="${jni.dir}" executable="make">
+            <arg line="install"/>
+        </exec>
+    </target>
+
+
+    <target name="install" depends="jni,build" if="notWindows">
+        <copy todir="${prefix}">
+            <fileset dir="${lib-dir}" includes="${projectName}-${version}.jar"/>
+        </copy>
+        <copy todir="${prefix}/tests">
+            <fileset dir="${test.dir}" includes="Test*.java"/>
+        </copy>
+    </target>
+
+    <target name="dist" depends="install" if="notWindows">
+        <basename property="installdir" file="${prefix}"/>
+        <tar tarfile="${lib-dir}/${installdir}.tar" basedir="${prefix}"/>
+        <gzip zipfile="${lib-dir}/${installdir}.tar.gz" src="${lib-dir}/${installdir}.tar"/>
+    </target>
 
 
 </project>
