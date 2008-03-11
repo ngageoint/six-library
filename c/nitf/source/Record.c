@@ -61,8 +61,6 @@ NITFAPI(nitf_Record *) nitf_Record_construct
         return NULL;
     }
 
-    record->parseInfo = NULL;
-
     /*  Right now, we are only doing these  */
     record->header = NULL;
     record->images = NULL;
@@ -80,10 +78,6 @@ NITFAPI(nitf_Record *) nitf_Record_construct
     /*  since we have all of our objects NULL-inited  */
     /*  we have the same behavior for each failure.   */
     /*  It lives at the end and is called TRAGIC      */
-
-    record->parseInfo = nitf_ParseInfo_construct(error);
-    if (!record->parseInfo)
-        goto CATCH_TRAGIC;
 
     record->header = nitf_FileHeader_construct(error);
     if (!record->header)
@@ -166,7 +160,6 @@ NITFAPI(nitf_Record *) nitf_Record_clone(nitf_Record * source,
     }
 
     /*  Null-set in case we auto-destruct  */
-    record->parseInfo = NULL;
     record->header = NULL;
     record->images = NULL;
     record->graphics = NULL;
@@ -250,36 +243,6 @@ NITFAPI(nitf_Record *) nitf_Record_clone(nitf_Record * source,
         return NULL;
     }
 
-    record->parseInfo = nitf_ParseInfo_construct(error);
-    if (!record->parseInfo)
-    {
-        /*  Destruct gracefully if we had a problem  */
-        nitf_Record_destruct(&record);
-        return NULL;
-    }
-
-    /* NOW, copy the pointers from the new Record that
-     * were originally set up in the original record.
-     * This way, the ParseInfo hashTable points to the
-     * data for THIS NEW CLONED record.
-     * See Reader.c for the ParseInfo values that get set.
-     */
-
-    NITF_PARSEINFO_SET(record->parseInfo,
-                       "hdr.HL", record->header->NITF_HL, error);
-    NITF_PARSEINFO_SET(record->parseInfo,
-                       "hdr.NUMI", record->header->NITF_NUMI, error);
-    NITF_PARSEINFO_SET(record->parseInfo,
-                       "hdr.NUMS", record->header->NITF_NUMS, error);
-    NITF_PARSEINFO_SET(record->parseInfo,
-                       "hdr.NUMX", record->header->NITF_NUMX, error);
-    NITF_PARSEINFO_SET(record->parseInfo,
-                       "hdr.NUMT", record->header->NITF_NUMT, error);
-    NITF_PARSEINFO_SET(record->parseInfo,
-                       "hdr.NUMDES", record->header->NITF_NUMDES, error);
-    NITF_PARSEINFO_SET(record->parseInfo,
-                       "hdr.NUMRES", record->header->NITF_NUMRES, error);
-
     return record;
 
 CATCH_ERROR:
@@ -296,11 +259,6 @@ NITFAPI(void) nitf_Record_destruct(nitf_Record ** record)
         if ((*record)->header)
         {
             nitf_FileHeader_destruct(&(*record)->header);
-        }
-
-        if ((*record)->parseInfo)
-        {
-            nitf_ParseInfo_destruct(&(*record)->parseInfo);
         }
 
         /*  When destroying these, we always use the same macro  */

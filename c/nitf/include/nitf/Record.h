@@ -33,7 +33,6 @@
 #include "nitf/TextSegment.h"
 #include "nitf/DESegment.h"
 #include "nitf/RESegment.h"
-#include "nitf/ParseInfo.h"
 
 NITF_CXX_GUARD
 
@@ -56,7 +55,6 @@ typedef struct _nitf_Record
     nitf_List *texts;           /*  A list of TextSegment*             */
     nitf_List *dataExtensions;  /*  data extensions segments    */
     nitf_List *reservedExtensions;      /*  reserved segments       */
-    nitf_ParseInfo *parseInfo;  /* An object storing parsing info */
 }
 nitf_Record;
 

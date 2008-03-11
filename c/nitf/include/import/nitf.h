@@ -57,7 +57,6 @@
 #include "nitf/List.h"
 #include "nitf/LookupTable.h"
 #include "nitf/Pair.h"
-#include "nitf/ParseInfo.h"
 #include "nitf/PluginIdentifier.h"
 #include "nitf/PluginRegistry.h"
 #include "nitf/RESegment.h"

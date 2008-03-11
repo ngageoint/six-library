@@ -57,7 +57,7 @@ NITF_TRY_GET_UINT32|64() -- these are public macros found in nitf/Value.h
                          reader->record->header->userDefinedSection, \
                          reader->record->header->NITF_UDHDL, \
                          reader->record->header->NITF_UDHOFL, \
-                         "hdr.UDHD", error); \
+                         error); \
     if( !success) goto CATCH_ERROR;
 
 /*  This macro makes it easier to read the extended header */
@@ -69,67 +69,47 @@ NITF_TRY_GET_UINT32|64() -- these are public macros found in nitf/Value.h
                          reader->record->header->extendedSection, \
                          reader->record->header->NITF_XHDL, \
                          reader->record->header->NITF_XHDLOFL, \
-                         "hdr.XHD", error); \
+                         error); \
     if( !success) goto CATCH_ERROR;
 
 #define TRY_READ_UDID(reader_, imageIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%d).UDID", (int)imageIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->userDefinedSection, \
-                             subhdr_->NITF_UDIDL, \
-                             subhdr_->NITF_UDOFL, \
-                             field, error); \
-    } \
+    success = readExtras(reader_, \
+                         subhdr_->userDefinedSection, \
+                         subhdr_->NITF_UDIDL, \
+                         subhdr_->NITF_UDOFL, \
+                         error); \
     if( !success) goto CATCH_ERROR;
 
 #define TRY_READ_IXSHD(reader_, imageIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%d).IXSHD", (int)imageIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->extendedSection, \
-                             subhdr_->NITF_IXSHDL, \
-                             subhdr_->NITF_IXSOFL, \
-                             field, error); \
-    } \
+    success = readExtras(reader_, \
+                         subhdr_->extendedSection, \
+                         subhdr_->NITF_IXSHDL, \
+                         subhdr_->NITF_IXSOFL, \
+                         error); \
     if( !success) goto CATCH_ERROR;
 
 #define TRY_READ_SXSHD(reader_, graphicIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%d).SXSHD", (int)graphicIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->extendedSection, \
-                             subhdr_->NITF_SXSHDL, \
-                             subhdr_->NITF_SXSOFL, \
-                             field, error); \
-    } \
+    success = readExtras(reader_, \
+                         subhdr_->extendedSection, \
+                         subhdr_->NITF_SXSHDL, \
+                         subhdr_->NITF_SXSOFL, \
+                         error); \
     if( !success) goto CATCH_ERROR;
 
 #define TRY_READ_LXSHD(reader_, labelIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%d).LXSHD", (int)labelIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->extendedSection, \
-                             subhdr_->NITF_LXSHDL, \
-                             subhdr_->NITF_LXSOFL, \
-                             field, error); \
-    } \
+    success = readExtras(reader_, \
+                         subhdr_->extendedSection, \
+                         subhdr_->NITF_LXSHDL, \
+                         subhdr_->NITF_LXSOFL, \
+                         error); \
     if( !success) goto CATCH_ERROR;
 
 #define TRY_READ_TXSHD(reader_, textIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%.d).TXSHD", (int)textIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->extendedSection, \
-                             subhdr_->NITF_TXSHDL, \
-                             subhdr_->NITF_TXSOFL, \
-                             field, error); \
-    } \
+    success = readExtras(reader_, \
+                         subhdr_->extendedSection, \
+                         subhdr_->NITF_TXSHDL, \
+                         subhdr_->NITF_TXSOFL, \
+                         error); \
     if( !success) goto CATCH_ERROR;
 
 /*  These are internal macros which basically provide a         */
@@ -186,7 +166,7 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
                                nitf_Extensions * ext,
                                nitf_Field * totalLengthValue,
                                nitf_Field * overflowOffsetValue,
-                               const char *field, nitf_Error * error);
+                               nitf_Error * error);
 
 /*  Reading the component info sections is not a big deal, but it does      */
 /*  suit us that we are interested in reuse.  This method may be            */
@@ -1067,52 +1047,37 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader * reader, nitf_Error * error)
     /* HL */
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_HL);
     NITF_TRY_GET_UINT32(fileHeader->NITF_HL, &num32, error);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.HL", fileHeader->NITF_HL, error);
 
     /* Read the image info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->imageInfo,
                        fileHeader->NITF_NUMI, NITF_LISH_SZ, NITF_LI_SZ);
 
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMI", fileHeader->NITF_NUMI, error);
-
     /* Read the graphic info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->graphicInfo,
                        fileHeader->NITF_NUMS, NITF_LSSH_SZ, NITF_LS_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMS", fileHeader->NITF_NUMS, error);
 
     /* Read the label info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->labelInfo,
                        fileHeader->NITF_NUMX, NITF_LLSH_SZ, NITF_LL_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMX", fileHeader->NITF_NUMX, error);
 
     /* Read the text info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->textInfo,
                        fileHeader->NITF_NUMT, NITF_LTSH_SZ, NITF_LT_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMT", fileHeader->NITF_NUMT, error);
 
     /* Read the data extension info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->dataExtensionInfo,
                        fileHeader->NITF_NUMDES, NITF_LDSH_SZ, NITF_LD_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMDES", fileHeader->NITF_NUMDES, error);
 
     /* Read the reserved extension info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->reservedExtensionInfo,
                        fileHeader->NITF_NUMRES,
                        NITF_LRESH_SZ, NITF_LRE_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMRES", fileHeader->NITF_NUMRES, error);
 
     /* Read the user header info section */
     TRY_READ_UDHD(reader);
@@ -1136,7 +1101,7 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
                                nitf_Extensions * ext,
                                nitf_Field * totalLengthValue,
                                nitf_Field * overflowOffsetValue,
-                               const char *field, nitf_Error * error)
+                               nitf_Error * error)
 {
     /* Total length of the extras seciton */
     nitf_Uint32 totalLength;
@@ -1180,9 +1145,9 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
                 /* Generate a warning */
                 fieldWarning =
                     nitf_FieldWarning_construct(currentOffset,
-                                                field,
+                                                "TRE",
                                                 NULL,
-                                                "A properly formed TRE",
+                                                "Not properly formed",
                                                 error);
                 if (fieldWarning == NULL)
                     goto CATCH_ERROR;

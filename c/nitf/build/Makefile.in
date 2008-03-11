@@ -72,7 +72,6 @@ SOURCES = BandInfo.c \
           List.c \
           LookupTable.c \
           Pair.c \
-          ParseInfo.c \
           PluginRegistry.c \
           RESegment.c \
           RESubheader.c \
