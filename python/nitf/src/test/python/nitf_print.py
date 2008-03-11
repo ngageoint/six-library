@@ -46,33 +46,33 @@ def print_header(header, desc, extensions={}):
 
 
 def print_record(fileName):
-        """
-        This dumps the file record to standard out
-        Notice how we can easily iterate over the Extensions and TREs
-        """
-        
-        handle = IOHandle(fileName)
-        record = Reader().read(handle)
-        
-        logging.info('--- Dumping file: %s ---' % fileName)
-        print_header(record.header, "FileHeader",
-                     {'UDHD':record.header.getUDHD(),
-                      'XHD':record.header.getXHD()})
+    """
+    This dumps the file record to standard out
+    Notice how we can easily iterate over the Extensions and TREs
+    """
+    
+    handle = IOHandle(fileName)
+    record = Reader().read(handle)
+    
+    logging.info('--- Dumping file: %s ---' % fileName)
+    print_header(record.header, "FileHeader",
+                 {'UDHD':record.header.getUDHD(),
+                  'XHD':record.header.getXHD()})
 
-        for i, segment in enumerate(record.getImages()):
-            subheader = segment.subheader
-            print_header(subheader, 'Image [%s]' % i,
-                         {'UDHD':subheader.getUDHD(),
-                          'XHD':subheader.getXHD()})
-        for i, segment in enumerate(record.getGraphics()):
-            subheader = segment.subheader
-            print_header(subheader, 'Graphic [%s]' % i,
-                         {'XHD':subheader.getXHD()})
-        for i, segment in enumerate(record.getTexts()):
-            subheader = segment.subheader
-            print_header(subheader, 'Text [%s]' % i, {'XHD':subheader.getXHD()})
-           
-        handle.close()
+    for i, segment in enumerate(record.getImages()):
+        subheader = segment.subheader
+        print_header(subheader, 'Image [%s]' % i,
+                     {'UDHD':subheader.getUDHD(),
+                      'XHD':subheader.getXHD()})
+    for i, segment in enumerate(record.getGraphics()):
+        subheader = segment.subheader
+        print_header(subheader, 'Graphic [%s]' % i,
+                     {'XHD':subheader.getXHD()})
+    for i, segment in enumerate(record.getTexts()):
+        subheader = segment.subheader
+        print_header(subheader, 'Text [%s]' % i, {'XHD':subheader.getXHD()})
+       
+    handle.close()
 
 
 if __name__ == '__main__':
