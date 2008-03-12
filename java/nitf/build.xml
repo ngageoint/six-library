@@ -84,7 +84,7 @@
     </target>
 
 
-    <target name="jni" depends="init" unless="isWindows">
+    <target name="jni-nonwin" depends="init" unless="isWindows">
         <condition property="jni.debug" value="--enable-debugging">
             <istrue value="${debug}"/>
         </condition>
@@ -101,9 +101,19 @@
             <arg line="install"/>
         </exec>
     </target>
+    
+    
+    <target name="jni-win" depends="init" if="isWindows">
+        <condition property="jni.debug" value="debug=1">
+            <istrue value="${debug}"/>
+        </condition>
+        <exec dir="${jni.dir}" executable="cmd.exe">
+            <arg line="/c scons prefix=${prefix} ${jni.debug} install"/>
+        </exec>
+    </target>
 
 
-    <target name="install" depends="jni,build" unless="isWindows">
+    <target name="install" depends="jni-nonwin,jni-win,build">
         <copy todir="${prefix}">
             <fileset dir="${lib-dir}" includes="${projectName}-${version}.jar"/>
         </copy>
@@ -112,10 +122,11 @@
         </copy>
     </target>
 
-    <target name="dist" depends="install" unless="isWindows">
-        <basename property="installdir" file="${prefix}"/>
-        <tar tarfile="${lib-dir}/${installdir}.tar" basedir="${prefix}"/>
-        <gzip zipfile="${lib-dir}/${installdir}.tar.gz" src="${lib-dir}/${installdir}.tar"/>
+    <target name="dist" depends="install">
+        <basename property="prefixBase" file="${prefix}"/>
+        <dirname property="prefixdir" file="${prefix}"/>
+        <tar tarfile="${lib-dir}/${prefixBase}.tar" basedir="${prefixdir}" includes="${prefixBase}/**"/>
+        <gzip zipfile="${lib-dir}/${prefixBase}.tar.gz" src="${lib-dir}/${prefixBase}.tar"/>
     </target>
 
 
