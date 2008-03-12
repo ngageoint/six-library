@@ -18,14 +18,6 @@
         <condition property="isWindows">
             <os family="windows"/>
         </condition>
-        <condition property="nativeLib" value="nitf.jni-c.dll">
-            <os family="windows"/>
-        </condition>
-        <condition property="nativeLib" value="libnitf.jni-c-${version}.so">
-            <not>
-                <os family="windows"/>
-            </not>
-        </condition>
     </target>
 
 
@@ -104,8 +96,8 @@
         <antcall target="_jni-win"/>
         <antcall target="_jni-nonwin"/>
         <copy todir="${target.dir}">
-        	<mapper type="flatten"/>
-            <fileset dir="${jni.dir}" includes="lib/**/${nativeLib}"/>
+            <mapper type="flatten"/>
+            <fileset dir="${jni.dir}" includes="lib/**/*.dll,lib/**/*.so"/>
         </copy> 
     </target>
     
@@ -125,7 +117,7 @@
             <fileset dir="${target.dir}" includes="${projectName}-${version}.jar"/>
         </copy>
         <copy todir="${prefix}/shared">
-        	<mapper type="flatten"/>
+            <mapper type="flatten"/>
             <fileset dir="${nitf.dir}/plugins" includes="**/*.dll,**/*.so"/>
         </copy>
     </target>
@@ -135,7 +127,7 @@
         
         <!-- this little chunk gets the system identifier, as provided by config.guess or SCons -->
         <path id="lib.path">
-            <fileset dir="${jni.dir}" includes="lib/**/${nativeLib}"/>
+            <fileset dir="${jni.dir}" includes="lib/**/*.dll,lib/**/*.so"/>
         </path>
         <property name="temp.1" refid="lib.path"/>
         <dirname property="temp.2" file="${temp.1}"/>
@@ -147,14 +139,14 @@
         <property name="dist.dir" value="${target.dir}/dist/${dist.name}"/>
         
         <copy todir="${dist.dir}/lib">
-        	<mapper type="flatten"/>
-            <fileset dir="${jni.dir}" includes="lib/**/${nativeLib}"/>
+            <mapper type="flatten"/>
+            <fileset dir="${jni.dir}" includes="lib/**/*.dll,lib/**/*.so"/>
         </copy>
         <copy todir="${dist.dir}/lib">
             <fileset dir="${target.dir}" includes="${projectName}-${version}.jar"/>
         </copy>
         <copy todir="${dist.dir}/shared">
-        	<mapper type="flatten"/>
+            <mapper type="flatten"/>
             <fileset dir="${nitf.dir}/plugins" includes="**/*.dll,**/*.so"/>
         </copy>
         
