@@ -8,15 +8,23 @@ Add any replacement regexes here to files that include the version
 import os, sys, re, fileinput
 
 if __name__ == '__main__':
+    
+    def helpAndExit():
+        print 'usage: %s <major.minor[-suffix]>' % sys.argv[0]
+        sys.exit(1)
+    
+    if len(sys.argv) <= 1:
+        helpAndExit()
+    
     top_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
-    versionFile = os.path.join(top_dir, 'VERSION')
-    sequence = fileinput.input(versionFile)
-    fullVersion = sequence.next().strip()
+    fullVersion = sys.argv[1]
     print 'Version = %s' % fullVersion
-    sequence.close()
     parts = re.match(r'(?P<major>\d+)[.](?P<minor>\d+)([-](?P<suffix>\w+))?',
                      fullVersion).groupdict()
     major, minor, suffix = parts['major'], parts['minor'], parts['suffix']
+    
+    if not major or not minor:
+        helpAndExit()
     
     #update version of C Makefiles
     makefiles = [os.path.join(top_dir, 'c/nitf/build/Makefile.in'),
@@ -46,8 +54,6 @@ if __name__ == '__main__':
         line = re.sub(r'\d+[.]\d+(?![-]setup)([-]\w+)?', r'%s' % fullVersion, line)
         line = re.sub(r'\d+[.]\d+.+[-]setup', r'%s-setup' % fullVersion.lower(), line)
         #line = re.sub(r'\d+[.]\d+((?![-]setup)[-]\w+)?-setup', r'%s-setup' % fullVersion.lower(), line)
-        
-        
         sys.stdout.write(line)
     
     
