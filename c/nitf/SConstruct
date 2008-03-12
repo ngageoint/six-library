@@ -64,8 +64,10 @@ if not int(env.subst('$lib_only')):
         # create dlls for each of our shared objects
         for plugin in glob.glob('shared/*.c'):
             if os.path.basename(plugin) not in SKIP_PLUGINS:
-                lib = pluginEnv.SharedLibrary(plugin.strip('.c'),
-                    plugin, LIBS=['%s' % LIB_NAME] + env['LIBS'],
-                        LIBPATH=[local_lib] + env['LIBPATH'])
+                lib = pluginEnv.SharedLibrary(
+                            os.path.join('plugins/%s' % env['PLATFORM'],
+                                         os.path.basename(plugin.rstrip('.c'))),
+                            plugin, LIBS=['%s' % LIB_NAME] + env['LIBS'],
+                            LIBPATH=[local_lib] + env['LIBPATH'])
 
 #==============================================================================#

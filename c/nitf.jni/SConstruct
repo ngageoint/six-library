@@ -40,9 +40,7 @@ dll = env.InstallAs(os.path.join(dirname, 'nitf.jni-c%s' % ext), str(libs[0][0])
 #setup install goal
 if env.subst('$prefix') and env.subst('$prefix') != '0':
     prefix = env.subst('$prefix')
-    env.Alias(target="install", source=env.Install(dir=os.path.join(prefix, 'include'),
-              source=glob.glob('include/*.h')))
-    env.Alias(target="install", source=env.Install(dir=os.path.join(prefix, local_lib),
+    env.Alias(target="install", source=env.Install(dir=os.path.join(prefix, 'lib'),
               source=dll))
 
 #==============================================================================#
