@@ -68,12 +68,6 @@
     </target>
     
     
-    <target name="_install-nonwin" depends="init,build" unless="isWindows">
-        <exec dir="${jni.dir}" executable="make">
-            <arg line="install"/>
-        </exec>
-    </target>
-    
     <target name="_jni-win" depends="init" if="isWindows">
         <condition property="jni.debug" value="debug=1">
             <istrue value="${debug}"/>
@@ -83,22 +77,12 @@
         </exec>
     </target>
     
-    <target name="_install-win" depends="init,build" if="isWindows">
-        <exec dir="${jni.dir}" executable="cmd.exe">
-            <arg line="/c scons prefix=${prefix} ${jni.debug} install"/>
-        </exec>
-    </target>
-    
     <target name="jni">
         <echo>"====================================================="</echo>
         <echo>"                        JNI                          "</echo>
         <echo>"====================================================="</echo>
         <antcall target="_jni-win"/>
         <antcall target="_jni-nonwin"/>
-        <copy todir="${target.dir}">
-            <mapper type="flatten"/>
-            <fileset dir="${jni.dir}" includes="lib/**/*.dll,lib/**/*.so"/>
-        </copy> 
     </target>
     
     
@@ -110,9 +94,11 @@
     </target>
 
     
-    <target name="install" depends="init">
-        <antcall target="_install-win"/>
-        <antcall target="_install-nonwin"/>
+    <target name="install" depends="build">
+        <copy todir="${prefix}/lib">
+            <mapper type="flatten"/>
+            <fileset dir="${jni.dir}" includes="lib/**/*.dll,lib/**/*.so"/>
+        </copy>
         <copy todir="${prefix}/lib">
             <fileset dir="${target.dir}" includes="${projectName}-${version}.jar"/>
         </copy>
