@@ -131,13 +131,17 @@
         <copy todir="${dist.dir}/lib">
             <fileset dir="${target.dir}" includes="${projectName}-${version}.jar"/>
         </copy>
-        <copy todir="${dist.dir}/shared">
+        <copy todir="${dist.dir}/share/nitf">
             <mapper type="flatten"/>
             <fileset dir="${nitf.dir}/plugins" includes="**/*.dll,**/*.so"/>
         </copy>
         
-        <copy todir="${dist.dir}/docs/api">
+        <copy todir="${dist.dir}/share/doc/nitf/api/java">
             <fileset dir="${javadoc.dir}" includes="**"/>
+        </copy>
+        
+        <copy todir="${dist.dir}/share/doc/nitf/">
+            <fileset dir="../../" includes="COPYING*,README*"/>
         </copy>
         
         <tar tarfile="${target.dir}/${dist.name}.tar" basedir="${target.dir}/dist" includes="${dist.name}/**"/>
@@ -165,9 +169,23 @@
             author="true"
             version="true"
             use="true"
-            windowtitle="NITRO API">
+            windowtitle="NITRO ${version} API">
+            <bottom>
+                <![CDATA[
+                <i>Copyright &#169; 2004-2008 General Dynamics All Rights Reserved.</i>
+                <div style=\"float:left;\"><a href=\"http://sourceforge.net/\" target=\"_blank\"><img style=\"width: 151px; height: 38px;\" src=\"http://web.sourceforge.com/images/footer/source.gif\" alt=\"SourceForge.net\" border=\"0\" height=\"38\" width=\"151\"></a></div>
+                <script type=\"text/javascript\">
+                    var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");
+                    document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));
 
-            <bottom><![CDATA[<i>Copyright &#169; 2004-2008 General Dynamics All Rights Reserved.</i>]]></bottom>
+                    </script>
+                    <script type=\"text/javascript\">
+                    var pageTracker = _gat._getTracker(\"UA-3779761-1\");
+                    pageTracker._initData();
+                    pageTracker._trackPageview();
+                </script>
+                ]]>
+            </bottom>
             <footer><![CDATA[<b>Created: ${touch.time}</b>]]></footer>
             <tag name="todo" scope="all" description="To do:"/>
         </javadoc>
