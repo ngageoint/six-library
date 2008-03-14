@@ -46,6 +46,7 @@ dnl # set some variables/options based on the architecture choices
 dnl # the core_options must go after we do the architecture setup
 builtin(include, ../../build/conf/configure.core_options.in)
 builtin(include, ../../build/conf/configure.mt.in)
+builtin(include, ../../build/conf/configure.unit_tests.in)
 
 
 #disable optz if we are debugging
@@ -66,6 +67,7 @@ fi
 
 link_autolibs="${link_thread_libs} ${link_autolibs}"
 link_libpath="${libpath} ${link_thread_libpath}"
+
 
 AC_SUBST(cc_includes)
 AC_SUBST(cc_flags)

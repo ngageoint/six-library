@@ -110,6 +110,10 @@ TESTS = test_field.c test_dll_1.c test_list_1.c test_list_2.c \
         test_read_acftb.c test_des_read.c test_field_set.c \
         test_text_read.c test_des_write.c
 
+#unit test info
+UNIT_TEST_MAIN = check_all.c
+UNIT_TESTS = check_list.c check_field.c
+
 
 APPS = getNITFVersion.c
 
