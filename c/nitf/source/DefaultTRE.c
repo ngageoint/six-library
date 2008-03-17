@@ -166,6 +166,27 @@ NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
 	
 }
 
+NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
+				 const char* tag,
+				 nitf_Error* error)
+{
+    nitf_List* list;
+    nitf_Pair* pair;
+    if (strcmp(tag, "raw_data") != 0)
+    {
+	printf("Warning: unknown TRE field for default\n");
+    }
+    pair = nitf_HashTable_find(tre->hash, tag);
+    if (!pair) return NULL;
+
+    list = nitf_List_construct(error);
+    if (!list) return NULL;
+    
+    nitf_List_pushBack(list, pair, error);
+    return list;
+  
+}
+
 NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE * tre,
                                     const char *tag,
                                     NITF_DATA * data,
@@ -222,6 +243,7 @@ NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error)
 		defaultInit,
 		defaultRead,
 		defaultSetField,
+		defaultFind,
 		defaultWrite,
 		defaultBegin,
 		defaultGetCurrentSize,

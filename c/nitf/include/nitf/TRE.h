@@ -109,10 +109,16 @@ typedef NITF_BOOL (*NITF_TRE_INIT) (nitf_TRE* tre, const char* id, nitf_Error * 
 typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOHandle, nitf_TRE*, struct _nitf_Record*, nitf_Error*);
 
 
+typedef nitf_Field* (*NITF_TRE_FIND)(nitf_TRE * tre,
+				     const char *tag,
+				     nitf_Error* error);
+
+
 typedef NITF_BOOL (*NITF_TRE_FIELD_SET)(nitf_TRE * tre,
                                     const char *tag,
                                     NITF_DATA * data,
                                     size_t dataLength, nitf_Error * error);
+
 
 
 typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle, nitf_TRE* tre, struct _nitf_Record* record, nitf_Error*);
@@ -127,13 +133,14 @@ typedef nitf_TREEnumerator* (*NITF_TRE_ITERATOR)(nitf_TRE*, nitf_Error*);
 #define NITF_TRE_END NULL
 typedef struct _nitf_TREHandler
 {
-	NITF_TRE_INIT init;
-	NITF_TRE_READER read;
-	NITF_TRE_FIELD_SET setField;
-	NITF_TRE_WRITER write;
-	NITF_TRE_ITERATOR begin;
-	NITF_TRE_SIZE getCurrentSize;
-	NITF_DATA* data;
+  NITF_TRE_INIT init;
+  NITF_TRE_READER read;
+  NITF_TRE_FIELD_SET setField;
+  NITF_TRE_FIND find;
+  NITF_TRE_WRITER write;
+  NITF_TRE_ITERATOR begin;
+  NITF_TRE_SIZE getCurrentSize;
+  NITF_DATA* data;
 
 } nitf_TREHandler;
 
@@ -161,7 +168,7 @@ NITFPROT(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
  */
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
                                        const char* id,
-									   int length,
+				       int length,
                                        nitf_Error * error);
 
 
@@ -226,6 +233,10 @@ NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      NITF_DATA * data,
                                      size_t dataLength,
                                      nitf_Error * error);
+
+NITFAPI(nitf_List*) nitf_TRE_find(nitf_TRE* tre,
+				  const char* pattern,
+				  nitf_Error* error);
 
 /*!
  * Returns 1 if the TRE follows the TRE Description

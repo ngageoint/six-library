@@ -243,12 +243,21 @@ NITFAPI(NITF_BOOL) nitf_TRE_exists(nitf_TRE * tre, const char *tag)
     return (!tre) ? NITF_FAILURE : nitf_HashTable_exists(tre->hash, tag);
 }
 
+
+NITFAPI(nitf_List*) nitf_TRE_find(nitf_TRE* tre,
+				  const char* pattern,
+				  nitf_Error* error)
+{
+    return tre->handler->find(tre, pattern, error);
+}
+
+
 NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      const char *tag,
                                      NITF_DATA * data,
                                      size_t dataLength, nitf_Error * error)
 {	
-	return tre->handler->setField(tre, tag, data, dataLength, error);
+    return tre->handler->setField(tre, tag, data, dataLength, error);
 }
 
 

@@ -835,6 +835,17 @@ NITFPRIV(int) basicGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
 }
 
 
+NITFPRIV(nitf_List*) basicFind(nitf_TRE* tre, const char* tag, nitf_Error* error)
+{
+    nitf_List* list;
+    nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
+    if (!pair) return NULL;
+    list = nitf_List_construct(error);
+    if (!list) return NULL;
+    nitf_List_pushBack(list, pair, error);
+    return list;
+}
+
 NITFPRIV(NITF_BOOL) basicSetField(nitf_TRE* tre, const char* tag, NITF_DATA* data, size_t dataLength, nitf_Error* error)
 {
 	return nitf_TREUtils_setValue(tre, tag,  data, dataLength, error);
@@ -905,6 +916,7 @@ NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSe
 		basicInit,
 		basicRead,
 		basicSetField,
+		basicFind,
 		basicWrite,
 		basicBegin,
 		basicGetCurrentSize,
