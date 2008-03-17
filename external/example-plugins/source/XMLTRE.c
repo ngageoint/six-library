@@ -156,6 +156,58 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 }
 
 
+
+/*
+ *  Organizes data out of the DOM and puts it in the hash
+ *
+ *
+ */
+NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
+				       xmlNode* node, 
+				       xmlNode* find,
+				       const char* prepend)
+{
+    xmlNode * current = NULL;
+    
+    int depth = 0;
+    char lastName[512] = "";
+
+    for (current = node; current; current = current->next)
+    {
+	if (current->type == XML_ELEMENT_NODE)
+	{
+
+	    char name[512];
+	    
+	    if (strcmp((char*)current->name, lastName) == 0)
+	    {
+		depth++;
+	    }
+	    else depth = 0;
+	    
+	    strcpy(lastName, (char*)current->name);
+	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
+	    //printf("Looking for name: %s\n", name);
+	    if (current == find)
+	    {
+		//printf("Actually got here\n");
+		return nitf_HashTable_find(tre->hash, name);
+	    }
+
+	    nitf_Pair* rv = 
+		getElementFromDOM(tre, current->children, find, name);
+	    if (rv) return rv;
+
+		
+	    
+	    
+	}
+	
+    }
+    //printf("Got here\n");
+}
+
+
 /*
  *  This function is called by the Reader.  Since I am feeling lazy right now,
  *  Im going to read into memory.
@@ -277,12 +329,14 @@ NITFPRIV(int) XMLTREIterator_getCurrentSize(nitf_TRE* tre, nitf_Error* error)
 }
 
 
-NITFPRIV(nitf_List*) getFieldsFromXPath(xmlNodeSet* nodes)
+
+NITFPRIV(nitf_List*) getFieldsFromXPath(nitf_TRE* tre, xmlNodeSet* nodes)
 {
     int i, size;
     xmlNode* current;
+    XMLTREData* treData = tre->priv;
     size = (nodes) ? nodes->nodeNr : 0;
-
+    nitf_List* list = NULL;
     for (i = 0; i < size; i++)
     {
 	if (nodes->nodeTab[i]->type == XML_NAMESPACE_DECL)
@@ -291,15 +345,41 @@ NITFPRIV(nitf_List*) getFieldsFromXPath(xmlNodeSet* nodes)
 	}
 	else if (nodes->nodeTab[i]->type == XML_ELEMENT_NODE)
 	{
+	    
+	    nitf_Pair* pair = NULL;
+	    nitf_Field* field = NULL;
+	    xmlNode* root;
 	    current = nodes->nodeTab[i];
-	    printf("Found node: %s\n", current->name);
+	    //printf("Element: %s\n", current->name);
+	    root = xmlDocGetRootElement(treData->doc);
+	    pair = getElementFromDOM(tre, root, current, "");
+	    if (pair)
+	    {
+
+		if (list == NULL)
+		{
+		    nitf_Error error;
+		    list = nitf_List_construct(&error);
+		    assert(list);
+		    nitf_List_pushBack(list, pair, &error);
+		}
+		
+		field = (nitf_Field*)pair->data;
+	    //printf("Found: %s [%.*s]\n", pair->key, field->length, field->raw);
+	    }
+	    else
+	    {
+		printf("Found this key, but its not a field\n");
+	    }
 	}
 	else
 	{
 	    current = nodes->nodeTab[i];
+	    printf("Att?: %s\n", current->name);
+
 	}
     }
-    return NULL;
+    return list;
 
 }
 
@@ -323,7 +403,7 @@ NITFPRIV(nitf_List*) XMLTRE_find(nitf_TRE* tre, const char* pattern, nitf_Error*
 	return NULL;
     }
     
-    list = getFieldsFromXPath(xpathObject->nodesetval);
+    list = getFieldsFromXPath(tre, xpathObject->nodesetval);
     
 
     xmlXPathFreeObject(xpathObject);
