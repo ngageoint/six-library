@@ -89,7 +89,7 @@ NITFPRIV(char*) getText(xmlNode* node)
 	if (!strlen(buf))
 		return NULL;
 
-	data = (char*)malloc(strlen(buf + 1));
+	data = (char*)malloc(strlen(buf) + 1);
 	
 	strcpy(data, buf);
 	return data;
@@ -116,6 +116,7 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 			nitf_Field* field;
 			char* text;
 			
+			printf("DBG: %s\n", (char*)current->name);
 			if (strcmp((char*)current->name, lastName) == 0)
 			{
 				depth++;
@@ -123,6 +124,7 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 			else depth = 0;
 
 			strcpy(lastName, (char*)current->name);
+			//printf("DBG: %s/%s[%d]", prepend, (char*)current->name, depth);
 			sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
 
 			putElementsInTRE(current->children, tre, name, error);
@@ -138,7 +140,7 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 				field = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
 				nitf_Field_setString(field, text, error);
 				//printf("Name: <%s>: %s\n", name, text);			
-				if (nitf_HashTable_insert(tre->hash, name, field, error))
+				if (!nitf_HashTable_insert(tre->hash, name, field, error))
 				{
 					//free(text);
 					return NITF_FAILURE;
