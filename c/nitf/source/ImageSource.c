@@ -48,6 +48,7 @@ NITFAPI(void) nitf_ImageSource_destruct(nitf_ImageSource ** imageSource)
     if (*imageSource)
     {
         nitf_List *l = (*imageSource)->bandSources;
+	while (nitf_List_size(l))
         {
             nitf_BandSource *bandSource =
                 (nitf_BandSource *) nitf_List_popFront(l);
