@@ -1247,12 +1247,11 @@ CATCH_ERROR:
 NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
                               nitf_TRE * tre, nitf_Error * error)
 {
-    int ok =1;
-	int bad = 0;
+    int ok = 0;
+    int bad = 0;
     off_t off;
-    //NITF_PLUGIN_TRE_HANDLER_FUNCTION handler =
     
-	nitf_TREHandler* handler = NULL;
+    nitf_TREHandler* handler = NULL;
 
     nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
     if (reg)
@@ -1263,13 +1262,13 @@ NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
             goto CATCH_ERROR;
         if (handler)
         {
-			tre->handler = handler;
+            tre->handler = handler;
             off = nitf_IOHandle_tell(reader->inputHandle, error);
 			
-			ok = handler->read(reader->inputHandle, tre, reader->record, error);
+	    ok = handler->read(reader->inputHandle, tre, reader->record, error);
             if (!ok)
             {
-				// Also probably warning list makes sense here!
+		// Also probably warning list makes sense here!
                 
                 /* move the IO Handle back the size of the TRE */
                 nitf_IOHandle_seek(reader->inputHandle, off, NITF_SEEK_SET, error);
