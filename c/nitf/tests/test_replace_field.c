@@ -74,10 +74,11 @@ void lookForTREField(nitf_Extensions* ext,
 		nitf_Error_print(&error, stdout, "Replace failed");
 		return;
 	    }
-
-
 	    
-	    
+	    pair = nitf_HashTable_find(tre->hash, pair->key);
+	    field = (nitf_Field*)pair->data;
+	    /* TODO: use find to show it again? */
+	    printf("Round Trip Value: %s [%.*s]\n", pair->key, field->length, field->raw);
 	    nitf_ListIterator_increment(&currentInst);
 
 	}

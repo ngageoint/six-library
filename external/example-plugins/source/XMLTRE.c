@@ -126,7 +126,7 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 	    
 	    strcpy(lastName, (char*)current->name);
 	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
-	    
+	    printf("Found node with path: [%s]\n", (char*)xmlGetNodePath(current));
 	    putElementsInTRE(current->children, tre, name, error);
 	    
 	    text = getText(current->children);
@@ -156,6 +156,182 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 }
 
 
+/* Maybe we dont have to do this, but I cant find the
+   getElementsByTagName equivalent in libxml2 -- lame! */
+
+NITFPRIV(nitf_List*) getElementsByTagName(xmlNode* parent, const char* name, nitf_Error* error)
+{
+    xmlNode* current = NULL;
+    nitf_List* list = nitf_List_construct(error);
+    if (!list) goto CATCH_ERROR;
+
+    for (current = parent->children; current; current = current->next)
+    {
+	if (current->type == XML_ELEMENT_NODE)
+	{
+	    if (!nitf_List_pushBack(list, current, error))
+	    {
+		goto CATCH_ERROR;
+	    }
+	}
+	
+	
+    }
+    return list;
+    
+ CATCH_ERROR:
+    if (list)
+    {
+	nitf_ListIterator it = nitf_List_begin(list);
+	nitf_ListIterator end = nitf_List_end(list);
+	
+	while (nitf_ListIterator_notEqualTo(&it, &end))
+	{
+	    current = (xmlNode*)nitf_ListIterator_get(&it);
+	    xmlUnlinkNode(current);
+	    xmlFreeNode(current);
+	    nitf_ListIterator_increment(&it);
+	}
+	nitf_List_destruct(&list);
+    }
+    return NULL;
+}
+		
+/* We do have this element, so lets replace it */
+// Should I use xmlReplaceNode & xmlNewText?
+// probably not, since there could be more than one text node
+
+NITFPRIV(NITF_BOOL) removeTextNodes(xmlNode* parent, nitf_Error* error)
+{
+    NITF_BOOL rv = NITF_SUCCESS;
+    xmlNode* current = NULL;
+    nitf_List* list = nitf_List_construct(error);
+    if (!list) return NITF_FAILURE;
+
+    for (current = parent->children; current; current = current->next)
+    {
+	
+	if (current->type == XML_TEXT_NODE)
+	{
+	    if (!nitf_List_pushBack(list, current, error))
+	    {
+		rv = NITF_FAILURE;
+		goto CLEANUP;
+	    }
+	}
+	else
+	{
+	    printf("Found a non-text node\n");
+	}
+    }
+
+ CLEANUP:
+    {
+	nitf_ListIterator it = nitf_List_begin(list);
+	nitf_ListIterator end = nitf_List_end(list);
+
+	while (nitf_ListIterator_notEqualTo(&it, &end))
+	{
+	    current = (xmlNode*)nitf_ListIterator_get(&it);
+	    xmlUnlinkNode(current);
+	    xmlFreeNode(current);
+	    nitf_ListIterator_increment(&it);
+	}
+	nitf_List_destruct(&list);
+    }
+    return rv;
+
+}  
+
+/*
+ *  We're going to want this function to traverse our DOM, installing
+ *  new element nodes every step of the way, until we get where we are 
+ *  going
+ *  
+ *  Current working alg
+ *  /root[0]/next[1]
+ *
+ */
+NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
+				    const char* tag,
+				    const char* value,
+				    xmlNode* parent,
+				    int found,
+				    nitf_Error* error) 
+{
+    xmlNode* current = NULL;
+    nitf_List* elements = NULL;
+    int numElements = 0;
+    char next[128] = "";
+    /* This is the next chunk we are on */
+    size_t endOfTag = strcspn(tag, "[");
+    int index = 0;
+    int rv;
+    /* Now, for example, we are pointing at
+     * root[0]/next[1], so we need to figure out what number
+     */
+    if (endOfTag + 1 >= strlen(tag))
+    {
+	/* We ran out of rope */
+	nitf_Error_init(error, "Over the line", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+	return NITF_FAILURE;
+    }
+    rv = sscanf(&tag[endOfTag], "%d]/%s", &index, next);
+    if (rv != 2)
+    {
+	next[endOfTag+1] = 0;
+	memcpy(next, tag, endOfTag + 1);
+
+	if (found)
+	{
+	    if (!removeTextNodes(parent, error))
+	    {
+		return NITF_FAILURE;
+	    }
+	}
+
+	xmlNewTextChild(parent, 
+			NULL, 
+			(const xmlChar*)next,
+			(const xmlChar*)value);
+	return NITF_SUCCESS;
+    }
+
+    /* If the field was found already, that implies that the entire
+       path of nodes to it should exist already as well */
+    elements = getElementsByTagName(parent, tag, error);
+    if (!elements)
+    {
+	return NITF_FAILURE;
+    }
+    
+    numElements = nitf_List_size(elements);
+
+    if (numElements < index)
+    {
+	int have = 0;
+	if (found)
+	{
+	    /* Somethign is wrong */
+	    nitf_Error_init(error, "Not enough children exist for found field", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+	    return NITF_FAILURE;
+	}
+	/* Else, create dummy elements all the way up to the one we need */
+	for (have = numElements; have <= index; have++)
+	{
+	    printf("Creating dummy element\n");
+	    current = xmlNewChild(parent, NULL, (const xmlChar*)tag, NULL);
+	}
+    }
+    else
+    {
+	/* Just need the ith element in the list! */
+	nitf_ListIterator obj = nitf_List_at(elements, index);
+	current = (xmlNode*)nitf_ListIterator_get(&obj);
+    }
+    
+    return putElementInDOM(tre, next, value, current, found, error);
+}
 
 /*
  *  Organizes data out of the DOM and puts it in the hash
@@ -205,6 +381,7 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
 	
     }
     //printf("Got here\n");
+    //return rv;
 }
 
 
@@ -418,40 +595,74 @@ NITFPRIV(nitf_List*) XMLTRE_find(nitf_TRE* tre, const char* pattern, nitf_Error*
 
 NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* data, size_t dataLength, nitf_Error* error)
 {
-	nitf_Field* field = NULL;
-	XMLTREData * treData = (XMLTREData*)tre->priv;
+    char* value = NULL;
+    nitf_Field* field = NULL;
+    XMLTREData * treData = (XMLTREData*)tre->priv;
+    
+    
+    if (! nitf_HashTable_exists(tre->hash, tag))
+    {
+	
+	field = nitf_Field_construct(dataLength, NITF_BCS_A, error);
+	if (!field)
+	    return NITF_FAILURE;
 	
 
-	if (! nitf_HashTable_exists(tre->hash, tag))
-	{
+	/* 
+	   Note that doing it this way could cause a problem, so we 
+	   remove the value if we can't make it work
+	   TODO: clean up this mess!
+	*/
 
-		field = nitf_Field_construct(dataLength, NITF_BCS_A, error);
-		if (!field)
-			return NITF_FAILURE;
+	value = (char*)malloc(dataLength + 1);
+	value[dataLength] = 0;
+	memcpy(value, data, dataLength);
 
-		if (!nitf_HashTable_insert(tre->hash, tag, field, error))
-			return NITF_FAILURE;
-	}
-	else
-	{
-		// If it exists alread, lets be real flexible
-		
-		nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
-		assert(pair);
-		field = (nitf_Field*)pair->data;
-		if ( field->length != dataLength )
-		{
-			nitf_Field_destruct(&field);
-			if (!nitf_Field_construct(dataLength, NITF_BCS_A, error))
-				return NITF_FAILURE;
+	if (!putElementInDOM(tre, tag, value, treData->doc, 0, error))
+	    goto CATCH_ERROR;
 
-			pair->data = field;
-		}
-	}
-
+	if (!nitf_HashTable_insert(tre->hash, tag, field, error))
+	    goto CATCH_ERROR;
+	
 	treData->dirty = 1;
+	free(value);
+	return NITF_SUCCESS;
+    }
+    else
+    {
+	// If it exists already, lets be real flexible
+	
+	nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
+	assert(pair);
+	field = (nitf_Field*)pair->data;
+    
+	value = (char*)malloc(dataLength + 1);
+	value[dataLength] = 0;
+	memcpy(value, data, dataLength);
+	
+	/* Okay, if it all works... */
+	if (putElementInDOM(tre, tag, value, treData->doc, 0, error))
+	{
+	    
+	    treData->dirty = 1;
 
-	return nitf_Field_setRawData(field, data, dataLength, error);
+	    if (!nitf_Field_setRawData(field, data, dataLength, error))
+		goto CATCH_ERROR;
+	    free(value);
+	    return NITF_SUCCESS;
+	}
+    }
+
+ CATCH_ERROR:
+    if (field)
+    {
+	nitf_Field_destruct(&field);
+    }
+    if (value)
+    {
+	free(value);
+    }
+    return NITF_FAILURE;
 }
 
 
