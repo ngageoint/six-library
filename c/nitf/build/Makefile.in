@@ -95,7 +95,8 @@ SOURCES = BandInfo.c \
           Writer.c
 
 
-TESTS = test_find_field.c test_field.c test_dll_1.c test_list_1.c test_list_2.c \
+TESTS = test_replace_field.c test_find_field.c test_field.c \
+        test_dll_1.c test_list_1.c test_list_2.c \
         test_debug_mem_1.c test_hash_table_1.c \
         test_dump_record.c \
         test_extensions_1.c test_image_loading.c \
