@@ -109,9 +109,9 @@ typedef NITF_BOOL (*NITF_TRE_INIT) (nitf_TRE* tre, const char* id, nitf_Error * 
 typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOHandle, nitf_TRE*, struct _nitf_Record*, nitf_Error*);
 
 
-typedef nitf_Field* (*NITF_TRE_FIND)(nitf_TRE * tre,
-				     const char *tag,
-				     nitf_Error* error);
+typedef nitf_List* (*NITF_TRE_FIND)(nitf_TRE * tre,
+				    const char *tag,
+				    nitf_Error* error);
 
 
 typedef NITF_BOOL (*NITF_TRE_FIELD_SET)(nitf_TRE * tre,
