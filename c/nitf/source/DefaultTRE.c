@@ -112,22 +112,22 @@ CATCH_ERROR:
 
 
 NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOHandle io, 
-								struct _nitf_TRE* tre, 
-								struct _nitf_Record* record, 
-								nitf_Error* error)
+				 struct _nitf_TRE* tre, 
+				 struct _nitf_Record* record, 
+				 nitf_Error* error)
 {
-	nitf_Field* field;
-	nitf_Pair* pair = nitf_HashTable_find(tre->hash, "raw_data");
-	if (pair == NULL)
-	{
-		nitf_Error_init(error, "No raw_data in default!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-		return NITF_FAILURE;
-	}
-	field = (nitf_Field*)pair->data;
-	
-	if (!nitf_IOHandle_write(io, field->raw, field->length, error))
-		return NITF_FAILURE;
-	return NITF_SUCCESS;
+    nitf_Field* field;
+    nitf_Pair* pair = nitf_HashTable_find(tre->hash, "raw_data");
+    if (pair == NULL)
+    {
+	nitf_Error_init(error, "No raw_data in default!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+	return NITF_FAILURE;
+    }
+    field = (nitf_Field*)pair->data;
+    
+    if (!nitf_IOHandle_write(io, field->raw, field->length, error))
+	return NITF_FAILURE;
+    return NITF_SUCCESS;
 }
 
 NITFPRIV(NITF_BOOL) defaultNullIncrement(nitf_TREEnumerator** it, nitf_Error* error)
@@ -167,24 +167,36 @@ NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
 }
 
 NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
-				 const char* tag,
+				 const char* pattern,
 				 nitf_Error* error)
 {
     nitf_List* list;
-    nitf_Pair* pair;
-    if (strcmp(tag, "raw_data") != 0)
-    {
-	printf("Warning: unknown TRE field for default\n");
-    }
-    pair = nitf_HashTable_find(tre->hash, tag);
-    if (!pair) return NULL;
+    /*    nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
+	  if (!pair) return NULL;
+	  
+    */
+    nitf_HashTableIterator it = nitf_HashTable_begin(tre->hash);
+    nitf_HashTableIterator end = nitf_HashTable_end(tre->hash);
 
     list = nitf_List_construct(error);
     if (!list) return NULL;
-    
-    nitf_List_pushBack(list, pair, error);
+
+    while (nitf_HashTableIterator_notEqualTo(&it, &end))
+    {
+	nitf_Pair* pair = nitf_HashTableIterator_get(&it);
+
+	if (strstr(pair->key, pattern))
+	{
+	    /* Should check this, I suppose */
+	    nitf_List_pushBack(list, pair, error);
+
+	}
+	nitf_HashTableIterator_increment(&it);
+	
+    }
+
     return list;
-  
+
 }
 
 NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE * tre,

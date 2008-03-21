@@ -834,15 +834,40 @@ NITFPRIV(int) basicGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
 	return nitf_TREUtils_computeLength(tre);
 }
 
-
-NITFPRIV(nitf_List*) basicFind(nitf_TRE* tre, const char* tag, nitf_Error* error)
+/*
+ *  TODO: Make all these private functions accessible so that our other
+ *  handlers, like DefaultTRE can make use of them
+ *
+ */
+NITFPRIV(nitf_List*) basicFind(nitf_TRE* tre, 
+			       const char* pattern, 
+			       nitf_Error* error)
 {
     nitf_List* list;
-    nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
+    /*    nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
     if (!pair) return NULL;
+
+    */
+    nitf_HashTableIterator it = nitf_HashTable_begin(tre->hash);
+    nitf_HashTableIterator end = nitf_HashTable_end(tre->hash);
+
     list = nitf_List_construct(error);
     if (!list) return NULL;
-    nitf_List_pushBack(list, pair, error);
+
+    while (nitf_HashTableIterator_notEqualTo(&it, &end))
+    {
+	nitf_Pair* pair = nitf_HashTableIterator_get(&it);
+
+	if (strstr(pair->key, pattern))
+	{
+	    /* Should check this, I suppose */
+	    nitf_List_pushBack(list, pair, error);
+
+	}
+	nitf_HashTableIterator_increment(&it);
+	
+    }
+
     return list;
 }
 

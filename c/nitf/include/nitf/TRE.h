@@ -247,7 +247,7 @@ NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
  *  \param tre The TRE
  *  \param A pattern to match
  *  \param error The error if one occurs
- *  \return A nitf_List of nitf_Field*, or NULL if no matches
+ *  \return A nitf_List of nitf_Pair*, or NULL if no matches
  *  \todo How to tell if its an error or failure to retrieve -- probably
  *  need another parameter
  *
