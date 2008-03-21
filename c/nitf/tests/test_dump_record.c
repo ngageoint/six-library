@@ -36,79 +36,57 @@ int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData, nitf_Err
         if (pair->key)
         {
             nitf_ListIterator iter, end;
-
+	    
             iter = nitf_List_begin((nitf_List *) pair->data);
             end = nitf_List_end((nitf_List *) pair->data);
-
+	    
             while (nitf_ListIterator_notEqualTo(&iter, &end))
             {
-
-
-	      int i = 0;
+		
+		
+		int i = 0;
                 nitf_TRE *tre = (nitf_TRE *) nitf_ListIterator_get(&iter);
-				nitf_TREEnumerator* it;
-				if (tre->length <= 0)
-				{
-					perror("Invalid tre->length (0)");
-				}
+		nitf_TREEnumerator* it;
+		if (tre->length <= 0)
+		{
+		    perror("Invalid tre->length (0)");
+		}
                 else
                     treLength = tre->length;
                 printf("\n--------------- %s TRE (%d) ---------------\n", pair->key, treLength);
-
-
-				
-				
-				for (it = nitf_TRE_begin(tre, error); 
-					it != NULL; it->next(&it, error) )
-				{
-					nitf_Pair* fieldPair;
-					i++;
-					
-					fieldPair = it->get(it, error);
-					printf("%s = [", fieldPair->key);    
-					nitf_Field_print((nitf_Field *) fieldPair->data);
-					printf("]\n");
-/*
-					// If you uncomment this section, it will change them
-					// into ASCII smiley face 1 and 2
-					printf("And now Im changing it!\n");
-					
-					nitf_TRE_setField(tre, fieldPair->key, &i, sizeof(i), error);
-					fieldPair = it->get(it, error);
-					printf("New %s = [", fieldPair->key);    
-					nitf_Field_print((nitf_Field *) fieldPair->data);
-					printf("]\n");
-*/
-
-				}
-				/*
-				do
-				{
-					nitf_Pair* fieldPair;
-					if (!it)
-						break;
-					
-					fieldPair = it->get(it, error);
-					printf("%s = [", fieldPair->key);    
-					nitf_Field_print((nitf_Field *) fieldPair->data);
-					printf("]\n");
-				
-				} while (it->next(&it, error));
-*/
-
-				
-              
-                //nitf_TREUtils_print(tre, error);
-                printf("---------------------------------------------\n");
-                nitf_ListIterator_increment(&iter);
-				
-            }
-        }
+		
+		
+		
+		
+		for (it = nitf_TRE_begin(tre, error); 
+		     it != NULL; it->next(&it, error) )
+		{
+		    nitf_Pair* fieldPair;
+		    i++;
+		    
+		    fieldPair = it->get(it, error);
+		    if (fieldPair)
+		    {
+			printf("%s = [", fieldPair->key);    
+			nitf_Field_print((nitf_Field *) fieldPair->data);
+			printf("]\n");
+		    }
+		    else
+		    {
+			printf("Warning, no field found!\n");
+		    }
+		    
+		}	    
+		printf("---------------------------------------------\n");
+		nitf_ListIterator_increment(&iter);
+		
+	    }
+	}
     }
     else
     {
 #if NITF_DEBUG_TRE
-        printf("No pair defined at iter pos!\n");
+	printf("No pair defined at iter pos!\n");
 #endif
     }
     return 1;
