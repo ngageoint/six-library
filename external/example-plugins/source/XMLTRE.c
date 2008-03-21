@@ -276,11 +276,11 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
 	nitf_Error_init(error, "Over the line", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
 	return NITF_FAILURE;
     }
-    rv = sscanf(&tag[endOfTag], "%d]/%s", &index, next);
+    rv = sscanf(&tag[endOfTag], "[%d]/%s", &index, next);
     if (rv != 2)
     {
 	next[endOfTag+1] = 0;
-	memcpy(next, tag, endOfTag + 1);
+	memcpy(next, tag, endOfTag);
 
 	if (found)
 	{
@@ -625,6 +625,11 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
     if (! nitf_HashTable_exists(tre->hash, tag))
     {
 	
+	/* This is the next chunk we are on */
+	size_t endOfTag = strcspn(tag, "]");
+
+	xmlNode* root = xmlDocGetRootElement(treData->doc);
+
 	field = nitf_Field_construct(dataLength, NITF_BCS_A, error);
 	if (!field)
 	    return NITF_FAILURE;
@@ -640,7 +645,8 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
 	value[dataLength] = 0;
 	memcpy(value, data, dataLength);
 
-	if (!putElementInDOM(tre, tag, value, treData->doc, 0, error))
+	/* Different encoding than else!!! */
+	if (!putElementInDOM(tre, &tag[endOfTag + 2], value, root, 0, error))
 	    goto CATCH_ERROR;
 
 	if (!nitf_HashTable_insert(tre->hash, tag, field, error))
