@@ -450,8 +450,30 @@ NITFPRIV(NITF_BOOL) XMLTRE_initData(nitf_TRE * tre, const char* id, nitf_Error *
 {
     
     /* first, we need to build our DOM */
-    LIBXML_TEST_VERSION
-    //xmlSetBufferAllocationScheme(XML_BUFFER_ALLOC_EXACT);
+    LIBXML_TEST_VERSION;
+    
+    XMLTREData* treData = NULL;
+    
+    xmlNode* node;
+    
+    //char *data = NULL; 
+    NITF_BOOL success; 
+    if (!tre) { return NITF_FAILURE; } 
+    
+    treData = XMLTREData_construct(error);
+    if (!treData) return NITF_FAILURE;
+    
+    /* We have no memory data, so we are starting off dirty */
+    treData->dirty = 1; 
+    treData->memory = NULL; 
+    treData->memorySize = 0;
+    
+    treData->doc = xmlNewDoc(BAD_CAST "1.0");
+    node = xmlNewNode(NULL, BAD_CAST id);
+    xmlDocSetRootElement(treData->doc, node);
+    
+    tre->priv = treData;
+
     return NITF_SUCCESS;
 }
 
@@ -701,18 +723,24 @@ NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
 {
 	/* Iteration is easy, we are using a hash table iterator underneath */
 
-	nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
-	nitf_HashTableIterator* hashIter = (nitf_HashTableIterator*)NITF_MALLOC(sizeof(nitf_HashTableIterator));
-	*hashIter = nitf_HashTable_begin(tre->hash);
-	
-	it->data = hashIter;
-	it->next = XMLTRE_increment;
-	it->get = XMLTREIterator_get;
-	
-
-	
-	
-	return it;
+    nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
+    nitf_HashTableIterator hashEnd = nitf_HashTable_end(tre->hash);
+    nitf_HashTableIterator* hashIter = (nitf_HashTableIterator*)NITF_MALLOC(sizeof(nitf_HashTableIterator));
+    *hashIter = nitf_HashTable_begin(tre->hash);
+    
+    if (nitf_HashTableIterator_equals(&hashEnd, hashIter))
+    {
+	NITF_FREE(hashIter);
+	NITF_FREE(it);
+	return NULL;
+    }
+    
+    it->data = hashIter;
+    it->next = XMLTRE_increment;
+    it->get = XMLTREIterator_get;
+    
+    
+    return it;
 	
 }
 
