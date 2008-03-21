@@ -628,7 +628,6 @@ CATCH_ERROR:
 NITFPRIV(NITF_BOOL) writeExtension(nitf_Writer * writer,
                                    nitf_TRE * tre, nitf_Error * error)
 {
-    char *tre_data;
 
     NITF_BOOL success;
 
@@ -640,15 +639,10 @@ NITFPRIV(NITF_BOOL) writeExtension(nitf_Writer * writer,
     if (!success)
         goto CATCH_ERROR;
 
-    /* we need to free this later on */
-    //tre_data = nitf_TRE_getRawData(tre, &length, error);
-
-    //if (!tre_data)
-    //    goto CATCH_ERROR;
-
-	length = tre->handler->getCurrentSize(tre, error);
-	if (length == -1)
-		goto CATCH_ERROR;
+    
+    length = tre->handler->getCurrentSize(tre, error);
+    if (length == -1)
+      goto CATCH_ERROR;
 		
     success = writeIntField(writer, length,
                             NITF_EL_SZ, ZERO, FILL_LEFT, error);
@@ -657,11 +651,8 @@ NITFPRIV(NITF_BOOL) writeExtension(nitf_Writer * writer,
 
     /* write the data, then free the buf */
 	
-	if (!tre->handler->write(writer->outputHandle, tre, writer->record, error))
-		goto CATCH_ERROR;
-
-	//success = writeField(writer, tre_data, length, error);
-    NITF_FREE(tre_data);
+    if (!tre->handler->write(writer->outputHandle, tre, writer->record, error))
+      goto CATCH_ERROR;
 
     return success;
 
