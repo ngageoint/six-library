@@ -75,9 +75,7 @@ void lookForTREField(nitf_Extensions* ext,
 		return;
 	    }
 	    
-	    pair = nitf_HashTable_find(tre->hash, pair->key);
-	    field = (nitf_Field*)pair->data;
-	    /* TODO: use find to show it again? */
+	    field = nitf_TRE_getField(tre, pair->key);
 	    printf("Round Trip Value: %s [%.*s]\n", pair->key, field->length, field->raw);
 	    nitf_ListIterator_increment(&currentInst);
 

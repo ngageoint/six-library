@@ -260,6 +260,16 @@ NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
     return tre->handler->setField(tre, tag, data, dataLength, error);
 }
 
+NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre,
+				       const char* tag)
+{
+    nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
+    if (!pair) return NULL;
+    return (nitf_Field*)pair->data;
+
+}
+
+
 
 NITFPROT(void) nitf_TRE_flush(nitf_TRE * tre, nitf_Error * error)
 {

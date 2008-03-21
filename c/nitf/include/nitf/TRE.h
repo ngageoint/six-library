@@ -110,7 +110,7 @@ typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOHandle, nitf_TRE*, struct _nitf_Reco
 
 
 typedef nitf_List* (*NITF_TRE_FIND)(nitf_TRE * tre,
-				    const char *tag,
+				    const char *pattern,
 				    nitf_Error* error);
 
 
@@ -233,10 +233,47 @@ NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      NITF_DATA * data,
                                      size_t dataLength,
                                      nitf_Error * error);
-
+		   
+/*!
+ *  This function retrieves all fields that match the pattern.  Exactly
+ *  how and what patterns are supported is up to the plug-in -- here
+ *  we are simply an interface broker, making plug-in capabilities exposed
+ *  to our users.  In TREUtils, our default behavior is to find any
+ *  fields with an occurence of the string.  For XML TREs, we assume that
+ *  the user will be building an XPath expression, and that a plug-in should
+ *  support that capability.
+ *
+ *  \since 2.0
+ *  \param tre The TRE
+ *  \param A pattern to match
+ *  \param error The error if one occurs
+ *  \return A nitf_List of nitf_Field*, or NULL if no matches
+ *  \todo How to tell if its an error or failure to retrieve -- probably
+ *  need another parameter
+ *
+ */
 NITFAPI(nitf_List*) nitf_TRE_find(nitf_TRE* tre,
 				  const char* pattern,
 				  nitf_Error* error);
+
+
+/*!
+ * 
+ *  Gets a field by its (exact) name.  The retrieval is here for basic
+ *  symmetry and to prevent the application developer from playing with
+ *  the model directly.  We really want them to have an opaque view of
+ *  the TREs internals
+ *  \todo What about the error?
+ *
+ *  \since 2.0
+ *
+ *  \param tre The TRE
+ *  \param tag The tag name
+ *  \return Return NULL if no such field exists in the TRE, otherwise, the value
+ */
+NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre,
+				       const char* tag);
+
 
 /*!
  * Returns 1 if the TRE follows the TRE Description
