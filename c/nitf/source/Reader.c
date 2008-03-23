@@ -983,8 +983,8 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader * reader, nitf_Error * error)
     nitf_Version fver;
     /*nitf_Uint32 udhdl, udhofl, xhdl, xhdlofl; */
 
-    char fl_buf[NITF_FL_SZ + 1];        /* File length buffer */
-    int i;
+    char fileLenBuf[NITF_FL_SZ + 1];    /* File length buffer */
+    char streamingBuf[NITF_FL_SZ];
 
     /* FHDR */
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FHDR);
@@ -1030,19 +1030,17 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader * reader, nitf_Error * error)
 
     /* FL */
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FL);
-    /*      Check for streaming header (Length is all 9's) */
+    /* Check for streaming header (Length is all 9's) */
+    memset(streamingBuf, '9', NITF_FL_SZ);
+    
     nitf_Field_get(fileHeader->NITF_FL,
-                   fl_buf, NITF_CONV_STRING, NITF_FL_SZ + 1, error);
-    for (i = 0; i < NITF_FL_SZ; i++)
-        if (fl_buf[i] != '9')
-            break;
-    if (i >= NITF_FL_SZ)
+                   fileLenBuf, NITF_CONV_STRING, NITF_FL_SZ + 1, error);
+    if (strncmp(fileLenBuf, streamingBuf, NITF_FL_SZ) == 0)
     {
         nitf_Error_init(error, "Streaming headers are not supported",
                         NITF_CTXT, NITF_ERR_PARSING_FILE);
         goto CATCH_ERROR;
     }
-    /* We may need this for parsing, but not yet */
 
     /* HL */
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_HL);
@@ -1353,9 +1351,7 @@ NITFPRIV(nitf_BandInfo **) readBandInfo(nitf_Reader * reader,
 
     /*  Make sure we are all NULL-inited  */
     for (i = 0; i < nbands; i++)
-    {
         bandInfo[i] = nitf_BandInfo_construct(error);
-    }
 
     /*  Now pick up our precious band info  */
     for (i = 0; i < nbands; i++)
