@@ -23,6 +23,7 @@
 
 #include <import/nitf.h>
 
+#define FAKE_DESC "Fake.  \nRemove Me"
 #define DESC1 "First desc."
 #define DESC2 "TRE that doesnt really do much.  Just a demo."
 #define PUB_DATE "March 2008"
@@ -63,7 +64,7 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
 
 //    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]/vendor[1]/publish-date[1]", "March 2008", strlen("March 2008"), error))
 
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[2]", DESC2, strlen(DESC2), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[2]", FAKE_DESC, strlen(FAKE_DESC), error))
       goto CATCH_ERROR;
 
 
@@ -73,9 +74,7 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
 
 
 
-    
-
-
+  
     if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/publish-date[1]", PUB_DATE, strlen(PUB_DATE), error))
       goto CATCH_ERROR;
 
@@ -93,6 +92,9 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
     if (!nitf_TRE_setField(tre, "/xmltre[1]/constants[1]/c[1]", "299792458.0", strlen("299792458.0"), error))
       goto CATCH_ERROR;
     
+
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[2]", DESC2, strlen(DESC2), error))
+      goto CATCH_ERROR;
     
 
     /* Ahh, but can you go back and set it now?: 

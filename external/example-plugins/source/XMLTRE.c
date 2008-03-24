@@ -665,40 +665,38 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
     nitf_Field* field = NULL;
     XMLTREData * treData = (XMLTREData*)tre->priv;
     
+
+    /* This is the next chunk we are on */
+    size_t endOfTag = strcspn(tag, "]");
+    
+    xmlNode* root = xmlDocGetRootElement(treData->doc);
+    
+    /* 
+       Note that doing it this way could cause a problem, so we 
+       remove the value if we can't make it work
+       TODO: clean up this mess!
+    */
+    
+    value = (char*)malloc(dataLength + 1);
+    value[dataLength] = 0;
+    memcpy(value, data, dataLength);
+    
+    /* Different encoding than else!!! */
+    if (!putElementInDOM(tre, &tag[endOfTag + 2], value, root, 0, error))
+	goto CATCH_ERROR;
     
     if (! nitf_HashTable_exists(tre->hash, tag))
     {
 	
-	/* This is the next chunk we are on */
-	size_t endOfTag = strcspn(tag, "]");
-
-	xmlNode* root = xmlDocGetRootElement(treData->doc);
-
 	field = nitf_Field_construct(dataLength, NITF_BCS_A, error);
 	if (!field)
 	    return NITF_FAILURE;
 	
-
-	/* 
-	   Note that doing it this way could cause a problem, so we 
-	   remove the value if we can't make it work
-	   TODO: clean up this mess!
-	*/
-
-	value = (char*)malloc(dataLength + 1);
-	value[dataLength] = 0;
-	memcpy(value, data, dataLength);
-
-	/* Different encoding than else!!! */
-	if (!putElementInDOM(tre, &tag[endOfTag + 2], value, root, 0, error))
-	    goto CATCH_ERROR;
-
+	nitf_Field_setString(field, value, error);
+	
+	
 	if (!nitf_HashTable_insert(tre->hash, tag, field, error))
 	    goto CATCH_ERROR;
-	
-	treData->dirty = 1;
-	free(value);
-	return NITF_SUCCESS;
     }
     else
     {
@@ -707,24 +705,15 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
 	nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
 	assert(pair);
 	field = (nitf_Field*)pair->data;
+	nitf_Field_setString(field, value, error);
     
-	value = (char*)malloc(dataLength + 1);
-	value[dataLength] = 0;
-	memcpy(value, data, dataLength);
-	
-	/* Okay, if it all works... */
-	if (putElementInDOM(tre, tag, value, treData->doc, 0, error))
-	{
-	    
-	    treData->dirty = 1;
-
-	    if (!nitf_Field_setRawData(field, data, dataLength, error))
-		goto CATCH_ERROR;
-	    free(value);
-	    return NITF_SUCCESS;
-	}
     }
 
+    
+    treData->dirty = 1;
+    free(value);
+    return NITF_SUCCESS;
+    
  CATCH_ERROR:
     if (field)
     {
