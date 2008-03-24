@@ -23,6 +23,16 @@
 
 #include <import/nitf.h>
 
+#define DESC "TRE that doesnt really do much.  Just a demo."
+#define PUB_DATE "March 2008"
+#define VER "0.1"
+#define AUTH "DP"
+#define CONSTANT_PI M_PI
+#define CONSTANT_C 299792458.0
+#define IND_1 1.2
+#define IND_2 2.4
+#define IND_3 3.6
+
 /*
  *  Warning!  In order for this test to work properly, you MUST
  *  set the NITF_PLUGIN_PATH to use the XMLTRE plugin provided in
@@ -52,15 +62,32 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
 
 //    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]/vendor[0]/publish-date[0]", "March 2008", strlen("March 2008"), error))
 
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[1]/vendor[0]/publish-date[0]", "March 2008", strlen("March 2008"), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[1]", DESC, strlen(DESC), error))
+      goto CATCH_ERROR;
 
-    {
-	nitf_TRE_destruct(&tre);
-	return NULL;
+    /* Ahh, but can you go back and set it now?: 
+       
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]", DESC, strlen(DESC), error))
+      goto CATCH_ERROR;
 
-    }
+    */
+
+
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/publish-date[0]", PUB_DATE, strlen(PUB_DATE), error))
+      goto CATCH_ERROR;
+
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/version[0]", VER, strlen(VER), error))
+      goto CATCH_ERROR;
+
+    
 
     return tre;
+
+ CATCH_ERROR:
+    
+    nitf_TRE_destruct(&tre);
+    return NULL;
+
 }
 
 nitf_Record *doRead(const char *inFile);
