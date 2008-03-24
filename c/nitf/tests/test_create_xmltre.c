@@ -65,22 +65,27 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
     if (!nitf_TRE_setField(tre, "/xmltre[0]/description[1]", DESC, strlen(DESC), error))
       goto CATCH_ERROR;
 
-    /* Ahh, but can you go back and set it now?: 
-       
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]", DESC, strlen(DESC), error))
+
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]", "Waaa", strlen("Waaa"), error))
       goto CATCH_ERROR;
 
-    */
 
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]", PUB_DATE, strlen(PUB_DATE), error))
+      goto CATCH_ERROR;
 
+    /* Ahh, but can you go back and set it now?: 
     if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/publish-date[0]", PUB_DATE, strlen(PUB_DATE), error))
       goto CATCH_ERROR;
+       
+
+
+
 
     if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/version[0]", VER, strlen(VER), error))
       goto CATCH_ERROR;
 
     
-
+    */
     return tre;
 
  CATCH_ERROR:

@@ -126,7 +126,7 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 	    
 	    strcpy(lastName, (char*)current->name);
 	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
-	    printf("Found node with path: [%s]\n", (char*)xmlGetNodePath(current));
+	    //printf("Found node with path: [%s]\n", (char*)xmlGetNodePath(current));
 	    putElementsInTRE(current->children, tre, name, error);
 	    
 	    text = getText(current->children);
@@ -169,12 +169,15 @@ NITFPRIV(nitf_List*) getElementsByTagName(xmlNode* parent, const char* name, nit
     {
 	if (current->type == XML_ELEMENT_NODE)
 	{
-	    if (!nitf_List_pushBack(list, current, error))
+	    if (strcmp((const char*)current->name, name) == 0)
 	    {
-		goto CATCH_ERROR;
+
+		if (!nitf_List_pushBack(list, current, error))
+		{
+		    goto CATCH_ERROR;
+		}
 	    }
 	}
-	
 	
     }
     return list;
@@ -243,6 +246,48 @@ NITFPRIV(NITF_BOOL) removeTextNodes(xmlNode* parent, nitf_Error* error)
 
 }  
 
+NITFPRIV(xmlNode*) doExpansion(xmlNode* parent, const char* thisTag, int index, int found, nitf_Error* error)
+{
+    xmlNode* current = NULL;
+    int numElements = 0;
+    nitf_List* elements = getElementsByTagName(parent, thisTag, error);
+    if (!elements)
+    {
+	return NULL;
+    }
+    
+    numElements = nitf_List_size(elements);
+
+    /* If the field was found already, that implies that the entire
+       path of nodes to it should exist already as well */
+
+    if (numElements <= index)
+    {
+	int have = 0;
+	if (found)
+	{
+	    /* Somethign is wrong */
+	    nitf_Error_init(error, "Not enough children exist for found field", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+	    return NULL;
+	}
+	/* Else, create dummy elements all the way up to the one we need */
+	for (have = numElements; have <= index; have++)
+	{
+	    printf("Creating dummy element\n");
+	    current = xmlNewChild(parent, NULL, (const xmlChar*)thisTag, NULL);
+	}
+    }
+    else
+    {
+	/* Just need the ith element in the list! */
+	nitf_ListIterator obj = nitf_List_at(elements, index);
+	current = (xmlNode*)nitf_ListIterator_get(&obj);
+    }
+
+    return current;
+
+}
+
 /*
  *  We're going to want this function to traverse our DOM, installing
  *  new element nodes every step of the way, until we get where we are 
@@ -260,8 +305,8 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
 				    nitf_Error* error) 
 {
     xmlNode* current = NULL;
-    nitf_List* elements = NULL;
-    int numElements = 0;
+    //nitf_List* elements = NULL;
+    //int numElements = 0;
     char next[128] = "";
     char thisTag[128] = "";
     /* This is the next chunk we are on */
@@ -278,63 +323,54 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
 	return NITF_FAILURE;
     }
     rv = sscanf(&tag[endOfTag], "[%d]/%s", &index, next);
-    if (rv != 2)
-    {
-	next[endOfTag+1] = 0;
-	memcpy(next, tag, endOfTag);
-
-	if (found)
-	{
-	    if (!removeTextNodes(parent, error))
-	    {
-		return NITF_FAILURE;
-	    }
-	}
-
-	xmlNewTextChild(parent, 
-			NULL, 
-			(const xmlChar*)next,
-			(const xmlChar*)value);
-	return NITF_SUCCESS;
-    }
 
     thisTag[endOfTag] = 0;
     memcpy(thisTag, tag, endOfTag);
 
-    elements = getElementsByTagName(parent, thisTag, error);
-    if (!elements)
+    if (rv != 2)
     {
+
+	/* This part is broken.  we need to get our children with
+	   this tag name, and iterate through, creating the ones that
+	   we dont have leading up to now.  But if its there already, we just
+	   need to remove its children, and set the new one */
+	if (!found)
+	{
+	    current = doExpansion(parent, thisTag, index, found, error);
+	
+	    xmlNodeSetContent(current, (const xmlChar*)value);
+	}
+	else
+	{
+	    nitf_List* elements = getElementsByTagName(parent, thisTag, error);
+	    nitf_ListIterator obj = nitf_List_at(elements, index);
+	    current = (xmlNode*)nitf_ListIterator_get(&obj);
+/*  	    if (!removeTextNodes(parent, error)) */
+/*  	    { */
+/*  		return NITF_FAILURE; */
+// 	    }
+	    xmlNodeSetContent(current, (const xmlChar*)value);
+	}
+/* 	if (found) */
+/* 	{ */
+/* 	} */
+
+/* 	xmlNewTextChild(parent, */
+/* 			NULL,  */
+/* 			(const xmlChar*)thisTag, */
+/* 			(const xmlChar*)value); */
+	return NITF_SUCCESS;
+    }
+
+
+
+
+
+    current = doExpansion(parent, thisTag, index, found, error);
+    if (!current)
 	return NITF_FAILURE;
-    }
-    
-    numElements = nitf_List_size(elements);
+	
 
-    /* If the field was found already, that implies that the entire
-       path of nodes to it should exist already as well */
-
-    if (numElements <= index)
-    {
-	int have = 0;
-	if (found)
-	{
-	    /* Somethign is wrong */
-	    nitf_Error_init(error, "Not enough children exist for found field", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
-	    return NITF_FAILURE;
-	}
-	/* Else, create dummy elements all the way up to the one we need */
-	for (have = numElements; have <= index; have++)
-	{
-	    printf("Creating dummy element\n");
-	    current = xmlNewChild(parent, NULL, (const xmlChar*)thisTag, NULL);
-	}
-    }
-    else
-    {
-	/* Just need the ith element in the list! */
-	nitf_ListIterator obj = nitf_List_at(elements, index);
-	current = (xmlNode*)nitf_ListIterator_get(&obj);
-    }
-    
     return putElementInDOM(tre, next, value, current, found, error);
 }
 
@@ -462,7 +498,7 @@ NITFPRIV(NITF_BOOL) XMLTRE_initData(nitf_TRE * tre, const char* id, nitf_Error *
     xmlNode* node;
     
     //char *data = NULL; 
-    NITF_BOOL success; 
+    //NITF_BOOL success; 
     if (!tre) { return NITF_FAILURE; } 
     
     treData = XMLTREData_construct(error);
