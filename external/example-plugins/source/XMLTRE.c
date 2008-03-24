@@ -38,20 +38,18 @@ static char *ident[] = { NITF_PLUGIN_TRE_KEY, "XMLTRE", NULL };
   
 typedef struct _XMLTREData
 {
-	/* This contains the actual document */
-	xmlDoc* doc;
-	/* This is the size of our memory buffer.  Its resized whenever memory is accessed */
-	/* Tis allows us to not specify XML_BUFFER_ALLOC_EXACT */
-	//int memorySize;
-	/* This contains the memory -- it will get allocated when getCurrentSize() is called */
-	/* Or whenever data is written, after which it may be cleared */
-	//xmlBuffer* memory;
-	char* memory;
-	int memorySize;
-	
-	/* This field is only 1 when setField() is called.  It indicates that the current size */
-	/* or write functions must update memory */
-	int dirty;
+    /* This contains the actual document */
+    xmlDoc* doc;
+    /* This contains the memory -- it will get allocated when getCurrentSize() is called */
+    /* Or whenever data is written, after which it may be cleared */
+    char* memory;
+    /* This is the size of our memory buffer.  Its resized whenever memory is accessed */
+    
+    int memorySize;
+    
+    /* This field is only 1 when setField() is called.  It indicates that the current size */
+    /* or write functions must update memory */
+    int dirty;
 } XMLTREData;
 
 NITFPRIV(XMLTREData*) XMLTREData_construct(nitf_Error* error)
@@ -78,23 +76,23 @@ NITFPRIV(XMLTREData*) XMLTREData_construct(nitf_Error* error)
  */
 NITFPRIV(char*) getText(xmlNode* node)
 {
-	xmlNode * current = NULL;
-	char* data = NULL;
-	char buf[1024] = "";
-	for (current = node; current; current = current->next)
+    xmlNode * current = NULL;
+    char* data = NULL;
+    char buf[1024] = "";
+    for (current = node; current; current = current->next)
+    {
+	if (current->type == XML_TEXT_NODE)
 	{
-		if (current->type == XML_TEXT_NODE)
-		{
-			strcat(buf, (char*)current->content);
-		}	
-	}
-	if (!strlen(buf))
-		return NULL;
-
-	data = (char*)malloc(strlen(buf) + 1);
-	
-	strcpy(data, buf);
-	return data;
+	    strcat(buf, (char*)current->content);
+	}	
+    }
+    if (!strlen(buf))
+	return NULL;
+    
+    data = (char*)malloc(strlen(buf) + 1);
+    
+    strcpy(data, buf);
+    return data;
 }
 
 /*
@@ -126,7 +124,6 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 	    
 	    strcpy(lastName, (char*)current->name);
 	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
-	    //printf("Found node with path: [%s]\n", (char*)xmlGetNodePath(current));
 	    putElementsInTRE(current->children, tre, name, error);
 	    
 	    text = getText(current->children);
@@ -139,7 +136,6 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 		
 		field = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
 		nitf_Field_setString(field, text, error);
-		//printf("Name: <%s>: %s\n", name, text);			
 		if (!nitf_HashTable_insert(tre->hash, name, field, error))
 		{
 		    //free(text);
@@ -201,9 +197,8 @@ NITFPRIV(nitf_List*) getElementsByTagName(xmlNode* parent, const char* name, nit
 }
 		
 /* We do have this element, so lets replace it */
-// Should I use xmlReplaceNode & xmlNewText?
-// probably not, since there could be more than one text node
-
+/* This doesnt appear to actually be necessary, since I can just set the
+   content of an existing node in this case -- see where I commented it out */
 NITFPRIV(NITF_BOOL) removeTextNodes(xmlNode* parent, nitf_Error* error)
 {
     NITF_BOOL rv = NITF_SUCCESS;
@@ -246,6 +241,14 @@ NITFPRIV(NITF_BOOL) removeTextNodes(xmlNode* parent, nitf_Error* error)
 
 }  
 
+/*
+ *  Here we go looking for all elements with the same name given in thisTag.
+ *  If we are under count for what we need in the index, we need to create some
+ *  intermediary dummy nodes to fill in those values for later.
+ *
+ *  Its the user's responsibility to fill those nodes in with text where
+ *  needed.  For now, we are just creating them in the right places
+ */
 NITFPRIV(xmlNode*) doExpansion(xmlNode* parent, const char* thisTag, int index, int found, nitf_Error* error)
 {
     xmlNode* current = NULL;
@@ -266,7 +269,7 @@ NITFPRIV(xmlNode*) doExpansion(xmlNode* parent, const char* thisTag, int index, 
 	int have = 0;
 	if (found)
 	{
-	    /* Somethign is wrong */
+	    /* Something is wrong */
 	    nitf_Error_init(error, "Not enough children exist for found field", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
 	    return NULL;
 	}
@@ -305,8 +308,6 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
 				    nitf_Error* error) 
 {
     xmlNode* current = NULL;
-    //nitf_List* elements = NULL;
-    //int numElements = 0;
     char next[128] = "";
     char thisTag[128] = "";
     /* This is the next chunk we are on */
@@ -330,13 +331,13 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
     thisTag[endOfTag] = 0;
     memcpy(thisTag, tag, endOfTag);
 
+    /* If we dont have a result of two -- assuming for now, a result of one,
+       we have found the actual node we are trying to get to in this fully
+       specified XPath.  Now we need to do the exansion on this one more time,
+       and set our text content to the value */
     if (rv != 2)
     {
 
-	/* This part is broken.  we need to get our children with
-	   this tag name, and iterate through, creating the ones that
-	   we dont have leading up to now.  But if its there already, we just
-	   need to remove its children, and set the new one */
 	if (!found)
 	{
 	    current = doExpansion(parent, thisTag, index, found, error);
@@ -351,7 +352,7 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
 /*  	    if (!removeTextNodes(parent, error)) */
 /*  	    { */
 /*  		return NITF_FAILURE; */
-// 	    }
+ 	    /*}*/
 	    xmlNodeSetContent(current, (const xmlChar*)value);
 	}
 /* 	if (found) */
@@ -368,7 +369,9 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
 
 
 
-
+    /* If we are still here, that means we are still above the target element,
+       which means we need to keep expanding (fanning out) and drilling down
+       to the sub-nodes underneath us, so we continue recursion */
     current = doExpansion(parent, thisTag, index, found, error);
     if (!current)
 	return NITF_FAILURE;
@@ -407,10 +410,8 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
 	    
 	    strcpy(lastName, (char*)current->name);
 	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
-	    //printf("Looking for name: %s\n", name);
 	    if (current == find)
 	    {
-		//printf("Actually got here\n");
 		return nitf_HashTable_find(tre->hash, name);
 	    }
 
@@ -424,8 +425,6 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
 	}
 	
     }
-    //printf("Got here\n");
-    //return rv;
 }
 
 
@@ -443,7 +442,6 @@ NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
     
     xmlNode* node;
     
-    //char *data = NULL; 
     NITF_BOOL success; 
     if (!tre) {goto CATCH_ERROR;} 
     
@@ -451,9 +449,8 @@ NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
     if (!treData) goto CATCH_ERROR;
     
     treData->dirty = 0;
-    treData->memory = (char*)malloc(tre->length); //xmlBufferCreateSize(tre->length);
+    treData->memory = (char*)malloc(tre->length);
     treData->memorySize = tre->length;
-    //data = (char*)NITF_MALLOC( tre->length ); 
     if (!treData->memory) 
     { 
         nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),NITF_CTXT, NITF_ERR_MEMORY );
@@ -468,13 +465,9 @@ NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
     tre->priv = treData;
     
     node = xmlDocGetRootElement(treData->doc);
-    //putElementsInTRE(node, tre);
     
-    //  print_element_names(node);
     putElementsInTRE(node, tre, "", error);
-    /*free the document */
-    //xmlFreeDoc(doc);
-    //tre->
+
     /*
      *Free the global variables that may
      *have been allocated by the parser.
@@ -499,9 +492,6 @@ NITFPRIV(NITF_BOOL) XMLTRE_initData(nitf_TRE * tre, const char* id, nitf_Error *
     XMLTREData* treData = NULL;
     
     xmlNode* node;
-    
-    //char *data = NULL; 
-    //NITF_BOOL success; 
     if (!tre) { return NITF_FAILURE; } 
     
     treData = XMLTREData_construct(error);
@@ -537,10 +527,6 @@ NITFPRIV(NITF_BOOL) XMLTREData_updateBuffer(XMLTREData* treData, nitf_Error* err
     xmlDocDumpMemory(treData->doc, (xmlChar**)& (treData->memory), & (treData->memorySize));
     
     /* In either case, dirty or memory need to allocate a buffer and get it */
-    //treData->memory = xmlBufferCreate();
-    
-    //xmlSaveFileTo(treData->memory, treData->doc, NULL); // UTF-8??? 
-    //xmlNode* node = xmlDocGetRootElement(treData->doc);
     
     treData->dirty = 0;
     return NITF_SUCCESS;
@@ -549,14 +535,10 @@ NITFPRIV(NITF_BOOL) XMLTREData_updateBuffer(XMLTREData* treData, nitf_Error* err
 NITFPRIV(NITF_BOOL) XMLTRE_write(nitf_IOHandle ioHandle, nitf_TRE* tre, 
 				 struct _nitf_Record* record, nitf_Error* error)
 {
-    //const char* xmlData;
-    //int xmlDataSize;
     XMLTREData * treData = (XMLTREData*)tre->priv;
     
     /* Write out our DOM here */	
     if (!XMLTREData_updateBuffer(treData, error)) return NITF_FAILURE;
-    //xmlDataSize = xmlBufferLength(treData->memory);
-    //xmlData = (const char*)xmlBufferContent(treData->memory);
     if (!nitf_IOHandle_write(ioHandle, treData->memory, treData->memorySize, error))
 	return NITF_FAILURE;
     
@@ -568,7 +550,6 @@ NITFPRIV(int) XMLTREIterator_getCurrentSize(nitf_TRE* tre, nitf_Error* error)
     XMLTREData * treData = (XMLTREData*)tre->priv;
     if (!XMLTREData_updateBuffer(treData, error)) return -1;
     return treData->memorySize;
-    //return xmlBufferLength(treData->memory);
 }
 
 
@@ -593,7 +574,6 @@ NITFPRIV(nitf_List*) getFieldsFromXPath(nitf_TRE* tre, xmlNodeSet* nodes)
 	    nitf_Field* field = NULL;
 	    xmlNode* root;
 	    current = nodes->nodeTab[i];
-	    //printf("Element: %s\n", current->name);
 	    root = xmlDocGetRootElement(treData->doc);
 	    pair = getElementFromDOM(tre, root, current, "");
 	    if (pair)
@@ -608,7 +588,6 @@ NITFPRIV(nitf_List*) getFieldsFromXPath(nitf_TRE* tre, xmlNodeSet* nodes)
 		}
 		
 		field = (nitf_Field*)pair->data;
-	    //printf("Found: %s [%.*s]\n", pair->key, field->length, field->raw);
 	    }
 	    else
 	    {
@@ -700,7 +679,6 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
     }
     else
     {
-	// If it exists already, lets be real flexible
 	
 	nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
 	assert(pair);
