@@ -106,7 +106,7 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 {
     xmlNode * current = NULL;
     
-    int depth = 0;
+    int depth = 1;
     char lastName[512] = "";
     for (current = node; current; current = current->next)
     {
@@ -122,7 +122,7 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 	    {
 		depth++;
 	    }
-	    else depth = 0;
+	    else depth = 1;
 	    
 	    strcpy(lastName, (char*)current->name);
 	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
@@ -324,6 +324,9 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
     }
     rv = sscanf(&tag[endOfTag], "[%d]/%s", &index, next);
 
+
+    index -= 1;
+
     thisTag[endOfTag] = 0;
     memcpy(thisTag, tag, endOfTag);
 
@@ -386,7 +389,7 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
 {
     xmlNode * current = NULL;
     
-    int depth = 0;
+    int depth = 1;
     char lastName[512] = "";
 
     for (current = node; current; current = current->next)
@@ -400,7 +403,7 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
 	    {
 		depth++;
 	    }
-	    else depth = 0;
+	    else depth = 1;
 	    
 	    strcpy(lastName, (char*)current->name);
 	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);

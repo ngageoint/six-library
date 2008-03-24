@@ -23,8 +23,8 @@
 
 #include <import/nitf.h>
 
-#define DESC0 "0 desc."
-#define DESC1 "TRE that doesnt really do much.  Just a demo."
+#define DESC1 "First desc."
+#define DESC2 "TRE that doesnt really do much.  Just a demo."
 #define PUB_DATE "March 2008"
 #define VER "0.1"
 #define AUTH "DP"
@@ -61,14 +61,14 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
     /* Else, we will add some stuff here */
 
 
-//    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]/vendor[0]/publish-date[0]", "March 2008", strlen("March 2008"), error))
+//    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]/vendor[1]/publish-date[1]", "March 2008", strlen("March 2008"), error))
 
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[1]", DESC1, strlen(DESC1), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[2]", DESC2, strlen(DESC2), error))
       goto CATCH_ERROR;
 
 
     /* Tests out-of-order set */
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]", DESC0, strlen(DESC0), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]", DESC1, strlen(DESC1), error))
       goto CATCH_ERROR;
 
 
@@ -76,34 +76,34 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
     
 
 
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/publish-date[0]", PUB_DATE, strlen(PUB_DATE), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/publish-date[1]", PUB_DATE, strlen(PUB_DATE), error))
       goto CATCH_ERROR;
 
 
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/version[0]", VER, strlen(VER), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/version[1]", VER, strlen(VER), error))
       goto CATCH_ERROR;
 
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/author[0]", AUTH, strlen(AUTH), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/author[1]", AUTH, strlen(AUTH), error))
       goto CATCH_ERROR;
 
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/constants[0]/pi[0]", "3.14", strlen("3.14"), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/constants[1]/pi[1]", "3.14", strlen("3.14"), error))
       goto CATCH_ERROR;
     
 
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/constants[0]/c[0]", "299792458.0", strlen("299792458.0"), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/constants[1]/c[1]", "299792458.0", strlen("299792458.0"), error))
       goto CATCH_ERROR;
     
     
 
     /* Ahh, but can you go back and set it now?: 
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/publish-date[0]", PUB_DATE, strlen(PUB_DATE), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/publish-date[1]", PUB_DATE, strlen(PUB_DATE), error))
       goto CATCH_ERROR;
        
 
 
 
 
-    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/version[0]", VER, strlen(VER), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/version[1]", VER, strlen(VER), error))
       goto CATCH_ERROR;
 
     
