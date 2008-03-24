@@ -263,6 +263,7 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
     nitf_List* elements = NULL;
     int numElements = 0;
     char next[128] = "";
+    char thisTag[128] = "";
     /* This is the next chunk we are on */
     size_t endOfTag = strcspn(tag, "[");
     int index = 0;
@@ -297,9 +298,10 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
 	return NITF_SUCCESS;
     }
 
-    /* If the field was found already, that implies that the entire
-       path of nodes to it should exist already as well */
-    elements = getElementsByTagName(parent, tag, error);
+    thisTag[endOfTag] = 0;
+    memcpy(thisTag, tag, endOfTag);
+
+    elements = getElementsByTagName(parent, thisTag, error);
     if (!elements)
     {
 	return NITF_FAILURE;
@@ -307,7 +309,10 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
     
     numElements = nitf_List_size(elements);
 
-    if (numElements < index)
+    /* If the field was found already, that implies that the entire
+       path of nodes to it should exist already as well */
+
+    if (numElements <= index)
     {
 	int have = 0;
 	if (found)
@@ -320,7 +325,7 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
 	for (have = numElements; have <= index; have++)
 	{
 	    printf("Creating dummy element\n");
-	    current = xmlNewChild(parent, NULL, (const xmlChar*)tag, NULL);
+	    current = xmlNewChild(parent, NULL, (const xmlChar*)thisTag, NULL);
 	}
     }
     else

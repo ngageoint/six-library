@@ -36,18 +36,29 @@
  *
  */
 
-nitf_TRE* createXMLTRE(const char* rootElementName, nitf_Error* error)
+nitf_TRE* createXMLTRE(nitf_Error* error)
 {
     /* For starters, we need to create the XMLTRE */
     nitf_TRE* tre = nitf_TRE_construct("XMLTRE",
-				       rootElementName,
+				       "xmltre", /* Root element */
 				       0,
-				       &error);
+				       error);
     
     if (!tre)
 	return NULL;
 
     /* Else, we will add some stuff here */
+
+
+//    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]/vendor[0]/publish-date[0]", "March 2008", strlen("March 2008"), error))
+
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[1]/vendor[0]/publish-date[0]", "March 2008", strlen("March 2008"), error))
+
+    {
+	nitf_TRE_destruct(&tre);
+	return NULL;
+
+    }
 
     return tre;
 }
@@ -342,15 +353,17 @@ int main(int argc, char **argv)
 
     record = doRead(argv[1]);
 
-    xmltre = createXMLTRE("description", &error);
+    xmltre = createXMLTRE(&error);
 
-    
+
 
     if (!xmltre)
     {
 	nitf_Error_print(&error, stdout, "Failed to create XMLTRE");
 	exit(EXIT_FAILURE);
     }
+
+
 
     if (!nitf_Extensions_appendTRE(record->header->userDefinedSection, 
 				   xmltre, &error))
