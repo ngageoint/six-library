@@ -27,14 +27,10 @@
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_N, 4, "Number of Points in Bounding Polygon",
-     "NUMPTS", NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE,
-     NULL, NULL},
+    {NITF_BCS_N, 4, "Number of Points in Bounding Polygon", "NUMPTS" },
     {NITF_LOOP, 0, NULL, "NUMPTS"},
-    {NITF_BCS_N, 15, "Longitude/Easting", "LON",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 15, "Latitude/Northing", "LAT",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_N, 15, "Longitude/Easting", "LON" },
+    {NITF_BCS_N, 15, "Latitude/Northing", "LAT" },
     {NITF_ENDLOOP, 0, NULL, NULL},
     {NITF_END, 0, NULL, NULL}
 };

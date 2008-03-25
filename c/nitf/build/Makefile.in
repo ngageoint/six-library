@@ -124,16 +124,16 @@ PLUGINS = \
         ACCHZB.c \
         ACCPOB.c \
         ACCVTB.c \
-        ACFTA.c \
-        ACFTB.c \
+        ACFTA.c  \
+        ACFTB.c  \
         AIMIDA.c \
-        AIMIDB.c
-
-#        BANDSA.c \
+        AIMIDB.c \
+        BANDSA.c \
         BCKGDA.c \
         BLOCKA.c \
-        BNDPLB.c \
-        CLCTNA.c \
+        BNDPLB.c
+
+#        CLCTNA.c \
         CLCTNB.c \
         CMETAA.c \
         ENGRDA.c \
