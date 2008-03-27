@@ -103,11 +103,11 @@ NITFPRIV(char*) getText(xmlNode* node)
 NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* prepend, nitf_Error* error)
 {
     xmlNode * current = NULL;
-    
     int depth = 1;
     char lastName[512] = "";
     for (current = node; current; current = current->next)
     {
+	
 	
 	if (current->type == XML_ELEMENT_NODE)
 	{
@@ -124,6 +124,7 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 	    
 	    strcpy(lastName, (char*)current->name);
 	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
+
 	    putElementsInTRE(current->children, tre, name, error);
 	    
 	    text = getText(current->children);
@@ -144,6 +145,30 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 		//free(text);
 	    }
 	    
+	    if (current->properties)
+	    {
+		xmlAttr* attrs = NULL;
+		
+		for (attrs = current->properties; attrs; attrs = attrs->next)
+		{
+		    char attName[128] = "";
+		    /*sprintf(attName, "%s/%s", name, value);*/
+		    printf("Path: %s\n", (char*)xmlGetNodePath(attrs));
+		    printf("Name: %s\n", attName);
+		    /*	    
+		    field = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
+		    nitf_Field_setString(field, text, error);
+		    if (!nitf_HashTable_insert(tre->hash, name, field, error))
+		    {
+			//free(text);
+			return NITF_FAILURE;
+		    }
+		    */
+		    
+		}
+		
+		
+	    }
 	    
 	}
 	
