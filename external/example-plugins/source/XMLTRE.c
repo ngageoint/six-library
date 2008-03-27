@@ -152,18 +152,24 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
 		for (attrs = current->properties; attrs; attrs = attrs->next)
 		{
 		    char attName[128] = "";
-		    /*sprintf(attName, "%s/%s", name, value);*/
-		    printf("Path: %s\n", (char*)xmlGetNodePath(attrs));
+		    char* value = (char*)xmlNodeGetContent(attrs);
+		    nitf_Field* attField = NULL;
+		    sprintf(attName, "%s/@%s", name, attrs->name);
+//printf("Path: %s\n", (char*)xmlGetNodePath(attrs));
+		    
 		    printf("Name: %s\n", attName);
-		    /*	    
-		    field = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
-		    nitf_Field_setString(field, text, error);
-		    if (!nitf_HashTable_insert(tre->hash, name, field, error))
+		    /*
+		    attField = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
+		    nitf_Field_setString(field, value, error);
+		    if (!nitf_HashTable_insert(tre->hash, 
+					       attName, 
+					       attField, 
+					       error))
 		    {
-			//free(text);
+			free(value);
 			return NITF_FAILURE;
 		    }
-		    */
+*/	    
 		    
 		}
 		
