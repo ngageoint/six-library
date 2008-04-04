@@ -28,9 +28,9 @@
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_N, 2, "Number of Related TREs", "NUM_RELATED_TRES",
+    {NITF_BCS_N, 2, "Number of Related TREs", "RELATED_TRES",
      NITF_VAL_BCS_N_PLUS, NITF_U32_RANGE, "0", "20" },
-    {NITF_BCS_A, 120, "Related TREs", "RELATED_TRES",
+    {NITF_BCS_A, 120, "Related TREs", "ADDITIONAL_TRES",
      NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
     {NITF_BCS_A, 12, "Processor Version No.", "RD_PRC_NO",
      NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
