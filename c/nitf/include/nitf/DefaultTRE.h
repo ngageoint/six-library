@@ -31,7 +31,7 @@
 
 NITF_CXX_GUARD
 
-typedef struct _nitf_Record;
+struct _nitf_Record;
 /*!
  *  \fn nitf_DefaultTRE_handler
  *  \brief The default TRE handler is what gets run if no handler
