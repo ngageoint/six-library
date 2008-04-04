@@ -130,7 +130,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
     }
     /* TODO: remove later */
     assert(sizeof(nitf_Uint8) == sizeof(jbyte));
-    if (!nitf_ImageReader_read(nitf_ImageReader,
+    if (!nitf_ImageReader_read(imReader,
                                nitfSubWindow,
                                (nitf_Uint8 **) data, &padded, &error))
     {
