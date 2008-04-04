@@ -52,6 +52,8 @@ NITF_CXX_GUARD
 
 NITFPROT(jobject) _GetFieldObj(JNIEnv* env, nitf_Field* value);
 
+NITFPROT(nitf_Version) _GetNITFVersion(JNIEnv * env, jobject versionObject);
+
 NITF_CXX_ENDGUARD
 
 #endif
