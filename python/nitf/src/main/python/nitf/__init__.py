@@ -137,6 +137,10 @@ class IOHandle:
     ACCESS_WRITEONLY = nitropy.PY_NITF_ACCESS_WRITEONLY
     ACCESS_READWRITE = nitropy.PY_NITF_ACCESS_READWRITE
     
+    SEEK_SET = nitropy.PY_NITF_SEEK_SET
+    SEEK_CUR = nitropy.PY_NITF_SEEK_CUR
+    SEEK_END = nitropy.PY_NITF_SEEK_END
+    
     def __init__(self, filename, accessFlags=ACCESS_READONLY, createFlags=OPEN_EXISTING):
         self.filename = filename
         self.error = Error()
@@ -154,7 +158,18 @@ class IOHandle:
         if size == -1:
             size = len(data)
         return nitropy.nitf_IOHandle_write(self.ref, data, size, self.error) == 1
-        
+    
+    def read(self, size):
+        return nitropy.py_IOHandle_read(self.ref, size, self.error)
+    
+    def tell(self):
+        return nitropy.nitf_IOHandle_tell(self.ref, self.error)
+    
+    def seek(self, offset, whence=SEEK_CUR):
+        return nitropy.py_IOHandle_seek(self.ref, offset, whence, self.error)
+    
+    def getSize(self):
+        return nitropy.nitf_IOHandle_getSize(self.ref, self.error)
     
     def close(self):
         if hasattr(self, 'open') and self.open:
@@ -294,7 +309,8 @@ class Reader:
     def read(self, handle):
         self.handle = handle #must set this so it doesn't get ref-counted away
         record = nitropy.nitf_Reader_read(self.ref, handle.ref, self.error)
-        #TODO check for error
+        if not record:
+            raise Exception, self.error.message 
         self.record = Record(record)
         return self.record
     
@@ -308,6 +324,10 @@ class Reader:
         reader = nitropy.nitf_Reader_newGraphicReader(self.ref, num, self.error)
         if not reader: raise Exception('Unable to get new GraphicReader')
         return SegmentReader(reader)
+    
+    @staticmethod
+    def getNITFVersion(filename):
+        return nitropy.nitf_Reader_getNITFVersion(filename)
     
 
 #NITF Record class

@@ -1851,7 +1851,11 @@ PY_NITF_OPEN_EXISTING = _nitropy.PY_NITF_OPEN_EXISTING
 PY_NITF_ACCESS_READONLY = _nitropy.PY_NITF_ACCESS_READONLY
 PY_NITF_ACCESS_WRITEONLY = _nitropy.PY_NITF_ACCESS_WRITEONLY
 PY_NITF_ACCESS_READWRITE = _nitropy.PY_NITF_ACCESS_READWRITE
+PY_NITF_SEEK_CUR = _nitropy.PY_NITF_SEEK_CUR
+PY_NITF_SEEK_SET = _nitropy.PY_NITF_SEEK_SET
+PY_NITF_SEEK_END = _nitropy.PY_NITF_SEEK_END
 py_IOHandle_create = _nitropy.py_IOHandle_create
+py_IOHandle_seek = _nitropy.py_IOHandle_seek
 py_Field_getString = _nitropy.py_Field_getString
 py_Field_getInt = _nitropy.py_Field_getInt
 py_Record_getFileHeader = _nitropy.py_Record_getFileHeader
@@ -1875,5 +1879,6 @@ py_ImageReader_read = _nitropy.py_ImageReader_read
 py_Pair_getFieldData = _nitropy.py_Pair_getFieldData
 py_DataSource_read = _nitropy.py_DataSource_read
 py_SegmentReader_read = _nitropy.py_SegmentReader_read
+py_IOHandle_read = _nitropy.py_IOHandle_read
 
 

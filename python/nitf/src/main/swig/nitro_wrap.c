@@ -2965,6 +2965,10 @@ SWIG_From_size_t  (size_t value)
     #define PY_NITF_ACCESS_WRITEONLY 2
     #define PY_NITF_ACCESS_READWRITE 3
     
+    #define  PY_NITF_SEEK_CUR 1
+    #define  PY_NITF_SEEK_SET 2
+    #define  PY_NITF_SEEK_END 3
+    
     nitf_IOHandle py_IOHandle_create(const char *fname,
             int accessFlag,
             int createFlag,
@@ -3000,6 +3004,19 @@ SWIG_From_size_t  (size_t value)
         }
         
         return nitf_IOHandle_create(fname, accessInt, createInt, error);
+    }
+    
+    off_t py_IOHandle_seek(nitf_IOHandle handle,
+            off_t offset, int whence, nitf_Error * error)
+    {
+        int realWhence = NITF_SEEK_SET;
+        
+        if (whence == PY_NITF_SEEK_CUR)
+            realWhence = NITF_SEEK_CUR;
+        else if (whence == PY_NITF_SEEK_END)
+            realWhence = NITF_SEEK_END;
+        
+        return nitf_IOHandle_seek(handle, offset, realWhence, error);
     }
 
 
@@ -3184,6 +3201,11 @@ SWIG_From_size_t  (size_t value)
         window->numBands = PySequence_Length(bandList);
         if (window->numBands < 0) window->numBands = 0;
         window->bandList = (nitf_Uint32*)NITF_MALLOC(sizeof(nitf_Uint32) * window->numBands);
+        if (!window->bandList)
+        {
+            PyErr_NoMemory();
+            return NULL;
+        }
         
       for (i = 0; i < window->numBands; i++) {
         PyObject *o = PySequence_GetItem(bandList,i);
@@ -3214,7 +3236,11 @@ SWIG_From_size_t  (size_t value)
         subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * NITF_NBPP_TO_BYTES(nbpp);
         
         buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*));
-        if (!buf) goto CATCH_ERROR;
+        if (!buf)
+        {
+            PyErr_NoMemory();
+            goto CATCH_ERROR;
+        }
         
         /* copy the window */
         newWindow->downsampler = window->downsampler;
@@ -3267,8 +3293,12 @@ SWIG_From_size_t  (size_t value)
         char* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
-        memset(buf, 0, size);
-        /* TODO check status */
+        
+        if (!buf)
+        {
+            PyErr_NoMemory();
+            return NULL;
+        }
         
         source->iface->read(source->data, buf, size, error);
         bufObj = PyBuffer_FromMemory((void*)buf, size);
@@ -3280,10 +3310,31 @@ SWIG_From_size_t  (size_t value)
         char* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
-        memset(buf, 0, size);
-        /* TODO check status */
+        
+        if (!buf)
+        {
+            PyErr_NoMemory();
+            return NULL;
+        }
         
         nitf_SegmentReader_read(reader, buf, size, error);
+        bufObj = PyBuffer_FromMemory((void*)buf, size);
+        return bufObj;
+    }
+    
+    PyObject* py_IOHandle_read(nitf_IOHandle handle, size_t size, nitf_Error* error)
+    {
+        char* buf = NULL;
+        PyObject* bufObj = NULL;
+        buf = NITF_MALLOC(size);
+        
+        if (!buf)
+        {
+            PyErr_NoMemory();
+            return NULL;
+        }
+            
+        nitf_IOHandle_read(handle, buf, size, error);
         bufObj = PyBuffer_FromMemory((void*)buf, size);
         return bufObj;
     }
@@ -27848,6 +27899,53 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_py_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_IOHandle arg1 ;
+  off_t arg2 ;
+  int arg3 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  off_t result;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:py_IOHandle_seek",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "py_IOHandle_seek" "', argument " "1"" of type '" "nitf_IOHandle""'");
+  } 
+  arg1 = (nitf_IOHandle)(val1);
+  {
+    arg2 = (off_t)PyLong_AsLong(obj1);
+  }
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "py_IOHandle_seek" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__nitf_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "py_IOHandle_seek" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = (nitf_Error *)(argp4);
+  result = py_IOHandle_seek(arg1,arg2,arg3,arg4);
+  {
+    resultobj = PyLong_FromLong(result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_py_Field_getString(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Field *arg1 = (nitf_Field *) 0 ;
@@ -28624,6 +28722,46 @@ SWIGINTERN PyObject *_wrap_py_SegmentReader_read(PyObject *SWIGUNUSEDPARM(self),
   }
   arg3 = (nitf_Error *)(argp3);
   result = (PyObject *)py_SegmentReader_read(arg1,arg2,arg3);
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_py_IOHandle_read(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_IOHandle arg1 ;
+  size_t arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  PyObject *result = 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:py_IOHandle_read",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "py_IOHandle_read" "', argument " "1"" of type '" "nitf_IOHandle""'");
+  } 
+  arg1 = (nitf_IOHandle)(val1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "py_IOHandle_read" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = (size_t)(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__nitf_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "py_IOHandle_read" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = (nitf_Error *)(argp3);
+  result = (PyObject *)py_IOHandle_read(arg1,arg2,arg3);
   resultobj = result;
   return resultobj;
 fail:
@@ -29516,6 +29654,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_SegmentMemorySource_construct", _wrap_nitf_SegmentMemorySource_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_SegmentFileSource_construct", _wrap_nitf_SegmentFileSource_construct, METH_VARARGS, NULL},
 	 { (char *)"py_IOHandle_create", _wrap_py_IOHandle_create, METH_VARARGS, NULL},
+	 { (char *)"py_IOHandle_seek", _wrap_py_IOHandle_seek, METH_VARARGS, NULL},
 	 { (char *)"py_Field_getString", _wrap_py_Field_getString, METH_VARARGS, NULL},
 	 { (char *)"py_Field_getInt", _wrap_py_Field_getInt, METH_VARARGS, NULL},
 	 { (char *)"py_Record_getFileHeader", _wrap_py_Record_getFileHeader, METH_VARARGS, NULL},
@@ -29539,6 +29678,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"py_Pair_getFieldData", _wrap_py_Pair_getFieldData, METH_VARARGS, NULL},
 	 { (char *)"py_DataSource_read", _wrap_py_DataSource_read, METH_VARARGS, NULL},
 	 { (char *)"py_SegmentReader_read", _wrap_py_SegmentReader_read, METH_VARARGS, NULL},
+	 { (char *)"py_IOHandle_read", _wrap_py_IOHandle_read, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -30745,5 +30885,8 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "PY_NITF_ACCESS_READONLY",SWIG_From_int((int)(1)));
   SWIG_Python_SetConstant(d, "PY_NITF_ACCESS_WRITEONLY",SWIG_From_int((int)(2)));
   SWIG_Python_SetConstant(d, "PY_NITF_ACCESS_READWRITE",SWIG_From_int((int)(3)));
+  SWIG_Python_SetConstant(d, "PY_NITF_SEEK_CUR",SWIG_From_int((int)(1)));
+  SWIG_Python_SetConstant(d, "PY_NITF_SEEK_SET",SWIG_From_int((int)(2)));
+  SWIG_Python_SetConstant(d, "PY_NITF_SEEK_END",SWIG_From_int((int)(3)));
 }
 
