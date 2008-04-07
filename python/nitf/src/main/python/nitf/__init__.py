@@ -137,6 +137,10 @@ class IOHandle:
     ACCESS_WRITEONLY = nitropy.PY_NITF_ACCESS_WRITEONLY
     ACCESS_READWRITE = nitropy.PY_NITF_ACCESS_READWRITE
     
+    SEEK_SET = nitropy.PY_NITF_SEEK_SET
+    SEEK_CUR = nitropy.PY_NITF_SEEK_CUR
+    SEEK_END = nitropy.PY_NITF_SEEK_END
+    
     def __init__(self, filename, accessFlags=ACCESS_READONLY, createFlags=OPEN_EXISTING):
         self.filename = filename
         self.error = Error()
@@ -154,7 +158,18 @@ class IOHandle:
         if size == -1:
             size = len(data)
         return nitropy.nitf_IOHandle_write(self.ref, data, size, self.error) == 1
-        
+    
+    def read(self, size):
+        return nitropy.py_IOHandle_read(self.ref, size, self.error)
+    
+    def tell(self):
+        return nitropy.nitf_IOHandle_tell(self.ref, self.error)
+    
+    def seek(self, offset, whence=SEEK_CUR):
+        return nitropy.py_IOHandle_seek(self.ref, offset, whence, self.error)
+    
+    def getSize(self):
+        return nitropy.nitf_IOHandle_getSize(self.ref, self.error)
     
     def close(self):
         if hasattr(self, 'open') and self.open:

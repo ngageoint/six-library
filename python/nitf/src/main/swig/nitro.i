@@ -239,6 +239,10 @@
     #define PY_NITF_ACCESS_WRITEONLY 2
     #define PY_NITF_ACCESS_READWRITE 3
     
+    #define  PY_NITF_SEEK_CUR 1
+    #define  PY_NITF_SEEK_SET 2
+    #define  PY_NITF_SEEK_END 3
+    
     nitf_IOHandle py_IOHandle_create(const char *fname,
             int accessFlag,
             int createFlag,
@@ -274,6 +278,19 @@
         }
         
         return nitf_IOHandle_create(fname, accessInt, createInt, error);
+    }
+    
+    off_t py_IOHandle_seek(nitf_IOHandle handle,
+            off_t offset, int whence, nitf_Error * error)
+    {
+        int realWhence = NITF_SEEK_SET;
+        
+        if (whence == PY_NITF_SEEK_CUR)
+            realWhence = NITF_SEEK_CUR;
+        else if (whence == PY_NITF_SEEK_END)
+            realWhence = NITF_SEEK_END;
+        
+        return nitf_IOHandle_seek(handle, offset, realWhence, error);
     }
 
 %}
@@ -470,6 +487,11 @@
         window->numBands = PySequence_Length(bandList);
         if (window->numBands < 0) window->numBands = 0;
         window->bandList = (nitf_Uint32*)NITF_MALLOC(sizeof(nitf_Uint32) * window->numBands);
+        if (!window->bandList)
+        {
+            PyErr_NoMemory();
+            return NULL;
+        }
         
       for (i = 0; i < window->numBands; i++) {
         PyObject *o = PySequence_GetItem(bandList,i);
@@ -500,7 +522,11 @@
         subimageSize = (window->numRows/rowSkip) * (window->numCols/colSkip) * NITF_NBPP_TO_BYTES(nbpp);
         
         buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*));
-        if (!buf) goto CATCH_ERROR;
+        if (!buf)
+        {
+            PyErr_NoMemory();
+            goto CATCH_ERROR;
+        }
         
         /* copy the window */
         newWindow->downsampler = window->downsampler;
@@ -553,8 +579,12 @@
         char* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
-        memset(buf, 0, size);
-        /* TODO check status */
+        
+        if (!buf)
+        {
+            PyErr_NoMemory();
+            return NULL;
+        }
         
         source->iface->read(source->data, buf, size, error);
         bufObj = PyBuffer_FromMemory((void*)buf, size);
@@ -566,10 +596,31 @@
         char* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
-        memset(buf, 0, size);
-        /* TODO check status */
+        
+        if (!buf)
+        {
+            PyErr_NoMemory();
+            return NULL;
+        }
         
         nitf_SegmentReader_read(reader, buf, size, error);
+        bufObj = PyBuffer_FromMemory((void*)buf, size);
+        return bufObj;
+    }
+    
+    PyObject* py_IOHandle_read(nitf_IOHandle handle, size_t size, nitf_Error* error)
+    {
+        char* buf = NULL;
+        PyObject* bufObj = NULL;
+        buf = NITF_MALLOC(size);
+        
+        if (!buf)
+        {
+            PyErr_NoMemory();
+            return NULL;
+        }
+            
+        nitf_IOHandle_read(handle, buf, size, error);
         bufObj = PyBuffer_FromMemory((void*)buf, size);
         return bufObj;
     }
