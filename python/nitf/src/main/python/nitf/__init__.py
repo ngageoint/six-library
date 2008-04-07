@@ -294,7 +294,8 @@ class Reader:
     def read(self, handle):
         self.handle = handle #must set this so it doesn't get ref-counted away
         record = nitropy.nitf_Reader_read(self.ref, handle.ref, self.error)
-        #TODO check for error
+        if not record:
+            raise Exception, self.error.message 
         self.record = Record(record)
         return self.record
     
@@ -308,6 +309,10 @@ class Reader:
         reader = nitropy.nitf_Reader_newGraphicReader(self.ref, num, self.error)
         if not reader: raise Exception('Unable to get new GraphicReader')
         return SegmentReader(reader)
+    
+    @staticmethod
+    def getNITFVersion(filename):
+        return nitropy.nitf_Reader_getNITFVersion(filename)
     
 
 #NITF Record class
