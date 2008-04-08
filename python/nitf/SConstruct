@@ -20,20 +20,20 @@ Help(opts.GenerateHelpText(env))
 # Get the target name, and setup all the system-dependent flags and libs
 local_lib = scons_utils.do_configure(env)
 print "Building for %s" % env['PLATFORM']
-sourceFiles = scons_utils.get_source_files('./src/main/swig', ext='.c', platform=env['PLATFORM'])
+sourceFiles = scons_utils.get_source_files('./source/main/swig', ext='.c', platform=env['PLATFORM'])
 
 depends = ['nitf-c']
 include_path = ['../../c/nitf/include']
 lib_path = ['../../c/nitf/%s' % local_lib]
 
-PYTHON_DIR = 'src/main/python/nitf/'
+PYTHON_DIR = 'source/main/python/nitf/'
 
 #SCons knows that the .i suffix means to use swig to generate the source, and then compiles it... sweet!
 if int(env.subst('$swigify')):
     #Here, we set the swig command-line args
     env['SWIGFLAGS'] = '-c -python %s -outdir %s' % \
             (' '.join(['-I%s' % p for p in include_path]), PYTHON_DIR)
-    sourceFiles = glob.glob('src/main/swig/nitro.i')
+    sourceFiles = glob.glob('source/main/swig/nitro.i')
 
 
 #TODO - might need to fix this...
