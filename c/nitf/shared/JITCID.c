@@ -31,44 +31,7 @@ static nitf_TREDescription description[] = {
 	{NITF_BCS_A, 100, "File Comment (part II)", "FILCMT2" },
     {NITF_END, 0, NULL, NULL}
 };
-
-#if 1
-
-/* Define the available descriptions and the default one */
-static nitf_TREDescriptionInfo descriptions[] = {
-    { "JITCID", description, NITF_TRE_DESC_NO_LENGTH },
-    { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
-};
-
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
-
-static char *ident[] = { NITF_PLUGIN_TRE_KEY, "JITCID", NULL }; 
-    
-
-static nitf_TREHandler* gHandler = NULL;
-NITFAPI(char**) JITCID_init(nitf_Error* error)
-{
-    gHandler = nitf_TREUtils_createBasicHandler(&descriptionSet, error);
-    if (!gHandler)
-	return NULL;
-    
-    return ident;
-} 
-    
-NITFAPI(nitf_TREHandler*) JITCID_handler(nitf_Error* error)
-{
-    return gHandler;
-}
-
-NITFAPI(void) JITCID_cleanup(void)
-{
-
-}
-#else
 NITF_DECLARE_SINGLE_PLUGIN(JITCID, description)
-
-#endif
-
 
 
 NITF_CXX_ENDGUARD

@@ -134,9 +134,8 @@ PLUGINS = \
         BNDPLB.c \
         CLCTNA.c \
         CLCTNB.c \
-        CMETAA.c
-
-#        ENGRDA.c \
+        CMETAA.c \
+        ENGRDA.c \
         EXOPTA.c \
         EXPLTA.c \
         EXPLTB.c \
@@ -153,8 +152,8 @@ PLUGINS = \
         MPDSRA.c \
         MSTGTA.c \
         MTIRPA.c \
-        MTIRPB.c \
-        NBLOCA.c \
+        MTIRPB.c
+#        NBLOCA.c \
         OBJCTA.c \
         OFFSET.c \
         PATCHA.c \
