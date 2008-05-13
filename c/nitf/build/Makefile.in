@@ -152,8 +152,8 @@ PLUGINS = \
         MPDSRA.c \
         MSTGTA.c \
         MTIRPA.c \
-        MTIRPB.c
-#        NBLOCA.c \
+        MTIRPB.c \
+        NBLOCA.c \
         OBJCTA.c \
         OFFSET.c \
         PATCHA.c \
@@ -174,8 +174,8 @@ PLUGINS = \
         RPC00B.c \
         RPFDES.c \
         RPFHDR.c \
-        RPFIMG.c \
-        SECTGA.c \
+        RPFIMG.c
+#        SECTGA.c \
         SENSRA.c \
         SNSPSB.c \
         SNSRA.c \
