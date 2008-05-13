@@ -20,28 +20,19 @@
  *
  */
 
-#include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
-#include <nitf/Record.h>
+#include <import/nitf.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_A, 80, "Projection Name", "PRN",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 2, "Projection Code", "PCO",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 1, "Number of Projection Parameters", "NUMPRJ",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_A, 80, "Projection Name", "PRN" },
+    {NITF_BCS_A, 2, "Projection Code", "PCO" },
+    {NITF_BCS_N, 1, "Number of Projection Parameters", "NUMPRJ" },
     {NITF_LOOP, 0, NULL, "NUMPRJ"},
-    {NITF_BCS_N, 15, "Projection Parameter", "PRJ",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_N, 15, "Projection Parameter", "PRJ" },
     {NITF_ENDLOOP, 0, NULL, NULL},
-    {NITF_BCS_N, 15, "Projection False X (Easting) Origin", "XOR",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 15, "Projection False Y (Northing) Origin",
-     "YOR", NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL,
-     NULL},
+    {NITF_BCS_N, 15, "Projection False X (Easting) Origin", "XOR" },
+    {NITF_BCS_N, 15, "Projection False Y (Northing) Origin" "YOR" }, 
     {NITF_END, 0, NULL, NULL}
 };
 
