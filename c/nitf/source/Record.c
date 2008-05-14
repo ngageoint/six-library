@@ -1167,7 +1167,37 @@ NITFAPI(NITF_BOOL) nitf_Record_moveImageSegment
     nitf_Error * error
 )
 {
-    return nitf_List_move(record->images, oldIndex, newIndex, error);
+    nitf_Uint32 num;
+    nitf_ComponentInfo *tempInfo = NULL;
+    
+    NITF_TRY_GET_UINT32(record->header->numImages, &num, error);
+
+    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Invalid index provided");
+        goto CATCH_ERROR;
+    }
+    
+    /* just return OK if no change */
+    if (oldIndex == newIndex)
+        return NITF_SUCCESS;
+
+    /* do the list move */
+    if (nitf_List_move(record->images, oldIndex, newIndex, error))
+        goto CATCH_ERROR;
+    
+    /* now, need to move the component info - just move pointers */
+    tempInfo = record->header->imageInfo[oldIndex];
+    record->header->imageInfo[oldIndex] = record->header->imageInfo[newIndex];
+    record->header->imageInfo[newIndex] = tempInfo;
+    
+    return NITF_SUCCESS;
+    
+  CATCH_ERROR:
+      return NITF_FAILURE;
 }
 
 
@@ -1179,7 +1209,37 @@ NITFAPI(NITF_BOOL) nitf_Record_moveGraphicSegment
     nitf_Error * error
 )
 {
-    return nitf_List_move(record->graphics, oldIndex, newIndex, error);
+    nitf_Uint32 num;
+    nitf_ComponentInfo *tempInfo = NULL;
+    
+    NITF_TRY_GET_UINT32(record->header->numGraphics, &num, error);
+
+    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Invalid index provided");
+        goto CATCH_ERROR;
+    }
+    
+    /* just return OK if no change */
+    if (oldIndex == newIndex)
+        return NITF_SUCCESS;
+
+    /* do the list move */
+    if (nitf_List_move(record->graphics, oldIndex, newIndex, error))
+        goto CATCH_ERROR;
+    
+    /* now, need to move the component info - just move pointers */
+    tempInfo = record->header->graphicInfo[oldIndex];
+    record->header->graphicInfo[oldIndex] = record->header->graphicInfo[newIndex];
+    record->header->graphicInfo[newIndex] = tempInfo;
+    
+    return NITF_SUCCESS;
+    
+  CATCH_ERROR:
+    return NITF_FAILURE;
 }
 
 
@@ -1191,7 +1251,37 @@ NITFAPI(NITF_BOOL) nitf_Record_moveLabelSegment
     nitf_Error * error
 )
 {
-    return nitf_List_move(record->labels, oldIndex, newIndex, error);
+    nitf_Uint32 num;
+    nitf_ComponentInfo *tempInfo = NULL;
+    
+    NITF_TRY_GET_UINT32(record->header->numLabels, &num, error);
+
+    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Invalid index provided");
+        goto CATCH_ERROR;
+    }
+    
+    /* just return OK if no change */
+    if (oldIndex == newIndex)
+        return NITF_SUCCESS;
+
+    /* do the list move */
+    if (nitf_List_move(record->labels, oldIndex, newIndex, error))
+        goto CATCH_ERROR;
+    
+    /* now, need to move the component info - just move pointers */
+    tempInfo = record->header->labelInfo[oldIndex];
+    record->header->labelInfo[oldIndex] = record->header->labelInfo[newIndex];
+    record->header->labelInfo[newIndex] = tempInfo;
+    
+    return NITF_SUCCESS;
+    
+  CATCH_ERROR:
+    return NITF_FAILURE;
 }
 
 
@@ -1203,7 +1293,37 @@ NITFAPI(NITF_BOOL) nitf_Record_moveTextSegment
     nitf_Error * error
 )
 {
-    return nitf_List_move(record->texts, oldIndex, newIndex, error);
+    nitf_Uint32 num;
+    nitf_ComponentInfo *tempInfo = NULL;
+    
+    NITF_TRY_GET_UINT32(record->header->numTexts, &num, error);
+
+    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Invalid index provided");
+        goto CATCH_ERROR;
+    }
+    
+    /* just return OK if no change */
+    if (oldIndex == newIndex)
+        return NITF_SUCCESS;
+
+    /* do the list move */
+    if (nitf_List_move(record->texts, oldIndex, newIndex, error))
+        goto CATCH_ERROR;
+    
+    /* now, need to move the component info - just move pointers */
+    tempInfo = record->header->textInfo[oldIndex];
+    record->header->textInfo[oldIndex] = record->header->textInfo[newIndex];
+    record->header->textInfo[newIndex] = tempInfo;
+    
+    return NITF_SUCCESS;
+    
+  CATCH_ERROR:
+    return NITF_FAILURE;
 }
 
 
@@ -1215,7 +1335,37 @@ NITFAPI(NITF_BOOL) nitf_Record_moveDataExtensionSegment
     nitf_Error * error
 )
 {
-    return nitf_List_move(record->dataExtensions, oldIndex, newIndex, error);
+    nitf_Uint32 num;
+    nitf_ComponentInfo *tempInfo = NULL;
+    
+    NITF_TRY_GET_UINT32(record->header->numDataExtensions, &num, error);
+
+    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Invalid index provided");
+        goto CATCH_ERROR;
+    }
+    
+    /* just return OK if no change */
+    if (oldIndex == newIndex)
+        return NITF_SUCCESS;
+
+    /* do the list move */
+    if (nitf_List_move(record->dataExtensions, oldIndex, newIndex, error))
+        goto CATCH_ERROR;
+    
+    /* now, need to move the component info - just move pointers */
+    tempInfo = record->header->dataExtensionInfo[oldIndex];
+    record->header->dataExtensionInfo[oldIndex] = record->header->dataExtensionInfo[newIndex];
+    record->header->dataExtensionInfo[newIndex] = tempInfo;
+    
+    return NITF_SUCCESS;
+    
+  CATCH_ERROR:
+    return NITF_FAILURE;
 }
 
 
@@ -1227,5 +1377,35 @@ NITFAPI(NITF_BOOL) nitf_Record_moveReservedExtensionSegment
     nitf_Error * error
 )
 {
-    return nitf_List_move(record->reservedExtensions, oldIndex, newIndex, error);
+    nitf_Uint32 num;
+    nitf_ComponentInfo *tempInfo = NULL;
+    
+    NITF_TRY_GET_UINT32(record->header->numReservedExtensions, &num, error);
+
+    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Invalid index provided");
+        goto CATCH_ERROR;
+    }
+    
+    /* just return OK if no change */
+    if (oldIndex == newIndex)
+        return NITF_SUCCESS;
+
+    /* do the list move */
+    if (nitf_List_move(record->reservedExtensions, oldIndex, newIndex, error))
+        goto CATCH_ERROR;
+    
+    /* now, need to move the component info - just move pointers */
+    tempInfo = record->header->reservedExtensionInfo[oldIndex];
+    record->header->reservedExtensionInfo[oldIndex] = record->header->reservedExtensionInfo[newIndex];
+    record->header->reservedExtensionInfo[newIndex] = tempInfo;
+    
+    return NITF_SUCCESS;
+
+  CATCH_ERROR:
+    return NITF_FAILURE;
 }

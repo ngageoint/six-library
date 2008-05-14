@@ -168,7 +168,7 @@ NITFPROT(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
  */
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
                                        const char* id,
-				       int length,
+                                       int length,
                                        nitf_Error * error);
 
 
@@ -274,15 +274,6 @@ NITFAPI(nitf_List*) nitf_TRE_find(nitf_TRE* tre,
 NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre,
 				       const char* tag);
 
-
-/*!
- * Returns 1 if the TRE follows the TRE Description
- * and contains fields for each entry that it should,
- * otherwise returns 0
- * \param tre the TRE
- * \return 1 if it is sane, 0 otherwise
- */
-NITFAPI(NITF_BOOL) nitf_TRE_isSane(nitf_TRE * tre);
 
 NITFAPI(nitf_TREEnumerator*) nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error);
 
