@@ -57,7 +57,9 @@ if not int(env.subst('$lib_only')):
         ########################
         ### MAKE THE PLUGINS ###
         ########################
-        SKIP_PLUGINS = []
+        SKIP_PLUGINS = ['SECTGA.c', 'SENSRA.c', 'SNSPSB.c', 'SNSRA.c',
+                        'SOURCB.c', 'STDIDC.c', 'STEROB.c', 'STREOB.c',
+                        'TEST_DES.c', 'TRGTA.c', 'USE00A.c']
         pluginEnv = env.Copy()
         pluginEnv.Replace(CPPPATH=include_path)
         pluginEnv['LIBPREFIX'] = ''
