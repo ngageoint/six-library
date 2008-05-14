@@ -71,9 +71,6 @@
             <includes>
                 <include>**/*Test*.java</include>
             </includes>
-            <excludes>
-                <exclude>Test*.java</exclude>
-            </excludes>
         </unitTest>
     </build>
 </project>
