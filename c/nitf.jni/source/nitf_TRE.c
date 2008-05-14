@@ -181,6 +181,7 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_find
         jfieldID nameFieldID, fieldFieldID;
         jobject vector, jField, jFieldPair;
         jstring jFieldName;
+        nitf_Uint32 listSize;
         
         vectorClass = (*env)->FindClass(env, "java/util/Vector");
         fieldClass = (*env)->FindClass(env, "nitf/Field");
@@ -198,7 +199,7 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_find
         vectorMethodID =
                 (*env)->GetMethodID(env, vectorClass, "<init>", "(I)V");
         
-        nitf_Uint32 listSize = nitf_List_size(list);
+        listSize = nitf_List_size(list);
         
         /* create a new vector to hold the results */
         vector = (*env)->NewObject(env, vectorClass, vectorMethodID, (jint)listSize);
