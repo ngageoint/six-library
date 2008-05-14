@@ -6,7 +6,7 @@
     <pomVersion>3</pomVersion>
     <name>${projectName}</name>
     <id>${projectName}</id>
-    <groupId>gd-ais</groupId>
+    <groupId>nitro-nitf</groupId>
     <currentVersion>${version}</currentVersion>
 
     <developers>
