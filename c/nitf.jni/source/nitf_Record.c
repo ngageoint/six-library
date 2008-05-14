@@ -694,3 +694,92 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeReservedExtensionSegment
 	return;
 }
 
+JNIEXPORT void JNICALL Java_nitf_Record_moveImageSegment
+  (JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
+{
+    nitf_Record *record = _GetObj(env, self);
+    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
+    nitf_Error error;
+    
+    if (!nitf_Record_moveImageSegment(record,
+            (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+    {
+        (*env)->ThrowNew(env, exClass, error.message);
+    }
+    return;
+}
+
+JNIEXPORT void JNICALL Java_nitf_Record_moveGraphicSegment
+(JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
+{
+    nitf_Record *record = _GetObj(env, self);
+    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
+    nitf_Error error;
+
+    if (!nitf_Record_moveGraphicSegment(record,
+                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+    {
+        (*env)->ThrowNew(env, exClass, error.message);
+    }
+    return;
+}
+
+JNIEXPORT void JNICALL Java_nitf_Record_moveTextSegment
+(JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
+{
+    nitf_Record *record = _GetObj(env, self);
+    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
+    nitf_Error error;
+
+    if (!nitf_Record_moveTextSegment(record,
+                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+    {
+        (*env)->ThrowNew(env, exClass, error.message);
+    }
+    return;
+}
+
+JNIEXPORT void JNICALL Java_nitf_Record_moveLabelSegment
+(JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
+{
+    nitf_Record *record = _GetObj(env, self);
+    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
+    nitf_Error error;
+
+    if (!nitf_Record_moveLabelSegment(record,
+                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+    {
+        (*env)->ThrowNew(env, exClass, error.message);
+    }
+    return;
+}
+
+JNIEXPORT void JNICALL Java_nitf_Record_moveDataExtensionSegment
+(JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
+{
+    nitf_Record *record = _GetObj(env, self);
+    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
+    nitf_Error error;
+
+    if (!nitf_Record_moveDataExtensionSegment(record,
+                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+    {
+        (*env)->ThrowNew(env, exClass, error.message);
+    }
+    return;
+}
+
+JNIEXPORT void JNICALL Java_nitf_Record_moveReservedExtensionSegment
+(JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
+{
+    nitf_Record *record = _GetObj(env, self);
+    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
+    nitf_Error error;
+
+    if (!nitf_Record_moveReservedExtensionSegment(record,
+                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+    {
+        (*env)->ThrowNew(env, exClass, error.message);
+    }
+    return;
+}

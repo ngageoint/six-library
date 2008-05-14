@@ -255,6 +255,78 @@ public final class Record extends CloneableObject
             throws NITFException;
 
     /**
+     * Move an ImageSegment from the oldIndex to the nexIndex
+     * 
+     * @param oldIndex
+     *            the current of the segment to move
+     * @param newIndex
+     *            the new index of the segment
+     * @throws NITFException
+     */
+    public native void moveImageSegment(int oldIndex, int newIndex)
+            throws NITFException;
+
+    /**
+     * Move a GraphicSegment from the oldIndex to the nexIndex
+     * 
+     * @param oldIndex
+     *            the current of the segment to move
+     * @param newIndex
+     *            the new index of the segment
+     * @throws NITFException
+     */
+    public native void moveGraphicSegment(int oldIndex, int newIndex)
+            throws NITFException;
+
+    /**
+     * Move a TextSegment from the oldIndex to the nexIndex
+     * 
+     * @param oldIndex
+     *            the current of the segment to move
+     * @param newIndex
+     *            the new index of the segment
+     * @throws NITFException
+     */
+    public native void moveTextSegment(int oldIndex, int newIndex)
+            throws NITFException;
+
+    /**
+     * Move a LabelSegment from the oldIndex to the nexIndex
+     * 
+     * @param oldIndex
+     *            the current of the segment to move
+     * @param newIndex
+     *            the new index of the segment
+     * @throws NITFException
+     */
+    public native void moveLabelSegment(int oldIndex, int newIndex)
+            throws NITFException;
+
+    /**
+     * Move a DataExtensionSegment from the oldIndex to the nexIndex
+     * 
+     * @param oldIndex
+     *            the current of the segment to move
+     * @param newIndex
+     *            the new index of the segment
+     * @throws NITFException
+     */
+    public native void moveDataExtensionSegment(int oldIndex, int newIndex)
+            throws NITFException;
+
+    /**
+     * Move a ReservedExtensionSegment from the oldIndex to the nexIndex
+     * 
+     * @param oldIndex
+     *            the current of the segment to move
+     * @param newIndex
+     *            the new index of the segment
+     * @throws NITFException
+     */
+    public native void moveReservedExtensionSegment(int oldIndex, int newIndex)
+            throws NITFException;
+
+    /**
      * This function is here only to simplify printing out data. Unless you
      * really like this formatting style, I recommend that you not use it.
      * 
@@ -324,4 +396,3 @@ public final class Record extends CloneableObject
     public native Version getVersion();
 
 }
-
