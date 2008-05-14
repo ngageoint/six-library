@@ -174,14 +174,14 @@ PLUGINS = \
         RPC00B.c \
         RPFDES.c \
         RPFHDR.c \
-        RPFIMG.c
-#        SECTGA.c \
+        RPFIMG.c \
+        SECTGA.c \
         SENSRA.c \
         SNSPSB.c \
-        SNSRA.c \
+        SNSRA.c  \
         SOURCB.c \
         STDIDC.c \
         STEROB.c \
         STREOB.c \
-        TRGTA.c \
+        TRGTA.c  \
         USE00A.c
