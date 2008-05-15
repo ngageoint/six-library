@@ -30,6 +30,8 @@ package nitf;
 public abstract class NITFObject
 {
 
+    public static final int INVALID_ADDRESS = 0;
+
     /**
      * The name of the library to load
      */
@@ -42,7 +44,7 @@ public abstract class NITFObject
     }
 
     /* This is the memory address of the underlying native object */
-    protected long address = 0;
+    protected long address = INVALID_ADDRESS;
 
     /**
      * Constructs a new NITF Object, using the native address supplied for the
@@ -92,7 +94,13 @@ public abstract class NITFObject
      */
     public synchronized boolean isValid()
     {
-        return address > 0;
+        return address != INVALID_ADDRESS;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj instanceof NITFObject
+                && ((NITFObject) obj).getAddress() == getAddress();
     }
 }
-

@@ -20,7 +20,6 @@
  *
  */
 
-
 import java.io.File;
 import java.io.IOException;
 
@@ -31,7 +30,6 @@ import nitf.ImageSegment;
 import nitf.ImageSource;
 import nitf.ImageWriter;
 import nitf.NITFException;
-import nitf.NITFUtils;
 import nitf.Reader;
 import nitf.Record;
 import nitf.SubWindow;
@@ -64,9 +62,6 @@ public class TestWriter3
         Record record = doRead(args[0]);
         record.getHeader().print(System.out);
         doWrite(record, args[0], args[1]);
-
-        // call this to free all the memory before exiting
-        NITFUtils.freeAllMemory();
     }
 
     /**
@@ -117,8 +112,6 @@ public class TestWriter3
             System.out.println("Writing image " + i);
             /* Write the thing out */
             manuallyWriteImageBands(imageSegment, inFile, deserializer, i);
-
-            deserializer.destruct();
             System.out.println("Done");
         }
 
@@ -232,7 +225,6 @@ public class TestWriter3
         System.out.println("wroteOK = " + wroteOK);
 
         output_io.close();
-        writer.destruct();
     }
 
     /**
@@ -254,10 +246,9 @@ public class TestWriter3
             IOHandle sourceHandle = new IOHandle(inFile,
                     IOHandle.NITF_ACCESS_READONLY, IOHandle.NITF_OPEN_EXISTING);
 
-            FileSource bandSource = new FileSource(sourceHandle,0,1,0);
+            FileSource bandSource = new FileSource(sourceHandle, 0, 1, 0);
             iSource.addBand(bandSource);
         }
         return iSource;
     }
 }
-

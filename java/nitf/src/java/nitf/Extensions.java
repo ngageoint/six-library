@@ -23,6 +23,7 @@
 package nitf;
 
 import java.io.PrintStream;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -57,7 +58,7 @@ public final class Extensions extends NITFObject
      *            the name of the TRE(s) to return
      * @return an array of TREs with the given name, or null if none exist
      */
-    public native synchronized Iterable<TRE> getTREsByName(String name);
+    public native synchronized Collection<TRE> getTREsByName(String name);
 
     /**
      * Remove all instances of a given TRE from this extensions object.
@@ -79,9 +80,9 @@ public final class Extensions extends NITFObject
     public native synchronized boolean exists(String name);
 
     /**
-     * @return an Iterable of the TREs in this extensions segment
+     * @return a Collection of the TREs in this extensions segment
      */
-    public native synchronized Iterable<TRE> getAll();
+    public native synchronized Collection<TRE> getAll();
 
     /**
      * @param version
@@ -109,4 +110,3 @@ public final class Extensions extends NITFObject
     }
 
 }
-

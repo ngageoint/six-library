@@ -33,12 +33,6 @@ public abstract class BandSource extends DestructibleObject
 {
 
     /**
-     * The static map that keeps track of hashing native pointers to whether or
-     * not they are attached
-     */
-    static Map attachMap = new HashMap();
-
-    /**
      * This maps addresses to BandSource objects. Since this is a special case,
      * where we do underlying callback code, we need to know if this is a
      * user-extended BandSource, or one of the provided ones.
@@ -123,38 +117,6 @@ public abstract class BandSource extends DestructibleObject
     protected native synchronized void destructMemory();
 
     /**
-     * Sets whether or not this BandSource is attached to an ImageSource This
-     * information is used when cleaning up memory
-     * 
-     * @param attached
-     */
-    protected final void setAttached(boolean attached)
-    {
-        synchronized (attachMap)
-        {
-            attachMap.put(new Long(getAddress()), new Boolean(attached));
-        }
-    }
-
-    /**
-     * Returns true if this BandSource is attached to an ImageSource
-     * 
-     * @return true if this BandSource is attached to an ImageSource
-     */
-    public final boolean isAttached()
-    {
-        synchronized (attachMap)
-        {
-            final Object o = attachMap.get(new Long(getAddress()));
-            if (o != null)
-            {
-                return ((Boolean) o).booleanValue();
-            }
-            return false;
-        }
-    }
-
-    /**
      * This returns the BandSource object represented by the given underlying
      * memory address. This helps the JNI code, since this is a special class
      * where we do different things depending on the extended class type.
@@ -192,4 +154,3 @@ public abstract class BandSource extends DestructibleObject
     }
 
 }
-

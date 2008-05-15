@@ -20,7 +20,6 @@
  *
  */
 
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -36,7 +35,6 @@ import nitf.ImageSource;
 import nitf.ImageSubheader;
 import nitf.ImageWriter;
 import nitf.NITFException;
-import nitf.NITFUtils;
 import nitf.Record;
 import nitf.Version;
 import nitf.Writer;
@@ -122,7 +120,6 @@ public class TestWriter
         writeNITFImage(imageSource);
 
         // delete the test_file.src file
-        NITFUtils.closeAllIOHandles();
         new File(FILENAME).delete();
     }
 
@@ -329,4 +326,3 @@ public class TestWriter
     }
 
 }
-

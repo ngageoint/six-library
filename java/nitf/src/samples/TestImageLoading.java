@@ -114,17 +114,19 @@ public class TestImageLoading
             for (int i = 0; i < bands.length; i++)
                 bands[i] = i;
 
+            // set up the subwindow
+            SubWindow subimage = new SubWindow();
+            subimage.setStartCol(0);
+            subimage.setNumCols(nColumns);
+            subimage.setNumRows(1);
+            subimage.setBandList(bands);
+            subimage.setNumBands(nBands);
+
             // read one row at a time, and write it to the file
+            // Note- this is not very efficient at all
             for (int i = 0; i < nRows; ++i)
             {
-                // set up the subwindow
-                SubWindow subimage = new SubWindow();
-                subimage.setStartCol(0);
                 subimage.setStartRow(i * rowSkip);
-                subimage.setNumCols(nColumns);
-                subimage.setNumRows(1);
-                subimage.setBandList(bands);
-                subimage.setNumBands(nBands);
 
                 if (downSampler != null)
                     subimage.setDownSampler(downSampler);
@@ -138,9 +140,6 @@ public class TestImageLoading
                     // write the data to the output handle
                     handles[j].write(buffer[j], subimageSize);
                 }
-
-                // be nice and cleanup
-                subimage.destruct();
             }
 
             // now close each handle
@@ -240,4 +239,3 @@ public class TestImageLoading
     }
 
 }
-

@@ -23,8 +23,8 @@
 package nitf;
 
 /**
- * A representation of a handle to a file object. <p/> This class provides access to a native file object, so it does
- * not use the Java io library.
+ * A representation of a handle to a file object. <p/> This class provides
+ * access to a native file object, so it does not use the Java io library.
  */
 public final class IOHandle extends NITFObject
 {
@@ -95,8 +95,9 @@ public final class IOHandle extends NITFObject
     }
 
     /**
-     * Creates a new IOHandle object for READING, using the file referenced from a parent pathname string; This sets the
-     * access flag to NITF_ACCESS_READONLY and the creation flag to NITF_OPEN_EXISTING
+     * Creates a new IOHandle object for READING, using the file referenced from
+     * a parent pathname string; This sets the access flag to
+     * NITF_ACCESS_READONLY and the creation flag to NITF_OPEN_EXISTING
      * 
      * @param fileName
      *            the path of the file associated with this handle
@@ -108,7 +109,8 @@ public final class IOHandle extends NITFObject
     }
 
     /**
-     * Creates a new IOHandle object, using the file referenced from a parent pathname string and an access modifier.
+     * Creates a new IOHandle object, using the file referenced from a parent
+     * pathname string and an access modifier.
      * 
      * @param fileName
      *            the path of the file associated with this handle
@@ -142,7 +144,7 @@ public final class IOHandle extends NITFObject
         this.creationFlag = creationFlag;
         long ioHandle = createHandle(fileName, accessFlag, creationFlag);
         setAddress(ioHandle);
-        NITFUtils.trackIOHandle(this);
+        NITFResourceManager.getInstance().trackIOHandle(this);
     }
 
     /**
@@ -170,7 +172,8 @@ public final class IOHandle extends NITFObject
             throws NITFException;
 
     /**
-     * Seeks to the specified offset relative to the position specified by whence
+     * Seeks to the specified offset relative to the position specified by
+     * whence
      * 
      * @param offset
      *            the offset in the file
@@ -199,7 +202,8 @@ public final class IOHandle extends NITFObject
     public native synchronized long getSize() throws NITFException;
 
     /**
-     * Closes the file descriptor. Good implementation should always end by calling this.
+     * Closes the file descriptor. Good implementation should always end by
+     * calling this.
      */
     public native synchronized void close();
 
@@ -225,4 +229,3 @@ public final class IOHandle extends NITFObject
     private native synchronized long createHandle(String fileName,
             int accessFlag, int creationFlag) throws NITFException;
 }
-

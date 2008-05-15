@@ -22,6 +22,8 @@
 
 package nitf;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,6 +31,8 @@ import junit.framework.TestCase;
 import nitf.TRE.FieldPair;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This TestCase assumes your NITF_PLUGIN_PATH environment variable is set and
@@ -37,6 +41,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  */
 public class TRETest extends TestCase
 {
+    private static final Log log = LogFactory.getLog(TRETest.class);
 
     private TRE makeNewTRE(String tag) throws NITFException
     {
@@ -83,7 +88,7 @@ public class TRETest extends TestCase
             assertEquals(2, fields.size());
             for (FieldPair fieldPair : fields)
             {
-                System.out.println(fieldPair.getName());
+                log.info(fieldPair.getName());
             }
         }
         catch (NITFException e)
@@ -100,7 +105,7 @@ public class TRETest extends TestCase
             for (Iterator<FieldPair> it = tre.iterator(); it.hasNext();)
             {
                 FieldPair pair = (FieldPair) it.next();
-                System.out.println(pair.getName());
+                log.info(pair.getName());
             }
         }
         catch (NITFException e)
@@ -116,7 +121,10 @@ public class TRETest extends TestCase
             TRE tre = makeNewTRE("JITCID");
             tre.setField("FILCMT1", "comment1".getBytes());
             tre.setField("FILCMT2", "comment2".getBytes());
-            tre.print(System.out);
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            tre.print(new PrintStream(out));
+            log.info(out.toString());
         }
         catch (NITFException e)
         {

@@ -23,14 +23,14 @@
 package nitf;
 
 /**
- * Class representing a NITF object that has underlying
- * memory that can be independently destructed.
+ * Class representing a NITF object that has underlying memory that can be
+ * independently destructed.
  */
 public abstract class DestructibleObject extends NITFObject
 {
 
     /**
-     * Default Constructor
+     * Default constructor
      */
     protected DestructibleObject()
     {
@@ -39,44 +39,44 @@ public abstract class DestructibleObject extends NITFObject
 
     /**
      * Constructor
-     *
-     * @param address the memory address of the underlying object
+     * 
+     * @param address
+     *            the memory address of the underlying object
      */
     protected DestructibleObject(long address)
     {
         super(address);
-        NITFUtils.incrementRefCount(this);
+        NITFResourceManager.getInstance().incrementRefCount(this);
     }
 
     /**
      * Sets the memory address, but also increments the reference count
-     *
+     * 
      * @param address
      */
     synchronized void setAddress(long address)
     {
         super.setAddress(address);
-        NITFUtils.incrementRefCount(this);
+        NITFResourceManager.getInstance().incrementRefCount(this);
     }
 
     /**
      * Actually destructs the underlying memory.
-     * <p/>
-     * This should only be called by NITFUtils.decrementRefCount()
      */
     protected abstract void destructMemory();
 
     /**
-     * Attempts to destruct the underlying object, if it is not referenced elsewhere
+     * Attempts to destruct the underlying object, if it is not referenced
+     * elsewhere
      */
-    public void destruct()
+    protected void destruct()
     {
-        NITFUtils.decrementRefCount(this);
+        NITFResourceManager.getInstance().decrementRefCount(this);
     }
 
     /**
      * If Java finalizes this object, we want to destruct it first
-     *
+     * 
      * @throws Throwable
      */
     protected void finalize() throws Throwable
@@ -84,5 +84,35 @@ public abstract class DestructibleObject extends NITFObject
         destruct();
         super.finalize();
     }
-}
 
+    public boolean isManaged()
+    {
+        return NITFResourceManager.getInstance().isManaged(this);
+    }
+
+    /**
+     * Sets whether or not the underlying memory is managed by the
+     * {@code NITFResourceManager}. Some native objects might be "owned" by
+     * other native objects, and get destroyed then. In those cases, you will
+     * want to call {@code setManaged(false)}.
+     * 
+     * @param manageIt
+     */
+    protected void setManaged(boolean manageIt)
+    {
+        NITFResourceManager.getInstance().manageDestructibleObject(this,
+                manageIt);
+    }
+
+    public String getInfo()
+    {
+        return "[" + getClass().getCanonicalName() + ", " + address + ", "
+                + NITFResourceManager.getInstance().getRefCount(this) + "]";
+    }
+
+    @Override
+    public String toString()
+    {
+        return getInfo();
+    }
+}
