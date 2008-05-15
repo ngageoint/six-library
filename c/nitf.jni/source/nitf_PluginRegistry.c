@@ -39,6 +39,7 @@ JNIEXPORT void JNICALL Java_nitf_PluginRegistry_loadPluginDir
     {
         (*env)->ThrowNew(env, exClass, error.message);
     }
+    (*env)->ReleaseStringUTFChars(env, dirName, dir);
     return;
 }
 

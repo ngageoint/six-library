@@ -54,6 +54,9 @@ JNIEXPORT void JNICALL Java_nitf_TRE_construct
     
     tre = nitf_TRE_construct(tag, id, size, &error);
     
+    (*env)->ReleaseStringUTFChars(env, jTag, tag);
+    (*env)->ReleaseStringUTFChars(env, jId, id);
+    
     if (!tre)
     {
         jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
@@ -88,13 +91,15 @@ JNIEXPORT void JNICALL Java_nitf_TRE_setLength
 
 
 JNIEXPORT jboolean JNICALL Java_nitf_TRE_exists
-    (JNIEnv * env, jobject self, jstring tag)
+    (JNIEnv * env, jobject self, jstring jTag)
 {
     nitf_TRE *tre = _GetObj(env, self);
-    char *tag_id;
-    tag_id = (*env)->GetStringUTFChars(env, tag, 0);
+    jboolean exists = JNI_FALSE;
+    char *tag = (*env)->GetStringUTFChars(env, jTag, 0);
 
-    return nitf_TRE_exists(tre, tag_id) ? JNI_TRUE : JNI_FALSE;
+    exists = nitf_TRE_exists(tre, tag) ? JNI_TRUE : JNI_FALSE;
+    (*env)->ReleaseStringUTFChars(env, jTag, tag);
+    return exists;
 }
 
 
@@ -113,6 +118,8 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_getField
     
     tag = (*env)->GetStringUTFChars(env, jTag, 0);
     field = nitf_TRE_getField(tre, tag);
+    (*env)->ReleaseStringUTFChars(env, jTag, tag);
+    
     if (field)
         jField = (*env)->NewObject(env, fieldClass, methodID, (jlong) field);
     
@@ -121,32 +128,31 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_getField
 
 
 JNIEXPORT jboolean JNICALL Java_nitf_TRE_setField
-    (JNIEnv * env, jobject self, jstring tag, jbyteArray data)
+    (JNIEnv * env, jobject self, jstring jTag, jbyteArray data)
 {
     nitf_TRE *tre = _GetObj(env, self);
-    char *tag_id;
-    NITF_DATA *buf;
+    char *tag = NULL;
+    NITF_DATA *buf = NULL;
     NITF_BOOL success;
     nitf_Error error;
     jsize len;
     jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     /* get the tag, data buffer, and length */
-    tag_id = (*env)->GetStringUTFChars(env, tag, 0);
+    tag = (*env)->GetStringUTFChars(env, tag, 0);
     buf = (NITF_DATA *) ((*env)->GetByteArrayElements(env, data, 0));
     len = (*env)->GetArrayLength(env, data);
 
     /* set to 0, to see if we need to actually throw an exception */
     error.level = 0;
-    success = nitf_TRE_setField(tre, tag_id, buf, len, &error);
+    success = nitf_TRE_setField(tre, tag, buf, len, &error);
+    
+    (*env)->ReleaseStringUTFChars(env, jTag, tag);
 
     if (!success)
     {
         if (error.level)
-        {
-            /* throw the error */
             (*env)->ThrowNew(env, exClass, error.message);
-        }
         return JNI_FALSE;
     }
     return JNI_TRUE;
@@ -163,8 +169,8 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_find
     nitf_Error error;
     
     pattern = (*env)->GetStringUTFChars(env, jPattern, 0);
-    
     list = nitf_TRE_find(tre, pattern, &error);
+    (*env)->ReleaseStringUTFChars(env, jPattern, pattern);
     
     if (!list)
     {

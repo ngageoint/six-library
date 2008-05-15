@@ -35,7 +35,8 @@ JNIEXPORT void JNICALL Java_nitf_TREDescription_construct
     (JNIEnv * env, jobject self, jobject dataType,
      jint dataCount, jstring label, jstring tag)
 {
-    nitf_TREDescription *descrip;
+    nitf_TREDescription *descrip = NULL;
+    char *tempBuf = NULL;
     nitf_Error error;
     int length;                 /* used to temporarily hold length */
     jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
@@ -143,14 +144,18 @@ JNIEXPORT void JNICALL Java_nitf_TREDescription_construct
     /* copy the label */
     length = (int) (*env)->GetStringUTFLength(env, label);
     descrip->label = (char *) NITF_MALLOC(length + 1);
-    strcpy(descrip->label, (*env)->GetStringUTFChars(env, label, 0));
+    tempBuf = (*env)->GetStringUTFChars(env, label, 0);
+    strcpy(descrip->label, tempBuf);
     descrip->label[length] = 0;
+    (*env)->ReleaseStringUTFChars(env, label, tempBuf);
 
     /* copy the tag */
     length = (int) (*env)->GetStringUTFLength(env, tag);
     descrip->tag = (char *) NITF_MALLOC(length + 1);
-    strcpy(descrip->tag, (*env)->GetStringUTFChars(env, tag, 0));
+    tempBuf = (*env)->GetStringUTFChars(env, tag, 0);
+    strcpy(descrip->tag, tempBuf);
     descrip->tag[length] = 0;
+    (*env)->ReleaseStringUTFChars(env, tag, tempBuf);
 
     /* now, add it to the map FIRST, before calling setAddress */
     /* this flags it as a user constructed object */

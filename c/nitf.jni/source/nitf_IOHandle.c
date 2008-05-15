@@ -99,6 +99,7 @@ JNIEXPORT jlong JNICALL Java_nitf_IOHandle_createHandle
     }
 
     io = nitf_IOHandle_create(fName, accessInt, createInt, &error);
+    (*env)->ReleaseStringUTFChars(env, fileName, fName);
     if ( NITF_INVALID_HANDLE(io))
     {
         if (error.level)

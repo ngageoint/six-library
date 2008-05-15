@@ -700,23 +700,27 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_insertImageComment
 {
     nitf_ImageSubheader *header = _GetObj(env, self);
     nitf_Error error;
-    jchar *comBuf;
+    jchar *comBuf = NULL;
     jint length;
     jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
+    jboolean status = JNI_FALSE;
 
     if (comment)
     {
         comBuf = (*env)->GetStringUTFChars(env, comment, 0);
         length = (*env)->GetStringLength(env, comment);
 
-        if (!nitf_ImageSubheader_insertImageComment
+        if (nitf_ImageSubheader_insertImageComment
             (header, comBuf, length, index, &error))
         {
-            (*env)->ThrowNew(env, exClass, error.message);
-            return JNI_FALSE;
+            status = JNI_TRUE;
         }
+        else
+            (*env)->ThrowNew(env, exClass, error.message);
+        
+        (*env)->ReleaseStringUTFChars(env, comment, comBuf);
     }
-    return JNI_TRUE;
+    return status;
 }
 
 

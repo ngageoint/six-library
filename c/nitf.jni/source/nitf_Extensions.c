@@ -54,7 +54,7 @@ JNIEXPORT void JNICALL Java_nitf_Extensions_appendTRE
  * Signature: (Ljava/lang/String;)Ljava/lang/Iterable;
  */
 JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
-  (JNIEnv *env, jobject self, jstring name)
+  (JNIEnv *env, jobject self, jstring jName)
 {
     nitf_Extensions *extensions = _GetObj(env, self);
     jclass treClass = (*env)->FindClass(env, "nitf/TRE");
@@ -66,7 +66,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
     nitf_ListIterator iter, end;
     nitf_TRE *tre;
     jobject treObject;
-    char *tmp = (*env)->GetStringUTFChars(env, name, 0);
+    char *name = NULL;
     nitf_List* list;
     jobject vector = NULL;
     
@@ -75,8 +75,10 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
     
     if (extensions != NULL)
     {
+        name = (*env)->GetStringUTFChars(env, jName, 0);
         /* get the list */
-        list = nitf_Extensions_getTREsByName(extensions, tmp);
+        list = nitf_Extensions_getTREsByName(extensions, name);
+        (*env)->ReleaseStringUTFChars(env, jName, name);
         
         /* set up iterators */
         iter = nitf_List_begin(list);
@@ -103,18 +105,19 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
  * Signature: (Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_nitf_Extensions_exists
-    (JNIEnv * env, jobject self, jstring name)
+    (JNIEnv * env, jobject self, jstring jName)
 {
     nitf_Extensions *extensions = _GetObj(env, self);
-    char *tmp;
+    char *name = NULL;
+    jboolean exists = JNI_FALSE;
 
     if (extensions)
     {
-        tmp = (*env)->GetStringUTFChars(env, name, 0);
-        return nitf_Extensions_exists(extensions,
-                                      tmp) ? JNI_TRUE : JNI_FALSE;
+        name = (*env)->GetStringUTFChars(env, jName, 0);
+        exists = nitf_Extensions_exists(extensions, name) ? JNI_TRUE : JNI_FALSE;
+        (*env)->ReleaseStringUTFChars(env, jName, name);
     }
-    return JNI_FALSE;
+    return exists;
 }
 
 
@@ -124,15 +127,16 @@ JNIEXPORT jboolean JNICALL Java_nitf_Extensions_exists
  * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_nitf_Extensions_removeTREsByName
-  (JNIEnv *env, jobject self, jstring name)
+  (JNIEnv *env, jobject self, jstring jName)
 {
     nitf_Extensions *extensions = _GetObj(env, self);
-    char *tmp;
+    char *name = NULL;
 
     if (extensions)
     {
-        tmp = (char *) (*env)->GetStringUTFChars(env, name, 0);
-        nitf_Extensions_removeTREsByName(extensions, tmp);
+        name = (*env)->GetStringUTFChars(env, jName, 0);
+        nitf_Extensions_removeTREsByName(extensions, name);
+        (*env)->ReleaseStringUTFChars(env, jName, name);
     }
 }
 
