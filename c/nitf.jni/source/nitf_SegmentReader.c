@@ -53,7 +53,6 @@ JNIEXPORT jboolean JNICALL Java_nitf_SegmentReader_read
     nitf_SegmentReader *reader = _GetObj(env, self);
     nitf_Error error;
     jint success;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     jbyte *byteBuf = (*env)->GetByteArrayElements(env, buf, 0);
     success =
@@ -66,7 +65,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_SegmentReader_read
     }
     else
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
     return JNI_TRUE;
@@ -82,7 +81,6 @@ JNIEXPORT jlong JNICALL Java_nitf_SegmentReader_seek
     (JNIEnv * env, jobject self, jlong offset, jint whence)
 {
     nitf_SegmentReader *reader = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jint seekInt;
     jlong seek;
@@ -109,7 +107,7 @@ JNIEXPORT jlong JNICALL Java_nitf_SegmentReader_seek
     /* check for error */
     if (!NITF_IO_SUCCESS(seek))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
 
     return seek;
@@ -125,7 +123,6 @@ JNIEXPORT jlong JNICALL Java_nitf_SegmentReader_tell
     (JNIEnv * env, jobject self)
 {
     nitf_SegmentReader *reader = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jlong tell;
 
@@ -134,7 +131,7 @@ JNIEXPORT jlong JNICALL Java_nitf_SegmentReader_tell
     /* check for error */
     if (tell == -1)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return tell;
 }
@@ -149,7 +146,6 @@ JNIEXPORT jlong JNICALL Java_nitf_SegmentReader_getSize
     (JNIEnv * env, jobject self)
 {
     nitf_SegmentReader *reader = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jlong size;
 
@@ -158,7 +154,7 @@ JNIEXPORT jlong JNICALL Java_nitf_SegmentReader_getSize
     /* check for error */
     if (size == -1)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return size;
 }

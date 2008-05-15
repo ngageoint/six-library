@@ -48,7 +48,6 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_ImageSubheader_getBandInfo
     nitf_ImageSubheader *header = _GetObj(env, self);
 
     jclass infoClass = (*env)->FindClass(env, "nitf/BandInfo");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jobjectArray info;
     jobject element;
@@ -73,7 +72,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_ImageSubheader_getBandInfo
     return info;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -198,7 +197,6 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_ImageSubheader_getImageComments
     jobjectArray array;
     jobject fieldObj;
     nitf_ListIterator iter, end;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jclass fieldClass = (*env)->FindClass(env, "nitf/Field");
 
     NITF_TRY_GET_UINT32(header->numImageComments, &numComments, &error);
@@ -224,7 +222,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_ImageSubheader_getImageComments
     return array;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -627,7 +625,6 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageSubheader_getUserDefinedSection
 {
     nitf_ImageSubheader *header = _GetObj(env, self);
     jclass extensionsClass = (*env)->FindClass(env, "nitf/Extensions");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jmethodID methodID =
         (*env)->GetMethodID(env, extensionsClass, "<init>", "(J)V");
     nitf_Error error;
@@ -648,7 +645,7 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageSubheader_getUserDefinedSection
     return extensions;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -664,7 +661,6 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageSubheader_getExtendedSection
     nitf_ImageSubheader *header = _GetObj(env, self);
 
     jclass extensionsClass = (*env)->FindClass(env, "nitf/Extensions");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jmethodID methodID =
         (*env)->GetMethodID(env, extensionsClass, "<init>", "(J)V");
     nitf_Error error;
@@ -685,7 +681,7 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageSubheader_getExtendedSection
     return extensions;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -702,7 +698,6 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_insertImageComment
     nitf_Error error;
     jchar *comBuf = NULL;
     jint length;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jboolean status = JNI_FALSE;
 
     if (comment)
@@ -716,7 +711,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_insertImageComment
             status = JNI_TRUE;
         }
         else
-            (*env)->ThrowNew(env, exClass, error.message);
+            _ThrowNITFException(env, error.message);
         
         (*env)->ReleaseStringUTFChars(env, comment, comBuf);
     }
@@ -734,11 +729,10 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_removeImageComment
 {
     nitf_ImageSubheader *header = _GetObj(env, self);
     nitf_Error error;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     if (!nitf_ImageSubheader_removeImageComment(header, index, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
     return JNI_TRUE;
@@ -773,12 +767,11 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_createBands
 {
     nitf_ImageSubheader *header = _GetObj(env, self);
     nitf_Error error;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     if (!nitf_ImageSubheader_createBands
         (header, (nitf_Uint32) numBands, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
     return JNI_TRUE;

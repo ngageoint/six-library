@@ -122,6 +122,11 @@ JNIEXPORT jobject JNICALL Java_nitf_BandInfo_getLookupTable
     {
         lut = (*env)->NewObject(env,
                                 lutClass, methodID, (jlong) info->lut);
+        
+        /* tell Java not to manage it */
+        methodID = (*env)->GetMethodID(env, lutClass, "setManaged", "(Z)V");
+        (*env)->CallVoidMethod(env, lut, methodID, JNI_FALSE);
+        
     }
     return lut;
 }
@@ -159,6 +164,10 @@ JNIEXPORT void JNICALL Java_nitf_BandInfo_setLookupTable
     /* set the tables and entries field in the BandInfo object */
     nitf_Field_setUint32(info->numLUTs, lut->tables, &error);
     nitf_Field_setUint32(info->bandEntriesPerLUT, lut->entries, &error);
+    
+    /* tell Java not to manage it */
+    methodID = (*env)->GetMethodID(env, lutClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, lookupTable, methodID, JNI_FALSE);
 
     return;
 }

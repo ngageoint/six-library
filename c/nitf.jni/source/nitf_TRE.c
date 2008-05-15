@@ -59,8 +59,7 @@ JNIEXPORT void JNICALL Java_nitf_TRE_construct
     
     if (!tre)
     {
-        jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return;
     }
     _SetObj(env, self, tre);
@@ -136,10 +135,9 @@ JNIEXPORT jboolean JNICALL Java_nitf_TRE_setField
     NITF_BOOL success;
     nitf_Error error;
     jsize len;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     /* get the tag, data buffer, and length */
-    tag = (*env)->GetStringUTFChars(env, tag, 0);
+    tag = (*env)->GetStringUTFChars(env, jTag, 0);
     buf = (NITF_DATA *) ((*env)->GetByteArrayElements(env, data, 0));
     len = (*env)->GetArrayLength(env, data);
 
@@ -152,7 +150,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_TRE_setField
     if (!success)
     {
         if (error.level)
-            (*env)->ThrowNew(env, exClass, error.message);
+            _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
     return JNI_TRUE;
@@ -175,8 +173,7 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_find
     if (!list)
     {
         /* TODO currently, we don't know if an error occurred or if no TREs were found */
-        jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return NULL;
     }
     else

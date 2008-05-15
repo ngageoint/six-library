@@ -44,15 +44,11 @@ static void _SetObj(JNIEnv* env, jobject self, OBJ_TY* info) \
 NITF_CXX_GUARD
 
 
-/*
- *  With a smart GetValueObj() function, we could clean up a lot
- *  
- *
- */
-
 NITFPROT(jobject) _GetFieldObj(JNIEnv* env, nitf_Field* value);
 
 NITFPROT(nitf_Version) _GetNITFVersion(JNIEnv * env, jobject versionObject);
+
+NITFPROT(void) _ThrowNITFException(JNIEnv *env, const char *message);
 
 NITF_CXX_ENDGUARD
 

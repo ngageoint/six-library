@@ -71,3 +71,15 @@ NITFPROT(nitf_Version) _GetNITFVersion(JNIEnv * env, jobject versionObject)
     return version;
 }
 
+
+NITFPROT(void) _ThrowNITFException(JNIEnv *env, const char *message)
+{
+    static jclass exceptClass = NULL;
+    if (!exceptClass)
+    {
+        jclass localClass = (*env)->FindClass(env, "nitf/NITFException");
+        exceptClass = (*env)->NewGlobalRef(env, localClass);
+        (*env)->DeleteLocalRef(env, localClass);
+    }
+    (*env)->ThrowNew(env, exceptClass, message);
+}

@@ -116,7 +116,6 @@ JNIEXPORT void JNICALL Java_nitf_BandSource_construct
     nitf_BandSource *bandSource = NULL;
     BandSourceImpl *impl;       /* gets malloc'd for this object */
     nitf_Error error;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jclass bandSourceClass = (*env)->FindClass(env, "nitf/BandSource");
     jmethodID methodID = (*env)->GetStaticMethodID(env, bandSourceClass,
         "register", "(Lnitf/BandSource;)V");
@@ -125,10 +124,7 @@ JNIEXPORT void JNICALL Java_nitf_BandSource_construct
     impl = (BandSourceImpl *) NITF_MALLOC(sizeof(BandSourceImpl));
     if (!impl)
     {
-        /* TODO do something about errors */
-        /*nitf_Error_init(&error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
-           NITF_ERR_MEMORY); */
-        (*env)->ThrowNew(env, exClass, "Out of memory");
+        _ThrowNITFException(env, "Out of memory");
         return;
     }
 
@@ -143,9 +139,7 @@ JNIEXPORT void JNICALL Java_nitf_BandSource_construct
     bandSource = (nitf_BandSource *) NITF_MALLOC(sizeof(nitf_BandSource));
     if (!bandSource)
     {
-        /*nitf_Error_init(&error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
-           NITF_ERR_MEMORY); */
-        (*env)->ThrowNew(env, exClass, "Out of Memory");
+        _ThrowNITFException(env, "Out of Memory");
         return;
     }
     bandSource->data = impl;
@@ -167,28 +161,9 @@ JNIEXPORT void JNICALL Java_nitf_BandSource_construct
 JNIEXPORT void JNICALL Java_nitf_BandSource_destructMemory
     (JNIEnv * env, jobject self)
 {
-    nitf_BandSource *bandSource;
-    jmethodID methodID;
-    jclass bandSourceClass = (*env)->GetObjectClass(env, self);
-
-    /* -- THIS IS A SPECIAL CASE --
-     * Do not destroy if it is attached to an ImageSource
-     * The ImageSource will destruct it within nitf_ImageSource_Destruct
-     *
-     * This is why we have to call the _GetObj function later on, after
-     * we make sure it doesn't "belong" to an ImageSource, and may have
-     * already been freed.
-     */
-    methodID =
-        (*env)->GetMethodID(env, bandSourceClass, "isAttached", "()Z");
-    if ((*env)->CallBooleanMethod(env, self, methodID) == JNI_FALSE)
-    {
-        bandSource = _GetObj(env, self);
-        if (bandSource)
-        {
-            nitf_BandSource_destruct(&bandSource);
-        }
-        _SetObj(env, self, NULL);
-    }
+    nitf_BandSource *bandSource = _GetObj(env, self);
+    if (bandSource)
+        nitf_BandSource_destruct(&bandSource);
+    _SetObj(env, self, NULL);
 }
 

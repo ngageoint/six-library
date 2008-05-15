@@ -52,9 +52,7 @@ JNIEXPORT void JNICALL Java_nitf_ImageSource_destructMemory
     nitf_ImageSource *imageSource = _GetObj(env, self);
 
     if (imageSource)
-    {
         nitf_ImageSource_destruct(&imageSource);
-    }
 
     _SetObj(env, self, NULL);
 }
@@ -71,7 +69,6 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_ImageSource_getBandSources
     nitf_ImageSource *imageSource = _GetObj(env, self);
 
     jclass bandSourceClass = (*env)->FindClass(env, "nitf/BandSource");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jobjectArray sources;
     jobject element;
@@ -111,20 +108,15 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_ImageSource_getBandSources
     while (nitf_ListIterator_notEqualTo(&iter, &end))
     {
         address = (nitf_BandSource *)nitf_ListIterator_get(&iter);
-        element = (*env)->CallStaticObjectMethod(env,
-            bandSourceClass, methodID, address);
-
-        /*element = (*env)->NewObject(env,
-                                    bandSourceClass,
-                                    methodID,
-                                    (jlong) address);*/
+        element = (*env)->CallStaticObjectMethod(env, bandSourceClass,
+                methodID, address);
         (*env)->SetObjectArrayElement(env, sources, index++, element);
         nitf_ListIterator_increment(&iter);
     }
     return sources;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -169,19 +161,17 @@ JNIEXPORT jint JNICALL Java_nitf_ImageSource_getSize
  * Signature: (Lnitf/BandSource;)Z
  */
 JNIEXPORT jboolean JNICALL Java_nitf_ImageSource_addBand
-    (JNIEnv * env, jobject self, jobject bandSourceObject)
+    (JNIEnv * env, jobject self, jobject jBandSource)
 {
     nitf_ImageSource *source = _GetObj(env, self);
     nitf_BandSource *bandSource;
     nitf_Error error;
     jclass bandSourceClass = (*env)->FindClass(env, "nitf/BandSource");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jmethodID methodID =
         (*env)->GetMethodID(env, bandSourceClass, "getAddress", "()J");
 
-    bandSource =
-        (nitf_BandSource *) (*env)->CallLongMethod(env, bandSourceObject,
-                                                   methodID);
+    bandSource = (nitf_BandSource *) (*env)->CallLongMethod(
+            env, jBandSource, methodID);
 
     if (!bandSource)
     {
@@ -190,14 +180,13 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSource_addBand
 
     if (!nitf_ImageSource_addBand(source, bandSource, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
 
-    /* Now, set the BandSource object to attached */
-    methodID =
-        (*env)->GetMethodID(env, bandSourceClass, "setAttached", "(Z)V");
-    (*env)->CallVoidMethod(env, bandSourceObject, methodID, JNI_TRUE);
+    /* Now, tell Java not to manage it anymore */
+    methodID = (*env)->GetMethodID(env, bandSourceClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, jBandSource, methodID, JNI_FALSE);
 
     return JNI_TRUE;
 }
@@ -216,7 +205,6 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageSource_getBand
     jobject bandSourceObject;
     nitf_Error error;
     jclass bandSourceClass = (*env)->FindClass(env, "nitf/BandSource");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jmethodID methodID =
         (*env)->GetMethodID(env, bandSourceClass, "<init>", "(J)V");
 
@@ -224,7 +212,7 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageSource_getBand
 
     if (!bandSource)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return NULL;
     }
 

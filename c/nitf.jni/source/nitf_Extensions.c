@@ -34,7 +34,6 @@ JNIEXPORT void JNICALL Java_nitf_Extensions_appendTRE
 {
     nitf_Extensions *extensions = _GetObj(env, self);
     jclass treClass = (*env)->FindClass(env, "nitf/TRE");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jmethodID methodID =
         (*env)->GetMethodID(env, treClass, "getAddress", "()J");
@@ -43,35 +42,35 @@ JNIEXPORT void JNICALL Java_nitf_Extensions_appendTRE
 
     if (!nitf_Extensions_appendTRE(extensions, tre, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
+        return;
     }
+    
+    /* tell Java not to manage it */
+    methodID = (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, treObject, methodID, JNI_FALSE);
 }
 
 
-/*
- * Class:     nitf_Extensions
- * Method:    getTREsByName
- * Signature: (Ljava/lang/String;)Ljava/lang/Iterable;
- */
 JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
   (JNIEnv *env, jobject self, jstring jName)
 {
     nitf_Extensions *extensions = _GetObj(env, self);
     jclass treClass = (*env)->FindClass(env, "nitf/TRE");
-    jclass vecClass = (*env)->FindClass(env, "java/util/Vector");
+    jclass listClass = (*env)->FindClass(env, "java/util/LinkedList");
     jmethodID methodID =
         (*env)->GetMethodID(env, treClass, "<init>", "(J)V");
-    jmethodID vecAddMethodID =
-        (*env)->GetMethodID(env, vecClass, "add", "(Ljava/lang/Object;)Z");
+    jmethodID listAddMethodID =
+        (*env)->GetMethodID(env, listClass, "add", "(Ljava/lang/Object;)Z");
     nitf_ListIterator iter, end;
     nitf_TRE *tre;
     jobject treObject;
     char *name = NULL;
     nitf_List* list;
-    jobject vector = NULL;
+    jobject linkedList = NULL;
     
-    vector = (*env)->NewObject(env, vecClass,
-        (*env)->GetMethodID(env, vecClass, "<init>", "()V"));
+    linkedList = (*env)->NewObject(env, listClass,
+        (*env)->GetMethodID(env, listClass, "<init>", "()V"));
     
     if (extensions != NULL)
     {
@@ -91,11 +90,16 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
             /* get the object and add it to the array */
             treObject =
                 (*env)->NewObject(env, treClass, methodID, (jlong) tre);
-            (*env)->CallBooleanMethod(env, vector, vecAddMethodID, treObject);
+            
+            /* tell Java not to manage it */
+            methodID = (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
+            (*env)->CallVoidMethod(env, treObject, methodID, JNI_FALSE);
+            
+            (*env)->CallBooleanMethod(env, linkedList, listAddMethodID, treObject);
             nitf_ListIterator_increment(&iter);
         }
     }
-    return vector;
+    return linkedList;
 }
 
 
@@ -141,27 +145,22 @@ JNIEXPORT void JNICALL Java_nitf_Extensions_removeTREsByName
 }
 
 
-/*
- * Class:     nitf_Extensions
- * Method:    getAll
- * Signature: ()Ljava/lang/Iterable;
- */
 JNIEXPORT jobject JNICALL Java_nitf_Extensions_getAll
   (JNIEnv *env, jobject self)
 {
     nitf_Extensions *extensions = _GetObj(env, self);
     nitf_ExtensionsIterator startIter, endIter;
     jclass treClass = (*env)->FindClass(env, "nitf/TRE");
-    jclass vecClass = (*env)->FindClass(env, "java/util/Vector");
-    jmethodID vecAddMethodID =
-        (*env)->GetMethodID(env, vecClass, "add", "(Ljava/lang/Object;)Z");
+    jclass listClass = (*env)->FindClass(env, "java/util/LinkedList");
+    jmethodID listAddMethodID =
+        (*env)->GetMethodID(env, listClass, "add", "(Ljava/lang/Object;)Z");
     jmethodID methodID = (*env)->GetMethodID(env, treClass, "<init>", "(J)V");
     nitf_TRE *tre;
     jobject element;
-    jobject vector;
+    jobject linkedList;
     
-    vector = (*env)->NewObject(env, vecClass,
-        (*env)->GetMethodID(env, vecClass, "<init>", "()V"));
+    linkedList = (*env)->NewObject(env, listClass,
+        (*env)->GetMethodID(env, listClass, "<init>", "()V"));
 
     if (extensions)
     {
@@ -174,11 +173,17 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getAll
             tre = nitf_ExtensionsIterator_get(&startIter);
             element = (*env)->NewObject(env,
                                         treClass, methodID, (jlong) tre);
-            (*env)->CallBooleanMethod(env, vector, vecAddMethodID, element);
+            
+            /* tell Java not to manage it */
+            methodID = (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
+            (*env)->CallVoidMethod(env, element, methodID, JNI_FALSE);
+            
+            
+            (*env)->CallBooleanMethod(env, linkedList, listAddMethodID, element);
             nitf_ExtensionsIterator_increment(&startIter);
         }
     }
-    return vector;
+    return linkedList;
 }
 
 

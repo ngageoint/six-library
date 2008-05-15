@@ -34,13 +34,12 @@ JNIEXPORT void JNICALL Java_nitf_SubWindow_construct
 {
     nitf_SubWindow *subWindow;
     nitf_Error error;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     subWindow = nitf_SubWindow_construct(&error);
     if (!subWindow)
     {
         /* throw an error */
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     else
     {
@@ -58,26 +57,8 @@ JNIEXPORT void JNICALL Java_nitf_SubWindow_destructMemory
     (JNIEnv * env, jobject self)
 {
     nitf_SubWindow *subWindow = _GetObj(env, self);
-    jobject downSampler;
-    jmethodID methodID;
-    jclass nitfUtilsClass = (*env)->FindClass(env, "nitf/NITFUtils");
-    jclass downSamplerClass = (*env)->FindClass(env, "nitf/DownSampler");
-
-    /* check on the DownSampler */
-    /*if (subWindow->downsampler)
-       {
-       methodID = (*env)->GetMethodID(env, downSamplerClass, "<init>", "(J)V");
-       downSampler = (*env)->NewObject(env, downSamplerClass, methodID, (jlong)subWindow->downsampler);
-
-       methodID = (*env)->GetStaticMethodID(env, nitfUtilsClass, "decrementRefCount", "(Lnitf/DestructibleObject;)V");
-       (*env)->CallStaticVoidMethod(nitfUtilsClass, methodID, downSampler);
-       }
-     */
-
     if (subWindow)
-    {
         nitf_SubWindow_destruct(&subWindow);
-    }
     _SetObj(env, self, NULL);
 }
 

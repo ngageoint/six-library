@@ -88,8 +88,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_DEReader_read
     }
     else
     {
-        jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
     return JNI_TRUE;
@@ -105,7 +104,6 @@ JNIEXPORT jlong JNICALL Java_nitf_DEReader_seek
     (JNIEnv * env, jobject self, jlong offset, jint whence)
 {
     nitf_DEReader *reader = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jint seekInt;
     jlong seek;
@@ -132,7 +130,7 @@ JNIEXPORT jlong JNICALL Java_nitf_DEReader_seek
     /* check for error */
     if (!NITF_IO_SUCCESS(seek))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
 
     return seek;
@@ -147,7 +145,6 @@ JNIEXPORT jlong JNICALL Java_nitf_DEReader_seek
 JNIEXPORT jlong JNICALL Java_nitf_DEReader_tell(JNIEnv * env, jobject self)
 {
     nitf_DEReader *reader = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jlong tell;
 
@@ -156,7 +153,7 @@ JNIEXPORT jlong JNICALL Java_nitf_DEReader_tell(JNIEnv * env, jobject self)
     /* check for error */
     if (tell == -1)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return tell;
 }
@@ -171,7 +168,6 @@ JNIEXPORT jlong JNICALL Java_nitf_DEReader_getSize
     (JNIEnv * env, jobject self)
 {
     nitf_DEReader *reader = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jlong size;
 
@@ -179,9 +175,7 @@ JNIEXPORT jlong JNICALL Java_nitf_DEReader_getSize
 
     /* check for error */
     if (size == -1)
-    {
-        (*env)->ThrowNew(env, exClass, error.message);
-    }
+        _ThrowNITFException(env, error.message);
     return size;
 }
 

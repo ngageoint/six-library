@@ -73,7 +73,6 @@ SOURCES = nitf_BandInfo.c \
 	nitf_SubWindow.c \
 	nitf_SumSq2BandDownSampler.c \
 	nitf_TRE.c \
-	nitf_TREDescription.c \
 	nitf_TRE_TREIterator.c \
 	nitf_TextSegment.c \
 	nitf_TextSubheader.c \

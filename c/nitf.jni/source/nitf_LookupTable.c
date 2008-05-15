@@ -35,7 +35,6 @@ JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
 {
     nitf_LookupTable *lut = NULL;
     nitf_Error error;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     char *dataBuf = NULL;
 
     /* construct the LUT */
@@ -45,7 +44,7 @@ JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
     if (!lut)
     {
         /* throw an error */
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return;
     }
 

@@ -35,9 +35,7 @@ JNIEXPORT void JNICALL Java_nitf_ImageWriter_destructMemory
 {
     nitf_ImageWriter *writer = _GetObj(env, self);
     if (writer)
-    {
         nitf_ImageWriter_destruct(&writer);
-    }
     _SetObj(env, self, NULL);
 }
 
@@ -88,14 +86,13 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageWriter_write
      jint numMultispectralImageBands, jint numRows, jint numCols)
 {
     nitf_ImageWriter *writer = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     if (!nitf_ImageWriter_write
         (writer, numBitsPerPixel, numImageBands,
          numMultispectralImageBands, numRows, numCols, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
     return JNI_TRUE;
@@ -108,25 +105,28 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageWriter_write
  * Signature: (Lnitf/ImageSource;)Z
  */
 JNIEXPORT jboolean JNICALL Java_nitf_ImageWriter_attachSource
-    (JNIEnv * env, jobject self, jobject imageSource)
+    (JNIEnv * env, jobject self, jobject jImageSource)
 {
     nitf_ImageWriter *writer = _GetObj(env, self);
     jclass imageSourceClass = (*env)->FindClass(env, "nitf/ImageSource");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
-
-    nitf_ImageSource *source;
+    nitf_ImageSource *imageSource = NULL;
     jmethodID methodID =
         (*env)->GetMethodID(env, imageSourceClass, "getAddress", "()J");
-    source =
-        (nitf_ImageSource *) (*env)->CallLongMethod(env, imageSource,
-                                                    methodID);
+    
+    imageSource = (nitf_ImageSource *) (*env)->CallLongMethod(
+            env, jImageSource, methodID);
 
-    if (!nitf_ImageWriter_attachSource(writer, source, &error))
+    if (!nitf_ImageWriter_attachSource(writer, imageSource, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
+    
+    /* tell Java not to manage the ImageSource memory */
+    methodID = (*env)->GetMethodID(env, imageSourceClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, jImageSource, methodID, JNI_FALSE);
+    
     return JNI_TRUE;
 }
 

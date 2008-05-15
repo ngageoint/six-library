@@ -31,13 +31,12 @@ JNIEXPORT void JNICALL Java_nitf_PluginRegistry_loadPluginDir
   (JNIEnv *env, jclass thisClass, jstring dirName)
 {
     char *dir;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     dir = (char *) (*env)->GetStringUTFChars(env, dirName, 0);
     if (nitf_PluginRegistry_loadDir(dir, &error) != NITF_SUCCESS)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     (*env)->ReleaseStringUTFChars(env, dirName, dir);
     return;
@@ -53,7 +52,6 @@ JNIEXPORT jboolean JNICALL Java_nitf_PluginRegistry_canHandleTRE
   (JNIEnv *env, jclass thisClass, jstring name)
 {
     char *treName;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     int had_err;
     nitf_PluginRegistry* reg = NULL;

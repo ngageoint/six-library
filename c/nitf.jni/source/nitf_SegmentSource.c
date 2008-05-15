@@ -35,7 +35,6 @@ JNIEXPORT jobject JNICALL Java_nitf_SegmentSource_makeSegmentMemorySource
   (JNIEnv *env, jclass thisClass, jbyteArray data, jint size, jint start, jint byteSkip)
 {
 	
-	jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     char *buf;
     nitf_SegmentSource *memorySource;
@@ -43,7 +42,7 @@ JNIEXPORT jobject JNICALL Java_nitf_SegmentSource_makeSegmentMemorySource
 
     if (!data)
     {
-        (*env)->ThrowNew(env, exClass, "ERROR, data array is null");
+        _ThrowNITFException(env, "ERROR, data array is null");
         return NULL;
     }
 
@@ -51,7 +50,7 @@ JNIEXPORT jobject JNICALL Java_nitf_SegmentSource_makeSegmentMemorySource
     buf = (char *) (*env)->GetByteArrayElements(env, data, NULL);
     if (!buf)
     {
-        (*env)->ThrowNew(env, exClass, "ERROR getting data from array");
+        _ThrowNITFException(env, "ERROR getting data from array");
         return NULL;
     }
 
@@ -60,7 +59,7 @@ JNIEXPORT jobject JNICALL Java_nitf_SegmentSource_makeSegmentMemorySource
             byteSkip, &error);
     if (!memorySource)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return NULL;
     }
 

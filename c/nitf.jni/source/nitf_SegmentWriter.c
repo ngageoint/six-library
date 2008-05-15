@@ -85,7 +85,6 @@ JNIEXPORT jboolean JNICALL Java_nitf_SegmentWriter_attachSource
 {
 	nitf_SegmentWriter *writer = _GetObj(env, self);
     jclass segmentSourceClass = (*env)->FindClass(env, "nitf/SegmentSource");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     nitf_SegmentSource *source;
@@ -97,7 +96,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_SegmentWriter_attachSource
 
     if (!nitf_SegmentWriter_attachSource(writer, source, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
     return JNI_TRUE;

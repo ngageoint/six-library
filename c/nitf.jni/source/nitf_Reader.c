@@ -59,54 +59,6 @@ JNIEXPORT void JNICALL Java_nitf_Reader_destructMemory
 
 /*
  * Class:     nitf_Reader
- * Method:    readHeader
- * Signature: (Lnitf/IOHandle;)Lnitf/FileHeader;
- */
-/*JNIEXPORT jobject JNICALL Java_nitf_Reader_readHeader
-  (JNIEnv *env, jobject self, jobject handle)
-{
-    nitf_Reader* reader = _GetObj(env, self);
-    nitf_Error error;
-    nitf_Record* nitfRecord;
-    jobject record;
-
-    jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
-    jclass recordClass = (*env)->FindClass(env, "nitf/Record");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
-
-jmethodID methodID =
-(*env)->GetMethodID(env, ioHandleClass, "getIOHandle", "()J");
-nitf_IOHandle ioHandle =
-(nitf_IOHandle)((*env)->CallIntMethod(env, handle, methodID));
-
-if (nitf_IOHandle_seek(ioHandle, 0, NITF_SEEK_SET, &error) == -1)
-{
-goto CATCH_ERROR;
-}
-
-nitfRecord = nitf_Record_construct(&error);
-if (!nitfRecord)
-{
-goto CATCH_ERROR;
-}
-
-nitf_Reader_readHeader(reader, ioHandle, &error);
-
-methodID = (*env)->GetMethodID(env, recordClass, "<init>", "(J)V");
-record = (*env)->NewObject(env,
-recordClass,
-methodID,
-(jlong)nitfRecord);
-
-return record;
-
-CATCH_ERROR:
-(*env)->ThrowNew(env, exClass, error.message);
-return NULL;
-}*/
-
-/*
- * Class:     nitf_Reader
  * Method:    read
  * Signature: (Lnitf/IOHandle;)Lnitf/Record;
  */
@@ -121,7 +73,6 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_read
     /* get some classIDs */
     jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
     jclass recordClass = (*env)->FindClass(env, "nitf/Record");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     /* get the IOHandle */
     jmethodID methodID =
@@ -145,7 +96,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_read
     return record;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -162,7 +113,6 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewImageReader
     nitf_ImageReader *imageReader;
     nitf_Error error;
     jclass imageReaderClass = (*env)->FindClass(env, "nitf/ImageReader");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jobject imageReaderObject;
 
     jmethodID methodID =
@@ -172,7 +122,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewImageReader
 
     if (!imageReader)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return NULL;
     }
 
@@ -196,7 +146,6 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewGraphicReader
     nitf_Error error;
     jclass segmentReaderClass =
         (*env)->FindClass(env, "nitf/SegmentReader");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jobject segmentReaderObject;
 
     jmethodID methodID =
@@ -206,7 +155,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewGraphicReader
 
     if (!segmentReader)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return NULL;
     }
 
@@ -231,7 +180,6 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewTextReader
     nitf_Error error;
     jclass segmentReaderClass =
         (*env)->FindClass(env, "nitf/SegmentReader");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jobject segmentReaderObject;
 
     jmethodID methodID =
@@ -241,7 +189,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewTextReader
 
     if (!segmentReader)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return NULL;
     }
 
@@ -265,7 +213,6 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewDEReader
     nitf_DEReader *deReader;
     nitf_Error error;
     jclass readerClass = (*env)->FindClass(env, "nitf/DEReader");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jobject readerObject = NULL;
 
     jmethodID methodID =
@@ -274,7 +221,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewDEReader
 
     if (!deReader)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return NULL;
     }
 
@@ -323,6 +270,11 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getRecord
                                        recordClass,
                                        methodID,
                                        (jlong) reader->record);
+    
+    /* tell Java not to manage the ImageSource memory */
+    methodID = (*env)->GetMethodID(env, recordClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, handle, methodID, JNI_FALSE);
+    
     return handle;
 }
 

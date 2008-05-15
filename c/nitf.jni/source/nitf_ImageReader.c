@@ -74,7 +74,6 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo
     nitf_Error error;
     nitf_BlockingInfo *info;
     jobject blockingInfoObject;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jclass blockingInfoClass = (*env)->FindClass(env, "nitf/BlockingInfo");
     jmethodID methodID =
         (*env)->GetMethodID(env, blockingInfoClass, "<init>", "(J)V");
@@ -82,7 +81,7 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo
     info = nitf_ImageReader_getBlockingInfo(reader, &error);
     if (!info)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return NULL;
     }
 
@@ -90,6 +89,11 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo
     blockingInfoObject = (*env)->NewObject(env,
                                            blockingInfoClass,
                                            methodID, (jlong) info);
+    
+    /* tell Java not to manage it */
+    methodID = (*env)->GetMethodID(env, blockingInfoClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, blockingInfoObject, methodID, JNI_FALSE);
+        
     return blockingInfoObject;
 }
 
@@ -104,7 +108,6 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
 {
     nitf_ImageReader *imReader = _GetObj(env, self);
     jclass subWindowClass = (*env)->FindClass(env, "nitf/SubWindow");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_SubWindow *nitfSubWindow;
     nitf_Error error;
     jbyte **data;
@@ -135,7 +138,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
                                (nitf_Uint8 **) data, &padded, &error))
     {
         free(data);
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
 

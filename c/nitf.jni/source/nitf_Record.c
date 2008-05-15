@@ -34,7 +34,6 @@ JNIEXPORT void JNICALL Java_nitf_Record_construct
 {
     nitf_Record *record;
     nitf_Error error;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     nitf_Version nitfVersion = _GetNITFVersion(env, version);
 
@@ -42,7 +41,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_construct
     if (!record)
     {
         /* throw an error */
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     _SetObj(env, self, record);
 }
@@ -79,7 +78,6 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_makeClone
     nitf_Record *clone;
     jobject cloneObject;
     jclass recordClass = (*env)->FindClass(env, "nitf/Record");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jmethodID methodID =
         (*env)->GetMethodID(env, recordClass, "<init>", "(J)V");
     nitf_Error error;
@@ -89,7 +87,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_makeClone
 
     if (!clone)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return NULL;
     }
 
@@ -455,7 +453,6 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_newImageSegment
     jmethodID methodID;
     jobject segmentObject;
     jclass segmentClass = (*env)->FindClass(env, "nitf/ImageSegment");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     segment = nitf_Record_newImageSegment(record, &error);
     if (!segment)
@@ -469,7 +466,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_newImageSegment
     return segmentObject;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -489,7 +486,6 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_newGraphicSegment
     jmethodID methodID;
     jobject segmentObject;
     jclass segmentClass = (*env)->FindClass(env, "nitf/GraphicSegment");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     segment = nitf_Record_newGraphicSegment(record, &error);
     if (!segment)
@@ -503,7 +499,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_newGraphicSegment
     return segmentObject;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -523,7 +519,6 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_newTextSegment
     jmethodID methodID;
     jobject segmentObject;
     jclass segmentClass = (*env)->FindClass(env, "nitf/TextSegment");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     segment = nitf_Record_newTextSegment(record, &error);
     if (!segment)
@@ -537,7 +532,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_newTextSegment
     return segmentObject;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -589,12 +584,11 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeImageSegment
   (JNIEnv *env, jobject self, jint segmentNumber)
 {
 	nitf_Record *record = _GetObj(env, self);
-	jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 	nitf_Error error;
 	
 	if (!nitf_Record_removeImageSegment(record, (nitf_Uint32)segmentNumber, &error))
 	{
-		(*env)->ThrowNew(env, exClass, error.message);
+		_ThrowNITFException(env, error.message);
 	}
 	return;
 }
@@ -608,12 +602,11 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeGraphicSegment
   (JNIEnv *env, jobject self, jint segmentNumber)
 {
 	nitf_Record *record = _GetObj(env, self);
-	jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 	nitf_Error error;
 	
 	if (!nitf_Record_removeGraphicSegment(record, (nitf_Uint32)segmentNumber, &error))
 	{
-		(*env)->ThrowNew(env, exClass, error.message);
+		_ThrowNITFException(env, error.message);
 	}
 	return;
 }
@@ -627,12 +620,11 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeLabelSegment
   (JNIEnv *env, jobject self, jint segmentNumber)
 {
 	nitf_Record *record = _GetObj(env, self);
-	jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 	nitf_Error error;
 	
 	if (!nitf_Record_removeLabelSegment(record, (nitf_Uint32)segmentNumber, &error))
 	{
-		(*env)->ThrowNew(env, exClass, error.message);
+		_ThrowNITFException(env, error.message);
 	}
 	return;
 }
@@ -646,12 +638,11 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeTextSegment
   (JNIEnv *env, jobject self, jint segmentNumber)
 {
 	nitf_Record *record = _GetObj(env, self);
-	jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 	nitf_Error error;
 	
 	if (!nitf_Record_removeTextSegment(record, (nitf_Uint32)segmentNumber, &error))
 	{
-		(*env)->ThrowNew(env, exClass, error.message);
+		_ThrowNITFException(env, error.message);
 	}
 	return;
 }
@@ -665,12 +656,11 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeDataExtensionSegment
   (JNIEnv *env, jobject self, jint segmentNumber)
 {
 	nitf_Record *record = _GetObj(env, self);
-	jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 	nitf_Error error;
 	
 	if (!nitf_Record_removeDataExtensionSegment(record, (nitf_Uint32)segmentNumber, &error))
 	{
-		(*env)->ThrowNew(env, exClass, error.message);
+		_ThrowNITFException(env, error.message);
 	}
 	return;
 }
@@ -684,12 +674,11 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeReservedExtensionSegment
   (JNIEnv *env, jobject self, jint segmentNumber)
 {
 	nitf_Record *record = _GetObj(env, self);
-	jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 	nitf_Error error;
 	
 	if (!nitf_Record_removeReservedExtensionSegment(record, (nitf_Uint32)segmentNumber, &error))
 	{
-		(*env)->ThrowNew(env, exClass, error.message);
+		_ThrowNITFException(env, error.message);
 	}
 	return;
 }
@@ -698,13 +687,12 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveImageSegment
   (JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
 {
     nitf_Record *record = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     
     if (!nitf_Record_moveImageSegment(record,
             (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return;
 }
@@ -713,13 +701,12 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveGraphicSegment
 (JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
 {
     nitf_Record *record = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     if (!nitf_Record_moveGraphicSegment(record,
                     (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return;
 }
@@ -728,13 +715,12 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveTextSegment
 (JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
 {
     nitf_Record *record = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     if (!nitf_Record_moveTextSegment(record,
                     (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return;
 }
@@ -743,13 +729,12 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveLabelSegment
 (JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
 {
     nitf_Record *record = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     if (!nitf_Record_moveLabelSegment(record,
                     (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return;
 }
@@ -758,13 +743,12 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveDataExtensionSegment
 (JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
 {
     nitf_Record *record = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     if (!nitf_Record_moveDataExtensionSegment(record,
                     (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return;
 }
@@ -773,13 +757,12 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveReservedExtensionSegment
 (JNIEnv *env, jobject self, jint oldIndex, jint newIndex)
 {
     nitf_Record *record = _GetObj(env, self);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     if (!nitf_Record_moveReservedExtensionSegment(record,
                     (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return;
 }

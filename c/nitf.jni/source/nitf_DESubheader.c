@@ -158,6 +158,10 @@ JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getSubheaderFields
         tre = (*env)->NewObject(env,
                                 treClass,
                                 methodID, (jlong) header->subheaderFields);
+        
+        /* tell Java not to manage it */
+        methodID = (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
+        (*env)->CallVoidMethod(env, tre, methodID, JNI_FALSE);
     }
     return tre;
 }

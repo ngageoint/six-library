@@ -48,8 +48,7 @@ JNIEXPORT void JNICALL Java_nitf_IOHandle_read
     }
     else
     {
-        jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
 }
 
@@ -68,7 +67,6 @@ JNIEXPORT jlong JNICALL Java_nitf_IOHandle_createHandle
     nitf_Error error;
     jint accessInt = 0;
     jint createInt = 0;
-    jclass exClass;
 
     const char *fName = (*env)->GetStringUTFChars(env, fileName, 0);
 
@@ -104,8 +102,7 @@ JNIEXPORT jlong JNICALL Java_nitf_IOHandle_createHandle
     {
         if (error.level)
         {
-            exClass = (*env)->FindClass(env, "nitf/NITFException");
-            (*env)->ThrowNew(env, exClass, error.message);
+            _ThrowNITFException(env, error.message);
         }
         return -1;
     }
@@ -125,7 +122,6 @@ JNIEXPORT void JNICALL Java_nitf_IOHandle_write
     jmethodID methodID =
         (*env)->GetMethodID(env, thisClass, "getIOHandle", "()J");
     jlong ioHandle = (*env)->CallLongMethod(env, this, methodID);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jint success;
     jbyte *byteBuf = (*env)->GetByteArrayElements(env, buf, 0);
@@ -136,7 +132,7 @@ JNIEXPORT void JNICALL Java_nitf_IOHandle_write
     /* Check for errors */
     if (!NITF_IO_SUCCESS(success))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
 }
 
@@ -153,7 +149,6 @@ JNIEXPORT jlong JNICALL Java_nitf_IOHandle_seek
     jmethodID methodID =
         (*env)->GetMethodID(env, thisClass, "getIOHandle", "()J");
     jlong ioHandle = (*env)->CallLongMethod(env, this, methodID);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jint seekInt;
     jlong seek;
@@ -180,7 +175,7 @@ JNIEXPORT jlong JNICALL Java_nitf_IOHandle_seek
     /* check for error */
     if (!NITF_IO_SUCCESS(seek))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
 
     return seek;
@@ -198,14 +193,13 @@ JNIEXPORT jlong JNICALL Java_nitf_IOHandle_tell(JNIEnv * env, jobject this)
     jmethodID methodID =
         (*env)->GetMethodID(env, thisClass, "getIOHandle", "()J");
     jlong ioHandle = (*env)->CallLongMethod(env, this, methodID);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     jlong tell = nitf_IOHandle_tell(ioHandle, &error);
 
     if (tell == -1)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return tell;
 }
@@ -223,14 +217,13 @@ JNIEXPORT jlong JNICALL Java_nitf_IOHandle_getSize
     jmethodID methodID =
         (*env)->GetMethodID(env, thisClass, "getIOHandle", "()J");
     jlong ioHandle = (*env)->CallLongMethod(env, this, methodID);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
 
     jlong size = nitf_IOHandle_getSize(ioHandle, &error);
 
     if (size == -1)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
     }
     return size;
 }
@@ -247,7 +240,6 @@ JNIEXPORT void JNICALL Java_nitf_IOHandle_close(JNIEnv * env, jobject this)
     jmethodID methodID =
         (*env)->GetMethodID(env, thisClass, "getIOHandle", "()J");
     jlong ioHandle = (*env)->CallLongMethod(env, this, methodID);
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_IOHandle_close(ioHandle);
     ioHandle = NULL;
 

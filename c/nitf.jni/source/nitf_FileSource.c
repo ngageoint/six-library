@@ -34,7 +34,6 @@ JNIEXPORT void JNICALL Java_nitf_FileSource_construct
     (JNIEnv * env, jobject self, jobject handle, jlong start,
      jint numBytesPerPixel, jint pixelSkip)
 {
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
     nitf_Error error;
     jmethodID methodID;
@@ -58,7 +57,7 @@ JNIEXPORT void JNICALL Java_nitf_FileSource_construct
             numBytesPerPixel, pixelSkip, &error);
     if (!fileSource)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return;
     }
 
@@ -83,18 +82,17 @@ JNIEXPORT void JNICALL Java_nitf_FileSource_read
     nitf_BandSource *source = _GetObj(env, self);
     char *byteBuf;
     nitf_Error error;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     byteBuf = (char*)(*env)->GetByteArrayElements(env, buf, NULL);
     if (!byteBuf)
     {
-        (*env)->ThrowNew(env, exClass, "ERROR getting data from array");
+        _ThrowNITFException(env, "ERROR getting data from array");
         return;
     }
 
     if (!source->iface->read(source->data, (char *) byteBuf, size, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return;
     }
 

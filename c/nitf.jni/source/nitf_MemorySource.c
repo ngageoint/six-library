@@ -34,7 +34,6 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
     (JNIEnv * env, jobject self, jbyteArray data, jint size, jint start,
      jint numBytesPerPixel, jint pixelSkip)
 {
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     char *buf;
     nitf_BandSource *memorySource;
@@ -45,7 +44,7 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
 
     if (!data)
     {
-        (*env)->ThrowNew(env, exClass, "ERROR, data array is null");
+        _ThrowNITFException(env, "ERROR, data array is null");
         return;
     }
 
@@ -53,7 +52,7 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
     buf = (char *) (*env)->GetByteArrayElements(env, data, NULL);
     if (!buf)
     {
-        (*env)->ThrowNew(env, exClass, "ERROR getting data from array");
+        _ThrowNITFException(env, "ERROR getting data from array");
         return;
     }
 
@@ -62,7 +61,7 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
             numBytesPerPixel, pixelSkip, &error);
     if (!memorySource)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return;
     }
 
@@ -87,18 +86,17 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_read
     nitf_BandSource *source = _GetObj(env, self);
     jbyte *byteBuf;
     nitf_Error error;
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
 
     byteBuf = (*env)->GetByteArrayElements(env, buf, NULL);
     if (!byteBuf)
     {
-        (*env)->ThrowNew(env, exClass, "ERROR getting data from array");
+        _ThrowNITFException(env, "ERROR getting data from array");
         return;
     }
 
     if (!source->iface->read(source->data, (char *) byteBuf, size, &error))
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return;
     }
 

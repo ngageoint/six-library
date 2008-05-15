@@ -34,7 +34,6 @@ NITF_JNI_DECLARE_OBJ(nitf_DownSampler)
 JNIEXPORT void JNICALL Java_nitf_SumSq2BandDownSampler_construct
   (JNIEnv *env, jobject self, jint rowSkip, jint colSkip)
 {
-	jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jmethodID methodID;
     nitf_DownSampler *downSampler;
@@ -52,7 +51,7 @@ JNIEXPORT void JNICALL Java_nitf_SumSq2BandDownSampler_construct
         nitf_SumSq2DownSample_construct(rowSkip, colSkip, &error);
     if (!downSampler)
     {
-        (*env)->ThrowNew(env, exClass, error.message);
+        _ThrowNITFException(env, error.message);
         return;
     }
 

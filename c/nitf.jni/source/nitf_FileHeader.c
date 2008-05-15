@@ -398,7 +398,6 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getImageInfo
     nitf_FileHeader *header = _GetObj(env, self);
 
     jclass infoClass = (*env)->FindClass(env, "nitf/ComponentInfo");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jobjectArray info;
     jobject element;
@@ -420,7 +419,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getImageInfo
     return info;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -436,7 +435,6 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getGraphicInfo
 
     nitf_FileHeader *header = _GetObj(env, self);
     jclass infoClass = (*env)->FindClass(env, "nitf/ComponentInfo");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jobjectArray info;
     jobject element;
@@ -458,7 +456,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getGraphicInfo
     return info;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -474,7 +472,6 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getLabelInfo
 
     nitf_FileHeader *header = _GetObj(env, self);
     jclass infoClass = (*env)->FindClass(env, "nitf/ComponentInfo");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jobjectArray info;
     jobject element;
@@ -496,7 +493,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getLabelInfo
     return info;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -512,7 +509,6 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getTextInfo
 
     nitf_FileHeader *header = _GetObj(env, self);
     jclass infoClass = (*env)->FindClass(env, "nitf/ComponentInfo");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jobjectArray info;
     jobject element;
@@ -532,7 +528,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getTextInfo
     return info;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -548,7 +544,6 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getDataExtensionInfo
 
     nitf_FileHeader *header = _GetObj(env, self);
     jclass infoClass = (*env)->FindClass(env, "nitf/ComponentInfo");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jobjectArray info;
     jobject element;
@@ -570,7 +565,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getDataExtensionInfo
     return info;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -587,7 +582,6 @@ JNIEXPORT jobjectArray JNICALL
 
     nitf_FileHeader *header = _GetObj(env, self);
     jclass infoClass = (*env)->FindClass(env, "nitf/ComponentInfo");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     nitf_Error error;
     jobjectArray info;
     jobject element;
@@ -610,7 +604,7 @@ JNIEXPORT jobjectArray JNICALL
     return info;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -625,7 +619,6 @@ JNIEXPORT jobject JNICALL Java_nitf_FileHeader_getUserDefinedSection
 {
     nitf_FileHeader *header = _GetObj(env, self);
     jclass extensionsClass = (*env)->FindClass(env, "nitf/Extensions");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jmethodID methodID =
         (*env)->GetMethodID(env, extensionsClass, "<init>", "(J)V");
     nitf_Error error;
@@ -646,7 +639,7 @@ JNIEXPORT jobject JNICALL Java_nitf_FileHeader_getUserDefinedSection
     return extensions;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
@@ -661,7 +654,6 @@ JNIEXPORT jobject JNICALL Java_nitf_FileHeader_getExtendedSection
 {
     nitf_FileHeader *header = _GetObj(env, self);
     jclass extensionsClass = (*env)->FindClass(env, "nitf/Extensions");
-    jclass exClass = (*env)->FindClass(env, "nitf/NITFException");
     jmethodID methodID =
         (*env)->GetMethodID(env, extensionsClass, "<init>", "(J)V");
     nitf_Error error;
@@ -682,7 +674,7 @@ JNIEXPORT jobject JNICALL Java_nitf_FileHeader_getExtendedSection
     return extensions;
 
   CATCH_ERROR:
-    (*env)->ThrowNew(env, exClass, error.message);
+    _ThrowNITFException(env, error.message);
     return NULL;
 }
 
