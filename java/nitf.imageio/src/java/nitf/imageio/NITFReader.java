@@ -22,7 +22,6 @@
 
 package nitf.imageio;
 
-
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.color.ColorSpace;
@@ -753,8 +752,6 @@ public class NITFReader extends ImageReader
     {
         if (handle != null)
             handle.close();
-        if (record != null)
-            record.destruct();
     }
 
 }
