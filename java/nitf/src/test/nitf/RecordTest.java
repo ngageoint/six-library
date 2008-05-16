@@ -46,4 +46,25 @@ public class RecordTest extends TestCase
         }
     }
 
+    public void testImageComments()
+    {
+        try
+        {
+            Record record = new Record();
+            ImageSegment imageSegment = record.newImageSegment();
+            ImageSubheader subheader = imageSegment.getSubheader();
+            assertTrue(subheader.insertImageComment(null, 0));
+            assertTrue(subheader.insertImageComment("2nd comment", 1));
+
+            Field[] comments = subheader.getImageComments();
+            assertEquals(2, comments.length);
+            log.info(comments[0]);
+            log.info(comments[1]);
+        }
+        catch (NITFException e)
+        {
+            fail(ExceptionUtils.getStackTrace(e));
+        }
+    }
+
 }
