@@ -655,7 +655,7 @@ class ImageSubheader(Header):
     
     def insertComment(self, comment, index=-1):
         """ Inserts a comment. By default, adds it to the end """
-        return nitropy.nitf_ImageSubheader_insertImageComment(self.ref, comment, len(comment), index, self.error) and True
+        return nitropy.nitf_ImageSubheader_insertImageComment(self.ref, comment, index, self.error) and True
     
     def removeComment(self, index):
         """ Removes the comment at the specified index. If index is out of bounds, nothing is done """
@@ -872,33 +872,33 @@ class TRE:
     def __str__(self):
         return '%s(%s)' % (self.getTag(), self.getLength())
     
-    def __iter__(self):
-        class TRECursor:
-            def __init__(self, tre):
-                self.tre = tre
-                self.ref = nitropy.nitf_TRE_begin(tre)
-                self.status = True
-                self.error = Error()
-            
-            def __del__(self):
-                if self.ref: nitropy.nitf_TRE_cleanup(self.ref)
-            
-            def next(self):
-                """ Returns a tuple (fieldName, Field) """
-                if nitropy.nitf_TRE_isDone(self.ref) != 1 and self.status:
-                    if nitropy.nitf_TRE_iterate(self.ref, self.error):
-                        pair = nitropy.nitf_HashTable_find(self.tre.hash, self.ref.tag_str)
-                        if not pair:
-                            self.status = False
-                            #set an error message?
-                        else:
-                            field = nitropy.py_Pair_getFieldData(pair)
-                            return self.ref.tag_str, Field(field)
-                raise StopIteration
-        return TRECursor(self.ref)
-    
-    def __getitem__(self, field):
-        return dict((key, value) for key, value in self)[field]
+#    def __iter__(self):
+#        class TRECursor:
+#            def __init__(self, tre):
+#                self.tre = tre
+#                self.ref = nitropy.nitf_TRE_begin(tre)
+#                self.status = True
+#                self.error = Error()
+#            
+#            def __del__(self):
+#                if self.ref: nitropy.nitf_TRE_cleanup(self.ref)
+#            
+#            def next(self):
+#                """ Returns a tuple (fieldName, Field) """
+#                if nitropy.nitf_TRE_isDone(self.ref) != 1 and self.status:
+#                    if nitropy.nitf_TRE_iterate(self.ref, self.error):
+#                        pair = nitropy.nitf_HashTable_find(self.tre.hash, self.ref.tag_str)
+#                        if not pair:
+#                            self.status = False
+#                            #set an error message?
+#                        else:
+#                            field = nitropy.py_Pair_getFieldData(pair)
+#                            return self.ref.tag_str, Field(field)
+#                raise StopIteration
+#        return TRECursor(self.ref)
+#    
+#    def __getitem__(self, field):
+#        return dict((key, value) for key, value in self)[field]
     
 
 class Extensions:

@@ -1,6 +1,6 @@
 import sys, os, glob
 
-sys.path.append('../../build/scons')
+sys.path.append('../../build/utils')
 import scons_utils
 sys.path.pop()
 
@@ -12,28 +12,28 @@ sys.path.pop()
 LIB_NAME = '_nitropy'
 
 # Handle command-line options
-opts = scons_utils.add_default_options(Options())
+opts = scons_utils.addDefaultOptions(Options())
 opts.Add('swigify', 'run swig to generate the bindings', 0)
 env = Environment(options = opts, ENV = os.environ)
 Help(opts.GenerateHelpText(env))
 
 # Get the target name, and setup all the system-dependent flags and libs
-local_lib = scons_utils.do_configure(env)
+local_lib = scons_utils.doConfigure(env)
 print "Building for %s" % env['PLATFORM']
-sourceFiles = scons_utils.get_source_files('./src/main/swig', ext='.c', platform=env['PLATFORM'])
+sourceFiles = scons_utils.getSourceFiles('./src/swig', ext='.c', platform=env['PLATFORM'])
 
 depends = ['nitf-c']
 include_path = ['../../c/nitf/include']
 lib_path = ['../../c/nitf/%s' % local_lib]
 
-PYTHON_DIR = 'src/main/python/nitf/'
+PYTHON_DIR = 'src/python/nitf/'
 
 #SCons knows that the .i suffix means to use swig to generate the source, and then compiles it... sweet!
 if int(env.subst('$swigify')):
     #Here, we set the swig command-line args
     env['SWIGFLAGS'] = '-c -python %s -outdir %s' % \
             (' '.join(['-I%s' % p for p in include_path]), PYTHON_DIR)
-    sourceFiles = glob.glob('src/main/swig/nitro.i')
+    sourceFiles = glob.glob('src/swig/nitro.i')
 
 
 #TODO - might need to fix this...
@@ -58,7 +58,7 @@ env.Append(CPPPATH = include_path)
 env.Append(CCFLAGS = ['-DNITF_MODULE_EXPORTS', '-DSWIG_PYTHON_SILENT_MEMLEAK'])
 
 #make the lib(s)
-libs = scons_utils.make_libs(env, build_libs, local_lib, lib_path)
+libs = scons_utils.makeLibs(env, build_libs, local_lib, lib_path)
 pyExt = os.path.splitext(str(libs[0][0]))[1]
 if 'win32' in env['PLATFORM']:
     pyExt = '.pyd'
