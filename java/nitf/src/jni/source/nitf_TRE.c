@@ -178,7 +178,6 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_find
     }
     else
     {
-        nitf_ListIterator iter, end;
         jclass vectorClass, fieldClass, fieldPairClass;
         jmethodID vectorMethodID, fieldInitMethod, fieldPairInitMethod;
         jfieldID nameFieldID, fieldFieldID;
@@ -213,11 +212,9 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_find
                         "(Ljava/lang/Object;)Z");
         
         /* iterate over the list and add to the vector */
-        iter = nitf_List_begin(list);
-        end = nitf_List_end(list);
-        while (nitf_ListIterator_notEqualTo(&iter, &end))
+        while (!nitf_List_isEmpty(list))
         {
-            nitf_Pair* pair = (nitf_Pair*) nitf_ListIterator_get(&iter);
+            nitf_Pair* pair = (nitf_Pair*) nitf_List_popFront(list);
             jField = (*env)->NewObject(env,
                     fieldClass, fieldInitMethod, (jlong) pair->data);
             jFieldName = (*env)->NewStringUTF(env, pair->key);
@@ -229,10 +226,9 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_find
             
             /* add to the Vector */
             (*env)->CallBooleanMethod(env, vector, vectorMethodID, jFieldPair);
-            nitf_ListIterator_increment(&iter);
         }
         
-        /* destroy the list since we are done with it */
+        /* destroy the list since we are done with it - should be empty */
         nitf_List_destruct(&list);
         
         return vector;
