@@ -28,9 +28,9 @@ MAINTAINER = tzellman@users.sourceforge.net
 LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
 EXTLIBS = -lnitf-c
 EXTINCLUDEPATH = -I@top_srcdir@/include \
-                 -I@top_srcdir@/../nitf/include
+                 -I@top_srcdir@/../../c/nitf/include
 EXTLIBPATH =     -L@top_srcdir@/lib/@target@ \
-                 -L@top_srcdir@/../nitf/lib/@target@
+                 -L@top_srcdir@/../../c/nitf/lib/@target@
 CFGDEFS = @DEFS@
 
 SOURCES = nitf_BandInfo.c \
