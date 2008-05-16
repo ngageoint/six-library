@@ -193,20 +193,6 @@ NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * tre, nitf_Error * error);
  */
 NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre);
 
-/*!
- *  Take in the description and parse the TRE into cooked
- *  hash data
- *  NOTE: The existing hash is emptied first to avoid an unstable TRE
- *  \param  tre      The TRE
- *  \param  desc_ptr The TRE description
- *  \param  bufptr   The buffer
- *  \param  error    The error
- *  \return One on success, zero on failure
- */
-NITFAPI(int) nitf_TRE_parse(nitf_TRE * tre,
-                            char *bufptr, nitf_Error * error);
-
-
 
 /*!
  * Returns 1 if the given tag exists in the TRE
