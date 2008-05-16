@@ -1,6 +1,6 @@
 import sys, os, glob
 
-sys.path.append('../../build/scons')
+sys.path.append('../../build/utils')
 import scons_utils
 sys.path.pop()
 
@@ -12,16 +12,16 @@ sys.path.pop()
 LIB_NAME = 'nitf-c'
 
 # Handle command-line options
-opts = scons_utils.add_default_options(Options())
+opts = scons_utils.addDefaultOptions(Options())
 opts.Add('lib_only', 'only compile the lib', 0)
 opts.Add('no_plugins', 'don\'t compile the plug-ins', 0)
 env = Environment(options = opts, ENV = os.environ)
 Help(opts.GenerateHelpText(env))
 
 # Get the target name, and setup all the system-dependent flags and libs
-local_lib = scons_utils.do_configure(env)
+local_lib = scons_utils.doConfigure(env)
 print "Building %s for %s" % (LIB_NAME, env['PLATFORM'])
-sourceFiles = scons_utils.get_source_files('./source', ext='.c', platform=env['PLATFORM'])
+sourceFiles = scons_utils.getSourceFiles('./source', ext='.c', platform=env['PLATFORM'])
 
 build_libs = [{'source':sourceFiles, 'lib':'%s' % LIB_NAME}]
 include_path = ['include']
@@ -29,7 +29,7 @@ env.Append(CPPPATH = include_path)
 env.Append(CCFLAGS = ['-DNITF_MODULE_EXPORTS'])
 
 #make the lib(s)
-libs = scons_utils.make_libs(env, build_libs, local_lib, [])
+libs = scons_utils.makeLibs(env, build_libs, local_lib, [])
 
 #see if we only want to build the library
 if not int(env.subst('$lib_only')):

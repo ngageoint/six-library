@@ -1,0 +1,47 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+import sys
+sys.path.append('../../build/utils')
+import build_utils
+sys.path.pop()
+
+import Utils, Params
+
+# the following two variables are used by the target "waf dist"
+VERSION='0.2-dev'
+APPNAME='nitf'
+
+srcdir = '.'
+blddir = 'build'
+
+def set_options(opt):
+    pass
+
+
+def configure(conf):
+    vars = build_utils.configure()
+    conf.env['APPNAME'] = APPNAME
+    conf.env['VERSION'] = VERSION
+    
+    conf.env['CCFLAGS_%s' % APPNAME] = Utils.to_list(conf.env["CFLAGS"]) + vars['FLAGS']
+    conf.env['CCDEFINES_%s' % APPNAME] = Utils.to_list(conf.env["CDEFINES"]) + vars['DEFINES']
+    conf.env['LIB_%s' % APPNAME] = Utils.to_list(conf.env["LIB"]) + vars['LINK_LIBS']
+    conf.env['LINKFLAGS_%s' % APPNAME] = vars['LINK_FLAGS']
+    
+    platform = vars['PLATFORM']
+    if platform == 'win32':
+        conf.check_tool('msvc')
+        conf.env['SOURCE_FILTER'] = build_utils.UNIX_FILTER
+    elif platform.startswith('sparc-sun-'):
+        conf.check_tool('gcc')
+        conf.env['SOURCE_FILTER'] = build_utils.WIN32_FILTER
+    elif platform.startswith('i686-pc'):
+        conf.check_tool('gcc')
+        conf.env['SOURCE_FILTER'] = build_utils.WIN32_FILTER
+    else:
+        Params.fatal('ERROR -- Unsupported platform: \'%s\'' % platform)
+    
+
+def build(bld):
+    bld.add_subdirs('source')
