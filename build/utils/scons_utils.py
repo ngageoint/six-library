@@ -6,17 +6,17 @@ def addDefaultOptions(opts):
     """ Just returns some basic re-usable options """
     from SCons.Options import PathOption
     
-    opts.Add('debug', 'Enable debugging', 0)
-    opts.Add('optz', 'Set optimizations', 0)
-    opts.Add('warnings', 'Enable warnings', 0)
-    opts.Add('prefix', 'where to install the files', '0')
-    opts.Add('defines', '-D compiler flags', 0)
-    opts.Add('include_paths', 'extra include paths', 0)
-    opts.Add('lib_paths', 'extra lib paths', 0)
-    opts.Add('libs', 'extra libs', 0)
-    opts.Add('threading', 'Enable threading', 1)
-    opts.Add('verbose', 'Turn on compiler verbose', 1)
-    opts.Add('enable64', 'Make a 64-bit build', 0)
+    opts.Add('debug', 'Enable debugging', False)
+    opts.Add('optz', 'Set optimizations', True)
+    opts.Add('warnings', 'Enable warnings', False)
+    opts.Add('prefix', 'where to install the files', None)
+    opts.Add('defines', '-D compiler flags', None)
+    opts.Add('includes', 'extra include paths, separated by ;', None)
+    opts.Add('libpaths', 'extra lib paths, separated by ;', None)
+    opts.Add('libs', 'extra libs', None)
+    opts.Add('threading', 'Enable threading', True)
+    opts.Add('verbose', 'Turn on compiler verbose', True)
+    opts.Add('enable64', 'Make a 64-bit build', False)
     return opts
 
 
@@ -35,32 +35,42 @@ def getSourceFiles(dirname, ext='.c', platform=None):
     return source
     
 
+def toBoolean(val):
+    if val is not None:
+        try:
+            iVal = int(val)
+            return iVal != 0
+        except:{}
+        return val.lower().strip() == 'true'
+    return False
+
+
 def doConfigure(env, dirname='lib'):
-    opt_warnings = env.subst('$warnings') and int(env.subst('$warnings'))
-    opt_debug = env.subst('$debug') and int(env.subst('$debug'))
-    opt_64bit = env.subst('$enable64') and int(env.subst('$enable64'))
-    opt_threading = env.subst('$threading') and int(env.subst('$threading'))
-    opt_verbose = env.subst('$verbose') and int(env.subst('$verbose'))
+    opt_debug = toBoolean(env.subst('$debug'))
+    opt_warnings = toBoolean(env.subst('$warnings'))
+    opt_64bit = toBoolean(env.subst('$enable64'))
+    opt_threading = toBoolean(env.subst('$threading'))
+    opt_verbose = toBoolean(env.subst('$verbose'))
     
     defines = None
     if env.subst('$defines') and env.subst('$defines') != '0':
         defstr = env.subst('$defines')
         defines = defstr.split(" ")
     
-    includes = None
-    if env.subst('$include_paths') and env.subst('$include_paths') != '0':
-        includeStr = env.subst('$include_paths')
-        includes = includeStr.split(";")
+    includes = []
+    if env.subst('$includes') and env.subst('$include_paths') != '0':
+        for s in env.subst('$includes').split(';'):
+            includes.append(s.startswith('-I') and s or '-I%s' % s)
     
-    libpaths = None
-    if env.subst('$lib_paths') and env.subst('$lib_paths') != '0':
-        libStr = env.subst('$lib_paths')
-        libpaths = libStr.split(";")
+    libpaths = []
+    if env.subst('$libpaths') and env.subst('$lib_paths') != '0':
+        for s in env.subst('$libpaths').split(';'):
+            libpaths.append(s.startswith('-L') and s or '-L%s' % s)
     
-    libs = None
+    libs = []
     if env.subst('$libs') and env.subst('$libs') != '0':
-        libStr = env.subst('$libs')
-        libs = libStr.split(" ")
+        for s in env.subst('$libs').split(' '):
+            libs.append(s.startswith('-l') and s or '-l%s' % s)
     
     #configure
     vars = configure(target=dirname, defines=defines, includes=includes,
