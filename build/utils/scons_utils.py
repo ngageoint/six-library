@@ -17,6 +17,7 @@ def addDefaultOptions(opts):
     opts.Add('threading', 'Enable threading', True)
     opts.Add('verbose', 'Turn on compiler verbose', True)
     opts.Add('enable64', 'Make a 64-bit build', False)
+    opts.Add('dynamic', 'Build a DLL', False)
     return opts
 
 
@@ -51,6 +52,7 @@ def doConfigure(env, dirname='lib'):
     opt_64bit = toBoolean(env.subst('$enable64'))
     opt_threading = toBoolean(env.subst('$threading'))
     opt_verbose = toBoolean(env.subst('$verbose'))
+    opt_dynamic = toBoolean(env.subst('$dynamic'))
     
     defines = None
     if env.subst('$defines') and env.subst('$defines') != '0':
@@ -80,9 +82,10 @@ def doConfigure(env, dirname='lib'):
     
     #setup the standard environment variables
     env.Append(CPPPATH = vars['INCLUDES'])
-    env.Append(CCFLAGS = vars['FLAGS'] + ['-D%s' % d for d in vars['DEFINES']])
+    env.Append(CCFLAGS = vars['FLAGS'] + vars['DEFINES'])
     env.Append(LIBS = vars['LINK_LIBS'])
     env.Append(LIBPATH = vars['LINK_LIBPATH'])
+    env.Append(DYNAMIC = opt_dynamic)
     env['PLATFORM'] = vars['PLATFORM']
     
     return vars['BUILD_DIR']

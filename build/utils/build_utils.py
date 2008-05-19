@@ -39,7 +39,7 @@ def configure(target='lib', compiler=None, platform=None,
     if not platform:
         platform = getPlatform()
     
-    _thread_defs="_REENTRANT"
+    _thread_defs="-D_REENTRANT"
     _thread_libs="pthread"
     _cxx_flags=""
     _64_flags=""
@@ -62,7 +62,7 @@ def configure(target='lib', compiler=None, platform=None,
         _optz_fast="-O2"
         _optz_fastest="-O2"
         _optz_flags = _optz_med
-        _thread_defs="_REENTRANT"
+        _thread_defs="-D_REENTRANT"
         _thread_libs=""
         
         _cxx_defs="/DWIN32 /UUNICODE /U_UNICODE"
@@ -94,10 +94,10 @@ def configure(target='lib', compiler=None, platform=None,
         _optz_fast="-O2"
         _optz_fastest="-O3"
         _optz_flags = _optz_med
-        _thread_defs="_REENTRANT __POSIX"
+        _thread_defs="-D_REENTRANT -D__POSIX"
         _thread_libs="pthread"
         
-        _cxx_defs="_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE"
+        _cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
         _cxx_flags=""
         _cxx_optz_flags=_optz_flags
         _link_libs="dl nsl"
@@ -116,10 +116,10 @@ def configure(target='lib', compiler=None, platform=None,
         _optz_fast="-O2"
         _optz_fastest="-O3"
         _optz_flags = _optz_med
-        _thread_defs="_REENTRANT __POSIX"
+        _thread_defs="-D_REENTRANT -D__POSIX"
         _thread_libs="pthread"
 
-        _cxx_defs="_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE"
+        _cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
         _cxx_flags=""
         _cxx_optz_flags=_optz_flags
         _link_libs="dl"
@@ -138,10 +138,10 @@ def configure(target='lib', compiler=None, platform=None,
         _optz_fast="-O2"
         _optz_fastest="-O3"
         _optz_flags=_optz_med
-        _thread_defs="_REENTRANT"
+        _thread_defs="-D_REENTRANT"
         _thread_libs=""
         
-        _cxx_defs="_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE"
+        _cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
         _cxx_flags="-LANG:std -LANG:ansi-for-init-scope=ON -ptused"
         _cxx_optz_flags=_optz_flags
         _link_libs="m"
@@ -162,7 +162,7 @@ def configure(target='lib', compiler=None, platform=None,
         _thread_defs="-mt"
         _thread_libs="thread"
         
-        _cxx_defs="_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE"
+        _cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
         _cxx_flags=" -instances=static"
         _cxx_optz_flags=_optz_flags
         _link_libs="dl nsl socket"
