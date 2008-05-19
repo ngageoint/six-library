@@ -40,6 +40,7 @@ def add_default_options(opts):
     opts.Add('threading', 'Enable threading', 1)
     opts.Add('verbose', 'Turn on compiler verbose', 1)
     opts.Add('enable64', 'Make a 64-bit build', 0)
+    opts.Add('dynamic', 'Make a DLL', 0)
     return opts
     
 
@@ -83,6 +84,7 @@ def do_configure(env, dirname='lib', append_gnu_if_gnu=False):
     opt_64bit = env.subst('$enable64') and int(env.subst('$enable64'))
     opt_threading = env.subst('$threading') and int(env.subst('$threading'))
     opt_verbose = env.subst('$verbose') and int(env.subst('$verbose'))
+    opt_dynamic = env.subst('$dynamic') and int(env.subst('$dynamic'))
     
     
     ########################################
@@ -268,6 +270,7 @@ def do_configure(env, dirname='lib', append_gnu_if_gnu=False):
     env['link_libs'] = link_libs
     env['link_libpath'] = link_libpath
     env['local_lib'] = local_lib
+    env['dynamic'] = opt_dynamic
     
     #setup the standard environment variables
     env.Append(CPPPATH = cxx_includes)
