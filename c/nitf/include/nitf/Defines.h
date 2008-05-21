@@ -117,7 +117,7 @@
        if (!gHandler) return NULL; return ident; \
     } \
     NITFAPI(void) _Tre##_cleanup(void){} \
-    NITFAPI(nitf_TREHandler*) JITCID_handler(nitf_Error* error) { \
+    NITFAPI(nitf_TREHandler*) _Tre##_handler(nitf_Error* error) { \
         return gHandler; \
     }
 

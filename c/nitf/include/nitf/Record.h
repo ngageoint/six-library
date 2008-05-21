@@ -368,6 +368,49 @@ NITFAPI(NITF_BOOL) nitf_Record_moveReservedExtensionSegment
     nitf_Error * error
 );
 
+/**
+ * nitf_Record_mergeTREs merges TREs between all segments and the associate
+ * TRE_OVERFLOW segments. After this call all TRE_OVERFLOW (DE) segments are
+ * removed and their TRE's have been added to the TRE list of the corresponding
+ * extension in the corresponding section.
+ *
+ *  \param The record or operate on
+ *  \param error An error to populate if a problem occurs
+ *  \return TRUE on success, false on failure
+ * 
+*/
+NITFAPI(NITF_BOOL) nitf_Record_mergeTREs
+(
+    nitf_Record * record,
+    nitf_Error * error
+);
+
+/**
+ * nitf_Record_unmergeTREs scans all segments and creates TRE_OVERFLOW (DE)
+ * segments for each segment that requires one. When an overflow segment is
+ * created,TREs are transfered from the original segment to the overflow. 
+ * The TRE order in the combined lists, original and overflows replicates the
+ * order of the orginal TRE list. As many TREs as will fit are placed in the
+ * original segment, but the orginal list is not reordered.
+ *
+ * This function will be automatically be called by the writer, but may be
+ * called by the user. Once a segment has been unmerged to create an overflow
+ * segment, subsequent unmerges will do nothing and additional TREs are added
+ * to the overflow segment. Also after unmerging, the user must be cognicant
+ * of the presence of the overflow segment when preocessing TREs for the
+ * original segment. An unmerged segment can be remerged.
+ *
+ *  \param The record or operate on
+ *  \param error An error to populate if a problem occurs
+ *  \return TRUE on success, false on failure
+ * 
+*/
+NITFAPI(NITF_BOOL) nitf_Record_unmergeTREs
+(
+    nitf_Record * record,
+    nitf_Error * error
+);
+
 
 NITF_CXX_ENDGUARD
 

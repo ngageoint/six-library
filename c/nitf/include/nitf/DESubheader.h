@@ -55,8 +55,10 @@ typedef struct _nitf_DESubheader
     nitf_Field *subheaderFieldsLength;
     nitf_TRE *subheaderFields;
     nitf_Uint64 dataLength;
-    /*  This section (unfortunately), also has a userDefinedSection  */
-    nitf_Extensions *userDefinedSection;
+
+    /*  This section is used for overflow segments */
+
+    nitf_Extensions *overflowSection;
 }
 nitf_DESubheader;
 
