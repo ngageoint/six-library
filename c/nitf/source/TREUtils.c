@@ -58,7 +58,6 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE * tre,
              * it is OK for this one to be in the hash
              */
             /* construct the field */
-			printf("Cursor tag [%s]\n", cursor.tag_str);
             field =
                 nitf_Field_construct(length, cursor.desc_ptr->data_type,
                                      error);

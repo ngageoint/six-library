@@ -545,7 +545,7 @@ NITFPRIV(NITF_BOOL) writeExtras(nitf_Writer * writer,
 
     /* TODO: figure out what we should do with the overflow...
      * for now, just set it to zero */
-    *dataOverflow = 0;
+/*  *dataOverflow = 0; */
 
     if (*dataLength != 0)
     {
@@ -791,6 +791,12 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
                         NITF_ERR_INVALID_PARAMETER);
         return NITF_FAILURE;
     }
+
+/*  Create overflow DE segments if needed */
+
+    if(!nitf_Record_unmergeTREs(record,error))
+        return NITF_FAILURE;
+
     if (!nitf_Field_get
             (record->header->numImages, &numImages, NITF_CONV_INT,
              NITF_INT32_SZ, error))
@@ -1574,9 +1580,44 @@ CATCH_ERROR:
 }
 
 NITFPRIV(NITF_BOOL) writeDE(nitf_SegmentWriter * segmentWriter,
-                            nitf_Error * error)
+        nitf_Writer* writer,nitf_DESubheader *subheader,nitf_Error *error)
 {
+    char desid[NITF_DESTAG_SZ+1];  /* DESID for overflow check */
 
+/*  Check for overflow segment */
+
+    if(!nitf_Field_get(subheader->NITF_DESTAG,(NITF_DATA *) desid,
+                                  NITF_CONV_STRING,NITF_DESTAG_SZ+1, error))
+    {
+      nitf_Error_init(error,
+          "Could not retrieve DE segment id",
+                              NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+      return(NITF_FAILURE);
+    }
+
+    nitf_Field_trimString(desid);
+    if(strcmp(desid,"TRE_OVERFLOW") == 0)  /* This is an overflow */
+    {
+      nitf_ExtensionsIterator iter;       /* TRE iterator */
+      nitf_ExtensionsIterator end;        /* End iterator */
+      nitf_TRE *tre = NULL;
+
+      iter = nitf_Extensions_begin(subheader->overflowSection);
+      end = nitf_Extensions_end(subheader->overflowSection);
+
+      while (nitf_ExtensionsIterator_notEqualTo(&iter, &end))
+      {
+        tre = (nitf_TRE *) nitf_ExtensionsIterator_get(&iter);
+
+        if(!writeExtension(writer,tre,error))
+          goto CATCH_ERROR;
+
+        nitf_ExtensionsIterator_increment(&iter);
+      }
+
+      return(NITF_SUCCESS);   
+    }
+ 
     if (!segmentWriter)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
@@ -1955,7 +1996,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
             deSubLens[i] = endSize - startSize;
             startSize = endSize;
             /* TODO - we need to check to make sure the imageWriter exists */
-            if (!writeDE(writer->dataExtensionWriters[i], error))
+            if (!writeDE(writer->dataExtensionWriters[i],writer,
+                                              segment->subheader,error))
             {
                 NITF_FREE(deSubLens);
                 NITF_FREE(deDataLens);
