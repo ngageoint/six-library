@@ -678,6 +678,11 @@ EGREP
 result
 pretool
 make_dsos
+CHECK_CFLAGS
+CHECK_LIBS
+cc_unit_test_flags
+link_unit_test_libs
+have_unit_tests
 cc_includes
 cc_flags
 cc_defs
@@ -1284,6 +1289,7 @@ Optional Features:
   --enable-optz			Turn on optimization at default level (default is on)
   --enable-verbose 		Turn on compiler verbose (default is on)
   --enable-threading 		Turn on threading
+  --enable-unit-tests       enable unit tests, using check
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1326,6 +1332,7 @@ The final library options are built from:
   --with-postlibs=LIBS		Link executable with LIBS
   --with-thread-layer=LAYER	Compile with LAYER
   --with-thread-home=HOME	Compile with HOME
+  --with-check=PATH       prefix where check is installed default=auto
 
 Some influential environment variables:
   CC          C compiler command
@@ -4617,6 +4624,16 @@ esac
 ar_flags="-crs"
 AR="ar"
 
+
+case "${CXX}" in
+     g++)
+        { echo "$as_me:$LINENO: result: gnu compiler libdir" >&5
+echo "${ECHO_T}gnu compiler libdir" >&6; }
+        lib_dir="gnu"
+     ;;
+esac
+
+
 case "${target}" in
    x86_64-*-linux-*|i686-pc-*)
         case "${CC}" in
@@ -4685,7 +4702,6 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
       esac
    ;;
 esac
-
 ###########################################################
 #  Archiver                                               #
 ###########################################################
@@ -4848,7 +4864,11 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
 	    def_link_thread_libs="-lpthread"
 
 	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-            cc_flags=""
+	    { echo "$as_me:$LINENO: result: setting up build for universal binaries..." >&5
+echo "${ECHO_T}setting up build for universal binaries..." >&6; }
+
+            cc_flags="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc  -arch i386"
+
 	    cc_optz_flags="${def_cc_optz_flags}"
         link_autolibs="-ldl"
 
@@ -5299,6 +5319,392 @@ echo "${ECHO_T}setting thread home... ${ok}" >&6; }
 fi
 
 
+
+
+
+
+have_check=no
+# Check whether --enable-unit-tests was given.
+if test "${enable_unit_tests+set}" = set; then
+  enableval=$enable_unit_tests; ok=$enable_unit_tests
+else
+  ok="yes"
+fi
+
+if test "${ok}" = "yes"
+then
+    if test "${ac_cv_header_check_h+set}" = set; then
+  { echo "$as_me:$LINENO: checking for check.h" >&5
+echo $ECHO_N "checking for check.h... $ECHO_C" >&6; }
+if test "${ac_cv_header_check_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_header_check_h" >&5
+echo "${ECHO_T}$ac_cv_header_check_h" >&6; }
+else
+  # Is the header compilable?
+{ echo "$as_me:$LINENO: checking check.h usability" >&5
+echo $ECHO_N "checking check.h usability... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <check.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_header_compiler=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6; }
+
+# Is the header present?
+{ echo "$as_me:$LINENO: checking check.h presence" >&5
+echo $ECHO_N "checking check.h presence... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <check.h>
+_ACEOF
+if { (ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null && {
+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       }; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+
+rm -f conftest.err conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6; }
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: check.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: check.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: check.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: check.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: check.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: check.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: check.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: check.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: check.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: check.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: check.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: check.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: check.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: check.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: check.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: check.h: in the future, the compiler will take precedence" >&2;}
+
+    ;;
+esac
+{ echo "$as_me:$LINENO: checking for check.h" >&5
+echo $ECHO_N "checking for check.h... $ECHO_C" >&6; }
+if test "${ac_cv_header_check_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_check_h=$ac_header_preproc
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_header_check_h" >&5
+echo "${ECHO_T}$ac_cv_header_check_h" >&6; }
+
+fi
+if test $ac_cv_header_check_h = yes; then
+  have_check=1
+else
+  have_check=0
+fi
+
+
+    if test "x${have_check}" = "x1"; then
+        { echo "$as_me:$LINENO: result: searching for check..." >&5
+echo "${ECHO_T}searching for check..." >&6; }
+
+
+
+# Check whether --with-check was given.
+if test "${with_check+set}" = set; then
+  withval=$with_check;
+fi
+
+
+  min_check_version=0.9.4
+
+  { echo "$as_me:$LINENO: checking for check - version >= $min_check_version" >&5
+echo $ECHO_N "checking for check - version >= $min_check_version... $ECHO_C" >&6; }
+
+  if test x$with_check = xno; then
+    { echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6; }
+    have_check=no
+  else
+    if test "x$with_check" != x; then
+      CHECK_CFLAGS="-I$with_check/include"
+      CHECK_LIBS="-L$with_check/lib -lcheck"
+    else
+      CHECK_CFLAGS=""
+      CHECK_LIBS="-lcheck"
+    fi
+
+    ac_save_CFLAGS="$CFLAGS"
+    ac_save_LIBS="$LIBS"
+
+    CFLAGS="$CFLAGS $CHECK_CFLAGS"
+    LIBS="$CHECK_LIBS $LIBS"
+
+    rm -f conf.check-test
+    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <check.h>
+
+int main ()
+{
+  int major, minor, micro;
+  char *tmp_version;
+
+  system ("touch conf.check-test");
+
+  /* HP/UX 9 (%@#!) writes to sscanf strings */
+  tmp_version = strdup("$min_check_version");
+  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
+     printf("%s, bad version string\n", "$min_check_version");
+     return 1;
+   }
+
+  if ((CHECK_MAJOR_VERSION != check_major_version) ||
+      (CHECK_MINOR_VERSION != check_minor_version) ||
+      (CHECK_MICRO_VERSION != check_micro_version))
+    {
+      printf("\n*** The check header file (version %d.%d.%d) does not match\n",
+         CHECK_MAJOR_VERSION, CHECK_MINOR_VERSION, CHECK_MICRO_VERSION);
+      printf("*** the check library (version %d.%d.%d).\n",
+         check_major_version, check_minor_version, check_micro_version);
+      return 1;
+    }
+
+  if ((check_major_version > major) ||
+      ((check_major_version == major) && (check_minor_version > minor)) ||
+      ((check_major_version == major) && (check_minor_version == minor) && (check_micro_version >= micro)))
+    {
+      return 0;
+    }
+  else
+    {
+      printf("\n*** An old version of check (%d.%d.%d) was found.\n",
+             check_major_version, check_minor_version, check_micro_version);
+      printf("*** You need a version of check being at least %d.%d.%d.\n", major, minor, micro);
+      printf("***\n");
+      printf("*** If you have already installed a sufficiently new version, this error\n");
+      printf("*** probably means that the wrong copy of the check library and header\n");
+      printf("*** file is being found. Rerun configure with the --with-check=PATH option\n");
+      printf("*** to specify the prefix where the correct version was installed.\n");
+    }
+
+  return 1;
+}
+
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  :
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	no_check=yes
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+    CFLAGS="$ac_save_CFLAGS"
+    LIBS="$ac_save_LIBS"
+
+    if test "x$no_check" = x ; then
+      { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+      have_check=yes
+    else
+      { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+      if test -f conf.check-test ; then
+        :
+      else
+        echo "*** Could not run check test program, checking why..."
+        CFLAGS="$CFLAGS $CHECK_CFLAGS"
+        LIBS="$CHECK_LIBS $LIBS"
+        cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <check.h>
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+   echo "*** The test program compiled, but did not run. This usually means"
+        echo "*** that the run-time linker is not finding check. You'll need to set your"
+        echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+        echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+        echo "*** is required on your system"
+    echo "***"
+        echo "*** If you have an old version installed, it is best to remove it, although"
+        echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	 echo "*** The test program failed to compile or link. See the file config.log for"
+        echo "*** the exact error that occured."
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+
+        CFLAGS="$ac_save_CFLAGS"
+        LIBS="$ac_save_LIBS"
+      fi
+
+      CHECK_CFLAGS=""
+      CHECK_LIBS=""
+
+      rm -f conf.check-test
+      have_check=no
+    fi
+
+
+
+
+    rm -f conf.check-test
+
+  fi
+
+
+    fi
+fi
+
+if test "${have_check}" = "yes"
+then
+     { echo "$as_me:$LINENO: result: enabling unit-tests..." >&5
+echo "${ECHO_T}enabling unit-tests..." >&6; }
+     cc_check_libs="${CHECK_LIBS}"
+     cc_check_flags="${CHECK_CFLAGS}"
+else
+    { echo "$as_me:$LINENO: result: disabling unit-tests..." >&5
+echo "${ECHO_T}disabling unit-tests..." >&6; }
+    cc_check_libs=""
+    cc_check_flags=""
+fi
+
+
+cc_unit_test_flags="${cc_check_flags}"
+link_unit_test_libs="${cc_check_libs}"
+have_unit_tests="${have_check}"
+
+
+
+
+
+
+
+
 #disable optz if we are debugging
 if test "${cc_debug_flags}" != ""
 then
@@ -5317,6 +5723,7 @@ fi
 
 link_autolibs="${link_thread_libs} ${link_autolibs}"
 link_libpath="${libpath} ${link_thread_libpath}"
+
 
 
 
@@ -5966,6 +6373,11 @@ EGREP!$EGREP$ac_delim
 result!$result$ac_delim
 pretool!$pretool$ac_delim
 make_dsos!$make_dsos$ac_delim
+CHECK_CFLAGS!$CHECK_CFLAGS$ac_delim
+CHECK_LIBS!$CHECK_LIBS$ac_delim
+cc_unit_test_flags!$cc_unit_test_flags$ac_delim
+link_unit_test_libs!$link_unit_test_libs$ac_delim
+have_unit_tests!$have_unit_tests$ac_delim
 cc_includes!$cc_includes$ac_delim
 cc_flags!$cc_flags$ac_delim
 cc_defs!$cc_defs$ac_delim
@@ -5984,7 +6396,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 81; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 86; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

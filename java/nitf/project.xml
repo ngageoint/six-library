@@ -9,11 +9,61 @@
     <groupId>nitro-nitf</groupId>
     <currentVersion>${version}</currentVersion>
 
+    <developers>
+        <developer>
+            <name>D. Pressel</name>
+            <id>gojira_1</id>
+            <email>gojira_1@users.sourceforge.net</email>
+        </developer>
+        <developer>
+            <name>Tom Zellman</name>
+            <id>tzellman</id>
+            <email>tzellman@users.sourceforge.net</email>
+        </developer>
+    </developers>
+
     <dependencies>
+        <dependency>
+            <id>commons-lang</id>
+            <version>2.0</version>
+            <url>http://jakarta.apache.org/commons/</url>
+        </dependency>
+
+        <dependency>
+            <id>commons-io</id>
+            <version>1.3.2</version>
+            <url>http://jakarta.apache.org/commons/</url>
+        </dependency>
+
+        <dependency>
+            <id>commons-cli</id>
+            <version>1.0-beta-2</version>
+            <url>http://jakarta.apache.org/commons/</url>
+        </dependency>
+
+        <dependency>
+            <id>commons-logging</id>
+            <version>1.1.1</version>
+            <url>http://jakarta.apache.org/commons/</url>
+        </dependency>
+
+        <dependency>
+            <id>junit</id>
+            <version>3.8.1</version>
+        </dependency>
+
+        <dependency>
+            <id>log4j</id>
+            <version>1.2.8</version>
+            <url>http://jakarta.apache.org/log4j/</url>
+        </dependency>
+
     </dependencies>
 
     <build>
-        <nagEmailAddress>tzellman@users.sourceforge.net</nagEmailAddress>
+        <nagEmailAddress>
+            tzellman@users.sourceforge.net
+        </nagEmailAddress>
         <sourceDirectory>${src.dir}</sourceDirectory>
         <unitTestSourceDirectory>${test.dir}</unitTestSourceDirectory>
 
@@ -21,9 +71,6 @@
             <includes>
                 <include>**/*Test*.java</include>
             </includes>
-            <excludes>
-                <exclude>Test*.java</exclude>
-            </excludes>
         </unitTest>
     </build>
 </project>

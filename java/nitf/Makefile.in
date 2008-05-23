@@ -1,0 +1,25 @@
+all: jni
+
+clean: jni_clean
+raw: jni_raw
+	rm -f Makefile
+	rm -f config.status
+	rm -rf install
+
+jni:
+	cd src/jni; make library
+
+jni_install:
+	cd src/jni; make install
+
+jni_clean:
+	cd src/jni; make clean
+
+jni_raw:
+	cd src/jni; make raw
+
+install: jni_install
+
+fresh: clean
+	make
+

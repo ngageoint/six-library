@@ -396,7 +396,7 @@ NITFAPI(nitf_TRE *) nitf_UserSegment_decodeUserHeader
 (
     nitf_Record *record,      /*!< Associated Record object */
     nitf_DESubheader *subhdr, /*!< Associated DES subheader */
-    NITF_DATA *buffer,        /*!< The header as raw data */
+    nitf_IOHandle ioHandle,        /*!< The header as raw data */
     nitf_Error *error         /*!< For error returns */
 );
 

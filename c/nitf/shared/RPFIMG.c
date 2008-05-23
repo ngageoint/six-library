@@ -21,35 +21,22 @@
  */
 
 
-#include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
-#include <nitf/Record.h>
+#include <import/nitf.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BINARY, 1, "location section length", "LOCLEN",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BINARY, 1, "component location table offset",
-     "CLTOFF", NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE,
-     NULL, NULL},
-    {NITF_BINARY, 1, "# of section location records",
-     "SECRECS", NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE,
-     NULL, NULL},
-    {NITF_BINARY, 1, "location record length", "RECLEN",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BINARY, 1, "component aggregate length", "AGGLEN",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BINARY, 1, "location section length", "LOCLEN" },
+    {NITF_BINARY, 1, "component location table offset", "CLTOFF" },
+    {NITF_BINARY, 1, "# of section location records", "SECRECS" },
+    {NITF_BINARY, 1, "location record length", "RECLEN" },
+    {NITF_BINARY, 1, "component aggregate length", "AGGLEN" },
     {NITF_LOOP, 0, NULL, "SECRECS"},
-    {NITF_BINARY, 1, "location ID code", "LOCID",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BINARY, 1, "location section length", "SECLEN",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BINARY, 1, "physical index", "PHYSIDX",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BINARY, 1, "location ID code", "LOCID" },
+    {NITF_BINARY, 1, "location section length", "SECLEN" },
+    {NITF_BINARY, 1, "physical index", "PHYSIDX" },
     {NITF_ENDLOOP, 0, NULL, NULL},
-    {NITF_BINARY, NITF_TRE_GOBBLE, "unknown", "UNKNOWN",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BINARY, NITF_TRE_GOBBLE, "unknown", "UNKNOWN" },
     {NITF_END, 0, NULL, NULL}
 };
 

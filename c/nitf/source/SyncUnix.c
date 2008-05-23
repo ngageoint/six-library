@@ -25,8 +25,7 @@
 
 NITF_CXX_GUARD
 
-#if defined(_REENTRANT)
-#   if !defined(WIN32) && !defined(__sgi)
+#if !defined(WIN32) && !defined(__sgi)
 
 NITFPROT(void) nitf_Mutex_lock(nitf_Mutex * m)
 {
@@ -58,22 +57,6 @@ NITFPROT(void) nitf_Mutex_delete(nitf_Mutex * m)
         nitf_Debug_flogf(stdout, "***Destroyed Mutex***\n");
     }
 }
-#   endif
-#else                           /* We are not re-entrant :( */
-NITFPROT(void) nitf_Mutex_lock(nitf_Mutex * m)
-{}
-
-
-NITFPROT(void) nitf_Mutex_unlock(nitf_Mutex * m)
-{}
-
-
-NITFPROT(void) nitf_Mutex_init(nitf_Mutex * m)
-{}
-
-
-NITFPROT(void) nitf_Mutex_delete(nitf_Mutex * m)
-{}
 #endif
 
 NITF_CXX_ENDGUARD

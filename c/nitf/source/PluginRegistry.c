@@ -153,49 +153,74 @@ NITFPRIV(int) insertPlugin(nitf_PluginRegistry * reg,
 
 NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
 {
-	const char *pluginEnvVar = NULL;
-	
+
     /*  Create the registry object  */
     nitf_PluginRegistry *reg =
         (nitf_PluginRegistry *) NITF_MALLOC(sizeof(nitf_PluginRegistry));
 
+    const char *pluginEnvVar;
     /*  If we have a memory problem, init our error struct and return  */
     if (!reg)
     {
         nitf_Error_init(error,
                         NITF_STRERROR(NITF_ERRNO),
                         NITF_CTXT, NITF_ERR_MEMORY);
-        goto CATCH_ERROR;
+        return NULL;
     }
-    
-    /* NULL-initialize members */
-    reg->treHandlers = NULL;
-    reg->compressionHandlers = NULL;
-    reg->decompressionHandlers = NULL;
-    reg->desHandlers = NULL;
-    
+
     /*  Construct our hash object  */
     reg->treHandlers = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
+    
+
+    /*  If we have a problem, get rid of this object and return  */
     if (!reg->treHandlers)
-    	goto CATCH_ERROR;
+    {
+        implicitDestruct(&reg);
+        return NULL;
+    }
+
+    /*nitf_HashTable_setPolicy(reg->treHandlers, NITF_DATA_RETAIN_OWNER);*/
 
     reg->compressionHandlers =
         nitf_HashTable_construct(NITF_COMPRESSION_HASH_SIZE, error);
+
+    /*  If we have a problem, get rid of this object and return  */
     if (!reg->compressionHandlers)
-    	goto CATCH_ERROR;
+    {
+        implicitDestruct(&reg);
+        return NULL;
+    }
+
+    /*nitf_HashTable_setPolicy(reg->compressionHandlers, NITF_DATA_RETAIN_OWNER);*/
 
     reg->decompressionHandlers =
         nitf_HashTable_construct(NITF_DECOMPRESSION_HASH_SIZE, error);
+
+    /*  If we have a problem, get rid of this object and return  */
     if (!reg->decompressionHandlers)
-    	goto CATCH_ERROR;
+    {
+        implicitDestruct(&reg);
+        return NULL;
+    }
+
+    /*nitf_HashTable_setPolicy(reg->decompressionHandlers, NITF_DATA_RETAIN_OWNER);
+*/
 
     reg->desHandlers = nitf_HashTable_construct(NITF_DES_HASH_SIZE, error);
+
+    /*  If we have a problem, get rid of this object and return  */
     if (!reg->desHandlers)
-    	goto CATCH_ERROR;
+    {
+        implicitDestruct(&reg);
+        return NULL;
+    }
+
+    /*nitf_HashTable_setPolicy(reg->desHandlers, NITF_DATA_RETAIN_OWNER);
+*/
 
     /*  Start with a clean slate  */
     memset(reg->path, 0, NITF_MAX_PATH);
-        
+
     /*  Take the environment variable, or...  */
     pluginEnvVar = getenv(NITF_PLUGIN_PATH);
     if (!pluginEnvVar)
@@ -204,8 +229,9 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
         strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);
     }
     else
+    {
         strcpy(reg->path, pluginEnvVar);
-    
+    }
     /*  If the we have a user-defined path, they might not  */
     /*  have terminated their environment variable with a   */
     /*  trailing slash.  No problem, we can do it for them  */
@@ -217,12 +243,6 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
 
     /*  Return the object, its okay!  */
     return reg;
-
-  CATCH_ERROR:
-  	/* an error occurred, so do some cleanup and return NULL */
-  	if (reg)
-  		implicitDestruct(&reg);
-  	return NULL;
 }
 
 /*
@@ -253,7 +273,7 @@ NITFPRIV(void) exitListener(void)
 
 NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg)
 {
-    nitf_Error error;
+    
     /*  If it is not NULL set  */
     if (*reg)
     {
@@ -346,7 +366,7 @@ NITFPRIV(int) unloadIt(nitf_HashTable * ht, nitf_Pair * pair,
 	    return 0;
 
 	/* destroy the lib */
-	nitf_DLL_unload(dll, error);
+        nitf_DLL_unload(dll, &error);
 	if ( dll->libname )
 	{
 	    NITF_FREE( dll->libname );
@@ -488,25 +508,27 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
                     ident = doInit(dll, keyName, error);
 
                     /*  If no ident, we have a set error and an invalid plugin  */
-                    if (!ident)
+                    if (ident)
                     {
                         /*  I expect to have problems with this now and then  */
-                        nitf_Directory_destruct(&dir);
-                        return NITF_FAILURE;
-                    }
+                        //break; // This is probably better behavior!
+						//nitf_Directory_destruct(&dir);
+                        //return NITF_FAILURE;
+                   
 
-                    ok = insertPlugin(reg, ident, dll, error);
+						ok = insertPlugin(reg, ident, dll, error);
 
-                    /*  If insertion failed, take our toys and leave  */
-                    if (!ok)
-                    {
-                        nitf_Directory_destruct(&dir);
-                        return NITF_FAILURE;
-                    }
+						/*  If insertion failed, take our toys and leave  */
+						if (!ok)
+						{
+							nitf_Directory_destruct(&dir);
+							return NITF_FAILURE;
+						}
 #if NITF_DEBUG_PLUGIN_REG
-                    printf("Successfully loaded plugin: [%s] at [%p]\n",
-                           name, dll);
+						printf("Successfully loaded plugin: [%s] at [%p]\n",
+							   name, dll);
 #endif
+					 }
                 }
 
                 else
@@ -567,12 +589,13 @@ NITFAPI(NITF_BOOL) nitf_PluginRegistry_loadDir(const char *dirName,
 }
 
 
-NITFPROT(NITF_PLUGIN_TRE_HANDLER_FUNCTION)
+NITFPROT(nitf_TREHandler*)
 nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
                                        const char *tre_id,
                                        int *had_error, nitf_Error * error)
 {
-    /*  We get back a pair from the hash table  */
+    nitf_TREHandler* theHandler;
+	/*  We get back a pair from the hash table  */
     nitf_Pair *pair;
     /*  We get back a DLL from the pair  */
     nitf_DLL *dll;
@@ -614,11 +637,12 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
         /*  If it didnt work, we are done  */
         *had_error = 1;
         return NULL;
-    }
+	}
     /*  Yes!!! We did it!!  */
-    return tre_main;
+    theHandler = (*tre_main)(error);
+	return theHandler;
 }
-
+#if 0
 
 NITFPROT(NITF_PLUGIN_TRE_GET_DESCRIPTIONS_FUNCTION)
 nitf_PluginRegistry_retrieveTREDescription(nitf_PluginRegistry * reg,
@@ -675,6 +699,7 @@ nitf_PluginRegistry_retrieveTREDescription(nitf_PluginRegistry * reg,
 }
 
 
+
 NITFPROT(NITF_PLUGIN_TRE_SET_DESCRIPTION_FUNCTION)
 nitf_PluginRegistry_retrieveSetTREDescription(nitf_PluginRegistry * reg,
         const char *tre_id,
@@ -710,9 +735,7 @@ nitf_PluginRegistry_retrieveSetTREDescription(nitf_PluginRegistry * reg,
     {
         return NULL;
     }
-#if NITF_DEBUG_PLUGIN_REG
-    printf("Loading function [%s] in dll at [%p]\n", tre_name, dll);
-#endif
+
 
     /*  Retrieve the main  */
     tre_main =
@@ -729,7 +752,7 @@ nitf_PluginRegistry_retrieveSetTREDescription(nitf_PluginRegistry * reg,
     return tre_main;
 }
 
-
+#endif
 NITFPROT(NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)
 nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
         const char *comp_id,

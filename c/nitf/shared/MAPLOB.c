@@ -20,23 +20,16 @@
  *
  */
 
-#include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
-#include <nitf/Record.h>
+#include <import/nitf.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_A, 3, "Length units", "UNILOA",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 5, "Easting interval", "LOD",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 5, "Northing interval", "LAD",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 15, "Easting of Reference Origin", "LSO",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 15, "Northing of Reference Origin", "PSO",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_A, 3, "Length units", "UNILOA" },
+    {NITF_BCS_N, 5, "Easting interval", "LOD" },
+    {NITF_BCS_N, 5, "Northing interval", "LAD" },
+    {NITF_BCS_N, 15, "Easting of Reference Origin", "LSO" },
+    {NITF_BCS_N, 15, "Northing of Reference Origin", "PSO" },
     {NITF_END, 0, NULL, NULL}
 };
 

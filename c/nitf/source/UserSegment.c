@@ -86,14 +86,14 @@ NITFAPI(nitf_IUserSegment *) nitf_UserSegment_getInterface(char *desID,
 NITFAPI(nitf_TRE *) nitf_UserSegment_decodeUserHeader(nitf_Record * record,
         nitf_DESubheader *
         subhdr,
-        NITF_DATA * buffer,
+        nitf_IOHandle ioHandle,
         nitf_Error * error)
 {
     nitf_IUserSegment *iface;   /* The interface */
     nitf_Uint32 headerLen;      /* Length of the user header */
     nitf_TRE *header;           /* The user header */
     int bad;                    /* DES look-up failure flag */
-    char desID[NITF_DESTAG_SZ + 2];     /* DE type ID */
+    char desID[NITF_DESTAG_SZ + 1];     /* DE type ID */
 
     /* get the desID */
     if (!nitf_Field_get(subhdr->typeID,
@@ -119,19 +119,26 @@ NITFAPI(nitf_TRE *) nitf_UserSegment_decodeUserHeader(nitf_Record * record,
 
     if (iface->createHeader != NULL)
     {
-        header =
-            (*(iface->createHeader)) (iface, record, subhdr, buffer,
-                                      error);
-        if (header == NULL)
-            return (NULL);
+        //header =
+        //    (*(iface->createHeader)) (iface, record, subhdr, buffer,
+        //                              error);
+        nitf_Error_init(error, "Im not prepared for this!", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+		/*
+		if (header == NULL)
+            return (NULL);*/
+		return NULL;
     }
     else if (iface->headerDesc != NULL)
     {
         /* no need to call TRE_construct b/c we don't want the auto-filled fields */
-        header = nitf_TRE_createSkeleton("DES", headerLen, error);
+        
+		// This wont work either, but I dont care right now!
+		header = nitf_TRE_createSkeleton("DES", headerLen, error);
         if (header == NULL)
             return (NULL);
-        header->descrip = iface->headerDesc;
+
+		header->handler->read(ioHandle, header, record, error);
+       /* header->descrip = iface->headerDesc;
 
         if (buffer != NULL)
         {
@@ -140,7 +147,8 @@ NITFAPI(nitf_TRE *) nitf_UserSegment_decodeUserHeader(nitf_Record * record,
                 nitf_TRE_destruct(&header);
                 return (NULL);
             }
-        }
+        }*/
+		// No idea
     }
     else
     {

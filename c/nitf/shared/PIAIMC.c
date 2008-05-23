@@ -21,51 +21,30 @@
  */
 
 
-#include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
-#include <nitf/Record.h>
+#include <import/nitf.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_N, 3, "Cloud Cover", "CLOUDCVR",
-     NITF_VAL_BCS_N_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 1, "Standard Radiometric?", "SRP",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 12, "Sensor Mode", "SENSMODE",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 18, "Sensor Name", "SENSNAME",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 255, "Source", "SOURCE",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 2, "Compression Generation", "COMGEN",
-     NITF_VAL_BCS_N_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 1, "Subjective Quality", "SUBQUAL",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 7, "PIA Mission Number", "PIAMSNNM",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 32, "Camera Specs", "CAMSPECS",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 2, "Project ID Code", "PROJID",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 1, "Generation", "GENERATN",
-     NITF_VAL_BCS_N_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 1, "Exploitation Support", "ESD",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 2, "Other Conditions", "OTHRCOND",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 7, "Mean GSD", "MEANGSD",
-     NITF_VAL_BCS_N_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 3, "Image Datum", "IDATUM",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 3, "Image Ellipsoid", "IELLIP",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 2, "Image Proc Levl Code", "PREPROC",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 2, "Image Projection Systm", "IPROJ",
-     NITF_VAL_BCS_A_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 8, "Satellite Track", "SATTRACK",
-     NITF_VAL_BCS_N_PLUS"|"NITF_VAL_BCS_SPACE"+", NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_N, 3, "Cloud Cover", "CLOUDCVR" },
+    {NITF_BCS_A, 1, "Standard Radiometric?", "SRP" },
+    {NITF_BCS_A, 12, "Sensor Mode", "SENSMODE" },
+    {NITF_BCS_A, 18, "Sensor Name", "SENSNAME" },
+    {NITF_BCS_A, 255, "Source", "SOURCE" },
+    {NITF_BCS_N, 2, "Compression Generation", "COMGEN" },
+    {NITF_BCS_A, 1, "Subjective Quality", "SUBQUAL" },
+    {NITF_BCS_A, 7, "PIA Mission Number", "PIAMSNNM" },
+    {NITF_BCS_A, 32, "Camera Specs", "CAMSPECS" },
+    {NITF_BCS_A, 2, "Project ID Code", "PROJID" },
+    {NITF_BCS_N, 1, "Generation", "GENERATN" },
+    {NITF_BCS_A, 1, "Exploitation Support", "ESD" },
+    {NITF_BCS_A, 2, "Other Conditions", "OTHRCOND" },
+    {NITF_BCS_N, 7, "Mean GSD", "MEANGSD" },
+    {NITF_BCS_A, 3, "Image Datum", "IDATUM" },
+    {NITF_BCS_A, 3, "Image Ellipsoid", "IELLIP" },
+    {NITF_BCS_A, 2, "Image Proc Levl Code", "PREPROC" },
+    {NITF_BCS_A, 2, "Image Projection Systm", "IPROJ" },
+    {NITF_BCS_N, 8, "Satellite Track", "SATTRACK" },
     {NITF_END, 0, NULL, NULL}
 };
 

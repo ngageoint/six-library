@@ -21,19 +21,14 @@
  */
 
 
-#include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
-#include <nitf/Record.h>
+#include <import/nitf.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_A, 12, "Secondary Target ID", "SEC_ID",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 15, "Secondary Target BE No", "SEC_BE",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 1, "reserved 1", "RESVD001",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_A, 12, "Secondary Target ID", "SEC_ID" },
+    {NITF_BCS_A, 15, "Secondary Target BE No", "SEC_BE" },
+    {NITF_BCS_A, 1, "reserved 1", "RESVD001" },
     {NITF_END, 0, NULL, NULL}
 };
 

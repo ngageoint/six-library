@@ -1,7 +1,7 @@
 [Setup]
 AppName=NITRO
-AppVersion=1.5-RC6
-AppVerName=NITRO 1.5-RC6
+AppVersion=2.0-dev
+AppVerName=NITRO 2.0-dev
 AppPublisherURL=http://nitro-nitf.sourceforge.net/
 AppSupportURL=http://nitro-nitf.sourceforge.net/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
@@ -12,8 +12,8 @@ LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=nitro-1.5-rc6-setup
-UninstallDisplayName=NITRO 1.5-RC6
+OutputBaseFilename=nitro-2.0-dev-setup
+UninstallDisplayName=NITRO 2.0-dev
 SetupIconFile=NITRO.ico
 WizardSmallImageFile=NITRO_small.bmp
 WizardImageFile=NITRO.bmp
@@ -60,9 +60,7 @@ Source: "..\..\java\nitf\apidocs\*"; DestDir: "{app}\share\doc\nitf\api\java"; F
 Source: "..\..\c\nitf\doc\html\*"; DestDir: "{app}\share\doc\nitf\api\c"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\c;
 
 [Registry]
-Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "NITF_PLUGIN_PATH"; ValueData: "{app}\share\nitf"; Flags: uninsdeletekeyifempty; Components: plugins;
-;ideally, would like to set a system env. variable, but may not be a power user
-;Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: string; ValueName: "NITF_PLUGIN_PATH"; ValueData: "{app}\share\nitf"; Flags: uninsdeletekeyifempty; Components: plugins;
+Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: string; ValueName: "NITF_PLUGIN_PATH"; ValueData: "{app}\share\nitf"; Flags: uninsdeletekeyifempty; Components: plugins;
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,NITRO}"; Filename: "{uninstallexe}"

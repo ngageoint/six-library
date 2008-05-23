@@ -515,14 +515,16 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression
 
   If the position is out of the array bounds, or less than zero, the
   comment will be appended to the end.
+  
+  If the comment is NULL, a blank comment is inserted. Otherwise, the passed
+  comment must be a null-terminated char*.
 
   \return TRUE is return on success, on error the error object is set.
 */
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_insertImageComment
 (
     nitf_ImageSubheader* subhdr,  /*!< Associated image subheader object */
-    char* comment,                /*!< Comment to add */
-    int length,                   /*!< Length of comment */
+    char* comment,                /*!< Comment to add - must be null-terminated */
     int position,                 /*!< position to put the comment (zero-index)*/
     nitf_Error *error             /*!< Object for error messages */
 );

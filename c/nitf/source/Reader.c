@@ -27,9 +27,8 @@
 /****************************
  *** NOTE ABOUT THE MACROS ***
  *****************************
-All of these macros make the assumption that an instance of a NITF_BOOL
-named success is in scope and can be overwritten.  Additionally, a label
-called CATCH_ERROR must also exist.  These exist to allow the macors to
+All of these macros make the assumption that a label
+called CATCH_ERROR exists.  This allows macros to
 simulate throwing as seen in C++
 
 NITF_TRY_GET_UINT32|64() -- these are public macros found in nitf/Value.h
@@ -42,95 +41,75 @@ NITF_TRY_GET_UINT32|64() -- these are public macros found in nitf/Value.h
 /*  assumptions.                                          */
 /*  ASSUMPTIONS:                                          */
 /*  1)  A nitf_Reader object named reader exists          */
-/*  2)  success and CATCH_ERROR exist (see above)         */
+/*  2)  CATCH_ERROR exists (see above)                    */
 
 #define TRY_READ_FIELD(own_, fld_) \
-    success = readField(reader, own_->fld_, fld_##_SZ, error); \
-    if( !success)  goto CATCH_ERROR;
+    if (!readField(reader, own_->fld_, fld_##_SZ, error)) \
+        goto CATCH_ERROR;
 
 /*  This macro makes it easier to read the user-defined    */
 /*  header data section.  The readExtras() method supplies */
 /*  the underlying driving call, but it can be generalized */
 /*  for this case, and for the extended header components  */
 #define TRY_READ_UDHD(reader_) \
-    success = readExtras(reader_, \
+    if (!readExtras(reader_, \
                          reader->record->header->userDefinedSection, \
                          reader->record->header->NITF_UDHDL, \
                          reader->record->header->NITF_UDHOFL, \
-                         "hdr.UDHD", error); \
-    if( !success) goto CATCH_ERROR;
+                         error)) \
+        goto CATCH_ERROR;
 
 /*  This macro makes it easier to read the extended header */
 /*  section.  As above, the readExtras() method supplies   */
 /*  the underlying driving call, but it can be generalized */
 /*  for this case, and for the user header components too  */
 #define TRY_READ_XHD(reader_) \
-    success = readExtras(reader_, \
+    if (!readExtras(reader_, \
                          reader->record->header->extendedSection, \
                          reader->record->header->NITF_XHDL, \
                          reader->record->header->NITF_XHDLOFL, \
-                         "hdr.XHD", error); \
-    if( !success) goto CATCH_ERROR;
+                         error)) \
+        goto CATCH_ERROR;
 
 #define TRY_READ_UDID(reader_, imageIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%d).UDID", (int)imageIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->userDefinedSection, \
-                             subhdr_->NITF_UDIDL, \
-                             subhdr_->NITF_UDOFL, \
-                             field, error); \
-    } \
-    if( !success) goto CATCH_ERROR;
+    if (!readExtras(reader_, \
+                         subhdr_->userDefinedSection, \
+                         subhdr_->NITF_UDIDL, \
+                         subhdr_->NITF_UDOFL, \
+                         error)) \
+        goto CATCH_ERROR;
 
 #define TRY_READ_IXSHD(reader_, imageIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%d).IXSHD", (int)imageIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->extendedSection, \
-                             subhdr_->NITF_IXSHDL, \
-                             subhdr_->NITF_IXSOFL, \
-                             field, error); \
-    } \
-    if( !success) goto CATCH_ERROR;
+    if (!readExtras(reader_, \
+                         subhdr_->extendedSection, \
+                         subhdr_->NITF_IXSHDL, \
+                         subhdr_->NITF_IXSOFL, \
+                         error)) \
+        goto CATCH_ERROR;
 
 #define TRY_READ_SXSHD(reader_, graphicIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%d).SXSHD", (int)graphicIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->extendedSection, \
-                             subhdr_->NITF_SXSHDL, \
-                             subhdr_->NITF_SXSOFL, \
-                             field, error); \
-    } \
-    if( !success) goto CATCH_ERROR;
+    if (!readExtras(reader_, \
+                         subhdr_->extendedSection, \
+                         subhdr_->NITF_SXSHDL, \
+                         subhdr_->NITF_SXSOFL, \
+                         error)) \
+        goto CATCH_ERROR;
 
 #define TRY_READ_LXSHD(reader_, labelIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%d).LXSHD", (int)labelIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->extendedSection, \
-                             subhdr_->NITF_LXSHDL, \
-                             subhdr_->NITF_LXSOFL, \
-                             field, error); \
-    } \
-    if( !success) goto CATCH_ERROR;
+    if (!readExtras(reader_, \
+                         subhdr_->extendedSection, \
+                         subhdr_->NITF_LXSHDL, \
+                         subhdr_->NITF_LXSOFL, \
+                         error)) \
+        goto CATCH_ERROR;
 
 #define TRY_READ_TXSHD(reader_, textIndex_, subhdr_) \
-    { \
-        char field[32]; \
-        sprintf(field, "hdr.ish(%.d).TXSHD", (int)textIndex_); \
-        success = readExtras(reader_, \
-                             subhdr_->extendedSection, \
-                             subhdr_->NITF_TXSHDL, \
-                             subhdr_->NITF_TXSOFL, \
-                             field, error); \
-    } \
-    if( !success) goto CATCH_ERROR;
+    if (!readExtras(reader_, \
+                         subhdr_->extendedSection, \
+                         subhdr_->NITF_TXSHDL, \
+                         subhdr_->NITF_TXSOFL, \
+                         error)) \
+        goto CATCH_ERROR;
 
 /*  These are internal macros which basically provide a         */
 /*  mock version of exceptions in C.  They are simple           */
@@ -143,10 +122,10 @@ NITF_TRY_GET_UINT32|64() -- these are public macros found in nitf/Value.h
 /*  2)  A label is in scope called CATCH_ERROR                  */
 
 #define TRY_READ_VALUE(reader_, field_, length_) \
-    if (!readValue(reader_, field_, length_, error)) goto CATCH_ERROR
+    if (!readValue(reader_, field_, length_, error)) goto CATCH_ERROR;
 
 #define TRY_READ_MEMBER_VALUE(reader_, OWNER, ID) \
-    if (!readValue(reader_, OWNER->ID, ID##_SZ, error)) goto CATCH_ERROR
+    if (!readValue(reader_, OWNER->ID, ID##_SZ, error)) goto CATCH_ERROR;
 
 #define TRY_READ_COMPONENT(reader_, infoPtrPtr_, numValue_, \
                            subHdrSz_,  dataSz_) \
@@ -155,7 +134,7 @@ if (!readComponentInfo(reader_, \
                        numValue_, \
                        subHdrSz_, \
                        dataSz_, \
-                       error) ) goto CATCH_ERROR
+                       error) ) goto CATCH_ERROR;
 
 /*  This is the size of each num* (numi, numx, nums, numdes, numres)  */
 #define NITF_IVAL_SZ 3
@@ -186,7 +165,7 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
                                nitf_Extensions * ext,
                                nitf_Field * totalLengthValue,
                                nitf_Field * overflowOffsetValue,
-                               const char *field, nitf_Error * error);
+                               nitf_Error * error);
 
 /*  Reading the component info sections is not a big deal, but it does      */
 /*  suit us that we are interested in reuse.  This method may be            */
@@ -265,14 +244,11 @@ CATCH_ERROR:
 NITFPRIV(NITF_BOOL) readField(nitf_Reader * reader,
                               char *fld, int length, nitf_Error * error)
 {
-    NITF_BOOL success;
-
     /* Make sure the field is nulled out  */
     memset(fld, 0, length);
 
     /* Read from the IO handle */
-    success = nitf_IOHandle_read(reader->inputHandle, fld, length, error);
-    if (!success)
+    if (!nitf_IOHandle_read(reader->inputHandle, fld, length, error))
     {
         nitf_Error_init(error,
                         "Unable to read from IO object",
@@ -282,7 +258,6 @@ NITFPRIV(NITF_BOOL) readField(nitf_Reader * reader,
 
     return NITF_SUCCESS;
 
-    /* Handle any errors */
 CATCH_ERROR:
     return NITF_FAILURE;
 }
@@ -292,59 +267,54 @@ NITFPRIV(NITF_BOOL) readValue(nitf_Reader * reader,
                               nitf_Field * field,
                               int length, nitf_Error * error)
 {
-    NITF_BOOL success;
-
     char *buf = (char *) NITF_MALLOC(length);
-    /*memset(buf, 0, length);  <--- Done for us in the readField function */
-
-    success = readField(reader, buf, length, error);
-    if (!success)
+    if (!buf)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                NITF_CTXT, NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    
+    if (!readField(reader, buf, length, error))
         goto CATCH_ERROR;
 
-
     /* first, check to see if we need to swap bytes */
-    if (field->type == NITF_BINARY
-            && (length == NITF_INT16_SZ || length == NITF_INT32_SZ))
+    if (field->type == NITF_BINARY)
     {
         if (length == NITF_INT16_SZ)
         {
             nitf_Int16 int16 =
                 (nitf_Int16)NITF_NTOHS(*((nitf_Int16 *) buf));
-            success = nitf_Field_setRawData(field,
-                                            (NITF_DATA *) & int16, length, error);
+            if (!nitf_Field_setRawData(field,
+                    (NITF_DATA *) & int16, length, error))
+                goto CATCH_ERROR;
         }
         else if (length == NITF_INT32_SZ)
         {
             nitf_Int32 int32 =
                 (nitf_Int32)NITF_NTOHL(*((nitf_Int32 *) buf));
-            success = nitf_Field_setRawData(field,
-                                            (NITF_DATA *) & int32, length, error);
+            if (!nitf_Field_setRawData(field,
+                    (NITF_DATA *) & int32, length, error))
+                goto CATCH_ERROR;
+        }
+        else
+        {
+            /* TODO what to do??? 8 bit is ok, but what about 64? */
+            if (!nitf_Field_setRawData(field, (NITF_DATA *) buf, length, error))
+                goto CATCH_ERROR;
         }
     }
     else
     {
-        /* check for the other binary lengths ... */
-        if (field->type == NITF_BINARY)
-        {
-            /* TODO what to do??? 8 bit is ok, but what about 64? */
-            /* for now, just let it go through... */
-        }
-
-        /* now, set the data */
-        success = nitf_Field_setRawData(field,
-                                        (NITF_DATA *) buf, length, error);
+        if (!nitf_Field_setRawData(field, (NITF_DATA *) buf, length, error))
+            goto CATCH_ERROR;
     }
-    /* similar code to the above is in TRE_parse */
-
-    if (!success)
-        goto CATCH_ERROR;
 
     NITF_FREE(buf);
     return NITF_SUCCESS;
 
-    /* Handle any errors */
 CATCH_ERROR:
-    NITF_FREE(buf);
+    if (buf) NITF_FREE(buf);
     return NITF_FAILURE;
 }
 
@@ -417,25 +387,28 @@ NITFPRIV(NITF_BOOL) readFileSecurity(nitf_Reader * reader,
                                      nitf_FileSecurity * securityGroup,
                                      nitf_Error * error)
 {
-    NITF_BOOL success;
-
     if (IS_NITF20(fver))
     {
-        success = read20FileSecurity(reader, securityGroup, error);
+        if (!read20FileSecurity(reader, securityGroup, error))
+            goto CATCH_ERROR;
     }
     else if (IS_NITF21(fver))
     {
-        success = read21FileSecurity(reader, securityGroup, error);
+        if (!read21FileSecurity(reader, securityGroup, error))
+            goto CATCH_ERROR;
     }
     else
     {
         /* Invalid NITF Version (We had better never get here) */
         nitf_Error_init(error, "Invalid NITF Version",
                         NITF_CTXT, NITF_ERR_INVALID_FILE);
-        success = 0;
+        goto CATCH_ERROR;
     }
 
-    return success;
+    return NITF_SUCCESS;
+
+CATCH_ERROR:
+    return NITF_FAILURE;
 }
 
 
@@ -536,7 +509,6 @@ NITFPRIV(NITF_BOOL) readImageSubheader(nitf_Reader * reader,
     /* List iterator pointing to the image segment */
     nitf_ListIterator listIter = nitf_List_begin(reader->record->images);
 
-    NITF_BOOL success;          /* Generic success flag */
     nitf_Uint32 numComments;    /* Number of comment fields */
     nitf_Uint32 nbands;         /* An integer representing the \nbands field */
     nitf_Uint32 xbands;         /* An integer representing the xbands field */
@@ -558,8 +530,7 @@ NITFPRIV(NITF_BOOL) readImageSubheader(nitf_Reader * reader,
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_ISCLAS);
 
     /* Read the security group */
-    success = readFileSecurity(reader, fver, subhdr->securityGroup, error);
-    if (!success)
+    if (!readFileSecurity(reader, fver, subhdr->securityGroup, error))
         goto CATCH_ERROR;
 
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_ENCRYP);
@@ -573,8 +544,7 @@ NITFPRIV(NITF_BOOL) readImageSubheader(nitf_Reader * reader,
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_PJUST);
 
     /* Read the ICORDS and IGEOLO segments  */
-    success = readCorners(reader, subhdr, fver, error);
-    if (!success)
+    if (!readCorners(reader, subhdr, fver, error))
         goto CATCH_ERROR;
 
     /*  Figure out how many comments we have  */
@@ -659,7 +629,6 @@ NITFPRIV(NITF_BOOL) readGraphicSubheader(nitf_Reader * reader,
 {
     int i;
     nitf_GraphicSubheader *subhdr;
-    NITF_BOOL success;
 
     /* List iterator pointing to the graphics segment */
     nitf_ListIterator listIter = nitf_List_begin(reader->record->graphics);
@@ -676,8 +645,7 @@ NITFPRIV(NITF_BOOL) readGraphicSubheader(nitf_Reader * reader,
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_SSCLAS);
 
     /* Read the security section */
-    success = readFileSecurity(reader, fver, subhdr->securityGroup, error);
-    if (!success)
+    if (!readFileSecurity(reader, fver, subhdr->securityGroup, error))
         goto CATCH_ERROR;
 
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_ENCRYP);
@@ -709,7 +677,6 @@ NITFPRIV(NITF_BOOL) readLabelSubheader(nitf_Reader * reader,
 {
     int i;
     nitf_LabelSubheader *subhdr;
-    NITF_BOOL success;
 
     /* List iterator pointing to the label segment */
     nitf_ListIterator listIter = nitf_List_begin(reader->record->labels);
@@ -727,9 +694,7 @@ NITFPRIV(NITF_BOOL) readLabelSubheader(nitf_Reader * reader,
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_LSCLAS);
 
     /* Read the security group */
-    success = readFileSecurity(reader, fver, subhdr->securityGroup, error);
-
-    if (!success)
+    if (!readFileSecurity(reader, fver, subhdr->securityGroup, error))
         goto CATCH_ERROR;
 
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_ENCRYP);
@@ -761,8 +726,6 @@ NITFPRIV(NITF_BOOL) readTextSubheader(nitf_Reader * reader,
 {
     int i;
     nitf_TextSubheader *subhdr;
-    NITF_BOOL success;
-    /* nitf_Uint32 txshdl, txsofl; */
 
     /* List iterator pointing to the text segment */
     nitf_ListIterator listIter = nitf_List_begin(reader->record->texts);
@@ -781,8 +744,7 @@ NITFPRIV(NITF_BOOL) readTextSubheader(nitf_Reader * reader,
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_TSCLAS);
 
     /* Read the security group */
-    success = readFileSecurity(reader, fver, subhdr->securityGroup, error);
-    if (!success)
+    if (!readFileSecurity(reader, fver, subhdr->securityGroup, error))
         goto CATCH_ERROR;
 
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_ENCRYP);
@@ -806,8 +768,6 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     int i;
     nitf_DESegment *segment;
     nitf_DESubheader *subhdr;
-    /* Generic success flag */
-    NITF_BOOL success;
     /* Length of the sub-header */
     nitf_Uint32 subLen;
     off_t currentOffset;
@@ -830,8 +790,7 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_DESCLAS);
 
     /* Read the security group */
-    success = readFileSecurity(reader, fver, subhdr->securityGroup, error);
-    if (!success)
+    if (!readFileSecurity(reader, fver, subhdr->securityGroup, error))
         goto CATCH_ERROR;
 
     /* get the DESID and trim it */
@@ -855,26 +814,15 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     NITF_TRY_GET_UINT32(subhdr->NITF_DESSHL, &subLen, error);
     if (subLen > 0)
     {
-        userSubheaderData = (char *) NITF_MALLOC(subLen);
-        if (userSubheaderData == NULL)
-            goto CATCH_ERROR;
-        success = nitf_IOHandle_read(reader->inputHandle,
-                                     userSubheaderData, subLen, error);
-        if (!success)
-        {
-            nitf_Error_init(error,
-                            "Unable to read from IO object",
-                            NITF_CTXT, NITF_ERR_READING_FROM_FILE);
+
+	if ((nitf_UserSegment_decodeUserHeader(reader->record,
+					       subhdr, reader->inputHandle,
+					       error)) == NULL)
+	{
+	    NITF_FREE(userSubheaderData);
             goto CATCH_ERROR;
         }
-        if ((nitf_UserSegment_decodeUserHeader(reader->record,
-                                               subhdr, userSubheaderData,
-                                               error)) == NULL)
-        {
-            NITF_FREE(userSubheaderData);
-            goto CATCH_ERROR;
-        }
-        NITF_FREE(userSubheaderData);
+
     }
 
     NITF_TRY_GET_UINT64(reader->record->
@@ -894,18 +842,11 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     {
         currentOffset = segment->offset;
 
-        /* Construct an extension */
-        /* No construct needed - The extension is already constructed when the DES is */
-        /*subhdr->userDefinedSection = nitf_Extensions_construct(error);
-        if (!subhdr->userDefinedSection)
-            goto CATCH_ERROR;*/
-
         /* loop until we are done */
         while (currentOffset < segment->end)
         {
             /* read a TRE */
-            success = readTRE(reader, subhdr->userDefinedSection, error);
-            if (!success)
+            if (!readTRE(reader, subhdr->overflowSection, error))
                 goto CATCH_ERROR;
 
             /* update the offset */
@@ -939,7 +880,6 @@ NITFPRIV(NITF_BOOL) readRESubheader(nitf_Reader * reader,
     int i;
     nitf_RESegment *segment;
     nitf_RESubheader *subhdr;
-    NITF_BOOL success;
     nitf_Uint32 subLen;
     /* List iterator pointing to the reserved extension segment */
     nitf_ListIterator listIter =
@@ -958,7 +898,8 @@ NITFPRIV(NITF_BOOL) readRESubheader(nitf_Reader * reader,
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_RESCLAS);
 
     /* Read the security group */
-    success = readFileSecurity(reader, fver, subhdr->securityGroup, error);
+    if (!readFileSecurity(reader, fver, subhdr->securityGroup, error))
+        goto CATCH_ERROR;
 
     /* get the subheader fields length */
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_RESSHL);
@@ -966,9 +907,7 @@ NITFPRIV(NITF_BOOL) readRESubheader(nitf_Reader * reader,
     if (subLen > 0)
     {
         /* for now, we just read it into a buffer... change in the future */
-        success =
-            readField(reader, subhdr->subheaderFields, subLen, error);
-        if (!success)
+        if (!readField(reader, subhdr->subheaderFields, subLen, error))
             goto CATCH_ERROR;
     }
 
@@ -1005,17 +944,14 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader * reader, nitf_Error * error)
     /* Pointer to the fileHeade, simplifies futher references to this object */
     nitf_FileHeader *fileHeader = reader->record->header;
 
-    /* generic success flag */
-    NITF_BOOL success;
-
     /* generic uint32 */
     nitf_Uint32 num32;
 
     nitf_Version fver;
     /*nitf_Uint32 udhdl, udhofl, xhdl, xhdlofl; */
 
-    char fl_buf[NITF_FL_SZ + 1];        /* File length buffer */
-    int i;
+    char fileLenBuf[NITF_FL_SZ + 1];    /* File length buffer */
+    char streamingBuf[NITF_FL_SZ];
 
     /* FHDR */
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FHDR);
@@ -1047,9 +983,7 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader * reader, nitf_Error * error)
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FTITLE);
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FSCLAS);
 
-    success = readFileSecurity(reader,
-                               fver, fileHeader->securityGroup, error);
-    if (!success)
+    if (!readFileSecurity(reader, fver, fileHeader->securityGroup, error))
         goto CATCH_ERROR;
 
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FSCOP);
@@ -1061,69 +995,52 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader * reader, nitf_Error * error)
 
     /* FL */
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FL);
-    /*      Check for streaming header (Length is all 9's) */
+    /* Check for streaming header (Length is all 9's) */
+    memset(streamingBuf, '9', NITF_FL_SZ);
+    
     nitf_Field_get(fileHeader->NITF_FL,
-                   fl_buf, NITF_CONV_STRING, NITF_FL_SZ + 1, error);
-    for (i = 0; i < NITF_FL_SZ; i++)
-        if (fl_buf[i] != '9')
-            break;
-    if (i >= NITF_FL_SZ)
+                   fileLenBuf, NITF_CONV_STRING, NITF_FL_SZ + 1, error);
+    if (strncmp(fileLenBuf, streamingBuf, NITF_FL_SZ) == 0)
     {
         nitf_Error_init(error, "Streaming headers are not supported",
                         NITF_CTXT, NITF_ERR_PARSING_FILE);
         goto CATCH_ERROR;
     }
-    /* We may need this for parsing, but not yet */
 
     /* HL */
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_HL);
     NITF_TRY_GET_UINT32(fileHeader->NITF_HL, &num32, error);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.HL", fileHeader->NITF_HL, error);
 
     /* Read the image info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->imageInfo,
                        fileHeader->NITF_NUMI, NITF_LISH_SZ, NITF_LI_SZ);
 
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMI", fileHeader->NITF_NUMI, error);
-
     /* Read the graphic info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->graphicInfo,
                        fileHeader->NITF_NUMS, NITF_LSSH_SZ, NITF_LS_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMS", fileHeader->NITF_NUMS, error);
 
     /* Read the label info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->labelInfo,
                        fileHeader->NITF_NUMX, NITF_LLSH_SZ, NITF_LL_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMX", fileHeader->NITF_NUMX, error);
 
     /* Read the text info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->textInfo,
                        fileHeader->NITF_NUMT, NITF_LTSH_SZ, NITF_LT_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMT", fileHeader->NITF_NUMT, error);
 
     /* Read the data extension info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->dataExtensionInfo,
                        fileHeader->NITF_NUMDES, NITF_LDSH_SZ, NITF_LD_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMDES", fileHeader->NITF_NUMDES, error);
 
     /* Read the reserved extension info section */
     TRY_READ_COMPONENT(reader,
                        &fileHeader->reservedExtensionInfo,
                        fileHeader->NITF_NUMRES,
                        NITF_LRESH_SZ, NITF_LRE_SZ);
-    NITF_PARSEINFO_SET(reader->record->parseInfo,
-                       "hdr.NUMRES", fileHeader->NITF_NUMRES, error);
 
     /* Read the user header info section */
     TRY_READ_UDHD(reader);
@@ -1147,7 +1064,7 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
                                nitf_Extensions * ext,
                                nitf_Field * totalLengthValue,
                                nitf_Field * overflowOffsetValue,
-                               const char *field, nitf_Error * error)
+                               nitf_Error * error)
 {
     /* Total length of the extras seciton */
     nitf_Uint32 totalLength;
@@ -1155,8 +1072,6 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
     off_t sectionEndOffset;
     /* The current ioHandle offset */
     off_t currentOffset;
-    /* Generic success flag */
-    NITF_BOOL success;
 
     /* Read the total length of the "extras" section */
     TRY_READ_VALUE(reader, totalLengthValue, 5);
@@ -1177,8 +1092,7 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
 
         while (currentOffset < sectionEndOffset)
         {
-            success = readTRE(reader, ext, error);
-            if (!success)
+            if (!readTRE(reader, ext, error))
             {
                 nitf_FieldWarning *fieldWarning;
                 /* Get the current offset */
@@ -1191,9 +1105,9 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
                 /* Generate a warning */
                 fieldWarning =
                     nitf_FieldWarning_construct(currentOffset,
-                                                field,
+                                                "TRE",
                                                 NULL,
-                                                "A properly formed TRE",
+                                                "Not properly formed",
                                                 error);
                 if (fieldWarning == NULL)
                     goto CATCH_ERROR;
@@ -1234,7 +1148,6 @@ NITFPRIV(NITF_BOOL) readTRE(nitf_Reader * reader,
 {
     int blanki;                 /* string index */
     char etag[NITF_ETAG_SZ + 1];        /* character array for the tag */
-    NITF_BOOL success;          /* Generic success flag */
     nitf_TRE *tre;              /* tre object */
     off_t off;                  /* offset in the file where the tre was found  */
     nitf_Uint32 length;         /* length of the TRE object */
@@ -1248,8 +1161,7 @@ NITFPRIV(NITF_BOOL) readTRE(nitf_Reader * reader,
         goto CATCH_ERROR;
 
     /* Read the tag header  */
-    success = readField(reader, etag, NITF_ETAG_SZ, error);
-    if (!success)
+    if (!readField(reader, etag, NITF_ETAG_SZ, error))
         goto CATCH_ERROR;
 
     /* blank trim the tag */
@@ -1272,8 +1184,7 @@ NITFPRIV(NITF_BOOL) readTRE(nitf_Reader * reader,
         goto CATCH_ERROR;
 
     /*  Insert the tre into the data store  */
-    success = nitf_Extensions_appendTRE(ext, tre, error);
-    if (!success)
+    if (!nitf_Extensions_appendTRE(ext, tre, error))
         goto CATCH_ERROR;
 
     /* Destruct the value object we created */
@@ -1293,10 +1204,11 @@ CATCH_ERROR:
 NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
                               nitf_TRE * tre, nitf_Error * error)
 {
-    int ok = 0, bad = 0;
+    int ok = 0;
+    int bad = 0;
     off_t off;
-    NITF_PLUGIN_TRE_HANDLER_FUNCTION handler =
-        (NITF_PLUGIN_TRE_HANDLER_FUNCTION) NULL;
+    
+    nitf_TREHandler* handler = NULL;
 
     nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
     if (reg)
@@ -1307,17 +1219,13 @@ NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
             goto CATCH_ERROR;
         if (handler)
         {
+            tre->handler = handler;
             off = nitf_IOHandle_tell(reader->inputHandle, error);
-            ok = (*handler) (reader->inputHandle, tre, reader->record, error);
+			
+	    ok = handler->read(reader->inputHandle, tre, reader->record, error);
             if (!ok)
             {
-                nitf_FieldWarning *fieldWarning = NULL;
-                fieldWarning = nitf_FieldWarning_construct(off, tre->tag, NULL,
-                    "Unable to parse TRE with provided plug-in. Using default TRE handler instead.", error);
-                if (fieldWarning == NULL)
-                    goto CATCH_ERROR;
-                if (!nitf_List_pushBack(reader->warningList, fieldWarning, error))
-                    goto CATCH_ERROR;
+		// Also probably warning list makes sense here!
                 
                 /* move the IO Handle back the size of the TRE */
                 nitf_IOHandle_seek(reader->inputHandle, off, NITF_SEEK_SET, error);
@@ -1327,10 +1235,10 @@ NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
 
     /* if we couldn't parse it with the plug-in OR if no plug-in is found,
      * then, we use the default TRE handler */
-    if (!ok || handler == (NITF_PLUGIN_TRE_HANDLER_FUNCTION) NULL)
+    if (!ok || handler == NULL)
     {
-        handler = (NITF_PLUGIN_TRE_HANDLER_FUNCTION) nitf_DefaultTRE_handler;
-        ok = (*handler) (reader->inputHandle, tre, reader->record, error);
+        tre->handler = nitf_DefaultTRE_handler(error);
+		ok = tre->handler->read(reader->inputHandle, tre, reader->record, error);
     }
     
     if (!ok)
@@ -1383,7 +1291,6 @@ NITFPRIV(nitf_BandInfo **) readBandInfo(nitf_Reader * reader,
                                         unsigned int nbands,
                                         nitf_Error * error)
 {
-    NITF_BOOL success;
     nitf_Uint32 i;
     nitf_Uint32 numLuts, bandEntriesPerLut;
     nitf_BandInfo **bandInfo = NULL;
@@ -1402,9 +1309,7 @@ NITFPRIV(nitf_BandInfo **) readBandInfo(nitf_Reader * reader,
 
     /*  Make sure we are all NULL-inited  */
     for (i = 0; i < nbands; i++)
-    {
         bandInfo[i] = nitf_BandInfo_construct(error);
-    }
 
     /*  Now pick up our precious band info  */
     for (i = 0; i < nbands; i++)
@@ -1431,12 +1336,9 @@ NITFPRIV(nitf_BandInfo **) readBandInfo(nitf_Reader * reader,
                                 NITF_CTXT, NITF_ERR_MEMORY);
                 return NULL;
             }
-            success = readField(reader,
-                                (char *) bandInfo[i]->lut->table,
-                                numLuts * bandEntriesPerLut, error);
-            if (!success)
+            if (!readField(reader, (char *) bandInfo[i]->lut->table,
+                    numLuts * bandEntriesPerLut, error))
                 goto CATCH_ERROR;
-            /* printf("reading lut(s) for band %d at %p\n", (int)i, bandInfo[i]->lut); */
         }
     }
     return bandInfo;
@@ -1452,7 +1354,6 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
 {
     nitf_Uint32 i = 0;          /* iterator */
     nitf_ListIterator listIter; /* list iterator */
-    NITF_BOOL success;          /* success flag */
     nitf_Uint32 num32;          /* generic uint32 */
     nitf_Uint32 length32;
     nitf_Uint64 length;
@@ -1465,8 +1366,7 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
     resetIOHandle(reader);
     reader->inputHandle = ioHandle;
     /*  This part is trivial thanks to our readHeader accessor  */
-    success = readHeader(reader, error);
-    if (!success)
+    if (!readHeader(reader, error))
         goto CATCH_ERROR;
 
     fver = nitf_Record_getVersion(reader->record, error);
@@ -1491,8 +1391,7 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
         }
 
         /* Read the sub-header */
-        success = readImageSubheader(reader, i, fver, error);
-        if (!success)
+        if (!readImageSubheader(reader, i, fver, error))
             goto CATCH_ERROR;
 
         /* Allocate an IO object */
@@ -1537,9 +1436,7 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
             goto CATCH_ERROR;
         }
 
-        success = readGraphicSubheader(reader, i, fver, error);
-
-        if (!success)
+        if (!readGraphicSubheader(reader, i, fver, error))
             goto CATCH_ERROR;
         graphicSegment->offset = nitf_IOHandle_tell(reader->inputHandle,
                                  error);
@@ -1576,8 +1473,7 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
             goto CATCH_ERROR;
         }
 
-        success = readLabelSubheader(reader, i, fver, error);
-        if (!success)
+        if (!readLabelSubheader(reader, i, fver, error))
             goto CATCH_ERROR;
         labelSegment->offset = nitf_IOHandle_tell(reader->inputHandle,
                                error);
@@ -1613,8 +1509,7 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
             goto CATCH_ERROR;
         }
 
-        success = readTextSubheader(reader, i, fver, error);
-        if (!success)
+        if (!readTextSubheader(reader, i, fver, error))
             goto CATCH_ERROR;
         textSegment->offset = nitf_IOHandle_tell(reader->inputHandle,
                               error);
@@ -1652,8 +1547,7 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
             goto CATCH_ERROR;
         }
 
-        success = readDESubheader(reader, i, fver, error);
-        if (!success)
+        if (!readDESubheader(reader, i, fver, error))
             goto CATCH_ERROR;
 
         /* readDESubheader takes care of zooming/reading the DES Data */
@@ -1677,8 +1571,7 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
             goto CATCH_ERROR;
         }
 
-        success = readRESubheader(reader, i, fver, error);
-        if (!success)
+        if (!readRESubheader(reader, i, fver, error))
             goto CATCH_ERROR;
 
         /*  Now, we zoom to the end of the RES, so we can pick up  */

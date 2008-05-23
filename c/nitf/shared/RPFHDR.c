@@ -21,33 +21,21 @@
  */
 
 
-#include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
-#include <nitf/Record.h>
+#include <import/nitf.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BINARY, 1, "endian flag", "ENDIAN",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BINARY, 2, "header section length", "HDSECL",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 12, "filename", "FILENM",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BINARY, 1, "new flag", "NEWFLG",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 15, "standard number", "STDNUM",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 8, "standard date", "STDDAT",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 1, "classification", "CLASS",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 2, "country code", "COUNTR",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_A, 2, "release", "RELEAS",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BINARY, 4, "location sect phys loc", "LOCSEC",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BINARY, 1, "endian flag", "ENDIAN" },
+    {NITF_BINARY, 2, "header section length", "HDSECL" },
+    {NITF_BCS_A, 12, "filename", "FILENM" },
+    {NITF_BINARY, 1, "new flag", "NEWFLG" },
+    {NITF_BCS_A, 15, "standard number", "STDNUM" },
+    {NITF_BCS_A, 8, "standard date", "STDDAT" },
+    {NITF_BCS_A, 1, "classification", "CLASS" },
+    {NITF_BCS_A, 2, "country code", "COUNTR" },
+    {NITF_BCS_A, 2, "release", "RELEAS" },
+    {NITF_BINARY, 4, "location sect phys loc", "LOCSEC" },
     {NITF_END, 0, NULL, NULL}
 };
 

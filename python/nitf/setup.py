@@ -3,9 +3,9 @@ from distutils.command.install import INSTALL_SCHEMES
 import os, glob, sys, shutil
 
 files = [os.path.normpath(f).replace('\\', '/') for f in \
-              glob.glob('source/main/python/*.dll') + \
-              glob.glob('source/main/python/nitf/*.so') + \
-              glob.glob('source/main/python/nitf/*.pyd')]
+              glob.glob('src/python/*.dll') + \
+              glob.glob('src/python/nitf/*.so') + \
+              glob.glob('src/python/nitf/*.pyd')]
 
 
 out_dir = 'build/lib/nitf'
@@ -18,13 +18,13 @@ for f in files:
 
 setup(
     name = 'nitro-python',
-    version = '1.5-rc7'
+    version = '2.0-dev',
     url = 'http://nitro-nitf.sourceforge.net',
     author = 'tzellman',
     author_email = 'tzellman@users.sourceforget.net',
     description = 'Python bindings for the NITRO project',
     packages = ['nitf'],
-    package_dir = {'':'source/main/python'},
+    package_dir = {'':'src/python'},
     license = "LGPL",
-    scripts=['source/test/python/nitf_extract.py', 'source/test/python/nitf_print.py'],
+    scripts=['src/test/python/nitf_extract.py', 'src/test/python/nitf_print.py'],
 )

@@ -861,7 +861,6 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_insertImageComment
 (
     nitf_ImageSubheader * subhdr,
     char *comment,
-    int length,
     int position,
     nitf_Error * error
 )
@@ -871,52 +870,49 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_insertImageComment
     nitf_Field* field = NULL;
     char numCommentBuf[NITF_NICOM_SZ + 1];
     char commentBuf[NITF_ICOM_SZ + 1];
+    int length;
 
     NITF_TRY_GET_UINT32(subhdr->numImageComments, &numComments, error);
     /* in case there is bad info in numImageComments */
     numComments = numComments < 0 ? 0 : numComments;
 
-    if (comment)
+    /* see if we can really add another one */
+    if (numComments < 9)
     {
-        /* see if we can really add another one */
-        if (numComments < 9)
-        {
-            /* check the position */
-            if (position < 0 || position > numComments)
-                position = numComments;
+        /* check the position */
+        if (position < 0 || position > numComments)
+            position = numComments;
 
-            /* make the field */
-            field = nitf_Field_construct(NITF_ICOM_SZ, NITF_BCS_A, error);
-            if (!field) goto CATCH_ERROR;
-            memset(commentBuf, 0, NITF_ICOM_SZ + 1);
+        /* make the field */
+        field = nitf_Field_construct(NITF_ICOM_SZ, NITF_BCS_A, error);
+        if (!field) goto CATCH_ERROR;
+        memset(commentBuf, 0, NITF_ICOM_SZ + 1);
+        
+        length = comment != NULL ? strlen(comment) : 0;
+        
+        if (length > 0)
             memcpy(commentBuf, comment, length > NITF_ICOM_SZ ? NITF_ICOM_SZ : length);
-            /* Warning: if the comment string is greater than the size of the
-             * field,an error will be set -- which is why we copy it here
-             * It might be nice to have a size param in nitf_Field_setString */
-            if (!nitf_Field_setString(field, commentBuf, error))
-                goto CATCH_ERROR;
-
-            /* find the iter where we want to insert */
-            iterPos = nitf_List_at(subhdr->imageComments, position);
-            if (!nitf_List_insert(subhdr->imageComments, iterPos, field, error))
-                goto CATCH_ERROR;
-
-            /* always set the numComments back */
-            sprintf(numCommentBuf, "%.*d", NITF_NICOM_SZ, ++numComments);
-            nitf_Field_setRawData(subhdr->numImageComments,
-                                  numCommentBuf, NITF_NICOM_SZ, error);
-        }
-        else
-        {
-            nitf_Error_init(error,
-                            "insertComment -> can't add another comment",
-                            NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        
+        /* Warning: if the comment string is greater than the size of the
+         * field,an error will be set -- which is why we copy it here
+         * It might be nice to have a size param in nitf_Field_setString */
+        if (!nitf_Field_setString(field, commentBuf, error))
             goto CATCH_ERROR;
-        }
+
+        /* find the iter where we want to insert */
+        iterPos = nitf_List_at(subhdr->imageComments, position);
+        if (!nitf_List_insert(subhdr->imageComments, iterPos, field, error))
+            goto CATCH_ERROR;
+
+        /* always set the numComments back */
+        sprintf(numCommentBuf, "%.*d", NITF_NICOM_SZ, ++numComments);
+        nitf_Field_setRawData(subhdr->numImageComments,
+                              numCommentBuf, NITF_NICOM_SZ, error);
     }
     else
     {
-        nitf_Error_init(error, "insertComment -> comment is NULL",
+        nitf_Error_init(error,
+                        "insertComment -> can't add another comment",
                         NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
         goto CATCH_ERROR;
     }

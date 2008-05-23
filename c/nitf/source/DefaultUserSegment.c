@@ -21,6 +21,7 @@
  */
 
 #include "nitf/DefaultUserSegment.h"
+#include "nitf/TREUtils.h"
 
 NITFPRIV(nitf_TRE *) createHeader(struct _nitf_IUserSegment *iface,
                                   nitf_Record * record,
@@ -31,7 +32,7 @@ NITFPRIV(nitf_TRE *) createHeader(struct _nitf_IUserSegment *iface,
     nitf_TRE *header = NULL;            /* The user header */
     nitf_TREDescription *descr = NULL;  /* holds the TREDescriptions */
     nitf_Field *field = NULL;
-
+	
     /* get the length */
     if (!nitf_Field_get(subhdr->subheaderFieldsLength,
                         &headerLen, NITF_CONV_UINT, NITF_INT32_SZ, error))
@@ -59,19 +60,20 @@ NITFPRIV(nitf_TRE *) createHeader(struct _nitf_IUserSegment *iface,
     descr[0].data_count = headerLen;
     descr[0].label = "Unknown raw data";
     descr[0].tag = "raw_data";
-    descr[0].pattern = ".*";
-    descr[0].rangeCategory = NITF_NO_RANGE;
-    descr[0].minValue = NULL;
-    descr[0].maxValue = NULL;
     descr[1].data_type = NITF_END;
     descr[1].data_count = 0;
     descr[1].label = NULL;
     descr[1].tag = NULL;
 
+	
+	// How on earth?
+	
     header = nitf_TRE_createSkeleton("DES", headerLen, error);
+	
     if (header == NULL)
         goto CATCH_ERROR;
-    header->descrip = descr;
+	header->priv = descr;
+   // header->descrip = descr;
 
     /* just add the raw data to the hash table */
     field = nitf_Field_construct(headerLen, NITF_BINARY, error);

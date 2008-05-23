@@ -23,7 +23,10 @@ case "${target}" in
 	    def_link_thread_libs="-lpthread"
 
 	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-            cc_flags=""
+	    AC_MSG_RESULT(setting up build for universal binaries...)
+
+            cc_flags="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc  -arch i386"
+
 	    cc_optz_flags="${def_cc_optz_flags}"
         link_autolibs="-ldl"
 

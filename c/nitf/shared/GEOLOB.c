@@ -20,21 +20,15 @@
  *
  */
 
-#include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
-#include <nitf/Record.h>
+#include <import/nitf.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_N, 9, "Longitude density", "ARV",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 9, "Latitude density", "BRV",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 15, "Longitude of Reference Origin", "LSO",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
-    {NITF_BCS_N, 15, "Latitude of Reference Origin", "PSO",
-     NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_N, 9, "Longitude density", "ARV" },
+    {NITF_BCS_N, 9, "Latitude density", "BRV" },
+    {NITF_BCS_N, 15, "Longitude of Reference Origin", "LSO" },
+    {NITF_BCS_N, 15, "Latitude of Reference Origin", "PSO" },
     {NITF_END, 0, NULL, NULL}
 };
 

@@ -52,7 +52,7 @@ NITFAPI(nitf_DESubheader *) nitf_DESubheader_construct(nitf_Error * error)
     subhdr->securityGroup = NULL;
     subhdr->subheaderFields = NULL;
     subhdr->dataLength = 0;
-    subhdr->userDefinedSection = NULL;
+    subhdr->overflowSection = NULL;
 
     subhdr->securityGroup = nitf_FileSecurity_construct(error);
     if (!subhdr->securityGroup)
@@ -71,8 +71,8 @@ NITFAPI(nitf_DESubheader *) nitf_DESubheader_construct(nitf_Error * error)
 
     _NITF_CONSTRUCT_FIELD(subhdr, NITF_DESSHL, NITF_BCS_N);
 
-    subhdr->userDefinedSection = nitf_Extensions_construct(error);
-    if (!subhdr->userDefinedSection)
+    subhdr->overflowSection = nitf_Extensions_construct(error);
+    if (!subhdr->overflowSection)
         goto CATCH_ERROR;
 
     return subhdr;
@@ -123,20 +123,20 @@ nitf_DESubheader_clone(nitf_DESubheader * source, nitf_Error * error)
             goto CATCH_ERROR;
 
         subhdr->subheaderFields = NULL;
-        subhdr->userDefinedSection = NULL;
+        subhdr->overflowSection = NULL;
 
         if (source->subheaderFields)
         {
             memcpy(subhdr->subheaderFields,
                    source->subheaderFields, subLen);
         }
-        if (source->userDefinedSection)
+        if (source->overflowSection)
         {
 
-            subhdr->userDefinedSection =
-                nitf_Extensions_clone(source->userDefinedSection, error);
+            subhdr->overflowSection =
+                nitf_Extensions_clone(source->overflowSection, error);
 
-            if (!subhdr->userDefinedSection)
+            if (!subhdr->overflowSection)
                 goto CATCH_ERROR;
         }
 
@@ -154,9 +154,9 @@ NITFAPI(void) nitf_DESubheader_destruct(nitf_DESubheader ** subhdr)
     if (!*subhdr)
         return;
 
-    if ((*subhdr)->userDefinedSection)
+    if ((*subhdr)->overflowSection)
     {
-        nitf_Extensions_destruct(&(*subhdr)->userDefinedSection);
+        nitf_Extensions_destruct(&(*subhdr)->overflowSection);
     }
     if ((*subhdr)->securityGroup)
     {

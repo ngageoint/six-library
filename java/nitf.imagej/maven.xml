@@ -1,0 +1,30 @@
+<project xmlns:j="jelly:core" xmlns:maven="jelly:maven" xmlns:m="maven"
+    xmlns:u="jelly:util">
+
+
+    <!-- Build the plugin structure everytime we build the jar -->
+    <postGoal name="jar:jar">
+        <attainGoal name="plugin" />
+    </postGoal>
+
+    <!-- The plugin goal will setup the plugin directory, which can be
+        copy/pasted into the ImageJ plugins structure-->
+    <goal name="plugin">
+        <mkdir dir="${maven.build.dir}/plugins/nitf" />
+        <j:forEach var="depend" items="${pom.dependencies}">
+            <j:if test="${depend.getGroupId()!='imagej'}">
+                <copy
+                    file="${maven.repo.local}/${depend.groupId}/jars/${depend.artifactId}-${depend.version}.jar"
+                    todir="${maven.build.dir}/plugins/nitf" />
+            </j:if>
+        </j:forEach>
+
+        <jar
+            destfile="${maven.build.dir}/plugins/nitf/${projectName}-${version}.jar"
+            update="true">
+            <fileset dir="${maven.build.dest}" />
+        </jar>
+    </goal>
+
+
+</project>

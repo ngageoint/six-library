@@ -1,0 +1,19 @@
+<xmltre>
+   <description>TRE that doesnt really do much.  Just a demo.</description>
+   <vendor>
+      <publish-date>March 2008</publish-date>
+      <version>0.1</version>
+      <author>Dan Pressel</author>
+   </vendor>
+   <constants>
+       <pi>3.1415926535</pi>
+       <c>299792458.0</c>
+   </constants>
+   <params>
+      <anArray>
+         <index1>1.2</index1>
+         <index2>2.4</index2>
+         <index3>3.6</index3> 
+      </anArray>
+   </params>
+</xmltre>

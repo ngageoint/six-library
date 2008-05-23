@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/3.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
+    <pomVersion>3</pomVersion>
+    <name>nitf-imageio</name>
+    <id>nitf-imageio</id>
+    <groupId>nitro-nitf</groupId>
+    <currentVersion>1.0-dev</currentVersion>
+
+    <developers>
+        <developer>
+            <name>D. Pressel</name>
+            <id>gojira_1</id>
+            <email>gojira_1@users.sourceforge.net</email>
+        </developer>
+        <developer>
+            <name>Tom Zellman</name>
+            <id>tzellman</id>
+            <email>tzellman@users.sourceforge.net</email>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <id>commons-lang</id>
+            <version>2.0</version>
+            <url>http://jakarta.apache.org/commons/</url>
+        </dependency>
+
+        <dependency>
+            <id>commons-io</id>
+            <version>1.3.2</version>
+            <url>http://jakarta.apache.org/commons/</url>
+        </dependency>
+
+        <dependency>
+            <id>commons-logging</id>
+            <version>1.1.1</version>
+            <url>http://jakarta.apache.org/commons/</url>
+        </dependency>
+
+        <dependency>
+            <id>junit</id>
+            <version>3.8.1</version>
+        </dependency>
+
+        <dependency>
+            <id>log4j</id>
+            <version>1.2.8</version>
+            <url>http://jakarta.apache.org/log4j/</url>
+        </dependency>
+
+        <dependency>
+            <id>nitro-nitf:nitf</id>
+            <version>SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <nagEmailAddress>
+            tzellman@users.sourceforge.net
+        </nagEmailAddress>
+        <sourceDirectory>src/java</sourceDirectory>
+        <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+
+        <unitTest>
+            <includes>
+                <include>**/*Test*.java</include>
+            </includes>
+        </unitTest>
+
+        <resources>
+            <resource>
+                <directory>src/samples</directory>
+                <includes>
+                    <include>**/*.java</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+</project>

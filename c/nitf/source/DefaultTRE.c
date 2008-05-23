@@ -22,14 +22,19 @@
 
 #include "nitf/DefaultTRE.h"
 
-NITFAPI(int) nitf_DefaultTRE_handler(nitf_IOHandle io,
-                                     nitf_TRE * tre, nitf_Error * error)
+NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * error)
+{
+	return NITF_SUCCESS;
+}
+
+
+NITFPRIV(int) defaultRead(nitf_IOHandle io, nitf_TRE * tre, struct _nitf_Record* record, nitf_Error * error)
 {
     nitf_Field *field = NULL;
     nitf_TREDescription *descr = NULL;
     char *data = NULL;
     NITF_BOOL success;
-
+	
     if (!tre)
     {
         /* set error ??? */
@@ -61,19 +66,15 @@ NITFAPI(int) nitf_DefaultTRE_handler(nitf_IOHandle io,
     descr[0].data_count = tre->length;
     descr[0].label = "Unknown raw data";
     descr[0].tag = "raw_data";
-    descr[0].pattern = ".*";
-    descr[0].rangeCategory = NITF_NO_RANGE;
-    descr[0].minValue = NULL;
-    descr[0].maxValue = NULL;
     descr[1].data_type = NITF_END;
     descr[1].data_count = 0;
     descr[1].label = NULL;
     descr[1].tag = NULL;
 
-    tre->descrip = descr;
+    tre->priv = descr;
 
     /*  Read the data extension into the tre  */
-    success = nitf_TRE_readField(io, data, (int) tre->length, error);
+    success = nitf_TREUtils_readField(io, data, (int) tre->length, error);
     if (!success)
         goto CATCH_ERROR;
 
@@ -107,4 +108,159 @@ NITFAPI(int) nitf_DefaultTRE_handler(nitf_IOHandle io,
     /* Handle any errors */
 CATCH_ERROR:
     return NITF_FAILURE;
+}
+
+
+NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOHandle io, 
+				 struct _nitf_TRE* tre, 
+				 struct _nitf_Record* record, 
+				 nitf_Error* error)
+{
+    nitf_Field* field;
+    nitf_Pair* pair = nitf_HashTable_find(tre->hash, "raw_data");
+    if (pair == NULL)
+    {
+	nitf_Error_init(error, "No raw_data in default!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+	return NITF_FAILURE;
+    }
+    field = (nitf_Field*)pair->data;
+    
+    if (!nitf_IOHandle_write(io, field->raw, field->length, error))
+	return NITF_FAILURE;
+    return NITF_SUCCESS;
+}
+
+NITFPRIV(NITF_BOOL) defaultNullIncrement(nitf_TREEnumerator** it, nitf_Error* error)
+{
+	NITF_FREE(*it);
+	*it = NULL;
+	return NITF_SUCCESS;
+}
+
+NITFPRIV(nitf_Pair*) defaultGet(struct _nitf_TREEnumerator* iter, nitf_Error* error)
+{
+	if (!iter)
+	{
+		nitf_Error_init(error, "Null iterator!", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+		return NULL;
+	}
+	return (nitf_Pair*)iter->data;
+}
+
+
+
+NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
+{
+	nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
+	/* Check rv here */
+	//it->tre = tre;
+	it->next = defaultNullIncrement;
+	it->get = defaultGet;
+	it->data = nitf_HashTable_find(tre->hash, "raw_data");
+	if (it->data == NULL)
+	{
+		nitf_Error_init(error, "No raw_data in default!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+		return NITF_FAILURE;
+	}
+	return it;
+	
+}
+
+NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
+				 const char* pattern,
+				 nitf_Error* error)
+{
+    nitf_List* list;
+    /*    nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
+	  if (!pair) return NULL;
+	  
+    */
+    nitf_HashTableIterator it = nitf_HashTable_begin(tre->hash);
+    nitf_HashTableIterator end = nitf_HashTable_end(tre->hash);
+
+    list = nitf_List_construct(error);
+    if (!list) return NULL;
+
+    while (nitf_HashTableIterator_notEqualTo(&it, &end))
+    {
+	nitf_Pair* pair = nitf_HashTableIterator_get(&it);
+
+	if (strstr(pair->key, pattern))
+	{
+	    /* Should check this, I suppose */
+	    nitf_List_pushBack(list, pair, error);
+
+	}
+	nitf_HashTableIterator_increment(&it);
+	
+    }
+
+    return list;
+
+}
+
+NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE * tre,
+                                    const char *tag,
+                                    NITF_DATA * data,
+                                    size_t dataLength, nitf_Error * error)
+{
+	nitf_Field* field;
+	
+	if (strcmp(tag, "raw_data"))
+	{
+		nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER, "Invalid param [%s]", tag);
+		return NITF_FAILURE;
+	}
+	
+	field = nitf_Field_construct(dataLength, NITF_BINARY, error);
+    if (!field)
+		return NITF_FAILURE;
+
+	 /* TODO -- likely inefficient, since we end up copying the raw data here */
+    if (!nitf_Field_setRawData
+            (field, (NITF_DATA *) data, dataLength, error))
+        return NITF_FAILURE;
+
+	tre->length = dataLength;
+
+	if (nitf_HashTable_exists(tre->hash, tag))
+	{
+		nitf_Field* oldValue;
+		nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
+		oldValue = (nitf_Field*)pair->data;
+		nitf_Field_destruct(&oldValue);
+		pair->data = field;
+		return NITF_SUCCESS;
+	}
+	
+	return nitf_HashTable_insert(tre->hash, tag, field, error);
+	
+	 
+
+}
+
+
+//typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle, nitf_TRE* tre, struct _nitf_Record* record, nitf_Error*);
+
+NITFPRIV(int) defaultGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
+{
+	/* TODO: maybe should check that these two fields are equal.. tre->length and "raw_data"->length*/
+	return tre->length;
+}
+
+NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error)
+{
+	static nitf_TREHandler handler =
+	{
+		defaultInit,
+		defaultRead,
+		defaultSetField,
+		defaultFind,
+		defaultWrite,
+		defaultBegin,
+		defaultGetCurrentSize,
+		NULL /* We dont need this! */	
+	};
+	
+	return &handler;
 }

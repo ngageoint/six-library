@@ -20,19 +20,18 @@
  *
  */
 
-
 #include <nitf/IOHandle.h>
-#include <nitf/TRE.h>
+#include <nitf/TREUtils.h>
 #include <nitf/Record.h>
 
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_A, 200, "File Comment", "FILCMT",
-     NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, NULL, NULL},
+    {NITF_BCS_A, 100, "File Comment", "FILCMT1" },
+	{NITF_BCS_A, 100, "File Comment (part II)", "FILCMT2" },
     {NITF_END, 0, NULL, NULL}
 };
-
 NITF_DECLARE_SINGLE_PLUGIN(JITCID, description)
+
 
 NITF_CXX_ENDGUARD
