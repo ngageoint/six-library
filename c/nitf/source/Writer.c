@@ -1582,52 +1582,50 @@ CATCH_ERROR:
 NITFPRIV(NITF_BOOL) writeDE(nitf_SegmentWriter * segmentWriter,
         nitf_Writer* writer,nitf_DESubheader *subheader,nitf_Error *error)
 {
-    char desid[NITF_DESTAG_SZ+1];  /* DESID for overflow check */
+    char desid[NITF_DESTAG_SZ+1]; /* DESID for overflow check */
 
-/*  Check for overflow segment */
-
+    /*  Check for overflow segment */
     if(!nitf_Field_get(subheader->NITF_DESTAG,(NITF_DATA *) desid,
-                                  NITF_CONV_STRING,NITF_DESTAG_SZ+1, error))
+                    NITF_CONV_STRING,NITF_DESTAG_SZ+1, error))
     {
-      nitf_Error_init(error,
-          "Could not retrieve DE segment id",
-                              NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-      return(NITF_FAILURE);
+        nitf_Error_init(error,
+                "Could not retrieve DE segment id",
+                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        return NITF_FAILURE;
     }
 
     nitf_Field_trimString(desid);
-    if(strcmp(desid,"TRE_OVERFLOW") == 0)  /* This is an overflow */
+    /*if(strcmp(desid,"TRE_OVERFLOW") == 0)*//* This is an overflow */
     {
-      nitf_ExtensionsIterator iter;       /* TRE iterator */
-      nitf_ExtensionsIterator end;        /* End iterator */
-      nitf_TRE *tre = NULL;
+        nitf_ExtensionsIterator iter; /* TRE iterator */
+        nitf_ExtensionsIterator end; /* End iterator */
+        nitf_TRE *tre = NULL;
 
-      iter = nitf_Extensions_begin(subheader->overflowSection);
-      end = nitf_Extensions_end(subheader->overflowSection);
+        iter = nitf_Extensions_begin(subheader->userDefinedSection);
+        end = nitf_Extensions_end(subheader->userDefinedSection);
 
-      while (nitf_ExtensionsIterator_notEqualTo(&iter, &end))
-      {
-        tre = (nitf_TRE *) nitf_ExtensionsIterator_get(&iter);
+        while (nitf_ExtensionsIterator_notEqualTo(&iter, &end))
+        {
+            tre = (nitf_TRE *) nitf_ExtensionsIterator_get(&iter);
 
-        if(!writeExtension(writer,tre,error))
-          goto CATCH_ERROR;
+            if(!writeExtension(writer,tre,error))
+            goto CATCH_ERROR;
 
-        nitf_ExtensionsIterator_increment(&iter);
-      }
-
-      return(NITF_SUCCESS);   
+            nitf_ExtensionsIterator_increment(&iter);
+        }
+        return NITF_SUCCESS;
     }
- 
+
     if (!segmentWriter)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Trying to use uninitialized DE SegmentWriter.  Write failed.");
+                "Trying to use uninitialized DE SegmentWriter.  Write failed.");
         goto CATCH_ERROR;
     }
 
     return nitf_SegmentWriter_write(segmentWriter, error);
 
-CATCH_ERROR:
+    CATCH_ERROR:
     return NITF_FAILURE;
 }
 

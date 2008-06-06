@@ -590,9 +590,9 @@ void showDESubheader(nitf_DESubheader * sub)
     nitf_TREUtils_print(sub->subheaderFields, &error);
     SHOWI(sub->dataLength);
 
-    if (sub->overflowSection)
+    if (sub->userDefinedSection)
     {
-        nitf_HashTable_foreach(sub->overflowSection->hash,
+        nitf_HashTable_foreach(sub->userDefinedSection->hash,
                                (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
     }
 }

@@ -1819,7 +1819,7 @@ NITFAPI(NITF_BOOL) nitf_Record_moveReservedExtensionSegment
         } \
       } \
       if(!moveTREs(section, \
-               overflow->subheader->overflowSection,maxLength,error)) \
+               overflow->subheader->userDefinedSection,maxLength,error)) \
       { \
         nitf_Error_init(error, \
             "Could not transfer TREs to overflow segment", \
@@ -2089,7 +2089,7 @@ NITFAPI(NITF_BOOL) nitf_Record_mergeTREs
         return(NITF_FAILURE);
       if(!nitf_Field_setUint32(overflowIdx,0,error))
         return(NITF_FAILURE);
-      if(!moveTREs(subheader->overflowSection,destination,0,error))
+      if(!moveTREs(subheader->userDefinedSection,destination,0,error))
         return(NITF_FAILURE);
 
 /* Remove the DE segment how does this effect indexes */

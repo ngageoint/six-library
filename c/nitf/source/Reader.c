@@ -846,7 +846,7 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
         while (currentOffset < segment->end)
         {
             /* read a TRE */
-            if (!readTRE(reader, subhdr->overflowSection, error))
+            if (!readTRE(reader, subhdr->userDefinedSection, error))
                 goto CATCH_ERROR;
 
             /* update the offset */
