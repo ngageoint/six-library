@@ -1971,7 +1971,6 @@ NITFAPI(NITF_BOOL) nitf_Record_mergeTREs
     nitf_ListIterator deEnd; /* DE segment list end */
     nitf_Uint32 deIdx; /* Current DE segment index (one based) */
     nitf_Int32 deRemoved; /* Number of DE segments removed */
-    nitf_DESegment *overflow; /* Current overflow segment */
 
     deIter = nitf_List_begin(record->dataExtensions);
     deEnd = nitf_List_end(record->dataExtensions);
