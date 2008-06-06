@@ -1841,124 +1841,124 @@ NITFAPI(NITF_BOOL) nitf_Record_unmergeTREs
     nitf_Error * error
 )
 {
-  nitf_Version version;             /* NITF version */ 
-  nitf_FileHeader *header;          /* File header */
-  nitf_ListIterator segIter;        /* Current segment list */
-  nitf_ListIterator segEnd;         /* Current segment list end */
-  nitf_Uint32 segIdx;               /* Current segment index */
-  nitf_Uint32 length;               /* Length Of TREs in current section */
-  nitf_Uint32 maxLength;            /* Max length for this type of section */
-  nitf_Uint32 ovfIdx;               /* Overflow index of current extension */
-  nitf_DESegment *overflow;         /* Overflow segment */
+    nitf_Version version; /* NITF version */
+    nitf_FileHeader *header; /* File header */
+    nitf_ListIterator segIter; /* Current segment list */
+    nitf_ListIterator segEnd; /* Current segment list end */
+    nitf_Uint32 segIdx; /* Current segment index */
+    nitf_Uint32 length; /* Length Of TREs in current section */
+    nitf_Uint32 maxLength; /* Max length for this type of section */
+    nitf_Uint32 ovfIdx; /* Overflow index of current extension */
+    nitf_DESegment *overflow; /* Overflow segment */
 
-  version = nitf_Record_getVersion(record,error); 
+    version = nitf_Record_getVersion(record,error);
 
-/* File header */
+    /* File header */
 
     header = record->header;
     UNMERGE_SEGMENT(header->userDefinedSection,
-        header->classification,header->securityGroup,header->NITF_UDHOFL,UDHD);
+            header->classification,header->securityGroup,header->NITF_UDHOFL,UDHD);
 
     UNMERGE_SEGMENT(header->extendedSection,
-        header->classification,header->securityGroup,header->NITF_XHDLOFL,XHD);
+            header->classification,header->securityGroup,header->NITF_XHDLOFL,XHD);
 
-/* Image segments */
+    /* Image segments */
 
-  segIter = nitf_List_begin(record->images);
-  segEnd = nitf_List_end(record->images);
-  segIdx = 1;
-  while(nitf_ListIterator_notEqualTo(&segIter, &segEnd))
-  {
-    nitf_ImageSubheader *subheader;    /* Current subheader */
+    segIter = nitf_List_begin(record->images);
+    segEnd = nitf_List_end(record->images);
+    segIdx = 1;
+    while(nitf_ListIterator_notEqualTo(&segIter, &segEnd))
+    {
+        nitf_ImageSubheader *subheader; /* Current subheader */
 
-    maxLength = 99999;
+        maxLength = 99999;
 
-    subheader = (nitf_ImageSubheader *)
-        ((nitf_ImageSegment *) nitf_ListIterator_get(&segIter))->subheader;
+        subheader = (nitf_ImageSubheader *)
+                ((nitf_ImageSegment *) nitf_ListIterator_get(&segIter))->subheader;
 
-/*  User defined section */
+        /*  User defined section */
 
-    UNMERGE_SEGMENT(subheader->userDefinedSection,subheader->imageSecurityClass,
-                     subheader->securityGroup,subheader->NITF_UDOFL,UDID);
+        UNMERGE_SEGMENT(subheader->userDefinedSection,subheader->imageSecurityClass,
+                subheader->securityGroup,subheader->NITF_UDOFL,UDID);
 
-/*  Extension section */
+        /*  Extension section */
 
-    UNMERGE_SEGMENT(subheader->extendedSection,subheader->imageSecurityClass,
-                    subheader->securityGroup,subheader->NITF_IXSOFL,IXSHD);
+        UNMERGE_SEGMENT(subheader->extendedSection,subheader->imageSecurityClass,
+                subheader->securityGroup,subheader->NITF_IXSOFL,IXSHD);
 
-    segIdx += 1;
-    nitf_ListIterator_increment(&segIter);
-  }
+        segIdx += 1;
+        nitf_ListIterator_increment(&segIter);
+    }
 
-/* Graphics segments */
+    /* Graphics segments */
 
-  segIter = nitf_List_begin(record->graphics);
-  segEnd = nitf_List_end(record->graphics);
-  segIdx = 1;
-  while(nitf_ListIterator_notEqualTo(&segIter, &segEnd))
-  {
-    nitf_GraphicSubheader *subheader;    /* Current subheader */
+    segIter = nitf_List_begin(record->graphics);
+    segEnd = nitf_List_end(record->graphics);
+    segIdx = 1;
+    while(nitf_ListIterator_notEqualTo(&segIter, &segEnd))
+    {
+        nitf_GraphicSubheader *subheader; /* Current subheader */
 
-    maxLength = 9741;
+        maxLength = 9741;
 
-    subheader = (nitf_GraphicSubheader *)
-        ((nitf_GraphicSegment *) nitf_ListIterator_get(&segIter))->subheader;
+        subheader = (nitf_GraphicSubheader *)
+                ((nitf_GraphicSegment *) nitf_ListIterator_get(&segIter))->subheader;
 
-/*  Extension section */
+        /*  Extension section */
 
-    UNMERGE_SEGMENT(subheader->extendedSection,subheader->securityClass,
-            subheader->securityGroup,subheader->NITF_SXSOFL,SXSHD);
+        UNMERGE_SEGMENT(subheader->extendedSection,subheader->securityClass,
+                subheader->securityGroup,subheader->NITF_SXSOFL,SXSHD);
 
-    segIdx += 1;
-    nitf_ListIterator_increment(&segIter);
-  }
+        segIdx += 1;
+        nitf_ListIterator_increment(&segIter);
+    }
 
-/* Label segments */
+    /* Label segments */
 
-  segIter = nitf_List_begin(record->labels);
-  segEnd = nitf_List_end(record->labels);
-  segIdx = 1;
-  while(nitf_ListIterator_notEqualTo(&segIter, &segEnd))
-  {
-    nitf_LabelSubheader *subheader;    /* Current subheader */
+    segIter = nitf_List_begin(record->labels);
+    segEnd = nitf_List_end(record->labels);
+    segIdx = 1;
+    while(nitf_ListIterator_notEqualTo(&segIter, &segEnd))
+    {
+        nitf_LabelSubheader *subheader; /* Current subheader */
 
-    maxLength = 9747;
+        maxLength = 9747;
 
-    subheader = (nitf_LabelSubheader *)
-        ((nitf_LabelSegment *) nitf_ListIterator_get(&segIter))->subheader;
+        subheader = (nitf_LabelSubheader *)
+                ((nitf_LabelSegment *) nitf_ListIterator_get(&segIter))->subheader;
 
-/*  Extension section */
+        /*  Extension section */
 
-    UNMERGE_SEGMENT(subheader->extendedSection,subheader->securityClass,
-            subheader->securityGroup,subheader->NITF_LXSOFL,LXSHD);
+        UNMERGE_SEGMENT(subheader->extendedSection,subheader->securityClass,
+                subheader->securityGroup,subheader->NITF_LXSOFL,LXSHD);
 
-    segIdx += 1;
-  }
+        segIdx += 1;
+    }
 
-/* Text segments */
+    /* Text segments */
 
-  segIter = nitf_List_begin(record->texts);
-  segEnd = nitf_List_end(record->texts);
-  segIdx = 1;
-  while(nitf_ListIterator_notEqualTo(&segIter, &segEnd))
-  {
-    nitf_TextSubheader *subheader;    /* Current subheader */
+    segIter = nitf_List_begin(record->texts);
+    segEnd = nitf_List_end(record->texts);
+    segIdx = 1;
+    while(nitf_ListIterator_notEqualTo(&segIter, &segEnd))
+    {
+        nitf_TextSubheader *subheader; /* Current subheader */
 
-    maxLength = 9717;
+        maxLength = 9717;
 
-    subheader = (nitf_TextSubheader *)
-        ((nitf_TextSegment *) nitf_ListIterator_get(&segIter))->subheader;
+        subheader = (nitf_TextSubheader *)
+                ((nitf_TextSegment *) nitf_ListIterator_get(&segIter))->subheader;
 
-/*  Extension section */
+        /*  Extension section */
 
-    UNMERGE_SEGMENT(subheader->extendedSection,subheader->securityClass,
-            subheader->securityGroup,subheader->NITF_TXSOFL,TXSHD);
+        UNMERGE_SEGMENT(subheader->extendedSection,subheader->securityClass,
+                subheader->securityGroup,subheader->NITF_TXSOFL,TXSHD);
 
-    segIdx += 1;
-    nitf_ListIterator_increment(&segIter);
-  }
+        segIdx += 1;
+        nitf_ListIterator_increment(&segIter);
+    }
 
-  return(NITF_SUCCESS);
+    return(NITF_SUCCESS);
 }
 
 NITFAPI(NITF_BOOL) nitf_Record_mergeTREs
@@ -1967,157 +1967,157 @@ NITFAPI(NITF_BOOL) nitf_Record_mergeTREs
     nitf_Error * error
 )
 {
-  nitf_ListIterator deIter;        /* DE segment list */
-  nitf_ListIterator deEnd;         /* DE segment list end */
-  nitf_Uint32 deIdx;               /* Current DE segment index (one based) */
-  nitf_Int32 deRemoved;            /* Number of DE segments removed */
-  nitf_DESegment *overflow;        /* Current overflow segment */
-  
-  deIter = nitf_List_begin(record->dataExtensions);
-  deEnd = nitf_List_end(record->dataExtensions);
-  deIdx = 1;
-  deRemoved = 0;
-  while(nitf_ListIterator_notEqualTo(&deIter, &deEnd))
-  {
-    nitf_DESubheader *subheader;    /* Current subheader */
-    char desid[NITF_DESTAG_SZ+1];
-    nitf_Extensions *destination;   /* Owner of overflow */
-    nitf_Field *extLength;          /* Extended header length field */
-    nitf_Field *overflowIdx;        /* Overflow length  field */
+    nitf_ListIterator deIter; /* DE segment list */
+    nitf_ListIterator deEnd; /* DE segment list end */
+    nitf_Uint32 deIdx; /* Current DE segment index (one based) */
+    nitf_Int32 deRemoved; /* Number of DE segments removed */
+    nitf_DESegment *overflow; /* Current overflow segment */
 
-    subheader = (nitf_DESubheader *)
-        ((nitf_DESegment *) nitf_ListIterator_get(&deIter))->subheader;
-
-    if(!nitf_Field_get(subheader->NITF_DESTAG,(NITF_DATA *) desid,
-                                  NITF_CONV_STRING,NITF_DESTAG_SZ+1, error))
+    deIter = nitf_List_begin(record->dataExtensions);
+    deEnd = nitf_List_end(record->dataExtensions);
+    deIdx = 1;
+    deRemoved = 0;
+    while(nitf_ListIterator_notEqualTo(&deIter, &deEnd))
     {
-      nitf_Error_init(error,
-          "Could not retrieve DE segment id",
-                              NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-      return(NITF_FAILURE);
-    }
-    nitf_Field_trimString(desid);
+        nitf_DESubheader *subheader; /* Current subheader */
+        char desid[NITF_DESTAG_SZ+1];
+        nitf_Extensions *destination; /* Owner of overflow */
+        nitf_Field *extLength; /* Extended header length field */
+        nitf_Field *overflowIdx; /* Overflow length  field */
 
-    if(strcmp(desid,TRE_OVERFLOW_STR) == 0)  /* This is an overflow */
+        subheader = (nitf_DESubheader *)
+                ((nitf_DESegment *) nitf_ListIterator_get(&deIter))->subheader;
+
+        if(!nitf_Field_get(subheader->NITF_DESTAG,(NITF_DATA *) desid,
+                        NITF_CONV_STRING,NITF_DESTAG_SZ+1, error))
+        {
+            nitf_Error_init(error,
+                    "Could not retrieve DE segment id",
+                    NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+            return(NITF_FAILURE);
+        }
+        nitf_Field_trimString(desid);
+
+        if(strcmp(desid,TRE_OVERFLOW_STR) == 0) /* This is an overflow */
+        {
+            nitf_Uint32 segIdx;
+            char type[NITF_DESOFLW_SZ+1];
+            NITF_BOOL eflag;
+
+            /* Get type and index */
+
+            eflag = !nitf_Field_get(subheader->NITF_DESOFLW,(NITF_DATA *) type,
+                    NITF_CONV_STRING,NITF_DESOFLW_SZ+1,error);
+            eflag |= !nitf_Field_get(subheader->NITF_DESITEM,&segIdx,
+                    NITF_CONV_INT,NITF_INT32_SZ,error);
+            if(eflag)
+            {
+                nitf_Error_init(error,
+                        "Could not retrieve DE segment header overflow value",
+                        NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+                return(NITF_FAILURE);
+            }
+            nitf_Field_trimString(type);
+
+            if(strcmp(type,"UDHD") == 0) /* File header user defined */
+            {
+                extLength = record->header->NITF_UDHDL;
+                overflowIdx = record->header->NITF_UDHOFL;
+                destination = record->header->userDefinedSection;
+            }
+            else if(strcmp(type,"XHD") == 0) /* File header extended */
+            {
+                extLength = record->header->NITF_XHDL;
+                overflowIdx = record->header->NITF_XHDLOFL;
+                destination = record->header->extendedSection;
+            }
+            else if((strcmp(type,"UDID") == 0) /* Image segment */
+                    || (strcmp(type,"IXSHD") == 0))
+            {
+                nitf_ImageSegment *imSeg;
+
+                imSeg = nitf_List_get(record->images,segIdx-1,error);
+                if(strcmp(type,"UDID") == 0) /* Image segment user defined */
+                {
+                    extLength = imSeg->subheader->NITF_UDIDL;
+                    overflowIdx = imSeg->subheader->NITF_UDOFL;
+                    destination = imSeg->subheader->userDefinedSection;
+                }
+                else
+                {
+                    extLength = imSeg->subheader->NITF_IXSHDL;
+                    overflowIdx = imSeg->subheader->NITF_IXSOFL;
+                    destination = imSeg->subheader->extendedSection;
+                }
+            }
+            else if(strcmp(type,"SXSHD") == 0) /* Graphics segment */
+            {
+                nitf_GraphicSegment *grSeg;
+
+                grSeg = nitf_List_get(record->graphics,segIdx-1,error);
+                extLength = grSeg->subheader->NITF_SXSHDL;
+                overflowIdx = grSeg->subheader->NITF_SXSOFL;
+                destination = grSeg->subheader->extendedSection;
+            }
+            else if(strcmp(type,"LXSHD") == 0) /* Labels segment */
+            {
+                nitf_LabelSegment *lbSeg;
+
+                lbSeg = nitf_List_get(record->labels,segIdx-1,error);
+                extLength = lbSeg->subheader->NITF_LXSHDL;
+                overflowIdx = lbSeg->subheader->NITF_LXSOFL;
+                destination = lbSeg->subheader->extendedSection;
+            }
+            else if(strcmp(type,"TXSHD") == 0) /* Text segment */
+            {
+                nitf_TextSegment *txSeg;
+
+                txSeg = nitf_List_get(record->texts,segIdx-1,error);
+                extLength = txSeg->subheader->NITF_TXSHDL;
+                overflowIdx = txSeg->subheader->NITF_TXSOFL;
+                destination = txSeg->subheader->extendedSection;
+            }
+            else
+            {
+                nitf_Error_init(error,
+                        "Invalid overflow segment type or index",
+                        NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+                return(NITF_FAILURE);
+            }
+
+            if(!nitf_Field_setUint32(extLength,0,error))
+                return(NITF_FAILURE);
+            if(!nitf_Field_setUint32(overflowIdx,0,error))
+                return(NITF_FAILURE);
+            if(!moveTREs(subheader->userDefinedSection,destination,0,error))
+                return(NITF_FAILURE);
+
+            /* Remove the DE segment how does this effect indexes */
+
+            if(!nitf_Record_removeDataExtensionSegment(record,deIdx-1,error))
+                return(NITF_FAILURE);
+            deIter = nitf_List_begin(record->dataExtensions);
+            deIdx = 1;
+            deRemoved += 1;
+            continue;
+        }
+
+        deIdx += 1;
+        nitf_ListIterator_increment(&deIter);
+    }
+
+    if(deRemoved> 0)
     {
-      nitf_Uint32 segIdx;
-      char type[NITF_DESOFLW_SZ+1];
-      NITF_BOOL eflag;
+        nitf_Int32 deCount;
 
-/* Get type and index */
-
-      eflag = !nitf_Field_get(subheader->NITF_DESOFLW,(NITF_DATA *) type,
-                                  NITF_CONV_STRING,NITF_DESOFLW_SZ+1,error);
-      eflag |= !nitf_Field_get(subheader->NITF_DESITEM,&segIdx,
-                                  NITF_CONV_INT,NITF_INT32_SZ,error);
-      if(eflag)
-      {
-        nitf_Error_init(error,
-          "Could not retrieve DE segment header overflow value",
-                              NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-        return(NITF_FAILURE);
-      }
-    nitf_Field_trimString(type);
-
-      if(strcmp(type,"UDHD") == 0)         /* File header user defined */
-      {
-        extLength = record->header->NITF_UDHDL;
-        overflowIdx = record->header->NITF_UDHOFL;
-        destination = record->header->userDefinedSection;
-        }
-      else if(strcmp(type,"XHD") == 0)      /* File header extended */
-      {
-        extLength = record->header->NITF_XHDL;
-        overflowIdx = record->header->NITF_XHDLOFL;
-        destination = record->header->extendedSection;
-      }
-      else if((strcmp(type,"UDID") == 0)    /* Image segment */
-              || (strcmp(type,"IXSHD") == 0))
-      {
-        nitf_ImageSegment *imSeg;
-
-        imSeg = nitf_List_get(record->images,segIdx-1,error);
-        if(strcmp(type,"UDID") == 0)      /* Image segment user defined */
-        {
-          extLength = imSeg->subheader->NITF_UDIDL;
-          overflowIdx = imSeg->subheader->NITF_UDOFL;
-          destination = imSeg->subheader->userDefinedSection;
-        }
-        else
-        {
-          extLength = imSeg->subheader->NITF_IXSHDL;
-          overflowIdx = imSeg->subheader->NITF_IXSOFL;
-          destination = imSeg->subheader->extendedSection;
-        }
-      }
-      else if(strcmp(type,"SXSHD") == 0)    /* Graphics segment */
-      {
-        nitf_GraphicSegment *grSeg;
-  
-        grSeg = nitf_List_get(record->graphics,segIdx-1,error);
-        extLength = grSeg->subheader->NITF_SXSHDL;
-        overflowIdx = grSeg->subheader->NITF_SXSOFL;
-        destination = grSeg->subheader->extendedSection;
-      }
-      else if(strcmp(type,"LXSHD") == 0)    /* Labels segment */
-      {
-        nitf_LabelSegment *lbSeg;
-
-        lbSeg = nitf_List_get(record->labels,segIdx-1,error);
-        extLength = lbSeg->subheader->NITF_LXSHDL;
-        overflowIdx = lbSeg->subheader->NITF_LXSOFL;
-        destination = lbSeg->subheader->extendedSection;
-      }
-      else if(strcmp(type,"TXSHD") == 0)    /* Text segment */
-      {
-        nitf_TextSegment *txSeg;
-  
-        txSeg = nitf_List_get(record->texts,segIdx-1,error);
-        extLength = txSeg->subheader->NITF_TXSHDL;
-        overflowIdx = txSeg->subheader->NITF_TXSOFL;
-        destination = txSeg->subheader->extendedSection;
-      }
-      else
-      {
-        nitf_Error_init(error,
-          "Invalid overflow segment type or index",
-                              NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-        return(NITF_FAILURE);
-      }
-
-      if(!nitf_Field_setUint32(extLength,0,error))
-        return(NITF_FAILURE);
-      if(!nitf_Field_setUint32(overflowIdx,0,error))
-        return(NITF_FAILURE);
-      if(!moveTREs(subheader->userDefinedSection,destination,0,error))
-        return(NITF_FAILURE);
-
-/* Remove the DE segment how does this effect indexes */
-
-      if(!nitf_Record_removeDataExtensionSegment(record,deIdx-1,error))
-        return(NITF_FAILURE);
-      deIter = nitf_List_begin(record->dataExtensions);
-      deIdx = 1;
-      deRemoved += 1;
-      continue;
+        if(!nitf_Field_get(record->header->NITF_NUMDES,&deCount,
+                        NITF_CONV_INT,NITF_INT32_SZ,error))
+            return(NITF_FAILURE);
+        deCount -= deRemoved;
+        if(deCount < 0)
+            deCount = 0;
+        if(!nitf_Field_setUint32(record->header->NITF_NUMDES,deCount,error))
+            return(NITF_FAILURE);
     }
-
-    deIdx += 1;
-    nitf_ListIterator_increment(&deIter);
-  }
-
-  if(deRemoved > 0)
-  {
-    nitf_Int32 deCount;
-
-    if(!nitf_Field_get(record->header->NITF_NUMDES,&deCount,
-                                  NITF_CONV_INT,NITF_INT32_SZ,error))
-      return(NITF_FAILURE);
-    deCount -= deRemoved;
-    if(deCount < 0)
-      deCount = 0;
-    if(!nitf_Field_setUint32(record->header->NITF_NUMDES,deCount,error))
-      return(NITF_FAILURE);
-  }
-  return(NITF_SUCCESS);
+    return(NITF_SUCCESS);
 }
