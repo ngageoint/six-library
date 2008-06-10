@@ -128,6 +128,7 @@ PLUGINS = \
         ACFTB.c  \
         AIMIDA.c \
         AIMIDB.c \
+        AIPBCA.c \
         BANDSA.c \
         BCKGDA.c \
         BLOCKA.c \
