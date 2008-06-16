@@ -349,11 +349,11 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
 
 /*  Set a string field */
 
-NITFPRIV(NITF_BOOL) isBCSN(char *str, nitf_Uint32 len, nitf_Error * error);
-NITFPRIV(NITF_BOOL) isBCSA(char *str, nitf_Uint32 len, nitf_Error * error);
+NITFPRIV(NITF_BOOL) isBCSN(const char *str, nitf_Uint32 len, nitf_Error * error);
+NITFPRIV(NITF_BOOL) isBCSA(const char *str, nitf_Uint32 len, nitf_Error * error);
 
 NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
-                                        char *str, nitf_Error * error)
+                                        const char *str, nitf_Error * error)
 {
     nitf_Uint32 strLen;         /* Length of input string */
 
@@ -1040,7 +1040,7 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
  *  A zero length string passes
  */
 
-NITFPRIV(NITF_BOOL) isBCSN(char *str, nitf_Uint32 len, nitf_Error * error)
+NITFPRIV(NITF_BOOL) isBCSN(const char *str, nitf_Uint32 len, nitf_Error * error)
 {
     char *strp;                 /* Pointer into string */
     nitf_Uint32 i;
@@ -1077,7 +1077,7 @@ NITFPRIV(NITF_BOOL) isBCSN(char *str, nitf_Uint32 len, nitf_Error * error)
  *  A zero length string passes
  */
 
-NITFPRIV(NITF_BOOL) isBCSA(char *str, nitf_Uint32 len, nitf_Error * error)
+NITFPRIV(NITF_BOOL) isBCSA(const char *str, nitf_Uint32 len, nitf_Error * error)
 {
     nitf_Uint8 *strp;           /* Pointer into string */
     nitf_Uint32 i;

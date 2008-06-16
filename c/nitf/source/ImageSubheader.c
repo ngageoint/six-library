@@ -365,10 +365,11 @@ NITFAPI(void) nitf_ImageSubheader_destruct(nitf_ImageSubheader ** subhdr)
 
 NITFAPI(NITF_BOOL)
 nitf_ImageSubheader_setPixelInformation(nitf_ImageSubheader * subhdr,
-                                        char *pvtype, nitf_Uint32 nbpp,
+                                        const char *pvtype, nitf_Uint32 nbpp,
                                         nitf_Uint32 abpp,
-                                        char *justification, char *irep,
-                                        char *icat, nitf_Uint32 bandCount,
+                                        const char *justification,
+                                        const char *irep,
+                                        const char *icat, nitf_Uint32 bandCount,
                                         nitf_BandInfo ** bands,
                                         nitf_Error * error)
 {
@@ -727,10 +728,8 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_getBlocking(nitf_ImageSubheader *
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_getCompression(nitf_ImageSubheader *
         subhdr,
-        char
-        *imageCompression,
-        char
-        *compressionRate,
+        char *imageCompression,
+        char *compressionRate,
         nitf_Error * error)
 {
 
@@ -775,16 +774,13 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setDimensions(nitf_ImageSubheader *
 }
 
 
-NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking(nitf_ImageSubheader *
-        subhdr,
+NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking(nitf_ImageSubheader *subhdr,
         nitf_Uint32 numRows,
         nitf_Uint32 numCols,
-        nitf_Uint32
-        numRowsPerBlock,
-        nitf_Uint32
-        numColsPerBlock,
-        char *imode,
-        nitf_Error * error)
+        nitf_Uint32 numRowsPerBlock,
+        nitf_Uint32 numColsPerBlock,
+        const char *imode,
+        nitf_Error *error)
 {
     nitf_Uint32 numBlocksPerRow;        /* Number of blocks/row */
     nitf_Uint32 numBlocksPerCol;        /* Number of blocks/column */
@@ -840,12 +836,9 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking(nitf_ImageSubheader *
 }
 
 
-NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression(nitf_ImageSubheader *
-        subhdr,
-        char
-        *imageCompression,
-        char
-        *compressionRate,
+NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression(nitf_ImageSubheader *subhdr,
+        const char *imageCompression,
+        const char *compressionRate,
         nitf_Error * error)
 {
     if (!nitf_Field_setString(subhdr->NITF_IC, imageCompression, error))
@@ -860,7 +853,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression(nitf_ImageSubheader *
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_insertImageComment
 (
     nitf_ImageSubheader * subhdr,
-    char *comment,
+    const char *comment,
     int position,
     nitf_Error * error
 )

@@ -258,12 +258,12 @@ NITFAPI(void) nitf_ImageSubheader_destruct(nitf_ImageSubheader ** subhdr);
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_setPixelInformation
 (
     nitf_ImageSubheader *subhdr,      /*!< Subheader object to set */
-    char *pvtype,                     /*!< Pixel value type */
+    const char *pvtype,               /*!< Pixel value type */
     nitf_Uint32 nbpp,                 /*!< Number of bits/pixel */
     nitf_Uint32 abpp,                 /*!< Actual number of bits/pixel */
-    char *justification,              /*!< Pixel justification */
-    char *irep,                       /*!< Image representation */
-    char *icat,                       /*!< Image category */
+    const char *justification,        /*!< Pixel justification */
+    const char *irep,                 /*!< Image representation */
+    const char *icat,                 /*!< Image category */
     nitf_Uint32 bandCount,            /*!< Number of bands */
     nitf_BandInfo **bands,            /*!< Band information object list */
     nitf_Error *error                 /*!< For error returns */
@@ -446,7 +446,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking
     nitf_Uint32 numCols,          /*!< The number of columns */
     nitf_Uint32 numRowsPerBlock,  /*!< The number of rows/block */
     nitf_Uint32 numColsPerBlock,  /*!< The number of columns/block */
-    char *imode,                  /*!< Image mode */
+    const char *imode,            /*!< Image mode */
     nitf_Error *error             /*!< Object for error messages */
 );
 
@@ -472,31 +472,8 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression
 (
     nitf_ImageSubheader* subhdr,  /*!< Associated image subheader object */
-    char *imageCompression,       /*!< The compression type code */
-    char *compressionRate,        /*!< The compression rate code */
-    nitf_Error *error             /*!< Object for error messages */
-);
-
-/*!
-  \brief  nitf_ImageSubheader_setCompression - Set image compression
-
-  nitf_ImageSubheader_getCompression sets the comnpression type and
-  compression rate
-
-  The imageCompression argument must is a char array with at least
-  NITF_IC_SZ+1 bytes. The compressionRate argument must is a char array
-  with at least NITF_CCOMRAT_SZ+1 bytes. IF eaither string is too long
-  for the field, it is truncated.
-
-  The only errors are associated with fetching field objects.
-
-  \return TRUE is return on success, on error the error object is set.
-*/
-NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression
-(
-    nitf_ImageSubheader* subhdr,  /*!< Associated image subheader object */
-    char *imageCompression,       /*!< The compression type code */
-    char *compressionRate,        /*!< The compression rate code */
+    const char *imageCompression, /*!< The compression type code */
+    const char *compressionRate,  /*!< The compression rate code */
     nitf_Error *error             /*!< Object for error messages */
 );
 
@@ -524,7 +501,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_insertImageComment
 (
     nitf_ImageSubheader* subhdr,  /*!< Associated image subheader object */
-    char* comment,                /*!< Comment to add - must be null-terminated */
+    const char* comment,          /*!< Comment to add - must be null-terminated */
     int position,                 /*!< position to put the comment (zero-index)*/
     nitf_Error *error             /*!< Object for error messages */
 );

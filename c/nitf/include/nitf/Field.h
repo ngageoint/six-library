@@ -246,7 +246,7 @@ NITFAPI(void) nitf_Field_trimString(char *str);
  */
 
 NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
-                                        char *str, nitf_Error * error);
+                                        const char *str, nitf_Error * error);
 
 /*!
  *  \fn nitf_Field_setReal
@@ -265,7 +265,8 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
  */
 
 NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
-                                      const char *type, NITF_BOOL plus, double value, nitf_Error *error);
+                                      const char *type, NITF_BOOL plus,
+                                      double value, nitf_Error *error);
 
 /*!
  *  \fn nitf_Field_destruct
