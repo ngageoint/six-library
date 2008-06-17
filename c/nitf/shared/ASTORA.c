@@ -174,6 +174,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(AIPBCA, description)
+NITF_DECLARE_SINGLE_PLUGIN(ASTORA, description)
 
 NITF_CXX_ENDGUARD
