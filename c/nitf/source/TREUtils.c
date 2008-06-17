@@ -390,7 +390,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
 NITFAPI(void) nitf_TREUtils_setDescription(nitf_TRE* tre, nitf_Error* error)
 {
 
-	nitf_TREDescriptionSet *descriptions = NULL;
+    nitf_TREDescriptionSet *descriptions = NULL;
     nitf_TREDescriptionInfo *infoPtr = NULL;
     int numDescriptions = 0;
     if (!tre)
@@ -423,14 +423,14 @@ NITFAPI(void) nitf_TREUtils_setDescription(nitf_TRE* tre, nitf_Error* error)
         }
     }
     
-	if (!tre->priv)
+    if (!tre->priv)
     {
         infoPtr = descriptions->descriptions;
         while (infoPtr && (infoPtr->description != NULL))
         {
             if (numDescriptions == descriptions->defaultIndex)
             {
-				tre->priv = infoPtr->description;
+		tre->priv = infoPtr->description;
                 if (tre->length == NITF_TRE_DEFAULT_LENGTH &&
                     infoPtr->lengthMatch != NITF_TRE_DESC_NO_LENGTH)
                     tre->length = infoPtr->lengthMatch;
@@ -440,7 +440,8 @@ NITFAPI(void) nitf_TREUtils_setDescription(nitf_TRE* tre, nitf_Error* error)
             infoPtr++;
         }
     }
-	if (!tre->priv)
+
+    if (!tre->priv)
     {
         nitf_Error_init(error, "TRE Description is NULL",
                         NITF_CTXT, NITF_ERR_INVALID_OBJECT);
@@ -453,11 +454,11 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
                                    const nitf_TREDescription* descrip,
                                    nitf_Error * error)
 {
-	nitf_TRECursor cursor;
-	
-	/* set the description so the cursor can use it */
-	tre->priv = descrip;
-
+    nitf_TRECursor cursor;
+    
+    /* set the description so the cursor can use it */
+    tre->priv = descrip;
+    
     /* loop over the description, and add blank fields for the
      * "normal" fields... any special case fields (loops, conditions)
      * won't be added here
@@ -471,9 +472,9 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
             if (!pair || !pair->data)
             {
                 nitf_Field* field = nitf_Field_construct(cursor.length,
-                                             cursor.desc_ptr->data_type,
-                                             error);
-
+							 cursor.desc_ptr->data_type,
+							 error);
+		
                 /* special case if BINARY... must set Raw Data */
                 if (cursor.desc_ptr->data_type == NITF_BINARY)
                 {
@@ -518,134 +519,6 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
 CATCH_ERROR:
     return NITF_FAILURE;
 }
-
-#if 0
-NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
-                                   const nitf_TREDescription* descrip,
-                                   nitf_Error * error)
-
-{
-    int bad = 0;
-    NITF_PLUGIN_TRE_SET_DESCRIPTION_FUNCTION function =
-        (NITF_PLUGIN_TRE_SET_DESCRIPTION_FUNCTION) NULL;
-
-    nitf_PluginRegistry *reg;
-    nitf_Pair *pair;            /* temp nitf_Pair */
-    nitf_Field *field;          /* temp nitf_Field */
-    nitf_TRECursor cursor;      /* the cursor for looping the TRE */
-    char *tempBuf;              /* temp buffer */
-
-    /* get out if TRE is null */
-    if (!tre)
-    {
-        nitf_Error_init(error, "nitf_TREUtils_fillData -> invalid tre object",
-                        NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
-        goto CATCH_ERROR;
-    }
-
-    /* see if the description needs to be looked up in the registry */
-    if (!descrip)
-    {
-        reg = nitf_PluginRegistry_getInstance(error);
-        if (reg)
-        {
-            function = nitf_PluginRegistry_retrieveSetTREDescription(reg,
-                tre->tag, &bad, error);
-            if (bad)
-                goto CATCH_ERROR;
-        }
-
-        if (function == (NITF_PLUGIN_TRE_SET_DESCRIPTION_FUNCTION) NULL)
-        {
-            /* try the default TRE handler */
-            handler = nitf_DefaultTRE_handler(error);
-			if (handler == NULL)
-			{
-				/* for now, just error out */
-				nitf_Error_init(error,
-                            "TRE Set Description handle is NULL",
-                            NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-			}
-            goto CATCH_ERROR;
-        }
-        
-        (*function)(tre, error);
-        if (!tre->descrip)
-        {
-            /*nitf_Error_init(error, "TRE Description is NULL",
-                            NITF_CTXT, NITF_ERR_INVALID_OBJECT);*/
-            goto CATCH_ERROR;
-        }
-    }
-    else
-    {
-        tre->descrip = (nitf_TREDescription *) descrip;
-    }
-
-    /* loop over the description, and add blank fields for the
-     * "normal" fields... any special case fields (loops, conditions)
-     * won't be added here
-     */
-    cursor = nitf_TRECursor_begin(tre);
-    while (!nitf_TRECursor_isDone(&cursor))
-    {
-        if (nitf_TRECursor_iterate(&cursor, error))
-        {
-            pair = nitf_HashTable_find(tre->hash, cursor.tag_str);
-            if (!pair || !pair->data)
-            {
-                field = nitf_Field_construct(cursor.length,
-                                             cursor.desc_ptr->data_type,
-                                             error);
-
-                /* special case if BINARY... must set Raw Data */
-                if (cursor.desc_ptr->data_type == NITF_BINARY)
-                {
-                    tempBuf = (char *) NITF_MALLOC(cursor.length);
-                    if (!tempBuf)
-                    {
-                        nitf_Field_destruct(&field);
-                        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                                        NITF_CTXT, NITF_ERR_MEMORY);
-                        goto CATCH_ERROR;
-                    }
-
-                    memset(tempBuf, 0, cursor.length);
-                    nitf_Field_setRawData(field, (NITF_DATA *) tempBuf,
-                                          cursor.length, error);
-                }
-                else
-                {
-                    /* this will get zero/blank filled by the function */
-                    nitf_Field_setString(field, "", error);
-                }
-
-                /* add to hash if there wasn't an entry yet */
-                if (!pair)
-                {
-                    nitf_HashTable_insert(tre->hash,
-                                          cursor.tag_str, field, error);
-                }
-                /* otherwise, just set the data pointer */
-                else
-                {
-                    pair->data = (NITF_DATA *) field;
-                }
-            }
-        }
-    }
-    nitf_TRE_cleanup(&cursor);
-
-    /* no problems */
-    /*    return tre->descrip; */
-    return NITF_SUCCESS;
-CATCH_ERROR:
-    return NITF_FAILURE;
-}
-
-#endif
-
-
 
 NITFAPI(int) nitf_TREUtils_print(nitf_TRE * tre, nitf_Error * error)
 {
