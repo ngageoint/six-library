@@ -411,6 +411,16 @@ NITFAPI(int) nitf_TRECursor_evalLoops(nitf_TRE * tre,
     {
         loops = NITF_ATO32(desc_ptr->tag);
     }
+
+    else if (desc_ptr->label && strcmp(desc_ptr->label, NITF_FUNCTION) == 0)
+    {
+	NITF_TRE_CURSOR_COUNT_FUNCTION fn = 
+	    (NITF_TRE_CURSOR_COUNT_FUNCTION*)desc_ptr->tag;
+	loops = (*fn)(tre, error);
+	if (loops == -1)
+	    return NITF_FAILURE;
+    }
+
     else
     {
         pair = nitf_TRECursor_getTREPair(tre, desc_ptr, idx_str, looping, error);

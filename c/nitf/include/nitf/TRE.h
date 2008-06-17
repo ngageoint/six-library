@@ -70,6 +70,7 @@ NITF_CXX_GUARD
 /* Set the TREDescription label to NITF_CONST_N, and the number in the tag */
 /* Example: {NITF_LOOP, 0, NITF_CONST_N, "4096"} */
 #define NITF_CONST_N    "CONSTANT"          /*!< TREDescription label value */
+#define NITF_FUNCTION   "FUNCTION"
 
 struct _nitf_Record;
 

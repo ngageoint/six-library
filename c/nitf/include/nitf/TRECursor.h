@@ -128,6 +128,8 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                               nitf_Error * error);
 
 
+typedef unsigned int (*NITF_TRE_CURSOR_COUNT_FUNCTION) (nitf_TRE *,nitf_Error*);
+
 NITF_CXX_ENDGUARD
 
 #endif
