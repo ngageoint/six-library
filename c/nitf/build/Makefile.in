@@ -177,6 +177,14 @@ PLUGINS = \
         RPFDES.c \
         RPFHDR.c \
         RPFIMG.c \
+        RSMAPA.c \
+        RSMDCA.c \
+        RSMECA.c \
+        RSMGGA.c \
+        RSMGIA.c \
+        RSMIDA.c \
+        RSMPCA.c \
+        RSMPIA.c \
         SECTGA.c \
         SENSRA.c \
         SNSPSB.c \
