@@ -27,7 +27,6 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_readField(nitf_IOHandle handle,
 
 
 
-NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSet* set, nitf_Error* error);
 
 
 NITFAPI(char *) nitf_TREUtils_getRawData(nitf_TRE * tre, nitf_Uint32* treLength, nitf_Error * error);
@@ -46,7 +45,7 @@ NITFAPI(int) nitf_TREUtils_print(nitf_TRE * tre, nitf_Error * error);
 NITFAPI(int) nitf_TREUtils_parse(nitf_TRE * tre,
                             char *bufptr, nitf_Error * error);
 
-NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSet* set, nitf_Error* error)
+NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSet* set, nitf_TREHandler *handler, nitf_Error* error);
 ;
 
 NITF_CXX_ENDGUARD
