@@ -805,22 +805,19 @@ NITFPRIV(nitf_TREEnumerator*) basicBegin(nitf_TRE* tre, nitf_Error* error)
 }
 
 
-NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSet* set, nitf_Error* error)
+NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSet* set, nitf_TREHandler *handler,nitf_Error* error)
 {
 	
 
-	static nitf_TREHandler handler = {
-		basicInit,
-		basicRead,
-		basicSetField,
-		basicFind,
-		basicWrite,
-		basicBegin,
-		basicGetCurrentSize,
-		NULL
-	};
+		handler->init = basicInit;
+		handler->read = basicRead;
+		handler->setField = basicSetField;
+		handler->find = basicFind;
+		handler->write = basicWrite;
+		handler->begin = basicBegin;
+		handler->getCurrentSize = basicGetCurrentSize;
 	
 
-	handler.data = set;
-	return &handler;
+	handler->data = set;
+	return handler;
 }

@@ -1219,10 +1219,10 @@ NITFAPI(NITF_BOOL) nitf_Writer_writeImageSubheader(nitf_Writer * writer,
     NITF_WRITE_VALUE(subhdr, NITF_IMAG, SPACE, FILL_RIGHT);
 
     /* deal with extensions */
-    /*NITF_TRY_GET_UINT32(subhdr->NITF_UDIDL, &udidl, error);
+    NITF_TRY_GET_UINT32(subhdr->NITF_UDIDL, &udidl, error);
        NITF_TRY_GET_UINT32(subhdr->NITF_UDOFL, &udofl, error);
        NITF_TRY_GET_UINT32(subhdr->NITF_IXSHDL, &ixshdl, error);
-       NITF_TRY_GET_UINT32(subhdr->NITF_IXSOFL, &ixsofl, error); */
+       NITF_TRY_GET_UINT32(subhdr->NITF_IXSOFL, &ixsofl, error);
 
     NITF_WRITE_USER_HDR_INFO(subhdr->userDefinedSection, &udidl, &udofl);
     NITF_WRITE_EXT_HDR_INFO(subhdr->extendedSection, &ixshdl, &ixsofl);

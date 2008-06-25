@@ -1855,6 +1855,8 @@ NITFAPI(NITF_BOOL) nitf_Record_unmergeTREs
 
     /* File header */
 
+    maxLength = 99999;
+
     header = record->header;
     UNMERGE_SEGMENT(header->userDefinedSection,
             header->classification,header->securityGroup,header->NITF_UDHOFL,UDHD);
