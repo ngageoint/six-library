@@ -28,9 +28,10 @@ static int nxptsXnypts(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* e
 {
     int nxpts, nypts;
     char fname[64];
+    nitf_Field* field;
     strcpy(fname, "NXPTS");    
     strcat(fname, idx[0]);
-    nitf_Field* field = nitf_TRE_getField(tre, fname);
+    field = nitf_TRE_getField(tre, fname);
     nitf_Field_get(field, &nxpts, NITF_CONV_INT, sizeof(nxpts), error);
 
     strcpy(fname, "NYPTS");    
