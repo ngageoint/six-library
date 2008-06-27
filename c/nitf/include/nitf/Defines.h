@@ -111,15 +111,15 @@
         #_Tre, \
         NULL \
     }; \
-    static nitf_TREHandler* gHandler = NULL; \
+    static nitf_TREHandler _Tre##Handler; \
     NITFAPI(char**) _Tre##_init(nitf_Error* error){ \
-       gHandler = nitf_TREUtils_createBasicHandler(&descriptionSet,\
-                                                   &_Tre##Handler,error); \
-       if (!gHandler) return NULL; return ident; \
+       if (!nitf_TREUtils_createBasicHandler(&descriptionSet,\
+                                        &_Tre##Handler,error)) \
+       return NULL; return ident; \
     } \
     NITFAPI(void) _Tre##_cleanup(void){} \
     NITFAPI(nitf_TREHandler*) _Tre##_handler(nitf_Error* error) { \
-        return gHandler; \
+        return &_Tre##Handler; \
     }
 
 /**
