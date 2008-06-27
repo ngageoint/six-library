@@ -62,17 +62,21 @@ def doConfigure(env, dirname='lib'):
     includes = []
     if env.subst('$includes') and env.subst('$include_paths') != '0':
         for s in env.subst('$includes').split(';'):
-            includes.append(s.startswith('-I') and s or '-I%s' % s)
-    
+            includes.append(s)
     libpaths = []
     if env.subst('$libpaths') and env.subst('$lib_paths') != '0':
         for s in env.subst('$libpaths').split(';'):
-            libpaths.append(s.startswith('-L') and s or '-L%s' % s)
+            libpaths.append(s)
+            # This is totally not right on windows and nobody uses scons
+            # anywhere else that I know of
+            #libpaths.append(s.startswith('-L') and s or '-L%s' % s)
     
     libs = []
     if env.subst('$libs') and env.subst('$libs') != '0':
         for s in env.subst('$libs').split(' '):
-            libs.append(s.startswith('-l') and s or '-l%s' % s)
+            libs.append(s)
+
+            #libs.append(s.startswith('-l') and s or '-l%s' % s)
     
     #configure
     vars = configure(target=dirname, defines=defines, includes=includes,
