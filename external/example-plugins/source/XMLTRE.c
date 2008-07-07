@@ -57,8 +57,8 @@ NITFPRIV(XMLTREData*) XMLTREData_construct(nitf_Error* error)
     XMLTREData* data = (XMLTREData*)malloc(sizeof(XMLTREData));
     if (!data) 
     { 
-	nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY);
-	return NULL;
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY);
+        return NULL;
     }
     data->memorySize = -1;
     data->memory = NULL;
@@ -81,13 +81,13 @@ NITFPRIV(char*) getText(xmlNode* node)
     char buf[1024] = "";
     for (current = node; current; current = current->next)
     {
-	if (current->type == XML_TEXT_NODE)
-	{
-	    strcat(buf, (char*)current->content);
-	}	
+        if (current->type == XML_TEXT_NODE)
+        {
+            strcat(buf, (char*)current->content);
+        }        
     }
     if (!strlen(buf))
-	return NULL;
+        return NULL;
     
     data = (char*)malloc(strlen(buf) + 1);
     
@@ -107,77 +107,73 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
     char lastName[512] = "";
     for (current = node; current; current = current->next)
     {
-	
-	
-	if (current->type == XML_ELEMENT_NODE)
-	{
-	    
-	    char name[512];
-	    nitf_Field* field;
-	    char* text;
-	    
-	    if (strcmp((char*)current->name, lastName) == 0)
-	    {
-		depth++;
-	    }
-	    else depth = 1;
-	    
-	    strcpy(lastName, (char*)current->name);
-	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
+        if (current->type == XML_ELEMENT_NODE)
+        {
+            
+            char name[512];
+            nitf_Field* field;
+            char* text;
+            
+            if (strcmp((char*)current->name, lastName) == 0)
+            {
+                depth++;
+            }
+            else depth = 1;
+            
+            strcpy(lastName, (char*)current->name);
+            sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
 
-	    putElementsInTRE(current->children, tre, name, error);
-	    
-	    text = getText(current->children);
-	    
-	    
-	    
-	    if (text != NULL)
-	    {
-		
-		
-		field = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
-		nitf_Field_setString(field, text, error);
-		if (!nitf_HashTable_insert(tre->hash, name, field, error))
-		{
-		    //free(text);
-		    return NITF_FAILURE;
-		}
-		//free(text);
-	    }
-	    
-	    if (current->properties)
-	    {
-		xmlAttr* attrs = NULL;
-		
-		for (attrs = current->properties; attrs; attrs = attrs->next)
-		{
-		    char attName[128] = "";
-		    char* value = (char*)xmlNodeGetContent(attrs);
-		    nitf_Field* attField = NULL;
-		    sprintf(attName, "%s/@%s", name, attrs->name);
+            putElementsInTRE(current->children, tre, name, error);
+            
+            text = getText(current->children);
+            
+            if (text != NULL)
+            {
+                
+                
+                field = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
+                nitf_Field_setString(field, text, error);
+                if (!nitf_HashTable_insert(tre->hash, name, field, error))
+                {
+                    //free(text);
+                    return NITF_FAILURE;
+                }
+                //free(text);
+            }
+            
+            if (current->properties)
+            {
+                xmlAttr* attrs = NULL;
+                
+                for (attrs = current->properties; attrs; attrs = attrs->next)
+                {
+                    char attName[128] = "";
+                    char* value = (char*)xmlNodeGetContent(attrs);
+                    nitf_Field* attField = NULL;
+                    sprintf(attName, "%s/@%s", name, attrs->name);
 //printf("Path: %s\n", (char*)xmlGetNodePath(attrs));
-		    
-		    printf("Name: %s\n", attName);
-		    /*
-		    attField = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
-		    nitf_Field_setString(field, value, error);
-		    if (!nitf_HashTable_insert(tre->hash, 
-					       attName, 
-					       attField, 
-					       error))
-		    {
-			free(value);
-			return NITF_FAILURE;
-		    }
-*/	    
-		    
-		}
-		
-		
-	    }
-	    
-	}
-	
+                    
+                    printf("Name: %s\n", attName);
+                    /*
+                    attField = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
+                    nitf_Field_setString(field, value, error);
+                    if (!nitf_HashTable_insert(tre->hash, 
+                                               attName, 
+                                               attField, 
+                                               error))
+                    {
+                        free(value);
+                        return NITF_FAILURE;
+                    }
+*/            
+                    
+                }
+                
+                
+            }
+            
+        }
+        
     }
     return NITF_SUCCESS;
 }
@@ -194,39 +190,39 @@ NITFPRIV(nitf_List*) getElementsByTagName(xmlNode* parent, const char* name, nit
 
     for (current = parent->children; current; current = current->next)
     {
-	if (current->type == XML_ELEMENT_NODE)
-	{
-	    if (strcmp((const char*)current->name, name) == 0)
-	    {
+        if (current->type == XML_ELEMENT_NODE)
+        {
+            if (strcmp((const char*)current->name, name) == 0)
+            {
 
-		if (!nitf_List_pushBack(list, current, error))
-		{
-		    goto CATCH_ERROR;
-		}
-	    }
-	}
-	
+                if (!nitf_List_pushBack(list, current, error))
+                {
+                    goto CATCH_ERROR;
+                }
+            }
+        }
+        
     }
     return list;
     
  CATCH_ERROR:
     if (list)
     {
-	nitf_ListIterator it = nitf_List_begin(list);
-	nitf_ListIterator end = nitf_List_end(list);
-	
-	while (nitf_ListIterator_notEqualTo(&it, &end))
-	{
-	    current = (xmlNode*)nitf_ListIterator_get(&it);
-	    xmlUnlinkNode(current);
-	    xmlFreeNode(current);
-	    nitf_ListIterator_increment(&it);
-	}
-	nitf_List_destruct(&list);
+        nitf_ListIterator it = nitf_List_begin(list);
+        nitf_ListIterator end = nitf_List_end(list);
+        
+        while (nitf_ListIterator_notEqualTo(&it, &end))
+        {
+            current = (xmlNode*)nitf_ListIterator_get(&it);
+            xmlUnlinkNode(current);
+            xmlFreeNode(current);
+            nitf_ListIterator_increment(&it);
+        }
+        nitf_List_destruct(&list);
     }
     return NULL;
 }
-		
+                
 /* We do have this element, so lets replace it */
 /* This doesnt appear to actually be necessary, since I can just set the
    content of an existing node in this case -- see where I commented it out */
@@ -239,34 +235,34 @@ NITFPRIV(NITF_BOOL) removeTextNodes(xmlNode* parent, nitf_Error* error)
 
     for (current = parent->children; current; current = current->next)
     {
-	
-	if (current->type == XML_TEXT_NODE)
-	{
-	    if (!nitf_List_pushBack(list, current, error))
-	    {
-		rv = NITF_FAILURE;
-		goto CLEANUP;
-	    }
-	}
-	else
-	{
-	    printf("Found a non-text node\n");
-	}
+        
+        if (current->type == XML_TEXT_NODE)
+        {
+            if (!nitf_List_pushBack(list, current, error))
+            {
+                rv = NITF_FAILURE;
+                goto CLEANUP;
+            }
+        }
+        else
+        {
+            printf("Found a non-text node\n");
+        }
     }
 
  CLEANUP:
     {
-	nitf_ListIterator it = nitf_List_begin(list);
-	nitf_ListIterator end = nitf_List_end(list);
+        nitf_ListIterator it = nitf_List_begin(list);
+        nitf_ListIterator end = nitf_List_end(list);
 
-	while (nitf_ListIterator_notEqualTo(&it, &end))
-	{
-	    current = (xmlNode*)nitf_ListIterator_get(&it);
-	    xmlUnlinkNode(current);
-	    xmlFreeNode(current);
-	    nitf_ListIterator_increment(&it);
-	}
-	nitf_List_destruct(&list);
+        while (nitf_ListIterator_notEqualTo(&it, &end))
+        {
+            current = (xmlNode*)nitf_ListIterator_get(&it);
+            xmlUnlinkNode(current);
+            xmlFreeNode(current);
+            nitf_ListIterator_increment(&it);
+        }
+        nitf_List_destruct(&list);
     }
     return rv;
 
@@ -287,7 +283,7 @@ NITFPRIV(xmlNode*) doExpansion(xmlNode* parent, const char* thisTag, int index, 
     nitf_List* elements = getElementsByTagName(parent, thisTag, error);
     if (!elements)
     {
-	return NULL;
+        return NULL;
     }
     
     numElements = nitf_List_size(elements);
@@ -297,25 +293,25 @@ NITFPRIV(xmlNode*) doExpansion(xmlNode* parent, const char* thisTag, int index, 
 
     if (numElements <= index)
     {
-	int have = 0;
-	if (found)
-	{
-	    /* Something is wrong */
-	    nitf_Error_init(error, "Not enough children exist for found field", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
-	    return NULL;
-	}
-	/* Else, create dummy elements all the way up to the one we need */
-	for (have = numElements; have <= index; have++)
-	{
-	    printf("Creating dummy element\n");
-	    current = xmlNewChild(parent, NULL, (const xmlChar*)thisTag, NULL);
-	}
+        int have = 0;
+        if (found)
+        {
+            /* Something is wrong */
+            nitf_Error_init(error, "Not enough children exist for found field", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+            return NULL;
+        }
+        /* Else, create dummy elements all the way up to the one we need */
+        for (have = numElements; have <= index; have++)
+        {
+            printf("Creating dummy element\n");
+            current = xmlNewChild(parent, NULL, (const xmlChar*)thisTag, NULL);
+        }
     }
     else
     {
-	/* Just need the ith element in the list! */
-	nitf_ListIterator obj = nitf_List_at(elements, index);
-	current = (xmlNode*)nitf_ListIterator_get(&obj);
+        /* Just need the ith element in the list! */
+        nitf_ListIterator obj = nitf_List_at(elements, index);
+        current = (xmlNode*)nitf_ListIterator_get(&obj);
     }
 
     return current;
@@ -332,11 +328,11 @@ NITFPRIV(xmlNode*) doExpansion(xmlNode* parent, const char* thisTag, int index, 
  *
  */
 NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
-				    const char* tag,
-				    const char* value,
-				    xmlNode* parent,
-				    int found,
-				    nitf_Error* error) 
+                                    const char* tag,
+                                    const char* value,
+                                    xmlNode* parent,
+                                    int found,
+                                    nitf_Error* error) 
 {
     xmlNode* current = NULL;
     char next[128] = "";
@@ -350,9 +346,9 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
      */
     if (endOfTag + 1 >= strlen(tag))
     {
-	/* We ran out of rope */
-	nitf_Error_init(error, "Over the line", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
-	return NITF_FAILURE;
+        /* We ran out of rope */
+        nitf_Error_init(error, "Over the line", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        return NITF_FAILURE;
     }
     rv = sscanf(&tag[endOfTag], "[%d]/%s", &index, next);
 
@@ -368,36 +364,33 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
        and set our text content to the value */
     if (rv != 2)
     {
+        if (!found)
+        {
+            current = doExpansion(parent, thisTag, index, found, error);
+        
+            xmlNodeSetContent(current, (const xmlChar*)value);
+        }
+        else
+        {
+            nitf_List* elements = getElementsByTagName(parent, thisTag, error);
+            nitf_ListIterator obj = nitf_List_at(elements, index);
+            current = (xmlNode*)nitf_ListIterator_get(&obj);
+/*              if (!removeTextNodes(parent, error)) */
+/*              { */
+/*                  return NITF_FAILURE; */
+             /*}*/
+            xmlNodeSetContent(current, (const xmlChar*)value);
+        }
+/*         if (found) */
+/*         { */
+/*         } */
 
-	if (!found)
-	{
-	    current = doExpansion(parent, thisTag, index, found, error);
-	
-	    xmlNodeSetContent(current, (const xmlChar*)value);
-	}
-	else
-	{
-	    nitf_List* elements = getElementsByTagName(parent, thisTag, error);
-	    nitf_ListIterator obj = nitf_List_at(elements, index);
-	    current = (xmlNode*)nitf_ListIterator_get(&obj);
-/*  	    if (!removeTextNodes(parent, error)) */
-/*  	    { */
-/*  		return NITF_FAILURE; */
- 	    /*}*/
-	    xmlNodeSetContent(current, (const xmlChar*)value);
-	}
-/* 	if (found) */
-/* 	{ */
-/* 	} */
-
-/* 	xmlNewTextChild(parent, */
-/* 			NULL,  */
-/* 			(const xmlChar*)thisTag, */
-/* 			(const xmlChar*)value); */
-	return NITF_SUCCESS;
+/*         xmlNewTextChild(parent, */
+/*                         NULL,  */
+/*                         (const xmlChar*)thisTag, */
+/*                         (const xmlChar*)value); */
+        return NITF_SUCCESS;
     }
-
-
 
 
     /* If we are still here, that means we are still above the target element,
@@ -405,8 +398,7 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
        to the sub-nodes underneath us, so we continue recursion */
     current = doExpansion(parent, thisTag, index, found, error);
     if (!current)
-	return NITF_FAILURE;
-	
+        return NITF_FAILURE;
 
     return putElementInDOM(tre, next, value, current, found, error);
 }
@@ -417,9 +409,9 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
  *
  */
 NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
-				       xmlNode* node, 
-				       xmlNode* find,
-				       const char* prepend)
+                                       xmlNode* node, 
+                                       xmlNode* find,
+                                       const char* prepend)
 {
     xmlNode * current = NULL;
     
@@ -428,33 +420,27 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
 
     for (current = node; current; current = current->next)
     {
-	if (current->type == XML_ELEMENT_NODE)
-	{
+        if (current->type == XML_ELEMENT_NODE)
+        {
+            char name[512];
+            
+            if (strcmp((char*)current->name, lastName) == 0)
+            {
+                depth++;
+            }
+            else depth = 1;
+            
+            strcpy(lastName, (char*)current->name);
+            sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
+            if (current == find)
+            {
+                return nitf_HashTable_find(tre->hash, name);
+            }
 
-	    char name[512];
-	    
-	    if (strcmp((char*)current->name, lastName) == 0)
-	    {
-		depth++;
-	    }
-	    else depth = 1;
-	    
-	    strcpy(lastName, (char*)current->name);
-	    sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
-	    if (current == find)
-	    {
-		return nitf_HashTable_find(tre->hash, name);
-	    }
-
-	    nitf_Pair* rv = 
-		getElementFromDOM(tre, current->children, find, name);
-	    if (rv) return rv;
-
-		
-	    
-	    
-	}
-	
+            nitf_Pair* rv = 
+                getElementFromDOM(tre, current->children, find, name);
+            if (rv) return rv;
+        }
     }
 }
 
@@ -466,8 +452,8 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
  *
  */
 NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle, 
-				nitf_TRE* tre, 
-				struct _nitf_Record* record, nitf_Error* error)
+                                nitf_TRE* tre, 
+                                struct _nitf_Record* record, nitf_Error* error)
 {
     XMLTREData* treData = NULL;
     
@@ -546,14 +532,14 @@ NITFPRIV(NITF_BOOL) XMLTREData_updateBuffer(XMLTREData* treData, nitf_Error* err
 {
     if (!treData->dirty && treData->memory)
     {
-	/* We can just write it out */
-	return NITF_SUCCESS;
+        /* We can just write it out */
+        return NITF_SUCCESS;
     }
     /* If we have the memory (and its just dirty) we need to free it */
     else if (treData->memory)
     {
-	//xmlBufferFree(treData->memory);
-	free(treData->memory);
+        //xmlBufferFree(treData->memory);
+        free(treData->memory);
     }
     xmlDocDumpMemory(treData->doc, (xmlChar**)& (treData->memory), & (treData->memorySize));
     
@@ -564,14 +550,14 @@ NITFPRIV(NITF_BOOL) XMLTREData_updateBuffer(XMLTREData* treData, nitf_Error* err
 }
 
 NITFPRIV(NITF_BOOL) XMLTRE_write(nitf_IOHandle ioHandle, nitf_TRE* tre, 
-				 struct _nitf_Record* record, nitf_Error* error)
+                                 struct _nitf_Record* record, nitf_Error* error)
 {
     XMLTREData * treData = (XMLTREData*)tre->priv;
     
-    /* Write out our DOM here */	
+    /* Write out our DOM here */        
     if (!XMLTREData_updateBuffer(treData, error)) return NITF_FAILURE;
     if (!nitf_IOHandle_write(ioHandle, treData->memory, treData->memorySize, error))
-	return NITF_FAILURE;
+        return NITF_FAILURE;
     
     return NITF_SUCCESS;
 }
@@ -594,46 +580,45 @@ NITFPRIV(nitf_List*) getFieldsFromXPath(nitf_TRE* tre, xmlNodeSet* nodes)
     nitf_List* list = NULL;
     for (i = 0; i < size; i++)
     {
-	if (nodes->nodeTab[i]->type == XML_NAMESPACE_DECL)
-	{
-	    printf("XML Namespace Decl\n");
-	}
-	else if (nodes->nodeTab[i]->type == XML_ELEMENT_NODE)
-	{
-	    
-	    nitf_Pair* pair = NULL;
-	    nitf_Field* field = NULL;
-	    xmlNode* root;
-	    current = nodes->nodeTab[i];
-	    root = xmlDocGetRootElement(treData->doc);
-	    pair = getElementFromDOM(tre, root, current, "");
-	    if (pair)
-	    {
+        if (nodes->nodeTab[i]->type == XML_NAMESPACE_DECL)
+        {
+            printf("XML Namespace Decl\n");
+        }
+        else if (nodes->nodeTab[i]->type == XML_ELEMENT_NODE)
+        {
+            
+            nitf_Pair* pair = NULL;
+            nitf_Field* field = NULL;
+            xmlNode* root;
+            current = nodes->nodeTab[i];
+            root = xmlDocGetRootElement(treData->doc);
+            pair = getElementFromDOM(tre, root, current, "");
+            if (pair)
+            {
 
-		if (list == NULL)
-		{
-		    nitf_Error error;
-		    list = nitf_List_construct(&error);
-		    assert(list);
-		    nitf_List_pushBack(list, pair, &error);
-		}
-		
-		field = (nitf_Field*)pair->data;
-	    }
-	    else
-	    {
-		printf("Found this key, but its not a field\n");
-	    }
-	}
-	else
-	{
-	    current = nodes->nodeTab[i];
-	    printf("Att?: %s\n", current->name);
+                if (list == NULL)
+                {
+                    nitf_Error error;
+                    list = nitf_List_construct(&error);
+                    assert(list);
+                    nitf_List_pushBack(list, pair, &error);
+                }
+                
+                field = (nitf_Field*)pair->data;
+            }
+            else
+            {
+                printf("Found this key, but its not a field\n");
+            }
+        }
+        else
+        {
+            current = nodes->nodeTab[i];
+            printf("Att?: %s\n", current->name);
 
-	}
+        }
     }
     return list;
-
 }
 
 NITFPRIV(nitf_List*) XMLTRE_find(nitf_TRE* tre, const char* pattern, nitf_Error* error)
@@ -646,14 +631,14 @@ NITFPRIV(nitf_List*) XMLTRE_find(nitf_TRE* tre, const char* pattern, nitf_Error*
     xpathContext = xmlXPathNewContext(treData->doc);
     if (xpathContext == NULL)
     {
-	/* How do we solve these errors */
-	return NULL;
+        /* How do we solve these errors */
+        return NULL;
     }
     xpathObject = xmlXPathEvalExpression((const xmlChar*)pattern, xpathContext);
     if (xpathObject == NULL)
     {
-	xmlXPathFreeContext(xpathContext);
-	return NULL;
+        xmlXPathFreeContext(xpathContext);
+        return NULL;
     }
     
     list = getFieldsFromXPath(tre, xpathObject->nodesetval);
@@ -663,9 +648,6 @@ NITFPRIV(nitf_List*) XMLTRE_find(nitf_TRE* tre, const char* pattern, nitf_Error*
     xmlXPathFreeContext(xpathContext);
     
     return list;
-    
-
-
 }
 
 
@@ -693,28 +675,26 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
     
     /* Different encoding than else!!! */
     if (!putElementInDOM(tre, &tag[endOfTag + 2], value, root, 0, error))
-	goto CATCH_ERROR;
+        goto CATCH_ERROR;
     
     if (! nitf_HashTable_exists(tre->hash, tag))
     {
-	
-	field = nitf_Field_construct(dataLength, NITF_BCS_A, error);
-	if (!field)
-	    return NITF_FAILURE;
-	
-	nitf_Field_setString(field, value, error);
-	
-	
-	if (!nitf_HashTable_insert(tre->hash, tag, field, error))
-	    goto CATCH_ERROR;
+        field = nitf_Field_construct(dataLength, NITF_BCS_A, error);
+        if (!field)
+            return NITF_FAILURE;
+        
+        nitf_Field_setString(field, value, error);
+        
+        
+        if (!nitf_HashTable_insert(tre->hash, tag, field, error))
+            goto CATCH_ERROR;
     }
     else
     {
-	
-	nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
-	assert(pair);
-	field = (nitf_Field*)pair->data;
-	nitf_Field_setString(field, value, error);
+        nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
+        assert(pair);
+        field = (nitf_Field*)pair->data;
+        nitf_Field_setString(field, value, error);
     
     }
 
@@ -726,11 +706,11 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
  CATCH_ERROR:
     if (field)
     {
-	nitf_Field_destruct(&field);
+        nitf_Field_destruct(&field);
     }
     if (value)
     {
-	free(value);
+        free(value);
     }
     return NITF_FAILURE;
 }
@@ -738,38 +718,33 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
 
 NITFPRIV(NITF_BOOL) XMLTRE_increment(nitf_TREEnumerator** it, nitf_Error* error)
 {
-	nitf_HashTableIterator* hashIt = (nitf_HashTableIterator*)(*it)->data;
-	
-	nitf_HashTableIterator end = nitf_HashTable_end( hashIt->hash );
+    nitf_HashTableIterator* hashIt = (nitf_HashTableIterator*)(*it)->data;
 
-	nitf_HashTableIterator_increment(hashIt);
-	
-	if (nitf_HashTableIterator_equals(&end, hashIt))
-	{
-		NITF_FREE(hashIt);
-		NITF_FREE( (*it) );
-		*it = NULL;
-	}
+    nitf_HashTableIterator end = nitf_HashTable_end( hashIt->hash );
 
-	
-	return NITF_SUCCESS;
-	
+    nitf_HashTableIterator_increment(hashIt);
 
+    if (nitf_HashTableIterator_equals(&end, hashIt))
+    {
+        NITF_FREE(hashIt);
+        NITF_FREE( (*it) );
+        *it = NULL;
+    }
+
+    return NITF_SUCCESS;
 }
-
 
 
 NITFPRIV(nitf_Pair*) XMLTREIterator_get(nitf_TREEnumerator* it, nitf_Error* error)
 {
-	nitf_HashTableIterator* hashIter = (nitf_HashTableIterator*)it->data;
-	
-	return nitf_HashTableIterator_get(hashIter);
-	
+    nitf_HashTableIterator* hashIter = (nitf_HashTableIterator*)it->data;
+
+    return nitf_HashTableIterator_get(hashIter);
 }
 
 NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
 {
-	/* Iteration is easy, we are using a hash table iterator underneath */
+        /* Iteration is easy, we are using a hash table iterator underneath */
 
     nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
     nitf_HashTableIterator hashEnd = nitf_HashTable_end(tre->hash);
@@ -778,9 +753,9 @@ NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
     
     if (nitf_HashTableIterator_equals(&hashEnd, hashIter))
     {
-	NITF_FREE(hashIter);
-	NITF_FREE(it);
-	return NULL;
+        NITF_FREE(hashIter);
+        NITF_FREE(it);
+        return NULL;
     }
     
     it->data = hashIter;
@@ -789,37 +764,36 @@ NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
     
     
     return it;
-	
+        
 }
 
 
 static nitf_TREHandler gHandler = 
 {
-	XMLTRE_initData,
-	XMLTRE_read,
-	XMLTRE_setField,
-	XMLTRE_find,
-	XMLTRE_write,
-	XMLTRE_begin,
-	XMLTREIterator_getCurrentSize,
-	NULL
+        XMLTRE_initData,
+        XMLTRE_read,
+        XMLTRE_setField,
+        XMLTRE_find,
+        XMLTRE_write,
+        XMLTRE_begin,
+        XMLTREIterator_getCurrentSize,
+        NULL
 
 };
 
 NITFAPI(char**) XMLTRE_init(nitf_Error* error)
 {
-	return ident;
+    return ident;
 } 
     
     
 NITFAPI(nitf_TREHandler*) XMLTRE_handler(nitf_Error* error)
 {
-	return &gHandler;
+    return &gHandler;
 }
 
 NITFAPI(void) XMLTRE_cleanup(void)
 {
-	
 }
 
 NITF_CXX_ENDGUARD
