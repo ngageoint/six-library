@@ -1,0 +1,96 @@
+import sys, os, glob, shutil
+
+sys.path.append('../../../../build/utils')
+import scons_utils
+sys.path.pop()
+
+################################################################################
+# PROJECT SPECIFIC VARS/CODE
+################################################################################
+#==============================================================================#
+
+LIB_NAME = 'jasper'
+
+# Handle command-line options
+opts = scons_utils.addDefaultOptions(Options())
+env = Environment(options = opts, ENV = os.environ)
+Help(opts.GenerateHelpText(env))
+
+# Get the target name, and setup all the system-dependent flags and libs
+local_lib = scons_utils.doConfigure(env)
+print "Building %s for %s" % (LIB_NAME, env['PLATFORM'])
+
+include_path = ['src/libjasper/bmp',
+                'src/libjasper/include/',
+                'src/libjasper/jp2',
+                'src/libjasper/jpc',
+                'src/libjasper/jpg',
+                'src/libjasper/mif',
+                'src/libjasper/pgx',
+                'src/libjasper/pnm',
+                'src/libjasper/ras',]
+
+
+sourceFiles = (
+        'src/libjasper/bmp/bmp_cod.c',
+        'src/libjasper/bmp/bmp_dec.c',
+        'src/libjasper/bmp/bmp_enc.c',
+        'src/libjasper/base/jas_cm.c',
+        'src/libjasper/base/jas_debug.c',
+        'src/libjasper/base/jas_getopt.c',
+        'src/libjasper/base/jas_icc.c',
+        'src/libjasper/base/jas_iccdata.c',
+        'src/libjasper/base/jas_image.c',
+        'src/libjasper/base/jas_init.c',
+        'src/libjasper/base/jas_malloc.c',
+        'src/libjasper/base/jas_seq.c',
+        'src/libjasper/base/jas_stream.c',
+        'src/libjasper/base/jas_string.c',
+        'src/libjasper/base/jas_tmr.c',
+        'src/libjasper/base/jas_tvp.c',
+        'src/libjasper/base/jas_version.c',
+        'src/libjasper/jp2/jp2_cod.c',
+        'src/libjasper/jp2/jp2_dec.c',
+        'src/libjasper/jp2/jp2_enc.c',
+        'src/libjasper/jpc/jpc_bs.c',
+        'src/libjasper/jpc/jpc_cs.c',
+        'src/libjasper/jpc/jpc_dec.c',
+        'src/libjasper/jpc/jpc_enc.c',
+        'src/libjasper/jpc/jpc_math.c',
+        'src/libjasper/jpc/jpc_mct.c',
+        'src/libjasper/jpc/jpc_mqcod.c',
+        'src/libjasper/jpc/jpc_mqdec.c',
+        'src/libjasper/jpc/jpc_mqenc.c',
+        'src/libjasper/jpc/jpc_qmfb.c',
+        'src/libjasper/jpc/jpc_t1cod.c',
+        'src/libjasper/jpc/jpc_t1dec.c',
+        'src/libjasper/jpc/jpc_t1enc.c',
+        'src/libjasper/jpc/jpc_t2cod.c',
+        'src/libjasper/jpc/jpc_t2dec.c',
+        'src/libjasper/jpc/jpc_t2enc.c',
+        'src/libjasper/jpc/jpc_tagtree.c',
+        'src/libjasper/jpc/jpc_tsfb.c',
+        'src/libjasper/jpc/jpc_util.c',
+        'src/libjasper/jpg/jpg_dummy.c',
+        'src/libjasper/jpg/jpg_val.c',
+        'src/libjasper/mif/mif_cod.c',
+        'src/libjasper/pgx/pgx_cod.c',
+        'src/libjasper/pgx/pgx_dec.c',
+        'src/libjasper/pgx/pgx_enc.c',
+        'src/libjasper/pnm/pnm_cod.c',
+        'src/libjasper/pnm/pnm_dec.c',
+        'src/libjasper/pnm/pnm_enc.c',
+        'src/libjasper/ras/ras_cod.c',
+        'src/libjasper/ras/ras_dec.c',
+        'src/libjasper/ras/ras_enc.c',
+    )
+
+
+build_libs = [{'source':sourceFiles, 'lib':'%s' % LIB_NAME, 'dynamic':False,
+        'depends':[]}]
+env.Append(CPPPATH = include_path)
+if sys.platform.startswith('win32'):
+    env.Append(CCFLAGS = ['-DJAS_WIN_MSVC_BUILD'])
+libs = scons_utils.makeLibs(env, build_libs, local_lib, [])
+
+#==============================================================================#

@@ -414,6 +414,7 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
                                        const char* prepend)
 {
     xmlNode * current = NULL;
+    nitf_Pair* rv = NULL;
     
     int depth = 1;
     char lastName[512] = "";
@@ -437,8 +438,7 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
                 return nitf_HashTable_find(tre->hash, name);
             }
 
-            nitf_Pair* rv = 
-                getElementFromDOM(tre, current->children, find, name);
+            rv = getElementFromDOM(tre, current->children, find, name);
             if (rv) return rv;
         }
     }
@@ -502,13 +502,12 @@ NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
 
 NITFPRIV(NITF_BOOL) XMLTRE_initData(nitf_TRE * tre, const char* id, nitf_Error * error)
 {
+    XMLTREData* treData = NULL;
+    xmlNode* node = NULL;
     
     /* first, we need to build our DOM */
     LIBXML_TEST_VERSION;
     
-    XMLTREData* treData = NULL;
-    
-    xmlNode* node;
     if (!tre) { return NITF_FAILURE; } 
     
     treData = XMLTREData_construct(error);
@@ -574,10 +573,12 @@ NITFPRIV(int) XMLTREIterator_getCurrentSize(nitf_TRE* tre, nitf_Error* error)
 NITFPRIV(nitf_List*) getFieldsFromXPath(nitf_TRE* tre, xmlNodeSet* nodes)
 {
     int i, size;
-    xmlNode* current;
-    XMLTREData* treData = tre->priv;
-    size = (nodes) ? nodes->nodeNr : 0;
+    xmlNode* current = NULL;
     nitf_List* list = NULL;
+    XMLTREData* treData = tre->priv;
+    
+    size = (nodes) ? nodes->nodeNr : 0;
+    
     for (i = 0; i < size; i++)
     {
         if (nodes->nodeTab[i]->type == XML_NAMESPACE_DECL)

@@ -42,6 +42,8 @@ if not int(env.subst('$lib_only')):
         'test_dump_record.c',
         'test_image_loading.c',
         'test_writer_3.c',
+        'test_create_xmltre.c',
+        'test_insert_raw_xmltre.c',
     ]
     
     env.Replace(CPPPATH=['include', 'tests/'])
