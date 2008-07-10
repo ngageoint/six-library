@@ -34,6 +34,7 @@
 #define IND_1 1.2
 #define IND_2 2.4
 #define IND_3 3.6
+#define ATT_1 "Tom"
 
 /*
  *  Warning!  In order for this test to work properly, you MUST
@@ -71,13 +72,14 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
     /* Tests out-of-order set */
     if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]", DESC1, strlen(DESC1), error))
       goto CATCH_ERROR;
-
-
-
-  
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/publish-date[1]", PUB_DATE, strlen(PUB_DATE), error))
+    
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]/@name", ATT_1, strlen(ATT_1), error))
+      goto CATCH_ERROR;
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]/@name", ATT_1, strlen(ATT_1), error))
       goto CATCH_ERROR;
 
+    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/publish-date[1]", PUB_DATE, strlen(PUB_DATE), error))
+      goto CATCH_ERROR;
 
     if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/version[1]", VER, strlen(VER), error))
       goto CATCH_ERROR;
