@@ -109,7 +109,6 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
     {
         if (current->type == XML_ELEMENT_NODE)
         {
-            
             char name[512];
             nitf_Field* field;
             char* text;
@@ -129,8 +128,6 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
             
             if (text != NULL)
             {
-                
-                
                 field = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
                 nitf_Field_setString(field, text, error);
                 if (!nitf_HashTable_insert(tre->hash, name, field, error))
@@ -148,15 +145,12 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
                 for (attrs = current->properties; attrs; attrs = attrs->next)
                 {
                     char attName[128] = "";
-                    char* value = (char*)xmlNodeGetContent(attrs);
+                    char* value = (char*)xmlGetProp(current, attrs->name);
                     nitf_Field* attField = NULL;
                     sprintf(attName, "%s/@%s", name, attrs->name);
-//printf("Path: %s\n", (char*)xmlGetNodePath(attrs));
                     
-                    printf("Name: %s\n", attName);
-                    /*
-                    attField = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
-                    nitf_Field_setString(field, value, error);
+                    attField = nitf_Field_construct(strlen(value), NITF_BCS_A, error);
+                    nitf_Field_setString(attField, value, error);
                     if (!nitf_HashTable_insert(tre->hash, 
                                                attName, 
                                                attField, 
@@ -165,15 +159,9 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
                         free(value);
                         return NITF_FAILURE;
                     }
-*/            
-                    
                 }
-                
-                
             }
-            
         }
-        
     }
     return NITF_SUCCESS;
 }
@@ -339,19 +327,45 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
     char thisTag[128] = "";
     /* This is the next chunk we are on */
     size_t endOfTag = strcspn(tag, "[");
+    size_t tagLength = strlen(tag);
     int index = 0;
     int rv;
     /* Now, for example, we are pointing at
      * root[0]/next[1], so we need to figure out what number
      */
-    if (endOfTag + 1 >= strlen(tag))
+    
+    /* deal with attributes */
+    if (tag[0] == '@' && endOfTag == tagLength)
     {
-        /* We ran out of rope */
-        nitf_Error_init(error, "Over the line", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
-        return NITF_FAILURE;
+        xmlAttr *attr = NULL;
+        
+        thisTag[endOfTag] = 0;
+        memcpy(thisTag, &tag[1], endOfTag);
+        
+        /* in case it exists, this unsets it */
+        xmlUnsetProp(parent, (const xmlChar*)thisTag);
+        attr = xmlNewProp(parent, (const xmlChar*)thisTag,
+                (const xmlChar*)value);
+        
+        /* we're done! */
+        if (!attr)
+            return NITF_FAILURE;
+        return NITF_SUCCESS;
     }
-    rv = sscanf(&tag[endOfTag], "[%d]/%s", &index, next);
-
+    
+    
+    if (endOfTag + 1 >= tagLength)
+    {
+        /* we default to the first index if there isn't an index */
+        index = 1;
+        rv = 1;
+        endOfTag = tagLength;
+        /* We ran out of rope 
+        nitf_Error_init(error, "Over the line", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        return NITF_FAILURE;*/
+    }
+    else
+        rv = sscanf(&tag[endOfTag], "[%d]/%s", &index, next);
 
     index -= 1;
 
