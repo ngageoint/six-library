@@ -72,6 +72,11 @@ NITF_CXX_GUARD
 #define NITF_CONST_N    "CONSTANT"          /*!< TREDescription label value */
 #define NITF_FUNCTION   "FUNCTION"
 
+/*!
+ * Pass this into the id of nitf_TRE_construct to bypass the plug-in registry,
+ * yet still create the TRE type expected. */
+#define NITF_TRE_RAW_ID "RAW"
+
 struct _nitf_Record;
 
 struct _nitf_TREHandler;

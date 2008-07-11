@@ -42,19 +42,9 @@
 nitf_TRE* createXMLTRE(const char* data, const int length)
 {
     nitf_TRE *tre;
-    static nitf_TREDescription description[2];
-
     nitf_Error error;
     
-    description[0].data_type = NITF_BCS_A;
-    description[0].data_count = length;
-    description[0].label = "XML Data";
-    description[0].tag = "raw_data";
-    description[1].data_type = NITF_END;
-    description[1].data_count = 0;
-    description[1].label = NULL;
-    description[1].tag = NULL;
-    tre = nitf_TRE_construct("XMLTRE", description, length, &error);
+    tre = nitf_TRE_construct("XMLTRE", NITF_TRE_RAW_ID, length, &error);
     if (!tre)
     {
         nitf_Error_print(&error, stdout, "Exiting...");
@@ -367,6 +357,7 @@ int main(int argc, char **argv)
     xmlData = (char*)malloc(xmlSize);
     nitf_IOHandle_read(xmlFile, xmlData, xmlSize, &error);
     
+    printf("%s\n", xmlData);
     nitf_IOHandle_close(xmlFile);
 
     record = doRead(argv[1]);

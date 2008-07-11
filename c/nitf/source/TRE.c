@@ -207,28 +207,32 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
     int bad = 0;
     nitf_TRE* tre = nitf_TRE_createSkeleton(tag, length, error);
     nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
-    
+
     if (!tre)
         return NULL;
-    if (!reg) return NULL;
+    if (!reg)
+        return NULL;
     
-    tre->handler = nitf_PluginRegistry_retrieveTREHandler(reg, tag, &bad, error);
-    if (bad)
-	return NULL;
-    
+    tre->handler= NULL;
+    /* if it's not a RAW id, try to load it from the registry */
+    if (!id || strcmp(id, NITF_TRE_RAW_ID) != 0)
+    {
+        tre->handler = nitf_PluginRegistry_retrieveTREHandler(reg, tag, &bad, error);
+        if (bad)
+            return NULL;
+    }
     if (!tre->handler)
     {
-	tre->handler = nitf_DefaultTRE_handler(error);
-	if (! tre->handler )
-	    return NULL;
+        tre->handler = nitf_DefaultTRE_handler(error);
+        if (!tre->handler)
+            return NULL;
     }
-    
-    if (! (tre->handler->init)(tre, id, error))
+
+    if (!(tre->handler->init)(tre, id, error))
     {
-	nitf_TRE_destruct(&tre);
-	return NULL;
+        nitf_TRE_destruct(&tre);
+        return NULL;
     }
-    
     return tre;
 }
 
