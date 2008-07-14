@@ -351,7 +351,7 @@ NITFPRIV(int) unloadIt(nitf_HashTable * ht, nitf_Pair * pair,
 	    return 0;
 
 	/* destroy the lib */
-        nitf_DLL_unload(dll, &error);
+        nitf_DLL_unload(dll, error);
 	if ( dll->libname )
 	{
 	    NITF_FREE( dll->libname );
@@ -397,11 +397,78 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_unload(nitf_PluginRegistry * reg,
 }
 
 
-NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
-                                                        * reg,
-                                                        const char
-                                                        *dirName,
-                                                        nitf_Error * error)
+NITFAPI(NITF_BOOL)
+    nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error * error)
+{
+    
+    /*  For now, the key is the dll name minus the extension  */
+    char keyName[NITF_MAX_PATH] = "";
+    char* p;
+    int ok;
+    int i, begin, end;
+    nitf_DLL *dll;
+    const char **ident;
+    nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
+
+    /*  Construct the DLL object  */
+    dll = nitf_DLL_construct(error);
+    if (!dll)
+    {
+        return NITF_FAILURE;
+    }
+    /*  Otherwise we can load the DLL  */
+    if (!nitf_DLL_load(dll, fullName, error))
+    {
+        /*  If the load failed, we have a set error      */
+        /*  So all we have to do is close shop, go home  */
+        return NITF_FAILURE;
+    }
+
+    begin = 0;
+    end = strlen(fullName);
+    p = strstr(fullName, NITF_DLL_EXTENSION);
+    for (i = 0; i < strlen(fullName); i++)
+    {
+        if ( *(fullName + i) == '/' || *(fullName + i) == '\\')
+            begin = i + 1;
+
+        if ( fullName + i == p)
+            end = i - 1;
+    }
+    memcpy(keyName, &fullName[begin], end - begin + 1);
+    end = strstr(keyName, NITF_DLL_EXTENSION);
+    keyName[ end - begin + 1] = NULL;
+    
+    /* Now init the plugin!!!  */
+    ident = doInit(dll, keyName, error);
+    
+    /*  If no ident, we have a set error and an invalid plugin  */
+    if (ident)
+    {
+        /*  I expect to have problems with this now and then  */
+        
+        
+        ok = insertPlugin(reg, ident, dll, error);
+        
+        /*  If insertion failed, take our toys and leave  */
+        if (!ok)
+        {
+            return NITF_FAILURE;
+        }
+#if NITF_DEBUG_PLUGIN_REG
+        printf("Successfully loaded plugin: [%s] at [%p]\n",
+               name, dll);
+#endif
+        return NITF_SUCCESS;
+    }
+    return NITF_FAILURE;
+    
+}
+
+NITFPROT(NITF_BOOL) 
+    nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry * reg,
+                                        const char *dirName,
+                                        nitf_Error * error)
 {
     const char *name;
     size_t sizePath;
@@ -440,6 +507,7 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
         {
             do
             {
+
                 char *end;
                 char fullName[NITF_MAX_PATH];
                 int pathSize = sizePath;
@@ -453,61 +521,12 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
                 if ((end =
                      (char *) strstr(name, NITF_DLL_EXTENSION)) != NULL)
                 {
-                    /*  For now, the key is the dll name minus the extension  */
-                    const char *p = name;
-                    char keyName[NITF_MAX_PATH] = "";
-                    int ok;
-                    int i;
-                    nitf_DLL *dll;
-                    const char **ident;
-                    
-                    /*  Construct the DLL object  */
-                    dll = nitf_DLL_construct(error);
-                    if (!dll)
+                    if (!nitf_PluginRegistry_loadPlugin(fullName, error))
                     {
-                        /*  If we failed, close up shop  */
-                        nitf_Directory_destruct(&dir);
-                        return NITF_FAILURE;
-                    }
-                    /*  Otherwise we can load the DLL  */
-                    ok = nitf_DLL_load(dll, fullName, error);
-                    
-                    if (!ok)
-                    {
-                        /*  If the load failed, we have a set error      */
-                        /*  So all we have to do is close shop, go home  */
-                        nitf_Directory_destruct(&dir);
-                        return NITF_FAILURE;
-                    }
-                    
-                    /*  TEMPORARY, ASK PLUGIN FOR ITS TRE NAME  */
-                    memset(keyName, 0, NITF_MAX_PATH);
-                    for (i = 0; p != end; i++)
-                    {
-                        keyName[i] = *p++;
-                    }
-
-                    /* Now init the plugin!!!  */
-                    ident = doInit(dll, keyName, error);
-                    
-                    /*  If no ident, we have a set error and an invalid plugin  */
-                    if (ident)
-                    {
-                        /*  I expect to have problems with this now and then  */
-                        
-                        
-                        ok = insertPlugin(reg, ident, dll, error);
-                        
-                        /*  If insertion failed, take our toys and leave  */
-                        if (!ok)
-                        {
-                            nitf_Directory_destruct(&dir);
-                            return NITF_FAILURE;
-                        }
 #if NITF_DEBUG_PLUGIN_REG
-                        printf("Successfully loaded plugin: [%s] at [%p]\n",
-                               name, dll);
-#endif
+                        /*  printf("Here, closing 1\n");  */
+                        printf("Warning: plugin [%s] failed to load!\n", name);
+#endif                        
                     }
                 }
                 
@@ -590,7 +609,7 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
     memset(tre_name, 0, NITF_MAX_PATH);
     sprintf(tre_name, "%s%s", tre_id, NITF_PLUGIN_HOOK_SUFFIX);
 
-    while( (p = strstr(tre_name, " ")) != NULL)
+    while( (p = strchr(tre_name, ' ')) != NULL)
     {
         *p = '_';
     }

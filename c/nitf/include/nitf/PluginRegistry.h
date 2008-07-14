@@ -70,7 +70,7 @@ nitf_PluginRegistry;
  *
  */
 NITFPROT(nitf_PluginRegistry *)
-nitf_PluginRegistry_getInstance(nitf_Error * error);
+    nitf_PluginRegistry_getInstance(nitf_Error * error);
 
 
 /*!
@@ -87,7 +87,7 @@ nitf_PluginRegistry_getInstance(nitf_Error * error);
  *
  */
 NITFPROT(NITF_BOOL)
-nitf_PluginRegistry_load(nitf_PluginRegistry * reg, nitf_Error * error);
+    nitf_PluginRegistry_load(nitf_PluginRegistry * reg, nitf_Error * error);
 
 
 /*!
@@ -104,8 +104,11 @@ nitf_PluginRegistry_load(nitf_PluginRegistry * reg, nitf_Error * error);
  *
  */
 NITFAPI(NITF_BOOL)
-nitf_PluginRegistry_loadDir(const char* dirName, nitf_Error * error);
+    nitf_PluginRegistry_loadDir(const char* dirName, nitf_Error * error);
 
+
+NITFAPI(NITF_BOOL)
+    nitf_PluginRegistry_loadPlugin(const char* fullPathName, nitf_Error* error);
 
 /*!
  *  Unload the plugin registry.  This will unload the DLLs and free
@@ -211,6 +214,8 @@ NITFPROT(NITF_PLUGIN_DECOMPRESSION_DESTRUCT_FUNCTION)
         int *had_error,
         nitf_Error* error);
 */
+
+
 
 NITF_CXX_ENDGUARD
 
