@@ -30,6 +30,13 @@
 #include "nitf/Validation.h" /* need this for the TRE Descriptions, for now */
 #include "nitf/TREDescription.h"
 
+/*!
+ * Pass this into the id of nitf_TRE_construct to bypass the plug-in registry,
+ * yet still create the TRE type expected. 
+ */
+#define NITF_TRE_RAW_ID "RAW"
+
+#define NITF_MAX_TAG 32
 #define NITF_ETAG_SZ 6
 #define NITF_EL_SZ 5
 
@@ -72,11 +79,6 @@ NITF_CXX_GUARD
 #define NITF_CONST_N    "CONSTANT"          /*!< TREDescription label value */
 #define NITF_FUNCTION   "FUNCTION"
 
-/*!
- * Pass this into the id of nitf_TRE_construct to bypass the plug-in registry,
- * yet still create the TRE type expected. */
-#define NITF_TRE_RAW_ID "RAW"
-
 struct _nitf_Record;
 
 struct _nitf_TREHandler;
@@ -87,11 +89,10 @@ struct _nitf_TREHandler;
 typedef struct _nitf_TRE
 {
     size_t length;  /* The length of the tag */
-    //nitf_TREDescription *descrip;   /* A structure to guide unraveling the data */
 	struct _nitf_TREHandler* handler;
 	NITF_DATA* priv;
 	nitf_HashTable *hash;   /* key is field, data is char* pointing at tag[field_off] */
-    char tag[NITF_ETAG_SZ + 1]; /* the TRE tag */
+    char tag[NITF_MAX_TAG + 1]; /* the TRE tag */
 } nitf_TRE;
 
 
@@ -99,12 +100,10 @@ struct _nitf_TREEnumerator;
 
 typedef NITF_BOOL (*NITF_TRE_ITERATOR_INCREMENT)(struct _nitf_TREEnumerator**, nitf_Error*);
 typedef nitf_Pair* (*NITF_TRE_ITERATOR_GET)(struct _nitf_TREEnumerator*, nitf_Error*);
-// HOW DO I remove() or insert() ???
 
 
 typedef struct _nitf_TREEnumerator
 {
-	//nitf_TRE* tre;
 	NITF_TRE_ITERATOR_INCREMENT next;
 	NITF_TRE_ITERATOR_GET get;
 	NITF_DATA* data;
