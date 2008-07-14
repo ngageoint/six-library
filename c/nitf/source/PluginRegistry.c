@@ -28,15 +28,15 @@ NITFPRIV(void) exitListener(void);
 
 NITFPRIV(nitf_Mutex) getMutex()
 {
-
+    
 #ifndef WIN32
     /*  This */
     static nitf_Mutex _lock = NITF_MUTEX_INIT;
-
+    
 #else
     static nitf_Mutex _lock = NULL;
     static long _initLock = 0;
-
+    
     if (_lock == NULL)
     {
         while (InterlockedExchange(&_initLock, 1) == 1)
@@ -53,24 +53,24 @@ NITFPRIV(nitf_Mutex) getMutex()
 /*NITF_MUTEX_STATIC_INITIALIZER( singletonSync );*/
 
 NITFPROT(nitf_PluginRegistry *)
-nitf_PluginRegistry_getInstance(nitf_Error * error)
+    nitf_PluginRegistry_getInstance(nitf_Error * error)
 {
     static nitf_PluginRegistry *theInstance = NULL;
     if (theInstance == NULL)
     {
         nitf_Mutex mutex = getMutex();
         nitf_Mutex_lock(&mutex);
-
+        
         /*  If this call below fails, the error will have been  */
         /*  constructed                                         */
         if (theInstance == NULL)
         {
-
+            
             theInstance = implicitConstruct(error);
             /*  If this succeeded...  */
             if (theInstance)
             {
-
+                
                 int loadRet = nitf_PluginRegistry_load(theInstance, error);
                 /*  If the load failed  */
                 if (!loadRet)
@@ -82,12 +82,12 @@ nitf_PluginRegistry_getInstance(nitf_Error * error)
                 else
                     atexit(exitListener);
             }
-
+            
         }
         nitf_Mutex_unlock(&mutex);
-
+        
     }
-
+    
     return theInstance;
 }
 
@@ -97,7 +97,7 @@ NITFPRIV(int) insertToHash(nitf_HashTable * hash,
                            nitf_DLL * dll, nitf_Error * error)
 {
     return nitf_HashTable_insert(hash, key, dll, error);
-
+    
 }
 
 
@@ -108,7 +108,7 @@ NITFPRIV(int) insertPlugin(nitf_PluginRegistry * reg,
     nitf_HashTable *hash = NULL;
     int i;
     int ok;
-
+    
     if (strcmp(ident[0], NITF_PLUGIN_TRE_KEY) == 0)
     {
         hash = reg->treHandlers;
@@ -120,10 +120,6 @@ NITFPRIV(int) insertPlugin(nitf_PluginRegistry * reg,
     else if (strcmp(ident[0], NITF_PLUGIN_DECOMPRESSION_KEY) == 0)
     {
         hash = reg->decompressionHandlers;
-    }
-    else if (strcmp(ident[0], NITF_PLUGIN_DES_KEY) == 0)
-    {
-        hash = reg->desHandlers;
     }
     else
     {
@@ -206,15 +202,6 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     /*nitf_HashTable_setPolicy(reg->decompressionHandlers, NITF_DATA_RETAIN_OWNER);
 */
 
-    reg->desHandlers = nitf_HashTable_construct(NITF_DES_HASH_SIZE, error);
-
-    /*  If we have a problem, get rid of this object and return  */
-    if (!reg->desHandlers)
-    {
-        implicitDestruct(&reg);
-        return NULL;
-    }
-
     /*nitf_HashTable_setPolicy(reg->desHandlers, NITF_DATA_RETAIN_OWNER);
 */
 
@@ -283,8 +270,6 @@ NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg)
             nitf_HashTable_destruct(&(*reg)->compressionHandlers);
         if ((*reg)->decompressionHandlers)
             nitf_HashTable_destruct(&(*reg)->decompressionHandlers);
-        if ((*reg)->desHandlers)
-            nitf_HashTable_destruct(&(*reg)->desHandlers);
         NITF_FREE(*reg);
         *reg = NULL;
     }
@@ -408,37 +393,35 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_unload(nitf_PluginRegistry * reg,
         rv |= nitf_HashTable_foreach(reg->compressionHandlers, fn, NULL, error);
     if (reg->decompressionHandlers)
         rv |= nitf_HashTable_foreach(reg->decompressionHandlers, fn, NULL, error);
-    if (reg->desHandlers)
-        rv |= nitf_HashTable_foreach(reg->desHandlers, fn, NULL, error);
     return (NITF_BOOL) rv;
 }
 
 
 NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
-        * reg,
-        const char
-        *dirName,
-        nitf_Error * error)
+                                                        * reg,
+                                                        const char
+                                                        *dirName,
+                                                        nitf_Error * error)
 {
     const char *name;
     size_t sizePath;
     nitf_Directory *dir = NULL;
-
+    
     if (!dirName)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_OPENING_FILE,
                          "Null directory name");
         return NITF_FAILURE;
     }
-
+    
     dir = nitf_Directory_construct(error);
     if (!dir)
     {
         return NITF_FAILURE;
     }
-
+    
     sizePath = strlen(dirName);
-
+    
     /* removed this so we don't fail if there aren't any plugins loaded */
     /*if (!nitf_Directory_exists(reg->path))
        {
@@ -468,7 +451,7 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
 
                 /*  See if we have .so or .dll extensions  */
                 if ((end =
-                            (char *) strstr(name, NITF_DLL_EXTENSION)) != NULL)
+                     (char *) strstr(name, NITF_DLL_EXTENSION)) != NULL)
                 {
                     /*  For now, the key is the dll name minus the extension  */
                     const char *p = name;
@@ -477,7 +460,7 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
                     int i;
                     nitf_DLL *dll;
                     const char **ident;
-
+                    
                     /*  Construct the DLL object  */
                     dll = nitf_DLL_construct(error);
                     if (!dll)
@@ -488,7 +471,7 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
                     }
                     /*  Otherwise we can load the DLL  */
                     ok = nitf_DLL_load(dll, fullName, error);
-
+                    
                     if (!ok)
                     {
                         /*  If the load failed, we have a set error      */
@@ -496,7 +479,7 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
                         nitf_Directory_destruct(&dir);
                         return NITF_FAILURE;
                     }
-
+                    
                     /*  TEMPORARY, ASK PLUGIN FOR ITS TRE NAME  */
                     memset(keyName, 0, NITF_MAX_PATH);
                     for (i = 0; p != end; i++)
@@ -506,28 +489,28 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
 
                     /* Now init the plugin!!!  */
                     ident = doInit(dll, keyName, error);
-
+                    
                     /*  If no ident, we have a set error and an invalid plugin  */
                     if (ident)
                     {
                         /*  I expect to have problems with this now and then  */
-                   
-
-						ok = insertPlugin(reg, ident, dll, error);
-
-						/*  If insertion failed, take our toys and leave  */
-						if (!ok)
-						{
-							nitf_Directory_destruct(&dir);
-							return NITF_FAILURE;
-						}
+                        
+                        
+                        ok = insertPlugin(reg, ident, dll, error);
+                        
+                        /*  If insertion failed, take our toys and leave  */
+                        if (!ok)
+                        {
+                            nitf_Directory_destruct(&dir);
+                            return NITF_FAILURE;
+                        }
 #if NITF_DEBUG_PLUGIN_REG
-						printf("Successfully loaded plugin: [%s] at [%p]\n",
-							   name, dll);
+                        printf("Successfully loaded plugin: [%s] at [%p]\n",
+                               name, dll);
 #endif
-					 }
+                    }
                 }
-
+                
                 else
                 {
 #if NITF_DEBUG_PLUGIN_REG
@@ -536,7 +519,7 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
 #endif
                     /*return (NITF_BOOL)1; */
                 }
-
+                
                 name = nitf_Directory_findNextFile(dir);
             }
             while (name);
@@ -559,7 +542,7 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
 
 
 NITFPROT(NITF_BOOL) nitf_PluginRegistry_load(nitf_PluginRegistry * reg,
-        nitf_Error * error)
+                                             nitf_Error * error)
 {
     return nitf_PluginRegistry_internalLoadDir(reg, reg->path, error);
 }
@@ -573,7 +556,7 @@ NITFAPI(NITF_BOOL) nitf_PluginRegistry_loadDir(const char *dirName,
 
     /* first, get the registry */
     nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
-
+    
     /* must be thread safe */
     mutex = getMutex();
     nitf_Mutex_lock(&mutex);
@@ -810,56 +793,3 @@ nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
     return decomp_constructor;
 }
 
-
-NITFPROT(NITF_PLUGIN_DES_CONSTRUCT_FUNCTION)
-nitf_PluginRegistry_retrieveDESConstructor(nitf_PluginRegistry * reg,
-        const char *comp_id,
-        int *had_error,
-        nitf_Error * error)
-{
-    /*  We get back a pair from the hash table  */
-    nitf_Pair *pair;
-    /*  We get back a DLL from the pair  */
-    nitf_DLL *dll;
-
-    /*  We are trying to find decomp_constructor  */
-    NITF_PLUGIN_DES_CONSTRUCT_FUNCTION des_constructor = NULL;
-
-    /*  Get the name of the handler  */
-    char des_name[NITF_MAX_PATH];
-    memset(des_name, 0, NITF_MAX_PATH);
-    sprintf(des_name, "%s", "DES_construct");
-
-    /*  No error has occurred (yet)  */
-    *had_error = 0;
-
-    /*  Lookup the pair from the hash table, by the decomp_id  */
-    pair = nitf_HashTable_find(reg->desHandlers, comp_id);
-
-    /*  If nothing is there, we dont have a handler, plain and simple  */
-    if (!pair)
-        return NULL;
-
-    /*  If something is, get its DLL part  */
-    dll = (nitf_DLL *) pair->data;
-    if (!nitf_DLL_isValid(dll))
-    {
-        return NULL;
-    }
-#if NITF_DEBUG_PLUGIN_REG
-    printf("Loading function [%s] in dll at [%p]\n", des_name, dll);
-#endif
-
-    /*  Retrieve the main  */
-    des_constructor =
-        (NITF_PLUGIN_DES_CONSTRUCT_FUNCTION)
-        nitf_DLL_retrieve(dll, des_name, error);
-    if (!des_constructor)
-    {
-        /*  If it didnt work, we are done  */
-        *had_error = 1;
-        return NULL;
-    }
-    /*  Yes!!! We did it!!  */
-    return des_constructor;
-}

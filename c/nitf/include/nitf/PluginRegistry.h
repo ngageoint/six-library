@@ -11,7 +11,6 @@
 
 #   define NITF_COMPRESSION_HASH_SIZE 2
 #   define NITF_DECOMPRESSION_HASH_SIZE 2
-#   define NITF_DES_HASH_SIZE 2
 
 /*  The environment variable for the plugin path  */
 #   define NITF_PLUGIN_PATH "NITF_PLUGIN_PATH"
@@ -41,7 +40,7 @@ typedef struct _protected_nitf_PluginRegistry
     nitf_HashTable *treHandlers;
     nitf_HashTable *compressionHandlers;
     nitf_HashTable *decompressionHandlers;
-    nitf_HashTable *desHandlers;
+    /* nitf_HashTable *desHandlers; */
 
 }
 nitf_PluginRegistry;
@@ -212,12 +211,6 @@ NITFPROT(NITF_PLUGIN_DECOMPRESSION_DESTRUCT_FUNCTION)
         int *had_error,
         nitf_Error* error);
 */
-
-NITFPROT(NITF_PLUGIN_DES_CONSTRUCT_FUNCTION)
-nitf_PluginRegistry_retrieveDESConstructor(nitf_PluginRegistry * reg,
-        const char *comp_id,
-        int *had_error,
-        nitf_Error * error);
 
 NITF_CXX_ENDGUARD
 

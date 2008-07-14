@@ -18,7 +18,6 @@
 #define NITF_PLUGIN_TRE_KEY             "TRE:"NITF_LIB_VERSION
 #define NITF_PLUGIN_COMPRESSION_KEY     "COMPRESSION"
 #define NITF_PLUGIN_DECOMPRESSION_KEY   "DECOMPRESSION"
-#define NITF_PLUGIN_DES_KEY             "DES"
 
 
 NITF_CXX_GUARD
@@ -132,27 +131,6 @@ typedef int (*NITF_PLUGIN_DECOMPRESSION_DESTRUCT_FUNCTION)
   nitf_Error* error
   );
 */
-
-/*
-  \brief NITF_PLUGIN_DES_CONSTRUCT_FUNCTION - Function pointer for DES
-  interface object construction.
-
-
-  The function creates a DES interface object. The return type is void * to
-  avoid a dependency on the UserSegment object. The type is actually
-  nitf_nitf_IUserSegment *
-
-  \ar error           - Error object
-
-  \return Returns the new object or NULL on error.
-
-  On error, the error object is initialized.
-*/
-
-typedef void * (*NITF_PLUGIN_DES_CONSTRUCT_FUNCTION)
-(
-    nitf_Error* error
-);
 
 NITF_CXX_ENDGUARD
 
