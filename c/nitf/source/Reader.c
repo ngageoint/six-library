@@ -15,14 +15,12 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * License along with this program; if not, 
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 #include "nitf/Reader.h"
-#include "nitf/DEReader.h"
-#include "nitf/UserSegment.h"
 
 /****************************
  *** NOTE ABOUT THE MACROS ***
@@ -771,7 +769,6 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     /* Length of the sub-header */
     nitf_Uint32 subLen;
     off_t currentOffset;
-    char *userSubheaderData;    /* User subheader data */
     char desID[NITF_DESTAG_SZ + 1];     /* DES ID string */
 
     nitf_ListIterator listIter =
@@ -813,22 +810,24 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     /* Verify that it is a UINT */
     NITF_TRY_GET_UINT32(subhdr->NITF_DESSHL, &subLen, error);
     if (subLen > 0)
-    {
+    {        
+        
+        /*  We know our constraints, so build up the tre object  */
+        subhdr->subheaderFields = 
+            nitf_TRE_createSkeleton(desID, subLen, error);
 
-	if ((nitf_UserSegment_decodeUserHeader(reader->record,
-					       subhdr, reader->inputHandle,
-					       error)) == NULL)
-	{
-	    NITF_FREE(userSubheaderData);
+        if (!subhdr->subheaderFields)
             goto CATCH_ERROR;
-        }
+        
+        if (!handleTRE(reader, subhdr->subheaderFields, error))
+            goto CATCH_ERROR;
 
     }
-
+    
     NITF_TRY_GET_UINT64(reader->record->
                         header->dataExtensionInfo[desIndex]->lengthData,
                         &subhdr->dataLength, error);
-
+    
     /* set the offset and end of the segment */
     segment->offset = nitf_IOHandle_tell(reader->inputHandle, error);
     if (!NITF_IO_SUCCESS(segment->offset))
@@ -837,8 +836,8 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
 
     /* see if we need to read the data now as part of a TRE */
     if ((strcmp(desID, "TRE_OVERFLOW") == 0) ||
-            (strcmp(desID, "Registered Extensions") == 0) ||
-            (strcmp(desID, "Controlled Extensions") == 0))
+        (strcmp(desID, "Registered Extensions") == 0) ||
+        (strcmp(desID, "Controlled Extensions") == 0))
     {
         currentOffset = segment->offset;
 
@@ -1225,7 +1224,6 @@ NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
 	    ok = handler->read(reader->inputHandle, tre, reader->record, error);
             if (!ok)
             {
-		// Also probably warning list makes sense here!
                 
                 /* move the IO Handle back the size of the TRE */
                 nitf_IOHandle_seek(reader->inputHandle, off, NITF_SEEK_SET, error);
@@ -1839,58 +1837,95 @@ NITFAPI(nitf_SegmentReader *) nitf_Reader_newGraphicReader
 }
 
 
-NITFAPI(nitf_DEReader *) nitf_Reader_newDEReader(nitf_Reader *
+NITFAPI(nitf_SegmentReader *) nitf_Reader_newDEReader(nitf_Reader *
         reader,
         int
         DESegmentNumber,
         nitf_Error * error)
 {
-    nitf_DEReader *DEReader;    /* The result */
-    nitf_ListIterator iter;     /* Iterators to used find segment in list */
+
+    nitf_SegmentReader *segmentReader;
+    nitf_ListIterator iter;
     nitf_ListIterator end;
-    nitf_DESegment *des;        /* Associated DE segment */
-    int i;
+    nitf_DESegment *segment = NULL;
 
     /*    Find the associated segment */
-
-    des = NULL;
-    iter = nitf_List_begin(reader->record->dataExtensions);
+    iter = nitf_List_at(reader->record->dataExtensions, index);
     end = nitf_List_end(reader->record->dataExtensions);
-    for (i = 0; i <= DESegmentNumber; i++)
+    if (nitf_ListIterator_equals(&iter, &end))
     {
-        des = (nitf_DESegment *) nitf_ListIterator_get(&iter);
-        if (nitf_ListIterator_equals(&iter, &end))
-        {
-            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
-                             "Index [%d] is not a valid DE segment",
-                             DESegmentNumber);
-            return NULL;
-        }
-        nitf_ListIterator_increment(&iter);
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                         "Index [%d] is not a valid Graphic segment",
+                         index);
+        return NULL;
     }
+    segment = (nitf_DESegment *) nitf_ListIterator_get(&iter);
 
     /*    Allocate the object */
-
-    DEReader = (nitf_DEReader *) NITF_MALLOC(sizeof(nitf_DEReader));
-    if (!DEReader)
+    segmentReader =
+        (nitf_SegmentReader *) NITF_MALLOC(sizeof(nitf_SegmentReader));
+    if (!segmentReader)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
                         NITF_ERR_MEMORY);
         return NULL;
     }
 
-    DEReader->inputHandle = reader->inputHandle;
+    /* set the fields */
+    segmentReader->inputHandle = reader->inputHandle;
+    segmentReader->dataLength = segment->end - segment->offset;
+    segmentReader->baseOffset = segment->offset;
+    segmentReader->virtualOffset = 0;
 
-    /*   Create the user segment object */
-    DEReader->user =
-        nitf_UserSegment_construct(reader->record, des, 0, error);
-    if (DEReader->user == NULL)
-    {
-        nitf_DEReader_destruct(&DEReader);
-        return (NULL);
-    }
+    return segmentReader;
 
-    return (DEReader);
+
+/*     nitf_DEReader *DEReader;    /\* The result *\/ */
+/*     nitf_ListIterator iter;     /\* Iterators to used find segment in list *\/ */
+/*     nitf_ListIterator end; */
+/*     nitf_DESegment *des;        /\* Associated DE segment *\/ */
+/*     int i; */
+
+/*     /\*    Find the associated segment *\/ */
+
+/*     des = NULL; */
+/*     iter = nitf_List_begin(reader->record->dataExtensions); */
+/*     end = nitf_List_end(reader->record->dataExtensions); */
+/*     for (i = 0; i <= DESegmentNumber; i++) */
+/*     { */
+/*         des = (nitf_DESegment *) nitf_ListIterator_get(&iter); */
+/*         if (nitf_ListIterator_equals(&iter, &end)) */
+/*         { */
+/*             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT, */
+/*                              "Index [%d] is not a valid DE segment", */
+/*                              DESegmentNumber); */
+/*             return NULL; */
+/*         } */
+/*         nitf_ListIterator_increment(&iter); */
+/*     } */
+
+/*     /\*    Allocate the object *\/ */
+
+/*     DEReader = (nitf_DEReader *) NITF_MALLOC(sizeof(nitf_DEReader)); */
+/*     if (!DEReader) */
+/*     { */
+/*         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, */
+/*                         NITF_ERR_MEMORY); */
+/*         return NULL; */
+/*     } */
+
+/*     DEReader->inputHandle = reader->inputHandle; */
+
+/*     /\*   Create the user segment object *\/ */
+/*     DEReader->user = */
+/*         nitf_UserSegment_construct(reader->record, des, 0, error); */
+/*     if (DEReader->user == NULL) */
+/*     { */
+/*         nitf_DEReader_destruct(&DEReader); */
+/*         return (NULL); */
+/*     } */
+
+/*     return (DEReader); */
 }
 
 

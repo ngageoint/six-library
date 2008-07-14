@@ -144,8 +144,6 @@ NITFPRIV(NITF_BOOL) moveTREs
 { 
   nitf_ExtensionsIterator srcIter;  /* Source extension iterator */
   nitf_ExtensionsIterator srcEnd;   /* Source extension iterator end */
-  nitf_ExtensionsIterator dstIter;  /* Destination extension iterator */
-  nitf_ExtensionsIterator dstEnd;   /* Destination extension iterator end */
   nitf_TRE *tre;                    /* Current TRE */
 
   srcIter = nitf_Extensions_begin(source);
@@ -1856,11 +1854,12 @@ NITFAPI(NITF_BOOL) nitf_Record_unmergeTREs
     /* File header */
 
     maxLength = 99999;
+    segIdx = 1;  /* ??? I moved this up so this would be initialized!! */
 
     header = record->header;
     UNMERGE_SEGMENT(header->userDefinedSection,
             header->classification,header->securityGroup,header->NITF_UDHOFL,UDHD);
-
+    
     UNMERGE_SEGMENT(header->extendedSection,
             header->classification,header->securityGroup,header->NITF_XHDLOFL,XHD);
 
@@ -1868,7 +1867,6 @@ NITFAPI(NITF_BOOL) nitf_Record_unmergeTREs
 
     segIter = nitf_List_begin(record->images);
     segEnd = nitf_List_end(record->images);
-    segIdx = 1;
     while(nitf_ListIterator_notEqualTo(&segIter, &segEnd))
     {
         nitf_ImageSubheader *subheader; /* Current subheader */

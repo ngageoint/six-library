@@ -105,9 +105,9 @@ NITFAPI(nitf_TRE *) nitf_UserSegment_decodeUserHeader(nitf_Record * record,
     nitf_Field_trimString(desID);
 
     /*   Get the interface object */
-    if ((iface =
-                nitf_UserSegment_getInterface(desID, &bad, error)) == NULL)
-        return (NULL);
+/*     if ((iface = */
+/*                 nitf_UserSegment_getInterface(desID, &bad, error)) == NULL) */
+/*         return (NULL); */
 
     /*   Get required values from DES segment */
 
@@ -117,27 +117,28 @@ NITFAPI(nitf_TRE *) nitf_UserSegment_decodeUserHeader(nitf_Record * record,
 
     /*   Call the create header interface function or TRE constructor */
 
-    if (iface->createHeader != NULL)
-    {
-        //header =
-        //    (*(iface->createHeader)) (iface, record, subhdr, buffer,
-        //                              error);
-        nitf_Error_init(error, "Im not prepared for this!", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
-		/*
-		if (header == NULL)
-            return (NULL);*/
-		return NULL;
-    }
-    else if (iface->headerDesc != NULL)
-    {
+/*     if (iface->createHeader != NULL) */
+/*     { */
+/*         //header = */
+/*         //    (*(iface->createHeader)) (iface, record, subhdr, buffer, */
+/*         //                              error); */
+/*         nitf_Error_init(error, "Im not prepared for this!", NITF_CTXT, NITF_ERR_INVALID_PARAMETER); */
+/* 		/\* */
+/* 		if (header == NULL) */
+/*             return (NULL);*\/ */
+/* 		return NULL; */
+/*     } */
+
+/*     else if (iface->headerDesc != NULL) */
+/*     { */
         /* no need to call TRE_construct b/c we don't want the auto-filled fields */
         
-		// This wont work either, but I dont care right now!
-		header = nitf_TRE_createSkeleton("DES", headerLen, error);
-        if (header == NULL)
-            return (NULL);
-
-		header->handler->read(ioHandle, header, record, error);
+      // This wont work either, but I dont care right now!
+    header = nitf_TRE_createSkeleton(desID, headerLen, error);
+    if (header == NULL)
+        return (NULL);
+    
+    header->handler->read(ioHandle, header, record, error);
        /* header->descrip = iface->headerDesc;
 
         if (buffer != NULL)
@@ -149,13 +150,13 @@ NITFAPI(nitf_TRE *) nitf_UserSegment_decodeUserHeader(nitf_Record * record,
             }
         }*/
 		// No idea
-    }
-    else
-    {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
-                         "Invalid User segment inteface, no user header constructor");
-        return (NULL);
-    }
+/*     } */
+/*     else */
+/*     { */
+/*         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT, */
+/*                          "Invalid User segment inteface, no user header constructor"); */
+/*         return (NULL); */
+/*     } */
 
     subhdr->subheaderFields = header;
 

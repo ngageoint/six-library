@@ -4,8 +4,6 @@
 #define NITF_PLUGIN_INIT_SUFFIX "_init"
 #define NITF_PLUGIN_CLEANUP_SUFFIX "_cleanup"
 #define NITF_PLUGIN_HOOK_SUFFIX "_handler"
-//#define NITF_PLUGIN_TRE_GET_DESC_SUFFIX "_getDescriptions"
-//#define NITF_PLUGIN_TRE_SET_DESC_SUFFIX "_nitf_TREUtils_fillData"
 #define NITF_PLUGIN_CONSTRUCT_SUFFIX "_construct"
 #define NITF_PLUGIN_DESTRUCT_SUFFIX "_destruct"
 

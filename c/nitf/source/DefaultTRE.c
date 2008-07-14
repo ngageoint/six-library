@@ -153,7 +153,6 @@ NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
 {
 	nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
 	/* Check rv here */
-	//it->tre = tre;
 	it->next = defaultNullIncrement;
 	it->get = defaultGet;
 	it->data = nitf_HashTable_find(tre->hash, "raw_data");
@@ -240,7 +239,6 @@ NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE * tre,
 }
 
 
-//typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle, nitf_TRE* tre, struct _nitf_Record* record, nitf_Error*);
 
 NITFPRIV(int) defaultGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
 {

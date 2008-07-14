@@ -52,7 +52,7 @@
 #ifndef __NITF_ROW_SOURCE_H__
 #define __NITF_ROW_SOURCE_H__
 
-#include <import/nitf.h>
+#include "nitf/BandSource.h"
 
 NITF_CXX_GUARD
 

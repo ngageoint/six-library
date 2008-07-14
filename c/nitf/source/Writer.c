@@ -1595,7 +1595,7 @@ NITFPRIV(NITF_BOOL) writeDE(nitf_SegmentWriter * segmentWriter,
     }
 
     nitf_Field_trimString(desid);
-    /*if(strcmp(desid,"TRE_OVERFLOW") == 0)*//* This is an overflow */
+    if(strcmp(desid,"TRE_OVERFLOW") == 0)//* This is an overflow */
     {
         nitf_ExtensionsIterator iter; /* TRE iterator */
         nitf_ExtensionsIterator end; /* End iterator */

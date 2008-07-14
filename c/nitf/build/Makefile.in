@@ -39,13 +39,11 @@ SOURCES = BandInfo.c \
           ComponentInfo.c \
           DataSource.c \
           Debug.c \
-          DEReader.c \
           DESegment.c \
           DESubheader.c \
           DLLUnix.c \
           DLLWin32.c \
           DefaultTRE.c \
-          DefaultUserSegment.c \
           DirectoryUnix.c \
           DirectoryWin32.c \
           DownSampler.c \
@@ -91,9 +89,11 @@ SOURCES = BandInfo.c \
           TREUtils.c \
           TextSegment.c \
           TextSubheader.c \
-          UserSegment.c \
-          Writer.c
+          Writer.c 
 
+#        DefaultUserSegment.c \
+#          UserSegment.c \
+#          DEReader.c \
 
 TESTS = test_replace_field.c test_find_field.c test_field.c \
         test_dll_1.c test_list_1.c test_list_2.c \
@@ -103,8 +103,10 @@ TESTS = test_replace_field.c test_find_field.c test_field.c \
         test_create.c test_fhdr_clone.c test_list_clone.c \
         test_hash_table_clone.c test_imsub_clone.c \
         test_image_source.c test_writer_3.c \
-        test_file_source.c test_mem_source.c \
-        test_insert_raw_xmltre.c test_create_xmltre.c
+        test_file_source.c test_mem_source.c
+
+#        test_create_xmltre.c
+#        test_insert_raw_xmltre.c\
 
 # test_ext_iter.c \
         test_ImageIO_read_data.c test_ImageIO_writePattern.c \
@@ -194,4 +196,5 @@ PLUGINS = \
         STEROB.c \
         STREOB.c \
         TRGTA.c  \
+        TEST_DES.c \
         USE00A.c

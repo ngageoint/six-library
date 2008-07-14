@@ -33,7 +33,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
         nitf_Error * error)
 {
     nitf_TRE *tre = (nitf_TRE *) NITF_MALLOC(sizeof(nitf_TRE));
-    int toCopy = NITF_ETAG_SZ;
+    int toCopy = NITF_MAX_TAG;
     if (!tre)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -49,11 +49,11 @@ NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
     tre->length = length;
 
     /* This happens with things like "DES" */
-    if (strlen(tag) < NITF_ETAG_SZ )
+    if (strlen(tag) < NITF_MAX_TAG )
     {
         toCopy = strlen(tag);
     }
-    memset(tre->tag, 0, NITF_ETAG_SZ + 1);
+    memset(tre->tag, 0, NITF_MAX_TAG + 1);
     memcpy(tre->tag, tag, toCopy);
 
     /* create the hashtable for the fields */

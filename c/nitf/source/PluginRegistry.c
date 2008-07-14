@@ -511,9 +511,6 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry
                     if (ident)
                     {
                         /*  I expect to have problems with this now and then  */
-                        //break; // This is probably better behavior!
-						//nitf_Directory_destruct(&dir);
-                        //return NITF_FAILURE;
                    
 
 						ok = insertPlugin(reg, ident, dll, error);
@@ -594,6 +591,8 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
                                        const char *tre_id,
                                        int *had_error, nitf_Error * error)
 {
+    char* p = NULL;
+
     nitf_TREHandler* theHandler;
 	/*  We get back a pair from the hash table  */
     nitf_Pair *pair;
@@ -607,6 +606,11 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
     char tre_name[NITF_MAX_PATH];
     memset(tre_name, 0, NITF_MAX_PATH);
     sprintf(tre_name, "%s%s", tre_id, NITF_PLUGIN_HOOK_SUFFIX);
+
+    while( (p = strstr(tre_name, " ")) != NULL)
+    {
+        *p = '_';
+    }
 
     /*  No error has occurred (yet)  */
     *had_error = 0;

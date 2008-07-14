@@ -33,7 +33,7 @@
 #include "nitf/FieldWarning.h"
 #include "nitf/ImageReader.h"
 #include "nitf/SegmentReader.h"
-#include "nitf/DEReader.h"
+//#include "nitf/DEReader.h"
 
 NITF_CXX_GUARD
 
@@ -152,7 +152,7 @@ NITFAPI(nitf_SegmentReader*) nitf_Reader_newGraphicReader
  *  \param error A populated error if return value is zero
  *  \return new nitf_DEReader* for the segment in question
  */
-NITFAPI(nitf_DEReader *) nitf_Reader_newDEReader
+NITFAPI(nitf_SegmentReader *) nitf_Reader_newDEReader
 (
     nitf_Reader *reader,
     int DESegmentNumber,
