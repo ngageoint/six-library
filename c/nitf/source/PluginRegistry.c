@@ -155,6 +155,9 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
         (nitf_PluginRegistry *) NITF_MALLOC(sizeof(nitf_PluginRegistry));
 
     const char *pluginEnvVar;
+
+    /* Null initialize these just in case we fail early on */
+    reg->compressionHandlers = reg->decompressionHandlers = NULL;
     /*  If we have a memory problem, init our error struct and return  */
     if (!reg)
     {
