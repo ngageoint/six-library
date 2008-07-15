@@ -34,7 +34,7 @@
  * Pass this into the id of nitf_TRE_construct to bypass the plug-in registry,
  * yet still create the TRE type expected. 
  */
-#define NITF_TRE_RAW_ID "RAW"
+#define NITF_TRE_RAW "raw_data"
 
 #define NITF_MAX_TAG 32
 #define NITF_ETAG_SZ 6

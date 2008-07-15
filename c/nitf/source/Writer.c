@@ -1445,7 +1445,8 @@ NITFPRIV(NITF_BOOL) writeDESubheader(nitf_Writer * writer,
 
     //set the length field
     nitf_Field_setUint32(subhdr->NITF_DESSHL, subLen, error);
-    NITF_WRITE_VALUE(subhdr, NITF_DESSHL, SPACE, FILL_RIGHT);
+    NITF_WRITE_VALUE(subhdr, NITF_DESSHL, ZERO, FILL_LEFT);
+
     *userSublen = subLen;
 
     if (subLen > 0)

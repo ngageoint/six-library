@@ -215,7 +215,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
     
     tre->handler= NULL;
     /* if it's not a RAW id, try to load it from the registry */
-    if (!id || strcmp(id, NITF_TRE_RAW_ID) != 0)
+    if (!id || strcmp(id, NITF_TRE_RAW) != 0)
     {
         tre->handler = nitf_PluginRegistry_retrieveTREHandler(reg, tag, &bad, error);
         if (bad)
