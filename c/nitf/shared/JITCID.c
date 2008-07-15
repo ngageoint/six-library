@@ -27,8 +27,7 @@
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_A, 100, "File Comment", "FILCMT1" },
-	{NITF_BCS_A, 100, "File Comment (part II)", "FILCMT2" },
+    {NITF_BCS_A, NITF_TRE_GOBBLE, "File Comment", "FILCMT" },
     {NITF_END, 0, NULL, NULL}
 };
 NITF_DECLARE_SINGLE_PLUGIN(JITCID, description)
