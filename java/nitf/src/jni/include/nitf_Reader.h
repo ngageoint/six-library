@@ -93,7 +93,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewTextReader
 /*
  * Class:     nitf_Reader
  * Method:    getNewDEReader
- * Signature: (I)Lnitf/DEReader;
+ * Signature: (I)Lnitf/SegmentReader;
  */
 JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewDEReader
   (JNIEnv *, jobject, jint);

@@ -101,13 +101,13 @@ public final class Reader extends DestructibleObject
 
 
     /**
-     * Returns a new DEReader
+     * Returns a new SegmentReader
      *
      * @param deSegmentNumber the index of the DE to get a reader for
      * @return DEReader
      * @throws NITFException
      */
-    public native synchronized DEReader getNewDEReader(int deSegmentNumber)
+    public native synchronized SegmentReader getNewDEReader(int deSegmentNumber)
             throws NITFException;
 
     /**

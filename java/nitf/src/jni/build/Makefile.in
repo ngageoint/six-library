@@ -37,7 +37,6 @@ SOURCES = nitf_BandInfo.c \
 	nitf_BandSource.c \
 	nitf_BlockingInfo.c \
 	nitf_ComponentInfo.c \
-	nitf_DEReader.c \
 	nitf_DESegment.c \
 	nitf_DESubheader.c \
 	nitf_DownSampler.c \
@@ -76,6 +75,5 @@ SOURCES = nitf_BandInfo.c \
 	nitf_TRE_TREIterator.c \
 	nitf_TextSegment.c \
 	nitf_TextSubheader.c \
-	nitf_UserSegment.c \
 	nitf_Writer.c
 TESTS =

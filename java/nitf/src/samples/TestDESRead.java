@@ -20,12 +20,18 @@
  *
  */
 
-
-import nitf.*;
+import nitf.DESegment;
+import nitf.DESubheader;
+import nitf.IOHandle;
+import nitf.NITFException;
+import nitf.Reader;
+import nitf.Record;
+import nitf.SegmentReader;
+import nitf.TRE;
 
 /**
- * Tests Reading the DES data using the new DES UserSegment plugin(s)
- * This is a Java version of the C test case test_DES_read.c
+ * Tests Reading the DES data using the new DES UserSegment plugin(s) This is a
+ * Java version of the C test case test_DES_read.c
  */
 public class TestDESRead
 {
@@ -41,7 +47,7 @@ public class TestDESRead
         Reader reader = new Reader();
         System.out.println("Setting up handle...");
         IOHandle handle = new IOHandle(args[0], IOHandle.NITF_ACCESS_READONLY,
-            IOHandle.NITF_OPEN_EXISTING);
+                IOHandle.NITF_OPEN_EXISTING);
         System.out.println("Parsing NITF file...");
         Record record = reader.read(handle);
 
@@ -55,25 +61,14 @@ public class TestDESRead
             final TRE subheaderFields = subheader.getSubheaderFields();
             subheaderFields.print(System.out);
 
-            final DEReader deReader = reader.getNewDEReader(i);
-            final UserSegment userSegment = deReader.getUserSegment();
-            System.out.println("userSegment.getDataLength() = " +
-                userSegment.getDataLength());
-            System.out.println("userSegment.getVirtualLength() = " +
-                userSegment.getVirtualLength());
-            System.out.println("userSegment.getBaseOffset() = " +
-                userSegment.getBaseOffset());
+            final SegmentReader deReader = reader.getNewDEReader(i);
+            byte[] buf = new byte[(int) deReader.getSize()];
 
-            byte[] buf = new byte[userSegment.getVirtualLength()];
-
-            final boolean status = deReader.read(buf,
-                userSegment.getVirtualLength());
+            final boolean status = deReader.read(buf, (int) deReader.getSize());
             System.out.println("status = " + status);
-
             System.out.println("buf = " + new String(buf));
         }
         handle.close();
     }
 
 }
-

@@ -204,15 +204,15 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewTextReader
 /*
  * Class:     nitf_Reader
  * Method:    getNewDEReader
- * Signature: (I)Lnitf/DEReader;
+ * Signature: (I)Lnitf/SegmentReader;
  */
 JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewDEReader
     (JNIEnv * env, jobject self, jint deSegmentNumber)
 {
     nitf_Reader *reader = _GetObj(env, self);
-    nitf_DEReader *deReader;
+    nitf_SegmentReader *deReader;
     nitf_Error error;
-    jclass readerClass = (*env)->FindClass(env, "nitf/DEReader");
+    jclass readerClass = (*env)->FindClass(env, "nitf/SegmentReader");
     jobject readerObject = NULL;
 
     jmethodID methodID =
