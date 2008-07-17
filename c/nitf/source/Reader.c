@@ -1839,8 +1839,7 @@ NITFAPI(nitf_SegmentReader *) nitf_Reader_newGraphicReader
 
 NITFAPI(nitf_SegmentReader *) nitf_Reader_newDEReader(nitf_Reader *
         reader,
-        int
-        DESegmentNumber,
+        int index,
         nitf_Error * error)
 {
 
@@ -1891,7 +1890,7 @@ NITFAPI(nitf_SegmentReader *) nitf_Reader_newDEReader(nitf_Reader *
 /*     des = NULL; */
 /*     iter = nitf_List_begin(reader->record->dataExtensions); */
 /*     end = nitf_List_end(reader->record->dataExtensions); */
-/*     for (i = 0; i <= DESegmentNumber; i++) */
+/*     for (i = 0; i <= index; i++) */
 /*     { */
 /*         des = (nitf_DESegment *) nitf_ListIterator_get(&iter); */
 /*         if (nitf_ListIterator_equals(&iter, &end)) */
