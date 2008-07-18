@@ -27,7 +27,8 @@ NITFAPI(void) nitf_DataSource_destruct(nitf_DataSource ** dataSource)
 {
     if (*dataSource)
     {
-        (*dataSource)->iface->destruct((*dataSource)->data);
+        if ((*dataSource)->iface)
+            (*dataSource)->iface->destruct((*dataSource)->data);
         NITF_FREE(*dataSource);
         *dataSource = NULL;
     }
