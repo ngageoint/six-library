@@ -39,6 +39,7 @@ typedef struct _nitf_TREPrivateData
     nitf_Uint32 length;
     nitf_TREDescription* description;
     nitf_HashTable *hash;
+    NITF_DATA *userData;    /*! user-defined - meant for extending this */
 } nitf_TREPrivateData;
 
 

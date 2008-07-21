@@ -37,6 +37,7 @@ NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_construct(
     
     priv->length = 0;
     priv->description = NULL;
+    priv->userData = NULL;
     
     /* create the hashtable for the fields */
     priv->hash = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);

@@ -567,7 +567,7 @@ NITFAPI(int) nitf_TREUtils_computeLength(nitf_TRE * tre)
 
     /* get out if TRE is null */
     if (!tre)
-    return -1;
+        return -1;
 
     cursor = nitf_TRECursor_begin(tre);
     while (!nitf_TRECursor_isDone(&cursor))
