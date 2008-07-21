@@ -173,10 +173,10 @@ NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre)
     nitf_Error e;
     if (*tre)
     {
-        if ((*tre)->handler && (*tre)->handler->destructPrivateData)
+        if ((*tre)->handler && (*tre)->handler->destruct)
         {
             /* let the handler destroy the private data */
-            (*tre)->handler->destructPrivateData(*tre);
+            (*tre)->handler->destruct(*tre);
         }
         
         if ((*tre)->hash)

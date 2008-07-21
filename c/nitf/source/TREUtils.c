@@ -709,7 +709,7 @@ NITFPRIV(int) basicGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
 }
 
 
-NITFPRIV(void) basicDestructPrivateData(nitf_TRE* tre)
+NITFPRIV(void) basicDestruct(nitf_TRE* tre)
 {
     if (tre && tre->priv)
         NITF_FREE((nitf_TREPrivateData*)tre->priv);
@@ -819,9 +819,7 @@ NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSe
     handler->write = basicWrite;
     handler->begin = basicBegin;
     handler->getCurrentSize = basicGetCurrentSize;
-    handler->destructPrivateData = basicDestructPrivateData;
-    
-    
+    handler->destruct = basicDestruct;
 
     handler->data = set;
     return handler;
