@@ -91,9 +91,19 @@ NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * source, nitf_Error * error)
         /*  Set this in case of auto-destruct  */
         tre->hash = NULL;
 
-        /* share the descrip */
+        /* share the handler */
 		tre->handler = source->handler;
         memcpy(tre->tag, source->tag, sizeof(tre->tag));
+        
+        /* call the handler clone method, if one is defined */
+        if (tre->handler && tre->handler->clone)
+        {
+            if (!tre->handler->clone(source, tre, error))
+            {
+                nitf_TRE_destruct(&tre);
+                return NULL;
+            }
+        }
 
         tre->hash = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
         if (!tre->hash)

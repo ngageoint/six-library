@@ -132,6 +132,8 @@ typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle, nitf_TRE* tre, struct _nitf_
 
 typedef int (*NITF_TRE_SIZE)(nitf_TRE*, nitf_Error*);
 
+typedef NITF_BOOL (*NITF_TRE_CLONE)(nitf_TRE*, nitf_TRE*, nitf_Error*);
+
 typedef void (*NITF_TRE_DESTRUCT)(nitf_TRE*);
 
 typedef nitf_TREEnumerator* (*NITF_TRE_ITERATOR)(nitf_TRE*, nitf_Error*);
@@ -147,6 +149,7 @@ typedef struct _nitf_TREHandler
   NITF_TRE_WRITER write;
   NITF_TRE_ITERATOR begin;
   NITF_TRE_SIZE getCurrentSize;
+  NITF_TRE_CLONE clone;
   NITF_TRE_DESTRUCT destruct;
   NITF_DATA* data;
 } nitf_TREHandler;

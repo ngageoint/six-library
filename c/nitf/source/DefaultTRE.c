@@ -242,6 +242,21 @@ NITFPRIV(int) defaultGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
     return ((nitf_TREDescription *)tre->priv)[0].data_count;
 }
 
+
+NITFPRIV(NITF_BOOL) defaultClone(nitf_TRE *source,
+                                 nitf_TRE *tre,
+                                 nitf_Error* error)
+{
+    /* nothing to do... yet */
+    return NITF_SUCCESS;
+}
+
+
+NITFPRIV(void) defaultDestruct(nitf_TRE *tre)
+{
+    /* nothing to do... yet */
+}
+
 NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error)
 {
     static nitf_TREHandler handler =
@@ -253,8 +268,9 @@ NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error)
         defaultWrite,
         defaultBegin,
         defaultGetCurrentSize,
-        NULL, /* We dont need this! */
-        NULL /* We dont need this! */	
+        defaultClone,
+        defaultDestruct,
+        NULL    /* data - We don't need this! */
     };
     
     return &handler;

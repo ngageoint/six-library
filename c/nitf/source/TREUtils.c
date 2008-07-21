@@ -709,6 +709,33 @@ NITFPRIV(int) basicGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
 }
 
 
+NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
+                               nitf_TRE *tre,
+                               nitf_Error *error)
+{
+    nitf_TREPrivateData *sourcePriv = NULL;
+    
+    if (!tre || !source || !source->priv)
+        return NITF_FAILURE;
+    
+    tre->priv = (nitf_TREPrivateData*)NITF_MALLOC(sizeof(nitf_TREPrivateData));
+    if (!tre->priv)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                NITF_CTXT, NITF_ERR_MEMORY);
+        return NITF_FAILURE;
+    }
+    
+    sourcePriv = (nitf_TREPrivateData*)source->priv;
+    
+    /* just copy over the optional length and static description */
+    ((nitf_TREPrivateData*)tre->priv)->length = sourcePriv->length;
+    ((nitf_TREPrivateData*)tre->priv)->description = sourcePriv->description;
+    
+    return NITF_SUCCESS;
+}
+
+
 NITFPRIV(void) basicDestruct(nitf_TRE* tre)
 {
     if (tre && tre->priv)
@@ -819,6 +846,7 @@ NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSe
     handler->write = basicWrite;
     handler->begin = basicBegin;
     handler->getCurrentSize = basicGetCurrentSize;
+    handler->clone = basicClone;
     handler->destruct = basicDestruct;
 
     handler->data = set;
