@@ -269,6 +269,9 @@ NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre,
 NITFAPI(nitf_TREEnumerator*) nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error);
 
 
+NITFAPI(int) nitf_TRE_getCurrentSize(nitf_TRE* tre, nitf_Error* error);
+
+
 NITF_CXX_ENDGUARD
 
 #endif

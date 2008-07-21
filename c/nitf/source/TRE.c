@@ -181,3 +181,8 @@ NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre, const char* tag)
 {
     return tre->handler->getField(tre, tag);
 }
+
+NITFAPI(int) nitf_TRE_getCurrentSize(nitf_TRE* tre, nitf_Error* error)
+{
+    return tre->handler->getCurrentSize(tre, error);
+}
