@@ -39,7 +39,7 @@ JNIEXPORT void JNICALL Java_nitf_TRE_destructMemory
 
 
 JNIEXPORT void JNICALL Java_nitf_TRE_construct
-  (JNIEnv *env, jobject self, jstring jTag, jstring jId, jint size)
+  (JNIEnv *env, jobject self, jstring jTag, jstring jId)
 {
     nitf_TRE *tre = _GetObj(env, self);
     char* tag = NULL;
@@ -49,10 +49,7 @@ JNIEXPORT void JNICALL Java_nitf_TRE_construct
     tag = (*env)->GetStringUTFChars(env, jTag, 0);
     id = (*env)->GetStringUTFChars(env, jId, 0);
 
-    if (size == nitf_TRE_DEFAULT_LENGTH)
-        size = NITF_TRE_DEFAULT_LENGTH;
-    
-    tre = nitf_TRE_construct(tag, id, size, &error);
+    tre = nitf_TRE_construct(tag, id, &error);
     
     (*env)->ReleaseStringUTFChars(env, jTag, tag);
     (*env)->ReleaseStringUTFChars(env, jId, id);
@@ -66,10 +63,11 @@ JNIEXPORT void JNICALL Java_nitf_TRE_construct
 }
 
 
-JNIEXPORT jint JNICALL Java_nitf_TRE_getLength(JNIEnv * env, jobject self)
+JNIEXPORT jint JNICALL Java_nitf_TRE_getCurrentSize(JNIEnv * env, jobject self)
 {
+    nitf_Error error;
     nitf_TRE *tre = _GetObj(env, self);
-    return tre->length;
+    return nitf_TRE_getCurrentSize(tre, &error);
 }
 
 
@@ -78,14 +76,6 @@ JNIEXPORT jstring JNICALL Java_nitf_TRE_getTag(JNIEnv * env, jobject self)
     nitf_TRE *tre = _GetObj(env, self);
     jstring tag = (*env)->NewStringUTF(env, tre->tag);
     return tag;
-}
-
-
-JNIEXPORT void JNICALL Java_nitf_TRE_setLength
-    (JNIEnv * env, jobject self, jint length)
-{
-    nitf_TRE *tre = _GetObj(env, self);
-    tre->length = length;
 }
 
 

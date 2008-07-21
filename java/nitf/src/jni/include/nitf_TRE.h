@@ -7,8 +7,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#undef nitf_TRE_DEFAULT_LENGTH
-#define nitf_TRE_DEFAULT_LENGTH 0L
 /*
  * Class:     nitf_TRE
  * Method:    destructMemory
@@ -20,26 +18,18 @@ JNIEXPORT void JNICALL Java_nitf_TRE_destructMemory
 /*
  * Class:     nitf_TRE
  * Method:    construct
- * Signature: (Ljava/lang/String;Ljava/lang/String;I)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_nitf_TRE_construct
-  (JNIEnv *, jobject, jstring, jstring, jint);
+  (JNIEnv *, jobject, jstring, jstring);
 
 /*
  * Class:     nitf_TRE
- * Method:    getLength
+ * Method:    getCurrentSize
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_nitf_TRE_getLength
+JNIEXPORT jint JNICALL Java_nitf_TRE_getCurrentSize
   (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_TRE
- * Method:    setLength
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_nitf_TRE_setLength
-  (JNIEnv *, jobject, jint);
 
 /*
  * Class:     nitf_TRE

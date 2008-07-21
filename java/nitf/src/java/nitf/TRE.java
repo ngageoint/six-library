@@ -33,12 +33,6 @@ public final class TRE extends DestructibleObject
 {
 
     /**
-     * Specifies that the length of the TRE should be computed by the library,
-     * and not specified by the user at construction time
-     */
-    public static final int DEFAULT_LENGTH = 0;
-
-    /**
      * Creates a new TRE of the given type. The tag is the TRE tag (such as
      * "JITCID"). This uses the default id for the given TRE. In some cases, the
      * plug-in may not be able to find the TRE, or it may not be able to decide
@@ -56,7 +50,7 @@ public final class TRE extends DestructibleObject
      */
     public TRE(String tag) throws NITFException
     {
-        this(tag, null, DEFAULT_LENGTH);
+        this(tag, null);
     }
 
     /**
@@ -75,28 +69,11 @@ public final class TRE extends DestructibleObject
      */
     public TRE(String tag, String id) throws NITFException
     {
-        this(tag, id, DEFAULT_LENGTH);
-    }
-
-    /**
-     * Creates a new TRE of the given type, with the given length
-     * 
-     * @param tag
-     *            the type of TRE to create
-     * @param id
-     *            the id of the TRE Description to use
-     * @param size
-     *            the size of the TRE, or DEFAULT_LENGTH
-     * @throws NITFException
-     *             if tag is an unkown type
-     */
-    public TRE(String tag, String id, int size) throws NITFException
-    {
         if (!PluginRegistry.canHandleTRE(tag))
             throw new NITFException(
                     "TRE Handler cannot be found for this TRE: " + tag);
 
-        construct(tag, id, size);
+        construct(tag, id);
     }
 
     /**
@@ -109,23 +86,14 @@ public final class TRE extends DestructibleObject
 
     protected native synchronized void destructMemory();
 
-    private native void construct(String tag, String id, int size)
-            throws NITFException;
+    private native void construct(String tag, String id) throws NITFException;
 
     /**
-     * Returns the length of this TRE
+     * Returns the (possibly computed) current size of this TRE
      * 
      * @return
      */
-    public native synchronized int getLength();
-
-    /**
-     * Sets the length of the TRE
-     * 
-     * @param length
-     * @throws NITFException
-     */
-    public native void setLength(int length) throws NITFException;
+    public native synchronized int getCurrentSize();
 
     /**
      * Returns the TRE identifier tag
