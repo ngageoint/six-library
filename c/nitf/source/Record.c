@@ -158,9 +158,7 @@ NITFPRIV(NITF_BOOL) moveTREs
     while(nitf_ExtensionsIterator_notEqualTo(&srcIter, &srcEnd))
     {
       tre = nitf_ExtensionsIterator_get(&srcIter);
-      treLength = tre->length;
-      if(treLength <= 0)
-        treLength = (nitf_Uint32)tre->handler->getCurrentSize(tre, error);
+      treLength = (nitf_Uint32)tre->handler->getCurrentSize(tre, error);
       skipLeft -= treLength;
       if(skipLeft < 1)
         break;

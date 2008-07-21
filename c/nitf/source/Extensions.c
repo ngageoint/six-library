@@ -395,17 +395,13 @@ NITFAPI(nitf_Uint32) nitf_Extensions_computeLength
             tre = (nitf_TRE *) nitf_ExtensionsIterator_get(&iter);
 
             /* if unknown length, we need to compute it */
-            if (tre->length <= 0)
-				dataLength += (nitf_Uint32)tre->handler->getCurrentSize(tre, error);
-            else
-                dataLength += tre->length;
+            dataLength += (nitf_Uint32)tre->handler->getCurrentSize(tre, error);
             dataLength += NITF_ETAG_SZ + NITF_EL_SZ;
 
             /* increment */
             nitf_ExtensionsIterator_increment(&iter);
         }
     }
-
     return dataLength;
 }
 

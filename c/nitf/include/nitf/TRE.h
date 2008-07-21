@@ -65,13 +65,15 @@ NITF_CXX_GUARD
 
 
 /* Control values that are put in the TREDescription data_type field */
-#define NITF_LOOP       NITF_BINARY + 1     /*!< data_type control loop */
-#define NITF_ENDLOOP    NITF_LOOP + 1       /*!< data_type control end loop */
-#define NITF_IF         NITF_ENDLOOP + 1    /*!< data_type control if */
-#define NITF_ENDIF      NITF_IF + 1         /*!< data_type control endif */
-#define NITF_COMP_LEN   NITF_ENDIF + 1      /*!< data_type computes the length of the next field */
-#define NITF_END        NITF_COMP_LEN + 1   /*!< data_type end marker */
-
+enum
+{
+    NITF_LOOP = NITF_BINARY + 1,    /*!< data_type control loop */
+    NITF_ENDLOOP,                   /*!< data_type control end loop */
+    NITF_IF,                        /*!< data_type control if */
+    NITF_ENDIF,                     /*!< data_type control endif */
+    NITF_COMP_LEN,                  /*!< data_type computes the length of the next field */
+    NITF_END                        /*!< data_type end marker */
+};
 
 /* This can be used if the user wants to loop a constant number of times */
 /* Set the TREDescription label to NITF_CONST_N, and the number in the tag */
@@ -88,7 +90,6 @@ struct _nitf_TREHandler;
  */
 typedef struct _nitf_TRE
 {
-    size_t length;  /* The length of the tag */
 	struct _nitf_TREHandler* handler;
 	NITF_DATA* priv;
 	nitf_HashTable *hash;   /* key is field, data is char* pointing at tag[field_off] */
@@ -111,7 +112,8 @@ typedef struct _nitf_TREEnumerator
 
 typedef NITF_BOOL (*NITF_TRE_INIT) (nitf_TRE* tre, const char* id, nitf_Error * error);
 
-typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOHandle, nitf_TRE*, struct _nitf_Record*, nitf_Error*);
+typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOHandle, nitf_Uint32 length,
+        nitf_TRE*, struct _nitf_Record*, nitf_Error*);
 
 
 typedef nitf_List* (*NITF_TRE_FIND)(nitf_TRE * tre,
@@ -130,7 +132,7 @@ typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle, nitf_TRE* tre, struct _nitf_
 
 typedef int (*NITF_TRE_SIZE)(nitf_TRE*, nitf_Error*);
 
-
+typedef void (*NITF_TRE_DESTRUCT_PRIVATE_DATA)(nitf_TRE*);
 
 typedef nitf_TREEnumerator* (*NITF_TRE_ITERATOR)(nitf_TRE*, nitf_Error*);
 
@@ -145,35 +147,30 @@ typedef struct _nitf_TREHandler
   NITF_TRE_WRITER write;
   NITF_TRE_ITERATOR begin;
   NITF_TRE_SIZE getCurrentSize;
+  NITF_TRE_DESTRUCT_PRIVATE_DATA destructPrivateData;
   NITF_DATA* data;
-
 } nitf_TREHandler;
 
 /*!
  *  Construct a TRE Skeleton (for Reader).
  *  and the offset within the file
  *  \param tag The name of the TRE
- *  \param length This is the length of the TRE data (NITF_TRE_DEFAULT_LENGTH)
  *  \param error The error to populate on failure
  *  \return The newly constructed TRE
  *
  */
 NITFPROT(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
-        int length,
         nitf_Error * error);
 
 /*!
  *  Construct an actual TRE (for users of the library)
  *  \param tag Name of TRE
  *  \param desc a description structure, or if null, uses default for name
- *  \param length The length to construct, or uses default if
- *  NITF_TRE_DEFAULT_LENGTH
  *  \param error Error to populate if something bad happens
  *  \return A new TRE or NULL on failure
  */
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
                                        const char* id,
-                                       int length,
                                        nitf_Error * error);
 
 

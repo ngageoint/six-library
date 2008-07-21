@@ -88,7 +88,7 @@ int main(int argc, char **argv)
         if (intLength)
         {
             off_t treOff = nitf_IOHandle_tell(io, &error);
-            nitf_TRE* tre = nitf_TRE_construct(treName, NULL, intLength, &error);
+            nitf_TRE* tre = nitf_TRE_construct(treName, NULL, &error);
             char *data = NULL;
 
             assert(treOff);
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
             assert(intLength < MAX_TRE);
 
             /*  malloc the space for the raw data */
-            data = (char*)NITF_MALLOC( tre->length );
+            data = (char*)NITF_MALLOC( intLength );
             if (!data)
             {
                 nitf_Error_fprintf(&error,
@@ -108,11 +108,11 @@ int main(int argc, char **argv)
                                    treName);
                 exit(EXIT_FAILURE);
             }
-            memset(data, 0, tre->length);
+            memset(data, 0, intLength);
 
             if (! NITF_IO_SUCCESS( nitf_IOHandle_read(io,
                                    data,
-                                   tre->length,
+                                   intLength,
                                    &error) ) )
             {
                 nitf_Error_print(&error, stdout, "Exiting (5) ...");

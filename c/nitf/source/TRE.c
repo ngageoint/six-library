@@ -27,9 +27,7 @@
 
 
 /* IF desc is null, look for it, if I can't load then fail */
-/* Length should be defaultable */
 NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
-        int length,
         nitf_Error * error)
 {
     nitf_TRE *tre = (nitf_TRE *) NITF_MALLOC(sizeof(nitf_TRE));
@@ -44,9 +42,6 @@ NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
     /*  Just in case the first malloc fails  */
     tre->hash = NULL;
     tre->handler = NULL;
-    /*  Set the length to the default if it is not defined */
-    length = length < 0 ? NITF_TRE_DEFAULT_LENGTH : length;
-    tre->length = length;
 
     /* This happens with things like "DES" */
     if (strlen(tag) < NITF_MAX_TAG )
@@ -96,12 +91,8 @@ NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * source, nitf_Error * error)
         /*  Set this in case of auto-destruct  */
         tre->hash = NULL;
 
-        /*  Set the easy fields  */
-        tre->length = source->length;
-
         /* share the descrip */
 		tre->handler = source->handler;
-		//tre->descrip = source->descrip;
         memcpy(tre->tag, source->tag, sizeof(tre->tag));
 
         tre->hash = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
@@ -182,6 +173,12 @@ NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre)
     nitf_Error e;
     if (*tre)
     {
+        if ((*tre)->handler && (*tre)->handler->destructPrivateData)
+        {
+            /* let the handler destroy the private data */
+            (*tre)->handler->destructPrivateData(*tre);
+        }
+        
         if ((*tre)->hash)
         {
             /* flush the hash */
@@ -200,12 +197,10 @@ NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error);
 
 // For safe-keeping
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
-				       const char* id,
-				       int length,
-                                       nitf_Error * error)
+        const char* id, nitf_Error * error)
 {
     int bad = 0;
-    nitf_TRE* tre = nitf_TRE_createSkeleton(tag, length, error);
+    nitf_TRE* tre = nitf_TRE_createSkeleton(tag, error);
     nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
 
     if (!tre)

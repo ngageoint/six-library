@@ -44,7 +44,7 @@ nitf_TRE* createXMLTRE(const char* data, const int length)
     nitf_TRE *tre;
     nitf_Error error;
     
-    tre = nitf_TRE_construct("XMLTRE", NITF_TRE_RAW_ID, length, &error);
+    tre = nitf_TRE_construct("XMLTRE", NITF_TRE_RAW_ID, &error);
     if (!tre)
     {
         nitf_Error_print(&error, stdout, "Exiting...");

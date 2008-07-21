@@ -10,7 +10,10 @@ NITF_CXX_GUARD
 
 NITFAPI(int) nitf_TREUtils_computeLength(nitf_TRE * tre);
 
-NITFAPI(void) nitf_TREUtils_setDescription(nitf_TRE* tre, nitf_Error* error);
+NITFAPI(NITF_BOOL) nitf_TREUtils_setDescription(nitf_TRE* tre,
+                                                nitf_Uint32 length,
+                                                nitf_Error* error);
+
 NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
                                    const nitf_TREDescription* descrip,
                                    nitf_Error * error);

@@ -154,7 +154,7 @@ NITFPRIV(NITF_BOOL) readField(nitf_Reader * reader,
 NITFPRIV(NITF_BOOL) readValue(nitf_Reader * reader,
                               nitf_Field * field,
                               int length, nitf_Error * error);
-NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
+NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader, nitf_Uint32 length,
                               nitf_TRE * tre, nitf_Error * error);
 
 /*  This method reads the extra sections from the header, if    */
@@ -811,17 +811,14 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     NITF_TRY_GET_UINT32(subhdr->NITF_DESSHL, &subLen, error);
     if (subLen > 0)
     {        
-        
         /*  We know our constraints, so build up the tre object  */
-        subhdr->subheaderFields = 
-            nitf_TRE_createSkeleton(desID, subLen, error);
+        subhdr->subheaderFields = nitf_TRE_createSkeleton(desID, error);
 
         if (!subhdr->subheaderFields)
             goto CATCH_ERROR;
         
-        if (!handleTRE(reader, subhdr->subheaderFields, error))
+        if (!handleTRE(reader, subLen, subhdr->subheaderFields, error))
             goto CATCH_ERROR;
-
     }
     
     NITF_TRY_GET_UINT64(reader->record->
@@ -1175,11 +1172,11 @@ NITFPRIV(NITF_BOOL) readTRE(nitf_Reader * reader,
     off = nitf_IOHandle_tell(reader->inputHandle, error);
 
     /*  We know our constraints, so build up the tre object  */
-    tre = nitf_TRE_createSkeleton(etag, length, error);
+    tre = nitf_TRE_createSkeleton(etag, error);
     if (!tre)
         goto CATCH_ERROR;
 
-    if (!handleTRE(reader, tre, error))
+    if (!handleTRE(reader, length, tre, error))
         goto CATCH_ERROR;
 
     /*  Insert the tre into the data store  */
@@ -1200,7 +1197,7 @@ CATCH_ERROR:
 }
 
 
-NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
+NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader, nitf_Uint32 length, 
                               nitf_TRE * tre, nitf_Error * error)
 {
     int ok = 0;
@@ -1221,10 +1218,10 @@ NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
             tre->handler = handler;
             off = nitf_IOHandle_tell(reader->inputHandle, error);
 			
-	    ok = handler->read(reader->inputHandle, tre, reader->record, error);
+    	    ok = handler->read(reader->inputHandle, length, tre,
+    	            reader->record, error);
             if (!ok)
             {
-                
                 /* move the IO Handle back the size of the TRE */
                 nitf_IOHandle_seek(reader->inputHandle, off, NITF_SEEK_SET, error);
             }
@@ -1236,7 +1233,8 @@ NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader,
     if (!ok || handler == NULL)
     {
         tre->handler = nitf_DefaultTRE_handler(error);
-		ok = tre->handler->read(reader->inputHandle, tre, reader->record, error);
+		ok = tre->handler->read(reader->inputHandle, length, tre,
+		        reader->record, error);
     }
     
     if (!ok)

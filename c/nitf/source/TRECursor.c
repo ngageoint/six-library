@@ -21,6 +21,7 @@
  */
 
 #include "nitf/TRECursor.h"
+#include "nitf/TREPrivateData.h"
 
 
 NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
@@ -41,7 +42,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
         /* set the start index */
         tre_cursor.index = -1;
         /* count how many descriptions there are */
-		dptr = (nitf_TREDescription*)tre->priv;
+		dptr = ((nitf_TREPrivateData*)tre->priv)->description;
 		
         while (dptr && (dptr->data_type != NITF_END))
         {
@@ -49,7 +50,8 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
             dptr++;
         }
         memset(tre_cursor.tag_str, 0, 256);
-		sprintf(tre_cursor.tag_str, "%s", ((nitf_TREDescription*)tre->priv)->tag);
+		sprintf(tre_cursor.tag_str, "%s",
+		        ((nitf_TREPrivateData*)tre->priv)->description->tag);
         tre_cursor.tre = tre;
     }
 
@@ -187,7 +189,7 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
 
     /* count how many descriptions there are */
     
-	dptr = tre_cursor->tre->priv;
+	dptr = ((nitf_TREPrivateData*)tre_cursor->tre->priv)->description;
 
     while (!done)
     {

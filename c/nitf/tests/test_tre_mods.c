@@ -69,9 +69,10 @@ int main(int argc, char **argv)
     nitf_Error error;
     NITF_BOOL exists;
     nitf_TRE *dolly;            /* used for clone */
+    nitf_Uint32 treLength;
 
     /* construct a tre */
-    nitf_TRE *tre = nitf_TRE_construct("ACFTA", NULL, 154, &error);
+    nitf_TRE *tre = nitf_TRE_construct("ACFTA", NULL, &error);
     if (!tre)
     {
         nitf_Error_print(&error, stdout, "Exiting...");
@@ -127,7 +128,7 @@ int main(int argc, char **argv)
     /* Now, try to create a VALID TRE                     */
     /******************************************************/
     /* construct a tre */
-    tre = nitf_TRE_construct("JITCID", NULL, NITF_TRE_DEFAULT_LENGTH, &error);
+    tre = nitf_TRE_construct("JITCID", NULL, &error);
     if (!tre)
     {
         nitf_Error_print(&error, stdout, "Exiting...");
@@ -171,7 +172,7 @@ int main(int argc, char **argv)
     nitf_TRE_destruct(&dolly);
 
 
-    tre = nitf_TRE_construct("AIMIDB", NULL, NITF_TRE_DEFAULT_LENGTH, &error);
+    tre = nitf_TRE_construct("AIMIDB", NULL, &error);
     if (!tre)
     {
         nitf_Error_print(&error, stdout, "Exiting...");
@@ -180,8 +181,10 @@ int main(int argc, char **argv)
     /*
     nitf_TRE_setDescription(tre, "AIMIDB", NULL, &error);
     */
-    printf("TRE Length = %d\n", tre->length);
-    printf("Computed Length = %d\n", nitf_TRE_computeLength(tre));
+    
+    treLength = tre->handler->getCurrentSize(tre, error);
+    
+    printf("Computed TRE Length = %d\n", treLength);
 
     /* destruct the TRE */
     nitf_TRE_destruct(&tre);
@@ -191,9 +194,7 @@ int main(int argc, char **argv)
     /* Create a TRE, and set the description ourselves!! */
     /******************************************************/
     /* construct a tre */
-    tre = nitf_TRE_construct("ENGRDA",
-                             NULL,
-                             NITF_TRE_DEFAULT_LENGTH, &error);
+    tre = nitf_TRE_construct("ENGRDA", NULL, &error);
     if (!tre)
     {
         nitf_Error_print(&error, stdout, "Exiting...");
@@ -250,7 +251,7 @@ int main(int argc, char **argv)
     /* Test a TRE that has nested loops                   */
     /******************************************************/
     /* construct a tre */
-    tre = nitf_TRE_construct("ACCHZB", NULL, NITF_TRE_DEFAULT_LENGTH, &error);
+    tre = nitf_TRE_construct("ACCHZB", NULL, &error);
     if (!tre)
     {
         nitf_Error_print(&error, stdout, "Exiting...");
@@ -312,7 +313,7 @@ int main(int argc, char **argv)
         {
             printf("Name: %s, Length: %d\n--------------------------------\n",
                 infoPtr->name, infoPtr->lengthMatch);
-            tre = nitf_TRE_construct("ACFTA", infoPtr->description, -1, &error);
+            tre = nitf_TRE_construct("ACFTA", NULL, &error);
             if (!tre)
             {
                 nitf_Error_print(&error, stdout, "Exiting...");
