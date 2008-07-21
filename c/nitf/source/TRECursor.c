@@ -94,15 +94,18 @@ NITFAPI(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
         /* it is dependent on something in another loop,
          * so, we need to figure out what level.
          * since tags are unique, we are ok checking like this */
-        pair = nitf_HashTable_find(tre->hash, tag_str);
+        pair = nitf_HashTable_find(
+                ((nitf_TREPrivateData*)tre->priv)->hash, tag_str);
         for (i = 0; i < looping && !pair; ++i)
         {
             strcat(tag_str, idx_str[i]);
-            pair = nitf_HashTable_find(tre->hash, tag_str);
+            pair = nitf_HashTable_find(
+                    ((nitf_TREPrivateData*)tre->priv)->hash, tag_str);
         }
     }
     /* pull the data from the hash about the dependent loop value */
-    pair = nitf_HashTable_find(tre->hash, tag_str);
+    pair = nitf_HashTable_find(((nitf_TREPrivateData*)tre->priv)->hash,
+            tag_str);
     return pair;
 }
 

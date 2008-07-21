@@ -25,6 +25,7 @@
 
 #include "nitf/TRE.h"
 #include "nitf/TREDescription.h"
+#include "nitf/HashTable.h"
 
 NITF_CXX_GUARD
 
@@ -37,7 +38,20 @@ typedef struct _nitf_TREPrivateData
 {
     nitf_Uint32 length;
     nitf_TREDescription* description;
+    nitf_HashTable *hash;
 } nitf_TREPrivateData;
+
+
+NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_construct(
+        nitf_Error * error);
+
+NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_clone(
+        nitf_TREPrivateData *source, nitf_Error * error);
+
+NITFAPI(void) nitf_TREPrivateData_destruct(nitf_TREPrivateData **priv);
+
+NITFPROT(void) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
+                                         nitf_Error * error);
 
 
 NITF_CXX_ENDGUARD

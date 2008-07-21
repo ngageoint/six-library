@@ -86,6 +86,7 @@ SOURCES = BandInfo.c \
           System.c \
           TRE.c \
           TRECursor.c \
+          TREPrivateData.c \
           TREUtils.c \
           TextSegment.c \
           TextSubheader.c \

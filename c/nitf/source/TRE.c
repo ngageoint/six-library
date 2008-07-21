@@ -40,8 +40,8 @@ NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
     }
 
     /*  Just in case the first malloc fails  */
-    tre->hash = NULL;
     tre->handler = NULL;
+    tre->priv = NULL;
 
     /* This happens with things like "DES" */
     if (strlen(tag) < NITF_MAX_TAG )
@@ -51,33 +51,13 @@ NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
     memset(tre->tag, 0, NITF_MAX_TAG + 1);
     memcpy(tre->tag, tag, toCopy);
 
-    /* create the hashtable for the fields */
-    tre->hash = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
-
-    if (!tre->hash)
-    {
-        nitf_TRE_destruct(&tre);
-        return NULL;
-    }
-
-    /* ??? change policy? */
-    nitf_HashTable_setPolicy(tre->hash, NITF_DATA_ADOPT);
     return tre;
 }
-
-
 
 
 NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * source, nitf_Error * error)
 {
     nitf_TRE *tre = NULL;
-
-    nitf_List *lPtr;            /* temporary nitf_List pointer */
-    nitf_Field *field;          /* temporary nitf_Field pointer */
-    nitf_Pair *pair;            /* temporary nitf_Pair pointer */
-    nitf_ListIterator iter;     /* iterator to front of list */
-    nitf_ListIterator end;      /* iterator to back of list */
-    int i;                      /* used for iterating */
 
     if (source)
     {
@@ -88,8 +68,6 @@ NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * source, nitf_Error * error)
                             NITF_CTXT, NITF_ERR_MEMORY);
             return NULL;
         }
-        /*  Set this in case of auto-destruct  */
-        tre->hash = NULL;
 
         /* share the handler */
 		tre->handler = source->handler;
@@ -104,54 +82,6 @@ NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * source, nitf_Error * error)
                 return NULL;
             }
         }
-
-        tre->hash = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
-        if (!tre->hash)
-        {
-            nitf_TRE_destruct(&tre);
-            return NULL;
-        }
-
-        /*  Copy the entire contents of the hash  */
-        for (i = 0; i < source->hash->nbuckets; i++)
-        {
-            /*  Foreach chain in the hash table...  */
-            lPtr = source->hash->buckets[i];
-            iter = nitf_List_begin(lPtr);
-            end = nitf_List_end(lPtr);
-
-            /*  And while they are different...  */
-            while (nitf_ListIterator_notEqualTo(&iter, &end))
-            {
-                /*  Retrieve the field at the iterator...  */
-                pair = (nitf_Pair *) nitf_ListIterator_get(&iter);
-
-                /*  Cast it back to a field...  */
-                field = (nitf_Field *) pair->data;
-
-                /* clone the field */
-                field = nitf_Field_clone(field, error);
-
-                /*  If that failed, we need to destruct  */
-                if (!field)
-                {
-                    nitf_TRE_destruct(&tre);
-                    return NULL;
-                }
-
-                /*  Yes, now we can insert the new field!  */
-                if (!nitf_HashTable_insert(tre->hash,
-                                           pair->key, field, error))
-                {
-                    nitf_TRE_destruct(&tre);
-                    return NULL;
-                }
-                nitf_ListIterator_increment(&iter);
-            }
-        }
-
-        /* ??? change policy? */
-        nitf_HashTable_setPolicy(tre->hash, NITF_DATA_ADOPT);
     }
     else
     {
@@ -164,23 +94,9 @@ NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * source, nitf_Error * error)
 }
 
 
-/**
- * Helper function for destructing the HashTable pairs
- */
-NITFPRIV(int) destructHashValue(nitf_HashTable * ht,
-                                nitf_Pair * pair, NITF_DATA* userData,
-                                nitf_Error * error)
-{
-    if (pair)
-        if (pair->data)
-            nitf_Field_destruct((nitf_Field **) & pair->data);
-    return NITF_SUCCESS;
-}
-
 
 NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre)
 {
-    nitf_Error e;
     if (*tre)
     {
         if ((*tre)->handler && (*tre)->handler->destruct)
@@ -189,15 +105,6 @@ NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre)
             (*tre)->handler->destruct(*tre);
         }
         
-        if ((*tre)->hash)
-        {
-            /* flush the hash */
-            nitf_TRE_flush(*tre, &e);
-
-            /* destruct the hash */
-            nitf_HashTable_destruct(&((*tre)->hash));
-            (*tre)->hash = NULL;
-        }
         NITF_FREE(*tre);
         *tre = NULL;
     }
@@ -249,7 +156,8 @@ NITFAPI(nitf_TREEnumerator*) nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error)
 
 NITFAPI(NITF_BOOL) nitf_TRE_exists(nitf_TRE * tre, const char *tag)
 {
-    return (!tre) ? NITF_FAILURE : nitf_HashTable_exists(tre->hash, tag);
+    return (!tre) ? NITF_FAILURE :
+        (nitf_TRE_getField(tre, tag) != NULL ? NITF_SUCCESS : NITF_FAILURE);
 }
 
 
@@ -269,26 +177,7 @@ NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
     return tre->handler->setField(tre, tag, data, dataLength, error);
 }
 
-NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre,
-				       const char* tag)
+NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre, const char* tag)
 {
-    nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
-    if (!pair) return NULL;
-    return (nitf_Field*)pair->data;
-
+    return tre->handler->getField(tre, tag);
 }
-
-
-
-NITFPROT(void) nitf_TRE_flush(nitf_TRE * tre, nitf_Error * error)
-{
-    if (tre->hash)
-    {
-        /* destruct each field in the hash */
-        nitf_HashTable_foreach(tre->hash,
-                               (NITF_HASH_FUNCTOR) destructHashValue,
-                               NULL, error);
-    }
-}
-
-

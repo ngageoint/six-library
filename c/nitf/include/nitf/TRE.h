@@ -24,10 +24,10 @@
 #define __NITF_TRE_H__
 
 #include "nitf/System.h"
-#include "nitf/HashTable.h"
 #include "nitf/Field.h"
 #include "nitf/IntStack.h"
 #include "nitf/Validation.h" /* need this for the TRE Descriptions, for now */
+#include "nitf/Pair.h"
 #include "nitf/TREDescription.h"
 
 /*!
@@ -92,7 +92,6 @@ typedef struct _nitf_TRE
 {
 	struct _nitf_TREHandler* handler;
 	NITF_DATA* priv;
-	nitf_HashTable *hash;   /* key is field, data is char* pointing at tag[field_off] */
     char tag[NITF_MAX_TAG + 1]; /* the TRE tag */
 } nitf_TRE;
 
@@ -126,7 +125,7 @@ typedef NITF_BOOL (*NITF_TRE_FIELD_SET)(nitf_TRE * tre,
                                     NITF_DATA * data,
                                     size_t dataLength, nitf_Error * error);
 
-
+typedef nitf_Field* (*NITF_TRE_FIELD_GET)(nitf_TRE * tre, const char *tag);
 
 typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle, nitf_TRE* tre, struct _nitf_Record* record, nitf_Error*);
 
@@ -140,11 +139,13 @@ typedef nitf_TREEnumerator* (*NITF_TRE_ITERATOR)(nitf_TRE*, nitf_Error*);
 
 
 #define NITF_TRE_END NULL
+
 typedef struct _nitf_TREHandler
 {
   NITF_TRE_INIT init;
   NITF_TRE_READER read;
   NITF_TRE_FIELD_SET setField;
+  NITF_TRE_FIELD_GET getField;
   NITF_TRE_FIND find;
   NITF_TRE_WRITER write;
   NITF_TRE_ITERATOR begin;
@@ -180,7 +181,6 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
 
 /*!
  *  Clone this object.  This is a deep copy operation.
- *  \todo  This cannot clone the hash table without copying
  *  This is a serious problem since this is the first thing
  *  people will want to do.  Possible solution: put desc inside
  *  of the TRE.  Alternate possibility: call TRE plugin
@@ -267,14 +267,6 @@ NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre,
 
 
 NITFAPI(nitf_TREEnumerator*) nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error);
-
-/*!
- * Flushes the contents of the TRE (i.e. flushes the internal hash table)
- * \param tre The TRE
- * \param error The error to populate on failure
- */
-NITFPROT(void) nitf_TRE_flush(nitf_TRE * tre, nitf_Error * error);
-
 
 
 NITF_CXX_ENDGUARD

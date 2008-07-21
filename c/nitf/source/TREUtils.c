@@ -42,11 +42,12 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE * tre,
                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
         return NITF_FAILURE;
     }
-
-    /* flush the TRE hash first, to protect from duplicate entries */
-    nitf_TRE_flush(tre, error);
     
     privData = (nitf_TREPrivateData*)tre->priv;
+
+    /* flush the hash first, to protect from duplicate entries */
+    if (privData)
+        nitf_TREPrivateData_flush(privData, error);
     
     cursor = nitf_TRECursor_begin(tre);
     while (offset < privData->length && status)
@@ -109,7 +110,8 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE * tre,
 #endif
 
             /* add to the hash */
-            nitf_HashTable_insert(tre->hash, cursor.tag_str, field, error);
+            nitf_HashTable_insert(((nitf_TREPrivateData*)tre->priv)->hash,
+                    cursor.tag_str, field, error);
 
             offset += length;
         }
@@ -173,7 +175,8 @@ NITFAPI(char *) nitf_TREUtils_getRawData(nitf_TRE * tre, nitf_Uint32* treLength,
     {
         if (nitf_TRECursor_iterate(&cursor, error) == NITF_SUCCESS)
         {
-            pair = nitf_HashTable_find(tre->hash, cursor.tag_str);
+            pair = nitf_HashTable_find(((nitf_TREPrivateData*)tre->priv)->hash,
+                    cursor.tag_str);
             if (pair && pair->data)
             {
                 tempLength = cursor.length;
@@ -285,9 +288,10 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
     }
 
     /* If the field already exists, get it and modify it */
-    if (nitf_HashTable_exists(tre->hash, tag))
+    if (nitf_HashTable_exists(((nitf_TREPrivateData*)tre->priv)->hash, tag))
     {
-        pair = nitf_HashTable_find(tre->hash, tag);
+        pair = nitf_HashTable_find(
+                ((nitf_TREPrivateData*)tre->priv)->hash, tag);
         field = (nitf_Field *) pair->data;
 
         if (!field)
@@ -364,8 +368,9 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
 #endif
 
                     /* add to the hash */
-                    nitf_HashTable_insert(tre->hash, cursor.tag_str, field,
-                            error);
+                    nitf_HashTable_insert(
+                            ((nitf_TREPrivateData*)tre->priv)->hash,
+                            cursor.tag_str, field, error);
                     done = 1; /* set, so we break out of loop */
                 }
             }
@@ -413,11 +418,9 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setDescription(nitf_TRE* tre,
     {
         if (numDescriptions == descriptions->defaultIndex)
         {
-            tre->priv = (nitf_TREPrivateData*)NITF_MALLOC(sizeof(nitf_TREPrivateData));
+            tre->priv = nitf_TREPrivateData_construct(error);
             if (!tre->priv)
             {
-                nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
                 return NITF_FAILURE;
             }
             
@@ -458,7 +461,8 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
     {
         if (nitf_TRECursor_iterate(&cursor, error))
         {
-            nitf_Pair* pair = nitf_HashTable_find(tre->hash, cursor.tag_str);
+            nitf_Pair* pair = nitf_HashTable_find(
+                    ((nitf_TREPrivateData*)tre->priv)->hash, cursor.tag_str);
             if (!pair || !pair->data)
             {
                 nitf_Field* field = nitf_Field_construct(cursor.length,
@@ -490,7 +494,8 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
                 /* add to hash if there wasn't an entry yet */
                 if (!pair)
                 {
-                    nitf_HashTable_insert(tre->hash,
+                    nitf_HashTable_insert(
+                            ((nitf_TREPrivateData*)tre->priv)->hash,
                             cursor.tag_str, field, error);
                 }
                 /* otherwise, just set the data pointer */
@@ -530,7 +535,8 @@ NITFAPI(int) nitf_TREUtils_print(nitf_TRE * tre, nitf_Error * error)
     {
         if ((status = nitf_TRECursor_iterate(&cursor, error)) == NITF_SUCCESS)
         {
-            pair = nitf_HashTable_find(tre->hash, cursor.tag_str);
+            pair = nitf_HashTable_find(
+                    ((nitf_TREPrivateData*)tre->priv)->hash, cursor.tag_str);
             if (!pair || !pair->data)
             {
                 nitf_Error_initf(error, NITF_CTXT, NITF_ERR_UNK,
@@ -577,7 +583,8 @@ NITFAPI(int) nitf_TREUtils_computeLength(nitf_TRE * tre)
                  * Otherwise, we don't add any length.
                  */
                 tempLength = 0;
-                pair = nitf_HashTable_find(tre->hash, cursor.tag_str);
+                pair = nitf_HashTable_find(
+                        ((nitf_TREPrivateData*)tre->priv)->hash, cursor.tag_str);
                 if (pair)
                 {
                     field = (nitf_Field *) pair->data;
@@ -714,23 +721,21 @@ NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
                                nitf_Error *error)
 {
     nitf_TREPrivateData *sourcePriv = NULL;
+    nitf_TREPrivateData *trePriv = NULL;
     
     if (!tre || !source || !source->priv)
         return NITF_FAILURE;
     
-    tre->priv = (nitf_TREPrivateData*)NITF_MALLOC(sizeof(nitf_TREPrivateData));
-    if (!tre->priv)
-    {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                NITF_CTXT, NITF_ERR_MEMORY);
-        return NITF_FAILURE;
-    }
-    
     sourcePriv = (nitf_TREPrivateData*)source->priv;
+    trePriv = (nitf_TREPrivateData*)tre->priv;
+    
+    /* this clones the hash */
+    if (!(trePriv = nitf_TREPrivateData_clone(sourcePriv, error)))
+        return NITF_FAILURE;
     
     /* just copy over the optional length and static description */
-    ((nitf_TREPrivateData*)tre->priv)->length = sourcePriv->length;
-    ((nitf_TREPrivateData*)tre->priv)->description = sourcePriv->description;
+    trePriv->length = sourcePriv->length;
+    trePriv->description = sourcePriv->description;
     
     return NITF_SUCCESS;
 }
@@ -739,7 +744,7 @@ NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
 NITFPRIV(void) basicDestruct(nitf_TRE* tre)
 {
     if (tre && tre->priv)
-        NITF_FREE((nitf_TREPrivateData*)tre->priv);
+        nitf_TREPrivateData_destruct((nitf_TREPrivateData**)&tre->priv);
 }
 
 /*
@@ -752,12 +757,11 @@ NITFPRIV(nitf_List*) basicFind(nitf_TRE* tre,
                                nitf_Error* error)
 {
     nitf_List* list;
-    /*    nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
-     if (!pair) return NULL;
-
-     */
-    nitf_HashTableIterator it = nitf_HashTable_begin(tre->hash);
-    nitf_HashTableIterator end = nitf_HashTable_end(tre->hash);
+    
+    nitf_HashTableIterator it = nitf_HashTable_begin(
+            ((nitf_TREPrivateData*)tre->priv)->hash);
+    nitf_HashTableIterator end = nitf_HashTable_end(
+            ((nitf_TREPrivateData*)tre->priv)->hash);
 
     list = nitf_List_construct(error);
     if (!list) return NULL;
@@ -782,6 +786,14 @@ NITFPRIV(nitf_List*) basicFind(nitf_TRE* tre,
 NITFPRIV(NITF_BOOL) basicSetField(nitf_TRE* tre, const char* tag, NITF_DATA* data, size_t dataLength, nitf_Error* error)
 {
     return nitf_TREUtils_setValue(tre, tag, data, dataLength, error);
+}
+
+NITFPRIV(nitf_Field*) basicGetField(nitf_TRE* tre, const char* tag)
+{
+    nitf_Pair* pair = nitf_HashTable_find(
+            ((nitf_TREPrivateData*)tre->priv)->hash, tag);
+    if (!pair) return NULL;
+    return (nitf_Field*)pair->data;
 }
 
 NITFPRIV(NITF_BOOL) basicIncrement(nitf_TREEnumerator** it, nitf_Error* error)
@@ -809,7 +821,8 @@ NITFPRIV(nitf_Pair*) basicGet(nitf_TREEnumerator* it, nitf_Error* error)
     if (!nitf_TRE_exists(cursor->tre, cursor->tag_str))
         goto CATCH_ERROR;
 
-    data = nitf_HashTable_find(cursor->tre->hash, cursor->tag_str);
+    data = nitf_HashTable_find(((nitf_TREPrivateData*)cursor->tre->priv)->hash,
+            cursor->tag_str);
     if (!data)
         goto CATCH_ERROR;
 
@@ -842,6 +855,7 @@ NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSe
     handler->init = basicInit;
     handler->read = basicRead;
     handler->setField = basicSetField;
+    handler->getField = basicGetField;
     handler->find = basicFind;
     handler->write = basicWrite;
     handler->begin = basicBegin;
