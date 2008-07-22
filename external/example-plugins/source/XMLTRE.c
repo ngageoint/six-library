@@ -79,12 +79,47 @@ NITFPRIV(XMLTREData*) XMLTREData_construct(nitf_Error* error)
     }
     data->memorySize = -1;
     data->memory = NULL;
+    data->doc = NULL;
     data->dirty = 0;
     data->priv = nitf_TREPrivateData_construct(error);
     if (!data->priv)
     {
         XMLTREData_destruct(&data);
         return NULL;
+    }
+    return data;
+}
+
+NITFPRIV(XMLTREData*) XMLTREData_clone(XMLTREData *source, nitf_Error* error)
+{
+    XMLTREData* data = XMLTREData_construct(error);
+    if (!data)
+        return NULL;
+    
+    data->memorySize = source->memorySize;
+    data->dirty = source->dirty;
+    if (source->memory)
+    {
+        memcpy(data->memory, source->memory, data->memorySize);
+        if(!data->memory)
+        {
+            XMLTREData_destruct(&data);
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                            NITF_CTXT, NITF_ERR_MEMORY);
+            return NULL;
+        }
+    }
+    
+    if (source->doc)
+    {
+        data->doc = xmlCopyDoc(source->doc, 1);
+        if (!data->doc)
+        {
+            XMLTREData_destruct(&data);
+            nitf_Error_init(error, "Unable to copy the XML document",
+                    NITF_CTXT, NITF_ERR_MEMORY);
+            return NULL;
+        }
     }
     return data;
 }
@@ -818,6 +853,27 @@ NITFPRIV(void) XMLTRE_destruct(nitf_TRE *tre)
 }
 
 
+NITFPRIV(NITF_BOOL) XMLTRE_clone(nitf_TRE *source,
+                                 nitf_TRE *tre,
+                                 nitf_Error *error)
+{
+    XMLTREData *sourcePriv = NULL;
+    XMLTREData *trePriv = NULL;
+    
+    if (!tre || !source || !source->priv)
+        return NITF_FAILURE;
+    
+    sourcePriv = (XMLTREData*)source->priv;
+    trePriv = (XMLTREData*)tre->priv;
+    
+    /* this clones the hash */
+    if (!(trePriv = XMLTREData_clone(sourcePriv, error)))
+        return NITF_FAILURE;
+    
+    return NITF_SUCCESS;
+}
+
+
 NITFPRIV(nitf_Field*) XMLTRE_getField(nitf_TRE* tre, const char* tag)
 {
     nitf_Pair* pair = nitf_HashTable_find(
@@ -837,7 +893,7 @@ static nitf_TREHandler gHandler =
         XMLTRE_write,
         XMLTRE_begin,
         XMLTREIterator_getCurrentSize,
-        NULL, /* TODO - support this */
+        XMLTRE_clone,
         XMLTRE_destruct,
         NULL
 };
