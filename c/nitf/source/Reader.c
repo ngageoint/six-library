@@ -1835,12 +1835,10 @@ NITFAPI(nitf_SegmentReader *) nitf_Reader_newGraphicReader
 }
 
 
-NITFAPI(nitf_SegmentReader *) nitf_Reader_newDEReader(nitf_Reader *
-        reader,
-        int index,
-        nitf_Error * error)
+NITFAPI(nitf_SegmentReader *) nitf_Reader_newDEReader(nitf_Reader *reader,
+                                                      int index,
+                                                      nitf_Error * error)
 {
-
     nitf_SegmentReader *segmentReader;
     nitf_ListIterator iter;
     nitf_ListIterator end;

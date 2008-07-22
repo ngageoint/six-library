@@ -146,48 +146,6 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
 
 
 /*!
- *  Retrieve the plugin point of entry (NITF_PLUGIN_TRE_GET_DESCRIPTIONS_FUNCTION), so that
- *  the user/developer can call it.  If no such plugin exists, the
- *  handler will return NULL.  If such a plugin DOES exist, the handler
- *  will return it, unless an error occurred, in which case, it sets
- *  had_error to 1.
- *
- *  \param reg This is the registry
- *  \param tre_id  This is the ID of the tre (the plugin will have same name)
- *  \param had_error If an error occured, this will be 1, otherwise it is 0
- *  \param error An error to be populated if tre_main is NULL and return val
- *    is -1
- *  \return The plugin main, or NULL
- */
-NITFPROT(NITF_PLUGIN_TRE_GET_DESCRIPTIONS_FUNCTION)
-nitf_PluginRegistry_retrieveTREDescription(nitf_PluginRegistry * reg,
-        const char *tre_id,
-        int *had_error,
-        nitf_Error * error);
-
-
-/*!
- *  Retrieve the plugin point of entry (NITF_PLUGIN_TRE_SET_DESCRIPTION_FUNCTION), so that
- *  the user/developer can call it.  If no such plugin exists, the
- *  handler will return NULL.  If such a plugin DOES exist, the handler
- *  will return it, unless an error occurred, in which case, it sets
- *  had_error to 1.
- *
- *  \param reg This is the registry
- *  \param tre_id  This is the ID of the tre (the plugin will have same name)
- *  \param had_error If an error occured, this will be 1, otherwise it is 0
- *  \param error An error to be populated if tre_main is NULL and return val
- *    is -1
- *  \return The plugin main, or NULL
- */
-NITFPROT(NITF_PLUGIN_TRE_SET_DESCRIPTION_FUNCTION)
-nitf_PluginRegistry_retrieveSetTREDescription(nitf_PluginRegistry * reg,
-        const char *tre_id,
-        int *had_error,
-        nitf_Error * error);
-
-
-/*!
  *  Retrieve the plugin point of entry, so that
  *  the image io object can recieve it.  If no such compression plugin,
  *  handler will return NULL.  If such a plugin DOES exist, the handler
@@ -203,9 +161,11 @@ nitf_PluginRegistry_retrieveSetTREDescription(nitf_PluginRegistry * reg,
  */
 NITFPROT(NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)
 nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
-        const char *comp_id,
-        int *had_error,
-        nitf_Error * error);
+                                              const char *comp_id,
+                                              int *had_error,
+                                              nitf_Error * error);
+
+
 /*  There is no destructor currently, the object is statically created in
      the plugin
 NITFPROT(NITF_PLUGIN_DECOMPRESSION_DESTRUCT_FUNCTION)

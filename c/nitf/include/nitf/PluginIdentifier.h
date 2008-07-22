@@ -40,23 +40,6 @@ typedef int (*NITF_PLUGIN_TRE_HANDLER_FUNCTION)
 
 typedef nitf_TREHandler* (*NITF_PLUGIN_TRE_HANDLER_FUNCTION)(nitf_Error * error);
 
-/*
- * \brief NITF_PLUGIN_TRE_GET_DESCRIPTIONS_FUNCTION - Function pointer for returning
- * the descriptions available by the plug-in.
- */
-typedef nitf_TREDescriptionSet* (*NITF_PLUGIN_TRE_GET_DESCRIPTIONS_FUNCTION) (void);
-
-/*
- * \brief NITF_PLUGIN_TRE_SET_DESCRIPTION_FUNCTION - Function pointer for setting
- * the description of the given TRE. This will attempt to set the default description
- * to the TRE, and will fail (check tre->descrip == NULL for failure) if there
- * is no default description found.
- */
-typedef void (*NITF_PLUGIN_TRE_SET_DESCRIPTION_FUNCTION)
-(
-    nitf_TRE* tre,
-    nitf_Error* error
-);
 
 /*
   \brief NITF_PLUGIN_COMPRESSION_HANDLER_FUNCTION - Function pointer for
