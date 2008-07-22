@@ -41,7 +41,7 @@ def print_header(header, desc, extensions={}):
     logging.info(str(header))
     for section, tres in extensions.iteritems():
         for tre in tres:
-            logging.info('--- %s %s TRE [%s] ---' % (desc, section, tre.getTag()))
+            logging.info('--- %s %s TRE [%s] - (%d) ---' % (desc, section, tre.getTag(), tre.getCurrentSize()))
             printTRE(tre)
 
 

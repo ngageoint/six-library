@@ -841,7 +841,7 @@ class RESegment(RecordSegment):
         RecordSegment.__init__(self, ref)
         self.subheader = RESubheader(self.ref.subheader)
 
-            
+
 class TRE:
     """ Tagged Record Extension """
     DEFAULT_LENGTH = nitropy.NITF_TRE_DEFAULT_LENGTH
@@ -862,9 +862,9 @@ class TRE:
     
     def getTag(self):
         return self.ref.tag
-    
-    def getLength(self):
-        return self.ref.length
+
+    def getCurrentSize(self):
+        return nitropy.nitf_TRE_getCurrentSize(self.ref, self.error)
     
     def __contains__(self, field):
         return nitropy.nitf_TRE_exists(self.ref, field)
@@ -872,33 +872,26 @@ class TRE:
     def __str__(self):
         return '%s(%s)' % (self.getTag(), self.getLength())
     
-#    def __iter__(self):
-#        class TRECursor:
-#            def __init__(self, tre):
-#                self.tre = tre
-#                self.ref = nitropy.nitf_TRE_begin(tre)
-#                self.status = True
-#                self.error = Error()
-#            
-#            def __del__(self):
-#                if self.ref: nitropy.nitf_TRE_cleanup(self.ref)
-#            
-#            def next(self):
-#                """ Returns a tuple (fieldName, Field) """
-#                if nitropy.nitf_TRE_isDone(self.ref) != 1 and self.status:
-#                    if nitropy.nitf_TRE_iterate(self.ref, self.error):
-#                        pair = nitropy.nitf_HashTable_find(self.tre.hash, self.ref.tag_str)
-#                        if not pair:
-#                            self.status = False
-#                            #set an error message?
-#                        else:
-#                            field = nitropy.py_Pair_getFieldData(pair)
-#                            return self.ref.tag_str, Field(field)
-#                raise StopIteration
-#        return TRECursor(self.ref)
-#    
-#    def __getitem__(self, field):
-#        return dict((key, value) for key, value in self)[field]
+    def __iter__(self):
+        it = nitropy.nitf_TRE_begin(self.ref, self.error)
+        while True:
+            pair = nitropy.py_TREEnumerator_get(it, self.error)
+            
+            if pair:
+                field = nitropy.py_Pair_getFieldData(pair)
+                if field:
+                    field = Field(field)
+                    yield pair.key, field
+                    if nitropy.py_TREEnumerator_next(it, self.error):
+                        continue
+            break
+    
+    def getField(self, name):
+        field = nitropy.nitf_TRE_getField(self.ref, field)
+        return field and Field(field) or None
+    
+    def __getitem__(self, field):
+        return self.getField(field)
     
 
 class Extensions:

@@ -127,6 +127,15 @@
     }
 }
 
+%typemap(in) nitf_TREEnumerator**{
+    if ($input)
+    {
+        nitf_TREEnumerator* temp = 0;
+        if (SWIG_ConvertPtr($input, &temp,$descriptor(nitf_TREEnumerator*), 0 |  0 ) != -1 && temp)
+            $1 = (nitf_TREEnumerator**)&temp;
+    }
+}
+
 %typemap(in) nitf_SegmentReader**{
     if ($input)
     {
@@ -571,6 +580,22 @@
     nitf_Field* py_Pair_getFieldData(nitf_Pair* pair)
     {
         return (nitf_Field*)pair->data;
+    }
+    
+    
+    PyObject* py_TREEnumerator_next(nitf_TREEnumerator **it,
+                                    nitf_Error *error)
+    {
+        if (!(*it)) Py_RETURN_FALSE;
+        if ((*it)->next(it, error) == NITF_SUCCESS && (*it))
+            Py_RETURN_TRUE;
+        Py_RETURN_FALSE;
+    }
+    
+    nitf_Pair* py_TREEnumerator_get(nitf_TREEnumerator *it, nitf_Error *error)
+    {
+        if (!it) return NULL;
+        return it->get(it, error);
     }
     
     
