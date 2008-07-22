@@ -90,16 +90,25 @@ struct _nitf_TREHandler;
  */
 typedef struct _nitf_TRE
 {
-	struct _nitf_TREHandler* handler;
-	NITF_DATA* priv;
-    char tag[NITF_MAX_TAG + 1]; /* the TRE tag */
+	struct _nitf_TREHandler* handler;  /*! The plug-in handler */
+	NITF_DATA* priv;                   /*! Private data the plug-in knows about */
+    char tag[NITF_MAX_TAG + 1];        /* the TRE tag */
 } nitf_TRE;
 
 
 struct _nitf_TREEnumerator;
 
-typedef NITF_BOOL (*NITF_TRE_ITERATOR_INCREMENT)(struct _nitf_TREEnumerator**, nitf_Error*);
-typedef nitf_Pair* (*NITF_TRE_ITERATOR_GET)(struct _nitf_TREEnumerator*, nitf_Error*);
+/*!
+ * Increments the TREEnumerator
+ */
+typedef NITF_BOOL (*NITF_TRE_ITERATOR_INCREMENT)(struct _nitf_TREEnumerator**,
+                                                 nitf_Error*);
+
+/*!
+ * Gets a pointer to the nitf_Pair at the current location of the TRE Enumerator
+ */
+typedef nitf_Pair* (*NITF_TRE_ITERATOR_GET)(struct _nitf_TREEnumerator*,
+                                            nitf_Error*);
 
 
 typedef struct _nitf_TREEnumerator
@@ -109,51 +118,180 @@ typedef struct _nitf_TREEnumerator
 	NITF_DATA* data;
 } nitf_TREEnumerator;
 
-typedef NITF_BOOL (*NITF_TRE_INIT) (nitf_TRE* tre, const char* id, nitf_Error * error);
-
-typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOHandle, nitf_Uint32 length,
-        nitf_TRE*, struct _nitf_Record*, nitf_Error*);
-
-
-typedef nitf_List* (*NITF_TRE_FIND)(nitf_TRE * tre,
-				    const char *pattern,
-				    nitf_Error* error);
-
-
-typedef NITF_BOOL (*NITF_TRE_FIELD_SET)(nitf_TRE * tre,
-                                    const char *tag,
-                                    NITF_DATA * data,
-                                    size_t dataLength, nitf_Error * error);
-
-typedef nitf_Field* (*NITF_TRE_FIELD_GET)(nitf_TRE * tre, const char *tag);
-
-typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle, nitf_TRE* tre, struct _nitf_Record* record, nitf_Error*);
-
-typedef int (*NITF_TRE_SIZE)(nitf_TRE*, nitf_Error*);
-
-typedef NITF_BOOL (*NITF_TRE_CLONE)(nitf_TRE*, nitf_TRE*, nitf_Error*);
-
-typedef void (*NITF_TRE_DESTRUCT)(nitf_TRE*);
-
-typedef nitf_TREEnumerator* (*NITF_TRE_ITERATOR)(nitf_TRE*, nitf_Error*);
-
-
 #define NITF_TRE_END NULL
 
+/*============================================================================*/
+/*===========================BEGIN TRE HANDLER API============================*/
+/*============================================================================*/
+
+/*!
+ * The plug-in is allowed to do some initialization to prepare the TRE
+ * \param tre       The TRE to initialize
+ * \param id        An optional ID used to further specify a specific version, etc.
+ * \param error     The error object
+ * \return          NITF_FAILURE if an error occurred, otherwise NITF_SUCCESS
+ */
+typedef NITF_BOOL (*NITF_TRE_INIT) (nitf_TRE* tre,
+                                    const char* id,
+                                    nitf_Error * error);
+
+/*!
+ * Read data from the given IOHandle, parsing it however the plug-in desires.
+ * \param io        The IOHandle we are reading from
+ * \param length    The length of the TRE (i.e. # of bytes to read)
+ * \param tre       The associated TRE
+ * \param record    The associated Record object
+ * \param error     The error object
+ * \return          NITF_FAILURE if an error occurred, otherwise NITF_SUCCESS
+ */
+typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOHandle io,
+                                     nitf_Uint32 length,
+                                     nitf_TRE *tre,
+                                     struct _nitf_Record *record,
+                                     nitf_Error *error);
+
+
+/*!
+ * Returns a nitf_List* of Fields that match the input XPath-like pattern.
+ * \param tre       The associated TRE
+ * \param pattern   The XPath pattern used to search for fields
+ * \param error     The error object
+ * \return          nitf_List* of fields, or NULL if an error occurred
+ */
+typedef nitf_List* (*NITF_TRE_FIND)(nitf_TRE * tre,
+                                    const char *pattern,
+                                    nitf_Error* error);
+
+
+/*!
+ * Sets a field in the given TRE. It is up to the plug-in to 
+ * \param tre           The associated TRE
+ * \param tag           The name of the field
+ * \param data          The data (void*) to set the field to
+ * \param dataLength    The size of the data
+ * \param error         The error object
+ * \return              NITF_FAILURE if an error occurred, otherwise NITF_SUCCESS
+ */
+typedef NITF_BOOL (*NITF_TRE_FIELD_SET)(nitf_TRE * tre,
+                                        const char *tag,
+                                        NITF_DATA * data,
+                                        size_t dataLength,
+                                        nitf_Error * error);
+
+/*!
+ * Returns the one Field with the given tag ID
+ * \param tre       The associated TRE
+ * \param tag       The tag, or name of the field to return
+ * \return          the nitf_Field*, or NULL if it doesn't exist (or error)
+ */
+typedef nitf_Field* (*NITF_TRE_FIELD_GET)(nitf_TRE * tre,
+                                          const char *tag);
+
+/*!
+ * Sets a field in the given TRE. It is up to the plug-in to 
+ * \param io        The IOHandle to write to
+ * \param tre       The associated TRE to write
+ * \param record    The associated Record object
+ * \param error The error object
+ * \return          NITF_FAILURE if an error occurred, otherwise NITF_SUCCESS
+ */
+typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle io,
+                                     nitf_TRE* tre,
+                                     struct _nitf_Record* record,
+                                     nitf_Error *error);
+
+/*!
+ * Returns the current size of the TRE. 
+ * \param tre       The associated TRE
+ * \param error     The error object
+ * \return          The size of the TRE, or -1 if an error occurred
+ */
+typedef int (*NITF_TRE_SIZE)(nitf_TRE *tre, nitf_Error *error);
+
+/*!
+ * Sets a field in the given TRE. It is up to the plug-in to 
+ * \param source    The source TRE to clone
+ * \param dest      The destination TRE, where the source will be cloned to
+ * \param error     The error object
+ * \return          NITF_FAILURE if an error occurred, otherwise NITF_SUCCESS
+ */
+typedef NITF_BOOL (*NITF_TRE_CLONE)(nitf_TRE *source,
+                                    nitf_TRE *dest,
+                                    nitf_Error *error);
+
+/*!
+ * Destroy any internal data associated with the given TRE. You should not
+ * destroy the TRE. It will be deleted by the library. 
+ * \param tre       The associated TRE
+ */
+typedef void (*NITF_TRE_DESTRUCT)(nitf_TRE*);
+
+/*!
+ * Returns a nitf_TREEnumerator for the TRE 
+ * \param tre       The associated TRE
+ * \param error     The error object
+ * \return          an enumerator, or NULL if an error occurred
+ */
+typedef nitf_TREEnumerator* (*NITF_TRE_ITERATOR)(nitf_TRE *tre,
+                                                 nitf_Error *error);
+
+
+
+/*!
+ * \brief The TRE Handler Interface
+ * 
+ * This interface should be fulfilled by any plug-in that wants to handle a TRE.
+ * View the documentation above for each of the methods below.
+ * In addition to the methods, there is an optional data field (of type
+ * NITF_DATA*) which allows the plug-in to store data associated with the
+ * Handler.
+ * 
+ */
 typedef struct _nitf_TREHandler
 {
-  NITF_TRE_INIT init;
-  NITF_TRE_READER read;
-  NITF_TRE_FIELD_SET setField;
-  NITF_TRE_FIELD_GET getField;
-  NITF_TRE_FIND find;
-  NITF_TRE_WRITER write;
-  NITF_TRE_ITERATOR begin;
-  NITF_TRE_SIZE getCurrentSize;
-  NITF_TRE_CLONE clone;
-  NITF_TRE_DESTRUCT destruct;
-  NITF_DATA* data;
+    /* The init method gets called when creating a TRE from scratch */
+    NITF_TRE_INIT init;
+    
+    /* The read method gets called when reading a TRE from an IOHandle */
+    NITF_TRE_READER read;
+    
+    /* setField is called by the setField proxy of the TRE API */
+    NITF_TRE_FIELD_SET setField;
+    
+    /* getField is called by the getField proxy of the TRE API */
+    NITF_TRE_FIELD_GET getField;
+    
+    /* find is called by the find proxy of the TRE API */
+    NITF_TRE_FIND find;
+    
+    /* write gets called when writing the TRE to an output IOHandle */
+    NITF_TRE_WRITER write;
+    
+    /* begin is called by the begin proxy of the TRE API */
+    NITF_TRE_ITERATOR begin;
+    
+    /* getCurrentSize is called by the getCurrentSize proxy of the TRE API */
+    NITF_TRE_SIZE getCurrentSize;
+    
+    /* clone is called when a TRE is cloned */
+    NITF_TRE_CLONE clone;
+    
+    /*
+     * destruct is called when a TRE is destroyed - NOT when the handler is.
+     * destruct is an optional operation and doesn't need to be provided by
+     * plug-in implementations
+     */
+    NITF_TRE_DESTRUCT destruct;
+    
+    /* optional data that contains handler-wide data for supporting TREs of
+     * the type that the plug-in handles
+     */
+    NITF_DATA* data;
 } nitf_TREHandler;
+
+/*============================================================================*/
+/*===========================END TRE HANDLER API==============================*/
+/*============================================================================*/
 
 /*!
  *  Construct a TRE Skeleton (for Reader).
