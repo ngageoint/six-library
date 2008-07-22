@@ -11,7 +11,7 @@
 
         <!-- some defaults here -->
         <property name="nitf.dir" location="../../c/nitf/"/>
-        <property name="jni.dir" location="./src/jni/"/>
+        <property name="jni.dir" location="./"/>
         <property name="jni.gnu" value=""/>
         <property name="jni.debug" value=""/>
         <property name="prefix" value="${target.dir}/nitro-java-${version}"/>
