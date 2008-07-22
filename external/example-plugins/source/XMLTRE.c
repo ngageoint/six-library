@@ -23,6 +23,7 @@
 
 #include <nitf/IOHandle.h>
 #include <nitf/TREUtils.h>
+#include <nitf/TREPrivateData.h>
 #include <nitf/Record.h>
 
 /* This example uses libxml2.  It requires that, which in turn requires iconv and zlib */
@@ -50,7 +51,23 @@ typedef struct _XMLTREData
     /* This field is only 1 when setField() is called.  It indicates that the current size */
     /* or write functions must update memory */
     int dirty;
+    
+    /* only using this for its HashTable */
+    nitf_TREPrivateData *priv;
 } XMLTREData;
+
+NITFPRIV(void) XMLTREData_destruct(XMLTREData** data)
+{
+    if (data && (*data))
+    {
+        if ((*data)->memory)
+            NITF_FREE((*data)->memory);
+        if ((*data)->priv)
+            nitf_TREPrivateData_destruct(&(*data)->priv);
+        NITF_FREE(*data);
+        *data = NULL;
+    }
+}
 
 NITFPRIV(XMLTREData*) XMLTREData_construct(nitf_Error* error)
 {
@@ -63,9 +80,14 @@ NITFPRIV(XMLTREData*) XMLTREData_construct(nitf_Error* error)
     data->memorySize = -1;
     data->memory = NULL;
     data->dirty = 0;
+    data->priv = nitf_TREPrivateData_construct(error);
+    if (!data->priv)
+    {
+        XMLTREData_destruct(&data);
+        return NULL;
+    }
     return data;
 }
-
 
 
 /*
@@ -130,7 +152,8 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
             {
                 field = nitf_Field_construct(strlen(text), NITF_BCS_A, error);
                 nitf_Field_setString(field, text, error);
-                if (!nitf_HashTable_insert(tre->hash, name, field, error))
+                if (!nitf_HashTable_insert(((XMLTREData*)tre->priv)->priv->hash,
+                        name, field, error))
                 {
                     //free(text);
                     return NITF_FAILURE;
@@ -151,10 +174,9 @@ NITFPRIV(NITF_BOOL) putElementsInTRE(xmlNode* node, nitf_TRE* tre, const char* p
                     
                     attField = nitf_Field_construct(strlen(value), NITF_BCS_A, error);
                     nitf_Field_setString(attField, value, error);
-                    if (!nitf_HashTable_insert(tre->hash, 
-                                               attName, 
-                                               attField, 
-                                               error))
+                    if (!nitf_HashTable_insert(
+                            ((XMLTREData*)tre->priv)->priv->hash,
+                            attName, attField, error))
                     {
                         free(value);
                         return NITF_FAILURE;
@@ -449,13 +471,15 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
             sprintf(name, "%s/%s[%d]", prepend, (char*)current->name, depth);
             if (current == find)
             {
-                return nitf_HashTable_find(tre->hash, name);
+                return nitf_HashTable_find(
+                        ((XMLTREData*)tre->priv)->priv->hash, name);
             }
-
             rv = getElementFromDOM(tre, current->children, find, name);
             if (rv) return rv;
         }
     }
+    
+    return NULL;
 }
 
 
@@ -465,9 +489,11 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
  *  TODO: Read XML from the file handle
  *
  */
-NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle, 
-                                nitf_TRE* tre, 
-                                struct _nitf_Record* record, nitf_Error* error)
+NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
+                                nitf_Uint32 length,
+                                nitf_TRE* tre,
+                                struct _nitf_Record* record,
+                                nitf_Error* error)
 {
     XMLTREData* treData = NULL;
     
@@ -480,15 +506,15 @@ NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
     if (!treData) goto CATCH_ERROR;
     
     treData->dirty = 0;
-    treData->memory = (char*)malloc(tre->length);
-    treData->memorySize = tre->length;
+    treData->memory = (char*)malloc(length);
+    treData->memorySize = length;
     if (!treData->memory) 
     { 
         nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),NITF_CTXT, NITF_ERR_MEMORY );
         goto CATCH_ERROR;
     }
-    memset(treData->memory, 0, tre->length);
-    success = nitf_TREUtils_readField(ioHandle, treData->memory, (int)tre->length, error);
+    memset(treData->memory, 0, length);
+    success = nitf_TREUtils_readField(ioHandle, treData->memory, length, error);
     if (!success) goto CATCH_ERROR;
     
     treData->doc = xmlReadMemory(treData->memory, treData->memorySize, NULL, NULL, 0);
@@ -506,8 +532,7 @@ NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
     xmlCleanupParser();
     return NITF_SUCCESS;
  CATCH_ERROR:
-    if (treData->memory) NITF_FREE(treData->memory);
-    if (treData) NITF_FREE(treData);
+    if (treData) XMLTREData_destruct(&treData);
     return NITF_FAILURE;
     
 }
@@ -692,7 +717,7 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
     if (!putElementInDOM(tre, &tag[endOfTag + 2], value, root, 0, error))
         goto CATCH_ERROR;
     
-    if (! nitf_HashTable_exists(tre->hash, tag))
+    if (! nitf_HashTable_exists(((XMLTREData*)tre->priv)->priv->hash, tag))
     {
         field = nitf_Field_construct(dataLength, NITF_BCS_A, error);
         if (!field)
@@ -700,13 +725,14 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
         
         nitf_Field_setString(field, value, error);
         
-        
-        if (!nitf_HashTable_insert(tre->hash, tag, field, error))
+        if (!nitf_HashTable_insert(((XMLTREData*)tre->priv)->priv->hash,
+                tag, field, error))
             goto CATCH_ERROR;
     }
     else
     {
-        nitf_Pair* pair = nitf_HashTable_find(tre->hash, tag);
+        nitf_Pair* pair = nitf_HashTable_find(
+                ((XMLTREData*)tre->priv)->priv->hash, tag);
         assert(pair);
         field = (nitf_Field*)pair->data;
         nitf_Field_setString(field, value, error);
@@ -762,9 +788,10 @@ NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
         /* Iteration is easy, we are using a hash table iterator underneath */
 
     nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
-    nitf_HashTableIterator hashEnd = nitf_HashTable_end(tre->hash);
+    nitf_HashTableIterator hashEnd = nitf_HashTable_end(
+            ((XMLTREData*)tre->priv)->priv->hash);
     nitf_HashTableIterator* hashIter = (nitf_HashTableIterator*)NITF_MALLOC(sizeof(nitf_HashTableIterator));
-    *hashIter = nitf_HashTable_begin(tre->hash);
+    *hashIter = nitf_HashTable_begin(((XMLTREData*)tre->priv)->priv->hash);
     
     if (nitf_HashTableIterator_equals(&hashEnd, hashIter))
     {
@@ -782,18 +809,37 @@ NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
         
 }
 
+NITFPRIV(void) XMLTRE_destruct(nitf_TRE *tre)
+{
+    if (tre && tre->priv)
+    {
+        XMLTREData_destruct((XMLTREData**)&tre->priv);
+    }
+}
+
+
+NITFPRIV(nitf_Field*) XMLTRE_getField(nitf_TRE* tre, const char* tag)
+{
+    nitf_Pair* pair = nitf_HashTable_find(
+            ((XMLTREData*)tre->priv)->priv->hash, tag);
+    if (!pair) return NULL;
+    return (nitf_Field*)pair->data;
+}
+
 
 static nitf_TREHandler gHandler = 
 {
         XMLTRE_initData,
         XMLTRE_read,
         XMLTRE_setField,
+        XMLTRE_getField,
         XMLTRE_find,
         XMLTRE_write,
         XMLTRE_begin,
         XMLTREIterator_getCurrentSize,
+        NULL, /* TODO - support this */
+        XMLTRE_destruct,
         NULL
-
 };
 
 NITFAPI(char**) XMLTRE_init(nitf_Error* error)
