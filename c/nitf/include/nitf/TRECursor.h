@@ -63,31 +63,35 @@ nitf_TRECursor;
 
 
 NITFAPI(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
-                                 nitf_TREDescription * desc_ptr,
-                                 char idx_str[10][10],
-                                 int looping, nitf_Error * error);
+                                               nitf_TREDescription * desc_ptr,
+                                               char idx_str[10][10],
+                                               int looping,
+                                               nitf_Error * error);
 
 
 
 NITFAPI(int) nitf_TRECursor_evalIf(nitf_TRE * tre,
-                          nitf_TREDescription * desc_ptr,
-                          char idx_str[10][10],
-                          int looping, nitf_Error * error);
+                                   nitf_TREDescription * desc_ptr,
+                                   char idx_str[10][10],
+                                   int looping,
+                                   nitf_Error * error);
 
 /**
  * Helper function for evaluating loops
  * Returns the number of loops that will be processed
  */
 NITFAPI(int) nitf_TRECursor_evalLoops(nitf_TRE * tre,
-                             nitf_TREDescription * desc_ptr,
-                             char idx_str[10][10],
-                             int looping, nitf_Error * error);
+                                      nitf_TREDescription * desc_ptr,
+                                      char idx_str[10][10],
+                                      int looping,
+                                      nitf_Error * error);
 
 
 NITFAPI(int) nitf_TRECursor_evalCondLength(nitf_TRE * tre,
-        nitf_TREDescription * desc_ptr,
-        char idx_str[10][10],
-        int looping, nitf_Error * error);
+                                           nitf_TREDescription * desc_ptr,
+                                           char idx_str[10][10],
+                                           int looping,
+                                           nitf_Error * error);
 
 /*!
  *  Initializes the cursor
@@ -128,7 +132,10 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                               nitf_Error * error);
 
 
-typedef unsigned int (*NITF_TRE_CURSOR_COUNT_FUNCTION) (nitf_TRE *, char idx[10][10], int, nitf_Error*);
+typedef unsigned int (*NITF_TRE_CURSOR_COUNT_FUNCTION) (nitf_TRE *,
+                                                        char idx[10][10],
+                                                        int,
+                                                        nitf_Error*);
 
 NITF_CXX_ENDGUARD
 
