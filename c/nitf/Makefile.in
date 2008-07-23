@@ -5,13 +5,13 @@
 include build/Makefile
 
 # This target builds the library.  The targets are defined below...
-all: library unit-tests test plugin apps
+all: library unit-tests test plugin progs
 ##############################################
 #  The ".PHONY" directive tells make not to try 
 #  to find any dependencies.  This keeps it 
 #  working even if there's a file called "libs" 
 #  or "clean".
-.PHONY: libs test shared docs clean raw install fresh apps unit-tests
+.PHONY: libs test shared docs clean raw install fresh progs unit-tests
 
 ############################################
 #  Make the library
@@ -26,7 +26,7 @@ test:
 plugin:
 	cd shared; make
 
-apps:
+progs:
 	cd apps; make
 
 unit-tests:
