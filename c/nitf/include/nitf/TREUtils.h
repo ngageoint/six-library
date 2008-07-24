@@ -4,6 +4,7 @@
 #include "nitf/TREDescription.h"
 #include "nitf/TRE.h"
 #include "nitf/TRECursor.h"
+#include "nitf/TREPrivateData.h"
 
 NITF_CXX_GUARD
 
