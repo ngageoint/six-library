@@ -69,8 +69,10 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_Writer_getImageWriters
     jobject imageWriter;
     jobjectArray writers;
     jclass imageWriterClass = (*env)->FindClass(env, "nitf/ImageWriter");
-    jmethodID methodID =
+    jmethodID initMethodID =
         (*env)->GetMethodID(env, imageWriterClass, "<init>", "(J)V");
+    jmethodID methodID = (*env)->GetMethodID(env, imageWriterClass,
+                                             "setManaged", "(Z)V");
 
     numWriters = writer->numImageWriters;
     writers =
@@ -80,11 +82,10 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_Writer_getImageWriters
     {
         imageWriter = (*env)->NewObject(env,
                                         imageWriterClass,
-                                        methodID,
+                                        initMethodID,
                                         (jlong) writer->imageWriters[i]);
         
         /* tell Java not to manage the ImageSource memory */
-        methodID = (*env)->GetMethodID(env, imageWriterClass, "setManaged", "(Z)V");
         (*env)->CallVoidMethod(env, imageWriter, methodID, JNI_FALSE);
         
         (*env)->SetObjectArrayElement(env, writers, i, imageWriter);
@@ -121,8 +122,10 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_Writer_getTextWriters
     jobject segmentWriter;
     jobjectArray writers;
     jclass segmentWriterClass = (*env)->FindClass(env, "nitf/SegmentWriter");
-    jmethodID methodID =
+    jmethodID initMethodID =
         (*env)->GetMethodID(env, segmentWriterClass, "<init>", "(J)V");
+    jmethodID methodID = (*env)->GetMethodID(env, segmentWriterClass,
+                                             "setManaged", "(Z)V");
 
     numWriters = writer->numTextWriters;
     writers =
@@ -132,11 +135,10 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_Writer_getTextWriters
     {
         segmentWriter = (*env)->NewObject(env,
                                           segmentWriterClass,
-                                          methodID,
+                                          initMethodID,
                                           (jlong) writer->textWriters[i]);
         
         /* tell Java not to manage the ImageSource memory */
-        methodID = (*env)->GetMethodID(env, segmentWriterClass, "setManaged", "(Z)V");
         (*env)->CallVoidMethod(env, segmentWriter, methodID, JNI_FALSE);
         
         (*env)->SetObjectArrayElement(env, writers, i, segmentWriter);

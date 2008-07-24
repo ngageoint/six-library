@@ -74,7 +74,8 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_00024TREIterator_next
     (*env)->SetObjectField(env, jFieldPair, fieldFieldID, jField);
     
     /* call next */
-    enumerator->next(&enumerator, &error);
+    if (!enumerator->next(&enumerator, &error))
+        enumerator = NULL;
     /* re-set the object each time to ensure the address is updated */
     _SetObj(env, self, enumerator);
     return jFieldPair;
