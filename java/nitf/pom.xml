@@ -106,7 +106,8 @@
             </plugins>
         </pluginManagement>
         <sourceDirectory>src/java</sourceDirectory>
-        <testSourceDirectory>src/test</testSourceDirectory>
+        <!-- for now, no tests will be run on build -->
+        <!-- testSourceDirectory>src/test</testSourceDirectory -->
 
     </build>
 

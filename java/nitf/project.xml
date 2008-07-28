@@ -68,9 +68,10 @@
         <unitTestSourceDirectory>${test.dir}</unitTestSourceDirectory>
 
         <unitTest>
-            <includes>
-                <include>**/*Test*.java</include>
-            </includes>
+            <!-- for now, we're not going to run any unit tests on build -->
+            <excludes>
+                <exclude>**/*Test*.java</exclude>
+            </excludes>
         </unitTest>
     </build>
 </project>
