@@ -98,7 +98,7 @@ NITF Library Programmers:
 
 	SVN Issues:
 	~~~~~~~~~~~
-		Please DONT POLLUTE CVS!  Dont put binaries in there,
+		Please DONT POLLUTE SVN!  Don't put binaries in there,
 		unless you have a very good reason
 
 		IMPORTANT: Before you commit:
