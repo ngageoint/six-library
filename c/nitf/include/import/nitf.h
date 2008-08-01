@@ -68,10 +68,10 @@
 #include "nitf/Sync.h"
 #include "nitf/System.h"
 #include "nitf/TRE.h"
+/*#include "nitf/Tree.h"*/
 #include "nitf/TREUtils.h"
 #include "nitf/TextSegment.h"
 #include "nitf/TextSubheader.h"
-#include "nitf/Validation.h"
 #include "nitf/Writer.h"
 
 #endif
