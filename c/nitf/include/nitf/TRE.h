@@ -26,8 +26,8 @@
 #include "nitf/System.h"
 #include "nitf/Field.h"
 #include "nitf/IntStack.h"
-#include "nitf/Validation.h" /* need this for the TRE Descriptions, for now */
 #include "nitf/Pair.h"
+#include "nitf/List.h"
 #include "nitf/TREDescription.h"
 
 /*!
