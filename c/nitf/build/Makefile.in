@@ -86,6 +86,7 @@ SOURCES = BandInfo.c \
           System.c \
           TRE.c \
           TRECursor.c \
+          Tree.c \
           TREPrivateData.c \
           TREUtils.c \
           TextSegment.c \
@@ -104,7 +105,7 @@ TESTS = test_replace_field.c test_find_field.c test_field.c \
         test_create.c test_fhdr_clone.c test_list_clone.c \
         test_hash_table_clone.c test_imsub_clone.c \
         test_image_source.c test_writer_3.c \
-        test_file_source.c test_mem_source.c
+        test_file_source.c test_mem_source.c test_tree_1.c
 
 #        test_create_xmltre.c
 #        test_insert_raw_xmltre.c\
