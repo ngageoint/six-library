@@ -28,9 +28,24 @@ NITF_JNI_DECLARE_OBJ(nitf_BandSource)
 /* Temporary data structure for holding important data */
 typedef struct _BandSourceImpl
 {
-    JNIEnv *env;                /* The JNI Environment */
     jobject self;               /* The current object */
 } BandSourceImpl;
+
+
+NITFPRIV(int) getEnv(JavaVM** vm, JNIEnv** env)
+{
+    jsize num = 0;
+    jint status = JNI_GetCreatedJavaVMs(vm, 1, &num);
+    status = (**vm)->GetEnv(vm, (void**)env, JNI_VERSION_1_4);
+    
+    if (env == NULL && status == JNI_EDETACHED)
+    {
+        //attach the current thread
+        status = (**vm)->AttachCurrentThread(vm, (void**)env, NULL);
+        return 1;
+    }
+    return 0;
+}
 
 /*
  *  Private read implementation for file source.
@@ -43,35 +58,44 @@ NITFPRIV(NITF_BOOL) BandSource_read
     BandSourceImpl *impl = NULL;
     jbyteArray byteArray = NULL;
     jbyte* temp;
+    JNIEnv *env = NULL;
+    JavaVM *vm = NULL;
+    int detach;
 
     /* cast it to the structure we know about */
     impl = (BandSourceImpl *) data;
     
-    bandSourceClass = (*impl->env)->GetObjectClass(impl->env, impl->self);
+    detach = getEnv(&vm, &env);
+    
+    bandSourceClass = (*env)->GetObjectClass(env, impl->self);
     methodID =
-        (*impl->env)->GetMethodID(impl->env, bandSourceClass, "read",
+        (*env)->GetMethodID(env, bandSourceClass, "read",
                                   "([BI)V");
 
     /* create new array */
-    byteArray = (*impl->env)->NewByteArray(impl->env, (jsize) size);
+    byteArray = (*env)->NewByteArray(env, (jsize) size);
     
     if (!byteArray)
     {
+        if (detach)
+            (*vm)->DetachCurrentThread(vm);
     	return NITF_FAILURE;
     }
 
     /* read the data */
-    (*impl->env)->CallVoidMethod(impl->env, impl->self, methodID,
+    (*env)->CallVoidMethod(env, impl->self, methodID,
                                  byteArray, size);
 
     /* copy to the char buffer */
-    temp = (*impl->env)->GetByteArrayElements(impl->env, byteArray, 0);
+    temp = (*env)->GetByteArrayElements(env, byteArray, 0);
     memcpy(buf, (char*)temp, size);
     
     /* delete the local refs */ 
-    (*impl->env)->ReleaseByteArrayElements(impl->env, byteArray, temp, 0);
-    (*impl->env)->DeleteLocalRef(impl->env, byteArray);
+    (*env)->ReleaseByteArrayElements(env, byteArray, temp, 0);
+    (*env)->DeleteLocalRef(env, byteArray);
     
+    if (detach)
+        (*vm)->DetachCurrentThread(vm);
     return NITF_SUCCESS;
 }
 
@@ -81,20 +105,28 @@ NITFPRIV(void) BandSource_destruct(NITF_DATA * data)
     jclass bandSourceClass = NULL;
     jmethodID methodID = NULL;
     BandSourceImpl *impl = NULL;
+    JNIEnv *env = NULL;
+    JavaVM *vm = NULL;
+    int detach;
+    
+    detach = getEnv(&vm, &env);
 
     if (data)
     {
         impl = (BandSourceImpl *) data;
         bandSourceClass =
-            (*impl->env)->GetObjectClass(impl->env, (jobject) impl->self);
+            (*env)->GetObjectClass(env, (jobject) impl->self);
 
         /* Call the Java object to tell it we are done using it */
-        /*(*impl->env)->CallVoidMethod(impl->env, impl->self, methodID); */
+        /*(*env)->CallVoidMethod(env, impl->self, methodID); */
 
         /* Delete the global ref */
-        (*impl->env)->DeleteGlobalRef(impl->env, impl->self);
+        (*env)->DeleteGlobalRef(env, impl->self);
         NITF_FREE(data);
     }
+    
+    if (detach)
+        (*vm)->DetachCurrentThread(vm);
 }
 
 
@@ -128,9 +160,6 @@ JNIEXPORT void JNICALL Java_nitf_BandSource_construct
         return;
     }
 
-    /* fill the data structure */
-    impl->env = env;
-
     /**************************************************************/
     /* THIS IS VERY IMPORTANT... WE MUST MAKE A STRONG GLOBAL REF */
     /**************************************************************/
@@ -161,6 +190,7 @@ JNIEXPORT void JNICALL Java_nitf_BandSource_construct
 JNIEXPORT void JNICALL Java_nitf_BandSource_destructMemory
     (JNIEnv * env, jobject self)
 {
+    printf("In destructoMemory:\n");
     nitf_BandSource *bandSource = _GetObj(env, self);
     if (bandSource)
         nitf_BandSource_destruct(&bandSource);
