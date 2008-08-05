@@ -427,6 +427,7 @@ NITFAPI(nitf_Reader *) nitf_Reader_construct(nitf_Error * error)
         nitf_Error_init(error,
                         NITF_STRERROR(NITF_ERRNO),
                         NITF_CTXT, NITF_ERR_MEMORY);
+	return NULL;
     }
 
     reader->warningList = nitf_List_construct(error);
@@ -435,13 +436,6 @@ NITFAPI(nitf_Reader *) nitf_Reader_construct(nitf_Error * error)
         nitf_Reader_destruct(&reader);
         return NULL;
     }
-    /*
-       reader->imageReaderPool = nitf_List_construct(error);
-       if (!reader->imageReaderPool)
-       {
-       nitf_Reader_destruct(&reader);
-       return NULL;
-       } */
 
     resetIOHandle(reader);
 
