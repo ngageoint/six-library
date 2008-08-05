@@ -33,7 +33,6 @@
 #include "nitf/FieldWarning.h"
 #include "nitf/ImageReader.h"
 #include "nitf/SegmentReader.h"
-//#include "nitf/DEReader.h"
 
 NITF_CXX_GUARD
 
