@@ -44,7 +44,6 @@ NITFAPI(void) nitf_DLL_destruct(nitf_DLL ** dll)
     nitf_Error error;
     if (*dll)
     {
-        //unload the dll on destruct
         nitf_DLL_unload((*dll), &error);
         if (*dll)
         {

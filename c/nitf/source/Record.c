@@ -480,8 +480,7 @@ NITFAPI(nitf_Record *) nitf_Record_clone(nitf_Record * source,
         nitf_Error * error)
 {
     nitf_Record *record = NULL;
-    NITF_BOOL success;
-
+ 
     if (!source)
     {
         nitf_Error_initf(error,
@@ -585,7 +584,6 @@ NITFAPI(nitf_Record *) nitf_Record_clone(nitf_Record * source,
 
     return record;
 
-CATCH_ERROR:
     /*  Destruct gracefully if we had a problem  */
     nitf_Record_destruct(&record);
     return NULL;

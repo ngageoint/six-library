@@ -151,7 +151,7 @@ NITFAPI(void) nitf_Tree_destruct(nitf_Tree** tree);
 typedef enum _nitf_Traversal 
 { 
     NITF_PRE_ORDER = 0,
-    NITF_POST_ORDER,
+    NITF_POST_ORDER
     /* We are not a binary tree, so no inorder traversal */
 } nitf_Traversal;
 

@@ -37,6 +37,20 @@ NITFPROT(nitf_IntStack *) nitf_IntStack_construct(nitf_Error * error)
     return stk;
 }
 
+NITFPROT(nitf_IntStack*) nitf_IntStack_clone(nitf_IntStack* stack,
+                                             nitf_Error* error)
+{
+    int i;
+    nitf_IntStack* copy = nitf_IntStack_construct(error);
+    if (!copy) return NULL;
+
+    for (i = 0; i < stack->sp; i++)
+    {
+        copy->st[ i ] = stack->st[i];
+    }
+    return copy;
+
+}
 
 NITFPROT(void) nitf_IntStack_destruct(nitf_IntStack ** stk)
 {

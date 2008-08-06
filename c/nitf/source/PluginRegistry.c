@@ -439,8 +439,8 @@ NITFAPI(NITF_BOOL)
             end = i - 1;
     }
     memcpy(keyName, &fullName[begin], end - begin + 1);
-    end = strstr(keyName, NITF_DLL_EXTENSION);
-    keyName[ end - begin + 1] = NULL;
+    end = strstr(keyName, NITF_DLL_EXTENSION); /* FIXME!!! */
+    keyName[ end - begin + 1] = NULL; /* FIXME!!! */
     
     /* Now init the plugin!!!  */
     ident = doInit(dll, keyName, error);

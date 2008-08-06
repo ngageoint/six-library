@@ -450,7 +450,8 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
     nitf_TRECursor cursor;
 
     /* set the description so the cursor can use it */
-    ((nitf_TREPrivateData*)tre->priv)->description = descrip;
+    ((nitf_TREPrivateData*)tre->priv)->description = 
+        (nitf_TREDescription*)descrip;
 
     /* loop over the description, and add blank fields for the
      * "normal" fields... any special case fields (loops, conditions)

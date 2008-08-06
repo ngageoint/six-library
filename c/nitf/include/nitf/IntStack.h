@@ -45,6 +45,10 @@ nitf_IntStack;
  */
 NITFPROT(nitf_IntStack *) nitf_IntStack_construct(nitf_Error * error);
 
+
+NITFPROT(nitf_IntStack *) nitf_IntStack_clone(nitf_IntStack* stack, 
+                                              nitf_Error* error);
+
 /*!
  *  TODO: Add documentation
  */

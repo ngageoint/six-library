@@ -1433,7 +1433,6 @@ NITFPRIV(NITF_BOOL) writeDESubheader(nitf_Writer * writer,
         NITF_WRITE_VALUE(subhdr, NITF_DESITEM, SPACE, FILL_RIGHT);
     }
 
-    //get the TRE data, and length
     if (subhdr->subheaderFields)
     {
       subLen = subhdr->subheaderFields->handler->getCurrentSize(subhdr->subheaderFields, error);
@@ -1443,7 +1442,6 @@ NITFPRIV(NITF_BOOL) writeDESubheader(nitf_Writer * writer,
     else
         subLen = 0;
 
-    //set the length field
     nitf_Field_setUint32(subhdr->NITF_DESSHL, subLen, error);
     NITF_WRITE_VALUE(subhdr, NITF_DESSHL, ZERO, FILL_LEFT);
 
@@ -1596,7 +1594,7 @@ NITFPRIV(NITF_BOOL) writeDE(nitf_SegmentWriter * segmentWriter,
     }
 
     nitf_Field_trimString(desid);
-    if(strcmp(desid,"TRE_OVERFLOW") == 0)//* This is an overflow */
+    if(strcmp(desid,"TRE_OVERFLOW") == 0)
     {
         nitf_ExtensionsIterator iter; /* TRE iterator */
         nitf_ExtensionsIterator end; /* End iterator */

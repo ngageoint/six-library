@@ -67,7 +67,6 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(MemorySourceImpl *
         nitf_Error * error)
 {
     int i = 0;
-    int j = 0;
 
     while (i < size)
     {
@@ -232,7 +231,6 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
     char *tbuf;
     off_t lmark = 0;
     int i = 0;
-    int j = 0;
     if (tsize + fileSource->mark > fileSource->size)
         tsize = fileSource->size - fileSource->mark;
 

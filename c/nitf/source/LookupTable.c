@@ -98,7 +98,6 @@ NITFAPI(void) nitf_LookupTable_destruct(nitf_LookupTable ** lt)
         if ((*lt)->table)
         {
             NITF_FREE((*lt)->table);
-            (*lt)->table;
         }
         NITF_FREE((*lt));
         *lt = NULL;
