@@ -15,8 +15,8 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
- * see <http://www.gnu.org/licenses/>.
+ * License along with this program; 
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -440,9 +440,6 @@ NITFAPI(NITF_BOOL)
     }
     memcpy(keyName, &fullName[begin], end - begin + 1);
     keyName[ end - begin + 1] = 0;
-    //end = strstr(keyName, NITF_DLL_EXTENSION); /* FIXME!!! */
-    //printf("END - BEGIN + 1: %s\n", *(p - begin + 1));
-    //keyName[ end - begin + 1] = NULL; /* FIXME!!! */
     
     /* Now init the plugin!!!  */
     ident = doInit(dll, keyName, error);
