@@ -112,7 +112,6 @@ NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre)
 NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error);
 
 
-// For safe-keeping
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
         const char* id, nitf_Error * error)
 {

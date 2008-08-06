@@ -419,7 +419,6 @@ NITFAPI(int) nitf_TRECursor_evalLoops(nitf_TRE * tre,
 
     else if (desc_ptr->label && strcmp(desc_ptr->label, NITF_FUNCTION) == 0)
     {
-	int i;
 	NITF_TRE_CURSOR_COUNT_FUNCTION fn = 
 	    (NITF_TRE_CURSOR_COUNT_FUNCTION*)desc_ptr->tag;
 
