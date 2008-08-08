@@ -16,6 +16,6 @@ EXTLIBPATH = -L@top_srcdir@/lib/@target@ \
              -L@top_srcdir@/../nitf/lib/@target@
 
 CFGDEFS = @DEFS@
-SOURCES = Metafile.c MetafileReader.c
+SOURCES = PictureBody.c Picture.c Metafile.c MetafileReader.c
 
 TESTS = test_read_cgm.c

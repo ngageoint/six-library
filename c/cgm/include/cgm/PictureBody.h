@@ -20,14 +20,33 @@
  *
  */
 
-#ifndef __IMPORT_CGM_H__
-#define __IMPORT_CGM_H__
+#ifndef __CGM_PICTURE_BODY_H__
+#define __CGM_PICTURE_BODY_H__
 
+#include <import/nitf.h>
 #include "cgm/Elements.h"
-#include "cgm/PictureBody.h"
-#include "cgm/Picture.h"
-#include "cgm/Metafile.h"
-#include "cgm/MetafileReader.h"
+NITF_CXX_GUARD
+
+
+typedef struct _cgm_PictureBody
+{
+
+    /* This defaults to 1 */
+    NITF_BOOL transparency;
+    
+    short auxColor[CGM_RGB];
+
+    nitf_List* elements;
+    
+} cgm_PictureBody;
+
+
+NITFAPI(cgm_PictureBody*) cgm_PictureBody_construct(nitf_Error* error);
+
+NITFAPI(void) cgm_PictureBody_destruct(cgm_PictureBody** body);
+
+
+NITF_CXX_ENDGUARD
+
 
 #endif
-

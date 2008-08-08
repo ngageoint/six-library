@@ -20,14 +20,46 @@
  *
  */
 
-#ifndef __IMPORT_CGM_H__
-#define __IMPORT_CGM_H__
-
-#include "cgm/Elements.h"
 #include "cgm/PictureBody.h"
-#include "cgm/Picture.h"
-#include "cgm/Metafile.h"
-#include "cgm/MetafileReader.h"
 
-#endif
+NITFAPI(cgm_PictureBody*) cgm_PictureBody_construct(nitf_Error* error)
+{
+    cgm_PictureBody* body = 
+	(cgm_PictureBody*)NITF_MALLOC(sizeof(cgm_PictureBody));
 
+    if (!body)
+    {
+	nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), 
+			NITF_CTXT, NITF_ERR_MEMORY);
+	return NULL;
+    }
+
+    body->elements = nitf_List_construct(error);
+    if (!body->elements)
+    {
+	cgm_PictureBody_destruct(&body);
+	return NULL;
+    }
+
+    body->transparency = 1;
+    body->auxColor[CGM_R] = -1;
+    body->auxColor[CGM_G] = -1;
+    body->auxColor[CGM_B] = -1;
+    return body;
+}
+
+NITFAPI(void) cgm_PictureBody_destruct(cgm_PictureBody** body)
+{
+    if (*body)
+    {
+
+	if ( (*body)->elements )
+	{
+	    nitf_List_destruct( & (*body)->elements );
+	}
+	NITF_FREE( *body );
+	*body = NULL;
+    }
+
+
+}

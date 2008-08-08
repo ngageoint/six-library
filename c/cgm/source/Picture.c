@@ -20,56 +20,50 @@
  *
  */
 
+#include "cgm/Picture.h"
 
-#include "cgm/Metafile.h"
 
-
-NITFAPI(cgm_Metafile*) cgm_Metafile_construct(nitf_Error* error)
+NITFAPI(cgm_Picture*) cgm_Picture_construct(nitf_Error* error)
 {
-    cgm_Metafile* mf = (cgm_Metafile*) NITF_MALLOC( sizeof(cgm_Metafile) );
-    if (!mf)
+    cgm_Picture* picture = (cgm_Picture*)NITF_MALLOC(sizeof(cgm_Picture));
+    if (!picture)
     {
 	nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), 
 			NITF_CTXT, NITF_ERR_MEMORY);
 	return NULL;
     }
+    picture->name = NULL;
+    picture->colorSelectionMode = CGM_DIRECT;
+    picture->edgeWidthSpec = CGM_ABSOLUTE;
+    picture->lineWidthSpec = CGM_ABSOLUTE;
+    picture->vdcExtent.corner1X = -1;
+    picture->vdcExtent.corner2X = -1;
+    picture->vdcExtent.corner1Y = -1;
+    picture->vdcExtent.corner2Y = -1;
 
-    mf->name = NULL;
-    mf->fontList = NULL;
-    mf->description = NULL;
-    mf->picture = NULL;
+    picture->body = NULL;
 
-    return mf;
-	
-}
-NITFAPI(void) cgm_Metafile_destruct(cgm_Metafile** mf)
-{
-    if (*mf)
+    /*cgm_PictureBody_construct(error);
+    if (picture->body == NULL)
     {
+	cgm_PictureDestruct(& picture->body );
+	}*/
+    return picture;
+}
 
-	if ( (*mf)->picture )
-	{
-	    cgm_Picture_destruct( & (*mf)->picture );
-	}
+NITFAPI(void) cgm_Picture_destruct(cgm_Picture** picture)
+{
+    if (*picture)
+    {
+	if ( (*picture)->body )
+	    cgm_PictureBody_destruct((*picture)->body);
 
-	if ( (*mf)->fontList )
-	{
-	    /* We actually have to walk this to delete it */
-	    
-	    nitf_List_destruct(& (*mf)->fontList );
-	}
+	if ( (*picture)->name )
+	    NITF_FREE( (*picture)->name );
 
-	if ( (*mf)->name )
-	{
-	    NITF_FREE( (*mf)->name );
-	}
-
-	if ( (*mf)->description )
-	{
-	    NITF_FREE( (*mf)->description );
-	}
-
-	NITF_FREE( *mf );
-	*mf = NULL;
+	NITF_FREE( *picture );
+	*picture = NULL;
+	
     }
+
 }

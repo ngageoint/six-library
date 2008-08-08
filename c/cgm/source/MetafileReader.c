@@ -111,6 +111,39 @@ void readRGB(char* b, int length, short *rgb3)
     rgb3[CGM_G] = 0x00FF & b[CGM_G];
     rgb3[CGM_B] = 0x00FF & b[CGM_B];
 }
+
+nitf_List* readVertices(char* b, int length, nitf_Error* error)
+{
+
+    int i = 0;
+    assert(length % 4 == 0);
+    nitf_List* list;
+    list = nitf_List_construct(error);
+    
+    if (!list)
+	return NITF_FAILURE;
+
+    for (i = 0; i < length; i+=4)
+    {
+	/* TODO: Constructor?*/
+	short s;
+	cgm_Vertex* v = (cgm_Vertex*)NITF_MALLOC(sizeof(cgm_Vertex));
+	assert(v);
+
+	memcpy(&s, &b[i], 2);
+	v->x = ntohs(s);
+	memcpy(&s, &b[i+2], 2);
+	v->y = ntohs(s);
+	if (!nitf_List_pushBack(list, v, error))
+	{
+	    nitf_List_destruct(&list);
+	    return NULL;
+	}
+	
+    }
+    return list;
+}
+
 short readShort(char* b, int length)
 {
     short s;
@@ -118,6 +151,8 @@ short readShort(char* b, int length)
     memcpy(&s, b, length);
     return NITF_NTOHS(s);
 }
+
+
 
 char* readString(char* b, int length)
 {
@@ -152,7 +187,23 @@ NITF_BOOL endPicture(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int 
 NITF_BOOL beginPicture(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->picture.name = readString(b, len);
+    
+    if (mf->picture != NULL)
+    {
+	nitf_Error_initf(error,
+			 NITF_CTXT,
+			 NITF_ERR_INVALID_OBJECT,
+			 "Picture Body was already set");
+	return NITF_FAILURE;
+
+    }
+    mf->picture = cgm_Picture_construct(error);
+    if (!mf->picture)
+	return NITF_FAILURE;
+
+    mf->picture->name = readString(b, len);
+
+
     return NITF_SUCCESS;
 }
 
@@ -160,20 +211,32 @@ NITF_BOOL beginPictureBody(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
 {
     DBG_TRACE();
     /* We really do nothing here yet */
+    assert(mf->picture);
+
+    if (mf->picture->body != NULL)
+    {
+	nitf_Error_initf(error,
+			 NITF_CTXT,
+			 NITF_ERR_INVALID_OBJECT,
+			 "Picture Body was already set");
+	return NITF_FAILURE;
+
+    }
+
     return NITF_SUCCESS;
 }
 
 NITF_BOOL metafileVersion(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->descriptor.version = readShort(b, len);
+    mf->version = readShort(b, len);
     return NITF_SUCCESS;
 }
 
 NITF_BOOL metafileDesc(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->descriptor.description = readString(b, len);
+    mf->description = readString(b, len);
     return NITF_SUCCESS;
 }
 
@@ -181,54 +244,99 @@ NITF_BOOL metafileList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, in
 {
     DBG_TRACE();
     assert(len == 6);
-    mf->descriptor.elementList[0] = readShort(&b[0], 2);
-    mf->descriptor.elementList[1] = readShort(&b[2], 2);
-    mf->descriptor.elementList[2] = readShort(&b[4], 2);
+    mf->elementList[0] = readShort(&b[0], 2);
+    mf->elementList[1] = readShort(&b[2], 2);
+    mf->elementList[2] = readShort(&b[4], 2);
 
     return NITF_SUCCESS;
 }
 
 NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    int i = 0;
+    int j = 1;
+    int total = 0;
+    char* p;
+
     DBG_TRACE();
     
-    // TODO: Do something here!!
+    if (mf->fontList != NULL)
+    {
+	nitf_Error_initf(error,
+			 NITF_CTXT,
+			 NITF_ERR_INVALID_OBJECT,
+			 "Font list was already set");
+	return NITF_FAILURE;
+
+    }
+    mf->fontList = nitf_List_construct( error );
+    if (!mf->fontList ) return NITF_FAILURE;
+
+    while (1)
+    {
+	assert ( i <= len);
+	unsigned char bu = b[i];
+	int slen = 0x000000FF & bu;
+	
+	p = (char*)NITF_MALLOC( slen + 1);
+	p[slen] = 0;
+	memcpy(p, &b[++i], slen);
+	total += slen + 1;
+	
+	if(total >= len)
+	    break;
+	
+	i += slen;	
+	j++;
+	/* Actually, this could get complicated, need to destruct then */
+	if (!nitf_List_pushBack(mf->fontList, p, error))
+	    return NITF_FAILURE;
+
+    }
+
     return NITF_SUCCESS;
 }
 
 NITF_BOOL colorSelectionMode(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->picture.descriptor.colorSelectionMode = readShort(b, len);
+    mf->picture->colorSelectionMode = readShort(b, len);
     return NITF_SUCCESS;
 }
 
 NITF_BOOL lineWidthSpecMode(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-
+    mf->picture->lineWidthSpec = readShort(b, len);
     return NITF_SUCCESS;
 }
 
 NITF_BOOL edgeWidthSpecMode(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-
+    mf->picture->edgeWidthSpec = readShort(b, len);
     return NITF_SUCCESS;
 }
 
 NITF_BOOL vdcExtent(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    short x1, y1, x2, y2;
+    
     DBG_TRACE();
+    assert(len == 8);
+    assert(mf->picture);
+    
+    memcpy(&x1, &b[0], 2);
+    mf->picture->vdcExtent.corner1X = NITF_NTOHS(x1);
 
-    return NITF_SUCCESS;
-}
+    memcpy(&y1, &b[2], 2);
+    mf->picture->vdcExtent.corner1Y = NITF_NTOHS(y1);
 
+    memcpy(&x2, &b[4], 2);
+    mf->picture->vdcExtent.corner2X = NITF_NTOHS(x2);
 
-NITF_BOOL textColor(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
-{
-    DBG_TRACE();
-    printf("%s(%d, %d, %d)\n", __PRETTY_FUNCTION__, classType, shortCode, len);
+    memcpy(&y2, &b[6], 2);
+    mf->picture->vdcExtent.corner2Y = NITF_NTOHS(x2);
 
     return NITF_SUCCESS;
 }
@@ -275,14 +383,14 @@ NITF_BOOL auxColor(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 {
     DBG_TRACE();
     /* TODO: handle multiple pix */
-    readRGB(b, len, mf->picture.body.auxColor);
+    readRGB(b, len, mf->picture->body->auxColor);
 
     return NITF_SUCCESS;
 }
 NITF_BOOL transparency(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->picture.body.transparency = readShort(b, len);
+    mf->picture->body->transparency = readShort(b, len);
 
     return NITF_SUCCESS;
 }

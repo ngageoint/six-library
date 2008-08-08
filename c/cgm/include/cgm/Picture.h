@@ -20,14 +20,30 @@
  *
  */
 
-#ifndef __IMPORT_CGM_H__
-#define __IMPORT_CGM_H__
+#ifndef __CGM_PICTURE_H__
+#define __CGM_PICTURE_H__
 
-#include "cgm/Elements.h"
+#include <import/nitf.h>
 #include "cgm/PictureBody.h"
-#include "cgm/Picture.h"
-#include "cgm/Metafile.h"
-#include "cgm/MetafileReader.h"
+
+NITF_CXX_GUARD
+
+typedef struct _cgm_Picture
+{
+    char* name;
+    cgm_ColorSelectionMode colorSelectionMode;
+    cgm_WidthSpecificationMode edgeWidthSpec;
+    cgm_WidthSpecificationMode lineWidthSpec;
+    cgm_Rectangle vdcExtent;
+    cgm_PictureBody* body;
+
+} cgm_Picture;
+
+NITFAPI(cgm_Picture*) cgm_Picture_construct(nitf_Error* error);
+
+NITFAPI(void) cgm_Picture_destruct(cgm_Picture** picture);
+
+
+NITF_CXX_ENDGUARD
 
 #endif
-
