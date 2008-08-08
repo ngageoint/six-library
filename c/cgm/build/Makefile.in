@@ -1,0 +1,21 @@
+PACKAGE = cgm
+MAJOR_VERSION = 0
+MINOR_VERSION = 1
+VERSION_SUFFIX = RC1
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+LANGUAGE = c
+MAINTAINER = gojira_1@users.sourceforge.net
+LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
+LIBEXT  = .a
+DSOEXT  = .so
+EXTLIBS = -lcgm-c -lnitf-c
+EXTINCLUDEPATH = -I@top_srcdir@/include \
+                 -I@top_srcdir@/../nitf/include
+
+EXTLIBPATH = -L@top_srcdir@/lib/@target@ \
+             -L@top_srcdir@/../nitf/lib/@target@
+
+CFGDEFS = @DEFS@
+SOURCES = Metafile.c MetafileReader.c
+
+TESTS = test_read_cgm.c

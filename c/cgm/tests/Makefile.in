@@ -1,0 +1,69 @@
+include ../build/Makefile
+
+#############################################
+# C O M P I L E R
+# The compiler + pretool
+CC = @pretool@ @CC@
+# What are we defining on the compile line?
+CCDEFINES = @cc_defs@
+# Dll Compile flags
+DLLFLAGS = @dll_flags@
+# Generic Compile Flags
+CCFLAGS = @cc_flags@
+# Where do the includes live?
+INCLUDEPATH = -I../include $(EXTINCLUDEPATH) @cc_includes@
+
+# The compile command
+COMPILE = $(CC) $(CCFLAGS) $(CCDEFINES) $(INCLUDEPATH)
+
+#############################################
+# A R C H I V E R
+ARCHIVE = @AR@ @ar_flags@
+
+#############################################
+# L I N K E R
+# Link flags
+LFLAGS = @link_flags@
+# THIS library's path
+LIBDIR  = ../lib/@target@
+# The testing directory
+TESTDIR = @target@
+# The general lib path
+LIBRARYPATH = -L$(LIBDIR) $(EXTLIBPATH) @link_libpath@
+
+# Libs to link with
+LIBS = @link_prelibs@ $(EXTLIBS) @link_autolibs@ @link_postlibs@
+
+# The link suffixes
+LINK = $(LIBRARYPATH) $(LFLAGS) $(LIBS)
+
+OBJS   = $(TESTS:.c=.o)
+EXE    = $(TESTS:.c=)
+# If you have several executables which depend on the same set of
+# object files, list them here.
+COMMON_OBJS = 
+
+all: $(EXE)
+
+$(EXE):  $(OBJS) $(COMMON_OBJS) testdir
+	$(COMPILE) -o $@ $@.o $(COMMON_OBJS) $(LINK)
+	mv $@ $(TESTDIR)
+
+testdir:
+	\mkdir -p $(TESTDIR)
+
+doxy: 
+	doxygen ../Doxyfile
+
+clean: 
+	perl -w @build_dir@/rfk.pl -f	
+
+fresh:  clean
+	make all
+
+
+.SUFFIXES: .o .c
+.c.o:
+	$(COMPILE) -c $<
+
+
