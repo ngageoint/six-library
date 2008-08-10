@@ -36,7 +36,7 @@ typedef struct _cgm_ParseContext
     cgm_InteriorStyle style;
     short height;
     short index;
-    cgm_Rectangle orientation;
+    short orientation[4];
     short visibility;
     short width;
     cgm_HatchType hatchIndex;

@@ -34,7 +34,7 @@ typedef struct _cgm_Picture
     cgm_ColorSelectionMode colorSelectionMode;
     cgm_WidthSpecificationMode edgeWidthSpec;
     cgm_WidthSpecificationMode lineWidthSpec;
-    cgm_Rectangle vdcExtent;
+    cgm_Rectangle* vdcExtent;
     cgm_PictureBody* body;
 
 } cgm_Picture;

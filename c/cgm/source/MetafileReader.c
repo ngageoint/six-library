@@ -37,10 +37,11 @@ NITFPRIV(void) resetParseContext(cgm_ParseContext* pc)
 
     pc->style = CGM_IS_NOT_SET;
     pc->height = pc->width = pc->index = -1;
-    pc->orientation.corner1X = -1;
-    pc->orientation.corner2X = -1;
-    pc->orientation.corner1Y = -1;
-    pc->orientation.corner2Y = -1;
+
+    pc->orientation[0] = -1;
+    pc->orientation[1] = -1;
+    pc->orientation[2] = -1;
+    pc->orientation[3] = -1;
     pc->visibility = -1;
     pc->type = CGM_TYPE_NOT_SET;
     pc->hatchIndex = CGM_HATCH_NOT_SET;
@@ -77,13 +78,13 @@ NITFPRIV(void) printParseContext(cgm_ParseContext* pc)
     if (pc->index != -1)
 	printf("\tFont index: [%d]\n", pc->index);
 
-    if (pc->orientation.corner1X != -1)
+    if (pc->orientation[0] != -1)
     {
 	printf("\tCharacter Orientation (%d, %d, %d, %d)\n",
-	       pc->orientation.corner1X,
-	       pc->orientation.corner2X,
-	       pc->orientation.corner1Y,
-	       pc->orientation.corner2Y);
+	       pc->orientation[0],
+	       pc->orientation[1],
+	       pc->orientation[2],
+	       pc->orientation[3]);
     }
 
     if (pc->visibility != -1)
@@ -105,14 +106,47 @@ printf("%s(%d, %d, %d)\n", __PRETTY_FUNCTION__, classType, shortCode, len)
 #    define DBG_TRACE() 
 #endif
 
-void readRGB(char* b, int length, short *rgb3)
+NITFPRIV(void) readRGB(char* b, int length, short *rgb3)
 {
     rgb3[CGM_R] = 0x00FF & b[CGM_R];
     rgb3[CGM_G] = 0x00FF & b[CGM_G];
     rgb3[CGM_B] = 0x00FF & b[CGM_B];
 }
 
-nitf_List* readVertices(char* b, int length, nitf_Error* error)
+NITFPRIV(cgm_Rectangle*) readRectangle(char* b, int len, nitf_Error* error)
+{
+    short x1, x2, y1, y2;
+    cgm_Rectangle* rectangle = cgm_Rectangle_construct(error);
+    if (!rectangle)
+	return NULL;
+
+    memcpy(&x1, &b[0], 2);
+    rectangle->x1 = NITF_NTOHS(x1);
+
+    memcpy(&y1, &b[2], 2);
+    rectangle->y1 = NITF_NTOHS(y1);
+
+    memcpy(&x2, &b[4], 2);
+    rectangle->x2 = NITF_NTOHS(x2);
+
+    memcpy(&y2, &b[6], 2);
+    rectangle->y2 = NITF_NTOHS(x2);
+    return rectangle;
+}
+
+NITFPRIV(cgm_Vertex*) readVertex(char* b, nitf_Error* error)
+{
+    cgm_Vertex* v = cgm_Vertex_construct(error);
+    short s;
+    if (!v) return NULL;
+    
+    memcpy(&s, &b[0], 2);
+    v->x = NITF_NTOHS(s);
+    memcpy(&s, &b[2], 2);
+    v->y = NITF_NTOHS(s);
+    return v;
+}
+NITFPRIV(nitf_List*) readVertices(char* b, int length, nitf_Error* error)
 {
 
     int i = 0;
@@ -125,15 +159,14 @@ nitf_List* readVertices(char* b, int length, nitf_Error* error)
 
     for (i = 0; i < length; i+=4)
     {
-	/* TODO: Constructor?*/
-	short s;
-	cgm_Vertex* v = (cgm_Vertex*)NITF_MALLOC(sizeof(cgm_Vertex));
-	assert(v);
 
-	memcpy(&s, &b[i], 2);
-	v->x = ntohs(s);
-	memcpy(&s, &b[i+2], 2);
-	v->y = ntohs(s);
+	cgm_Vertex* v = readVertex(&b[i], error);
+	if (!v)
+	{
+	    /*  TODO: We dont get out so easy, but for now... */
+	    nitf_List_destruct(&list);
+	    return NULL;
+	}
 	if (!nitf_List_pushBack(list, v, error))
 	{
 	    nitf_List_destruct(&list);
@@ -144,7 +177,7 @@ nitf_List* readVertices(char* b, int length, nitf_Error* error)
     return list;
 }
 
-short readShort(char* b, int length)
+NITFPRIV(short) readShort(char* b, int length)
 {
     short s;
     assert(length == 2);
@@ -154,7 +187,7 @@ short readShort(char* b, int length)
 
 
 
-char* readString(char* b, int length)
+NITFPRIV(char*) readString(char* b, int length)
 {
     int slen = (int) b[0];
     char* str = (char*)NITF_MALLOC(slen + 1);
@@ -320,23 +353,22 @@ NITF_BOOL edgeWidthSpecMode(cgm_Metafile* mf, cgm_ParseContext* pc, int classTyp
 
 NITF_BOOL vdcExtent(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
-    short x1, y1, x2, y2;
     
     DBG_TRACE();
     assert(len == 8);
     assert(mf->picture);
     
-    memcpy(&x1, &b[0], 2);
-    mf->picture->vdcExtent.corner1X = NITF_NTOHS(x1);
+    if (mf->picture->vdcExtent)
+    {
+	nitf_Error_initf(error,
+			 NITF_CTXT,
+			 NITF_ERR_INVALID_OBJECT,
+			 "VDC was already set");
+	return NITF_FAILURE;
+	
+    }
 
-    memcpy(&y1, &b[2], 2);
-    mf->picture->vdcExtent.corner1Y = NITF_NTOHS(y1);
-
-    memcpy(&x2, &b[4], 2);
-    mf->picture->vdcExtent.corner2X = NITF_NTOHS(x2);
-
-    memcpy(&y2, &b[6], 2);
-    mf->picture->vdcExtent.corner2Y = NITF_NTOHS(x2);
+    mf->picture->vdcExtent = readRectangle(b, len, error);
 
     return NITF_SUCCESS;
 }
@@ -493,10 +525,10 @@ NITF_BOOL characterOrient(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 {
     DBG_TRACE();
     assert(len == 8);
-    pc->orientation.corner1X = readShort(&b[0], 2);
-    pc->orientation.corner1Y = readShort(&b[2], 2);
-    pc->orientation.corner2X = readShort(&b[4], 2);
-    pc->orientation.corner2Y = readShort(&b[6], 2);
+    pc->orientation[0] = readShort(&b[0], 2); /* x1, y1, x2, y2 */
+    pc->orientation[1] = readShort(&b[2], 2);
+    pc->orientation[2] = readShort(&b[4], 2);
+    pc->orientation[3] = readShort(&b[6], 2);
    
     return NITF_SUCCESS;
 }
@@ -668,11 +700,6 @@ static cgm_ElementHandler five[] =
     
 };
 
-static cgm_ElementHandler blank[] =
-{
-    { 0, NULL }
-    
-};
 
 static cgm_ElementHandler* classes[] = 
 {

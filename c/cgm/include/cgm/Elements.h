@@ -23,26 +23,14 @@
 #ifndef __CGM_ELEMENTS_H__
 #define __CGM_ELEMENTS_H__
 
-#include <import/nitf.h>
-
+#include "cgm/BasicTypes.h"
+#include "cgm/Rectangle.h"
+#include "cgm/Vertex.h"
+#include "cgm/Text.h"
 
 NITF_CXX_GUARD
 
 
-typedef struct _cgm_Rectangle
-{
-    short corner1X;
-    short corner1Y;
-    short corner2X;
-    short corner2Y;
-
-} cgm_Rectangle;
-
-typedef struct _cgm_Vertex
-{
-    short x;
-    short y;
-} cgm_Vertex;
 
 typedef enum _cgm_ElementType
 {
@@ -59,96 +47,37 @@ typedef enum _cgm_ElementType
     CGM_CIRCULAR_ARC_CENTER_CLOSE,
 } cgm_ElementType;
 
-typedef struct _cgm_Text
+
+typedef void (*CGM_ELEMENT_DESTROY)(NITF_DATA*);
+
+typedef struct _cgm_Element
 {
-    short x;
-    short y;
-    char* text;
-} cgm_Text;
 
-typedef struct _cgm_CharacterOrientation
-{
-    short y;
-    short x;
-} cgm_CharacterOrientation;
+    cgm_ElementType type;
+    CGM_ELEMENT_DESTROY destroy;
+    NITF_DATA* data;
 
-
-typedef enum _cgm_Color
-{
-    CGM_R = 0,
-    CGM_G = 1,
-    CGM_B = 2,
-    CGM_RGB = 3,
-
-} cgm_Color;
-
-
-typedef enum _cgm_ColorSelectionMode
-{
-    CGM_DIRECT = 1
-} cgm_ColorSelectionMode;
-
-typedef enum _cgm_WidthSpecificationMode
-{
-    CGM_ABSOLUTE = 0
-} cgm_WidthSpecificationMode;
-
-
-typedef enum _cgm_InteriorStyle
-{
-    CGM_IS_NOT_SET = 0,
-    CGM_IS_SOLID,
-    CGM_IS_UNKNOWN,
-    CGM_IS_HATCH,
-    CGM_IS_EMPTY
-
-} cgm_InteriorStyle;
-
-typedef enum _cgm_HatchType
-{
-    CGM_HATCH_NOT_SET = 0,
-    CGM_HATCH_HORIZONTAL,
-    CGM_HATCH_VERTICAL,
-    CGM_HATCH_POSITIVE_SLOPE,
-    CGM_HATCH_NEGATIVE_SLOPE,
-    CGM_HATCH_HORIZ_VERT_CROSSHATCH,
-    CGM_HATCH_POS_NEG_SLOPE_CROSS
-    
-} cgm_HatchType;
-
-typedef enum _cgm_Type
-{
-    CGM_TYPE_NOT_SET = 0,
-    CGM_TYPE_SOLID,
-    CGM_TYPE_DASHED,
-    CGM_TYPE_DOT,
-    CGM_TYPE_DASH_DOT,
-    CGM_TYPE_DASH_DOT_DOT
-} cgm_Type;
+} cgm_Element;
 
 
 typedef struct _cgm_PolygonElement
 {
-    cgm_ElementType elementType;
     nitf_List* vertices;
 } cgm_PolygonElement;
 
 typedef struct _cgm_PolySetElement
 {
-    cgm_ElementType elementType;
     nitf_List* vertices;
 } cgm_PolySetElement;
 
 typedef struct _cgm_PolyLineElement
 {
-    cgm_ElementType elementType;
     nitf_List* vertices;
 } cgm_PolyLineElement;
 
 
 typedef struct _cgm_TextElement
 {
-    cgm_ElementType elementType;
     int color[CGM_RGB];
     short characterHeight;
     short textFontIndex;
@@ -158,8 +87,6 @@ typedef struct _cgm_TextElement
 
 typedef struct _cgm_EllipseElement
 {
-    cgm_ElementType elementType;
-    
     short centerX;
     short centerY;
     short end1X;
@@ -172,7 +99,6 @@ typedef struct _cgm_EllipseElement
 /* Serves both elliptical arc and elliptical arc close */
 typedef struct _cgm_EllipticalArcElement
 {
-    cgm_ElementType elementType;
     short centerX;
     short centerY;
     short end1X;
@@ -188,7 +114,6 @@ typedef struct _cgm_EllipticalArcElement
 
 typedef struct _cgm_CircleElement
 {
-    cgm_ElementType elementType;
     short centerX;
     short centerY;
     short radius;
@@ -198,7 +123,6 @@ typedef struct _cgm_CircleElement
 /* Serves both circle arc center and circle arc center close */
 typedef struct _cgm_CircleArcCenterElement
 {
-    cgm_ElementType elementType;
     short centerX;
     short centerY;
     short startX;
@@ -208,6 +132,45 @@ typedef struct _cgm_CircleArcCenterElement
     short radius;
     short closeType;
 } cgm_CircleArcCenter;
+
+/*!
+ *  Im thinking, we probably wont instantiate this directly.  Instead,
+ *  this class is more like a pure-virtual base.  The important thing,
+ *  should be that the unserializers should know how to construct the
+ *  object-of-interest, which is contained in the data portion of the
+ *  object.  Thus, those objects should have the 'derived' constructors,
+ *  and they should also specify destructor functions.
+ *
+ */
+NITFAPI(cgm_Element*) cgm_Element_construct(nitf_Error* error);
+
+/*!
+ *  If we follow the approach specified above, we can just destroy
+ *  this element by calling the 'sub-class' destroy function pointer
+ *  if we are set.  I guess we will handle the NULL data pointer to
+ *  make sure they dont have to in their functions (what a nice guy).
+ *
+ */
+NITFAPI(void) cgm_Element_destruct(cgm_Element** element);
+
+/*
+ *  We could make all these methods 'factory' like.  It might look a little
+ *  more graceful, but the idea is conceptually this:
+ *  Use the cgm_Element_construct() to create the base object, and assign
+ *  it the destructor for this type (we can make one destructor apply for
+ *  all destroy() where the Element type doesnt require deletion of sub-field
+ *  data.  Also, we need to malloc our actual element and tie it up to the
+ *  'data' field (obviously).
+ */
+
+NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_CircleArcElement_construct(nitf_Error* error);
 
 
 NITF_CXX_ENDGUARD

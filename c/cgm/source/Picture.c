@@ -36,10 +36,8 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(nitf_Error* error)
     picture->colorSelectionMode = CGM_DIRECT;
     picture->edgeWidthSpec = CGM_ABSOLUTE;
     picture->lineWidthSpec = CGM_ABSOLUTE;
-    picture->vdcExtent.corner1X = -1;
-    picture->vdcExtent.corner2X = -1;
-    picture->vdcExtent.corner1Y = -1;
-    picture->vdcExtent.corner2Y = -1;
+
+    picture->vdcExtent = NULL;
 
     picture->body = NULL;
 
@@ -56,10 +54,15 @@ NITFAPI(void) cgm_Picture_destruct(cgm_Picture** picture)
     if (*picture)
     {
 	if ( (*picture)->body )
-	    cgm_PictureBody_destruct((*picture)->body);
+	    cgm_PictureBody_destruct(&(*picture)->body);
 
 	if ( (*picture)->name )
 	    NITF_FREE( (*picture)->name );
+
+	if ( (*picture)->vdcExtent )
+	{
+	    cgm_Rectangle_destruct( &((*picture)->vdcExtent) );
+	}
 
 	NITF_FREE( *picture );
 	*picture = NULL;
