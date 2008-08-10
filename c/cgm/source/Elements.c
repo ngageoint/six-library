@@ -39,44 +39,134 @@ NITFPRIV(void) basicDestroy(NITF_DATA* data)
 }
 
 
-NITFPRIV(void) polygonDestroy(NITF_DATA* data)
-{
-    /* TODO!! */
 
+NITFPRIV(void) polyDestroy(NITF_DATA* data)
+{
+    
+    
+    /* TODO!! */
+    cgm_PolygonElement* poly = (cgm_PolygonElement*)data;
+    nitf_ListIterator it, end;
+    
+    nitf_List* list = (nitf_List*)poly->vertices;
+    it = nitf_List_begin(list);
+    end = nitf_List_end(list);
+
+    while (nitf_ListIterator_notEqualTo(&it, &end))
+    {
+	cgm_Vertex* v = (cgm_Vertex*)nitf_ListIterator_get(&it);
+	cgm_Vertex_destruct(&v);
+	nitf_ListIterator_increment(&it);
+    }
+    
+    nitf_List_destruct(&list);
+    
     NITF_FREE(data);
+
 }
 
-NITFPRIV(void) polySetDestroy(NITF_DATA* data)
+NITFPRIV(void) textDestroy(NITF_DATA* data)
 {
+    
+    
     /* TODO!! */
+    cgm_TextElement* text = (cgm_TextElement*)data;
+
+    if (text->characterOrientation)
+	cgm_Rectangle_destruct( &(text->characterOrientation) );
+    
+    if (text->text)
+    {
+	cgm_Text_destruct( &(text->text) );
+    }
 
     NITF_FREE(data);
 
 }
-
-NITFPRIV(void) polyLineDestroy(NITF_DATA* data)
-{
-    /* TODO!! */
-
-    NITF_FREE(data);
-
-}
-
 
 NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error)
 {
+    cgm_Element* element = cgm_Element_construct(error);
+    if (element)
+    {
+	cgm_PolygonElement* poly = (cgm_PolygonElement*)
+	    NITF_MALLOC(sizeof(cgm_PolygonElement));
+
+	if (!poly)
+	{
+	    NITF_FREE(element);
+	    return NULL;
+	    
+	}
+	poly->vertices = NULL;
+	element->data = (NITF_DATA*)poly;
+
+    }
+
+    element->destroy = &polyDestroy;
+	    
+    return element;
     
 }
+
 NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error)
 {
-
+    return NULL;
 }
 NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error)
 {
-
+    return NULL;
 }
+
 NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error)
 {
+    cgm_Element* element = cgm_Element_construct(error);
+    if (element)
+    {
+	cgm_TextElement* text = (cgm_TextElement*)
+	    NITF_MALLOC(sizeof(cgm_TextElement));
+	if (!text)
+	{
+	    NITF_FREE(element);
+	    return NULL;
+	    
+	}
+	/* TODO: This default arg in constructor doesnt appear to be 
+	   that helpful.  Remove?  Otherwise, might want to make consistent
+	 */
+	text->text = cgm_Text_construct(NULL, error);
+	if (!text->text)
+	{
+	    NITF_FREE( text );
+	    NITF_FREE( element );
+	    return NULL;
+	      
+	}
+
+	if (!text->characterOrientation)
+	{
+	    cgm_Text_destruct( &(text->text) );
+	    NITF_FREE( text );
+	    NITF_FREE( element );
+	    return NULL;
+	      
+	}
+
+	text->color[CGM_R] = -1;
+	text->color[CGM_G] = -1;
+	text->color[CGM_B] = -1;
+
+	text->characterHeight = -1;
+	text->textFontIndex = -1;
+	
+	element->data = (NITF_DATA*)text;
+
+    }
+
+
+    element->destroy = &textDestroy;
+	    
+    return element;
 
 }
 NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error)
@@ -113,8 +203,8 @@ NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error)
     cgm_Element* element = cgm_Element_construct(error);
     if (element)
     {
-	cgm_EllipseElement* ellipse = (cgm_EllipseElement*)
-	    NITF_MALLOC(sizeof(cgm_EllipseElement));
+	cgm_EllipticalArcElement* ellipse = (cgm_EllipticalArcElement*)
+	    NITF_MALLOC(sizeof(cgm_EllipticalArcElement));
 	if (!ellipse)
 	{
 	    NITF_FREE(element);
@@ -154,8 +244,8 @@ NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error)
 	}
 	circle->centerX = -1;
 	circle->centerY = -1;
-	circle->radius;
-
+	circle->radius = -1;
+	element->data = (NITF_DATA*)circle;
     }
 
     element->destroy = &basicDestroy;
@@ -168,8 +258,8 @@ NITFAPI(cgm_Element*) cgm_CircleArcElement_construct(nitf_Error* error)
     cgm_Element* element = cgm_Element_construct(error);
     if (element)
     {
-	cgm_CircleElement* circle = (cgm_CircleElement*)
-	    NITF_MALLOC(sizeof(cgm_CircleElement));
+	cgm_CircleArcElement* circle = (cgm_CircleArcElement*)
+	    NITF_MALLOC(sizeof(cgm_CircleArcElement));
 	if (!circle)
 	{
 	    NITF_FREE(element);
@@ -188,6 +278,7 @@ NITFAPI(cgm_Element*) cgm_CircleArcElement_construct(nitf_Error* error)
 	circle->radius = -1;
 
 	circle->closeType = -1;
+	element->data = (NITF_DATA*)circle;
 
     }
 

@@ -81,8 +81,8 @@ typedef struct _cgm_TextElement
     int color[CGM_RGB];
     short characterHeight;
     short textFontIndex;
-    cgm_Rectangle characterOrientation;
-    cgm_Text text;
+    cgm_Rectangle* characterOrientation;
+    cgm_Text* text;
 } cgm_TextElement;
 
 typedef struct _cgm_EllipseElement
@@ -121,7 +121,7 @@ typedef struct _cgm_CircleElement
 } cgm_CircleElement;
 
 /* Serves both circle arc center and circle arc center close */
-typedef struct _cgm_CircleArcCenterElement
+typedef struct _cgm_CircleArcElement
 {
     short centerX;
     short centerY;
@@ -131,7 +131,7 @@ typedef struct _cgm_CircleArcCenterElement
     short endY;
     short radius;
     short closeType;
-} cgm_CircleArcCenter;
+} cgm_CircleArcElement;
 
 /*!
  *  Im thinking, we probably wont instantiate this directly.  Instead,
