@@ -4635,7 +4635,7 @@ esac
 
 
 case "${target}" in
-   x86_64-*-linux-*|i686-pc-*)
+   x86_64-*-linux-*|i686-pc-*|powerpc64-*-linux-*)
         case "${CC}" in
             cc)
                 { echo "$as_me:$LINENO: result: setting compiler to gcc..." >&5
@@ -4702,6 +4702,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
       esac
    ;;
 esac
+
 ###########################################################
 #  Archiver                                               #
 ###########################################################
