@@ -458,7 +458,8 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int
     te->characterOrientation->x2 = pc->orientation[2];
     te->characterOrientation->y2 = pc->orientation[3];
 
-    resetParseContext(pc);
+    cgm_Element_print(elem);
+    /*resetParseContext(pc);*/
 
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;

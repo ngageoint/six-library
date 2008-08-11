@@ -21,4 +21,6 @@ NITFAPI(cgm_Text*) cgm_Text_construct(char* text,
 
 NITFAPI(void) cgm_Text_destruct(cgm_Text** t);
 
+NITFAPI(void) cgm_Text_print(cgm_Text* t);
+
 #endif

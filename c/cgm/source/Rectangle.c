@@ -22,3 +22,9 @@ NITFAPI(void) cgm_Rectangle_destruct(cgm_Rectangle** r)
 	*r = NULL;
     }
 }
+
+NITFAPI(void) cgm_Rectangle_print(cgm_Rectangle* r)
+{
+    printf("R1(%d %d), R2(%d %d)\n", 
+	   r->x1, r->y1, r->x2, r->y2 );
+}

@@ -49,12 +49,13 @@ typedef enum _cgm_ElementType
 
 
 typedef void (*CGM_ELEMENT_DESTROY)(NITF_DATA*);
-
+typedef void (*CGM_ELEMENT_PRINT)(NITF_DATA*);
 typedef struct _cgm_Element
 {
 
     cgm_ElementType type;
     CGM_ELEMENT_DESTROY destroy;
+    CGM_ELEMENT_PRINT print;
     NITF_DATA* data;
 
 } cgm_Element;
@@ -177,6 +178,8 @@ NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_CircleArcElement_construct(nitf_Error* error);
+
+NITFAPI(void) cgm_Element_print(cgm_Element* elem);
 
 
 NITF_CXX_ENDGUARD

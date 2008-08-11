@@ -22,3 +22,10 @@ NITFAPI(void) cgm_Vertex_destruct(cgm_Vertex** v)
 	*v = NULL;
     }
 }
+
+NITFAPI(void) cgm_Vertex_print(cgm_Vertex* v)
+{
+    printf("V(%d %d)\n", 
+	   v->x, v->y );
+
+}

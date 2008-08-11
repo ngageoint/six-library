@@ -20,6 +20,8 @@ NITFAPI(cgm_Rectangle*) cgm_Rectangle_construct(nitf_Error* error);
 
 NITFAPI(void) cgm_Rectangle_destruct(cgm_Rectangle** r);
 
+NITFAPI(void) cgm_Rectangle_print(cgm_Rectangle* r);
+
 NITF_CXX_ENDGUARD
 
 

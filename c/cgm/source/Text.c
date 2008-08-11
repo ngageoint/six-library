@@ -33,3 +33,8 @@ NITFAPI(void) cgm_Text_destruct(cgm_Text** v)
 	*v = NULL;
     }
 }
+
+NITFAPI(void) cgm_Text_print(cgm_Text* t)
+{
+    printf("(%d, %d): %s\n", t->x, t->y, t->str);
+}
