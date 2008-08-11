@@ -177,11 +177,10 @@ NITFPRIV(nitf_List*) readVertices(char* b, int length, nitf_Error* error)
     return list;
 }
 
-NITFPRIV(short) readShort(char* b, int length)
+NITFPRIV(short) readShort(char* b)
 {
     short s;
-    assert(length == 2);
-    memcpy(&s, b, length);
+    memcpy(&s, b, 2);
     return NITF_NTOHS(s);
 }
 
@@ -256,13 +255,15 @@ NITF_BOOL beginPictureBody(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
 
     }
 
+    mf->picture->body = cgm_PictureBody_construct(error);
+
     return NITF_SUCCESS;
 }
 
 NITF_BOOL metafileVersion(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->version = readShort(b, len);
+    mf->version = readShort(b);
     return NITF_SUCCESS;
 }
 
@@ -277,9 +278,9 @@ NITF_BOOL metafileList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, in
 {
     DBG_TRACE();
     assert(len == 6);
-    mf->elementList[0] = readShort(&b[0], 2);
-    mf->elementList[1] = readShort(&b[2], 2);
-    mf->elementList[2] = readShort(&b[4], 2);
+    mf->elementList[0] = readShort(&b[0]);
+    mf->elementList[1] = readShort(&b[2]);
+    mf->elementList[2] = readShort(&b[4]);
 
     return NITF_SUCCESS;
 }
@@ -333,21 +334,21 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 NITF_BOOL colorSelectionMode(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->picture->colorSelectionMode = readShort(b, len);
+    mf->picture->colorSelectionMode = readShort(b);
     return NITF_SUCCESS;
 }
 
 NITF_BOOL lineWidthSpecMode(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->picture->lineWidthSpec = readShort(b, len);
+    mf->picture->lineWidthSpec = readShort(b);
     return NITF_SUCCESS;
 }
 
 NITF_BOOL edgeWidthSpecMode(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->picture->edgeWidthSpec = readShort(b, len);
+    mf->picture->edgeWidthSpec = readShort(b);
     return NITF_SUCCESS;
 }
 
@@ -385,7 +386,7 @@ NITF_BOOL characterHeight(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 	return NITF_FAILURE;
     }
 
-    pc->height = readShort(b, len);
+    pc->height = readShort(b);
     return NITF_SUCCESS;
 }
 
@@ -394,7 +395,7 @@ NITF_BOOL interiorStyle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, i
     short s;
 	    
     DBG_TRACE();
-    s = readShort(b, len);
+    s = readShort(b);
     /*  Make sure its not already set  */
     if (pc->style != CGM_IS_NOT_SET)
     {
@@ -406,7 +407,7 @@ NITF_BOOL interiorStyle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, i
 	return NITF_FAILURE;
     }
 
-    pc->style= (cgm_InteriorStyle)s;
+    pc->style = (cgm_InteriorStyle)s;
 
     return NITF_SUCCESS;
 }
@@ -422,7 +423,7 @@ NITF_BOOL auxColor(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 NITF_BOOL transparency(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    mf->picture->body->transparency = readShort(b, len);
+    mf->picture->body->transparency = readShort(b);
 
     return NITF_SUCCESS;
 }
@@ -435,11 +436,32 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 
     return NITF_SUCCESS;
 }
-NITF_BOOL text(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
+NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    short _1;
+    cgm_TextElement* te;
+    cgm_Element* elem = cgm_TextElement_construct(error);
+    if (!elem) return NITF_FAILURE;
+    te = (cgm_TextElement*) elem->data;
+    te->text->x = readShort(b);
+    te->text->y = readShort(&b[2]);
+    _1 = readShort(&b[4]);
+    te->text->str = readString(&b[6], len - 6);
+
     DBG_TRACE();
     printParseContext(pc);
+    memcpy(te->color, pc->color, 6);
+    te->characterHeight = pc->height;
+    te->textFontIndex = pc->index;
+    te->characterOrientation->x1 = pc->orientation[0];
+    te->characterOrientation->y1 = pc->orientation[1];
+    te->characterOrientation->x2 = pc->orientation[2];
+    te->characterOrientation->y2 = pc->orientation[3];
+
     resetParseContext(pc);
+
+    if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
+	return NITF_FAILURE;
 
     return NITF_SUCCESS;
 }
@@ -458,16 +480,36 @@ NITF_BOOL polySet(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
     resetParseContext(pc);
     return NITF_SUCCESS;
 }
-NITF_BOOL rectangle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
+NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    cgm_RectangleElement* rect;
+    cgm_Element* elem = cgm_RectangleElement_construct(error);
+    if (!elem) return NITF_FAILURE;
+    rect = (cgm_RectangleElement*)elem->data;
+
+
     DBG_TRACE();
     printParseContext(pc);
+    
+    rect->rectangle = readRectangle(b, len, error);
+    if (!rect->rectangle)
+	return NITF_FAILURE;
+
     resetParseContext(pc);
+    
+    if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
+	return NITF_FAILURE;
+
     return NITF_SUCCESS;
 }
 NITF_BOOL circle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    cgm_Element* elem = cgm_CircleElement_construct(error);
+    if (!elem) return NITF_FAILURE;
+
     DBG_TRACE();
+    
+
     printParseContext(pc);
     resetParseContext(pc);
     return NITF_SUCCESS;
@@ -517,7 +559,7 @@ NITF_BOOL ellipticalArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int c
 NITF_BOOL textFontIndex(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    pc->index = readShort(b, len);
+    pc->index = readShort(b);
     return NITF_SUCCESS;
 }
 
@@ -525,10 +567,10 @@ NITF_BOOL characterOrient(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 {
     DBG_TRACE();
     assert(len == 8);
-    pc->orientation[0] = readShort(&b[0], 2); /* x1, y1, x2, y2 */
-    pc->orientation[1] = readShort(&b[2], 2);
-    pc->orientation[2] = readShort(&b[4], 2);
-    pc->orientation[3] = readShort(&b[6], 2);
+    pc->orientation[0] = readShort(&b[0]); /* x1, y1, x2, y2 */
+    pc->orientation[1] = readShort(&b[2]);
+    pc->orientation[2] = readShort(&b[4]);
+    pc->orientation[3] = readShort(&b[6]);
    
     return NITF_SUCCESS;
 }
@@ -546,7 +588,7 @@ NITF_BOOL hatchIndex(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int 
     short s;
 	    
     DBG_TRACE();
-    s = readShort(b, len);
+    s = readShort(b);
     /*  Make sure its not already set  */
     if (pc->hatchIndex != CGM_HATCH_NOT_SET)
     {
@@ -566,7 +608,7 @@ NITF_BOOL hatchIndex(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int 
 NITF_BOOL edgeVisibility(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    pc->visibility = readShort(b, len);
+    pc->visibility = readShort(b);
 
     return NITF_SUCCESS;
 }
@@ -584,7 +626,7 @@ NITF_BOOL readWidth(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int s
 	return NITF_FAILURE;
     }
 
-    pc->width = readShort(b, len);
+    pc->width = readShort(b);
     return NITF_SUCCESS;
 }
 NITF_BOOL readType(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
@@ -600,7 +642,7 @@ NITF_BOOL readType(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 	return NITF_FAILURE;
     }
 
-    pc->type = readShort(b, len);
+    pc->type = readShort(b);
     return NITF_SUCCESS;
 }
 NITF_BOOL readShapeColor(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
@@ -665,10 +707,10 @@ static cgm_ElementHandler three[] =
 static cgm_ElementHandler four[] =
 {
     { 1, (CGM_UNPACK)&polyLine },
-    { 4, (CGM_UNPACK)&text },
+    { 4, (CGM_UNPACK)&textElement },
     { 7, (CGM_UNPACK)&polygon },
     { 8, (CGM_UNPACK)&polySet },
-    { 11, (CGM_UNPACK)&rectangle },
+    { 11, (CGM_UNPACK)&rectangleElement },
     { 12, (CGM_UNPACK)&circle },
     { 15, (CGM_UNPACK)&circularArcCenter },
     { 16, (CGM_UNPACK)&circularArcCenterClose },

@@ -78,7 +78,7 @@ typedef struct _cgm_PolyLineElement
 
 typedef struct _cgm_TextElement
 {
-    int color[CGM_RGB];
+    short color[CGM_RGB];
     short characterHeight;
     short textFontIndex;
     cgm_Rectangle* characterOrientation;
@@ -111,6 +111,11 @@ typedef struct _cgm_EllipticalArcElement
     short endVectorY;
     short closeType;
 } cgm_EllipticalArcElement;
+
+typedef struct _cgm_RectangleElement
+{
+    cgm_Rectangle* rectangle;
+} cgm_RectangleElement;
 
 typedef struct _cgm_CircleElement
 {
@@ -166,6 +171,7 @@ NITFAPI(void) cgm_Element_destruct(cgm_Element** element);
 NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error);

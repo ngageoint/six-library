@@ -65,6 +65,17 @@ NITFPRIV(void) polyDestroy(NITF_DATA* data)
 
 }
 
+NITFPRIV(void) rectangleDestroy(NITF_DATA* data)
+{
+    cgm_RectangleElement* rect = (cgm_RectangleElement*)data;
+    
+    if (rect->rectangle)
+    {
+	cgm_Rectangle_destruct( & (rect->rectangle) );
+    }
+    NITF_FREE(data);
+}
+
 NITFPRIV(void) textDestroy(NITF_DATA* data)
 {
     
@@ -143,6 +154,7 @@ NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error)
 	      
 	}
 
+	text->characterOrientation = cgm_Rectangle_construct(error);
 	if (!text->characterOrientation)
 	{
 	    cgm_Text_destruct( &(text->text) );
@@ -169,6 +181,43 @@ NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error)
     return element;
 
 }
+
+NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error)
+{
+    cgm_Element* element = cgm_Element_construct(error);
+    if (element)
+    {
+	cgm_RectangleElement* rect = (cgm_RectangleElement*)
+	    NITF_MALLOC(sizeof(cgm_RectangleElement));
+	if (!rect)
+	{
+	    NITF_FREE(element);
+	    return NULL;
+	    
+	}
+	/* TODO: This default arg in constructor doesnt appear to be 
+	   that helpful.  Remove?  Otherwise, might want to make consistent
+	 */
+	rect->rectangle = cgm_Rectangle_construct(error);
+	if (!rect->rectangle)
+	{
+	    NITF_FREE( rect );
+	    NITF_FREE( element );
+	    return NULL;
+	      
+	}
+	
+	element->data = (NITF_DATA*)rect;
+
+    }
+
+
+    element->destroy = &rectangleDestroy;
+	    
+    return element;
+
+}
+
 NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error)
 {
     cgm_Element* element = cgm_Element_construct(error);
