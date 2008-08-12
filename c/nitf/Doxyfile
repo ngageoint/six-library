@@ -22,7 +22,7 @@ PROJECT_NAME = NITF
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER         = 1.5
+PROJECT_NUMBER         = 2.0
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute)
 # base path where the generated documentation will be put.
@@ -1037,4 +1037,4 @@ BIN_ABSPATH            = /usr/local/bin/
 # documentation generated for other projects. This allows doxysearch to search 
 # the documentation for these projects as well.
 
-EXT_DOC_PATHS          = ../except/doc/ ../str/doc/ 
+EXT_DOC_PATHS          = 
