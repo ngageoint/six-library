@@ -61,17 +61,6 @@ typedef struct _cgm_Element
 } cgm_Element;
 
 
-typedef struct _cgm_PolygonElement
-{
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
-    nitf_List* vertices;
-} cgm_PolygonElement;
-
 typedef struct _cgm_PolySetElement
 {
     short fillColor[CGM_RGB];
@@ -240,7 +229,6 @@ NITFAPI(void) cgm_Element_destruct(cgm_Element** element);
  *  'data' field (obviously).
  */
 
-NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error);

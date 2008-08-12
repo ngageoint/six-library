@@ -24,9 +24,35 @@
 
 #define DEBUG_CGM 1
 
+#ifdef DEBUG_CGM
+#    define DBG_TRACE() \
+printf("%s(%d, %d, %d)\n", __PRETTY_FUNCTION__, classType, shortCode, len)
+
+#else
+/* Do nothing */
+#    define DBG_TRACE() 
+#endif
+
+#define FILL_EDGE_ATTS(ELEM, PC) \
+{ \
+    memcpy(ELEM->fillColor, PC->fillColor, 6); \
+    ELEM->interiorStyle = PC->style; \
+    ELEM->edgeVisibility = PC->visibility; \
+    ELEM->edgeWidth = PC->width; \
+    ELEM->edgeType = PC->type; \
+    memcpy(ELEM->edgeColor, PC->color, 6); \
+}
+
+#define FILL_LINE_ATTS(ELEM, PC) \
+{ \
+    ELEM->lineWidth = pc->width; \
+    ELEM->lineType = pc->type; \
+    memcpy( ELEM->lineColor, PC->color, 6); \
+}
+
 NITFPRIV(void) resetParseContext(cgm_ParseContext* pc)
 {
-
+    printf("=======Reset Parse=========\n");
     pc->fillColor[CGM_R] = -1;
     pc->fillColor[CGM_G] = -1;
     pc->fillColor[CGM_B] = -1;
@@ -97,14 +123,6 @@ NITFPRIV(void) printParseContext(cgm_ParseContext* pc)
 	printf("\tHatch Index: [%d]\n", pc->hatchIndex);
 }
 
-#ifdef DEBUG_CGM
-#    define DBG_TRACE() \
-printf("%s(%d, %d, %d)\n", __PRETTY_FUNCTION__, classType, shortCode, len)
-
-#else
-/* Do nothing */
-#    define DBG_TRACE() 
-#endif
 
 NITFPRIV(void) readRGB(char* b, int length, short *rgb3)
 {
@@ -468,12 +486,25 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int
 }
 NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    cgm_PolygonElement* poly;
+    cgm_Element* elem = cgm_PolygonElement_construct(error);
+    if (!elem) return NITF_FAILURE;
+    poly = (cgm_PolygonElement*) elem->data;
+
     DBG_TRACE();
-    printParseContext(pc);
+    FILL_EDGE_ATTS(poly, pc);
     resetParseContext(pc);
+
+    poly->vertices = readVertices(b, len, error);
+    if (! poly->vertices )
+	return NITF_FAILURE;
+
+    cgm_Element_print(elem);
 
     return NITF_SUCCESS;
 }
+
+
 NITF_BOOL polySet(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
@@ -495,6 +526,7 @@ NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
     rect->rectangle = readRectangle(b, len, error);
     if (!rect->rectangle)
 	return NITF_FAILURE;
+    FILL_EDGE_ATTS(rect, pc);
 
     resetParseContext(pc);
     

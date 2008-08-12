@@ -26,6 +26,7 @@
 
 #include "cgm/Metafile.h"
 #include "cgm/TextElement.h"
+#include "cgm/PolygonElement.h"
 
 NITF_CXX_GUARD
 
