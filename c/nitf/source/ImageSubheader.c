@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -452,10 +452,10 @@ NITFAPI(nitf_Uint32) nitf_ImageSubheader_getBandCount(nitf_ImageSubheader *
 
     if (!nitf_Field_get(subhdr->NITF_NBANDS, (NITF_DATA *) (&nbands),
                         NITF_CONV_INT, NITF_INT32_SZ, error))
-        return (NITF_INVALID_BAND_COUNT);
+        return NITF_INVALID_BAND_COUNT;
     if (!nitf_Field_get(subhdr->NITF_XBANDS, (NITF_DATA *) (&xbands),
                         NITF_CONV_INT, NITF_INT32_SZ, error))
-        return (NITF_INVALID_BAND_COUNT);
+        return NITF_INVALID_BAND_COUNT;
 
     /*    The count is nbands unless it is 0. */
 
@@ -467,21 +467,20 @@ NITFAPI(nitf_Uint32) nitf_ImageSubheader_getBandCount(nitf_ImageSubheader *
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                              "NBANDS (%d) and XBANDS (%d) cannot both be non-zero",
                              nbands, xbands);
-            return (NITF_INVALID_BAND_COUNT);
+            return NITF_INVALID_BAND_COUNT;
         }
     }
     else
         bandCount = xbands;
 
-    if ((bandCount == 0) || (bandCount > 99999))
+    if (bandCount > NITF_MAX_BAND_COUNT)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Invalid band count NBANDS is %d and XBANDS is %d",
                          nbands, xbands);
-        return (NITF_INVALID_BAND_COUNT);
     }
 
-    return (bandCount);
+    return bandCount;
 }
 
 
@@ -530,7 +529,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(nitf_ImageSubheader *
     totalBandCount = curBandCount + numBands;
 
     /* check if invalid values */
-    if (totalBandCount > 99999 || numBands <= 0)
+    if (totalBandCount > NITF_MAX_BAND_COUNT || numBands <= 0)
     {
         /* throw an error */
         nitf_Error_init(error,
@@ -880,12 +879,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_insertImageComment
         field = nitf_Field_construct(NITF_ICOM_SZ, NITF_BCS_A, error);
         if (!field) goto CATCH_ERROR;
         memset(commentBuf, 0, NITF_ICOM_SZ + 1);
-        
+
         length = comment != NULL ? strlen(comment) : 0;
-        
+
         if (length > 0)
             memcpy(commentBuf, comment, length > NITF_ICOM_SZ ? NITF_ICOM_SZ : length);
-        
+
         /* Warning: if the comment string is greater than the size of the
          * field,an error will be set -- which is why we copy it here
          * It might be nice to have a size param in nitf_Field_setString */

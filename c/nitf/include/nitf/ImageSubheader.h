@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -115,7 +115,8 @@
 #define NITF_IXSHDL    extendedHeaderLength
 #define NITF_IXSOFL    extendedHeaderOverflow
 
-/*!< \def NITF_INVALID_BAND_COUNT - Invalid band count return value */
+/*!< \def NITF_MAX_BAND_COUNT - Maximum band count */
+#define NITF_MAX_BAND_COUNT 99999
 #define NITF_INVALID_BAND_COUNT ((nitf_Uint32) -1)
 
 
@@ -492,7 +493,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression
 
   If the position is out of the array bounds, or less than zero, the
   comment will be appended to the end.
-  
+
   If the comment is NULL, a blank comment is inserted. Otherwise, the passed
   comment must be a null-terminated char*.
 
