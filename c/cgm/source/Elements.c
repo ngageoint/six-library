@@ -85,6 +85,12 @@ NITFPRIV(void) rectangleDestroy(NITF_DATA* data)
     NITF_FREE(data);
 }
 
+NITFPRIV(void) rectanglePrint(NITF_DATA* data)
+{
+    cgm_RectangleElement* rect = (cgm_RectangleElement*)data;
+    cgm_Rectangle_print(rect);
+    
+}
 
 NITFPRIV(void) textPrint(NITF_DATA* data)
 {
@@ -238,7 +244,7 @@ NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error)
 
     }
 
-
+    element->print = &rectanglePrint;
     element->destroy = &rectangleDestroy;
 	    
     return element;
