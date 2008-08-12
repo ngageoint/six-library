@@ -25,6 +25,7 @@
 #define __CGM_METAFILE_READER_H__
 
 #include "cgm/Metafile.h"
+#include "cgm/TextElement.h"
 
 NITF_CXX_GUARD
 

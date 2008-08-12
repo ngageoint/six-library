@@ -431,7 +431,7 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 {
     DBG_TRACE();
 
-    printParseContext(pc);
+    //printParseContext(pc);
     resetParseContext(pc);
 
     return NITF_SUCCESS;
@@ -449,7 +449,7 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int
     te->text->str = readString(&b[6], len - 6);
 
     DBG_TRACE();
-    printParseContext(pc);
+    //printParseContext(pc);
     memcpy(te->color, pc->color, 6);
     te->characterHeight = pc->height;
     te->textFontIndex = pc->index;
@@ -459,7 +459,7 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int
     te->characterOrientation->y2 = pc->orientation[3];
 
     cgm_Element_print(elem);
-    /*resetParseContext(pc);*/
+    resetParseContext(pc);
 
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
@@ -511,21 +511,21 @@ NITF_BOOL circle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shor
     DBG_TRACE();
     
 
-    printParseContext(pc);
+    //printParseContext(pc);
     resetParseContext(pc);
     return NITF_SUCCESS;
 }
 NITF_BOOL circularArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    printParseContext(pc);
+    //printParseContext(pc);
     resetParseContext(pc);
     return NITF_SUCCESS;
 }
 NITF_BOOL circularArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    printParseContext(pc);
+    //printParseContext(pc);
     resetParseContext(pc);
 
     return NITF_SUCCESS;
@@ -533,7 +533,7 @@ NITF_BOOL circularArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int cla
 NITF_BOOL ellipse(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    printParseContext(pc);
+    //printParseContext(pc);
     resetParseContext(pc);
 
     return NITF_SUCCESS;
@@ -541,7 +541,7 @@ NITF_BOOL ellipse(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
 NITF_BOOL ellipticalArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    printParseContext(pc);
+    //printParseContext(pc);
     resetParseContext(pc);
 
     return NITF_SUCCESS;
@@ -550,7 +550,7 @@ NITF_BOOL ellipticalArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int c
 {
     DBG_TRACE();
 
-    printParseContext(pc);
+    //printParseContext(pc);
     resetParseContext(pc);
 
     return NITF_SUCCESS;
@@ -617,6 +617,7 @@ NITF_BOOL edgeVisibility(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, 
 NITF_BOOL readWidth(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
+    /*
     if (pc->width != -1)
     {
 	nitf_Error_initf(error,
@@ -625,7 +626,7 @@ NITF_BOOL readWidth(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int s
 			 "Width was already set: [%d]",
 			 pc->width);
 	return NITF_FAILURE;
-    }
+	}*/
 
     pc->width = readShort(b);
     return NITF_SUCCESS;
@@ -633,6 +634,7 @@ NITF_BOOL readWidth(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int s
 NITF_BOOL readType(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
+    /*
     if (pc->type != CGM_TYPE_NOT_SET)
     {
 	nitf_Error_initf(error,
@@ -641,7 +643,7 @@ NITF_BOOL readType(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 			 "Type was already set: [%d]",
 			 pc->type);
 	return NITF_FAILURE;
-    }
+	}*/
 
     pc->type = readShort(b);
     return NITF_SUCCESS;
@@ -649,6 +651,7 @@ NITF_BOOL readType(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 NITF_BOOL readShapeColor(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
+    /*
     if (pc->color[CGM_R] != -1)
     {
 	nitf_Error_initf(error,
@@ -660,7 +663,7 @@ NITF_BOOL readShapeColor(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, 
 			 pc->color[CGM_B]
 	    );
 	return NITF_FAILURE;
-    }
+	}*/
 
 
     readRGB(b, len, pc->color);
