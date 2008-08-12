@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -2641,11 +2641,11 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
     nitf->dataLength = length;
 
     nitf->blockMask = NULL;     /* Set by first read/write */
-    
+
     if (!nitf_ImageIO_setPixelDef(nitf, pixelType, nBits, nBitsActual,
                                   justification, error))
         return (NULL);
-    
+
     /* Set function pointers */
     if (!nitf_ImageIO_decodeModes(nitf, subheader, error))
         return (NULL);
@@ -2671,7 +2671,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
         nitf->blockSize = numRowsPerBlock * numColumnsPerBlock *
                         (nitf->pixel.bytes) * (nitf->numBands);
     }
-    
+
     nitf_ImageIO_setUnpack(nitf);
     nitf_ImageIO_setIO(nitf);
     return ((nitf_ImageIO *) nitf);
@@ -2784,7 +2784,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
                          "I/O operation in progress");
         return (0);
     }
-    
+
     /* *possibly* revert the optimized modes */
     nitf_ImageIO_revertOptimizedModes(nitfI, subWindow->numBands);
 
@@ -2973,7 +2973,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,
     _nitf_ImageIOWriteControl *writeCntl;
 
     nitfI = (_nitf_ImageIO *) nitf;
-    
+
     /* *possibly* revert the optimized modes */
     nitf_ImageIO_revertOptimizedModes(nitfI, 0);
 
@@ -3416,10 +3416,10 @@ NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
                                        nitf_Error * error)
 {
     /*      Decode compression */
-    
+
     char *blockingMode = NULL;
     char *compression = NULL;
-    
+
     blockingMode = subhdr->imageMode->raw;
     compression = subhdr->imageCompression->raw;
 
@@ -3531,7 +3531,7 @@ NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
 	        nitf->vtbl.setup = nitf_ImageIO_setup_P;
 	        nitf->vtbl.done = nitf_ImageIO_setup_P;
     	}
-    	
+
         nitf->oneBand = 0;
         nitf->vtbl.reader = NULL;
         nitf->vtbl.writer = NULL;
@@ -4395,7 +4395,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
             *      Initialize block control (used for cached writes)
             */
             blockIO->blockControl.number = NITF_IMAGE_IO_NO_BLOCK;
-            nitf->blockControl.freeFlag = freeCacheBuffer;
+            blockIO->blockControl.freeFlag = freeCacheBuffer;
             freeCacheBuffer = freeCacheBufferReset;
             blockIO->blockControl.block = cacheBuffer;
         }
@@ -4841,7 +4841,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
             *      Initialize block control (used for cached writes)
             */
             blockIO->blockControl.number = NITF_IMAGE_IO_NO_BLOCK;
-            nitf->blockControl.freeFlag = freeCacheBuffer;
+            blockIO->blockControl.freeFlag = freeCacheBuffer;
             freeCacheBuffer = freeCacheBufferReset;
             blockIO->blockControl.block = cacheBuffer;
         }
@@ -5433,13 +5433,13 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
                && (nitfI->compression
                    & (NITF_IMAGE_IO_COMPRESSION_NC |
                       NITF_IMAGE_IO_COMPRESSION_NM));
-	
+
 	oneReadRGB = (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_RGB24)
 		&& (nitfI->nBlocksPerColumn == 1) && all;
-	
+
 	oneReadIQ = (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_IQ)
 		&& (nitfI->nBlocksPerColumn == 1) && all;
-		
+
 
     /*      Actually, its one read per band */
     oneRead = oneReadA || oneReadB || oneReadC || oneReadRGB || oneReadIQ;
@@ -6173,7 +6173,7 @@ NITFPROT(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                  */
 
                 if (blockIO->residual != 0)
-                    memmove(blockIO->unpacked.buffer 
+                    memmove(blockIO->unpacked.buffer
                        + blockIO->unpacked.offset.mark -
                             (blockIO->residual) * bytes, columnSave,
                                  (blockIO->residual) * bytes);
@@ -6355,7 +6355,7 @@ NITFPROT(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
     nitf_Uint32 i;
 
     nitf = cntl->nitf;
-   
+
     cntl->padBuffer = (nitf_Uint8 *) NITF_MALLOC(cntl->padBufferSize);
     if (cntl->padBuffer == NULL)
     {
@@ -6407,7 +6407,7 @@ NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOHandle handle,
     /*      Seek to the offset */
     bytes = count;
     bufp = (char *) buffer;
-   
+
 
     if (!NITF_IO_SUCCESS(nitf_IOHandle_seek(handle,
                                             (off_t) fileOffset,
@@ -6434,7 +6434,7 @@ NITFPROT(int) nitf_ImageIO_writeToFile(nitf_IOHandle handle,
 
     /* Seek to the offset */
 
-    
+
 
     if (!NITF_IO_SUCCESS
             (nitf_IOHandle_seek

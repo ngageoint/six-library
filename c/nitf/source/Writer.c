@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -231,7 +231,7 @@ NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
 
     if (!padString(writer, buf, length, fill, fillDir, error))
         goto CATCH_ERROR;
-    
+
     if (!writeField(writer, buf, length, error))
         goto CATCH_ERROR;
 
@@ -252,7 +252,7 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
                                const nitf_Uint32 fillDir,
                                nitf_Error * error)
 {
-    char *buf = (char *) NITF_MALLOC(length);
+    char *buf = (char *) NITF_MALLOC(length + 1);
     if (!buf)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -288,13 +288,13 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
 
     if (!padString(writer, buf, length, fill, fillDir, error))
         goto CATCH_ERROR;
-    
+
     if (!writeField(writer, buf, length, error))
         goto CATCH_ERROR;
 
     NITF_FREE(buf);
     return NITF_SUCCESS;
-    
+
 CATCH_ERROR:
     if (buf) NITF_FREE(buf);
     return NITF_FAILURE;
@@ -444,6 +444,8 @@ NITFPRIV(NITF_BOOL) padString(nitf_Writer * writer,
     char *buf = NULL;
 
     /* check to see if we even need to pad it */
+    if (!fld)
+        printf("Null field\n");
     size = strlen(fld);
     if (size >= length)
     {
@@ -595,16 +597,16 @@ NITFPRIV(NITF_BOOL) writeExtension(nitf_Writer * writer,
             NITF_ETAG_SZ, SPACE, FILL_RIGHT, error))
         goto CATCH_ERROR;
 
-    
+
     length = tre->handler->getCurrentSize(tre, error);
     if (length == -1)
       goto CATCH_ERROR;
-		
+
     if (!writeIntField(writer, length, NITF_EL_SZ, ZERO, FILL_LEFT, error))
         goto CATCH_ERROR;
 
     /* write the data, then free the buf */
-	
+
     if (!tre->handler->write(writer->outputHandle, tre, writer->record, error))
       goto CATCH_ERROR;
 
@@ -692,7 +694,7 @@ NITFAPI(nitf_Writer *) nitf_Writer_construct(nitf_Error * error)
                         NITF_CTXT, NITF_ERR_MEMORY);
         return NULL;
     }
-    
+
     /* NULL-initialize everything first */
     writer->imageWriters = NULL;
     writer->graphicWriters = NULL;
@@ -704,7 +706,7 @@ NITFAPI(nitf_Writer *) nitf_Writer_construct(nitf_Error * error)
     writer->numTextWriters = 0;
     writer->numGraphicWriters = 0;
     writer->numDataExtensionWriters = 0;
-    
+
     writer->warningList = nitf_List_construct(error);
     if (!writer->warningList)
     {
@@ -1009,7 +1011,7 @@ NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
     NITF_WRITE_VALUE(writer->record->header, NITF_FSCOP, ZERO, FILL_LEFT);
     NITF_WRITE_VALUE(writer->record->header, NITF_FSCPYS, ZERO, FILL_LEFT);
     NITF_WRITE_VALUE(writer->record->header, NITF_ENCRYP, ZERO, FILL_LEFT);
-    
+
     /* KEEP IN MIND HERE THAT THE UPDATED 2.0 SPEC HAS A BACKGROUND
      * COLOR FIELD, AND REDUCED THE ONAME FIELD SIZE TO 24.
      * WHEN USING THE OLD SPEC, SUCH AS WITH CIB, PLACE THE FIRST
@@ -1030,7 +1032,7 @@ NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
     *fileLenOff = nitf_IOHandle_tell(writer->outputHandle, error);
     if (!NITF_IO_SUCCESS(*fileLenOff))
         goto CATCH_ERROR;
-    
+
     NITF_WRITE_VALUE(writer->record->header, NITF_FL, ZERO, FILL_LEFT);
     NITF_WRITE_VALUE(writer->record->header, NITF_HL, ZERO, FILL_LEFT);
 
@@ -1450,7 +1452,7 @@ NITFPRIV(NITF_BOOL) writeDESubheader(nitf_Writer * writer,
     if (subLen > 0)
     {
         if (!subhdr->subheaderFields->handler->write(writer->outputHandle,
-                subhdr->subheaderFields, writer->record, error)) 
+                subhdr->subheaderFields, writer->record, error))
             goto CATCH_ERROR;
     }
     if (des_data) NITF_FREE(des_data);
@@ -2016,7 +2018,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     }
 
     /* Fix file and header lengths */
-    
+
     /*   Get the file length */
     fileLen = nitf_IOHandle_getSize(writer->outputHandle, error);
     if (!NITF_IO_SUCCESS(fileLen))
@@ -2144,16 +2146,16 @@ NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *
         goto CATCH_ERROR;
     }
     iter = nitf_List_at(writer->record->images, i);
-    
+
     /* this operation will assert if it is the end of the list */
     currentSegment = (nitf_ImageSegment *) nitf_ListIterator_get(&iter);
 
     assert(currentSegment);
     assert(currentSegment->subheader);
-    
+
     /*  Copy the output handle  */
     imageWriter->outputHandle = writer->outputHandle;
-    
+
     /* TODO: currently the compIface is always NULL.. */
     imageWriter->imageBlocker = nitf_ImageIO_construct(
             currentSegment->subheader, 0, 0, compIface, NULL, error);
@@ -2164,7 +2166,7 @@ NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *
     writer->imageWriters[i] = imageWriter;
 
     return imageWriter;
-    
+
 CATCH_ERROR:
       if (imageWriter)
           nitf_ImageWriter_destruct(&imageWriter);
