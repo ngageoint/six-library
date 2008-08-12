@@ -18,6 +18,6 @@ EXTLIBPATH = -L@top_srcdir@/lib/@target@ \
 CFGDEFS = @DEFS@
 SOURCES = Elements.c PictureBody.c Picture.c Metafile.c MetafileReader.c \
           Rectangle.c Text.c Vertex.c TextElement.c PolygonElement.c \
-          RectangleElement.c CircleElement.c
+          RectangleElement.c CircleElement.c PolyLineElement.c
 
 TESTS = test_read_cgm.c

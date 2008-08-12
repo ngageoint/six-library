@@ -27,7 +27,7 @@ NITFPRIV(void) rectanglePrint(NITF_DATA* data)
 	   rect->edgeColor[CGM_R],
 	   rect->edgeColor[CGM_G],
 	   rect->edgeColor[CGM_B]);
-
+    printf("\t");
     cgm_Rectangle_print(rect->rectangle);
     
 }

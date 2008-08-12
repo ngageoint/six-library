@@ -447,10 +447,24 @@ NITF_BOOL transparency(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, in
 }
 NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
-    DBG_TRACE();
 
-    //printParseContext(pc);
+    cgm_PolyLineElement* poly;
+    cgm_Element* elem = cgm_PolyLineElement_construct(error);
+    if (!elem) return NITF_FAILURE;
+    poly = (cgm_PolyLineElement*) elem->data;
+
+    DBG_TRACE();
+    FILL_LINE_ATTS(poly, pc);
     resetParseContext(pc);
+
+    poly->vertices = readVertices(b, len, error);
+    if (! poly->vertices )
+	return NITF_FAILURE;
+
+    if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
+	return NITF_FAILURE;
+
+    cgm_Element_print(elem);
 
     return NITF_SUCCESS;
 }
@@ -495,8 +509,13 @@ NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
     FILL_EDGE_ATTS(poly, pc);
     resetParseContext(pc);
 
+    
+
     poly->vertices = readVertices(b, len, error);
     if (! poly->vertices )
+	return NITF_FAILURE;
+
+    if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
 
     cgm_Element_print(elem);
@@ -533,6 +552,8 @@ NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
 
+    cgm_Element_print(elem);
+
     return NITF_SUCCESS;
 }
 NITF_BOOL circle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
@@ -550,6 +571,10 @@ NITF_BOOL circle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shor
     cgm_Element_print(elem);
 
     //printParseContext(pc);
+    if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
+	return NITF_FAILURE;
+
+
     resetParseContext(pc);
     return NITF_SUCCESS;
 }

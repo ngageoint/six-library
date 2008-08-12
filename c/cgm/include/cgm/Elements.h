@@ -72,13 +72,6 @@ typedef struct _cgm_PolySetElement
     nitf_List* vertices;
 } cgm_PolySetElement;
 
-typedef struct _cgm_PolyLineElement
-{
-    short lineWidth;
-    cgm_Type lineType;
-    short lineColor[CGM_RGB];
-    nitf_List* vertices;
-} cgm_PolyLineElement;
 
 
 
@@ -207,7 +200,6 @@ NITFAPI(void) cgm_Element_destruct(cgm_Element** element);
  */
 
 NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error);
-NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_CircleArcElement_construct(nitf_Error* error);

@@ -53,10 +53,6 @@ NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error)
 {
     return NULL;
 }
-NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error)
-{
-    return NULL;
-}
 
 NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error)
 {
