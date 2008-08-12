@@ -537,11 +537,17 @@ NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
 }
 NITF_BOOL circle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    cgm_CircleElement* circle;
     cgm_Element* elem = cgm_CircleElement_construct(error);
     if (!elem) return NITF_FAILURE;
+    circle = (cgm_CircleElement*)elem->data;
 
     DBG_TRACE();
-    
+    FILL_EDGE_ATTS(circle, pc);
+    circle->centerX = readShort(b);
+    circle->centerX = readShort(&b[2]);
+    circle->radius = readShort(&b[4]);
+    cgm_Element_print(elem);
 
     //printParseContext(pc);
     resetParseContext(pc);

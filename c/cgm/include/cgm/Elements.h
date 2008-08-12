@@ -139,30 +139,7 @@ typedef struct _cgm_EllipticalArcCloseElement
 } cgm_EllipticalArcCloseElement;
 
 
-typedef struct _cgm_RectangleElement
-{
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
-    cgm_Rectangle* rectangle;
-} cgm_RectangleElement;
 
-typedef struct _cgm_CircleElement
-{
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
-    short centerX;
-    short centerY;
-    short radius;
-    
-} cgm_CircleElement;
 
 /* Serves both circle arc center and circle arc center close */
 typedef struct _cgm_CircleArcElement
@@ -231,10 +208,8 @@ NITFAPI(void) cgm_Element_destruct(cgm_Element** element);
 
 NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error);
-NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error);
-NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_CircleArcElement_construct(nitf_Error* error);
 
 NITFAPI(void) cgm_Element_print(cgm_Element* elem);

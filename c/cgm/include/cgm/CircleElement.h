@@ -20,15 +20,14 @@
  *
  */
 
-#ifndef __CGM_POLYGON_ELEMENT_H__
-#define __CGM_POLYGON_ELEMENT_H__
+#ifndef __CGM_CIRCLE_ELEMENT_H__
+#define __CGM_CIRCLE_ELEMENT_H__
 
 #include "cgm/Elements.h"
 
 NITF_CXX_GUARD
 
-
-typedef struct _cgm_PolygonElement
+typedef struct _cgm_CircleElement
 {
     short fillColor[CGM_RGB];
     cgm_InteriorStyle interiorStyle;
@@ -36,10 +35,13 @@ typedef struct _cgm_PolygonElement
     short edgeWidth;
     cgm_Type edgeType;
     short edgeColor[CGM_RGB];
-    nitf_List* vertices;
-} cgm_PolygonElement;
+    short centerX;
+    short centerY;
+    short radius;
+    
+} cgm_CircleElement;
 
-NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error);
 
 
 NITF_CXX_ENDGUARD
