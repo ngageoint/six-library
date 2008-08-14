@@ -69,8 +69,8 @@ install:
 	( cd ./lib/@target@; tar cf - . | ( cd ${_LIBDIR} && tar xfB - ) )
 	cp ./plugins/@target@/*${DSOEXT} ${_PLUGDIR}
 	mkdir -p ${_DOCDIR}
-	cp ../../COPYING* ${_DOCDIR} 
-	cp ../../README* ${_DOCDIR} 
+	cp COPYING* ${_DOCDIR} 
+	cp README* ${_DOCDIR} 
 	cp ./tests/*.c ${_TESTDIR}
 	cp ./tests/@target@/* ${_TESTBINDIR}
 	cp ./apps/@target@/* ${_APPBINDIR}
