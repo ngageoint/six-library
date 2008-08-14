@@ -1,4 +1,4 @@
-NITF Library Builders:
+Building NITRO
 ----------------------
 	For the time being, configuration is done with configure
 	Type 
