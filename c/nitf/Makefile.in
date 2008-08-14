@@ -4,6 +4,9 @@
 ##############################################
 include build/Makefile
 
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
 # This target builds the library.  The targets are defined below...
 all: library unit-tests test plugin progs
 ##############################################
@@ -42,13 +45,14 @@ docs:
 ############################################
 #  Install the library(ies) and include files 
 #  in the appropriate place...  
-_LIBDIR = @prefix@/lib
-_INCDIR = @prefix@/include
-_PLUGDIR = @prefix@/share/nitf
-_DOCDIR = @prefix@/share/doc/nitf
-_TESTDIR = @prefix@/tests
+_LIBDIR = @libdir@
+_INCDIR = @includedir@
+_PLUGDIR = ${prefix}/share/nitf
+_DOCDIR = ${prefix}/share/doc/nitf
+_TESTDIR = ${prefix}/tests
 _TESTBINDIR = ${_TESTDIR}/bin
-_APPBINDIR = @prefix@/bin
+_APPBINDIR = ${prefix}/bin
+
 
 install:
 	echo "Installing ${PACKAGE}-${VERSION} to @prefix@"
