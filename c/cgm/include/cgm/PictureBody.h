@@ -24,7 +24,7 @@
 #define __CGM_PICTURE_BODY_H__
 
 #include <import/nitf.h>
-#include "cgm/Elements.h"
+#include "cgm/Element.h"
 NITF_CXX_GUARD
 
 

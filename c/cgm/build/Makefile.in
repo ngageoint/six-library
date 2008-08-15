@@ -16,7 +16,7 @@ EXTLIBPATH = -L@top_srcdir@/lib/@target@ \
              -L@top_srcdir@/../nitf/lib/@target@
 
 CFGDEFS = @DEFS@
-SOURCES = Elements.c PictureBody.c Picture.c Metafile.c MetafileReader.c \
+SOURCES = Element.c PictureBody.c Picture.c Metafile.c MetafileReader.c \
           Rectangle.c Text.c Vertex.c VertexClose.c TextElement.c \
           PolygonElement.c RectangleElement.c CircleElement.c \
           PolyLineElement.c PolySetElement.c EllipseElement.c \

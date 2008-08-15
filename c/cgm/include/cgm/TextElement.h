@@ -23,7 +23,7 @@
 #ifndef __CGM_TEXT_ELEMENT_H__
 #define __CGM_TEXT_ELEMENT_H__
 
-#include "cgm/Elements.h"
+#include "cgm/Element.h"
 
 NITF_CXX_GUARD
 

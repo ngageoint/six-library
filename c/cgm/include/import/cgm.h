@@ -23,7 +23,6 @@
 #ifndef __IMPORT_CGM_H__
 #define __IMPORT_CGM_H__
 
-#include "cgm/Elements.h"
 #include "cgm/PictureBody.h"
 #include "cgm/Picture.h"
 #include "cgm/Metafile.h"

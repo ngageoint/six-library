@@ -1,4 +1,4 @@
-#include "cgm/Elements.h"
+#include "cgm/Element.h"
 
 
 NITFAPI(cgm_Element*) cgm_Element_construct(cgm_ElementType type,
