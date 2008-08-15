@@ -66,22 +66,6 @@ typedef struct _cgm_Element
 
 
 
-typedef struct _cgm_EllipseElement
-{
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
-    short centerX;
-    short centerY;
-    short end1X;
-    short end1Y;
-    short end2X;
-    short end2Y;
-    
-} cgm_EllipseElement;
 
 /* Serves both elliptical arc and elliptical arc close */
 typedef struct _cgm_EllipticalArcElement

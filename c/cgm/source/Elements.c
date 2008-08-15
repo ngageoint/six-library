@@ -48,36 +48,6 @@ NITFPRIV(void) basicDestroy(NITF_DATA* data)
 }
 
 
-
-NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error)
-{
-    cgm_Element* element = cgm_Element_construct(error);
-    if (element)
-    {
-	cgm_EllipseElement* ellipse = (cgm_EllipseElement*)
-	    NITF_MALLOC(sizeof(cgm_EllipseElement));
-	if (!ellipse)
-	{
-	    NITF_FREE(element);
-	    return NULL;
-	    
-	}
-	ellipse->centerX = -1;
-	ellipse->centerY = -1;
-	ellipse->end1X = -1;
-	ellipse->end1Y = -1;
-	ellipse->end2X = -1;
-	ellipse->end2Y = -1;
-	
-	element->data = (NITF_DATA*)ellipse;
-
-    }
-
-    element->destroy = &basicDestroy;
-	    
-    return element;
-
-}
 NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error)
 {
     cgm_Element* element = cgm_Element_construct(error);

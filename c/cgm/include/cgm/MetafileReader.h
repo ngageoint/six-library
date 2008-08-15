@@ -31,6 +31,7 @@
 #include "cgm/PolySetElement.h"
 #include "cgm/RectangleElement.h"
 #include "cgm/CircleElement.h"
+#include "cgm/EllipseElement.h"
 
 NITF_CXX_GUARD
 
