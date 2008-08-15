@@ -32,16 +32,18 @@
 
 int main(int argc, char** argv)
 {
+    nitf_Error error;
+    nitf_IOHandle io;
+    cgm_Metafile* mf = NULL;
+    cgm_MetafileReader* reader = cgm_MetafileReader_construct(&error);
+        
     if (argc != 2)
     {
 	printf("Usage: %s <Version 1 CGM>\n", argv[0]);
 	exit(EXIT_FAILURE);
     }
     
-    nitf_Error error;
-    nitf_IOHandle io;
-    cgm_Metafile* mf;
-    cgm_MetafileReader* reader = cgm_MetafileReader_construct(&error);
+    reader = cgm_MetafileReader_construct(&error);
     assert(reader);
     
     io = nitf_IOHandle_create(argv[1], 

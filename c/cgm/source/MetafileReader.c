@@ -25,9 +25,13 @@
 #define DEBUG_CGM 1
 
 #ifdef DEBUG_CGM
+#ifndef WIN32
 #    define DBG_TRACE()                                                 \
     printf("%s(%d, %d, %d)\n", __PRETTY_FUNCTION__, classType, shortCode, len)
-
+#else
+#    define DBG_TRACE()                                                 \
+    printf("%s(%d, %d, %d)\n", __FUNCTION__, classType, shortCode, len)
+#endif
 #else
 /* Do nothing */
 #    define DBG_TRACE() 
@@ -185,8 +189,10 @@ NITFPRIV(nitf_List*) readVertices(char* b, int length, nitf_Error* error)
 {
     
     int i = 0;
+    nitf_List* list = NULL;
+    
     assert(length % 4 == 0);
-    nitf_List* list;
+    
     list = nitf_List_construct(error);
     
     if (!list)
@@ -237,8 +243,10 @@ NITFPRIV(nitf_List*) readCloseVertices(char* b, int length, nitf_Error* error)
 {
     
     int i = 0;
+    nitf_List* list = NULL;
+    
     assert(length % 4 == 0);
-    nitf_List* list;
+    
     list = nitf_List_construct(error);
     
     if (!list)
@@ -376,6 +384,8 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
     while (1)
     {
 	assert ( i <= len);
+	/* had to add another scope due to C99 compliancy on Windows */
+	{
 	unsigned char bu = b[i];
 	int slen = 0x000000FF & bu;
 	
@@ -392,7 +402,7 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 	/* Actually, this could get complicated, need to destruct then */
 	if (!nitf_List_pushBack(mf->fontList, p, error))
 	    return NITF_FAILURE;
-        
+	}    
     }
     
     return NITF_SUCCESS;
@@ -966,10 +976,9 @@ static cgm_ElementHandler* classes[] =
 NITFAPI(cgm_MetafileReader*) 
     cgm_MetafileReader_construct(nitf_Error* error)
 {
-    error->level = NITF_NO_ERR;
     cgm_MetafileReader* reader = 
 	(cgm_MetafileReader*)NITF_MALLOC(sizeof(cgm_MetafileReader));
-
+    
     if (!reader)
     {
         nitf_Error_init(error,
@@ -977,6 +986,8 @@ NITFAPI(cgm_MetafileReader*)
                         NITF_CTXT, NITF_ERR_MEMORY);
 	return NULL;
     }
+    
+    error->level = NITF_NO_ERR;
     
     reader->unpacker = classes;
     
@@ -1105,11 +1116,13 @@ NITFAPI(cgm_Metafile*) cgm_MetafileReader_read(cgm_MetafileReader* reader,
 {
     int success;
     /*  Try and alloc our model */
-    cgm_Metafile* mf = cgm_Metafile_construct(error);
+    cgm_Metafile* mf = NULL;
+    cgm_ParseContext parseContext;
+    
+    mf = cgm_Metafile_construct(error);
     if (!mf)
 	return NULL;
 
-    cgm_ParseContext parseContext;
     resetParseContext(&parseContext);
 
     /* Keep going while there is more to read */
