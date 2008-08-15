@@ -734,11 +734,31 @@ NITF_BOOL ellipticalArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc, int classT
 }
 NITF_BOOL ellipticalArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    cgm_EllipticalArcCloseElement* ellipticalArc;
+    cgm_Element* elem = cgm_EllipticalArcCloseElement_construct(error);
+    if (!elem) return NITF_FAILURE;
+    ellipticalArc = (cgm_EllipticalArcCloseElement*)elem->data;
+
     DBG_TRACE();
+    FILL_EDGE_ATTS(ellipticalArc, pc);
+    ellipticalArc->centerX = readShort(b);
+    ellipticalArc->centerY = readShort(&b[2]);
+    ellipticalArc->end1X = readShort(&b[4]);
+    ellipticalArc->end1Y = readShort(&b[6]);
+    ellipticalArc->end2X = readShort(&b[8]);
+    ellipticalArc->end2Y = readShort(&b[10]);
+    ellipticalArc->startVectorX = readShort(&b[12]);
+    ellipticalArc->startVectorY = readShort(&b[14]);
+    ellipticalArc->endVectorX = readShort(&b[16]);
+    ellipticalArc->endVectorY = readShort(&b[18]);
 
-    //printParseContext(pc);
+    cgm_Element_print(elem);
+
+    if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
+	return NITF_FAILURE;
+
+
     resetParseContext(pc);
-
     return NITF_SUCCESS;
 }
 

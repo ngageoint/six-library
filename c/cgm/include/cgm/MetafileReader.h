@@ -34,6 +34,7 @@
 #include "cgm/EllipseElement.h"
 #include "cgm/CircularArcElement.h"
 #include "cgm/EllipticalArcElement.h"
+#include "cgm/EllipticalArcCloseElement.h"
 
 NITF_CXX_GUARD
 
