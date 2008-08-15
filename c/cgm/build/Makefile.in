@@ -21,6 +21,6 @@ SOURCES = Element.c PictureBody.c Picture.c Metafile.c MetafileReader.c \
           PolygonElement.c RectangleElement.c CircleElement.c \
           PolyLineElement.c PolySetElement.c EllipseElement.c \
           EllipticalArcElement.c CircularArcElement.c \
-          EllipticalArcCloseElement.c
+          EllipticalArcCloseElement.c CircularArcCloseElement.c
 
 TESTS = test_read_cgm.c

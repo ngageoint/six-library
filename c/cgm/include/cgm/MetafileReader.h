@@ -33,6 +33,7 @@
 #include "cgm/CircleElement.h"
 #include "cgm/EllipseElement.h"
 #include "cgm/CircularArcElement.h"
+#include "cgm/CircularArcCloseElement.h"
 #include "cgm/EllipticalArcElement.h"
 #include "cgm/EllipticalArcCloseElement.h"
 

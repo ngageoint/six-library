@@ -62,27 +62,6 @@ typedef struct _cgm_Element
 } cgm_Element;
 
 
-
-/* Serves both circle arc center and circle arc center close */
-typedef struct _cgm_CircularArcElementClose
-{
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
-    short centerX;
-    short centerY;
-    short startX;
-    short startY;
-    short endX;
-    short endY;
-    short radius;
-    short closeType;
-} cgm_CircleArcElementClose;
-
-
 /*!
  *  Im thinking, we probably wont instantiate this directly.  Instead,
  *  this class is more like a pure-virtual base.  The important thing,

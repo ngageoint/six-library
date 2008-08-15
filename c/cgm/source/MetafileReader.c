@@ -680,10 +680,28 @@ NITF_BOOL circularArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc, int classTyp
 }
 NITF_BOOL circularArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    cgm_CircularArcCloseElement* circularArc;
+    cgm_Element* elem = cgm_CircularArcCloseElement_construct(error);
+    if (!elem) return NITF_FAILURE;
+    circularArc = (cgm_CircularArcCloseElement*)elem->data;
+
     DBG_TRACE();
-    //printParseContext(pc);
+    FILL_EDGE_ATTS(circularArc, pc);
+    circularArc->centerX = readShort(b);
+    circularArc->centerY = readShort(&b[2]);
+    circularArc->startX = readShort(&b[4]);
+    circularArc->startY = readShort(&b[6]);
+    circularArc->endX = readShort(&b[8]);
+    circularArc->endY = readShort(&b[10]);
+    circularArc->radius = readShort(&b[10]);
+
+    cgm_Element_print(elem);
+
+    if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
+	return NITF_FAILURE;
+
+
     resetParseContext(pc);
-    
     return NITF_SUCCESS;
 }
 NITF_BOOL ellipse(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
