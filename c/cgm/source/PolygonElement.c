@@ -24,17 +24,16 @@
 
 NITFPRIV(void) polyDestroy(NITF_DATA* data)
 {
-    
-    
     /* TODO!! */
+    nitf_ListIterator it, end;
+    nitf_List* list = NULL;
+    
     cgm_PolygonElement* poly = (cgm_PolygonElement*)data;
 
     if (poly->attributes)
         cgm_FillAttributes_destruct( & (poly->attributes ));
 
-    nitf_ListIterator it, end;
-    
-    nitf_List* list = (nitf_List*)poly->vertices;
+    list = (nitf_List*)poly->vertices;
     it = nitf_List_begin(list);
     end = nitf_List_end(list);
 
