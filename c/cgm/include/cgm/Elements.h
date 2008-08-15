@@ -26,6 +26,7 @@
 #include "cgm/BasicTypes.h"
 #include "cgm/Rectangle.h"
 #include "cgm/Vertex.h"
+#include "cgm/VertexClose.h"
 #include "cgm/Text.h"
 
 NITF_CXX_GUARD

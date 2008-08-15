@@ -5,7 +5,6 @@
 
 NITF_CXX_GUARD
 
-
 typedef struct _cgm_Vertex
 {
     short x;

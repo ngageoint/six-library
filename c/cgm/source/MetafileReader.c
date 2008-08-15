@@ -164,6 +164,23 @@ NITFPRIV(cgm_Vertex*) readVertex(char* b, nitf_Error* error)
     v->y = NITF_NTOHS(s);
     return v;
 }
+
+NITFPRIV(cgm_VertexClose*) readVertexClose(char* b, nitf_Error* error)
+{
+    cgm_VertexClose* v = cgm_VertexClose_construct(error);
+    short s;
+    if (!v) return NULL;
+    
+    memcpy(&s, &b[0], 2);
+    v->x = NITF_NTOHS(s);
+    memcpy(&s, &b[2], 2);
+    v->y = NITF_NTOHS(s);
+    memcpy(&s, &b[4], 2);
+    v->edgeOutFlag = NITF_NTOHS(s);
+    return v;
+}
+
+
 NITFPRIV(nitf_List*) readVertices(char* b, int length, nitf_Error* error)
 {
 
@@ -216,7 +233,7 @@ NITFPRIV(char*) readString(char* b, int length)
 
 
 /* TODO: Handle edge out flag */
-NITFPRIV(nitf_List*) readPolySetVertices(char* b, int length, nitf_Error* error)
+NITFPRIV(nitf_List*) readCloseVertices(char* b, int length, nitf_Error* error)
 {
 
     int i = 0;
@@ -229,15 +246,13 @@ NITFPRIV(nitf_List*) readPolySetVertices(char* b, int length, nitf_Error* error)
 
     for (i = 0; i < length; i+=6)
     {
-	short edgeOutFlag;
-	cgm_Vertex* v = readVertex(&b[i], error);
+	cgm_VertexClose* v = readVertexClose(&b[i], error);
 	if (!v)
 	{
 	    /*  TODO: We dont get out so easy, but for now... */
 	    nitf_List_destruct(&list);
 	    return NULL;
 	}
-	edgeOutFlag = readShort(&b[i + 4]);
 	if (!nitf_List_pushBack(list, v, error))
 	{
 	    nitf_List_destruct(&list);
@@ -489,7 +504,6 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 
     DBG_TRACE();
     FILL_LINE_ATTS(poly, pc);
-    resetParseContext(pc);
 
     poly->vertices = readVertices(b, len, error);
     if (! poly->vertices )
@@ -498,7 +512,10 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
 
+
     cgm_Element_print(elem);
+    resetParseContext(pc);
+
 
     return NITF_SUCCESS;
 }
@@ -541,7 +558,6 @@ NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
 
     DBG_TRACE();
     FILL_EDGE_ATTS(poly, pc);
-    resetParseContext(pc);
 
     
 
@@ -553,6 +569,7 @@ NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
 	return NITF_FAILURE;
 
     cgm_Element_print(elem);
+    resetParseContext(pc);
 
     return NITF_SUCCESS;
 }
@@ -567,11 +584,10 @@ NITF_BOOL polySet(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
 
     DBG_TRACE();
     FILL_EDGE_ATTS(poly, pc);
-    resetParseContext(pc);
 
     
 
-    poly->vertices = readPolySetVertices(b, len, error);
+    poly->vertices = readCloseVertices(b, len, error);
     if (! poly->vertices )
 	return NITF_FAILURE;
 
@@ -579,6 +595,7 @@ NITF_BOOL polySet(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
 	return NITF_FAILURE;
 
     cgm_Element_print(elem);
+    resetParseContext(pc);
 
     return NITF_SUCCESS;
 
@@ -600,12 +617,12 @@ NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
 	return NITF_FAILURE;
     FILL_EDGE_ATTS(rect, pc);
 
-    resetParseContext(pc);
     
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
 
     cgm_Element_print(elem);
+    resetParseContext(pc);
 
     return NITF_SUCCESS;
 }

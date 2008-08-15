@@ -36,6 +36,7 @@ typedef struct _cgm_PolySetElement
     cgm_Type edgeType;
     short edgeColor[CGM_RGB];
     nitf_List* vertices;
+    nitf_List* edgeOutFlags;
 } cgm_PolySetElement;
 
 

@@ -65,6 +65,15 @@ typedef enum _cgm_Type
     CGM_TYPE_DASH_DOT_DOT
 } cgm_Type;
 
+typedef enum _cgm_EdgeCloseType
+{
+    CGM_EDGE_CLOSE_TYPE_NOT_SET = -1,
+    CGM_EDGE_CLOSE_TYPE_INVISIBLE,
+    CGM_EDGE_CLOSE_TYPE_VISIBLE,
+    CGM_EDGE_CLOSE_TYPE_CLOSE_INVISIBLE,
+    CGM_EDGE_CLOSE_TYPE_CLOSE_VISIBLE
+
+} cgm_EdgeCloseType;
 
 NITF_CXX_ENDGUARD
 

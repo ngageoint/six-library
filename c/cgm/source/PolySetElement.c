@@ -16,8 +16,8 @@ NITFPRIV(void) polyDestroy(NITF_DATA* data)
 
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
-	cgm_Vertex* v = (cgm_Vertex*)nitf_ListIterator_get(&it);
-	cgm_Vertex_destruct(&v);
+	cgm_VertexClose* v = (cgm_VertexClose*)nitf_ListIterator_get(&it);
+	cgm_VertexClose_destruct(&v);
 	nitf_ListIterator_increment(&it);
     }
     
@@ -37,7 +37,7 @@ NITFPRIV(void) polyPrint(NITF_DATA* data)
     nitf_List* list = (nitf_List*)poly->vertices;
     it = nitf_List_begin(list);
     end = nitf_List_end(list);
-   printf("\tFill Color: (%d, %d, %d)\n", 
+    printf("\tFill Color: (%d, %d, %d)\n", 
 	   poly->fillColor[CGM_R],
 	   poly->fillColor[CGM_G],
 	   poly->fillColor[CGM_B]);
@@ -52,9 +52,9 @@ NITFPRIV(void) polyPrint(NITF_DATA* data)
 
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
-	cgm_Vertex* v = (cgm_Vertex*)nitf_ListIterator_get(&it);
+	cgm_VertexClose* v = (cgm_VertexClose*)nitf_ListIterator_get(&it);
 	printf("\t");
-	cgm_Vertex_print(v);
+	cgm_VertexClose_print(v);
 	nitf_ListIterator_increment(&it);
     }
 
