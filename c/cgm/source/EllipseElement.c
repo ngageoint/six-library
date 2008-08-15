@@ -31,7 +31,7 @@ NITFPRIV(void) print(NITF_DATA* data)
 
 NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error)
 {
-    cgm_Element* element = cgm_Element_construct(error);
+    cgm_Element* element = cgm_Element_construct(CGM_ELLIPSE_ELEMENT, error);
     if (element)
     {
 	cgm_EllipseElement* ellipse = (cgm_EllipseElement*)

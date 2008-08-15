@@ -31,7 +31,9 @@ NITFPRIV(void) print(NITF_DATA* data)
 
 NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error)
 {
-    cgm_Element* element = cgm_Element_construct(error);
+    cgm_Element* element = 
+        cgm_Element_construct(CGM_ELLIPTICAL_ARC_CENTER_ELEMENT,
+                              error);
     if (element)
     {
 	cgm_EllipticalArcElement* arc = (cgm_EllipticalArcElement*)

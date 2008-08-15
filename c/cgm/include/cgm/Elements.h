@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __CGM_ELEMENTS_H__
-#define __CGM_ELEMENTS_H__
+#ifndef __CGM_ELEMENT_H__
+#define __CGM_ELEMENT_H__
 
 #include "cgm/BasicTypes.h"
 #include "cgm/Rectangle.h"
@@ -40,12 +40,12 @@ typedef enum _cgm_ElementType
     CGM_POLYLINE_ELEMENT,
     CGM_POLYSET_ELEMENT,
     CGM_ELLIPSE_ELEMENT,
-    CGM_ELLIPTICAL_ARC_ELEMENT,
-    CGM_ELLIPTICAL_CLOSED_ARC_ELEMENT,
+    CGM_ELLIPTICAL_ARC_CENTER_ELEMENT,
+    CGM_ELLIPTICAL_ARC_CENTER_CLOSE_ELEMENT,
     CGM_RECTANGLE_ELEMENT,
     CGM_CIRCLE_ELEMENT,
-    CGM_CIRCULAR_ARC_CENTER,
-    CGM_CIRCULAR_ARC_CENTER_CLOSE,
+    CGM_CIRCULAR_ARC_CENTER_ELEMENT,
+    CGM_CIRCULAR_ARC_CENTER_CLOSE_ELEMENT
 } cgm_ElementType;
 
 
@@ -113,7 +113,8 @@ typedef struct _cgm_CircularArcElementClose
  *  and they should also specify destructor functions.
  *
  */
-NITFAPI(cgm_Element*) cgm_Element_construct(nitf_Error* error);
+NITFAPI(cgm_Element*) cgm_Element_construct(cgm_ElementType type,
+                                            nitf_Error* error);
 
 /*!
  *  If we follow the approach specified above, we can just destroy
@@ -137,6 +138,8 @@ NITFAPI(void) cgm_Element_destruct(cgm_Element** element);
 
 NITFAPI(void) cgm_Element_print(cgm_Element* elem);
 
+
+NITFAPI(const char*) cgm_Element_getName(cgm_Element* elem);
 
 NITF_CXX_ENDGUARD
 

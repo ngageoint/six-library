@@ -36,7 +36,7 @@ NITFPRIV(void) rectanglePrint(NITF_DATA* data)
 
 NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error)
 {
-    cgm_Element* element = cgm_Element_construct(error);
+    cgm_Element* element = cgm_Element_construct(CGM_RECTANGLE_ELEMENT, error);
     if (element)
     {
 	cgm_RectangleElement* rect = (cgm_RectangleElement*)

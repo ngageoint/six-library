@@ -1,7 +1,8 @@
 #include "cgm/Elements.h"
 
 
-NITFAPI(cgm_Element*) cgm_Element_construct(nitf_Error* error)
+NITFAPI(cgm_Element*) cgm_Element_construct(cgm_ElementType type,
+                                            nitf_Error* error)
 {
     cgm_Element* element = (cgm_Element*)NITF_MALLOC(sizeof(cgm_Element));
     if (!element)
@@ -12,6 +13,7 @@ NITFAPI(cgm_Element*) cgm_Element_construct(nitf_Error* error)
 			NITF_ERR_MEMORY);
 	return NULL;
     }
+    element->type = type;
     element->print = NULL;
     element->destroy = NULL;
     element->data = NULL;
@@ -34,17 +36,27 @@ NITFAPI(void) cgm_Element_print(cgm_Element* element)
 {
     if (element->print && element->data)
     {
-	printf("Element:\n");
+	printf("Element: [%s]\n", cgm_Element_getName(element));
 	(* element->print )(element->data);
     }
 }
-/*!
- *  Beauty is, we dont even need to know what type it is.  Lets count
- *  how many times we can get away with this (I guess probably a lot).
- */
-NITFPRIV(void) basicDestroy(NITF_DATA* data)
+
+#define TRY_NAME(X, Y) if (X == Y) return #X
+
+NITFAPI(const char*) cgm_Element_getName(cgm_Element* element)
 {
-    NITF_FREE( data );
+    static char* dontKnow = "No idea";
+    cgm_ElementType t = element->type;
+    TRY_NAME(CGM_TEXT_ELEMENT, t);
+    TRY_NAME(CGM_POLYGON_ELEMENT, t);
+    TRY_NAME(CGM_POLYLINE_ELEMENT, t);
+    TRY_NAME(CGM_POLYSET_ELEMENT, t);
+    TRY_NAME(CGM_ELLIPSE_ELEMENT, t);
+    TRY_NAME(CGM_ELLIPTICAL_ARC_CENTER_ELEMENT, t);
+    TRY_NAME(CGM_ELLIPTICAL_ARC_CENTER_CLOSE_ELEMENT, t);
+    TRY_NAME(CGM_RECTANGLE_ELEMENT, t);
+    TRY_NAME(CGM_CIRCLE_ELEMENT, t);
+    TRY_NAME(CGM_CIRCULAR_ARC_CENTER_ELEMENT, t);
+    TRY_NAME(CGM_CIRCULAR_ARC_CENTER_CLOSE_ELEMENT, t);
+    return dontKnow;
 }
-
-
