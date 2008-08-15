@@ -1060,8 +1060,6 @@ NITFAPI(cgm_MetafileReader*)
 	return NULL;
     }
     
-    error->level = NITF_NO_ERR;
-    
     reader->unpacker = classes;
     
     return reader;
@@ -1191,6 +1189,9 @@ NITFAPI(cgm_Metafile*) cgm_MetafileReader_read(cgm_MetafileReader* reader,
     /*  Try and alloc our model */
     cgm_Metafile* mf = NULL;
     cgm_ParseContext parseContext;
+    
+    /* reset the error level */
+    error->level = NITF_NO_ERR;
     
     mf = cgm_Metafile_construct(error);
     if (!mf)
