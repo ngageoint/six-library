@@ -877,7 +877,7 @@ static cgm_ElementHandler two[] =
 static cgm_ElementHandler three[] =
 {
     { 3, (CGM_UNPACK)&auxColor },
-    { 3, (CGM_UNPACK)&transparency },
+    { 4, (CGM_UNPACK)&transparency },
     { 0, NULL }
     
 };
