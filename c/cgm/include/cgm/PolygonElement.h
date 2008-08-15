@@ -30,12 +30,7 @@ NITF_CXX_GUARD
 
 typedef struct _cgm_PolygonElement
 {
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
+    cgm_FillAttributes* attributes;
     nitf_List* vertices;
 } cgm_PolygonElement;
 

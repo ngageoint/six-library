@@ -28,6 +28,9 @@
 #include "cgm/Vertex.h"
 #include "cgm/VertexClose.h"
 #include "cgm/Text.h"
+#include "cgm/FillAttributes.h"
+#include "cgm/LineAttributes.h"
+#include "cgm/TextAttributes.h"
 
 NITF_CXX_GUARD
 

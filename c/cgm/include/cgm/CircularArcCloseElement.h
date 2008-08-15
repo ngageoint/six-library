@@ -32,12 +32,7 @@ NITF_CXX_GUARD
 /* Serves both circle arc center and circle arc center close */
 typedef struct _cgm_CircularArcCloseElement
 {
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
+    cgm_FillAttributes* attributes;
     short centerX;
     short centerY;
     short startX;

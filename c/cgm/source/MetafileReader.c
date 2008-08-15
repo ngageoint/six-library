@@ -37,23 +37,49 @@
 #    define DBG_TRACE() 
 #endif
 
-#define FILL_EDGE_ATTS(ELEM, PC)                \
-{                                           \
-    memcpy(ELEM->fillColor, PC->fillColor, 6);          \
-    ELEM->interiorStyle = PC->style;                    \
-    ELEM->edgeVisibility = PC->visibility;              \
-    ELEM->edgeWidth = PC->width;                        \
-    ELEM->edgeType = PC->type;                          \
-    memcpy(ELEM->edgeColor, PC->color, 6);              \
+
+cgm_FillAttributes* createFillAttributes(cgm_ParseContext* pc,
+                                         nitf_Error*error)
+{
+    cgm_FillAttributes* atts = cgm_FillAttributes_construct(error);
+    if (!atts) return NULL;
+
+    memcpy(atts->fillColor, pc->fillColor, 6);
+    atts->interiorStyle = pc->style;
+    atts->edgeVisibility = pc->visibility;
+    atts->edgeWidth = pc->width;
+    atts->edgeType = pc->type;
+    memcpy(atts->edgeColor, pc->color, 6);
+    return atts;
+
 }
 
-#define FILL_LINE_ATTS(ELEM, PC)                \
-{                                           \
-    ELEM->lineWidth = pc->width;            \
-    ELEM->lineType = pc->type;              \
-    memcpy( ELEM->lineColor, PC->color, 6); \
-}
+cgm_LineAttributes* createLineAttributes(cgm_ParseContext* pc,
+                                         nitf_Error* error)
+{
+    cgm_LineAttributes* atts = cgm_LineAttributes_construct(error);
+    if (!atts) return NULL;
+    atts->lineWidth = pc->width;
+    atts->lineType = pc->type;
+    memcpy( atts->lineColor, pc->color, 6);
+    return atts;
 
+}
+cgm_TextAttributes* createTextAttributes(cgm_ParseContext*  pc,
+                                         nitf_Error* error)
+{
+    cgm_TextAttributes* atts = cgm_TextAttributes_construct(error);
+    if (!atts) return NULL;
+
+    memcpy(atts->textColor, pc->color, 6);
+    atts->characterHeight = pc->height;
+    atts->textFontIndex = pc->index;
+    atts->characterOrientation->x1 = pc->orientation[0];
+    atts->characterOrientation->y1 = pc->orientation[1];
+    atts->characterOrientation->x2 = pc->orientation[2];
+    atts->characterOrientation->y2 = pc->orientation[3];
+    return atts;
+}
 NITFPRIV(void) resetParseContext(cgm_ParseContext* pc)
 {
     printf("=======Reset Parse=========\n");
@@ -513,8 +539,10 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
     poly = (cgm_PolyLineElement*) elem->data;
     
     DBG_TRACE();
-    FILL_LINE_ATTS(poly, pc);
-    
+    poly->attributes = createLineAttributes(pc, error);
+    if (!poly->attributes)
+        return NITF_FAILURE;
+
     poly->vertices = readVertices(b, len, error);
     if (! poly->vertices )
 	return NITF_FAILURE;
@@ -536,20 +564,15 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int
     cgm_Element* elem = cgm_TextElement_construct(error);
     if (!elem) return NITF_FAILURE;
     te = (cgm_TextElement*) elem->data;
+    te->attributes = createTextAttributes(pc, error);
+    if (!te->attributes) return NITF_FAILURE;
+
     te->text->x = readShort(b);
     te->text->y = readShort(&b[2]);
     _1 = readShort(&b[4]);
     te->text->str = readString(&b[6], len - 6);
     
     DBG_TRACE();
-    //printParseContext(pc);
-    memcpy(te->color, pc->color, 6);
-    te->characterHeight = pc->height;
-    te->textFontIndex = pc->index;
-    te->characterOrientation->x1 = pc->orientation[0];
-    te->characterOrientation->y1 = pc->orientation[1];
-    te->characterOrientation->x2 = pc->orientation[2];
-    te->characterOrientation->y2 = pc->orientation[3];
 
     cgm_Element_print(elem);
     resetParseContext(pc);
@@ -567,7 +590,10 @@ NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
     poly = (cgm_PolygonElement*) elem->data;
     
     DBG_TRACE();
-    FILL_EDGE_ATTS(poly, pc);
+    poly->attributes = createFillAttributes(pc, error);
+    if (! poly->attributes )
+        return NITF_FAILURE;
+
     poly->vertices = readVertices(b, len, error);
     if (! poly->vertices )
 	return NITF_FAILURE;
@@ -590,7 +616,10 @@ NITF_BOOL polySet(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
     poly = (cgm_PolySetElement*) elem->data;
 
     DBG_TRACE();
-    FILL_EDGE_ATTS(poly, pc);
+    poly->attributes = createFillAttributes(pc, error);
+    if (! poly->attributes )
+        return NITF_FAILURE;
+
     poly->vertices = readCloseVertices(b, len, error);
     if (! poly->vertices )
 	return NITF_FAILURE;
@@ -619,9 +648,11 @@ NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
     rect->rectangle = readRectangle(b, len, error);
     if (!rect->rectangle)
 	return NITF_FAILURE;
-    FILL_EDGE_ATTS(rect, pc);
 
-    
+    rect->attributes = createFillAttributes(pc, error);
+    if (! rect->attributes )
+        return NITF_FAILURE;
+
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
     
@@ -638,7 +669,11 @@ NITF_BOOL circle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shor
     circle = (cgm_CircleElement*)elem->data;
     
     DBG_TRACE();
-    FILL_EDGE_ATTS(circle, pc);
+
+    circle->attributes = createFillAttributes(pc, error);
+    if (! circle->attributes )
+        return NITF_FAILURE;
+
     circle->centerX = readShort(b);
     circle->centerY = readShort(&b[2]);
     circle->radius = readShort(&b[4]);
@@ -660,7 +695,10 @@ NITF_BOOL circularArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc, int classTyp
     circularArc = (cgm_CircularArcElement*)elem->data;
 
     DBG_TRACE();
-    FILL_LINE_ATTS(circularArc, pc);
+    circularArc->attributes = createLineAttributes(pc, error);
+    if (!circularArc->attributes)
+        return NITF_FAILURE;
+
     circularArc->centerX = readShort(b);
     circularArc->centerY = readShort(&b[2]);
     circularArc->startX = readShort(&b[4]);
@@ -686,7 +724,11 @@ NITF_BOOL circularArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int cla
     circularArc = (cgm_CircularArcCloseElement*)elem->data;
 
     DBG_TRACE();
-    FILL_EDGE_ATTS(circularArc, pc);
+
+    circularArc->attributes = createFillAttributes(pc, error);
+    if (! circularArc->attributes )
+        return NITF_FAILURE;
+
     circularArc->centerX = readShort(b);
     circularArc->centerY = readShort(&b[2]);
     circularArc->startX = readShort(&b[4]);
@@ -714,7 +756,11 @@ NITF_BOOL ellipse(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
     ellipse = (cgm_EllipseElement*)elem->data;
 
     DBG_TRACE();
-    FILL_EDGE_ATTS(ellipse, pc);
+
+    ellipse->attributes = createFillAttributes(pc, error);
+    if (! ellipse->attributes )
+        return NITF_FAILURE;
+
     ellipse->centerX = readShort(b);
     ellipse->centerY = readShort(&b[2]);
     ellipse->end1X = readShort(&b[4]);
@@ -739,7 +785,11 @@ NITF_BOOL ellipticalArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc, int classT
     ellipticalArc = (cgm_EllipticalArcElement*)elem->data;
 
     DBG_TRACE();
-    FILL_LINE_ATTS(ellipticalArc, pc);
+
+    ellipticalArc->attributes = createLineAttributes(pc, error);
+    if (!ellipticalArc->attributes)
+        return NITF_FAILURE;
+
     ellipticalArc->centerX = readShort(b);
     ellipticalArc->centerY = readShort(&b[2]);
     ellipticalArc->end1X = readShort(&b[4]);
@@ -768,7 +818,11 @@ NITF_BOOL ellipticalArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int c
     ellipticalArc = (cgm_EllipticalArcCloseElement*)elem->data;
 
     DBG_TRACE();
-    FILL_EDGE_ATTS(ellipticalArc, pc);
+
+    ellipticalArc->attributes = createFillAttributes(pc, error);
+    if (! ellipticalArc->attributes )
+        return NITF_FAILURE;
+
     ellipticalArc->centerX = readShort(b);
     ellipticalArc->centerY = readShort(&b[2]);
     ellipticalArc->end1X = readShort(&b[4]);
@@ -817,7 +871,7 @@ NITF_BOOL fillColor(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int s
     return NITF_SUCCESS;
 }
 
-
+/* TODO: Im still not sure what we do with this thing */
 NITF_BOOL hatchIndex(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     short s;
@@ -825,6 +879,7 @@ NITF_BOOL hatchIndex(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int 
     DBG_TRACE();
     s = readShort(b);
     /*  Make sure its not already set  */
+    
     if (pc->hatchIndex != CGM_HATCH_NOT_SET)
     {
 	nitf_Error_initf(error,

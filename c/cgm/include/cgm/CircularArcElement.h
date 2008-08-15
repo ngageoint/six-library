@@ -29,9 +29,7 @@ NITF_CXX_GUARD
 
 typedef struct _cgm_CircularArcElement
 {
-    short lineWidth;
-    cgm_Type lineType;
-    short lineColor[CGM_RGB];
+    cgm_LineAttributes* attributes;
     short centerX;
     short centerY;
     short startX;

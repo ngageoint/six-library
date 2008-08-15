@@ -6,6 +6,10 @@ NITFPRIV(void) rectangleDestroy(NITF_DATA* data)
 {
     cgm_RectangleElement* rect = (cgm_RectangleElement*)data;
     
+    if (rect->attributes)
+    {
+        cgm_FillAttributes_destruct( &(rect->attributes) );
+    }
     if (rect->rectangle)
     {
 	cgm_Rectangle_destruct( & (rect->rectangle) );
@@ -16,17 +20,8 @@ NITFPRIV(void) rectangleDestroy(NITF_DATA* data)
 NITFPRIV(void) rectanglePrint(NITF_DATA* data)
 {
     cgm_RectangleElement* rect = (cgm_RectangleElement*)data;
-    printf("\tFill Color: (%d, %d, %d)\n", 
-	   rect->fillColor[CGM_R],
-	   rect->fillColor[CGM_G],
-	   rect->fillColor[CGM_B]);
-    printf("\tInterior Style [%d]\n", rect->interiorStyle);
-    printf("\tEdge Visibility [%d]\n", rect->edgeVisibility);
-    printf("\tEdge Width [%d]\n", rect->edgeWidth);
-    printf("\tEdge Color: (%d, %d, %d)\n", 
-	   rect->edgeColor[CGM_R],
-	   rect->edgeColor[CGM_G],
-	   rect->edgeColor[CGM_B]);
+    if (rect->attributes)
+        cgm_FillAttributes_print( rect->attributes );
     printf("\t");
     cgm_Rectangle_print(rect->rectangle);
     
@@ -47,6 +42,8 @@ NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error)
 	    return NULL;
 	    
 	}
+
+        rect->attributes = NULL;
 	/* TODO: This default arg in constructor doesnt appear to be 
 	   that helpful.  Remove?  Otherwise, might want to make consistent
 	 */

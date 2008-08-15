@@ -29,9 +29,7 @@ NITF_CXX_GUARD
 
 typedef struct _cgm_PolyLineElement
 {
-    short lineWidth;
-    cgm_Type lineType;
-    short lineColor[CGM_RGB];
+    cgm_LineAttributes* attributes;
     nitf_List* vertices;
 } cgm_PolyLineElement;
 

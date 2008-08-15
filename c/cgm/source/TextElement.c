@@ -25,16 +25,9 @@
 NITFPRIV(void) textPrint(NITF_DATA* data)
 {
     cgm_TextElement* text = (cgm_TextElement*)data;
-    
-    printf("\tText Color: (%d, %d, %d)\n", 
-	   text->color[CGM_R],
-	   text->color[CGM_G],
-	   text->color[CGM_B]);
-    printf("\tCharacter Height: %d\n", text->characterHeight);
-    printf("\tText Font Index: %d\n", text->textFontIndex);
 
-    printf("\tCharacter orientation: ");
-    cgm_Rectangle_print(text->characterOrientation);
+    if (text->attributes)
+        cgm_TextAttributes_print( text->attributes );
     printf("\tText: ");
     cgm_Text_print(text->text);
 
@@ -46,8 +39,8 @@ NITFPRIV(void) textDestroy(NITF_DATA* data)
     /* TODO!! */
     cgm_TextElement* text = (cgm_TextElement*)data;
 
-    if (text->characterOrientation)
-	cgm_Rectangle_destruct( &(text->characterOrientation) );
+    if (text->attributes)
+	cgm_TextAttributes_destruct( &(text->attributes) );
     
     if (text->text)
     {
@@ -71,6 +64,7 @@ NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error)
 	    return NULL;
 	    
 	}
+        text->attributes = NULL;
 	/* TODO: This default arg in constructor doesnt appear to be 
 	   that helpful.  Remove?  Otherwise, might want to make consistent
 	 */
@@ -83,22 +77,8 @@ NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error)
 	      
 	}
 
-	text->characterOrientation = cgm_Rectangle_construct(error);
-	if (!text->characterOrientation)
-	{
-	    cgm_Text_destruct( &(text->text) );
-	    NITF_FREE( text );
-	    NITF_FREE( element );
-	    return NULL;
-	      
-	}
 
-	text->color[CGM_R] = -1;
-	text->color[CGM_G] = -1;
-	text->color[CGM_B] = -1;
-
-	text->characterHeight = -1;
-	text->textFontIndex = -1;
+        text->attributes = NULL;
 	
 	element->data = (NITF_DATA*)text;
 

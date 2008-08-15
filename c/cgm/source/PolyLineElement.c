@@ -11,6 +11,10 @@ NITFPRIV(void) polyDestroy(NITF_DATA* data)
     nitf_ListIterator it, end;
     
     nitf_List* list = (nitf_List*)poly->vertices;
+
+    if (poly->attributes)
+        cgm_LineAttributes_destruct( &(poly->attributes) );
+
     it = nitf_List_begin(list);
     end = nitf_List_end(list);
 
@@ -33,17 +37,15 @@ NITFPRIV(void) polyPrint(NITF_DATA* data)
     
     cgm_PolyLineElement* poly = (cgm_PolyLineElement*)data;
     nitf_ListIterator it, end;
-    
     nitf_List* list = (nitf_List*)poly->vertices;
+    
+    if (poly->attributes)
+    {
+        cgm_LineAttributes_print( poly->attributes );
+    }
+
     it = nitf_List_begin(list);
     end = nitf_List_end(list);
-
-    printf("\tLine Type [%d]\n", poly->lineType);
-    printf("\tLine Width [%d]\n", poly->lineWidth);
-    printf("\tLine Color: (%d, %d, %d)\n", 
-	   poly->lineColor[CGM_R],
-	   poly->lineColor[CGM_G],
-	   poly->lineColor[CGM_B]);
 
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
@@ -70,11 +72,7 @@ NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error)
 	    return NULL;
 	    
 	}
-	poly->lineWidth = -1;
-	poly->lineType = CGM_TYPE_NOT_SET;
-	poly->lineColor[CGM_R] = -1;
-	poly->lineColor[CGM_G] = -1;
-	poly->lineColor[CGM_B] = -1;
+        poly->attributes = NULL;
 	poly->vertices = NULL;
 	element->data = (NITF_DATA*)poly;
     }

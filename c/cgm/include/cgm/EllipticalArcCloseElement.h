@@ -30,12 +30,7 @@ NITF_CXX_GUARD
 /* Serves both elliptical arc and elliptical arc close */
 typedef struct _cgm_EllipticalArcCloseElement
 {
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
+    cgm_FillAttributes* attributes;
     short centerX;
     short centerY;
     short end1X;

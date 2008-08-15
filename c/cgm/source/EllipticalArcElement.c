@@ -3,27 +3,30 @@
 
 NITFPRIV(void) destroy(NITF_DATA* data)
 {
+    if ( ((cgm_EllipticalArcElement*)data)->attributes)
+    {
+        cgm_LineAttributes_destruct( & ((cgm_EllipticalArcElement*)data)->attributes);
+    }
     NITF_FREE( data );
+
 }
+
 
 NITFPRIV(void) print(NITF_DATA* data)
 {
     cgm_EllipticalArcElement* arc = (cgm_EllipticalArcElement*)data;
-    printf("\tLine Type [%d]\n", arc->lineType);
-    printf("\tLine Width [%d]\n", arc->lineWidth);
-    printf("\tLine Color: (%d, %d, %d)\n", 
-	   arc->lineColor[CGM_R],
-	   arc->lineColor[CGM_G],
-	   arc->lineColor[CGM_B]);
-    printf("\tEA O(%d, %d)\n",
+    if (arc->attributes)
+        cgm_LineAttributes_print(arc->attributes);
+
+    printf("\tOrigin (%d, %d)\n",
 	   arc->centerX, arc->centerY);
-    printf("\tEA P1(%d, %d)\n",
+    printf("\tEnd Point 1 (%d, %d)\n",
 	   arc->end1X, arc->end1Y);
-    printf("\tEA P2(%d, %d)\n",
+    printf("\tEnd Point 2 (%d, %d)\n",
 	   arc->end2X, arc->end2Y);
-    printf("\tEA SV(%d, %d)\n",
+    printf("\tStart Vector (%d, %d)\n",
 	   arc->startVectorX, arc->startVectorY);
-    printf("\tEA EV(%d, %d)\n",
+    printf("\tEnd Vector (%d, %d)\n",
 	   arc->endVectorX, arc->endVectorY);
     
 
@@ -44,12 +47,7 @@ NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error)
 	    return NULL;
 	    
 	}
-	arc->lineWidth = -1;
-	arc->lineType = CGM_TYPE_NOT_SET;
-	arc->lineColor[CGM_R] = -1;
-	arc->lineColor[CGM_G] = -1;
-	arc->lineColor[CGM_B] = -1;
-        
+        arc->attributes = NULL;        
 	arc->centerX = -1;
 	arc->centerY = -1;
 	arc->end1X = -1;

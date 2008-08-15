@@ -11,6 +11,12 @@ NITFPRIV(void) polyDestroy(NITF_DATA* data)
     nitf_ListIterator it, end;
     
     nitf_List* list = (nitf_List*)poly->vertices;
+
+    if (poly->attributes)
+    {
+        cgm_FillAttributes_destruct( &(poly->attributes) );
+    }
+
     it = nitf_List_begin(list);
     end = nitf_List_end(list);
 
@@ -37,18 +43,9 @@ NITFPRIV(void) polyPrint(NITF_DATA* data)
     nitf_List* list = (nitf_List*)poly->vertices;
     it = nitf_List_begin(list);
     end = nitf_List_end(list);
-    printf("\tFill Color: (%d, %d, %d)\n", 
-	   poly->fillColor[CGM_R],
-	   poly->fillColor[CGM_G],
-	   poly->fillColor[CGM_B]);
-    printf("\tInterior Style [%d]\n", poly->interiorStyle);
-    printf("\tEdge Visibility [%d]\n", poly->edgeVisibility);
-    printf("\tEdge Type [%d]\n", poly->edgeType);
-    printf("\tEdge Width [%d]\n", poly->edgeWidth);
-    printf("\tEdge Color: (%d, %d, %d)\n", 
-	   poly->edgeColor[CGM_R],
-	   poly->edgeColor[CGM_G],
-	   poly->edgeColor[CGM_B]);
+    
+    if (poly->attributes)
+        cgm_FillAttributes_print(poly->attributes);
 
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
@@ -75,20 +72,7 @@ NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error)
 	    return NULL;
 	    
 	}
-
-	poly->fillColor[CGM_R] = -1;
-	poly->fillColor[CGM_G] = -1;
-	poly->fillColor[CGM_B] = -1;
-	poly->interiorStyle = CGM_IS_NOT_SET;
-	poly->edgeVisibility = -1;
-	poly->edgeWidth = -1;
-	poly->edgeType = CGM_TYPE_NOT_SET;
-
-	poly->edgeWidth = -1;
-	poly->edgeType = CGM_TYPE_NOT_SET;
-	poly->edgeColor[CGM_R] = -1;
-	poly->edgeColor[CGM_G] = -1;
-	poly->edgeColor[CGM_B] = -1;
+        poly->attributes = NULL;
 	poly->vertices = NULL;
 	element->data = (NITF_DATA*)poly;
     }

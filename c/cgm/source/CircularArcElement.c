@@ -3,25 +3,28 @@
 
 NITFPRIV(void) destroy(NITF_DATA* data)
 {
+    if ( ((cgm_CircularArcElement*)data)->attributes)
+    {
+        cgm_LineAttributes_destruct( & ((cgm_CircularArcElement*)data)->attributes);
+    }
     NITF_FREE( data );
+
 }
 
 NITFPRIV(void) print(NITF_DATA* data)
 {
     cgm_CircularArcElement* arc = (cgm_CircularArcElement*)data;
-    printf("\tLine Type [%d]\n", arc->lineType);
-    printf("\tLine Width [%d]\n", arc->lineWidth);
-    printf("\tLine Color: (%d, %d, %d)\n", 
-	   arc->lineColor[CGM_R],
-	   arc->lineColor[CGM_G],
-	   arc->lineColor[CGM_B]);
-    printf("\tCA O(%d, %d)\n",
+
+    if (arc->attributes)
+        cgm_LineAttributes_print( arc->attributes );    
+
+    printf("\tOrigin (%d, %d)\n",
 	   arc->centerX, arc->centerY);
-    printf("\tCA P1(%d, %d)\n",
+    printf("\tPoint 1(%d, %d)\n",
 	   arc->startX, arc->startY);
-    printf("\tCA P2(%d, %d)\n",
+    printf("\tPoint 2(%d, %d)\n",
 	   arc->endX, arc->endY);
-    printf("\tCA R(%d)\n",
+    printf("\tRadius [%d]\n",
 	   arc->radius);
     
 }
@@ -41,11 +44,7 @@ NITFAPI(cgm_Element*) cgm_CircularArcElement_construct(nitf_Error* error)
 	    return NULL;
 	    
 	}
-	arc->lineWidth = -1;
-	arc->lineType = CGM_TYPE_NOT_SET;
-	arc->lineColor[CGM_R] = -1;
-	arc->lineColor[CGM_G] = -1;
-	arc->lineColor[CGM_B] = -1;
+        arc->attributes = NULL;
         
 	arc->centerX = -1;
 	arc->centerY = -1;

@@ -3,6 +3,10 @@
 
 NITFPRIV(void) destroy(NITF_DATA* data)
 {
+    if ( ((cgm_CircularArcCloseElement*)data)->attributes)
+    {
+        cgm_FillAttributes_destruct( & ((cgm_CircularArcCloseElement*)data)->attributes);
+    }
     NITF_FREE( data );
 }
 
@@ -10,26 +14,18 @@ NITFPRIV(void) print(NITF_DATA* data)
 {
     cgm_CircularArcCloseElement* arc = 
         (cgm_CircularArcCloseElement*)data;
-    printf("\tFill Color: (%d, %d, %d)\n", 
-	   arc->fillColor[CGM_R],
-	   arc->fillColor[CGM_G],
-	   arc->fillColor[CGM_B]);
-    printf("\tInterior Style [%d]\n", arc->interiorStyle);
-    printf("\tEdge Visibility [%d]\n", arc->edgeVisibility);
-    printf("\tEdge Width [%d]\n", arc->edgeWidth);
-    printf("\tEdge Color: (%d, %d, %d)\n", 
-	   arc->edgeColor[CGM_R],
-	   arc->edgeColor[CGM_G],
-	   arc->edgeColor[CGM_B]);
-    printf("\tEA O(%d, %d)\n",
+
+    if (arc->attributes)
+        cgm_FillAttributes_print( arc->attributes );
+    printf("\tOrigin (%d, %d)\n",
 	   arc->centerX, arc->centerY);
-    printf("\tEA P1(%d, %d)\n",
+    printf("\tStart (%d, %d)\n",
 	   arc->startX, arc->startY);
-    printf("\tEA P2(%d, %d)\n",
+    printf("\tEnd (%d, %d)\n",
 	   arc->endX, arc->endY);
-    printf("\tEA R(%d)\n",
+    printf("\tRadius [%d]\n",
 	   arc->radius);
-    printf("\tEA Close(%d)\n",
+    printf("\tClose[%d]\n",
 	   arc->closeType);
     
 
@@ -50,15 +46,7 @@ NITFAPI(cgm_Element*) cgm_CircularArcCloseElement_construct(nitf_Error* error)
 	    return NULL;
 	    
 	}
-
-	arc->fillColor[0] = -1;
-	arc->fillColor[1] = -1;
-	arc->fillColor[2] = -1;
-	arc->interiorStyle = CGM_IS_NOT_SET;
-	arc->edgeVisibility = -1;
-	arc->edgeWidth = -1;
-	arc->edgeType = CGM_TYPE_NOT_SET;
-        
+        arc->attributes = NULL;        
 	arc->centerX = -1;
 	arc->centerY = -1;
 	arc->startX = -1;

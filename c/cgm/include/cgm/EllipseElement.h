@@ -29,12 +29,7 @@ NITF_CXX_GUARD
 
 typedef struct _cgm_EllipseElement
 {
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
+    cgm_FillAttributes* attributes;
     short centerX;
     short centerY;
     short end1X;

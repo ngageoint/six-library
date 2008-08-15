@@ -28,6 +28,10 @@ NITFPRIV(void) polyDestroy(NITF_DATA* data)
     
     /* TODO!! */
     cgm_PolygonElement* poly = (cgm_PolygonElement*)data;
+
+    if (poly->attributes)
+        cgm_FillAttributes_destruct( & (poly->attributes ));
+
     nitf_ListIterator it, end;
     
     nitf_List* list = (nitf_List*)poly->vertices;
@@ -58,18 +62,8 @@ NITFPRIV(void) polyPrint(NITF_DATA* data)
     it = nitf_List_begin(list);
     end = nitf_List_end(list);
 
-
-    printf("\tFill Color: (%d, %d, %d)\n", 
-	   poly->fillColor[CGM_R],
-	   poly->fillColor[CGM_G],
-	   poly->fillColor[CGM_B]);
-    printf("\tInterior Style [%d]\n", poly->interiorStyle);
-    printf("\tEdge Visibility [%d]\n", poly->edgeVisibility);
-    printf("\tEdge Width [%d]\n", poly->edgeWidth);
-    printf("\tEdge Color: (%d, %d, %d)\n", 
-	   poly->edgeColor[CGM_R],
-	   poly->edgeColor[CGM_G],
-	   poly->edgeColor[CGM_B]);
+    if (poly->attributes)
+        cgm_FillAttributes_print( poly->attributes );
 
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
@@ -96,6 +90,7 @@ NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error)
 	    return NULL;
 	    
 	}
+        poly->attributes = NULL;
 	poly->vertices = NULL;
 	element->data = (NITF_DATA*)poly;
 
