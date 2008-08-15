@@ -28,6 +28,7 @@
 #include "cgm/TextElement.h"
 #include "cgm/PolygonElement.h"
 #include "cgm/PolyLineElement.h"
+#include "cgm/PolySetElement.h"
 #include "cgm/RectangleElement.h"
 #include "cgm/CircleElement.h"
 

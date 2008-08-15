@@ -214,6 +214,40 @@ NITFPRIV(char*) readString(char* b, int length)
 
 }
 
+
+/* TODO: Handle edge out flag */
+NITFPRIV(nitf_List*) readPolySetVertices(char* b, int length, nitf_Error* error)
+{
+
+    int i = 0;
+    assert(length % 4 == 0);
+    nitf_List* list;
+    list = nitf_List_construct(error);
+    
+    if (!list)
+	return NITF_FAILURE;
+
+    for (i = 0; i < length; i+=6)
+    {
+	short edgeOutFlag;
+	cgm_Vertex* v = readVertex(&b[i], error);
+	if (!v)
+	{
+	    /*  TODO: We dont get out so easy, but for now... */
+	    nitf_List_destruct(&list);
+	    return NULL;
+	}
+	edgeOutFlag = readShort(&b[i + 4]);
+	if (!nitf_List_pushBack(list, v, error))
+	{
+	    nitf_List_destruct(&list);
+	    return NULL;
+	}
+	
+    }
+    return list;
+}
+
 NITF_BOOL beginMetafile(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
 
@@ -526,10 +560,29 @@ NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
 
 NITF_BOOL polySet(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    cgm_PolySetElement* poly;
+    cgm_Element* elem = cgm_PolySetElement_construct(error);
+    if (!elem) return NITF_FAILURE;
+    poly = (cgm_PolySetElement*) elem->data;
+
     DBG_TRACE();
-    printParseContext(pc);
+    FILL_EDGE_ATTS(poly, pc);
     resetParseContext(pc);
+
+    
+
+    poly->vertices = readPolySetVertices(b, len, error);
+    if (! poly->vertices )
+	return NITF_FAILURE;
+
+    if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
+	return NITF_FAILURE;
+
+    cgm_Element_print(elem);
+
     return NITF_SUCCESS;
+
+
 }
 NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {

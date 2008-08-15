@@ -61,16 +61,6 @@ typedef struct _cgm_Element
 } cgm_Element;
 
 
-typedef struct _cgm_PolySetElement
-{
-    short fillColor[CGM_RGB];
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    cgm_Type edgeType;
-    short edgeColor[CGM_RGB];
-    nitf_List* vertices;
-} cgm_PolySetElement;
 
 
 
