@@ -53,19 +53,13 @@ typedef void (*CGM_ELEMENT_DESTROY)(NITF_DATA*);
 typedef void (*CGM_ELEMENT_PRINT)(NITF_DATA*);
 typedef struct _cgm_Element
 {
-
+    
     cgm_ElementType type;
     CGM_ELEMENT_DESTROY destroy;
     CGM_ELEMENT_PRINT print;
     NITF_DATA* data;
-
+    
 } cgm_Element;
-
-
-
-
-
-
 
 
 typedef struct _cgm_EllipticalArcCloseElement
@@ -90,25 +84,8 @@ typedef struct _cgm_EllipticalArcCloseElement
 } cgm_EllipticalArcCloseElement;
 
 
-
-
 /* Serves both circle arc center and circle arc center close */
-typedef struct _cgm_CircleArcElement
-{
-    short lineWidth;
-    cgm_Type lineType;
-    short lineColor[CGM_RGB];
-    short centerX;
-    short centerY;
-    short startX;
-    short startY;
-    short endX;
-    short endY;
-    short radius;
-} cgm_CircleArcElement;
-
-/* Serves both circle arc center and circle arc center close */
-typedef struct _cgm_CircleArcElementClose
+typedef struct _cgm_CircularArcElementClose
 {
     short fillColor[CGM_RGB];
     cgm_InteriorStyle interiorStyle;
@@ -157,7 +134,6 @@ NITFAPI(void) cgm_Element_destruct(cgm_Element** element);
  *  'data' field (obviously).
  */
 
-NITFAPI(cgm_Element*) cgm_CircleArcElement_construct(nitf_Error* error);
 
 NITFAPI(void) cgm_Element_print(cgm_Element* elem);
 

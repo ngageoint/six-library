@@ -11,7 +11,7 @@ typedef struct _cgm_Text
     short x;
     short y;
     char* str;
-
+    
 } cgm_Text;
 
 NITF_CXX_ENDGUARD

@@ -12,7 +12,7 @@ typedef struct _cgm_Rectangle
     short y1;
     short x2;
     short y2;
-
+    
 } cgm_Rectangle;
 
 

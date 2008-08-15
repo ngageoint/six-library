@@ -16,7 +16,7 @@ NITFAPI(cgm_Element*) cgm_Element_construct(nitf_Error* error)
     element->destroy = NULL;
     element->data = NULL;
     return element;
-
+    
 }
 
 NITFAPI(void) cgm_Element_destruct(cgm_Element** element)
@@ -47,39 +47,4 @@ NITFPRIV(void) basicDestroy(NITF_DATA* data)
     NITF_FREE( data );
 }
 
-
-NITFAPI(cgm_Element*) cgm_CircleArcElement_construct(nitf_Error* error)
-{
-    cgm_Element* element = cgm_Element_construct(error);
-    if (element)
-    {
-	cgm_CircleArcElement* circle = (cgm_CircleArcElement*)
-	    NITF_MALLOC(sizeof(cgm_CircleArcElement));
-	if (!circle)
-	{
-	    NITF_FREE(element);
-	    return NULL;
-	    
-	}
-	circle->centerX = -1;
-	circle->centerY = -1;
-
-	circle->startX = -1;
-	circle->startY = -1;
-
-	circle->endX = -1;
-	circle->endY = -1;
-
-	circle->radius = -1;
-
-	//circle->closeType = -1;
-	element->data = (NITF_DATA*)circle;
-
-    }
-
-    element->destroy = &basicDestroy;
-	    
-    return element;
-    
-}
 

@@ -18,7 +18,7 @@ typedef enum _cgm_Color
     CGM_G = 1,
     CGM_B = 2,
     CGM_RGB = 3,
-
+    
 } cgm_Color;
 
 
@@ -40,7 +40,7 @@ typedef enum _cgm_InteriorStyle
     CGM_IS_UNKNOWN,
     CGM_IS_HATCH,
     CGM_IS_EMPTY
-
+    
 } cgm_InteriorStyle;
 
 typedef enum _cgm_HatchType
@@ -72,7 +72,7 @@ typedef enum _cgm_EdgeCloseType
     CGM_EDGE_CLOSE_TYPE_VISIBLE,
     CGM_EDGE_CLOSE_TYPE_CLOSE_INVISIBLE,
     CGM_EDGE_CLOSE_TYPE_CLOSE_VISIBLE
-
+    
 } cgm_EdgeCloseType;
 
 NITF_CXX_ENDGUARD

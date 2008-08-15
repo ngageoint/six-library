@@ -35,7 +35,7 @@ typedef struct _cgm_PictureBody
     NITF_BOOL transparency;
     
     short auxColor[CGM_RGB];
-
+    
     nitf_List* elements;
     
 } cgm_PictureBody;

@@ -20,56 +20,30 @@
  *
  */
 
+#ifndef __CGM_CIRCULAR_ARC_ELEMENT_H__
+#define __CGM_CIRCULAR_ARC_ELEMENT_H__
 
-#include "cgm/Metafile.h"
+#include "cgm/Elements.h"
 
+NITF_CXX_GUARD
 
-NITFAPI(cgm_Metafile*) cgm_Metafile_construct(nitf_Error* error)
+typedef struct _cgm_CircularArcElement
 {
-    cgm_Metafile* mf = (cgm_Metafile*) NITF_MALLOC( sizeof(cgm_Metafile) );
-    if (!mf)
-    {
-	nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), 
-			NITF_CTXT, NITF_ERR_MEMORY);
-	return NULL;
-    }
-    
-    mf->name = NULL;
-    mf->fontList = NULL;
-    mf->description = NULL;
-    mf->picture = NULL;
-    
-    return mf;
-    
-}
-NITFAPI(void) cgm_Metafile_destruct(cgm_Metafile** mf)
-{
-    if (*mf)
-    {
-        
-	if ( (*mf)->picture )
-	{
-	    cgm_Picture_destruct( & (*mf)->picture );
-	}
-        
-	if ( (*mf)->fontList )
-	{
-	    /* We actually have to walk this to delete it */
-	    
-	    nitf_List_destruct(& (*mf)->fontList );
-	}
-        
-	if ( (*mf)->name )
-	{
-	    NITF_FREE( (*mf)->name );
-	}
-        
-	if ( (*mf)->description )
-	{
-	    NITF_FREE( (*mf)->description );
-	}
-        
-	NITF_FREE( *mf );
-	*mf = NULL;
-    }
-}
+    short lineWidth;
+    cgm_Type lineType;
+    short lineColor[CGM_RGB];
+    short centerX;
+    short centerY;
+    short startX;
+    short startY;
+    short endX;
+    short endY;
+    short radius;
+} cgm_CircularArcElement;
+
+NITFAPI(cgm_Element*) cgm_CircularArcElement_construct(nitf_Error* error);
+
+
+NITF_CXX_ENDGUARD
+
+#endif

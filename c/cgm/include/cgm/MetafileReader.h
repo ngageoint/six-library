@@ -32,6 +32,7 @@
 #include "cgm/RectangleElement.h"
 #include "cgm/CircleElement.h"
 #include "cgm/EllipseElement.h"
+#include "cgm/CircularArcElement.h"
 #include "cgm/EllipticalArcElement.h"
 
 NITF_CXX_GUARD
@@ -49,7 +50,7 @@ typedef struct _cgm_ParseContext
     short width;
     cgm_HatchType hatchIndex;
     cgm_Type type;
-
+    
 } cgm_ParseContext;
 
 
@@ -73,10 +74,10 @@ typedef struct _cgm_MetafileReader
 } cgm_MetafileReader;
 
 NITFAPI(cgm_MetafileReader*) 
-    cgm_MetafileReader_construct(nitf_Error* error);
+cgm_MetafileReader_construct(nitf_Error* error);
 
 NITFAPI(void) 
-    cgm_MetafileReader_destruct(cgm_MetafileReader** reader);
+cgm_MetafileReader_destruct(cgm_MetafileReader** reader);
 
 NITFAPI(cgm_Metafile*) cgm_MetafileReader_read(cgm_MetafileReader* reader,
 					       nitf_IOHandle in, 

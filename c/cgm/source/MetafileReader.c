@@ -25,28 +25,28 @@
 #define DEBUG_CGM 1
 
 #ifdef DEBUG_CGM
-#    define DBG_TRACE() \
-printf("%s(%d, %d, %d)\n", __PRETTY_FUNCTION__, classType, shortCode, len)
+#    define DBG_TRACE()                                                 \
+    printf("%s(%d, %d, %d)\n", __PRETTY_FUNCTION__, classType, shortCode, len)
 
 #else
 /* Do nothing */
 #    define DBG_TRACE() 
 #endif
 
-#define FILL_EDGE_ATTS(ELEM, PC) \
-{ \
-    memcpy(ELEM->fillColor, PC->fillColor, 6); \
-    ELEM->interiorStyle = PC->style; \
-    ELEM->edgeVisibility = PC->visibility; \
-    ELEM->edgeWidth = PC->width; \
-    ELEM->edgeType = PC->type; \
-    memcpy(ELEM->edgeColor, PC->color, 6); \
+#define FILL_EDGE_ATTS(ELEM, PC)                \
+{                                           \
+    memcpy(ELEM->fillColor, PC->fillColor, 6);          \
+    ELEM->interiorStyle = PC->style;                    \
+    ELEM->edgeVisibility = PC->visibility;              \
+    ELEM->edgeWidth = PC->width;                        \
+    ELEM->edgeType = PC->type;                          \
+    memcpy(ELEM->edgeColor, PC->color, 6);              \
 }
 
-#define FILL_LINE_ATTS(ELEM, PC) \
-{ \
-    ELEM->lineWidth = pc->width; \
-    ELEM->lineType = pc->type; \
+#define FILL_LINE_ATTS(ELEM, PC)                \
+{                                           \
+    ELEM->lineWidth = pc->width;            \
+    ELEM->lineType = pc->type;              \
     memcpy( ELEM->lineColor, PC->color, 6); \
 }
 
@@ -56,14 +56,14 @@ NITFPRIV(void) resetParseContext(cgm_ParseContext* pc)
     pc->fillColor[CGM_R] = -1;
     pc->fillColor[CGM_G] = -1;
     pc->fillColor[CGM_B] = -1;
-
+    
     pc->color[CGM_R] = -1;
     pc->color[CGM_G] = -1;
     pc->color[CGM_B] = -1;
-
+    
     pc->style = CGM_IS_NOT_SET;
     pc->height = pc->width = pc->index = -1;
-
+    
     pc->orientation[0] = -1;
     pc->orientation[1] = -1;
     pc->orientation[2] = -1;
@@ -94,16 +94,16 @@ NITFPRIV(void) printParseContext(cgm_ParseContext* pc)
 
     if (pc->style != CGM_IS_NOT_SET)
 	printf("\tInterior Style: [%d]\n", pc->style);
-
+    
     if (pc->height != -1)
 	printf("\tCharacter Height: [%d]\n", pc->height);
 
     if (pc->width != -1)
 	printf("\tEdge/Line Width: [%d]\n", pc->width);
-
+    
     if (pc->index != -1)
 	printf("\tFont index: [%d]\n", pc->index);
-
+    
     if (pc->orientation[0] != -1)
     {
 	printf("\tCharacter Orientation (%d, %d, %d, %d)\n",
@@ -112,10 +112,10 @@ NITFPRIV(void) printParseContext(cgm_ParseContext* pc)
 	       pc->orientation[2],
 	       pc->orientation[3]);
     }
-
+    
     if (pc->visibility != -1)
 	printf("\tEdge Visibility: [%d]\n", pc->visibility);
-
+    
     if (pc->type != CGM_TYPE_NOT_SET)
 	printf("\tEdge/Line Type: [%d]\n", pc->type);
     
@@ -137,16 +137,16 @@ NITFPRIV(cgm_Rectangle*) readRectangle(char* b, int len, nitf_Error* error)
     cgm_Rectangle* rectangle = cgm_Rectangle_construct(error);
     if (!rectangle)
 	return NULL;
-
+    
     memcpy(&x1, &b[0], 2);
     rectangle->x1 = NITF_NTOHS(x1);
-
+    
     memcpy(&y1, &b[2], 2);
     rectangle->y1 = NITF_NTOHS(y1);
 
     memcpy(&x2, &b[4], 2);
     rectangle->x2 = NITF_NTOHS(x2);
-
+    
     memcpy(&y2, &b[6], 2);
     rectangle->y2 = NITF_NTOHS(x2);
     return rectangle;
@@ -183,7 +183,7 @@ NITFPRIV(cgm_VertexClose*) readVertexClose(char* b, nitf_Error* error)
 
 NITFPRIV(nitf_List*) readVertices(char* b, int length, nitf_Error* error)
 {
-
+    
     int i = 0;
     assert(length % 4 == 0);
     nitf_List* list;
@@ -191,10 +191,10 @@ NITFPRIV(nitf_List*) readVertices(char* b, int length, nitf_Error* error)
     
     if (!list)
 	return NITF_FAILURE;
-
+    
     for (i = 0; i < length; i+=4)
     {
-
+        
 	cgm_Vertex* v = readVertex(&b[i], error);
 	if (!v)
 	{
@@ -228,14 +228,14 @@ NITFPRIV(char*) readString(char* b, int length)
     str[slen] = 0;
     memcpy(str, &b[1], slen);
     return str;
-
+    
 }
 
 
 /* TODO: Handle edge out flag */
 NITFPRIV(nitf_List*) readCloseVertices(char* b, int length, nitf_Error* error)
 {
-
+    
     int i = 0;
     assert(length % 4 == 0);
     nitf_List* list;
@@ -243,7 +243,7 @@ NITFPRIV(nitf_List*) readCloseVertices(char* b, int length, nitf_Error* error)
     
     if (!list)
 	return NITF_FAILURE;
-
+    
     for (i = 0; i < length; i+=6)
     {
 	cgm_VertexClose* v = readVertexClose(&b[i], error);
@@ -265,7 +265,7 @@ NITFPRIV(nitf_List*) readCloseVertices(char* b, int length, nitf_Error* error)
 
 NITF_BOOL beginMetafile(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
-
+    
     DBG_TRACE();
     mf->name = readString(b, len);
     return NITF_SUCCESS;
@@ -294,15 +294,15 @@ NITF_BOOL beginPicture(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, in
 			 NITF_ERR_INVALID_OBJECT,
 			 "Picture Body was already set");
 	return NITF_FAILURE;
-
+        
     }
     mf->picture = cgm_Picture_construct(error);
     if (!mf->picture)
 	return NITF_FAILURE;
-
+    
     mf->picture->name = readString(b, len);
-
-
+    
+    
     return NITF_SUCCESS;
 }
 
@@ -311,7 +311,7 @@ NITF_BOOL beginPictureBody(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
     DBG_TRACE();
     /* We really do nothing here yet */
     assert(mf->picture);
-
+    
     if (mf->picture->body != NULL)
     {
 	nitf_Error_initf(error,
@@ -319,11 +319,11 @@ NITF_BOOL beginPictureBody(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
 			 NITF_ERR_INVALID_OBJECT,
 			 "Picture Body was already set");
 	return NITF_FAILURE;
-
+        
     }
-
+    
     mf->picture->body = cgm_PictureBody_construct(error);
-
+    
     return NITF_SUCCESS;
 }
 
@@ -348,7 +348,7 @@ NITF_BOOL metafileList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, in
     mf->elementList[0] = readShort(&b[0]);
     mf->elementList[1] = readShort(&b[2]);
     mf->elementList[2] = readShort(&b[4]);
-
+    
     return NITF_SUCCESS;
 }
 
@@ -358,7 +358,7 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
     int j = 1;
     int total = 0;
     char* p;
-
+    
     DBG_TRACE();
     
     if (mf->fontList != NULL)
@@ -368,11 +368,11 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 			 NITF_ERR_INVALID_OBJECT,
 			 "Font list was already set");
 	return NITF_FAILURE;
-
+        
     }
     mf->fontList = nitf_List_construct( error );
     if (!mf->fontList ) return NITF_FAILURE;
-
+    
     while (1)
     {
 	assert ( i <= len);
@@ -392,9 +392,9 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 	/* Actually, this could get complicated, need to destruct then */
 	if (!nitf_List_pushBack(mf->fontList, p, error))
 	    return NITF_FAILURE;
-
+        
     }
-
+    
     return NITF_SUCCESS;
 }
 
@@ -435,9 +435,9 @@ NITF_BOOL vdcExtent(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int s
 	return NITF_FAILURE;
 	
     }
-
+    
     mf->picture->vdcExtent = readRectangle(b, len, error);
-
+    
     return NITF_SUCCESS;
 }
 
@@ -452,7 +452,7 @@ NITF_BOOL characterHeight(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 			 pc->height);
 	return NITF_FAILURE;
     }
-
+    
     pc->height = readShort(b);
     return NITF_SUCCESS;
 }
@@ -460,7 +460,7 @@ NITF_BOOL characterHeight(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 NITF_BOOL interiorStyle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     short s;
-	    
+    
     DBG_TRACE();
     s = readShort(b);
     /*  Make sure its not already set  */
@@ -473,9 +473,9 @@ NITF_BOOL interiorStyle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, i
 			 pc->style);
 	return NITF_FAILURE;
     }
-
+    
     pc->style = (cgm_InteriorStyle)s;
-
+    
     return NITF_SUCCESS;
 }
 
@@ -484,39 +484,39 @@ NITF_BOOL auxColor(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
     DBG_TRACE();
     /* TODO: handle multiple pix */
     readRGB(b, len, mf->picture->body->auxColor);
-
+    
     return NITF_SUCCESS;
 }
 NITF_BOOL transparency(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
     mf->picture->body->transparency = readShort(b);
-
+    
     return NITF_SUCCESS;
 }
 NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
-
+    
     cgm_PolyLineElement* poly;
     cgm_Element* elem = cgm_PolyLineElement_construct(error);
     if (!elem) return NITF_FAILURE;
     poly = (cgm_PolyLineElement*) elem->data;
-
+    
     DBG_TRACE();
     FILL_LINE_ATTS(poly, pc);
-
+    
     poly->vertices = readVertices(b, len, error);
     if (! poly->vertices )
 	return NITF_FAILURE;
-
+    
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
 
-
+    
     cgm_Element_print(elem);
     resetParseContext(pc);
-
-
+    
+    
     return NITF_SUCCESS;
 }
 NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
@@ -530,7 +530,7 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int
     te->text->y = readShort(&b[2]);
     _1 = readShort(&b[4]);
     te->text->str = readString(&b[6], len - 6);
-
+    
     DBG_TRACE();
     //printParseContext(pc);
     memcpy(te->color, pc->color, 6);
@@ -543,10 +543,10 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int
 
     cgm_Element_print(elem);
     resetParseContext(pc);
-
+    
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
-
+    
     return NITF_SUCCESS;
 }
 NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
@@ -555,22 +555,19 @@ NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
     cgm_Element* elem = cgm_PolygonElement_construct(error);
     if (!elem) return NITF_FAILURE;
     poly = (cgm_PolygonElement*) elem->data;
-
+    
     DBG_TRACE();
     FILL_EDGE_ATTS(poly, pc);
-
-    
-
     poly->vertices = readVertices(b, len, error);
     if (! poly->vertices )
 	return NITF_FAILURE;
-
+    
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
-
+    
     cgm_Element_print(elem);
     resetParseContext(pc);
-
+    
     return NITF_SUCCESS;
 }
 
@@ -584,22 +581,19 @@ NITF_BOOL polySet(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
 
     DBG_TRACE();
     FILL_EDGE_ATTS(poly, pc);
-
-    
-
     poly->vertices = readCloseVertices(b, len, error);
     if (! poly->vertices )
 	return NITF_FAILURE;
-
+    
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
-
+    
     cgm_Element_print(elem);
     resetParseContext(pc);
-
+    
     return NITF_SUCCESS;
-
-
+    
+    
 }
 NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
@@ -607,8 +601,8 @@ NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
     cgm_Element* elem = cgm_RectangleElement_construct(error);
     if (!elem) return NITF_FAILURE;
     rect = (cgm_RectangleElement*)elem->data;
-
-
+    
+    
     DBG_TRACE();
     printParseContext(pc);
     
@@ -620,10 +614,10 @@ NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType
     
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
-
+    
     cgm_Element_print(elem);
     resetParseContext(pc);
-
+    
     return NITF_SUCCESS;
 }
 NITF_BOOL circle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
@@ -632,26 +626,45 @@ NITF_BOOL circle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shor
     cgm_Element* elem = cgm_CircleElement_construct(error);
     if (!elem) return NITF_FAILURE;
     circle = (cgm_CircleElement*)elem->data;
-
+    
     DBG_TRACE();
     FILL_EDGE_ATTS(circle, pc);
     circle->centerX = readShort(b);
     circle->centerY = readShort(&b[2]);
     circle->radius = readShort(&b[4]);
     cgm_Element_print(elem);
-
+    
     //printParseContext(pc);
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
-
-
+    
+    
     resetParseContext(pc);
     return NITF_SUCCESS;
 }
 NITF_BOOL circularArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    cgm_CircularArcElement* circularArc;
+    cgm_Element* elem = cgm_CircularArcElement_construct(error);
+    if (!elem) return NITF_FAILURE;
+    circularArc = (cgm_CircularArcElement*)elem->data;
+
     DBG_TRACE();
-    //printParseContext(pc);
+    FILL_LINE_ATTS(circularArc, pc);
+    circularArc->centerX = readShort(b);
+    circularArc->centerY = readShort(&b[2]);
+    circularArc->startX = readShort(&b[4]);
+    circularArc->startY = readShort(&b[6]);
+    circularArc->endX = readShort(&b[8]);
+    circularArc->endY = readShort(&b[10]);
+    circularArc->radius = readShort(&b[10]);
+
+    cgm_Element_print(elem);
+
+    if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
+	return NITF_FAILURE;
+
+
     resetParseContext(pc);
     return NITF_SUCCESS;
 }
@@ -660,7 +673,7 @@ NITF_BOOL circularArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int cla
     DBG_TRACE();
     //printParseContext(pc);
     resetParseContext(pc);
-
+    
     return NITF_SUCCESS;
 }
 NITF_BOOL ellipse(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
@@ -712,7 +725,6 @@ NITF_BOOL ellipticalArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc, int classT
 
     cgm_Element_print(elem);
 
-    //printParseContext(pc);
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
 

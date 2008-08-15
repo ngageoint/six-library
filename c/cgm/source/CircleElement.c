@@ -20,7 +20,7 @@ NITFPRIV(void) print(NITF_DATA* data)
 	   circle->edgeColor[CGM_B]);
     printf("\tC O(%d, %d), R(%d)\n",
 	   circle->centerX, circle->centerY, circle->radius);
-
+    
 }
 NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error)
 {
@@ -42,7 +42,7 @@ NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error)
 	circle->edgeVisibility = -1;
 	circle->edgeWidth = -1;
 	circle->edgeType = CGM_TYPE_NOT_SET;
-
+        
 	circle->centerX = -1;
 	circle->centerY = -1;
 	circle->radius = -1;
@@ -52,5 +52,5 @@ NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error)
     element->destroy = &destroy;
     
     return element;
-
+    
 }

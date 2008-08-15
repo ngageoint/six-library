@@ -36,7 +36,7 @@ typedef struct _cgm_Picture
     cgm_WidthSpecificationMode lineWidthSpec;
     cgm_Rectangle* vdcExtent;
     cgm_PictureBody* body;
-
+    
 } cgm_Picture;
 
 NITFAPI(cgm_Picture*) cgm_Picture_construct(nitf_Error* error);

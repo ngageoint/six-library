@@ -32,27 +32,27 @@ typedef struct _cgm_Metafile
 {
     /* The metafile title */
     char* name;
-
+    
     /* NITF only supports CGM version 1 */
     short version;
-
+    
     /* This is required to be 1 -1 1*/
     short elementList[3];
-
+    
     /* This is the description of the metafile */
     char* description;
- 
+    
     /* List of fonts */
     nitf_List* fontList;
-
+    
     /* Picture */
     cgm_Picture* picture;
-
+    
 } cgm_Metafile;
 
 NITFAPI(cgm_Metafile*) cgm_Metafile_construct(nitf_Error* error);
 NITFAPI(void) cgm_Metafile_destruct(cgm_Metafile** mf);
-				 
+
 NITF_CXX_ENDGUARD
 
 #endif
