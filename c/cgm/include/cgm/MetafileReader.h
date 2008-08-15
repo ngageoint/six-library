@@ -32,6 +32,7 @@
 #include "cgm/RectangleElement.h"
 #include "cgm/CircleElement.h"
 #include "cgm/EllipseElement.h"
+#include "cgm/EllipticalArcElement.h"
 
 NITF_CXX_GUARD
 

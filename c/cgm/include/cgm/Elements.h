@@ -67,23 +67,6 @@ typedef struct _cgm_Element
 
 
 
-/* Serves both elliptical arc and elliptical arc close */
-typedef struct _cgm_EllipticalArcElement
-{
-    short lineWidth;
-    cgm_Type lineType;
-    short lineColor[CGM_RGB];
-    short centerX;
-    short centerY;
-    short end1X;
-    short end1Y;
-    short end2X;
-    short end2Y;
-    short startVectorX;
-    short startVectorY;
-    short endVectorX;
-    short endVectorY;
-} cgm_EllipticalArcElement;
 
 typedef struct _cgm_EllipticalArcCloseElement
 {
@@ -174,9 +157,6 @@ NITFAPI(void) cgm_Element_destruct(cgm_Element** element);
  *  'data' field (obviously).
  */
 
-NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error);
-NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error);
-NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error);
 NITFAPI(cgm_Element*) cgm_CircleArcElement_construct(nitf_Error* error);
 
 NITFAPI(void) cgm_Element_print(cgm_Element* elem);
