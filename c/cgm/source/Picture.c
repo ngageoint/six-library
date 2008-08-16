@@ -23,7 +23,8 @@
 #include "cgm/Picture.h"
 
 
-NITFAPI(cgm_Picture*) cgm_Picture_construct(nitf_Error* error)
+NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
+                                            nitf_Error* error)
 {
     cgm_Picture* picture = (cgm_Picture*)NITF_MALLOC(sizeof(cgm_Picture));
     if (!picture)
@@ -40,6 +41,12 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(nitf_Error* error)
     picture->vdcExtent = NULL;
 
     picture->body = NULL;
+
+    if (name)
+    {
+	picture->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
+	strcpy(picture->name, name);
+    }
 
     /*cgm_PictureBody_construct(error);
     if (picture->body == NULL)

@@ -25,13 +25,8 @@
 #define DEBUG_CGM 1
 
 #ifdef DEBUG_CGM
-#ifndef WIN32
 #    define DBG_TRACE()                                                 \
-    printf("%s(%d, %d, %d)\n", __PRETTY_FUNCTION__, classType, shortCode, len)
-#else
-#    define DBG_TRACE()                                                 \
-    printf("%s(%d, %d, %d)\n", __FUNCTION__, classType, shortCode, len)
-#endif
+    printf("%s(%d, %d, %d)\n", NITF_FUNC, classType, shortCode, len)
 #else
 /* Do nothing */
 #    define DBG_TRACE() 
@@ -320,7 +315,7 @@ NITF_BOOL endPicture(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int 
 NITF_BOOL beginPicture(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
     DBG_TRACE();
-    
+    char* name;
     if (mf->picture != NULL)
     {
 	nitf_Error_initf(error,
@@ -330,12 +325,10 @@ NITF_BOOL beginPicture(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, in
 	return NITF_FAILURE;
         
     }
-    mf->picture = cgm_Picture_construct(error);
+    name = readString(b, len);
+    mf->picture = cgm_Metafile_createPicture(mf, name, error);
     if (!mf->picture)
 	return NITF_FAILURE;
-    
-    mf->picture->name = readString(b, len);
-    
     
     return NITF_SUCCESS;
 }
@@ -1189,11 +1182,9 @@ NITFAPI(cgm_Metafile*) cgm_MetafileReader_read(cgm_MetafileReader* reader,
     /*  Try and alloc our model */
     cgm_Metafile* mf = NULL;
     cgm_ParseContext parseContext;
-    
+    error->level = NITF_NO_ERR;    
+    mf = cgm_Metafile_construct(NULL, NULL, error);
     /* reset the error level */
-    error->level = NITF_NO_ERR;
-    
-    mf = cgm_Metafile_construct(error);
     if (!mf)
 	return NULL;
 

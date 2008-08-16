@@ -50,8 +50,17 @@ typedef struct _cgm_Metafile
     
 } cgm_Metafile;
 
-NITFAPI(cgm_Metafile*) cgm_Metafile_construct(nitf_Error* error);
+NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
+                                              const char* description,
+                                              nitf_Error* error);
+
 NITFAPI(void) cgm_Metafile_destruct(cgm_Metafile** mf);
+
+NITFAPI(cgm_Picture*) cgm_Metafile_createPicture(cgm_Metafile* metafile,
+                                                 const char* name,
+                                                 nitf_Error* error);
+
+
 
 NITF_CXX_ENDGUARD
 

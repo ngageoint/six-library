@@ -24,7 +24,9 @@
 #include "cgm/Metafile.h"
 
 
-NITFAPI(cgm_Metafile*) cgm_Metafile_construct(nitf_Error* error)
+NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
+                                              const char* description,
+                                              nitf_Error* error)
 {
     cgm_Metafile* mf = (cgm_Metafile*) NITF_MALLOC( sizeof(cgm_Metafile) );
     if (!mf)
@@ -35,9 +37,29 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(nitf_Error* error)
     }
     
     mf->name = NULL;
+    mf->description = NULL;
+
+
+    mf->version = 1;
+    mf->elementList[0] = 1;
+    mf->elementList[1] = -1;
+    mf->elementList[2] = 1;
+    
     mf->fontList = NULL;
     mf->description = NULL;
     mf->picture = NULL;
+
+    if (name)
+    {
+	mf->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
+	strcpy(mf->name, name);
+    }
+
+    if (description)
+    {
+	mf->description = (char*)NITF_MALLOC( strlen( description ) + 1 );
+	strcpy(mf->description, description);
+    }
     
     return mf;
     
@@ -72,4 +94,16 @@ NITFAPI(void) cgm_Metafile_destruct(cgm_Metafile** mf)
 	NITF_FREE( *mf );
 	*mf = NULL;
     }
+}
+
+NITFAPI(cgm_Picture*) cgm_Metafile_createPicture(cgm_Metafile* metafile,
+                                                 const char* name,
+                                                 nitf_Error* error)
+{
+    cgm_Picture* picture = cgm_Picture_construct(name, error);
+    if (!picture)
+        return NULL;
+    
+    metafile->picture = picture;
+    return metafile->picture;
 }

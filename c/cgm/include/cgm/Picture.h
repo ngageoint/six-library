@@ -39,7 +39,8 @@ typedef struct _cgm_Picture
     
 } cgm_Picture;
 
-NITFAPI(cgm_Picture*) cgm_Picture_construct(nitf_Error* error);
+NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
+                                            nitf_Error* error);
 
 NITFAPI(void) cgm_Picture_destruct(cgm_Picture** picture);
 
