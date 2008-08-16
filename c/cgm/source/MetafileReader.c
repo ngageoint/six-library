@@ -178,7 +178,7 @@ NITFPRIV(cgm_Rectangle*) readRectangle(char* b, int len, nitf_Error* error)
     rectangle->x2 = NITF_NTOHS(x2);
     
     memcpy(&y2, &b[6], 2);
-    rectangle->y2 = NITF_NTOHS(x2);
+    rectangle->y2 = NITF_NTOHS(y2);
     return rectangle;
 }
 
