@@ -84,7 +84,7 @@ public final class IOHandle extends NITFObject
         super(address);
     }
 
-    synchronized long getIOHandle()
+    public synchronized long getIOHandle()
     {
         return getAddress();
     }
