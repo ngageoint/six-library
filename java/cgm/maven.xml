@@ -1,0 +1,32 @@
+<project xmlns:j="jelly:core" xmlns:maven="jelly:maven" xmlns:m="maven" xmlns:u="jelly:util">
+
+
+    <goal name="clean-all" prereqs="clean">
+        <echo>===========================================================</echo>
+        <echo>                         C L E A N - A L L                 </echo>
+        <echo>===========================================================</echo>
+        <delete dir="${javadoc.dir}"/>
+    </goal>
+
+    <!--Copy some ant tasks so we can use them everywhere-->
+    <goal name="javadoc">
+        <ant antfile="build.xml" target="javadoc"/>
+    </goal>
+    
+    <goal name="build">
+        <ant antfile="build.xml" target="build"/>
+    </goal>
+
+    <goal name="jni">
+        <ant antfile="build.xml" target="jni"/>
+    </goal>
+
+    <goal name="dist">
+        <ant antfile="build.xml" target="dist"/>
+    </goal>
+
+    <goal name="install">
+        <ant antfile="build.xml" target="install"/>
+    </goal>
+
+</project>

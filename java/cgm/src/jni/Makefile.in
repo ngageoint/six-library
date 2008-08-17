@@ -1,0 +1,74 @@
+##############################################
+# This will include the package information 
+# such as the VERSION, PACKAGE and LANGUAGE
+##############################################
+include build/Makefile
+
+# This target builds the library.  The targets are defined below...
+all: library
+##############################################
+#  The ".PHONY" directive tells make not to try 
+#  to find any dependencies.  This keeps it 
+#  working even if there's a file called "libs" 
+#  or "clean".
+.PHONY: libs shared docs clean raw install fresh
+
+############################################
+#  Make the library
+library:
+	cd source;make
+
+############################################
+#  Make the doxygen
+docs:
+	doxygen Doxyfile_1.3
+
+
+############################################
+#  Install the library(ies) and include files 
+#  in the appropriate place...  Notice we have
+#  an external script to do this.  Note the 
+#  "-l" option.  This makes the install script
+#  automatically make the symbolic links between 
+#  canonical names and versioned names.
+_LIBDIR = @prefix@/lib
+#_INCDIR = @prefix@/include/
+install:
+	echo "Installing ${PACKAGE}-${VERSION} to @prefix@"
+	mkdir -p ${_LIBDIR}
+	#mkdir -p ${_INCDIR}
+	#cp -R ./include/* ${_INCDIR}
+	#cp -R ./lib/@target@/* ${_LIBDIR}
+	( cd ./lib/@target@; tar cf - . | ( cd ${_LIBDIR} && tar xfB - ) )
+
+
+#############################################
+#  CAUTION: This will delete all the libraries, 
+#  not just for one platform...
+clean:
+	rm -f ./lib/@target@/*$(LIBEXT)
+	rm -f ./lib/@target@/*$(DSOEXT)
+	perl @build_dir@/rfk.pl -f
+
+
+fresh: 
+	make clean
+	make all
+
+#############################################
+# This target will clean out _everything_!  It removes all the
+# platform-specific build directories and all libraries...
+raw:
+	make clean
+	rm -f Makefile
+	rm -f source/Makefile
+	rm -f config.log
+	rm -f config.status
+	rm -f include/pcre*
+	rm -rf lib
+	rm -rf docs
+	rm -rf bin
+	rm -rf obj
+
+dist:
+	perl @build_dir@/makedist.pl $(PACKAGE) $(VERSION) @target@

@@ -1,0 +1,114 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>nitro-nitf</groupId>
+    <artifactId>nitf</artifactId>
+    <packaging>jar</packaging>
+    <version>2.0-RC1</version>
+    <inceptionYear>2004</inceptionYear>
+    <name>NITRO Java Bindings</name>
+    <url>http://nitro-nitf.sourceforge.net/</url>
+
+    <description>
+        NITRO is a full-fledged, extensible library solution for reading
+        and writing National Imagery Transmission Format (NITF) files, a
+        U.S. Department of Defense standard format. It is written in
+        cross-platform C, with bindings available for other languages.
+        NITRO was originally developed by General Dynamics - Advanced
+        Information Systems in 2004 and is continuously being improved.
+        It is now released as open-source software under the Lesser GNU
+        Public License.
+    </description>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License, Version 3</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>
+            svcm:svn:https://nitro-nitf.svn.sourceforge.net/svnroot/nitro-nitf
+        </connection>
+        <url>
+            http://nitro-nitf.svn.sourceforge.net/viewvc/nitro-nitf/
+        </url>
+    </scm>
+
+
+    <developers>
+        <developer>
+            <name>D. Pressel</name>
+            <id>gojira_1</id>
+            <email>gojira_1@users.sourceforge.net</email>
+        </developer>
+        <developer>
+            <name>Tom Zellman</name>
+            <id>tzellman</id>
+            <email>tzellman@users.sourceforge.net</email>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                        <debug>false</debug>
+                        <optimize>true</optimize>
+                        <showDeprecation>true</showDeprecation>
+                        <showWarnings>true</showWarnings>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <sourceDirectory>src/java</sourceDirectory>
+        <!-- for now, no tests will be run on build -->
+        <!-- testSourceDirectory>src/test</testSourceDirectory -->
+
+    </build>
+
+</project>

@@ -1,0 +1,39 @@
+#####################################################
+#_M__a__s__t__e__r_____M__a__k__e__f__i__l__e_______#
+#                                                   #
+#                                                   #
+#        - - - NITF Archive Project - - -           #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# This is the master makefile, and hence, the only  #
+# one that you should need to edit.  Please do not  #
+# change local makefiles without discussing it with #
+# the project maintainer                            #
+#                                                   #
+# To add new library files to the effort, add them  #
+# to the SOURCES variable.  Make sure that they are #
+# located in the source/ directory.  To add new     #
+# test cases, add them to the TESTS variable, and   #
+# place the tests in the tests/ subdirectory.       #
+#                                                   #
+#___________________________________________________#
+
+PACKAGE = nitf.jni
+MAJOR_VERSION = 2
+MINOR_VERSION = 0
+VERSION_SUFFIX = RC1
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+LANGUAGE = c
+DSOEXT  = .so
+MAINTAINER = tzellman@users.sourceforge.net
+LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
+EXTLIBS = -lnitf-c
+EXTINCLUDEPATH = -I@top_srcdir@/include \
+                 -I@top_srcdir@/../../c/nitf/include
+EXTLIBPATH =     -L@top_srcdir@/lib/@target@ \
+                 -L@top_srcdir@/../../c/nitf/lib/@target@
+CFGDEFS = @DEFS@
+
+SOURCES = \
+    cgm_JNI.c \
+    cgm_MetafileReader.c
+TESTS =
