@@ -56,7 +56,7 @@ NITFPROT(NITF_BOOL) nitf_ImageWriter_write(nitf_ImageWriter * writer,
     numImageBands += numMultispectralImageBands;
     rowSize = numCols * NITF_NBPP_TO_BYTES(numBitsPerPixel);
 
-    user = (nitf_Uint8 **) NITF_MALLOC(8 * numImageBands);
+    user = (nitf_Uint8 **) NITF_MALLOC(sizeof(nitf_Uint8*) * numImageBands);
     assert(user);
     for (band = 0; band < numImageBands; band++)
     {
