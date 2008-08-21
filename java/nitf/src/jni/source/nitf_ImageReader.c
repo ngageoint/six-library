@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_ImageReader.h"
 #include "nitf_JNI.h"
 

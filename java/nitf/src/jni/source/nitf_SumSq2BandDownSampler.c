@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_SumSq2BandDownSampler.h"
 #include "nitf_JNI.h"
 

@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_SegmentReader.h"
 #include "nitf_IOHandle.h"
 #include "nitf_JNI.h"

@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include <stdio.h>
 #include "nitf_IOHandle.h"
 

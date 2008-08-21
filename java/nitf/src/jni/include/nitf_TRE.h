@@ -7,6 +7,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef nitf_TRE_INVALID_ADDRESS
+#define nitf_TRE_INVALID_ADDRESS 0L
 /*
  * Class:     nitf_TRE
  * Method:    destructMemory

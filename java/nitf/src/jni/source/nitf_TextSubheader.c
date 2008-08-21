@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_TextSubheader.h"
 #include "nitf_JNI.h"
 

@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_PixelSkipDownSampler.h"
 #include "nitf_JNI.h"
 

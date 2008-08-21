@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_ComponentInfo.h"
 #include "nitf_JNI.h"
 

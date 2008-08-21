@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_JNI.h"
 
 NITFPROT(jobject) _GetFieldObj(JNIEnv * env, nitf_Field * field)

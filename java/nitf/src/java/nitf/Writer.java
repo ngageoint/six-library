@@ -133,7 +133,20 @@ public final class Writer extends DestructibleObject
      * @throws NITFException
      *             if a native error occurs
      */
-    public native synchronized SegmentWriter getNewGraphicWriter(int graphicNumber)
+    public native synchronized SegmentWriter getNewGraphicWriter(
+            int graphicNumber) throws NITFException;
+
+    /**
+     * Returns a SegmentWriter pertaining to the DataExtension segment at the
+     * given index
+     * 
+     * @param deNumber
+     *            the index of the segment
+     * @return a SegmentWriter pertaining to the DE at the given index
+     * @throws NITFException
+     *             if a native error occurs
+     */
+    public native synchronized SegmentWriter getNewDEWriter(int deNumber)
             throws NITFException;
 
     /**
@@ -146,4 +159,3 @@ public final class Writer extends DestructibleObject
     public native synchronized boolean write() throws NITFException;
 
 }
-

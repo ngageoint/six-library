@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_Writer.h"
 #include "nitf_JNI.h"
 
@@ -279,7 +280,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getNewImageWriter
                                           imageWriterClass,
                                           methodID, (jlong) imageWriter);
     
-    /* tell Java not to manage the ImageSource memory */
+    /* tell Java not to manage the memory */
     methodID = (*env)->GetMethodID(env, imageWriterClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, imageWriterObject, methodID, JNI_FALSE);
     
@@ -315,7 +316,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getNewTextWriter
                                             segmentWriterClass,
                                             methodID, (jlong) segmentWriter);
     
-    /* tell Java not to manage the ImageSource memory */
+    /* tell Java not to manage the memory */
     methodID = (*env)->GetMethodID(env, segmentWriterClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, segmentWriterObject, methodID, JNI_FALSE);
     
@@ -350,7 +351,38 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getNewGraphicWriter
                                             segmentWriterClass,
                                             methodID, (jlong) segmentWriter);
     
-    /* tell Java not to manage the ImageSource memory */
+    /* tell Java not to manage the memory */
+    methodID = (*env)->GetMethodID(env, segmentWriterClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, segmentWriterObject, methodID, JNI_FALSE);
+    
+    return segmentWriterObject;
+}
+
+
+JNIEXPORT jobject JNICALL Java_nitf_Writer_getNewDEWriter
+  (JNIEnv *env, jobject self, jint segmentNumber)
+{
+    nitf_Writer *writer = _GetObj(env, self);
+    nitf_SegmentWriter *segmentWriter;
+    nitf_Error error;
+    jclass segmentWriterClass = (*env)->FindClass(env, "nitf/SegmentWriter");
+    jobject segmentWriterObject;
+
+    jmethodID methodID =
+        (*env)->GetMethodID(env, segmentWriterClass, "<init>", "(J)V");
+    segmentWriter = nitf_Writer_newDEWriter(writer, segmentNumber, &error);
+
+    if (!segmentWriter)
+    {
+        _ThrowNITFException(env, error.message);
+        return NULL;
+    }
+
+    segmentWriterObject = (*env)->NewObject(env,
+                                            segmentWriterClass,
+                                            methodID, (jlong) segmentWriter);
+    
+    /* tell Java not to manage the memory */
     methodID = (*env)->GetMethodID(env, segmentWriterClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, segmentWriterObject, methodID, JNI_FALSE);
     

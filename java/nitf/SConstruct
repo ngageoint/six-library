@@ -22,10 +22,10 @@ print "Building %s for %s" % (LIB_NAME, env['PLATFORM'])
 sourceFiles = scons_utils.getSourceFiles('./src/jni/source', ext='.c', platform=env['PLATFORM'])
 
 #setup the path/lib vars
-depends = ['nitf-c']
+depends = ['nitf-c', 'jvm']
 build_libs = [{'source':sourceFiles, 'lib':'%s' % LIB_NAME, 'depends':depends, 'dynamic':True},]
 include_path = ['src/jni/include', '../../c/nitf/include',]
-lib_path = ['../../c/nitf/%s' % local_lib]
+lib_path = ['../../c/nitf/%s' % local_lib, '%s/lib' % os.environ.get('JAVA_HOME', '.')]
 env.Append(CPPPATH = include_path)
 
 env.Append(CCFLAGS = ['-DNITF_MODULE_EXPORTS'])

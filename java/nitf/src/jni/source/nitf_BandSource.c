@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_BandSource.h"
 #include "nitf_JNI.h"
 
@@ -36,12 +37,12 @@ NITFPRIV(int) getEnv(JavaVM** vm, JNIEnv** env)
 {
     jsize num = 0;
     jint status = JNI_GetCreatedJavaVMs(vm, 1, &num);
-    status = (**vm)->GetEnv(vm, (void**)env, JNI_VERSION_1_4);
+    status = (**vm)->GetEnv(*vm, (void**)env, JNI_VERSION_1_4);
     
     if (env == NULL && status == JNI_EDETACHED)
     {
         //attach the current thread
-        status = (**vm)->AttachCurrentThread(vm, (void**)env, NULL);
+        status = (**vm)->AttachCurrentThread(*vm, (void**)env, NULL);
         return 1;
     }
     return 0;
@@ -130,11 +131,6 @@ NITFPRIV(void) BandSource_destruct(NITF_DATA * data)
 }
 
 
-/*
- * Class:     nitf_BandSource
- * Method:    construct
- * Signature: ()V
- */
 JNIEXPORT void JNICALL Java_nitf_BandSource_construct
     (JNIEnv * env, jobject self)
 {
@@ -182,15 +178,9 @@ JNIEXPORT void JNICALL Java_nitf_BandSource_construct
 }
 
 
-/*
- * Class:     nitf_BandSource
- * Method:    destructMemory
- * Signature: ()V
- */
 JNIEXPORT void JNICALL Java_nitf_BandSource_destructMemory
     (JNIEnv * env, jobject self)
 {
-    printf("In destructoMemory:\n");
     nitf_BandSource *bandSource = _GetObj(env, self);
     if (bandSource)
         nitf_BandSource_destruct(&bandSource);

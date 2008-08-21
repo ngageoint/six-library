@@ -20,6 +20,7 @@
  *
  */
 
+#include <import/nitf.h>
 #include "nitf_DownSampler.h"
 #include "nitf_JNI.h"
 
