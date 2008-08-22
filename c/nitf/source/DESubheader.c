@@ -161,13 +161,11 @@ NITFAPI(void) nitf_DESubheader_destruct(nitf_DESubheader ** subhdr)
     if ((*subhdr)->securityGroup)
     {
         nitf_FileSecurity_destruct(&(*subhdr)->securityGroup);
-        NITF_FREE((*subhdr)->securityGroup);
         (*subhdr)->securityGroup = NULL;
     }
     if ((*subhdr)->subheaderFields)
     {
-        NITF_FREE((*subhdr)->subheaderFields);
-        (*subhdr)->subheaderFields = NULL;
+        nitf_TRE_destruct(&(*subhdr)->subheaderFields);
     }
 
     _NITF_DESTRUCT_FIELD(&(*subhdr), NITF_DE);

@@ -25,7 +25,11 @@
 
 NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * error)
 {
-	return NITF_SUCCESS;
+    /* create a new private data struct */
+    tre->priv = nitf_TREPrivateData_construct(error);
+    if (!tre->priv)
+        return NITF_FAILURE;
+    return NITF_SUCCESS;
 }
 
 
@@ -75,11 +79,7 @@ NITFPRIV(int) defaultRead(nitf_IOHandle io, nitf_Uint32 length, nitf_TRE * tre,
     
     tre->priv = nitf_TREPrivateData_construct(error);
     if (!tre->priv)
-    {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
         goto CATCH_ERROR;
-    }
     
     ((nitf_TREPrivateData*)tre->priv)->length = length;
     ((nitf_TREPrivateData*)tre->priv)->description = descr;

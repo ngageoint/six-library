@@ -661,42 +661,42 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOHandle ioHandle, nitf_Uint32 length,
 NITFPRIV(NITF_BOOL) basicInit(nitf_TRE * tre, const char* id, nitf_Error * error)
 {
     nitf_TREDescriptionSet* set;
-    const nitf_TREDescriptionInfo* desc;
-
+    const nitf_TREDescriptionInfo* descInfo;
+    
     assert(tre);
 
     set = (nitf_TREDescriptionSet*)tre->handler->data;
     
     /* create a new private data struct */
-    tre->priv = (nitf_TREPrivateData*)NITF_MALLOC(
-            sizeof(nitf_TREPrivateData));
-            
+    tre->priv = nitf_TREPrivateData_construct(error);
     if (!tre->priv)
-    {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                NITF_CTXT, NITF_ERR_MEMORY);
         return NITF_FAILURE;
-    }
 
-    /* search for the description with the given ID */
-    do
+    /* search for the description with the given ID - if one was provided */
+    if (id)
     {
-        desc = set->descriptions;
-        assert(desc);
-        if (strcmp(desc->name, id) == 0)
+        descInfo = set->descriptions;
+        while(descInfo && descInfo->name)
         {
-            /* we have a match! */
-            if (nitf_TREUtils_fillData(tre, desc->description, error))
-                return NITF_SUCCESS;
-            else
+            if (strcmp(descInfo->name, id) == 0)
             {
-                nitf_TRE_destruct(&tre);
-                return NITF_FAILURE;
+                /* we have a match! */
+                if (nitf_TREUtils_fillData(tre, descInfo->description, error))
+                    return NITF_SUCCESS;
+                else
+                {
+                    nitf_TRE_destruct(&tre);
+                    return NITF_FAILURE;
+                }
             }
+            descInfo++;
         }
     }
-    while (desc != NULL);
-
+    else
+    {
+        /* TODO - do we try a default one? */
+    }
+    
     nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
             "No matching id '%s' found!", id);
     return NITF_FAILURE;
