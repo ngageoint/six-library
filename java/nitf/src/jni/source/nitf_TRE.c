@@ -42,24 +42,27 @@ JNIEXPORT void JNICALL Java_nitf_TRE_destructMemory
 JNIEXPORT void JNICALL Java_nitf_TRE_construct
   (JNIEnv *env, jobject self, jstring jTag, jstring jId)
 {
-    nitf_TRE *tre = _GetObj(env, self);
+    nitf_TRE *tre = NULL;
     char* tag = NULL;
     char* id = NULL;
     nitf_Error error;
     
-    tag = (*env)->GetStringUTFChars(env, jTag, 0);
-    id = (*env)->GetStringUTFChars(env, jId, 0);
-
+    tag = jTag != NULL ? (*env)->GetStringUTFChars(env, jTag, 0) : NULL;
+    id = jId != NULL ? (*env)->GetStringUTFChars(env, jId, 0) : NULL;
+    
     tre = nitf_TRE_construct(tag, id, &error);
     
-    (*env)->ReleaseStringUTFChars(env, jTag, tag);
-    (*env)->ReleaseStringUTFChars(env, jId, id);
+    if (tag)
+        (*env)->ReleaseStringUTFChars(env, jTag, tag);
+    if (id)
+        (*env)->ReleaseStringUTFChars(env, jId, id);
     
     if (!tre)
     {
         _ThrowNITFException(env, error.message);
         return;
     }
+    
     _SetObj(env, self, tre);
 }
 

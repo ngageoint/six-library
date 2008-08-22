@@ -115,6 +115,14 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_newTextSegment
 
 /*
  * Class:     nitf_Record
+ * Method:    newDESegment
+ * Signature: ()Lnitf/DESegment;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_Record_newDESegment
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     nitf_Record
  * Method:    removeImageSegment
  * Signature: (I)V
  */

@@ -537,6 +537,33 @@ JNIEXPORT jobject JNICALL Java_nitf_Record_newTextSegment
     return NULL;
 }
 
+JNIEXPORT jobject JNICALL Java_nitf_Record_newDESegment
+  (JNIEnv *env, jobject self)
+{
+    nitf_Record *record = _GetObj(env, self);
+    nitf_DESegment *segment;
+    nitf_Error error;
+
+    jmethodID methodID;
+    jobject segmentObject;
+    jclass segmentClass = (*env)->FindClass(env, "nitf/DESegment");
+
+    segment = nitf_Record_newDataExtensionSegment(record, &error);
+    if (!segment)
+        goto CATCH_ERROR;
+
+    /* return it */
+    methodID = (*env)->GetMethodID(env, segmentClass, "<init>", "(J)V");
+    segmentObject = (*env)->NewObject(env,
+                                      segmentClass,
+                                      methodID, (jlong) segment);
+    return segmentObject;
+
+  CATCH_ERROR:
+    _ThrowNITFException(env, error.message);
+    return NULL;
+}
+
 
 /*
  * Class:     nitf_Record

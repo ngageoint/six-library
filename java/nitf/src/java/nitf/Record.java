@@ -23,7 +23,6 @@
 package nitf;
 
 import java.io.PrintStream;
-import java.util.List;
 
 /**
  * Represents a NITF record <p/> The Record object is a database-like record of
@@ -175,6 +174,14 @@ public final class Record extends CloneableObject
      */
     public native synchronized TextSegment newTextSegment()
             throws NITFException;
+
+    /**
+     * Adds a DESegment to this Record, and returns a handle to it <p/> NOTE:
+     * This also adds a componentInfo object to the FileHeader
+     * 
+     * @throws NITFException
+     */
+    public native synchronized DESegment newDESegment() throws NITFException;
 
     /**
      * This removes the segment at the given offset. The segment is

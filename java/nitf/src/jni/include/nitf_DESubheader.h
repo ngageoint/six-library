@@ -83,6 +83,14 @@ JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getSubheaderFields
 
 /*
  * Class:     nitf_DESubheader
+ * Method:    setSubheaderFields
+ * Signature: (Lnitf/TRE;)Lnitf/TRE;
+ */
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_setSubheaderFields
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     nitf_DESubheader
  * Method:    getDataLength
  * Signature: ()J
  */

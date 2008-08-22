@@ -168,6 +168,62 @@ JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getSubheaderFields
 }
 
 
+JNIEXPORT jobject JNICALL Java_nitf_DESubheader_setSubheaderFields
+  (JNIEnv *env, jobject self, jobject subheaderFields)
+{
+    nitf_DESubheader *header = _GetObj(env, self);
+    jobject tre = NULL;
+    jmethodID initMethod = NULL, managedMethod = NULL, addressMethod = NULL;
+    nitf_TRE *newTRE = NULL, *clonedTRE = NULL;
+    jclass thisClass = (*env)->GetObjectClass(env, self);
+    jclass treClass = (*env)->FindClass(env, "nitf/TRE");
+    nitf_Error error;
+    
+    initMethod = (*env)->GetMethodID(env, treClass, "<init>", "(J)V");
+    managedMethod = (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
+    addressMethod = (*env)->GetMethodID(env, treClass, "getAddress", "()J");
+    
+    /* get the address of the new one passed in */
+    newTRE = (nitf_TRE*) (*env)->CallLongMethod(env, subheaderFields,
+                                                addressMethod);
+    
+    /* clone it */
+    nitf_TRE_clone(newTRE, clonedTRE, &error);
+    if (!clonedTRE)
+    {
+        _ThrowNITFException(env, error.message);
+        return NULL;
+    }
+    
+    /* get the current TRE object, and tell Java we're done with it */
+    if (header->subheaderFields)
+    {
+        tre = (*env)->NewObject(env,
+                                treClass,
+                                initMethod,
+                                (jlong) header->subheaderFields);
+        
+        /* tell Java to manage it */
+        (*env)->CallVoidMethod(env, tre, managedMethod, JNI_TRUE);
+    }
+    
+    /* set the cloned one to the subheaderFields */
+    header->subheaderFields = clonedTRE;
+    
+    /* create a new TRE from the cloned one and tell Java not to manage it */
+    tre = (*env)->NewObject(env,
+                            treClass,
+                            initMethod,
+                            (jlong) clonedTRE);
+    
+    /* tell Java not to manage it */
+    (*env)->CallVoidMethod(env, tre, managedMethod, JNI_FALSE);
+    
+    return tre;
+}
+
+
+
 /*
  * Class:     nitf_DESubheader
  * Method:    getDataLength

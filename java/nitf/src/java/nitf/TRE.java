@@ -84,7 +84,7 @@ public final class TRE extends DestructibleObject
         super(address);
     }
 
-    protected native synchronized void destructMemory();
+    protected native void destructMemory();
 
     private native void construct(String tag, String id) throws NITFException;
 
@@ -93,14 +93,14 @@ public final class TRE extends DestructibleObject
      * 
      * @return
      */
-    public native synchronized int getCurrentSize();
+    public native int getCurrentSize();
 
     /**
      * Returns the TRE identifier tag
      * 
      * @return the TRE identifier tag
      */
-    public native synchronized String getTag();
+    public native String getTag();
 
     /**
      * Returns true if the given field tag exists within the TRE The tag is the
@@ -112,7 +112,7 @@ public final class TRE extends DestructibleObject
      *            the identifier for the field
      * @return true if the field exists, false otherwise
      */
-    public native synchronized boolean exists(String tag);
+    public native boolean exists(String tag);
 
     /**
      * Returns a List of Fields that match the given pattern.
@@ -125,8 +125,7 @@ public final class TRE extends DestructibleObject
      * @throws NITFException
      *             if an error occurs or no field with with the given tag exists
      */
-    public native synchronized List<FieldPair> find(String pattern)
-            throws NITFException;
+    public native List<FieldPair> find(String pattern) throws NITFException;
 
     /**
      * Returns the Field associated with the given tag
@@ -137,7 +136,7 @@ public final class TRE extends DestructibleObject
      * @throws NITFException
      *             if an error occurs
      */
-    public native synchronized Field getField(String tag) throws NITFException;
+    public native Field getField(String tag) throws NITFException;
 
     /**
      * Attempts to set the value of the field referenced by tag to the data
@@ -150,8 +149,24 @@ public final class TRE extends DestructibleObject
      * @throws NITFException
      *             if an error occurs
      */
-    public native synchronized boolean setField(String tag, byte[] data)
+    public native boolean setField(String tag, byte[] data)
             throws NITFException;
+
+    /**
+     * Attempts to set the value of the field referenced by tag to the data
+     * given. Throws a NITFException if an error occurs.
+     * 
+     * @param tag
+     *            the identifier for the field
+     * @param data
+     *            the String to set the field to
+     * @throws NITFException
+     *             if an error occurs
+     */
+    public boolean setField(String tag, String data) throws NITFException
+    {
+        return setField(tag, data.getBytes());
+    }
 
     /**
      * Prints the contents of the TRE to the given PrintStream
@@ -160,7 +175,7 @@ public final class TRE extends DestructibleObject
      *            PrintStream to print to
      * @throws NITFException
      */
-    public synchronized void print(PrintStream stream) throws NITFException
+    public void print(PrintStream stream) throws NITFException
     {
         stream.println("\n---------------" + getTag() + "---------------");
 
