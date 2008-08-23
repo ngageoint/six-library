@@ -302,7 +302,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
         }
 
         /* check to see if the data passed in is too large or too small */
-        if (dataLength> field->length || dataLength < 1)
+        if ((dataLength > field->length && !field->resizable) || dataLength < 1)
         {
             nitf_Error_init(error, "setValue -> invalid dataLength",
                     NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -466,14 +466,30 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
                     ((nitf_TREPrivateData*)tre->priv)->hash, cursor.tag_str);
             if (!pair || !pair->data)
             {
-                nitf_Field* field = nitf_Field_construct(cursor.length,
+                nitf_Field* field = NULL;
+                int fieldLength = cursor.length;
+                
+                /* If it is a GOBBLE length, there isn't really a standard
+                 * on how long it can be... therefore we'll just throw in
+                 * a field of size 1, just to have something...
+                 */
+                if (fieldLength == NITF_TRE_GOBBLE)
+                {
+                    fieldLength = 1;
+                }
+                
+                field = nitf_Field_construct(fieldLength,
                         cursor.desc_ptr->data_type,
                         error);
+                
+                /* set the field to be resizable later on */
+                if (cursor.length == NITF_TRE_GOBBLE)
+                    field->resizable = 1;
 
                 /* special case if BINARY... must set Raw Data */
                 if (cursor.desc_ptr->data_type == NITF_BINARY)
                 {
-                    char* tempBuf = (char *) NITF_MALLOC(cursor.length);
+                    char* tempBuf = (char *) NITF_MALLOC(fieldLength);
                     if (!tempBuf)
                     {
                         nitf_Field_destruct(&field);
@@ -482,16 +498,21 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
                         goto CATCH_ERROR;
                     }
 
-                    memset(tempBuf, 0, cursor.length);
+                    memset(tempBuf, 0, fieldLength);
                     nitf_Field_setRawData(field, (NITF_DATA *) tempBuf,
-                            cursor.length, error);
+                            fieldLength, error);
+                }
+                else if (cursor.desc_ptr->data_type == NITF_BCS_N)
+                {
+                    /* this will get zero/blank filled by the function */
+                    nitf_Field_setString(field, "0", error);
                 }
                 else
                 {
                     /* this will get zero/blank filled by the function */
-                    nitf_Field_setString(field, "", error);
+                    nitf_Field_setString(field, " ", error);
                 }
-
+                
                 /* add to hash if there wasn't an entry yet */
                 if (!pair)
                 {
@@ -728,7 +749,6 @@ NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
         return NITF_FAILURE;
     
     sourcePriv = (nitf_TREPrivateData*)source->priv;
-    trePriv = (nitf_TREPrivateData*)tre->priv;
     
     /* this clones the hash */
     if (!(trePriv = nitf_TREPrivateData_clone(sourcePriv, error)))
@@ -737,6 +757,8 @@ NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
     /* just copy over the optional length and static description */
     trePriv->length = sourcePriv->length;
     trePriv->description = sourcePriv->description;
+    
+    tre->priv = trePriv;
     
     return NITF_SUCCESS;
 }

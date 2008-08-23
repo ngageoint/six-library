@@ -202,7 +202,7 @@ JNIEXPORT jobject JNICALL Java_nitf_DESubheader_setSubheaderFields
                                 treClass,
                                 initMethod,
                                 (jlong) header->subheaderFields);
-
+    
         /* tell Java to manage it */
         (*env)->CallVoidMethod(env, tre, managedMethod, JNI_TRUE);
     }
@@ -210,7 +210,7 @@ JNIEXPORT jobject JNICALL Java_nitf_DESubheader_setSubheaderFields
     /* set the cloned one to the subheaderFields */
     header->subheaderFields = clonedTRE;
 
-    /* create a new TRE from the cloned one and tell Java not to manage it */
+    /* create a new Java TRE from the clone and tell Java not to manage it */
     tre = (*env)->NewObject(env,
                             treClass,
                             initMethod,

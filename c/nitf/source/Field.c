@@ -53,63 +53,38 @@ NITF_BOOL copyAndFillZeros(nitf_Field * field,
     return NITF_SUCCESS;
 }
 
-
 NITFAPI(nitf_Field *) nitf_Field_construct(size_t length,
         nitf_FieldType type,
         nitf_Error * error)
 {
-    char fill;
-    nitf_Field *field;
+    nitf_Field *field = NULL;
 
     /* punt on this for now */
     assert(length > 0);
 
-    fill = 0;                   /* Needed to avoid suprious warning */
     field = (nitf_Field *) NITF_MALLOC(sizeof(nitf_Field));
     if (!field)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
                         NITF_CTXT, NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
     }
-    else
-    {
-        field->length = length;
-        field->type = type;
+    
+    field->type = type;
+    field->raw = NULL;
+    field->length = 0; /* this gets set by resizeField */
+    field->resizable = 1; /* set to 1 so we can use the resize code */
+    
+    if (!nitf_Field_resizeField(field, length, error))
+        goto CATCH_ERROR;
+    
+    field->resizable = 0; /* set to 0 - the default value */
 
-        field->raw = (char *) NITF_MALLOC(length + 1);
-        if (!field->raw)
-        {
-            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                            NITF_CTXT, NITF_ERR_MEMORY);
-
-            nitf_Field_destruct(&field);
-            field = NULL;
-        }
-        else
-        {
-            field->raw[length] = 0; /* terminating null byte */
-            switch (field->type)
-            {
-                case NITF_BCS_A:
-                    fill = ' ';
-                    break;
-                case NITF_BCS_N:
-                    fill = '0';
-                    break;
-                case NITF_BINARY:
-                    fill = 0;
-                    break;
-                default:
-                    nitf_Error_initf(error, NITF_CTXT,
-                                     NITF_ERR_INVALID_PARAMETER,
-                                     "Invalid type [%d]", field->type);
-                    nitf_Field_destruct(&field);
-                    return NULL;
-            }
-            memset(field->raw, fill, field->length);
-        }
-    }
     return field;
+    
+  CATCH_ERROR:
+      if (field) nitf_Field_destruct(&field);
+      return NULL;
 }
 
 
@@ -124,6 +99,13 @@ NITFAPI(NITF_BOOL) nitf_Field_setRawData(nitf_Field * field,
         nitf_Error_init(error, "NULL data",
                         NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
         return NITF_FAILURE;
+    }
+    
+    /* if it's resizable and a different length, we resize */
+    if (field->resizable && dataLength != field->length)
+    {
+        if (!nitf_Field_resizeField(field, dataLength, error))
+            return NITF_FAILURE;
     }
 
     /*  Should we also offer adoption?  */
@@ -208,6 +190,13 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
 
     sprintf(numberBuffer, "%lu", (long) number);
     numberLen = strlen(numberBuffer);
+    
+    /* if it's resizable and a different length, we resize */
+    if (field->resizable && numberLen != field->length)
+    {
+        if (!nitf_Field_resizeField(field, numberLen, error))
+            return NITF_FAILURE;
+    }
 
     if (numberLen > field->length)
     {
@@ -249,6 +238,13 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
 
     sprintf(numberBuffer, "%llu", number);
     numberLen = strlen(numberBuffer);
+    
+    /* if it's resizable and a different length, we resize */
+    if (field->resizable && numberLen != field->length)
+    {
+        if (!nitf_Field_resizeField(field, numberLen, error))
+            return NITF_FAILURE;
+    }
 
     if (numberLen > field->length)
     {
@@ -289,6 +285,13 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt32(nitf_Field * field,
 
     sprintf(numberBuffer, "%ld", (long) number);
     numberLen = strlen(numberBuffer);
+    
+    /* if it's resizable and a different length, we resize */
+    if (field->resizable && numberLen != field->length)
+    {
+        if (!nitf_Field_resizeField(field, numberLen, error))
+            return NITF_FAILURE;
+    }
 
     if (numberLen > field->length)
     {
@@ -329,6 +332,13 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
 
     sprintf(numberBuffer, "%lld", number);
     numberLen = strlen(numberBuffer);
+    
+    /* if it's resizable and a different length, we resize */
+    if (field->resizable && numberLen != field->length)
+    {
+        if (!nitf_Field_resizeField(field, numberLen, error))
+            return NITF_FAILURE;
+    }
 
     if (numberLen > field->length)
     {
@@ -370,6 +380,14 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
     /*  Transfer and pad result (check for correct characters) */
 
     strLen = strlen(str);
+    
+    /* if it's resizable and a different length, we resize */
+    if (field->resizable && strLen != field->length)
+    {
+        if (!nitf_Field_resizeField(field, strLen, error))
+            return NITF_FAILURE;
+    }
+    
     if (strLen > field->length)
     {
         nitf_Error_init(error, "Value for field is too long",
@@ -398,13 +416,10 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
 NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
                                       const char *type, NITF_BOOL plus, double value, nitf_Error *error)
 {
-    nitf_Uint32 length;        /* Length of the field */
     nitf_Uint32 precision;     /* Format precision */
     nitf_Uint32 bufferLen;     /* Length of buffer */
     char *buffer;              /* Holds intermediate and final results */
     char fmt[64];              /* Format used */
-
-    length = field->length;
 
     /*  Check type */
 
@@ -421,7 +436,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
     /* Allocate buffer used to build value */
 
     /* The 64 covers the puncuation and exponent and is overkill */
-    bufferLen = length * 2 + 64;
+    bufferLen = field->length * 2 + 64;
     buffer = NITF_MALLOC(bufferLen + 1);
     if (buffer == NULL)
     {
@@ -437,16 +452,25 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
       number of digits in the whole part of the number.
     */
 
-    precision = length;   /* Must be too big */
+    precision = field->length;   /* Must be too big */
     if (plus)
         NITF_SNPRINTF(fmt, 64, "%%+-1.%dl%s", precision, type);
     else
         NITF_SNPRINTF(fmt, 64, "%%-1.%dl%s", precision, type);
     NITF_SNPRINTF(buffer, bufferLen, fmt, value);
-
-    if (strlen(buffer) > length)
+    
+    bufferLen = strlen(buffer);
+    
+    /* if it's resizable and a different length, we resize */
+    if (field->resizable && bufferLen != field->length)
     {
-        precision -= strlen(buffer) - length;
+        if (!nitf_Field_resizeField(field, bufferLen, error))
+            return NITF_FAILURE;
+    }
+
+    if (bufferLen > field->length)
+    {
+        precision -= strlen(buffer) - field->length;
         if (plus)
             NITF_SNPRINTF(fmt, 64, "%%+-1.%dl%s", precision, type);
         else
@@ -454,7 +478,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
         NITF_SNPRINTF(buffer, bufferLen, fmt, value);
     }
 
-    if (!nitf_Field_setRawData(field, buffer, length, error))
+    if (!nitf_Field_setRawData(field, buffer, field->length, error))
     {
         NITF_FREE(buffer);
         return(NITF_FAILURE);
@@ -505,6 +529,7 @@ NITFAPI(nitf_Field *) nitf_Field_clone(nitf_Field * source,
         field = nitf_Field_construct(source->length, source->type, error);
         if (field)
         {
+            field->resizable = source->resizable;
             /* set the data */
             if (!nitf_Field_setRawData
                     (field, (NITF_DATA *) source->raw, source->length, error))
@@ -1031,6 +1056,64 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
         default:
             printf("Invalid Field type [%d]\n", (int) field->type);
     }
+}
+
+
+NITFPROT(NITF_BOOL) nitf_Field_resizeField(nitf_Field *field,
+                                           size_t newLength,
+                                           nitf_Error *error)
+{
+    char fill = 0;
+    
+    /* it must be resizable */
+    if (!field->resizable)
+        return NITF_FAILURE;
+    
+    if (field && newLength != field->length)
+    {
+        if (field->raw)
+            NITF_FREE(field->raw);
+        
+        field->raw = NULL;
+        
+        /* re-malloc */
+        field->raw = (char *) NITF_MALLOC(newLength + 1);
+        if (!field->raw)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                            NITF_CTXT, NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
+        
+        /* set the new length */
+        field->length = newLength;
+        
+        field->raw[newLength] = 0; /* terminating null byte */
+        switch (field->type)
+        {
+            case NITF_BCS_A:
+                fill = ' ';
+                break;
+            case NITF_BCS_N:
+                fill = '0';
+                break;
+            case NITF_BINARY:
+                fill = 0;
+                break;
+            default:
+                nitf_Error_initf(error, NITF_CTXT,
+                                 NITF_ERR_INVALID_PARAMETER,
+                                 "Invalid type [%d]", field->type);
+                goto CATCH_ERROR;
+        }
+                
+        memset(field->raw, fill, field->length);
+    }
+    
+    return NITF_SUCCESS;
+    
+  CATCH_ERROR:
+    return NITF_FAILURE;
 }
 
 

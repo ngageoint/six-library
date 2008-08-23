@@ -80,6 +80,8 @@ typedef struct _nitf_Field
     nitf_FieldType type;
     char *raw;
     size_t length;
+    NITF_BOOL resizable; /* private member that states whether the field
+                            can be resized - default is false */
 }
 nitf_Field;
 
@@ -92,9 +94,7 @@ nitf_Field;
  *  \param error The error to populate on failure
  *  \return The newly created field, or NULL on failure.
  *
- *  Construct a new field.  Assigne each field to its corresponding
- *  member.  Return the field, unless an error occurred.
- *
+ *  Construct a new field.  Return the field, unless an error occurred.
  */
 NITFAPI(nitf_Field *) nitf_Field_construct(size_t length,
         nitf_FieldType type,
@@ -341,6 +341,16 @@ NITFPROT(NITF_BOOL) nitf_Field_resetLength(nitf_Field * field,
  *  \param field The field object
  */
 NITFPROT(void) nitf_Field_print(nitf_Field * field);
+
+
+/*!
+ * Resizes the field, if it is allowed to be resized. It returns false if the
+ * resizable member of the field is false. Otherwise, it attempts to resize
+ * the field, which will destroy the current raw data.
+ */
+NITFPROT(NITF_BOOL) nitf_Field_resizeField(nitf_Field *field,
+                                           size_t newLength,
+                                           nitf_Error *error);
 
 /*!
  *  TODO: Add documentation
