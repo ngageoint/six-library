@@ -23,26 +23,20 @@
 package nitf;
 
 /**
- * This class is a NITFObject that can be cloned.
- * <p/>
- * --------------------------
- * Note to Developer
- * --------------------------
- * Since this extends DestructibleObject, when it gets created,
- * it is referenced within the NITFUtil class.
- * When we clone things, we want a separate reference to that new
- * memory. Since DestructibleObject takes care of that for us, we
- * don't need anything separate in here that tracks the clone memory.
- * <p/>
- * For some objects that we may want to make cloneable from within
- * Java, we may not want to destruct the memory of the original, since
- * it might be part of a larger structure (for example, FileHeader is part
- * of a Record, and should not be destructed or else it will disrupct the parent
- * Record). However, we will want to be able to destruct the clone object.
- * For this reason, these particular objects will have to check to see if
- * itself is a clone first before calling the super.destruct().
- * Thus, for some objects, it is a good idea to override the DestructibleObject.destruct()
- * method. Keep that in mind.
+ * This class is a NITFObject that can be cloned. <p/>
+ * -------------------------- Note to Developer -------------------------- Since
+ * this extends DestructibleObject, when it gets created, it is referenced
+ * within the NITFUtil class. When we clone things, we want a separate reference
+ * to that new memory. Since DestructibleObject takes care of that for us, we
+ * don't need anything separate in here that tracks the clone memory. <p/> For
+ * some objects that we may want to make cloneable from within Java, we may not
+ * want to destruct the memory of the original, since it might be part of a
+ * larger structure (for example, FileHeader is part of a Record, and should not
+ * be destructed or else it will disrupct the parent Record). However, we will
+ * want to be able to destruct the clone object. For this reason, these
+ * particular objects will have to check to see if itself is a clone first
+ * before calling the super.destruct(). Thus, for some objects, it is a good
+ * idea to override the DestructibleObject.destruct() method. Keep that in mind.
  */
 public abstract class CloneableObject extends DestructibleObject
 {
@@ -52,7 +46,7 @@ public abstract class CloneableObject extends DestructibleObject
 
     /**
      * Returns true if it is a clone, false otherwise
-     *
+     * 
      * @return
      */
     final boolean isClone()
@@ -62,7 +56,7 @@ public abstract class CloneableObject extends DestructibleObject
 
     /**
      * Sets the clone status
-     *
+     * 
      * @param clone
      */
     final void setClone(boolean clone)
@@ -72,7 +66,7 @@ public abstract class CloneableObject extends DestructibleObject
 
     /**
      * Returns a clone of this NITFObject
-     *
+     * 
      * @return
      * @throws NITFException
      */
@@ -95,4 +89,3 @@ public abstract class CloneableObject extends DestructibleObject
     }
 
 }
-

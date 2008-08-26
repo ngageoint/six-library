@@ -112,4 +112,3 @@ public final class PixelSkipDownSampler extends DownSampler
     public native boolean isMultiBand();
 
 }
-

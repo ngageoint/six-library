@@ -40,91 +40,91 @@ public class TextSubheader extends NITFObject
 
     /**
      * Returns the File Part Type (TE) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getFilePartType();
+    public native Field getFilePartType();
 
     /**
      * Returns the Text Identifier (TEXTID) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getTextID();
+    public native Field getTextID();
 
     /**
      * Returns the Text Attachment Level (TXTALVL) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getAttachmentLevel();
+    public native Field getAttachmentLevel();
 
     /**
      * Returns the Text Date and Time (TXTDT) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getDateTime();
+    public native Field getDateTime();
 
     /**
      * Returns the Text Title (TXTITL) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getTitle();
+    public native Field getTitle();
 
     /**
      * Returns the Text Security Classification (TSCLAS) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getSecurityClass();
+    public native Field getSecurityClass();
 
     /**
      * Returnst the FileSecurity info for this Text Header
-     *
+     * 
      * @return
      */
-    public native synchronized FileSecurity getSecurityGroup();
+    public native FileSecurity getSecurityGroup();
 
     /**
      * Returns the Encryption (ENCRYP) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getEncrypted();
+    public native Field getEncrypted();
 
     /**
      * Returns the Text Format (TXTFMT) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getFormat();
+    public native Field getFormat();
 
     /**
      * Returns the Text Extended Subheader Data Length (TXSHDL) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getExtendedHeaderLength();
+    public native Field getExtendedHeaderLength();
 
     /**
      * Returns the Text Extended Subheader Overflow (TXSOFL) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getExtendedHeaderOverflow();
+    public native Field getExtendedHeaderOverflow();
 
     /**
      * Returns the Text Extended Subheader Data Extensions segment
-     *
+     * 
      * @return
      */
-    public native synchronized Extensions getExtendedSection();
+    public native Extensions getExtendedSection();
 
     /**
      * Prints the data associated with the TextSubheader to a PrintStream
-     *
+     * 
      * @param out
      */
     public void print(PrintStream out)
@@ -140,9 +140,8 @@ public class TextSubheader extends NITFObject
 
         out.println("Encryption = [" + getEncrypted() + "]");
         out.println("Format = [" + getFormat() + "]");
-        out.println(
-                "ExtendedHeaderLength = [" + getExtendedHeaderLength() + "]");
+        out.println("ExtendedHeaderLength = [" + getExtendedHeaderLength()
+                + "]");
     }
 
 }
-

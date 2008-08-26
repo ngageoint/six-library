@@ -95,4 +95,3 @@ public final class MemorySource extends BandSource
     public native void read(byte[] buf, int size) throws NITFException;
 
 }
-

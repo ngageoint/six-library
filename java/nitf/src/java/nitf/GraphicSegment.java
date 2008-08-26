@@ -38,24 +38,23 @@ public final class GraphicSegment extends NITFObject
 
     /**
      * Returns the GraphicSubheader from this segment
-     *
+     * 
      * @return the GraphicSubheader from this segment
      */
-    public native synchronized GraphicSubheader getSubheader();
+    public native GraphicSubheader getSubheader();
 
     /**
      * Returns the file offset where this graphic segment starts
-     *
+     * 
      * @return the file offset where this graphic segment starts
      */
-    public native synchronized long getOffset();
+    public native long getOffset();
 
     /**
      * Returns the end offset
-     *
+     * 
      * @return the end offset
      */
-    public native synchronized long getEnd();
+    public native long getEnd();
 
 }
-

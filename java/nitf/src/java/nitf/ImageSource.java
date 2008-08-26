@@ -23,15 +23,14 @@
 package nitf;
 
 /**
- * Class used to compile an image together, based on its constituent
- * bands.
+ * Class used to compile an image together, based on its constituent bands.
  */
 public final class ImageSource extends DestructibleObject
 {
 
     /**
      * Default constructor
-     *
+     * 
      * @throws NITFException
      */
     public ImageSource() throws NITFException
@@ -47,7 +46,7 @@ public final class ImageSource extends DestructibleObject
         super(address);
     }
 
-    private native synchronized void construct() throws NITFException;
+    private native void construct() throws NITFException;
 
     /**
      * Destructs the underlying memory
@@ -56,37 +55,36 @@ public final class ImageSource extends DestructibleObject
 
     /**
      * Returns an array of the BandSources associated with this ImageSource
-     *
+     * 
      * @return an array of the BandSources associated with this ImageSource
      */
-    public native synchronized BandSource[] getBandSources();
+    public native BandSource[] getBandSources();
 
     /**
      * Returns the number of band sources
-     *
+     * 
      * @return the number of band sources
      */
-    public native synchronized int getSize();
+    public native int getSize();
 
     /**
      * Adds another BandSource to this ImageSource
-     *
-     * @param bandSource the BandSource to append
+     * 
+     * @param bandSource
+     *            the BandSource to append
      * @return true if the BandSource added successfully, false otherwise
      * @throws NITFException
      */
-    public native synchronized boolean addBand(BandSource bandSource)
-            throws NITFException;
+    public native boolean addBand(BandSource bandSource) throws NITFException;
 
     /**
      * Returns the BandSource associated by the position denoted by number
-     *
-     * @param number the BandSource, starting at array position 0
+     * 
+     * @param number
+     *            the BandSource, starting at array position 0
      * @return the BandSource associated by the position denoted by number
      * @throws NITFException
      */
-    public native synchronized BandSource getBand(int number)
-            throws NITFException;
+    public native BandSource getBand(int number) throws NITFException;
 
 }
-

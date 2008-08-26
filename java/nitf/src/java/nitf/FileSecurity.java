@@ -25,10 +25,9 @@ package nitf;
 import java.io.PrintStream;
 
 /**
- * A representation of the NITF security information.
- * This information differs between the NITF specification
- * versions, but this class represents the information as a
- * whole. Each component that has security information makes
+ * A representation of the NITF security information. This information differs
+ * between the NITF specification versions, but this class represents the
+ * information as a whole. Each component that has security information makes
  * reference to a <code>FileSecurity</code> object.
  */
 public final class FileSecurity extends NITFObject
@@ -44,143 +43,146 @@ public final class FileSecurity extends NITFObject
 
     /**
      * Returns the classification authority Field, or null if one doesn't exist
-     *
+     * 
      * @return the classification authority Field, or null if one doesn't exist
      */
-    public native synchronized Field getClassificationAuthority();
+    public native Field getClassificationAuthority();
 
     /**
-     * Returns the classification authority type Field, or null if one doesn't exist
-     *
-     * @return the classification authority type Field, or null if one doesn't exist
+     * Returns the classification authority type Field, or null if one doesn't
+     * exist
+     * 
+     * @return the classification authority type Field, or null if one doesn't
+     *         exist
      */
-    public native synchronized Field getClassificationAuthorityType();
+    public native Field getClassificationAuthorityType();
 
     /**
      * Returns the classification reason Field, or null if one doesn't exist
-     *
+     * 
      * @return the classification reason Field, or null if one doesn't exist
      */
-    public native synchronized Field getClassificationReason();
+    public native Field getClassificationReason();
 
     /**
      * Returns the classification system Field, or null if one doesn't exist
-     *
+     * 
      * @return the classification system Field, or null if one doesn't exist
      */
-    public native synchronized Field getClassificationSystem();
+    public native Field getClassificationSystem();
 
     /**
      * Returns the classification text Field, or null if one doesn't exist
-     *
+     * 
      * @return the classification text Field, or null if one doesn't exist
      */
-    public native synchronized Field getClassificationText();
+    public native Field getClassificationText();
 
     /**
      * Returns the codewords Field, or null if one doesn't exist
-     *
+     * 
      * @return the codewords Field, or null if one doesn't exist
      */
-    public native synchronized Field getCodewords();
+    public native Field getCodewords();
 
     /**
      * Returns the control and handling Field, or null if one doesn't exist
-     *
+     * 
      * @return the control and handling Field, or null if one doesn't exist
      */
-    public native synchronized Field getControlAndHandling();
+    public native Field getControlAndHandling();
 
     /**
      * Returns the declassification date Field, or null if one doesn't exist
-     *
+     * 
      * @return the declassification date Field, or null if one doesn't exist
      */
-    public native synchronized Field getDeclassificationDate();
+    public native Field getDeclassificationDate();
 
     /**
-     * Returns the declassification exemption Field, or null if one doesn't exist
-     *
-     * @return the declassification exemption Field, or null if one doesn't exist
+     * Returns the declassification exemption Field, or null if one doesn't
+     * exist
+     * 
+     * @return the declassification exemption Field, or null if one doesn't
+     *         exist
      */
-    public native synchronized Field getDeclassificationExemption();
+    public native Field getDeclassificationExemption();
 
     /**
      * Returns the declassification type Field, or null if one doesn't exist
-     *
+     * 
      * @return the declassification type Field, or null if one doesn't exist
      */
-    public native synchronized Field getDeclassificationType();
+    public native Field getDeclassificationType();
 
     /**
-     * Returns the declassification downgrade Field, or null if one doesn't exist
-     *
-     * @return the declassification downgrade Field, or null if one doesn't exist
+     * Returns the declassification downgrade Field, or null if one doesn't
+     * exist
+     * 
+     * @return the declassification downgrade Field, or null if one doesn't
+     *         exist
      */
-    public native synchronized Field getDowngrade();
+    public native Field getDowngrade();
 
     /**
      * Returns the downgrade date/time Field, or null if one doesn't exist
-     *
+     * 
      * @return the downgrade date/time Field, or null if one doesn't exist
      */
-    public native synchronized Field getDowngradeDateTime();
+    public native Field getDowngradeDateTime();
 
     /**
      * Returns the releasing instructions Field, or null if one doesn't exist
-     *
+     * 
      * @return the releasing instructions Field, or null if one doesn't exist
      */
-    public native synchronized Field getReleasingInstructions();
+    public native Field getReleasingInstructions();
 
     /**
      * Returns the security control number Field, or null if one doesn't exist
-     *
+     * 
      * @return the security control number Field, or null if one doesn't exist
      */
-    public native synchronized Field getSecurityControlNumber();
+    public native Field getSecurityControlNumber();
 
     /**
      * Returns the security source date Field, or null if one doesn't exist
-     *
+     * 
      * @return the security source date Field, or null if one doesn't exist
      */
-    public native synchronized Field getSecuritySourceDate();
+    public native Field getSecuritySourceDate();
 
     /**
      * Prints the contents of the FileSecurity info
-     *
-     * @param out the stream to write to
+     * 
+     * @param out
+     *            the stream to write to
      */
     public void print(PrintStream out)
     {
-        out.println("ClassificationAuthority = [" +
-                getClassificationAuthority() +
-                "]");
-        out.println("ClassificationAuthorityType = [" +
-                getClassificationAuthorityType() +
-                "]");
-        out.println(
-                "ClassificationReason = [" + getClassificationReason() + "]");
-        out.println(
-                "ClassificationSystem = [" + getClassificationSystem() + "]");
+        out.println("ClassificationAuthority = ["
+                + getClassificationAuthority() + "]");
+        out.println("ClassificationAuthorityType = ["
+                + getClassificationAuthorityType() + "]");
+        out.println("ClassificationReason = [" + getClassificationReason()
+                + "]");
+        out.println("ClassificationSystem = [" + getClassificationSystem()
+                + "]");
         out.println("ClassificationText = [" + getClassificationText() + "]");
         out.println("Codewords = [" + getCodewords() + "]");
         out.println("ControlAndHandling = [" + getControlAndHandling() + "]");
-        out.println(
-                "DeclassificationDate = [" + getDeclassificationDate() + "]");
-        out.println("DeclassificationExemption = [" +
-                getDeclassificationExemption() +
-                "]");
-        out.println(
-                "DeclassificationType = [" + getDeclassificationType() + "]");
+        out.println("DeclassificationDate = [" + getDeclassificationDate()
+                + "]");
+        out.println("DeclassificationExemption = ["
+                + getDeclassificationExemption() + "]");
+        out.println("DeclassificationType = [" + getDeclassificationType()
+                + "]");
         out.println("Downgrade = [" + getDowngrade() + "]");
         out.println("DowngradeDateTime = [" + getDowngradeDateTime() + "]");
-        out.println(
-                "ReleasingInstructions = [" + getReleasingInstructions() + "]");
-        out.println(
-                "SecurityControlNumber = [" + getSecurityControlNumber() + "]");
+        out.println("ReleasingInstructions = [" + getReleasingInstructions()
+                + "]");
+        out.println("SecurityControlNumber = [" + getSecurityControlNumber()
+                + "]");
         out.println("SecuritySourceDate = [" + getSecuritySourceDate() + "]");
     }
 }
-

@@ -23,13 +23,16 @@
 package nitf;
 
 /**
- * <code>PluginRegistry</code> This class provides an entrypoint to loading plugins
+ * <code>PluginRegistry</code> This class provides an entrypoint to loading
+ * plugins
  */
 public final class PluginRegistry extends NITFObject
 {
     /*
-     * Note to Developer: I extended NITFObject solely to make sure the nitf-jni library got loaded statically. This
-     * happens in NITFObject, so it only made sense... Since this only has static functions, we hide the constructors
+     * Note to Developer: I extended NITFObject solely to make sure the nitf-jni
+     * library got loaded statically. This happens in NITFObject, so it only
+     * made sense... Since this only has static functions, we hide the
+     * constructors
      */
 
     // private
@@ -56,4 +59,3 @@ public final class PluginRegistry extends NITFObject
      */
     public static native boolean canHandleTRE(String name);
 }
-

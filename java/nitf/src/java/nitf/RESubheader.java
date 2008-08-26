@@ -40,70 +40,70 @@ public final class RESubheader extends NITFObject
 
     /**
      * Returns the File Part Type Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getFilePartType();
+    public native Field getFilePartType();
 
     /**
      * Returns the TypeID Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getTypeID();
+    public native Field getTypeID();
 
     /**
      * Returns the RES Security Classification Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getSecurityClass();
+    public native Field getSecurityClass();
 
     /**
      * Returns the FileSecurity info for this RES Subheader
-     *
+     * 
      * @return
      */
-    public native synchronized FileSecurity getSecurityGroup();
+    public native FileSecurity getSecurityGroup();
 
     /**
      * Returns the RES Version Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getVersion();
+    public native Field getVersion();
 
     /**
      * Returns the Subheader Fields Length Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getSubheaderFieldsLength();
+    public native Field getSubheaderFieldsLength();
 
     /**
      * Returns the Subheader Field data
-     *
+     * 
      * @return
      */
-    public native synchronized char[] getSubheaderFields();
+    public native char[] getSubheaderFields();
 
     /**
      * Returns the data length
-     *
+     * 
      * @return
      */
-    public native synchronized long getDataLength();
+    public native long getDataLength();
 
     /**
      * Sets the data length
-     *
+     * 
      * @param dataLength
      */
-    public native synchronized void setDataLength(long dataLength);
+    public native void setDataLength(long dataLength);
 
     /**
      * Prints the data associated with the RESubheader to a PrintStream
-     *
+     * 
      * @param out
      */
     public void print(PrintStream out)
@@ -115,9 +115,8 @@ public final class RESubheader extends NITFObject
 
         getSecurityGroup().print(out);
 
-        out.println(
-                "SubheaderFieldsLength = [" + getSubheaderFieldsLength() + "]");
+        out.println("SubheaderFieldsLength = [" + getSubheaderFieldsLength()
+                + "]");
         out.println("DataLength = [" + getDataLength() + "]");
     }
 }
-

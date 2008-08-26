@@ -22,11 +22,9 @@
 
 package nitf;
 
-
 /**
- * A Field corresponds to the data and basic information
- * regarding a NITF field. Each field in the NITF headers
- * has a Field associated with it.
+ * A Field corresponds to the data and basic information regarding a NITF field.
+ * Each field in the NITF headers has a Field associated with it.
  */
 public class Field extends NITFObject
 {
@@ -40,36 +38,34 @@ public class Field extends NITFObject
     }
 
     /**
-     * Returns the Value type
-     * Either NITF_BCS_A, NITF_BCS_N, or NITF_BINARY
-     *
+     * Returns the Value type Either NITF_BCS_A, NITF_BCS_N, or NITF_BINARY
+     * 
      * @return
      */
-    public native synchronized FieldType getType();
+    public native FieldType getType();
 
     /**
      * Returns the field length
-     *
+     * 
      * @return the length of the field
      */
-    public native synchronized long getLength();
-
+    public native long getLength();
 
     /**
-     * Sets the raw data to the data specified
-     * If the size of data is larger than the field size,
-     * the data is truncated.
-     *
-     * @param data raw data
+     * Sets the raw data to the data specified If the size of data is larger
+     * than the field size, the data is truncated.
+     * 
+     * @param data
+     *            raw data
      * @return true if the data gets set, false otherwise
      */
     public native boolean setRawData(byte[] data);
 
-
     /**
      * Sets the raw data to the the data from the input String
-     *
-     * @param data input String data
+     * 
+     * @param data
+     *            input String data
      * @return true if the data gets set, false otherwise
      */
     public boolean setData(String data)
@@ -77,46 +73,41 @@ public class Field extends NITFObject
         return setRawData(data.getBytes());
     }
 
-
     /**
      * Return the raw data for this Field
-     *
+     * 
      * @return raw byte array, or null if an error occurs
      */
     public native byte[] getRawData();
 
     /**
-     * Return the data formatted as a String
-     * This should only be used if you know the data
-     * consists of valid characters.
-     *
+     * Return the data formatted as a String This should only be used if you
+     * know the data consists of valid characters.
+     * 
      * @return data formatted as a String, or null if an error occurs
      */
     public native String getStringData();
 
     /**
-     * Return the data formatted as an integer
-     * This should only be used if you know the data
-     * consists of valid integer characters.
-     *
+     * Return the data formatted as an integer This should only be used if you
+     * know the data consists of valid integer characters.
+     * 
      * @return data formatted as an integer
      */
     public native int getIntData();
 
     /**
-     * Return the data formatted as an double
-     * This should only be used if you know the data
-     * consists of valid characters capable of converting to a double.
-     *
+     * Return the data formatted as an double This should only be used if you
+     * know the data consists of valid characters capable of converting to a
+     * double.
+     * 
      * @return data formatted as an double
      */
-    /*public native double getRealData();*/
-
+    /* public native double getRealData(); */
 
     /**
-     * Overrides the toString() function
-     * Same as calling getStringData()
-     *
+     * Overrides the toString() function Same as calling getStringData()
+     * 
      * @return String representation of the data
      */
     public String toString()
@@ -124,12 +115,12 @@ public class Field extends NITFObject
         try
         {
             return getStringData();
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
-            //e.printStackTrace();
+            // e.printStackTrace();
         }
         return new String(getRawData());
     }
 
 }
-

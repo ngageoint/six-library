@@ -219,4 +219,3 @@ public abstract class DownSampler extends DestructibleObject
         }
     }
 }
-

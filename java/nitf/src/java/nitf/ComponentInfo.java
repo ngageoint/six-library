@@ -23,10 +23,9 @@
 package nitf;
 
 /**
- * A representation of the component information found
- * in the NITF File Header. Each component (images, graphics, etc.)
- * has metadata pertaining to the length of the data, and length
- * of the subheader. This class captures that.
+ * A representation of the component information found in the NITF File Header.
+ * Each component (images, graphics, etc.) has metadata pertaining to the length
+ * of the data, and length of the subheader. This class captures that.
  */
 public final class ComponentInfo extends NITFObject
 {
@@ -38,17 +37,16 @@ public final class ComponentInfo extends NITFObject
 
     /**
      * Returns the length of the Subheader
-     *
+     * 
      * @return
      */
-    public native synchronized Field getLengthSubheader();
+    public native Field getLengthSubheader();
 
     /**
      * Returns the length of the Data
-     *
+     * 
      * @return
      */
-    public native synchronized Field getLengthData();
+    public native Field getLengthData();
 
 }
-

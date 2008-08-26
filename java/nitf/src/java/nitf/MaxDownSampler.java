@@ -114,4 +114,3 @@ public final class MaxDownSampler extends DownSampler
     public native boolean isMultiBand();
 
 }
-

@@ -116,4 +116,3 @@ public final class SumSq2BandDownSampler extends DownSampler
     public native boolean isMultiBand();
 
 }
-

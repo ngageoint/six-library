@@ -46,7 +46,7 @@ public final class Writer extends DestructibleObject
         super(address);
     }
 
-    private native synchronized void construct() throws NITFException;
+    private native void construct() throws NITFException;
 
     /**
      * Destructs the underlying memory
@@ -56,36 +56,36 @@ public final class Writer extends DestructibleObject
     /**
      * @return the array of ImageWriters
      */
-    public native synchronized ImageWriter[] getImageWriters();
+    public native ImageWriter[] getImageWriters();
 
     /**
      * @return the number of image writers
      */
-    public native synchronized int getNumImageWriters();
+    public native int getNumImageWriters();
 
     /**
      * @return the array of TextWriters
      */
-    public native synchronized SegmentWriter[] getTextWriters();
+    public native SegmentWriter[] getTextWriters();
 
     /**
      * @return Returns the number of image writers
      */
-    public native synchronized int getNumTextWriters();
+    public native int getNumTextWriters();
 
     /**
      * Returns the output IOHandle Currently not public
      * 
      * @return the output IOHandle
      */
-    native synchronized IOHandle getOutputHandle();
+    native IOHandle getOutputHandle();
 
     /**
      * Returns the associated Record Currently not public
      * 
      * @return the associated Record, or null if none is associated
      */
-    native synchronized Record getRecord();
+    native Record getRecord();
 
     /**
      * Prepares for writing. This is called before the write() function.
@@ -97,7 +97,7 @@ public final class Writer extends DestructibleObject
      * @return true if the prepare completed successfully, false otherwise
      * @throws NITFException
      */
-    public native synchronized boolean prepare(Record record, IOHandle ioHandle)
+    public native boolean prepare(Record record, IOHandle ioHandle)
             throws NITFException;
 
     /**
@@ -109,7 +109,7 @@ public final class Writer extends DestructibleObject
      * @throws NITFException
      *             if a native error occurs
      */
-    public native synchronized ImageWriter getNewImageWriter(int imageNumber)
+    public native ImageWriter getNewImageWriter(int imageNumber)
             throws NITFException;
 
     /**
@@ -121,7 +121,7 @@ public final class Writer extends DestructibleObject
      * @throws NITFException
      *             if a native error occurs
      */
-    public native synchronized SegmentWriter getNewTextWriter(int textNumber)
+    public native SegmentWriter getNewTextWriter(int textNumber)
             throws NITFException;
 
     /**
@@ -133,8 +133,8 @@ public final class Writer extends DestructibleObject
      * @throws NITFException
      *             if a native error occurs
      */
-    public native synchronized SegmentWriter getNewGraphicWriter(
-            int graphicNumber) throws NITFException;
+    public native SegmentWriter getNewGraphicWriter(int graphicNumber)
+            throws NITFException;
 
     /**
      * Returns a SegmentWriter pertaining to the DataExtension segment at the
@@ -146,7 +146,7 @@ public final class Writer extends DestructibleObject
      * @throws NITFException
      *             if a native error occurs
      */
-    public native synchronized SegmentWriter getNewDEWriter(int deNumber)
+    public native SegmentWriter getNewDEWriter(int deNumber)
             throws NITFException;
 
     /**
@@ -156,6 +156,6 @@ public final class Writer extends DestructibleObject
      * @throws NITFException
      *             if a native error occurs
      */
-    public native synchronized boolean write() throws NITFException;
+    public native boolean write() throws NITFException;
 
 }

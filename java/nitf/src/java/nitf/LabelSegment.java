@@ -38,22 +38,21 @@ public final class LabelSegment extends NITFObject
 
     /**
      * Returns the LabelSubheader object associated with this segment
-     *
+     * 
      * @return the LabelSubheader object associated with this segment
      */
-    public native synchronized LabelSubheader getSubheader();
+    public native LabelSubheader getSubheader();
 
     /**
      * Returns the offset (in the file) where this segment starts
-     *
+     * 
      * @return the offset (in the file) where this segment starts
      */
-    public native synchronized long getOffset();
+    public native long getOffset();
 
     /**
      * @return
      */
-    public native synchronized long getEnd();
+    public native long getEnd();
 
 }
-

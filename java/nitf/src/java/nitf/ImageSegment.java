@@ -23,11 +23,9 @@
 package nitf;
 
 /**
- * A representation of the NITF Image Segment
- * <p/>
- * The image segment corresponds to each image plus its subheader which
- * exists in the NITF file.  The segment also contains some book-keeping
- * information regarding its offsets.
+ * A representation of the NITF Image Segment <p/> The image segment corresponds
+ * to each image plus its subheader which exists in the NITF file. The segment
+ * also contains some book-keeping information regarding its offsets.
  */
 public final class ImageSegment extends NITFObject
 {
@@ -42,24 +40,22 @@ public final class ImageSegment extends NITFObject
 
     /**
      * Retrieve the subheader corresponding to this image segment
-     *
+     * 
      * @return The associated image subheader
      */
-    public native synchronized ImageSubheader getSubheader();
+    public native ImageSubheader getSubheader();
 
     /**
      * Retrieve the offset into the file for an image
-     *
+     * 
      * @return An integer offset
      */
-    public native synchronized int getImageOffset();
-
+    public native int getImageOffset();
 
     /**
      * Retrieve the ending offset for the image
-     *
+     * 
      * @return An integer offset
      */
-    public native synchronized int getImageEnd();
+    public native int getImageEnd();
 }
-

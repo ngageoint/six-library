@@ -95,4 +95,3 @@ public final class FileSource extends BandSource
     public native void read(byte[] buf, int size) throws NITFException;
 
 }
-

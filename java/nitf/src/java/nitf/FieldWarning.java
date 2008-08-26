@@ -22,13 +22,11 @@
 
 package nitf;
 
-
 /**
- * This class represents a Warning that is created by the
- * NITF system while processing the data in some way.
- * Usually a FieldWarning is created when a Field does
- * not contain valid data.
- *
+ * This class represents a Warning that is created by the NITF system while
+ * processing the data in some way. Usually a FieldWarning is created when a
+ * Field does not contain valid data.
+ * 
  */
 public class FieldWarning extends DestructibleObject
 {
@@ -47,40 +45,38 @@ public class FieldWarning extends DestructibleObject
 
     /**
      * Returns the name of the offending field
-     *
+     * 
      * @return name of the field, or null
      */
-    public native synchronized String getFieldName();
+    public native String getFieldName();
 
     /**
-     * Returns the offending Field object, or null if the
-     * warning is not associated with one particular Field
-     *
+     * Returns the offending Field object, or null if the warning is not
+     * associated with one particular Field
+     * 
      * @return a Field object, or null
      */
-    public native synchronized Field getField();
+    public native Field getField();
 
     /**
      * Returns the warning message, or expectation message
-     *
+     * 
      * @return the warning message, or null
      */
-    public native synchronized String getWarning();
+    public native String getWarning();
 
     /**
-     * Returns the file offset if it is possible for
-     * the library to figure it out. Otherwise, (if the warning
-     * was not created while parsing the file) it
-     * will most likely return 0.
-     *
+     * Returns the file offset if it is possible for the library to figure it
+     * out. Otherwise, (if the warning was not created while parsing the file)
+     * it will most likely return 0.
+     * 
      * @return
      */
-    public native synchronized long getFileOffset();
-
+    public native long getFileOffset();
 
     /**
      * Overrides the toString() function
-     *
+     * 
      * @return String representation of the warning
      */
     public String toString()
@@ -93,7 +89,8 @@ public class FieldWarning extends DestructibleObject
         if (name != null)
         {
             buf.append(name);
-        } else
+        }
+        else
         {
             buf.append("UNKNOWN");
         }
@@ -116,4 +113,3 @@ public class FieldWarning extends DestructibleObject
     }
 
 }
-

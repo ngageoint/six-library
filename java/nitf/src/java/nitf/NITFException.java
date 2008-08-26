@@ -23,8 +23,7 @@
 package nitf;
 
 /**
- * Represents an Exception that occurs in the underlying
- * native NITF library
+ * Represents an Exception that occurs in the underlying native NITF library
  */
 public class NITFException extends Exception
 {
@@ -40,4 +39,3 @@ public class NITFException extends Exception
     }
 
 }
-

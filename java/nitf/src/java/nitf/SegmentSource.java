@@ -34,18 +34,16 @@ public class SegmentSource extends NITFObject
     {
         super(address);
     }
-    
-    
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see nitf.DestructibleObject#destructMemory()
      */
-//    protected native void destructMemory();
-
+    // protected native synchronized void destructMemory();
 
     public static final native SegmentSource makeSegmentMemorySource(
             byte[] data, int size, int start, int byteSkip)
             throws NITFException;
 
 }
-

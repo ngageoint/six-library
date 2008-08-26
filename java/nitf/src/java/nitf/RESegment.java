@@ -38,24 +38,23 @@ public final class RESegment extends NITFObject
 
     /**
      * Returns the RESubheader for this segment
-     *
+     * 
      * @return
      */
-    public native synchronized RESubheader getSubheader();
+    public native RESubheader getSubheader();
 
     /**
      * Returns the file offset where this segment starts
-     *
+     * 
      * @return
      */
-    public native synchronized long getOffset();
+    public native long getOffset();
 
     /**
      * Returns the end offset
-     *
+     * 
      * @return the end offset
      */
-    public native synchronized long getEnd();
+    public native long getEnd();
 
 }
-

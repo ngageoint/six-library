@@ -38,22 +38,21 @@ public final class TextSegment extends NITFObject
 
     /**
      * Returns the TextSubheader from this Text Segment
-     *
+     * 
      * @return
      */
-    public native synchronized TextSubheader getSubheader();
+    public native TextSubheader getSubheader();
 
     /**
      * Returns the file offset where this Text segment starts
-     *
+     * 
      * @return
      */
-    public native synchronized long getOffset();
+    public native long getOffset();
 
     /**
      * @return
      */
-    public native synchronized long getEnd();
+    public native long getEnd();
 
 }
-

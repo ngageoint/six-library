@@ -84,7 +84,7 @@ public final class TRE extends DestructibleObject
         super(address);
     }
 
-    protected native void destructMemory();
+    protected native synchronized void destructMemory();
 
     private native void construct(String tag, String id) throws NITFException;
 

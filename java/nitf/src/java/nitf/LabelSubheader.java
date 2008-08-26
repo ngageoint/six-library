@@ -40,131 +40,130 @@ public final class LabelSubheader extends NITFObject
 
     /**
      * Return the File Part Type (LA) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getFilePartType();
+    public native Field getFilePartType();
 
     /**
      * Return the Label ID (LID) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getLabelID();
+    public native Field getLabelID();
 
     /**
      * Return the Label Security Classification (LSCLAS) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getSecurityClass();
+    public native Field getSecurityClass();
 
     /**
      * Return the FileSecurity info for this Label Header
-     *
+     * 
      * @return
      */
-    public native synchronized FileSecurity getSecurityGroup();
+    public native FileSecurity getSecurityGroup();
 
     /**
      * Return the Encryption (ENCRYP) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getEncrypted();
+    public native Field getEncrypted();
 
     /**
      * Return the Label Font Style (LFS) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getFontStyle();
+    public native Field getFontStyle();
 
     /**
      * Return the Label Cell Width (LCW) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getCellWidth();
+    public native Field getCellWidth();
 
     /**
      * Return the Label Cell Height (LCH) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getCellHeight();
+    public native Field getCellHeight();
 
     /**
      * Return the Display Level (LDLVL) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getDisplayLevel();
+    public native Field getDisplayLevel();
 
     /**
      * Return the Attachment Level (LALVL) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getAttachmentLevel();
+    public native Field getAttachmentLevel();
 
     /**
      * Return the Label Location - Row (LLOC) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getLocationRow();
+    public native Field getLocationRow();
 
     /**
      * Return the Label Location - Column (LLOC) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getLocationColumn();
+    public native Field getLocationColumn();
 
     /**
      * Return the Label Text Color (LTC) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getTextColor();
+    public native Field getTextColor();
 
     /**
      * Return the Label Background Bolor (LBC) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getBackgroundColor();
+    public native Field getBackgroundColor();
 
     /**
      * Return the Extended Subheader Data Length (LXSHDL) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getExtendedHeaderLength();
+    public native Field getExtendedHeaderLength();
 
     /**
      * Return the Extended Subheader Overflow (LXSOFL) Field
-     *
+     * 
      * @return
      */
-    public native synchronized Field getExtendedHeaderOverflow();
+    public native Field getExtendedHeaderOverflow();
 
     /**
      * Return the Extended Subheader Data extensions section
-     *
+     * 
      * @return
      */
-    public native synchronized Extensions getExtendedSection();
+    public native Extensions getExtendedSection();
 
     /**
      * Prints the data associated with the LabelSubheader to a PrintStream
-     *
+     * 
      * @param out
      */
     public void print(PrintStream out)
     {
-        //TODO
+        // TODO
     }
 }
-

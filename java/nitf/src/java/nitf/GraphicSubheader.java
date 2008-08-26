@@ -40,134 +40,133 @@ public final class GraphicSubheader extends NITFObject
 
     /**
      * Returns the File Part Type (SY) Field
-     *
+     * 
      * @return the File Part Type (SY) Field
      */
-    public native synchronized Field getFilePartType();
+    public native Field getFilePartType();
 
     /**
      * Returns the Graphic Identifer (SID) Field
-     *
+     * 
      * @return the Graphic Identifer (SID) Field
      */
-    public native synchronized Field getGraphicID();
+    public native Field getGraphicID();
 
     /**
      * Returns the Graphic Name (SNAME) Field
-     *
+     * 
      * @return the Graphic Name (SNAME) Field
      */
-    public native synchronized Field getName();
+    public native Field getName();
 
     /**
      * Returns the Graphic Security Classification (SSCLAS) Field
-     *
+     * 
      * @return the Graphic Security Classification (SSCLAS) Field
      */
-    public native synchronized Field getSecurityClass();
+    public native Field getSecurityClass();
 
     /**
      * Returns the FileSecurity associated with this Graphic Header
-     *
+     * 
      * @return the FileSecurity associated with this Graphic Header
      */
-    public native synchronized FileSecurity getSecurityGroup();
+    public native FileSecurity getSecurityGroup();
 
     /**
      * Returns the Encryption (ENCRYP) Field
-     *
+     * 
      * @return the Encryption (ENCRYP) Field
      */
-    public native synchronized Field getEncrypted();
+    public native Field getEncrypted();
 
     /**
      * Returns the Graphic Type (SFMT) Field
-     *
+     * 
      * @return the Graphic Type (SFMT) Field
      */
-    public native synchronized Field getStype();
+    public native Field getStype();
 
     /**
      * Returns the Reserved for future use (SSTRUCT) Field
-     *
+     * 
      * @return the Reserved for future use (SSTRUCT) Field
      */
-    public native synchronized Field getRes1();
+    public native Field getRes1();
 
     /**
      * Returns the Graphic Display Level (SDLVL) Field
-     *
+     * 
      * @return the Graphic Display Level (SDLVL) Field
      */
-    public native synchronized Field getDisplayLevel();
+    public native Field getDisplayLevel();
 
     /**
      * Returns the Graphic Attachment Level (SALVL) Field
-     *
+     * 
      * @return the Graphic Attachment Level (SALVL) Field
      */
-    public native synchronized Field getAttachmentLevel();
+    public native Field getAttachmentLevel();
 
     /**
      * Returns the Graphic Location - (SLOC) Field
-     *
+     * 
      * @return the Graphic Location - (SLOC) Field
      */
-    public native synchronized Field getLocation();
+    public native Field getLocation();
 
     /**
      * Returns the First Graphic Bound Location - (SBND1) Field
-     *
+     * 
      * @return the First Graphic Bound Location - (SBND1) Field
      */
-    public native synchronized Field getBound1Loc();
+    public native Field getBound1Loc();
 
     /**
      * Returns the Graphic Color (SCOLOR) Field
-     *
+     * 
      * @return the Graphic Color (SCOLOR) Field
      */
-    public native synchronized Field getColor();
+    public native Field getColor();
 
     /**
      * Returns the Second Graphic Bound Location - (SBND2) Field
-     *
+     * 
      * @return the Second Graphic Bound Location - (SBND2) Field
      */
-    public native synchronized Field getBound2Loc();
+    public native Field getBound2Loc();
 
     /**
      * Returns the Reserved For Future Use (SRES2) Field
-     *
+     * 
      * @return the Reserved For Future Use (SRES2) Field
      */
-    public native synchronized Field getRes2();
+    public native Field getRes2();
 
     /**
      * Returns the Graphic Extended Subheader Data Length (SXSHDL) Field
-     *
+     * 
      * @return the Graphic Extended Subheader Data Length (SXSHDL) Field
      */
-    public native synchronized Field getExtendedHeaderLength();
+    public native Field getExtendedHeaderLength();
 
     /**
      * Returns the Graphic Extended Subheader Overflow (SXSOFL) Field
-     *
+     * 
      * @return the Graphic Extended Subheader Overflow (SXSOFL) Field
      */
-    public native synchronized Field getExtendedHeaderOverflow();
+    public native Field getExtendedHeaderOverflow();
 
     /**
      * Returns the Graphic Extended Subheader Data Extensions segment
-     *
+     * 
      * @return the Graphic Extended Subheader Data Extensions segment
      */
-    public native synchronized Extensions getExtendedSection();
-
+    public native Extensions getExtendedSection();
 
     /**
      * Prints the data associated with the GraphicSubheader to a PrintStream
-     *
+     * 
      * @param out
      */
     public void print(PrintStream out)
@@ -192,4 +191,3 @@ public final class GraphicSubheader extends NITFObject
         out.println("Reserved2 = [" + getExtendedHeaderLength() + "]");
     }
 }
-

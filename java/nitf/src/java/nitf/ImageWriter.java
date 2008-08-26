@@ -46,7 +46,7 @@ public final class ImageWriter extends DestructibleObject
      * 
      * @return
      */
-    public native synchronized IOHandle getOutputHandle();
+    public native IOHandle getOutputHandle();
 
     /**
      * Returns the ImageSource
@@ -54,13 +54,14 @@ public final class ImageWriter extends DestructibleObject
      * @return the ImageSource associated with this ImageWriter
      * @throws NITFException
      */
-    public native synchronized ImageSource getImageSource()
-            throws NITFException;
+    public native ImageSource getImageSource() throws NITFException;
 
     /**
-     * Method used by the actual Writer to write an image out. <p/> This function writes out an image from a source, by
-     * pulling the required amounts from the source attached. This function is probably only useable from the
-     * Writer.write() function. The image source must be attached at this point, or an exception will occur.
+     * Method used by the actual Writer to write an image out. <p/> This
+     * function writes out an image from a source, by pulling the required
+     * amounts from the source attached. This function is probably only useable
+     * from the Writer.write() function. The image source must be attached at
+     * this point, or an exception will occur.
      * 
      * @param numBitsPerPixel
      *            The number of bits per pixel in the image
@@ -75,9 +76,9 @@ public final class ImageWriter extends DestructibleObject
      * @return
      * @throws NITFException
      */
-    public native synchronized boolean write(int numBitsPerPixel,
-            int numImageBands, int numMultispectralImageBands, int numRows,
-            int numCols) throws NITFException;
+    public native boolean write(int numBitsPerPixel, int numImageBands,
+            int numMultispectralImageBands, int numRows, int numCols)
+            throws NITFException;
 
     /**
      * Attaches the specified ImageSource to this ImageWriter
@@ -86,23 +87,25 @@ public final class ImageWriter extends DestructibleObject
      *            the imageSource to attach
      * @return true if it attached successfully, false otherwise
      * @throws NITFException
-     *             if an ImageSource has already been attached, or if an error occurs
+     *             if an ImageSource has already been attached, or if an error
+     *             occurs
      */
-    public native synchronized boolean attachSource(ImageSource imageSource)
+    public native boolean attachSource(ImageSource imageSource)
             throws NITFException;
 
     /**
-     * Enables/disables cached writes. Enabling cached writes causes the system to accumulate full blocks of data prior
-     * to writing. This is more efficent in terms of writing but requires more memory. For blocking modes, R, P, and B
-     * blocking modes, one block sized buffer is required for each block column (number of blocks/row). For S mode one
-     * block is required for each band for each block column, however for the same iamge dimensions, pixel size and
-     * number of bands it amount to the same storage since the blocks of the S mode image are smaller (each contains
-     * only one band of data)
+     * Enables/disables cached writes. Enabling cached writes causes the system
+     * to accumulate full blocks of data prior to writing. This is more efficent
+     * in terms of writing but requires more memory. For blocking modes, R, P,
+     * and B blocking modes, one block sized buffer is required for each block
+     * column (number of blocks/row). For S mode one block is required for each
+     * band for each block column, however for the same iamge dimensions, pixel
+     * size and number of bands it amount to the same storage since the blocks
+     * of the S mode image are smaller (each contains only one band of data)
      * 
      * @param flag
      * @return Returns the current enable/disable state
      */
-    public native synchronized boolean setWriteCaching(boolean flag);
+    public native boolean setWriteCaching(boolean flag);
 
 }
-

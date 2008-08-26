@@ -38,24 +38,23 @@ public final class DESegment extends NITFObject
 
     /**
      * Returns the DESubheader from this segment
-     *
+     * 
      * @return the DESubheader from this segment
      */
-    public native synchronized DESubheader getSubheader();
+    public native DESubheader getSubheader();
 
     /**
      * Returns the file offset where this DES segment starts
-     *
+     * 
      * @return the file offset where this DES segment starts
      */
-    public native synchronized long getOffset();
+    public native long getOffset();
 
     /**
      * Return the end marker
-     *
+     * 
      * @return the end marker
      */
-    public native synchronized long getEnd();
+    public native long getEnd();
 
 }
-

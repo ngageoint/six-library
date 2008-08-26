@@ -48,7 +48,7 @@ public final class ImageSubheader extends NITFObject
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getActualBitsPerPixel();
+    public native Field getActualBitsPerPixel();
 
     /**
      * Retrieve an array of band info associated with the image.
@@ -56,7 +56,7 @@ public final class ImageSubheader extends NITFObject
      * @return A Field associated with the field
      */
 
-    public native synchronized BandInfo[] getBandInfo();
+    public native BandInfo[] getBandInfo();
 
     /**
      * Retrieve the specified compression rate.
@@ -64,154 +64,154 @@ public final class ImageSubheader extends NITFObject
      * @return A Field associated with the field
      */
 
-    public native synchronized Field getCompressionRate();
+    public native Field getCompressionRate();
 
     /**
      * Retrieve the corner coordinates.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getCornerCoordinates();
+    public native Field getCornerCoordinates();
 
     /**
      * Is the image encrypted?
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getEncrypted();
+    public native Field getEncrypted();
 
     /**
      * Retrieve the extended header length.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getExtendedHeaderLength();
+    public native Field getExtendedHeaderLength();
 
     /**
      * Retrieve the extended header overflow Field.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getExtendedHeaderOverflow();
+    public native Field getExtendedHeaderOverflow();
 
     /**
      * Get file part type.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getFilePartType();
+    public native Field getFilePartType();
 
     /**
      * Get image attachment level.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageAttachmentLevel();
+    public native Field getImageAttachmentLevel();
 
     /**
      * Get the image category.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageCategory();
+    public native Field getImageCategory();
 
     /**
      * Retrieve the image comments.
      * 
      * @return An array of Fields
      */
-    public native synchronized Field[] getImageComments();
+    public native Field[] getImageComments();
 
     /**
      * Retrieve the image compression.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageCompression();
+    public native Field getImageCompression();
 
     /**
      * Retrieve the image coordinate system.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageCoordinateSystem();
+    public native Field getImageCoordinateSystem();
 
     /**
      * Get image date and time.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageDateAndTime();
+    public native Field getImageDateAndTime();
 
     /**
      * Get image date and time.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageDisplayLevel();
+    public native Field getImageDisplayLevel();
 
     /**
      * Get the associated image id
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageId();
+    public native Field getImageId();
 
     /**
      * Get the image location.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageLocation();
+    public native Field getImageLocation();
 
     /**
      * Get the image magnification Field.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageMagnification();
+    public native Field getImageMagnification();
 
     /**
      * Get the image (blocking) mode
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageMode();
+    public native Field getImageMode();
 
     /**
      * Get the image representation
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageRepresentation();
+    public native Field getImageRepresentation();
 
     /**
      * Get the security classification.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageSecurityClass();
+    public native Field getImageSecurityClass();
 
     /**
      * Get the image source.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageSource();
+    public native Field getImageSource();
 
     /**
      * Get the image sync code.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageSyncCode();
+    public native Field getImageSyncCode();
 
     /**
      * Get the image title.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getImageTitle();
+    public native Field getImageTitle();
 
     /**
      * Get the number of bits per pixel in the image.
@@ -219,42 +219,42 @@ public final class ImageSubheader extends NITFObject
      * @return A Field associated with the field
      */
 
-    public native synchronized Field getNumBitsPerPixel();
+    public native Field getNumBitsPerPixel();
 
     /**
      * Get the number of blocks per column in the image.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getNumBlocksPerCol();
+    public native Field getNumBlocksPerCol();
 
     /**
      * Get the number of blocks per row in the image.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getNumBlocksPerRow();
+    public native Field getNumBlocksPerRow();
 
     /**
      * Get the number of columns in the image
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getNumCols();
+    public native Field getNumCols();
 
     /**
      * Get the number of image bands (for instance, RGB is typically 3).
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getNumImageBands();
+    public native Field getNumImageBands();
 
     /**
      * Get the number of image comments.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getNumImageComments();
+    public native Field getNumImageComments();
 
     /**
      * Get the number of multispectral image bands. It should always have only
@@ -263,35 +263,35 @@ public final class ImageSubheader extends NITFObject
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getNumMultispectralImageBands();
+    public native Field getNumMultispectralImageBands();
 
     /**
      * Get the number of pixels per horizontal block.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getNumPixelsPerHorizBlock();
+    public native Field getNumPixelsPerHorizBlock();
 
     /**
      * Get the number of pixels per vertical block.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getNumPixelsPerVertBlock();
+    public native Field getNumPixelsPerVertBlock();
 
     /**
      * Get the number of rows in the image
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getNumRows();
+    public native Field getNumRows();
 
     /**
      * Find out the pixel justification.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getPixelJustification();
+    public native Field getPixelJustification();
 
     /**
      * Pixel Field type could be int, float, etc.
@@ -299,49 +299,49 @@ public final class ImageSubheader extends NITFObject
      * @return A Field associated with the field
      */
 
-    public native synchronized Field getPixelValueType();
+    public native Field getPixelValueType();
 
     /**
      * Retrieve the security info.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized FileSecurity getSecurityGroup();
+    public native FileSecurity getSecurityGroup();
 
     /**
      * Get the target id.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getTargetId();
+    public native Field getTargetId();
 
     /**
      * Tell us how much user data to expect.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getUserDefinedImageDataLength();
+    public native Field getUserDefinedImageDataLength();
 
     /**
      * Tell us how much user defined overflow is there.
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Field getUserDefinedOverflow();
+    public native Field getUserDefinedOverflow();
 
     /**
      * Retrieve an object representing the user data
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Extensions getUserDefinedSection();
+    public native Extensions getUserDefinedSection();
 
     /**
      * Retrieve an object representing the extended section
      * 
      * @return A Field associated with the field
      */
-    public native synchronized Extensions getExtendedSection();
+    public native Extensions getExtendedSection();
 
     /**
      * This function adds the given comment string to the list of comments
@@ -359,8 +359,8 @@ public final class ImageSubheader extends NITFObject
      *            the index to add it at
      * @throws NITFException
      */
-    public native synchronized boolean insertImageComment(String comment,
-            int index) throws NITFException;
+    public native boolean insertImageComment(String comment, int index)
+            throws NITFException;
 
     /**
      * This function removes the comment at the given position from the list of
@@ -376,8 +376,7 @@ public final class ImageSubheader extends NITFObject
      * @return
      * @throws NITFException
      */
-    public native synchronized boolean removeImageComment(int index)
-            throws NITFException;
+    public native boolean removeImageComment(int index) throws NITFException;
 
     /**
      * getBandCount returns the number of bands in The image associated with the
@@ -387,7 +386,7 @@ public final class ImageSubheader extends NITFObject
      * 
      * @return number of bands
      */
-    public native synchronized int getBandCount();
+    public native int getBandCount();
 
     /**
      * createBands creates the specified number of BandInfo objects, and updates
@@ -402,8 +401,7 @@ public final class ImageSubheader extends NITFObject
      * @return true if the bands are created, false otherwise
      * @throws NITFException
      */
-    public native synchronized boolean createBands(int numBands)
-            throws NITFException;
+    public native boolean createBands(int numBands) throws NITFException;
 
     /**
      * Prints the data associated with the ImageSubheader to a PrintStream
@@ -493,4 +491,3 @@ public final class ImageSubheader extends NITFObject
     }
 
 }
-

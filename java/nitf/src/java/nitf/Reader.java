@@ -29,8 +29,9 @@ public final class Reader extends DestructibleObject
 {
     /**
      * Reader Constructor
-     *
-     * @throws NITFException if a problem occurs in the underlying library
+     * 
+     * @throws NITFException
+     *             if a problem occurs in the underlying library
      */
     public Reader() throws NITFException
     {
@@ -47,10 +48,10 @@ public final class Reader extends DestructibleObject
 
     /**
      * Constructs a new Reader
-     *
+     * 
      * @throws NITFException
      */
-    private native synchronized void construct() throws NITFException;
+    private native void construct() throws NITFException;
 
     /**
      * Destructs the memory for the underlying object
@@ -59,72 +60,72 @@ public final class Reader extends DestructibleObject
 
     /**
      * Read and parse the file into a Record
-     *
-     * @param inputHandle the IOHandle used to read from
+     * 
+     * @param inputHandle
+     *            the IOHandle used to read from
      * @return a Record containing the read data
      * @throws NITFException
      */
-    public native synchronized Record read(IOHandle inputHandle)
-            throws NITFException;
+    public native Record read(IOHandle inputHandle) throws NITFException;
 
     /**
      * Returns a new ImageReader
-     *
-     * @param imageSegmentNumber the index of the image to get a reader for
+     * 
+     * @param imageSegmentNumber
+     *            the index of the image to get a reader for
      * @return ImageReader
      * @throws NITFException
      */
-    public native synchronized ImageReader getNewImageReader(
-            int imageSegmentNumber) throws NITFException;
-
-
-    /**
-     * Returns a new SegmentReader for reading graphic data
-     *
-     * @param graphicSegmentNumber the index of the graphic to get a reader for
-     * @return new SegmentReader
-     * @throws NITFException
-     */
-    public native synchronized SegmentReader getNewGraphicReader(
-            int graphicSegmentNumber) throws NITFException;
-
+    public native ImageReader getNewImageReader(int imageSegmentNumber)
+            throws NITFException;
 
     /**
      * Returns a new SegmentReader for reading graphic data
-     *
-     * @param textSegmentNumber the index of the text to get a reader for
+     * 
+     * @param graphicSegmentNumber
+     *            the index of the graphic to get a reader for
      * @return new SegmentReader
      * @throws NITFException
      */
-    public native synchronized SegmentReader getNewTextReader(
-            int textSegmentNumber) throws NITFException;
+    public native SegmentReader getNewGraphicReader(int graphicSegmentNumber)
+            throws NITFException;
 
+    /**
+     * Returns a new SegmentReader for reading graphic data
+     * 
+     * @param textSegmentNumber
+     *            the index of the text to get a reader for
+     * @return new SegmentReader
+     * @throws NITFException
+     */
+    public native SegmentReader getNewTextReader(int textSegmentNumber)
+            throws NITFException;
 
     /**
      * Returns a new SegmentReader
-     *
-     * @param deSegmentNumber the index of the DE to get a reader for
+     * 
+     * @param deSegmentNumber
+     *            the index of the DE to get a reader for
      * @return DEReader
      * @throws NITFException
      */
-    public native synchronized SegmentReader getNewDEReader(int deSegmentNumber)
+    public native SegmentReader getNewDEReader(int deSegmentNumber)
             throws NITFException;
 
     /**
      * Returns the Input IOHandle
-     *
+     * 
      * @return
      * @throws NITFException
      */
-    public native synchronized IOHandle getInputHandle() throws NITFException;
+    public native IOHandle getInputHandle() throws NITFException;
 
     /**
      * Returns the Record associated with this Reader, or null if none is
-     *
+     * 
      * @return
      * @throws NITFException
      */
-    public native synchronized Record getRecord() throws NITFException;
+    public native Record getRecord() throws NITFException;
 
 }
-

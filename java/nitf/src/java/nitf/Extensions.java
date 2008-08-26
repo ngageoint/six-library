@@ -49,7 +49,7 @@ public final class Extensions extends NITFObject
      *            the TRE to append
      * @throws NITFException
      */
-    public native synchronized void appendTRE(TRE tre) throws NITFException;
+    public native void appendTRE(TRE tre) throws NITFException;
 
     /**
      * Returns an array of TREs with the given name
@@ -58,7 +58,7 @@ public final class Extensions extends NITFObject
      *            the name of the TRE(s) to return
      * @return an array of TREs with the given name, or null if none exist
      */
-    public native synchronized Collection<TRE> getTREsByName(String name);
+    public native Collection<TRE> getTREsByName(String name);
 
     /**
      * Remove all instances of a given TRE from this extensions object.
@@ -67,8 +67,7 @@ public final class Extensions extends NITFObject
      *            the tag name of the TREs to remove
      * @throws NITFException
      */
-    public native synchronized void removeTREsByName(String name)
-            throws NITFException;
+    public native void removeTREsByName(String name) throws NITFException;
 
     /**
      * Returns true if a TRE with the given name exists, false otherwise
@@ -77,12 +76,12 @@ public final class Extensions extends NITFObject
      *            the name of the TRE
      * @return true if a TRE with the given name exists, false otherwise
      */
-    public native synchronized boolean exists(String name);
+    public native boolean exists(String name);
 
     /**
      * @return a Collection of the TREs in this extensions segment
      */
-    public native synchronized Collection<TRE> getAll();
+    public native Collection<TRE> getAll();
 
     /**
      * @param version

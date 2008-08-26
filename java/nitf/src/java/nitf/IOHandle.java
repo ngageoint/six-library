@@ -156,8 +156,7 @@ public final class IOHandle extends NITFObject
      *            the amount to read
      * @throws NITFException
      */
-    public native synchronized void read(byte[] buf, int size)
-            throws NITFException;
+    public native void read(byte[] buf, int size) throws NITFException;
 
     /**
      * Writes size bytes to the file at the current position
@@ -168,8 +167,7 @@ public final class IOHandle extends NITFObject
      *            the amount to write
      * @throws NITFException
      */
-    public native synchronized void write(byte[] buf, int size)
-            throws NITFException;
+    public native void write(byte[] buf, int size) throws NITFException;
 
     /**
      * Seeks to the specified offset relative to the position specified by
@@ -182,8 +180,7 @@ public final class IOHandle extends NITFObject
      * @return the position in the file after the seek
      * @throws NITFException
      */
-    public native synchronized long seek(long offset, int whence)
-            throws NITFException;
+    public native long seek(long offset, int whence) throws NITFException;
 
     /**
      * Returns the current file pointer position
@@ -191,7 +188,7 @@ public final class IOHandle extends NITFObject
      * @return the current file pointer position
      * @throws NITFException
      */
-    public native synchronized long tell() throws NITFException;
+    public native long tell() throws NITFException;
 
     /**
      * Returns the size of the file descriptor
@@ -199,13 +196,13 @@ public final class IOHandle extends NITFObject
      * @return the size of the file descriptor
      * @throws NITFException
      */
-    public native synchronized long getSize() throws NITFException;
+    public native long getSize() throws NITFException;
 
     /**
      * Closes the file descriptor. Good implementation should always end by
      * calling this.
      */
-    public native synchronized void close();
+    public native void close();
 
     /**
      * Return the name of the file associated with this handle
@@ -226,6 +223,6 @@ public final class IOHandle extends NITFObject
      * @return
      * @throws NITFException
      */
-    private native synchronized long createHandle(String fileName,
-            int accessFlag, int creationFlag) throws NITFException;
+    private native long createHandle(String fileName, int accessFlag,
+            int creationFlag) throws NITFException;
 }

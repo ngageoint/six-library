@@ -46,7 +46,7 @@ public final class SegmentWriter extends DestructibleObject
      * 
      * @return
      */
-    public native synchronized IOHandle getOutputHandle();
+    public native IOHandle getOutputHandle();
 
     /**
      * Returns the ImageSource
@@ -54,8 +54,7 @@ public final class SegmentWriter extends DestructibleObject
      * @return the ImageSource associated with this ImageWriter
      * @throws NITFException
      */
-    public native synchronized SegmentSource getSegmentSource()
-            throws NITFException;
+    public native SegmentSource getSegmentSource() throws NITFException;
 
     /**
      * Attaches the specified SegmentSource to this SegmentWriter
@@ -67,8 +66,7 @@ public final class SegmentWriter extends DestructibleObject
      *             if a SegmentSource has already been attached, or if an error
      *             occurs
      */
-    public native synchronized boolean attachSource(SegmentSource segmentSource)
+    public native boolean attachSource(SegmentSource segmentSource)
             throws NITFException;
 
 }
-

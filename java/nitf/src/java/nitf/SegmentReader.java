@@ -24,7 +24,7 @@ package nitf;
 
 /**
  * SegmentReader <p/> This class provides a "jailed" IOHandle to the data in a
- * segment. <p/> 
+ * segment. <p/>
  * 
  * @see Reader#getNewGraphicReader(int)
  * @see Reader#getNewTextReader(int)
@@ -97,7 +97,7 @@ public final class SegmentReader extends DestructibleObject
      * @throws NITFException
      * @see IOHandle#tell()
      */
-    public native synchronized long tell() throws NITFException;
+    public native long tell() throws NITFException;
 
     /**
      * The seek function allows the user to determine the size of the data. This
@@ -107,7 +107,6 @@ public final class SegmentReader extends DestructibleObject
      * @throws NITFException
      * @see IOHandle#getSize()
      */
-    public native synchronized long getSize() throws NITFException;
+    public native long getSize() throws NITFException;
 
 }
-

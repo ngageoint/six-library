@@ -26,9 +26,7 @@
 package nitf;
 
 /**
- * FieldType
- * <p/>
- * This enumeration class provides the possible types for a Field
+ * FieldType <p/> This enumeration class provides the possible types for a Field
  */
 public class FieldType
 {
@@ -58,7 +56,7 @@ public class FieldType
     {
         return myName;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -73,4 +71,3 @@ public class FieldType
         return obj.toString().equals(toString());
     }
 }
-

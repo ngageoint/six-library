@@ -38,42 +38,42 @@ public final class BandInfo extends NITFObject
      * 
      * @return the Band Entries Per LUT Field
      */
-    public native synchronized Field getBandEntriesPerLUT();
+    public native Field getBandEntriesPerLUT();
 
     /**
      * Returns the Image Filter Code Field
      * 
      * @return the Image Filter Code Field
      */
-    public native synchronized Field getImageFilterCode();
+    public native Field getImageFilterCode();
 
     /**
      * Returns the Image Filter Condition Field
      * 
      * @return the Image Filter Condition Field
      */
-    public native synchronized Field getImageFilterCondition();
+    public native Field getImageFilterCondition();
 
     /**
      * Returns the Num LUTS Field
      * 
      * @return the Num LUTS Field
      */
-    public native synchronized Field getNumLUTs();
+    public native Field getNumLUTs();
 
     /**
      * Returns the Representation Field
      * 
      * @return the Representation Field
      */
-    public native synchronized Field getRepresentation();
+    public native Field getRepresentation();
 
     /**
      * Returns the Subcategory Field
      * 
      * @return the Subcategory Field
      */
-    public native synchronized Field getSubcategory();
+    public native Field getSubcategory();
 
     /**
      * Returns the LookUpTable associated with this BandInfo
@@ -81,7 +81,7 @@ public final class BandInfo extends NITFObject
      * @return the LookUpTable associated with this BandInfo, or null if none
      *         specified
      */
-    public native synchronized LookupTable getLookupTable();
+    public native LookupTable getLookupTable();
 
     /**
      * Sets the lookupTable for this BandInfo
@@ -89,6 +89,5 @@ public final class BandInfo extends NITFObject
      * @param lookupTable
      *            the LookupTable
      */
-    public native synchronized void setLookupTable(LookupTable lookupTable);
+    public native void setLookupTable(LookupTable lookupTable);
 }
-

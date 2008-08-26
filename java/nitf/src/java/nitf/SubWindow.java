@@ -56,91 +56,91 @@ public final class SubWindow extends DestructibleObject
      * 
      * @return
      */
-    public native synchronized int[] getBandList();
+    public native int[] getBandList();
 
     /**
      * Constructs the underlying memory
      * 
      * @throws NITFException
      */
-    private native synchronized void construct() throws NITFException;
+    private native void construct() throws NITFException;
 
     /**
      * Sets the number of columns
      * 
      * @param numCols
      */
-    public native synchronized void setNumCols(int numCols);
+    public native void setNumCols(int numCols);
 
     /**
      * Sets the BandList array
      * 
      * @param bandList
      */
-    public native synchronized void setBandList(int[] bandList);
+    public native void setBandList(int[] bandList);
 
     /**
      * Returns the start row
      * 
      * @return
      */
-    public native synchronized int getStartRow();
+    public native int getStartRow();
 
     /**
      * Sets the start row
      * 
      * @param startRow
      */
-    public native synchronized void setStartRow(int startRow);
+    public native void setStartRow(int startRow);
 
     /**
      * Returns the number of rows
      * 
      * @return
      */
-    public native synchronized int getNumRows();
+    public native int getNumRows();
 
     /**
      * Sets the number of rows
      * 
      * @param numRows
      */
-    public native synchronized void setNumRows(int numRows);
+    public native void setNumRows(int numRows);
 
     /**
      * Returns the start column
      * 
      * @return
      */
-    public native synchronized int getStartCol();
+    public native int getStartCol();
 
     /**
      * Sets the start column
      * 
      * @param startCol
      */
-    public native synchronized void setStartCol(int startCol);
+    public native void setStartCol(int startCol);
 
     /**
      * Returns the number of columns
      * 
      * @return
      */
-    public native synchronized int getNumCols();
+    public native int getNumCols();
 
     /**
      * Returns the number of bands
      * 
      * @return
      */
-    public native synchronized int getNumBands();
+    public native int getNumBands();
 
     /**
      * Sets the number of bands
      * 
      * @param numBands
      */
-    public native synchronized void setNumBands(int numBands);
+    public native void setNumBands(int numBands);
 
     /**
      * Sets the DownSampler for this SubWindow If none is specified, or if
@@ -148,14 +148,14 @@ public final class SubWindow extends DestructibleObject
      * 
      * @param downSampler
      */
-    public native synchronized void setDownSampler(DownSampler downSampler);
+    public native void setDownSampler(DownSampler downSampler);
 
     /**
      * Returns the DownSampler for this window, or null if none is specified
      * 
      * @return
      */
-    public native synchronized DownSampler getDownSampler();
+    public native DownSampler getDownSampler();
 
     public String toString()
     {
@@ -171,4 +171,3 @@ public final class SubWindow extends DestructibleObject
     }
 
 }
-

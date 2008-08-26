@@ -46,7 +46,7 @@ public final class ImageReader extends DestructibleObject
      * 
      * @return the IOHandle associated with this ImageReader
      */
-    public native synchronized IOHandle getInputHandle();
+    public native IOHandle getInputHandle();
 
     /**
      * Returns the BlockingInfo used by this ImageReader
@@ -54,8 +54,7 @@ public final class ImageReader extends DestructibleObject
      * @return the BlockingInfo used by this ImageReader
      * @throws NITFException
      */
-    public native synchronized BlockingInfo getBlockingInfo()
-            throws NITFException;
+    public native BlockingInfo getBlockingInfo() throws NITFException;
 
     /**
      * Reads the data specified by the SubWindow into the byte[][] buffer
@@ -67,6 +66,6 @@ public final class ImageReader extends DestructibleObject
      * @return true if the read succeeds, false otherwise
      * @throws NITFException
      */
-    public native synchronized boolean read(SubWindow subWindow,
-            byte[][] userBuf) throws NITFException;
+    public native boolean read(SubWindow subWindow, byte[][] userBuf)
+            throws NITFException;
 }

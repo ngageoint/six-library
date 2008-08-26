@@ -91,4 +91,3 @@ public class LookupTable extends DestructibleObject
     public synchronized native byte[] getData();
 
 }
-

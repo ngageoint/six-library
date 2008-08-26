@@ -70,8 +70,7 @@ public final class Record extends CloneableObject
      *            The Version of the NITF to create
      * @throws NITFException
      */
-    private native synchronized void construct(Version version)
-            throws NITFException;
+    private native void construct(Version version) throws NITFException;
 
     /**
      * Destructs the underlying memory
@@ -95,14 +94,14 @@ public final class Record extends CloneableObject
      * 
      * @return The file header component to the client
      */
-    public native synchronized FileHeader getHeader() throws NITFException;
+    public native FileHeader getHeader() throws NITFException;
 
     /**
      * Get the array of image segments found in the NITF file
      * 
      * @return The segment array back to the client
      */
-    public native synchronized ImageSegment[] getImages() throws NITFException;
+    public native ImageSegment[] getImages() throws NITFException;
 
     /**
      * Get the array of graphics segments found in the NITF file. This object is
@@ -111,8 +110,7 @@ public final class Record extends CloneableObject
      * @return The segment array back to the client
      */
 
-    public native synchronized GraphicSegment[] getGraphics()
-            throws NITFException;
+    public native GraphicSegment[] getGraphics() throws NITFException;
 
     /**
      * Get the array of labels segments found in the NITF file. This object is
@@ -120,7 +118,7 @@ public final class Record extends CloneableObject
      * 
      * @return The segment array back to the client
      */
-    public native synchronized LabelSegment[] getLabels() throws NITFException;
+    public native LabelSegment[] getLabels() throws NITFException;
 
     /**
      * Get the array of text segments found in the NITF file. This object is
@@ -128,7 +126,7 @@ public final class Record extends CloneableObject
      * 
      * @return The segment array back to the client
      */
-    public native synchronized TextSegment[] getTexts() throws NITFException;
+    public native TextSegment[] getTexts() throws NITFException;
 
     /**
      * Get the array of data extension segments found in the NITF file. These
@@ -136,8 +134,7 @@ public final class Record extends CloneableObject
      * 
      * @return The segment array back to the client
      */
-    public native synchronized DESegment[] getDataExtensions()
-            throws NITFException;
+    public native DESegment[] getDataExtensions() throws NITFException;
 
     /**
      * Get the array of reserved extension segments found in the NITF file. This
@@ -145,8 +142,7 @@ public final class Record extends CloneableObject
      * 
      * @return The segment array back to the client
      */
-    public native synchronized RESegment[] getReservedExtensions()
-            throws NITFException;
+    public native RESegment[] getReservedExtensions() throws NITFException;
 
     /**
      * Adds an ImageSegment to this Record, and returns a handle to it <p/>
@@ -154,8 +150,7 @@ public final class Record extends CloneableObject
      * 
      * @throws NITFException
      */
-    public native synchronized ImageSegment newImageSegment()
-            throws NITFException;
+    public native ImageSegment newImageSegment() throws NITFException;
 
     /**
      * Adds a GraphicSegment to this Record, and returns a handle to it <p/>
@@ -163,8 +158,7 @@ public final class Record extends CloneableObject
      * 
      * @throws NITFException
      */
-    public native synchronized GraphicSegment newGraphicSegment()
-            throws NITFException;
+    public native GraphicSegment newGraphicSegment() throws NITFException;
 
     /**
      * Adds a TextSegment to this Record, and returns a handle to it <p/> NOTE:
@@ -172,8 +166,7 @@ public final class Record extends CloneableObject
      * 
      * @throws NITFException
      */
-    public native synchronized TextSegment newTextSegment()
-            throws NITFException;
+    public native TextSegment newTextSegment() throws NITFException;
 
     /**
      * Adds a DESegment to this Record, and returns a handle to it <p/> NOTE:
@@ -181,7 +174,7 @@ public final class Record extends CloneableObject
      * 
      * @throws NITFException
      */
-    public native synchronized DESegment newDESegment() throws NITFException;
+    public native DESegment newDESegment() throws NITFException;
 
     /**
      * This removes the segment at the given offset. The segment is
