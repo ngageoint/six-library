@@ -376,8 +376,7 @@ int main(int argc, char *argv[])
     
 
     des->subheader->subheaderFields = 
-        nitf_TRE_construct("TEST DES", "TEST DES",
-                           NITF_TRE_DEFAULT_LENGTH, &error);
+        nitf_TRE_construct("TEST DES", "TEST DES", &error);
     if (!des->subheader->subheaderFields)
     {
         nitf_Record_destruct(&record);

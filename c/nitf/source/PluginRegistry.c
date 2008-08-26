@@ -150,14 +150,12 @@ NITFPRIV(int) insertPlugin(nitf_PluginRegistry * reg,
 NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
 {
 
+    const char *pluginEnvVar;
+    
     /*  Create the registry object  */
     nitf_PluginRegistry *reg =
         (nitf_PluginRegistry *) NITF_MALLOC(sizeof(nitf_PluginRegistry));
-
-    const char *pluginEnvVar;
-
-    /* Null initialize these just in case we fail early on */
-    reg->compressionHandlers = reg->decompressionHandlers = NULL;
+    
     /*  If we have a memory problem, init our error struct and return  */
     if (!reg)
     {
@@ -166,11 +164,15 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
                         NITF_CTXT, NITF_ERR_MEMORY);
         return NULL;
     }
+    
+    /* set these to NULL to possibly protect us later */
+    reg->compressionHandlers = NULL;
+    reg->treHandlers = NULL;
+    reg->decompressionHandlers = NULL;
 
     /*  Construct our hash object  */
     reg->treHandlers = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
     
-
     /*  If we have a problem, get rid of this object and return  */
     if (!reg->treHandlers)
     {
@@ -178,10 +180,12 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
         return NULL;
     }
 
-    /*nitf_HashTable_setPolicy(reg->treHandlers, NITF_DATA_RETAIN_OWNER);*/
+    /* do not adopt the data - we will clean it up ourselves */
+    nitf_HashTable_setPolicy(reg->treHandlers, NITF_DATA_RETAIN_OWNER);
 
     reg->compressionHandlers =
         nitf_HashTable_construct(NITF_COMPRESSION_HASH_SIZE, error);
+
 
     /*  If we have a problem, get rid of this object and return  */
     if (!reg->compressionHandlers)
@@ -190,7 +194,8 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
         return NULL;
     }
 
-    /*nitf_HashTable_setPolicy(reg->compressionHandlers, NITF_DATA_RETAIN_OWNER);*/
+    /* do not adopt the data - we will clean it up ourselves */
+    nitf_HashTable_setPolicy(reg->compressionHandlers, NITF_DATA_RETAIN_OWNER);
 
     reg->decompressionHandlers =
         nitf_HashTable_construct(NITF_DECOMPRESSION_HASH_SIZE, error);
@@ -202,8 +207,8 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
         return NULL;
     }
 
-    /*nitf_HashTable_setPolicy(reg->decompressionHandlers, NITF_DATA_RETAIN_OWNER);
-*/
+    /* do not adopt the data - we will clean it up ourselves */
+    nitf_HashTable_setPolicy(reg->decompressionHandlers, NITF_DATA_RETAIN_OWNER);
 
     /*nitf_HashTable_setPolicy(reg->desHandlers, NITF_DATA_RETAIN_OWNER);
 */
