@@ -112,13 +112,13 @@ NITFPROT(nitf_BandInfo *) nitf_BandInfo_clone(nitf_BandInfo * source,
  *  \return FALSE is returned on error and the supplied error object is set
  */
 NITFAPI(NITF_BOOL) nitf_BandInfo_init(nitf_BandInfo * bandInfo, /*!< The band info to initialize */
-                                      char *representation,     /*!< The band representation */
-                                      char *subcategory,        /*!< The band subcategory */
-                                      char *imageFilterCondition,       /*!< The band filter condition */
-                                      char *imageFilterCode,    /*!< The band standard image filter code */
+                                      const char *representation,       /*!< The band representation */
+                                      const char *subcategory,          /*!< The band subcategory */
+                                      const char *imageFilterCondition, /*!< The band filter condition */
+                                      const char *imageFilterCode,      /*!< The band standard image filter code */
                                       nitf_Uint32 numLUTs,      /*!< The number of look-up tables */
                                       nitf_Uint32 bandEntriesPerLUT,    /*!< The number of entries/LUT */
-                                      nitf_LookupTable * lut,   /*!< The look-upt tables */
+                                      nitf_LookupTable * lut,   /*!< The look-up tables */
                                       nitf_Error * error        /*!< Error object for error returns */
                                      );
 

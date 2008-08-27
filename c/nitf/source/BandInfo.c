@@ -129,10 +129,10 @@ CATCH_ERROR:
 
 
 NITFAPI(NITF_BOOL) nitf_BandInfo_init(nitf_BandInfo * bandInfo,
-                                      char *representation,
-                                      char *subcategory,
-                                      char *imageFilterCondition,
-                                      char *imageFilterCode,
+                                      const char *representation,
+                                      const char *subcategory,
+                                      const char *imageFilterCondition,
+                                      const char *imageFilterCode,
                                       nitf_Uint32 numLUTs,
                                       nitf_Uint32 bandEntriesPerLUT,
                                       nitf_LookupTable * lut,
