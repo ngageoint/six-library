@@ -7609,6 +7609,59 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nitf_Field_resizable_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Field *arg1 = (nitf_Field *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Field_resizable_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Field, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Field_resizable_set" "', argument " "1"" of type '" "nitf_Field *""'"); 
+  }
+  arg1 = (nitf_Field *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Field_resizable_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->resizable = arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Field_resizable_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Field *arg1 = (nitf_Field *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Field_resizable_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Field, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Field_resizable_get" "', argument " "1"" of type '" "nitf_Field *""'"); 
+  }
+  arg1 = (nitf_Field *)(argp1);
+  result = (int) ((arg1)->resizable);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_nitf_Field(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Field *arg1 = (nitf_Field *) 0 ;
@@ -8199,6 +8252,46 @@ SWIGINTERN PyObject *_wrap_nitf_Field_print(PyObject *SWIGUNUSEDPARM(self), PyOb
   arg1 = (nitf_Field *)(argp1);
   nitf_Field_print(arg1);
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Field_resizeField(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Field *arg1 = (nitf_Field *) 0 ;
+  size_t arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Field_resizeField",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Field, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Field_resizeField" "', argument " "1"" of type '" "nitf_Field *""'"); 
+  }
+  arg1 = (nitf_Field *)(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Field_resizeField" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = (size_t)(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__nitf_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Field_resizeField" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = (nitf_Error *)(argp3);
+  result = (int)nitf_Field_resizeField(arg1,arg2,arg3);
+  resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
   return NULL;
@@ -27844,6 +27937,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_Field_raw_get", _wrap_nitf_Field_raw_get, METH_VARARGS, NULL},
 	 { (char *)"nitf_Field_length_set", _wrap_nitf_Field_length_set, METH_VARARGS, NULL},
 	 { (char *)"nitf_Field_length_get", _wrap_nitf_Field_length_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Field_resizable_set", _wrap_nitf_Field_resizable_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Field_resizable_get", _wrap_nitf_Field_resizable_get, METH_VARARGS, NULL},
 	 { (char *)"delete_nitf_Field", _wrap_delete_nitf_Field, METH_VARARGS, NULL},
 	 { (char *)"nitf_Field_swigregister", nitf_Field_swigregister, METH_VARARGS, NULL},
 	 { (char *)"nitf_Field_construct", _wrap_nitf_Field_construct, METH_VARARGS, NULL},
@@ -27860,6 +27955,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_Field_get", _wrap_nitf_Field_get, METH_VARARGS, NULL},
 	 { (char *)"nitf_Field_resetLength", _wrap_nitf_Field_resetLength, METH_VARARGS, NULL},
 	 { (char *)"nitf_Field_print", _wrap_nitf_Field_print, METH_VARARGS, NULL},
+	 { (char *)"nitf_Field_resizeField", _wrap_nitf_Field_resizeField, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileSecurity_classificationSystem_set", _wrap_nitf_FileSecurity_classificationSystem_set, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileSecurity_classificationSystem_get", _wrap_nitf_FileSecurity_classificationSystem_get, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileSecurity_codewords_set", _wrap_nitf_FileSecurity_codewords_set, METH_VARARGS, NULL},

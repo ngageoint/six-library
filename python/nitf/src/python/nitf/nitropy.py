@@ -325,6 +325,9 @@ class nitf_Field(_object):
     __swig_setmethods__["length"] = _nitropy.nitf_Field_length_set
     __swig_getmethods__["length"] = _nitropy.nitf_Field_length_get
     if _newclass:length = _swig_property(_nitropy.nitf_Field_length_get, _nitropy.nitf_Field_length_set)
+    __swig_setmethods__["resizable"] = _nitropy.nitf_Field_resizable_set
+    __swig_getmethods__["resizable"] = _nitropy.nitf_Field_resizable_get
+    if _newclass:resizable = _swig_property(_nitropy.nitf_Field_resizable_get, _nitropy.nitf_Field_resizable_set)
     __swig_destroy__ = _nitropy.delete_nitf_Field
     __del__ = lambda self : None;
 nitf_Field_swigregister = _nitropy.nitf_Field_swigregister
@@ -344,6 +347,7 @@ nitf_Field_clone = _nitropy.nitf_Field_clone
 nitf_Field_get = _nitropy.nitf_Field_get
 nitf_Field_resetLength = _nitropy.nitf_Field_resetLength
 nitf_Field_print = _nitropy.nitf_Field_print
+nitf_Field_resizeField = _nitropy.nitf_Field_resizeField
 NITF_CLSY_SZ = _nitropy.NITF_CLSY_SZ
 NITF_CODE_SZ = _nitropy.NITF_CODE_SZ
 NITF_CTLH_SZ = _nitropy.NITF_CTLH_SZ
