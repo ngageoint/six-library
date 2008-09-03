@@ -201,6 +201,12 @@ NITF_BOOL colorIsSet(short* color3)
 }
 
 
+NITF_BOOL rectangleIsSet(cgm_Rectangle* r)
+{
+    return (r->x1 != -1 && r->x2 != -1 && r->y1 != -1 && r->y2 != -1);
+    
+}
+
 NITF_BOOL writeFillAttributes(cgm_FillAttributes* atts, nitf_IOHandle io, nitf_Error* error)
 {
     short actual;
@@ -251,6 +257,76 @@ NITF_BOOL writeFillAttributes(cgm_FillAttributes* atts, nitf_IOHandle io, nitf_E
     return NITF_SUCCESS;
 }
 
+
+
+NITF_BOOL writeLineAttributes(cgm_LineAttributes* atts, nitf_IOHandle io, nitf_Error* error)
+{
+    short actual;
+    NITF_BOOL rv;
+    /* Write the fill color if its set */
+    if (colorIsSet(atts->lineColor))
+    {
+        rv = writeHeader(5, 48, 3, io,&actual, error);
+        if (!rv) return NITF_FAILURE;
+
+        rv = writeRGBPadded(atts->lineColor, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    /* Write the edge width */
+    if (atts->lineWidth != -1)
+    {
+        rv = writeField(5, 3, (const char*)&(atts->lineWidth), 2, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    /* Write the edge type */
+    if (atts->lineType != CGM_TYPE_NOT_SET)
+    {
+        rv = writeField(5, 2, (const char*)&(atts->lineType), 2, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    return NITF_SUCCESS;
+}
+
+
+NITF_BOOL writeTextAttributes(cgm_TextAttributes* atts, nitf_IOHandle io, nitf_Error* error)
+{
+    short actual;
+    NITF_BOOL rv;
+    /* Write the fill color if its set */
+    if (colorIsSet(atts->textColor))
+    {
+        rv = writeHeader(5, 14, 3, io,&actual, error);
+        if (!rv) return NITF_FAILURE;
+
+        rv = writeRGBPadded(atts->textColor, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    /* Write the edge width */
+    if (atts->characterHeight != -1)
+    {
+        rv = writeField(5, 15, (const char*)&(atts->characterHeight), 2, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    /* Write the edge width */
+    if (atts->textFontIndex != -1)
+    {
+        rv = writeField(5, 10, (const char*)&(atts->textFontIndex), 2, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+
+    
+    /* Write the edge type */
+    if (rectangleIsSet(atts->characterOrientation))
+    {
+        rv = writeHeader(5, 16, 8, io, &actual, error);
+        if (!rv) return NITF_FAILURE;
+
+        rv = writeRectangle(atts->characterOrientation, io, error);
+        if (!rv) return NITF_FAILURE;
+            
+    }
+    return NITF_SUCCESS;
+}
 
 
 NITF_BOOL writeElements(nitf_List* elements, nitf_IOHandle io, nitf_Error* error)
