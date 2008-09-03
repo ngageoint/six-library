@@ -165,9 +165,51 @@ NITF_BOOL writeVDC(cgm_Rectangle* r, nitf_IOHandle io, nitf_Error* error)
     return writeRectangle(r, io, error);
 }
 
-NITF_BOOL writeBody(cgm_PictureBody* body, nitf_IOHandle io, nitf_Error* error)
+NITF_BOOL writeRGB(short *color3, nitf_IOHandle io, nitf_Error* error)
+{
+    NITF_BOOL rv;
+    short s = NITF_HTONS(color3[0]);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_NTOHS(color3[1]);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_NTOHS(color3[2]);
+    return nitf_IOHandle_write(io, (const char*)&s, 2, error);
+
+}
+
+NITF_BOOL writeElements(nitf_List* elements, nitf_IOHandle io, nitf_Error* error)
 {
     return NITF_SUCCESS;
+}
+
+NITF_BOOL writeBody(cgm_PictureBody* body, nitf_IOHandle io, nitf_Error* error)
+{
+    NITF_BOOL rv;
+    short actual;
+
+    /* Write picture body */    
+    rv = writeHeader(0, 4, 0, io, &actual, error);
+    if (!rv) return NITF_FAILURE;
+
+    /* Transparency */
+    rv = writeField(3, 4,  (const char*)&(body->transparency), 2, io, error);
+    if (!rv) return NITF_FAILURE;
+
+    if (body->auxColor[0] != -1 &&
+        body->auxColor[1] != -1 &&
+        body->auxColor[2] != -1)
+    {
+        char zero = 0;
+        writeHeader(3, 3, 3, io, &actual, error);
+        if (!nitf_IOHandle_write(io, &zero, 2, error))
+            return NITF_FAILURE;
+    }
+    
+    return writeElements(body->elements, io, error);
 }
 
 NITF_BOOL writePicture(cgm_Picture* picture, nitf_IOHandle io, nitf_Error* error)
@@ -199,8 +241,7 @@ NITF_BOOL writePicture(cgm_Picture* picture, nitf_IOHandle io, nitf_Error* error
     if (!rv) return NITF_FAILURE;
 
     /* End picture */
-    rv = writeHeader(0, 5, 0, io, &actual, error);
-    return NITF_SUCCESS;
+    return writeHeader(0, 5, 0, io, &actual, error);
 }
 
 NITF_BOOL writeFontList(nitf_List* fontList, nitf_IOHandle io, nitf_Error* error)
@@ -256,9 +297,12 @@ NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_Metafile* mf,
     NITF_BOOL rv;
     short actual;
     /* Begin Metafile */
-    writeField(0, 1, mf->name, strlen(mf->name), io, error);
+    rv = writeField(0, 1, mf->name, strlen(mf->name), io, error);
+    if (!rv) return NITF_FAILURE;
+
     /* Write version */
-    writeField(1, 1, (const char*)&(mf->version), 2, io, error);
+    rv = writeField(1, 1, (const char*)&(mf->version), 2, io, error);
+    if (!rv) return NITF_FAILURE;
     /* Metafile element list */
     reversed[0] = NITF_HTONS(mf->elementList[0]);
     reversed[1] = NITF_HTONS(mf->elementList[1]);
