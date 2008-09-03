@@ -51,6 +51,7 @@ typedef enum _cgm_ElementType
     CGM_CIRCULAR_ARC_CENTER_CLOSE_ELEMENT
 } cgm_ElementType;
 
+#define CGM_ELEMENT_RANGE 10
 
 typedef void (*CGM_ELEMENT_DESTROY)(NITF_DATA*);
 typedef void (*CGM_ELEMENT_PRINT)(NITF_DATA*);

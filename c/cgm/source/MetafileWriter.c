@@ -22,55 +22,7 @@
 
 #include "cgm/MetafileWriter.h"
 
-static cgm_ElementWriter elements[] =
-{
-/*
-    { CGM_TEXT_ELEMENT, (CGM_PACK)&writeText },
-    { CGM_POLYGON_ELEMENT, (CGM_PACK)&writePolygon },
-    { CGM_POLYSET_ELEMENT, (CGM_PACK)&writePolySet },
-    { CGM_POLYLINE_ELEMENT, (CGM_PACK)&writePolyLine },
-    { CGM_ELLIPSE_ELEMENT, (CGM_PACK)&writeEllipse },
-    { CGM_ELLIPTICAL_ARC_CENTER_ELEMENT, (CGM_PACK)&writeEllipticalArcCenter },
-    { CGM_ELLIPTICAL_ARC_CENTER_CLOSE_ELEMENT, (CGM_PACK)&writeEllipticalArcCenterClose },
-    { CGM_RECTANGLE_ELEMENT, (CGM_PACK)&writeRectangle },
-    { CGM_CIRCLE_ELEMENT, (CGM_PACK)&writeCircle },
-    { CGM_CIRCULAR_ARC_CENTER_ELEMENT, (CGM_PACK)&writeCircularArcCenter },
-    { CGM_CIRCULAR_ARC_CENTER_CLOSE_ELEMENT, (CGM_PACK)&writeCircularArcCenterClose },
-    
-*/
-    { 0, NULL }
-};
 
-NITFAPI(cgm_MetafileWriter*) 
-    cgm_MetafileWriter_construct(nitf_Error* error)
-{
-    cgm_MetafileWriter* reader = 
-	(cgm_MetafileWriter*)NITF_MALLOC(sizeof(cgm_MetafileWriter));
-    
-    if (!reader)
-    {
-        nitf_Error_init(error,
-                        NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
-	return NULL;
-    }
-    
-    reader->packer = elements;
-    
-    return reader;
-    
-}
-
-NITFAPI(void) 
-    cgm_MetafileWriter_destruct(cgm_MetafileWriter** writer)
-{
-    /*  If we have a reader, lets blow it away */
-    if (*writer)
-    {
-	NITF_FREE(*writer);
-	*writer = NULL;
-    }
-}
 
 NITF_BOOL writeRectangle(cgm_Rectangle* r, nitf_IOHandle io, nitf_Error* error)
 {
@@ -94,15 +46,12 @@ NITF_BOOL writeRectangle(cgm_Rectangle* r, nitf_IOHandle io, nitf_Error* error)
 NITFPRIV(NITF_BOOL) writeHeader(short classType, short code, short size, nitf_IOHandle io, short* actual, nitf_Error* error)
 {
     *actual = size;
+    short params = size;
     short extendedParams = 0;
-    short params = 0;
     short header = 0;
     if (size % 2 != 0)
         /* We have to do padding */
         (*actual)++;
-
-    params = *actual;
-
 
     if (*actual >= 31)
     {
@@ -168,16 +117,16 @@ NITF_BOOL writeVDC(cgm_Rectangle* r, nitf_IOHandle io, nitf_Error* error)
 NITF_BOOL writeRGB(short *color3, nitf_IOHandle io, nitf_Error* error)
 {
     NITF_BOOL rv;
-    short s = NITF_HTONS(color3[0]);
-    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    unsigned char c = color3[0];
+    rv = nitf_IOHandle_write(io, (const char*)&c, 1, error);
     if (!rv) return NITF_FAILURE;
 
-    s = NITF_NTOHS(color3[1]);
-    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    c = color3[1];
+    rv = nitf_IOHandle_write(io, (const char*)&c, 1, error);
     if (!rv) return NITF_FAILURE;
 
-    s = NITF_NTOHS(color3[2]);
-    return nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    c = color3[2];
+    return nitf_IOHandle_write(io, (const char*)&c, 1, error);
 
 }
 
@@ -188,7 +137,7 @@ NITF_BOOL writeRGBPadded(short *color3, nitf_IOHandle io, nitf_Error* error)
     if (!writeRGB(color3, io, error))
         return NITF_FAILURE;
 
-    if (!nitf_IOHandle_write(io, &zero, 2, error))
+    if (!nitf_IOHandle_write(io, &zero, 1, error))
         return NITF_FAILURE;
     return NITF_SUCCESS;
 }
@@ -329,13 +278,38 @@ NITF_BOOL writeTextAttributes(cgm_TextAttributes* atts, nitf_IOHandle io, nitf_E
 }
 
 
-NITF_BOOL writeElements(nitf_List* elements, nitf_IOHandle io, nitf_Error* error)
+NITF_BOOL writeElements(cgm_MetafileWriter* writer,
+                        nitf_List* elements, 
+                        nitf_IOHandle io, 
+                        nitf_Error* error)
 {
+    nitf_ListIterator it = nitf_List_begin(elements);
+    nitf_ListIterator end = nitf_List_end(elements);
+/*    short dataLen = 0;
+      short actual = 0;*/
+    NITF_BOOL rv;
+    while (nitf_ListIterator_notEqualTo(&it, &end))
+    {
+        cgm_Element *elem = (cgm_Element*)nitf_ListIterator_get(&it);
+        if (elem->type >= CGM_ELEMENT_RANGE ||
+            elem->type < 0)
+        {
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT, 
+                             "Invalid element type [%d] encountered", 
+                             elem->type);
+            return NITF_FAILURE;
+        }
+        rv = (* (writer->packers[ elem->type ]))(elem, io, error);
+
+        nitf_ListIterator_increment(&it);
+    }
+
     return NITF_SUCCESS;
 }
 
 
-NITF_BOOL writeBody(cgm_PictureBody* body, nitf_IOHandle io, nitf_Error* error)
+NITF_BOOL writeBody(cgm_MetafileWriter* writer,
+                    cgm_PictureBody* body, nitf_IOHandle io, nitf_Error* error)
 {
     NITF_BOOL rv;
     short actual;
@@ -356,10 +330,11 @@ NITF_BOOL writeBody(cgm_PictureBody* body, nitf_IOHandle io, nitf_Error* error)
         if (!rv) return NITF_FAILURE;
     }
     
-    return writeElements(body->elements, io, error);
+    return writeElements(writer, body->elements, io, error);
 }
 
-NITF_BOOL writePicture(cgm_Picture* picture, nitf_IOHandle io, nitf_Error* error)
+NITF_BOOL writePicture(cgm_MetafileWriter* writer,
+                       cgm_Picture* picture, nitf_IOHandle io, nitf_Error* error)
 {
     short actual;
     NITF_BOOL rv;
@@ -384,7 +359,7 @@ NITF_BOOL writePicture(cgm_Picture* picture, nitf_IOHandle io, nitf_Error* error
     if (!rv) return NITF_FAILURE;
 
     /* Write picture body */
-    rv = writeBody(picture->body, io, error);
+    rv = writeBody(writer, picture->body, io, error);
     if (!rv) return NITF_FAILURE;
 
     /* End picture */
@@ -436,7 +411,8 @@ NITF_BOOL writeFontList(nitf_List* fontList, nitf_IOHandle io, nitf_Error* error
 }
 
 
-NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_Metafile* mf,
+NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_MetafileWriter* writer,
+                                      cgm_Metafile* mf,
                                       nitf_IOHandle io,
                                       nitf_Error* error)
 {
@@ -468,7 +444,7 @@ NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_Metafile* mf,
         rv = writeFontList(mf->fontList, io, error);
         if (!rv) return NITF_FAILURE;
     }
-    rv = writePicture(mf->picture, io, error);
+    rv = writePicture(writer, mf->picture, io, error);
     if (!rv) return NITF_FAILURE;
 
     /* Write metafile end */
@@ -495,6 +471,161 @@ NITFAPI(NITF_BOOL) cgm_MetafileWriter_write(cgm_MetafileWriter* writer,
 
     return ok;
 */
-    return writeMetafileInfo(mf, io, error);
+    return writeMetafileInfo(writer, mf, io, error);
 
+}
+
+NITF_BOOL writeText(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    short s;
+    short actual;
+    unsigned char slen;
+    NITF_BOOL rv;
+    cgm_TextElement* textElement = (cgm_TextElement*)element->data;
+    cgm_Text* text = textElement->text;
+    if (!writeTextAttributes(textElement->attributes, io, error))
+        return NITF_FAILURE;
+    
+    /* Text length + x + y */
+    s = strlen(text->str) + 1 + 6;
+    rv = writeHeader(4, 4, s, io, &actual, error);
+
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(text->x);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(text->y);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(1);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    slen = strlen(text->str);
+    rv = nitf_IOHandle_write(io, (const char*)&slen, 1, error);
+    if (!rv) return NITF_FAILURE;
+
+
+    /* Trick since we know it zero padded in memory */
+    rv = nitf_IOHandle_write(io, (const char*)text->str, actual - 7, error);
+    if (!rv) return NITF_FAILURE;
+
+    
+    return NITF_SUCCESS;
+}
+NITF_BOOL writePolygon(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+NITF_BOOL writePolySet(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+NITF_BOOL writePolyLine(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+NITF_BOOL writeEllipse(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+
+NITF_BOOL writeEllipticalArcCenter(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+NITF_BOOL writeEllipticalArcCenterClose(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+NITF_BOOL writeRectangleElement(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+NITF_BOOL writeCircle(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+NITF_BOOL writeCircularArcCenter(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+NITF_BOOL writeCircularArcCenterClose(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
+{
+    cgm_Element_print(element);
+    return NITF_SUCCESS;
+}
+
+static CGM_PACK elements[] =
+{
+    &writeText,
+    &writePolygon,
+    &writePolyLine,
+    &writePolySet,
+    &writeEllipse,
+    &writeEllipticalArcCenter,
+    &writeEllipticalArcCenterClose,
+    &writeRectangleElement,
+    &writeCircle,
+    &writeCircularArcCenter,
+    &writeCircularArcCenterClose
+};
+/*
+    { CGM_TEXT_ELEMENT, (CGM_PACK)&writeText },
+    { CGM_POLYGON_ELEMENT, (CGM_PACK)&writePolygon },
+    { CGM_POLYSET_ELEMENT, (CGM_PACK)&writePolySet },
+    { CGM_POLYLINE_ELEMENT, (CGM_PACK)&writePolyLine },
+    { CGM_ELLIPSE_ELEMENT, (CGM_PACK)&writeEllipse },
+    { CGM_ELLIPTICAL_ARC_CENTER_ELEMENT, (CGM_PACK)&writeEllipticalArcCenter },
+    { CGM_ELLIPTICAL_ARC_CENTER_CLOSE_ELEMENT, (CGM_PACK)&writeEllipticalArcCenterClose },
+    { CGM_RECTANGLE_ELEMENT, (CGM_PACK)&writeRectangleElement },
+    { CGM_CIRCLE_ELEMENT, (CGM_PACK)&writeCircle },
+    { CGM_CIRCULAR_ARC_CENTER_ELEMENT, (CGM_PACK)&writeCircularArcCenter },
+    { CGM_CIRCULAR_ARC_CENTER_CLOSE_ELEMENT, (CGM_PACK)&writeCircularArcCenterClose },
+    
+
+    { 0, NULL }
+
+ */
+NITFAPI(cgm_MetafileWriter*) 
+    cgm_MetafileWriter_construct(nitf_Error* error)
+{
+    cgm_MetafileWriter* writer = 
+	(cgm_MetafileWriter*)NITF_MALLOC(sizeof(cgm_MetafileWriter));
+    
+    if (!writer)
+    {
+        nitf_Error_init(error,
+                        NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT, NITF_ERR_MEMORY);
+	return NULL;
+    }
+    
+    writer->packers = elements;
+    
+    return writer;
+    
+}
+
+NITFAPI(void) 
+    cgm_MetafileWriter_destruct(cgm_MetafileWriter** writer)
+{
+    /*  If we have a reader, lets blow it away */
+    if (*writer)
+    {
+	NITF_FREE(*writer);
+	*writer = NULL;
+    }
 }

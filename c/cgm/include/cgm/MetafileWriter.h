@@ -40,19 +40,13 @@
 NITF_CXX_GUARD
 
 
-typedef NITF_BOOL (*CGM_PACK)(cgm_Element* element, nitf_IOHandle io);
+typedef NITF_BOOL (*CGM_PACK)(cgm_Element* element, nitf_IOHandle io, nitf_Error* error);
 
 
-
-typedef struct _cgm_ElementWriter
-{
-    int type;
-    CGM_PACK pack;
-} cgm_ElementWriter;
 
 typedef struct _cgm_MetafileWriter
 {
-    cgm_ElementWriter* packer;
+    CGM_PACK* packers;
 } cgm_MetafileWriter;
 
 NITFAPI(cgm_MetafileWriter*) 
