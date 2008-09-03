@@ -4225,9 +4225,12 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                     band * nitf->nBlocksPerRow * nitf->nBlocksPerColumn;
                 blockIO->blockOffset.orig =
                     modeBlockBaseOffset + startColumnThisBlock * bytes;
+
                 blockIO->blockOffset.mark =
                     blockIO->blockOffset.orig +
-                    (startRowThisBlock * nitf->numColumnsPerBlock) * bytes;
+                    ((nitf_Uint64) startRowThisBlock) *
+                    ((nitf_Uint64) nitf->numColumnsPerBlock) *
+                    ((nitf_Uint64)  bytes);
             }
             else if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_B)
             {
@@ -4238,9 +4241,12 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                 modeMaskOffset = 0;
                 blockIO->blockOffset.orig =
                     modeBlockBaseOffset + startColumnThisBlock * bytes;
+
                 blockIO->blockOffset.mark =
                     blockIO->blockOffset.orig +
-                    (startRowThisBlock * nitf->numColumnsPerBlock) * bytes;
+                    ((nitf_Uint64) startRowThisBlock) *
+                    ((nitf_Uint64) nitf->numColumnsPerBlock) *
+                    ((nitf_Uint64)  bytes);
             }
             else                /* IMODE == "R" */
             {
@@ -4250,10 +4256,13 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                 modeMaskOffset = 0;
                 blockIO->blockOffset.orig =
                     modeBlockBaseOffset + startColumnThisBlock * bytes;
+
                 blockIO->blockOffset.mark =
                     blockIO->blockOffset.orig +
-                    (startRowThisBlock * nitf->numColumnsPerBlock) *
-                    (nitf->numBands) * bytes;
+                    ((nitf_Uint64) startRowThisBlock) *
+                    ((nitf_Uint64) nitf->numColumnsPerBlock) *
+                    ((nitf_Uint64) nitf->numBands) *
+                    ((nitf_Uint64)  bytes);
             }
 
             blockIO->cntl = cntl;
@@ -4690,10 +4699,13 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
             blockIO->blockOffset.orig =
                 startColumnThisBlock * (nitf->numBands) * bytes;
 
-            blockIO->blockOffset.mark = blockIO->blockOffset.orig
-                               +
-                               (startRowThisBlock * nitf->numColumnsPerBlock) *
-                               (nitf->numBands) * bytes;
+                blockIO->blockOffset.mark =
+                    blockIO->blockOffset.orig +
+                    ((nitf_Uint64) startRowThisBlock) *
+                    ((nitf_Uint64) nitf->numColumnsPerBlock) *
+                    ((nitf_Uint64) nitf->numBands) *
+                    ((nitf_Uint64)  bytes);
+
             blockIO->pixelCountFR =
                 (nitf->numColumnsPerBlock - startColumnThisBlock);
             /* Last block may not span full block */
