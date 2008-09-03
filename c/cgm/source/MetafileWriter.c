@@ -181,32 +181,103 @@ NITF_BOOL writeRGB(short *color3, nitf_IOHandle io, nitf_Error* error)
 
 }
 
+NITF_BOOL writeRGBPadded(short *color3, nitf_IOHandle io, nitf_Error* error)
+{
+    char zero = 0;
+
+    if (!writeRGB(color3, io, error))
+        return NITF_FAILURE;
+
+    if (!nitf_IOHandle_write(io, &zero, 2, error))
+        return NITF_FAILURE;
+    return NITF_SUCCESS;
+}
+
+NITF_BOOL colorIsSet(short* color3)
+{
+    return (color3[0] != -1 &&
+            color3[1] != -1 &&
+            color3[2] != -1);
+}
+
+
+NITF_BOOL writeFillAttributes(cgm_FillAttributes* atts, nitf_IOHandle io, nitf_Error* error)
+{
+    short actual;
+    NITF_BOOL rv;
+    /* Write the fill color if its set */
+    if (colorIsSet(atts->fillColor))
+    {
+        rv = writeHeader(5, 23, 3, io,&actual, error);
+        if (!rv) return NITF_FAILURE;
+
+        rv = writeRGBPadded(atts->fillColor, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    /* Write the edge color if its set */
+    if (colorIsSet(atts->edgeColor))
+    {
+        rv = writeHeader(5, 29, 3, io,&actual, error);
+        if (!rv) return NITF_FAILURE;
+        
+        rv = writeRGBPadded(atts->edgeColor, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+
+    /* Write the interior style */
+    if (atts->interiorStyle != CGM_IS_NOT_SET)
+    {
+        rv = writeField(5, 22, (const char*)&(atts->interiorStyle), 2, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    /* Write the edge vis */
+    if (atts->edgeVisibility != -1)
+    {
+        rv = writeField(5, 30, (const char*)&(atts->edgeVisibility), 2, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    /* Write the edge width */
+    if (atts->edgeWidth != -1)
+    {
+        rv = writeField(5, 28, (const char*)&(atts->edgeWidth), 2, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    /* Write the edge type */
+    if (atts->edgeType != CGM_TYPE_NOT_SET)
+    {
+        rv = writeField(5, 27, (const char*)&(atts->edgeType), 2, io, error);
+        if (!rv) return NITF_FAILURE;
+    }
+    return NITF_SUCCESS;
+}
+
+
+
 NITF_BOOL writeElements(nitf_List* elements, nitf_IOHandle io, nitf_Error* error)
 {
     return NITF_SUCCESS;
 }
 
+
 NITF_BOOL writeBody(cgm_PictureBody* body, nitf_IOHandle io, nitf_Error* error)
 {
     NITF_BOOL rv;
     short actual;
-
+    
     /* Write picture body */    
     rv = writeHeader(0, 4, 0, io, &actual, error);
     if (!rv) return NITF_FAILURE;
-
+    
     /* Transparency */
     rv = writeField(3, 4,  (const char*)&(body->transparency), 2, io, error);
     if (!rv) return NITF_FAILURE;
 
-    if (body->auxColor[0] != -1 &&
-        body->auxColor[1] != -1 &&
-        body->auxColor[2] != -1)
+    if (colorIsSet(body->auxColor))
     {
-        char zero = 0;
-        writeHeader(3, 3, 3, io, &actual, error);
-        if (!nitf_IOHandle_write(io, &zero, 2, error))
-            return NITF_FAILURE;
+        rv = writeHeader(3, 3, 3, io, &actual, error);
+        if (!rv) return NITF_FAILURE;
+        rv = writeRGBPadded(body->auxColor, io, error);
+        if (!rv) return NITF_FAILURE;
     }
     
     return writeElements(body->elements, io, error);
