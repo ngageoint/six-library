@@ -552,31 +552,235 @@ NITF_BOOL writePolygon(cgm_Element* element, nitf_IOHandle io, nitf_Error* error
 
     return NITF_SUCCESS;
 }
+
 NITF_BOOL writePolySet(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
 {
-    cgm_Element_print(element);
+    NITF_BOOL rv;
+    cgm_PolySetElement* polyElement = (cgm_PolySetElement*)element->data;
+    nitf_ListIterator it = nitf_List_begin(polyElement->vertices);
+    nitf_ListIterator end = nitf_List_end(polyElement->vertices);
+    short actual;
+    short size = nitf_List_size(element->data);
+    size *= 6;
+
+    rv = writeFillAttributes(polyElement->attributes, io, error);
+    if (!rv) return NITF_FAILURE;
+
+    rv = writeHeader(4, 8, size, io, &actual, error);
+    if (!rv) return NITF_FAILURE;
+
+    while (nitf_ListIterator_notEqualTo(&it, &end))
+    {
+        short s;
+	cgm_VertexClose* v = (cgm_VertexClose*)nitf_ListIterator_get(&it);
+        s = NITF_HTONS(v->x);
+
+        rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+        if (!rv) return NITF_FAILURE;
+
+        s = NITF_HTONS(v->y);
+
+        rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+        if (!rv) return NITF_FAILURE;
+
+        if (v->edgeOutFlag == CGM_EDGE_CLOSE_TYPE_NOT_SET)
+        {
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT, 
+                            "Edge out flags not set in polygon set");
+            return NITF_FAILURE;
+
+        }
+        s = NITF_HTONS(v->edgeOutFlag);
+
+        rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+        if (!rv) return NITF_FAILURE;
+
+        
+        nitf_ListIterator_increment(&it);
+    }
+
     return NITF_SUCCESS;
 }
 NITF_BOOL writePolyLine(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
 {
-    cgm_Element_print(element);
+    NITF_BOOL rv;
+    cgm_PolyLineElement* polyElement = (cgm_PolyLineElement*)element->data;
+    nitf_ListIterator it = nitf_List_begin(polyElement->vertices);
+    nitf_ListIterator end = nitf_List_end(polyElement->vertices);
+    short actual;
+    short size = nitf_List_size(element->data);
+    size *= 4;
+
+    rv = writeLineAttributes(polyElement->attributes, io, error);
+    if (!rv) return NITF_FAILURE;
+
+    rv = writeHeader(4, 1, size, io, &actual, error);
+    if (!rv) return NITF_FAILURE;
+
+    while (nitf_ListIterator_notEqualTo(&it, &end))
+    {
+        short s;
+        cgm_Vertex* v = (cgm_Vertex*)nitf_ListIterator_get(&it);
+        s = NITF_HTONS(v->x);
+
+        rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+        if (!rv) return NITF_FAILURE;
+
+        s = NITF_HTONS(v->y);
+
+        rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+        if (!rv) return NITF_FAILURE;
+
+        
+        nitf_ListIterator_increment(&it);
+    }
+
     return NITF_SUCCESS;
 }
+
 NITF_BOOL writeEllipse(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
 {
-    cgm_Element_print(element);
+    NITF_BOOL rv;
+    short s;
+    short actual;
+    cgm_EllipseElement* ellipse = (cgm_EllipseElement*)element->data;
+
+    rv = writeFillAttributes(ellipse->attributes, io, error);
+    if (!rv) return NITF_FAILURE;
+
+    rv = writeHeader(4, 17, 12, io, &actual, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(ellipse->centerX);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(ellipse->centerY);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(ellipse->end1X);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(ellipse->end1Y);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(ellipse->end2X);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(ellipse->end2Y);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+
     return NITF_SUCCESS;
 }
 
 NITF_BOOL writeEllipticalArcCenter(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
 {
-    cgm_Element_print(element);
+    NITF_BOOL rv;
+    short s;
+    short actual;
+    cgm_EllipticalArcElement* arc = (cgm_EllipticalArcElement*)element->data;
+
+    rv = writeLineAttributes(arc->attributes, io, error);
+    if (!rv) return NITF_FAILURE;
+
+    rv = writeHeader(4, 17, 12, io, &actual, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(arc->centerX);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(arc->centerY);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(arc->end1X);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->end1Y);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->end2X);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->end2Y);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(arc->startVectorY);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->startVectorY);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->endVectorX);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->endVectorY);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    
+
     return NITF_SUCCESS;
 }
 NITF_BOOL writeEllipticalArcCenterClose(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
 {
-    cgm_Element_print(element);
+    NITF_BOOL rv;
+    short s;
+    short actual;
+    cgm_EllipticalArcCloseElement* arc = (cgm_EllipticalArcCloseElement*)element->data;
+
+    rv = writeFillAttributes(arc->attributes, io, error);
+    if (!rv) return NITF_FAILURE;
+
+    rv = writeHeader(4, 17, 12, io, &actual, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(arc->centerX);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(arc->centerY);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(arc->end1X);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->end1Y);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->end2X);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->end2Y);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(arc->startVectorY);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->startVectorY);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->endVectorX);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    s = NITF_HTONS(arc->endVectorY);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+
+    s = NITF_HTONS(arc->closeType);
+    rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+    if (!rv) return NITF_FAILURE;
+    
+    
+
     return NITF_SUCCESS;
+
 }
 NITF_BOOL writeRectangleElement(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
 {

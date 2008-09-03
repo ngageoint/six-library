@@ -823,6 +823,7 @@ NITF_BOOL ellipticalArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int c
     ellipticalArc->startVectorY = readShort(&b[14]);
     ellipticalArc->endVectorX = readShort(&b[16]);
     ellipticalArc->endVectorY = readShort(&b[18]);
+    ellipticalArc->closeType = readShort(&b[20]);
 
     cgm_Element_print(elem);
 

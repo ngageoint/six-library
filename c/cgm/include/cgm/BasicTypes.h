@@ -75,6 +75,13 @@ typedef enum _cgm_EdgeCloseType
     
 } cgm_EdgeCloseType;
 
+typedef enum _cgm_EllipticalCloseType
+{
+    CGM_ELLIPTICAL_CLOSE_TYPE_PIE = 0,
+    CGM_ELLIPTICAL_CLOSE_TYPE_CHORD
+    
+} cgm_EllipticalCloseType;
+
 NITF_CXX_ENDGUARD
 
 #endif

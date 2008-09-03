@@ -41,6 +41,7 @@ typedef struct _cgm_EllipticalArcCloseElement
     short startVectorY;
     short endVectorX;
     short endVectorY;
+    cgm_EllipticalCloseType closeType;
 } cgm_EllipticalArcCloseElement;
 
 NITFAPI(cgm_Element*) cgm_EllipticalArcCloseElement_construct(nitf_Error* error);

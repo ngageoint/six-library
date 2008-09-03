@@ -26,6 +26,10 @@ NITFPRIV(void) print(NITF_DATA* data)
 	   arc->startVectorX, arc->startVectorY);
     printf("\tEnd Vector (%d, %d)\n",
 	   arc->endVectorX, arc->endVectorY);
+
+    printf("\tClose Type (%s)\n",
+	   arc->closeType == CGM_ELLIPTICAL_CLOSE_TYPE_PIE ?
+           "pie": "chord");
     
 
 }
@@ -56,6 +60,7 @@ NITFAPI(cgm_Element*) cgm_EllipticalArcCloseElement_construct(nitf_Error* error)
 	arc->end2Y = -1;
 	arc->startVectorX = -1;
 	arc->endVectorY = -1;
+        arc->closeType = CGM_ELLIPTICAL_CLOSE_TYPE_PIE;
 	element->data = (NITF_DATA*)arc;
         
     }
