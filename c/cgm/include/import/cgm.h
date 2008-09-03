@@ -27,6 +27,7 @@
 #include "cgm/Picture.h"
 #include "cgm/Metafile.h"
 #include "cgm/MetafileReader.h"
+#include "cgm/MetafileWriter.h"
 
 #endif
 

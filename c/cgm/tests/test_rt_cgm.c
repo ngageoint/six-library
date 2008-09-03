@@ -33,42 +33,60 @@
 int main(int argc, char** argv)
 {
     nitf_Error error;
-    nitf_IOHandle io;
+    nitf_IOHandle in;
+    nitf_IOHandle out;
     cgm_Metafile* mf = NULL;
     cgm_MetafileReader* reader;
     cgm_MetafileWriter* writer;
 
-    if (argc != 2)
+    if (argc != 3)
     {
-	printf("Usage: %s <Version 1 CGM>\n", argv[0]);
+	printf("Usage: %s <Version 1 CGM> <out-file>\n", argv[0]);
 	exit(EXIT_FAILURE);
     }
     
     reader = cgm_MetafileReader_construct(&error);
     assert(reader);
+
+    writer = cgm_MetafileWriter_construct(&error);
+    assert(writer);
     
-    io = nitf_IOHandle_create(argv[1], 
+    in = nitf_IOHandle_create(argv[1], 
 			      NITF_ACCESS_READONLY,
 			      NITF_OPEN_EXISTING, &error);
     
-    if (NITF_INVALID_HANDLE(io))
+    out = nitf_IOHandle_create(argv[2],
+                               NITF_ACCESS_WRITEONLY,
+                               NITF_CREATE, &error);
+
+    if (NITF_INVALID_HANDLE(in))
     {
-	nitf_Error_print(&error, stdout, "Exiting...");
+	nitf_Error_print(&error, stdout, "Input file.  Exiting...");
+	goto END_OF_FILE;
+    }
+
+    if (NITF_INVALID_HANDLE(out))
+    {
+	nitf_Error_print(&error, stdout, "Output file.  Exiting...");
 	goto END_OF_FILE;
     }
     
-    mf = cgm_MetafileReader_read(reader, io, &error);
+    mf = cgm_MetafileReader_read(reader, in, &error);
     if (!mf)
     {
-	nitf_Error_print(&error, stdout, "Exiting...");
+	nitf_Error_print(&error, stdout, "Read file. Exiting...");
 	goto END_OF_FILE;
 
     }
+
+    assert(cgm_MetafileWriter_write(writer, mf, out, &error));
+
     cgm_Metafile_destruct(&mf);
     
 
 END_OF_FILE:
-    nitf_IOHandle_close(io);
+    nitf_IOHandle_close(in);
+    nitf_IOHandle_close(out);
     cgm_MetafileReader_destruct(&reader);
     assert(!reader);
     return 0;

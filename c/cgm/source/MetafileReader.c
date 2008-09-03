@@ -402,11 +402,9 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
     
     while (1)
     {
-	assert ( i <= len);
-	/* had to add another scope due to C99 compliancy on Windows */
-	{
 	unsigned char bu = b[i];
 	int slen = 0x000000FF & bu;
+	assert ( i <= len);
 	
 	p = (char*)NITF_MALLOC( slen + 1);
 	p[slen] = 0;
@@ -421,7 +419,6 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 	/* Actually, this could get complicated, need to destruct then */
 	if (!nitf_List_pushBack(mf->fontList, p, error))
 	    return NITF_FAILURE;
-	}    
     }
     
     return NITF_SUCCESS;
@@ -952,7 +949,7 @@ NITF_BOOL readShapeColor(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, 
     return NITF_SUCCESS;
 }
 
-static cgm_ElementHandler zero[] =
+static cgm_ElementReader zero[] =
 { 
     { 1, (CGM_UNPACK)&beginMetafile },
     { 2, (CGM_UNPACK)&endMetafile },
@@ -962,7 +959,7 @@ static cgm_ElementHandler zero[] =
     { 0, NULL }
 };
     
-static cgm_ElementHandler one[] =
+static cgm_ElementReader one[] =
 {
     { 1, (CGM_UNPACK)&metafileVersion },
     { 2, (CGM_UNPACK)&metafileDesc },
@@ -972,7 +969,7 @@ static cgm_ElementHandler one[] =
     
 };
 
-static cgm_ElementHandler two[] =
+static cgm_ElementReader two[] =
 {
     { 2, (CGM_UNPACK)&colorSelectionMode },
     { 3, (CGM_UNPACK)&lineWidthSpecMode },
@@ -982,7 +979,7 @@ static cgm_ElementHandler two[] =
     
 };
 
-static cgm_ElementHandler three[] =
+static cgm_ElementReader three[] =
 {
     { 3, (CGM_UNPACK)&auxColor },
     { 4, (CGM_UNPACK)&transparency },
@@ -990,7 +987,7 @@ static cgm_ElementHandler three[] =
     
 };
 
-static cgm_ElementHandler four[] =
+static cgm_ElementReader four[] =
 {
     { 1, (CGM_UNPACK)&polyLine },
     { 4, (CGM_UNPACK)&textElement },
@@ -1007,7 +1004,7 @@ static cgm_ElementHandler four[] =
     
 };
 
-static cgm_ElementHandler five[] =
+static cgm_ElementReader five[] =
 {
     { 2, (CGM_UNPACK)&readType },
     { 3, (CGM_UNPACK)&readWidth },
@@ -1029,7 +1026,7 @@ static cgm_ElementHandler five[] =
 };
 
 
-static cgm_ElementHandler* classes[] = 
+static cgm_ElementReader* classes[] = 
 {
     zero,
     one,
@@ -1071,7 +1068,7 @@ NITFPRIV(int) readCGM(cgm_MetafileReader* reader,
     short classType;
     short code = -1;
     char* bytes = NULL;
-    cgm_ElementHandler* handlers;
+    cgm_ElementReader* handlers;
     if (!nitf_IOHandle_read(in, (char*)&s, 2, error))
 	goto END_OF_FUNCTION;
 
@@ -1120,12 +1117,12 @@ NITFPRIV(int) readCGM(cgm_MetafileReader* reader,
 
     }
     
-    /*  This will be an ElementHandler[] */
+    /*  This will be an ElementReader[] */
     handlers = reader->unpacker[ classType ];
     for (i = 0; ; i++)
     {
 	/* op[i] */
-	cgm_ElementHandler handler  = handlers[i];
+	cgm_ElementReader handler  = handlers[i];
 	/* If this happened, we ran out of codes in class */
 	if (handler.code == 0)
 	{

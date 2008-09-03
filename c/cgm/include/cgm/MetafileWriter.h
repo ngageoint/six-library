@@ -21,8 +21,8 @@
  */
 
 
-#ifndef __CGM_METAFILE_READER_H__
-#define __CGM_METAFILE_READER_H__
+#ifndef __CGM_METAFILE_WRITER_H__
+#define __CGM_METAFILE_WRITER_H__
 
 #include "cgm/Metafile.h"
 #include "cgm/TextElement.h"
@@ -40,52 +40,32 @@
 NITF_CXX_GUARD
 
 
-typedef struct _cgm_ParseContext
+typedef NITF_BOOL (*CGM_PACK)(cgm_Element* element, nitf_IOHandle io);
+
+
+
+typedef struct _cgm_ElementWriter
 {
-    short fillColor[CGM_RGB];
-    short color[CGM_RGB];
-    cgm_InteriorStyle style;
-    short height;
-    short index;
-    short orientation[4];
-    short visibility;
-    short width;
-    cgm_HatchType hatchIndex;
-    cgm_Type type;
-    
-} cgm_ParseContext;
+    int type;
+    CGM_PACK pack;
+} cgm_ElementWriter;
 
-
-typedef NITF_BOOL (*CGM_UNPACK)(cgm_Metafile*,
-				cgm_ParseContext*,
-				short,
-				short,
-				char*, 
-				int,
-				nitf_Error*);
-
-typedef struct _cgm_ElementReader
+typedef struct _cgm_MetafileWriter
 {
-    short code;
-    CGM_UNPACK unpack;
-} cgm_ElementReader;
+    cgm_ElementWriter* packer;
+} cgm_MetafileWriter;
 
-typedef struct _cgm_MetafileReader
-{
-    cgm_ElementReader** unpacker;
-} cgm_MetafileReader;
-
-NITFAPI(cgm_MetafileReader*) 
-cgm_MetafileReader_construct(nitf_Error* error);
+NITFAPI(cgm_MetafileWriter*) 
+cgm_MetafileWriter_construct(nitf_Error* error);
 
 NITFAPI(void) 
-cgm_MetafileReader_destruct(cgm_MetafileReader** reader);
+cgm_MetafileWriter_destruct(cgm_MetafileWriter** writer);
 
-NITFAPI(cgm_Metafile*) cgm_MetafileReader_read(cgm_MetafileReader* reader,
-					       nitf_IOHandle in, 
-					       nitf_Error* error);
-
-
+NITFAPI(NITF_BOOL) cgm_MetafileWriter_writeFile(cgm_MetafileWriter* writer,
+                                                cgm_Metafile* mf,
+                                                nitf_IOHandle io,
+                                                nitf_Error* error);
+                   
 NITF_CXX_ENDGUARD
 
 #endif
