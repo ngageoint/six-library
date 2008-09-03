@@ -518,7 +518,38 @@ NITF_BOOL writeText(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
 }
 NITF_BOOL writePolygon(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
 {
-    cgm_Element_print(element);
+    NITF_BOOL rv;
+    cgm_PolygonElement* polyElement = (cgm_PolygonElement*)element->data;
+    nitf_ListIterator it = nitf_List_begin(polyElement->vertices);
+    nitf_ListIterator end = nitf_List_end(polyElement->vertices);
+    short actual;
+    short size = nitf_List_size(element->data);
+    size *= 4;
+
+    rv = writeFillAttributes(polyElement->attributes, io, error);
+    if (!rv) return NITF_FAILURE;
+
+    rv = writeHeader(4, 7, size, io, &actual, error);
+    if (!rv) return NITF_FAILURE;
+
+    while (nitf_ListIterator_notEqualTo(&it, &end))
+    {
+        short s;
+        cgm_Vertex* v = (cgm_Vertex*)nitf_ListIterator_get(&it);
+        s = NITF_HTONS(v->x);
+
+        rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+        if (!rv) return NITF_FAILURE;
+
+        s = NITF_HTONS(v->y);
+
+        rv = nitf_IOHandle_write(io, (const char*)&s, 2, error);
+        if (!rv) return NITF_FAILURE;
+
+        
+        nitf_ListIterator_increment(&it);
+    }
+
     return NITF_SUCCESS;
 }
 NITF_BOOL writePolySet(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)
