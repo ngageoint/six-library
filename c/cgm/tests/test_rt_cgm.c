@@ -79,7 +79,12 @@ int main(int argc, char** argv)
 
     }
 
-    assert(cgm_MetafileWriter_write(writer, mf, out, &error));
+    if (!cgm_MetafileWriter_write(writer, mf, out, &error))
+    {
+	nitf_Error_print(&error, stdout, "Write file. Exiting...");
+	goto END_OF_FILE;
+
+    }
 
     cgm_Metafile_destruct(&mf);
     

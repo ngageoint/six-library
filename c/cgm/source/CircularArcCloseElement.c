@@ -25,8 +25,10 @@ NITFPRIV(void) print(NITF_DATA* data)
 	   arc->endX, arc->endY);
     printf("\tRadius [%d]\n",
 	   arc->radius);
-    printf("\tClose[%d]\n",
-	   arc->closeType);
+    printf("\tClose Type (%s)\n",
+	   arc->closeType == CGM_CLOSE_TYPE_PIE ?
+           "pie": "chord");
+    
     
 
 }
@@ -53,7 +55,7 @@ NITFAPI(cgm_Element*) cgm_CircularArcCloseElement_construct(nitf_Error* error)
 	arc->startY = -1;
 	arc->endX = -1;
 	arc->endY = -1;
-	arc->radius = -1;
+	arc->radius = CGM_CLOSE_TYPE_PIE;
 	arc->closeType = -1;
 	element->data = (NITF_DATA*)arc;
         

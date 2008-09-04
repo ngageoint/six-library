@@ -40,7 +40,7 @@ typedef struct _cgm_CircularArcCloseElement
     short endX;
     short endY;
     short radius;
-    short closeType;
+    cgm_CloseType closeType;
 } cgm_CircularArcCloseElement;
 
 

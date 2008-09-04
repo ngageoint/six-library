@@ -45,7 +45,12 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
     mf->elementList[1] = -1;
     mf->elementList[2] = 1;
     
-    mf->fontList = NULL;
+    mf->fontList = nitf_List_construct(error);
+    if (!mf->fontList)
+    {
+        NITF_FREE(mf);
+        return NULL;
+    }
     mf->description = NULL;
     mf->picture = NULL;
 

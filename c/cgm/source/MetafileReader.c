@@ -206,18 +206,15 @@ NITFPRIV(cgm_VertexClose*) readVertexClose(char* b, nitf_Error* error)
 }
 
 
-NITFPRIV(nitf_List*) readVertices(char* b, int length, nitf_Error* error)
+NITFPRIV(NITF_BOOL) readVertices(char* b, 
+                                 int length, 
+                                 nitf_List* list,
+                                 nitf_Error* error)
 {
     
     int i = 0;
-    nitf_List* list = NULL;
     
     assert(length % 4 == 0);
-    
-    list = nitf_List_construct(error);
-    
-    if (!list)
-	return NITF_FAILURE;
     
     for (i = 0; i < length; i+=4)
     {
@@ -225,20 +222,16 @@ NITFPRIV(nitf_List*) readVertices(char* b, int length, nitf_Error* error)
 	cgm_Vertex* v = readVertex(&b[i], error);
 	if (!v)
 	{
-	    /*  TODO: We dont get out so easy, but for now... */
-	    nitf_List_destruct(&list);
-	    return NULL;
+            return NITF_FAILURE;
 	}
 	if (!nitf_List_pushBack(list, v, error))
 	{
-	    nitf_List_destruct(&list);
-	    return NULL;
+            return NITF_FAILURE;
 	}
 	
     }
-    return list;
+    return NITF_SUCCESS;
 }
-
 NITFPRIV(short) readShort(char* b)
 {
     short s;
@@ -260,36 +253,27 @@ NITFPRIV(char*) readString(char* b, int length)
 
 
 /* TODO: Handle edge out flag */
-NITFPRIV(nitf_List*) readCloseVertices(char* b, int length, nitf_Error* error)
+NITFPRIV(NITF_BOOL) readCloseVertices(char* b, int length, nitf_List* list, nitf_Error* error)
 {
     
     int i = 0;
-    nitf_List* list = NULL;
     
     assert(length % 4 == 0);
-    
-    list = nitf_List_construct(error);
-    
-    if (!list)
-	return NITF_FAILURE;
     
     for (i = 0; i < length; i+=6)
     {
 	cgm_VertexClose* v = readVertexClose(&b[i], error);
 	if (!v)
 	{
-	    /*  TODO: We dont get out so easy, but for now... */
-	    nitf_List_destruct(&list);
-	    return NULL;
+	    return NITF_FAILURE;
 	}
 	if (!nitf_List_pushBack(list, v, error))
 	{
-	    nitf_List_destruct(&list);
-	    return NULL;
+	    return NITF_FAILURE;
 	}
 	
     }
-    return list;
+    return NITF_SUCCESS;
 }
 
 NITF_BOOL beginMetafile(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
@@ -388,7 +372,7 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
     
     DBG_TRACE();
     
-    if (mf->fontList != NULL)
+    if (nitf_List_size(mf->fontList))
     {
 	nitf_Error_initf(error,
 			 NITF_CTXT,
@@ -397,8 +381,6 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
 	return NITF_FAILURE;
         
     }
-    mf->fontList = nitf_List_construct( error );
-    if (!mf->fontList ) return NITF_FAILURE;
     
     while (1)
     {
@@ -533,9 +515,8 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sh
     if (!poly->attributes)
         return NITF_FAILURE;
 
-    poly->vertices = readVertices(b, len, error);
-    if (! poly->vertices )
-	return NITF_FAILURE;
+    if (!readVertices(b, len, poly->vertices, error))
+        return NITF_FAILURE;
     
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
 	return NITF_FAILURE;
@@ -584,8 +565,7 @@ NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
     if (! poly->attributes )
         return NITF_FAILURE;
 
-    poly->vertices = readVertices(b, len, error);
-    if (! poly->vertices )
+    if (!readVertices(b, len, poly->vertices, error))
 	return NITF_FAILURE;
     
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
@@ -610,8 +590,7 @@ NITF_BOOL polySet(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int sho
     if (! poly->attributes )
         return NITF_FAILURE;
 
-    poly->vertices = readCloseVertices(b, len, error);
-    if (! poly->vertices )
+    if (!readCloseVertices(b, len, poly->vertices, error))
 	return NITF_FAILURE;
     
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
@@ -725,8 +704,8 @@ NITF_BOOL circularArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc, int cla
     circularArc->startY = readShort(&b[6]);
     circularArc->endX = readShort(&b[8]);
     circularArc->endY = readShort(&b[10]);
-    circularArc->radius = readShort(&b[10]);
-
+    circularArc->radius = readShort(&b[12]);
+    circularArc->closeType = readShort(&b[14]);
     cgm_Element_print(elem);
 
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))

@@ -73,7 +73,14 @@ NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error)
 	    
 	}
         poly->attributes = NULL;
-	poly->vertices = NULL;
+	poly->vertices = nitf_List_construct(error);
+        if (!poly->vertices)
+        {
+            NITF_FREE(poly);
+            NITF_FREE(element);
+            return NULL;
+        }
+
 	element->data = (NITF_DATA*)poly;
     }
     element->print = &polyPrint;
