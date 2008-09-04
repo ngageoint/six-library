@@ -39,6 +39,9 @@
 #define FILL_LEFT 1
 #define FILL_RIGHT 2
 
+/* define some maximum data lengths */
+#define NITF_MAX_IMAGE_LENGTH NITF_INT64(9999999999)
+
 /*  This is the size of each num* (numi, numx, nums, numdes, numres)  */
 #define NITF_IVAL_SZ 3
 
@@ -787,6 +790,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
     int numTexts;
     int numGraphics;
     int numDEs;
+    nitf_ListIterator iter;
+    
     if (!writer)
     {
         nitf_Error_init(error, "NULL writer", NITF_CTXT,
@@ -884,7 +889,35 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
         writer->numImageWriters = numImages;
         for (i = 0; i < numImages; i++)
         {
+            nitf_ImageSegment *segment = NULL;
+            nitf_ImageSubheader *subheader = NULL;
+            nitf_Uint32 nbpp, nbands, xbands, nrows, ncols;
+            nitf_Uint64 length;
+            
+            /* first, set the writer to NULL */
             writer->imageWriters[i] = NULL;
+            
+            /* guard against an overflowing data length */
+            iter = nitf_List_at(record->images, i);
+            segment = (nitf_ImageSegment*) nitf_ListIterator_get(&iter);
+            subheader = segment->subheader;
+            
+            /* calculate the length */
+            NITF_TRY_GET_UINT32(subheader->numBitsPerPixel, &nbpp, error);
+            NITF_TRY_GET_UINT32(subheader->numImageBands, &nbands, error);
+            NITF_TRY_GET_UINT32(subheader->numMultispectralImageBands, &xbands, error);
+            NITF_TRY_GET_UINT32(subheader->numRows, &nrows, error);
+            NITF_TRY_GET_UINT32(subheader->numCols, &ncols, error);
+            
+            length = (nitf_Uint64)ncols * (nitf_Uint64)nrows *
+                    NITF_NBPP_TO_BYTES(nbpp) * (nbands + xbands);
+            
+            if (length > NITF_MAX_IMAGE_LENGTH)
+            {
+                nitf_Error_init(error, "Image Length is too large", NITF_CTXT,
+                        NITF_ERR_INVALID_OBJECT);
+                return NITF_FAILURE;
+            }
         }
     }
 
@@ -945,6 +978,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
     }
 
     return NITF_SUCCESS;
+    
+  CATCH_ERROR:
+    return NITF_FAILURE;
 }
 
 
@@ -1728,6 +1764,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
             }
             imageDataLens[i] = endSize - startSize;
             startSize = endSize;
+            
+            /* TODO - should we check the data length written against NITF_MAX_IMAGE_LENGTH? */
 
             nitf_ListIterator_increment(&iter);
             ++i;
