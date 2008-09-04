@@ -91,6 +91,7 @@ SOURCES = BandInfo.c \
           TREUtils.c \
           TextSegment.c \
           TextSubheader.c \
+          WriteHandler.c \
           Writer.c 
 
 #        DefaultUserSegment.c \

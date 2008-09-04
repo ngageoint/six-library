@@ -72,6 +72,7 @@
 #include "nitf/TREUtils.h"
 #include "nitf/TextSegment.h"
 #include "nitf/TextSubheader.h"
+#include "nitf/WriteHandler.h"
 #include "nitf/Writer.h"
 
 #endif
