@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -23,56 +23,24 @@
 #ifndef __NITF_IMAGE_WRITER_H__
 #define __NITF_IMAGE_WRITER_H__
 
-#include "nitf/ImageIO.h"
-#include "nitf/IOHandle.h"
 #include "nitf/System.h"
 #include "nitf/Error.h"
 #include "nitf/ImageSource.h"
+#include "nitf/WriteHandler.h"
+#include "nitf/ImageSubheader.h"
 
 NITF_CXX_GUARD
 
-/*!
- *  TODO: Add documentation
- */
-typedef struct _nitf_ImageWriter
-{
-    nitf_IOHandle outputHandle;
-    nitf_ImageSource *imageSource;
-    nitf_ImageIO *imageBlocker;
-}
-nitf_ImageWriter;
+
+typedef nitf_WriteHandler nitf_ImageWriter;
 
 /*!
- *  \fn nitf_ImageWriter_write
- *  \brief Method used by the actual Writer to write an image out.
- *
- *  This function writes out an image from a source, by pulling
- *  the required amounts from the source attached.  This function is
- *  probably only useable from the Writer.write() function.  The
- *  image source must be attached at this point, or an exception
- *  will occur.
- *
- *  \param imageWriter The image writer object
- *  \param numBitsPerPixel The number of bits per pixel in the image
- *  \param numImageBands  The number of bands in the image
- *  \param numMultispectralBands Number of multi-spectral image bands
- *  \param numRows The number of rows
- *  \param numCols The number of columns
- *  \param An error to return on failure
- *
+ * Constructs a new ImageWriter, using the passed-in subheader as the basis
+ * for the values.
  */
-NITFPROT(NITF_BOOL) nitf_ImageWriter_write(nitf_ImageWriter * writer,
-        int numBitsPerPixel,
-        int numImageBands,
-        int numMultispectralImageBands,
-        int numRows,
-        int numCols,
-        nitf_Error * error);
+NITFAPI(nitf_ImageWriter*) nitf_ImageWriter_construct(
+        nitf_ImageSubheader *subheader, nitf_Error * error);
 
-/*!
- *  TODO: Add documentation
- */
-NITFAPI(void) nitf_ImageWriter_destruct(nitf_ImageWriter ** writer);
 
 /*!
  * Attach the given nitf_ImageSource to this ImageWriter
@@ -80,7 +48,8 @@ NITFAPI(void) nitf_ImageWriter_destruct(nitf_ImageWriter ** writer);
  * it when the ImageWriter is destructed.
  */
 NITFAPI(NITF_BOOL) nitf_ImageWriter_attachSource(nitf_ImageWriter * writer,
-    nitf_ImageSource *imageSource, nitf_Error * error);
+        nitf_ImageSource *imageSource, nitf_Error * error);
+
 
 /*!
   \brief nitf_ImageWriter_setWriteCaching - Enable/disable cached writes
@@ -98,7 +67,6 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_attachSource(nitf_ImageWriter * writer,
 
   \return Returns the current enable/disable state
 */
-
 NITFPROT(int) nitf_ImageWriter_setWriteCaching
 (
     nitf_ImageWriter * iWriter,     /*!< Object to modify */

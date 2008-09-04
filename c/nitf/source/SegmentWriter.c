@@ -24,20 +24,45 @@
 
 #define READ_SIZE 8192
 
-NITFPROT(NITF_BOOL) nitf_SegmentWriter_write
-(
-    nitf_SegmentWriter * writer,
-    nitf_Error * error
-)
+
+
+/*
+ *  Private implementation struct
+ */
+typedef struct _SegmentWriterImpl
 {
-    size_t size = (*writer->segmentSource->iface->getSize)(writer->segmentSource->data);
-    size_t bytesLeft = size;
+    nitf_SegmentSource *segmentSource;
+} SegmentWriterImpl;
+
+
+
+NITFPRIV(void) SegmentWriter_destruct(NITF_DATA * data)
+{
+    SegmentWriterImpl *impl = (SegmentWriterImpl *) data;
+
+    if (impl)
+    {
+        if (impl->segmentSource)
+            nitf_SegmentSource_destruct(&impl->segmentSource);
+        NITF_FREE(impl);
+    }
+}
+
+
+NITFPRIV(NITF_BOOL) SegmentWriter_write(NITF_DATA * data,
+        nitf_IOHandle io, nitf_Error * error)
+{
+    size_t size, bytesLeft;
     size_t readSize = READ_SIZE;
     size_t bytesToRead = READ_SIZE;
-    char* buf;
+    char* buf = NULL;
+    SegmentWriterImpl *impl = (SegmentWriterImpl *) data;
+    
+    size = (*impl->segmentSource->iface->getSize)(impl->segmentSource->data);
+    bytesLeft = size;
 
     buf = (char*) NITF_MALLOC(readSize);
-    if (buf == NULL)
+    if (!buf)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
                         NITF_ERR_MEMORY);
@@ -52,57 +77,80 @@ NITFPROT(NITF_BOOL) nitf_SegmentWriter_write
             bytesToRead = readSize;
 
         /* read the bytes */
-        if (!(*(writer->segmentSource->iface->read))
-                (writer->segmentSource->data, buf, bytesToRead, error))
+        if (!(*(impl->segmentSource->iface->read))
+                (impl->segmentSource->data, buf, bytesToRead, error))
         {
             goto CATCH_ERROR;
         }
 
         /* write them */
-        if (!nitf_IOHandle_write(writer->outputHandle,
-                                 buf, (int)bytesToRead, error))
-        {
+        if (!nitf_IOHandle_write(io, buf, (int)bytesToRead, error))
             goto CATCH_ERROR;
-        }
         bytesLeft -= bytesToRead;
     }
 
     NITF_FREE(buf);
-
     return NITF_SUCCESS;
 
 CATCH_ERROR:
+    if (buf) NITF_FREE(buf);
     return NITF_FAILURE;
 }
 
-NITFAPI(void) nitf_SegmentWriter_destruct(nitf_SegmentWriter ** writer)
+
+
+NITFAPI(nitf_SegmentWriter *) nitf_SegmentWriter_construct(nitf_Error *error)
 {
-    if (*writer)
+    static nitf_IWriteHandler iWriteHandler =
     {
-        (*writer)->outputHandle = 0;
-        if ((*writer)->segmentSource)
-            nitf_SegmentSource_destruct(&(*writer)->segmentSource);
-        
-        NITF_FREE(*writer);
-        *writer = NULL;
+        &SegmentWriter_write,
+        &SegmentWriter_destruct
+    };
+
+    SegmentWriterImpl *impl = NULL;
+    nitf_SegmentWriter *segmentWriter = NULL;
+
+    impl = (SegmentWriterImpl *) NITF_MALLOC(sizeof(SegmentWriterImpl));
+    if (!impl)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                        NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
     }
+    impl->segmentSource = NULL;
+
+    segmentWriter = (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
+    if (!segmentWriter)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                        NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    segmentWriter->data = impl;
+    segmentWriter->iface = &iWriteHandler;
+    return segmentWriter;
+
+  CATCH_ERROR:
+    if (impl)
+        NITF_FREE(impl);
+    return NULL;
 }
 
 
 NITFAPI(NITF_BOOL) nitf_SegmentWriter_attachSource
 (
-    nitf_SegmentWriter * writer,
+    nitf_SegmentWriter * segmentWriter,
     nitf_SegmentSource * segmentSource,
     nitf_Error * error
 )
 {
-    if (writer->segmentSource != NULL)
+    SegmentWriterImpl *impl = (SegmentWriterImpl *) segmentWriter->data;
+    if (impl->segmentSource != NULL)
     {
-        nitf_Error_init(error,
-                        "Segment source already attached",
+        nitf_Error_init(error, "Segment source already attached",
                         NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
         return NITF_FAILURE;
     }
-    writer->segmentSource = segmentSource;
+    impl->segmentSource = segmentSource;
     return NITF_SUCCESS;
 }

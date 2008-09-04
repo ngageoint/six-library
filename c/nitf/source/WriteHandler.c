@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,39 +14,22 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
-#ifndef __NITF_SEGMENT_WRITER_H__
-#define __NITF_SEGMENT_WRITER_H__
-
-#include "nitf/IOHandle.h"
-#include "nitf/System.h"
-#include "nitf/Error.h"
-#include "nitf/SegmentSource.h"
 #include "nitf/WriteHandler.h"
 
-NITF_CXX_GUARD
 
-typedef nitf_WriteHandler nitf_SegmentWriter;
-
-/*!
- * Constructs a new SegmentWriter.
- */
-NITFAPI(nitf_SegmentWriter*) nitf_SegmentWriter_construct(nitf_Error *error);
-
-/*!
- * Attach the given segmentSource to this Writer
- * The Writer obtains ownership of the passed segmentSource, and will destruct
- * it when the Writer is destructed.
- */
-NITFAPI(NITF_BOOL) nitf_SegmentWriter_attachSource(nitf_SegmentWriter *writer,
-        nitf_SegmentSource *segmentSource,
-        nitf_Error *error);
-
-NITF_CXX_ENDGUARD
-
-#endif
+NITFAPI(void) nitf_WriteHandler_destruct(nitf_WriteHandler ** writeHandler)
+{
+    if (*writeHandler)
+    {
+        if ((*writeHandler)->iface)
+            (*writeHandler)->iface->destruct((*writeHandler)->data);
+        NITF_FREE(*writeHandler);
+        *writeHandler = NULL;
+    }
+}

@@ -28,6 +28,7 @@
 #include "nitf/PluginRegistry.h"
 #include "nitf/Record.h"
 #include "nitf/ImageIO.h"
+#include "nitf/WriteHandler.h"
 #include "nitf/ImageWriter.h"
 #include "nitf/SegmentWriter.h"
 
@@ -40,10 +41,10 @@ NITF_CXX_GUARD
 typedef struct _nitf_Writer
 {
     nitf_List *warningList;
-    nitf_ImageWriter **imageWriters;
-    nitf_SegmentWriter **textWriters;
-    nitf_SegmentWriter **graphicWriters;
-    nitf_SegmentWriter **dataExtensionWriters;
+    nitf_WriteHandler **imageWriters;
+    nitf_WriteHandler **textWriters;
+    nitf_WriteHandler **graphicWriters;
+    nitf_WriteHandler **dataExtensionWriters;
     nitf_IOHandle outputHandle;
     nitf_Record *record;
     int numImageWriters;
@@ -76,50 +77,90 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
                                        nitf_IOHandle ioHandle,
                                        nitf_Error * error);
 
-
-NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *
-        writer,
-        int imageNumber,
-        nitf_Error * error);
+/*!
+ * Sets the WriteHandler for the Image at the given index.
+ */
+NITFAPI(NITF_BOOL) nitf_Writer_setImageWriteHandler(nitf_Writer *writer,
+        int index, nitf_WriteHandler *writeHandler, nitf_Error * error);
 
 /*!
- *  Creates a new Text Writer
- *  \param error A populated structure upon failure
- *  \return A Writer, or NULL on failure
+ * Sets the WriteHandler for the Graphic at the given index.
  */
-NITFAPI(nitf_SegmentWriter *) nitf_Writer_newTextWriter
-(
-    nitf_Writer * writer,
-    int textNumber,
-    nitf_Error * error
-);
+NITFAPI(NITF_BOOL) nitf_Writer_setGraphicWriteHandler(nitf_Writer *writer,
+        int index, nitf_WriteHandler *writeHandler, nitf_Error * error);
 
 /*!
- *  Creates a new Graphics Writer
- *  \param error A populated structure upon failure
- *  \return A Writer, or NULL on failure
+ * Sets the WriteHandler for the Text at the given index.
  */
-NITFAPI(nitf_SegmentWriter *) nitf_Writer_newGraphicWriter
-(
-    nitf_Writer * writer,
-    int graphicNumber,
-    nitf_Error * error
-);
+NITFAPI(NITF_BOOL) nitf_Writer_setTextWriteHandler(nitf_Writer *writer,
+        int index, nitf_WriteHandler *writeHandler, nitf_Error * error);
 
 /*!
- *  Creates a new DE segment Writer
- *  \param error A populated structure upon failure
- *  \return A Writer, or NULL on failure
+ * Sets the WriteHandler for the DE Segment at the given index.
  */
-NITFAPI(nitf_SegmentWriter *) nitf_Writer_newDEWriter
-(
-    nitf_Writer * writer,
-    int DENumber,
-    nitf_Error * error
-);
+NITFAPI(NITF_BOOL) nitf_Writer_setDEWriteHandler(nitf_Writer *writer,
+        int index, nitf_WriteHandler *writeHandler, nitf_Error * error);
 
-NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
-                                     nitf_Error * error);
+
+/*!
+ * Creates and returns a new ImageWriter for the image at the given index.
+ * This is deprecated, but is available for backwards compatibility.
+ *
+ * \param writer    The Writer object
+ * \param index     The segment index 
+ * 
+ * \deprecated - setImageWriteHandler is the preferred method to use.
+ * \return A new ImageWriter, or NULL on failure
+ */
+NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *writer,
+        int index, nitf_Error * error);
+
+/*!
+ * Creates and returns a new SegmentWriter for the graphic at the given index.
+ * This is deprecated, but is available for backwards compatibility.
+ *
+ * \param writer    The Writer object
+ * \param index     The segment index 
+ * 
+ * \deprecated - setGraphicWriteHandler is the preferred method to use.
+ * \return A new SegmentWriter, or NULL on failure
+ */
+NITFAPI(nitf_SegmentWriter*) nitf_Writer_newGraphicWriter(nitf_Writer *writer,
+        int index, nitf_Error * error);
+
+/*!
+ * Creates and returns a new SegmentWriter for the text at the given index.
+ * This is deprecated, but is available for backwards compatibility.
+ *
+ * \param writer    The Writer object
+ * \param index     The segment index 
+ * 
+ * \deprecated - setTextWriteHandler is the preferred method to use.
+ * \return A new SegmentWriter, or NULL on failure
+ */
+NITFAPI(nitf_SegmentWriter*) nitf_Writer_newTextWriter(nitf_Writer *writer,
+        int index, nitf_Error * error);
+
+/*!
+ * Creates and returns a new SegmentWriter for the DESegment at the given index.
+ * This is deprecated, but is available for backwards compatibility.
+ *
+ * \param writer    The Writer object
+ * \param index     The segment index 
+ * 
+ * \deprecated - setDEWriteHandler is the preferred method to use.
+ * \return A new SegmentWriter, or NULL on failure
+ */
+NITFAPI(nitf_SegmentWriter*) nitf_Writer_newDEWriter(nitf_Writer *writer,
+        int index, nitf_Error * error);
+
+
+/*!
+ * Performs the write operation
+ * 
+ * \return NITF_SUCCESS or NITF_FAILURE
+ */
+NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer, nitf_Error * error);
 
 
 NITF_CXX_ENDGUARD

@@ -728,23 +728,23 @@ NITFPRIV(void) nitf_Writer_destructWriters(nitf_Writer* writer)
         int i;
         for (i = 0; i < (writer->numImageWriters) && writer->imageWriters; i++)
         {
-            nitf_ImageWriter_destruct(&writer->imageWriters[i]);
+            nitf_WriteHandler_destruct(&writer->imageWriters[i]);
         }
 
         for (i = 0; i < (writer->numTextWriters) && writer->textWriters; i++)
         {
-            nitf_SegmentWriter_destruct(&writer->textWriters[i]);
+            nitf_WriteHandler_destruct(&writer->textWriters[i]);
         }
 
         for (i = 0; i < (writer->numGraphicWriters) && writer->graphicWriters; i++)
         {
-            nitf_SegmentWriter_destruct(&writer->graphicWriters[i]);
+            nitf_WriteHandler_destruct(&writer->graphicWriters[i]);
         }
 
         for (i = 0; i < (writer->numDataExtensionWriters)
                 && writer->dataExtensionWriters; i++)
         {
-            nitf_SegmentWriter_destruct(&writer->dataExtensionWriters[i]);
+            nitf_WriteHandler_destruct(&writer->dataExtensionWriters[i]);
         }
 
         if (writer->imageWriters)
@@ -873,7 +873,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
             NITF_FREE(writer->imageWriters);
 
         writer->imageWriters =
-            (nitf_ImageWriter **) NITF_MALLOC(sizeof(nitf_ImageWriter *) *
+            (nitf_WriteHandler **) NITF_MALLOC(sizeof(nitf_WriteHandler *) *
                                               numImages);
         if (!writer->imageWriters)
         {
@@ -892,7 +892,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
     if (numTexts > 0)
     {
         writer->textWriters =
-            (nitf_SegmentWriter **) NITF_MALLOC(sizeof(nitf_SegmentWriter *) *
+            (nitf_WriteHandler **) NITF_MALLOC(sizeof(nitf_WriteHandler *) *
                                                 numTexts);
         if (!writer->textWriters)
         {
@@ -911,7 +911,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
     if (numGraphics > 0)
     {
         writer->graphicWriters =
-            (nitf_SegmentWriter **) NITF_MALLOC(sizeof(nitf_SegmentWriter *) *
+            (nitf_WriteHandler **) NITF_MALLOC(sizeof(nitf_WriteHandler *) *
                                                 numGraphics);
         if (!writer->graphicWriters)
         {
@@ -929,7 +929,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
     if (numDEs > 0)
     {
         writer->dataExtensionWriters =
-            (nitf_SegmentWriter **) NITF_MALLOC(sizeof(nitf_SegmentWriter *) *
+            (nitf_WriteHandler **) NITF_MALLOC(sizeof(nitf_WriteHandler *) *
                                                 numDEs);
         if (!writer->dataExtensionWriters)
         {
@@ -1515,73 +1515,56 @@ CATCH_ERROR:
 }
 
 
-NITFPRIV(NITF_BOOL) writeImage(nitf_ImageSegment * segment,
-                               nitf_ImageWriter * imageWriter,
-                               nitf_Error * error)
+NITFPRIV(NITF_BOOL) writeImage(nitf_WriteHandler * imageWriter,
+                               nitf_IOHandle outHandle, nitf_Error * error)
 {
-
-    nitf_Uint32 nBits, nBands, xBands, nRows, nColumns;
     if (!imageWriter)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Trying to use uninitialized image writer.  Write failed.");
         goto CATCH_ERROR;
     }
-
-    NITF_TRY_GET_UINT32(segment->subheader->numBitsPerPixel, &nBits,
-                        error);
-    NITF_TRY_GET_UINT32(segment->subheader->numImageBands, &nBands, error);
-    NITF_TRY_GET_UINT32(segment->subheader->numMultispectralImageBands,
-                        &xBands, error);
-    NITF_TRY_GET_UINT32(segment->subheader->numRows, &nRows, error);
-    NITF_TRY_GET_UINT32(segment->subheader->numCols, &nColumns, error);
-
-    return nitf_ImageWriter_write(imageWriter,
-                                  nBits, nBands,
-                                  xBands, nRows, nColumns, error);
+    return (*imageWriter->iface->write)(imageWriter->data, outHandle, error);
 
 CATCH_ERROR:
     return NITF_FAILURE;
 }
 
 
-NITFPRIV(NITF_BOOL) writeText(nitf_SegmentWriter * segmentWriter,
-                              nitf_Error * error)
+NITFPRIV(NITF_BOOL) writeText(nitf_WriteHandler *textWriter,
+        nitf_IOHandle outHandle, nitf_Error * error)
 {
-
-    if (!segmentWriter)
+    if (!textWriter)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Trying to use uninitialized Text SegmentWriter.  Write failed.");
+                         "Trying to use uninitialized Text Writer.  Write failed.");
         goto CATCH_ERROR;
     }
-
-    return nitf_SegmentWriter_write(segmentWriter, error);
-
+    return (*textWriter->iface->write)(textWriter->data, outHandle, error);
 CATCH_ERROR:
     return NITF_FAILURE;
 }
 
 
-NITFPRIV(NITF_BOOL) writeGraphic(nitf_SegmentWriter * segmentWriter,
-                                 nitf_Error * error)
+NITFPRIV(NITF_BOOL) writeGraphic(nitf_WriteHandler * graphicWriter,
+        nitf_IOHandle outHandle, nitf_Error * error)
 {
-
-    if (!segmentWriter)
+    if (!graphicWriter)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Trying to use uninitialized Graphic SegmentWriter.  Write failed.");
         goto CATCH_ERROR;
     }
-
-    return nitf_SegmentWriter_write(segmentWriter, error);
-
+    return (*graphicWriter->iface->write)(graphicWriter->data, outHandle, error);
 CATCH_ERROR:
     return NITF_FAILURE;
 }
 
-NITFPRIV(NITF_BOOL) writeDE(nitf_SegmentWriter * segmentWriter,
-        nitf_Writer* writer,nitf_DESubheader *subheader,nitf_Error *error)
+NITFPRIV(NITF_BOOL) writeDE(nitf_Writer* writer,
+        nitf_WriteHandler * deWriter,
+        nitf_DESubheader *subheader,
+        nitf_IOHandle outHandle,
+        nitf_Error *error)
 {
     char desid[NITF_DESTAG_SZ+1]; /* DESID for overflow check */
 
@@ -1617,16 +1600,15 @@ NITFPRIV(NITF_BOOL) writeDE(nitf_SegmentWriter * segmentWriter,
         return NITF_SUCCESS;
     }
 
-    if (!segmentWriter)
+    if (!deWriter)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                 "Trying to use uninitialized DE SegmentWriter.  Write failed.");
         goto CATCH_ERROR;
     }
+    return (*deWriter->iface->write)(deWriter->data, outHandle, error);
 
-    return nitf_SegmentWriter_write(segmentWriter, error);
-
-    CATCH_ERROR:
+  CATCH_ERROR:
     return NITF_FAILURE;
 }
 
@@ -1730,7 +1712,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
             imageSubLens[i] = endSize - startSize;
             startSize = endSize;
             /* TODO - we need to check to make sure the imageWriter exists */
-            if (!writeImage(segment, writer->imageWriters[i], error))
+            if (!writeImage(writer->imageWriters[i],
+                    writer->outputHandle, error))
             {
                 NITF_FREE(imageSubLens);
                 NITF_FREE(imageDataLens);
@@ -1818,7 +1801,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
             graphicSubLens[i] = endSize - startSize;
             startSize = endSize;
             /* TODO - we need to check to make sure the imageWriter exists */
-            if (!writeGraphic(writer->graphicWriters[i], error))
+            if (!writeGraphic(writer->graphicWriters[i],
+                    writer->outputHandle, error))
             {
                 NITF_FREE(graphicSubLens);
                 NITF_FREE(graphicDataLens);
@@ -1906,7 +1890,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
             textSubLens[i] = endSize - startSize;
             startSize = endSize;
             /* TODO - we need to check to make sure the imageWriter exists */
-            if (!writeText(writer->textWriters[i], error))
+            if (!writeText(writer->textWriters[i],
+                    writer->outputHandle, error))
             {
                 NITF_FREE(textSubLens);
                 NITF_FREE(textDataLens);
@@ -1995,8 +1980,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
             deSubLens[i] = endSize - startSize;
             startSize = endSize;
             /* TODO - we need to check to make sure the imageWriter exists */
-            if (!writeDE(writer->dataExtensionWriters[i],writer,
-                                              segment->subheader,error))
+            if (!writeDE(writer, writer->dataExtensionWriters[i],
+                    segment->subheader, writer->outputHandle, error))
             {
                 NITF_FREE(deSubLens);
                 NITF_FREE(deDataLens);
@@ -2121,56 +2106,118 @@ CATCH_ERROR:
 }
 
 
-NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *
-        writer, int i,
-        nitf_Error * error)
+NITFAPI(NITF_BOOL) nitf_Writer_setImageWriteHandler(nitf_Writer *writer,
+        int index, nitf_WriteHandler *writeHandler, nitf_Error * error)
+{
+    if (index >= writer->numImageWriters)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                         "index is greater than number of images");
+        goto CATCH_ERROR;
+    }
+    /* destroy any previously existing one */
+    if (writer->imageWriters[index])
+        nitf_WriteHandler_destruct(&writer->imageWriters[index]);
+    writer->imageWriters[index] = writeHandler;
+    return NITF_SUCCESS;
+
+CATCH_ERROR:
+    return NITF_FAILURE;
+}
+
+NITFAPI(NITF_BOOL) nitf_Writer_setGraphicWriteHandler(nitf_Writer *writer,
+        int index, nitf_WriteHandler *writeHandler, nitf_Error * error)
+{
+    if (index >= writer->numGraphicWriters)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                         "index is greater than number of graphics");
+        goto CATCH_ERROR;
+    }
+    /* destroy any previously existing one */
+    if (writer->graphicWriters[index])
+        nitf_WriteHandler_destruct(&writer->graphicWriters[index]);
+    writer->graphicWriters[index] = writeHandler;
+    return NITF_SUCCESS;
+
+CATCH_ERROR:
+    return NITF_FAILURE;
+}
+
+NITFAPI(NITF_BOOL) nitf_Writer_setTextWriteHandler(nitf_Writer *writer,
+        int index, nitf_WriteHandler *writeHandler, nitf_Error * error)
+{
+    if (index >= writer->numTextWriters)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                         "index is greater than number of texts");
+        goto CATCH_ERROR;
+    }
+    /* destroy any previously existing one */
+    if (writer->textWriters[index])
+        nitf_WriteHandler_destruct(&writer->textWriters[index]);
+    writer->textWriters[index] = writeHandler;
+    return NITF_SUCCESS;
+
+CATCH_ERROR:
+    return NITF_FAILURE;
+}
+
+NITFAPI(NITF_BOOL) nitf_Writer_setDEWriteHandler(nitf_Writer *writer,
+        int index, nitf_WriteHandler *writeHandler, nitf_Error * error)
+{
+    if (index >= writer->numDataExtensionWriters)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                         "index is greater than number of images");
+        goto CATCH_ERROR;
+    }
+    /* destroy any previously existing one */
+    if (writer->dataExtensionWriters[index])
+        nitf_WriteHandler_destruct(&writer->dataExtensionWriters[index]);
+    writer->dataExtensionWriters[index] = writeHandler;
+    return NITF_SUCCESS;
+
+CATCH_ERROR:
+    return NITF_FAILURE;
+}
+
+
+NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *writer,
+        int index, nitf_Error * error)
 {
     nitf_ListIterator iter;
     nitf_ImageWriter *imageWriter = NULL;
     nitf_ImageSegment *currentSegment = NULL;
     nitf_CompressionInterface *compIface = NULL;  /* currently always NULL */
 
-    if (i >= writer->numImageWriters)
+    if (index >= writer->numImageWriters)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "i is greater than number of images");
+                         "index is greater than number of images");
         goto CATCH_ERROR;
     }
-    imageWriter =
-        (nitf_ImageWriter *) NITF_MALLOC(sizeof(nitf_ImageWriter));
-    if (!imageWriter)
-    {
-        nitf_Error_init(error,
-                        NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
-        goto CATCH_ERROR;
-    }
-    iter = nitf_List_at(writer->record->images, i);
-
+    
+    iter = nitf_List_at(writer->record->images, index);
     /* this operation will assert if it is the end of the list */
     currentSegment = (nitf_ImageSegment *) nitf_ListIterator_get(&iter);
 
     assert(currentSegment);
     assert(currentSegment->subheader);
-
-    /*  Copy the output handle  */
-    imageWriter->outputHandle = writer->outputHandle;
-
-    /* TODO: currently the compIface is always NULL.. */
-    imageWriter->imageBlocker = nitf_ImageIO_construct(
-            currentSegment->subheader, 0, 0, compIface, NULL, error);
-    if (!imageWriter->imageBlocker)
+    
+    imageWriter = nitf_ImageWriter_construct(currentSegment->subheader, error);
+    if (!imageWriter)
         goto CATCH_ERROR;
-
-    imageWriter->imageSource = NULL;
-    writer->imageWriters[i] = imageWriter;
+    
+    if (!nitf_Writer_setImageWriteHandler(writer, index, imageWriter, error))
+        goto CATCH_ERROR;
 
     return imageWriter;
 
 CATCH_ERROR:
-      if (imageWriter)
-          nitf_ImageWriter_destruct(&imageWriter);
-      return NULL;
+    if (imageWriter)
+        nitf_WriteHandler_destruct(&imageWriter);
+    return NULL;
 }
 
 
@@ -2181,9 +2228,7 @@ NITFAPI(nitf_SegmentWriter *) nitf_Writer_newTextWriter
     nitf_Error * error
 )
 {
-    nitf_ListIterator iter;
     nitf_SegmentWriter *segmentWriter = NULL;
-    nitf_TextSegment *currentSegment = NULL;
 
     if (index >= writer->numTextWriters)
     {
@@ -2191,26 +2236,13 @@ NITFAPI(nitf_SegmentWriter *) nitf_Writer_newTextWriter
                          "i is greater than number of texts");
         return NULL;
     }
-    segmentWriter =
-        (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
+    
+    segmentWriter = nitf_SegmentWriter_construct(error);
     if (!segmentWriter)
-    {
-        nitf_Error_init(error,
-                        NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
         return NULL;
-    }
-
-    /* this operation will assert if it is the end of the list */
-    iter = nitf_List_at(writer->record->texts, index);
-    currentSegment = (nitf_TextSegment *) nitf_ListIterator_get(&iter);
-
-    assert(currentSegment);
-    /*  Copy the output handle  */
-    segmentWriter->outputHandle = writer->outputHandle;
-
-    segmentWriter->segmentSource = NULL;
-    writer->textWriters[index] = segmentWriter;
+    
+    if (!nitf_Writer_setTextWriteHandler(writer, index, segmentWriter, error))
+        return NULL;
 
     return segmentWriter;
 }
@@ -2222,9 +2254,7 @@ NITFAPI(nitf_SegmentWriter *) nitf_Writer_newDEWriter
     nitf_Error * error
 )
 {
-    nitf_ListIterator iter;
     nitf_SegmentWriter *segmentWriter = NULL;
-    nitf_DESegment *currentSegment = NULL;
 
     if (index >= writer->numDataExtensionWriters)
     {
@@ -2233,27 +2263,12 @@ NITFAPI(nitf_SegmentWriter *) nitf_Writer_newDEWriter
         return NULL;
     }
 
-    segmentWriter =
-        (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
-
+    segmentWriter = nitf_SegmentWriter_construct(error);
     if (!segmentWriter)
-    {
-        nitf_Error_init(error,
-                        NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
         return NULL;
-    }
-
-    /* this operation will assert if it is the end of the list */
-    iter = nitf_List_at(writer->record->dataExtensions, index);
-    currentSegment = (nitf_DESegment *) nitf_ListIterator_get(&iter);
-
-    assert(currentSegment);
-    /*  Copy the output handle  */
-    segmentWriter->outputHandle = writer->outputHandle;
-
-    segmentWriter->segmentSource = NULL;
-    writer->dataExtensionWriters[index] = segmentWriter;
+    
+    if (!nitf_Writer_setDEWriteHandler(writer, index, segmentWriter, error))
+        return NULL;
 
     return segmentWriter;
 }
@@ -2266,9 +2281,7 @@ NITFAPI(nitf_SegmentWriter *) nitf_Writer_newGraphicWriter
     nitf_Error * error
 )
 {
-    nitf_ListIterator iter;
     nitf_SegmentWriter *segmentWriter = NULL;
-    nitf_GraphicSegment *currentSegment = NULL;
 
     if (index >= writer->numGraphicWriters)
     {
@@ -2276,26 +2289,13 @@ NITFAPI(nitf_SegmentWriter *) nitf_Writer_newGraphicWriter
                          "i is greater than number of graphics");
         return NULL;
     }
-    segmentWriter =
-        (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
+    
+    segmentWriter = nitf_SegmentWriter_construct(error);
     if (!segmentWriter)
-    {
-        nitf_Error_init(error,
-                        NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
         return NULL;
-    }
-
-    /* this operation will assert if it is the end of the list */
-    iter = nitf_List_at(writer->record->graphics, index);
-    currentSegment = (nitf_GraphicSegment *) nitf_ListIterator_get(&iter);
-
-    assert(currentSegment);
-    /*  Copy the output handle  */
-    segmentWriter->outputHandle = writer->outputHandle;
-
-    segmentWriter->segmentSource = NULL;
-    writer->graphicWriters[index] = segmentWriter;
+    
+    if (!nitf_Writer_setGraphicWriteHandler(writer, index, segmentWriter, error))
+        return NULL;
 
     return segmentWriter;
 }
