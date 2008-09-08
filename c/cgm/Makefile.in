@@ -32,11 +32,11 @@ docs:
 ############################################
 #  Install the library(ies) and include files 
 #  in the appropriate place...  
-_LIBDIR = @prefix@/lib
-_INCDIR = @prefix@/include
-_TESTDIR = @prefix@/tests
+_LIBDIR = @libdir@
+_INCDIR = @includedir@
+_TESTDIR = ${prefix}/tests
 _TESTBINDIR = ${_TESTDIR}/bin
-_APPBINDIR = @prefix@/bin
+_APPBINDIR = ${prefix}/bin
 
 install:
 	echo "Installing ${PACKAGE}-${VERSION} to @prefix@"
