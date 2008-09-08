@@ -42,21 +42,6 @@ public final class SegmentWriter extends DestructibleObject
     protected native synchronized void destructMemory();
 
     /**
-     * Returns the IOHandle associated with this SegmentWriter
-     * 
-     * @return
-     */
-    public native IOHandle getOutputHandle();
-
-    /**
-     * Returns the ImageSource
-     * 
-     * @return the ImageSource associated with this ImageWriter
-     * @throws NITFException
-     */
-    public native SegmentSource getSegmentSource() throws NITFException;
-
-    /**
      * Attaches the specified SegmentSource to this SegmentWriter
      * 
      * @param segmentSource

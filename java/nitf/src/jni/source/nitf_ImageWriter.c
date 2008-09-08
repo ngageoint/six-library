@@ -26,6 +26,7 @@
 
 /*  This creates the _SetObj and _GetObj accessors  */
 NITF_JNI_DECLARE_OBJ(nitf_ImageWriter)
+
 /*
  * Class:     nitf_ImageWriter
  * Method:    destructMemory
@@ -36,67 +37,8 @@ JNIEXPORT void JNICALL Java_nitf_ImageWriter_destructMemory
 {
     nitf_ImageWriter *writer = _GetObj(env, self);
     if (writer)
-        nitf_ImageWriter_destruct(&writer);
+        nitf_WriteHandler_destruct((nitf_WriteHandler**)&writer);
     _SetObj(env, self, NULL);
-}
-
-
-/*
- * Class:     nitf_ImageWriter
- * Method:    getOutputHandle
- * Signature: ()Lnitf/IOHandle;
- */
-JNIEXPORT jobject JNICALL Java_nitf_ImageWriter_getOutputHandle
-    (JNIEnv * env, jobject self)
-{
-    nitf_ImageWriter *writer = _GetObj(env, self);
-    jclass iohandleClass = (*env)->FindClass(env, "nitf/IOHandle");
-    jmethodID methodID =
-        (*env)->GetMethodID(env, iohandleClass, "<init>", "(J)V");
-    return (*env)->NewObject(env,
-                             iohandleClass,
-                             methodID, (jlong) writer->outputHandle);
-}
-
-
-/*
- * Class:     nitf_ImageWriter
- * Method:    getImageSource
- * Signature: ()Lnitf/ImageSource;
- */
-JNIEXPORT jobject JNICALL Java_nitf_ImageWriter_getImageSource
-    (JNIEnv * env, jobject self)
-{
-    nitf_ImageWriter *writer = _GetObj(env, self);
-    jclass imageSourceClass = (*env)->FindClass(env, "nitf/ImageSource");
-    jmethodID methodID =
-        (*env)->GetMethodID(env, imageSourceClass, "<init>", "(J)V");
-    return (*env)->NewObject(env,
-                             imageSourceClass,
-                             methodID, (jlong) writer->imageSource);
-}
-
-
-/*
- * Class:     nitf_ImageWriter
- * Method:    write
- * Signature: (IIIII)Z
- */
-JNIEXPORT jboolean JNICALL Java_nitf_ImageWriter_write
-    (JNIEnv * env, jobject self, jint numBitsPerPixel, jint numImageBands,
-     jint numMultispectralImageBands, jint numRows, jint numCols)
-{
-    nitf_ImageWriter *writer = _GetObj(env, self);
-    nitf_Error error;
-
-    if (!nitf_ImageWriter_write
-        (writer, numBitsPerPixel, numImageBands,
-         numMultispectralImageBands, numRows, numCols, &error))
-    {
-        _ThrowNITFException(env, error.message);
-        return JNI_FALSE;
-    }
-    return JNI_TRUE;
 }
 
 

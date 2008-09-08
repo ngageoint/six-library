@@ -19,22 +19,6 @@ JNIEXPORT void JNICALL Java_nitf_SegmentWriter_destructMemory
 
 /*
  * Class:     nitf_SegmentWriter
- * Method:    getOutputHandle
- * Signature: ()Lnitf/IOHandle;
- */
-JNIEXPORT jobject JNICALL Java_nitf_SegmentWriter_getOutputHandle
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_SegmentWriter
- * Method:    getSegmentSource
- * Signature: ()Lnitf/SegmentSource;
- */
-JNIEXPORT jobject JNICALL Java_nitf_SegmentWriter_getSegmentSource
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_SegmentWriter
  * Method:    attachSource
  * Signature: (Lnitf/SegmentSource;)Z
  */

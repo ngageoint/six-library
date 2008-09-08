@@ -42,45 +42,6 @@ public final class ImageWriter extends DestructibleObject
     protected native synchronized void destructMemory();
 
     /**
-     * Returns the IOHandle associated with this ImageWriter
-     * 
-     * @return
-     */
-    public native IOHandle getOutputHandle();
-
-    /**
-     * Returns the ImageSource
-     * 
-     * @return the ImageSource associated with this ImageWriter
-     * @throws NITFException
-     */
-    public native ImageSource getImageSource() throws NITFException;
-
-    /**
-     * Method used by the actual Writer to write an image out. <p/> This
-     * function writes out an image from a source, by pulling the required
-     * amounts from the source attached. This function is probably only useable
-     * from the Writer.write() function. The image source must be attached at
-     * this point, or an exception will occur.
-     * 
-     * @param numBitsPerPixel
-     *            The number of bits per pixel in the image
-     * @param numImageBands
-     *            The number of bands in the image
-     * @param numMultispectralImageBands
-     *            Number of multi-spectral image bands
-     * @param numRows
-     *            The number of rows
-     * @param numCols
-     *            The number of columns
-     * @return
-     * @throws NITFException
-     */
-    public native boolean write(int numBitsPerPixel, int numImageBands,
-            int numMultispectralImageBands, int numRows, int numCols)
-            throws NITFException;
-
-    /**
      * Attaches the specified ImageSource to this ImageWriter
      * 
      * @param imageSource

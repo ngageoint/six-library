@@ -19,30 +19,6 @@ JNIEXPORT void JNICALL Java_nitf_ImageWriter_destructMemory
 
 /*
  * Class:     nitf_ImageWriter
- * Method:    getOutputHandle
- * Signature: ()Lnitf/IOHandle;
- */
-JNIEXPORT jobject JNICALL Java_nitf_ImageWriter_getOutputHandle
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_ImageWriter
- * Method:    getImageSource
- * Signature: ()Lnitf/ImageSource;
- */
-JNIEXPORT jobject JNICALL Java_nitf_ImageWriter_getImageSource
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_ImageWriter
- * Method:    write
- * Signature: (IIIII)Z
- */
-JNIEXPORT jboolean JNICALL Java_nitf_ImageWriter_write
-  (JNIEnv *, jobject, jint, jint, jint, jint, jint);
-
-/*
- * Class:     nitf_ImageWriter
  * Method:    attachSource
  * Signature: (Lnitf/ImageSource;)Z
  */

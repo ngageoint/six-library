@@ -26,6 +26,7 @@
 
 /*  This creates the _SetObj and _GetObj accessors  */
 NITF_JNI_DECLARE_OBJ(nitf_SegmentWriter)
+
 /*
  * Class:     nitf_SegmentWriter
  * Method:    destructMemory
@@ -37,44 +38,11 @@ JNIEXPORT void JNICALL Java_nitf_SegmentWriter_destructMemory
 	nitf_SegmentWriter *writer = _GetObj(env, self);
     if (writer)
     {
-        nitf_SegmentWriter_destruct(&writer);
+        nitf_WriteHandler_destruct((nitf_WriteHandler**)&writer);
     }
     _SetObj(env, self, NULL);
 }
 
-/*
- * Class:     nitf_SegmentWriter
- * Method:    getOutputHandle
- * Signature: ()Lnitf/IOHandle;
- */
-JNIEXPORT jobject JNICALL Java_nitf_SegmentWriter_getOutputHandle
-  (JNIEnv *env, jobject self)
-{
-	nitf_SegmentWriter *writer = _GetObj(env, self);
-    jclass iohandleClass = (*env)->FindClass(env, "nitf/IOHandle");
-    jmethodID methodID =
-        (*env)->GetMethodID(env, iohandleClass, "<init>", "(J)V");
-    return (*env)->NewObject(env,
-                             iohandleClass,
-                             methodID, (jlong) writer->outputHandle);
-}
-
-/*
- * Class:     nitf_SegmentWriter
- * Method:    getSegmentSource
- * Signature: ()Lnitf/SegmentSource;
- */
-JNIEXPORT jobject JNICALL Java_nitf_SegmentWriter_getSegmentSource
-  (JNIEnv *env, jobject self)
-{
-	nitf_SegmentWriter *writer = _GetObj(env, self);
-    jclass segmentSourceClass = (*env)->FindClass(env, "nitf/SegmentSource");
-    jmethodID methodID =
-        (*env)->GetMethodID(env, segmentSourceClass, "<init>", "(J)V");
-    return (*env)->NewObject(env,
-                             segmentSourceClass,
-                             methodID, (jlong) writer->segmentSource);
-}
 
 /*
  * Class:     nitf_SegmentWriter
@@ -102,6 +70,4 @@ JNIEXPORT jboolean JNICALL Java_nitf_SegmentWriter_attachSource
     }
     return JNI_TRUE;
 }
-
-
 
