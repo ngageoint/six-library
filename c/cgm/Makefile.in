@@ -44,13 +44,14 @@ install:
 	mkdir -p ${_INCDIR}
 	mkdir -p ${_INCDIR}/import
 	mkdir -p ${_INCDIR}/cgm
-	mkdir -p ${_TESTDIR}
-	mkdir -p ${_TESTBINDIR}
 	cp ./include/import/cgm.h ${_INCDIR}/import
 	cp ./include/cgm/*.h ${_INCDIR}/cgm
 	( cd ./lib/@target@; tar cf - . | ( cd ${_LIBDIR} && tar xfB - ) )
-	cp ./tests/*.c ${_TESTDIR}
-	cp ./tests/@target@/* ${_TESTBINDIR}
+
+#	mkdir -p ${_TESTBINDIR}
+#	cp ./tests/@target@/* ${_TESTBINDIR}
+#	mkdir -p ${_TESTDIR}
+#cp ./tests/*.c ${_TESTDIR}
 
 
 #############################################
