@@ -14,7 +14,6 @@ typedef struct _cgm_Text
     
 } cgm_Text;
 
-NITF_CXX_ENDGUARD
 
 NITFAPI(cgm_Text*) cgm_Text_construct(char* text, 
 				      nitf_Error* error);
@@ -22,5 +21,7 @@ NITFAPI(cgm_Text*) cgm_Text_construct(char* text,
 NITFAPI(void) cgm_Text_destruct(cgm_Text** t);
 
 NITFAPI(void) cgm_Text_print(cgm_Text* t);
+
+NITF_CXX_ENDGUARD
 
 #endif

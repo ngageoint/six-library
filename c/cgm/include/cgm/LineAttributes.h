@@ -13,7 +13,6 @@ typedef struct _cgm_LineAttributes
     cgm_Type lineType;
 } cgm_LineAttributes;
 
-NITF_CXX_ENDGUARD
 
 NITFAPI(cgm_LineAttributes*) 
     cgm_LineAttributes_construct(nitf_Error* error);
@@ -21,5 +20,7 @@ NITFAPI(cgm_LineAttributes*)
 NITFAPI(void) cgm_LineAttributes_destruct(cgm_LineAttributes** atts);
 
 NITFAPI(void) cgm_LineAttributes_print(cgm_LineAttributes* atts);
+
+NITF_CXX_ENDGUARD
 
 #endif

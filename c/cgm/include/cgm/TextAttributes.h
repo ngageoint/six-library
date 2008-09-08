@@ -15,7 +15,6 @@ typedef struct _cgm_TextAttributes
     cgm_Rectangle* characterOrientation;
 } cgm_TextAttributes;
 
-NITF_CXX_ENDGUARD
 
 NITFAPI(cgm_TextAttributes*) 
     cgm_TextAttributes_construct(nitf_Error* error);
@@ -23,5 +22,7 @@ NITFAPI(cgm_TextAttributes*)
 NITFAPI(void) cgm_TextAttributes_destruct(cgm_TextAttributes** atts);
 
 NITFAPI(void) cgm_TextAttributes_print(cgm_TextAttributes* atts);
+
+NITF_CXX_ENDGUARD
 
 #endif

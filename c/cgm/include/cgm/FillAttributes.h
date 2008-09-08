@@ -16,7 +16,6 @@ typedef struct _cgm_FillAttributes
     short edgeType;
 } cgm_FillAttributes;
 
-NITF_CXX_ENDGUARD
 
 NITFAPI(cgm_FillAttributes*) 
     cgm_FillAttributes_construct(nitf_Error* error);
@@ -24,5 +23,7 @@ NITFAPI(cgm_FillAttributes*)
 NITFAPI(void) cgm_FillAttributes_destruct(cgm_FillAttributes** atts);
 
 NITFAPI(void) cgm_FillAttributes_print(cgm_FillAttributes* atts);
+
+NITF_CXX_ENDGUARD
 
 #endif

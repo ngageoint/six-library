@@ -11,12 +11,13 @@ typedef struct _cgm_Vertex
     short y;
 } cgm_Vertex;
 
-NITF_CXX_ENDGUARD
 
 NITFAPI(cgm_Vertex*) cgm_Vertex_construct(nitf_Error* error);
 
 NITFAPI(void) cgm_Vertex_destruct(cgm_Vertex** v);
 
 NITFAPI(void) cgm_Vertex_print(cgm_Vertex* v);
+
+NITF_CXX_ENDGUARD
 
 #endif

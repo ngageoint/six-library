@@ -14,12 +14,13 @@ typedef struct _cgm_VertexClose
 } cgm_VertexClose;
 
 
-NITF_CXX_ENDGUARD
 
 NITFAPI(cgm_VertexClose*) cgm_VertexClose_construct(nitf_Error* error);
 
 NITFAPI(void) cgm_VertexClose_destruct(cgm_VertexClose** v);
 
 NITFAPI(void) cgm_VertexClose_print(cgm_VertexClose* v);
+
+NITF_CXX_ENDGUARD
 
 #endif
