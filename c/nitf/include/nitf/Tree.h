@@ -204,4 +204,6 @@ NITFAPI(nitf_Tree*) nitf_Tree_clone(nitf_Tree* source,
  *  There are lots of other tree-type functions that I will ignore
  *  for now, but that would be useful, including sub-cloning, etc.
  */
+NITF_CXX_ENDGUARD
+
 #endif
