@@ -557,10 +557,12 @@ NITFPROT(NITF_BOOL)
     }
     else
     {
+#if NITF_DEBUG_PLUGIN_REG
         fprintf(stdout,
                 "Could not open plug-in directory '%s'. "
                 "You may have forgotten to set your NITF_PLUGIN_PATH environment "
                 "variable : continuing without plugins...\n", dirName);
+#endif
     }
     nitf_Directory_destruct(&dir);
     return NITF_SUCCESS;
