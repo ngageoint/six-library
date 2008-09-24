@@ -14,7 +14,7 @@ case "${target}" in
     powerpc-apple-*)
         java_ident="apple"
     ;;
-    x86_64-*-linux-*|i686-pc-*)
+    *-*-linux-*|i686-pc-*)
         java_ident="linux"
     ;;
 esac

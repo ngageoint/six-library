@@ -14,7 +14,7 @@ esac
 
 
 case "${target}" in
-   x86_64-*-linux-*|i686-pc-*|powerpc64-*-linux-*)
+   *-*-linux-*|i686-pc-*)
         case "${CC}" in
             cc)
                 AC_MSG_RESULT(setting compiler to gcc...)
@@ -26,7 +26,7 @@ esac
 
 
 case "${target}" in
-    x86_64-*-linux-*|i686-pc-*)
+    *-*-linux-*|i686-pc-*)
         case "${CC}" in
             icc)
                 AC_MSG_RESULT(selecting the intel icc compiler...)

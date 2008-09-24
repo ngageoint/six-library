@@ -4630,7 +4630,7 @@ esac
 
 
 case "${target}" in
-   x86_64-*-linux-*|i686-pc-*|powerpc64-*-linux-*)
+   *-*-linux-*|i686-pc-*)
         case "${CC}" in
             cc)
                 { echo "$as_me:$LINENO: result: setting compiler to gcc..." >&5
@@ -4643,7 +4643,7 @@ esac
 
 
 case "${target}" in
-    x86_64-*-linux-*|i686-pc-*)
+    *-*-linux-*|i686-pc-*)
         case "${CC}" in
             icc)
                 { echo "$as_me:$LINENO: result: selecting the intel icc compiler..." >&5
@@ -5329,7 +5329,7 @@ case "${target}" in
     powerpc-apple-*)
         java_ident="apple"
     ;;
-    x86_64-*-linux-*|i686-pc-*)
+    *-*-linux-*|i686-pc-*)
         java_ident="linux"
     ;;
 esac
