@@ -67,7 +67,7 @@ int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData,
                     }
                     else
                     {
-                        printf("Warning, no field found!\n");
+                        printf("ERROR: no field found!\n");
                     }
 
                 }

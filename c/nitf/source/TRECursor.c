@@ -133,19 +133,24 @@ NITFAPI(NITF_BOOL) nitf_TRECursor_isDone(nitf_TRECursor * tre_cursor)
         status = 0;
 
     /* first check all loops to see if we are in the middle of one */
+
+    /*  Removed this short circuit logic, since it causes the TRE to
+        think its not done, when actually, if the loop comes last, it is.
+        DP
     for (i = 0; status && (i < tre_cursor->looping); ++i)
     {
         if (tre_cursor->loop_idx->st[i] < tre_cursor->loop->st[i])
         {
-            status = 0;
+            printf("TRECursor: In the middle\n");
+            status = 1;
         }
     }
+    */
 
     /* try iterating and see if we make it to the end */
     while (status && (cursor.index < cursor.numItems) && iterStatus == NITF_SUCCESS)
     {
         iterStatus = nitf_TRECursor_iterate(&cursor, &error);
-
         if (gotField)
         {
             /* we got to the next field... so return not done */

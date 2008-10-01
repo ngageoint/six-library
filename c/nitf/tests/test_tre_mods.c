@@ -50,7 +50,7 @@ int showTRE(nitf_TRE* tre)
         }
         else
         {
-            printf("Warning, no field found!\n");
+            printf("ERROR, no field found!\n");
         }
         
     }
