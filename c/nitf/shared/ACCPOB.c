@@ -36,7 +36,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_N, 5, "Point-to-Point Horizontal Accuracy", "APH" },
     {NITF_BCS_A, 3, "Unit of Measure for APV", "UNIAPV" },
     {NITF_BCS_N, 5, "Point-to-Point Vertical Accuracy", "APV" },
-    {NITF_BCS_N, 3, "Number of Points in Bounding Polygon" },
+    {NITF_BCS_N, 3, "Number of Points in Bounding Polygon", "NUMPTS" },
     {NITF_LOOP, 0, NULL, "NUMPTS"},
     {NITF_BCS_N, 15, "Longitude/Easting", "LON" },
     {NITF_BCS_N, 15, "Latitude/Northing", "LAT" },

@@ -20,9 +20,7 @@
  *
  */
 
-#include <nitf/IOHandle.h>
-#include <nitf/TREUtils.h>
-#include <nitf/Record.h>
+#include <import/nitf.h>
 
 NITF_CXX_GUARD
 
