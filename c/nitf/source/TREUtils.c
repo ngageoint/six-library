@@ -278,7 +278,6 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
     NITF_BOOL status = 1;
     nitf_FieldType type = NITF_BCS_A;
     int length; /* used temporarily for storing the length */
-
     /* get out if TRE is null */
     if (!tre)
     {
@@ -310,14 +309,22 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
         }
 
         if (!nitf_Field_setRawData
-                (field, (NITF_DATA *) data, dataLength, error))
+            (field, (NITF_DATA *) data, dataLength, error))
         {
             return NITF_FAILURE;
         }
+        
+        /* Now we need to fill our data */
+        if (!nitf_TREUtils_fillData(tre, 
+                                    ((nitf_TREPrivateData*)tre->priv)->description, 
+                                    error))
+            return NITF_FAILURE;
+
     }
     /* it doesn't exist in the hash yet, so we need to find it */
     else
     {
+
         cursor = nitf_TRECursor_begin(tre);
         while (!nitf_TRECursor_isDone(&cursor) && !done && status)
         {
@@ -363,7 +370,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
                             dataLength, error);
 
 #ifdef NITF_DEBUG
-                    fprintf(stdout, "Adding Field [%s] to TRE [%s]\n",
+                    fprintf(stdout, "Adding (and filling) Field [%s] to TRE [%s]\n",
                             cursor.tag_str, tre->tag);
 #endif
 
@@ -371,6 +378,12 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
                     nitf_HashTable_insert(
                             ((nitf_TREPrivateData*)tre->priv)->hash,
                             cursor.tag_str, field, error);
+
+
+                    /* Now we need to fill our data */
+                    if (!nitf_TREUtils_fillData(tre, ((nitf_TREPrivateData*)tre->priv)->description, error))
+                        return NITF_FAILURE;
+
                     done = 1; /* set, so we break out of loop */
                 }
             }

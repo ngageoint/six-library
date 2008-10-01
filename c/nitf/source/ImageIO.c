@@ -8458,8 +8458,8 @@ NITFPROT(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
 NITFPROT(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
                                        FILE * file, int longIndent)
 {
-#ifdef NITF_DEBUG
-    char *sp;                   /* Indent spaces */
+#ifdef NITF_BLOCK_DEBUG
+    char *sp;
 
     if (file == NULL)
         file = stdout;
