@@ -48,10 +48,20 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_00024TREIterator_next
     
     
     if (!enumerator)
+    {
+        printf("Warning! Null enumerator!\n");
         return NULL;
-    
+    }
     pair = enumerator->get(enumerator, &error);
-    
+    if (!pair)
+    {
+        nitf_Error_print(&error, stdout, "Exiting...");
+        printf("Warning! Bad pair, we're gonna die!\n");
+    }
+/*     else */
+/*     { */
+/*         printf("Found key: %s\n", pair->key); */
+/*     } */
     fieldClass = (*env)->FindClass(env, "nitf/Field");
     fieldPairClass = (*env)->FindClass(env, "nitf/TRE$FieldPair");
     
@@ -75,10 +85,14 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_00024TREIterator_next
     (*env)->SetObjectField(env, jFieldPair, fieldFieldID, jField);
     
     /* call next */
-    if (!enumerator->next(&enumerator, &error))
-        enumerator = NULL;
-    /* re-set the object each time to ensure the address is updated */
-    _SetObj(env, self, enumerator);
+    enumerator->next(&enumerator, &error);
+    if (!enumerator)
+    {
+        _SetObj(env, self, enumerator);
+     
+    }
+/*         enumerator = NULL; */
+/*     /\* re-set the object each time to ensure the address is updated *\/ */
     return jFieldPair;
 }
 
