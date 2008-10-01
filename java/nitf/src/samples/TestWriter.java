@@ -155,7 +155,8 @@ public class TestWriter
         final ImageSubheader subheader = imageSegment.getSubheader();
 
         subheader.getImageCoordinateSystem().setData(" ");
-
+        
+        subheader.getFilePartType().setData("IM");
         // imageID
         subheader.getImageId().setData(
                 String.valueOf(System.currentTimeMillis()));
