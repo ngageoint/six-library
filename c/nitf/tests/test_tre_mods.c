@@ -23,6 +23,39 @@
 #include <import/nitf.h>
 
 
+int showTRE(nitf_TRE* tre)
+{
+    nitf_Error error;
+    int i = 0;
+    nitf_Uint32 treLength;
+    nitf_TREEnumerator* it;
+    
+    treLength = tre->handler->getCurrentSize(tre, &error);
+    
+    printf("\n--------------- %s TRE (%d) ---------------\n",
+           tre->tag, treLength);
+    
+    for (it = nitf_TRE_begin(tre, &error); 
+         it != NULL; it->next(&it, &error) )
+    {
+        nitf_Pair* fieldPair;
+        i++;
+        
+        fieldPair = it->get(it, &error);
+        if (fieldPair)
+        {
+            printf("%s = [", fieldPair->key);
+            nitf_Field_print((nitf_Field *) fieldPair->data);
+            printf("]\n");
+        }
+        else
+        {
+            printf("Warning, no field found!\n");
+        }
+        
+    }
+}
+
 NITF_BOOL testNestedMod(nitf_Error* error)
 {
     NITF_BOOL exists;
@@ -51,7 +84,7 @@ NITF_BOOL testNestedMod(nitf_Error* error)
     printf("Set ok? %s\n", exists ? "OK" : "FAIL");
 
     /* print the TRE. should print the value now */
-    nitf_TREUtils_print(tre, error);
+    showTRE(tre);
 
     /* destruct the TREs */
     nitf_TRE_destruct(&tre);
@@ -67,7 +100,7 @@ NITF_BOOL testIncompleteCondMod(nitf_Error* error)
         return NITF_FAILURE;
     }
     printf("Before Mods\n");
-    nitf_TREUtils_print(tre, error);
+    showTRE(tre);
     printf("\n\n");
 
     exists = nitf_TRE_setField(tre, "NUMACPO", "01", 2, error);
@@ -77,7 +110,7 @@ NITF_BOOL testIncompleteCondMod(nitf_Error* error)
     }
 
     printf("Again\n");
-    nitf_TREUtils_print(tre, error);
+    showTRE(tre);
     printf("\n\n");
 
     exists = nitf_TRE_setField(tre, "UNIAAH[0]", "FT0", 3, error);
@@ -95,7 +128,7 @@ NITF_BOOL testIncompleteCondMod(nitf_Error* error)
 
     /* print the TRE. should print the value now */
     printf("After Mods\n");
-    nitf_TREUtils_print(tre, error);
+    showTRE(tre);
 
 
     /* destruct the TREs */
@@ -118,7 +151,7 @@ NITF_BOOL testClone(nitf_Error* error)
     printf("Set ok? %s\n", exists ? "yes" : "no");
 
     /* print the TRE. should print the value now */
-    nitf_TREUtils_print(tre, error);
+    showTRE(tre);
 
     /* now, clone it */
     dolly = nitf_TRE_clone(tre, error);
@@ -127,7 +160,7 @@ NITF_BOOL testClone(nitf_Error* error)
         return NITF_FAILURE;
     }
     printf("About to print the cloned TRE\n");
-    nitf_TREUtils_print(dolly, error);
+    showTRE(dolly);
 
     /* destruct the TREs */
     nitf_TRE_destruct(&tre);
@@ -146,7 +179,7 @@ NITF_BOOL testBasicMod(nitf_Error* error)
     }
 
     /* print the TRE -- should print fields, but all blank */
-    nitf_TREUtils_print(tre, error);
+    showTRE(tre);
 
     /* set a value. make sure it went ok */
     printf("Now, set the value of 'AC_MSN_ID' to 'fly-by'. Set ok? ");
@@ -155,7 +188,7 @@ NITF_BOOL testBasicMod(nitf_Error* error)
 
     printf("Now, print the TRE:\n----------\n");
     /* print the TRE. should print the value now */
-    nitf_TREUtils_print(tre, error);
+    showTRE(tre);
     printf("----------\n");
 
     /* re-set the same value. make sure it went ok */
@@ -165,7 +198,7 @@ NITF_BOOL testBasicMod(nitf_Error* error)
 
     printf("Now, print the TRE:\n----------\n");
     /* print the TRE. should print the value now */
-    nitf_TREUtils_print(tre, error);
+    showTRE(tre);
     printf("----------\n");
 
     /* make sure that we can't set an invalid tag */
@@ -175,7 +208,7 @@ NITF_BOOL testBasicMod(nitf_Error* error)
 
     printf("Now, print the TRE:\n----------\n");
     /* print the TRE. should print the value now */
-    nitf_TREUtils_print(tre, error);
+    showTRE(tre);
     printf("----------\n");
 
     /* destruct the TRE */

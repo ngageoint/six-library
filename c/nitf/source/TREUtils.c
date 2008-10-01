@@ -313,6 +313,10 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
         {
             return NITF_FAILURE;
         }
+#ifdef NITF_DEBUG
+        fprintf(stdout, "Setting (and filling) Field [%s] to TRE [%s]\n",
+                tag, tre->tag);
+#endif
         
         /* Now we need to fill our data */
         if (!nitf_TREUtils_fillData(tre, 
