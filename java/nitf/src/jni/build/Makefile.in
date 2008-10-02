@@ -41,6 +41,7 @@ SOURCES = nitf_BandInfo.c \
 	nitf_DESubheader.c \
 	nitf_DownSampler.c \
 	nitf_Extensions.c \
+        nitf_Extensions_ExtensionsIterator.c \
 	nitf_Field.c \
 	nitf_FieldWarning.c \
 	nitf_FileHeader.c \
