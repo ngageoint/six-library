@@ -26,6 +26,9 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
 
+import nitf.TRE.FieldPair;
+import nitf.TRE.TREIterator;
+
 /**
  * A representation of an extensions segment in the NITF specification.
  * Extensions segments contain TREs, which can be found at the end of component
@@ -83,6 +86,39 @@ public final class Extensions extends NITFObject
      */
     public native Collection<TRE> getAll();
 
+    /**
+     * Retrieve an Iterator for FieldPairs. This will iterate through all of the
+     * fields in the TRE, returning a FieldPair for each.
+     * 
+     * @return Iterator of FieldPairs
+     */
+    public Iterator<TRE> iterator()
+    {
+        return new ExtensionsIterator(this);
+    }
+    /**
+     * An Iterator for TRE FieldPairs
+     */
+    static class ExtensionsIterator extends NITFObject implements Iterator<TRE>
+    {
+        protected ExtensionsIterator(Extensions ext)
+        {
+            construct(ext);
+        }
+
+        protected ExtensionsIterator(long address)
+        {
+            super(address);
+        }
+
+        public native boolean hasNext();
+
+        public native TRE next();
+
+        public native void remove();
+
+        private native void construct(Extensions ext);
+    }
     /**
      * @param version
      *            The NITF version

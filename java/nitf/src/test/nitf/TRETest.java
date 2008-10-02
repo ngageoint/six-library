@@ -24,6 +24,7 @@ package nitf;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -97,6 +98,36 @@ public class TRETest extends TestCase
         }
     }
 
+    public void testExtensionsIterator() throws Exception
+    {
+    	Record r = new Record();
+    	TRE tre = makeNewTRE("JITCID");
+    	
+    	Iterator<TRE> emptyIt = r.getHeader().getExtendedSection().iterator();
+    	assertTrue(!emptyIt.hasNext());
+    	//Iterator<TRE> it = all.iterator();
+    	// This is almost certainly not going to work
+    	r.getHeader().getExtendedSection().appendTRE(tre);
+    	Iterator<TRE> it = r.getHeader().getExtendedSection().iterator();
+    	//while (assert)
+    	//int size = 0;
+    	assertTrue(it.hasNext());
+    	TRE fromIt = it.next();
+    	//PrintStream ps = new PrintStream();
+    	
+    	System.out.println(fromIt.getTag());
+    	
+    	assertTrue(tre.equals(fromIt));
+    	
+    	assertEquals(1, r.getHeader().getExtendedSection().getAll().size());
+    	it.remove();
+    	assertEquals(0, r.getHeader().getExtendedSection().getAll().size());
+    	
+    	
+    	
+    	
+    	
+    }
     public void testIterator()
     {
         try
