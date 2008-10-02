@@ -67,8 +67,8 @@ public class TRETest extends TestCase
         {
             TRE tre = makeNewTRE("JITCID");
             String comment = "A comment";
-            assertTrue(tre.setField("FILCMT1", comment.getBytes()));
-            Field field = tre.getField("FILCMT1");
+            assertTrue(tre.setField("FILCMT", comment.getBytes()));
+            Field field = tre.getField("FILCMT");
             assertNotNull(field);
             assertEquals(comment, field.getStringData().trim());
         }
@@ -85,7 +85,7 @@ public class TRETest extends TestCase
             TRE tre = makeNewTRE("JITCID");
             List<FieldPair> fields = tre.find("FILCMT");
             assertNotNull(fields);
-            assertEquals(2, fields.size());
+            assertEquals(1, fields.size());
             for (FieldPair fieldPair : fields)
             {
                 log.info(fieldPair.getName());
@@ -119,8 +119,8 @@ public class TRETest extends TestCase
         try
         {
             TRE tre = makeNewTRE("JITCID");
-            tre.setField("FILCMT1", "comment1".getBytes());
-            tre.setField("FILCMT2", "comment2".getBytes());
+            tre.setField("FILCMT", "comment1".getBytes());
+            //tre.setField("FILCMT", "comment2".getBytes());
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             tre.print(new PrintStream(out));
