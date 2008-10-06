@@ -28,7 +28,7 @@
 typedef struct _MemorySourceImpl
 {
     char *data;
-    size_t size;
+    off_t size;
     off_t mark;
     int numBytesPerPixel;
     int pixelSkip;
@@ -53,7 +53,7 @@ NITFPRIV(MemorySourceImpl *) toMemorySource(NITF_DATA * data,
 
 NITFPRIV(NITF_BOOL) MemorySource_contigRead(MemorySourceImpl *
         memorySource, char *buf,
-        size_t size,
+        off_t size,
         nitf_Error * error)
 {
     memcpy(buf, memorySource->data + memorySource->mark, size);
@@ -64,7 +64,7 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(MemorySourceImpl *
 
 NITFPRIV(NITF_BOOL) MemorySource_offsetRead(MemorySourceImpl *
         memorySource, char *buf,
-        size_t size,
+        off_t size,
         nitf_Error * error)
 {
     int i = 0;
@@ -88,7 +88,7 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(MemorySourceImpl *
  */
 NITFPRIV(NITF_BOOL) MemorySource_read(NITF_DATA * data,
                                       char *buf,
-                                      size_t size, nitf_Error * error)
+                                      off_t size, nitf_Error * error)
 {
     MemorySourceImpl *memorySource = toMemorySource(data, error);
     if (!memorySource)
@@ -112,16 +112,24 @@ NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 }
 
 
-NITFPRIV(size_t) MemorySource_getSize(NITF_DATA * data)
+NITFPRIV(off_t) MemorySource_getSize(NITF_DATA * data)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     assert(memorySource);
     return memorySource->size;
 }
 
+NITFPRIV(void) MemorySource_setSize(NITF_DATA * data, off_t size)
+{
+    MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
+    assert(memorySource);
+    memorySource->size = size;
+}
+
+
 
 NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(char *data,
-        size_t size,
+        off_t size,
         off_t start,
         int numBytesPerPixel,
         int pixelSkip,
@@ -131,7 +139,8 @@ NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(char *data,
         {
             &MemorySource_read,
             &MemorySource_destruct,
-            &MemorySource_getSize
+            &MemorySource_getSize,
+            &MemorySource_setSize
         };
     MemorySourceImpl *impl;
     nitf_BandSource *bandSource;
@@ -182,11 +191,19 @@ NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
     NITF_FREE(data);
 }
 
-NITFPRIV(size_t) FileSource_getSize(NITF_DATA * data)
+NITFPRIV(off_t) FileSource_getSize(NITF_DATA * data)
 {
     FileSourceImpl *fileSource = (FileSourceImpl *) data;
     assert(fileSource);
-    return (size_t)fileSource->size;
+    return (off_t)fileSource->size;
+}
+
+
+NITFPRIV(void) FileSource_setSize(NITF_DATA * data, off_t size)
+{
+    FileSourceImpl *fileSource = (FileSourceImpl *) data;
+    assert(fileSource);
+    fileSource->size = size;
 }
 
 
@@ -207,7 +224,7 @@ NITFPRIV(FileSourceImpl *) toFileSource(NITF_DATA * data,
 
 NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
         char *buf,
-        size_t size, nitf_Error * error)
+        off_t size, nitf_Error * error)
 {
 
     if (!NITF_IO_SUCCESS(nitf_IOHandle_read(fileSource->handle,
@@ -234,14 +251,14 @@ NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
  */
 NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
         char *buf,
-        size_t size, nitf_Error * error)
+        off_t size, nitf_Error * error)
 {
 
     /* we do not multiply the pixelSkip by numBytesPerPixel, b/c this
      * read method takes in size as number of bytes, not number of pixels */
 
     /* TODO - this *could* be smaller, but this should be ok for now */
-    size_t tsize = size * (fileSource->pixelSkip + 1);
+    off_t tsize = size * (fileSource->pixelSkip + 1);
 
     char *tbuf;
     off_t lmark = 0;
@@ -284,7 +301,7 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
  */
 NITFPRIV(NITF_BOOL) FileSource_read(NITF_DATA * data,
                                     char *buf,
-                                    size_t size, nitf_Error * error)
+                                    off_t size, nitf_Error * error)
 {
     FileSourceImpl *fileSource = toFileSource(data, error);
     if (!fileSource)
@@ -310,7 +327,8 @@ NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle handle,
         {
             &FileSource_read,
             &FileSource_destruct,
-            &FileSource_getSize
+            &FileSource_getSize,
+            &FileSource_setSize
         };
     FileSourceImpl *impl;
     nitf_BandSource *bandSource;

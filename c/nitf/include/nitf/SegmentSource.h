@@ -67,7 +67,7 @@ typedef nitf_DataSource             nitf_SegmentSource;
 NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
 (
     char *data,
-    size_t size,
+    off_t size,
     off_t start,
     int byteSkip,
     nitf_Error * error

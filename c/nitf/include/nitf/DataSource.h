@@ -38,7 +38,7 @@ NITF_CXX_GUARD
  *  \param error    populated on error
  */
 typedef NITF_BOOL(*NITF_IDATASOURCE_READ) (NITF_DATA *data,
-        char *buf, size_t size, nitf_Error *error);
+        char *buf, off_t size, nitf_Error *error);
 
 
 /*
@@ -47,12 +47,19 @@ typedef NITF_BOOL(*NITF_IDATASOURCE_READ) (NITF_DATA *data,
  */
 typedef void (*NITF_IDATASOURCE_DESTRUCT) (NITF_DATA *);
 
-
-/*
- *  Function pointer for destructing the data structure (part of the data source interface)
- *  \param data     The ancillary "helper" data
+/*!
+ *  Get the size of the data source
+ *
  */
-typedef size_t (*NITF_IDATASOURCE_GET_SIZE) (NITF_DATA *);
+typedef off_t (*NITF_IDATASOURCE_GET_SIZE) (NITF_DATA *);
+
+/*!
+ *  Set the size of the data source.  (NITRO 2.0).  This is useful
+ *  when we want to stream a file into our NITF.  That way our user
+ *  does not have to write his/her own file source.
+ */
+typedef void (*NITF_IDATASOURCE_SET_SIZE) (NITF_DATA *, off_t size);
+
 
 
 /*!
@@ -67,6 +74,7 @@ typedef struct _nitf_IDataSource
     NITF_IDATASOURCE_READ read;
     NITF_IDATASOURCE_DESTRUCT destruct;
     NITF_IDATASOURCE_GET_SIZE getSize;
+    NITF_IDATASOURCE_SET_SIZE setSize;
 }
 nitf_IDataSource;
 

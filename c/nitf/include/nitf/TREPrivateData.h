@@ -51,8 +51,8 @@ NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_clone(
 
 NITFAPI(void) nitf_TREPrivateData_destruct(nitf_TREPrivateData **priv);
 
-NITFPROT(void) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
-                                         nitf_Error * error);
+NITFPROT(NITF_BOOL) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
+                                              nitf_Error * error);
 
 
 NITF_CXX_ENDGUARD

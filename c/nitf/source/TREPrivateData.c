@@ -144,12 +144,13 @@ NITFAPI(void) nitf_TREPrivateData_destruct(nitf_TREPrivateData **priv)
     {
         if ((*priv)->hash)
         {
-            /* flush the hash */
-            nitf_TREPrivateData_flush(*priv, &e);
-
+            /* destruct each field in the hash */
+            nitf_HashTable_foreach((*priv)->hash,
+                                   (NITF_HASH_FUNCTOR) destructHashValue,
+                                   NULL, &e);
             /* destruct the hash */
             nitf_HashTable_destruct(&((*priv)->hash));
-            (*priv)->hash = NULL;
+            
         }
         NITF_FREE(*priv);
         *priv = NULL;
@@ -157,7 +158,7 @@ NITFAPI(void) nitf_TREPrivateData_destruct(nitf_TREPrivateData **priv)
 }
 
 
-NITFPROT(void) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
+NITFPROT(NITF_BOOL) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
                                          nitf_Error * error)
 {
     if (priv && priv->hash)
@@ -166,5 +167,21 @@ NITFPROT(void) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
         nitf_HashTable_foreach(priv->hash,
                                (NITF_HASH_FUNCTOR) destructHashValue,
                                NULL, error);
+        /* destruct the hash */
+        nitf_HashTable_destruct(&(priv->hash));
+
     }
+
+    /* create the hashtable for the fields */
+    priv->hash = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
+    
+    if (!priv->hash)
+    {
+        nitf_TREPrivateData_destruct(&priv);
+        return NITF_FAILURE;
+    }
+    
+    nitf_HashTable_setPolicy(priv->hash, NITF_DATA_ADOPT);
+    
+    return NITF_SUCCESS;
 }

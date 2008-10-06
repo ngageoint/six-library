@@ -47,7 +47,9 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE * tre,
 
     /* flush the hash first, to protect from duplicate entries */
     if (privData)
+    {
         nitf_TREPrivateData_flush(privData, error);
+    }
     
     cursor = nitf_TRECursor_begin(tre);
     while (offset < privData->length && status)
@@ -701,6 +703,7 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOHandle ioHandle, nitf_Uint32 length,
     tre->priv = NULL; 
     infoPtr = descriptions->descriptions;
     tre->priv = nitf_TREPrivateData_construct(error);
+    ((nitf_TREPrivateData*)tre->priv)->length = length;
 
     ok = NITF_FAILURE;
     while (infoPtr && (infoPtr->description != NULL))
@@ -710,17 +713,22 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOHandle ioHandle, nitf_Uint32 length,
             break;
         }
             
-        ((nitf_TREPrivateData*)tre->priv)->length = length;
+
         ((nitf_TREPrivateData*)tre->priv)->description = infoPtr->description;
-        printf("Trying TRE with description length: %d", length);
+#ifdef NITF_DEBUG
+        printf("Trying TRE with description: %s\n\n", infoPtr->name);
+#endif
         ok = nitf_TREUtils_parse(tre, data, error);
         if (ok)
         {
+            /*nitf_HashTable_print( ((nitf_TREPrivateData*)tre->priv)->hash );*/
             break;
         }
 
         infoPtr++;
     }
+    
+
   
     if (data) NITF_FREE(data);
     return ok;
