@@ -664,36 +664,66 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOHandle ioHandle, nitf_Uint32 length,
 {
     int ok;
     char *data = NULL;
-    NITF_BOOL success;
+    nitf_TREDescriptionSet *descriptions = NULL;
+    nitf_TREDescriptionInfo *infoPtr = NULL;
 
     if (!tre)
-        goto CATCH_ERROR;
+        return NITF_FAILURE;
     
     /* set the description/length */
-    nitf_TREUtils_setDescription(tre, length, error);
+    /*nitf_TREUtils_setDescription(tre, length, error);*/
     
     /*if (!tre->descrip) goto CATCH_ERROR;*/ 
     data = (char*)NITF_MALLOC( length );
     if (!data)
     {
         nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),NITF_CTXT, NITF_ERR_MEMORY );
-        goto CATCH_ERROR;
+        return NITF_FAILURE;
     }
     memset(data, 0, length);
-    success = nitf_TREUtils_readField(ioHandle, data, length, error);
-    if (!success) goto CATCH_ERROR;
+    if (!nitf_TREUtils_readField(ioHandle, data, length, error))
+    {
+        NITF_FREE(data);
+        return NITF_FAILURE;
+    }
     
-    ok = nitf_TREUtils_parse(tre, data, error);
-    NITF_FREE( data );
-    data = NULL;
+    descriptions = (nitf_TREDescriptionSet*)tre->handler->data;
+
+    if (!descriptions)
+    {
+        nitf_Error_init(error, "TRE Description Set is NULL",
+                        NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        
+        NITF_FREE(data);
+        return NITF_FAILURE;
+    }
     
-    if (!ok)
-        goto CATCH_ERROR;
-    return NITF_SUCCESS;
+    tre->priv = NULL; 
+    infoPtr = descriptions->descriptions;
+    tre->priv = nitf_TREPrivateData_construct(error);
+
+    ok = NITF_FAILURE;
+    while (infoPtr && (infoPtr->description != NULL))
+    {
+        if (!tre->priv)
+        {
+            break;
+        }
+            
+        ((nitf_TREPrivateData*)tre->priv)->length = length;
+        ((nitf_TREPrivateData*)tre->priv)->description = infoPtr->description;
+        printf("Trying TRE with description length: %d", length);
+        ok = nitf_TREUtils_parse(tre, data, error);
+        if (ok)
+        {
+            break;
+        }
+
+        infoPtr++;
+    }
   
-  CATCH_ERROR:
     if (data) NITF_FREE(data);
-    return NITF_FAILURE;
+    return ok;
 }
 
 NITFPRIV(NITF_BOOL) basicInit(nitf_TRE * tre, const char* id, nitf_Error * error)
