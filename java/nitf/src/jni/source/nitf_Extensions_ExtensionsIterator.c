@@ -120,9 +120,10 @@ JNIEXPORT void JNICALL Java_nitf_Extensions_00024ExtensionsIterator_construct
     jclass extClass;
     jmethodID extMethodId;
     nitf_Extensions *ext = NULL;
-    java_ExtensionsIterator *it = (java_ExtensionsIterator*)NITF_MALLOC(sizeof(java_ExtensionsIterator));
-    assert(it);
     nitf_Error error;
+    java_ExtensionsIterator *it = (java_ExtensionsIterator*)NITF_MALLOC(sizeof(java_ExtensionsIterator));
+    
+    assert(it);
     
     extClass = (*env)->GetObjectClass(env, jExtObject);
     extMethodId = (*env)->GetMethodID(env, extClass, "getAddress", "()J");
