@@ -50,6 +50,8 @@ NITFPROT(nitf_Version) _GetNITFVersion(JNIEnv * env, jobject versionObject);
 
 NITFPROT(void) _ThrowNITFException(JNIEnv *env, const char *message);
 
+NITFPROT(int) _GetJNIEnv(JavaVM** vm, JNIEnv** env);
+
 NITF_CXX_ENDGUARD
 
 #endif

@@ -20,17 +20,17 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageSegment_getSubheader
 /*
  * Class:     nitf_ImageSegment
  * Method:    getImageOffset
- * Signature: ()I
+ * Signature: ()J
  */
-JNIEXPORT jint JNICALL Java_nitf_ImageSegment_getImageOffset
+JNIEXPORT jlong JNICALL Java_nitf_ImageSegment_getImageOffset
   (JNIEnv *, jobject);
 
 /*
  * Class:     nitf_ImageSegment
  * Method:    getImageEnd
- * Signature: ()I
+ * Signature: ()J
  */
-JNIEXPORT jint JNICALL Java_nitf_ImageSegment_getImageEnd
+JNIEXPORT jlong JNICALL Java_nitf_ImageSegment_getImageEnd
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

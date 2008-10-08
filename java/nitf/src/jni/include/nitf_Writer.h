@@ -83,6 +83,38 @@ JNIEXPORT jboolean JNICALL Java_nitf_Writer_prepare
 
 /*
  * Class:     nitf_Writer
+ * Method:    setImageWriteHandler
+ * Signature: (ILnitf/WriteHandler;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_Writer_setImageWriteHandler
+  (JNIEnv *, jobject, jint, jobject);
+
+/*
+ * Class:     nitf_Writer
+ * Method:    setGraphicWriteHandler
+ * Signature: (ILnitf/WriteHandler;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_Writer_setGraphicWriteHandler
+  (JNIEnv *, jobject, jint, jobject);
+
+/*
+ * Class:     nitf_Writer
+ * Method:    setTextWriteHandler
+ * Signature: (ILnitf/WriteHandler;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_Writer_setTextWriteHandler
+  (JNIEnv *, jobject, jint, jobject);
+
+/*
+ * Class:     nitf_Writer
+ * Method:    setDEWriteHandler
+ * Signature: (ILnitf/WriteHandler;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_Writer_setDEWriteHandler
+  (JNIEnv *, jobject, jint, jobject);
+
+/*
+ * Class:     nitf_Writer
  * Method:    getNewImageWriter
  * Signature: (I)Lnitf/ImageWriter;
  */

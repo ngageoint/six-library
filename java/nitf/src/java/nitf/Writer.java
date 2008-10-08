@@ -101,6 +101,30 @@ public final class Writer extends DestructibleObject
             throws NITFException;
 
     /**
+     * Sets the WriteHandler for the Image at the given index.
+     */
+    public native void setImageWriteHandler(int index, WriteHandler writeHandler)
+            throws NITFException;
+
+    /**
+     * Sets the WriteHandler for the Graphic at the given index.
+     */
+    public native void setGraphicWriteHandler(int index,
+            WriteHandler writeHandler) throws NITFException;
+
+    /**
+     * Sets the WriteHandler for the Text at the given index.
+     */
+    public native void setTextWriteHandler(int index, WriteHandler writeHandler)
+            throws NITFException;
+
+    /**
+     * Sets the WriteHandler for the DE at the given index.
+     */
+    public native void setDEWriteHandler(int index, WriteHandler writeHandler)
+            throws NITFException;
+
+    /**
      * Returns an ImageWriter pertaining to the image at the given index
      * 
      * @param imageNumber

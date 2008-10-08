@@ -50,12 +50,12 @@ public final class ImageSegment extends NITFObject
      * 
      * @return An integer offset
      */
-    public native int getImageOffset();
+    public native long getImageOffset();
 
     /**
      * Retrieve the ending offset for the image
      * 
      * @return An integer offset
      */
-    public native int getImageEnd();
+    public native long getImageEnd();
 }

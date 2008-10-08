@@ -33,21 +33,6 @@ typedef struct _BandSourceImpl
 } BandSourceImpl;
 
 
-NITFPRIV(int) getEnv(JavaVM** vm, JNIEnv** env)
-{
-    jsize num = 0;
-    jint status = JNI_GetCreatedJavaVMs(vm, 1, &num);
-    status = (**vm)->GetEnv(*vm, (void**)env, JNI_VERSION_1_4);
-    
-    if (env == NULL && status == JNI_EDETACHED)
-    {
-        //attach the current thread
-        status = (**vm)->AttachCurrentThread(*vm, (void**)env, NULL);
-        return 1;
-    }
-    return 0;
-}
-
 /*
  *  Private read implementation for file source.
  */
@@ -66,7 +51,7 @@ NITFPRIV(NITF_BOOL) BandSource_read
     /* cast it to the structure we know about */
     impl = (BandSourceImpl *) data;
     
-    detach = getEnv(&vm, &env);
+    detach = _GetJNIEnv(&vm, &env);
     
     bandSourceClass = (*env)->GetObjectClass(env, impl->self);
     methodID =
@@ -110,7 +95,7 @@ NITFPRIV(void) BandSource_destruct(NITF_DATA * data)
     JavaVM *vm = NULL;
     int detach;
     
-    detach = getEnv(&vm, &env);
+    detach = _GetJNIEnv(&vm, &env);
 
     if (data)
     {

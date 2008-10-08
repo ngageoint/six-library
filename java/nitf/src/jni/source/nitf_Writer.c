@@ -251,6 +251,121 @@ JNIEXPORT jboolean JNICALL Java_nitf_Writer_prepare
     return JNI_TRUE;
 }
 
+/*
+ * Class:     nitf_Writer
+ * Method:    setImageWriteHandler
+ * Signature: (ILnitf/WriteHandler;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_Writer_setImageWriteHandler
+  (JNIEnv *env, jobject self, jint index, jobject handler)
+{
+    nitf_Writer *writer = _GetObj(env, self);
+    jclass writeHandlerClass = (*env)->FindClass(env, "nitf/WriteHandler");
+    nitf_WriteHandler *writeHandler = NULL;
+    nitf_Error error;
+    jmethodID methodID;
+    
+    /* TODO - there might be a better way to do this, but for now we need to
+     * keep this handler around for later. Maybe adding a list to the Writer
+     * class might do the trick.
+     */
+    handler = (*env)->NewGlobalRef(env, handler);
+
+    methodID =
+        (*env)->GetMethodID(env, writeHandlerClass, "getAddress", "()J");
+    writeHandler =
+        (nitf_WriteHandler *) (*env)->CallLongMethod(env, handler, methodID);
+    
+    if (!nitf_Writer_setImageWriteHandler(writer, index, writeHandler, &error))
+        _ThrowNITFException(env, error.message);
+}
+
+/*
+ * Class:     nitf_Writer
+ * Method:    setGraphicWriteHandler
+ * Signature: (ILnitf/WriteHandler;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_Writer_setGraphicWriteHandler
+  (JNIEnv *env, jobject self, jint index, jobject handler)
+{
+    nitf_Writer *writer = _GetObj(env, self);
+    jclass writeHandlerClass = (*env)->FindClass(env, "nitf/WriteHandler");
+    nitf_WriteHandler *writeHandler = NULL;
+    nitf_Error error;
+    jmethodID methodID;
+    
+    /* TODO - there might be a better way to do this, but for now we need to
+     * keep this handler around for later. Maybe adding a list to the Writer
+     * class might do the trick.
+     */
+    handler = (*env)->NewGlobalRef(env, handler);
+
+    methodID =
+        (*env)->GetMethodID(env, writeHandlerClass, "getAddress", "()J");
+    writeHandler =
+        (nitf_WriteHandler *) (*env)->CallLongMethod(env, handler, methodID);
+    
+    if (!nitf_Writer_setGraphicWriteHandler(writer, index, writeHandler, &error))
+        _ThrowNITFException(env, error.message);
+}
+
+/*
+ * Class:     nitf_Writer
+ * Method:    setTextWriteHandler
+ * Signature: (ILnitf/WriteHandler;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_Writer_setTextWriteHandler
+  (JNIEnv *env, jobject self, jint index, jobject handler)
+{
+    nitf_Writer *writer = _GetObj(env, self);
+    jclass writeHandlerClass = (*env)->FindClass(env, "nitf/WriteHandler");
+    nitf_WriteHandler *writeHandler = NULL;
+    nitf_Error error;
+    jmethodID methodID;
+    
+    /* TODO - there might be a better way to do this, but for now we need to
+     * keep this handler around for later. Maybe adding a list to the Writer
+     * class might do the trick.
+     */
+    handler = (*env)->NewGlobalRef(env, handler);
+
+    methodID =
+        (*env)->GetMethodID(env, writeHandlerClass, "getAddress", "()J");
+    writeHandler =
+        (nitf_WriteHandler *) (*env)->CallLongMethod(env, handler, methodID);
+    
+    if (!nitf_Writer_setTextWriteHandler(writer, index, writeHandler, &error))
+        _ThrowNITFException(env, error.message);
+}
+
+/*
+ * Class:     nitf_Writer
+ * Method:    setDEWriteHandler
+ * Signature: (ILnitf/WriteHandler;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_Writer_setDEWriteHandler
+  (JNIEnv *env, jobject self, jint index, jobject handler)
+{
+    nitf_Writer *writer = _GetObj(env, self);
+    jclass writeHandlerClass = (*env)->FindClass(env, "nitf/WriteHandler");
+    nitf_WriteHandler *writeHandler = NULL;
+    nitf_Error error;
+    jmethodID methodID;
+    
+    /* TODO - there might be a better way to do this, but for now we need to
+     * keep this handler around for later. Maybe adding a list to the Writer
+     * class might do the trick.
+     */
+    handler = (*env)->NewGlobalRef(env, handler);
+
+    methodID =
+        (*env)->GetMethodID(env, writeHandlerClass, "getAddress", "()J");
+    writeHandler =
+        (nitf_WriteHandler *) (*env)->CallLongMethod(env, handler, methodID);
+    
+    if (!nitf_Writer_setDEWriteHandler(writer, index, writeHandler, &error))
+        _ThrowNITFException(env, error.message);
+}
 
 /*
  * Class:     nitf_Writer

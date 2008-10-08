@@ -84,3 +84,18 @@ NITFPROT(void) _ThrowNITFException(JNIEnv *env, const char *message)
     }
     (*env)->ThrowNew(env, exceptClass, message);
 }
+
+NITFPROT(int) _GetJNIEnv(JavaVM** vm, JNIEnv** env)
+{
+    jsize num = 0;
+    jint status = JNI_GetCreatedJavaVMs(vm, 1, &num);
+    status = (**vm)->GetEnv(*vm, (void**)env, JNI_VERSION_1_4);
+    
+    if (env == NULL && status == JNI_EDETACHED)
+    {
+        //attach the current thread
+        status = (**vm)->AttachCurrentThread(*vm, (void**)env, NULL);
+        return 1;
+    }
+    return 0;
+}
