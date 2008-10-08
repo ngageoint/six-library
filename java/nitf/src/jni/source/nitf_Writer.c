@@ -278,6 +278,10 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setImageWriteHandler
     
     if (!nitf_Writer_setImageWriteHandler(writer, index, writeHandler, &error))
         _ThrowNITFException(env, error.message);
+    
+    /* tell Java not to manage it */
+    methodID = (*env)->GetMethodID(env, writeHandlerClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, handler, methodID, JNI_FALSE);
 }
 
 /*
@@ -307,6 +311,10 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setGraphicWriteHandler
     
     if (!nitf_Writer_setGraphicWriteHandler(writer, index, writeHandler, &error))
         _ThrowNITFException(env, error.message);
+    
+    /* tell Java not to manage it */
+    methodID = (*env)->GetMethodID(env, writeHandlerClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, handler, methodID, JNI_FALSE);
 }
 
 /*
@@ -336,6 +344,10 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setTextWriteHandler
     
     if (!nitf_Writer_setTextWriteHandler(writer, index, writeHandler, &error))
         _ThrowNITFException(env, error.message);
+    
+    /* tell Java not to manage it */
+    methodID = (*env)->GetMethodID(env, writeHandlerClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, handler, methodID, JNI_FALSE);
 }
 
 /*
@@ -365,6 +377,10 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setDEWriteHandler
     
     if (!nitf_Writer_setDEWriteHandler(writer, index, writeHandler, &error))
         _ThrowNITFException(env, error.message);
+    
+    /* tell Java not to manage it */
+    methodID = (*env)->GetMethodID(env, writeHandlerClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, handler, methodID, JNI_FALSE);
 }
 
 /*
