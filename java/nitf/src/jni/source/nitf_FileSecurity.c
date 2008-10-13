@@ -221,3 +221,18 @@ JNIEXPORT jobject JNICALL Java_nitf_FileSecurity_getSecuritySourceDate
     return _GetFieldObj(env, info->securitySourceDate);
 }
 
+/*
+ * Class:     nitf_FileSecurity
+ * Method:    resizeForVersion
+ * Signature: (Lnitf/Version;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_FileSecurity_resizeForVersion
+  (JNIEnv *env, jobject self, jobject versionObject)
+{
+    nitf_FileSecurity *info = _GetObj(env, self);
+    nitf_Version version = _GetNITFVersion(env, versionObject);
+    nitf_Error error;
+
+    if (!nitf_FileSecurity_resizeForVersion(info, version, &error))
+        _ThrowNITFException(env, error.message);
+}

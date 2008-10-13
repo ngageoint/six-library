@@ -129,6 +129,14 @@ JNIEXPORT jobject JNICALL Java_nitf_FileSecurity_getSecurityControlNumber
 JNIEXPORT jobject JNICALL Java_nitf_FileSecurity_getSecuritySourceDate
   (JNIEnv *, jobject);
 
+/*
+ * Class:     nitf_FileSecurity
+ * Method:    resizeForVersion
+ * Signature: (Lnitf/Version;)V
+ */
+JNIEXPORT void JNICALL Java_nitf_FileSecurity_resizeForVersion
+  (JNIEnv *, jobject, jobject);
+
 #ifdef __cplusplus
 }
 #endif

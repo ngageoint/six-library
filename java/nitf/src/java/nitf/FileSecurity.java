@@ -153,6 +153,15 @@ public final class FileSecurity extends NITFObject
     public native Field getSecuritySourceDate();
 
     /**
+     * Resize the file security for the given version. Warning: Only use this if
+     * you know what you are doing. This will modify the underlying FileSecurity
+     * fields.
+     * 
+     * @param version
+     */
+    public native void resizeForVersion(Version version) throws NITFException;
+
+    /**
      * Prints the contents of the FileSecurity info
      * 
      * @param out

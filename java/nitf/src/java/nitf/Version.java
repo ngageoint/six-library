@@ -25,41 +25,41 @@ package nitf;
 /**
  * Enumeration class for the NITF version
  */
-public final class Version
+public enum Version
 {
 
     /**
      * Represents a NITF 2.0 type
      */
-    public final static Version NITF_20 = new Version("NITF 2.0");
+    NITF_20("NITF 2.0"),
 
     /**
      * Represents a NITF 2.1 type
      */
-    public final static Version NITF_21 = new Version("NITF 2.1");
+    NITF_21("NITF 2.1"),
+
+    /**
+     * Unknown type
+     */
+    UNKNOWN;
 
     // a name that can be queried that describes the version
     private String name;
 
-    /**
-     * Return a name that describes the type
-     * 
-     * @return a descriptive name
-     */
-    public String getName()
-    {
-        return name;
-    }
-
     public String toString()
     {
-        return getName();
+        return name != null ? name : super.toString();
     }
 
     // keep private
     private Version(String name)
     {
         this.name = name;
+    }
+
+    private Version()
+    {
+        this(null);
     }
 
 }

@@ -67,7 +67,7 @@ NITFPROT(nitf_Version) _GetNITFVersion(JNIEnv * env, jobject versionObject)
              JNI_TRUE)
         version = NITF_VER_21;
     else
-        version = -1;
+        version = NITF_VER_UNKNOWN;
 
     return version;
 }
