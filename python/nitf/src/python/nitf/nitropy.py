@@ -237,9 +237,13 @@ nitf_Writer_swigregister(nitf_Writer)
 nitf_Writer_construct = _nitropy.nitf_Writer_construct
 nitf_Writer_destruct = _nitropy.nitf_Writer_destruct
 nitf_Writer_prepare = _nitropy.nitf_Writer_prepare
+nitf_Writer_setImageWriteHandler = _nitropy.nitf_Writer_setImageWriteHandler
+nitf_Writer_setGraphicWriteHandler = _nitropy.nitf_Writer_setGraphicWriteHandler
+nitf_Writer_setTextWriteHandler = _nitropy.nitf_Writer_setTextWriteHandler
+nitf_Writer_setDEWriteHandler = _nitropy.nitf_Writer_setDEWriteHandler
 nitf_Writer_newImageWriter = _nitropy.nitf_Writer_newImageWriter
-nitf_Writer_newTextWriter = _nitropy.nitf_Writer_newTextWriter
 nitf_Writer_newGraphicWriter = _nitropy.nitf_Writer_newGraphicWriter
+nitf_Writer_newTextWriter = _nitropy.nitf_Writer_newTextWriter
 nitf_Writer_newDEWriter = _nitropy.nitf_Writer_newDEWriter
 nitf_Writer_write = _nitropy.nitf_Writer_write
 class nitf_Record(_object):
@@ -716,6 +720,9 @@ class nitf_IDataSource(_object):
     __swig_setmethods__["getSize"] = _nitropy.nitf_IDataSource_getSize_set
     __swig_getmethods__["getSize"] = _nitropy.nitf_IDataSource_getSize_get
     if _newclass:getSize = _swig_property(_nitropy.nitf_IDataSource_getSize_get, _nitropy.nitf_IDataSource_getSize_set)
+    __swig_setmethods__["setSize"] = _nitropy.nitf_IDataSource_setSize_set
+    __swig_getmethods__["setSize"] = _nitropy.nitf_IDataSource_setSize_get
+    if _newclass:setSize = _swig_property(_nitropy.nitf_IDataSource_setSize_get, _nitropy.nitf_IDataSource_setSize_set)
     __swig_destroy__ = _nitropy.delete_nitf_IDataSource
     __del__ = lambda self : None;
 nitf_IDataSource_swigregister = _nitropy.nitf_IDataSource_swigregister
@@ -742,29 +749,7 @@ nitf_DataSource_swigregister(nitf_DataSource)
 nitf_DataSource_destruct = _nitropy.nitf_DataSource_destruct
 nitf_MemorySource_construct = _nitropy.nitf_MemorySource_construct
 nitf_FileSource_construct = _nitropy.nitf_FileSource_construct
-class nitf_ImageWriter(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_ImageWriter, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, nitf_ImageWriter, name)
-    def __init__(self): raise AttributeError, "No constructor defined"
-    __repr__ = _swig_repr
-    __swig_setmethods__["outputHandle"] = _nitropy.nitf_ImageWriter_outputHandle_set
-    __swig_getmethods__["outputHandle"] = _nitropy.nitf_ImageWriter_outputHandle_get
-    if _newclass:outputHandle = _swig_property(_nitropy.nitf_ImageWriter_outputHandle_get, _nitropy.nitf_ImageWriter_outputHandle_set)
-    __swig_setmethods__["imageSource"] = _nitropy.nitf_ImageWriter_imageSource_set
-    __swig_getmethods__["imageSource"] = _nitropy.nitf_ImageWriter_imageSource_get
-    if _newclass:imageSource = _swig_property(_nitropy.nitf_ImageWriter_imageSource_get, _nitropy.nitf_ImageWriter_imageSource_set)
-    __swig_setmethods__["imageBlocker"] = _nitropy.nitf_ImageWriter_imageBlocker_set
-    __swig_getmethods__["imageBlocker"] = _nitropy.nitf_ImageWriter_imageBlocker_get
-    if _newclass:imageBlocker = _swig_property(_nitropy.nitf_ImageWriter_imageBlocker_get, _nitropy.nitf_ImageWriter_imageBlocker_set)
-    __swig_destroy__ = _nitropy.delete_nitf_ImageWriter
-    __del__ = lambda self : None;
-nitf_ImageWriter_swigregister = _nitropy.nitf_ImageWriter_swigregister
-nitf_ImageWriter_swigregister(nitf_ImageWriter)
-
-nitf_ImageWriter_write = _nitropy.nitf_ImageWriter_write
-nitf_ImageWriter_destruct = _nitropy.nitf_ImageWriter_destruct
+nitf_ImageWriter_construct = _nitropy.nitf_ImageWriter_construct
 nitf_ImageWriter_attachSource = _nitropy.nitf_ImageWriter_attachSource
 nitf_ImageWriter_setWriteCaching = _nitropy.nitf_ImageWriter_setWriteCaching
 NITF_FHDR_SZ = _nitropy.NITF_FHDR_SZ
@@ -1664,27 +1649,10 @@ nitf_SegmentReader_seek = _nitropy.nitf_SegmentReader_seek
 nitf_SegmentReader_tell = _nitropy.nitf_SegmentReader_tell
 nitf_SegmentReader_getSize = _nitropy.nitf_SegmentReader_getSize
 nitf_SegmentReader_destruct = _nitropy.nitf_SegmentReader_destruct
-class nitf_SegmentWriter(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_SegmentWriter, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, nitf_SegmentWriter, name)
-    def __init__(self): raise AttributeError, "No constructor defined"
-    __repr__ = _swig_repr
-    __swig_setmethods__["outputHandle"] = _nitropy.nitf_SegmentWriter_outputHandle_set
-    __swig_getmethods__["outputHandle"] = _nitropy.nitf_SegmentWriter_outputHandle_get
-    if _newclass:outputHandle = _swig_property(_nitropy.nitf_SegmentWriter_outputHandle_get, _nitropy.nitf_SegmentWriter_outputHandle_set)
-    __swig_setmethods__["segmentSource"] = _nitropy.nitf_SegmentWriter_segmentSource_set
-    __swig_getmethods__["segmentSource"] = _nitropy.nitf_SegmentWriter_segmentSource_get
-    if _newclass:segmentSource = _swig_property(_nitropy.nitf_SegmentWriter_segmentSource_get, _nitropy.nitf_SegmentWriter_segmentSource_set)
-    __swig_destroy__ = _nitropy.delete_nitf_SegmentWriter
-    __del__ = lambda self : None;
-nitf_SegmentWriter_swigregister = _nitropy.nitf_SegmentWriter_swigregister
-nitf_SegmentWriter_swigregister(nitf_SegmentWriter)
-
-nitf_SegmentWriter_write = _nitropy.nitf_SegmentWriter_write
-nitf_SegmentWriter_destruct = _nitropy.nitf_SegmentWriter_destruct
+nitf_SegmentWriter_construct = _nitropy.nitf_SegmentWriter_construct
 nitf_SegmentWriter_attachSource = _nitropy.nitf_SegmentWriter_attachSource
+NITF_RGB24_BANDS = _nitropy.NITF_RGB24_BANDS
+NITF_IQ_BANDS = _nitropy.NITF_IQ_BANDS
 class nitf_SubWindow(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_SubWindow, name, value)

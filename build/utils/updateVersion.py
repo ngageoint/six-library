@@ -28,7 +28,7 @@ if __name__ == '__main__':
     
     #update version of C Makefiles
     makefiles = [os.path.join(top_dir, 'c/nitf/build/Makefile.in'),
-                 os.path.join(top_dir, 'c/nitf.jni/build/Makefile.in'),]
+                 os.path.join(top_dir, 'java/nitf/src/jni/build/Makefile.in'),]
     for line in fileinput.input(makefiles, inplace=1):
         line = re.sub(r'(\s*MAJOR_VERSION\s*=\s*)\d+', r'\g<1>%s' % major, line)
         line = re.sub(r'(\s*MINOR_VERSION\s*=\s*)\d+', r'\g<1>%s' % minor, line)
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     #update python setup.py
     setupFile = os.path.join(top_dir, 'python/nitf/setup.py')
     for line in fileinput.input(setupFile, inplace=1):
-        line = re.sub(r'(\s*version\s*=\s*).+', r"\g<1>'%s'" % fullVersion.lower(), line)
+        line = re.sub(r'(\s*version\s*=\s*),.+', r"\g<1>'%s'" % fullVersion.lower(), line)
         sys.stdout.write(line)
     
     #update windows installer
@@ -53,6 +53,7 @@ if __name__ == '__main__':
         line = re.sub(r'\d+[.]\d+[-]setup', r'%s-setup' % fullVersion.lower(), line)
         line = re.sub(r'\d+[.]\d+(?![-]setup)([-]\w+)?', r'%s' % fullVersion, line)
         line = re.sub(r'\d+[.]\d+.+[-]setup', r'%s-setup' % fullVersion.lower(), line)
+        line = re.sub(r'\d+[.]\d+.+[.]win32[.]exe', r'%s.win32.exe' % fullVersion.lower(), line)
         #line = re.sub(r'\d+[.]\d+((?![-]setup)[-]\w+)?-setup', r'%s-setup' % fullVersion.lower(), line)
         sys.stdout.write(line)
     

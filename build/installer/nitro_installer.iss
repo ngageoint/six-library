@@ -1,7 +1,7 @@
 [Setup]
 AppName=NITRO
-AppVersion=2.0-RC1
-AppVerName=NITRO 2.0-RC1
+AppVersion=2.0-RC2
+AppVerName=NITRO 2.0-RC2
 AppPublisherURL=http://nitro-nitf.sourceforge.net/
 AppSupportURL=http://nitro-nitf.sourceforge.net/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
@@ -12,8 +12,8 @@ LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=nitro-2.0-RC1-setup
-UninstallDisplayName=NITRO 2.0-RC1
+OutputBaseFilename=nitro-2.0-rc2-setup
+UninstallDisplayName=NITRO 2.0-RC2
 SetupIconFile=NITRO.ico
 WizardSmallImageFile=NITRO_small.bmp
 WizardImageFile=NITRO.bmp
@@ -54,7 +54,7 @@ Source: "..\..\c\nitf\include\*"; DestDir: "{app}\include"; Flags: ignoreversion
 Source: "..\..\c\nitf\plugins\win32\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs; Components: plugins\tres;
 Source: "..\..\external\libjpeg-plugins\lib\win32\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jpeg;
 Source: "..\..\external\jasper-plugins\lib\win32\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jasper;
-Source: "..\..\external\jasper-plugins\lib\win32\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\xmltre;
+Source: "..\..\external\example-plugins\lib\win32\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\xmltre;
 Source: "..\..\c\nitf\tests\*.c"; DestDir: "{app}\samples\c\"; Flags: ignoreversion recursesubdirs; Components: samples\c;
 Source: "..\..\c\nitf\tests\*.exe"; DestDir: "{app}\tests"; Flags: ignoreversion recursesubdirs; Components: tests;
 Source: "..\..\java\nitf\lib\win32\nitf.jni-c.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
@@ -62,6 +62,7 @@ Source: "..\..\java\nitf\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversi
 Source: "..\..\java\nitf\src\test\*"; DestDir: "{app}\samples\java"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: samples\java;
 Source: "..\..\python\nitf\src\python\*"; DestDir: "{app}\python"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\python\nitf\src\test\python\*"; DestDir: "{app}\samples\python"; Flags: ignoreversion skipifsourcedoesntexist; Components: samples\python;
+Source: "..\..\python\nitf\dist\nitro-python-2.0-rc2.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\java\nitf\apidocs\*"; DestDir: "{app}\share\doc\nitf\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;
 Source: "..\..\c\nitf\doc\html\*"; DestDir: "{app}\share\doc\nitf\api\c"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\c;
 
@@ -74,4 +75,8 @@ Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "NITF_PLUGIN_PA
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,NITRO}"; Filename: "{uninstallexe}"
+
+[Run]
+Filename: "{app}\nitro-python-2.0-rc2.win32.exe"; Description: "Install Python Bindings"; Flags: skipifsilent skipifdoesntexist
+
 
