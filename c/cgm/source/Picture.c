@@ -22,16 +22,15 @@
 
 #include "cgm/Picture.h"
 
-
 NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
-                                            nitf_Error* error)
+        nitf_Error* error)
 {
     cgm_Picture* picture = (cgm_Picture*)NITF_MALLOC(sizeof(cgm_Picture));
     if (!picture)
     {
-	nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), 
-			NITF_CTXT, NITF_ERR_MEMORY);
-	return NULL;
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                NITF_CTXT, NITF_ERR_MEMORY);
+        return NULL;
     }
     picture->name = NULL;
     picture->colorSelectionMode = CGM_DIRECT;
@@ -44,15 +43,15 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
 
     if (name)
     {
-	picture->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
-	strcpy(picture->name, name);
+        picture->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
+        strcpy(picture->name, name);
     }
 
     /*cgm_PictureBody_construct(error);
-    if (picture->body == NULL)
-    {
-	cgm_PictureDestruct(& picture->body );
-	}*/
+     if (picture->body == NULL)
+     {
+     cgm_PictureDestruct(& picture->body );
+     }*/
     return picture;
 }
 
@@ -60,20 +59,18 @@ NITFAPI(void) cgm_Picture_destruct(cgm_Picture** picture)
 {
     if (*picture)
     {
-	if ( (*picture)->body )
-	    cgm_PictureBody_destruct(&(*picture)->body);
+        if ( (*picture)->body )
+            cgm_PictureBody_destruct(&(*picture)->body);
 
-	if ( (*picture)->name )
-	    NITF_FREE( (*picture)->name );
+        if ( (*picture)->name )
+            NITF_FREE( (*picture)->name );
 
-	if ( (*picture)->vdcExtent )
-	{
-	    cgm_Rectangle_destruct( &((*picture)->vdcExtent) );
-	}
+        if ( (*picture)->vdcExtent )
+        {
+            cgm_Rectangle_destruct( &((*picture)->vdcExtent) );
+        }
 
-	NITF_FREE( *picture );
-	*picture = NULL;
-	
+        NITF_FREE( *picture );
+        *picture = NULL;
     }
-
 }

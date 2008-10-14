@@ -20,31 +20,28 @@
  *
  */
 
-
 #include "cgm/Metafile.h"
 
-
 NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
-                                              const char* description,
-                                              nitf_Error* error)
+        const char* description,
+        nitf_Error* error)
 {
     cgm_Metafile* mf = (cgm_Metafile*) NITF_MALLOC( sizeof(cgm_Metafile) );
     if (!mf)
     {
-	nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), 
-			NITF_CTXT, NITF_ERR_MEMORY);
-	return NULL;
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                NITF_CTXT, NITF_ERR_MEMORY);
+        return NULL;
     }
-    
+
     mf->name = NULL;
     mf->description = NULL;
-
 
     mf->version = 1;
     mf->elementList[0] = 1;
     mf->elementList[1] = -1;
     mf->elementList[2] = 1;
-    
+
     mf->fontList = nitf_List_construct(error);
     if (!mf->fontList)
     {
@@ -56,59 +53,58 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
 
     if (name)
     {
-	mf->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
-	strcpy(mf->name, name);
+        mf->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
+        strcpy(mf->name, name);
     }
 
     if (description)
     {
-	mf->description = (char*)NITF_MALLOC( strlen( description ) + 1 );
-	strcpy(mf->description, description);
+        mf->description = (char*)NITF_MALLOC( strlen( description ) + 1 );
+        strcpy(mf->description, description);
     }
-    
+
     return mf;
-    
+
 }
 NITFAPI(void) cgm_Metafile_destruct(cgm_Metafile** mf)
 {
     if (*mf)
     {
-        
-	if ( (*mf)->picture )
-	{
-	    cgm_Picture_destruct( & (*mf)->picture );
-	}
-        
-	if ( (*mf)->fontList )
-	{
-	    /* We actually have to walk this to delete it */
-	    
-	    nitf_List_destruct(& (*mf)->fontList );
-	}
-        
-	if ( (*mf)->name )
-	{
-	    NITF_FREE( (*mf)->name );
-	}
-        
-	if ( (*mf)->description )
-	{
-	    NITF_FREE( (*mf)->description );
-	}
-        
-	NITF_FREE( *mf );
-	*mf = NULL;
+        if ( (*mf)->picture )
+        {
+            cgm_Picture_destruct( & (*mf)->picture );
+        }
+
+        if ( (*mf)->fontList )
+        {
+            /* We actually have to walk this to delete it */
+
+            nitf_List_destruct(& (*mf)->fontList );
+        }
+
+        if ( (*mf)->name )
+        {
+            NITF_FREE( (*mf)->name );
+        }
+
+        if ( (*mf)->description )
+        {
+            NITF_FREE( (*mf)->description );
+        }
+
+        NITF_FREE( *mf );
+        *mf = NULL;
     }
 }
 
 NITFAPI(cgm_Picture*) cgm_Metafile_createPicture(cgm_Metafile* metafile,
-                                                 const char* name,
-                                                 nitf_Error* error)
+        const char* name,
+        nitf_Error* error)
 {
     cgm_Picture* picture = cgm_Picture_construct(name, error);
     if (!picture)
         return NULL;
-    
+
     metafile->picture = picture;
     return metafile->picture;
 }

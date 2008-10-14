@@ -24,21 +24,21 @@
 
 NITFAPI(cgm_PictureBody*) cgm_PictureBody_construct(nitf_Error* error)
 {
-    cgm_PictureBody* body = 
-	(cgm_PictureBody*)NITF_MALLOC(sizeof(cgm_PictureBody));
+    cgm_PictureBody* body =
+        (cgm_PictureBody*)NITF_MALLOC(sizeof(cgm_PictureBody));
 
     if (!body)
     {
-	nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), 
-			NITF_CTXT, NITF_ERR_MEMORY);
-	return NULL;
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                NITF_CTXT, NITF_ERR_MEMORY);
+        return NULL;
     }
 
     body->elements = nitf_List_construct(error);
     if (!body->elements)
     {
-	cgm_PictureBody_destruct(&body);
-	return NULL;
+        cgm_PictureBody_destruct(&body);
+        return NULL;
     }
 
     body->transparency = 1;
@@ -52,14 +52,11 @@ NITFAPI(void) cgm_PictureBody_destruct(cgm_PictureBody** body)
 {
     if (*body)
     {
-
-	if ( (*body)->elements )
-	{
-	    nitf_List_destruct( & (*body)->elements );
-	}
-	NITF_FREE( *body );
-	*body = NULL;
+        if ( (*body)->elements )
+        {
+            nitf_List_destruct( & (*body)->elements );
+        }
+        NITF_FREE( *body );
+        *body = NULL;
     }
-
-
 }
