@@ -64,8 +64,9 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
     }
 
     return mf;
-
 }
+
+
 NITFAPI(void) cgm_Metafile_destruct(cgm_Metafile** mf)
 {
     if (*mf)
@@ -103,10 +104,31 @@ NITFAPI(cgm_Picture*) cgm_Metafile_createPicture(cgm_Metafile* metafile,
 {
     cgm_Picture* picture = cgm_Picture_construct(name, error);
     if (!picture)
-        return NULL;
-
+        goto CATCH_ERROR;
+    
+    /* also create the PictureBody */
+    picture->body = cgm_PictureBody_construct(error);
+    if (!picture->body)
+        goto CATCH_ERROR;
+    
+    /* in addition, create the vdcExtent */
+    picture->vdcExtent = cgm_Rectangle_construct(error);
+    if (!picture->vdcExtent)
+        goto CATCH_ERROR;
+    
+    /* by default, make the extent the maximum size - should we do this? */
+    picture->vdcExtent->x1 = 0;
+    picture->vdcExtent->y1 = 32767;
+    picture->vdcExtent->x2 = 32767;
+    picture->vdcExtent->y2 = 0;
+    
     metafile->picture = picture;
     return metafile->picture;
+  
+  CATCH_ERROR:
+    if (picture)
+        cgm_Picture_destruct(&picture);
+    return NULL;
 }
 
 NITFAPI(cgm_Metafile*) cgm_Metafile_clone(cgm_Metafile* mf, nitf_Error* error)
