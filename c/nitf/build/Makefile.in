@@ -107,10 +107,8 @@ TESTS = test_replace_field.c test_find_field.c test_field.c \
         test_hash_table_clone.c test_imsub_clone.c \
         test_image_source.c test_writer_3.c \
         test_file_source.c test_mem_source.c test_tree_1.c \
-        test_create_nitf.c test_tre_mods.c
-
-#        test_create_xmltre.c
-#        test_insert_raw_xmltre.c\
+        test_create_nitf.c test_tre_mods.c test_create_xmltre.c \
+        test_insert_raw_xmltre.c
 
 # test_ext_iter.c \
 #        test_ImageIO_read_data.c test_ImageIO_writePattern.c \

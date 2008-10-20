@@ -25,10 +25,35 @@
 
 NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * error)
 {
+    nitf_TREDescription* descr;
+
     /* create a new private data struct */
     tre->priv = nitf_TREPrivateData_construct(error);
     if (!tre->priv)
         return NITF_FAILURE;
+
+    
+    descr =
+        (nitf_TREDescription *) NITF_MALLOC(2 *
+                                            sizeof(nitf_TREDescription));
+    if (!descr)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT, NITF_ERR_MEMORY);
+        return NITF_FAILURE;
+    }
+    
+    descr[0].data_type = NITF_BINARY;
+    descr[0].data_count = NITF_TRE_GOBBLE;
+    descr[0].label = "Unknown raw data";
+    descr[0].tag = NITF_TRE_RAW;
+    descr[1].data_type = NITF_END;
+    descr[1].data_count = 0;
+    descr[1].label = NULL;
+    descr[1].tag = NULL;
+    
+    ((nitf_TREPrivateData*)tre->priv)->description = descr;
+
     return NITF_SUCCESS;
 }
 

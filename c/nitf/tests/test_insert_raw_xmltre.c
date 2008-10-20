@@ -44,7 +44,7 @@ nitf_TRE* createXMLTRE(const char* data, const int length)
     nitf_TRE *tre;
     nitf_Error error;
     
-    tre = nitf_TRE_construct("XMLTRE", NITF_TRE_RAW_ID, &error);
+    tre = nitf_TRE_construct("XMLTRE", NITF_TRE_RAW, &error);
     if (!tre)
     {
         nitf_Error_print(&error, stdout, "Exiting...");
@@ -426,68 +426,6 @@ CATCH_ERROR:
     return;
 }
 
-/*XXX */
-/* this writes the data extension data from a data segment to a file */
-void writeDEData(nitf_DESegment * segment,
-                 const char *fileName,
-                 nitf_DEReader * reader,
-                 int DENumber, nitf_Error * error)
-{
-
-#define DE_READ_SIZE 16*1024
-
-    nitf_Uint64 toRead = DE_READ_SIZE;
-    nitf_Uint64 leftToRead;
-    nitf_Uint64 amtToRead;
-    char * buf = NULL;
-    char * outName = NULL;
-
-    nitf_IOHandle file;
-
-    leftToRead = (size_t) reader->user->virtualLength;
-
-    buf = (char*)NITF_MALLOC(toRead + 1);
-    if (!buf)
-    {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
-        return;
-    }
-
-    /*  Make file output file anme and create */
-    outName = makeBandName(fileName, "DE", DENumber, -1);
-    file = nitf_IOHandle_create(outName, NITF_ACCESS_WRITEONLY,
-                                NITF_CREATE, error);
-    freeBandName(&outName);
-
-    if (NITF_INVALID_HANDLE(file))
-    {
-        goto CATCH_ERROR;
-    }
-
-    /* get the data and write to file */
-    while (leftToRead > 0)
-    {
-        amtToRead = DE_READ_SIZE;
-        if (amtToRead > leftToRead)
-            amtToRead = leftToRead;
-        if (nitf_DEReader_read(reader, buf, amtToRead, error) != NITF_SUCCESS)
-        {
-            /* TODO populate error */
-            goto CATCH_ERROR;
-        }
-
-        if (!nitf_IOHandle_write(file, (const char*)buf, amtToRead, error))
-            goto CATCH_ERROR;
-
-        leftToRead -= amtToRead;
-    }
-    nitf_IOHandle_close(file);
-
-CATCH_ERROR:
-    if (buf) NITF_FREE(buf);
-    return;
-}
 
 void manuallyWriteImageBands(nitf_ImageSegment * segment,
                              const char *imageName,
@@ -616,7 +554,6 @@ nitf_Record *doRead(const char *inFile)
     nitf_TextSegment *textSegment = NULL;
     nitf_DESegment *DESegment = NULL;
     nitf_SegmentReader *segmentReader = NULL;
-    nitf_DEReader *DEReader = NULL;
 
     reader = nitf_Reader_construct(&e);
     if (!reader)
@@ -733,37 +670,6 @@ nitf_Record *doRead(const char *inFile)
         }
     }
 
-    /*XXX*/
-    /* loop over data extensions and read the data to a file */
-    if (record->dataExtensions)
-    {
-        fprintf(stderr, "XXX Data Ext %d\n", numDataExtensions);
-        end = nitf_List_end(record->dataExtensions);
-
-        for (count = 0; count < numDataExtensions;  ++count)
-        {
-            iter = nitf_List_at(record->dataExtensions, count);
-            if (nitf_ListIterator_equals(&iter, &end))
-            {
-                printf("Out of bounds on iterator [%d]!\n", count);
-                exit(EXIT_FAILURE);
-            }
-            DESegment = (nitf_DESegment *) nitf_ListIterator_get(&iter);
-            DEReader = nitf_Reader_newDEReader(reader, count, &e);
-            if (!DEReader)
-            {
-                nitf_Error_print(&e, stderr, "Couldnt spawn deserializer");
-                exit(EXIT_FAILURE);
-            }
-            printf("Writing data extension %d... ", count);
-            /*  Write the thing out  */
-            writeDEData(DESegment, inFile, DEReader, count, &e);
-            nitf_SegmentReader_destruct(&segmentReader);
-
-            /*  Increment the iterator so we can continue  */
-            nitf_ListIterator_increment(&iter);
-        }
-    }
     nitf_Reader_destruct(&reader);
     return record;
 
