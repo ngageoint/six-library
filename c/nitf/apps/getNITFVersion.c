@@ -24,13 +24,14 @@
 
 int main(int argc, char** argv)
 {
+    nitf_Version version;
     if ( argc != 2 )
     {
         fprintf(stdout, "Usage: %s <nitf-file>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    nitf_Version version = nitf_Reader_getNITFVersion(argv[1]);
+    version = nitf_Reader_getNITFVersion(argv[1]);
     switch (version)
     {
         case NITF_VER_20:
