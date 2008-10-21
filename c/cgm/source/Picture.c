@@ -47,11 +47,6 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
         strcpy(picture->name, name);
     }
 
-    /*cgm_PictureBody_construct(error);
-     if (picture->body == NULL)
-     {
-     cgm_PictureDestruct(& picture->body );
-     }*/
     return picture;
 }
 

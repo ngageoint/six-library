@@ -13,6 +13,24 @@ NITFAPI(cgm_FillAttributes*)
         return NULL;
     }
 
+    atts->fillColor = (short*)NITF_MALLOC(sizeof(short) * CGM_RGB);
+    if (!atts->fillColor)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                        NITF_ERR_MEMORY);
+        cgm_FillAttributes_destruct(&atts);
+        return NULL;
+    }
+    
+    atts->edgeColor = (short*)NITF_MALLOC(sizeof(short) * CGM_RGB);
+    if (!atts->edgeColor)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                        NITF_ERR_MEMORY);
+        cgm_FillAttributes_destruct(&atts);
+        return NULL;
+    }
+    
     atts->fillColor[CGM_R] = -1;
     atts->fillColor[CGM_G] = -1;
     atts->fillColor[CGM_B] = -1;
@@ -33,6 +51,14 @@ NITFAPI(void) cgm_FillAttributes_destruct(cgm_FillAttributes** atts)
 {
     if (*atts)
     {
+        if ((*atts)->fillColor)
+        {
+            NITF_FREE((*atts)->fillColor);
+        }
+        if ((*atts)->edgeColor)
+        {
+            NITF_FREE((*atts)->edgeColor);
+        }
         NITF_FREE( *atts );
         *atts = NULL;
     }

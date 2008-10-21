@@ -8,8 +8,8 @@ NITF_CXX_GUARD
 
 typedef struct _cgm_FillAttributes
 {
-    short fillColor[CGM_RGB];
-    short edgeColor[CGM_RGB];
+    short *fillColor;
+    short *edgeColor;
     cgm_InteriorStyle interiorStyle;
     short edgeVisibility;
     short edgeWidth;

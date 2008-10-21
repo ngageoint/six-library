@@ -8,7 +8,7 @@ NITF_CXX_GUARD
 
 typedef struct _cgm_LineAttributes
 {
-    short lineColor[CGM_RGB];
+    short *lineColor;
     short lineWidth;
     cgm_Type lineType;
 } cgm_LineAttributes;

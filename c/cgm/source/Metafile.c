@@ -108,7 +108,7 @@ NITFAPI(cgm_Picture*) cgm_Metafile_createPicture(cgm_Metafile* metafile,
     
     /* also create the PictureBody */
     picture->body = cgm_PictureBody_construct(error);
-    if (!picture->body)
+    if (!picture->body || !picture->body->elements)
         goto CATCH_ERROR;
     
     /* in addition, create the vdcExtent */

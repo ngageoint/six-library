@@ -15,6 +15,15 @@ NITFAPI(cgm_LineAttributes*)
 
     atts->lineWidth = -1;
     atts->lineType = CGM_TYPE_NOT_SET;
+    
+    atts->lineColor = (short*)NITF_MALLOC(sizeof(short) * CGM_RGB);
+    if (!atts->lineColor)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                        NITF_ERR_MEMORY);
+        cgm_LineAttributes_destruct(&atts);
+        return NULL;
+    }
     atts->lineColor[CGM_R] = -1;
     atts->lineColor[CGM_G] = -1;
     atts->lineColor[CGM_B] = -1;
@@ -26,6 +35,10 @@ NITFAPI(void) cgm_LineAttributes_destruct(cgm_LineAttributes** atts)
 {
     if (*atts)
     {
+        if ((*atts)->lineColor)
+        {
+            NITF_FREE((*atts)->lineColor);
+        }
         NITF_FREE( *atts );
         *atts = NULL;
     }
