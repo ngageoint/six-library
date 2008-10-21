@@ -458,7 +458,6 @@ NITFAPI(NITF_BOOL) cgm_MetafileWriter_write(cgm_MetafileWriter* writer,
                                             nitf_Error* error)
 {
     return writeMetafileInfo(writer, mf, io, error);
-
 }
 
 NITF_BOOL writeText(cgm_Element* element, nitf_IOHandle io, nitf_Error* error)

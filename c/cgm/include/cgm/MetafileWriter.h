@@ -55,10 +55,10 @@ cgm_MetafileWriter_construct(nitf_Error* error);
 NITFAPI(void) 
 cgm_MetafileWriter_destruct(cgm_MetafileWriter** writer);
 
-NITFAPI(NITF_BOOL) cgm_MetafileWriter_writeFile(cgm_MetafileWriter* writer,
-                                                cgm_Metafile* mf,
-                                                nitf_IOHandle io,
-                                                nitf_Error* error);
+NITFAPI(NITF_BOOL) cgm_MetafileWriter_write(cgm_MetafileWriter* writer,
+                                            cgm_Metafile* mf,
+                                            nitf_IOHandle io,
+                                            nitf_Error* error);
                    
 NITF_CXX_ENDGUARD
 
