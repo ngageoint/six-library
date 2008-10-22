@@ -29,7 +29,8 @@ NITFPRIV(void) textPrint(NITF_DATA* data)
     if (text->attributes)
         cgm_TextAttributes_print( text->attributes );
     printf("\tText: ");
-    cgm_Text_print(text->text);
+    if (text->text)
+        cgm_Text_print(text->text);
 }
 
 NITFPRIV(void) textDestroy(NITF_DATA* data)
@@ -44,7 +45,6 @@ NITFPRIV(void) textDestroy(NITF_DATA* data)
     {
         cgm_Text_destruct( &(text->text) );
     }
-
     NITF_FREE(data);
 }
 
@@ -66,7 +66,15 @@ NITFPRIV(cgm_Element*) textClone(NITF_DATA* data, nitf_Error* error)
         /* TODO text attributes */
     }
     
-    /* TODO rectangle */
+    if (source->text)
+    {
+        dest->text = cgm_Text_clone(source->text, error);
+        if (!dest->text)
+        {
+            cgm_Element_destruct(&element);
+            return NULL;
+        }
+    }
 
     return element;
 }
@@ -85,18 +93,7 @@ NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error)
 
         }
         text->attributes = NULL;
-        /* TODO: This default arg in constructor doesnt appear to be 
-         that helpful.  Remove?  Otherwise, might want to make consistent
-         */
-        text->text = cgm_Text_construct(NULL, error);
-        if (!text->text)
-        {
-            NITF_FREE( text );
-            NITF_FREE( element );
-            return NULL;
-        }
-
-        text->attributes = NULL;
+        text->text = NULL;
         element->data = (NITF_DATA*)text;
     }
 

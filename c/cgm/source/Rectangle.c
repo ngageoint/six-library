@@ -35,6 +35,21 @@ NITFAPI(cgm_Rectangle*) cgm_Rectangle_construct(nitf_Error* error)
     return r;
 }
 
+NITFAPI(cgm_Rectangle*) cgm_Rectangle_clone(cgm_Rectangle* source,
+                                            nitf_Error* error)
+{
+    cgm_Rectangle* r = cgm_Rectangle_construct(error);
+    if (!r)
+        return NULL;
+    
+    r->x1 = source->x1;
+    r->x2 = source->x2;
+    r->y1 = source->y1;
+    r->y2 = source->y2;
+    
+    return r;
+}
+
 NITFAPI(void) cgm_Rectangle_destruct(cgm_Rectangle** r)
 {
     if (*r)
@@ -47,5 +62,5 @@ NITFAPI(void) cgm_Rectangle_destruct(cgm_Rectangle** r)
 NITFAPI(void) cgm_Rectangle_print(cgm_Rectangle* r)
 {
     printf("R1(%d %d), R2(%d %d)\n",
-    r->x1, r->y1, r->x2, r->y2 );
+           r->x1, r->y1, r->x2, r->y2 );
 }

@@ -60,8 +60,16 @@ NITFPRIV(cgm_Element*) rectangleClone(NITF_DATA* data, nitf_Error* error)
         }
     }
     
-    /* TODO rectangle */
-
+    if (source->rectangle)
+    {
+        dest->rectangle = cgm_Rectangle_clone(source->rectangle, error);
+        if (!dest->rectangle)
+        {
+            cgm_Element_destruct(&element);
+            return NULL;
+        }
+    }
+    
     return element;
 }
 
@@ -71,7 +79,8 @@ NITFPRIV(void) rectanglePrint(NITF_DATA* data)
     if (rect->attributes)
         cgm_FillAttributes_print( rect->attributes );
     printf("\t");
-    cgm_Rectangle_print(rect->rectangle);
+    if (rect->rectangle)
+        cgm_Rectangle_print(rect->rectangle);
 
 }
 
@@ -89,17 +98,7 @@ NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error)
         }
 
         rect->attributes = NULL;
-        /* TODO: This default arg in constructor doesnt appear to be 
-         that helpful.  Remove?  Otherwise, might want to make consistent
-         */
-        rect->rectangle = cgm_Rectangle_construct(error);
-        if (!rect->rectangle)
-        {
-            NITF_FREE( rect );
-            NITF_FREE( element );
-            return NULL;
-
-        }
+        rect->rectangle = NULL;
 
         element->data = (NITF_DATA*)rect;
     }

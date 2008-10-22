@@ -40,6 +40,8 @@ typedef struct _cgm_Rectangle
 
 NITFAPI(cgm_Rectangle*) cgm_Rectangle_construct(nitf_Error* error);
 
+NITFAPI(cgm_Rectangle*) cgm_Rectangle_clone(cgm_Rectangle*, nitf_Error*);
+
 NITFAPI(void) cgm_Rectangle_destruct(cgm_Rectangle** r);
 
 NITFAPI(void) cgm_Rectangle_print(cgm_Rectangle* r);
