@@ -37,7 +37,7 @@ NITFPRIV(void) rectangleDestroy(NITF_DATA* data)
     NITF_FREE(data);
 }
 
-NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
+NITFPRIV(cgm_Element*) rectangleClone(NITF_DATA* data, nitf_Error* error)
 {
     cgm_RectangleElement *source = NULL, *dest = NULL;
     cgm_Element* element = NULL;
@@ -105,7 +105,7 @@ NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error)
     }
 
     element->print = &rectanglePrint;
-    element->clone = &clone;
+    element->clone = &rectangleClone;
     element->destroy = &rectangleDestroy;
 
     return element;

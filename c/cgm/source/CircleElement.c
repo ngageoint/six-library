@@ -22,7 +22,7 @@
 
 #include "cgm/CircleElement.h"
 
-NITFPRIV(void) destroy(NITF_DATA* data)
+NITFPRIV(void) destroyCircle(NITF_DATA* data)
 {
     if ( ((cgm_CircleElement*)data)->attributes)
     {
@@ -31,7 +31,7 @@ NITFPRIV(void) destroy(NITF_DATA* data)
     NITF_FREE( data );
 }
 
-NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
+NITFPRIV(cgm_Element*) cloneCircle(NITF_DATA* data, nitf_Error* error)
 {
     cgm_CircleElement *source = NULL, *dest = NULL;
     cgm_Element* element = NULL;
@@ -61,7 +61,7 @@ NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
     return element;
 }
 
-NITFPRIV(void) print(NITF_DATA* data)
+NITFPRIV(void) printCircle(NITF_DATA* data)
 {
     cgm_CircleElement* circle = (cgm_CircleElement*)data;
     if (circle->attributes)
@@ -88,9 +88,9 @@ NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error)
         circle->radius = -1;
         element->data = (NITF_DATA*)circle;
     }
-    element->print = &print;
-    element->destroy = &destroy;
-    element->clone = &clone;
+    element->print = &printCircle;
+    element->destroy = &destroyCircle;
+    element->clone = &cloneCircle;
 
     return element;
 }

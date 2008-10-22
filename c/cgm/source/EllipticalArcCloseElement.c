@@ -22,7 +22,7 @@
 
 #include "cgm/EllipticalArcCloseElement.h"
 
-NITFPRIV(void) destroy(NITF_DATA* data)
+NITFPRIV(void) ellipticalArcCloseDestroy(NITF_DATA* data)
 {
     if ( ((cgm_EllipticalArcCloseElement*)data)->attributes)
     {
@@ -31,7 +31,7 @@ NITFPRIV(void) destroy(NITF_DATA* data)
     NITF_FREE( data );
 }
 
-NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
+NITFPRIV(cgm_Element*) ellipticalArcCloseClone(NITF_DATA* data, nitf_Error* error)
 {
     cgm_EllipticalArcCloseElement *source = NULL, *dest = NULL;
     cgm_Element* element = NULL;
@@ -67,7 +67,7 @@ NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
     return element;
 }
 
-NITFPRIV(void) print(NITF_DATA* data)
+NITFPRIV(void) ellipticalArcClosePrint(NITF_DATA* data)
 {
     cgm_EllipticalArcCloseElement* arc = (cgm_EllipticalArcCloseElement*)data;
     if (arc->attributes)
@@ -117,9 +117,9 @@ NITFAPI(cgm_Element*) cgm_EllipticalArcCloseElement_construct(nitf_Error* error)
         arc->closeType = CGM_CLOSE_TYPE_PIE;
         element->data = (NITF_DATA*)arc;
     }
-    element->print = &print;
-    element->clone = &clone;
-    element->destroy = &destroy;
+    element->print = &ellipticalArcClosePrint;
+    element->clone = &ellipticalArcCloseClone;
+    element->destroy = &ellipticalArcCloseDestroy;
 
     return element;
 }

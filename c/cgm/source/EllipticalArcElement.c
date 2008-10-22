@@ -22,7 +22,7 @@
 
 #include "cgm/EllipticalArcElement.h"
 
-NITFPRIV(void) destroy(NITF_DATA* data)
+NITFPRIV(void) ellipticalArcDestroy(NITF_DATA* data)
 {
     if ( ((cgm_EllipticalArcElement*)data)->attributes)
     {
@@ -31,7 +31,7 @@ NITFPRIV(void) destroy(NITF_DATA* data)
     NITF_FREE( data );
 }
 
-NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
+NITFPRIV(cgm_Element*) ellipticalArcClone(NITF_DATA* data, nitf_Error* error)
 {
     cgm_EllipticalArcElement *source = NULL, *dest = NULL;
     cgm_Element* element = NULL;
@@ -66,7 +66,7 @@ NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
     return element;
 }
 
-NITFPRIV(void) print(NITF_DATA* data)
+NITFPRIV(void) ellipticalArcPrint(NITF_DATA* data)
 {
     cgm_EllipticalArcElement* arc = (cgm_EllipticalArcElement*)data;
     if (arc->attributes)
@@ -108,9 +108,9 @@ NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error)
         arc->endVectorY = -1;
         element->data = (NITF_DATA*)arc;
     }
-    element->print = &print;
-    element->clone = &clone;
-    element->destroy = &destroy;
+    element->print = &ellipticalArcPrint;
+    element->clone = &ellipticalArcClone;
+    element->destroy = &ellipticalArcDestroy;
 
     return element;
 }

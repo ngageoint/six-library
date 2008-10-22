@@ -48,7 +48,7 @@ NITFPRIV(void) textDestroy(NITF_DATA* data)
     NITF_FREE(data);
 }
 
-NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
+NITFPRIV(cgm_Element*) textClone(NITF_DATA* data, nitf_Error* error)
 {
     cgm_TextElement *source = NULL, *dest = NULL;
     cgm_Element* element = NULL;
@@ -101,7 +101,7 @@ NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error)
     }
 
     element->print = &textPrint;
-    element->clone = &clone;
+    element->clone = &textClone;
     element->destroy = &textDestroy;
 
     return element;

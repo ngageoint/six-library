@@ -49,7 +49,7 @@ NITFPRIV(void) polyDestroy(NITF_DATA* data)
     NITF_FREE(data);
 }
 
-NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
+NITFPRIV(cgm_Element*) polyClone(NITF_DATA* data, nitf_Error* error)
 {
     cgm_PolygonElement *source = NULL, *dest = NULL;
     cgm_Element* element = NULL;
@@ -126,7 +126,7 @@ NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error)
         element->data = (NITF_DATA*)poly;
     }
     element->print = &polyPrint;
-    element->clone = &clone;
+    element->clone = &polyClone;
     element->destroy = &polyDestroy;
 
     return element;

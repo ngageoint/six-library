@@ -22,7 +22,7 @@
 
 #include "cgm/CircularArcElement.h"
 
-NITFPRIV(void) destroy(NITF_DATA* data)
+NITFPRIV(void) circularArcDestroy(NITF_DATA* data)
 {
     if ( ((cgm_CircularArcElement*)data)->attributes)
     {
@@ -31,7 +31,7 @@ NITFPRIV(void) destroy(NITF_DATA* data)
     NITF_FREE( data );
 }
 
-NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
+NITFPRIV(cgm_Element*) circularArcClone(NITF_DATA* data, nitf_Error* error)
 {
     cgm_CircularArcElement *source = NULL, *dest = NULL;
     cgm_Element* element = NULL;
@@ -65,7 +65,7 @@ NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
     return element;
 }
 
-NITFPRIV(void) print(NITF_DATA* data)
+NITFPRIV(void) circularArcPrint(NITF_DATA* data)
 {
     cgm_CircularArcElement* arc = (cgm_CircularArcElement*)data;
 
@@ -107,9 +107,9 @@ NITFAPI(cgm_Element*) cgm_CircularArcElement_construct(nitf_Error* error)
         element->data = (NITF_DATA*)arc;
 
     }
-    element->print = &print;
-    element->clone = &clone;
-    element->destroy = &destroy;
+    element->print = &circularArcPrint;
+    element->clone = &circularArcClone;
+    element->destroy = &circularArcDestroy;
 
     return element;
 }
