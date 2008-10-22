@@ -34,16 +34,6 @@ typedef struct _cgm_CharacterOrientation
 } cgm_CharacterOrientation;
 
 
-typedef enum _cgm_Color
-{
-    CGM_R = 0,
-    CGM_G = 1,
-    CGM_B = 2,
-    CGM_RGB = 3,
-    
-} cgm_Color;
-
-
 typedef enum _cgm_ColorSelectionMode
 {
     CGM_DIRECT = 1

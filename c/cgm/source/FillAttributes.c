@@ -35,37 +35,28 @@ NITFAPI(cgm_FillAttributes*)
         return NULL;
     }
 
-    atts->fillColor = (short*)NITF_MALLOC(sizeof(short) * CGM_RGB);
-    if (!atts->fillColor)
-    {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
-                        NITF_ERR_MEMORY);
-        cgm_FillAttributes_destruct(&atts);
-        return NULL;
-    }
+    atts->fillColor = NULL;
+    atts->edgeColor = NULL;
     
-    atts->edgeColor = (short*)NITF_MALLOC(sizeof(short) * CGM_RGB);
-    if (!atts->edgeColor)
-    {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
-                        NITF_ERR_MEMORY);
-        cgm_FillAttributes_destruct(&atts);
-        return NULL;
-    }
-    
-    atts->fillColor[CGM_R] = -1;
-    atts->fillColor[CGM_G] = -1;
-    atts->fillColor[CGM_B] = -1;
-
     atts->interiorStyle = CGM_IS_NOT_SET;
     atts->edgeVisibility = -1;
     atts->edgeWidth = -1;
     atts->edgeType = CGM_TYPE_NOT_SET;
-
-    atts->edgeColor[CGM_R] = -1;
-    atts->edgeColor[CGM_G] = -1;
-    atts->edgeColor[CGM_B] = -1;
-
+    
+    atts->fillColor = cgm_Color_construct(-1, -1, -1, error);
+    if (!atts->fillColor)
+    {
+        cgm_FillAttributes_destruct(&atts);
+        return NULL;
+    }
+    
+    atts->edgeColor = cgm_Color_construct(-1, -1, -1, error);
+    if (!atts->edgeColor)
+    {
+        cgm_FillAttributes_destruct(&atts);
+        return NULL;
+    }
+    
     return atts;
 }
 
@@ -77,10 +68,20 @@ NITFAPI(cgm_FillAttributes*)
         (cgm_FillAttributes*)NITF_MALLOC(sizeof(cgm_FillAttributes));
     if (!atts)
         return NULL;
-
-    memcpy(atts->fillColor, source->fillColor, sizeof(short) * CGM_RGB);
-    memcpy(atts->edgeColor, source->edgeColor, sizeof(short) * CGM_RGB);
     
+    if (source->fillColor)
+    {
+        atts->fillColor->r = source->fillColor->r;
+        atts->fillColor->g = source->fillColor->g;
+        atts->fillColor->b = source->fillColor->b;
+    }
+    if (source->edgeColor)
+    {
+        atts->edgeColor->r = source->edgeColor->r;
+        atts->edgeColor->g = source->edgeColor->g;
+        atts->edgeColor->b = source->edgeColor->b;
+    }
+
     atts->interiorStyle = source->interiorStyle;
     atts->edgeVisibility = source->edgeVisibility;
     atts->edgeWidth = source->edgeWidth;
@@ -96,11 +97,11 @@ NITFAPI(void) cgm_FillAttributes_destruct(cgm_FillAttributes** atts)
     {
         if ((*atts)->fillColor)
         {
-            NITF_FREE((*atts)->fillColor);
+            cgm_Color_destruct(&((*atts)->fillColor));
         }
         if ((*atts)->edgeColor)
         {
-            NITF_FREE((*atts)->edgeColor);
+            cgm_Color_destruct(&((*atts)->edgeColor));
         }
         NITF_FREE( *atts );
         *atts = NULL;
@@ -109,17 +110,18 @@ NITFAPI(void) cgm_FillAttributes_destruct(cgm_FillAttributes** atts)
 
 NITFAPI(void) cgm_FillAttributes_print(cgm_FillAttributes* atts)
 {
-    printf("\tFill Color: (%d, %d, %d)\n", 
-	   atts->fillColor[CGM_R],
-	   atts->fillColor[CGM_G],
-	   atts->fillColor[CGM_B]);
+    if (atts->fillColor)
+    {
+        printf("\tFill Color: ");
+        cgm_Color_print(atts->fillColor);
+    }
     printf("\tInterior Style [%d]\n", atts->interiorStyle);
     printf("\tEdge Visibility [%d]\n", atts->edgeVisibility);
     printf("\tEdge Width [%d]\n", atts->edgeWidth);
     printf("\tEdge Type [%d]\n", atts->edgeType);
-    printf("\tEdge Color: (%d, %d, %d)\n", 
-	   atts->edgeColor[CGM_R],
-	   atts->edgeColor[CGM_G],
-	   atts->edgeColor[CGM_B]);
-
+    if (atts->edgeColor)
+    {
+        printf("\tEdge Color: ");
+        cgm_Color_print(atts->edgeColor);
+    }
 }

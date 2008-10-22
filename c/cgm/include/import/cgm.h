@@ -23,11 +23,28 @@
 #ifndef __IMPORT_CGM_H__
 #define __IMPORT_CGM_H__
 
-#include "cgm/PictureBody.h"
-#include "cgm/Picture.h"
+#include "cgm/BasicTypes.h"
+#include "cgm/CircleElement.h"
+#include "cgm/Element.h"
+#include "cgm/CircularArcCloseElement.h"
+#include "cgm/CircularArcElement.h"
+#include "cgm/RectangleElement.h"
+#include "cgm/EllipticalArcCloseElement.h"
+#include "cgm/EllipticalArcElement.h"
+#include "cgm/EllipseElement.h"
+#include "cgm/PolyLineElement.h"
+#include "cgm/PolySetElement.h"
+#include "cgm/PolygonElement.h"
+#include "cgm/TextElement.h"
 #include "cgm/Metafile.h"
 #include "cgm/MetafileReader.h"
 #include "cgm/MetafileWriter.h"
+#include "cgm/Picture.h"
+#include "cgm/PictureBody.h"
+#include "cgm/Rectangle.h"
+#include "cgm/FillAttributes.h"
+#include "cgm/LineAttributes.h"
+#include "cgm/Color.h"
 
 #endif
 

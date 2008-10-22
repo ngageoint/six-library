@@ -20,36 +20,39 @@
  *
  */
 
-#ifndef __CGM_FILL_ATTRIBUTES_H__
-#define __CGM_FILL_ATTRIBUTES_H__
-
-#include <import/nitf.h>
-#include "cgm/BasicTypes.h"
 #include "cgm/Color.h"
 
-NITF_CXX_GUARD
-
-typedef struct _cgm_FillAttributes
+NITFAPI(cgm_Color*) cgm_Color_construct(short r, short g, short b,
+        nitf_Error* error)
 {
-    cgm_Color *fillColor;
-    cgm_Color *edgeColor;
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    short edgeType;
-} cgm_FillAttributes;
+    cgm_Color* v = (cgm_Color*)NITF_MALLOC(sizeof(cgm_Color));
+    if (!v)
+    {
+        nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),
+                NITF_CTXT, NITF_ERR_MEMORY);
+        return NULL;
+    }
+    v->r = r;
+    v->g = g;
+    v->b = b;
+    return v;
+}
 
+NITFAPI(cgm_Color*) cgm_Color_clone(cgm_Color* source, nitf_Error* error)
+{
+    return cgm_Color_construct(source->r, source->g, source->b, error);
+}
 
-NITFAPI(cgm_FillAttributes*) 
-    cgm_FillAttributes_construct(nitf_Error* error);
+NITFAPI(void) cgm_Color_destruct(cgm_Color** v)
+{
+    if (*v)
+    {
+        NITF_FREE( *v );
+        *v = NULL;
+    }
+}
 
-NITFAPI(cgm_FillAttributes*) 
-    cgm_FillAttributes_clone(cgm_FillAttributes* source, nitf_Error* error);
-
-NITFAPI(void) cgm_FillAttributes_destruct(cgm_FillAttributes** atts);
-
-NITFAPI(void) cgm_FillAttributes_print(cgm_FillAttributes* atts);
-
-NITF_CXX_ENDGUARD
-
-#endif
+NITFAPI(void) cgm_Color_print(cgm_Color* c)
+{
+    printf("(%d, %d, %d)\n", c->r, c->g, c->b);
+}

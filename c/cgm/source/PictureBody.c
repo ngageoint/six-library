@@ -25,7 +25,7 @@
 NITFAPI(cgm_PictureBody*) cgm_PictureBody_construct(nitf_Error* error)
 {
     cgm_PictureBody* body =
-    (cgm_PictureBody*)NITF_MALLOC(sizeof(cgm_PictureBody));
+        (cgm_PictureBody*)NITF_MALLOC(sizeof(cgm_PictureBody));
 
     if (!body)
     {
@@ -44,19 +44,14 @@ NITFAPI(cgm_PictureBody*) cgm_PictureBody_construct(nitf_Error* error)
         return NULL;
     }
 
-    body->auxColor = (short*)NITF_MALLOC(sizeof(short) * CGM_RGB);
+    body->auxColor = cgm_Color_construct(-1, -1, -1, error);
     if (!body->auxColor)
     {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                NITF_CTXT, NITF_ERR_MEMORY);
         cgm_PictureBody_destruct(&body);
         return NULL;
     }
 
     body->transparency = 1;
-    body->auxColor[CGM_R] = -1;
-    body->auxColor[CGM_G] = -1;
-    body->auxColor[CGM_B] = -1;
     return body;
 }
 
@@ -70,7 +65,7 @@ NITFAPI(void) cgm_PictureBody_destruct(cgm_PictureBody** body)
         }
         if ( (*body)->auxColor )
         {
-            NITF_FREE( (*body)->auxColor );
+            cgm_Color_destruct(&((*body)->auxColor));
         }
         NITF_FREE( *body );
         *body = NULL;

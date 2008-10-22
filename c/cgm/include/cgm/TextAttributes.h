@@ -26,12 +26,13 @@
 #include <import/nitf.h>
 #include "cgm/BasicTypes.h"
 #include "cgm/Rectangle.h"
+#include "cgm/Color.h"
 
 NITF_CXX_GUARD
 
 typedef struct _cgm_TextAttributes
 {
-    short textColor[CGM_RGB];
+    cgm_Color *textColor;
     short characterHeight;
     short textFontIndex;
     cgm_Rectangle* characterOrientation;
@@ -40,6 +41,9 @@ typedef struct _cgm_TextAttributes
 
 NITFAPI(cgm_TextAttributes*) 
     cgm_TextAttributes_construct(nitf_Error* error);
+
+NITFAPI(cgm_TextAttributes*) 
+    cgm_TextAttributes_clone(cgm_TextAttributes* source, nitf_Error* error);
 
 NITFAPI(void) cgm_TextAttributes_destruct(cgm_TextAttributes** atts);
 

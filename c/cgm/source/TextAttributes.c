@@ -34,22 +34,53 @@ NITFAPI(cgm_TextAttributes*)
                         NITF_ERR_MEMORY);
         return NULL;
     }
-
-    atts->textColor[CGM_R] = -1;
-    atts->textColor[CGM_G] = -1;
-    atts->textColor[CGM_B] = -1;
-    
+    atts->textColor = NULL;
+    atts->characterOrientation = NULL;
     atts->characterHeight = -1;
     atts->textFontIndex = -1;
     
+    atts->textColor = cgm_Color_construct(-1, -1, -1, error);
+    if (!atts->textColor)
+    {
+        cgm_TextAttributes_destruct(&atts);
+        return NULL;
+    }
+
     atts->characterOrientation = cgm_Rectangle_construct(error);
     if (!atts->characterOrientation)
     {
         cgm_TextAttributes_destruct( &atts );
         return NULL;
-        
     }
 
+    return atts;
+}
+
+NITFAPI(cgm_TextAttributes*) 
+    cgm_TextAttributes_clone(cgm_TextAttributes* source, nitf_Error* error)
+{
+    cgm_TextAttributes* atts = cgm_TextAttributes_construct(error);
+    if (!atts)
+        return NULL;
+    
+    atts->characterHeight = source->characterHeight;
+    atts->textFontIndex = source->textFontIndex;
+    
+    if (source->textColor)
+    {
+        atts->textColor->r = source->textColor->r;
+        atts->textColor->g = source->textColor->g;
+        atts->textColor->b = source->textColor->b;
+    }
+    
+    if (source->characterOrientation)
+    {
+        atts->characterOrientation->x1 = source->characterOrientation->x1;
+        atts->characterOrientation->y1 = source->characterOrientation->y1;
+        atts->characterOrientation->x2 = source->characterOrientation->x2;
+        atts->characterOrientation->y2 = source->characterOrientation->y2;
+    }
+    
     return atts;
 }
 
@@ -57,6 +88,10 @@ NITFAPI(void) cgm_TextAttributes_destruct(cgm_TextAttributes** atts)
 {
     if (*atts)
     {
+        if ((*atts)->textColor)
+        {
+            cgm_Color_destruct( &((*atts)->textColor) );
+        }
         if ((*atts)->characterOrientation)
         {
             cgm_Rectangle_destruct( &((*atts)->characterOrientation) );
@@ -69,14 +104,15 @@ NITFAPI(void) cgm_TextAttributes_destruct(cgm_TextAttributes** atts)
 NITFAPI(void) cgm_TextAttributes_print(cgm_TextAttributes* atts)
 {
 
-    printf("\tText Color: (%d, %d, %d)\n", 
-	   atts->textColor[CGM_R],
-	   atts->textColor[CGM_G],
-	   atts->textColor[CGM_B]);
+    if (atts->textColor)
+    {
+        printf("\tText Color: ");
+        cgm_Color_print(atts->textColor);
+    }
     printf("\tCharacter Height: %d\n", atts->characterHeight);
     printf("\tText Font Index: %d\n", atts->textFontIndex);
 
     printf("\tCharacter orientation: ");
-    cgm_Rectangle_print(atts->characterOrientation);
-
+    if (atts->characterOrientation)
+        cgm_Rectangle_print(atts->characterOrientation);
 }

@@ -63,7 +63,12 @@ NITFPRIV(cgm_Element*) textClone(NITF_DATA* data, nitf_Error* error)
 
     if (source->attributes)
     {
-        /* TODO text attributes */
+        dest->attributes = cgm_TextAttributes_clone(source->attributes, error);
+        if (!dest->attributes)
+        {
+            cgm_Element_destruct(&element);
+            return NULL;
+        }
     }
     
     if (source->text)

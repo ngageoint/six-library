@@ -20,35 +20,29 @@
  *
  */
 
-#ifndef __CGM_FILL_ATTRIBUTES_H__
-#define __CGM_FILL_ATTRIBUTES_H__
+#ifndef __CGM_COLOR_H__
+#define __CGM_COLOR_H__
 
 #include <import/nitf.h>
-#include "cgm/BasicTypes.h"
-#include "cgm/Color.h"
 
 NITF_CXX_GUARD
 
-typedef struct _cgm_FillAttributes
+typedef struct _cgm_Color
 {
-    cgm_Color *fillColor;
-    cgm_Color *edgeColor;
-    cgm_InteriorStyle interiorStyle;
-    short edgeVisibility;
-    short edgeWidth;
-    short edgeType;
-} cgm_FillAttributes;
+    short r;
+    short g;
+    short b;
+} cgm_Color;
 
+NITFAPI(cgm_Color*) cgm_Color_construct(short r, short g, short b,
+        nitf_Error* error);
 
-NITFAPI(cgm_FillAttributes*) 
-    cgm_FillAttributes_construct(nitf_Error* error);
+NITFAPI(cgm_Color*) cgm_Color_clone(cgm_Color* source,
+        nitf_Error* error);
 
-NITFAPI(cgm_FillAttributes*) 
-    cgm_FillAttributes_clone(cgm_FillAttributes* source, nitf_Error* error);
+NITFAPI(void) cgm_Color_destruct(cgm_Color** c);
 
-NITFAPI(void) cgm_FillAttributes_destruct(cgm_FillAttributes** atts);
-
-NITFAPI(void) cgm_FillAttributes_print(cgm_FillAttributes* atts);
+NITFAPI(void) cgm_Color_print(cgm_Color* c);
 
 NITF_CXX_ENDGUARD
 

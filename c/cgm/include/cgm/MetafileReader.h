@@ -25,6 +25,7 @@
 #define __CGM_METAFILE_READER_H__
 
 #include "cgm/Metafile.h"
+#include "cgm/Color.h"
 #include "cgm/TextElement.h"
 #include "cgm/PolygonElement.h"
 #include "cgm/PolyLineElement.h"
@@ -42,8 +43,8 @@ NITF_CXX_GUARD
 
 typedef struct _cgm_ParseContext
 {
-    short fillColor[CGM_RGB];
-    short color[CGM_RGB];
+    cgm_Color fillColor;
+    cgm_Color color;
     cgm_InteriorStyle style;
     short height;
     short index;

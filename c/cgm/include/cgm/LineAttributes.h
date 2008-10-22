@@ -25,12 +25,13 @@
 
 #include <import/nitf.h>
 #include "cgm/BasicTypes.h"
+#include "cgm/Color.h"
 
 NITF_CXX_GUARD
 
 typedef struct _cgm_LineAttributes
 {
-    short *lineColor;
+    cgm_Color* lineColor;
     short lineWidth;
     cgm_Type lineType;
 } cgm_LineAttributes;

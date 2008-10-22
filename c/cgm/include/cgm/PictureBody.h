@@ -25,6 +25,8 @@
 
 #include <import/nitf.h>
 #include "cgm/Element.h"
+#include "cgm/Color.h"
+
 NITF_CXX_GUARD
 
 
@@ -34,7 +36,7 @@ typedef struct _cgm_PictureBody
     /* This defaults to 1 */
     NITF_BOOL transparency;
     
-    short *auxColor;
+    cgm_Color* auxColor;
     
     nitf_List* elements;
     
