@@ -53,16 +53,20 @@ typedef enum _cgm_ElementType
 
 #define CGM_ELEMENT_RANGE 11
 
+/* Forward reference */
+struct _cgm_Element;
+
 typedef void (*CGM_ELEMENT_DESTROY)(NITF_DATA*);
+typedef struct _cgm_Element* (*CGM_ELEMENT_CLONE)(NITF_DATA*, nitf_Error*);
 typedef void (*CGM_ELEMENT_PRINT)(NITF_DATA*);
+
 typedef struct _cgm_Element
 {
-    
     cgm_ElementType type;
     CGM_ELEMENT_DESTROY destroy;
+    CGM_ELEMENT_CLONE clone;
     CGM_ELEMENT_PRINT print;
     NITF_DATA* data;
-    
 } cgm_Element;
 
 
@@ -77,6 +81,13 @@ typedef struct _cgm_Element
  */
 NITFAPI(cgm_Element*) cgm_Element_construct(cgm_ElementType type,
                                             nitf_Error* error);
+
+
+/*!
+ * Clone the given Element. This will give an exact replica, deep-copied
+ * version of the source Element.
+ */
+NITFAPI(cgm_Element*) cgm_Element_clone(cgm_Element* source, nitf_Error* error);
 
 /*!
  *  If we follow the approach specified above, we can just destroy

@@ -298,8 +298,9 @@ NITF_BOOL endPicture(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int 
 
 NITF_BOOL beginPicture(cgm_Metafile* mf, cgm_ParseContext* pc, int classType, int shortCode, char* b, int len, nitf_Error* error)
 {
+    char* name = NULL;
     DBG_TRACE();
-    char* name;
+    
     if (mf->picture != NULL)
     {
 	nitf_Error_initf(error,

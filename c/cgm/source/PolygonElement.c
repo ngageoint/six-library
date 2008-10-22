@@ -27,7 +27,7 @@ NITFPRIV(void) polyDestroy(NITF_DATA* data)
     /* TODO!! */
     nitf_ListIterator it, end;
     nitf_List* list = NULL;
-    
+
     cgm_PolygonElement* poly = (cgm_PolygonElement*)data;
 
     if (poly->attributes)
@@ -39,24 +39,49 @@ NITFPRIV(void) polyDestroy(NITF_DATA* data)
 
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
-	cgm_Vertex* v = (cgm_Vertex*)nitf_ListIterator_get(&it);
-	cgm_Vertex_destruct(&v);
-	nitf_ListIterator_increment(&it);
+        cgm_Vertex* v = (cgm_Vertex*)nitf_ListIterator_get(&it);
+        cgm_Vertex_destruct(&v);
+        nitf_ListIterator_increment(&it);
     }
-    
-    nitf_List_destruct(&list);
-    
-    NITF_FREE(data);
 
+    nitf_List_destruct(&list);
+
+    NITF_FREE(data);
 }
 
+NITFPRIV(cgm_Element*) clone(NITF_DATA* data, nitf_Error* error)
+{
+    cgm_PolygonElement *source = NULL, *dest = NULL;
+    cgm_Element* element = NULL;
+    assert(data);
+
+    source = (cgm_PolygonElement*)data;
+    element = cgm_PolygonElement_construct(error);
+
+    if (!element)
+        return NULL;
+    dest = (cgm_PolygonElement*)element->data;
+
+    if (source->attributes)
+    {
+        dest->attributes = cgm_FillAttributes_clone(source->attributes, error);
+        if (!dest->attributes)
+        {
+            cgm_Element_destruct(&element);
+            return NULL;
+        }
+    }
+    
+    /* TODO vertices */
+
+    return element;
+}
 
 NITFPRIV(void) polyPrint(NITF_DATA* data)
 {
-    
     cgm_PolygonElement* poly = (cgm_PolygonElement*)data;
     nitf_ListIterator it, end;
-    
+
     nitf_List* list = (nitf_List*)poly->vertices;
     it = nitf_List_begin(list);
     end = nitf_List_end(list);
@@ -66,31 +91,31 @@ NITFPRIV(void) polyPrint(NITF_DATA* data)
 
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
-	cgm_Vertex* v = (cgm_Vertex*)nitf_ListIterator_get(&it);
-	printf("\t");
-	cgm_Vertex_print(v);
-	nitf_ListIterator_increment(&it);
+        cgm_Vertex* v = (cgm_Vertex*)nitf_ListIterator_get(&it);
+        printf("\t");
+        cgm_Vertex_print(v);
+        nitf_ListIterator_increment(&it);
     }
-
 }
-
 
 NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error)
 {
     cgm_Element* element = cgm_Element_construct(CGM_POLYGON_ELEMENT, error);
-    if (element)
+    
+    if (!element)
+        return NULL;
+    else
     {
-	cgm_PolygonElement* poly = (cgm_PolygonElement*)
-	    NITF_MALLOC(sizeof(cgm_PolygonElement));
+        cgm_PolygonElement* poly = (cgm_PolygonElement*)
+        NITF_MALLOC(sizeof(cgm_PolygonElement));
 
-	if (!poly)
-	{
-	    NITF_FREE(element);
-	    return NULL;
-	    
-	}
+        if (!poly)
+        {
+            NITF_FREE(element);
+            return NULL;
+        }
         poly->attributes = NULL;
-	poly->vertices = nitf_List_construct(error);
+        poly->vertices = nitf_List_construct(error);
         if (!poly->vertices)
         {
             NITF_FREE(poly);
@@ -98,12 +123,12 @@ NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error)
             return NULL;
         }
 
-	element->data = (NITF_DATA*)poly;
-
+        element->data = (NITF_DATA*)poly;
     }
     element->print = &polyPrint;
+    element->clone = &clone;
     element->destroy = &polyDestroy;
-    
+
     return element;
-    
+
 }

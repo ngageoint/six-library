@@ -45,10 +45,12 @@ NITF_BOOL writeRectangle(cgm_Rectangle* r, nitf_IOHandle io, nitf_Error* error)
 
 NITFPRIV(NITF_BOOL) writeHeader(short classType, short code, short size, nitf_IOHandle io, short* actual, nitf_Error* error)
 {
-    *actual = size;
     short params = size;
     short extendedParams = 0;
     short header = 0;
+    
+    *actual = size;
+    
     if (size % 2 != 0)
         /* We have to do padding */
         (*actual)++;
