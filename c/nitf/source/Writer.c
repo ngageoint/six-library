@@ -550,7 +550,7 @@ NITFPRIV(NITF_BOOL) writeExtras(nitf_Writer * writer,
 
     /* TODO: figure out what we should do with the overflow...
      * for now, just set it to zero */
-/*  *dataOverflow = 0; */
+    *dataOverflow = 0;
 
     if (*dataLength != 0)
     {
