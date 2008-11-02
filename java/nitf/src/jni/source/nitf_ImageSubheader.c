@@ -690,25 +690,23 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageSubheader_getExtendedSection
 /*
  * Class:     nitf_ImageSubheader
  * Method:    insertImageComment
- * Signature: (Ljava/lang/String;I)Z
+ * Signature: (Ljava/lang/String;I)I
  */
-JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_insertImageComment
+JNIEXPORT jint JNICALL Java_nitf_ImageSubheader_insertImageComment
     (JNIEnv * env, jobject self, jstring comment, jint index)
 {
     nitf_ImageSubheader *header = _GetObj(env, self);
     nitf_Error error;
     jchar *comBuf = NULL;
-    jboolean status = JNI_FALSE;
+    jint indexUsed;
 
     if (comment != NULL)
         comBuf = (*env)->GetStringUTFChars(env, comment, 0);
 
-    if (nitf_ImageSubheader_insertImageComment(
-            header, comBuf, index, &error))
-    {
-        status = JNI_TRUE;
-    }
-    else
+    indexUsed = nitf_ImageSubheader_insertImageComment(
+            header, comBuf, index, &error);
+    
+    if (indexUsed < 0)
     {
         _ThrowNITFException(env, error.message);
     }
@@ -716,7 +714,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_insertImageComment
     if (comment != NULL)
         (*env)->ReleaseStringUTFChars(env, comment, comBuf);
     
-    return status;
+    return indexUsed;
 }
 
 

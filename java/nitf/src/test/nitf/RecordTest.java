@@ -53,8 +53,8 @@ public class RecordTest extends TestCase
             Record record = new Record();
             ImageSegment imageSegment = record.newImageSegment();
             ImageSubheader subheader = imageSegment.getSubheader();
-            assertTrue(subheader.insertImageComment(null, 0));
-            assertTrue(subheader.insertImageComment("2nd comment", 1));
+            assertTrue(subheader.insertImageComment(null, 0) >= 0);
+            assertTrue(subheader.insertImageComment("2nd comment", 1) >= 0);
 
             Field[] comments = subheader.getImageComments();
             assertEquals(2, comments.length);

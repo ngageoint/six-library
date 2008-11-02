@@ -357,9 +357,10 @@ public final class ImageSubheader extends NITFObject
      *            the comment to add
      * @param index
      *            the index to add it at
+     * @return the index the comment was actually placed at
      * @throws NITFException
      */
-    public native boolean insertImageComment(String comment, int index)
+    public native int insertImageComment(String comment, int index)
             throws NITFException;
 
     /**

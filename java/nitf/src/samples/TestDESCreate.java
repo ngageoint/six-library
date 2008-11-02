@@ -26,15 +26,19 @@ public class TestDESCreate
 
         // create and get a new subheaderFields TRE
         // you want to use the returned one since the TRE passed in gets cloned
-        TRE newTRE = new TRE("JITCID");
+        TRE newTRE = new TRE("TEST_DES");
         TRE tre = des.getSubheader().setSubheaderFields(newTRE);
-        tre.setField("FILCMT", "A comment");
+        //tre.setField("FILCMT", "A comment");
+        
+        tre.setField("TEST_DES_COUNT", "16");
+        tre.setField("TEST_DES_START", "065");
+        tre.setField("TEST_DES_INCREMENT", "01");
 
         tre.print(System.out);
 
         des.getSubheader().getFilePartType().setData("DE");
         // set the typeId to the TRE tag
-        des.getSubheader().getTypeID().setData("JITCID");
+        des.getSubheader().getTypeID().setData("TEST_DES");
         des.getSubheader().getVersion().setData("01");
         des.getSubheader().getSecurityClass().setData("U");
 

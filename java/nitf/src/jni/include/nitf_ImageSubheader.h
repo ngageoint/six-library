@@ -348,9 +348,9 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageSubheader_getExtendedSection
 /*
  * Class:     nitf_ImageSubheader
  * Method:    insertImageComment
- * Signature: (Ljava/lang/String;I)Z
+ * Signature: (Ljava/lang/String;I)I
  */
-JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_insertImageComment
+JNIEXPORT jint JNICALL Java_nitf_ImageSubheader_insertImageComment
   (JNIEnv *, jobject, jstring, jint);
 
 /*
