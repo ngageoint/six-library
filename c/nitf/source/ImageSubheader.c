@@ -849,7 +849,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression(nitf_ImageSubheader *subhd
     return (NITF_SUCCESS);
 }
 
-NITFAPI(NITF_BOOL) nitf_ImageSubheader_insertImageComment
+NITFAPI(int) nitf_ImageSubheader_insertImageComment
 (
     nitf_ImageSubheader * subhdr,
     const char *comment,
@@ -908,10 +908,10 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_insertImageComment
                         NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
         goto CATCH_ERROR;
     }
-    return NITF_SUCCESS;
+    return position;
 
 CATCH_ERROR:
-    return NITF_FAILURE;
+    return -1;
 }
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeImageComment

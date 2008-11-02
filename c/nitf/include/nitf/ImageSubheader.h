@@ -486,7 +486,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression
   This function adds the given comment string to the list of comments
   associated with this image subheader. The numImageComments field
   value gets incremented by 1. If the number of comments is already equal
-  to 9, then NITF_FAILURE is returned, and the comment is not added.
+  to 9, then -1 is returned, and the comment is not added.
 
   The function assumes that the numImageComments field value and the actual
   size of the imageComments buffer are consistent with eachother.
@@ -497,9 +497,9 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression
   If the comment is NULL, a blank comment is inserted. Otherwise, the passed
   comment must be a null-terminated char*.
 
-  \return TRUE is return on success, on error the error object is set.
+  \return the index where the comment was inserted, or -1 if an error occurred.
 */
-NITFAPI(NITF_BOOL) nitf_ImageSubheader_insertImageComment
+NITFAPI(int) nitf_ImageSubheader_insertImageComment
 (
     nitf_ImageSubheader* subhdr,  /*!< Associated image subheader object */
     const char* comment,          /*!< Comment to add - must be null-terminated */
