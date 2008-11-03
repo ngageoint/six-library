@@ -5715,7 +5715,7 @@ fi
 
 cc_includes="${cc_includes} ${cc_thread_includes}"
 cc_defs="${cc_defs} ${cc_thread_defs}"
-cc_flags="$CFLAGS ${cc_flags} ${cc_optz_flags} ${cc_thread_flags} ${cc_64_flags} ${cc_verb_flags} ${cc_debug_flags} ${cc_warn_flags}"
+cc_flags="${cc_flags} ${cc_optz_flags} ${cc_thread_flags} ${cc_64_flags} ${cc_verb_flags} ${cc_debug_flags} ${cc_warn_flags}"
 
 if test "${enabled_64bit}" != "false"
 then
