@@ -1103,14 +1103,14 @@ NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
     NITF_WRITE_RES_EXT_INFO(writer->record->header->reservedExtensionInfo,
                             numRES);
 
-    /*NITF_TRY_GET_UINT32(writer->record->header->userDefinedHeaderLength,
-       &udhdl, error);
-       NITF_TRY_GET_UINT32(writer->record->header->userDefinedOverflow,
-       &udhofl, error);
-       NITF_TRY_GET_UINT32(writer->record->header->extendedHeaderLength,
-       &xhdl, error);
-       NITF_TRY_GET_UINT32(writer->record->header->extendedHeaderOverflow,
-       &xhdlofl, error); */
+    NITF_TRY_GET_UINT32(writer->record->header->userDefinedHeaderLength,
+        &udhdl, error);
+    NITF_TRY_GET_UINT32(writer->record->header->userDefinedOverflow,
+        &udhofl, error);
+    NITF_TRY_GET_UINT32(writer->record->header->extendedHeaderLength,
+        &xhdl, error);
+    NITF_TRY_GET_UINT32(writer->record->header->extendedHeaderOverflow,
+        &xhdlofl, error); 
 
     NITF_WRITE_USER_HDR_INFO(writer->record->header->userDefinedSection,
                              &udhdl, &udhofl);
