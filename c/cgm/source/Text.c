@@ -22,7 +22,7 @@
 
 #include "cgm/Text.h"
 
-NITFAPI(cgm_Text*) cgm_Text_construct(char* text, nitf_Error* error)
+NITFAPI(cgm_Text*) cgm_Text_construct(const char* text, nitf_Error* error)
 {
     cgm_Text* v = (cgm_Text*)NITF_MALLOC(sizeof(cgm_Text));
     if (!v)

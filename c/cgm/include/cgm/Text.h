@@ -35,7 +35,7 @@ typedef struct _cgm_Text
 
 } cgm_Text;
 
-NITFAPI(cgm_Text*) cgm_Text_construct(char* text,
+NITFAPI(cgm_Text*) cgm_Text_construct(const char* text,
         nitf_Error* error);
 
 NITFAPI(cgm_Text*) cgm_Text_clone(cgm_Text* source,
