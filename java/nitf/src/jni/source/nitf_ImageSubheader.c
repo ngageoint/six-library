@@ -776,3 +776,19 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_createBands
     return JNI_TRUE;
 }
 
+/*
+ * Class:     nitf_ImageSubheader
+ * Method:    removeBand
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_nitf_ImageSubheader_removeBand
+  (JNIEnv *env, jobject self, jint index)
+{
+    nitf_ImageSubheader *header = _GetObj(env, self);
+    nitf_Error error;
+
+    if (!nitf_ImageSubheader_removeBand(header, (nitf_Uint32) index, &error))
+    {
+        _ThrowNITFException(env, error.message);
+    }
+}

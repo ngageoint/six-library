@@ -405,6 +405,15 @@ public final class ImageSubheader extends NITFObject
     public native boolean createBands(int numBands) throws NITFException;
 
     /**
+     * Removes a band from the image. This removes the underlying BandInfo
+     * object and decrements the band count.
+     * 
+     * @param index
+     * @throws NITFException
+     */
+    public native void removeBand(int index) throws NITFException;
+
+    /**
      * Prints the data associated with the ImageSubheader to a PrintStream
      * 
      * @param out

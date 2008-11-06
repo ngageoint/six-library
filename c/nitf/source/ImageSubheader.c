@@ -573,12 +573,10 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(nitf_ImageSubheader *
     nitf_Field_setRawData(subhdr->numImageBands, buf, NITF_NBANDS_SZ,
                           error);
 
-    if (totalBandCount > 9)
-    {
-        sprintf(buf, "%.*d", NITF_XBANDS_SZ, totalBandCount);
-        nitf_Field_setRawData(subhdr->numMultispectralImageBands, buf,
-                              NITF_XBANDS_SZ, error);
-    }
+    sprintf(buf, "%.*d", NITF_XBANDS_SZ,
+            (totalBandCount > 9 ? totalBandCount : 0));
+    nitf_Field_setRawData(subhdr->numMultispectralImageBands, buf,
+                          NITF_XBANDS_SZ, error);
 
     /* delete old array, and set equal to the new one */
     if (subhdr->bandInfo)
@@ -596,6 +594,81 @@ CATCH_ERROR:
     return NITF_FAILURE;
 }
 
+
+
+NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
+    nitf_ImageSubheader * subhdr,
+    nitf_Uint32 index,
+    nitf_Error * error
+)
+{
+    nitf_BandInfo *bandInfo = NULL;     /* temp BandInfo object */
+    nitf_BandInfo **infos = NULL;       /* new BandInfo array */
+    nitf_Uint32 curBandCount;   /* current band count */
+    int i;
+    char buf[256];              /* temp buf */
+
+    /* first, get the current number of bands */
+    curBandCount = nitf_ImageSubheader_getBandCount(subhdr, error);
+    /* check to see if this is a NEW subheader with no bands yet */
+    if (curBandCount == NITF_INVALID_BAND_COUNT || index < 0 ||
+            index >= curBandCount)
+    {
+        nitf_Error_init(error, "Invalid band index",
+                        NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        goto CATCH_ERROR;
+    }
+    
+    /* decrement the band count */
+    curBandCount--;
+    
+    /* set the new values into the ImageSubheader fields */
+    sprintf(buf, "%.*d", NITF_NBANDS_SZ,
+            (curBandCount > 9 ? 0 : curBandCount));
+    nitf_Field_setRawData(subhdr->numImageBands, buf, NITF_NBANDS_SZ,
+                          error);
+    sprintf(buf, "%.*d", NITF_XBANDS_SZ,
+            (curBandCount > 9 ? curBandCount : 0));
+    nitf_Field_setRawData(subhdr->numMultispectralImageBands, buf,
+                          NITF_XBANDS_SZ, error);
+        
+    /* set the new array */
+    infos =
+        (nitf_BandInfo **) NITF_MALLOC(sizeof(nitf_BandInfo *) *
+                                       (curBandCount));
+    if (!infos)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT, NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+
+    for (i = 0; subhdr->bandInfo && i < index; ++i)
+    {
+        infos[i] = subhdr->bandInfo[i];
+    }
+    for (i = index; subhdr->bandInfo && i < curBandCount; ++i)
+    {
+        infos[i] = subhdr->bandInfo[i + 1];
+    }
+    
+    /* delete old array, and set equal to the new one */
+    if (subhdr->bandInfo)
+    {
+        /* delete the removed bandInfo */
+        bandInfo = subhdr->bandInfo[index];
+        nitf_BandInfo_destruct(&bandInfo);
+        NITF_FREE(subhdr->bandInfo);
+    }
+    subhdr->bandInfo = infos;
+
+    return NITF_SUCCESS;
+
+CATCH_ERROR:
+    if (infos)
+        NITF_FREE(infos);
+    return NITF_FAILURE;
+}
 
 
 /*

@@ -323,7 +323,6 @@ NITFAPI(nitf_BandInfo *) nitf_ImageSubheader_getBandInfo
   the bandInfo array is EQUAL to the current number of toatl bands (NBANDS +
   XBANDS). An error is returned if memory problems occur, or if the total bands
   will exceed 99999.
-
 */
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(
     nitf_ImageSubheader * subhdr, /*!< The associated subheader */
@@ -333,6 +332,20 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(
 
 
 /*!
+  \brief  nitf_ImageSubheader_removeBand - removes a band from the image.
+  
+  This removes the underlying BandInfo object and decrements the band count.
+  
+  \return NITF_SUCCESS is return on success, on error the error object is set.
+*/
+NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
+    nitf_ImageSubheader * subhdr, /*!< The associated subheader */
+    nitf_Uint32 index,            /*!< The index of the band to remove */
+    nitf_Error * error            /*!< For error returns */
+);
+
+                                                  
+/*!
   \brief  nitf_ImageSubheader_getDimensions - Get image dimensions
 
   nitf_ImageSubheader_getDimensions returns the number of rows and columns
@@ -340,7 +353,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(
 
   The only errors are associated with fetching field objects
 
-  \return TRUE is return on success, on error the error object is set.
+  \return NITF_SUCCESS is return on success, on error the error object is set.
 */
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_getDimensions
@@ -362,7 +375,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_getDimensions
 
   The only errors are associated with fetching field objects
 
-  \return TRUE is return on success, on error the error object is set.
+  \return NITF_SUCCESS is return on success, on error the error object is set.
 */
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_getBlocking
@@ -392,7 +405,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_getBlocking
 
   The only errors are associated with fetching field objects.
 
-  \return TRUE is return on success, on error the error object is set.
+  \return NITF_SUCCESS is return on success, on error the error object is set.
 */
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_getCompression

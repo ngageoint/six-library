@@ -377,6 +377,14 @@ JNIEXPORT jint JNICALL Java_nitf_ImageSubheader_getBandCount
 JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_createBands
   (JNIEnv *, jobject, jint);
 
+/*
+ * Class:     nitf_ImageSubheader
+ * Method:    removeBand
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_nitf_ImageSubheader_removeBand
+  (JNIEnv *, jobject, jint);
+
 #ifdef __cplusplus
 }
 #endif
