@@ -87,7 +87,7 @@ public final class Record extends CloneableObject
      * @return a clone of this Record
      * @see CloneableObject
      */
-    public native CloneableObject makeClone() throws NITFException;
+    public native Record makeClone() throws NITFException;
 
     /**
      * Accessor for file header.
