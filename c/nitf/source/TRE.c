@@ -139,7 +139,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
             return NULL;
     }
     
-    if (tre->handler->init && !(tre->handler->init)(tre, id ? id : tag, error))
+    if (tre->handler->init && !(tre->handler->init)(tre, id, error))
     {
         nitf_TRE_destruct(&tre);
         return NULL;

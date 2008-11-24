@@ -736,8 +736,9 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOHandle ioHandle, nitf_Uint32 length,
 
 NITFPRIV(NITF_BOOL) basicInit(nitf_TRE * tre, const char* id, nitf_Error * error)
 {
-    nitf_TREDescriptionSet* set;
-    const nitf_TREDescriptionInfo* descInfo;
+    nitf_TREDescriptionSet* set = NULL;
+    nitf_TREDescriptionInfo* descInfo = NULL;
+    NITF_BOOL found = 0;
     
     assert(tre);
 
@@ -752,30 +753,44 @@ NITFPRIV(NITF_BOOL) basicInit(nitf_TRE * tre, const char* id, nitf_Error * error
     if (id)
     {
         descInfo = set->descriptions;
-        while(descInfo && descInfo->name)
+        
+        while(descInfo && descInfo->name && !found)
         {
             if (strcmp(descInfo->name, id) == 0)
             {
                 /* we have a match! */
-                if (nitf_TREUtils_fillData(tre, descInfo->description, error))
-                    return NITF_SUCCESS;
-                else
-                {
-                    nitf_TRE_destruct(&tre);
-                    return NITF_FAILURE;
-                }
+                found = 1;
             }
-            descInfo++;
+            else
+            {
+                descInfo++;
+            }
+        }
+        
+        /* if we couldn't find it, we get out of here... */
+        if (!found)
+        {
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                    "No matching id '%s' found!", id);
+            return NITF_FAILURE;
         }
     }
     else
     {
-        /* TODO - do we try a default one? */
+        /* otherwise, if no ID was given, we'll just use the first description.
+         * in most cases, this will be the only description.
+         */
+        descInfo = set->descriptions;
     }
     
-    nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
-            "No matching id '%s' found!", id);
-    return NITF_FAILURE;
+    /* try to fill the TRE */
+    if (nitf_TREUtils_fillData(tre, descInfo->description, error))
+        return NITF_SUCCESS;
+    else
+    {
+        nitf_TRE_destruct(&tre);
+        return NITF_FAILURE;
+    }
 }
 
 NITFPRIV(NITF_BOOL) basicWrite(nitf_IOHandle ioHandle, nitf_TRE* tre,
@@ -813,7 +828,7 @@ NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
     trePriv->length = sourcePriv->length;
     trePriv->description = sourcePriv->description;
     
-    tre->priv = trePriv;
+    tre->priv = (NITF_DATA*)trePriv;
     
     return NITF_SUCCESS;
 }
