@@ -176,7 +176,7 @@ typedef struct _FileSourceImpl
     nitf_IOHandle handle;
     off_t start;
     off_t size;
-    int sizeSet;
+    off_t fileSize;
     int byteSkip;
     off_t mark;
 }
@@ -191,17 +191,17 @@ NITFPRIV(size_t) FileSource_getSize(NITF_DATA * data)
 {
     FileSourceImpl *fileSource = (FileSourceImpl *) data;
     assert(fileSource);
-    assert(fileSource->size - fileSource->start > 0);
-    return fileSource->sizeSet ? fileSource->size :
-        (off_t)((fileSource->size - fileSource->start) / (fileSource->byteSkip + 1));
+    assert(fileSource->fileSize > fileSource->start);
+    return fileSource->size;
 }
 
 NITFPRIV(void) FileSource_setSize(NITF_DATA* data, off_t size)
 {
+    /* you better know what you're doing if you set the size yourself! */
     FileSourceImpl* fileSource = (FileSourceImpl*)data;
     assert(fileSource);
+    assert(fileSource->fileSize >= size);
     fileSource->size = size;
-    fileSource->sizeSet = 1;
 }
 
 NITFPRIV(FileSourceImpl *) toFileSource(NITF_DATA * data,
@@ -331,14 +331,16 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
     impl->handle = handle;
     impl->byteSkip = byteSkip >= 0 ? byteSkip : 0;
     impl->mark = impl->start = (start >= 0 ? start : 0);
-    impl->size = nitf_IOHandle_getSize(handle, error);
-    impl->sizeSet = 0;
+    impl->fileSize = nitf_IOHandle_getSize(handle, error);
 
-    if (!NITF_IO_SUCCESS(impl->size))
+    if (!NITF_IO_SUCCESS(impl->fileSize))
     {
         NITF_FREE(impl);
         return NULL;
     }
+    
+    /* figure out the actual # oif bytes represented by the source */
+    impl->size = impl->fileSize / (impl->byteSkip + 1);
 
     segmentSource = (nitf_SegmentSource *) NITF_MALLOC(sizeof(nitf_SegmentSource));
     if (!segmentSource)
