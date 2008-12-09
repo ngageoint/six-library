@@ -297,16 +297,16 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
 
         if (!field)
         {
-            nitf_Error_init(error, "setValue -> invalid field object",
-                    NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                    "setValue -> invalid field object: %s", tag);
             return NITF_FAILURE;
         }
 
         /* check to see if the data passed in is too large or too small */
         if ((dataLength > field->length && !field->resizable) || dataLength < 1)
         {
-            nitf_Error_init(error, "setValue -> invalid dataLength",
-                    NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                    "setValue -> invalid dataLength for field: %s", tag);
             return NITF_FAILURE;
         }
 
