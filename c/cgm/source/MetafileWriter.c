@@ -451,6 +451,16 @@ NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_MetafileWriter* writer,
     short reversed[3];
     NITF_BOOL rv;
     short actual;
+    
+    if (!mf->name || strlen(mf->name) <= 0)
+    {
+        nitf_Error_init(error,
+                        "Metafile name must exist and have length > 0",
+                        NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        return NITF_FAILURE;
+    }
+        
+    
     /* Begin Metafile */
     rv = writeField(0, 1, mf->name, strlen(mf->name), io, error);
     if (!rv) return NITF_FAILURE;

@@ -22,25 +22,24 @@
 
 #include "cgm/Element.h"
 
-
 NITFAPI(cgm_Element*) cgm_Element_construct(cgm_ElementType type,
-                                            nitf_Error* error)
+        nitf_Error* error)
 {
     cgm_Element* element = (cgm_Element*)NITF_MALLOC(sizeof(cgm_Element));
     if (!element)
     {
-	nitf_Error_init(error,
-			NITF_STRERROR( NITF_ERRNO ),
-			NITF_CTXT,
-			NITF_ERR_MEMORY);
-	return NULL;
+        nitf_Error_init(error,
+                NITF_STRERROR( NITF_ERRNO ),
+                NITF_CTXT,
+                NITF_ERR_MEMORY);
+        return NULL;
     }
     element->type = type;
     element->print = NULL;
     element->destroy = NULL;
     element->data = NULL;
     return element;
-    
+
 }
 
 NITFAPI(cgm_Element*) cgm_Element_clone(cgm_Element* source, nitf_Error* error)
@@ -52,9 +51,9 @@ NITFAPI(void) cgm_Element_destruct(cgm_Element** element)
 {
     if (*element)
     {
-	if ( (*element)->data )
-	    (*element)->destroy( (*element)->data );
-	NITF_FREE( (*element) );
+        if ( (*element)->data )
+        (*element)->destroy( (*element)->data );
+        NITF_FREE( (*element) );
     }
     *element = NULL;
 }
@@ -63,8 +62,8 @@ NITFAPI(void) cgm_Element_print(cgm_Element* element)
 {
     if (element->print && element->data)
     {
-	printf("Element: [%s]\n", cgm_Element_getName(element));
-	(* element->print )(element->data);
+        printf("Element: [%s]\n", cgm_Element_getName(element));
+        (* element->print )(element->data);
     }
 }
 

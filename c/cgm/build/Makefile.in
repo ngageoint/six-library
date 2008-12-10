@@ -24,6 +24,6 @@ SOURCES = CircleElement.c Element.c PictureBody.c Picture.c Metafile.c \
           EllipticalArcElement.c CircularArcElement.c \
           EllipticalArcCloseElement.c CircularArcCloseElement.c \
           FillAttributes.c LineAttributes.c MetafileWriter.c \
-	  Color.c
+          Color.c
 
 TESTS = test_read_cgm.c test_rt_cgm.c

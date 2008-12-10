@@ -247,10 +247,14 @@ NITFPRIV(short) readShort(char* b)
 
 NITFPRIV(char*) readString(char* b, int length)
 {
-    int slen = (int) b[0];
-    char* str = (char*)NITF_MALLOC(slen + 1);
-    str[slen] = 0;
-    memcpy(str, &b[1], slen);
+    /* TZ int slen = (int) b[0]; */
+    char* str = NULL;
+    if (length > 0)
+    {
+        str = (char*)NITF_MALLOC(length + 1);
+        str[length] = 0;
+        memcpy(str, &b[1], length);
+    }
     return str;
 }
 
@@ -330,10 +334,7 @@ NITF_BOOL beginPictureBody(cgm_Metafile* mf, cgm_ParseContext* pc,
 
     if (mf->picture->body != NULL)
     {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
-                "Picture Body was already set");
-        return NITF_FAILURE;
-
+        cgm_PictureBody_destruct(&mf->picture->body);
     }
 
     mf->picture->body = cgm_PictureBody_construct(error);
@@ -384,10 +385,9 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
                 "Font list was already set");
         return NITF_FAILURE;
-
     }
 
-    while (1)
+    while (b)
     {
         unsigned char bu = b[i];
         int slen = 0x000000FF & bu;
@@ -445,10 +445,8 @@ NITF_BOOL vdcExtent(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 
     if (mf->picture->vdcExtent)
     {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
-                "VDC was already set");
-        return NITF_FAILURE;
-
+        /* delete it */
+        cgm_Rectangle_destruct(&mf->picture->vdcExtent);
     }
 
     mf->picture->vdcExtent = readRectangle(b, len, error);
@@ -538,7 +536,7 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
         int shortCode, char* b, int len, nitf_Error* error)
 {
-    short _1;
+    short _1, tX, tY;
     cgm_TextElement* te;
     cgm_Element* elem = cgm_TextElement_construct(error);
     if (!elem)
@@ -548,11 +546,15 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     if (!te->attributes)
         return NITF_FAILURE;
 
-    te->text->x = readShort(b);
-    te->text->y = readShort(&b[2]);
+    tX = readShort(b);
+    tY = readShort(&b[2]);
     _1 = readShort(&b[4]);
-    te->text->str = readString(&b[6], len - 6);
-
+    te->text = cgm_Text_construct(readString(&b[6], len - 6), error);
+    if (!te->text)
+        return NITF_FAILURE;
+    te->text->x = tX;
+    te->text->y = tY;
+    
     DBG_TRACE();
 
     cgm_Element_print(elem);
