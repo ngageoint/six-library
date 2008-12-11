@@ -64,6 +64,7 @@
 #include "nitf/Record.h"
 #include "nitf/SegmentReader.h"
 #include "nitf/SegmentSource.h"
+#include "nitf/StreamIOWriteHandler.h"
 #include "nitf/SubWindow.h"
 #include "nitf/Sync.h"
 #include "nitf/System.h"

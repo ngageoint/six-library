@@ -79,6 +79,7 @@ SOURCES = BandInfo.c \
           SegmentReader.c \
           SegmentSource.c \
           SegmentWriter.c \
+          StreamIOWriteHandler.c \
           SubWindow.c \
           SyncUnix.c \
           SyncIrix.c \
