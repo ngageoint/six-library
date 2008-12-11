@@ -22,8 +22,6 @@
 
 #include "cgm/MetafileReader.h"
 
-#define DEBUG_CGM 1
-
 #ifdef DEBUG_CGM
 #    define DBG_TRACE()                                                 \
     printf("%s(%d, %d, %d)\n", NITF_FUNC, classType, shortCode, len)
@@ -86,10 +84,9 @@ cgm_TextAttributes* createTextAttributes(cgm_ParseContext* pc, nitf_Error* error
     atts->characterOrientation->y2 = pc->orientation[3];
     return atts;
 }
+
 NITFPRIV(void) resetParseContext(cgm_ParseContext* pc)
 {
-    printf("=======Reset Parse=========\n");
-
     pc->fillColor.r = -1;
     pc->fillColor.g = -1;
     pc->fillColor.b = -1;
@@ -111,7 +108,7 @@ NITFPRIV(void) resetParseContext(cgm_ParseContext* pc)
 
 }
 
-NITFPRIV(void) printParseContext(cgm_ParseContext* pc)
+/*NITFPRIV(void) printParseContext(cgm_ParseContext* pc)
 {
     printf("=== Parse Context ===\n");
     if (pc->fillColor.r != -1)
@@ -126,16 +123,16 @@ NITFPRIV(void) printParseContext(cgm_ParseContext* pc)
     }
 
     if (pc->style != CGM_IS_NOT_SET)
-    printf("\tInterior Style: [%d]\n", pc->style);
+        printf("\tInterior Style: [%d]\n", pc->style);
 
     if (pc->height != -1)
-    printf("\tCharacter Height: [%d]\n", pc->height);
+        printf("\tCharacter Height: [%d]\n", pc->height);
 
     if (pc->width != -1)
-    printf("\tEdge/Line Width: [%d]\n", pc->width);
+        printf("\tEdge/Line Width: [%d]\n", pc->width);
 
     if (pc->index != -1)
-    printf("\tFont index: [%d]\n", pc->index);
+        printf("\tFont index: [%d]\n", pc->index);
 
     if (pc->orientation[0] != -1)
     {
@@ -154,13 +151,13 @@ NITFPRIV(void) printParseContext(cgm_ParseContext* pc)
 
     if (pc->hatchIndex != CGM_HATCH_NOT_SET)
     printf("\tHatch Index: [%d]\n", pc->hatchIndex);
-}
+}*/
 
 NITFPRIV(void) readRGB(char* b, int length, cgm_Color* color)
 {
     color->r = 0x00FF & b[0];
-    color->r = 0x00FF & b[1];
-    color->r = 0x00FF & b[2];
+    color->g = 0x00FF & b[1];
+    color->b = 0x00FF & b[2];
 }
 
 NITFPRIV(cgm_Rectangle*) readRectangle(char* b, int len, nitf_Error* error)
@@ -168,7 +165,7 @@ NITFPRIV(cgm_Rectangle*) readRectangle(char* b, int len, nitf_Error* error)
     short x1, x2, y1, y2;
     cgm_Rectangle* rectangle = cgm_Rectangle_construct(error);
     if (!rectangle)
-    return NULL;
+        return NULL;
 
     memcpy(&x1, &b[0], 2);
     rectangle->x1 = NITF_NTOHS(x1);
@@ -247,13 +244,12 @@ NITFPRIV(short) readShort(char* b)
 
 NITFPRIV(char*) readString(char* b, int length)
 {
-    /* TZ int slen = (int) b[0]; */
     char* str = NULL;
     if (length > 0)
     {
         str = (char*)NITF_MALLOC(length + 1);
         str[length] = 0;
-        memcpy(str, &b[1], length);
+        memcpy(str, b, length);
     }
     return str;
 }
@@ -398,14 +394,14 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
         memcpy(p, &b[++i], slen);
         total += slen + 1;
 
-        if (total >= len)
-            break;
-
         i += slen;
         j++;
         /* Actually, this could get complicated, need to destruct then */
         if (!nitf_List_pushBack(mf->fontList, p, error))
             return NITF_FAILURE;
+        
+        if (total >= len)
+            break;
     }
 
     return NITF_SUCCESS;
@@ -527,7 +523,7 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
 
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
     resetParseContext(pc);
 
     return NITF_SUCCESS;
@@ -537,6 +533,7 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
         int shortCode, char* b, int len, nitf_Error* error)
 {
     short _1, tX, tY;
+    int sLen;
     cgm_TextElement* te;
     cgm_Element* elem = cgm_TextElement_construct(error);
     if (!elem)
@@ -549,7 +546,8 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     tX = readShort(b);
     tY = readShort(&b[2]);
     _1 = readShort(&b[4]);
-    te->text = cgm_Text_construct(readString(&b[6], len - 6), error);
+    sLen = (int) b[6];
+    te->text = cgm_Text_construct(readString(&b[7], sLen), error);
     if (!te->text)
         return NITF_FAILURE;
     te->text->x = tX;
@@ -557,7 +555,7 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     
     DBG_TRACE();
 
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
     resetParseContext(pc);
 
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
@@ -585,7 +583,7 @@ NITF_BOOL polygon(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
 
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
     resetParseContext(pc);
 
     return NITF_SUCCESS;
@@ -611,7 +609,7 @@ NITF_BOOL polySet(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
 
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
     resetParseContext(pc);
 
     return NITF_SUCCESS;
@@ -627,7 +625,7 @@ NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc,
     rect = (cgm_RectangleElement*)elem->data;
 
     DBG_TRACE();
-    printParseContext(pc);
+    /*printParseContext(pc);*/
 
     rect->rectangle = readRectangle(b, len, error);
     if (!rect->rectangle)
@@ -640,7 +638,7 @@ NITF_BOOL rectangleElement(cgm_Metafile* mf, cgm_ParseContext* pc,
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
 
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
     resetParseContext(pc);
 
     return NITF_SUCCESS;
@@ -663,9 +661,9 @@ NITF_BOOL circle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     circle->centerX = readShort(b);
     circle->centerY = readShort(&b[2]);
     circle->radius = readShort(&b[4]);
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
 
-    //printParseContext(pc);
+    /*printParseContext(pc);*/
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
 
@@ -694,7 +692,7 @@ NITF_BOOL circularArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc,
     circularArc->endY = readShort(&b[10]);
     circularArc->radius = readShort(&b[10]);
 
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
 
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
@@ -725,7 +723,7 @@ NITF_BOOL circularArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc,
     circularArc->endY = readShort(&b[10]);
     circularArc->radius = readShort(&b[12]);
     circularArc->closeType = readShort(&b[14]);
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
 
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
@@ -755,9 +753,9 @@ NITF_BOOL ellipse(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     ellipse->end1Y = readShort(&b[6]);
     ellipse->end2X = readShort(&b[8]);
     ellipse->end2Y = readShort(&b[10]);
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
 
-    //printParseContext(pc);
+    /*printParseContext(pc);*/
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
 
@@ -790,7 +788,7 @@ NITF_BOOL ellipticalArcCenter(cgm_Metafile* mf, cgm_ParseContext* pc,
     ellipticalArc->endVectorX = readShort(&b[16]);
     ellipticalArc->endVectorY = readShort(&b[18]);
 
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
 
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
@@ -825,7 +823,7 @@ NITF_BOOL ellipticalArcCenterClose(cgm_Metafile* mf, cgm_ParseContext* pc,
     ellipticalArc->endVectorY = readShort(&b[18]);
     ellipticalArc->closeType = readShort(&b[20]);
 
-    cgm_Element_print(elem);
+    /*cgm_Element_print(elem);*/
 
     if (!nitf_List_pushBack(mf->picture->body->elements, elem, error))
         return NITF_FAILURE;
@@ -847,6 +845,7 @@ NITF_BOOL characterOrient(cgm_Metafile* mf, cgm_ParseContext* pc,
 {
     DBG_TRACE();
     assert(len == 8);
+    
     pc->orientation[0] = readShort(&b[0]); /* x1, y1, x2, y2 */
     pc->orientation[1] = readShort(&b[2]);
     pc->orientation[2] = readShort(&b[4]);
@@ -1031,10 +1030,10 @@ cgm_MetafileReader_construct(nitf_Error* error)
 }
 
 NITFPRIV(int) readCGM(cgm_MetafileReader* reader,
-cgm_Metafile* mf,
-cgm_ParseContext* pc,
-nitf_IOHandle in,
-nitf_Error* error)
+        cgm_Metafile* mf,
+        cgm_ParseContext* pc,
+        nitf_IOHandle in,
+        nitf_Error* error)
 {
 
     short s;
@@ -1049,11 +1048,11 @@ nitf_Error* error)
     s = NITF_NTOHS(s);
 
     if (s == 0x0040)
-    goto END_OF_FUNCTION;
+        goto END_OF_FUNCTION;
 
-    params = 0x0000001F & s;
+    params = 0x001F & s;
     classType = 0x000F & (s >> 12);
-    code = (0x0FF0 & s) >> 5;
+    code = (0x0FE0 & s) >> 5;
 
     if (params == 31)
     {
@@ -1064,18 +1063,18 @@ nitf_Error* error)
             goto END_OF_FUNCTION;
 
         x = NITF_NTOHS(x);
-        /* This looks like a mistake */
-        params = 0x0000FFFFF & x;
-
+        params = x;
     }
-    if (params % 2)
+    
+    if (params % 2 != 0)
     {
         /* We need to pad to fall on 2-byte boundaries */
         params++;
     }
-    if ( params )
+    
+    if (params)
     {
-        bytes = (char*)NITF_MALLOC( params );
+        bytes = (char*)NITF_MALLOC(params);
         if (!bytes)
         {
             nitf_Error_init(error,
@@ -1087,7 +1086,6 @@ nitf_Error* error)
 
         if (!nitf_IOHandle_read(in, bytes, params, error))
             goto END_OF_FUNCTION;
-
     }
 
     /*  This will be an ElementReader[] */
@@ -1116,7 +1114,7 @@ nitf_Error* error)
                     bytes, params, error))
                 goto END_OF_FUNCTION;
 
-            //printParseContext(&parseContext);
+            /*printParseContext(&parseContext);*/
 
             if (bytes)
                 free(bytes);
@@ -1159,7 +1157,7 @@ NITFAPI(cgm_Metafile*) cgm_MetafileReader_read(cgm_MetafileReader* reader,
     resetParseContext(&parseContext);
 
     /* Keep going while there is more to read */
-    while ( (success = readCGM(reader, mf, &parseContext, in, error))> 0 );
+    while ( (success = readCGM(reader, mf, &parseContext, in, error)) > 0 );
     /* If we return 0, check if there is an error */
     if ( error->level != NITF_NO_ERR )
     {

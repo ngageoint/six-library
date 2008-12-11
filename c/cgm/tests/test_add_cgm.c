@@ -44,17 +44,17 @@ NITF_BOOL addGraphicSegment(nitf_Record *record, nitf_Error *error)
     if (!nitf_Field_setUint32(graphic->subheader->res1, 0, error))
         goto CATCH_ERROR;
     /* might want to calculate this... for now, hard code it */
-    if (!nitf_Field_setUint32(graphic->subheader->displayLevel, 999, error))
+    if (!nitf_Field_setUint32(graphic->subheader->displayLevel, 2, error))
         goto CATCH_ERROR;
-    if (!nitf_Field_setUint32(graphic->subheader->attachmentLevel, 0, error))
+    if (!nitf_Field_setUint32(graphic->subheader->attachmentLevel, 1, error))
         goto CATCH_ERROR;
     if (!nitf_Field_setUint32(graphic->subheader->location, 0, error))
         goto CATCH_ERROR;
-    if (!nitf_Field_setUint32(graphic->subheader->bound1Loc, 0, error))
+    if (!nitf_Field_setString(graphic->subheader->bound2Loc, "0000000000", error))
         goto CATCH_ERROR;
     if (!nitf_Field_setString(graphic->subheader->color, "C", error))
         goto CATCH_ERROR;
-    if (!nitf_Field_setString(graphic->subheader->bound2Loc, "0010000100", error))
+    if (!nitf_Field_setString(graphic->subheader->bound2Loc, "0007000500", error))
         goto CATCH_ERROR;
     if (!nitf_Field_setUint32(graphic->subheader->res2, 0, error))
         goto CATCH_ERROR;
@@ -95,21 +95,18 @@ cgm_Metafile* createCGM(nitf_Error *error)
         goto CATCH_ERROR;
     
     
-    textElement->attributes->characterHeight = 14;
+    textElement->attributes->characterHeight = 21;
     textElement->attributes->textFontIndex = 2; /* courier */
     
     /* set the color of the text */
-    textElement->attributes->textColor->r = 255;
-    textElement->attributes->textColor->g = 0;
+    textElement->attributes->textColor->r = 0;
+    textElement->attributes->textColor->g = 255;
     textElement->attributes->textColor->b = 0;
     
-    textElement->attributes->characterOrientation->x1 = 0;
-    textElement->attributes->characterOrientation->y1 = 0;
-    textElement->attributes->characterOrientation->x2 = 100;
-    textElement->attributes->characterOrientation->y2 = 100;
+    textElement->attributes->characterOrientation->y1 = -1;
     
-    textElement->text->x = 10;
-    textElement->text->y = 20;
+    textElement->text->x = 50;
+    textElement->text->y = 50;
     
     /* add the element to the picture body */
     if (!nitf_List_pushBack(mf->picture->body->elements,

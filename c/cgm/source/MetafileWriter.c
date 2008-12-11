@@ -42,7 +42,8 @@ NITF_BOOL writeRectangle(cgm_Rectangle* r, nitf_IOHandle io, nitf_Error* error)
     return rv;
 }
 
-NITFPRIV(NITF_BOOL) writeHeader(short classType, short code, short size, nitf_IOHandle io, short* actual, nitf_Error* error)
+NITFPRIV(NITF_BOOL) writeHeader(short classType, short code, short size,
+        nitf_IOHandle io, short* actual, nitf_Error* error)
 {
     short params = size;
     short extendedParams = 0;
@@ -51,8 +52,10 @@ NITFPRIV(NITF_BOOL) writeHeader(short classType, short code, short size, nitf_IO
     *actual = size;
 
     if (size % 2 != 0)
-    /* We have to do padding */
-    (*actual)++;
+    {
+        /* We have to do padding */
+        (*actual)++;
+    }
 
     if (*actual >= 31)
     {
@@ -72,20 +75,20 @@ NITFPRIV(NITF_BOOL) writeHeader(short classType, short code, short size, nitf_IO
     {
         extendedParams = NITF_HTONS(extendedParams);
         if (!nitf_IOHandle_write(io, (const char*)&extendedParams, 2, error))
-        goto CATCH_ERROR;
+            goto CATCH_ERROR;
     }
     return NITF_SUCCESS;
 
   CATCH_ERROR:
     return NITF_FAILURE;
-
 }
 
-NITFPRIV(NITF_BOOL) writeField(short classType, short code, const char* data, short size, nitf_IOHandle io, nitf_Error* error)
+NITFPRIV(NITF_BOOL) writeField(short classType, short code, const char* data,
+        short size, nitf_IOHandle io, nitf_Error* error)
 {
     short actual = 0;
     if (!writeHeader(classType, code, size, io, &actual, error))
-    return NITF_FAILURE;
+        return NITF_FAILURE;
 
     if (size)
     {
@@ -151,8 +154,7 @@ NITF_BOOL colorIsSet(cgm_Color* color3)
 
 NITF_BOOL rectangleIsSet(cgm_Rectangle* r)
 {
-    return (r->x1 != -1 && r->x2 != -1 && r->y1 != -1 && r->y2 != -1);
-
+    return (r->x1 != -1 || r->x2 != -1 || r->y1 != -1 || r->y2 != -1);
 }
 
 NITF_BOOL writeFillAttributes(cgm_FillAttributes* atts, nitf_IOHandle io,
@@ -252,7 +254,7 @@ NITF_BOOL writeLineAttributes(cgm_LineAttributes* atts, nitf_IOHandle io,
 NITF_BOOL writeTextAttributes(cgm_TextAttributes* atts, nitf_IOHandle io,
         nitf_Error* error)
 {
-    short actual;
+    short actual, tmpShort;
     NITF_BOOL rv;
     /* Write the fill color if its set */
     if (colorIsSet(atts->textColor))
@@ -268,15 +270,16 @@ NITF_BOOL writeTextAttributes(cgm_TextAttributes* atts, nitf_IOHandle io,
     /* Write the edge width */
     if (atts->characterHeight != -1)
     {
-        rv = writeField(5, 15, (const char*)&(atts->characterHeight), 2, io,
-                error);
+        tmpShort = NITF_HTONS(atts->characterHeight);
+        rv = writeField(5, 15, (const char*)&tmpShort, 2, io, error);
         if (!rv)
             return NITF_FAILURE;
     }
     /* Write the edge width */
     if (atts->textFontIndex != -1)
     {
-        rv = writeField(5, 10, (const char*)&(atts->textFontIndex), 2, io,
+        tmpShort = NITF_HTONS(atts->textFontIndex);
+        rv = writeField(5, 10, (const char*)&tmpShort, 2, io,
                 error);
         if (!rv)
             return NITF_FAILURE;
@@ -292,7 +295,6 @@ NITF_BOOL writeTextAttributes(cgm_TextAttributes* atts, nitf_IOHandle io,
         rv = writeRectangle(atts->characterOrientation, io, error);
         if (!rv)
             return NITF_FAILURE;
-
     }
     return NITF_SUCCESS;
 }
@@ -330,7 +332,7 @@ NITF_BOOL writeBody(cgm_MetafileWriter* writer, cgm_PictureBody* body,
         nitf_IOHandle io, nitf_Error* error)
 {
     NITF_BOOL rv;
-    short actual;
+    short actual, tmpShort;
 
     /* Write picture body */
     rv = writeHeader(0, 4, 0, io, &actual, error);
@@ -338,7 +340,8 @@ NITF_BOOL writeBody(cgm_MetafileWriter* writer, cgm_PictureBody* body,
         return NITF_FAILURE;
 
     /* Transparency */
-    rv = writeField(3, 4, (const char*)&(body->transparency), 2, io, error);
+    tmpShort = NITF_HTONS(body->transparency);
+    rv = writeField(3, 4, (const char*)&tmpShort, 2, io, error);
     if (!rv)
         return NITF_FAILURE;
 
@@ -358,7 +361,7 @@ NITF_BOOL writeBody(cgm_MetafileWriter* writer, cgm_PictureBody* body,
 NITF_BOOL writePicture(cgm_MetafileWriter* writer, cgm_Picture* picture,
         nitf_IOHandle io, nitf_Error* error)
 {
-    short actual;
+    short actual, tmpShort;
     NITF_BOOL rv;
     /* Begin picture */
     rv = writeField(0, 3, picture->name, strlen(picture->name), io, error);
@@ -366,18 +369,20 @@ NITF_BOOL writePicture(cgm_MetafileWriter* writer, cgm_Picture* picture,
         return NITF_FAILURE;
 
     /* Color selection mode */
-    rv = writeField(2, 2, (const char*)&(picture->colorSelectionMode), 2, io,
-            error);
+    tmpShort = NITF_HTONS(picture->colorSelectionMode);
+    rv = writeField(2, 2, (const char*)&tmpShort, 2, io, error);
     if (!rv)
         return NITF_FAILURE;
 
     /* [Edge width spec mode] */
-    rv = writeField(2, 5, (const char*)&picture->edgeWidthSpec, 2, io, error);
+    tmpShort = NITF_HTONS(picture->edgeWidthSpec);
+    rv = writeField(2, 5, (const char*)&tmpShort, 2, io, error);
     if (!rv)
         return NITF_FAILURE;
 
     /* [Line width spec mode] */
-    rv = writeField(2, 3, (const char*)&picture->lineWidthSpec, 2, io, error);
+    tmpShort = NITF_HTONS(picture->lineWidthSpec);
+    rv = writeField(2, 3, (const char*)&tmpShort, 2, io, error);
     if (!rv)
         return NITF_FAILURE;
 
@@ -402,7 +407,7 @@ NITF_BOOL writeFontList(nitf_List* fontList, nitf_IOHandle io, nitf_Error* error
     short dataLen = 0;
     short actual = 0;
     NITF_BOOL rv;
-    /* So lazy... */
+    
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
         char *data = (char*)nitf_ListIterator_get(&it);
@@ -410,6 +415,7 @@ NITF_BOOL writeFontList(nitf_List* fontList, nitf_IOHandle io, nitf_Error* error
         dataLen += (strlen(data) + 1);
         nitf_ListIterator_increment(&it);
     }
+    
     rv = writeHeader(1, 13, dataLen, io, &actual, error);
     if (!rv)
         return NITF_FAILURE;
@@ -460,14 +466,15 @@ NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_MetafileWriter* writer,
         return NITF_FAILURE;
     }
         
-    
     /* Begin Metafile */
     rv = writeField(0, 1, mf->name, strlen(mf->name), io, error);
     if (!rv) return NITF_FAILURE;
 
     /* Write version */
-    rv = writeField(1, 1, (const char*)&(mf->version), 2, io, error);
+    actual = NITF_HTONS(mf->version);
+    rv = writeField(1, 1, (const char*)&actual, 2, io, error);
     if (!rv) return NITF_FAILURE;
+    
     /* Metafile element list */
     reversed[0] = NITF_HTONS(mf->elementList[0]);
     reversed[1] = NITF_HTONS(mf->elementList[1]);
