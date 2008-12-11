@@ -20,32 +20,28 @@
  *
  */
 
-#ifndef __IMPORT_CGM_H__
-#define __IMPORT_CGM_H__
+#ifndef __CGM_NITF_WRITE_HANDLER_H__
+#define __CGM_NITF_WRITE_HANDLER_H__
 
-#include "cgm/BasicTypes.h"
-#include "cgm/CircleElement.h"
-#include "cgm/Element.h"
-#include "cgm/CircularArcCloseElement.h"
-#include "cgm/CircularArcElement.h"
-#include "cgm/RectangleElement.h"
-#include "cgm/EllipticalArcCloseElement.h"
-#include "cgm/EllipticalArcElement.h"
-#include "cgm/EllipseElement.h"
-#include "cgm/PolyLineElement.h"
-#include "cgm/PolySetElement.h"
-#include "cgm/PolygonElement.h"
-#include "cgm/TextElement.h"
+#include <import/nitf.h>
 #include "cgm/Metafile.h"
-#include "cgm/MetafileReader.h"
 #include "cgm/MetafileWriter.h"
-#include "cgm/Picture.h"
-#include "cgm/PictureBody.h"
-#include "cgm/Rectangle.h"
-#include "cgm/FillAttributes.h"
-#include "cgm/LineAttributes.h"
-#include "cgm/Color.h"
-#include "cgm/NITFWriteHandler.h"
+
+NITF_CXX_GUARD
+
+
+/**
+ * Create a WriteHandler for writing CGM directly to a NITF file. This would
+ * be used in applications that are writing out NITF files and want to stream
+ * a cgm Metafile* directly to the output NITF file.
+ * 
+ * \param mf    The CGM Metafile to write out
+ * \param error The error object, which will get populated on error
+ * \return      a nitf_WriteHandler*, or NULL on error
+ */
+nitf_WriteHandler* cgm_NITFWriteHandler_construct(
+        cgm_Metafile *mf, nitf_Error *error);
+
+NITF_CXX_ENDGUARD
 
 #endif
-

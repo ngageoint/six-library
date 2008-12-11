@@ -36,10 +36,10 @@ NITFAPI(cgm_TextAttributes*)
     }
     atts->textColor = NULL;
     atts->characterOrientation = NULL;
-    atts->characterHeight = -1;
-    atts->textFontIndex = -1;
+    atts->characterHeight = 1;
+    atts->textFontIndex = 1;
     
-    atts->textColor = cgm_Color_construct(-1, -1, -1, error);
+    atts->textColor = cgm_Color_construct(0, 0, 0, error);
     if (!atts->textColor)
     {
         cgm_TextAttributes_destruct(&atts);
@@ -52,6 +52,11 @@ NITFAPI(cgm_TextAttributes*)
         cgm_TextAttributes_destruct( &atts );
         return NULL;
     }
+    /* set some defaults */
+    atts->characterOrientation->x1 = 0;
+    atts->characterOrientation->y1 = 1;
+    atts->characterOrientation->x2 = 1;
+    atts->characterOrientation->y2 = 0;
 
     return atts;
 }
