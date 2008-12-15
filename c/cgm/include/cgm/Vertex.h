@@ -34,7 +34,7 @@ typedef struct _cgm_Vertex
 } cgm_Vertex;
 
 
-NITFAPI(cgm_Vertex*) cgm_Vertex_construct(nitf_Error* error);
+NITFAPI(cgm_Vertex*) cgm_Vertex_construct(short x, short y, nitf_Error* error);
 
 NITFAPI(void) cgm_Vertex_destruct(cgm_Vertex** v);
 

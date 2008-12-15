@@ -69,48 +69,115 @@ NITF_BOOL addGraphicSegment(nitf_Record *record, nitf_Error *error)
 cgm_Metafile* createCGM(nitf_Error *error)
 {
     cgm_Metafile *mf = NULL;
-    cgm_Element *element = NULL;
+    cgm_Element *element = NULL, *dolly = NULL;
     cgm_TextElement *textElement = NULL;
+    cgm_PolyLineElement *lineElement = NULL, *lineClone = NULL;
+    cgm_Vertex *vertex = NULL;
     
+    /* first, we create a metafile object */
     if (!(mf = cgm_Metafile_construct("TEXT", "TEXT", error)))
         goto CATCH_ERROR;
     
+    /* next, create a picture */
     if (!cgm_Metafile_createPicture(mf, "Text", error))
         goto CATCH_ERROR;
     
+    /* add some fonts */
     if (!nitf_List_pushBack(mf->fontList, (NITF_DATA*)"Helvetica", error))
+        goto CATCH_ERROR;
+    if (!nitf_List_pushBack(mf->fontList, (NITF_DATA*)"TIMES_ROMAN", error))
+        goto CATCH_ERROR;
+    if (!nitf_List_pushBack(mf->fontList, (NITF_DATA*)"TIMES_ITALIC", error))
         goto CATCH_ERROR;
     if (!nitf_List_pushBack(mf->fontList, (NITF_DATA*)"Courier", error))
         goto CATCH_ERROR;
     
+    /* let's create a text element */
     if (!(element = cgm_TextElement_construct(error)))
         goto CATCH_ERROR;
     
+    /* because of how the Elements are derived, get the text-specific part */
     textElement = (cgm_TextElement*)element->data;
     
+    /* create text attributes */
     if (!(textElement->attributes = cgm_TextAttributes_construct(error)))
         goto CATCH_ERROR;
     
+    /* create the text that goes in the text element */
     if (!(textElement->text = cgm_Text_construct("NITRO rocks!", error)))
         goto CATCH_ERROR;
     
-    
+    /* set some attributes */
     textElement->attributes->characterHeight = 21;
     textElement->attributes->textFontIndex = 2; /* courier */
+    textElement->attributes->characterOrientation->y1 = -1;
     
     /* set the color of the text */
     textElement->attributes->textColor->r = 0;
     textElement->attributes->textColor->g = 255;
     textElement->attributes->textColor->b = 0;
     
-    textElement->attributes->characterOrientation->y1 = -1;
-    
+    /* set the text coordinates */
     textElement->text->x = 50;
     textElement->text->y = 50;
     
     /* add the element to the picture body */
     if (!nitf_List_pushBack(mf->picture->body->elements,
             (NITF_DATA*)element, error))
+        goto CATCH_ERROR;
+    
+    
+    /* let's create some polyline elements to make a cross */
+    if (!(element = cgm_PolyLineElement_construct(error)))
+        goto CATCH_ERROR;
+    
+    lineElement = (cgm_PolyLineElement*)element->data;
+    
+    /* create attributes */
+    if (!(lineElement->attributes = cgm_LineAttributes_construct(error)))
+        goto CATCH_ERROR;
+    
+    /* set some attributes */
+    lineElement->attributes->lineWidth = 2;
+    lineElement->attributes->lineType = CGM_TYPE_SOLID;
+    
+    /* set the color of the line */
+    lineElement->attributes->lineColor->r = 255;
+    lineElement->attributes->lineColor->g = 0;
+    lineElement->attributes->lineColor->b = 0;
+    
+    /* before we add vertices, let's clone it as it is now */
+    if (!(dolly = cgm_Element_clone(element, error)))
+        goto CATCH_ERROR;
+    lineClone = (cgm_PolyLineElement*)dolly->data;
+    
+    /* add some vertices */
+    if (!(vertex = cgm_Vertex_construct(25, 50, error)))
+        goto CATCH_ERROR;
+    if (!(nitf_List_pushBack(lineElement->vertices, (NITF_DATA*)vertex, error)))
+        goto CATCH_ERROR;
+    
+    if (!(vertex = cgm_Vertex_construct(75, 50, error)))
+        goto CATCH_ERROR;
+    if (!(nitf_List_pushBack(lineElement->vertices, (NITF_DATA*)vertex, error)))
+        goto CATCH_ERROR;
+    
+    if (!(vertex = cgm_Vertex_construct(50, 25, error)))
+        goto CATCH_ERROR;
+    if (!(nitf_List_pushBack(lineClone->vertices, (NITF_DATA*)vertex, error)))
+        goto CATCH_ERROR;
+    
+    if (!(vertex = cgm_Vertex_construct(50, 75, error)))
+        goto CATCH_ERROR;
+    if (!(nitf_List_pushBack(lineClone->vertices, (NITF_DATA*)vertex, error)))
+        goto CATCH_ERROR;
+    
+    /* add the line elements to the picture body */
+    if (!nitf_List_pushBack(mf->picture->body->elements,
+            (NITF_DATA*)element, error))
+        goto CATCH_ERROR;
+    if (!nitf_List_pushBack(mf->picture->body->elements,
+            (NITF_DATA*)dolly, error))
         goto CATCH_ERROR;
     
     return mf;

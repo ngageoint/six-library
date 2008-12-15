@@ -49,7 +49,6 @@ cgm_FillAttributes* createFillAttributes(cgm_ParseContext* pc, nitf_Error*error)
     atts->edgeColor->g = pc->color.g;
     atts->edgeColor->b = pc->color.b;
     return atts;
-
 }
 
 cgm_LineAttributes* createLineAttributes(cgm_ParseContext* pc, nitf_Error* error)
@@ -64,8 +63,8 @@ cgm_LineAttributes* createLineAttributes(cgm_ParseContext* pc, nitf_Error* error
     atts->lineColor->g = pc->color.g;
     atts->lineColor->b = pc->color.b;
     return atts;
-
 }
+
 cgm_TextAttributes* createTextAttributes(cgm_ParseContext* pc, nitf_Error* error)
 {
     cgm_TextAttributes* atts = cgm_TextAttributes_construct(error);
@@ -105,7 +104,6 @@ NITFPRIV(void) resetParseContext(cgm_ParseContext* pc)
     pc->visibility = -1;
     pc->type = CGM_TYPE_NOT_SET;
     pc->hatchIndex = CGM_HATCH_NOT_SET;
-
 }
 
 /*NITFPRIV(void) printParseContext(cgm_ParseContext* pc)
@@ -183,14 +181,16 @@ NITFPRIV(cgm_Rectangle*) readRectangle(char* b, int len, nitf_Error* error)
 
 NITFPRIV(cgm_Vertex*) readVertex(char* b, nitf_Error* error)
 {
-    cgm_Vertex* v = cgm_Vertex_construct(error);
     short s;
-    if (!v) return NULL;
-
+    cgm_Vertex* v = cgm_Vertex_construct(-1, -1, error);
+    if (!v)
+        return NULL;
+    
     memcpy(&s, &b[0], 2);
     v->x = NITF_NTOHS(s);
     memcpy(&s, &b[2], 2);
     v->y = NITF_NTOHS(s);
+    
     return v;
 }
 
