@@ -126,3 +126,9 @@ NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error)
 
     return element;
 }
+
+NITFAPI(NITF_BOOL) cgm_PolyLineElement_addVertex(cgm_PolyLineElement *poly,
+        cgm_Vertex *vertex, nitf_Error* error)
+{
+    return nitf_List_pushBack(poly->vertices, vertex, error);
+}

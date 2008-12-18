@@ -98,6 +98,12 @@ NITFPRIV(void) polyPrint(NITF_DATA* data)
     }
 }
 
+NITFAPI(NITF_BOOL) cgm_PolygonElement_addVertex(cgm_PolygonElement *polygon,
+        cgm_Vertex *vertex, nitf_Error* error)
+{
+    return nitf_List_pushBack(polygon->vertices, vertex, error);
+}
+
 NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error)
 {
     cgm_Element* element = cgm_Element_construct(CGM_POLYGON_ELEMENT, error);
@@ -107,7 +113,7 @@ NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error)
     else
     {
         cgm_PolygonElement* poly = (cgm_PolygonElement*)
-        NITF_MALLOC(sizeof(cgm_PolygonElement));
+                NITF_MALLOC(sizeof(cgm_PolygonElement));
 
         if (!poly)
         {
@@ -130,5 +136,4 @@ NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error)
     element->destroy = &polyDestroy;
 
     return element;
-
 }

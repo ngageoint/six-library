@@ -24,6 +24,7 @@
 #define __CGM_POLYLINE_ELEMENT_H__
 
 #include "cgm/Element.h"
+#include "cgm/Vertex.h"
 
 NITF_CXX_GUARD
 
@@ -35,6 +36,8 @@ typedef struct _cgm_PolyLineElement
 
 NITFAPI(cgm_Element*) cgm_PolyLineElement_construct(nitf_Error* error);
 
+NITFAPI(NITF_BOOL) cgm_PolyLineElement_addVertex(cgm_PolyLineElement *poly,
+        cgm_Vertex *vertex, nitf_Error* error);
 
 NITF_CXX_ENDGUARD
 

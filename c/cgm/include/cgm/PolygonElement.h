@@ -24,6 +24,7 @@
 #define __CGM_POLYGON_ELEMENT_H__
 
 #include "cgm/Element.h"
+#include "cgm/Vertex.h"
 
 NITF_CXX_GUARD
 
@@ -36,6 +37,8 @@ typedef struct _cgm_PolygonElement
 
 NITFAPI(cgm_Element*) cgm_PolygonElement_construct(nitf_Error* error);
 
+NITFAPI(NITF_BOOL) cgm_PolygonElement_addVertex(cgm_PolygonElement *polygon,
+        cgm_Vertex *vertex, nitf_Error* error);
 
 NITF_CXX_ENDGUARD
 
