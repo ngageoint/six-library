@@ -791,7 +791,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
     int numGraphics;
     int numDEs;
     nitf_ListIterator iter;
-    
+
     if (!writer)
     {
         nitf_Error_init(error, "NULL writer", NITF_CTXT,
@@ -893,25 +893,25 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
             nitf_ImageSubheader *subheader = NULL;
             nitf_Uint32 nbpp, nbands, xbands, nrows, ncols;
             nitf_Uint64 length;
-            
+
             /* first, set the writer to NULL */
             writer->imageWriters[i] = NULL;
-            
+
             /* guard against an overflowing data length */
             iter = nitf_List_at(record->images, i);
             segment = (nitf_ImageSegment*) nitf_ListIterator_get(&iter);
             subheader = segment->subheader;
-            
+
             /* calculate the length */
             NITF_TRY_GET_UINT32(subheader->numBitsPerPixel, &nbpp, error);
             NITF_TRY_GET_UINT32(subheader->numImageBands, &nbands, error);
             NITF_TRY_GET_UINT32(subheader->numMultispectralImageBands, &xbands, error);
             NITF_TRY_GET_UINT32(subheader->numRows, &nrows, error);
             NITF_TRY_GET_UINT32(subheader->numCols, &ncols, error);
-            
+
             length = (nitf_Uint64)ncols * (nitf_Uint64)nrows *
                     NITF_NBPP_TO_BYTES(nbpp) * (nbands + xbands);
-            
+
             if (length > NITF_MAX_IMAGE_LENGTH)
             {
                 nitf_Error_init(error, "Image Length is too large", NITF_CTXT,
@@ -978,7 +978,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
     }
 
     return NITF_SUCCESS;
-    
+
   CATCH_ERROR:
     return NITF_FAILURE;
 }
@@ -1110,7 +1110,7 @@ NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
     NITF_TRY_GET_UINT32(writer->record->header->extendedHeaderLength,
         &xhdl, error);
     NITF_TRY_GET_UINT32(writer->record->header->extendedHeaderOverflow,
-        &xhdlofl, error); 
+        &xhdlofl, error);
 
     NITF_WRITE_USER_HDR_INFO(writer->record->header->userDefinedSection,
                              &udhdl, &udhofl);
@@ -1326,7 +1326,7 @@ CATCH_ERROR:
     return NITF_FAILURE;
 }
 
-
+/*
 NITFPRIV(NITF_BOOL) writeLabelSubheader(nitf_Writer * writer,
                                         nitf_LabelSubheader * subhdr,
                                         nitf_Version fver,
@@ -1350,7 +1350,6 @@ NITFPRIV(NITF_BOOL) writeLabelSubheader(nitf_Writer * writer,
     }
     else
     {
-        /* !!!we should check this earlier, not here */
         nitf_Error_init(error, "Invalid NITF Version",
                         NITF_CTXT, NITF_ERR_UNK);
         goto CATCH_ERROR;
@@ -1367,7 +1366,6 @@ NITFPRIV(NITF_BOOL) writeLabelSubheader(nitf_Writer * writer,
     NITF_WRITE_VALUE(subhdr, NITF_LTC, SPACE, FILL_RIGHT);
     NITF_WRITE_VALUE(subhdr, NITF_LBC, SPACE, FILL_RIGHT);
 
-    /* deal with extensions */
     NITF_TRY_GET_UINT32(subhdr->extendedHeaderLength, &lxshdl, error);
     NITF_TRY_GET_UINT32(subhdr->extendedHeaderOverflow, &lxsofl, error);
     NITF_WRITE_EXT_HDR_INFO(subhdr->extendedSection, &lxshdl, &lxsofl);
@@ -1377,6 +1375,7 @@ NITFPRIV(NITF_BOOL) writeLabelSubheader(nitf_Writer * writer,
 CATCH_ERROR:
     return NITF_FAILURE;
 }
+*/
 
 
 NITFPRIV(NITF_BOOL) writeTextSubheader(nitf_Writer * writer,
@@ -1500,6 +1499,7 @@ CATCH_ERROR:
 }
 
 
+/* For now, we won't support writing RES
 NITFPRIV(NITF_BOOL) writeRESubheader(nitf_Writer * writer,
                                      nitf_RESubheader * subhdr,
                                      nitf_Version fver, nitf_Error * error)
@@ -1523,7 +1523,6 @@ NITFPRIV(NITF_BOOL) writeRESubheader(nitf_Writer * writer,
     }
     else
     {
-        /* !!!we should check this earlier, not here */
         nitf_Error_init(error, "Invalid NITF Version",
                         NITF_CTXT, NITF_ERR_UNK);
         goto CATCH_ERROR;
@@ -1537,8 +1536,7 @@ NITFPRIV(NITF_BOOL) writeRESubheader(nitf_Writer * writer,
             goto CATCH_ERROR;
     }
 
-    /* !!! TODO: ADD CODE HERE TO WRITE RES !!! */
-    /* For now, we won't support writing RES */
+
     nitf_Error_init(error,
                     "RES Error... TODO: Change code in readRESubheader",
                     NITF_CTXT, NITF_ERR_UNK);
@@ -1549,7 +1547,7 @@ NITFPRIV(NITF_BOOL) writeRESubheader(nitf_Writer * writer,
 CATCH_ERROR:
     return NITF_FAILURE;
 }
-
+*/
 
 NITFPRIV(NITF_BOOL) writeImage(nitf_WriteHandler * imageWriter,
                                nitf_IOHandle outHandle, nitf_Error * error)
@@ -1764,7 +1762,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
             }
             imageDataLens[i] = endSize - startSize;
             startSize = endSize;
-            
+
             /* TODO - should we check the data length written against NITF_MAX_IMAGE_LENGTH? */
 
             nitf_ListIterator_increment(&iter);
@@ -2227,7 +2225,7 @@ NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *writer,
     nitf_ListIterator iter;
     nitf_ImageWriter *imageWriter = NULL;
     nitf_ImageSegment *currentSegment = NULL;
-    nitf_CompressionInterface *compIface = NULL;  /* currently always NULL */
+    /*nitf_CompressionInterface *compIface = NULL;*/  /* currently always NULL */
 
     if (index >= writer->numImageWriters)
     {
@@ -2235,18 +2233,18 @@ NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *writer,
                          "index is greater than number of images");
         goto CATCH_ERROR;
     }
-    
+
     iter = nitf_List_at(writer->record->images, index);
     /* this operation will assert if it is the end of the list */
     currentSegment = (nitf_ImageSegment *) nitf_ListIterator_get(&iter);
 
     assert(currentSegment);
     assert(currentSegment->subheader);
-    
+
     imageWriter = nitf_ImageWriter_construct(currentSegment->subheader, error);
     if (!imageWriter)
         goto CATCH_ERROR;
-    
+
     if (!nitf_Writer_setImageWriteHandler(writer, index, imageWriter, error))
         goto CATCH_ERROR;
 
@@ -2274,11 +2272,11 @@ NITFAPI(nitf_SegmentWriter *) nitf_Writer_newTextWriter
                          "i is greater than number of texts");
         return NULL;
     }
-    
+
     segmentWriter = nitf_SegmentWriter_construct(error);
     if (!segmentWriter)
         return NULL;
-    
+
     if (!nitf_Writer_setTextWriteHandler(writer, index, segmentWriter, error))
         return NULL;
 
@@ -2304,7 +2302,7 @@ NITFAPI(nitf_SegmentWriter *) nitf_Writer_newDEWriter
     segmentWriter = nitf_SegmentWriter_construct(error);
     if (!segmentWriter)
         return NULL;
-    
+
     if (!nitf_Writer_setDEWriteHandler(writer, index, segmentWriter, error))
         return NULL;
 
@@ -2327,11 +2325,11 @@ NITFAPI(nitf_SegmentWriter *) nitf_Writer_newGraphicWriter
                          "i is greater than number of graphics");
         return NULL;
     }
-    
+
     segmentWriter = nitf_SegmentWriter_construct(error);
     if (!segmentWriter)
         return NULL;
-    
+
     if (!nitf_Writer_setGraphicWriteHandler(writer, index, segmentWriter, error))
         return NULL;
 

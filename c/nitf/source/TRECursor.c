@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -29,7 +29,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
     nitf_Error error;
     nitf_TRECursor tre_cursor;
     nitf_TREDescription *dptr;
-	
+
     tre_cursor.loop = nitf_IntStack_construct(&error);
     tre_cursor.loop_idx = nitf_IntStack_construct(&error);
     tre_cursor.loop_rtn = nitf_IntStack_construct(&error);
@@ -43,7 +43,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
         tre_cursor.index = -1;
         /* count how many descriptions there are */
 		dptr = ((nitf_TREPrivateData*)tre->priv)->description;
-		
+
         while (dptr && (dptr->data_type != NITF_END))
         {
             tre_cursor.numItems++;
@@ -122,7 +122,6 @@ NITFAPI(void) nitf_TRECursor_cleanup(nitf_TRECursor * tre_cursor)
 NITFAPI(NITF_BOOL) nitf_TRECursor_isDone(nitf_TRECursor * tre_cursor)
 {
     int status = 1;
-    int i = 0;
     int gotField = 0;
     nitf_Error error;
     NITF_BOOL iterStatus = NITF_SUCCESS;
@@ -185,7 +184,7 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
     int done = 0;               /* flag used for special cases */
 
     char idx_str[10][10];       /* used for keeping track of indexes */
-	
+
     if (!tre_cursor->loop || !tre_cursor->loop_idx
             || !tre_cursor->loop_rtn)
     {
@@ -196,7 +195,7 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
     }
 
     /* count how many descriptions there are */
-    
+
 	dptr = ((nitf_TREPrivateData*)tre_cursor->tre->priv)->description;
 
     while (!done)
@@ -424,7 +423,7 @@ NITFAPI(int) nitf_TRECursor_evalLoops(nitf_TRE * tre,
 
     else if (desc_ptr->label && strcmp(desc_ptr->label, NITF_FUNCTION) == 0)
     {
-	NITF_TRE_CURSOR_COUNT_FUNCTION fn = 
+	NITF_TRE_CURSOR_COUNT_FUNCTION fn =
 	    (NITF_TRE_CURSOR_COUNT_FUNCTION)desc_ptr->tag;
 
 

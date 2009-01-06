@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -187,7 +187,7 @@ NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
     NITF_FREE(data);
 }
 
-NITFPRIV(size_t) FileSource_getSize(NITF_DATA * data)
+NITFPRIV(off_t) FileSource_getSize(NITF_DATA * data)
 {
     FileSourceImpl *fileSource = (FileSourceImpl *) data;
     assert(fileSource);
@@ -338,7 +338,7 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
         NITF_FREE(impl);
         return NULL;
     }
-    
+
     /* figure out the actual # oif bytes represented by the source */
     impl->size = impl->fileSize / (impl->byteSkip + 1);
 

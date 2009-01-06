@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -40,7 +40,7 @@ typedef struct _RowSourceImpl
 
     nitf_Uint8 *rowBuffer;      /* The row buffer */
     nitf_Uint8 *nextPtr;        /* Points to next byte to be transfered */
-    nitf_Uint32 bytesLeft;      /* Bytes left to be processed */
+    nitf_Uint64 bytesLeft;      /* Bytes left to be processed */
 }
 RowSourceImpl;
 
@@ -50,12 +50,12 @@ RowSourceImpl;
 
 /* Instance data */
 /* Output buffer */
-NITFPRIV(NITF_BOOL) RowSource_read(NITF_DATA * data, char *buf, size_t size,    /* Amount to read */
+NITFPRIV(NITF_BOOL) RowSource_read(NITF_DATA * data, char *buf, off_t size,    /* Amount to read */
                                    nitf_Error * error)  /* For error returns */
 {
     RowSourceImpl *impl;        /* Instance data */
-    nitf_Uint32 xfrCount;       /* Transfer count */
-    nitf_Uint32 remainder;      /* Amount left to transfer */
+    nitf_Uint64 xfrCount;       /* Transfer count */
+    nitf_Uint64 remainder;      /* Amount left to transfer */
     char *bufPtr;               /* Current location in output buffer */
 
     impl = (RowSourceImpl *) data;
@@ -106,10 +106,10 @@ NITFPRIV(void) RowSource_destruct(NITF_DATA * data)
 }
 
 
-NITFPRIV(size_t) RowSource_getSize(NITF_DATA * data)
+NITFPRIV(off_t) RowSource_getSize(NITF_DATA * data)
 {
     RowSourceImpl *impl = (RowSourceImpl *) data;
-    return impl->numRows * impl->rowLength;
+    return (off_t)impl->numRows * (off_t)impl->rowLength;
 }
 
 
