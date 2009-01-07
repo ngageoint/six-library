@@ -18,7 +18,7 @@ for f in files:
 
 setup(
     name = 'nitro-python',
-    version = '2.0-rc2',
+    version = '2.0-rc3',
     url = 'http://nitro-nitf.sourceforge.net',
     author = 'tzellman',
     author_email = 'tzellman@users.sourceforget.net',
