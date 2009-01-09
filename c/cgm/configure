@@ -1294,6 +1294,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-sysroot=PATH           Mac specific: compile with sysroot set to the given path
   --with-optz=OPTZ		Compile with optimization level (med, fast, fastest)
   --with-includes=INCLUDES	Add INCLUDES
   --with-libpaths=LIBPATHs 	Add LIBPATHS
@@ -4866,10 +4867,28 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
 	    def_link_thread_libs="-lpthread"
 
 	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-	    { echo "$as_me:$LINENO: result: setting up build for universal binaries..." >&5
-echo "${ECHO_T}setting up build for universal binaries..." >&6; }
 
-            cc_flags="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc  -arch i386"
+             # if --with-sysroot is given, set -isysroot to cc_flags
+	    # default sysroot is /usr/include on the mac
+
+# Check whether --with-sysroot was given.
+if test "${with_sysroot+set}" = set; then
+  withval=$with_sysroot; applesr=${withval}
+else
+  applesr="no"
+fi
+
+            { echo "$as_me:$LINENO: result: setting sysroot: $applesr" >&5
+echo "${ECHO_T}setting sysroot: $applesr" >&6; }
+	    if test "${applesr}" != "no" && test -n "${applesr}"
+	    then
+		cc_flags="-isysroot ${applesr}"
+ 	    else
+	        cc_flags=""
+	    fi
+
+            # Not tested on intel chipset yet!
+            cc_flags="${cc_flags} -arch ppc"
 
 	    cc_optz_flags="${def_cc_optz_flags}"
         link_autolibs="-ldl"
@@ -4878,6 +4897,7 @@ echo "${ECHO_T}setting up build for universal binaries..." >&6; }
 	    dll_flags="${dll_flags} -fPIC -dynamiclib"
     ;;
 esac
+
 
 ###########################################################
 pretool=""
