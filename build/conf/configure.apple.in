@@ -23,9 +23,23 @@ case "${target}" in
 	    def_link_thread_libs="-lpthread"
 
 	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-	    AC_MSG_RESULT(setting up build for universal binaries...)
 
-            cc_flags="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc  -arch i386"
+             # if --with-sysroot is given, set -isysroot to cc_flags
+	    # default sysroot is /usr/include on the mac
+	    AC_ARG_WITH(sysroot,
+	                [  --with-sysroot=PATH           Mac specific: compile with sysroot set to the given path],
+	                applesr=${withval},
+		        applesr="no")
+            AC_MSG_RESULT(setting sysroot: $applesr)
+	    if test "${applesr}" != "no" && test -n "${applesr}"
+	    then
+		cc_flags="-isysroot ${applesr}"
+ 	    else
+	        cc_flags=""
+	    fi
+
+            # Not tested on intel chipset yet!
+            cc_flags="${cc_flags} -arch ppc"
 
 	    cc_optz_flags="${def_cc_optz_flags}"
         link_autolibs="-ldl"
@@ -34,3 +48,4 @@ case "${target}" in
 	    dll_flags="${dll_flags} -fPIC -dynamiclib"
     ;;
 esac
+
