@@ -5,7 +5,7 @@ ar_flags="-crs"
 AR="ar"
 
 case "${target}" in
-    sparc-sun-*)
+    *-solaris*)
         case "${CC}" in
             cc)
                 AC_MSG_RESULT(selecting the forte compiler...)
