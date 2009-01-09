@@ -4490,7 +4490,7 @@ ar_flags="-crs"
 AR="ar"
 
 case "${target}" in
-    sparc-sun-*)
+    *-solaris*)
         case "${CC}" in
             cc)
                 { echo "$as_me:$LINENO: result: selecting the forte compiler..." >&5
@@ -4552,6 +4552,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
         esac
     ;;
 esac
+
 ###########################################################
 #  Archiver                                               #
 ###########################################################
