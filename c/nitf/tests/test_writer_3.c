@@ -129,13 +129,13 @@ void showFileHeader(nitf_FileHeader * header)
     SHOW_VAL(header->securityGroup->securityControlNumber);
 
     GET_UINT32(header->numImages, &num, &error);
-    printf("The number of IMAGES contained in this file [%ld]\n", num);
+    printf("The number of IMAGES contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
         GET_UINT32(header->imageInfo[i]->lengthSubheader, &len, &error);
         GET_UINT64(header->imageInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
-               i, len);
+               i, (long)len);
         printf("\tThe length of the IMAGE data: %lld bytes\n\n", dataLen);
     }
 
@@ -385,9 +385,6 @@ int main(int argc, char **argv)
     nitf_IOHandle output_io;    /* output IOHandle */
 #endif
 
-    nitf_Error error;           /* error object */
-
-
     /*  Check argv and make sure we are happy  */
     if (argc != 3)
     {
@@ -539,9 +536,9 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
     nitf_SubWindow *subimage;
     unsigned int i;
     int padded;
-    nitf_Uint8 **buffer;
+    nitf_Uint8 **buffer = NULL;
     nitf_Uint32 band;
-    nitf_Uint32 *bandList;
+    nitf_Uint32 *bandList = NULL;
 
     NITF_TRY_GET_UINT32(segment->subheader->numBitsPerPixel, &nBits,
                         error);

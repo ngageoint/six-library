@@ -20,6 +20,11 @@
  *
  */
 
+/*==============================================================
+ * This test is not currently being used! It needs updates!   DP
+ *==============================================================
+ */
+
 #include <import/nitf.h>
 
 /*  This is not the real max, so please dont break this  */

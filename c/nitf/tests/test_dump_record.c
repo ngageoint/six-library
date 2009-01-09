@@ -156,7 +156,7 @@ void showFileHeader(nitf_FileHeader * header)
         goto CATCH_ERROR;
 
 
-    printf("The number of IMAGES contained in this file [%ld]\n", num);
+    printf("The number of IMAGES contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
 
@@ -170,7 +170,7 @@ void showFileHeader(nitf_FileHeader * header)
             goto CATCH_ERROR;
 
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
-               i, len);
+               i, (long)len);
         printf("\tThe length of the IMAGE data: %lld bytes\n\n", dataLen);
     }
 
@@ -179,7 +179,7 @@ void showFileHeader(nitf_FileHeader * header)
         goto CATCH_ERROR;
 
 
-    printf("The number of GRAPHICS contained in this file [%ld]\n", num);
+    printf("The number of GRAPHICS contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
 
@@ -193,7 +193,7 @@ void showFileHeader(nitf_FileHeader * header)
             goto CATCH_ERROR;
 
         printf("\tThe length of GRAPHIC subheader [%d]: %ld bytes\n",
-               i, len);
+               i, (long)len);
         printf("\tThe length of the GRAPHIC data: %ld bytes\n\n",
                /*XXX               (long) dataLen); */
                (long) dataLen32);
@@ -203,7 +203,7 @@ void showFileHeader(nitf_FileHeader * header)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of LABELS contained in this file [%ld]\n", num);
+    printf("The number of LABELS contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
 
@@ -217,7 +217,7 @@ void showFileHeader(nitf_FileHeader * header)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
         printf("\tThe length of LABEL subheader [%d]: %ld bytes\n",
-               i, len);
+               i, (long)len);
         printf("\tThe length of the LABEL data: %ld bytes\n\n",
                /*XXX               (long) dataLen); */
                (long) dataLen32);
@@ -226,7 +226,7 @@ void showFileHeader(nitf_FileHeader * header)
     if (!nitf_Field_get(header->numTexts,
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
-    printf("The number of TEXTS contained in this file [%ld]\n", num);
+    printf("The number of TEXTS contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
 
@@ -240,7 +240,7 @@ void showFileHeader(nitf_FileHeader * header)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of TEXT subheader [%d]: %ld bytes\n", i, len);
+        printf("\tThe length of TEXT subheader [%d]: %ld bytes\n", i, (long)len);
         printf("\tThe length of the TEXT data: %ld bytes\n\n",
                /*XXX               (long) dataLen); */
                (long) dataLen32);
@@ -250,7 +250,7 @@ void showFileHeader(nitf_FileHeader * header)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
     printf("The number of DATA EXTENSIONS contained in this file [%ld]\n",
-           num);
+           (long)num);
 
     for (i = 0; i < num; i++)
     {
@@ -280,7 +280,7 @@ void showFileHeader(nitf_FileHeader * header)
 
     printf
     ("The number of RESERVED EXTENSIONS contained in this file [%ld]\n",
-     num);
+     (long)num);
     for (i = 0; i < num; i++)
     {
 
@@ -308,7 +308,7 @@ void showFileHeader(nitf_FileHeader * header)
                         NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The user-defined header length [%ld]\n", num);
+    printf("The user-defined header length [%ld]\n", (long)num);
 
 
     if (header->userDefinedSection)
@@ -321,7 +321,7 @@ void showFileHeader(nitf_FileHeader * header)
                         NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The extended header length [%ld]\n", num);
+    printf("The extended header length [%ld]\n", (long)num);
 
     if (header->extendedSection)
     {
@@ -582,7 +582,7 @@ void showDESubheader(nitf_DESubheader * sub)
     SHOW_VAL(sub->dataItemOverflowed);
     SHOW_VAL(sub->subheaderFieldsLength);
     nitf_TREUtils_print(sub->subheaderFields, &error);
-    SHOWI(sub->dataLength);
+    SHOWI((long)sub->dataLength);
 
     if (sub->userDefinedSection)
     {
@@ -593,7 +593,6 @@ void showDESubheader(nitf_DESubheader * sub)
 
 void showRESubheader(nitf_RESubheader * sub)
 {
-    nitf_Error error;
 
     if (!sub)
     {
@@ -612,7 +611,7 @@ void showRESubheader(nitf_RESubheader * sub)
 
     SHOW_VAL(sub->subheaderFieldsLength);
     //nitf_TREUtils_print(sub->, &error);
-    SHOWI(sub->dataLength);
+    SHOWI((long)sub->dataLength);
 }
 
 int main(int argc, char **argv)
@@ -669,7 +668,7 @@ int main(int argc, char **argv)
                 (strcmp(nitf_version, "02.10") != 0)
                 && (strncmp(record->header->NITF_FHDR->raw, "NSIF", 4) != 0))
         {
-            printf("!!! unhandled NITF version: %3.2f\n", nitf_version);
+            printf("!!! unhandled NITF version: %s\n", nitf_version);
         }
     }
     else

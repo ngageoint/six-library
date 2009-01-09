@@ -54,6 +54,7 @@ int showTRE(nitf_TRE* tre)
         }
         
     }
+    return 1;
 }
 
 NITF_BOOL testNestedMod(nitf_Error* error)

@@ -33,8 +33,6 @@ int main(int argc, char** argv)
     nitf_Error      error;
     /*  A hash table  */
     nitf_HashTable* hashTable;
-    /*  Integer iterator  */
-    int i;
     /*  The hash table configurator  */
     FILE* config;
 

@@ -47,7 +47,6 @@ void lookForTREField(nitf_Extensions* ext,
     while (nitf_ListIterator_notEqualTo(&current, &last))
     {
 	nitf_Error error;
-	nitf_Pair* pair;
 	nitf_TRE* tre = nitf_ListIterator_get(&current);
 	nitf_ListIterator currentInst;
 	nitf_ListIterator lastInst;

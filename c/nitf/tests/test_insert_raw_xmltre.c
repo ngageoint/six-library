@@ -50,8 +50,8 @@ nitf_TRE* createXMLTRE(const char* data, const int length)
         nitf_Error_print(&error, stdout, "Exiting...");
         exit(EXIT_FAILURE);
     }
-
-    nitf_TRE_setField(tre, "raw_data", data, length, &error);
+    /* TODO! Make setField const char*? */
+    nitf_TRE_setField(tre, "raw_data", (char*)data, length, &error);
     return tre;
 }
 
@@ -438,9 +438,9 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
     nitf_SubWindow *subimage;
     unsigned int i;
     int padded;
-    nitf_Uint8 **buffer;
+    nitf_Uint8 **buffer = NULL;
     nitf_Uint32 band;
-    nitf_Uint32 *bandList;
+    nitf_Uint32 *bandList = NULL;
 
     NITF_TRY_GET_UINT32(segment->subheader->numBitsPerPixel, &nBits,
                         error);
@@ -552,7 +552,6 @@ nitf_Record *doRead(const char *inFile)
     nitf_ImageSegment *imageSegment = NULL;
     nitf_ImageReader *deserializer = NULL;
     nitf_TextSegment *textSegment = NULL;
-    nitf_DESegment *DESegment = NULL;
     nitf_SegmentReader *segmentReader = NULL;
 
     reader = nitf_Reader_construct(&e);

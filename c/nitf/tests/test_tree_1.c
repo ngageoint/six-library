@@ -90,7 +90,7 @@ NITF_BOOL printElement(nitf_TreeNode* t, NITF_DATA* ud, int depth, nitf_Error* e
     for (i = 0; i < depth; i++) 
         printf("   ");
     printf("%s depth=\"%d\"\n", p, depth);
-
+    return 1;
 }
 
 
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     
     printf("\n\n");
 
-    tc = nitf_Tree_clone(t, &C, &e);
+    tc = nitf_Tree_clone(t, (NITF_DATA_ITEM_CLONE)&C, &e);
     assert(tc);
 
 

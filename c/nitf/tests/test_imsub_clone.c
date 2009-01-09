@@ -77,13 +77,13 @@ void showFileHeader(nitf_FileHeader* header)
 
 
     NITF_TRY_GET_UINT32(header->numImages, &num, &error);
-    printf("The number of IMAGES contained in this file [%ld]\n", num);
+    printf("The number of IMAGES contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
         NITF_TRY_GET_UINT32(header->imageInfo[i]->lengthSubheader, &len, &error);
         NITF_TRY_GET_UINT64(header->imageInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
-               i, len);
+               i, (long)len);
         printf("\tThe length of the IMAGE data: %lld bytes\n\n",
                dataLen);
     }

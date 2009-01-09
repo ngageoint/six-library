@@ -36,9 +36,9 @@ void writeImage(nitf_ImageSegment * segment,
     nitf_SubWindow *subimage;
     unsigned int i;
     int padded;
-    nitf_Uint8 **buffer;
+    nitf_Uint8 **buffer = NULL;
     nitf_Uint32 band;
-    nitf_Uint32 *bandList;
+    nitf_Uint32 *bandList = NULL;
 
     nitf_DownSampler *pixelSkip;
     NITF_TRY_GET_UINT32(segment->subheader->numBitsPerPixel, &nBits,
@@ -221,7 +221,7 @@ void writeImageSegment(char *imageName,
     char file[NITF_MAX_PATH];
     int pos;
     off_t size = nitf_SegmentReader_getSize(reader, error);
-    printf("Segment Size: %d\n", size);
+    printf("Segment Size: %ld\n", (long)size);
     buffer = (nitf_Uint8 *) NITF_MALLOC(size);
     assert(buffer);
     

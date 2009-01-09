@@ -76,55 +76,55 @@ void printHdr(nitf_FileHeader* header)
 
 
     NITF_TRY_GET_UINT32(header->numImages, &num, &error);
-    printf("The number of IMAGES contained in this file [%ld]\n", num);
+    printf("The number of IMAGES contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
         NITF_TRY_GET_UINT32(header->imageInfo[i]->lengthSubheader, &len, &error);
         NITF_TRY_GET_UINT64(header->imageInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
-               i, len);
+               i, (long)len);
         printf("\tThe length of the IMAGE data: %lld bytes\n\n",
                dataLen);
     }
 
     NITF_TRY_GET_UINT32(header->numGraphics, &num, &error);
-    printf("The number of GRAPHICS contained in this file [%ld]\n", num);
+    printf("The number of GRAPHICS contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
         NITF_TRY_GET_UINT32(header->graphicInfo[i]->lengthSubheader, &len, &error);
         NITF_TRY_GET_UINT64(header->graphicInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of GRAPHIC subheader [%d]: %ld bytes\n",
-               i, len);
+               i, (long)len);
         printf("\tThe length of the GRAPHIC data: %d bytes\n\n",
                (int)dataLen);
     }
 
     NITF_TRY_GET_UINT32(header->numLabels, &num, &error);
-    printf("The number of LABELS contained in this file [%ld]\n", num);
+    printf("The number of LABELS contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
         NITF_TRY_GET_UINT32(header->labelInfo[i]->lengthSubheader, &len, &error);
         NITF_TRY_GET_UINT64(header->labelInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of LABEL subheader [%d]: %ld bytes\n",
-               i, len);
+               i, (long)len);
         printf("\tThe length of the LABEL data: %d bytes\n\n",
                (int)dataLen);
     }
 
     NITF_TRY_GET_UINT32(header->numTexts, &num, &error);
-    printf("The number of TEXTS contained in this file [%ld]\n", num);
+    printf("The number of TEXTS contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
         NITF_TRY_GET_UINT32(header->textInfo[i]->lengthSubheader, &len, &error);
         NITF_TRY_GET_UINT64(header->textInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of TEXT subheader [%d]: %ld bytes\n",
-               i, len);
+               i, (long)len);
         printf("\tThe length of the TEXT data: %d bytes\n\n",
                (int)dataLen);
     }
 
     NITF_TRY_GET_UINT32(header->numDataExtensions, &num, &error);
-    printf("The number of DATA EXTENSIONS contained in this file [%ld]\n", num);
+    printf("The number of DATA EXTENSIONS contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
         NITF_TRY_GET_UINT32(header->dataExtensionInfo[i]->lengthSubheader, &len, &error);
@@ -136,7 +136,7 @@ void printHdr(nitf_FileHeader* header)
     }
 
     NITF_TRY_GET_UINT32(header->numReservedExtensions, &num, &error);
-    printf("The number of RESERVED EXTENSIONS contained in this file [%ld]\n", num);
+    printf("The number of RESERVED EXTENSIONS contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
         NITF_TRY_GET_UINT32(header->reservedExtensionInfo[i]->lengthSubheader, &len, &error);
@@ -148,10 +148,10 @@ void printHdr(nitf_FileHeader* header)
     }
 
     NITF_TRY_GET_UINT32(header->userDefinedHeaderLength, &num, &error);
-    printf("The user-defined header length [%ld]\n", num);
+    printf("The user-defined header length [%ld]\n", (long)num);
 
     NITF_TRY_GET_UINT32(header->extendedHeaderLength, &num, &error);
-    printf("The extended header length [%ld]\n", num);
+    printf("The extended header length [%ld]\n", (long)num);
 
     return;
 
@@ -165,7 +165,7 @@ int main(int argc, char** argv)
 {
     nitf_IOHandle io;
     nitf_Reader* reader;
-    nitf_Record* record;
+    nitf_Record* record = NULL;
     nitf_FileHeader* twin;
     nitf_Error error;
 
@@ -184,7 +184,6 @@ int main(int argc, char** argv)
     reader = nitf_Reader_construct(&error);
     TRY_IT(  reader  );
 
-    TRY_IT(record);
 
     record = nitf_Reader_read(reader, io, &error);
     if (!record)

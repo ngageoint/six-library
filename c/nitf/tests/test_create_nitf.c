@@ -1155,7 +1155,7 @@ NITF_BOOL writeNITF(nitf_Record *record, const char* filename, nitf_Error *error
     for (i = 0; i < 3; ++i)
     {
         nitf_BandSource *bandSource = nitf_MemorySource_construct(
-                NITRO_IMAGE.data, NITRO_IMAGE.width * NITRO_IMAGE.height,
+            (char*)NITRO_IMAGE.data, NITRO_IMAGE.width * NITRO_IMAGE.height,
                 i, 1, 2, error);
         if (!bandSource)
             goto CATCH_ERROR;
@@ -1173,9 +1173,9 @@ NITF_BOOL writeNITF(nitf_Record *record, const char* filename, nitf_Error *error
         goto CATCH_ERROR;
 
     /* finally, write it! */
-    if (!nitf_Writer_write(writer, &error))
+    if (!nitf_Writer_write(writer, error))
     {
-        nitf_Error_print(&error, stderr, "Error writing up write");
+        nitf_Error_print(error, stderr, "Error writing up write");
         exit(1);
     }
 

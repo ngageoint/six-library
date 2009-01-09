@@ -51,7 +51,7 @@ int main()
         nitf_Error_print(&error, stdout, "Blah");
         exit(EXIT_FAILURE);
     }
-    printf("FHDR: [%s]\n", fhdr_str);
+    printf("FHDR: [%s]\n", *fhdr_str);
 
     if (!nitf_Field_get
             (hl, hl_str, NITF_CONV_STRING, NITF_HL_SZ + 1, &error))
