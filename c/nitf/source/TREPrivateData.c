@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -34,11 +34,12 @@ NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_construct(
                         NITF_CTXT, NITF_ERR_MEMORY);
         return NULL;
     }
-    
+
     priv->length = 0;
+    priv->descriptionName = NULL;
     priv->description = NULL;
     priv->userData = NULL;
-    
+
     /* create the hashtable for the fields */
     priv->hash = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
 
@@ -50,7 +51,7 @@ NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_construct(
 
     /* ??? change policy? */
     nitf_HashTable_setPolicy(priv->hash, NITF_DATA_ADOPT);
-    
+
     return priv;
 }
 
@@ -71,8 +72,14 @@ NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_clone(
     {
         priv = nitf_TREPrivateData_construct(error);
         if (!priv)
-            return NULL;
-        
+            goto CATCH_ERROR;
+
+        if (!nitf_TREPrivateData_setDescriptionName(
+                priv, source->descriptionName, error))
+        {
+            goto CATCH_ERROR;
+        }
+
         /*  Copy the entire contents of the hash  */
         for (i = 0; i < source->hash->nbuckets; i++)
         {
@@ -95,17 +102,13 @@ NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_clone(
 
                 /*  If that failed, we need to destruct  */
                 if (!field)
-                {
-                    nitf_TREPrivateData_destruct(&priv);
-                    return NULL;
-                }
+                    goto CATCH_ERROR;
 
                 /*  Yes, now we can insert the new field!  */
                 if (!nitf_HashTable_insert(priv->hash,
                                            pair->key, field, error))
                 {
-                    nitf_TREPrivateData_destruct(&priv);
-                    return NULL;
+                    goto CATCH_ERROR;
                 }
                 nitf_ListIterator_increment(&iter);
             }
@@ -119,6 +122,11 @@ NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_clone(
                          "Trying to clone NULL pointer");
     }
     return priv;
+
+  CATCH_ERROR:
+    if (priv)
+        nitf_TREPrivateData_destruct(&priv);
+    return NULL;
 }
 
 
@@ -150,7 +158,7 @@ NITFAPI(void) nitf_TREPrivateData_destruct(nitf_TREPrivateData **priv)
                                    NULL, &e);
             /* destruct the hash */
             nitf_HashTable_destruct(&((*priv)->hash));
-            
+
         }
         NITF_FREE(*priv);
         *priv = NULL;
@@ -174,14 +182,40 @@ NITFPROT(NITF_BOOL) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
 
     /* create the hashtable for the fields */
     priv->hash = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
-    
+
     if (!priv->hash)
     {
         nitf_TREPrivateData_destruct(&priv);
         return NITF_FAILURE;
     }
-    
+
     nitf_HashTable_setPolicy(priv->hash, NITF_DATA_ADOPT);
-    
+
+    return NITF_SUCCESS;
+}
+
+
+NITFPROT(NITF_BOOL) nitf_TREPrivateData_setDescriptionName(
+        nitf_TREPrivateData *priv, const char* name, nitf_Error * error)
+{
+    /* if already set, free it */
+    if (priv->descriptionName)
+    {
+        NITF_FREE(priv->descriptionName);
+        priv->descriptionName = NULL;
+    }
+
+    /* copy the description id */
+    if (name)
+    {
+        priv->descriptionName = (char*)NITF_MALLOC(strlen(name) + 1);
+        if (!priv->descriptionName)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                    NITF_CTXT, NITF_ERR_MEMORY);
+            return NITF_FAILURE;
+        }
+        strcpy(priv->descriptionName, name);
+    }
     return NITF_SUCCESS;
 }

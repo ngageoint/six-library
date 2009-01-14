@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -72,7 +72,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * source, nitf_Error * error)
         /* share the handler */
 		tre->handler = source->handler;
         memcpy(tre->tag, source->tag, sizeof(tre->tag));
-        
+
         /* call the handler clone method, if one is defined */
         if (tre->handler && tre->handler->clone)
         {
@@ -104,7 +104,7 @@ NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre)
             /* let the handler destroy the private data */
             (*tre)->handler->destruct(*tre);
         }
-        
+
         NITF_FREE(*tre);
         *tre = NULL;
     }
@@ -123,7 +123,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
         return NULL;
     if (!reg)
         return NULL;
-    
+
     tre->handler= NULL;
     /* if it's not a RAW id, try to load it from the registry */
     if (!id || strcmp(id, NITF_TRE_RAW) != 0)
@@ -138,7 +138,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
         if (!tre->handler)
             return NULL;
     }
-    
+
     if (tre->handler->init && !(tre->handler->init)(tre, id, error))
     {
         nitf_TRE_destruct(&tre);
@@ -172,7 +172,7 @@ NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      const char *tag,
                                      NITF_DATA * data,
                                      size_t dataLength, nitf_Error * error)
-{	
+{
     return tre->handler->setField(tre, tag, data, dataLength, error);
 }
 
@@ -184,4 +184,9 @@ NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre, const char* tag)
 NITFAPI(int) nitf_TRE_getCurrentSize(nitf_TRE* tre, nitf_Error* error)
 {
     return tre->handler->getCurrentSize(tre, error);
+}
+
+NITFAPI(const char*) nitf_TRE_getID(nitf_TRE* tre)
+{
+    return tre->handler->getID(tre);
 }

@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -45,12 +45,14 @@ int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData,
                 int i = 0;
                 nitf_Uint32 treLength;
                 nitf_TREEnumerator* it;
+                const char* treID = NULL;
                 nitf_TRE *tre = (nitf_TRE *) nitf_ListIterator_get(&iter);
-                
+
                 treLength = tre->handler->getCurrentSize(tre, error);
-                
-                printf("\n--------------- %s TRE (%d) ---------------\n",
-                        pair->key, treLength);
+                treID = nitf_TRE_getID(tre);
+
+                printf("\n--------------- %s TRE (%d) - (%s) ---------------\n",
+                        pair->key, treLength, treID ? treID : "null id");
 
                 for (it = nitf_TRE_begin(tre, error); it != NULL; it->next(&it,
                         error) )
@@ -622,7 +624,7 @@ int main(int argc, char **argv)
     /*  This is the reader object  */
     nitf_Reader *reader;
     nitf_Record *record;
-	
+
     /*  The IO handle  */
     nitf_IOHandle io;
     int num;
@@ -633,7 +635,7 @@ int main(int argc, char **argv)
         printf("Usage: %s <nitf-file>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
-	
+
     io = nitf_IOHandle_create(argv[1], NITF_ACCESS_READONLY,
                               NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
@@ -648,7 +650,7 @@ int main(int argc, char **argv)
         nitf_Error_print(&error, stdout, "Exiting (1) ...");
         exit(EXIT_FAILURE);
     }
-   
+
 #if NITF_VERBOSE_READER
     printf("Here are the loaded handlers\n");
     printf("* * * * * * * * * * * * * * * *\n");

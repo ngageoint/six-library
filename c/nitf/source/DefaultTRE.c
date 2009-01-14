@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -32,7 +32,7 @@ NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * erro
     if (!tre->priv)
         return NITF_FAILURE;
 
-    
+
     descr =
         (nitf_TREDescription *) NITF_MALLOC(2 *
                                             sizeof(nitf_TREDescription));
@@ -42,7 +42,7 @@ NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * erro
                         NITF_CTXT, NITF_ERR_MEMORY);
         return NITF_FAILURE;
     }
-    
+
     descr[0].data_type = NITF_BINARY;
     descr[0].data_count = NITF_TRE_GOBBLE;
     descr[0].label = "Unknown raw data";
@@ -51,10 +51,16 @@ NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * erro
     descr[1].data_count = 0;
     descr[1].label = NULL;
     descr[1].tag = NULL;
-    
+
     ((nitf_TREPrivateData*)tre->priv)->description = descr;
 
     return NITF_SUCCESS;
+}
+
+
+NITFPRIV(const char*) defaultGetID(nitf_TRE *tre)
+{
+    return ((nitf_TREPrivateData*)tre->priv)->descriptionName;
 }
 
 
@@ -65,13 +71,13 @@ NITFPRIV(int) defaultRead(nitf_IOHandle io, nitf_Uint32 length, nitf_TRE * tre,
     nitf_TREDescription *descr = NULL;
     char *data = NULL;
     NITF_BOOL success;
-	
+
     if (!tre)
     {
         /* set error ??? */
         goto CATCH_ERROR;
     }
-    
+
     /*  malloc the space for the raw data */
     data = (char *) NITF_MALLOC(length + 1);
     if (!data)
@@ -92,7 +98,7 @@ NITFPRIV(int) defaultRead(nitf_IOHandle io, nitf_Uint32 length, nitf_TRE * tre,
                         NITF_CTXT, NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    
+
     descr[0].data_type = NITF_BINARY;
     descr[0].data_count = length;
     descr[0].label = "Unknown raw data";
@@ -101,11 +107,11 @@ NITFPRIV(int) defaultRead(nitf_IOHandle io, nitf_Uint32 length, nitf_TRE * tre,
     descr[1].data_count = 0;
     descr[1].label = NULL;
     descr[1].tag = NULL;
-    
+
     tre->priv = nitf_TREPrivateData_construct(error);
     if (!tre->priv)
         goto CATCH_ERROR;
-    
+
     ((nitf_TREPrivateData*)tre->priv)->length = length;
     ((nitf_TREPrivateData*)tre->priv)->description = descr;
 
@@ -151,9 +157,9 @@ CATCH_ERROR:
 }
 
 
-NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOHandle io, 
-				 struct _nitf_TRE* tre, 
-				 struct _nitf_Record* record, 
+NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOHandle io,
+				 struct _nitf_TRE* tre,
+				 struct _nitf_Record* record,
 				 nitf_Error* error)
 {
     nitf_Field* field;
@@ -165,7 +171,7 @@ NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOHandle io,
         return NITF_FAILURE;
     }
     field = (nitf_Field*)pair->data;
-    
+
     if (!nitf_IOHandle_write(io, field->raw, field->length, error))
         return NITF_FAILURE;
     return NITF_SUCCESS;
@@ -204,7 +210,7 @@ NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
 		return NITF_FAILURE;
 	}
 	return it;
-	
+
 }
 
 NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
@@ -212,7 +218,7 @@ NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
 				 nitf_Error* error)
 {
     nitf_List* list;
-    
+
     nitf_HashTableIterator it = nitf_HashTable_begin(
             ((nitf_TREPrivateData*)tre->priv)->hash);
     nitf_HashTableIterator end = nitf_HashTable_end(
@@ -242,21 +248,21 @@ NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE * tre,
                                     size_t dataLength, nitf_Error * error)
 {
 	nitf_Field* field = NULL;
-	
+
 	if (strcmp(tag, NITF_TRE_RAW))
 	{
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER, "Invalid param [%s]", tag);
         return NITF_FAILURE;
 	}
-	
+
 	field = nitf_Field_construct(dataLength, NITF_BINARY, error);
     if (!field)
         return NITF_FAILURE;
-    
+
     /* TODO -- likely inefficient, since we end up copying the raw data here */
     if (!nitf_Field_setRawData(field, (NITF_DATA *) data, dataLength, error))
         return NITF_FAILURE;
-        
+
 	if (nitf_HashTable_exists(((nitf_TREPrivateData*)tre->priv)->hash, tag))
 	{
         nitf_Field* oldValue;
@@ -267,11 +273,11 @@ NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE * tre,
         pair->data = field;
         return NITF_SUCCESS;
 	}
-	
+
 	/* reset the lengths in two places */
 	((nitf_TREPrivateData*)tre->priv)->length = dataLength;
 	((nitf_TREPrivateData*)tre->priv)->description[0].data_count = dataLength;
-	
+
 	return nitf_HashTable_insert(((nitf_TREPrivateData*)tre->priv)->hash,
 	        tag, field, error);
 }
@@ -298,19 +304,19 @@ NITFPRIV(NITF_BOOL) defaultClone(nitf_TRE *source,
 {
     nitf_TREPrivateData *sourcePriv = NULL;
     nitf_TREPrivateData *trePriv = NULL;
-    
+
     if (!tre || !source || !source->priv)
         return NITF_FAILURE;
-    
+
     sourcePriv = (nitf_TREPrivateData*)source->priv;
-    
+
     /* this clones the hash */
     if (!(trePriv = nitf_TREPrivateData_clone(sourcePriv, error)))
         return NITF_FAILURE;
-    
+
     /* just copy over the optional length */
     trePriv->length = sourcePriv->length;
-    
+
     /* setup the description how we want it */
     trePriv->description = (nitf_TREDescription *) NITF_MALLOC(
             2 * sizeof(nitf_TREDescription));
@@ -321,7 +327,7 @@ NITFPRIV(NITF_BOOL) defaultClone(nitf_TRE *source,
                         NITF_CTXT, NITF_ERR_MEMORY);
         return NITF_FAILURE;
     }
-    
+
     trePriv->description[0].data_type = NITF_BINARY;
     trePriv->description[0].data_count = sourcePriv->description[0].data_count;
     trePriv->description[0].label = "Unknown raw data";
@@ -330,9 +336,9 @@ NITFPRIV(NITF_BOOL) defaultClone(nitf_TRE *source,
     trePriv->description[1].data_count = 0;
     trePriv->description[1].label = NULL;
     trePriv->description[1].tag = NULL;
-    
+
     tre->priv = trePriv;
-    
+
     return NITF_SUCCESS;
 }
 
@@ -351,6 +357,7 @@ NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error)
     static nitf_TREHandler handler =
     {
         defaultInit,
+        defaultGetID,
         defaultRead,
         defaultSetField,
         defaultGetField,
@@ -362,6 +369,6 @@ NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error)
         defaultDestruct,
         NULL    /* data - We don't need this! */
     };
-    
+
     return &handler;
 }

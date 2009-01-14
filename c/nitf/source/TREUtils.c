@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -42,7 +42,7 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE * tre,
                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
         return NITF_FAILURE;
     }
-    
+
     privData = (nitf_TREPrivateData*)tre->priv;
 
     /* flush the hash first, to protect from duplicate entries */
@@ -50,7 +50,7 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE * tre,
     {
         nitf_TREPrivateData_flush(privData, error);
     }
-    
+
     cursor = nitf_TRECursor_begin(tre);
     while (offset < privData->length && status)
     {
@@ -319,10 +319,10 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
         fprintf(stdout, "Setting (and filling) Field [%s] to TRE [%s]\n",
                 tag, tre->tag);
 #endif
-        
+
         /* Now we need to fill our data */
-        if (!nitf_TREUtils_fillData(tre, 
-                                    ((nitf_TREPrivateData*)tre->priv)->description, 
+        if (!nitf_TREUtils_fillData(tre,
+                                    ((nitf_TREPrivateData*)tre->priv)->description,
                                     error))
             return NITF_FAILURE;
 
@@ -429,23 +429,31 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setDescription(nitf_TRE* tre,
                 NITF_CTXT, NITF_ERR_INVALID_OBJECT);
         return NITF_FAILURE;
     }
-    
+
     tre->priv = NULL;
-    
+
     infoPtr = descriptions->descriptions;
     while (infoPtr && (infoPtr->description != NULL))
     {
         if (numDescriptions == descriptions->defaultIndex)
         {
-            tre->priv = nitf_TREPrivateData_construct(error);
-            if (!tre->priv)
+            nitf_TREPrivateData *priv = nitf_TREPrivateData_construct(error);
+            if (!priv)
             {
                 return NITF_FAILURE;
             }
-            
-            ((nitf_TREPrivateData*)tre->priv)->length = length;
-            ((nitf_TREPrivateData*)tre->priv)->description =
-                    infoPtr->description;
+
+            priv->length = length;
+            priv->description = infoPtr->description;
+
+            if (!nitf_TREPrivateData_setDescriptionName(
+                    priv, infoPtr->name, error))
+            {
+                nitf_TREPrivateData_destruct(&priv);
+                return NITF_FAILURE;
+            }
+
+            tre->priv = priv;
             break;
         }
         numDescriptions++;
@@ -458,7 +466,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setDescription(nitf_TRE* tre,
                 NITF_CTXT, NITF_ERR_INVALID_OBJECT);
         return NITF_FAILURE;;
     }
-    
+
     return NITF_SUCCESS;
 }
 
@@ -469,7 +477,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
     nitf_TRECursor cursor;
 
     /* set the description so the cursor can use it */
-    ((nitf_TREPrivateData*)tre->priv)->description = 
+    ((nitf_TREPrivateData*)tre->priv)->description =
         (nitf_TREDescription*)descrip;
 
     /* loop over the description, and add blank fields for the
@@ -487,7 +495,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
             {
                 nitf_Field* field = NULL;
                 int fieldLength = cursor.length;
-                
+
                 /* If it is a GOBBLE length, there isn't really a standard
                  * on how long it can be... therefore we'll just throw in
                  * a field of size 1, just to have something...
@@ -496,11 +504,11 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
                 {
                     fieldLength = 1;
                 }
-                
+
                 field = nitf_Field_construct(fieldLength,
                         cursor.desc_ptr->data_type,
                         error);
-                
+
                 /* set the field to be resizable later on */
                 if (cursor.length == NITF_TRE_GOBBLE)
                     field->resizable = 1;
@@ -531,7 +539,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
                     /* this will get zero/blank filled by the function */
                     nitf_Field_setString(field, " ", error);
                 }
-                
+
                 /* add to hash if there wasn't an entry yet */
                 if (!pair)
                 {
@@ -552,7 +560,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
     /* no problems */
     /*    return tre->descrip; */
     return NITF_SUCCESS;
-  
+
   CATCH_ERROR:
     return NITF_FAILURE;
 }
@@ -671,11 +679,11 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOHandle ioHandle, nitf_Uint32 length,
 
     if (!tre)
         return NITF_FAILURE;
-    
+
     /* set the description/length */
     /*nitf_TREUtils_setDescription(tre, length, error);*/
-    
-    /*if (!tre->descrip) goto CATCH_ERROR;*/ 
+
+    /*if (!tre->descrip) goto CATCH_ERROR;*/
     data = (char*)NITF_MALLOC( length );
     if (!data)
     {
@@ -688,19 +696,19 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOHandle ioHandle, nitf_Uint32 length,
         NITF_FREE(data);
         return NITF_FAILURE;
     }
-    
+
     descriptions = (nitf_TREDescriptionSet*)tre->handler->data;
 
     if (!descriptions)
     {
         nitf_Error_init(error, "TRE Description Set is NULL",
                         NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-        
+
         NITF_FREE(data);
         return NITF_FAILURE;
     }
-    
-    tre->priv = NULL; 
+
+    tre->priv = NULL;
     infoPtr = descriptions->descriptions;
     tre->priv = nitf_TREPrivateData_construct(error);
     ((nitf_TREPrivateData*)tre->priv)->length = length;
@@ -712,7 +720,6 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOHandle ioHandle, nitf_Uint32 length,
         {
             break;
         }
-            
 
         ((nitf_TREPrivateData*)tre->priv)->description = infoPtr->description;
 #ifdef NITF_DEBUG
@@ -721,15 +728,27 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOHandle ioHandle, nitf_Uint32 length,
         ok = nitf_TREUtils_parse(tre, data, error);
         if (ok)
         {
+            nitf_TREPrivateData *priv = (nitf_TREPrivateData*)tre->priv;
+            /* copy the name */
+            if (!nitf_TREPrivateData_setDescriptionName(
+                    priv, infoPtr->name, error))
+            {
+                /* something bad happened... so we need to cleanup */
+                NITF_FREE(data);
+                nitf_TREPrivateData_destruct(&priv);
+                tre->priv = NULL;
+                return NITF_FAILURE;
+            }
+
             /*nitf_HashTable_print( ((nitf_TREPrivateData*)tre->priv)->hash );*/
             break;
         }
 
         infoPtr++;
     }
-    
 
-  
+
+
     if (data) NITF_FREE(data);
     return ok;
 }
@@ -738,22 +757,23 @@ NITFPRIV(NITF_BOOL) basicInit(nitf_TRE * tre, const char* id, nitf_Error * error
 {
     nitf_TREDescriptionSet* set = NULL;
     nitf_TREDescriptionInfo* descInfo = NULL;
+    nitf_TREPrivateData *priv = NULL;
     NITF_BOOL found = 0;
-    
+
     assert(tre);
 
     set = (nitf_TREDescriptionSet*)tre->handler->data;
-    
+
     /* create a new private data struct */
-    tre->priv = nitf_TREPrivateData_construct(error);
-    if (!tre->priv)
+    priv = nitf_TREPrivateData_construct(error);
+    if (!priv)
         return NITF_FAILURE;
 
     /* search for the description with the given ID - if one was provided */
     if (id)
     {
         descInfo = set->descriptions;
-        
+
         while(descInfo && descInfo->name && !found)
         {
             if (strcmp(descInfo->name, id) == 0)
@@ -766,7 +786,7 @@ NITFPRIV(NITF_BOOL) basicInit(nitf_TRE * tre, const char* id, nitf_Error * error
                 descInfo++;
             }
         }
-        
+
         /* if we couldn't find it, we get out of here... */
         if (!found)
         {
@@ -782,7 +802,19 @@ NITFPRIV(NITF_BOOL) basicInit(nitf_TRE * tre, const char* id, nitf_Error * error
          */
         descInfo = set->descriptions;
     }
-    
+
+    /* set the name */
+    if (!nitf_TREPrivateData_setDescriptionName(
+            priv, descInfo->name, error))
+    {
+        nitf_TREPrivateData_destruct(&priv);
+        tre->priv = NULL;
+        return NITF_FAILURE;
+    }
+
+    /* assign it to the TRE */
+    tre->priv = priv;
+
     /* try to fill the TRE */
     if (nitf_TREUtils_fillData(tre, descInfo->description, error))
         return NITF_SUCCESS;
@@ -807,6 +839,11 @@ NITFPRIV(int) basicGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
     return nitf_TREUtils_computeLength(tre);
 }
 
+NITFPRIV(const char*) basicGetID(nitf_TRE *tre)
+{
+    return ((nitf_TREPrivateData*)tre->priv)->descriptionName;
+}
+
 
 NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
                                nitf_TRE *tre,
@@ -814,22 +851,22 @@ NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
 {
     nitf_TREPrivateData *sourcePriv = NULL;
     nitf_TREPrivateData *trePriv = NULL;
-    
+
     if (!tre || !source || !source->priv)
         return NITF_FAILURE;
-    
+
     sourcePriv = (nitf_TREPrivateData*)source->priv;
-    
+
     /* this clones the hash */
     if (!(trePriv = nitf_TREPrivateData_clone(sourcePriv, error)))
         return NITF_FAILURE;
-    
+
     /* just copy over the optional length and static description */
     trePriv->length = sourcePriv->length;
     trePriv->description = sourcePriv->description;
-    
+
     tre->priv = (NITF_DATA*)trePriv;
-    
+
     return NITF_SUCCESS;
 }
 
@@ -850,7 +887,7 @@ NITFPRIV(nitf_List*) basicFind(nitf_TRE* tre,
                                nitf_Error* error)
 {
     nitf_List* list;
-    
+
     nitf_HashTableIterator it = nitf_HashTable_begin(
             ((nitf_TREPrivateData*)tre->priv)->hash);
     nitf_HashTableIterator end = nitf_HashTable_end(
@@ -935,7 +972,7 @@ NITFPRIV(nitf_TREEnumerator*) basicBegin(nitf_TRE* tre, nitf_Error* error)
         (nitf_TRECursor*)NITF_MALLOC(sizeof(nitf_TRECursor));
     *cursor = nitf_TRECursor_begin(tre);
     assert(nitf_TRECursor_iterate(cursor, error));
-    
+
     it->data = cursor;
     it->next = basicIncrement;
     it->get = basicGet;
@@ -946,6 +983,7 @@ NITFPRIV(nitf_TREEnumerator*) basicBegin(nitf_TRE* tre, nitf_Error* error)
 NITFAPI(nitf_TREHandler*) nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSet* set, nitf_TREHandler *handler,nitf_Error* error)
 {
     handler->init = basicInit;
+    handler->getID = basicGetID;
     handler->read = basicRead;
     handler->setField = basicSetField;
     handler->getField = basicGetField;

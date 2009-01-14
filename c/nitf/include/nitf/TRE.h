@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -32,7 +32,7 @@
 
 /*!
  * Pass this into the id of nitf_TRE_construct to bypass the plug-in registry,
- * yet still create the TRE type expected. 
+ * yet still create the TRE type expected.
  */
 #define NITF_TRE_RAW "raw_data"
 
@@ -136,6 +136,14 @@ typedef NITF_BOOL (*NITF_TRE_INIT) (nitf_TRE* tre,
                                     nitf_Error * error);
 
 /*!
+ * Retrieves the id of the TRE. This could be the same value as the TRE tag,
+ * any other identifier, or NULL.
+ * \param tre       The TRE
+ * \return          the ID, or NULL of no ID is set
+ */
+typedef const char* (*NITF_TRE_ID_GET) (nitf_TRE* tre);
+
+/*!
  * Read data from the given IOHandle, parsing it however the plug-in desires.
  * \param io        The IOHandle we are reading from
  * \param length    The length of the TRE (i.e. # of bytes to read)
@@ -164,7 +172,7 @@ typedef nitf_List* (*NITF_TRE_FIND)(nitf_TRE * tre,
 
 
 /*!
- * Sets a field in the given TRE. It is up to the plug-in to 
+ * Sets a field in the given TRE. It is up to the plug-in to
  * \param tre           The associated TRE
  * \param tag           The name of the field
  * \param data          The data (void*) to set the field to
@@ -188,7 +196,7 @@ typedef nitf_Field* (*NITF_TRE_FIELD_GET)(nitf_TRE * tre,
                                           const char *tag);
 
 /*!
- * Sets a field in the given TRE. It is up to the plug-in to 
+ * Sets a field in the given TRE. It is up to the plug-in to
  * \param io        The IOHandle to write to
  * \param tre       The associated TRE to write
  * \param record    The associated Record object
@@ -201,7 +209,7 @@ typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle io,
                                      nitf_Error *error);
 
 /*!
- * Returns the current size of the TRE. 
+ * Returns the current size of the TRE.
  * \param tre       The associated TRE
  * \param error     The error object
  * \return          The size of the TRE, or -1 if an error occurred
@@ -209,7 +217,7 @@ typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle io,
 typedef int (*NITF_TRE_SIZE)(nitf_TRE *tre, nitf_Error *error);
 
 /*!
- * Sets a field in the given TRE. It is up to the plug-in to 
+ * Sets a field in the given TRE. It is up to the plug-in to
  * \param source    The source TRE to clone
  * \param dest      The destination TRE, where the source will be cloned to
  * \param error     The error object
@@ -221,13 +229,13 @@ typedef NITF_BOOL (*NITF_TRE_CLONE)(nitf_TRE *source,
 
 /*!
  * Destroy any internal data associated with the given TRE. You should not
- * destroy the TRE. It will be deleted by the library. 
+ * destroy the TRE. It will be deleted by the library.
  * \param tre       The associated TRE
  */
 typedef void (*NITF_TRE_DESTRUCT)(nitf_TRE*);
 
 /*!
- * Returns a nitf_TREEnumerator for the TRE 
+ * Returns a nitf_TREEnumerator for the TRE
  * \param tre       The associated TRE
  * \param error     The error object
  * \return          an enumerator, or NULL if an error occurred
@@ -239,50 +247,57 @@ typedef nitf_TREEnumerator* (*NITF_TRE_ITERATOR)(nitf_TRE *tre,
 
 /*!
  * \brief The TRE Handler Interface
- * 
+ *
  * This interface should be fulfilled by any plug-in that wants to handle a TRE.
  * View the documentation above for each of the methods below.
  * In addition to the methods, there is an optional data field (of type
  * NITF_DATA*) which allows the plug-in to store data associated with the
  * Handler.
- * 
+ *
  */
 typedef struct _nitf_TREHandler
 {
     /* The init method gets called when creating a TRE from scratch */
     NITF_TRE_INIT init;
-    
+
+    /* Get the name/id of the TRE. This is NOT the tag, however it may be the
+     * same value as the tag. The id is used to identify a specific
+     * version/incarnation of the TRE, if multiple are possible. For most TREs,
+     * this value will be the same as the tag.
+     */
+    NITF_TRE_ID_GET getID;
+
     /* The read method gets called when reading a TRE from an IOHandle */
     NITF_TRE_READER read;
-    
+
     /* setField is called by the setField proxy of the TRE API */
     NITF_TRE_FIELD_SET setField;
-    
+
     /* getField is called by the getField proxy of the TRE API */
     NITF_TRE_FIELD_GET getField;
-    
+
     /* find is called by the find proxy of the TRE API */
     NITF_TRE_FIND find;
-    
+
     /* write gets called when writing the TRE to an output IOHandle */
     NITF_TRE_WRITER write;
-    
+
     /* begin is called by the begin proxy of the TRE API */
     NITF_TRE_ITERATOR begin;
-    
+
     /* getCurrentSize is called by the getCurrentSize proxy of the TRE API */
     NITF_TRE_SIZE getCurrentSize;
-    
+
     /* clone is called when a TRE is cloned */
     NITF_TRE_CLONE clone;
-    
+
     /*
      * destruct is called when a TRE is destroyed - NOT when the handler is.
      * destruct is an optional operation and doesn't need to be provided by
      * plug-in implementations
      */
     NITF_TRE_DESTRUCT destruct;
-    
+
     /* optional data that contains handler-wide data for supporting TREs of
      * the type that the plug-in handles
      */
@@ -306,9 +321,10 @@ NITFPROT(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
 
 /*!
  *  Construct an actual TRE (for users of the library)
- *  \param tag Name of TRE
- *  \param desc a description structure, or if null, uses default for name
- *  \param error Error to populate if something bad happens
+ *  \param tag      Name of TRE
+ *  \param id       Optional identifier used to specify a specific
+ *                  version/incarnation of the TRE (if several are possible).
+ *  \param error    Error to populate if something bad happens
  *  \return A new TRE or NULL on failure
  */
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
@@ -362,7 +378,7 @@ NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      NITF_DATA * data,
                                      size_t dataLength,
                                      nitf_Error * error);
-		   
+
 /*!
  *  This function retrieves all fields that match the pattern.  Exactly
  *  how and what patterns are supported is up to the plug-in -- here
@@ -387,7 +403,7 @@ NITFAPI(nitf_List*) nitf_TRE_find(nitf_TRE* tre,
 
 
 /*!
- * 
+ *
  *  Gets a field by its (exact) name.  The retrieval is here for basic
  *  symmetry and to prevent the application developer from playing with
  *  the model directly.  We really want them to have an opaque view of
@@ -408,6 +424,14 @@ NITFAPI(nitf_TREEnumerator*) nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error);
 
 
 NITFAPI(int) nitf_TRE_getCurrentSize(nitf_TRE* tre, nitf_Error* error);
+
+/*!
+ * Returns the ID of the TRE. This is optional and is allowed to be NULL. The
+ * ID is only useful when you want to identify how the TRE is structured.
+ * Depending on how the TRE is created (via its handler), this name/ID can
+ * be used to keep track of its origin.
+ */
+NITFAPI(const char*) nitf_TRE_getID(nitf_TRE* tre);
 
 
 NITF_CXX_ENDGUARD

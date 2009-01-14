@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -37,6 +37,7 @@ NITF_CXX_GUARD
 typedef struct _nitf_TREPrivateData
 {
     nitf_Uint32 length;
+    char* descriptionName;   /* the name/ID of the TREDescription */
     nitf_TREDescription* description;
     nitf_HashTable *hash;
     NITF_DATA *userData;    /*! user-defined - meant for extending this */
@@ -53,6 +54,10 @@ NITFAPI(void) nitf_TREPrivateData_destruct(nitf_TREPrivateData **priv);
 
 NITFPROT(NITF_BOOL) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
                                               nitf_Error * error);
+
+NITFPROT(NITF_BOOL) nitf_TREPrivateData_setDescriptionName(
+        nitf_TREPrivateData *priv, const char* name, nitf_Error * error);
+
 
 
 NITF_CXX_ENDGUARD
