@@ -60,7 +60,8 @@ NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * erro
 
 NITFPRIV(const char*) defaultGetID(nitf_TRE *tre)
 {
-    return ((nitf_TREPrivateData*)tre->priv)->descriptionName;
+    /* always return raw - since it is a raw description */
+    return NITF_TRE_RAW;
 }
 
 
