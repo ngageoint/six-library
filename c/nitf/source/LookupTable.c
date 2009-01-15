@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -37,15 +37,11 @@ NITFAPI(nitf_LookupTable *) nitf_LookupTable_construct(nitf_Uint32 tables,
         return NULL;
     }
 
-    lt->tables = tables;
-    lt->entries = entries;
-    lt->table = (unsigned char *) NITF_MALLOC(tables * entries);
-
-    if (!lt->table)
+    lt->table = NULL;
+    if (!nitf_LookupTable_init(lt, tables, entries, NULL, error))
     {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
         nitf_LookupTable_destruct(&lt);
+        lt = NULL;
     }
 
     return lt;
@@ -118,19 +114,22 @@ NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
     lut->tables = numTables;
     lut->entries = numEntries;
 
-    /*   Make a copy of the tables */
-
-    lut->table =
-        (nitf_Uint8 *) NITF_MALLOC(numTables * numEntries *
-                                   sizeof(nitf_Uint8));
-    if (lut->table == NULL)
+    /* only create the table data if we really should */
+    if (numTables > 0 && numEntries > 0)
     {
-        nitf_Error_initf(error, NITF_CTXT,
-                         NITF_ERR_MEMORY,
-                         "Error allocating look-up table");
-        return (NITF_FAILURE);
+        lut->table = (nitf_Uint8 *) NITF_MALLOC(numTables * numEntries);
+        if (!lut->table)
+        {
+            nitf_Error_initf(error, NITF_CTXT,
+                             NITF_ERR_MEMORY,
+                             "Error allocating look-up table");
+            return NITF_FAILURE;
+        }
+        /* only copy if one existed */
+        if (tables)
+        {
+            memcpy(lut->table, tables, numTables * numEntries);
+        }
     }
-
-    memcpy(lut->table, tables, numTables * numEntries);
-    return (NITF_SUCCESS);
+    return NITF_SUCCESS;
 }
