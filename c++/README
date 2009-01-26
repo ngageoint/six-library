@@ -1,0 +1,21 @@
+This directory contains the NITRO C++ bindings.
+
+This code depends on 4 external dependencies, all from the open source CODAForge repository. These dependencies are:
+
+- except : common exceptions
+- str    : string utilities
+- sys    : system utilities
+- mt     : threading
+
+The bindings obviously also require the NITRO C headers and library. For now, we do not have a driver that will automatically build it for you. Instead, we just include the c/nitf directory in the includes/libpath. In the future, we may provide a driver that builds the C library. Note that this means you should configure both the C and C++ libraries the same. For example, if you want a 64-bit build, make sure to pass the --enable-64bit flag to both configures.
+
+Below is an example of how to build:
+
+% cd trunk/c
+% ./configure --enable-debugging
+% make
+% cd ../c++
+% ./configure --enable-debugging
+% make
+
+
