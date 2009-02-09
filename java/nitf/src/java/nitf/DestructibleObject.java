@@ -67,9 +67,17 @@ public abstract class DestructibleObject extends NITFObject
 
     /**
      * Attempts to destruct the underlying object, if it is not referenced
-     * elsewhere
+     * elsewhere.
+     * 
+     * Note: This method is public in order to give you more control of the
+     * underlying memory. The garbage collector doesn't always finalize all
+     * objects that go out of scope, so publicizing this could be useful.
+     * 
+     * If you try to access the object after it's underlying object has been
+     * destroyed, you could be sunk. Call isValid() to see if it is still a
+     * valid object.
      */
-    protected void destruct()
+    public void destruct()
     {
         NITFResourceManager.getInstance().decrementRefCount(this);
     }
