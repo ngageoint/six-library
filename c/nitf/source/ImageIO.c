@@ -863,8 +863,8 @@ NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf, nitf_ImageSubheader
  * This is called when:
  * - the user requests to read data, but does not want it in the RGB24 or IQ single-band format
  * - the user writes data
- * \param nitfI		the ImageIO structure
- * \param numBands	the number of bands (when reading), or 0 when writing.
+ * \param nitfI        the ImageIO structure
+ * \param numBands    the number of bands (when reading), or 0 when writing.
  */
 NITFPROT(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBands);
 
@@ -3381,32 +3381,34 @@ NITFPROT(void) nitf_BlockingInfo_print(nitf_BlockingInfo * info,
 
 NITFPROT(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBands)
 {
-	if (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_RGB24 &&
-		(numBands == 3 || numBands == 0))
-	{
-		numBands = 3;
-		/* revert to normal 'P' mode */
-		nitfI->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_P;
+    if (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_RGB24 &&
+        (numBands == 3 || numBands == 0))
+    {
+        numBands = 3;
+        /* revert to normal 'P' mode */
+        nitfI->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_P;
         nitfI->vtbl.setup = nitf_ImageIO_setup_P;
         nitfI->vtbl.done = nitf_ImageIO_setup_P;
         nitfI->numBands = numBands;
         nitfI->pixel.bytes /= numBands;
         /* reset the unpack functions */
         nitf_ImageIO_setUnpack(nitfI);
-	}
-	else if (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_IQ &&
-		(numBands == 2 || numBands == 0))
-	{
-		numBands = 2;
-		/* revert to normal 'P' mode */
-		nitfI->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_P;
+    }
+    else if (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_IQ &&
+        (numBands == 2 || numBands == 0))
+    {
+        numBands = 2;
+        /* revert to normal 'P' mode */
+        nitfI->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_P;
         nitfI->vtbl.setup = nitf_ImageIO_setup_P;
         nitfI->vtbl.done = nitf_ImageIO_setup_P;
         nitfI->numBands = numBands;
         nitfI->pixel.bytes /= numBands;
         /* reset the unpack functions */
         nitf_ImageIO_setUnpack(nitfI);
-	}
+        if (nitfI->vtbl.unformat)
+            nitfI->vtbl.unformat = nitf_ImageIO_swapOnly_4;
+    }
 }
 
 /*======================== nitf_ImageIO_decodeModes ==========================*/
@@ -3497,40 +3499,45 @@ NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
     }
     else if (blockingMode[0] == 'P')
     {
-    	if (nitf->numBands == 3
-    		&& strncmp("RGB", subhdr->imageRepresentation->raw, 3) == 0
-    		&& nitf->pixel.bytes == 1
-    		&& (nitf->compression
-    			& (NITF_IMAGE_IO_COMPRESSION_NC
-    				| NITF_IMAGE_IO_COMPRESSION_NM)))
-    	{
-    		nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_RGB24;
-    		/* now, we fake the nbands and bytes */
-    		nitf->pixel.bytes *= nitf->numBands;
-    		nitf->numBands = 1;
-	        nitf->vtbl.setup = nitf_ImageIO_setup_SBR;
-	        nitf->vtbl.done = nitf_ImageIO_setup_SBR;
-    	}
-    	else if (nitf->numBands == 2
-    		&& ((subhdr->bandInfo[0]->subcategory->raw[0] == 'I'
-    			&& subhdr->bandInfo[1]->subcategory->raw[0] == 'Q'))
-    		&& (nitf->compression
-    			& (NITF_IMAGE_IO_COMPRESSION_NC
-    				| NITF_IMAGE_IO_COMPRESSION_NM)))
-    	{
-    		nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_IQ;
-    		/* now, we fake the nbands and bytes */
-    		nitf->pixel.bytes *= nitf->numBands;
-    		nitf->numBands = 1;
-	        nitf->vtbl.setup = nitf_ImageIO_setup_SBR;
-	        nitf->vtbl.done = nitf_ImageIO_setup_SBR;
-    	}
-    	else
-    	{
-    		nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_P;
-	        nitf->vtbl.setup = nitf_ImageIO_setup_P;
-	        nitf->vtbl.done = nitf_ImageIO_setup_P;
-    	}
+        if (nitf->numBands == 3
+            && strncmp("RGB", subhdr->imageRepresentation->raw, 3) == 0
+            && nitf->pixel.bytes == 1
+            && (nitf->compression
+                & (NITF_IMAGE_IO_COMPRESSION_NC
+                    | NITF_IMAGE_IO_COMPRESSION_NM)))
+        {
+            nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_RGB24;
+            /* now, we fake the nbands and bytes */
+            nitf->pixel.bytes *= nitf->numBands;
+            nitf->numBands = 1;
+            nitf->vtbl.setup = nitf_ImageIO_setup_SBR;
+            nitf->vtbl.done = nitf_ImageIO_setup_SBR;
+        }
+        else if (nitf->numBands == 2
+            && ((subhdr->bandInfo[0]->subcategory->raw[0] == 'I'
+                && subhdr->bandInfo[1]->subcategory->raw[0] == 'Q'))
+            && (nitf->compression
+                & (NITF_IMAGE_IO_COMPRESSION_NC
+                    | NITF_IMAGE_IO_COMPRESSION_NM)))
+        {
+            nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_IQ;
+            /* now, we fake the nbands and bytes */
+            nitf->pixel.bytes *= nitf->numBands;
+            nitf->numBands = 1;
+            nitf->vtbl.setup = nitf_ImageIO_setup_SBR;
+            nitf->vtbl.done = nitf_ImageIO_setup_SBR;
+            /* changing the unformat will only matters on LE systems
+             * this is required to do proper byte-swapping
+             */
+            if (nitf->vtbl.unformat)
+                nitf->vtbl.unformat = nitf_ImageIO_swapOnly_8c;
+        }
+        else
+        {
+            nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_P;
+            nitf->vtbl.setup = nitf_ImageIO_setup_P;
+            nitf->vtbl.done = nitf_ImageIO_setup_P;
+        }
 
         nitf->oneBand = 0;
         nitf->vtbl.reader = NULL;
@@ -5446,11 +5453,11 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
                    & (NITF_IMAGE_IO_COMPRESSION_NC |
                       NITF_IMAGE_IO_COMPRESSION_NM));
 
-	oneReadRGB = (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_RGB24)
-		&& (nitfI->nBlocksPerColumn == 1) && all;
+    oneReadRGB = (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_RGB24)
+        && (nitfI->nBlocksPerColumn == 1) && all;
 
-	oneReadIQ = (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_IQ)
-		&& (nitfI->nBlocksPerColumn == 1) && all;
+    oneReadIQ = (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_IQ)
+        && (nitfI->nBlocksPerColumn == 1) && all;
 
 
     /*      Actually, its one read per band */
