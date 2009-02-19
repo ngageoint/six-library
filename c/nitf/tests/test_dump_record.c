@@ -44,7 +44,7 @@ int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData,
             {
                 int i = 0;
                 nitf_Uint32 treLength;
-                nitf_TREEnumerator* it;
+                nitf_TREEnumerator* it = NULL;
                 const char* treID = NULL;
                 nitf_TRE *tre = (nitf_TRE *) nitf_ListIterator_get(&iter);
 
@@ -54,13 +54,11 @@ int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData,
                 printf("\n--------------- %s TRE (%d) - (%s) ---------------\n",
                         pair->key, treLength, treID ? treID : "null id");
 
-                for (it = nitf_TRE_begin(tre, error); it != NULL; it->next(&it,
-                        error) )
+                it = nitf_TRE_begin(tre, error);
+                while(it && it->hasNext(&it))
                 {
-                    nitf_Pair* fieldPair;
+                    nitf_Pair* fieldPair = it->next(it, error);
                     i++;
-
-                    fieldPair = it->get(it, error);
                     if (fieldPair)
                     {
                         printf("%s = [", fieldPair->key);
@@ -75,7 +73,6 @@ int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData,
                 }
                 printf("---------------------------------------------\n");
                 nitf_ListIterator_increment(&iter);
-
             }
         }
     }

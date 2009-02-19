@@ -178,31 +178,41 @@ NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOHandle io,
     return NITF_SUCCESS;
 }
 
-NITFPRIV(NITF_BOOL) defaultNullIncrement(nitf_TREEnumerator** it, nitf_Error* error)
+NITFPRIV(nitf_Pair*) defaultIncrement(nitf_TREEnumerator* it, nitf_Error* error)
 {
-	NITF_FREE(*it);
-	*it = NULL;
-	return NITF_SUCCESS;
+    nitf_Pair* data = it ? (nitf_Pair*)it->data : NULL;
+    if (!it)
+        nitf_Error_init(error, "Null iterator!", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+    it->data = NULL; /* set to NULL, since we only have one value */
+    return data;
 }
 
-NITFPRIV(nitf_Pair*) defaultGet(struct _nitf_TREEnumerator* iter, nitf_Error* error)
+NITFPRIV(NITF_BOOL) defaultHasNext(nitf_TREEnumerator** it)
 {
-	if (!iter)
-	{
-		nitf_Error_init(error, "Null iterator!", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
-		return NULL;
-	}
-	return (nitf_Pair*)iter->data;
+    if (it && *it)
+    {
+        if ((*it)->data)
+        {
+            /* next hasn't been called yet */
+            return NITF_SUCCESS;
+        }
+        else
+        {
+            /* next was already called once */
+            NITF_FREE(*it);
+            *it = NULL;
+            return NITF_FAILURE;
+        }
+    }
+    return NITF_FAILURE;
 }
-
-
 
 NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
 {
 	nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
 	/* Check rv here */
-	it->next = defaultNullIncrement;
-	it->get = defaultGet;
+	it->next = defaultIncrement;
+	it->hasNext = defaultHasNext;
 	it->data = nitf_HashTable_find(((nitf_TREPrivateData*)tre->priv)->hash,
 	        NITF_TRE_RAW);
 	if (it->data == NULL)

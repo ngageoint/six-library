@@ -45,7 +45,7 @@ namespace nitf
 class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
 {
 public:
-    TREFieldIterator()
+    TREFieldIterator() : mPair(NULL)
     {
         setNative(NULL);
     }
@@ -56,33 +56,40 @@ public:
     TREFieldIterator(const TREFieldIterator & x)
     {
         setNative(x.getNative());
+        increment();
     }
 
     //! Assignment Operator
     TREFieldIterator & operator=(const TREFieldIterator & x)
     {
         if (&x != this)
+        {
             setNative(x.getNative());
+            mPair = x.mPair;
+        }
         return *this;
     }
 
     //! Set native object
-    TREFieldIterator(nitf_TREEnumerator * x)
+    TREFieldIterator(nitf_TREEnumerator * x) : mPair(NULL)
     {
         setNative(x);
         getNativeOrThrow();
+        increment();
     }
 
     TREFieldIterator(NITF_DATA * x)
     {
         setNative((nitf_TREEnumerator*)x);
         getNativeOrThrow();
+        increment();
     }
 
     TREFieldIterator & operator=(NITF_DATA * x)
     {
         setNative((nitf_TREEnumerator*)x);
         getNativeOrThrow();
+        increment();
         return *this;
     }
 
@@ -93,7 +100,11 @@ public:
      */
     bool operator==(const nitf::TREFieldIterator& it2)
     {
-        return getNative() == it2.getNative();
+        //need to do this double-check so that the last iteration of an iterator
+        //doesn't get skipped
+        if (getNative() == it2.getNative())
+            return mPair == it2.mPair;
+        return false;
     }
 
     bool operator!=(const nitf::TREFieldIterator& it2)
@@ -106,12 +117,12 @@ public:
      */
     void increment()
     {
-        if (isValid())
-        {
-            nitf_TREEnumerator* enumerator = getNative();
-            enumerator->next(&enumerator, &error);
-            setNative(enumerator);
-        }
+        nitf_TREEnumerator* enumerator = getNative();
+        if (isValid() && enumerator->hasNext(&enumerator))
+            mPair = enumerator->next(enumerator, &error);
+        else
+            mPair = NULL;
+        setNative(enumerator); //always reset, in case it got destroyed
     }
 
     //! Increment the iterator (postfix)
@@ -129,27 +140,14 @@ public:
     //! Get the TRE from the iterator
     nitf::Pair operator*()
     {
-        return get();
-    }
-
-    /*!
-     *  Get the TRE from the iterator
-     */
-    nitf::Pair get()
-    {
-        if (!isValid())
+        if (!mPair)
             throw except::NullPointerReference();
-
-        nitf_TREEnumerator* enumerator = getNative();
-        nitf_Pair *pair = enumerator->get(enumerator, &error);
-
-        if (pair)
-            return nitf::Pair(pair);
-        throw except::NullPointerReference();
+        return nitf::Pair(mPair);
     }
 
 private:
     nitf_Error error;
+    nitf_Pair *mPair;
 };
 
 

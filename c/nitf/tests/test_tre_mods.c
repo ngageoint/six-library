@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -29,19 +29,17 @@ int showTRE(nitf_TRE* tre)
     int i = 0;
     nitf_Uint32 treLength;
     nitf_TREEnumerator* it;
-    
+
     treLength = tre->handler->getCurrentSize(tre, &error);
-    
+
     printf("\n--------------- %s TRE (%d) ---------------\n",
            tre->tag, treLength);
-    
-    for (it = nitf_TRE_begin(tre, &error); 
-         it != NULL; it->next(&it, &error) )
+
+    it = nitf_TRE_begin(tre, &error);
+    while(it && it->hasNext(&it))
     {
-        nitf_Pair* fieldPair;
+        nitf_Pair* fieldPair = it->next(it, &error);
         i++;
-        
-        fieldPair = it->get(it, &error);
         if (fieldPair)
         {
             printf("%s = [", fieldPair->key);
@@ -52,7 +50,6 @@ int showTRE(nitf_TRE* tre)
         {
             printf("ERROR, no field found!\n");
         }
-        
     }
     return 1;
 }
@@ -125,7 +122,7 @@ NITF_BOOL testIncompleteCondMod(nitf_Error* error)
     {
         return NITF_FAILURE;
     }
-    
+
 
     /* print the TRE. should print the value now */
     printf("After Mods\n");
@@ -228,9 +225,9 @@ NITF_BOOL testSize(nitf_Error* error)
         nitf_Error_print(error, stdout, "Exiting...");
         return NITF_FAILURE;
     }
-    
+
     treLength = tre->handler->getCurrentSize(tre, error);
-    
+
     printf("Computed TRE Length = %d\n", treLength);
 
     /* destruct the TRE */
@@ -282,7 +279,7 @@ int main(int argc, char **argv)
     }
 
 
-    /* TODO: this *is* important, but in order to continue 
+    /* TODO: this *is* important, but in order to continue
        other test, I need to block it out for now */
 
     /* now, let's try to construct based on a description set
@@ -298,7 +295,7 @@ int main(int argc, char **argv)
             infoPtr++;
         }
         printf("Found %d descriptions for ACFTA\n", numDescriptions);
-        
+
         infoPtr = descriptions->descriptions;
         while (infoPtr && (infoPtr->description != NULL))
         {

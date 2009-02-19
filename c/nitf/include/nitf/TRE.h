@@ -99,22 +99,21 @@ typedef struct _nitf_TRE
 struct _nitf_TREEnumerator;
 
 /*!
- * Increments the TREEnumerator
+ * Increments the TREEnumerator and returns the data
  */
-typedef NITF_BOOL (*NITF_TRE_ITERATOR_INCREMENT)(struct _nitf_TREEnumerator**,
+typedef nitf_Pair* (*NITF_TRE_ITERATOR_INCREMENT)(struct _nitf_TREEnumerator*,
                                                  nitf_Error*);
 
 /*!
- * Gets a pointer to the nitf_Pair at the current location of the TRE Enumerator
+ * Returns a boolean stating whether or not the enumerator has more elements
  */
-typedef nitf_Pair* (*NITF_TRE_ITERATOR_GET)(struct _nitf_TREEnumerator*,
-                                            nitf_Error*);
+typedef NITF_BOOL (*NITF_TRE_ITERATOR_HAS_NEXT)(struct _nitf_TREEnumerator**);
 
 
 typedef struct _nitf_TREEnumerator
 {
 	NITF_TRE_ITERATOR_INCREMENT next;
-	NITF_TRE_ITERATOR_GET get;
+	NITF_TRE_ITERATOR_HAS_NEXT hasNext;
 	NITF_DATA* data;
 } nitf_TREEnumerator;
 

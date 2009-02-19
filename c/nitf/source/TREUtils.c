@@ -907,7 +907,6 @@ NITFPRIV(nitf_List*) basicFind(nitf_TRE* tre,
 
         }
         nitf_HashTableIterator_increment(&it);
-
     }
 
     return list;
@@ -926,27 +925,18 @@ NITFPRIV(nitf_Field*) basicGetField(nitf_TRE* tre, const char* tag)
     return (nitf_Field*)pair->data;
 }
 
-NITFPRIV(NITF_BOOL) basicIncrement(nitf_TREEnumerator** it, nitf_Error* error)
+NITFPRIV(nitf_Pair*) basicIncrement(nitf_TREEnumerator* it, nitf_Error* error)
 {
-    /* Free this baby */
-    nitf_TRECursor* cursor = (nitf_TRECursor*)(*it)->data;
-
-    if (nitf_TRECursor_isDone(cursor))
-    {
-        nitf_TRECursor_cleanup(cursor);
-        NITF_FREE(cursor);
-        NITF_FREE(*it);
-        *it = NULL;
-        return NITF_SUCCESS;
-    }
-
-    return nitf_TRECursor_iterate(cursor, error);
-}
-
-NITFPRIV(nitf_Pair*) basicGet(nitf_TREEnumerator* it, nitf_Error* error)
-{
-    nitf_TRECursor* cursor = (nitf_TRECursor*)it->data;
+    //get the next value, and incrment the cursor
+    nitf_TRECursor* cursor = it ? (nitf_TRECursor*)it->data : NULL;
     nitf_Pair* data;
+
+    if (!cursor || !nitf_TRECursor_iterate(cursor, error))
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                "Invalid cursor, or error iterating...");
+        return NULL;
+    }
 
     if (!nitf_TRE_exists(cursor->tre, cursor->tag_str))
         goto CATCH_ERROR;
@@ -964,6 +954,20 @@ NITFPRIV(nitf_Pair*) basicGet(nitf_TREEnumerator* it, nitf_Error* error)
     return NULL;
 }
 
+NITFPRIV(NITF_BOOL) basicHasNext(nitf_TREEnumerator** it)
+{
+    nitf_TRECursor* cursor = it && *it ? (nitf_TRECursor*)(*it)->data : NULL;
+    if (cursor && nitf_TRECursor_isDone(cursor))
+    {
+        nitf_TRECursor_cleanup(cursor);
+        NITF_FREE(cursor);
+        NITF_FREE(*it);
+        *it = NULL;
+        return NITF_FAILURE; /* maybe 0 is better */
+    }
+    return cursor != NULL ? NITF_SUCCESS : NITF_FAILURE;
+}
+
 NITFPRIV(nitf_TREEnumerator*) basicBegin(nitf_TRE* tre, nitf_Error* error)
 {
     nitf_TREEnumerator* it =
@@ -971,11 +975,11 @@ NITFPRIV(nitf_TREEnumerator*) basicBegin(nitf_TRE* tre, nitf_Error* error)
     nitf_TRECursor* cursor =
         (nitf_TRECursor*)NITF_MALLOC(sizeof(nitf_TRECursor));
     *cursor = nitf_TRECursor_begin(tre);
-    assert(nitf_TRECursor_iterate(cursor, error));
+    /*assert(nitf_TRECursor_iterate(cursor, error));*/
 
     it->data = cursor;
     it->next = basicIncrement;
-    it->get = basicGet;
+    it->hasNext = basicHasNext;
     return it;
 
 }
