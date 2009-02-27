@@ -76,7 +76,6 @@ TRE::~TRE(){}
 TRE::Iterator TRE::begin()
 {
     TRE::Iterator iter(nitf_TRE_begin(getNativeOrThrow(), &error));
-    iter++; //we must increment for the first time, to simulate an iterator
     return iter;
 }
 
