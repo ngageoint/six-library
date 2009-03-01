@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -29,7 +29,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 20, "Unique Source System Name", "RESRC" },
     {NITF_BCS_N, 3, "Record Entry Count", "RECNT" },
     {NITF_LOOP, 0, NULL, "RECNT"},
-    {NITF_BCS_N, 3, "Engineering Data Label Length", "ENGLN" },
+    {NITF_BCS_N, 2, "Engineering Data Label Length", "ENGLN" },
     /* This specifies that the next field should have length equal to the value of ENGLN field */
     {NITF_COMP_LEN, 0, NULL, "ENGLN"},
     /* This one we don't know the length of, so we have to use the special length tag */
