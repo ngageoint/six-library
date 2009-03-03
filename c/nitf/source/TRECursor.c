@@ -828,6 +828,10 @@ NITFAPI(int) nitf_TRECursor_evaluatePostfix(
                 nitf_IntStack_push(stack, intVal, error);
             }
         }
+
+        /* must cleanup after ourselves */
+        if (expr)
+            NITF_FREE(expr);
     }
 
     /* if all is well, the postfix stack should have one value */
