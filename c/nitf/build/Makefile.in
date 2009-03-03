@@ -92,6 +92,7 @@ SOURCES = BandInfo.c \
           TREUtils.c \
           TextSegment.c \
           TextSubheader.c \
+          Utils.c \
           WriteHandler.c \
           Writer.c 
 

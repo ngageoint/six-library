@@ -24,6 +24,8 @@
 #include "nitf/TREPrivateData.h"
 
 
+#define TAG_BUF_LEN 256
+
 NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
 {
     nitf_Error error;
@@ -49,7 +51,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
             tre_cursor.numItems++;
             dptr++;
         }
-        memset(tre_cursor.tag_str, 0, 256);
+        memset(tre_cursor.tag_str, 0, TAG_BUF_LEN);
 		sprintf(tre_cursor.tag_str, "%s",
 		        ((nitf_TREPrivateData*)tre->priv)->description->tag);
         tre_cursor.tre = tre;
@@ -64,22 +66,22 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
  * the TRE hash that corresponds to the current normalized tag.
  */
 NITFAPI(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
-                                 nitf_TREDescription * desc_ptr,
+                                 char *descTag,
                                  char idx_str[10][10],
                                  int looping, nitf_Error * error)
 {
-    char tag_str[256];          /* temp buf used for storing the qualified tag */
+    char tag_str[TAG_BUF_LEN];          /* temp buf used for storing the qualified tag */
     char *bracePtr;             /* pointer for brace position */
     int index = 0;              /* used as in iterator */
     int i;                      /* temp used for looping */
     nitf_Pair *pair = NULL;     /* the pair to return */
 
-    strncpy(tag_str, desc_ptr->tag, sizeof(tag_str));
+    strncpy(tag_str, descTag, sizeof(tag_str));
     /* deal with braces */
-    if (strchr(desc_ptr->tag, '['))
+    if (strchr(descTag, '['))
     {
         index = 0;
-        bracePtr = desc_ptr->tag;
+        bracePtr = descTag;
         /* split the string */
         *(strchr(tag_str, '[')) = 0;
         bracePtr--;
@@ -149,15 +151,17 @@ NITFAPI(NITF_BOOL) nitf_TRECursor_isDone(nitf_TRECursor * tre_cursor)
     /* try iterating and see if we make it to the end */
     while (status && (cursor.index < cursor.numItems) && iterStatus == NITF_SUCCESS)
     {
-        iterStatus = nitf_TRECursor_iterate(&cursor, &error);
-        if (gotField)
+        if ((iterStatus = nitf_TRECursor_iterate(&cursor, &error)))
         {
-            /* we got to the next field... so return not done */
-            status = 0;
-        }
-        else if (strcmp(tre_cursor->tag_str, cursor.tag_str) == 0)
-        {
-            gotField = 1;
+            if (gotField)
+            {
+                /* we got to the next field... so return not done */
+                status = 0;
+            }
+            else if (strcmp(tre_cursor->tag_str, cursor.tag_str) == 0)
+            {
+                gotField = 1;
+            }
         }
     }
 
@@ -207,7 +211,7 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
 
         if (tre_cursor->index < tre_cursor->numItems)
         {
-            memset(tre_cursor->tag_str, 0, 256);
+            memset(tre_cursor->tag_str, 0, TAG_BUF_LEN);
 
             tre_cursor->prev_ptr = tre_cursor->desc_ptr;
             tre_cursor->desc_ptr = &dptr[tre_cursor->index];
@@ -246,24 +250,34 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                         strcat(tre_cursor->tag_str, entry);
                     }
                 }
+
                 /* check to see if we don't know the length */
                 if (tre_cursor->desc_ptr->data_count ==
                         NITF_TRE_CONDITIONAL_LENGTH)
                 {
-                    /* compute the length given by the previous field */
-                    tre_cursor->length =
-                        nitf_TRECursor_evalCondLength(tre_cursor->tre,
-                                                   tre_cursor->prev_ptr,
-                                                   idx_str,
-                                                   tre_cursor->looping,
-                                                   error);
-                    /* This check was added because of this scenario:
-                     * What if the value that the conditional length is based upon
-                     * happens to be zero??? That means that technically the field
-                     * should not exist. Since we enforce fields to be of size > 0,
-                     * then we will just take care of this scenario now, and just
-                     * iterate the cursor.
-                     */
+                    /* compute it from the function given */
+                    if (tre_cursor->desc_ptr->special)
+                    {
+                        /* evaluate the special string as a postfix expression */
+                        tre_cursor->length = nitf_TRECursor_evaluatePostfix(
+                                tre_cursor->tre, idx_str, tre_cursor->looping,
+                                tre_cursor->desc_ptr->special, error);
+
+                        if (tre_cursor->length < 0)
+                        {
+                            /* error! */
+                            nitf_Error_print(error, stderr, "TRE expression error:");
+                            return NITF_FAILURE;
+                        }
+                    }
+                    else
+                    {
+                        /* should we return failure here? */
+                        /* for now, just set the length to 0, which forces an
+                           iteration... */
+                        tre_cursor->length = 0;
+                    }
+
                     if (tre_cursor->length == 0)
                     {
                         return nitf_TRECursor_iterate(tre_cursor, error);
@@ -374,11 +388,6 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                         }
                     }
                 }
-                /* compute the length */
-                else if (tre_cursor->desc_ptr->data_type == NITF_COMP_LEN)
-                {
-                    /*do nothing */
-                }
             }
             else
             {
@@ -407,7 +416,7 @@ NITFAPI(int) nitf_TRECursor_evalLoops(nitf_TRE * tre,
                              int looping, nitf_Error * error)
 {
     int loops;
-    char str[256];              /* temp buf used for manipulating the loop label */
+    char str[TAG_BUF_LEN];      /* temp buf used for manipulating the loop label */
     nitf_Pair *pair;            /* temp nitf_Pair */
     nitf_Field *field;          /* temp nitf_Field */
 
@@ -423,19 +432,19 @@ NITFAPI(int) nitf_TRECursor_evalLoops(nitf_TRE * tre,
 
     else if (desc_ptr->label && strcmp(desc_ptr->label, NITF_FUNCTION) == 0)
     {
-	NITF_TRE_CURSOR_COUNT_FUNCTION fn =
-	    (NITF_TRE_CURSOR_COUNT_FUNCTION)desc_ptr->tag;
+        NITF_TRE_CURSOR_COUNT_FUNCTION fn =
+            (NITF_TRE_CURSOR_COUNT_FUNCTION)desc_ptr->tag;
 
 
-	loops = (*fn)(tre, idx_str, looping, error);
+        loops = (*fn)(tre, idx_str, looping, error);
 
-	if (loops == -1)
-	    return NITF_FAILURE;
+        if (loops == -1)
+            return NITF_FAILURE;
     }
 
     else
     {
-        pair = nitf_TRECursor_getTREPair(tre, desc_ptr, idx_str, looping, error);
+        pair = nitf_TRECursor_getTREPair(tre, desc_ptr->tag, idx_str, looping, error);
         if (!pair)
         {
             nitf_Error_init(error,
@@ -521,7 +530,7 @@ NITFAPI(int) nitf_TRECursor_evalIf(nitf_TRE * tre,
     nitf_Field *field;
     nitf_Pair *pair;
 
-    char str[256];              /* temp buf for the label */
+    char str[TAG_BUF_LEN];      /* temp buf for the label */
     char *emptyPtr;
     char *op;
     char *valPtr;
@@ -531,7 +540,7 @@ NITFAPI(int) nitf_TRECursor_evalIf(nitf_TRE * tre,
     int treData;                /* the value defined int the TRE descrip */
 
     /* get the data out of the hashtable */
-    pair = nitf_TRECursor_getTREPair(tre, desc_ptr, idx_str, looping, error);
+    pair = nitf_TRECursor_getTREPair(tre, desc_ptr->tag, idx_str, looping, error);
     if (!pair)
     {
         nitf_Error_init(error, "Unable to find tag in TRE hash",
@@ -629,7 +638,7 @@ NITFAPI(int) nitf_TRECursor_evalCondLength(nitf_TRE * tre,
         int looping, nitf_Error * error)
 {
     int computedLength;
-    char str[256];              /* temp buf used for manipulating the loop label */
+    char str[TAG_BUF_LEN];      /* temp buf used for manipulating the loop label */
     nitf_Pair *pair;            /* temp nitf_Pair */
     nitf_Field *field;          /* temp nitf_Field */
 
@@ -637,7 +646,7 @@ NITFAPI(int) nitf_TRECursor_evalCondLength(nitf_TRE * tre,
     char *valPtr;
     int funcVal;                /* used for the possible data in the description label */
 
-    pair = nitf_TRECursor_getTREPair(tre, desc_ptr, idx_str, looping, error);
+    pair = nitf_TRECursor_getTREPair(tre, desc_ptr->tag, idx_str, looping, error);
     if (!pair)
     {
         nitf_Error_init(error,
@@ -711,4 +720,133 @@ NITFAPI(int) nitf_TRECursor_evalCondLength(nitf_TRE * tre,
         }
     }
     return computedLength < 0 ? 0 : computedLength;
+}
+
+NITFAPI(int) nitf_TRECursor_evaluatePostfix(
+        nitf_TRE *tre,
+        char idx[10][10],
+        int looping,
+        char *expression,
+        nitf_Error *error)
+{
+    nitf_List *parts = NULL;
+    nitf_IntStack *stack = NULL;
+    int expressionValue;
+
+    /* create the postfix stack */
+    stack = nitf_IntStack_construct(error);
+    if (!stack)
+        goto CATCH_ERROR;
+
+    /* split the expression by spaces */
+    parts = nitf_Utils_splitString(expression, 0, error);
+    if (!parts)
+        goto CATCH_ERROR;
+
+    while(!nitf_List_isEmpty(parts))
+    {
+        char* expr = (char*) nitf_List_popFront(parts);
+        if (strlen(expr) == 1 &&
+                (expr[0] == '+' || expr[0] == '-' || expr[0] == '*' ||
+                        expr[0] == '/' || expr[0] == '%'))
+        {
+            int op1, op2, stackSize;
+            stackSize = nitf_IntStack_depth(stack, error) + 1;
+
+            if (stackSize == 0)
+            {
+                /* error for postfix... */
+                nitf_Error_init(error,
+                        "nitf_TRECursor_evaluatePostfix: invalid expression",
+                        NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+                goto CATCH_ERROR;
+            }
+
+            op2 = nitf_IntStack_pop(stack, error);
+            if (stackSize == 1)
+                op1 = 0; /* assume 0 for the first operand of a unary op */
+            else
+                op1 = nitf_IntStack_pop(stack, error);
+
+            switch(expr[0])
+            {
+            case '+':
+                nitf_IntStack_push(stack, (op1 + op2), error);
+                break;
+            case '-':
+                nitf_IntStack_push(stack, (op1 - op2), error);
+                break;
+            case '*':
+                nitf_IntStack_push(stack, (op1 * op2), error);
+                break;
+            case '/':
+                /* check for divide by zero */
+                if (op2 == 0)
+                {
+                    nitf_Error_init(error,
+                            "nitf_TRECursor_evaluatePostfix: attempt to divide by zero",
+                            NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+                    goto CATCH_ERROR;
+                }
+                nitf_IntStack_push(stack, (op1 / op2), error);
+                break;
+            case '%':
+                nitf_IntStack_push(stack, (op1 % op2), error);
+                break;
+            }
+        }
+        else
+        {
+            /* evaluate as an integer and push onto the stack */
+            if (nitf_Utils_isNumeric(expr))
+            {
+                nitf_IntStack_push(stack, NITF_ATO32(expr), error);
+            }
+            else
+            {
+                /* must be a dependent field */
+                int intVal;
+                nitf_Field *field = NULL;
+                nitf_Pair *pair = nitf_TRECursor_getTREPair(tre, expr, idx,
+                        looping, error);
+
+                if (!pair)
+                {
+                    nitf_Error_init(error,
+                            "nitf_TRECursor_evaluatePostfix: invalid TRE field reference",
+                            NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+                    goto CATCH_ERROR;
+                }
+                field = (nitf_Field *) pair->data;
+
+                /* get the int value */
+                if (!nitf_Field_get(field, (char*) &intVal, NITF_CONV_INT,
+                         sizeof(intVal), error))
+                {
+                    goto CATCH_ERROR;
+                }
+                nitf_IntStack_push(stack, intVal, error);
+            }
+        }
+    }
+
+    /* if all is well, the postfix stack should have one value */
+    if (nitf_IntStack_depth(stack, error) != 0)
+    {
+        nitf_Error_init(error, "Invalid postfix expression",
+                NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        goto CATCH_ERROR;
+    }
+
+    expressionValue = nitf_IntStack_pop(stack, error);
+
+    nitf_IntStack_destruct(&stack);
+    nitf_List_destruct(&parts);
+
+    return expressionValue;
+
+  CATCH_ERROR:
+    if (stack) nitf_IntStack_destruct(&stack);
+    if (parts) nitf_List_destruct(&parts);
+    return -1;
 }

@@ -12,6 +12,7 @@ typedef struct _nitf_TREDescription
     int data_count;                 /*!< the size of the field */
     char *label;                    /*!< description */
     char *tag;                      /*!< unique tag */
+    char *special;                  /*!< special field, reserved for special cases */
 } nitf_TREDescription;
 
 
