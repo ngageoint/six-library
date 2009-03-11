@@ -792,30 +792,31 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
 }
 
 
-NITFPRIV(NITF_BOOL) XMLTRE_increment(nitf_TREEnumerator** it, nitf_Error* error)
+NITFPRIV(NITF_BOOL) XMLTRE_hasNext(nitf_TREEnumerator** it)
 {
     nitf_HashTableIterator* hashIt = (nitf_HashTableIterator*)(*it)->data;
 
     nitf_HashTableIterator end = nitf_HashTable_end( hashIt->hash );
-
-    nitf_HashTableIterator_increment(hashIt);
-
+    
     if (nitf_HashTableIterator_equals(&end, hashIt))
     {
         NITF_FREE(hashIt);
         NITF_FREE( (*it) );
         *it = NULL;
+        return NITF_FAILURE;
     }
 
     return NITF_SUCCESS;
 }
 
 
-NITFPRIV(nitf_Pair*) XMLTREIterator_get(nitf_TREEnumerator* it, nitf_Error* error)
+NITFPRIV() XMLTREIterator_next(nitf_TREEnumerator* it, nitf_Error* error)
 {
     nitf_HashTableIterator* hashIter = (nitf_HashTableIterator*)it->data;
-
-    return nitf_HashTableIterator_get(hashIter);
+    
+    nitf_Pair* data = nitf_HashTableIterator_get(hashIter);
+    nitf_HashTableIterator_increment(hashIter);
+    return data;
 }
 
 NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
@@ -836,12 +837,10 @@ NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
     }
     
     it->data = hashIter;
-    it->next = XMLTRE_increment;
-    it->get = XMLTREIterator_get;
-    
+    it->hasNext = XMLTRE_hasNext;
+    it->next = XMLTREIterator_next;
     
     return it;
-        
 }
 
 NITFPRIV(void) XMLTRE_destruct(nitf_TRE *tre)
