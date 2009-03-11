@@ -7,7 +7,7 @@
     <name>nitf-imageio</name>
     <id>nitf-imageio</id>
     <groupId>nitro-nitf</groupId>
-    <currentVersion>1.0-dev</currentVersion>
+    <currentVersion>1.0</currentVersion>
 
     <developers>
         <developer>
@@ -54,7 +54,7 @@
 
         <dependency>
             <id>nitro-nitf:nitf</id>
-            <version>2.0-rc2</version>
+            <version>2.0</version>
         </dependency>
     </dependencies>
 
