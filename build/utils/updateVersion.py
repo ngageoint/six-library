@@ -25,6 +25,9 @@ if __name__ == '__main__':
     
     if not major or not minor:
         helpAndExit()
+
+    if not suffix:
+        suffix = ''
     
     #update version of C Makefiles
     makefiles = [os.path.join(top_dir, 'c/nitf/build/Makefile.in'),

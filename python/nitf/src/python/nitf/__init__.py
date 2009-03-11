@@ -874,16 +874,15 @@ class TRE:
     
     def __iter__(self):
         it = nitropy.nitf_TRE_begin(self.ref, self.error)
-        while True:
-            pair = nitropy.py_TREEnumerator_get(it, self.error)
+        while nitropy.py_TREEnumerator_hasNext(it):
+            pair = nitropy.py_TREEnumerator_next(it, self.error)
             
             if pair:
                 field = nitropy.py_Pair_getFieldData(pair)
                 if field:
                     field = Field(field)
                     yield pair.key, field
-                    if nitropy.py_TREEnumerator_next(it, self.error):
-                        continue
+                    continue
             break
     
     def getField(self, name):

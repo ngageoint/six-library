@@ -583,19 +583,18 @@
     }
     
     
-    PyObject* py_TREEnumerator_next(nitf_TREEnumerator **it,
-                                    nitf_Error *error)
+    PyObject* py_TREEnumerator_hasNext(nitf_TREEnumerator **it)
     {
         if (!(*it)) Py_RETURN_FALSE;
-        if ((*it)->next(it, error) == NITF_SUCCESS && (*it))
+        if ((*it) && (*it)->hasNext(it) == NITF_SUCCESS)
             Py_RETURN_TRUE;
         Py_RETURN_FALSE;
     }
     
-    nitf_Pair* py_TREEnumerator_get(nitf_TREEnumerator *it, nitf_Error *error)
+    nitf_Pair* py_TREEnumerator_next(nitf_TREEnumerator *it, nitf_Error *error)
     {
         if (!it) return NULL;
-        return it->get(it, error);
+        return it->next(it, error);
     }
     
     
