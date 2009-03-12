@@ -1,0 +1,60 @@
+import sys, os, glob, zipfile, shutil
+from cStringIO import StringIO
+
+sys.path.append('../../build/utils')
+import scons_utils
+sys.path.pop()
+
+
+################################################################################
+# PROJECT SPECIFIC VARS/CODE
+################################################################################
+#==============================================================================#
+
+LIB_NAME = 'JasPerDecompress'
+
+# Handle command-line options
+opts = scons_utils.addDefaultOptions(Options())
+opts.Add(PathOption('jasperhome', 'the path of the jasper development installation directory', None))
+opts.Add('build_jasper', 'build_jasper', 1)
+env = Environment(options = opts, ENV = os.environ)
+Help(opts.GenerateHelpText(env))
+
+# Get the target name, and setup all the system-dependent flags and libs
+local_lib = scons_utils.doConfigure(env)
+print "Building %s for %s" % (LIB_NAME, env['PLATFORM'])
+
+include_path = ['../../c/nitf/include']
+lib_path = ['../../c/nitf/%s' % local_lib]
+
+depends = ['nitf-c']
+#if sys.platform.startswith('win32'):
+#    depends.append('Ws2_32') # for ntohs on Windows
+
+if env.subst('$jasperhome'):
+    jasper_home = env.subst('$jasperhome')
+    include_path.append(os.path.normpath(os.path.join(jasper_home, 'include')))
+    jasper_libdir = os.path.normpath(os.path.join(jasper_home, 'lib'))
+    lib_path.append(jasper_libdir)
+    for dep in ['jasper.lib', 'libjasper.lib']:
+        if os.path.exists(os.path.join(jasper_libdir, dep)):
+            depends.append(dep)
+elif env.subst('$build_jasper') and env.subst('$build_jasper') != '0':
+    #unzip the source and copy the SConstruct there
+    scons_utils.extract('build/jasper-1.900.1.zip', './')
+    shutil.copy('build/SConstruct_jasper', 'jasper-1.900.1/SConstruct')
+    SConscript(["jasper-1.900.1/SConstruct",],)
+    include_path.append('jasper-1.900.1/src/libjasper/include')
+    lib_path.append(os.path.join('jasper-1.900.1', local_lib))
+    depends.append('jasper.lib')
+
+sourceFiles = scons_utils.getSourceFiles('./source', ext='.c', platform=env['PLATFORM'])
+build_libs = [{'source':sourceFiles, 'lib':'%s' % LIB_NAME, 'dynamic':True,
+        'depends':depends}]
+
+env.Append(CPPPATH = include_path)
+env.Append(CCFLAGS = ['-DNITF_MODULE_EXPORTS', '-DJAS_WIN_MSVC_BUILD'])
+
+libs = scons_utils.makeLibs(env, build_libs, local_lib, lib_path)
+
+#==============================================================================#
