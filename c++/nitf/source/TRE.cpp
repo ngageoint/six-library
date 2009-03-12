@@ -75,8 +75,7 @@ TRE::~TRE(){}
 
 TRE::Iterator TRE::begin()
 {
-    TRE::Iterator iter(nitf_TRE_begin(getNativeOrThrow(), &error));
-    return iter;
+    return TRE::Iterator(nitf_TRE_begin(getNativeOrThrow(), &error));
 }
 
 TRE::Iterator TRE::end() throw (nitf::NITFException)

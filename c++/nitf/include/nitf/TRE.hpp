@@ -56,7 +56,6 @@ public:
     TREFieldIterator(const TREFieldIterator & x)
     {
         setNative(x.getNative());
-        increment();
     }
 
     //! Assignment Operator
