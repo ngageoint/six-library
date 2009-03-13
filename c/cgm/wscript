@@ -3,40 +3,31 @@
 import os
 import Options
 
-
 def build(bld):
     includes = ['include']
-    libname = 'nitf'
+    libname = 'cgm'
     
     lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
                            target='%s-c' % libname,
-                           export_incdirs=includes)
+                           export_incdirs=includes,
+                           uselib_local='nitf-c')
     lib.find_sources_in_dirs('./source', excludes=[])
     
     #build tests
     testDir = bld.path.find_dir('tests')
-    tests = testDir.find_iter(in_pat=['test*.c'],
-                              ex_pat=['test_1band_rw_line.c', 'test_fileIO.c',
-                                      'test_hash_table_2.c', 'test_writer_s.c',
-                                      'test_des_read.c', 'test_read_acftb.c',
-                                      'test_add_masks.c', 'test_plugin_reg_1.c',
-                                      'test_des_write.c', 'test_ImageIO_support.c',
-                                      'test_make_pattern.c', 'test_des.c',
-                                      'test_ext_iter.c', 'test_ImageIO_read_data.c',
-                                      'test_ImageIO_writePattern.c'],
-                              maxdepth=1, flat=True).split(' ')
-    for test in tests:
+    for test in testDir.find_iter(in_pat=['test*.c'],
+                                  maxdepth=1, flat=True).split(' '):
         exe = bld.new_task_gen('cc', 'program', source=test,
                                uselib_local='%s-c' % libname,
                                target=os.path.splitext(test)[0],
                                path=testDir,
-                               install_path='${PREFIX}/share/nitf/tests')
+                               install_path='${PREFIX}/share/nitf-cgm/tests')
     
     #install headers
     for f in bld.path.find_dir('include').find_iter():
         relpath = f.relpath_gen(bld.path)
         bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath), relpath)
-        
+    
     #run doxygen
     if 'DOXYGEN' in bld.env:
         if Options.options.doxygen or Options.is_install:
@@ -45,5 +36,5 @@ def build(bld):
             htmlDocs = bld.path.find_dir('doc/html')
             for f in htmlDocs.find_iter():
                 relpath = f.relpath_gen(htmlDocs)
-                bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
+                bld.install_files('${PREFIX}/share/doc/nitf-cgm/c/%s' % relpath, f.abspath())
         except:{}
