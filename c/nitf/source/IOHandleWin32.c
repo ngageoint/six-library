@@ -38,6 +38,7 @@ NITFAPI(nitf_IOHandle) nitf_IOHandle_create(const char *fname,
         if (handle != INVALID_HANDLE_VALUE)
         {
             creation |= TRUNCATE_EXISTING;
+            FindClose(handle);
         }
     }
 
