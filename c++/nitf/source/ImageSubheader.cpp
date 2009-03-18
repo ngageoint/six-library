@@ -73,7 +73,7 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
 {
     nitf_BandInfo ** bandInfo = new nitf_BandInfo * [bandCount];
 
-    for (int i = 0; i < bandCount; i++)
+    for (nitf::Uint32 i = 0; i < bandCount; i++)
     {
         bandInfo[i] = nitf_BandInfo_clone(bands[i].getNative(), &error);
         if (!bandInfo[i])
