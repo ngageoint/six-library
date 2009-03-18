@@ -25,7 +25,7 @@
 NITFAPI(nitf_List*) nitf_Utils_splitString(
         char *str, unsigned int max, nitf_Error* error)
 {
-    unsigned int count;
+    unsigned int count = 0;
     nitf_List *parts;
     char *op, *cur, *end;
     size_t strLen;
