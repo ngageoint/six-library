@@ -24,7 +24,7 @@
 #define __NITF_DEFINES_H__
 
 /* The version of the NITF library */
-#define NITF_LIB_VERSION    "2.0"
+#define NITF_LIB_VERSION    "2.5"
 
 
 #ifdef __cplusplus
