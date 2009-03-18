@@ -51,7 +51,7 @@ nitf::Record doRead(const std::string& inFile);
 
 std::string makeBandName(const std::string& rootFile, int imageNum, int bandNum)
 {
-    int pos = rootFile.find_last_of("/\\");
+    unsigned int pos = rootFile.find_last_of("/\\");
     std::ostringstream os;
     os << rootFile.substr(pos + 1) << "__" << imageNum << "_band_" << bandNum;
     std::string newFile = os.str();
@@ -83,7 +83,6 @@ void doWrite(nitf::Record record, const std::string& inRootFile, const std::stri
     int numImages = record.getHeader().getNumImages();
     nitf::ListIterator end = record.getImages().end();
     nitf::ListIterator iter = record.getImages().begin();
-    nitf_Error error;
 
     for (int i = 0; i < numImages && iter != end; ++i, ++iter)
     {

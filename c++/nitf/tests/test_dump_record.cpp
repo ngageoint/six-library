@@ -23,7 +23,7 @@
 #include <import/nitf.hpp>
 
 #define SHOW(X) std::cout << #X << " = [" << X << "]" << std::endl
-#define SHOWI(X) printf("%s=[%ld]\n", #X, X)
+#define SHOWI(X) printf("%s=[%d]\n", #X, (int)X)
 #define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, (unsigned char) X[0], (unsigned char) X[1], (unsigned char) X[2])
 
 
@@ -415,7 +415,6 @@ void showDESubheader(nitf::DESubheader sub)
  */
 void showRESubheader(nitf::RESubheader sub)
 {
-    nitf_Error error;
 
     std::cout << "Read RE into sub\n" << std::endl;
 

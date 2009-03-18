@@ -145,7 +145,7 @@ int main(int argc, char **argv)
         /*  Close the search file  */
         search.close();
 
-        for (int i = 0; i < values.size(); i++)
+        for (unsigned int i = 0; i < values.size(); i++)
             delete[]values[i];
 
         return 0;

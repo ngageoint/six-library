@@ -28,7 +28,7 @@
 
 void printHdr(nitf::FileHeader header)
 {
-    int i;
+    nitf::Uint32 i;
     SHOW( header.getFileHeader().toString() );
     SHOW( header.getFileVersion().toString() );
     SHOW( header.getComplianceLevel().toString() );
@@ -46,8 +46,8 @@ void printHdr(nitf::FileHeader header)
     SHOWI( (nitf::Uint32)header.getFileLength() );
     SHOWI( (nitf::Uint32)header.getHeaderLength() );
 
-    printf("The number of IMAGES contained in this file [%ld]\n",
-           (nitf::Uint32)header.getNumImages());
+    printf("The number of IMAGES contained in this file [%d]\n",
+           (int)header.getNumImages());
 
     for (i = 0; i < (nitf::Uint32)header.getNumImages(); i++)
     {
@@ -75,7 +75,7 @@ void printHdr(nitf::FileHeader header)
     printf("The number of TEXTS contained in this file [%d]\n",
            (nitf::Uint32)header.getNumTexts());
 
-    for (i = 0; i < (int)header.getNumTexts(); i++)
+    for (i = 0; i < (nitf::Uint32)header.getNumTexts(); i++)
     {
         printf("\tThe length of TEXT subheader [%d]: %d bytes\n",
                i, (int)header.getTextInfo(i).getLengthSubheader());
@@ -93,7 +93,7 @@ void printHdr(nitf::FileHeader header)
                (nitf::Uint32)header.getDataExtensionInfo(i).getLengthData());
 
     }
-    printf("The number of RESERVED EXTENSIONS contained in this file [%ld]\n",
+    printf("The number of RESERVED EXTENSIONS contained in this file [%d]\n",
            (nitf::Uint32)header.getNumReservedExtensions());
 
     for (i = 0; i < (nitf::Uint32)header.getNumReservedExtensions(); i++)
