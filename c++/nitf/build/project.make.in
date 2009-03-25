@@ -78,7 +78,6 @@ TESTS = test_create.cpp \
         test_image_loading.cpp \
         test_list_1.cpp \
         test_list_2.cpp \
-        test_mem_source.cpp \
         test_read_acftb.cpp \
         test_tre_mods.cpp \
         test_writer_3.cpp
