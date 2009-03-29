@@ -1,0 +1,35 @@
+import os
+import Options
+
+def set_options(opt):
+    opt.tool_options('java')
+
+def configure(conf):
+    conf.check_tool('java')
+    if 'JAVA_HOME' in conf.env:
+        env = conf.env.copy()
+        incPath = os.path.join(env['JAVA_HOME'][0], 'include')
+        #also add the platform-specific dir
+        incPath = [incPath, os.path.join(incPath, Options.platform)]
+        
+        if conf.check_cc(header_name="jni.h", define_name='HAVE_JNI_H',
+                      includes=incPath):
+            conf.env.append_value('CPPPATH_JAVA', incPath)
+        
+        jrePath = os.path.join(env['JAVA_HOME'][0], 'jre')
+        jreLibPath = os.path.join(jrePath, 'lib')
+        libPaths = [jreLibPath]
+        if Options.platform == 'linux':
+            libPaths.append(os.path.join(jreLibPath, 'i386', 'client'))
+        env.append_value('LIBPATH', libPaths)
+        if conf.check_cc(lib='jvm', env=env):
+            conf.env.append_value('LIB_JAVA', 'jvm')
+            conf.env.append_value('LIBPATH_JAVA', libPaths)
+            conf.env['defines']['HAVE_JVM'] = True
+            
+
+def build(bld):
+    bld.add_subdirs('nitf')
+
+def distclean(context):
+    pass

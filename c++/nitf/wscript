@@ -1,0 +1,9 @@
+import coda, os
+
+def build(bld):
+    includeDir = os.path.join(bld.path.abspath(), os.pardir, 'include')
+    module = coda.Module('nitf', moduleDeps='mt sys', uselibLocals='NITRO')
+    module.makeLib(bld, includePaths=includeDir)
+    skipTests = ['test_handles.cpp', 'test_mem_source.cpp']
+    module.makeTests(bld, includePaths=includeDir,
+                     testFilter=lambda t: t not in skipTests)

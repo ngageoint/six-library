@@ -1,0 +1,11 @@
+def set_options(opt):
+    pass
+
+def configure(conf):
+    pass
+
+def build(bld):
+    bld.add_subdirs('except str sys mt nitf')
+
+def distclean(context):
+    pass
