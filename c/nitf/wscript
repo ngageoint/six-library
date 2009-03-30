@@ -15,13 +15,17 @@ def build(bld):
     lib.cloneVariants()
     
     pluginNode = bld.path.find_dir('shared')
+    libPattern = bld.env['shlib_PATTERN']
+    if libPattern.startswith('lib'):
+        libPattern = libPattern[3:]
     for p in pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' '):
         plugin = bld.new_task_gen('cc', 'shlib', source=p,
                                   uselib_local='NITRO',
                                   target=os.path.splitext(p)[0],
                                   path=pluginNode,
                                   install_path='${PREFIX}/share/nitf/plugins')
-        plugin.cloneVariants()
+        for t in plugin.cloneVariants():
+            t.env['shlib_PATTERN'] = libPattern
         
     
     #build tests
