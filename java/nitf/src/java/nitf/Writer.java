@@ -74,11 +74,11 @@ public final class Writer extends DestructibleObject
     public native int getNumTextWriters();
 
     /**
-     * Returns the output IOHandle Currently not public
+     * Returns the output IOInterface
      * 
-     * @return the output IOHandle
+     * @return the output IOInterface
      */
-    native IOHandle getOutputHandle();
+    native IOInterface getOutput();
 
     /**
      * Returns the associated Record Currently not public
@@ -97,7 +97,22 @@ public final class Writer extends DestructibleObject
      * @return true if the prepare completed successfully, false otherwise
      * @throws NITFException
      */
-    public native boolean prepare(Record record, IOHandle ioHandle)
+    public boolean prepare(Record record, IOInterface ioHandle) throws NITFException
+    {
+        return prepareIO(record, ioHandle);
+    }
+
+    /**
+     * Prepares for writing. This is called before the write() function.
+     * 
+     * @param record
+     *            the record to write
+     * @param output
+     *            the output IOInterface
+     * @return true if the prepare completed successfully, false otherwise
+     * @throws NITFException
+     */
+    public native boolean prepareIO(Record record, IOInterface output)
             throws NITFException;
 
     /**

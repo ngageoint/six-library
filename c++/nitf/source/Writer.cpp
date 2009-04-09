@@ -74,6 +74,11 @@ void Writer::prepare(nitf::IOHandle & io, nitf::Record & record) throw (nitf::NI
         throw nitf::NITFException(&error);
 }
 
+void Writer::prepareIO(nitf::IOInterface & io, nitf::Record & record) throw (nitf::NITFException)
+{
+    //TODO!
+}
+
 
 void Writer::setImageWriteHandler(int index, WriteHandler* writeHandler, bool adopt)
     throw (nitf::NITFException)

@@ -95,7 +95,7 @@ NITFAPI(void) nitf_BandInfo_destruct(nitf_BandInfo ** info);
  *  \return A new object that is identical to the old
  */
 NITFPROT(nitf_BandInfo *) nitf_BandInfo_clone(nitf_BandInfo * source,
-        nitf_Error * error);
+                                              nitf_Error * error);
 
 /*!
  *  \brief nitf_BandInfo_init - Initialize a band info object

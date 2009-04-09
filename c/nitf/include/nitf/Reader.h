@@ -27,6 +27,7 @@
 #include "nitf/System.h"
 #include "nitf/Debug.h"
 #include "nitf/IOHandle.h"
+#include "nitf/IOInterface.h"
 #include "nitf/PluginRegistry.h"
 #include "nitf/DefaultTRE.h"
 #include "nitf/Record.h"
@@ -46,7 +47,7 @@ NITF_CXX_GUARD
 typedef struct _nitf_Reader
 {
     nitf_List *warningList;
-    nitf_IOHandle inputHandle;
+    nitf_IOInterface* input;
     nitf_Record *record;
 
 }
@@ -85,6 +86,15 @@ NITFAPI(void) nitf_Reader_destruct(nitf_Reader ** reader);
 NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
                                         nitf_IOHandle inputHandle,
                                         nitf_Error * error);
+
+/*!
+ *  Same as the read function, except this method allows you to change
+ *  the underlying interface.  The read method calls this one using an
+ *  IOInterface adaptor
+ */
+NITFAPI(nitf_Record *) nitf_Reader_readIO(nitf_Reader* reader,
+                                          nitf_IOInterface* io,
+                                          nitf_Error* error);
 
 
 /*!

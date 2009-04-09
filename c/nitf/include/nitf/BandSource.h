@@ -29,7 +29,10 @@
 #include "nitf/DataSource.h"
 
 NITF_CXX_GUARD
-
+/*!
+ *  TODO: We should offer an IOInterface source
+ *
+ */
 
 /*!
  * Typedef nitf_BandSource

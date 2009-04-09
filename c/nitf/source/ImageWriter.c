@@ -57,7 +57,8 @@ NITFPRIV(void) ImageWriter_destruct(NITF_DATA * data)
 
 
 NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
-        nitf_IOHandle io, nitf_Error * error)
+                                      nitf_IOInterface* output, 
+                                      nitf_Error * error)
 {
     nitf_Uint8 **user = NULL;
     int row, band;
@@ -78,14 +79,14 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
         assert(user[band]);
     }
 
-    offset = nitf_IOHandle_tell(io, error);
+    offset = nitf_IOInterface_tell(output, error);
     if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
 
     if (!nitf_ImageIO_setFileOffset(impl->imageBlocker, offset, error))
         goto CATCH_ERROR;
 
-    if (!nitf_ImageIO_writeSequential(impl->imageBlocker, io, error))
+    if (!nitf_ImageIO_writeSequential(impl->imageBlocker, output, error))
         goto CATCH_ERROR;
 
     for (row = 0; row < impl->numRows; ++row)
@@ -104,11 +105,11 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
             }
         }
 
-        if (!nitf_ImageIO_writeRows(impl->imageBlocker, io, 1, user, error))
+        if (!nitf_ImageIO_writeRows(impl->imageBlocker, output, 1, user, error))
             goto CATCH_ERROR;
     }
 
-    if (!nitf_ImageIO_writeDone(impl->imageBlocker, io, error))
+    if (!nitf_ImageIO_writeDone(impl->imageBlocker, output, error))
         goto CATCH_ERROR;
 
     for (band = 0; band < numImageBands; band++)

@@ -2,8 +2,8 @@ package nitf;
 
 /**
  * The WriteHandler class is essentially an interface for writing to an
- * IOHandle, but is an abstract class because under the covers it sets up some
- * native code that will facilitate the callback to your write method.
+ * IOInterface, but is an abstract class because under the covers it sets up
+ * some native code that will facilitate the callback to your write method.
  */
 public abstract class WriteHandler extends DestructibleObject
 {
@@ -26,6 +26,6 @@ public abstract class WriteHandler extends DestructibleObject
      * @param io
      * @throws NITFException
      */
-    public abstract void write(IOHandle io) throws NITFException;
+    public abstract void write(IOInterface io) throws NITFException;
 
 }

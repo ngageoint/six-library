@@ -2,7 +2,7 @@
 #define __NITF_PLUGIN_IDENTIFIER_H__
 
 #define NITF_PLUGIN_INIT_SUFFIX "_init"
-#define NITF_PLUGIN_CLEANUP_SUFFIX "_cleanup"
+#define NITF_PLUGIN_CLEANUP "cleanup"
 #define NITF_PLUGIN_HOOK_SUFFIX "_handler"
 #define NITF_PLUGIN_CONSTRUCT_SUFFIX "_construct"
 #define NITF_PLUGIN_DESTRUCT_SUFFIX "_destruct"
@@ -23,7 +23,7 @@
 NITF_CXX_GUARD
 
 struct _nitf_Record;
-typedef const char **(*NITF_PLUGIN_INIT_FUNCTION) (nitf_Error * error);
+typedef char **(*NITF_PLUGIN_INIT_FUNCTION) (nitf_Error * error);
 typedef void (*NITF_PLUGIN_CLEANUP_FUNCTION) (void);
 
 /*
@@ -31,7 +31,7 @@ typedef void (*NITF_PLUGIN_CLEANUP_FUNCTION) (void);
  *
 typedef int (*NITF_PLUGIN_TRE_HANDLER_FUNCTION)
 (
-    nitf_IOHandle io,
+    nitf_IOInterface* io,
     nitf_TRE * tre,
     struct _nitf_Record* rec,
     nitf_Error * error
@@ -86,6 +86,13 @@ typedef int (*NITF_PLUGIN_COMPRESSION_HANDLER_FUNCTION)
   On error, the error object is initialized.
 */
 typedef void * (*NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)
+(
+    const char *compressionType,
+    nitf_Error* error
+);
+
+
+typedef void * (*NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION)
 (
     const char *compressionType,
     nitf_Error* error

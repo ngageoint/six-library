@@ -41,6 +41,7 @@
 #include "nitf/Handle.hpp"
 #include "nitf/HandleManager.hpp"
 #include "nitf/HashTable.hpp"
+#include "nitf/IOInterface.hpp"
 #include "nitf/IOHandle.hpp"
 #include "nitf/ImageReader.hpp"
 #include "nitf/ImageSegment.hpp"

@@ -65,8 +65,10 @@ NITFPRIV(const char*) defaultGetID(nitf_TRE *tre)
 }
 
 
-NITFPRIV(int) defaultRead(nitf_IOHandle io, nitf_Uint32 length, nitf_TRE * tre,
-        struct _nitf_Record* record, nitf_Error * error)
+NITFPRIV(int) defaultRead(nitf_IOInterface *io, 
+                          nitf_Uint32 length, nitf_TRE * tre,
+                          struct _nitf_Record* record, 
+                          nitf_Error * error)
 {
     nitf_Field *field = NULL;
     nitf_TREDescription *descr = NULL;
@@ -158,7 +160,7 @@ CATCH_ERROR:
 }
 
 
-NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOHandle io,
+NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOInterface* io,
 				 struct _nitf_TRE* tre,
 				 struct _nitf_Record* record,
 				 nitf_Error* error)
@@ -173,7 +175,7 @@ NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOHandle io,
     }
     field = (nitf_Field*)pair->data;
 
-    if (!nitf_IOHandle_write(io, field->raw, field->length, error))
+    if (!nitf_IOInterface_write(io, field->raw, field->length, error))
         return NITF_FAILURE;
     return NITF_SUCCESS;
 }

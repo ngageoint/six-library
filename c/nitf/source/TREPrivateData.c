@@ -56,17 +56,28 @@ NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_construct(
 }
 
 
-NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_clone(
-        nitf_TREPrivateData *source, nitf_Error * error)
+NITFAPI(nitf_TREPrivateData *) 
+nitf_TREPrivateData_clone(nitf_TREPrivateData *source, nitf_Error * error)
 {
     nitf_TREPrivateData *priv = NULL;
 
-    nitf_List *lPtr;            /* temporary nitf_List pointer */
-    nitf_Field *field;          /* temporary nitf_Field pointer */
-    nitf_Pair *pair;            /* temporary nitf_Pair pointer */
-    nitf_ListIterator iter;     /* iterator to front of list */
-    nitf_ListIterator end;      /* iterator to back of list */
-    int i;                      /* used for iterating */
+    /* temporary nitf_List pointer */
+    nitf_List *lPtr;      
+
+    /* temporary nitf_Field pointer */
+    nitf_Field *field;          
+
+    /* temporary nitf_Pair pointer */
+    nitf_Pair *pair;
+
+    /* iterator to front of list */
+    nitf_ListIterator iter;     
+
+    /* iterator to back of list */
+    nitf_ListIterator end;
+
+    /* used for iterating */
+    int i;
 
     if (source)
     {

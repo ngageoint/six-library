@@ -66,7 +66,13 @@ public final class Reader extends DestructibleObject
      * @return a Record containing the read data
      * @throws NITFException
      */
-    public native Record read(IOHandle inputHandle) throws NITFException;
+    public native Record read(IOInterface input) throws NITFException;
+
+    // for completeness - matches the C API
+    public Record readIO(IOInterface input) throws NITFException
+    {
+        return read(input);
+    }
 
     /**
      * Returns a new ImageReader
@@ -113,12 +119,12 @@ public final class Reader extends DestructibleObject
             throws NITFException;
 
     /**
-     * Returns the Input IOHandle
+     * Returns the Input IOInterface
      * 
      * @return
      * @throws NITFException
      */
-    public native IOHandle getInputHandle() throws NITFException;
+    public native IOInterface getInput() throws NITFException;
 
     /**
      * Returns the Record associated with this Reader, or null if none is

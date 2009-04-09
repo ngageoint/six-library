@@ -23,6 +23,7 @@
 #ifndef __NITF_TRE_H__
 #define __NITF_TRE_H__
 
+#include "nitf/IOInterface.h"
 #include "nitf/System.h"
 #include "nitf/Field.h"
 #include "nitf/IntStack.h"
@@ -143,15 +144,16 @@ typedef NITF_BOOL (*NITF_TRE_INIT) (nitf_TRE* tre,
 typedef const char* (*NITF_TRE_ID_GET) (nitf_TRE* tre);
 
 /*!
- * Read data from the given IOHandle, parsing it however the plug-in desires.
- * \param io        The IOHandle we are reading from
+ * Read data from the given IO interface, parsing it 
+ *  however the plug-in desires.
+ * \param io        The IO interface we are reading from
  * \param length    The length of the TRE (i.e. # of bytes to read)
  * \param tre       The associated TRE
  * \param record    The associated Record object
  * \param error     The error object
  * \return          NITF_FAILURE if an error occurred, otherwise NITF_SUCCESS
  */
-typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOHandle io,
+typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOInterface* io,
                                      nitf_Uint32 length,
                                      nitf_TRE *tre,
                                      struct _nitf_Record *record,
@@ -196,13 +198,13 @@ typedef nitf_Field* (*NITF_TRE_FIELD_GET)(nitf_TRE * tre,
 
 /*!
  * Sets a field in the given TRE. It is up to the plug-in to
- * \param io        The IOHandle to write to
+ * \param io        The IO interface to write to
  * \param tre       The associated TRE to write
  * \param record    The associated Record object
  * \param error The error object
  * \return          NITF_FAILURE if an error occurred, otherwise NITF_SUCCESS
  */
-typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOHandle io,
+typedef NITF_BOOL (*NITF_TRE_WRITER)(nitf_IOInterface* io,
                                      nitf_TRE* tre,
                                      struct _nitf_Record* record,
                                      nitf_Error *error);
@@ -266,7 +268,7 @@ typedef struct _nitf_TREHandler
      */
     NITF_TRE_ID_GET getID;
 
-    /* The read method gets called when reading a TRE from an IOHandle */
+    /* The read method gets called when reading a TRE from an IO interface */
     NITF_TRE_READER read;
 
     /* setField is called by the setField proxy of the TRE API */
@@ -278,7 +280,7 @@ typedef struct _nitf_TREHandler
     /* find is called by the find proxy of the TRE API */
     NITF_TRE_FIND find;
 
-    /* write gets called when writing the TRE to an output IOHandle */
+    /* write gets called when writing the TRE to an output IO interface */
     NITF_TRE_WRITER write;
 
     /* begin is called by the begin proxy of the TRE API */

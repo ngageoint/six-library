@@ -50,6 +50,7 @@ SOURCES = nitf_BandInfo.c \
 	nitf_GraphicSegment.c \
 	nitf_GraphicSubheader.c \
 	nitf_IOHandle.c \
+	nitf_IOInterface.c \
 	nitf_ImageReader.c \
 	nitf_ImageSegment.c \
 	nitf_ImageSource.c \
@@ -61,6 +62,7 @@ SOURCES = nitf_BandInfo.c \
 	nitf_LookupTable.c \
 	nitf_MaxDownSampler.c \
 	nitf_MemorySource.c \
+	nitf_NativeIOInterface.c \
 	nitf_PixelSkipDownSampler.c \
 	nitf_PluginRegistry.c \
 	nitf_RESegment.c \

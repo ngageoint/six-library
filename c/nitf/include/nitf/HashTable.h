@@ -27,7 +27,7 @@
 #include "nitf/List.h"
 
 /*  How many chains are in the hashes, by default  */
-#   define NITF_TRE_HASH_SIZE 5
+#   define NITF_TRE_HASH_SIZE 8
 
 NITF_CXX_GUARD
 

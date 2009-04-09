@@ -28,10 +28,11 @@
 
 /* IF desc is null, look for it, if I can't load then fail */
 NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
-        nitf_Error * error)
+                                            nitf_Error* error)
 {
-    nitf_TRE *tre = (nitf_TRE *) NITF_MALLOC(sizeof(nitf_TRE));
     int toCopy = NITF_MAX_TAG;
+    nitf_TRE *tre = (nitf_TRE *) NITF_MALLOC(sizeof(nitf_TRE));
+
     if (!tre)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -55,7 +56,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
 }
 
 
-NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * source, nitf_Error * error)
+NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE* source, nitf_Error* error)
 {
     nitf_TRE *tre = NULL;
 
@@ -70,7 +71,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_clone(nitf_TRE * source, nitf_Error * error)
         }
 
         /* share the handler */
-		tre->handler = source->handler;
+        tre->handler = source->handler;
         memcpy(tre->tag, source->tag, sizeof(tre->tag));
 
         /* call the handler clone method, if one is defined */
@@ -113,7 +114,8 @@ NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error);
 
 
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
-        const char* id, nitf_Error * error)
+                                       const char* id, 
+                                       nitf_Error * error)
 {
     int bad = 0;
     nitf_TRE* tre = nitf_TRE_createSkeleton(tag, error);
@@ -124,11 +126,13 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
     if (!reg)
         return NULL;
 
-    tre->handler= NULL;
+    tre->handler = NULL;
     /* if it's not a RAW id, try to load it from the registry */
     if (!id || strcmp(id, NITF_TRE_RAW) != 0)
     {
-        tre->handler = nitf_PluginRegistry_retrieveTREHandler(reg, tag, &bad, error);
+        tre->handler = 
+            nitf_PluginRegistry_retrieveTREHandler(reg, tag, &bad, error);
+
         if (bad)
             return NULL;
     }
@@ -149,7 +153,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
 
 NITFAPI(nitf_TREEnumerator*) nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error)
 {
-	return tre->handler->begin(tre, error);
+    return tre->handler->begin(tre, error);
 }
 
 

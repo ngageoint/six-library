@@ -174,6 +174,7 @@
 %include "nitf/Types.h"
 %include "nitf/Error.h"
 %include "nitf/IOHandle.h"
+%include "nitf/IOInterface.h"
 
 
 

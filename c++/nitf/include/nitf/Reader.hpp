@@ -25,6 +25,7 @@
 
 #include "nitf/Reader.h"
 #include "nitf/IOHandle.hpp"
+#include "nitf/IOInterface.hpp"
 #include "nitf/Record.hpp"
 #include "nitf/ImageReader.hpp"
 #include "nitf/SegmentReader.hpp"
@@ -73,6 +74,13 @@ public:
      *  \return  A Record containing the read information
      */
     nitf::Record read(nitf::IOHandle & io) throw (nitf::NITFException);
+
+    /*!
+     *  This is the preferred method for reading a NITF 2.1 file.
+     *  \param io  The IO handle
+     *  \return  A Record containing the read information
+     */
+    nitf::Record readIO(nitf::IOInterface & io) throw (nitf::NITFException);
 
     /*!
      *  Get a new image reader for the segment

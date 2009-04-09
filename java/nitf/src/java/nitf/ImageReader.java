@@ -42,11 +42,11 @@ public final class ImageReader extends DestructibleObject
     protected native synchronized void destructMemory();
 
     /**
-     * Returns the IOHandle associated with this ImageReader
+     * Returns the IOInterface associated with this ImageReader
      * 
-     * @return the IOHandle associated with this ImageReader
+     * @return the IOInterface associated with this ImageReader
      */
-    public native IOHandle getInputHandle();
+    public native IOInterface getInput();
 
     /**
      * Returns the BlockingInfo used by this ImageReader

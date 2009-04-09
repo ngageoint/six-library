@@ -73,7 +73,7 @@ public final class NITFResourceManager
 
     private Map<String, Integer> refCountMap = new HashMap<String, Integer>();
 
-    private Set<IOHandle> ioHandles = new HashSet<IOHandle>();
+    private Set<IOInterface> ioHandles = new HashSet<IOInterface>();
 
     private Map<String, DestructibleObject> destructiblesMap = new LinkedHashMap<String, DestructibleObject>();
 
@@ -228,10 +228,13 @@ public final class NITFResourceManager
 
     /**
      * This function will free ALL of the underlying native memory, thus making
-     * all of existing Java objects usesless. <p/> Call this method when you are
-     * ready to exit the system, or when you are surely never going to use any
-     * of the existing Java objects or their functionalities anymore. <p/> This
-     * function will get called automatically when the application using it
+     * all of existing Java objects usesless.
+     * <p/>
+     * Call this method when you are ready to exit the system, or when you are
+     * surely never going to use any of the existing Java objects or their
+     * functionalities anymore.
+     * <p/>
+     * This function will get called automatically when the application using it
      * shuts down, so you don't have to add it to your programs.
      */
     protected void freeAllMemory()
@@ -256,13 +259,13 @@ public final class NITFResourceManager
 
     /**
      * Tells the framework to keep track of the given IOHandle. This handle will
-     * be freed with a call to
+     * be freed with a call to {@link NITFResourceManager#closeAllIOHandles()}
      * 
      * @param handle
      */
-    protected void trackIOHandle(IOHandle handle)
+    protected void trackIOHandle(IOInterface handle)
     {
-        if (handle.getIOHandle() > 0)
+        if (handle.getAddress() > 0)
         {
             synchronized (ioHandles)
             {
@@ -274,16 +277,28 @@ public final class NITFResourceManager
     /**
      * This function will close any IOHandle that was created. This function can
      * be called any time, so users must be careful not to use any closed
-     * handles. <p/> This function gets called by freeAllMemory()
+     * handles.
+     * <p/>
+     * This function gets called by freeAllMemory()
      */
     protected void closeAllIOHandles()
     {
         synchronized (ioHandles)
         {
-            for (Iterator<IOHandle> it = ioHandles.iterator(); it.hasNext();)
+            for (Iterator<IOInterface> it = ioHandles.iterator(); it.hasNext();)
             {
-                IOHandle handle = it.next();
-                handle.close();
+                IOInterface handle = it.next();
+                if (handle.isValid())
+                {
+                    try
+                    {
+                        handle.close();
+                    }
+                    catch (NITFException e)
+                    {
+                        // TODO
+                    }
+                }
             }
             ioHandles.clear();
         }

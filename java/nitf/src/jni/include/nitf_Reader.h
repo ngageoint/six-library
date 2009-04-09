@@ -67,10 +67,10 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewDEReader
 
 /*
  * Class:     nitf_Reader
- * Method:    getInputHandle
- * Signature: ()Lnitf/IOHandle;
+ * Method:    getInput
+ * Signature: ()Lnitf/IOInterface;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Reader_getInputHandle
+JNIEXPORT jobject JNICALL Java_nitf_Reader_getInput
   (JNIEnv *, jobject);
 
 /*

@@ -25,7 +25,7 @@
 
 #include "nitf/Error.h"
 #include "nitf/System.h"
-#include "nitf/IOHandle.h"
+#include "nitf/IOInterface.h"
 #include "nitf/WriteHandler.h"
 
 
@@ -35,7 +35,7 @@ NITF_CXX_GUARD
  * Create a WriteHandler that streams from an input IO source. This is useful
  * if you want to bypass any specialized WriteHandlers and/or your data is
  * already in the desired format.
- * 
+ *
  * \param inputHandle   The input IOHandle
  * \param offset        The offset of the IOHandle to start from
  * \param bytes         The # of bytes to write
@@ -43,10 +43,10 @@ NITF_CXX_GUARD
  * \return              a nitf_WriteHandler*, or NULL on error
  */
 nitf_WriteHandler* nitf_StreamIOWriteHandler_construct(
-        nitf_IOHandle inputHandle,
-        nitf_Uint64 offset,
-        nitf_Uint64 bytes,
-        nitf_Error *error);
+    nitf_IOInterface *io,
+    nitf_Uint64 offset,
+    nitf_Uint64 bytes,
+    nitf_Error *error);
 
 
 NITF_CXX_ENDGUARD

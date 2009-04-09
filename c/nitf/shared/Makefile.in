@@ -36,6 +36,8 @@ LIBRARYPATH = -L$(DSODIR) $(EXTLIBPATH) @link_libpath@
 # Libs to link with
 LIBS = @link_prelibs@ $(EXTLIBS) @link_autolibs@ @link_postlibs@
 
+LIBDIR = ../lib/@target@
+
 # The link suffixes
 LINK = $(LIBRARYPATH) $(LFLAGS) $(LIBS)
 
@@ -43,7 +45,7 @@ LINK = $(LIBRARYPATH) $(LFLAGS) $(LIBS)
 #EXE    = $(TESTS:.cpp=)
 
 DSO = ${PLUGINS:.c=.so}
-
+STATIC = ${PLUGINS:.c=.o}
 
 #################################################
 #  This is the top level rule.  It makes your 
@@ -58,7 +60,13 @@ all: $(DSO)
 #  rule, but you should make sure that $(PLUGINS)
 #  depends on it
 
+$(STATIC): $(PLUGINS)
+
 $(DSO): dsodir $(PLUGINS)
+
+static: $(STATIC)
+	$(ARCHIVE) $(LIBDIR)/$(LIBHANDLERS)-$(VERSION)$(LIBEXT) $(STATIC); \
+	cd $(LIBDIR); rm -rf $(LIBHANDLERS)$(LIBEXT); ln -fs $(LIBHANDLERS)-$(VERSION)$(LIBEXT) $(LIBHANDLERS)$(LIBEXT);	
 
 dsodir:
 	\mkdir -p $(DSODIR)
@@ -72,8 +80,9 @@ clean:
 fresh:  clean
 	make all
 
-.SUFFIXES: .so .c
+.SUFFIXES: .so .c .o
 .c.so:
 	$(COMPILE) $(DLLFLAGS) $< -o $(DSODIR)/$@ $(LINK)
 
-
+.c.o:
+	$(COMPILE) -c $<

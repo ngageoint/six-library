@@ -19,10 +19,10 @@ JNIEXPORT void JNICALL Java_nitf_ImageReader_destructMemory
 
 /*
  * Class:     nitf_ImageReader
- * Method:    getInputHandle
- * Signature: ()Lnitf/IOHandle;
+ * Method:    getInput
+ * Signature: ()Lnitf/IOInterface;
  */
-JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getInputHandle
+JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getInput
   (JNIEnv *, jobject);
 
 /*

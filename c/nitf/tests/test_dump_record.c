@@ -22,11 +22,45 @@
 
 #include <import/nitf.h>
 #include "nitf/TREUtils.h"
+
 #define SHOW(X) printf("%s=[%s]\n", #X, ((X==0)?"(nul)":X))
 #define SHOWI(X) printf("%s=[%ld]\n", #X, X)
 #define SHOWLL(X) printf("%s=[%lld]\n", #X, X)
 #define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, (unsigned char) X[0], (unsigned char) X[1], (unsigned char) X[2])
 #define SHOW_VAL(X) printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:X->length)), ((X==0)?"(nulptr)":((X->raw==0)?"(nul)":X->raw)))
+
+NITF_BOOL printTRE(nitf_TRE* tre, nitf_Error* error)
+{
+    nitf_Uint32 treLength;
+    nitf_TREEnumerator* it = NULL;
+    const char* treID = NULL;
+    
+    treLength = tre->handler->getCurrentSize(tre, error);
+    treID = nitf_TRE_getID(tre);
+    
+    printf("\n--------------- %s TRE (%d) - (%s) ---------------\n",
+           tre->tag, treLength, treID ? treID : "null id");
+    
+    it = nitf_TRE_begin(tre, error);
+    while(it && it->hasNext(&it))
+    {
+        nitf_Pair* fieldPair = it->next(it, error);
+        if (fieldPair)
+        {
+            printf("%s = [", fieldPair->key);
+            nitf_Field_print((nitf_Field *) fieldPair->data);
+            printf("]\n");
+        }
+        else
+        {
+            printf("ERROR: no field found!\n");
+            return NITF_FAILURE;
+        }
+        
+    }
+    printf("---------------------------------------------\n");
+    return NITF_SUCCESS;
+}
 
 int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData,
         nitf_Error * error)
@@ -42,36 +76,8 @@ int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData,
 
             while (nitf_ListIterator_notEqualTo(&iter, &end))
             {
-                int i = 0;
-                nitf_Uint32 treLength;
-                nitf_TREEnumerator* it = NULL;
-                const char* treID = NULL;
                 nitf_TRE *tre = (nitf_TRE *) nitf_ListIterator_get(&iter);
-
-                treLength = tre->handler->getCurrentSize(tre, error);
-                treID = nitf_TRE_getID(tre);
-
-                printf("\n--------------- %s TRE (%d) - (%s) ---------------\n",
-                        pair->key, treLength, treID ? treID : "null id");
-
-                it = nitf_TRE_begin(tre, error);
-                while(it && it->hasNext(&it))
-                {
-                    nitf_Pair* fieldPair = it->next(it, error);
-                    i++;
-                    if (fieldPair)
-                    {
-                        printf("%s = [", fieldPair->key);
-                        nitf_Field_print((nitf_Field *) fieldPair->data);
-                        printf("]\n");
-                    }
-                    else
-                    {
-                        printf("ERROR: no field found!\n");
-                    }
-
-                }
-                printf("---------------------------------------------\n");
+                printTRE(tre, error);
                 nitf_ListIterator_increment(&iter);
             }
         }
@@ -580,7 +586,11 @@ void showDESubheader(nitf_DESubheader * sub)
     SHOW_VAL(sub->overflowedHeaderType);
     SHOW_VAL(sub->dataItemOverflowed);
     SHOW_VAL(sub->subheaderFieldsLength);
-    nitf_TREUtils_print(sub->subheaderFields, &error);
+
+    if (sub->subheaderFields)
+    {
+        printTRE(sub->subheaderFields, &error);
+    }
     SHOWI((long)sub->dataLength);
 
     if (sub->userDefinedSection)
@@ -609,7 +619,6 @@ void showRESubheader(nitf_RESubheader * sub)
         showSecurityGroup(sub->securityGroup);
 
     SHOW_VAL(sub->subheaderFieldsLength);
-    //nitf_TREUtils_print(sub->, &error);
     SHOWI((long)sub->dataLength);
 }
 

@@ -68,6 +68,11 @@ nitf::Record Reader::read(nitf::IOHandle & io) throw (nitf::NITFException)
     return rec;
 }
 
+nitf::Record Reader::readIO(nitf::IOInterface & io) throw (nitf::NITFException)
+{
+    //TODO!
+}
+
 nitf::ImageReader Reader::newImageReader(int imageSegmentNumber)
     throw (nitf::NITFException)
 {

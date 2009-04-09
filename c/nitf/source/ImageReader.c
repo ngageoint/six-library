@@ -27,27 +27,25 @@ nitf_ImageReader_getBlockingInfo(nitf_ImageReader * imageReader,
                                  nitf_Error * error)
 {
     return nitf_ImageIO_getBlockingInfo(imageReader->imageDeblocker,
-                                        imageReader->inputHandle, error);
+                                        imageReader->input, error);
 }
 
 
 NITFAPI(NITF_BOOL) nitf_ImageReader_read(nitf_ImageReader * imageReader,
-        nitf_SubWindow * subWindow,
-        nitf_Uint8 ** user,
-        int *padded, nitf_Error * error)
+                                         nitf_SubWindow * subWindow,
+                                         nitf_Uint8 ** user,
+                                         int *padded, nitf_Error * error)
 {
     return (NITF_BOOL) nitf_ImageIO_read(imageReader->imageDeblocker,
-                                         imageReader->inputHandle,
+                                         imageReader->input,
                                          subWindow, user, padded, error);
 }
 
 
 NITFAPI(void) nitf_ImageReader_destruct(nitf_ImageReader ** imageReader)
 {
-    /*printf("Destructed\n"); */
     if (*imageReader)
     {
-        /*printf("Deleting\n"); */
         if ((void *) (*imageReader)->imageDeblocker != NULL)
         {
             /*

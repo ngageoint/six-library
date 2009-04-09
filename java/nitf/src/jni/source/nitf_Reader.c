@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -61,39 +61,33 @@ JNIEXPORT void JNICALL Java_nitf_Reader_destructMemory
 /*
  * Class:     nitf_Reader
  * Method:    read
- * Signature: (Lnitf/IOHandle;)Lnitf/Record;
+ * Signature: (Lnitf/IOInterface;)Lnitf/Record;
  */
 JNIEXPORT jobject JNICALL Java_nitf_Reader_read
-    (JNIEnv * env, jobject self, jobject handle)
+    (JNIEnv * env, jobject self, jobject interface)
 {
     nitf_Reader *reader = _GetObj(env, self);
     nitf_Error error;
     jobject record;
-    nitf_IOHandle ioHandle;
+    nitf_IOInterface* io;
+    jclass recordClass, inputClass;
+    jfieldID fieldID;
+    jmethodID methodID;
 
     /* get some classIDs */
-    jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
-    jclass recordClass = (*env)->FindClass(env, "nitf/Record");
+    inputClass = (*env)->GetObjectClass(env, interface);
+    recordClass = (*env)->FindClass(env, "nitf/Record");
 
-    /* get the IOHandle */
-    jmethodID methodID =
-        (*env)->GetMethodID(env, ioHandleClass, "getIOHandle", "()J");
-    ioHandle =
-        (nitf_IOHandle) ((*env)->CallLongMethod(env, handle, methodID));
+    methodID =
+        (*env)->GetMethodID(env, inputClass, "getAddress", "()J");
+    io = (nitf_IOInterface *) (*env)->CallLongMethod(env, interface, methodID);
 
-    /* just to be sure, seek to start of file */
-    if (nitf_IOHandle_seek(ioHandle, 0, NITF_SEEK_SET, &error) == -1)
-    {
-        goto CATCH_ERROR;
-    }
-
-    if (!nitf_Reader_read(reader, ioHandle, &error))
+    if (!nitf_Reader_readIO(reader, io, &error))
         goto CATCH_ERROR;
 
     methodID = (*env)->GetMethodID(env, recordClass, "<init>", "(J)V");
-    record = (*env)->NewObject(env,
-                               recordClass,
-                               methodID, (jlong) reader->record);
+    record = (*env)->NewObject(env, recordClass, methodID,
+            (jlong) reader->record);
     return record;
 
   CATCH_ERROR:
@@ -235,22 +229,16 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewDEReader
 
 /*
  * Class:     nitf_Reader
- * Method:    getInputHandle
- * Signature: ()Lnitf/IOHandle;
+ * Method:    getInput
+ * Signature: ()Lnitf/IOInterface;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Reader_getInputHandle
+JNIEXPORT jobject JNICALL Java_nitf_Reader_getInput
     (JNIEnv * env, jobject self)
 {
     nitf_Reader *reader = _GetObj(env, self);
-    jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
-
-    jmethodID methodID =
-        (*env)->GetMethodID(env, ioHandleClass, "<init>", "(J)V");
-    jobject handle = (*env)->NewObject(env,
-                                       ioHandleClass,
-                                       methodID,
-                                       (jlong) reader->inputHandle);
-    return handle;
+    jclass ioClass = (*env)->FindClass(env, "nitf/NativeIOInterface");
+    jmethodID methodID = (*env)->GetMethodID(env, ioClass, "<init>", "(J)V");
+    return (*env)->NewObject(env, ioClass, methodID, (jlong) reader->input);
 }
 
 
@@ -271,11 +259,11 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getRecord
                                        recordClass,
                                        methodID,
                                        (jlong) reader->record);
-    
+
     /* tell Java not to manage the ImageSource memory */
     methodID = (*env)->GetMethodID(env, recordClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, handle, methodID, JNI_FALSE);
-    
+
     return handle;
 }
 

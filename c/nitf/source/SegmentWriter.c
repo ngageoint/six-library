@@ -50,7 +50,8 @@ NITFPRIV(void) SegmentWriter_destruct(NITF_DATA * data)
 
 
 NITFPRIV(NITF_BOOL) SegmentWriter_write(NITF_DATA * data,
-        nitf_IOHandle io, nitf_Error * error)
+                                        nitf_IOInterface* io, 
+                                        nitf_Error * error)
 {
     size_t size, bytesLeft;
     size_t readSize = READ_SIZE;
@@ -84,7 +85,7 @@ NITFPRIV(NITF_BOOL) SegmentWriter_write(NITF_DATA * data,
         }
 
         /* write them */
-        if (!nitf_IOHandle_write(io, buf, (int)bytesToRead, error))
+        if (!nitf_IOInterface_write(io, buf, (int)bytesToRead, error))
             goto CATCH_ERROR;
         bytesLeft -= bytesToRead;
     }

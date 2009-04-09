@@ -23,11 +23,13 @@
 PACKAGE = nitf
 MAJOR_VERSION = 2
 MINOR_VERSION = 5
-VERSION_SUFFIX = dev
+VERSION_SUFFIX = 
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 LANGUAGE = c
 MAINTAINER = gojira_1@users.sourceforge.net
 LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
+# Only if you are forcing these as a static lib
+LIBHANDLERS = lib$(PACKAGE)-handlers
 LIBEXT  = .a
 DSOEXT  = .so
 EXTLIBS = -lnitf-c
@@ -58,6 +60,7 @@ SOURCES = BandInfo.c \
           HashTable.c \
           IOHandleUnix.c \
           IOHandleWin32.c \
+          IOInterface.c \
           ImageIO.c \
           ImageReader.c \
           ImageSegment.c \

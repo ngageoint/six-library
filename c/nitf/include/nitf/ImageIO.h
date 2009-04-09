@@ -38,7 +38,7 @@
 
 #include "nitf/System.h"
 #include "nitf/Error.h"
-#include "nitf/IOHandle.h"
+#include "nitf/IOInterface.h"
 #include "nitf/PluginIdentifier.h"
 #include "nitf/ImageSubheader.h"
 #include "nitf/SubWindow.h"
@@ -143,6 +143,9 @@ NITFPROT(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info);
   object. It is an error to try to start another operation before the write
   done function is called.
  
+  \param nitf Associated ImageIO object
+  \param io The IO interface to use
+  \param error [out] return errors
   \return FALSE is returned on error and the error object is set
  
   Possible errors:
@@ -153,9 +156,9 @@ NITFPROT(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info);
  
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,     /*!< Associated ImageIO object */
-        nitf_IOHandle handle,    /*!< IO handle to use */
-        nitf_Error * error      /*!< For error returns */
+NITFPROT(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,
+                                                 nitf_IOInterface* io,
+                                                 nitf_Error * error
                                                 );
 
 /*!
@@ -168,6 +171,10 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,     /*!< A
   operations are complete. The deferred writes are done by calling the flush
   operation.
  
+  \param object Object to cleanup
+  \param io io interface to use
+  \param error [out] The error to return
+
   \return One error, FALSE is returned and the caller supplied error object
   is set.
  
@@ -180,10 +187,9 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,     /*!< A
  
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_writeDone(nitf_ImageIO * object,         /*!< Object to cleanup */
-        nitf_IOHandle handle,  /*!< I/O handle for writes */
-        nitf_Error * error    /*!< For error returns */
-                                          );
+NITFPROT(NITF_BOOL) nitf_ImageIO_writeDone(nitf_ImageIO * object,
+                                           nitf_IOInterface* io,
+                                           nitf_Error * error);
 
 /*!
   \brief nitf_ImageIO_writeRows - Write rows more rows
@@ -202,6 +208,10 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeDone(nitf_ImageIO * object,         /*!< O
  
       nitf_ImageIO_writeSequential
  
+  \param object Associated ImageIO object
+  \param io Interface for writes
+  \param data Row buffers, one per band
+  \param erro For error reports
   \return One error, FALSE is returned and the caller supplied error object
   is set.
  
@@ -213,11 +223,11 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeDone(nitf_ImageIO * object,         /*!< O
     Invalid row count
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,         /*!< Associated ImageIO object */
-        nitf_IOHandle handle,  /*!< I/O handle for writes */
-        nitf_Uint32 numRows,   /*!< Number of rows to write */
-        nitf_Uint8 ** data,    /*!< Row buffers, one/band */
-        nitf_Error * error    /*!< For error reports */
+NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
+                                           nitf_IOInterface* io,
+                                           nitf_Uint32 numRows,
+                                           nitf_Uint8 ** data,
+                                           nitf_Error * error
                                           );
 
 /*!
@@ -227,6 +237,9 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,         /*!< A
   calling object. An example of something that might be deferred is the
   writing of the block mask.
  
+  \param The object to flush
+  \param io The interface pointer
+  \param error [out] error to return
   \return On error, FALSE is returned and the supplied error object is set
  
   Possible errors include:
@@ -235,9 +248,9 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,         /*!< A
     I/O errors
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_flush(nitf_ImageIO * object,     /*!< The object to flush */
-                                       nitf_IOHandle handle,      /*!< I/O handle for writes */
-                                       nitf_Error * error        /*!< For error reports */
+NITFPROT(NITF_BOOL) nitf_ImageIO_flush(nitf_ImageIO * object,
+                                       nitf_IOInterface* io,
+                                       nitf_Error * error
                                       );
 
 
@@ -253,15 +266,19 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_flush(nitf_ImageIO * object,     /*!< The objec
  
   Because the pad pixel's type depends on the pixel type the user must give
   the value as a byte pointer and length.
- 
+  \param object to flush
+  \param pad pixel value
+  \param length of the value
   \return None
  
 */
 
-NITFPROT(void) nitf_ImageIO_setPadPixel(nitf_ImageIO * object,    /*!< The object to flush */
-                                        nitf_Uint8 * value,       /*!< The pad pixel value */
-                                        nitf_Uint32 length       /*!< Length of the value */
-                                       );
+NITFPROT(NITF_BOOL) 
+nitf_ImageIO_setPadPixel(nitf_ImageIO * object,
+                         nitf_Uint8 * value,
+                         nitf_Uint32 length,
+                         nitf_Error* error
+    );
 
 
 /*!
@@ -300,7 +317,7 @@ typedef void nitf_DecompressionControl;
 
 typedef nitf_DecompressionControl *
 (*NITF_DECOMPRESSION_INTERFACE_OPEN_FUNCTION)
-(nitf_IOHandle handle,
+(nitf_IOInterface* io,
  nitf_Uint64 offset,
  nitf_Uint64 fileLength,
  nitf_BlockingInfo * blockingDefinition,
@@ -435,16 +452,16 @@ nitf_DecompressionInterface;
 */
 
 typedef int (*NITF_DOWN_SAMPLE_FUNCTION) (void *input,
-        void *output,
-        void *parameters,
-        nitf_Uint32 numWindowRows,
-        nitf_Uint32 numWindowCols,
-        nitf_SubWindow * subWindow,
-        nitf_Uint32 pixelType,
-        nitf_Uint32 pixelSize,
-        nitf_Uint32 rowsInLastWindow,
-        nitf_Uint32 colsInLastWindow,
-        nitf_Error * error);
+                                          void *output,
+                                          void *parameters,
+                                          nitf_Uint32 numWindowRows,
+                                          nitf_Uint32 numWindowCols,
+                                          nitf_SubWindow * subWindow,
+                                          nitf_Uint32 pixelType,
+                                          nitf_Uint32 pixelSize,
+                                          nitf_Uint32 rowsInLastWindow,
+                                          nitf_Uint32 colsInLastWindow,
+                                          nitf_Error * error);
 /*!
   \brief Constructor for the nitf_ImageIO object
  
@@ -467,6 +484,12 @@ typedef int (*NITF_DOWN_SAMPLE_FUNCTION) (void *input,
   the compression type specified by the compression argument. NULL pointers
   should be used for uncompressed images
  
+  \param subheader From the calling image segment
+  \param offset Byte offset in file to image data segment
+  \param length Length of image data segment
+  \param compressor Compression interface
+  \param decompressor Decompression interface
+  \param error Error object
   \return The new object or NULL on error
  
   On error, the user supplied error object is set. Possible errors include:
@@ -481,13 +504,14 @@ typedef int (*NITF_DOWN_SAMPLE_FUNCTION) (void *input,
  
 */
 
-NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader * subheader,  /*!< From the calling image segment */
-        nitf_Uint64 offset,       /*!< Byte offset in file to image data segment */
-        nitf_Uint64 length,       /*!< Length of image data segment (with masks) */
-        nitf_CompressionInterface * compressor,   /*!< Compression interface object */
-        nitf_DecompressionInterface * decompressor,       /*!< Decompression interface object */
-        nitf_Error * error       /*!< Error object */
-                                               );
+NITFPROT(nitf_ImageIO *) 
+nitf_ImageIO_construct(nitf_ImageSubheader * subheader, 
+                       nitf_Uint64 offset,
+                       nitf_Uint64 length,
+                       nitf_CompressionInterface * compressor,
+                       nitf_DecompressionInterface * decompressor,
+                       nitf_Error * error
+    );
 
 /*!
   \brief nitf_ImageIO_clone - Clone an object
@@ -496,7 +520,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader * subheader,
   except that any state information in the object is reset th the initial
   values. Calling this function is the same as calling the constructor with
   the same arguments used to create the caller.
- 
+  \param image The object to clone
   \return A pointer to the new object is returned. On error, NULL is returned
   and the caller supplied error object is set.
  
@@ -505,8 +529,8 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader * subheader,
     Memory allocation error
 */
 
-NITFPROT(nitf_ImageIO *) nitf_ImageIO_clone(nitf_ImageIO * image,         /*!< The object to clone */
-        nitf_Error * error   /*!< Error object */
+NITFPROT(nitf_ImageIO *) nitf_ImageIO_clone(nitf_ImageIO * image,
+                                            nitf_Error * error
                                            );
 
 
@@ -516,11 +540,11 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_clone(nitf_ImageIO * image,         /*!< T
   \b nitf_ImageIO_destruct deallocates the memory associated with the object.
   The argument is set to NULL on return
  
+  \param Pointer to the nitf_ImageIO object to destroy
   \return None
 */
 
-NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf        /*!< Pointer to the nitf_ImageIO object to destroy */
-                                    );
+NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf);
 
 /*!
   \brief nitf_ImageIO_read - Read a sub-window
@@ -543,6 +567,11 @@ NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf        /*!< Pointer to
   Row and column skips of more than one in the sub-window are not currently
   implemented.
  
+  \param nitf The associated nitf_ImageIO object
+  \param io The IO interface
+  \param subWindow Sub-window to read
+  \param padded Returns TRUE if pad pixels may have been read
+  \param error [out] Error object
   \return Returns FALSE on error
  
   On error, FALSE is returned and the user supplied error object is set.
@@ -554,12 +583,12 @@ NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf        /*!< Pointer to
     System I/O or memory allocation errors
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,        /*!< The associated nitf_ImageIO object */
-                                      nitf_IOHandle handle,       /*!< IO handle for read */
-                                      nitf_SubWindow * subWindow,         /*!< Sub-window to read */
-                                      nitf_Uint8 ** user,         /*!< Data buffers for read */
-                                      int *padded,        /*!< Returns TRUE if pad pixels may have been read */
-                                      nitf_Error * error /*!< Error object */
+NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
+                                      nitf_IOInterface* io,
+                                      nitf_SubWindow * subWindow,
+                                      nitf_Uint8 ** user,
+                                      int *padded,
+                                      nitf_Error * error
                                      );
 
 /*!
@@ -567,11 +596,11 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,        /*!< The assoc
  
   \b nitf_ImageIO_pixelSize returns the pixel size in bytes.
  
+  \param nitf The associated nitf_ImageIO object
   \return Returns pixel size in bytes
 */
 
-NITFPROT(nitf_Uint32) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf /*!< The associated nitf_ImageIO object */
-                                            );
+NITFPROT(nitf_Uint32) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf);
 
 /*!
   \brief  nitf_ImageIO_setFileOffset
@@ -581,6 +610,9 @@ NITFPROT(nitf_Uint32) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf /*!< The associ
   nitf_ImageIO contructor. This value cannot be changed if an I/O operation
   is in progress.
  
+  \param nitf 
+  \param offset The associated nitf_ImageIO offset
+  \param error Error object
   \return FALSE is returned on error and teh error object is set
  
   Possible errors include:
@@ -588,9 +620,9 @@ NITFPROT(nitf_Uint32) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf /*!< The associ
     I/O operation in progress
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_setFileOffset(nitf_ImageIO * nitf,       /*!< The associated nitf_ImageIO object */
-        nitf_Uint64 offset,        /*!< New byte offset in file to image data segment */
-        nitf_Error * error        /*!< Error object */
+NITFPROT(NITF_BOOL) nitf_ImageIO_setFileOffset(nitf_ImageIO * nitf,
+                                               nitf_Uint64 offset,
+                                               nitf_Error * error 
                                               );
 
 /*!
@@ -607,6 +639,9 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_setFileOffset(nitf_ImageIO * nitf,       /*!< T
   This function may have read values from the file, hence the need for the
   I/O handle. This function can only be called for an existing file.
  
+  \param image The associated ImageIO object 
+  \param io IO interface for read
+  \param error Error object
   \return A pointer to a \b nitf_BlockingInfo structure. On error, the error
   structure is set and NULL is returned.
  
@@ -616,9 +651,9 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_setFileOffset(nitf_ImageIO * nitf,       /*!< T
     I/O error
 */
 
-NITFPROT(nitf_BlockingInfo *) nitf_ImageIO_getBlockingInfo(nitf_ImageIO * image,  /*!< The associated ImageIO object */
-        nitf_IOHandle handle,  /*!< IO handle for read */
-        nitf_Error * error    /*!< Error object */
+NITFPROT(nitf_BlockingInfo *) nitf_ImageIO_getBlockingInfo(nitf_ImageIO * image,
+                                                           nitf_IOInterface* io,
+                                                           nitf_Error * error
                                                           );
 
 /*!

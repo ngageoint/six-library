@@ -27,7 +27,7 @@
 #include "nitf/StreamIOWriteHandler.h"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include "nitf/IOHandle.hpp"
+#include "nitf/IOInterface.hpp"
 #include <string>
 
 /*!
@@ -70,16 +70,16 @@ public:
     virtual ~WriteHandler(){}
 
     /*!
-     *  Write to the given output IOHandle
-     *  \param handle   the output IOHandle
+     *  Write to the given output IOInterface
+     *  \param handle   the output IOInterface
      */
-    virtual void write(IOHandle handle) throw (nitf::NITFException){}
+    virtual void write(IOInterface& handle) throw (nitf::NITFException){}
 
 private:
 
     //! Allows the engine to call the read function for this object
     static NITF_BOOL WriteHandler_write(NITF_DATA * data,
-                                        nitf_IOHandle io,
+                                        nitf_IOInterface* io,
                                         nitf_Error *error);
 
     //! Needed for the engine interface
@@ -121,10 +121,10 @@ public:
     virtual ~KnownWriteHandler() {}
 
     /*!
-     *  Write data to the given IOHandle
-     *  \param handle   The output IOHandle
+     *  Write data to the given IOInterface
+     *  \param handle   The output IOInterface
      */
-    virtual void write(IOHandle handle) throw (nitf::NITFException);
+    virtual void write(IOInterface& handle) throw (nitf::NITFException);
 
 protected:
     NITF_DATA * mData;
@@ -140,7 +140,7 @@ class StreamIOWriteHandler : public KnownWriteHandler
 {
 public:
     //! Constructor
-    StreamIOWriteHandler(IOHandle sourceHandle, nitf::Uint64 offset,
+    StreamIOWriteHandler(IOInterface& sourceHandle, nitf::Uint64 offset,
             nitf::Uint64 bytes);
     ~StreamIOWriteHandler() {}
 };

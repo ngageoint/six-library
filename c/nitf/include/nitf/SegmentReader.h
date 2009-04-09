@@ -23,7 +23,7 @@
 #ifndef __NITF_SEGMENT_READER_H__
 #define __NITF_SEGMENT_READER_H__
 
-#include "nitf/IOHandle.h"
+#include "nitf/IOInterface.h"
 #include "nitf/System.h"
 #include "nitf/Error.h"
 
@@ -48,14 +48,20 @@ NITF_CXX_GUARD
   methods available are:
                 nitf_Reader_newTextReader
                 nitf_Reader_newGraphicReader
+
+
+  \param input The input interface
+  \param dataLength The length of the user data
+  \param baseOffset Offset to the start of data
+  \param virtualOffset current offset (within this region)
 */
 
 typedef struct _nitf_SegmentReader
 {
-    nitf_IOHandle inputHandle;      /*!< I/O handle for reads */
-    nitf_Uint32 dataLength;         /*!< Length of user data */
-    nitf_Uint64 baseOffset;         /*!< Offset to start of data */
-    nitf_Uint64 virtualOffset;      /*!< Current offset */
+    nitf_IOInterface* input;
+    nitf_Uint32 dataLength;
+    nitf_Uint64 baseOffset;
+    nitf_Uint64 virtualOffset;
 }
 nitf_SegmentReader;
 

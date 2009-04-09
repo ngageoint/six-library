@@ -23,10 +23,12 @@
 package nitf;
 
 /**
- * A representation of a handle to a file object. <p/> This class provides
- * access to a native file object, so it does not use the Java io library.
+ * A representation of a handle to a file object.
+ * <p/>
+ * This class provides access to a native file object, so it does not use the
+ * Java io library.
  */
-public final class IOHandle extends NITFObject
+public final class IOHandle extends NativeIOInterface
 {
     /**
      * Creates a new file
@@ -58,41 +60,24 @@ public final class IOHandle extends NITFObject
      */
     public static final int NITF_ACCESS_READWRITE = 0x03;
 
-    /**
-     * Seek offset is relative to current position
-     */
-    public static final int SEEK_CUR = 10;
-
-    /**
-     * Seek offset is relative to start of file
-     */
-    public static final int SEEK_SET = 20;
-
-    /**
-     * Seek offset is relative to end of file
-     */
-    public static final int SEEK_END = 30;
-
     private String fileName;
 
-    private int accessFlag;
-
-    private int creationFlag;
+    // private long ioHandle;
 
     IOHandle(long address)
     {
         super(address);
     }
 
-    public synchronized long getIOHandle()
-    {
-        return getAddress();
-    }
-
-    synchronized void setIOHandle(long ioHandle)
-    {
-        setAddress(ioHandle);
-    }
+    // public synchronized long getIOHandle()
+    // {
+    // return ioHandle;
+    // }
+    //
+    // synchronized void setIOHandle(long ioHandle)
+    // {
+    // this.ioHandle = ioHandle;
+    // }
 
     /**
      * Creates a new IOHandle object for READING, using the file referenced from
@@ -116,14 +101,18 @@ public final class IOHandle extends NITFObject
      *            the path of the file associated with this handle
      * @param accessFlag
      *            options are <code>NITF_ACCESS_READONLY<code>,
-     *                     <code>NITF_ACCESS_WRITEONLY</code>, or <code>NITF_ACCESS_READWRITE</code>
-     * @param creationFlag options are <code>NITF_CREATE<code>,
-     *                     <code>NITF_TRUNCATE</code>, or <code>NITF_OPEN_EXISTING</code>
+     *                     <code>NITF_ACCESS_WRITEONLY</code>, or
+     *            <code>NITF_ACCESS_READWRITE</code>
+     * @param creationFlag
+     *            options are <code>NITF_CREATE<code>,
+     *                     <code>NITF_TRUNCATE</code>, or
+     *            <code>NITF_OPEN_EXISTING</code>
      * @throws NITFException
      */
     public IOHandle(String fileName, int accessFlag, int creationFlag)
             throws NITFException
     {
+        super();
         this.fileName = fileName;
 
         if (accessFlag != NITF_ACCESS_READONLY
@@ -140,69 +129,10 @@ public final class IOHandle extends NITFObject
                     "Creation flag must be a valid NITF Creation flag");
         }
 
-        this.accessFlag = accessFlag;
-        this.creationFlag = creationFlag;
-        long ioHandle = createHandle(fileName, accessFlag, creationFlag);
-        setAddress(ioHandle);
+        createHandle(fileName, accessFlag, creationFlag);
+        // must track it (special case for Native IO Interfaces)
         NITFResourceManager.getInstance().trackIOHandle(this);
     }
-
-    /**
-     * Reads size bytes into the specified byte buffer
-     * 
-     * @param buf
-     *            the byte buffer to store the data
-     * @param size
-     *            the amount to read
-     * @throws NITFException
-     */
-    public native void read(byte[] buf, int size) throws NITFException;
-
-    /**
-     * Writes size bytes to the file at the current position
-     * 
-     * @param buf
-     *            the byte buffer containing the data
-     * @param size
-     *            the amount to write
-     * @throws NITFException
-     */
-    public native void write(byte[] buf, int size) throws NITFException;
-
-    /**
-     * Seeks to the specified offset relative to the position specified by
-     * whence
-     * 
-     * @param offset
-     *            the offset in the file
-     * @param whence
-     *            the type of seek, either SEEK_CUR, SEEK_SET, or SEEK_END
-     * @return the position in the file after the seek
-     * @throws NITFException
-     */
-    public native long seek(long offset, int whence) throws NITFException;
-
-    /**
-     * Returns the current file pointer position
-     * 
-     * @return the current file pointer position
-     * @throws NITFException
-     */
-    public native long tell() throws NITFException;
-
-    /**
-     * Returns the size of the file descriptor
-     * 
-     * @return the size of the file descriptor
-     * @throws NITFException
-     */
-    public native long getSize() throws NITFException;
-
-    /**
-     * Closes the file descriptor. Good implementation should always end by
-     * calling this.
-     */
-    public native void close();
 
     /**
      * Return the name of the file associated with this handle
@@ -215,7 +145,7 @@ public final class IOHandle extends NITFObject
     }
 
     /**
-     * Native function used internally to create an file handle
+     * Native function used internally to create a file handle
      * 
      * @param fileName
      * @param accessFlag
@@ -223,6 +153,7 @@ public final class IOHandle extends NITFObject
      * @return
      * @throws NITFException
      */
-    private native long createHandle(String fileName, int accessFlag,
+    private native void createHandle(String fileName, int accessFlag,
             int creationFlag) throws NITFException;
+
 }

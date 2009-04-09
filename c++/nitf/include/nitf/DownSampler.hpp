@@ -24,7 +24,7 @@
 #define __NITF_DOWN_SAMPLER_HPP__
 
 #include "nitf/DownSampler.h"
-#include "nitf/IOHandle.hpp"
+#include "nitf/IOInterface.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
 #include <string>

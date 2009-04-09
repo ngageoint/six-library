@@ -27,6 +27,7 @@
 #include "nitf/List.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/IOHandle.hpp"
+#include "nitf/IOInterface.hpp"
 #include "nitf/Record.hpp"
 #include "nitf/ImageWriter.hpp"
 #include "nitf/SegmentWriter.hpp"
@@ -71,6 +72,14 @@ public:
      *  \param record  The record to write out
      */
     void prepare(nitf::IOHandle & io, nitf::Record & record)
+        throw (nitf::NITFException);
+
+    /*!
+     *  Prepare the writer
+     *  \param io  The IO handle to use
+     *  \param record  The record to write out
+     */
+    void prepareIO(nitf::IOInterface & io, nitf::Record & record)
         throw (nitf::NITFException);
 
     /*!

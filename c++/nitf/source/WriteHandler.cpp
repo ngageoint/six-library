@@ -42,23 +42,24 @@ nitf::WriteHandler::WriteHandler() throw (nitf::NITFException)
 
 
 NITF_BOOL nitf::WriteHandler::WriteHandler_write(NITF_DATA * data,
-        nitf_IOHandle io,
+        nitf_IOInterface* io,
         nitf_Error * error)
 {
     // Get our object from the data and call the read function
     if (!data) throw except::NullPointerReference(Ctxt("WriteHandler_write"));
-    ((nitf::WriteHandler*)data)->write(IOHandle(io));
+    nitf::NativeIOInterface interface(io);
+    ((nitf::WriteHandler*)data)->write(interface);
     return true;
 }
 
 void nitf::WriteHandler::WriteHandler_destruct(NITF_DATA* data){}
 
 
-void nitf::KnownWriteHandler::write(nitf::IOHandle handle) throw (nitf::NITFException)
+void nitf::KnownWriteHandler::write(nitf::IOInterface& handle) throw (nitf::NITFException)
 {
     if (mIface)
     {
-        NITF_BOOL x = mIface->write(mData, handle.getHandle(), &error);
+        NITF_BOOL x = mIface->write(mData, handle.getNative(), &error);
         if (!x) throw nitf::NITFException(&error);
     }
     else
@@ -66,11 +67,11 @@ void nitf::KnownWriteHandler::write(nitf::IOHandle handle) throw (nitf::NITFExce
 }
 
 nitf::StreamIOWriteHandler::StreamIOWriteHandler(
-        IOHandle sourceHandle,
+        nitf::IOInterface& sourceHandle,
         nitf::Uint64 offset,
         nitf::Uint64 bytes)
 {
-    setNative(nitf_StreamIOWriteHandler_construct(sourceHandle.getHandle(),
+    setNative(nitf_StreamIOWriteHandler_construct(sourceHandle.getNative(),
             offset, bytes, &error));
     getNativeOrThrow();
 

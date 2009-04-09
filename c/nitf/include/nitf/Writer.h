@@ -24,7 +24,7 @@
 #define __NITF_WRITER_H__
 
 #include "nitf/Error.h"
-#include "nitf/IOHandle.h"
+#include "nitf/IOInterface.h"
 #include "nitf/PluginRegistry.h"
 #include "nitf/Record.h"
 #include "nitf/ImageIO.h"
@@ -45,7 +45,7 @@ typedef struct _nitf_Writer
     nitf_WriteHandler **textWriters;
     nitf_WriteHandler **graphicWriters;
     nitf_WriteHandler **dataExtensionWriters;
-    nitf_IOHandle outputHandle;
+    nitf_IOInterface* output;
     nitf_Record *record;
     int numImageWriters;
     int numTextWriters;
@@ -76,6 +76,14 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
                                        nitf_Record * record,
                                        nitf_IOHandle ioHandle,
                                        nitf_Error * error);
+
+
+
+NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer * writer,
+                                       nitf_Record * record,
+                                       nitf_IOInterface* io,
+                                       nitf_Error * error);
+
 
 /*!
  * Sets the WriteHandler for the Image at the given index.

@@ -24,7 +24,7 @@
 #define __NITF_BLOCKING_INFO_HPP__
 
 #include "nitf/System.hpp"
-#include "nitf/IOHandle.hpp"
+#include "nitf/IOInterface.hpp"
 #include "nitf/ImageIO.h"
 #include "nitf/ImageSubheader.hpp"
 #include "nitf/SubWindow.hpp"

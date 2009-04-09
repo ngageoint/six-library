@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -44,21 +44,21 @@ JNIEXPORT void JNICALL Java_nitf_ImageReader_destructMemory
 
 /*
  * Class:     nitf_ImageReader
- * Method:    getInputHandle
- * Signature: ()Lnitf/IOHandle;
+ * Method:    getInput
+ * Signature: ()Lnitf/IOInterface;
  */
-JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getInputHandle
+JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getInput
     (JNIEnv * env, jobject self)
 {
     nitf_ImageReader *reader = _GetObj(env, self);
-    jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
+    jclass ioClass = (*env)->FindClass(env, "nitf/IOInterface");
 
     jmethodID methodID =
-        (*env)->GetMethodID(env, ioHandleClass, "<init>", "(J)V");
+        (*env)->GetMethodID(env, ioClass, "<init>", "(J)V");
     jobject handle = (*env)->NewObject(env,
-                                       ioHandleClass,
+                                       ioClass,
                                        methodID,
-                                       (jlong) reader->inputHandle);
+                                       (jlong) reader->input);
     return handle;
 }
 
@@ -90,11 +90,11 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo
     blockingInfoObject = (*env)->NewObject(env,
                                            blockingInfoClass,
                                            methodID, (jlong) info);
-    
+
     /* tell Java not to manage it */
     methodID = (*env)->GetMethodID(env, blockingInfoClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, blockingInfoObject, methodID, JNI_FALSE);
-        
+
     return blockingInfoObject;
 }
 

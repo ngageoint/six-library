@@ -58,7 +58,7 @@ public:
      * The nitf_SegmentReader_read function reads data from the associated segment.
      * The reading of the data is serial as if a flat file were being read by an
      * input stream. Except for the first argument, this function has the same
-     * calling sequence and behavior as IOHandle_read.
+     * calling sequence and behavior as IOInterface_read.
      *
      * \param buffer    buffer to hold data
      * \param count     amount of data to return
@@ -70,7 +70,7 @@ public:
      *
      * The nitf_SegmentReader_seek function allows the user to seek within the extension
      * data. Except for the first argument, this function has the same calling
-     * sequence and behaivior as IOHandle_seek. The offset is relative to the top
+     * sequence and behaivior as IOInterface_seek. The offset is relative to the top
      * of the segment data.
      *
      * The returned value maybe tested with NITF_IO_SUCCESS()
@@ -85,7 +85,7 @@ public:
      *
      * The tell function allows the user to determine the current
      * offset within the extension data. Except for the first argument, this
-     * function has the same calling sequence and behaivior as IOHandle_tell. The
+     * function has the same calling sequence and behaivior as IOInterface_tell. The
      * offset is relative to the top of the segment data.
      *
      * The returned value may be tested with NITF_IO_SUCCESS()
@@ -99,7 +99,7 @@ public:
      *
      * The nitf_SegmentReader_seek function allows the user to determine the size of
      * the data. Except for the first argument, this function has the same calling
-     * sequence and behavior as IOHandle_getSize.
+     * sequence and behavior as IOInterface_getSize.
      *
      * The returned value maybe tested with NITF_IO_SUCCESS()
      *

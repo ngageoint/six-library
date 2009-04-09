@@ -43,6 +43,8 @@ NITFAPI(NITF_BOOL) nitf_Utils_isNumeric(char *str);
 
 NITFAPI(NITF_BOOL) nitf_Utils_isAlpha(char *str);
 
+NITFAPI(void) nitf_Utils_trimString(char* str);
+
 
 NITF_CXX_ENDGUARD
 

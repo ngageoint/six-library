@@ -25,20 +25,19 @@
 
 #include "nitf/Error.h"
 #include "nitf/System.h"
-#include "nitf/IOHandle.h"
-
+#include "nitf/IOInterface.h"
 
 NITF_CXX_GUARD
 
 /*
  *  Function pointer for writing.
  *  \param data     The ancillary "helper" data
- *  \param buf      The buffer to store the image data
- *  \param size     The size (usually numColumns * numBytesPerPixel)
+ *  \param io       The output interface
  *  \param error    populated on error
  */
 typedef NITF_BOOL(*NITF_IWRITEHANDLER_WRITE) (NITF_DATA *data,
-        nitf_IOHandle io, nitf_Error *error);
+                                              nitf_IOInterface* output,
+                                              nitf_Error *error);
 
 
 /*

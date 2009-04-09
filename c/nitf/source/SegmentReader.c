@@ -45,13 +45,13 @@ NITFAPI(NITF_BOOL) nitf_SegmentReader_read(nitf_SegmentReader *
 
      */
     if (segmentReader->virtualOffset == 0)
-        if (!NITF_IO_SUCCESS(nitf_IOHandle_seek(segmentReader->inputHandle,
-                                                segmentReader->baseOffset,
-                                                NITF_SEEK_SET, error)))
+        if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(segmentReader->input,
+                                                   segmentReader->baseOffset,
+                                                   NITF_SEEK_SET, error)))
             return (NITF_FAILURE);
 
-    ret = nitf_IOHandle_read
-          (segmentReader->inputHandle, (char *) buffer, count, error);
+    ret = nitf_IOInterface_read
+          (segmentReader->input, (char *) buffer, count, error);
     segmentReader->virtualOffset += count;
     return ret;
 }
@@ -108,8 +108,9 @@ NITFAPI(off_t) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
     }
 
     actualPosition =
-        nitf_IOHandle_seek(segmentReader->inputHandle,
-                           actualPosition, SEEK_SET, error);
+        nitf_IOInterface_seek(segmentReader->input,
+                              actualPosition, NITF_SEEK_SET, error);
+
     if (!NITF_IO_SUCCESS(actualPosition))
         return (actualPosition);
 

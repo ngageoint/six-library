@@ -59,10 +59,10 @@ JNIEXPORT jint JNICALL Java_nitf_Writer_getNumTextWriters
 
 /*
  * Class:     nitf_Writer
- * Method:    getOutputHandle
- * Signature: ()Lnitf/IOHandle;
+ * Method:    getOutput
+ * Signature: ()Lnitf/IOInterface;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Writer_getOutputHandle
+JNIEXPORT jobject JNICALL Java_nitf_Writer_getOutput
   (JNIEnv *, jobject);
 
 /*
@@ -75,10 +75,10 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getRecord
 
 /*
  * Class:     nitf_Writer
- * Method:    prepare
- * Signature: (Lnitf/Record;Lnitf/IOHandle;)Z
+ * Method:    prepareIO
+ * Signature: (Lnitf/Record;Lnitf/IOInterface;)Z
  */
-JNIEXPORT jboolean JNICALL Java_nitf_Writer_prepare
+JNIEXPORT jboolean JNICALL Java_nitf_Writer_prepareIO
   (JNIEnv *, jobject, jobject, jobject);
 
 /*

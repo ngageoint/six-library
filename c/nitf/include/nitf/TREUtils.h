@@ -23,7 +23,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
                                           NITF_DATA * data,
                                           size_t dataLength, nitf_Error * error);
 
-NITFAPI(NITF_BOOL) nitf_TREUtils_readField(nitf_IOHandle handle,
+NITFAPI(NITF_BOOL) nitf_TREUtils_readField(nitf_IOInterface* io,
                                            char *fld,
                                            int length,
                                            nitf_Error * error);

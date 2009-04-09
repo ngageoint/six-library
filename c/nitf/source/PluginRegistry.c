@@ -25,7 +25,17 @@
 NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error);
 NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg);
 NITFPRIV(void) exitListener(void);
+NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso, 
+                                  nitf_HashTable* handlers,
+                                  const char* ident,
+                                  const char* suffix,
+                                  nitf_Error* error);
 
+/*
+ *  This function retrieves the mutex that is necessary
+ *  to establish the singleton in a portable way.
+ *
+ */
 NITFPRIV(nitf_Mutex) getMutex()
 {
     
@@ -49,9 +59,14 @@ NITFPRIV(nitf_Mutex) getMutex()
     return _lock;
 }
 
-
-/*NITF_MUTEX_STATIC_INITIALIZER( singletonSync );*/
-
+/*
+ *  Retrieves the singleton instance.  If there is none
+ *  already, one is created.
+ *
+ *  When we create a new registry, we call the load function
+ *  in an attempt to load up all DSO references
+ *
+ */
 NITFPROT(nitf_PluginRegistry *)
     nitf_PluginRegistry_getInstance(nitf_Error * error)
 {
@@ -91,43 +106,47 @@ NITFPROT(nitf_PluginRegistry *)
     return theInstance;
 }
 
-
-NITFPRIV(int) insertToHash(nitf_HashTable * hash,
-                           const char *key,
-                           nitf_DLL * dll, nitf_Error * error)
-{
-    return nitf_HashTable_insert(hash, key, dll, error);
-    
-}
-
-
-NITFPRIV(int) insertPlugin(nitf_PluginRegistry * reg,
-                           const char **ident,
-                           nitf_DLL * dll, nitf_Error * error)
+NITFPRIV(NITF_BOOL) insertPlugin(nitf_PluginRegistry * reg,
+                                 char **ident,
+                                 nitf_DLL * dll, 
+                                 nitf_Error * error)
 {
     nitf_HashTable *hash = NULL;
     int i;
     int ok;
-    
+    const char* suffix = NULL;
+
+    /* Load the DLL */
+    if (!nitf_List_pushBack(reg->dsos, dll, error))
+    {
+        return NITF_FAILURE;
+    }
+
+
     if (strcmp(ident[0], NITF_PLUGIN_TRE_KEY) == 0)
     {
         hash = reg->treHandlers;
+        suffix = NITF_PLUGIN_HOOK_SUFFIX;
     }
     else if (strcmp(ident[0], NITF_PLUGIN_COMPRESSION_KEY) == 0)
     {
         hash = reg->compressionHandlers;
+        suffix = NITF_PLUGIN_CONSTRUCT_SUFFIX;
     }
     else if (strcmp(ident[0], NITF_PLUGIN_DECOMPRESSION_KEY) == 0)
     {
         hash = reg->decompressionHandlers;
+        suffix = NITF_PLUGIN_CONSTRUCT_SUFFIX;
     }
     else
     {
-        nitf_Error_init(error,
-                        "Other handlers not yet supported!",
-                        NITF_CTXT, NITF_ERR_UNK);
-        return 0;
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "The identity [%s] is not supported", ident[0]);
+        return NITF_FAILURE;
     }
+    /* Go through each identity and add it as a creator */
     for (i = 1;; i++)
     {
         const char *key = ident[i];
@@ -136,26 +155,27 @@ NITFPRIV(int) insertPlugin(nitf_PluginRegistry * reg,
             break;
 
         /* no more */
-        ok = insertToHash(hash, key, dll, error);
+        ok = insertCreator(dll, hash, key, suffix, error);
         if (!ok)
         {
-            return 0;
+            return NITF_FAILURE;
         }
 
     }
-    return 1;
+    return NITF_SUCCESS;
 }
 
 
 NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
 {
 
+
     const char *pluginEnvVar;
     
     /*  Create the registry object  */
     nitf_PluginRegistry *reg =
         (nitf_PluginRegistry *) NITF_MALLOC(sizeof(nitf_PluginRegistry));
-    
+
     /*  If we have a memory problem, init our error struct and return  */
     if (!reg)
     {
@@ -169,6 +189,15 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     reg->compressionHandlers = NULL;
     reg->treHandlers = NULL;
     reg->decompressionHandlers = NULL;
+    reg->dsos = NULL;
+
+    reg->dsos = nitf_List_construct(error);
+    if (!reg->dsos)
+    {
+        implicitDestruct(&reg);
+        return NULL;
+    }
+
 
     /*  Construct our hash object  */
     reg->treHandlers = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
@@ -210,9 +239,6 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     /* do not adopt the data - we will clean it up ourselves */
     nitf_HashTable_setPolicy(reg->decompressionHandlers, NITF_DATA_RETAIN_OWNER);
 
-    /*nitf_HashTable_setPolicy(reg->desHandlers, NITF_DATA_RETAIN_OWNER);
-*/
-
     /*  Start with a clean slate  */
     memset(reg->path, 0, NITF_MAX_PATH);
 
@@ -221,7 +247,8 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     if (!pluginEnvVar)
     {
         /*  Take the default path  */
-        strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);
+        /*strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);*/
+        return reg;
     }
     else
     {
@@ -272,6 +299,9 @@ NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg)
     /*  If it is not NULL set  */
     if (*reg)
     {
+        if ((*reg)->dsos)
+            nitf_List_destruct(&(*reg)->dsos);
+
         if ((*reg)->treHandlers)
             nitf_HashTable_destruct(&(*reg)->treHandlers);
         if ((*reg)->compressionHandlers)
@@ -283,12 +313,16 @@ NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg)
     }
 }
 
+/*
+ *  Initialize a DSO.  The init hook is retrieved and called once
+ *  when the DSO is loaded
+ */
 
-NITFPRIV(const char **) doInit(nitf_DLL * dll,
+NITFPRIV(char **) doInit(nitf_DLL * dll,
                                const char *prefix, nitf_Error * error)
 {
     NITF_PLUGIN_INIT_FUNCTION init;
-    const char **ident;
+    char **ident;
 
     char name[NITF_MAX_PATH];
     memset(name, 0, NITF_MAX_PATH);
@@ -296,13 +330,13 @@ NITFPRIV(const char **) doInit(nitf_DLL * dll,
     init = (NITF_PLUGIN_INIT_FUNCTION) nitf_DLL_retrieve(dll, name, error);
     if (!init)
     {
-        nitf_Error_print(error, stdout, "FIXME");
+        nitf_Error_print(error, stdout, "Invalid init hook in DSO");
         return NULL;
     }
 
     /*  Else, call it  */
 
-    ident = init(error);
+    ident = (*init)(error);
     if (!ident)
     {
         nitf_Error_initf(error,
@@ -315,26 +349,25 @@ NITFPRIV(const char **) doInit(nitf_DLL * dll,
 }
 
 
-NITFPRIV(int) doCleanup(nitf_DLL * dll,
-                        const char *prefix, nitf_Error * error)
+/*
+ *  Cleanup the DLL.  This is called once when the registry is
+ *  shut down.
+ */
+NITFPRIV(int) doCleanup(nitf_DLL * dll, nitf_Error* error)
 {
     NITF_PLUGIN_CLEANUP_FUNCTION cleanup;
-    char name[NITF_MAX_PATH];
-    memset(name, 0, NITF_MAX_PATH);
-    sprintf(name, "%s%s", prefix, NITF_PLUGIN_CLEANUP_SUFFIX);
+    const char* cleanupName = NITF_PLUGIN_CLEANUP;
 
-    if (nitf_DLL_isValid(dll))
+    cleanup = (NITF_PLUGIN_CLEANUP_FUNCTION)nitf_DLL_retrieve(dll,
+                                                              cleanupName,
+                                                              error);
+    if (!cleanup)
     {
-	cleanup = (NITF_PLUGIN_CLEANUP_FUNCTION) nitf_DLL_retrieve(dll,
-								   name,
-								   error);
-	if (!cleanup)
-	{
-	    return 0;
-	}
-	/*  Else, call it  */
-	cleanup();
+        return 0;
     }
+    /*  Else, call it  */
+    cleanup();
+
     return 1;
 }
 
@@ -348,60 +381,53 @@ NITFPRIV(int) doCleanup(nitf_DLL * dll,
  *  \return 1 on success, 0 on failure
  *
  */
-NITFPRIV(int) unloadIt(nitf_HashTable * ht, nitf_Pair * pair,
-                       NITF_DATA* userData, nitf_Error * error)
+NITFPRIV(NITF_BOOL) unloadDSO(nitf_DLL* dll, nitf_Error * error)
 {
-    nitf_DLL *dll = (nitf_DLL *) pair->data;
+
+    NITF_BOOL ok = NITF_SUCCESS;
+
 
     if (nitf_DLL_isValid(dll))
     {
-	if (!doCleanup(dll, pair->key, error))
-	    return 0;
+	doCleanup(dll, error);
 
 	/* destroy the lib */
-        nitf_DLL_unload(dll, error);
+        ok &= nitf_DLL_unload(dll, error);
 	if ( dll->libname )
 	{
+
+#if NITF_DEBUG_PLUGIN_REG
+            printf("Unloaded dll with name [%s]\n", dll->libname);
+#endif
+
 	    NITF_FREE( dll->libname );
 	    dll->libname = NULL;
 	}
 	
-	/* Don't ever do this!
-	   nitf_DLL_destruct(&dll);
-	   that way object is still valid
-	*/
-#if NITF_DEBUG_PLUGIN_REG
-    printf("Successfully unloaded dll with key [%s]\n", pair->key);
-#endif
+        nitf_DLL_destruct(&dll);
+
 
     }
-    else
-    {
-
-	assert(dll->libname == NULL);
-	/* We *have* to get rid of this entry now! */
-	pair->data = NULL;
-#if NITF_DEBUG_PLUGIN_REG
-	printf("No need to unload dll with key [%s]\n", pair->key);
-#endif
-	
-    }
-    return 1;
+    return ok;
 }
+
+
 
 
 NITFPROT(NITF_BOOL) nitf_PluginRegistry_unload(nitf_PluginRegistry * reg,
         nitf_Error * error)
 {
-    NITF_HASH_FUNCTOR fn = unloadIt;
-    int rv = 0;
-    if (reg->treHandlers)
-        rv = nitf_HashTable_foreach(reg->treHandlers, fn, NULL, error);
-    if (reg->compressionHandlers)
-        rv |= nitf_HashTable_foreach(reg->compressionHandlers, fn, NULL, error);
-    if (reg->decompressionHandlers)
-        rv |= nitf_HashTable_foreach(reg->decompressionHandlers, fn, NULL, error);
-    return (NITF_BOOL) rv;
+
+    /*  Pop the front off, until the list is empty  */
+    nitf_List* l = reg->dsos;
+    NITF_BOOL success = NITF_SUCCESS;
+    while ( ! nitf_List_isEmpty(l) )
+    {
+        nitf_DLL* dso = (nitf_DLL*)nitf_List_popFront(l);
+        success &= unloadDSO(dso, error);
+    }
+    return success;
+    
 }
 
 
@@ -415,7 +441,7 @@ NITFAPI(NITF_BOOL)
     int ok;
     int i, begin, end;
     nitf_DLL *dll;
-    const char **ident;
+    char **ident;
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
     /*  Construct the DLL object  */
@@ -464,13 +490,60 @@ NITFAPI(NITF_BOOL)
         }
 #if NITF_DEBUG_PLUGIN_REG
         printf("Successfully loaded plugin: [%s] at [%p]\n",
-               name, dll);
+               keyName, dll);
 #endif
         return NITF_SUCCESS;
     }
     return NITF_FAILURE;
     
 }
+
+
+
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
+                                       NITF_PLUGIN_TRE_HANDLER_FUNCTION handle,
+                                       nitf_Error * error)
+{
+    
+    nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
+
+    char** ident;
+    int i = 1;
+    int ok = 1;
+    if (!reg)
+    {
+        return NITF_FAILURE;
+    }
+    if ( (ident = (*init)(error)) == NULL)
+    {
+        return NITF_FAILURE;
+    }
+    
+    if (!ident[0] || (strcmp(ident[0], NITF_PLUGIN_TRE_KEY) != 0))
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_OBJECT,
+                         "Expected a TRE identity"); 
+        return NITF_FAILURE;
+    }
+
+    for (; ident[i] != NULL; ++i)
+    {
+#if NITF_DEBUG_PLUGIN_REG
+        if (nitf_HashTable_exists(reg->treHandlers, ident[i]))
+        {
+            printf("Warning, static handler overriding [%s] hook", ident);
+        }
+#endif
+        ok &= nitf_HashTable_insert(reg->treHandlers, ident[i], handle, error);
+    }
+
+    return ok;
+
+}
+
 
 NITFPROT(NITF_BOOL) 
     nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry * reg,
@@ -496,17 +569,6 @@ NITFPROT(NITF_BOOL)
     
     sizePath = strlen(dirName);
     
-    /* removed this so we don't fail if there aren't any plugins loaded */
-    /*if (!nitf_Directory_exists(reg->path))
-       {
-       nitf_Error_initf(error,
-       NITF_CTXT, NITF_ERR_OPENING_FILE,
-       "Could not open plug-in directory '%s'.  You may have forgotten to set your NITF_PLUGIN_PATH environment variable",
-       reg->path);
-       nitf_Directory_destruct(&dir);
-       return NITF_FAILURE;
-       } */
-
     if (nitf_Directory_exists(dirName))
     {
         name = nitf_Directory_findFirstFile(dir, dirName);
@@ -531,7 +593,6 @@ NITFPROT(NITF_BOOL)
                     if (!nitf_PluginRegistry_loadPlugin(fullName, error))
                     {
 #if NITF_DEBUG_PLUGIN_REG
-                        /*  printf("Here, closing 1\n");  */
                         printf("Warning: plugin [%s] failed to load!\n", name);
 #endif                        
                     }
@@ -540,10 +601,8 @@ NITFPROT(NITF_BOOL)
                 else
                 {
 #if NITF_DEBUG_PLUGIN_REG
-                    /*  printf("Here, closing 1\n");  */
                     printf("Skipping directory [%s]\n", name);
 #endif
-                    /*return (NITF_BOOL)1; */
                 }
                 
                 name = nitf_Directory_findNextFile(dir);
@@ -597,118 +656,160 @@ NITFAPI(NITF_BOOL) nitf_PluginRegistry_loadDir(const char *dirName,
 }
 
 
-NITFPROT(nitf_TREHandler*)
-nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
-                                       const char *tre_id,
-                                       int *had_error, nitf_Error * error)
+
+NITFPROT(NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)
+nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
+                                              const char *ident,
+                                              int *hadError,
+                                              nitf_Error * error)
 {
-    char* p = NULL;
-
-    nitf_TREHandler* theHandler;
-	/*  We get back a pair from the hash table  */
+    
+    /*  We get back a pair from the hash table  */
     nitf_Pair *pair;
-    /*  We get back a DLL from the pair  */
-    nitf_DLL *dll;
+    
+    /*  No error has occurred (yet)  */
+    *hadError = 0;
+    
+    if (!nitf_HashTable_exists(reg->decompressionHandlers, ident))
+    {
+        *hadError = 1;
+        return NULL;
+    }
+    pair = nitf_HashTable_find(reg->decompressionHandlers, ident);
+    
+    /*  If nothing is there, we dont have a handler, plain and simple  */
+    if (!pair)
+        return NULL;
+    
+    return (NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION) pair->data;
+}
 
+NITFPROT(NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION)
+nitf_PluginRegistry_retrieveCompConstructor(nitf_PluginRegistry * reg,
+                                            const char *ident,
+                                            int *hadError,
+                                            nitf_Error * error)
+{
+
+    /*  We get back a pair from the hash table  */
+    nitf_Pair *pair;
+    
+    /*  No error has occurred (yet)  */
+    *hadError = 0;
+    
+    if (!nitf_HashTable_exists(reg->compressionHandlers, ident))
+    {
+        *hadError = 1;
+        return NULL;
+    }
+    pair = nitf_HashTable_find(reg->compressionHandlers, ident);
+    
+    /*  If nothing is there, we dont have a handler, plain and simple  */
+    if (!pair)
+        return NULL;
+    
+    return (NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION) pair->data;
+}
+
+
+NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso, 
+                                  nitf_HashTable* hash,
+                                  const char* ident,
+                                  const char* suffix,
+                                  nitf_Error* error)
+{
     /*  We are trying to find tre_main  */
-    NITF_PLUGIN_TRE_HANDLER_FUNCTION tre_main = NULL;
+    NITF_DLL_FUNCTION_PTR dsoMain = NULL;
 
     /*  Get the name of the handler  */
-    char tre_name[NITF_MAX_PATH];
-    memset(tre_name, 0, NITF_MAX_PATH);
-    sprintf(tre_name, "%s%s", tre_id, NITF_PLUGIN_HOOK_SUFFIX);
+    char name[NITF_MAX_PATH];
+    char* p = NULL;
 
-    while( (p = strchr(tre_name, ' ')) != NULL)
+    if (!nitf_DLL_isValid(dso))
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_INVALID_PARAMETER,
+                         "DSO is not valid for [%s]",
+                         ident);
+
+    }
+
+    memset(name, 0, NITF_MAX_PATH);
+    sprintf(name, "%s%s", ident, suffix);
+
+    while( (p = strchr(name, ' ')) != NULL)
     {
         *p = '_';
     }
 
     /*  No error has occurred (yet)  */
-    *had_error = 0;
-
-    /*  Lookup the pair from the hash table, by the tre_id  */
-    pair = nitf_HashTable_find(reg->treHandlers, tre_id);
-
-    /*  If nothing is there, we dont have a handler, plain and simple  */
-    if (!pair)
-        return NULL;
-
-    /*  If something is, get its DLL part  */
-    dll = (nitf_DLL *) pair->data;
-    if (!nitf_DLL_isValid(dll))
-    {
-        return NULL;
-    }
 #if NITF_DEBUG_PLUGIN_REG
-    printf("Loading function [%s] in dll at [%p]\n", tre_name, dll);
+    printf("Loading function [%s] in dso at [%p]\n", name, dso);
 #endif
 
     /*  Retrieve the main  */
-    tre_main =
-        (NITF_PLUGIN_TRE_HANDLER_FUNCTION) nitf_DLL_retrieve(dll, tre_name,
-                error);
-    if (!tre_main)
+    dsoMain = nitf_DLL_retrieve(dso, name, error);
+
+    if (!dsoMain)
     {
         /*  If it didnt work, we are done  */
-        *had_error = 1;
-        return NULL;
-	}
-    /*  Yes!!! We did it!!  */
-    theHandler = (*tre_main)(error);
-	return theHandler;
+        return NITF_FAILURE;
+    }
+
+#if NITF_DEBUG_PLUGIN_REG
+    if (nitf_HashTable_exists(hash, ident))
+    {
+        printf("Warning, overriding [%s] hook", ident);
+        
+    }
+#endif
+    
+    return nitf_HashTable_insert(hash, ident, dsoMain, error);
+
 }
 
-
-NITFPROT(NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)
-nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
-        const char *comp_id,
-        int *had_error,
-        nitf_Error * error)
+/*
+ *  Function is now greatly simplified.  We only retrieve TREs from
+ *  the hash table.  If they are there, we are good, if not fail
+ *
+ *  No more talking to the DSOs directly
+ */
+NITFPROT(nitf_TREHandler*)
+nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
+                                       const char *treIdent,
+                                       int *hadError, 
+                                       nitf_Error * error)
 {
+    nitf_TREHandler* theHandler;
     /*  We get back a pair from the hash table  */
     nitf_Pair *pair;
-    /*  We get back a DLL from the pair  */
-    nitf_DLL *dll;
-
-    /*  We are trying to find decomp_constructor  */
-    NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION decomp_constructor = NULL;
-
-    /*  Get the name of the handler  */
-    char decomp_name[NITF_MAX_PATH];
-    memset(decomp_name, 0, NITF_MAX_PATH);
-    sprintf(decomp_name, "%s%s", comp_id, NITF_PLUGIN_CONSTRUCT_SUFFIX);
-
+    /*  We are trying to find tre_main  */
+    NITF_PLUGIN_TRE_HANDLER_FUNCTION treMain = NULL;
+    
     /*  No error has occurred (yet)  */
-    *had_error = 0;
+    *hadError = 0;
 
-    /*  Lookup the pair from the hash table, by the decomp_id  */
-    pair = nitf_HashTable_find(reg->decompressionHandlers, comp_id);
+    if (!nitf_HashTable_exists(reg->treHandlers, treIdent))
+    {
+        return NULL;
+    }
+    /*  Lookup the pair from the hash table, by the tre_id  */
+    pair = nitf_HashTable_find(reg->treHandlers, treIdent);
 
     /*  If nothing is there, we dont have a handler, plain and simple  */
     if (!pair)
         return NULL;
-
+    
     /*  If something is, get its DLL part  */
-    dll = (nitf_DLL *) pair->data;
-    if (!nitf_DLL_isValid(dll))
-    {
-        return NULL;
-    }
-#if NITF_DEBUG_PLUGIN_REG
-    printf("Loading function [%s] in dll at [%p]\n", decomp_name, dll);
-#endif
+    treMain = (NITF_PLUGIN_TRE_HANDLER_FUNCTION) pair->data;
 
-    /*  Retrieve the main  */
-    decomp_constructor =
-        (NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)
-        nitf_DLL_retrieve(dll, decomp_name, error);
-    if (!decomp_constructor)
+    theHandler = (*treMain)(error);
+    if (!theHandler)
     {
-        /*  If it didnt work, we are done  */
-        *had_error = 1;
-        return NULL;
+        *hadError = 1;
     }
-    /*  Yes!!! We did it!!  */
-    return decomp_constructor;
+    return theHandler;
 }
+
 

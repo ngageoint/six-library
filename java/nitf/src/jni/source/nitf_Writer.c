@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -85,10 +85,10 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_Writer_getImageWriters
                                         imageWriterClass,
                                         initMethodID,
                                         (jlong) writer->imageWriters[i]);
-        
+
         /* tell Java not to manage the ImageSource memory */
         (*env)->CallVoidMethod(env, imageWriter, methodID, JNI_FALSE);
-        
+
         (*env)->SetObjectArrayElement(env, writers, i, imageWriter);
     }
 
@@ -138,10 +138,10 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_Writer_getTextWriters
                                           segmentWriterClass,
                                           initMethodID,
                                           (jlong) writer->textWriters[i]);
-        
+
         /* tell Java not to manage the ImageSource memory */
         (*env)->CallVoidMethod(env, segmentWriter, methodID, JNI_FALSE);
-        
+
         (*env)->SetObjectArrayElement(env, writers, i, segmentWriter);
     }
 
@@ -158,28 +158,22 @@ JNIEXPORT jint JNICALL Java_nitf_Writer_getNumTextWriters
   (JNIEnv *env, jobject self)
 {
     nitf_Writer *writer = _GetObj(env, self);
-    return writer->numTextWriters;	
+    return writer->numTextWriters;
 }
 
 
 /*
  * Class:     nitf_Writer
- * Method:    getOutputHandle
- * Signature: ()Lnitf/IOHandle;
+ * Method:    getOutput
+ * Signature: ()Lnitf/IOInterface;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Writer_getOutputHandle
+JNIEXPORT jobject JNICALL Java_nitf_Writer_getOutput
     (JNIEnv * env, jobject self)
 {
     nitf_Writer *writer = _GetObj(env, self);
-    jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
-
-    jmethodID methodID =
-        (*env)->GetMethodID(env, ioHandleClass, "<init>", "(J)V");
-    jobject handle = (*env)->NewObject(env,
-                                       ioHandleClass,
-                                       methodID,
-                                       (jlong) writer->outputHandle);
-    return handle;
+    jclass ioClass = (*env)->FindClass(env, "nitf/NativeIOInterface");
+    jmethodID methodID = (*env)->GetMethodID(env, ioClass, "<init>", "(J)V");
+    return (*env)->NewObject(env, ioClass, methodID, (jlong) writer->output);
 }
 
 
@@ -200,56 +194,52 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getRecord
                                        recordClass,
                                        methodID,
                                        (jlong) writer->record);
-    
+
     /* tell Java not to manage the ImageSource memory */
     methodID = (*env)->GetMethodID(env, recordClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, handle, methodID, JNI_FALSE);
-    
+
     return handle;
 }
 
 
 /*
  * Class:     nitf_Writer
- * Method:    prepare
- * Signature: (Lnitf/Record;Lnitf/IOHandle;)Z
+ * Method:    prepareIO
+ * Signature: (Lnitf/Record;Lnitf/IOInterface;)Z
  */
-JNIEXPORT jboolean JNICALL Java_nitf_Writer_prepare
+JNIEXPORT jboolean JNICALL Java_nitf_Writer_prepareIO
     (JNIEnv * env, jobject self, jobject recordObject,
-     jobject ioHandleObject)
+     jobject ioObject)
 {
     nitf_Writer *writer = _GetObj(env, self);
     jclass recordClass = (*env)->FindClass(env, "nitf/Record");
-    jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
-    nitf_Record *record;
-    nitf_IOHandle ioHandle;
+    jclass ioClass = (*env)->GetObjectClass(env, ioObject);
+    nitf_Record *record = NULL;
+    nitf_IOInterface *io = NULL;
     nitf_Error error;
 
     jmethodID methodID =
         (*env)->GetMethodID(env, recordClass, "getAddress", "()J");
-    record =
-        (nitf_Record *) (*env)->CallLongMethod(env, recordObject,
-                                               methodID);
+    record = (nitf_Record *) (*env)->CallLongMethod(
+            env, recordObject, methodID);
 
     /* punt if there is no record */
     if (!record)
-    {
         return JNI_FALSE;
-    }
 
     methodID =
-        (*env)->GetMethodID(env, ioHandleClass, "getIOHandle", "()J");
-    ioHandle =
-        (nitf_IOHandle) ((*env)->
-                         CallLongMethod(env, ioHandleObject, methodID));
+        (*env)->GetMethodID(env, ioClass, "getAddress", "()J");
+    io = (nitf_IOInterface*) ((*env)->CallLongMethod(env, ioObject, methodID));
 
-    if (!nitf_Writer_prepare(writer, record, ioHandle, &error))
+    if (!nitf_Writer_prepareIO(writer, record, io, &error))
     {
         _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
     return JNI_TRUE;
 }
+
 
 /*
  * Class:     nitf_Writer
@@ -264,7 +254,7 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setImageWriteHandler
     nitf_WriteHandler *writeHandler = NULL;
     nitf_Error error;
     jmethodID methodID;
-    
+
     /* TODO - there might be a better way to do this, but for now we need to
      * keep this handler around for later. Maybe adding a list to the Writer
      * class might do the trick.
@@ -275,10 +265,10 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setImageWriteHandler
         (*env)->GetMethodID(env, writeHandlerClass, "getAddress", "()J");
     writeHandler =
         (nitf_WriteHandler *) (*env)->CallLongMethod(env, handler, methodID);
-    
+
     if (!nitf_Writer_setImageWriteHandler(writer, index, writeHandler, &error))
         _ThrowNITFException(env, error.message);
-    
+
     /* tell Java not to manage it */
     methodID = (*env)->GetMethodID(env, writeHandlerClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, handler, methodID, JNI_FALSE);
@@ -297,7 +287,7 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setGraphicWriteHandler
     nitf_WriteHandler *writeHandler = NULL;
     nitf_Error error;
     jmethodID methodID;
-    
+
     /* TODO - there might be a better way to do this, but for now we need to
      * keep this handler around for later. Maybe adding a list to the Writer
      * class might do the trick.
@@ -308,10 +298,10 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setGraphicWriteHandler
         (*env)->GetMethodID(env, writeHandlerClass, "getAddress", "()J");
     writeHandler =
         (nitf_WriteHandler *) (*env)->CallLongMethod(env, handler, methodID);
-    
+
     if (!nitf_Writer_setGraphicWriteHandler(writer, index, writeHandler, &error))
         _ThrowNITFException(env, error.message);
-    
+
     /* tell Java not to manage it */
     methodID = (*env)->GetMethodID(env, writeHandlerClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, handler, methodID, JNI_FALSE);
@@ -330,7 +320,7 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setTextWriteHandler
     nitf_WriteHandler *writeHandler = NULL;
     nitf_Error error;
     jmethodID methodID;
-    
+
     /* TODO - there might be a better way to do this, but for now we need to
      * keep this handler around for later. Maybe adding a list to the Writer
      * class might do the trick.
@@ -341,10 +331,10 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setTextWriteHandler
         (*env)->GetMethodID(env, writeHandlerClass, "getAddress", "()J");
     writeHandler =
         (nitf_WriteHandler *) (*env)->CallLongMethod(env, handler, methodID);
-    
+
     if (!nitf_Writer_setTextWriteHandler(writer, index, writeHandler, &error))
         _ThrowNITFException(env, error.message);
-    
+
     /* tell Java not to manage it */
     methodID = (*env)->GetMethodID(env, writeHandlerClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, handler, methodID, JNI_FALSE);
@@ -363,7 +353,7 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setDEWriteHandler
     nitf_WriteHandler *writeHandler = NULL;
     nitf_Error error;
     jmethodID methodID;
-    
+
     /* TODO - there might be a better way to do this, but for now we need to
      * keep this handler around for later. Maybe adding a list to the Writer
      * class might do the trick.
@@ -374,10 +364,10 @@ JNIEXPORT void JNICALL Java_nitf_Writer_setDEWriteHandler
         (*env)->GetMethodID(env, writeHandlerClass, "getAddress", "()J");
     writeHandler =
         (nitf_WriteHandler *) (*env)->CallLongMethod(env, handler, methodID);
-    
+
     if (!nitf_Writer_setDEWriteHandler(writer, index, writeHandler, &error))
         _ThrowNITFException(env, error.message);
-    
+
     /* tell Java not to manage it */
     methodID = (*env)->GetMethodID(env, writeHandlerClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, handler, methodID, JNI_FALSE);
@@ -410,11 +400,11 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getNewImageWriter
     imageWriterObject = (*env)->NewObject(env,
                                           imageWriterClass,
                                           methodID, (jlong) imageWriter);
-    
+
     /* tell Java not to manage the memory */
     methodID = (*env)->GetMethodID(env, imageWriterClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, imageWriterObject, methodID, JNI_FALSE);
-    
+
     return imageWriterObject;
 }
 
@@ -446,11 +436,11 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getNewTextWriter
     segmentWriterObject = (*env)->NewObject(env,
                                             segmentWriterClass,
                                             methodID, (jlong) segmentWriter);
-    
+
     /* tell Java not to manage the memory */
     methodID = (*env)->GetMethodID(env, segmentWriterClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, segmentWriterObject, methodID, JNI_FALSE);
-    
+
     return segmentWriterObject;
 }
 
@@ -481,11 +471,11 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getNewGraphicWriter
     segmentWriterObject = (*env)->NewObject(env,
                                             segmentWriterClass,
                                             methodID, (jlong) segmentWriter);
-    
+
     /* tell Java not to manage the memory */
     methodID = (*env)->GetMethodID(env, segmentWriterClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, segmentWriterObject, methodID, JNI_FALSE);
-    
+
     return segmentWriterObject;
 }
 
@@ -512,11 +502,11 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getNewDEWriter
     segmentWriterObject = (*env)->NewObject(env,
                                             segmentWriterClass,
                                             methodID, (jlong) segmentWriter);
-    
+
     /* tell Java not to manage the memory */
     methodID = (*env)->GetMethodID(env, segmentWriterClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, segmentWriterObject, methodID, JNI_FALSE);
-    
+
     return segmentWriterObject;
 }
 

@@ -49,6 +49,7 @@ SOURCES = BandInfo.cpp \
           ImageSource.cpp \
           ImageSubheader.cpp \
           ImageWriter.cpp \
+          IOInterface.cpp \
           LabelSegment.cpp \
           LabelSubheader.cpp \
           List.cpp \

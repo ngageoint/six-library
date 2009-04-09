@@ -38,27 +38,36 @@ NITF_CXX_GUARD
  */
 typedef struct _nitf_FieldWarning
 {
-    off_t fileOffset;           /* Offset in bytes to the field in the NITF file */
-    char *fieldName;                /* Name of the offending field in the following format
-                                       hdr.section(i).  ...  .fieldName
-                                       section  - Any of the following section abbreviations.
-                                       If a section can occur more than once (i)
-                                       will appear where "i" is the occurance number
-                                       in the order they appear in the file
-                                       hdr     - Main file header (Identification & Organization Segment)
-                                       ish(i)  - ith image sub-header
-                                       imd(i)  - ith image data section
-                                       gsh(i)  - ith graphics sub-header
-                                       grd(i)  - ith graphics data section
-                                       tsh(i)  - ith text sub-header
-                                       ted(i)  - ith text data section
-                                       esh(i)  - ith extended data sub-header
-                                       edd(i)  - ith extended data section
+    /* Offset in bytes to the field in the NITF file */
+    off_t fileOffset;
 
-                                       <TRE>(i)- ith occurance of a particular TRE in a particular
-                                       section (i.e. hdr.ish(2).ACFTB(1).SCNUM */
-    nitf_Field *field;      /* Original field found in the file */
-    char *expectation;          /* Description of what was expected */
+    /* Name of the offending field in the following format
+       hdr.section(i).  ...  .fieldName
+       section  - Any of the following section abbreviations.
+       If a section can occur more than once (i)
+       will appear where "i" is the occurance number
+       in the order they appear in the file
+       hdr     - Main file header (Identification & Organization Segment)
+       ish(i)  - ith image sub-header
+       imd(i)  - ith image data section
+       gsh(i)  - ith graphics sub-header
+       grd(i)  - ith graphics data section
+       tsh(i)  - ith text sub-header
+       ted(i)  - ith text data section
+       esh(i)  - ith extended data sub-header
+       edd(i)  - ith extended data section
+       
+       <TRE>(i)- ith occurance of a particular TRE in a particular
+       section (i.e. hdr.ish(2).ACFTB(1).SCNUM 
+    */
+    
+    char *fieldName;
+
+    /* Original field found in the file */
+    nitf_Field *field;
+
+    /* Description of what was expected */
+    char *expectation;
 
 }
 nitf_FieldWarning;
@@ -74,13 +83,14 @@ nitf_FieldWarning;
  *  \param error An error object to fill if a problem occurs
  *  \return A FieldWarning object or NULL upon failure
  */
-NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(off_t fileOffset,
-        const char *fieldName,
-        nitf_Field *field,
-        const char
-        *expectation,
-        nitf_Error *
-        error);
+NITFAPI(nitf_FieldWarning *) 
+nitf_FieldWarning_construct(off_t fileOffset,
+                            const char *fieldName,
+                            nitf_Field *field,
+                            const char
+                            *expectation,
+                            nitf_Error *
+                            error);
 
 
 /*!
@@ -88,8 +98,7 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(off_t fileOffset,
  *  This function destructs a FieldWarning object and NULL sets its pointer
  *  \param fieldWarningPtr A pointer to a FieldWarning object
  */
-NITFAPI(void) nitf_FieldWarning_destruct(nitf_FieldWarning **
-        fieldWarningPtr);
+NITFAPI(void) nitf_FieldWarning_destruct(nitf_FieldWarning **fieldWarningPtr);
 
 
 /*!
@@ -99,9 +108,8 @@ NITFAPI(void) nitf_FieldWarning_destruct(nitf_FieldWarning **
  *  \param error An error object to fill if a problem occurs
  *  \return A FieldWarning object or NULL upon failure
  */
-NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
-        source,
-        nitf_Error * error);
+NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *source,
+                                                     nitf_Error * error);
 
 
 /* HELP:  This object should probably have 1 or more print methods, and ? */

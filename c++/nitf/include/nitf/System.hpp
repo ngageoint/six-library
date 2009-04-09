@@ -25,8 +25,6 @@
 
 /*!
  *  \file System.hpp
- *  \brief Perverse back-forth wrapping between io::FileInputStream
- *  and IOHandle
  */
 
 #include "nitf/System.h"
