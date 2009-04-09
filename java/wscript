@@ -11,6 +11,8 @@ def configure(conf):
         incPath = os.path.join(env['JAVA_HOME'][0], 'include')
         #also add the platform-specific dir
         incPath = [incPath, os.path.join(incPath, Options.platform)]
+        if Options.platform == 'sunos':
+            incPath.append(os.path.join(incPath[0], 'solaris'))
         
         if conf.check_cc(header_name="jni.h", define_name='HAVE_JNI_H',
                       includes=incPath):
