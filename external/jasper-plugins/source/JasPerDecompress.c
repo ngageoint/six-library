@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -197,7 +197,7 @@ NITFPRIV(void*) implMemAlloc(size_t size, nitf_Error* error)
 
 NITFPRIV(void) implMemFree(void* p)
 {
-    NITF_FREE(p);
+    if (p) NITF_FREE(p);
 }
 
 
@@ -332,6 +332,7 @@ NITFPRIV(int) decode(ImplControl *implControl,
 
     /*  Free input buffer  */
     implMemFree(input);
+    input = NULL;
     if (!check) return 0;
 
     if (outputLen != implControl->blockInfo.length)
@@ -355,7 +356,10 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
     ImplControl *implControl;   /* The object */
     implControl = (ImplControl *) * control;
     if (implControl->data != NULL)
-        implMemFree(implControl);
+    {
+        implMemFree(implControl->data);
+        implControl->data = NULL;
+    }
 
     implMemFree((void *)(*control));
     *control = NULL;
