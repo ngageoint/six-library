@@ -68,15 +68,15 @@ void Writer::write()
 
 void Writer::prepare(nitf::IOHandle & io, nitf::Record & record) throw (nitf::NITFException)
 {
-    NITF_BOOL x = nitf_Writer_prepare(getNativeOrThrow(),
-        record.getNative(), io.getHandle(), &error);
-    if (!x)
-        throw nitf::NITFException(&error);
+    prepareIO(io, record);
 }
 
 void Writer::prepareIO(nitf::IOInterface & io, nitf::Record & record) throw (nitf::NITFException)
 {
-    //TODO!
+    NITF_BOOL x = nitf_Writer_prepareIO(getNativeOrThrow(),
+        record.getNative(), io.getNative(), &error);
+    if (!x)
+        throw nitf::NITFException(&error);
 }
 
 

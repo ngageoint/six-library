@@ -58,7 +58,12 @@ nitf::Version Reader::getNITFVersion(const std::string& fileName)
 
 nitf::Record Reader::read(nitf::IOHandle & io) throw (nitf::NITFException)
 {
-    nitf_Record * x = nitf_Reader_read(getNativeOrThrow(), io.getHandle(), &error);
+    return readIO(io);
+}
+
+nitf::Record Reader::readIO(nitf::IOInterface & io) throw (nitf::NITFException)
+{
+    nitf_Record * x = nitf_Reader_readIO(getNativeOrThrow(), io.getNative(), &error);
     if (!x)
         throw nitf::NITFException(&error);
     nitf::Record rec(x);
@@ -66,11 +71,6 @@ nitf::Record Reader::read(nitf::IOHandle & io) throw (nitf::NITFException)
     //this means Records are subject to deletion when refcount == 0
     rec.setManaged(false);
     return rec;
-}
-
-nitf::Record Reader::readIO(nitf::IOInterface & io) throw (nitf::NITFException)
-{
-    //TODO!
 }
 
 nitf::ImageReader Reader::newImageReader(int imageSegmentNumber)
