@@ -337,7 +337,7 @@ int main(int argc, char **argv)
     nitf_Error error;           /* error object */
 
     nitf_IOHandle xmlFile;
-    off_t xmlSize;
+    nitf_Off xmlSize;
     /*  Check argv and make sure we are happy  */
     if (argc != 4)
     {

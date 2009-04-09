@@ -75,7 +75,7 @@ public:
      *  \param value  The NITF field value
      *  \param expectation  A string describing the expected field value
      */
-    FieldWarning(off_t fileOffset, const std::string& fieldName,
+    FieldWarning(nitf::Off fileOffset, const std::string& fieldName,
         nitf::Field & field, const std::string& expectation)
             throw(nitf::NITFException)
     {
@@ -88,7 +88,7 @@ public:
     ~FieldWarning(){}
 
     //! Get the fileOffset
-    off_t getFileOffset() const
+    nitf::Off getFileOffset() const
     {
         return getNativeOrThrow()->fileOffset;
     }

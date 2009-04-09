@@ -71,11 +71,11 @@ public:
 
     virtual void write(const char * buf, size_t size) throw(nitf::NITFException) {}
 
-    virtual off_t seek(off_t offset, int whence) throw(nitf::NITFException) { return -1; }
+    virtual nitf::Off seek(nitf::Off offset, int whence) throw(nitf::NITFException) { return -1; }
 
-    virtual off_t tell() throw(nitf::NITFException) { return -1; }
+    virtual nitf::Off tell() throw(nitf::NITFException) { return -1; }
 
-    virtual off_t getSize() throw(nitf::NITFException) { return -1; }
+    virtual nitf::Off getSize() throw(nitf::NITFException) { return -1; }
 
     virtual void close() {}
 
@@ -87,11 +87,11 @@ private:
             const char* buf, size_t size, nitf_Error* error);
 
     static NITF_BOOL IOInterfaceImpl_seek(NITF_DATA* data,
-            off_t offset, int whence, nitf_Error* error);
+            nitf::Off offset, int whence, nitf_Error* error);
 
-    static off_t IOInterfaceImpl_tell(NITF_DATA* data, nitf_Error* error);
+    static nitf::Off IOInterfaceImpl_tell(NITF_DATA* data, nitf_Error* error);
 
-    static off_t IOInterfaceImpl_getSize(NITF_DATA* data, nitf_Error* error);
+    static nitf::Off IOInterfaceImpl_getSize(NITF_DATA* data, nitf_Error* error);
 
     static NITF_BOOL IOInterfaceImpl_close(NITF_DATA* data, nitf_Error* error);
 
@@ -141,11 +141,11 @@ public:
 
     virtual void write(const char * buf, size_t size) throw(nitf::NITFException);
 
-    virtual off_t seek(off_t offset, int whence) throw(nitf::NITFException);
+    virtual nitf::Off seek(nitf::Off offset, int whence) throw(nitf::NITFException);
 
-    virtual off_t tell() throw(nitf::NITFException);
+    virtual nitf::Off tell() throw(nitf::NITFException);
 
-    virtual off_t getSize() throw(nitf::NITFException);
+    virtual nitf::Off getSize() throw(nitf::NITFException);
 
     virtual void close();
 };

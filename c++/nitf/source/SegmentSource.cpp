@@ -25,7 +25,7 @@
 nitf::SegmentMemorySource::SegmentMemorySource(
     char * data,
     size_t size,
-    off_t start,
+    nitf::Off start,
     int byteSkip) throw(nitf::NITFException)
 {
     setNative(nitf_SegmentMemorySource_construct(data, size, start, byteSkip, &error));
@@ -44,7 +44,7 @@ nitf::SegmentMemorySource::SegmentMemorySource(
 
 nitf::SegmentFileSource::SegmentFileSource(
     nitf::IOHandle & io,
-    off_t start,
+    nitf::Off start,
     int byteSkip) throw(nitf::NITFException)
 {
     setNative(nitf_SegmentFileSource_construct(io.getHandle(), start, byteSkip, &error));

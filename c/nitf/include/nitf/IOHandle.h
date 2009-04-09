@@ -98,8 +98,8 @@ NITFAPI(NITF_BOOL) nitf_IOHandle_write(nitf_IOHandle handle,
  *  \param error   The error, if !NITF_IO_SUCCESS()
  *  \return The offset from the beginning to the current position
  */
-NITFAPI(off_t) nitf_IOHandle_seek(nitf_IOHandle handle,
-                                  off_t offset, int whence,
+NITFAPI(nitf_Off) nitf_IOHandle_seek(nitf_IOHandle handle,
+                                  nitf_Off offset, int whence,
                                   nitf_Error * error);
 
 /*!
@@ -111,7 +111,7 @@ NITFAPI(off_t) nitf_IOHandle_seek(nitf_IOHandle handle,
  *  \param error The error to populate if there is a problem
  *  \return The offset
  */
-NITFAPI(off_t) nitf_IOHandle_tell(nitf_IOHandle handle,
+NITFAPI(nitf_Off) nitf_IOHandle_tell(nitf_IOHandle handle,
                                   nitf_Error * error);
 
 
@@ -125,7 +125,7 @@ NITFAPI(off_t) nitf_IOHandle_tell(nitf_IOHandle handle,
  *  \param error  A populated error if something goes wrong
  *  \return The size of the file
  */
-NITFAPI(off_t) nitf_IOHandle_getSize(nitf_IOHandle handle,
+NITFAPI(nitf_Off) nitf_IOHandle_getSize(nitf_IOHandle handle,
                                      nitf_Error * error);
 
 /*!

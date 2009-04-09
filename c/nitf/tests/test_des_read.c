@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 
     /*    Try some seeks */
 
-    if (nitf_DEReader_seek(deReader, (off_t) 4, SEEK_SET, error) == (off_t) - 1)
+    if (nitf_DEReader_seek(deReader, (nitf_Off) 4, SEEK_SET, error) == (nitf_Off) - 1)
     {
         NITF_FREE(data);
         nitf_DEReader_destruct(&deReader);
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
         the last byte in the file
     */
 
-    if (nitf_DEReader_seek(deReader, (off_t) 10, SEEK_CUR, error) == (off_t) - 1)
+    if (nitf_DEReader_seek(deReader, (nitf_Off) 10, SEEK_CUR, error) == (nitf_Off) - 1)
     {
         NITF_FREE(data);
         nitf_DEReader_destruct(&deReader);
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
     data[1] = 0;
     fprintf(stdout, "Data after current seek: |%s|\n", data);
 
-    if (nitf_DEReader_seek(deReader, (off_t) - 2, SEEK_END, error) == (off_t) - 1)
+    if (nitf_DEReader_seek(deReader, (nitf_Off) - 2, SEEK_END, error) == (nitf_Off) - 1)
     {
         NITF_FREE(data);
         nitf_DEReader_destruct(&deReader);

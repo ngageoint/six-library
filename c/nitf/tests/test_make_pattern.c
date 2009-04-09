@@ -343,7 +343,7 @@ nitf_ImageSource *makeImageSource(
 {
     nitf_ImageSource *imgSource;  /* The result */
     nitf_Uint32 nBands;           /* Number of bands */
-    off_t bandSize;               /* Size of individual bands */
+    nitf_Off bandSize;               /* Size of individual bands */
     nitf_Error error;             /* Error object argument */
     nitf_Uint32 i;
 

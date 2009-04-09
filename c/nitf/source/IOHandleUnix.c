@@ -133,12 +133,12 @@ NITFAPI(NITF_BOOL) nitf_IOHandle_write(nitf_IOHandle handle,
 }
 
 
-NITFAPI(off_t) nitf_IOHandle_seek(nitf_IOHandle handle,
-                                  off_t offset, int whence,
+NITFAPI(nitf_Off) nitf_IOHandle_seek(nitf_IOHandle handle,
+                                  nitf_Off offset, int whence,
                                   nitf_Error * error)
 {
-    off_t off = lseek(handle, offset, whence);
-    if (off == (off_t) - 1)
+    nitf_Off off = lseek(handle, offset, whence);
+    if (off == (nitf_Off) - 1)
     {
         nitf_Error_init(error,
                         strerror(errno),
@@ -148,13 +148,13 @@ NITFAPI(off_t) nitf_IOHandle_seek(nitf_IOHandle handle,
 }
 
 
-NITFAPI(off_t) nitf_IOHandle_tell(nitf_IOHandle handle, nitf_Error * error)
+NITFAPI(nitf_Off) nitf_IOHandle_tell(nitf_IOHandle handle, nitf_Error * error)
 {
     return nitf_IOHandle_seek(handle, 0, SEEK_CUR, error);
 }
 
 
-NITFAPI(off_t) nitf_IOHandle_getSize(nitf_IOHandle handle,
+NITFAPI(nitf_Off) nitf_IOHandle_getSize(nitf_IOHandle handle,
                                      nitf_Error * error)
 {
     struct stat buf;

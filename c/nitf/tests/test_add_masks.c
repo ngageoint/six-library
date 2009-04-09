@@ -383,7 +383,7 @@ NITF_BOOL makeImageSource(imgInfo *img, nitf_Writer *writer, nitf_Error *error)
     for (i = 0;i < img->nBands;i++)
     {
         bandSource = nitf_MemorySource_construct((char *) (img->buffers[i]),
-                     img->imgSize, (off_t) 0, 0, 0, error);
+                     img->imgSize, (nitf_Off) 0, 0, 0, error);
         if (!bandSource)
             return(NITF_FAILURE);
 

@@ -32,7 +32,7 @@
  *  \param error An error object to fill if a problem occurs
  *  \return A FieldWarning object or NULL upon failure
  */
-NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(off_t fileOffset,
+NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
         const char *fieldName,
         nitf_Field *field,
         const char

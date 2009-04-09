@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -54,6 +54,8 @@ typedef DWORD             nitf_CreationFlags;
 /*  Determine the maximum file path length  */
 #      define  NITF_MAX_PATH     MAX_PATH
 
+/* use nitf_Off instead of off_t, since on Windows we want nitf_Int64 used */
+typedef nitf_Int64        nitf_Off;
 
 /*  IO macros  */
 #      define  NITF_INVALID_HANDLE_VALUE INVALID_HANDLE_VALUE
@@ -99,6 +101,7 @@ typedef int16_t            nitf_Int16;
 typedef int32_t            nitf_Int32;
 typedef int64_t            nitf_Int64;
 typedef int                nitf_IOHandle;
+typedef off_t              nitf_Off;
 
 typedef void*             NITF_DLL_FUNCTION_PTR;
 typedef void*             NITF_NATIVE_DLL;

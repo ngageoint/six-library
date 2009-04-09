@@ -41,6 +41,7 @@ namespace nitf
     typedef nitf_Int32 Int32;
     typedef nitf_Int16 Int16;
     typedef nitf_Int8 Int8;
+    typedef nitf_Off Off;
     typedef nitf_Version Version;
     typedef nitf_ConvType ConvType;
     typedef nitf_FieldType FieldType;

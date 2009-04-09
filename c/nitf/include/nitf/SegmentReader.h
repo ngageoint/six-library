@@ -102,10 +102,10 @@ NITFAPI(NITF_BOOL) nitf_SegmentReader_read
   is set.
 */
 
-NITFAPI(off_t) nitf_SegmentReader_seek
+NITFAPI(nitf_Off) nitf_SegmentReader_seek
 (
     nitf_SegmentReader *segmentReader, /*!< Associated SegmentReader */
-    off_t offset,                /*!< The seek offset */
+    nitf_Off offset,                /*!< The seek offset */
     int whence,                  /*!< Starting at (SEEK_SET, SEEK_CUR, SEEK_END)*/
     nitf_Error *error            /*!< For error returns */
 );
@@ -124,7 +124,7 @@ NITFAPI(off_t) nitf_SegmentReader_seek
   is set.
 */
 
-NITFAPI(off_t) nitf_SegmentReader_tell
+NITFAPI(nitf_Off) nitf_SegmentReader_tell
 (
     nitf_SegmentReader *segmentReader,  /*!< Associated SegmentReader */
     nitf_Error *error                   /*!< For error returns */
@@ -143,7 +143,7 @@ NITFAPI(off_t) nitf_SegmentReader_tell
   is set.
 */
 
-NITFAPI(off_t) nitf_SegmentReader_getSize
+NITFAPI(nitf_Off) nitf_SegmentReader_getSize
 (
     nitf_SegmentReader *segmentReader,  /*!< Associated SegmentReader */
     nitf_Error *error                   /*!< For error returns */

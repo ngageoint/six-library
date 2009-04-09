@@ -92,10 +92,10 @@ int checkCreateClose(char* fullFileName, char* scratchFullFileName, nitf_Error* 
 ** errorPtr             - Pointer to a nitf error object
 **
 **RETURN VALUES:
-**  fileSize            - An off_t indicating the file size or -1 on failure
+**  fileSize            - An nitf_Off indicating the file size or -1 on failure
 **
 *******************************************************************************/
-off_t checkGetSize(char* fullFileName, char* scratchFullFileName, nitf_Error* errorPtr);
+nitf_Off checkGetSize(char* fullFileName, char* scratchFullFileName, nitf_Error* errorPtr);
 
 
 /********************************************************************************
@@ -113,8 +113,8 @@ off_t checkGetSize(char* fullFileName, char* scratchFullFileName, nitf_Error* er
 **                    and 0 otherwise
 **
 *******************************************************************************/
-int checkSeekTell(char* fullFileName, off_t fileSize, nitf_Error* errorPtr);
-int checkSeekTell_test(nitf_IOHandle ioHandle, off_t fileSize, nitf_Error* errorPtr);
+int checkSeekTell(char* fullFileName, nitf_Off fileSize, nitf_Error* errorPtr);
+int checkSeekTell_test(nitf_IOHandle ioHandle, nitf_Off fileSize, nitf_Error* errorPtr);
 
 
 /********************************************************************************
@@ -131,7 +131,7 @@ int checkSeekTell_test(nitf_IOHandle ioHandle, off_t fileSize, nitf_Error* error
 **  status              - 1 if successful and 0 otherwise
 **
 *******************************************************************************/
-int checkReadWrite(char* fullFileName, off_t fileSize, nitf_Error* errorPtr);
+int checkReadWrite(char* fullFileName, nitf_Off fileSize, nitf_Error* errorPtr);
 
 
 /*******************************************************************************
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
     *** Variable Declarations ***
     ****************************/
     nitf_Error error;                       /* Error object */
-    off_t fileSize;                         /* size in bytes of the test file */
+    nitf_Off fileSize;                         /* size in bytes of the test file */
     char* fullFileName;                     /* C style string containing the test file*/
     char scratchFullFileName[1024];          /* C style string for a scratch file to be created */
 
@@ -166,9 +166,9 @@ int main(int argc, char** argv)
 
 
     /****************************
-    *** Display size of off_t ***
+    *** Display size of nitf_Off ***
     ****************************/
-    printf("Size of off_t: %i bits \n", (int)sizeof(off_t)*8 );
+    printf("Size of nitf_Off: %i bits \n", (int)sizeof(nitf_Off)*8 );
 
 
     /********************************
@@ -343,14 +343,14 @@ int checkCreateClose(char* fullFileName, char* scratchFullFileName, nitf_Error* 
 }
 
 
-off_t checkGetSize(char* fullFileName, char* scratchFullFileName, nitf_Error* errorPtr)
+nitf_Off checkGetSize(char* fullFileName, char* scratchFullFileName, nitf_Error* errorPtr)
 {
     /****************************
     *** Variable Declarations ***
     ****************************/
     nitf_IOHandle ioHandle;                 /* IO handle */
-    off_t fileSize;
-    off_t tempFileSize;
+    nitf_Off fileSize;
+    nitf_Off tempFileSize;
 
 
     /***********
@@ -455,7 +455,7 @@ off_t checkGetSize(char* fullFileName, char* scratchFullFileName, nitf_Error* er
 }
 
 
-int checkSeekTell(char* fullFileName, off_t fileSize, nitf_Error* errorPtr)
+int checkSeekTell(char* fullFileName, nitf_Off fileSize, nitf_Error* errorPtr)
 {
     /****************************
     *** Variable Declarations ***
@@ -533,7 +533,7 @@ int checkSeekTell(char* fullFileName, off_t fileSize, nitf_Error* errorPtr)
 }
 
 
-int checkSeekTell_test(nitf_IOHandle ioHandle, off_t fileSize, nitf_Error* errorPtr)
+int checkSeekTell_test(nitf_IOHandle ioHandle, nitf_Off fileSize, nitf_Error* errorPtr)
 {
 
     /* From start of file */
@@ -636,7 +636,7 @@ int checkSeekTell_test(nitf_IOHandle ioHandle, off_t fileSize, nitf_Error* error
 }
 
 
-int checkReadWrite(char* fullFileName, off_t fileSize, nitf_Error* errorPtr)
+int checkReadWrite(char* fullFileName, nitf_Off fileSize, nitf_Error* errorPtr)
 {
     /****************************
     *** Variable Declarations ***
@@ -646,7 +646,7 @@ int checkReadWrite(char* fullFileName, off_t fileSize, nitf_Error* errorPtr)
     nitf_IOHandle ioHandle;                         /* IO handle */
     char* readBuffer;
     int longReadSize;                               /* Number of bytes in a "long" read */
-    off_t longOffset;                               /* Offset to test the 32 bit limit if possible */
+    nitf_Off longOffset;                               /* Offset to test the 32 bit limit if possible */
 
 
     /*******************************

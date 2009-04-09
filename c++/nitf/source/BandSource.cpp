@@ -24,7 +24,7 @@
 
 nitf::MemorySource::MemorySource(char * data,
                                  size_t size,
-                                 off_t start,
+                                 nitf::Off start,
                                  int numBytesPerPixel,
                                  int pixelSkip) throw(nitf::NITFException)
 {
@@ -45,7 +45,7 @@ nitf::MemorySource::MemorySource(char * data,
 }
 
 nitf::FileSource::FileSource(nitf::IOHandle & io,
-                             off_t start,
+                             nitf::Off start,
                              int numBytesPerPixel,
                              int pixelSkip) throw(nitf::NITFException)
 {

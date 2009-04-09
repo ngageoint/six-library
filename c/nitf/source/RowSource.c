@@ -50,7 +50,7 @@ RowSourceImpl;
 
 /* Instance data */
 /* Output buffer */
-NITFPRIV(NITF_BOOL) RowSource_read(NITF_DATA * data, char *buf, off_t size,    /* Amount to read */
+NITFPRIV(NITF_BOOL) RowSource_read(NITF_DATA * data, char *buf, nitf_Off size,    /* Amount to read */
                                    nitf_Error * error)  /* For error returns */
 {
     RowSourceImpl *impl;        /* Instance data */
@@ -106,10 +106,10 @@ NITFPRIV(void) RowSource_destruct(NITF_DATA * data)
 }
 
 
-NITFPRIV(off_t) RowSource_getSize(NITF_DATA * data)
+NITFPRIV(nitf_Off) RowSource_getSize(NITF_DATA * data)
 {
     RowSourceImpl *impl = (RowSourceImpl *) data;
-    return (off_t)impl->numRows * (off_t)impl->rowLength;
+    return (nitf_Off)impl->numRows * (nitf_Off)impl->rowLength;
 }
 
 

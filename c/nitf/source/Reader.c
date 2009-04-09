@@ -765,7 +765,7 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     nitf_DESubheader *subhdr;
     /* Length of the sub-header */
     nitf_Uint32 subLen;
-    off_t currentOffset;
+    nitf_Off currentOffset;
     char desID[NITF_DESTAG_SZ + 1];     /* DES ID string */
 
     nitf_ListIterator listIter =
@@ -1062,9 +1062,9 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
     /* Total length of the extras seciton */
     nitf_Uint32 totalLength;
     /* Offset in the stream to the end of the section */
-    off_t sectionEndOffset;
+    nitf_Off sectionEndOffset;
     /* The current io offset */
-    off_t currentOffset;
+    nitf_Off currentOffset;
 
     /* Read the total length of the "extras" section */
     TRY_READ_VALUE(reader, totalLengthValue, 5);
@@ -1081,7 +1081,7 @@ NITFPRIV(NITF_BOOL) readExtras(nitf_Reader * reader,
         if (!NITF_IO_SUCCESS(currentOffset))
             goto CATCH_ERROR;
 
-        sectionEndOffset = currentOffset + (off_t) totalLength - 3;
+        sectionEndOffset = currentOffset + (nitf_Off) totalLength - 3;
 
         while (currentOffset < sectionEndOffset)
         {
@@ -1150,7 +1150,7 @@ NITFPRIV(NITF_BOOL) readTRE(nitf_Reader * reader,
     nitf_TRE *tre;
 
     /* offset in the file where the tre was found  */
-    off_t off;
+    nitf_Off off;
 
     /* length of the TRE object */
     nitf_Uint32 length;
@@ -1210,7 +1210,7 @@ NITFPRIV(NITF_BOOL) handleTRE(nitf_Reader * reader, nitf_Uint32 length,
 {
     int ok = 0;
     int bad = 0;
-    off_t off;
+    nitf_Off off;
 
     nitf_TREHandler* handler = NULL;
 

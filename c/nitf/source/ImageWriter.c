@@ -64,7 +64,7 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     int row, band;
     size_t rowSize;
     nitf_Uint32 numImageBands = 0;
-    off_t offset;
+    nitf_Off offset;
     nitf_BandSource *bandSrc = NULL;
     ImageWriterImpl *impl = (ImageWriterImpl *) data;
 

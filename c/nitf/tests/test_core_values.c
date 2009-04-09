@@ -34,7 +34,7 @@ int main()
     assert( sizeof(nitf_Int64) == 8);
 
     printf("sizeof(size_t): %d\n", sizeof(size_t) );
-    printf("sizeof(off_t):  %d\n", sizeof(off_t) );
+    printf("sizeof(nitf_Off):  %d\n", sizeof(nitf_Off) );
 
     if ( sizeof( long ) == 4 )
     {

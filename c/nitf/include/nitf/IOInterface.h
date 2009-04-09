@@ -38,13 +38,13 @@ typedef NITF_BOOL (*NITF_IO_INTERFACE_WRITE)(NITF_DATA* data,
                                              nitf_Error * error);
 
 typedef NITF_BOOL (*NITF_IO_INTERFACE_SEEK)(NITF_DATA* data,
-                                            off_t offset, int whence,
+                                            nitf_Off offset, int whence,
                                             nitf_Error* error);
 
-typedef off_t     (*NITF_IO_INTERFACE_TELL)(NITF_DATA* data,
+typedef nitf_Off     (*NITF_IO_INTERFACE_TELL)(NITF_DATA* data,
                                             nitf_Error * error);
 
-typedef off_t     (*NITF_IO_INTERFACE_GET_SIZE)(NITF_DATA* data,
+typedef nitf_Off     (*NITF_IO_INTERFACE_GET_SIZE)(NITF_DATA* data,
                                                 nitf_Error * error);
 
 typedef NITF_BOOL (*NITF_IO_INTERFACE_CLOSE)(NITF_DATA* data,
@@ -81,16 +81,16 @@ NITFAPI(NITF_BOOL) nitf_IOInterface_write(nitf_IOInterface* io,
                                           nitf_Error* error);
 
 NITFAPI(NITF_BOOL) nitf_IOInterface_seek(nitf_IOInterface* io,
-                                         off_t offset,
+                                         nitf_Off offset,
                                          int whence,
                                          nitf_Error* error);
 
-NITFAPI(off_t) nitf_IOInterface_tell(nitf_IOInterface* io,
+NITFAPI(nitf_Off) nitf_IOInterface_tell(nitf_IOInterface* io,
                                      nitf_Error* error);
 
 
                    
-NITFAPI(off_t) nitf_IOInterface_getSize(nitf_IOInterface* io,
+NITFAPI(nitf_Off) nitf_IOInterface_getSize(nitf_IOInterface* io,
                                         nitf_Error* error);
 
 

@@ -43,7 +43,7 @@ nitf::DataSource::DataSource() throw (nitf::NITFException)
 
 NITF_BOOL nitf::DataSource::DataSource_read(NITF_DATA * data,
         char * buf,
-        off_t size,
+        nitf::Off size,
         nitf_Error * error)
 {
     // Get our object from the data and call the read function
@@ -54,14 +54,14 @@ NITF_BOOL nitf::DataSource::DataSource_read(NITF_DATA * data,
 
 void nitf::DataSource::DataSource_destruct(NITF_DATA* data){}
 
-off_t nitf::DataSource::DataSource_getSize(NITF_DATA* data)
+nitf::Off nitf::DataSource::DataSource_getSize(NITF_DATA* data)
 {
     // Get our object from the data and call the read function
     if (!data) throw except::NullPointerReference(Ctxt("DataSource_getSize"));
     return ((nitf::DataSource*)data)->getSize();
 }
 
-void nitf::DataSource::DataSource_setSize(NITF_DATA* data, off_t size)
+void nitf::DataSource::DataSource_setSize(NITF_DATA* data, nitf::Off size)
 {
     // Get our object from the data and call the read function
     if (!data) throw except::NullPointerReference(Ctxt("DataSource_setSize"));
@@ -71,7 +71,7 @@ void nitf::DataSource::DataSource_setSize(NITF_DATA* data, off_t size)
 
 
 void nitf::KnownDataSource::read(char * buf,
-                                 off_t size) throw (nitf::NITFException)
+                                 nitf::Off size) throw (nitf::NITFException)
 {
     if (mIface)
     {
@@ -82,6 +82,6 @@ void nitf::KnownDataSource::read(char * buf,
         throw except::NullPointerReference(Ctxt("KnownDataSource"));
 }
 
-off_t nitf::KnownDataSource::getSize() { return mIface->getSize(mData); }
+nitf::Off nitf::KnownDataSource::getSize() { return mIface->getSize(mData); }
 
-void nitf::KnownDataSource::setSize(off_t size) { mIface->setSize(mData, size); }
+void nitf::KnownDataSource::setSize(nitf::Off size) { mIface->setSize(mData, size); }

@@ -28,11 +28,11 @@
 typedef struct _MemorySourceImpl
 {
     char *data;
-    off_t size;
+    nitf_Off size;
     int sizeSet;
-    off_t mark;
+    nitf_Off mark;
     int byteSkip;
-    off_t start;
+    nitf_Off start;
 }
 MemorySourceImpl;
 
@@ -53,7 +53,7 @@ NITFPRIV(MemorySourceImpl *) toMemorySource(NITF_DATA * data,
 
 NITFPRIV(NITF_BOOL) MemorySource_contigRead(MemorySourceImpl *
         memorySource, char *buf,
-        off_t size,
+        nitf_Off size,
         nitf_Error * error)
 {
     memcpy(buf, memorySource->data + memorySource->mark, size);
@@ -64,7 +64,7 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(MemorySourceImpl *
 
 NITFPRIV(NITF_BOOL) MemorySource_offsetRead(MemorySourceImpl *
         memorySource, char *buf,
-        off_t size,
+        nitf_Off size,
         nitf_Error * error)
 {
     int i = 0;
@@ -83,7 +83,7 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(MemorySourceImpl *
  */
 NITFPRIV(NITF_BOOL) MemorySource_read(NITF_DATA * data,
                                       char *buf,
-                                      off_t size, nitf_Error * error)
+                                      nitf_Off size, nitf_Error * error)
 {
     MemorySourceImpl *memorySource = toMemorySource(data, error);
     if (!memorySource)
@@ -105,15 +105,15 @@ NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
     NITF_FREE(memorySource);
 }
 
-NITFPRIV(off_t) MemorySource_getSize(NITF_DATA * data)
+NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     assert(memorySource);
-    return memorySource->sizeSet ? (off_t)memorySource->size :
-        (off_t)(memorySource->size / (memorySource->byteSkip + 1));
+    return memorySource->sizeSet ? (nitf_Off)memorySource->size :
+        (nitf_Off)(memorySource->size / (memorySource->byteSkip + 1));
 }
 
-NITFPRIV(void) MemorySource_setSize(NITF_DATA * data, off_t size)
+NITFPRIV(void) MemorySource_setSize(NITF_DATA * data, nitf_Off size)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     assert(memorySource);
@@ -125,8 +125,8 @@ NITFPRIV(void) MemorySource_setSize(NITF_DATA * data, off_t size)
 NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
 (
     char *data,
-    off_t size,
-    off_t start,
+    nitf_Off size,
+    nitf_Off start,
     int byteSkip,
     nitf_Error * error
 )
@@ -174,11 +174,11 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
 typedef struct _FileSourceImpl
 {
     nitf_IOHandle handle;
-    off_t start;
-    off_t size;
-    off_t fileSize;
+    nitf_Off start;
+    nitf_Off size;
+    nitf_Off fileSize;
     int byteSkip;
-    off_t mark;
+    nitf_Off mark;
 }
 FileSourceImpl;
 
@@ -187,7 +187,7 @@ NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
     NITF_FREE(data);
 }
 
-NITFPRIV(off_t) FileSource_getSize(NITF_DATA * data)
+NITFPRIV(nitf_Off) FileSource_getSize(NITF_DATA * data)
 {
     FileSourceImpl *fileSource = (FileSourceImpl *) data;
     assert(fileSource);
@@ -195,7 +195,7 @@ NITFPRIV(off_t) FileSource_getSize(NITF_DATA * data)
     return fileSource->size;
 }
 
-NITFPRIV(void) FileSource_setSize(NITF_DATA* data, off_t size)
+NITFPRIV(void) FileSource_setSize(NITF_DATA* data, nitf_Off size)
 {
     /* you better know what you're doing if you set the size yourself! */
     FileSourceImpl* fileSource = (FileSourceImpl*)data;
@@ -220,7 +220,7 @@ NITFPRIV(FileSourceImpl *) toFileSource(NITF_DATA * data,
 
 NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
         char *buf,
-        off_t size, nitf_Error * error)
+        nitf_Off size, nitf_Error * error)
 {
     if (!NITF_IO_SUCCESS(nitf_IOHandle_read(fileSource->handle,
                                             buf, size, error)))
@@ -245,13 +245,13 @@ NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
  */
 NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
         char *buf,
-        off_t size, nitf_Error * error)
+        nitf_Off size, nitf_Error * error)
 {
 
-    off_t tsize = size * (fileSource->byteSkip + 1);
+    nitf_Off tsize = size * (fileSource->byteSkip + 1);
 
     char *tbuf;
-    off_t lmark = 0;
+    nitf_Off lmark = 0;
     int i = 0;
     if (tsize + fileSource->mark > fileSource->size)
         tsize = fileSource->size - fileSource->mark;
@@ -287,7 +287,7 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
  */
 NITFPRIV(NITF_BOOL) FileSource_read(NITF_DATA * data,
                                     char *buf,
-                                    off_t size, nitf_Error * error)
+                                    nitf_Off size, nitf_Error * error)
 {
     FileSourceImpl *fileSource = toFileSource(data, error);
     if (!fileSource)
@@ -306,7 +306,7 @@ NITFPRIV(NITF_BOOL) FileSource_read(NITF_DATA * data,
 NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
 (
     nitf_IOHandle handle,
-    off_t start,
+    nitf_Off start,
     int byteSkip,
     nitf_Error * error
 )

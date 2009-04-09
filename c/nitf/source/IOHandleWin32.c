@@ -111,8 +111,8 @@ NITFAPI(NITF_BOOL) nitf_IOHandle_write(nitf_IOHandle handle,
 }
 
 
-NITFAPI(off_t) nitf_IOHandle_seek(nitf_IOHandle handle,
-                                  off_t offset, int whence,
+NITFAPI(nitf_Off) nitf_IOHandle_seek(nitf_IOHandle handle,
+                                  nitf_Off offset, int whence,
                                   nitf_Error * error)
 {
     LARGE_INTEGER largeInt;
@@ -129,19 +129,19 @@ NITFAPI(off_t) nitf_IOHandle_seek(nitf_IOHandle handle,
                          NITF_CTXT, NITF_ERR_SEEKING_IN_FILE,
                          "SetFilePointer failed with error [%d]",
                          lastError);
-	return (off_t)-1;
+	return (nitf_Off)-1;
     }
-    return (off_t) largeInt.QuadPart;
+    return (nitf_Off) largeInt.QuadPart;
 }
 
 
-NITFAPI(off_t) nitf_IOHandle_tell(nitf_IOHandle handle, nitf_Error * error)
+NITFAPI(nitf_Off) nitf_IOHandle_tell(nitf_IOHandle handle, nitf_Error * error)
 {
     return nitf_IOHandle_seek(handle, 0, FILE_CURRENT, error);
 }
 
 
-NITFAPI(off_t) nitf_IOHandle_getSize(nitf_IOHandle handle,
+NITFAPI(nitf_Off) nitf_IOHandle_getSize(nitf_IOHandle handle,
                                      nitf_Error * error)
 {
     DWORD ret;
@@ -154,7 +154,7 @@ NITFAPI(off_t) nitf_IOHandle_getSize(nitf_IOHandle handle,
                          NITF_ERR_STAT_FILE,
                          "GetFileSize failed with error [%d]",
                          GetLastError());
-	return (off_t)-1;
+	return (nitf_Off)-1;
     }
     return ((highOff) << 32) + ret;
 }

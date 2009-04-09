@@ -58,19 +58,19 @@ NITF_BOOL nitf::IOInterface::IOInterfaceImpl_write(NITF_DATA* data,
 }
 
 NITF_BOOL nitf::IOInterface::IOInterfaceImpl_seek(NITF_DATA* data,
-        off_t offset, int whence, nitf_Error* error)
+        nitf::Off offset, int whence, nitf_Error* error)
 {
     if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_seek"));
     return ((nitf::IOInterface*)data)->seek(offset, whence) >= 0 ? NITF_SUCCESS : NITF_FAILURE;
 }
 
-off_t nitf::IOInterface::IOInterfaceImpl_tell(NITF_DATA* data, nitf_Error* error)
+nitf::Off nitf::IOInterface::IOInterfaceImpl_tell(NITF_DATA* data, nitf_Error* error)
 {
     if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_tell"));
     return ((nitf::IOInterface*)data)->tell();
 }
 
-off_t nitf::IOInterface::IOInterfaceImpl_getSize(NITF_DATA* data, nitf_Error* error)
+nitf::Off nitf::IOInterface::IOInterfaceImpl_getSize(NITF_DATA* data, nitf_Error* error)
 {
     if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_getSize"));
     return ((nitf::IOInterface*)data)->getSize();
@@ -102,7 +102,7 @@ void nitf::NativeIOInterface::write(const char * buf, size_t size) throw(nitf::N
     if (!x) throw nitf::NITFException(&error);
 }
 
-off_t nitf::NativeIOInterface::seek(off_t offset, int whence) throw(nitf::NITFException)
+nitf::Off nitf::NativeIOInterface::seek(nitf::Off offset, int whence) throw(nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     if (io->iface->seek(io->data, offset, whence, &error))
@@ -110,19 +110,19 @@ off_t nitf::NativeIOInterface::seek(off_t offset, int whence) throw(nitf::NITFEx
     throw nitf::NITFException(&error);
 }
 
-off_t nitf::NativeIOInterface::tell() throw(nitf::NITFException)
+nitf::Off nitf::NativeIOInterface::tell() throw(nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
-    off_t t = io->iface->tell(io->data, &error);
+    nitf::Off t = io->iface->tell(io->data, &error);
     if (t == NITF_INVALID_HANDLE_VALUE)
         throw nitf::NITFException(&error);
     return t;
 }
 
-off_t nitf::NativeIOInterface::getSize() throw(nitf::NITFException)
+nitf::Off nitf::NativeIOInterface::getSize() throw(nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
-    off_t size = io->iface->getSize(io->data, &error);
+    nitf::Off size = io->iface->getSize(io->data, &error);
     if (size == NITF_INVALID_HANDLE_VALUE)
         throw nitf::NITFException(&error);
     return size;

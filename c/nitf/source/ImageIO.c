@@ -2916,7 +2916,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_flush(nitf_ImageIO * object,
 {
     /* Internal view of object */
     _nitf_ImageIOWriteControl *wrtCntl;
-    off_t currentOffset;            /* File offset when called (restored) */
+    nitf_Off currentOffset;            /* File offset when called (restored) */
 
     wrtCntl = ((_nitf_ImageIO *) object)->writeControl;
 
@@ -6399,7 +6399,7 @@ NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
 
 
     if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(io,
-                                               (off_t) fileOffset,
+                                               (nitf_Off) fileOffset,
                                                NITF_SEEK_SET, error)))
     {
         return 0;
@@ -6424,7 +6424,7 @@ NITFPROT(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
     /* Seek to the offset */
     if (!NITF_IO_SUCCESS
             (nitf_IOInterface_seek
-             (io, (off_t) fileOffset, NITF_SEEK_SET, error)))
+             (io, (nitf_Off) fileOffset, NITF_SEEK_SET, error)))
         return NITF_FAILURE;
 
     /* Write the data */
@@ -6577,7 +6577,7 @@ NITFPROT(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
 
         if (!NITF_IO_SUCCESS
                 (nitf_IOInterface_seek
-                 (io, (off_t) fileOffset, NITF_SEEK_SET, error)))
+                 (io, (nitf_Off) fileOffset, NITF_SEEK_SET, error)))
             return (0);
 
         /* Write the data */
@@ -8249,7 +8249,7 @@ nitf_ImageIO_bPixelReadBlock(nitf_DecompressionControl * control,
     /*      Read the data */
 
     if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(icntl->io,
-                                               (off_t) (icntl->offset +
+                                               (nitf_Off) (icntl->offset +
                                                         icntl->
                                                         blockMask
                                                         [blockNumber]),

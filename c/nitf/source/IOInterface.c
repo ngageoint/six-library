@@ -18,21 +18,21 @@ NITFAPI(NITF_BOOL) nitf_IOInterface_write(nitf_IOInterface* io,
 }
 
 NITFAPI(NITF_BOOL) nitf_IOInterface_seek(nitf_IOInterface* io,
-                                         off_t offset,
+                                         nitf_Off offset,
                                          int whence,
                                          nitf_Error* error)
 {
     return io->iface->seek(io->data, offset, whence, error);
 }
      
-NITFAPI(off_t) nitf_IOInterface_tell(nitf_IOInterface* io,
+NITFAPI(nitf_Off) nitf_IOInterface_tell(nitf_IOInterface* io,
                                      nitf_Error* error)
 {
     return io->iface->tell(io->data, error);
 }
 
               
-NITFAPI(off_t) nitf_IOInterface_getSize(nitf_IOInterface* io,
+NITFAPI(nitf_Off) nitf_IOInterface_getSize(nitf_IOInterface* io,
                                         nitf_Error* error)
 {
     return io->iface->getSize(io->data, error);
@@ -80,7 +80,7 @@ NITFPRIV(NITF_BOOL) IOHandleAdaptor_write(NITF_DATA* data,
 
                 
 NITFPRIV(NITF_BOOL) IOHandleAdaptor_seek(NITF_DATA* data,
-                                         off_t offset,
+                                         nitf_Off offset,
                                          int whence,
                                          nitf_Error* error)
 {
@@ -89,14 +89,14 @@ NITFPRIV(NITF_BOOL) IOHandleAdaptor_seek(NITF_DATA* data,
 }
 
 
-NITFPRIV(off_t) IOHandleAdaptor_tell(NITF_DATA* data,
+NITFPRIV(nitf_Off) IOHandleAdaptor_tell(NITF_DATA* data,
                                      nitf_Error* error)
 {
     return nitf_IOHandle_tell( (nitf_IOHandle)data,
                                error);
 }
 
-NITFPRIV(off_t) IOHandleAdaptor_getSize(NITF_DATA* data,
+NITFPRIV(nitf_Off) IOHandleAdaptor_getSize(NITF_DATA* data,
                                         nitf_Error* error)
 {
     return nitf_IOHandle_getSize( (nitf_IOHandle)data,

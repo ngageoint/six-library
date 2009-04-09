@@ -220,7 +220,7 @@ void writeImageSegment(char *imageName,
     nitf_IOHandle toFile;
     char file[NITF_MAX_PATH];
     int pos;
-    off_t size = nitf_SegmentReader_getSize(reader, error);
+    nitf_Off size = nitf_SegmentReader_getSize(reader, error);
     printf("Segment Size: %ld\n", (long)size);
     buffer = (nitf_Uint8 *) NITF_MALLOC(size);
     assert(buffer);

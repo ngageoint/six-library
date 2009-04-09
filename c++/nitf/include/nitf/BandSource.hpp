@@ -67,7 +67,7 @@ public:
      */
     MemorySource(char * data,
                  size_t size,
-                 off_t start,
+                 nitf::Off start,
                  int numBytesPerPixel,
                  int pixelSkip) throw(nitf::NITFException);
 
@@ -96,7 +96,7 @@ public:
      *  \param pixelSkip  The number of pixels to skip each time
      */
     FileSource(nitf::IOHandle & io,
-               off_t start,
+               nitf::Off start,
                int numBytesPerPixel,
                int pixelSkip) throw(nitf::NITFException);
 

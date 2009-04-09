@@ -119,7 +119,7 @@ int doWrite(nitf_ImageSegment* segment, nitf_ImageSource *imgSrc,
 NITF_BOOL writeImage(nitf_ImageSegment* segment, nitf_IOHandle input_io, nitf_IOHandle output_io)
 {
     nitf_Error error;
-    off_t offset;
+    nitf_Off offset;
     int ret;
 
     nitf_ImageIO* ioClone;
@@ -212,7 +212,7 @@ NITF_BOOL writeImage(nitf_ImageSegment* segment, nitf_IOHandle input_io, nitf_IO
     for (band = 0; band < nBands; band++)
     {
         bandSrc = nitf_MemorySource_construct(buffer[band], (size_t) subimageSize,
-                                              (off_t) 0, NITF_NBPP_TO_BYTES(nBits), 0, &error);
+                                              (nitf_Off) 0, NITF_NBPP_TO_BYTES(nBits), 0, &error);
         if (bandSrc == NULL)
             return(0);
 

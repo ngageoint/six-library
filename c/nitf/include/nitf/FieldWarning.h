@@ -39,7 +39,7 @@ NITF_CXX_GUARD
 typedef struct _nitf_FieldWarning
 {
     /* Offset in bytes to the field in the NITF file */
-    off_t fileOffset;
+    nitf_Off fileOffset;
 
     /* Name of the offending field in the following format
        hdr.section(i).  ...  .fieldName
@@ -84,7 +84,7 @@ nitf_FieldWarning;
  *  \return A FieldWarning object or NULL upon failure
  */
 NITFAPI(nitf_FieldWarning *) 
-nitf_FieldWarning_construct(off_t fileOffset,
+nitf_FieldWarning_construct(nitf_Off fileOffset,
                             const char *fieldName,
                             nitf_Field *field,
                             const char

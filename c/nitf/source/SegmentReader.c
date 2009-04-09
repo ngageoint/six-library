@@ -57,12 +57,12 @@ NITFAPI(NITF_BOOL) nitf_SegmentReader_read(nitf_SegmentReader *
 }
 
 
-NITFAPI(off_t) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
-                                       off_t offset,
+NITFAPI(nitf_Off) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
+                                       nitf_Off offset,
                                        int whence, nitf_Error * error)
 {
     nitf_Uint64 baseOffset;     /* Bas offset to the data */
-    off_t actualPosition;       /* Real file position (no base offset) */
+    nitf_Off actualPosition;       /* Real file position (no base offset) */
 
     baseOffset = segmentReader->baseOffset;
 
@@ -74,7 +74,7 @@ NITFAPI(off_t) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
             {
                 nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                                  "Seek offset out of bounds\n");
-                return ((off_t) - 1);
+                return ((nitf_Off) - 1);
             }
             actualPosition = offset + baseOffset;
             break;
@@ -85,7 +85,7 @@ NITFAPI(off_t) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
             {
                 nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                                  "Seek offset out of bounds\n");
-                return ((off_t) - 1);
+                return ((nitf_Off) - 1);
             }
             actualPosition =
                 offset + segmentReader->virtualOffset + baseOffset;
@@ -97,14 +97,14 @@ NITFAPI(off_t) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
             {
                 nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                                  "Seek offset out of bounds\n");
-                return ((off_t) - 1);
+                return ((nitf_Off) - 1);
             }
             actualPosition = offset + segmentReader->dataLength + baseOffset;
             break;
         default:
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                              "Invalid seek\n");
-            return ((off_t) - 1);
+            return ((nitf_Off) - 1);
     }
 
     actualPosition =
@@ -121,14 +121,14 @@ NITFAPI(off_t) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
 }
 
 
-NITFAPI(off_t) nitf_SegmentReader_tell(nitf_SegmentReader * segmentReader,
+NITFAPI(nitf_Off) nitf_SegmentReader_tell(nitf_SegmentReader * segmentReader,
                                        nitf_Error * error)
 {
     return (segmentReader->virtualOffset);
 }
 
 
-NITFAPI(off_t) nitf_SegmentReader_getSize(nitf_SegmentReader *
+NITFAPI(nitf_Off) nitf_SegmentReader_getSize(nitf_SegmentReader *
         segmentReader,
         nitf_Error * error)
 {

@@ -34,7 +34,7 @@ JNIEXPORT void JNICALL Java_nitf_NativeIOInterface_read
 (JNIEnv *env, jobject self, jbyteArray buf, jint size)
 {
     nitf_Error error;
-    off_t tell;
+    nitf_Off tell;
     jbyte *array = NULL;
     nitf_IOInterface *interface = _GetObj(env, self);
 
@@ -50,7 +50,7 @@ JNIEXPORT void JNICALL Java_nitf_NativeIOInterface_write
 (JNIEnv *env, jobject self, jbyteArray buf, jint size)
 {
     nitf_Error error;
-    off_t tell;
+    nitf_Off tell;
     jbyte *array = NULL;
     nitf_IOInterface *interface = _GetObj(env, self);
 
@@ -100,7 +100,7 @@ JNIEXPORT jlong JNICALL Java_nitf_NativeIOInterface_seek
 JNIEXPORT jlong JNICALL Java_nitf_NativeIOInterface_tell(JNIEnv *env,
         jobject self)
 {
-    off_t tell;
+    nitf_Off tell;
     nitf_Error error;
     nitf_IOInterface *interface = _GetObj(env, self);
 
@@ -117,7 +117,7 @@ JNIEXPORT jlong JNICALL Java_nitf_NativeIOInterface_getSize(JNIEnv *env,
         jobject self)
 {
     nitf_Error error;
-    off_t size;
+    nitf_Off size;
     nitf_IOInterface *interface = _GetObj(env, self);
 
     size = interface->iface->getSize(interface->data, &error);

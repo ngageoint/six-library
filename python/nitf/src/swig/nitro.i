@@ -55,8 +55,8 @@
 
 %typemap(out) nitf_Uint32, nitf_Int32{$result = PyInt_FromLong($1);}
 %typemap(in) nitf_Uint32{$1 = (nitf_Uint32)PyInt_AsLong($input);}
-%typemap(out) off_t{$result = PyLong_FromLong($1);}
-%typemap(in) off_t{$1 = (off_t)PyLong_AsLong($input);}
+%typemap(out) nitf_Off{$result = PyLong_FromLong($1);}
+%typemap(in) nitf_Off{$1 = (nitf_Off)PyLong_AsLong($input);}
 
 /**
  * Setup some typemaps for the destructors
@@ -290,8 +290,8 @@
         return nitf_IOHandle_create(fname, accessInt, createInt, error);
     }
     
-    off_t py_IOHandle_seek(nitf_IOHandle handle,
-            off_t offset, int whence, nitf_Error * error)
+    nitf_Off py_IOHandle_seek(nitf_IOHandle handle,
+            nitf_Off offset, int whence, nitf_Error * error)
     {
         int realWhence = NITF_SEEK_SET;
         

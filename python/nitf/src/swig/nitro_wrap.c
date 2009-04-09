@@ -3020,8 +3020,8 @@ SWIG_From_size_t  (size_t value)
         return nitf_IOHandle_create(fname, accessInt, createInt, error);
     }
     
-    off_t py_IOHandle_seek(nitf_IOHandle handle,
-            off_t offset, int whence, nitf_Error * error)
+    nitf_Off py_IOHandle_seek(nitf_IOHandle handle,
+            nitf_Off offset, int whence, nitf_Error * error)
     {
         int realWhence = NITF_SEEK_SET;
         
@@ -4291,10 +4291,10 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_IOHandle arg1 ;
-  off_t arg2 ;
+  nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
-  off_t result;
+  nitf_Off result;
   int val1 ;
   int ecode1 = 0 ;
   int val3 ;
@@ -4313,7 +4313,7 @@ SWIGINTERN PyObject *_wrap_nitf_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), Py
   } 
   arg1 = (nitf_IOHandle)(val1);
   {
-    arg2 = (off_t)PyLong_AsLong(obj1);
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -4339,7 +4339,7 @@ SWIGINTERN PyObject *_wrap_nitf_IOHandle_tell(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject *resultobj = 0;
   nitf_IOHandle arg1 ;
   nitf_Error *arg2 = (nitf_Error *) 0 ;
-  off_t result;
+  nitf_Off result;
   int val1 ;
   int ecode1 = 0 ;
   void *argp2 = 0 ;
@@ -4372,7 +4372,7 @@ SWIGINTERN PyObject *_wrap_nitf_IOHandle_getSize(PyObject *SWIGUNUSEDPARM(self),
   PyObject *resultobj = 0;
   nitf_IOHandle arg1 ;
   nitf_Error *arg2 = (nitf_Error *) 0 ;
-  off_t result;
+  nitf_Off result;
   int val1 ;
   int ecode1 = 0 ;
   void *argp2 = 0 ;
@@ -5081,7 +5081,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_IOInterface_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_IOInterface *arg1 = (nitf_IOInterface *) 0 ;
-  off_t arg2 ;
+  nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   int result;
@@ -5103,7 +5103,7 @@ SWIGINTERN PyObject *_wrap_nitf_IOInterface_seek(PyObject *SWIGUNUSEDPARM(self),
   }
   arg1 = (nitf_IOInterface *)(argp1);
   {
-    arg2 = (off_t)PyLong_AsLong(obj1);
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -5127,7 +5127,7 @@ SWIGINTERN PyObject *_wrap_nitf_IOInterface_tell(PyObject *SWIGUNUSEDPARM(self),
   PyObject *resultobj = 0;
   nitf_IOInterface *arg1 = (nitf_IOInterface *) 0 ;
   nitf_Error *arg2 = (nitf_Error *) 0 ;
-  off_t result;
+  nitf_Off result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -5160,7 +5160,7 @@ SWIGINTERN PyObject *_wrap_nitf_IOInterface_getSize(PyObject *SWIGUNUSEDPARM(sel
   PyObject *resultobj = 0;
   nitf_IOInterface *arg1 = (nitf_IOInterface *) 0 ;
   nitf_Error *arg2 = (nitf_Error *) 0 ;
-  off_t result;
+  nitf_Off result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -14547,8 +14547,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_MemorySource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
-  off_t arg2 ;
-  off_t arg3 ;
+  nitf_Off arg2 ;
+  nitf_Off arg3 ;
   int arg4 ;
   int arg5 ;
   nitf_Error *arg6 = (nitf_Error *) 0 ;
@@ -14576,10 +14576,10 @@ SWIGINTERN PyObject *_wrap_nitf_MemorySource_construct(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = (char *)(buf1);
   {
-    arg2 = (off_t)PyLong_AsLong(obj1);
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
   {
-    arg3 = (off_t)PyLong_AsLong(obj2);
+    arg3 = (nitf_Off)PyLong_AsLong(obj2);
   }
   ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
@@ -14609,7 +14609,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_IOHandle arg1 ;
-  off_t arg2 ;
+  nitf_Off arg2 ;
   int arg3 ;
   int arg4 ;
   nitf_Error *arg5 = (nitf_Error *) 0 ;
@@ -14635,7 +14635,7 @@ SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(se
   } 
   arg1 = (nitf_IOHandle)(val1);
   {
-    arg2 = (off_t)PyLong_AsLong(obj1);
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -26398,10 +26398,10 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SegmentReader_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_SegmentReader *arg1 = (nitf_SegmentReader *) 0 ;
-  off_t arg2 ;
+  nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
-  off_t result;
+  nitf_Off result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val3 ;
@@ -26420,7 +26420,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_seek(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = (nitf_SegmentReader *)(argp1);
   {
-    arg2 = (off_t)PyLong_AsLong(obj1);
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -26446,7 +26446,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_tell(PyObject *SWIGUNUSEDPARM(self
   PyObject *resultobj = 0;
   nitf_SegmentReader *arg1 = (nitf_SegmentReader *) 0 ;
   nitf_Error *arg2 = (nitf_Error *) 0 ;
-  off_t result;
+  nitf_Off result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -26479,7 +26479,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_getSize(PyObject *SWIGUNUSEDPARM(s
   PyObject *resultobj = 0;
   nitf_SegmentReader *arg1 = (nitf_SegmentReader *) 0 ;
   nitf_Error *arg2 = (nitf_Error *) 0 ;
-  off_t result;
+  nitf_Off result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -27792,8 +27792,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SegmentMemorySource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
-  off_t arg2 ;
-  off_t arg3 ;
+  nitf_Off arg2 ;
+  nitf_Off arg3 ;
   int arg4 ;
   nitf_Error *arg5 = (nitf_Error *) 0 ;
   nitf_SegmentSource *result = 0 ;
@@ -27817,10 +27817,10 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentMemorySource_construct(PyObject *SWIGUNUS
   }
   arg1 = (char *)(buf1);
   {
-    arg2 = (off_t)PyLong_AsLong(obj1);
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
   {
-    arg3 = (off_t)PyLong_AsLong(obj2);
+    arg3 = (nitf_Off)PyLong_AsLong(obj2);
   }
   ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
@@ -27845,7 +27845,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_IOHandle arg1 ;
-  off_t arg2 ;
+  nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   nitf_SegmentSource *result = 0 ;
@@ -27867,7 +27867,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_construct(PyObject *SWIGUNUSED
   } 
   arg1 = (nitf_IOHandle)(val1);
   {
-    arg2 = (off_t)PyLong_AsLong(obj1);
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -27942,10 +27942,10 @@ fail:
 SWIGINTERN PyObject *_wrap_py_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_IOHandle arg1 ;
-  off_t arg2 ;
+  nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
-  off_t result;
+  nitf_Off result;
   int val1 ;
   int ecode1 = 0 ;
   int val3 ;
@@ -27964,7 +27964,7 @@ SWIGINTERN PyObject *_wrap_py_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyOb
   } 
   arg1 = (nitf_IOHandle)(val1);
   {
-    arg2 = (off_t)PyLong_AsLong(obj1);
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -29865,7 +29865,7 @@ static swig_type_info _swigt__p_nitf_ImageIO = {"_p_nitf_ImageIO", "nitf_ImageIO
 static swig_type_info _swigt__p_nitf_List = {"_p_nitf_List", "nitf_List *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_ListIterator = {"_p_nitf_ListIterator", "nitf_ListIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_WriteHandler = {"_p_nitf_WriteHandler", "nitf_WriteHandler *|nitf_ImageWriter *|nitf_SegmentWriter *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|nitf_Off *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p__nitf_ComponentInfo = {"_p_p__nitf_ComponentInfo", "struct _nitf_ComponentInfo **|nitf_ComponentInfo **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p__nitf_DESegment = {"_p_p__nitf_DESegment", "struct _nitf_DESegment **|nitf_DESegment **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p__nitf_DESubheader = {"_p_p__nitf_DESubheader", "struct _nitf_DESubheader **|nitf_DESubheader **", 0, 0, (void*)0, 0};

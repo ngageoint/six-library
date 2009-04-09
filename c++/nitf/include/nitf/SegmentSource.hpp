@@ -69,7 +69,7 @@ public:
     SegmentMemorySource(
         char * data,
         size_t size,
-        off_t start,
+        nitf::Off start,
         int byteSkip) throw(nitf::NITFException);
 
     //! Destructor
@@ -95,7 +95,7 @@ public:
      */
     SegmentFileSource(
         nitf::IOHandle & io,
-        off_t start,
+        nitf::Off start,
         int byteSkip) throw(nitf::NITFException);
 
     //! Destructor

@@ -971,7 +971,7 @@ NITFAPI(void) nitf_Writer_destruct(nitf_Writer ** writer)
 
 
 NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
-                                off_t * fileLenOff,
+                                nitf_Off * fileLenOff,
                                 nitf_Uint32 * hdrLen,
                                 nitf_Error * error)
 {
@@ -1595,10 +1595,10 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     nitf_ListIterator end;
 
     /* Offset to the file length field */
-    off_t fileLenOff;
+    nitf_Off fileLenOff;
 
     /* The final file length */
-    off_t fileLen;
+    nitf_Off fileLen;
 
     /* Length of teh file header */
     nitf_Uint32 hdrLen;
@@ -1610,43 +1610,43 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     nitf_Uint32 numImgs = 0;
 
     /* Lengths of image subheaders */
-    off_t *imageSubLens = NULL;
+    nitf_Off *imageSubLens = NULL;
 
     /* Lengths of image data */
-    off_t *imageDataLens = NULL;
+    nitf_Off *imageDataLens = NULL;
 
     /* Number of texts */
     nitf_Uint32 numTexts = 0;
 
     /* Lengths of text subheaders */
-    off_t *textSubLens = NULL;
+    nitf_Off *textSubLens = NULL;
 
     /* Lengths of text data */
-    off_t *textDataLens = NULL;
+    nitf_Off *textDataLens = NULL;
 
     /* Number of graphics */
     nitf_Uint32 numGraphics = 0;
 
     /* Lengths of graphic subheaders */
-    off_t *graphicSubLens = NULL;
+    nitf_Off *graphicSubLens = NULL;
 
     /* Lengths of graphic data */
-    off_t *graphicDataLens = NULL;
+    nitf_Off *graphicDataLens = NULL;
 
     /* Number of data extensions */
     nitf_Uint32 numDEs = 0;
 
     /* Lengths of data extension subheaders */
-    off_t *deSubLens = NULL;
+    nitf_Off *deSubLens = NULL;
 
     /* Lengths of data extensions data */
-    off_t *deDataLens = NULL;
+    nitf_Off *deDataLens = NULL;
 
     /* Start file size */
-    off_t startSize;
+    nitf_Off startSize;
 
     /* End file size */
-    off_t endSize;
+    nitf_Off endSize;
 
     if (!writeHeader(writer, &fileLenOff, &hdrLen, error))
         return NITF_FAILURE;
@@ -1668,14 +1668,14 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     imageDataLens = NULL;       /* Void uninitialized variable warning */
     if (numImgs != 0)
     {
-        imageSubLens = (off_t *) NITF_MALLOC(numImgs * sizeof(off_t));
+        imageSubLens = (nitf_Off *) NITF_MALLOC(numImgs * sizeof(nitf_Off));
         if (!imageSubLens)
         {
             nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
                             NITF_CTXT, NITF_ERR_MEMORY);
             return NITF_FAILURE;
         }
-        imageDataLens = (off_t *) NITF_MALLOC(numImgs * sizeof(off_t));
+        imageDataLens = (nitf_Off *) NITF_MALLOC(numImgs * sizeof(nitf_Off));
         if (!imageDataLens)
         {
             NITF_FREE(imageSubLens);
@@ -1767,14 +1767,14 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
 
     if (numGraphics != 0)
     {
-        graphicSubLens = (off_t *) NITF_MALLOC(numGraphics * sizeof(off_t));
+        graphicSubLens = (nitf_Off *) NITF_MALLOC(numGraphics * sizeof(nitf_Off));
         if (!graphicSubLens)
         {
             nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
                             NITF_CTXT, NITF_ERR_MEMORY);
             return NITF_FAILURE;
         }
-        graphicDataLens = (off_t *) NITF_MALLOC(numGraphics * sizeof(off_t));
+        graphicDataLens = (nitf_Off *) NITF_MALLOC(numGraphics * sizeof(nitf_Off));
         if (!graphicDataLens)
         {
             NITF_FREE(graphicSubLens);
@@ -1856,14 +1856,14 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     textDataLens = NULL;
     if (numTexts != 0)
     {
-        textSubLens = (off_t *) NITF_MALLOC(numTexts * sizeof(off_t));
+        textSubLens = (nitf_Off *) NITF_MALLOC(numTexts * sizeof(nitf_Off));
         if (!textSubLens)
         {
             nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
                             NITF_CTXT, NITF_ERR_MEMORY);
             return NITF_FAILURE;
         }
-        textDataLens = (off_t *) NITF_MALLOC(numTexts * sizeof(off_t));
+        textDataLens = (nitf_Off *) NITF_MALLOC(numTexts * sizeof(nitf_Off));
         if (!textDataLens)
         {
             NITF_FREE(textSubLens);
@@ -1949,14 +1949,14 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         /* Length of current user subheader */
         nitf_Uint32 userSublen;
 
-        deSubLens = (off_t *) NITF_MALLOC(numDEs * sizeof(off_t));
+        deSubLens = (nitf_Off *) NITF_MALLOC(numDEs * sizeof(nitf_Off));
         if (!deSubLens)
         {
             nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
                             NITF_CTXT, NITF_ERR_MEMORY);
             return NITF_FAILURE;
         }
-        deDataLens = (off_t *) NITF_MALLOC(numDEs * sizeof(off_t));
+        deDataLens = (nitf_Off *) NITF_MALLOC(numDEs * sizeof(nitf_Off));
         if (!deDataLens)
         {
             NITF_FREE(deSubLens);
@@ -2036,7 +2036,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     NITF_WRITE_INT64_FIELD(hdrLen, NITF_HL, ZERO, FILL_LEFT);
 
     /*    Fix the image subheader and data lengths */
-    NITF_WRITE_INT64_FIELD((off_t) numImgs, NITF_NUMI, ZERO, FILL_LEFT);
+    NITF_WRITE_INT64_FIELD((nitf_Off) numImgs, NITF_NUMI, ZERO, FILL_LEFT);
     for (i = 0; i < numImgs; i++)
     {
         NITF_WRITE_INT64_FIELD(imageSubLens[i], NITF_LISH, ZERO, FILL_LEFT);
@@ -2049,7 +2049,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     }
 
     /*    Fix the graphic subheader and data lengths */
-    NITF_WRITE_INT64_FIELD((off_t) numGraphics, NITF_NUMS, ZERO, FILL_LEFT);
+    NITF_WRITE_INT64_FIELD((nitf_Off) numGraphics, NITF_NUMS, ZERO, FILL_LEFT);
     for (i = 0; i < numGraphics; i++)
     {
         NITF_WRITE_INT64_FIELD(graphicSubLens[i], NITF_LSSH, ZERO, FILL_LEFT);
@@ -2070,7 +2070,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         goto CATCH_ERROR;
 
     /*    Fix the text subheader and data lengths */
-    NITF_WRITE_INT64_FIELD((off_t) numTexts, NITF_NUMT, ZERO, FILL_LEFT);
+    NITF_WRITE_INT64_FIELD((nitf_Off) numTexts, NITF_NUMT, ZERO, FILL_LEFT);
     for (i = 0; i < numTexts; i++)
     {
         NITF_WRITE_INT64_FIELD(textSubLens[i], NITF_LTSH, ZERO, FILL_LEFT);
@@ -2083,7 +2083,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     }
 
     /*    Fix the data extension subheader and data lengths */
-    NITF_WRITE_INT64_FIELD((off_t) numDEs, NITF_NUMT, ZERO, FILL_LEFT);
+    NITF_WRITE_INT64_FIELD((nitf_Off) numDEs, NITF_NUMT, ZERO, FILL_LEFT);
     for (i = 0; i < numDEs; i++)
     {
         NITF_WRITE_INT64_FIELD(deSubLens[i], NITF_LDSH, ZERO, FILL_LEFT);

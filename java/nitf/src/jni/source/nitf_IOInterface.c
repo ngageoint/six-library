@@ -99,7 +99,7 @@ NITFPRIV(NITF_BOOL) IOInterfaceImpl_write(NITF_DATA* data,
 }
 
 NITFPRIV(NITF_BOOL) IOInterfaceImpl_seek(NITF_DATA* data,
-                                         off_t offset,
+                                         nitf_Off offset,
                                          int whence,
                                          nitf_Error* error)
 {
@@ -142,7 +142,7 @@ NITFPRIV(NITF_BOOL) IOInterfaceImpl_seek(NITF_DATA* data,
     return NITF_SUCCESS;
 }
 
-NITFPRIV(off_t) IOInterfaceImpl_tell(NITF_DATA* data,
+NITFPRIV(nitf_Off) IOInterfaceImpl_tell(NITF_DATA* data,
                                      nitf_Error* error)
 {
     jclass  ioClass = NULL;
@@ -151,7 +151,7 @@ NITFPRIV(off_t) IOInterfaceImpl_tell(NITF_DATA* data,
     JNIEnv *env = NULL;
     JavaVM *vm = NULL;
     int detach;
-    off_t tell;
+    nitf_Off tell;
 
     /* cast it to the structure we know about */
     impl = (IOInterfaceImpl *) data;
@@ -166,7 +166,7 @@ NITFPRIV(off_t) IOInterfaceImpl_tell(NITF_DATA* data,
     return tell;
 }
 
-NITFPRIV(off_t) IOInterfaceImpl_getSize(NITF_DATA* data,
+NITFPRIV(nitf_Off) IOInterfaceImpl_getSize(NITF_DATA* data,
                                         nitf_Error* error)
 {
     jclass  ioClass = NULL;

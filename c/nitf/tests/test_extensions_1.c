@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     nitf_IOHandle io;
     nitf_Extensions* ext;
     nitf_List* l;
-    off_t fileSize;
+    nitf_Off fileSize;
 
     if (argc != 2)
     {
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
         intLength = atoi(treLength);
         if (intLength)
         {
-            off_t treOff = nitf_IOHandle_tell(io, &error);
+            nitf_Off treOff = nitf_IOHandle_tell(io, &error);
             nitf_TRE* tre = nitf_TRE_construct(treName, NULL, &error);
             char *data = NULL;
 

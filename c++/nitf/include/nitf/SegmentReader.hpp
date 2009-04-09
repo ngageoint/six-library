@@ -78,7 +78,7 @@ public:
      * \param whence    starting at (SEEK_SET, SEEK_CUR, SEEK_END)
      * \return The offset from the beginning to the current position is set.
      */
-    off_t seek(off_t offset, int whence) throw (nitf::NITFException);
+    nitf::Off seek(nitf::Off offset, int whence) throw (nitf::NITFException);
 
     /*!
      * \brief tell - Tell location in segment data
@@ -92,7 +92,7 @@ public:
      *
      * \return The offset from the beginning to the current position is set.
      */
-    off_t tell();
+    nitf::Off tell();
 
     /*!
      * \brief getSize - Determine size of the data
@@ -105,7 +105,7 @@ public:
      *
      * \return The offset from the beginning to the current position is set.
      */
-    off_t getSize();
+    nitf::Off getSize();
 
 private:
     SegmentReader() throw(nitf::NITFException){}
