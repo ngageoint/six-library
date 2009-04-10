@@ -21,7 +21,7 @@
  */
 
 
-#include <nitf/IOHandle.h>
+#include <nitf/IOInterface.h>
 #include <nitf/TREUtils.h>
 #include <nitf/TREPrivateData.h>
 #include <nitf/Record.h>
@@ -39,21 +39,21 @@ static char *ident[] = { NITF_PLUGIN_TRE_KEY, "XMLTRE", NULL };
   
 typedef struct _XMLTREData
 {
-    /* This contains the actual document */
+    /* DOM */
     xmlDoc* doc;
-    /* This contains the memory -- it will get allocated when getCurrentSize() is called */
-    /* Or whenever data is written, after which it may be cleared */
+
+    /* DOM memory */
     char* memory;
-    /* This is the size of our memory buffer.  Its resized whenever memory is accessed */
-    
-    int memorySize;
-    
-    /* This field is only 1 when setField() is called.  It indicates that the current size */
-    /* or write functions must update memory */
+
+    /* DOM memory size */
+    int memorySize;    
+
+    /* Flag set when field is updated */
     int dirty;
     
     /* only using this for its HashTable */
     nitf_TREPrivateData *priv;
+
 } XMLTREData;
 
 NITFPRIV(void) XMLTREData_destruct(XMLTREData** data)
@@ -333,9 +333,10 @@ NITFPRIV(xmlNode*) doExpansion(xmlNode* parent, const char* thisTag, int index, 
     
     numElements = nitf_List_size(elements);
 
-    /* If the field was found already, that implies that the entire
-       path of nodes to it should exist already as well */
-
+    /* 
+     *  If the field was found already, that implies that the entire
+     *  path of nodes to it should exist already as well
+     */
     if (numElements <= index)
     {
         int have = 0;
@@ -387,8 +388,9 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
     size_t tagLength = strlen(tag);
     int index = 0;
     int rv;
-    /* Now, for example, we are pointing at
-     * root[0]/next[1], so we need to figure out what number
+    /* 
+     *  Now, for example, we are pointing at
+     *  root[0]/next[1], so we need to figure out what number
      */
     
     /* deal with attributes */
@@ -418,7 +420,8 @@ NITFPRIV(NITF_BOOL) putElementInDOM(nitf_TRE* tre,
         rv = 1;
         endOfTag = tagLength;
         /* We ran out of rope 
-        nitf_Error_init(error, "Over the line", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        nitf_Error_init(error, "Over the line", 
+        NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
         return NITF_FAILURE;*/
     }
     else
@@ -519,12 +522,13 @@ NITFPRIV(nitf_Pair*) getElementFromDOM(nitf_TRE* tre,
 
 
 /*
- *  This function is called by the Reader.  Since I am feeling lazy right now,
+ *  This function is called by the Reader.  
+ *  Since I am feeling lazy right now,
  *  Im going to read into memory.
  *  TODO: Read XML from the file handle
  *
  */
-NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
+NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOInterface* ioIface,
                                 nitf_Uint32 length,
                                 nitf_TRE* tre,
                                 struct _nitf_Record* record,
@@ -545,11 +549,12 @@ NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
     treData->memorySize = length;
     if (!treData->memory) 
     { 
-        nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),NITF_CTXT, NITF_ERR_MEMORY );
+        nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),
+                        NITF_CTXT, NITF_ERR_MEMORY );
         goto CATCH_ERROR;
     }
     memset(treData->memory, 0, length);
-    success = nitf_TREUtils_readField(ioHandle, treData->memory, length, error);
+    success = nitf_TREUtils_readField(ioIface, treData->memory, length, error);
     if (!success) goto CATCH_ERROR;
     
     treData->doc = xmlReadMemory(treData->memory, treData->memorySize, NULL, NULL, 0);
@@ -572,6 +577,11 @@ NITFPRIV(NITF_BOOL) XMLTRE_read(nitf_IOHandle ioHandle,
     
 }
 
+
+NITFPRIV(const char*) XMLTRE_getID(nitf_TRE* tre)
+{
+    return NULL;
+}
 
 
 NITFPRIV(NITF_BOOL) XMLTRE_initData(nitf_TRE * tre, const char* id, nitf_Error * error)
@@ -601,7 +611,24 @@ NITFPRIV(NITF_BOOL) XMLTRE_initData(nitf_TRE * tre, const char* id, nitf_Error *
     return NITF_SUCCESS;
 }
 
-NITFPRIV(NITF_BOOL) XMLTREData_updateBuffer(XMLTREData* treData, nitf_Error* error)
+/*
+ *  If we have made modifications to the TRE, its up
+ *  to this function to capture those changes before they
+ *  are written.
+ *
+ *  This function checks if we have modified the TRE first
+ *  If not, it can return success without changing anything,
+ *  since the buffer has the same content as the fields
+ *
+ *  If there is memory allocated, and the function has
+ *  continued, it must mean that our buffer is dirty.  Therefore
+ *  we need to free the memory.
+ *
+ *  In either case, we need to rewrite the DOM to the buffer.
+ *  Then we can safely set the dirty flag to false.
+ */
+NITFPRIV(NITF_BOOL) XMLTREData_updateBuffer(XMLTREData* treData, 
+                                            nitf_Error* error)
 {
     if (!treData->dirty && treData->memory)
     {
@@ -611,30 +638,47 @@ NITFPRIV(NITF_BOOL) XMLTREData_updateBuffer(XMLTREData* treData, nitf_Error* err
     /* If we have the memory (and its just dirty) we need to free it */
     else if (treData->memory)
     {
-        //xmlBufferFree(treData->memory);
         free(treData->memory);
     }
-    xmlDocDumpMemory(treData->doc, (xmlChar**)& (treData->memory), & (treData->memorySize));
+    xmlDocDumpMemory(treData->doc, 
+                     (xmlChar**)& (treData->memory),
+                     &(treData->memorySize));
     
     /* In either case, dirty or memory need to allocate a buffer and get it */
-    
     treData->dirty = 0;
     return NITF_SUCCESS;
 }
 
-NITFPRIV(NITF_BOOL) XMLTRE_write(nitf_IOHandle ioHandle, nitf_TRE* tre, 
-                                 struct _nitf_Record* record, nitf_Error* error)
+/*
+ *  In order to write the XML TRE out, we need to make sure that
+ *  we rewrite the memory buffer, if it is stale.  This happens
+ *  since we sync only the DOM on TRE mods.
+ */
+NITFPRIV(NITF_BOOL) XMLTRE_write(nitf_IOInterface* ioIface, 
+                                 nitf_TRE* tre, 
+                                 struct _nitf_Record* record, 
+                                 nitf_Error* error)
 {
     XMLTREData * treData = (XMLTREData*)tre->priv;
     
     /* Write out our DOM here */        
     if (!XMLTREData_updateBuffer(treData, error)) return NITF_FAILURE;
-    if (!nitf_IOHandle_write(ioHandle, treData->memory, treData->memorySize, error))
+    if (!nitf_IOInterface_write(ioIface, 
+                                treData->memory, 
+                                treData->memorySize, error))
         return NITF_FAILURE;
     
     return NITF_SUCCESS;
 }
 
+/*
+ *  Currently, in order to make this work, I find it easiest to just
+ *  re-sync the DOM.
+ *
+ *  Once I have done that, the length is going to be the current DOM
+ *  length.
+ *
+ */
 NITFPRIV(int) XMLTREIterator_getCurrentSize(nitf_TRE* tre, nitf_Error* error)
 {
     XMLTREData * treData = (XMLTREData*)tre->priv;
@@ -643,7 +687,17 @@ NITFPRIV(int) XMLTREIterator_getCurrentSize(nitf_TRE* tre, nitf_Error* error)
 }
 
 
-
+/*
+ *  This function assumes that I already made an XPath query
+ *  on the DOM, and have retrieved a result set.  We are doing
+ *  this to fulfill the find() function, giving it an implementation
+ *  that you might actually want to do something with
+ *
+ *  For each element node in our result set, we retrieve the
+ *  associated nitf_Pair containing the path name and the node as
+ *  a Field.
+ *
+ */
 NITFPRIV(nitf_List*) getFieldsFromXPath(nitf_TRE* tre, xmlNodeSet* nodes)
 {
     int i, size;
@@ -696,7 +750,25 @@ NITFPRIV(nitf_List*) getFieldsFromXPath(nitf_TRE* tre, xmlNodeSet* nodes)
     return list;
 }
 
-NITFPRIV(nitf_List*) XMLTRE_find(nitf_TRE* tre, const char* pattern, nitf_Error* error)
+/*
+ *  The ability to find a node comes from NITRO 2.0's TRE interface.
+ *  The default behavior is typically to look for the pattern as a
+ *  substring.  For typical TREs, if we knew that we had a regex
+ *  library at our disposal, we might use it to find the pattern.
+ *
+ *  However, since this is XML, by far the most useful thing to do
+ *  here is to let the end-user run XPath queries against it.
+ *
+ *  This function builds an XPath query from the pattern, and
+ *  evaluates it against the DOM, producing a list of nitf_Pair
+ *  values back to the caller.
+ *
+ *  \TODO: Allow attribute results too!
+ *
+ */
+NITFPRIV(nitf_List*) XMLTRE_find(nitf_TRE* tre, 
+                                 const char* pattern, 
+                                 nitf_Error* error)
 {
     nitf_List* list;
     xmlXPathContext* xpathContext;
@@ -726,7 +798,21 @@ NITFPRIV(nitf_List*) XMLTRE_find(nitf_TRE* tre, const char* pattern, nitf_Error*
 }
 
 
-NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* data, size_t dataLength, nitf_Error* error)
+/*
+ *  This function is reponsible for setting a field,
+ *  fulfilling the required TRE interface.  In order
+ *  to effectively set this up, we sync the DOM and
+ *  the nitf_HashTable with the same data.  This 
+ *  allows the end-user to have the linear mapped
+ *  names that create a typical TRE experience while
+ *  keeping the DOM up-to-date
+ *
+ */
+NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, 
+                                    const char* tag, 
+                                    NITF_DATA* data, 
+                                    size_t dataLength, 
+                                    nitf_Error* error)
 {
     char* value = NULL;
     nitf_Field* field = NULL;
@@ -739,33 +825,43 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
     xmlNode* root = xmlDocGetRootElement(treData->doc);
     
     /* 
-       Note that doing it this way could cause a problem, so we 
-       remove the value if we can't make it work
-       TODO: clean up this mess!
-    */
+     *  Note that doing it this way could cause a problem, so we 
+     *  remove the value if we can't make it work
+     *  TODO: clean up this mess!
+     */
     
     value = (char*)malloc(dataLength + 1);
     value[dataLength] = 0;
     memcpy(value, data, dataLength);
-    
-    /* Different encoding than else!!! */
+
+    /*  Put the element in the DOM directly */
     if (!putElementInDOM(tre, &tag[endOfTag + 2], value, root, 0, error))
         goto CATCH_ERROR;
     
+    /*  And now check if its in the hash table  */
     if (! nitf_HashTable_exists(((XMLTREData*)tre->priv)->priv->hash, tag))
     {
+        /*  If not, make a new entry */
         field = nitf_Field_construct(dataLength, NITF_BCS_A, error);
         if (!field)
             return NITF_FAILURE;
         
+        /*  And set it */
         nitf_Field_setString(field, value, error);
         
+        /*  And insert it  */
         if (!nitf_HashTable_insert(((XMLTREData*)tre->priv)->priv->hash,
                 tag, field, error))
             goto CATCH_ERROR;
     }
     else
     {
+        /*  Otherwise, we just need to get it and reset the value  */
+
+        /*  
+         *  !!! This looks really bad!  What if the field length 
+         *      is too short?  Will this get truncated? !!!
+         */
         nitf_Pair* pair = nitf_HashTable_find(
                 ((XMLTREData*)tre->priv)->priv->hash, tag);
         assert(pair);
@@ -774,7 +870,7 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
     
     }
 
-    
+    /*  Either way, the TRE is dirty now */
     treData->dirty = 1;
     free(value);
     return NITF_SUCCESS;
@@ -791,7 +887,9 @@ NITFPRIV(NITF_BOOL) XMLTRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* d
     return NITF_FAILURE;
 }
 
-
+/*
+ *  Check if there is another field
+ */
 NITFPRIV(NITF_BOOL) XMLTRE_hasNext(nitf_TREEnumerator** it)
 {
     nitf_HashTableIterator* hashIt = (nitf_HashTableIterator*)(*it)->data;
@@ -810,7 +908,11 @@ NITFPRIV(NITF_BOOL) XMLTRE_hasNext(nitf_TREEnumerator** it)
 }
 
 
-NITFPRIV() XMLTREIterator_next(nitf_TREEnumerator* it, nitf_Error* error)
+/*
+ *  Get the next field
+ */
+NITFPRIV(nitf_Pair*) XMLTREIterator_next(nitf_TREEnumerator* it, 
+                                         nitf_Error* error)
 {
     nitf_HashTableIterator* hashIter = (nitf_HashTableIterator*)it->data;
     
@@ -819,14 +921,23 @@ NITFPRIV() XMLTREIterator_next(nitf_TREEnumerator* it, nitf_Error* error)
     return data;
 }
 
+/*
+ *  Get the enumerator to the beginning of the TRE
+ *  Iteration is easy, we are using a hash table iterator underneath 
+ *  Since I make no effort to keep this stuff ordered, its going to
+ *  be hash-ordered (i.e., not ordered at all)
+ */
 NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
 {
-        /* Iteration is easy, we are using a hash table iterator underneath */
 
-    nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
+    nitf_TREEnumerator* it = 
+        (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
+
     nitf_HashTableIterator hashEnd = nitf_HashTable_end(
             ((XMLTREData*)tre->priv)->priv->hash);
-    nitf_HashTableIterator* hashIter = (nitf_HashTableIterator*)NITF_MALLOC(sizeof(nitf_HashTableIterator));
+    nitf_HashTableIterator* hashIter = 
+        (nitf_HashTableIterator*)NITF_MALLOC(sizeof(nitf_HashTableIterator));
+
     *hashIter = nitf_HashTable_begin(((XMLTREData*)tre->priv)->priv->hash);
     
     if (nitf_HashTableIterator_equals(&hashEnd, hashIter))
@@ -843,6 +954,10 @@ NITFPRIV(nitf_TREEnumerator*) XMLTRE_begin(nitf_TRE* tre, nitf_Error* error)
     return it;
 }
 
+/*
+ *  When we are done, its time to clean up shop.
+ *
+ */
 NITFPRIV(void) XMLTRE_destruct(nitf_TRE *tre)
 {
     if (tre && tre->priv)
@@ -851,7 +966,10 @@ NITFPRIV(void) XMLTRE_destruct(nitf_TRE *tre)
     }
 }
 
-
+/*
+ *  \TODO: Im not sure if this has been tested
+ *
+ */
 NITFPRIV(NITF_BOOL) XMLTRE_clone(nitf_TRE *source,
                                  nitf_TRE *tre,
                                  nitf_Error *error)
@@ -872,7 +990,11 @@ NITFPRIV(NITF_BOOL) XMLTRE_clone(nitf_TRE *source,
     return NITF_SUCCESS;
 }
 
-
+/*
+ *  Get the field, if it exists as a nitf_Field.  Otherwise,
+ *  just return NULL
+ *
+ */
 NITFPRIV(nitf_Field*) XMLTRE_getField(nitf_TRE* tre, const char* tag)
 {
     nitf_Pair* pair = nitf_HashTable_find(
@@ -881,10 +1003,13 @@ NITFPRIV(nitf_Field*) XMLTRE_getField(nitf_TRE* tre, const char* tag)
     return (nitf_Field*)pair->data;
 }
 
-
+/*
+ *  This is the descriptor for our XML handler
+ */
 static nitf_TREHandler gHandler = 
 {
         XMLTRE_initData,
+        XMLTRE_getID,
         XMLTRE_read,
         XMLTRE_setField,
         XMLTRE_getField,
