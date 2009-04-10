@@ -690,6 +690,15 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
+    /*  You should use this function to test that you have a valid NITF */
+    if (nitf_Reader_getNITFVersion( argv[1] ) == NITF_VER_UNKNOWN)
+    {
+        printf("This file does not appear to be a valid NITF");
+        exit(EXIT_FAILURE);
+    }
+        
+
+
     /*
      *  Using an IO handle is one valid way to read a NITF in
      *  
@@ -715,13 +724,6 @@ int main(int argc, char **argv)
     /*  This parses all header data within the NITF  */
     record = nitf_Reader_read(reader, io, &error);
     if (!record) goto CATCH_ERROR;
-
-    /*  You should use this function to test that you have a valid NITF */
-    if ( nitf_Record_getVersion(record, &error) == NITF_VER_UNKNOWN)
-    {
-        printf("This file does not appear to be a valid NITF");
-        goto CATCH_ERROR;
-    }
 
     /* Now show the header */
     showFileHeader(record->header);
