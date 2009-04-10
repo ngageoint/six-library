@@ -23,28 +23,60 @@
 #include <import/nitf.h>
 #include "nitf/TREUtils.h"
 
+/*
+ *  These macros are just for retrieving the data simply as raw
+ *  strings.  They are not very robust, since we dont bother to check
+ *  here that your data is printable.  We do not recommend using this
+ *  approach within your own program.
+ *
+ *  Typically, you would use the Field conversion functions
+ *  (which are used within the program whenever we are testing
+ *  a value).
+ */
 #define SHOW(X) printf("%s=[%s]\n", #X, ((X==0)?"(nul)":X))
 #define SHOWI(X) printf("%s=[%ld]\n", #X, X)
 #define SHOWLL(X) printf("%s=[%lld]\n", #X, X)
-#define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, (unsigned char) X[0], (unsigned char) X[1], (unsigned char) X[2])
-#define SHOW_VAL(X) printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:X->length)), ((X==0)?"(nulptr)":((X->raw==0)?"(nul)":X->raw)))
 
-NITF_BOOL printTRE(nitf_TRE* tre, nitf_Error* error)
+#define SHOWRGB(X) \
+    printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, (unsigned char) X[0], \
+                         (unsigned char) X[1], (unsigned char) X[2])
+
+#define SHOW_VAL(X) \
+    printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:X->length)), \
+                  ((X==0)?"(nulptr)":((X->raw==0)?"(nul)":X->raw)))
+
+/*
+ *  This function dumps a TRE using the TRE enumerator.
+ *  The enumerator is used to walk the fields of a TRE in order
+ *  when the TRE enumerator is expired it will be set to NULL.
+ *
+ */
+void printTRE(nitf_TRE* tre)
 {
+    nitf_Error error;
     nitf_Uint32 treLength;
     nitf_TREEnumerator* it = NULL;
     const char* treID = NULL;
     
-    treLength = tre->handler->getCurrentSize(tre, error);
+    /* This is just so you know how long the TRE is */
+    treLength = tre->handler->getCurrentSize(tre, &error);
+
+    /* 
+     *  This is the name for the description that was selected to field
+     *  this TRE by the handler.
+     */
     treID = nitf_TRE_getID(tre);
     
     printf("\n--------------- %s TRE (%d) - (%s) ---------------\n",
            tre->tag, treLength, treID ? treID : "null id");
     
-    it = nitf_TRE_begin(tre, error);
+    /* Now walk the TRE */
+    it = nitf_TRE_begin(tre, &error);
+
     while(it && it->hasNext(&it))
     {
-        nitf_Pair* fieldPair = it->next(it, error);
+        /* If this isn't set, it should have been an error */
+        nitf_Pair* fieldPair = it->next(it, &error);
         if (fieldPair)
         {
             printf("%s = [", fieldPair->key);
@@ -52,55 +84,48 @@ NITF_BOOL printTRE(nitf_TRE* tre, nitf_Error* error)
             printf("]\n");
         }
         else
-        {
-            printf("ERROR: no field found!\n");
-            return NITF_FAILURE;
-        }
+            nitf_Error_print(&error, stdout, "Field retrieval error");
         
     }
     printf("---------------------------------------------\n");
-    return NITF_SUCCESS;
 }
 
-int showTRE(nitf_HashTable * ht, nitf_Pair * pair, NITF_DATA* userData,
-        nitf_Error * error)
+/*
+ *  This function shows us the best way of walking through
+ *  an extension segment (userDefined or extended)
+ */
+void showExtensions(nitf_Extensions* ext)
 {
-    if (pair)
-    {
-        if (pair->key)
-        {
-            nitf_ListIterator iter, end;
 
-            iter = nitf_List_begin((nitf_List *) pair->data);
-            end = nitf_List_end((nitf_List *) pair->data);
+    /* These let you walk an extensions like a list */
+    nitf_ExtensionsIterator iter;
+    nitf_ExtensionsIterator end;
 
-            while (nitf_ListIterator_notEqualTo(&iter, &end))
-            {
-                nitf_TRE *tre = (nitf_TRE *) nitf_ListIterator_get(&iter);
-                printTRE(tre, error);
-                nitf_ListIterator_increment(&iter);
-            }
-        }
-    }
-    else
+    /* Get the beginning pointer */
+    iter = nitf_Extensions_begin(ext);
+
+    /* Get the pointer to end */
+    end  = nitf_Extensions_end(ext);
+
+    /* Iterations */
+    while (nitf_ExtensionsIterator_notEqualTo(&iter, &end) )
     {
-#if NITF_DEBUG_TRE
-        printf("No pair defined at iter pos!\n");
-#endif
+        nitf_TRE* tre = nitf_ExtensionsIterator_get(&iter);
+        /* Prints a single TRE */
+        printTRE( tre );
+        /* Don't forget to increment this */
+        nitf_ExtensionsIterator_increment(&iter);
     }
-    return 1;
 }
 
-void showSecurityGroup(nitf_FileSecurity * securityGroup)
+/*
+ *  This function dumps the security header.
+ *
+ */
+void showSecurityGroup(nitf_FileSecurity* securityGroup)
 {
-    if (!securityGroup)
-    {
-        printf("ERROR: security group = (nul)\n");
-        return;
-    }
 
-    /*  Attention: If the classification is U, the security group  */
-    /*  section should be empty!  (boring!)                        */
+    assert( securityGroup );
 
     SHOW_VAL(securityGroup->classificationSystem);
     SHOW_VAL(securityGroup->codewords);
@@ -119,7 +144,12 @@ void showSecurityGroup(nitf_FileSecurity * securityGroup)
     SHOW_VAL(securityGroup->securityControlNumber);
 }
 
-
+/*
+ *  The file header contains information that is relevant
+ *  to the entire file, including subheader and segment
+ *  lengths, file length, header length, and security level
+ *  for the file.
+ */
 void showFileHeader(nitf_FileHeader * header)
 {
     unsigned int i;
@@ -128,13 +158,11 @@ void showFileHeader(nitf_FileHeader * header)
     nitf_Uint32 len;
     nitf_Uint64 dataLen;
     nitf_Uint32 dataLen32;
+    
+    /* Sanity check */
+    assert( header );
 
-    if (!header)
-    {
-        printf("ERROR: file header = (nul)\n");
-        return;
-    }
-
+    /* Dump the values in order */
     SHOW_VAL(header->fileHeader);
     SHOW_VAL(header->fileVersion);
     SHOW_VAL(header->complianceLevel);
@@ -161,7 +189,7 @@ void showFileHeader(nitf_FileHeader * header)
         goto CATCH_ERROR;
 
 
-    printf("The number of IMAGES contained in this file [%ld]\n", (long)num);
+    printf("The number of images contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
 
@@ -174,9 +202,9 @@ void showFileHeader(nitf_FileHeader * header)
                             NITF_CONV_INT, NITF_INT64_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
+        printf("\tThe length of image subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the IMAGE data: %lld bytes\n\n", dataLen);
+        printf("\tThe length of the image data: %lld bytes\n\n", dataLen);
     }
 
     if (!nitf_Field_get(header->numGraphics,
@@ -184,7 +212,7 @@ void showFileHeader(nitf_FileHeader * header)
         goto CATCH_ERROR;
 
 
-    printf("The number of GRAPHICS contained in this file [%ld]\n", (long)num);
+    printf("The number of graphics contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
 
@@ -193,14 +221,13 @@ void showFileHeader(nitf_FileHeader * header)
             goto CATCH_ERROR;
 
         if (!nitf_Field_get(header->graphicInfo[i]->lengthData,
-                            &dataLen32,  /*XXX*/
+                            &dataLen32,
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of GRAPHIC subheader [%d]: %ld bytes\n",
+        printf("\tThe length of graphic subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the GRAPHIC data: %ld bytes\n\n",
-               /*XXX               (long) dataLen); */
+        printf("\tThe length of the graphic data: %ld bytes\n\n",
                (long) dataLen32);
     }
 
@@ -208,7 +235,7 @@ void showFileHeader(nitf_FileHeader * header)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of LABELS contained in this file [%ld]\n", (long)num);
+    printf("The number of labels contained in this file [%ld]\n", (long)num);
     for (i = 0; i < num; i++)
     {
 
@@ -217,64 +244,62 @@ void showFileHeader(nitf_FileHeader * header)
             goto CATCH_ERROR;
 
         if (!nitf_Field_get(header->labelInfo[i]->lengthData,
-                            /*XXX                            &dataLen, */
                             &dataLen32,
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
-        printf("\tThe length of LABEL subheader [%d]: %ld bytes\n",
+        printf("\tThe length of label subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the LABEL data: %ld bytes\n\n",
-               /*XXX               (long) dataLen); */
+
+        printf("\tThe length of the label data: %ld bytes\n\n",
                (long) dataLen32);
     }
 
     if (!nitf_Field_get(header->numTexts,
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
-    printf("The number of TEXTS contained in this file [%ld]\n", (long)num);
+
+    printf("The number of text sections contained in this file [%ld]\n", 
+           (long)num);
+
     for (i = 0; i < num; i++)
     {
-
         if (!nitf_Field_get(header->textInfo[i]->lengthSubheader,
                             &len, NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
         if (!nitf_Field_get(header->textInfo[i]->lengthData,
-                            /*XXX                            &dataLen, */
                             &dataLen32,
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of TEXT subheader [%d]: %ld bytes\n", i, (long)len);
-        printf("\tThe length of the TEXT data: %ld bytes\n\n",
-               /*XXX               (long) dataLen); */
+        printf("\tThe length of text subheader [%d]: %ld bytes\n", 
+               i, (long)len);
+
+        printf("\tThe length of the text data: %ld bytes\n\n",
                (long) dataLen32);
     }
 
     if (!nitf_Field_get(header->numDataExtensions,
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
-    printf("The number of DATA EXTENSIONS contained in this file [%ld]\n",
+
+    printf("The number of DES contained in this file [%ld]\n",
            (long)num);
 
     for (i = 0; i < num; i++)
     {
-
-
         if (!nitf_Field_get(header->dataExtensionInfo[i]->lengthSubheader,
                             &len, NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
         if (!nitf_Field_get(header->dataExtensionInfo[i]->lengthData,
-                            /*XXX                            &dataLen, */
                             &dataLen32,
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of DATA EXTENSION subheader [%d]: %d bytes\n",
+        printf("\tThe length of DES subheader [%d]: %d bytes\n",
                i, (int) len);
-        printf("\tThe length of the DATA EXTENSION data: %ld bytes\n\n",
-               /*XXX (long) dataLen); */
+        printf("\tThe length of the DES data: %ld bytes\n\n",
                (long) dataLen32);
     }
 
@@ -283,9 +308,9 @@ void showFileHeader(nitf_FileHeader * header)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf
-    ("The number of RESERVED EXTENSIONS contained in this file [%ld]\n",
-     (long)num);
+    printf("The number of RES contained in this file [%ld]\n",
+           (long)num);
+
     for (i = 0; i < num; i++)
     {
 
@@ -296,16 +321,14 @@ void showFileHeader(nitf_FileHeader * header)
             goto CATCH_ERROR;
 
         if (!nitf_Field_get(header->reservedExtensionInfo[i]->lengthData,
-                            /*XXX                            &dataLen, */
                             &dataLen32,
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf
-        ("\tThe length of RESERVED EXTENSION subheader [%d]: %d bytes\n",
-         i, (int) len);
-        printf("\tThe length of the RESERVED EXTENSION data: %ld bytes\n\n",
-               /*XXX               (long) dataLen); */
+        printf("\tThe length of RES subheader [%d]: %d bytes\n",
+               i, (int) len);
+
+        printf("\tThe length of the RES data: %ld bytes\n\n",
                (long) dataLen32);
     }
 
@@ -315,12 +338,8 @@ void showFileHeader(nitf_FileHeader * header)
 
     printf("The user-defined header length [%ld]\n", (long)num);
 
-
     if (header->userDefinedSection)
-    {
-        nitf_HashTable_foreach(header->userDefinedSection->hash,
-                               (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
-    }
+        showExtensions( header->userDefinedSection );
 
     if (!nitf_Field_get(header->extendedHeaderLength, &num,
                         NITF_CONV_INT, NITF_INT32_SZ, &error))
@@ -329,29 +348,29 @@ void showFileHeader(nitf_FileHeader * header)
     printf("The extended header length [%ld]\n", (long)num);
 
     if (header->extendedSection)
-    {
-        nitf_HashTable_foreach(header->extendedSection->hash,
-                               (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
-    }
+        showExtensions( header->extendedSection );
+
     return;
 
 CATCH_ERROR:
     printf("Error processing\n");
 }
 
+/*
+ *  Show the image subheader.  This contains information
+ *  about a specific segment.  That includes the pixel interleaving,
+ *  block info, pixel information and band info.
+ *
+ */
 void showImageSubheader(nitf_ImageSubheader * sub)
 {
-    int q;                      /* iterator */
+    int q;
     int nbands, xbands;
     nitf_Error error;
     int ncomments;
     nitf_ListIterator iter, end;
 
-    if (!sub)
-    {
-        printf("ERROR: image subheader = (nul)\n");
-        return;
-    }
+    assert( sub );
 
     if (!nitf_Field_get(sub->numImageComments,
                         &ncomments, NITF_CONV_INT, NITF_INT32_SZ, &error))
@@ -359,7 +378,7 @@ void showImageSubheader(nitf_ImageSubheader * sub)
         goto CATCH_ERROR;
     }
 
-    printf("Read image into imsub\n");
+    printf("image subheader:\n");
     SHOW_VAL(sub->filePartType);
     SHOW_VAL(sub->imageId);
     SHOW_VAL(sub->imageDateAndTime);
@@ -437,19 +456,13 @@ void showImageSubheader(nitf_ImageSubheader * sub)
     SHOW_VAL(sub->userDefinedOverflow);
 
     if (sub->userDefinedSection)
-    {
-        nitf_HashTable_foreach(sub->userDefinedSection->hash,
-                               (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
-    }
+        showExtensions( sub->userDefinedSection );
 
     SHOW_VAL(sub->extendedHeaderLength);
     SHOW_VAL(sub->extendedHeaderOverflow);
 
     if (sub->extendedSection)
-    {
-        nitf_HashTable_foreach(sub->extendedSection->hash,
-                               (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
-    }
+        showExtensions( sub->extendedSection );
     return;
 
 CATCH_ERROR:
@@ -457,17 +470,20 @@ CATCH_ERROR:
 
 }
 
+/*
+ *  This section is for vector graphics.  Currently
+ *  this will be CGM 1.0 (there is a spec for NITF CGM,
+ *  but the original CGM 1.0 spec is out-of-print.
+ *
+ *  Note that this function does not dump the binary CGM
+ *  You can use the NITRO CGM library to read the CGM data
+ *  from the NITF (and dump it)
+ */
 void showGraphicSubheader(nitf_GraphicSubheader * sub)
 {
-    nitf_Error error;
+    assert( sub );
 
-    if (!sub)
-    {
-        printf("ERROR: graphic subheader = (nul)\n");
-        return;
-    }
-
-    printf("Read graphic into sub\n");
+    printf("graphic subheader:\n");
     SHOW_VAL(sub->filePartType);
     SHOW_VAL(sub->graphicID);
     SHOW_VAL(sub->name);
@@ -489,23 +505,17 @@ void showGraphicSubheader(nitf_GraphicSubheader * sub)
     SHOW_VAL(sub->extendedHeaderLength);
     SHOW_VAL(sub->extendedHeaderOverflow);
     if (sub->extendedSection)
-    {
-        nitf_HashTable_foreach(sub->extendedSection->hash,
-                               (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
-    }
+        showExtensions( sub->extendedSection );
 }
 
+/*
+ *  Label was superceded for NITF 2.1
+ *
+ */
 void showLabelSubheader(nitf_LabelSubheader * sub)
 {
-    nitf_Error error;
-
-    if (!sub)
-    {
-        printf("ERROR: label subheader = (nul)\n");
-        return;
-    }
-
-    printf("Read label into sub\n");
+    assert( sub );
+    printf("label subheader\n");
     SHOW_VAL(sub->filePartType);
     SHOW_VAL(sub->labelID);
     SHOW_VAL(sub->securityClass);
@@ -526,23 +536,22 @@ void showLabelSubheader(nitf_LabelSubheader * sub)
     SHOW_VAL(sub->extendedHeaderLength);
     SHOW_VAL(sub->extendedHeaderOverflow);
     if (sub->extendedSection)
-    {
-        nitf_HashTable_foreach(sub->extendedSection->hash,
-                               (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
-    }
+        showExtensions( sub->extendedSection );
 }
 
+/*
+ *  This section contains raw text data.  You can put
+ *  lots of stuff in here but most people never do.
+ *
+ *  Note that XML data is usually not contained in this section
+ *  even though that might have made more sense.  XML data is
+ *  typically found in the DES segment
+ */
 void showTextSubheader(nitf_TextSubheader * sub)
 {
-    nitf_Error error;
+    assert( sub );
 
-    if (!sub)
-    {
-        printf("ERROR: text subheader = (nul)\n");
-        return;
-    }
-
-    printf("Read text into sub\n");
+    printf("text subheader\n");
     SHOW_VAL(sub->filePartType);
     SHOW_VAL(sub->textID);
     SHOW_VAL(sub->attachmentLevel);
@@ -558,23 +567,50 @@ void showTextSubheader(nitf_TextSubheader * sub)
     SHOW_VAL(sub->extendedHeaderLength);
     SHOW_VAL(sub->extendedHeaderOverflow);
     if (sub->extendedSection)
-    {
-        nitf_HashTable_foreach(sub->extendedSection->hash,
-                               (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
-    }
+        showExtensions(sub->extendedSection);
 }
-
+/*
+ *  This section is for dumping the Data Extension Segment (DES)
+ *  subheader.  It can hold up to 1GB worth of data, so its big
+ *  enough for most things.  People stuff all kinds of things in 
+ *  the DESDATA block including
+ * 
+ *  - TRE overflow:
+ *      When a TRE is too big for the section its in.  In other words,
+ *      if populating it properly would overflow the segment, it is
+ *      dumped into the TRE overflow segment.  
+ *  
+ *      This is kind of a pain, and so NITRO 2.0 has functions to
+ *      split this up for you, or merge it back into the header where it
+ *      would go if it wasnt too big (see nitf_Record_mergeTREs() and
+ *      nitf_Record_unmergeTREs).
+ *
+ *      However, by default, we assume that you want the data as it
+ *      appeared in the file.  Therefore, when you dump a record, you
+ *      might see overflow data
+ *
+ *  - Text data (especially XML)
+ *     
+ *      XML data is getting more popular, and to make sure that they
+ *      dont have to worry about the length of the XML surpassing the
+ *      limits of a segment, most people decide to spec. it to go here
+ *
+ *  - Binary data
+ *      
+ *      Since the DES is the wild west of the NITF, you can put anything
+ *      you want here.
+ *
+ *  Confusingly, the DES subheader has its own little TRE-like 
+ *  arbitrary key-value params.  In NITRO we treat this as a TRE within
+ *  the subheader.
+ *
+ *  This function prints the DE subheader, the extended TRE described above,
+ *  and additionally, if the DESDATA is TRE overflow, we dump those too.
+ */
 void showDESubheader(nitf_DESubheader * sub)
 {
-    nitf_Error error;
-
-    if (!sub)
-    {
-        printf("ERROR: DES subheader = (nul)\n");
-        return;
-    }
-
-    printf("Read DE into sub\n");
+    assert( sub );
+    printf("DES subheader\n");
     SHOW_VAL(sub->filePartType);
     SHOW_VAL(sub->typeID);
     SHOW_VAL(sub->version);
@@ -587,29 +623,41 @@ void showDESubheader(nitf_DESubheader * sub)
     SHOW_VAL(sub->dataItemOverflowed);
     SHOW_VAL(sub->subheaderFieldsLength);
 
+    /*
+     *  This is the user defined parameter section
+     *  within the DES.  It contains only BCS-A/N type values
+     *  so storing it in a 'TRE' struct is no big deal
+     */
     if (sub->subheaderFields)
-    {
-        printTRE(sub->subheaderFields, &error);
-    }
+        printTRE(sub->subheaderFields);
+
     SHOWI((long)sub->dataLength);
 
+    /*
+     *  NITRO only populates this object if the DESDATA contains
+     *  TRE overflow.  Otherwise, you need to use a DEReader to
+     *  get at the DESDATA, since it can contain anything.
+     *
+     *  We wont bother to try and print whatever other things might
+     *  have been put in here (e.g, text data or binary blobs)
+     */
     if (sub->userDefinedSection)
-    {
-        nitf_HashTable_foreach(sub->userDefinedSection->hash,
-                               (NITF_HASH_FUNCTOR) showTRE, NULL, &error);
-    }
+        showExtensions( sub->userDefinedSection );
 }
 
+/*
+ *  This section is never really populated
+ */
 void showRESubheader(nitf_RESubheader * sub)
 {
 
     if (!sub)
     {
-        printf("ERROR: RES subheader = (nul)\n");
+        printf("Error: RES subheader not set\n");
         return;
     }
 
-    printf("Read RE into sub\n");
+    printf("RES subheader\n");
     SHOW_VAL(sub->filePartType);
     SHOW_VAL(sub->typeID);
     SHOW_VAL(sub->version);
@@ -624,9 +672,9 @@ void showRESubheader(nitf_RESubheader * sub)
 
 int main(int argc, char **argv)
 {
-    /*  Get the error object       */
+    /*  Get the error object  */
     nitf_Error error;
-
+    
     /*  This is the reader object  */
     nitf_Reader *reader;
     nitf_Record *record;
@@ -642,6 +690,12 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
+    /*
+     *  Using an IO handle is one valid way to read a NITF in
+     *  
+     *  NITRO 2.5 offers other ways, using the readIO() function
+     *  in the Reader
+     */
     io = nitf_IOHandle_create(argv[1], NITF_ACCESS_READONLY,
                               NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
@@ -650,6 +704,7 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
+    /*  We need to make a reader so we can parse the NITF */
     reader = nitf_Reader_construct(&error);
     if (!reader)
     {
@@ -657,34 +712,19 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-#if NITF_VERBOSE_READER
-    printf("Here are the loaded handlers\n");
-    printf("* * * * * * * * * * * * * * * *\n");
-    nitf_HashTable_print(reader->reg->treHandlers);
-    printf("* * * * * * * * * * * * * * * *\n");
-#endif
+    /*  This parses all header data within the NITF  */
     record = nitf_Reader_read(reader, io, &error);
+    if (!record) goto CATCH_ERROR;
 
-    if (record)
+    /*  You should use this function to test that you have a valid NITF */
+    if ( nitf_Record_getVersion(record, &error) == NITF_VER_UNKNOWN)
     {
-        char nitf_version[NITF_FVER_SZ + 2];
-        if (!nitf_Field_get(record->header->fileVersion, nitf_version,
-                            NITF_CONV_STRING, NITF_FVER_SZ + 1, &error))
-            goto CATCH_ERROR;
-        nitf_version[NITF_FVER_SZ] = 0;
-        if ((strcmp(nitf_version, "02.00") != 0) &&
-                (strcmp(nitf_version, "02.10") != 0)
-                && (strncmp(record->header->NITF_FHDR->raw, "NSIF", 4) != 0))
-        {
-            printf("!!! unhandled NITF version: %s\n", nitf_version);
-        }
-    }
-    else
+        printf("This file does not appear to be a valid NITF");
         goto CATCH_ERROR;
+    }
 
     /* Now show the header */
     showFileHeader(record->header);
-
 
     if (!nitf_Field_get(record->header->numImages,
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
@@ -794,14 +834,14 @@ int main(int argc, char **argv)
 
     nitf_IOHandle_close(io);
     nitf_Record_destruct(&record);
-
     nitf_Reader_destruct(&reader);
 
     return 0;
 
 CATCH_ERROR:
-    printf("!!! we had a problem reading the file !!!\n");
+    printf("We had a problem reading the file\n");
     nitf_Error_print(&error, stdout, "Exiting...");
     exit(EXIT_FAILURE);
 }
+
 
