@@ -484,7 +484,7 @@ NITFPRIV(NITF_BOOL) writeExtras(nitf_Writer * writer,
     nitf_TRE *tre = NULL;
 
     /* get the version */
-    version = nitf_Record_getVersion(writer->record, error);
+    version = nitf_Record_getVersion(writer->record);
 
     /* compute the length of the section */
     totalLength = nitf_Extensions_computeLength(section, version, error);
@@ -981,7 +981,7 @@ NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
     nitf_Version fver;
     char buf[256];              /* temp buf */
 
-    fver = nitf_Record_getVersion(writer->record, error);
+    fver = nitf_Record_getVersion(writer->record);
 
     /* start writing */
     NITF_WRITE_VALUE(writer->record->header, NITF_FHDR, SPACE, FILL_RIGHT);
@@ -1651,7 +1651,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     if (!writeHeader(writer, &fileLenOff, &hdrLen, error))
         return NITF_FAILURE;
 
-    fver = nitf_Record_getVersion(writer->record, error);
+    fver = nitf_Record_getVersion(writer->record);
 
     /*******************************************************************/
     /*                   START DEALING WITH IMAGES                     */

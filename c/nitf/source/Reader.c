@@ -960,7 +960,7 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader * reader, nitf_Error * error)
     /* FVER */
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FVER);
 
-    fver = nitf_Record_getVersion(reader->record, error);
+    fver = nitf_Record_getVersion(reader->record);
     if (!IS_NITF20(fver) && !IS_NITF21(fver))
     {
         nitf_Error_init(error,
@@ -1388,7 +1388,7 @@ NITFAPI(nitf_Record *) nitf_Reader_readIO(nitf_Reader* reader,
     if (!readHeader(reader, error))
         goto CATCH_ERROR;
 
-    fver = nitf_Record_getVersion(reader->record, error);
+    fver = nitf_Record_getVersion(reader->record);
     NITF_TRY_GET_UINT32(reader->record->header->numImages, &num32, error);
 
     /*  Foreach image, read the header and skip to the end  */

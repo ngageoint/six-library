@@ -120,10 +120,6 @@ typedef struct _nitf_TREEnumerator
 
 #define NITF_TRE_END NULL
 
-/*============================================================================*/
-/*===========================BEGIN TRE HANDLER API============================*/
-/*============================================================================*/
-
 /*!
  * The plug-in is allowed to do some initialization to prepare the TRE
  * \param tre       The TRE to initialize
@@ -305,9 +301,6 @@ typedef struct _nitf_TREHandler
     NITF_DATA* data;
 } nitf_TREHandler;
 
-/*============================================================================*/
-/*===========================END TRE HANDLER API==============================*/
-/*============================================================================*/
 
 /*!
  *  Construct a TRE Skeleton (for Reader).

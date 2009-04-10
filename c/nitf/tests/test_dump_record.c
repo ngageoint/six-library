@@ -728,18 +728,18 @@ int main(int argc, char **argv)
     /* Now show the header */
     showFileHeader(record->header);
 
-    if (!nitf_Field_get(record->header->numImages,
-                        &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
+    num = nitf_Record_getNumImages(record, &error);
+
+    if (NITF_INVALID_NUM_SEGMENTS( num ) )
         goto CATCH_ERROR;
 
     /* And now show the image information */
-    if (num > 0)
+    if (num)
     {
-
         /*  Walk each image and show  */
         nitf_ListIterator iter = nitf_List_begin(record->images);
         nitf_ListIterator end = nitf_List_end(record->images);
-
+        
         while (nitf_ListIterator_notEqualTo(&iter, &end))
         {
             nitf_ImageSegment *segment =
@@ -753,7 +753,11 @@ int main(int argc, char **argv)
         printf("No image in file!\n");
     }
 
-    if (record->header->numGraphics)
+    num = nitf_Record_getNumGraphics(record, &error);
+    if (NITF_INVALID_NUM_SEGMENTS( num ) )
+        goto CATCH_ERROR;
+    
+    if (num)
     {
         /*  Walk each graphic and show  */
         nitf_ListIterator iter = nitf_List_begin(record->graphics);
@@ -769,7 +773,11 @@ int main(int argc, char **argv)
         }
     }
 
-    if (record->header->numLabels)
+    num = nitf_Record_getNumLabels(record, &error);
+    if (NITF_INVALID_NUM_SEGMENTS( num ) )
+        goto CATCH_ERROR;
+
+    if (num)
     {
         /*  Walk each label and show  */
         nitf_ListIterator iter = nitf_List_begin(record->labels);
@@ -785,7 +793,11 @@ int main(int argc, char **argv)
         }
     }
 
-    if (record->header->numTexts)
+    num = nitf_Record_getNumTexts(record, &error);
+    if (NITF_INVALID_NUM_SEGMENTS( num ) )
+        goto CATCH_ERROR;
+
+    if (num)
     {
         /*  Walk each text and show  */
         nitf_ListIterator iter = nitf_List_begin(record->texts);
@@ -801,7 +813,12 @@ int main(int argc, char **argv)
         }
     }
 
-    if (record->header->numDataExtensions)
+
+    num = nitf_Record_getNumDataExtensions(record, &error);
+    if (NITF_INVALID_NUM_SEGMENTS( num ) )
+        goto CATCH_ERROR;
+
+    if (num)
     {
         /*  Walk each dataExtension and show  */
         nitf_ListIterator iter = nitf_List_begin(record->dataExtensions);
@@ -817,23 +834,27 @@ int main(int argc, char **argv)
         }
     }
 
-    if (record->header->numReservedExtensions)
+    num = nitf_Record_getNumReservedExtensions(record, &error);
+    if (NITF_INVALID_NUM_SEGMENTS( num ) )
+        goto CATCH_ERROR;
+    
+    if (num)
     {
         /*  Walk each reservedextension and show  */
         nitf_ListIterator iter =
             nitf_List_begin(record->reservedExtensions);
         nitf_ListIterator end = nitf_List_end(record->reservedExtensions);
-
+        
         while (nitf_ListIterator_notEqualTo(&iter, &end))
         {
             nitf_RESegment *segment =
                 (nitf_RESegment *) nitf_ListIterator_get(&iter);
-
+            
             showRESubheader(segment->subheader);
             nitf_ListIterator_increment(&iter);
         }
     }
-
+    
     nitf_IOHandle_close(io);
     nitf_Record_destruct(&record);
     nitf_Reader_destruct(&reader);

@@ -48,15 +48,30 @@ NITF_CXX_GUARD
  */
 typedef struct _nitf_Record
 {
-    nitf_FileHeader *header;    /*  The file header                    */
-    nitf_List *images;          /*  A list of ImageSegment*            */
-    nitf_List *graphics;        /*  A list of GraphicsSegment*         */
-    nitf_List *labels;          /*  A list of LabelSegment* (2.0 only) */
-    nitf_List *texts;           /*  A list of TextSegment*             */
-    nitf_List *dataExtensions;  /*  data extensions segments    */
-    nitf_List *reservedExtensions;      /*  reserved segments       */
+    /* The file header */
+    nitf_FileHeader *header;
+
+    /* List of ImageSegments */
+    nitf_List *images;
+
+    /* List of GraphicsSegments */
+    nitf_List *graphics;
+
+    /* List of LabelSegments (2.0 only) */
+    nitf_List *labels;
+
+    /* List of TextSegments */
+    nitf_List *texts;
+
+    /* List of data extensions segments (DES) */
+    nitf_List *dataExtensions;
+
+    /* List of reserved segments (RES) */
+    nitf_List *reservedExtensions;
 }
 nitf_Record;
+
+#define NITF_INVALID_NUM_SEGMENTS(I) ((I < 0) || (I > 999))
 
 /*!
  *  Create a new record.  This allocates the Record itself, its FileHeader,
@@ -73,11 +88,8 @@ nitf_Record;
  *  \return A record to return
  *
  */
-NITFAPI(nitf_Record *) nitf_Record_construct
-(
-    nitf_Version version,
-    nitf_Error * error
-);
+NITFAPI(nitf_Record *) nitf_Record_construct(nitf_Version version,
+                                             nitf_Error * error);
 
 
 /*!
@@ -88,7 +100,7 @@ NITFAPI(nitf_Record *) nitf_Record_construct
  *  \return A new object that is identical to the old
  */
 NITFAPI(nitf_Record *) nitf_Record_clone(nitf_Record * source,
-        nitf_Error * error);
+                                         nitf_Error * error);
 
 /*!
  *  Destroy a record and NULL-set it
@@ -97,17 +109,32 @@ NITFAPI(nitf_Record *) nitf_Record_clone(nitf_Record * source,
 NITFAPI(void) nitf_Record_destruct(nitf_Record ** record);
 
 
-/**
+/*!
  * Returns the nitf_Version enum for the Record in the Reader
+ *
+ * \note In version 2.5 of NITRO, the error is eliminated, since
+ * it is not possible to test, and is not being set
+ *
  * \param record the Record object
- * \param error The error to populate on failure
  * \return nitf_Version enum specifying the version
  */
-NITFAPI(nitf_Version) nitf_Record_getVersion(nitf_Record * record,
-        nitf_Error * error);
+NITFAPI(nitf_Version) nitf_Record_getVersion(nitf_Record * record);
 
 
-/**
+/*!
+ *  Utility function gets the number of images out of the record.
+ *  Just goes into the FHDR and gets out NUMI and converts the
+ *  field to a Uint32
+ *
+ *  \param record The record
+ *  \param error An error to populate on failure
+ *  \return We will return a value that can be tested using
+ *      NITF_INVALID_NUM_SEGMENTS(rv)
+ */
+NITFAPI(nitf_Uint32) nitf_Record_getNumImages(nitf_Record* record,
+                                              nitf_Error* error);
+
+/*!
  * Creates and returns a new ImageSegment* that is bound to the Record
  *
  * Note: The accompanying ComponentInfo object for this segment is also
@@ -118,10 +145,22 @@ NITFAPI(nitf_Version) nitf_Record_getVersion(nitf_Record * record,
  * \return nitf_ImageSegment* that is bound to the Record
  */
 NITFAPI(nitf_ImageSegment*) nitf_Record_newImageSegment(nitf_Record * record,
-        nitf_Error * error);
+                                                        nitf_Error * error);
 
+/*!
+ *  Utility function gets the number of graphics out of the record.
+ *  Just goes into the FHDR and gets out NUMS and converts the
+ *  field to a Uint32
+ *
+ *  \param record The record
+ *  \param error An error to populate on failure
+ *  \return We will return a value that can be tested using
+ *      NITF_INVALID_NUM_SEGMENTS(rv)
+ */
+NITFAPI(nitf_Uint32) nitf_Record_getNumGraphics(nitf_Record* record,
+                                                nitf_Error* error);
 
-/**
+/*!
  * Creates and returns a new GraphicSegment* that is bound to the Record
  *
  * Note: The accompanying ComponentInfo object for this segment is also
@@ -131,11 +170,25 @@ NITFAPI(nitf_ImageSegment*) nitf_Record_newImageSegment(nitf_Record * record,
  * \param error The error to populate on failure
  * \return nitf_GraphicSegment* that is bound to the Record
  */
-NITFAPI(nitf_GraphicSegment*) nitf_Record_newGraphicSegment(nitf_Record * record,
-        nitf_Error * error);
+NITFAPI(nitf_GraphicSegment*) 
+nitf_Record_newGraphicSegment(nitf_Record * record,
+                              nitf_Error * error);
 
 
-/**
+/*!
+ *  Utility function gets the number of texts out of the record.
+ *  Just goes into the FHDR and gets out NUMT and converts the
+ *  field to a Uint32
+ *
+ *  \param record The record
+ *  \param error An error to populate on failure
+ *  \return We will return a value that can be tested using
+ *      NITF_INVALID_NUM_SEGMENTS(rv)
+ */
+NITFAPI(nitf_Uint32) nitf_Record_getNumTexts(nitf_Record* record,
+                                             nitf_Error* error);
+
+/*!
  * Creates and returns a new TextSegment* that is bound to the Record
  *
  * Note: The accompanying ComponentInfo object for this segment is also
@@ -146,10 +199,24 @@ NITFAPI(nitf_GraphicSegment*) nitf_Record_newGraphicSegment(nitf_Record * record
  * \return nitf_TextSegment* that is bound to the Record
  */
 NITFAPI(nitf_TextSegment*) nitf_Record_newTextSegment(nitf_Record * record,
-        nitf_Error * error);
+                                                      nitf_Error * error);
 
 
-/**
+                     
+/*!
+ *  Utility function gets the number of DES out of the record.
+ *  Just goes into the FHDR and gets out NUMDES and converts the
+ *  field to a Uint32
+ *
+ *  \param record The record
+ *  \param error An error to populate on failure
+ *  \return We will return a value that can be tested using
+ *      NITF_INVALID_NUM_SEGMENTS(rv)
+ */
+NITFAPI(nitf_Uint32) nitf_Record_getNumDataExtensions(nitf_Record* record,
+                                                      nitf_Error* error);
+                                          
+/*!
  * Creates and returns a new DESegment* that is bound to the Record
  *
  * Note: The accompanying ComponentInfo object for this segment is also
@@ -159,20 +226,20 @@ NITFAPI(nitf_TextSegment*) nitf_Record_newTextSegment(nitf_Record * record,
  * \param error The error to populate on failure
  * \return nitf_DESegment* that is bound to the Record
  */
-NITFAPI(nitf_DESegment*) nitf_Record_newDataExtensionSegment(
-    nitf_Record * record,
-    nitf_Error * error);
+NITFAPI(nitf_DESegment*) 
+nitf_Record_newDataExtensionSegment(nitf_Record * record,
+                                    nitf_Error * error);
 
 
-/**
+/*!
  * This removes the segment at the given offset. The segment is
  * de-allocated, and removed from the system.
  *
  * CAUTION!!! -- Removing a segment removes the memory in the segment list,
  * so any usage of the segment will cause a segmentation fault.
  *
- * @param segmentNumber
- * @throws NITFException
+ * \param segmentNumber
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_removeImageSegment
 (
@@ -181,15 +248,15 @@ NITFAPI(NITF_BOOL) nitf_Record_removeImageSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * This removes the segment at the given offset. The segment is
  * de-allocated, and removed from the system.
  *
  * CAUTION!!! -- Removing a segment removes the memory in the segment list,
  * so any usage of the segment will cause a segmentation fault.
  *
- * @param segmentNumber
- * @throws NITFException
+ * \param segmentNumber
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_removeGraphicSegment
 (
@@ -198,15 +265,30 @@ NITFAPI(NITF_BOOL) nitf_Record_removeGraphicSegment
     nitf_Error * error
 );
 
-/**
+
+/*!
+ *  Utility function gets the number of labels out of the record.
+ *  Just goes into the FHDR and gets out NUMX and converts the
+ *  field to a Uint32
+ *
+ *  \param record The record
+ *  \param error An error to populate on failure
+ *  \return We will return a value that can be tested using
+ *      NITF_INVALID_NUM_SEGMENTS(rv)
+ */
+NITFAPI(nitf_Uint32) nitf_Record_getNumLabels(nitf_Record* record,
+                                              nitf_Error* error);
+
+
+/*!
  * This removes the segment at the given offset. The segment is
  * de-allocated, and removed from the system.
  *
  * CAUTION!!! -- Removing a segment removes the memory in the segment list,
  * so any usage of the segment will cause a segmentation fault.
  *
- * @param segmentNumber
- * @throws NITFException
+ * \param segmentNumber
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_removeLabelSegment
 (
@@ -215,15 +297,15 @@ NITFAPI(NITF_BOOL) nitf_Record_removeLabelSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * This removes the segment at the given offset. The segment is
  * de-allocated, and removed from the system.
  *
  * CAUTION!!! -- Removing a segment removes the memory in the segment list,
  * so any usage of the segment will cause a segmentation fault.
  *
- * @param segmentNumber
- * @throws NITFException
+ * \param segmentNumber
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_removeTextSegment
 (
@@ -232,15 +314,15 @@ NITFAPI(NITF_BOOL) nitf_Record_removeTextSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * This removes the segment at the given offset. The segment is
  * de-allocated, and removed from the system.
  *
  * CAUTION!!! -- Removing a segment removes the memory in the segment list,
  * so any usage of the segment will cause a segmentation fault.
  *
- * @param segmentNumber
- * @throws NITFException
+ * \param segmentNumber
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_removeDataExtensionSegment
 (
@@ -249,15 +331,29 @@ NITFAPI(NITF_BOOL) nitf_Record_removeDataExtensionSegment
     nitf_Error * error
 );
 
-/**
+
+/*!
+ *  Utility function gets the number of RES out of the record.
+ *  Just goes into the FHDR and gets out NUMRES and converts the
+ *  field to a Uint32
+ *
+ *  \param record The record
+ *  \param error An error to populate on failure
+ *  \return We will return a value that can be tested using
+ *      NITF_INVALID_NUM_SEGMENTS(rv)
+ */
+NITFAPI(nitf_Uint32) nitf_Record_getNumReservedExtensions(nitf_Record* record,
+                                                          nitf_Error* error);
+
+/*!
  * This removes the segment at the given offset. The segment is
  * de-allocated, and removed from the system.
  *
  * CAUTION!!! -- Removing a segment removes the memory in the segment list,
  * so any usage of the segment will cause a segmentation fault.
  *
- * @param segmentNumber
- * @throws NITFException
+ * \param segmentNumber
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_removeReservedExtensionSegment
 (
@@ -266,14 +362,14 @@ NITFAPI(NITF_BOOL) nitf_Record_removeReservedExtensionSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * This moves the segment from the oldIndex to the newIndex.
  * This is a shortcut for:
  *      nitf_List_move(record->images, oldIndex, newIndex, error);
  *
- * @param oldIndex  the index of the segment to move
- * @param newIndex  the index where the segment will be moved to
- * @throws NITFException
+ * \param oldIndex  the index of the segment to move
+ * \param newIndex  the index where the segment will be moved to
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_moveImageSegment
 (
@@ -283,14 +379,14 @@ NITFAPI(NITF_BOOL) nitf_Record_moveImageSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * This moves the segment from the oldIndex to the newIndex.
  * This is a shortcut for:
  *      nitf_List_move(record->graphics, oldIndex, newIndex, error);
  *
- * @param oldIndex  the index of the segment to move
- * @param newIndex  the index where the segment will be moved to
- * @throws NITFException
+ * \param oldIndex  the index of the segment to move
+ * \param newIndex  the index where the segment will be moved to
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_moveGraphicSegment
 (
@@ -300,14 +396,14 @@ NITFAPI(NITF_BOOL) nitf_Record_moveGraphicSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * This moves the segment from the oldIndex to the newIndex.
  * This is a shortcut for:
  *      nitf_List_move(record->labels, oldIndex, newIndex, error);
  *
- * @param oldIndex  the index of the segment to move
- * @param newIndex  the index where the segment will be moved to
- * @throws NITFException
+ * \param oldIndex  the index of the segment to move
+ * \param newIndex  the index where the segment will be moved to
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_moveLabelSegment
 (
@@ -317,14 +413,14 @@ NITFAPI(NITF_BOOL) nitf_Record_moveLabelSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * This moves the segment from the oldIndex to the newIndex.
  * This is a shortcut for:
  *      nitf_List_move(record->texts, oldIndex, newIndex, error);
  *
- * @param oldIndex  the index of the segment to move
- * @param newIndex  the index where the segment will be moved to
- * @throws NITFException
+ * \param oldIndex  the index of the segment to move
+ * \param newIndex  the index where the segment will be moved to
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_moveTextSegment
 (
@@ -334,14 +430,14 @@ NITFAPI(NITF_BOOL) nitf_Record_moveTextSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * This moves the segment from the oldIndex to the newIndex.
  * This is a shortcut for:
  *      nitf_List_move(record->dataExtensions, oldIndex, newIndex, error);
  *
- * @param oldIndex  the index of the segment to move
- * @param newIndex  the index where the segment will be moved to
- * @throws NITFException
+ * \param oldIndex  the index of the segment to move
+ * \param newIndex  the index where the segment will be moved to
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_moveDataExtensionSegment
 (
@@ -351,14 +447,14 @@ NITFAPI(NITF_BOOL) nitf_Record_moveDataExtensionSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * This moves the segment from the oldIndex to the newIndex.
  * This is a shortcut for:
  *      nitf_List_move(record->reservedExtensions, oldIndex, newIndex, error);
  *
- * @param oldIndex  the index of the segment to move
- * @param newIndex  the index where the segment will be moved to
- * @throws NITFException
+ * \param oldIndex  the index of the segment to move
+ * \param newIndex  the index where the segment will be moved to
+ * \throws NITFException
  */
 NITFAPI(NITF_BOOL) nitf_Record_moveReservedExtensionSegment
 (
@@ -368,7 +464,7 @@ NITFAPI(NITF_BOOL) nitf_Record_moveReservedExtensionSegment
     nitf_Error * error
 );
 
-/**
+/*!
  * nitf_Record_mergeTREs merges TREs between all segments and the associate
  * TRE_OVERFLOW segments. After this call all TRE_OVERFLOW (DE) segments are
  * removed and their TRE's have been added to the TRE list of the corresponding
@@ -385,7 +481,7 @@ NITFAPI(NITF_BOOL) nitf_Record_mergeTREs
     nitf_Error * error
 );
 
-/**
+/*!
  * nitf_Record_unmergeTREs scans all segments and creates TRE_OVERFLOW (DE)
  * segments for each segment that requires one. When an overflow segment is
  * created,TREs are transfered from the original segment to the overflow. 
