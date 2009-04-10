@@ -60,7 +60,7 @@ Record::~Record(){}
 
 nitf::Version Record::getVersion()
 {
-    return nitf_Record_getVersion(getNativeOrThrow(), &error);
+    return nitf_Record_getVersion(getNativeOrThrow());
 }
 
 nitf::FileHeader Record::getHeader()

@@ -3135,10 +3135,9 @@ SWIG_From_size_t  (size_t value)
         nitf_Record_destruct(&record);
     }
     
-    nitf_Version py_Record_getVersion(nitf_Record * record,
-                                             nitf_Error * error)
+    nitf_Version py_Record_getVersion(nitf_Record * record)
     {
-	    return nitf_Record_getVersion(record, error);
+	    return nitf_Record_getVersion(record);
 	}
 
 
@@ -8105,8 +8104,30 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_getVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Error *arg2 = (nitf_Error *) 0 ;
   nitf_Version result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Record_getVersion",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Record_getVersion" "', argument " "1"" of type '" "nitf_Record *""'"); 
+  }
+  arg1 = (nitf_Record *)(argp1);
+  result = (nitf_Version)nitf_Record_getVersion(arg1);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Record_getNumImages(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Record *arg1 = (nitf_Record *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  nitf_Uint32 result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -8114,19 +8135,21 @@ SWIGINTERN PyObject *_wrap_nitf_Record_getVersion(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getVersion",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumImages",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Record_getVersion" "', argument " "1"" of type '" "nitf_Record *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Record_getNumImages" "', argument " "1"" of type '" "nitf_Record *""'"); 
   }
   arg1 = (nitf_Record *)(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Error, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Record_getVersion" "', argument " "2"" of type '" "nitf_Error *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Record_getNumImages" "', argument " "2"" of type '" "nitf_Error *""'"); 
   }
   arg2 = (nitf_Error *)(argp2);
-  result = (nitf_Version)nitf_Record_getVersion(arg1,arg2);
-  resultobj = SWIG_From_int((int)(result));
+  result = nitf_Record_getNumImages(arg1,arg2);
+  {
+    resultobj = PyInt_FromLong(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -8164,6 +8187,39 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nitf_Record_getNumGraphics(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Record *arg1 = (nitf_Record *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  nitf_Uint32 result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumGraphics",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Record_getNumGraphics" "', argument " "1"" of type '" "nitf_Record *""'"); 
+  }
+  arg1 = (nitf_Record *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Record_getNumGraphics" "', argument " "2"" of type '" "nitf_Error *""'"); 
+  }
+  arg2 = (nitf_Error *)(argp2);
+  result = nitf_Record_getNumGraphics(arg1,arg2);
+  {
+    resultobj = PyInt_FromLong(result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_nitf_Record_newGraphicSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
@@ -8195,6 +8251,39 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nitf_Record_getNumTexts(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Record *arg1 = (nitf_Record *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  nitf_Uint32 result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumTexts",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Record_getNumTexts" "', argument " "1"" of type '" "nitf_Record *""'"); 
+  }
+  arg1 = (nitf_Record *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Record_getNumTexts" "', argument " "2"" of type '" "nitf_Error *""'"); 
+  }
+  arg2 = (nitf_Error *)(argp2);
+  result = nitf_Record_getNumTexts(arg1,arg2);
+  {
+    resultobj = PyInt_FromLong(result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_nitf_Record_newTextSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
@@ -8220,6 +8309,39 @@ SWIGINTERN PyObject *_wrap_nitf_Record_newTextSegment(PyObject *SWIGUNUSEDPARM(s
   arg2 = (nitf_Error *)(argp2);
   result = (nitf_TextSegment *)nitf_Record_newTextSegment(arg1,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_TextSegment, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Record_getNumDataExtensions(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Record *arg1 = (nitf_Record *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  nitf_Uint32 result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumDataExtensions",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Record_getNumDataExtensions" "', argument " "1"" of type '" "nitf_Record *""'"); 
+  }
+  arg1 = (nitf_Record *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Record_getNumDataExtensions" "', argument " "2"" of type '" "nitf_Error *""'"); 
+  }
+  arg2 = (nitf_Error *)(argp2);
+  result = nitf_Record_getNumDataExtensions(arg1,arg2);
+  {
+    resultobj = PyInt_FromLong(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -8329,6 +8451,39 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nitf_Record_getNumLabels(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Record *arg1 = (nitf_Record *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  nitf_Uint32 result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumLabels",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Record_getNumLabels" "', argument " "1"" of type '" "nitf_Record *""'"); 
+  }
+  arg1 = (nitf_Record *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Record_getNumLabels" "', argument " "2"" of type '" "nitf_Error *""'"); 
+  }
+  arg2 = (nitf_Error *)(argp2);
+  result = nitf_Record_getNumLabels(arg1,arg2);
+  {
+    resultobj = PyInt_FromLong(result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_nitf_Record_removeLabelSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
@@ -8431,6 +8586,39 @@ SWIGINTERN PyObject *_wrap_nitf_Record_removeDataExtensionSegment(PyObject *SWIG
   arg3 = (nitf_Error *)(argp3);
   result = (int)nitf_Record_removeDataExtensionSegment(arg1,arg2,arg3);
   resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Record_getNumReservedExtensions(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Record *arg1 = (nitf_Record *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  nitf_Uint32 result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumReservedExtensions",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Record_getNumReservedExtensions" "', argument " "1"" of type '" "nitf_Record *""'"); 
+  }
+  arg1 = (nitf_Record *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Record_getNumReservedExtensions" "', argument " "2"" of type '" "nitf_Error *""'"); 
+  }
+  arg2 = (nitf_Error *)(argp2);
+  result = nitf_Record_getNumReservedExtensions(arg1,arg2);
+  {
+    resultobj = PyInt_FromLong(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -28468,27 +28656,18 @@ fail:
 SWIGINTERN PyObject *_wrap_py_Record_getVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Error *arg2 = (nitf_Error *) 0 ;
   nitf_Version result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:py_Record_getVersion",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:py_Record_getVersion",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "py_Record_getVersion" "', argument " "1"" of type '" "nitf_Record *""'"); 
   }
   arg1 = (nitf_Record *)(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Error, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "py_Record_getVersion" "', argument " "2"" of type '" "nitf_Error *""'"); 
-  }
-  arg2 = (nitf_Error *)(argp2);
-  result = (nitf_Version)py_Record_getVersion(arg1,arg2);
+  result = (nitf_Version)py_Record_getVersion(arg1);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -29020,15 +29199,21 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_Record_clone", _wrap_nitf_Record_clone, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_destruct", _wrap_nitf_Record_destruct, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_getVersion", _wrap_nitf_Record_getVersion, METH_VARARGS, NULL},
+	 { (char *)"nitf_Record_getNumImages", _wrap_nitf_Record_getNumImages, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_newImageSegment", _wrap_nitf_Record_newImageSegment, METH_VARARGS, NULL},
+	 { (char *)"nitf_Record_getNumGraphics", _wrap_nitf_Record_getNumGraphics, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_newGraphicSegment", _wrap_nitf_Record_newGraphicSegment, METH_VARARGS, NULL},
+	 { (char *)"nitf_Record_getNumTexts", _wrap_nitf_Record_getNumTexts, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_newTextSegment", _wrap_nitf_Record_newTextSegment, METH_VARARGS, NULL},
+	 { (char *)"nitf_Record_getNumDataExtensions", _wrap_nitf_Record_getNumDataExtensions, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_newDataExtensionSegment", _wrap_nitf_Record_newDataExtensionSegment, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_removeImageSegment", _wrap_nitf_Record_removeImageSegment, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_removeGraphicSegment", _wrap_nitf_Record_removeGraphicSegment, METH_VARARGS, NULL},
+	 { (char *)"nitf_Record_getNumLabels", _wrap_nitf_Record_getNumLabels, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_removeLabelSegment", _wrap_nitf_Record_removeLabelSegment, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_removeTextSegment", _wrap_nitf_Record_removeTextSegment, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_removeDataExtensionSegment", _wrap_nitf_Record_removeDataExtensionSegment, METH_VARARGS, NULL},
+	 { (char *)"nitf_Record_getNumReservedExtensions", _wrap_nitf_Record_getNumReservedExtensions, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_removeReservedExtensionSegment", _wrap_nitf_Record_removeReservedExtensionSegment, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_moveImageSegment", _wrap_nitf_Record_moveImageSegment, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_moveGraphicSegment", _wrap_nitf_Record_moveGraphicSegment, METH_VARARGS, NULL},

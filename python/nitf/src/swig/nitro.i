@@ -411,10 +411,9 @@
         nitf_Record_destruct(&record);
     }
     
-    nitf_Version py_Record_getVersion(nitf_Record * record,
-                                             nitf_Error * error)
+    nitf_Version py_Record_getVersion(nitf_Record * record)
     {
-	    return nitf_Record_getVersion(record, error);
+	    return nitf_Record_getVersion(record);
 	}
 %}
 
