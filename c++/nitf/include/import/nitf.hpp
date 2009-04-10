@@ -52,6 +52,7 @@
 #include "nitf/LabelSubheader.hpp"
 #include "nitf/List.hpp"
 #include "nitf/LookupTable.hpp"
+#include "nitf/MemoryIO.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/Pair.hpp"
