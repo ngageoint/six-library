@@ -81,8 +81,16 @@ public:
     //! Set the header
     void setHeader(nitf::FileHeader & value);
 
+    nitf::Uint32 getNumImages();
+    nitf::Uint32 getNumGraphics();
+    nitf::Uint32 getNumLabels();
+    nitf::Uint32 getNumTexts();
+    nitf::Uint32 getNumDataExtensions();
+    nitf::Uint32 getNumReservedExtensions();
+
     //! Get the images
     nitf::List getImages();
+
 
     //! Get the graphics
     nitf::List getGraphics();
