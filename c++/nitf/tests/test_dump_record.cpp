@@ -24,39 +24,61 @@
 
 #define SHOW(X) std::cout << #X << " = [" << X << "]" << std::endl
 #define SHOWI(X) printf("%s=[%d]\n", #X, (int)X)
-#define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, (unsigned char) X[0], (unsigned char) X[1], (unsigned char) X[2])
+#define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, \
+       (unsigned char) X[0], (unsigned char) X[1], (unsigned char) X[2])
 
+
+/*
+ *  This function dumps a TRE using the TRE iterator (enumerator in C).
+ *  The iterator is used to walk the fields of a TRE in order
+ *  when the TRE enumerator is expired it will be set to NULL.
+ *
+ */
 
 void printTRE(nitf::TRE tre)
 {
+
+
+
+    // This is so you know how long the TRE is
+    nitf_Uint32 treLength = tre.getCurrentSize();
+
+    /* 
+     *  This is the name for the description that was selected to field
+     *  this TRE by the handler.
+     */
+    std::string treID = tre.getID();
+
+
+    std::cout << std::endl << "--------------- " << tre.getTag()
+              << " TRE (" << treLength << " - "
+              << (treID.empty() ? "nullID" : treID)
+              << ") ---------------" << std::endl;
+    
+    // Now walk the TRE
     for(nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
     {
         nitf::Field field((*it).second());
-        std::cout << (*it).first() << " = [" << field.toString() << "]" << std::endl;
+        std::cout << (*it).first() << " = [" 
+                  << field.toString() << "]" << std::endl;
     }
+    std::cout << "---------------------------------------------" << std::endl;
+
 }
 
-
+/*
+ *  This function shows us the best way of walking through
+ *  an extension segment (userDefined or extended)
+ */
 void showExtensions(nitf::Extensions extensions)
 {
-    //TREPrintFunctor treTraverser;
     for (nitf::ExtensionsIterator it = extensions.begin();
-            it != extensions.end(); ++it)
+         it != extensions.end(); ++it)
     {
         nitf::TRE tre = *it;
-        nitf_Uint32 treLength = tre.getCurrentSize();
+
         std::string treID = tre.getID();
-//        if (treLength <= 0)
-//            treLength = tre.computeLength();
-        std::cout << std::endl << "--------------- " << tre.getTag()
-            << " TRE (" << treLength << " - "
-            << (treID.empty() ? "nullID" : treID)
-            << ") ---------------" << std::endl;
-        //        for(nitf::TRE::FieldIterator it = tre.begin(); it != tre.end(); ++it)
-        //            std::cout << it->first << " = [" << it->second.toString() << "]" << std::endl;
         printTRE(tre);
-        //tre.foreach(treTraverser);
-        std::cout << "---------------------------------------------" << std::endl;
     }
 }
 
@@ -80,109 +102,108 @@ void showFileHeader(nitf::FileHeader header)
     SHOW( header.getFileLength().toString() );
     SHOW( header.getHeaderLength().toString() );
 
-    std::cout << "The number of IMAGES contained in this file ["
-    << (unsigned int)header.getNumImages() << "]" << std::endl;
+    unsigned int num = header.getNumImages();
+    std::cout << "The number of images contained in this file ["
+              << num << "]" << std::endl;
 
-    for (unsigned int i = 0; i < (unsigned int)header.getNumImages(); i++)
+    for (unsigned int i = 0; i < num; i++)
     {
-        std::cout << "\tThe length of IMAGE subheader ["
-        << i
-        << "]: "
-        << (unsigned int)header.getImageInfo(i).getLengthSubheader()
-        << std::endl;
+        nitf::ComponentInfo info = header.getImageInfo(i);
+
+        std::cout << "\tThe length of image subheader [" << i << "]: " 
+                  << (unsigned int)info.getLengthSubheader() << std::endl;
+    }
+    
+    num = header.getNumGraphics();
+
+    std::cout << "The number of graphics contained in this file ["
+              << num << "]" << std::endl;
+    
+    for (unsigned int i = 0; i < num; i++)
+    {
+        nitf::ComponentInfo info = header.getGraphicInfo(i);
+
+        std::cout << "\tThe length of graphics subheader [" << i << "]: "
+                  << (unsigned int)info.getLengthSubheader() << std::endl;
+
+        std::cout << "\tThe length of the graphics data: "
+                  << (unsigned int)info.getLengthData() 
+                  << "bytes\n" << std::endl;
     }
 
-    std::cout << "The number of GRAPHICS contained in this file ["
-    << (unsigned int)header.getNumGraphics() << "]" << std::endl;
+    num = header.getNumLabels();
 
-    for (unsigned int i = 0; i < (unsigned int)header.getNumGraphics(); i++)
+    std::cout << "The number of labels contained in this file ["
+              << num << "]" << std::endl;
+
+    for (unsigned int i = 0; i < num; i++)
     {
-        std::cout << "\tThe length of GRAPHIC subheader ["
-        << i << "]: "
-        << (unsigned int)header.getGraphicInfo(i).getLengthSubheader()
-        << std::endl;
-
-        std::cout << "\tThe length of the GRAPHIC data: "
-        << (unsigned int)header.getGraphicInfo(i).getLengthData()
-        << "bytes\n" << std::endl;
+        nitf::ComponentInfo info = header.getLabelInfo(i);
+        
+        std::cout << "\tThe length of label subheader [" << i << "]: " 
+                  << (unsigned int)info.getLengthSubheader() << std::endl;
+            
+        std::cout << "\tThe length of the label data: "
+                  << (unsigned int)info.getLengthData() 
+                  << "bytes\n" << std::endl;
     }
 
-    std::cout << "The number of LABELS contained in this file ["
-    << (unsigned int)header.getNumLabels() << "]" << std::endl;
+    num = header.getNumTexts();
+    std::cout << "The number of texts contained in this file ["
+              << num << "]" << std::endl;
 
-    for (unsigned int i = 0; i < (unsigned int)header.getNumLabels(); i++)
+    for (unsigned int i = 0; i < num; i++)
     {
-        std::cout << "\tThe length of LABEL subheader ["
-        << i << "]: "
-        << (unsigned int)header.getLabelInfo(i).getLengthSubheader()
-        << std::endl;
+        nitf::ComponentInfo info = header.getTextInfo(i);
+        std::cout << "\tThe length of text subheader [" << i << "]: " 
+                  << (unsigned int)info.getLengthSubheader() << std::endl;
 
-        std::cout << "\tThe length of the LABEL data: "
-        << (unsigned int)header.getLabelInfo(i).getLengthData()
-        << "bytes\n" << std::endl;
+        std::cout << "\tThe length of the text data: "
+                  << (unsigned int)info.getLengthData() 
+                  << "bytes\n" << std::endl;
     }
 
-    std::cout << "The number of TEXTS contained in this file ["
-    << (unsigned int)header.getNumTexts() << "]" << std::endl;
+    num = header.getNumDataExtensions();
+    std::cout << "The number of DES contained in this file ["
+              << num << "]" << std::endl;
 
-    for (unsigned int i = 0; i < (unsigned int)header.getNumTexts(); i++)
+    for (unsigned int i = 0; i < num; i++)
     {
-        std::cout << "\tThe length of TEXT subheader ["
-        << i << "]: "
-        << (unsigned int)header.getTextInfo(i).getLengthSubheader()
-        << std::endl;
+        nitf::ComponentInfo info = header.getDataExtensionInfo(i);
 
-        std::cout << "\tThe length of the TEXT data: "
-        << (unsigned int)header.getTextInfo(i).getLengthData()
-        << "bytes\n" << std::endl;
+        std::cout << "\tThe length of DES subheader [" << i << "]: " 
+                  << (unsigned int)info.getLengthSubheader() << std::endl;
+
+        std::cout << "\tThe length of the DES data: "
+                  << (unsigned int)info.getLengthData() 
+                  << "bytes\n" << std::endl;
     }
 
-    std::cout << "The number of DATA EXTENSIONS contained in this file ["
-    << (unsigned int)header.getNumDataExtensions() << "]" << std::endl;
+    num = header.getNumReservedExtensions();
+    std::cout << "The number of RES contained in this file ["
+              << num << "]" << std::endl;
 
-    for (unsigned int i = 0; i < (unsigned int)header.getNumDataExtensions(); i++)
+    for (unsigned int i = 0; i < num; i++)
     {
-        std::cout << "\tThe length of DATA EXTENSION subheader ["
-        << i << "]: "
-        << (unsigned int)header.getDataExtensionInfo(i).getLengthSubheader()
-        << std::endl;
+        nitf::ComponentInfo info = header.getReservedExtensionInfo(i);
+        std::cout << "\tThe length of RES subheader [" << i << "]: " 
+                  << (unsigned int)info.getLengthSubheader() << std::endl;
 
-        std::cout << "\tThe length of the DATA EXTENSION data: "
-        << (unsigned int)header.getDataExtensionInfo(i).getLengthData()
-        << "bytes\n" << std::endl;
+        std::cout << "\tThe length of the RES data: "
+                  << (unsigned int)info.getLengthData()
+                  << "bytes\n" << std::endl;
     }
 
-    std::cout << "The number of RESERVED EXTENSIONS contained in this file ["
-    << (unsigned int)header.getNumReservedExtensions() << "]" << std::endl;
-
-    for (unsigned int i = 0; i < (unsigned int)header.getNumReservedExtensions(); i++)
-    {
-        std::cout << "\tThe length of RESERVED EXTENSION subheader ["
-        << i << "]: "
-        << (unsigned int)header.getReservedExtensionInfo(i).getLengthSubheader()
-        << std::endl;
-
-        std::cout << "\tThe length of the RESERVED EXTENSION data: "
-        << (unsigned int)header.getReservedExtensionInfo(i).getLengthData()
-        << "bytes\n" << std::endl;
-    }
-
-    //the hash functor
-    //    ShowTREFunctor showTRE;
     SHOW(header.getUserDefinedHeaderLength().toString());
 
     nitf::Extensions udExts = header.getUserDefinedSection();
+
     showExtensions(udExts);
-    // nitf::HashTable htUd = udExts.getHash();
-    //    htUd.foreach(showTRE);
 
     SHOW(header.getExtendedHeaderLength().toString());
 
     nitf::Extensions exExts = header.getExtendedSection();
     showExtensions(exExts);
-    // nitf::HashTable htEx = exExts.getHash();
-    //    htEx.foreach(showTRE);
-
 
 }
 
@@ -190,7 +211,7 @@ void showFileHeader(nitf::FileHeader header)
 void showImageSubheader(nitf::ImageSubheader imsub)
 {
     unsigned int i;
-    std::cout << "Read image into imsub" << std::endl;
+    std::cout << "image subheader" << std::endl;
     SHOW( imsub.getFilePartType().toString() );
     SHOW( imsub.getImageId().toString() );
     SHOW( imsub.getImageDateAndTime().toString() );
@@ -262,11 +283,12 @@ void showImageSubheader(nitf::ImageSubheader imsub)
 }
 
 
+/*
+ *  This function dumps the security header.
+ *
+ */
 void showSecurityGroup(nitf::FileSecurity securityGroup)
 {
-    /*  Attention: If the classification is U, the security group  */
-    /*  section should be empty!  (boring!)                        */
-
     SHOW(securityGroup.getClassificationSystem().toString());
     SHOW(securityGroup.getCodewords().toString());
     SHOW(securityGroup.getControlAndHandling().toString());
@@ -284,10 +306,20 @@ void showSecurityGroup(nitf::FileSecurity securityGroup)
     SHOW(securityGroup.getSecurityControlNumber().toString());
 }
 
+/*
+ *  This section is for vector graphics.  Currently
+ *  this will be CGM 1.0 (there is a spec for NITF CGM,
+ *  but the original CGM 1.0 spec is out-of-print.
+ *
+ *  Note that this function does not dump the binary CGM
+ *  You can use the NITRO CGM library to read the CGM data
+ *  from the NITF (and dump it)
+ */
+
 void showGraphicSubheader(nitf::GraphicSubheader sub)
 {
 
-    std::cout << "Read graphic into sub\n" << std::endl;
+    std::cout << "graphic subheader" << std::endl;
 
     SHOW(sub.getFilePartType().toString());
     SHOW(sub.getGraphicID().toString());
@@ -312,18 +344,14 @@ void showGraphicSubheader(nitf::GraphicSubheader sub)
 
     nitf::Extensions exts = sub.getExtendedSection();
     showExtensions(exts);
-    //the hash functor
-    //    ShowTREFunctor showTRE;
-    // nitf::HashTable ht = exts.getHash();
-    //    ht.foreach(showTRE);
 
 }
 
 
 void showLabelSubheader(nitf::LabelSubheader sub)
 {
+    printf("label subheader");
 
-    std::cout << "Read label into sub\n" << std::endl;
     SHOW(sub.getFilePartType().toString());
     SHOW(sub.getLabelID().toString());
     SHOW(sub.getSecurityClass().toString());
@@ -344,18 +372,22 @@ void showLabelSubheader(nitf::LabelSubheader sub)
     SHOW(sub.getExtendedHeaderLength().toString());
     SHOW(sub.getExtendedHeaderOverflow().toString());
 
-    //the hash functor
-    //    ShowTREFunctor showTRE;
     nitf::Extensions exts = sub.getExtendedSection();
     showExtensions(exts);
-    // nitf::HashTable ht = exts.getHash();
-    // ht.foreach(showTRE);
 
 }
 
+/*
+ *  This section contains raw text data.  You can put
+ *  lots of stuff in here but most people never do.
+ *
+ *  Note that XML data is usually not contained in this section
+ *  even though that might have made more sense.  XML data is
+ *  typically found in the DES segment
+ */
 void showTextSubheader(nitf::TextSubheader sub)
 {
-    std::cout << "Read text into sub\n" << std::endl;
+    std::cout << "text subheader" << std::endl;
     SHOW(sub.getFilePartType().toString());
     SHOW(sub.getTextID().toString());
     SHOW(sub.getAttachmentLevel().toString());
@@ -374,17 +406,50 @@ void showTextSubheader(nitf::TextSubheader sub)
     nitf::Extensions exts = sub.getExtendedSection();
     showExtensions(exts);
 
-    //the hash functor
-    //    ShowTREFunctor showTRE;
-    // nitf::HashTable ht = exts.getHash();
-    // ht.foreach(showTRE);
 
 }
 
+/*
+ *  This section is for dumping the Data Extension Segment (DES)
+ *  subheader.  It can hold up to 1GB worth of data, so its big
+ *  enough for most things.  People stuff all kinds of things in 
+ *  the DESDATA block including
+ * 
+ *  - TRE overflow:
+ *      When a TRE is too big for the section its in.  In other words,
+ *      if populating it properly would overflow the segment, it is
+ *      dumped into the TRE overflow segment.  
+ *  
+ *      This is kind of a pain, and so NITRO 2.0 has functions to
+ *      split this up for you, or merge it back into the header where it
+ *      would go if it wasnt too big (see nitf_Record_mergeTREs() and
+ *      nitf_Record_unmergeTREs).
+ *
+ *      However, by default, we assume that you want the data as it
+ *      appeared in the file.  Therefore, when you dump a record, you
+ *      might see overflow data
+ *
+ *  - Text data (especially XML)
+ *     
+ *      XML data is getting more popular, and to make sure that they
+ *      dont have to worry about the length of the XML surpassing the
+ *      limits of a segment, most people decide to spec. it to go here
+ *
+ *  - Binary data
+ *      
+ *      Since the DES is the wild west of the NITF, you can put anything
+ *      you want here.
+ *
+ *  Confusingly, the DES subheader has its own little TRE-like 
+ *  arbitrary key-value params.  In NITRO we treat this as a TRE within
+ *  the subheader.
+ *
+ *  This function prints the DE subheader, the extended TRE described above,
+ *  and additionally, if the DESDATA is TRE overflow, we dump those too.
+ */
 void showDESubheader(nitf::DESubheader sub)
 {
-
-    std::cout << "Read DE into sub\n" << std::endl;
+    printf("DES subheader\n");
     SHOW(sub.getFilePartType().toString());
     SHOW(sub.getTypeID().toString());
     SHOW(sub.getVersion().toString());
@@ -397,26 +462,35 @@ void showDESubheader(nitf::DESubheader sub)
     SHOW(sub.getDataItemOverflowed().toString());
     SHOW(sub.getSubheaderFieldsLength().toString());
 
-    //TREPrintFunctor treTraverser;
-    //sub.getSubheaderFields().foreach(treTraverser);
+    /*
+     *  This is the user defined parameter section
+     *  within the DES.  It contains only BCS-A/N type values
+     *  so storing it in a 'TRE' struct is no big deal
+     */
+    nitf::TRE tre = sub.getSubheaderFields();
+    printTRE( tre );
 
     SHOWI(sub.getDataLength());
 
+    /*
+     *  NITRO only populates this object if the DESDATA contains
+     *  TRE overflow.  Otherwise, you need to use a DEReader to
+     *  get at the DESDATA, since it can contain anything.
+     *
+     *  We wont bother to try and print whatever other things might
+     *  have been put in here (e.g, text data or binary blobs)
+     */
     nitf::Extensions exts = sub.getUserDefinedSection();
     showExtensions(exts);
-    // nitf::HashTable ht = exts.getHash();
-    //the hash functor
-    //    ShowTREFunctor showTRE;
-    // ht.foreach(showTRE);
 }
 
 
-/* No way to test this anyway
+/*
+ *  This section is never really populated
  */
 void showRESubheader(nitf::RESubheader sub)
 {
-
-    std::cout << "Read RE into sub\n" << std::endl;
+    std::cout << "RES subheader\n" << std::endl;
 
     SHOW(sub.getFilePartType().toString());
     SHOW(sub.getTypeID().toString());
@@ -428,8 +502,6 @@ void showRESubheader(nitf::RESubheader sub)
 
     SHOW(sub.getSubheaderFieldsLength().toString());
 
-    // ?! this returns the raw info, so we can leave it as it is in the C
-    //nitf_TRE_print((nitf_TRE*)sub.getSubheaderFields(), &error);
     SHOWI(sub.getDataLength());
 }
 
@@ -438,49 +510,50 @@ int main(int argc, char **argv)
 
     try
     {
-        /*  This is the reader object  */
+        //  This is the reader object
         nitf::Reader reader;
-
-        /*  Check argv and make sure we are happy  */
+        
         if ( argc != 2 )
         {
-            throw nitf::NITFException(Ctxt(FmtX("Usage: %s <nitf-file>\n", argv[0])));
+            std::cout << "Usage: " << argv[0] << " <nitf-file>" << std::endl;
+            exit(EXIT_FAILURE);
         }
 
+        if (nitf::Reader::getNITFVersion( argv[1] ) == NITF_VER_UNKNOWN)
+        {
+            std::cout << "This file does not appear to be a valid NITF" 
+                      << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        /*
+         *  Using an IO handle is one valid way to read a NITF in
+         *  
+         *  NITRO 2.5 offers other ways, using the readIO() function
+         *  in the Reader
+         */
         nitf::IOHandle io(argv[1]);
 
+        //  This parses all header data within the NITF
         nitf::Record record = reader.read(io);
-        //return 0;
+
         // Now show the header
         nitf::FileHeader fileHeader = record.getHeader();
 
-        // warn if not version 2.00 or 2.10
-        std::string version = fileHeader.getFileVersion().toString();
-
-        if (strcmp(version.c_str(), "02.10") != 0 &&
-                strcmp(version.c_str(), "02.00") != 0 &&
-                strncmp(fileHeader.getFileHeader().getRawData(), "NSIF", 4) != 0)
-        {
-            std::cout << "!!! unhandled NITF version: " << version << std::endl;
-        }
-
-        // May have coredumped already
-        // Fileheader
+        // Now show the header
         showFileHeader(fileHeader);
 
-        // Images
-        if ((unsigned int)fileHeader.getNumImages())
+        // And now show the image information
+        if (record.getNumImages())
         {
-            nitf::ListIterator iter = record.getImages().begin();
-            nitf::ListIterator end = record.getImages().end();
+            nitf::List images = record.getImages();
 
-            while (iter != end)
+            //  Walk each image and show
+            for (nitf::ListIterator iter = images.begin();
+                 iter != images.end(); ++iter)
             {
-                printf("Image segment\n");
                 nitf::ImageSegment segment = *iter;
-                printf("Show image subheader\n");
                 showImageSubheader(segment.getSubheader());
-                iter++;
             }
         }
         else
@@ -489,19 +562,16 @@ int main(int argc, char **argv)
         }
 
         // Graphics
-        if ((unsigned int)fileHeader.getNumGraphics())
+        if (record.getNumGraphics())
         {
-            /*  Walk each graphic and show  */
-            nitf::ListIterator iter = record.getGraphics().begin();
-            nitf::ListIterator end = record.getGraphics().end();
+            nitf::List graphics = record.getGraphics();
 
-            while (iter != end)
+            //  Walk each graphic and show
+            for (nitf::ListIterator iter = graphics.begin();
+                 iter != graphics.end(); ++iter)
             {
-                printf("Graphic segment\n");
                 nitf::GraphicSegment segment = *iter;
-                printf("Show graphic subheader\n");
                 showGraphicSubheader(segment.getSubheader());
-                iter++;
             }
         }
         else
@@ -510,19 +580,16 @@ int main(int argc, char **argv)
         }
 
         // Labels
-        if ((unsigned int)fileHeader.getNumLabels())
+        if (record.getNumLabels())
         {
-            //  Walk each label and show
-            nitf::ListIterator iter = record.getLabels().begin();
-            nitf::ListIterator end = record.getLabels().end();
+            nitf::List labels = record.getLabels();
 
-            while (iter != end)
+            //  Walk each label and show
+            for (nitf::ListIterator iter = labels.begin();
+                 iter != labels.end(); ++iter)
             {
-                printf("Label segment\n");
                 nitf::LabelSegment segment = *iter;
-                printf("Show label subheader\n");
                 showLabelSubheader(segment.getSubheader());
-                iter++;
             }
         }
         else
@@ -531,19 +598,16 @@ int main(int argc, char **argv)
         }
 
         // Texts
-        if ((unsigned int)fileHeader.getNumTexts())
+        if (record.getNumTexts())
         {
-            //  Walk each text and show
-            nitf::ListIterator iter = record.getTexts().begin();
-            nitf::ListIterator end = record.getTexts().end();
+            nitf::List texts = record.getTexts();
 
-            while (iter != end)
+            //  Walk each label and show
+            for (nitf::ListIterator iter = texts.begin();
+                 iter != texts.end(); ++iter)
             {
-                printf("Text segment\n");
                 nitf::TextSegment segment = *iter;
-                printf("Show text subheader\n");
                 showTextSubheader(segment.getSubheader());
-                iter++;
             }
         }
         else
@@ -552,45 +616,39 @@ int main(int argc, char **argv)
         }
 
         // Data Extensions
-        if ((unsigned int)fileHeader.getNumDataExtensions())
+        if (record.getNumDataExtensions())
         {
-            //  Walk each dataExtension and show
-            nitf::ListIterator iter = record.getDataExtensions().begin();
-            nitf::ListIterator end = record.getDataExtensions().end();
+            nitf::List des = record.getDataExtensions();
 
-            while (iter != end)
+            //  Walk each label and show
+            for (nitf::ListIterator iter = des.begin();
+                 iter != des.end(); ++iter)
             {
-                printf("Data Extensions segment\n");
                 nitf::DESegment segment = *iter;
-                printf("Show data extensions subheader\n");
                 showDESubheader(segment.getSubheader());
-                iter++;
             }
         }
         else
         {
-            std::cout << "No data extensions in file: " << (unsigned int)fileHeader.getNumDataExtensions() << std::endl;
+            std::cout << "No data extensions in file" << std::endl;
         }
 
-        // Reserved Extensions
-        if ((unsigned int)fileHeader.getNumReservedExtensions())
+        // Data Extensions
+        if (record.getNumReservedExtensions())
         {
-            //  Walk each reservedextension and show
-            nitf::ListIterator iter = record.getReservedExtensions().begin();
-            nitf::ListIterator end = record.getReservedExtensions().end();
+            nitf::List res = record.getReservedExtensions();
 
-            while (iter != end)
+            //  Walk each label and show
+            for (nitf::ListIterator iter = res.begin();
+                 iter != res.end(); ++iter)
             {
-                printf("Reserved Extensions segment\n");
                 nitf::RESegment segment = *iter;
-                printf("Show reserved extensions subheader\n");
                 showRESubheader(segment.getSubheader());
-                iter++;
             }
         }
         else
         {
-            std::cout << "No reserved extensions in file" << std::endl;
+            std::cout << "No reserved extensions in file" << std::endl; 
         }
 
         io.close();
