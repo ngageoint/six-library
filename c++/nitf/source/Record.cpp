@@ -79,6 +79,71 @@ void Record::setHeader(nitf::FileHeader & value)
     value.setManaged(true);
 }
 
+nitf::Uint32 Record::getNumImages()
+{
+    nitf::Uint32 num = nitf_Record_getNumImages(getNativeOrThrow(), &error);
+    
+    if (NITF_INVALID_NUM_SEGMENTS( num ))
+        throw nitf::NITFException(&error);
+    
+    return num;
+}
+    
+nitf::Uint32 Record::getNumGraphics()
+{
+
+    nitf::Uint32 num = nitf_Record_getNumGraphics(getNativeOrThrow(), &error);
+
+    if (NITF_INVALID_NUM_SEGMENTS( num ))
+        throw nitf::NITFException(&error);
+
+    return num;
+}
+
+nitf::Uint32 Record::getNumLabels()
+{
+
+    nitf::Uint32 num = nitf_Record_getNumLabels(getNativeOrThrow(), &error);
+
+    if (NITF_INVALID_NUM_SEGMENTS( num ))
+        throw nitf::NITFException(&error);
+
+    return num;
+}
+
+nitf::Uint32 Record::getNumTexts()
+{
+    nitf::Uint32 num = nitf_Record_getNumTexts(getNativeOrThrow(), &error);
+
+    if (NITF_INVALID_NUM_SEGMENTS( num ))
+        throw nitf::NITFException(&error);
+
+    return num;
+}
+
+nitf::Uint32 Record::getNumDataExtensions()
+{
+    nitf::Uint32 num = nitf_Record_getNumDataExtensions(getNativeOrThrow(), 
+                                                        &error);
+
+    if (NITF_INVALID_NUM_SEGMENTS( num ))
+        throw nitf::NITFException(&error);
+
+    return num;
+}
+
+nitf::Uint32 Record::getNumReservedExtensions()
+{
+    nitf::Uint32 num = nitf_Record_getNumReservedExtensions(getNativeOrThrow(), 
+                                                            &error);
+
+    if (NITF_INVALID_NUM_SEGMENTS( num ))
+        throw nitf::NITFException(&error);
+
+    return num;
+}
+
+
 nitf::List Record::getImages()
 {
     return nitf::List(getNativeOrThrow()->images);
