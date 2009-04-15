@@ -29,7 +29,6 @@ void writeImage(nitf::ImageSegment & segment,
                 nitf_Uint32 rowSkipFactor,
                 nitf_Uint32 columnSkipFactor)
 {
-    nitf_Uint32 nBits, nBands, xBands, nRows, nColumns;
     size_t subWindowSize;
     nitf::SubWindow subWindow;
     unsigned int i;
@@ -39,37 +38,45 @@ void writeImage(nitf::ImageSegment & segment,
     nitf::Uint32 * bandList;
 
     // missing skip factor
+    nitf::ImageSubheader subheader = segment.getSubheader();
 
-    nBits = segment.getSubheader().getNumBitsPerPixel();
-    nBands = segment.getSubheader().getNumImageBands();
-    xBands = segment.getSubheader().getNumMultispectralImageBands();
+    nitf::Uint32 nBits   = subheader.getNumBitsPerPixel();
+
+    nitf::Uint32 nBands  = subheader.getNumImageBands();
+    nitf::Uint32 xBands  = subheader.getNumMultispectralImageBands();
     nBands += xBands;
-    nRows = segment.getSubheader().getNumRows();
-    nColumns = segment.getSubheader().getNumCols();
-    subWindowSize = (nRows / rowSkipFactor) * (nColumns / columnSkipFactor) * NITF_NBPP_TO_BYTES(nBits);
+
+
+    nitf::Uint32 nRows   = subheader.getNumRows();
+    nitf::Uint32 nCols   = subheader.getNumCols();
+    subWindowSize = (size_t)(nRows / rowSkipFactor) * 
+        (size_t)(nCols / columnSkipFactor) * 
+        (size_t)NITF_NBPP_TO_BYTES(nBits);
 
     std::cout << "NBANDS -> " << nBands << std::endl;
     std::cout << "XBANDS -> " << xBands << std::endl;
-    std::cout << "NROWS -> " << nRows << std::endl;
-    std::cout << "NCOLS -> " << nColumns << std::endl;
-    std::cout << "PVTYPE -> " << segment.getSubheader(). getPixelValueType().toString() << std::endl;
-    std::cout << "NBPP -> " << segment.getSubheader().getNumBitsPerPixel() .toString() << std::endl;
-    std::cout << "ABPP -> " << segment.getSubheader().getActualBitsPerPixel().toString() << std::endl;
-    std::cout << "PJUST -> " << segment.getSubheader().getPixelJustification().toString() << std::endl;
-    std::cout << "IMODE -> " << segment.getSubheader().getImageMode().toString() << std::endl;
-    std::cout << "NBPR -> " << segment.getSubheader().getNumBlocksPerRow().toString() << std::endl;
-    std::cout << "NBPC -> " << segment.getSubheader().getNumBlocksPerCol().toString() << std::endl;
-    std::cout << "NPPBH -> " << (int) segment.getSubheader().getNumPixelsPerHorizBlock() << std::endl;
-    std::cout << "NPPBV -> " << (int) segment.getSubheader().getNumPixelsPerVertBlock() << std::endl;
-    std::cout << "IC -> " << segment.getSubheader().getImageCompression().toString() << std::endl;
-    std::cout << "COMRAT -> " << segment.getSubheader().getCompressionRate().toString() << std::endl;
+    std::cout << "NROWS -> "  << nRows  << std::endl;
+    std::cout << "NCOLS -> "  << nCols  << std::endl;
+    std::cout << "PVTYPE -> " << subheader.getPixelValueType().toString() << std::endl;
+    std::cout << "NBPP -> " << subheader.getNumBitsPerPixel() .toString() << std::endl;
+    std::cout << "ABPP -> " << subheader.getActualBitsPerPixel().toString() << std::endl;
+    std::cout << "PJUST -> " << subheader.getPixelJustification().toString() << std::endl;
+    std::cout << "IMODE -> " << subheader.getImageMode().toString() << std::endl;
+    std::cout << "NBPR -> " << subheader.getNumBlocksPerRow().toString() << std::endl;
+    std::cout << "NBPC -> " << subheader.getNumBlocksPerCol().toString() << std::endl;
+    std::cout << "NPPBH -> " << (int)subheader.getNumPixelsPerHorizBlock() << std::endl;
+    std::cout << "NPPBV -> " << (int)subheader.getNumPixelsPerVertBlock() << std::endl;
+    std::cout << "IC -> " << subheader.getImageCompression().toString() << std::endl;
+    std::cout << "COMRAT -> " << subheader.getCompressionRate().toString() << std::endl;
 
     std::cout << "Allocating work buffer..." << std::endl;
-    buffer = (nitf::Uint8 **) malloc(8 * nBands);
+
+    buffer = new nitf::Uint8*[nBands];
+
     band = 0;
     std::cout << "Allocating band list... " << sizeof(nitf::Uint32 *) *
     nBands << std::endl;
-    bandList = (nitf_Uint32 *) malloc(sizeof(nitf_Uint32 *) * nBands);
+    bandList = new nitf::Uint32[nBands];
     std::cout << "Setting up subWindow... " << std::endl;
 
     subWindow.setStartCol(0);
@@ -77,7 +84,7 @@ void writeImage(nitf::ImageSegment & segment,
     subWindow.setStartRow(0);
 
     subWindow.setNumRows(nRows / rowSkipFactor);
-    subWindow.setNumCols(nColumns / columnSkipFactor);
+    subWindow.setNumCols(nCols / columnSkipFactor);
 
     nitf::PixelSkip pixelSkip(rowSkipFactor, columnSkipFactor);
 
@@ -92,11 +99,12 @@ void writeImage(nitf::ImageSegment & segment,
     std::cout << "Assigning band list to sub-image" << std::endl;
     subWindow.setBandList(bandList);
     subWindow.setNumBands(nBands);
+
     std::cout << "Allocating band buffers..." << std::endl;
     for (i = 0; i < nBands; i++)
     {
         std::cout << "# " << i << " allocated to size: " << subWindowSize << std::endl;
-        buffer[i] = (nitf::Uint8 *) malloc(subWindowSize);
+        buffer[i] = new nitf::Uint8[subWindowSize];
         assert(buffer[i]);
     }
 
@@ -120,7 +128,7 @@ void writeImage(nitf::ImageSegment & segment,
 
         sprintf(file,
                 "%s__%d__%d_%d_%d_band_%d",
-                &imageName[pos], imageNumber, nRows / rowSkipFactor, nColumns / columnSkipFactor, nBits, i);
+                &imageName[pos], imageNumber, nRows / rowSkipFactor, nCols / columnSkipFactor, nBits, i);
 
         // remove decimals
         for (pos = strlen(file) - 1; pos; pos--)
@@ -143,10 +151,10 @@ void writeImage(nitf::ImageSegment & segment,
     /* free buffers */
     for (i = 0; i < nBands; i++)
     {
-        free(buffer[i]);
+        delete [] buffer[i];
     }
-    free(buffer);
-    free(bandList);
+    delete [] buffer;
+    delete [] bandList;
 }
 
 
@@ -161,8 +169,8 @@ int main(int argc, char **argv)
         /*  If you didnt give us a nitf file, we're croaking  */
         if (argc != 2)
         {
-            std::cout << "Usage: " << argv[0] << " <nitf-file>" << std::
-            endl;
+            std::cout << "Usage: " << argv[0] << " <nitf-file>" 
+                      << std::endl;
             exit(EXIT_FAILURE);
         }
 
@@ -172,10 +180,8 @@ int main(int argc, char **argv)
         /*  This is the io handle we will give the reader to parse  */
         nitf::IOHandle io(argv[1]);
 
-        printf("Before READ\n");
         /*  Read the file (first pass) */
         nitf::Record record = reader.read(io);
-        printf("After READ\n");
         /*  These iterators are for going through the image segments  */
         nitf::ListIterator iter;
         nitf::ListIterator end;
