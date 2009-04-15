@@ -24,28 +24,12 @@
 #include <iostream>
 #include <string>
 
-/* *********************************************************************
- ** This test tests the round-trip process of taking an input NITF
- ** file and writing it to a new file. This includes writing the image
- ** segments (headers, extensions, and image data). This is an example
- ** of how users can write the image data to their NITF file
- ** ********************************************************************/
-
-class JunkWriteHandler : public nitf::WriteHandler
-{
-public:
-    JunkWriteHandler(){}
-    ~JunkWriteHandler(){}
-
-    void write(nitf::IOHandle handle) throw (nitf::NITFException)
-    {
-        //yup, does nothing...
-
-        handle.write("01234567890", 11);
-    }
-
-};
-
+/*
+ * This test tests the round-trip process of taking an input NITF
+ * file and writing it to a new file. This includes writing the image
+ * segments (headers, extensions, and image data). This is an example
+ * of how users can write the image data to their NITF file
+ */
 
 nitf::Record doRead(const std::string& inFile);
 
@@ -77,8 +61,8 @@ nitf::ImageSource* setupBands(int nbands, int imageNum, const std::string& inRoo
 void doWrite(nitf::Record record, const std::string& inRootFile, const std::string& outFile)
 {
     nitf::Writer writer;
-    nitf::IOHandle output_io(outFile, NITF_ACCESS_WRITEONLY, NITF_CREATE);
-    writer.prepare(output_io, record);
+    nitf::IOHandle output(outFile, NITF_ACCESS_WRITEONLY, NITF_CREATE);
+    writer.prepare(output, record);
 
     int numImages = record.getHeader().getNumImages();
     nitf::ListIterator end = record.getImages().end();
@@ -90,28 +74,34 @@ void doWrite(nitf::Record record, const std::string& inRootFile, const std::stri
         imseg = *iter;
         int nbands = imseg.getSubheader().getNumImageBands();
         nitf::ImageWriter* iWriter = writer.newImageWriter(i);
-        //nitf::WriteHandler *iWriter = new JunkWriteHandler();
-        //writer.setImageWriteHandler(i, iWriter);
-
         nitf::ImageSource* iSource = setupBands(nbands, i, inRootFile);
         iWriter->attachSource(iSource, true);
     }
     writer.write();
-    output_io.close();
+    output.close();
 }
 
 int main(int argc, char **argv)
 {
     try
     {
-        /*  Check argv and make sure we are happy  */
+        //  Check argv and make sure we are happy
         if (argc != 3)
         {
             std::cout << "Usage: %s <input-file> <output-file> \n" << argv[0] << std::endl;
             exit(EXIT_FAILURE);
         }
+
+        // Check that wew have a valid NITF
+        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN )
+        {
+            std::cout << "Invalid NITF: " << argv[1] << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
         nitf::Record record = doRead(argv[1]);
         doWrite(record, argv[1], argv[2]);
+        return 0;
     }
     catch (except::Throwable & t)
     {
@@ -127,16 +117,16 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
 {
     int padded;
 
-    nitf::Uint32 nBits = segment.getSubheader().getNumBitsPerPixel();
-    nitf::Uint32 nBands = segment.getSubheader().getNumImageBands();
-    nitf::Uint32 xBands = segment.getSubheader().getNumMultispectralImageBands();
+    nitf::ImageSubheader subheader = segment.getSubheader();
+
+
+    nitf::Uint32 nBits = subheader.getNumBitsPerPixel();
+    nitf::Uint32 nBands = subheader.getNumImageBands();
+    nitf::Uint32 xBands = subheader.getNumMultispectralImageBands();
     nBands += xBands;
 
-    nitf::Uint32 nRows = segment.getSubheader().getNumRows();
-    nitf::Uint32 nColumns = segment.getSubheader().getNumCols();
-    //nitf::Uint32 nBlocksPerCol = segment.getSubheader().getNumBlocksPerCol();
-    //nitf::Uint32 nPixPerVertBlock = segment.getSubheader().getNumPixelsPerVertBlock();
-
+    nitf::Uint32 nRows = subheader.getNumRows();
+    nitf::Uint32 nColumns = subheader.getNumCols();
 
     //one row at a time
     size_t subWindowSize = nColumns * NITF_NBPP_TO_BYTES(nBits);
@@ -145,20 +135,21 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
         << "XBANDS -> " << xBands << std::endl
         << "NROWS -> " << nRows << std::endl
         << "NCOLS -> " << nColumns << std::endl
-        << "PVTYPE -> " << segment.getSubheader().getPixelValueType().toString() << std::endl
-        << "NBPP -> " << segment.getSubheader().getNumBitsPerPixel().toString() << std::endl
-        << "ABPP -> " << segment.getSubheader().getActualBitsPerPixel().toString() << std::endl
-        << "PJUST -> " << segment.getSubheader().getPixelJustification().toString() << std::endl
-        << "IMODE -> " << segment.getSubheader().getImageMode().toString() << std::endl
-        << "NBPR -> " << segment.getSubheader().getNumBlocksPerRow().toString() << std::endl
-        << "NBPC -> " << segment.getSubheader().getNumBlocksPerCol().toString() << std::endl
-        << "NPPBH -> " << (int)segment.getSubheader().getNumPixelsPerHorizBlock() << std::endl
-        << "NPPBV -> " << (int)segment.getSubheader().getNumPixelsPerVertBlock() << std::endl
-        << "IC -> " << segment.getSubheader().getImageCompression().toString() << std::endl
-        << "COMRAT -> " << segment.getSubheader().getCompressionRate().toString() << std::endl;
+        << "PVTYPE -> " << subheader.getPixelValueType().toString() << std::endl
+        << "NBPP -> " << subheader.getNumBitsPerPixel().toString() << std::endl
+        << "ABPP -> " << subheader.getActualBitsPerPixel().toString() << std::endl
+        << "PJUST -> " << subheader.getPixelJustification().toString() << std::endl
+        << "IMODE -> " << subheader.getImageMode().toString() << std::endl
+        << "NBPR -> " << subheader.getNumBlocksPerRow().toString() << std::endl
+        << "NBPC -> " << subheader.getNumBlocksPerCol().toString() << std::endl
+        << "NPPBH -> " << (int)subheader.getNumPixelsPerHorizBlock() << std::endl
+        << "NPPBV -> " << (int)subheader.getNumPixelsPerVertBlock() << std::endl
+        << "IC -> " << subheader.getImageCompression().toString() << std::endl
+        << "COMRAT -> " << subheader.getCompressionRate().toString() << std::endl;
 
     nitf::Uint8** buffer = new nitf::Uint8*[nBands];
     nitf::Uint32* bandList = new nitf::Uint32[nBands];
+
     for (nitf::Uint32 band = 0; band < nBands; band++)
         bandList[band] = band;
 
@@ -189,23 +180,13 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
         handles.push_back(toFile);
     }
 
-    //nitf::Uint32 lastBlockRows = nPixPerVertBlock - (nBlocksPerCol * nPixPerVertBlock - nRows);
-    //size_t lastBlockSize = nColumns * NITF_NBPP_TO_BYTES(nBits) * lastBlockRows;
-
     //read all row blocks and write to disk
     for (int i = 0; i < nRows; ++i)
     {
         subWindow.setStartRow(i);
-
-        //if (i == nBlocksPerCol - 1)
-        //    subWindow.setNumRows(lastBlockRows);
-
         deserializer.read(subWindow, buffer, &padded);
         for (int j = 0; j < nBands; j++)
         {
-            //if (i == nBlocksPerCol - 1)
-            //    handles[j].write((const char*)buffer[j], lastBlockSize);
-            //else
             handles[j].write((const char*)buffer[j], subWindowSize);
         }
     }
