@@ -116,33 +116,20 @@ void writeImage(nitf::ImageSegment & segment,
     for (i = 0; i < nBands; i++)
     {
         std::cout << "Writing band # " << i << std::endl;
-        char file[NITF_MAX_PATH];
-        int pos;
+        std::string base = sys::Path::basename(imageName);
+        
+        size_t where = 0;
+        while ((where = base.find(".")) != (size_t)std::string::npos)
+            base.replace(where, 1, "_");
 
-        // find end slash
-        for (pos = strlen(imageName) - 1;
-                pos && imageName[pos] != '\\' && imageName[pos] != '/';
-                pos--);
+        std::ostringstream file;
+        file << base << "__" << imageNumber << "__" 
+             << nRows / rowSkipFactor << '_'
+             << nCols / columnSkipFactor << '_' 
+             << nBits << "_band_" << i << ".out";
 
-        pos = pos == 0 ? pos : pos + 1;
-
-        sprintf(file,
-                "%s__%d__%d_%d_%d_band_%d",
-                &imageName[pos], imageNumber, nRows / rowSkipFactor, nCols / columnSkipFactor, nBits, i);
-
-        // remove decimals
-        for (pos = strlen(file) - 1; pos; pos--)
-        {
-            if (file[pos] == '.')
-            {
-                file[pos] = '_';
-            }
-        }
-        strcat(file, ".out");
-        nitf::IOHandle toFile(file, NITF_ACCESS_WRITEONLY, NITF_CREATE);
-
+        nitf::IOHandle toFile(file.str(), NITF_ACCESS_WRITEONLY, NITF_CREATE);
         toFile.write((const char *) buffer[i], subWindowSize);
-
         toFile.close();
 
         std::cout << "Finished # " << i << std::endl;
