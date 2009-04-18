@@ -27,8 +27,13 @@
 /*
  * This test tests the round-trip process of taking an input NITF
  * file and writing it to a new file. This includes writing the image
- * segments (headers, extensions, and image data). This is an example
- * of how users can write the image data to their NITF file
+ * segments (headers, extensions, and image data).
+ *
+ * This example differs from test_writer_3 in that it tests the
+ * BufferedWriter classes, and writes the entire file as a set of
+ * configurable sized blocks.  The last block may be smaller than the others
+ * if the data does not fill the block.
+ *
  */
 
 nitf::Record doRead(const std::string& inFile);
@@ -58,11 +63,17 @@ nitf::ImageSource* setupBands(int nbands, int imageNum, const std::string& inRoo
     return iSource;
 }
 
-void doWrite(nitf::Record record, const std::string& inRootFile, const std::string& outFile)
+void doWrite(nitf::Record record, 
+             const std::string& inRootFile, 
+             const std::string& outFile,
+             size_t bufferSize)
 {
+    std::cout << "Preparing to write file in " << bufferSize
+              << " size blocks" << std::endl;
+
     nitf::Writer writer;
-    nitf::IOHandle output(outFile, NITF_ACCESS_WRITEONLY, NITF_CREATE);
-    writer.prepare(output, record);
+    nitf::BufferedWriter output(outFile, (nitf::Off)bufferSize);
+    writer.prepareIO(output, record);
 
     int numImages = record.getHeader().getNumImages();
     nitf::ListIterator end = record.getImages().end();
@@ -79,6 +90,14 @@ void doWrite(nitf::Record record, const std::string& inRootFile, const std::stri
     }
     writer.write();
     output.close();
+
+    std::cout << "Write block info: " << std::endl;
+    std::cout << "------------------------------------" << std::endl;
+    std::cout << "Total number of blocks written: " << output.getNumBlocksWritten() << std::endl;
+    std::cout << "Of those, " << output.getNumPartialBlocksWritten() << " were less than buffer size " << bufferSize << std::endl;
+        
+
+
 }
 
 int main(int argc, char **argv)
@@ -86,11 +105,15 @@ int main(int argc, char **argv)
     try
     {
         //  Check argv and make sure we are happy
-        if (argc != 3)
+        if (argc < 3 || argc > 4)
         {
-            std::cout << "Usage: %s <input-file> <output-file> \n" << argv[0] << std::endl;
+            std::cout << "Usage: %s <input-file> <output-file> (block-size - default is 8192)\n" << argv[0] << std::endl;
             exit(EXIT_FAILURE);
         }
+        
+        size_t blockSize = 8192;
+        if (argc == 4)
+            blockSize = str::toType<int>(argv[3]);
 
         // Check that wew have a valid NITF
         if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN )
@@ -100,7 +123,7 @@ int main(int argc, char **argv)
         }
 
         nitf::Record record = doRead(argv[1]);
-        doWrite(record, argv[1], argv[2]);
+        doWrite(record, argv[1], argv[2], blockSize);
         return 0;
     }
     catch (except::Throwable & t)
@@ -211,23 +234,19 @@ nitf::Record doRead(const std::string& inFile)
     nitf::Record record = reader.read(io);
 
     /*  Set this to the end, so we'll know when we're done!  */
+    nitf::ListIterator end = record.getImages().end();
     nitf::ListIterator iter = record.getImages().begin();
-
-
-    nitf::Uint32 num = record.getNumImages();
-
-    for (nitf::Uint32 i = 0; i < num; i++)
+    for (int count = 0, numImages = record.getHeader().getNumImages();
+            count < numImages && iter != end; ++count, ++iter)
     {
         nitf::ImageSegment imageSegment = *iter;
-        iter++;
-        nitf::ImageReader deserializer = reader.newImageReader(i);
-        std::cout << "Writing image " << i << "..." << std::endl;
+        nitf::ImageReader deserializer = reader.newImageReader(count);
+        std::cout << "Writing image " << count << "..." << std::endl;
 
         /*  Write the thing out  */
-        manuallyWriteImageBands(imageSegment, inFile, deserializer, i);
+        manuallyWriteImageBands(imageSegment, inFile, deserializer, count);
         std::cout << "done.\n" << std::endl;
     }
-
 
     return record;
 }

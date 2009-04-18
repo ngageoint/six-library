@@ -26,6 +26,7 @@
 #include "nitf/BandInfo.hpp"
 #include "nitf/BandSource.hpp"
 #include "nitf/BlockingInfo.hpp"
+#include "nitf/BufferedWriter.hpp"
 #include "nitf/ComponentInfo.hpp"
 #include "nitf/DataSource.hpp"
 #include "nitf/DESegment.hpp"

@@ -21,18 +21,19 @@
 
 PACKAGE = nitf
 BUILD = library unit-tests
-MAJOR_VERSION = 1
+MAJOR_VERSION = 2
 MINOR_VERSION = 5
-VERSION_SUFFIX = RC1
+VERSION_SUFFIX = dev
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
-MAINTAINER = tzellman@users.sourceforge.net
+MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net
 DESCRIPTION = A complete solution for reading and writing NITF \
-              files. C++ bindings for the C core library, including \
-              a built-in memory/object manager.
+              files. C++ bindings for the C core library.
 
+#          BufferedReader.cpp
 SOURCES = BandInfo.cpp \
           BandSource.cpp \
           BlockingInfo.cpp \
+          BufferedWriter.cpp \
           ComponentInfo.cpp \
           DataSource.cpp \
           DESegment.cpp \
@@ -69,7 +70,9 @@ SOURCES = BandInfo.cpp \
           WriteHandler.cpp \
           Writer.cpp
 
-TESTS = test_create.cpp \
+
+TESTS = test_buffered_write.cpp \
+        test_create.cpp \
         test_des_create.cpp \
         test_dump_record.cpp \
         test_fh.cpp \
