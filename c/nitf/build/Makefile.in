@@ -26,7 +26,7 @@ MINOR_VERSION = 5
 VERSION_SUFFIX = 
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 LANGUAGE = c
-MAINTAINER = gojira_1@users.sourceforge.net
+MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net
 LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
 # Only if you are forcing these as a static lib
 LIBHANDLERS = lib$(PACKAGE)-handlers

@@ -610,6 +610,7 @@ void showTextSubheader(nitf_TextSubheader * sub)
 void showDESubheader(nitf_DESubheader * sub)
 {
     assert( sub );
+
     printf("DES subheader\n");
     SHOW_VAL(sub->filePartType);
     SHOW_VAL(sub->typeID);
@@ -650,13 +651,8 @@ void showDESubheader(nitf_DESubheader * sub)
  */
 void showRESubheader(nitf_RESubheader * sub)
 {
-
-    if (!sub)
-    {
-        printf("Error: RES subheader not set\n");
-        return;
-    }
-
+    assert( sub );
+ 
     printf("RES subheader\n");
     SHOW_VAL(sub->filePartType);
     SHOW_VAL(sub->typeID);

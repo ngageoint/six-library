@@ -35,7 +35,6 @@
 /*  These define chars for filling fields  */
 #define SPACE ' '
 #define ZERO '0'
-
 #define FILL_LEFT 1
 #define FILL_RIGHT 2
 
@@ -1023,11 +1022,11 @@ NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
      */
     if (IS_NITF20(fver))
     {
-        NITF_WRITE_VALUE(writer->record->header, NITF_FBKGC, ZERO, FILL_LEFT);
+        NITF_WRITE_VALUE(writer->record->header, NITF_FBKGC, 0, FILL_LEFT);
     }
     else
     {
-        NITF_WRITE_VALUE(writer->record->header, NITF_FBKGC, ZERO, FILL_LEFT);
+        NITF_WRITE_VALUE(writer->record->header, NITF_FBKGC, 0, FILL_LEFT);
     }
 
     NITF_WRITE_VALUE(writer->record->header, NITF_ONAME, SPACE, FILL_RIGHT);
@@ -2029,7 +2028,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         goto CATCH_ERROR;
 
     if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(writer->output,
-                            fileLenOff, NITF_SEEK_SET, error)))
+                                               fileLenOff, 
+                                               NITF_SEEK_SET, 
+                                               error)))
         goto CATCH_ERROR;
 
     NITF_WRITE_INT64_FIELD(fileLen, NITF_FL, ZERO, FILL_LEFT);
