@@ -148,7 +148,7 @@ NITFAPI(NITF_BOOL) nitf_Utils_isAlpha(char *str)
     return 1;
 }
 
-NITFAPI(void) nitf_Utils_trimString(char *str)
+NITFPROT(void) nitf_Utils_trimString(char *str)
 {
     nitf_Uint32 len;            /* Length of the string */
     char *strp;                 /* Pointer into the string */
@@ -171,4 +171,33 @@ NITFAPI(void) nitf_Utils_trimString(char *str)
         str[len] = 0;
     }
     return;
+}
+
+NITFPROT(void) nitf_Utils_replace(char* str, char oldValue, char newValue)
+{
+    char *p;
+    while( (p = strchr(str, oldValue)) != NULL)
+    {
+        *p = newValue;
+    }
+
+}
+
+NITFPROT(void) nitf_Utils_baseName(char *base,
+                                   const char* fullName,
+                                   const char* extension)
+{
+    int i, begin = 0;
+    int end = strlen(fullName);
+    char *p = strstr(fullName, extension);
+    for (i = 0; i < strlen(fullName); i++)
+    {
+        if ( *(fullName + i) == '/' || *(fullName + i) == '\\')
+            begin = i + 1;
+        
+        if ( fullName + i == p)
+            end = i - 1;
+    }
+    memcpy(base, &fullName[begin], end - begin + 1);
+    base[ end - begin + 1] = 0;
 }

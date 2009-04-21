@@ -237,7 +237,8 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     }
 
     /* do not adopt the data - we will clean it up ourselves */
-    nitf_HashTable_setPolicy(reg->decompressionHandlers, NITF_DATA_RETAIN_OWNER);
+    nitf_HashTable_setPolicy(reg->decompressionHandlers, 
+                             NITF_DATA_RETAIN_OWNER);
 
     /*  Start with a clean slate  */
     memset(reg->path, 0, NITF_MAX_PATH);
@@ -254,9 +255,11 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     {
         strcpy(reg->path, pluginEnvVar);
     }
-    /*  If the we have a user-defined path, they might not  */
-    /*  have terminated their environment variable with a   */
-    /*  trailing slash.  No problem, we can do it for them  */
+    /*  
+     * If the we have a user-defined path, they might not
+     * have terminated their environment variable with a
+     * trailing slash.  No problem, we can do it for them  
+     */
     if (reg->path[strlen(reg->path) - 1] != '/')
     {
         /*  Need to append / to end  */
@@ -319,7 +322,7 @@ NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg)
  */
 
 NITFPRIV(char **) doInit(nitf_DLL * dll,
-                               const char *prefix, nitf_Error * error)
+                         const char *prefix, nitf_Error * error)
 {
     NITF_PLUGIN_INIT_FUNCTION init;
     char **ident;
@@ -453,24 +456,13 @@ NITFAPI(NITF_BOOL)
     /*  Otherwise we can load the DLL  */
     if (!nitf_DLL_load(dll, fullName, error))
     {
-        /*  If the load failed, we have a set error      */
-        /*  So all we have to do is close shop, go home  */
+        /*  
+         * If the load failed, we have a set error
+         *  So all we have to do is close shop, go home
+         */
         return NITF_FAILURE;
     }
-
-    begin = 0;
-    end = strlen(fullName);
-    p = strstr(fullName, NITF_DLL_EXTENSION);
-    for (i = 0; i < strlen(fullName); i++)
-    {
-        if ( *(fullName + i) == '/' || *(fullName + i) == '\\')
-            begin = i + 1;
-
-        if ( fullName + i == p)
-            end = i - 1;
-    }
-    memcpy(keyName, &fullName[begin], end - begin + 1);
-    keyName[ end - begin + 1] = 0;
+    nitf_Utils_baseName(keyName, fullName, NITF_DLL_EXTENSION);
     
     /* Now init the plugin!!!  */
     ident = doInit(dll, keyName, error);
@@ -479,8 +471,6 @@ NITFAPI(NITF_BOOL)
     if (ident)
     {
         /*  I expect to have problems with this now and then  */
-        
-        
         ok = insertPlugin(reg, ident, dll, error);
         
         /*  If insertion failed, take our toys and leave  */
@@ -738,10 +728,7 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
     memset(name, 0, NITF_MAX_PATH);
     sprintf(name, "%s%s", ident, suffix);
 
-    while( (p = strchr(name, ' ')) != NULL)
-    {
-        *p = '_';
-    }
+    nitf_Utils_replace(name, ' ', '_');
 
     /*  No error has occurred (yet)  */
 #if NITF_DEBUG_PLUGIN_REG

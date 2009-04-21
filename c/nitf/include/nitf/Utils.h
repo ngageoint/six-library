@@ -43,8 +43,26 @@ NITFAPI(NITF_BOOL) nitf_Utils_isNumeric(char *str);
 
 NITFAPI(NITF_BOOL) nitf_Utils_isAlpha(char *str);
 
-NITFAPI(void) nitf_Utils_trimString(char* str);
+NITFPROT(void) nitf_Utils_trimString(char* str);
 
+/*!
+ *  Replace the oldValue with the newValue within this string
+ *
+ */
+NITFPROT(void) nitf_Utils_replace(char* str, char oldValue, char newValue);
+
+/*!
+ * Return the base name for the fullName, up until the 
+ * extension is encountered.  Both base and fullName should
+ * have at least NITF_MAX_PATH number of elements.
+ *
+ * \param base A user supplied base name target
+ * \param fullName The source string
+ * \param extension The extension name
+ */
+NITFPROT(void) nitf_Utils_baseName(char* base, 
+                                   const char* fullName, 
+                                   const char* extension);
 
 NITF_CXX_ENDGUARD
 
