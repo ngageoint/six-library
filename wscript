@@ -45,6 +45,10 @@ def configure(conf):
 
 def build(bld):
     bld.add_subdirs('c c++ java')
+    
+    #since waf 1.5.5 we need to do this...
+    from coda import removeVariantTasks
+    removeVariantTasks(bld, 'default')
 
 def distclean(context):
     context.recurse('c c++ java')
