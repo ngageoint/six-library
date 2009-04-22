@@ -30,16 +30,9 @@ libs:
 	cd str;    make library
 	cd sys;    make library
 	cd mt;     make library
-	perl $(ROOT)/linkLibs.pl @target@/@lib_dir@ except str sys mt
 	cd nitf;   make library
 
-install_compat_headers:
-	mkdir -p @prefix@;
-	tar -cf compat_headers.tar include/;
-	mv compat_headers.tar @prefix@/;
-	cd @prefix@; tar -xvf compat_headers.tar; \rm -f compat_headers.tar
-
-install: install_compat_headers
+install:
 	cd except; make install
 	cd str;    make install
 	cd sys;    make install

@@ -73,10 +73,7 @@ fi
 #add the nitf-c linkage
 link_nitf_libpath="-L${here}/../c/nitf/lib/${target}"
 cxx_nitf_includes="-I${here}/../c/nitf/include"
-
-
-#add the top-level include dir for compatibility headers
-cxx_includes="${cxx_includes} ${cxx_nitf_includes} -I${here}/include"
+cxx_includes="${cxx_includes} ${cxx_nitf_includes}"
 
 cxx_pic_flags="${sys_cxx_pic_flags}"
 cxx_defs="${cxx_defs} ${cxx_time_defs}"
