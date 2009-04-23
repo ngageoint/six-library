@@ -37,6 +37,51 @@
 #define ATT_1 "Tom"
 
 /*
+ *  This function dumps a TRE using the TRE enumerator.
+ *  The enumerator is used to walk the fields of a TRE in order
+ *  when the TRE enumerator is expired it will be set to NULL.
+ *
+ */
+void printTRE(nitf_TRE* tre)
+{
+    nitf_Error error;
+    nitf_Uint32 treLength;
+    nitf_TREEnumerator* it = NULL;
+    const char* treID = NULL;
+    
+    /* This is just so you know how long the TRE is */
+    treLength = tre->handler->getCurrentSize(tre, &error);
+
+    /* 
+     *  This is the name for the description that was selected to field
+     *  this TRE by the handler.
+     */
+    treID = nitf_TRE_getID(tre);
+    
+    printf("\n--------------- %s TRE (%d) - (%s) ---------------\n",
+           tre->tag, treLength, treID ? treID : "null id");
+    
+    /* Now walk the TRE */
+    it = nitf_TRE_begin(tre, &error);
+
+    while(it && it->hasNext(&it))
+    {
+        /* If this isn't set, it should have been an error */
+        nitf_Pair* fieldPair = it->next(it, &error);
+        if (fieldPair)
+        {
+            printf("%s = [", fieldPair->key);
+            nitf_Field_print((nitf_Field *) fieldPair->data);
+            printf("]\n");
+        }
+        else
+            nitf_Error_print(&error, stdout, "Field retrieval error");
+        
+    }
+    printf("---------------------------------------------\n");
+}
+
+/*
  *  Warning!  In order for this test to work properly, you MUST
  *  set the NITF_PLUGIN_PATH to use the XMLTRE plugin provided in
  *  the external/examples area!  
@@ -64,44 +109,47 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
 
 //    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]/vendor[1]/publish-date[1]", "March 2008", strlen("March 2008"), error))
 
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[2]", FAKE_DESC, strlen(FAKE_DESC), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]", FAKE_DESC, strlen(FAKE_DESC), error))
       goto CATCH_ERROR;
 
 
     /* Tests out-of-order set */
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]", DESC1, strlen(DESC1), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]", DESC1, strlen(DESC1), error))
       goto CATCH_ERROR;
     
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]/@name", ATT_1, strlen(ATT_1), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]/@name", ATT_1, strlen(ATT_1), error))
       goto CATCH_ERROR;
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]/@name", ATT_1, strlen(ATT_1), error))
-      goto CATCH_ERROR;
-
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/publish-date[1]", PUB_DATE, strlen(PUB_DATE), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]/@name", ATT_1, strlen(ATT_1), error))
       goto CATCH_ERROR;
 
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/version[1]", VER, strlen(VER), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/publish-date[0]", PUB_DATE, strlen(PUB_DATE), error))
       goto CATCH_ERROR;
 
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/author[1]", AUTH, strlen(AUTH), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/version[0]", VER, strlen(VER), error))
       goto CATCH_ERROR;
 
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/constants[1]/pi[1]", "3.14", strlen("3.14"), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/vendor[0]/author[0]", AUTH, strlen(AUTH), error))
       goto CATCH_ERROR;
-    
 
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/constants[1]/c[1]", "299792458.0", strlen("299792458.0"), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/constants[0]/pi[0]", "3.14", strlen("3.14"), error))
       goto CATCH_ERROR;
     
 
-    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[2]", DESC2, strlen(DESC2), error))
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/constants[0]/c[0]", "299792458.0", strlen("299792458.0"), error))
       goto CATCH_ERROR;
     
+
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[1]", FAKE_DESC, strlen(FAKE_DESC), error))
+        goto CATCH_ERROR;
+    if (!nitf_TRE_setField(tre, "/xmltre[0]/description[1]", DESC2, strlen(DESC2), error))
+      goto CATCH_ERROR;
+    
+    printTRE( tre );
 
     /* Ahh, but can you go back and set it now?: 
     if (!nitf_TRE_setField(tre, "/xmltre[1]/vendor[1]/publish-date[1]", PUB_DATE, strlen(PUB_DATE), error))
       goto CATCH_ERROR;
-       
+
 
 
 

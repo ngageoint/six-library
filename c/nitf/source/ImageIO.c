@@ -2780,13 +2780,11 @@ CATCH_ERROR:
 }
 
 
-/*==================== nitf_ImageIO_clone ====================================*/
-
 NITFPROT(nitf_ImageIO *) nitf_ImageIO_clone(nitf_ImageIO * image,
-        nitf_Error * error)
+                                            nitf_Error * error)
 {
     _nitf_ImageIO *clone;       /* The result */
-
+    
     clone = (_nitf_ImageIO *) NITF_MALLOC(sizeof(_nitf_ImageIO));
     if (clone == NULL)
     {
@@ -2798,7 +2796,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_clone(nitf_ImageIO * image,
     /* Make copy */
     *clone = *((_nitf_ImageIO *) image);
 
-    /*      Clear some fields */
+    /* Clear some fields */
 
     clone->blockInfoFlag = 0;
 
@@ -6623,7 +6621,7 @@ NITFPROT(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
         }
     }
     
-    /*    Overflow check*/
+    /* Overflow check*/
     
     if ((blockOffset + count) > nitf->blockSize)
     {
@@ -6632,7 +6630,7 @@ NITFPROT(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
         return NITF_FAILURE;
     }
     
-    /*    Copy data */
+    /* Copy data */
     
     memcpy(blockCntl->block + blockOffset, buffer, count);
     

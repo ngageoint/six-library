@@ -22,13 +22,20 @@
 
 #include <import/nitf.h>
 
+#if 1
 #include <import/coda/xml/lite.h>
 #include <import/coda/io.h>
 #include <import/coda/sys.h>
 #include <import/coda/str.h>
 #include <import/coda/except.h>
 using namespace coda;
-
+#else
+#include <import/xml/lite.h>
+#include <import/io.h>
+#include <import/sys.h>
+#include <import/str.h>
+#include <import/except.h>
+#endif
 
 
 NITF_CXX_GUARD
@@ -40,6 +47,8 @@ struct PrivateData
     /* only using this for its HashTable */
     nitf_TREPrivateData *priv;
     
+    std::string id;
+
     static void destruct(PrivateData** data);
     static PrivateData* construct(nitf_Error* error);
     static PrivateData* clone(PrivateData *source, 
@@ -98,7 +107,7 @@ struct XMLHandler
      *  Walk the name path and expand the DOM tree to include
      *  elements that do not yet exist
      */
-    static void _expandDOM(xml::lite::Element* root, 
+    static void _expandDOM(xml::lite::Document* doc,
                            std::string name, 
                            std::string value);
         
@@ -240,7 +249,7 @@ PrivateData* PrivateData::construct(nitf_Error* error)
      * this is not necessary, and we will probably do something
      * more efficient in the future
      */
-    data->doc = NULL;
+    data->doc = new xml::lite::Document();
     data->priv = nitf_TREPrivateData_construct(error);
     if (!data->priv)
     {
@@ -272,14 +281,22 @@ PrivateData* PrivateData::clone(PrivateData *source,
     PrivateData* data = PrivateData::construct(error);
     if (!data)
         return NULL;
+
+    data->doc = NULL;
     
     if (source->doc)
     {
         data->doc = new xml::lite::Document();
         // TODO: make it easier to do this in xml.lite
-        xml::lite::Element* element = new xml::lite::Element();
-        element->clone(*source->doc->getRootElement());
-        source->doc->setRootElement(element);
+
+
+        if (source->doc->getRootElement())
+        {
+            xml::lite::Element* element = new xml::lite::Element();
+
+            element->clone(*source->doc->getRootElement());
+            source->doc->setRootElement(element);
+        }
 
         if (!data->doc)
         {
@@ -421,7 +438,8 @@ NITF_BOOL XMLHandler::readXML(nitf_IOInterface* ioIface,
 // Just do nothing here, we have only one handler for all TREs
 const char* XMLHandler::getID(nitf_TRE* tre)
 {
-    return NULL;
+    PrivateData * treData = (PrivateData*)tre->priv;
+    return treData->id.c_str();
 }
 
 // Init our TRE from scratch -- through TRE_construct
@@ -431,12 +449,30 @@ NITF_BOOL XMLHandler::init(nitf_TRE* tre,
 {
     PrivateData* treData = NULL;
     if (!tre) { return NITF_FAILURE; } 
+
+    if (id == NULL)
+    {
+        nitf_Error_init(error, "You must declare a root node!", NITF_CTXT, 
+                        NITF_ERR_INVALID_OBJECT);
+
+        return NITF_FAILURE;
+    }
     
     treData = PrivateData::construct(error);
     if (!treData) return NITF_FAILURE;
+
     
     // Dont forget the root is NULL
     treData->doc = new xml::lite::Document();
+
+    xml::lite::Element * root = new xml::lite::Element();
+
+    treData->id = id;
+
+    root->setLocalName(id);
+    treData->doc->setRootElement(root);
+
+
     tre->priv = treData;
     
     return NITF_SUCCESS;
@@ -497,26 +533,45 @@ int XMLHandler::getCurrentSize(nitf_TRE* tre, nitf_Error* error)
     return bs.stream().str().length();
 }
 
-void XMLHandler::_expandDOM(xml::lite::Element* root, 
+void XMLHandler::_expandDOM(xml::lite::Document* doc,
                             std::string name, 
                             std::string value)
 {
-    
-    std::vector<std::string> toks = str::Tokenizer(name, "]");
-    xml::lite::Element* current = root;
+    // First, we split on ] boundary.
+    std::vector<std::string> toks = str::Tokenizer(name, "/");
+
+    // This may be NULL if the tree is empty
+    xml::lite::Element* current = doc->getRootElement();
+    assert(current);
+    // Figure out how many keys we got
     size_t numToks = toks.size();
     
     std::string currentName;
+
+    // Freak out if we got none
+    if (!numToks)
+        throw except::Exception(
+            Ctxt(
+                FmtX("Need at least one token")
+                )
+            );
     
     // Walk through and fill any elements that are not yet filled
     unsigned int index = 0;
-    for (unsigned int i = 0; i < numToks; i++)
+
+
+    // For each token
+    for (unsigned int i = 1; i < numToks; i++)
     {
+        // Strip the [ which accompanies the already stripped ]
         std::vector<std::string> v = str::Tokenizer(toks[i], "[");
+
+        // That means the first token inside here is the base name
         currentName = v[0];
 
         if (v.size() == 1)
         {
+            // Flip out if braces didnt match up
             if (i != numToks - 1)
             {
                 throw except::Exception(
@@ -533,16 +588,30 @@ void XMLHandler::_expandDOM(xml::lite::Element* root,
                           << "Assuming you want first element" 
                           << std::endl;
                 index = 0;
-                
             }
             else
             {
                 // We have our final attribute and current is pointing
                 // to our element
-                xml::lite::AttributeNode attNode;
-                attNode.setLocalName(currentName);
-                attNode.setValue(value);
-                current->getAttributes().add(attNode);
+                assert(current);
+                std::string attName = currentName.substr(1);
+                // Figure out if it exists
+                int attIndex = 
+                    current->getAttributes().getIndex(attName);
+                if (attIndex == -1)
+                {
+
+                    xml::lite::AttributeNode attNode;
+                    attNode.setLocalName(currentName.substr(1));
+                    attNode.setValue(value);
+                    
+                    current->getAttributes().add(attNode);
+                }
+                else
+                {
+                    current->getAttributes().getNode(attIndex).setValue(value);
+
+                }
                 return;
             }
             
@@ -555,6 +624,8 @@ void XMLHandler::_expandDOM(xml::lite::Element* root,
         
         // If there is only one element, we are at the end of our walk
         std::vector<xml::lite::Element*> children;
+
+      
         current->getElementsByTagName(currentName, children);
         
         xml::lite::Element* lastChild = NULL;
@@ -566,9 +637,11 @@ void XMLHandler::_expandDOM(xml::lite::Element* root,
             lastChild->setLocalName(currentName);
             current->addChild( lastChild );
             children.clear();
+            // We need this again, since we have reinserted
             current->getElementsByTagName(currentName, children);
         }
-        current = children[index];
+        // Now we are on the index we wanted in the first place
+            current = children[index];
     }
     
     // If we got here we must have character data
@@ -621,7 +694,7 @@ NITF_BOOL XMLHandler::_insertField(nitf_TRE* tre,
         nitf_Field* field = (nitf_Field*)pair->data;
         nitf_Field_resizeField(field, dataStr.length(), error);
         nitf_Field_setString(field, dataStr.c_str(), error);
-        
+
     }
     return NITF_SUCCESS;
     
@@ -643,20 +716,32 @@ NITF_BOOL XMLHandler::setField(nitf_TRE* tre,
                                size_t dataLength, 
                                nitf_Error* error)
 {
+    
     PrivateData* treData = (PrivateData*)tre->priv;
     
     // Now we have the tag, and we have the data
     std::string tagStr(tag);    
     std::string dataStr((const char*)data, dataLength);
     
-    xml::lite::Element* root = treData->doc->getRootElement();
+
+    //xml::lite::Element* root = treData->doc->getRootElement();
     /*
      *
      * First expand the DOM so that a new element is there 
      * for each subdirectory if it was not before
      */
-    XMLHandler::_expandDOM(root, tagStr, dataStr);
-    
+
+    try
+    {
+        XMLHandler::_expandDOM(treData->doc, tagStr, dataStr);
+    }
+    catch (except::Exception& ex)
+    {
+        nitf_Error_init(error, ex.getMessage().c_str(), NITF_CTXT, 
+                        NITF_ERR_INVALID_OBJECT);
+
+        return NITF_FAILURE;
+    }
     /*!
      * Then go ahead and insert the field
      */
