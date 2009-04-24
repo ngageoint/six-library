@@ -5038,7 +5038,7 @@ case "${target}" in
    ;;
 
 
-	powerpc-apple-*)
+	*-apple-*)
 	    cxx_thread_defs="-D_REENTRANT -D__POSIX"
 	    link_thread_libs=""
    	;;
