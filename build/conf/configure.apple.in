@@ -48,6 +48,7 @@ case "${target}" in
 	    AR="ar"
 	    dll_flags="${dll_flags} -fPIC -dynamiclib"
     ;;
+esac
 case "${target}" in
     i686-apple-*)
 
