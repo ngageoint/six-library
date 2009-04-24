@@ -1295,6 +1295,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-sysroot=PATH           Mac specific: compile with sysroot set to the given path
   --with-includes=INCLUDES  	Add INCLUDES
   --with-libpaths=LIBPATHs	Add LIBPATHS
   --with-flags=FLAGS  		Use FLAGS as compiler options
@@ -4644,7 +4645,27 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
 	    def_cxx_optz_flags="${sys_cxx_optz_fast}"
 
 	    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-        cxx_flags=""
+
+   # if --with-sysroot is given, set -isysroot to cc_flags
+	    # default sysroot is /usr/include on the mac
+
+# Check whether --with-sysroot was given.
+if test "${with_sysroot+set}" = set; then
+  withval=$with_sysroot; applesr=${withval}
+else
+  applesr="no"
+fi
+
+            { echo "$as_me:$LINENO: result: setting sysroot: $applesr" >&5
+echo "${ECHO_T}setting sysroot: $applesr" >&6; }
+	    if test "${applesr}" != "no" && test -n "${applesr}"
+	    then
+		cxx_flags="${cxx_flags} -isysroot ${applesr}"
+ 	    else
+	        cxx_flags="${cxx_flags}"
+	    fi
+
+            cxx_flags="${cxx_flags} -arch ppc"
 	    cxx_optz_flags="${def_cxx_optz_flags}"
 
         link_libs="-ldl"
@@ -4657,6 +4678,60 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
     ;;
 esac
 
+case "${target}" in
+	i686-apple-*)
+      	{ echo "$as_me:$LINENO: result: attempting to configure for mac..." >&5
+echo "${ECHO_T}attempting to configure for mac..." >&6; }
+	    { echo "$as_me:$LINENO: result: selecting the gnu compiler..." >&5
+echo "${ECHO_T}selecting the gnu compiler..." >&6; }
+	    { echo "$as_me:$LINENO: result: selecting the ar archiver..." >&5
+echo "${ECHO_T}selecting the ar archiver..." >&6; }
+        CXX="g++"
+	    sys_cxx_debug_flags="-g"
+	    sys_cxx_warn_flags="-Wall"
+	    sys_cxx_verb_flags="-v"
+
+	    sys_cxx_optz_med="-O1"
+	    sys_cxx_optz_fast="-O2"
+	    sys_cxx_optz_fastest="-O3"
+
+	    sys_cxx_pic_flags="-fPIC"
+
+	    def_cxx_optz_flags="${sys_cxx_optz_fast}"
+
+	    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+
+            # if --with-sysroot is given, set -isysroot to cc_flags
+	    # default sysroot is /usr/include on the mac
+
+# Check whether --with-sysroot was given.
+if test "${with_sysroot+set}" = set; then
+  withval=$with_sysroot; applesr=${withval}
+else
+  applesr="no"
+fi
+
+            { echo "$as_me:$LINENO: result: setting sysroot: $applesr" >&5
+echo "${ECHO_T}setting sysroot: $applesr" >&6; }
+	    if test "${applesr}" != "no" && test -n "${applesr}"
+	    then
+		cxx_flags="${cxx_flags} -isysroot ${applesr}"
+ 	    else
+	        cxx_flags="${cxx_flags}"
+	    fi
+
+            cxx_flags="${cxx_flags} -arch i386"
+	    cxx_optz_flags="${def_cxx_optz_flags}"
+
+        link_libs="-ldl"
+
+	    AR="ar"
+
+	    ar_flags="-rs"
+	    dll_flags="${dll_flags} ${sys_cxx_pic_flags} -shared"
+
+    ;;
+esac
 # Check whether --enable-64bit was given.
 if test "${enable_64bit+set}" = set; then
   enableval=$enable_64bit; ok=${enableval}
