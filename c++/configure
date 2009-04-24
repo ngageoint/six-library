@@ -4644,7 +4644,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
 
 	    def_cxx_optz_flags="${sys_cxx_optz_fast}"
 
-	    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+	    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D__APPLE_CC__"
 
    # if --with-sysroot is given, set -isysroot to cc_flags
 	    # default sysroot is /usr/include on the mac
@@ -4699,7 +4699,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
 
 	    def_cxx_optz_flags="${sys_cxx_optz_fast}"
 
-	    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+	    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D__APPLE_CC__"
 
             # if --with-sysroot is given, set -isysroot to cc_flags
 	    # default sysroot is /usr/include on the mac
@@ -4732,6 +4732,7 @@ echo "${ECHO_T}setting sysroot: $applesr" >&6; }
 
     ;;
 esac
+
 # Check whether --enable-64bit was given.
 if test "${enable_64bit+set}" = set; then
   enableval=$enable_64bit; ok=${enableval}
