@@ -4899,7 +4899,7 @@ echo "${ECHO_T}setting sysroot: $applesr" >&6; }
     ;;
 esac
 case "${target}" in
-    i686-apple-*)
+    i686-apple-*|i386-apple-*)
 
         { echo "$as_me:$LINENO: result: attempting to configure for the mac..." >&5
 echo "${ECHO_T}attempting to configure for the mac..." >&6; }
