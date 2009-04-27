@@ -50,7 +50,7 @@ case "${target}" in
     ;;
 esac
 case "${target}" in
-    i686-apple-*)
+    i686-apple-*|i386-apple-*)
 
         AC_MSG_RESULT(attempting to configure for the mac...)
 	    AC_MSG_RESULT(selecting the gnu compiler...)
