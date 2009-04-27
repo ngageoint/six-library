@@ -4640,6 +4640,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
 	    sys_cxx_optz_fast="-O2"
 	    sys_cxx_optz_fastest="-O3"
 
+            sys_cxx_64_flags="-m64"
 	    sys_cxx_pic_flags="-fPIC"
 
 	    def_cxx_optz_flags="${sys_cxx_optz_fast}"
@@ -4695,6 +4696,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
 	    sys_cxx_optz_fast="-O2"
 	    sys_cxx_optz_fastest="-O3"
 
+            sys_cxx_64_flags="-m64"
 	    sys_cxx_pic_flags="-fPIC"
 
 	    def_cxx_optz_flags="${sys_cxx_optz_fast}"
