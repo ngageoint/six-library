@@ -1,7 +1,0 @@
-EXTLIBS = -lcoda.xml.lite-c++ -lcoda.io-c++ -lcoda.sys-c++ -lcoda.str-c++ -lcoda.except-c++ -lnitf-c -lexpat
-EXTINCLUDEPATH = -I@top_srcdir@/../../c/nitf/include \
-                 -I$(CODA)/include
-EXTLIBPATH = -L@top_srcdir@/../../c/nitf/lib/@target@ \
-             -L$(CODA)/lib/@target@/gnu
-PLUGINS = XMLPlugin.cpp
-
