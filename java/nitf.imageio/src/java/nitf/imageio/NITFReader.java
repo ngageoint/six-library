@@ -30,13 +30,12 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferDouble;
 import java.awt.image.DataBufferFloat;
-import java.awt.image.DataBufferShort;
+import java.awt.image.DataBufferUShort;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -279,7 +278,7 @@ public class NITFReader extends ImageReader
      * data. (non-Javadoc)
      * 
      * @see javax.imageio.ImageReader#readRaster(int,
-     *      javax.imageio.ImageReadParam)
+     * javax.imageio.ImageReadParam)
      */
     @Override
     public Raster readRaster(int imageIndex, ImageReadParam param)
@@ -316,13 +315,14 @@ public class NITFReader extends ImageReader
 
         // make the band offsets array, for the output
         int[] bandOffsets = null;
+        int[] sourceBands = param.getSourceBands();
         if (param != null && param.getDestinationBands() != null)
             bandOffsets = param.getDestinationBands();
-        else if (param != null && param.getSourceBands() != null)
+        else if (param != null && sourceBands != null)
         {
-            bandOffsets = new int[param.getSourceBands().length];
+            bandOffsets = new int[sourceBands.length];
             for (int i = 0; i < bandOffsets.length; i++)
-                bandOffsets[i] = i;
+                bandOffsets[i] = sourceBands[i];
         }
         else
         {
@@ -420,16 +420,37 @@ public class NITFReader extends ImageReader
             int numCols = destRegion.width;
             int numRows = destRegion.height;
 
+            int nBands = subheader.getBandCount();
+
+            /*
+             * NOTE: This is a "fix" that will be removed once the underlying
+             * NITRO library gets patched. Currently, if you make a request of a
+             * single band, it doesn't matter which band you request - the data
+             * from the first band will be returned regardless. This is
+             * obviously wrong. To thwart this, we will read all bands, then
+             * scale down what we return to the user based on their actual
+             * request.
+             */
+
+            int[] requestBands = bandOffsets;
+            if (nBands != bandOffsets.length && bandOffsets.length == 1
+                    && bandOffsets[0] != 0)
+            {
+                requestBands = new int[nBands];
+                for (int i = 0; i < nBands; ++i)
+                    requestBands[i] = i;
+            }
+
             int bufSize = numCols * numRows * pixelSize;
-            byte[][] imageBuf = new byte[bandOffsets.length][bufSize];
+            byte[][] imageBuf = new byte[requestBands.length][bufSize];
 
             // make a SubWindow from the params
             // TODO may want to read by blocks or rows to make faster and more
             // memory efficient
             SubWindow window;
             window = new SubWindow();
-            window.setNumBands(bandOffsets.length);
-            window.setBandList(bandOffsets);
+            window.setNumBands(requestBands.length);
+            window.setBandList(requestBands);
             window.setNumCols(numCols);
             window.setNumRows(numRows);
             window.setStartCol(0);
@@ -443,19 +464,36 @@ public class NITFReader extends ImageReader
                 window.setDownSampler(downSampler);
             }
 
-            String pixelJustification = subheader.getPixelJustification()
-                    .getStringData().trim();
-            boolean shouldSwap = pixelJustification.equals("R");
+            // String pixelJustification = subheader.getPixelJustification()
+            // .getStringData().trim();
+            // boolean shouldSwap = pixelJustification.equals("R");
+
+            // since this is Java, we need the data in big-endian format
+            // boolean shouldSwap = ByteOrder.nativeOrder() !=
+            // ByteOrder.BIG_ENDIAN;
 
             nitf.ImageReader imageReader = getImageReader(imageIndex);
             imageReader.read(window, imageBuf);
 
             List<ByteBuffer> bandBufs = new ArrayList<ByteBuffer>();
+
             for (int i = 0; i < bandOffsets.length; ++i)
             {
-                ByteBuffer bandBuf = ByteBuffer.wrap(imageBuf[i]);
-                bandBuf.order(shouldSwap ? ByteOrder.LITTLE_ENDIAN
-                        : ByteOrder.BIG_ENDIAN);
+                ByteBuffer bandBuf = null;
+
+                // the special "fix" we added needs to do this
+                if (bandOffsets.length != requestBands.length)
+                {
+                    bandBuf = ByteBuffer.wrap(imageBuf[bandOffsets[i]]);
+                }
+                else
+                {
+                    bandBuf = ByteBuffer.wrap(imageBuf[i]);
+                }
+                // bandBuf.order(ByteOrder.BIG_ENDIAN);
+                // shouldSwap ? ByteOrder.LITTLE_ENDIAN
+                // : ByteOrder.BIG_ENDIAN);
+
                 bandBufs.add(bandBuf);
             }
 
@@ -474,7 +512,7 @@ public class NITFReader extends ImageReader
                     break;
                 case 2:
                     ShortBuffer rasterShortBuf = ShortBuffer
-                            .wrap(((DataBufferShort) imRas.getDataBuffer())
+                            .wrap(((DataBufferUShort) imRas.getDataBuffer())
                                     .getData());
                     rasterShortBuf.put(bandBuf.asShortBuffer());
                     break;
@@ -556,8 +594,6 @@ public class NITFReader extends ImageReader
     {
         checkIndex(imageIndex);
 
-        // first, see if we can optimize the read call by reading in the entire
-        // image at once
         try
         {
             ImageSubheader subheader = record.getImages()[imageIndex]
@@ -565,6 +601,8 @@ public class NITFReader extends ImageReader
             int numCols = subheader.getNumCols().getIntData();
             int numRows = subheader.getNumRows().getIntData();
 
+            // try to optimize the read call by reading in the entire
+            // image at once
             if ((destRegion.height * sourceYSubsampling) == numRows
                     && (destRegion.width * sourceXSubsampling) == numCols)
             {
@@ -572,125 +610,120 @@ public class NITFReader extends ImageReader
                         sourceYSubsampling, bandOffsets, pixelSize, imRas);
                 return;
             }
-
-        }
-        catch (NITFException e1)
-        {
-            throw new IOException(ExceptionUtils.getStackTrace(e1));
-        }
-
-        // below is the general purpose case
-        try
-        {
-            ImageSubheader subheader = record.getImages()[imageIndex]
-                    .getSubheader();
-
-            int colBytes = destRegion.width * pixelSize;
-            byte[][] rowBuf = new byte[bandOffsets.length][colBytes];
-
-            int dstMinX = imRas.getMinX();
-            int dstMaxX = dstMinX + imRas.getWidth() - 1;
-            int dstMinY = imRas.getMinY();
-            int dstMaxY = dstMinY + imRas.getHeight() - 1;
-            int swap = 0;
-
-            // make a SubWindow from the params
-            // TODO may want to read by blocks or rows to make faster and more
-            // memory efficient
-            SubWindow window;
-            window = new SubWindow();
-            window.setNumBands(bandOffsets.length);
-            window.setBandList(bandOffsets);
-            window.setNumCols(destRegion.width);
-            window.setNumRows(1);
-            window.setStartCol(sourceRegion.x);
-            window.setStartRow(sourceRegion.y);
-
-            // the NITRO library can do the subsampling for us
-            if (sourceYSubsampling != 1 || sourceXSubsampling != 1)
-            {
-                DownSampler downSampler = new PixelSkipDownSampler(
-                        sourceYSubsampling, sourceXSubsampling);
-                window.setDownSampler(downSampler);
-            }
-
-            String pixelJustification = record.getImages()[imageIndex]
-                    .getSubheader().getPixelJustification().getStringData()
-                    .trim();
-            swap = pixelJustification.equals("R") ? 1 : 0;
-
-            List<ByteBuffer> bandBufs = new ArrayList<ByteBuffer>();
-            for (int i = 0; i < bandOffsets.length; ++i)
+            // the general purpose case
+            else
             {
 
-                ByteBuffer bandBuf = ByteBuffer.wrap(rowBuf[i]);
-                bandBuf.order(swap == 0 ? ByteOrder.BIG_ENDIAN
-                        : ByteOrder.LITTLE_ENDIAN);
-                bandBufs.add(bandBuf);
-            }
+                int colBytes = destRegion.width * pixelSize;
+                byte[][] rowBuf = new byte[bandOffsets.length][colBytes];
 
-            nitf.ImageReader imageReader = getImageReader(imageIndex);
-            for (int srcY = 0; srcY < sourceRegion.height; srcY++)
-            {
-                if (sourceYSubsampling != 1 && (srcY % sourceYSubsampling) != 0)
-                    continue;
+                int dstMinX = imRas.getMinX();
+                int dstMaxX = dstMinX + imRas.getWidth() - 1;
+                int dstMinY = imRas.getMinY();
+                int dstMaxY = dstMinY + imRas.getHeight() - 1;
+                // int swap = 0;
 
-                window.setStartRow(sourceRegion.y + srcY);
+                // make a SubWindow from the params
+                // TODO may want to read by blocks or rows to make faster and
+                // more
+                // memory efficient
+                SubWindow window;
+                window = new SubWindow();
+                window.setNumBands(bandOffsets.length);
+                window.setBandList(bandOffsets);
+                window.setNumCols(destRegion.width);
+                window.setNumRows(1);
+                window.setStartCol(sourceRegion.x);
+                window.setStartRow(sourceRegion.y);
 
-                // Read the row
-                try
+                // the NITRO library can do the subsampling for us
+                if (sourceYSubsampling != 1 || sourceXSubsampling != 1)
                 {
-                    imageReader.read(window, rowBuf);
-                }
-                catch (NITFException e)
-                {
-                    throw new IIOException("Error reading line " + srcY, e);
-                }
-
-                // Determine where the row will go in the destination
-                int dstY = destinationOffset.y + srcY / sourceYSubsampling;
-                if (dstY < dstMinY)
-                {
-                    continue; // The row is above imRas
-                }
-                if (dstY > dstMaxY)
-                {
-                    break; // We're done with the image
+                    DownSampler downSampler = new PixelSkipDownSampler(
+                            sourceYSubsampling, sourceXSubsampling);
+                    window.setDownSampler(downSampler);
                 }
 
-                // Copy each (subsampled) source pixel into imRas
-                for (int srcX = 0, dstX = destinationOffset.x; srcX < colBytes; srcX += pixelSize, dstX++)
+                String pixelJustification = record.getImages()[imageIndex]
+                        .getSubheader().getPixelJustification().getStringData()
+                        .trim();
+                // swap = pixelJustification.equals("R") ? 1 : 0;
+
+                List<ByteBuffer> bandBufs = new ArrayList<ByteBuffer>();
+                for (int i = 0; i < bandOffsets.length; ++i)
                 {
-                    if (dstX < dstMinX)
-                    {
+                    ByteBuffer bandBuf = ByteBuffer.wrap(rowBuf[i]);
+                    // bandBuf.order(ByteOrder.nativeOrder());
+                    // bandBuf.order(swap == 0 ? ByteOrder.BIG_ENDIAN
+                    // : ByteOrder.LITTLE_ENDIAN);
+                    bandBufs.add(bandBuf);
+                }
+
+                nitf.ImageReader imageReader = getImageReader(imageIndex);
+                for (int srcY = 0; srcY < sourceRegion.height; srcY++)
+                {
+                    if (sourceYSubsampling != 1
+                            && (srcY % sourceYSubsampling) != 0)
                         continue;
-                    }
-                    if (dstX > dstMaxX)
+
+                    window.setStartRow(sourceRegion.y + srcY);
+
+                    // Read the row
+                    try
                     {
-                        break;
+                        imageReader.read(window, rowBuf);
+                    }
+                    catch (NITFException e)
+                    {
+                        throw new IIOException("Error reading line " + srcY, e);
                     }
 
-                    for (int i = 0; i < bandOffsets.length; ++i)
+                    // Determine where the row will go in the destination
+                    int dstY = destinationOffset.y + srcY / sourceYSubsampling;
+                    if (dstY < dstMinY)
                     {
-                        ByteBuffer bandBuf = bandBufs.get(i);
+                        continue; // The row is above imRas
+                    }
+                    if (dstY > dstMaxY)
+                    {
+                        break; // We're done with the image
+                    }
 
-                        switch (pixelSize)
+                    // Copy each (subsampled) source pixel into imRas
+                    for (int srcX = 0, dstX = destinationOffset.x; srcX < colBytes; srcX += pixelSize, dstX++)
+                    {
+                        if (dstX < dstMinX)
                         {
-                        case 1:
-                            imRas.setSample(dstX, dstY, i, bandBuf.get(srcX));
+                            continue;
+                        }
+                        if (dstX > dstMaxX)
+                        {
                             break;
-                        case 2:
-                            imRas.setSample(dstX, dstY, i, bandBuf
-                                    .getShort(srcX));
-                            break;
-                        case 4:
-                            imRas.setSample(dstX, dstY, i, bandBuf
-                                    .getFloat(srcX));
-                            break;
-                        case 8:
-                            imRas.setSample(dstX, dstY, i, bandBuf
-                                    .getDouble(srcX));
-                            break;
+                        }
+
+                        for (int i = 0; i < bandOffsets.length; ++i)
+                        {
+                            ByteBuffer bandBuf = bandBufs.get(i);
+
+                            switch (pixelSize)
+                            {
+                            case 1:
+                                imRas.setSample(dstX, dstY, i, bandBuf
+                                        .get(srcX));
+                                break;
+                            case 2:
+                                imRas.setSample(dstX, dstY, i, bandBuf
+                                        .getShort(srcX));
+                                break;
+                            case 4:
+                                imRas.setSample(dstX, dstY, i, bandBuf
+                                        .getFloat(srcX));
+                                break;
+                            case 8:
+                                imRas.setSample(dstX, dstY, i, bandBuf
+                                        .getDouble(srcX));
+                                break;
+                            }
                         }
                     }
                 }
@@ -709,6 +742,35 @@ public class NITFReader extends ImageReader
         readHeader();
         Raster raster = readRaster(imageIndex, param);
 
+        // get the requested number of destination bands (or 0 for all)
+        int numDestBands = param != null ? (param.getDestinationBands() != null ? param
+                .getDestinationBands().length
+                : param.getSourceBands() != null ? param.getSourceBands().length
+                        : 0)
+                : 0;
+
+        // try to find a good match for the specifier
+        ImageTypeSpecifier imageType = null, firstType = null;
+        Iterator<ImageTypeSpecifier> imageTypes = getImageTypes(imageIndex);
+        while (imageTypes.hasNext() && imageType == null)
+        {
+            ImageTypeSpecifier currentImageType = imageTypes.next();
+            if (firstType == null)
+                firstType = currentImageType;
+
+            if (currentImageType.getNumBands() == numDestBands)
+                imageType = currentImageType;
+        }
+
+        if (imageType == null)
+        {
+            if (firstType == null)
+                throw new IOException(
+                        "Unable to determine the ImageTypeSpecifier");
+            else
+                imageType = firstType;
+        }
+
         try
         {
             ImageSubheader subheader = record.getImages()[imageIndex]
@@ -720,8 +782,7 @@ public class NITFReader extends ImageReader
             if (nbpp == 8 || nbpp == 16 || (nbpp == 32 && pvType.equals("R"))
                     || (nbpp == 64 && pvType.equals("R")))
             {
-                return ImageIOUtils.rasterToBufferedImage(raster,
-                        getImageTypes(imageIndex).next());
+                return ImageIOUtils.rasterToBufferedImage(raster, imageType);
             }
         }
         catch (NITFException e)

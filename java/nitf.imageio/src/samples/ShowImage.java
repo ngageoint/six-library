@@ -100,10 +100,11 @@ public class ShowImage
                                     ImageReadParam readParam = imageReader
                                             .getDefaultReadParam();
                                     readParam.setSourceBands(new int[] { j });
-                                    BufferedImage image = imageReader.read(i);
+                                    BufferedImage image = imageReader.read(i,
+                                            readParam);
                                     ImageIOUtils.showImage(image, file
                                             .getName()
-                                            + "[" + i + "]");
+                                            + "[" + i + "][" + j + "]");
 
                                     // downsample
                                     // readParam.setSourceSubsampling(2, 2, 0,
@@ -120,7 +121,8 @@ public class ShowImage
                     }
                     catch (Exception e)
                     {
-                        log.debug(ExceptionUtils.getStackTrace(e));
+                        System.out.println(ExceptionUtils.getStackTrace(e));
+                        log.error(ExceptionUtils.getStackTrace(e));
                     }
                 }
             }
