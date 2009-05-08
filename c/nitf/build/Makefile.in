@@ -38,6 +38,7 @@ EXTLIBPATH = -L@top_srcdir@/lib/@target@
 CFGDEFS = @DEFS@
 SOURCES = BandInfo.c \
           BandSource.c \
+          ComplexityLevel.c \
           ComponentInfo.c \
           DataSource.c \
           Debug.c \

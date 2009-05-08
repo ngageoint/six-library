@@ -64,6 +64,9 @@ NITFPROT(void) nitf_Utils_baseName(char* base,
                                    const char* fullName, 
                                    const char* extension);
 
+
+
+
 NITF_CXX_ENDGUARD
 
 #endif
