@@ -23,11 +23,13 @@
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.spi.IIORegistry;
 
@@ -105,6 +107,10 @@ public class ShowImage
                                     ImageIOUtils.showImage(image, file
                                             .getName()
                                             + "[" + i + "][" + j + "]");
+
+                                    ImageIO.write(image, "jpg",
+                                            new FileOutputStream("image" + i
+                                                    + "_" + j + ".jpg"));
 
                                     // downsample
                                     // readParam.setSourceSubsampling(2, 2, 0,

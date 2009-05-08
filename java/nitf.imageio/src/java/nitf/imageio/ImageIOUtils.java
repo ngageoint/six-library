@@ -455,7 +455,9 @@ public class ImageIOUtils
     {
         int[] minMax = ImageIOUtils.findMinAndMax(shortData, pixelStride,
                 numBands);
-        double scale = 256.0 / (minMax[1] - minMax[0]);
+        double scale = 1.0;
+        if (minMax[1] != minMax[0])
+            scale = 256.0 / (minMax[1] - minMax[0]);
         for (int i = 0, j = 0; i < shortData.length; i += numBands, j++)
         {
             int value = (shortData[i] & 0xffff) - minMax[0];
@@ -497,11 +499,11 @@ public class ImageIOUtils
                 && bufImage.getRaster().getDataBuffer().getDataType() == DataBuffer.TYPE_BYTE)
         {
             // convert short pixels to bytes
-            short[] floatData = ((DataBufferUShort) raster.getDataBuffer())
+            short[] shortData = ((DataBufferUShort) raster.getDataBuffer())
                     .getData();
             byte[] byteData = ((DataBufferByte) bufImage.getWritableTile(0, 0)
                     .getDataBuffer()).getData();
-            ImageIOUtils.shortToByteBuffer(floatData, byteData, 1, raster
+            ImageIOUtils.shortToByteBuffer(shortData, byteData, 1, raster
                     .getNumBands());
         }
         else if (raster.getDataBuffer().getDataType() == DataBuffer.TYPE_FLOAT
