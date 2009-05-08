@@ -342,13 +342,17 @@ public class ImageIOUtils
      * @return
      */
     public static WritableRaster makeGenericBandedWritableRaster(int numElems,
-            int numLines, int[] bandOffsets, int dataType)
+            int numLines, int numBands, int dataType)
     {
+        int[] bandOffsets = new int[numBands];
+        for (int i = 0; i < numBands; ++i)
+            bandOffsets[i] = i;
+
         DataBuffer d = null;
         if (dataType == DataBuffer.TYPE_BYTE)
-            d = new DataBufferByte(numElems * numLines * bandOffsets.length);
+            d = new DataBufferByte(numElems * numLines * numBands);
         else if (dataType == DataBuffer.TYPE_FLOAT)
-            d = new DataBufferFloat(numElems * numLines * bandOffsets.length);
+            d = new DataBufferFloat(numElems * numLines * numBands);
         else
             throw new IllegalArgumentException("Invalid datatype: " + dataType);
 
@@ -369,19 +373,23 @@ public class ImageIOUtils
      * @return
      */
     public static WritableRaster makeGenericPixelInterleavedWritableRaster(
-            int numElems, int numLines, int[] bandOffsets, int dataType)
+            int numElems, int numLines, int numBands, int dataType)
     {
+        int[] bandOffsets = new int[numBands];
+        for (int i = 0; i < numBands; ++i)
+            bandOffsets[i] = i;
+
         DataBuffer d = null;
         if (dataType == DataBuffer.TYPE_BYTE)
-            d = new DataBufferByte(numElems * numLines * bandOffsets.length);
+            d = new DataBufferByte(numElems * numLines * numBands);
         else if (dataType == DataBuffer.TYPE_SHORT)
-            d = new DataBufferShort(numElems * numLines * bandOffsets.length);
+            d = new DataBufferShort(numElems * numLines * numBands);
         else if (dataType == DataBuffer.TYPE_USHORT)
-            d = new DataBufferUShort(numElems * numLines * bandOffsets.length);
+            d = new DataBufferUShort(numElems * numLines * numBands);
         else if (dataType == DataBuffer.TYPE_FLOAT)
-            d = new DataBufferFloat(numElems * numLines * bandOffsets.length);
+            d = new DataBufferFloat(numElems * numLines * numBands);
         else if (dataType == DataBuffer.TYPE_DOUBLE)
-            d = new DataBufferDouble(numElems * numLines * bandOffsets.length);
+            d = new DataBufferDouble(numElems * numLines * numBands);
         else
             throw new IllegalArgumentException("Invalid datatype: " + dataType);
 

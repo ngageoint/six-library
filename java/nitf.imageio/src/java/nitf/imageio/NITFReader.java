@@ -338,8 +338,8 @@ public class NITFReader extends ImageReader
         {
             WritableRaster byteRas = ImageIOUtils
                     .makeGenericPixelInterleavedWritableRaster(
-                            destRegion.width, destRegion.height, bandOffsets,
-                            DataBuffer.TYPE_BYTE);
+                            destRegion.width, destRegion.height,
+                            bandOffsets.length, DataBuffer.TYPE_BYTE);
             checkReadParamBandSettings(param, bandCount, byteRas
                     .getSampleModel().getNumBands());
             readRaster(imageIndex, sourceRegion, destRegion,
@@ -352,8 +352,8 @@ public class NITFReader extends ImageReader
         {
             WritableRaster ras = ImageIOUtils
                     .makeGenericPixelInterleavedWritableRaster(
-                            destRegion.width, destRegion.height, bandOffsets,
-                            DataBuffer.TYPE_USHORT);
+                            destRegion.width, destRegion.height,
+                            bandOffsets.length, DataBuffer.TYPE_USHORT);
             checkReadParamBandSettings(param, bandCount, ras.getSampleModel()
                     .getNumBands());
             readRaster(imageIndex, sourceRegion, destRegion,
@@ -366,8 +366,8 @@ public class NITFReader extends ImageReader
         {
             WritableRaster ras = ImageIOUtils
                     .makeGenericPixelInterleavedWritableRaster(
-                            destRegion.width, destRegion.height, bandOffsets,
-                            DataBuffer.TYPE_FLOAT);
+                            destRegion.width, destRegion.height,
+                            bandOffsets.length, DataBuffer.TYPE_FLOAT);
             checkReadParamBandSettings(param, bandCount, ras.getSampleModel()
                     .getNumBands());
             readRaster(imageIndex, sourceRegion, destRegion,
@@ -380,8 +380,8 @@ public class NITFReader extends ImageReader
         {
             WritableRaster ras = ImageIOUtils
                     .makeGenericPixelInterleavedWritableRaster(
-                            destRegion.width, destRegion.height, bandOffsets,
-                            DataBuffer.TYPE_DOUBLE);
+                            destRegion.width, destRegion.height,
+                            bandOffsets.length, DataBuffer.TYPE_DOUBLE);
             checkReadParamBandSettings(param, bandCount, ras.getSampleModel()
                     .getNumBands());
             readRaster(imageIndex, sourceRegion, destRegion,
@@ -613,9 +613,7 @@ public class NITFReader extends ImageReader
             // the general purpose case
             else
             {
-
                 int colBytes = destRegion.width * pixelSize;
-                byte[][] rowBuf = new byte[bandOffsets.length][colBytes];
 
                 int dstMinX = imRas.getMinX();
                 int dstMaxX = dstMinX + imRas.getWidth() - 1;
@@ -623,14 +621,37 @@ public class NITFReader extends ImageReader
                 int dstMaxY = dstMinY + imRas.getHeight() - 1;
                 // int swap = 0;
 
+                int nBands = subheader.getBandCount();
+
+                /*
+                 * NOTE: This is a "fix" that will be removed once the
+                 * underlying NITRO library gets patched. Currently, if you make
+                 * a request of a single band, it doesn't matter which band you
+                 * request - the data from the first band will be returned
+                 * regardless. This is obviously wrong. To thwart this, we will
+                 * read all bands, then scale down what we return to the user
+                 * based on their actual request.
+                 */
+
+                int[] requestBands = bandOffsets;
+                if (nBands != bandOffsets.length && bandOffsets.length == 1
+                        && bandOffsets[0] != 0)
+                {
+                    requestBands = new int[nBands];
+                    for (int i = 0; i < nBands; ++i)
+                        requestBands[i] = i;
+                }
+
+                byte[][] rowBuf = new byte[requestBands.length][colBytes];
+
                 // make a SubWindow from the params
                 // TODO may want to read by blocks or rows to make faster and
                 // more
                 // memory efficient
                 SubWindow window;
                 window = new SubWindow();
-                window.setNumBands(bandOffsets.length);
-                window.setBandList(bandOffsets);
+                window.setNumBands(requestBands.length);
+                window.setBandList(requestBands);
                 window.setNumCols(destRegion.width);
                 window.setNumRows(1);
                 window.setStartCol(sourceRegion.x);
@@ -644,15 +665,25 @@ public class NITFReader extends ImageReader
                     window.setDownSampler(downSampler);
                 }
 
-                String pixelJustification = record.getImages()[imageIndex]
-                        .getSubheader().getPixelJustification().getStringData()
-                        .trim();
+                // String pixelJustification = record.getImages()[imageIndex]
+                // .getSubheader().getPixelJustification().getStringData()
+                // .trim();
                 // swap = pixelJustification.equals("R") ? 1 : 0;
 
                 List<ByteBuffer> bandBufs = new ArrayList<ByteBuffer>();
                 for (int i = 0; i < bandOffsets.length; ++i)
                 {
-                    ByteBuffer bandBuf = ByteBuffer.wrap(rowBuf[i]);
+                    ByteBuffer bandBuf = null;
+
+                    // the special "fix" we added needs to do this
+                    if (bandOffsets.length != requestBands.length)
+                    {
+                        bandBuf = ByteBuffer.wrap(rowBuf[bandOffsets[i]]);
+                    }
+                    else
+                    {
+                        bandBuf = ByteBuffer.wrap(rowBuf[i]);
+                    }
                     // bandBuf.order(ByteOrder.nativeOrder());
                     // bandBuf.order(swap == 0 ? ByteOrder.BIG_ENDIAN
                     // : ByteOrder.LITTLE_ENDIAN);
