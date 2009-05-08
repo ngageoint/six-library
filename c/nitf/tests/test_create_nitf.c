@@ -986,14 +986,8 @@ NITF_BOOL populateFileHeader(nitf_Record *record, const char* title,
     /* the file header is already created, so just grab it */
     nitf_FileHeader *header = record->header;
 
-    /* populate some fields */
-    if (!nitf_Field_setString(header->fileHeader, "NITF", error))
-        goto CATCH_ERROR;
-    if (!nitf_Field_setString(header->fileVersion, "02.10", error))
-        goto CATCH_ERROR;
+    
     if (!nitf_Field_setUint32(header->complianceLevel, 3, error))
-        goto CATCH_ERROR;
-    if (!nitf_Field_setString(header->systemType, "BF01", error))
         goto CATCH_ERROR;
     if (!nitf_Field_setString(header->originStationID, "SF.net", error))
         goto CATCH_ERROR;
@@ -1001,10 +995,6 @@ NITF_BOOL populateFileHeader(nitf_Record *record, const char* title,
     if (!nitf_Field_setString(header->fileDateTime, "20080812000000", error))
         goto CATCH_ERROR;
     if (!nitf_Field_setString(header->fileTitle, title, error))
-        goto CATCH_ERROR;
-    if (!nitf_Field_setString(header->classification, "U", error))
-        goto CATCH_ERROR;
-    if (!nitf_Field_setUint32(header->encrypted, 0, error))
         goto CATCH_ERROR;
 
     return NITF_SUCCESS;
@@ -1029,16 +1019,10 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
     header = segment->subheader;
 
     /* populate some fields */
-    if (!nitf_Field_setString(header->filePartType, "IM", error))
-        goto CATCH_ERROR;
     if (!nitf_Field_setString(header->imageId, "NITRO-TEST", error))
         goto CATCH_ERROR;
     /* fake the date */
     if (!nitf_Field_setString(header->imageDateAndTime, "20080812000000", error))
-        goto CATCH_ERROR;
-    if (!nitf_Field_setString(header->imageSecurityClass, "U", error))
-        goto CATCH_ERROR;
-    if (!nitf_Field_setUint32(header->encrypted, 0, error))
         goto CATCH_ERROR;
 
     /* create a BandInfo buffer */
@@ -1087,10 +1071,6 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
                                                 0, error) < 0)
         goto CATCH_ERROR;
 
-    /* uncompressed image */
-    if (!nitf_Field_setString(header->imageCompression, "NC", error))
-        goto CATCH_ERROR;
-
     /* set the blocking info */
     if (!nitf_ImageSubheader_setBlocking(header,
                                          NITRO_IMAGE.height, /*!< The number of rows */
@@ -1101,15 +1081,6 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
                                          error))
         goto CATCH_ERROR;
 
-
-    if (!nitf_Field_setString(header->imageMagnification, "1.00", error))
-        goto CATCH_ERROR;
-    if (!nitf_Field_setUint32(header->imageDisplayLevel, 1, error))
-        goto CATCH_ERROR;
-    if (!nitf_Field_setUint32(header->imageAttachmentLevel, 0, error))
-        goto CATCH_ERROR;
-    if (!nitf_Field_setUint32(header->imageLocation, 0, error))
-        goto CATCH_ERROR;
 
     return NITF_SUCCESS;
 

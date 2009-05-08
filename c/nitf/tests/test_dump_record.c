@@ -34,12 +34,11 @@
  *  a value).
  */
 #define SHOW(X) printf("%s=[%s]\n", #X, ((X==0)?"(nul)":X))
-#define SHOWI(X) printf("%s=[%ld]\n", #X, X)
-#define SHOWLL(X) printf("%s=[%lld]\n", #X, X)
+#define SHOW_I(X) printf("%s=[%ld]\n", #X, X)
+#define SHOW_LL(X) printf("%s=[%lld]\n", #X, X)
 
-#define SHOWRGB(X) \
-    printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, (unsigned char) X[0], \
-                         (unsigned char) X[1], (unsigned char) X[2])
+#define SHOW_RGB(X) \
+    printf("%s(R,G,B)=[0x%x,0x%x,0x%x]\n", #X, (short)(X->raw[0]), (short)(X->raw[1]), (short)(X->raw[2]))
 
 #define SHOW_VAL(X) \
     printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:X->length)), \
@@ -178,7 +177,7 @@ void showFileHeader(nitf_FileHeader * header)
     SHOW_VAL(header->messageCopyNum);
     SHOW_VAL(header->messageNumCopies);
     SHOW_VAL(header->encrypted);
-    SHOW_VAL(header->backgroundColor);
+    SHOW_RGB(header->backgroundColor);
     SHOW_VAL(header->originatorName);
     SHOW_VAL(header->originatorPhone);
     SHOW_VAL(header->fileLength);
@@ -531,8 +530,8 @@ void showLabelSubheader(nitf_LabelSubheader * sub)
     SHOW_VAL(sub->attachmentLevel);
     SHOW_VAL(sub->locationRow);
     SHOW_VAL(sub->locationColumn);
-    SHOWRGB(sub->textColor->raw);
-    SHOWRGB(sub->backgroundColor->raw);
+    SHOW_RGB(sub->textColor);
+    SHOW_RGB(sub->backgroundColor);
     SHOW_VAL(sub->extendedHeaderLength);
     SHOW_VAL(sub->extendedHeaderOverflow);
     if (sub->extendedSection)
@@ -632,7 +631,7 @@ void showDESubheader(nitf_DESubheader * sub)
     if (sub->subheaderFields)
         printTRE(sub->subheaderFields);
 
-    SHOWI((long)sub->dataLength);
+    SHOW_I((long)sub->dataLength);
 
     /*
      *  NITRO only populates this object if the DESDATA contains
@@ -663,7 +662,7 @@ void showRESubheader(nitf_RESubheader * sub)
         showSecurityGroup(sub->securityGroup);
 
     SHOW_VAL(sub->subheaderFieldsLength);
-    SHOWI((long)sub->dataLength);
+    SHOW_I((long)sub->dataLength);
 }
 
 int main(int argc, char **argv)
@@ -689,7 +688,7 @@ int main(int argc, char **argv)
     /*  You should use this function to test that you have a valid NITF */
     if (nitf_Reader_getNITFVersion( argv[1] ) == NITF_VER_UNKNOWN)
     {
-        printf("This file does not appear to be a valid NITF");
+        printf("This file does not appear to be a valid NITF\n");
         exit(EXIT_FAILURE);
     }
         
