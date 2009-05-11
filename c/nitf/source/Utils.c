@@ -394,13 +394,13 @@ NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
 NITFPROT(void) nitf_Utils_decimalLatToCharArray(double decimal,
                                                 char *buffer7)
 {
-    sprintf(buffer7, "%+-2.3f", decimal);
+    sprintf(buffer7, "%+07.3f", decimal);
 }
 
 NITFPROT(void) nitf_Utils_decimalLonToCharArray(double decimal,
-                                               char *buffer8)
+                                                char *buffer8)
 {
-    sprintf(buffer8, "%+-3.3f", decimal);
+    sprintf(buffer8, "%+08.3f", decimal);
 }
 
 NITFPROT(void) nitf_Utils_decimalLatToGeoCharArray(double decimal,

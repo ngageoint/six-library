@@ -272,6 +272,155 @@ CATCH_ERROR:
 
 }
 
+NITFAPI(nitf_CornersType)
+nitf_ImageSubheader_getCornersType(nitf_ImageSubheader* subheader)
+{
+    nitf_CornersType type = NITF_CORNERS_UNKNOWN;
+    switch (subheader->NITF_ICORDS->raw[0])
+    {
+    case 'U':
+        type = NITF_CORNERS_UTM;
+        break;
+
+    case 'N':
+        type = NITF_CORNERS_UTM_UPS_N;
+        break;
+
+    case 'S':
+        type = NITF_CORNERS_UTM_UPS_S;
+        break;
+
+    case 'D':
+        type = NITF_CORNERS_DECIMAL;
+        break;
+
+    case 'G':
+        type = NITF_CORNERS_GEO;
+        break;
+        
+    }
+    return type;
+}
+
+NITFAPI(NITF_BOOL) 
+nitf_ImageSubheader_setCornersFromLatLons(nitf_ImageSubheader* subheader,
+                                          nitf_CornersType type,
+                                          double corners[4][2],
+                                          nitf_Error* error)
+{
+    
+    char cornerRep = nitf_Utils_cornersTypeAsCoordRep(type);
+    char *igeolo = subheader->NITF_IGEOLO->raw;
+    unsigned int i = 0;
+    unsigned int where = 0;
+    
+    if (type == NITF_CORNERS_GEO)
+    {
+       
+        for (; i < 4; i++)
+        {
+            nitf_Utils_decimalLatToGeoCharArray(corners[i][0], &igeolo[where]);
+            where += 7;
+            nitf_Utils_decimalLonToGeoCharArray(corners[i][1], &igeolo[where]);
+            where += 8;
+        }
+
+    }
+    else if (type == NITF_CORNERS_DECIMAL)
+    {
+        for (; i < 4; i++)
+        {
+            nitf_Utils_decimalLatToCharArray(corners[i][0], &igeolo[where]);
+            where += 7;
+            nitf_Utils_decimalLonToCharArray(corners[i][1], &igeolo[where]);
+            where += 8;
+        }
+    }
+    else
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                         "Can only support IGEOLO 'D' or 'G' for this operation.  Found %c",
+                         cornerRep);
+        return NITF_FAILURE;
+    }
+
+
+    /* Go ahead and set ICORDS */
+    subheader->NITF_ICORDS->raw[0] = cornerRep;
+    return NITF_SUCCESS;
+
+}
+
+
+NITFAPI(NITF_BOOL) 
+nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
+                                        double corners[4][2],
+                                        nitf_Error *error)
+{
+    nitf_CornersType type = nitf_ImageSubheader_getCornersType(subheader);
+    char *igeolo = subheader->NITF_IGEOLO->raw;
+    unsigned int i = 0;
+    unsigned int where = 0;
+
+    if (type == NITF_CORNERS_GEO)
+    {
+       
+        for (; i < 4; i++)
+        {
+            int d, m, s;
+            char lat[8];
+            char lon[9];
+            lat[7] = 0;
+            lon[8] = 0;
+            memcpy(lat, &igeolo[where], 7);
+            where += 7;
+            if (!nitf_Utils_parseGeographicString(lat, &d, &m, &s, error))
+                return NITF_FAILURE;
+
+            corners[i][0] = nitf_Utils_geographicToDecimal(d, m, s);
+
+            memcpy(lat, &igeolo[where], 8);
+            where += 8;
+
+            if (!nitf_Utils_parseGeographicString(lon, &d, &m, &s, error))
+                return NITF_FAILURE;
+
+            corners[i][1] = nitf_Utils_geographicToDecimal(d, m, s);
+
+            /* Now I need to get them as decimal */
+        }
+
+    }
+    else if (type == NITF_CORNERS_DECIMAL)
+    {
+        for (; i < 4; i++)
+        {
+            char lat[8];
+            char lon[9];
+            lat[7] = 0;
+            lon[8] = 0;
+            memcpy(lat, &igeolo[where], 7);
+            where += 7;
+            if (!nitf_Utils_parseDecimalString(lat, &(corners[i][0]), error))
+                return NITF_FAILURE;
+
+            memcpy(lat, &igeolo[where], 8);
+            where += 8;
+
+            if (!nitf_Utils_parseDecimalString(lon, &(corners[i][1]), error))
+                return NITF_FAILURE;
+            
+        }
+    }
+    else
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                         "Can only support IGEOLO 'D' or 'G' for this operation.  Found %c",
+                         subheader->NITF_ICORDS->raw[0]);
+        return NITF_FAILURE;
+    }
+    return NITF_SUCCESS;
+}
 
 NITFAPI(void) nitf_ImageSubheader_destruct(nitf_ImageSubheader ** subhdr)
 {
