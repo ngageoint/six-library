@@ -205,7 +205,7 @@ NITFPROT(void) nitf_Utils_baseName(char *base,
 NITFAPI(void) nitf_Utils_decimalToGeographic(double decimal,
                                              int *degrees,
                                              int *minutes,
-                                             int *seconds)
+                                             double *seconds)
 {
     double remainder;
     *degrees = (int)decimal;
@@ -217,11 +217,11 @@ NITFAPI(void) nitf_Utils_decimalToGeographic(double decimal,
 
 NITFAPI(double) nitf_Utils_geographicToDecimal(int degrees,
                                                int minutes,
-                                               int seconds)
+                                               double seconds)
 {
-    double decimal = degrees;
+    double decimal = fabs(degrees);
     decimal += ((double)minutes/60.0);
-    decimal += ((double)seconds/3600.0);
+    decimal += (seconds/3600.0);
 
     if (degrees < 0)
     {
@@ -234,7 +234,7 @@ NITFAPI(double) nitf_Utils_geographicToDecimal(int degrees,
 NITFAPI(NITF_BOOL) nitf_Utils_parseGeographicString(char* dms,
                                                     int* degrees,
                                                     int* minutes,
-                                                    int* seconds,
+                                                    double* seconds,
                                                     nitf_Error* error)
 {
     int degreeOffset = 0;
@@ -286,7 +286,7 @@ NITFAPI(NITF_BOOL) nitf_Utils_parseGeographicString(char* dms,
     
     *degrees = NITF_ATO32(d);
     *minutes = NITF_ATO32(m);
-    *seconds = NITF_ATO32(s);
+    *seconds = (double)NITF_ATO32(s);
 
     if ((degreeOffset == 2 && dir == 'S') ||
         (degreeOffset == 3 && dir == 'W'))
@@ -355,7 +355,7 @@ NITFAPI(char) nitf_Utils_cornersTypeAsCoordRep(nitf_CornersType type)
         break;
 
     case NITF_CORNERS_DECIMAL:
-        cornerRep = 'G';
+        cornerRep = 'D';
         break;
     default:
         break;
@@ -365,7 +365,7 @@ NITFAPI(char) nitf_Utils_cornersTypeAsCoordRep(nitf_CornersType type)
 
 NITFPROT(void) nitf_Utils_geographicLatToCharArray(int degrees,
                                                    int minutes,
-                                                   int seconds,
+                                                   double seconds,
                                                    char *buffer7)
 {
     char dir = 'N';
@@ -374,12 +374,12 @@ NITFPROT(void) nitf_Utils_geographicLatToCharArray(int degrees,
         dir = 'S';
         degrees *= -1;
     }
-    sprintf(buffer7, "%02d%02d%02d%c", degrees, minutes, seconds, dir);
+    sprintf(buffer7, "%02d%02d%02d%c", degrees, minutes, (int)seconds, dir);
 }
 
 NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
                                                    int minutes,
-                                                   int seconds, 
+                                                   double seconds, 
                                                    char *buffer8)
 {
     char dir = 'E';
@@ -387,7 +387,7 @@ NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
     {
         dir = 'E';
     }
-    sprintf(buffer8, "%03d%02d%02d%c", degrees, minutes, seconds, dir);
+    sprintf(buffer8, "%03d%02d%02d%c", degrees, minutes, (int)seconds, dir);
 
 }
 
@@ -406,7 +406,8 @@ NITFPROT(void) nitf_Utils_decimalLonToCharArray(double decimal,
 NITFPROT(void) nitf_Utils_decimalLatToGeoCharArray(double decimal,
                                                    char *buffer7)
 {
-    int d, m, s;
+    int d, m;
+    double s;
     
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
     nitf_Utils_geographicLatToCharArray(d, m, s, buffer7);
@@ -416,7 +417,8 @@ NITFPROT(void) nitf_Utils_decimalLonToGeoCharArray(double decimal,
                                                   char *buffer8)
 {
 
-    int d, m, s;
+    int d, m;
+    double s;
     
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
     nitf_Utils_geographicLonToCharArray(d, m, s, buffer8);
