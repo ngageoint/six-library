@@ -367,7 +367,8 @@ nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
        
         for (; i < 4; i++)
         {
-            int d, m, s;
+            int d, m;
+            double s;
             char lat[8];
             char lon[9];
             lat[7] = 0;
@@ -379,7 +380,7 @@ nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
 
             corners[i][0] = nitf_Utils_geographicToDecimal(d, m, s);
 
-            memcpy(lat, &igeolo[where], 8);
+            memcpy(lon, &igeolo[where], 8);
             where += 8;
 
             if (!nitf_Utils_parseGeographicString(lon, &d, &m, &s, error))
@@ -404,7 +405,7 @@ nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
             if (!nitf_Utils_parseDecimalString(lat, &(corners[i][0]), error))
                 return NITF_FAILURE;
 
-            memcpy(lat, &igeolo[where], 8);
+            memcpy(lon, &igeolo[where], 8);
             where += 8;
 
             if (!nitf_Utils_parseDecimalString(lon, &(corners[i][1]), error))

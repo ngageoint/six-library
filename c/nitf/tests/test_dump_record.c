@@ -368,7 +368,7 @@ void showImageSubheader(nitf_ImageSubheader * sub)
     nitf_Error error;
     int ncomments;
     nitf_ListIterator iter, end;
-
+    nitf_CornersType cornersType;
     assert( sub );
 
     if (!nitf_Field_get(sub->numImageComments,
@@ -399,6 +399,30 @@ void showImageSubheader(nitf_ImageSubheader * sub)
     SHOW_VAL(sub->pixelJustification);
     SHOW_VAL(sub->imageCoordinateSystem);
     SHOW_VAL(sub->cornerCoordinates);
+    
+    cornersType = nitf_ImageSubheader_getCornersType(sub);
+
+    if (cornersType == NITF_CORNERS_GEO ||
+        cornersType == NITF_CORNERS_DECIMAL)
+    {
+        double corners[4][2];
+
+        if (!nitf_ImageSubheader_getCornersAsLatLons(sub, corners, &error))
+        {
+            nitf_Error_print(&error, stdout, "Warning: Corners appear to be invalid!");
+        }
+        else
+        {
+            printf("(0,0): (%f, %f)\n", corners[0][0], corners[0][1]);
+            printf("(0,C): (%f, %f)\n", corners[1][0], corners[1][1]);
+            printf("(R,C): (%f, %f)\n", corners[2][0], corners[2][1]);
+            printf("(R,0): (%f, %f)\n", corners[3][0], corners[3][1]);
+
+        }
+        
+    }
+
+
 
     SHOW_VAL(sub->numImageComments);
 

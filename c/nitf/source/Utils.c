@@ -316,7 +316,7 @@ NITFAPI(NITF_BOOL) nitf_Utils_parseDecimalString(char* d,
     else
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Invalid decimal string: %s. Should be +-dd.ddd or +-ddd.ddd",
+                         "Invalid decimal string: '%s'. Should be +-dd.ddd or +-ddd.ddd",
                          d);
         return NITF_FAILURE;
     }
