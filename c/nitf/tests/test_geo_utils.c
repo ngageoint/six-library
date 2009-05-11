@@ -11,7 +11,8 @@ int main(int argc, char**argv)
 
     /* Try geographic stuff */
     char ll[10];
-    int d, m, s;
+    int d, m;
+    double s;
     double decimal;
     nitf_Error e;
     if (!nitf_Utils_parseGeographicString(DMS_LAT_STR, &d, &m, &s, &e))
@@ -21,7 +22,7 @@ int main(int argc, char**argv)
     }
     decimal = nitf_Utils_geographicToDecimal(d, m, s);
     printf("DMS: [%s]\n", DMS_LAT_STR);
-    printf("\tSeparated: %d %d %d\n", d, m, s);
+    printf("\tSeparated: %d %d %f\n", d, m, s);
     nitf_Utils_geographicLatToCharArray(d, m, s, ll);
     printf("\tRe-formatted: [%s]\n", ll);
 
@@ -31,7 +32,7 @@ int main(int argc, char**argv)
 
     /* Now convert it back */
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
-    printf("\tRound trip: %d %d %d\n", d, m, s);
+    printf("\tRound trip: %d %d %f\n", d, m, s);
 
 
 
@@ -43,7 +44,7 @@ int main(int argc, char**argv)
     }
     decimal = nitf_Utils_geographicToDecimal(d, m, s);
     printf("DMS: [%s]\n", DMS_LON_STR);
-    printf("\tSeparated: %d %d %d\n", d, m, s);
+    printf("\tSeparated: %d %d %f\n", d, m, s);
     nitf_Utils_geographicLonToCharArray(d, m, s, ll);
     printf("\tRe-formatted: [%s]\n", ll);
     printf("\tAs decimal: %f\n", decimal);
@@ -52,7 +53,7 @@ int main(int argc, char**argv)
 
     /* Now convert it back */
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
-    printf("\tRound trip: %d %d %d\n", d, m, s);
+    printf("\tRound trip: %d %d %f\n", d, m, s);
 
     
 
