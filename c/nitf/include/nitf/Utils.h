@@ -80,7 +80,7 @@ NITFPROT(void) nitf_Utils_baseName(char* base,
 NITFAPI(void) nitf_Utils_decimalToGeographic(double decimal,
                                              int *degrees,
                                              int *minutes,
-                                             int *seconds);
+                                             double *seconds);
 
 /*!
  *  Convert the geographic coordinates (i.e., DMS) into decimal
@@ -92,7 +92,7 @@ NITFAPI(void) nitf_Utils_decimalToGeographic(double decimal,
  */
 NITFAPI(double) nitf_Utils_geographicToDecimal(int degrees,
                                                int minutes,
-                                               int seconds);
+                                               double seconds);
 
 /*!
  *  Take in a degree of DMS format and convert it into integers
@@ -111,7 +111,7 @@ NITFAPI(double) nitf_Utils_geographicToDecimal(int degrees,
 NITFAPI(NITF_BOOL) nitf_Utils_parseGeographicString(char* dms,
                                                     int* degrees,
                                                     int* minutes,
-                                                    int* seconds,
+                                                    double* seconds,
                                                     nitf_Error* error);
 
 /*!
@@ -121,7 +121,7 @@ NITFAPI(NITF_BOOL) nitf_Utils_parseGeographicString(char* dms,
  */
 NITFPROT(void) nitf_Utils_geographicLatToCharArray(int degrees,
                                                    int minutes,
-                                                   int seconds,
+                                                   double seconds,
                                                    char *buffer7);
 
 /*!
@@ -131,7 +131,7 @@ NITFPROT(void) nitf_Utils_geographicLatToCharArray(int degrees,
  */
 NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
                                                    int minutes,
-                                                   int seconds, 
+                                                   double seconds, 
                                                    char *buffer8);
                    
 /*!
