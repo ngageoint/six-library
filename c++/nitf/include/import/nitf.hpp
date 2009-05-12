@@ -70,6 +70,7 @@
 #include "nitf/TRE.hpp"
 #include "nitf/TextSegment.hpp"
 #include "nitf/TextSubheader.hpp"
+#include "nitf/Utils.hpp"
 #include "nitf/WriteHandler.hpp"
 #include "nitf/Writer.hpp"
 
