@@ -38,8 +38,8 @@ typedef nitf_WriteHandler nitf_ImageWriter;
  * Constructs a new ImageWriter, using the passed-in subheader as the basis
  * for the values.
  */
-NITFAPI(nitf_ImageWriter*) nitf_ImageWriter_construct(
-        nitf_ImageSubheader *subheader, nitf_Error * error);
+NITFAPI(nitf_ImageWriter*) 
+nitf_ImageWriter_construct(nitf_ImageSubheader *subheader, nitf_Error * error);
 
 
 /*!
@@ -48,30 +48,48 @@ NITFAPI(nitf_ImageWriter*) nitf_ImageWriter_construct(
  * it when the ImageWriter is destructed.
  */
 NITFAPI(NITF_BOOL) nitf_ImageWriter_attachSource(nitf_ImageWriter * writer,
-        nitf_ImageSource *imageSource, nitf_Error * error);
+                                                 nitf_ImageSource *imageSource,
+                                                 nitf_Error * error);
 
 
 /*!
-  \brief nitf_ImageWriter_setWriteCaching - Enable/disable cached writes
-
-  nitf_ImageWriter_setWriteCaching enables/disables cached writes. Enabling
-  cached writes causes the system to accumulate full blocks of data prior to
-  writing. This is more efficent in terms of writing but requires more memory.
-
-  For blocking modes, R, P, and B blocking modes, one block sized buffer is
-  required for each block column (number of blocks/row). For S mode one
-  block is required for each band for each block column, however for the
-  same iamge dimensions, pixel size and number of bands it amount to the
-  same storage since the blocks of the S mode image are smaller (each
-  contains only one band of data)
-
-  \return Returns the current enable/disable state
-*/
+ * \brief nitf_ImageWriter_setWriteCaching - Enable/disable cached writes
+ *
+ * nitf_ImageWriter_setWriteCaching enables/disables cached writes. Enabling
+ * cached writes causes the system to accumulate full blocks of data prior to
+ * writing. This is more efficent in terms of writing but requires more memory.
+ * 
+ * For blocking modes, R, P, and B blocking modes, one block sized buffer is
+ * required for each block column (number of blocks/row). For S mode one
+ * block is required for each band for each block column, however for the
+ * same iamge dimensions, pixel size and number of bands it amount to the
+ * same storage since the blocks of the S mode image are smaller (each
+ * contains only one band of data)
+ *
+ * \return Returns the current enable/disable state
+ */
 NITFPROT(int) nitf_ImageWriter_setWriteCaching
 (
     nitf_ImageWriter * iWriter,     /*!< Object to modify */
     int enable                      /*!< Enable cached writes if true */
 );
+
+
+/*!
+ * This offers an alternative to attaching a typical band source.  In
+ * this case, we attach an image source with only one band source attached.
+ * 
+ * The data should be written as one pixel, where each band is byte swapped
+ * where necessary.
+ *
+ * This behavior is only supported when the data is band interleaved by
+ * pixel
+ */
+NITFAPI(int) 
+nitf_ImageWriter_attachInterleavedSource(nitf_ImageWriter * writer,
+                                         nitf_ImageSource *imageSource, 
+                                         nitf_Error * error);
+                   
 
 NITF_CXX_ENDGUARD
 

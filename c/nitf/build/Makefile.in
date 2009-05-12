@@ -126,7 +126,7 @@ UNIT_TEST_MAIN = check_all.c
 UNIT_TESTS = check_list.c check_field.c
 
 
-APPS = getNITFVersion.c
+APPS = get_nitf_version.c
 
 #TEST_DES.c
 PLUGINS = \

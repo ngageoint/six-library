@@ -273,6 +273,7 @@ NITFAPI(void) nitf_Tree_destruct(nitf_Tree** tree)
     {
         nitf_TreeNode* root = (*tree)->root;
         nitf_TreeNode_destruct( &root );
+        NITF_FREE( *tree );
         *tree = NULL;
     }
 
