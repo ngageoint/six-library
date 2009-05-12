@@ -148,7 +148,7 @@ NITFAPI(NITF_BOOL) nitf_Utils_isAlpha(char *str)
     return 1;
 }
 
-NITFPROT(void) nitf_Utils_trimString(char *str)
+NITFAPI(void) nitf_Utils_trimString(char *str)
 {
     nitf_Uint32 len;            /* Length of the string */
     char *strp;                 /* Pointer into the string */
@@ -183,9 +183,9 @@ NITFPROT(void) nitf_Utils_replace(char* str, char oldValue, char newValue)
 
 }
 
-NITFPROT(void) nitf_Utils_baseName(char *base,
-                                   const char* fullName,
-                                   const char* extension)
+NITFAPI(void) nitf_Utils_baseName(char *base,
+                                  const char* fullName,
+                                  const char* extension)
 {
     int i, begin = 0;
     int end = strlen(fullName);

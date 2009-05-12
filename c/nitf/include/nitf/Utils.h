@@ -43,7 +43,7 @@ NITFAPI(NITF_BOOL) nitf_Utils_isNumeric(char *str);
 
 NITFAPI(NITF_BOOL) nitf_Utils_isAlpha(char *str);
 
-NITFPROT(void) nitf_Utils_trimString(char* str);
+NITFAPI(void) nitf_Utils_trimString(char* str);
 
 /*!
  *  Replace the oldValue with the newValue within this string
@@ -60,9 +60,9 @@ NITFPROT(void) nitf_Utils_replace(char* str, char oldValue, char newValue);
  * \param fullName The source string
  * \param extension The extension name
  */
-NITFPROT(void) nitf_Utils_baseName(char* base, 
-                                   const char* fullName, 
-                                   const char* extension);
+NITFAPI(void) nitf_Utils_baseName(char* base, 
+                                  const char* fullName, 
+                                  const char* extension);
 
 
 /*!
