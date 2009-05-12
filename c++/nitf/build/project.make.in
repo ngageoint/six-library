@@ -67,6 +67,7 @@ SOURCES = BandInfo.cpp \
           TextSegment.cpp \
           TextSubheader.cpp \
           TRE.cpp \
+          Utils.cpp \
           WriteHandler.cpp \
           Writer.cpp
 

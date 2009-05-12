@@ -124,6 +124,36 @@ void ImageSubheader::createBands(nitf::Uint32 numBands) throw(nitf::NITFExceptio
 }
 
 
+void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
+                                           double corners[4][2])
+    throw(nitf::NITFException)
+{
+    NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
+                                                            type,
+                                                            corners,
+                                                            &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+
+}
+
+void ImageSubheader::getCornersAsLatLons(double corners[4][2])
+    throw(nitf::NITFException)
+{
+    NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
+                                                          corners,
+                                                          &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+
+}
+
+nitf::CornersType ImageSubheader::getCornersType()
+    throw(nitf::NITFException)
+{
+    return nitf_ImageSubheader_getCornersType(getNativeOrThrow());
+}
+
 int ImageSubheader::insertImageComment(std::string comment, int index)
 {
     int actualIndex = nitf_ImageSubheader_insertImageComment(getNativeOrThrow(),

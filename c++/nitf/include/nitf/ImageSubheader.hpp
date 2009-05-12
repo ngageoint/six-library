@@ -30,6 +30,7 @@
 #include "nitf/List.hpp"
 #include "nitf/FileSecurity.hpp"
 #include "nitf/Extensions.hpp"
+#include "nitf/System.hpp"
 #include <string>
 
 /*!
@@ -89,6 +90,54 @@ public:
                              std::vector<nitf::BandInfo>& bands)
         throw(nitf::NITFException);
 
+
+    /*!
+     *  This function allows the user to set the corner coordinates from a
+     *  set of decimal values.  This function only supports CornersTypes of
+     *  NITF_GEO or NITF_DECIMAL.  Others will trigger an error with code
+     *  NITF_ERR_INVALID_PARAMETER
+     *
+     *  In order to set up the type, you should declare a double corners[4][2];
+     *  The first dimension is used for the corner itself, and the second
+     *  dimension is for lat (0) or lon (1).
+     *
+     *  The corners MUST be oriented to correspond to 
+     *
+     *  corners[0] = (0, 0), 
+     *  corners[1] = (0, MaxCol), 
+     *  corners[2] = (MaxRow, MaxCol)
+     *  corners[3] = (MaxRow, 0)
+     *
+     *  following in line with 2500C.
+     */
+    void setCornersFromLatLons(nitf::CornersType type,
+                               double corners[4][2]) 
+        throw(nitf::NITFException);
+    
+    
+    /*!
+     *  This function allows the user to extract corner coordinates as a
+     *  set of decimal values.  This function only supports CornersTypes of
+     *  NITF_GEO or NITF_DECIMAL.  Others will trigger an error with code
+     *  NITF_ERR_INVALID_PARAMETER
+     *
+     *  The output corners will be oriented to correspond to 
+     *
+     *  corners[0] = (0, 0), 
+     *  corners[1] = (0, MaxCol), 
+     *  corners[2] = (MaxRow, MaxCol)
+     *  corners[3] = (MaxRow, 0)
+     *
+     *  following in line with 2500C.
+     */
+    void getCornersAsLatLons(double corners[4][2]) throw(nitf::NITFException);
+    
+    /*!
+     *  Get the type of corners.  This will return NITF_CORNERS_UNKNOWN
+     *  in the event that it is not 'U', 'N', 'S', 'D', or 'G'.
+     *
+     */
+    nitf::CornersType getCornersType() throw(nitf::NITFException);
 
     /*!
      * Set the image dimensions and blocking info.

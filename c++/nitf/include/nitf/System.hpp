@@ -47,5 +47,6 @@ namespace nitf
     typedef nitf_FieldType FieldType;
     typedef nitf_AccessFlags AccessFlags;
     typedef nitf_CreationFlags CreationFlags;
+    typedef nitf_CornersType CornersType;
 }
 #endif
