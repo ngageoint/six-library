@@ -23,9 +23,9 @@ void Utils::decimalToGeographic(double decimal,
                                    seconds);
 }
 
-void Utils::geographicToDecimal(int degrees, int minutes, double seconds)
+double Utils::geographicToDecimal(int degrees, int minutes, double seconds)
 {
-    nitf_Utils_geographicToDecimal(degrees, minutes, seconds);
+    return nitf_Utils_geographicToDecimal(degrees, minutes, seconds);
 }
 /*
 void Utils::parseGeographicString(std::string dms,

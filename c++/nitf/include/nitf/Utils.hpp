@@ -49,10 +49,10 @@ namespace nitf
                                         int* minutes,
                                         double* seconds);
         
-        static void geographicToDecimal(int degrees, 
-                                        int minutes, 
-                                        double seconds);
-
+        static double geographicToDecimal(int degrees, 
+                                          int minutes, 
+                                          double seconds);
+        
         /*
         // Not sure whether we should actually publicize these?
         static void parseGeographicString(std::string dms,
