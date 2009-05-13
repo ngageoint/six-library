@@ -9,7 +9,7 @@ def build(bld):
     lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
                            target='%s-c' % libname,
                            export_incdirs=includes,
-                           uselib = 'THREAD DL NITRO'.split(),
+                           uselib = 'THREAD DL MATH NITRO'.split(),
                            name='NITRO')
     lib.find_sources_in_dirs('./source', excludes=[])
     lib.cloneVariants()
