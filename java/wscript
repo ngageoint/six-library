@@ -2,10 +2,10 @@ import os
 import Options
 
 def set_options(opt):
-    opt.tool_options('java')
+    opt.tool_options('javaw')
 
 def configure(conf):
-    conf.check_tool('java')
+    conf.check_tool('javaw')
     if 'JAVA_HOME' in conf.env:
         env = conf.env.copy()
         incPath = os.path.join(env['JAVA_HOME'][0], 'include')
