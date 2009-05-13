@@ -1,7 +1,7 @@
 
 
 def build(bld):
-    if bld.env['defines']['HAVE_JVM']:
+    if bld.env['defines'].get('HAVE_JVM', False):
         lib = bld.new_task_gen('cc', 'shlib', includes='src/jni/include',
                                target='nitf.jni-c',
                                uselib='JAVA', uselib_local='NITRO')
