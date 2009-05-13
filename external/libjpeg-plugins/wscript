@@ -1,0 +1,100 @@
+import os, shutil
+import Options
+
+fname = 'jpeg-6b'
+
+def build(bld):
+    
+    defs = bld.env['defines']
+    defList = []
+    for k, v in defs.iteritems():
+        if v:
+            defList.append('%s=%s' % (k, v))
+    
+    #---------------------------------------------------------------------------
+    ###### LIB-JPEG
+    ut = bld.new_task_gen(path=bld.path.find_dir('build'), fname='%s.zip' % fname)
+    ut.features = ['unzip']
+    bld.add_group()
+    
+    driverNode = bld.path.find_dir('build').ensure_dir_node_from_path(fname)
+    
+    #shutil.copy('jconfig.vc', 'jconfig.h')
+
+    sources = (
+        'jcapimin.c',
+        'jccoefct.c',
+        'jccolor.c',
+        'jcdctmgr.c',
+        'jchuff.c',
+        'jcinit.c',
+        'jcmainct.c',
+        'jcmarker.c',
+        'jcmaster.c',
+        'jcomapi.c',
+        'jcparam.c',
+        'jcphuff.c',
+        'jcprepct.c',
+        'jcsample.c',
+        'jctrans.c',
+        'jdapimin.c',
+        'jdapistd.c',
+        'jdatadst.c',
+        'jdatasrc.c',
+        'jdcoefct.c',
+        'jdcolor.c',
+        'jddctmgr.c',
+        'jdhuff.c',
+        'jdinput.c',
+        'jdmainct.c',
+        'jdmarker.c',
+        'jdmaster.c',
+        'jdmerge.c',
+        'jdphuff.c',
+        'jdpostct.c',
+        'jdsample.c',
+        'jdtrans.c',
+        'jerror.c',
+        'jfdctflt.c',
+        'jfdctfst.c',
+        'jfdctint.c',
+        'jidctflt.c',
+        'jidctfst.c',
+        'jidctint.c',
+        'jidctred.c',
+        'jmemansi.c',
+        'jmemmgr.c',
+        'jquant1.c',
+        'jquant2.c',
+        'jutils.c',
+    )
+        
+    jpeg = bld.new_task_gen('cc', 'staticlib', includes='.',
+                            source=sources,
+                            target='jpeg', path=driverNode,
+                            export_incdirs='.',
+                            uselib='LIB_SOCKET',
+                            name='LIBJPEG')
+    jpeg.cloneVariants()
+    bld.add_group()
+    
+    #---------------------------------------------------------------------------
+    ###### JPEG PLUG-IN
+    libPattern = bld.env['shlib_PATTERN']
+    if libPattern.startswith('lib'):
+        libPattern = libPattern[3:]
+    lib = bld.new_task_gen('cc', 'shlib', target='LibjpegDecompress',
+                           uselib_local='LIBJPEG NITRO'.split(),
+                           install_path='${PREFIX}/share/nitf/plugins')
+    lib.find_sources_in_dirs('./source', excludes=[])
+    for t in lib.cloneVariants():
+        t.env['shlib_PATTERN'] = libPattern
+
+
+
+def distclean(context):
+    unzipPath = os.path.join(context.curdir, 'build', fname)
+    try:
+        if os.path.exists(unzipPath):
+            shutil.rmtree(unzipPath, ignore_errors=True)
+    except:{}

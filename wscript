@@ -44,13 +44,13 @@ def configure(conf):
     conf.sub_config('c c++ java')
 
 def build(bld):
-    bld.add_subdirs('c c++ java')
+    bld.add_subdirs('c c++ java external')
     
     #since waf 1.5.5 we need to do this...
     from coda import removeVariantTasks
     removeVariantTasks(bld, 'default')
 
 def distclean(context):
-    context.recurse('c c++ java')
+    context.recurse('c c++ java external')
     Scripting.distclean(context)
 

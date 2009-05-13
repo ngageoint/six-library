@@ -1,0 +1,5 @@
+def build(bld):
+    bld.add_subdirs('jasper-plugins libjpeg-plugins')
+
+def distclean(context):
+    context.recurse('jasper-plugins libjpeg-plugins')
