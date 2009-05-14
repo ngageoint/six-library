@@ -47,8 +47,13 @@ NITFPRIV(NITF_CLEVEL) checkILOC(nitf_ImageSubheader* subhdr, nitf_Error* error)
                         NITF_CONV_INT, sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
+    if (!nitf_Field_get(subhdr->NITF_NCOLS, &ncols, 
+                        NITF_CONV_INT, sizeof(int), error))
+        return NITF_CLEVEL_CHECK_FAILED;
+
+
     rowExtent = rowCoord + nrows;
-    colExtent = rowCoord + ncols;
+    colExtent = colCoord + ncols;
 
     if (rowExtent <= 2047 && colExtent <= 2047)
         return NITF_CLEVEL_03;
@@ -462,6 +467,51 @@ NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_measure(nitf_Record* record,
         {
             clevel = checkComplexity;
         }
+        checkToRun = checks[++i].check;
     }
     return clevel;
+}
+
+NITFPROT(NITF_BOOL) nitf_ComplexityLevel_toString(NITF_CLEVEL clevel,
+                                                  char* c2)
+{
+    
+    NITF_BOOL success = NITF_FAILURE;
+    switch (clevel)
+    {
+    case NITF_CLEVEL_CHECK_FAILED:
+        break;
+        
+    case NITF_CLEVEL_03:
+        memcpy(c2, "03", 2);
+        success = NITF_SUCCESS;
+        break;
+
+    case NITF_CLEVEL_05:
+        memcpy(c2, "05", 2);
+        success = NITF_SUCCESS;
+        break;
+        
+    case NITF_CLEVEL_06:
+        memcpy(c2, "06", 2);
+        success = NITF_SUCCESS;
+        break;
+
+
+    case NITF_CLEVEL_07:
+        memcpy(c2, "07", 2);
+        success = NITF_SUCCESS;
+        break;
+
+
+    case NITF_CLEVEL_09:
+        success = NITF_SUCCESS;
+        /* Dont break, we want 09 */
+
+    case NITF_CLEVEL_UNKNOWN:
+        memcpy(c2, "09", 2);
+        break;
+
+    }
+
 }

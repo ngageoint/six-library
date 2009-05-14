@@ -987,8 +987,8 @@ NITF_BOOL populateFileHeader(nitf_Record *record, const char* title,
     nitf_FileHeader *header = record->header;
 
     
-    if (!nitf_Field_setUint32(header->complianceLevel, 3, error))
-        goto CATCH_ERROR;
+/*     if (!nitf_Field_setUint32(header->complianceLevel, 3, error)) */
+/*         goto CATCH_ERROR; */
     if (!nitf_Field_setString(header->originStationID, "SF.net", error))
         goto CATCH_ERROR;
     /* fake the date */

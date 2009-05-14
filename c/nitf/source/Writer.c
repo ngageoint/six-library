@@ -63,6 +63,8 @@
     if (!writeInt64Field(writer, value_, fld_##_SZ, fil_, dir_, error)) \
         goto CATCH_ERROR;
 
+
+
 /*  We use the writeComponentInfo() method underneath this */
 /*  method, as we do for all of the components.  The macro */
 /*  allows us to specialize this functionality for images  */
@@ -1647,6 +1649,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /* End file size */
     nitf_Off endSize;
 
+    nitf_FileHeader* header = writer->record->header;
+
     if (!writeHeader(writer, &fileLenOff, &hdrLen, error))
         return NITF_FAILURE;
 
@@ -1655,7 +1659,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /*******************************************************************/
     /*                   START DEALING WITH IMAGES                     */
     /*******************************************************************/
-    if (!nitf_Field_get(writer->record->header->numImages, &numImgs,
+    if (!nitf_Field_get(header->numImages, &numImgs,
                         NITF_CONV_INT, NITF_INT32_SZ, error))
     {
         nitf_Error_init(error, "Could not retrieve number of images",
@@ -1750,7 +1754,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /*******************************************************************/
     /*                   START DEALING WITH GRAPHICS                   */
     /*******************************************************************/
-    if (!nitf_Field_get(writer->record->header->numGraphics, &numGraphics,
+    if (!nitf_Field_get(header->numGraphics, &numGraphics,
                         NITF_CONV_INT, NITF_INT32_SZ, error))
     {
         nitf_Error_init(error, "Could not retrieve number of Graphics",
@@ -1840,7 +1844,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /*******************************************************************/
     /*                   START DEALING WITH TEXTS                      */
     /*******************************************************************/
-    if (!nitf_Field_get(writer->record->header->numTexts, &numTexts,
+    if (!nitf_Field_get(header->numTexts, &numTexts,
                         NITF_CONV_INT, NITF_INT32_SZ, error))
     {
         nitf_Error_init(error, "Could not retrieve number of texts",
@@ -1929,7 +1933,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /*******************************************************************/
     /*                   START DEALING WITH DATA EXTENSIONS            */
     /*******************************************************************/
-    if (!nitf_Field_get(writer->record->header->numDataExtensions, &numDEs,
+    if (!nitf_Field_get(header->numDataExtensions, &numDEs,
                         NITF_CONV_INT, NITF_INT32_SZ, error))
     {
         nitf_Error_init(error, "Could not retrieve number of data extensions",
@@ -2034,14 +2038,26 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         goto CATCH_ERROR;
 
     NITF_WRITE_INT64_FIELD(fileLen, NITF_FL, ZERO, FILL_LEFT);
+    if (!nitf_Field_setUint64(header->NITF_FL, fileLen, error))
+        goto CATCH_ERROR;
+
     NITF_WRITE_INT64_FIELD(hdrLen, NITF_HL, ZERO, FILL_LEFT);
+    if (!nitf_Field_setUint64(header->NITF_HL, fileLen, error))
+        goto CATCH_ERROR;
+
+
 
     /*    Fix the image subheader and data lengths */
     NITF_WRITE_INT64_FIELD((nitf_Off) numImgs, NITF_NUMI, ZERO, FILL_LEFT);
     for (i = 0; i < numImgs; i++)
     {
         NITF_WRITE_INT64_FIELD(imageSubLens[i], NITF_LISH, ZERO, FILL_LEFT);
+        if (!nitf_Field_setUint64(header->NITF_LISH(i), imageSubLens[i], error))
+            goto CATCH_ERROR;
+
         NITF_WRITE_INT64_FIELD(imageDataLens[i], NITF_LI, ZERO, FILL_LEFT);
+        if (!nitf_Field_setUint64(header->NITF_LI(i), imageDataLens[i], error))
+            goto CATCH_ERROR;
     }
     if (numImgs != 0)
     {
@@ -2051,10 +2067,19 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
 
     /*    Fix the graphic subheader and data lengths */
     NITF_WRITE_INT64_FIELD((nitf_Off) numGraphics, NITF_NUMS, ZERO, FILL_LEFT);
+    if (!nitf_Field_setUint64(header->NITF_NUMS, numGraphics, error))
+        goto CATCH_ERROR;
+
     for (i = 0; i < numGraphics; i++)
     {
         NITF_WRITE_INT64_FIELD(graphicSubLens[i], NITF_LSSH, ZERO, FILL_LEFT);
+        if (!nitf_Field_setUint64(header->NITF_LSSH(i), graphicSubLens[i], error))
+            goto CATCH_ERROR;
+
         NITF_WRITE_INT64_FIELD(graphicDataLens[i], NITF_LS, ZERO, FILL_LEFT);
+        if (!nitf_Field_setUint64(header->NITF_LS(i), graphicDataLens[i], error))
+            goto CATCH_ERROR;
+        
     }
     if (numGraphics != 0)
     {
@@ -2072,10 +2097,20 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
 
     /*    Fix the text subheader and data lengths */
     NITF_WRITE_INT64_FIELD((nitf_Off) numTexts, NITF_NUMT, ZERO, FILL_LEFT);
+    if (!nitf_Field_setUint64(header->NITF_NUMT, numTexts, error))
+        goto CATCH_ERROR;
+
     for (i = 0; i < numTexts; i++)
     {
         NITF_WRITE_INT64_FIELD(textSubLens[i], NITF_LTSH, ZERO, FILL_LEFT);
+        if (!nitf_Field_setUint64(header->NITF_LTSH(i), graphicSubLens[i], error))
+            goto CATCH_ERROR;
+
+
         NITF_WRITE_INT64_FIELD(textDataLens[i], NITF_LT, ZERO, FILL_LEFT);
+        if (!nitf_Field_setUint64(header->NITF_LT(i), graphicDataLens[i], error))
+            goto CATCH_ERROR;
+
     }
     if (numTexts != 0)
     {
@@ -2084,17 +2119,55 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     }
 
     /*    Fix the data extension subheader and data lengths */
-    NITF_WRITE_INT64_FIELD((nitf_Off) numDEs, NITF_NUMT, ZERO, FILL_LEFT);
+    NITF_WRITE_INT64_FIELD((nitf_Off) numDEs, NITF_NUMDES, ZERO, FILL_LEFT);
+    if (!nitf_Field_setUint64(header->NITF_NUMDES, numDEs, error))
+        goto CATCH_ERROR;
+
     for (i = 0; i < numDEs; i++)
     {
         NITF_WRITE_INT64_FIELD(deSubLens[i], NITF_LDSH, ZERO, FILL_LEFT);
+        if (!nitf_Field_setUint64(header->NITF_LDSH(i), deSubLens[i], error))
+            goto CATCH_ERROR;
+
+
         NITF_WRITE_INT64_FIELD(deDataLens[i], NITF_LD, ZERO, FILL_LEFT);
+        if (!nitf_Field_setUint64(header->NITF_LD(i), deDataLens[i], error))
+            goto CATCH_ERROR;
+
+
     }
     if (numDEs != 0)
     {
         NITF_FREE(deSubLens);
         NITF_FREE(deDataLens);
     }
+
+    /* Now its time to check if we should be measuring the CLEVEL */
+    if (strncmp(header->NITF_CLEVEL->raw, "00", 2) == 0)
+    {
+        NITF_CLEVEL clevel = 
+            nitf_ComplexityLevel_measure(writer->record, error);
+
+        if (clevel == NITF_CLEVEL_CHECK_FAILED)
+            goto CATCH_ERROR;
+
+        nitf_ComplexityLevel_toString(clevel, 
+                                      header->NITF_CLEVEL->raw);
+
+        if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(writer->output,
+                                                   NITF_FHDR_SZ + NITF_FVER_SZ,
+                                                   NITF_SEEK_SET,
+                                                   error)))
+            goto CATCH_ERROR;
+
+
+        if (!writeField(writer, header->NITF_CLEVEL->raw, 2, error))
+            goto CATCH_ERROR;
+
+
+    }
+
+
 
     nitf_Writer_destructWriters(writer);
 

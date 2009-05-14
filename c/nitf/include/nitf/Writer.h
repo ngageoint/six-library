@@ -31,6 +31,7 @@
 #include "nitf/WriteHandler.h"
 #include "nitf/ImageWriter.h"
 #include "nitf/SegmentWriter.h"
+#include "nitf/ComplexityLevel.h"
 
 NITF_CXX_GUARD
 

@@ -70,6 +70,10 @@ typedef enum _NITF_CLEVEL
 NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_measure(nitf_Record* record,
                                                   nitf_Error* error);
 
+                     
+NITFPROT(NITF_BOOL) nitf_ComplexityLevel_toString(NITF_CLEVEL clevel,
+                                                  char* c2);
+
 NITF_CXX_ENDGUARD
 
 #endif
