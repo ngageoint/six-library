@@ -388,7 +388,7 @@ NITFPRIV(NITF_CLEVEL) checkSpecificImageAttributes(nitf_Record* record,
     while (nitf_ListIterator_notEqualTo(&it, &end) )
     {
 
-        NITF_CLEVEL result = NITF_CLEVEL_CHECK_FAILED;
+        NITF_CLEVEL result = NITF_CLEVEL_UNKNOWN;
         char irep[ NITF_IREP_SZ + 1];
 
         nitf_ImageSegment* imageSegment = 
