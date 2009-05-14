@@ -40,6 +40,7 @@ void writeImage(nitf_ImageSegment * segment,
                 int imageNumber,
                 nitf_Uint32 rowSkipFactor,
                 nitf_Uint32 columnSkipFactor,
+                NITF_BOOL optz,
                 nitf_Error * error)
 {
 
@@ -109,6 +110,9 @@ void writeImage(nitf_ImageSegment * segment,
            segment->subheader->compressionRate->length,
            segment->subheader->compressionRate->raw);
     
+
+    if (optz)
+    {
 	/*
          *  There is an accelerated mode for band-interleaved by pixel data.
          *  In that case, we assume that the user doesnt want the data
@@ -145,7 +149,7 @@ void writeImage(nitf_ImageSegment * segment,
             nBands = 1;
             printf("Using accelerated 3-band RGB mode pix-interleaved image\n");
 	}
-
+    }
     subimage = nitf_SubWindow_construct(error);
     assert(subimage);
 
@@ -299,15 +303,40 @@ int main(int argc, char **argv)
     nitf_ListIterator iter;
     nitf_ListIterator end;
 
+    char* inputFile;
+    NITF_BOOL optz = 0;
+
     /*  If you didnt give us a nitf file, we're croaking  */
-    if (argc != 2)
+    if (argc < 2)
     {
-        printf("Usage: %s <nitf-file>\n", argv[0]);
+        printf("Usage: %s <nitf-file> (-o)\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
+    if (argc == 3)
+    {
+        optz = 1;
+
+        if (strcmp(argv[1], "-o") == 0)
+        {
+            inputFile = argv[2];
+        }
+        else if (strcmp(argv[2], "-o") == 0)
+        {
+            inputFile = argv[1];
+        }
+        else
+        {
+            printf("Usage: %s <nitf-file> (-o)\n", argv[0]);
+            exit(EXIT_FAILURE);
+
+        }
+    }
+    else
+        inputFile = argv[1];
+
     /*  You should use this function to test that you have a valid NITF */
-    if (nitf_Reader_getNITFVersion( argv[1] ) == NITF_VER_UNKNOWN)
+    if (nitf_Reader_getNITFVersion( inputFile ) == NITF_VER_UNKNOWN)
     {
         printf("This file does not appear to be a valid NITF");
         exit(EXIT_FAILURE);
@@ -324,7 +353,7 @@ int main(int argc, char **argv)
      *  As of 2.5, you do not have to use an IOHandle if you use 
      *  readIO instead of read()
      */
-    io = nitf_IOHandle_create(argv[1],
+    io = nitf_IOHandle_create(inputFile,
                               NITF_ACCESS_READONLY,
                               NITF_OPEN_EXISTING, &e);
 
@@ -378,8 +407,8 @@ int main(int argc, char **argv)
         printf("Writing image %d... ", count);
 
         /*  Write the thing out  */
-        writeImage(imageSegment, argv[1], deserializer, count,
-                   rowSkipFactor, columnSkipFactor, &e);
+        writeImage(imageSegment, inputFile, deserializer, count,
+                   rowSkipFactor, columnSkipFactor, optz, &e);
 
         nitf_ImageReader_destruct(&deserializer);
         
