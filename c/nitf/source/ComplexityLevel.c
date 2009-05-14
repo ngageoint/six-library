@@ -454,7 +454,7 @@ NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_measure(nitf_Record* record,
 {
     /*char *p = checks[0].checkName;*/
     CLEVEL_CHECK_PTR checkToRun = checks[0].check;
-    NITF_CLEVEL clevel;
+    NITF_CLEVEL clevel = NITF_CLEVEL_UNKNOWN;
     int i = 0;
     while ( checkToRun != NULL )
     {
