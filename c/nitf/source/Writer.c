@@ -2042,7 +2042,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         goto CATCH_ERROR;
 
     NITF_WRITE_INT64_FIELD(hdrLen, NITF_HL, ZERO, FILL_LEFT);
-    if (!nitf_Field_setUint64(header->NITF_HL, fileLen, error))
+    if (!nitf_Field_setUint64(header->NITF_HL, hdrLen, error))
         goto CATCH_ERROR;
 
 
