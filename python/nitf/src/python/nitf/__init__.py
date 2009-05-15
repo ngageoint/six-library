@@ -51,18 +51,6 @@ FILE_HEADER_FIELDS = [
     {'id' : 'OPHONE', 'name' : 'originatorPhone', },
     {'id' : 'FL', 'name' : 'fileLength', },
     {'id' : 'HL', 'name' : 'headerLength', },
-    #{'id' : 'LISH(%%s)', 'name' : 'imageInfo[i]->lengthSubheader', },
-    #{'id' : 'LI(%%s)', 'name' : 'imageInfo[i]->lengthData', },
-    #{'id' : 'LSSH(i)', 'name' : 'graphicInfo[i]->lengthSubheader', },
-    #{'id' : 'LS(i)', 'name' : 'graphicInfo[i]->lengthData', },
-    #{'id' : 'LLSH(i)', 'name' : 'labelInfo[i]->lengthSubheader', },
-    #{'id' : 'LL(i)', 'name' : 'labelInfo[i]->lengthData', },
-    #{'id' : 'LTSH(i)', 'name' : 'textInfo[i]->lengthSubheader', },
-    #{'id' : 'LT(i)', 'name' : 'textInfo[i]->lengthData', },
-    #{'id' : 'LDSH(i)', 'name' : 'dataExtensionInfo[i]->lengthSubheader', },
-    #{'id' : 'LD(i)', 'name' : 'dataExtensionInfo[i]->lengthData', },
-    #{'id' : 'LRESH(i)', 'name' : 'reservedExtensionInfo[i]->lengthSubheader', },
-    #{'id' : 'LRE(i)', 'name' : 'reservedExtensionInfo[i]->lengthData', },
     
     {'id' : 'NUMI', 'name' : 'numImages', },
     {'id' : 'NUMS', 'name' : 'numGraphics', },
@@ -405,6 +393,11 @@ class Record:
 
 #NITF Field object
 class Field:
+    
+    NITF_BCS_A  = nitropy.NITF_BCS_A
+    NITF_BCS_N  = nitropy.NITF_BCS_N
+    NITF_BINARY = nitropy.NITF_BINARY
+    
     def __init__(self, ref):
         self.ref = ref
 
@@ -431,6 +424,9 @@ class Field:
     def intValue(self):
         error = Error()
         return nitropy.py_Field_getInt(self.ref, error)
+    
+    def getType(self):
+        return self.ref.type
     
 
 #base class for headers that contain many nitf_Field objects
@@ -600,39 +596,44 @@ class FileHeader(Header):
     def __iter__(self):
         fields = []
         fields.extend([
-            ('fileHeader', self['fileHeader']),
-            ('fileVersion', self['fileVersion']),
-            ('complianceLevel', self['complianceLevel']),
-            ('systemType', self['systemType']),
-            ('originStationID', self['originStationID']),
-            ('fileDateTime', self['fileDateTime']),
-            ('fileTitle', self['fileTitle']),
-            ('classification', self['classification']),
+            ('FHDR', self['fileHeader']),
+            ('FVER', self['fileVersion']),
+            ('CLEVEL', self['complianceLevel']),
+            ('STYPE', self['systemType']),
+            ('OSTAID', self['originStationID']),
+            ('FDT', self['fileDateTime']),
+            ('FTITLE', self['fileTitle']),
+            ('FSCLAS', self['classification']),
         ])
-        fields.extend(list(self.fileSecurity.__iter__()))
+        fields.extend(list(self.fileSecurity.__iter__(prefix='F')))
         fields.extend([
-            ('messageCopyNum', self['messageCopyNum']),
-            ('messageNumCopies', self['messageNumCopies']),
-            ('encrypted', self['encrypted']),
-            ('backgroundColor', self['backgroundColor']),
-            ('originatorName', self['originatorName']),
-            ('originatorPhone', self['originatorPhone']),
-            ('fileLength', self['fileLength']),
-            ('headerLength', self['headerLength']),
+            ('FSCOP', self['messageCopyNum']),
+            ('FSCPYS', self['messageNumCopies']),
+            ('ENCRYP', self['encrypted']),
+            ('FBKGC', self['backgroundColor']),
+            ('ONAME', self['originatorName']),
+            ('OPHONE', self['originatorPhone']),
+            ('FL', self['fileLength']),
+            ('HL', self['headerLength']),
         ])
         
-        for segment in ('image', 'text', 'graphic', 'label', 'dataExtension', 'reservedExtension'):
+        for (segment, segid, segprefix) in (('image', 'NUMI', 'I'),
+                        ('graphic', 'NUMS', 'S'),
+                        ('label', 'NUMX', 'L'),
+                        ('text', 'NUMT', 'T'),
+                        ('dataExtension', 'NUMDES', 'D'),
+                        ('reservedExtension', 'NUMRES', 'RE')):
             fname = 'num%ss' % segment.title()
-            fields.append((fname, self[fname]))
+            fields.append((segid, self[fname]))
             for i in range(int(self[fname])):
-                fields.append(('%sInfo[%s]->headerLength' % (segment, i), self['%sInfo' % segment][i].getHeaderLength()))
-                fields.append(('%sInfo[%s]->dataLength' % (segment, i), self['%sInfo' % segment][i].getDataLength()))
+                fields.append(('L%sSH' % segprefix, self['%sInfo' % segment][i].getHeaderLength()))
+                fields.append(('L%s' % segprefix, self['%sInfo' % segment][i].getDataLength()))
         
         fields.extend([
-            ('userDefinedHeaderLength', self['userDefinedHeaderLength']),
-            ('userDefinedOverflow', self['userDefinedOverflow']),
-            ('extendedHeaderLength', self['extendedHeaderLength']),
-            ('extendedHeaderOverflow', self['extendedHeaderOverflow']),
+            ('UDHDL', self['userDefinedHeaderLength']),
+            ('UDHOFL', self['userDefinedOverflow']),
+            ('XHDL', self['extendedHeaderLength']),
+            ('XHDLOFL', self['extendedHeaderOverflow']),
         ])
         return fields.__iter__()
     
@@ -667,56 +668,79 @@ class ImageSubheader(Header):
     def __iter__(self):
         fields = []
         fields.extend([
-            ('filePartType', self['filePartType']),
-            ('imageId', self['imageId']),
-            ('imageDateAndTime', self['imageDateAndTime']),
-            ('targetId', self['targetId']),
-            ('imageTitle', self['imageTitle']),
-            ('imageSecurityClass', self['imageSecurityClass']),
+            ('IM', self['filePartType']),
+            ('IID1', self['imageId']),
+            ('IDATIM', self['imageDateAndTime']),
+            ('TGTID', self['targetId']),
+            ('IID2', self['imageTitle']),
+            ('ISCLAS', self['imageSecurityClass']),
         ])
-        fields.extend(list(self.fileSecurity.__iter__()))
+        fields.extend(list(self.fileSecurity.__iter__(prefix='I')))
         fields.extend([
-            ('imageSource', self['imageSource']),
-            ('numRows', self['numRows']),
-            ('numCols', self['numCols']),
-            ('pixelValueType', self['pixelValueType']),
-            ('imageRepresentation', self['imageRepresentation']),
-            ('imageCategory', self['imageCategory']),
-            ('actualBitsPerPixel', self['actualBitsPerPixel']),
-            ('pixelJustification', self['pixelJustification']),
-            ('imageCoordinateSystem', self['imageCoordinateSystem']),
-            ('cornerCoordinates', self['cornerCoordinates']),
-            ('numImageComments', self['numImageComments']),
+            ('ISORCE', self['imageSource']),
+            ('NROWS', self['numRows']),
+            ('NCOLS', self['numCols']),
+            ('PVTYPE', self['pixelValueType']),
+            ('IREP', self['imageRepresentation']),
+            ('ICAT', self['imageCategory']),
+            ('ABPP', self['actualBitsPerPixel']),
+            ('PJUST', self['pixelJustification']),
+            ('ICORDS', self['imageCoordinateSystem']),
+            ('IGEOLO', self['cornerCoordinates']),
+            ('NICOM', self['numImageComments']),
         ])
         
         for i, comment in enumerate(self.getComments()):
-            fields.append(('imageComment[%s]' % i, comment))
+            fields.append(('ICOM[%s]' % i, comment))
             
         fields.extend([
-            ('imageCompression', self['imageCompression']),
-            ('compressionRate', self['compressionRate']),
-            ('numImageBands', self['numImageBands']),
-            ('numMultispectralImageBands', self['numMultispectralImageBands']),
-            ('imageSyncCode', self['imageSyncCode']),
-            ('imageMode', self['imageMode']),
-            ('numBlocksPerRow', self['numBlocksPerRow']),
-            ('numBlocksPerCol', self['numBlocksPerCol']),
-            ('numPixelsPerHorizBlock', self['numPixelsPerHorizBlock']),
-            ('numPixelsPerVertBlock', self['numPixelsPerVertBlock']),
-            ('numBitsPerPixel', self['numBitsPerPixel']),
-            ('imageDisplayLevel', self['imageDisplayLevel']),
-            ('imageAttachmentLevel', self['imageAttachmentLevel']),
-            ('imageLocation', self['imageLocation']),
-            ('imageMagnification', self['imageMagnification']),
-            ('userDefinedImageDataLength', self['userDefinedImageDataLength']),
-            ('userDefinedOverflow', self['userDefinedOverflow']),
-            ('extendedHeaderLength', self['extendedHeaderLength']),
-            ('extendedHeaderOverflow', self['extendedHeaderOverflow']),
+            ('IC', self['imageCompression']),
+            ('COMRAT', self['compressionRate']),
+            ('NBANDS', self['numImageBands']),
+            ('XBANDS', self['numMultispectralImageBands']),
+            ('ISYNC', self['imageSyncCode']),
+            ('IMODE', self['imageMode']),
+            ('NBPR', self['numBlocksPerRow']),
+            ('NBPC', self['numBlocksPerCol']),
+            ('NPPBH', self['numPixelsPerHorizBlock']),
+            ('NPPBV', self['numPixelsPerVertBlock']),
+            ('NBPP', self['numBitsPerPixel']),
+            ('IDLVL', self['imageDisplayLevel']),
+            ('IALVL', self['imageAttachmentLevel']),
+            ('ILOC', self['imageLocation']),
+            ('IMAG', self['imageMagnification']),
+            ('UDIDL', self['userDefinedImageDataLength']),
+            ('UDOFL', self['userDefinedOverflow']),
+            ('IXSHDL', self['extendedHeaderLength']),
+            ('IXSOFL', self['extendedHeaderOverflow']),
         ])
         return fields.__iter__()
 
 #NITF GraphicSubheader class
 class GraphicSubheader(Header):
+    
+    def __iter__(self):
+        fields = [
+            ('SY', self['filePartType']),
+            ('SID', self['graphicID']),
+            ('SNAME', self['name']),
+            ('SSCLAS', self['securityClass']),
+        ]
+        fields.extend(list(self.fileSecurity.__iter__(prefix='S')))
+        fields.extend([
+            ('SFMT', self['stype']),
+            ('SSTRUCT', self['res1']),
+            ('SDLVL', self['displayLevel']),
+            ('SALVL', self['attachmentLevel']),
+            ('SLOC', self['location']),
+            ('SBND1', self['bound1Loc']),
+            ('SCOLOR', self['color']),
+            ('SBND2', self['bound2Loc']),
+            ('SRES2', self['res2']),
+            ('SXSHDL', self['extendedHeaderLength']),
+            ('SXSOFL', self['extendedHeaderOverflow']),
+        ])
+        return fields.__iter__()
     
     def getXHD(self):
         return Extensions(self.ref.extendedSection)
@@ -725,22 +749,23 @@ class GraphicSubheader(Header):
 class LabelSubheader(Header):
     pass
 
+
 #NITF TextSubheader class
 class TextSubheader(Header):
     def __iter__(self):
         fields = [
-            ('filePartType', self['filePartType']),
-            ('textID', self['textID']),
-            ('attachmentLevel', self['attachmentLevel']),
-            ('dateTime', self['dateTime']),
-            ('title', self['title']),
-            ('securityClass', self['securityClass']),
+            ('TE', self['filePartType']),
+            ('TEXTID', self['textID']),
+            ('TXTALVL', self['attachmentLevel']),
+            ('TXTDT', self['dateTime']),
+            ('TXTITL', self['title']),
+            ('TSCLAS', self['securityClass']),
         ]
-        fields.extend(list(self.fileSecurity.__iter__()))
+        fields.extend(list(self.fileSecurity.__iter__(prefix='T')))
         fields.extend([
-            ('format', self['format']),
-            ('extendedHeaderLength', self['extendedHeaderLength']),
-            ('extendedHeaderOverflow', self['extendedHeaderOverflow']),
+            ('TXTFMT', self['format']),
+            ('TXSHDL', self['extendedHeaderLength']),
+            ('TXSOFL', self['extendedHeaderOverflow']),
         ])
         return fields.__iter__()
     
@@ -749,7 +774,21 @@ class TextSubheader(Header):
 
 #NITF DESubheader class
 class DESubheader(Header):
-    pass
+    
+    def __iter__(self):
+        fields = [
+            ('DE', self['filePartType']),
+            ('DESTAG', self['typeID']),
+            ('DESVER', self['version']),
+            ('DESCLAS', self['securityClass']),
+        ]
+        fields.extend(list(self.fileSecurity.__iter__(prefix='D')))
+        fields.extend([
+            ('DESOFLW', self['overflowHeaderType']),
+            ('DESITEM', self['dataItemOverflowed']),
+            ('DESSHL', self['subheaderFieldsLength']),
+        ])
+        return fields.__iter__()
 
 #NITF RESubheader class
 class RESubheader(Header):
@@ -757,28 +796,27 @@ class RESubheader(Header):
 
 #NITF FileSecurity class
 class FileSecurity(FieldHeader):
-    def __iter__(self):
+    def __iter__(self, prefix=''):
         fields = []
         fields.extend([
-            ('classificationSystem', self['classificationSystem']),
-            ('codewords', self['codewords']),
-            ('controlAndHandling', self['controlAndHandling']),
-            ('releasingInstructions', self['releasingInstructions']),
-            ('declassificationType', self['declassificationType']),
-            ('declassificationDate', self['declassificationDate']),
-            ('declassificationExemption', self['declassificationExemption']),
-            ('downgrade', self['downgrade']),
-            ('downgradeDateTime', self['downgradeDateTime']),
-            ('classificationText', self['classificationText']),
-            ('classificationAuthorityType', self['classificationAuthorityType']),
-            ('classificationAuthority', self['classificationAuthority']),
-            ('classificationReason', self['classificationReason']),
-            ('securitySourceDate', self['securitySourceDate']),
-            ('securityControlNumber', self['securityControlNumber']),
+            ('%sSCLSY' % prefix, self['classificationSystem']),
+            ('%sSCODE' % prefix, self['codewords']),
+            ('%sSCTLH' % prefix, self['controlAndHandling']),
+            ('%sSREL' % prefix, self['releasingInstructions']),
+            ('%sSDCTP' % prefix, self['declassificationType']),
+            ('%sSDCDT' % prefix, self['declassificationDate']),
+            ('%sSDCXM' % prefix, self['declassificationExemption']),
+            ('%sSDG' % prefix, self['downgrade']),
+            ('%sSDGDT' % prefix, self['downgradeDateTime']),
+            ('%sSCLTX' % prefix, self['classificationText']),
+            ('%sSCATP' % prefix, self['classificationAuthorityType']),
+            ('%sSCAUT' % prefix, self['classificationAuthority']),
+            ('%sSCRSN' % prefix, self['classificationReason']),
+            ('%sSSRDT' % prefix, self['securitySourceDate']),
+            ('%sSCTLN' % prefix, self['securityControlNumber']),
         ])
         return fields.__iter__()
-
-
+    
 class RecordSegment:
     """
     Abstract class for Segments
