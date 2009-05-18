@@ -68,9 +68,9 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
                          nitf::Uint32 abpp,
                          std::string justification,
                          std::string irep, std::string icat,
-                         nitf::Uint32 bandCount,
                          std::vector<nitf::BandInfo>& bands) throw(nitf::NITFException)
 {
+    nitf::Uint32 bandCount = bands.size();
     nitf_BandInfo ** bandInfo = new nitf_BandInfo * [bandCount];
 
     for (nitf::Uint32 i = 0; i < bandCount; i++)
@@ -85,6 +85,19 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
         icat.c_str(), bandCount, bandInfo, &error);
     if (!x)
         throw nitf::NITFException(&error);
+}
+
+
+void ImageSubheader::setPixelInformation(std::string pvtype,
+                         nitf::Uint32 nbpp,
+                         nitf::Uint32 abpp,
+                         std::string justification,
+                         std::string irep, std::string icat,
+                         nitf::Uint32 bandCount,
+                         std::vector<nitf::BandInfo>& bands) throw(nitf::NITFException)
+{
+    return setPixelInformation(pvtype, nbpp, abpp, justification, irep, icat,
+            bands);
 }
 
 void ImageSubheader::setBlocking(nitf::Uint32 numRows,
