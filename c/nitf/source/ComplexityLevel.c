@@ -513,5 +513,5 @@ NITFPROT(NITF_BOOL) nitf_ComplexityLevel_toString(NITF_CLEVEL clevel,
         break;
 
     }
-
+    return success;
 }
