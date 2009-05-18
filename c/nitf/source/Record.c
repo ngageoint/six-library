@@ -981,7 +981,9 @@ nitf_Record_newGraphicSegment(nitf_Record* record,
     _NITF_SET_FIELD(NITF_SY, "SY");
     _NITF_SET_FIELD(NITF_ENCRYP, "0");
     _NITF_SET_FIELD(NITF_SSCLAS, "U");
-    _NITF_SET_FIELD(NITF_SDLVL, num + 1);
+
+    if (!nitf_Field_setUint32(header->NITF_SDLVL, num + 1, error))
+        goto CATCH_ERROR;
 
     /* Update the version of the FileSecurity, if necessary */
     version = nitf_Record_getVersion(record);
