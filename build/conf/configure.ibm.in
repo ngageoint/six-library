@@ -117,7 +117,7 @@ case "${target}" in
                 cc_flags=""
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs="-ldl"
+                link_autolibs="-ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"

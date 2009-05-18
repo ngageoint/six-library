@@ -43,7 +43,7 @@ case "${target}" in
             cc_flags="${cc_flags} -arch ppc"
 
 	    cc_optz_flags="${def_cc_optz_flags}"
-        link_autolibs="-ldl"
+        link_autolibs="-ldl -lm"
 
 	    AR="ar"
 	    dll_flags="${dll_flags} -fPIC -dynamiclib"
@@ -88,7 +88,7 @@ case "${target}" in
             cc_flags="${cc_flags} -arch i386"
 
 	    cc_optz_flags="${def_cc_optz_flags}"
-        link_autolibs="-ldl"
+        link_autolibs="-ldl -lm"
 
 	    AR="ar"
 	    dll_flags="${dll_flags} -fPIC -dynamiclib"

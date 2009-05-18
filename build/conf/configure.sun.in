@@ -27,7 +27,7 @@ case "${target}" in
         	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs="-ldl"
+                link_autolibs="-ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"
@@ -54,7 +54,7 @@ case "${target}" in
                 cc_flags="-mcpu=supersparc"
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs=" -ldl"
+                link_autolibs=" -ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"
