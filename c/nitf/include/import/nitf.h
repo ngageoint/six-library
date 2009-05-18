@@ -30,6 +30,7 @@
 #include "nitf/DESegment.h"
 #include "nitf/DESubheader.h"
 #include "nitf/DLL.h"
+#include "nitf/DateTime.h"
 #include "nitf/DefaultTRE.h"
 #include "nitf/Directory.h"
 #include "nitf/DownSampler.h"
