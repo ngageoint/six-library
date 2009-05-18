@@ -4515,7 +4515,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
         	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs="-ldl"
+                link_autolibs="-ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"
@@ -4544,7 +4544,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
                 cc_flags="-mcpu=supersparc"
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs=" -ldl"
+                link_autolibs=" -ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"
@@ -4612,7 +4612,7 @@ echo "${ECHO_T}selecting the compiler option for the archiver..." >&6; }
         	    cc_flags=""
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-        	    link_autolibs="-ldl"
+        	    link_autolibs="-ldl -lm"
 
                 ar_flags="-ru"
             ;;
@@ -4695,7 +4695,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6; }
                 cc_flags="-fPIC"
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs="-ldl"
+                link_autolibs="-ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"
@@ -4830,7 +4830,7 @@ echo "${ECHO_T}\"selecting the ar archiver...\"" >&6; }
                 cc_flags=""
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs="-ldl"
+                link_autolibs="-ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"
@@ -4839,6 +4839,7 @@ echo "${ECHO_T}\"selecting the ar archiver...\"" >&6; }
         esac
     ;;
 esac
+
 ###########################################################
 #  Archiver                                               #
 ###########################################################
@@ -4892,14 +4893,14 @@ echo "${ECHO_T}setting sysroot: $applesr" >&6; }
             cc_flags="${cc_flags} -arch ppc"
 
 	    cc_optz_flags="${def_cc_optz_flags}"
-        link_autolibs="-ldl"
+        link_autolibs="-ldl -lm"
 
 	    AR="ar"
 	    dll_flags="${dll_flags} -fPIC -dynamiclib"
     ;;
 esac
 case "${target}" in
-    i686-apple-*|i386-apple-*)
+    i686-apple-*)
 
         { echo "$as_me:$LINENO: result: attempting to configure for the mac..." >&5
 echo "${ECHO_T}attempting to configure for the mac..." >&6; }
@@ -4945,7 +4946,7 @@ echo "${ECHO_T}setting sysroot: $applesr" >&6; }
             cc_flags="${cc_flags} -arch i386"
 
 	    cc_optz_flags="${def_cc_optz_flags}"
-        link_autolibs="-ldl"
+        link_autolibs="-ldl -lm"
 
 	    AR="ar"
 	    dll_flags="${dll_flags} -fPIC -dynamiclib"
