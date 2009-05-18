@@ -297,26 +297,26 @@ nitf_ImageSubheader_getCornersType(nitf_ImageSubheader* subheader)
     case 'G':
         type = NITF_CORNERS_GEO;
         break;
-        
+
     }
     return type;
 }
 
-NITFAPI(NITF_BOOL) 
+NITFAPI(NITF_BOOL)
 nitf_ImageSubheader_setCornersFromLatLons(nitf_ImageSubheader* subheader,
                                           nitf_CornersType type,
                                           double corners[4][2],
                                           nitf_Error* error)
 {
-    
+
     char cornerRep = nitf_Utils_cornersTypeAsCoordRep(type);
     char *igeolo = subheader->NITF_IGEOLO->raw;
     unsigned int i = 0;
     unsigned int where = 0;
-    
+
     if (type == NITF_CORNERS_GEO)
     {
-       
+
         for (; i < 4; i++)
         {
             nitf_Utils_decimalLatToGeoCharArray(corners[i][0], &igeolo[where]);
@@ -352,7 +352,7 @@ nitf_ImageSubheader_setCornersFromLatLons(nitf_ImageSubheader* subheader,
 }
 
 
-NITFAPI(NITF_BOOL) 
+NITFAPI(NITF_BOOL)
 nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
                                         double corners[4][2],
                                         nitf_Error *error)
@@ -364,7 +364,7 @@ nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
 
     if (type == NITF_CORNERS_GEO)
     {
-       
+
         for (; i < 4; i++)
         {
             int d, m;
@@ -410,7 +410,7 @@ nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
 
             if (!nitf_Utils_parseDecimalString(lon, &(corners[i][1]), error))
                 return NITF_FAILURE;
-            
+
         }
     }
     else
@@ -768,10 +768,10 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
                         NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
         goto CATCH_ERROR;
     }
-    
+
     /* decrement the band count */
     curBandCount--;
-    
+
     /* set the new values into the ImageSubheader fields */
     sprintf(buf, "%.*d", NITF_NBANDS_SZ,
             (curBandCount > 9 ? 0 : curBandCount));
@@ -781,7 +781,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
             (curBandCount > 9 ? curBandCount : 0));
     nitf_Field_setRawData(subhdr->numMultispectralImageBands, buf,
                           NITF_XBANDS_SZ, error);
-        
+
     /* set the new array */
     infos =
         (nitf_BandInfo **) NITF_MALLOC(sizeof(nitf_BandInfo *) *
@@ -801,7 +801,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
     {
         infos[i] = subhdr->bandInfo[i + 1];
     }
-    
+
     /* delete old array, and set equal to the new one */
     if (subhdr->bandInfo)
     {
@@ -1006,6 +1006,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking(nitf_ImageSubheader *subhdr,
 {
     nitf_Uint32 numBlocksPerRow;        /* Number of blocks/row */
     nitf_Uint32 numBlocksPerCol;        /* Number of blocks/column */
+
+    /* for 2500C - if > 8192, then NROWS/NCOLS specifies NPPBV/NPPBH */
+    if (numRowsPerBlock > _NITF_BLOCK_DIM_MAX)
+        numRowsPerBlock = 0;
+    if (numColsPerBlock > _NITF_BLOCK_DIM_MAX)
+        numColsPerBlock = 0;
 
     if (!nitf_Field_setUint32(subhdr->NITF_NROWS, numRows, error))
         return (NITF_FAILURE);
