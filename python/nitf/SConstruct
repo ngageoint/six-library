@@ -31,7 +31,7 @@ PYTHON_DIR = 'src/python/nitf/'
 #SCons knows that the .i suffix means to use swig to generate the source, and then compiles it... sweet!
 if int(env.subst('$swigify')):
     #Here, we set the swig command-line args
-    env['SWIGFLAGS'] = '-c -python %s -outdir %s' % \
+    env['SWIGFLAGS'] = '-python %s -outdir %s' % \
             (' '.join(['-I%s' % p for p in include_path]), PYTHON_DIR)
     sourceFiles = glob.glob('src/swig/nitro.i')
 

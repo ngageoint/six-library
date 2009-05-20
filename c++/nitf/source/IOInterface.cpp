@@ -57,11 +57,11 @@ NITF_BOOL nitf::IOInterface::IOInterfaceImpl_write(NITF_DATA* data,
     return NITF_SUCCESS;
 }
 
-NITF_BOOL nitf::IOInterface::IOInterfaceImpl_seek(NITF_DATA* data,
+nitf::Off nitf::IOInterface::IOInterfaceImpl_seek(NITF_DATA* data,
         nitf::Off offset, int whence, nitf_Error* error)
 {
     if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_seek"));
-    return ((nitf::IOInterface*)data)->seek(offset, whence) >= 0 ? NITF_SUCCESS : NITF_FAILURE;
+    return ((nitf::IOInterface*)data)->seek(offset, whence);
 }
 
 nitf::Off nitf::IOInterface::IOInterfaceImpl_tell(NITF_DATA* data, nitf_Error* error)

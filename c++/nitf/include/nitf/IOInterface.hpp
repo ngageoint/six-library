@@ -86,7 +86,7 @@ private:
     static NITF_BOOL IOInterfaceImpl_write(NITF_DATA* data,
             const char* buf, size_t size, nitf_Error* error);
 
-    static NITF_BOOL IOInterfaceImpl_seek(NITF_DATA* data,
+    static nitf::Off IOInterfaceImpl_seek(NITF_DATA* data,
             nitf::Off offset, int whence, nitf_Error* error);
 
     static nitf::Off IOInterfaceImpl_tell(NITF_DATA* data, nitf_Error* error);

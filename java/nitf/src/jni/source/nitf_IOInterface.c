@@ -98,7 +98,7 @@ NITFPRIV(NITF_BOOL) IOInterfaceImpl_write(NITF_DATA* data,
     return NITF_SUCCESS;
 }
 
-NITFPRIV(NITF_BOOL) IOInterfaceImpl_seek(NITF_DATA* data,
+NITFPRIV(nitf_Off) IOInterfaceImpl_seek(NITF_DATA* data,
                                          nitf_Off offset,
                                          int whence,
                                          nitf_Error* error)
@@ -108,6 +108,7 @@ NITFPRIV(NITF_BOOL) IOInterfaceImpl_seek(NITF_DATA* data,
     IOInterfaceImpl *impl = NULL;
     JNIEnv *env = NULL;
     JavaVM *vm = NULL;
+    jlong seekResult;
     int detach;
     int jWhence;
 
@@ -133,13 +134,13 @@ NITFPRIV(NITF_BOOL) IOInterfaceImpl_seek(NITF_DATA* data,
 
     ioClass = (*env)->GetObjectClass(env, impl->self);
     methodID = (*env)->GetMethodID(env, ioClass, "seek", "(JI)J");
-    (*env)->CallLongMethod(env, impl->self, methodID, offset, jWhence);
+    seekResult = (*env)->CallLongMethod(env, impl->self, methodID, offset, jWhence);
 
     /* TODO check for result ? */
 
     if (detach)
         (*vm)->DetachCurrentThread(vm);
-    return NITF_SUCCESS;
+    return (nitf_Off)seekResult;
 }
 
 NITFPRIV(nitf_Off) IOInterfaceImpl_tell(NITF_DATA* data,

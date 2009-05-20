@@ -8,7 +8,7 @@ NITFAPI(NITF_BOOL) nitf_IOInterface_read(nitf_IOInterface* io,
 {
     return io->iface->read(io->data, buf, size, error);
 }
-                   
+
 NITFAPI(NITF_BOOL) nitf_IOInterface_write(nitf_IOInterface* io,
                                           const char *buf,
                                           size_t size,
@@ -17,21 +17,21 @@ NITFAPI(NITF_BOOL) nitf_IOInterface_write(nitf_IOInterface* io,
     return io->iface->write(io->data, buf, size, error);
 }
 
-NITFAPI(NITF_BOOL) nitf_IOInterface_seek(nitf_IOInterface* io,
-                                         nitf_Off offset,
-                                         int whence,
-                                         nitf_Error* error)
+NITFAPI(nitf_Off) nitf_IOInterface_seek(nitf_IOInterface* io,
+                                        nitf_Off offset,
+                                        int whence,
+                                        nitf_Error* error)
 {
     return io->iface->seek(io->data, offset, whence, error);
 }
-     
+
 NITFAPI(nitf_Off) nitf_IOInterface_tell(nitf_IOInterface* io,
                                      nitf_Error* error)
 {
     return io->iface->tell(io->data, error);
 }
 
-              
+
 NITFAPI(nitf_Off) nitf_IOInterface_getSize(nitf_IOInterface* io,
                                         nitf_Error* error)
 {
@@ -78,11 +78,11 @@ NITFPRIV(NITF_BOOL) IOHandleAdaptor_write(NITF_DATA* data,
 
 }
 
-                
-NITFPRIV(NITF_BOOL) IOHandleAdaptor_seek(NITF_DATA* data,
-                                         nitf_Off offset,
-                                         int whence,
-                                         nitf_Error* error)
+
+NITFPRIV(nitf_Off) IOHandleAdaptor_seek(NITF_DATA* data,
+                                        nitf_Off offset,
+                                        int whence,
+                                        nitf_Error* error)
 {
     return nitf_IOHandle_seek( (nitf_IOHandle)data,
                                offset, whence, error);
@@ -112,13 +112,12 @@ NITFPRIV(NITF_BOOL) IOHandleAdaptor_close(NITF_DATA* data,
 NITFPRIV(void) IOHandleAdaptor_destruct(NITF_DATA* data)
 {
 }
-                
 
 
 NITFAPI(nitf_IOInterface*)
 nitf_IOHandleAdaptor_construct(nitf_IOHandle handle, nitf_Error* error)
 {
-    static nitf_IIOInterface iIOHandle = 
+    static nitf_IIOInterface iIOHandle =
     {
         &IOHandleAdaptor_read,
         &IOHandleAdaptor_write,
@@ -128,7 +127,7 @@ nitf_IOHandleAdaptor_construct(nitf_IOHandle handle, nitf_Error* error)
         &IOHandleAdaptor_close,
         &IOHandleAdaptor_destruct,
     };
-    nitf_IOInterface* impl = 
+    nitf_IOInterface* impl =
         (nitf_IOInterface*)NITF_MALLOC(sizeof(nitf_IOInterface));
 
     if (!impl)

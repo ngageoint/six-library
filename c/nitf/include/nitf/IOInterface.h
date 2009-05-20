@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -30,22 +30,22 @@ NITF_CXX_GUARD
 
 
 typedef NITF_BOOL (*NITF_IO_INTERFACE_READ) (NITF_DATA* data,
-                                             char *buf, size_t size, 
+                                             char *buf, size_t size,
                                              nitf_Error *error);
 
 typedef NITF_BOOL (*NITF_IO_INTERFACE_WRITE)(NITF_DATA* data,
                                              const char *buf, size_t size,
                                              nitf_Error * error);
 
-typedef NITF_BOOL (*NITF_IO_INTERFACE_SEEK)(NITF_DATA* data,
-                                            nitf_Off offset, int whence,
-                                            nitf_Error* error);
+typedef nitf_Off    (*NITF_IO_INTERFACE_SEEK)(NITF_DATA* data,
+                                              nitf_Off offset, int whence,
+                                              nitf_Error* error);
 
 typedef nitf_Off     (*NITF_IO_INTERFACE_TELL)(NITF_DATA* data,
-                                            nitf_Error * error);
+                                               nitf_Error * error);
 
 typedef nitf_Off     (*NITF_IO_INTERFACE_GET_SIZE)(NITF_DATA* data,
-                                                nitf_Error * error);
+                                                   nitf_Error * error);
 
 typedef NITF_BOOL (*NITF_IO_INTERFACE_CLOSE)(NITF_DATA* data,
                                              nitf_Error* error);
@@ -61,7 +61,7 @@ typedef struct _nitf_IIOInterface
     NITF_IO_INTERFACE_GET_SIZE getSize;
     NITF_IO_INTERFACE_CLOSE    close;
     NITF_IO_INTERFACE_DESTRUCT destruct;
-} 
+}
 nitf_IIOInterface;
 
 typedef struct _nitf_IOInterface
@@ -74,22 +74,22 @@ nitf_IOInterface;
 NITFAPI(NITF_BOOL) nitf_IOInterface_read(nitf_IOInterface*,
                                          char *buf, size_t size,
                                          nitf_Error *error);
-                   
+
 NITFAPI(NITF_BOOL) nitf_IOInterface_write(nitf_IOInterface* io,
                                           const char *buf,
                                           size_t size,
                                           nitf_Error* error);
 
-NITFAPI(NITF_BOOL) nitf_IOInterface_seek(nitf_IOInterface* io,
-                                         nitf_Off offset,
-                                         int whence,
-                                         nitf_Error* error);
+NITFAPI(nitf_Off) nitf_IOInterface_seek(nitf_IOInterface* io,
+                                        nitf_Off offset,
+                                        int whence,
+                                        nitf_Error* error);
 
 NITFAPI(nitf_Off) nitf_IOInterface_tell(nitf_IOInterface* io,
                                      nitf_Error* error);
 
 
-                   
+
 NITFAPI(nitf_Off) nitf_IOInterface_getSize(nitf_IOInterface* io,
                                         nitf_Error* error);
 
@@ -105,8 +105,8 @@ NITFAPI(NITF_BOOL) nitf_IOInterface_close(nitf_IOInterface* io,
 NITFAPI(void) nitf_IOInterface_destruct(nitf_IOInterface** io);
 
 /*!
- *  This special 'subclass' puts the IOHandle into the IOInterface 
- *  that is needed to supply it for reads and writes within the library. 
+ *  This special 'subclass' puts the IOHandle into the IOInterface
+ *  that is needed to supply it for reads and writes within the library.
  *
  *  You can define your own
  *  interfaces, and set them using the nitf_Reader_setInputSource()
