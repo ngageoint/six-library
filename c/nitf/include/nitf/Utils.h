@@ -43,6 +43,12 @@ NITFAPI(NITF_BOOL) nitf_Utils_isNumeric(char *str);
 
 NITFAPI(NITF_BOOL) nitf_Utils_isAlpha(char *str);
 
+/**
+ * Returns 1 if the input string is either null, empty (strlen == 0), or
+ * if every character is a whitespace char.
+ */
+NITFAPI(NITF_BOOL) nitf_Utils_isBlank(char *str);
+
 NITFAPI(void) nitf_Utils_trimString(char* str);
 
 /*!
@@ -52,7 +58,7 @@ NITFAPI(void) nitf_Utils_trimString(char* str);
 NITFPROT(void) nitf_Utils_replace(char* str, char oldValue, char newValue);
 
 /*!
- * Return the base name for the fullName, up until the 
+ * Return the base name for the fullName, up until the
  * extension is encountered.  Both base and fullName should
  * have at least NITF_MAX_PATH number of elements.
  *
@@ -60,15 +66,15 @@ NITFPROT(void) nitf_Utils_replace(char* str, char oldValue, char newValue);
  * \param fullName The source string
  * \param extension The extension name
  */
-NITFAPI(void) nitf_Utils_baseName(char* base, 
-                                  const char* fullName, 
+NITFAPI(void) nitf_Utils_baseName(char* base,
+                                  const char* fullName,
                                   const char* extension);
 
 
 /*!
  *  Convert a double representing decimal degrees into 3 integers,
  *  one for degrees, one for minutes, and one for seconds.
- *  
+ *
  *  The function returns these values through the passed in parameters.
  *  parameters may not be NULL
  *
@@ -131,9 +137,9 @@ NITFPROT(void) nitf_Utils_geographicLatToCharArray(int degrees,
  */
 NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
                                                    int minutes,
-                                                   double seconds, 
+                                                   double seconds,
                                                    char *buffer8);
-                   
+
 /*!
  *  Turn the decimal value into a string +-dd.ddd.  You must have a buffer
  *  with 7 elements to hand in to this function, otherwise you will
@@ -160,7 +166,7 @@ NITFPROT(void) nitf_Utils_decimalLatToGeoCharArray(double decimal,
  */
 NITFPROT(void) nitf_Utils_decimalLonToGeoCharArray(double decimal,
                                                    char *buffer8);
-                   
+
 /*!
  *  Take in a decimal degree format string and convert it into
  *  a double.  The string will be of the format +-ddd.dd or +-dd.dd.

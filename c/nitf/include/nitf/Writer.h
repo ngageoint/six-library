@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -32,6 +32,8 @@
 #include "nitf/ImageWriter.h"
 #include "nitf/SegmentWriter.h"
 #include "nitf/ComplexityLevel.h"
+#include "nitf/Utils.h"
+#include "nitf/DateTime.h"
 
 NITF_CXX_GUARD
 
@@ -116,8 +118,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_setDEWriteHandler(nitf_Writer *writer,
  * This is deprecated, but is available for backwards compatibility.
  *
  * \param writer    The Writer object
- * \param index     The segment index 
- * 
+ * \param index     The segment index
+ *
  * \deprecated - setImageWriteHandler is the preferred method to use.
  * \return A new ImageWriter, or NULL on failure
  */
@@ -129,8 +131,8 @@ NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *writer,
  * This is deprecated, but is available for backwards compatibility.
  *
  * \param writer    The Writer object
- * \param index     The segment index 
- * 
+ * \param index     The segment index
+ *
  * \deprecated - setGraphicWriteHandler is the preferred method to use.
  * \return A new SegmentWriter, or NULL on failure
  */
@@ -142,8 +144,8 @@ NITFAPI(nitf_SegmentWriter*) nitf_Writer_newGraphicWriter(nitf_Writer *writer,
  * This is deprecated, but is available for backwards compatibility.
  *
  * \param writer    The Writer object
- * \param index     The segment index 
- * 
+ * \param index     The segment index
+ *
  * \deprecated - setTextWriteHandler is the preferred method to use.
  * \return A new SegmentWriter, or NULL on failure
  */
@@ -155,8 +157,8 @@ NITFAPI(nitf_SegmentWriter*) nitf_Writer_newTextWriter(nitf_Writer *writer,
  * This is deprecated, but is available for backwards compatibility.
  *
  * \param writer    The Writer object
- * \param index     The segment index 
- * 
+ * \param index     The segment index
+ *
  * \deprecated - setDEWriteHandler is the preferred method to use.
  * \return A new SegmentWriter, or NULL on failure
  */
@@ -166,7 +168,7 @@ NITFAPI(nitf_SegmentWriter*) nitf_Writer_newDEWriter(nitf_Writer *writer,
 
 /*!
  * Performs the write operation
- * 
+ *
  * \return NITF_SUCCESS or NITF_FAILURE
  */
 NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer, nitf_Error * error);

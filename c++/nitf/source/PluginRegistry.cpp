@@ -28,3 +28,19 @@ void nitf::PluginRegistry::loadDir(std::string dirName) throw(nitf::NITFExceptio
     if (!nitf_PluginRegistry_loadDir(dirName.c_str(), &error))
         throw nitf::NITFException(&error);
 }
+
+void nitf::PluginRegistry::loadPlugin(std::string path) throw(nitf::NITFException)
+{
+    nitf_Error error;
+    if (!nitf_PluginRegistry_loadPlugin(path.c_str(), &error))
+        throw nitf::NITFException(&error);
+}
+
+void nitf::PluginRegistry::registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
+        NITF_PLUGIN_TRE_HANDLER_FUNCTION handler)
+        throw(nitf::NITFException)
+{
+    nitf_Error error;
+    if (!nitf_PluginRegistry_registerTREHandler(init, handler, &error))
+        throw nitf::NITFException(&error);
+}

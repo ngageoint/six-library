@@ -1649,6 +1649,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /* End file size */
     nitf_Off endSize;
 
+    nitf_DateTime *dateTime;
+    char* dateStr = NULL;
+
     nitf_FileHeader* header = writer->record->header;
 
     if (!writeHeader(writer, &fileLenOff, &hdrLen, error))
@@ -2032,8 +2035,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         goto CATCH_ERROR;
 
     if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(writer->output,
-                                               fileLenOff, 
-                                               NITF_SEEK_SET, 
+                                               fileLenOff,
+                                               NITF_SEEK_SET,
                                                error)))
         goto CATCH_ERROR;
 
@@ -2079,7 +2082,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         NITF_WRITE_INT64_FIELD(graphicDataLens[i], NITF_LS, ZERO, FILL_LEFT);
         if (!nitf_Field_setUint64(header->NITF_LS(i), graphicDataLens[i], error))
             goto CATCH_ERROR;
-        
+
     }
     if (numGraphics != 0)
     {
@@ -2145,13 +2148,13 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /* Now its time to check if we should be measuring the CLEVEL */
     if (strncmp(header->NITF_CLEVEL->raw, "00", 2) == 0)
     {
-        NITF_CLEVEL clevel = 
+        NITF_CLEVEL clevel =
             nitf_ComplexityLevel_measure(writer->record, error);
 
         if (clevel == NITF_CLEVEL_CHECK_FAILED)
             goto CATCH_ERROR;
 
-        nitf_ComplexityLevel_toString(clevel, 
+        nitf_ComplexityLevel_toString(clevel,
                                       header->NITF_CLEVEL->raw);
 
         if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(writer->output,
@@ -2163,13 +2166,42 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
 
         if (!writeField(writer, header->NITF_CLEVEL->raw, 2, error))
             goto CATCH_ERROR;
-
-
     }
 
+    /* if there wasn't a file datetime set, let's set one automatically */
+    if (nitf_Utils_isBlank(header->NITF_FDT->raw))
+    {
+        dateTime = nitf_DateTime_now(error);
+        if (!dateTime)
+            goto CATCH_ERROR;
+        dateStr = nitf_DateTime_format(dateTime, NITF_FORMAT_21, error);
+        if (!dateStr)
+            goto CATCH_ERROR;
 
+        /* should we set the FDT field w/the date? */
+        /*if (!nitf_Field_setString(header->NITF_FDT, dateStr, error))
+        {
+            NITF_FREE(dateStr);
+            nitf_DateTime_destruct(&now);
+            goto CATCH_ERROR;
+        }*/
+
+        if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(writer->output,
+                NITF_FHDR_SZ + NITF_FVER_SZ + NITF_CLEVEL_SZ + NITF_STYPE_SZ + NITF_OSTAID_SZ,
+                NITF_SEEK_SET,
+                error)))
+            goto CATCH_ERROR;
+
+        if (!writeField(writer, dateStr, NITF_FDT_SZ, error))
+            goto CATCH_ERROR;
+    }
 
     nitf_Writer_destructWriters(writer);
+
+    if (dateTime)
+        nitf_DateTime_destruct(&dateTime);
+    if (dateStr)
+        NITF_FREE(dateStr);
 
     /*  We dont handle anything cool yet  */
     return NITF_SUCCESS;
@@ -2198,6 +2230,11 @@ CATCH_ERROR:
         NITF_FREE(deSubLens);
         NITF_FREE(deDataLens);
     }
+
+    if (dateTime)
+        nitf_DateTime_destruct(&dateTime);
+    if (dateStr)
+        NITF_FREE(dateStr);
     return NITF_FAILURE;
 }
 

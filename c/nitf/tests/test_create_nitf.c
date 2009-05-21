@@ -986,14 +986,14 @@ NITF_BOOL populateFileHeader(nitf_Record *record, const char* title,
     /* the file header is already created, so just grab it */
     nitf_FileHeader *header = record->header;
 
-    
+
 /*     if (!nitf_Field_setUint32(header->complianceLevel, 3, error)) */
 /*         goto CATCH_ERROR; */
     if (!nitf_Field_setString(header->originStationID, "SF.net", error))
         goto CATCH_ERROR;
-    /* fake the date */
-    if (!nitf_Field_setString(header->fileDateTime, "20080812000000", error))
-        goto CATCH_ERROR;
+    /* the filedatetime can get auto-populated at write-time now, if blank */
+    /*if (!nitf_Field_setString(header->fileDateTime, "20080812000000", error))
+        goto CATCH_ERROR;*/
     if (!nitf_Field_setString(header->fileTitle, title, error))
         goto CATCH_ERROR;
 
@@ -1007,7 +1007,7 @@ NITF_BOOL populateFileHeader(nitf_Record *record, const char* title,
 NITF_BOOL setCornersFromDMSBox(nitf_ImageSubheader* header, nitf_Error * error)
 {
     /*
-     *  You could do this in degrees as easily 
+     *  You could do this in degrees as easily
      *  but this way we get to show off some new utilities
      */
     int latTopDMS[3]    = { 42, 17, 50 };
@@ -1015,28 +1015,28 @@ NITF_BOOL setCornersFromDMSBox(nitf_ImageSubheader* header, nitf_Error * error)
     int lonEastDMS[3]   = { -83, 42, 12 };
     int lonWestDMS[3]   = { -83, 45, 44 };
 
-    double latTopDecimal = 
-        nitf_Utils_geographicToDecimal(latTopDMS[0], 
-                                       latTopDMS[1], 
+    double latTopDecimal =
+        nitf_Utils_geographicToDecimal(latTopDMS[0],
+                                       latTopDMS[1],
                                        latTopDMS[2]);
 
     double latBottomDecimal =
-        nitf_Utils_geographicToDecimal(latBottomDMS[0], 
-                                       latBottomDMS[1], 
+        nitf_Utils_geographicToDecimal(latBottomDMS[0],
+                                       latBottomDMS[1],
                                        latBottomDMS[2]);
 
     double lonEastDecimal =
-        nitf_Utils_geographicToDecimal(lonEastDMS[0], 
-                                       lonEastDMS[1], 
+        nitf_Utils_geographicToDecimal(lonEastDMS[0],
+                                       lonEastDMS[1],
                                        lonEastDMS[2]);
 
 
     double lonWestDecimal =
-        nitf_Utils_geographicToDecimal(lonWestDMS[0], 
-                                       lonWestDMS[1], 
+        nitf_Utils_geographicToDecimal(lonWestDMS[0],
+                                       lonWestDMS[1],
                                        lonWestDMS[2]);
 
-    double corners[4][2] = 
+    double corners[4][2] =
     {
         { latTopDecimal,    lonWestDecimal },
         { latTopDecimal,    lonEastDecimal },
@@ -1048,7 +1048,7 @@ NITF_BOOL setCornersFromDMSBox(nitf_ImageSubheader* header, nitf_Error * error)
                                                      NITF_CORNERS_DECIMAL,
                                                      corners,
                                                      error);
-        
+
 
 }
 
@@ -1078,7 +1078,7 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
     /* Set the geo-corners to Ann Arbor, MI */
     if (!setCornersFromDMSBox(header, error))
         goto CATCH_ERROR;
-    
+
     /* create a BandInfo buffer */
     bands = (nitf_BandInfo **) NITF_MALLOC(sizeof(nitf_BandInfo *) * 3);
     if (bands == NULL)
