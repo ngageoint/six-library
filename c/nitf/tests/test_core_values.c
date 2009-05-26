@@ -48,8 +48,8 @@ int main()
         printf("Bad: (str: %s) [%ld]\n", bad, atol(bad));
 
         printf("As long long\n");
-        printf("Ok: (str: %s) [%lld]\n", ok, atoll(ok));
-        printf("Bad: (str: %s) [%lld]\n", bad, atoll(bad) );
+        printf("Ok: (str: %s) [%lld]\n", ok, NITF_ATO64(ok));
+        printf("Bad: (str: %s) [%lld]\n", bad, NITF_ATO64(bad) );
 
     }
     else if ( sizeof( long ) == 8 )
@@ -61,8 +61,8 @@ int main()
         printf("Bad: (str: %s) [%ld]\n", bad, atol(bad));
 
         printf("As long long\n");
-        printf("Ok: (str: %s) [%lld]\n", ok, atoll(ok));
-        printf("Bad: (str: %s) [%lld]\n", bad, atoll(bad));
+        printf("Ok: (str: %s) [%lld]\n", ok, NITF_ATO64(ok));
+        printf("Bad: (str: %s) [%lld]\n", bad, NITF_ATO64(bad));
 
 
     }

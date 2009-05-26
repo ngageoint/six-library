@@ -45,14 +45,18 @@ int main(int argc, char** argv)
         now.format(NITF_DATE_FORMAT_21, dateBuf, NITF_FDT_SZ + 1);
         std::cout << "The Current NITF 2.1 Formatted Date: " << dateBuf << std::endl;
 
+#ifndef WIN32
         nitf::DateTime dolly(dateBuf, NITF_DATE_FORMAT_21);
         std::cout << "Roundtripped: " << dolly.getTimeInMillis() << std::endl;
+#endif
 
         now.format(NITF_DATE_FORMAT_20, dateBuf, NITF_FDT_SZ + 1);
         std::cout << "The Current NITF 2.0 Formatted Date: " << dateBuf << std::endl;
 
+#ifndef WIN32
         dolly = nitf::DateTime(dateBuf, NITF_DATE_FORMAT_20);
         std::cout << "Roundtripped: " << dolly.getTimeInMillis() << std::endl;
+#endif
 
         exit(EXIT_SUCCESS);
     }

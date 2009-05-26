@@ -55,10 +55,13 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
     printf("The Current NITF 2.1 Formatted Date: %s\n", dateBuf);
+
+#ifndef WIN32
     date2 = nitf_DateTime_fromString(dateBuf, NITF_DATE_FORMAT_21, &error);
     printf("Roundtripped: %f\n", date2->timeInMillis);
     if (date2) nitf_DateTime_destruct(&date2);
-
+#endif
+    
     /* If you know the millis (since the epoch) you can do a quick-format: */
     if (!nitf_DateTime_formatMillis(date->timeInMillis, NITF_DATE_FORMAT_21, dateBuf,
             NITF_FDT_SZ + 1, &error))
@@ -67,10 +70,13 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
     printf("The Current NITF 2.1 Formatted Date: %s\n", dateBuf);
+    
+#ifndef WIN32
     date2 = nitf_DateTime_fromString(dateBuf, NITF_DATE_FORMAT_21, &error);
     printf("Roundtripped: %f\n", date2->timeInMillis);
     if (date2) nitf_DateTime_destruct(&date2);
-
+#endif
+    
     if (!nitf_DateTime_format(date, NITF_DATE_FORMAT_20, dateBuf,
             NITF_FDT_SZ + 1, &error))
     {
@@ -78,9 +84,12 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
     printf("The Current NITF 2.0 Formatted Date: %s\n", dateBuf);
+    
+#ifndef WIN32
     date2 = nitf_DateTime_fromString(dateBuf, NITF_DATE_FORMAT_20, &error);
     printf("Roundtripped: %f\n", date2->timeInMillis);
     if (date2) nitf_DateTime_destruct(&date2);
+#endif
 
     if (date) nitf_DateTime_destruct(&date);
     if (date2) nitf_DateTime_destruct(&date2);

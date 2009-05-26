@@ -64,11 +64,12 @@ void extractGraphics(nitf_Record *record, nitf_Reader *reader,
             
             if (nitf_SegmentReader_read(segmentReader, buf, bytes, error))
             {
+                nitf_IOHandle output;
                 char *file = (char *) NITF_MALLOC(NITF_MAX_PATH);
                 sprintf(file, "graphic_%d.cgm", num);
                 
                 /* write to a file */
-                nitf_IOHandle output = nitf_IOHandle_create(file,
+                output = nitf_IOHandle_create(file,
                         NITF_ACCESS_WRITEONLY, NITF_CREATE, error);
                 
                 nitf_IOHandle_write(output, buf, bytes, error);

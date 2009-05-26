@@ -114,7 +114,7 @@ nitf::Off nitf::NativeIOInterface::tell() throw(nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     nitf::Off t = io->iface->tell(io->data, &error);
-    if (t == NITF_INVALID_HANDLE_VALUE)
+    if (t < 0)
         throw nitf::NITFException(&error);
     return t;
 }
@@ -123,7 +123,7 @@ nitf::Off nitf::NativeIOInterface::getSize() throw(nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     nitf::Off size = io->iface->getSize(io->data, &error);
-    if (size == NITF_INVALID_HANDLE_VALUE)
+    if (size < 0)
         throw nitf::NITFException(&error);
     return size;
 }

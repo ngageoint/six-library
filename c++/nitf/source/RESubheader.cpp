@@ -107,7 +107,7 @@ char * RESubheader::getSubheaderFields() const
     return getNativeOrThrow()->subheaderFields;
 }
 
-nitf::Uint32 RESubheader::getDataLength() const
+nitf::Uint64 RESubheader::getDataLength() const
 {
     return getNativeOrThrow()->dataLength;
 }
