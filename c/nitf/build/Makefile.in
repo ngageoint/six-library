@@ -41,6 +41,7 @@ SOURCES = BandInfo.c \
           ComplexityLevel.c \
           ComponentInfo.c \
           DataSource.c \
+          DateTime.c \
           Debug.c \
           DESegment.c \
           DESubheader.c \
