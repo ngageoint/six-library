@@ -754,9 +754,6 @@ NITFAPI(nitf_Record *) nitf_Record_clone(nitf_Record * source,
     
     return record;
     
-    /* Destruct gracefully if we had a problem  */
-    nitf_Record_destruct(&record);
-    return NULL;
 }
 
 

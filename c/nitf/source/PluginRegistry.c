@@ -527,7 +527,7 @@ nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
             printf("Warning, static handler overriding [%s] hook", ident);
         }
 #endif
-        ok &= nitf_HashTable_insert(reg->treHandlers, ident[i], handle, error);
+        ok &= nitf_HashTable_insert(reg->treHandlers, ident[i], (NITF_DATA*)handle, error);
     }
 
     return ok;

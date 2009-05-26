@@ -76,4 +76,5 @@ int main(int argc, char**argv)
     printf("Decimal: [%s]\n", DECIMAL_LON_STR);
     nitf_Utils_decimalLonToCharArray(decimal, ll);
     printf("\tRe-formatted: [%s]\n", ll);
+    return 0;
 }

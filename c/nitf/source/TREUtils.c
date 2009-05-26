@@ -486,7 +486,7 @@ nitf_TREUtils_setDescription(nitf_TRE* tre,
     {
         nitf_Error_init(error, "TRE Description is NULL",
                 NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-        return NITF_FAILURE;;
+        return NITF_FAILURE;
     }
 
     return NITF_SUCCESS;
