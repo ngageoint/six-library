@@ -1649,7 +1649,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /* End file size */
     nitf_Off endSize;
 
-    nitf_DateTime *dateTime;
+    nitf_DateTime *dateTime = NULL;
     char* dateStr = NULL;
 
     nitf_FileHeader* header = writer->record->header;
