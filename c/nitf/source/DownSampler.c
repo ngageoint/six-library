@@ -449,16 +449,12 @@ NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
         {
             case 1:
                 MAX_DOWN_SAMPLE(nitf_Uint8);
-                break;
             case 2:
                 MAX_DOWN_SAMPLE(nitf_Uint16);
-                break;
             case 4:
                 MAX_DOWN_SAMPLE(nitf_Uint32);
-                break;
             case 8:
                 MAX_DOWN_SAMPLE(nitf_Uint64);
-                break;
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -497,10 +493,8 @@ NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
         {
             case 4:
                 MAX_DOWN_SAMPLE(float);
-                break;
             case 8:
                 MAX_DOWN_SAMPLE(double);
-                break;
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -513,10 +507,8 @@ NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
         {
             case 8:
                 MAX_DOWN_SAMPLE_CMPX(float);
-                break;
             case 16:               /* This case may not be possible */
                 MAX_DOWN_SAMPLE_CMPX(double);
-                break;
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -719,16 +711,12 @@ nitf_Error * error)
         {
             case 1:
                 SUM_SQ_2_DOWN_SAMPLE(nitf_Uint8);
-                break;
             case 2:
                 SUM_SQ_2_DOWN_SAMPLE(nitf_Uint16);
-                break;
             case 4:
                 SUM_SQ_2_DOWN_SAMPLE(nitf_Uint32);
-                break;
             case 8:
                 SUM_SQ_2_DOWN_SAMPLE(nitf_Uint64);
-                break;
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -745,16 +733,12 @@ nitf_Error * error)
         {
             case 1:
                 SUM_SQ_2_DOWN_SAMPLE(nitf_Int8);
-                break;
             case 2:
                 SUM_SQ_2_DOWN_SAMPLE(nitf_Int16);
-                break;
             case 4:
                 SUM_SQ_2_DOWN_SAMPLE(nitf_Int32);
-                break;
             case 8:
                 SUM_SQ_2_DOWN_SAMPLE(nitf_Int64);
-                break;
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -767,10 +751,8 @@ nitf_Error * error)
         {
             case 4:
                 SUM_SQ_2_DOWN_SAMPLE(float);
-                break;
             case 8:
                 SUM_SQ_2_DOWN_SAMPLE(double);
-                break;
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -977,16 +959,12 @@ nitf_Error * error)
         {
             case 1:
                 SELECT_2_DOWN_SAMPLE(nitf_Uint8);
-                break;
             case 2:
                 SELECT_2_DOWN_SAMPLE(nitf_Uint16);
-                break;
             case 4:
                 SELECT_2_DOWN_SAMPLE(nitf_Uint32);
-                break;
             case 8:
                 SELECT_2_DOWN_SAMPLE(nitf_Uint64);
-                break;
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -1003,16 +981,12 @@ nitf_Error * error)
         {
             case 1:
                 SELECT_2_DOWN_SAMPLE(nitf_Int8);
-                break;
             case 2:
                 SELECT_2_DOWN_SAMPLE(nitf_Int16);
-                break;
             case 4:
                 SELECT_2_DOWN_SAMPLE(nitf_Int32);
-                break;
             case 8:
                 SELECT_2_DOWN_SAMPLE(nitf_Int64);
-                break;
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -1025,10 +999,8 @@ nitf_Error * error)
         {
             case 4:
                 SELECT_2_DOWN_SAMPLE(float);
-                break;
             case 8:
                 SELECT_2_DOWN_SAMPLE(double);
-                break;
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
