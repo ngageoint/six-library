@@ -31,6 +31,7 @@
 #   include <stdarg.h>
 #   include <sys/types.h>
 #   include <ctype.h>
+#   include <time.h>
 #ifdef WIN32
 #      define WIN32_LEAN_AND_MEAN
 #      include <windows.h>
@@ -129,7 +130,9 @@ typedef int               nitf_CreationFlags;
 /* type suffixes */
 #      define  NITF_INT64(x) x##LL
 
-
+#      if defined(HAVE_SYS_TIME_H)
+#           include <sys/time.h>
+#      endif
 
 /*
 *  On most systems, this gets included in limits.h, but sometimes its not

@@ -391,10 +391,49 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
     return (NITF_SUCCESS);
 }
 
+NITFAPI(NITF_BOOL) nitf_Field_setDateTime(nitf_Field * field,
+        nitf_DateTime *dateTime, const char *dateFormat, nitf_Error * error)
+{
+    double millis;
+
+    /*  Check the field type */
+    if (field->type == NITF_BINARY)
+    {
+        nitf_Error_init(error,
+                        "Type for date set for field can not be binary",
+                        NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        return (NITF_FAILURE);
+    }
+
+    millis = dateTime ? dateTime->timeInMillis :
+            nitf_Utils_getCurrentTimeMillis();
+
+    return nitf_DateTime_formatMillis(millis, dateFormat,
+            field->raw, field->length + 1, error);
+}
+
+
+NITFAPI(nitf_DateTime*) nitf_Field_asDateTime(nitf_Field * field,
+        const char* dateFormat, nitf_Error * error)
+{
+    nitf_DateTime *dateTime = NULL;
+    /*  Check the field type */
+    if (field->type == NITF_BINARY)
+    {
+        nitf_Error_init(error,
+                        "Type for date field can not be binary",
+                        NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        return NULL;
+    }
+
+    return nitf_DateTime_fromString(field->raw, dateFormat, error);
+}
+
 /* Set a real field */
 
 NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
-                                      const char *type, NITF_BOOL plus, double value, nitf_Error *error)
+                                      const char *type, NITF_BOOL plus,
+                                      double value, nitf_Error *error)
 {
     nitf_Uint32 precision;     /* Format precision */
     nitf_Uint32 bufferLen;     /* Length of buffer */

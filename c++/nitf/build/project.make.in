@@ -36,6 +36,7 @@ SOURCES = BandInfo.cpp \
           BufferedWriter.cpp \
           ComponentInfo.cpp \
           DataSource.cpp \
+          DateTime.cpp \
           DESegment.cpp \
           DESubheader.cpp \
           DownSampler.cpp \

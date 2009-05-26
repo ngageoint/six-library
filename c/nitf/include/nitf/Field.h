@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -24,6 +24,7 @@
 #define __NITF_FIELD_H__
 
 #include "nitf/System.h"
+#include "nitf/DateTime.h"
 #include "nitf/Utils.h"
 
 NITF_CXX_GUARD
@@ -249,6 +250,15 @@ NITFAPI(void) nitf_Field_trimString(char *str);
 NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
                                         const char *str, nitf_Error * error);
 
+
+/**
+ * Sets the value of the field to the formatted date string, represented by
+ * the given DateTime and date format.
+ */
+NITFAPI(NITF_BOOL) nitf_Field_setDateTime(nitf_Field * field,
+        nitf_DateTime *dateTime, const char *format, nitf_Error * error);
+
+
 /*!
  *  \fn nitf_Field_setReal
  *  \param field The field to set
@@ -328,6 +338,14 @@ NITFAPI(NITF_BOOL) nitf_Field_get(nitf_Field * field,
                                   NITF_DATA * outValue,
                                   nitf_ConvType convType,
                                   size_t length, nitf_Error * error);
+
+/**
+ * Attempt to get the Field as a DateTime object, represented by the given
+ * date format.
+ * \return  a new DateTime object, which is up to the user to destroy
+ */
+NITFAPI(nitf_DateTime*) nitf_Field_asDateTime(nitf_Field * field,
+        const char* dateFormat, nitf_Error * error);
 
 /*!
  *  TODO: Add documentation

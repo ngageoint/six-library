@@ -29,6 +29,7 @@
 #include "nitf/Object.hpp"
 #include "nitf/HashTable.hpp"
 #include "nitf/List.hpp"
+#include "nitf/DateTime.hpp"
 #include <import/str.h>
 #include <string>
 
@@ -248,6 +249,25 @@ public:
         NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), (char*)data.c_str(), &error);
         if (!x)
             throw nitf::NITFException(&error);
+    }
+
+    void set(nitf::DateTime dateTime, const std::string& format) throw(nitf::NITFException)
+    {
+        NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(),
+                dateTime.getNative(), (char*)format.c_str(), &error);
+        if (!x)
+            throw nitf::NITFException(&error);
+    }
+
+    nitf::DateTime asDateTime(const std::string& format) throw(nitf::NITFException)
+    {
+        nitf_DateTime *x = nitf_Field_asDateTime(getNativeOrThrow(),
+                (char*)format.c_str(), &error);
+        if (!x)
+            throw nitf::NITFException(&error);
+        nitf::DateTime d(x);
+        d.setManaged(false);
+        return d;
     }
 
     //! Get the type

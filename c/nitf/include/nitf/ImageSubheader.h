@@ -333,9 +333,9 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(
 
 /*!
   \brief  nitf_ImageSubheader_removeBand - removes a band from the image.
-  
+
   This removes the underlying BandInfo object and decrements the band count.
-  
+
   \return NITF_SUCCESS is return on success, on error the error object is set.
 */
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
@@ -344,7 +344,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
     nitf_Error * error            /*!< For error returns */
 );
 
-                                                  
+
 /*!
   \brief  nitf_ImageSubheader_getDimensions - Get image dimensions
 
@@ -450,16 +450,16 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setDimensions
  *  The first dimension is used for the corner itself, and the second
  *  dimension is for lat (0) or lon (1).
  *
- *  The corners MUST be oriented to correspond to 
+ *  The corners MUST be oriented to correspond to
  *
- *  corners[0] = (0, 0), 
- *  corners[1] = (0, MaxCol), 
+ *  corners[0] = (0, 0),
+ *  corners[1] = (0, MaxCol),
  *  corners[2] = (MaxRow, MaxCol)
  *  corners[3] = (MaxRow, 0)
  *
  *  following in line with 2500C.
  */
-NITFAPI(NITF_BOOL) 
+NITFAPI(NITF_BOOL)
 nitf_ImageSubheader_setCornersFromLatLons(nitf_ImageSubheader* subheader,
                                           nitf_CornersType type,
                                           double corners[4][2],
@@ -479,16 +479,16 @@ nitf_ImageSubheader_getCornersType(nitf_ImageSubheader* subheader);
  *  NITF_GEO or NITF_DECIMAL.  Others will trigger an error with code
  *  NITF_ERR_INVALID_PARAMETER
  *
- *  The output corners will be oriented to correspond to 
+ *  The output corners will be oriented to correspond to
  *
- *  corners[0] = (0, 0), 
- *  corners[1] = (0, MaxCol), 
+ *  corners[0] = (0, 0),
+ *  corners[1] = (0, MaxCol),
  *  corners[2] = (MaxRow, MaxCol)
  *  corners[3] = (MaxRow, 0)
  *
  *  following in line with 2500C.
  */
-NITFAPI(NITF_BOOL) 
+NITFAPI(NITF_BOOL)
 nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
                                         double corners[4][2],
                                         nitf_Error *error);
@@ -598,7 +598,6 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeImageComment
     int position,                 /*!< position of comment to remove (zero-index)*/
     nitf_Error *error             /*!< Object for error messages */
 );
-
 
 
 NITF_CXX_ENDGUARD

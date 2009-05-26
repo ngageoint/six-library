@@ -29,6 +29,7 @@
 #include "nitf/BufferedWriter.hpp"
 #include "nitf/ComponentInfo.hpp"
 #include "nitf/DataSource.hpp"
+#include "nitf/DateTime.hpp"
 #include "nitf/DESegment.hpp"
 #include "nitf/DESubheader.hpp"
 #include "nitf/DownSampler.hpp"

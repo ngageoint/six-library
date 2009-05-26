@@ -22,38 +22,10 @@
 
 #include "nitf/DateTime.h"
 
-#if defined(HAVE_SYS_TIME_H)
-#include <sys/time.h>
-#elif defined(_WIN32)
-#include <windows.h>
-#endif
-
 
 NITFAPI(nitf_DateTime*) nitf_DateTime_now(nitf_Error *error)
 {
-    double millis = 0;
-#if defined(__POSIX) && defined(USE_CLOCK_GETTIME)
-    struct timespec now;
-    clock_gettime(CLOCK_REALTIME,&now);
-    millis = (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
-#elif defined(HAVE_SYS_TIME_H)
-    struct timeval now;
-    gettimeofday(&now,NULL);
-    millis = (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
-#elif defined(_WIN32)
-    // Getting time twice may be inefficient but is quicker
-    // than converting the SYSTEMTIME structure into
-    // milliseconds
-    // We could add an additional flag here if the user
-    // does not need millisecond accuracy
-    SYSTEMTIME now;
-    GetLocalTime(&now);
-    millis = (double)time(NULL) * 1000 + now.wMilliseconds;
-#else
-    millis = (double)time(NULL) * 1000;
-#endif
-
-    return nitf_DateTime_fromMillis(millis, error);
+    return nitf_DateTime_fromMillis(nitf_Utils_getCurrentTimeMillis(), error);
 }
 
 NITFAPI(nitf_DateTime*) nitf_DateTime_fromMillis(double millis,
@@ -91,6 +63,21 @@ NITFAPI(nitf_DateTime*) nitf_DateTime_fromMillis(double millis,
     return dt;
 }
 
+
+NITFAPI(nitf_DateTime*) nitf_DateTime_fromString(const char* string,
+        const char* format, nitf_Error *error)
+{
+    struct tm t;
+    if (!strptime(string, format, &t))
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                "Unknown error caused by the call to strptime with format string: [%s]",
+                format);
+        return NULL;
+    }
+    return nitf_DateTime_fromMillis((double)time(&t) * 1000, error);
+}
+
 NITFAPI(void) nitf_DateTime_destruct(nitf_DateTime **dt)
 {
     if (*dt)
@@ -101,32 +88,28 @@ NITFAPI(void) nitf_DateTime_destruct(nitf_DateTime **dt)
 }
 
 
-NITFAPI(char*) nitf_DateTime_format(nitf_DateTime *dateTime,
-        const char* format, nitf_Error *error)
+NITFAPI(NITF_BOOL) nitf_DateTime_format(nitf_DateTime *dateTime,
+        const char* format, char* outBuf, size_t maxSize, nitf_Error *error)
 {
     return nitf_DateTime_formatMillis(dateTime->timeInMillis,
-            format, error);
+            format, outBuf, maxSize, error);
 }
 
-NITFAPI(char*) nitf_DateTime_formatMillis(double millis,
-        const char* format, nitf_Error *error)
+NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
+        const char* format, char* outBuf, size_t maxSize, nitf_Error *error)
 {
     time_t timeInSeconds;
     struct tm t;
-    char *buf = NULL;
-    size_t strfReturn;
 
     timeInSeconds = millis / 1000;
     t = *gmtime(&timeInSeconds);
 
-    buf = (char*)NITF_MALLOC(NITF_MAX_DATE_STRING + 1);
-    if (!buf)
+    if (strftime(outBuf, maxSize, format, &t) == 0)
     {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
-        return NULL;
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                "Unknown error caused by the call to strftime with format string: [%s]",
+                format);
+        return NITF_FAILURE;
     }
-
-    strfReturn = strftime(buf, NITF_MAX_DATE_STRING, format, &t);
-    return buf;
+    return NITF_SUCCESS;
 }

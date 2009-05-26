@@ -23,10 +23,12 @@
 #include <import/nitf.h>
 
 
+#define MAX_DATE_STRING    1024
+
 int main(int argc, char** argv)
 {
-    nitf_DateTime *date = NULL;
-    char *dateStr = NULL;
+    nitf_DateTime *date = NULL, *date2 = NULL;
+    char dateBuf[MAX_DATE_STRING];
     nitf_Error error;
 
     date = nitf_DateTime_now(&error);
@@ -46,26 +48,42 @@ int main(int argc, char** argv)
     printf("Second: %f\n", date->second);
     printf("Millis: %f\n", date->timeInMillis);
 
-    dateStr = nitf_DateTime_format(date, NITF_FORMAT_21, &error);
-    if (!dateStr)
+    if (!nitf_DateTime_format(date, NITF_DATE_FORMAT_21, dateBuf,
+            NITF_FDT_SZ + 1, &error))
     {
         nitf_Error_print(&error, stdout, "Exiting (2) ...");
         exit(EXIT_FAILURE);
     }
-    printf("The Current NITF 2.1 Formatted Date: %s\n", dateStr);
-    if (dateStr) NITF_FREE(dateStr);
+    printf("The Current NITF 2.1 Formatted Date: %s\n", dateBuf);
+    date2 = nitf_DateTime_fromString(dateBuf, NITF_DATE_FORMAT_21, &error);
+    printf("Roundtripped: %f\n", date2->timeInMillis);
+    if (date2) nitf_DateTime_destruct(&date2);
 
     /* If you know the millis (since the epoch) you can do a quick-format: */
-    dateStr = nitf_DateTime_formatMillis(date->timeInMillis, NITF_FORMAT_21, &error);
-    if (!dateStr)
+    if (!nitf_DateTime_formatMillis(date->timeInMillis, NITF_DATE_FORMAT_21, dateBuf,
+            NITF_FDT_SZ + 1, &error))
     {
         nitf_Error_print(&error, stdout, "Exiting (2) ...");
         exit(EXIT_FAILURE);
     }
-    printf("The Current NITF 2.1 Formatted Date: %s\n", dateStr);
-    if (dateStr) NITF_FREE(dateStr);
+    printf("The Current NITF 2.1 Formatted Date: %s\n", dateBuf);
+    date2 = nitf_DateTime_fromString(dateBuf, NITF_DATE_FORMAT_21, &error);
+    printf("Roundtripped: %f\n", date2->timeInMillis);
+    if (date2) nitf_DateTime_destruct(&date2);
+
+    if (!nitf_DateTime_format(date, NITF_DATE_FORMAT_20, dateBuf,
+            NITF_FDT_SZ + 1, &error))
+    {
+        nitf_Error_print(&error, stdout, "Exiting (3) ...");
+        exit(EXIT_FAILURE);
+    }
+    printf("The Current NITF 2.0 Formatted Date: %s\n", dateBuf);
+    date2 = nitf_DateTime_fromString(dateBuf, NITF_DATE_FORMAT_20, &error);
+    printf("Roundtripped: %f\n", date2->timeInMillis);
+    if (date2) nitf_DateTime_destruct(&date2);
 
     if (date) nitf_DateTime_destruct(&date);
+    if (date2) nitf_DateTime_destruct(&date2);
 
     return 0;
 }

@@ -188,6 +188,9 @@ NITFAPI(NITF_BOOL) nitf_Utils_parseDecimalString(char* d,
  */
 NITFAPI(char) nitf_Utils_cornersTypeAsCoordRep(nitf_CornersType type);
 
+
+NITFAPI(double) nitf_Utils_getCurrentTimeMillis();
+
 NITF_CXX_ENDGUARD
 
 #endif

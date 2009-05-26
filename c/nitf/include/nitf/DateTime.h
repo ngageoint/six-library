@@ -25,11 +25,11 @@
 
 #include "nitf/Error.h"
 #include "nitf/System.h"
-#include <time.h>
+#include "nitf/Utils.h"
 
-#define NITF_MAX_DATE_STRING    1024
 
-#define NITF_FORMAT_21  "%Y%m%d%H%M%S"
+#define NITF_DATE_FORMAT_20  "%d%H%M%SZ%b%y"
+#define NITF_DATE_FORMAT_21  "%Y%m%d%H%M%S"
 
 
 NITF_CXX_GUARD
@@ -66,24 +66,44 @@ NITFAPI(nitf_DateTime*) nitf_DateTime_now(nitf_Error*);
 NITFAPI(nitf_DateTime*) nitf_DateTime_fromMillis(double millis, nitf_Error*);
 
 /*!
+ * Returns a DateTime object from the string with the given format.
+ */
+NITFAPI(nitf_DateTime*) nitf_DateTime_fromString(const char* string,
+        const char* format, nitf_Error *error);
+
+/*!
  * Destroys the DateTime object.
  */
 NITFAPI(void) nitf_DateTime_destruct(nitf_DateTime**);
 
 /*!
- * Formats a DateTime object using the given format string, returning a newly
- * allocated string (which must be freed by the user using NITF_FREE).
+ * Formats a DateTime object using the given format string and output buffer.
+ *
+ * \param dateTime  the DateTime object
+ * \param format    the format string (uses the srftime format)
+ * \param outBuf    the output buffer to write to (passed in & pre-allocated)
+ * \param maxSize   the maximum size of the formatted output
+ * \param error     the error object
+ * \return  NITF_SUCCESS or NITF_FAILURE
  */
-NITFAPI(char*) nitf_DateTime_format(nitf_DateTime *dateTime,
-        const char* format, nitf_Error*);
+NITFAPI(NITF_BOOL) nitf_DateTime_format(nitf_DateTime *dateTime,
+        const char* format, char* outBuf,
+        size_t maxSize, nitf_Error *error);
 /*!
  *
  * Uses the input milliseconds since the epoch as the DateTime to format
- * using the given format string, returning a newly
- * allocated string (which must be freed by the user using NITF_FREE).
+ * using the given format string and output buffer.
+ *
+ * \param millis    the # of milliseconds since the epoch
+ * \param format    the format string (uses the srftime format)
+ * \param outBuf    the output buffer to write to (passed in & pre-allocated)
+ * \param maxSize   the maximum size of the formatted output
+ * \param error     the error object
+ * \return  NITF_SUCCESS or NITF_FAILURE
  */
-NITFAPI(char*) nitf_DateTime_formatMillis(double millis,
-        const char* format, nitf_Error*);
+NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
+        const char* format, char* outBuf,
+        size_t maxSize, nitf_Error *error);
 
 
 NITF_CXX_ENDGUARD

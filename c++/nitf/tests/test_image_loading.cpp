@@ -49,8 +49,8 @@ void writeImage(nitf::ImageSegment & segment,
 
     nitf::Uint32 nRows   = subheader.getNumRows();
     nitf::Uint32 nCols   = subheader.getNumCols();
-    subWindowSize = (size_t)(nRows / rowSkipFactor) * 
-        (size_t)(nCols / columnSkipFactor) * 
+    subWindowSize = (size_t)(nRows / rowSkipFactor) *
+        (size_t)(nCols / columnSkipFactor) *
         (size_t)NITF_NBPP_TO_BYTES(nBits);
 
     std::cout << "NBANDS -> " << nBands << std::endl;
@@ -117,15 +117,15 @@ void writeImage(nitf::ImageSegment & segment,
     {
         std::cout << "Writing band # " << i << std::endl;
         std::string base = sys::Path::basename(imageName);
-        
+
         size_t where = 0;
         while ((where = base.find(".")) != (size_t)std::string::npos)
             base.replace(where, 1, "_");
 
         std::ostringstream file;
-        file << base << "__" << imageNumber << "__" 
+        file << base << "__" << imageNumber << "__"
              << nRows / rowSkipFactor << '_'
-             << nCols / columnSkipFactor << '_' 
+             << nCols / columnSkipFactor << '_'
              << nBits << "_band_" << i << ".out";
 
         nitf::IOHandle toFile(file.str(), NITF_ACCESS_WRITEONLY, NITF_CREATE);
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
         /*  If you didnt give us a nitf file, we're croaking  */
         if (argc != 2)
         {
-            std::cout << "Usage: " << argv[0] << " <nitf-file>" 
+            std::cout << "Usage: " << argv[0] << " <nitf-file>"
                       << std::endl;
             exit(EXIT_FAILURE);
         }

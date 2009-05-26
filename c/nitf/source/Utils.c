@@ -442,3 +442,29 @@ NITFPROT(void) nitf_Utils_decimalLonToGeoCharArray(double decimal,
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
     nitf_Utils_geographicLonToCharArray(d, m, s, buffer8);
 }
+
+
+NITFAPI(double) nitf_Utils_getCurrentTimeMillis()
+{
+    double millis = 0;
+#if defined(__POSIX) && defined(USE_CLOCK_GETTIME)
+    struct timespec now;
+    clock_gettime(CLOCK_REALTIME,&now);
+    millis = (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
+#elif defined(HAVE_SYS_TIME_H)
+    struct timeval now;
+    gettimeofday(&now,NULL);
+    millis = (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
+#elif defined(WIN32)
+    // Getting time twice may be inefficient but is quicker
+    // than converting the SYSTEMTIME structure into milliseconds
+    // We could add an additional flag here if the user
+    // does not need millisecond accuracy
+    SYSTEMTIME now;
+    GetLocalTime(&now);
+    millis = (double)time(NULL) * 1000 + now.wMilliseconds;
+#else
+    millis = (double)time(NULL) * 1000;
+#endif
+    return millis;
+}

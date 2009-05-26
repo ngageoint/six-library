@@ -1649,9 +1649,6 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /* End file size */
     nitf_Off endSize;
 
-    nitf_DateTime *dateTime = NULL;
-    char* dateStr = NULL;
-
     nitf_FileHeader* header = writer->record->header;
 
     if (!writeHeader(writer, &fileLenOff, &hdrLen, error))
@@ -2171,37 +2168,22 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /* if there wasn't a file datetime set, let's set one automatically */
     if (nitf_Utils_isBlank(header->NITF_FDT->raw))
     {
-        dateTime = nitf_DateTime_now(error);
-        if (!dateTime)
-            goto CATCH_ERROR;
-        dateStr = nitf_DateTime_format(dateTime, NITF_FORMAT_21, error);
-        if (!dateStr)
-            goto CATCH_ERROR;
+        char *dateFormat = (nitf_Record_getVersion(writer->record) == NITF_VER_20 ?
+                NITF_DATE_FORMAT_20 : NITF_DATE_FORMAT_21);
 
-        /* should we set the FDT field w/the date? */
-        /*if (!nitf_Field_setString(header->NITF_FDT, dateStr, error))
-        {
-            NITF_FREE(dateStr);
-            nitf_DateTime_destruct(&now);
+        if (!nitf_Field_setDateTime(header->NITF_FDT, NULL, dateFormat, error))
             goto CATCH_ERROR;
-        }*/
 
         if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(writer->output,
                 NITF_FHDR_SZ + NITF_FVER_SZ + NITF_CLEVEL_SZ + NITF_STYPE_SZ + NITF_OSTAID_SZ,
-                NITF_SEEK_SET,
-                error)))
+                NITF_SEEK_SET, error)))
             goto CATCH_ERROR;
 
-        if (!writeField(writer, dateStr, NITF_FDT_SZ, error))
+        if (!writeField(writer, header->NITF_FDT->raw, NITF_FDT_SZ, error))
             goto CATCH_ERROR;
     }
 
     nitf_Writer_destructWriters(writer);
-
-    if (dateTime)
-        nitf_DateTime_destruct(&dateTime);
-    if (dateStr)
-        NITF_FREE(dateStr);
 
     /*  We dont handle anything cool yet  */
     return NITF_SUCCESS;
@@ -2231,10 +2213,6 @@ CATCH_ERROR:
         NITF_FREE(deDataLens);
     }
 
-    if (dateTime)
-        nitf_DateTime_destruct(&dateTime);
-    if (dateStr)
-        NITF_FREE(dateStr);
     return NITF_FAILURE;
 }
 
