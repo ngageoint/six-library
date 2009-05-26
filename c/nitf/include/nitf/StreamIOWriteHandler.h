@@ -42,7 +42,7 @@ NITF_CXX_GUARD
  * \param error         The error object, which will get populated on error
  * \return              a nitf_WriteHandler*, or NULL on error
  */
-nitf_WriteHandler* nitf_StreamIOWriteHandler_construct(
+NITFAPI(nitf_WriteHandler*) nitf_StreamIOWriteHandler_construct(
     nitf_IOInterface *io,
     nitf_Uint64 offset,
     nitf_Uint64 bytes,
