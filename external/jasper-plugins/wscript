@@ -19,6 +19,16 @@ def build(bld):
     
     driverNode = bld.path.find_dir('build').ensure_dir_node_from_path(fname)
     
+    defDict = dict(PACKAGE='"jasper"', PACKAGE_NAME='"jasper"',
+                   JAS_VERSION='"1.900.1"', PACKAGE_STRING='"jasper 1.900.1"',
+                   PACKAGE_VERSION='"1.900.1"', PACKAGE_TARNAME='"jasper"',
+                   VERSION='"1.900.1"',)
+                   
+    configH = bld.new_task_gen(output='src/libjasper/include/jasper/jas_config.h',
+                               path=driverNode, defs=defDict, before='JASPER')
+    configH.features = ['makeHeader']
+    configH.cloneVariants()
+    
     jasperDefs = []
     if Options.platform.startswith('win'):
         jasperDefs.append('JAS_WIN_MSVC_BUILD')

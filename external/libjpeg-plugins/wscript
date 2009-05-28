@@ -3,6 +3,20 @@ import Options
 
 fname = 'jpeg-6b'
 
+
+def configure(conf):
+    platform = Options.platform
+    defs = []
+    if platform.startswith('win32'):
+        defs.append('/DHAVE_PROTOTYPES')
+        defs.append('/UNEED_BSD_STRINGS')
+        defs.append('/UNEED_SYS_TYPES_H')
+        defs.append('/UNEED_FAR_POINTERS')
+        defs.append('/UNEED_SHORT_EXTERNAL_NAMES')
+        defs.append('/UINCOMPLETE_TYPES_BROKEN')
+    env.append_value('CCFLAGS_LIBJPEG', defs)
+
+
 def build(bld):
     
     defs = bld.env['defines']
@@ -18,6 +32,12 @@ def build(bld):
     bld.add_group()
     
     driverNode = bld.path.find_dir('build').ensure_dir_node_from_path(fname)
+    
+    defDict = dict()
+    configH = bld.new_task_gen(output='jconfig.h', path=driverNode,
+                               defs=defDict, before='LIBJPEG')
+    configH.features = ['makeHeader']
+    configH.cloneVariants()
     
     #shutil.copy('jconfig.vc', 'jconfig.h')
 
@@ -73,7 +93,8 @@ def build(bld):
                             source=sources,
                             target='jpeg', path=driverNode,
                             export_incdirs='.',
-                            uselib='LIB_SOCKET',
+                            uselib='SOCKET LIBJPEG',
+                            defines=defList,
                             name='LIBJPEG')
     jpeg.cloneVariants()
     bld.add_group()
@@ -85,7 +106,8 @@ def build(bld):
         libPattern = libPattern[3:]
     lib = bld.new_task_gen('cc', 'shlib', target='LibjpegDecompress',
                            uselib_local='LIBJPEG NITRO'.split(),
-                           install_path='${PREFIX}/share/nitf/plugins')
+                           install_path='${PREFIX}/share/nitf/plugins',
+                           defines=defList)
     lib.find_sources_in_dirs('./source', excludes=[])
     for t in lib.cloneVariants():
         t.env['shlib_PATTERN'] = libPattern
