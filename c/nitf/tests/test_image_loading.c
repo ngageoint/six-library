@@ -139,7 +139,6 @@ void writeImage(nitf_ImageSegment * segment,
 
 	if (nBands == 2
             && segment->subheader->NITF_IMODE->raw[0] == 'P'
-            && strncmp("SAR", segment->subheader->NITF_ICAT->raw, 3) == 0
             && NITF_NBPP_TO_BYTES(nBits) == 4
             && segment->subheader->bandInfo[0]->NITF_ISUBCAT->raw[0] == 'I'
             && (strncmp("NC", segment->subheader->NITF_IC->raw, 2)
@@ -147,7 +146,7 @@ void writeImage(nitf_ImageSegment * segment,
 	{
             subimageSize *= nBands;
             nBands = 1;
-            printf("Using accelerated 3-band RGB mode pix-interleaved image\n");
+            printf("Using accelerated 2-band IQ mode pix-interleaved image\n");
 	}
     }
     subimage = nitf_SubWindow_construct(error);

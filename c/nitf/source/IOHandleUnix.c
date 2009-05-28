@@ -48,8 +48,8 @@ NITFAPI(NITF_BOOL) nitf_IOHandle_read(nitf_IOHandle handle,
                                       char *buf, size_t size,
                                       nitf_Error * error)
 {
-    int bytesRead = 0;          /* Number of bytes read during last read operation */
-    int totalBytesRead = 0;     /* Total bytes read thus far */
+    ssize_t bytesRead = 0;          /* Number of bytes read during last read operation */
+    size_t totalBytesRead = 0;     /* Total bytes read thus far */
     int i;                      /* iterator */
 
     /* make sure the user actually wants data */
@@ -65,7 +65,7 @@ NITFAPI(NITF_BOOL) nitf_IOHandle_read(nitf_IOHandle handle,
 
         switch (bytesRead)
         {
-            case - 1:               /* Some type of error occured */
+            case -1:               /* Some type of error occured */
                 switch (errno)
                 {
                     case EINTR:
@@ -84,7 +84,7 @@ NITFAPI(NITF_BOOL) nitf_IOHandle_read(nitf_IOHandle handle,
                 return NITF_FAILURE;
 
             default:               /* We made progress */
-                totalBytesRead += bytesRead;
+                totalBytesRead += (size_t)bytesRead;
 
         }                       /* End of switch */
 
