@@ -237,12 +237,16 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
             /* TODO what to do??? 8 bit is ok, but what about 64? */
             memcpy(buf, field->raw, length);
         }
+
+        /* we do not pad binary values, for obvious reasons... */
     }
     else
+    {
         memcpy(buf, field->raw, length);
 
-    if (!padString(writer, buf, length, fill, fillDir, error))
-        goto CATCH_ERROR;
+        if (!padString(writer, buf, length, fill, fillDir, error))
+            goto CATCH_ERROR;
+    }
 
     if (!writeField(writer, buf, length, error))
         goto CATCH_ERROR;
@@ -399,7 +403,11 @@ NITFPRIV(NITF_BOOL) padString(nitf_Writer * writer,
 
     /* check to see if we even need to pad it */
     if (!field)
-        printf("Null field\n");
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                "Trying to use NULL field. padString failed.");
+        return NITF_FAILURE;
+    }
     size = strlen(field);
     if (size >= length)
     {
