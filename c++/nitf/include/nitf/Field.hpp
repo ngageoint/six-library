@@ -251,7 +251,7 @@ public:
             throw nitf::NITFException(&error);
     }
 
-    void set(nitf::DateTime dateTime, const std::string& format) throw(nitf::NITFException)
+    void set(nitf::DateTime dateTime, std::string format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
     {
         NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(),
                 dateTime.getNative(), (char*)format.c_str(), &error);
@@ -259,7 +259,7 @@ public:
             throw nitf::NITFException(&error);
     }
 
-    nitf::DateTime asDateTime(const std::string& format) throw(nitf::NITFException)
+    nitf::DateTime asDateTime(std::string format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
     {
         nitf_DateTime *x = nitf_Field_asDateTime(getNativeOrThrow(),
                 (char*)format.c_str(), &error);

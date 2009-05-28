@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -99,10 +99,10 @@
 
 /**
  * Macro which declares a TRE Plugin
- * 
+ *
  * This assumes that the variable 'descriptions' is an accessible
  * nitf_TRE_DescriptionSet
- * 
+ *
  * _Tre the name of the input TRE
  */
 #define NITF_DECLARE_PLUGIN(_Tre) \
@@ -123,7 +123,7 @@
 
 /**
  * Declare a TRE Plugin with a single TREDescription
- * 
+ *
  * _Tre the name of the input TRE
  * _Description the description to use
  */
@@ -139,10 +139,16 @@
  * Reference a TRE that has been statically compiled inside of a library
  *
  */
-#define NITF_TRE_STATIC_HANDLER_REF(_Tre) \
-    extern char** _Tre##_init(nitf_Error*); \
-    extern nitf_TREHandler* _Tre##_handler(nitf_Error*)
 
+#ifdef __cplusplus
+#   define NITF_TRE_STATIC_HANDLER_REF(_Tre) \
+        extern "C" char** _Tre##_init(nitf_Error*); \
+        extern "C" nitf_TREHandler* _Tre##_handler(nitf_Error*);
+#else
+#   define NITF_TRE_STATIC_HANDLER_REF(_Tre) \
+        extern char** _Tre##_init(nitf_Error*); \
+        extern nitf_TREHandler* _Tre##_handler(nitf_Error*);
+#endif
 
 
 #endif
