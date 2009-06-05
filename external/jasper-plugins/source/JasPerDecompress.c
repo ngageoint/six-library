@@ -43,12 +43,12 @@
  */
 
 /*  Prototypes  */
-NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOHandle      io,
-        nitf_Uint64        offset,
-        nitf_Uint64        fileLength,
-        nitf_BlockingInfo* blockInfo,
-        nitf_Uint32*       blockMask,
-        nitf_Error*        error);
+NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface*  io,
+                                              nitf_Uint64        offset,
+                                              nitf_Uint64        fileLength,
+                                              nitf_BlockingInfo* blockInfo,
+                                              nitf_Uint64*       blockMask,
+                                              nitf_Error*        error);
 
 NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                                     nitf_Uint32 blockNumber,
@@ -301,8 +301,8 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
 
 
 
-NITFPRIV(int) decode(ImplControl *implControl,
-                     nitf_IOHandle io,
+NITFPRIV(int) decode(ImplControl* implControl,
+                     nitf_IOInterface* io,
                      nitf_Error* error)
 {
     nitf_Uint8 *input;        /* Input (compressed) image data */
@@ -310,9 +310,10 @@ NITFPRIV(int) decode(ImplControl *implControl,
     nitf_Uint32 outputLen;    /* Output (decompressed) image data */
     int check;
     /*      Seek the handle to the start of data */
-    off_t found = nitf_IOHandle_seek(io,
-                                     implControl->offset,
-                                     NITF_SEEK_SET, error);
+    off_t found = nitf_IOInterface_seek(io,
+                                        implControl->offset,
+                                        NITF_SEEK_SET, error);
+
     if (!NITF_IO_SUCCESS(found)) return 0;
 
     /*  Allocate read buffer */
@@ -321,7 +322,9 @@ NITFPRIV(int) decode(ImplControl *implControl,
 
     /*  Read compressed data */
 
-    check = nitf_IOHandle_read(io, input, (int)implControl->fileLength, error);
+    check = nitf_IOInterface_read(io, (char*)input, 
+                                  implControl->fileLength, error);
+
     if (!NITF_IO_SUCCESS(check)) return 0;
 
     /*  Decompress image */
@@ -334,8 +337,8 @@ NITFPRIV(int) decode(ImplControl *implControl,
     implMemFree(input);
     input = NULL;
     if (!check) return 0;
-
-    if (outputLen != implControl->blockInfo.length)
+    
+    if (outputLen > implControl->blockInfo.length)
     {
         nitf_Error_initf(error,
                            NITF_CTXT,
@@ -364,12 +367,12 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
     implMemFree((void *)(*control));
     *control = NULL;
 }
-NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOHandle      io,
-        nitf_Uint64        offset,
-        nitf_Uint64        fileLength,
-        nitf_BlockingInfo* blockInfo,
-        nitf_Uint32*       blockMask,
-        nitf_Error*        error)
+NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
+                                              nitf_Uint64        offset,
+                                              nitf_Uint64        fileLength,
+                                              nitf_BlockingInfo* blockInfo,
+                                              nitf_Uint64*       blockMask,
+                                              nitf_Error*        error)
 {
     ImplControl *implControl;    /* The answer */
 
