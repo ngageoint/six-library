@@ -792,10 +792,8 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
                    desID, NITF_CONV_STRING, NITF_DESTAG_SZ + 1, error);
     nitf_Field_trimString(desID);
 
-    /* read the two conditional fields if TRE_OVERFLOW or RE or CE */
-    if ((strcmp(desID, "TRE_OVERFLOW") == 0) ||
-            (strcmp(desID, "Registered Extensions") == 0) ||
-            (strcmp(desID, "Controlled Extensions") == 0))
+    /* read the two conditional fields if TRE_OVERFLOW */
+    if (strcmp(desID, "TRE_OVERFLOW") == 0)
     {
         TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_DESOFLW);
         TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_DESITEM);

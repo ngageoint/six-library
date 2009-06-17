@@ -1545,7 +1545,6 @@ NITFPRIV(NITF_BOOL) writeDE(nitf_Writer* writer,
                             nitf_IOInterface* output,
                             nitf_Error *error)
 {
-
     /* DESID for overflow check */
     char desid[NITF_DESTAG_SZ+1];
 
@@ -1560,9 +1559,10 @@ NITFPRIV(NITF_BOOL) writeDE(nitf_Writer* writer,
     }
 
     nitf_Field_trimString(desid);
-    if(strcmp(desid,"TRE_OVERFLOW") == 0)
+    if ((strcmp(desid, "TRE_OVERFLOW") == 0) ||
+        (strcmp(desid, "Registered Extensions") == 0) ||
+        (strcmp(desid, "Controlled Extensions") == 0))
     {
-
         /* TRE iterator */
         nitf_ExtensionsIterator iter;
 
@@ -1584,14 +1584,16 @@ NITFPRIV(NITF_BOOL) writeDE(nitf_Writer* writer,
         }
         return NITF_SUCCESS;
     }
-
-    if (!deWriter)
+    else
     {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                "Trying to use uninitialized DE SegmentWriter.  Write failed.");
-        goto CATCH_ERROR;
+        if (!deWriter)
+        {
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                    "Trying to use uninitialized DE SegmentWriter.  Write failed.");
+            goto CATCH_ERROR;
+        }
+        return (*deWriter->iface->write)(deWriter->data, output, error);
     }
-    return (*deWriter->iface->write)(deWriter->data, output, error);
 
   CATCH_ERROR:
     return NITF_FAILURE;
