@@ -44,6 +44,17 @@ public class StreamIOWriteHandler extends WriteHandler
         this.bytes = bytes;
     }
 
+    public StreamIOWriteHandler(IOInterface input, long offset)
+            throws NITFException
+    {
+        this(input, offset, input.getSize());
+    }
+
+    public StreamIOWriteHandler(IOInterface input) throws NITFException
+    {
+        this(input, 0);
+    }
+
     @Override
     public StreamIOWriteHandler clone()
     {
