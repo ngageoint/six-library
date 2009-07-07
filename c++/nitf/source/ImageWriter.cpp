@@ -57,3 +57,10 @@ void ImageWriter::setWriteCaching(int enable)
 {
     nitf_ImageWriter_setWriteCaching(getNativeOrThrow(), enable);
 }
+
+void ImageWriter::setPadPixel(nitf::Uint8* value, nitf::Uint32 length)
+{
+    if (!nitf_ImageWriter_setPadPixel(getNativeOrThrow(), 
+                                      value, length, &error))
+        throw nitf::NITFException(&error);
+}
