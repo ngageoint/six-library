@@ -107,7 +107,7 @@ public:
 
     void setManualClose(bool manualClose) { mAutoClose = !manualClose; }
     void setAutoClose(bool autoClose) { mAutoClose = autoClose; }
-    bool isValid() { return !NITF_INVALID_HANDLE(handle) ? true: false; }
+    //bool isValid() { return !NITF_INVALID_HANDLE(handle) ? true: false; }
 
 };
 
