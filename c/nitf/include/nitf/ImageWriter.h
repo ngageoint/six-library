@@ -68,7 +68,7 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_attachSource(nitf_ImageWriter * writer,
  *
  * \return Returns the current enable/disable state
  */
-NITFPROT(int) nitf_ImageWriter_setWriteCaching
+NITFAPI(int) nitf_ImageWriter_setWriteCaching
 (
     nitf_ImageWriter * iWriter,     /*!< Object to modify */
     int enable                      /*!< Enable cached writes if true */
@@ -89,7 +89,22 @@ NITFAPI(int)
 nitf_ImageWriter_attachInterleavedSource(nitf_ImageWriter * writer,
                                          nitf_ImageSource *imageSource, 
                                          nitf_Error * error);
-                   
+/*!
+ *  Function allows the user access to the product's pad pixels.
+ *  For example, if you wanted transparent pixels for fill, you would
+ *  set this function using arguments (writer, 0, 1, error)
+ *  
+ *  \param writer  The image writer
+ *  \param value   The pixel fill value
+ *  \param length  The length in bytes of the pixel
+ *  \param error   An error to populate if the function fails
+ *  \return NITF_SUCCESS if function succeeded, NITF_FAILURE if function
+ *  failed
+ */
+NITFAPI(NITF_BOOL) nitf_ImageWriter_setPadPixel(nitf_ImageWriter* imageWriter,
+                                                nitf_Uint8* value,
+                                                nitf_Uint32 length,
+                                                nitf_Error* error);
 
 NITF_CXX_ENDGUARD
 

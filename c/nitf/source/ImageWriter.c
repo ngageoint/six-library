@@ -197,9 +197,18 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_attachSource(nitf_ImageWriter * imageWriter,
 }
 
 
-NITFPROT(int) nitf_ImageWriter_setWriteCaching(nitf_ImageWriter *imageWriter,
+NITFAPI(int) nitf_ImageWriter_setWriteCaching(nitf_ImageWriter *imageWriter,
         int enable)
 {
     ImageWriterImpl *impl = (ImageWriterImpl*)imageWriter->data;
     return(nitf_ImageIO_setWriteCaching(impl->imageBlocker, enable));
+}
+
+NITFAPI(NITF_BOOL) nitf_ImageWriter_setPadPixel(nitf_ImageWriter* imageWriter,
+                                                nitf_Uint8* value,
+                                                nitf_Uint32 length,
+                                                nitf_Error* error)
+{
+    ImageWriterImpl *impl = (ImageWriterImpl*)imageWriter->data;
+    return nitf_ImageIO_setPadPixel(impl->imageBlocker, value, length, error); 
 }
