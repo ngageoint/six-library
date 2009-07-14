@@ -112,3 +112,40 @@ double nitf::DateTime::getTimeInMillis() const
 {
     return getNativeOrThrow()->timeInMillis;
 }
+
+void nitf::DateTime::setYear(int year)
+{
+	getNativeOrThrow()->year = year;
+}
+void nitf::DateTime::setMonth(int month)
+{
+	getNativeOrThrow()->month = month;
+}
+void nitf::DateTime::setDayOfMonth(int dayOfMonth)
+{
+	getNativeOrThrow()->dayOfMonth = dayOfMonth;
+}
+void nitf::DateTime::setDayOfWeek(int dayOfWeek)
+{
+	getNativeOrThrow()->dayOfWeek = dayOfWeek;
+}
+void nitf::DateTime::setDayOfYear(int dayOfYear)
+{
+	getNativeOrThrow()->dayOfYear = dayOfYear;
+}
+void nitf::DateTime::setHour(int hour)
+{
+	getNativeOrThrow()->hour = hour;
+}
+void nitf::DateTime::setMinute(int minute)
+{
+	getNativeOrThrow()->minute = minute;
+}
+void nitf::DateTime::setSecond(double second)
+{
+	getNativeOrThrow()->second = second;
+}
+void nitf::DateTime::setTimeInMillis(double timeInMillis)
+{
+	getNativeOrThrow()->timeInMillis = timeInMillis;
+}

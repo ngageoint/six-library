@@ -74,6 +74,16 @@ public:
     double getSecond() const;
     double getTimeInMillis() const;
 
+    void setYear(int);
+    void setMonth(int);
+    void setDayOfMonth(int);
+    void setDayOfWeek(int);
+    void setDayOfYear(int);
+    void setHour(int);
+    void setMinute(int);
+    void setSecond(double);
+    void setTimeInMillis(double);
+
 private:
     nitf_Error error;
 };
