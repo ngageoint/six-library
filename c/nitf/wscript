@@ -3,6 +3,10 @@ import Options
 
 
 def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
+    env.set_variant(variant)
+        
     includes = ['include']
     libname = 'nitf'
     
@@ -12,11 +16,10 @@ def build(bld):
                            uselib = 'THREAD DL MATH NITRO'.split(),
                            name='NITRO')
     lib.find_sources_in_dirs('./source', excludes=[])
-    lib.cloneVariants()
     
     #make all of plug-ins normally - as separate DSOs
     pluginNode = bld.path.find_dir('shared')
-    libPattern = bld.env['shlib_PATTERN']
+    libPattern = env['shlib_PATTERN']
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
     for p in pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' '):
@@ -25,15 +28,14 @@ def build(bld):
                                   target=os.path.splitext(p)[0],
                                   path=pluginNode,
                                   install_path='${PREFIX}/share/nitf/plugins')
-        for t in plugin.cloneVariants():
-            t.env['shlib_PATTERN'] = libPattern
+#        for t in plugin.cloneVariants():
+#            t.env['shlib_PATTERN'] = libPattern
     
     #now, to support static linkage, make the plug-ins as a static library
     lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
                            target='%s-handlers' % libname,
                            uselib_local = 'NITRO')
     lib.find_sources_in_dirs('./shared', excludes=[])
-    lib.cloneVariants()
         
     
     #build tests
@@ -54,7 +56,6 @@ def build(bld):
                                target=os.path.splitext(test)[0],
                                path=testDir,
                                install_path='${PREFIX}/share/nitf/tests')
-        exe.cloneVariants()
     
     #install headers
     for f in bld.path.find_dir('include').find_iter():
@@ -62,7 +63,7 @@ def build(bld):
         bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath), relpath)
         
     #run doxygen
-    if 'DOXYGEN' in bld.env and Options.is_install:
+    if 'DOXYGEN' in env and Options.is_install:
         bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
         try:
             htmlDocs = bld.path.find_dir('doc/html')
