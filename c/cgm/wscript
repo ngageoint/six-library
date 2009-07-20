@@ -2,6 +2,10 @@ import os
 import Options
 
 def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
+    env.set_variant(variant)
+    
     includes = ['include']
     libname = 'cgm'
     
@@ -10,7 +14,6 @@ def build(bld):
                            export_incdirs=includes,
                            uselib_local='NITRO')
     lib.find_sources_in_dirs('./source', excludes=[])
-    lib.cloneVariants()
     
     #build tests
     testDir = bld.path.find_dir('tests')
@@ -21,7 +24,6 @@ def build(bld):
                                target=os.path.splitext(test)[0],
                                path=testDir,
                                install_path='${PREFIX}/share/nitf-cgm/tests')
-        exe.cloneVariants()
     
     #install headers
     for f in bld.path.find_dir('include').find_iter():
@@ -29,7 +31,7 @@ def build(bld):
         bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath), relpath)
     
     #run doxygen
-    if 'DOXYGEN' in bld.env and Options.is_install:
+    if 'DOXYGEN' in env and Options.is_install:
         bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
         try:
             htmlDocs = bld.path.find_dir('doc/html')
@@ -37,3 +39,4 @@ def build(bld):
                 relpath = f.relpath_gen(htmlDocs)
                 bld.install_files('${PREFIX}/share/doc/nitf-cgm/c/%s' % relpath, f.abspath())
         except:{}
+

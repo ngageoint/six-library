@@ -315,7 +315,7 @@ public class NITFReader extends ImageReader
 
         // make the band offsets array, for the output
         int[] bandOffsets = null;
-        int[] sourceBands = param.getSourceBands();
+        int[] sourceBands = param != null ? param.getSourceBands() : null;
         if (param != null && param.getDestinationBands() != null)
             bandOffsets = param.getDestinationBands();
         else if (param != null && sourceBands != null)

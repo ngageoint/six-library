@@ -1,9 +1,10 @@
 
 
 def build(bld):
-    if bld.env['defines'].get('HAVE_JVM', False):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
+    if env['defines'].get('HAVE_JVM', False):
         lib = bld.new_task_gen('cc', 'shlib', includes='src/jni/include',
-                               target='nitf.jni-c',
+                               target='nitf.jni-c', env=env.copy(),
                                uselib='JAVA', uselib_local='NITRO')
         lib.find_sources_in_dirs('src/jni/source')
-        lib.cloneVariants()

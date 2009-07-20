@@ -18,8 +18,10 @@ def configure(conf):
 
 
 def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
     
-    defs = bld.env['defines']
+    defs = env['defines']
     defList = []
     for k, v in defs.iteritems():
         if v:
@@ -27,7 +29,7 @@ def build(bld):
     
     #---------------------------------------------------------------------------
     ###### LIB-JPEG
-    ut = bld.new_task_gen(path=bld.path.find_dir('build'), fname='%s.zip' % fname)
+    ut = bld.new_task_gen(env=env.copy(), path=bld.path.find_dir('build'), fname='%s.zip' % fname)
     ut.features = ['unzip']
     bld.add_group()
     
@@ -35,9 +37,9 @@ def build(bld):
     
     defDict = dict()
     configH = bld.new_task_gen(output='jconfig.h', path=driverNode,
-                               defs=defDict, before='LIBJPEG')
+                               defs=defDict, before='LIBJPEG',
+                               env=env.copy())
     configH.features = ['makeHeader']
-    configH.cloneVariants()
     
     #shutil.copy('jconfig.vc', 'jconfig.h')
 
@@ -95,22 +97,21 @@ def build(bld):
                             export_incdirs='.',
                             uselib='SOCKET LIBJPEG',
                             defines=defList,
+                            env=env.copy(),
                             name='LIBJPEG')
-    jpeg.cloneVariants()
     bld.add_group()
     
     #---------------------------------------------------------------------------
     ###### JPEG PLUG-IN
-    libPattern = bld.env['shlib_PATTERN']
+    libPattern = env['shlib_PATTERN']
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
     lib = bld.new_task_gen('cc', 'shlib', target='LibjpegDecompress',
                            uselib_local='LIBJPEG NITRO'.split(),
                            install_path='${PREFIX}/share/nitf/plugins',
-                           defines=defList)
+                           defines=defList, env=env.copy())
     lib.find_sources_in_dirs('./source', excludes=[])
-    for t in lib.cloneVariants():
-        t.env['shlib_PATTERN'] = libPattern
+    #t.env['shlib_PATTERN'] = libPattern
 
 
 

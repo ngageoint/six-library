@@ -43,40 +43,45 @@
                     };
                     
                     var runIt = function(){
-                        jQuery.getJSON("/file?jsonp=?", params, function(data){
-                            fileDiv.find('.loading').remove();
-                            var tableDiv = $('<div class="file-data"><table></table></div>').appendTo(fileDiv).find('table:first');
-                            var header = data['header'];
-                            tableDiv.append('<tr class="title"><td colspan="2">File Header</td></tr>');
-                            loopHeader(header, tableDiv);
-                            
-                            for (var num = 0; data['images'] && num < data['images'].length; ++num)
-                            {
-                                var image = data['images'][num];
-                                header = image['header'];
-                                tableDiv.append('<tr class="title"><td colspan="2">Image Subheader #' + (num + 1) + '</td></tr>');
+                        jQuery.ajax({
+                            'url'       : "/file?jsonp=?",
+                            'data'      : params,
+                            'dataType'  : 'json',
+                            'success'   : function(data){
+                                fileDiv.find('.loading').remove();
+                                var tableDiv = $('<div class="file-data"><table></table></div>').appendTo(fileDiv).find('table:first');
+                                var header = data['header'];
+                                tableDiv.append('<tr class="title"><td colspan="2">File Header</td></tr>');
                                 loopHeader(header, tableDiv);
-                            }
-                            for (var num = 0; data['graphics'] && num < data['graphics'].length; ++num)
-                            {
-                                var graphic = data['graphics'][num];
-                                header = graphic['header'];
-                                tableDiv.append('<tr class="title"><td colspan="2">Graphic Subheader #' + (num + 1) + '</td></tr>');
-                                loopHeader(header, tableDiv);
-                            }
-                            for (var num = 0; data['texts'] && num < data['texts'].length; ++num)
-                            {
-                                var text = data['texts'][num];
-                                header = text['header'];
-                                tableDiv.append('<tr class="title"><td colspan="2">Text Subheader #' + (num + 1) + '</td></tr>');
-                                loopHeader(header, tableDiv);
-                            }
-                            for (var num = 0; data['des'] && num < data['des'].length; ++num)
-                            {
-                                var des = data['des'][num];
-                                header = des['header'];
-                                tableDiv.append('<tr class="title"><td colspan="2">DES Subheader #' + (num + 1) + '</td></tr>');
-                                loopHeader(header, tableDiv);
+                                
+                                for (var num = 0; data['images'] && num < data['images'].length; ++num)
+                                {
+                                    var image = data['images'][num];
+                                    header = image['header'];
+                                    tableDiv.append('<tr class="title"><td colspan="2">Image Subheader #' + (num + 1) + '</td></tr>');
+                                    loopHeader(header, tableDiv);
+                                }
+                                for (var num = 0; data['graphics'] && num < data['graphics'].length; ++num)
+                                {
+                                    var graphic = data['graphics'][num];
+                                    header = graphic['header'];
+                                    tableDiv.append('<tr class="title"><td colspan="2">Graphic Subheader #' + (num + 1) + '</td></tr>');
+                                    loopHeader(header, tableDiv);
+                                }
+                                for (var num = 0; data['texts'] && num < data['texts'].length; ++num)
+                                {
+                                    var text = data['texts'][num];
+                                    header = text['header'];
+                                    tableDiv.append('<tr class="title"><td colspan="2">Text Subheader #' + (num + 1) + '</td></tr>');
+                                    loopHeader(header, tableDiv);
+                                }
+                                for (var num = 0; data['des'] && num < data['des'].length; ++num)
+                                {
+                                    var des = data['des'][num];
+                                    header = des['header'];
+                                    tableDiv.append('<tr class="title"><td colspan="2">DES Subheader #' + (num + 1) + '</td></tr>');
+                                    loopHeader(header, tableDiv);
+                                }
                             }
                         });
                     };

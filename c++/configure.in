@@ -34,7 +34,7 @@ AR="ar"
 
 AC_CANONICAL_SYSTEM
 AC_PROG_INSTALL
-AC_C_BIGENDIAN
+AC_C_BIGENDIAN([ac_big_endian=yes, AC_DEFINE(WORDS_BIGENDIAN)],ac_big_endian=no)
 AC_CHECK_HEADER(sys/time.h,[cxx_time_defs="-DHAVE_SYS_TIME_H"])
 AC_PROG_CXX
 

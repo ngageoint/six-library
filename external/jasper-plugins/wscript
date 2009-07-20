@@ -4,8 +4,10 @@ import Options
 fname = 'jasper-1.900.1'
 
 def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
     
-    defs = bld.env['defines']
+    defs = env['defines']
     defList = []
     for k, v in defs.iteritems():
         if v:
@@ -13,7 +15,7 @@ def build(bld):
     
     #---------------------------------------------------------------------------
     ###### LIB-JASPER
-    ut = bld.new_task_gen(path=bld.path.find_dir('build'), fname='%s.zip' % fname)
+    ut = bld.new_task_gen(path=bld.path.find_dir('build'), fname='%s.zip' % fname, env=env.copy())
     ut.features = ['unzip']
     bld.add_group()
     
@@ -25,9 +27,8 @@ def build(bld):
                    VERSION='"1.900.1"',)
                    
     configH = bld.new_task_gen(output='src/libjasper/include/jasper/jas_config.h',
-                               path=driverNode, defs=defDict, before='JASPER')
+                               path=driverNode, defs=defDict, before='JASPER', env=env.copy())
     configH.features = ['makeHeader']
-    configH.cloneVariants()
     
     jasperDefs = []
     if Options.platform.startswith('win'):
@@ -102,21 +103,20 @@ def build(bld):
                               target='jasper', path=driverNode,
                               export_incdirs='src/libjasper/include/',
                               defines=defList + jasperDefs,
+                              env=env.copy(),
                               name='JASPER')
-    jasper.cloneVariants()
     bld.add_group()
     
     #---------------------------------------------------------------------------
     ###### JASPER PLUG-IN
-    libPattern = bld.env['shlib_PATTERN']
+    libPattern = env['shlib_PATTERN']
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
     lib = bld.new_task_gen('cc', 'shlib', target='JasPerDecompress',
-                           uselib_local='JASPER NITRO'.split(),
+                           uselib_local='JASPER NITRO'.split(), env=env.copy(),
                            install_path='${PREFIX}/share/nitf/plugins')
     lib.find_sources_in_dirs('./source', excludes=[])
-    for t in lib.cloneVariants():
-        t.env['shlib_PATTERN'] = libPattern
+    #t.env['shlib_PATTERN'] = libPattern
     
 
 

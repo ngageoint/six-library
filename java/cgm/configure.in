@@ -14,8 +14,7 @@ AC_CANONICAL_SYSTEM
 
 # Get install program
 AC_PROG_INSTALL
-AC_C_BIGENDIAN
-
+AC_C_BIGENDIAN([ac_big_endian=yes, AC_DEFINE(WORDS_BIGENDIAN)],ac_big_endian=no)
 
 # Set value of POSIX string; This string is placed in Makefiles
 # on compliant systems to indicate POSIX mode.

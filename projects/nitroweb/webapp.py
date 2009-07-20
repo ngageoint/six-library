@@ -129,7 +129,6 @@ class GetFile:
                 return '%s(%s);' % (jsonp, jsonData)
             return jsonData
         except Exception, e:
-            print e
             raise web.badrequest()
         
 
