@@ -1519,6 +1519,21 @@ NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface
                                          );
 
 /*!
+  \brief nitf_ImageIO_swapMaskHeader - Byte swap the mask header
+
+  nitf_ImageIO_swapMaskHeader byte swaps the mask header. The mask
+  header, which is a binary structure in the NITF file, needs to
+  be byte swapped in little endian machines. Swapping is required
+  before writing and afetr reading
+
+  \return None
+*/
+
+/*<! the header to byte swap */
+NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
+        header);
+
+/*!
   \brief nitf_ImageIO_writeMasks - Write the masks
 
   nitf_ImageIO_writeMasks writes the mask header, block mask and pad mask.
@@ -5892,6 +5907,7 @@ NITFPROT(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf,
     return NITF_SUCCESS;
 }
 
+
 NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf,
                                           nitf_IOInterface* io,
                                           nitf_Error * error)
@@ -5903,44 +5919,38 @@ NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf,
 
     maskHeader = &(nitf->maskHeader);
 
-    /* Read header and load it into the mask header structure */
+    /*      Read header and load it into the mask header structure */
+
     if (!nitf_ImageIO_readFromFile(io, nitf->imageBase,
                                    buffer, NITF_IMAGE_IO_MASK_HEADER_LEN,
                                    error))
         return NITF_FAILURE;
-    
+
     bp = buffer;
     memcpy(&(maskHeader->imageDataOffset), bp, sizeof(nitf_Uint32));
-    
-    maskHeader->imageDataOffset = 
-        NITF_NTOHL(maskHeader->imageDataOffset);
     bp += 4;
-    
     memcpy(&(maskHeader->blockRecordLength), bp, sizeof(nitf_Uint16));
-    maskHeader->blockRecordLength = 
-        NITF_NTOHS(maskHeader->blockRecordLength);
     bp += 2;
-    
     memcpy(&(maskHeader->padRecordLength), bp, sizeof(nitf_Uint16));
-    maskHeader->padRecordLength = 
-        NITF_NTOHS(maskHeader->padRecordLength);
     bp += 2;
-    
     memcpy(&(maskHeader->padPixelValueLength), bp, sizeof(nitf_Uint16));
-    maskHeader->padPixelValueLength = 
-        NITF_NTOHS(maskHeader->padPixelValueLength);
-    
+
+    /*      Byte swap structure  if needed */
+
+    if (!nitf_ImageIO_bigEndian())
+        nitf_ImageIO_swapMaskHeader(maskHeader);
+
     /*
-     * The pad pixel value length is in bits and the structure field is in
-     * bytes. Unless the field is 0 substitute the number of bytes per pixel in
-     * the structure. NOTE: maskHeader->padPixelValueLength == 0 mean zero bits
-     * in the pad pixel which means no pad value.
+       The pad pixel value length is in bits and the structure field is in
+       bytes. Unless the field is 0 substitute the number of bytes per pixel in
+       the structure. NOTE: maskHeader->padPixelValueLength == 0 mean zero bits
+       in the pad pixel which means no pad value.
      */
 
     if (maskHeader->padPixelValueLength != 0)
         maskHeader->padPixelValueLength = nitf->pixel.bytes;
-    
-    /* Read pad pixel value */
+
+    /*      Read pad pixel value */
 
     if (maskHeader->padPixelValueLength != 0)
     {
@@ -5970,43 +5980,39 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
     nitf_Uint32 maskSizeFile;   /* Block mask size in bytes in the file */
 
     /* Do not write anything if the IC is not a mask type */
-    
+
     if ((nitf->compression &
-         (NITF_IMAGE_IO_COMPRESSION_NM
-          | NITF_IMAGE_IO_COMPRESSION_M1
-          | NITF_IMAGE_IO_COMPRESSION_M3
-          | NITF_IMAGE_IO_COMPRESSION_M4
-          | NITF_IMAGE_IO_COMPRESSION_M5
-          | NITF_IMAGE_IO_COMPRESSION_M8)) == 0 /* No masks */ )
+            (NITF_IMAGE_IO_COMPRESSION_NM
+             | NITF_IMAGE_IO_COMPRESSION_M1
+             | NITF_IMAGE_IO_COMPRESSION_M3
+             | NITF_IMAGE_IO_COMPRESSION_M4
+             | NITF_IMAGE_IO_COMPRESSION_M5
+             | NITF_IMAGE_IO_COMPRESSION_M8)) == 0 /* No masks */ )
         return NITF_SUCCESS;
-    
+
+    /* A copy of the structure is made so it can be byte swapped if needed */
+
     maskHeader = nitf->maskHeader;
-    
-    maskHeader.imageDataOffset = 
-        NITF_HTONL(maskHeader.imageDataOffset);
-    maskHeader.blockRecordLength = 
-        NITF_HTONS(maskHeader.blockRecordLength);
-    maskHeader.padRecordLength = 
-        NITF_HTONS(maskHeader.padRecordLength);
-    maskHeader.padPixelValueLength = 
-        NITF_HTONS(maskHeader.padPixelValueLength);
-    
+    if (!nitf_ImageIO_bigEndian())
+        nitf_ImageIO_swapMaskHeader(&maskHeader);
+
     /* Format and write the header buffer */
+
     buffer[0] = ((nitf_Uint8 *) & maskHeader.imageDataOffset)[0];
     buffer[1] = ((nitf_Uint8 *) & maskHeader.imageDataOffset)[1];
     buffer[2] = ((nitf_Uint8 *) & maskHeader.imageDataOffset)[2];
     buffer[3] = ((nitf_Uint8 *) & maskHeader.imageDataOffset)[3];
-    
+
     buffer[4] = ((nitf_Uint8 *) & maskHeader.blockRecordLength)[0];
     buffer[5] = ((nitf_Uint8 *) & maskHeader.blockRecordLength)[1];
     buffer[6] = ((nitf_Uint8 *) & maskHeader.padRecordLength)[0];
     buffer[7] = ((nitf_Uint8 *) & maskHeader.padRecordLength)[1];
-    
+
     /*
-     * Write pad output pixel code length actually NBPP, M3 is a special case
-     * fix later XXX
+       Write pad output pixel code length actually NBPP, M3 is a special case
+       fix later XXX
      */
-    
+
     if (nitf->maskHeader.padPixelValueLength != 0)
         padCodeLength = 8 * (nitf->pixel.bytes);
     else
@@ -6022,14 +6028,14 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         ((nitf_Uint8 *) buffer)[9] = padCodeLength >> 8;
         ((nitf_Uint8 *) buffer)[8] = padCodeLength & 0xff;
     }
-    
+
     if (!nitf_ImageIO_writeToFile(io, nitf->imageBase,
                                   buffer, NITF_IMAGE_IO_MASK_HEADER_LEN,
                                   error))
         return NITF_FAILURE;
-    
+
     /* Write pad pixel value */
-    
+
     maskOffset = nitf->imageBase + NITF_IMAGE_IO_MASK_HEADER_LEN;
     if (maskHeader.padPixelValueLength != 0)
     {
@@ -6042,19 +6048,18 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         }
         maskOffset += nitf->maskHeader.padPixelValueLength;
     }
-    
+
     /*
-     * Write the block mask. The offsets are stored as big-endian binary so
-     * swap them on little endian machines. swap in place and 
-     * swap back after write
+       Write the block mask. The offsets are stored as big-endian binary so
+       swap them on little endian machines. swap in place and swap back after write
      */
 
     if (nitf->maskHeader.blockRecordLength != 0)
     {
         /*
-         * Because the in memory offset is 64-bit and the file is 32-bit
-         * you must allocate a 32-bit array and byte-swap after copying
-         */
+              Because the in memory offset is 64-bit and the file is 32-bit
+              you must allocate a 32-bit array and byte-swap after copying
+        */
         nitf_Uint32 *fileMask;   /* Buffer to hold file mask */
         nitf_Uint32 i;
 
@@ -6063,28 +6068,26 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         if (fileMask == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
-                             "Memory allocation error: %s", 
-                             NITF_STRERROR(NITF_ERRNO));
+                             "Memory allocation error: %s", NITF_STRERROR(NITF_ERRNO));
             return NITF_FAILURE;
         }
 
         for (i = 0;i < nitf->nBlocksTotal;i++)
             fileMask[i] = nitf->blockMask[i];
-        
+
         for (i = 0;i < nitf->nBlocksTotal;i++)   /* Overflow check */
             if (fileMask[i] != nitf->blockMask[i])
             {
                 NITF_FREE(fileMask);
                 nitf_Error_initf(error, NITF_CTXT,
-                                 NITF_ERR_INVALID_PARAMETER, 
-                                 "Mask index overflow");
+                                 NITF_ERR_INVALID_PARAMETER, "Mask index overflow");
                 return NITF_FAILURE;
             }
-        
+
         if (!nitf_ImageIO_bigEndian())
             nitf_ImageIO_swapOnly_4((nitf_Uint8 *) fileMask,
                                     nitf->nBlocksTotal, 0);
-        
+
         if (!nitf_ImageIO_writeToFile(io, maskOffset,
                                       (nitf_Uint8 *) fileMask,
                                       nitf->nBlocksTotal *
@@ -6093,36 +6096,35 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
             NITF_FREE(fileMask);
             return NITF_FAILURE;
         }
-        
+
         maskOffset += nitf->nBlocksTotal * sizeof(nitf_Uint32);
         NITF_FREE(fileMask);
     }
     /*
-     *  Write the pad mask.
+       Write the pad mask.
      */
 
     if (nitf->maskHeader.padRecordLength != 0)
     {
         /*
-         * Because the in memory offset is 64-bit and the file is 32-bit
-         * you must allocate a 32-bit array and byte-swap after copying
-         */
+          Because the in memory offset is 64-bit and the file is 32-bit
+          you must allocate a 32-bit array and byte-swap after copying
+        */
         nitf_Uint32 *fileMask;   /* Buffer to hold file mask */
         nitf_Uint32 i;
-        
+
         maskSizeFile = nitf->nBlocksTotal * sizeof(nitf_Uint32);
         fileMask = (nitf_Uint32 *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
-                             "Memory allocation error: %s", 
-                             NITF_STRERROR(NITF_ERRNO));
+                             "Memory allocation error: %s", NITF_STRERROR(NITF_ERRNO));
             return NITF_FAILURE;
         }
-        
+
         for (i = 0;i < nitf->nBlocksTotal;i++)
             fileMask[i] = nitf->padMask[i];
-        
+
         for (i = 0;i < nitf->nBlocksTotal;i++)   /* Overflow check */
             if (fileMask[i] != nitf->padMask[i])
             {
@@ -6131,11 +6133,11 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
                                  NITF_ERR_INVALID_PARAMETER, "Mask index overflow");
                 return NITF_FAILURE;
             }
-        
+
         if (!nitf_ImageIO_bigEndian())
             nitf_ImageIO_swapOnly_4((nitf_Uint8 *) fileMask,
                                     nitf->nBlocksTotal, 0);
-        
+
         if (!nitf_ImageIO_writeToFile(io, maskOffset,
                                       (nitf_Uint8 *) fileMask,
                                       nitf->nBlocksTotal *
@@ -6144,12 +6146,46 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
             NITF_FREE(fileMask);
             return NITF_FAILURE;
         }
-        
+
         NITF_FREE(fileMask);
         maskOffset += nitf->nBlocksTotal * sizeof(nitf_Uint32);
     }
     return NITF_SUCCESS;
 }
+
+
+NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
+        header)
+{
+    nitf_Uint8 *hp;             /* Points into header */
+    nitf_Uint8 tmp;             /* Temp value for byte swaps */
+
+    hp = (nitf_Uint8 *) & (header->imageDataOffset);
+    tmp = hp[0];
+    hp[0] = hp[3];
+    hp[3] = tmp;
+    tmp = hp[1];
+    hp[1] = hp[2];
+    hp[2] = tmp;
+
+    hp = (nitf_Uint8 *) & (header->blockRecordLength);
+    tmp = hp[0];
+    hp[0] = hp[1];
+    hp[1] = tmp;
+
+    hp = (nitf_Uint8 *) & (header->padRecordLength);
+    tmp = hp[0];
+    hp[0] = hp[1];
+    hp[1] = tmp;
+
+    hp = (nitf_Uint8 *) & (header->padPixelValueLength);
+    tmp = hp[0];
+    hp[0] = hp[1];
+    hp[1] = tmp;
+
+    return;
+}
+
 
 NITFPROT(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl,
                                    nitf_IOInterface* io,
