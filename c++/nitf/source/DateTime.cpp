@@ -22,7 +22,6 @@
 
 #include "nitf/DateTime.hpp"
 
-
 nitf::DateTime::DateTime(const nitf::DateTime & x)
 {
     setNative(x.getNative());
@@ -41,7 +40,7 @@ nitf::DateTime::DateTime(nitf_DateTime * x)
     getNativeOrThrow();
 }
 
-nitf::DateTime::DateTime(double timeInMillis) throw(nitf::NITFException)
+nitf::DateTime::DateTime(double timeInMillis) throw (nitf::NITFException)
 {
     setNative(nitf_DateTime_fromMillis(timeInMillis, &error));
     getNativeOrThrow();
@@ -49,15 +48,15 @@ nitf::DateTime::DateTime(double timeInMillis) throw(nitf::NITFException)
 }
 
 nitf::DateTime::DateTime(const std::string& dateString,
-        const std::string& dateFormat) throw(nitf::NITFException)
+        const std::string& dateFormat) throw (nitf::NITFException)
 {
-    setNative(nitf_DateTime_fromString(dateString.c_str(),
-            dateFormat.c_str(), &error));
+    setNative(nitf_DateTime_fromString(dateString.c_str(), dateFormat.c_str(),
+            &error));
     getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::DateTime::DateTime() throw(nitf::NITFException)
+nitf::DateTime::DateTime() throw (nitf::NITFException)
 {
     setNative(nitf_DateTime_now(&error));
     getNativeOrThrow();
@@ -69,11 +68,12 @@ nitf::DateTime::~DateTime()
 }
 
 void nitf::DateTime::format(const std::string& format, char* outBuf,
-        size_t maxSize) throw(nitf::NITFException)
+        size_t maxSize) const throw (nitf::NITFException)
 {
-    if (!nitf_DateTime_format(getNativeOrThrow(), format.c_str(),
-            outBuf, maxSize, &error))
-        throw nitf::NITFException(&error);
+    nitf_Error e;
+    if (!nitf_DateTime_format(getNativeOrThrow(), format.c_str(), outBuf,
+            maxSize, &e))
+        throw nitf::NITFException(&e);
 }
 
 int nitf::DateTime::getYear() const
@@ -115,37 +115,37 @@ double nitf::DateTime::getTimeInMillis() const
 
 void nitf::DateTime::setYear(int year)
 {
-	getNativeOrThrow()->year = year;
+    getNativeOrThrow()->year = year;
 }
 void nitf::DateTime::setMonth(int month)
 {
-	getNativeOrThrow()->month = month;
+    getNativeOrThrow()->month = month;
 }
 void nitf::DateTime::setDayOfMonth(int dayOfMonth)
 {
-	getNativeOrThrow()->dayOfMonth = dayOfMonth;
+    getNativeOrThrow()->dayOfMonth = dayOfMonth;
 }
 void nitf::DateTime::setDayOfWeek(int dayOfWeek)
 {
-	getNativeOrThrow()->dayOfWeek = dayOfWeek;
+    getNativeOrThrow()->dayOfWeek = dayOfWeek;
 }
 void nitf::DateTime::setDayOfYear(int dayOfYear)
 {
-	getNativeOrThrow()->dayOfYear = dayOfYear;
+    getNativeOrThrow()->dayOfYear = dayOfYear;
 }
 void nitf::DateTime::setHour(int hour)
 {
-	getNativeOrThrow()->hour = hour;
+    getNativeOrThrow()->hour = hour;
 }
 void nitf::DateTime::setMinute(int minute)
 {
-	getNativeOrThrow()->minute = minute;
+    getNativeOrThrow()->minute = minute;
 }
 void nitf::DateTime::setSecond(double second)
 {
-	getNativeOrThrow()->second = second;
+    getNativeOrThrow()->second = second;
 }
 void nitf::DateTime::setTimeInMillis(double timeInMillis)
 {
-	getNativeOrThrow()->timeInMillis = timeInMillis;
+    getNativeOrThrow()->timeInMillis = timeInMillis;
 }

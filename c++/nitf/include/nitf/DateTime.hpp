@@ -62,7 +62,7 @@ public:
     ~DateTime();
 
     void format(const std::string& format,
-            char* outBuf, size_t maxSize) throw(nitf::NITFException);
+            char* outBuf, size_t maxSize) const throw(nitf::NITFException);
 
     int getYear() const;
     int getMonth() const;
