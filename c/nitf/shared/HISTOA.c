@@ -58,7 +58,7 @@ static nitf_TREDescription description[] = {
 
     {NITF_BCS_A, 1, "Image Projection", "ASYM_FLAG" },
 
-    {NITF_IF, 0, "== 1", "ASYM_FLAG" },
+    {NITF_IF, 0, "eq 1", "ASYM_FLAG" },
 
     {NITF_BCS_A, 7, "Mag in Line (row) Direction", "ZOOMROW" },
     {NITF_BCS_A, 7, "Mag in Element (column) Direction", "ZOOMCOL" }, 
