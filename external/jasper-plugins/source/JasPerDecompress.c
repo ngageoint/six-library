@@ -338,7 +338,8 @@ NITFPRIV(int) decode(ImplControl* implControl,
     input = NULL;
     if (!check) return 0;
     
-    if (outputLen > implControl->blockInfo.length)
+    /* commenting this out for now... this particular check is incorrect.. */
+    /*if (outputLen > implControl->blockInfo.length)
     {
         nitf_Error_initf(error,
                            NITF_CTXT,
@@ -347,7 +348,7 @@ NITFPRIV(int) decode(ImplControl* implControl,
                            outputLen,
                            implControl->blockInfo.length);
         return 0;
-    }
+    }*/
     implControl->data = output;
     return 1;
 }
