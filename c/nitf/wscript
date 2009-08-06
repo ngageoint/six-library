@@ -14,6 +14,7 @@ def build(bld):
                            target='%s-c' % libname,
                            export_incdirs=includes,
                            uselib = 'THREAD DL MATH NITRO'.split(),
+                           defines = 'NITF_MODULE_EXPORTS',
                            name='NITRO')
     lib.find_sources_in_dirs('./source', excludes=[])
     
