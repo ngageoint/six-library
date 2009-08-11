@@ -106,12 +106,13 @@ def build(bld):
     libPattern = env['shlib_PATTERN']
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
+    libEnv = env.copy()
     lib = bld.new_task_gen('cc', 'shlib', target='LibjpegDecompress',
                            uselib_local='LIBJPEG NITRO'.split(),
                            install_path='${PREFIX}/share/nitf/plugins',
-                           defines=defList, env=env.copy())
+                           defines=defList, env=libEnv)
     lib.find_sources_in_dirs('./source', excludes=[])
-    #t.env['shlib_PATTERN'] = libPattern
+    libEnv['shlib_PATTERN'] = libPattern
 
 
 

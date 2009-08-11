@@ -178,8 +178,37 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                                     nitf_Uint32 blockNumber,
                                     nitf_Error* error)
 {
+    nitf_Uint32 blockRow, blockCol, i, blockRowLength, colBlockOffset, colBlockSkip;
+    nitf_Uint64 imageOffset, bufOffset;
+    
     ImplControl* implControl = (ImplControl*)control;
-    return implControl->data;
+    nitf_Uint8* buf = NULL;
+    
+    /* the length, in bytes of one row */
+    blockRowLength = implControl->blockInfo.length / implControl->blockInfo.numRowsPerBlock;
+    
+    buf = NITF_MALLOC(implControl->blockInfo.length);
+    bufOffset = 0;
+    
+    blockRow = blockNumber / implControl->blockInfo.numBlocksPerRow;
+    blockCol = blockNumber % implControl->blockInfo.numBlocksPerRow;
+    
+    /* skip past row blocks */
+    imageOffset = blockRow * implControl->blockInfo.numBlocksPerRow * implControl->blockInfo.length;
+    colBlockOffset = blockCol * blockRowLength;
+    colBlockSkip = (implControl->blockInfo.numBlocksPerRow - blockCol) * blockRowLength;
+    
+    /* loop over the rows in the block */
+    for (i = 0; i < implControl->blockInfo.numRowsPerBlock; ++i)
+    {
+        imageOffset += colBlockOffset;
+        memcpy(buf + bufOffset, implControl->data + imageOffset, blockRowLength);
+        bufOffset += blockRowLength;
+        imageOffset += colBlockSkip;
+    }
+    
+    return buf;
+    /*return (nitf_Uint8*)(implControl->data + implControl->blockInfo.length * blockNumber);*/
 }
 
 NITFPRIV(void*) implMemAlloc(size_t size, nitf_Error* error)
@@ -338,8 +367,9 @@ NITFPRIV(int) decode(ImplControl* implControl,
     input = NULL;
     if (!check) return 0;
     
-    /* commenting this out for now... this particular check is incorrect.. */
-    /*if (outputLen > implControl->blockInfo.length)
+    if (outputLen != (implControl->blockInfo.length *
+            implControl->blockInfo.numBlocksPerRow *
+            implControl->blockInfo.numBlocksPerCol))
     {
         nitf_Error_initf(error,
                            NITF_CTXT,
@@ -348,7 +378,7 @@ NITFPRIV(int) decode(ImplControl* implControl,
                            outputLen,
                            implControl->blockInfo.length);
         return 0;
-    }*/
+    }
     implControl->data = output;
     return 1;
 }

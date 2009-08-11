@@ -17,7 +17,7 @@ def configure(conf):
     conf.env['VERSION'] = VERSION
     conf.check_tool('coda', tooldir='.')
     conf.configureCODA()
-    conf.sub_config('c c++ java')
+    conf.sub_config('c c++ java external')
 
 def build(bld):
     bld.add_subdirs('c c++ java external')

@@ -3,6 +3,21 @@ import Options
 
 fname = 'jasper-1.900.1'
 
+def configure(conf):
+    uchar = conf.check_cc(fragment='#include <sys/types.h>\nint main(){uchar i; return 0;}',
+                          msg='Checking for uchar', errmsg='not found')
+    longlong = conf.check_cc(fragment='#include <sys/types.h>\nint main(){longlong i; return 0;}',
+                          msg='Checking for longlong', errmsg='not found')
+    ulonglong = conf.check_cc(fragment='#include <sys/types.h>\nint main(){ulonglong i; return 0;}',
+                          msg='Checking for ulonglong', errmsg='not found')
+    if not uchar:
+        conf.env.append_unique('jasper-defs', 'uchar=unsigned char') 
+    if not longlong:
+        conf.env.append_unique('jasper-defs', 'longlong=long long') 
+    if not ulonglong:
+        conf.env.append_unique('jasper-defs', 'ulonglong=unsigned long long')
+
+
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.env_of_name(variant)
@@ -21,10 +36,13 @@ def build(bld):
     
     driverNode = bld.path.find_dir('build').ensure_dir_node_from_path(fname)
     
+    jDefs = map(lambda x: x.split('='), env['jasper-defs'])
     defDict = dict(PACKAGE='"jasper"', PACKAGE_NAME='"jasper"',
                    JAS_VERSION='"1.900.1"', PACKAGE_STRING='"jasper 1.900.1"',
                    PACKAGE_VERSION='"1.900.1"', PACKAGE_TARNAME='"jasper"',
                    VERSION='"1.900.1"',)
+    for k,v in jDefs:
+        defDict[k] = v
                    
     configH = bld.new_task_gen(output='src/libjasper/include/jasper/jas_config.h',
                                path=driverNode, defs=defDict, before='JASPER', env=env.copy())
@@ -112,11 +130,12 @@ def build(bld):
     libPattern = env['shlib_PATTERN']
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
+    libEnv = env.copy()
     lib = bld.new_task_gen('cc', 'shlib', target='JasPerDecompress',
-                           uselib_local='JASPER NITRO'.split(), env=env.copy(),
+                           uselib_local='JASPER NITRO'.split(), env=libEnv,
                            install_path='${PREFIX}/share/nitf/plugins')
     lib.find_sources_in_dirs('./source', excludes=[])
-    #t.env['shlib_PATTERN'] = libPattern
+    libEnv['shlib_PATTERN'] = libPattern
     
 
 
