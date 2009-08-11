@@ -208,7 +208,6 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
     }
     
     return buf;
-    /*return (nitf_Uint8*)(implControl->data + implControl->blockInfo.length * blockNumber);*/
 }
 
 NITFPRIV(void*) implMemAlloc(size_t size, nitf_Error* error)
