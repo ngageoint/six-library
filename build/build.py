@@ -326,7 +326,7 @@ def configureCODA(self):
             config['cxx']['64']             = '-xtarget=generic64'
             config['cxx']['optz_med']       = '-xO2'
             config['cxx']['optz_fast']      = '-xO3'
-            config['cxx']['optz_fastest']   = '-xO4'
+            config['cxx']['optz_fastest']   = '-fast'
 
             env.append_value('CXXDEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
             env.append_value('CXXFLAGS', '-KPIC'.split())
@@ -339,7 +339,7 @@ def configureCODA(self):
             config['cc']['64']             = '-xtarget=generic64'
             config['cc']['optz_med']       = '-xO2'
             config['cc']['optz_fast']      = '-xO3'
-            config['cc']['optz_fastest']   = '-xO4'
+            config['cc']['optz_fastest']   = '-fast'
 
             env.append_value('CCDEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
             env.append_value('CCFLAGS', '-KPIC'.split())
