@@ -12,7 +12,7 @@ def build(bld):
     
     lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
                            target='%s-c' % libname,
-                           export_incdirs=includes,
+                           export_incdirs=includes, env=env.copy(),
                            uselib = 'THREAD DL MATH NITRO'.split(),
                            defines = 'NITF_MODULE_EXPORTS',
                            name='NITRO')
@@ -34,7 +34,7 @@ def build(bld):
     
     #now, to support static linkage, make the plug-ins as a static library
     lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
-                           target='%s-handlers' % libname,
+                           target='%s-handlers' % libname, env=env.copy(),
                            uselib_local = 'NITRO')
     lib.find_sources_in_dirs('./shared', excludes=[])
         
@@ -55,7 +55,7 @@ def build(bld):
         exe = bld.new_task_gen('cc', 'program', source=test,
                                uselib_local='NITRO',
                                target=os.path.splitext(test)[0],
-                               path=testDir,
+                               path=testDir, env=env.copy(),
                                install_path='${PREFIX}/share/nitf/tests')
     
     #install headers
