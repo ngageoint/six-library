@@ -23,20 +23,24 @@ def build(bld):
     libPattern = env['shlib_PATTERN']
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
+    
+    pluginList = []
     for p in pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' '):
         pEnv = env.copy()
         pEnv['shlib_PATTERN'] = libPattern
+        pluginName = os.path.splitext(p)[0]
         plugin = bld.new_task_gen('cc', 'shlib', source=p,
                                   uselib_local='NITRO',
-                                  target=os.path.splitext(p)[0],
+                                  target=pluginName,
                                   path=pluginNode, env=pEnv,
                                   install_path='${PREFIX}/share/nitf/plugins')
+        pluginList.append(pluginName)
     
     #now, to support static linkage, make the plug-ins as a static library
     lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
                            target='%s-handlers' % libname, env=env.copy(),
-                           uselib_local = 'NITRO')
-    lib.find_sources_in_dirs('./shared', excludes=[])
+                           uselib_local = 'NITRO', add_objects = pluginList)
+    #lib.find_sources_in_dirs('./shared', excludes=[])
         
     
     #build tests
@@ -72,3 +76,15 @@ def build(bld):
                 relpath = f.relpath_gen(htmlDocs)
                 bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
         except:{}
+    
+    #add some extra/custom targets
+    extraTargets = {'nitro-plugins' : pluginList, 'nitro' : pluginList + ['nitf-handlers']}
+    newTargets = []
+    if Options.options.compile_targets:
+        targets = Options.options.compile_targets.split(',')
+        for k in extraTargets.keys():
+            if k in targets:
+                newTargets.extend(extraTargets[k])
+                targets.remove(k)
+        newTargets.extend(targets) #add the remaining targets, if any
+    Options.options.compile_targets = ','.join(newTargets) #reset the options
