@@ -26,7 +26,3 @@ def distclean(context):
     context.recurse('c c++ java external')
     Scripting.distclean(context)
 
-def install(ctx):
-    print 'in install', ctx
-    print dir(ctx)
-    print ctx.get_install_path('${PREFIX}')

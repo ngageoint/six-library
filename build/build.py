@@ -106,6 +106,8 @@ def set_options(opt):
                    help='Enable debugging')
     opt.add_option('--enable-64bit', action='store_true', dest='enable64',
                    help='Enable 64bit builds')
+    opt.add_option('--enable-doxygen', action='store_true', dest='doxygen',
+                   help='Enable doxygen')
     opt.add_option('--with-cflags', action='store', nargs=1, dest='cflags',
                    help='Set non-standard CFLAGS')
     opt.add_option('--with-cxxflags', action='store', nargs=1, dest='cxxflags',
@@ -156,7 +158,8 @@ def configureCODA(self):
         self.fatal('Unable to find C/C++ compiler')
 
     self.check_tool('misc')
-    self.find_program('doxygen', var='DOXYGEN', mandatory=False)
+    if Options.options.doxygen:
+        self.find_program('doxygen', var='DOXYGEN')
     
     #Look for a ton of headers
     self.check_cc(header_name="inttypes.h")
