@@ -9,19 +9,23 @@ def build(bld):
     includes = ['include']
     libname = 'cgm'
     
+    objs = bld.new_task_gen('cc', includes=includes,
+            target='CGM_objs', export_incdirs=includes,
+            env=env.copy(), uselib_local='NITRO_objs',
+            defines = 'NITF_MODULE_EXPORTS')
+    objs.find_sources_in_dirs('source')
+    
     lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
-                           target='%s-c' % libname,
-                           export_incdirs=includes,
-                           defines = 'NITF_MODULE_EXPORTS',
-                           uselib_local='NITRO')
-    lib.find_sources_in_dirs('./source', excludes=[])
+                           target='%s-c' % libname, uselib_local='NITRO',
+                           export_incdirs=includes, env=env.copy(),
+                           add_objects='CGM_objs', name='CGM')
     
     #build tests
     testDir = bld.path.find_dir('tests')
     for test in testDir.find_iter(in_pat=['test*.c'],
                                   maxdepth=1, flat=True).split(' '):
         exe = bld.new_task_gen('cc', 'program', source=test,
-                               uselib_local='%s-c' % libname,
+                               uselib_local='CGM',
                                target=os.path.splitext(test)[0],
                                path=testDir,
                                install_path='${PREFIX}/share/nitf-cgm/tests')
