@@ -12,6 +12,7 @@ def build(bld):
     lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
                            target='%s-c' % libname,
                            export_incdirs=includes,
+                           defines = 'NITF_MODULE_EXPORTS',
                            uselib_local='NITRO')
     lib.find_sources_in_dirs('./source', excludes=[])
     
