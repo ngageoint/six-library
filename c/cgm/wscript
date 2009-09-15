@@ -16,14 +16,14 @@ def build(bld):
     lib.find_sources_in_dirs('source')
     
     #build tests
-    testDir = bld.path.find_dir('tests')
-    for test in testDir.find_iter(in_pat=['test*.c'],
-                                  maxdepth=1, flat=True).split(' '):
-        exe = bld.new_task_gen('cc', 'program', source=test,
-                               uselib_local='CGM',
-                               target=os.path.splitext(test)[0],
-                               path=testDir,
-                               install_path='${PREFIX}/share/nitf-cgm/tests')
+    #testDir = bld.path.find_dir('tests')
+    #for test in testDir.find_iter(in_pat=['test*.c'],
+    #                              maxdepth=1, flat=True).split(' '):
+    #    exe = bld.new_task_gen('cc', 'program', source=test,
+    #                           uselib_local='CGM',
+    #                           target=os.path.splitext(test)[0],
+    #                           path=testDir,
+    #                           install_path='${PREFIX}/share/nitf-cgm/tests')
     
     #install headers
     for f in bld.path.find_dir('include').find_iter():
