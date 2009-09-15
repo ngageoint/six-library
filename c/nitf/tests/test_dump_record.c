@@ -901,7 +901,7 @@ int main(int argc, char **argv)
         }
     }
 
-    measureComplexity(record);
+    /*measureComplexity(record);*/
     
     nitf_IOHandle_close(io);
     nitf_Record_destruct(&record);
