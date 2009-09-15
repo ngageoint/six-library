@@ -44,6 +44,33 @@
     printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:X->length)), \
                   ((X==0)?"(nulptr)":((X->raw==0)?"(nul)":X->raw)))
 
+
+
+void measureComplexity(nitf_Record* record)
+{
+
+    nitf_Error error;
+    char str[3];
+    NITF_CLEVEL recorded, clevel;
+    str[2] = 0;
+
+    recorded = nitf_ComplexityLevel_get(record);
+
+    clevel = nitf_ComplexityLevel_measure(record, &error);
+
+    if ((int)recorded != (int)clevel)
+    {
+        if (!nitf_ComplexityLevel_toString(clevel, str))
+        {
+            printf("CLEVEL measurement failed");
+            nitf_Error_print(&error, stdout, "Measurement problem");
+        }
+        printf("Measured CLEVEL differs from recorded: '%s', ", str);
+        nitf_ComplexityLevel_toString(recorded, str);
+        printf("file: '%s'\n", str);
+    }
+}
+
 /*
  *  This function dumps a TRE using the TRE enumerator.
  *  The enumerator is used to walk the fields of a TRE in order
@@ -873,6 +900,8 @@ int main(int argc, char **argv)
             nitf_ListIterator_increment(&iter);
         }
     }
+
+    measureComplexity(record);
     
     nitf_IOHandle_close(io);
     nitf_Record_destruct(&record);

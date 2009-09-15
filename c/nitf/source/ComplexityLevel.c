@@ -24,6 +24,11 @@
 
 typedef NITF_CLEVEL (*CLEVEL_CHECK_PTR)(nitf_Record*, nitf_Error*);
 
+/* Still need to handle CGM aggregate size check! */
+/* Still need to handle Text Size/seg Text Format Codes */
+
+
+
 NITFPRIV(NITF_CLEVEL) checkILOC(nitf_ImageSubheader* subhdr, nitf_Error* error)
 {
     char iloc[NITF_ILOC_SZ + 1];
@@ -136,13 +141,13 @@ NITFPRIV(NITF_CLEVEL) checkImage(nitf_ImageSubheader* subhdr,
                         sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
-    if (nrows <= 2047 && ncols <= 2047)
+    if (nrows <= 2048 && ncols <= 2048)
         return NITF_CLEVEL_03;
     
-    if (nrows <= 8191 && ncols <= 8191)
+    if (nrows <= 8192 && ncols <= 8192)
         return NITF_CLEVEL_05;
     
-    if (nrows <= 65535 && ncols <= 65535)
+    if (nrows <= 65536 && ncols <= 65536)
         return NITF_CLEVEL_06;
     
     if (nrows <= 99999999 && ncols <= 99999999)
@@ -236,13 +241,24 @@ NITFPRIV(NITF_CLEVEL) checkBlockSize(nitf_Record* record, nitf_Error* error)
 
 }
 
-NITFPRIV(NITF_CLEVEL) checkDES(nitf_Record* record, nitf_Error* error)
+NITFPRIV(NITF_CLEVEL) checkNumImages(nitf_Record* record, nitf_Error* error)
 {
+
+
     int clevel = NITF_CLEVEL_03;
-    int numdes;
-    if (!nitf_Field_get(record->header->NITF_NUMDES, &numdes, NITF_CONV_INT,
-                        sizeof(int), error))
-        return NITF_CLEVEL_CHECK_FAILED;
+    nitf_Uint32 numi = nitf_Record_getNumImages(record, error);
+
+    if (numi > 20)
+        return clevel = NITF_CLEVEL_05;
+
+}
+
+NITFPRIV(NITF_CLEVEL) checkNumDES(nitf_Record* record, nitf_Error* error)
+{
+
+    int clevel = NITF_CLEVEL_03;
+    nitf_Uint32 numdes = nitf_Record_getNumDataExtensions(record, error);
+
 
     if (numdes > 10)
     {
@@ -257,7 +273,6 @@ NITFPRIV(NITF_CLEVEL) checkDES(nitf_Record* record, nitf_Error* error)
             clevel = NITF_CLEVEL_09;
 
     }
-
     return clevel;
 
 }
@@ -277,6 +292,18 @@ NITFPRIV(NITF_CLEVEL) checkRGBImage(nitf_ImageSubheader* subhdr,
                         sizeof(int), error ))
         return NITF_CLEVEL_CHECK_FAILED;
 
+    if (memcmp(subhdr->NITF_IC->raw, "C8", 2) == 0 ||
+        memcmp(subhdr->NITF_IC->raw, "M8", 2) == 0 &&
+        nbpp > 32)
+        clevel = NITF_CLEVEL_09;
+
+    if (memcmp(subhdr->NITF_IC->raw, "C3", 2) == 0 ||
+        memcmp(subhdr->NITF_IC->raw, "M3", 2) == 0 &&
+        (nbpp > 8 || imode != 'P'))
+        clevel = NITF_CLEVEL_09;
+
+    
+
     if (nbands != 3)
     {
         clevel = NITF_CLEVEL_09;
@@ -292,12 +319,14 @@ NITFPRIV(NITF_CLEVEL) checkRGBImage(nitf_ImageSubheader* subhdr,
     {
         if (nbpp == 8)
         {
-            /*clevel = NITF_CLEVEL_03;*/
+            /* NITF_CLEVEL_03 */
         }
         else if (nbpp == 16 || nbpp == 32)
         {
-            clevel = NITF_CLEVEL_06;
+            if (clevel < NITF_CLEVEL_06)
+                clevel = NITF_CLEVEL_06;
         }
+        
         else clevel = NITF_CLEVEL_09;
         
     }
@@ -320,6 +349,10 @@ NITFPRIV(NITF_CLEVEL) checkRGBLUTImage(nitf_ImageSubheader* subhdr,
     if (!nitf_Field_get(subhdr->NITF_NBPP, &nbpp, NITF_CONV_INT,
                         sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
+
+    if (memcmp(subhdr->NITF_IC->raw, "NC", 2) != 0 ||
+        memcmp(subhdr->NITF_IC->raw, "NM", 2) != 0)
+        clevel = NITF_CLEVEL_09;
 
     if (nbands != 1)
     {
@@ -352,6 +385,12 @@ NITFPRIV(NITF_CLEVEL) checkMonoImage(nitf_ImageSubheader* subhdr,
                         sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
+    if ( (memcmp(subhdr->NITF_IC->raw, "C3", 2) == 0) ||
+         (memcmp(subhdr->NITF_IC->raw, "M3", 2) == 0) )
+    {
+        if (nbpp != 8 && nbpp != 12)
+            clevel = NITF_CLEVEL_09;
+    }
 
     if (nbands != 1)
     {
@@ -363,6 +402,91 @@ NITFPRIV(NITF_CLEVEL) checkMonoImage(nitf_ImageSubheader* subhdr,
              nbpp != 32 &&
              nbpp != 64)
     {
+        clevel = NITF_CLEVEL_09;
+    }
+    else if (imode != 'B')
+    {
+        clevel = NITF_CLEVEL_09;
+    }
+    return clevel;
+}
+
+/* This is an optional feature */
+/* NITFPRIV(NITF_CLEVEL) checkNoDisplay(nitf_ImageSubheader* subhdr, */
+/*                                      nitf_Error* error) */
+/* { */
+/*     /\* Is it elevation data? *\/ */
+    
+/*     /\* Is it location grid? *\/ */
+
+/*     /\* Is it matrix data? *\/ */
+
+    
+
+/* } */
+
+NITFPRIV(NITF_CLEVEL) checkMultiImage(nitf_ImageSubheader* subhdr, 
+                                      nitf_Error* error)
+{
+    int clevel = NITF_CLEVEL_03;
+    int nbands, nbpp;
+    char imode = subhdr->imageMode->raw[0];
+
+    if (!nitf_Field_get(subhdr->NITF_NBANDS, &nbands, NITF_CONV_INT,
+                        sizeof(int), error))
+        return NITF_CLEVEL_CHECK_FAILED;
+
+    if (!nitf_Field_get(subhdr->NITF_NBPP, &nbpp, NITF_CONV_INT,
+                        sizeof(int), error))
+        return NITF_CLEVEL_CHECK_FAILED;
+
+    /*  Note that the rest of this check is covered below */
+    if (memcmp(subhdr->NITF_IC->raw, "C8", 2) == 0 ||
+        memcmp(subhdr->NITF_IC->raw, "M8", 2) == 0)
+    {
+        if (imode == 'B' || nbpp > 32)
+            clevel = NITF_CLEVEL_09;
+        
+    }
+    /*  Normal JPEG */
+    else if (memcmp(subhdr->NITF_IC->raw, "C3", 2) == 0 ||
+             memcmp(subhdr->NITF_IC->raw, "M3", 2) == 0)
+    {
+        if (nbpp != 8 && nbpp != 12)
+            return NITF_CLEVEL_09;
+    }
+
+    if (nbands < 2)
+    {
+        clevel = NITF_CLEVEL_09;
+    }
+    else if (nbands < 10)
+    {
+        if (clevel < NITF_CLEVEL_03)
+            clevel = NITF_CLEVEL_03;
+    }
+    else
+    {
+        if (nbands <= 255)
+        {
+            if (clevel < NITF_CLEVEL_06)
+                clevel = NITF_CLEVEL_06;
+        }
+        else if (nbands <= 999)
+        {
+            if (clevel < NITF_CLEVEL_07)
+                clevel = NITF_CLEVEL_07;
+        }
+        else clevel = NITF_CLEVEL_09;
+                
+        
+    }
+
+    if (nbpp != 8 &&
+        nbpp != 16 &&
+        nbpp != 32 &&
+        nbpp != 64)
+    {
 
         clevel = NITF_CLEVEL_09;
     }
@@ -372,6 +496,7 @@ NITFPRIV(NITF_CLEVEL) checkMonoImage(nitf_ImageSubheader* subhdr,
     }
     return clevel;
 }
+
 
 
 NITFPRIV(NITF_CLEVEL) checkSpecificImageAttributes(nitf_Record* record,
@@ -413,6 +538,10 @@ NITFPRIV(NITF_CLEVEL) checkSpecificImageAttributes(nitf_Record* record,
         {
             result = checkRGBLUTImage(imageSegment->subheader, error);
         }
+        else if (strcmp( irep, "MULTI" ) == 0)
+        {
+            result = checkMultiImage(imageSegment->subheader, error);
+        }
         else
         {
             /* What happens for these other reps ? */
@@ -444,7 +573,8 @@ static ComplexityLevelCheck checks[] =
     { checkFileSize },
     { checkImageSize },
     { checkBlockSize },
-    { checkDES },
+    { checkNumImages },
+    { checkNumDES },
     { checkSpecificImageAttributes },
     { NULL }
 };
@@ -472,8 +602,30 @@ NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_measure(nitf_Record* record,
     return clevel;
 }
 
-NITFPROT(NITF_BOOL) nitf_ComplexityLevel_toString(NITF_CLEVEL clevel,
-                                                  char* c2)
+
+NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_get(nitf_Record* record)
+{
+
+    char* c2 = record->header->NITF_CLEVEL->raw;
+
+    if (memcmp(c2, "03", 2) == 0)
+        return NITF_CLEVEL_03;
+    if (memcmp(c2, "05", 2) == 0)
+        return NITF_CLEVEL_05;
+    if (memcmp(c2, "06", 2) == 0)
+        return NITF_CLEVEL_06;
+    if (memcmp(c2, "07", 2) == 0)
+        return NITF_CLEVEL_07;
+    if (memcmp(c2, "09", 2) == 0)
+        return NITF_CLEVEL_09;
+    else return NITF_CLEVEL_UNKNOWN;
+            
+
+}
+
+
+NITFAPI(NITF_BOOL) nitf_ComplexityLevel_toString(NITF_CLEVEL clevel,
+                                                 char* c2)
 {
     
     NITF_BOOL success = NITF_FAILURE;

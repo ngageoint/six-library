@@ -37,12 +37,12 @@ NITF_CXX_GUARD
 typedef enum _NITF_CLEVEL
 {
     NITF_CLEVEL_UNKNOWN = 0,
-    NITF_CLEVEL_03,
-    NITF_CLEVEL_05,
-    NITF_CLEVEL_06,
-    NITF_CLEVEL_07,
-    NITF_CLEVEL_09,
-    NITF_CLEVEL_CHECK_FAILED
+    NITF_CLEVEL_03 = 3,
+    NITF_CLEVEL_05 = 5,
+    NITF_CLEVEL_06 = 6,
+    NITF_CLEVEL_07 = 7,
+    NITF_CLEVEL_09 = 9,
+    NITF_CLEVEL_CHECK_FAILED = 10
 } NITF_CLEVEL;
 
 /*!
@@ -70,9 +70,20 @@ typedef enum _NITF_CLEVEL
 NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_measure(nitf_Record* record,
                                                   nitf_Error* error);
 
-                     
-NITFPROT(NITF_BOOL) nitf_ComplexityLevel_toString(NITF_CLEVEL clevel,
-                                                  char* c2);
+/*!
+ *  Get the CLEVEL as recorded in the file
+ *  \return The CLEVEL, unknown if not 03,05,06,07 or 09
+ */
+NITFAPI(NITF_CLEVEL) nitf_ComplexityLevel_get(nitf_Record* record);       
+
+/*!
+ *  Turn the enumeration into a 2-byte char.  This function should
+ *  probably be renamed to toArray, since it does not write any NULL
+ *  byte at the end (just a memcpy of 2 bytes)
+ *
+ */
+NITFAPI(NITF_BOOL) nitf_ComplexityLevel_toString(NITF_CLEVEL clevel,
+                                                 char* c2);
 
 NITF_CXX_ENDGUARD
 
