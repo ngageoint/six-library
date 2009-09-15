@@ -11,16 +11,11 @@ def build(bld):
     libname = 'nitf'
     
     uselibs = 'THREAD DL MATH NITRO'.split()
-    objs = bld.new_task_gen('cc', includes=includes,
-            target='NITRO_objs', export_incdirs=includes,
-            env=env.copy(), uselib=uselibs,
-            defines = 'NITF_MODULE_EXPORTS')
-    objs.find_sources_in_dirs('source')
-    
     lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
                            target='%s-c' % libname, uselib=uselibs,
                            export_incdirs=includes, env=env.copy(),
-                           add_objects='NITRO_objs', name='NITRO')
+                           defines = 'NITF_MODULE_EXPORTS', name='NITRO')
+    lib.find_sources_in_dirs('source')
     
     #make all of plug-ins normally - as separate DSOs
     pluginNode = bld.path.find_dir('shared')
