@@ -116,6 +116,8 @@ def set_options(opt):
                    default='med', help='Specify the optimization level for optimized/release builds')
     opt.add_option('--libs-only', action='store_true',
                    help='Only build the libs (skip building the tests, etc.)')
+    opt.add_option('--shared', action='store_true', dest='shared_libs',
+                   help='Build all libs as shared libs')
     
 
 types_str = '''
@@ -231,6 +233,8 @@ def configureCODA(self):
     
     env = self.env
     env['PLATFORM'] = platform
+
+    env['LIB_TYPE'] = Options.options.shared_libs and 'shlib' or 'staticlib'
     
     env.append_unique('CXXFLAGS', Options.options.cxxflags or '')
     env.append_unique('CCFLAGS', Options.options.cflags or '')
