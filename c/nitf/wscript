@@ -11,7 +11,8 @@ def build(bld):
     libname = 'nitf'
     
     uselibs = 'THREAD DL MATH NITRO'.split()
-    lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
+    lib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
+                           includes=includes,
                            target='%s-c' % libname, uselib=uselibs,
                            export_incdirs=includes, env=env.copy(),
                            defines = 'NITF_MODULE_EXPORTS', name='NITRO')
@@ -36,7 +37,7 @@ def build(bld):
         pluginList.append(pluginName)
     
     #now, to support static linkage, make the plug-ins as a static library
-    lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
+    lib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', includes=includes,
                            target='%s-handlers' % libname, env=env.copy(),
                            uselib_local = 'NITRO', add_objects = pluginList)
     #lib.find_sources_in_dirs('./shared', excludes=[])
