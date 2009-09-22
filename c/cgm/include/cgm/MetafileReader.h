@@ -83,7 +83,7 @@ NITFAPI(void)
 cgm_MetafileReader_destruct(cgm_MetafileReader** reader);
 
 NITFAPI(cgm_Metafile*) cgm_MetafileReader_read(cgm_MetafileReader* reader,
-					       nitf_IOHandle in, 
+					       nitf_IOInterface* in, 
 					       nitf_Error* error);
 
 

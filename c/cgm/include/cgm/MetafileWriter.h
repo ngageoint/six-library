@@ -40,7 +40,7 @@
 NITF_CXX_GUARD
 
 
-typedef NITF_BOOL (*CGM_PACK)(cgm_Element* element, nitf_IOHandle io, nitf_Error* error);
+typedef NITF_BOOL (*CGM_PACK)(cgm_Element* element, nitf_IOInterface* io, nitf_Error* error);
 
 
 
@@ -57,7 +57,7 @@ cgm_MetafileWriter_destruct(cgm_MetafileWriter** writer);
 
 NITFAPI(NITF_BOOL) cgm_MetafileWriter_write(cgm_MetafileWriter* writer,
                                             cgm_Metafile* mf,
-                                            nitf_IOHandle io,
+                                            nitf_IOInterface* io,
                                             nitf_Error* error);
                    
 NITF_CXX_ENDGUARD

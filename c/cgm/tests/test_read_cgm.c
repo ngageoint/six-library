@@ -75,10 +75,11 @@ void printCGM(cgm_Metafile *mf, nitf_Error *error)
 int main(int argc, char** argv)
 {
     nitf_Error error;
-    nitf_IOHandle io;
+    nitf_IOHandle in;
     cgm_Metafile* mf = NULL;
     cgm_MetafileReader* reader = NULL;
     cgm_MetafileWriter* writer = NULL;
+    nitf_IOInterface* io = NULL;
 
     if (argc != 2)
     {
@@ -89,14 +90,16 @@ int main(int argc, char** argv)
     reader = cgm_MetafileReader_construct(&error);
     assert(reader);
 
-    io = nitf_IOHandle_create(argv[1], NITF_ACCESS_READONLY,
-            NITF_OPEN_EXISTING, &error);
+    in = nitf_IOHandle_create(argv[1], NITF_ACCESS_READONLY,
+			      NITF_OPEN_EXISTING, &error);
 
-    if (NITF_INVALID_HANDLE(io))
+    if (NITF_INVALID_HANDLE(in))
     {
         nitf_Error_print(&error, stdout, "Exiting...");
         goto END_OF_FILE;
     }
+
+    io = nitf_IOHandleAdaptor_construct(in, &error);
 
     mf = cgm_MetafileReader_read(reader, io, &error);
     if (!mf)
@@ -111,7 +114,7 @@ int main(int argc, char** argv)
     cgm_Metafile_destruct(&mf);
 
   END_OF_FILE:
-    nitf_IOHandle_close(io);
+    nitf_IOHandle_close(in);
     cgm_MetafileReader_destruct(&reader);
     assert(!reader);
     return 0;

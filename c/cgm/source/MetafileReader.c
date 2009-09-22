@@ -879,7 +879,7 @@ NITF_BOOL hatchIndex(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
         return NITF_FAILURE;
     }
 
-    pc->style= (cgm_HatchType)s;
+    pc->hatchIndex = (cgm_HatchType)s;
 
     return NITF_SUCCESS;
 }
@@ -1032,7 +1032,7 @@ cgm_MetafileReader_construct(nitf_Error* error)
 NITFPRIV(int) readCGM(cgm_MetafileReader* reader,
         cgm_Metafile* mf,
         cgm_ParseContext* pc,
-        nitf_IOHandle in,
+        nitf_IOInterface* in,
         nitf_Error* error)
 {
 
@@ -1042,7 +1042,7 @@ NITFPRIV(int) readCGM(cgm_MetafileReader* reader,
     short code = -1;
     char* bytes = NULL;
     cgm_ElementReader* handlers;
-    if (!nitf_IOHandle_read(in, (char*)&s, 2, error))
+    if (!nitf_IOInterface_read(in, (char*)&s, 2, error))
         goto END_OF_FUNCTION;
 
     s = NITF_NTOHS(s);
@@ -1059,7 +1059,7 @@ NITFPRIV(int) readCGM(cgm_MetafileReader* reader,
         /* We have too many params to fit, so we are overflowing */
         /* into the next short */
         short x;
-        if (!nitf_IOHandle_read(in, (char*)&x, 2, error))
+        if (!nitf_IOInterface_read(in, (char*)&x, 2, error))
             goto END_OF_FUNCTION;
 
         x = NITF_NTOHS(x);
@@ -1084,7 +1084,7 @@ NITFPRIV(int) readCGM(cgm_MetafileReader* reader,
             goto END_OF_FUNCTION;
         }
 
-        if (!nitf_IOHandle_read(in, bytes, params, error))
+        if (!nitf_IOInterface_read(in, bytes, params, error))
             goto END_OF_FUNCTION;
     }
 
@@ -1141,7 +1141,7 @@ cgm_MetafileReader_destruct(cgm_MetafileReader** reader)
 }
 
 NITFAPI(cgm_Metafile*) cgm_MetafileReader_read(cgm_MetafileReader* reader,
-                                               nitf_IOHandle in,
+                                               nitf_IOInterface* in,
                                                nitf_Error* error)
 {
     int success;

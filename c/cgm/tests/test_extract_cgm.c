@@ -39,7 +39,7 @@ void extractGraphics(nitf_Record *record, nitf_Reader *reader,
     if (!nitf_Field_get(record->header->numGraphics,
             &numSegments, NITF_CONV_INT, NITF_INT32_SZ, error))
     {
-        nitf_Error_print(error, stderr, "nitf::Value::get() failed");
+        nitf_Error_print(error, stderr, "Field retrieval failed");
         numSegments = 0;
     }
 

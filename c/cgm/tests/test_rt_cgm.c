@@ -35,6 +35,8 @@ int main(int argc, char** argv)
     nitf_Error error;
     nitf_IOHandle in;
     nitf_IOHandle out;
+    nitf_IOInterface* inIO;
+    nitf_IOInterface* outIO;
     cgm_Metafile* mf = NULL;
     cgm_MetafileReader* reader;
     cgm_MetafileWriter* writer;
@@ -70,8 +72,11 @@ int main(int argc, char** argv)
 	nitf_Error_print(&error, stdout, "Output file.  Exiting...");
 	goto END_OF_FILE;
     }
-    
-    mf = cgm_MetafileReader_read(reader, in, &error);
+
+    inIO = nitf_IOHandleAdaptor_construct(in, &error);
+    outIO = nitf_IOHandleAdaptor_construct(out,& error);
+
+    mf = cgm_MetafileReader_read(reader, inIO, &error);
     if (!mf)
     {
 	nitf_Error_print(&error, stdout, "Read file. Exiting...");
@@ -79,7 +84,7 @@ int main(int argc, char** argv)
 
     }
 
-    if (!cgm_MetafileWriter_write(writer, mf, out, &error))
+    if (!cgm_MetafileWriter_write(writer, mf, outIO, &error))
     {
 	nitf_Error_print(&error, stdout, "Write file. Exiting...");
 	goto END_OF_FILE;

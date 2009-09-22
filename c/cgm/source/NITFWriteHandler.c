@@ -33,7 +33,7 @@ typedef struct _WriteHandlerImpl
  *  Private read implementation for file source.
  */
 NITFPRIV(NITF_BOOL) WriteHandler_write
-    (NITF_DATA * data, nitf_IOHandle io, nitf_Error * error)
+    (NITF_DATA * data, nitf_IOInterface* io, nitf_Error * error)
 {
     WriteHandlerImpl *impl = NULL;
     cgm_MetafileWriter *writer = NULL;
@@ -74,7 +74,7 @@ nitf_WriteHandler* cgm_NITFWriteHandler_construct(
     
     /* make the interface */
     static nitf_IWriteHandler iWriteHandler = {
-        &WriteHandler_write,
+	&WriteHandler_write,
         &WriteHandler_destruct
     };
     

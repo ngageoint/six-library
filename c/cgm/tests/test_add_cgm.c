@@ -196,7 +196,12 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
     int num;
     int numSegments;
     nitf_Writer *writer = NULL;
-    
+    nitf_IOInterface *inputIO = 
+	nitf_IOHandleAdaptor_construct(input, error);
+   
+    if (!inputIO)
+	return NITF_FAILURE;
+
     /* open the output IO Handle */
     nitf_IOHandle output = nitf_IOHandle_create(outFile,
             NITF_ACCESS_WRITEONLY, NITF_CREATE, error);
@@ -295,7 +300,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
                 nitf_GraphicSegment *segment =
                         (nitf_GraphicSegment *) nitf_ListIterator_get(&iter);
                 
-                writeHandler = nitf_StreamIOWriteHandler_construct(input,
+                writeHandler = nitf_StreamIOWriteHandler_construct(inputIO,
                         segment->offset, segment->end - segment->offset,
                         error);
             }
@@ -339,7 +344,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
             nitf_TextSegment *segment =
                     (nitf_TextSegment *) nitf_ListIterator_get(&iter);
             
-            writeHandler = nitf_StreamIOWriteHandler_construct(input,
+            writeHandler = nitf_StreamIOWriteHandler_construct(inputIO,
                     segment->offset, segment->end - segment->offset,
                     error);
             if (!writeHandler)
@@ -381,7 +386,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
             nitf_DESegment *segment =
                     (nitf_DESegment *) nitf_ListIterator_get(&iter);
             
-            writeHandler = nitf_StreamIOWriteHandler_construct(input,
+            writeHandler = nitf_StreamIOWriteHandler_construct(inputIO,
                     segment->offset, segment->end - segment->offset,
                     error);
             if (!writeHandler)
@@ -434,7 +439,7 @@ int main(int argc, char **argv)
     reader = nitf_Reader_construct(&error);
     if (!reader)
     {
-        nitf_Error_print(&error, stderr, "nitf::Reader::construct() failed");
+        nitf_Error_print(&error, stderr, "Reader construction failed");
         exit(EXIT_FAILURE);
     }
 
@@ -446,7 +451,7 @@ int main(int argc, char **argv)
     /* check to make sure it is valid */
     if (NITF_INVALID_HANDLE(io))
     {
-        nitf_Error_print(&error, stderr, "nitf::IOHandle::create() failed");
+        nitf_Error_print(&error, stderr, "IO Handle creation failed");
         exit(EXIT_FAILURE);
     }
 
@@ -454,7 +459,7 @@ int main(int argc, char **argv)
     record = nitf_Reader_read(reader, io, &error);
     if (!record)
     {
-        nitf_Error_print(&error, stderr, "nitf::Reader::read() failed");
+        nitf_Error_print(&error, stderr, "Read failed");
         exit(EXIT_FAILURE);
     }
     
