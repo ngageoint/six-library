@@ -189,7 +189,7 @@ cgm_Metafile* createCGM(nitf_Error *error)
 }
 
 NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
-        char *outFile, cgm_Metafile *lastCGM, nitf_Error *error)
+		    char *outFile, cgm_Metafile *lastCGM, nitf_Error *error)
 {
     nitf_ListIterator iter;
     nitf_ListIterator end;
@@ -246,7 +246,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
             nitf_ImageSegment *segment =
                     (nitf_ImageSegment *) nitf_ListIterator_get(&iter);
             
-            writeHandler = nitf_StreamIOWriteHandler_construct(input,
+            writeHandler = nitf_StreamIOWriteHandler_construct(inputIO,
                     segment->imageOffset, segment->imageEnd - segment->imageOffset,
                     error);
             if (!writeHandler)
