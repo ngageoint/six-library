@@ -9,7 +9,7 @@ def build(bld):
     includes = ['include']
     libname = 'cgm'
     
-    lib = bld.new_task_gen('cc', 'staticlib', includes=includes,
+    lib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', includes=includes,
                            target='%s-c' % libname, uselib_local='NITRO',
                            export_incdirs=includes, env=env.copy(),
                            defines='NITF_MODULE_EXPORTS', name='CGM')
