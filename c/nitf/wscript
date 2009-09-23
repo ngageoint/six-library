@@ -25,16 +25,22 @@ def build(bld):
         libPattern = libPattern[3:]
     
     pluginList = []
-    for p in pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' '):
+    plugins = pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
+    plugins.sort()
+    for p in plugins:
         pEnv = env.copy()
         pEnv['shlib_PATTERN'] = libPattern
         pluginName = os.path.splitext(p)[0]
-        plugin = bld.new_task_gen('cc', 'shlib', source=p,
-                                  uselib_local='NITRO',
-                                  target=pluginName,
+        plugin = bld.new_task_gen('cc', source=p,
+                                  target='%s_obj' % pluginName,
+                                  includes='../include',
+                                  defines = 'NITF_MODULE_EXPORTS',
+                                  path=pluginNode, env=env.copy())
+        plugin = bld.new_task_gen('cc', 'shlib', uselib_local='NITRO',
+                                  target=pluginName, add_objects='%s_obj' % pluginName,
                                   path=pluginNode, env=pEnv,
                                   install_path='${PREFIX}/share/nitf/plugins')
-        pluginList.append(pluginName)
+        pluginList.append('%s_obj' % pluginName)
     
     #now, to support static linkage, make the plug-ins as a static library
     lib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', includes=includes,

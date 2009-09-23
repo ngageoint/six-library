@@ -12,7 +12,8 @@ def build(bld):
     env = bld.env_of_name(variant)
     
     def buildDir(dir, **kwargs):
-        libName = '%s-c++' % kwargs.get('name', dir)
+        name = '%s' % kwargs.get('name', dir)
+        libName = '%s-c++' % name
         path = bld.path.find_dir(dir)
         
         deps = map(lambda x: '%s-c++' % x, kwargs.get('deps', '').split())
@@ -21,27 +22,32 @@ def build(bld):
         uselib_local = deps + kwargs.get('uselib_locals', '').split()
         uselib = kwargs.get('uselibs', '').split()
         
-        plugin = kwargs.get('plugin', None)
+        includes = kwargs.get('includes', 'include') or ''
         
-        lib = bld.new_task_gen('cxx', 'staticlib', includes='include',
-                target=libName, name=libName, export_incdirs='include',
-                uselib_local=uselib_local, uselib=uselib, env=env.copy(),
+        lib = bld.new_task_gen('cxx', env['LIB_TYPE'] or 'staticlib', includes=includes,
+                target=libName, name=libName, export_incdirs=includes,
+                env=env.copy(), uselib_local=uselib_local, uselib=uselib,
                 defines=defines, path=path, install_path='${PREFIX}/lib')
         lib.find_sources_in_dirs('source')
         lib.source = filter(kwargs.get('srcFilter', None), lib.source)
     
-        for f in path.find_dir('include').find_iter():
-            relpath = f.relpath_gen(path)
-            bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
-                              f.abspath())
+        if includes:
+            for f in path.find_dir(includes).find_iter():
+                relpath = f.relpath_gen(path)
+                bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
+                                  f.abspath())
         
-        testNode = path.find_dir('tests')
-        for test in filter(kwargs.get('testFilter', None),
-                           testNode.find_iter(in_pat=['*.cpp'], maxdepth=1, flat=True).split()):
-            exe = bld.new_task_gen('cxx', 'program', source=test,
-                    uselib_local=libName, uselib=uselib, env=env.copy(),
-                    target=os.path.splitext(test)[0], path=testNode,
-                    install_path='${PREFIX}/share/coda/%s/tests' % dir)
+        if not Options.options.libs_only:
+            testNode = path.find_dir('tests')
+            if testNode:
+                for test in filter(kwargs.get('testFilter', None),
+                                   testNode.find_iter(in_pat=['*.cpp'], maxdepth=1, flat=True).split()):
+                    exe = bld.new_task_gen('cxx', 'program', source=test,
+                            uselib_local=libName,
+                            uselib=uselib, env=env.copy(), defines=defines,
+                            target=os.path.splitext(test)[0], path=testNode,
+                            install_path='${PREFIX}/share/%s/tests' % dir)
+
 
     pcre = 'MAKE_PCRE' in env and 'PCRE' or ''
     
@@ -53,7 +59,6 @@ def build(bld):
         dict(dir='mt', deps='sys'),
         dict(dir='nitf', deps='mt sys', uselib_locals='NITRO',
              testFilter=lambda t: t not in 'test_handles.cpp test_mem_source.cpp test_static_plugin.cpp'.split()),
-        #dict(dir='cgm', deps='nitf', uselib_locals='cgm-c'),
     ]
     map(lambda x: buildDir(**x), libs)
     
