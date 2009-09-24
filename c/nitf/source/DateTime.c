@@ -97,9 +97,11 @@ NITFAPI(nitf_DateTime*) nitf_DateTime_fromString(const char* string,
         const char* format, nitf_Error *error)
 {
 #ifdef WIN32
-    nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+    /* punting on this for now... */
+    return nitf_DateTime_now(error);
+    /*nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
             "strptime (or a reasonable alternative) is not available for Windows");
-    return NULL;
+    return NULL;*/
 #else
     struct tm t;
     if (!strptime(string, format, &t))
