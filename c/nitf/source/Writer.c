@@ -2113,12 +2113,12 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     for (i = 0; i < numTexts; i++)
     {
         NITF_WRITE_INT64_FIELD(textSubLens[i], NITF_LTSH, ZERO, FILL_LEFT);
-        if (!nitf_Field_setUint64(header->NITF_LTSH(i), graphicSubLens[i], error))
+        if (!nitf_Field_setUint64(header->NITF_LTSH(i), textSubLens[i], error))
             goto CATCH_ERROR;
 
 
         NITF_WRITE_INT64_FIELD(textDataLens[i], NITF_LT, ZERO, FILL_LEFT);
-        if (!nitf_Field_setUint64(header->NITF_LT(i), graphicDataLens[i], error))
+        if (!nitf_Field_setUint64(header->NITF_LT(i), textSubLens[i], error))
             goto CATCH_ERROR;
 
     }
