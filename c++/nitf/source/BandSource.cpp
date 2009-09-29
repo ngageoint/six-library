@@ -65,3 +65,44 @@ nitf::FileSource::FileSource(nitf::IOHandle & io,
     setManaged(false);
 }
 
+
+nitf::RowSource::RowSource(nitf::Uint32 band, nitf::Uint32 numRows,
+        nitf::Uint32 numCols, nitf::Uint32 pixelSize) throw(nitf::NITFException)
+    : mBand(band), mNumRows(numRows), mNumCols(numCols), mPixelSize(pixelSize)
+{
+    setNative(nitf_RowSource_construct((void*)this, &nitf::RowSource_nextRow,
+            mBand, mNumRows, mNumCols * mPixelSize, &error));
+    getNativeOrThrow();
+
+    static nitf_IDataSource iBandSource = getIDataSource();
+
+    mData = getNativeOrThrow()->data;
+    mIface = getNativeOrThrow()->iface;
+
+    // Attach 'this' as the data, which will be the data
+    // for the BandSource_read function
+    getNativeOrThrow()->data = this;
+    getNativeOrThrow()->iface = &iBandSource;
+
+    setManaged(false);
+}
+
+
+NITF_BOOL nitf::RowSource_nextRow(void *algorithm,
+        nitf_Uint32 band,
+        NITF_DATA * buffer,
+        nitf_Error * error)
+{
+    nitf::RowSource *source = (nitf::RowSource*)algorithm;
+    try
+    {
+        source->nextRow((char*)buffer);
+    }
+    catch(nitf::NITFException &ex)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
+                ex.getMessage().c_str());
+        return NITF_FAILURE;
+    }
+    return NITF_SUCCESS;
+}

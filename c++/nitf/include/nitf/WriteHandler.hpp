@@ -28,6 +28,7 @@
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/IOInterface.hpp"
+#include "nitf/SegmentReader.hpp"
 #include <string>
 
 /*!
@@ -143,6 +144,27 @@ public:
     StreamIOWriteHandler(IOInterface& sourceHandle, nitf::Uint64 offset,
             nitf::Uint64 bytes);
     ~StreamIOWriteHandler() {}
+};
+
+
+/**
+ *  \class SegmentWriteHandler
+ *  \brief  Write handler that streams from a SegmentReader.
+ */
+class SegmentWriteHandler : public KnownWriteHandler
+{
+public:
+    SegmentWriteHandler(SegmentReader reader) : mReader(reader)
+    {
+    }
+
+    virtual ~SegmentWriteHandler(){}
+
+    void write(IOInterface& handle) throw (nitf::NITFException);
+
+protected:
+    SegmentReader mReader;
+    static const size_t BLOCK_SIZE = 8192;
 };
 
 

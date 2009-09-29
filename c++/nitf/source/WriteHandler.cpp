@@ -87,3 +87,18 @@ nitf::StreamIOWriteHandler::StreamIOWriteHandler(
 
     setManaged(false);
 }
+
+void nitf::SegmentWriteHandler::write(nitf::IOInterface& handle)
+        throw (nitf::NITFException)
+{
+    char buf[BLOCK_SIZE];
+    nitf::Off numBytes = mReader.getSize();
+    size_t readBytes = 0;
+    while(numBytes > 0)
+    {
+        readBytes = numBytes < BLOCK_SIZE ? (size_t)numBytes : BLOCK_SIZE;
+        mReader.read((NITF_DATA*)buf, readBytes);
+        handle.write(buf, readBytes);
+        numBytes -= readBytes;
+    }
+}

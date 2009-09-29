@@ -25,6 +25,7 @@
 #define __NITF_BANDSOURCE_HPP__
 
 #include "nitf/BandSource.h"
+#include "nitf/RowSource.h"
 #include "nitf/DataSource.hpp"
 #include "nitf/IOHandle.hpp"
 #include "nitf/System.hpp"
@@ -103,5 +104,24 @@ public:
     //! Destructor
     ~FileSource(){}
 };
+
+
+class RowSource : public KnownBandSource
+{
+public:
+    RowSource(nitf::Uint32 band, nitf::Uint32 numRows, nitf::Uint32 numCols,
+            nitf::Uint32 pixelSize) throw(nitf::NITFException);
+
+    ~RowSource(){}
+
+    virtual void nextRow(char* buffer) throw(nitf::NITFException) = 0;
+
+protected:
+    nitf::Uint32 mBand, mNumRows, mNumCols, mPixelSize;
+};
+
+NITF_BOOL RowSource_nextRow(void *algorithm, nitf_Uint32 band,
+        NITF_DATA * buffer, nitf_Error * error);
+
 }
 #endif
