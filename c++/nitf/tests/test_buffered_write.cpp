@@ -40,7 +40,7 @@ nitf::Record doRead(const std::string& inFile);
 
 std::string makeBandName(const std::string& rootFile, int imageNum, int bandNum)
 {
-    unsigned int pos = rootFile.find_last_of("/\\");
+    std::string::size_type pos = rootFile.find_last_of("/\\");
     std::ostringstream os;
     os << rootFile.substr(pos + 1) << "__" << imageNum << "_band_" << bandNum;
     std::string newFile = os.str();
@@ -63,8 +63,8 @@ nitf::ImageSource* setupBands(int nbands, int imageNum, const std::string& inRoo
     return iSource;
 }
 
-void doWrite(nitf::Record record, 
-             const std::string& inRootFile, 
+void doWrite(nitf::Record record,
+             const std::string& inRootFile,
              const std::string& outFile,
              size_t bufferSize)
 {
@@ -95,7 +95,7 @@ void doWrite(nitf::Record record,
     std::cout << "------------------------------------" << std::endl;
     std::cout << "Total number of blocks written: " << output.getNumBlocksWritten() << std::endl;
     std::cout << "Of those, " << output.getNumPartialBlocksWritten() << " were less than buffer size " << bufferSize << std::endl;
-        
+
 
 
 }
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
             std::cout << "Usage: %s <input-file> <output-file> (block-size - default is 8192)\n" << argv[0] << std::endl;
             exit(EXIT_FAILURE);
         }
-        
+
         size_t blockSize = 8192;
         if (argc == 4)
             blockSize = str::toType<int>(argv[3]);

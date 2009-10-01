@@ -35,7 +35,7 @@ nitf::Record doRead(const std::string& inFile);
 
 std::string makeBandName(const std::string& rootFile, int imageNum, int bandNum)
 {
-    unsigned int pos = rootFile.find_last_of("/\\");
+    std::string::size_type pos = rootFile.find_last_of("/\\");
     std::ostringstream os;
     os << rootFile.substr(pos + 1) << "__" << imageNum << "_band_" << bandNum;
     std::string newFile = os.str();
