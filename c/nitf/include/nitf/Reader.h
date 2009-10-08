@@ -49,6 +49,7 @@ typedef struct _nitf_Reader
     nitf_List *warningList;
     nitf_IOInterface* input;
     nitf_Record *record;
+    NITF_BOOL ownInput;
 
 }
 nitf_Reader;

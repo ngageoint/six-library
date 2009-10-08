@@ -412,9 +412,10 @@ CATCH_ERROR:
 
 NITFPRIV(void) resetIOInterface(nitf_Reader * reader)
 {
-    if (reader->input)
+    if (reader->input && reader->ownInput)
         nitf_IOInterface_destruct( &(reader->input) );
     reader->input = NULL;
+    reader->ownInput = 0;
 }
 
 
@@ -440,6 +441,7 @@ NITFAPI(nitf_Reader *) nitf_Reader_construct(nitf_Error * error)
     }
 
     reader->input = NULL;
+    reader->ownInput = 0;
     resetIOInterface(reader);
 
     /*  Return our results  */
@@ -488,6 +490,10 @@ NITFAPI(void) nitf_Reader_destruct(nitf_Reader ** reader)
 
            }
          */
+
+        /* this will delete the input if we own it */
+        resetIOInterface(*reader);
+
         NITF_FREE(*reader);
         *reader = NULL;
     }
@@ -1354,8 +1360,16 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
                                         nitf_IOHandle ioHandle,
                                         nitf_Error * error)
 {
-    nitf_IOInterface *io = nitf_IOHandleAdaptor_construct(ioHandle, error);
-    return nitf_Reader_readIO(reader, io, error);
+    nitf_Record *record = NULL;
+    nitf_IOInterface *io = NULL;
+
+    io = nitf_IOHandleAdaptor_construct(ioHandle, error);
+    if (!io)
+        return NULL;
+
+    record = nitf_Reader_readIO(reader, io, error);
+    reader->ownInput = 1; /* we own the IOInterface */
+    return record;
 }
 
 

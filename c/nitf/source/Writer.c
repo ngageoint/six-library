@@ -167,6 +167,14 @@ NITFPRIV(NITF_BOOL) writeExtension(nitf_Writer * writer,
 /*                PRIVATE AREA                                        */
 /* ------------------------------------------------------------------ */
 
+NITFPRIV(void) resetIOInterface(nitf_Writer * writer)
+{
+    if (writer->output && writer->ownOutput)
+        nitf_IOInterface_destruct( &(writer->output) );
+    writer->output = NULL;
+    writer->ownOutput = 0;
+}
+
 NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
                                      char *field,
                                      nitf_Uint32 length,
@@ -174,7 +182,7 @@ NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
                                      const nitf_Uint32 fillDir,
                                      nitf_Error * error)
 {
-    char *buf = (char *) NITF_MALLOC(length);
+    char *buf = (char *) NITF_MALLOC(length + 1);
     if (!buf)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -182,7 +190,7 @@ NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
         goto CATCH_ERROR;
     }
 
-    memset(buf, '\0', length);
+    memset(buf, '\0', length + 1);
     memcpy(buf, field, length);
 
     if (!padString(writer, buf, length, fill, fillDir, error))
@@ -215,7 +223,7 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
         goto CATCH_ERROR;
     }
 
-    memset(buf, '\0', length);
+    memset(buf, '\0', length + 1);
 
     /* first, check to see if we need to swap bytes */
     if (field->type == NITF_BINARY)
@@ -397,7 +405,7 @@ NITFPRIV(NITF_BOOL) padString(nitf_Writer * writer,
                               nitf_Error * error)
 {
     /*  size and remainder  */
-    nitf_Uint32 size, offset;
+    size_t size = 0, offset = 0;
 
     /* check to see if we even need to pad it */
     if (!field)
@@ -406,14 +414,14 @@ NITFPRIV(NITF_BOOL) padString(nitf_Writer * writer,
                 "Trying to use NULL field. padString failed.");
         return NITF_FAILURE;
     }
-    size = strlen(field);
+    size = (nitf_Uint32)strlen(field);
     if (size >= length)
     {
         /* Dont need to pad at all */
         return NITF_SUCCESS; /* No error occurred */
     }
 
-    offset = length - size;
+    offset = (size_t)length - size;
     /* Set the buffer to the fill character */
     if (fillDir == FILL_RIGHT)
     {
@@ -648,6 +656,7 @@ NITFAPI(nitf_Writer *) nitf_Writer_construct(nitf_Error * error)
     writer->textWriters = NULL;
     writer->dataExtensionWriters = NULL;
     writer->output = NULL;
+    writer->ownOutput = 0;
     writer->record = NULL;
     writer->numImageWriters = 0;
     writer->numTextWriters = 0;
@@ -812,8 +821,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
     nitf_Writer_destructWriters(writer);
 
     writer->record = record;
-
-    /*  TODO: Reset IOInterface! */
+    resetIOInterface(writer);
     writer->output = io;
 
     /* setup image writers */
@@ -935,13 +943,14 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
                                        nitf_IOHandle ioHandle,
                                        nitf_Error * error)
 {
+    NITF_BOOL rc;
     nitf_IOInterface* io = nitf_IOHandleAdaptor_construct(ioHandle, error);
     if (!io)
         return NITF_FAILURE;
 
-    return nitf_Writer_prepareIO(writer, record, io, error);
-
-
+    rc = nitf_Writer_prepareIO(writer, record, io, error);
+    writer->ownOutput = 1;
+    return rc;
 }
 
 
@@ -958,6 +967,7 @@ NITFAPI(void) nitf_Writer_destruct(nitf_Writer ** writer)
             nitf_List_destruct(&(*writer)->warningList);
         }
 
+        resetIOInterface(*writer);
         NITF_FREE(*writer);
         *writer = NULL;
     }

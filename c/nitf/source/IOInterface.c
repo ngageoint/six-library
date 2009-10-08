@@ -125,7 +125,7 @@ nitf_IOHandleAdaptor_construct(nitf_IOHandle handle, nitf_Error* error)
         &IOHandleAdaptor_tell,
         &IOHandleAdaptor_getSize,
         &IOHandleAdaptor_close,
-        &IOHandleAdaptor_destruct,
+        &IOHandleAdaptor_destruct
     };
     nitf_IOInterface* impl =
         (nitf_IOInterface*)NITF_MALLOC(sizeof(nitf_IOInterface));

@@ -54,6 +54,7 @@ typedef struct _nitf_Writer
     int numTextWriters;
     int numGraphicWriters;
     int numDataExtensionWriters;
+    NITF_BOOL ownOutput;
 }
 nitf_Writer;
 
