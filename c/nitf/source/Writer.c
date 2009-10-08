@@ -397,9 +397,7 @@ NITFPRIV(NITF_BOOL) padString(nitf_Writer * writer,
                               nitf_Error * error)
 {
     /*  size and remainder  */
-    nitf_Uint32 size;
-
-    char *buf = NULL;
+    nitf_Uint32 size, offset;
 
     /* check to see if we even need to pad it */
     if (!field)
@@ -414,33 +412,20 @@ NITFPRIV(NITF_BOOL) padString(nitf_Writer * writer,
         /* Dont need to pad at all */
         return NITF_SUCCESS; /* No error occurred */
     }
-    buf = (char *) NITF_MALLOC((size_t) length + 1);
-    if (!buf)
-    {
-        /* If we couldnt malloc enough memory... */
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
-        return NITF_FAILURE;
-    }
 
+    offset = length - size;
     /* Set the buffer to the fill character */
-    memset(buf, fill, length);
-    buf[length] = '\0';
+    if (fillDir == FILL_RIGHT)
+    {
+        memset((char*)(field + size), fill, offset);
+    }
+    else if (fillDir == FILL_LEFT)
+    {
+        memmove((char*)(field + offset), field, size);
+        memset(field, fill, offset);
+    }
+    field[length] = '\0';
 
-    /* If we fill left we need to align right */
-    if (fillDir == FILL_LEFT)
-    {
-        memcpy(buf + (length - size), field, size);
-        memcpy(field, buf, length);
-    }
-    /* If we fill right we start at the left side */
-    else if (fillDir == FILL_RIGHT)
-    {
-        memcpy(buf, field, size);
-        memcpy(field, buf, length);
-    }
-    /* Free our work buffer and go home */
-    NITF_FREE(buf);
     return NITF_SUCCESS;
 }
 
