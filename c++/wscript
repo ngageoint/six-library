@@ -1,67 +1,21 @@
 import os, re
-import Options
+import Options, Utils
+from build import CPPBuildContext
+
+#override the default build context with our own
+Utils.g_module.build_context = CPPBuildContext 
+
+MODULES = 'except str sys mt nitf'
 
 def set_options(opt):
-    pass
+    opt.sub_options(MODULES)
 
 def configure(conf):
-    pass
-    
+    conf.sub_config(MODULES)
+
 def build(bld):
-    variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
-    
-    def buildDir(dir, **kwargs):
-        name = '%s' % kwargs.get('name', dir)
-        libName = '%s-c++' % name
-        path = bld.path.find_dir(dir)
-        
-        deps = map(lambda x: '%s-c++' % x, kwargs.get('deps', '').split())
-        defines = kwargs.get('defines', '').split()
-        
-        uselib_local = deps + kwargs.get('uselib_locals', '').split()
-        uselib = kwargs.get('uselibs', '').split()
-        
-        includes = kwargs.get('includes', 'include') or ''
-        
-        lib = bld.new_task_gen('cxx', env['LIB_TYPE'] or 'staticlib', includes=includes,
-                target=libName, name=libName, export_incdirs=includes,
-                env=env.copy(), uselib_local=uselib_local, uselib=uselib,
-                defines=defines, path=path, install_path='${PREFIX}/lib')
-        lib.find_sources_in_dirs('source')
-        lib.source = filter(kwargs.get('srcFilter', None), lib.source)
-    
-        if includes:
-            for f in path.find_dir(includes).find_iter():
-                relpath = f.relpath_gen(path)
-                bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
-                                  f.abspath())
-        
-        if not Options.options.libs_only:
-            testNode = path.find_dir('tests')
-            if testNode:
-                for test in filter(kwargs.get('testFilter', None),
-                                   testNode.find_iter(in_pat=['*.cpp'], maxdepth=1, flat=True).split()):
-                    exe = bld.new_task_gen('cxx', 'program', source=test,
-                            uselib_local=libName,
-                            uselib=uselib, env=env.copy(), defines=defines,
-                            target=os.path.splitext(test)[0], path=testNode,
-                            install_path='${PREFIX}/share/%s/tests' % dir)
-
-
-    pcre = 'MAKE_PCRE' in env and 'PCRE' or ''
-    
-    libs = [
-        dict(dir='except'),
-        dict(dir='str', deps='except'),
-        dict(dir='sys', deps='str', uselibs='THREAD DL',
-             testFilter=lambda t: t not in 'MMapReadOnlyTest.cpp ProcessTest1.cpp'.split()),
-        dict(dir='mt', deps='sys'),
-        dict(dir='nitf', deps='mt sys', uselib_locals='NITRO',
-             testFilter=lambda t: t not in 'test_handles.cpp test_mem_source.cpp test_static_plugin.cpp'.split()),
-    ]
-    map(lambda x: buildDir(**x), libs)
-    
+    bld.add_subdirs(MODULES)
 
 def distclean(context):
-    pass
+    context.recurse(MODULES)
+

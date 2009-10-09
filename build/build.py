@@ -2,7 +2,87 @@ import sys, os, types, re, fnmatch
 
 import Options, Utils
 from Configure import conf
-from TaskGen import taskgen, feature
+from Build import BuildContext
+from TaskGen import taskgen, feature, after, before
+
+
+class CPPBuildContext(BuildContext):
+    """
+    Create a custom context for building C++ modules/plugins
+    """
+    def __init__(self):
+        BuildContext.__init__(self)
+    
+    def module(self, **modArgs):
+        """
+        Builds a module, along with optional tests.
+        It makes assumptions, but most can be overridden by passing in args.
+        """
+        bld = self
+        variant = bld.env['VARIANT'] or 'default'
+        env = bld.env_of_name(variant)
+        env.set_variant(variant)
+    
+        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        libName = '%s-c++' % modArgs['name']
+
+        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        defines = modArgs.get('defines', '').split()
+        uselib_local = deps + modArgs.get('uselib_local', '').split()
+        uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
+        includes = modArgs.get('includes', 'include').split()
+        exportIncludes = modArgs.get('export_includes', 'include').split()
+
+        lib = bld.new_task_gen('cxx', env['LIB_TYPE'] or 'staticlib', includes=includes,
+                target=libName, name=libName, export_incdirs=exportIncludes,
+                uselib_local=uselib_local, uselib=uselib, env=env.copy(),
+                defines=defines, path=bld.path, install_path='${PREFIX}/lib')
+        lib.find_sources_in_dirs('source')
+        lib.source = filter(modArgs.get('source_filter', None), lib.source)
+
+        for f in bld.path.find_dir('include').find_iter():
+            relpath = f.relpath_gen(bld.path)
+            bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
+                              f.abspath())
+
+        testNode = bld.path.find_dir('tests')
+        for test in filter(modArgs.get('test_filter', None),
+                           testNode.find_iter(in_pat=['*.cpp'],
+                                              maxdepth=1, flat=True).split()):
+            exe = bld.new_task_gen('cxx', 'program', source=test,
+                    uselib_local=libName, env=env.copy(),
+                    target=os.path.splitext(test)[0], path=testNode,
+                    install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
+    
+    def plugin(self, **modArgs):
+        """
+        Builds a plugin (.so) and sets the install path based on the type of
+        plugin (via the plugin kwarg).
+        """
+        bld = self
+        variant = bld.env['VARIANT'] or 'default'
+        env = bld.env_of_name(variant)
+        env.set_variant(variant)
+        
+        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        libName = '%s-c++' % modArgs['name']
+        plugin = modArgs.get('plugin', '')
+
+        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        defines = modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
+        uselib_local = deps + modArgs.get('uselib_local', '').split()
+        uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
+        includes = modArgs.get('includes', 'include').split()
+        exportIncludes = modArgs.get('export_includes', 'include').split()
+        plugin = modArgs.get('plugin', None)
+        
+        lib = bld.new_task_gen('cxx', 'shlib', includes=includes,
+                target=libName, name=libName, export_incdirs=exportIncludes,
+                uselib_local=uselib_local, uselib=uselib, env=env.copy(),
+                defines=defines, path=bld.path,
+                install_path='${PREFIX}/share/%s/plugins' % plugin)
+        lib.find_sources_in_dirs('source')
+        lib.source = filter(modArgs.get('source_filter', None), lib.source)
 
 
 class GlobDirectoryWalker:
@@ -107,17 +187,19 @@ def set_options(opt):
     opt.add_option('--enable-64bit', action='store_true', dest='enable64',
                    help='Enable 64bit builds')
     opt.add_option('--enable-doxygen', action='store_true', dest='doxygen',
-                   help='Enable doxygen')
+                   help='Enable running doxygen')
     opt.add_option('--with-cflags', action='store', nargs=1, dest='cflags',
                    help='Set non-standard CFLAGS')
     opt.add_option('--with-cxxflags', action='store', nargs=1, dest='cxxflags',
                    help='Set non-standard CXXFLAGS (C++)')
     opt.add_option('--with-optz', action='store', choices=['med', 'fast', 'fastest'],
                    default='med', help='Specify the optimization level for optimized/release builds')
-    opt.add_option('--libs-only', action='store_true',
+    opt.add_option('--libs-only', action='store_true', dest='libs_only',
                    help='Only build the libs (skip building the tests, etc.)')
     opt.add_option('--shared', action='store_true', dest='shared_libs',
                    help='Build all libs as shared libs')
+    
+
     
 
 types_str = '''
@@ -142,8 +224,7 @@ int main()
 '''
 
 
-@conf
-def configureCODA(self):
+def detect(self):
     platform = getPlatform(default=Options.platform)
     
     self.check_message_custom('platform', '', platform, color='GREEN')
@@ -233,7 +314,7 @@ def configureCODA(self):
     
     env = self.env
     env['PLATFORM'] = platform
-
+    
     env['LIB_TYPE'] = Options.options.shared_libs and 'shlib' or 'staticlib'
     
     env.append_unique('CXXFLAGS', Options.options.cxxflags or '')
@@ -257,6 +338,7 @@ def configureCODA(self):
         config['cxx']['warn']           = '-Wall'
         config['cxx']['verbose']        = '-v'
         config['cxx']['64']             = '-m64'
+        config['cxx']['32']             = '-m32'
         config['cxx']['optz_med']       = '-O1'
         config['cxx']['optz_fast']      = '-O2'
         config['cxx']['optz_fastest']   = '-O3'
@@ -291,6 +373,7 @@ def configureCODA(self):
             config['cxx']['warn']           = '-Wall'
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = '-m64'
+            config['cxx']['32']             = '-m32'
             config['cxx']['optz_med']       = '-O1'
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
@@ -307,6 +390,7 @@ def configureCODA(self):
             config['cc']['warn']           = '-Wall'
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = '-m64'
+            config['cc']['32']             = '-m32'
             config['cc']['optz_med']       = '-O1'
             config['cc']['optz_fast']      = '-O2'
             config['cc']['optz_fastest']   = '-O3'
@@ -324,6 +408,8 @@ def configureCODA(self):
         env.append_value('LIB_SOCKET', 'socket')
         env.append_value('LIB_THREAD', 'thread')
         env.append_value('LIB_MATH', 'm')
+        env.append_value('LIB_CRUN', 'Crun')
+        env.append_value('LIB_CSTD', 'Cstd')
         self.check_cc(lib='thread', mandatory=True)
 
         if cxxCompiler == 'sunc++':
@@ -331,22 +417,26 @@ def configureCODA(self):
             config['cxx']['warn']           = ''
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = '-xtarget=generic64'
-            config['cxx']['optz_med']       = '-xO2'
-            config['cxx']['optz_fast']      = '-xO3'
+            config['cxx']['32']             = '-xtarget=generic'
+            config['cxx']['optz_med']       = '-xO3'
+            config['cxx']['optz_fast']      = '-xO4'
             config['cxx']['optz_fastest']   = '-fast'
+            env['shlib_CXXFLAGS']            = ['-KPIC', '-DPIC']
 
             env.append_value('CXXDEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
             env.append_value('CXXFLAGS', '-KPIC'.split())
             env.append_value('CXXFLAGS_THREAD', '-mt')
-
+            
         if ccCompiler == 'suncc':
             config['cc']['debug']          = '-g'
             config['cc']['warn']           = ''
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = '-xtarget=generic64'
+            config['cc']['32']             = '-xtarget=generic'
             config['cc']['optz_med']       = '-xO2'
             config['cc']['optz_fast']      = '-xO3'
             config['cc']['optz_fastest']   = '-fast'
+            env['shlib_CCFLAGS']            = ['-KPIC', '-DPIC']
 
             env.append_value('CCDEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
             env.append_value('CCFLAGS', '-KPIC'.split())
@@ -354,6 +444,8 @@ def configureCODA(self):
 
         if Options.options.enable64:
             env.append_value('LINKFLAGS', config['cc']['64'].split())
+        else:
+            env.append_value('LINKFLAGS', config['cc']['32'].split())
 
     
     elif re.match(winRegex, platform):
@@ -389,6 +481,9 @@ def configureCODA(self):
         env.append_value('CCFLAGS', flags)
         env.append_value('CCFLAGS_THREAD', threadFlags)
     
+    else:
+        self.fatal('OS/platform currently unsupported: %s' % platform)
+    
     #CXX
     if Options.options.warnings:
         env.append_value('CXXFLAGS', config['cxx'].get('warn', ''))
@@ -405,7 +500,7 @@ def configureCODA(self):
     if Options.options.debugging:
         variantName = '%s-debug' % platform
         variant.append_value('CXXFLAGS', config['cxx'].get('debug', ''))
-        variant.append_value('CCFLAGS', config['cxx'].get('debug', ''))
+        variant.append_value('CCFLAGS', config['cc'].get('debug', ''))
     else:
         variantName = '%s-release' % platform
         optz = Options.options.with_optz
@@ -416,6 +511,9 @@ def configureCODA(self):
         variantName = '%s-64' % variantName
         variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
         variant.append_value('CCFLAGS', config['cc'].get('64', ''))
+    else:
+        variant.append_value('CXXFLAGS', config['cxx'].get('32', ''))
+        variant.append_value('CCFLAGS', config['cc'].get('32', ''))
         
     self.set_env_name(variantName, variant)
     variant.set_variant(variantName)
@@ -516,3 +614,49 @@ def makeHeader(tsk):
     dest.write('\n#endif /* %s */\n' % guard)
     dest.close()
     if tsk.chmod: os.chmod(outfile, tsk.chmod)
+
+
+@feature('cc', 'cxx')
+@before('apply_obj_vars')
+def fix_libs(self):
+    """
+    The apply_lib_vars task does not order the STATICLIBs based on dependencies,
+    which is required for some OSes (Linux, Solaris)
+    """
+    env = self.env
+    
+    uselib = self.to_list(self.uselib)
+    names = self.to_list(self.uselib_local)
+    
+    seen = {}
+    tmp = names[:]
+    while tmp:
+        lib_name = tmp.pop(0)
+        # visit dependencies only once
+        if lib_name in seen:
+            continue
+
+        y = self.name_to_obj(lib_name)
+        if not y: continue
+        uselib_locals = y.to_list(getattr(y, 'uselib_local', []))
+        
+        if 'cshlib' in y.features or 'cprogram' in y.features:
+            uselib_locals = filter(lambda x: 'cstaticlib' not in \
+                                   self.name_to_obj(x).features, uselib_locals)
+        
+        seen[lib_name] = (y, uselib_locals)
+        tmp.extend(uselib_locals)
+        
+    ordered = []
+    allKeys = seen.keys()[:]
+    while allKeys:
+        for k in allKeys:
+            found = False
+            for ok in allKeys:
+                if k == ok or found: continue
+                found = k in seen[ok][1]
+            if not found:
+                ordered.append(k)
+                allKeys.remove(k)
+    
+    env['STATICLIB'] = [seen[k][0].target for k in ordered]

@@ -9,4 +9,4 @@ TEST_FILTER     = lambda t: t not in 'test_handles.cpp test_mem_source.cpp test_
 set_options = configure = distclean = lambda p: None
 
 def build(bld):
-    bld.codaModule(**globals())
+    bld.module(**globals())
