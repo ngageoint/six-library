@@ -625,8 +625,8 @@ def fix_libs(self):
     """
     env = self.env
     
-    uselib = self.to_list(self.uselib)
-    names = self.to_list(self.uselib_local)
+    uselib = self.to_list(getattr(self, 'uselib', []))
+    names = self.to_list(getattr(self, 'uselib_local', []))
     
     seen = {}
     tmp = names[:]
