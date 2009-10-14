@@ -22,70 +22,73 @@
 
 #include "nitf/WriteHandler.hpp"
 
-nitf::WriteHandler::WriteHandler() throw (nitf::NITFException)
+nitf::WriteHandler::WriteHandler() throw (nitf::NITFException) :
+    cppWriteHandler(NULL)
 {
     static nitf_IWriteHandler iWriteHandler = getIWriteHandler();
 
     // Create the dummy handle
-    nitf_WriteHandler * writeHandler = (nitf_WriteHandler*)NITF_MALLOC(sizeof(nitf_WriteHandler));
-    setNative(writeHandler);
-    if (!isValid())
+    cppWriteHandler = (nitf_WriteHandler*) NITF_MALLOC(
+            sizeof(nitf_WriteHandler));
+    if (!cppWriteHandler)
         throw nitf::NITFException(Ctxt("Could not create WriteHandler"));
 
     // Attach 'this' as the data, which will be the data
     // for the WriteHandler_write function
-    writeHandler->data = this;
-    writeHandler->iface = &iWriteHandler;
-
-    setManaged(false);
+    cppWriteHandler->data = this;
+    cppWriteHandler->iface = &iWriteHandler;
 }
 
+nitf::WriteHandler::~WriteHandler()
+{
+    if (cppWriteHandler)
+        nitf_WriteHandler_destruct(&cppWriteHandler);
+}
 
 NITF_BOOL nitf::WriteHandler::WriteHandler_write(NITF_DATA * data,
-        nitf_IOInterface* io,
-        nitf_Error * error)
+        nitf_IOInterface* io, nitf_Error * error)
 {
     // Get our object from the data and call the read function
-    if (!data) throw except::NullPointerReference(Ctxt("WriteHandler_write"));
+    if (!data)
+        throw except::NullPointerReference(Ctxt("WriteHandler_write"));
     nitf::NativeIOInterface interface(io);
-    ((nitf::WriteHandler*)data)->write(interface);
+    ((nitf::WriteHandler*) data)->write(interface);
     return true;
 }
 
-void nitf::WriteHandler::WriteHandler_destruct(NITF_DATA* data){}
-
-
-void nitf::KnownWriteHandler::write(nitf::IOInterface& handle) throw (nitf::NITFException)
+void nitf::WriteHandler::WriteHandler_destruct(NITF_DATA* data)
 {
-    if (mIface)
+}
+
+void nitf::KnownWriteHandler::write(nitf::IOInterface& handle)
+        throw (nitf::NITFException)
+{
+    if (knownHandler && knownHandler->iface)
     {
-        NITF_BOOL x = mIface->write(mData, handle.getNative(), &error);
-        if (!x) throw nitf::NITFException(&error);
+        NITF_BOOL x = knownHandler->iface->write(knownHandler->data,
+                handle.getNative(), &error);
+        if (!x)
+            throw nitf::NITFException(&error);
     }
     else
         throw except::NullPointerReference(Ctxt("KnownWriteHandler"));
 }
 
-nitf::StreamIOWriteHandler::StreamIOWriteHandler(
-        nitf::IOInterface& sourceHandle,
-        nitf::Uint64 offset,
-        nitf::Uint64 bytes)
+void nitf::KnownWriteHandler::setKnownHandler(nitf_WriteHandler *handler)
+        throw (nitf::NITFException)
 {
-    setNative(nitf_StreamIOWriteHandler_construct(sourceHandle.getNative(),
-            offset, bytes, &error));
-    getNativeOrThrow();
+    if (!handler)
+        throw nitf::NITFException(Ctxt("Could not create WriteHandler"));
+    knownHandler = handler;
+}
 
-    static nitf_IWriteHandler iWriteHandler = getIWriteHandler();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    // Attach 'this' as the data, which will be the data
-    // for the WriteHandler_write function
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iWriteHandler;
-
-    setManaged(false);
+nitf::StreamIOWriteHandler::StreamIOWriteHandler(
+        nitf::IOInterface& sourceHandle, nitf::Uint64 offset,
+        nitf::Uint64 bytes) :
+    nitf::KnownWriteHandler()
+{
+    setKnownHandler(nitf_StreamIOWriteHandler_construct(
+            sourceHandle.getNative(), offset, bytes, &error));
 }
 
 void nitf::SegmentWriteHandler::write(nitf::IOInterface& handle)
@@ -94,10 +97,10 @@ void nitf::SegmentWriteHandler::write(nitf::IOInterface& handle)
     char buf[BLOCK_SIZE];
     nitf::Off numBytes = mReader.getSize();
     size_t readBytes = 0;
-    while(numBytes > 0)
+    while (numBytes > 0)
     {
-        readBytes = numBytes < BLOCK_SIZE ? (size_t)numBytes : BLOCK_SIZE;
-        mReader.read((NITF_DATA*)buf, readBytes);
+        readBytes = numBytes < BLOCK_SIZE ? (size_t) numBytes : BLOCK_SIZE;
+        mReader.read((NITF_DATA*) buf, readBytes);
         handle.write(buf, readBytes);
         numBytes -= readBytes;
     }

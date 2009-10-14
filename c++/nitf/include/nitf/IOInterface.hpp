@@ -29,15 +29,14 @@
 #include <string>
 
 /*!
- *  \file WriteHandler.hpp
- *  \brief  Contains wrapper implementations for WriteHandlers
+ *  \file IOInterface.hpp
  */
 namespace nitf
 {
 
 /*!
- *  \class WriteHandler
- *  \brief  The C++ wrapper for the nitf_WriteHandler
+ *  \class IOInterface
+ *  \brief  The C++ wrapper for the nitf_IOInterface
  */
 DECLARE_CLASS(IOInterface)
 {

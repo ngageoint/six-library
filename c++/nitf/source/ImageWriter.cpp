@@ -24,12 +24,17 @@
 
 using namespace nitf;
 
-
-ImageWriter::ImageWriter(nitf::ImageSubheader& subheader) throw(nitf::NITFException)
-    : mAdopt(false), mImageSource(NULL)
+ImageWriter::ImageWriter(nitf::ImageSubheader& subheader)
+        throw (nitf::NITFException) :
+    nitf::KnownWriteHandler(), mAdopt(false), mImageSource(NULL)
 {
-    setNative(nitf_ImageWriter_construct(subheader.getNative(), &error));
-    getNativeOrThrow();
+    setKnownHandler(nitf_ImageWriter_construct(subheader.getNative(), &error));
+}
+
+ImageWriter::ImageWriter(nitf_ImageWriter * x) throw (nitf::NITFException) :
+    mAdopt(true), mImageSource(NULL)
+{
+    setKnownHandler(x);
 }
 
 ImageWriter::~ImageWriter()
@@ -44,8 +49,8 @@ ImageWriter::~ImageWriter()
 void ImageWriter::attachSource(nitf::ImageSource* imageSource, bool adopt)
         throw (nitf::NITFException)
 {
-    if (!nitf_ImageWriter_attachSource(getNativeOrThrow(),
-            imageSource->getNative(), &error) )
+    if (!nitf_ImageWriter_attachSource(knownHandler, imageSource->getNative(),
+            &error))
         throw nitf::NITFException(&error);
     imageSource->setManaged(true);
     imageSource->incRef();
@@ -55,12 +60,11 @@ void ImageWriter::attachSource(nitf::ImageSource* imageSource, bool adopt)
 
 void ImageWriter::setWriteCaching(int enable)
 {
-    nitf_ImageWriter_setWriteCaching(getNativeOrThrow(), enable);
+    nitf_ImageWriter_setWriteCaching(knownHandler, enable);
 }
 
 void ImageWriter::setPadPixel(nitf::Uint8* value, nitf::Uint32 length)
 {
-    if (!nitf_ImageWriter_setPadPixel(getNativeOrThrow(), 
-                                      value, length, &error))
+    if (!nitf_ImageWriter_setPadPixel(knownHandler, value, length, &error))
         throw nitf::NITFException(&error);
 }

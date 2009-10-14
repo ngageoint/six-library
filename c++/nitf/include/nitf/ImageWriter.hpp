@@ -50,29 +50,9 @@ public:
      *  \param subheader    The subheader of the Image to write
      */
     ImageWriter(nitf::ImageSubheader& subheader) throw(nitf::NITFException);
+    ImageWriter(nitf_ImageWriter * x) throw(nitf::NITFException);
 
     ~ImageWriter();
-
-    //! Copy constructor
-    ImageWriter(const ImageWriter & x)
-    {
-        setNative(x.getNative());
-    }
-
-    //! Assignment Operator
-    ImageWriter & operator=(const ImageWriter & x)
-    {
-        if (&x != this)
-            setNative(x.getNative());
-        return *this;
-    }
-
-    //! Set native object
-    ImageWriter(nitf_ImageWriter * x)
-    {
-        setNative(x);
-        getNativeOrThrow();
-    }
 
     /*!
      *  Attach an image source from which to write.

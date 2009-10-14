@@ -41,47 +41,33 @@ namespace nitf
 /*!
  *  \class WriteHandler
  *  \brief  The C++ wrapper for the nitf_WriteHandler
+ *
+ *  All WriteHandlers are treated as pointers in the nitf system.
  */
-DECLARE_CLASS(WriteHandler)
+class WriteHandler
 {
 public:
 
-    //! Copy constructor
-    WriteHandler(const WriteHandler & x)
-    {
-        setNative(x.getNative());
-    }
-
-    //! Assignment Operator
-    WriteHandler & operator=(const WriteHandler & x)
-    {
-        if (&x != this)
-            setNative(x.getNative());
-        return *this;
-    }
-
-    // Set native object
-    WriteHandler(nitf_WriteHandler * x)
-    {
-        setNative(x);
-        getNativeOrThrow();
-    }
-
     //! Destructor
-    virtual ~WriteHandler(){}
+    virtual ~WriteHandler();
 
     /*!
      *  Write to the given output IOInterface
      *  \param handle   the output IOInterface
      */
-    virtual void write(IOInterface& handle) throw (nitf::NITFException){}
+    virtual void write(IOInterface& handle) throw (nitf::NITFException)
+    {
+    }
+
+    virtual nitf_WriteHandler* getNative() const = 0;
 
 private:
 
+    nitf_WriteHandler *cppWriteHandler;
+
     //! Allows the engine to call the read function for this object
-    static NITF_BOOL WriteHandler_write(NITF_DATA * data,
-                                        nitf_IOInterface* io,
-                                        nitf_Error *error);
+    static NITF_BOOL WriteHandler_write(NITF_DATA * data, nitf_IOInterface* io,
+            nitf_Error *error);
 
     //! Needed for the engine interface
     static void WriteHandler_destruct(NITF_DATA* data);
@@ -93,11 +79,8 @@ protected:
     {
         // Create a data source interface that
         // the native layer can use
-        nitf_IWriteHandler WriteHandler =
-        {
-            &WriteHandler_write,
-            &WriteHandler_destruct,
-        };
+        nitf_IWriteHandler WriteHandler = { &WriteHandler_write,
+                &WriteHandler_destruct, };
         return WriteHandler;
     }
 
@@ -105,21 +88,30 @@ protected:
     WriteHandler() throw (nitf::NITFException);
 
     nitf_Error error;
+
 };
-
-
 
 /*!
  *  \class KnownWriteHandler
  *  \brief  The base class for known data sources in the engine.
  */
-class KnownWriteHandler : public WriteHandler
+class KnownWriteHandler: public WriteHandler
 {
 public:
     //! Constructor
-    KnownWriteHandler(): WriteHandler(), mData(NULL), mIface(NULL){}
+    KnownWriteHandler() :
+        WriteHandler(), knownHandler(NULL)
+    {
+    }
+
     //! Destructor
-    virtual ~KnownWriteHandler() {}
+    virtual ~KnownWriteHandler()
+    {
+        //we don't destroy the native known WriteHandler - the Writer
+        //destroys attached WriteHandlers - if you by chance don't attach
+        //the handler to a Writer, you can call:
+        //nitf_WriteHandler_destruct(handler->getNative());
+    }
 
     /*!
      *  Write data to the given IOInterface
@@ -127,38 +119,48 @@ public:
      */
     virtual void write(IOInterface& handle) throw (nitf::NITFException);
 
-protected:
-    NITF_DATA * mData;
-    nitf_IWriteHandler * mIface;
-};
+    nitf_WriteHandler* getNative() const
+    {
+        return knownHandler;
+    }
 
+protected:
+    nitf_WriteHandler *knownHandler;
+
+    void setKnownHandler(nitf_WriteHandler *handler)
+            throw (nitf::NITFException);
+};
 
 /*!
  *  \class StreamIOWriteHandler
  *  \brief  Write handler that streams from an input source.
  */
-class StreamIOWriteHandler : public KnownWriteHandler
+class StreamIOWriteHandler: public KnownWriteHandler
 {
 public:
     //! Constructor
     StreamIOWriteHandler(IOInterface& sourceHandle, nitf::Uint64 offset,
             nitf::Uint64 bytes);
-    ~StreamIOWriteHandler() {}
+    ~StreamIOWriteHandler()
+    {
+    }
 };
-
 
 /**
  *  \class SegmentWriteHandler
  *  \brief  Write handler that streams from a SegmentReader.
  */
-class SegmentWriteHandler : public KnownWriteHandler
+class SegmentWriteHandler: public KnownWriteHandler
 {
 public:
-    SegmentWriteHandler(SegmentReader reader) : mReader(reader)
+    SegmentWriteHandler(SegmentReader reader) :
+        mReader(reader)
     {
     }
 
-    virtual ~SegmentWriteHandler(){}
+    virtual ~SegmentWriteHandler()
+    {
+    }
 
     void write(IOInterface& handle) throw (nitf::NITFException);
 
@@ -166,7 +168,6 @@ protected:
     SegmentReader mReader;
     static const size_t BLOCK_SIZE = 8192;
 };
-
 
 }
 #endif

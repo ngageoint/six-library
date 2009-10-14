@@ -40,33 +40,12 @@ namespace nitf
  *  \class SegmentWriter
  *  \brief  The C++ wrapper for the nitf_SegmentWriter
  */
-class SegmentWriter : public KnownWriteHandler
+class SegmentWriter: public KnownWriteHandler
 {
 public:
 
     //! Default constructor
-    SegmentWriter() throw(nitf::NITFException);
-
-    //! Copy constructor
-    SegmentWriter(const SegmentWriter & x)
-    {
-        setNative(x.getNative());
-    }
-
-    //! Assignment Operator
-    SegmentWriter & operator=(const SegmentWriter & x)
-    {
-        if (&x != this)
-            setNative(x.getNative());
-        return *this;
-    }
-
-    //! Set native object
-    SegmentWriter(nitf_SegmentWriter * x)
-    {
-        setNative(x);
-        getNativeOrThrow();
-    }
+    SegmentWriter(nitf_SegmentWriter *x = NULL) throw (nitf::NITFException);
 
     ~SegmentWriter();
 

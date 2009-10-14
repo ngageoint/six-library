@@ -41,7 +41,7 @@ namespace nitf
  *  \class IOHandle
  *  \brief The C++ wrapper of the nitf_IOHandle
  */
-class IOHandle : public NativeIOInterface
+class IOHandle: public NativeIOInterface
 {
 
 private:
@@ -55,43 +55,43 @@ public:
      * Default constructor. Only here for compatibility purposes.
      * Use the other constructor
      */
-    explicit IOHandle() : handle(NITF_INVALID_HANDLE_VALUE), mAutoClose(false) {}
+    explicit IOHandle() :
+        handle(NITF_INVALID_HANDLE_VALUE), mAutoClose(false)
+    {
+    }
 
-    explicit IOHandle(const std::string& fname,
-             nitf::AccessFlags access = NITF_ACCESS_READONLY,
-             nitf::CreationFlags creation = NITF_OPEN_EXISTING) throw(nitf::NITFException)
-            : mAutoClose(false)
+    explicit IOHandle(const std::string& fname, nitf::AccessFlags access =
+            NITF_ACCESS_READONLY, nitf::CreationFlags creation =
+            NITF_OPEN_EXISTING) throw (nitf::NITFException) :
+        mAutoClose(false)
     {
         create(fname, access, creation);
     }
 
-    explicit IOHandle(const char* fname,
-             nitf::AccessFlags access = NITF_ACCESS_READONLY,
-             nitf::CreationFlags creation = NITF_OPEN_EXISTING) throw(nitf::NITFException)
-            : mAutoClose(false)
+    explicit IOHandle(const char* fname, nitf::AccessFlags access =
+            NITF_ACCESS_READONLY, nitf::CreationFlags creation =
+            NITF_OPEN_EXISTING) throw (nitf::NITFException) :
+        mAutoClose(false)
     {
         std::string fName(fname);
         create(fName, access, creation);
     }
 
-    //!  Construct from native object
-//    explicit IOHandle(nitf_IOHandle n) : mAutoClose(false)
-//    {
-//        handle = n;
-//    }
-
     ~IOHandle()
     {
-        if (mAutoClose) close();
+        if (mAutoClose)
+            close();
     }
 
     //!  Get native object
-    nitf_IOHandle getHandle() { return handle; }
+    nitf_IOHandle getHandle()
+    {
+        return handle;
+    }
 
-    void create(const std::string& fname,
-                nitf::AccessFlags access = NITF_ACCESS_READONLY,
-                nitf::CreationFlags creation = NITF_OPEN_EXISTING)
-    throw(nitf::NITFException)
+    void create(const std::string& fname, nitf::AccessFlags access =
+            NITF_ACCESS_READONLY, nitf::CreationFlags creation =
+            NITF_OPEN_EXISTING) throw (nitf::NITFException)
     {
         handle = nitf_IOHandle_create(fname.c_str(), access, creation, &error);
         if (NITF_INVALID_HANDLE(handle))
@@ -99,15 +99,21 @@ public:
 
         /* now, we must adapt this IOHandle to fit into the IOInterface */
         /* get a nitf_IOInterface* object... */
-        nitf_IOInterface *interface = nitf_IOHandleAdaptor_construct(handle, &error);
+        nitf_IOInterface *interface = nitf_IOHandleAdaptor_construct(handle,
+                &error);
         if (!interface)
             throw nitf::NITFException(&error);
         setNative(interface);
     }
 
-    void setManualClose(bool manualClose) { mAutoClose = !manualClose; }
-    void setAutoClose(bool autoClose) { mAutoClose = autoClose; }
-    //bool isValid() { return !NITF_INVALID_HANDLE(handle) ? true: false; }
+    void setManualClose(bool manualClose)
+    {
+        mAutoClose = !manualClose;
+    }
+    void setAutoClose(bool autoClose)
+    {
+        mAutoClose = autoClose;
+    }
 
 };
 
