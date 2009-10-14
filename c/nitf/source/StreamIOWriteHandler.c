@@ -97,7 +97,11 @@ NITFPRIV(NITF_BOOL) WriteHandler_write
 
 NITFPRIV(void) WriteHandler_destruct(NITF_DATA * data)
 {
-    /* nothing to do */
+    if (data)
+    {
+        WriteHandlerImpl *impl = (WriteHandlerImpl*)data;
+        NITF_FREE(impl);
+    }
 }
 
 
