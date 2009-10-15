@@ -49,22 +49,22 @@ class WriteHandler
 public:
 
     //! Destructor
-    virtual ~WriteHandler();
+    virtual ~WriteHandler()
+    {
+    }
 
     /*!
      *  Write to the given output IOInterface
      *  \param handle   the output IOInterface
      */
-    virtual void write(IOInterface& handle) throw (nitf::NITFException)
+    virtual void write(IOInterface& handle) throw (nitf::NITFException) = 0;
+
+    virtual nitf_WriteHandler* getNative() const
     {
+        return cppWriteHandler;
     }
 
-    virtual nitf_WriteHandler* getNative() const = 0;
-
 private:
-
-    nitf_WriteHandler *cppWriteHandler;
-
     //! Allows the engine to call the read function for this object
     static NITF_BOOL WriteHandler_write(NITF_DATA * data, nitf_IOInterface* io,
             nitf_Error *error);
@@ -88,7 +88,7 @@ protected:
     WriteHandler() throw (nitf::NITFException);
 
     nitf_Error error;
-
+    nitf_WriteHandler *cppWriteHandler;
 };
 
 /*!
@@ -111,6 +111,10 @@ public:
         //destroys attached WriteHandlers - if you by chance don't attach
         //the handler to a Writer, you can call:
         //nitf_WriteHandler_destruct(handler->getNative());
+        //but, we do need to delete the cppWriteHandler since it is not the
+        //native one that DOES get deleted by the Writer
+        if (cppWriteHandler)
+            nitf_WriteHandler_destruct(&cppWriteHandler);
     }
 
     /*!

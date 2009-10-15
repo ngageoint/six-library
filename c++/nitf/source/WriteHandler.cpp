@@ -39,11 +39,6 @@ nitf::WriteHandler::WriteHandler() throw (nitf::NITFException) :
     cppWriteHandler->iface = &iWriteHandler;
 }
 
-nitf::WriteHandler::~WriteHandler()
-{
-    if (cppWriteHandler)
-        nitf_WriteHandler_destruct(&cppWriteHandler);
-}
 
 NITF_BOOL nitf::WriteHandler::WriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
