@@ -14850,46 +14850,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_nitf_ImageWriter_attachInterleavedSource(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_ImageWriter *arg1 = (nitf_ImageWriter *) 0 ;
-  nitf_ImageSource *arg2 = (nitf_ImageSource *) 0 ;
-  nitf_Error *arg3 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_ImageWriter_attachInterleavedSource",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_ImageWriter_attachInterleavedSource" "', argument " "1"" of type '" "nitf_ImageWriter *""'"); 
-  }
-  arg1 = (nitf_ImageWriter *)(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_ImageSource, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageWriter_attachInterleavedSource" "', argument " "2"" of type '" "nitf_ImageSource *""'"); 
-  }
-  arg2 = (nitf_ImageSource *)(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__nitf_Error, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageWriter_attachInterleavedSource" "', argument " "3"" of type '" "nitf_Error *""'"); 
-  }
-  arg3 = (nitf_Error *)(argp3);
-  result = (int)nitf_ImageWriter_attachInterleavedSource(arg1,arg2,arg3);
-  resultobj = SWIG_From_int((int)(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_nitf_FileHeader_fileHeader_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_FileHeader *arg1 = (nitf_FileHeader *) 0 ;
@@ -29285,7 +29245,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_ImageWriter_construct", _wrap_nitf_ImageWriter_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_ImageWriter_attachSource", _wrap_nitf_ImageWriter_attachSource, METH_VARARGS, NULL},
 	 { (char *)"nitf_ImageWriter_setWriteCaching", _wrap_nitf_ImageWriter_setWriteCaching, METH_VARARGS, NULL},
-	 { (char *)"nitf_ImageWriter_attachInterleavedSource", _wrap_nitf_ImageWriter_attachInterleavedSource, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileHeader_fileHeader_set", _wrap_nitf_FileHeader_fileHeader_set, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileHeader_fileHeader_get", _wrap_nitf_FileHeader_fileHeader_get, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileHeader_fileVersion_set", _wrap_nitf_FileHeader_fileVersion_set, METH_VARARGS, NULL},
