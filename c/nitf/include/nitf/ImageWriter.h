@@ -74,21 +74,6 @@ NITFAPI(int) nitf_ImageWriter_setWriteCaching
     int enable                      /*!< Enable cached writes if true */
 );
 
-
-/*!
- * This offers an alternative to attaching a typical band source.  In
- * this case, we attach an image source with only one band source attached.
- * 
- * The data should be written as one pixel, where each band is byte swapped
- * where necessary.
- *
- * This behavior is only supported when the data is band interleaved by
- * pixel
- */
-NITFAPI(int) 
-nitf_ImageWriter_attachInterleavedSource(nitf_ImageWriter * writer,
-                                         nitf_ImageSource *imageSource, 
-                                         nitf_Error * error);
 /*!
  *  Function allows the user access to the product's pad pixels.
  *  For example, if you wanted transparent pixels for fill, you would
