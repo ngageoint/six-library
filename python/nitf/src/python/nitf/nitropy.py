@@ -840,7 +840,6 @@ nitf_FileSource_construct = _nitropy.nitf_FileSource_construct
 nitf_ImageWriter_construct = _nitropy.nitf_ImageWriter_construct
 nitf_ImageWriter_attachSource = _nitropy.nitf_ImageWriter_attachSource
 nitf_ImageWriter_setWriteCaching = _nitropy.nitf_ImageWriter_setWriteCaching
-nitf_ImageWriter_attachInterleavedSource = _nitropy.nitf_ImageWriter_attachInterleavedSource
 NITF_FHDR_SZ = _nitropy.NITF_FHDR_SZ
 NITF_FVER_SZ = _nitropy.NITF_FVER_SZ
 NITF_CLEVEL_SZ = _nitropy.NITF_CLEVEL_SZ

@@ -37,14 +37,14 @@ if int(env.subst('$swigify')):
 
 
 #TODO - might need to fix this...
-INCLUDE_POSSIBILITIES = [ os.path.join(os.path.dirname(sys.executable), 'include'),
+INCLUDE_POSSIBILITIES = [ '%s/../include/python%s' % (os.path.dirname(sys.executable), sys.version.split()[0][0:3]),
     '/usr/include/python%s/' % sys.version.split()[0][0:3],]
 for dir in INCLUDE_POSSIBILITIES:
     if os.path.isdir(dir):
         include_path.append(dir)
 
 #TODO - might need to fix this...
-LIB_POSSIBILITIES = [ os.path.join(os.path.dirname(sys.executable), 'libs'),
+LIB_POSSIBILITIES = [ os.path.join(os.path.dirname(sys.executable), '../lib'),
     '/usr/lib/python%s/' % sys.version.split()[0],]
 for dir in LIB_POSSIBILITIES:
     if os.path.isdir(dir):
