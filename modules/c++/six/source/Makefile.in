@@ -1,0 +1,35 @@
+#----------------------------------------
+# This is for project-specific stuff
+#----------------------------------------
+include ../build/Makefile
+
+#----------------------------------------
+# Build commands
+#----------------------------------------
+OBJS = ${SOURCES:.cpp=.o}
+#----------------------------------------
+# Just lib, which requires objects
+#----------------------------------------
+$(LIBDIR)/$(LIBNAME): $(OBJS) dirs
+	$(ARCHIVE) $(LIBDIR)/$(LIBNAME) $(OBJS)
+
+#----------------------------------------
+# Rule for setting up dir. structure
+#----------------------------------------
+dirs:
+	\mkdir -p $(LIBDIR)
+
+#----------------------------------------
+# Rule for building C++ objects
+#----------------------------------------
+.SUFFIXES: .o .cpp
+.cpp.o:
+	$(COMPILE) -c $?
+
+clean:
+	\rm -f $(OBJS)
+	\rm -rf $(LIBDIR)
+
+raw: clean
+	\rm -f Makefile
+
