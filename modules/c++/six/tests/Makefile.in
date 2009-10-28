@@ -1,0 +1,53 @@
+# ==================== DO NOT EDIT THIS HEADER ======================== 
+# 
+# Copyright (c) 2006 General Dynamics - AIS
+# Ann Arbor, MI. 
+# 
+# All Rights Reserved 
+# 
+# THIS IS UNPUBLISHED COPYRIGHTED SOURCE CODE containing
+# proprietary information of General Dynamics - AIS
+# This copy has been provided on the basis of strict
+# confidentiality and on the express understanding that
+# it may not be reproduced, or revealed to any person,
+# in whole or in part, without express written permission
+# from General Dynamics - AIS, which is sole owner of
+# copyright and all other rights therein. 
+# No cost usage license granted to U.S. Government only.
+# 
+# ==================== DO NOT EDIT THIS HEADER ========================
+
+#----------------------------------------
+# General area
+#----------------------------------------
+include ../build/Makefile
+
+EXE    = $(TESTS:.cpp=)
+OBJS = ${TESTS:.cpp=.o}
+#----------------------------------------
+# Build commands
+#----------------------------------------
+all: $(EXE)
+
+$(EXE):  $(OBJS) dirs
+	$(COMPILE) -o $@ $@.o $(LINK)
+	mv $@ $(TESTDIR)
+
+#----------------------------------------
+# Rule for setting up dir. structure
+#----------------------------------------
+dirs:
+	\mkdir -p $(TESTDIR)
+
+
+.SUFFIXES: .o .cpp
+.cpp.o:
+	$(COMPILE) -c $?
+
+clean:
+	\rm -f $(OBJS)
+	\rm -rf $(TESTDIR)
+
+raw: clean
+	\rm -f Makefile
+
