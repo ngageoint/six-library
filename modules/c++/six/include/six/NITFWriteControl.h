@@ -238,6 +238,13 @@ public:
      *  \param toFile The destination file
      */
     void save(io::InputStream& imageData, std::string toFile);
+
+    /*!
+     *  Write out a single image
+     *  \param imageData A memory buffer we can pull from
+     *  \param toFile The destination file
+     */
+    void save(UByte* imageData, std::string toFile);
 };
 
 }
