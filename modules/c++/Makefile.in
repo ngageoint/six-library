@@ -1,0 +1,97 @@
+ROOT = $(PWD)
+DRIVER_PATH = $(ROOT)/../drivers
+
+build: six_libs
+clean: six_clean
+install: six_install
+fresh: clean
+	make
+
+raw: six_raw
+	rm -f Makefile
+	rm -f config.status
+	rm -rf install
+
+#  Make all of the tests in CODA
+all_tests: core_tests dbi_tests extended_tests
+
+# make all the drivers in CODA
+all_drivers: pcre_driver sax_driver nitf_driver cgm_driver fft_driver uuid_driver 
+
+#  Build NITRO.  You need to do this only if your configure could not
+#  detect a working version of nitro
+nitf_driver:
+	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/nitf_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@"
+
+#  Build the SAX driver.  You need to do this only if your configure
+#  could not detect a working version of expat when you selected
+#  --enable-xml-layer=expat
+sax_driver:
+	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/sax_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@"
+
+#-------------------------------------------------------
+#  Most basic libraries
+#-------------------------------------------------------
+six_libs:
+	@make_sax_driver@
+	@make_nitf_driver@
+	cd except;      make library
+	cd str;         make library
+	cd sys;         make library
+	cd io;          make library
+	cd mt;          make library
+	cd nitf;        make library
+	cd tiff;        make library
+	cd xml.lite;    make library
+	cd scene;       make library
+
+six_install:
+	cd except;      make install
+	cd str;         make install
+	cd sys;         make install
+	cd io;          make install
+	cd mt;          make install
+	cd nitf;        make install
+	cd tiff;        make install
+	cd xml.lite;    make install
+	cd scene;       make install
+	cd math.linear; make install
+	cd math.poly;   make install
+
+drivers_clean:
+	cd ../drivers; rm -rf expat-1.95.7
+	if test -f ../drivers/nitf/Makefile; \
+	then cd ../drivers/nitf; make clean; \
+	     rm -f *INSTALL_SUCCEEDED; \
+	fi
+
+six_clean: drivers_clean
+	cd except;      make clean
+	cd str;         make clean
+	cd sys;         make clean
+	cd io;          make clean
+	cd mt;          make clean
+	cd nitf;        make clean
+	cd tiff;        make clean
+	cd xml.lite;    make clean
+	cd scene;       make clean
+	cd math.linear; make clean
+	cd math.poly;   make clean
+
+six_raw: six_clean
+	cd except;      make raw
+	cd str;         make raw
+	cd sys;         make raw
+	cd io;          make raw
+	cd mt;          make raw
+	cd nitf;        make raw
+	cd tiff;        make raw
+	cd xml.lite;    make raw
+	cd scene;       make raw
+	cd math.linear; make raw
+	cd math.poly;   make raw
+
+six_test:
+	cd six;         make unit-tests
+
+

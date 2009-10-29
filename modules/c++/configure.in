@@ -1,0 +1,98 @@
+dnl Disable cache file creation.
+define([AC_CACHE_LOAD], )
+define([AC_CACHE_SAVE], )
+
+AC_INIT(configure.in)
+AC_CONFIG_AUX_DIR(build)
+
+# Location of makefiles directory.
+here=`pwd`
+build_dir="${here}/build/"
+ar_flags="-crs"
+AR="ar"
+
+AC_CANONICAL_SYSTEM
+AC_PROG_INSTALL
+AC_C_BIGENDIAN([ac_big_endian=yes, AC_DEFINE(WORDS_BIGENDIAN)],ac_big_endian=no)
+AC_CHECK_HEADER(sys/time.h,[cxx_time_defs="-DHAVE_SYS_TIME_H"])
+AC_PROG_CXX
+
+case "${CXX}" in
+     g++)
+	AC_MSG_RESULT(gnu compiler libdir)
+	lib_dir="gnu"
+     ;;
+esac
+
+
+dnl ##############################################
+dnl INCLUDES
+dnl ##############################################
+dnl # first let's configure for the system
+builtin(include, ./build/conf/configure.sun.in)
+builtin(include, ./build/conf/configure.sgi.in)
+builtin(include, ./build/conf/configure.linux.in)
+builtin(include, ./build/conf/configure.ibm.in)
+builtin(include, ./build/conf/configure.apple.in)
+dnl # this goes here b/c it sets some variables based on the architecture choices
+builtin(include, ./build/conf/configure.baseOptions.in)
+dnl #now, add any additional configuration
+builtin(include, ./build/conf/configure.mt.in)
+builtin(include, ./build/conf/configure.pcre.in)
+builtin(include, ./build/conf/configure.fftw.in)
+builtin(include, ./build/conf/configure.ssl.in)
+builtin(include, ./build/conf/configure.xml.in)
+builtin(include, ./build/conf/configure.sql.in)
+builtin(include, ./build/conf/configure.apache.in)
+builtin(include, ./build/conf/configure.pretool.in)
+builtin(include, ./build/conf/configure.purify.in)
+builtin(include, ./build/conf/configure.uuid.in)
+builtin(include, ./build/conf/configure.python.in)
+builtin(include, ./build/conf/configure.java.in)
+builtin(include, ./build/conf/configure.misc.in)
+builtin(include, ./build/conf/configure.nitf.in)
+builtin(include, ./build/conf/configure.mpi.in)
+
+
+#disable optz if we are debugging
+if test "${cxx_debug_flags}" != ""
+then
+    cxx_optz_flags=""
+fi
+
+#add the top-level include dir for compatibility headers
+#cxx_includes="${cxx_includes} -I${here}/include"
+
+cxx_pic_flags="${sys_cxx_pic_flags}"
+cxx_defs="${cxx_defs} ${cxx_time_defs}"
+cxx_flags="${cxx_flags} ${cxx_optz_flags} ${cxx_64_flags} ${cxx_pic_flags} ${cxx_verb_flags} ${cxx_debug_flags} ${cxx_warn_flags}"
+
+AC_MSG_RESULT(configured for ${target}...)
+
+AC_SUBST(cxx_includes)
+AC_SUBST(cxx_flags)
+AC_SUBST(cxx_64_flags)
+AC_SUBST(cxx_pic_flags)
+AC_SUBST(cxx_defs)
+AC_SUBST(POSIX)
+AC_SUBST(CXX)
+AC_SUBST(ar_flags)
+AC_SUBST(dll_flags)
+AC_SUBST(build_dir)
+AC_SUBST(AR)
+AC_SUBST(link_prelibs)
+AC_SUBST(link_libs)
+AC_SUBST(link_libpath)
+AC_SUBST(link_flags)
+AC_SUBST(lib_dir)
+
+
+# Figure out which Makefile.ins to process
+makefile_in_subs=`find . -name Makefile.in -print | sed 's/.in$//'`
+proj_make_in=`find . -name project.make.in -print | sed 's/.in$//'`
+xml_in=`find . -name *.xml.in -print | sed 's/.in$//'`
+sh_in=`find . -name *.sh.in -print | sed 's/.in$//'`
+AC_OUTPUT(${makefile_in_subs} ${proj_make_in} ${xml_in} ${sh_in})
+
+#now, expand the dependencies within the project.make files
+#`find . -name project.make -exec perl ./build/expandDeps.pl {} ${target} ${lib_dir} \;`
