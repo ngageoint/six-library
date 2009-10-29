@@ -3,6 +3,7 @@ DRIVER_PATH = $(ROOT)/../drivers
 
 build: six_libs
 clean: six_clean
+test: six_test
 install: six_install
 fresh: clean
 	make
@@ -11,12 +12,6 @@ raw: six_raw
 	rm -f Makefile
 	rm -f config.status
 	rm -rf install
-
-#  Make all of the tests in CODA
-all_tests: core_tests dbi_tests extended_tests
-
-# make all the drivers in CODA
-all_drivers: pcre_driver sax_driver nitf_driver cgm_driver fft_driver uuid_driver 
 
 #  Build NITRO.  You need to do this only if your configure could not
 #  detect a working version of nitro

@@ -19,11 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <iostream>
+
+#ifdef USE_SIO_LITE
+
 #include <import/six.h>
 #include <import/sio/lite.h>
 #include <import/io.h>
 
-#ifdef USE_SIO_LITE
+
+
+
 /*!
  *  This file takes in an SIO and turns it in to a SICD.
  *  It uses the WriteControl::save() function to stream
