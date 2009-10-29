@@ -235,8 +235,9 @@ void scene::SceneGeometry::getGroundResolution(double resRg,
                                                double& resRow,
                                                double& resCol) const
 {
-    double grazingAngle = getGrazingAngle();
-    double tiltAngle = getTiltAngle();
+    Vector3 z = math::linear::cross(*mR, *mC);
+    double grazingAngle = asin(mXs.dot(z)) * RADIANS_TO_DEGREES;
+    double tiltAngle = atan2(z.dot(mYs), z.dot(mZs)) * RADIANS_TO_DEGREES;
     double rotAngle = getRotationAngle();
 
     double cosRot = cos(rotAngle * DEGREES_TO_RADIANS);
@@ -257,7 +258,7 @@ void scene::SceneGeometry::getGroundResolution(double resRg,
 
     double kc2 = pow(cosRot * secTilt, 2);
 
-    resRow = sqrt(kr1 * pow(resAz, 2) + kr2 * pow(resRg, 2));
-    resCol = sqrt(kc1 * pow(resAz, 2) + kc2 * pow(resRg, 2));
+    resRow = sqrt(kr1 * pow(resRg, 2) + kr2 * pow(resAz, 2));
+    resCol = sqrt(kc1 * pow(resRg, 2) + kc2 * pow(resAz, 2));
 }
 
