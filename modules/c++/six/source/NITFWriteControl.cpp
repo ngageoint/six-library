@@ -164,24 +164,6 @@ void NITFWriteControl::initialize(Container* container)
 
 }
 
-void NITFWriteControl::save(BufferList& imageData, std::string outputFile)
-{
-
-    //     int bufferSize = mOptions.getParameter(OPT_BUFFER_SIZE,
-    //                                            Parameter((int)DEFAULT_BUFFER_SIZE));
-    int bufferSize = DEFAULT_BUFFER_SIZE;
-    nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
-
-    saveIO(imageData, bufferedIO);
-    //     std::cout << "Write block info: " << std::endl;
-    //     std::cout << "------------------------------------" << std::endl;
-    //     std::cout << "Total number of blocks written: "
-    //             << bufferedIO.getNumBlocksWritten() << std::endl;
-    //     std::cout << "Of those, " << bufferedIO.getNumPartialBlocksWritten()
-    //             << " were less than buffer size " << bufferSize << std::endl;
-    bufferedIO.close();
-}
-
 void NITFWriteControl::save(SourceList& imageData, std::string outputFile)
 {
     //     int bufferSize = mOptions.getParameter(OPT_BUFFER_SIZE,
@@ -300,33 +282,27 @@ void NITFWriteControl::save(io::InputStream& imageData, std::string toFile)
                 writeHandler);
     }
 
+    addDataAndWrite();
+
     outputFile.close();
 }
 
-void NITFWriteControl::addDataAndWrite()
+void NITFWriteControl::save(BufferList& imageData, std::string outputFile)
 {
-    size_t numDES = mContainer->getNumData();
 
-    char **raw = new char*[numDES];
+    //     int bufferSize = mOptions.getParameter(OPT_BUFFER_SIZE,
+    //                                            Parameter((int)DEFAULT_BUFFER_SIZE));
+    int bufferSize = DEFAULT_BUFFER_SIZE;
+    nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
-    for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
-    {
-        Data* data = mContainer->getData(i);
-
-        raw[i] = six::toXMLCharArray(data);
-        nitf::SegmentWriter* deWriter = mWriter.newDEWriter(i);
-        nitf::SegmentSource* segSource = new nitf::SegmentMemorySource(raw[i],
-                strlen(raw[i]), 0, 0);
-        deWriter->attachSource(segSource, true);
-    }
-    mWriter.write();
-
-    for (unsigned int i = 0; i < numDES; ++i)
-    {
-        delete[] raw[i];
-    }
-    delete[] raw;
-
+    saveIO(imageData, bufferedIO);
+    //     std::cout << "Write block info: " << std::endl;
+    //     std::cout << "------------------------------------" << std::endl;
+    //     std::cout << "Total number of blocks written: "
+    //             << bufferedIO.getNumBlocksWritten() << std::endl;
+    //     std::cout << "Of those, " << bufferedIO.getNumPartialBlocksWritten()
+    //             << " were less than buffer size " << bufferSize << std::endl;
+    bufferedIO.close();
 }
 
 void NITFWriteControl::saveIO(BufferList& imageData,
@@ -366,4 +342,68 @@ void NITFWriteControl::saveIO(BufferList& imageData,
     }
 
     addDataAndWrite();
+}
+
+void NITFWriteControl::save(UByte* imageData, std::string toFile)
+{
+    int bufferSize = DEFAULT_BUFFER_SIZE;
+    nitf::BufferedWriter outputFile(toFile, bufferSize);
+
+    mWriter.prepareIO(outputFile, mRecord);
+
+    // Have to if its not a BE machine
+    bool doByteSwap = !sys::isBigEndianSystem();
+
+    if (mInfos.size() != 1)
+        throw except::Exception(Ctxt(FmtX("Require %d images, received 1",
+                mInfos.size())));
+
+    NITFImageInfo* info = mInfos[0];
+    std::vector<NITFSegmentInfo> imageSegments = info->getImageSegments();
+    size_t numIS = imageSegments.size();
+    unsigned long pixelSize = info->getData()->getNumBytesPerPixel();
+    unsigned long numCols = info->getData()->getNumCols();
+    unsigned long numChannels = info->getData()->getNumChannels();
+
+    for (unsigned int j = 0; j < numIS; ++j)
+    {
+        NITFSegmentInfo segmentInfo = imageSegments[j];
+
+        nitf::WriteHandler* writeHandler = new MemoryWriteHandler(
+                segmentInfo, imageData, segmentInfo.firstRow, numCols,
+                numChannels, pixelSize, doByteSwap);
+        // Could set start index here
+        mWriter.setImageWriteHandler(info->getStartIndex() + j,
+                writeHandler);
+    }
+
+    addDataAndWrite();
+
+    outputFile.close();
+}
+
+void NITFWriteControl::addDataAndWrite()
+{
+    size_t numDES = mContainer->getNumData();
+
+    char **raw = new char*[numDES];
+
+    for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
+    {
+        Data* data = mContainer->getData(i);
+
+        raw[i] = six::toXMLCharArray(data);
+        nitf::SegmentWriter* deWriter = mWriter.newDEWriter(i);
+        nitf::SegmentSource* segSource = new nitf::SegmentMemorySource(raw[i],
+                strlen(raw[i]), 0, 0);
+        deWriter->attachSource(segSource, true);
+    }
+    mWriter.write();
+
+    for (unsigned int i = 0; i < numDES; ++i)
+    {
+        delete[] raw[i];
+    }
+    delete[] raw;
+
 }

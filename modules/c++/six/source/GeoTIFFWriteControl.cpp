@@ -114,7 +114,6 @@ void GeoTIFFWriteControl::save(SourceList& sources, std::string toFile)
 
 }
 
-
 void GeoTIFFWriteControl::save(io::InputStream& source, std::string toFile)
 {
     tiff::FileWriter tiffWriter(toFile);
@@ -254,6 +253,7 @@ std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data, tiff::IFD* i
 
     return allocated;
 }
+
 void GeoTIFFWriteControl::save(BufferList& sources, std::string toFile)
 {
 
@@ -284,8 +284,33 @@ void GeoTIFFWriteControl::save(BufferList& sources, std::string toFile)
     }
 
     tiffWriter.close();
+}
+
+void GeoTIFFWriteControl::save(UByte* source, std::string toFile)
+{
+    tiff::FileWriter tiffWriter(toFile);
+
+    tiffWriter.writeHeader();
+    if (1 != mDerivedData.size())
+        throw except::Exception(
+            Ctxt(
+                FmtX("Meta-data count [%d] does not match source list [1]",
+                     mDerivedData.size())
+                )
+            );
 
 
+    tiff::ImageWriter* imageWriter = tiffWriter.addImage();
+    tiff::IFD* ifd = imageWriter->getIFD();
+    DerivedData* data = (DerivedData*)mDerivedData[0];
+    std::vector<char*> allocated = setupIFD(data, ifd);
+    // Now we hack to write
+    imageWriter->putData(source, data->getNumRows() * data->getNumCols());
+    imageWriter->writeIFD();
+    for (unsigned int j = 0; j < allocated.size(); ++j)
+        delete allocated[j];
+
+    tiffWriter.close();
 }
 
 void GeoTIFFWriteControl::addCharArray(tiff::IFD* ifd,
