@@ -1,0 +1,201 @@
+import os
+import Options
+from TaskGen import feature, before, taskgen
+import Tools.misc as misc
+
+
+def set_options(opt):
+    opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'xerces'],
+                   dest='xml_layer', default='expat', help='Specify the XML layer')
+    opt.add_option('--with-xml-home', action='store', dest='xml_home',
+                   help='Specify the XML Home - where the XML library is installed to')
+    opt.add_option('--build-xml', action='store_true',
+                   default=False, help='force building XML library (expat) from scratch')
+
+def configure(conf):
+    #-- XML --------------------------------------------------------------------
+    xmlHome = Options.options.xml_home
+    xmlLayer = Options.options.xml_layer
+    makeXML = Options.options.build_xml
+    
+    if makeXML:
+        xmlLayer = 'expat'
+    
+    if xmlHome and not makeXML:
+        conf.check_message_1('Setting xml home')
+        conf.check_message_2(xmlHome)
+        conf.env.append_value('LIBPATH_XML', os.path.join(xmlHome, 'lib'))
+        conf.env.append_value('CPPPATH_XML', os.path.join(xmlHome, 'include'))
+    
+    expatDefines = '-DUSE_EXPAT -DXML_STATIC'
+    if not makeXML:
+        if xmlLayer == 'expat':
+            conf.env.append_value('CXXFLAGS_XML', expatDefines.split())
+            if not xmlHome:
+                #look for it on the system
+                if not conf.check_cc(lib='expat', mandatory=False, uselib_store='XML') \
+                    or not conf.check_cc(header_name='expat.h'):
+                    #we must use/build the local one
+                    makeXML = True
+            else:
+                conf.env['LIB_XML'] = ['expat']
+        elif xmlLayer == 'xerces':
+            conf.env.append_value('CXXFLAGS_XML', '-DUSE_XERCES')
+            conf.env['LIB_XML'] = ['xerces-c']
+            if not xmlHome:
+                conf.check_cxx(lib='xerces-c', mandatory=True, uselib_store='XML')
+
+    if makeXML:
+        conf.env['MAKE_XML'] = xmlLayer
+        conf.env.append_unique('CXXFLAGS_XML', expatDefines.split())
+        conf.check_message_1('Building local lib')
+        conf.check_message_2(xmlLayer)
+    
+    #add some flags for the nitro lib - if a lib states NITRO as a uselib (or uselib local)
+    #these flags will get applied automatically
+    conf.env.append_value('CCFLAGS_NITRO', '-DNITF_MODULE_EXPORTS')
+    conf.env.append_value('CXXFLAGS_NITRO', '-DNITF_MODULE_EXPORTS')
+
+@taskgen
+@feature('untar')
+def untar(self):
+    import tarfile
+    f = self.path.find_or_declare(self.fname)
+    tf = tarfile.open(f.abspath(), 'r')
+    p = self.path.abspath()
+    for x in tf:
+        tf.extract(x, p)
+    tf.close()
+    
+
+@taskgen
+@feature('m4subst')
+def m4subst(tsk):
+    import re
+    #similar to the subst in misc.py - but outputs to the src directory
+    m4_re = re.compile('@(\w+)@', re.M)
+
+    env = tsk.env
+    infile = os.path.join(tsk.path.abspath(), tsk.input)
+    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    
+    file = open(infile, 'r')
+    code = file.read()
+    file.close()
+
+    # replace all % by %% to prevent errors by % signs in the input file while string formatting
+    code = code.replace('%', '%%')
+
+    s = m4_re.sub(r'%(\1)s', code)
+
+    di = tsk.dict or {}
+    if not di:
+        names = m4_re.findall(code)
+        for i in names:
+            di[i] = env.get_flat(i) or env.get_flat(i.upper())
+    
+    file = open(outfile, 'w')
+    file.write(s % di)
+    file.close()
+    if tsk.chmod: os.chmod(outfile, tsk.chmod)
+
+
+@taskgen
+@feature('commentUndefs')
+def commentUndefs(tsk):
+    import re
+    env = tsk.env
+    infile = os.path.join(tsk.path.abspath(), tsk.input)
+    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    
+    file = open(infile, 'r')
+    code = file.read()
+    file.close()
+
+    code = re.sub(r'(#undef[^\n]*)(\n)', r'/* \1 */\2', code)
+    file = open(outfile, 'w')
+    file.write(code)
+    file.close()
+    if tsk.chmod: os.chmod(outfile, tsk.chmod)
+
+
+@taskgen
+@feature('makeHeader')
+def makeHeader(tsk):
+    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    dest = open(outfile, 'w')
+    guard = '__CONFIG_H__'
+    dest.write('#ifndef %s\n#define %s\n\n' % (guard, guard))
+
+    for k in tsk.defs.keys():
+        v = tsk.defs[k]
+        if v is None:
+            v = ''
+        dest.write('\n#ifndef %s\n#define %s %s\n#endif\n' % (k, k, v))
+    
+    if hasattr(tsk, 'undefs'):
+        for u in tsk.undefs:
+            dest.write('\n#undef %s\n' % u)
+
+    dest.write('\n#endif /* %s */\n' % guard)
+    dest.close()
+    if tsk.chmod: os.chmod(outfile, tsk.chmod)
+
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
+    env.set_variant(variant)
+
+    defs = env['defines']
+    defList = []
+    for k, v in defs.iteritems():
+        if v:
+            defList.append('%s=%s' % (k, v))
+    #defs = map(lambda t: '%s=%s' % t, [(k, v) for k, v in bld.env['defines'].iteritems()])
+
+    driversNode = bld.path
+    
+    if 'MAKE_XML' in env:
+        
+        driver = Options.options.xml_layer
+        
+        if driver == 'expat':
+            fname = 'expat-1.95.7'
+            ut = bld.new_task_gen(path=bld.path, fname='%s.tar' % fname,
+                                  env=env.copy(), before='XML')
+            ut.features = ['untar']
+            bld.add_group()
+            
+            driverNode = driversNode.ensure_dir_node_from_path(fname)
+        
+            expatDefs = ['PACKAGE_VERSION="1.95.7"',
+                         'XML_CONTEXT_BYTES=1024',
+                         'XML_DTD=1',
+                         'XML_NS=1',
+                         'PACKAGE_STRING="expat 1.95.7"',
+                         'XML_STATIC=1']
+            
+            sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
+            expat = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', source=sources,
+                             includes='.', export_incdirs='lib',
+                             target='expat', path=driverNode,
+                             uselib='XML', name='XML', env=env.copy(),
+                             defines=defList + expatDefs)
+            
+            bld.install_files('${PREFIX}/include',
+                          os.path.join(driverNode.abspath(), 'lib/expat.h'))
+        else:
+            raise Exception('Invalid XML driver: %s' % driver)
+    
+def distclean(context):
+    #remove the untarred directories
+    import shutil
+    
+    dirs = map(lambda d: os.path.join(context.curdir, d),
+               ['expat-1.95.7'])
+    for d in dirs:
+        try:
+            if os.path.exists(d):
+                shutil.rmtree(d, ignore_errors=True)
+        except:{}

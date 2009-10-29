@@ -1,0 +1,24 @@
+import os
+import Scripting, Options
+from Build import BuildContext
+
+VERSION = '0.1-RC1'
+APPNAME = 'Sensor Independent XML'
+srcdir  = '.'
+blddir  = 'target'
+
+def set_options(opt):
+    opt.tool_options('build', tooldir='build')
+    opt.sub_options('drivers c++')
+
+def configure(conf):
+    Options.options.enable_fft = True #force it
+    conf.check_tool('build', tooldir='build')
+    conf.sub_config('drivers c++')
+
+def build(bld):
+    bld.add_subdirs('drivers drivers/nitf c++')
+
+def distclean(context):
+    context.recurse('drivers c++')
+    Scripting.distclean(context)
