@@ -132,7 +132,12 @@ double scene::SceneGeometry::getDopplerConeAngle() const
 
 double scene::SceneGeometry::getSquintAngle() const
 {
-    return acos(mVg.dot(mRg) / mVg.norm() / mRg.norm()) * RADIANS_TO_DEGREES;
+    Vector3 z = mPa / mPa.norm();
+    Vector3 x = mVa - z * (mVa.dot(z));
+    x.normalize();
+
+    Vector3 y = math::linear::cross(x, z);
+    return atan2((-1.0 * mXs).dot(y), (-1.0 * mXs).dot(x)) * RADIANS_TO_DEGREES;
 }
 
 double scene::SceneGeometry::getSlopeAngle() const
