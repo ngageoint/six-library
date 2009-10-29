@@ -75,7 +75,6 @@ MY_INCLUDES = -I@top_srcdir@/except/include \
               -I@top_srcdir@/math.linear/include \
               -I@top_srcdir@/math.poly/include \
               -I@top_srcdir@/xml.lite/include \
-              -I@top_srcdir@/sio.lite/include \
               -I@top_srcdir@/tiff/include
 
 MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
@@ -87,7 +86,6 @@ MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/mt/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/scene/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/xml.lite/lib/@target@/@lib_dir@ \
-             -L@top_srcdir@/sio.lite/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/tiff/lib/@target@/@lib_dir@
 
-MY_LIBS = -lxml.lite-c++ -lscene-c++ -lnitf-c++ -lnitf-c -ltiff-c++ -lmt-c++ -lsio.lite-c++ -lalgs-c++ -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
+MY_LIBS = -lxml.lite-c++ -lscene-c++ -lnitf-c++ -lnitf-c -ltiff-c++ -lmt-c++ -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
