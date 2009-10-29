@@ -170,6 +170,39 @@ class NITFWriteControl : public WriteControl
      */
     void addDataAndWrite();
 
+    /*!
+     *  This function sets the image security fields in the
+     *  given image subheader using the parameters in the 
+     *  classification object.  This allows a manual override of
+     *  these fields in the NITF product.
+     */
+    void setImageSecurity(six::Classification c,
+            nitf::ImageSubheader& subheader);
+
+    /*!
+     *  This function sets the image security fields in the
+     *  given DE subheader using the parameters in the 
+     *  classification object.  This allows a manual override of
+     *  these fields in the NITF product.
+     */
+    void setDESecurity(six::Classification c,
+            nitf::DESubheader& subheader);
+
+    /*!
+     *  Takes in a string representing the classification level
+     *  and returns the value expected by the NITF
+     */
+    std::string getNITFClassification(std::string level);
+
+    /*!
+     *  This function scans through the security fields for each
+     *  image segment and sets the security information in the file
+     *  subheader so that it matches the highest level of the
+     *  image segments.
+     */
+    void updateFileHeaderSecurity();
+
+
 public:
     
     //!  Constructor
