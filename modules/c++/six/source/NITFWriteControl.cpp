@@ -554,56 +554,6 @@ void NITFWriteControl::saveIO(SourceList& imageData,
 
 }
 
-void NITFWriteControl::save(io::InputStream& imageData, std::string toFile)
-{
-    int bufferSize = DEFAULT_BUFFER_SIZE;
-    nitf::BufferedWriter outputFile(toFile, bufferSize);
-
-    mWriter.prepareIO(outputFile, mRecord);
-    bool doByteSwap;
-
-    int byteSwapping = (int) mOptions.getParameter(OPT_BYTE_SWAP, Parameter(
-            (int) BYTE_SWAP_AUTO));
-
-    if (byteSwapping == BYTE_SWAP_AUTO)
-    {
-        // Have to if its not a BE machine
-        doByteSwap = !sys::isBigEndianSystem();
-    }
-    else
-    {
-        // Do what they say.  You really shouldnt do this
-        // unless you know what you're doing anyway!
-        doByteSwap = (bool) byteSwapping;
-    }
-
-    if (mInfos.size() != 1)
-        throw except::Exception(Ctxt(FmtX("Require %d images, received 1",
-                mInfos.size())));
-
-    NITFImageInfo* info = mInfos[0];
-    std::vector<NITFSegmentInfo> imageSegments = info->getImageSegments();
-    size_t numIS = imageSegments.size();
-    unsigned long pixelSize = info->getData()->getNumBytesPerPixel();
-    unsigned long numCols = info->getData()->getNumCols();
-    unsigned long numChannels = info->getData()->getNumChannels();
-
-    for (unsigned int j = 0; j < numIS; ++j)
-    {
-        NITFSegmentInfo segmentInfo = imageSegments[j];
-
-        nitf::WriteHandler* writeHandler = new StreamWriteHandler(
-                segmentInfo, &imageData, numCols, numChannels, pixelSize,
-                doByteSwap);
-
-        mWriter.setImageWriteHandler(info->getStartIndex() + j,
-                writeHandler);
-    }
-
-    addDataAndWrite();
-
-    outputFile.close();
-}
 
 void NITFWriteControl::save(BufferList& imageData, std::string outputFile)
 {
@@ -660,43 +610,6 @@ void NITFWriteControl::saveIO(BufferList& imageData,
     }
 
     addDataAndWrite();
-}
-
-void NITFWriteControl::save(UByte* imageData, std::string toFile)
-{
-    int bufferSize = DEFAULT_BUFFER_SIZE;
-    nitf::BufferedWriter outputFile(toFile, bufferSize);
-
-    mWriter.prepareIO(outputFile, mRecord);
-
-    // Have to if its not a BE machine
-    bool doByteSwap = !sys::isBigEndianSystem();
-
-    if (mInfos.size() != 1)
-        throw except::Exception(Ctxt(FmtX("Require %d images, received 1",
-                mInfos.size())));
-
-    NITFImageInfo* info = mInfos[0];
-    std::vector<NITFSegmentInfo> imageSegments = info->getImageSegments();
-    size_t numIS = imageSegments.size();
-    unsigned long pixelSize = info->getData()->getNumBytesPerPixel();
-    unsigned long numCols = info->getData()->getNumCols();
-    unsigned long numChannels = info->getData()->getNumChannels();
-
-    for (unsigned int j = 0; j < numIS; ++j)     {
-        NITFSegmentInfo segmentInfo = imageSegments[j];
-
-        nitf::WriteHandler* writeHandler = new MemoryWriteHandler(
-                segmentInfo, imageData, segmentInfo.firstRow, numCols,
-                numChannels, pixelSize, doByteSwap);
-        // Could set start index here
-        mWriter.setImageWriteHandler(info->getStartIndex() + j,
-                writeHandler);
-    }
-
-    addDataAndWrite();
-
-    outputFile.close();
 }
 
 

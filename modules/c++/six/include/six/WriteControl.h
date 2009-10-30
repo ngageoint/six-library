@@ -112,9 +112,24 @@ public:
      *  Utility for Writing out one InputStream only.
      *
      */
-    virtual void save(io::InputStream& source, std::string toFile) = 0;
+    virtual void save(io::InputStream* source, std::string toFile) 
+    {
+	SourceList sources;
+	sources.push_back(source);
+	save(sources, toFile);
+    }
 
-    //! \todo save should also be implemented for memory
+    /*!
+     *  Utility for Writing out one buffer image only.
+     *
+     */
+
+    virtual void save(UByte* buffer, std::string toFile)
+    {
+	BufferList sources;
+	sources.push_back( buffer );
+	save(sources, toFile);
+    }
 
     /*!
      *  const pointer to Container.  This object is not owned by the

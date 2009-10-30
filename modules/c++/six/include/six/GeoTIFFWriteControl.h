@@ -71,14 +71,6 @@ public:
      *  Write out a set of images from a memory buffer source list
      */
     virtual void save(BufferList& sources, std::string toFile);
-    /*!
-     *  Write out an image from a single source
-     */
-    virtual void save(io::InputStream& source, std::string toFile);
-    /*!
-     *  Write out an image from a single memory buffer source
-     */
-    virtual void save(UByte* source, std::string toFile);
     
     /*!
      *  We are a GeoTIFF handler
