@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by General Dynamics AIS (General Dynamics AIS) -->
-<!-- SIDD v0.0.6 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:SID:0.0.8" targetNamespace="urn:SID:0.0.8" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<!-- SIDD v0.1 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:SID:0.1" targetNamespace="urn:SID:0.1" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:annotation>
 		<xs:documentation>Imported SICD types.</xs:documentation>
 	</xs:annotation>
