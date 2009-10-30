@@ -53,6 +53,7 @@ XMLControl.cpp \
 XMLControlFactory.cpp
 
 TESTS	= \
+test_create_sidd_from_mem.cpp \
 test_create_sicd.cpp \
 test_dump_sicd_lines.cpp \
 test_dump_sicd_single.cpp \

@@ -43,12 +43,14 @@ six::DerivedDataBuilder& six::DerivedDataBuilder::addDisplay(
     if (mData->display)
         delete mData->display;
 
+
+
     six::DisplayType displayType = six::DISPLAY_COLOR;
     if (pixelType == six::MONO8LU || pixelType == six::MONO8I || pixelType
             == six::MONO16I)
         displayType = six::DISPLAY_MONO;
     mData->display = new six::Display(displayType);
-
+    mData->display->pixelType = pixelType;
     return *this;
 }
 
