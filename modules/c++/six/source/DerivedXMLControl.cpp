@@ -76,7 +76,7 @@ void DerivedXMLControl::xmlToProductCreation(
         productCreation->classification.guidance->date = str::toType<DateTime>(
                 getFirstAndOnly(classGuidanceXML, "Date")->getCharacterData());
         productCreation->classification.guidance->authority = getFirstAndOnly(
-                classificationXML, "Authority")->getCharacterData();
+                classGuidanceXML, "Authority")->getCharacterData();
     }
 
     productCreation->productName = getFirstAndOnly(productCreationXML,
