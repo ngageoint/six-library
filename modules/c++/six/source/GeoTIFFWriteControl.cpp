@@ -116,7 +116,6 @@ void GeoTIFFWriteControl::save(SourceList& sources, std::string toFile)
 
 std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data, tiff::IFD* ifd)
 {
-    printf("IFD during setup: %x\n", ifd);
     std::vector<char*> allocated;
     PixelType pixelType = data->getPixelType();
     sys::Uint32_T numRows = (sys::Uint32_T)data->getNumRows();
