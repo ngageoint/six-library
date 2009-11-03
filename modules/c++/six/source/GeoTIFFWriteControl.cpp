@@ -89,7 +89,6 @@ void GeoTIFFWriteControl::save(SourceList& sources, std::string toFile)
         DerivedData* data = (DerivedData*)mDerivedData[i];
         unsigned long oneRow = data->getNumCols() * data->getNumBytesPerPixel();
         tiff::IFD* ifd = imageWriter->getIFD();
-
         std::vector<char*> allocated = setupIFD(data, ifd);
         unsigned char * buf = new unsigned char[oneRow];
         unsigned long numRows = data->getNumRows();
@@ -117,10 +116,11 @@ void GeoTIFFWriteControl::save(SourceList& sources, std::string toFile)
 
 std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data, tiff::IFD* ifd)
 {
+    printf("IFD during setup: %x\n", ifd);
     std::vector<char*> allocated;
     PixelType pixelType = data->getPixelType();
-    unsigned long numRows = data->getNumRows();
-    unsigned long numCols = data->getNumCols();
+    sys::Uint32_T numRows = (sys::Uint32_T)data->getNumRows();
+    sys::Uint32_T numCols = (sys::Uint32_T)data->getNumCols();
 
     // Start by initializing the TIFF info
     ifd->addEntry(tiff::KnownTags::IMAGE_WIDTH, numCols);
@@ -143,7 +143,7 @@ std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data, tiff::IFD* i
             );
     }
 
-    unsigned int photoInterp(1);
+    unsigned short photoInterp(1);
 
     if (pixelType == RGB8LU)
     {
@@ -167,7 +167,8 @@ std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data, tiff::IFD* i
     }
     else if (pixelType == RGB24I)
     {
-        ifd->addEntry(tiff::KnownTags::SAMPLES_PER_PIXEL, 3);
+	short spp(3);
+        ifd->addEntry(tiff::KnownTags::SAMPLES_PER_PIXEL, spp);
         photoInterp = 2;
     }
     ifd->addEntry(tiff::KnownTags::PHOTOMETRIC_INTERPRETATION,
@@ -179,10 +180,10 @@ std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data, tiff::IFD* i
             )
         );
 
-    ifd->addEntry("Orientation", 1);
-    ifd->addEntry("XResolution", 1);
-    ifd->addEntry("YResolution", 1);
-    ifd->addEntry("PlanarConfiguration", 1);
+    unsigned short orientation(1);
+    ifd->addEntry("Orientation", orientation);
+    unsigned short planarConf(1);
+    ifd->addEntry("PlanarConfiguration", planarConf);
 
     allocated.push_back(
         addStringArray(
@@ -239,6 +240,7 @@ void GeoTIFFWriteControl::save(BufferList& sources, std::string toFile)
 
         tiff::ImageWriter* imageWriter = tiffWriter.addImage();
         tiff::IFD* ifd = imageWriter->getIFD();
+
         DerivedData* data = (DerivedData*)mDerivedData[i];
         std::vector<char*> allocated = setupIFD(data, ifd);
         // Now we hack to write
