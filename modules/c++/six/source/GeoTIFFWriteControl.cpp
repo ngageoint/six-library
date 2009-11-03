@@ -124,6 +124,7 @@ std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data, tiff::IFD* i
 
     // Start by initializing the TIFF info
     ifd->addEntry(tiff::KnownTags::IMAGE_WIDTH, numCols);
+
     ifd->addEntry(tiff::KnownTags::IMAGE_LENGTH, numRows);
     ifd->addEntry(tiff::KnownTags::BITS_PER_SAMPLE);
 
@@ -241,7 +242,9 @@ void GeoTIFFWriteControl::save(BufferList& sources, std::string toFile)
         DerivedData* data = (DerivedData*)mDerivedData[i];
         std::vector<char*> allocated = setupIFD(data, ifd);
         // Now we hack to write
+
         imageWriter->putData(sources[i], data->getNumRows() * data->getNumCols());
+
         imageWriter->writeIFD();
         for (unsigned int j = 0; j < allocated.size(); ++j)
             delete allocated[j];
