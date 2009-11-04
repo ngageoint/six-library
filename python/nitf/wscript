@@ -1,0 +1,20 @@
+set_options = configure = distclean = lambda p: None
+
+def build(bld):
+    variant = bld.env['VARIANT'] or 'default'
+    env = bld.env_of_name(variant)
+    
+    # first compile a few py files
+    obj = bld.new_task_gen(features = 'py', env=env.copy(),
+						   install_path='${PYTHONDIR}/nitf')
+    obj.find_sources_in_dirs('src/python/nitf/', exts=['.py'])
+
+    # then a c extension module
+    bld.new_task_gen(
+        features = 'cc cshlib pyext',
+        source = 'src/swig/nitro_wrap.c',
+        target = '_nitropy',
+        uselib_local='NITRO',
+        env=env.copy(),
+        install_path='${PYTHONDIR}/nitf')
+
