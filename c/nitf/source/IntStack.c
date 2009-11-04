@@ -44,7 +44,9 @@ NITFPROT(nitf_IntStack*) nitf_IntStack_clone(nitf_IntStack* stack,
     nitf_IntStack* copy = nitf_IntStack_construct(error);
     if (!copy) return NULL;
 
-    for (i = 0; i < stack->sp; i++)
+    copy->sp = stack->sp;
+
+    for (i = 0; i < NITF_INT_STACK_DEPTH; i++)
     {
         copy->st[ i ] = stack->st[i];
     }

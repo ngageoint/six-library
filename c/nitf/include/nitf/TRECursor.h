@@ -47,6 +47,7 @@ typedef struct _nitf_TRECursor
     nitf_IntStack *loop_idx;    /* holds the indexes for each level of loops (arrays) */
     nitf_IntStack *loop_rtn;    /* holds the endloop bookmark for each level of loops */
     nitf_TRE *tre;              /* the TRE associated with this cursor */
+    nitf_TREDescription *end_ptr; /* holds a pointer to the end description */
 
     /* YOU CAN REFER TO THE MEMBERS BELOW IN YOUR CODE */
     nitf_TREDescription *prev_ptr; /* holds the previous description */
@@ -120,6 +121,16 @@ NITFAPI(NITF_BOOL) nitf_TRECursor_isDone(nitf_TRECursor * tre_cursor);
  *  \return 1 if done, 0 otherwise
  */
 NITFAPI(void) nitf_TRECursor_cleanup(nitf_TRECursor * tre_cursor);
+
+/*!
+ *  Duplicates the input cursor. This can be useful if you want to capture a
+ *  snapshot of the cursor to revert back to.
+ *
+ *  \param tre The input TRE cursor
+ *  \return A duplicated cursor for the TRE
+ */
+NITFAPI(nitf_TRECursor) nitf_TRECursor_clone(nitf_TRECursor *tre_cursor,
+        nitf_Error * error);
 
 
 /*!

@@ -38,6 +38,10 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
     tre_cursor.numItems = 0;
     tre_cursor.index = 0;
     tre_cursor.looping = 0;
+    /* init the pointers */
+    tre_cursor.end_ptr = NULL;
+    tre_cursor.prev_ptr = NULL;
+    tre_cursor.desc_ptr = NULL;
 
     if (tre)
     {
@@ -51,6 +55,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
             tre_cursor.numItems++;
             dptr++;
         }
+        tre_cursor.end_ptr = dptr;
         memset(tre_cursor.tag_str, 0, TAG_BUF_LEN);
 		sprintf(tre_cursor.tag_str, "%s",
 		        ((nitf_TREPrivateData*)tre->priv)->description->tag);
@@ -58,6 +63,26 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
     }
 
     return tre_cursor;
+}
+
+NITFAPI(nitf_TRECursor) nitf_TRECursor_clone(nitf_TRECursor *tre_cursor,
+        nitf_Error * error)
+{
+    nitf_TRECursor cursor;
+    cursor.numItems = tre_cursor->numItems;
+    cursor.index = tre_cursor->index;
+    cursor.looping = tre_cursor->looping;
+    cursor.loop = nitf_IntStack_clone(tre_cursor->loop, error);
+    cursor.loop_idx = nitf_IntStack_clone(tre_cursor->loop_idx, error);
+    cursor.loop_rtn = nitf_IntStack_clone(tre_cursor->loop_rtn, error);
+    cursor.tre = tre_cursor->tre;
+    cursor.end_ptr = tre_cursor->end_ptr;
+
+    cursor.prev_ptr = tre_cursor->prev_ptr;
+    cursor.desc_ptr = tre_cursor->desc_ptr;
+    strcpy(cursor.tag_str, tre_cursor->tag_str);
+    cursor.length = tre_cursor->length;
+    return cursor;
 }
 
 
@@ -135,53 +160,19 @@ NITFAPI(void) nitf_TRECursor_cleanup(nitf_TRECursor * tre_cursor)
 
 NITFAPI(NITF_BOOL) nitf_TRECursor_isDone(nitf_TRECursor * tre_cursor)
 {
-    int status = 1;
-    int gotField = 0;
     nitf_Error error;
-    NITF_BOOL iterStatus = NITF_SUCCESS;
-    nitf_TRECursor cursor = nitf_TRECursor_begin(tre_cursor->tre);
+    int isDone = (tre_cursor->desc_ptr == tre_cursor->end_ptr);
 
-    /* check if the passed in cursor just began */
-    if (tre_cursor->index < 0)
-        status = 0;
-
-    /* first check all loops to see if we are in the middle of one */
-
-    /*  Removed this short circuit logic, since it causes the TRE to
-        think its not done, when actually, if the loop comes last, it is.
-        DP
-    for (i = 0; status && (i < tre_cursor->looping); ++i)
+    /* check if the passed in cursor is not at the beginning */
+    if (!isDone && tre_cursor->index >= 0)
     {
-        if (tre_cursor->loop_idx->st[i] < tre_cursor->loop->st[i])
-        {
-            printf("TRECursor: In the middle\n");
-            status = 1;
-        }
+        nitf_TRECursor dolly = nitf_TRECursor_clone(tre_cursor, &error);
+        /* if iterate returns 0, we are done */
+        isDone = !nitf_TRECursor_iterate(&dolly, &error);
+        isDone = isDone || (dolly.desc_ptr == dolly.end_ptr);
+        nitf_TRECursor_cleanup(&dolly);
     }
-    */
-
-    /* try iterating and see if we make it to the end */
-    while (status && (cursor.index < cursor.numItems) && 
-           iterStatus == NITF_SUCCESS)
-    {
-        if ((iterStatus = nitf_TRECursor_iterate(&cursor, &error)))
-        {
-            if (gotField)
-            {
-                /* we got to the next field... so return not done */
-                status = 0;
-            }
-            else if (strcmp(tre_cursor->tag_str, cursor.tag_str) == 0)
-            {
-                gotField = 1;
-            }
-        }
-    }
-
-    /* and the current status with a check to see if we reached the end */
-    status = (status & (cursor.index >= cursor.numItems)) | !iterStatus;
-    nitf_TRECursor_cleanup(&cursor);
-    return status;
+    return isDone;
 }
 
 NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
