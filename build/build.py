@@ -26,9 +26,9 @@ class CPPBuildContext(BuildContext):
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         libName = '%s-c++' % modArgs['name']
 
-        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        module_deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
         defines = modArgs.get('defines', '').split()
-        uselib_local = deps + modArgs.get('uselib_local', '').split()
+        uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
@@ -46,13 +46,14 @@ class CPPBuildContext(BuildContext):
                               f.abspath())
 
         testNode = bld.path.find_dir('tests')
-        for test in filter(modArgs.get('test_filter', None),
-                           testNode.find_iter(in_pat=['*.cpp'],
-                                              maxdepth=1, flat=True).split()):
-            exe = bld.new_task_gen('cxx', 'program', source=test,
-                    uselib_local=libName, env=env.copy(),
-                    target=os.path.splitext(test)[0], path=testNode,
-                    install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
+        if testNode and not Options.options.libs_only:
+            for test in filter(modArgs.get('test_filter', None),
+                               testNode.find_iter(in_pat=['*.cpp'],
+                                                  maxdepth=1, flat=True).split()):
+                exe = bld.new_task_gen('cxx', 'program', source=test,
+                        uselib_local=libName, env=env.copy(),
+                        target=os.path.splitext(test)[0], path=testNode,
+                        install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
     
     def plugin(self, **modArgs):
         """
@@ -68,13 +69,12 @@ class CPPBuildContext(BuildContext):
         libName = '%s-c++' % modArgs['name']
         plugin = modArgs.get('plugin', '')
 
-        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        module_deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
         defines = modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
-        uselib_local = deps + modArgs.get('uselib_local', '').split()
+        uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
-        plugin = modArgs.get('plugin', None)
         
         lib = bld.new_task_gen('cxx', 'shlib', includes=includes,
                 target=libName, name=libName, export_incdirs=exportIncludes,
@@ -83,6 +83,34 @@ class CPPBuildContext(BuildContext):
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
         lib.find_sources_in_dirs('source')
         lib.source = filter(modArgs.get('source_filter', None), lib.source)
+    
+    
+    def program(self, **modArgs):
+        """
+        Builds a program (exe)
+        """
+        bld = self
+        variant = bld.env['VARIANT'] or 'default'
+        env = bld.env_of_name(variant)
+        env.set_variant(variant)
+        
+        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        progName = modArgs['name']
+
+        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        defines = modArgs.get('defines', '').split()
+        uselib_local = deps + modArgs.get('uselib_local', '').split()
+        uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
+        includes = modArgs.get('includes', 'include').split()
+        source = modArgs.get('source', '').split() or None
+        
+        exe = bld.new_task_gen('cxx', 'program', source=source,
+                               uselib_local=uselib_local, uselib=uselib,
+                               env=env.copy(), target=progName,
+                               install_path='${PREFIX}/bin')
+        if not source:
+            exe.find_sources_in_dirs(modArgs.get('sourcedir', 'source'))
+            exe.source = filter(modArgs.get('source_filter', None), exe.source)
 
 
 class GlobDirectoryWalker:
@@ -193,7 +221,7 @@ def set_options(opt):
     opt.add_option('--with-cxxflags', action='store', nargs=1, dest='cxxflags',
                    help='Set non-standard CXXFLAGS (C++)')
     opt.add_option('--with-optz', action='store', choices=['med', 'fast', 'fastest'],
-                   default='med', help='Specify the optimization level for optimized/release builds')
+                   default='fastest', help='Specify the optimization level for optimized/release builds')
     opt.add_option('--libs-only', action='store_true', dest='libs_only',
                    help='Only build the libs (skip building the tests, etc.)')
     opt.add_option('--shared', action='store_true', dest='shared_libs',
@@ -366,6 +394,7 @@ def detect(self):
         env.append_value('LIB_NSL', 'nsl')
         env.append_value('LIB_THREAD', 'pthread')
         env.append_value('LIB_MATH', 'm')
+
         self.check_cc(lib='pthread', mandatory=True)
 
         if cxxCompiler == 'g++':
@@ -424,7 +453,7 @@ def detect(self):
             env['shlib_CXXFLAGS']            = ['-KPIC', '-DPIC']
 
             env.append_value('CXXDEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
-            env.append_value('CXXFLAGS', '-KPIC'.split())
+            env.append_value('CXXFLAGS', '-KPIC -instances=global'.split())
             env.append_value('CXXFLAGS_THREAD', '-mt')
             
         if ccCompiler == 'suncc':
