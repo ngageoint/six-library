@@ -7,7 +7,6 @@ def set_options(opt):
                    help='Disable python', default=True)
     
 def configure(conf):
-    print Options.options.python
     if Options.options.python:
         conf.check_tool('python')
         conf.check_python_version((2,4,2))
