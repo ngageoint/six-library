@@ -49,7 +49,7 @@ public class TRETest extends TestCase
         return new TRE(tag, tag);
     }
 
-    public void testCreate()
+    public void xtestCreate()
     {
         try
         {
@@ -62,7 +62,7 @@ public class TRETest extends TestCase
         }
     }
 
-    public void testGetSetFields()
+    public void xtestGetSetFields()
     {
         try
         {
@@ -79,7 +79,7 @@ public class TRETest extends TestCase
         }
     }
 
-    public void testFind()
+    public void xtestFind()
     {
         try
         {
@@ -98,7 +98,7 @@ public class TRETest extends TestCase
         }
     }
 
-    public void testExtensionsIterator() throws Exception
+    public void xtestExtensionsIterator() throws Exception
     {
     	Record r = new Record();
     	TRE tre = makeNewTRE("JITCID");
@@ -128,7 +128,7 @@ public class TRETest extends TestCase
     	
     	
     }
-    public void testIterator()
+    public void xtestIterator()
     {
         try
         {
@@ -145,7 +145,7 @@ public class TRETest extends TestCase
         }
     }
 
-    public void testPrint()
+    public void xtestPrint()
     {
         try
         {
