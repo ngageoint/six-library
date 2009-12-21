@@ -162,4 +162,8 @@ public class TRETest extends TestCase
             fail(ExceptionUtils.getStackTrace(e));
         }
     }
+    public void testDummy()
+    {
+
+    }
 }
