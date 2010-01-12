@@ -1,19 +1,19 @@
 [Setup]
 AppName=NITRO
-AppVersion=2.0
-AppVerName=NITRO 2.0
+AppVersion=2.5-dev
+AppVerName=NITRO 2.5-dev
 AppPublisherURL=http://nitro-nitf.sourceforge.net/
 AppSupportURL=http://nitro-nitf.sourceforge.net/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
-DefaultDirName={pf}\nitro-nitf\nitro-2.0
+DefaultDirName={pf}\nitro-nitf\nitro-2.5-dev
 DefaultGroupName=NITRO
 AllowNoIcons=yes
 LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=nitro-2.0-setup
-UninstallDisplayName=NITRO 2.0
+OutputBaseFilename=nitro-2.5-dev-setup
+UninstallDisplayName=NITRO 2.5-dev
 SetupIconFile=NITRO.ico
 WizardSmallImageFile=NITRO_small.bmp
 WizardImageFile=NITRO.bmp
@@ -54,41 +54,42 @@ Name: "samples\python"; Description: "Python"; Types: full
 
 [Files]
 Source: "..\..\COPYING.LESSER"; DestDir: "{app}\share\doc\nitf"; Flags: ignoreversion; Components: core;
-Source: "..\..\c\nitf\lib\win32\nitf-c.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
+Source: "..\..\target\win32-release\c\nitf\*.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
 Source: "..\..\c\nitf\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: core;
-Source: "..\..\c\nitf\plugins\win32\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs; Components: plugins\tres;
-Source: "..\..\c\cgm\lib\win32\cgm-c.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
-Source: "..\..\external\libjpeg-plugins\lib\win32\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jpeg;
-Source: "..\..\external\jasper-plugins\lib\win32\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jasper;
-Source: "..\..\external\example-plugins\lib\win32\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\xmltre;
+Source: "..\..\target\win32-release\c\nitf\shared\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs; Components: plugins\tres;
+Source: "..\..\target\win32-release\c\cgm\*.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
+Source: "..\..\target\win32-release\external\libjpeg-plugins\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jpeg;
+Source: "..\..\target\win32-release\external\jasper-plugins\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jasper;
+Source: "..\..\target\win32-release\external\example-plugins\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\xmltre;
 Source: "..\..\c\nitf\tests\*.c"; DestDir: "{app}\samples\c\"; Flags: ignoreversion recursesubdirs; Components: samples\c;
-Source: "..\..\c\nitf\tests\*.exe"; DestDir: "{app}\tests"; Flags: ignoreversion recursesubdirs; Components: tests;
-Source: "..\..\java\nitf\lib\win32\nitf.jni-c.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
+Source: "..\..\target\win32-release\c\nitf\tests\*.exe"; DestDir: "{app}\tests"; Flags: ignoreversion recursesubdirs; Components: tests;
+Source: "..\..\target\win32-release\java\nitf\*.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "..\..\java\nitf\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "..\..\java\cgm\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "..\..\java\nitf.imageio\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
-Source: "..\..\java\nitf.imagej\target\plugins\nitf\*"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
+Source: "..\..\java\nitf.imagej\target\*.jar"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
+Source: "..\..\java\nitf.imagej\target\dependency\*"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
 Source: "..\..\java\nitf\src\test\*"; DestDir: "{app}\samples\java"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: samples\java;
 Source: "..\..\python\nitf\src\python\nitf\*.py"; DestDir: "{app}\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
-Source: "..\..\python\nitf\src\python\nitf\*.pyd"; DestDir: "{app}\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
+Source: "..\..\target\win32-release\python\nitf\*.pyd"; DestDir: "{app}\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\python\nitf\src\test\python\*.py"; DestDir: "{app}\samples\python"; Flags: ignoreversion skipifsourcedoesntexist; Components: samples\python;
-Source: "..\..\python\nitf\dist\nitro-python-2.0.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
-Source: "..\..\java\nitf\apidocs\*"; DestDir: "{app}\share\doc\nitf\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;
+;Source: "..\..\python\nitf\dist\nitro-python-2.5-dev.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
+Source: "..\..\java\nitf\target\site\apidocs\*"; DestDir: "{app}\share\doc\nitf\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;
 Source: "..\..\c\nitf\doc\html\*"; DestDir: "{app}\share\doc\nitf\api\c"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\c;
 Source: "..\..\c++\doc\html\*"; DestDir: "{app}\share\doc\nitf\api\c++"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\cpp;
-Source: "..\..\python\nitf\src\python\nitf.html"; DestDir: "{app}\share\doc\nitf\api\python"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\cpp;
+;Source: "..\..\python\nitf\src\python\nitf.html"; DestDir: "{app}\share\doc\nitf\api\python"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\cpp;
 
-Source: "..\..\c++\except\lib\win32\except-c++.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
-Source: "..\..\c++\str\lib\win32\str-c++.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
-Source: "..\..\c++\sys\lib\win32\sys-c++.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
-Source: "..\..\c++\mt\lib\win32\mt-c++.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
-Source: "..\..\c++\nitf\lib\win32\nitf-c++.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
+Source: "..\..\target\win32-release\c++\except\*.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
+Source: "..\..\target\win32-release\c++\str\*.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
+Source: "..\..\target\win32-release\c++\sys\*.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
+Source: "..\..\target\win32-release\c++\mt\*.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
+Source: "..\..\target\win32-release\c++\nitf\*.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: cpp;
 Source: "..\..\c++\except\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
 Source: "..\..\c++\str\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
 Source: "..\..\c++\sys\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
 Source: "..\..\c++\mt\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
 Source: "..\..\c++\nitf\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
-Source: "..\..\c++\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
+;Source: "..\..\c++\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: cpp;
 Source: "..\..\c++\nitf\tests\*.cpp"; DestDir: "{app}\samples\c++"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: samples\cpp;
 
 [Registry]
@@ -102,6 +103,6 @@ Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "NITF_PLUGIN_PA
 Name: "{group}\{cm:UninstallProgram,NITRO}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: "{app}\nitro-python-2.0.win32.exe"; Description: "Install Python Bindings"; Flags: skipifsilent skipifdoesntexist
+Filename: "{app}\nitro-python-2.5-dev.win32.exe"; Description: "Install Python Bindings"; Flags: skipifsilent skipifdoesntexist
 
 
