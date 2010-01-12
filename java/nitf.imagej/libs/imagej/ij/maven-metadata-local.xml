@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>imagej</groupId>
+  <artifactId>ij</artifactId>
+  <version>1.42</version>
+  <versioning>
+    <versions>
+      <version>1.42</version>
+    </versions>
+    <lastUpdated>20100112195235</lastUpdated>
+  </versioning>
+</metadata>

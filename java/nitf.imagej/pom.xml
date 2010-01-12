@@ -4,7 +4,7 @@
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>nitro-nitf</groupId>
-    <artifactId>imageio</artifactId>
+    <artifactId>NITF_ImageJ</artifactId>
     <packaging>jar</packaging>
     <version>2.5-dev</version>
     <inceptionYear>2004</inceptionYear>
@@ -41,6 +41,19 @@
             <email>tzellman@users.sourceforge.net</email>
         </developer>
     </developers>
+    
+    <!--
+        By default, http://repo1.maven.org/maven2/ is used, but some jars
+        aren't available there, so we add the local lib path where we have
+        some jars under version control
+    -->
+    <repositories>
+        <repository>
+            <id>local</id>
+            <name>local</name>
+            <url>file://${basedir}/libs</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -74,10 +87,28 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>nitro-nitf</groupId>
+            <artifactId>nitf</artifactId>
+            <version>2.5-dev</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>nitro-nitf</groupId>
+            <artifactId>imageio</artifactId>
+            <version>2.5-dev</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.4</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>imagej</groupId>
+            <artifactId>ij</artifactId>
+            <version>1.42</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
