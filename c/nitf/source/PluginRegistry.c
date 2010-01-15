@@ -31,33 +31,34 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
                                   const char* suffix,
                                   nitf_Error* error);
 
+#ifndef WIN32
+    static nitf_Mutex  __PluginRegistryLock = NITF_MUTEX_INIT;
+#else
+    static nitf_Mutex __PluginRegistryLock = NULL;
+    static long __PluginRegistryInitLock = 0;
+#endif
 /*
  *  This function retrieves the mutex that is necessary
  *  to establish the singleton in a portable way.
  *
  */
-NITFPRIV(nitf_Mutex) getMutex()
+
+#ifdef WIN32
+NITFPRIV(nitf_Mutex*) GET_MUTEX()
 {
-    
-#ifndef WIN32
-    /*  This */
-    static nitf_Mutex _lock = NITF_MUTEX_INIT;
-    
-#else
-    static nitf_Mutex _lock = NULL;
-    static long _initLock = 0;
-    
-    if (_lock == NULL)
+    if (__PluginRegistryLock == NULL)
     {
-        while (InterlockedExchange(&_initLock, 1) == 1)
+        while (InterlockedExchange(&__PluginRegistryInitLock, 1) == 1)
             /* loop, another thread own the lock */ ;
-        if (_lock == NULL)
-            nitf_Mutex_init(&_lock);
-        InterlockedExchange(&_initLock, 0);
+        if (__PluginRegistryLock == NULL)
+            nitf_Mutex_init(&__PluginRegistryLock);
+        InterlockedExchange(&__PluginRegistryInitLock, 0);
     }
-#endif
-    return _lock;
+    return &__PluginRegistryLock;
 }
+#else
+#define GET_MUTEX() &__PluginRegistryLock
+#endif
 
 /*
  *  Retrieves the singleton instance.  If there is none
@@ -71,16 +72,18 @@ NITFPROT(nitf_PluginRegistry *)
     nitf_PluginRegistry_getInstance(nitf_Error * error)
 {
     static nitf_PluginRegistry *theInstance = NULL;
+
+    /*nitf_Mutex mutex = GET_MUTEX();*/
+    /*nitf_Mutex_lock(&mutex);*/
+    
     if (theInstance == NULL)
     {
-        nitf_Mutex mutex = getMutex();
-        nitf_Mutex_lock(&mutex);
+        nitf_Mutex_lock( GET_MUTEX());
         
         /*  If this call below fails, the error will have been  */
         /*  constructed                                         */
         if (theInstance == NULL)
         {
-            
             theInstance = implicitConstruct(error);
             /*  If this succeeded...  */
             if (theInstance)
@@ -97,11 +100,15 @@ NITFPROT(nitf_PluginRegistry *)
                 else
                     atexit(exitListener);
             }
+            else
+            {
+            }
             
         }
-        nitf_Mutex_unlock(&mutex);
-        
+
+        nitf_Mutex_unlock( GET_MUTEX());
     }
+
     
     return theInstance;
 }
@@ -283,7 +290,7 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
 NITFPRIV(void) exitListener(void)
 {
     nitf_Error error;
-    nitf_Mutex mutex = getMutex();
+    nitf_Mutex* mutex = GET_MUTEX();
     nitf_PluginRegistry *single = nitf_PluginRegistry_getInstance(&error);
     if (single)
     {
@@ -293,7 +300,7 @@ NITFPRIV(void) exitListener(void)
             implicitDestruct(&single);
         }
     }
-    nitf_Mutex_delete(&mutex);
+    nitf_Mutex_delete(mutex);
 }
 
 NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg)
@@ -626,7 +633,7 @@ NITFPROT(NITF_BOOL) nitf_PluginRegistry_load(nitf_PluginRegistry * reg,
 
 
 NITFAPI(NITF_BOOL) nitf_PluginRegistry_loadDir(const char *dirName,
-        nitf_Error * error)
+                                               nitf_Error * error)
 {
     NITF_BOOL status;
     nitf_Mutex mutex;
@@ -635,13 +642,12 @@ NITFAPI(NITF_BOOL) nitf_PluginRegistry_loadDir(const char *dirName,
     nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
     
     /* must be thread safe */
-    mutex = getMutex();
-    nitf_Mutex_lock(&mutex);
+    nitf_Mutex_lock( GET_MUTEX() );
 
     status = nitf_PluginRegistry_internalLoadDir(reg, dirName, error);
 
     /* unlock */
-    nitf_Mutex_unlock(&mutex);
+    nitf_Mutex_unlock( GET_MUTEX() );
     return status;
 }
 
