@@ -12,6 +12,7 @@ public:
     virtual void run()
     {
         nitf::Record record(NITF_VER_21);
+        nitf::Writer writer;
         nitf::FileHeader header = record.getHeader();
         header.getFileHeader().set("NITF");
         header.getComplianceLevel().set("09");
@@ -28,7 +29,13 @@ public:
         const std::string name = "ACFTB";
         //m.lock();
         nitf::TRE* acftb = new nitf::TRE(name, name);
-        //m.unlock();
+
+        std::string file = str::toString<long>(sys::getThreadID()) + ".ntf";
+
+        nitf::IOHandle output(file, NITF_ACCESS_WRITEONLY, NITF_CREATE);
+        writer.prepare(output, record);
+
+        writer.write();
     }
 
 };
