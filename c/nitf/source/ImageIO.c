@@ -2155,8 +2155,9 @@ void nitf_ImageIO_unformatUShift_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_
   There are five variants of this function that operate on various lengths
   of data:
 
-  nitf_ImageIO_swapOnly_2   - Byte swap 2 byte data\\n
+nitf_ImageIO_swapOnly_2   - Byte swap 2 byte data\\n
 nitf_ImageIO_swapOnly_4   - Byte swap 4 byte data\\n
+nitf_ImageIO_swapOnly_4c  - Byte swap 4 byte, complex data\\n
 nitf_ImageIO_swapOnly_8   - Byte swap 8 byte data\\n
 nitf_ImageIO_swapOnly_8c  - Byte swap 8 byte, complex data data
 nitf_ImageIO_swapOnly_16c - Byte swap 16 byte, complex data data
@@ -2185,6 +2186,16 @@ void nitf_ImageIO_swapOnly_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32
 /*!< Number of values to unformat */
 void nitf_ImageIO_swapOnly_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount     /*!< Number of bits to shift (unused) */
                             );
+
+/*!< Buffer holding the data to unformat */
+/*!< Number of values to unformat */
+void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount    /*!< Number of bits to shift (unused) */
+                             );
+
+/*!< Buffer holding the data to unformat */
+/*!< Number of values to unformat */
+void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount    /*!< Number of bits to shift (unused) */
+                             );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
@@ -3523,7 +3534,26 @@ NITFPROT(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBa
         /* reset the unpack functions */
         nitf_ImageIO_setUnpack(nitfI);
         if (nitfI->vtbl.unformat)
-            nitfI->vtbl.unformat = nitf_ImageIO_swapOnly_4;
+        {
+            switch (nitfI->pixel.bytes) 
+            {
+                case 8:
+                    nitfI->vtbl.unformat = nitf_ImageIO_swapOnly_8;
+                    break;
+                case 4:
+                    nitfI->vtbl.unformat = nitf_ImageIO_swapOnly_4;
+                    break;
+                case 2:
+                    nitfI->vtbl.unformat = nitf_ImageIO_swapOnly_2;
+                    break;
+                case 1:
+                    nitfI->vtbl.unformat = NULL;
+                    break;
+                default:
+                    /* No optimized mode */
+                    return;
+            }
+        }
     }
 }
 
@@ -3646,7 +3676,27 @@ NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
              * this is required to do proper byte-swapping
              */
             if (nitf->vtbl.unformat)
-                nitf->vtbl.unformat = nitf_ImageIO_swapOnly_8c;
+            {
+                switch (nitf->pixel.bytes)
+                {
+                    case 16:
+                        nitf->vtbl.unformat = nitf_ImageIO_swapOnly_16c;
+                        break;
+                    case 8:
+                        nitf->vtbl.unformat = nitf_ImageIO_swapOnly_8c;
+                        break;
+                    case 4:
+                        nitf->vtbl.unformat = nitf_ImageIO_swapOnly_4c;
+                        break;
+                    case 2:
+                        nitf->vtbl.unformat = NULL;
+                        break;
+                    default:
+                        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
+                                         "Invalid number of bytes in complex data %d", nitf->pixel.bytes);
+                         return 0;
+                }
+            }
         }
         else
         {
@@ -7345,6 +7395,30 @@ void nitf_ImageIO_swapOnly_4(nitf_Uint8 * buffer,
         bp8[2] = tmp8;
     }
     
+    return;
+}
+
+void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer,
+                             nitf_Uint32 count, nitf_Uint32 shiftCount)
+{
+    nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
+    nitf_Uint32 *bp32;          /* Buffer pointer, 32 bit */
+    nitf_Uint8 tmp8;            /* Temp value, 8 bit */
+    nitf_Uint32 i;
+
+    bp32 = (nitf_Uint32 *) buffer;
+    for (i = 0; i < count; i++)
+    {
+        bp8 = (nitf_Uint8 *) (bp32++);
+
+        tmp8 = bp8[0];
+        bp8[0] = bp8[1];
+        bp8[1] = tmp8;
+        tmp8 = bp8[2];
+        bp8[2] = bp8[3];
+        bp8[3] = tmp8;
+    }
+
     return;
 }
 
