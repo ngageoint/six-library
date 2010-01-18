@@ -1,6 +1,6 @@
 NAME            = 'nitf'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
-VERSION         = '2.5-dev'
+VERSION         = '2.5-RC1'
 MODULE_DEPS     = 'mt sys'
 USELIB          = 'THREAD DL'
 USELIB_LOCAL    = 'NITRO'

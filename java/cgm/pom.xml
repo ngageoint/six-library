@@ -6,7 +6,7 @@
     <groupId>nitro-nitf</groupId>
     <artifactId>cgm</artifactId>
     <packaging>jar</packaging>
-    <version>2.5-dev</version>
+    <version>2.5-RC1</version>
     <inceptionYear>2004</inceptionYear>
     <name>Java Bindings for NITF CGM</name>
     <url>http://nitro-nitf.sourceforge.net/</url>
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>nitro-nitf</groupId>
             <artifactId>nitf</artifactId>
-            <version>2.5-dev</version>
+            <version>2.5-RC1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

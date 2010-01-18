@@ -23,7 +23,7 @@
 PACKAGE = nitf
 MAJOR_VERSION = 2
 MINOR_VERSION = 5
-VERSION_SUFFIX = 
+VERSION_SUFFIX = RC1
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 LANGUAGE = c
 MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net

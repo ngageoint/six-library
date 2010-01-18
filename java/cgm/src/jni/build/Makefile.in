@@ -17,10 +17,10 @@
 #                                                   #
 #___________________________________________________#
 
-PACKAGE = nitf.jni
+PACKAGE = cgm.jni
 MAJOR_VERSION = 2
-MINOR_VERSION = 0
-VERSION_SUFFIX = RC1
+MINOR_VERSION = 5
+VERSION_SUFFIX = RC5
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 LANGUAGE = c
 DSOEXT  = .so
