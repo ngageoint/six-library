@@ -1,19 +1,19 @@
 [Setup]
 AppName=NITRO
-AppVersion=2.5-dev
-AppVerName=NITRO 2.5-dev
+AppVersion=2.5-RC1
+AppVerName=NITRO 2.5-RC1
 AppPublisherURL=http://nitro-nitf.sourceforge.net/
 AppSupportURL=http://nitro-nitf.sourceforge.net/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
-DefaultDirName={pf}\nitro-nitf\nitro-2.5-dev
+DefaultDirName={pf}\nitro-nitf\nitro-2.5-RC1
 DefaultGroupName=NITRO
 AllowNoIcons=yes
 LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=nitro-2.5-dev-setup
-UninstallDisplayName=NITRO 2.5-dev
+OutputBaseFilename=nitro-2.5-RC1-setup
+UninstallDisplayName=NITRO 2.5-RC1
 SetupIconFile=NITRO.ico
 WizardSmallImageFile=NITRO_small.bmp
 WizardImageFile=NITRO.bmp
@@ -38,12 +38,12 @@ Name: "plugins"; Description: "Plugins"; Types: full compact
 Name: "plugins\tres"; Description: "TREs"; Types: full compact
 Name: "plugins\jpeg"; Description: "JPEG"; Types: full compact
 Name: "plugins\jasper"; Description: "JasPer JPEG 2000"; Types: full compact
-Name: "plugins\xmltre"; Description: "XMLTRE Example"; Types: full compact
+;Name: "plugins\xmltre"; Description: "XMLTRE Example"; Types: full compact
 Name: "docs"; Description: "Documentation"; Types: full
 Name: "docs\c"; Description: "C API"; Types: full
 Name: "docs\cpp"; Description: "C++ API"; Types: full
 Name: "docs\java"; Description: "Java API"; Types: full
-Name: "docs\python"; Description: "Python API"; Types: full
+;Name: "docs\python"; Description: "Python API"; Types: full
 Name: "tests"; Description: "Test Applications"; Types: full
 Name: "samples"; Description: "Code Samples"; Types: full
 Name: "samples\c"; Description: "C"; Types: full
@@ -60,7 +60,7 @@ Source: "..\..\target\win32-release\c\nitf\shared\*.dll"; DestDir: "{app}\share\
 Source: "..\..\target\win32-release\c\cgm\*.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
 Source: "..\..\target\win32-release\external\libjpeg-plugins\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jpeg;
 Source: "..\..\target\win32-release\external\jasper-plugins\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jasper;
-Source: "..\..\target\win32-release\external\example-plugins\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\xmltre;
+;Source: "..\..\target\win32-release\external\example-plugins\*.dll"; DestDir: "{app}\share\nitf"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\xmltre;
 Source: "..\..\c\nitf\tests\*.c"; DestDir: "{app}\samples\c\"; Flags: ignoreversion recursesubdirs; Components: samples\c;
 Source: "..\..\target\win32-release\c\nitf\tests\*.exe"; DestDir: "{app}\tests"; Flags: ignoreversion recursesubdirs; Components: tests;
 Source: "..\..\target\win32-release\java\nitf\*.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
@@ -73,7 +73,7 @@ Source: "..\..\java\nitf\src\test\*"; DestDir: "{app}\samples\java"; Flags: igno
 Source: "..\..\python\nitf\src\python\nitf\*.py"; DestDir: "{app}\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\target\win32-release\python\nitf\*.pyd"; DestDir: "{app}\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\python\nitf\src\test\python\*.py"; DestDir: "{app}\samples\python"; Flags: ignoreversion skipifsourcedoesntexist; Components: samples\python;
-;Source: "..\..\python\nitf\dist\nitro-python-2.5-dev.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
+;Source: "..\..\python\nitf\dist\nitro-python-2.5-RC1.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\java\nitf\target\site\apidocs\*"; DestDir: "{app}\share\doc\nitf\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;
 Source: "..\..\c\nitf\doc\html\*"; DestDir: "{app}\share\doc\nitf\api\c"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\c;
 Source: "..\..\c++\doc\html\*"; DestDir: "{app}\share\doc\nitf\api\c++"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\cpp;
@@ -103,6 +103,6 @@ Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "NITF_PLUGIN_PA
 Name: "{group}\{cm:UninstallProgram,NITRO}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: "{app}\nitro-python-2.5-dev.win32.exe"; Description: "Install Python Bindings"; Flags: skipifsilent skipifdoesntexist
+Filename: "{app}\nitro-python-2.5-RC1.win32.exe"; Description: "Install Python Bindings"; Flags: skipifsilent skipifdoesntexist
 
 
