@@ -718,12 +718,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(nitf_ImageSubheader *
     }
 
     /* set the new values into the ImageSubheader fields */
-    sprintf(buf, "%.*d", NITF_NBANDS_SZ,
+    NITF_SNPRINTF(buf, 256, "%.*d", NITF_NBANDS_SZ,
             (totalBandCount > 9 ? 0 : totalBandCount));
     nitf_Field_setRawData(subhdr->numImageBands, buf, NITF_NBANDS_SZ,
                           error);
 
-    sprintf(buf, "%.*d", NITF_XBANDS_SZ,
+    NITF_SNPRINTF(buf, 256, "%.*d", NITF_XBANDS_SZ,
             (totalBandCount > 9 ? totalBandCount : 0));
     nitf_Field_setRawData(subhdr->numMultispectralImageBands, buf,
                           NITF_XBANDS_SZ, error);
@@ -773,11 +773,11 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
     curBandCount--;
 
     /* set the new values into the ImageSubheader fields */
-    sprintf(buf, "%.*d", NITF_NBANDS_SZ,
+    NITF_SNPRINTF(buf, 256, "%.*d", NITF_NBANDS_SZ,
             (curBandCount > 9 ? 0 : curBandCount));
     nitf_Field_setRawData(subhdr->numImageBands, buf, NITF_NBANDS_SZ,
                           error);
-    sprintf(buf, "%.*d", NITF_XBANDS_SZ,
+    NITF_SNPRINTF(buf, 256, "%.*d", NITF_XBANDS_SZ,
             (curBandCount > 9 ? curBandCount : 0));
     nitf_Field_setRawData(subhdr->numMultispectralImageBands, buf,
                           NITF_XBANDS_SZ, error);
@@ -1126,7 +1126,8 @@ NITFAPI(int) nitf_ImageSubheader_insertImageComment
             goto CATCH_ERROR;
 
         /* always set the numComments back */
-        sprintf(numCommentBuf, "%.*d", NITF_NICOM_SZ, ++numComments);
+        NITF_SNPRINTF(numCommentBuf, NITF_NICOM_SZ + 1, "%.*d",
+                NITF_NICOM_SZ, ++numComments);
         nitf_Field_setRawData(subhdr->numImageComments,
                               numCommentBuf, NITF_NICOM_SZ, error);
     }
@@ -1169,7 +1170,8 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeImageComment
             goto CATCH_ERROR;
 
         /* always set the numComments back */
-        sprintf(commentBuf, "%.*d", NITF_NICOM_SZ, --numComments);
+        NITF_SNPRINTF(commentBuf, NITF_NICOM_SZ + 1, "%.*d",
+                      NITF_NICOM_SZ, --numComments);
         nitf_Field_setRawData(subhdr->numImageComments,
                               commentBuf, NITF_NICOM_SZ, error);
     }

@@ -168,7 +168,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
 
     /*  Convert the number to a string */
 
-    sprintf(numberBuffer, "%lu", (long) number);
+    NITF_SNPRINTF(numberBuffer, 20, "%lu", (long) number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -216,7 +216,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
 
     /*  Convert thte number to a string */
 
-    sprintf(numberBuffer, "%llu", number);
+    NITF_SNPRINTF(numberBuffer, 20, "%llu", number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -263,7 +263,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt32(nitf_Field * field,
 
     /*  Convert the number to a string */
 
-    sprintf(numberBuffer, "%ld", (long) number);
+    NITF_SNPRINTF(numberBuffer, 20, "%ld", (long) number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -310,7 +310,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
 
     /*  Convert thte number to a string */
 
-    sprintf(numberBuffer, "%lld", number);
+    NITF_SNPRINTF(numberBuffer, 20, "%lld", number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -476,7 +476,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
         NITF_SNPRINTF(fmt, 64, "%%+-1.%dl%s", precision, type);
     else
         NITF_SNPRINTF(fmt, 64, "%%-1.%dl%s", precision, type);
-    NITF_SNPRINTF(buffer, bufferLen, fmt, value);
+    NITF_SNPRINTF(buffer, bufferLen + 1, fmt, value);
 
     bufferLen = strlen(buffer);
 
@@ -494,7 +494,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
             NITF_SNPRINTF(fmt, 64, "%%+-1.%dl%s", precision, type);
         else
             NITF_SNPRINTF(fmt, 64, "%%-1.%dl%s", precision, type);
-        NITF_SNPRINTF(buffer, bufferLen, fmt, value);
+        NITF_SNPRINTF(buffer, bufferLen + 1, fmt, value);
     }
 
     if (!nitf_Field_setRawData(field, buffer, field->length, error))
@@ -606,7 +606,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
 {
     char buffer[256];
     size_t actualLength = 0;
-    /*  These are all two-step processes 1) get as native int 2) sprintf  */
+    /*  These are all two-step processes 1) get native int 2) NITF_SNPRINTF */
     switch (field->length)
     {
         case 2:
@@ -614,7 +614,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
             nitf_Int16 int16;
             if (!toInt16(field, &int16, error))
                 goto CATCH_ERROR;
-            actualLength = sprintf(buffer, "%d", int16);
+            actualLength = NITF_SNPRINTF(buffer, 256, "%d", int16);
         }
         break;
         case 4:
@@ -622,7 +622,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
             nitf_Int32 int32;
             if (!toInt32(field, &int32, error))
                 goto CATCH_ERROR;
-            actualLength = sprintf(buffer, "%ld", (long) int32);
+            actualLength = NITF_SNPRINTF(buffer, 256, "%ld", (long) int32);
         }
         break;
         case 8:
@@ -630,7 +630,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
             nitf_Int64 int64;
             if (!toInt64(field, &int64, error))
                 goto CATCH_ERROR;
-            actualLength = sprintf(buffer, "%lld", int64);
+            actualLength = NITF_SNPRINTF(buffer, 256, "%lld", int64);
         }
         break;
         default:

@@ -336,7 +336,7 @@ NITFPRIV(char **) doInit(nitf_DLL * dll,
 
     char name[NITF_MAX_PATH];
     memset(name, 0, NITF_MAX_PATH);
-    sprintf(name, "%s%s", prefix, NITF_PLUGIN_INIT_SUFFIX);
+    NITF_SNPRINTF(name, NITF_MAX_PATH, "%s%s", prefix, NITF_PLUGIN_INIT_SUFFIX);
     init = (NITF_PLUGIN_INIT_FUNCTION) nitf_DLL_retrieve(dll, name, error);
     if (!init)
     {
@@ -732,7 +732,7 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
     }
 
     memset(name, 0, NITF_MAX_PATH);
-    sprintf(name, "%s%s", ident, suffix);
+    NITF_SNPRINTF(name, NITF_MAX_PATH, "%s%s", ident, suffix);
 
     nitf_Utils_replace(name, ' ', '_');
 

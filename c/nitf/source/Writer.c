@@ -278,7 +278,7 @@ NITFPRIV(NITF_BOOL) writeIntField(nitf_Writer * writer,
     char buf[20];
 
     memset(buf, '\0', 20);
-    sprintf(buf, "%d", field);
+    NITF_SNPRINTF(buf, 20, "%d", field);
 
     if (padString(writer, buf, length, fill, fillDir, error))
     {
@@ -303,7 +303,7 @@ NITFPRIV(NITF_BOOL) writeInt64Field(nitf_Writer * writer,
     char buf[20];
 
     memset(buf, '\0', 20);
-    sprintf(buf, "%lld", field);
+    NITF_SNPRINTF(buf, 20, "%lld", field);
 
     if (padString(writer, buf, length, fill, fillDir, error))
     {
@@ -1094,19 +1094,19 @@ NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
                             &xhdl, &xhdlofl);
 
     /* just to be nice, let's set these values in the record */
-    sprintf(buf, "%.*d", NITF_UDHDL_SZ, udhdl);
+    NITF_SNPRINTF(buf, 256, "%.*d", NITF_UDHDL_SZ, udhdl);
     nitf_Field_setRawData(writer->record->header->userDefinedHeaderLength,
                           buf, NITF_UDHDL_SZ, error);
 
-    sprintf(buf, "%.*d", NITF_UDHOFL_SZ, udhofl);
+    NITF_SNPRINTF(buf, 256, "%.*d", NITF_UDHOFL_SZ, udhofl);
     nitf_Field_setRawData(writer->record->header->userDefinedOverflow,
                           buf, NITF_UDHOFL_SZ, error);
 
-    sprintf(buf, "%.*d", NITF_XHDL_SZ, xhdl);
+    NITF_SNPRINTF(buf, 256, "%.*d", NITF_XHDL_SZ, xhdl);
     nitf_Field_setRawData(writer->record->header->extendedHeaderLength,
                           buf, NITF_XHDL_SZ, error);
 
-    sprintf(buf, "%.*d", NITF_XHDLOFL_SZ, xhdlofl);
+    NITF_SNPRINTF(buf, 256, "%.*d", NITF_XHDLOFL_SZ, xhdlofl);
     nitf_Field_setRawData(writer->record->header->extendedHeaderOverflow,
                           buf, NITF_XHDLOFL_SZ, error);
 

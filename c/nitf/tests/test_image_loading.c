@@ -227,9 +227,10 @@ void writeImage(nitf_ImageSegment * segment,
                 pos--);
 
         pos = pos == 0 ? pos : pos + 1;
-        sprintf(file, "%s_%d__%d_%d_%d_band_%d", &imageName[pos],
-                imageNumber, nRows / rowSkipFactor, nColumns / columnSkipFactor,
-                nBits, i);
+        NITF_SNPRINTF(file, NITF_MAX_PATH,
+                      "%s_%d__%d_%d_%d_band_%d", &imageName[pos],
+                      imageNumber, nRows / rowSkipFactor,
+                      nColumns / columnSkipFactor, nBits, i);
         /* remove decimals */
         for (pos = strlen(file) - 1; pos; pos--)
             if (file[pos] == '.')

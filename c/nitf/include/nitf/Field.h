@@ -330,7 +330,7 @@ NITFAPI(nitf_Field *) nitf_Field_clone(nitf_Field * source,
  *                   * Hurt them (just kidding).  Make sure the internal and external sizes are same
  *                     then give them it back in the right format
  *      - If the user is requesting a string
- *                   * Allocate a 256 byte buffer, sprintf to the buffer, and give them what they are
+ *                   * Allocate a 256 byte buffer, snprintf to the buffer, and give them what they are
  *                     asking for (currently not implemented for 64 bit numbers)
  *
  */

@@ -77,9 +77,11 @@ char *makeBandName(const char *rootFile, const char* segment, int segmentNum, in
             pos && rootFile[pos] != '\\' && rootFile[pos] != '/'; pos--);
 
     if (bandNum >= 0)
-        sprintf(file, "%s__%s_%d_band_%d", &rootFile[pos + 1], segment, segmentNum, bandNum);
+        NITF_SNPRINTF(file, NITF_MAX_PATH, "%s__%s_%d_band_%d",
+                      &rootFile[pos + 1], segment, segmentNum, bandNum);
     else
-        sprintf(file, "%s__%s_%d", &rootFile[pos + 1], segment, segmentNum);
+        NITF_SNPRINTF(file, NITF_MAX_PATH, "%s__%s_%d",
+                      &rootFile[pos + 1], segment, segmentNum);
     /* remove decimals */
     for (pos = strlen(file) - 1; pos; pos--)
     {

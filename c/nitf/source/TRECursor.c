@@ -57,7 +57,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
         }
         tre_cursor.end_ptr = dptr;
         memset(tre_cursor.tag_str, 0, TAG_BUF_LEN);
-		sprintf(tre_cursor.tag_str, "%s",
+		NITF_SNPRINTF(tre_cursor.tag_str, TAG_BUF_LEN, "%s",
 		        ((nitf_TREPrivateData*)tre->priv)->description->tag);
         tre_cursor.tre = tre;
     }
@@ -229,7 +229,8 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
 
                 for (index = 0; index < tre_cursor->looping; index++)
                 {
-                    sprintf(idx_str[index], "[%d]", stack[index]);
+                    NITF_SNPRINTF(idx_str[index], TAG_BUF_LEN,
+                                  "[%d]", stack[index]);
                 }
             }
 
@@ -241,7 +242,7 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                     /* raw bytes */
                     (tre_cursor->desc_ptr->data_type == NITF_BINARY))
             {
-                sprintf(tre_cursor->tag_str, "%s",
+                NITF_SNPRINTF(tre_cursor->tag_str, TAG_BUF_LEN, "%s",
                         tre_cursor->desc_ptr->tag);
                 /* check if data is part of an array */
                 if (tre_cursor->looping)
@@ -250,7 +251,7 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                     for (index = 0; index < tre_cursor->looping; index++)
                     {
                         char entry[64];
-                        sprintf(entry, "[%d]", stack[index]);
+                        NITF_SNPRINTF(entry, TAG_BUF_LEN, "[%d]", stack[index]);
                         strcat(tre_cursor->tag_str, entry);
                     }
                 }

@@ -37,7 +37,7 @@ NITFPROT(void *) nitf_Debug_malloc(const char *file, int line, size_t sz)
     char name[512];
 
 #ifndef WIN32
-    sprintf(name, "%s.%d", NITF_MEM_LOG, getpid());
+    NITF_SNPRINTF(name, 512, "%s.%d", NITF_MEM_LOG, getpid());
 #else
     /* This can easily be modified to use GetCurrentProcessId()  */
     strcpy(name, NITF_MEM_LOG);
@@ -64,7 +64,7 @@ NITFPROT(void *) nitf_Debug_realloc(const char *file,
     FILE *f;
 
 #ifndef WIN32
-    sprintf(name, "%s.%d", NITF_MEM_LOG, getpid());
+    NITF_SNPRINTF(name, 512, "%s.%d", NITF_MEM_LOG, getpid());
 #else
     /* This can easily be modified to use GetCurrentProcessId()  */
     strcpy(name, NITF_MEM_LOG);
@@ -88,7 +88,7 @@ NITFPROT(void) nitf_Debug_free(const char *file, int line, void *ptr)
     char name[512];
 
 #ifndef WIN32
-    sprintf(name, "%s.%d", NITF_MEM_LOG, getpid());
+    NITF_SNPRINTF(name, 512, "%s.%d", NITF_MEM_LOG, getpid());
 #else
     /* This can easily be modified to use GetCurrentProcessId()  */
     strcpy(name, NITF_MEM_LOG);
