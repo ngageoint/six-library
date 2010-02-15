@@ -49,6 +49,16 @@ def build(bld):
     #lib.find_sources_in_dirs('./shared', excludes=[])
         
     
+    #build apps
+    appsDir = bld.path.find_dir('apps')
+    apps = appsDir.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
+    for app in apps:
+        exe = bld.new_task_gen('cc', 'program', source=app,
+                               uselib_local='NITRO',
+                               target=os.path.splitext(app)[0],
+                               path=appsDir, env=env.copy(),
+                               install_path='${PREFIX}/share/nitf/apps')
+
     #build tests
     testDir = bld.path.find_dir('tests')
     tests = testDir.find_iter(in_pat=['test*.c'],

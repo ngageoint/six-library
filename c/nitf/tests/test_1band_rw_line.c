@@ -131,7 +131,8 @@ void writeImage(nitf_ImageSegment* segment,
             i && imageName[i] != '\\' && imageName[i] != '/';
             i--);
 
-    sprintf(file, "%s_%d__%d_%d_%d_per_line_1band", &imageName[i + 1], imageNumber, nRows, nColumns, nBits);
+    NITF_SNPRINTF(file, NITF_MAX_PATH, "%s_%d__%d_%d_%d_per_line_1band",
+                  &imageName[i + 1], imageNumber, nRows, nColumns, nBits);
 
 
     for (i = strlen(file) - 1; i; i--)

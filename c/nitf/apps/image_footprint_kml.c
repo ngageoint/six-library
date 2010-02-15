@@ -75,7 +75,7 @@ void writeKML(nitf_ImageSubheader* header,
         return;
     }
 
-    sprintf(outfile, "%s-%d.kml", file, i+1);
+    NITF_SNPRINTF(outfile, NITF_MAX_PATH, "%s-%d.kml", file, i+1);
 
     out = nitf_IOHandle_create(outfile, 
                                NITF_ACCESS_WRITEONLY,
@@ -83,12 +83,12 @@ void writeKML(nitf_ImageSubheader* header,
                                &error);
 
     /* KML is lon first! */
-    sprintf(buf, KML_TEMPLATE, outfile, i+1, outfile, i+1, 
-            corners[0][1], corners[0][0],
-            corners[1][1], corners[1][0],
-            corners[2][1], corners[2][0],
-            corners[3][1], corners[3][0],
-            corners[0][1], corners[0][0]);
+    NITF_SNPRINTF(buf, NITF_MAX_PATH, KML_TEMPLATE, outfile, i+1, outfile, i+1,
+                  corners[0][1], corners[0][0],
+                  corners[1][1], corners[1][0],
+                  corners[2][1], corners[2][0],
+                  corners[3][1], corners[3][0],
+                  corners[0][1], corners[0][0]);
 
     if (!nitf_IOHandle_write(out, buf, strlen(buf), &error))
     {
