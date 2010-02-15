@@ -393,7 +393,8 @@ NITFPROT(void) nitf_Utils_geographicLatToCharArray(int degrees,
         dir = 'S';
         degrees *= -1;
     }
-    sprintf(buffer7, "%02d%02d%02d%c", degrees, minutes, (int)seconds, dir);
+    NITF_SNPRINTF(buffer7, 7, "%02d%02d%02d%c",
+                  degrees, minutes, (int)seconds, dir);
 }
 
 NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
@@ -406,20 +407,21 @@ NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
     {
         dir = 'E';
     }
-    sprintf(buffer8, "%03d%02d%02d%c", degrees, minutes, (int)seconds, dir);
+    NITF_SNPRINTF(buffer8, 8, "%03d%02d%02d%c",
+                  degrees, minutes, (int)seconds, dir);
 
 }
 
 NITFPROT(void) nitf_Utils_decimalLatToCharArray(double decimal,
                                                 char *buffer7)
 {
-    sprintf(buffer7, "%+07.3f", decimal);
+    NITF_SNPRINTF(buffer7, 7, "%+07.3f", decimal);
 }
 
 NITFPROT(void) nitf_Utils_decimalLonToCharArray(double decimal,
                                                 char *buffer8)
 {
-    sprintf(buffer8, "%+08.3f", decimal);
+    NITF_SNPRINTF(buffer8, 8, "%+08.3f", decimal);
 }
 
 NITFPROT(void) nitf_Utils_decimalLatToGeoCharArray(double decimal,

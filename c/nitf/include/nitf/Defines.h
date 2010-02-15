@@ -53,6 +53,7 @@
 #      define  NITF_ATOU32(A) strtoul(A, (char **)NULL, 10)
 #      define  NITF_ATO64(A) _atoi64(A)
 #      define  NITF_SNPRINTF _snprintf
+#      define  NITF_VSNPRINTF _vsnprintf
 #else
 /*
 *  NITFAPI and NITFPROT don't mean as much on Unix since they
@@ -68,6 +69,7 @@
 #          define  NITF_ATO64(A) atoll(A)
 #      endif
 #      define NITF_SNPRINTF snprintf
+#      define NITF_VSNPRINTF vsnprintf
 #endif
 /*
  *  This section describes a set of macros to help with

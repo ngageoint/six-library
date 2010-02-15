@@ -153,8 +153,7 @@ NITFPROT(void) nitf_Error_initf(nitf_Error * error,
     va_list args;
     va_start(args, format);
 
-    /* vsnprintf is not portable */
-    vsprintf(error->message, format, args);
+    NITF_VSNPRINTF(error->message, NITF_MAX_EMESSAGE + 1, format, args);
     va_end(args);
 
     _nitf_Error_fillString(error->file, NITF_MAX_PATH, file);
