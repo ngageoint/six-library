@@ -22,8 +22,8 @@
 PACKAGE = nitf
 BUILD = library unit-tests
 MAJOR_VERSION = 2
-MINOR_VERSION = 5
-VERSION_SUFFIX = RC1
+MINOR_VERSION = 6
+VERSION_SUFFIX = dev
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net
 DESCRIPTION = A complete solution for reading and writing NITF \
