@@ -28,6 +28,28 @@
 #include "nitf/IOInterface.h"
 #include <string>
 
+extern "C"
+{
+    NITF_BOOL __nitf_IOInterfaceImpl_read(NITF_DATA* data,
+            char* buf, size_t size, nitf_Error* error);
+
+    NITF_BOOL __nitf_IOInterfaceImpl_write(NITF_DATA* data,
+            const char* buf, size_t size, nitf_Error* error);
+
+    nitf::Off __nitf_IOInterfaceImpl_seek(NITF_DATA* data,
+            nitf::Off offset, int whence, nitf_Error* error);
+
+    nitf::Off __nitf_IOInterfaceImpl_tell(NITF_DATA* data,
+                                          nitf_Error* error);
+
+    nitf::Off __nitf_IOInterfaceImpl_getSize(NITF_DATA* data,
+                                             nitf_Error* error);
+
+    NITF_BOOL __nitf_IOInterfaceImpl_close(NITF_DATA* data,
+                                           nitf_Error* error);
+
+    void __nitf_IOInterfaceImpl_destruct(NITF_DATA* data);
+}
 /*!
  *  \file IOInterface.hpp
  */
@@ -78,23 +100,6 @@ public:
 
     virtual void close() {}
 
-private:
-    static NITF_BOOL IOInterfaceImpl_read(NITF_DATA* data,
-            char* buf, size_t size, nitf_Error* error);
-
-    static NITF_BOOL IOInterfaceImpl_write(NITF_DATA* data,
-            const char* buf, size_t size, nitf_Error* error);
-
-    static nitf::Off IOInterfaceImpl_seek(NITF_DATA* data,
-            nitf::Off offset, int whence, nitf_Error* error);
-
-    static nitf::Off IOInterfaceImpl_tell(NITF_DATA* data, nitf_Error* error);
-
-    static nitf::Off IOInterfaceImpl_getSize(NITF_DATA* data, nitf_Error* error);
-
-    static NITF_BOOL IOInterfaceImpl_close(NITF_DATA* data, nitf_Error* error);
-
-    static void IOInterfaceImpl_destruct(NITF_DATA* data);
 
 protected:
 
@@ -103,13 +108,13 @@ protected:
     {
         nitf_IIOInterface iIOHandle =
         {
-            &IOInterfaceImpl_read,
-            &IOInterfaceImpl_write,
-            &IOInterfaceImpl_seek,
-            &IOInterfaceImpl_tell,
-            &IOInterfaceImpl_getSize,
-            &IOInterfaceImpl_close,
-            &IOInterfaceImpl_destruct,
+            &__nitf_IOInterfaceImpl_read,
+            &__nitf_IOInterfaceImpl_write,
+            &__nitf_IOInterfaceImpl_seek,
+            &__nitf_IOInterfaceImpl_tell,
+            &__nitf_IOInterfaceImpl_getSize,
+            &__nitf_IOInterfaceImpl_close,
+            &__nitf_IOInterfaceImpl_destruct,
         };
         return iIOHandle;
     }

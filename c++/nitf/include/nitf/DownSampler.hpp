@@ -34,6 +34,26 @@
  *  \brief  Contains wrapper implementations for DownSamplers
  */
 
+extern "C"
+{
+    //! Allows the engine to call the apply function for this object
+    NITF_BOOL __nitf_DownSampler_apply(nitf_DownSampler* userData,
+                                       NITF_DATA** inputWindow,
+                                       NITF_DATA** outputWindow,
+                                       nitf_Uint32 numBands,
+                                       nitf_Uint32 numWindowRows,
+                                       nitf_Uint32 numWindowCols,
+                                       nitf_Uint32 numInputCols,
+                                       nitf_Uint32 numSubWindowCols,
+                                       nitf_Uint32 pixelType,
+                                       nitf_Uint32 pixelSize,
+                                       nitf_Uint32 rowsInLastWindow,
+                                       nitf_Uint32 colsInLastWindow,
+                                       nitf_Error* error);
+    //! Needed for the engine interface
+    void __nitf_DownSampler_destruct(NITF_DATA* data);
+}
+
 namespace nitf
 {
 
@@ -114,22 +134,6 @@ public:
 
 private:
 
-    //! Allows the engine to call the apply function for this object
-    static NITF_BOOL DownSampler_apply(nitf_DownSampler* userData,
-                                       NITF_DATA** inputWindow,
-                                       NITF_DATA** outputWindow,
-                                       nitf_Uint32 numBands,
-                                       nitf_Uint32 numWindowRows,
-                                       nitf_Uint32 numWindowCols,
-                                       nitf_Uint32 numInputCols,
-                                       nitf_Uint32 numSubWindowCols,
-                                       nitf_Uint32 pixelType,
-                                       nitf_Uint32 pixelSize,
-                                       nitf_Uint32 rowsInLastWindow,
-                                       nitf_Uint32 colsInLastWindow,
-                                       nitf_Error* error);
-    //! Needed for the engine interface
-    static void DownSampler_destruct(NITF_DATA* data);
 
 protected:
     void setMembers(){}
@@ -141,8 +145,8 @@ protected:
         // the native layer can use
         nitf_IDownSampler downSampler =
             {
-                &DownSampler_apply,
-                &DownSampler_destruct
+                &__nitf_DownSampler_apply,
+                &__nitf_DownSampler_destruct
             };
         return downSampler;
     }

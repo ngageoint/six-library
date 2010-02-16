@@ -31,6 +31,17 @@
 #include "nitf/SegmentReader.hpp"
 #include <string>
 
+extern "C"
+{
+    //! Allows the engine to call the read function for this object
+    NITF_BOOL __nitf_WriteHandler_write(NITF_DATA * data, 
+                                        nitf_IOInterface* io,
+                                        nitf_Error *error);
+  
+    //! Needed for the engine interface
+    void __nitf_WriteHandler_destruct(NITF_DATA* data);
+}
+
 /*!
  *  \file WriteHandler.hpp
  *  \brief  Contains wrapper implementations for WriteHandlers
@@ -65,12 +76,7 @@ public:
     }
 
 private:
-    //! Allows the engine to call the read function for this object
-    static NITF_BOOL WriteHandler_write(NITF_DATA * data, nitf_IOInterface* io,
-            nitf_Error *error);
 
-    //! Needed for the engine interface
-    static void WriteHandler_destruct(NITF_DATA* data);
 
 protected:
 
@@ -79,8 +85,11 @@ protected:
     {
         // Create a data source interface that
         // the native layer can use
-        nitf_IWriteHandler WriteHandler = { &WriteHandler_write,
-                &WriteHandler_destruct, };
+        nitf_IWriteHandler WriteHandler = 
+            { 
+                &__nitf_WriteHandler_write,
+                &__nitf_WriteHandler_destruct
+            };
         return WriteHandler;
     }
 

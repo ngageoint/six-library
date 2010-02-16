@@ -40,8 +40,9 @@ nitf::WriteHandler::WriteHandler() throw (nitf::NITFException) :
 }
 
 
-NITF_BOOL nitf::WriteHandler::WriteHandler_write(NITF_DATA * data,
-        nitf_IOInterface* io, nitf_Error * error)
+extern "C" NITF_BOOL __nitf_WriteHandler_write(NITF_DATA * data,
+                                               nitf_IOInterface* io, 
+                                               nitf_Error * error)
 {
     // Get our object from the data and call the read function
     if (!data)
@@ -51,7 +52,7 @@ NITF_BOOL nitf::WriteHandler::WriteHandler_write(NITF_DATA * data,
     return true;
 }
 
-void nitf::WriteHandler::WriteHandler_destruct(NITF_DATA* data)
+extern "C" void __nitf_WriteHandler_destruct(NITF_DATA* data)
 {
 }
 

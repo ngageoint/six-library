@@ -110,7 +110,7 @@ class RowSource : public KnownBandSource
 {
 public:
     RowSource(nitf::Uint32 band, nitf::Uint32 numRows, nitf::Uint32 numCols,
-            nitf::Uint32 pixelSize) throw(nitf::NITFException);
+              nitf::Uint32 pixelSize) throw(nitf::NITFException);
 
     ~RowSource(){}
 
@@ -120,8 +120,12 @@ protected:
     nitf::Uint32 mBand, mNumRows, mNumCols, mPixelSize;
 };
 
-NITF_BOOL RowSource_nextRow(void *algorithm, nitf_Uint32 band,
-        NITF_DATA * buffer, nitf_Error * error);
 
+}
+
+extern "C"
+{
+    NITF_BOOL __nitf_RowSource_nextRow(void *algorithm, nitf_Uint32 band,
+                                       NITF_DATA * buffer, nitf_Error * error);
 }
 #endif

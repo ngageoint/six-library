@@ -41,10 +41,10 @@ nitf::IOInterface::IOInterface() throw (nitf::NITFException)
     setManaged(false);
 }
 
-NITF_BOOL nitf::IOInterface::IOInterfaceImpl_read(NITF_DATA* data,
-                                                  char* buf,
-                                                  size_t size,
-                                                  nitf_Error* error)
+extern "C" NITF_BOOL __nitf_IOInterfaceImpl_read(NITF_DATA* data,
+                                                 char* buf,
+                                                 size_t size,
+                                                 nitf_Error* error)
 {
     if (!data)
         throw except::NullPointerReference(Ctxt("IOInterfaceImpl_read"));
@@ -52,10 +52,10 @@ NITF_BOOL nitf::IOInterface::IOInterfaceImpl_read(NITF_DATA* data,
     return NITF_SUCCESS;
 }
 
-NITF_BOOL nitf::IOInterface::IOInterfaceImpl_write(NITF_DATA* data,
-                                                   const char* buf,
-                                                   size_t size,
-                                                   nitf_Error* error)
+extern "C" NITF_BOOL __nitf_IOInterfaceImpl_write(NITF_DATA* data,
+                                                  const char* buf,
+                                                  size_t size,
+                                                  nitf_Error* error)
 {
     if (!data)
         throw except::NullPointerReference(Ctxt("IOInterfaceImpl_write"));
@@ -63,34 +63,34 @@ NITF_BOOL nitf::IOInterface::IOInterfaceImpl_write(NITF_DATA* data,
     return NITF_SUCCESS;
 }
 
-nitf::Off nitf::IOInterface::IOInterfaceImpl_seek(NITF_DATA* data,
-                                                  nitf::Off offset,
-                                                  int whence,
-                                                  nitf_Error* error)
+extern "C" nitf::Off __nitf_IOInterfaceImpl_seek(NITF_DATA* data,
+                                                 nitf::Off offset,
+                                                 int whence,
+                                                 nitf_Error* error)
 {
     if (!data)
         throw except::NullPointerReference(Ctxt("IOInterfaceImpl_seek"));
     return ((nitf::IOInterface*) data)->seek(offset, whence);
 }
 
-nitf::Off nitf::IOInterface::IOInterfaceImpl_tell(NITF_DATA* data,
-                                                  nitf_Error* error)
+extern "C" nitf::Off __nitf_IOInterfaceImpl_tell(NITF_DATA* data,
+                                                 nitf_Error* error)
 {
     if (!data)
         throw except::NullPointerReference(Ctxt("IOInterfaceImpl_tell"));
     return ((nitf::IOInterface*) data)->tell();
 }
 
-nitf::Off nitf::IOInterface::IOInterfaceImpl_getSize(NITF_DATA* data,
-                                                     nitf_Error* error)
+extern "C" nitf::Off __nitf_IOInterfaceImpl_getSize(NITF_DATA* data,
+                                                    nitf_Error* error)
 {
     if (!data)
         throw except::NullPointerReference(Ctxt("IOInterfaceImpl_getSize"));
     return ((nitf::IOInterface*) data)->getSize();
 }
 
-NITF_BOOL nitf::IOInterface::IOInterfaceImpl_close(NITF_DATA* data,
-                                                   nitf_Error* error)
+extern "C" NITF_BOOL __nitf_IOInterfaceImpl_close(NITF_DATA* data,
+                                                  nitf_Error* error)
 {
     if (!data)
         throw except::NullPointerReference(Ctxt("IOInterfaceImpl_tell"));
@@ -98,9 +98,7 @@ NITF_BOOL nitf::IOInterface::IOInterfaceImpl_close(NITF_DATA* data,
     return NITF_SUCCESS;
 }
 
-void nitf::IOInterface::IOInterfaceImpl_destruct(NITF_DATA* data)
-{
-}
+extern "C" void __nitf_IOInterfaceImpl_destruct(NITF_DATA* data) {}
 
 void nitf::NativeIOInterface::read(char * buf, size_t size)
 {

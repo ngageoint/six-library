@@ -22,37 +22,37 @@
 
 #include "nitf/DownSampler.hpp"
 
-NITF_BOOL nitf::DownSampler::DownSampler_apply(nitf_DownSampler* userData,
-        NITF_DATA ** inputWindow,
-        NITF_DATA ** outputWindow,
-        nitf_Uint32 numBands,
-        nitf_Uint32 numWindowRows,
-        nitf_Uint32 numWindowCols,
-        nitf_Uint32 numInputCols,
-        nitf_Uint32 numSubWindowCols,
-        nitf_Uint32 pixelType,
-        nitf_Uint32 pixelSize,
-        nitf_Uint32 rowsInLastWindow,
-        nitf_Uint32 colsInLastWindow,
-        nitf_Error* error)
+extern "C" NITF_BOOL __nitf_DownSampler_apply(nitf_DownSampler* userData,
+                                              NITF_DATA ** inputWindow,
+                                              NITF_DATA ** outputWindow,
+                                              nitf_Uint32 numBands,
+                                              nitf_Uint32 numWindowRows,
+                                              nitf_Uint32 numWindowCols,
+                                              nitf_Uint32 numInputCols,
+                                              nitf_Uint32 numSubWindowCols,
+                                              nitf_Uint32 pixelType,
+                                              nitf_Uint32 pixelSize,
+                                              nitf_Uint32 rowsInLastWindow,
+                                              nitf_Uint32 colsInLastWindow,
+                                              nitf_Error* error)
 {
     // Get our object from the data and call the read function
     if (!userData) throw except::NullPointerReference(Ctxt("DownSampler_read"));
     ((nitf::DownSampler*)(userData->data))->apply(inputWindow,
-            outputWindow,
-            numBands,
-            numWindowRows,
-            numWindowCols,
-            numInputCols,
-            numSubWindowCols,
-            pixelType,
-            pixelSize,
-            rowsInLastWindow,
-            colsInLastWindow);
+                                                  outputWindow,
+                                                  numBands,
+                                                  numWindowRows,
+                                                  numWindowCols,
+                                                  numInputCols,
+                                                  numSubWindowCols,
+                                                  pixelType,
+                                                  pixelSize,
+                                                  rowsInLastWindow,
+                                                  colsInLastWindow);
     return true;
 }
 
-void nitf::DownSampler::DownSampler_destruct(NITF_DATA* data){}
+extern "C" void __nitf_DownSampler_destruct(NITF_DATA* data){}
 
 nitf::DownSampler::DownSampler(nitf::Uint32 rowSkip, nitf::Uint32 colSkip) throw (nitf::NITFException)
 {

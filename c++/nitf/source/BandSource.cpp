@@ -70,8 +70,9 @@ nitf::RowSource::RowSource(nitf::Uint32 band, nitf::Uint32 numRows,
         nitf::Uint32 numCols, nitf::Uint32 pixelSize) throw(nitf::NITFException)
     : mBand(band), mNumRows(numRows), mNumCols(numCols), mPixelSize(pixelSize)
 {
-    setNative(nitf_RowSource_construct((void*)this, &nitf::RowSource_nextRow,
-            mBand, mNumRows, mNumCols * mPixelSize, &error));
+    setNative(nitf_RowSource_construct((void*)this, &__nitf_RowSource_nextRow,
+                                       mBand, mNumRows, 
+                                       mNumCols * mPixelSize, &error));
     getNativeOrThrow();
 
     static nitf_IDataSource iBandSource = getIDataSource();
@@ -88,10 +89,10 @@ nitf::RowSource::RowSource(nitf::Uint32 band, nitf::Uint32 numRows,
 }
 
 
-NITF_BOOL nitf::RowSource_nextRow(void *algorithm,
-        nitf_Uint32 band,
-        NITF_DATA * buffer,
-        nitf_Error * error)
+extern "C" NITF_BOOL __nitf_RowSource_nextRow(void *algorithm,
+                                              nitf_Uint32 band,
+                                              NITF_DATA * buffer,
+                                              nitf_Error * error)
 {
     nitf::RowSource *source = (nitf::RowSource*)algorithm;
     try

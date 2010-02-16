@@ -28,6 +28,24 @@
 #include "nitf/Object.hpp"
 #include <string>
 
+
+extern "C"
+{
+    //! Allows the engine to call the read function for this object
+    NITF_BOOL __nitf_DataSource_read(NITF_DATA * data,
+                                     char * buf,
+                                     nitf::Off size,
+                                     nitf_Error * error);
+    
+
+    //! Needed for the engine interface
+    void __nitf_DataSource_destruct(NITF_DATA* data);
+
+    nitf::Off __nitf_DataSource_getSize(NITF_DATA* data);
+
+    void __nitf_DataSource_setSize(NITF_DATA* data, nitf::Off size);
+}
+
 /*!
  *  \file DataSource.hpp
  *  \brief  Contains wrapper implementations for DataSources
@@ -80,15 +98,6 @@ public:
     virtual void setSize(nitf::Off size) {}
 private:
 
-    //! Allows the engine to call the read function for this object
-    static NITF_BOOL DataSource_read(NITF_DATA * data,
-                                     char * buf,
-                                     nitf::Off size,
-                                     nitf_Error * error);
-    //! Needed for the engine interface
-    static void DataSource_destruct(NITF_DATA* data);
-    static nitf::Off DataSource_getSize(NITF_DATA* data);
-    static void DataSource_setSize(NITF_DATA* data, nitf::Off size);
 
 protected:
 
@@ -99,10 +108,10 @@ protected:
         // the native layer can use
         nitf_IDataSource dataSource =
         {
-            &DataSource_read,
-            &DataSource_destruct,
-            &DataSource_getSize,
-            &DataSource_setSize
+            &__nitf_DataSource_read,
+            &__nitf_DataSource_destruct,
+            &__nitf_DataSource_getSize,
+            &__nitf_DataSource_setSize
         };
         return dataSource;
     }
@@ -148,4 +157,5 @@ protected:
 };
 
 }
+
 #endif
