@@ -217,11 +217,14 @@ def set_options(opt):
     opt.add_option('--enable-doxygen', action='store_true', dest='doxygen',
                    help='Enable running doxygen')
     opt.add_option('--with-cflags', action='store', nargs=1, dest='cflags',
-                   help='Set non-standard CFLAGS')
+                   help='Set non-standard CFLAGS', metavar='FLAGS')
     opt.add_option('--with-cxxflags', action='store', nargs=1, dest='cxxflags',
-                   help='Set non-standard CXXFLAGS (C++)')
+                   help='Set non-standard CXXFLAGS (C++)', metavar='FLAGS')
+    opt.add_option('--with-defs', action='store', nargs=1, dest='defs',
+                   help='Use DEFS as macro definitions', metavar='DEFS')
     opt.add_option('--with-optz', action='store', choices=['med', 'fast', 'fastest'],
-                   default='fastest', help='Specify the optimization level for optimized/release builds')
+                   default='fastest', help='Specify the optimization level for optimized/release builds',
+                   metavar='OPTZ')
     opt.add_option('--libs-only', action='store_true', dest='libs_only',
                    help='Only build the libs (skip building the tests, etc.)')
     opt.add_option('--shared', action='store_true', dest='shared_libs',
@@ -347,6 +350,8 @@ def detect(self):
     
     env.append_unique('CXXFLAGS', Options.options.cxxflags or '')
     env.append_unique('CCFLAGS', Options.options.cflags or '')
+    env.append_value('CCDEFINES', (Options.options.defs or '').split(','))
+    env.append_value('CXXDEFINES', (Options.options.defs or '').split(','))
 
     appleRegex = r'i.86-apple-.*'
     linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
