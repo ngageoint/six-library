@@ -20,9 +20,10 @@
  *
  */
 
+#include "nitf/IOHandle.h"
+
 #ifdef WIN32
 
-#include "nitf/IOHandle.h"
 
 NITFAPI(nitf_IOHandle) nitf_IOHandle_create(const char *fname,
         nitf_AccessFlags access,
@@ -129,7 +130,7 @@ NITFAPI(nitf_Off) nitf_IOHandle_seek(nitf_IOHandle handle,
                          NITF_CTXT, NITF_ERR_SEEKING_IN_FILE,
                          "SetFilePointer failed with error [%d]",
                          lastError);
-	return (nitf_Off)-1;
+        return (nitf_Off)-1;
     }
     return (nitf_Off) largeInt.QuadPart;
 }
@@ -154,7 +155,7 @@ NITFAPI(nitf_Off) nitf_IOHandle_getSize(nitf_IOHandle handle,
                          NITF_ERR_STAT_FILE,
                          "GetFileSize failed with error [%d]",
                          GetLastError());
-	return (nitf_Off)-1;
+        return (nitf_Off)-1;
     }
     return ((highOff) << 32) + ret;
 }

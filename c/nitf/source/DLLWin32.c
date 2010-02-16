@@ -20,9 +20,10 @@
  *
  */
 
+#include "nitf/DLL.h"
+
 #if defined(WIN32)
 
-#include "nitf/DLL.h"
 
 NITFAPI(nitf_DLL *) nitf_DLL_construct(nitf_Error * error)
 {

@@ -20,9 +20,10 @@
  *
  */
 
+#include "nitf/Directory.h"
+
 #ifdef WIN32
 
-#include "nitf/Directory.h"
 
 NITF_CXX_GUARD typedef struct _DirectoryWin32
 {
