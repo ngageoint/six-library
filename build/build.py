@@ -8,10 +8,13 @@ from TaskGen import taskgen, feature, after, before
 
 class CPPBuildContext(BuildContext):
     """
-    Create a custom context for building C++ modules/plugins
+    Create a custom context for building C/C++ modules/plugins
     """
     def __init__(self):
         BuildContext.__init__(self)
+    
+    def safeVersion(self, version):
+        return re.sub(r'[^\w]', '.', version)
     
     def module(self, **modArgs):
         """
@@ -24,25 +27,39 @@ class CPPBuildContext(BuildContext):
         env.set_variant(variant)
     
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
-        libName = '%s-c++' % modArgs['name']
+        lang = modArgs.get('lang', 'c++')
+        libExeType = {'c++':'cxx', 'c':'cc'}.get(lang, 'cxx')
+        libName = '%s-%s' % (modArgs['name'], lang)
         path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
 
-        module_deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
         defines = modArgs.get('defines', '').split()
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
+        libVersion = modArgs.get('version', None)
+        
+        if libVersion is not None and sys.platform != 'win32':
+            targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
+        else:
+            targetName = libName
+        
         
         headersOnly = modArgs.get('headersonly', False)
         if not headersOnly:
             #build the lib
-            lib = bld.new_task_gen('cxx', env['LIB_TYPE'] or 'staticlib', includes=includes,
-                    target=libName, name=libName, export_incdirs=exportIncludes,
+            lib = bld.new_task_gen(libExeType, env['LIB_TYPE'] or 'staticlib', includes=includes,
+                    target=targetName, name=libName, export_incdirs=exportIncludes,
                     uselib_local=uselib_local, uselib=uselib, env=env.copy(),
                     defines=defines, path=path, install_path='${PREFIX}/lib')
             lib.find_sources_in_dirs('source')
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
+            
+            if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks:
+                symlinkLoc = '%s/%s' % (lib.install_path, env['staticlib_PATTERN'] % libName)
+                bld.symlink_as(symlinkLoc, env['staticlib_PATTERN'] % lib.target, env=env)
+            
 
         for f in path.find_dir('include').find_iter():
             relpath = f.relpath_gen(path)
@@ -53,13 +70,17 @@ class CPPBuildContext(BuildContext):
         if testNode and not Options.options.libs_only:
             if not headersOnly:
                 uselib_local = libName
+            
+            sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
             for test in filter(modArgs.get('test_filter', None),
-                               testNode.find_iter(in_pat=['*.cpp'],
+                               testNode.find_iter(in_pat=['*%s' % sourceExt],
                                                   maxdepth=1, flat=True).split()):
-                exe = bld.new_task_gen('cxx', 'program', source=test,
+                exe = bld.new_task_gen(libExeType, 'program', source=test,
                         uselib_local=uselib_local, uselib=uselib, env=env.copy(), includes='.',
                         target=os.path.splitext(test)[0], path=testNode,
                         install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
+        
+        return env
     
     def plugin(self, **modArgs):
         """
@@ -238,6 +259,8 @@ def set_options(opt):
                    help='Only build the libs (skip building the tests, etc.)')
     opt.add_option('--shared', action='store_true', dest='shared_libs',
                    help='Build all libs as shared libs')
+    opt.add_option('--disable-symlinks', action='store_false', dest='symlinks',
+                   default=True, help='Disable creating symlinks for libs')
     
 
     

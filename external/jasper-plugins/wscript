@@ -137,7 +137,7 @@ def build(bld):
         libPattern = libPattern[3:]
     libEnv = env.copy()
     lib = bld.new_task_gen('cc', 'shlib', target='JasPerDecompress',
-                           uselib_local='JASPER NITRO'.split(), env=libEnv,
+                           uselib_local='JASPER nitf-c'.split(), env=libEnv,
                            install_path='${PREFIX}/share/nitf/plugins')
     lib.find_sources_in_dirs('./source', excludes=[])
     libEnv['shlib_PATTERN'] = libPattern

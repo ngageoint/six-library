@@ -3,7 +3,7 @@ MAINTAINER      = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
 VERSION         = '2.5-RC1'
 MODULE_DEPS     = 'mt sys'
 USELIB          = 'THREAD DL'
-USELIB_LOCAL    = 'NITRO'
+USELIB_LOCAL    = 'nitf-c'
 TEST_FILTER     = lambda t: t not in 'test_functional.cpp test_handles.cpp test_mem_source.cpp test_static_plugin.cpp'.split()
 
 set_options = configure = distclean = lambda p: None

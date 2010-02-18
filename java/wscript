@@ -1,14 +1,15 @@
 import os
 import Options, Build
+from Configure import ConfigurationError
 
 def set_options(opt):
     opt.tool_options('javaw')
     opt.add_option('--disable-java', action='store_false', dest='java',
-                   help='Disable java (default)', default=False)
-    opt.add_option('--enable-java', action='store_true', dest='java',
-                   help='Enable java')
+                   help='Disable java (default)', default=True)
     opt.add_option('--with-java-home', action='store', dest='java_home',
                    help='Specify the location of the java home')
+    opt.add_option('--require-java', action='store_true', dest='force_java',
+               help='Require Java lib/headers (configure option)', default=False)
 
 
 def configure(conf):
@@ -34,37 +35,47 @@ def configure(conf):
     if not conf.env.CC_NAME and not conf.env.CXX_NAME:
         conf.fatal('load a compiler first (gcc, g++, ..)')
 
-    if not conf.env.JAVA_HOME:
-        conf.fatal('set JAVA_HOME in the system environment')
-
-    # jni requires the jvm
-    javaHome = conf.env['JAVA_HOME'][0]
-
-    b = Build.BuildContext()
-    b.load_dirs(conf.srcdir, conf.blddir)
-    dir = b.root.find_dir(javaHome + '/include')
-    if not dir:
-        conf.fatal('could not find include directory in %r (see config.log)' % javaHome)
+    try:
+        if not conf.env.JAVA_HOME:
+            conf.fatal('set JAVA_HOME in the system environment')
     
-    incDirs = map(lambda x: os.path.dirname(x),
-                  recursiveGlob(dir.abspath(), ['jni.h', 'jni_md.h']))
-#    f = dir.ant_glob('**/(jni|jni_md).h', flat=False)
-#    incDirs = [x.parent.abspath() for x in f]
+        # jni requires the jvm
+        javaHome = conf.env['JAVA_HOME'][0]
+    
+        b = Build.BuildContext()
+        b.load_dirs(conf.srcdir, conf.blddir)
+        incDir = b.root.find_dir(javaHome + '/include')
+        if not incDir:
+            conf.fatal('could not find include directory in %r (see config.log)' % javaHome)
+        
+        incDirs = map(lambda x: os.path.dirname(x),
+                      recursiveGlob(incDir.abspath(), ['jni.h', 'jni_md.h']))
+    #    f = incDir.ant_glob('**/(jni|jni_md).h', flat=False)
+    #    incDirs = [x.parent.abspath() for x in f]
+    
+        homeDir = b.root.find_dir(javaHome)
+        if not homeDir:
+            conf.fatal('could not find JAVA_HOME directory %r (see config.log)' % javaHome)
+        libDirs = map(lambda x: os.path.dirname(x),
+                      recursiveGlob(homeDir.abspath(), ['*jvm.so', '*jvm.lib', '*jvm.dll']))
+    #    f = homeDir.ant_glob('**/*jvm.(so|dll)', flat=False)
+    #    libDirs = [x.parent.abspath() for x in f] or [javaHome]
+    
+        for i, d in enumerate(libDirs):
+            if conf.check(header_name='jni.h', define_name='HAVE_JNI_H', lib='jvm',
+                    libpath=[d], includes=incDirs, uselib_store='JAVA', uselib='JAVA'):
+                break
+        else:
+            conf.fatal('could not find lib jvm in %r (see config.log)' % libDirs)
+    except ConfigurationError, ex:
+        err = str(ex).strip()
+        if err.startswith('error: '):
+            err = err[7:]
+        if Options.options.force_java:
+            conf.fatal(err)
+        else:
+            conf.check_message_custom('Java', 'lib/headers', err, color='YELLOW')
 
-    dir = b.root.find_dir(javaHome)
-    if not dir:
-        conf.fatal('could not find JAVA_HOME directory %r (see config.log)' % javaHome)
-    libDirs = map(lambda x: os.path.dirname(x),
-                  recursiveGlob(dir.abspath(), ['*jvm.so', '*jvm.lib', '*jvm.dll']))
-#    f = dir.ant_glob('**/*jvm.(so|dll)', flat=False)
-#    libDirs = [x.parent.abspath() for x in f] or [javaHome]
-
-    for i, d in enumerate(libDirs):
-        if conf.check(header_name='jni.h', define_name='HAVE_JNI_H', lib='jvm',
-                libpath=[d], includes=incDirs, uselib_store='JAVA', uselib='JAVA'):
-            break
-    else:
-        conf.fatal('could not find lib jvm in %r (see config.log)' % libDirs)
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'

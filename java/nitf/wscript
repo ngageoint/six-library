@@ -7,5 +7,5 @@ def build(bld):
     if env['defines'].get('HAVE_JNI_H', False):
         lib = bld.new_task_gen('cc', 'shlib', includes='src/jni/include',
                                target='nitf.jni-c', env=env.copy(),
-                               uselib='JAVA', uselib_local='NITRO')
+                               uselib='JAVA', uselib_local='nitf-c')
         lib.find_sources_in_dirs('src/jni/source')

@@ -7,5 +7,5 @@ def build(bld):
     if env['defines'].get('HAVE_JNI_H', False):
         lib = bld.new_task_gen('cc', 'shlib', includes='src/jni/include',
                                target='cgm.jni-c', env=env.copy(),
-                               uselib='JAVA', uselib_local='CGM NITRO'.split())
+                               uselib='JAVA', uselib_local='cgm-c'.split())
         lib.find_sources_in_dirs('src/jni/source')

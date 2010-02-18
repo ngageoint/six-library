@@ -14,7 +14,7 @@ def build(bld):
         features = 'cc cshlib pyext',
         source = 'src/swig/nitro_wrap.c',
         target = '_nitropy',
-        uselib_local='NITRO',
+        uselib_local='nitf-c',
         env=env.copy(),
         install_path='${PYTHONDIR}/nitf')
 

@@ -1,35 +1,19 @@
-import os
 import Options
 
+NAME            = 'cgm'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '2.6-dev'
+MODULE_DEPS     = 'nitf'
+LANG            = 'c'
+USELIB_LOCAL    = 'nitf-c'
+DEFINES         = 'NITF_MODULE_EXPORTS'
+
+
+set_options = configure = distclean = lambda p: None
+
 def build(bld):
-    variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
-    env.set_variant(variant)
-    
-    includes = ['include']
-    libname = 'cgm'
-    
-    lib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', includes=includes,
-                           target='%s-c' % libname, uselib_local='NITRO',
-                           export_incdirs=includes, env=env.copy(),
-                           defines='NITF_MODULE_EXPORTS', name='CGM')
-    lib.find_sources_in_dirs('source')
-    
-    #build tests
-    #testDir = bld.path.find_dir('tests')
-    #for test in testDir.find_iter(in_pat=['test*.c'],
-    #                              maxdepth=1, flat=True).split(' '):
-    #    exe = bld.new_task_gen('cc', 'program', source=test,
-    #                           uselib_local='CGM',
-    #                           target=os.path.splitext(test)[0],
-    #                           path=testDir,
-    #                           install_path='${PREFIX}/share/nitf-cgm/tests')
-    
-    #install headers
-    for f in bld.path.find_dir('include').find_iter():
-        relpath = f.relpath_gen(bld.path)
-        bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath), relpath)
-    
+    env = bld.module(**globals())
+
     #run doxygen
     if 'DOXYGEN' in env and Options.is_install:
         bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)

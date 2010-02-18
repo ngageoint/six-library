@@ -5,17 +5,33 @@ def set_options(opt):
     opt.tool_options('python')
     opt.add_option('--disable-python', action='store_false', dest='python',
                    help='Disable python', default=True)
+    opt.add_option('--require-python', action='store_true', dest='force_python',
+                   help='Require Python lib/headers (configure option)', default=False)
     
 def configure(conf):
     if Options.options.python:
         conf.check_tool('python')
-        conf.check_python_version((2,4,2))
-        conf.check_python_headers()
+        try:
+            conf.check_python_version((2,4,2))
+            conf.check_python_headers()
+        except Exception, ex:
+#            conf.env.pop('PYTHON', None)
+#            if 'PYTHON' in conf.env:
+#                del conf.env['PYTHON']
+            conf.env['PYTHON'] = None
+            err = str(ex).strip()
+            if err.startswith('error: '):
+                err = err[7:]
+            
+            if Options.options.force_python:
+                conf.fatal(err)
+            else:
+                conf.check_message_custom('Python', 'lib/headers', err, color='YELLOW')
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
-    if 'PYTHON' in env:
+    if 'PYTHON' in env and env['PYTHON']:
         bld.add_subdirs('nitf')
 
 def distclean(context):

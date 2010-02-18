@@ -108,7 +108,7 @@ def build(bld):
         libPattern = libPattern[3:]
     libEnv = env.copy()
     lib = bld.new_task_gen('cc', 'shlib', target='LibjpegDecompress',
-                           uselib_local='LIBJPEG NITRO'.split(),
+                           uselib_local='LIBJPEG nitf-c'.split(),
                            install_path='${PREFIX}/share/nitf/plugins',
                            defines=defList, env=libEnv)
     lib.find_sources_in_dirs('./source', excludes=[])
