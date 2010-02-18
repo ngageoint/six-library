@@ -7,6 +7,7 @@ MODULE_DEPS     = 'nitf'
 LANG            = 'c'
 USELIB_LOCAL    = 'nitf-c'
 DEFINES         = 'NITF_MODULE_EXPORTS'
+TEST_FILTER     = lambda x: False #no tests for now
 
 
 set_options = configure = distclean = lambda p: None
