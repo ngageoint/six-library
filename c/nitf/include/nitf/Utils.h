@@ -191,6 +191,8 @@ NITFAPI(char) nitf_Utils_cornersTypeAsCoordRep(nitf_CornersType type);
 
 NITFAPI(double) nitf_Utils_getCurrentTimeMillis();
 
+NITFAPI(int) nitf_Utils_strncasecmp(char *s1, char *s2, size_t n);
+
 NITF_CXX_ENDGUARD
 
 #endif
