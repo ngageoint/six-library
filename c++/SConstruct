@@ -1,7 +1,0 @@
-SConscript([
-	    "except/SConstruct",
-	    "str/SConstruct",
-	    "sys/SConstruct",
-	    "mt/SConstruct",
-	    "nitf/SConstruct",
-],)
