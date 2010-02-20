@@ -31,6 +31,7 @@ if __name__ == '__main__':
     
     #update version of C Makefiles
     makefiles = [os.path.join(top_dir, 'c/nitf/build/Makefile.in'),
+                 os.path.join(top_dir, 'java/cgm/src/jni/build/Makefile.in'),
                  os.path.join(top_dir, 'java/nitf/src/jni/build/Makefile.in'),]
     for line in fileinput.input(makefiles, inplace=1):
         line = re.sub(r'(\s*MAJOR_VERSION\s*=\s*)\d+', r'\g<1>%s' % major, line)
@@ -39,24 +40,51 @@ if __name__ == '__main__':
         sys.stdout.write(line)
     
     #update java properties file
-    propsFile = os.path.join(top_dir, 'java/nitf/project.properties')
-    for line in fileinput.input(propsFile, inplace=1):
-        line = re.sub(r'(\s*version\s*=\s*).+', r'\g<1>%s' % fullVersion.lower(), line)
-        sys.stdout.write(line)
+    def replaceInProperties(propsFile):
+        for line in fileinput.input(propsFile, inplace=1):
+            line = re.sub(r'(\s*version\s*=\s*).+', r'\g<1>%s' % fullVersion, line)
+            sys.stdout.write(line)
+    
+    replaceInProperties(os.path.join(top_dir, 'java/nitf/project.properties'))
+    
+    #update xml pom files
+    def replaceInPom(pomFile):
+        found = False #only replace the first one
+        for line in fileinput.input(pomFile, inplace=1):
+            pattern = r'(<version>\s*).+(\s*</version>)'
+            if not found and re.search(pattern, line):
+                found = True
+                line = re.sub(pattern, r'\g<1>%s\g<2>' % fullVersion, line)
+            sys.stdout.write(line)
+    
+    replaceInPom(os.path.join(top_dir, 'java/nitf/pom.xml'))
+    replaceInPom(os.path.join(top_dir, 'java/cgm/pom.xml'))
+    
+    def replaceInWscript(wscript):
+        for line in fileinput.input(wscript, inplace=1):
+            line = re.sub(r'(\s*VERSION\s*=\s*[\']).+([\']\s*)', r'\g<1>%s\g<2>' % fullVersion, line)
+            sys.stdout.write(line)
+    
+    replaceInWscript(os.path.join(top_dir, 'c/nitf/wscript'))
+    replaceInWscript(os.path.join(top_dir, 'c/cgm/wscript'))
+    replaceInWscript(os.path.join(top_dir, 'c++/nitf/wscript'))
+    replaceInWscript(os.path.join(top_dir, 'java/nitf/wscript'))
+    replaceInWscript(os.path.join(top_dir, 'java/cgm/wscript'))
     
     #update python setup.py
     setupFile = os.path.join(top_dir, 'python/nitf/setup.py')
     for line in fileinput.input(setupFile, inplace=1):
-        line = re.sub(r'(\s*version\s*=\s*),.+', r"\g<1>'%s'" % fullVersion.lower(), line)
+        line = re.sub(r'(\s*version\s*=\s*),.+', r"\g<1>'%s'" % fullVersion, line)
         sys.stdout.write(line)
     
     #update windows installer
     setupFile = os.path.join(top_dir, 'build/installer/nitro_installer.iss')
     for line in fileinput.input(setupFile, inplace=1):
-        line = re.sub(r'\d+[.]\d+[-]setup', r'%s-setup' % fullVersion.lower(), line)
-        line = re.sub(r'\d+[.]\d+(?![-]setup)([-]\w+)?', r'%s' % fullVersion, line)
-        line = re.sub(r'\d+[.]\d+.+[-]setup', r'%s-setup' % fullVersion.lower(), line)
-        line = re.sub(r'\d+[.]\d+.+[.]win32[.]exe', r'%s.win32.exe' % fullVersion.lower(), line)
+        line = re.sub(r'\d+[.]\d+(-\w+)?', fullVersion, line)
+#        line = re.sub(r'\d+[.]\d+[-]setup', r'%s-setup' % fullVersion.lower(), line)
+#        line = re.sub(r'\d+[.]\d+(?![-]setup)([-]\w+)?', r'%s' % fullVersion, line)
+#        line = re.sub(r'\d+[.]\d+.+[-]setup', r'%s-setup' % fullVersion.lower(), line)
+#        line = re.sub(r'\d+[.]\d+.+[.]win32[.]exe', r'%s.win32.exe' % fullVersion.lower(), line)
         #line = re.sub(r'\d+[.]\d+((?![-]setup)[-]\w+)?-setup', r'%s-setup' % fullVersion.lower(), line)
         sys.stdout.write(line)
     
