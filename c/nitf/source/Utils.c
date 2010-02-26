@@ -405,7 +405,8 @@ NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
     char dir = 'E';
     if (degrees < 0)
     {
-        dir = 'E';
+        dir = 'W';
+        degrees *= -1;
     }
     NITF_SNPRINTF(buffer8, 8, "%03d%02d%02d%c",
                   degrees, minutes, (int)seconds, dir);

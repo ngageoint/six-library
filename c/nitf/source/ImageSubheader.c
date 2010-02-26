@@ -101,7 +101,7 @@ nitf_ImageSubheader_construct(nitf_Error * error)
 
     subhdr->bandInfo = NULL;
 
-    _NITF_CONSTRUCT_FIELD(subhdr, NITF_ISYNC, NITF_BCS_A);
+    _NITF_CONSTRUCT_FIELD(subhdr, NITF_ISYNC, NITF_BCS_N);
     _NITF_CONSTRUCT_FIELD(subhdr, NITF_IMODE, NITF_BCS_A);
 
     _NITF_CONSTRUCT_FIELD(subhdr, NITF_NBPR, NITF_BCS_N);
