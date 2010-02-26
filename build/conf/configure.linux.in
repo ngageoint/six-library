@@ -5,7 +5,7 @@ ar_flags="-crs"
 AR="ar"
 
 
-case "${CXX}" in
+case `basename "${CXX}"` in
      g++)
         AC_MSG_RESULT(gnu compiler libdir)
         lib_dir="gnu"
@@ -15,7 +15,7 @@ esac
 
 case "${target}" in
    *-*-linux-*|i686-pc-*)
-        case "${CC}" in
+        case `basename "${CC}"` in
             cc)
                 AC_MSG_RESULT(setting compiler to gcc...)
                 CC="gcc"
@@ -27,7 +27,7 @@ esac
 
 case "${target}" in
     *-*-linux-*|i686-pc-*)
-        case "${CC}" in
+        case `basename "${CC}"` in
             icc)
                 AC_MSG_RESULT(selecting the intel icc compiler...)
         	    AC_MSG_RESULT(selecting the ar archiver...)

@@ -6,7 +6,7 @@ AR="ar"
 
 case "${target}" in
     *-solaris*)
-        case "${CC}" in
+        case `basename "${CC}"` in
             cc)
                 AC_MSG_RESULT(selecting the forte compiler...)
         	    AC_MSG_RESULT(selecting the ar archiver...)
