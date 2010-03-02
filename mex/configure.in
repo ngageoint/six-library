@@ -1,0 +1,88 @@
+dnl Disable cache file creation.
+define([AC_CACHE_LOAD], )
+define([AC_CACHE_SAVE], )
+
+AC_INIT(configure.in)
+AC_CONFIG_AUX_DIR(build)
+
+# Location of makefiles directory.
+here=`pwd`
+build_dir="${here}/build/"
+ar_flags="-crs"
+AR="ar"
+
+AC_CANONICAL_SYSTEM
+AC_PROG_INSTALL
+AC_C_BIGENDIAN
+AC_PROG_CC
+cc_thread_defs="-D_REENTRANT -D__POSIX"
+link_libs="-ldl -lnsl"
+link_thread_libs="-lpthread"
+case `basename "${CC}"` in
+     gcc)
+	AC_MSG_RESULT(gnu compiler libdir)
+	lib_dir="gnu"
+     ;;
+esac
+
+
+cc_64_flags="-glnx86"
+
+case "${target}" in
+  sparc-sun-*)
+      cc_64_flags="-sol"
+
+      case `basename "${CC}"` in
+         cc)
+	        cc_thread_defs="-D_REENTRANT"
+		link_thread_libs="-lthread"
+         ;;         
+      esac
+   ;;
+esac
+
+
+AC_ARG_ENABLE(64bit,
+              [  --enable-64bit		Make a 64-bit build.],
+              ok=${enableval},
+              ok="no")
+if test "${ok}" != "no"
+then
+   AC_MSG_RESULT(enabling 64-bit compiles...)
+   target="${target}-64"
+   cc_64_flags="-glnxa64"
+   case "${target}" in
+       sparc-sun-*)
+           cc_64_flags="-s64"
+
+      ;;         
+   esac
+
+fi
+
+cc_flags="${cc_64_flags}"
+link_libs="${link_libs} ${link_thread_libs}"
+
+AC_MSG_RESULT(configured for ${target}...)
+AC_SUBST(cc_includes)
+AC_SUBST(cc_flags)
+AC_SUBST(cc_defs)
+AC_SUBST(POSIX)
+AC_SUBST(CC)
+AC_SUBST(ar_flags)
+AC_SUBST(dll_flags)
+AC_SUBST(build_dir)
+AC_SUBST(AR)
+AC_SUBST(link_prelibs)
+AC_SUBST(link_libs)
+AC_SUBST(link_libpath)
+AC_SUBST(link_flags)
+AC_SUBST(lib_dir)
+
+# Figure out which Makefile.ins to process
+makefile_in_subs=`find . -name Makefile.in -print | sed 's/.in$//'`
+proj_make_in=`find . -name project.make.in -print | sed 's/.in$//'`
+xml_in=`find . -name *.xml.in -print | sed 's/.in$//'`
+sh_in=`find . -name *.sh.in -print | sed 's/.in$//'`
+AC_OUTPUT(${makefile_in_subs} ${proj_make_in} ${xml_in} ${sh_in})
+

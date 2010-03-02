@@ -1,0 +1,60 @@
+# ==================== DO NOT EDIT THIS HEADER ======================== 
+# 
+# Copyright (c) 2006 General Dynamics - AIS
+# Ann Arbor, MI. 
+# 
+# All Rights Reserved 
+# 
+# THIS IS UNPUBLISHED COPYRIGHTED SOURCE CODE containing
+# proprietary information of General Dynamics - AIS
+# This copy has been provided on the basis of strict
+# confidentiality and on the express understanding that
+# it may not be reproduced, or revealed to any person,
+# in whole or in part, without express written permission
+# from General Dynamics - AIS, which is sole owner of
+# copyright and all other rights therein. 
+# No cost usage license granted to U.S. Government only.
+# 
+# ==================== DO NOT EDIT THIS HEADER ========================
+
+
+#----------------------------------------
+# Project specific
+#----------------------------------------
+include ./build/project.make
+
+TARGET = @target@
+LANGUAGE = c
+#----------------------------------------
+# Compile flags
+#----------------------------------------
+CC = mex
+CDEFINES = @cc_defs@ $(MY_CDEFINES)
+CFLAGS = $(MY_CFLAGS)
+INCLUDES = -I../include @cc_includes@ $(MY_INCLUDES)
+COMPILE = $(CC) $(CFLAGS) $(CDEFINES) $(INCLUDES)
+
+LIBDIR = ../lib/$(TARGET)/@lib_dir@
+LIBS = $(MY_LIBS) @link_libs@ 
+
+#----------------------------------------
+# Link
+#----------------------------------------
+LIBPATH = -L$(LIBDIR) $(MY_LIBPATH) @link_libpath@
+LINK = $(LIBPATH) $(LFLAGS) $(LIBS)
+LFLAGS = @link_flags@ $(MY_LFLAGS)
+
+DSO = ${SOURCES:.c=.mex}
+
+.SUFFIXES: .mex .c
+.c.mex:
+	$(COMPILE) $(LINK) $?
+
+
+all: $(DSO)
+
+clean:
+	\rm -f *.mex*
+
+raw: clean
+	\rm -f Makefile

@@ -1,0 +1,20 @@
+PACKAGE = nitf-mex
+BUILD = library 
+MAJOR_VERSION = 0
+MINOR_VERSION = 0
+VERSION_SUFFIX = dev
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net, nitfguy@users.sourceforge.net
+
+DESCRIPTION = Mex interface files to NITRO C
+
+SOURCES = nitf_metadata.c
+
+MY_CFLAGS = 
+MY_CDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/c/nitf/include 
+
+MY_LIBPATH = -L@top_srcdir@/c/nitf/lib/@target@/@lib_dir@ 
+
+MY_LIBS = -lnitf-c
