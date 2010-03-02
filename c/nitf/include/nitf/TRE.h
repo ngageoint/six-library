@@ -103,18 +103,22 @@ struct _nitf_TREEnumerator;
  * Increments the TREEnumerator and returns the data
  */
 typedef nitf_Pair* (*NITF_TRE_ITERATOR_INCREMENT)(struct _nitf_TREEnumerator*,
-                                                 nitf_Error*);
+                                                  nitf_Error*);
 
 /*!
  * Returns a boolean stating whether or not the enumerator has more elements
  */
 typedef NITF_BOOL (*NITF_TRE_ITERATOR_HAS_NEXT)(struct _nitf_TREEnumerator**);
 
+typedef const nitf_TREDescription* (*NITF_TRE_ITERATOR_GET_DESCRIPTION)(
+        struct _nitf_TREEnumerator*, nitf_Error*);
+
 
 typedef struct _nitf_TREEnumerator
 {
 	NITF_TRE_ITERATOR_INCREMENT next;
 	NITF_TRE_ITERATOR_HAS_NEXT hasNext;
+	NITF_TRE_ITERATOR_GET_DESCRIPTION getDescription;
 	NITF_DATA* data;
 } nitf_TREEnumerator;
 
@@ -239,6 +243,15 @@ typedef void (*NITF_TRE_DESTRUCT)(nitf_TRE*);
  */
 typedef nitf_TREEnumerator* (*NITF_TRE_ITERATOR)(nitf_TRE *tre,
                                                  nitf_Error *error);
+
+/*!
+ * Returns the field description for the current entry of the enumerator
+ * \param enumerator    The associated TREEnumerator
+ * \param error         The error object
+ * \return          the field description, or NULL if an error occurred
+ */
+typedef const char* (*NITF_TRE_FIELD_DESCRIPTION)(nitf_TREEnumerator* enumerator,
+                                                  nitf_Error *error);
 
 
 

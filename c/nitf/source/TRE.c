@@ -156,7 +156,6 @@ NITFAPI(nitf_TREEnumerator*) nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error)
     return tre->handler->begin(tre, error);
 }
 
-
 NITFAPI(NITF_BOOL) nitf_TRE_exists(nitf_TRE * tre, const char *tag)
 {
     return (!tre) ? NITF_FAILURE :

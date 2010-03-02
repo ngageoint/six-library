@@ -23,6 +23,8 @@
 #include "nitf/DefaultTRE.h"
 #include "nitf/TREPrivateData.h"
 
+#define _NITF_DEFAULT_TRE_LABEL "Unknown raw data"
+
 NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * error)
 {
     nitf_TREDescription* descr;
@@ -45,7 +47,7 @@ NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * erro
 
     descr[0].data_type = NITF_BINARY;
     descr[0].data_count = NITF_TRE_GOBBLE;
-    descr[0].label = "Unknown raw data";
+    descr[0].label = _NITF_DEFAULT_TRE_LABEL;
     descr[0].tag = NITF_TRE_RAW;
     descr[1].data_type = NITF_END;
     descr[1].data_count = 0;
@@ -104,7 +106,7 @@ NITFPRIV(int) defaultRead(nitf_IOInterface *io,
 
     descr[0].data_type = NITF_BINARY;
     descr[0].data_count = length;
-    descr[0].label = "Unknown raw data";
+    descr[0].label = _NITF_DEFAULT_TRE_LABEL;
     descr[0].tag = NITF_TRE_RAW;
     descr[1].data_type = NITF_END;
     descr[1].data_count = 0;
@@ -182,11 +184,18 @@ NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOInterface* io,
 
 NITFPRIV(nitf_Pair*) defaultIncrement(nitf_TREEnumerator* it, nitf_Error* error)
 {
-    nitf_Pair* data = it ? (nitf_Pair*)it->data : NULL;
-    if (!it)
-        nitf_Error_init(error, "Null iterator!", NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
-    it->data = NULL; /* set to NULL, since we only have one value */
-    return data;
+    if (it && it->data)
+    {
+        nitf_Pair* data = nitf_HashTable_find(
+                ((nitf_TREPrivateData*)it->data)->hash, NITF_TRE_RAW);
+        if (data)
+        {
+            it->data = NULL; /* set to NULL, since we only have one value */
+            return data;
+        }
+    }
+    nitf_Error_init(error, "Null iterator!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+    return NULL;
 }
 
 NITFPRIV(NITF_BOOL) defaultHasNext(nitf_TREEnumerator** it)
@@ -209,22 +218,38 @@ NITFPRIV(NITF_BOOL) defaultHasNext(nitf_TREEnumerator** it)
     return NITF_FAILURE;
 }
 
+
+NITFPRIV(const nitf_TREDescription*) defaultGetDescription(nitf_TREEnumerator* it,
+                                                           nitf_Error* error)
+{
+    if (it && it->data)
+    {
+        return &((nitf_TREPrivateData*)it->data)->description[0];
+    }
+    nitf_Error_init(error, "No TRE Description available",
+                    NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+    return NULL;
+}
+
+
 NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
 {
 	nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
 	/* Check rv here */
 	it->next = defaultIncrement;
 	it->hasNext = defaultHasNext;
-	it->data = nitf_HashTable_find(((nitf_TREPrivateData*)tre->priv)->hash,
-	        NITF_TRE_RAW);
-	if (it->data == NULL)
+	it->getDescription = defaultGetDescription;
+	it->data = tre->priv;
+
+	if (!it->data || !nitf_HashTable_find(
+	        ((nitf_TREPrivateData*)it->data)->hash, NITF_TRE_RAW))
 	{
 		nitf_Error_init(error, "No raw_data in default!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
 		return NITF_FAILURE;
 	}
 	return it;
-
 }
+
 
 NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
 				 const char* pattern,
@@ -343,7 +368,7 @@ NITFPRIV(NITF_BOOL) defaultClone(nitf_TRE *source,
 
     trePriv->description[0].data_type = NITF_BINARY;
     trePriv->description[0].data_count = sourcePriv->description[0].data_count;
-    trePriv->description[0].label = "Unknown raw data";
+    trePriv->description[0].label = _NITF_DEFAULT_TRE_LABEL;
     trePriv->description[0].tag = NITF_TRE_RAW;
     trePriv->description[1].data_type = NITF_END;
     trePriv->description[1].data_count = 0;
