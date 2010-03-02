@@ -144,6 +144,19 @@ public:
         return nitf::Pair(mPair);
     }
 
+    std::string getFieldDescription()
+    {
+        nitf_TREEnumerator* enumerator = getNative();
+        if (enumerator && isValid())
+        {
+            const char* desc = enumerator->getFieldDescription(enumerator,
+                                                               &error);
+            if (desc)
+                return std::string(desc);
+        }
+        return "";
+    }
+
 private:
     nitf_Error error;
     nitf_Pair *mPair;

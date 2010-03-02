@@ -105,9 +105,10 @@ void printTRE(nitf_TRE* tre)
         nitf_Pair* fieldPair = it->next(it, &error);
         if (fieldPair)
         {
+            const char* desc = it->getFieldDescription(it, &error);
             printf("%s", fieldPair->key);
-            if (it->getDescription(it, &error))
-                printf(" (%s)", it->getDescription(it, &error)->label);
+            if (desc)
+                printf(" (%s)", desc);
             printf(" = [");
             nitf_Field_print((nitf_Field *) fieldPair->data);
             printf("]\n");

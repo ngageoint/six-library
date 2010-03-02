@@ -14,7 +14,7 @@ extern "C" {
  * Method:    hasNext
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_nitf_TRE_TREIterator_hasNext
+JNIEXPORT jboolean JNICALL Java_nitf_TRE_00024TREIterator_hasNext
   (JNIEnv *, jobject);
 
 /*
@@ -22,7 +22,15 @@ JNIEXPORT jboolean JNICALL Java_nitf_TRE_TREIterator_hasNext
  * Method:    next
  * Signature: ()Lnitf/TRE/FieldPair;
  */
-JNIEXPORT jobject JNICALL Java_nitf_TRE_TREIterator_next
+JNIEXPORT jobject JNICALL Java_nitf_TRE_00024TREIterator_next
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     nitf_TRE_TREIterator
+ * Method:    getFieldDescription
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_nitf_TRE_00024TREIterator_getFieldDescription
   (JNIEnv *, jobject);
 
 /*
@@ -30,7 +38,7 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_TREIterator_next
  * Method:    construct
  * Signature: (Lnitf/TRE;)V
  */
-JNIEXPORT void JNICALL Java_nitf_TRE_TREIterator_construct
+JNIEXPORT void JNICALL Java_nitf_TRE_00024TREIterator_construct
   (JNIEnv *, jobject, jobject);
 
 #ifdef __cplusplus

@@ -111,10 +111,10 @@ typedef nitf_Pair* (*NITF_TRE_ITERATOR_INCREMENT)(struct _nitf_TREEnumerator*,
 typedef NITF_BOOL (*NITF_TRE_ITERATOR_HAS_NEXT)(struct _nitf_TREEnumerator**);
 
 /**
- * Returns the nitf_TREDescription* of the current/last field retrieved from
+ * Returns the description/label of the current/last field retrieved from
  * the enumerator. Returns NULL (and sets the error) if no description exists.
  */
-typedef const nitf_TREDescription* (*NITF_TRE_ITERATOR_GET_DESCRIPTION)(
+typedef const char* (*NITF_TRE_ITERATOR_GET_DESCRIPTION)(
         struct _nitf_TREEnumerator*, nitf_Error*);
 
 
@@ -122,7 +122,7 @@ typedef struct _nitf_TREEnumerator
 {
 	NITF_TRE_ITERATOR_INCREMENT next;
 	NITF_TRE_ITERATOR_HAS_NEXT hasNext;
-	NITF_TRE_ITERATOR_GET_DESCRIPTION getDescription;
+	NITF_TRE_ITERATOR_GET_DESCRIPTION getFieldDescription;
 	NITF_DATA* data;
 } nitf_TREEnumerator;
 

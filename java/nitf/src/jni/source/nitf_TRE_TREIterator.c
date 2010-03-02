@@ -106,3 +106,23 @@ JNIEXPORT void JNICALL Java_nitf_TRE_00024TREIterator_construct
     _SetObj(env, self, enumerator);
 }
 
+JNIEXPORT jstring JNICALL Java_nitf_TRE_00024TREIterator_getFieldDescription
+  (JNIEnv *env, jobject self)
+{
+    nitf_TREEnumerator *enumerator = _GetObj(env, self);
+    nitf_Error error;
+    jstring string = NULL;
+
+    if (enumerator)
+    {
+        const char* desc = enumerator->getFieldDescription(enumerator, &error);
+        if (desc)
+        {
+            /* get the string */
+            string = (*env)->NewStringUTF(env, desc);
+        }
+    }
+
+    return string;
+}
+

@@ -1,23 +1,23 @@
-/* =========================================================================
+/*
+ * =========================================================================
  * This file is part of NITRO
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
- *
+ * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
- *
  */
 
 package nitf;
@@ -71,7 +71,8 @@ public final class TRE extends DestructibleObject
     {
         if (!PluginRegistry.canHandleTRE(tag))
             throw new NITFException(
-                    "TRE Handler cannot be found for this TRE: " + tag);
+                                    "TRE Handler cannot be found for this TRE: "
+                                            + tag);
 
         construct(tag, id);
     }
@@ -150,7 +151,7 @@ public final class TRE extends DestructibleObject
      *             if an error occurs
      */
     public native boolean setField(String tag, byte[] data)
-            throws NITFException;
+                                                           throws NITFException;
 
     /**
      * Attempts to set the value of the field referenced by tag to the data
@@ -179,17 +180,20 @@ public final class TRE extends DestructibleObject
     {
         stream.println("\n---------------" + getTag() + "---------------");
 
-        for (Iterator<FieldPair> it = iterator(); it.hasNext();)
+        for (TREIterator it = iterator(); it.hasNext();)
         {
             FieldPair pair = (FieldPair) it.next();
 
+            String desc = it.getFieldDescription();
+
             Field field = pair.getField();
             stream
-                    .println(pair.getName()
-                            + " = ["
-                            + (field.getType() == FieldType.NITF_BINARY ? ("<binary stuff, length = "
-                                    + field.getLength() + ">")
-                                    : field.toString()) + "]");
+                  .println(pair.getName()
+                          + (desc != null ? (" (" + desc + ")") : "")
+                          + " = ["
+                          + (field.getType() == FieldType.NITF_BINARY ? ("<binary stuff, length = "
+                                  + field.getLength() + ">")
+                                  : field.toString()) + "]");
         }
 
         stream.println("------------------------------------");
@@ -201,7 +205,7 @@ public final class TRE extends DestructibleObject
      * 
      * @return Iterator of FieldPairs
      */
-    public Iterator<FieldPair> iterator()
+    public TREIterator iterator()
     {
         return new TREIterator(this);
     }
@@ -233,7 +237,8 @@ public final class TRE extends DestructibleObject
     /**
      * An Iterator for TRE FieldPairs
      */
-    static class TREIterator extends NITFObject implements Iterator<FieldPair>
+    public static final class TREIterator extends NITFObject implements
+            Iterator<FieldPair>
     {
         protected TREIterator(TRE tre)
         {
@@ -248,6 +253,8 @@ public final class TRE extends DestructibleObject
         public native boolean hasNext();
 
         public native FieldPair next();
+
+        public native String getFieldDescription();
 
         public void remove()
         {

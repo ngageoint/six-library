@@ -58,8 +58,12 @@ void printTRE(nitf::TRE tre)
     // Now walk the TRE
     for(nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
     {
+        std::string desc = it.getFieldDescription();
         nitf::Field field((*it).second());
-        std::cout << (*it).first() << " = ["
+        std::cout << (*it).first();
+        if (!desc.empty())
+            std::cout << " (" << desc << ")";
+        std::cout << " = ["
                   << field.toString() << "]" << std::endl;
     }
     std::cout << "---------------------------------------------" << std::endl;

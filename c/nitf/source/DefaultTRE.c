@@ -219,12 +219,14 @@ NITFPRIV(NITF_BOOL) defaultHasNext(nitf_TREEnumerator** it)
 }
 
 
-NITFPRIV(const nitf_TREDescription*) defaultGetDescription(nitf_TREEnumerator* it,
-                                                           nitf_Error* error)
+NITFPRIV(const char*) defaultGetFieldDescription(nitf_TREEnumerator* it,
+                                                 nitf_Error* error)
 {
     if (it && it->data)
     {
-        return &((nitf_TREPrivateData*)it->data)->description[0];
+        nitf_TREDescription *desc = &((nitf_TREPrivateData*)it->data)->description[0];
+        if (desc->label)
+            return desc->label;
     }
     nitf_Error_init(error, "No TRE Description available",
                     NITF_CTXT, NITF_ERR_INVALID_OBJECT);
@@ -238,7 +240,7 @@ NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
 	/* Check rv here */
 	it->next = defaultIncrement;
 	it->hasNext = defaultHasNext;
-	it->getDescription = defaultGetDescription;
+	it->getFieldDescription = defaultGetFieldDescription;
 	it->data = tre->priv;
 
 	if (!it->data || !nitf_HashTable_find(
