@@ -112,7 +112,7 @@ public:
      *  Utility for Writing out one InputStream only.
      *
      */
-    virtual void save(io::InputStream* source, std::string toFile) 
+    void save(io::InputStream* source, std::string toFile) 
     {
 	SourceList sources;
 	sources.push_back(source);
@@ -124,7 +124,7 @@ public:
      *
      */
 
-    virtual void save(UByte* buffer, std::string toFile)
+    void save(UByte* buffer, std::string toFile)
     {
 	BufferList sources;
 	sources.push_back( buffer );
