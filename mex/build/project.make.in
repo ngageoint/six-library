@@ -8,7 +8,7 @@ MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net, nit
 
 DESCRIPTION = Mex interface files to NITRO C
 
-SOURCES = nitf_metadata.c
+SOURCES = nitf_metadata.c nitf_image.c
 
 MY_CFLAGS = 
 MY_CDEFINES =

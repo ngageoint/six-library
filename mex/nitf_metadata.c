@@ -525,6 +525,9 @@ void mexFunction(int nlhs, mxArray *plhs[],
     /* Pointer to input file name */
     char *inputFile = NULL;
 
+    /* Returned array */
+    mxArray* mxRecord = NULL;
+
     if (nrhs != 1 && nrhs != 2) 
     {
 	mexErrMsgTxt("<file-name> (nitf-plugin-path)");
@@ -596,7 +599,7 @@ void mexFunction(int nlhs, mxArray *plhs[],
     }
 
     /* Still rockin' */
-    mxArray* mxRecord = createRecordMx(record);
+    mxRecord = createRecordMx(record);
     plhs[0] = mxRecord;
     
 }
