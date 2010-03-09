@@ -19,18 +19,8 @@ def configure(conf):
 
 def build(bld):
     bld.add_subdirs('c c++ java python external')
-    bld.cloneVariants()
 
 def distclean(context):
     context.recurse('c c++ java python external')
     Scripting.distclean(context)
 
-def init(context):
-    #override the lockfile - which allows us to build on multiple platforms
-    from build import getPlatform
-    platform = getPlatform()
-    Options.lockfile = '.lock-%s' % platform
-
-    #also, override the build/target directory
-    global blddir
-    blddir = os.path.join(blddir, platform)

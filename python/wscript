@@ -29,7 +29,7 @@ def configure(conf):
                 conf.check_message_custom('Python', 'lib/headers', err, color='YELLOW')
 
 def build(bld):
-    variant = Options.options.variants[0]
+    variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
     if 'PYTHON' in env and env['PYTHON']:
         bld.add_subdirs('nitf')

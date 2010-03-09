@@ -1,9 +1,7 @@
-import Options
-
 set_options = configure = distclean = lambda p: None
 
 def build(bld):
-    variant = Options.options.variants[0]
+    variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
     
     # first compile a few py files

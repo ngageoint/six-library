@@ -78,7 +78,7 @@ def configure(conf):
 
 
 def build(bld):
-    variant = Options.options.variants[0]
+    variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
     
     if 'JAVA' not in env:
