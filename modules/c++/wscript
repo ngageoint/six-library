@@ -1,5 +1,5 @@
 import os
-import Utils
+import Options, Utils
 from build import CPPBuildContext
 
 #override the default build context with our own
@@ -11,15 +11,20 @@ def set_options(opt):
     opt.sub_options(MODULES)
 
 def configure(conf):
+    
+    # Add this to take the cleanup leak over the warning
+    if conf.env['PLATFORM'].startswith('sparc-sun'):
+        conf.env.append_unique('CXXDEFINES', 'ELIMINATE_BROKEN_LINKAGE')
+
     conf.env['CPPPATH_MATH_LINEAR'] = os.path.join(conf.curdir, 'math.linear', 'include')
     conf.env['CPPPATH_MATH_POLY'] = os.path.join(conf.curdir, 'math.poly', 'include')
+
     conf.sub_config(MODULES)
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
     env.set_variant(variant)
-
     bld.add_subdirs(MODULES)
     if 'DOXYGEN' in env and Options.is_install:
         bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
