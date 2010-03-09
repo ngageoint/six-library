@@ -1,7 +1,7 @@
-
+import Options
 
 def build(bld):
-    variant = bld.env['VARIANT']
+    variant = Options.options.variants[0]
     env = bld.env_of_name(variant)
     
     if env['defines'].get('HAVE_JNI_H', False):

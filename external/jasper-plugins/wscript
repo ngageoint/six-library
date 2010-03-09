@@ -24,7 +24,7 @@ def configure(conf):
 
 
 def build(bld):
-    variant = bld.env['VARIANT']
+    variant = Options.options.variants[0]
     env = bld.env_of_name(variant)
     
     defs = env['defines']
