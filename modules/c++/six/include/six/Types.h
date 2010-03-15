@@ -68,7 +68,7 @@
  *  library or specification overhauls associated with the file
  *  format
  */
-#define SIX_MICRO_VERSION_NUMBER 0
+#define SIX_MICRO_VERSION_NUMBER 1
 
 namespace six
 {
@@ -98,6 +98,8 @@ typedef scene::LatLonAlt LatLon;
 typedef scene::LatLonAlt LatLonAlt;
 
 typedef except::Context ValidationContext;
+
+
 
 enum DataType
 {
@@ -133,7 +135,7 @@ enum RowColEnum
 };
 enum XYZEnum
 {
-    XYZ_X, XYZ_Y, XYZ_Z
+    XYZ_X = 0, XYZ_Y, XYZ_Z
 };
 enum MagnificationMethod
 {
@@ -180,62 +182,66 @@ enum FFTSign
  *  \struct RangeAzimuth
  *  \brief Range/azimuth pair type
  *
- *  Pair storage for range azimuth
+ *
+ *  Templated pair storage for  range azimuth values.
  *
  */
-struct RangeAzimuth
+template<typename T> struct RangeAzimuth
 {
-    RangeAzimuth(double r = 0, double a = 0) :
+    RangeAzimuth(T r = 0, T a = 0) :
         range(r), azimuth(a)
     {
     }
-    double range;
-    double azimuth;
+    T range;
+    T azimuth;
+
+    /*!
+     *  Compare the types considering that some specializations (e.g., double)
+     *  are not exact
+     */
+    bool operator==(const RangeAzimuth<T>& t) const
+    {
+        return math::linear::equals(range, t.range) && 
+            math::linear::equals(azimuth, t.azimuth);
+    }
+
+
 };
 
 /*!
- *  \struct RowColInt
+ *  \struct RowCol
  *  \brief Row/Col pair type
  *
- *  Pair storage for row/col unsigned integer.
- *
+ *  Templated pair storage for row/col values.  This is typedef'd
+ *  below to prevent incorrect type assigment (e.g., RowCol<int> where
+ *  type should be RowCol<long>)
  */
 
-struct RowColInt
+template<typename T> struct RowCol
 {
-    RowColInt(unsigned long r = 0, unsigned long c = 0) :
+    RowCol(T r = 0, T c = 0) :
         row(r), col(c)
     {
     }
-    unsigned long row;
-    unsigned long col;
-};
+    T row;
+    T col;
 
-/*!
- *  \struct RowColDouble
- *  \brief Row/Col pair type
- *
- *  Pair storage for row/col double
- */
-struct RowColDouble
-{
-    RowColDouble(double r = 0, double c = 0) :
-        row(r), col(c)
+    /*!
+     *  Compare the types considering that some specializations (e.g., double)
+     *  are not exact
+     */
+    bool operator==(const RowCol<T>& t) const
     {
-    }
-    RowColDouble(const RowColDouble & rc) :
-        row(rc.row), col(rc.col)
-    {
-    }
-    double row;
-    double col;
-
-    bool operator==(const RowColDouble& x) const
-    {
-        return row == x.row && col == x.col;
+        return math::linear::equals(row, t.row) && 
+            math::linear::equals(col, t.col);
     }
 
 };
+
+// These are heavily used and we dont want any mistakes
+typedef RowCol<double> RowColDouble;
+typedef RowCol<long> RowColInt;
+
 /*!
  *  \struct DecorrType
  *  \brief Reuse type for ErrorStatistics
@@ -268,15 +274,6 @@ struct RowColPoly2D
     RowColPoly2D()
     {
     }
-
-    /*     RowColPoly2D(const Poly2D& r, const Poly2D& c) : */
-    /*         row(r), col(c) */
-    /*     { */
-    /*     } */
-    /*     RowColPoly2D(const RowColPoly2D & rc) : */
-    /*         row(rc.row), col(rc.col) */
-    /*     { */
-    /*     } */
     Poly2D row;
     Poly2D col;
 };
@@ -371,7 +368,7 @@ enum AutofocusType
 struct Constants
 {
     //!  This is the upper bound of a NITF segment
-    const static sys::Uint64_T IS_SIZE_MAX;// = 9999999998LL;
+    const static sys::Uint64_T IS_SIZE_MAX; // = 9999999998LL;
     const static sys::Uint64_T GT_SIZE_MAX;
 
     enum GTKeys
@@ -434,7 +431,7 @@ struct ReferencePoint
     Vector3 ecef;
 
     //!  Row col pixel location of point
-    RowColDouble rowCol;
+    RowCol<double> rowCol;
 
     //!  (Optional) name.  Leave it blank if you dont need it
     std::string name;
@@ -449,7 +446,7 @@ struct ReferencePoint
         ecef[2] = z;
     }
     //!  Alternate construct, sitll init all fields at once
-    ReferencePoint(Vector3 xyz, RowColDouble rcd) :
+    ReferencePoint(Vector3 xyz, RowCol<double> rcd) :
         ecef(xyz), rowCol(rcd)
     {
     }
@@ -457,8 +454,7 @@ struct ReferencePoint
     //!  Are two points the same
     bool operator==(const ReferencePoint& x) const
     {
-        return ecef[0] == x.ecef[0] && ecef[1] == x.ecef[1] && ecef[2]
-                == x.ecef[2] && rowCol == x.rowCol;
+        return ecef == x.ecef && rowCol == x.rowCol;
     }
 };
 
@@ -475,135 +471,20 @@ struct SCP
     LatLonAlt llh;
 };
 
+
 /*!
- *  \struct Corners
- *  \brief Generic cross-format model for geo-corners
- *
- *  This model object is used by both SICD and SIDD reader/writers
- *  but frees the user from the details of the implementation of the
- *  XML.  Note that the enumeration defines the winding order (clockwise)
- *
+ *  Since the spec doesnt order the corners
+ *  like you might think, its a good idea to
+ *  use these indices
  */
-struct Corners
+enum CornerIndex
 {
-    scene::LatLonAlt corner[4];
-
-    /*!
-     *  Since the spec doesnt order the corners
-     *  like you might think, its a good idea to
-     *  use these indices
-     */
-    enum
-    {
-        FIRST_ROW_FIRST_COL = 0,
-        FIRST_ROW_LAST_COL,
-        LAST_ROW_LAST_COL,
-        LAST_ROW_FIRST_COL
-    };
-
-    //!  Default constructor
-    Corners()
-    {
-    }
-
-    /*!
-     *  Constructor that allows the four corners
-     *  to be set up front.
-     *
-     */
-    Corners(scene::LatLonAlt firstRowFirstCol,
-            scene::LatLonAlt firstRowLastCol, scene::LatLonAlt lastRowLastCol,
-            scene::LatLonAlt lastRowFirstCol)
-    {
-        corner[0] = firstRowFirstCol;
-        corner[1] = firstRowLastCol;
-        corner[2] = lastRowLastCol;
-        corner[3] = lastRowFirstCol;
-    }
-    ~Corners()
-    {
-    }
-
-    /*!
-     *  Get latitude of corner i in degrees.  The 
-     *  enums above may be used for the parameter
-     */
-    double getLat(int i) const
-    {
-        return corner[i].getLat();
-    }
-
-    /*!
-     *  Get longitude of corner i in degrees.  The 
-     *  enums above may be used for the parameter
-     */
-    double getLon(int i) const
-    {
-        return corner[i].getLon();
-    }
-
-    /*!
-     *  Get latitude of corner i in radians.  The 
-     *  enums above may be used for the parameter
-     */
-    double getLatRadians(int i) const
-    {
-        return corner[i].getLatRadians();
-    }
-
-    /*!
-     *  Get longitude of corner i in radians.  The 
-     *  enums above may be used for the parameter
-     */
-    double getLonRadians(int i) const
-    {
-        return corner[i].getLonRadians();
-    }
-
-    /*!
-     *  Set latitude of corner i in degrees.  The 
-     *  enums above may be used for the parameter
-     */
-    void setLat(int i, double lat)
-    {
-        corner[i].setLat(lat);
-    }
-
-    /*!
-     *  Set longitude of corner i in degrees.  The 
-     *  enums above may be used for the parameter
-     */
-    void setLon(int i, double lon)
-    {
-        corner[i].setLon(lon);
-    }
-
-    /*!
-     *  Set latitude of corner i in radians.  The 
-     *  enums above may be used for the parameter
-     */
-    void setLatRadians(int i, double lat)
-    {
-        corner[i].setLatRadians(lat);
-    }
-
-    /*!
-     *  Set longitude of corner i in radians.  The 
-     *  enums above may be used for the parameter
-     */
-    void setLonRadians(int i, double lon)
-    {
-        corner[i].setLonRadians(lon);
-    }
-
-    //!  Are these corners the same as this?
-    bool operator==(const Corners& x) const
-    {
-        return corner[0] == x.corner[0] && corner[1] == x.corner[1]
-                && corner[2] == x.corner[2] && corner[3] == x.corner[3];
-    }
-
+    FIRST_ROW_FIRST_COL = 0,
+    FIRST_ROW_LAST_COL,
+    LAST_ROW_LAST_COL,
+    LAST_ROW_FIRST_COL
 };
+
 
 /*!
  *  \struct LUT
@@ -693,10 +574,9 @@ struct AmplitudeTable : public LUT
     }
 };
 
+
 }
 
-//std::ostream& operator<<(std::ostream& os, const RowColType& rc);
-std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt);
-std::ostream& operator<<(std::ostream& os, const six::Corners& corners);
+//std::ostream& operator<<(std::ostream& os, const six::Corners& corners);
 
 #endif

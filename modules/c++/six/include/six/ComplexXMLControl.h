@@ -137,17 +137,22 @@ protected:
     void xmlToSCPCOA(xml::lite::Element* scpcoaXML, SCPCOA *obj);
     void xmlToAntenna(xml::lite::Element* antennaXML, Antenna *obj);
     void xmlToAntennaParams(xml::lite::Element* antennaParamsXML,
-            AntennaParameters* params);
-    void
-            xmlToMatchInfo(xml::lite::Element* matchInfoXML,
-                    MatchInformation *obj);
+                            AntennaParameters* params);
+
+    void xmlToMatchInfo(xml::lite::Element* matchInfoXML,
+                        MatchInformation *obj);
+    
     void xmlToPFA(xml::lite::Element* pfaXML, PFA *obj);
 
-    void parseFootprint(xml::lite::Element* footprint,
-                std::string cornerName, Corners* c, bool alt = false);
+    std::vector<LatLon> parseFootprint(xml::lite::Element* footprint,
+                                       std::string cornerName, 
+                                       bool alt = false);
 
     xml::lite::Element* createFootprint(xml::lite::Document* doc,
-            std::string name, std::string cornerName, Corners c, bool alt = false);
+                                        std::string name, 
+                                        std::string cornerName, 
+                                        const std::vector<LatLon>& corners, 
+                                        bool alt = false);
 
 };
 

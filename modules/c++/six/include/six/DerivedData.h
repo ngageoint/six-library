@@ -180,7 +180,7 @@ struct DerivedData: public Data
      *  Maps to:
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
      */
-    virtual Corners getImageCorners() const
+    virtual std::vector<LatLon> getImageCorners() const
     {
         return geographicAndTarget->geographicCoverage->footprint;
     }
@@ -189,7 +189,7 @@ struct DerivedData: public Data
      *  Maps to:
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
      */
-    virtual void setImageCorners(Corners imageCorners)
+    virtual void setImageCorners(const std::vector<LatLon>& imageCorners)
     {
         geographicAndTarget->geographicCoverage->footprint = imageCorners;
     }

@@ -416,9 +416,11 @@ void XMLControl::parseDecorrType(xml::lite::Element* decorrXML,
             "DecorrRate")->getCharacterData());
 }
 
-void XMLControl::parseFootprint(xml::lite::Element* footprint,
-        std::string cornerName, Corners* c, bool alt)
+std::vector<LatLon> XMLControl::parseFootprint(xml::lite::Element* footprint,
+        std::string cornerName, bool alt)
 {
+    std::vector<LatLon> corners(4);
+
     std::vector<xml::lite::Element*> vertices;
     footprint->getElementsByTagName(cornerName, vertices);
 
@@ -428,14 +430,15 @@ void XMLControl::parseFootprint(xml::lite::Element* footprint,
         int idx = str::toType<int>(vertices[i]->getAttributes().getValue(
                 "index"));
 
-        c->setLat(idx, str::toType<double>(
+        corners[idx].setLat(str::toType<double>(
                 getFirstAndOnly(vertices[i], "Lat")->getCharacterData()));
-        c->setLon(idx, str::toType<double>(
+
+        corners[idx].setLon(str::toType<double>(
                 getFirstAndOnly(vertices[i], "Lon")->getCharacterData()));
         if (alt)
         {
-            c->corner[idx].setAlt(str::toType<double>(getFirstAndOnly(
-                    vertices[i], "HAE")->getCharacterData()));
+            corners[idx].setAlt(str::toType<double>(getFirstAndOnly(
+                                                        vertices[i], "HAE")->getCharacterData()));
         }
     }
 }
@@ -459,7 +462,7 @@ void XMLControl::parseLatLons(xml::lite::Element* pointsXML,
 }
 
 xml::lite::Element* XMLControl::createFootprint(xml::lite::Document* doc,
-        std::string name, std::string cornerName, Corners c, bool alt)
+                                                std::string name, std::string cornerName, const std::vector<LatLon>& corners, bool alt)
 {
     xml::lite::Element* footprint = newElement(doc, name);
     xml::lite::AttributeNode node;
@@ -474,44 +477,44 @@ xml::lite::Element* XMLControl::createFootprint(xml::lite::Document* doc,
     vertex = newElement(doc, cornerName);
     node.setValue("0");
     vertex->getAttributes().add(node);
-    vertex->addChild(createDouble(doc, "Lat", c.getLat(0)));
-    vertex->addChild(createDouble(doc, "Lon", c.getLon(0)));
+    vertex->addChild(createDouble(doc, "Lat", corners[0].getLat()));
+    vertex->addChild(createDouble(doc, "Lon", corners[0].getLon()));
     if (alt)
     {
-        vertex->addChild(createDouble(doc, "HAE", c.corner[0].getAlt()));
+        vertex->addChild(createDouble(doc, "HAE", corners[0].getAlt()));
     }
     footprint->addChild(vertex);
 
     vertex = newElement(doc, cornerName);
     node.setValue("1");
     vertex->getAttributes().add(node);
-    vertex->addChild(createDouble(doc, "Lat", c.getLat(1)));
-    vertex->addChild(createDouble(doc, "Lon", c.getLon(1)));
+    vertex->addChild(createDouble(doc, "Lat", corners[1].getLat()));
+    vertex->addChild(createDouble(doc, "Lon", corners[1].getLon()));
     if (alt)
     {
-        vertex->addChild(createDouble(doc, "HAE", c.corner[1].getAlt()));
+        vertex->addChild(createDouble(doc, "HAE", corners[1].getAlt()));
     }
     footprint->addChild(vertex);
 
     vertex = newElement(doc, cornerName);
     node.setValue("2");
     vertex->getAttributes().add(node);
-    vertex->addChild(createDouble(doc, "Lat", c.getLat(2)));
-    vertex->addChild(createDouble(doc, "Lon", c.getLon(2)));
+    vertex->addChild(createDouble(doc, "Lat", corners[2].getLat()));
+    vertex->addChild(createDouble(doc, "Lon", corners[2].getLon()));
     if (alt)
     {
-        vertex->addChild(createDouble(doc, "HAE", c.corner[2].getAlt()));
+        vertex->addChild(createDouble(doc, "HAE", corners[2].getAlt()));
     }
     footprint->addChild(vertex);
 
     vertex = newElement(doc, cornerName);
     node.setValue("3");
     vertex->getAttributes().add(node);
-    vertex->addChild(createDouble(doc, "Lat", c.getLat(3)));
-    vertex->addChild(createDouble(doc, "Lon", c.getLon(3)));
+    vertex->addChild(createDouble(doc, "Lat", corners[3].getLat()));
+    vertex->addChild(createDouble(doc, "Lon", corners[3].getLon()));
     if (alt)
     {
-        vertex->addChild(createDouble(doc, "HAE", c.corner[3].getAlt()));
+        vertex->addChild(createDouble(doc, "HAE", corners[3].getAlt()));
     }
     footprint->addChild(vertex);
     return footprint;

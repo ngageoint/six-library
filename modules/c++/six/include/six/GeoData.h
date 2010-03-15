@@ -108,7 +108,7 @@ struct GeoData
      *  These corners are an approximate geographic location
      *  not intended for analytical use
      */
-    Corners imageCorners;
+    std::vector<LatLon> imageCorners;
 
     /*!
      *  (Optional) indicates the full image includes both

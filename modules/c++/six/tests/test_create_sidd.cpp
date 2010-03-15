@@ -27,6 +27,7 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <import/xml/lite.h>
+#include "utils.h"
 
 /*!
  *  This file takes in an SIO and turns it in to a SICD.
@@ -115,37 +116,6 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
     return lut;
 }
 
-/*!
- *  This function converts DMS corners into decimal degrees using NITRO,
- *  and then puts them into a lat-lon
- */
-six::Corners makeUpCornersFromDMS()
-{
-    int latTopDMS[3] = { 42, 17, 50 };
-    int latBottomDMS[3] = { 42, 15, 14 };
-    int lonEastDMS[3] = { -83, 42, 12 };
-    int lonWestDMS[3] = { -83, 45, 44 };
-
-    double latTopDecimal = nitf::Utils::geographicToDecimal(latTopDMS[0],
-            latTopDMS[1], latTopDMS[2]);
-
-    double latBottomDecimal = nitf::Utils::geographicToDecimal(latBottomDMS[0],
-            latBottomDMS[1], latBottomDMS[2]);
-
-    double lonEastDecimal = nitf::Utils::geographicToDecimal(lonEastDMS[0],
-            lonEastDMS[1], lonEastDMS[2]);
-
-    double lonWestDecimal = nitf::Utils::geographicToDecimal(lonWestDMS[0],
-            lonWestDMS[1], lonWestDMS[2]);
-    six::LatLon ul(latTopDecimal, lonWestDecimal);
-    six::LatLon ur(latTopDecimal, lonEastDecimal);
-    six::LatLon lr(latBottomDecimal, lonEastDecimal);
-    six::LatLon ll(latBottomDecimal, lonWestDecimal);
-
-    six::Corners c(ul, ur, lr, ll);
-    return c;
-
-}
 
 six::WriteControl* getWriteControl(std::string outputName)
 {

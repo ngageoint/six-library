@@ -102,7 +102,10 @@ private:
 
     std::vector<char*> setupIFD(DerivedData* data, tiff::IFD* ifd);
    
-    void addGeoTIFFKeys(tiff::IFD* ifd, Corners c, unsigned long numRows, unsigned long numCols);
+    void addGeoTIFFKeys(tiff::IFD* ifd, 
+                        const std::vector<LatLon>& corners, 
+                        unsigned long numRows, unsigned long numCols);
+
     void addTiepoint(tiff::IFDEntry* entry, double ties[6])
     {
         for (unsigned int i = 0; i < 6; ++i)

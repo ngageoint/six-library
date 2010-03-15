@@ -285,7 +285,7 @@ char* GeoTIFFWriteControl::addStringArray(tiff::IFD* ifd,
 }
 
 void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd,
-                                         Corners c,
+                                         const std::vector<LatLon>& c,
                                          unsigned long numRows,
                                          unsigned long numCols)
 {
@@ -318,20 +318,20 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd,
     memset(ties, 0, sizeof(double)*6);
 
     // 0, 0, lat(0), lon(0)
-    ties[3] = c.getLat(0);
-    ties[4] = c.getLon(0);
+    ties[3] = c[0].getLat();
+    ties[4] = c[0].getLon();
     addTiepoint(entry, ties);
 
     // 0, NC, lat(1), lon(1)
     ties[1] = numCols;
-    ties[3] = c.getLat(1);
-    ties[4] = c.getLon(1);
+    ties[3] = c[1].getLat();
+    ties[4] = c[1].getLon();
     addTiepoint(entry, ties);
 
     // NR, NC, lat(2), lon(2)
     ties[0] = numRows;
-    ties[3] = c.getLat(2);
-    ties[4] = c.getLon(2);
+    ties[3] = c[2].getLat();
+    ties[4] = c[2].getLon();
     addTiepoint(entry, ties);
 }
 

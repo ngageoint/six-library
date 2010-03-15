@@ -110,8 +110,8 @@ protected:
             std::string name, double rg = 0, double az = 0);
 
     virtual xml::lite::Element* createFootprint(xml::lite::Document* doc,
-            std::string name, std::string cornerName, Corners c, bool alt =
-                    false);
+                                                std::string name, std::string cornerName, const std::vector<LatLon>& c, bool alt = false);
+                                             
 
     xml::lite::Element
     * createPoly1D(xml::lite::Document* doc, std::string name, Poly1D& poly1D);
@@ -138,8 +138,8 @@ protected:
     void parseLatLonAlt(xml::lite::Element* llaXML, LatLonAlt& lla);
     void parseLatLons(xml::lite::Element* pointsXML, std::string pointName,
             std::vector<LatLon>& llVec);
-    virtual void parseFootprint(xml::lite::Element* footprint,
-            std::string cornerName, Corners* c, bool alt = false);
+    virtual std::vector<LatLon> parseFootprint(xml::lite::Element* footprint,
+            std::string cornerName, bool alt = false);
     void parseParameters(xml::lite::Element* paramXML, std::string paramName,
             std::vector<Parameter>& props);
 

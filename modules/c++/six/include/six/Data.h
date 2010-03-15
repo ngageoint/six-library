@@ -100,13 +100,13 @@ struct Data
      *  Maps to: /SICD/GeoData/ImageCorners,
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
      */
-    virtual Corners getImageCorners() const = 0;
+    virtual std::vector<LatLon> getImageCorners() const = 0;
 
     /*!
      *  Maps to: /SICD/GeoData/ImageCorners,
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
      */
-    virtual void setImageCorners(Corners imageCorners) = 0;
+    virtual void setImageCorners(const std::vector<LatLon>& corners) = 0;
 
     /*!
      *  Maps to: /SICD/CollectionInfo/CoreName,

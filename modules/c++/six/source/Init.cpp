@@ -129,10 +129,10 @@ template<> RadarModeType Init::undefined<RadarModeType>()
     return MODE_NOT_SET;
 }
 
-template<> RangeAzimuth Init::undefined<RangeAzimuth>()
+template<> RangeAzimuth<double> Init::undefined<RangeAzimuth<double> >()
 {
-    return RangeAzimuth(Init::undefined<double>(),
-                             Init::undefined<double>());
+    return RangeAzimuth<double>(Init::undefined<double>(),
+                                Init::undefined<double>());
 }
 
 template<> RowColInt Init::undefined<RowColInt>()
@@ -182,13 +182,13 @@ template<> LatLon Init::undefined<LatLon>()
                   Init::undefined<double>());
 }
 
-template<> Corners Init::undefined<Corners>()
-{
-    return Corners(Init::undefined<LatLon>(),
-                        Init::undefined<LatLon>(),
-                        Init::undefined<LatLon>(),
-                        Init::undefined<LatLon>());
-}
+// template<> Corners Init::undefined<Corners>()
+// {
+//     return Corners(Init::undefined<LatLon>(),
+//                         Init::undefined<LatLon>(),
+//                         Init::undefined<LatLon>(),
+//                         Init::undefined<LatLon>());
+// }
 
 template<> BooleanType Init::undefined<BooleanType>()
 {

@@ -54,12 +54,12 @@ struct Utilities
     //!  Set the values section given minimal scene information
     static void setProductValues(six::Poly2D timeCOAPoly, six::PolyXYZ arpPoly,
             six::ReferencePoint ref, six::Vector3* row, six::Vector3* col,
-            six::RangeAzimuth res, six::Product* product);
+            six::RangeAzimuth<double> res, six::Product* product);
 
     //!  Set the values section given minimal scene information
     static void setProductValues(six::Vector3 arpVel, six::Vector3 arpPos,
             six::Vector3 refPos, six::Vector3* row, six::Vector3* col,
-            six::RangeAzimuth res, six::Product* product);
+            six::RangeAzimuth<double> res, six::Product* product);
 
     //!  Set the values section given minimal scene information
     static void setCollectionValues(six::Poly2D timeCOAPoly,
