@@ -328,7 +328,7 @@ struct Area
 {
 
     /*!
-     *  Constructor.  Does not create plane, and leaves Corners undefined,
+     *  Constructor.  Does not create plane, and leaves the corners undefined,
      *  since both parameters are optional.  It is up to the user to allocate
      *  this
      */
@@ -345,7 +345,7 @@ struct Area
      *  parameters indexed x = 1,2,3,4 clockwise.  Note that six
      *  automatically creates these indices, so the user doesnt see them.
      */
-    Corners apcCorners;
+    std::vector<LatLon> apcCorners;
 
     /*!
      *  (Optional) SICD Plane parameter, See AreaPlane.

@@ -196,11 +196,11 @@ struct ComplexData: public Data
      *  Maps to: /SICD/GeoData/ImageCorners,
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
      */
-    virtual Corners getImageCorners() const
+    virtual std::vector<LatLon> getImageCorners() const
     {
         return geoData->imageCorners;
     }
-    virtual void setImageCorners(Corners imageCorners)
+    virtual void setImageCorners(const std::vector<LatLon>& imageCorners)
     {
         geoData->imageCorners = imageCorners;
     }

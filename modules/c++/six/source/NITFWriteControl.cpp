@@ -151,17 +151,17 @@ void NITFWriteControl::initialize(Container* container)
                 subheader.getImageAttachmentLevel().set((nitf::Uint16)(
                         info->getStartIndex() + j));
             }
-            corners[0][0] = segmentInfo.corners.getLat(0);
-            corners[0][1] = segmentInfo.corners.getLon(0);
+            corners[0][0] = segmentInfo.corners[0].getLat();
+            corners[0][1] = segmentInfo.corners[0].getLon();
 
-            corners[1][0] = segmentInfo.corners.getLat(1);
-            corners[1][1] = segmentInfo.corners.getLon(1);
+            corners[1][0] = segmentInfo.corners[1].getLat();
+            corners[1][1] = segmentInfo.corners[1].getLon();
 
-            corners[2][0] = segmentInfo.corners.getLat(2);
-            corners[2][1] = segmentInfo.corners.getLon(2);
+            corners[2][0] = segmentInfo.corners[2].getLat();
+            corners[2][1] = segmentInfo.corners[2].getLon();
 
-            corners[3][0] = segmentInfo.corners.getLat(3);
-            corners[3][1] = segmentInfo.corners.getLon(3);
+            corners[3][0] = segmentInfo.corners[3].getLat();
+            corners[3][1] = segmentInfo.corners[3].getLon();
 
             subheader.setCornersFromLatLons(NITF_CORNERS_GEO, corners);
 

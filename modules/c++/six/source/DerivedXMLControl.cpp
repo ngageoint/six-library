@@ -256,8 +256,7 @@ void DerivedXMLControl::xmlToGeographicAndTarget(
         for (std::vector<xml::lite::Element*>::iterator it2 =
                 footprintsXML.begin(); it2 != footprintsXML.end(); ++it2)
         {
-            Corners fp;
-            parseFootprint(*it2, "Vertex", &(fp));
+            std::vector<LatLon> fp = parseFootprint(*it2, "Vertex");
             ti->footprints.push_back(fp);
         }
 
@@ -290,8 +289,9 @@ void DerivedXMLControl::xmlToGeographicCoverage(
     }
 
     //Footprint
-    parseFootprint(getFirstAndOnly(geographicCoverageXML, "Footprint"),
-            "Vertex", &(geographicCoverage->footprint));
+    geographicCoverage->footprint = 
+        parseFootprint(getFirstAndOnly(geographicCoverageXML, "Footprint"),
+                       "Vertex");
 
     //If there are subregions, recurse
     std::vector<xml::lite::Element*> subRegionsXML;

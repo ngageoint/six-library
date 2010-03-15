@@ -212,14 +212,14 @@ void NITFReadControl::load(std::string fromFile)
             si.firstRow = 0;
         }
         subheader.getCornersAsLatLons(corners);
-        si.corners.setLat(0, corners[0][0]);
-        si.corners.setLon(0, corners[0][1]);
-        si.corners.setLat(1, corners[1][0]);
-        si.corners.setLat(1, corners[1][1]);
-        si.corners.setLat(2, corners[2][0]);
-        si.corners.setLat(2, corners[2][1]);
-        si.corners.setLat(3, corners[3][0]);
-        si.corners.setLat(3, corners[3][1]);
+        si.corners[0].setLat(corners[0][0]);
+        si.corners[0].setLon(corners[0][1]);
+        si.corners[1].setLat(corners[1][0]);
+        si.corners[1].setLat(corners[1][1]);
+        si.corners[2].setLat(corners[2][0]);
+        si.corners[2].setLat(corners[2][1]);
+        si.corners[3].setLat(corners[3][0]);
+        si.corners[3].setLat(corners[3][1]);
         currentInfo->addSegment(si);
     }
 }

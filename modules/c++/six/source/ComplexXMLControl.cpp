@@ -1170,8 +1170,8 @@ void ComplexXMLControl::xmlToGeoData(xml::lite::Element* geoDataXML,
     parseVector3D(getFirstAndOnly(tmpElem, "ECF"), geoData->scp.ecf);
     parseLatLonAlt(getFirstAndOnly(tmpElem, "LLH"), geoData->scp.llh);
 
-    parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP",
-            &(geoData->imageCorners));
+    geoData->imageCorners = 
+        parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP");
 
     tmpElem = getOptional(geoDataXML, "ValidData");
     if (tmpElem != NULL)
@@ -1648,8 +1648,7 @@ void ComplexXMLControl::xmlToRadarCollection(
         if (optElem)
         {
             //optional
-            parseFootprint(optElem, "APC",
-                    &(radarCollection->area->apcCorners), true);
+            radarCollection->area->apcCorners = parseFootprint(optElem, "APC", true);
         }
 
         xml::lite::Element* planeXML = getOptional(areaXML, "Plane");
@@ -2158,9 +2157,11 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
     }
 }
 
-void ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
-        std::string cornerName, Corners* c, bool alt)
+std::vector<LatLon> 
+ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
+        std::string cornerName, bool alt)
 {
+    std::vector<LatLon> corners(4);
     std::vector<xml::lite::Element*> vertices;
     footprint->getElementsByTagName(cornerName, vertices);
 
@@ -2170,46 +2171,54 @@ void ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
         int idx = str::toType<int>(vertices[i]->getAttributes().getValue(
                 "index")) - 1;
 
-        c->setLat(idx, str::toType<double>(
-                getFirstAndOnly(vertices[i], "Lat")->getCharacterData()));
-        c->setLon(idx, str::toType<double>(
-                getFirstAndOnly(vertices[i], "Lon")->getCharacterData()));
+        corners[idx].setLat(
+            str::toType<double>(
+                getFirstAndOnly(vertices[i], "Lat")->getCharacterData()
+                )
+            );
+        corners[idx].setLon(
+            str::toType<double>(
+                getFirstAndOnly(vertices[i], "Lon")->getCharacterData()
+                )
+            );
+
         if (alt)
         {
-            c->corner[idx].setAlt(str::toType<double>(getFirstAndOnly(
+            corners[idx].setAlt(str::toType<double>(getFirstAndOnly(
                     vertices[i], "HAE")->getCharacterData()));
         }
     }
+    return corners;
 }
 
 xml::lite::Element* ComplexXMLControl::createFootprint(
         xml::lite::Document* doc, std::string name, std::string cornerName,
-        Corners c, bool alt)
+        const std::vector<LatLon>& corners, bool alt)
 {
     xml::lite::Element* footprint = newElement(doc, name);
 
     xml::lite::Element* vertex = newElement(doc, cornerName);
     setAttribute(vertex, "index", "1:FRFC");
-    vertex->addChild(createDouble(doc, "Lat", c.getLat(0)));
-    vertex->addChild(createDouble(doc, "Lon", c.getLon(0)));
+    vertex->addChild(createDouble(doc, "Lat", corners[0].getLat()));
+    vertex->addChild(createDouble(doc, "Lon", corners[0].getLon()));
     footprint->addChild(vertex);
 
     vertex = newElement(doc, cornerName);
     setAttribute(vertex, "index", "2:FRLC");
-    vertex->addChild(createDouble(doc, "Lat", c.getLat(1)));
-    vertex->addChild(createDouble(doc, "Lon", c.getLon(1)));
+    vertex->addChild(createDouble(doc, "Lat", corners[1].getLat()));
+    vertex->addChild(createDouble(doc, "Lon", corners[1].getLon()));
     footprint->addChild(vertex);
 
     vertex = newElement(doc, cornerName);
     setAttribute(vertex, "index", "3:LRLC");
-    vertex->addChild(createDouble(doc, "Lat", c.getLat(2)));
-    vertex->addChild(createDouble(doc, "Lon", c.getLon(2)));
+    vertex->addChild(createDouble(doc, "Lat", corners[2].getLat()));
+    vertex->addChild(createDouble(doc, "Lon", corners[2].getLon()));
     footprint->addChild(vertex);
 
     vertex = newElement(doc, cornerName);
     setAttribute(vertex, "index", "4:LRFC");
-    vertex->addChild(createDouble(doc, "Lat", c.getLat(3)));
-    vertex->addChild(createDouble(doc, "Lon", c.getLon(3)));
+    vertex->addChild(createDouble(doc, "Lat", corners[3].getLat()));
+    vertex->addChild(createDouble(doc, "Lon", corners[3].getLon()));
     footprint->addChild(vertex);
     return footprint;
 }

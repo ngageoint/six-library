@@ -49,8 +49,12 @@ six::Utilities::getSceneGeometry(six::DerivedData* derived)
 }
 
 void six::Utilities::setProductValues(six::Poly2D timeCOAPoly,
-        six::PolyXYZ arpPoly, six::ReferencePoint ref, six::Vector3* row,
-        six::Vector3* col, six::RangeAzimuth res, six::Product* product)
+                                      six::PolyXYZ arpPoly, 
+                                      six::ReferencePoint ref, 
+                                      six::Vector3* row,
+                                      six::Vector3* col, 
+                                      six::RangeAzimuth<double> res,
+                                      six::Product* product)
 {
     double scpTime = timeCOAPoly(ref.rowCol.row, ref.rowCol.col);
 
@@ -61,9 +65,13 @@ void six::Utilities::setProductValues(six::Poly2D timeCOAPoly,
     setProductValues(arpVel, arpPos, ref.ecef, row, col, res, product);
 }
 
-void six::Utilities::setProductValues(six::Vector3 arpVel, six::Vector3 arpPos,
-        six::Vector3 refPos, six::Vector3* row, six::Vector3* col,
-        six::RangeAzimuth res, six::Product* product)
+void six::Utilities::setProductValues(six::Vector3 arpVel, 
+                                      six::Vector3 arpPos,
+                                      six::Vector3 refPos, 
+                                      six::Vector3* row, 
+                                      six::Vector3* col,
+                                      six::RangeAzimuth<double> res, 
+                                      six::Product* product)
 {
     scene::SceneGeometry* sceneGeom = new scene::SceneGeometry(arpVel, arpPos,
             refPos);
