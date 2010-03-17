@@ -81,8 +81,8 @@ public:
     {
         if (mAutoClose)
             close();
-        if (getNative())
-            delete getNative();
+        // if (getNative())
+        //    delete getNative();
     }
 
     //!  Get native object
