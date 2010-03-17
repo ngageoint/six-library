@@ -87,18 +87,19 @@ void NITFWriteControl::initialize(Container* container)
 
         std::string targetId = "";
 
-        if (info->getData()->getDataClass() == DATA_DERIVED)
-        {
-            DerivedData* derived = (DerivedData*)info->getData();
-            if(derived->geographicAndTarget && derived->geographicAndTarget->targetInformation.size() > 0)
-            {
-                six::TargetInformation* target = derived->geographicAndTarget->targetInformation[0];
-                if (target->identifiers.size() > 0)
-                {
-                    targetId = target->identifiers[0].str();
-                }
-            }
-        }
+        // TODO: Subclass to get this?
+        // if (info->getData()->getDataClass() == DATA_DERIVED)
+//         {
+//             DerivedData* derived = (DerivedData*)info->getData();
+//             if(derived->geographicAndTarget && derived->geographicAndTarget->targetInformation.size() > 0)
+//             {
+//                 six::TargetInformation* target = derived->geographicAndTarget->targetInformation[0];
+//                 if (target->identifiers.size() > 0)
+//                 {
+//                     targetId = target->identifiers[0].str();
+//                 }
+//             }
+//         }
 
         // Update this info's startIndex
         info->setStartIndex(startIndex);

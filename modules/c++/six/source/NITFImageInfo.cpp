@@ -196,41 +196,41 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
     {
         nitf::BandInfo band1;
 
-        LUT* lut = ((DerivedData*)data)->display->remapInformation->remapLUT->clone();
+        LUT* lut = data->getDisplayLUT()->clone();
         sys::byteSwap((sys::byte*)lut->table, 
-		      lut->elementSize, lut->numEntries);
+ 		      lut->elementSize, lut->numEntries);
 
         unsigned char* table =
-                new unsigned char[lut->numEntries * lut->elementSize];
+            new unsigned char[lut->numEntries * lut->elementSize];
 
-        for (unsigned int i = 0; i < lut->numEntries; ++i)
-        {
-            // Need two LUTS in the nitf, with high order
-            // bits in the first and low order in the second
-            table[i] = (short)(*lut)[i][0];
-            table[lut->numEntries + i] = (short)(*lut)[i][1];
+         for (unsigned int i = 0; i < lut->numEntries; ++i)
+         {
+             // Need two LUTS in the nitf, with high order
+             // bits in the first and low order in the second
+             table[i] = (short)(*lut)[i][0];
+             table[lut->numEntries + i] = (short)(*lut)[i][1];
 
-        }
+         }
 
-        //I would like to set it this way but it does not seem to work.
-        //Using the init function instead.
-        //band1.getRepresentation().set("LU");
-        //band1.getLookupTable().setTable(table, 2, lut->numEntries);
+//         //I would like to set it this way but it does not seem to work.
+//         //Using the init function instead.
+//         //band1.getRepresentation().set("LU");
+//         //band1.getLookupTable().setTable(table, 2, lut->numEntries);
 
-        nitf::LookupTable lookupTable(band1.getLookupTable());
-        lookupTable.setTable(table, 2, lut->numEntries);
-        band1.init("LU", "", "", "", 2, lut->numEntries, lookupTable);
-        bands.push_back(band1);
-    }
-        break;
+         nitf::LookupTable lookupTable(band1.getLookupTable());
+         lookupTable.setTable(table, 2, lut->numEntries);
+         band1.init("LU", "", "", "", 2, lut->numEntries, lookupTable);
+         bands.push_back(band1);
+     }
+    break;
 
     case RGB8LU:
     {
         nitf::BandInfo band1;
 
-        LUT* lut = ((DerivedData*)data)->display->remapInformation->remapLUT;
+        LUT* lut = data->getDisplayLUT();
         unsigned char* table =
-                new unsigned char[lut->numEntries * lut->elementSize];
+            new unsigned char[lut->numEntries * lut->elementSize];
 
         for (unsigned int i = 0, k = 0; i < lut->numEntries; ++i)
         {
@@ -240,7 +240,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
                 table[j * lut->numEntries + i] = lut->table[k];
             }
         }
-
+        
         //I would like to set it this way but it does not seem to work.
         //Using the init function instead.
         //band1.getRepresentation().set("LU");
@@ -251,7 +251,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         band1.init("LU", "", "", "", 3, lut->numEntries, lookupTable);
         bands.push_back(band1);
     }
-        break;
+    break;
 
     default:
         throw except::Exception(Ctxt("Unknown pixel type"));

@@ -81,7 +81,8 @@ Data* StubProfile::newData(const Options& options)
                 )
             );
     
-    XMLControl* control = XMLControlFactory::newXMLControl(dataClass);
+    XMLControl* control = XMLControlFactory::getInstance().
+        newXMLControl(dataClass);
     Data* data = control->fromXML(doc);
     delete control;
     return data;

@@ -88,9 +88,32 @@ namespace scene
     class LatLonAlt
     {
     public:
-        LatLonAlt(double lat = 0, double lon = 0, double alt = 0)
+        LatLonAlt() : mLat(0), mLon(0), mAlt(0) {}
+
+        LatLonAlt(double lat, double lon, double alt = 0)
             : mLat(lat), mLon(lon), mAlt(alt)
         {
+        }
+
+
+        LatLonAlt(const LatLonAlt& lla)
+        {
+            mLat = lla.mLat;
+            mLon = lla.mLon;
+            mAlt = lla.mAlt;
+            
+        }
+
+        LatLonAlt& operator=(const LatLonAlt& lla)
+        {
+            if (this != &lla)
+            {
+                mLat = lla.mLat;
+                mLon = lla.mLon;
+                mAlt = lla.mAlt;
+
+            }
+            return *this;
         }
 
         double getLat() const

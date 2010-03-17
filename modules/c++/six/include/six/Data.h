@@ -162,6 +162,8 @@ struct Data
      */
     virtual void setClassification(Classification classification) = 0;
 
+    virtual LUT* getDisplayLUT() = 0;
+
 };
 
 }

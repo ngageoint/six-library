@@ -1,6 +1,6 @@
 NAME            = 'six'
 VERSION         = '0.1'
-MODULE_DEPS     = 'scene tiff nitf xml.lite'
+MODULE_DEPS     = 'scene nitf xml.lite'
 
 set_options = configure = distclean = lambda p: None
 

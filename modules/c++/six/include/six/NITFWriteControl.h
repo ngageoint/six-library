@@ -27,7 +27,7 @@
 #include "six/WriteControl.h"
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
-#include "six/ComplexData.h"
+
 namespace six
 {
 

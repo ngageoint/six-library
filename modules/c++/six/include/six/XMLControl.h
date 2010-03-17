@@ -139,7 +139,8 @@ protected:
     void parseLatLons(xml::lite::Element* pointsXML, std::string pointName,
             std::vector<LatLon>& llVec);
     virtual std::vector<LatLon> parseFootprint(xml::lite::Element* footprint,
-            std::string cornerName, bool alt = false);
+                                               std::string cornerName,
+                                               bool alt);
     void parseParameters(xml::lite::Element* paramXML, std::string paramName,
             std::vector<Parameter>& props);
 
@@ -162,6 +163,7 @@ protected:
 
     void xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
             ErrorStatistics* errorStatistics);
+
 
     xml::lite::Element* radiometricToXML(xml::lite::Document* doc,
             Radiometric *obj);

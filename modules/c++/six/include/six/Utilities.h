@@ -23,8 +23,8 @@
 #define __SIX_UTILITIES_H__
 
 #include "six/Types.h"
-#include "six/DerivedData.h"
 #include "scene/SceneGeometry.h"
+#include "six/ErrorStatistics.h"
 #include <import/io.h>
 #include <import/xml/lite.h>
 #include <import/str.h>
@@ -40,36 +40,6 @@ struct Utilities
      *  TODO: Put me in NITFImageInfo
      */
     static PixelType getNITFPixelType(nitf::ImageSubheader& subheader);
-
-    /*!
-     *  Create a scene geometry object from the derived data passed in
-     *
-     */
-    static scene::SceneGeometry* getSceneGeometry(DerivedData* derived);
-
-    //!  Set the geometry/collection params in the derived section
-    //!  based on minimal scene information
-    static void setSceneGeometryValues(DerivedData* derived);
-
-    //!  Set the values section given minimal scene information
-    static void setProductValues(six::Poly2D timeCOAPoly, six::PolyXYZ arpPoly,
-            six::ReferencePoint ref, six::Vector3* row, six::Vector3* col,
-            six::RangeAzimuth<double> res, six::Product* product);
-
-    //!  Set the values section given minimal scene information
-    static void setProductValues(six::Vector3 arpVel, six::Vector3 arpPos,
-            six::Vector3 refPos, six::Vector3* row, six::Vector3* col,
-            six::RangeAzimuth<double> res, six::Product* product);
-
-    //!  Set the values section given minimal scene information
-    static void setCollectionValues(six::Poly2D timeCOAPoly,
-            six::PolyXYZ arpPoly, six::ReferencePoint ref, six::Vector3* row,
-            six::Vector3* col, six::Collection* collection);
-
-    //!  Set the values section given minimal scene information
-    static void setCollectionValues(six::Vector3 arpVel, six::Vector3 arpPos,
-            six::Vector3 refPos, six::Vector3* row, six::Vector3* col,
-            six::Collection* collection);
 
 };
 }
