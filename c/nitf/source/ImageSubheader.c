@@ -344,7 +344,6 @@ nitf_ImageSubheader_setCornersFromLatLons(nitf_ImageSubheader* subheader,
         return NITF_FAILURE;
     }
 
-
     /* Go ahead and set ICORDS */
     subheader->NITF_ICORDS->raw[0] = cornerRep;
     return NITF_SUCCESS;
