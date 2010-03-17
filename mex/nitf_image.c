@@ -34,15 +34,15 @@ mexErrMsgTxt(( (E)->level == NITF_ERR_UNK) ? ("Unknown Error") : ( (E)->message)
 #define EXTRA_SIZE sizeof(long)*2
 
 /*
- *  Allocate a C-string from a Matlab array
+ *  Allocate a C-string from a Matlab array (returns NULL on error)
  */
 static char* newString(const mxArray* mx)
 {
     if (!mxIsChar(mx))
-	mexErrMsgTxt("Require string arg");
+	return(NULL);
 
     if (mxGetM(mx) != 1)
-	mexErrMsgTxt("Input must be a row vector");
+	return(NULL);
 
      size_t len = (mxGetM(mx) * mxGetN(mx)) + 1;
      char* str = (char*)malloc(len + 1);
@@ -50,9 +50,25 @@ static char* newString(const mxArray* mx)
      if (mxGetString(mx, str, len) != 0)
      {
          free(str);
-	 mexErrMsgTxt("Not enough space!");
+	return(NULL);
      }
      return str;
+}
+
+/*
+ *   Transpose a matrix
+ *
+ * The return is the transposed result, or NULL on error
+ *
+ *  This either transposes the input in-place or allocates a new matrix and
+ *  frees the input
+ */
+
+mxArray *transpose(mxArray *org)
+{
+  mxArray *out;     /* Result */
+
+
 }
 
 
@@ -78,7 +94,8 @@ typedef mxArray* (*MEX_NTF_IMREAD)(nitf_Reader* reader,
                                    long startCol,
                                    long endRow,
                                    long endCol,
-                                   nitf_Uint8 *extra);
+                                   nitf_Uint8 *extra,
+				   nitf_Error *error);
 
 
 nitf_SubWindow* createSubWindow(long startRow,
@@ -103,7 +120,7 @@ nitf_SubWindow* createSubWindow(long startRow,
     subWindow = nitf_SubWindow_construct(&error);
 
     if (!subWindow)
-        MEX_NTF_ERR(&error);
+       return(NULL);
 
     /* 
      *  This tells us what order to give you bands in.  Normally
@@ -113,6 +130,11 @@ nitf_SubWindow* createSubWindow(long startRow,
      *  bandList backwards, the phase buffer comes first in the output
      */
     bandList = (nitf_Uint32 *) malloc(sizeof(nitf_Uint32 *) * numBands);
+    if(bandList == NULL)
+    {
+      nitf_SubWindow_destruct(&subWindow);
+      return(NULL);
+    }
 
     for (bandID = 0; bandID < numBands; ++bandID)
         bandList[bandID] = bandID;
@@ -133,9 +155,9 @@ mxArray* read32BitFloatPixelArray(nitf_Reader* reader,
                                   long startCol,
                                   long numRows, 
                                   long numCols,
-                                  nitf_Uint8 *extra)
+                                  nitf_Uint8 *extra,
+				  nitf_Error *error)
 {
-    
     int padded = 0;
 
     mxArray* mxImageArray = NULL;
@@ -147,24 +169,20 @@ mxArray* read32BitFloatPixelArray(nitf_Reader* reader,
     nitf_ImageReader* imageReader = NULL;
 
     /* Buffer array ptr */
-    nitf_Uint8** buffers = NULL;
+    nitf_Uint8* buffers[1];
 
     nitf_Uint8* buffer = NULL;
 
-    /* Error handler */
-    nitf_Error error;
-
     int numBands = 1;
+
+/* Do this first to avoid abort on fail casusing memory leak */
+
+    mxImageArray = 
+        mxCreateNumericMatrix(numCols, numRows, mxSINGLE_CLASS, mxREAL);
 
     /* Create the sub-window - will fail internally if error */
     subWindow = createSubWindow(startRow, startCol,
                                 numRows, numCols, numBands);
-
-    /* Create the image buffer - will fail internally if error */
-    buffers = (nitf_Uint8**)malloc( sizeof(nitf_Uint32*) * numBands);
-
-    mxImageArray = 
-        mxCreateNumericMatrix(numCols, numRows, mxSINGLE_CLASS, mxREAL);
 
     /* Now attach the buffer up to the mxImageArray */
     buffer = (nitf_Uint8*)mxGetData(mxImageArray);
@@ -173,22 +191,29 @@ mxArray* read32BitFloatPixelArray(nitf_Reader* reader,
     buffers[0] = buffer;
 
     /* Image reader (could fail) */
-    imageReader = nitf_Reader_newImageReader(reader,
-                                             idx,
-                                             &error);
-    if (!imageReader)
+    imageReader = nitf_Reader_newImageReader(reader,idx,error);
+    if (imageReader == NULL)
         goto CATCH_ERROR;
    
     /* Now read the data */
-    if (!nitf_ImageReader_read(imageReader, subWindow, 
-                               buffers, &padded, &error))
+    if(!nitf_ImageReader_read(imageReader,subWindow,buffers,&padded,error))
         goto CATCH_ERROR;
+
+    if(subWindow != NULL)
+       nitf_SubWindow_destruct(&subWindow);
+    if(imageReader != NULL)
+       nitf_ImageReader_destruct(&imageReader);
+
     return mxImageArray;
 
 CATCH_ERROR:
 
-    if (subWindow) free(subWindow);
-    MEX_NTF_ERR(&error);
+    if(subWindow != NULL)
+       nitf_SubWindow_destruct(&subWindow);
+    if(imageReader != NULL)
+       nitf_ImageReader_destruct(&imageReader);
+    if(mxImageArray != NULL);
+      mxFree(mxImageArray);
     return NULL;
 }
 
@@ -205,7 +230,8 @@ mxArray* read8BitPixelArray(nitf_Reader* reader,
                             long startCol,
                             long numRows, 
                             long numCols,
-                            nitf_Uint8 *extra)
+                            nitf_Uint8 *extra,
+			    nitf_Error *error)
 {
     
     int padded = 0;
@@ -222,9 +248,6 @@ mxArray* read8BitPixelArray(nitf_Reader* reader,
     nitf_Uint8** buffers = NULL;
 
     nitf_Uint8* buffer = NULL;
-
-    /* Error handler */
-    nitf_Error error;
 
     int numBands = 1;
 
@@ -245,22 +268,19 @@ mxArray* read8BitPixelArray(nitf_Reader* reader,
     buffers[0] = buffer;
 
     /* Image reader (could fail) */
-    imageReader = nitf_Reader_newImageReader(reader,
-                                             idx,
-                                             &error);
+    imageReader = nitf_Reader_newImageReader(reader, idx, error);
     if (!imageReader)
         goto CATCH_ERROR;
    
     /* Now read the data */
     if (!nitf_ImageReader_read(imageReader, subWindow, 
-                               buffers, &padded, &error))
+                               buffers, &padded, error))
         goto CATCH_ERROR;
     return mxImageArray;
 
 CATCH_ERROR:
 
     if (subWindow) free(subWindow);
-    MEX_NTF_ERR(&error);
     return NULL;
 }
 
@@ -286,7 +306,8 @@ mxArray* read2BandComplexFloatPixelArray(nitf_Reader* reader,
                                long numRows, 
                                long numCols,
                                long IBand,       /* or M */
-                               long Qband)       /* or P */
+                               long Qband,       /* or P */
+			       nitf_Error *error)
 {
     
     int padded = 0;
@@ -302,39 +323,49 @@ mxArray* read2BandComplexFloatPixelArray(nitf_Reader* reader,
     /* Buffer array ptr */
     nitf_Uint8* buffers[2];
 
-    /* Error handler */
-    nitf_Error error;
-
     int numBands = 2;
+
+/*
+ *  Do this here since if it failes the whole function aborts and there is
+ *   no chance to clean-up
+ */
+    mxImageArray = 
+        mxCreateNumericMatrix(numCols, numRows, mxSINGLE_CLASS, mxCOMPLEX);
 
     /* Create the sub-window - will fail internally if error */
     subWindow = createSubWindow(startRow, startCol,
                                 numRows, numCols, numBands);
 
-    mxImageArray = 
-        mxCreateNumericMatrix(numCols, numRows, mxSINGLE_CLASS, mxCOMPLEX);
 
     /* Now attach the buffer up to the mxImageArray */
     buffers[0] = (nitf_Uint8*)mxGetData(mxImageArray);
     buffers[1] = (nitf_Uint8*)mxGetImagData(mxImageArray);
 
     /* Image reader (could fail) */
-    imageReader = nitf_Reader_newImageReader(reader,
-                                             idx,
-                                             &error);
+    imageReader = nitf_Reader_newImageReader(reader, idx, error);
     if (!imageReader)
         goto CATCH_ERROR;
    
     /* Now read the data */
     if (!nitf_ImageReader_read(imageReader, subWindow, 
-                               buffers, &padded, &error))
+                               buffers, &padded, error))
         goto CATCH_ERROR;
+
+    if(subWindow != NULL)
+       nitf_SubWindow_destruct(&subWindow);
+    if(imageReader != NULL)
+       nitf_ImageReader_destruct(&imageReader);
+
     return mxImageArray;
 
 CATCH_ERROR:
 
-    if (subWindow) free(subWindow);
-    MEX_NTF_ERR(&error);
+    if(subWindow != NULL)
+       nitf_SubWindow_destruct(&subWindow);
+    if(imageReader != NULL)
+       nitf_ImageReader_destruct(&imageReader);
+    if(mxImageArray != NULL);
+      mxFree(mxImageArray);
     return NULL;
 }
 
@@ -344,7 +375,8 @@ mxArray* readIQComplexFloatPixelArray(nitf_Reader* reader,
                                long startCol,
                                long numRows, 
                                long numCols,
-                               nitf_Uint8 *extra)
+                               nitf_Uint8 *extra,
+			       nitf_Error *error)
 {
 
   return(read2BandComplexFloatPixelArray(reader,
@@ -354,7 +386,8 @@ mxArray* readIQComplexFloatPixelArray(nitf_Reader* reader,
                                numRows, 
                                numCols,
                                ((long *) extra)[0],       /* I or M */
-                               ((long *) extra)[1]));      /* Q or P */
+                               ((long *) extra)[1],      /* Q or P */
+                               error));
 } 
 
 /* TODO: Implement me (using normal mode?) mode */
@@ -371,13 +404,14 @@ mxArray* read24BitPixelArray(nitf_Reader* reader,
 
 
 /*
-   On error conditions, this function calls mexErrMsgTxt which pops back
-   to MATLAB without returning, so from the callers point of view, it
-   can't fail
+   On error conditions, this function returns NULL and a const error string
+   via theerStr argument. It cannot call  mexErrMsgTxt which pops back
+   to MATLAB without returning which would result in memory leaks
 */
 
                               
-MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,nitf_Uint8 *extra)
+MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,
+                 nitf_Uint8 *extra,const  char **errStr)
 {
     /* Figure out if we have a float or a byte for now */
     int pixelDepth = 
@@ -398,8 +432,9 @@ MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,nitf_Uint8 *extra)
         {
             return &read32BitFloatPixelArray;
         }
-   	mexErrMsgTxt(
-           "Sorry, this MEX wrapper doesnt currently handle the pixel type");
+   	*errStr =
+             "Sorry, this MEX wrapper doesnt currently handle the pixel type";
+        return(NULL);
     }
     else if(numBands == 2)
     {
@@ -425,8 +460,8 @@ MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,nitf_Uint8 *extra)
              }
              else
              {
-   	         mexErrMsgTxt(
-                    "Sorry, this MEX wrapper doesnt currently handle the pixel type");
+   	       *errStr =
+                    "Sorry, this MEX wrapper doesnt currently handle the pixel type";
                  return(NULL);
              }
 
@@ -434,14 +469,183 @@ MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,nitf_Uint8 *extra)
              {
                  return(&readIQComplexFloatPixelArray);
              }
-   	    mexErrMsgTxt(
-             "Sorry, this MEX wrapper doesnt currently handle the pixel type");
+   	    *errStr =
+             "Sorry, this MEX wrapper doesnt currently handle the pixel type";
             return(NULL);
         }
     }
-    mexErrMsgTxt(
-              "Sorry, this MEX wrapper doesnt currently handle the pixel type");
+    *errStr = "Sorry, this MEX wrapper doesnt currently handle the pixel type";
     return NULL;
+}
+
+/*
+ * Parse arguments
+ *
+ */
+
+/* Returns true on success */
+
+int parseArguments(int nrhs, const mxArray *prhs[],
+        char **inputFile,
+        int *idx,
+        long *startRow, 
+        long *startCol,
+        long *numRows, 
+        long *numCols,
+        const char **errStr)
+{
+  int argCount;     /* Count of remaining arguments */
+  int argIdx;       /* Current argumetn index */
+  char *key;        /* Current keyword */
+  char *plugin;     /* Plugin path */
+  nitf_Error error; /* For NITF library calls */
+
+/*
+
+   Initialize window values, use impossible values (0 for number of
+   rows/cols) to flag that window values are not supplied
+*/
+
+  *startRow = 0; 
+  *startCol = 0;
+  *numRows = 0; 
+  *numCols = 0;
+
+  *idx = 0;  /* idx is zero based */
+
+  if(nrhs == 0)
+  {
+    *errStr = "At least one argument is required";
+    return(0);
+  }
+
+  *inputFile = newString(prhs[0]);
+  if(*inputFile == NULL)
+  {
+    *errStr = "Invalid keyword";
+    return(0);
+  }
+
+
+  argCount = nrhs-1;   /* Total remaining arguments */
+  argIdx = 1;
+  while(argCount != 0)
+  {
+    key = mxArrayToString(prhs[argIdx]);
+    if(key == NULL)
+    {
+      *errStr = "Invalid keyword";
+      free(*inputFile);
+      *inputFile = NULL;
+      return(0);
+    }
+    if(strcmp(key,"Segment") == 0)
+    {
+      argCount -= 1;
+      argIdx += 1;
+      if(argCount == 0)
+      {
+        mxFree(key);
+        *errStr = "Segment keyword requires an index value";
+        free(*inputFile);
+        *inputFile = NULL;
+        return(0);
+      }
+      if(!mxIsNumeric(prhs[argIdx]))
+      {
+        mxFree(key);
+        *errStr = "Segment keyword requires an index value";
+        free(*inputFile);
+        *inputFile = NULL;
+        return(0);
+      }
+      *idx = (int) (mxGetScalar(prhs[argIdx]) + 0.5); /* Paranoid ???*/
+      *idx -= 1;     /* Zero base */
+      argCount -= 1;
+      argIdx += 1;
+    }
+    if(strcmp(key,"Plugins") == 0)
+    {
+      argCount -= 1;
+      argIdx += 1;
+      if(argCount == 0)
+      {
+        mxFree(key);
+        *errStr = "Segment keyword requires a string value";
+        free(*inputFile);
+        *inputFile = NULL;
+        return(0);
+      }
+
+      if((plugin = newString(prhs[argIdx])) == NULL)
+      {
+        mxFree(key);
+        *errStr = "Plugin keyword requires a string value";
+        free(*inputFile);
+        *inputFile = NULL;
+        return(0);
+      }
+      if(!nitf_PluginRegistry_loadDir(plugin,&error) )
+        {
+            *errStr = "Could not load NITF plugins";
+            free(plugin);
+            mxFree(key);
+            free(*inputFile);
+            *inputFile = NULL;
+            return(0);
+        }
+      free(plugin);
+
+      argCount -= 1;
+      argIdx += 1;
+    }
+    if(strcmp(key,"Window") == 0)
+    {
+      const mwSize *dims; /* Window spec dimensions */
+      double *ptr;        /* Pointer to dimensions */
+
+      argCount -= 1;
+      argIdx += 1;
+      if(argCount == 0)
+      {
+         *errStr = "Window keyword requires a row vector (4 values)";
+         mxFree(key);
+         free(*inputFile);
+         *inputFile = NULL;
+         return(0);
+      }
+      if(!mxIsNumeric(prhs[argIdx]))
+      {
+         *errStr = "Window keyword requires a row vector (4 values)";
+         mxFree(key);
+         free(*inputFile);
+         *inputFile = NULL;
+         return(0);
+      }
+
+      dims = mxGetDimensions(prhs[argIdx]);
+      if((dims == NULL) || (dims[0] != 1) || (dims[1] != 4))
+      {
+         *errStr = "Window keyword requires a row vector (4 values)";
+         mxFree(key);
+         free(*inputFile);
+         *inputFile = NULL;
+         return(0);
+      }
+
+      ptr = mxGetData(prhs[argIdx]);
+
+      *startRow = (long) (ptr[0] + 0.5) - 1; /* Paranoid ???*/
+      *startCol = (long) (ptr[1] + 0.5) - 1;
+      *numRows  = (long) (ptr[2] + 0.5);
+      *numCols = (long) (ptr[3] + 0.5);
+
+      argCount -= 1;
+      argIdx += 1;
+    }
+    mxFree(key);
+  }
+  return(1);
 }
 
 /**
@@ -474,7 +678,19 @@ void mexFunction(int nlhs, mxArray *plhs[],
     char *inputFile = NULL;
 
     /* index */
-    int idx = 0;
+    int idx;
+    int imageCount;   /* Segment count (one based) */
+
+/*  Sub-window components */
+
+    long startRow; 
+    long startCol;
+    long numRows; 
+    long numCols;
+
+/* Error string */
+
+    const char *errStr;
 
     /* pointer to a function of value */
     MEX_NTF_IMREAD imread = NULL;
@@ -484,41 +700,24 @@ void mexFunction(int nlhs, mxArray *plhs[],
 
     mxArray* mxImageArray;
 
-    if (nrhs < 2) 
+    if(!parseArguments(nrhs,prhs,&inputFile,&idx,
+                             &startRow,&startCol,&numRows,&numCols,&errStr))
     {
-	mexErrMsgTxt("<file-name> <idx> (nitf-plugin-path)");
+	mexErrMsgTxt(errStr);
 	return;
     }
-
-    if (nrhs == 3)
+    if(nlhs != 1)
     {
-        char* pluginPath = newString(prhs[2]);
-        /* Alternative to NITF_PLUGIN_PATH */
-        if (! nitf_PluginRegistry_loadDir(pluginPath, &error) )
-        {
-            free(pluginPath);
-            MEX_NTF_ERR(&error);
-            return;
-        }
-        free(pluginPath);
-    }
-
-    /* TODO: Support colormaps here too */
-
-    else if (nlhs > 1) 
-    {
-	mexErrMsgTxt("function requires only one output (struct)");
+        free(inputFile);
+	mexErrMsgTxt("function requires exactly one output (struct)");
 	return;
     }
-
-    /* Set input file (copy) */
-    inputFile = newString(prhs[0]);
 
     /* Check that we have a NITF */
     if (nitf_Reader_getNITFVersion(inputFile) == NITF_VER_UNKNOWN)
     {
-        mexErrMsgTxt(inputFile);
         free(inputFile);
+        mexErrMsgTxt("Input file is not NITF");
         return;
     }
     
@@ -553,23 +752,54 @@ void mexFunction(int nlhs, mxArray *plhs[],
         MEX_NTF_ERR(&error);
     }
 
+/*  Get number of image segments from file header */
+
+    if(!nitf_Field_get(record->header->NITF_NUMI,(NITF_DATA *) &imageCount,
+                             NITF_CONV_INT,sizeof(imageCount),&error))
+    {
+        nitf_Reader_destruct(&reader);
+        nitf_Record_destruct(&record);
+        nitf_IOHandle_close(io);
+        MEX_NTF_ERR(&error);
+    }
+
+/* Check the image index argument which is one based, the segment count
+                                    is zero based */
+
+    if((idx < 0) || (idx > imageCount-1)) /*LJW*/
+    {
+      nitf_Reader_destruct(&reader);
+      nitf_Record_destruct(&record);
+      nitf_IOHandle_close(io);
+      mexErrMsgTxt("Invalid image segment index");
+    }
+
     /* Still rockin' */
 
     it = nitf_List_at(record->images, idx);
     segment = (nitf_ImageSegment*)nitf_ListIterator_get(&it);
 
     /* TODO: Check most of the fields to make sure we are okay */
-    imread = findImageReader(segment,extra);
+    imread = findImageReader(segment,extra,&errStr);
 
     if (imread == NULL)
-        return;
-    
-    
-    mxImageArray = (*imread)(reader, idx, 0, 0, 
-                             atol(segment->subheader->NITF_NROWS->raw),
-                             atol(segment->subheader->NITF_NCOLS->raw),
-                             extra);
-    plhs[0] = mxImageArray;
+    {
+      nitf_Reader_destruct(&reader);
+      nitf_Record_destruct(&record);
+      nitf_IOHandle_close(io);
+      mexErrMsgTxt(errStr);
+    }
+
+    if(numRows == 0)      /* No window specified, read full iamge */    
+    {
+      startRow = 0;
+      startCol = 0;
+      numRows = atol(segment->subheader->NITF_NROWS->raw);
+      numCols = atol(segment->subheader->NITF_NCOLS->raw);
+    }
+
+    mxImageArray = (*imread)(reader, idx,startRow,startCol,
+                                         numRows,numCols,extra,&error);
 
 /*
   Clean-up
@@ -585,6 +815,11 @@ void mexFunction(int nlhs, mxArray *plhs[],
 
     if(!NITF_INVALID_HANDLE(io))
       nitf_IOHandle_close(io);
+
+    if(mxImageArray == NULL)
+      MEX_NTF_ERR(&error);
+
+    plhs[0] = mxImageArray;
 
     return;
 }
