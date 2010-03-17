@@ -1,0 +1,8 @@
+NAME            = 'six.sicd'
+VERSION         = '0.1'
+MODULE_DEPS     = 'scene nitf xml.lite six'
+
+set_options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

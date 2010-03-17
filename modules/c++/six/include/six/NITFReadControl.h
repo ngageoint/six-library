@@ -26,8 +26,6 @@
 #include "six/ReadControl.h"
 #include "six/Adapters.h"
 #include <import/nitf.hpp>
-#include "six/ComplexData.h"
-#include "six/DerivedData.h"
 
 namespace six
 {

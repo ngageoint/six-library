@@ -115,8 +115,8 @@ void NITFReadControl::load(std::string fromFile)
             xmlParser.parse(ioAdapter);
             xml::lite::Document* doc = xmlParser.getDocument();
 
-            XMLControl* xmlControl = XMLControlFactory::
-                                                newXMLControl(desid);
+            XMLControl* xmlControl = XMLControlFactory::getInstance().
+                newXMLControl(desid);
 
             Data* data = xmlControl->fromXML(doc);
 

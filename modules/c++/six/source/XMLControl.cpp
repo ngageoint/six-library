@@ -417,30 +417,40 @@ void XMLControl::parseDecorrType(xml::lite::Element* decorrXML,
 }
 
 std::vector<LatLon> XMLControl::parseFootprint(xml::lite::Element* footprint,
-        std::string cornerName, bool alt)
+                                               std::string cornerName, 
+                                               bool alt)
 {
-    std::vector<LatLon> corners(4);
+    std::vector<LatLon> corners;
+    corners.resize(4);
 
     std::vector<xml::lite::Element*> vertices;
+
     footprint->getElementsByTagName(cornerName, vertices);
 
     for (unsigned int i = 0; i < vertices.size(); i++)
     {
+        LatLonAlt lla;
         //check the index attr to know which corner it is
         int idx = str::toType<int>(vertices[i]->getAttributes().getValue(
                 "index"));
 
-        corners[idx].setLat(str::toType<double>(
-                getFirstAndOnly(vertices[i], "Lat")->getCharacterData()));
+        double lat = str::toType<double>(
+            getFirstAndOnly(vertices[i], "Lat")->getCharacterData()
+            );
+        double lon = str::toType<double>(
+            getFirstAndOnly(vertices[i], "Lon")->getCharacterData()
+            );
+        lla.setLat(lat);
+        lla.setLon(lon);
 
-        corners[idx].setLon(str::toType<double>(
-                getFirstAndOnly(vertices[i], "Lon")->getCharacterData()));
         if (alt)
         {
-            corners[idx].setAlt(str::toType<double>(getFirstAndOnly(
-                                                        vertices[i], "HAE")->getCharacterData()));
+            lla.setAlt(str::toType<double>(getFirstAndOnly(
+                                               vertices[i], "HAE")->getCharacterData()));
         }
+        corners[idx] = lla;
     }
+    return corners;
 }
 
 void XMLControl::parseLatLons(xml::lite::Element* pointsXML,
@@ -948,7 +958,7 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
 }
 
 void XMLControl::xmlToRadiometric(xml::lite::Element* radiometricXML,
-        Radiometric *radiometric)
+                                  Radiometric *radiometric)
 {
     xml::lite::Element* tmpElem = NULL;
 
@@ -1009,7 +1019,7 @@ void XMLControl::xmlToRadiometric(xml::lite::Element* radiometricXML,
 }
 
 xml::lite::Element* XMLControl::radiometricToXML(xml::lite::Document* doc,
-        Radiometric *radiometric)
+                                                 Radiometric *radiometric)
 {
     xml::lite::Element* radiometricXML = newElement(doc, "Radiometric");
 
