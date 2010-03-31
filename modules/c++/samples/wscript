@@ -13,3 +13,4 @@ def build(bld):
     bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_dump_sidd_lines.cpp', name='test_dump_sidd_lines')
     bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_create_sidd.cpp', name='test_create_sidd')
     bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_create_sidd_from_mem.cpp', name='test_create_sidd_from_mem')
+    bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_parse_xml.cpp', name='test_parse_xml')
