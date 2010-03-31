@@ -515,7 +515,9 @@ def detect(self):
 
     
     elif re.match(winRegex, platform):
-        
+        if Options.options.enable64:
+            platform = 'win'
+
         env.append_value('LIB_RPC', 'rpcrt4')
         env.append_value('LIB_SOCKET', 'Ws2_32')
         
@@ -524,7 +526,7 @@ def detect(self):
         vars['warn']           = '/Wall'
         vars['nowarn']         = '/W3 /wd4290'.split()
         vars['verbose']        = ''
-        vars['64']             = ''
+        vars['64']             = '/MACHINE:X64 '
         vars['optz_med']       = '-O2 /MT'.split()
         vars['optz_fast']      = '-O2 /MT'.split()
         vars['optz_fastest']   = '-Ox /MT'.split()
