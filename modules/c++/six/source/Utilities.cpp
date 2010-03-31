@@ -43,7 +43,7 @@ template<> six::DateTime str::toType<six::DateTime>(const std::string& dateTime)
         if (dateTime.length() >= 19)
             return six::DateTime(dateTime.substr(0, 19), "%Y-%m-%dT%H:%M:%S");
     }
-    catch (except::Exception &ex)
+    catch (except::Exception&)
     {
     }
 
@@ -53,7 +53,7 @@ template<> six::DateTime str::toType<six::DateTime>(const std::string& dateTime)
         if (dateTime.length() >= 14)
             return six::DateTime(dateTime.substr(0, 14), "%Y%m%d%H%M%S");
     }
-    catch (except::Exception &ex)
+    catch (except::Exception&)
     {
     }
 
@@ -63,7 +63,7 @@ template<> six::DateTime str::toType<six::DateTime>(const std::string& dateTime)
         if (dateTime.length() >= 10)
             return six::DateTime(dateTime.substr(0, 10), "%Y-%m-%d");
     }
-    catch (except::Exception &ex)
+    catch (except::Exception&)
     {
     }
 
@@ -73,7 +73,7 @@ template<> six::DateTime str::toType<six::DateTime>(const std::string& dateTime)
         if (dateTime.length() == 8)
             return six::DateTime(dateTime.substr(0, 8), "%Y-%m-%d");
     }
-    catch (except::Exception &ex)
+    catch (except::Exception&)
     {
     }
 

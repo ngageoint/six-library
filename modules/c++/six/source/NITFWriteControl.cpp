@@ -520,7 +520,7 @@ void NITFWriteControl::saveIO(SourceList& imageData,
     {
         // Do what they say.  You really shouldnt do this
         // unless you know what you're doing anyway!
-        doByteSwap = (bool) byteSwapping;
+	doByteSwap = byteSwapping ? true: false;
     }
 
     if (mInfos.size() != imageData.size())
