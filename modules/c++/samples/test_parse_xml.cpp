@@ -20,6 +20,8 @@
  *
  */
 #include <import/six.h>
+#include <import/six/sidd.h>
+#include <import/six/sicd.h>
 #include <import/xml/lite.h>
 #include <import/io.h>
 
@@ -30,6 +32,18 @@ int main(int argc, char** argv)
     {
         die_printf("Usage: %s <xml-file> <sidd|sicd> [output-xml-file]\n", argv[0]);
     }
+
+      six::XMLControlFactory::getInstance().
+            addCreator(
+                six::DATA_COMPLEX, 
+                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
+                );
+
+        six::XMLControlFactory::getInstance().
+            addCreator(
+                six::DATA_DERIVED, 
+                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>()
+                );
 
     std::string dataType = argv[2];
     str::lower(dataType);
@@ -42,8 +56,11 @@ int main(int argc, char** argv)
         xml::lite::MinidomParser treeBuilder;
         treeBuilder.parse(xmlFile);
 
-        six::XMLControl *control = six::XMLControlFactory::newXMLControl(
-                dataType == "sicd" ? six::DATA_COMPLEX : six::DATA_DERIVED);
+        six::DataClass dataClass = (dataType == "sicd") ? six::DATA_COMPLEX : six::DATA_DERIVED;
+
+        six::XMLControl *control =
+            six::XMLControlFactory::getInstance().newXMLControl(dataClass);
+                
         six::Data *data = control->fromXML(treeBuilder.getDocument());
 
         std::cout << "Data Class: " << str::toString(data->getDataClass())
