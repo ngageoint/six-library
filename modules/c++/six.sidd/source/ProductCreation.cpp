@@ -21,24 +21,25 @@
  */
 #include "six/sidd/ProductCreation.h"
 
-using namespace six;
-using namespace six::sidd;
+//using namespace six;
+//using namespace six::sidd;
 
-ProcessorInformation* ProcessorInformation::clone() const
+// Windows also has a ProcessorInformation in the API
+six::sidd::ProcessorInformation* six::sidd::ProcessorInformation::clone() const
 {
-    return new ProcessorInformation(*this);
+    return new six::sidd::ProcessorInformation(*this);
 }
 
-ProductCreation::~ProductCreation()
+six::sidd::ProductCreation::~ProductCreation()
 {
     if (processorInformation)
         delete processorInformation;
 
 }
 
-ProductCreation* ProductCreation::clone() const
+six::sidd::ProductCreation* six::sidd::ProductCreation::clone() const
 {
-    ProductCreation *pc = new ProductCreation();
+    six::sidd::ProductCreation *pc = new six::sidd::ProductCreation();
     if (pc->processorInformation)
     {
         delete pc->processorInformation;

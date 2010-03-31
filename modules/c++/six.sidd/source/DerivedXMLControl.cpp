@@ -98,7 +98,7 @@ void DerivedXMLControl::xmlToProductCreation(
         parseParameters(productCreationXML, "ProductCreationExtension",
                 productCreation->productCreationExtensions);
     }
-    catch (except::Exception& e)
+    catch (except::Exception&)
     {
     }
 }
@@ -178,7 +178,7 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
                         "RemapParameter",
                         ((MonochromeDisplayRemap*) display-> remapInformation)->remapParameters);
             }
-            catch (except::Exception& e)
+            catch (except::Exception&)
             {
             }
         }
@@ -223,7 +223,7 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
         parseParameters(displayXML, "DisplayExtension",
                 display->displayExtensions);
     }
-    catch (except::Exception& e)
+    catch (except::Exception&)
     {
     }
 
@@ -268,7 +268,7 @@ void DerivedXMLControl::xmlToGeographicAndTarget(
             parseParameters(*it, "TargetInformationExtension",
                     ti->targetInformationExtensions);
         }
-        catch (except::Exception& e)
+        catch (except::Exception&)
         {
         }
 
@@ -344,7 +344,7 @@ void DerivedXMLControl::xmlToGeographicCoverage(
                     "GeographicInfoExtension",
                     geographicCoverage->geographicInformation-> geographicInformationExtensions);
         }
-        catch (except::Exception& e)
+        catch (except::Exception&)
         {
         }
 
@@ -911,7 +911,7 @@ DerivedXMLControl::geographicAndTargetToXML(xml::lite::Document* doc,
         geographicAndTargetXML->addChild(tiXML);
 
         addParameters(doc, tiXML, "Identifier", ti->identifiers);
-        for (int i = 0; i < ti->footprints.size(); i++)
+        for (unsigned int i = 0; i < ti->footprints.size(); i++)
         {
             tiXML->addChild(createFootprint(doc, "Footprint", "Vertex",
                     ti->footprints[i]));
