@@ -44,9 +44,12 @@
 #      if defined(NITF_MODULE_EXPORTS)
 #          define NITFAPI(RT)  NITF_C __declspec(dllexport) RT
 #          define NITFPROT(RT) NITF_C __declspec(dllexport) RT
-#      else
+#      elif defined(NITF_MODULE_IMPORTS)
 #          define NITFAPI(RT)  NITF_C __declspec(dllimport) RT
 #          define NITFPROT(RT) NITF_C __declspec(dllexport) RT
+#      else /* Static library */
+#          define NITFAPI(RT) NITF_C RT
+#          define NITFPROT(RT) NITF_C RT
 #      endif
 /*  String conversion, on windows  */
 #      define  NITF_ATO32(A) strtol(A, (char **)NULL, 10)
