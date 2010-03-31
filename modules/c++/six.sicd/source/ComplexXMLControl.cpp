@@ -647,7 +647,18 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
 
         Area *area = radar->area;
 
-        if (!Init::isUndefined(area->apcCorners))
+        bool haveApcCorners = true;
+
+        for (unsigned int i = 0; i < area->apcCorners.size(); ++i)
+        {
+            if (Init::isUndefined<LatLon>(area->apcCorners[i]))
+            {
+                haveApcCorners = false;
+                break;
+            }
+        }
+
+        if (haveApcCorners)
         {
             areaXML->addChild(createFootprint(doc, "Corner", "APC",
                     area->apcCorners, true));
@@ -1080,8 +1091,7 @@ void ComplexXMLControl::xmlToImageCreation(
 
     element = getOptional(imageCreationXML, "DateTime");
     if (element)
-        imageCreation->dateTime = str::toType<DateTime>(
-                element->getCharacterData());
+        imageCreation->dateTime = parseDateTime(element);
 
     element = getOptional(imageCreationXML, "Site");
     if (element)
@@ -1127,18 +1137,11 @@ void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
     imageData->firstCol = str::toType<unsigned long>(getFirstAndOnly(
             imageDataXML, "FirstCol")->getCharacterData());
 
-    xml::lite::Element* fullImageXML = getFirstAndOnly(imageDataXML,
-            "FullImage");
-    imageData->fullImage.row = str::toType<unsigned long>(getFirstAndOnly(
-            fullImageXML, "NumRows")->getCharacterData());
-    imageData->fullImage.col = str::toType<unsigned long>(getFirstAndOnly(
-            fullImageXML, "NumCols")->getCharacterData());
+    parseRowColInt(getFirstAndOnly(imageDataXML, "FullImage"), "NumRows",
+            "NumCols", imageData->fullImage);
 
-    xml::lite::Element* scpPixelXML = getFirstAndOnly(imageDataXML, "SCPPixel");
-    imageData->scpPixel.row = str::toType<unsigned long>(getFirstAndOnly(
-            scpPixelXML, "Row")->getCharacterData());
-    imageData->scpPixel.col = str::toType<unsigned long>(getFirstAndOnly(
-            scpPixelXML, "Col")->getCharacterData());
+    parseRowColInt(getFirstAndOnly(imageDataXML, "SCPPixel"), "Row", "Col",
+            imageData->scpPixel);
 
     xml::lite::Element* validDataXML = getOptional(imageDataXML, "ValidData");
     if (validDataXML)
@@ -1151,11 +1154,8 @@ void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
                 verticesXML.begin(); it != verticesXML.end(); ++it)
         {
             RowColInt rowCol;
-            rowCol.row = str::toType<unsigned long>(
-                    getFirstAndOnly(*it, "Row")->getCharacterData());
-            rowCol.col = str::toType<unsigned long>(
-                    getFirstAndOnly(*it, "Col")->getCharacterData());
 
+            parseRowColInt(*it, "Row", "Col", rowCol);
             imageData->validData.push_back(rowCol);
         }
     }
@@ -1165,8 +1165,8 @@ void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
 void ComplexXMLControl::xmlToGeoData(xml::lite::Element* geoDataXML,
         GeoData *geoData)
 {
-    geoData->earthModel = str::toType<EarthModelType>(getFirstAndOnly(
-            geoDataXML, "EarthModel")->getCharacterData());
+    geoData->earthModel = parseEarthModelType(getFirstAndOnly(geoDataXML,
+            "EarthModel"));
 
     xml::lite::Element* tmpElem = getFirstAndOnly(geoDataXML, "SCP");
     parseVector3D(getFirstAndOnly(tmpElem, "ECF"), geoData->scp.ecf);
@@ -1350,8 +1350,8 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
 void ComplexXMLControl::xmlToTimeline(xml::lite::Element* timelineXML,
         Timeline *timeline)
 {
-    timeline->collectStart = str::toType<DateTime>(getFirstAndOnly(timelineXML,
-            "CollectStart")->getCharacterData());
+    timeline->collectStart = parseDateTime(getFirstAndOnly(timelineXML,
+            "CollectStart"));
     timeline->collectDuration = str::toType<double>(getFirstAndOnly(
             timelineXML, "CollectDuration")->getCharacterData());
 
@@ -1849,7 +1849,7 @@ void ComplexXMLControl::xmlToImageFormation(
         if (calibDateXML)
         {
             imageFormation->polarizationCalibration->distortion->calibrationDate
-                    = str::toType<DateTime>(calibDateXML->getCharacterData());
+                    = parseDateTime(calibDateXML);
         }
 
         imageFormation->polarizationCalibration->distortion->a

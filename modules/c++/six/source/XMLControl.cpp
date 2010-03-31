@@ -363,6 +363,13 @@ void XMLControl::setAttribute(xml::lite::Element* e, std::string name,
     e->getAttributes().add(node);
 }
 
+Parameter XMLControl::parseParameter(xml::lite::Element* element)
+{
+    Parameter p(element->getCharacterData());
+    p.setName(element->getAttributes().getValue("name"));
+    return p;
+}
+
 void XMLControl::parseParameters(xml::lite::Element* paramXML,
         std::string paramName, std::vector<Parameter>& props)
 {
@@ -372,9 +379,7 @@ void XMLControl::parseParameters(xml::lite::Element* paramXML,
     for (std::vector<xml::lite::Element*>::iterator it = elemXML.begin(); it
             != elemXML.end(); ++it)
     {
-        Parameter p((*it)->getCharacterData());
-        p.setName((*it)->getAttributes().getValue("name"));
-        props.push_back(p);
+        props.push_back(parseParameter(*it));
     }
 }
 
@@ -416,6 +421,16 @@ void XMLControl::parseDecorrType(xml::lite::Element* decorrXML,
             "DecorrRate")->getCharacterData());
 }
 
+EarthModelType XMLControl::parseEarthModelType(xml::lite::Element* element)
+{
+    return str::toType<EarthModelType>(element->getCharacterData());
+}
+
+SideOfTrackType XMLControl::parseSideOfTrackType(xml::lite::Element* element)
+{
+    return str::toType<SideOfTrackType>(element->getCharacterData());
+}
+
 std::vector<LatLon> XMLControl::parseFootprint(xml::lite::Element* footprint,
                                                std::string cornerName, 
                                                bool alt)
@@ -453,6 +468,14 @@ std::vector<LatLon> XMLControl::parseFootprint(xml::lite::Element* footprint,
     return corners;
 }
 
+void XMLControl::parseLatLon(xml::lite::Element* parent, LatLon& ll)
+{
+    ll.setLat(str::toType<double>(getFirstAndOnly(parent,
+            "Lat")->getCharacterData()));
+    ll.setLon(str::toType<double>(getFirstAndOnly(parent,
+            "Lon")->getCharacterData()));
+}
+
 void XMLControl::parseLatLons(xml::lite::Element* pointsXML,
         std::string pointName, std::vector<LatLon>& llVec)
 {
@@ -463,12 +486,43 @@ void XMLControl::parseLatLons(xml::lite::Element* pointsXML,
             != latLonsXML.end(); ++it)
     {
         LatLon ll;
-        ll.setLat(str::toType<double>(
-                getFirstAndOnly(*it, "Lat")->getCharacterData()));
-        ll.setLon(str::toType<double>(
-                getFirstAndOnly(*it, "Lon")->getCharacterData()));
+        parseLatLon(*it, ll);
         llVec.push_back(ll);
     }
+}
+
+DateTime XMLControl::parseDateTime(xml::lite::Element* element)
+{
+    return str::toType<DateTime>(element->getCharacterData());
+}
+
+void XMLControl::parseRowColDouble(xml::lite::Element* parent,
+        std::string rowName, std::string colName, RowColDouble& rc)
+{
+    rc.row = str::toType<double>(getFirstAndOnly(parent,
+            rowName)->getCharacterData());
+    rc.col = str::toType<double>(getFirstAndOnly(parent,
+            colName)->getCharacterData());
+}
+
+void XMLControl::parseRowColDouble(xml::lite::Element* parent,
+        RowColDouble& rc)
+{
+    parseRowColDouble(parent, "Row", "Col", rc);
+}
+
+void XMLControl::parseRowColInt(xml::lite::Element* parent,
+        std::string rowName, std::string colName, RowColInt& rc)
+{
+    rc.row = str::toType<long>(getFirstAndOnly(parent,
+            rowName)->getCharacterData());
+    rc.col = str::toType<long>(getFirstAndOnly(parent,
+            colName)->getCharacterData());
+}
+
+void XMLControl::parseRowColInt(xml::lite::Element* parent, RowColInt& rc)
+{
+    parseRowColInt(parent, "Row", "Col", rc);
 }
 
 xml::lite::Element* XMLControl::createFootprint(xml::lite::Document* doc,

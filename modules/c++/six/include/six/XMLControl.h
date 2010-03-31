@@ -136,11 +136,22 @@ protected:
 
     void parseVector3D(xml::lite::Element* vecXML, Vector3& vec);
     void parseLatLonAlt(xml::lite::Element* llaXML, LatLonAlt& lla);
+    void parseLatLon(xml::lite::Element* parent, LatLon& ll);
     void parseLatLons(xml::lite::Element* pointsXML, std::string pointName,
             std::vector<LatLon>& llVec);
     virtual std::vector<LatLon> parseFootprint(xml::lite::Element* footprint,
                                                std::string cornerName,
                                                bool alt);
+    EarthModelType parseEarthModelType(xml::lite::Element* element);
+    SideOfTrackType parseSideOfTrackType(xml::lite::Element* element);
+    DateTime parseDateTime(xml::lite::Element* element);
+    void parseRowColDouble(xml::lite::Element* parent, std::string rowName,
+            std::string colName, RowColDouble& rc);
+    void parseRowColDouble(xml::lite::Element* parent, RowColDouble& rc);
+    void parseRowColInt(xml::lite::Element* parent, std::string rowName,
+            std::string colName, RowColInt& rc);
+    void parseRowColInt(xml::lite::Element* parent, RowColInt& rc);
+    Parameter parseParameter(xml::lite::Element* element);
     void parseParameters(xml::lite::Element* paramXML, std::string paramName,
             std::vector<Parameter>& props);
 

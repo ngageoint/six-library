@@ -215,3 +215,24 @@ template<> AppliedType Init::undefined<AppliedType>()
 {
     return APPLIED_NOT_SET;
 }
+
+template<> Poly2D Init::undefined<Poly2D>()
+{
+    Poly2D poly(0, 0);
+    poly[0][0] = Init::undefined<double>();
+    return poly;
+}
+
+template<> Poly1D Init::undefined<Poly1D>()
+{
+    Poly1D poly(0);
+    poly[0] = Init::undefined<double>();
+    return poly;
+}
+
+template<> PolyXYZ Init::undefined<PolyXYZ>()
+{
+    PolyXYZ poly(0);
+    poly[0][0] = poly[0][1] = poly[0][2] = Init::undefined<double>();
+    return poly;
+}
