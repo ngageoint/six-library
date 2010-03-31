@@ -40,8 +40,8 @@ void DerivedXMLControl::xmlToProductCreation(
             informationXML, "Application")->getCharacterData();
 
     productCreation->processorInformation->processingDateTime
-            = str::toType<DateTime>(getFirstAndOnly(informationXML,
-                    "ProcessingDateTime")->getCharacterData());
+            = parseDateTime(getFirstAndOnly(informationXML,
+                    "ProcessingDateTime"));
 
     productCreation->processorInformation->site = getFirstAndOnly(
             informationXML, "Site")->getCharacterData();
@@ -75,8 +75,8 @@ void DerivedXMLControl::xmlToProductCreation(
         ClassificationGuidance* classGuidance = new ClassificationGuidance();
         productCreation->classification.guidance = classGuidance;
 
-        productCreation->classification.guidance->date = str::toType<DateTime>(
-                getFirstAndOnly(classGuidanceXML, "Date")->getCharacterData());
+        productCreation->classification.guidance->date = parseDateTime(
+                getFirstAndOnly(classGuidanceXML, "Date"));
         productCreation->classification.guidance->authority = getFirstAndOnly(
                 classGuidanceXML, "Authority")->getCharacterData();
     }
@@ -354,14 +354,8 @@ void DerivedXMLControl::xmlToGeographicCoverage(
 void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
         Measurement* measurement)
 {
-    xml::lite::Element* pixelFootprintXML = getFirstAndOnly(measurementXML,
-            "PixelFootprint");
-
-    measurement->pixelFootprint.row = str::toType<unsigned long>(
-            getFirstAndOnly(pixelFootprintXML, "Row")->getCharacterData());
-
-    measurement->pixelFootprint.col = str::toType<unsigned long>(
-            getFirstAndOnly(pixelFootprintXML, "Col")->getCharacterData());
+    parseRowColInt(getFirstAndOnly(measurementXML, "PixelFootprint"),
+            measurement->pixelFootprint);
 
     xml::lite::Element* projXML;
     if (measurement->projection->projectionType == PROJECTION_PLANE)
@@ -387,17 +381,11 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
     measurement->projection->referencePoint.ecef[2] = str::toType<double>(
             getFirstAndOnly(tmpElem, "Z")->getCharacterData());
 
-    tmpElem = getFirstAndOnly(refXML, "Point");
-    measurement->projection->referencePoint.rowCol.row = str::toType<double>(
-            getFirstAndOnly(tmpElem, "Row")->getCharacterData());
-    measurement->projection->referencePoint.rowCol.col = str::toType<double>(
-            getFirstAndOnly(tmpElem, "Col")->getCharacterData());
+    parseRowColDouble(getFirstAndOnly(refXML, "Point"),
+            measurement->projection->referencePoint.rowCol);
 
-    tmpElem = getFirstAndOnly(projXML, "SampleSpacing");
-    measurement->projection->sampleSpacing.row = str::toType<double>(
-            getFirstAndOnly(tmpElem, "Row")->getCharacterData());
-    measurement->projection->sampleSpacing.col = str::toType<double>(
-            getFirstAndOnly(tmpElem, "Col")->getCharacterData());
+    parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
+            measurement->projection->sampleSpacing);
 
     if (measurement->projection->projectionType == PROJECTION_PLANE)
     {
@@ -484,8 +472,8 @@ void DerivedXMLControl::xmlToExploitationFeatures(
             info->radarModeID = tmpElem->getCharacterData();
         }
 
-        info->collectionDateTime = str::toType<DateTime>(getFirstAndOnly(
-                informationXML, "CollectionDateTime")->getCharacterData());
+        info->collectionDateTime = parseDateTime(getFirstAndOnly(
+                informationXML, "CollectionDateTime"));
 
         tmpElem = getOptional(informationXML, "LocalDateTime");
         if (tmpElem)
@@ -507,17 +495,10 @@ void DerivedXMLControl::xmlToExploitationFeatures(
         {
             info->inputROI = new InputROI();
 
-            tmpElem = getFirstAndOnly(roiXML, "Size");
-            info->inputROI->size.row = str::toType<double>(getFirstAndOnly(
-                    tmpElem, "Row")->getCharacterData());
-            info->inputROI->size.col = str::toType<double>(getFirstAndOnly(
-                    tmpElem, "Col")->getCharacterData());
-
-            tmpElem = getFirstAndOnly(roiXML, "UpperLeft");
-            info->inputROI->upperLeft.row = str::toType<double>(
-                    getFirstAndOnly(tmpElem, "Row")->getCharacterData());
-            info->inputROI->upperLeft.col = str::toType<double>(
-                    getFirstAndOnly(tmpElem, "Col")->getCharacterData());
+            parseRowColDouble(getFirstAndOnly(roiXML, "Size"),
+                    info->inputROI->size);
+            parseRowColDouble(getFirstAndOnly(roiXML, "UpperLeft"),
+                    info->inputROI->upperLeft);
         }
 
         xml::lite::Element* polXML = getOptional(informationXML, "Polarization");
@@ -625,12 +606,8 @@ void DerivedXMLControl::xmlToExploitationFeatures(
             "Product");
     Product prod = exploitationFeatures->product;
 
-    tmpElem = getFirstAndOnly(productXML, "Resolution");
-
-    exploitationFeatures->product.resolution.row = str::toType<double>(
-            getFirstAndOnly(tmpElem, "Row")->getCharacterData());
-    exploitationFeatures->product.resolution.col = str::toType<double>(
-            getFirstAndOnly(tmpElem, "Col")->getCharacterData());
+    parseRowColDouble(getFirstAndOnly(productXML, "Resolution"),
+            exploitationFeatures->product.resolution);
 
     tmpElem = getOptional(productXML, "North");
     if (tmpElem)
@@ -1448,40 +1425,25 @@ void DerivedXMLControl::xmlToDownstreamReprocessing(xml::lite::Element* elem,
     {
         GeometricChip *chip = downstreamReproc->geometricChip
                 = new GeometricChip();
-        xml::lite::Element *tmpElem = getFirstAndOnly(geometricChipXML,
-                "ChipSize");
-        chip->chipSize.row = str::toType<int>(
-                getFirstAndOnly(tmpElem, "Row")->getCharacterData());
-        chip->chipSize.col = str::toType<int>(
-                getFirstAndOnly(tmpElem, "Col")->getCharacterData());
 
-        tmpElem = getFirstAndOnly(geometricChipXML,
-                "OriginalUpperLeftCoordinate");
-        chip->originalUpperLeftCoordinate.row = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Row")->getCharacterData());
-        chip->originalUpperLeftCoordinate.col = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Col")->getCharacterData());
+        parseRowColInt(getFirstAndOnly(geometricChipXML, "ChipSize"),
+                chip->chipSize);
 
-        tmpElem = getFirstAndOnly(geometricChipXML,
-                "OriginalUpperRightCoordinate");
-        chip->originalUpperRightCoordinate.row = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Row")->getCharacterData());
-        chip->originalUpperRightCoordinate.col = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Col")->getCharacterData());
+        parseRowColDouble(getFirstAndOnly(geometricChipXML,
+                "OriginalUpperLeftCoordinate"),
+                chip->originalUpperLeftCoordinate);
 
-        tmpElem = getFirstAndOnly(geometricChipXML,
-                "OriginalLowerLeftCoordinate");
-        chip->originalLowerLeftCoordinate.row = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Row")->getCharacterData());
-        chip->originalLowerLeftCoordinate.col = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Col")->getCharacterData());
+        parseRowColDouble(getFirstAndOnly(geometricChipXML,
+                "OriginalUpperRightCoordinate"),
+                chip->originalUpperRightCoordinate);
 
-        tmpElem = getFirstAndOnly(geometricChipXML,
-                "OriginalLowerRightCoordinate");
-        chip->originalLowerRightCoordinate.row = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Row")->getCharacterData());
-        chip->originalLowerRightCoordinate.col = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Col")->getCharacterData());
+        parseRowColDouble(getFirstAndOnly(geometricChipXML,
+                "OriginalLowerLeftCoordinate"),
+                chip->originalLowerLeftCoordinate);
+
+        parseRowColDouble(getFirstAndOnly(geometricChipXML,
+                "OriginalLowerRightCoordinate"),
+                chip->originalLowerRightCoordinate);
     }
 
     for (unsigned int i = 0, size = procEventXML.size(); i < size; ++i)

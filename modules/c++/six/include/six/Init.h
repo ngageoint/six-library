@@ -78,6 +78,9 @@ template<> SideOfTrackType Init::undefined<SideOfTrackType>();
 template<> ReferencePoint Init::undefined<ReferencePoint>();
 template<> FFTSign Init::undefined<FFTSign>();
 template<> AppliedType Init::undefined<AppliedType>();
+template<> Poly2D Init::undefined<Poly2D>();
+template<> Poly1D Init::undefined<Poly1D>();
+template<> PolyXYZ Init::undefined<PolyXYZ>();
 
 }
 
