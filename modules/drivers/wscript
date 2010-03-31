@@ -53,8 +53,8 @@ def configure(conf):
     
     #add some flags for the nitro lib - if a lib states NITRO as a uselib (or uselib local)
     #these flags will get applied automatically
-    conf.env.append_value('CCFLAGS_NITRO', '-DNITF_MODULE_EXPORTS')
-    conf.env.append_value('CXXFLAGS_NITRO', '-DNITF_MODULE_EXPORTS')
+    conf.env.append_value('CCFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
+    conf.env.append_value('CXXFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
 
 @taskgen
 @feature('untar')
