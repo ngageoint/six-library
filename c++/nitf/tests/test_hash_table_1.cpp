@@ -133,8 +133,9 @@ int main(int argc, char **argv)
                 }
                 catch (except::NoSuchKeyException & t)
                 {
-                    printf("\t[%s] Search unsuccessful.  No such key\n",
-                           keyBuf.c_str());
+                    printf("\t[%s] Search unsuccessful [%s].  No such key\n",
+                           keyBuf.c_str(),
+			   t.getMessage().c_str());
                 }
             }
 
