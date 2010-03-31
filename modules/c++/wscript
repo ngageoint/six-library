@@ -38,6 +38,14 @@ def build(bld):
                 bld.install_files('${PREFIX}/doc/%s' % relpath, f.abspath())
         except:{}
 
+    installIncludes = ['math.linear', 'math.poly']
+    for i in installIncludes:
+        includeDir = bld.path.find_dir('%s/include' % i)
+        for f in includeDir.find_iter():
+            relpath = os.path.dirname(f.relpath_gen(includeDir))
+            bld.install_files('${PREFIX}/include/%s' % relpath, f.abspath())
+
+
 def distclean(context):
     context.recurse(MODULES)
     context.recurse(SAMPLES)
