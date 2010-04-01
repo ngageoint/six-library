@@ -109,6 +109,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
 
     if (pfaXML != NULL)
     {
+        sicd->pfa = new PFA();
         xmlToPFA(pfaXML, sicd->pfa);
     }
     return sicd;

@@ -35,7 +35,7 @@ namespace sicd
  *  \brief SICD STDeskew
  *
  *  Parameters to describe image domain slow time
- *  deskew proceessing.  Name changed for API consistency
+ *  deskew processing.  Name changed for API consistency
  */
 struct SlowTimeDeskew
 {
