@@ -149,7 +149,9 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
         doc->insert(errorStatisticsToXML(doc, sicd->errorStatistics), root);
     if (sicd->matchInformation && !sicd->matchInformation->collects.empty())
         doc->insert(matchInfoToXML(doc, sicd->matchInformation), root);
-    doc->insert(pfaToXML(doc, sicd->pfa), root);
+    // Hack for now
+    if (sicd->pfa)
+        doc->insert(pfaToXML(doc, sicd->pfa), root);
 
     return doc;
 }
