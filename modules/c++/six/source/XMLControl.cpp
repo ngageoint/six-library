@@ -57,7 +57,7 @@ xml::lite::Element* XMLControl::createVector3D(xml::lite::Document* doc,
 }
 
 xml::lite::Element* XMLControl::createPoly1D(xml::lite::Document* doc,
-        std::string name, Poly1D& poly1D)
+        std::string name, const Poly1D& poly1D)
 {
     int order = poly1D.order();
     xml::lite::Element* poly1DXML = newElement(doc, name);
@@ -110,7 +110,7 @@ void XMLControl::parsePolyXYZ(xml::lite::Element* polyXML, PolyXYZ& polyXYZ)
 }
 
 xml::lite::Element* XMLControl::createPolyXYZ(xml::lite::Document* doc,
-        std::string name, PolyXYZ& polyXYZ)
+        std::string name, const PolyXYZ& polyXYZ)
 {
     int order = polyXYZ.order();
     xml::lite::Element* polyXML = newElement(doc, name);
@@ -184,7 +184,7 @@ void XMLControl::parsePoly2D(xml::lite::Element* polyXML, Poly2D& poly2D)
 }
 
 xml::lite::Element* XMLControl::createPoly2D(xml::lite::Document* doc,
-        std::string name, Poly2D& poly2D)
+        std::string name, const Poly2D& poly2D)
 {
     xml::lite::AttributeNode node;
     xml::lite::Element* poly2DXML = newElement(doc, name);
@@ -327,31 +327,75 @@ xml::lite::Element* XMLControl::getOptional(xml::lite::Element* parent,
         return NULL;
     return children[0];
 }
+
 xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
-        std::string name, int r, int c)
+        std::string name, std::string rowName, std::string colName,
+        const RowColInt& value)
 {
     xml::lite::Element* e = newElement(doc, name);
-    e->addChild(createInt(doc, "Row", r));
-    e->addChild(createInt(doc, "Col", c));
+    e->addChild(createInt(doc, rowName, value.row));
+    e->addChild(createInt(doc, colName, value.col));
     return e;
 }
 
 xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
-        std::string name, double r, double c)
+        std::string name, std::string rowName, std::string colName,
+        const RowColDouble& value)
 {
     xml::lite::Element* e = newElement(doc, name);
-    e->addChild(createDouble(doc, "Row", r));
-    e->addChild(createDouble(doc, "Col", c));
+    e->addChild(createDouble(doc, rowName, value.row));
+    e->addChild(createDouble(doc, colName, value.col));
     return e;
+}
+
+xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
+        std::string name, const RowColInt& value)
+{
+    return createRowCol(doc, name, "Row", "Col", value);
+}
+
+xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
+        std::string name, const RowColDouble& value)
+{
+    return createRowCol(doc, name, "Row", "Col", value);
 }
 
 xml::lite::Element* XMLControl::createRangeAzimuth(xml::lite::Document* doc,
-        std::string name, double rg, double az)
+        std::string name, const RangeAzimuth<double>& value)
 {
     xml::lite::Element* e = newElement(doc, name);
-    e->addChild(createDouble(doc, "Range", rg));
-    e->addChild(createDouble(doc, "Azimuth", az));
+    e->addChild(createDouble(doc, "Range", value.range));
+    e->addChild(createDouble(doc, "Azimuth", value.azimuth));
     return e;
+}
+
+xml::lite::Element* XMLControl::createLatLon(xml::lite::Document* doc,
+        std::string name, const LatLon& value)
+{
+    xml::lite::Element* e = newElement(doc, name);
+    e->addChild(createDouble(doc, "Lat", value.getLat()));
+    e->addChild(createDouble(doc, "Lon", value.getLon()));
+    return e;
+}
+
+xml::lite::Element* XMLControl::createLatLonAlt(xml::lite::Document* doc,
+        std::string name, const LatLonAlt& value)
+{
+    xml::lite::Element* e = createLatLon(doc, name, value);
+    e->addChild(createDouble(doc, "HAE", value.getAlt()));
+    return e;
+}
+
+xml::lite::Element* XMLControl::createEarthModelType(xml::lite::Document* doc,
+        std::string name, const EarthModelType& value)
+{
+    return createString(doc, name, str::toString(value));
+}
+
+xml::lite::Element* XMLControl::createSideOfTrackType(xml::lite::Document* doc,
+        std::string name, const SideOfTrackType& value)
+{
+    return createString(doc, name, str::toString(value));
 }
 
 void XMLControl::setAttribute(xml::lite::Element* e, std::string name,
@@ -383,16 +427,22 @@ void XMLControl::parseParameters(xml::lite::Element* paramXML,
     }
 }
 
+xml::lite::Element* XMLControl::createParameter(xml::lite::Document* doc,
+        xml::lite::Element* parent, std::string name, const Parameter& value)
+{
+    xml::lite::Element *element = createString(doc, name, value.str());
+    setAttribute(element, "name", value.getName());
+    return element;
+}
+
 void XMLControl::addParameters(xml::lite::Document* doc,
         xml::lite::Element* parent, std::string name,
         std::vector<Parameter>& props)
 {
-    for (std::vector<Parameter>::iterator it = props.begin(); it != props.end(); ++it)
+    for (std::vector<Parameter>::iterator it = props.begin();
+            it != props.end(); ++it)
     {
-        Parameter p = *it;
-        xml::lite::Element *extension = createString(doc, name, p.str());
-        setAttribute(extension, "name", p.getName());
-        parent->addChild(extension);
+        parent->addChild(createParameter(doc, parent, name, *it));
     }
 }
 

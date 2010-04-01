@@ -994,13 +994,11 @@ DerivedXMLControl::measurementToXML(xml::lite::Document* doc,
     referencePointXML->addChild(createVector3D(doc, "ECEF",
             projection->referencePoint.ecef));
     //Point
-    xml::lite::Element* pointXML = createRowCol(doc, "Point",
-            (double) projection->referencePoint.rowCol.row,
-            (double) projection->referencePoint.rowCol.col);
-    referencePointXML->addChild(pointXML);
+    referencePointXML->addChild(createRowCol(doc, "Point",
+            projection->referencePoint.rowCol));
 
     projectionXML->addChild(createRowCol(doc, "SampleSpacing",
-            projection->sampleSpacing.row, projection->sampleSpacing.col));
+            projection->sampleSpacing));
 
     if (projection->projectionType == PROJECTION_CYLINDRICAL)
     {
@@ -1016,8 +1014,7 @@ DerivedXMLControl::measurementToXML(xml::lite::Document* doc,
 
     //Pixel Footprint
     measurementXML->addChild(createRowCol(doc, "PixelFootprint",
-            (int) measurement->pixelFootprint.row,
-            (int) measurement->pixelFootprint.col));
+            measurement->pixelFootprint));
 
     //ARPPoly
     measurementXML->addChild(
@@ -1080,19 +1077,16 @@ DerivedXMLControl::exploitationFeaturesToXML(xml::lite::Document* doc,
 
         //Resolution
         informationXML->addChild(createRangeAzimuth(doc, "Resolution",
-                collection->information->resolution.range,
-                collection->information->resolution.azimuth));
+                collection->information->resolution));
 
         //InputROI
         if (collection->information->inputROI != NULL)
         {
             xml::lite::Element* roiXML = newElement(doc, "InputROI");
             roiXML->addChild(createRowCol(doc, "Size",
-                    (double) collection->information->inputROI->size.row,
-                    (double) collection->information->inputROI->size.col));
+                    collection->information->inputROI->size));
             roiXML->addChild(createRowCol(doc, "UpperLeft",
-                    (double) collection->information->inputROI->upperLeft.row,
-                    (double) collection->information->inputROI->upperLeft.col));
+                    collection->information->inputROI->upperLeft));
             informationXML->addChild(roiXML);
         }
 
@@ -1190,8 +1184,7 @@ DerivedXMLControl::exploitationFeaturesToXML(xml::lite::Document* doc,
 
     //Resolution
     productXML->addChild(createRowCol(doc, "Resolution",
-            exploitationFeatures->product.resolution.row,
-            exploitationFeatures->product.resolution.col));
+            exploitationFeatures->product.resolution));
 
     //North - optional
 
@@ -1335,20 +1328,15 @@ xml::lite::Element* DerivedXMLControl::downstreamReprocessingToXML(
         xml::lite::Element* geoChipXML = newElement(doc, "GeometricChip");
         epXML->addChild(geoChipXML);
 
-        geoChipXML->addChild(createRowCol(doc, "ChipSize",
-                (int) geoChip->chipSize.row, (int) geoChip->chipSize.col));
+        geoChipXML->addChild(createRowCol(doc, "ChipSize", geoChip->chipSize));
         geoChipXML->addChild(createRowCol(doc, "OriginalUpperLeftCoordinate",
-                geoChip->originalUpperLeftCoordinate.row,
-                geoChip->originalUpperLeftCoordinate.col));
+                geoChip->originalUpperLeftCoordinate));
         geoChipXML->addChild(createRowCol(doc, "OriginalUpperRightCoordinate",
-                geoChip->originalUpperRightCoordinate.row,
-                geoChip->originalUpperRightCoordinate.col));
+                geoChip->originalUpperRightCoordinate));
         geoChipXML->addChild(createRowCol(doc, "OriginalLowerLeftCoordinate",
-                geoChip->originalLowerLeftCoordinate.row,
-                geoChip->originalLowerLeftCoordinate.col));
+                geoChip->originalLowerLeftCoordinate));
         geoChipXML->addChild(createRowCol(doc, "OriginalLowerRightCoordinate",
-                geoChip->originalLowerRightCoordinate.row,
-                geoChip->originalLowerRightCoordinate.col));
+                geoChip->originalLowerRightCoordinate));
     }
     if (!downstreamReproc->processingEvents.empty())
     {
