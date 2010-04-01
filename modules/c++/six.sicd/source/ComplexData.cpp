@@ -108,6 +108,7 @@ ComplexData::ComplexData() :
     radarCollection = new RadarCollection();
     imageFormation = new ImageFormation();
     scpcoa = new SCPCOA();
-    pfa = new PFA();
+    // This is a choice in 0.4, this is a temporary workaround for 0.4 data
+    pfa = NULL;//new PFA();
 }
 
