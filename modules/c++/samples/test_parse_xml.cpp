@@ -45,14 +45,13 @@
     }
 #endif
 
-int main(int argc, char** argv)
+/*
+ *  Register the XMLControl handler objects for
+ *  SICD and SIDD
+ */
+void registerHandlers()
 {
-
-    if (argc < 3)
-    {
-        die_printf("Usage: %s <xml-file> <sidd|sicd> [output-xml-file]\n", argv[0]);
-    }
-
+    
     six::XMLControlFactory::getInstance().
         addCreator(
                 six::DATA_COMPLEX, 
@@ -65,20 +64,97 @@ int main(int argc, char** argv)
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>()
     );
 
+}
+/*
+ * Dump all files out to the local directory
+ *
+ */
+std::vector<std::string> extractXML(std::string inputFile)
+{
+    std::vector<std::string> allFiles;
+    std::string prefix = sys::Path::basename(inputFile, true);
+    nitf::Reader reader;
+    nitf::IOHandle io(inputFile);
+    io.setAutoClose(true);
+    nitf::Record record = reader.read(io);
 
+    nitf::Uint32 numDES =  record.getNumDataExtensions();
+    for (nitf::Uint32 i = 0; i < numDES; ++i)
+    {
+        nitf::DESegment segment = record.getDataExtensions()[i];
+        nitf::DESubheader subheader = segment.getSubheader();
+
+        nitf::SegmentReader deReader = reader.newDEReader(i);
+        nitf::Off size = deReader.getSize();
+
+        std::string typeID = subheader.getTypeID();
+        str::trim(typeID);
+        std::string fileName = FmtX("%s-%s%d.xml", prefix.c_str(),
+                                            typeID.c_str(), i);
+
+        char* xml = new char[size];
+        deReader.read(xml, size);
+
+        io::ByteStream bs;
+        bs.write(xml, size);
+
+        xml::lite::MinidomParser parser;
+        parser.parse(bs);
+
+        xml::lite::Document* doc = parser.getDocument();
+
+
+        io::FileOutputStream fos(fileName);
+        doc->getRootElement()->prettyPrint(fos);
+        fos.close();
+        delete [] xml;
+        allFiles.push_back(fileName);
+    }
+    return allFiles;
+}
+
+
+int main(int argc, char** argv)
+{
+
+    if (argc < 3)
+    {
+        die_printf("Usage: %s <nitf/xml-file> <sidd|sicd> [output-xml-file]\n", argv[0]);
+    }
+
+    // The input file (an XML or a NITF file)
     std::string inputFile = argv[1];
+
+    // Is the data type SICD or SIDD
     std::string dataType = argv[2];
-    
+
+    // Ignore case to be safe
     str::lower(dataType);
+
+    // And check that everything is ok
     if (dataType != "sicd" && dataType != "sidd")
         die_printf("Error - data type should be sicd or sidd");
 
+    // Do this prior to reading any XML
+    registerHandlers();
+
+
     try
     {
-        preview(inputFile);
-        io::FileInputStream xmlFile(inputFile);
+        std::string xmlFile = inputFile;
+        if (nitf::Reader::getNITFVersion(inputFile) != NITF_VER_UNKNOWN)
+        {
+            std::vector<std::string> allFiles = extractXML(inputFile);
+            if (!allFiles.size())
+                throw except::Exception(Ctxt(std::string("Invalid input NITF: ") + 
+                                             inputFile));
+            xmlFile = allFiles[0];
+        }
+        preview(xmlFile);
+        io::FileInputStream xmlFileStream(xmlFile);
         xml::lite::MinidomParser treeBuilder;
-        treeBuilder.parse(xmlFile);
+        treeBuilder.parse(xmlFileStream);
+        xmlFileStream.close();
 
         six::DataClass dataClass = (dataType == "sicd") ? six::DATA_COMPLEX : six::DATA_DERIVED;
 
