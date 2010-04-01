@@ -109,7 +109,7 @@ template<> std::string str::toString(const six::RadarModeType& type)
         mode = "STRIPMAP";
         break;
     case six::MODE_DYNAMIC_STRIPMAP:
-        mode = "DYNAMIC_STRIPMAP";
+        mode = "DYNAMIC STRIPMAP";
         break;
     default:
         break;
@@ -126,7 +126,7 @@ template<> six::RadarModeType str::toType<six::RadarModeType>(
         return six::MODE_SPOTLIGHT;
     if (type == "STRIPMAP")
         return six::MODE_STRIPMAP;
-    if (type == "DYNAMIC_STRIPMAP")
+    if (type == "DYNAMIC STRIPMAP")
         return six::MODE_DYNAMIC_STRIPMAP;
     if (type.empty())
         return six::MODE_NOT_SET;
