@@ -149,6 +149,7 @@ protected:
                                        std::string cornerName, 
                                        bool alt);
 
+    xml::lite::Element* createFFTSign(xml::lite::Document* doc, std::string name, six::FFTSign sign);
     xml::lite::Element* createFootprint(xml::lite::Document* doc,
                                         std::string name, 
                                         std::string cornerName, 
