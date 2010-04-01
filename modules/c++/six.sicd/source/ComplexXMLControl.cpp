@@ -1992,7 +1992,7 @@ void ComplexXMLControl::xmlToAntennaParams(
                 params->array->phasePoly);
     }
 
-    tmpElem = getOptional(antennaParamsXML, "Element");
+    tmpElem = getOptional(antennaParamsXML, "Elem");
     if (tmpElem)
     {
         params->element = new GainAndPhasePolys();
