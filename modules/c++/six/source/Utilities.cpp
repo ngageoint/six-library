@@ -637,7 +637,7 @@ template <> six::FFTSign str::toType<six::FFTSign>(const std::string& s)
     str::trim(type);
     if (type == "-1")
         return six::FFT_SIGN_NEG;
-    else if (type == "1")
+    else if (type == "+1")
         return six::FFT_SIGN_POS;
     else if (type == "0")
         return six::FFT_SIGN_NOT_SET;
@@ -652,7 +652,7 @@ template <> std::string str::toString(const six::FFTSign& value)
     case six::FFT_SIGN_NEG:
         return "-1";
     case six::FFT_SIGN_POS:
-        return "1";
+        return "+1";
     case six::FFT_SIGN_NOT_SET:
         return "0";
     default:

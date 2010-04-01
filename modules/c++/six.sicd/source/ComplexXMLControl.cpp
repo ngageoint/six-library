@@ -344,7 +344,8 @@ xml::lite::Element* ComplexXMLControl::gridToXML(xml::lite::Document* doc,
     rowDirXML->addChild(createDouble(doc, "SS", grid->row->sampleSpacing));
     rowDirXML->addChild(createDouble(doc, "ImpRespWid",
             grid->row->impulseResponseWidth));
-    rowDirXML->addChild(createInt(doc, "Sgn", grid->row->sign));
+    rowDirXML->addChild(createString(doc, "Sgn", str::toString<FFTSign>(
+            grid->row->sign)));
     rowDirXML->addChild(createDouble(doc, "ImpRespBW",
             grid->row->impulseResponseBandwidth));
     rowDirXML->addChild(createDouble(doc, "KCtr", grid->row->kCenter));
@@ -381,7 +382,8 @@ xml::lite::Element* ComplexXMLControl::gridToXML(xml::lite::Document* doc,
     colDirXML->addChild(createDouble(doc, "SS", grid->col->sampleSpacing));
     colDirXML->addChild(createDouble(doc, "ImpRespWid",
             grid->col->impulseResponseWidth));
-    colDirXML->addChild(createInt(doc, "Sgn", grid->col->sign));
+    colDirXML->addChild(createString(doc, "Sgn", str::toString<FFTSign>(
+            grid->col->sign)));
     colDirXML->addChild(createDouble(doc, "ImpRespBW",
             grid->col->impulseResponseBandwidth));
     colDirXML->addChild(createDouble(doc, "KCtr", grid->col->kCenter));
