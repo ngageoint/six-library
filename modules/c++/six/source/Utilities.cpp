@@ -664,7 +664,9 @@ template <> six::AppliedType str::toType<six::AppliedType>(const std::string& s)
 {
     std::string type(s);
     str::trim(type);
-    if (type == "APPLIED")
+    // TODO: Needs correction -- added alternate value to match schema
+    // from 03/17/2009.
+    if (type == "APPLIED" || type == "APPILED")
         return six::APPLIED_TRUE;
     else if (type == "NOT_APPLIED")
         return six::APPLIED_FALSE;
@@ -677,7 +679,9 @@ template <> std::string str::toString(const six::AppliedType& value)
     switch (value)
     {
     case six::APPLIED_TRUE:
-        return "APPLIED";
+        // TODO: Needs correction -- support alternate value to match
+        // schema from 03/17/2009.
+        return "APPILED";
     case six::APPLIED_FALSE:
         return "NOT_APPLIED";
     default:
