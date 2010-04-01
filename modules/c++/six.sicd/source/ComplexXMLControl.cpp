@@ -157,6 +157,19 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
     return doc;
 }
 
+xml::lite::Element* ComplexXMLControl::createFFTSign(xml::lite::Document* doc,
+                                                     std::string name, six::FFTSign sign)
+{
+    std::string charData = (sign == FFT_SIGN_NEG) ? ("-1") : ("+1");
+    xml::lite::Element* e = doc->createElement(name, mURI, charData);
+    xml::lite::AttributeNode node;
+    node.setQName("class");
+    node.setUri(mURI);
+    node.setValue("xs:int");
+    e->getAttributes().add(node);
+    return e;
+}
+
 xml::lite::Element* ComplexXMLControl::collectionInfoToXML(
         xml::lite::Document* doc, CollectionInformation *collInfo)
 {
@@ -349,8 +362,7 @@ xml::lite::Element* ComplexXMLControl::gridToXML(xml::lite::Document* doc,
     rowDirXML->addChild(createDouble(doc, "SS", grid->row->sampleSpacing));
     rowDirXML->addChild(createDouble(doc, "ImpRespWid",
             grid->row->impulseResponseWidth));
-    rowDirXML->addChild(createString(doc, "Sgn", str::toString<FFTSign>(
-            grid->row->sign)));
+    rowDirXML->addChild(createFFTSign(doc, "Sgn", grid->row->sign));
     rowDirXML->addChild(createDouble(doc, "ImpRespBW",
             grid->row->impulseResponseBandwidth));
     rowDirXML->addChild(createDouble(doc, "KCtr", grid->row->kCenter));
@@ -387,8 +399,7 @@ xml::lite::Element* ComplexXMLControl::gridToXML(xml::lite::Document* doc,
     colDirXML->addChild(createDouble(doc, "SS", grid->col->sampleSpacing));
     colDirXML->addChild(createDouble(doc, "ImpRespWid",
             grid->col->impulseResponseWidth));
-    colDirXML->addChild(createString(doc, "Sgn", str::toString<FFTSign>(
-            grid->col->sign)));
+    colDirXML->addChild(createFFTSign(doc, "Sgn", grid->col->sign));
     colDirXML->addChild(createDouble(doc, "ImpRespBW",
             grid->col->impulseResponseBandwidth));
     colDirXML->addChild(createDouble(doc, "KCtr", grid->col->kCenter));
