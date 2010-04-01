@@ -88,7 +88,7 @@ template<> std::string str::toString(const six::DateTime& dateTime)
 
 // FIXME!!
 #ifndef WIN32
-    dateTime.format("%FT%T%z", date, 255);
+    dateTime.format("%FT%TZ", date, 255);
 #else
     dateTime.format("%Y-%m-%dT%H:%M:%SZ", date, 255);
 #endif
