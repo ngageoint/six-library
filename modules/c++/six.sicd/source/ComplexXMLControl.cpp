@@ -64,7 +64,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
             "ErrorStatistics");
 
     xml::lite::Element *matchInfoXML = getOptional(root, "MatchInfo");
-    xml::lite::Element *pfaXML = getFirstAndOnly(root, "PFA");
+    xml::lite::Element *pfaXML = getOptional(root, "PFA");
 
     xmlToCollectionInfo(collectionInfoXML, sicd->collectionInformation);
 
@@ -107,8 +107,10 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
         xmlToMatchInfo(matchInfoXML, sicd->matchInformation);
     }
 
-    xmlToPFA(pfaXML, sicd->pfa);
-
+    if (pfaXML != NULL)
+    {
+        xmlToPFA(pfaXML, sicd->pfa);
+    }
     return sicd;
 }
 
