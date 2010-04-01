@@ -103,31 +103,40 @@ protected:
     xml::lite::Element* createVector3D(xml::lite::Document* doc,
             std::string name, Vector3 p = 0);
     xml::lite::Element* createRowCol(xml::lite::Document* doc,
-            std::string name, int r = 0, int c = 0);
+            std::string name, std::string rowName, std::string colName,
+            const RowColInt& value);
     xml::lite::Element* createRowCol(xml::lite::Document* doc,
-            std::string name, double r = 0, double c = 0);
+            std::string name, std::string rowName, std::string colName,
+            const RowColDouble& value);
+    xml::lite::Element* createRowCol(xml::lite::Document* doc,
+            std::string name, const RowColInt& value);
+    xml::lite::Element* createRowCol(xml::lite::Document* doc,
+            std::string name, const RowColDouble& value);
     xml::lite::Element* createRangeAzimuth(xml::lite::Document* doc,
-            std::string name, double rg = 0, double az = 0);
+            std::string name, const RangeAzimuth<double>& value);
+    xml::lite::Element* createLatLon(xml::lite::Document* doc,
+            std::string name, const LatLon& value);
+    xml::lite::Element* createLatLonAlt(xml::lite::Document* doc,
+            std::string name, const LatLonAlt& value);
+    xml::lite::Element* createEarthModelType(xml::lite::Document* doc,
+            std::string name, const EarthModelType& value);
+    xml::lite::Element* createSideOfTrackType(xml::lite::Document* doc,
+            std::string name, const SideOfTrackType& value);
 
     virtual xml::lite::Element* createFootprint(xml::lite::Document* doc,
-                                                std::string name, std::string cornerName, const std::vector<LatLon>& c, bool alt = false);
-                                             
+            std::string name, std::string cornerName,
+            const std::vector<LatLon>& c, bool alt = false);
 
-    xml::lite::Element
-    * createPoly1D(xml::lite::Document* doc, std::string name, Poly1D& poly1D);
-
-    xml::lite::Element
-    * createPolyXYZ(xml::lite::Document* doc, std::string name,
-            PolyXYZ& polyXYZ);
-
-    void parsePolyXYZ(xml::lite::Element* polyXML, PolyXYZ& polyXYZ);
-
-    xml::lite::Element
-    * createPoly2D(xml::lite::Document* doc, std::string name, Poly2D& poly2D);
+    xml::lite::Element* createPoly1D(xml::lite::Document* doc,
+            std::string name, const Poly1D& poly1D);
+    xml::lite::Element* createPoly2D(xml::lite::Document* doc,
+            std::string name, const Poly2D& poly2D);
+    xml::lite::Element* createPolyXYZ(xml::lite::Document* doc,
+            std::string name, const PolyXYZ& polyXYZ);
 
     void parsePoly1D(xml::lite::Element* polyXML, Poly1D& poly1D);
-
     void parsePoly2D(xml::lite::Element* polyXML, Poly2D& poly2D);
+    void parsePolyXYZ(xml::lite::Element* polyXML, PolyXYZ& polyXYZ);
 
     xml::lite::Element* newElement(xml::lite::Document* doc, std::string name)
     {
@@ -162,6 +171,9 @@ protected:
     static xml::lite::Element* getFirstAndOnly(xml::lite::Element* parent,
             std::string tag);
 
+    xml::lite::Element* createParameter(xml::lite::Document* doc,
+            xml::lite::Element* parent, std::string name,
+            const Parameter& value);
     void addParameters(xml::lite::Document* doc, xml::lite::Element* parent,
             std::string name, std::vector<Parameter>& props);
 

@@ -224,13 +224,9 @@ xml::lite::Element * ComplexXMLControl::imageDataToXML(
     imageDataXML->addChild(createInt(doc, "FirstRow", imageData->firstRow));
     imageDataXML->addChild(createInt(doc, "FirstCol", imageData->firstCol));
 
-    xml::lite::Element *fi = newElement(doc, "FullImage");
-    imageDataXML->addChild(fi);
-    fi->addChild(createInt(doc, "NumRows", imageData->fullImage.row));
-    fi->addChild(createInt(doc, "NumCols", imageData->fullImage.col));
-
-    imageDataXML->addChild(createRowCol(doc, "SCPPixel",
-            (int) imageData->scpPixel.row, (int) imageData->scpPixel.col));
+    imageDataXML->addChild(createRowCol(doc, "FullImage", "NumRows", "NumCols",
+            imageData->fullImage));
+    imageDataXML->addChild(createRowCol(doc, "SCPPixel", imageData->scpPixel));
 
     //only if 3+ vertices
     unsigned int numVertices = imageData->validData.size();
@@ -242,9 +238,8 @@ xml::lite::Element * ComplexXMLControl::imageDataToXML(
 
         for (unsigned int i = 0; i < numVertices; ++i)
         {
-            RowColInt rci = imageData->validData[i];
             xml::lite::Element *vertexXML = createRowCol(doc, "Vertex",
-                    (int) rci.row, (int) rci.col);
+                    imageData->validData[i]);
             vXML->addChild(vertexXML);
             setAttribute(vertexXML, "index", str::toString(i));
         }
@@ -257,18 +252,14 @@ xml::lite::Element* ComplexXMLControl::geoDataToXML(xml::lite::Document* doc,
 {
     xml::lite::Element* geoDataXML = newElement(doc, "GeoData");
 
-    geoDataXML->addChild(createString(doc, "EarthModel", str::toString(
-            geoData->earthModel)));
+    geoDataXML->addChild(createEarthModelType(doc, "EarthModel",
+            geoData->earthModel));
 
     xml::lite::Element* scpXML = newElement(doc, "SCP");
     geoDataXML->addChild(scpXML);
     scpXML->addChild(createVector3D(doc, "ECF", geoData->scp.ecf));
 
-    xml::lite::Element* llhXML = newElement(doc, "LLH");
-    scpXML->addChild(llhXML);
-    llhXML->addChild(createDouble(doc, "Lat", geoData->scp.llh.getLat()));
-    llhXML->addChild(createDouble(doc, "Lon", geoData->scp.llh.getLon()));
-    llhXML->addChild(createDouble(doc, "HAE", geoData->scp.llh.getAlt()));
+    scpXML->addChild(createLatLonAlt(doc, "LLH", geoData->scp.llh));
 
     //createFootprint
     geoDataXML->addChild(createFootprint(doc, "ImageCorners", "ICP",
@@ -284,10 +275,8 @@ xml::lite::Element* ComplexXMLControl::geoDataToXML(xml::lite::Document* doc,
 
         for (unsigned int i = 0; i < numVertices; ++i)
         {
-            LatLon ll = geoData->validData[i];
-            xml::lite::Element *vertexXML = newElement(doc, "Vertex");
-            vertexXML->addChild(createDouble(doc, "Lat", ll.getLat()));
-            vertexXML->addChild(createDouble(doc, "Lon", ll.getLon()));
+            xml::lite::Element *vertexXML = createLatLon(doc, "Vertex",
+                    geoData->validData[i]);
             vXML->addChild(vertexXML);
             setAttribute(vertexXML, "index", str::toString(i));
         }
@@ -320,11 +309,8 @@ xml::lite::Element* ComplexXMLControl::geoInfoToXML(xml::lite::Document* doc,
     size_t numLatLons = geoInfo->geometryLatLon.size();
     if (numLatLons == 1)
     {
-        LatLon latLon = geoInfo->geometryLatLon[0];
-        xml::lite::Element* pointXML = newElement(doc, "Point");
-        geoInfoXML->addChild(pointXML);
-        pointXML->addChild(createDouble(doc, "Lat", latLon.getLat()));
-        pointXML->addChild(createDouble(doc, "Lon", latLon.getLon()));
+        geoInfoXML->addChild(createLatLon(doc, "Point",
+                geoInfo->geometryLatLon[0]));
     }
     else if (numLatLons >= 2)
     {
@@ -334,12 +320,8 @@ xml::lite::Element* ComplexXMLControl::geoInfoToXML(xml::lite::Document* doc,
 
         for (int i = 0; i < numLatLons; ++i)
         {
-            LatLon latLon = geoInfo->geometryLatLon[i];
-            xml::lite::Element* epVertexXML = newElement(doc,
-                    numLatLons == 2 ? "Endpoint" : "Vertex");
-            linePolyXML->addChild(epVertexXML);
-            epVertexXML->addChild(createDouble(doc, "Lat", latLon.getLat()));
-            epVertexXML->addChild(createDouble(doc, "Lon", latLon.getLon()));
+            linePolyXML->addChild(createLatLon(doc, numLatLons == 2
+                    ? "Endpoint" : "Vertex", geoInfo->geometryLatLon[i]));
         }
     }
     return geoInfoXML;
@@ -1221,10 +1203,7 @@ void ComplexXMLControl::xmlToGeoInfo(xml::lite::Element* geoInfoXML,
     if (tmpElem)
     {
         LatLon ll;
-        ll.setLat(str::toType<double>(
-                getFirstAndOnly(tmpElem, "Lat")->getCharacterData()));
-        ll.setLon(str::toType<double>(
-                getFirstAndOnly(tmpElem, "Lon")->getCharacterData()));
+        parseLatLon(tmpElem, ll);
         geoInfo->geometryLatLon.push_back(ll);
     }
     else
@@ -2176,16 +2155,7 @@ ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
         int idx = str::toType<int>(vertices[i]->getAttributes().getValue(
                 "index")) - 1;
 
-        corners[idx].setLat(
-            str::toType<double>(
-                getFirstAndOnly(vertices[i], "Lat")->getCharacterData()
-                )
-            );
-        corners[idx].setLon(
-            str::toType<double>(
-                getFirstAndOnly(vertices[i], "Lon")->getCharacterData()
-                )
-            );
+        parseLatLon(vertices[i], corners[idx]);
 
         if (alt)
         {
@@ -2202,29 +2172,22 @@ xml::lite::Element* ComplexXMLControl::createFootprint(
 {
     xml::lite::Element* footprint = newElement(doc, name);
 
-    xml::lite::Element* vertex = newElement(doc, cornerName);
+    xml::lite::Element* vertex = createLatLon(doc, cornerName, corners[0]);
     setAttribute(vertex, "index", "1:FRFC");
-    vertex->addChild(createDouble(doc, "Lat", corners[0].getLat()));
-    vertex->addChild(createDouble(doc, "Lon", corners[0].getLon()));
     footprint->addChild(vertex);
 
-    vertex = newElement(doc, cornerName);
+    vertex = createLatLon(doc, cornerName, corners[1]);
     setAttribute(vertex, "index", "2:FRLC");
-    vertex->addChild(createDouble(doc, "Lat", corners[1].getLat()));
-    vertex->addChild(createDouble(doc, "Lon", corners[1].getLon()));
     footprint->addChild(vertex);
 
-    vertex = newElement(doc, cornerName);
+    vertex = createLatLon(doc, cornerName, corners[2]);
     setAttribute(vertex, "index", "3:LRLC");
-    vertex->addChild(createDouble(doc, "Lat", corners[2].getLat()));
-    vertex->addChild(createDouble(doc, "Lon", corners[2].getLon()));
     footprint->addChild(vertex);
 
-    vertex = newElement(doc, cornerName);
+    vertex = createLatLon(doc, cornerName, corners[3]);
     setAttribute(vertex, "index", "4:LRFC");
-    vertex->addChild(createDouble(doc, "Lat", corners[3].getLat()));
-    vertex->addChild(createDouble(doc, "Lon", corners[3].getLon()));
     footprint->addChild(vertex);
+
     return footprint;
 }
 
