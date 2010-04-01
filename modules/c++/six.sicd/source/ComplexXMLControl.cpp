@@ -434,14 +434,17 @@ xml::lite::Element* ComplexXMLControl::timelineToXML(xml::lite::Document* doc,
     if (timeline->interPulsePeriod)
     {
         xml::lite::Element* ippXML = newElement(doc, "IPP");
+        unsigned int setSize = timeline->interPulsePeriod->sets.size();
+        ippXML->attribute("size") = str::toString<int>(setSize);
         timelineXML->addChild(ippXML);
 
-        for (std::vector<TimelineSet*>::iterator it =
-                timeline->interPulsePeriod->sets.begin(); it
-                != timeline->interPulsePeriod->sets.end(); ++it)
+        for (unsigned int i = 0; i < setSize; ++i)
         {
-            TimelineSet* timelineSet = *it;
+
+            TimelineSet* timelineSet = timeline->interPulsePeriod->sets[i];
             xml::lite::Element* setXML = newElement(doc, "Set");
+            setXML->attribute("index") = str::toString<int>(i + 1);
+
             ippXML->addChild(setXML);
 
             setXML->addChild(createDouble(doc, "TStart", timelineSet->tStart));
