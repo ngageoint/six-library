@@ -25,6 +25,24 @@
 #include <import/xml/lite.h>
 #include <import/io.h>
 
+/*
+ *  Open the round trip product in whatever you use to view XML files
+ *  (e.g., Altova XMLSpy).  This only works currently on windows
+ *
+ */
+#ifdef WIN32
+#   include <shellapi.h>
+    void preview(std::string outputFile)
+    {        
+        ShellExecuteA(NULL, "open", outputFile.c_str(), NULL, NULL, SW_SHOWDEFAULT);
+    }
+#   else
+    void preview(std::string outputFile)
+    {
+        std::cerr << outputFile << " was created, but no preview is available" << std::endl;
+    }
+#endif
+
 int main(int argc, char** argv)
 {
 
@@ -33,26 +51,29 @@ int main(int argc, char** argv)
         die_printf("Usage: %s <xml-file> <sidd|sicd> [output-xml-file]\n", argv[0]);
     }
 
-      six::XMLControlFactory::getInstance().
-            addCreator(
+    six::XMLControlFactory::getInstance().
+        addCreator(
                 six::DATA_COMPLEX, 
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
-                );
+    );
 
-        six::XMLControlFactory::getInstance().
-            addCreator(
+    six::XMLControlFactory::getInstance().
+        addCreator(
                 six::DATA_DERIVED, 
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>()
-                );
+    );
 
+
+    std::string inputFile = argv[1];
     std::string dataType = argv[2];
+    
     str::lower(dataType);
     if (dataType != "sicd" && dataType != "sidd")
         die_printf("Error - data type should be sicd or sidd");
 
     try
     {
-        io::FileInputStream xmlFile(argv[1]);
+        io::FileInputStream xmlFile(inputFile);
         xml::lite::MinidomParser treeBuilder;
         treeBuilder.parse(xmlFile);
 
@@ -74,12 +95,14 @@ int main(int argc, char** argv)
 
         if (argc > 3)
         {
+            std::string outputFile = argv[3];
             //round-trip it
             xml::lite::Document* outDom = control->toXML(data);
-            io::FileOutputStream outXML(argv[3]);
+            io::FileOutputStream outXML(outputFile);
             outDom->getRootElement()->prettyPrint(outXML);
             outXML.close();
             delete outDom;
+            preview(outputFile);
         }
 
         delete control;
