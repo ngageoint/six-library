@@ -30,16 +30,18 @@
  *  (e.g., Altova XMLSpy).  This only works currently on windows
  *
  */
-#ifdef WIN32
+#if defined(WIN32) && defined(PREVIEW)
 #   include <shellapi.h>
     void preview(std::string outputFile)
     {        
+        // ShellExecute might get assigned to ShellExecuteW if we arent careful
         ShellExecuteA(NULL, "open", outputFile.c_str(), NULL, NULL, SW_SHOWDEFAULT);
     }
 #   else
+    // TODO Could open this using EDITOR or html view
     void preview(std::string outputFile)
     {
-        std::cerr << outputFile << " was created, but no preview is available" << std::endl;
+        std::cerr << "Preview unavailable for: " << outputFile << std::endl;
     }
 #endif
 
@@ -73,6 +75,7 @@ int main(int argc, char** argv)
 
     try
     {
+        preview(inputFile);
         io::FileInputStream xmlFile(inputFile);
         xml::lite::MinidomParser treeBuilder;
         treeBuilder.parse(xmlFile);
