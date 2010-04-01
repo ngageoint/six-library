@@ -439,16 +439,17 @@ xml::lite::Element* ComplexXMLControl::timelineToXML(xml::lite::Document* doc,
             xml::lite::Element* setXML = newElement(doc, "Set");
             ippXML->addChild(setXML);
 
-            ippXML->addChild(createDouble(doc, "TStart", timelineSet->tStart));
-            ippXML->addChild(createDouble(doc, "TEnd", timelineSet->tEnd));
-            ippXML->addChild(createInt(doc, "IPPStart",
+            setXML->addChild(createDouble(doc, "TStart", timelineSet->tStart));
+            setXML->addChild(createDouble(doc, "TEnd", timelineSet->tEnd));
+            setXML->addChild(createInt(doc, "IPPStart",
                     timelineSet->interPulsePeriodStart));
-            ippXML->addChild(createInt(doc, "IPPEnd",
+            setXML->addChild(createInt(doc, "IPPEnd",
                     timelineSet->interPulsePeriodEnd));
-            ippXML->addChild(createPoly1D(doc, "IPPPoly",
+            setXML->addChild(createPoly1D(doc, "IPPPoly",
                     timelineSet->interPulsePeriodPoly));
         }
     }
+
     return timelineXML;
 }
 
@@ -1346,6 +1347,7 @@ void ComplexXMLControl::xmlToTimeline(xml::lite::Element* timelineXML,
         for (std::vector<xml::lite::Element*>::iterator it = setsXML.begin(); it
                 != setsXML.end(); ++it)
         {
+            // Use the first set that is already available.
             TimelineSet* ts = new TimelineSet();
             ts->tStart = str::toType<double>(
                     (getFirstAndOnly(*it, "TStart"))->getCharacterData());
@@ -1359,6 +1361,10 @@ void ComplexXMLControl::xmlToTimeline(xml::lite::Element* timelineXML,
                     ts->interPulsePeriodPoly);
             timeline->interPulsePeriod->sets.push_back(ts);
         }
+
+        // Required to have at least one timeline set.
+        if (timeline->interPulsePeriod->sets.size() == 0)
+            timeline->interPulsePeriod->sets.push_back(new TimelineSet());
     }
 }
 

@@ -80,12 +80,10 @@ struct TimelineSet
 struct InterPulsePeriod
 {
     /*!
-     *  Constructor.  Assumes that we will have at least one underlying
-     *  Set and creates a new TimelineSet.
+     *  Constructor.
      */
     InterPulsePeriod()
     {
-        sets.push_back(new TimelineSet());
     }
     //!  Destrucctor.  Goes through sets and deletes every item
     ~InterPulsePeriod();
