@@ -820,16 +820,14 @@ xml::lite::Element* ComplexXMLControl::imageFormationToXML(
         xml::lite::Element* pcXML = newElement(doc, "PolarizationCalibration");
         imageFormationXML->addChild(pcXML);
 
-        imageFormationXML->addChild(
-                createBoolean(
-                        doc,
-                        "HvAngleCompApplied",
-                        imageFormation->polarizationCalibration->hvAngleCompensationApplied));
-        imageFormationXML->addChild(
-                createBoolean(
-                        doc,
-                        "DistortionCorrectionApplied",
-                        imageFormation->polarizationCalibration->distortionCorrectionApplied));
+        addRequired(imageFormationXML, createBooleanType(doc,
+                "HvAngleCompApplied", imageFormation->polarizationCalibration
+                ->hvAngleCompensationApplied), "HvAngleCompApplied");
+
+        addRequired(imageFormationXML, createBooleanType(doc,
+                "DistortionCorrectionApplied", imageFormation
+                ->polarizationCalibration->distortionCorrectionApplied),
+                "DistortionCorrectionApplied");
 
         //TODO this is required, but doing this for safety - once we decide on a policy, maybe throw an exception
         Distortion *distortion =
@@ -957,16 +955,12 @@ xml::lite::Element* ComplexXMLControl::antennaParametersToXML(
     {
         apXML->addChild(createPoly1D(doc, "GainBSPoly", params->gainBSPoly));
     }
-    if (params->electricalBoresightFrequencyShift != six::BOOL_NOT_SET)
-    {
-        apXML->addChild(createBoolean(doc, "EBFreqShift",
-                params->electricalBoresightFrequencyShift == six::BOOL_TRUE));
-    }
-    if (params->mainlobeFrequencyDilation != six::BOOL_NOT_SET)
-    {
-        apXML->addChild(createBoolean(doc, "MLFreqDilation",
-                params->mainlobeFrequencyDilation == six::BOOL_TRUE));
-    }
+
+    addOptional(apXML, createBooleanType(doc, "EBFreqShift",
+            params->electricalBoresightFrequencyShift));
+    addOptional(apXML, createBooleanType(doc, "MLFreqDilation",
+            params->mainlobeFrequencyDilation));
+
     return apXML;
 }
 
@@ -1020,8 +1014,10 @@ xml::lite::Element* ComplexXMLControl::pfaToXML(xml::lite::Document* doc,
     {
         xml::lite::Element* stdXML = newElement(doc, "STDeskew");
         pfaXML->addChild(stdXML);
-        stdXML->addChild(createBoolean(doc, "Applied",
-                pfa->slowTimeDeskew->applied));
+
+        addRequired(stdXML, createBooleanType(doc, "Applied",
+                pfa->slowTimeDeskew->applied), "Applied");
+
         stdXML->addChild(createPoly2D(doc, "STDPhasePoly",
                 pfa->slowTimeDeskew->slowTimeDeskewPhasePoly));
     }
@@ -1032,7 +1028,8 @@ xml::lite::Element* ComplexXMLControl::pfaToXML(xml::lite::Document* doc,
         xml::lite::Element* compXML = newElement(doc, "Comp");
         pfaXML->addChild(compXML);
         compXML->addChild(createString(doc, "Type", comp->type));
-        compXML->addChild(createBoolean(doc, "Applied", comp->applied));
+        addRequired(compXML, createBooleanType(doc, "Applied", comp->applied),
+                "Applied");
         addParameters(doc, compXML, "Parameter", comp->parameters);
     }
     return pfaXML;
@@ -1840,12 +1837,12 @@ void ComplexXMLControl::xmlToImageFormation(
         imageFormation->polarizationCalibration->distortion = new Distortion();
 
         imageFormation->polarizationCalibration->hvAngleCompensationApplied
-                = str::toType<bool>(getFirstAndOnly(polCalXML,
-                        "HVAngleCompApplied")->getCharacterData());
+                = parseBooleanType(getFirstAndOnly(polCalXML,
+                        "HVAngleCompApplied"));
 
         imageFormation->polarizationCalibration->distortionCorrectionApplied
-                = str::toType<bool>(getFirstAndOnly(polCalXML,
-                        "DistortionCorrectionApplied")->getCharacterData());
+                = parseBooleanType(getFirstAndOnly(polCalXML,
+                        "DistortionCorrectionApplied"));
 
         xml::lite::Element* distortionXML = getFirstAndOnly(polCalXML,
                 "Distortion");
@@ -2040,16 +2037,14 @@ void ComplexXMLControl::xmlToAntennaParams(
     if (tmpElem)
     {
         //optional
-        params->electricalBoresightFrequencyShift
-                = str::toType<BooleanType>(tmpElem->getCharacterData());
+        params->electricalBoresightFrequencyShift = parseBooleanType(tmpElem);
     }
 
     tmpElem = getOptional(antennaParamsXML, "MLFreqDilation");
     if (tmpElem)
     {
         //optional
-        params->mainlobeFrequencyDilation
-                = str::toType<BooleanType>(tmpElem->getCharacterData());
+        params->mainlobeFrequencyDilation = parseBooleanType(tmpElem);
     }
 }
 
@@ -2141,8 +2136,8 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
     if (deskewXML)
     {
         pfa->slowTimeDeskew = new SlowTimeDeskew();
-        pfa->slowTimeDeskew->applied = str::toType<bool>(getFirstAndOnly(
-                deskewXML, "Applied")->getCharacterData());
+        pfa->slowTimeDeskew->applied = parseBooleanType(getFirstAndOnly(
+                deskewXML, "Applied"));
 
         parsePoly2D(getFirstAndOnly(deskewXML, "STDSPhasePoly"),
                 pfa->slowTimeDeskew->slowTimeDeskewPhasePoly);
@@ -2157,8 +2152,7 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
         Compensation* comp = new Compensation();
 
         comp->type = getFirstAndOnly(*it, "Type")->getCharacterData();
-        comp->applied = str::toType<bool>(
-                getFirstAndOnly(*it, "Applied")->getCharacterData());
+        comp->applied = parseBooleanType(getFirstAndOnly(*it, "Applied"));
 
         //optional
         parseParameters(*it, "Parameter", comp->parameters);

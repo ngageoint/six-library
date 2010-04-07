@@ -257,11 +257,14 @@ xml::lite::Element* XMLControl::createComplex(xml::lite::Document* doc,
     return e;
 }
 
-xml::lite::Element* XMLControl::createBoolean(xml::lite::Document* doc,
-        std::string name, bool p)
+xml::lite::Element* XMLControl::createBooleanType(xml::lite::Document* doc,
+        std::string name, BooleanType p)
 {
-    xml::lite::Element* e = doc->createElement(name, mURI, str::toString<bool>(
-            p));
+    if (p == six::BOOL_NOT_SET)
+        return NULL;
+
+    xml::lite::Element* e = doc->createElement(name, mURI,
+            str::toString<BooleanType>(p));
     xml::lite::AttributeNode node;
     node.setQName("class");
     node.setUri(mURI);
@@ -326,6 +329,23 @@ xml::lite::Element* XMLControl::getOptional(xml::lite::Element* parent,
     if (children.size() != 1)
         return NULL;
     return children[0];
+}
+
+void XMLControl::addOptional(xml::lite::Element* parent,
+        xml::lite::Element* element)
+{
+    if (element)
+        parent->addChild(element);
+}
+
+void XMLControl::addRequired(xml::lite::Element* parent,
+        xml::lite::Element* element, std::string name)
+{
+    if (!element)
+        throw except::Exception(Ctxt(FmtX("Required field [%s] is undefined "
+                "or null.", name.c_str())));
+
+    parent->addChild(element);
 }
 
 xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
@@ -405,6 +425,11 @@ void XMLControl::setAttribute(xml::lite::Element* e, std::string name,
     node.setQName(name);
     node.setValue(v);
     e->getAttributes().add(node);
+}
+
+BooleanType XMLControl::parseBooleanType(xml::lite::Element* element)
+{
+    return str::toType<BooleanType>(element->getCharacterData());
 }
 
 Parameter XMLControl::parseParameter(xml::lite::Element* element)

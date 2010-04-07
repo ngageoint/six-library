@@ -95,9 +95,9 @@ template<> six::PosVelError::FrameType toType<six::PosVelError::FrameType> (
         const std::string& s);
 template<> std::string toString(const six::SideOfTrackType& value);
 
-//! THIS SHOULD ONLY BE USED WHEN THE TYPE IS REALLY A booleantype!
 template<> six::BooleanType toType<six::BooleanType> (const std::string& s);
-template<> bool toType<bool> (const std::string& s);
+template<> std::string toString(const six::BooleanType& value);
+
 template<> six::SideOfTrackType toType<six::SideOfTrackType> (
         const std::string& s);
 

@@ -91,8 +91,8 @@ protected:
             std::string name, double p = 0);
     xml::lite::Element* createComplex(xml::lite::Document* doc,
             std::string name, std::complex<double> c);
-    xml::lite::Element* createBoolean(xml::lite::Document* doc,
-            std::string name, bool b = false);
+    xml::lite::Element* createBooleanType(xml::lite::Document* doc,
+            std::string name, BooleanType b);
     xml::lite::Element* createDateTime(xml::lite::Document* doc,
             std::string name, DateTime p);
     xml::lite::Element* createDateTime(xml::lite::Document* doc,
@@ -134,6 +134,8 @@ protected:
     xml::lite::Element* createPolyXYZ(xml::lite::Document* doc,
             std::string name, const PolyXYZ& polyXYZ);
 
+    BooleanType parseBooleanType(xml::lite::Element* element);
+
     void parsePoly1D(xml::lite::Element* polyXML, Poly1D& poly1D);
     void parsePoly2D(xml::lite::Element* polyXML, Poly2D& poly2D);
     void parsePolyXYZ(xml::lite::Element* polyXML, PolyXYZ& polyXYZ);
@@ -170,6 +172,10 @@ protected:
             std::string tag);
     static xml::lite::Element* getFirstAndOnly(xml::lite::Element* parent,
             std::string tag);
+    static void addOptional(xml::lite::Element* parent,
+            xml::lite::Element* element);
+    static void addRequired(xml::lite::Element* parent,
+            xml::lite::Element* element, std::string name);
 
     xml::lite::Element* createParameter(xml::lite::Document* doc,
             xml::lite::Element* parent, std::string name,
