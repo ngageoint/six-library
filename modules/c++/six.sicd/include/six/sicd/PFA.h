@@ -42,6 +42,7 @@ struct SlowTimeDeskew
     //!  Constructor
     SlowTimeDeskew()
     {
+        applied = Init::undefined<BooleanType>();
     }
 
     //!  Destructor
@@ -56,7 +57,7 @@ struct SlowTimeDeskew
     }
 
     //! Was slow time deskew phase function applied?
-    bool applied;
+    BooleanType applied;
 
     //! Slow time deskew phase function to perform the slow-time/Kaz
     //!  shift.  2D poly function of image range coord and az coord
@@ -72,10 +73,21 @@ struct SlowTimeDeskew
  */
 struct Compensation
 {
+    //!  Constructor
+    Compensation()
+    {
+        applied = Init::undefined<BooleanType>();
+    }
+
+    //!  Destructor
+    ~Compensation()
+    {
+    }
+
     //! Text describing the type of compensation applied
     std::string type;
     //! Parameter indicating if compenstation has been applied
-    bool applied;
+    BooleanType applied;
     //! Free format field to pass forward compensation info
     std::vector<Parameter> parameters;
 

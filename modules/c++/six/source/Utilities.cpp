@@ -22,19 +22,25 @@
 #include "six/Utilities.h"
 
 
-
-//! THIS SHOULD ONLY BE USED WHEN THE TYPE IS booleantype in the spec!
 template<> six::BooleanType str::toType<six::BooleanType>(const std::string& s)
 {
     std::string type(s);
     str::trim(type);
-    if (type == "true" || type == "1")
+    str::lower(type);
+    if (type == "true" || type == "1" || type == "yes")
         return six::BOOL_TRUE;
-    else if (type == "false" || type == "0")
+    else if (type == "false" || type == "0" || type == "no")
         return six::BOOL_FALSE;
     else
         return six::BOOL_NOT_SET;
 }
+
+template<> std::string str::toString<six::BooleanType>(
+        const six::BooleanType& value)
+{
+    return toString<bool>(value == six::BOOL_TRUE);
+}
+
 template<> six::DateTime str::toType<six::DateTime>(const std::string& dateTime)
 {
     try
@@ -719,11 +725,3 @@ template <> std::string str::toString(const six::CollectType& value)
         throw except::Exception(Ctxt("Unsupported collect type"));
     }
 }
-
-template<> bool str::toType<bool>(const std::string& s)
-{
-    std::string sc = s;
-    str::lower(sc);
-    return sc == "true" || sc == "1" || sc == "yes";
-}
-

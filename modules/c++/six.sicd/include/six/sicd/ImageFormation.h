@@ -181,13 +181,13 @@ struct PolarizationCalibration
      *  Parameter indicating if compensation for H&V channel misalignment
      *  has been applied
      */
-    bool hvAngleCompensationApplied;
+    BooleanType hvAngleCompensationApplied;
 
     /*!
      *  Parameter indicating if polarization calibration processing
      *  has been applied
      */
-    bool distortionCorrectionApplied;
+    BooleanType distortionCorrectionApplied;
 
     /*!
      *  Distortion parameters
@@ -198,6 +198,8 @@ struct PolarizationCalibration
     PolarizationCalibration() :
         distortion(NULL)
     {
+        hvAngleCompensationApplied = Init::undefined<BooleanType>();
+        distortionCorrectionApplied = Init::undefined<BooleanType>();
     }
     //!  Destroy including distortion if non-NULL
     ~PolarizationCalibration()
