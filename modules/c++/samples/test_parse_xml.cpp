@@ -368,7 +368,8 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir)
     docXML->addChild(createLineStyle("arpPoly", "ff00007f", 2));
     
     // Create footprint
-    docXML->addChild(createPath(data->getImageCorners(), "footprint", "LinearRing"));
+    std::vector<six::LatLonAlt> corners = data->getImageCorners();
+    docXML->addChild(createPath(corners, "footprint", "LinearRing"));
 
     // Specifics to SICD
     if (data->getDataClass() == six::DATA_COMPLEX)
