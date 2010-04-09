@@ -1933,7 +1933,7 @@ int main(int argc, char** argv)
 	siddData->measurement->arpPoly = six::PolyXYZ(0);
 
 	// The constant term is a vector.  Each component is 0
-	siddData->measurement->arpPoly[0] = 0;
+	siddData->measurement->arpPoly[0] = six::Vector3(0.0);
 	
 	//----------------------------------------------------
 	// The basis vectors are dummied, each component is 0
@@ -1943,8 +1943,8 @@ int main(int argc, char** argv)
 	// C++ syntactic sugar.  Vector3 supports most math
 	// operations that one would expect
 	//----------------------------------------------------
-	planeProjection->productPlane.rowUnitVector = 0;
-	planeProjection->productPlane.colUnitVector = 0;
+	planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
+	planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 	
 	// The first collection is corresponds to the parent image
 	six::sidd::Collection* parent =
