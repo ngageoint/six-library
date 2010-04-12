@@ -376,6 +376,7 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir)
         generateKMLForSICD(docXML, (six::sicd::ComplexData*)data);
 
     root->prettyPrint(fos);
+    delete root;
     fos.close();
     return kmlPath.getPath();
 }
