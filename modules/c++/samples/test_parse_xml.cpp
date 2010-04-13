@@ -318,7 +318,7 @@ void generateKMLForSICD(xml::lite::Element* docXML, six::sicd::ComplexData* data
     // Time associated with start
     six::DateTime dateTime = data->timeline->collectStart;
 
-    int durationInSeconds = data->timeline->collectDuration;
+    int durationInSeconds = (int)data->timeline->collectDuration;
     six::Vector3 atTimeX;
     for (unsigned int i = 0; i < durationInSeconds; ++i)
     {
