@@ -101,7 +101,7 @@ protected:
             DateTime p);
 
     xml::lite::Element* createVector3D(xml::lite::Document* doc,
-            std::string name, Vector3 p = 0);
+            std::string name, Vector3 p = 0.0);
     xml::lite::Element* createRowCol(xml::lite::Document* doc,
             std::string name, std::string rowName, std::string colName,
             const RowColInt& value);
