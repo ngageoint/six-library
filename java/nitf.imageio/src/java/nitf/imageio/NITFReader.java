@@ -1,23 +1,23 @@
-/* =========================================================================
+/*
+ * =========================================================================
  * This file is part of NITRO
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
- *
+ * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
- *
  */
 
 package nitf.imageio;
@@ -36,6 +36,7 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -230,11 +231,12 @@ public class NITFReader extends ImageReader
             // throw new NotImplementedException(
             // "Only uncompressed imagery is currently supported");
             // }
-
-            if (nbpp == 8 || nbpp == 16 || (nbpp == 32 && pvType.equals("R"))
-                    || (nbpp == 64 && pvType.equals("R")))
+            int nBytes = ((nbpp - 1) / 8) + 1;
+            if (nBytes == 1 || nBytes == 2
+                    || (nBytes == 4 && pvType.equals("R"))
+                    || (nBytes == 8 && pvType.equals("R")))
             {
-                if (nbpp == 8 && bandCount == 3 && irep.equals("RGB"))
+                if (nBytes == 1 && bandCount == 3 && irep.equals("RGB"))
                 {
                     ColorSpace rgb = ColorSpace.getInstance(ColorSpace.CS_sRGB);
                     int[] bandOffsets = new int[3];
@@ -333,67 +335,43 @@ public class NITFReader extends ImageReader
                 bandOffsets[i] = i;
         }
 
+        int nBytes = ((nbpp - 1) / 8) + 1;
+
+        int bufType = -1;
+
         // byte
-        if (nbpp == 8)
+        if (nBytes == 1)
         {
-            WritableRaster byteRas = ImageIOUtils
-                    .makeGenericPixelInterleavedWritableRaster(
-                            destRegion.width, destRegion.height,
-                            bandOffsets.length, DataBuffer.TYPE_BYTE);
-            checkReadParamBandSettings(param, bandCount, byteRas
-                    .getSampleModel().getNumBands());
-            readRaster(imageIndex, sourceRegion, destRegion,
-                    sourceXSubsampling, sourceYSubsampling, bandOffsets, 1,
-                    destinationOffset, byteRas);
-            return byteRas;
+            bufType = DataBuffer.TYPE_BYTE;
         }
         // short
-        else if (nbpp == 16)
+        else if (nBytes == 2)
         {
-            WritableRaster ras = ImageIOUtils
-                    .makeGenericPixelInterleavedWritableRaster(
-                            destRegion.width, destRegion.height,
-                            bandOffsets.length, DataBuffer.TYPE_USHORT);
-            checkReadParamBandSettings(param, bandCount, ras.getSampleModel()
-                    .getNumBands());
-            readRaster(imageIndex, sourceRegion, destRegion,
-                    sourceXSubsampling, sourceYSubsampling, bandOffsets, 2,
-                    destinationOffset, ras);
-            return ras;
+            bufType = DataBuffer.TYPE_USHORT;
         }
         // float
-        else if (nbpp == 32 && pvType.equals("R"))
+        else if (nBytes == 4 && pvType.equals("R"))
         {
-            WritableRaster ras = ImageIOUtils
-                    .makeGenericPixelInterleavedWritableRaster(
-                            destRegion.width, destRegion.height,
-                            bandOffsets.length, DataBuffer.TYPE_FLOAT);
-            checkReadParamBandSettings(param, bandCount, ras.getSampleModel()
-                    .getNumBands());
-            readRaster(imageIndex, sourceRegion, destRegion,
-                    sourceXSubsampling, sourceYSubsampling, bandOffsets, 4,
-                    destinationOffset, ras);
-            return ras;
+            bufType = DataBuffer.TYPE_FLOAT;
         }
         // double
-        else if (nbpp == 64 && pvType.equals("R"))
+        else if (nBytes == 8 && pvType.equals("R"))
         {
-            WritableRaster ras = ImageIOUtils
-                    .makeGenericPixelInterleavedWritableRaster(
-                            destRegion.width, destRegion.height,
-                            bandOffsets.length, DataBuffer.TYPE_DOUBLE);
-            checkReadParamBandSettings(param, bandCount, ras.getSampleModel()
-                    .getNumBands());
-            readRaster(imageIndex, sourceRegion, destRegion,
-                    sourceXSubsampling, sourceYSubsampling, bandOffsets, 8,
-                    destinationOffset, ras);
-            return ras;
+            bufType = DataBuffer.TYPE_DOUBLE;
         }
         else
         {
             throw new NotImplementedException("not yet implemented");
         }
 
+        WritableRaster ras = ImageIOUtils
+                .makeGenericPixelInterleavedWritableRaster(destRegion.width,
+                        destRegion.height, bandOffsets.length, bufType);
+        checkReadParamBandSettings(param, bandCount, ras.getSampleModel()
+                .getNumBands());
+        readRaster(imageIndex, sourceRegion, destRegion, sourceXSubsampling,
+                sourceYSubsampling, bandOffsets, nBytes, destinationOffset, ras);
+        return ras;
     }
 
     /**
@@ -410,8 +388,10 @@ public class NITFReader extends ImageReader
      * @throws IOException
      */
     protected void readFullImage(int imageIndex, Rectangle destRegion,
-            int sourceXSubsampling, int sourceYSubsampling, int[] bandOffsets,
-            int pixelSize, WritableRaster imRas) throws IOException
+                                 int sourceXSubsampling,
+                                 int sourceYSubsampling, int[] bandOffsets,
+                                 int pixelSize, WritableRaster imRas)
+            throws IOException
     {
         try
         {
@@ -433,13 +413,15 @@ public class NITFReader extends ImageReader
              */
 
             int[] requestBands = bandOffsets;
-            if (nBands != bandOffsets.length && bandOffsets.length == 1
-                    && bandOffsets[0] != 0)
-            {
-                requestBands = new int[nBands];
-                for (int i = 0; i < nBands; ++i)
-                    requestBands[i] = i;
-            }
+            /*
+             * if (nBands != bandOffsets.length && bandOffsets.length == 1
+             * && bandOffsets[0] != 0)
+             * {
+             * requestBands = new int[nBands];
+             * for (int i = 0; i < nBands; ++i)
+             * requestBands[i] = i;
+             * }
+             */
 
             int bufSize = numCols * numRows * pixelSize;
             byte[][] imageBuf = new byte[requestBands.length][bufSize];
@@ -490,7 +472,7 @@ public class NITFReader extends ImageReader
                 {
                     bandBuf = ByteBuffer.wrap(imageBuf[i]);
                 }
-                // bandBuf.order(ByteOrder.BIG_ENDIAN);
+                // ban dBuf.order(ByteOrder.nativeOrder());
                 // shouldSwap ? ByteOrder.LITTLE_ENDIAN
                 // : ByteOrder.BIG_ENDIAN);
 
@@ -588,9 +570,10 @@ public class NITFReader extends ImageReader
      * @throws IOException
      */
     protected void readRaster(int imageIndex, Rectangle sourceRegion,
-            Rectangle destRegion, int sourceXSubsampling,
-            int sourceYSubsampling, int[] bandOffsets, int pixelSize,
-            Point destinationOffset, WritableRaster imRas) throws IOException
+                              Rectangle destRegion, int sourceXSubsampling,
+                              int sourceYSubsampling, int[] bandOffsets,
+                              int pixelSize, Point destinationOffset,
+                              WritableRaster imRas) throws IOException
     {
         checkIndex(imageIndex);
 
@@ -634,13 +617,15 @@ public class NITFReader extends ImageReader
                  */
 
                 int[] requestBands = bandOffsets;
-                if (nBands != bandOffsets.length && bandOffsets.length == 1
-                        && bandOffsets[0] != 0)
-                {
-                    requestBands = new int[nBands];
-                    for (int i = 0; i < nBands; ++i)
-                        requestBands[i] = i;
-                }
+                /*
+                 * if (nBands != bandOffsets.length && bandOffsets.length == 1
+                 * && bandOffsets[0] != 0)
+                 * {
+                 * requestBands = new int[nBands];
+                 * for (int i = 0; i < nBands; ++i)
+                 * requestBands[i] = i;
+                 * }
+                 */
 
                 byte[][] rowBuf = new byte[requestBands.length][colBytes];
 
@@ -809,9 +794,11 @@ public class NITFReader extends ImageReader
             String pvType = subheader.getPixelValueType().getStringData()
                     .trim();
             int nbpp = subheader.getNumBitsPerPixel().getIntData();
+            int nBytes = ((nbpp - 1) / 8) + 1;
 
-            if (nbpp == 8 || nbpp == 16 || (nbpp == 32 && pvType.equals("R"))
-                    || (nbpp == 64 && pvType.equals("R")))
+            if (nBytes == 1 || nBytes == 2
+                    || (nBytes == 4 && pvType.equals("R"))
+                    || (nBytes == 8 && pvType.equals("R")))
             {
                 return ImageIOUtils.rasterToBufferedImage(raster, imageType);
             }

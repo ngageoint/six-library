@@ -229,6 +229,28 @@ NITFPRIV(void) implMemFree(void* p)
     if (p) NITF_FREE(p);
 }
 
+/* Place this above readJPEG2000 */
+#define PRIV_READ_BUF(_SZ) \
+nitf_Uint##_SZ* data##_SZ = (nitf_Uint##_SZ*)outputp; \
+for (i = 0; i < numRows; ++i) { \
+    for (j = 0; j < numCols; ++j) { \
+            *data##_SZ++ = \
+                (nitf_Uint##_SZ)jas_image_readcmptsample(image, component, j, i); \
+    } \
+}
+
+
+#define PRIV_READ_MATRIX(_SZ) { \
+nitf_Uint##_SZ* data##_SZ = (nitf_Uint##_SZ*)outputp; \
+jas_matrix_t* matrix##_SZ = jas_matrix_create(numRows, numCols); \
+jas_image_readcmpt (image, component, 0, 0, numCols, numRows, matrix##_SZ); \
+for (i = 0; i < numRows; ++i){ \
+    for (j = 0; j < numCols; ++j){ \
+        *data##_SZ++ = (nitf_Uint##_SZ)jas_matrix_get(matrix##_SZ, i, j); \
+    } \
+} \
+jas_matrix_destroy (matrix##_SZ); }
+
 
 NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
                            nitf_Uint32 inputLen,
@@ -243,6 +265,7 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
     jas_image_t *image;    /* The input image */
     /* Number of image components */
     nitf_Uint32 numComponents;
+    nitf_Uint32 i, j;
     nitf_Uint32 numRows;   /* Number of rows */
     nitf_Uint32 numCols;   /* Number of columns */
     nitf_Uint32 numBits;   /* Number of bits/pixel */
@@ -252,6 +275,7 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
     nitf_Uint8 *outputp;   /* Pointer into the output */
     jas_stream_t *outStr;  /* Output stream */
     nitf_Uint32 component; /* Current component (index) */
+    jas_image_fmtinfo_t *fmtinfo;
 
     /*      Open jasper input stream */
 
@@ -279,6 +303,7 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
     }
 
     fmtname = jas_image_fmttostr(fmtid);
+    fmtinfo = jas_image_lookupfmtbyid(fmtid);
     if (fmtname == NULL)
     {
         nitf_Error_init(error,
@@ -301,15 +326,13 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
         return 0;
     }
 
-    /*      Make the output buffer */
-
     numComponents = jas_image_numcmpts(image);
     numRows       = jas_image_cmptheight(image, 0);
     numCols       = jas_image_cmptwidth(image, 0);
     numBits       = jas_image_cmptprec(image, 0);
     numBytes      = ((numBits - 1) / 8) + 1;
 
-
+    /*      Make the output buffer */
     componentLength = 
         (nitf_Uint64)numRows * (nitf_Uint64)numCols * (nitf_Uint64)numBytes;
     *outputLen = componentLength * numComponents;
@@ -318,21 +341,53 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
 
     /*      Copy the result to the output buffer */
     outputp = *output;
-    printf("component size: [%d]\n", componentLength);
+    /*printf("component size: [%d]\n", componentLength);*/
     for (component = 0; component < numComponents; component++)
     {
-        jas_stream_memobj_t* memobj = NULL;
-        printf("Real Rows [%d]\n", jas_image_cmptheight(image, component));
-        printf("Real Cols [%d]\n", jas_image_cmptwidth(image, component));
+        /*jas_stream_memobj_t* memobj = NULL;*/
 
-        outStr = image->cmpts_[component]->stream_;
-        memobj = (jas_stream_memobj_t*) outStr->obj_;
-        jas_stream_flush(outStr);
+        numRows       = jas_image_cmptheight(image, component);
+        numCols       = jas_image_cmptwidth(image, component);
+        assert(jas_image_cmptprec(image, component) == numBits);
 
-        printf("Total bufsize for component #%d: [%d]\n", component,
-               memobj->bufsize_);
+        /*printf("Real Rows [%d]\n", numRows);
+        printf("Real Cols [%d]\n", numCols);*/
+
+        /*outStr = image->cmpts_[component]->stream_;
+        memobj = (jas_stream_memobj_t*) outStr->obj_;*/
+        /*jas_stream_flush(outStr);*/
+
+        /*printf("Total bufsize for component #%d: [%d]\n", component,
+               memobj->bufsize_);*/
+
         /* When we skip, we leave zeros from (c)alloc */
-        memcpy(outputp, memobj->buf_, memobj->bufsize_);
+        /*memcpy(outputp, outStr->ptr_, outStr->cnt_);*/
+        /*memcpy(outputp, memobj->buf_, memobj->bufsize_);*/
+
+        if (numBytes == 1)
+        {
+            /*PRIV_READ_BUF(8);*/
+            PRIV_READ_MATRIX(8);
+        }
+        else if (numBytes == 2)
+        {
+            /*PRIV_READ_BUF(16);*/
+            PRIV_READ_MATRIX(16);
+        }
+        else if (numBytes == 4)
+        {
+            /*PRIV_READ_BUF(32);*/
+            PRIV_READ_MATRIX(32);
+        }
+        else
+        {
+            nitf_Error_init(error,
+                            "Unknown pixel size",
+                            NITF_CTXT,
+                            NITF_ERR_DECOMPRESSION);
+            return 0;
+        }
+
         outputp += componentLength;
     }
 

@@ -147,7 +147,8 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
     {
         byteArray = (*env)->GetObjectArrayElement(env, userBuf, i);
         length = (*env)->GetArrayLength(env, byteArray);
-        (*env)->SetByteArrayRegion(env, byteArray, 0, length, data[i]);
+        /*(*env)->SetByteArrayRegion(env, byteArray, 0, length, data[i]);*/
+        (*env)->ReleaseByteArrayElements(env, byteArray, data[i], JNI_COMMIT);
     }
     free(data);
     return JNI_TRUE;
