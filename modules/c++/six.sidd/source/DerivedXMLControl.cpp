@@ -39,9 +39,8 @@ void DerivedXMLControl::xmlToProductCreation(
     productCreation->processorInformation->application = getFirstAndOnly(
             informationXML, "Application")->getCharacterData();
 
-    productCreation->processorInformation->processingDateTime
-            = parseDateTime(getFirstAndOnly(informationXML,
-                    "ProcessingDateTime"));
+    parseDateTime(getFirstAndOnly(informationXML, "ProcessingDateTime"),
+            productCreation->processorInformation->processingDateTime);
 
     productCreation->processorInformation->site = getFirstAndOnly(
             informationXML, "Site")->getCharacterData();
@@ -75,8 +74,8 @@ void DerivedXMLControl::xmlToProductCreation(
         ClassificationGuidance* classGuidance = new ClassificationGuidance();
         productCreation->classification.guidance = classGuidance;
 
-        productCreation->classification.guidance->date = parseDateTime(
-                getFirstAndOnly(classGuidanceXML, "Date"));
+        parseDateTime(getFirstAndOnly(classGuidanceXML, "Date"),
+                productCreation->classification.guidance->date);
         productCreation->classification.guidance->authority = getFirstAndOnly(
                 classGuidanceXML, "Authority")->getCharacterData();
     }
@@ -258,7 +257,8 @@ void DerivedXMLControl::xmlToGeographicAndTarget(
         for (std::vector<xml::lite::Element*>::iterator it2 =
                 footprintsXML.begin(); it2 != footprintsXML.end(); ++it2)
         {
-            std::vector<LatLon> fp = parseFootprint(*it2, "Vertex", false);
+            std::vector<LatLon> fp;
+            parseFootprint(*it2, "Vertex", fp, false);
             ti->footprints.push_back(fp);
         }
 
@@ -294,8 +294,8 @@ void DerivedXMLControl::xmlToGeographicCoverage(
                                                        "Footprint");
 
     //Footprint
-    geographicCoverage->footprint = 
-        parseFootprint(footprintXML, "Vertex", false);
+    parseFootprint(footprintXML, "Vertex", geographicCoverage->footprint,
+           false);
 
     //If there are subregions, recurse
     std::vector<xml::lite::Element*> subRegionsXML;
@@ -472,8 +472,8 @@ void DerivedXMLControl::xmlToExploitationFeatures(
             info->radarModeID = tmpElem->getCharacterData();
         }
 
-        info->collectionDateTime = parseDateTime(getFirstAndOnly(
-                informationXML, "CollectionDateTime"));
+        parseDateTime(getFirstAndOnly(informationXML, "CollectionDateTime"),
+                info->collectionDateTime);
 
         tmpElem = getOptional(informationXML, "LocalDateTime");
         if (tmpElem)

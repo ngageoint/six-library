@@ -134,7 +134,7 @@ protected:
     xml::lite::Element* createPolyXYZ(xml::lite::Document* doc,
             std::string name, const PolyXYZ& polyXYZ);
 
-    BooleanType parseBooleanType(xml::lite::Element* element);
+    void parseBooleanType(xml::lite::Element* element, BooleanType& value);
 
     void parsePoly1D(xml::lite::Element* polyXML, Poly1D& poly1D);
     void parsePoly2D(xml::lite::Element* polyXML, Poly2D& poly2D);
@@ -150,12 +150,13 @@ protected:
     void parseLatLon(xml::lite::Element* parent, LatLon& ll);
     void parseLatLons(xml::lite::Element* pointsXML, std::string pointName,
             std::vector<LatLon>& llVec);
-    virtual std::vector<LatLon> parseFootprint(xml::lite::Element* footprint,
-                                               std::string cornerName,
-                                               bool alt);
-    EarthModelType parseEarthModelType(xml::lite::Element* element);
-    SideOfTrackType parseSideOfTrackType(xml::lite::Element* element);
-    DateTime parseDateTime(xml::lite::Element* element);
+    virtual void parseFootprint(xml::lite::Element* footprint,
+            std::string cornerName, std::vector<LatLon>& value, bool alt);
+    void parseEarthModelType(xml::lite::Element* element,
+            EarthModelType& value);
+    void parseSideOfTrackType(xml::lite::Element* element,
+            SideOfTrackType& value);
+    void parseDateTime(xml::lite::Element* element, DateTime& value);
     void parseRowColDouble(xml::lite::Element* parent, std::string rowName,
             std::string colName, RowColDouble& rc);
     void parseRowColDouble(xml::lite::Element* parent, RowColDouble& rc);

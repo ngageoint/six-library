@@ -145,9 +145,8 @@ protected:
     
     void xmlToPFA(xml::lite::Element* pfaXML, PFA *obj);
 
-    std::vector<LatLon> parseFootprint(xml::lite::Element* footprint,
-                                       std::string cornerName, 
-                                       bool alt);
+    void parseFootprint(xml::lite::Element* footprint, std::string cornerName, 
+            std::vector<LatLon>& value, bool alt);
 
     xml::lite::Element* createFFTSign(xml::lite::Document* doc, std::string name, six::FFTSign sign);
     xml::lite::Element* createFootprint(xml::lite::Document* doc,

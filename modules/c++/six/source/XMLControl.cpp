@@ -427,9 +427,10 @@ void XMLControl::setAttribute(xml::lite::Element* e, std::string name,
     e->getAttributes().add(node);
 }
 
-BooleanType XMLControl::parseBooleanType(xml::lite::Element* element)
+void XMLControl::parseBooleanType(xml::lite::Element* element,
+        BooleanType& value)
 {
-    return str::toType<BooleanType>(element->getCharacterData());
+    value = str::toType<BooleanType>(element->getCharacterData());
 }
 
 Parameter XMLControl::parseParameter(xml::lite::Element* element)
@@ -496,26 +497,26 @@ void XMLControl::parseDecorrType(xml::lite::Element* decorrXML,
             "DecorrRate")->getCharacterData());
 }
 
-EarthModelType XMLControl::parseEarthModelType(xml::lite::Element* element)
+void XMLControl::parseEarthModelType(xml::lite::Element* element,
+        EarthModelType& value)
 {
-    return str::toType<EarthModelType>(element->getCharacterData());
+    value = str::toType<EarthModelType>(element->getCharacterData());
 }
 
-SideOfTrackType XMLControl::parseSideOfTrackType(xml::lite::Element* element)
+void XMLControl::parseSideOfTrackType(xml::lite::Element* element,
+        SideOfTrackType& value)
 {
-    return str::toType<SideOfTrackType>(element->getCharacterData());
+    value = str::toType<SideOfTrackType>(element->getCharacterData());
 }
 
-std::vector<LatLon> XMLControl::parseFootprint(xml::lite::Element* footprint,
-                                               std::string cornerName, 
-                                               bool alt)
+void XMLControl::parseFootprint(xml::lite::Element* footprint,
+        std::string cornerName, std::vector<LatLon>& value, bool alt)
 {
-    std::vector<LatLon> corners;
-    corners.resize(4);
-
     std::vector<xml::lite::Element*> vertices;
-
     footprint->getElementsByTagName(cornerName, vertices);
+
+    value.clear();
+    value.resize(4);
 
     for (unsigned int i = 0; i < vertices.size(); i++)
     {
@@ -536,11 +537,10 @@ std::vector<LatLon> XMLControl::parseFootprint(xml::lite::Element* footprint,
         if (alt)
         {
             lla.setAlt(str::toType<double>(getFirstAndOnly(
-                                               vertices[i], "HAE")->getCharacterData()));
+                    vertices[i], "HAE")->getCharacterData()));
         }
-        corners[idx] = lla;
+        value[idx] = lla;
     }
-    return corners;
 }
 
 void XMLControl::parseLatLon(xml::lite::Element* parent, LatLon& ll)
@@ -566,9 +566,9 @@ void XMLControl::parseLatLons(xml::lite::Element* pointsXML,
     }
 }
 
-DateTime XMLControl::parseDateTime(xml::lite::Element* element)
+void XMLControl::parseDateTime(xml::lite::Element* element, DateTime& value)
 {
-    return str::toType<DateTime>(element->getCharacterData());
+    value = str::toType<DateTime>(element->getCharacterData());
 }
 
 void XMLControl::parseRowColDouble(xml::lite::Element* parent,
