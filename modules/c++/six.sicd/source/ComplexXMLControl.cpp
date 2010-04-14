@@ -1092,7 +1092,7 @@ void ComplexXMLControl::xmlToImageCreation(
 
     element = getOptional(imageCreationXML, "DateTime");
     if (element)
-        imageCreation->dateTime = parseDateTime(element);
+        parseDateTime(element, imageCreation->dateTime);
 
     element = getOptional(imageCreationXML, "Site");
     if (element)
@@ -1166,17 +1166,15 @@ void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
 void ComplexXMLControl::xmlToGeoData(xml::lite::Element* geoDataXML,
         GeoData *geoData)
 {
-    geoData->earthModel = parseEarthModelType(getFirstAndOnly(geoDataXML,
-            "EarthModel"));
+    parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
+            geoData->earthModel);
 
     xml::lite::Element* tmpElem = getFirstAndOnly(geoDataXML, "SCP");
     parseVector3D(getFirstAndOnly(tmpElem, "ECF"), geoData->scp.ecf);
     parseLatLonAlt(getFirstAndOnly(tmpElem, "LLH"), geoData->scp.llh);
 
-    geoData->imageCorners = 
-        parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), 
-                       "ICP", 
-                       false);
+    parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP",
+            geoData->imageCorners, false);
 
     tmpElem = getOptional(geoDataXML, "ValidData");
     if (tmpElem != NULL)
@@ -1348,8 +1346,8 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
 void ComplexXMLControl::xmlToTimeline(xml::lite::Element* timelineXML,
         Timeline *timeline)
 {
-    timeline->collectStart = parseDateTime(getFirstAndOnly(timelineXML,
-            "CollectStart"));
+    parseDateTime(getFirstAndOnly(timelineXML, "CollectStart"),
+            timeline->collectStart);
     timeline->collectDuration = str::toType<double>(getFirstAndOnly(
             timelineXML, "CollectDuration")->getCharacterData());
 
@@ -1655,7 +1653,8 @@ void ComplexXMLControl::xmlToRadarCollection(
         if (optElem)
         {
             //optional
-            radarCollection->area->apcCorners = parseFootprint(optElem, "APC", true);
+            parseFootprint(optElem, "APC", radarCollection->area->apcCorners,
+                    true);
         }
 
         xml::lite::Element* planeXML = getOptional(areaXML, "Plane");
@@ -1836,13 +1835,14 @@ void ComplexXMLControl::xmlToImageFormation(
         imageFormation->polarizationCalibration = new PolarizationCalibration();
         imageFormation->polarizationCalibration->distortion = new Distortion();
 
-        imageFormation->polarizationCalibration->hvAngleCompensationApplied
-                = parseBooleanType(getFirstAndOnly(polCalXML,
-                        "HVAngleCompApplied"));
+        parseBooleanType(getFirstAndOnly(polCalXML, "HVAngleCompApplied"),
+                imageFormation->polarizationCalibration
+                ->hvAngleCompensationApplied);
 
-        imageFormation->polarizationCalibration->distortionCorrectionApplied
-                = parseBooleanType(getFirstAndOnly(polCalXML,
-                        "DistortionCorrectionApplied"));
+        parseBooleanType(getFirstAndOnly(polCalXML,
+                "DistortionCorrectionApplied"),
+                imageFormation->polarizationCalibration
+                ->distortionCorrectionApplied);
 
         xml::lite::Element* distortionXML = getFirstAndOnly(polCalXML,
                 "Distortion");
@@ -1851,8 +1851,8 @@ void ComplexXMLControl::xmlToImageFormation(
                 "CalibrationDate");
         if (calibDateXML)
         {
-            imageFormation->polarizationCalibration->distortion->calibrationDate
-                    = parseDateTime(calibDateXML);
+            parseDateTime(calibDateXML, imageFormation->polarizationCalibration
+                    ->distortion->calibrationDate);
         }
 
         imageFormation->polarizationCalibration->distortion->a
@@ -2037,14 +2037,14 @@ void ComplexXMLControl::xmlToAntennaParams(
     if (tmpElem)
     {
         //optional
-        params->electricalBoresightFrequencyShift = parseBooleanType(tmpElem);
+        parseBooleanType(tmpElem, params->electricalBoresightFrequencyShift);
     }
 
     tmpElem = getOptional(antennaParamsXML, "MLFreqDilation");
     if (tmpElem)
     {
         //optional
-        params->mainlobeFrequencyDilation = parseBooleanType(tmpElem);
+        parseBooleanType(tmpElem, params->mainlobeFrequencyDilation);
     }
 }
 
@@ -2136,8 +2136,8 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
     if (deskewXML)
     {
         pfa->slowTimeDeskew = new SlowTimeDeskew();
-        pfa->slowTimeDeskew->applied = parseBooleanType(getFirstAndOnly(
-                deskewXML, "Applied"));
+        parseBooleanType(getFirstAndOnly(deskewXML, "Applied"),
+                pfa->slowTimeDeskew->applied);
 
         parsePoly2D(getFirstAndOnly(deskewXML, "STDSPhasePoly"),
                 pfa->slowTimeDeskew->slowTimeDeskewPhasePoly);
@@ -2152,7 +2152,7 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
         Compensation* comp = new Compensation();
 
         comp->type = getFirstAndOnly(*it, "Type")->getCharacterData();
-        comp->applied = parseBooleanType(getFirstAndOnly(*it, "Applied"));
+        parseBooleanType(getFirstAndOnly(*it, "Applied"), comp->applied);
 
         //optional
         parseParameters(*it, "Parameter", comp->parameters);
@@ -2161,14 +2161,14 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
     }
 }
 
-std::vector<LatLon> 
-ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
-                                  std::string cornerName, 
-                                  bool alt)
+void ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
+        std::string cornerName, std::vector<LatLon>& value, bool alt)
 {
-    std::vector<LatLon> corners(4);
     std::vector<xml::lite::Element*> vertices;
     footprint->getElementsByTagName(cornerName, vertices);
+
+    value.clear();
+    value.resize(4);
 
     for (unsigned int i = 0; i < vertices.size(); i++)
     {
@@ -2176,15 +2176,14 @@ ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
         int idx = str::toType<int>(vertices[i]->getAttributes().getValue(
                 "index")) - 1;
 
-        parseLatLon(vertices[i], corners[idx]);
+        parseLatLon(vertices[i], value[idx]);
 
         if (alt)
         {
-            corners[idx].setAlt(str::toType<double>(getFirstAndOnly(
+            value[idx].setAlt(str::toType<double>(getFirstAndOnly(
                     vertices[i], "HAE")->getCharacterData()));
         }
     }
-    return corners;
 }
 
 xml::lite::Element* ComplexXMLControl::createFootprint(
