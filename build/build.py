@@ -527,7 +527,6 @@ def detect(self):
         vars['nowarn']         = '/W3 /wd4290'.split()
         vars['verbose']        = ''
         vars['64']             = '/MACHINE:x64'
-        vars['32']             = '/MACHINE:x86'
         vars['optz_med']       = '-O2 /MT'.split()
         vars['optz_fast']      = '-O2 /MT'.split()
         vars['optz_fastest']   = '-Ox /MT'.split()
@@ -550,11 +549,6 @@ def detect(self):
         env.append_value('CCFLAGS', flags)
         env.append_value('CCFLAGS_THREAD', threadFlags)
         
-        if Options.options.enable64:
-            env.append_value('LINKFLAGS', config['cc']['64'].split())
-        else:
-            env.append_value('LINKFLAGS', config['cc']['32'].split())
-    
     else:
         self.fatal('OS/platform currently unsupported: %s' % platform)
     
