@@ -33,7 +33,7 @@ LIBHANDLERS = lib$(PACKAGE)-handlers
 LIBEXT  = .a
 DSOEXT  = .so
 EXTLIBS = -lnitf-c
-EXTINCLUDEPATH = -I@top_srcdir@/include
+EXTINCLUDEPATH = -I@top_srcdir@/include -I@top_srcdir@/tests
 EXTLIBPATH = -L@top_srcdir@/lib/@target@
 CFGDEFS = @DEFS@
 SOURCES = BandInfo.c \
@@ -106,10 +106,10 @@ SOURCES = BandInfo.c \
 #          DEReader.c \
 
 TESTS = test_replace_field.c test_find_field.c test_field.c \
-        test_dll_1.c test_list_1.c test_list_2.c \
+        test_dll_1.c test_list.c \
         test_debug_mem_1.c test_hash_table_1.c \
         test_dump_record.c test_image_loading.c \
-        test_create.c test_fhdr_clone.c test_list_clone.c \
+        test_create.c test_fhdr_clone.c \
         test_hash_table_clone.c test_imsub_clone.c \
         test_image_source.c test_writer_3.c \
         test_file_source.c test_mem_source.c test_tree_1.c \
