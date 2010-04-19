@@ -526,7 +526,8 @@ def detect(self):
         vars['warn']           = '/Wall'
         vars['nowarn']         = '/W3 /wd4290'.split()
         vars['verbose']        = ''
-        vars['64']             = '/MACHINE:X64 '
+        vars['64']             = '/MACHINE:X64'
+        vars['32']             = '/MACHINE:X32'
         vars['optz_med']       = '-O2 /MT'.split()
         vars['optz_fast']      = '-O2 /MT'.split()
         vars['optz_fastest']   = '-Ox /MT'.split()
