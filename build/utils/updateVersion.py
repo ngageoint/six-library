@@ -46,6 +46,8 @@ if __name__ == '__main__':
             sys.stdout.write(line)
     
     replaceInProperties(os.path.join(top_dir, 'java/nitf/project.properties'))
+    replaceInProperties(os.path.join(top_dir, 'java/nitf.imagej/project.properties'))
+    replaceInProperties(os.path.join(top_dir, 'java/nitf.imageio/project.properties'))
     
     #update xml pom files
     def replaceInPom(pomFile):
@@ -59,6 +61,8 @@ if __name__ == '__main__':
     
     replaceInPom(os.path.join(top_dir, 'java/nitf/pom.xml'))
     replaceInPom(os.path.join(top_dir, 'java/cgm/pom.xml'))
+    replaceInPom(os.path.join(top_dir, 'java/nitf.imageio/pom.xml'))
+    replaceInPom(os.path.join(top_dir, 'java/nitf.imagej/pom.xml'))
     
     def replaceInWscript(wscript):
         for line in fileinput.input(wscript, inplace=1):
@@ -70,11 +74,12 @@ if __name__ == '__main__':
     replaceInWscript(os.path.join(top_dir, 'c++/nitf/wscript'))
     replaceInWscript(os.path.join(top_dir, 'java/nitf/wscript'))
     replaceInWscript(os.path.join(top_dir, 'java/cgm/wscript'))
+    replaceInWscript(os.path.join(top_dir, 'wscript'))
     
     #update python setup.py
     setupFile = os.path.join(top_dir, 'python/nitf/setup.py')
     for line in fileinput.input(setupFile, inplace=1):
-        line = re.sub(r'(\s*version\s*=\s*),.+', r"\g<1>'%s'" % fullVersion, line)
+        line = re.sub(r'version\s*=\s*\'.*\',', r"version = '%s'" % fullVersion, line)
         sys.stdout.write(line)
     
     #update windows installer
