@@ -21,27 +21,25 @@
  */
 
 #include <import/nitf.h>
-int main()
+#include "Test.h"
+
+TEST_CASE(testCoreValues)
 {
-    assert( sizeof(nitf_Uint8) == 1 );
-    assert( sizeof(nitf_Uint16) == 2 );
-    assert( sizeof(nitf_Uint32) == 4 );
-    assert( sizeof(nitf_Uint64) == 8 );
+    TEST_ASSERT( sizeof(nitf_Uint8) == 1 );
+    TEST_ASSERT( sizeof(nitf_Uint16) == 2 );
+    TEST_ASSERT( sizeof(nitf_Uint32) == 4 );
+    TEST_ASSERT( sizeof(nitf_Uint64) == 8 );
 
-    assert( sizeof(nitf_Int8) == 1 );
-    assert( sizeof(nitf_Int16) == 2 );
-    assert( sizeof(nitf_Int32) == 4 );
-    assert( sizeof(nitf_Int64) == 8);
-
-    printf("sizeof(size_t): %d\n", sizeof(size_t) );
-    printf("sizeof(nitf_Off):  %d\n", sizeof(nitf_Off) );
+    TEST_ASSERT( sizeof(nitf_Int8) == 1 );
+    TEST_ASSERT( sizeof(nitf_Int16) == 2 );
+    TEST_ASSERT( sizeof(nitf_Int32) == 4 );
+    TEST_ASSERT( sizeof(nitf_Int64) == 8);
 
     if ( sizeof( long ) == 4 )
     {
         const char* ok = "2147483647";
         const char* bad = "2147483648";
         /* Test our assertions for atol, format */
-
 
         printf("A long is 4 bytes\n");
         printf("Ok: (str: %s) [%ld]\n", ok, atol(ok));
@@ -63,11 +61,11 @@ int main()
         printf("As long long\n");
         printf("Ok: (str: %s) [%lld]\n", ok, NITF_ATO64(ok));
         printf("Bad: (str: %s) [%lld]\n", bad, NITF_ATO64(bad));
-
-
     }
-
-
-    return 0;
 }
 
+int main(int argc, char **argv)
+{
+    CHECK(testCoreValues);
+    return 0;
+}

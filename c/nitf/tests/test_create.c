@@ -20,26 +20,22 @@
  *
  */
 
-#include <nitf/IOHandle.h>
+#include <import/nitf.h>
+#include "Test.h"
 
-
-int main(int argc, char** argv)
+TEST_CASE(testCreate)
 {
     nitf_IOHandle handle;
-    nitf_Error    error;
-    if (argc != 2)
-    {
-        printf("Usage %s <file-to-create>\n", argv[0]);
-        exit(EXIT_FAILURE);
-    }
+    nitf_Error error;
 
-    handle = nitf_IOHandle_create(argv[1], NITF_ACCESS_READONLY, NITF_CREATE, &error);
-    if ( NITF_INVALID_HANDLE( handle ) )
-    {
-        nitf_Error_print(&error, stderr, "Test failed!");
-        exit(EXIT_FAILURE);
-    }
-    printf("Create succeeded.  Check file permissions to make sure they're OK\n");
+    handle = nitf_IOHandle_create("test_create.ntf", NITF_ACCESS_READONLY, NITF_CREATE, &error);
+    TEST_ASSERT(!NITF_INVALID_HANDLE(handle));
+
     nitf_IOHandle_close(handle);
+}
+
+int main(int argc, char **argv)
+{
+    CHECK(testCreate);
     return 0;
 }
