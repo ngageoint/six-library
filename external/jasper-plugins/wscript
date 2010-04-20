@@ -1,134 +1,11 @@
 import os, shutil
 import Options
 
-fname = 'jasper-1.900.1'
-
-def configure(conf):
-    conf.check_cc(header_name="sys/types.h", define_name='HAVE_SYS_TYPES_H')
-    uchar = conf.check_cc(fragment='#include <sys/types.h>\nint main(){uchar i; return 0;}',
-                          msg='Checking for uchar', errmsg='not found')
-    ushort = conf.check_cc(fragment='#include <sys/types.h>\nint main(){ushort i; return 0;}',
-                          msg='Checking for ushort', errmsg='not found')
-    longlong = conf.check_cc(fragment='#include <sys/types.h>\nint main(){longlong i; return 0;}',
-                          msg='Checking for longlong', errmsg='not found')
-    ulonglong = conf.check_cc(fragment='#include <sys/types.h>\nint main(){ulonglong i; return 0;}',
-                          msg='Checking for ulonglong', errmsg='not found')
-    if not uchar:
-        conf.env.append_unique('jasper-defs', 'uchar=unsigned char') 
-    if not ushort:
-        conf.env.append_unique('jasper-defs', 'ushort=unsigned short')
-    if not longlong:
-        conf.env.append_unique('jasper-defs', 'longlong=long long') 
-    if not ulonglong:
-        conf.env.append_unique('jasper-defs', 'ulonglong=unsigned long long')
-
+configure = distclean = lambda x: False
 
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.env_of_name(variant)
-    
-    defs = env['defines']
-    defList = []
-    for k, v in defs.iteritems():
-        if v:
-            defList.append('%s=%s' % (k, v))
-    
-    #---------------------------------------------------------------------------
-    ###### LIB-JASPER
-    ut = bld.new_task_gen(path=bld.path.find_dir('build'), fname='%s.zip' % fname, env=env.copy())
-    ut.features = ['unzip']
-    bld.add_group()
-    
-    driverNode = bld.path.find_dir('build').ensure_dir_node_from_path(fname)
-    
-    jDefs = map(lambda x: x.split('='), env['jasper-defs'])
-    defDict = dict(PACKAGE='"jasper"', PACKAGE_NAME='"jasper"',
-                   JAS_VERSION='"1.900.1"', PACKAGE_STRING='"jasper 1.900.1"',
-                   PACKAGE_VERSION='"1.900.1"', PACKAGE_TARNAME='"jasper"',
-                   VERSION='"1.900.1"',)
-    for k,v in jDefs:
-        defDict[k] = v
-                   
-    configH = bld.new_task_gen(output='src/libjasper/include/jasper/jas_config.h',
-                               path=driverNode, defs=defDict, before='JASPER', env=env.copy())
-    configH.features = ['makeHeader']
-    
-    jasperDefs = []
-    if Options.platform.startswith('win'):
-        jasperDefs.append('JAS_WIN_MSVC_BUILD')
-        
-    includes = ('src/libjasper/bmp',
-                'src/libjasper/include/',
-                'src/libjasper/jp2',
-                'src/libjasper/jpc',
-                'src/libjasper/jpg',
-                'src/libjasper/mif',
-                'src/libjasper/pgx',
-                'src/libjasper/pnm',
-                'src/libjasper/ras')
-        
-    sources = (
-        'src/libjasper/bmp/bmp_cod.c',
-        'src/libjasper/bmp/bmp_dec.c',
-        'src/libjasper/bmp/bmp_enc.c',
-        'src/libjasper/base/jas_cm.c',
-        'src/libjasper/base/jas_debug.c',
-        'src/libjasper/base/jas_getopt.c',
-        'src/libjasper/base/jas_icc.c',
-        'src/libjasper/base/jas_iccdata.c',
-        'src/libjasper/base/jas_image.c',
-        'src/libjasper/base/jas_init.c',
-        'src/libjasper/base/jas_malloc.c',
-        'src/libjasper/base/jas_seq.c',
-        'src/libjasper/base/jas_stream.c',
-        'src/libjasper/base/jas_string.c',
-        'src/libjasper/base/jas_tmr.c',
-        'src/libjasper/base/jas_tvp.c',
-        'src/libjasper/base/jas_version.c',
-        'src/libjasper/jp2/jp2_cod.c',
-        'src/libjasper/jp2/jp2_dec.c',
-        'src/libjasper/jp2/jp2_enc.c',
-        'src/libjasper/jpc/jpc_bs.c',
-        'src/libjasper/jpc/jpc_cs.c',
-        'src/libjasper/jpc/jpc_dec.c',
-        'src/libjasper/jpc/jpc_enc.c',
-        'src/libjasper/jpc/jpc_math.c',
-        'src/libjasper/jpc/jpc_mct.c',
-        'src/libjasper/jpc/jpc_mqcod.c',
-        'src/libjasper/jpc/jpc_mqdec.c',
-        'src/libjasper/jpc/jpc_mqenc.c',
-        'src/libjasper/jpc/jpc_qmfb.c',
-        'src/libjasper/jpc/jpc_t1cod.c',
-        'src/libjasper/jpc/jpc_t1dec.c',
-        'src/libjasper/jpc/jpc_t1enc.c',
-        'src/libjasper/jpc/jpc_t2cod.c',
-        'src/libjasper/jpc/jpc_t2dec.c',
-        'src/libjasper/jpc/jpc_t2enc.c',
-        'src/libjasper/jpc/jpc_tagtree.c',
-        'src/libjasper/jpc/jpc_tsfb.c',
-        'src/libjasper/jpc/jpc_util.c',
-        'src/libjasper/jpg/jpg_dummy.c',
-        'src/libjasper/jpg/jpg_val.c',
-        'src/libjasper/mif/mif_cod.c',
-        'src/libjasper/pgx/pgx_cod.c',
-        'src/libjasper/pgx/pgx_dec.c',
-        'src/libjasper/pgx/pgx_enc.c',
-        'src/libjasper/pnm/pnm_cod.c',
-        'src/libjasper/pnm/pnm_dec.c',
-        'src/libjasper/pnm/pnm_enc.c',
-        'src/libjasper/ras/ras_cod.c',
-        'src/libjasper/ras/ras_dec.c',
-        'src/libjasper/ras/ras_enc.c',
-    )
-        
-    jasper = bld.new_task_gen('cc', 'staticlib', includes=includes,
-                              source=sources,
-                              target='jasper', path=driverNode,
-                              export_incdirs='src/libjasper/include/',
-                              defines=defList + jasperDefs,
-                              env=env.copy(),
-                              name='JASPER')
-    bld.add_group()
     
     #---------------------------------------------------------------------------
     ###### JASPER PLUG-IN
@@ -141,12 +18,4 @@ def build(bld):
                            install_path='${PREFIX}/share/nitf/plugins')
     lib.find_sources_in_dirs('./source', excludes=[])
     libEnv['shlib_PATTERN'] = libPattern
-    
 
-
-def distclean(context):
-    unzipPath = os.path.join(context.curdir, 'build', fname)
-    try:
-        if os.path.exists(unzipPath):
-            shutil.rmtree(unzipPath, ignore_errors=True)
-    except:{}
