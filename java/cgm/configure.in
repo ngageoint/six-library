@@ -22,16 +22,6 @@ POSIX=".POSIX:"
 
 AC_PROG_CC
 
-
-######################################################################
-# Process '--enable-gnu' argument before doing system setups.
-######################################################################
-AC_ARG_ENABLE(gnu,
-              [  --enable-gnu			Use GNU compiler rather than native compiler.],
-              CC="gcc",
-              CC="cc")
-
-
 dnl ##############################################
 dnl INCLUDES
 dnl ##############################################
