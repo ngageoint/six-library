@@ -213,8 +213,8 @@ NRL                N/A                        0,255 (Supposed to be display read
 	</xs:complexType>
 	<xs:complexType name="SampleSpacing2DType">
 		<xs:sequence>
-			<xs:element name="SampleSpacingRow" type="sicommon:LatLonType"/>
-			<xs:element name="SampleSpacingCol" type="sicommon:LatLonType"/>
+			<xs:element name="Row" type="sicommon:LatLonType"/>
+			<xs:element name="Col" type="sicommon:LatLonType"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="BaseProjectionType">
