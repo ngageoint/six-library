@@ -55,8 +55,8 @@ case "${target}" in
         	    sys_cc_warn_flags="-Wall"
         	    sys_cc_verb_flags="-v"
         	    sys_cc_64_flags="-m64 -fPIC"
-        	    sys_cc_optz_med="-O1"
-        	    sys_cc_optz_fast="-O2"
+        	    sys_cc_optz_med="-O2"
+        	    sys_cc_optz_fast="-O3"
         	    sys_cc_optz_fastest="-O3"
 
         	    def_cc_optz_flags="${sys_cc_optz_med}"
@@ -64,10 +64,10 @@ case "${target}" in
         	    def_link_thread_libs="-lpthread"
 
         	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-                cc_flags="-fPIC"
+                    cc_flags="-fPIC"
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs="-ldl -lm"
+                    link_autolibs="-ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"
