@@ -3692,7 +3692,7 @@ esac
 
 case "${target}" in
    sparc-sun-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
             echo "$as_me:$LINENO: result: selecting the forte compiler..." >&5
 echo "${ECHO_T}selecting the forte compiler..." >&6
@@ -3761,7 +3761,7 @@ esac
 
 case "${target}" in
    mips-sgi-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
 	    echo "$as_me:$LINENO: result: selecting the mips compiler..." >&5
 echo "${ECHO_T}selecting the mips compiler..." >&6
@@ -3789,28 +3789,24 @@ echo "${ECHO_T}selecting the compiler option for the archiver..." >&6
          g++)
             echo "$as_me:$LINENO: result: selecting the gnu compiler..." >&5
 echo "${ECHO_T}selecting the gnu compiler..." >&6
-		    echo "$as_me:$LINENO: result: selecting the compiler option for the archiver..." >&5
+            echo "$as_me:$LINENO: result: selecting the compiler option for the archiver..." >&5
 echo "${ECHO_T}selecting the compiler option for the archiver..." >&6
 
-		    sys_cxx_debug_flags="-g"
-		    sys_cxx_warn_flags="-Wall"
-		    sys_cxx_verb_flags="-v"
-		    sys_cxx_64_flags=""
-		    sys_cxx_optz_med="-O1"
-		    sys_cxx_optz_fast="-O2"
-		    sys_cxx_optz_fastest="-O3"
+            sys_cxx_debug_flags="-g"
+            sys_cxx_warn_flags="-Wall"
+            sys_cxx_verb_flags="-v"
+            sys_cxx_64_flags=""
+            sys_cxx_optz_med="-O1"
+            sys_cxx_optz_fast="-O2"
+            sys_cxx_optz_fastest="-O3"
 
-	        auto_test_flags=""
-
-		    def_cxx_optz_flags="${sys_cxx_optz_fast}"
-
-		    cxx_defs=""
-		    cxx_flags=""
-		    cxx_optz_flags="${def_cxx_optz_flags}"
-
-		    link_libs="-ldl"
-
-	        ar_flags="-ru"
+	    auto_test_flags=""
+            def_cxx_optz_flags="${sys_cxx_optz_fast}"
+	    cxx_defs=""
+            cxx_flags=""
+            cxx_optz_flags="${def_cxx_optz_flags}"
+            link_libs="-ldl"
+            ar_flags="-ru"
          ;;
 
       esac
@@ -3832,7 +3828,7 @@ esac
 
 case "${target}" in
     *-*-linux-*|i686-pc-*)
-        case "${CXX}" in
+        case `basename "${CXX}"` in
 
             icc)
                 echo "$as_me:$LINENO: result: selecting the intel icc compiler..." >&5
@@ -3893,14 +3889,14 @@ esac
 # Make an adjustment for system compiler on AIX systems, which is named xlC.
 case "${target}" in
    rs6000-ibm-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
             CXX="xlC"
          ;;
       esac
    ;;
    powerpc-ibm-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
             CXX="xlC"
          ;;
@@ -3912,7 +3908,7 @@ esac
 
 case "${target}" in
     powerpc-ibm-*)
-        case "${CXX}" in
+        case `basename "${CXX}"` in
           xlC)
               echo "$as_me:$LINENO: result: selecting the ibm compiler..." >&5
 echo "${ECHO_T}selecting the ibm compiler..." >&6
@@ -3970,7 +3966,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6
 
 
     rs6000-ibm-*)
-        case "${CXX}" in
+        case `basename "${CXX}"` in
         xlC)
             echo "$as_me:$LINENO: result: selecting the ibm compiler..." >&5
 echo "${ECHO_T}selecting the ibm compiler..." >&6
@@ -4379,36 +4375,36 @@ cxx_thread_libs="-lpthread"
 
 case "${target}" in
    mips-sgi-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
 	        cxx_thread_defs="-D_REENTRANT"
 	        link_thread_libs=""
          ;;
 
          g++)
-		    cxx_thread_defs="-D_REENTRANT"
-		    link_thread_libs=""
+		cxx_thread_defs="-D_REENTRANT"
+		link_thread_libs=""
          ;;
       esac
    ;;
 
    sparc-sun-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
 	        cxx_thread_defs="-mt"
 	        link_thread_libs="-lthread"
          ;;
 
          g++)
-		    cxx_thread_defs="-D_REENTRANT -D__POSIX"
-		    link_thread_libs="-lpthread"
+		cxx_thread_defs="-D_REENTRANT -D__POSIX"
+		link_thread_libs="-lpthread"
          ;;
       esac
    ;;
 
 
    *-*-linux-*|i686-pc-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          icc)
             cxx_thread_defs="-D_REENTRANT -D__POSIX"
 	    	link_thread_libs="-lpthread"
@@ -4422,7 +4418,7 @@ case "${target}" in
    ;;
 
    powerpc-ibm-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          xlC)
 	        cxx_thread_defs="-D_REENTRANT -D__POSIX"
 	        link_thread_libs="-lpthread"
@@ -4436,7 +4432,7 @@ case "${target}" in
 
 
    rs6000-ibm-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          xlC)
 	        cxx_thread_defs="-D_REENTRANT -D__POSIX"
 	        link_thread_libs="-lpthread"
@@ -5202,10 +5198,6 @@ echo "${ECHO_T}enabling debug sicortex mpi..." >&6
 fi
 
 
-
-
-
-# :vim:syntax=sh
 
 
 
