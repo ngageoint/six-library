@@ -18,13 +18,6 @@ AC_PROG_CC
 cc_thread_defs="-D_REENTRANT -D__POSIX"
 link_libs="-ldl -lnsl"
 link_thread_libs="-lpthread"
-case `basename "${CC}"` in
-     gcc)
-	AC_MSG_RESULT(gnu compiler libdir)
-	lib_dir="gnu"
-     ;;
-esac
-
 
 cc_64_flags="-glnx86"
 

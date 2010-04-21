@@ -3322,14 +3322,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 cc_thread_defs="-D_REENTRANT -D__POSIX"
 link_libs="-ldl -lnsl"
 link_thread_libs="-lpthread"
-case `basename "${CC}"` in
-     gcc)
-	echo "$as_me:$LINENO: result: gnu compiler libdir" >&5
-echo "${ECHO_T}gnu compiler libdir" >&6
-	lib_dir="gnu"
-     ;;
-esac
-
 
 cc_64_flags="-glnx86"
 
