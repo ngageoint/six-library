@@ -194,12 +194,10 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
     if (histogramOverridesXML)
     {
         display->histogramOverrides = new DRAHistogramOverrides();
-        display->histogramOverrides->clipMin
-                = str::toType<int>(getFirstAndOnly(histogramOverridesXML,
-                        "ClipMin")->getCharacterData());
-        display->histogramOverrides->clipMax
-                = str::toType<int>(getFirstAndOnly(histogramOverridesXML,
-                        "ClipMax")->getCharacterData());
+        parseInt(getFirstAndOnly(histogramOverridesXML, "ClipMin"),
+                display->histogramOverrides->clipMin);
+        parseInt(getFirstAndOnly(histogramOverridesXML, "ClipMax"),
+                display->histogramOverrides->clipMax);
     }
 
     //MonitorCompensationApplied
@@ -208,12 +206,10 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
     if (monitorCompensationXML)
     {
         display->monitorCompensationApplied = new MonitorCompensationApplied();
-        display->monitorCompensationApplied->gamma
-                = str::toType<double>(getFirstAndOnly(monitorCompensationXML,
-                        "Gamma")->getCharacterData());
-        display->monitorCompensationApplied->xMin
-                = str::toType<double>(getFirstAndOnly(monitorCompensationXML,
-                        "XMin")->getCharacterData());
+        parseDouble(getFirstAndOnly(monitorCompensationXML, "Gamma"),
+                display->monitorCompensationApplied->gamma);
+        parseDouble(getFirstAndOnly(monitorCompensationXML, "XMin"),
+                display->monitorCompensationApplied->xMin);
     }
 
     //DisplayExtension
@@ -373,13 +369,8 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
 
     xml::lite::Element* refXML = getFirstAndOnly(projXML, "ReferencePoint");
 
-    xml::lite::Element* tmpElem = getFirstAndOnly(refXML, "ECEF");
-    measurement->projection->referencePoint.ecef[0] = str::toType<double>(
-            getFirstAndOnly(tmpElem, "X")->getCharacterData());
-    measurement->projection->referencePoint.ecef[1] = str::toType<double>(
-            getFirstAndOnly(tmpElem, "Y")->getCharacterData());
-    measurement->projection->referencePoint.ecef[2] = str::toType<double>(
-            getFirstAndOnly(tmpElem, "Z")->getCharacterData());
+    parseVector3D(getFirstAndOnly(refXML, "ECEF"),
+            measurement->projection->referencePoint.ecef);
 
     parseRowColDouble(getFirstAndOnly(refXML, "Point"),
             measurement->projection->referencePoint.rowCol);
@@ -393,21 +384,11 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
 
         xml::lite::Element* prodPlaneXML = getFirstAndOnly(projXML,
                 "ProductPlane");
-        tmpElem = getFirstAndOnly(prodPlaneXML, "RowUnitVector");
-        planeProj->productPlane.rowUnitVector[0] = str::toType<double>(
-                getFirstAndOnly(tmpElem, "X")->getCharacterData());
-        planeProj->productPlane.rowUnitVector[1] = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Y")->getCharacterData());
-        planeProj->productPlane.rowUnitVector[2] = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Z")->getCharacterData());
 
-        tmpElem = getFirstAndOnly(prodPlaneXML, "ColUnitVector");
-        planeProj->productPlane.colUnitVector[0] = str::toType<double>(
-                getFirstAndOnly(tmpElem, "X")->getCharacterData());
-        planeProj->productPlane.colUnitVector[1] = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Y")->getCharacterData());
-        planeProj->productPlane.colUnitVector[2] = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Z")->getCharacterData());
+        parseVector3D(getFirstAndOnly(prodPlaneXML, "RowUnitVector"),
+                planeProj->productPlane.rowUnitVector);
+        parseVector3D(getFirstAndOnly(prodPlaneXML, "ColUnitVector"),
+                planeProj->productPlane.colUnitVector);
     }
     else if (measurement->projection->projectionType == PROJECTION_CYLINDRICAL)
     {
@@ -417,12 +398,11 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
         {
             CylindricalProjection* cylindricalProj = 
                     (CylindricalProjection*) measurement->projection;
-            cylindricalProj->curvatureRadius = str::toType<double>(
-                    curvRadiusXML->getCharacterData());
+            parseDouble(curvRadiusXML, cylindricalProj->curvatureRadius);
         }
     }
 
-    tmpElem = getFirstAndOnly(measurementXML, "ARPPoly");
+    xml::lite::Element* tmpElem = getFirstAndOnly(measurementXML, "ARPPoly");
     parsePolyXYZ(tmpElem, measurement->arpPoly);
 
     tmpElem = getFirstAndOnly(measurementXML, "TimeCOAPoly");
@@ -481,14 +461,11 @@ void DerivedXMLControl::xmlToExploitationFeatures(
             info->localDateTime = tmpElem->getCharacterData();
         }
 
-        info->collectionDuration = str::toType<double>(getFirstAndOnly(
-                informationXML, "CollectionDuration")->getCharacterData());
+        parseDouble(getFirstAndOnly(informationXML, "CollectionDuration"),
+                info->collectionDuration);
 
-        tmpElem = getFirstAndOnly(informationXML, "Resolution");
-        info->resolution.range = str::toType<double>(getFirstAndOnly(tmpElem,
-                "Range")->getCharacterData());
-        info->resolution.azimuth = str::toType<double>(getFirstAndOnly(tmpElem,
-                "Azimuth")->getCharacterData());
+        parseRangeAzimuth(getFirstAndOnly(informationXML, "Resolution"),
+                info->resolution);
 
         xml::lite::Element* roiXML = getOptional(informationXML, "InputROI");
         if (roiXML)
@@ -511,8 +488,7 @@ void DerivedXMLControl::xmlToExploitationFeatures(
                     tmpElem->getCharacterData());
 
             tmpElem = getFirstAndOnly(polXML, "RcvPolarization");
-            info->polarization->rcvPolarization = str::toType<double>(
-                    tmpElem->getCharacterData());
+            parseDouble(tmpElem, info->polarization->rcvPolarization);
         }
 
         // Geometry
@@ -527,32 +503,31 @@ void DerivedXMLControl::xmlToExploitationFeatures(
             tmpElem = getOptional(geometryXML, "Azimuth");
             if (tmpElem)
             {
-                geom->azimuth
-                        = str::toType<double>(tmpElem->getCharacterData());
+                parseDouble(tmpElem, geom->azimuth);
             }
 
             tmpElem = getOptional(geometryXML, "Slope");
             if (tmpElem)
             {
-                geom->slope = str::toType<double>(tmpElem->getCharacterData());
+                parseDouble(tmpElem, geom->slope);
             }
 
             tmpElem = getOptional(geometryXML, "Squint");
             if (tmpElem)
             {
-                geom->squint = str::toType<double>(tmpElem->getCharacterData());
+                parseDouble(tmpElem, geom->squint);
             }
 
             tmpElem = getOptional(geometryXML, "Graze");
             if (tmpElem)
             {
-                geom->graze = str::toType<double>(tmpElem->getCharacterData());
+                parseDouble(tmpElem, geom->graze);
             }
 
             tmpElem = getOptional(geometryXML, "Tilt");
             if (tmpElem)
             {
-                geom->tilt = str::toType<double>(tmpElem->getCharacterData());
+                parseDouble(tmpElem, geom->tilt);
             }
         }
 
@@ -570,34 +545,31 @@ void DerivedXMLControl::xmlToExploitationFeatures(
             tmpElem = getOptional(phenomenologyXML, "Shadow");
             if (tmpElem)
             {
-                phenom->shadow.angle = str::toType<double>(getFirstAndOnly(
-                        tmpElem, "Angle")->getCharacterData());
-                phenom->shadow.magnitude = str::toType<double>(getFirstAndOnly(
-                        tmpElem, "Magnitude")->getCharacterData());
+                parseDouble(getFirstAndOnly(tmpElem, "Angle"),
+                        phenom->shadow.angle);
+                parseDouble(getFirstAndOnly(tmpElem, "Magnitude"),
+                        phenom->shadow.magnitude);
             }
 
             tmpElem = getOptional(phenomenologyXML, "Layover");
             if (tmpElem)
             {
-                phenom->layover.angle = str::toType<double>(getFirstAndOnly(
-                        tmpElem, "Angle")->getCharacterData());
-                phenom->layover.magnitude
-                        = str::toType<double>(getFirstAndOnly(tmpElem,
-                                "Magnitude")->getCharacterData());
+                parseDouble(getFirstAndOnly(tmpElem, "Angle"),
+                        phenom->layover.angle);
+                parseDouble(getFirstAndOnly(tmpElem, "Magnitude"),
+                        phenom->layover.magnitude);
             }
 
             tmpElem = getOptional(phenomenologyXML, "MultiPath");
             if (tmpElem)
             {
-                phenom->multiPath = str::toType<double>(
-                        tmpElem->getCharacterData());
+                parseDouble(tmpElem, phenom->multiPath);
             }
 
             tmpElem = getOptional(phenomenologyXML, "GroundTrack");
             if (tmpElem)
             {
-                phenom->groundTrack = str::toType<double>(
-                        tmpElem->getCharacterData());
+                parseDouble(tmpElem, phenom->groundTrack);
             }
         }
     }
@@ -611,7 +583,7 @@ void DerivedXMLControl::xmlToExploitationFeatures(
 
     tmpElem = getOptional(productXML, "North");
     if (tmpElem)
-        prod.north = str::toType<double>(tmpElem->getCharacterData());
+        parseDouble(tmpElem, prod.north);
 }
 
 Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
@@ -1442,8 +1414,8 @@ void DerivedXMLControl::xmlToDownstreamReprocessing(xml::lite::Element* elem,
 
         procEvent->applicationName
                 = getFirstAndOnly(peXML, "ApplicationName")->getCharacterData();
-        procEvent->appliedDateTime = str::toType<six::DateTime>(
-                getFirstAndOnly(peXML, "AppliedDateTime")->getCharacterData());
+        parseDateTime(getFirstAndOnly(peXML, "AppliedDateTime"),
+                procEvent->appliedDateTime);
 
         xml::lite::Element *tmpElem = getOptional(peXML, "InterpolationMethod");
         if (tmpElem)
