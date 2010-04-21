@@ -1038,17 +1038,17 @@ xml::lite::Element* ComplexXMLControl::pfaToXML(xml::lite::Document* doc,
 void ComplexXMLControl::xmlToCollectionInfo(
         xml::lite::Element* collectionInfoXML, CollectionInformation *collInfo)
 {
-    collInfo->collectorName = getFirstAndOnly(collectionInfoXML,
-            "CollectorName")->getCharacterData();
+    parseString(getFirstAndOnly(collectionInfoXML, "CollectorName"),
+            collInfo->collectorName);
 
     xml::lite::Element* element = getOptional(collectionInfoXML,
             "IlluminatorName");
     if (element)
-        collInfo->illuminatorName = element->getCharacterData();
+        parseString(element, collInfo->illuminatorName);
 
     element = getOptional(collectionInfoXML, "CoreName");
     if (element)
-        collInfo->coreName = element->getCharacterData();
+        parseString(element, collInfo->coreName);
 
     element = getOptional(collectionInfoXML, "CollectType");
     if (element)
@@ -1063,19 +1063,22 @@ void ComplexXMLControl::xmlToCollectionInfo(
 
     element = getOptional(radarModeXML, "ModeID");
     if (element)
-        collInfo->radarModeID = element->getCharacterData();
+        parseString(element, collInfo->radarModeID);
 
-    collInfo->classification.level = getFirstAndOnly(collectionInfoXML,
-            "Classification")->getCharacterData();
+    parseString(getFirstAndOnly(collectionInfoXML, "Classification"),
+            collInfo->classification.level);
 
     std::vector<xml::lite::Element*> countryCodeXML;
     collectionInfoXML->getElementsByTagName("CountryCode", countryCodeXML);
 
     //optional
-    for (std::vector<xml::lite::Element*>::iterator it = countryCodeXML.begin(); it
-            != countryCodeXML.end(); ++it)
+    for (std::vector<xml::lite::Element*>::iterator it = countryCodeXML.begin();
+            it != countryCodeXML.end(); ++it)
     {
-        collInfo->countryCodes.push_back((*it)->getCharacterData());
+        std::string cc;
+
+        parseString(*it, cc);
+        collInfo->countryCodes.push_back(cc);
     }
 
     //optional
@@ -1088,7 +1091,7 @@ void ComplexXMLControl::xmlToImageCreation(
     // Optional
     xml::lite::Element* element = getOptional(imageCreationXML, "Application");
     if (element)
-        imageCreation->application = element->getCharacterData();
+        parseString(element, imageCreation->application);
 
     element = getOptional(imageCreationXML, "DateTime");
     if (element)
@@ -1096,11 +1099,11 @@ void ComplexXMLControl::xmlToImageCreation(
 
     element = getOptional(imageCreationXML, "Site");
     if (element)
-        imageCreation->site = element->getCharacterData();
+        parseString(element, imageCreation->site);
 
     element = getOptional(imageCreationXML, "Profile");
     if (element)
-        imageCreation->profile = element->getCharacterData();
+        parseString(element, imageCreation->profile);
 }
 
 void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
@@ -1125,18 +1128,14 @@ void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
         for (std::vector<xml::lite::Element*>::iterator it = ampsXML.begin(); 
 	     it != ampsXML.end(); ++it)
         {
-	    *(double*)ampTable[i++] = str::toType<double>((*it)->getCharacterData());
+            parseDouble(*it, *(double*)ampTable[i++]);
         }
     }
 
-    imageData->numRows = str::toType<unsigned long>(getFirstAndOnly(
-            imageDataXML, "NumRows")->getCharacterData());
-    imageData->numCols = str::toType<unsigned long>(getFirstAndOnly(
-            imageDataXML, "NumCols")->getCharacterData());
-    imageData->firstRow = str::toType<unsigned long>(getFirstAndOnly(
-            imageDataXML, "FirstRow")->getCharacterData());
-    imageData->firstCol = str::toType<unsigned long>(getFirstAndOnly(
-            imageDataXML, "FirstCol")->getCharacterData());
+    parseUInt(getFirstAndOnly(imageDataXML, "NumRows"), imageData->numRows);
+    parseUInt(getFirstAndOnly(imageDataXML, "NumCols"), imageData->numCols);
+    parseUInt(getFirstAndOnly(imageDataXML, "FirstRow"), imageData->firstRow);
+    parseUInt(getFirstAndOnly(imageDataXML, "FirstCol"), imageData->firstCol);
 
     parseRowColInt(getFirstAndOnly(imageDataXML, "FullImage"), "NumRows",
             "NumCols", imageData->fullImage);
@@ -1251,20 +1250,16 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
 
     tmpElem = getFirstAndOnly(gridXML, "Row");
     parseVector3D(getFirstAndOnly(tmpElem, "UVectECF"), grid->row->unitVector);
-    grid->row->sampleSpacing = str::toType<double>(getFirstAndOnly(tmpElem,
-            "SS")->getCharacterData());
-    grid->row->impulseResponseWidth = str::toType<double>(getFirstAndOnly(
-            tmpElem, "ImpRespWid")->getCharacterData());
-    grid->row->sign = str::toType<six::FFTSign>(
-            getFirstAndOnly(tmpElem, "Sgn")->getCharacterData());
-    grid->row->impulseResponseBandwidth = str::toType<double>(getFirstAndOnly(
-            tmpElem, "ImpRespBW")->getCharacterData());
-    grid->row->kCenter = str::toType<double>(
-            getFirstAndOnly(tmpElem, "KCtr")->getCharacterData());
-    grid->row->deltaK1 = str::toType<double>(
-            getFirstAndOnly(tmpElem, "DeltaK1")->getCharacterData());
-    grid->row->deltaK2 = str::toType<double>(
-            getFirstAndOnly(tmpElem, "DeltaK2")->getCharacterData());
+    parseDouble(getFirstAndOnly(tmpElem, "SS"), grid->row->sampleSpacing);
+    parseDouble(getFirstAndOnly(tmpElem, "ImpRespWid"),
+            grid->row->impulseResponseWidth);
+    grid->row->sign = str::toType<six::FFTSign>(getFirstAndOnly(tmpElem,
+            "Sgn")->getCharacterData());
+    parseDouble(getFirstAndOnly(tmpElem, "ImpRespBW"),
+            grid->row->impulseResponseBandwidth);
+    parseDouble(getFirstAndOnly(tmpElem, "KCtr"), grid->row->kCenter);
+    parseDouble(getFirstAndOnly(tmpElem, "DeltaK1"), grid->row->deltaK1);
+    parseDouble(getFirstAndOnly(tmpElem, "DeltaK2"), grid->row->deltaK2);
 
     xml::lite::Element* optElem = getOptional(tmpElem, "DeltaKCOAPoly");
     if (optElem)
@@ -1277,7 +1272,7 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
     if (optElem)
     {
         //optional
-        grid->row->weightType = optElem->getCharacterData();
+        parseString(optElem, grid->row->weightType);
     }
 
     xml::lite::Element* weightFuncXML = getOptional(tmpElem, "WgtFunct");
@@ -1290,27 +1285,24 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
         for (std::vector<xml::lite::Element*>::iterator it = weightsXML.begin(); it
                 != weightsXML.end(); ++it)
         {
-            grid->row->weights.push_back(str::toType<double>(
-                    (*it)->getCharacterData()));
+            double value;
+            parseDouble(*it, value);
+            grid->row->weights.push_back(value);
         }
     }
 
     tmpElem = getFirstAndOnly(gridXML, "Col");
     parseVector3D(getFirstAndOnly(tmpElem, "UVectECF"), grid->col->unitVector);
-    grid->col->sampleSpacing = str::toType<double>(getFirstAndOnly(tmpElem,
-            "SS")->getCharacterData());
-    grid->col->impulseResponseWidth = str::toType<double>(getFirstAndOnly(
-            tmpElem, "ImpRespWid")->getCharacterData());
+    parseDouble(getFirstAndOnly(tmpElem, "SS"), grid->col->sampleSpacing);
+    parseDouble(getFirstAndOnly(tmpElem, "ImpRespWid"),
+            grid->col->impulseResponseWidth);
     grid->col->sign = str::toType<six::FFTSign>(
             getFirstAndOnly(tmpElem, "Sgn")->getCharacterData());
-    grid->col->impulseResponseBandwidth = str::toType<double>(getFirstAndOnly(
-            tmpElem, "ImpRespBW")->getCharacterData());
-    grid->col->kCenter = str::toType<double>(
-            getFirstAndOnly(tmpElem, "KCtr")->getCharacterData());
-    grid->col->deltaK1 = str::toType<double>(
-            getFirstAndOnly(tmpElem, "DeltaK1")->getCharacterData());
-    grid->col->deltaK2 = str::toType<double>(
-            getFirstAndOnly(tmpElem, "DeltaK2")->getCharacterData());
+    parseDouble(getFirstAndOnly(tmpElem, "ImpRespBW"),
+            grid->col->impulseResponseBandwidth);
+    parseDouble(getFirstAndOnly(tmpElem, "KCtr"), grid->col->kCenter);
+    parseDouble(getFirstAndOnly(tmpElem, "DeltaK1"), grid->col->deltaK1);
+    parseDouble(getFirstAndOnly(tmpElem, "DeltaK2"), grid->col->deltaK2);
 
     optElem = getOptional(tmpElem, "DeltaKCOAPoly");
     if (optElem)
@@ -1323,7 +1315,7 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
     if (optElem)
     {
         //optional
-        grid->col->weightType = optElem->getCharacterData();
+        parseString(optElem, grid->col->weightType);
     }
 
     weightFuncXML = getOptional(tmpElem, "WgtFunct");
@@ -1337,8 +1329,9 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
         for (std::vector<xml::lite::Element*>::iterator it = weightsXML.begin(); it
                 != weightsXML.end(); ++it)
         {
-            grid->col->weights.push_back(str::toType<double>(
-                    (*it)->getCharacterData()));
+            double value;
+            parseDouble(*it, value);
+            grid->col->weights.push_back(value);
         }
     }
 }
@@ -1348,8 +1341,8 @@ void ComplexXMLControl::xmlToTimeline(xml::lite::Element* timelineXML,
 {
     parseDateTime(getFirstAndOnly(timelineXML, "CollectStart"),
             timeline->collectStart);
-    timeline->collectDuration = str::toType<double>(getFirstAndOnly(
-            timelineXML, "CollectDuration")->getCharacterData());
+    parseDouble(getFirstAndOnly(timelineXML, "CollectDuration"),
+            timeline->collectDuration);
 
     xml::lite::Element* ippXML = getOptional(timelineXML, "IPP");
     if (ippXML)
@@ -1363,14 +1356,11 @@ void ComplexXMLControl::xmlToTimeline(xml::lite::Element* timelineXML,
         {
             // Use the first set that is already available.
             TimelineSet* ts = new TimelineSet();
-            ts->tStart = str::toType<double>(
-                    (getFirstAndOnly(*it, "TStart"))->getCharacterData());
-            ts->tEnd = str::toType<double>(
-                    (getFirstAndOnly(*it, "TEnd"))->getCharacterData());
-            ts->interPulsePeriodStart = str::toType<int>((getFirstAndOnly(*it,
-                    "IPPStart"))->getCharacterData());
-            ts->interPulsePeriodEnd = str::toType<int>((getFirstAndOnly(*it,
-                    "IPPEnd"))->getCharacterData());
+            parseDouble(getFirstAndOnly(*it, "TStart"), ts->tStart);
+            parseDouble(getFirstAndOnly(*it, "TEnd"), ts->tEnd);
+            parseInt(getFirstAndOnly(*it, "IPPStart"),
+                    ts->interPulsePeriodStart);
+            parseInt(getFirstAndOnly(*it, "IPPEnd"), ts->interPulsePeriodEnd);
             parsePoly1D(getFirstAndOnly(*it, "IPPPoly"),
                     ts->interPulsePeriodPoly);
             timeline->interPulsePeriod->sets.push_back(ts);
@@ -1433,12 +1423,10 @@ void ComplexXMLControl::xmlToRadarCollection(
     {
         radarCollection->resolution = new ResolutionParameters();
 
-        radarCollection->resolution->rangeImpulseResponseWidth = str::toType<
-                double>(
-                getFirstAndOnly(tmpElem, "RgImpResWid")->getCharacterData());
-        radarCollection->resolution->azimuthImpulseResponseWidth = str::toType<
-                double>(
-                getFirstAndOnly(tmpElem, "AzImpResWid")->getCharacterData());
+        parseDouble(getFirstAndOnly(tmpElem, "RgImpResWid"),
+                radarCollection->resolution->rangeImpulseResponseWidth);
+        parseDouble(getFirstAndOnly(tmpElem, "AzImpResWid"),
+                radarCollection->resolution->azimuthImpulseResponseWidth);
 
         xml::lite::Element *refXML = getOptional(tmpElem, "ReferencePoint");
         if (refXML)
@@ -1461,15 +1449,14 @@ void ComplexXMLControl::xmlToRadarCollection(
     if (tmpElem)
     {
         //optional
-        radarCollection->refFrequencyIndex = str::toType<int>(
-                tmpElem->getCharacterData());
+        parseInt(tmpElem, radarCollection->refFrequencyIndex);
     }
 
     tmpElem = getFirstAndOnly(radarCollectionXML, "TxFrequency");
-    radarCollection->txFrequencyMin = str::toType<double>(getFirstAndOnly(
-            tmpElem, "Min")->getCharacterData());
-    radarCollection->txFrequencyMax = str::toType<double>(getFirstAndOnly(
-            tmpElem, "Max")->getCharacterData());
+    parseDouble(getFirstAndOnly(tmpElem, "Min"),
+            radarCollection->txFrequencyMin);
+    parseDouble(getFirstAndOnly(tmpElem, "Max"),
+            radarCollection->txFrequencyMax);
 
     tmpElem = getOptional(radarCollectionXML, "TxPolarization");
     if (tmpElem)
@@ -1502,8 +1489,7 @@ void ComplexXMLControl::xmlToRadarCollection(
             if (optElem)
             {
                 //optional
-                step->waveformIndex = str::toType<int>(
-                        optElem->getCharacterData());
+                parseInt(optElem, step->waveformIndex);
             }
 
             optElem = getOptional(*it, "TxPolarization");
@@ -1535,32 +1521,28 @@ void ComplexXMLControl::xmlToRadarCollection(
             if (optElem)
             {
                 //optional
-                wfParams->txPulseLength = str::toType<double>(
-                        optElem->getCharacterData());
+                parseDouble(optElem, wfParams->txPulseLength);
             }
 
             optElem = getOptional(*it, "TxRFBandwidth");
             if (optElem)
             {
                 //optional
-                wfParams->txRFBandwidth = str::toType<double>(
-                        optElem->getCharacterData());
+                parseDouble(optElem, wfParams->txRFBandwidth);
             }
 
             optElem = getOptional(*it, "TxFreqStart");
             if (optElem)
             {
                 //optional
-                wfParams->txFrequencyStart = str::toType<double>(
-                        optElem->getCharacterData());
+                parseDouble(optElem, wfParams->txFrequencyStart);
             }
 
             optElem = getOptional(*it, "TxFMRate");
             if (optElem)
             {
                 //optional
-                wfParams->txFMRate = str::toType<double>(
-                        optElem->getCharacterData());
+                parseDouble(optElem, wfParams->txFMRate);
             }
 
             optElem = getOptional(*it, "RcvDemodType");
@@ -1575,40 +1557,35 @@ void ComplexXMLControl::xmlToRadarCollection(
             if (optElem)
             {
                 //optional
-                wfParams->rcvWindowLength = str::toType<double>(
-                        optElem->getCharacterData());
+                parseDouble(optElem, wfParams->rcvWindowLength);
             }
 
             optElem = getOptional(*it, "ADCSampleRate");
             if (optElem)
             {
                 //optional
-                wfParams->adcSampleRate = str::toType<double>(
-                        optElem->getCharacterData());
+                parseDouble(optElem, wfParams->adcSampleRate);
             }
 
             optElem = getOptional(*it, "RcvIFBandwidth");
             if (optElem)
             {
                 //optional
-                wfParams->rcvIFBandwidth = str::toType<double>(
-                        optElem->getCharacterData());
+                parseDouble(optElem, wfParams->rcvIFBandwidth);
             }
 
             optElem = getOptional(*it, "RcvFreqStart");
             if (optElem)
             {
                 //optional
-                wfParams->rcvFrequencyStart = str::toType<double>(
-                        optElem->getCharacterData());
+                parseDouble(optElem, wfParams->rcvFrequencyStart);
             }
 
             optElem = getOptional(*it, "RcvFMRate");
             if (optElem)
             {
                 //optional
-                wfParams->rcvFMRate = str::toType<double>(
-                        optElem->getCharacterData());
+                parseDouble(optElem, wfParams->rcvFMRate);
             }
 
             radarCollection->waveform.push_back(wfParams);
@@ -1628,8 +1605,7 @@ void ComplexXMLControl::xmlToRadarCollection(
         xml::lite::Element* childXML = getOptional(*it, "RcvAPCIndex");
         if (childXML)
         {
-            chanParams->rcvAPCIndex = str::toType<int>(
-                    childXML->getCharacterData());
+            parseInt(childXML, chanParams->rcvAPCIndex);
         }
 
         childXML = getOptional(*it, "TxRcvPolarization");
@@ -1675,38 +1651,30 @@ void ComplexXMLControl::xmlToRadarCollection(
 
             parseVector3D(getFirstAndOnly(refPtXML, "ECF"),
                     radarCollection->area->plane->referencePoint.ecef);
-            radarCollection->area->plane->referencePoint.rowCol.row
-                    = str::toType<double>(
-                            getFirstAndOnly(refPtXML, "Line")->getCharacterData());
-            radarCollection->area->plane->referencePoint.rowCol.col
-                    = str::toType<double>(
-                            getFirstAndOnly(refPtXML, "Sample")->getCharacterData());
+            parseDouble(getFirstAndOnly(refPtXML, "Line"),
+                    radarCollection->area->plane->referencePoint.rowCol.row);
+            parseDouble(getFirstAndOnly(refPtXML, "Sample"),
+                    radarCollection->area->plane->referencePoint.rowCol.col);
 
             xml::lite::Element* dirXML = getFirstAndOnly(planeXML, "XDir");
             parseVector3D(getFirstAndOnly(dirXML, "UVectECF"),
                     radarCollection->area->plane->xDirection->unitVector);
-            radarCollection->area->plane->xDirection->spacing = str::toType<
-                    double>(
-                    getFirstAndOnly(dirXML, "LineSpacing")->getCharacterData());
-            radarCollection->area->plane->xDirection->elements = str::toType<
-                    unsigned long>(
-                    getFirstAndOnly(dirXML, "NumLines")->getCharacterData());
-            radarCollection->area->plane->xDirection->first = str::toType<
-                    unsigned long>(
-                    getFirstAndOnly(dirXML, "FirstLine")->getCharacterData());
+            parseDouble(getFirstAndOnly(dirXML, "LineSpacing"),
+                    radarCollection->area->plane->xDirection->spacing);
+            parseUInt(getFirstAndOnly(dirXML, "NumLines"),
+                    radarCollection->area->plane->xDirection->elements);
+            parseUInt(getFirstAndOnly(dirXML, "FirstLine"),
+                    radarCollection->area->plane->xDirection->first);
 
             dirXML = getFirstAndOnly(planeXML, "YDir");
             parseVector3D(getFirstAndOnly(dirXML, "UVectECF"),
                     radarCollection->area->plane->yDirection->unitVector);
-            radarCollection->area->plane->yDirection->spacing
-                    = str::toType<double>(getFirstAndOnly(dirXML,
-                            "SampleSpacing")->getCharacterData());
-            radarCollection->area->plane->yDirection->elements = str::toType<
-                    unsigned long>(
-                    getFirstAndOnly(dirXML, "NumSamples")->getCharacterData());
-            radarCollection->area->plane->yDirection->first = str::toType<
-                    unsigned long>(
-                    getFirstAndOnly(dirXML, "FirstSample")->getCharacterData());
+            parseDouble(getFirstAndOnly(dirXML, "SampleSpacing"),
+                    radarCollection->area->plane->yDirection->spacing);
+            parseUInt(getFirstAndOnly(dirXML, "NumSamples"),
+                    radarCollection->area->plane->yDirection->elements);
+            parseUInt(getFirstAndOnly(dirXML, "FirstSample"),
+                    radarCollection->area->plane->yDirection->first);
 
             xml::lite::Element* segmentListXML = getOptional(planeXML,
                     "SegmentList");
@@ -1721,16 +1689,13 @@ void ComplexXMLControl::xmlToRadarCollection(
                 {
                     Segment* seg = new Segment();
 
-                    seg->startLine = str::toType<int>(getFirstAndOnly(*it,
-                            "StartLine")->getCharacterData());
-                    seg->startSample = str::toType<int>(getFirstAndOnly(*it,
-                            "StartSample")->getCharacterData());
-                    seg->endLine = str::toType<int>(getFirstAndOnly(*it,
-                            "EndLine")->getCharacterData());
-                    seg->endSample = str::toType<int>(getFirstAndOnly(*it,
-                            "EndSample")->getCharacterData());
-                    seg->identifier
-                            = getFirstAndOnly(*it, "Identifier")->getCharacterData();
+                    parseInt(getFirstAndOnly(*it, "StartLine"),seg->startLine);
+                    parseInt(getFirstAndOnly(*it, "StartSample"),
+                            seg->startSample);
+                    parseInt(getFirstAndOnly(*it, "EndLine"), seg->endLine);
+                    parseInt(getFirstAndOnly(*it, "EndSample"), seg->endSample);
+                    parseString(getFirstAndOnly(*it, "Identifier"),
+                            seg->identifier);
 
                     radarCollection->area->plane->segmentList.push_back(seg);
                 }
@@ -1758,21 +1723,20 @@ void ComplexXMLControl::xmlToImageFormation(
     if (tmpElem)
     {
         //optional
-        imageFormation->segmentIdentifier = tmpElem->getCharacterData();
+        parseString(tmpElem, imageFormation->segmentIdentifier);
     }
 
     tmpElem = getFirstAndOnly(imageFormationXML, "RcvChanProc");
 
-    imageFormation->rcvChannelProcessed->numChannelsProcessed = str::toType<
-            unsigned int>(
-            getFirstAndOnly(tmpElem, "NumChanProc")->getCharacterData());
+    parseUInt(getFirstAndOnly(tmpElem, "NumChanProc"),
+            imageFormation->rcvChannelProcessed->numChannelsProcessed);
 
     xml::lite::Element* prfXML = getOptional(tmpElem, "PRFScaleFactor");
     if (prfXML)
     {
         //optional
-        imageFormation->rcvChannelProcessed->prfScaleFactor = str::toType<
-                double>(prfXML->getCharacterData());
+        parseDouble(prfXML,
+                imageFormation->rcvChannelProcessed->prfScaleFactor);
     }
 
     //TODO make sure there is at least one
@@ -1781,8 +1745,9 @@ void ComplexXMLControl::xmlToImageFormation(
     for (std::vector<xml::lite::Element*>::iterator it = chansXML.begin(); it
             != chansXML.end(); ++it)
     {
-        imageFormation->rcvChannelProcessed->channelIndex.push_back(
-                str::toType<int>((*it)->getCharacterData()));
+        int value;
+        parseInt(*it, value);
+        imageFormation->rcvChannelProcessed->channelIndex.push_back(value);
     }
 
     tmpElem = getOptional(imageFormationXML, "TxRcvPolarizationProc");
@@ -1797,19 +1762,19 @@ void ComplexXMLControl::xmlToImageFormation(
             = str::toType<ImageFormationType>(getFirstAndOnly(
                     imageFormationXML, "ImageFormAlgo")->getCharacterData());
 
-    imageFormation->tStartProc = str::toType<double>(getFirstAndOnly(
-            imageFormationXML, "TStartProc")->getCharacterData());
+    parseDouble(getFirstAndOnly(imageFormationXML, "TStartProc"),
+            imageFormation->tStartProc);
 
-    imageFormation->tEndProc = str::toType<double>(getFirstAndOnly(
-            imageFormationXML, "TEndProc")->getCharacterData());
+    parseDouble(getFirstAndOnly(imageFormationXML, "TEndProc"),
+            imageFormation->tEndProc);
 
     tmpElem = getFirstAndOnly(imageFormationXML, "TxFrequencyProc");
 
-    imageFormation->txFrequencyProcMin = str::toType<double>(getFirstAndOnly(
-            tmpElem, "MinProc")->getCharacterData());
+    parseDouble(getFirstAndOnly(tmpElem, "MinProc"),
+            imageFormation->txFrequencyProcMin);
 
-    imageFormation->txFrequencyProcMax = str::toType<double>(getFirstAndOnly(
-            tmpElem, "MaxProc")->getCharacterData());
+    parseDouble(getFirstAndOnly(tmpElem, "MaxProc"),
+            imageFormation->txFrequencyProcMax);
 
     imageFormation->slowTimeBeamCompensation = str::toType<
             SlowTimeBeamCompensationType>(getFirstAndOnly(imageFormationXML,
@@ -1855,94 +1820,57 @@ void ComplexXMLControl::xmlToImageFormation(
                     ->distortion->calibrationDate);
         }
 
-        imageFormation->polarizationCalibration->distortion->a
-                = str::toType<double>(
-                        getFirstAndOnly(distortionXML, "A")->getCharacterData());
+        parseDouble(getFirstAndOnly(distortionXML, "A"),
+                imageFormation->polarizationCalibration->distortion->a);
 
-        double r, i;
-        tmpElem = getFirstAndOnly(distortionXML, "F1");
-        r = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Real")->getCharacterData());
-        i = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Imag")->getCharacterData());
-        imageFormation->polarizationCalibration->distortion->f1 = std::complex<
-                float>(r, i);
-
-        tmpElem = getFirstAndOnly(distortionXML, "Q1");
-        r = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Real")->getCharacterData());
-        i = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Imag")->getCharacterData());
-        imageFormation->polarizationCalibration->distortion->q1 = std::complex<
-                float>(r, i);
-
-        tmpElem = getFirstAndOnly(distortionXML, "Q2");
-        r = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Real")->getCharacterData());
-        i = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Imag")->getCharacterData());
-        imageFormation->polarizationCalibration->distortion->q2 = std::complex<
-                float>(r, i);
-
-        tmpElem = getFirstAndOnly(distortionXML, "F2");
-        r = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Real")->getCharacterData());
-        i = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Imag")->getCharacterData());
-        imageFormation->polarizationCalibration->distortion->f2 = std::complex<
-                float>(r, i);
-
-        tmpElem = getFirstAndOnly(distortionXML, "Q3");
-        r = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Real")->getCharacterData());
-        i = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Imag")->getCharacterData());
-        imageFormation->polarizationCalibration->distortion->q3 = std::complex<
-                float>(r, i);
-
-        tmpElem = getFirstAndOnly(distortionXML, "Q4");
-        r = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Real")->getCharacterData());
-        i = str::toType<double>(
-                getFirstAndOnly(tmpElem, "Imag")->getCharacterData());
-        imageFormation->polarizationCalibration->distortion->q4 = std::complex<
-                float>(r, i);
+        parseComplex(getFirstAndOnly(distortionXML, "F1"),
+                imageFormation->polarizationCalibration->distortion->f1);
+        parseComplex(getFirstAndOnly(distortionXML, "Q1"),
+                imageFormation->polarizationCalibration->distortion->q1);
+        parseComplex(getFirstAndOnly(distortionXML, "Q2"),
+                imageFormation->polarizationCalibration->distortion->q2);
+        parseComplex(getFirstAndOnly(distortionXML, "F2"),
+                imageFormation->polarizationCalibration->distortion->f2);
+        parseComplex(getFirstAndOnly(distortionXML, "Q3"),
+                imageFormation->polarizationCalibration->distortion->q3);
+        parseComplex(getFirstAndOnly(distortionXML, "Q4"),
+                imageFormation->polarizationCalibration->distortion->q4);
 
         xml::lite::Element* gainErrorXML = getOptional(distortionXML,
                 "GainErrorA");
         if (gainErrorXML)
         {
-            imageFormation->polarizationCalibration->distortion->gainErrorA
-                    = str::toType<double>(gainErrorXML->getCharacterData());
+            parseDouble(gainErrorXML, imageFormation->polarizationCalibration
+                    ->distortion->gainErrorA);
         }
 
         gainErrorXML = getOptional(distortionXML, "GainErrorF1");
         if (gainErrorXML)
         {
-            imageFormation->polarizationCalibration->distortion->gainErrorF1
-                    = str::toType<double>(gainErrorXML->getCharacterData());
+            parseDouble(gainErrorXML, imageFormation->polarizationCalibration
+                    ->distortion->gainErrorF1);
         }
 
         gainErrorXML = getOptional(distortionXML, "GainErrorF2");
         if (gainErrorXML)
         {
-            imageFormation->polarizationCalibration->distortion->gainErrorF2
-                    = str::toType<double>(gainErrorXML->getCharacterData());
+            parseDouble(gainErrorXML, imageFormation->polarizationCalibration
+                    ->distortion->gainErrorF2);
         }
 
         xml::lite::Element* phaseErrorXML = getOptional(distortionXML,
                 "PhaseErrorF1");
         if (phaseErrorXML)
         {
-            imageFormation->polarizationCalibration->distortion->phaseErrorF1
-                    = str::toType<double>(phaseErrorXML->getCharacterData());
+            parseDouble(phaseErrorXML, imageFormation->polarizationCalibration
+                    ->distortion->phaseErrorF1);
         }
 
         phaseErrorXML = getOptional(distortionXML, "PhaseErrorF2");
         if (phaseErrorXML)
         {
-            imageFormation->polarizationCalibration->distortion->phaseErrorF2
-                    = str::toType<double>(phaseErrorXML->getCharacterData());
+            parseDouble(phaseErrorXML, imageFormation->polarizationCalibration
+                    ->distortion->phaseErrorF2);
         }
 
     }
@@ -1951,29 +1879,23 @@ void ComplexXMLControl::xmlToImageFormation(
 void ComplexXMLControl::xmlToSCPCOA(xml::lite::Element* scpcoaXML,
         SCPCOA *scpcoa)
 {
-    scpcoa->scpTime = str::toType<double>(
-            getFirstAndOnly(scpcoaXML, "SCPTime")->getCharacterData());
+    parseDouble(getFirstAndOnly(scpcoaXML, "SCPTime"), scpcoa->scpTime);
 
     parseVector3D(getFirstAndOnly(scpcoaXML, "ARPPos"), scpcoa->arpPos);
     parseVector3D(getFirstAndOnly(scpcoaXML, "ARPVel"), scpcoa->arpVel);
     parseVector3D(getFirstAndOnly(scpcoaXML, "ARPAcc"), scpcoa->arpAcc);
 
-    scpcoa->sideOfTrack = str::toType<SideOfTrackType>(getFirstAndOnly(
-            scpcoaXML, "SideOfTrack")->getCharacterData());
-    scpcoa->slantRange = str::toType<double>(getFirstAndOnly(scpcoaXML,
-            "SlantRange")->getCharacterData());
-    scpcoa->groundRange = str::toType<double>(getFirstAndOnly(scpcoaXML,
-            "GroundRange")->getCharacterData());
-    scpcoa->dopplerConeAngle = str::toType<double>(getFirstAndOnly(scpcoaXML,
-            "DopplerConeAng")->getCharacterData());
-    scpcoa->grazeAngle = str::toType<double>(getFirstAndOnly(scpcoaXML,
-            "GrazeAng")->getCharacterData());
-    scpcoa->incidenceAngle = str::toType<double>(getFirstAndOnly(scpcoaXML,
-            "IncidenceAng")->getCharacterData());
-    scpcoa->twistAngle = str::toType<double>(getFirstAndOnly(scpcoaXML,
-            "TwistAng")->getCharacterData());
-    scpcoa->slopeAngle = str::toType<double>(getFirstAndOnly(scpcoaXML,
-            "SlopeAng")->getCharacterData());
+    parseSideOfTrackType(getFirstAndOnly(scpcoaXML, "SideOfTrack"),
+            scpcoa->sideOfTrack);
+    parseDouble(getFirstAndOnly(scpcoaXML, "SlantRange"), scpcoa->slantRange);
+    parseDouble(getFirstAndOnly(scpcoaXML, "GroundRange"), scpcoa->groundRange);
+    parseDouble(getFirstAndOnly(scpcoaXML, "DopplerConeAng"),
+            scpcoa->dopplerConeAngle);
+    parseDouble(getFirstAndOnly(scpcoaXML, "GrazeAng"), scpcoa->grazeAngle);
+    parseDouble(getFirstAndOnly(scpcoaXML, "IncidenceAng"),
+            scpcoa->incidenceAngle);
+    parseDouble(getFirstAndOnly(scpcoaXML, "TwistAng"), scpcoa->twistAngle);
+    parseDouble(getFirstAndOnly(scpcoaXML, "SlopeAng"), scpcoa->slopeAngle);
 }
 
 void ComplexXMLControl::xmlToAntennaParams(
@@ -1983,8 +1905,8 @@ void ComplexXMLControl::xmlToAntennaParams(
             params->xAxisPoly);
     parsePolyXYZ(getFirstAndOnly(antennaParamsXML, "YAxisPoly"),
             params->yAxisPoly);
-    params->frequencyZero = str::toType<double>(getFirstAndOnly(
-            antennaParamsXML, "FreqZero")->getCharacterData());
+    parseDouble(getFirstAndOnly(antennaParamsXML, "FreqZero"),
+            params->frequencyZero);
 
     xml::lite::Element* tmpElem = getOptional(antennaParamsXML, "EB");
     if (tmpElem)
@@ -2000,10 +1922,10 @@ void ComplexXMLControl::xmlToAntennaParams(
     if (tmpElem)
     {
         params->halfPowerBeamwidths = new HalfPowerBeamwidths();
-        params->halfPowerBeamwidths->dcx = str::toType<double>(getFirstAndOnly(
-                tmpElem, "DCX")->getCharacterData());
-        params->halfPowerBeamwidths->dcy = str::toType<double>(getFirstAndOnly(
-                tmpElem, "DCY")->getCharacterData());
+        parseDouble(getFirstAndOnly(tmpElem, "DCX"),
+                params->halfPowerBeamwidths->dcx);
+        parseDouble(getFirstAndOnly(tmpElem, "DCY"),
+                params->halfPowerBeamwidths->dcy);
     }
 
     tmpElem = getOptional(antennaParamsXML, "Array");
@@ -2086,17 +2008,16 @@ void ComplexXMLControl::xmlToMatchInfo(xml::lite::Element* matchInfoXML,
     {
         MatchCollection* coll = new MatchCollection();
 
-        coll->collectorName
-                = getFirstAndOnly(*it, "CollectorName")->getCharacterData();
+        parseString(getFirstAndOnly(*it, "CollectorName"), coll->collectorName);
 
         optElem = getOptional(*it, "IlluminatorName");
         if (optElem)
         {
             //optional
-            coll->illuminatorName = optElem->getCharacterData();
+            parseString(optElem, coll->illuminatorName);
         }
 
-        coll->coreName = getFirstAndOnly(*it, "CoreName")->getCharacterData();
+        parseString(getFirstAndOnly(*it, "CoreName"), coll->coreName);
 
         //optional
         std::vector<xml::lite::Element*> matchTypesXML;
@@ -2104,7 +2025,10 @@ void ComplexXMLControl::xmlToMatchInfo(xml::lite::Element* matchInfoXML,
         for (std::vector<xml::lite::Element*>::iterator it2 =
                 collectsXML.begin(); it2 != collectsXML.end(); ++it2)
         {
-            coll->matchType.push_back((*it2)->getCharacterData());
+            std::string value;
+
+            parseString(*it2, value);
+            coll->matchType.push_back(value);
         }
 
         //optional
@@ -2118,19 +2042,15 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
 {
     parseVector3D(getFirstAndOnly(pfaXML, "FPN"), pfa->focusPlaneNormal);
     parseVector3D(getFirstAndOnly(pfaXML, "IPN"), pfa->imagePlaneNormal);
-    pfa->polarAngleRefTime = str::toType<double>(getFirstAndOnly(pfaXML,
-            "PolarAngRefTime")->getCharacterData());
+    parseDouble(getFirstAndOnly(pfaXML,
+            "PolarAngRefTime"), pfa->polarAngleRefTime);
     parsePoly1D(getFirstAndOnly(pfaXML, "PolarAngPoly"), pfa->polarAnglePoly);
     parsePoly1D(getFirstAndOnly(pfaXML, "SpatialFreqSFPoly"),
             pfa->spatialFrequencyScaleFactorPoly);
-    pfa->krg1 = str::toType<double>(
-            getFirstAndOnly(pfaXML, "Krg1")->getCharacterData());
-    pfa->krg2 = str::toType<double>(
-            getFirstAndOnly(pfaXML, "Krg2")->getCharacterData());
-    pfa->kaz1 = str::toType<double>(
-            getFirstAndOnly(pfaXML, "Kaz1")->getCharacterData());
-    pfa->kaz2 = str::toType<double>(
-            getFirstAndOnly(pfaXML, "Kaz2")->getCharacterData());
+    parseDouble(getFirstAndOnly(pfaXML, "Krg1"), pfa->krg1);
+    parseDouble(getFirstAndOnly(pfaXML, "Krg2"), pfa->krg2);
+    parseDouble(getFirstAndOnly(pfaXML, "Kaz1"), pfa->kaz1);
+    parseDouble(getFirstAndOnly(pfaXML, "Kaz2"), pfa->kaz2);
 
     xml::lite::Element* deskewXML = getOptional(pfaXML, "STDeskew");
     if (deskewXML)
@@ -2151,7 +2071,7 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
     {
         Compensation* comp = new Compensation();
 
-        comp->type = getFirstAndOnly(*it, "Type")->getCharacterData();
+        parseString(getFirstAndOnly(*it, "Type"), comp->type);
         parseBooleanType(getFirstAndOnly(*it, "Applied"), comp->applied);
 
         //optional
@@ -2180,8 +2100,10 @@ void ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
 
         if (alt)
         {
-            value[idx].setAlt(str::toType<double>(getFirstAndOnly(
-                    vertices[i], "HAE")->getCharacterData()));
+            double hae;
+
+            parseDouble(getFirstAndOnly(vertices[i], "HAE"), hae);
+            value[idx].setAlt(hae);
         }
     }
 }

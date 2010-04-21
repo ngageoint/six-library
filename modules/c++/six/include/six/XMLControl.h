@@ -134,6 +134,13 @@ protected:
     xml::lite::Element* createPolyXYZ(xml::lite::Document* doc,
             std::string name, const PolyXYZ& polyXYZ);
 
+    void parseInt(xml::lite::Element* element, int& value);
+    void parseInt(xml::lite::Element* element, long& value);
+    void parseUInt(xml::lite::Element* element, unsigned int& value);
+    void parseUInt(xml::lite::Element* element, unsigned long& value);
+    void parseDouble(xml::lite::Element* element, double& value);
+    void parseComplex(xml::lite::Element* element, std::complex<double>& value);
+    void parseString(xml::lite::Element* element, std::string& value);
     void parseBooleanType(xml::lite::Element* element, BooleanType& value);
 
     void parsePoly1D(xml::lite::Element* polyXML, Poly1D& poly1D);
@@ -150,6 +157,8 @@ protected:
     void parseLatLon(xml::lite::Element* parent, LatLon& ll);
     void parseLatLons(xml::lite::Element* pointsXML, std::string pointName,
             std::vector<LatLon>& llVec);
+    void parseRangeAzimuth(xml::lite::Element* parent,
+            RangeAzimuth<double>& value);
     virtual void parseFootprint(xml::lite::Element* footprint,
             std::string cornerName, std::vector<LatLon>& value, bool alt);
     void parseEarthModelType(xml::lite::Element* element,
