@@ -3,7 +3,7 @@ use Driver;
 @ARGV >= 1 or die "We at least need the platform name!";
 
 my $name = "expat";
-my $version = "1.95.7";
+my $version = "2.0.0";
 
 my %params = (
     Module => "xml.lite",
