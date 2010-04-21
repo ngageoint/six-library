@@ -845,7 +845,6 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-gnu			Use GNU compiler rather than native compiler.
   --enable-64bit		Make a 64-bit build.
   --enable-warnings 		Turn on compiler warnings (default is on)
   --enable-debugging 		Turn on compiler debugging (default is on)
@@ -1523,6 +1522,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
+#AC_C_BIGENDIAN
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -2684,6 +2684,7 @@ presetting ac_cv_c_bigendian=no (or yes) will help" >&2;}
 esac
 
 
+
 # Set value of POSIX string; This string is placed in Makefiles
 # on compliant systems to indicate POSIX mode.
 POSIX=".POSIX:"
@@ -3418,19 +3419,6 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-
-######################################################################
-# Process '--enable-gnu' argument before doing system setups.
-######################################################################
-# Check whether --enable-gnu or --disable-gnu was given.
-if test "${enable_gnu+set}" = set; then
-  enableval="$enable_gnu"
-  CC="gcc"
-else
-  CC="cc"
-fi;
-
-
 ###########################################################
 #  Archiver                                               #
 ###########################################################
@@ -3450,8 +3438,8 @@ echo "${ECHO_T}selecting the ar archiver..." >&6
         	    sys_cc_warn_flags=""
         	    sys_cc_verb_flags="-v"
         	    sys_cc_64_flags="-xarch=generic64 -KPIC"
-        	    sys_cc_optz_med="-xO1"
-        	    sys_cc_optz_fast="-fast"
+        	    sys_cc_optz_med="-xO3"
+        	    sys_cc_optz_fast="-xO4"
         	    sys_cc_optz_fastest="-fast"
 
 
@@ -3462,7 +3450,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6
         	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs="-ldl -lm"
+                    link_autolibs="-ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"
@@ -3488,10 +3476,10 @@ echo "${ECHO_T}selecting the ar archiver..." >&6
         	    def_link_thread_libs="-lpthread"
 
         	    cc_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-                cc_flags="-mcpu=supersparc"
+                    cc_flags=""
         	    cc_optz_flags="${def_cc_optz_flags}"
 
-                link_autolibs=" -ldl -lm"
+                    link_autolibs="-ldl -lm"
 
         	    AR="ar"
         	    ar_flags="-ru"
@@ -3500,6 +3488,7 @@ echo "${ECHO_T}selecting the ar archiver..." >&6
         esac
     ;;
 esac
+
 
 ###########################################################
 #  Archiver                                               #
