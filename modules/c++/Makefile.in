@@ -54,7 +54,7 @@ six_install:
 	cd math.poly;   make install
 
 drivers_clean:
-	cd ../drivers; rm -rf expat-1.95.7
+	cd ../drivers; rm -rf expat-2.0.0
 	if test -f ../drivers/nitf/Makefile; \
 	then cd ../drivers/nitf; make clean; \
 	     rm -f *INSTALL_SUCCEEDED; \
