@@ -3736,15 +3736,15 @@ echo "${ECHO_T}selecting the ar archiver..." >&6
 		    sys_cxx_verb_flags="-v"
 		    sys_cxx_64_flags="-m64"
 		    sys_cxx_pic_flags="-fPIC"
-		    sys_cxx_optz_med="-O1"
-		    sys_cxx_optz_fast="-O2"
+		    sys_cxx_optz_med="-O2"
+		    sys_cxx_optz_fast="-O3"
 		    sys_cxx_optz_fastest="-O3"
 
 	            auto_test_flags=""
 
 		    def_cxx_optz_flags="${sys_cxx_optz_fast}"
 		    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
-	            cxx_flags="-mcpu=supersparc"
+	            cxx_flags=""
 		    cxx_optz_flags="${def_cxx_optz_flags}"
 
 	            link_libs="-lrt -ldl -lnsl -lsocket"
@@ -5218,6 +5218,7 @@ cxx_flags="${cxx_flags} ${cxx_optz_flags} ${cxx_64_flags} ${cxx_pic_flags} ${cxx
 
 echo "$as_me:$LINENO: result: configured for ${target}..." >&5
 echo "${ECHO_T}configured for ${target}..." >&6
+
 
 
 
