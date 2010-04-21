@@ -152,12 +152,12 @@ namespace scene
             mLon = (lon * RADIANS_TO_DEGREES);
         }
 
-        virtual double getAlt() const
+        double getAlt() const
         {
             return mAlt;
         }
 
-        virtual void setAlt(double alt)
+        void setAlt(double alt)
         {
             mAlt = alt;
         }
