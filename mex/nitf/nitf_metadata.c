@@ -27,7 +27,7 @@
  *
  */
 #define MEX_NTF_ERR(E) \
-mexErrMsgTxt(( (E)->level == NITF_ERR_UNK) ? ("Unknown Error") : ( (E)->message))
+    mexErrMsgTxt(( (E)->level == NITF_ERR_UNK) ? ("Unknown Error") : ( (E)->message))
 
 /*
  *  Add a field from a nitf_Field* object into a mex object.
@@ -35,8 +35,7 @@ mexErrMsgTxt(( (E)->level == NITF_ERR_UNK) ? ("Unknown Error") : ( (E)->message)
  */
 void addField(const char* name, mxArray* mexObj, nitf_Field* field)
 {
-    mxArray* mxStr = NULL;
-    mxStr = mxCreateString(field->raw);
+    mxArray* mxStr = mxCreateString(field->raw);
     int fNum = mxAddField(mexObj, name);
     mxSetFieldByNumber(mexObj, 0, fNum, mxStr);
 }
@@ -47,8 +46,7 @@ void addField(const char* name, mxArray* mexObj, nitf_Field* field)
  */
 void addString(const char* name, mxArray* mexObj, const char* str)
 {
-    mxArray* mxStr = NULL;
-    mxStr = mxCreateString(str);
+    mxArray* mxStr = mxCreateString(str);
     int fNum = mxAddField(mexObj, name);
     mxSetFieldByNumber(mexObj, 0, fNum, mxStr);
 }

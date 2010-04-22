@@ -26,8 +26,8 @@
  *  Error handling method
  *
  */
-#define MEX_NTF_ERR(E) \
-mexErrMsgTxt(( (E)->level == NITF_ERR_UNK) ? ("Unknown Error") : ( (E)->message))
+#define MEX_NTF_ERR(E)                                                  \
+    mexErrMsgTxt(( (E)->level == NITF_ERR_UNK) ? ("Unknown Error") : ( (E)->message))
 
 /* Size of extra array (This is really ugly but is confined to this file) */
 
@@ -38,21 +38,24 @@ mexErrMsgTxt(( (E)->level == NITF_ERR_UNK) ? ("Unknown Error") : ( (E)->message)
  */
 static char* newString(const mxArray* mx)
 {
+    size_t len;
+    char* str;
+
     if (!mxIsChar(mx))
 	return(NULL);
 
     if (mxGetM(mx) != 1)
 	return(NULL);
 
-     size_t len = (mxGetM(mx) * mxGetN(mx)) + 1;
-     char* str = (char*)malloc(len + 1);
-     str[len] = 0;
-     if (mxGetString(mx, str, len) != 0)
-     {
-         free(str);
+    len = (mxGetM(mx) * mxGetN(mx)) + 1;
+    str = (char*)malloc(len + 1);
+    str[len] = 0;
+    if (mxGetString(mx, str, len) != 0)
+    {
+        free(str);
 	return(NULL);
-     }
-     return str;
+    }
+    return str;
 }
 
 /*
@@ -66,7 +69,7 @@ static char* newString(const mxArray* mx)
 
 mxArray *transpose(mxArray *org)
 {
-  mxArray *out;     /* Result */
+    mxArray *out;     /* Result */
 
 
 }
@@ -120,7 +123,7 @@ nitf_SubWindow* createSubWindow(long startRow,
     subWindow = nitf_SubWindow_construct(&error);
 
     if (!subWindow)
-       return(NULL);
+        return(NULL);
 
     /* 
      *  This tells us what order to give you bands in.  Normally
@@ -132,8 +135,8 @@ nitf_SubWindow* createSubWindow(long startRow,
     bandList = (nitf_Uint32 *) malloc(sizeof(nitf_Uint32 *) * numBands);
     if(bandList == NULL)
     {
-      nitf_SubWindow_destruct(&subWindow);
-      return(NULL);
+        nitf_SubWindow_destruct(&subWindow);
+        return(NULL);
     }
 
     for (bandID = 0; bandID < numBands; ++bandID)
@@ -175,7 +178,7 @@ mxArray* read32BitFloatPixelArray(nitf_Reader* reader,
 
     int numBands = 1;
 
-/* Do this first to avoid abort on fail casusing memory leak */
+    /* Do this first to avoid abort on fail causing memory leak */
 
     mxImageArray = 
         mxCreateNumericMatrix(numCols, numRows, mxSINGLE_CLASS, mxREAL);
@@ -200,20 +203,20 @@ mxArray* read32BitFloatPixelArray(nitf_Reader* reader,
         goto CATCH_ERROR;
 
     if(subWindow != NULL)
-       nitf_SubWindow_destruct(&subWindow);
+        nitf_SubWindow_destruct(&subWindow);
     if(imageReader != NULL)
-       nitf_ImageReader_destruct(&imageReader);
+        nitf_ImageReader_destruct(&imageReader);
 
     return mxImageArray;
 
 CATCH_ERROR:
 
     if(subWindow != NULL)
-       nitf_SubWindow_destruct(&subWindow);
+        nitf_SubWindow_destruct(&subWindow);
     if(imageReader != NULL)
-       nitf_ImageReader_destruct(&imageReader);
+        nitf_ImageReader_destruct(&imageReader);
     if(mxImageArray != NULL);
-      mxFree(mxImageArray);
+    mxFree(mxImageArray);
     return NULL;
 }
 
@@ -300,14 +303,14 @@ CATCH_ERROR:
  *  assume that the arguments here are 0-based
  */
 mxArray* read2BandComplexFloatPixelArray(nitf_Reader* reader,
-                               int idx,
-                               long startRow, 
-                               long startCol,
-                               long numRows, 
-                               long numCols,
-                               long IBand,       /* or M */
-                               long Qband,       /* or P */
-			       nitf_Error *error)
+                                         int idx,
+                                         long startRow, 
+                                         long startCol,
+                                         long numRows, 
+                                         long numCols,
+                                         long IBand,       /* or M */
+                                         long Qband,       /* or P */
+                                         nitf_Error *error)
 {
     
     int padded = 0;
@@ -352,42 +355,42 @@ mxArray* read2BandComplexFloatPixelArray(nitf_Reader* reader,
         goto CATCH_ERROR;
 
     if(subWindow != NULL)
-       nitf_SubWindow_destruct(&subWindow);
+        nitf_SubWindow_destruct(&subWindow);
     if(imageReader != NULL)
-       nitf_ImageReader_destruct(&imageReader);
+        nitf_ImageReader_destruct(&imageReader);
 
     return mxImageArray;
 
 CATCH_ERROR:
 
     if(subWindow != NULL)
-       nitf_SubWindow_destruct(&subWindow);
+        nitf_SubWindow_destruct(&subWindow);
     if(imageReader != NULL)
-       nitf_ImageReader_destruct(&imageReader);
+        nitf_ImageReader_destruct(&imageReader);
     if(mxImageArray != NULL);
-      mxFree(mxImageArray);
+    mxFree(mxImageArray);
     return NULL;
 }
 
 mxArray* readIQComplexFloatPixelArray(nitf_Reader* reader,
-                               int idx,
-                               long startRow, 
-                               long startCol,
-                               long numRows, 
-                               long numCols,
-                               nitf_Uint8 *extra,
-			       nitf_Error *error)
+                                      int idx,
+                                      long startRow, 
+                                      long startCol,
+                                      long numRows, 
+                                      long numCols,
+                                      nitf_Uint8 *extra,
+                                      nitf_Error *error)
 {
 
-  return(read2BandComplexFloatPixelArray(reader,
-                               idx,
-                               startRow, 
-                               startCol,
-                               numRows, 
-                               numCols,
-                               ((long *) extra)[0],       /* I or M */
-                               ((long *) extra)[1],      /* Q or P */
-                               error));
+    return(read2BandComplexFloatPixelArray(reader,
+                                           idx,
+                                           startRow, 
+                                           startCol,
+                                           numRows, 
+                                           numCols,
+                                           ((long *) extra)[0],       /* I or M */
+                                           ((long *) extra)[1],      /* Q or P */
+                                           error));
 } 
 
 /* TODO: Implement me (using normal mode?) mode */
@@ -404,14 +407,14 @@ mxArray* read24BitPixelArray(nitf_Reader* reader,
 
 
 /*
-   On error conditions, this function returns NULL and a const error string
-   via theerStr argument. It cannot call  mexErrMsgTxt which pops back
-   to MATLAB without returning which would result in memory leaks
+  On error conditions, this function returns NULL and a const error string
+  via theerStr argument. It cannot call  mexErrMsgTxt which pops back
+  to MATLAB without returning which would result in memory leaks
 */
 
                               
 MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,
-                 nitf_Uint8 *extra,const  char **errStr)
+                               nitf_Uint8 *extra,const  char **errStr)
 {
     /* Figure out if we have a float or a byte for now */
     int pixelDepth = 
@@ -427,50 +430,50 @@ MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,
         {
             return &read8BitPixelArray;
         }
-    /* Deal with real mode */
+        /* Deal with real mode */
         else if (memcmp(pixelValue, "R", 1) == 0 && pixelDepth == 4)
         {
             return &read32BitFloatPixelArray;
         }
    	*errStr =
-             "Sorry, this MEX wrapper doesnt currently handle the pixel type";
+            "Sorry, this MEX wrapper doesnt currently handle the pixel type";
         return(NULL);
     }
     else if(numBands == 2)
     {
-    /* Complex IQ or MP
-       Look for IQ, 2 bands, with ICAT = {"SAR","SARIQ"} and ISUBCAT = {I,Q}
-    */
+        /* Complex IQ or MP
+           Look for IQ, 2 bands, with ICAT = {"SAR","SARIQ"} and ISUBCAT = {I,Q}
+        */
         if(
-             (memcmp(segment->subheader->NITF_ICAT->raw,"SAR",3)
-           || memcmp(segment->subheader->NITF_ICAT->raw,"SARIQ",5)))
+            (memcmp(segment->subheader->NITF_ICAT->raw,"SAR",3)
+             || memcmp(segment->subheader->NITF_ICAT->raw,"SARIQ",5)))
         {  /* This is SAR, 2 bands */
-             char b0 = segment->subheader->bandInfo[0]->NITF_ISUBCAT->raw[0];
-             char b1 = segment->subheader->bandInfo[1]->NITF_ISUBCAT->raw[0];
+            char b0 = segment->subheader->bandInfo[0]->NITF_ISUBCAT->raw[0];
+            char b1 = segment->subheader->bandInfo[1]->NITF_ISUBCAT->raw[0];
 
-             if((b0 == 'I') && (b1 == 'Q'))
-             {
-                 extra[0] = 0;     /* I band */
-                 extra[1] = 1;     /* Q band */
-             }
-             else if((b1 == 'I') && (b0 == 'Q'))
-             {
-                 extra[1] = 0;     /* I band */
-                 extra[0] = 1;     /* Q band */
-             }
-             else
-             {
-   	       *errStr =
+            if((b0 == 'I') && (b1 == 'Q'))
+            {
+                extra[0] = 0;     /* I band */
+                extra[1] = 1;     /* Q band */
+            }
+            else if((b1 == 'I') && (b0 == 'Q'))
+            {
+                extra[1] = 0;     /* I band */
+                extra[0] = 1;     /* Q band */
+            }
+            else
+            {
+                *errStr =
                     "Sorry, this MEX wrapper doesnt currently handle the pixel type";
-                 return(NULL);
-             }
+                return(NULL);
+            }
 
-             if(pixelDepth == 4) /* Real*4 valued IQ complex */
-             {
-                 return(&readIQComplexFloatPixelArray);
-             }
+            if(pixelDepth == 4) /* Real*4 valued IQ complex */
+            {
+                return(&readIQComplexFloatPixelArray);
+            }
    	    *errStr =
-             "Sorry, this MEX wrapper doesnt currently handle the pixel type";
+                "Sorry, this MEX wrapper doesnt currently handle the pixel type";
             return(NULL);
         }
     }
@@ -486,166 +489,166 @@ MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,
 /* Returns true on success */
 
 int parseArguments(int nrhs, const mxArray *prhs[],
-        char **inputFile,
-        int *idx,
-        long *startRow, 
-        long *startCol,
-        long *numRows, 
-        long *numCols,
-        const char **errStr)
+                   char **inputFile,
+                   int *idx,
+                   long *startRow, 
+                   long *startCol,
+                   long *numRows, 
+                   long *numCols,
+                   const char **errStr)
 {
-  int argCount;     /* Count of remaining arguments */
-  int argIdx;       /* Current argumetn index */
-  char *key;        /* Current keyword */
-  char *plugin;     /* Plugin path */
-  nitf_Error error; /* For NITF library calls */
+    int argCount;     /* Count of remaining arguments */
+    int argIdx;       /* Current argumetn index */
+    char *key;        /* Current keyword */
+    char *plugin;     /* Plugin path */
+    nitf_Error error; /* For NITF library calls */
 
 /*
 
-   Initialize window values, use impossible values (0 for number of
-   rows/cols) to flag that window values are not supplied
+Initialize window values, use impossible values (0 for number of
+rows/cols) to flag that window values are not supplied
 */
 
-  *startRow = 0; 
-  *startCol = 0;
-  *numRows = 0; 
-  *numCols = 0;
+    *startRow = 0; 
+    *startCol = 0;
+    *numRows = 0; 
+    *numCols = 0;
 
-  *idx = 0;  /* idx is zero based */
+    *idx = 0;  /* idx is zero based */
 
-  if(nrhs == 0)
-  {
-    *errStr = "At least one argument is required";
-    return(0);
-  }
-
-  *inputFile = newString(prhs[0]);
-  if(*inputFile == NULL)
-  {
-    *errStr = "Invalid keyword";
-    return(0);
-  }
-
-
-  argCount = nrhs-1;   /* Total remaining arguments */
-  argIdx = 1;
-  while(argCount != 0)
-  {
-    key = mxArrayToString(prhs[argIdx]);
-    if(key == NULL)
+    if(nrhs == 0)
     {
-      *errStr = "Invalid keyword";
-      free(*inputFile);
-      *inputFile = NULL;
-      return(0);
+        *errStr = "At least one argument is required";
+        return(0);
     }
-    if(strcmp(key,"Segment") == 0)
-    {
-      argCount -= 1;
-      argIdx += 1;
-      if(argCount == 0)
-      {
-        mxFree(key);
-        *errStr = "Segment keyword requires an index value";
-        free(*inputFile);
-        *inputFile = NULL;
-        return(0);
-      }
-      if(!mxIsNumeric(prhs[argIdx]))
-      {
-        mxFree(key);
-        *errStr = "Segment keyword requires an index value";
-        free(*inputFile);
-        *inputFile = NULL;
-        return(0);
-      }
-      *idx = (int) (mxGetScalar(prhs[argIdx]) + 0.5); /* Paranoid ???*/
-      *idx -= 1;     /* Zero base */
-      argCount -= 1;
-      argIdx += 1;
-    }
-    if(strcmp(key,"Plugins") == 0)
-    {
-      argCount -= 1;
-      argIdx += 1;
-      if(argCount == 0)
-      {
-        mxFree(key);
-        *errStr = "Segment keyword requires a string value";
-        free(*inputFile);
-        *inputFile = NULL;
-        return(0);
-      }
 
-      if((plugin = newString(prhs[argIdx])) == NULL)
-      {
-        mxFree(key);
-        *errStr = "Plugin keyword requires a string value";
-        free(*inputFile);
-        *inputFile = NULL;
+    *inputFile = newString(prhs[0]);
+    if(*inputFile == NULL)
+    {
+        *errStr = "Invalid keyword";
         return(0);
-      }
-      if(!nitf_PluginRegistry_loadDir(plugin,&error) )
+    }
+
+
+    argCount = nrhs-1;   /* Total remaining arguments */
+    argIdx = 1;
+    while(argCount != 0)
+    {
+        key = mxArrayToString(prhs[argIdx]);
+        if(key == NULL)
         {
-            *errStr = "Could not load NITF plugins";
-            free(plugin);
-            mxFree(key);
+            *errStr = "Invalid keyword";
             free(*inputFile);
             *inputFile = NULL;
             return(0);
         }
-      free(plugin);
+        if(strcmp(key,"Segment") == 0)
+        {
+            argCount -= 1;
+            argIdx += 1;
+            if(argCount == 0)
+            {
+                mxFree(key);
+                *errStr = "Segment keyword requires an index value";
+                free(*inputFile);
+                *inputFile = NULL;
+                return(0);
+            }
+            if(!mxIsNumeric(prhs[argIdx]))
+            {
+                mxFree(key);
+                *errStr = "Segment keyword requires an index value";
+                free(*inputFile);
+                *inputFile = NULL;
+                return(0);
+            }
+            *idx = (int) (mxGetScalar(prhs[argIdx]) + 0.5); /* Paranoid ???*/
+            *idx -= 1;     /* Zero base */
+            argCount -= 1;
+            argIdx += 1;
+        }
+        if(strcmp(key,"Plugins") == 0)
+        {
+            argCount -= 1;
+            argIdx += 1;
+            if(argCount == 0)
+            {
+                mxFree(key);
+                *errStr = "Segment keyword requires a string value";
+                free(*inputFile);
+                *inputFile = NULL;
+                return(0);
+            }
 
-      argCount -= 1;
-      argIdx += 1;
+            if((plugin = newString(prhs[argIdx])) == NULL)
+            {
+                mxFree(key);
+                *errStr = "Plugin keyword requires a string value";
+                free(*inputFile);
+                *inputFile = NULL;
+                return(0);
+            }
+            if(!nitf_PluginRegistry_loadDir(plugin,&error) )
+            {
+                *errStr = "Could not load NITF plugins";
+                free(plugin);
+                mxFree(key);
+                free(*inputFile);
+                *inputFile = NULL;
+                return(0);
+            }
+            free(plugin);
+
+            argCount -= 1;
+            argIdx += 1;
+        }
+        if(strcmp(key,"Window") == 0)
+        {
+            const mwSize *dims; /* Window spec dimensions */
+            double *ptr;        /* Pointer to dimensions */
+
+            argCount -= 1;
+            argIdx += 1;
+            if(argCount == 0)
+            {
+                *errStr = "Window keyword requires a row vector (4 values)";
+                mxFree(key);
+                free(*inputFile);
+                *inputFile = NULL;
+                return(0);
+            }
+            if(!mxIsNumeric(prhs[argIdx]))
+            {
+                *errStr = "Window keyword requires a row vector (4 values)";
+                mxFree(key);
+                free(*inputFile);
+                *inputFile = NULL;
+                return(0);
+            }
+
+            dims = mxGetDimensions(prhs[argIdx]);
+            if((dims == NULL) || (dims[0] != 1) || (dims[1] != 4))
+            {
+                *errStr = "Window keyword requires a row vector (4 values)";
+                mxFree(key);
+                free(*inputFile);
+                *inputFile = NULL;
+                return(0);
+            }
+
+            ptr = mxGetData(prhs[argIdx]);
+
+            *startRow = (long) (ptr[0] + 0.5) - 1; /* Paranoid ???*/
+            *startCol = (long) (ptr[1] + 0.5) - 1;
+            *numRows  = (long) (ptr[2] + 0.5);
+            *numCols = (long) (ptr[3] + 0.5);
+
+            argCount -= 1;
+            argIdx += 1;
+        }
+        mxFree(key);
     }
-    if(strcmp(key,"Window") == 0)
-    {
-      const mwSize *dims; /* Window spec dimensions */
-      double *ptr;        /* Pointer to dimensions */
-
-      argCount -= 1;
-      argIdx += 1;
-      if(argCount == 0)
-      {
-         *errStr = "Window keyword requires a row vector (4 values)";
-         mxFree(key);
-         free(*inputFile);
-         *inputFile = NULL;
-         return(0);
-      }
-      if(!mxIsNumeric(prhs[argIdx]))
-      {
-         *errStr = "Window keyword requires a row vector (4 values)";
-         mxFree(key);
-         free(*inputFile);
-         *inputFile = NULL;
-         return(0);
-      }
-
-      dims = mxGetDimensions(prhs[argIdx]);
-      if((dims == NULL) || (dims[0] != 1) || (dims[1] != 4))
-      {
-         *errStr = "Window keyword requires a row vector (4 values)";
-         mxFree(key);
-         free(*inputFile);
-         *inputFile = NULL;
-         return(0);
-      }
-
-      ptr = mxGetData(prhs[argIdx]);
-
-      *startRow = (long) (ptr[0] + 0.5) - 1; /* Paranoid ???*/
-      *startCol = (long) (ptr[1] + 0.5) - 1;
-      *numRows  = (long) (ptr[2] + 0.5);
-      *numCols = (long) (ptr[3] + 0.5);
-
-      argCount -= 1;
-      argIdx += 1;
-    }
-    mxFree(key);
-  }
-  return(1);
+    return(1);
 }
 
 /**
@@ -701,7 +704,7 @@ void mexFunction(int nlhs, mxArray *plhs[],
     mxArray* mxImageArray;
 
     if(!parseArguments(nrhs,prhs,&inputFile,&idx,
-                             &startRow,&startCol,&numRows,&numCols,&errStr))
+                       &startRow,&startCol,&numRows,&numCols,&errStr))
     {
 	mexErrMsgTxt(errStr);
 	return;
@@ -755,7 +758,7 @@ void mexFunction(int nlhs, mxArray *plhs[],
 /*  Get number of image segments from file header */
 
     if(!nitf_Field_get(record->header->NITF_NUMI,(NITF_DATA *) &imageCount,
-                             NITF_CONV_INT,sizeof(imageCount),&error))
+                       NITF_CONV_INT,sizeof(imageCount),&error))
     {
         nitf_Reader_destruct(&reader);
         nitf_Record_destruct(&record);
@@ -764,14 +767,14 @@ void mexFunction(int nlhs, mxArray *plhs[],
     }
 
 /* Check the image index argument which is one based, the segment count
-                                    is zero based */
+   is zero based */
 
     if((idx < 0) || (idx > imageCount-1)) /*LJW*/
     {
-      nitf_Reader_destruct(&reader);
-      nitf_Record_destruct(&record);
-      nitf_IOHandle_close(io);
-      mexErrMsgTxt("Invalid image segment index");
+        nitf_Reader_destruct(&reader);
+        nitf_Record_destruct(&record);
+        nitf_IOHandle_close(io);
+        mexErrMsgTxt("Invalid image segment index");
     }
 
     /* Still rockin' */
@@ -784,40 +787,40 @@ void mexFunction(int nlhs, mxArray *plhs[],
 
     if (imread == NULL)
     {
-      nitf_Reader_destruct(&reader);
-      nitf_Record_destruct(&record);
-      nitf_IOHandle_close(io);
-      mexErrMsgTxt(errStr);
+        nitf_Reader_destruct(&reader);
+        nitf_Record_destruct(&record);
+        nitf_IOHandle_close(io);
+        mexErrMsgTxt(errStr);
     }
 
     if(numRows == 0)      /* No window specified, read full iamge */    
     {
-      startRow = 0;
-      startCol = 0;
-      numRows = atol(segment->subheader->NITF_NROWS->raw);
-      numCols = atol(segment->subheader->NITF_NCOLS->raw);
+        startRow = 0;
+        startCol = 0;
+        numRows = atol(segment->subheader->NITF_NROWS->raw);
+        numCols = atol(segment->subheader->NITF_NCOLS->raw);
     }
 
     mxImageArray = (*imread)(reader, idx,startRow,startCol,
-                                         numRows,numCols,extra,&error);
+                             numRows,numCols,extra,&error);
 
 /*
   Clean-up
 
- The image segment is part of the record so do not destruct it separately
- */
+  The image segment is part of the record so do not destruct it separately
+*/
 
     if(reader != NULL)
-      nitf_Reader_destruct(&reader);
+        nitf_Reader_destruct(&reader);
 
     if(record != NULL)
-      nitf_Record_destruct(&record);
+        nitf_Record_destruct(&record);
 
     if(!NITF_INVALID_HANDLE(io))
-      nitf_IOHandle_close(io);
+        nitf_IOHandle_close(io);
 
     if(mxImageArray == NULL)
-      MEX_NTF_ERR(&error);
+        MEX_NTF_ERR(&error);
 
     plhs[0] = mxImageArray;
 
