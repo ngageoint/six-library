@@ -161,7 +161,7 @@ def build(bld):
         driver = Options.options.xml_layer
         
         if driver == 'expat':
-            fname = 'expat-1.95.7'
+            fname = 'expat-2.0.0'
             ut = bld.new_task_gen(path=bld.path, fname='%s.tar' % fname,
                                   env=env.copy(), before='XML')
             ut.features = ['untar']
