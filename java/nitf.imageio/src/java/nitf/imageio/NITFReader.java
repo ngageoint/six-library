@@ -36,7 +36,6 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -827,10 +826,41 @@ public class NITFReader extends ImageReader
         return record;
     }
 
+    @Override
+    public void dispose()
+    {
+        synchronized (imageReaderMap)
+        {
+            try
+            {
+                if (handle != null)
+                    handle.close();
+                if (record != null)
+                    record.destruct();
+
+                // destroy the image readers
+                for (nitf.ImageReader nitfReader : imageReaderMap.values())
+                {
+                    nitfReader.destruct();
+                }
+                imageReaderMap.clear();
+
+                if (reader != null)
+                    reader.destruct();
+            }
+            catch (NITFException e)
+            {
+                log.error("Error destroying resources", e);
+            }
+        }
+        super.dispose();
+    }
+
+    @Override
     protected void finalize() throws Throwable
     {
-        if (handle != null)
-            handle.close();
+        dispose();
+        super.finalize();
     }
 
 }
