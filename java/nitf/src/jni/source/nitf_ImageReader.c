@@ -24,14 +24,14 @@
 #include "nitf_ImageReader.h"
 #include "nitf_JNI.h"
 
-NITF_JNI_DECLARE_OBJ(nitf_ImageReader)
+NITF_JNI_DECLARE_OBJ( nitf_ImageReader)
 /*
  * Class:     nitf_ImageReader
  * Method:    destructMemory
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_nitf_ImageReader_destructMemory
-    (JNIEnv * env, jobject self)
+(JNIEnv * env, jobject self)
 {
     nitf_ImageReader *reader = _GetObj(env, self);
     if (reader)
@@ -41,43 +41,38 @@ JNIEXPORT void JNICALL Java_nitf_ImageReader_destructMemory
     _SetObj(env, self, NULL);
 }
 
-
 /*
  * Class:     nitf_ImageReader
  * Method:    getInput
  * Signature: ()Lnitf/IOInterface;
  */
-JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getInput
-    (JNIEnv * env, jobject self)
+JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getInput(JNIEnv * env,
+                                                         jobject self)
 {
     nitf_ImageReader *reader = _GetObj(env, self);
     jclass ioClass = (*env)->FindClass(env, "nitf/IOInterface");
 
-    jmethodID methodID =
-        (*env)->GetMethodID(env, ioClass, "<init>", "(J)V");
-    jobject handle = (*env)->NewObject(env,
-                                       ioClass,
-                                       methodID,
+    jmethodID methodID = (*env)->GetMethodID(env, ioClass, "<init>", "(J)V");
+    jobject handle = (*env)->NewObject(env, ioClass, methodID,
                                        (jlong) reader->input);
     return handle;
 }
-
 
 /*
  * Class:     nitf_ImageReader
  * Method:    getBlockingInfo
  * Signature: ()Lnitf/BlockingInfo;
  */
-JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo
-    (JNIEnv * env, jobject self)
+JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo(JNIEnv * env,
+                                                                jobject self)
 {
     nitf_ImageReader *reader = _GetObj(env, self);
     nitf_Error error;
     nitf_BlockingInfo *info;
     jobject blockingInfoObject;
     jclass blockingInfoClass = (*env)->FindClass(env, "nitf/BlockingInfo");
-    jmethodID methodID =
-        (*env)->GetMethodID(env, blockingInfoClass, "<init>", "(J)V");
+    jmethodID methodID = (*env)->GetMethodID(env, blockingInfoClass, "<init>",
+                                             "(J)V");
 
     info = nitf_ImageReader_getBlockingInfo(reader, &error);
     if (!info)
@@ -87,25 +82,26 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo
     }
 
     /* make the object */
-    blockingInfoObject = (*env)->NewObject(env,
-                                           blockingInfoClass,
-                                           methodID, (jlong) info);
+    blockingInfoObject = (*env)->NewObject(env, blockingInfoClass, methodID,
+                                           (jlong) info);
 
     /* tell Java not to manage it */
-    methodID = (*env)->GetMethodID(env, blockingInfoClass, "setManaged", "(Z)V");
+    methodID
+            = (*env)->GetMethodID(env, blockingInfoClass, "setManaged", "(Z)V");
     (*env)->CallVoidMethod(env, blockingInfoObject, methodID, JNI_FALSE);
 
     return blockingInfoObject;
 }
-
 
 /*
  * Class:     nitf_ImageReader
  * Method:    read
  * Signature: (Lnitf/Subimage;[[B)Z
  */
-JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
-    (JNIEnv * env, jobject self, jobject subWindow, jobjectArray userBuf)
+JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read(JNIEnv *env,
+                                                      jobject self,
+                                                      jobject subWindow,
+                                                      jobjectArray userBuf)
 {
     nitf_ImageReader *imReader = _GetObj(env, self);
     jclass subWindowClass = (*env)->FindClass(env, "nitf/SubWindow");
@@ -115,14 +111,12 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
     jbyteArray byteArray;
     jint padded;
     jsize bands;
-    jsize length;
     jint i;
 
-    jmethodID methodID =
-        (*env)->GetMethodID(env, subWindowClass, "getAddress", "()J");
-    nitfSubWindow =
-        (nitf_SubWindow *) (*env)->CallLongMethod(env, subWindow,
-                                                  methodID);
+    jmethodID methodID = (*env)->GetMethodID(env, subWindowClass, "getAddress",
+                                             "()J");
+    nitfSubWindow = (nitf_SubWindow *) (*env)->CallLongMethod(env, subWindow,
+                                                              methodID);
 
     bands = (*env)->GetArrayLength(env, userBuf);
 
@@ -131,12 +125,17 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
     {
         byteArray = (*env)->GetObjectArrayElement(env, userBuf, i);
         data[i] = (*env)->GetByteArrayElements(env, byteArray, 0);
+        if (!data[i])
+        {
+            free(data);
+            _ThrowNITFException(env, "Out of memory!");
+            return JNI_FALSE;
+        }
     }
     /* TODO: remove later */
     assert(sizeof(nitf_Uint8) == sizeof(jbyte));
-    if (!nitf_ImageReader_read(imReader,
-                               nitfSubWindow,
-                               (nitf_Uint8 **) data, &padded, &error))
+    if (!nitf_ImageReader_read(imReader, nitfSubWindow, (nitf_Uint8 **) data,
+                               &padded, &error))
     {
         free(data);
         _ThrowNITFException(env, error.message);
@@ -146,11 +145,9 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read
     for (i = 0; i < bands; ++i)
     {
         byteArray = (*env)->GetObjectArrayElement(env, userBuf, i);
-        length = (*env)->GetArrayLength(env, byteArray);
-        /*(*env)->SetByteArrayRegion(env, byteArray, 0, length, data[i]);*/
-        (*env)->ReleaseByteArrayElements(env, byteArray, data[i], JNI_COMMIT);
+        (*env)->ReleaseByteArrayElements(env, byteArray, data[i], 0);
     }
     free(data);
-    return JNI_TRUE;
+    return padded ? JNI_TRUE : JNI_FALSE;
 }
 
