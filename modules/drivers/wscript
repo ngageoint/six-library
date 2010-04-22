@@ -169,11 +169,11 @@ def build(bld):
             
             driverNode = driversNode.ensure_dir_node_from_path(fname)
         
-            expatDefs = ['PACKAGE_VERSION="1.95.7"',
+            expatDefs = ['PACKAGE_VERSION="2.0.0"',
                          'XML_CONTEXT_BYTES=1024',
                          'XML_DTD=1',
                          'XML_NS=1',
-                         'PACKAGE_STRING="expat 1.95.7"',
+                         'PACKAGE_STRING="expat 2.0.0"',
                          'XML_STATIC=1']
             
             sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
@@ -182,9 +182,9 @@ def build(bld):
                              target='expat', path=driverNode,
                              uselib='XML', name='XML', env=env.copy(),
                              defines=defList + expatDefs)
-            
-            bld.install_files('${PREFIX}/include',
-                          os.path.join(driverNode.abspath(), 'lib/expat.h'))
+            for f in ['expat.h', 'expat_external.h']:
+                bld.install_files('${PREFIX}/include',
+                              os.path.join(driverNode.abspath(), 'lib/%s' % f))
         else:
             raise Exception('Invalid XML driver: %s' % driver)
     
@@ -193,7 +193,7 @@ def distclean(context):
     import shutil
     
     dirs = map(lambda d: os.path.join(context.curdir, d),
-               ['expat-1.95.7'])
+               ['expat-2.0.0'])
     for d in dirs:
         try:
             if os.path.exists(d):
