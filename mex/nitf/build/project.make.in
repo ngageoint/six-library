@@ -13,8 +13,11 @@ SOURCES = nitf_metadata.c nitf_image.c
 MY_CFLAGS = 
 MY_CDEFINES =
 MY_LFLAGS =
-MY_INCLUDES = -I@top_srcdir@/../c/nitf/include 
+MY_INCLUDES = -I@top_srcdir@/../c/nitf/include \
+              -I@top_srcdir@/../drivers/nitf/include
 
-MY_LIBPATH = -L@top_srcdir@/../c/nitf/lib/@target@/@lib_dir@ 
+MY_LIBPATH = -L@top_srcdir@/../c/nitf/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/../drivers/nitf/lib/@target@/@lib_dir
+
 
 MY_LIBS = -lnitf-c
