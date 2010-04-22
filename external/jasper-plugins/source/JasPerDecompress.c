@@ -59,6 +59,8 @@ NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
 
 NITFPRIV(void) implClose(nitf_DecompressionControl** control);
 
+NITFPRIV(void) implMemFree(void* p);
+
 
 NITF_CXX_GUARD
 /*
@@ -130,7 +132,6 @@ NITFAPI(char**) JasPerDecompress_init(nitf_Error *error)
  */
 NITFAPI(void) C8_cleanup(void)
 {
-
     /*  Cleanup the jasper library  */
     jas_cleanup();
 }
@@ -149,6 +150,8 @@ NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
                             nitf_Uint8* block,
                             nitf_Error* error)
 {
+    if (block)
+        implMemFree((void*)block);
     return 1;
 }
 
@@ -465,10 +468,9 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
     implControl = (ImplControl *) * control;
     if (implControl->data != NULL)
     {
-        implMemFree(implControl->data);
+        implMemFree((void*)implControl->data);
         implControl->data = NULL;
     }
-
     implMemFree((void *)(*control));
     *control = NULL;
 }
