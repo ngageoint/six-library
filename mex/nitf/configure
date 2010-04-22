@@ -1267,7 +1267,7 @@ here=`pwd`
 build_dir="${here}/build/"
 ar_flags="-crs"
 AR="ar"
-
+lib_dir="gnu"
 # Make sure we can run config.sub.
 $ac_config_sub sun4 >/dev/null 2>&1 ||
   { { echo "$as_me:$LINENO: error: cannot run $ac_config_sub" >&5
@@ -3333,6 +3333,7 @@ case "${target}" in
          cc)
 	        cc_thread_defs="-D_REENTRANT"
 		link_thread_libs="-lthread"
+                lib_dir=""
          ;;
       esac
    ;;

@@ -10,7 +10,7 @@ here=`pwd`
 build_dir="${here}/build/"
 ar_flags="-crs"
 AR="ar"
-
+lib_dir="gnu"
 AC_CANONICAL_SYSTEM
 AC_PROG_INSTALL
 AC_C_BIGENDIAN
@@ -29,6 +29,7 @@ case "${target}" in
          cc)
 	        cc_thread_defs="-D_REENTRANT"
 		link_thread_libs="-lthread"
+                lib_dir=""
          ;;         
       esac
    ;;
