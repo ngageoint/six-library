@@ -89,8 +89,8 @@ typedef mxArray* (*MEX_NTF_IMREAD)(nitf_Reader* reader,
                                    int idx,
                                    long startRow,
                                    long startCol,
-                                   long endRow,
-                                   long endCol,
+                                   long numRows,
+                                   long numCols,
                                    nitf_Error *error);
 
 
@@ -397,26 +397,79 @@ mxArray* readIQSignedIntPixelArray(nitf_Reader* reader,
                                       error));
 } 
 
-/* TODO: Implement me (using normal mode?) mode */
+
 mxArray* read24BitPixelArray(nitf_Reader* reader,
                              int idx,
                              long startRow, 
                              long startCol,
-                             long endRow, 
-                             long endCol)
+                             long numRows, 
+                             long numCols,
+                             nitf_Error *error)
 {
-    
+    int padded = 0;   
+
+    mxArray* mxImageArray = NULL;
+    /* Window size */
+    nitf_SubWindow* subWindow = NULL;
+
+    /* Image Reader */
+    nitf_ImageReader* imageReader = NULL;
+
+    /* Buffer array ptr */
+    nitf_Uint8* buffers[2];
+
+    int dims[] = { numCols, numRows, 3 };
+    int numBands = 3;
+    long frame = numRows * numCols;
+    /*
+     *  Do this here since if it fails the whole function aborts and there is
+     *   no chance to clean-up
+     */
+    mxImageArray = 
+        mxCreateNumericArray(3, dims, mxUINT8_CLASS, mxREAL);
+
+    /* Create the sub-window - will fail internally if error */
+    subWindow = createSubWindow(startRow, startCol,
+                                numRows, numCols, numBands);
+
+    buffers[0] = ((nitf_Uint8*)mxGetData(mxImageArray));
+    buffers[1] = ((nitf_Uint8*)mxGetData(mxImageArray)) + frame;
+    buffers[2] = ((nitf_Uint8*)mxGetData(mxImageArray)) + 2 * frame;
+    /* Image reader (could fail) */
+    imageReader = nitf_Reader_newImageReader(reader, idx, error);
+    if (!imageReader)
+        goto CATCH_ERROR;
+   
+    /* Now read the data */
+    if (!nitf_ImageReader_read(imageReader, subWindow, 
+                               buffers, &padded, error))
+        goto CATCH_ERROR;
+
+    if(subWindow != NULL)
+        nitf_SubWindow_destruct(&subWindow);
+    if(imageReader != NULL)
+        nitf_ImageReader_destruct(&imageReader);
+
+    return mxImageArray;
+
+CATCH_ERROR:
+
+    if(subWindow != NULL)
+        nitf_SubWindow_destruct(&subWindow);
+    if(imageReader != NULL)
+        nitf_ImageReader_destruct(&imageReader);
+    if(mxImageArray != NULL);
+    mxFree(mxImageArray);
     return NULL;
 }
 
 
+
 /*
   On error conditions, this function returns NULL and a const error string
-  via theerStr argument. It cannot call  mexErrMsgTxt which pops back
+  via the errStr argument. It cannot call  mexErrMsgTxt which pops back
   to MATLAB without returning which would result in memory leaks
-*/
-
-                              
+*/                              
 MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,
                                const  char **errStr)
 {
@@ -492,6 +545,14 @@ MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,
                 "Sorry, this MEX wrapper doesnt currently handle the pixel type";
             return(NULL);
         }
+    }
+    else if (numBands == 3 && pixelDepth == 1)
+    {
+        if (memcmp(segment->subheader->NITF_IREP->raw, "RGB", 3) == 0)
+        {
+            return &read24BitPixelArray;
+        }
+
     }
     *errStr = "Sorry, this MEX wrapper doesnt currently handle the pixel type";
     return NULL;
