@@ -58,8 +58,6 @@ void addString(const char* name, mxArray* mexObj, const char* str)
  */
 static mxArray* createSecurityMx(nitf_FileSecurity* security)
 {
-    nitf_Error error;
-
     mxArray *mxSecurity = 
         mxCreateStructMatrix(1, 1, 0, (const char**)NULL);
 
@@ -207,7 +205,6 @@ static mxArray* createImageCommentsMx(nitf_ImageSubheader* subheader)
 static mxArray* createHeaderMx(nitf_FileHeader* header)
 {
     mxArray* tempArray = NULL;
-    nitf_Error error;
     int fNum = 0;
 
     mxArray *mxHeader = 
@@ -265,7 +262,7 @@ static mxArray* createHeaderMx(nitf_FileHeader* header)
 
 static mxArray* createBandInfoMx(nitf_BandInfo* bandInfo)
 {
-    nitf_Error error;
+    
     mxArray *mxBandInfo = 
         mxCreateStructMatrix(1, 1, 0, (const char**)NULL);
 
@@ -314,7 +311,7 @@ static mxArray* createBandInfoArrayMx(nitf_ImageSubheader* subheader)
 
 static mxArray* createImageSubheaderMx(nitf_ImageSubheader* subheader)
 {
-    nitf_Error error;
+    
     int fNum = 0;
     mxArray *mxSubheader = 
         mxCreateStructMatrix(1, 1, 0, (const char**)NULL);
@@ -400,7 +397,6 @@ static mxArray* createImageSubheaderMx(nitf_ImageSubheader* subheader)
 
 static mxArray* createGraphicSubheaderMx(nitf_ImageSubheader* subheader)
 {
-    nitf_Error error;
     mxArray *mxSubheader = 
         mxCreateStructMatrix(1, 1, 0, (const char**)NULL);
 
@@ -409,7 +405,6 @@ static mxArray* createGraphicSubheaderMx(nitf_ImageSubheader* subheader)
 
 static mxArray* createTextSubheaderMx(nitf_ImageSubheader* subheader)
 {
-    nitf_Error error;
     mxArray *mxSubheader = 
         mxCreateStructMatrix(1, 1, 0, (const char**)NULL);
 
@@ -420,7 +415,6 @@ static mxArray* createTextSubheaderMx(nitf_ImageSubheader* subheader)
 
 static mxArray* createDESubheaderMx(nitf_ImageSubheader* subheader)
 {
-    nitf_Error error;
     mxArray *mxSubheader = 
         mxCreateStructMatrix(1, 1, 0, (const char**)NULL);
 
@@ -483,19 +477,21 @@ static mxArray* createRecordMx(nitf_Record* record)
  */
 static char* newString(const mxArray* mx)
 {
+    size_t len;
+    char* str = NULL;
     if (!mxIsChar(mx))
 	mexErrMsgTxt("Require string arg");
 
     if (mxGetM(mx) != 1)
 	mexErrMsgTxt("Input must be a row vector");
 
-     size_t len = (mxGetM(mx) * mxGetN(mx)) + 1;
-     char* str = (char*)malloc(len + 1);
+     len = (mxGetM(mx) * mxGetN(mx)) + 1;
+     str = (char*)malloc(len + 1);
      str[len] = 0;
      if (mxGetString(mx, str, len) != 0)
      {
          free(str);
-	 mexErrMsgTxt("Not enough space!");
+	     mexErrMsgTxt("Not enough space!");
      }
      return str;
 }
