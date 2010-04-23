@@ -66,6 +66,70 @@ NITFAPI(nitf_DateTime*) nitf_DateTime_now(nitf_Error*);
 NITFAPI(nitf_DateTime*) nitf_DateTime_fromMillis(double millis, nitf_Error*);
 
 /*!
+ * Sets the year of a DateTime object and updates the timeInMillis.
+ */
+NITFAPI(NITF_BOOL) nitf_DateTime_setYear(nitf_DateTime *dateTime,
+                                         int year,
+                                         nitf_Error *error);
+
+/*!
+ * Sets the month of a DateTime object and updates the timeInMillis.
+ */
+NITFAPI(NITF_BOOL) nitf_DateTime_setMonth(nitf_DateTime *dateTime,
+                                          int month,
+                                          nitf_Error *error);
+
+/*!
+ * Sets the dayOfMonth of a DateTime object and updates the timeInMillis.
+ */
+NITFAPI(NITF_BOOL) nitf_DateTime_setDayOfMonth(nitf_DateTime *dateTime,
+                                               int dayOfMonth,
+                                               nitf_Error *error);
+
+/*!
+ * Sets the dayOfWeek of a DateTime object and updates the timeInMillis.
+ */
+NITFAPI(NITF_BOOL) nitf_DateTime_setDayOfWeek(nitf_DateTime *dateTime,
+                                              int dayOfWeek,
+                                              nitf_Error *error);
+
+/*!
+ * Sets the dayOfYear of a DateTime object and updates the timeInMillis.
+ */
+NITFAPI(NITF_BOOL) nitf_DateTime_setDayOfYear(nitf_DateTime *dateTime,
+                                              int dayOfYear,
+                                              nitf_Error *error);
+
+/*!
+ * Sets the hour of a DateTime object and updates the timeInMillis.
+ */
+NITFAPI(NITF_BOOL) nitf_DateTime_setHour(nitf_DateTime *dateTime,
+                                         int hour,
+                                         nitf_Error *error);
+
+/*!
+ * Sets the minute of a DateTime object and updates the timeInMillis.
+ */
+NITFAPI(NITF_BOOL) nitf_DateTime_setMinute(nitf_DateTime *dateTime,
+                                           int minute,
+                                           nitf_Error *error);
+
+/*!
+ * Sets the second of a DateTime object and updates the timeInMillis.
+ */
+NITFAPI(NITF_BOOL) nitf_DateTime_setSecond(nitf_DateTime *dateTime,
+                                           int second,
+                                           nitf_Error *error);
+
+/*!
+ * Sets the timeInMillis of a DateTime object and updates
+ * the remaining fields to match the new timeInMillis.
+ */
+NITFAPI(NITF_BOOL) nitf_DateTime_setTimeInMillis(nitf_DateTime *dateTime,
+                                                 int timeInMillis,
+                                                 nitf_Error *error);
+
+/*!
  * Returns a DateTime object from the string with the given format.
  */
 NITFAPI(nitf_DateTime*) nitf_DateTime_fromString(const char* string,

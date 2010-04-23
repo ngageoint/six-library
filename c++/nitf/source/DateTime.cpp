@@ -115,37 +115,82 @@ double nitf::DateTime::getTimeInMillis() const
 
 void nitf::DateTime::setYear(int year)
 {
-    getNativeOrThrow()->year = year;
+    if (nitf_DateTime_setYear(getNativeOrThrow(),
+                              year,
+                              &error) != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 void nitf::DateTime::setMonth(int month)
 {
-    getNativeOrThrow()->month = month;
+    if (nitf_DateTime_setMonth(getNativeOrThrow(),
+                               month,
+                               &error) != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 void nitf::DateTime::setDayOfMonth(int dayOfMonth)
 {
-    getNativeOrThrow()->dayOfMonth = dayOfMonth;
+    if (nitf_DateTime_setDayOfMonth(getNativeOrThrow(),
+                                    dayOfMonth,
+                                    &error) != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 void nitf::DateTime::setDayOfWeek(int dayOfWeek)
 {
-    getNativeOrThrow()->dayOfWeek = dayOfWeek;
+    if (nitf_DateTime_setDayOfWeek(getNativeOrThrow(),
+                                   dayOfWeek,
+                                   &error) != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 void nitf::DateTime::setDayOfYear(int dayOfYear)
 {
-    getNativeOrThrow()->dayOfYear = dayOfYear;
+    if (nitf_DateTime_setDayOfYear(getNativeOrThrow(),
+                                   dayOfYear,
+                                   &error) != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 void nitf::DateTime::setHour(int hour)
 {
-    getNativeOrThrow()->hour = hour;
+    if (nitf_DateTime_setHour(getNativeOrThrow(),
+                              hour,
+                              &error) != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 void nitf::DateTime::setMinute(int minute)
 {
-    getNativeOrThrow()->minute = minute;
+    if (nitf_DateTime_setMinute(getNativeOrThrow(),
+                                minute,
+                                &error) != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 void nitf::DateTime::setSecond(double second)
 {
-    getNativeOrThrow()->second = second;
+    if (nitf_DateTime_setSecond(getNativeOrThrow(),
+                                second,
+                                &error) != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 void nitf::DateTime::setTimeInMillis(double timeInMillis)
 {
-    getNativeOrThrow()->timeInMillis = timeInMillis;
+    if (nitf_DateTime_setTimeInMillis(getNativeOrThrow(),
+                                      timeInMillis,
+                                      &error) != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
 }

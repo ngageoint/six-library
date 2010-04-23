@@ -35,12 +35,7 @@ NITFAPI(nitf_DateTime*) nitf_DateTime_now(nitf_Error *error)
 NITFAPI(nitf_DateTime*) nitf_DateTime_fromMillis(double millis,
         nitf_Error *error)
 {
-    time_t timeInSeconds;
-    struct tm t;
     nitf_DateTime *dt = NULL;
-
-    timeInSeconds = (time_t)(millis / 1000);
-    t = *gmtime(&timeInSeconds);
 
     dt = (nitf_DateTime*)NITF_MALLOC(sizeof(nitf_DateTime));
     if (!dt)
@@ -50,19 +45,7 @@ NITFAPI(nitf_DateTime*) nitf_DateTime_fromMillis(double millis,
         return NULL;
     }
 
-    dt->timeInMillis = millis;
-
-    /* this is the year since 1900 */
-    dt->year = t.tm_year + 1900;
-
-    /* 0-based so add 1 */
-    dt->month = t.tm_mon + 1;
-    dt->dayOfMonth = t.tm_mday;
-    dt->dayOfWeek = t.tm_wday + 1;
-    dt->dayOfYear = t.tm_yday + 1;
-    dt->hour = t.tm_hour;
-    dt->minute = t.tm_min;
-    dt->second = t.tm_sec + (millis / 1000.0 - timeInSeconds);
+    nitf_DateTime_setTimeInMillis(dt, millis, error);
 
     return dt;
 }
@@ -93,6 +76,130 @@ NITFPRIV(time_t) nitf_DateTime_timegm(struct tm *t)
         tb += 3600;
     }
     return (tl - (tb - tl));
+}
+
+NITFPRIV(NITF_BOOL) nitf_DateTime_updateMillis(nitf_DateTime *dateTime,
+                                               nitf_Error *error)
+{
+    struct tm t;
+    time_t seconds;
+    double fractionalSeconds;
+
+    t.tm_sec = (int)dateTime->second;
+    t.tm_min = dateTime->minute;
+    t.tm_hour = dateTime->hour;
+    t.tm_mday = dateTime->dayOfMonth;
+    t.tm_mon = dateTime->month - 1;
+    t.tm_year = dateTime->year - 1900;
+    t.tm_wday = dateTime->dayOfWeek - 1;
+    t.tm_yday = dateTime->dayOfYear - 1;
+    t.tm_isdst = 0;
+    
+    fractionalSeconds = dateTime->second - (double)t.tm_sec;
+    seconds = nitf_DateTime_timegm(&t);
+    if (seconds == -1)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                         "Error retrieving seconds from given time");
+        return NITF_FAILURE;
+    }
+
+    dateTime->timeInMillis = (seconds + fractionalSeconds) * 1000.0;
+    dateTime->dayOfWeek = t.tm_wday;
+    dateTime->dayOfYear = t.tm_yday;
+
+    return NITF_SUCCESS;
+}
+
+NITFAPI(NITF_BOOL) nitf_DateTime_setYear(nitf_DateTime *dateTime,
+                                         int year,
+                                         nitf_Error *error)
+{
+    dateTime->year = year;
+    return nitf_DateTime_updateMillis(dateTime, error);
+}
+
+NITFAPI(NITF_BOOL) nitf_DateTime_setMonth(nitf_DateTime *dateTime,
+                                          int month,
+                                          nitf_Error *error)
+{
+    dateTime->month = month;
+    return nitf_DateTime_updateMillis(dateTime, error);
+}
+
+NITFAPI(NITF_BOOL) nitf_DateTime_setDayOfMonth(nitf_DateTime *dateTime,
+                                               int dayOfMonth,
+                                               nitf_Error *error)
+{
+    dateTime->dayOfMonth = dayOfMonth;
+    return nitf_DateTime_updateMillis(dateTime, error);
+}
+
+NITFAPI(NITF_BOOL) nitf_DateTime_setDayOfWeek(nitf_DateTime *dateTime,
+                                              int dayOfWeek,
+                                              nitf_Error *error)
+{
+    dateTime->dayOfWeek = dayOfWeek;
+    return nitf_DateTime_updateMillis(dateTime, error);
+}
+
+NITFAPI(NITF_BOOL) nitf_DateTime_setDayOfYear(nitf_DateTime *dateTime,
+                                              int dayOfYear,
+                                              nitf_Error *error)
+{
+    dateTime->dayOfYear = dayOfYear;
+    return nitf_DateTime_updateMillis(dateTime, error);
+}
+
+NITFAPI(NITF_BOOL) nitf_DateTime_setHour(nitf_DateTime *dateTime,
+                                         int hour,
+                                         nitf_Error *error)
+{
+    dateTime->hour = hour;
+    return nitf_DateTime_updateMillis(dateTime, error);
+}
+
+NITFAPI(NITF_BOOL) nitf_DateTime_setMinute(nitf_DateTime *dateTime,
+                                           int minute,
+                                           nitf_Error *error)
+{
+    dateTime->minute = minute;
+    return nitf_DateTime_updateMillis(dateTime, error);
+}
+
+NITFAPI(NITF_BOOL) nitf_DateTime_setSecond(nitf_DateTime *dateTime,
+                                           int second,
+                                           nitf_Error *error)
+{
+    dateTime->second = second;
+    return nitf_DateTime_updateMillis(dateTime, error);
+}
+
+NITFAPI(NITF_BOOL) nitf_DateTime_setTimeInMillis(nitf_DateTime *dateTime,
+                                                 int timeInMillis,
+                                                 nitf_Error *error)
+{
+    time_t timeInSeconds;
+    struct tm t;
+
+    timeInSeconds = (time_t)(timeInMillis / 1000);
+    t = *gmtime(&timeInSeconds);
+
+    dateTime->timeInMillis = timeInMillis;
+
+    /* this is the year since 1900 */
+    dateTime->year = t.tm_year + 1900;
+
+    /* 0-based so add 1 */
+    dateTime->month = t.tm_mon + 1;
+    dateTime->dayOfMonth = t.tm_mday;
+    dateTime->dayOfWeek = t.tm_wday + 1;
+    dateTime->dayOfYear = t.tm_yday + 1;
+    dateTime->hour = t.tm_hour;
+    dateTime->minute = t.tm_min;
+    dateTime->second = t.tm_sec + (timeInMillis / 1000.0 - timeInSeconds);
+
+    return NITF_SUCCESS;
 }
 
 NITFAPI(nitf_DateTime*) nitf_DateTime_fromString(const char* string,
