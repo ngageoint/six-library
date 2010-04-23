@@ -9,9 +9,15 @@ The intent is to optionally support TRE extensions
 compressed image reading (via any available NITRO decompression plugins)
 
 Disclaimer: This interface to matlab is under development and has not been
-heavily tested yet.  The build system is limited and testing was done using
-matlab v2007a.  You may have to tweak the configuration to get this working on
+heavily tested yet.  Testing has been done on v2007a/v2007b, and v2008b.  
+
+You may have to tweak the configuration to get this working on
 your system.  Use at your own risk.
+
+
+nitf_metadata
+===========================================
+Function to read all the headers in a NITF:
 
 Example usage:
 
@@ -130,3 +136,8 @@ ans =
       UDID: {0x1 cell}
       XSHD: {0x1 cell}
 
+
+
+>> i_3301 = strcat(path2, '\i_3301a.ntf');
+>> out = nitf_image(i_3301, 'Window', [1, 1, 512, 512]);
+>> imshow(out)

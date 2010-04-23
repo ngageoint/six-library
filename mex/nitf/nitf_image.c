@@ -219,13 +219,14 @@ CATCH_ERROR:
  *  Things in the matlab world are one-based but these functions
  *  assume that the arguments here are 0-based
  */
-mxArray* read8BitPixelArray(nitf_Reader* reader,
-                            int idx,
-                            long startRow, 
-                            long startCol,
-                            long numRows, 
-                            long numCols,
-			                nitf_Error *error)
+mxArray* readSingleBandPixelArray(nitf_Reader* reader,
+                                  int idx,
+                                  int matlabClassType,
+                                  long startRow, 
+                                  long startCol,
+                                  long numRows, 
+                                  long numCols,
+			                      nitf_Error *error)
 {
     
     int padded = 0;
@@ -253,7 +254,7 @@ mxArray* read8BitPixelArray(nitf_Reader* reader,
     buffers = (nitf_Uint8**)malloc( sizeof(nitf_Uint8*) * numBands);
 
     mxImageArray = 
-        mxCreateNumericMatrix(numCols, numRows, mxUINT8_CLASS, mxREAL);
+        mxCreateNumericMatrix(numCols, numRows, matlabClassType, mxREAL);
 
     /* Now attach the buffer up to the mxImageArray */
     buffer = (nitf_Uint8*)mxGetData(mxImageArray);
@@ -276,6 +277,44 @@ CATCH_ERROR:
 
     if (subWindow) free(subWindow);
     return NULL;
+}
+
+/*
+ *  This case is totally straightforwad.  We just read in the
+ *  pixel array and create a matrix value.
+ *
+ *  Things in the matlab world are one-based but these functions
+ *  assume that the arguments here are 0-based
+ */
+mxArray* read16BitPixelArray(nitf_Reader* reader,
+                            int idx,
+                            long startRow, 
+                            long startCol,
+                            long numRows, 
+                            long numCols,
+			                nitf_Error *error)
+{
+    
+    return readSingleBandPixelArray(reader, idx, mxUINT16_CLASS, startRow, startCol, numRows, numCols, error);
+}
+
+/*
+ *  This case is totally straightforwad.  We just read in the
+ *  pixel array and create a matrix value.
+ *
+ *  Things in the matlab world are one-based but these functions
+ *  assume that the arguments here are 0-based
+ */
+mxArray* read8BitPixelArray(nitf_Reader* reader,
+                            int idx,
+                            long startRow, 
+                            long startCol,
+                            long numRows, 
+                            long numCols,
+			                nitf_Error *error)
+{
+    
+    return readSingleBandPixelArray(reader, idx, mxUINT8_CLASS, startRow, startCol, numRows, numCols, error);
 }
 
 /*
@@ -486,6 +525,10 @@ MEX_NTF_IMREAD findImageReader(nitf_ImageSegment* segment,
         if (pixelDepth == 1)
         {
             return &read8BitPixelArray;
+        }
+        else if (pixelDepth == 2)
+        {
+            return &read16BitPixelArray;
         }
         /* Deal with real mode */
         else if (memcmp(pixelValue, "R", 1) == 0 && pixelDepth == 4)
