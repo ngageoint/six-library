@@ -271,11 +271,22 @@ mxArray* readSingleBandPixelArray(nitf_Reader* reader,
     if (!nitf_ImageReader_read(imageReader, subWindow, 
                                buffers, &padded, error))
         goto CATCH_ERROR;
+
+    if(subWindow != NULL)
+        nitf_SubWindow_destruct(&subWindow);
+    if(imageReader != NULL)
+        nitf_ImageReader_destruct(&imageReader);
+
     return mxImageArray;
 
 CATCH_ERROR:
 
-    if (subWindow) free(subWindow);
+    if(subWindow != NULL)
+        nitf_SubWindow_destruct(&subWindow);
+    if(imageReader != NULL)
+        nitf_ImageReader_destruct(&imageReader);
+    if(mxImageArray != NULL);
+    mxFree(mxImageArray);
     return NULL;
 }
 
@@ -810,7 +821,8 @@ void mexFunction(int nlhs, mxArray *plhs[],
     long startCol;
     long numRows; 
     long numCols;
-
+    long numRowsTotal;
+    long numColsTotal;
     /* Error string */
 
     const char *errStr;
@@ -823,14 +835,14 @@ void mexFunction(int nlhs, mxArray *plhs[],
     if(!parseArguments(nrhs,prhs,&inputFile,&idx,
                        &startRow, &startCol, &numRows, &numCols, &errStr))
     {
-	mexErrMsgTxt(errStr);
-	return;
+	    mexErrMsgTxt(errStr);
+	    return;
     }
     if(nlhs != 1)
     {
         free(inputFile);
-	mexErrMsgTxt("function requires exactly one output (struct)");
-	return;
+	    mexErrMsgTxt("function requires exactly one output (struct)");
+	    return;
     }
 
     /* Check that we have a NITF */
@@ -895,7 +907,6 @@ void mexFunction(int nlhs, mxArray *plhs[],
     }
 
     /* Still rockin' */
-
     it = nitf_List_at(record->images, idx);
     segment = (nitf_ImageSegment*)nitf_ListIterator_get(&it);
 
@@ -910,12 +921,23 @@ void mexFunction(int nlhs, mxArray *plhs[],
         mexErrMsgTxt(errStr);
     }
 
+    numRowsTotal = atol(segment->subheader->NITF_NROWS->raw);
+    numColsTotal = atol(segment->subheader->NITF_NCOLS->raw);
     if(numRows == 0)      /* No window specified, read full iamge */    
     {
         startRow = 0;
         startCol = 0;
-        numRows = atol(segment->subheader->NITF_NROWS->raw);
-        numCols = atol(segment->subheader->NITF_NCOLS->raw);
+        numRows = numRowsTotal;
+        numCols = numColsTotal;
+    }
+    /* Now validate the rectangle, and if its too big, resize to be nice */
+    if (numRows + startRow > numRowsTotal)
+    {
+        numRows = numRowsTotal - startRow;
+    }
+    if (numCols + startCol > numColsTotal)
+    {
+        numCols = numColsTotal - startCol;
     }
 
     mxImageArray = (*imread)(reader, idx,startRow, startCol,
