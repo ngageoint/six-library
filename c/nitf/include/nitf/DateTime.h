@@ -126,7 +126,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_setSecond(nitf_DateTime *dateTime,
  * the remaining fields to match the new timeInMillis.
  */
 NITFAPI(NITF_BOOL) nitf_DateTime_setTimeInMillis(nitf_DateTime *dateTime,
-                                                 int timeInMillis,
+                                                 double timeInMillis,
                                                  nitf_Error *error);
 
 /*!

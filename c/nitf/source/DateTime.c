@@ -176,7 +176,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_setSecond(nitf_DateTime *dateTime,
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setTimeInMillis(nitf_DateTime *dateTime,
-                                                 int timeInMillis,
+                                                 double timeInMillis,
                                                  nitf_Error *error)
 {
     time_t timeInSeconds;
