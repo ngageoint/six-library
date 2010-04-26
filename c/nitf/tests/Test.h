@@ -70,7 +70,7 @@
     exit(EXIT_FAILURE); \
 }
 /* TODO use epsilon for comparing floating points */
-#define TEST_ASSERT_EQ_FLOAT(X1, X2) if (fabs((X1) - (X2)) > std::numeric_limits<float>::epsilon()) { \
+#define TEST_ASSERT_EQ_FLOAT(X1, X2) if (fabs((X1) - (X2)) > .0000001f) { \
     fprintf(stderr, "%s (%s,%s,%d) : FAILED: Recv'd %f, Expected %f\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE, X1, X2); \
     exit(EXIT_FAILURE); \
 }

@@ -22,7 +22,6 @@
 
 #include "nitf/DateTime.h"
 
-
 #ifdef WIN32
 NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm);
 #endif
@@ -50,38 +49,34 @@ NITFAPI(nitf_DateTime*) nitf_DateTime_fromMillis(double millis,
     return dt;
 }
 
+NITFPRIV(time_t) nitf_DateTime_getLocalOffset()
+{
+    struct tm gt, lt;
+    double millis;
+    time_t gmtSeconds, localSeconds;
+
+    millis = nitf_Utils_getCurrentTimeMillis(); /* gmt */
+
+    gmtSeconds = (time_t)(millis / 1000);
+    gt = *gmtime(&gmtSeconds);
+    lt = *localtime(&gmtSeconds);
+
+    gt.tm_isdst = lt.tm_isdst;
+    localSeconds = mktime(&gt);
+
+    return (localSeconds - gmtSeconds) * 1000;
+}
+
 NITFPRIV(time_t) nitf_DateTime_timegm(struct tm *t)
 {
-    time_t tl, tb;
-    struct tm *tg;
-
-    tl = mktime (t);
-    if (tl == -1)
-    {
-        t->tm_hour--;
-        tl = mktime (t);
-        if (tl == -1)
-        return -1; /* can't deal with output from strptime */
-        tl += 3600;
-    }
-    tg = gmtime (&tl);
-    tg->tm_isdst = 0;
-    tb = mktime (tg);
-    if (tb == -1)
-    {
-        tg->tm_hour--;
-        tb = mktime (tg);
-        if (tb == -1)
-        return -1; /* can't deal with output from gmtime */
-        tb += 3600;
-    }
-    return (tl - (tb - tl));
+    /* just subtract off the timezone offset of our locale */
+    return mktime(t) - (nitf_DateTime_getLocalOffset() / (time_t)1000);
 }
 
 NITFPRIV(NITF_BOOL) nitf_DateTime_updateMillis(nitf_DateTime *dateTime,
-                                               nitf_Error *error)
+        nitf_Error *error)
 {
-    struct tm t;
+    struct tm t, lt;
     time_t seconds;
     double fractionalSeconds;
 
@@ -93,14 +88,18 @@ NITFPRIV(NITF_BOOL) nitf_DateTime_updateMillis(nitf_DateTime *dateTime,
     t.tm_year = dateTime->year - 1900;
     t.tm_wday = dateTime->dayOfWeek - 1;
     t.tm_yday = dateTime->dayOfYear - 1;
-    t.tm_isdst = 0;
-    
+
+    /* adjust for local dst */
+    seconds = (time_t)(dateTime->timeInMillis / 1000.0);
+    lt = *localtime(&seconds);
+    t.tm_isdst = lt.tm_isdst;
+
     fractionalSeconds = dateTime->second - (double)t.tm_sec;
     seconds = nitf_DateTime_timegm(&t);
     if (seconds == -1)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Error retrieving seconds from given time");
+                "Error retrieving seconds from given time");
         return NITF_FAILURE;
     }
 
@@ -112,72 +111,72 @@ NITFPRIV(NITF_BOOL) nitf_DateTime_updateMillis(nitf_DateTime *dateTime,
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setYear(nitf_DateTime *dateTime,
-                                         int year,
-                                         nitf_Error *error)
+        int year,
+        nitf_Error *error)
 {
     dateTime->year = year;
     return nitf_DateTime_updateMillis(dateTime, error);
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setMonth(nitf_DateTime *dateTime,
-                                          int month,
-                                          nitf_Error *error)
+        int month,
+        nitf_Error *error)
 {
     dateTime->month = month;
     return nitf_DateTime_updateMillis(dateTime, error);
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setDayOfMonth(nitf_DateTime *dateTime,
-                                               int dayOfMonth,
-                                               nitf_Error *error)
+        int dayOfMonth,
+        nitf_Error *error)
 {
     dateTime->dayOfMonth = dayOfMonth;
     return nitf_DateTime_updateMillis(dateTime, error);
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setDayOfWeek(nitf_DateTime *dateTime,
-                                              int dayOfWeek,
-                                              nitf_Error *error)
+        int dayOfWeek,
+        nitf_Error *error)
 {
     dateTime->dayOfWeek = dayOfWeek;
     return nitf_DateTime_updateMillis(dateTime, error);
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setDayOfYear(nitf_DateTime *dateTime,
-                                              int dayOfYear,
-                                              nitf_Error *error)
+        int dayOfYear,
+        nitf_Error *error)
 {
     dateTime->dayOfYear = dayOfYear;
     return nitf_DateTime_updateMillis(dateTime, error);
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setHour(nitf_DateTime *dateTime,
-                                         int hour,
-                                         nitf_Error *error)
+        int hour,
+        nitf_Error *error)
 {
     dateTime->hour = hour;
     return nitf_DateTime_updateMillis(dateTime, error);
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setMinute(nitf_DateTime *dateTime,
-                                           int minute,
-                                           nitf_Error *error)
+        int minute,
+        nitf_Error *error)
 {
     dateTime->minute = minute;
     return nitf_DateTime_updateMillis(dateTime, error);
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setSecond(nitf_DateTime *dateTime,
-                                           int second,
-                                           nitf_Error *error)
+        int second,
+        nitf_Error *error)
 {
     dateTime->second = second;
     return nitf_DateTime_updateMillis(dateTime, error);
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setTimeInMillis(nitf_DateTime *dateTime,
-                                                 double timeInMillis,
-                                                 nitf_Error *error)
+        double timeInMillis,
+        nitf_Error *error)
 {
     time_t timeInSeconds;
     struct tm t;
@@ -269,16 +268,21 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
 #define LEGAL_ALT(x)       { ; }
 #define TM_YEAR_BASE   (1900) /* changed from 1970 */
 
-static const char *day[7] = { "Sunday", "Monday", "Tuesday", "Wednesday",
-                              "Thursday", "Friday", "Saturday" };
+static const char *day[7] =
+{   "Sunday", "Monday", "Tuesday", "Wednesday",
+    "Thursday", "Friday", "Saturday"};
 static const char
-        *abday[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
-static const char *mon[12] = { "January", "February", "March", "April", "May",
-                               "June", "July", "August", "September",
-                               "October", "November", "December" };
-static const char *abmon[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-static const char *am_pm[2] = { "AM", "PM" };
+*abday[7] =
+{   "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+static const char *mon[12] =
+{   "January", "February", "March", "April", "May",
+    "June", "July", "August", "September",
+    "October", "November", "December"};
+static const char *abmon[12] =
+{   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+static const char *am_pm[2] =
+{   "AM", "PM"};
 
 NITFPRIV(int) _nitf_convNum(const char **, int *, int, int);
 
@@ -305,7 +309,7 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm)
         if (isspace(c))
         {
             while (isspace(*bp))
-                bp++;
+            bp++;
 
             fmt++;
             continue;
@@ -318,9 +322,9 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm)
         {
             case '%': /* "%%" is converted to "%". */
             literal:
-                if (c != *bp++)
-                    return NULL;
-                break;
+            if (c != *bp++)
+            return NULL;
+            break;
 
             /*
              * "Alternative" modifiers. Just set the appropriate flag
@@ -328,58 +332,58 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm)
              */
             case 'E': /* "%E?" alternative conversion modifier. */
             LEGAL_ALT(0);
-                alt_format |= ALT_E;
-                goto again;
+            alt_format |= ALT_E;
+            goto again;
 
             case 'O': /* "%O?" alternative conversion modifier. */
             LEGAL_ALT(0);
-                alt_format |= ALT_O;
-                goto again;
+            alt_format |= ALT_O;
+            goto again;
 
             /*
              * "Complex" conversion rules, implemented through recursion.
              */
             case 'c': /* Date and time, using the locale's format. */
             LEGAL_ALT(ALT_E);
-                if (!(bp = _nitf_strptime(bp, "%x %X", tm)))
-                    return NULL;
-                break;
+            if (!(bp = _nitf_strptime(bp, "%x %X", tm)))
+            return NULL;
+            break;
 
             case 'D': /* The date as "%m/%d/%y". */
             LEGAL_ALT(0);
-                if (!(bp = _nitf_strptime(bp, "%m/%d/%y", tm)))
-                    return NULL;
-                break;
+            if (!(bp = _nitf_strptime(bp, "%m/%d/%y", tm)))
+            return NULL;
+            break;
 
             case 'R': /* The time as "%H:%M". */
             LEGAL_ALT(0);
-                if (!(bp = _nitf_strptime(bp, "%H:%M", tm)))
-                    return NULL;
-                break;
+            if (!(bp = _nitf_strptime(bp, "%H:%M", tm)))
+            return NULL;
+            break;
 
             case 'r': /* The time in 12-hour clock representation. */
             LEGAL_ALT(0);
-                if (!(bp = _nitf_strptime(bp, "%I:%M:%S %p", tm)))
-                    return NULL;
-                break;
+            if (!(bp = _nitf_strptime(bp, "%I:%M:%S %p", tm)))
+            return NULL;
+            break;
 
             case 'T': /* The time as "%H:%M:%S". */
             LEGAL_ALT(0);
-                if (!(bp = _nitf_strptime(bp, "%H:%M:%S", tm)))
-                    return NULL;
-                break;
+            if (!(bp = _nitf_strptime(bp, "%H:%M:%S", tm)))
+            return NULL;
+            break;
 
             case 'X': /* The time, using the locale's format. */
             LEGAL_ALT(ALT_E);
-                if (!(bp = _nitf_strptime(bp, "%H:%M:%S", tm)))
-                    return NULL;
-                break;
+            if (!(bp = _nitf_strptime(bp, "%H:%M:%S", tm)))
+            return NULL;
+            break;
 
             case 'x': /* The date, using the locale's format. */
             LEGAL_ALT(ALT_E);
-                if (!(bp = _nitf_strptime(bp, "%m/%d/%y", tm)))
-                    return NULL;
-                break;
+            if (!(bp = _nitf_strptime(bp, "%m/%d/%y", tm)))
+            return NULL;
+            break;
 
             /*
              * "Elementary" conversion rules.
@@ -387,114 +391,114 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm)
             case 'A': /* The day of week, using the locale's form. */
             case 'a':
             LEGAL_ALT(0);
-                for (i = 0; i < 7; i++)
-                {
-                    /* Full name. */
-                    len = strlen(day[i]);
-                    if (nitf_Utils_strncasecmp((char *)(day[i]), (char *)bp, len) == 0)
-                        break;
-
-                    /* Abbreviated name. */
-                    len = strlen(abday[i]);
-                    if (nitf_Utils_strncasecmp((char *)(abday[i]), (char *)bp, len) == 0)
-                        break;
-                }
-
-                /* Nothing matched. */
-                if (i == 7)
-                    return NULL;
-
-                tm->tm_wday = i;
-                bp += len;
+            for (i = 0; i < 7; i++)
+            {
+                /* Full name. */
+                len = strlen(day[i]);
+                if (nitf_Utils_strncasecmp((char *)(day[i]), (char *)bp, len) == 0)
                 break;
+
+                /* Abbreviated name. */
+                len = strlen(abday[i]);
+                if (nitf_Utils_strncasecmp((char *)(abday[i]), (char *)bp, len) == 0)
+                break;
+            }
+
+            /* Nothing matched. */
+            if (i == 7)
+            return NULL;
+
+            tm->tm_wday = i;
+            bp += len;
+            break;
 
             case 'B': /* The month, using the locale's form. */
             case 'b':
             case 'h':
             LEGAL_ALT(0);
-                for (i = 0; i < 12; i++)
-                {
-                    /* Full name. */
-                    len = strlen(mon[i]);
-                    if (nitf_Utils_strncasecmp((char *)(mon[i]), (char *)bp, len) == 0)
-                        break;
-
-                    /* Abbreviated name. */
-                    len = strlen(abmon[i]);
-                    if (nitf_Utils_strncasecmp((char *)(abmon[i]),(char *) bp, len) == 0)
-                        break;
-                }
-
-                /* Nothing matched. */
-                if (i == 12)
-                    return NULL;
-
-                tm->tm_mon = i;
-                bp += len;
+            for (i = 0; i < 12; i++)
+            {
+                /* Full name. */
+                len = strlen(mon[i]);
+                if (nitf_Utils_strncasecmp((char *)(mon[i]), (char *)bp, len) == 0)
                 break;
+
+                /* Abbreviated name. */
+                len = strlen(abmon[i]);
+                if (nitf_Utils_strncasecmp((char *)(abmon[i]),(char *) bp, len) == 0)
+                break;
+            }
+
+            /* Nothing matched. */
+            if (i == 12)
+            return NULL;
+
+            tm->tm_mon = i;
+            bp += len;
+            break;
 
             case 'C': /* The century number. */
             LEGAL_ALT(ALT_E);
-                if (!(_nitf_convNum(&bp, &i, 0, 99)))
-                    return NULL;
+            if (!(_nitf_convNum(&bp, &i, 0, 99)))
+            return NULL;
 
-                if (split_year)
-                {
-                    tm->tm_year = (tm->tm_year % 100) + (i * 100);
-                }
-                else
-                {
-                    tm->tm_year = i * 100;
-                    split_year = 1;
-                }
-                break;
+            if (split_year)
+            {
+                tm->tm_year = (tm->tm_year % 100) + (i * 100);
+            }
+            else
+            {
+                tm->tm_year = i * 100;
+                split_year = 1;
+            }
+            break;
 
             case 'd': /* The day of month. */
             case 'e':
             LEGAL_ALT(ALT_O);
-                if (!(_nitf_convNum(&bp, &tm->tm_mday, 1, 31)))
-                    return NULL;
-                break;
+            if (!(_nitf_convNum(&bp, &tm->tm_mday, 1, 31)))
+            return NULL;
+            break;
 
             case 'k': /* The hour (24-hour clock representation). */
             LEGAL_ALT(0);
             /* FALLTHROUGH */
             case 'H':
             LEGAL_ALT(ALT_O);
-                if (!(_nitf_convNum(&bp, &tm->tm_hour, 0, 23)))
-                    return NULL;
-                break;
+            if (!(_nitf_convNum(&bp, &tm->tm_hour, 0, 23)))
+            return NULL;
+            break;
 
             case 'l': /* The hour (12-hour clock representation). */
             LEGAL_ALT(0);
             /* FALLTHROUGH */
             case 'I':
             LEGAL_ALT(ALT_O);
-                if (!(_nitf_convNum(&bp, &tm->tm_hour, 1, 12)))
-                    return NULL;
-                if (tm->tm_hour == 12)
-                    tm->tm_hour = 0;
-                break;
+            if (!(_nitf_convNum(&bp, &tm->tm_hour, 1, 12)))
+            return NULL;
+            if (tm->tm_hour == 12)
+            tm->tm_hour = 0;
+            break;
 
             case 'j': /* The day of year. */
             LEGAL_ALT(0);
-                if (!(_nitf_convNum(&bp, &i, 1, 366)))
-                    return NULL;
-                tm->tm_yday = i - 1;
-                break;
+            if (!(_nitf_convNum(&bp, &i, 1, 366)))
+            return NULL;
+            tm->tm_yday = i - 1;
+            break;
 
             case 'M': /* The minute. */
             LEGAL_ALT(ALT_O);
-                if (!(_nitf_convNum(&bp, &tm->tm_min, 0, 59)))
-                    return NULL;
-                break;
+            if (!(_nitf_convNum(&bp, &tm->tm_min, 0, 59)))
+            return NULL;
+            break;
 
             case 'm': /* The month. */
             LEGAL_ALT(ALT_O);
-                if (!(_nitf_convNum(&bp, &i, 1, 12)))
-                    return NULL;
-                tm->tm_mon = i - 1;
-                break;
+            if (!(_nitf_convNum(&bp, &i, 1, 12)))
+            return NULL;
+            tm->tm_mon = i - 1;
+            break;
 
             //            case 'p': /* The locale's equivalent of AM/PM. */
             //                LEGAL_ALT(0);
@@ -523,65 +527,65 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm)
 
             case 'S': /* The seconds. */
             LEGAL_ALT(ALT_O);
-                if (!(_nitf_convNum(&bp, &tm->tm_sec, 0, 61)))
-                    return NULL;
-                break;
+            if (!(_nitf_convNum(&bp, &tm->tm_sec, 0, 61)))
+            return NULL;
+            break;
 
             case 'U': /* The week of year, beginning on sunday. */
             case 'W': /* The week of year, beginning on monday. */
             LEGAL_ALT(ALT_O);
-                /*
-                 * XXX This is bogus, as we can not assume any valid
-                 * information present in the tm structure at this
-                 * point to calculate a real value, so just check the
-                 * range for now.
-                 */
-                if (!(_nitf_convNum(&bp, &i, 0, 53)))
-                    return NULL;
-                break;
+            /*
+             * XXX This is bogus, as we can not assume any valid
+             * information present in the tm structure at this
+             * point to calculate a real value, so just check the
+             * range for now.
+             */
+            if (!(_nitf_convNum(&bp, &i, 0, 53)))
+            return NULL;
+            break;
 
             case 'w': /* The day of week, beginning on sunday. */
             LEGAL_ALT(ALT_O);
-                if (!(_nitf_convNum(&bp, &tm->tm_wday, 0, 6)))
-                    return NULL;
-                break;
+            if (!(_nitf_convNum(&bp, &tm->tm_wday, 0, 6)))
+            return NULL;
+            break;
 
             case 'Y': /* The year. */
             LEGAL_ALT(ALT_E);
-                i = TM_YEAR_BASE;
-                if (!(_nitf_convNum(&bp, &i, 0, 9999)))
-                    return NULL;
-                tm->tm_year = i - TM_YEAR_BASE;
-                break;
+            i = TM_YEAR_BASE;
+            if (!(_nitf_convNum(&bp, &i, 0, 9999)))
+            return NULL;
+            tm->tm_year = i - TM_YEAR_BASE;
+            break;
 
             case 'y': /* The year within 100 years of the epoch. */
             LEGAL_ALT(ALT_E | ALT_O);
-                if (!(_nitf_convNum(&bp, &i, 0, 99)))
-                    return NULL;
+            if (!(_nitf_convNum(&bp, &i, 0, 99)))
+            return NULL;
 
-                if (split_year)
-                {
-                    tm->tm_year = ((tm->tm_year / 100) * 100) + i;
-                    break;
-                }
-                split_year = 1;
-                if (i <= 68)
-                    tm->tm_year = i + 2000 - TM_YEAR_BASE;
-                else
-                    tm->tm_year = i + 1900 - TM_YEAR_BASE;
+            if (split_year)
+            {
+                tm->tm_year = ((tm->tm_year / 100) * 100) + i;
                 break;
+            }
+            split_year = 1;
+            if (i <= 68)
+            tm->tm_year = i + 2000 - TM_YEAR_BASE;
+            else
+            tm->tm_year = i + 1900 - TM_YEAR_BASE;
+            break;
             /*
              * Miscellaneous conversions.
              */
             case 'n': /* Any kind of white-space. */
             case 't':
             LEGAL_ALT(0);
-                while (isspace(*bp))
-                    bp++;
-                break;
+            while (isspace(*bp))
+            bp++;
+            break;
 
             default: /* Unknown/unsupported conversion. */
-                return NULL;
+            return NULL;
         }
 
     }
@@ -598,7 +602,7 @@ static int _nitf_convNum(const char **buf, int *dest, int llim, int ulim)
     int rulim = ulim;
 
     if (**buf < '0' || **buf > '9')
-        return (0);
+    return (0);
 
     do
     {
@@ -609,7 +613,7 @@ static int _nitf_convNum(const char **buf, int *dest, int llim, int ulim)
     while ((result * 10 <= ulim) && rulim && **buf >= '0' && **buf <= '9');
 
     if (result < llim || result > ulim)
-        return (0);
+    return (0);
 
     *dest = result;
     return (1);
