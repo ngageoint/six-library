@@ -204,7 +204,12 @@ NITFAPI(NITF_BOOL) nitf_DateTime_setTimeInMillis(nitf_DateTime *dateTime,
 NITFAPI(nitf_DateTime*) nitf_DateTime_fromString(const char* string,
         const char* format, nitf_Error *error)
 {
-    struct tm t;
+    struct tm t, lt;
+    time_t gmtSeconds;
+
+    gmtSeconds = (time_t)(nitf_Utils_getCurrentTimeMillis() / 1000.0); /* gmt */
+    lt = *localtime(&gmtSeconds);
+    t.tm_isdst = lt.tm_isdst;
 
 #ifdef WIN32
     if (!_nitf_strptime(string, format, &t))
@@ -217,6 +222,7 @@ NITFAPI(nitf_DateTime*) nitf_DateTime_fromString(const char* string,
                 format);
         return NULL;
     }
+    t.tm_isdst = lt.tm_isdst; /* reset it */
     return nitf_DateTime_fromMillis((double)nitf_DateTime_timegm(&t) * 1000, error);
 }
 
@@ -292,18 +298,13 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm)
     const char *bp;
     size_t len = 0;
     int alt_format, i, split_year = 0;
-    struct tm lt;
-    time_t gmtSeconds;
-
-    gmtSeconds = (time_t)(nitf_Utils_getCurrentTimeMillis() / 1000); /* gmt */
-    lt = *localtime(&gmtSeconds);
 
     bp = buf;
 
     /* init */
     tm->tm_sec = tm->tm_min = tm->tm_hour = tm->tm_mday =
     tm->tm_mon = tm->tm_year = tm->tm_wday = tm->tm_yday = 0;
-    tm->tm_isdst = lt.tm_isdst;
+    /* tm->tm_isdst = lt.tm_isdst; */
 
     while ((c = *fmt) != '\0')
     {
