@@ -90,10 +90,13 @@ TEST_CASE(testRoundTrip)
     TEST_ASSERT((nitf_DateTime_format(date2, NITF_DATE_FORMAT_21, buf2,
                             NITF_FDT_SZ + 1, &e)));
     /*printf("Date: %s\n", buf2);*/
-
     /*printDate(date2);*/
 
     TEST_ASSERT_EQ_STR(buf, buf2);
+    
+    /* must subtract off the millis - since our format string doesn't include them */
+    nitf_DateTime_setSecond(date, (int)date->second, &e);
+    nitf_DateTime_setSecond(date2, (int)date2->second, &e);
     TEST_ASSERT_EQ_FLOAT(date->timeInMillis, date2->timeInMillis);
 
     nitf_DateTime_destruct(&date);

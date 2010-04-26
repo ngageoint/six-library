@@ -292,13 +292,18 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm)
     const char *bp;
     size_t len = 0;
     int alt_format, i, split_year = 0;
+    struct tm lt;
+    time_t gmtSeconds;
+
+    gmtSeconds = (time_t)(nitf_Utils_getCurrentTimeMillis() / 1000); /* gmt */
+    lt = *localtime(&gmtSeconds);
 
     bp = buf;
 
     /* init */
     tm->tm_sec = tm->tm_min = tm->tm_hour = tm->tm_mday =
-    tm->tm_mon = tm->tm_year = tm->tm_wday =
-    tm->tm_yday = tm->tm_isdst = 0;
+    tm->tm_mon = tm->tm_year = tm->tm_wday = tm->tm_yday = 0;
+    tm->tm_isdst = lt.tm_isdst;
 
     while ((c = *fmt) != '\0')
     {
