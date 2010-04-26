@@ -256,11 +256,11 @@ NRL                N/A                        0,255 (Supposed to be display read
 		<xs:complexContent>
 			<xs:extension base="BaseProjectionType">
 				<xs:sequence>
-					<xs:element name="rowColToLat" type="sicommon:Poly2DType"/>
-					<xs:element name="rowColToLon" type="sicommon:Poly2DType"/>
-					<xs:element name="rowColToAlt" type="sicommon:Poly2DType" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element name="latLonToRow" type="sicommon:Poly2DType"/>
-					<xs:element name="latLonToCol" type="sicommon:Poly2DType"/>
+					<xs:element name="RowColToLat" type="sicommon:Poly2DType"/>
+					<xs:element name="RowColToLon" type="sicommon:Poly2DType"/>
+					<xs:element name="RowColToAlt" type="sicommon:Poly2DType" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="LatLonToRow" type="sicommon:Poly2DType"/>
+					<xs:element name="LatLonToCol" type="sicommon:Poly2DType"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
