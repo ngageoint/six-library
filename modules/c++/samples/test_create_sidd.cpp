@@ -289,8 +289,8 @@ int main(int argc, char** argv)
             six::sidd::PlaneProjection* planeProjection =
                 (six::sidd::PlaneProjection*) data->measurement->projection;
 
-            data->measurement->timeCOAPoly = six::Poly2D(0, 0);
-            data->measurement->timeCOAPoly[0][0] = 1;
+            planeProjection->timeCOAPoly = six::Poly2D(0, 0);
+            planeProjection->timeCOAPoly[0][0] = 1;
             data->measurement->arpPoly = six::PolyXYZ(0);
             data->measurement->arpPoly[0] = 0;
             planeProjection->productPlane.rowUnitVector = 0;

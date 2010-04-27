@@ -88,7 +88,8 @@ namespace scene
     class LatLonAlt
     {
     public:
-        LatLonAlt() : mLat(0), mLon(0), mAlt(0) {}
+        LatLonAlt(double scalar = 0.0) :
+	    mLat(scalar), mLon(scalar), mAlt(scalar) {}
 
         LatLonAlt(double lat, double lon, double alt = 0)
             : mLat(lat), mLon(lon), mAlt(alt)
