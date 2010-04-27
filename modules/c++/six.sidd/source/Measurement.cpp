@@ -40,6 +40,10 @@ Measurement::Measurement(ProjectionType projectionType) :
     {
         projection = new PlaneProjection();
     }
+    else if (projectionType == PROJECTION_POLYNOMIAL)
+    {
+	projection = new PolynomialProjection();
+    }
 }
 
 Measurement* Measurement::clone()
@@ -49,7 +53,5 @@ Measurement* Measurement::clone()
         m->projection = projection->clone();
     m->pixelFootprint = pixelFootprint;
     m->arpPoly = arpPoly;
-    m->timeCOAPoly = timeCOAPoly;
-
     return m;
 }

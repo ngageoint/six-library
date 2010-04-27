@@ -6,8 +6,15 @@ using namespace six::sidd;
 scene::SceneGeometry*
 Utilities::getSceneGeometry(DerivedData* derived)
 {
-    ReferencePoint ref = derived->measurement->projection->referencePoint;
-    Poly2D timeCOAPoly = derived->measurement->timeCOAPoly;
+
+    if (! derived->measurement->projection->isMeasurable() )
+	throw except::Exception(Ctxt("Projection is not measurable"));
+
+    MeasurableProjection* measurableProjection =
+	(MeasurableProjection*)derived->measurement->projection;
+
+    Poly2D timeCOAPoly = measurableProjection->timeCOAPoly;
+    ReferencePoint ref = measurableProjection->referencePoint;
     PolyXYZ arpPoly = derived->measurement->arpPoly;
 
     Vector3 refPos = ref.ecef;

@@ -19,8 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_MEASUREMENT_H__
-#define __SIX_MEASUREMENT_H__
+#ifndef __SIX_SIDD_MEASUREMENT_H__
+#define __SIX_SIDD_MEASUREMENT_H__
 
 #include "six/Types.h"
 #include "six/Init.h"
@@ -63,17 +63,78 @@ struct Projection
 {
     ProjectionType projectionType;
     ReferencePoint referencePoint;
-    RowColDouble sampleSpacing;
 
     //!  Empty constructor
-    Projection()
-    {
-    }
+    Projection() {}
+
     //!  Empty
     virtual ~Projection() {}
     
     //!  Pure
     virtual Projection* clone() const = 0;
+
+    virtual bool isMeasurable() const { return false; }
+
+};
+
+/*!
+ *  \struct PolynomialProjection
+ *  \brief SIDD PolynomialProjection
+ *
+ *  Allows geo-referencing via polynomials
+ *
+ */
+struct PolynomialProjection : public Projection
+{
+    //!  Initialize base class projection type
+    PolynomialProjection()
+    {
+        this->projectionType = PROJECTION_POLYNOMIAL;
+    }
+
+    virtual ~PolynomialProjection() {}
+
+    /*!
+     *  Define a copy operator
+     *
+     */
+    virtual Projection* clone() const
+    {
+        PolynomialProjection* c = new PolynomialProjection(*this);
+        return c;
+    }
+
+
+    //! Find a latitude associated with a row-col
+    Poly2D rowColToLat;
+
+    //! Find a longitude associated with a row-col
+    Poly2D rowColToLon;
+
+    //! Find an altitude associated with a row-col
+    Poly2D rowColToAlt;
+
+    //! Find a row in the image associated with a lat-lon
+    Poly2D latLonToRow;
+    
+    //! Find a col in the image associated with a lat-lon
+    Poly2D latLonToCol;
+
+};
+
+/*!
+ *  Provides some more utility (TimeCOAPOly) than projection but 
+ *  still pure.
+ */
+struct MeasurableProjection : public Projection
+{
+    virtual ~MeasurableProjection() {}
+
+    //!  SIDD TimeCOAPoly
+    Poly2D timeCOAPoly;
+
+    bool isMeasurable() const { return true; }
+
 };
 
 /*!
@@ -84,7 +145,7 @@ struct Projection
  *  to as GGD in the Design and Exploitation document.
  *
  */
-struct GeographicProjection: public Projection
+struct GeographicProjection : public MeasurableProjection
 {
 
     //!  Initialize base class projection type
@@ -92,6 +153,7 @@ struct GeographicProjection: public Projection
     {
         this->projectionType = PROJECTION_GEOGRAPHIC;
     }
+
     //!  Define a clone operation
     virtual Projection* clone() const
     {
@@ -99,6 +161,9 @@ struct GeographicProjection: public Projection
         return g;
     }
     virtual ~GeographicProjection() {}
+
+    //!  SIDD 0.1.1, this allows non-north-up
+    RowColLatLon sampleSpacing;
 
 };
 
@@ -110,8 +175,9 @@ struct GeographicProjection: public Projection
  *  referred to as CGD in the Design and Exploitation document.
  *
  */
-struct CylindricalProjection: public Projection
+struct CylindricalProjection : public MeasurableProjection
 {
+
     //!  Cylindrical projection creation (curvature is undefined)
     CylindricalProjection()
     {
@@ -119,13 +185,7 @@ struct CylindricalProjection: public Projection
         this->curvatureRadius = Init::undefined<double>();
     }
 
-    /*!
-     *  Radius of Curvature defined at scene center.  
-     *  If not present, the radius of curvature will be derived 
-     *  based upon the equations provided in the Design and 
-     *  Exploitation Document
-     */
-    double curvatureRadius;
+    virtual ~CylindricalProjection() {}
 
     /*!
      *  Define a copy operator
@@ -136,6 +196,18 @@ struct CylindricalProjection: public Projection
         CylindricalProjection* c = new CylindricalProjection(*this);
         return c;
     }
+
+    // SIDD 0.1.1, this is pushed down to derived
+    RowColDouble sampleSpacing;
+
+    /*!
+     *  Radius of Curvature defined at scene center.  
+     *  If not present, the radius of curvature will be derived 
+     *  based upon the equations provided in the Design and 
+     *  Exploitation Document
+     */
+    double curvatureRadius;
+
 };
 
 /*!
@@ -145,16 +217,15 @@ struct CylindricalProjection: public Projection
  *  Derived Projection for plane projection, PGD according to D&E
  *
  */
-struct PlaneProjection: public Projection
+struct PlaneProjection : public MeasurableProjection
 {
     //!  Constructor
     PlaneProjection()
     {
         this->projectionType = PROJECTION_PLANE;
     }
-
-    //!  Product plane definition (defined by a basis)
-    ProductPlane productPlane;
+    
+    virtual ~PlaneProjection() {}
 
     //!  Clone operation
     virtual Projection* clone() const
@@ -162,6 +233,13 @@ struct PlaneProjection: public Projection
         PlaneProjection* p = new PlaneProjection(*this);
         return p;
     }
+
+    // SIDD 0.1.1, this is pushed down to derived
+    RowColDouble sampleSpacing;
+
+    //!  Product plane definition (defined by a basis)
+    ProductPlane productPlane;
+
 
 };
 
@@ -181,9 +259,6 @@ struct Measurement
 
     //!  The ARP Polynomial
     PolyXYZ arpPoly;
-
-    //!  SIDD TimeCOAPoly
-    Poly2D timeCOAPoly;
 
     /*!
      *  To initialize a measurenet, we need a product projection
