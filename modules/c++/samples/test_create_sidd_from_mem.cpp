@@ -1907,6 +1907,7 @@ int main(int argc, char** argv)
 	six::sidd::PlaneProjection* planeProjection =
 	    (six::sidd::PlaneProjection*) siddData->measurement->projection;
 
+
 	//--------------------------------------------------
 	// This is creating a constant-term polynomial 2D
 	// 2D Polynomials are laid out as a matrix of terms
@@ -1920,10 +1921,8 @@ int main(int argc, char** argv)
 	// ... |  0    0   0   0
 	// x^n |  2    0   0   0
 	//--------------------------------------------------
-	siddData->measurement->timeCOAPoly = six::Poly2D(0, 0);
-
-	// The constant term is set by array index
-	siddData->measurement->timeCOAPoly[0][0] = 1;
+	planeProjection->timeCOAPoly = six::Poly2D(0, 0);
+	planeProjection->timeCOAPoly[0][0] = 1;
 
 	//--------------------------------------------------
 	// This is creating a constant-term polynomial of vectors
