@@ -380,6 +380,17 @@ xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
     return createRowCol(doc, name, "Row", "Col", value);
 }
 
+xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
+					     std::string name,
+					     const RowColLatLon& value)
+{
+    xml::lite::Element* e = newElement(doc, name);
+    e->addChild(createLatLon(doc, "Row", value.row));
+    e->addChild(createLatLon(doc, "Col", value.col));
+    return e;
+}
+
+
 xml::lite::Element* XMLControl::createRangeAzimuth(xml::lite::Document* doc,
         std::string name, const RangeAzimuth<double>& value)
 {
@@ -618,6 +629,13 @@ void XMLControl::parseRowColDouble(xml::lite::Element* parent,
 {
     parseDouble(getFirstAndOnly(parent, rowName), rc.row);
     parseDouble(getFirstAndOnly(parent, colName), rc.col);
+}
+
+void XMLControl::parseRowColLatLon(xml::lite::Element* parent,
+				   RowColLatLon& rc)
+{
+    parseLatLon(getFirstAndOnly(parent, "Row"), rc.row);
+    parseLatLon(getFirstAndOnly(parent, "Col"), rc.col);
 }
 
 void XMLControl::parseRowColDouble(xml::lite::Element* parent,

@@ -110,8 +110,13 @@ protected:
             const RowColDouble& value);
     xml::lite::Element* createRowCol(xml::lite::Document* doc,
             std::string name, const RowColInt& value);
+
     xml::lite::Element* createRowCol(xml::lite::Document* doc,
             std::string name, const RowColDouble& value);
+
+    xml::lite::Element* createRowCol(xml::lite::Document* doc,
+				     std::string, const RowColLatLon& value);
+
     xml::lite::Element* createRangeAzimuth(xml::lite::Document* doc,
             std::string name, const RangeAzimuth<double>& value);
     xml::lite::Element* createLatLon(xml::lite::Document* doc,
@@ -169,10 +174,14 @@ protected:
     void parseRowColDouble(xml::lite::Element* parent, std::string rowName,
             std::string colName, RowColDouble& rc);
     void parseRowColDouble(xml::lite::Element* parent, RowColDouble& rc);
+
     void parseRowColInt(xml::lite::Element* parent, std::string rowName,
             std::string colName, RowColInt& rc);
     void parseRowColInt(xml::lite::Element* parent, RowColInt& rc);
     Parameter parseParameter(xml::lite::Element* element);
+
+    void parseRowColLatLon(xml::lite::Element* parent, RowColLatLon& rc);
+
     void parseParameters(xml::lite::Element* paramXML, std::string paramName,
             std::vector<Parameter>& props);
 

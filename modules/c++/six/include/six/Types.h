@@ -219,7 +219,7 @@ template<typename T> struct RangeAzimuth
 
 template<typename T> struct RowCol
 {
-    RowCol(T r = 0, T c = 0) :
+    RowCol(T r = 0.0, T c = 0.0) :
         row(r), col(c)
     {
     }
@@ -264,19 +264,15 @@ struct DecorrType
 };
 
 /*!
- *  \struct RowColPoly2D
- *  \brief Pair for 2D polys
- *
- *  2-Dimensional polynomial pair
+ *  2-D polynomial pair
  */
-struct RowColPoly2D
-{
-    RowColPoly2D()
-    {
-    }
-    Poly2D row;
-    Poly2D col;
-};
+
+typedef RowCol<Poly2D> RowColPoly2D;
+
+/*!
+ *  2-D lat-lon sample spacing (Required for SIDD 0.1.1)
+ */
+typedef RowCol<LatLon> RowColLatLon;
 
 // Collection type
 enum CollectType
@@ -289,7 +285,8 @@ enum ProjectionType
     PROJECTION_NOT_SET, 
     PROJECTION_PLANE, 
     PROJECTION_GEOGRAPHIC, 
-    PROJECTION_CYLINDRICAL
+    PROJECTION_CYLINDRICAL,
+    PROJECTION_POLYNOMIAL
 };
 
 enum RegionType
