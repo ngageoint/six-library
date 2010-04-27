@@ -347,8 +347,9 @@ void DerivedXMLControl::xmlToGeographicCoverage(
     }
 }
 
+// This function ASSUMES that the measurement projection has already been set!
 void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
-        Measurement* measurement)
+					 Measurement* measurement)
 {
     parseRowColInt(getFirstAndOnly(measurementXML, "PixelFootprint"),
             measurement->pixelFootprint);
@@ -375,12 +376,14 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
     parseRowColDouble(getFirstAndOnly(refXML, "Point"),
             measurement->projection->referencePoint.rowCol);
 
-    parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
-            measurement->projection->sampleSpacing);
-
     if (measurement->projection->projectionType == PROJECTION_PLANE)
     {
         PlaneProjection* planeProj = (PlaneProjection*) measurement->projection;
+	parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
+		    planeProj->timeCOAPoly);
+
+	parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
+			  planeProj->sampleSpacing);
 
         xml::lite::Element* prodPlaneXML = getFirstAndOnly(projXML,
                 "ProductPlane");
@@ -390,23 +393,70 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
         parseVector3D(getFirstAndOnly(prodPlaneXML, "ColUnitVector"),
                 planeProj->productPlane.colUnitVector);
     }
+    else if (measurement->projection->projectionType == PROJECTION_GEOGRAPHIC)
+    {
+	GeographicProjection* geographicProj = 
+	    (GeographicProjection*) measurement->projection;
+
+	parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
+		    geographicProj->timeCOAPoly);
+
+	parseRowColLatLon(getFirstAndOnly(projXML, "SampleSpacing"),
+			  geographicProj->sampleSpacing);
+    }
     else if (measurement->projection->projectionType == PROJECTION_CYLINDRICAL)
     {
+	// Now, we go TimeCOA, SampleSpacing, CurvatureRadius
+	CylindricalProjection* cylindricalProj = 
+	    (CylindricalProjection*) measurement->projection;
+
+	parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
+		    cylindricalProj->timeCOAPoly);
+
+	parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
+			  cylindricalProj->sampleSpacing);
+
         xml::lite::Element* curvRadiusXML = getOptional(projXML, 
-                "CurvatureRadius");
+							"CurvatureRadius");
         if (curvRadiusXML)
         {
-            CylindricalProjection* cylindricalProj = 
-                    (CylindricalProjection*) measurement->projection;
             parseDouble(curvRadiusXML, cylindricalProj->curvatureRadius);
         }
     }
+    else if (measurement->projection->projectionType == PROJECTION_POLYNOMIAL)
+    {
+	PolynomialProjection* polyProj = 
+	    (PolynomialProjection*) measurement->projection;
+
+	// Get a bunch of 2D polynomials
+	parsePoly2D(getFirstAndOnly(projXML, "RowColToLat"),
+		    polyProj->rowColToLat);
+
+	parsePoly2D(getFirstAndOnly(projXML, "RowColToLon"),
+		    polyProj->rowColToLat);
+	
+	
+	xml::lite::Element* optionalAltPolyXML = getOptional(projXML,
+							     "RowColToAlt");
+	if (optionalAltPolyXML)
+	{
+	    parsePoly2D(optionalAltPolyXML,
+			polyProj->rowColToAlt);
+	}
+
+	parsePoly2D(getFirstAndOnly(projXML, "LatLonToRow"),
+		    polyProj->latLonToRow);
+
+	parsePoly2D(getFirstAndOnly(projXML, "LatLonToCol"),
+		    polyProj->latLonToCol);
+
+    }
+    else throw except::Exception(Ctxt("Unknown projection type"));
+
 
     xml::lite::Element* tmpElem = getFirstAndOnly(measurementXML, "ARPPoly");
     parsePolyXYZ(tmpElem, measurement->arpPoly);
 
-    tmpElem = getFirstAndOnly(measurementXML, "TimeCOAPoly");
-    parsePoly2D(tmpElem, measurement->timeCOAPoly);
 }
 
 void DerivedXMLControl::xmlToExploitationFeatures(
@@ -622,11 +672,16 @@ Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
     }
     builder.addGeographicAndTarget(regionType);
 
-    six::ProjectionType projType = six::PROJECTION_PLANE;
+    six::ProjectionType projType = six::PROJECTION_NOT_SET;
+
     if (getOptional(measurementXML, "GeographicProjection"))
         projType = six::PROJECTION_GEOGRAPHIC;
     else if (getOptional(measurementXML, "CylindricalProjection"))
         projType = six::PROJECTION_CYLINDRICAL;
+    else if (getOptional(measurementXML, "PlaneProjection"))
+	projType = six::PROJECTION_PLANE;
+    else if (getOptional(measurementXML, "PolynomialProjection"))
+	projType = six::PROJECTION_POLYNOMIAL;
 
     builder.addMeasurement(projType);
 
@@ -933,30 +988,7 @@ DerivedXMLControl::measurementToXML(xml::lite::Document* doc,
 
     Projection* projection = measurement->projection;
 
-    std::string projectionName =
-            projection->projectionType == PROJECTION_PLANE ? "PlaneProjection"
-                    : (projection->projectionType == PROJECTION_GEOGRAPHIC ? 
-                            "GeographicProjection" : "CylindricalProjection");
-
-    // PlaneProjection
-    xml::lite::Element* projectionXML = newElement(doc, projectionName);
-    measurementXML->addChild(projectionXML);
-
-    if (projection->projectionType == PROJECTION_PLANE)
-    {
-        PlaneProjection* planeProjection = (PlaneProjection*) projection;
-
-        xml::lite::Element* productPlaneXML = newElement(doc, "ProductPlane");
-        projectionXML->addChild(productPlaneXML);
-
-        //RowBasis
-        productPlaneXML->addChild(createVector3D(doc, "RowUnitVector",
-                planeProjection->productPlane.rowUnitVector));
-
-        //ColBasis
-        productPlaneXML->addChild(createVector3D(doc, "ColUnitVector",
-                planeProjection->productPlane.colUnitVector));
-    }
+    xml::lite::Element* projectionXML = newElement(doc, "");
 
     xml::lite::Element* referencePointXML = newElement(doc, "ReferencePoint");
     setAttribute(referencePointXML, "name", projection->referencePoint.name);
@@ -969,20 +1001,128 @@ DerivedXMLControl::measurementToXML(xml::lite::Document* doc,
     referencePointXML->addChild(createRowCol(doc, "Point",
             projection->referencePoint.rowCol));
 
-    projectionXML->addChild(createRowCol(doc, "SampleSpacing",
-            projection->sampleSpacing));
-
-    if (projection->projectionType == PROJECTION_CYLINDRICAL)
+    switch (projection->projectionType)
     {
-        CylindricalProjection* cylindricalProj = 
-                (CylindricalProjection*) projection;
+    case PROJECTION_PLANE:
+    {
+	projectionXML->setLocalName("PlaneProjection");
+        PlaneProjection* planeProj = (PlaneProjection*) projection;
+
+	//TimeCOAPoly
+	xml::lite::Element* timeCOAPolyXML =
+	    createPoly2D(doc, "TimeCOAPoly",
+			 planeProj->timeCOAPoly);
+	projectionXML->addChild(timeCOAPolyXML);
+
+
+	projectionXML->addChild(createRowCol(doc, "SampleSpacing",
+					     planeProj->sampleSpacing));
+
+        xml::lite::Element* productPlaneXML = newElement(doc, "ProductPlane");
+        projectionXML->addChild(productPlaneXML);
+
+        //RowBasis
+        productPlaneXML->addChild(createVector3D(doc, "RowUnitVector",
+                planeProj->productPlane.rowUnitVector));
+
+        //ColBasis
+        productPlaneXML->addChild(createVector3D(doc, "ColUnitVector",
+                planeProj->productPlane.colUnitVector));
+
+    }
+    break;
+
+    case PROJECTION_GEOGRAPHIC:
+    {
+	projectionXML->setLocalName("GeographicProjection");
+        GeographicProjection* geographicProj =
+	    (GeographicProjection*) projection;
+
+
+	//TimeCOAPoly
+	xml::lite::Element* timeCOAPolyXML =
+	    createPoly2D(doc, "TimeCOAPoly",
+			 geographicProj->timeCOAPoly);
+
+	projectionXML->addChild(timeCOAPolyXML);
+
+
+	xml::lite::Element* sampleSpacingXML = 
+	    createRowCol(doc, "SampleSpacing",
+			 geographicProj->sampleSpacing);
+
+
+
+    }
+    break;
+
+    case PROJECTION_CYLINDRICAL:
+    {
+	projectionXML->setLocalName("CylindricalProjection");
+
+	CylindricalProjection* cylindricalProj = 
+	    (CylindricalProjection*) projection;
+
+	//TimeCOAPoly
+	xml::lite::Element* timeCOAPolyXML =
+	    createPoly2D(doc, "TimeCOAPoly",
+			 cylindricalProj->timeCOAPoly);
+
+	projectionXML->addChild(timeCOAPolyXML);
+
+	projectionXML->addChild(
+	    createRowCol(doc, "SampleSpacing",
+			 cylindricalProj->sampleSpacing));
+
 
         if (cylindricalProj->curvatureRadius != Init::undefined<double>())
         {
-            projectionXML->addChild(createDouble(doc, "CurvatureRadius",
-                    cylindricalProj->curvatureRadius));
+            projectionXML->addChild(
+		createDouble(doc, "CurvatureRadius",
+			     cylindricalProj->curvatureRadius));
         }
+
     }
+    break;
+
+    case PROJECTION_POLYNOMIAL:
+    {
+	projectionXML->setLocalName("PolynomialProjection");
+	PolynomialProjection* polyProj = (PolynomialProjection*)projection;
+
+	projectionXML->addChild(createPoly2D(doc, "RowColToLat",
+					     polyProj->rowColToLat));
+
+
+	projectionXML->addChild(createPoly2D(doc, "RowColToLon",
+					     polyProj->rowColToLon));
+
+
+	if (polyProj->rowColToAlt.orderX() >= 0
+            && polyProj->rowColToAlt.orderY() >= 0)
+	{
+	    projectionXML->addChild(createPoly2D(doc, "RowColToAlt",
+						 polyProj->rowColToAlt));
+	}
+
+	
+
+	projectionXML->addChild(createPoly2D(doc, "LatLonToRow",
+					     polyProj->latLonToRow));
+
+
+
+	projectionXML->addChild(createPoly2D(doc, "LatLonToCol",
+					     polyProj->latLonToCol));
+
+    }
+    break;
+
+    default:
+	throw except::Exception(Ctxt("Unknown projection type!"));
+    }
+
+    measurementXML->addChild(projectionXML);
 
     //Pixel Footprint
     measurementXML->addChild(createRowCol(doc, "PixelFootprint",
@@ -992,10 +1132,6 @@ DerivedXMLControl::measurementToXML(xml::lite::Document* doc,
     measurementXML->addChild(
             createPolyXYZ(doc, "ARPPoly", measurement->arpPoly));
 
-    //TimeCOAPoly
-    xml::lite::Element* timeCOAPolyXML = createPoly2D(doc, "TimeCOAPoly",
-            measurement->timeCOAPoly);
-    measurementXML->addChild(timeCOAPolyXML);
     return measurementXML;
 }
 
