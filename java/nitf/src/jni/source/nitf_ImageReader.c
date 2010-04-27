@@ -120,7 +120,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_read(JNIEnv *env,
 
     bands = (*env)->GetArrayLength(env, userBuf);
 
-    data = (jbyte **) malloc(bands * sizeof(jbyte));
+    data = (jbyte **) malloc(bands * sizeof(jbyte*));
     for (i = 0; i < bands; ++i)
     {
         byteArray = (*env)->GetObjectArrayElement(env, userBuf, i);
