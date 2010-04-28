@@ -1,23 +1,23 @@
-/* =========================================================================
+/*
+ * =========================================================================
  * This file is part of NITRO
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
- *
+ * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
- *
  */
 
 package nitf.imageio;
@@ -25,6 +25,7 @@ package nitf.imageio;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -222,9 +223,39 @@ public class ImageIOUtils
 
     public static JFrame showImage(BufferedImage image, String title)
     {
+        return showImage(image, title, true);
+    }
+
+    public static JFrame showImage(BufferedImage image, String title,
+                                   boolean fitToScreen)
+    {
         JFrame frame = new JFrame(title != null ? title : "");
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        JLabel label = new JLabel(new ImageIcon(image));
+
+        Image im = image;
+
+        if (fitToScreen)
+        {
+            Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+            int imageHeight = image.getHeight();
+            int imageWidth = image.getWidth();
+            if (imageHeight > screen.height || imageWidth > screen.width)
+            {
+                double hRatio = (imageHeight - screen.height) / screen.height;
+                double wRatio = (imageWidth - screen.width) / screen.width;
+
+                int w = -1;
+                int h = -1;
+
+                if (hRatio > wRatio)
+                    h = screen.height;
+                else
+                    w = screen.width;
+                im = image.getScaledInstance(w, h, Image.SCALE_DEFAULT);
+            }
+        }
+
+        JLabel label = new JLabel(new ImageIcon(im));
         frame.getContentPane().add(label, BorderLayout.CENTER);
         frame.pack();
         centerWindow(frame);
@@ -270,7 +301,7 @@ public class ImageIOUtils
     }
 
     public static float[] findMinAndMax(float[] buffer, int pixelStride,
-            int numBands)
+                                        int numBands)
     {
         float min = Float.MAX_VALUE;
         float max = -Float.MAX_VALUE;
@@ -292,7 +323,7 @@ public class ImageIOUtils
     }
 
     public static double[] findMinAndMax(double[] buffer, int pixelStride,
-            int numBands)
+                                         int numBands)
     {
         double min = Double.MAX_VALUE;
         double max = -Double.MAX_VALUE;
@@ -314,7 +345,7 @@ public class ImageIOUtils
     }
 
     public static int[] findMinAndMax(short[] buffer, int pixelStride,
-            int numBands)
+                                      int numBands)
     {
         int min = 65535;
         int max = 0;
@@ -342,7 +373,9 @@ public class ImageIOUtils
      * @return
      */
     public static WritableRaster makeGenericBandedWritableRaster(int numElems,
-            int numLines, int numBands, int dataType)
+                                                                 int numLines,
+                                                                 int numBands,
+                                                                 int dataType)
     {
         int[] bandOffsets = new int[numBands];
         for (int i = 0; i < numBands; ++i)
@@ -373,7 +406,10 @@ public class ImageIOUtils
      * @return
      */
     public static WritableRaster makeGenericPixelInterleavedWritableRaster(
-            int numElems, int numLines, int numBands, int dataType)
+                                                                           int numElems,
+                                                                           int numLines,
+                                                                           int numBands,
+                                                                           int dataType)
     {
         int[] bandOffsets = new int[numBands];
         for (int i = 0; i < numBands; ++i)
@@ -409,7 +445,7 @@ public class ImageIOUtils
      * @param byteData
      */
     public static void floatToByteBuffer(float[] floatData, byte[] byteData,
-            int pixelStride, int numBands)
+                                         int pixelStride, int numBands)
     {
         float[] minMax = ImageIOUtils.findMinAndMax(floatData, pixelStride,
                 numBands);
@@ -434,7 +470,7 @@ public class ImageIOUtils
      * @param byteData
      */
     public static void doubleToByteBuffer(double[] doubleData, byte[] byteData,
-            int pixelStride, int numBands)
+                                          int pixelStride, int numBands)
     {
         double[] minMax = ImageIOUtils.findMinAndMax(doubleData, pixelStride,
                 numBands);
@@ -459,7 +495,7 @@ public class ImageIOUtils
      * @param byteData
      */
     public static void shortToByteBuffer(short[] shortData, byte[] byteData,
-            int pixelStride, int numBands)
+                                         int pixelStride, int numBands)
     {
         int[] minMax = ImageIOUtils.findMinAndMax(shortData, pixelStride,
                 numBands);
@@ -487,8 +523,9 @@ public class ImageIOUtils
      * @param imageType
      * @return
      */
-    public static BufferedImage rasterToBufferedImage(Raster raster,
-            ImageTypeSpecifier imageType)
+    public static BufferedImage rasterToBufferedImage(
+                                                      Raster raster,
+                                                      ImageTypeSpecifier imageType)
     {
         if (imageType == null)
         {

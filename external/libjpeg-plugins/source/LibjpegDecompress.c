@@ -22,6 +22,7 @@
 
 #include <import/nitf.h>
 #include <jpeglib.h>
+#include <jerror.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -37,6 +38,8 @@
 #ifndef NITF_IMAGE_IO_NO_BLOCK
 #   define NITF_IMAGE_IO_NO_BLOCK             ((nitf_Uint32) 0xffffffff)
 #endif
+
+#define INPUT_BUF_SIZE  4096
 
 /*
       Zero Block enable
@@ -150,19 +153,19 @@ JPEGMarkerItem;
 
 NITFPRIV(JPEGMarkerItem*) JPEGMarkerItem_construct(nitf_Error* error)
 {
-    JPEGMarkerItem* item =
-        (JPEGMarkerItem*)NITF_MALLOC(sizeof(JPEGMarkerItem));
+    JPEGMarkerItem* item = (JPEGMarkerItem*)NITF_MALLOC(sizeof(JPEGMarkerItem));
     if (! item )
     {
         nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),
-                        NITF_CTXT, NITF_ERR_DECOMPRESSION);
+                NITF_CTXT, NITF_ERR_DECOMPRESSION);
         return NULL;
     }
     memset(item->name, 0, 4);
-    item->off  = 0;
+    item->off = 0;
     return item;
 }
 
+/* not used - the list destructor will NITF_FREE these */
 NITFPRIV(void) JPEGMarkerItem_destruct(JPEGMarkerItem** item)
 {
     if (*item)
@@ -175,21 +178,21 @@ NITFPRIV(void) JPEGMarkerItem_destruct(JPEGMarkerItem** item)
 /* Added for diagnostics */
 
 NITFPRIV(void) JPEGMarkerItem_print(
-    JPEGMarkerItem* item, FILE *file)
+        JPEGMarkerItem* item, FILE *file)
 {
     if (file == NULL)
-        file = stdout;
+    file = stdout;
 
     fprintf(file, "JPEG Marker: %s %lld\n", item->name, item->off);
     return;
 }
 
 NITFPRIV(void) JPEGMarkerItem_printList(
-    nitf_List* markerList, FILE *file)
+        nitf_List* markerList, FILE *file)
 {
-    nitf_ListIterator x;          /* Iterator for walking list */
-    nitf_ListIterator end;        /* End of list iterator */
-    JPEGMarkerItem* item;         /* Current marker */
+    nitf_ListIterator x; /* Iterator for walking list */
+    nitf_ListIterator end; /* End of list iterator */
+    JPEGMarkerItem* item; /* Current marker */
 
     end = nitf_List_end(markerList);
     for (x = nitf_List_begin(markerList);
@@ -311,11 +314,10 @@ typedef nitf_Uint8* DATA_BUFFER;
  */
 typedef struct _JPEGImplControl
 {
-    nitf_IOHandle     ioHandle;
+    nitf_IOInterface* ioInterface;
     nitf_List*        markerList;
     int*              quantTable;
-    /* Total length of the block in bytes */
-    nitf_Uint32       length;
+    nitf_Uint32       length;       /* Total length of the block in bytes */
 }
 JPEGImplControl;
 
@@ -352,7 +354,6 @@ typedef struct _JPEGBlock
     int         cols;
     int         bands;
     int         current;
-
 }
 JPEGBlock;
 
@@ -383,16 +384,12 @@ void JPEGBlock_destruct(JPEGBlock** block)
  *  \param cols The number of cols in the block
  *
  */
-JPEGBlock* JPEGBlock_construct(int rows,
-                               int cols,
-                               int bands,
-                               nitf_Error* error)
+JPEGBlock* JPEGBlock_construct(int rows, int cols, int bands, nitf_Error* error)
 {
-    JPEGBlock* block = (JPEGBlock*) NITF_MALLOC( sizeof(JPEGBlock));
+    JPEGBlock* block = (JPEGBlock*) NITF_MALLOC(sizeof(JPEGBlock));
     if (!block)
     {
-        nitf_Error_init(error, "Failure to construct JPEG block",
-                        NITF_CTXT,
+        nitf_Error_init(error, "Failure to construct JPEG block", NITF_CTXT,
                         NITF_ERR_MEMORY);
         return NULL;
     }
@@ -401,13 +398,12 @@ JPEGBlock* JPEGBlock_construct(int rows,
     block->bands = bands;
     block->current = 0;
 
-    block->uncompressed = (DATA_BUFFER)NITF_MALLOC( _BLOCK_SIZE(block) );
+    block->uncompressed = (DATA_BUFFER) NITF_MALLOC(_BLOCK_SIZE(block));
     if (!block->uncompressed)
     {
         /* need to destroy */
         JPEGBlock_destruct(&block);
     }
-
     return block;
 }
 
@@ -421,11 +417,11 @@ JPEGBlock* JPEGBlock_construct(int rows,
  */
 void JPEGBlock_append(JPEGBlock* block, JSAMPLE* buffer, int rowStride)
 {
-    assert( rowStride + block->current <= _BLOCK_SIZE(block) );
+    assert(rowStride + block->current <= _BLOCK_SIZE(block));
     /*hexDump(buffer, rowStride);*/
 
     DPRINTA3("Copying %d components from ranges [%d - %d]\n", rowStride,
-             block->current, block->current + rowStride);
+            block->current, block->current + rowStride);
     memcpy(block->uncompressed + block->current, buffer, rowStride);
     block->current += rowStride;
 }
@@ -437,13 +433,12 @@ void JPEGBlock_reorder(JPEGBlock* block)
     int n;
     int j;
     off_t current = 0;
-    DATA_BUFFER* bands = (DATA_BUFFER*)NITF_MALLOC(sizeof(DATA_BUFFER) *
-                         block->bands);
+    DATA_BUFFER* bands = (DATA_BUFFER*) NITF_MALLOC(sizeof(DATA_BUFFER)
+            * block->bands);
     for (i = 0; i < block->bands; i++)
     {
-        bands[i] = (DATA_BUFFER)NITF_MALLOC( block->rows * block->cols );
+        bands[i] = (DATA_BUFFER) NITF_MALLOC(block->rows * block->cols);
     }
-
 
     for (n = 0; n < block->rows * block->cols; n++)
     {
@@ -467,26 +462,24 @@ void JPEGBlock_reorder(JPEGBlock* block)
         NITF_FREE(bands[i]);
     }
     NITF_FREE(bands);
-
 }
 
 static nitf_DecompressionInterface interfaceTable =
-    {
-        implOpen,
-        implReadBlock,
-        implFreeBlock,
-        implClose,
-        NULL
-
-    };
+{
+    implOpen,
+    implReadBlock,
+    implFreeBlock,
+    implClose,
+    NULL
+};
 
 NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
                             nitf_Uint8* block,
                             nitf_Error* error)
 {
-    NITF_FREE(block);
+    if (block)
+        NITF_FREE(block);
     return 1;
-
 }
 
 typedef enum _JPEGMarker
@@ -504,19 +497,18 @@ typedef enum _JPEGMarker
     JPEG_MARKER_APP6,
     JPEG_MARKER_APP7,
     JPEG_MARKER_DONT_CARE,
-
 } JPEGMarker;
 
 NITFPRIV(NITF_BOOL) readByte(nitf_IOInterface* io,
-                             unsigned char* b,
-                             nitf_Error* error)
+        unsigned char* b,
+        nitf_Error* error)
 {
     return nitf_IOInterface_read(io, (NITF_DATA *) b, 1, error);
 }
 
 NITFPRIV(NITF_BOOL) readShort(nitf_IOInterface* io,
-                              nitf_Uint16* native,
-                              nitf_Error* error)
+        nitf_Uint16* native,
+        nitf_Error* error)
 {
     nitf_Uint16 raw;
     if (!nitf_IOInterface_read(io, (char*)&raw, 2, error))
@@ -527,8 +519,6 @@ NITFPRIV(NITF_BOOL) readShort(nitf_IOInterface* io,
     return NITF_SUCCESS;
 }
 
-
-
 NITFPRIV(int) readMarker(nitf_IOInterface* io, nitf_Error* error)
 {
     int markerEnum = JPEG_MARKER_ERROR;
@@ -537,82 +527,75 @@ NITFPRIV(int) readMarker(nitf_IOInterface* io, nitf_Error* error)
     {
         switch (native)
         {
+        case 0x00:
+            markerEnum = JPEG_MARKER_FF_OCCURS_NATURALLY;
+            break;
 
-            case 0x00:
-                markerEnum = JPEG_MARKER_FF_OCCURS_NATURALLY;
-                break;
+        case 0xD8:
+            markerEnum = JPEG_MARKER_SOI;
+            break;
 
-            case 0xD8:
-                markerEnum = JPEG_MARKER_SOI;
-                break;
+        case 0xD9:
+            markerEnum = JPEG_MARKER_EOI;
+            break;
 
-            case 0xD9:
-                markerEnum = JPEG_MARKER_EOI;
-                break;
+        case 0xDB:
+            markerEnum = JPEG_MARKER_DECL_QUANT_TABLE;
+            break;
 
+        case 0xC4:
+            markerEnum = JPEG_MARKER_DECL_HUFF_TABLE;
+            break;
 
-            case 0xDB:
-                markerEnum = JPEG_MARKER_DECL_QUANT_TABLE;
-                break;
+        case 0xC0:
+            markerEnum = JPEG_MARKER_SOF;
+            break;
 
-            case 0xC4:
-                markerEnum = JPEG_MARKER_DECL_HUFF_TABLE;
-                break;
+        case 0xDA:
+            markerEnum = JPEG_MARKER_SOS;
+            break;
 
-            case 0xC0:
-                markerEnum = JPEG_MARKER_SOF;
-                break;
+        case 0xFE:
+            markerEnum = JPEG_MARKER_COMMENT;
+            break;
 
-            case 0xDA:
-                markerEnum = JPEG_MARKER_SOS;
-                break;
+        case 0xE6:
+            markerEnum = JPEG_MARKER_APP6;
+            break;
 
-            case 0xFE:
-                markerEnum = JPEG_MARKER_COMMENT;
-                break;
-
-            case 0xE6:
-                markerEnum = JPEG_MARKER_APP6;
-                break;
-
-            case 0xE7:
-                markerEnum = JPEG_MARKER_APP7;
-                break;
-                /*
-                case 0xE9:
-                markerEnum = JPEG_MARKER_APP7;
-                break;
-                */
-            default:
-                markerEnum = JPEG_MARKER_DONT_CARE;
+        case 0xE7:
+            markerEnum = JPEG_MARKER_APP7;
+            break;
+            /*
+            case 0xE9:
+            markerEnum = JPEG_MARKER_APP7;
+            break;
+            */
+        default:
+            markerEnum = JPEG_MARKER_DONT_CARE;
         }
     }
     /*  Then we already have an error!  */
     return markerEnum;
-
 }
 
 
 NITFPRIV(NITF_BOOL) readSOI(nitf_IOInterface* io,
-                            nitf_Uint64* bytesRead,
-                            nitf_Error* error)
+        nitf_Uint64* bytesRead,
+        nitf_Error* error)
 {
-
-
     unsigned char needFF;
     int tokenType;
-
 
     if (! readByte(io, &needFF, error) ) return NITF_FAILURE;
     (*bytesRead)++;
 
-
-    if (  needFF != 0xFF )
+    if ( needFF != 0xFF )
     {
         nitf_Error_init(error,
-                        "Missing mandatory APP6 marker indicator (FF)\n",
-                        NITF_CTXT,
-                        NITF_ERR_DECOMPRESSION);
+                "Missing mandatory APP6 marker indicator (FF)\n",
+                NITF_CTXT,
+                NITF_ERR_DECOMPRESSION);
 
         return NITF_FAILURE;
     }
@@ -620,7 +603,7 @@ NITFPRIV(NITF_BOOL) readSOI(nitf_IOInterface* io,
     (*bytesRead)++;
 
     if (tokenType == JPEG_MARKER_ERROR)
-        return NITF_FAILURE;
+    return NITF_FAILURE;
 
     DPRINT("====================================\n");
     DPRINT("Successful SOI read!\n");
@@ -782,8 +765,6 @@ NITFPRIV(NITF_BOOL) readQuantTable(nitf_IOInterface* io,
     DPRINT("Successful Quant Table read!\n");
     /*  Go Home    */
     return NITF_SUCCESS;
-
-
 }
 
 /*
@@ -841,10 +822,7 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
 
         if (b == 0xFF )
         {
-
             int tokenType;
-
-
             tokenType = readMarker(io, error);
             ++bytesRead;
 
@@ -867,97 +845,93 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
                 assert( fileLength == totalBytes);
                 switch (tokenType)
                 {
-                    case JPEG_MARKER_EOI:
-                        if (! pushMarker(markerList, "EOI", where, error) )
-                        {
-                            DPRINT("Failure EOI (pushMarker)\n");
-                            goto CATCH_ERROR;
-                        }
+                case JPEG_MARKER_EOI:
+                    if (! pushMarker(markerList, "EOI", where, error) )
+                    {
+                        DPRINT("Failure EOI (pushMarker)\n");
+                        goto CATCH_ERROR;
+                    }
 
-                        DPRINT("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-                        DPRINT("Successful EOI!\n");
-                        DPRINT("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-                        break;
-                        /*return NITF_SUCCESS;
-                         */
-                    case JPEG_NOT_MARKER:
-                        break;
+                    DPRINT("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                    DPRINT("Successful EOI!\n");
+                    DPRINT("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                    break;
+                    /*return NITF_SUCCESS;
+                     */
+                case JPEG_NOT_MARKER:
+                    break;
 
-                        /*  If it is the start of image, I want to read an APP6  */
-                    case JPEG_MARKER_SOI:
-                        if (! pushMarker(markerList, "SOI", where, error) )
-                        {
-                            DPRINT("Failure SOI (pushMarker)\n");
-                            goto CATCH_ERROR;
-                        }
+                    /*  If it is the start of image, I want to read an APP6  */
+                case JPEG_MARKER_SOI:
+                    if (! pushMarker(markerList, "SOI", where, error) )
+                    {
+                        DPRINT("Failure SOI (pushMarker)\n");
+                        goto CATCH_ERROR;
+                    }
 
-                        if (!readSOI(io, &bytesRead, error))
-                        {
-                            DPRINT("Failure SOF (readSOI)\n");
-                            goto CATCH_ERROR;
-                        }
+                    if (!readSOI(io, &bytesRead, error))
+                    {
+                        DPRINT("Failure SOF (readSOI)\n");
+                        goto CATCH_ERROR;
+                    }
 
-                        break;
+                    break;
 
-                    case JPEG_MARKER_SOS:
-                        if (! pushMarker(markerList, "SOS", where, error) )
-                        {
-                            DPRINT("Failure SOS (pushMarker)\n");
-                            goto CATCH_ERROR;
-                        }
+                case JPEG_MARKER_SOS:
+                    if (! pushMarker(markerList, "SOS", where, error) )
+                    {
+                        DPRINT("Failure SOS (pushMarker)\n");
+                        goto CATCH_ERROR;
+                    }
 
-                        if (!readSOS(io, &bytesRead, error))
-                        {
-                            DPRINT("Failure SOS (readSOS)\n");
-                            goto CATCH_ERROR;
-                        }
-                        break;
-
-
-                    case JPEG_MARKER_DECL_QUANT_TABLE:
-                        if (! pushMarker(markerList, "DQT", where, error) )
-                        {
-                            DPRINT("Failure DQT (pushMarker)\n");
-                            goto CATCH_ERROR;
-                        }
-
-                        if (!readQuantTable(io, &bytesRead, error))
-                        {
-                            DPRINT("Failure DQT (readQuantTable)\n");
-                            goto CATCH_ERROR;
-                        }
-                        break;
-
-                    case JPEG_MARKER_DECL_HUFF_TABLE:
-                        if (! pushMarker(markerList, "DHT", where, error) )
-                        {
-                            DPRINT("Failure DHT (pushMarker)\n");
-                            goto CATCH_ERROR;
-                        }
-
-                        if (!readHuffTable(io, &bytesRead, error))
-                        {
-                            DPRINT("Failure DHT (readHuffTable)\n");
-                            goto CATCH_ERROR;
-                        }
-
-                        break;
-
-                    case JPEG_MARKER_SOF:
-                        if (! pushMarker(markerList, "SOF", where, error) )
-                        {
-                            DPRINT("Failure SOF (pushMarker)\n");
-                            goto CATCH_ERROR;
-                        }
-
-                        /* if (!readSOF(io, error)) */
-                        /*       goto CATCH_ERROR; */
-                        break;
+                    if (!readSOS(io, &bytesRead, error))
+                    {
+                        DPRINT("Failure SOS (readSOS)\n");
+                        goto CATCH_ERROR;
+                    }
+                    break;
 
 
+                case JPEG_MARKER_DECL_QUANT_TABLE:
+                    if (! pushMarker(markerList, "DQT", where, error) )
+                    {
+                        DPRINT("Failure DQT (pushMarker)\n");
+                        goto CATCH_ERROR;
+                    }
+
+                    if (!readQuantTable(io, &bytesRead, error))
+                    {
+                        DPRINT("Failure DQT (readQuantTable)\n");
+                        goto CATCH_ERROR;
+                    }
+                    break;
+
+                case JPEG_MARKER_DECL_HUFF_TABLE:
+                    if (! pushMarker(markerList, "DHT", where, error) )
+                    {
+                        DPRINT("Failure DHT (pushMarker)\n");
+                        goto CATCH_ERROR;
+                    }
+
+                    if (!readHuffTable(io, &bytesRead, error))
+                    {
+                        DPRINT("Failure DHT (readHuffTable)\n");
+                        goto CATCH_ERROR;
+                    }
+
+                    break;
+
+                case JPEG_MARKER_SOF:
+                    if (! pushMarker(markerList, "SOF", where, error) )
+                    {
+                        DPRINT("Failure SOF (pushMarker)\n");
+                        goto CATCH_ERROR;
+                    }
+
+                    /* if (!readSOF(io, error)) */
+                    /*       goto CATCH_ERROR; */
+                    break;
                 }
-
-
             }
         }
     }
@@ -975,7 +949,6 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
 CATCH_ERROR:
     nitf_Error_print(error, stdout, "While scanning offsets!");
     return NITF_FAILURE;
-
 }
 
 /*!
@@ -985,24 +958,17 @@ CATCH_ERROR:
  *
  *  \todo  This function needs to know Bits per pixel so that it
  *  can load the correct JPEG library
- *
- *
  */
-
-
-
-
 NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
-                                              nitf_Uint64 offset,
-                                              nitf_Uint64 fileLength,
-                                              nitf_BlockingInfo* blockInfo,
-                                              nitf_Uint64* blockMask,
-                                              nitf_Error* error)
+        nitf_Uint64 offset,
+        nitf_Uint64 fileLength,
+        nitf_BlockingInfo* blockInfo,
+        nitf_Uint64* blockMask,
+        nitf_Error* error)
 {
 
     JPEGImplControl* implControl; /* This is our local storage  */
     implControl = (JPEGImplControl*)NITF_MALLOC(sizeof(JPEGImplControl));
-
 
     DPRINT("=============================================================\n");
     DPRINT("JPEG decompression\n");
@@ -1013,19 +979,18 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
     DPRINTA1("[%d] blockInfo->numColsPerBlock\n", blockInfo->numColsPerBlock);
     DPRINTA1("[%d] blockInfo->length\n", blockInfo->length);
 
-
     /*  Make sure creation succeeds, otherwise shutdown and go home  */
     if (implControl == NULL)
     {
         nitf_Error_init(error,
-                        "Error creating control object",
-                        NITF_CTXT,
-                        NITF_ERR_DECOMPRESSION);
+                "Error creating control object",
+                NITF_CTXT,
+                NITF_ERR_DECOMPRESSION);
         return NULL;
     }
 
     /*  For right now, we are storing this silly markerList.  I think
-    this will prove to be a useless mechanism  */
+     this will prove to be a useless mechanism  */
     implControl->markerList = nitf_List_construct(error);
     if (!implControl->markerList)
     {
@@ -1035,17 +1000,17 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
 
     /*  Seek to our start point, just in case... */
     if ( ! NITF_IO_SUCCESS( nitf_IOInterface_seek(io,
-                                                  offset,
-                                                  NITF_SEEK_SET,
-                                                  error) 
-             )
-        )
+                            offset,
+                            NITF_SEEK_SET,
+                            error)
+            )
+    )
     {
         nitf_Error_initf(error,
-                         NITF_CTXT,
-                         NITF_ERR_DECOMPRESSION,
-                         "Error seeking to offset for JPEG block [%ld]",
-                         offset);
+                NITF_CTXT,
+                NITF_ERR_DECOMPRESSION,
+                "Error seeking to offset for JPEG block [%ld]",
+                offset);
         return NULL;
     }
 
@@ -1054,7 +1019,7 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
     {
         return NULL;
     }
-    /* Debugging only  */
+
     {
         nitf_Uint32 nextBlock = 0;
         nitf_ListIterator x = nitf_List_begin((implControl->markerList));
@@ -1071,37 +1036,194 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
                 item->block = nextBlock - 1;
             }
             else
-                item->block = NITF_IMAGE_IO_NO_BLOCK;
+            item->block = NITF_IMAGE_IO_NO_BLOCK;
 
             nitf_ListIterator_increment(&x);
         }
         DPRINT("\n");
     }
 
-
     /*  Seek to our start point, just in case... */
     if ( ! NITF_IO_SUCCESS( nitf_IOInterface_seek(io,
-                                                  offset,
-                                                  NITF_SEEK_SET,
-                                                  error) 
-             )
-        )
+                            offset,
+                            NITF_SEEK_SET,
+                            error)
+            )
+    )
     {
         nitf_Error_init(error,
-                        "Error seeking to necessary offset for JPEG block",
-                        NITF_CTXT,
-                        NITF_ERR_DECOMPRESSION);
+                "Error seeking to necessary offset for JPEG block",
+                NITF_CTXT,
+                NITF_ERR_DECOMPRESSION);
         return NULL;
     }
 
-
-    /*  Debugging section only!!!!!  */
-    /*  Make sure to copy IO */
-    implControl->ioHandle = (nitf_IOHandle)io->data;
+    implControl->ioInterface = io;
     implControl->length = blockInfo->length;
-    /*  Return void* */
     return (nitf_DecompressionControl*)implControl;
+}
 
+typedef struct _JPEGIOManager
+{
+    struct jpeg_source_mgr pub;         /* public fields */
+    nitf_Uint8 buffer[INPUT_BUF_SIZE];  /* start of buffer */
+    boolean start_of_file;              /* have we gotten any data yet? */
+    nitf_IOInterface* ioInterface;      /* source IO */
+    nitf_Off ioStart;                   /* the io interface start offset (tell) */
+    nitf_Off ioEnd;                     /* the io interface end offset (size) */
+    nitf_Uint32 blockLength;            /* the length of the block */
+    nitf_Uint32 bytesRead;              /* the number of bytes read so far */
+    nitf_Error *error;
+} JPEGIOManager;
+
+
+NITFPRIV(void) JPEGInitSource (j_decompress_ptr cinfo)
+{
+    JPEGIOManager* src = (JPEGIOManager*)cinfo->src;
+    /* We reset the empty-input-file flag for each image,
+     * but we don't clear the input buffer.
+     * This is correct behavior for reading a series of images from one source.
+     */
+    src->start_of_file = TRUE;
+}
+
+NITFPRIV(void) JPEGTerminateSource(j_decompress_ptr cinfo)
+{
+    /* delete the source manager and buffer */
+    if (cinfo)
+    {
+        JPEGIOManager* src = (JPEGIOManager*)cinfo->src;
+        /*if (src && src->buffer)
+        {
+            NITF_FREE(src->buffer);
+            src->buffer = NULL;
+        }*/
+        if (src)
+        {
+            NITF_FREE(src);
+        }
+        cinfo->src = NULL;
+    }
+}
+
+NITFPRIV(boolean) JPEGFillInputBuffer (j_decompress_ptr cinfo)
+{
+    JPEGIOManager* src = (JPEGIOManager*)cinfo->src;
+    nitf_Uint32 toRead;
+    nitf_Off ioOff;
+
+    toRead = src->blockLength - src->bytesRead;
+    if (toRead > INPUT_BUF_SIZE)
+    {
+        toRead = INPUT_BUF_SIZE;
+    }
+
+    /* check for EOF bounds */
+    ioOff = src->ioStart + src->bytesRead;
+    if (ioOff + toRead > src->ioEnd)
+    {
+        nitf_Int32 ioDiff = src->ioEnd - ioOff;
+        if (ioDiff < 0)
+            toRead = 0;
+        else
+            toRead = (nitf_Uint32)ioDiff;
+    }
+
+    if (toRead == 0)
+    {
+        if (src->start_of_file)
+        {
+            /* Treat empty input file as fatal error */
+            ERREXIT(cinfo, JERR_INPUT_EMPTY);
+        }
+        WARNMS(cinfo, JWRN_JPEG_EOF);
+        /* Insert a fake EOI marker */
+        src->buffer[0] = 0xFF;
+        src->buffer[1] = JPEG_EOI;
+        toRead = 2;
+    }
+    else
+    {
+        if (!nitf_IOInterface_read(src->ioInterface, src->buffer,
+                                   toRead, src->error))
+        {
+            return FALSE;
+        }
+        src->bytesRead += toRead;
+    }
+
+    src->pub.next_input_byte = src->buffer;
+    src->pub.bytes_in_buffer = toRead;
+    src->start_of_file = FALSE;
+    return TRUE;
+}
+
+NITFPRIV(void) JPEGSkipInputData(j_decompress_ptr cinfo, long num_bytes)
+{
+    JPEGIOManager* src = (JPEGIOManager*)cinfo->src;
+
+    if (num_bytes > 0)
+    {
+        while (num_bytes > (long) src->pub.bytes_in_buffer)
+        {
+            num_bytes -= (long) src->pub.bytes_in_buffer;
+            (void) src->pub.fill_input_buffer(cinfo);
+            /* note we assume that fill_input_buffer will never return FALSE,
+             * so suspension need not be handled.
+             */
+        }
+        src->pub.next_input_byte += (size_t) num_bytes;
+        src->pub.bytes_in_buffer -= (size_t) num_bytes;
+    }
+}
+
+NITFPRIV(NITF_BOOL) JPEGCreateIOSource(j_decompress_ptr cinfo,
+                                       JPEGImplControl* implControl,
+                                       nitf_Error* error)
+{
+    JPEGIOManager* src = NULL;
+    if (!cinfo->src)
+    {
+        src = cinfo->src = (JPEGIOManager*)NITF_MALLOC(sizeof(JPEGIOManager));
+        if (src == NULL)
+        {
+            nitf_Error_init(error,
+                            "Error creating IO manager object",
+                            NITF_CTXT,
+                            NITF_ERR_DECOMPRESSION);
+            return NITF_FAILURE;
+        }
+
+        /*src->buffer = (nitf_Uint8*)NITF_MALLOC(INPUT_BUF_SIZE);
+        if (src->buffer == NULL)
+        {
+            nitf_Error_init(error,
+                            "Error creating IO buffer",
+                            NITF_CTXT,
+                            NITF_ERR_DECOMPRESSION);
+            return NITF_FAILURE;
+        }*/
+    }
+    else
+    {
+        src = (JPEGIOManager*)cinfo->src;
+    }
+
+    src->pub.init_source = JPEGInitSource;
+    src->pub.fill_input_buffer = JPEGFillInputBuffer;
+    src->pub.skip_input_data = JPEGSkipInputData;
+    src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
+    src->pub.term_source = JPEGTerminateSource;
+    src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
+    src->pub.next_input_byte = NULL; /* until buffer loaded */
+    src->ioInterface = implControl->ioInterface;
+    src->blockLength = implControl->length;
+    src->bytesRead = 0;
+    src->ioStart = nitf_IOInterface_tell(src->ioInterface, error);
+    src->ioEnd = nitf_IOInterface_getSize(src->ioInterface, error);
+    src->error = error;
+
+    return NITF_SUCCESS;
 }
 
 
@@ -1146,12 +1268,12 @@ NITFPRIV(NITF_BOOL) findBlockSOI(JPEGImplControl* control,
         return NITF_FAILURE;
     }
     return NITF_SUCCESS;
-
 }
+
 NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
-                                    nitf_Uint32 blockNumber,
-                                    /*        NITF_BOOL separateBands,*/
-                                    nitf_Error* error)
+        nitf_Uint32 blockNumber,
+        /*        NITF_BOOL separateBands,*/
+        nitf_Error* error)
 {
     /*
      *  For now, do as I say (to test that you dont break anything in
@@ -1162,7 +1284,6 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     /*  Get out the read object from the opaque handle  */
     JPEGImplControl* implControl = (JPEGImplControl*)control;
     off_t soi;
-    FILE* jstream;
 
     struct jpeg_error_mgr jerr;
     struct jpeg_decompress_struct cinfo;
@@ -1176,13 +1297,13 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     if (!findBlockSOI(control, blockNumber, &soi, error))
 #ifdef ZERO_BLOCK
     {
-        nitf_Uint8 *zeros;   /* Buffer of zeros */
+        nitf_Uint8 *zeros; /* Buffer of zeros */
 
         zeros = NITF_MALLOC(implControl->length);
         if (zeros == NULL)
         {
             nitf_Error_init(error, "Malloc failure for zero block",
-                            NITF_CTXT, NITF_ERR_MEMORY);
+                    NITF_CTXT, NITF_ERR_MEMORY);
             return(NULL);
         }
 #ifdef ZERO_BLOCK_WARN
@@ -1195,70 +1316,22 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     }
 #else
     {
-
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_DECOMPRESSION,
-                         "Missing SOI for block %d", blockNumber);
+                "Missing SOI for block %d", blockNumber);
         return(NULL);
     }
 #endif
 
     DPRINTA2("Found SOI [%d] for block # %d\n", (int)soi, (int)blockNumber);
     /*  We need to locate our block offset!! */
-    if (nitf_IOHandle_seek(implControl->ioHandle, soi,
-                           NITF_SEEK_SET, error) == (nitf_Off)-1)
-    {
-
-        nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),
-                        NITF_CTXT,
-                        NITF_ERR_DECOMPRESSION);
-
-
-    }
-
-
-    /*  First we try and create a FILE* to make libjpeg work  */
-#ifdef WIN32
-    {
-        int h = _open_osfhandle((long) implControl->ioHandle, 0);
-        jstream = _fdopen(h, "r");
-    }
-#else
-    /*  For now, I will require that IOInterface users actually have an FD */
-    jstream = fdopen(implControl->ioHandle, "r");
-#endif
-
-    /*  This is our first opportunity to check for failure  */
-    if (jstream == NULL)
-#ifdef ZERO_BLOCK
-    {
-        nitf_Uint8 *zeros;   /* Buffer of zeros */
-
-        zeros = NITF_MALLOC(implControl->length);
-        if (zeros == NULL)
-        {
-            nitf_Error_init(error, "Malloc failure for zero block",
-                            NITF_CTXT, NITF_ERR_MEMORY);
-            return(NULL);
-        }
-#ifdef ZERO_BLOCK_WARN
-        fprintf(stderr,
-                "JPEG Decompression error:"
-                " Failure on fdopen for block %d, returning zeros\n",
-                blockNumber);
-#endif
-        memset(zeros, 0, implControl->length);
-        return(zeros);
-    }
-#else
+    if (nitf_IOInterface_seek(implControl->ioInterface, soi,
+                    NITF_SEEK_SET, error) == (nitf_Off)-1)
     {
         nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),
-                        NITF_CTXT,
-                        NITF_ERR_DECOMPRESSION);
-
-
-        return NULL;
+                NITF_CTXT,
+                NITF_ERR_DECOMPRESSION);
     }
-#endif
+
     /*  Set up the error handler  */
     cinfo.err = jpeg_std_error(&jerr);
     DPRINT("Creating decompression struct!\n");
@@ -1266,7 +1339,8 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     jpeg_create_decompress(&cinfo);
 
     /*  Bind up our source location */
-    jpeg_stdio_src(&cinfo, jstream);
+    /*jpeg_stdio_src(&cinfo, jstream);*/
+    JPEGCreateIOSource(&cinfo, implControl, error);
 
     /*  Read the header  */
     DPRINT("Reading header... ");
@@ -1275,13 +1349,13 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     if (ret != JPEG_HEADER_OK)
 #ifdef ZERO_BLOCK
     {
-        nitf_Uint8 *zeros;   /* Buffer of zeros */
+        nitf_Uint8 *zeros; /* Buffer of zeros */
 
         zeros = NITF_MALLOC(implControl->length);
         if (zeros == NULL)
         {
             nitf_Error_init(error, "Malloc failure for zero block",
-                            NITF_CTXT, NITF_ERR_MEMORY);
+                    NITF_CTXT, NITF_ERR_MEMORY);
             return(NULL);
         }
 #ifdef ZERO_BLOCK_WARN
@@ -1296,10 +1370,10 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
 #else
     {
         nitf_Error_initf(error,
-                         NITF_CTXT,
-                         NITF_ERR_READING_FROM_FILE,
-                         "Invalid JPEG Header for block [%d]",
-                         blockNumber);
+                NITF_CTXT,
+                NITF_ERR_READING_FROM_FILE,
+                "Invalid JPEG Header for block [%d]",
+                blockNumber);
         return NULL;
     }
 #endif
@@ -1307,22 +1381,21 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     jpeg_start_decompress(&cinfo);
     DPRINT("Started decompress... \n");
     block =
-        JPEGBlock_construct(cinfo.output_height,
-                            cinfo.output_width,
-                            cinfo.output_components,
-                            error);
-
+    JPEGBlock_construct(cinfo.output_height,
+            cinfo.output_width,
+            cinfo.output_components,
+            error);
 
     if (!block)
 #ifdef ZERO_BLOCK
     {
-        nitf_Uint8 *zeros;   /* Buffer of zeros */
+        nitf_Uint8 *zeros; /* Buffer of zeros */
 
         zeros = NITF_MALLOC(implControl->length);
         if (zeros == NULL)
         {
             nitf_Error_init(error, "Malloc failure for zero block",
-                            NITF_CTXT, NITF_ERR_MEMORY);
+                    NITF_CTXT, NITF_ERR_MEMORY);
             return(NULL);
         }
 #ifdef ZERO_BLOCK_WARN
@@ -1337,20 +1410,19 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
 #else
     {
         nitf_Error_initf(error,
-                         NITF_CTXT,
-                         NITF_ERR_DECOMPRESSION,
-                         "Block object construct failed for block [%d]",
-                         blockNumber);
+                NITF_CTXT,
+                NITF_ERR_DECOMPRESSION,
+                "Block object construct failed for block [%d]",
+                blockNumber);
         return NULL;
     }
 #endif
 
     row_stride = cinfo.output_width *
-                 cinfo.output_components;
+    cinfo.output_components;
     buffer = (cinfo.mem->alloc_sarray)
-             ((j_common_ptr) & cinfo,
-              JPOOL_IMAGE, row_stride, 1);
-
+    ((j_common_ptr) & cinfo,
+            JPOOL_IMAGE, row_stride, 1);
 
     while (cinfo.output_scanline <
             cinfo.output_height)
@@ -1368,7 +1440,9 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
     /*  We separate bands if it is multi-band AND Band-interleaved */
     /*  by block                                                   */
     if (separateBands)
+    {
         JPEGBlock_reorder(block);
+    }
 
     uncompressed = (nitf_Uint8*)(block->uncompressed);
     block->uncompressed = NULL;
@@ -1384,25 +1458,24 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
     DPRINT("Destroying compression object in JPEG plugin\n");
     implControl = (JPEGImplControl*) * control;
 
-
-    NITF_FREE( (void*)(*control));
+    /* delete marker list */
+    if (implControl && implControl->markerList)
+    {
+        nitf_List_destruct(&implControl->markerList);
+    }
+    if (implControl)
+    {
+        NITF_FREE(implControl);
+    }
     *control = NULL;
-
 }
 
 NITFAPI(char**) LibjpegDecompress_init(nitf_Error *error)
 {
-
     /*  Return the identifier structure  */
     return ident;
 }
 
-/*
-NITFAPI(void) C5_cleanup(void)
-{
-
-}
-*/
 NITFAPI(void) C3_cleanup(void)
 {
 }
@@ -1418,13 +1491,13 @@ NITFAPI(void*) C3_construct(char *compressionType,
 
         return NULL;
     }
-
     return((void *) &interfaceTable);
 }
 
 NITFAPI(void) M3_cleanup(void)
 {
 }
+
 NITFAPI(void*) M3_construct(char *compressionType,
                             nitf_Error* error)
 {
@@ -1437,27 +1510,8 @@ NITFAPI(void*) M3_construct(char *compressionType,
 
         return NULL;
     }
-
     return((void *) &interfaceTable);
 }
-
-/*
-NITFAPI(void*) C5_construct(char *compressionType,
-       nitf_Error* error)
-{
-    if(strcmp(compressionType,"C5") != 0)
-    {
- nitf_Error_init(error,
-   "Unsupported compression type",
-   NITF_CTXT,
-   NITF_ERR_DECOMPRESSION);
-
- return NULL;
-    }
-
-    return((void *) &interfaceTable);
-}
-*/
 
 
 /*!

@@ -89,7 +89,7 @@ public class ShowImage
                         {
                             BufferedImage image = imageReader.read(i);
                             ImageIOUtils.showImage(image, file.getName() + "["
-                                    + i + "]");
+                                    + i + "]", true);
                         }
                         else
                         {
@@ -106,7 +106,7 @@ public class ShowImage
                                             readParam);
                                     ImageIOUtils.showImage(image, file
                                             .getName()
-                                            + "[" + i + "][" + j + "]");
+                                            + "[" + i + "][" + j + "]", true);
 
                                     ImageIO.write(image, "jpg",
                                             new FileOutputStream("image" + i
