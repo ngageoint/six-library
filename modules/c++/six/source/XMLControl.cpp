@@ -195,15 +195,11 @@ xml::lite::Element* XMLControl::createPoly2D(xml::lite::Document* doc,
     {
         for (int j = 0; j <= poly2D.orderY(); j++)
         {
-            if ((i == 0 && j == 0) || 
-                std::abs(poly2D[i][j]) > std::numeric_limits<float>::epsilon())
-            {
-                xml::lite::Element* coefXML = createDouble(doc, "Coef",
+            xml::lite::Element* coefXML = createDouble(doc, "Coef",
                         poly2D[i][j]);
-                setAttribute(coefXML, "exponent1", str::toString(i));
-                setAttribute(coefXML, "exponent2", str::toString(j));
-                poly2DXML->addChild(coefXML);
-            }
+            setAttribute(coefXML, "exponent1", str::toString(i));
+            setAttribute(coefXML, "exponent2", str::toString(j));
+            poly2DXML->addChild(coefXML);
         }
     }
 
