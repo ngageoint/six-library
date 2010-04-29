@@ -32,7 +32,6 @@ NITF_BOOL copyAndFillSpaces(nitf_Field * field,
     return NITF_SUCCESS;
 }
 
-
 /*  Zeros are added to the left  */
 NITF_BOOL copyAndFillZeros(nitf_Field * field,
                            const char *data,
@@ -489,7 +488,11 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
 
     if (bufferLen > field->length)
     {
-        precision -= strlen(buffer) - field->length;
+        if (precision > bufferLen - field->length)
+            precision -= bufferLen - field->length;
+        else
+            precision = 0;
+
         if (plus)
             NITF_SNPRINTF(fmt, 64, "%%+-1.%dl%s", precision, type);
         else
@@ -1159,7 +1162,11 @@ NITFPRIV(NITF_BOOL) isBCSN(const char *str, nitf_Uint32 len, nitf_Error * error)
 
     for (i = 0; i < len; i++)
     {
-        if (!isdigit(*strp))
+        /*
+         * Some TRE's allow for all minus signs to represent
+         * BCSN if number not known (e.g. BANDSB)
+         */
+        if (!isdigit(*strp) && (*strp != '-'))
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                              "Invalid character %c in BCS_N string",

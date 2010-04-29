@@ -141,6 +141,7 @@ PLUGINS = \
         AIPBCA.c \
         ASTORA.c \
         BANDSA.c \
+        BANDSB.c \
         BCKGDA.c \
         BLOCKA.c \
         BNDPLB.c \

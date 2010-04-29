@@ -564,6 +564,12 @@ NITFAPI(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
     /* the value defined int the TRE descrip */
     int treData;
 
+    /* the bit-field for comparing */
+    unsigned int bitFieldData;
+
+    /* the bit-field defined in the TRE descrip */
+    unsigned int treBitField;
+
     /* get the data out of the hashtable */
     pair = nitf_TRECursor_getTREPair(tre, desc_ptr->tag, idx_str, 
                                      looping, error);
@@ -642,6 +648,32 @@ NITFAPI(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
             status = (status == 0);
         else if (strcmp(op, "!=") == 0)
             status = (status != 0);
+    }
+    /* check if it is a bit-wise operator */
+    else if (strcmp(op, "&") == 0)
+    {
+        /* make sure it is a binary field */
+        if (field->type != NITF_BINARY)
+        {
+            nitf_Error_init(error,
+                            "evaluate: must use binary data for bit-wise expressions",
+                            NITF_CTXT,
+                            NITF_ERR_INVALID_PARAMETER);
+            return NITF_FAILURE;
+        }
+
+        treBitField = NITF_ATOU32(valPtr);
+        if (!nitf_Field_get(field,
+                            (char *)&bitFieldData,
+                            NITF_CONV_UINT,
+                            sizeof(bitFieldData),
+                            error))
+        {
+            return NITF_FAILURE;
+        }
+
+        /* check this bit field */
+        status = ((treBitField & bitFieldData) != 0);
     }
     /* otherwise, they used a bad operator */
     else
