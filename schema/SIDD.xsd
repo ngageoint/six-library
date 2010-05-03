@@ -213,7 +213,11 @@ NRL                N/A                        0,255 (Supposed to be display read
 	</xs:complexType>
 	<xs:complexType name="BaseProjectionType">
 		<xs:sequence>
-			<xs:element name="ReferencePoint" type="sicommon:ReferencePointType"/>
+			<xs:element name="ReferencePoint" type="sicommon:ReferencePointType">
+				<xs:annotation>
+					<xs:documentation>Reference point for the geometrical system.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MeasurableProjectionType">
@@ -236,7 +240,11 @@ NRL                N/A                        0,255 (Supposed to be display read
 		<xs:complexContent>
 			<xs:extension base="MeasurableProjectionType">
 				<xs:sequence>
-					<xs:element name="SampleSpacing" type="sicommon:RowColDoubleType"/>
+					<xs:element name="SampleSpacing" type="sicommon:RowColDoubleType">
+						<xs:annotation>
+							<xs:documentation>Sample spacing in row and column in meters.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 					<xs:element name="ProductPlane" type="ProductPlaneType">
 						<xs:annotation>
 							<xs:documentation>Plane definition for the product.</xs:documentation>
@@ -247,6 +255,9 @@ NRL                N/A                        0,255 (Supposed to be display read
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="PolynomialProjectionType">
+		<xs:annotation>
+			<xs:documentation>Polynomial pixel to ground.  Only used for sensor systems where the radar geometry parameters are not recorded.</xs:documentation>
+		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="BaseProjectionType">
 				<xs:sequence>
@@ -266,7 +277,11 @@ NRL                N/A                        0,255 (Supposed to be display read
 		<xs:complexContent>
 			<xs:extension base="MeasurableProjectionType">
 				<xs:sequence>
-					<xs:element name="SampleSpacing" type="sicommon:RowColLatLonType"/>
+					<xs:element name="SampleSpacing" type="sicommon:RowColLatLonType">
+						<xs:annotation>
+							<xs:documentation>Sample spacing in row and column each provided in (lat, lon) in arc-seconds.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -278,7 +293,11 @@ NRL                N/A                        0,255 (Supposed to be display read
 		<xs:complexContent>
 			<xs:extension base="MeasurableProjectionType">
 				<xs:sequence>
-					<xs:element name="SampleSpacing" type="sicommon:RowColDoubleType"/>
+					<xs:element name="SampleSpacing" type="sicommon:RowColDoubleType">
+						<xs:annotation>
+							<xs:documentation>Sample spacing in row and column given in meters.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 					<xs:element name="CurvatureRadius" type="xs:double" minOccurs="0">
 						<xs:annotation>
 							<xs:documentation>Radius of Curvature defined at scene center.  If not present, the radius of curvature will be derived based upon the equations provided in the Design and Exploitation Document</xs:documentation>
@@ -294,7 +313,11 @@ NRL                N/A                        0,255 (Supposed to be display read
 		</xs:annotation>
 		<xs:sequence>
 			<xs:choice>
-				<xs:element name="PolynomialProjection" type="PolynomialProjectionType"/>
+				<xs:element name="PolynomialProjection" type="PolynomialProjectionType">
+					<xs:annotation>
+						<xs:documentation>Polynomial pixel to ground.  Only used for sensor systems where the radar geometry parameters are not recorded.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 				<xs:element name="GeographicProjection" type="GeographicProjectionType">
 					<xs:annotation>
 						<xs:documentation>Geographic mapping of the pixel grid referred to as GGD in the Design and Exploitation document.</xs:documentation>
@@ -890,6 +913,9 @@ NRL                N/A                        0,255 (Supposed to be display read
 	</xs:complexType>
 -->
 	<xs:complexType name="AnnotationObjectType">
+		<xs:annotation>
+			<xs:documentation>Geometrical representation of the annotation.</xs:documentation>
+		</xs:annotation>
 		<xs:choice>
 			<xs:element name="Point" type="sfa:PointType"/>
 			<xs:element name="Line" type="sfa:LineType"/>
@@ -904,25 +930,28 @@ NRL                N/A                        0,255 (Supposed to be display read
 		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="AnnotationType">
+		<xs:annotation>
+			<xs:documentation>Single annotation.</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="Identifier" type="xs:string">
 				<xs:annotation>
-					<xs:documentation>Identifier for the annotation</xs:documentation>
+					<xs:documentation>Identifier for the annotation which idicates the type of object represented by this annotation.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="SpatialReferenceSystem" type="sfa:ReferenceSystemType">
+			<xs:element name="SpatialReferenceSystem" type="sfa:ReferenceSystemType" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Spatial reference system</xs:documentation>
+					<xs:documentation>Spatial reference system of the annotation.  Assumed to be WGS-84 geographic coordinate system if not specified with (lat, lon, h) units in (arc-sec, arc-sec, meters above ellipsoid). </xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="MeasureReferenceSystem" type="sfa:ReferenceSystemType" minOccurs="0">
+			<!--<xs:element name="MeasureReferenceSystem" type="sfa:ReferenceSystemType" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Measure reference system</xs:documentation>
 				</xs:annotation>
-			</xs:element>
+			</xs:element>-->
 			<xs:element name="Object" type="AnnotationObjectType" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>The geometrical representation of the annotation</xs:documentation>
+					<xs:documentation>The geometrical representation of the annotation.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -980,7 +1009,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 				</xs:element>
 				<xs:element name="Annotations" type="AnnotationsType" minOccurs="0">
 					<xs:annotation>
-						<xs:documentation>Annotations for the imagery.</xs:documentation>
+						<xs:documentation>List of annotations for the imagery.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 			</xs:sequence>
