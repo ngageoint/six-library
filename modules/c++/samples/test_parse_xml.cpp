@@ -97,7 +97,7 @@ std::vector<std::string> extractXML(std::string inputFile, const sys::Path& outp
         nitf::SegmentReader deReader = reader.newDEReader(i);
         nitf::Off size = deReader.getSize();
 
-        std::string typeID = subheader.getTypeID();
+        std::string typeID = subheader.getTypeID().toString();
         str::trim(typeID);
         sys::Path fileName(outputDir,
             FmtX("%s-%s%d.xml", prefix.c_str(), typeID.c_str(), i));

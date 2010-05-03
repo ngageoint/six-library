@@ -31,7 +31,7 @@ DataType NITFReadControl::getDataType(std::string fromFile)
     {
         nitf::IOHandle inFile(fromFile);
         nitf::Record rec = mReader.read(inFile);
-        std::string title = rec.getHeader().getFileTitle();
+        std::string title = rec.getHeader().getFileTitle().toString();
         if (str::startsWith(title, "SICD"))
             return TYPE_COMPLEX;
         else if (str::startsWith(title, "SIDD"))
@@ -47,7 +47,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
     unsigned long numBandsSeg =
             (unsigned long) (nitf::Uint32) subheader.getNumImageBands();
 
-    std::string pjust = subheader.getPixelJustification();
+    std::string pjust = subheader.getPixelJustification().toString();
     // TODO: More validation in here!
     if (pjust != "R")
         throw except::Exception(Ctxt("Expected right pixel justification"));
@@ -84,7 +84,7 @@ void NITFReadControl::load(std::string fromFile)
     nitf::IOHandle inFile(fromFile);
 
     mRecord = mReader.read(inFile);
-    std::string title = mRecord.getHeader().getFileTitle();
+    std::string title = mRecord.getHeader().getFileTitle().toString();
 
     if (str::startsWith(title, "SICD"))
         dataType = TYPE_COMPLEX;
@@ -104,7 +104,7 @@ void NITFReadControl::load(std::string fromFile)
     {
         nitf::DESegment seg = des[i];
         nitf::DESubheader subheader = seg.getSubheader();
-        std::string desid = subheader.getTypeID();
+        std::string desid = subheader.getTypeID().toString();
         str::trim(desid);
 
         if (desid == "SICD_XML" || desid == "SIDD_XML")
@@ -344,7 +344,7 @@ void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
 std::pair<int, int> NITFReadControl::getIndices(nitf::ImageSubheader& subheader)
 {
 
-    std::string imageID = subheader.getImageId();
+    std::string imageID = subheader.getImageId().toString();
     str::trim(imageID);
     // There is definitely something in here
     std::pair<int, int> imageAndSegment;

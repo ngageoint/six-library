@@ -55,7 +55,7 @@ int main(int argc, char** argv)
             nitf::SegmentReader deReader = reader.newDEReader(i);
             nitf::Off size = deReader.getSize();
 
-            std::string typeID = subheader.getTypeID();
+            std::string typeID = subheader.getTypeID().toString();
             str::trim(typeID);
             std::string fileName = FmtX("%s-%s%d.xml", prefix.c_str(),
                                         typeID.c_str(), i);
