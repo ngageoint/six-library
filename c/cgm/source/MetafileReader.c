@@ -472,12 +472,12 @@ NITF_BOOL interiorStyle(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     DBG_TRACE();
     s = readShort(b);
     /*  Make sure its not already set  */
-    if (pc->style != CGM_IS_NOT_SET)
+    /*if (pc->style != CGM_IS_NOT_SET)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
                 "Interior style was already set: [%d]", pc->style);
         return NITF_FAILURE;
-    }
+    }*/
 
     pc->style = (cgm_InteriorStyle)s;
 
