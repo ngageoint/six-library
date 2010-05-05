@@ -420,7 +420,7 @@
 	</xsd:complexType>
 	<xsd:simpleType name="SigmaZeroSFIncidenceMapType">
 		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="APPILED"/>
+			<xsd:enumeration value="APPLIED"/>
 			<xsd:enumeration value="NOT_APPLIED"/>
 		</xsd:restriction>
 	</xsd:simpleType>
