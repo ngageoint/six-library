@@ -662,7 +662,7 @@ NITFAPI(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
             return NITF_FAILURE;
         }
 
-        treBitField = NITF_ATOU32(valPtr);
+        treBitField = NITF_ATOU32_BASE(valPtr, 0);
         if (!nitf_Field_get(field,
                             (char *)&bitFieldData,
                             NITF_CONV_UINT,

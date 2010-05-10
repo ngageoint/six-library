@@ -148,6 +148,7 @@ PLUGINS = \
         CLCTNA.c \
         CLCTNB.c \
         CMETAA.c \
+        CSDIDA.c \
         ENGRDA.c \
         EXOPTA.c \
         EXPLTA.c \

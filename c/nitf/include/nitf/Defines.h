@@ -54,6 +54,7 @@
 /*  String conversion, on windows  */
 #      define  NITF_ATO32(A) strtol(A, (char **)NULL, 10)
 #      define  NITF_ATOU32(A) strtoul(A, (char **)NULL, 10)
+#      define  NITF_ATOU32_BASE(A,B) strtoul(A, (char **)NULL, B)
 #      define  NITF_ATO64(A) _atoi64(A)
 #      define  NITF_SNPRINTF _snprintf
 #      define  NITF_VSNPRINTF _vsnprintf
@@ -66,6 +67,7 @@
 #      define  NITFPROT(RT) NITF_C RT
 #      define  NITF_ATO32(A) strtol(A, (char **)NULL, 10)
 #      define  NITF_ATOU32(A) strtoul(A, (char **)NULL, 10)
+#      define  NITF_ATOU32_BASE(A,B) strtoul(A, (char **)NULL, B)
 #      if defined(__aix__)
 #          define  NITF_ATO64(A) strtoll(A, 0, 0)
 #      else
