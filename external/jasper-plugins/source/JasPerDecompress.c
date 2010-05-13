@@ -93,6 +93,10 @@ typedef struct _ImplControl
     nitf_Uint8 *data;            /* The block is kept here after decoding */
     nitf_Uint64 offset;          /* File offset to data */
     nitf_Uint64 fileLength;      /* Length of compressed data in file */
+    nitf_Uint32 nCols;           /* Number of columns in image */
+    nitf_Uint32 nBytes;          /* Number of bytes/pixel (expanded) */
+    nitf_Uint32 nBands;          /* Number of bands/components */
+    nitf_Uint64 imageSkip;       /* Byte skip between image bands in input */
 }
 ImplControl;
 
@@ -176,38 +180,83 @@ NITFAPI(void*) C8_construct(char *compressionType,
  *  Interface read block function
  *
  *  This function just returns the block pointer in the parent control
+ *
+ *  NITF files compresses with J2K compression are always blocked using
+ *  blocking mode "B" band interlieved by block, meaning that with in each
+ *  block, the data for each band appears together, allof band one followed
+ *  by all of band two next, etc.
+ *
+ *  If the decompression library decompresses the iamge with all of component
+ *  (band) one followed by componet two, etc. But this is for the entire
+ *  image and not on a per/block basis, blocks are a NITF artifact. 
+ *
+ *  Therefore it is necessary to copy the data out on and band by band basis
+ *  in nested loops of bands and then rows. 
+ *
+ *  Another important consideration, the decompression image has the
+ *  dimensions of the image not the blokc dimensions times the block array
+ *  dimensions, the blocks at the end of the rows and bottom of the image
+ *  can have padding (or is it fill)
  */
 NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                                     nitf_Uint32 blockNumber,
                                     nitf_Error* error)
 {
-    nitf_Uint32 blockRow, blockCol, i, blockRowLength, colBlockOffset, colBlockSkip;
-    nitf_Uint64 imageOffset, bufOffset;
+    nitf_Uint32 blockRow;        /* Block's row in block array */
+    nitf_Uint32 blockCol;        /* Block's column in block array */
+    nitf_Uint32 blockRowLength;  /*? Length of each row within block */
+    nitf_Uint32 colBlockOffset;  /*? Offset to start of block's data */
+    nitf_Uint32 colBlockSkip;    /*? Skip from row to row */
+    nitf_Uint64 imageOffset;     /* Offset of start of data in image buffer */
+    nitf_Uint64 imageBandSkip;   /* Skip between bands in image buffer */
+    nitf_Uint32 imageRowLength;  /* Length of a row in the image */
+    nitf_Uint64 bufOffset;       /* Offset into block buffer (result) */
+    nitf_Uint64 bandSkip;        /* Skip between bands in block buffer */
+    nitf_Uint32 nBands;          /* Number of bands in the image */
+    nitf_Uint32 bandIdx;         /* Band index in block */
+    nitf_Uint32 rowIdx;          /* Row index in block */
     
     ImplControl* implControl = (ImplControl*)control;
     nitf_Uint8* buf = NULL;
+    nBands = implControl->nBands;
     
     /* the length, in bytes of one row */
-    blockRowLength = implControl->blockInfo.length / implControl->blockInfo.numRowsPerBlock;
+    blockRowLength = (implControl->blockInfo.length 
+                      / implControl->blockInfo.numRowsPerBlock) / nBands;
+    imageRowLength = implControl->nCols*(implControl->nBytes);
     
     buf = NITF_MALLOC(implControl->blockInfo.length);
-    bufOffset = 0;
+    if(buf == NULL)
+        return(NULL);
+    memset(buf,0,implControl->blockInfo.length);
     
     blockRow = blockNumber / implControl->blockInfo.numBlocksPerRow;
     blockCol = blockNumber % implControl->blockInfo.numBlocksPerRow;
     
     /* skip past row blocks */
-    imageOffset = blockRow * implControl->blockInfo.numBlocksPerRow * implControl->blockInfo.length;
+
+    imageBandSkip = implControl->imageSkip;
+    bandSkip = implControl->blockInfo.length/nBands;
     colBlockOffset = blockCol * blockRowLength;
-    colBlockSkip = (implControl->blockInfo.numBlocksPerRow - blockCol) * blockRowLength;
-    
+    colBlockSkip = imageRowLength - colBlockOffset;
+
+
     /* loop over the rows in the block */
-    for (i = 0; i < implControl->blockInfo.numRowsPerBlock; ++i)
+    for (bandIdx=0;bandIdx < nBands;++bandIdx)
     {
-        imageOffset += colBlockOffset;
-        memcpy(buf + bufOffset, implControl->data + imageOffset, blockRowLength);
-        bufOffset += blockRowLength;
-        imageOffset += colBlockSkip;
+        imageOffset = blockRow * implControl->blockInfo.numRowsPerBlock 
+                        * imageRowLength; 
+        imageOffset += imageBandSkip*bandIdx;
+        bufOffset = bandSkip*bandIdx;
+
+        for (rowIdx=0;rowIdx < implControl->blockInfo.numRowsPerBlock;++rowIdx)
+        {
+            imageOffset += colBlockOffset;
+            memcpy(buf + bufOffset,
+                        implControl->data + imageOffset, blockRowLength);
+            bufOffset += blockRowLength;
+            imageOffset += colBlockSkip;
+        }
     }
     
     return buf;
@@ -259,6 +308,9 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
                            nitf_Uint32 inputLen,
                            nitf_Uint8 **output,
                            nitf_Uint64 *outputLen,
+                           nitf_Uint32  *nCols,
+                           nitf_Uint32  *nBytes,
+                           nitf_Uint32  *nBands,
                            nitf_Uint64 reserveSize,
                            nitf_Error *error)
 {
@@ -282,7 +334,7 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
 
     /*      Open jasper input stream */
 
-    inStr = jas_stream_memopen(input, inputLen);
+    inStr = jas_stream_memopen((char *) input, inputLen);
     if (inStr == NULL)
     {
         nitf_Error_init(error,
@@ -394,6 +446,10 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
         outputp += componentLength;
     }
 
+    *nCols = numCols;
+    *nBytes = numBytes;
+    *nBands = numComponents;
+
     /*      Cleanup memory */
     jas_stream_close(inStr);
     jas_image_destroy(image);
@@ -439,8 +495,12 @@ NITFPRIV(int) decode(ImplControl* implControl,
                          (nitf_Uint32) (implControl->fileLength),
                          &output,
                          &outputLen,
+                         &(implControl->nCols),
+                         &(implControl->nBytes),
+                         &(implControl->nBands),
                          expected,
                          error);
+    implControl->imageSkip = outputLen/implControl->nBands;
 
     /*  Free input buffer  */
     implMemFree(input);

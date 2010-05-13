@@ -1184,7 +1184,7 @@ NITFPRIV(NITF_BOOL) JPEGCreateIOSource(j_decompress_ptr cinfo,
     JPEGIOManager* src = NULL;
     if (!cinfo->src)
     {
-        src = cinfo->src = (JPEGIOManager*)NITF_MALLOC(sizeof(JPEGIOManager));
+        src = (JPEGIOManager*)NITF_MALLOC(sizeof(JPEGIOManager));
         if (src == NULL)
         {
             nitf_Error_init(error,
@@ -1193,6 +1193,7 @@ NITFPRIV(NITF_BOOL) JPEGCreateIOSource(j_decompress_ptr cinfo,
                             NITF_ERR_DECOMPRESSION);
             return NITF_FAILURE;
         }
+        cinfo->src = (struct jpeg_source_mgr*)src;
 
         /*src->buffer = (nitf_Uint8*)NITF_MALLOC(INPUT_BUF_SIZE);
         if (src->buffer == NULL)

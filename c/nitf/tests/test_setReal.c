@@ -90,10 +90,10 @@ void testField(nitf_Field *field, char *type, NITF_BOOL plus,
 
 
     if (plus)
-        printf("Test of type %s with sign length = %ld value = %lf\n",
+        printf("Test of type %s with sign length = %d value = %lf\n",
                type, length, value);
     else
-        printf("Test of type %s without sign length = %ld value = %lf\n",
+        printf("Test of type %s without sign length = %d value = %lf\n",
                type, length, value);
     printf("||");
     for (i = 0;i < length;i++) printf("=");

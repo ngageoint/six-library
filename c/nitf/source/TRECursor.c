@@ -251,7 +251,7 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                     for (index = 0; index < tre_cursor->looping; index++)
                     {
                         char entry[64];
-                        NITF_SNPRINTF(entry, TAG_BUF_LEN, "[%d]", stack[index]);
+                        NITF_SNPRINTF(entry, 64, "[%d]", stack[index]);
                         strcat(tre_cursor->tag_str, entry);
                     }
                 }

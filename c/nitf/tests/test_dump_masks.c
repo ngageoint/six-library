@@ -145,11 +145,11 @@ int main(int argc, char *argv[])
 
     printf("Image %s:\n", argv[1]);
     printf("  Blocking (mode is %s):\n", imageMode);
-    printf("    Block array dimensions (r,c) = %ld %ld\n",
+    printf("    Block array dimensions (r,c) = %d %d\n",
            blkInfo->numBlocksPerRow, blkInfo->numBlocksPerCol);
-    printf("    Block dimensions (r,c) = %ld,%ld\n",
+    printf("    Block dimensions (r,c) = %d,%d\n",
            blkInfo->numRowsPerBlock, blkInfo->numColsPerBlock);
-    printf("    Block length in bytes %ld\n", blkInfo->length);
+    printf("    Block length in bytes %d\n", blkInfo->length);
 
     /*  Get the actual information */
 
@@ -164,10 +164,10 @@ int main(int argc, char *argv[])
         nitf_Uint32 j;
 
         printf("  Masked image:\n");
-        printf("    Image data offset = %ld\n", imageDataOffset);
-        printf("    Block and pad mask record lengths = %ld %ld\n",
+        printf("    Image data offset = %d\n", imageDataOffset);
+        printf("    Block and pad mask record lengths = %d %d\n",
                blockRecordLength, padRecordLength);
-        printf("    Pad value length = %ld\n", padPixelValueLength);
+        printf("    Pad value length = %d\n", padPixelValueLength);
         printf("    Pad value = ");
         for (i = 0;i < padPixelValueLength;i++)
             printf("%x ", padValue[i]);

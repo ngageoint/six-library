@@ -34,22 +34,22 @@ int main(int argc, char *argv[])
     i32 = NITF_ATO32(BIG);
     u32 = NITF_ATO32(BIG);
 
-    printf("First test of NITF_ATO32 i32 %ld u32 %lu\n", i32, u32);
+    printf("First test of NITF_ATO32 i32 %d u32 %u\n", i32, u32);
 
     i32 = NITF_ATO32(SMALLER);
     u32 = NITF_ATO32(SMALLER);
 
-    printf("Second test of NITF_ATO32 i32 %ld u32 %lu\n", i32, u32);
+    printf("Second test of NITF_ATO32 i32 %d u32 %u\n", i32, u32);
 
     i32 = NITF_ATOU32(BIG);
     u32 = NITF_ATOU32(BIG);
 
-    printf("First test of NITF_ATOU32 i32 %ld u32 %lu\n", i32, u32);
+    printf("First test of NITF_ATOU32 i32 %d u32 %u\n", i32, u32);
 
     i32 = NITF_ATOU32(SMALLER);
     u32 = NITF_ATOU32(SMALLER);
 
-    printf("Second test of NITF_ATOU32 i32 %ld u32 %lu\n", i32, u32);
+    printf("Second test of NITF_ATOU32 i32 %d u32 %u\n", i32, u32);
 
     exit(0);
 }

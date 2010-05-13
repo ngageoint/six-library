@@ -65,7 +65,6 @@ NITFAPI(cgm_FillAttributes*)
     cgm_FillAttributes_clone(cgm_FillAttributes* source, nitf_Error* error)
 {
     cgm_FillAttributes* atts = cgm_FillAttributes_construct(error);
-        (cgm_FillAttributes*)NITF_MALLOC(sizeof(cgm_FillAttributes));
     if (!atts)
         return NULL;
     
