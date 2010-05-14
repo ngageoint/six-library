@@ -125,21 +125,29 @@ JNIEXPORT jboolean JNICALL Java_nitf_TRE_setField
 {
     nitf_TRE *tre = _GetObj(env, self);
     char *tag = NULL;
-    NITF_DATA *buf = NULL;
+    jbyte *buf = NULL;
     NITF_BOOL success;
     nitf_Error error;
     jsize len;
 
     /* get the tag, data buffer, and length */
     tag = (*env)->GetStringUTFChars(env, jTag, 0);
-    buf = (NITF_DATA *) ((*env)->GetByteArrayElements(env, data, 0));
+    buf = (*env)->GetByteArrayElements(env, data, 0);
+
+    if (!buf)
+    {
+        _ThrowNITFException(env, "Out of memory!");
+        return JNI_FALSE;
+    }
+
     len = (*env)->GetArrayLength(env, data);
 
     /* set to 0, to see if we need to actually throw an exception */
     error.level = 0;
-    success = nitf_TRE_setField(tre, tag, buf, len, &error);
+    success = nitf_TRE_setField(tre, tag, (NITF_DATA*)buf, len, &error);
     
     (*env)->ReleaseStringUTFChars(env, jTag, tag);
+    (*env)->ReleaseByteArrayElements(env, data, buf, 0);
 
     if (!success)
     {

@@ -39,11 +39,17 @@ JNIEXPORT void JNICALL Java_nitf_NativeIOInterface_read
     nitf_IOInterface *interface = _GetObj(env, self);
 
     array = (*env)->GetByteArrayElements(env, buf, 0);
+    if (!array)
+    {
+        _ThrowNITFException(env, "Out of memory!");
+        return;
+    }
+
     if (!(interface->iface->read(interface->data, array, size, &error)))
     {
         _ThrowNITFException(env, error.message);
     }
-    (*env)->ReleaseByteArrayElements(env, buf, array, JNI_COMMIT);
+    (*env)->ReleaseByteArrayElements(env, buf, array, 0);
 }
 
 JNIEXPORT void JNICALL Java_nitf_NativeIOInterface_write
@@ -55,11 +61,17 @@ JNIEXPORT void JNICALL Java_nitf_NativeIOInterface_write
     nitf_IOInterface *interface = _GetObj(env, self);
 
     array = (*env)->GetByteArrayElements(env, buf, 0);
+    if (!array)
+    {
+        _ThrowNITFException(env, "Out of memory!");
+        return JNI_FALSE;
+    }
+
     if (!(interface->iface->write(interface->data, array, size, &error)))
     {
         _ThrowNITFException(env, error.message);
     }
-    (*env)->ReleaseByteArrayElements(env, buf, array, JNI_ABORT);
+    (*env)->ReleaseByteArrayElements(env, buf, array, 0);
 }
 
 JNIEXPORT jlong JNICALL Java_nitf_NativeIOInterface_seek

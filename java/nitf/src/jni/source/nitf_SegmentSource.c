@@ -48,7 +48,7 @@ JNIEXPORT jobject JNICALL Java_nitf_SegmentSource_makeSegmentMemorySource
     }
 
     /* get the data */
-    buf = (char *) (*env)->GetByteArrayElements(env, data, NULL);
+    buf = (char *) (*env)->GetByteArrayElements(env, data, 0);
     if (!buf)
     {
         _ThrowNITFException(env, "ERROR getting data from array");
@@ -58,6 +58,9 @@ JNIEXPORT jobject JNICALL Java_nitf_SegmentSource_makeSegmentMemorySource
     memorySource =
         nitf_SegmentMemorySource_construct(buf, size, start,
             byteSkip, &error);
+
+    (*env)->ReleaseByteArrayElements(env, data, buf, 0);
+
     if (!memorySource)
     {
         _ThrowNITFException(env, error.message);

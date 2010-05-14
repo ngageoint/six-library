@@ -24,15 +24,15 @@
 #include "nitf_LookupTable.h"
 #include "nitf_JNI.h"
 
-NITF_JNI_DECLARE_OBJ(nitf_LookupTable)
+NITF_JNI_DECLARE_OBJ( nitf_LookupTable)
 /*
  * Class:     nitf_LookupTable
  * Method:    construct
  * Signature: (II[B)V
  */
 JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
-    (JNIEnv * env, jobject self, jint numTables, jint numEntries,
-     jbyteArray lutData)
+(JNIEnv * env, jobject self, jint numTables, jint numEntries,
+        jbyteArray lutData)
 {
     nitf_LookupTable *lut = NULL;
     nitf_Error error;
@@ -40,7 +40,7 @@ JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
 
     /* construct the LUT */
     lut = nitf_LookupTable_construct((nitf_Uint32) numTables,
-                                     (nitf_Uint32) numEntries, &error);
+            (nitf_Uint32) numEntries, &error);
 
     if (!lut)
     {
@@ -50,15 +50,20 @@ JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
     }
 
     dataBuf = (char *) (*env)->GetByteArrayElements(env, lutData, 0);
+    if (!dataBuf)
+    {
+        _ThrowNITFException(env, "Out of memory!");
+        return;
+    }
 
     /* initialize the data */
     nitf_LookupTable_init(lut, (nitf_Uint32) numTables,
-                          (nitf_Uint32) numEntries, (NITF_DATA *) dataBuf,
-                          &error);
+            (nitf_Uint32) numEntries, (NITF_DATA *) dataBuf,
+            &error);
 
+    (*env)->ReleaseByteArrayElements(env, lutData, dataBuf, 0);
     _SetObj(env, self, lut);
 }
-
 
 /*
  * Class:     nitf_LookupTable
@@ -66,7 +71,7 @@ JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_nitf_LookupTable_destructMemory
-    (JNIEnv * env, jobject self)
+(JNIEnv * env, jobject self)
 {
     nitf_LookupTable *lut = _GetObj(env, self);
     if (lut)
@@ -76,40 +81,37 @@ JNIEXPORT void JNICALL Java_nitf_LookupTable_destructMemory
     _SetObj(env, self, NULL);
 }
 
-
 /*
  * Class:     nitf_LookupTable
  * Method:    getNumTables
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_nitf_LookupTable_getNumTables
-    (JNIEnv * env, jobject self)
+JNIEXPORT jint JNICALL Java_nitf_LookupTable_getNumTables(JNIEnv * env,
+                                                          jobject self)
 {
     nitf_LookupTable *lut = _GetObj(env, self);
     return lut->tables;
 }
-
 
 /*
  * Class:     nitf_LookupTable
  * Method:    getNumEntries
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_nitf_LookupTable_getNumEntries
-    (JNIEnv * env, jobject self)
+JNIEXPORT jint JNICALL Java_nitf_LookupTable_getNumEntries(JNIEnv * env,
+                                                           jobject self)
 {
     nitf_LookupTable *lut = _GetObj(env, self);
     return lut->entries;
 }
-
 
 /*
  * Class:     nitf_LookupTable
  * Method:    getData
  * Signature: ()[B
  */
-JNIEXPORT jbyteArray JNICALL Java_nitf_LookupTable_getData
-    (JNIEnv * env, jobject self)
+JNIEXPORT jbyteArray JNICALL Java_nitf_LookupTable_getData(JNIEnv * env,
+                                                           jobject self)
 {
     nitf_LookupTable *lut = _GetObj(env, self);
     jint length;

@@ -24,14 +24,13 @@
 #include "nitf_Field.h"
 #include "nitf_JNI.h"
 
-NITF_JNI_DECLARE_OBJ(nitf_Field)
+NITF_JNI_DECLARE_OBJ( nitf_Field)
 /*
  * Class:     nitf_Field
  * Method:    getType
  * Signature: ()Lnitf/FieldType;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Field_getType
-    (JNIEnv * env, jobject self)
+JNIEXPORT jobject JNICALL Java_nitf_Field_getType(JNIEnv * env, jobject self)
 {
     nitf_Field *field = _GetObj(env, self);
 
@@ -41,23 +40,19 @@ JNIEXPORT jobject JNICALL Java_nitf_Field_getType
     jfieldID fieldID;
 
     /* BCS-A */
-    fieldID =
-        (*env)->GetStaticFieldID(env, fieldTypeClass, "NITF_BCS_A",
-                                 "Lnitf/FieldType;");
+    fieldID = (*env)->GetStaticFieldID(env, fieldTypeClass, "NITF_BCS_A",
+                                       "Lnitf/FieldType;");
     enumBCSA = (*env)->GetStaticObjectField(env, fieldTypeClass, fieldID);
 
     /* BCS-N */
-    fieldID =
-        (*env)->GetStaticFieldID(env, fieldTypeClass, "NITF_BCS_N",
-                                 "Lnitf/FieldType;");
+    fieldID = (*env)->GetStaticFieldID(env, fieldTypeClass, "NITF_BCS_N",
+                                       "Lnitf/FieldType;");
     enumBCSN = (*env)->GetStaticObjectField(env, fieldTypeClass, fieldID);
 
     /* BINARY */
-    fieldID =
-        (*env)->GetStaticFieldID(env, fieldTypeClass, "NITF_BINARY",
-                                 "Lnitf/FieldType;");
-    enumBINARY =
-        (*env)->GetStaticObjectField(env, fieldTypeClass, fieldID);
+    fieldID = (*env)->GetStaticFieldID(env, fieldTypeClass, "NITF_BINARY",
+                                       "Lnitf/FieldType;");
+    enumBINARY = (*env)->GetStaticObjectField(env, fieldTypeClass, fieldID);
 
     switch (field->type)
     {
@@ -72,66 +67,67 @@ JNIEXPORT jobject JNICALL Java_nitf_Field_getType
     }
 }
 
-
 /*
  * Class:     nitf_Field
  * Method:    getLength
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_nitf_Field_getLength
-    (JNIEnv * env, jobject self)
+JNIEXPORT jlong JNICALL Java_nitf_Field_getLength(JNIEnv * env, jobject self)
 {
     nitf_Field *field = _GetObj(env, self);
     return field->length;
 }
-
 
 /*
  * Class:     nitf_Field
  * Method:    setRawData
  * Signature: ([B)Z
  */
-JNIEXPORT jboolean JNICALL Java_nitf_Field_setRawData
-    (JNIEnv * env, jobject self, jbyteArray data)
+JNIEXPORT jboolean JNICALL Java_nitf_Field_setRawData(JNIEnv * env,
+                                                      jobject self,
+                                                      jbyteArray data)
 {
     nitf_Field *field = _GetObj(env, self);
     nitf_Error error;
+    jboolean status;
 
-    jbyte *tmp;
+    jbyte *byteBuf = NULL;
     jint length = (*env)->GetArrayLength(env, data);
-    tmp = (*env)->GetByteArrayElements(env, data, 0);
-
-    if (!nitf_Field_setRawData(field, (NITF_DATA *) tmp, length, &error))
+    byteBuf = (*env)->GetByteArrayElements(env, data, 0);
+    if (!byteBuf)
     {
+        _ThrowNITFException(env, "Out of memory!");
         return JNI_FALSE;
     }
-    return JNI_TRUE;
-}
 
+    status
+            = nitf_Field_setRawData(field, (NITF_DATA *) byteBuf, length,
+                                    &error) ? JNI_TRUE : JNI_FALSE;
+    (*env)->ReleaseByteArrayElements(env, data, byteBuf, 0);
+    return status;
+}
 
 /*
  * Class:     nitf_Field
  * Method:    getRawData
  * Signature: ()[B
  */
-JNIEXPORT jbyteArray JNICALL Java_nitf_Field_getRawData
-    (JNIEnv * env, jobject self)
+JNIEXPORT jbyteArray JNICALL Java_nitf_Field_getRawData(JNIEnv * env,
+                                                        jobject self)
 {
     nitf_Field *field = _GetObj(env, self);
     jbyteArray byteArray = (*env)->NewByteArray(env, field->length);
-    (*env)->SetByteArrayRegion(env, byteArray, 0, field->length,
-                               field->raw);
+    (*env)->SetByteArrayRegion(env, byteArray, 0, field->length, field->raw);
     return byteArray;
 }
-
 
 /*
  * Class:     nitf_Field
  * Method:    getStringData
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_nitf_Field_getStringData
-    (JNIEnv * env, jobject self)
+JNIEXPORT jstring JNICALL Java_nitf_Field_getStringData(JNIEnv * env,
+                                                        jobject self)
 {
     nitf_Field *field = _GetObj(env, self);
     jchar *buf;
@@ -146,8 +142,7 @@ JNIEXPORT jstring JNICALL Java_nitf_Field_getStringData
     memset(buf, 0, field->length + 1);
 
     /* TODO: check for an error here */
-    if (!nitf_Field_get
-        (field, buf, NITF_CONV_STRING, field->length + 1, &error))
+    if (!nitf_Field_get(field, buf, NITF_CONV_STRING, field->length + 1, &error))
     {
         NITF_FREE(buf);
         return NULL;
@@ -161,21 +156,18 @@ JNIEXPORT jstring JNICALL Java_nitf_Field_getStringData
     return string;
 }
 
-
 /*
  * Class:     nitf_Field
  * Method:    getIntData
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_nitf_Field_getIntData
-    (JNIEnv * env, jobject self)
+JNIEXPORT jint JNICALL Java_nitf_Field_getIntData(JNIEnv * env, jobject self)
 {
     nitf_Field *field = _GetObj(env, self);
     jint intData;
     nitf_Error error;
 
-    nitf_Field_get(field, &intData, NITF_CONV_INT, sizeof(intData),
-                   &error);
+    nitf_Field_get(field, &intData, NITF_CONV_INT, sizeof(intData), &error);
     /* TODO: deal with errors */
     return intData;
 }

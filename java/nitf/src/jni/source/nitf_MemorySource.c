@@ -50,7 +50,7 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
     }
 
     /* get the data */
-    buf = (char *) (*env)->GetByteArrayElements(env, data, NULL);
+    buf = (char *) (*env)->GetByteArrayElements(env, data, 0);
     if (!buf)
     {
         _ThrowNITFException(env, "ERROR getting data from array");
@@ -72,6 +72,8 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
     (*env)->CallStaticVoidMethod(env, bandSourceClass,
         methodID, self);
 
+    (*env)->ReleaseByteArrayElements(env, data, buf, 0);
+
     return;
 }
 
@@ -88,7 +90,7 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_read
     jbyte *byteBuf;
     nitf_Error error;
 
-    byteBuf = (*env)->GetByteArrayElements(env, buf, NULL);
+    byteBuf = (*env)->GetByteArrayElements(env, buf, 0);
     if (!byteBuf)
     {
         _ThrowNITFException(env, "ERROR getting data from array");
@@ -101,7 +103,7 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_read
         return;
     }
 
-    (*env)->SetByteArrayRegion(env, buf, 0, size, byteBuf);
+    (*env)->ReleaseByteArrayElements(env, buf, byteBuf, 0);
     return;
 }
 

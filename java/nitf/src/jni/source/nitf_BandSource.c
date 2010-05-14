@@ -74,6 +74,10 @@ NITFPRIV(NITF_BOOL) BandSource_read
 
     /* copy to the char buffer */
     temp = (*env)->GetByteArrayElements(env, byteArray, 0);
+    if (!temp)
+    {
+        return NITF_FAILURE;
+    }
     memcpy(buf, (char*)temp, size);
     
     /* delete the local refs */ 

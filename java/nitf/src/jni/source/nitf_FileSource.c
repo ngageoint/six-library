@@ -81,7 +81,7 @@ JNIEXPORT void JNICALL Java_nitf_FileSource_read
     (JNIEnv * env, jobject self, jbyteArray buf, jint size)
 {
     nitf_BandSource *source = _GetObj(env, self);
-    char *byteBuf;
+    char *byteBuf = NULL;
     nitf_Error error;
 
     byteBuf = (char*)(*env)->GetByteArrayElements(env, buf, NULL);
@@ -97,7 +97,7 @@ JNIEXPORT void JNICALL Java_nitf_FileSource_read
         return;
     }
 
-    (*env)->SetByteArrayRegion(env, buf, 0, size, (jbyte*)byteBuf);
+    (*env)->ReleaseByteArrayElements(env, buf, byteBuf, 0);
     return;
 }
 
