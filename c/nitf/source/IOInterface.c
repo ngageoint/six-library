@@ -52,6 +52,8 @@ NITFAPI(void) nitf_IOInterface_destruct(nitf_IOInterface** io)
         if ( (*io)->iface)
         {
             (*io)->iface->destruct( (*io)->data );
+            (*io)->data = NULL;
+            (*io)->iface = NULL;
             NITF_FREE( *io );
         }
         *io = NULL;
@@ -74,8 +76,6 @@ NITFPRIV(NITF_BOOL) IOHandleAdaptor_write(NITF_DATA* data,
 {
     return nitf_IOHandle_write( (nitf_IOHandle)data,
                                 buf, size, error);
-
-
 }
 
 
@@ -102,10 +102,11 @@ NITFPRIV(nitf_Off) IOHandleAdaptor_getSize(NITF_DATA* data,
     return nitf_IOHandle_getSize( (nitf_IOHandle)data,
                                   error);
 }
+
 NITFPRIV(NITF_BOOL) IOHandleAdaptor_close(NITF_DATA* data,
                                      nitf_Error* error)
 {
-    nitf_IOHandle_close( (nitf_IOHandle)data);
+    nitf_IOHandle_close((nitf_IOHandle)data);
     return NITF_SUCCESS;
 }
 
@@ -140,8 +141,5 @@ nitf_IOHandleAdaptor_construct(nitf_IOHandle handle, nitf_Error* error)
     impl->iface = &iIOHandle;
     return impl;
 }
-
-
-
 
 NITF_CXX_ENDGUARD

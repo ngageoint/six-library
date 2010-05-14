@@ -440,6 +440,7 @@ NITFAPI(nitf_Reader *) nitf_Reader_construct(nitf_Error * error)
         return NULL;
     }
 
+    reader->record = NULL;
     reader->input = NULL;
     reader->ownInput = 0;
     resetIOInterface(reader);
@@ -493,6 +494,9 @@ NITFAPI(void) nitf_Reader_destruct(nitf_Reader ** reader)
 
         /* this will delete the input if we own it */
         resetIOInterface(*reader);
+
+        (*reader)->warningList = NULL;
+        (*reader)->record = NULL;
 
         NITF_FREE(*reader);
         *reader = NULL;
