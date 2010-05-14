@@ -1,23 +1,23 @@
-/* =========================================================================
+/*
+ * =========================================================================
  * This file is part of NITRO
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
- *
+ * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
- *
  */
 
 package nitf;
@@ -47,11 +47,6 @@ public final class Writer extends DestructibleObject
     }
 
     private native void construct() throws NITFException;
-
-    /**
-     * Destructs the underlying memory
-     */
-    protected native synchronized void destructMemory();
 
     /**
      * @return the array of ImageWriters
@@ -97,7 +92,8 @@ public final class Writer extends DestructibleObject
      * @return true if the prepare completed successfully, false otherwise
      * @throws NITFException
      */
-    public boolean prepare(Record record, IOInterface ioHandle) throws NITFException
+    public boolean prepare(Record record, IOInterface ioHandle)
+            throws NITFException
     {
         return prepareIO(record, ioHandle);
     }
@@ -125,7 +121,8 @@ public final class Writer extends DestructibleObject
      * Sets the WriteHandler for the Graphic at the given index.
      */
     public native void setGraphicWriteHandler(int index,
-            WriteHandler writeHandler) throws NITFException;
+                                              WriteHandler writeHandler)
+            throws NITFException;
 
     /**
      * Sets the WriteHandler for the Text at the given index.
@@ -196,5 +193,16 @@ public final class Writer extends DestructibleObject
      *             if a native error occurs
      */
     public native boolean write() throws NITFException;
+
+    @Override
+    protected MemoryDestructor getDestructor()
+    {
+        return new Destructor();
+    }
+
+    private static class Destructor implements MemoryDestructor
+    {
+        public native boolean destructMemory(long nativeAddress);
+    }
 
 }

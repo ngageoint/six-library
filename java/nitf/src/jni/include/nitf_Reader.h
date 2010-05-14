@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_Reader_INVALID_ADDRESS
-#define nitf_Reader_INVALID_ADDRESS 0L
+#define nitf_Reader_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_Reader
  * Method:    construct
@@ -19,16 +19,8 @@ JNIEXPORT void JNICALL Java_nitf_Reader_construct
 
 /*
  * Class:     nitf_Reader
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_Reader_destructMemory
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_Reader
  * Method:    read
- * Signature: (Lnitf/IOHandle;)Lnitf/Record;
+ * Signature: (Lnitf/IOInterface;)Lnitf/Record;
  */
 JNIEXPORT jobject JNICALL Java_nitf_Reader_read
   (JNIEnv *, jobject, jobject);

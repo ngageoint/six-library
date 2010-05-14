@@ -22,6 +22,7 @@
 
 #include <import/nitf.h>
 #include "nitf_SubWindow.h"
+#include "nitf_SubWindow_Destructor.h"
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ(nitf_SubWindow)
@@ -48,19 +49,16 @@ JNIEXPORT void JNICALL Java_nitf_SubWindow_construct
     }
 }
 
-
-/*
- * Class:     nitf_SubWindow
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_SubWindow_destructMemory
-    (JNIEnv * env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_SubWindow_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_SubWindow *subWindow = _GetObj(env, self);
+    nitf_SubWindow *subWindow = (nitf_SubWindow*)address;
     if (subWindow)
+    {
         nitf_SubWindow_destruct(&subWindow);
-    _SetObj(env, self, NULL);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }
 
 

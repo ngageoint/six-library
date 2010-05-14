@@ -1,23 +1,23 @@
-/* =========================================================================
+/*
+ * =========================================================================
  * This file is part of NITRO
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
- *
+ * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
- *
  */
 
 package nitf;
@@ -25,12 +25,15 @@ package nitf;
 import java.io.PrintStream;
 
 /**
- * Represents a NITF record <p/> The Record object is a database-like record of
- * the fields in a NITF file. It a repository for information on reads, and as a
- * source of information on writes. <p/> A Record contains a file header, and
- * various segments associated with different sections of the NITF file.
- * Segments and headers contain extensions known as TREs and they are stored in
- * hierarchical format in the components.
+ * Represents a NITF record
+ * <p/>
+ * The Record object is a database-like record of the fields in a NITF file. It
+ * a repository for information on reads, and as a source of information on
+ * writes.
+ * <p/>
+ * A Record contains a file header, and various segments associated with
+ * different sections of the NITF file. Segments and headers contain extensions
+ * known as TREs and they are stored in hierarchical format in the components.
  */
 public final class Record extends CloneableObject
 {
@@ -73,16 +76,13 @@ public final class Record extends CloneableObject
     private native void construct(Version version) throws NITFException;
 
     /**
-     * Destructs the underlying memory
-     */
-    protected native synchronized void destructMemory();
-
-    /**
      * Returns a clone of this Record object, including it's underlying
-     * structures <p/> Use this method when you want two entirely separate
-     * objects that point to different memory locations. This will allow you to
-     * change each object independently of one another. This could be useful if
-     * you read in a Record, and want to modify the original in many ways.
+     * structures
+     * <p/>
+     * Use this method when you want two entirely separate objects that point to
+     * different memory locations. This will allow you to change each object
+     * independently of one another. This could be useful if you read in a
+     * Record, and want to modify the original in many ways.
      * 
      * @return a clone of this Record
      * @see CloneableObject
@@ -145,7 +145,8 @@ public final class Record extends CloneableObject
     public native RESegment[] getReservedExtensions() throws NITFException;
 
     /**
-     * Adds an ImageSegment to this Record, and returns a handle to it <p/>
+     * Adds an ImageSegment to this Record, and returns a handle to it
+     * <p/>
      * NOTE: This also adds a componentInfo object to the FileHeader
      * 
      * @throws NITFException
@@ -153,7 +154,8 @@ public final class Record extends CloneableObject
     public native ImageSegment newImageSegment() throws NITFException;
 
     /**
-     * Adds a GraphicSegment to this Record, and returns a handle to it <p/>
+     * Adds a GraphicSegment to this Record, and returns a handle to it
+     * <p/>
      * NOTE: This also adds a componentInfo object to the FileHeader
      * 
      * @throws NITFException
@@ -161,16 +163,18 @@ public final class Record extends CloneableObject
     public native GraphicSegment newGraphicSegment() throws NITFException;
 
     /**
-     * Adds a TextSegment to this Record, and returns a handle to it <p/> NOTE:
-     * This also adds a componentInfo object to the FileHeader
+     * Adds a TextSegment to this Record, and returns a handle to it
+     * <p/>
+     * NOTE: This also adds a componentInfo object to the FileHeader
      * 
      * @throws NITFException
      */
     public native TextSegment newTextSegment() throws NITFException;
 
     /**
-     * Adds a DESegment to this Record, and returns a handle to it <p/> NOTE:
-     * This also adds a componentInfo object to the FileHeader
+     * Adds a DESegment to this Record, and returns a handle to it
+     * <p/>
+     * NOTE: This also adds a componentInfo object to the FileHeader
      * 
      * @throws NITFException
      */
@@ -394,5 +398,16 @@ public final class Record extends CloneableObject
      * @see Version
      */
     public native Version getVersion();
+
+    @Override
+    protected MemoryDestructor getDestructor()
+    {
+        return new Destructor();
+    }
+
+    private static class Destructor implements MemoryDestructor
+    {
+        public native boolean destructMemory(long nativeAddress);
+    }
 
 }

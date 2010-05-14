@@ -148,21 +148,12 @@ JNIEXPORT jobject JNICALL Java_nitf_DESubheader_getSubheaderFields
     (JNIEnv * env, jobject self)
 {
     nitf_DESubheader *header = _GetObj(env, self);
-
-    jclass treClass = (*env)->FindClass(env, "nitf/TRE");
     jobject tre = NULL;
-    jmethodID methodID =
-        (*env)->GetMethodID(env, treClass, "<init>", "(J)V");
 
     if (header->subheaderFields)
     {
-        tre = (*env)->NewObject(env,
-                                treClass,
-                                methodID, (jlong) header->subheaderFields);
-
-        /* tell Java not to manage it */
-        methodID = (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
-        (*env)->CallVoidMethod(env, tre, methodID, JNI_FALSE);
+        tre = _NewObject(env, (jlong)header->subheaderFields, "nitf/TRE");
+        _ManageObject(env, (jlong)header->subheaderFields, JNI_FALSE);
     }
     return tre;
 }
@@ -173,7 +164,7 @@ JNIEXPORT jobject JNICALL Java_nitf_DESubheader_setSubheaderFields
 {
     nitf_DESubheader *header = _GetObj(env, self);
     jobject tre = NULL;
-    jmethodID initMethod = NULL, managedMethod = NULL, addressMethod = NULL;
+    jmethodID initMethod = NULL, addressMethod = NULL;
     nitf_TRE *newTRE = NULL, *clonedTRE = NULL;
     jclass treClass = (*env)->FindClass(env, "nitf/TRE");
     nitf_Error error;
@@ -181,7 +172,6 @@ JNIEXPORT jobject JNICALL Java_nitf_DESubheader_setSubheaderFields
     if (subheaderFields != NULL)
     {
         initMethod = (*env)->GetMethodID(env, treClass, "<init>", "(J)V");
-        managedMethod = (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
         addressMethod = (*env)->GetMethodID(env, treClass, "getAddress", "()J");
 
         /* get the address of the new one passed in */
@@ -200,33 +190,20 @@ JNIEXPORT jobject JNICALL Java_nitf_DESubheader_setSubheaderFields
     /* get the current TRE object, and tell Java we're done with it */
     if (header->subheaderFields)
     {
-        tre = (*env)->NewObject(env,
-                                treClass,
-                                initMethod,
-                                (jlong) header->subheaderFields);
-
-        /* tell Java to manage it */
-        (*env)->CallVoidMethod(env, tre, managedMethod, JNI_TRUE);
+        _ManageObject(env, (jlong)header->subheaderFields, JNI_TRUE);
     }
 
     /* set the cloned one to the subheaderFields */
     header->subheaderFields = clonedTRE;
 
-    if (subheaderFields != NULL)
+    if (clonedTRE != NULL)
     {
         /* create a new Java TRE from the clone and tell Java not to manage it */
-        tre = (*env)->NewObject(env,
-                                treClass,
-                                initMethod,
-                                (jlong) clonedTRE);
-
-        /* tell Java not to manage it */
-        (*env)->CallVoidMethod(env, tre, managedMethod, JNI_FALSE);
+        tre = _NewObject(env, (jlong)header->subheaderFields, "nitf/TRE");
+        _ManageObject(env, (jlong)header->subheaderFields, JNI_FALSE);
     }
     return tre;
 }
-
-
 
 /*
  * Class:     nitf_DESubheader

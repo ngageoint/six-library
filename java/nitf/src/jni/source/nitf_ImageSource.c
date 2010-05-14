@@ -22,6 +22,7 @@
 
 #include <import/nitf.h>
 #include "nitf_ImageSource.h"
+#include "nitf_ImageSource_Destructor.h"
 #include "nitf_JNI.h"
 
 /*  This creates the _SetObj and _GetObj accessors  */
@@ -41,21 +42,16 @@ JNIEXPORT void JNICALL Java_nitf_ImageSource_construct
     _SetObj(env, self, source);
 }
 
-
-/*
- * Class:     nitf_ImageSource
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_ImageSource_destructMemory
-    (JNIEnv * env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_ImageSource_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_ImageSource *imageSource = _GetObj(env, self);
-
+    nitf_ImageSource *imageSource = (nitf_ImageSource*)address;
     if (imageSource)
+    {
         nitf_ImageSource_destruct(&imageSource);
-
-    _SetObj(env, self, NULL);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }
 
 
@@ -186,8 +182,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSource_addBand
     }
 
     /* Now, tell Java not to manage it anymore */
-    methodID = (*env)->GetMethodID(env, bandSourceClass, "setManaged", "(Z)V");
-    (*env)->CallVoidMethod(env, jBandSource, methodID, JNI_FALSE);
+    _ManageObject(env, (jlong)bandSource, JNI_FALSE);
 
     return JNI_TRUE;
 }

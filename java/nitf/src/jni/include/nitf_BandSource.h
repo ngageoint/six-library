@@ -8,21 +8,13 @@
 extern "C" {
 #endif
 #undef nitf_BandSource_INVALID_ADDRESS
-#define nitf_BandSource_INVALID_ADDRESS 0L
+#define nitf_BandSource_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_BandSource
  * Method:    construct
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_nitf_BandSource_construct
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_BandSource
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_BandSource_destructMemory
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

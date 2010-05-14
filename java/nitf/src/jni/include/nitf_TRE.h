@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_TRE_INVALID_ADDRESS
-#define nitf_TRE_INVALID_ADDRESS 0L
-/*
- * Class:     nitf_TRE
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_TRE_destructMemory
-  (JNIEnv *, jobject);
-
+#define nitf_TRE_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_TRE
  * Method:    construct

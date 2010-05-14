@@ -1,23 +1,23 @@
-/* =========================================================================
+/*
+ * =========================================================================
  * This file is part of NITRO
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
- *
+ * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
- *
  */
 
 package nitf;
@@ -129,25 +129,37 @@ public abstract class DownSampler extends DestructibleObject
      *            The number of cols in the final window
      * @return NITF_SUCCESS on success, NITF_FAILURE on failure
      * 
-     * Note:
+     *         Note:
      * 
-     * The numWindowRows, numWindowCols, and numSubWindowCols values are in
-     * output image units (units of sample windows). For example, with a pixel
-     * skip of 3 in columns, if the sub-window request spans columns 0-299, then
-     * numSubWindowCols is 100. If the block is such that a particular request
-     * spans columns 90-149 (60 full resolution columns), then numWindowCols is
-     * 20. The numInputCols value is in full resolution units. This value gives
-     * the length, in pixels of one row in the input buffer. This buffer is used
-     * for all down-sample calls. Since the number of windows can vary from call
-     * to call, this buffer has a worst case length. Therefore, it is not
-     * possible to move from one row to the next with just the number of sample
-     * windows per row (numWindowCols) for the current request
+     *         The numWindowRows, numWindowCols, and numSubWindowCols values are
+     *         in
+     *         output image units (units of sample windows). For example, with a
+     *         pixel
+     *         skip of 3 in columns, if the sub-window request spans columns
+     *         0-299, then
+     *         numSubWindowCols is 100. If the block is such that a particular
+     *         request
+     *         spans columns 90-149 (60 full resolution columns), then
+     *         numWindowCols is
+     *         20. The numInputCols value is in full resolution units. This
+     *         value gives
+     *         the length, in pixels of one row in the input buffer. This buffer
+     *         is used
+     *         for all down-sample calls. Since the number of windows can vary
+     *         from call
+     *         to call, this buffer has a worst case length. Therefore, it is
+     *         not
+     *         possible to move from one row to the next with just the number of
+     *         sample
+     *         windows per row (numWindowCols) for the current request
      */
     protected abstract boolean apply(byte[][] inputWindows,
-            byte[][] outputWindows, int numBands, int numWindowRows,
-            int numWindowCols, int numInputCols, int numSubWindowCols,
-            int pixelType, int pixelSize, int rowsInLastWindow,
-            int colsInLastWindow) throws NITFException;
+                                     byte[][] outputWindows, int numBands,
+                                     int numWindowRows, int numWindowCols,
+                                     int numInputCols, int numSubWindowCols,
+                                     int pixelType, int pixelSize,
+                                     int rowsInLastWindow, int colsInLastWindow)
+            throws NITFException;
 
     /**
      * @return Returns the Row Skip size
@@ -176,11 +188,6 @@ public abstract class DownSampler extends DestructibleObject
      *         Otherwise, this returns false.
      */
     public abstract boolean isMultiBand();
-
-    /**
-     * Destructs the underlying memory
-     */
-    protected native synchronized void destructMemory();
 
     /**
      * This returns the DownSampler object represented by the given underlying
@@ -217,5 +224,16 @@ public abstract class DownSampler extends DestructibleObject
             if (!downSamplerMap.containsKey(key))
                 downSamplerMap.put(key, downSampler);
         }
+    }
+
+    @Override
+    protected MemoryDestructor getDestructor()
+    {
+        return new Destructor();
+    }
+
+    private static class Destructor implements MemoryDestructor
+    {
+        public native boolean destructMemory(long nativeAddress);
     }
 }

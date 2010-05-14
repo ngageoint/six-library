@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_ImageWriter_INVALID_ADDRESS
-#define nitf_ImageWriter_INVALID_ADDRESS 0L
-/*
- * Class:     nitf_ImageWriter
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_ImageWriter_destructMemory
-  (JNIEnv *, jobject);
-
+#define nitf_ImageWriter_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_ImageWriter
  * Method:    attachSource

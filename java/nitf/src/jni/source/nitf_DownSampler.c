@@ -22,6 +22,7 @@
 
 #include <import/nitf.h>
 #include "nitf_DownSampler.h"
+#include "nitf_DownSampler_Destructor.h"
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ(nitf_DownSampler)
@@ -41,20 +42,16 @@ JNIEXPORT void JNICALL Java_nitf_DownSampler_construct
 	 */
 }
 
-/*
- * Class:     nitf_DownSampler
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_DownSampler_destructMemory
-  (JNIEnv *env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_DownSampler_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-	nitf_DownSampler *downSampler = _GetObj(env, self);
+	nitf_DownSampler *downSampler = (nitf_DownSampler*)address;
     if (downSampler)
     {
         nitf_DownSampler_destruct(&downSampler);
+        return JNI_TRUE;
     }
-    _SetObj(env, self, NULL);
+    return JNI_FALSE;
 }
 
 

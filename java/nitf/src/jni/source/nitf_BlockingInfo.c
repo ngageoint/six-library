@@ -22,24 +22,22 @@
 
 #include <import/nitf.h>
 #include "nitf_BlockingInfo.h"
+#include "nitf_BlockingInfo_Destructor.h"
 #include "nitf_JNI.h"
 
 /*  This creates the _SetObj and _GetObj accessors  */
 NITF_JNI_DECLARE_OBJ(nitf_BlockingInfo)
-/*
- * Class:     nitf_BlockingInfo
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_BlockingInfo_destructMemory
-    (JNIEnv * env, jobject self)
+
+JNIEXPORT jboolean JNICALL Java_nitf_BlockingInfo_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_BlockingInfo *blockingInfo = _GetObj(env, self);
+    nitf_BlockingInfo *blockingInfo = (nitf_BlockingInfo*)address;
     if (blockingInfo)
     {
         NITF_FREE(blockingInfo);
+        return JNI_TRUE;
     }
-    _SetObj(env, self, NULL);
+    return JNI_FALSE;
 }
 
 

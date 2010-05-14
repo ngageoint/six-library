@@ -8,21 +8,13 @@
 extern "C" {
 #endif
 #undef nitf_ImageSource_INVALID_ADDRESS
-#define nitf_ImageSource_INVALID_ADDRESS 0L
+#define nitf_ImageSource_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_ImageSource
  * Method:    construct
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_nitf_ImageSource_construct
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_ImageSource
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_ImageSource_destructMemory
   (JNIEnv *, jobject);
 
 /*

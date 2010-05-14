@@ -22,23 +22,22 @@
 
 #include <import/nitf.h>
 #include "nitf_ImageWriter.h"
+#include "nitf_ImageWriter_Destructor.h"
 #include "nitf_JNI.h"
 
 /*  This creates the _SetObj and _GetObj accessors  */
 NITF_JNI_DECLARE_OBJ(nitf_ImageWriter)
 
-/*
- * Class:     nitf_ImageWriter
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_ImageWriter_destructMemory
-    (JNIEnv * env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_ImageWriter_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_ImageWriter *writer = _GetObj(env, self);
+    nitf_WriteHandler *writer = (nitf_WriteHandler*)address;
     if (writer)
-        nitf_WriteHandler_destruct((nitf_WriteHandler**)&writer);
-    _SetObj(env, self, NULL);
+    {
+        nitf_WriteHandler_destruct(&writer);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }
 
 
@@ -67,9 +66,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageWriter_attachSource
     }
     
     /* tell Java not to manage the ImageSource memory */
-    methodID = (*env)->GetMethodID(env, imageSourceClass, "setManaged", "(Z)V");
-    (*env)->CallVoidMethod(env, jImageSource, methodID, JNI_FALSE);
-    
+    _ManageObject(env, (jlong)imageSource, JNI_FALSE);
     return JNI_TRUE;
 }
 

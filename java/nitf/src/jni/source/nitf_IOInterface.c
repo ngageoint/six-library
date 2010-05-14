@@ -23,6 +23,7 @@
 #include <import/nitf.h>
 #include <stdio.h>
 #include "nitf_IOInterface.h"
+#include "nitf_IOInterface_Destructor.h"
 #include "nitf_JNI.h"
 
 
@@ -254,9 +255,9 @@ JNIEXPORT void JNICALL Java_nitf_IOInterface_construct
     interface->iface = &iIOHandle;
     _SetObj(env, self, interface);
 
-    /* Track the IOInterface ... */
+/*     Track the IOInterface ...
     {
-        /* Only register non-native, since they are handled differently */
+         Only register non-native, since they are handled differently
         jclass nativeIOClass = (*env)->FindClass(env, "nitf/NativeIOInterface");
         if (!(*env)->IsInstanceOf(env, self, nativeIOClass))
         {
@@ -269,14 +270,19 @@ JNIEXPORT void JNICALL Java_nitf_IOInterface_construct
                     "trackIOHandle", "(Lnitf/IOInterface;)V");
             (*env)->CallVoidMethod(env, manager, methodID, self);
         }
-    }
+    }*/
 }
 
-JNIEXPORT void JNICALL Java_nitf_IOInterface_destructMemory
-(JNIEnv *env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_IOInterface_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_IOInterface *interface = _GetObj(env, self);
+    nitf_IOInterface *interface = (nitf_IOInterface*)address;
+    nitf_Error error;
     if (interface)
+    {
+        /*nitf_IOInterface_close(interface, &error);*/
         nitf_IOInterface_destruct(&interface);
-    _SetObj(env, self, NULL);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }

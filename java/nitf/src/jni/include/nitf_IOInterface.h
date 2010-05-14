@@ -8,21 +8,13 @@
 extern "C" {
 #endif
 #undef nitf_IOInterface_INVALID_ADDRESS
-#define nitf_IOInterface_INVALID_ADDRESS 0L
+#define nitf_IOInterface_INVALID_ADDRESS 0LL
 #undef nitf_IOInterface_SEEK_CUR
 #define nitf_IOInterface_SEEK_CUR 10L
 #undef nitf_IOInterface_SEEK_SET
 #define nitf_IOInterface_SEEK_SET 20L
 #undef nitf_IOInterface_SEEK_END
 #define nitf_IOInterface_SEEK_END 30L
-/*
- * Class:     nitf_IOInterface
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_IOInterface_destructMemory
-  (JNIEnv *, jobject);
-
 /*
  * Class:     nitf_IOInterface
  * Method:    construct

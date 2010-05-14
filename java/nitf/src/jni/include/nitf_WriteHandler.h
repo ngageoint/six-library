@@ -8,21 +8,13 @@
 extern "C" {
 #endif
 #undef nitf_WriteHandler_INVALID_ADDRESS
-#define nitf_WriteHandler_INVALID_ADDRESS 0L
+#define nitf_WriteHandler_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_WriteHandler
  * Method:    construct
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_nitf_WriteHandler_construct
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_WriteHandler
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_WriteHandler_destructMemory
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

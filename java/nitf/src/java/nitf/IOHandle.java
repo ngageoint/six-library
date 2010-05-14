@@ -1,23 +1,23 @@
-/* =========================================================================
+/*
+ * =========================================================================
  * This file is part of NITRO
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
- *
+ * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
- *
  */
 
 package nitf;
@@ -68,16 +68,6 @@ public final class IOHandle extends NativeIOInterface
     {
         super(address);
     }
-
-    // public synchronized long getIOHandle()
-    // {
-    // return ioHandle;
-    // }
-    //
-    // synchronized void setIOHandle(long ioHandle)
-    // {
-    // this.ioHandle = ioHandle;
-    // }
 
     /**
      * Creates a new IOHandle object for READING, using the file referenced from
@@ -130,8 +120,6 @@ public final class IOHandle extends NativeIOInterface
         }
 
         createHandle(fileName, accessFlag, creationFlag);
-        // must track it (special case for Native IO Interfaces)
-        NITFResourceManager.getInstance().trackIOHandle(this);
     }
 
     /**
@@ -154,6 +142,6 @@ public final class IOHandle extends NativeIOInterface
      * @throws NITFException
      */
     private native void createHandle(String fileName, int accessFlag,
-            int creationFlag) throws NITFException;
-
+                                     int creationFlag) throws NITFException;
+    
 }

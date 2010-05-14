@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_SubWindow_INVALID_ADDRESS
-#define nitf_SubWindow_INVALID_ADDRESS 0L
-/*
- * Class:     nitf_SubWindow
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_SubWindow_destructMemory
-  (JNIEnv *, jobject);
-
+#define nitf_SubWindow_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_SubWindow
  * Method:    getBandList

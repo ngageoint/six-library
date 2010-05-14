@@ -22,20 +22,22 @@
 
 #include <import/nitf.h>
 #include "nitf_TRE.h"
+#include "nitf_TRE_Destructor.h"
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ(nitf_TRE)
 
 
-JNIEXPORT void JNICALL Java_nitf_TRE_destructMemory
-    (JNIEnv * env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_TRE_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_TRE *tre = _GetObj(env, self);
-
+    nitf_TRE *tre = (nitf_TRE*)address;
     if (tre)
+    {
         nitf_TRE_destruct(&tre);
-
-    _SetObj(env, self, NULL);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }
 
 

@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_ImageReader_INVALID_ADDRESS
-#define nitf_ImageReader_INVALID_ADDRESS 0L
-/*
- * Class:     nitf_ImageReader
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_ImageReader_destructMemory
-  (JNIEnv *, jobject);
-
+#define nitf_ImageReader_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_ImageReader
  * Method:    getInput

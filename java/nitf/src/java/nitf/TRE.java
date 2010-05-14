@@ -71,8 +71,7 @@ public final class TRE extends DestructibleObject
     {
         if (!PluginRegistry.canHandleTRE(tag))
             throw new NITFException(
-                                    "TRE Handler cannot be found for this TRE: "
-                                            + tag);
+                    "TRE Handler cannot be found for this TRE: " + tag);
 
         construct(tag, id);
     }
@@ -84,8 +83,6 @@ public final class TRE extends DestructibleObject
     {
         super(address);
     }
-
-    protected native synchronized void destructMemory();
 
     private native void construct(String tag, String id) throws NITFException;
 
@@ -151,7 +148,7 @@ public final class TRE extends DestructibleObject
      *             if an error occurs
      */
     public native boolean setField(String tag, byte[] data)
-                                                           throws NITFException;
+            throws NITFException;
 
     /**
      * Attempts to set the value of the field referenced by tag to the data
@@ -188,12 +185,12 @@ public final class TRE extends DestructibleObject
 
             Field field = pair.getField();
             stream
-                  .println(pair.getName()
-                          + (desc != null ? (" (" + desc + ")") : "")
-                          + " = ["
-                          + (field.getType() == FieldType.NITF_BINARY ? ("<binary stuff, length = "
-                                  + field.getLength() + ">")
-                                  : field.toString()) + "]");
+                    .println(pair.getName()
+                            + (desc != null ? (" (" + desc + ")") : "")
+                            + " = ["
+                            + (field.getType() == FieldType.NITF_BINARY ? ("<binary stuff, length = "
+                                    + field.getLength() + ">")
+                                    : field.toString()) + "]");
         }
 
         stream.println("------------------------------------");
@@ -262,5 +259,16 @@ public final class TRE extends DestructibleObject
         }
 
         private native void construct(TRE tre);
+    }
+
+    @Override
+    protected MemoryDestructor getDestructor()
+    {
+        return new Destructor();
+    }
+
+    private static class Destructor implements MemoryDestructor
+    {
+        public native boolean destructMemory(long nativeAddress);
     }
 }

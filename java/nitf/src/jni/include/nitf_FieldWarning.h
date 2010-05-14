@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_FieldWarning_INVALID_ADDRESS
-#define nitf_FieldWarning_INVALID_ADDRESS 0L
-/*
- * Class:     nitf_FieldWarning
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_FieldWarning_destructMemory
-  (JNIEnv *, jobject);
-
+#define nitf_FieldWarning_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_FieldWarning
  * Method:    getFieldName

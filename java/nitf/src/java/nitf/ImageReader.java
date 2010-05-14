@@ -37,11 +37,6 @@ public final class ImageReader extends DestructibleObject
     }
 
     /**
-     * Destroys the underlying object
-     */
-    protected native synchronized void destructMemory();
-
-    /**
      * Returns the IOInterface associated with this ImageReader
      * 
      * @return the IOInterface associated with this ImageReader
@@ -68,4 +63,15 @@ public final class ImageReader extends DestructibleObject
      */
     public native boolean read(SubWindow subWindow, byte[][] userBuf)
             throws NITFException;
+
+    @Override
+    protected MemoryDestructor getDestructor()
+    {
+        return new Destructor();
+    }
+
+    private static class Destructor implements MemoryDestructor
+    {
+        public native boolean destructMemory(long nativeAddress);
+    }
 }

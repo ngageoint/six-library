@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_TRE_TREIterator_INVALID_ADDRESS
-#define nitf_TRE_TREIterator_INVALID_ADDRESS 0L
+#define nitf_TRE_TREIterator_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_TRE_TREIterator
  * Method:    hasNext

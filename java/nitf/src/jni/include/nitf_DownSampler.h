@@ -8,21 +8,13 @@
 extern "C" {
 #endif
 #undef nitf_DownSampler_INVALID_ADDRESS
-#define nitf_DownSampler_INVALID_ADDRESS 0L
+#define nitf_DownSampler_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_DownSampler
  * Method:    construct
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_nitf_DownSampler_construct
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_DownSampler
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_DownSampler_destructMemory
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

@@ -22,6 +22,7 @@
 
 #include <import/nitf.h>
 #include "nitf_BandSource.h"
+#include "nitf_BandSource_Destructor.h"
 #include "nitf_JNI.h"
 
 /*  This creates the _SetObj and _GetObj accessors  */
@@ -166,13 +167,15 @@ JNIEXPORT void JNICALL Java_nitf_BandSource_construct
         methodID, self);
 }
 
-
-JNIEXPORT void JNICALL Java_nitf_BandSource_destructMemory
-    (JNIEnv * env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_BandSource_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_BandSource *bandSource = _GetObj(env, self);
+    nitf_BandSource *bandSource = (nitf_BandSource*)address;
     if (bandSource)
+    {
         nitf_BandSource_destruct(&bandSource);
-    _SetObj(env, self, NULL);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }
 

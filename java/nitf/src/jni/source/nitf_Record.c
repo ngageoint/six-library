@@ -22,6 +22,7 @@
 
 #include <import/nitf.h>
 #include "nitf_Record.h"
+#include "nitf_Record_Destructor.h"
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ(nitf_Record)
@@ -48,22 +49,17 @@ JNIEXPORT void JNICALL Java_nitf_Record_construct
 }
 
 
-/*
- * Class:     nitf_Record
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_Record_destructMemory
-    (JNIEnv * env, jobject self)
-{
-    nitf_Record *record = _GetObj(env, self);
 
+JNIEXPORT jboolean JNICALL Java_nitf_Record_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
+{
+    nitf_Record *record = (nitf_Record*)address;
     if (record)
     {
         nitf_Record_destruct(&record);
+        return JNI_TRUE;
     }
-
-    _SetObj(env, self, record);
+    return JNI_FALSE;
 }
 
 

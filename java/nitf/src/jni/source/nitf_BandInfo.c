@@ -113,21 +113,13 @@ JNIEXPORT jobject JNICALL Java_nitf_BandInfo_getLookupTable
     (JNIEnv * env, jobject self)
 {
     nitf_BandInfo *info = _GetObj(env, self);
-    jclass lutClass = (*env)->FindClass(env, "nitf/LookupTable");
-
-    jmethodID methodID =
-        (*env)->GetMethodID(env, lutClass, "<init>", "(J)V");
     jobject lut = NULL;
 
     if (info->lut)
     {
-        lut = (*env)->NewObject(env,
-                                lutClass, methodID, (jlong) info->lut);
-        
+        lut = _NewObject(env, (jlong)info->lut, "nitf/LookupTable");
         /* tell Java not to manage it */
-        methodID = (*env)->GetMethodID(env, lutClass, "setManaged", "(Z)V");
-        (*env)->CallVoidMethod(env, lut, methodID, JNI_FALSE);
-        
+        _ManageObject(env, (jlong)info->lut, JNI_FALSE);
     }
     return lut;
 }
@@ -154,10 +146,10 @@ JNIEXPORT void JNICALL Java_nitf_BandInfo_setLookupTable
         (nitf_LookupTable *) (*env)->CallLongMethod(env, lookupTable,
                                                     methodID);
 
-    /* if alreay has a LUT, destroy it */
+    /* if alreay has a LUT, release it to Java */
     if (info->lut)
     {
-        nitf_LookupTable_destruct(&info->lut);
+        _ManageObject(env, (jlong)info->lut, JNI_TRUE);
     }
     /* set the lut */
     info->lut = lut;
@@ -167,8 +159,7 @@ JNIEXPORT void JNICALL Java_nitf_BandInfo_setLookupTable
     nitf_Field_setUint32(info->bandEntriesPerLUT, lut->entries, &error);
     
     /* tell Java not to manage it */
-    methodID = (*env)->GetMethodID(env, lutClass, "setManaged", "(Z)V");
-    (*env)->CallVoidMethod(env, lookupTable, methodID, JNI_FALSE);
+    _ManageObject(env, (jlong)info->lut, JNI_FALSE);
 
     return;
 }

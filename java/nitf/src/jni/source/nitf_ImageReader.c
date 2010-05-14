@@ -22,23 +22,21 @@
 
 #include <import/nitf.h>
 #include "nitf_ImageReader.h"
+#include "nitf_ImageReader_Destructor.h"
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ( nitf_ImageReader)
-/*
- * Class:     nitf_ImageReader
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_ImageReader_destructMemory
-(JNIEnv * env, jobject self)
+
+JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_ImageReader *reader = _GetObj(env, self);
+    nitf_ImageReader *reader = (nitf_ImageReader*)address;
     if (reader)
     {
         nitf_ImageReader_destruct(&reader);
+        return JNI_TRUE;
     }
-    _SetObj(env, self, NULL);
+    return JNI_FALSE;
 }
 
 /*
@@ -69,10 +67,7 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo(JNIEnv * env,
     nitf_ImageReader *reader = _GetObj(env, self);
     nitf_Error error;
     nitf_BlockingInfo *info;
-    jobject blockingInfoObject;
-    jclass blockingInfoClass = (*env)->FindClass(env, "nitf/BlockingInfo");
-    jmethodID methodID = (*env)->GetMethodID(env, blockingInfoClass, "<init>",
-                                             "(J)V");
+    jobject blockingInfo;
 
     info = nitf_ImageReader_getBlockingInfo(reader, &error);
     if (!info)
@@ -81,16 +76,9 @@ JNIEXPORT jobject JNICALL Java_nitf_ImageReader_getBlockingInfo(JNIEnv * env,
         return NULL;
     }
 
-    /* make the object */
-    blockingInfoObject = (*env)->NewObject(env, blockingInfoClass, methodID,
-                                           (jlong) info);
-
-    /* tell Java not to manage it */
-    methodID
-            = (*env)->GetMethodID(env, blockingInfoClass, "setManaged", "(Z)V");
-    (*env)->CallVoidMethod(env, blockingInfoObject, methodID, JNI_FALSE);
-
-    return blockingInfoObject;
+    blockingInfo = _NewObject(env, (jlong)info, "nitf/BlockingInfo");
+    _ManageObject(env, (jlong)info, JNI_FALSE);
+    return blockingInfo;
 }
 
 /*

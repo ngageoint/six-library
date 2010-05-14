@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_LookupTable_INVALID_ADDRESS
-#define nitf_LookupTable_INVALID_ADDRESS 0L
+#define nitf_LookupTable_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_LookupTable
  * Method:    construct
@@ -16,14 +16,6 @@ extern "C" {
  */
 JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
   (JNIEnv *, jobject, jint, jint, jbyteArray);
-
-/*
- * Class:     nitf_LookupTable
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_LookupTable_destructMemory
-  (JNIEnv *, jobject);
 
 /*
  * Class:     nitf_LookupTable

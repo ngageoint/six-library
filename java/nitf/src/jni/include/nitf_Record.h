@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_Record_INVALID_ADDRESS
-#define nitf_Record_INVALID_ADDRESS 0L
+#define nitf_Record_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_Record
  * Method:    construct
@@ -19,16 +19,8 @@ JNIEXPORT void JNICALL Java_nitf_Record_construct
 
 /*
  * Class:     nitf_Record
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_Record_destructMemory
-  (JNIEnv *, jobject);
-
-/*
- * Class:     nitf_Record
  * Method:    makeClone
- * Signature: ()Lnitf/CloneableObject;
+ * Signature: ()Lnitf/Record;
  */
 JNIEXPORT jobject JNICALL Java_nitf_Record_makeClone
   (JNIEnv *, jobject);

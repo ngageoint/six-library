@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_SegmentWriter_INVALID_ADDRESS
-#define nitf_SegmentWriter_INVALID_ADDRESS 0L
-/*
- * Class:     nitf_SegmentWriter
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_SegmentWriter_destructMemory
-  (JNIEnv *, jobject);
-
+#define nitf_SegmentWriter_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_SegmentWriter
  * Method:    attachSource

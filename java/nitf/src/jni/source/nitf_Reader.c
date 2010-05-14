@@ -22,16 +22,17 @@
 
 #include <import/nitf.h>
 #include "nitf_Reader.h"
+#include "nitf_Reader_Destructor.h"
 #include "nitf_JNI.h"
 
-NITF_JNI_DECLARE_OBJ(nitf_Reader)
+NITF_JNI_DECLARE_OBJ( nitf_Reader)
 /*
  * Class:     nitf_Reader
  * Method:    construct
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_nitf_Reader_construct
-    (JNIEnv * env, jobject self)
+(JNIEnv * env, jobject self)
 {
     nitf_Reader *reader;
     nitf_Error error;
@@ -41,30 +42,34 @@ JNIEXPORT void JNICALL Java_nitf_Reader_construct
 }
 
 
-/*
- * Class:     nitf_Reader
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_Reader_destructMemory
-    (JNIEnv * env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_Reader_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_Reader *reader = _GetObj(env, self);
+    nitf_Reader *reader = (nitf_Reader*)address;
     if (reader)
     {
+        /* release our hold on the record/io */
+        if (reader->record)
+        {
+            _ManageObject(env, (jlong)reader->record, JNI_TRUE);
+        }
+        if (reader->input && !reader->ownInput)
+        {
+            _ManageObject(env, (jlong)reader->input, JNI_TRUE);
+        }
         nitf_Reader_destruct(&reader);
+        return JNI_TRUE;
     }
-    _SetObj(env, self, NULL);
+    return JNI_FALSE;
 }
-
 
 /*
  * Class:     nitf_Reader
  * Method:    read
  * Signature: (Lnitf/IOInterface;)Lnitf/Record;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Reader_read
-    (JNIEnv * env, jobject self, jobject interface)
+JNIEXPORT jobject JNICALL Java_nitf_Reader_read(JNIEnv * env, jobject self,
+                                                jobject interface)
 {
     nitf_Reader *reader = _GetObj(env, self);
     nitf_Error error;
@@ -74,20 +79,32 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_read
     jfieldID fieldID;
     jmethodID methodID;
 
+    /* release our hold on a pre-existing record/io */
+    if (reader->record)
+    {
+        _ManageObject(env, (jlong)reader->record, JNI_TRUE);
+    }
+    if (reader->input && !reader->ownInput)
+    {
+        _ManageObject(env, (jlong)reader->input, JNI_TRUE);
+    }
+
     /* get some classIDs */
     inputClass = (*env)->GetObjectClass(env, interface);
     recordClass = (*env)->FindClass(env, "nitf/Record");
 
-    methodID =
-        (*env)->GetMethodID(env, inputClass, "getAddress", "()J");
+    methodID = (*env)->GetMethodID(env, inputClass, "getAddress", "()J");
     io = (nitf_IOInterface *) (*env)->CallLongMethod(env, interface, methodID);
+    /* mark the io as being safe from Java GC destruction */
+    _ManageObject(env, (jlong)io, JNI_FALSE);
 
     if (!nitf_Reader_readIO(reader, io, &error))
         goto CATCH_ERROR;
 
-    methodID = (*env)->GetMethodID(env, recordClass, "<init>", "(J)V");
-    record = (*env)->NewObject(env, recordClass, methodID,
-            (jlong) reader->record);
+    record = _NewObject(env, (jlong)reader->record, "nitf/Record");
+    /* mark the record as being safe from Java GC destruction */
+    _ManageObject(env, (jlong)reader->record, JNI_FALSE);
+
     return record;
 
   CATCH_ERROR:
@@ -95,25 +112,23 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_read
     return NULL;
 }
 
-
 /*
  * Class:     nitf_Reader
  * Method:    getNewImageReader
  * Signature: (I)Lnitf/ImageReader;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewImageReader
-    (JNIEnv * env, jobject self, jint imageSegmentNumber)
+JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewImageReader(
+                                                             JNIEnv * env,
+                                                             jobject self,
+                                                             jint imageSegmentNumber)
 {
     nitf_Reader *reader = _GetObj(env, self);
     nitf_ImageReader *imageReader;
     nitf_Error error;
-    jclass imageReaderClass = (*env)->FindClass(env, "nitf/ImageReader");
     jobject imageReaderObject;
 
-    jmethodID methodID =
-        (*env)->GetMethodID(env, imageReaderClass, "<init>", "(J)V");
-    imageReader =
-        nitf_Reader_newImageReader(reader, imageSegmentNumber, &error);
+    imageReader
+            = nitf_Reader_newImageReader(reader, imageSegmentNumber, &error);
 
     if (!imageReader)
     {
@@ -121,32 +136,31 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewImageReader
         return NULL;
     }
 
-    imageReaderObject = (*env)->NewObject(env,
-                                          imageReaderClass,
-                                          methodID, (jlong) imageReader);
+    imageReaderObject = _NewObject(env, (jlong)imageReader, "nitf/ImageReader");
+
+    /* mark the io as being safe from Java GC destruction - since the reader needs it during its lifetime */
+    _ManageObject(env, (jlong)imageReader->input, JNI_FALSE);
+
     return imageReaderObject;
 }
-
 
 /*
  * Class:     nitf_Reader
  * Method:    getNewGraphicReader
  * Signature: (I)Lnitf/SegmentReader;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewGraphicReader
-    (JNIEnv * env, jobject self, jint graphicSegmentNumber)
+JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewGraphicReader(
+                                                               JNIEnv * env,
+                                                               jobject self,
+                                                               jint graphicSegmentNumber)
 {
     nitf_Reader *reader = _GetObj(env, self);
     nitf_SegmentReader *segmentReader;
     nitf_Error error;
-    jclass segmentReaderClass =
-        (*env)->FindClass(env, "nitf/SegmentReader");
     jobject segmentReaderObject;
 
-    jmethodID methodID =
-        (*env)->GetMethodID(env, segmentReaderClass, "<init>", "(J)V");
-    segmentReader =
-        nitf_Reader_newGraphicReader(reader, graphicSegmentNumber, &error);
+    segmentReader = nitf_Reader_newGraphicReader(reader, graphicSegmentNumber,
+                                                 &error);
 
     if (!segmentReader)
     {
@@ -154,33 +168,31 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewGraphicReader
         return NULL;
     }
 
-    segmentReaderObject = (*env)->NewObject(env,
-                                            segmentReaderClass,
-                                            methodID,
-                                            (jlong) segmentReader);
+    segmentReaderObject = _NewObject(env, (jlong)segmentReader, "nitf/SegmentReader");
+
+    /* mark the io as being safe from Java GC destruction - since the reader needs it during its lifetime */
+    _ManageObject(env, (jlong)segmentReader->input, JNI_FALSE);
+
     return segmentReaderObject;
 }
-
 
 /*
  * Class:     nitf_Reader
  * Method:    getNewTextReader
  * Signature: (I)Lnitf/SegmentReader;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewTextReader
-    (JNIEnv * env, jobject self, jint textSegmentNumber)
+JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewTextReader(
+                                                            JNIEnv * env,
+                                                            jobject self,
+                                                            jint textSegmentNumber)
 {
     nitf_Reader *reader = _GetObj(env, self);
     nitf_SegmentReader *segmentReader;
     nitf_Error error;
-    jclass segmentReaderClass =
-        (*env)->FindClass(env, "nitf/SegmentReader");
     jobject segmentReaderObject;
 
-    jmethodID methodID =
-        (*env)->GetMethodID(env, segmentReaderClass, "<init>", "(J)V");
-    segmentReader =
-        nitf_Reader_newTextReader(reader, textSegmentNumber, &error);
+    segmentReader
+            = nitf_Reader_newTextReader(reader, textSegmentNumber, &error);
 
     if (!segmentReader)
     {
@@ -188,30 +200,28 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewTextReader
         return NULL;
     }
 
-    segmentReaderObject = (*env)->NewObject(env,
-                                            segmentReaderClass,
-                                            methodID,
-                                            (jlong) segmentReader);
+    segmentReaderObject = _NewObject(env, (jlong)segmentReader, "nitf/SegmentReader");
+
+    /* mark the io as being safe from Java GC destruction - since the reader needs it during its lifetime */
+    _ManageObject(env, (jlong)segmentReader->input, JNI_FALSE);
+
     return segmentReaderObject;
 }
-
 
 /*
  * Class:     nitf_Reader
  * Method:    getNewDEReader
  * Signature: (I)Lnitf/SegmentReader;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewDEReader
-    (JNIEnv * env, jobject self, jint deSegmentNumber)
+JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewDEReader(JNIEnv * env,
+                                                          jobject self,
+                                                          jint deSegmentNumber)
 {
     nitf_Reader *reader = _GetObj(env, self);
     nitf_SegmentReader *deReader;
     nitf_Error error;
-    jclass readerClass = (*env)->FindClass(env, "nitf/SegmentReader");
     jobject readerObject = NULL;
 
-    jmethodID methodID =
-        (*env)->GetMethodID(env, readerClass, "<init>", "(J)V");
     deReader = nitf_Reader_newDEReader(reader, deSegmentNumber, &error);
 
     if (!deReader)
@@ -220,50 +230,33 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewDEReader
         return NULL;
     }
 
-    readerObject = (*env)->NewObject(env,
-                                     readerClass,
-                                     methodID, (jlong) deReader);
+    readerObject = _NewObject(env, (jlong)deReader, "nitf/SegmentReader");
+
+    /* mark the io as being safe from Java GC destruction - since the reader needs it during its lifetime */
+    _ManageObject(env, (jlong)deReader->input, JNI_FALSE);
+
     return readerObject;
 }
-
 
 /*
  * Class:     nitf_Reader
  * Method:    getInput
  * Signature: ()Lnitf/IOInterface;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Reader_getInput
-    (JNIEnv * env, jobject self)
+JNIEXPORT jobject JNICALL Java_nitf_Reader_getInput(JNIEnv * env, jobject self)
 {
     nitf_Reader *reader = _GetObj(env, self);
-    jclass ioClass = (*env)->FindClass(env, "nitf/NativeIOInterface");
-    jmethodID methodID = (*env)->GetMethodID(env, ioClass, "<init>", "(J)V");
-    return (*env)->NewObject(env, ioClass, methodID, (jlong) reader->input);
+    return _NewObject(env, (jlong) reader->input, "nitf/NativeIOInterface");
 }
-
 
 /*
  * Class:     nitf_Reader
  * Method:    getRecord
  * Signature: ()Lnitf/Record;
  */
-JNIEXPORT jobject JNICALL Java_nitf_Reader_getRecord
-    (JNIEnv * env, jobject self)
+JNIEXPORT jobject JNICALL Java_nitf_Reader_getRecord(JNIEnv * env, jobject self)
 {
     nitf_Reader *reader = _GetObj(env, self);
-    jclass recordClass = (*env)->FindClass(env, "nitf/Record");
-
-    jmethodID methodID =
-        (*env)->GetMethodID(env, recordClass, "<init>", "(J)V");
-    jobject handle = (*env)->NewObject(env,
-                                       recordClass,
-                                       methodID,
-                                       (jlong) reader->record);
-
-    /* tell Java not to manage the ImageSource memory */
-    methodID = (*env)->GetMethodID(env, recordClass, "setManaged", "(Z)V");
-    (*env)->CallVoidMethod(env, handle, methodID, JNI_FALSE);
-
-    return handle;
+    return _NewObject(env, (jlong) reader->record, "nitf/Record");
 }
 

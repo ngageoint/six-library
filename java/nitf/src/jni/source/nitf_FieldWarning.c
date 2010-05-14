@@ -22,27 +22,22 @@
 
 #include <import/nitf.h>
 #include "nitf_FieldWarning.h"
+#include "nitf_FieldWarning_Destructor.h"
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ(nitf_FieldWarning)
-/*
- * Class:     nitf_FieldWarning
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_FieldWarning_destructMemory
-    (JNIEnv * env, jobject self)
-{
-    nitf_FieldWarning *warning = _GetObj(env, self);
 
+JNIEXPORT jboolean JNICALL Java_nitf_FieldWarning_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
+{
+    nitf_FieldWarning *warning = (nitf_FieldWarning*)address;
     if (warning)
     {
         nitf_FieldWarning_destruct(&warning);
+        return JNI_TRUE;
     }
-
-    _SetObj(env, self, NULL);
+    return JNI_FALSE;
 }
-
 
 /*
  * Class:     nitf_FieldWarning

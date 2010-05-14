@@ -22,24 +22,22 @@
 
 #include <import/nitf.h>
 #include "nitf_SegmentReader.h"
+#include "nitf_SegmentReader_Destructor.h"
 #include "nitf_IOHandle.h"
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ(nitf_SegmentReader)
-/*
- * Class:     nitf_SegmentReader
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_SegmentReader_destructMemory
-    (JNIEnv * env, jobject self)
+
+JNIEXPORT jboolean JNICALL Java_nitf_SegmentReader_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_SegmentReader *reader = _GetObj(env, self);
+    nitf_SegmentReader *reader = (nitf_SegmentReader*)address;
     if (reader)
     {
         nitf_SegmentReader_destruct(&reader);
+        return JNI_TRUE;
     }
-    _SetObj(env, self, NULL);
+    return JNI_FALSE;
 }
 
 
@@ -56,22 +54,20 @@ JNIEXPORT jboolean JNICALL Java_nitf_SegmentReader_read
     jint success;
 
     jbyte *byteBuf = (*env)->GetByteArrayElements(env, buf, 0);
-    success =
-        nitf_SegmentReader_read(reader, (char *) byteBuf, size, &error);
-
-    /* Check for errors */
-    if (NITF_IO_SUCCESS(success))
+    if (!byteBuf)
     {
-        (*env)->SetByteArrayRegion(env, buf, 0, size, byteBuf);
+        _ThrowNITFException(env, "Out of memory!");
+        return JNI_FALSE;
     }
-    else
+
+    if (!nitf_SegmentReader_read(reader, (char *) byteBuf, size, &error))
     {
         _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
+    (*env)->ReleaseByteArrayElements(env, buf, byteBuf, 0);
     return JNI_TRUE;
 }
-
 
 /*
  * Class:     nitf_SegmentReader

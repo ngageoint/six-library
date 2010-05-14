@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_BlockingInfo_INVALID_ADDRESS
-#define nitf_BlockingInfo_INVALID_ADDRESS 0L
-/*
- * Class:     nitf_BlockingInfo
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_BlockingInfo_destructMemory
-  (JNIEnv *, jobject);
-
+#define nitf_BlockingInfo_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_BlockingInfo
  * Method:    construct

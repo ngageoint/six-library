@@ -99,3 +99,36 @@ NITFPROT(int) _GetJNIEnv(JavaVM** vm, JNIEnv** env)
     }
     return 0;
 }
+
+NITFPROT(void) _ManageObject(JNIEnv * env, jlong address, jboolean flag)
+{
+    /*jclass clazz = (*env)->GetObjectClass(env, object);
+    jmethodID methodID = (*env)->GetMethodID(env, clazz, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, object, methodID, flag);*/
+    jobject manager;
+    jclass managerClass;
+    jmethodID methodID;
+    managerClass = (*env)->FindClass(env, "nitf/NITFResourceManager");
+    methodID = (*env)->GetStaticMethodID(env, managerClass, "getInstance",
+                                              "()Lnitf/NITFResourceManager;");
+    manager = (*env)->CallStaticObjectMethod(env, managerClass, methodID);
+    if (flag)
+    {
+        methodID = (*env)->GetMethodID(env, managerClass,
+                                       "decrementRefCount", "(JZ)V");
+    }
+    else
+    {
+        methodID = (*env)->GetMethodID(env, managerClass,
+                                       "incrementRefCount", "(JZ)V");
+    }
+    (*env)->CallVoidMethod(env, manager, methodID, address, JNI_TRUE);
+}
+
+
+NITFPROT(jobject) _NewObject(JNIEnv* env, jlong address, const char* clazzName)
+{
+    jclass clazz = (*env)->FindClass(env, clazzName);
+    jmethodID methodID = (*env)->GetMethodID(env, clazz, "<init>", "(J)V");
+    return (*env)->NewObject(env, clazz, methodID, address);
+}

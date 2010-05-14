@@ -18,8 +18,6 @@ public abstract class WriteHandler extends DestructibleObject
 
     private native void construct();
 
-    protected native void destructMemory();
-
     /**
      * Write to the given IOHandle. This is user-defined.
      * 
@@ -27,5 +25,16 @@ public abstract class WriteHandler extends DestructibleObject
      * @throws NITFException
      */
     public abstract void write(IOInterface io) throws NITFException;
+
+    @Override
+    protected MemoryDestructor getDestructor()
+    {
+        return new Destructor();
+    }
+
+    private static class Destructor implements MemoryDestructor
+    {
+        public native boolean destructMemory(long nativeAddress);
+    }
 
 }

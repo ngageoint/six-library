@@ -52,6 +52,17 @@ NITFPROT(void) _ThrowNITFException(JNIEnv *env, const char *message);
 
 NITFPROT(int) _GetJNIEnv(JavaVM** vm, JNIEnv** env);
 
+/**
+ * If the object is told to be managed, it means that you want Java to take
+ * ownership of the object, and thus, you want the native memory to be deleted
+ * when the object is no longer referenced. Otherwise, if you set the flag to
+ * false, then the object will be safe and assumed to be held internally by
+ * another native object.
+ */
+NITFPROT(void) _ManageObject(JNIEnv* env, jlong address, jboolean flag);
+
+NITFPROT(jobject) _NewObject(JNIEnv* env, jlong address, const char* clazzName);
+
 NITF_CXX_ENDGUARD
 
 #endif

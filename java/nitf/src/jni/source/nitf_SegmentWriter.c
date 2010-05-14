@@ -22,27 +22,23 @@
 
 #include <import/nitf.h>
 #include "nitf_SegmentWriter.h"
+#include "nitf_SegmentWriter_Destructor.h"
 #include "nitf_JNI.h"
 
 /*  This creates the _SetObj and _GetObj accessors  */
 NITF_JNI_DECLARE_OBJ(nitf_SegmentWriter)
 
-/*
- * Class:     nitf_SegmentWriter
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_SegmentWriter_destructMemory
-  (JNIEnv *env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_SegmentWriter_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-	nitf_SegmentWriter *writer = _GetObj(env, self);
+	nitf_WriteHandler *writer = (nitf_WriteHandler*)address;
     if (writer)
     {
-        nitf_WriteHandler_destruct((nitf_WriteHandler**)&writer);
+        nitf_WriteHandler_destruct(&writer);
+        return JNI_TRUE;
     }
-    _SetObj(env, self, NULL);
+    return JNI_FALSE;
 }
-
 
 /*
  * Class:     nitf_SegmentWriter

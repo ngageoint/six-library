@@ -1,33 +1,30 @@
-/* =========================================================================
+/*
+ * =========================================================================
  * This file is part of NITRO
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
- *
+ * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
- *
  */
 
 package nitf;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -57,55 +54,119 @@ public final class NITFResourceManager
         return singleton;
     }
 
-    /**
-     * Create a shutdown hook for cleaning up the underlying resources
-     */
-    static
+    private static class TrackedObject
     {
-        Runtime.getRuntime().addShutdownHook(new Thread()
+        private Long address = NITFObject.INVALID_ADDRESS;
+
+        private Integer javaRefCount = 0;
+
+        private Integer nativeRefCount = 0;
+
+        private MemoryDestructor destructor = null;
+
+        private String className = null;
+
+        public TrackedObject(DestructibleObject object)
         {
-            public void run()
+            address = object.getAddress();
+            className = object.getClass().getCanonicalName();
+            destructor = object.getDestructor();
+            javaRefCount = 1;
+        }
+
+        public void reference(boolean nativeRef)
+        {
+            if (nativeRef)
+                nativeRefCount += 1;
+            else
+                javaRefCount += 1;
+        }
+
+        public void unReference(boolean nativeRef)
+        {
+            if (nativeRef)
+                nativeRefCount -= 1;
+            else
+                javaRefCount -= 1;
+        }
+
+        boolean canDestroy()
+        {
+            return javaRefCount <= 0 && nativeRefCount <= 0;
+        }
+
+        boolean destroy()
+        {
+            if (canDestroy() && destructor != null)
             {
-                NITFResourceManager.getInstance().freeAllMemory();
+                return destructor.destructMemory(address);
             }
-        });
+            return false;
+        }
+
+        @Override
+        public String toString()
+        {
+            return "[" + className + ", address=" + address + ", javaRefs="
+                    + javaRefCount + ", nativeRefs=" + nativeRefCount + "]";
+        }
     }
 
-    private Map<String, Integer> refCountMap = new HashMap<String, Integer>();
-
-    private Set<IOInterface> ioHandles = new HashSet<IOInterface>();
-
-    private Map<String, DestructibleObject> destructiblesMap = new LinkedHashMap<String, DestructibleObject>();
+    private Map<Long, TrackedObject> trackedObjects;
 
     /**
-     * Maps memory addresses to essentially a semaphore for management requests
-     */
-    private Map<String, Integer> nativeManagementMap = new LinkedHashMap<String, Integer>();
-
-    /**
-     * Increments the reference count of an object
+     * Increments the java reference count of an object
      * 
      * @param object
      */
     protected void incrementRefCount(DestructibleObject object)
     {
-        if (object.isValid())
+        if (object != null && object.isValid())
         {
-            synchronized (refCountMap)
+            long address = object.getAddress();
+            if (trackedObjects.containsKey(address))
             {
-                String memVal = String.valueOf(object.getAddress());
-                if (refCountMap.containsKey(memVal))
-                {
-                    refCountMap.put(memVal, refCountMap.get(memVal) + 1);
-                    log.debug("Incremented ref count: " + object.getInfo());
-                }
-                else
-                {
-                    refCountMap.put(memVal, 1);
-                    destructiblesMap.put(memVal, object);
-                    log.debug("Managing new object: " + object.getInfo());
-                }
+                TrackedObject trackedObject = trackedObjects.get(address);
+                trackedObject.reference(false);
+                log.debug("Incremented ref count: " + trackedObject.toString());
             }
+            else
+            {
+                TrackedObject trackedObject = new TrackedObject(object);
+                trackedObjects.put(address, trackedObject);
+                log.debug("Tracking new object: " + trackedObject.toString());
+            }
+        }
+        else
+        {
+            log.error("Cannot reference invalid object");
+        }
+    }
+
+    /**
+     * Increments either the java or native reference count
+     * 
+     * @param address
+     * @param nativeRef
+     */
+    protected void incrementRefCount(long address, boolean nativeRef)
+    {
+        if (address != NITFObject.INVALID_ADDRESS)
+        {
+            if (trackedObjects.containsKey(address))
+            {
+                TrackedObject trackedObject = trackedObjects.get(address);
+                trackedObject.reference(nativeRef);
+                log.debug("Incremented ref count: " + trackedObject.toString());
+            }
+            else
+            {
+                log.error("Unable to track unkown object: " + address);
+            }
+        }
+        else
+        {
+            log.error("Cannot reference invalid address");
         }
     }
 
@@ -115,193 +176,48 @@ public final class NITFResourceManager
      * 
      * @param object
      */
-    protected void decrementRefCount(DestructibleObject object)
+    protected void decrementRefCount(long address, boolean nativeRef)
     {
-        if (object.isValid())
+        if (address != NITFObject.INVALID_ADDRESS)
         {
-            synchronized (refCountMap)
+            // if its in here, update its count, if not, forget about it
+            if (trackedObjects.containsKey(address))
             {
-                String val = String.valueOf(object.getAddress());
-                log.debug("Decrementing ref count: " + object.getInfo());
-                // if its in here, update its count, if not, forget about it
-                if (refCountMap.containsKey(val))
+                TrackedObject trackedObject = trackedObjects.get(address);
+                trackedObject.unReference(nativeRef);
+                log.debug("Decremented ref count: " + trackedObject.toString());
+                if (trackedObject.canDestroy())
                 {
-                    int newCount = refCountMap.get(val) - 1;
-                    if (newCount > 0)
-                        refCountMap.put(val, newCount);
+                    if (trackedObject.destroy())
+                    {
+                        trackedObjects.remove(address);
+                        log.debug("Destroyed object: "
+                                + trackedObject.toString());
+                    }
                     else
                     {
-                        destroyObject(val, object);
+                        log.error("Unable to destroy object: "
+                                + trackedObject.toString());
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Request the Manager to manage (or not manage) the given object. If
-     * manageIt is true, the management count is incremented. Otherwise, it is
-     * decremented.
-     * 
-     * @param object
-     * @param manageIt
-     */
-    protected void manageDestructibleObject(DestructibleObject object,
-            boolean manageIt)
-    {
-        if (object.isValid())
-        {
-            synchronized (refCountMap)
+            else
             {
-                String val = String.valueOf(object.getAddress());
-
-                int newVal = getManagementCount(object) + (manageIt ? 1 : -1);
-                nativeManagementMap.put(val, newVal);
-                log.debug("Management count:  " + object.getInfo() + " = "
-                        + newVal);
+                log
+                        .warn("Unable to decrement reference count for untracked address: "
+                                + address);
             }
-        }
-    }
-
-    protected boolean isManaged(DestructibleObject object)
-    {
-        if (!object.isValid())
-            return false;
-
-        String val = String.valueOf(object.getAddress());
-        // if nobody ever requested to manage or un-manage, then we own it
-        if (!nativeManagementMap.containsKey(val))
-            return true;
-        // otherwise, see if we own it
-        // if the difference between refcounts and management ownership requests
-        // is greater than 1, we own it
-        return getRefCount(object) + getManagementCount(object) > 1;
-    }
-
-    protected int getManagementCount(DestructibleObject object)
-    {
-        if (!object.isValid())
-            return 0;
-
-        String val = String.valueOf(object.getAddress());
-        Integer curVal = nativeManagementMap.get(val);
-        return curVal != null ? curVal : 0;
-    }
-
-    protected int getRefCount(NITFObject object)
-    {
-        if (!object.isValid())
-            return 0;
-
-        String val = String.valueOf(object.getAddress());
-        Integer count = refCountMap.get(val);
-        if (count == null)
-            return 0;
-        return count;
-    }
-
-    /**
-     * Destroy the object and update all reference-counting maps, etc.
-     * 
-     * This should only be called within a synchronized block.
-     * 
-     * @param object
-     */
-    private void destroyObject(String memVal, DestructibleObject object)
-    {
-        if (object != null && object.isValid())
-        {
-            // only destroy if we are indeed managing the memory
-            if (isManaged(object))
-            {
-                log.debug("Destroying object: " + object.getInfo());
-                object.destructMemory();
-                object.address = NITFObject.INVALID_ADDRESS;
-            }
-            refCountMap.remove(memVal);
-            nativeManagementMap.remove(memVal);
         }
         else
-            log.debug("Can't destroy object, already null: " + memVal);
-        destructiblesMap.remove(memVal);
-    }
-
-    /**
-     * This function will free ALL of the underlying native memory, thus making
-     * all of existing Java objects usesless.
-     * <p/>
-     * Call this method when you are ready to exit the system, or when you are
-     * surely never going to use any of the existing Java objects or their
-     * functionalities anymore.
-     * <p/>
-     * This function will get called automatically when the application using it
-     * shuts down, so you don't have to add it to your programs.
-     */
-    protected void freeAllMemory()
-    {
-        synchronized (refCountMap)
         {
-            log.debug("Freeing all native memory");
-            // copy the keyset so we don't get a list modification error
-            Set<String> keySet = new HashSet<String>(destructiblesMap.keySet());
-            for (String memVal : keySet)
-            {
-                DestructibleObject object = destructiblesMap.get(memVal);
-                destroyObject(memVal, object);
-            }
-            destructiblesMap.clear();
-            refCountMap.clear();
-
-            // close the IOHandles as well
-            closeAllIOHandles();
+            log.error("Cannot reference invalid address");
         }
     }
 
-    /**
-     * Tells the framework to keep track of the given IOHandle. This handle will
-     * be freed with a call to {@link NITFResourceManager#closeAllIOHandles()}
-     * 
-     * @param handle
-     */
-    protected void trackIOHandle(IOInterface handle)
+    protected String getObjectInfo(long address)
     {
-        if (handle.getAddress() > 0)
-        {
-            synchronized (ioHandles)
-            {
-                ioHandles.add(handle);
-            }
-        }
-    }
-
-    /**
-     * This function will close any IOHandle that was created. This function can
-     * be called any time, so users must be careful not to use any closed
-     * handles.
-     * <p/>
-     * This function gets called by freeAllMemory()
-     */
-    protected void closeAllIOHandles()
-    {
-        synchronized (ioHandles)
-        {
-            for (Iterator<IOInterface> it = ioHandles.iterator(); it.hasNext();)
-            {
-                IOInterface handle = it.next();
-                if (handle.isValid())
-                {
-                    try
-                    {
-                        handle.close();
-                    }
-                    catch (NITFException e)
-                    {
-                        // TODO
-                    }
-                }
-            }
-            ioHandles.clear();
-        }
+        TrackedObject trackedObject = trackedObjects.get(address);
+        return trackedObject != null ? trackedObject.toString() : null;
     }
 
     /**
@@ -319,6 +235,8 @@ public final class NITFResourceManager
     // private constructor
     private NITFResourceManager()
     {
+        trackedObjects = Collections
+                .synchronizedMap(new LinkedHashMap<Long, TrackedObject>());
     }
 
 }

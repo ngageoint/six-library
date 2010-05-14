@@ -22,6 +22,7 @@
 
 #include <import/nitf.h>
 #include "nitf_LookupTable.h"
+#include "nitf_LookupTable_Destructor.h"
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ( nitf_LookupTable)
@@ -65,20 +66,16 @@ JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
     _SetObj(env, self, lut);
 }
 
-/*
- * Class:     nitf_LookupTable
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_LookupTable_destructMemory
-(JNIEnv * env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_LookupTable_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_LookupTable *lut = _GetObj(env, self);
+    nitf_LookupTable *lut = (nitf_LookupTable*)address;
     if (lut)
     {
         nitf_LookupTable_destruct(&lut);
+        return JNI_TRUE;
     }
-    _SetObj(env, self, NULL);
+    return JNI_FALSE;
 }
 
 /*

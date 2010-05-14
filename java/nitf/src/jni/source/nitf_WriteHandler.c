@@ -22,6 +22,7 @@
 
 #include <import/nitf.h>
 #include "nitf_WriteHandler.h"
+#include "nitf_WriteHandler_Destructor.h"
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ(nitf_WriteHandler)
@@ -137,11 +138,14 @@ JNIEXPORT void JNICALL Java_nitf_WriteHandler_construct
 }
 
 
-JNIEXPORT void JNICALL Java_nitf_WriteHandler_destructMemory
-  (JNIEnv *env, jobject self)
+JNIEXPORT jboolean JNICALL Java_nitf_WriteHandler_00024Destructor_destructMemory
+    (JNIEnv * env, jobject self, jlong address)
 {
-    nitf_WriteHandler *writeHandler = _GetObj(env, self);
+    nitf_WriteHandler *writeHandler = (nitf_WriteHandler*)address;
     if (writeHandler)
+    {
         nitf_WriteHandler_destruct(&writeHandler);
-    _SetObj(env, self, NULL);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }

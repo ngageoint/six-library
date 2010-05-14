@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef nitf_SegmentReader_INVALID_ADDRESS
-#define nitf_SegmentReader_INVALID_ADDRESS 0L
-/*
- * Class:     nitf_SegmentReader
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_nitf_SegmentReader_destructMemory
-  (JNIEnv *, jobject);
-
+#define nitf_SegmentReader_INVALID_ADDRESS 0LL
 /*
  * Class:     nitf_SegmentReader
  * Method:    read
