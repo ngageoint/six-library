@@ -64,7 +64,7 @@ JNIEXPORT void JNICALL Java_nitf_NativeIOInterface_write
     if (!array)
     {
         _ThrowNITFException(env, "Out of memory!");
-        return JNI_FALSE;
+        return;
     }
 
     if (!(interface->iface->write(interface->data, array, size, &error)))
