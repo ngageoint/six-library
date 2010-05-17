@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by General Dynamics AIS (General Dynamics AIS) -->
-<!-- SIDD v0.1.1 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sicommon="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SID:0.1.1" targetNamespace="urn:SID:0.1.1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<!-- SIDD v0.2 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sicommon="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SID:0.2" targetNamespace="urn:SID:0.2" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="urn:SICommon:0.1" schemaLocation="SICommonTypes.xsd"/>
 	<xs:import namespace="urn:SFA:1.2.0" schemaLocation="SFA.xsd"/>
 	<xs:simpleType name="LUTListType">
