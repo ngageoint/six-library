@@ -21,17 +21,21 @@
  */
 
 #include "cgm_Element.h"
+#include "cgm_Element_Destructor.h"
 #include "cgm_JNI.h"
 
 CGM_JNI_DECLARE_OBJ(cgm_Element)
 
-JNIEXPORT void JNICALL Java_cgm_Element_destructMemory
-  (JNIEnv *env, jobject self)
+JNIEXPORT jboolean JNICALL Java_cgm_Element_00024Destructor_destructMemory
+  (JNIEnv *env, jobject self, jlong address)
 {
-    cgm_Element *element = _GetObj(env, self);
+    cgm_Element *element = (cgm_Element*)address;
     if (element)
+    {
         cgm_Element_destruct(&element);
-    _SetObj(env, self, NULL);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }
 
 JNIEXPORT jstring JNICALL Java_cgm_Element_getName

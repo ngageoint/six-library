@@ -8,21 +8,13 @@
 extern "C" {
 #endif
 #undef cgm_MetafileReader_INVALID_ADDRESS
-#define cgm_MetafileReader_INVALID_ADDRESS 0L
+#define cgm_MetafileReader_INVALID_ADDRESS 0LL
 /*
  * Class:     cgm_MetafileReader
  * Method:    construct
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_cgm_MetafileReader_construct
-  (JNIEnv *, jobject);
-
-/*
- * Class:     cgm_MetafileReader
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_cgm_MetafileReader_destructMemory
   (JNIEnv *, jobject);
 
 /*

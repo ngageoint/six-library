@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef cgm_Element_INVALID_ADDRESS
-#define cgm_Element_INVALID_ADDRESS 0L
-/*
- * Class:     cgm_Element
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_cgm_Element_destructMemory
-  (JNIEnv *, jobject);
-
+#define cgm_Element_INVALID_ADDRESS 0LL
 /*
  * Class:     cgm_Element
  * Method:    getName

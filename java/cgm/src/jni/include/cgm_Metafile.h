@@ -8,15 +8,7 @@
 extern "C" {
 #endif
 #undef cgm_Metafile_INVALID_ADDRESS
-#define cgm_Metafile_INVALID_ADDRESS 0L
-/*
- * Class:     cgm_Metafile
- * Method:    destructMemory
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_cgm_Metafile_destructMemory
-  (JNIEnv *, jobject);
-
+#define cgm_Metafile_INVALID_ADDRESS 0LL
 /*
  * Class:     cgm_Metafile
  * Method:    setName

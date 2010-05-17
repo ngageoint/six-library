@@ -2,6 +2,7 @@ package cgm;
 
 import nitf.DestructibleObject;
 import nitf.IOHandle;
+import nitf.MemoryDestructor;
 import nitf.NITFException;
 
 public class MetafileReader extends DestructibleObject
@@ -39,11 +40,6 @@ public class MetafileReader extends DestructibleObject
     private native synchronized void construct() throws NITFException;
 
     /**
-     * Destructs the memory for the underlying object
-     */
-    protected native synchronized void destructMemory();
-
-    /**
      * Read and parse the inputHandle into a Metafile
      * 
      * @param inputHandle
@@ -53,4 +49,15 @@ public class MetafileReader extends DestructibleObject
      */
     public native synchronized Metafile read(IOHandle inputHandle)
             throws NITFException;
+
+    @Override
+    protected MemoryDestructor getDestructor()
+    {
+        return new Destructor();
+    }
+
+    private static class Destructor implements MemoryDestructor
+    {
+        public native boolean destructMemory(long nativeAddress);
+    }
 }

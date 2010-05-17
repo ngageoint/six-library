@@ -1,8 +1,8 @@
 package cgm;
 
 import nitf.CloneableObject;
+import nitf.MemoryDestructor;
 import nitf.NITFException;
-import nitf.RESegment;
 
 public class Metafile extends CloneableObject
 {
@@ -10,9 +10,6 @@ public class Metafile extends CloneableObject
     {
         super(address);
     }
-
-    @Override
-    protected native void destructMemory();
 
     @Override
     public CloneableObject makeClone() throws NITFException
@@ -42,5 +39,16 @@ public class Metafile extends CloneableObject
     public native void addFont(String font);
 
     public native Picture getPicture();
+
+    @Override
+    protected MemoryDestructor getDestructor()
+    {
+        return new Destructor();
+    }
+
+    private static class Destructor implements MemoryDestructor
+    {
+        public native boolean destructMemory(long nativeAddress);
+    }
 
 }

@@ -21,6 +21,7 @@
  */
 
 #include "cgm_MetafileReader.h"
+#include "cgm_MetafileReader_Destructor.h"
 #include "cgm_JNI.h"
 
 CGM_JNI_DECLARE_OBJ(cgm_MetafileReader)
@@ -37,13 +38,16 @@ JNIEXPORT void JNICALL Java_cgm_MetafileReader_construct
     _SetObj(env, self, reader);
 }
 
-JNIEXPORT void JNICALL Java_cgm_MetafileReader_destructMemory
-  (JNIEnv *env, jobject self)
+JNIEXPORT jboolean JNICALL Java_cgm_MetafileReader_00024Destructor_destructMemory
+  (JNIEnv *env, jobject self, jlong address)
 {
-    cgm_MetafileReader *reader = _GetObj(env, self);
+    cgm_MetafileReader *reader = (cgm_MetafileReader*)address;
     if (reader)
+    {
         cgm_MetafileReader_destruct(&reader);
-    _SetObj(env, self, NULL);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }
 
 JNIEXPORT jobject JNICALL Java_cgm_MetafileReader_read

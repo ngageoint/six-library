@@ -21,17 +21,22 @@
  */
 
 #include "cgm_Metafile.h"
+#include "cgm_Metafile_Destructor.h"
 #include "cgm_JNI.h"
 
 CGM_JNI_DECLARE_OBJ(cgm_Metafile)
 
 
-JNIEXPORT void JNICALL Java_cgm_Metafile_destructMemory
-  (JNIEnv *env, jobject self)
+JNIEXPORT jboolean JNICALL Java_cgm_Metafile_00024Destructor_destructMemory
+  (JNIEnv *env, jobject self, jlong address)
 {
-    cgm_Metafile *metafile = _GetObj(env, self);
+    cgm_Metafile *metafile = (cgm_Metafile*)address;
     if (metafile)
+    {
         cgm_Metafile_destruct(&metafile);
+        return JNI_TRUE;
+    }
+    return JNI_FALSE;
 }
 
 JNIEXPORT void JNICALL Java_cgm_Metafile_setName
