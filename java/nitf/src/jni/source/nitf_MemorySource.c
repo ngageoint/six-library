@@ -36,7 +36,8 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
      jint numBytesPerPixel, jint pixelSkip)
 {
     nitf_Error error;
-    char *buf;
+    char *buf, *copyBuf;
+    jboolean isCopy;
     nitf_BandSource *memorySource;
 
     jclass bandSourceClass = (*env)->FindClass(env, "nitf/BandSource");
@@ -50,15 +51,32 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
     }
 
     /* get the data */
-    buf = (char *) (*env)->GetByteArrayElements(env, data, 0);
+    buf = (char *) (*env)->GetByteArrayElements(env, data, &isCopy);
     if (!buf)
     {
         _ThrowNITFException(env, "ERROR getting data from array");
         return;
     }
 
+    if (isCopy == JNI_TRUE)
+    {
+    	/* this will almost always  be true - most JVMs always copy... */
+    	copyBuf = buf;
+    }
+    else
+    {
+    	/* we must copy ourselves */
+    	copyBuf = (char*)NITF_MALLOC(size);
+    	if (!copyBuf)
+		{
+			_ThrowNITFException(env, "Out of memory");
+			return;
+		}
+    	memcpy(copyBuf, buf, size);
+    }
+
     memorySource =
-        nitf_MemorySource_construct(buf, size, start,
+        nitf_MemorySource_construct(copyBuf, size, start,
             numBytesPerPixel, pixelSkip, &error);
     if (!memorySource)
     {
@@ -72,7 +90,11 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
     (*env)->CallStaticVoidMethod(env, bandSourceClass,
         methodID, self);
 
-    (*env)->ReleaseByteArrayElements(env, data, buf, 0);
+    if (isCopy != JNI_TRUE)
+    {
+    	/* if the JVM did not make a copy, we need to tell it we're done with it */
+    	(*env)->ReleaseByteArrayElements(env, data, buf, JNI_ABORT);
+    }
 
     return;
 }
