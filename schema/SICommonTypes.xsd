@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by General Dynamics AIS (General Dynamics AIS) -->
 <!-- SIDD v0.1.1 -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:SICommon:0.1" targetNamespace="urn:SICommon:0.1" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<!-- SICD derived types -->
+	<!--=-->
 	<xsd:complexType name="XYZType">
 		<xsd:sequence>
 			<xsd:element name="X" type="xsd:double"/>
@@ -467,13 +467,6 @@
 				</xsd:annotation>
 			</xsd:element>
 		</xsd:sequence>
-	</xsd:complexType>
-	<xsd:complexType name="DateType">
-		<xsd:simpleContent>
-			<xsd:extension base="xsd:date">
-				<xsd:attribute name="class" type="xsd:string" use="required" fixed="xsd:date"/>
-			</xsd:extension>
-		</xsd:simpleContent>
 	</xsd:complexType>
 	<xsd:complexType name="ReferencePointType">
 		<xsd:annotation>
