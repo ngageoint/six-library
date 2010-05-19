@@ -1,14 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>nitro-nitf</groupId>
     <artifactId>NITF_ImageJ</artifactId>
     <packaging>jar</packaging>
-    <version>2.6-dev</version>
+    <version>${nitro.version}</version>
     <inceptionYear>2004</inceptionYear>
-    <name>NITRO ImageIO codec</name>
+    <name>NITRO ImageJ plug-in</name>
     <url>http://nitro-nitf.sourceforge.net/</url>
 
     <licenses>
@@ -41,11 +40,20 @@
             <email>tzellman@users.sourceforge.net</email>
         </developer>
     </developers>
-    
+
+    <properties>
+        <nitro.version>2.6-dev</nitro.version>
+        <log4j.version>1.2.14</log4j.version>
+        <commons-logging.version>1.1.1</commons-logging.version>
+        <commons-lang.version>2.4</commons-lang.version>
+        <commons-io.version>1.4</commons-io.version>
+        <junit.version>4.4</junit.version>
+        <imagej.version>1.42</imagej.version>
+    </properties>
+
     <!--
-        By default, http://repo1.maven.org/maven2/ is used, but some jars
-        aren't available there, so we add the local lib path where we have
-        some jars under version control
+        By default, http://repo1.maven.org/maven2/ is used, but some jars aren't available there, so we add the local
+        lib path where we have some jars under version control
     -->
     <repositories>
         <repository>
@@ -59,49 +67,49 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
+            <version>${log4j.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.1.1</version>
+            <version>${commons-logging.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.4</version>
+            <version>${commons-lang.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>1.4</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>nitro-nitf</groupId>
-            <artifactId>nitf</artifactId>
-            <version>2.6-dev</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>nitro-nitf</groupId>
-            <artifactId>imageio</artifactId>
-            <version>2.6-dev</version>
+            <version>${commons-io.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.4</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nitro-nitf</groupId>
+            <artifactId>nitf</artifactId>
+            <version>${nitro.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>nitro-nitf</groupId>
+            <artifactId>imageio</artifactId>
+            <version>${nitro.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>imagej</groupId>
             <artifactId>ij</artifactId>
-            <version>1.42</version>
+            <version>${imagej.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -127,7 +135,6 @@
         </pluginManagement>
         <sourceDirectory>src/java</sourceDirectory>
         <testSourceDirectory>src/test</testSourceDirectory>
-
     </build>
 
 </project>

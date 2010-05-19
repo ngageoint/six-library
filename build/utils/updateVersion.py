@@ -42,21 +42,18 @@ if __name__ == '__main__':
     #update java properties file
     def replaceInProperties(propsFile):
         for line in fileinput.input(propsFile, inplace=1):
-            line = re.sub(r'(\s*version\s*=\s*).+', r'\g<1>%s' % fullVersion, line)
+            line = re.sub(r'(\s*nitro.version\s*=\s*).+', r'\g<1>%s' % fullVersion, line)
             sys.stdout.write(line)
     
     replaceInProperties(os.path.join(top_dir, 'java/nitf/project.properties'))
+    replaceInProperties(os.path.join(top_dir, 'java/cgm/project.properties'))
     replaceInProperties(os.path.join(top_dir, 'java/nitf.imagej/project.properties'))
     replaceInProperties(os.path.join(top_dir, 'java/nitf.imageio/project.properties'))
     
     #update xml pom files
     def replaceInPom(pomFile):
-        found = False #only replace the first one
         for line in fileinput.input(pomFile, inplace=1):
-            pattern = r'(<version>\s*).+(\s*</version>)'
-            if not found and re.search(pattern, line):
-                found = True
-                line = re.sub(pattern, r'\g<1>%s\g<2>' % fullVersion, line)
+            line = re.sub(r'(<nitro.version>\s*).+(\s*</nitro.version>)', r'\g<1>%s\g<2>' % fullVersion, line)
             sys.stdout.write(line)
     
     replaceInPom(os.path.join(top_dir, 'java/nitf/pom.xml'))
