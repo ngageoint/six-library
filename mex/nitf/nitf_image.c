@@ -439,7 +439,7 @@ mxArray* readIQSignedIntPixelArray(nitf_Reader* reader,
 
     return(read2BandComplexPixelArray(reader,
                                       idx,
-                                      mxUINT16_CLASS,
+                                      mxINT16_CLASS,
                                       startRow, 
                                       startCol,
                                       numRows, 
