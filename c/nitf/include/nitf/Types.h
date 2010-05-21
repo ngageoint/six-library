@@ -27,6 +27,7 @@
 #   include <stdlib.h>
 #   include <string.h>
 #   include <stdio.h>
+#   include <math.h>
 #   include <stdarg.h>
 #   include <sys/types.h>
 #   include <ctype.h>
