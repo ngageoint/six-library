@@ -66,6 +66,13 @@
 		</xsd:sequence>
 		<xsd:attribute name="index" type="CornerAttrType" use="required"/>
 	</xsd:complexType>
+	<xsd:complexType name="LatLonVertexType">
+		<xsd:sequence>
+			<xsd:element name="Lat" type="xsd:double"/>
+			<xsd:element name="Lon" type="xsd:double"/>
+		</xsd:sequence>
+		<xsd:attribute name="index" type="xsd:int" use="required"/>
+	</xsd:complexType>
 	<xsd:complexType name="LLHCornerStringType">
 		<xsd:sequence>
 			<xsd:element name="Lat" type="xsd:double"/>

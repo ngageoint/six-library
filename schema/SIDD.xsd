@@ -463,15 +463,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 	</xs:complexType>
 	<xs:complexType name="FootprintType">
 		<xs:sequence>
-			<xs:element name="Vertex" minOccurs="4" maxOccurs="4">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="Lat" type="xs:double"/>
-						<xs:element name="Lon" type="xs:double"/>
-					</xs:sequence>
-					<xs:attribute name="index" type="xs:int" use="required"/>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="Vertex" minOccurs="4" maxOccurs="4" type="sicommon:LatLonVertexType"/>
 		</xs:sequence>
 		<xs:attribute name="size" type="xs:int" use="required"/>
 	</xs:complexType>
