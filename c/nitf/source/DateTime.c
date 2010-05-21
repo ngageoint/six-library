@@ -251,18 +251,17 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
     int formatLength;
     int startIndex;
     int i, j;
-    int found;
+    int found = 0;
     NITF_BOOL returnValue = NITF_SUCCESS;
 
     timeInSeconds = (time_t)(millis / 1000);
     t = *gmtime(&timeInSeconds);
-    remainingMillis = (time_t)((time_t)millis % 1000);
+    remainingMillis = (time_t)(((millis / 1000.0) - timeInSeconds) * 1000 + 0.5);
 
     /* Search for "%...S" string */
     formatLength = strlen(format);
-    for (i = 0; i < formatLength; ++i)
+    for (i = 0; i < formatLength && !found; ++i)
     {
-        found = 0;
         if (format[i] == '%')
         {
             startIndex = i;
@@ -281,11 +280,6 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
                     endString = &(format[j + 1]);
                 }
             }
-        }
-
-        if (found)
-        {
-            break;
         }
     }
 

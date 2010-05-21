@@ -93,7 +93,7 @@ TEST_CASE(testRoundTrip)
     /*printDate(date2);*/
 
     TEST_ASSERT_EQ_STR(buf, buf2);
-    
+
     /* must subtract off the millis - since our format string doesn't include them */
     nitf_DateTime_setSecond(date, (int)date->second, &e);
     nitf_DateTime_setSecond(date2, (int)date2->second, &e);
@@ -120,35 +120,49 @@ TEST_CASE(testSetIdentity)
     /* set hour */
     TEST_ASSERT(nitf_DateTime_setHour(date, date->hour, &e));
     TEST_ASSERT((nitf_DateTime_format(date, NITF_DATE_FORMAT_21, buf2,
-                                NITF_FDT_SZ + 1, &e)));
+                            NITF_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     /* set minute */
     TEST_ASSERT(nitf_DateTime_setMinute(date, date->minute, &e));
     TEST_ASSERT((nitf_DateTime_format(date, NITF_DATE_FORMAT_21, buf2,
-                                NITF_FDT_SZ + 1, &e)));
+                            NITF_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     /* set second */
     TEST_ASSERT(nitf_DateTime_setSecond(date, date->second, &e));
     TEST_ASSERT((nitf_DateTime_format(date, NITF_DATE_FORMAT_21, buf2,
-                                NITF_FDT_SZ + 1, &e)));
+                            NITF_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     /* set month */
     TEST_ASSERT(nitf_DateTime_setMonth(date, date->month, &e));
     TEST_ASSERT((nitf_DateTime_format(date, NITF_DATE_FORMAT_21, buf2,
-                                NITF_FDT_SZ + 1, &e)));
+                            NITF_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     /* set month */
     TEST_ASSERT(nitf_DateTime_setYear(date, date->year, &e));
     TEST_ASSERT((nitf_DateTime_format(date, NITF_DATE_FORMAT_21, buf2,
-                                NITF_FDT_SZ + 1, &e)));
+                            NITF_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     nitf_DateTime_destruct(&date);
     TEST_ASSERT_NULL(date);
+}
+
+TEST_CASE(testMillis)
+{
+    nitf_Error e;
+    char buf[MAX_DATE_STRING];
+    const char* timeStr = "2010-01-12T22:55:37.467000Z";
+    nitf_DateTime *date = NULL;
+
+    date = nitf_DateTime_fromString(timeStr, "%Y-%m-%dT%H:%M:%S000Z", &e);
+    TEST_ASSERT(date);
+
+    nitf_DateTime_format(date, "%Y-%m-%dT%H:%M:%.6SZ", buf, MAX_DATE_STRING, &e);
+    TEST_ASSERT_EQ_STR(timeStr, buf);
 }
 
 int main(int argc, char **argv)
@@ -157,6 +171,7 @@ int main(int argc, char **argv)
     CHECK(testFromMillis);
     CHECK(testRoundTrip);
     CHECK(testSetIdentity);
+    CHECK(testMillis);
 
     return 0;
 }
