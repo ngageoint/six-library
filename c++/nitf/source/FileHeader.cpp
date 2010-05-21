@@ -190,7 +190,8 @@ nitf::ComponentInfo FileHeader::getImageInfo(int i)
 {
     int num = getNumImages();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(i, 0, num - 1);
+        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+                "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return nitf::ComponentInfo(getNativeOrThrow()->imageInfo[i]);
 }
 
@@ -199,7 +200,8 @@ nitf::ComponentInfo FileHeader::getGraphicInfo(int i)
 {
     int num = getNumGraphics();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(i, 0, num - 1);
+        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+                "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return nitf::ComponentInfo(getNativeOrThrow()->graphicInfo[i]);
 }
 
@@ -208,7 +210,8 @@ nitf::ComponentInfo FileHeader::getLabelInfo(int i)
 {
     int num = getNumLabels();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(i, 0, num - 1);
+        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+                "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return nitf::ComponentInfo(getNativeOrThrow()->labelInfo[i]);
 }
 
@@ -217,7 +220,8 @@ nitf::ComponentInfo FileHeader::getTextInfo(int i)
 {
     int num = getNumTexts();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(i, 0, num - 1);
+        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+                "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return nitf::ComponentInfo(getNativeOrThrow()->textInfo[i]);
 }
 
@@ -226,7 +230,8 @@ nitf::ComponentInfo FileHeader::getDataExtensionInfo(int i)
 {
     int num = getNumDataExtensions();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(i, 0, num - 1);
+        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+                "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return nitf::ComponentInfo(getNativeOrThrow()->dataExtensionInfo[i]);
 }
 
@@ -235,7 +240,8 @@ nitf::ComponentInfo FileHeader::getReservedExtensionInfo(int i)
 {
     int num = getNumReservedExtensions();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(i, 0, num - 1);
+        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+                "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return nitf::ComponentInfo(getNativeOrThrow()->reservedExtensionInfo[i]);
 }
 
