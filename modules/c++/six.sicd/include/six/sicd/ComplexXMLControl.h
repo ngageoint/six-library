@@ -45,7 +45,7 @@ namespace sicd
  *  XMLControlFactory::newXMLControl() methods
  *  to create this object.
  */
-class ComplexXMLControl: public XMLControl
+class ComplexXMLControl : public XMLControl
 {
 
 public:
@@ -59,7 +59,6 @@ public:
     virtual ~ComplexXMLControl()
     {
     }
-
 
     /*!
      *  This function takes in a ComplexData object and converts
@@ -80,51 +79,64 @@ public:
 
 protected:
 
-    xml::lite::Element* collectionInfoToXML(xml::lite::Document* doc,
-            CollectionInformation *obj);
+    xml::lite::Element* collectionInfoToXML(CollectionInformation *obj,
+                                            xml::lite::Element* parent = NULL);
 
-    xml::lite::Element* imageCreationToXML(xml::lite::Document* doc,
-            ImageCreation *obj);
+    xml::lite::Element* imageCreationToXML(ImageCreation *obj,
+                                           xml::lite::Element* parent = NULL);
+
+    xml::lite::Element* imageDataToXML(ImageData *obj, xml::lite::Element* parent = NULL);
+
+    xml::lite::Element* geoDataToXML(GeoData *obj, xml::lite::Element* parent =
+            NULL);
+
+    xml::lite::Element* geoInfoToXML(GeoInfo *obj, xml::lite::Element* parent =
+            NULL);
+
+    xml::lite::Element* gridToXML(Grid *obj, xml::lite::Element* parent = NULL);
+
+    xml::lite::Element* timelineToXML(Timeline *obj,
+                                      xml::lite::Element* parent = NULL);
+
+    xml::lite::Element* positionToXML(Position *obj,
+                                      xml::lite::Element* parent = NULL);
+
+    xml::lite::Element* radarCollectionToXML(RadarCollection *obj,
+                                             xml::lite::Element* parent = NULL);
+
+    xml::lite::Element* imageFormationToXML(ImageFormation *obj,
+                                            xml::lite::Element* parent = NULL);
+
+    xml::lite::Element* scpcoaToXML(SCPCOA *obj, xml::lite::Element* parent =
+            NULL);
+
+    xml::lite::Element* antennaToXML(Antenna *obj, xml::lite::Element* parent =
+            NULL);
+
+    xml::lite::Element* antennaParametersToXML(std::string name,
+                                               AntennaParameters *obj,
+                                               xml::lite::Element* parent =
+                                                       NULL);
 
     xml::lite::Element
-    * imageDataToXML(xml::lite::Document* doc, ImageData *obj);
+    * matchInfoToXML(MatchInformation *obj, xml::lite::Element* parent = NULL);
 
-    xml::lite::Element* geoDataToXML(xml::lite::Document* doc, GeoData *obj);
-
-    xml::lite::Element* geoInfoToXML(xml::lite::Document* doc, GeoInfo *obj);
-
-    xml::lite::Element* gridToXML(xml::lite::Document* doc, Grid *obj);
-
-    xml::lite::Element* timelineToXML(xml::lite::Document* doc, Timeline *obj);
-
-    xml::lite::Element* positionToXML(xml::lite::Document* doc, Position *obj);
-
-    xml::lite::Element* radarCollectionToXML(xml::lite::Document* doc,
-            RadarCollection *obj);
-
-    xml::lite::Element* imageFormationToXML(xml::lite::Document* doc,
-            ImageFormation *obj);
-
-    xml::lite::Element* scpcoaToXML(xml::lite::Document* doc, SCPCOA *obj);
-
-    xml::lite::Element* antennaToXML(xml::lite::Document* doc, Antenna *obj);
-
-    xml::lite::Element* antennaParametersToXML(xml::lite::Document* doc,
-            std::string name, AntennaParameters *obj);
-
+    xml::lite::Element* pfaToXML(PFA *obj, xml::lite::Element* parent = NULL);
     xml::lite::Element
-    * matchInfoToXML(xml::lite::Document* doc, MatchInformation *obj);
-
-    xml::lite::Element* pfaToXML(xml::lite::Document* doc, PFA *obj);
-    xml::lite::Element* areaLineDirectionParametersToXML(xml::lite::Document* doc,
-            std::string name, AreaDirectionParameters *obj);
-    xml::lite::Element* areaSampleDirectionParametersToXML(xml::lite::Document* doc,
-            std::string name, AreaDirectionParameters *obj);
+            * areaLineDirectionParametersToXML(std::string name,
+                                               AreaDirectionParameters *obj,
+                                               xml::lite::Element* parent =
+                                                       NULL);
+    xml::lite::Element
+            * areaSampleDirectionParametersToXML(std::string name,
+                                                 AreaDirectionParameters *obj,
+                                                 xml::lite::Element* parent =
+                                                         NULL);
 
     void xmlToCollectionInfo(xml::lite::Element* collectionInfoXML,
-            CollectionInformation *obj);
+                             CollectionInformation *obj);
     void xmlToImageCreation(xml::lite::Element* imageCreationXML,
-            ImageCreation *obj);
+                            ImageCreation *obj);
     void xmlToImageData(xml::lite::Element* imageDataXML, ImageData *obj);
     void xmlToGeoData(xml::lite::Element* geoDataXML, GeoData *obj);
     void xmlToGeoInfo(xml::lite::Element* geoInfoXML, GeoInfo *obj);
@@ -132,29 +144,30 @@ protected:
     void xmlToTimeline(xml::lite::Element* timelineXML, Timeline *obj);
     void xmlToPosition(xml::lite::Element* positionXML, Position *obj);
     void xmlToRadarCollection(xml::lite::Element* radarCollectionXML,
-            RadarCollection *obj);
+                              RadarCollection *obj);
     void xmlToImageFormation(xml::lite::Element* imageFormationXML,
-            ImageFormation *obj);
+                             ImageFormation *obj);
     void xmlToSCPCOA(xml::lite::Element* scpcoaXML, SCPCOA *obj);
     void xmlToAntenna(xml::lite::Element* antennaXML, Antenna *obj);
     void xmlToAntennaParams(xml::lite::Element* antennaParamsXML,
                             AntennaParameters* params);
 
-    void xmlToMatchInfo(xml::lite::Element* matchInfoXML,
-                        MatchInformation *obj);
-    
+    void
+            xmlToMatchInfo(xml::lite::Element* matchInfoXML,
+                           MatchInformation *obj);
+
     void xmlToPFA(xml::lite::Element* pfaXML, PFA *obj);
 
-    void parseFootprint(xml::lite::Element* footprint, std::string cornerName, 
-            std::vector<LatLon>& value, bool alt);
+    void parseFootprint(xml::lite::Element* footprint, std::string cornerName,
+                        std::vector<LatLon>& value, bool alt);
 
-    xml::lite::Element* createFFTSign(xml::lite::Document* doc, std::string name, six::FFTSign sign);
-    xml::lite::Element* createFootprint(xml::lite::Document* doc,
-                                        std::string name, 
-                                        std::string cornerName, 
-                                        const std::vector<LatLon>& corners, 
-                                        bool alt = false);
-
+    xml::lite::Element* createFFTSign(std::string name, six::FFTSign sign,
+                                      xml::lite::Element* parent = NULL);
+    xml::lite::Element* createFootprint(std::string name,
+                                        std::string cornerName,
+                                        const std::vector<LatLon>& corners,
+                                        bool alt = false,
+                                        xml::lite::Element* parent = NULL);
 
 };
 

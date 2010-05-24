@@ -26,6 +26,23 @@
 
 using namespace six;
 
+xml::lite::Element* XMLControl::newElement(std::string name,
+                                           xml::lite::Element* parent)
+{
+    return newElement(name, "", parent);
+}
+
+xml::lite::Element* XMLControl::newElement(std::string name,
+                                           std::string characterData,
+                                           xml::lite::Element* parent)
+{
+    xml::lite::Element* elem =
+            new xml::lite::Element(name, mURI, characterData);
+    if (parent)
+        parent->addChild(elem);
+    return elem;
+}
+
 void XMLControl::parseVector3D(xml::lite::Element* vecXML, Vector3& vec)
 {
     parseDouble(getFirstAndOnly(vecXML, "X"), vec[0]);
@@ -46,28 +63,29 @@ void XMLControl::parseLatLonAlt(xml::lite::Element* llaXML, LatLonAlt& lla)
     lla.setAlt(alt);
 }
 
-xml::lite::Element* XMLControl::createVector3D(xml::lite::Document* doc,
-        std::string name, Vector3 p)
+xml::lite::Element* XMLControl::createVector3D(std::string name, Vector3 p,
+                                               xml::lite::Element* parent)
 {
-    xml::lite::Element* element = newElement(doc, name);
-    element->addChild(createDouble(doc, "X", p[0]));
-    element->addChild(createDouble(doc, "Y", p[1]));
-    element->addChild(createDouble(doc, "Z", p[2]));
-    return element;
+    xml::lite::Element* e = newElement(name, parent);
+    createDouble("X", p[0], e);
+    createDouble("Y", p[1], e);
+    createDouble("Z", p[2], e);
+    return e;
 }
 
-xml::lite::Element* XMLControl::createPoly1D(xml::lite::Document* doc,
-        std::string name, const Poly1D& poly1D)
+xml::lite::Element* XMLControl::createPoly1D(std::string name,
+                                             const Poly1D& poly1D,
+                                             xml::lite::Element* parent)
 {
     int order = poly1D.order();
-    xml::lite::Element* poly1DXML = newElement(doc, name);
+    xml::lite::Element* poly1DXML = newElement(name, parent);
     setAttribute(poly1DXML, "order1", str::toString(order));
 
     for (int i = 0; i <= order; ++i)
     {
-        xml::lite::Element* coefXML = createDouble(doc, "Coef", poly1D[i]);
+        xml::lite::Element* coefXML =
+                createDouble("Coef", poly1D[i], poly1DXML);
         setAttribute(coefXML, "exponent1", str::toString(i));
-        poly1DXML->addChild(coefXML);
     }
     return poly1DXML;
 }
@@ -93,35 +111,38 @@ void XMLControl::parsePolyXYZ(xml::lite::Element* polyXML, PolyXYZ& polyXYZ)
     for (int i = 0; i <= order; i++)
     {
         //check the order attr, and use that index
-        exp = str::toType<int>(xCoeffsXML[i]->getAttributes().getValue(
-                "exponent1"));
+        exp
+                = str::toType<int>(
+                                   xCoeffsXML[i]->getAttributes().getValue(
+                                                                           "exponent1"));
         parseDouble(xCoeffsXML[i], pXYZ[exp][0]);
 
-        exp = str::toType<int>(yCoeffsXML[i]->getAttributes().getValue(
-                "exponent1"));
+        exp
+                = str::toType<int>(
+                                   yCoeffsXML[i]->getAttributes().getValue(
+                                                                           "exponent1"));
         parseDouble(yCoeffsXML[i], pXYZ[exp][1]);
 
-        exp = str::toType<int>(zCoeffsXML[i]->getAttributes().getValue(
-                "exponent1"));
+        exp
+                = str::toType<int>(
+                                   zCoeffsXML[i]->getAttributes().getValue(
+                                                                           "exponent1"));
         parseDouble(zCoeffsXML[i], pXYZ[exp][2]);
     }
 
     polyXYZ = pXYZ;
 }
 
-xml::lite::Element* XMLControl::createPolyXYZ(xml::lite::Document* doc,
-        std::string name, const PolyXYZ& polyXYZ)
+xml::lite::Element* XMLControl::createPolyXYZ(std::string name,
+                                              const PolyXYZ& polyXYZ,
+                                              xml::lite::Element* parent)
 {
     int order = polyXYZ.order();
-    xml::lite::Element* polyXML = newElement(doc, name);
+    xml::lite::Element* polyXML = newElement(name, parent);
 
-    xml::lite::Element* xXML = newElement(doc, "X");
-    xml::lite::Element* yXML = newElement(doc, "Y");
-    xml::lite::Element* zXML = newElement(doc, "Z");
-
-    polyXML->addChild(xXML);
-    polyXML->addChild(yXML);
-    polyXML->addChild(zXML);
+    xml::lite::Element* xXML = newElement("X", polyXML);
+    xml::lite::Element* yXML = newElement("Y", polyXML);
+    xml::lite::Element* zXML = newElement("Z", polyXML);
 
     setAttribute(xXML, "order1", str::toString(order));
     setAttribute(yXML, "order1", str::toString(order));
@@ -130,17 +151,13 @@ xml::lite::Element* XMLControl::createPolyXYZ(xml::lite::Document* doc,
     for (int i = 0; i <= order; ++i)
     {
         Vector3 v3 = polyXYZ[i];
-        xml::lite::Element* xCoefXML = createDouble(doc, "Coef", v3[0]);
-        xml::lite::Element* yCoefXML = createDouble(doc, "Coef", v3[1]);
-        xml::lite::Element* zCoefXML = createDouble(doc, "Coef", v3[2]);
+        xml::lite::Element* xCoefXML = createDouble("Coef", v3[0], xXML);
+        xml::lite::Element* yCoefXML = createDouble("Coef", v3[1], yXML);
+        xml::lite::Element* zCoefXML = createDouble("Coef", v3[2], zXML);
 
         setAttribute(xCoefXML, "exponent1", str::toString(i));
         setAttribute(yCoefXML, "exponent1", str::toString(i));
         setAttribute(zCoefXML, "exponent1", str::toString(i));
-
-        xXML->addChild(xCoefXML);
-        yXML->addChild(yCoefXML);
-        zXML->addChild(zCoefXML);
     }
     return polyXML;
 }
@@ -183,11 +200,12 @@ void XMLControl::parsePoly2D(xml::lite::Element* polyXML, Poly2D& poly2D)
     poly2D = p2D;
 }
 
-xml::lite::Element* XMLControl::createPoly2D(xml::lite::Document* doc,
-        std::string name, const Poly2D& poly2D)
+xml::lite::Element* XMLControl::createPoly2D(std::string name,
+                                             const Poly2D& poly2D,
+                                             xml::lite::Element* parent)
 {
     xml::lite::AttributeNode node;
-    xml::lite::Element* poly2DXML = newElement(doc, name);
+    xml::lite::Element* poly2DXML = newElement(name, parent);
     setAttribute(poly2DXML, "order1", str::toString(poly2D.orderX()));
     setAttribute(poly2DXML, "order2", str::toString(poly2D.orderY()));
 
@@ -195,21 +213,20 @@ xml::lite::Element* XMLControl::createPoly2D(xml::lite::Document* doc,
     {
         for (int j = 0; j <= poly2D.orderY(); j++)
         {
-            xml::lite::Element* coefXML = createDouble(doc, "Coef",
-                        poly2D[i][j]);
+            xml::lite::Element* coefXML = createDouble("Coef", poly2D[i][j],
+                                                       poly2DXML);
             setAttribute(coefXML, "exponent1", str::toString(i));
             setAttribute(coefXML, "exponent2", str::toString(j));
-            poly2DXML->addChild(coefXML);
         }
     }
 
     return poly2DXML;
 }
 
-xml::lite::Element* XMLControl::createString(xml::lite::Document* doc,
-        std::string name, std::string p)
+xml::lite::Element* XMLControl::createString(std::string name, std::string p,
+                                             xml::lite::Element* parent)
 {
-    xml::lite::Element* e = doc->createElement(name, mURI, p);
+    xml::lite::Element* e = newElement(name, p, parent);
     xml::lite::AttributeNode node;
     node.setQName("class");
     node.setUri(mURI);
@@ -218,11 +235,10 @@ xml::lite::Element* XMLControl::createString(xml::lite::Document* doc,
     return e;
 }
 
-xml::lite::Element* XMLControl::createInt(xml::lite::Document* doc,
-        std::string name, int p)
+xml::lite::Element* XMLControl::createInt(std::string name, int p,
+                                          xml::lite::Element* parent)
 {
-    xml::lite::Element* e = doc->createElement(name, mURI,
-            str::toString<int>(p));
+    xml::lite::Element* e = newElement(name, str::toString<int>(p), parent);
     xml::lite::AttributeNode node;
     node.setQName("class");
     node.setUri(mURI);
@@ -231,11 +247,10 @@ xml::lite::Element* XMLControl::createInt(xml::lite::Document* doc,
     return e;
 }
 
-xml::lite::Element* XMLControl::createDouble(xml::lite::Document* doc,
-        std::string name, double p)
+xml::lite::Element* XMLControl::createDouble(std::string name, double p,
+                                             xml::lite::Element* parent)
 {
-    xml::lite::Element* e = doc->createElement(name, mURI,
-            str::toString<double>(p));
+    xml::lite::Element* e = newElement(name, str::toString<double>(p), parent);
     xml::lite::AttributeNode node;
     node.setQName("class");
     node.setUri(mURI);
@@ -244,23 +259,24 @@ xml::lite::Element* XMLControl::createDouble(xml::lite::Document* doc,
     return e;
 }
 
-xml::lite::Element* XMLControl::createComplex(xml::lite::Document* doc,
-        std::string name, std::complex<double> c)
+xml::lite::Element* XMLControl::createComplex(std::string name, std::complex<
+        double> c, xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(doc, name);
-    e->addChild(createDouble(doc, "Real", c.real()));
-    e->addChild(createDouble(doc, "Imag", c.imag()));
+    xml::lite::Element* e = newElement(name, parent);
+    createDouble("Real", c.real(), e);
+    createDouble("Imag", c.imag(), e);
     return e;
 }
 
-xml::lite::Element* XMLControl::createBooleanType(xml::lite::Document* doc,
-        std::string name, BooleanType p)
+xml::lite::Element* XMLControl::createBooleanType(std::string name,
+                                                  BooleanType p,
+                                                  xml::lite::Element* parent)
 {
     if (p == six::BOOL_NOT_SET)
         return NULL;
 
-    xml::lite::Element* e = doc->createElement(name, mURI,
-            str::toString<BooleanType>(p));
+    xml::lite::Element* e = newElement(name, str::toString<BooleanType>(p),
+                                       parent);
     xml::lite::AttributeNode node;
     node.setQName("class");
     node.setUri(mURI);
@@ -269,10 +285,10 @@ xml::lite::Element* XMLControl::createBooleanType(xml::lite::Document* doc,
     return e;
 }
 
-xml::lite::Element* XMLControl::createDateTime(xml::lite::Document* doc,
-        std::string name, std::string s)
+xml::lite::Element* XMLControl::createDateTime(std::string name, std::string s,
+                                               xml::lite::Element* parent)
 {
-    xml::lite::Element* e = doc->createElement(name, mURI, s);
+    xml::lite::Element* e = newElement(name, s, parent);
     xml::lite::AttributeNode node;
     node.setQName("class");
     node.setUri(mURI);
@@ -281,22 +297,22 @@ xml::lite::Element* XMLControl::createDateTime(xml::lite::Document* doc,
     return e;
 }
 
-xml::lite::Element* XMLControl::createDateTime(xml::lite::Document* doc,
-        std::string name, DateTime p)
+xml::lite::Element* XMLControl::createDateTime(std::string name, DateTime p,
+                                               xml::lite::Element* parent)
 {
     std::string s = str::toString<DateTime>(p);
-    return createDateTime(doc, name, s);
+    return createDateTime(name, s, parent);
 }
 
-xml::lite::Element* XMLControl::createDate(xml::lite::Document* doc,
-        std::string name, DateTime p)
+xml::lite::Element* XMLControl::createDate(std::string name, DateTime p,
+                                           xml::lite::Element* parent)
 {
     char date[256];
     date[255] = 0;
     p.format("%Y-%m-%d", date, 255);
     std::string s(date);
 
-    xml::lite::Element* e = doc->createElement(name, mURI, s);
+    xml::lite::Element* e = newElement(name, s, parent);
     xml::lite::AttributeNode node;
     node.setQName("class");
     node.setUri(mURI);
@@ -306,19 +322,19 @@ xml::lite::Element* XMLControl::createDate(xml::lite::Document* doc,
 }
 
 xml::lite::Element* XMLControl::getFirstAndOnly(xml::lite::Element* parent,
-        std::string tag)
+                                                std::string tag)
 {
     std::vector<xml::lite::Element*> children;
     parent->getElementsByTagName(tag, children);
     if (children.size() != 1)
     {
         throw except::Exception(
-                Ctxt(std::string("Expected exactly one ") + tag));
+                                Ctxt(std::string("Expected exactly one ") + tag));
     }
     return children[0];
 }
 xml::lite::Element* XMLControl::getOptional(xml::lite::Element* parent,
-        std::string tag)
+                                            std::string tag)
 {
     std::vector<xml::lite::Element*> children;
     parent->getElementsByTagName(tag, children);
@@ -327,106 +343,110 @@ xml::lite::Element* XMLControl::getOptional(xml::lite::Element* parent,
     return children[0];
 }
 
-void XMLControl::addOptional(xml::lite::Element* parent,
-        xml::lite::Element* element)
-{
-    if (element)
-        parent->addChild(element);
-}
-
-void XMLControl::addRequired(xml::lite::Element* parent,
-        xml::lite::Element* element, std::string name)
+xml::lite::Element* XMLControl::require(xml::lite::Element* element, std::string name)
 {
     if (!element)
         throw except::Exception(Ctxt(FmtX("Required field [%s] is undefined "
-                "or null.", name.c_str())));
-
-    parent->addChild(element);
+            "or null.", name.c_str())));
+    return element;
 }
 
-xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
-        std::string name, std::string rowName, std::string colName,
-        const RowColInt& value)
+xml::lite::Element* XMLControl::createRowCol(std::string name,
+                                             std::string rowName,
+                                             std::string colName,
+                                             const RowColInt& value,
+                                             xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(doc, name);
-    e->addChild(createInt(doc, rowName, value.row));
-    e->addChild(createInt(doc, colName, value.col));
+    xml::lite::Element* e = newElement(name, parent);
+    createInt(rowName, value.row, e);
+    createInt(colName, value.col, e);
     return e;
 }
 
-xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
-        std::string name, std::string rowName, std::string colName,
-        const RowColDouble& value)
+xml::lite::Element* XMLControl::createRowCol(std::string name,
+                                             std::string rowName,
+                                             std::string colName,
+                                             const RowColDouble& value,
+                                             xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(doc, name);
-    e->addChild(createDouble(doc, rowName, value.row));
-    e->addChild(createDouble(doc, colName, value.col));
+    xml::lite::Element* e = newElement(name, parent);
+    createDouble(rowName, value.row, e);
+    createDouble(colName, value.col, e);
     return e;
 }
 
-xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
-        std::string name, const RowColInt& value)
+xml::lite::Element* XMLControl::createRowCol(std::string name,
+                                             const RowColInt& value,
+                                             xml::lite::Element* parent)
 {
-    return createRowCol(doc, name, "Row", "Col", value);
+    return createRowCol(name, "Row", "Col", value, parent);
 }
 
-xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
-        std::string name, const RowColDouble& value)
+xml::lite::Element* XMLControl::createRowCol(std::string name,
+                                             const RowColDouble& value,
+                                             xml::lite::Element* parent)
 {
-    return createRowCol(doc, name, "Row", "Col", value);
+    return createRowCol(name, "Row", "Col", value, parent);
 }
 
-xml::lite::Element* XMLControl::createRowCol(xml::lite::Document* doc,
-					     std::string name,
-					     const RowColLatLon& value)
+xml::lite::Element* XMLControl::createRowCol(std::string name,
+                                             const RowColLatLon& value,
+                                             xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(doc, name);
-    e->addChild(createLatLon(doc, "Row", value.row));
-    e->addChild(createLatLon(doc, "Col", value.col));
+    xml::lite::Element* e = newElement(name, parent);
+    createLatLon("Row", value.row, e);
+    createLatLon("Col", value.col, e);
     return e;
 }
 
-
-xml::lite::Element* XMLControl::createRangeAzimuth(xml::lite::Document* doc,
-        std::string name, const RangeAzimuth<double>& value)
+xml::lite::Element* XMLControl::createRangeAzimuth(
+                                                   std::string name,
+                                                   const RangeAzimuth<double>& value,
+                                                   xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(doc, name);
-    e->addChild(createDouble(doc, "Range", value.range));
-    e->addChild(createDouble(doc, "Azimuth", value.azimuth));
+    xml::lite::Element* e = newElement(name, parent);
+    createDouble("Range", value.range, e);
+    createDouble("Azimuth", value.azimuth, e);
     return e;
 }
 
-xml::lite::Element* XMLControl::createLatLon(xml::lite::Document* doc,
-        std::string name, const LatLon& value)
+xml::lite::Element* XMLControl::createLatLon(std::string name,
+                                             const LatLon& value,
+                                             xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(doc, name);
-    e->addChild(createDouble(doc, "Lat", value.getLat()));
-    e->addChild(createDouble(doc, "Lon", value.getLon()));
+    xml::lite::Element* e = newElement(name, parent);
+    createDouble("Lat", value.getLat(), e);
+    createDouble("Lon", value.getLon(), e);
     return e;
 }
 
-xml::lite::Element* XMLControl::createLatLonAlt(xml::lite::Document* doc,
-        std::string name, const LatLonAlt& value)
+xml::lite::Element* XMLControl::createLatLonAlt(std::string name,
+                                                const LatLonAlt& value,
+                                                xml::lite::Element* parent)
 {
-    xml::lite::Element* e = createLatLon(doc, name, value);
-    e->addChild(createDouble(doc, "HAE", value.getAlt()));
+    xml::lite::Element* e = createLatLon(name, value, parent);
+    createDouble("HAE", value.getAlt(), e);
     return e;
 }
 
-xml::lite::Element* XMLControl::createEarthModelType(xml::lite::Document* doc,
-        std::string name, const EarthModelType& value)
+xml::lite::Element* XMLControl::createEarthModelType(
+                                                     std::string name,
+                                                     const EarthModelType& value,
+                                                     xml::lite::Element* parent)
 {
-    return createString(doc, name, str::toString(value));
+    return createString(name, str::toString(value), parent);
 }
 
-xml::lite::Element* XMLControl::createSideOfTrackType(xml::lite::Document* doc,
-        std::string name, const SideOfTrackType& value)
+xml::lite::Element* XMLControl::createSideOfTrackType(
+                                                      std::string name,
+                                                      const SideOfTrackType& value,
+                                                      xml::lite::Element* parent)
 {
-    return createString(doc, name, str::toString(value));
+    return createString(name, str::toString(value), parent);
 }
 
 void XMLControl::setAttribute(xml::lite::Element* e, std::string name,
-        std::string v)
+                              std::string v)
 {
     xml::lite::AttributeNode node;
     node.setQName(name);
@@ -460,7 +480,7 @@ void XMLControl::parseDouble(xml::lite::Element* element, double& value)
 }
 
 void XMLControl::parseComplex(xml::lite::Element* element,
-        std::complex<double>& value)
+                              std::complex<double>& value)
 {
     double r, i;
 
@@ -476,7 +496,7 @@ void XMLControl::parseString(xml::lite::Element* element, std::string& value)
 }
 
 void XMLControl::parseBooleanType(xml::lite::Element* element,
-        BooleanType& value)
+                                  BooleanType& value)
 {
     value = str::toType<BooleanType>(element->getCharacterData());
 }
@@ -489,7 +509,8 @@ Parameter XMLControl::parseParameter(xml::lite::Element* element)
 }
 
 void XMLControl::parseParameters(xml::lite::Element* paramXML,
-        std::string paramName, std::vector<Parameter>& props)
+                                 std::string paramName,
+                                 std::vector<Parameter>& props)
 {
     std::vector<xml::lite::Element*> elemXML;
     paramXML->getElementsByTagName(paramName, elemXML);
@@ -501,64 +522,60 @@ void XMLControl::parseParameters(xml::lite::Element* paramXML,
     }
 }
 
-xml::lite::Element* XMLControl::createParameter(xml::lite::Document* doc,
-        xml::lite::Element* parent, std::string name, const Parameter& value)
+xml::lite::Element* XMLControl::createParameter(std::string name,
+                                                const Parameter& value,
+                                                xml::lite::Element* parent)
 {
-    xml::lite::Element *element = createString(doc, name, value.str());
+    xml::lite::Element *element = createString(name, value.str(), parent);
     setAttribute(element, "name", value.getName());
     return element;
 }
 
-void XMLControl::addParameters(xml::lite::Document* doc,
-        xml::lite::Element* parent, std::string name,
-        std::vector<Parameter>& props)
+void XMLControl::addParameters(std::string name, std::vector<Parameter>& props,
+                               xml::lite::Element* parent)
 {
-    for (std::vector<Parameter>::iterator it = props.begin();
-            it != props.end(); ++it)
+    for (std::vector<Parameter>::iterator it = props.begin(); it != props.end(); ++it)
     {
-        parent->addChild(createParameter(doc, parent, name, *it));
+        createParameter(name, *it, parent);
     }
 }
 
-void XMLControl::addDecorrType(xml::lite::Document* doc,
-        xml::lite::Element* parent, std::string name, DecorrType& decorrType)
+void XMLControl::addDecorrType(std::string name, DecorrType& decorrType,
+                               xml::lite::Element* parent)
 {
     //only adds it if it needs to
-    if (!Init::isUndefined<double>(decorrType.corrCoefZero) && !Init::isUndefined<double>(
-            decorrType.decorrRate))
+    if (!Init::isUndefined<double>(decorrType.corrCoefZero)
+            && !Init::isUndefined<double>(decorrType.decorrRate))
     {
-        xml::lite::Element* decorrXML = newElement(doc, name);
-        parent->addChild(decorrXML);
-        decorrXML->addChild(createDouble(doc, "CorrCoefZero",
-                decorrType.corrCoefZero));
-        decorrXML->addChild(createDouble(doc, "DecorrRate",
-                decorrType.decorrRate));
+        xml::lite::Element* decorrXML = newElement(name, parent);
+        createDouble("CorrCoefZero", decorrType.corrCoefZero, decorrXML);
+        createDouble("DecorrRate", decorrType.decorrRate, decorrXML);
     }
 }
 
 void XMLControl::parseDecorrType(xml::lite::Element* decorrXML,
-        DecorrType& decorrType)
+                                 DecorrType& decorrType)
 {
     parseDouble(getFirstAndOnly(decorrXML, "CorrCoefZero"),
-            decorrType.corrCoefZero);
-    parseDouble(getFirstAndOnly(decorrXML, "DecorrRate"),
-            decorrType.decorrRate);
+                decorrType.corrCoefZero);
+    parseDouble(getFirstAndOnly(decorrXML, "DecorrRate"), decorrType.decorrRate);
 }
 
 void XMLControl::parseEarthModelType(xml::lite::Element* element,
-        EarthModelType& value)
+                                     EarthModelType& value)
 {
     value = str::toType<EarthModelType>(element->getCharacterData());
 }
 
 void XMLControl::parseSideOfTrackType(xml::lite::Element* element,
-        SideOfTrackType& value)
+                                      SideOfTrackType& value)
 {
     value = str::toType<SideOfTrackType>(element->getCharacterData());
 }
 
 void XMLControl::parseFootprint(xml::lite::Element* footprint,
-        std::string cornerName, std::vector<LatLon>& value, bool alt)
+                                std::string cornerName,
+                                std::vector<LatLon>& value, bool alt)
 {
     std::vector<xml::lite::Element*> vertices;
     footprint->getElementsByTagName(cornerName, vertices);
@@ -570,8 +587,11 @@ void XMLControl::parseFootprint(xml::lite::Element* footprint,
     {
         LatLonAlt lla;
         //check the index attr to know which corner it is
-        int idx = str::toType<int>(vertices[i]->getAttributes().getValue(
-                "index"));
+        int
+                idx =
+                        str::toType<int>(
+                                         vertices[i]->getAttributes().getValue(
+                                                                               "index"));
 
         if (alt)
             parseLatLonAlt(vertices[i], lla);
@@ -594,7 +614,7 @@ void XMLControl::parseLatLon(xml::lite::Element* parent, LatLon& ll)
 }
 
 void XMLControl::parseLatLons(xml::lite::Element* pointsXML,
-        std::string pointName, std::vector<LatLon>& llVec)
+                              std::string pointName, std::vector<LatLon>& llVec)
 {
     std::vector<xml::lite::Element*> latLonsXML;
     pointsXML->getElementsByTagName(pointName, latLonsXML);
@@ -608,8 +628,8 @@ void XMLControl::parseLatLons(xml::lite::Element* pointsXML,
     }
 }
 
-void XMLControl::parseRangeAzimuth(xml::lite::Element* parent,
-        RangeAzimuth<double>& value)
+void XMLControl::parseRangeAzimuth(xml::lite::Element* parent, RangeAzimuth<
+        double>& value)
 {
     parseDouble(getFirstAndOnly(parent, "Range"), value.range);
     parseDouble(getFirstAndOnly(parent, "Azimuth"), value.azimuth);
@@ -621,27 +641,27 @@ void XMLControl::parseDateTime(xml::lite::Element* element, DateTime& value)
 }
 
 void XMLControl::parseRowColDouble(xml::lite::Element* parent,
-        std::string rowName, std::string colName, RowColDouble& rc)
+                                   std::string rowName, std::string colName,
+                                   RowColDouble& rc)
 {
     parseDouble(getFirstAndOnly(parent, rowName), rc.row);
     parseDouble(getFirstAndOnly(parent, colName), rc.col);
 }
 
-void XMLControl::parseRowColLatLon(xml::lite::Element* parent,
-				   RowColLatLon& rc)
+void XMLControl::parseRowColLatLon(xml::lite::Element* parent, RowColLatLon& rc)
 {
     parseLatLon(getFirstAndOnly(parent, "Row"), rc.row);
     parseLatLon(getFirstAndOnly(parent, "Col"), rc.col);
 }
 
-void XMLControl::parseRowColDouble(xml::lite::Element* parent,
-        RowColDouble& rc)
+void XMLControl::parseRowColDouble(xml::lite::Element* parent, RowColDouble& rc)
 {
     parseRowColDouble(parent, "Row", "Col", rc);
 }
 
 void XMLControl::parseRowColInt(xml::lite::Element* parent,
-        std::string rowName, std::string colName, RowColInt& rc)
+                                std::string rowName, std::string colName,
+                                RowColInt& rc)
 {
     parseInt(getFirstAndOnly(parent, rowName), rc.row);
     parseInt(getFirstAndOnly(parent, colName), rc.col);
@@ -652,10 +672,14 @@ void XMLControl::parseRowColInt(xml::lite::Element* parent, RowColInt& rc)
     parseRowColInt(parent, "Row", "Col", rc);
 }
 
-xml::lite::Element* XMLControl::createFootprint(xml::lite::Document* doc,
-                                                std::string name, std::string cornerName, const std::vector<LatLon>& corners, bool alt)
+xml::lite::Element* XMLControl::createFootprint(
+                                                std::string name,
+                                                std::string cornerName,
+                                                const std::vector<LatLon>& corners,
+                                                bool alt,
+                                                xml::lite::Element* parent)
 {
-    xml::lite::Element* footprint = newElement(doc, name);
+    xml::lite::Element* footprint = newElement(name, parent);
     xml::lite::AttributeNode node;
     node.setQName("size");
     node.setValue("4");
@@ -665,93 +689,81 @@ xml::lite::Element* XMLControl::createFootprint(xml::lite::Document* doc,
     xml::lite::Element* vertex;
     node.setQName("index");
 
-    vertex = newElement(doc, cornerName);
+    vertex = newElement(cornerName, footprint);
     node.setValue("0");
     vertex->getAttributes().add(node);
-    vertex->addChild(createDouble(doc, "Lat", corners[0].getLat()));
-    vertex->addChild(createDouble(doc, "Lon", corners[0].getLon()));
+    createDouble("Lat", corners[0].getLat(), vertex);
+    createDouble("Lon", corners[0].getLon(), vertex);
     if (alt)
     {
-        vertex->addChild(createDouble(doc, "HAE", corners[0].getAlt()));
+        createDouble("HAE", corners[0].getAlt(), vertex);
     }
-    footprint->addChild(vertex);
 
-    vertex = newElement(doc, cornerName);
+    vertex = newElement(cornerName, footprint);
     node.setValue("1");
     vertex->getAttributes().add(node);
-    vertex->addChild(createDouble(doc, "Lat", corners[1].getLat()));
-    vertex->addChild(createDouble(doc, "Lon", corners[1].getLon()));
+    createDouble("Lat", corners[1].getLat(), vertex);
+    createDouble("Lon", corners[1].getLon(), vertex);
     if (alt)
     {
-        vertex->addChild(createDouble(doc, "HAE", corners[1].getAlt()));
+        createDouble("HAE", corners[1].getAlt(), vertex);
     }
-    footprint->addChild(vertex);
 
-    vertex = newElement(doc, cornerName);
+    vertex = newElement(cornerName, footprint);
     node.setValue("2");
     vertex->getAttributes().add(node);
-    vertex->addChild(createDouble(doc, "Lat", corners[2].getLat()));
-    vertex->addChild(createDouble(doc, "Lon", corners[2].getLon()));
+    createDouble("Lat", corners[2].getLat(), vertex);
+    createDouble("Lon", corners[2].getLon(), vertex);
     if (alt)
     {
-        vertex->addChild(createDouble(doc, "HAE", corners[2].getAlt()));
+        createDouble("HAE", corners[2].getAlt(), vertex);
     }
-    footprint->addChild(vertex);
 
-    vertex = newElement(doc, cornerName);
+    vertex = newElement(cornerName, footprint);
     node.setValue("3");
     vertex->getAttributes().add(node);
-    vertex->addChild(createDouble(doc, "Lat", corners[3].getLat()));
-    vertex->addChild(createDouble(doc, "Lon", corners[3].getLon()));
+    createDouble("Lat", corners[3].getLat(), vertex);
+    createDouble("Lon", corners[3].getLon(), vertex);
     if (alt)
     {
-        vertex->addChild(createDouble(doc, "HAE", corners[3].getAlt()));
+        createDouble("HAE", corners[3].getAlt(), vertex);
     }
-    footprint->addChild(vertex);
     return footprint;
 }
 
-xml::lite::Element* XMLControl::errorStatisticsToXML(xml::lite::Document* doc,
-        ErrorStatistics* errorStatistics)
+xml::lite::Element* XMLControl::errorStatisticsToXML(
+                                                     ErrorStatistics* errorStatistics,
+                                                     xml::lite::Element* parent)
 {
-    xml::lite::Element* errorStatsXML = newElement(doc, "ErrorStatistics");
+    xml::lite::Element* errorStatsXML = newElement("ErrorStatistics", parent);
 
     //TODO compositeSCP needs to be reworked
 
     if (errorStatistics->compositeSCP)
     {
-        xml::lite::Element* scpXML = newElement(doc, "CompositeSCP");
-        errorStatsXML->addChild(scpXML);
+        xml::lite::Element* scpXML = newElement("CompositeSCP", errorStatsXML);
 
         if (errorStatistics->scpType == ErrorStatistics::SCP_RG_AZ)
         {
-            xml::lite::Element* rgAzXML = newElement(doc, "RgAzErr");
-            scpXML->addChild(rgAzXML);
-            rgAzXML->addChild(createDouble(doc, "Rg",
-                    errorStatistics->compositeSCP->xErr));
-            rgAzXML->addChild(createDouble(doc, "Az",
-                    errorStatistics->compositeSCP->yErr));
-            rgAzXML->addChild(createDouble(doc, "RgAz",
-                    errorStatistics->compositeSCP->xyErr));
+            xml::lite::Element* rgAzXML = newElement("RgAzErr", scpXML);
+            createDouble("Rg", errorStatistics->compositeSCP->xErr, rgAzXML);
+            createDouble("Az", errorStatistics->compositeSCP->yErr, rgAzXML);
+            createDouble("RgAz", errorStatistics->compositeSCP->xyErr, rgAzXML);
         }
         else
         {
-            xml::lite::Element* rgAzXML = newElement(doc, "RowColErr");
-            scpXML->addChild(rgAzXML);
-            rgAzXML->addChild(createDouble(doc, "Row",
-                    errorStatistics->compositeSCP->xErr));
-            rgAzXML->addChild(createDouble(doc, "Col",
-                    errorStatistics->compositeSCP->yErr));
-            rgAzXML->addChild(createDouble(doc, "RgCol",
-                    errorStatistics->compositeSCP->xyErr));
+            xml::lite::Element* rgAzXML = newElement("RowColErr", scpXML);
+            createDouble("Row", errorStatistics->compositeSCP->xErr, rgAzXML);
+            createDouble("Col", errorStatistics->compositeSCP->yErr, rgAzXML);
+            createDouble("RgCol", errorStatistics->compositeSCP->xyErr, rgAzXML);
         }
     }
 
     Components* components = errorStatistics->components;
     if (components)
     {
-        xml::lite::Element* componentsXML = newElement(doc, "Components");
-        errorStatsXML->addChild(componentsXML);
+        xml::lite::Element* componentsXML = newElement("Components",
+                                                       errorStatsXML);
 
         PosVelError* posVelError = components->posVelError;
         RadarSensor* radarSensor = components->radarSensor;
@@ -760,126 +772,125 @@ xml::lite::Element* XMLControl::errorStatisticsToXML(xml::lite::Document* doc,
 
         if (posVelError)
         {
-            xml::lite::Element* posVelErrXML = newElement(doc, "PosVelErr");
-            componentsXML->addChild(posVelErrXML);
+            xml::lite::Element* posVelErrXML = newElement("PosVelErr",
+                                                          componentsXML);
 
-            posVelErrXML->addChild(createString(doc, "Frame", str::toString(
-                    posVelError->frame)));
-            posVelErrXML->addChild(createDouble(doc, "P1", posVelError->p1));
-            posVelErrXML->addChild(createDouble(doc, "P2", posVelError->p2));
-            posVelErrXML->addChild(createDouble(doc, "P3", posVelError->p3));
-            posVelErrXML->addChild(createDouble(doc, "V1", posVelError->v1));
-            posVelErrXML->addChild(createDouble(doc, "V2", posVelError->v2));
-            posVelErrXML->addChild(createDouble(doc, "V3", posVelError->v3));
+            createString("Frame", str::toString(posVelError->frame),
+                         posVelErrXML);
+            createDouble("P1", posVelError->p1, posVelErrXML);
+            createDouble("P2", posVelError->p2, posVelErrXML);
+            createDouble("P3", posVelError->p3, posVelErrXML);
+            createDouble("V1", posVelError->v1, posVelErrXML);
+            createDouble("V2", posVelError->v2, posVelErrXML);
+            createDouble("V3", posVelError->v3, posVelErrXML);
 
             CorrCoefs *coefs = posVelError->corrCoefs;
             if (coefs)
             {
-                xml::lite::Element* coefsXML = newElement(doc, "CorrCoefs");
-                posVelErrXML->addChild(coefsXML);
+                xml::lite::Element* coefsXML = newElement("CorrCoefs",
+                                                          posVelErrXML);
 
-                coefsXML->addChild(createDouble(doc, "P1P2", coefs->p1p2));
-                coefsXML->addChild(createDouble(doc, "P1P3", coefs->p1p3));
-                coefsXML->addChild(createDouble(doc, "P1V1", coefs->p1v1));
-                coefsXML->addChild(createDouble(doc, "P1V2", coefs->p1v2));
-                coefsXML->addChild(createDouble(doc, "P1V3", coefs->p1v3));
-                coefsXML->addChild(createDouble(doc, "P2P3", coefs->p2p3));
-                coefsXML->addChild(createDouble(doc, "P2V1", coefs->p2v1));
-                coefsXML->addChild(createDouble(doc, "P2V2", coefs->p2v2));
-                coefsXML->addChild(createDouble(doc, "P2V3", coefs->p2v3));
-                coefsXML->addChild(createDouble(doc, "P3V1", coefs->p3v1));
-                coefsXML->addChild(createDouble(doc, "P3V2", coefs->p3v2));
-                coefsXML->addChild(createDouble(doc, "P3V3", coefs->p3v3));
-                coefsXML->addChild(createDouble(doc, "V1V2", coefs->v1v2));
-                coefsXML->addChild(createDouble(doc, "V1V3", coefs->v1v3));
-                coefsXML->addChild(createDouble(doc, "V2V3", coefs->v2v3));
+                createDouble("P1P2", coefs->p1p2, coefsXML);
+                createDouble("P1P3", coefs->p1p3, coefsXML);
+                createDouble("P1V1", coefs->p1v1, coefsXML);
+                createDouble("P1V2", coefs->p1v2, coefsXML);
+                createDouble("P1V3", coefs->p1v3, coefsXML);
+                createDouble("P2P3", coefs->p2p3, coefsXML);
+                createDouble("P2V1", coefs->p2v1, coefsXML);
+                createDouble("P2V2", coefs->p2v2, coefsXML);
+                createDouble("P2V3", coefs->p2v3, coefsXML);
+                createDouble("P3V1", coefs->p3v1, coefsXML);
+                createDouble("P3V2", coefs->p3v2, coefsXML);
+                createDouble("P3V3", coefs->p3v3, coefsXML);
+                createDouble("V1V2", coefs->v1v2, coefsXML);
+                createDouble("V1V3", coefs->v1v3, coefsXML);
+                createDouble("V2V3", coefs->v2v3, coefsXML);
             }
 
-            addDecorrType(doc, posVelErrXML, "PositionDecorr",
-                    posVelError->positionDecorr);
+            addDecorrType("PositionDecorr", posVelError->positionDecorr,
+                          posVelErrXML);
         }
         if (radarSensor)
         {
-            xml::lite::Element* radarSensorXML = newElement(doc, "RadarSensor");
-            componentsXML->addChild(radarSensorXML);
+            xml::lite::Element* radarSensorXML = newElement("RadarSensor",
+                                                            componentsXML);
 
-            radarSensorXML->addChild(createDouble(doc, "RangeBias",
-                    radarSensor->rangeBias));
+            createDouble("RangeBias", radarSensor->rangeBias, radarSensorXML);
 
             if (!Init::isUndefined<double>(radarSensor->clockFreqSF))
             {
-                radarSensorXML->addChild(createDouble(doc, "ClockFreqSF",
-                        radarSensor->clockFreqSF));
+                createDouble("ClockFreqSF", radarSensor->clockFreqSF,
+                             radarSensorXML);
             }
             if (!Init::isUndefined<double>(radarSensor->transmitFreqSF))
             {
-                radarSensorXML->addChild(createDouble(doc, "TransmitFreqSF",
-                        radarSensor->transmitFreqSF));
+                createDouble("TransmitFreqSF", radarSensor->transmitFreqSF,
+                             radarSensorXML);
             }
-            addDecorrType(doc, radarSensorXML, "RangeBiasDecorr",
-                    radarSensor->rangeBiasDecorr);
+            addDecorrType("RangeBiasDecorr", radarSensor->rangeBiasDecorr,
+                          radarSensorXML);
         }
         if (tropoError)
         {
-            xml::lite::Element* tropoErrXML = newElement(doc, "TropoError");
-            componentsXML->addChild(tropoErrXML);
+            xml::lite::Element* tropoErrXML = newElement("TropoError",
+                                                         componentsXML);
 
             if (!Init::isUndefined<double>(tropoError->tropoRangeVertical))
             {
-                tropoErrXML->addChild(createDouble(doc, "TropoRangeVertical",
-                        tropoError->tropoRangeVertical));
+                createDouble("TropoRangeVertical",
+                             tropoError->tropoRangeVertical, tropoErrXML);
             }
             if (!Init::isUndefined<double>(tropoError->tropoRangeSlant))
             {
-                tropoErrXML->addChild(createDouble(doc, "TropoRangeSlant",
-                        tropoError->tropoRangeSlant));
+                createDouble("TropoRangeSlant", tropoError->tropoRangeSlant,
+                             tropoErrXML);
             }
 
-            addDecorrType(doc, tropoErrXML, "TropoRangeDecorr",
-                    tropoError->tropoRangeDecorr);
+            addDecorrType("TropoRangeDecorr", tropoError->tropoRangeDecorr,
+                          tropoErrXML);
         }
         if (ionoError)
         {
-            xml::lite::Element* ionoErrXML = newElement(doc, "IonoError");
-            componentsXML->addChild(ionoErrXML);
+            xml::lite::Element* ionoErrXML = newElement("IonoError",
+                                                        componentsXML);
 
             if (!Init::isUndefined<double>(ionoError->ionoRangeVertical))
             {
-                ionoErrXML->addChild(createDouble(doc, "IonoRangeVertical",
-                        ionoError->ionoRangeVertical));
+                createDouble("IonoRangeVertical", ionoError->ionoRangeVertical,
+                             ionoErrXML);
             }
             if (!Init::isUndefined<double>(ionoError->ionoRangeRateVertical))
             {
-                ionoErrXML->addChild(createDouble(doc, "IonoRangeRateVertical",
-                        ionoError->ionoRangeRateVertical));
+                createDouble("IonoRangeRateVertical",
+                             ionoError->ionoRangeRateVertical, ionoErrXML);
             }
 
-            ionoErrXML->addChild(createDouble(doc, "IonoRgRgRateCC",
-                    ionoError->ionoRgRgRateCC));
+            createDouble("IonoRgRgRateCC", ionoError->ionoRgRgRateCC,
+                         ionoErrXML);
 
-            addDecorrType(doc, ionoErrXML, "IonoRangeVertDecorr",
-                    ionoError->ionoRangeVertDecorr);
+            addDecorrType("IonoRangeVertDecorr",
+                          ionoError->ionoRangeVertDecorr, ionoErrXML);
         }
     }
 
     if (!errorStatistics->additionalParameters.empty())
     {
-        xml::lite::Element* paramsXML = newElement(doc, "AdditionalParms");
-        errorStatsXML->addChild(paramsXML);
-        addParameters(doc, paramsXML, "Parameter",
-                errorStatistics->additionalParameters);
+        xml::lite::Element* paramsXML = newElement("AdditionalParms",
+                                                   errorStatsXML);
+        addParameters("Parameter", errorStatistics->additionalParameters,
+                      paramsXML);
     }
 
     return errorStatsXML;
 }
 
 void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
-        ErrorStatistics* errorStatistics)
+                                      ErrorStatistics* errorStatistics)
 {
     xml::lite::Element* tmpElem = NULL;
     //optional
     xml::lite::Element* compositeSCPXML = getOptional(errorStatsXML,
-            "CompositeSCP");
+                                                      "CompositeSCP");
     //See if it's RgAzErr or RowColErr
     //optional
     if (compositeSCPXML)
@@ -905,21 +916,21 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
                 == ErrorStatistics::SCP_RG_AZ)
         {
             parseDouble(getFirstAndOnly(tmpElem, "Rg"),
-                    errorStatistics->compositeSCP->xErr);
+                        errorStatistics->compositeSCP->xErr);
             parseDouble(getFirstAndOnly(tmpElem, "Az"),
-                    errorStatistics->compositeSCP->yErr);
+                        errorStatistics->compositeSCP->yErr);
             parseDouble(getFirstAndOnly(tmpElem, "RgAz"),
-                    errorStatistics->compositeSCP->xyErr);
+                        errorStatistics->compositeSCP->xyErr);
         }
         else if (tmpElem != NULL && errorStatistics->scpType
                 == ErrorStatistics::SCP_ROW_COL)
         {
             parseDouble(getFirstAndOnly(tmpElem, "Row"),
-                    errorStatistics->compositeSCP->xErr);
+                        errorStatistics->compositeSCP->xErr);
             parseDouble(getFirstAndOnly(tmpElem, "Col"),
-                    errorStatistics->compositeSCP->yErr);
+                        errorStatistics->compositeSCP->yErr);
             parseDouble(getFirstAndOnly(tmpElem, "RowCol"),
-                    errorStatistics->compositeSCP->xyErr);
+                        errorStatistics->compositeSCP->xyErr);
         }
     }
 
@@ -929,7 +940,7 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
     xml::lite::Element* ionoErrorXML = NULL;
 
     tmpElem = getOptional(errorStatsXML, "Components");
-    if(tmpElem)
+    if (tmpElem)
     {
         //optional
         errorStatistics->components = new Components();
@@ -965,21 +976,23 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
 
     if (posVelErrXML != NULL)
     {
-        errorStatistics->components->posVelError->frame = str::toType<
-                PosVelError::FrameType>(
-                getFirstAndOnly(posVelErrXML, "Frame")->getCharacterData());
+        errorStatistics->components->posVelError->frame
+                = str::toType<PosVelError::FrameType>(
+                                                      getFirstAndOnly(
+                                                                      posVelErrXML,
+                                                                      "Frame")->getCharacterData());
         parseDouble(getFirstAndOnly(posVelErrXML, "P1"),
-                errorStatistics->components->posVelError->p1);
+                    errorStatistics->components->posVelError->p1);
         parseDouble(getFirstAndOnly(posVelErrXML, "P2"),
-                errorStatistics->components->posVelError->p2);
+                    errorStatistics->components->posVelError->p2);
         parseDouble(getFirstAndOnly(posVelErrXML, "P3"),
-                errorStatistics->components->posVelError->p3);
+                    errorStatistics->components->posVelError->p3);
         parseDouble(getFirstAndOnly(posVelErrXML, "V1"),
-                errorStatistics->components->posVelError->v1);
+                    errorStatistics->components->posVelError->v1);
         parseDouble(getFirstAndOnly(posVelErrXML, "V2"),
-                errorStatistics->components->posVelError->v2);
+                    errorStatistics->components->posVelError->v2);
         parseDouble(getFirstAndOnly(posVelErrXML, "V3"),
-                errorStatistics->components->posVelError->v3);
+                    errorStatistics->components->posVelError->v3);
 
         tmpElem = getOptional(posVelErrXML, "CorrCoefs");
         if (tmpElem)
@@ -987,73 +1000,91 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
             //optional
             errorStatistics->components->posVelError->corrCoefs
                     = new CorrCoefs();
-            parseDouble(getFirstAndOnly(tmpElem, "P1P2"),
-                    errorStatistics->components->posVelError->corrCoefs->p1p2);
-            parseDouble(getFirstAndOnly(tmpElem, "P1P3"),
-                    errorStatistics->components->posVelError->corrCoefs->p1p3);
-            parseDouble(getFirstAndOnly(tmpElem, "P1V1"),
-                    errorStatistics->components->posVelError->corrCoefs->p1v1);
-            parseDouble(getFirstAndOnly(tmpElem, "P1V2"),
-                    errorStatistics->components->posVelError->corrCoefs->p1v2);
-            parseDouble(getFirstAndOnly(tmpElem, "P1V3"),
-                    errorStatistics->components->posVelError->corrCoefs->p1v3);
-            parseDouble(getFirstAndOnly(tmpElem, "P2P3"),
-                    errorStatistics->components->posVelError->corrCoefs->p2p3);
-            parseDouble(getFirstAndOnly(tmpElem, "P2V1"),
-                    errorStatistics->components->posVelError->corrCoefs->p2v1);
-            parseDouble(getFirstAndOnly(tmpElem, "P2V2"),
-                    errorStatistics->components->posVelError->corrCoefs->p2v2);
-            parseDouble(getFirstAndOnly(tmpElem, "P2V3"),
-                    errorStatistics->components->posVelError->corrCoefs->p2v3);
-            parseDouble(getFirstAndOnly(tmpElem, "P3V1"),
-                    errorStatistics->components->posVelError->corrCoefs->p3v1);
-            parseDouble(getFirstAndOnly(tmpElem, "P3V2"),
-                    errorStatistics->components->posVelError->corrCoefs->p3v2);
-            parseDouble(getFirstAndOnly(tmpElem, "P3V3"),
-                    errorStatistics->components->posVelError->corrCoefs->p3v3);
-            parseDouble(getFirstAndOnly(tmpElem, "V1V2"),
-                    errorStatistics->components->posVelError->corrCoefs->v1v2);
-            parseDouble(getFirstAndOnly(tmpElem, "V1V3"),
-                    errorStatistics->components->posVelError->corrCoefs->v1v3);
-            parseDouble(getFirstAndOnly(tmpElem, "V2V3"),
-                    errorStatistics->components->posVelError->corrCoefs->v2v3);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P1P2"),
+                        errorStatistics->components->posVelError->corrCoefs->p1p2);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P1P3"),
+                        errorStatistics->components->posVelError->corrCoefs->p1p3);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P1V1"),
+                        errorStatistics->components->posVelError->corrCoefs->p1v1);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P1V2"),
+                        errorStatistics->components->posVelError->corrCoefs->p1v2);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P1V3"),
+                        errorStatistics->components->posVelError->corrCoefs->p1v3);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P2P3"),
+                        errorStatistics->components->posVelError->corrCoefs->p2p3);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P2V1"),
+                        errorStatistics->components->posVelError->corrCoefs->p2v1);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P2V2"),
+                        errorStatistics->components->posVelError->corrCoefs->p2v2);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P2V3"),
+                        errorStatistics->components->posVelError->corrCoefs->p2v3);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P3V1"),
+                        errorStatistics->components->posVelError->corrCoefs->p3v1);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P3V2"),
+                        errorStatistics->components->posVelError->corrCoefs->p3v2);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "P3V3"),
+                        errorStatistics->components->posVelError->corrCoefs->p3v3);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "V1V2"),
+                        errorStatistics->components->posVelError->corrCoefs->v1v2);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "V1V3"),
+                        errorStatistics->components->posVelError->corrCoefs->v1v3);
+            parseDouble(
+                        getFirstAndOnly(tmpElem, "V2V3"),
+                        errorStatistics->components->posVelError->corrCoefs->v2v3);
         }
 
         tmpElem = getOptional(posVelErrXML, "PositionDecorr");
         if (tmpElem)
         {
             //optional
-            parseDecorrType(tmpElem,
-                    errorStatistics->components->posVelError->positionDecorr);
+            parseDecorrType(
+                            tmpElem,
+                            errorStatistics->components->posVelError->positionDecorr);
         }
     }
 
     if (radarSensorXML != NULL)
     {
         parseDouble(getFirstAndOnly(radarSensorXML, "RangeBias"),
-                errorStatistics->components->radarSensor->rangeBias);
+                    errorStatistics->components->radarSensor->rangeBias);
 
         tmpElem = getOptional(radarSensorXML, "ClockFreqSF");
         if (tmpElem)
         {
             //optional
             parseDouble(tmpElem,
-                    errorStatistics->components->radarSensor->clockFreqSF);
+                        errorStatistics->components->radarSensor->clockFreqSF);
         }
 
         tmpElem = getOptional(radarSensorXML, "TransmitFreqSF");
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem,
-                    errorStatistics->components->radarSensor->transmitFreqSF);
+            parseDouble(
+                        tmpElem,
+                        errorStatistics->components->radarSensor->transmitFreqSF);
         }
 
         tmpElem = getOptional(radarSensorXML, "RangeBiasDecorr");
         if (tmpElem)
         {
-            parseDecorrType(tmpElem,
-                    errorStatistics->components->radarSensor->rangeBiasDecorr);
+            parseDecorrType(
+                            tmpElem,
+                            errorStatistics->components->radarSensor->rangeBiasDecorr);
         }
     }
 
@@ -1063,23 +1094,26 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem, errorStatistics->components->tropoError
-                    ->tropoRangeVertical);
+            parseDouble(
+                        tmpElem,
+                        errorStatistics->components->tropoError ->tropoRangeVertical);
         }
 
         tmpElem = getOptional(tropoErrorXML, "TropoRangeSlant");
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem,
-                    errorStatistics->components->tropoError->tropoRangeSlant);
+            parseDouble(
+                        tmpElem,
+                        errorStatistics->components->tropoError->tropoRangeSlant);
         }
 
         tmpElem = getOptional(tropoErrorXML, "TropoRangeDecorr");
         if (tmpElem)
         {
-            parseDecorrType(tmpElem,
-                    errorStatistics->components->tropoError->tropoRangeDecorr);
+            parseDecorrType(
+                            tmpElem,
+                            errorStatistics->components->tropoError->tropoRangeDecorr);
         }
     }
 
@@ -1089,26 +1123,29 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem,
-                    errorStatistics->components->ionoError->ionoRangeVertical);
+            parseDouble(
+                        tmpElem,
+                        errorStatistics->components->ionoError->ionoRangeVertical);
         }
 
         tmpElem = getOptional(ionoErrorXML, "IonoRangeRateVertical");
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem, errorStatistics->components->ionoError
-                    ->ionoRangeRateVertical);
+            parseDouble(
+                        tmpElem,
+                        errorStatistics->components->ionoError ->ionoRangeRateVertical);
         }
 
         parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRgRgRateCC"),
-                errorStatistics->components->ionoError->ionoRgRgRateCC);
+                    errorStatistics->components->ionoError->ionoRgRgRateCC);
 
         tmpElem = getOptional(ionoErrorXML, "IonoRangeVertDecorr");
         if (tmpElem)
         {
-            parseDecorrType(tmpElem,
-                    errorStatistics->components->ionoError->ionoRangeVertDecorr);
+            parseDecorrType(
+                            tmpElem,
+                            errorStatistics->components->ionoError->ionoRangeVertDecorr);
         }
     }
 
@@ -1117,7 +1154,7 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
     {
         //optional
         parseParameters(tmpElem, "Parameter",
-                errorStatistics->additionalParameters);
+                        errorStatistics->additionalParameters);
     }
 }
 
@@ -1158,8 +1195,8 @@ void XMLControl::xmlToRadiometric(xml::lite::Element* radiometricXML,
     if (tmpElem)
     {
         //optional
-        radiometric->sigmaZeroSFIncidenceMap = str::toType<six::AppliedType>(
-                tmpElem->getCharacterData());
+        radiometric->sigmaZeroSFIncidenceMap
+                = str::toType<six::AppliedType>(tmpElem->getCharacterData());
     }
 
     tmpElem = getOptional(radiometricXML, "GammaZeroSFPoly");
@@ -1173,48 +1210,40 @@ void XMLControl::xmlToRadiometric(xml::lite::Element* radiometricXML,
     if (tmpElem)
     {
         //optional
-        radiometric->gammaZeroSFIncidenceMap = str::toType<six::AppliedType>(
-                tmpElem->getCharacterData());
+        radiometric->gammaZeroSFIncidenceMap
+                = str::toType<six::AppliedType>(tmpElem->getCharacterData());
     }
 }
 
-xml::lite::Element* XMLControl::radiometricToXML(xml::lite::Document* doc,
-                                                 Radiometric *radiometric)
+xml::lite::Element* XMLControl::radiometricToXML(Radiometric *r,
+                                                 xml::lite::Element* parent)
 {
-    xml::lite::Element* radiometricXML = newElement(doc, "Radiometric");
+    xml::lite::Element* rXML = newElement("Radiometric", parent);
 
-    if (radiometric->noisePoly.orderX() >= 0 && radiometric->noisePoly.orderY()
-            >= 0)
-        radiometricXML->addChild(createPoly2D(doc, "NoisePoly",
-                radiometric->noisePoly));
-    if (radiometric->rcsSFPoly.orderX() >= 0 && radiometric->rcsSFPoly.orderY()
-            >= 0)
-        radiometricXML->addChild(createPoly2D(doc, "RCSSFPoly",
-                radiometric->rcsSFPoly));
-    if (radiometric->betaZeroSFPoly.orderX() >= 0
-            && radiometric->betaZeroSFPoly.orderY() >= 0)
-        radiometricXML->addChild(createPoly2D(doc, "BetaZeroSFPoly",
-                radiometric->betaZeroSFPoly));
-    if (radiometric->sigmaZeroSFPoly.orderX() >= 0
-            && radiometric->sigmaZeroSFPoly.orderY() >= 0)
-        radiometricXML->addChild(createPoly2D(doc, "SigmaZeroSFPoly",
-                radiometric->sigmaZeroSFPoly));
+    if (r->noisePoly.orderX() >= 0 && r->noisePoly.orderY() >= 0)
+        createPoly2D("NoisePoly", r->noisePoly, rXML);
+    if (r->rcsSFPoly.orderX() >= 0 && r->rcsSFPoly.orderY() >= 0)
+        createPoly2D("RCSSFPoly", r->rcsSFPoly, rXML);
+    if (r->betaZeroSFPoly.orderX() >= 0 && r->betaZeroSFPoly.orderY() >= 0)
+        createPoly2D("BetaZeroSFPoly", r->betaZeroSFPoly, rXML);
+    if (r->sigmaZeroSFPoly.orderX() >= 0 && r->sigmaZeroSFPoly.orderY() >= 0)
+        createPoly2D("SigmaZeroSFPoly", r->sigmaZeroSFPoly, rXML);
 
-    if (radiometric->sigmaZeroSFIncidenceMap != six::APPLIED_NOT_SET)
+    if (r->sigmaZeroSFIncidenceMap != six::APPLIED_NOT_SET)
     {
-        radiometricXML->addChild(createString(doc, "SigmaZeroSFIncidenceMap",
-                str::toString<six::AppliedType>(
-                        radiometric->sigmaZeroSFIncidenceMap)));
+        createString(
+                     "SigmaZeroSFIncidenceMap",
+                     str::toString<six::AppliedType>(r->sigmaZeroSFIncidenceMap),
+                     rXML);
     }
-    if (radiometric->gammaZeroSFPoly.orderX() >= 0
-            && radiometric->gammaZeroSFPoly.orderY() >= 0)
-        radiometricXML->addChild(createPoly2D(doc, "GammaZeroSFPoly",
-                radiometric->sigmaZeroSFPoly));
-    if (radiometric->gammaZeroSFIncidenceMap != six::APPLIED_NOT_SET)
+    if (r->gammaZeroSFPoly.orderX() >= 0 && r->gammaZeroSFPoly.orderY() >= 0)
+        createPoly2D("GammaZeroSFPoly", r->sigmaZeroSFPoly, rXML);
+    if (r->gammaZeroSFIncidenceMap != six::APPLIED_NOT_SET)
     {
-        radiometricXML->addChild(createString(doc, "GammaZeroSFIncidenceMap",
-                str::toString<six::AppliedType>(
-                        radiometric->gammaZeroSFIncidenceMap)));
+        createString(
+                     "GammaZeroSFIncidenceMap",
+                     str::toString<six::AppliedType>(r->gammaZeroSFIncidenceMap),
+                     rXML);
     }
-    return radiometricXML;
+    return rXML;
 }

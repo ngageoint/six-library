@@ -72,7 +72,7 @@ public:
      *  \return An XML DOM
      */
     virtual xml::lite::Document* toXML(Data* data) = 0;
-    
+
     /*!
      *  Convert a document from a DOM into a Data model
      *  \param doc
@@ -83,61 +83,71 @@ public:
 protected:
     std::string mURI;
 
-    xml::lite::Element* createString(xml::lite::Document* doc,
-            std::string name, std::string p = "");
-    xml::lite::Element* createInt(xml::lite::Document* doc, std::string name,
-            int p = 0);
-    xml::lite::Element* createDouble(xml::lite::Document* doc,
-            std::string name, double p = 0);
-    xml::lite::Element* createComplex(xml::lite::Document* doc,
-            std::string name, std::complex<double> c);
-    xml::lite::Element* createBooleanType(xml::lite::Document* doc,
-            std::string name, BooleanType b);
-    xml::lite::Element* createDateTime(xml::lite::Document* doc,
-            std::string name, DateTime p);
-    xml::lite::Element* createDateTime(xml::lite::Document* doc,
-            std::string name, std::string s);
-    xml::lite::Element* createDate(xml::lite::Document* doc, std::string name,
-            DateTime p);
+    xml::lite::Element* newElement(std::string name,
+                                   xml::lite::Element* parent = NULL);
 
-    xml::lite::Element* createVector3D(xml::lite::Document* doc,
-            std::string name, Vector3 p = 0.0);
-    xml::lite::Element* createRowCol(xml::lite::Document* doc,
-            std::string name, std::string rowName, std::string colName,
-            const RowColInt& value);
-    xml::lite::Element* createRowCol(xml::lite::Document* doc,
-            std::string name, std::string rowName, std::string colName,
-            const RowColDouble& value);
-    xml::lite::Element* createRowCol(xml::lite::Document* doc,
-            std::string name, const RowColInt& value);
+    xml::lite::Element* newElement(std::string name, std::string characterData,
+                                   xml::lite::Element* parent = NULL);
 
-    xml::lite::Element* createRowCol(xml::lite::Document* doc,
-            std::string name, const RowColDouble& value);
-
-    xml::lite::Element* createRowCol(xml::lite::Document* doc,
-				     std::string, const RowColLatLon& value);
-
-    xml::lite::Element* createRangeAzimuth(xml::lite::Document* doc,
-            std::string name, const RangeAzimuth<double>& value);
-    xml::lite::Element* createLatLon(xml::lite::Document* doc,
-            std::string name, const LatLon& value);
-    xml::lite::Element* createLatLonAlt(xml::lite::Document* doc,
-            std::string name, const LatLonAlt& value);
-    xml::lite::Element* createEarthModelType(xml::lite::Document* doc,
-            std::string name, const EarthModelType& value);
-    xml::lite::Element* createSideOfTrackType(xml::lite::Document* doc,
-            std::string name, const SideOfTrackType& value);
-
-    virtual xml::lite::Element* createFootprint(xml::lite::Document* doc,
-            std::string name, std::string cornerName,
-            const std::vector<LatLon>& c, bool alt = false);
-
-    xml::lite::Element* createPoly1D(xml::lite::Document* doc,
-            std::string name, const Poly1D& poly1D);
-    xml::lite::Element* createPoly2D(xml::lite::Document* doc,
-            std::string name, const Poly2D& poly2D);
-    xml::lite::Element* createPolyXYZ(xml::lite::Document* doc,
-            std::string name, const PolyXYZ& polyXYZ);
+    xml::lite::Element* createString(std::string name, std::string p = "",
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createInt(std::string name, int p = 0,
+                                  xml::lite::Element* parent = NULL);
+    xml::lite::Element* createDouble(std::string name, double p = 0,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createComplex(std::string name, std::complex<double> c,
+                                      xml::lite::Element* parent = NULL);
+    xml::lite::Element* createBooleanType(std::string name, BooleanType b,
+                                          xml::lite::Element* parent = NULL);
+    xml::lite::Element* createDateTime(std::string name, DateTime p,
+                                       xml::lite::Element* parent = NULL);
+    xml::lite::Element* createDateTime(std::string name, std::string s,
+                                       xml::lite::Element* parent = NULL);
+    xml::lite::Element* createDate(std::string name, DateTime p,
+                                   xml::lite::Element* parent = NULL);
+    xml::lite::Element* createVector3D(std::string name, Vector3 p = 0.0,
+                                       xml::lite::Element* parent = NULL);
+    xml::lite::Element* createRowCol(std::string name, std::string rowName,
+                                     std::string colName,
+                                     const RowColInt& value,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createRowCol(std::string name, std::string rowName,
+                                     std::string colName,
+                                     const RowColDouble& value,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createRowCol(std::string name, const RowColInt& value,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createRowCol(std::string name,
+                                     const RowColDouble& value,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createRowCol(std::string, const RowColLatLon& value,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createRangeAzimuth(std::string name,
+                                           const RangeAzimuth<double>& value,
+                                           xml::lite::Element* parent = NULL);
+    xml::lite::Element* createLatLon(std::string name, const LatLon& value,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createLatLonAlt(std::string name,
+                                        const LatLonAlt& value,
+                                        xml::lite::Element* parent = NULL);
+    xml::lite::Element* createEarthModelType(std::string name,
+                                             const EarthModelType& value,
+                                             xml::lite::Element* parent = NULL);
+    xml::lite::Element
+    * createSideOfTrackType(std::string name, const SideOfTrackType& value,
+                            xml::lite::Element* parent = NULL);
+    virtual xml::lite::Element* createFootprint(std::string name,
+                                                std::string cornerName,
+                                                const std::vector<LatLon>& c,
+                                                bool alt = false,
+                                                xml::lite::Element* parent =
+                                                        NULL);
+    xml::lite::Element* createPoly1D(std::string name, const Poly1D& poly1D,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createPoly2D(std::string name, const Poly2D& poly2D,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createPolyXYZ(std::string name, const PolyXYZ& polyXYZ,
+                                      xml::lite::Element* parent = NULL);
 
     void parseInt(xml::lite::Element* element, int& value);
     void parseInt(xml::lite::Element* element, long& value);
@@ -152,70 +162,69 @@ protected:
     void parsePoly2D(xml::lite::Element* polyXML, Poly2D& poly2D);
     void parsePolyXYZ(xml::lite::Element* polyXML, PolyXYZ& polyXYZ);
 
-    xml::lite::Element* newElement(xml::lite::Document* doc, std::string name)
-    {
-        return doc->createElement(name, mURI);
-    }
-
     void parseVector3D(xml::lite::Element* vecXML, Vector3& vec);
     void parseLatLonAlt(xml::lite::Element* llaXML, LatLonAlt& lla);
     void parseLatLon(xml::lite::Element* parent, LatLon& ll);
     void parseLatLons(xml::lite::Element* pointsXML, std::string pointName,
-            std::vector<LatLon>& llVec);
+                      std::vector<LatLon>& llVec);
     void parseRangeAzimuth(xml::lite::Element* parent,
-            RangeAzimuth<double>& value);
+                           RangeAzimuth<double>& value);
     virtual void parseFootprint(xml::lite::Element* footprint,
-            std::string cornerName, std::vector<LatLon>& value, bool alt);
-    void parseEarthModelType(xml::lite::Element* element,
-            EarthModelType& value);
+                                std::string cornerName,
+                                std::vector<LatLon>& value, bool alt);
+    void
+    parseEarthModelType(xml::lite::Element* element, EarthModelType& value);
     void parseSideOfTrackType(xml::lite::Element* element,
-            SideOfTrackType& value);
+                              SideOfTrackType& value);
     void parseDateTime(xml::lite::Element* element, DateTime& value);
     void parseRowColDouble(xml::lite::Element* parent, std::string rowName,
-            std::string colName, RowColDouble& rc);
+                           std::string colName, RowColDouble& rc);
     void parseRowColDouble(xml::lite::Element* parent, RowColDouble& rc);
 
     void parseRowColInt(xml::lite::Element* parent, std::string rowName,
-            std::string colName, RowColInt& rc);
+                        std::string colName, RowColInt& rc);
     void parseRowColInt(xml::lite::Element* parent, RowColInt& rc);
     Parameter parseParameter(xml::lite::Element* element);
 
     void parseRowColLatLon(xml::lite::Element* parent, RowColLatLon& rc);
 
     void parseParameters(xml::lite::Element* paramXML, std::string paramName,
-            std::vector<Parameter>& props);
+                         std::vector<Parameter>& props);
 
     void setAttribute(xml::lite::Element* e, std::string name, std::string v);
 
     static xml::lite::Element* getOptional(xml::lite::Element* parent,
-            std::string tag);
+                                           std::string tag);
     static xml::lite::Element* getFirstAndOnly(xml::lite::Element* parent,
-            std::string tag);
-    static void addOptional(xml::lite::Element* parent,
-            xml::lite::Element* element);
-    static void addRequired(xml::lite::Element* parent,
-            xml::lite::Element* element, std::string name);
+                                               std::string tag);
 
-    xml::lite::Element* createParameter(xml::lite::Document* doc,
-            xml::lite::Element* parent, std::string name,
-            const Parameter& value);
-    void addParameters(xml::lite::Document* doc, xml::lite::Element* parent,
-            std::string name, std::vector<Parameter>& props);
+    xml::lite::Element* createParameter(std::string name,
+                                        const Parameter& value,
+                                        xml::lite::Element* parent = NULL);
+    void addParameters(std::string name, std::vector<Parameter>& props,
+                       xml::lite::Element* parent = NULL);
 
-    void addDecorrType(xml::lite::Document* doc, xml::lite::Element* parent,
-            std::string name, DecorrType& decorrType);
+    void addDecorrType(std::string name, DecorrType& decorrType,
+                       xml::lite::Element* parent);
     void parseDecorrType(xml::lite::Element* decorrXML, DecorrType& decorrType);
 
-    xml::lite::Element* errorStatisticsToXML(xml::lite::Document* doc,
-            ErrorStatistics* errorStatistics);
+    xml::lite::Element* errorStatisticsToXML(ErrorStatistics* errorStatistics,
+                                             xml::lite::Element* parent = NULL);
 
     void xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
-            ErrorStatistics* errorStatistics);
+                              ErrorStatistics* errorStatistics);
 
-
-    xml::lite::Element* radiometricToXML(xml::lite::Document* doc,
-            Radiometric *obj);
+    xml::lite::Element* radiometricToXML(Radiometric *obj,
+                                         xml::lite::Element* parent = NULL);
     void xmlToRadiometric(xml::lite::Element* radiometricXML, Radiometric *obj);
+
+    /*!
+     * Require an element to be not NULL
+     * @throw throws an Exception if the element is NULL
+     * @return returns the input Element
+     */
+    static xml::lite::Element* require(xml::lite::Element* element,
+                                       std::string name);
 
 };
 

@@ -39,7 +39,7 @@ namespace sidd
  *  if necessary.  A best practice is to use the six::toXMLCharArray
  *  and six::toXMLString functions to turn Data* objects into XML
  */
-class DerivedXMLControl: public XMLControl
+class DerivedXMLControl : public XMLControl
 {
 
 public:
@@ -64,60 +64,69 @@ public:
     virtual Data* fromXML(xml::lite::Document* doc);
 
 protected:
-    //    virtual xml::lite::Element* createLUT3(xml::lite::Document* doc,
-    //            std::string name, char *lutTable, size_t numElems);
-    virtual xml::lite::Element* createLUT(xml::lite::Document* doc,
-            std::string name, LUT *lut);
+    //    virtual xml::lite::Element* createLUT3(
+    //            std::string name, char *lutTable, size_t numElems, xml::lite::Element* parent = NULL);
+    virtual xml::lite::Element* createLUT(std::string name, LUT *lut,
+                                          xml::lite::Element* parent = NULL);
 
-    xml::lite::Element* productCreationToXML(xml::lite::Document* doc,
-            ProductCreation* productCreation);
-
-    xml::lite::Element* productProcessingToXML(xml::lite::Document* doc,
-            ProductProcessing* productProcessing);
-    void xmlToProductProcessing(xml::lite::Element* elem,
-            ProductProcessing* productProcessing);
-
-    xml::lite::Element* processingModuleToXML(xml::lite::Document* doc,
-            ProcessingModule* procMod);
-    void xmlToProcessingModule(xml::lite::Element* elem,
-            ProcessingModule* procMod);
-
-    xml::lite::Element* downstreamReprocessingToXML(xml::lite::Document* doc,
-            DownstreamReprocessing* downstreamReproc);
-    void xmlToDownstreamReprocessing(xml::lite::Element* elem,
-            DownstreamReprocessing* downstreamReproc);
+    xml::lite::Element* productCreationToXML(ProductCreation* productCreation,
+                                             xml::lite::Element* parent = NULL);
 
     xml::lite::Element
-    * displayToXML(xml::lite::Document* doc, Display* display);
+            * productProcessingToXML(ProductProcessing* productProcessing,
+                                     xml::lite::Element* parent = NULL);
+    void xmlToProductProcessing(xml::lite::Element* elem,
+                                ProductProcessing* productProcessing);
 
-    xml::lite::Element* geographicAndTargetToXML(xml::lite::Document* doc,
-            GeographicAndTarget* geographicAndTarget);
+    xml::lite::Element
+            * processingModuleToXML(ProcessingModule* procMod,
+                                    xml::lite::Element* parent = NULL);
+    void xmlToProcessingModule(xml::lite::Element* elem,
+                               ProcessingModule* procMod);
 
-    xml::lite::Element* geographicCoverageToXML(xml::lite::Document* doc,
-            GeographicCoverage* geographicCoverage);
+    xml::lite::Element
+            * downstreamReprocessingToXML(
+                                          DownstreamReprocessing* downstreamReproc,
+                                          xml::lite::Element* parent = NULL);
+    void xmlToDownstreamReprocessing(xml::lite::Element* elem,
+                                     DownstreamReprocessing* downstreamReproc);
 
-    xml::lite::Element* measurementToXML(xml::lite::Document* doc,
-            Measurement* measurement);
+    xml::lite::Element* displayToXML(Display* display,
+                                     xml::lite::Element* parent = NULL);
 
-    xml::lite::Element* exploitationFeaturesToXML(xml::lite::Document* doc,
-            ExploitationFeatures* exploitationFeatures);
+    xml::lite::Element
+            * geographicAndTargetToXML(
+                                       GeographicAndTarget* geographicAndTarget,
+                                       xml::lite::Element* parent = NULL);
+
+    xml::lite::Element
+            * geographicCoverageToXML(GeographicCoverage* geographicCoverage,
+                                      xml::lite::Element* parent = NULL);
+
+    xml::lite::Element* measurementToXML(Measurement* measurement,
+                                         xml::lite::Element* parent = NULL);
+
+    xml::lite::Element
+            * exploitationFeaturesToXML(
+                                        ExploitationFeatures* exploitationFeatures,
+                                        xml::lite::Element* parent = NULL);
 
     void xmlToProductCreation(xml::lite::Element* productCreationXML,
-            ProductCreation* productCreation);
+                              ProductCreation* productCreation);
 
     void xmlToDisplay(xml::lite::Element* displayXML, Display* display);
 
     void xmlToMeasurement(xml::lite::Element* measurementXML,
-            Measurement* measurement);
+                          Measurement* measurement);
 
     void xmlToGeographicAndTarget(xml::lite::Element* geographicAndTargetXML,
-            GeographicAndTarget* geographicAndTarget);
+                                  GeographicAndTarget* geographicAndTarget);
 
     void xmlToGeographicCoverage(xml::lite::Element* geographicCoverageXML,
-            GeographicCoverage* geographicCoverage);
+                                 GeographicCoverage* geographicCoverage);
 
     void xmlToExploitationFeatures(xml::lite::Element* exploitationFeaturesXML,
-            ExploitationFeatures* exploitationFeatures);
+                                   ExploitationFeatures* exploitationFeatures);
 };
 
 }
