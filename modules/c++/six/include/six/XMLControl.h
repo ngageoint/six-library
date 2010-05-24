@@ -184,7 +184,7 @@ protected:
     void parseRowColInt(xml::lite::Element* parent, std::string rowName,
                         std::string colName, RowColInt& rc);
     void parseRowColInt(xml::lite::Element* parent, RowColInt& rc);
-    Parameter parseParameter(xml::lite::Element* element);
+    void parseParameter(xml::lite::Element* element, Parameter& param);
 
     void parseRowColLatLon(xml::lite::Element* parent, RowColLatLon& rc);
 
