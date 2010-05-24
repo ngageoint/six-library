@@ -38,7 +38,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
     xml::lite::Element *root = doc->getRootElement();
 
     xml::lite::Element *collectionInfoXML = getFirstAndOnly(root,
-            "CollectionInfo");
+                                                            "CollectionInfo");
 
     xml::lite::Element *imageCreationXML = NULL;
 
@@ -50,9 +50,9 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
     xml::lite::Element *timelineXML = getFirstAndOnly(root, "Timeline");
     xml::lite::Element *positionXML = getFirstAndOnly(root, "Position");
     xml::lite::Element *radarCollectionXML = getFirstAndOnly(root,
-            "RadarCollection");
+                                                             "RadarCollection");
     xml::lite::Element *imageFormationXML = getFirstAndOnly(root,
-            "ImageFormation");
+                                                            "ImageFormation");
     xml::lite::Element *scpcoaXML = getFirstAndOnly(root, "SCPCOA");
 
     xml::lite::Element *radiometricXML = NULL;
@@ -61,7 +61,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
     xml::lite::Element *antennaXML = getOptional(root, "Antenna");
 
     xml::lite::Element *errorStatisticsXML = getOptional(root,
-            "ErrorStatistics");
+                                                         "ErrorStatistics");
 
     xml::lite::Element *matchInfoXML = getOptional(root, "MatchInfo");
     xml::lite::Element *pfaXML = getOptional(root, "PFA");
@@ -124,44 +124,44 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
 
     xml::lite::Document* doc = new xml::lite::Document();
 
-    xml::lite::Element* root = newElement(doc, "SICD");
+    xml::lite::Element* root = newElement("SICD");
     doc->setRootElement(root);
 
     ComplexData *sicd = (ComplexData*) data;
 
-    doc->insert(collectionInfoToXML(doc, sicd->collectionInformation), root);
+    collectionInfoToXML(sicd->collectionInformation, root);
     if (sicd->imageCreation)
     {
-        doc->insert(imageCreationToXML(doc, sicd->imageCreation), root);
+        imageCreationToXML(sicd->imageCreation, root);
     }
-    doc->insert(imageDataToXML(doc, sicd->imageData), root);
-    doc->insert(geoDataToXML(doc, sicd->geoData), root);
-    doc->insert(gridToXML(doc, sicd->grid), root);
-    doc->insert(timelineToXML(doc, sicd->timeline), root);
-    doc->insert(positionToXML(doc, sicd->position), root);
-    doc->insert(radarCollectionToXML(doc, sicd->radarCollection), root);
-    doc->insert(imageFormationToXML(doc, sicd->imageFormation), root);
-    doc->insert(scpcoaToXML(doc, sicd->scpcoa), root);
+    imageDataToXML(sicd->imageData, root);
+    geoDataToXML(sicd->geoData, root);
+    gridToXML(sicd->grid, root);
+    timelineToXML(sicd->timeline, root);
+    positionToXML(sicd->position, root);
+    radarCollectionToXML(sicd->radarCollection, root);
+    imageFormationToXML(sicd->imageFormation, root);
+    scpcoaToXML(sicd->scpcoa, root);
     if (sicd->radiometric)
-        doc->insert(radiometricToXML(doc, sicd->radiometric), root);
+        radiometricToXML(sicd->radiometric, root);
     if (sicd->antenna)
-        doc->insert(antennaToXML(doc, sicd->antenna), root);
+        antennaToXML(sicd->antenna, root);
     if (sicd->errorStatistics)
-        doc->insert(errorStatisticsToXML(doc, sicd->errorStatistics), root);
+        errorStatisticsToXML(sicd->errorStatistics, root);
     if (sicd->matchInformation && !sicd->matchInformation->collects.empty())
-        doc->insert(matchInfoToXML(doc, sicd->matchInformation), root);
+        matchInfoToXML(sicd->matchInformation, root);
     // Hack for now
     if (sicd->pfa)
-        doc->insert(pfaToXML(doc, sicd->pfa), root);
-
+        pfaToXML(sicd->pfa, root);
     return doc;
 }
 
-xml::lite::Element* ComplexXMLControl::createFFTSign(xml::lite::Document* doc,
-                                                     std::string name, six::FFTSign sign)
+xml::lite::Element* ComplexXMLControl::createFFTSign(std::string name,
+                                                     six::FFTSign sign,
+                                                     xml::lite::Element* parent)
 {
     std::string charData = (sign == FFT_SIGN_NEG) ? ("-1") : ("+1");
-    xml::lite::Element* e = doc->createElement(name, mURI, charData);
+    xml::lite::Element* e = newElement(name, charData, parent);
     xml::lite::AttributeNode node;
     node.setQName("class");
     node.setUri(mURI);
@@ -171,131 +171,118 @@ xml::lite::Element* ComplexXMLControl::createFFTSign(xml::lite::Document* doc,
 }
 
 xml::lite::Element* ComplexXMLControl::collectionInfoToXML(
-        xml::lite::Document* doc, CollectionInformation *collInfo)
+                                                           CollectionInformation *collInfo,
+                                                           xml::lite::Element* parent)
 {
-    xml::lite::Element* collInfoXML = newElement(doc, "CollectionInfo");
+    xml::lite::Element* collInfoXML = newElement("CollectionInfo", parent);
 
-    collInfoXML->addChild(createString(doc, "CollectorName",
-            collInfo->collectorName));
+    createString("CollectorName", collInfo->collectorName, collInfoXML);
     if (!collInfo->illuminatorName.empty())
-        collInfoXML->addChild(createString(doc, "IlluminatorName",
-                collInfo->illuminatorName));
-    collInfoXML->addChild(createString(doc, "CoreName", collInfo->coreName));
+        createString("IlluminatorName", collInfo->illuminatorName, collInfoXML);
+    createString("CoreName", collInfo->coreName, collInfoXML);
     if (!Init::isUndefined<CollectType>(collInfo->collectType))
-        collInfoXML->addChild(createString(doc, "CollectType", str::toString<
-                six::CollectType>(collInfo->collectType)));
+        createString("CollectType",
+                     str::toString<six::CollectType>(collInfo->collectType),
+                     collInfoXML);
 
-    xml::lite::Element* radarModeXML = newElement(doc, "RadarMode");
-    collInfoXML->addChild(radarModeXML);
-    radarModeXML->addChild(createString(doc, "ModeType", str::toString(
-            collInfo->radarMode)));
+    xml::lite::Element* radarModeXML = newElement("RadarMode", collInfoXML);
+    createString("ModeType", str::toString(collInfo->radarMode), radarModeXML);
     if (!collInfo->radarModeID.empty())
-        radarModeXML->addChild(createString(doc, "ModeID",
-                collInfo->radarModeID));
+        createString("ModeID", collInfo->radarModeID, radarModeXML);
 
     //TODO maybe add more class. info in the future
-    collInfoXML->addChild(createString(doc, "Classification",
-            collInfo->classification.level));
+    createString("Classification", collInfo->classification.level, radarModeXML);
 
     for (std::vector<std::string>::iterator it = collInfo->countryCodes.begin(); it
             != collInfo->countryCodes.end(); ++it)
     {
-        collInfoXML->addChild(createString(doc, "CountryCode", *it));
+        createString("CountryCode", *it, collInfoXML);
     }
-    addParameters(doc, collInfoXML, "Parameter", collInfo->parameters);
+    addParameters("Parameter", collInfo->parameters, collInfoXML);
     return collInfoXML;
 }
 
 xml::lite::Element* ComplexXMLControl::imageCreationToXML(
-        xml::lite::Document* doc, ImageCreation *imageCreation)
+                                                          ImageCreation *imageCreation,
+                                                          xml::lite::Element* parent)
 {
-    xml::lite::Element* imageCreationXML = newElement(doc, "ImageCreation");
+    xml::lite::Element* imageCreationXML = newElement("ImageCreation", parent);
 
     if (!imageCreation->application.empty())
-        imageCreationXML->addChild(createString(doc, "Application",
-                imageCreation->application));
+        createString("Application", imageCreation->application,
+                     imageCreationXML);
     if (!Init::isUndefined<DateTime>(imageCreation->dateTime))
-        imageCreationXML->addChild(createDateTime(doc, "DateTime",
-                imageCreation->dateTime));
+        createDateTime("DateTime", imageCreation->dateTime, imageCreationXML);
     if (!imageCreation->site.empty())
-        imageCreationXML->addChild(createString(doc, "Site",
-                imageCreation->site));
+        createString("Site", imageCreation->site, imageCreationXML);
     if (!imageCreation->profile.empty())
-        imageCreationXML->addChild(createString(doc, "Profile",
-                imageCreation->profile));
+        createString("Profile", imageCreation->profile, imageCreationXML);
     return imageCreationXML;
 }
 
 xml::lite::Element * ComplexXMLControl::imageDataToXML(
-        xml::lite::Document* doc, ImageData *imageData)
+                                                       ImageData *imageData,
+                                                       xml::lite::Element* parent)
 {
-    xml::lite::Element* imageDataXML = newElement(doc, "ImageData");
+    xml::lite::Element* imageDataXML = newElement("ImageData", parent);
 
-    imageDataXML->addChild(createString(doc, "PixelType", str::toString(
-            imageData->pixelType)));
+    createString("PixelType", str::toString(imageData->pixelType), imageDataXML);
     if (imageData->amplitudeTable)
     {
         //TODO AmpTable
     }
-    imageDataXML->addChild(createInt(doc, "NumRows", imageData->numRows));
-    imageDataXML->addChild(createInt(doc, "NumCols", imageData->numCols));
-    imageDataXML->addChild(createInt(doc, "FirstRow", imageData->firstRow));
-    imageDataXML->addChild(createInt(doc, "FirstCol", imageData->firstCol));
+    createInt("NumRows", imageData->numRows, imageDataXML);
+    createInt("NumCols", imageData->numCols, imageDataXML);
+    createInt("FirstRow", imageData->firstRow, imageDataXML);
+    createInt("FirstCol", imageData->firstCol, imageDataXML);
 
-    imageDataXML->addChild(createRowCol(doc, "FullImage", "NumRows", "NumCols",
-            imageData->fullImage));
-    imageDataXML->addChild(createRowCol(doc, "SCPPixel", imageData->scpPixel));
+    createRowCol("FullImage", "NumRows", "NumCols", imageData->fullImage,
+                 imageDataXML);
+    createRowCol("SCPPixel", imageData->scpPixel, imageDataXML);
 
     //only if 3+ vertices
     unsigned int numVertices = imageData->validData.size();
     if (numVertices >= 3)
     {
-        xml::lite::Element *vXML = newElement(doc, "ValidData");
-        imageDataXML->addChild(vXML);
+        xml::lite::Element *vXML = newElement("ValidData", imageDataXML);
         setAttribute(vXML, "size", str::toString(numVertices));
 
         for (unsigned int i = 0; i < numVertices; ++i)
         {
-            xml::lite::Element *vertexXML = createRowCol(doc, "Vertex",
-                    imageData->validData[i]);
-            vXML->addChild(vertexXML);
+            xml::lite::Element *vertexXML =
+                    createRowCol("Vertex", imageData->validData[i], vXML);
             setAttribute(vertexXML, "index", str::toString(i));
         }
     }
     return imageDataXML;
 }
 
-xml::lite::Element* ComplexXMLControl::geoDataToXML(xml::lite::Document* doc,
-        GeoData *geoData)
+xml::lite::Element* ComplexXMLControl::geoDataToXML(GeoData *geoData,
+                                                    xml::lite::Element* parent)
 {
-    xml::lite::Element* geoDataXML = newElement(doc, "GeoData");
+    xml::lite::Element* geoDataXML = newElement("GeoData", parent);
 
-    geoDataXML->addChild(createEarthModelType(doc, "EarthModel",
-            geoData->earthModel));
+    createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
 
-    xml::lite::Element* scpXML = newElement(doc, "SCP");
-    geoDataXML->addChild(scpXML);
-    scpXML->addChild(createVector3D(doc, "ECF", geoData->scp.ecf));
-
-    scpXML->addChild(createLatLonAlt(doc, "LLH", geoData->scp.llh));
+    xml::lite::Element* scpXML = newElement("SCP", geoDataXML);
+    createVector3D("ECF", geoData->scp.ecf, scpXML);
+    createLatLonAlt("LLH", geoData->scp.llh, scpXML);
 
     //createFootprint
-    geoDataXML->addChild(createFootprint(doc, "ImageCorners", "ICP",
-            geoData->imageCorners));
+    createFootprint("ImageCorners", "ICP", geoData->imageCorners, geoDataXML);
 
     //only if 3+ vertices
     unsigned int numVertices = geoData->validData.size();
     if (numVertices >= 3)
     {
-        xml::lite::Element *vXML = newElement(doc, "ValidData");
-        geoDataXML->addChild(vXML);
+        xml::lite::Element *vXML = newElement("ValidData", geoDataXML);
         setAttribute(vXML, "size", str::toString(numVertices));
 
         for (unsigned int i = 0; i < numVertices; ++i)
         {
-            xml::lite::Element *vertexXML = createLatLon(doc, "Vertex",
-                    geoData->validData[i]);
-            vXML->addChild(vertexXML);
+            xml::lite::Element *vertexXML = createLatLon("Vertex",
+                                                         geoData->validData[i],
+                                                         vXML);
             setAttribute(vertexXML, "index", str::toString(i));
         }
     }
@@ -303,198 +290,178 @@ xml::lite::Element* ComplexXMLControl::geoDataToXML(xml::lite::Document* doc,
     for (std::vector<GeoInfo*>::iterator it = geoData->geoInfos.begin(); it
             != geoData->geoInfos.end(); ++it)
     {
-        geoDataXML->addChild(geoInfoToXML(doc, *it));
+        geoInfoToXML(*it, geoDataXML);
     }
 
     return geoDataXML;
 }
 
-xml::lite::Element* ComplexXMLControl::geoInfoToXML(xml::lite::Document* doc,
-        GeoInfo *geoInfo)
+xml::lite::Element* ComplexXMLControl::geoInfoToXML(GeoInfo *geoInfo,
+                                                    xml::lite::Element* parent)
 {
-    xml::lite::Element* geoInfoXML = newElement(doc, "GeoInfo");
+    xml::lite::Element* geoInfoXML = newElement("GeoInfo", parent);
     if (!geoInfo->name.empty())
         setAttribute(geoInfoXML, "name", geoInfo->name);
 
     for (std::vector<GeoInfo*>::iterator it = geoInfo->geoInfos.begin(); it
             != geoInfo->geoInfos.end(); ++it)
     {
-        geoInfoXML->addChild(geoInfoToXML(doc, *it));
+        geoInfoToXML(*it, geoInfoXML);
     }
 
-    addParameters(doc, geoInfoXML, "Desc", geoInfo->desc);
+    addParameters("Desc", geoInfo->desc, geoInfoXML);
 
     size_t numLatLons = geoInfo->geometryLatLon.size();
     if (numLatLons == 1)
     {
-        geoInfoXML->addChild(createLatLon(doc, "Point",
-                geoInfo->geometryLatLon[0]));
+        createLatLon("Point", geoInfo->geometryLatLon[0], geoInfoXML);
     }
     else if (numLatLons >= 2)
     {
-        xml::lite::Element* linePolyXML = newElement(doc,
-                numLatLons == 2 ? "Line" : "Polygon");
-        geoInfoXML->addChild(linePolyXML);
+        xml::lite::Element* linePolyXML =
+                newElement(numLatLons == 2 ? "Line" : "Polygon", geoInfoXML);
 
         for (int i = 0; i < numLatLons; ++i)
         {
-            linePolyXML->addChild(createLatLon(doc, numLatLons == 2
-                    ? "Endpoint" : "Vertex", geoInfo->geometryLatLon[i]));
+            createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
+                         geoInfo->geometryLatLon[i], linePolyXML);
         }
     }
     return geoInfoXML;
 }
 
-xml::lite::Element* ComplexXMLControl::gridToXML(xml::lite::Document* doc,
-        Grid *grid)
+xml::lite::Element* ComplexXMLControl::gridToXML(Grid *grid,
+                                                 xml::lite::Element* parent)
 {
-    xml::lite::Element* gridXML = newElement(doc, "Grid");
+    xml::lite::Element* gridXML = newElement("Grid", parent);
 
-    gridXML->addChild(createString(doc, "ImagePlane", str::toString(
-            grid->imagePlane)));
-    gridXML->addChild(createString(doc, "Type", str::toString(grid->type)));
-    gridXML->addChild(createPoly2D(doc, "TimeCOAPoly", grid->timeCOAPoly));
+    createString("ImagePlane", str::toString(grid->imagePlane), gridXML);
+    createString("Type", str::toString(grid->type), gridXML);
+    createPoly2D("TimeCOAPoly", grid->timeCOAPoly, gridXML);
 
-    xml::lite::Element* rowDirXML = newElement(doc, "Row");
-    gridXML->addChild(rowDirXML);
+    xml::lite::Element* rowDirXML = newElement("Row", gridXML);
 
-    rowDirXML->addChild(createVector3D(doc, "UVectECF", grid->row->unitVector));
-    rowDirXML->addChild(createDouble(doc, "SS", grid->row->sampleSpacing));
-    rowDirXML->addChild(createDouble(doc, "ImpRespWid",
-            grid->row->impulseResponseWidth));
-    rowDirXML->addChild(createFFTSign(doc, "Sgn", grid->row->sign));
-    rowDirXML->addChild(createDouble(doc, "ImpRespBW",
-            grid->row->impulseResponseBandwidth));
-    rowDirXML->addChild(createDouble(doc, "KCtr", grid->row->kCenter));
-    rowDirXML->addChild(createDouble(doc, "DeltaK1", grid->row->deltaK1));
-    rowDirXML->addChild(createDouble(doc, "DeltaK2", grid->row->deltaK2));
+    createVector3D("UVectECF", grid->row->unitVector, rowDirXML);
+    createDouble("SS", grid->row->sampleSpacing, rowDirXML);
+    createDouble("ImpRespWid", grid->row->impulseResponseWidth, rowDirXML);
+    createFFTSign("Sgn", grid->row->sign, rowDirXML);
+    createDouble("ImpRespBW", grid->row->impulseResponseBandwidth, rowDirXML);
+    createDouble("KCtr", grid->row->kCenter, rowDirXML);
+    createDouble("DeltaK1", grid->row->deltaK1, rowDirXML);
+    createDouble("DeltaK2", grid->row->deltaK2, rowDirXML);
 
     if (grid->row->deltaKCOAPoly.orderX() >= 0
             && grid->row->deltaKCOAPoly.orderY() >= 0)
     {
-        rowDirXML->addChild(createPoly2D(doc, "DeltaKCOAPoly",
-                grid->row->deltaKCOAPoly));
+        createPoly2D("DeltaKCOAPoly", grid->row->deltaKCOAPoly, rowDirXML);
     }
 
     if (!Init::isUndefined<std::string>(grid->row->weightType))
     {
-        rowDirXML->addChild(createString(doc, "WgtType", grid->row->weightType));
+        createString("WgtType", grid->row->weightType, rowDirXML);
     }
 
     if (grid->row->weights.size() > 0)
     {
-        xml::lite::Element* wgtFuncXML = newElement(doc, "WgtFunc");
+        //TODO add a parent
+        xml::lite::Element* wgtFuncXML = newElement("WgtFunc");
 
         for (std::vector<double>::iterator it = grid->row->weights.begin(); it
                 != grid->row->weights.end(); ++it)
         {
-            wgtFuncXML->addChild(createDouble(doc, "Wgt", *it));
+            createDouble("Wgt", *it, wgtFuncXML);
         }
     }
 
-    xml::lite::Element* colDirXML = newElement(doc, "Col");
-    gridXML->addChild(colDirXML);
+    xml::lite::Element* colDirXML = newElement("Col", gridXML);
 
-    colDirXML->addChild(createVector3D(doc, "UVectECF", grid->col->unitVector));
-    colDirXML->addChild(createDouble(doc, "SS", grid->col->sampleSpacing));
-    colDirXML->addChild(createDouble(doc, "ImpRespWid",
-            grid->col->impulseResponseWidth));
-    colDirXML->addChild(createFFTSign(doc, "Sgn", grid->col->sign));
-    colDirXML->addChild(createDouble(doc, "ImpRespBW",
-            grid->col->impulseResponseBandwidth));
-    colDirXML->addChild(createDouble(doc, "KCtr", grid->col->kCenter));
-    colDirXML->addChild(createDouble(doc, "DeltaK1", grid->col->deltaK1));
-    colDirXML->addChild(createDouble(doc, "DeltaK2", grid->col->deltaK2));
+    createVector3D("UVectECF", grid->col->unitVector, colDirXML);
+    createDouble("SS", grid->col->sampleSpacing, colDirXML);
+    createDouble("ImpRespWid", grid->col->impulseResponseWidth, colDirXML);
+    createFFTSign("Sgn", grid->col->sign, colDirXML);
+    createDouble("ImpRespBW", grid->col->impulseResponseBandwidth, colDirXML);
+    createDouble("KCtr", grid->col->kCenter, colDirXML);
+    createDouble("DeltaK1", grid->col->deltaK1, colDirXML);
+    createDouble("DeltaK2", grid->col->deltaK2, colDirXML);
 
     if (grid->col->deltaKCOAPoly.orderX() >= 0
             && grid->col->deltaKCOAPoly.orderY() >= 0)
     {
-        colDirXML->addChild(createPoly2D(doc, "DeltaKCOAPoly",
-                grid->col->deltaKCOAPoly));
+        createPoly2D("DeltaKCOAPoly", grid->col->deltaKCOAPoly, colDirXML);
     }
 
     if (!Init::isUndefined<std::string>(grid->col->weightType))
     {
-        colDirXML->addChild(createString(doc, "WgtType", grid->col->weightType));
+        createString("WgtType", grid->col->weightType, colDirXML);
     }
 
     if (grid->col->weights.size() > 0)
     {
-        xml::lite::Element* wgtFuncXML = newElement(doc, "WgtFunc");
+        //TODO add a parent
+        xml::lite::Element* wgtFuncXML = newElement("WgtFunc");
 
         for (std::vector<double>::iterator it = grid->col->weights.begin(); it
                 != grid->col->weights.end(); ++it)
         {
-            wgtFuncXML->addChild(createDouble(doc, "Wgt", *it));
+            createDouble("Wgt", *it, wgtFuncXML);
         }
     }
 
     return gridXML;
 }
 
-xml::lite::Element* ComplexXMLControl::timelineToXML(xml::lite::Document* doc,
-        Timeline *timeline)
+xml::lite::Element* ComplexXMLControl::timelineToXML(Timeline *timeline,
+                                                     xml::lite::Element* parent)
 {
-    xml::lite::Element* timelineXML = newElement(doc, "Timeline");
+    xml::lite::Element* timelineXML = newElement("Timeline", parent);
 
-    timelineXML->addChild(createDateTime(doc, "CollectStart",
-            timeline->collectStart));
-    timelineXML->addChild(createDouble(doc, "CollectDuration",
-            timeline->collectDuration));
+    createDateTime("CollectStart", timeline->collectStart, timelineXML);
+    createDouble("CollectDuration", timeline->collectDuration, timelineXML);
 
     if (timeline->interPulsePeriod)
     {
-        xml::lite::Element* ippXML = newElement(doc, "IPP");
+        xml::lite::Element* ippXML = newElement("IPP", timelineXML);
         unsigned int setSize = timeline->interPulsePeriod->sets.size();
         ippXML->attribute("size") = str::toString<int>(setSize);
-        timelineXML->addChild(ippXML);
 
         for (unsigned int i = 0; i < setSize; ++i)
         {
-
             TimelineSet* timelineSet = timeline->interPulsePeriod->sets[i];
-            xml::lite::Element* setXML = newElement(doc, "Set");
+            xml::lite::Element* setXML = newElement("Set", ippXML);
             setXML->attribute("index") = str::toString<int>(i + 1);
 
-            ippXML->addChild(setXML);
-
-            setXML->addChild(createDouble(doc, "TStart", timelineSet->tStart));
-            setXML->addChild(createDouble(doc, "TEnd", timelineSet->tEnd));
-            setXML->addChild(createInt(doc, "IPPStart",
-                    timelineSet->interPulsePeriodStart));
-            setXML->addChild(createInt(doc, "IPPEnd",
-                    timelineSet->interPulsePeriodEnd));
-            setXML->addChild(createPoly1D(doc, "IPPPoly",
-                    timelineSet->interPulsePeriodPoly));
+            createDouble("TStart", timelineSet->tStart, setXML);
+            createDouble("TEnd", timelineSet->tEnd, setXML);
+            createInt("IPPStart", timelineSet->interPulsePeriodStart, setXML);
+            createInt("IPPEnd", timelineSet->interPulsePeriodEnd, setXML);
+            createPoly1D("IPPPoly", timelineSet->interPulsePeriodPoly, setXML);
         }
     }
 
     return timelineXML;
 }
 
-xml::lite::Element* ComplexXMLControl::positionToXML(xml::lite::Document* doc,
-        Position *position)
+xml::lite::Element* ComplexXMLControl::positionToXML(Position *position,
+                                                     xml::lite::Element* parent)
 {
-    xml::lite::Element* positionXML = newElement(doc, "Position");
+    xml::lite::Element* positionXML = newElement("Position", parent);
 
-    positionXML->addChild(createPolyXYZ(doc, "ARPPoly", position->arpPoly));
+    createPolyXYZ("ARPPoly", position->arpPoly, positionXML);
     if (position->grpPoly.order() >= 0)
-        positionXML->addChild(createPolyXYZ(doc, "GRPPoly", position->grpPoly));
+        createPolyXYZ("GRPPoly", position->grpPoly, positionXML);
     if (position->txAPCPoly.order() >= 0)
-        positionXML->addChild(createPolyXYZ(doc, "TxAPCPoly",
-                position->txAPCPoly));
+        createPolyXYZ("TxAPCPoly", position->txAPCPoly, positionXML);
     if (position->rcvAPC && !position->rcvAPC->rcvAPCPolys.empty())
     {
         unsigned int numPolys = position->rcvAPC->rcvAPCPolys.size();
-        xml::lite::Element* rcvXML = newElement(doc, "RcvAPC");
-        positionXML->addChild(rcvXML);
+        xml::lite::Element* rcvXML = newElement("RcvAPC", positionXML);
         setAttribute(rcvXML, "size", str::toString(numPolys));
 
         for (unsigned int i = 0; i < numPolys; ++i)
         {
             PolyXYZ xyz = position->rcvAPC->rcvAPCPolys[0];
-            xml::lite::Element *xyzXML = createPolyXYZ(doc, "RcvAPCPoly", xyz);
-            rcvXML->addChild(xyzXML);
+            xml::lite::Element *xyzXML = createPolyXYZ("RcvAPCPoly", xyz,
+                                                       rcvXML);
             setAttribute(xyzXML, "index", str::toString(i));
         }
     }
@@ -502,26 +469,28 @@ xml::lite::Element* ComplexXMLControl::positionToXML(xml::lite::Document* doc,
 }
 
 xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
-        xml::lite::Document* doc, RadarCollection *radar)
+                                                            RadarCollection *radar,
+                                                            xml::lite::Element* parent)
 {
-    xml::lite::Element* radarXML = newElement(doc, "RadarCollection");
+    xml::lite::Element* radarXML = newElement("RadarCollection", parent);
 
     if (radar->resolution)
     {
-        xml::lite::Element* resXML = newElement(doc, "Res");
-        radarXML->addChild(resXML);
-        resXML->addChild(createDouble(doc, "RgImpResWid",
-                radar->resolution->rangeImpulseResponseWidth));
-        resXML->addChild(createDouble(doc, "AzImpResWid",
-                radar->resolution->azimuthImpulseResponseWidth));
+        xml::lite::Element* resXML = newElement("Res", radarXML);
+        createDouble("RgImpResWid",
+                     radar->resolution->rangeImpulseResponseWidth, resXML);
+        createDouble("AzImpResWid",
+                     radar->resolution->azimuthImpulseResponseWidth, resXML);
 
         if (!Init::isUndefined<double>(radar->resolution->referencePoint[0])
-                && !Init::isUndefined<double>(radar->resolution->referencePoint[1])
-                && !Init::isUndefined<double>(radar->resolution->referencePoint[2]))
+                && !Init::isUndefined<double>(
+                                              radar->resolution->referencePoint[1])
+                && !Init::isUndefined<double>(
+                                              radar->resolution->referencePoint[2]))
         {
-            xml::lite::Element *refXML = createVector3D(doc, "ReferencePoint",
-                    radar->resolution->referencePoint);
-            resXML->addChild(refXML);
+            xml::lite::Element *refXML =
+                    createVector3D("ReferencePoint",
+                                   radar->resolution->referencePoint, resXML);
             if (!radar->resolution->referenceName.empty())
             {
                 setAttribute(refXML, "name", radar->resolution->referenceName);
@@ -531,48 +500,43 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
 
     if (!Init::isUndefined<int>(radar->refFrequencyIndex))
     {
-        radarXML->addChild(createInt(doc, "RefFreqIndex",
-                radar->refFrequencyIndex));
+        createInt("RefFreqIndex", radar->refFrequencyIndex, radarXML);
     }
 
-    xml::lite::Element* txFreqXML = newElement(doc, "TxFrequency");
-    radarXML->addChild(txFreqXML);
-    txFreqXML->addChild(createDouble(doc, "Min", radar->txFrequencyMin));
-    txFreqXML->addChild(createDouble(doc, "Max", radar->txFrequencyMax));
+    xml::lite::Element* txFreqXML = newElement("TxFrequency", radarXML);
+    createDouble("Min", radar->txFrequencyMin, txFreqXML);
+    createDouble("Max", radar->txFrequencyMax, txFreqXML);
 
     if (radar->txPolarization != six::POL_NOT_SET)
     {
-        radarXML->addChild(createString(doc, "TxPolarization", str::toString(
-                radar->txPolarization)));
+        createString("TxPolarization", str::toString(radar->txPolarization),
+                     radarXML);
     }
 
     if (radar->polarizationHVAnglePoly.order() >= 0)
     {
-        radarXML->addChild(createPoly1D(doc, "PolarizationHVAnglePoly",
-                radar->polarizationHVAnglePoly));
+        createPoly1D("PolarizationHVAnglePoly", radar->polarizationHVAnglePoly,
+                     radarXML);
     }
 
     if (!radar->txSequence.empty())
     {
-        xml::lite::Element* txSeqXML = newElement(doc, "TxSequence");
-        radarXML->addChild(txSeqXML);
+        xml::lite::Element* txSeqXML = newElement("TxSequence", radarXML);
         for (std::vector<TxStep*>::iterator it = radar->txSequence.begin(); it
                 != radar->txSequence.end(); ++it)
         {
             TxStep *tx = *it;
 
-            xml::lite::Element* txStepXML = newElement(doc, "TxStep");
-            txSeqXML->addChild(txStepXML);
+            xml::lite::Element* txStepXML = newElement("TxStep", txSeqXML);
 
             if (!Init::isUndefined<int>(tx->waveformIndex))
             {
-                txStepXML->addChild(
-                        createInt(doc, "WFIndex", tx->waveformIndex));
+                createInt("WFIndex", tx->waveformIndex, txStepXML);
             }
             if (tx->txPolarization != six::POL_NOT_SET)
             {
-                txStepXML->addChild(createString(doc, "TxPolarization",
-                        str::toString(tx->txPolarization)));
+                createString("TxPolarization",
+                             str::toString(tx->txPolarization), txStepXML);
             }
         }
     }
@@ -580,75 +544,62 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
     if (!radar->waveform.empty())
     {
         unsigned int numWaveforms = radar->waveform.size();
-        xml::lite::Element* wfXML = newElement(doc, "Waveform");
-        radarXML->addChild(wfXML);
+        xml::lite::Element* wfXML = newElement("Waveform", radarXML);
         setAttribute(wfXML, "size", str::toString(numWaveforms));
 
         for (unsigned int i = 0; i < numWaveforms; ++i)
         {
             WaveformParameters *wf = radar->waveform[i];
 
-            xml::lite::Element* wfpXML = newElement(doc, "WFParameters");
-            wfXML->addChild(wfpXML);
+            xml::lite::Element* wfpXML = newElement("WFParameters", wfXML);
             setAttribute(wfpXML, "index", str::toString(i));
 
             if (!Init::isUndefined<double>(wf->txPulseLength))
-                wfpXML->addChild(createDouble(doc, "TxPulseLength",
-                        wf->txPulseLength));
+                createDouble("TxPulseLength", wf->txPulseLength, wfpXML);
             if (!Init::isUndefined<double>(wf->txRFBandwidth))
-                wfpXML->addChild(createDouble(doc, "TxRFBandwidth",
-                        wf->txRFBandwidth));
+                createDouble("TxRFBandwidth", wf->txRFBandwidth, wfpXML);
             if (!Init::isUndefined<double>(wf->txFrequencyStart))
-                wfpXML->addChild(createDouble(doc, "TxFreqStart",
-                        wf->txFrequencyStart));
+                createDouble("TxFreqStart", wf->txFrequencyStart, wfpXML);
             if (!Init::isUndefined<double>(wf->txFMRate))
-                wfpXML->addChild(createDouble(doc, "TxFMRate", wf->txFMRate));
+                createDouble("TxFMRate", wf->txFMRate, wfpXML);
             if (wf->rcvDemodType != six::DEMOD_NOT_SET)
-                wfpXML->addChild(createString(doc, "RcvDemodType",
-                        str::toString(wf->rcvDemodType)));
+                createString("RcvDemodType", str::toString(wf->rcvDemodType),
+                             wfpXML);
             if (!Init::isUndefined<double>(wf->rcvWindowLength))
-                wfpXML->addChild(createDouble(doc, "RcvWindowLength",
-                        wf->rcvWindowLength));
+                createDouble("RcvWindowLength", wf->rcvWindowLength, wfpXML);
             if (!Init::isUndefined<double>(wf->adcSampleRate))
-                wfpXML->addChild(createDouble(doc, "ADCSampleRate",
-                        wf->adcSampleRate));
+                createDouble("ADCSampleRate", wf->adcSampleRate, wfpXML);
             if (!Init::isUndefined<double>(wf->rcvIFBandwidth))
-                wfpXML->addChild(createDouble(doc, "RcvIFBandwidth",
-                        wf->rcvIFBandwidth));
+                createDouble("RcvIFBandwidth", wf->rcvIFBandwidth, wfpXML);
             if (!Init::isUndefined<double>(wf->rcvFrequencyStart))
-                wfpXML->addChild(createDouble(doc, "RcvFreqStart",
-                        wf->rcvFrequencyStart));
+                createDouble("RcvFreqStart", wf->rcvFrequencyStart, wfpXML);
             if (!Init::isUndefined<double>(wf->rcvFMRate))
-                wfpXML->addChild(createDouble(doc, "RcvFMRate", wf->rcvFMRate));
+                createDouble("RcvFMRate", wf->rcvFMRate, wfpXML);
         }
     }
 
     unsigned int numChannels = radar->rcvChannels.size();
-    xml::lite::Element* rcvChanXML = newElement(doc, "RcvChannels");
-    radarXML->addChild(rcvChanXML);
+    xml::lite::Element* rcvChanXML = newElement("RcvChannels", radarXML);
     setAttribute(rcvChanXML, "size", str::toString(numChannels));
     for (unsigned int i = 0; i < numChannels; ++i)
     {
         ChannelParameters *cp = radar->rcvChannels[i];
-        xml::lite::Element* cpXML = newElement(doc, "ChanParameters");
-        rcvChanXML->addChild(cpXML);
+        xml::lite::Element* cpXML = newElement("ChanParameters", rcvChanXML);
         setAttribute(cpXML, "index", str::toString(i));
 
         if (!Init::isUndefined<int>(cp->rcvAPCIndex))
-            cpXML->addChild(createInt(doc, "RcvAPCIndex", cp->rcvAPCIndex));
+            createInt("RcvAPCIndex", cp->rcvAPCIndex, cpXML);
 
         if (cp->txRcvPolarization != six::DUAL_POL_NOT_SET)
         {
-            cpXML->addChild(createString(doc, "TxRcvPolarization",
-                    str::toString<DualPolarizationType>(cp->txRcvPolarization)));
+            createString("TxRcvPolarization", str::toString<
+                    DualPolarizationType>(cp->txRcvPolarization), cpXML);
         }
     }
 
     if (radar->area)
     {
-        xml::lite::Element* areaXML = newElement(doc, "Area");
-        radarXML->addChild(areaXML);
-
+        xml::lite::Element* areaXML = newElement("Area", radarXML);
         Area *area = radar->area;
 
         bool haveApcCorners = true;
@@ -664,169 +615,170 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
 
         if (haveApcCorners)
         {
-            areaXML->addChild(createFootprint(doc, "Corner", "APC",
-                    area->apcCorners, true));
+            createFootprint("Corner", "APC", area->apcCorners, true, areaXML);
         }
 
         AreaPlane *plane = area->plane;
         if (plane)
         {
-            xml::lite::Element* planeXML = newElement(doc, "Plane");
-            areaXML->addChild(planeXML);
-            xml::lite::Element* refPtXML = newElement(doc, "RefPt");
-            planeXML->addChild(refPtXML);
+            xml::lite::Element* planeXML = newElement("Plane", areaXML);
+            xml::lite::Element* refPtXML = newElement("RefPt", planeXML);
 
             ReferencePoint refPt = plane->referencePoint;
             if (!refPt.name.empty())
                 setAttribute(refPtXML, "name", refPt.name);
 
-            xml::lite::Element* ecfXML = newElement(doc, "ECF");
-            refPtXML->addChild(ecfXML);
-            ecfXML->addChild(createDouble(doc, "X", refPt.ecef[0]));
-            ecfXML->addChild(createDouble(doc, "Y", refPt.ecef[1]));
-            ecfXML->addChild(createDouble(doc, "Z", refPt.ecef[2]));
+            xml::lite::Element* ecfXML = newElement("ECF", refPtXML);
+            createDouble("X", refPt.ecef[0], ecfXML);
+            createDouble("Y", refPt.ecef[1], ecfXML);
+            createDouble("Z", refPt.ecef[2], ecfXML);
 
-            refPtXML->addChild(createDouble(doc, "Line", refPt.rowCol.row));
-            refPtXML->addChild(createDouble(doc, "Sample", refPt.rowCol.col));
+            createDouble("Line", refPt.rowCol.row, refPtXML);
+            createDouble("Sample", refPt.rowCol.col, refPtXML);
 
-            planeXML->addChild(areaLineDirectionParametersToXML(doc, "XDir",
-                    plane->xDirection));
-            planeXML->addChild(areaSampleDirectionParametersToXML(doc, "YDir",
-                    plane->yDirection));
+            areaLineDirectionParametersToXML("XDir", plane->xDirection,
+                                             planeXML);
+            areaSampleDirectionParametersToXML("YDir", plane->yDirection,
+                                               planeXML);
 
             if (!plane->segmentList.empty())
             {
-                xml::lite::Element* segListXML = newElement(doc, "SegmentList");
-                planeXML->addChild(segListXML);
-                setAttribute(segListXML, "size", str::toString(
-                        plane->segmentList.size()));
+                xml::lite::Element* segListXML = newElement("SegmentList",
+                                                            planeXML);
+                setAttribute(segListXML, "size",
+                             str::toString(plane->segmentList.size()));
                 for (int i = 0, size = plane->segmentList.size(); i < size; ++i)
                 {
                     Segment *segment = plane->segmentList[i];
-                    xml::lite::Element* segXML = newElement(doc, "Segment");
-                    segListXML->addChild(segXML);
-                    setAttribute(segXML, "index", str::toString(i+1));
+                    xml::lite::Element* segXML = newElement("Segment",
+                                                            segListXML);
+                    setAttribute(segXML, "index", str::toString(i + 1));
 
-                    segXML->addChild(createInt(doc, "StartLine",
-                            segment->startLine));
-                    segXML->addChild(createInt(doc, "StartSample",
-                            segment->startSample));
-                    segXML->addChild(
-                            createInt(doc, "EndLine", segment->endLine));
-                    segXML->addChild(createInt(doc, "EndSample",
-                            segment->endSample));
-                    segXML->addChild(createString(doc, "Identifier",
-                            segment->identifier));
+                    createInt("StartLine", segment->startLine, segXML);
+                    createInt("StartSample", segment->startSample, segXML);
+                    createInt("EndLine", segment->endLine, segXML);
+                    createInt("EndSample", segment->endSample, segXML);
+                    createString("Identifier", segment->identifier, segXML);
                 }
             }
 
             if (plane->timeCOAPoly.orderX() >= 0 && plane->timeCOAPoly.orderY()
                     >= 0)
             {
-                planeXML->addChild(createPoly2D(doc, "TimeCOAPoly",
-                        plane->timeCOAPoly));
+                createPoly2D("TimeCOAPoly", plane->timeCOAPoly, planeXML);
             }
         }
     }
 
-    addParameters(doc, radarXML, "Parameter", radar->parameters);
+    addParameters("Parameter", radar->parameters, radarXML);
     return radarXML;
 }
 
 xml::lite::Element* ComplexXMLControl::areaLineDirectionParametersToXML(
-        xml::lite::Document* doc, std::string name,
-        AreaDirectionParameters *adp)
+                                                                        std::string name,
+                                                                        AreaDirectionParameters *adp,
+                                                                        xml::lite::Element* parent)
 {
-    xml::lite::Element* adpXML = newElement(doc, name);
-    adpXML->addChild(createVector3D(doc, "UVectECF", adp->unitVector));
-    adpXML->addChild(createDouble(doc, "LineSpacing", adp->spacing));
-    adpXML->addChild(createInt(doc, "NumLines", adp->elements));
-    adpXML->addChild(createInt(doc, "FirstLine", adp->first));
+    xml::lite::Element* adpXML = newElement(name, parent);
+    createVector3D("UVectECF", adp->unitVector, adpXML);
+    createDouble("LineSpacing", adp->spacing, adpXML);
+    createInt("NumLines", adp->elements, adpXML);
+    createInt("FirstLine", adp->first, adpXML);
     return adpXML;
 }
 
 xml::lite::Element* ComplexXMLControl::areaSampleDirectionParametersToXML(
-        xml::lite::Document* doc, std::string name,
-        AreaDirectionParameters *adp)
+                                                                          std::string name,
+                                                                          AreaDirectionParameters *adp,
+                                                                          xml::lite::Element* parent)
 {
-    xml::lite::Element* adpXML = newElement(doc, name);
-    adpXML->addChild(createVector3D(doc, "UVectECF", adp->unitVector));
-    adpXML->addChild(createDouble(doc, "SampleSpacing", adp->spacing));
-    adpXML->addChild(createInt(doc, "NumSamples", adp->elements));
-    adpXML->addChild(createInt(doc, "FirstSample", adp->first));
+    xml::lite::Element* adpXML = newElement(name, parent);
+    createVector3D("UVectECF", adp->unitVector, adpXML);
+    createDouble("SampleSpacing", adp->spacing, adpXML);
+    createInt("NumSamples", adp->elements, adpXML);
+    createInt("FirstSample", adp->first, adpXML);
     return adpXML;
 }
 
 xml::lite::Element* ComplexXMLControl::imageFormationToXML(
-        xml::lite::Document* doc, ImageFormation *imageFormation)
+                                                           ImageFormation *imageFormation,
+                                                           xml::lite::Element* parent)
 {
-    xml::lite::Element* imageFormationXML = newElement(doc, "ImageFormation");
+    xml::lite::Element* imageFormationXML =
+            newElement("ImageFormation", parent);
 
     if (!imageFormation->segmentIdentifier.empty())
-        imageFormationXML->addChild(createString(doc, "SegmentIdentifier",
-                imageFormation->segmentIdentifier));
+        createString("SegmentIdentifier", imageFormation->segmentIdentifier,
+                     imageFormationXML);
 
     //TODO this is actually required by the schema, but I don't want to seg fault
     if (imageFormation->rcvChannelProcessed)
     {
-        xml::lite::Element* rcvChanXML = newElement(doc, "RcvChanProc");
-        imageFormationXML->addChild(rcvChanXML);
-        rcvChanXML->addChild(createInt(doc, "NumChanProc",
-                imageFormation->rcvChannelProcessed->numChannelsProcessed));
+        xml::lite::Element* rcvChanXML = newElement("RcvChanProc",
+                                                    imageFormationXML);
+        createInt("NumChanProc",
+                  imageFormation->rcvChannelProcessed->numChannelsProcessed,
+                  rcvChanXML);
         if (!Init::isUndefined<double>(
-                imageFormation->rcvChannelProcessed->prfScaleFactor))
-            rcvChanXML->addChild(createDouble(doc, "PRFScaleFactor",
-                    imageFormation->rcvChannelProcessed->prfScaleFactor));
+                                       imageFormation->rcvChannelProcessed->prfScaleFactor))
+            createDouble("PRFScaleFactor",
+                         imageFormation->rcvChannelProcessed->prfScaleFactor,
+                         rcvChanXML);
 
         for (std::vector<int>::iterator it =
                 imageFormation->rcvChannelProcessed->channelIndex.begin(); it
                 != imageFormation->rcvChannelProcessed->channelIndex.end(); ++it)
         {
-            rcvChanXML->addChild(createInt(doc, "ChanIndex", *it));
+            createInt("ChanIndex", *it, rcvChanXML);
         }
     }
     if (imageFormation->txRcvPolarizationProc != six::DUAL_POL_NOT_SET)
     {
-        imageFormationXML->addChild(createString(doc, "TxRcvPolarizationProc",
-                str::toString(imageFormation->txRcvPolarizationProc)));
+        createString("TxRcvPolarizationProc",
+                     str::toString(imageFormation->txRcvPolarizationProc),
+                     imageFormationXML);
     }
 
-    imageFormationXML->addChild(createString(doc, "ImageFormAlgo",
-            str::toString(imageFormation->imageFormationAlgorithm)));
+    createString("ImageFormAlgo",
+                 str::toString(imageFormation->imageFormationAlgorithm),
+                 imageFormationXML);
 
-    imageFormationXML->addChild(createDouble(doc, "TStartProc",
-            imageFormation->tStartProc));
-    imageFormationXML->addChild(createDouble(doc, "TEndProc",
-            imageFormation->tEndProc));
+    createDouble("TStartProc", imageFormation->tStartProc, imageFormationXML);
+    createDouble("TEndProc", imageFormation->tEndProc, imageFormationXML);
 
-    xml::lite::Element* txFreqXML = newElement(doc, "TxFrequencyProc");
-    imageFormationXML->addChild(txFreqXML);
-    txFreqXML->addChild(createDouble(doc, "MinProc",
-            imageFormation->txFrequencyProcMin));
-    txFreqXML->addChild(createDouble(doc, "MaxProc",
-            imageFormation->txFrequencyProcMax));
+    xml::lite::Element* txFreqXML = newElement("TxFrequencyProc",
+                                               imageFormationXML);
+    createDouble("MinProc", imageFormation->txFrequencyProcMin, txFreqXML);
+    createDouble("MaxProc", imageFormation->txFrequencyProcMax, txFreqXML);
 
-    imageFormationXML->addChild(createString(doc, "STBeamComp", str::toString(
-            imageFormation->slowTimeBeamCompensation)));
-    imageFormationXML->addChild(createString(doc, "ImageBeamComp",
-            str::toString(imageFormation->imageBeamCompensation)));
-    imageFormationXML->addChild(createString(doc, "AzAutofocus", str::toString(
-            imageFormation->azimuthAutofocus)));
-    imageFormationXML->addChild(createString(doc, "RgAutofocus", str::toString(
-            imageFormation->rangeAutofocus)));
+    createString("STBeamComp",
+                 str::toString(imageFormation->slowTimeBeamCompensation),
+                 imageFormationXML);
+    createString("ImageBeamComp",
+                 str::toString(imageFormation->imageBeamCompensation),
+                 imageFormationXML);
+    createString("AzAutofocus",
+                 str::toString(imageFormation->azimuthAutofocus),
+                 imageFormationXML);
+    createString("RgAutofocus", str::toString(imageFormation->rangeAutofocus),
+                 imageFormationXML);
 
     if (imageFormation->polarizationCalibration)
     {
-        xml::lite::Element* pcXML = newElement(doc, "PolarizationCalibration");
-        imageFormationXML->addChild(pcXML);
+        xml::lite::Element* pcXML = newElement("PolarizationCalibration",
+                                               imageFormationXML);
 
-        addRequired(imageFormationXML, createBooleanType(doc,
-                "HvAngleCompApplied", imageFormation->polarizationCalibration
-                ->hvAngleCompensationApplied), "HvAngleCompApplied");
+        require(
+                createBooleanType(
+                                  "HvAngleCompApplied",
+                                  imageFormation->polarizationCalibration ->hvAngleCompensationApplied,
+                                  imageFormationXML), "HvAngleCompApplied");
 
-        addRequired(imageFormationXML, createBooleanType(doc,
-                "DistortionCorrectionApplied", imageFormation
-                ->polarizationCalibration->distortionCorrectionApplied),
+        require(
+                createBooleanType(
+                                  "DistortionCorrectionApplied",
+                                  imageFormation ->polarizationCalibration->distortionCorrectionApplied,
+                                  imageFormationXML),
                 "DistortionCorrectionApplied");
 
         //TODO this is required, but doing this for safety - once we decide on a policy, maybe throw an exception
@@ -834,215 +786,195 @@ xml::lite::Element* ComplexXMLControl::imageFormationToXML(
                 imageFormation->polarizationCalibration->distortion;
         if (distortion)
         {
-            xml::lite::Element* distortionXML = newElement(doc, "Distortion");
-            pcXML->addChild(distortionXML);
+            xml::lite::Element* distortionXML = newElement("Distortion", pcXML);
 
             //This should be optionally added...
-            distortionXML->addChild(createDateTime(doc, "CalibrationDate",
-                    distortion->calibrationDate));
-            distortionXML->addChild(createDouble(doc, "A", distortion->a));
-            distortionXML->addChild(createComplex(doc, "F1", distortion->f1));
-            distortionXML->addChild(createComplex(doc, "Q1", distortion->q1));
-            distortionXML->addChild(createComplex(doc, "Q2", distortion->q2));
-            distortionXML->addChild(createComplex(doc, "F2", distortion->f2));
-            distortionXML->addChild(createComplex(doc, "Q3", distortion->q3));
-            distortionXML->addChild(createComplex(doc, "Q4", distortion->q4));
+            createDateTime("CalibrationDate", distortion->calibrationDate,
+                           distortionXML);
+            createDouble("A", distortion->a, distortionXML);
+            createComplex("F1", distortion->f1, distortionXML);
+            createComplex("Q1", distortion->q1, distortionXML);
+            createComplex("Q2", distortion->q2, distortionXML);
+            createComplex("F2", distortion->f2, distortionXML);
+            createComplex("Q3", distortion->q3, distortionXML);
+            createComplex("Q4", distortion->q4, distortionXML);
 
             if (!Init::isUndefined<double>(distortion->gainErrorA))
-                distortionXML->addChild(createDouble(doc, "GainErrorA",
-                        distortion->gainErrorA));
+                createDouble("GainErrorA", distortion->gainErrorA,
+                             distortionXML);
             if (!Init::isUndefined<double>(distortion->gainErrorF1))
-                distortionXML->addChild(createDouble(doc, "GainErrorF1",
-                        distortion->gainErrorF1));
+                createDouble("GainErrorF1", distortion->gainErrorF1,
+                             distortionXML);
             if (!Init::isUndefined<double>(distortion->gainErrorF2))
-                distortionXML->addChild(createDouble(doc, "GainErrorF2",
-                        distortion->gainErrorF2));
+                createDouble("GainErrorF2", distortion->gainErrorF2,
+                             distortionXML);
             if (!Init::isUndefined<double>(distortion->phaseErrorF1))
-                distortionXML->addChild(createDouble(doc, "PhaseErrorF1",
-                        distortion->phaseErrorF1));
+                createDouble("PhaseErrorF1", distortion->phaseErrorF1,
+                             distortionXML);
             if (!Init::isUndefined<double>(distortion->phaseErrorF2))
-                distortionXML->addChild(createDouble(doc, "PhaseErrorF2",
-                        distortion->phaseErrorF2));
+                createDouble("PhaseErrorF2", distortion->phaseErrorF2,
+                             distortionXML);
         }
     }
     return imageFormationXML;
 }
 
-xml::lite::Element* ComplexXMLControl::scpcoaToXML(xml::lite::Document* doc,
-        SCPCOA *scpcoa)
+xml::lite::Element* ComplexXMLControl::scpcoaToXML(SCPCOA *scpcoa,
+                                                   xml::lite::Element* parent)
 {
-    xml::lite::Element* scpcoaXML = newElement(doc, "SCPCOA");
-
-    scpcoaXML->addChild(createDouble(doc, "SCPTime", scpcoa->scpTime));
-    scpcoaXML->addChild(createVector3D(doc, "ARPPos", scpcoa->arpPos));
-    scpcoaXML->addChild(createVector3D(doc, "ARPVel", scpcoa->arpVel));
-    scpcoaXML->addChild(createVector3D(doc, "ARPAcc", scpcoa->arpAcc));
-    scpcoaXML->addChild(createString(doc, "SideOfTrack", str::toString(
-            scpcoa->sideOfTrack)));
-    scpcoaXML->addChild(createDouble(doc, "SlantRange", scpcoa->slantRange));
-    scpcoaXML->addChild(createDouble(doc, "GroundRange", scpcoa->groundRange));
-    scpcoaXML->addChild(createDouble(doc, "DopplerConeAng",
-            scpcoa->dopplerConeAngle));
-    scpcoaXML->addChild(createDouble(doc, "GrazeAng", scpcoa->grazeAngle));
-    scpcoaXML->addChild(createDouble(doc, "IncidenceAng",
-            scpcoa->incidenceAngle));
-    scpcoaXML->addChild(createDouble(doc, "TwistAng", scpcoa->twistAngle));
-    scpcoaXML->addChild(createDouble(doc, "SlopeAng", scpcoa->slopeAngle));
+    xml::lite::Element* scpcoaXML = newElement("SCPCOA", parent);
+    createDouble("SCPTime", scpcoa->scpTime, scpcoaXML);
+    createVector3D("ARPPos", scpcoa->arpPos, scpcoaXML);
+    createVector3D("ARPVel", scpcoa->arpVel, scpcoaXML);
+    createVector3D("ARPAcc", scpcoa->arpAcc, scpcoaXML);
+    createString("SideOfTrack", str::toString(scpcoa->sideOfTrack), scpcoaXML);
+    createDouble("SlantRange", scpcoa->slantRange, scpcoaXML);
+    createDouble("GroundRange", scpcoa->groundRange, scpcoaXML);
+    createDouble("DopplerConeAng", scpcoa->dopplerConeAngle, scpcoaXML);
+    createDouble("GrazeAng", scpcoa->grazeAngle, scpcoaXML);
+    createDouble("IncidenceAng", scpcoa->incidenceAngle, scpcoaXML);
+    createDouble("TwistAng", scpcoa->twistAngle, scpcoaXML);
+    createDouble("SlopeAng", scpcoa->slopeAngle, scpcoaXML);
     return scpcoaXML;
 }
 
-xml::lite::Element* ComplexXMLControl::antennaToXML(xml::lite::Document* doc,
-        Antenna *antenna)
+xml::lite::Element* ComplexXMLControl::antennaToXML(Antenna *antenna,
+                                                    xml::lite::Element* parent)
 {
-    xml::lite::Element* antennaXML = newElement(doc, "Antenna");
+    xml::lite::Element* antennaXML = newElement("Antenna", parent);
 
     if (antenna->tx)
-        antennaXML->addChild(antennaParametersToXML(doc, "Tx", antenna->tx));
+        antennaParametersToXML("Tx", antenna->tx, antennaXML);
     if (antenna->rcv)
-        antennaXML->addChild(antennaParametersToXML(doc, "Rcv", antenna->rcv));
+        antennaParametersToXML("Rcv", antenna->rcv, antennaXML);
     if (antenna->twoWay)
-        antennaXML->addChild(antennaParametersToXML(doc, "TwoWay",
-                antenna->twoWay));
+        antennaParametersToXML("TwoWay", antenna->twoWay, antennaXML);
 
     return antennaXML;
 }
 
 xml::lite::Element* ComplexXMLControl::antennaParametersToXML(
-        xml::lite::Document* doc, std::string name, AntennaParameters *params)
+                                                              std::string name,
+                                                              AntennaParameters *params,
+                                                              xml::lite::Element* parent)
 {
-    xml::lite::Element* apXML = newElement(doc, name);
+    xml::lite::Element* apXML = newElement(name, parent);
 
-    apXML->addChild(createPolyXYZ(doc, "XAxisPoly", params->xAxisPoly));
-    apXML->addChild(createPolyXYZ(doc, "YAxisPoly", params->yAxisPoly));
-    apXML->addChild(createDouble(doc, "FreqZero", params->frequencyZero));
+    createPolyXYZ("XAxisPoly", params->xAxisPoly, apXML);
+    createPolyXYZ("YAxisPoly", params->yAxisPoly, apXML);
+    createDouble("FreqZero", params->frequencyZero, apXML);
 
     if (params->electricalBoresight)
     {
-        xml::lite::Element* ebXML = newElement(doc, "EB");
-        apXML->addChild(ebXML);
-        ebXML->addChild(createPoly1D(doc, "DCXPoly",
-                params->electricalBoresight->dcxPoly));
-        ebXML->addChild(createPoly1D(doc, "DCYPoly",
-                params->electricalBoresight->dcyPoly));
+        xml::lite::Element* ebXML = newElement("EB", apXML);
+        createPoly1D("DCXPoly", params->electricalBoresight->dcxPoly, ebXML);
+        createPoly1D("DCYPoly", params->electricalBoresight->dcyPoly, ebXML);
     }
     if (params->halfPowerBeamwidths)
     {
-        xml::lite::Element* hpXML = newElement(doc, "HPBW");
-        apXML->addChild(hpXML);
-        hpXML->addChild(createDouble(doc, "DCX",
-                params->halfPowerBeamwidths->dcx));
-        hpXML->addChild(createDouble(doc, "DCY",
-                params->halfPowerBeamwidths->dcy));
+        xml::lite::Element* hpXML = newElement("HPBW", apXML);
+        createDouble("DCX", params->halfPowerBeamwidths->dcx, hpXML);
+        createDouble("DCY", params->halfPowerBeamwidths->dcy, hpXML);
     }
     if (params->array)
     {
-        xml::lite::Element* arrXML = newElement(doc, "Array");
-        apXML->addChild(arrXML);
-        arrXML->addChild(createPoly2D(doc, "GainPoly", params->array->gainPoly));
-        arrXML->addChild(createPoly2D(doc, "PhasePoly",
-                params->array->phasePoly));
+        xml::lite::Element* arrXML = newElement("Array", apXML);
+        createPoly2D("GainPoly", params->array->gainPoly, arrXML);
+        createPoly2D("PhasePoly", params->array->phasePoly, arrXML);
     }
     if (params->element)
     {
-        xml::lite::Element* elemXML = newElement(doc, "Elem");
-        apXML->addChild(elemXML);
-        elemXML->addChild(createPoly2D(doc, "GainPoly",
-                params->element->gainPoly));
-        elemXML->addChild(createPoly2D(doc, "PhasePoly",
-                params->element->phasePoly));
+        xml::lite::Element* elemXML = newElement("Elem", apXML);
+        createPoly2D("GainPoly", params->element->gainPoly, elemXML);
+        createPoly2D("PhasePoly", params->element->phasePoly, elemXML);
     }
     if (params->gainBSPoly.order() >= 0)
     {
-        apXML->addChild(createPoly1D(doc, "GainBSPoly", params->gainBSPoly));
+        createPoly1D("GainBSPoly", params->gainBSPoly, apXML);
     }
 
-    addOptional(apXML, createBooleanType(doc, "EBFreqShift",
-            params->electricalBoresightFrequencyShift));
-    addOptional(apXML, createBooleanType(doc, "MLFreqDilation",
-            params->mainlobeFrequencyDilation));
+    createBooleanType("EBFreqShift", params->electricalBoresightFrequencyShift,
+                      apXML);
+    createBooleanType("MLFreqDilation", params->mainlobeFrequencyDilation,
+                      apXML);
 
     return apXML;
 }
 
 xml::lite::Element * ComplexXMLControl::matchInfoToXML(
-        xml::lite::Document* doc, MatchInformation *matchInfo)
+                                                       MatchInformation *matchInfo,
+                                                       xml::lite::Element* parent)
 {
-    xml::lite::Element* matchInfoXML = newElement(doc, "MatchInfo");
+    xml::lite::Element* matchInfoXML = newElement("MatchInfo", parent);
 
     for (unsigned int i = 0; i < matchInfo->collects.size(); ++i)
     {
-    
-        MatchCollection *mc = matchInfo->collects[i];
-        xml::lite::Element* mcXML = newElement(doc, "Collect");
-	setAttribute(mcXML, "index", str::toString(i+1));
-        matchInfoXML->addChild(mcXML);
 
-        mcXML->addChild(createString(doc, "CollectorName", mc->collectorName));
+        MatchCollection *mc = matchInfo->collects[i];
+        xml::lite::Element* mcXML = newElement("Collect", matchInfoXML);
+        setAttribute(mcXML, "index", str::toString(i + 1));
+
+        createString("CollectorName", mc->collectorName, mcXML);
         if (!mc->illuminatorName.empty())
-            mcXML->addChild(createString(doc, "IlluminatorName",
-                    mc->illuminatorName));
-        mcXML->addChild(createString(doc, "CoreName", mc->coreName));
+            createString("IlluminatorName", mc->illuminatorName, mcXML);
+        createString("CoreName", mc->coreName, mcXML);
 
         for (std::vector<std::string>::iterator it = mc->matchType.begin(); it
                 != mc->matchType.end(); ++it)
         {
-            mcXML->addChild(createString(doc, "MatchType", *it));
+            createString("MatchType", *it, mcXML);
         }
-        addParameters(doc, mcXML, "Parameter", mc->parameters);
+        addParameters("Parameter", mc->parameters, mcXML);
     }
 
     return matchInfoXML;
 }
 
-xml::lite::Element* ComplexXMLControl::pfaToXML(xml::lite::Document* doc,
-        PFA *pfa)
+xml::lite::Element* ComplexXMLControl::pfaToXML(PFA *pfa,
+                                                xml::lite::Element* parent)
 {
-    xml::lite::Element* pfaXML = newElement(doc, "PFA");
+    xml::lite::Element* pfaXML = newElement("PFA", parent);
 
-    pfaXML->addChild(createVector3D(doc, "FPN", pfa->focusPlaneNormal));
-    pfaXML->addChild(createVector3D(doc, "IPN", pfa->imagePlaneNormal));
-    pfaXML->addChild(createDouble(doc, "PolarAngRefTime",
-            pfa->polarAngleRefTime));
-    pfaXML->addChild(createPoly1D(doc, "PolarAngPoly", pfa->polarAnglePoly));
-    pfaXML->addChild(createPoly1D(doc, "SpatialFreqSFPoly",
-            pfa->spatialFrequencyScaleFactorPoly));
-    pfaXML->addChild(createDouble(doc, "Krg1", pfa->krg1));
-    pfaXML->addChild(createDouble(doc, "Krg2", pfa->krg2));
-    pfaXML->addChild(createDouble(doc, "Kaz1", pfa->kaz1));
-    pfaXML->addChild(createDouble(doc, "Kaz2", pfa->kaz2));
+    createVector3D("FPN", pfa->focusPlaneNormal, pfaXML);
+    createVector3D("IPN", pfa->imagePlaneNormal, pfaXML);
+    createDouble("PolarAngRefTime", pfa->polarAngleRefTime, pfaXML);
+    createPoly1D("PolarAngPoly", pfa->polarAnglePoly, pfaXML);
+    createPoly1D("SpatialFreqSFPoly", pfa->spatialFrequencyScaleFactorPoly,
+                 pfaXML);
+    createDouble("Krg1", pfa->krg1, pfaXML);
+    createDouble("Krg2", pfa->krg2, pfaXML);
+    createDouble("Kaz1", pfa->kaz1, pfaXML);
+    createDouble("Kaz2", pfa->kaz2, pfaXML);
     if (pfa->slowTimeDeskew)
     {
-        xml::lite::Element* stdXML = newElement(doc, "STDeskew");
-        pfaXML->addChild(stdXML);
+        xml::lite::Element* stdXML = newElement("STDeskew", pfaXML);
+        require(createBooleanType("Applied", pfa->slowTimeDeskew->applied,
+                                  stdXML), "Applied");
 
-        addRequired(stdXML, createBooleanType(doc, "Applied",
-                pfa->slowTimeDeskew->applied), "Applied");
-
-        stdXML->addChild(createPoly2D(doc, "STDPhasePoly",
-                pfa->slowTimeDeskew->slowTimeDeskewPhasePoly));
+        createPoly2D("STDPhasePoly",
+                     pfa->slowTimeDeskew->slowTimeDeskewPhasePoly, stdXML);
     }
     for (std::vector<Compensation*>::iterator it = pfa->compensations.begin(); it
             != pfa->compensations.end(); ++it)
     {
         Compensation *comp = *it;
-        xml::lite::Element* compXML = newElement(doc, "Comp");
-        pfaXML->addChild(compXML);
-        compXML->addChild(createString(doc, "Type", comp->type));
-        addRequired(compXML, createBooleanType(doc, "Applied", comp->applied),
-                "Applied");
-        addParameters(doc, compXML, "Parameter", comp->parameters);
+        xml::lite::Element* compXML = newElement("Comp", pfaXML);
+        createString("Type", comp->type, compXML);
+        require(createBooleanType("Applied", comp->applied, compXML), "Applied");
+        addParameters("Parameter", comp->parameters, compXML);
     }
     return pfaXML;
 }
 
 void ComplexXMLControl::xmlToCollectionInfo(
-        xml::lite::Element* collectionInfoXML, CollectionInformation *collInfo)
+                                            xml::lite::Element* collectionInfoXML,
+                                            CollectionInformation *collInfo)
 {
     parseString(getFirstAndOnly(collectionInfoXML, "CollectorName"),
-            collInfo->collectorName);
+                collInfo->collectorName);
 
     xml::lite::Element* element = getOptional(collectionInfoXML,
-            "IlluminatorName");
+                                              "IlluminatorName");
     if (element)
         parseString(element, collInfo->illuminatorName);
 
@@ -1052,28 +984,30 @@ void ComplexXMLControl::xmlToCollectionInfo(
 
     element = getOptional(collectionInfoXML, "CollectType");
     if (element)
-        collInfo->collectType = str::toType<six::CollectType>(
-                element->getCharacterData());
+        collInfo->collectType
+                = str::toType<six::CollectType>(element->getCharacterData());
 
     xml::lite::Element* radarModeXML = getFirstAndOnly(collectionInfoXML,
-            "RadarMode");
+                                                       "RadarMode");
 
-    collInfo->radarMode = str::toType<RadarModeType>(getFirstAndOnly(
-            radarModeXML, "ModeType")->getCharacterData());
+    collInfo->radarMode
+            = str::toType<RadarModeType>(
+                                         getFirstAndOnly(radarModeXML,
+                                                         "ModeType")->getCharacterData());
 
     element = getOptional(radarModeXML, "ModeID");
     if (element)
         parseString(element, collInfo->radarModeID);
 
     parseString(getFirstAndOnly(collectionInfoXML, "Classification"),
-            collInfo->classification.level);
+                collInfo->classification.level);
 
     std::vector<xml::lite::Element*> countryCodeXML;
     collectionInfoXML->getElementsByTagName("CountryCode", countryCodeXML);
 
     //optional
-    for (std::vector<xml::lite::Element*>::iterator it = countryCodeXML.begin();
-            it != countryCodeXML.end(); ++it)
+    for (std::vector<xml::lite::Element*>::iterator it = countryCodeXML.begin(); it
+            != countryCodeXML.end(); ++it)
     {
         std::string cc;
 
@@ -1086,7 +1020,8 @@ void ComplexXMLControl::xmlToCollectionInfo(
 }
 
 void ComplexXMLControl::xmlToImageCreation(
-        xml::lite::Element* imageCreationXML, ImageCreation *imageCreation)
+                                           xml::lite::Element* imageCreationXML,
+                                           ImageCreation *imageCreation)
 {
     // Optional
     xml::lite::Element* element = getOptional(imageCreationXML, "Application");
@@ -1107,10 +1042,11 @@ void ComplexXMLControl::xmlToImageCreation(
 }
 
 void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
-        ImageData *imageData)
+                                       ImageData *imageData)
 {
-    imageData->pixelType = str::toType<PixelType>(getFirstAndOnly(imageDataXML,
-            "PixelType")->getCharacterData());
+    imageData->pixelType
+            = str::toType<PixelType>(
+                                     getFirstAndOnly(imageDataXML, "PixelType")->getCharacterData());
 
     xml::lite::Element* ampTableXML = getOptional(imageDataXML, "AmpTable");
 
@@ -1123,12 +1059,12 @@ void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
         //TODO make sure there is at least 1 and not more than 256
         imageData->amplitudeTable = new AmplitudeTable();
 
-	AmplitudeTable& ampTable = *(imageData->amplitudeTable);
-		
-        for (std::vector<xml::lite::Element*>::iterator it = ampsXML.begin(); 
-	     it != ampsXML.end(); ++it)
+        AmplitudeTable& ampTable = *(imageData->amplitudeTable);
+
+        for (std::vector<xml::lite::Element*>::iterator it = ampsXML.begin(); it
+                != ampsXML.end(); ++it)
         {
-            parseDouble(*it, *(double*)ampTable[i++]);
+            parseDouble(*it, *(double*) ampTable[i++]);
         }
     }
 
@@ -1138,10 +1074,10 @@ void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
     parseUInt(getFirstAndOnly(imageDataXML, "FirstCol"), imageData->firstCol);
 
     parseRowColInt(getFirstAndOnly(imageDataXML, "FullImage"), "NumRows",
-            "NumCols", imageData->fullImage);
+                   "NumCols", imageData->fullImage);
 
     parseRowColInt(getFirstAndOnly(imageDataXML, "SCPPixel"), "Row", "Col",
-            imageData->scpPixel);
+                   imageData->scpPixel);
 
     xml::lite::Element* validDataXML = getOptional(imageDataXML, "ValidData");
     if (validDataXML)
@@ -1163,17 +1099,17 @@ void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
 }
 
 void ComplexXMLControl::xmlToGeoData(xml::lite::Element* geoDataXML,
-        GeoData *geoData)
+                                     GeoData *geoData)
 {
     parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
-            geoData->earthModel);
+                        geoData->earthModel);
 
     xml::lite::Element* tmpElem = getFirstAndOnly(geoDataXML, "SCP");
     parseVector3D(getFirstAndOnly(tmpElem, "ECF"), geoData->scp.ecf);
     parseLatLonAlt(getFirstAndOnly(tmpElem, "LLH"), geoData->scp.llh);
 
     parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP",
-            geoData->imageCorners, false);
+                   geoData->imageCorners, false);
 
     tmpElem = getOptional(geoDataXML, "ValidData");
     if (tmpElem != NULL)
@@ -1196,7 +1132,7 @@ void ComplexXMLControl::xmlToGeoData(xml::lite::Element* geoDataXML,
 }
 
 void ComplexXMLControl::xmlToGeoInfo(xml::lite::Element* geoInfoXML,
-        GeoInfo* geoInfo)
+                                     GeoInfo* geoInfo)
 {
     std::vector<xml::lite::Element*> geoInfosXML;
     geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
@@ -1240,10 +1176,13 @@ void ComplexXMLControl::xmlToGeoInfo(xml::lite::Element* geoInfoXML,
 
 void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
 {
-    grid->imagePlane = str::toType<ComplexImagePlaneType>(getFirstAndOnly(
-            gridXML, "ImagePlane")->getCharacterData());
-    grid->type = str::toType<ComplexImageGridType>(getFirstAndOnly(gridXML,
-            "Type")->getCharacterData());
+    grid->imagePlane
+            = str::toType<ComplexImagePlaneType>(
+                                                 getFirstAndOnly(gridXML,
+                                                                 "ImagePlane")->getCharacterData());
+    grid->type
+            = str::toType<ComplexImageGridType>(
+                                                getFirstAndOnly(gridXML, "Type")->getCharacterData());
 
     xml::lite::Element* tmpElem = getFirstAndOnly(gridXML, "TimeCOAPoly");
     parsePoly2D(tmpElem, grid->timeCOAPoly);
@@ -1252,11 +1191,12 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
     parseVector3D(getFirstAndOnly(tmpElem, "UVectECF"), grid->row->unitVector);
     parseDouble(getFirstAndOnly(tmpElem, "SS"), grid->row->sampleSpacing);
     parseDouble(getFirstAndOnly(tmpElem, "ImpRespWid"),
-            grid->row->impulseResponseWidth);
-    grid->row->sign = str::toType<six::FFTSign>(getFirstAndOnly(tmpElem,
-            "Sgn")->getCharacterData());
+                grid->row->impulseResponseWidth);
+    grid->row->sign
+            = str::toType<six::FFTSign>(
+                                        getFirstAndOnly(tmpElem, "Sgn")->getCharacterData());
     parseDouble(getFirstAndOnly(tmpElem, "ImpRespBW"),
-            grid->row->impulseResponseBandwidth);
+                grid->row->impulseResponseBandwidth);
     parseDouble(getFirstAndOnly(tmpElem, "KCtr"), grid->row->kCenter);
     parseDouble(getFirstAndOnly(tmpElem, "DeltaK1"), grid->row->deltaK1);
     parseDouble(getFirstAndOnly(tmpElem, "DeltaK2"), grid->row->deltaK2);
@@ -1295,11 +1235,12 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
     parseVector3D(getFirstAndOnly(tmpElem, "UVectECF"), grid->col->unitVector);
     parseDouble(getFirstAndOnly(tmpElem, "SS"), grid->col->sampleSpacing);
     parseDouble(getFirstAndOnly(tmpElem, "ImpRespWid"),
-            grid->col->impulseResponseWidth);
-    grid->col->sign = str::toType<six::FFTSign>(
-            getFirstAndOnly(tmpElem, "Sgn")->getCharacterData());
+                grid->col->impulseResponseWidth);
+    grid->col->sign
+            = str::toType<six::FFTSign>(
+                                        getFirstAndOnly(tmpElem, "Sgn")->getCharacterData());
     parseDouble(getFirstAndOnly(tmpElem, "ImpRespBW"),
-            grid->col->impulseResponseBandwidth);
+                grid->col->impulseResponseBandwidth);
     parseDouble(getFirstAndOnly(tmpElem, "KCtr"), grid->col->kCenter);
     parseDouble(getFirstAndOnly(tmpElem, "DeltaK1"), grid->col->deltaK1);
     parseDouble(getFirstAndOnly(tmpElem, "DeltaK2"), grid->col->deltaK2);
@@ -1337,12 +1278,12 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
 }
 
 void ComplexXMLControl::xmlToTimeline(xml::lite::Element* timelineXML,
-        Timeline *timeline)
+                                      Timeline *timeline)
 {
     parseDateTime(getFirstAndOnly(timelineXML, "CollectStart"),
-            timeline->collectStart);
+                  timeline->collectStart);
     parseDouble(getFirstAndOnly(timelineXML, "CollectDuration"),
-            timeline->collectDuration);
+                timeline->collectDuration);
 
     xml::lite::Element* ippXML = getOptional(timelineXML, "IPP");
     if (ippXML)
@@ -1359,10 +1300,10 @@ void ComplexXMLControl::xmlToTimeline(xml::lite::Element* timelineXML,
             parseDouble(getFirstAndOnly(*it, "TStart"), ts->tStart);
             parseDouble(getFirstAndOnly(*it, "TEnd"), ts->tEnd);
             parseInt(getFirstAndOnly(*it, "IPPStart"),
-                    ts->interPulsePeriodStart);
+                     ts->interPulsePeriodStart);
             parseInt(getFirstAndOnly(*it, "IPPEnd"), ts->interPulsePeriodEnd);
             parsePoly1D(getFirstAndOnly(*it, "IPPPoly"),
-                    ts->interPulsePeriodPoly);
+                        ts->interPulsePeriodPoly);
             timeline->interPulsePeriod->sets.push_back(ts);
         }
 
@@ -1373,7 +1314,7 @@ void ComplexXMLControl::xmlToTimeline(xml::lite::Element* timelineXML,
 }
 
 void ComplexXMLControl::xmlToPosition(xml::lite::Element* positionXML,
-        Position *position)
+                                      Position *position)
 {
     xml::lite::Element* tmpElem = getFirstAndOnly(positionXML, "ARPPoly");
     parsePolyXYZ(tmpElem, position->arpPoly);
@@ -1412,8 +1353,8 @@ void ComplexXMLControl::xmlToPosition(xml::lite::Element* positionXML,
 }
 
 void ComplexXMLControl::xmlToRadarCollection(
-        xml::lite::Element* radarCollectionXML,
-        RadarCollection *radarCollection)
+                                             xml::lite::Element* radarCollectionXML,
+                                             RadarCollection *radarCollection)
 {
     xml::lite::Element* tmpElem = NULL;
     xml::lite::Element* optElem = NULL;
@@ -1424,9 +1365,9 @@ void ComplexXMLControl::xmlToRadarCollection(
         radarCollection->resolution = new ResolutionParameters();
 
         parseDouble(getFirstAndOnly(tmpElem, "RgImpResWid"),
-                radarCollection->resolution->rangeImpulseResponseWidth);
+                    radarCollection->resolution->rangeImpulseResponseWidth);
         parseDouble(getFirstAndOnly(tmpElem, "AzImpResWid"),
-                radarCollection->resolution->azimuthImpulseResponseWidth);
+                    radarCollection->resolution->azimuthImpulseResponseWidth);
 
         xml::lite::Element *refXML = getOptional(tmpElem, "ReferencePoint");
         if (refXML)
@@ -1454,9 +1395,9 @@ void ComplexXMLControl::xmlToRadarCollection(
 
     tmpElem = getFirstAndOnly(radarCollectionXML, "TxFrequency");
     parseDouble(getFirstAndOnly(tmpElem, "Min"),
-            radarCollection->txFrequencyMin);
+                radarCollection->txFrequencyMin);
     parseDouble(getFirstAndOnly(tmpElem, "Max"),
-            radarCollection->txFrequencyMax);
+                radarCollection->txFrequencyMax);
 
     tmpElem = getOptional(radarCollectionXML, "TxPolarization");
     if (tmpElem)
@@ -1498,7 +1439,7 @@ void ComplexXMLControl::xmlToRadarCollection(
                 //optional
                 step->txPolarization
                         = str::toType<PolarizationType>(
-                                optElem->getCharacterData());
+                                                        optElem->getCharacterData());
             }
 
             radarCollection->txSequence.push_back(step);
@@ -1549,8 +1490,8 @@ void ComplexXMLControl::xmlToRadarCollection(
             if (optElem)
             {
                 //optional
-                wfParams->rcvDemodType = str::toType<DemodType>(
-                        optElem->getCharacterData());
+                wfParams->rcvDemodType
+                        = str::toType<DemodType>(optElem->getCharacterData());
             }
 
             optElem = getOptional(*it, "RcvWindowLength");
@@ -1612,8 +1553,9 @@ void ComplexXMLControl::xmlToRadarCollection(
         if (childXML)
         {
             //optional
-            chanParams->txRcvPolarization = str::toType<DualPolarizationType>(
-                    childXML->getCharacterData());
+            chanParams->txRcvPolarization
+                    = str::toType<DualPolarizationType>(
+                                                        childXML->getCharacterData());
         }
 
         radarCollection->rcvChannels.push_back(chanParams);
@@ -1630,7 +1572,7 @@ void ComplexXMLControl::xmlToRadarCollection(
         {
             //optional
             parseFootprint(optElem, "APC", radarCollection->area->apcCorners,
-                    true);
+                           true);
         }
 
         xml::lite::Element* planeXML = getOptional(areaXML, "Plane");
@@ -1650,34 +1592,34 @@ void ComplexXMLControl::xmlToRadarCollection(
             }
 
             parseVector3D(getFirstAndOnly(refPtXML, "ECF"),
-                    radarCollection->area->plane->referencePoint.ecef);
+                          radarCollection->area->plane->referencePoint.ecef);
             parseDouble(getFirstAndOnly(refPtXML, "Line"),
-                    radarCollection->area->plane->referencePoint.rowCol.row);
+                        radarCollection->area->plane->referencePoint.rowCol.row);
             parseDouble(getFirstAndOnly(refPtXML, "Sample"),
-                    radarCollection->area->plane->referencePoint.rowCol.col);
+                        radarCollection->area->plane->referencePoint.rowCol.col);
 
             xml::lite::Element* dirXML = getFirstAndOnly(planeXML, "XDir");
             parseVector3D(getFirstAndOnly(dirXML, "UVectECF"),
-                    radarCollection->area->plane->xDirection->unitVector);
+                          radarCollection->area->plane->xDirection->unitVector);
             parseDouble(getFirstAndOnly(dirXML, "LineSpacing"),
-                    radarCollection->area->plane->xDirection->spacing);
+                        radarCollection->area->plane->xDirection->spacing);
             parseUInt(getFirstAndOnly(dirXML, "NumLines"),
-                    radarCollection->area->plane->xDirection->elements);
+                      radarCollection->area->plane->xDirection->elements);
             parseUInt(getFirstAndOnly(dirXML, "FirstLine"),
-                    radarCollection->area->plane->xDirection->first);
+                      radarCollection->area->plane->xDirection->first);
 
             dirXML = getFirstAndOnly(planeXML, "YDir");
             parseVector3D(getFirstAndOnly(dirXML, "UVectECF"),
-                    radarCollection->area->plane->yDirection->unitVector);
+                          radarCollection->area->plane->yDirection->unitVector);
             parseDouble(getFirstAndOnly(dirXML, "SampleSpacing"),
-                    radarCollection->area->plane->yDirection->spacing);
+                        radarCollection->area->plane->yDirection->spacing);
             parseUInt(getFirstAndOnly(dirXML, "NumSamples"),
-                    radarCollection->area->plane->yDirection->elements);
+                      radarCollection->area->plane->yDirection->elements);
             parseUInt(getFirstAndOnly(dirXML, "FirstSample"),
-                    radarCollection->area->plane->yDirection->first);
+                      radarCollection->area->plane->yDirection->first);
 
             xml::lite::Element* segmentListXML = getOptional(planeXML,
-                    "SegmentList");
+                                                             "SegmentList");
             if (segmentListXML != NULL)
             {
                 //TODO make sure there is at least one
@@ -1689,13 +1631,13 @@ void ComplexXMLControl::xmlToRadarCollection(
                 {
                     Segment* seg = new Segment();
 
-                    parseInt(getFirstAndOnly(*it, "StartLine"),seg->startLine);
+                    parseInt(getFirstAndOnly(*it, "StartLine"), seg->startLine);
                     parseInt(getFirstAndOnly(*it, "StartSample"),
-                            seg->startSample);
+                             seg->startSample);
                     parseInt(getFirstAndOnly(*it, "EndLine"), seg->endLine);
                     parseInt(getFirstAndOnly(*it, "EndSample"), seg->endSample);
                     parseString(getFirstAndOnly(*it, "Identifier"),
-                            seg->identifier);
+                                seg->identifier);
 
                     radarCollection->area->plane->segmentList.push_back(seg);
                 }
@@ -1705,21 +1647,21 @@ void ComplexXMLControl::xmlToRadarCollection(
             optElem = getOptional(planeXML, "TimeCOAPoly");
             if (optElem)
             {
-                parsePoly2D(optElem,
-                        radarCollection->area->plane->timeCOAPoly);
+                parsePoly2D(optElem, radarCollection->area->plane->timeCOAPoly);
             }
         }
     }
 
     parseParameters(radarCollectionXML, "Parameter",
-            radarCollection->parameters);
+                    radarCollection->parameters);
 }
 
 void ComplexXMLControl::xmlToImageFormation(
-        xml::lite::Element* imageFormationXML, ImageFormation *imageFormation)
+                                            xml::lite::Element* imageFormationXML,
+                                            ImageFormation *imageFormation)
 {
     xml::lite::Element* tmpElem = getOptional(imageFormationXML,
-            "SegmentIdentifier");
+                                              "SegmentIdentifier");
     if (tmpElem)
     {
         //optional
@@ -1729,14 +1671,13 @@ void ComplexXMLControl::xmlToImageFormation(
     tmpElem = getFirstAndOnly(imageFormationXML, "RcvChanProc");
 
     parseUInt(getFirstAndOnly(tmpElem, "NumChanProc"),
-            imageFormation->rcvChannelProcessed->numChannelsProcessed);
+              imageFormation->rcvChannelProcessed->numChannelsProcessed);
 
     xml::lite::Element* prfXML = getOptional(tmpElem, "PRFScaleFactor");
     if (prfXML)
     {
         //optional
-        parseDouble(prfXML,
-                imageFormation->rcvChannelProcessed->prfScaleFactor);
+        parseDouble(prfXML, imageFormation->rcvChannelProcessed->prfScaleFactor);
     }
 
     //TODO make sure there is at least one
@@ -1759,125 +1700,139 @@ void ComplexXMLControl::xmlToImageFormation(
     }
 
     imageFormation->imageFormationAlgorithm
-            = str::toType<ImageFormationType>(getFirstAndOnly(
-                    imageFormationXML, "ImageFormAlgo")->getCharacterData());
+            = str::toType<ImageFormationType>(
+                                              getFirstAndOnly(
+                                                              imageFormationXML,
+                                                              "ImageFormAlgo")->getCharacterData());
 
     parseDouble(getFirstAndOnly(imageFormationXML, "TStartProc"),
-            imageFormation->tStartProc);
+                imageFormation->tStartProc);
 
     parseDouble(getFirstAndOnly(imageFormationXML, "TEndProc"),
-            imageFormation->tEndProc);
+                imageFormation->tEndProc);
 
     tmpElem = getFirstAndOnly(imageFormationXML, "TxFrequencyProc");
 
     parseDouble(getFirstAndOnly(tmpElem, "MinProc"),
-            imageFormation->txFrequencyProcMin);
+                imageFormation->txFrequencyProcMin);
 
     parseDouble(getFirstAndOnly(tmpElem, "MaxProc"),
-            imageFormation->txFrequencyProcMax);
+                imageFormation->txFrequencyProcMax);
 
-    imageFormation->slowTimeBeamCompensation = str::toType<
-            SlowTimeBeamCompensationType>(getFirstAndOnly(imageFormationXML,
-            "STBeamComp")->getCharacterData());
+    imageFormation->slowTimeBeamCompensation
+            = str::toType<SlowTimeBeamCompensationType>(
+                                                        getFirstAndOnly(
+                                                                        imageFormationXML,
+                                                                        "STBeamComp")->getCharacterData());
 
-    imageFormation->imageBeamCompensation = str::toType<
-            ImageBeamCompensationType>(getFirstAndOnly(imageFormationXML,
-            "ImageBeamComp")->getCharacterData());
+    imageFormation->imageBeamCompensation
+            = str::toType<ImageBeamCompensationType>(
+                                                     getFirstAndOnly(
+                                                                     imageFormationXML,
+                                                                     "ImageBeamComp")->getCharacterData());
 
     imageFormation->azimuthAutofocus
-            = str::toType<AutofocusType>(getFirstAndOnly(imageFormationXML,
-                    "AzAutofocus")->getCharacterData());
+            = str::toType<AutofocusType>(
+                                         getFirstAndOnly(imageFormationXML,
+                                                         "AzAutofocus")->getCharacterData());
 
     imageFormation->rangeAutofocus
-            = str::toType<AutofocusType>(getFirstAndOnly(imageFormationXML,
-                    "RgAutofocus")->getCharacterData());
+            = str::toType<AutofocusType>(
+                                         getFirstAndOnly(imageFormationXML,
+                                                         "RgAutofocus")->getCharacterData());
 
     xml::lite::Element* polCalXML = getOptional(imageFormationXML,
-            "PolarizationCalibration");
+                                                "PolarizationCalibration");
     if (polCalXML)
     {
         //optional
         imageFormation->polarizationCalibration = new PolarizationCalibration();
         imageFormation->polarizationCalibration->distortion = new Distortion();
 
-        parseBooleanType(getFirstAndOnly(polCalXML, "HVAngleCompApplied"),
-                imageFormation->polarizationCalibration
-                ->hvAngleCompensationApplied);
+        parseBooleanType(
+                         getFirstAndOnly(polCalXML, "HVAngleCompApplied"),
+                         imageFormation->polarizationCalibration ->hvAngleCompensationApplied);
 
-        parseBooleanType(getFirstAndOnly(polCalXML,
-                "DistortionCorrectionApplied"),
-                imageFormation->polarizationCalibration
-                ->distortionCorrectionApplied);
+        parseBooleanType(
+                         getFirstAndOnly(polCalXML,
+                                         "DistortionCorrectionApplied"),
+                         imageFormation->polarizationCalibration ->distortionCorrectionApplied);
 
         xml::lite::Element* distortionXML = getFirstAndOnly(polCalXML,
-                "Distortion");
+                                                            "Distortion");
 
         xml::lite::Element* calibDateXML = getOptional(distortionXML,
-                "CalibrationDate");
+                                                       "CalibrationDate");
         if (calibDateXML)
         {
-            parseDateTime(calibDateXML, imageFormation->polarizationCalibration
-                    ->distortion->calibrationDate);
+            parseDateTime(
+                          calibDateXML,
+                          imageFormation->polarizationCalibration ->distortion->calibrationDate);
         }
 
         parseDouble(getFirstAndOnly(distortionXML, "A"),
-                imageFormation->polarizationCalibration->distortion->a);
+                    imageFormation->polarizationCalibration->distortion->a);
 
         parseComplex(getFirstAndOnly(distortionXML, "F1"),
-                imageFormation->polarizationCalibration->distortion->f1);
+                     imageFormation->polarizationCalibration->distortion->f1);
         parseComplex(getFirstAndOnly(distortionXML, "Q1"),
-                imageFormation->polarizationCalibration->distortion->q1);
+                     imageFormation->polarizationCalibration->distortion->q1);
         parseComplex(getFirstAndOnly(distortionXML, "Q2"),
-                imageFormation->polarizationCalibration->distortion->q2);
+                     imageFormation->polarizationCalibration->distortion->q2);
         parseComplex(getFirstAndOnly(distortionXML, "F2"),
-                imageFormation->polarizationCalibration->distortion->f2);
+                     imageFormation->polarizationCalibration->distortion->f2);
         parseComplex(getFirstAndOnly(distortionXML, "Q3"),
-                imageFormation->polarizationCalibration->distortion->q3);
+                     imageFormation->polarizationCalibration->distortion->q3);
         parseComplex(getFirstAndOnly(distortionXML, "Q4"),
-                imageFormation->polarizationCalibration->distortion->q4);
+                     imageFormation->polarizationCalibration->distortion->q4);
 
         xml::lite::Element* gainErrorXML = getOptional(distortionXML,
-                "GainErrorA");
+                                                       "GainErrorA");
         if (gainErrorXML)
         {
-            parseDouble(gainErrorXML, imageFormation->polarizationCalibration
-                    ->distortion->gainErrorA);
+            parseDouble(
+                        gainErrorXML,
+                        imageFormation->polarizationCalibration ->distortion->gainErrorA);
         }
 
         gainErrorXML = getOptional(distortionXML, "GainErrorF1");
         if (gainErrorXML)
         {
-            parseDouble(gainErrorXML, imageFormation->polarizationCalibration
-                    ->distortion->gainErrorF1);
+            parseDouble(
+                        gainErrorXML,
+                        imageFormation->polarizationCalibration ->distortion->gainErrorF1);
         }
 
         gainErrorXML = getOptional(distortionXML, "GainErrorF2");
         if (gainErrorXML)
         {
-            parseDouble(gainErrorXML, imageFormation->polarizationCalibration
-                    ->distortion->gainErrorF2);
+            parseDouble(
+                        gainErrorXML,
+                        imageFormation->polarizationCalibration ->distortion->gainErrorF2);
         }
 
         xml::lite::Element* phaseErrorXML = getOptional(distortionXML,
-                "PhaseErrorF1");
+                                                        "PhaseErrorF1");
         if (phaseErrorXML)
         {
-            parseDouble(phaseErrorXML, imageFormation->polarizationCalibration
-                    ->distortion->phaseErrorF1);
+            parseDouble(
+                        phaseErrorXML,
+                        imageFormation->polarizationCalibration ->distortion->phaseErrorF1);
         }
 
         phaseErrorXML = getOptional(distortionXML, "PhaseErrorF2");
         if (phaseErrorXML)
         {
-            parseDouble(phaseErrorXML, imageFormation->polarizationCalibration
-                    ->distortion->phaseErrorF2);
+            parseDouble(
+                        phaseErrorXML,
+                        imageFormation->polarizationCalibration ->distortion->phaseErrorF2);
         }
 
     }
 }
 
 void ComplexXMLControl::xmlToSCPCOA(xml::lite::Element* scpcoaXML,
-        SCPCOA *scpcoa)
+                                    SCPCOA *scpcoa)
 {
     parseDouble(getFirstAndOnly(scpcoaXML, "SCPTime"), scpcoa->scpTime);
 
@@ -1886,36 +1841,37 @@ void ComplexXMLControl::xmlToSCPCOA(xml::lite::Element* scpcoaXML,
     parseVector3D(getFirstAndOnly(scpcoaXML, "ARPAcc"), scpcoa->arpAcc);
 
     parseSideOfTrackType(getFirstAndOnly(scpcoaXML, "SideOfTrack"),
-            scpcoa->sideOfTrack);
+                         scpcoa->sideOfTrack);
     parseDouble(getFirstAndOnly(scpcoaXML, "SlantRange"), scpcoa->slantRange);
     parseDouble(getFirstAndOnly(scpcoaXML, "GroundRange"), scpcoa->groundRange);
     parseDouble(getFirstAndOnly(scpcoaXML, "DopplerConeAng"),
-            scpcoa->dopplerConeAngle);
+                scpcoa->dopplerConeAngle);
     parseDouble(getFirstAndOnly(scpcoaXML, "GrazeAng"), scpcoa->grazeAngle);
     parseDouble(getFirstAndOnly(scpcoaXML, "IncidenceAng"),
-            scpcoa->incidenceAngle);
+                scpcoa->incidenceAngle);
     parseDouble(getFirstAndOnly(scpcoaXML, "TwistAng"), scpcoa->twistAngle);
     parseDouble(getFirstAndOnly(scpcoaXML, "SlopeAng"), scpcoa->slopeAngle);
 }
 
 void ComplexXMLControl::xmlToAntennaParams(
-        xml::lite::Element* antennaParamsXML, AntennaParameters* params)
+                                           xml::lite::Element* antennaParamsXML,
+                                           AntennaParameters* params)
 {
     parsePolyXYZ(getFirstAndOnly(antennaParamsXML, "XAxisPoly"),
-            params->xAxisPoly);
+                 params->xAxisPoly);
     parsePolyXYZ(getFirstAndOnly(antennaParamsXML, "YAxisPoly"),
-            params->yAxisPoly);
+                 params->yAxisPoly);
     parseDouble(getFirstAndOnly(antennaParamsXML, "FreqZero"),
-            params->frequencyZero);
+                params->frequencyZero);
 
     xml::lite::Element* tmpElem = getOptional(antennaParamsXML, "EB");
     if (tmpElem)
     {
         params->electricalBoresight = new ElectricalBoresight();
         parsePoly1D(getFirstAndOnly(tmpElem, "DCXPoly"),
-                params->electricalBoresight->dcxPoly);
+                    params->electricalBoresight->dcxPoly);
         parsePoly1D(getFirstAndOnly(tmpElem, "DCYPoly"),
-                params->electricalBoresight->dcyPoly);
+                    params->electricalBoresight->dcyPoly);
     }
 
     tmpElem = getOptional(antennaParamsXML, "HPBW");
@@ -1923,9 +1879,9 @@ void ComplexXMLControl::xmlToAntennaParams(
     {
         params->halfPowerBeamwidths = new HalfPowerBeamwidths();
         parseDouble(getFirstAndOnly(tmpElem, "DCX"),
-                params->halfPowerBeamwidths->dcx);
+                    params->halfPowerBeamwidths->dcx);
         parseDouble(getFirstAndOnly(tmpElem, "DCY"),
-                params->halfPowerBeamwidths->dcy);
+                    params->halfPowerBeamwidths->dcy);
     }
 
     tmpElem = getOptional(antennaParamsXML, "Array");
@@ -1933,9 +1889,9 @@ void ComplexXMLControl::xmlToAntennaParams(
     {
         params->array = new GainAndPhasePolys();
         parsePoly2D(getFirstAndOnly(tmpElem, "GainPoly"),
-                params->array->gainPoly);
+                    params->array->gainPoly);
         parsePoly2D(getFirstAndOnly(tmpElem, "PhasePoly"),
-                params->array->phasePoly);
+                    params->array->phasePoly);
     }
 
     tmpElem = getOptional(antennaParamsXML, "Elem");
@@ -1943,9 +1899,9 @@ void ComplexXMLControl::xmlToAntennaParams(
     {
         params->element = new GainAndPhasePolys();
         parsePoly2D(getFirstAndOnly(tmpElem, "GainPoly"),
-                params->element->gainPoly);
+                    params->element->gainPoly);
         parsePoly2D(getFirstAndOnly(tmpElem, "PhasePoly"),
-                params->element->phasePoly);
+                    params->element->phasePoly);
     }
 
     tmpElem = getOptional(antennaParamsXML, "GainBSPoly");
@@ -1971,7 +1927,7 @@ void ComplexXMLControl::xmlToAntennaParams(
 }
 
 void ComplexXMLControl::xmlToAntenna(xml::lite::Element* antennaXML,
-        Antenna *antenna)
+                                     Antenna *antenna)
 {
     xml::lite::Element* antennaParamsXML = getOptional(antennaXML, "Tx");
     if (antennaParamsXML)
@@ -1996,7 +1952,7 @@ void ComplexXMLControl::xmlToAntenna(xml::lite::Element* antennaXML,
 }
 
 void ComplexXMLControl::xmlToMatchInfo(xml::lite::Element* matchInfoXML,
-        MatchInformation *matchInfo)
+                                       MatchInformation *matchInfo)
 {
     xml::lite::Element* optElem = NULL;
 
@@ -2042,11 +1998,11 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
 {
     parseVector3D(getFirstAndOnly(pfaXML, "FPN"), pfa->focusPlaneNormal);
     parseVector3D(getFirstAndOnly(pfaXML, "IPN"), pfa->imagePlaneNormal);
-    parseDouble(getFirstAndOnly(pfaXML,
-            "PolarAngRefTime"), pfa->polarAngleRefTime);
+    parseDouble(getFirstAndOnly(pfaXML, "PolarAngRefTime"),
+                pfa->polarAngleRefTime);
     parsePoly1D(getFirstAndOnly(pfaXML, "PolarAngPoly"), pfa->polarAnglePoly);
     parsePoly1D(getFirstAndOnly(pfaXML, "SpatialFreqSFPoly"),
-            pfa->spatialFrequencyScaleFactorPoly);
+                pfa->spatialFrequencyScaleFactorPoly);
     parseDouble(getFirstAndOnly(pfaXML, "Krg1"), pfa->krg1);
     parseDouble(getFirstAndOnly(pfaXML, "Krg2"), pfa->krg2);
     parseDouble(getFirstAndOnly(pfaXML, "Kaz1"), pfa->kaz1);
@@ -2057,10 +2013,10 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
     {
         pfa->slowTimeDeskew = new SlowTimeDeskew();
         parseBooleanType(getFirstAndOnly(deskewXML, "Applied"),
-                pfa->slowTimeDeskew->applied);
+                         pfa->slowTimeDeskew->applied);
 
         parsePoly2D(getFirstAndOnly(deskewXML, "STDSPhasePoly"),
-                pfa->slowTimeDeskew->slowTimeDeskewPhasePoly);
+                    pfa->slowTimeDeskew->slowTimeDeskewPhasePoly);
     }
 
     //optional
@@ -2082,7 +2038,8 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
 }
 
 void ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
-        std::string cornerName, std::vector<LatLon>& value, bool alt)
+                                       std::string cornerName, std::vector<
+                                               LatLon>& value, bool alt)
 {
     std::vector<xml::lite::Element*> vertices;
     footprint->getElementsByTagName(cornerName, vertices);
@@ -2093,8 +2050,12 @@ void ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
     for (unsigned int i = 0; i < vertices.size(); i++)
     {
         //check the index attr to know which corner it is
-        int idx = str::toType<int>(vertices[i]->getAttributes().getValue(
-                "index")) - 1;
+        int
+                idx =
+                        str::toType<int>(
+                                         vertices[i]->getAttributes().getValue(
+                                                                               "index"))
+                                - 1;
 
         parseLatLon(vertices[i], value[idx]);
 
@@ -2109,26 +2070,26 @@ void ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
 }
 
 xml::lite::Element* ComplexXMLControl::createFootprint(
-        xml::lite::Document* doc, std::string name, std::string cornerName,
-        const std::vector<LatLon>& corners, bool alt)
+                                                       std::string name,
+                                                       std::string cornerName,
+                                                       const std::vector<LatLon>& corners,
+                                                       bool alt,
+                                                       xml::lite::Element* parent)
 {
-    xml::lite::Element* footprint = newElement(doc, name);
+    xml::lite::Element* footprint = newElement(name, parent);
 
-    xml::lite::Element* vertex = createLatLon(doc, cornerName, corners[0]);
+    xml::lite::Element* vertex =
+            createLatLon(cornerName, corners[0], footprint);
     setAttribute(vertex, "index", "1:FRFC");
-    footprint->addChild(vertex);
 
-    vertex = createLatLon(doc, cornerName, corners[1]);
+    vertex = createLatLon(cornerName, corners[1], footprint);
     setAttribute(vertex, "index", "2:FRLC");
-    footprint->addChild(vertex);
 
-    vertex = createLatLon(doc, cornerName, corners[2]);
+    vertex = createLatLon(cornerName, corners[2], footprint);
     setAttribute(vertex, "index", "3:LRLC");
-    footprint->addChild(vertex);
 
-    vertex = createLatLon(doc, cornerName, corners[3]);
+    vertex = createLatLon(cornerName, corners[3], footprint);
     setAttribute(vertex, "index", "4:LRFC");
-    footprint->addChild(vertex);
 
     return footprint;
 }
