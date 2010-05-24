@@ -638,6 +638,10 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm, 
                 bp++;
                 if (!(_nitf_convNum(&bp, millis, 0, 1000)))
                 return NULL;
+
+                /* clear out some trailing precision, which we can't track */
+                while(*bp >= '0' && *bp <= '9')
+                    bp++;
             }
             break;
 
