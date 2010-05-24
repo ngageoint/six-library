@@ -501,11 +501,10 @@ void XMLControl::parseBooleanType(xml::lite::Element* element,
     value = str::toType<BooleanType>(element->getCharacterData());
 }
 
-Parameter XMLControl::parseParameter(xml::lite::Element* element)
+void XMLControl::parseParameter(xml::lite::Element* element, Parameter& p)
 {
-    Parameter p(element->getCharacterData());
     p.setName(element->getAttributes().getValue("name"));
-    return p;
+    p.setValue<std::string>(element->getCharacterData());
 }
 
 void XMLControl::parseParameters(xml::lite::Element* paramXML,
@@ -518,7 +517,9 @@ void XMLControl::parseParameters(xml::lite::Element* paramXML,
     for (std::vector<xml::lite::Element*>::iterator it = elemXML.begin(); it
             != elemXML.end(); ++it)
     {
-        props.push_back(parseParameter(*it));
+        Parameter p;
+        parseParameter(*it, p);
+        props.push_back(p);
     }
 }
 
