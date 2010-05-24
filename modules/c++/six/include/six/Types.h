@@ -219,7 +219,7 @@ template<typename T> struct RangeAzimuth
 
 template<typename T> struct RowCol
 {
-    RowCol(T r = 0.0, T c = 0.0) :
+    RowCol(T r = (T)0.0, T c = (T)0.0) :
         row(r), col(c)
     {
     }
