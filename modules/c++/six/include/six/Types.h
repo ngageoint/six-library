@@ -217,25 +217,140 @@ template<typename T> struct RangeAzimuth
  *  type should be RowCol<long>)
  */
 
+
 template<typename T> struct RowCol
 {
-    RowCol(T r = (T)0.0, T c = (T)0.0) :
-        row(r), col(c)
-    {
-    }
     T row;
     T col;
+    
+    RowCol(T r = (T) 0.0, T c = (T) 0.0) :
+        row(r), col(c) {}
 
-    /*!
-     *  Compare the types considering that some specializations (e.g., double)
-     *  are not exact
-     */
-    bool operator==(const RowCol<T>& t) const
+    template<typename Other_T> RowCol(const RowCol<Other_T>& p)
     {
-        return math::linear::equals(row, t.row) && 
-            math::linear::equals(col, t.col);
+        row = p.row;
+        col = p.col;
     }
 
+    RowCol(const std::pair<T, T>& p)
+    {
+        row = p.first;
+        col = p.second;
+    }
+
+    template<typename Other_T> RowCol& operator=(const RowCol<Other_T>& p)
+    {
+        if (this != &p)
+        {
+            row = (T)p.row;
+            col = (T)p.col;
+        }
+        return *this;
+    }
+
+    RowCol& operator=(const std::pair<T, T>& p)
+    {
+        row = p.first;
+        col = p.second;
+        return *this;
+    }
+
+    
+    template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p)
+    {
+        row += (T)p.row;
+        col += (T)p.col;
+        return *this;
+    }
+    
+    template<typename Other_T> RowCol operator+(const RowCol<Other_T>& p)
+    {
+        RowCol copy(*this);
+        return copy += p;
+    }
+    
+    template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p)
+    {
+        row -= (T)p.row;
+        col -= (T)p.col;
+        return *this;
+    }
+    
+    template<typename Other_T> RowCol operator-(const RowCol<Other_T>& p)
+    {
+        RowCol copy(*this);
+        return copy -= p;
+    }
+
+    RowCol& operator+=(T scalar)
+    {
+        row += scalar;
+        col += scalar;
+        return *this;
+    }
+
+    RowCol operator+(T scalar)
+    {
+        RowCol copy(*this);
+        return copy += scalar;
+    }
+    
+    RowCol& operator-=(T scalar)
+    {
+        row -= scalar;
+        col -= scalar;
+        return *this;
+    }
+
+    RowCol operator-(T scalar)
+    {
+        RowCol copy(*this);
+        return copy -= scalar;
+    }
+
+    RowCol& operator*=(T scalar)
+    {
+        row *= scalar;
+        col *= scalar;
+        return *this;
+    }
+
+    RowCol operator*(T scalar)
+    {
+        RowCol copy(*this);
+        return copy *= scalar;
+    }
+    
+    RowCol& operator/=(T scalar)
+    {
+        row /= scalar;
+        col /= scalar;
+        return *this;
+    }
+
+    RowCol operator/(T scalar)
+    {
+        RowCol copy(*this);
+        return copy /= scalar;
+    }
+    
+    /*!
+     *  Compare the types considering that some
+     *  specializations (e.g., double)
+     *  are not exact
+     */
+    bool operator==(const RowCol<T>& p) const
+    {
+        return math::linear::equals(row, p.row) && 
+            math::linear::equals(col, p.col);
+    }
+
+
+    bool operator!=(const RowCol<T>& p) const
+    {
+        return ! (RowCol::operator==(p));
+    }
+        
 };
 
 // These are heavily used and we dont want any mistakes
