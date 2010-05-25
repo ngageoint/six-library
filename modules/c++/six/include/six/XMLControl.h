@@ -27,6 +27,7 @@
 #include "six/ErrorStatistics.h"
 #include "six/Radiometric.h"
 #include <import/xml/lite.h>
+#include <import/logging.h>
 
 namespace six
 {
@@ -58,13 +59,12 @@ class XMLControl
 
 public:
     //!  Constructor
-    XMLControl()
-    {
-    }
+    XMLControl(logging::Logger* log = NULL);
+
     //!  Destructor
-    virtual ~XMLControl()
-    {
-    }
+    virtual ~XMLControl();
+
+    void setLogger(logging::Logger* log);
 
     /*!
      *  Convert the Data model into an XML DOM.
@@ -82,6 +82,8 @@ public:
 
 protected:
     std::string mURI;
+    logging::Logger *mLog;
+    bool mOwnLog;
 
     xml::lite::Element* newElement(std::string name,
                                    xml::lite::Element* parent = NULL);

@@ -50,7 +50,7 @@ class ComplexXMLControl : public XMLControl
 
 public:
     //!  Constructor
-    ComplexXMLControl()
+    ComplexXMLControl(logging::Logger* log = NULL) : XMLControl(log)
     {
         mURI = "urn:SICD:0.3.1";
     }
