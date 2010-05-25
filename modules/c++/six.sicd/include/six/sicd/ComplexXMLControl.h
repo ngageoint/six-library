@@ -171,6 +171,22 @@ protected:
                                         bool alt = false,
                                         xml::lite::Element* parent = NULL);
 
+    // Overridden methods from the base XMLControl, for adding attributes
+    xml::lite::Element* createString(std::string name, std::string p = "",
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createInt(std::string name, int p = 0,
+                                  xml::lite::Element* parent = NULL);
+    xml::lite::Element* createDouble(std::string name, double p = 0,
+                                     xml::lite::Element* parent = NULL);
+    xml::lite::Element* createBooleanType(std::string name, BooleanType b,
+                                          xml::lite::Element* parent = NULL);
+    xml::lite::Element* createDateTime(std::string name, std::string s,
+                                       xml::lite::Element* parent = NULL);
+    xml::lite::Element* createDateTime(std::string name, DateTime p,
+                                       xml::lite::Element* parent = NULL);
+    xml::lite::Element* createDate(std::string name, DateTime p,
+                                   xml::lite::Element* parent = NULL);
+
 };
 
 }

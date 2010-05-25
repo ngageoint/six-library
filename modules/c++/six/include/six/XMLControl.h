@@ -91,22 +91,22 @@ protected:
     xml::lite::Element* newElement(std::string name, std::string characterData,
                                    xml::lite::Element* parent = NULL);
 
-    xml::lite::Element* createString(std::string name, std::string p = "",
+    virtual xml::lite::Element* createString(std::string name, std::string p = "",
                                      xml::lite::Element* parent = NULL);
-    xml::lite::Element* createInt(std::string name, int p = 0,
+    virtual xml::lite::Element* createInt(std::string name, int p = 0,
                                   xml::lite::Element* parent = NULL);
-    xml::lite::Element* createDouble(std::string name, double p = 0,
+    virtual xml::lite::Element* createDouble(std::string name, double p = 0,
                                      xml::lite::Element* parent = NULL);
+    virtual xml::lite::Element* createBooleanType(std::string name, BooleanType b,
+                                          xml::lite::Element* parent = NULL);
+    virtual xml::lite::Element* createDateTime(std::string name, DateTime p,
+                                       xml::lite::Element* parent = NULL);
+    virtual xml::lite::Element* createDateTime(std::string name, std::string s,
+                                       xml::lite::Element* parent = NULL);
+    virtual xml::lite::Element* createDate(std::string name, DateTime p,
+                                   xml::lite::Element* parent = NULL);
     xml::lite::Element* createComplex(std::string name, std::complex<double> c,
                                       xml::lite::Element* parent = NULL);
-    xml::lite::Element* createBooleanType(std::string name, BooleanType b,
-                                          xml::lite::Element* parent = NULL);
-    xml::lite::Element* createDateTime(std::string name, DateTime p,
-                                       xml::lite::Element* parent = NULL);
-    xml::lite::Element* createDateTime(std::string name, std::string s,
-                                       xml::lite::Element* parent = NULL);
-    xml::lite::Element* createDate(std::string name, DateTime p,
-                                   xml::lite::Element* parent = NULL);
     xml::lite::Element* createVector3D(std::string name, Vector3 p = 0.0,
                                        xml::lite::Element* parent = NULL);
     xml::lite::Element* createRowCol(std::string name, std::string rowName,

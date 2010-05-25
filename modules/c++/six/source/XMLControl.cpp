@@ -248,37 +248,19 @@ xml::lite::Element* XMLControl::createPoly2D(std::string name,
 xml::lite::Element* XMLControl::createString(std::string name, std::string p,
                                              xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(name, p, parent);
-    xml::lite::AttributeNode node;
-    node.setQName("class");
-    node.setUri(mURI);
-    node.setValue("xs:string");
-    e->getAttributes().add(node);
-    return e;
+    return newElement(name, p, parent);
 }
 
 xml::lite::Element* XMLControl::createInt(std::string name, int p,
                                           xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(name, str::toString<int>(p), parent);
-    xml::lite::AttributeNode node;
-    node.setQName("class");
-    node.setUri(mURI);
-    node.setValue("xs:int");
-    e->getAttributes().add(node);
-    return e;
+    return newElement(name, str::toString<int>(p), parent);
 }
 
 xml::lite::Element* XMLControl::createDouble(std::string name, double p,
                                              xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(name, str::toString<double>(p), parent);
-    xml::lite::AttributeNode node;
-    node.setQName("class");
-    node.setUri(mURI);
-    node.setValue("xs:double");
-    e->getAttributes().add(node);
-    return e;
+    return newElement(name, str::toString<double>(p), parent);
 }
 
 xml::lite::Element* XMLControl::createComplex(std::string name, std::complex<
@@ -296,27 +278,13 @@ xml::lite::Element* XMLControl::createBooleanType(std::string name,
 {
     if (p == six::BOOL_NOT_SET)
         return NULL;
-
-    xml::lite::Element* e = newElement(name, str::toString<BooleanType>(p),
-                                       parent);
-    xml::lite::AttributeNode node;
-    node.setQName("class");
-    node.setUri(mURI);
-    node.setValue("xs:boolean");
-    e->getAttributes().add(node);
-    return e;
+    return newElement(name, str::toString<BooleanType>(p), parent);
 }
 
 xml::lite::Element* XMLControl::createDateTime(std::string name, std::string s,
                                                xml::lite::Element* parent)
 {
-    xml::lite::Element* e = newElement(name, s, parent);
-    xml::lite::AttributeNode node;
-    node.setQName("class");
-    node.setUri(mURI);
-    node.setValue("xs:dateTime");
-    e->getAttributes().add(node);
-    return e;
+    return newElement(name, s, parent);
 }
 
 xml::lite::Element* XMLControl::createDateTime(std::string name, DateTime p,
@@ -334,13 +302,7 @@ xml::lite::Element* XMLControl::createDate(std::string name, DateTime p,
     p.format("%Y-%m-%d", date, 255);
     std::string s(date);
 
-    xml::lite::Element* e = newElement(name, s, parent);
-    xml::lite::AttributeNode node;
-    node.setQName("class");
-    node.setUri(mURI);
-    node.setValue("xs:date");
-    e->getAttributes().add(node);
-    return e;
+    return newElement(name, s, parent);
 }
 
 xml::lite::Element* XMLControl::getFirstAndOnly(xml::lite::Element* parent,
