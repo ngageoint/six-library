@@ -2150,3 +2150,106 @@ xml::lite::Element* ComplexXMLControl::createFootprint(
     return footprint;
 }
 
+xml::lite::Element* ComplexXMLControl::createString(std::string name, std::string p,
+                                             xml::lite::Element* parent)
+{
+    xml::lite::Element* e = XMLControl::createString(name, p, parent);
+    if (e)
+    {
+        // add the class attribute
+        xml::lite::AttributeNode node;
+        node.setQName("class");
+        node.setUri(mURI);
+        node.setValue("xs:string");
+        e->getAttributes().add(node);
+    }
+    return e;
+}
+
+xml::lite::Element* ComplexXMLControl::createInt(std::string name, int p,
+                                          xml::lite::Element* parent)
+{
+    xml::lite::Element* e = XMLControl::createInt(name, p, parent);
+    if (e)
+    {
+        // add the class attribute
+        xml::lite::AttributeNode node;
+        node.setQName("class");
+        node.setUri(mURI);
+        node.setValue("xs:int");
+        e->getAttributes().add(node);
+    }
+    return e;
+}
+
+xml::lite::Element* ComplexXMLControl::createDouble(std::string name, double p,
+                                             xml::lite::Element* parent)
+{
+    xml::lite::Element* e = XMLControl::createDouble(name, p, parent);
+    if (e)
+    {
+        // add the class attribute
+        xml::lite::AttributeNode node;
+        node.setQName("class");
+        node.setUri(mURI);
+        node.setValue("xs:double");
+        e->getAttributes().add(node);
+    }
+    return e;
+}
+
+xml::lite::Element* ComplexXMLControl::createBooleanType(std::string name,
+                                                  BooleanType p,
+                                                  xml::lite::Element* parent)
+{
+    xml::lite::Element* e = XMLControl::createBooleanType(name, p, parent);
+    if (e)
+    {
+        // add the class attribute
+        xml::lite::AttributeNode node;
+        node.setQName("class");
+        node.setUri(mURI);
+        node.setValue("xs:boolean");
+        e->getAttributes().add(node);
+    }
+    return e;
+}
+
+xml::lite::Element* ComplexXMLControl::createDateTime(std::string name, std::string s,
+                                               xml::lite::Element* parent)
+{
+    xml::lite::Element* e = XMLControl::createDateTime(name, s, parent);
+    if (e)
+    {
+        // add the class attribute
+        xml::lite::AttributeNode node;
+        node.setQName("class");
+        node.setUri(mURI);
+        node.setValue("xs:dateTime");
+        e->getAttributes().add(node);
+    }
+    return e;
+}
+
+xml::lite::Element* ComplexXMLControl::createDateTime(std::string name, DateTime p,
+                                               xml::lite::Element* parent)
+{
+    std::string s = str::toString<DateTime>(p);
+    return createDateTime(name, s, parent);
+}
+
+xml::lite::Element* ComplexXMLControl::createDate(std::string name, DateTime p,
+                                           xml::lite::Element* parent)
+{
+    xml::lite::Element* e = XMLControl::createDate(name, p, parent);
+    if (e)
+    {
+        // add the class attribute
+        xml::lite::AttributeNode node;
+        node.setQName("class");
+        node.setUri(mURI);
+        node.setValue("xs:date");
+        e->getAttributes().add(node);
+    }
+    return e;
+}
