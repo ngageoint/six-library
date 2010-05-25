@@ -26,6 +26,28 @@
 
 using namespace six;
 
+XMLControl::XMLControl(logging::Logger* log) :
+    mLog(NULL), mOwnLog(false)
+{
+    setLogger(log);
+}
+
+XMLControl::~XMLControl()
+{
+    if (mLog && mOwnLog)
+        delete mLog;
+}
+
+void XMLControl::setLogger(logging::Logger* log)
+{
+    if (mLog && mOwnLog && log != mLog)
+        delete mLog;
+    // create a dummy logger if one wasn't supplied - this lets us use the log
+    // without checking for NULL every time
+    mLog = log ? log : new logging::Logger("XMLControl");
+    mOwnLog = !log;
+}
+
 xml::lite::Element* XMLControl::newElement(std::string name,
                                            xml::lite::Element* parent)
 {
@@ -343,7 +365,8 @@ xml::lite::Element* XMLControl::getOptional(xml::lite::Element* parent,
     return children[0];
 }
 
-xml::lite::Element* XMLControl::require(xml::lite::Element* element, std::string name)
+xml::lite::Element* XMLControl::require(xml::lite::Element* element,
+                                        std::string name)
 {
     if (!element)
         throw except::Exception(Ctxt(FmtX("Required field [%s] is undefined "
@@ -456,27 +479,62 @@ void XMLControl::setAttribute(xml::lite::Element* e, std::string name,
 
 void XMLControl::parseInt(xml::lite::Element* element, int& value)
 {
-    value = str::toType<int>(element->getCharacterData());
+    try
+    {
+        value = str::toType<int>(element->getCharacterData());
+    }
+    catch (except::BadCastException& ex)
+    {
+        mLog->warn(Ctxt(FmtX("Unable to parse: %s", ex.toString().c_str())));
+    }
 }
 
 void XMLControl::parseInt(xml::lite::Element* element, long& value)
 {
-    value = str::toType<long>(element->getCharacterData());
+    try
+    {
+        value = str::toType<long>(element->getCharacterData());
+    }
+    catch (except::BadCastException& ex)
+    {
+        mLog->warn(Ctxt(FmtX("Unable to parse: %s", ex.toString().c_str())));
+    }
 }
 
 void XMLControl::parseUInt(xml::lite::Element* element, unsigned int& value)
 {
-    value = str::toType<unsigned int>(element->getCharacterData());
+    try
+    {
+        value = str::toType<unsigned int>(element->getCharacterData());
+    }
+    catch (except::BadCastException& ex)
+    {
+        mLog->warn(Ctxt(FmtX("Unable to parse: %s", ex.toString().c_str())));
+    }
 }
 
 void XMLControl::parseUInt(xml::lite::Element* element, unsigned long& value)
 {
-    value = str::toType<unsigned long>(element->getCharacterData());
+    try
+    {
+        value = str::toType<unsigned long>(element->getCharacterData());
+    }
+    catch (except::BadCastException& ex)
+    {
+        mLog->warn(Ctxt(FmtX("Unable to parse: %s", ex.toString().c_str())));
+    }
 }
 
 void XMLControl::parseDouble(xml::lite::Element* element, double& value)
 {
-    value = str::toType<double>(element->getCharacterData());
+    try
+    {
+        value = str::toType<double>(element->getCharacterData());
+    }
+    catch (except::BadCastException& ex)
+    {
+        mLog->warn(Ctxt(FmtX("Unable to parse: %s", ex.toString().c_str())));
+    }
 }
 
 void XMLControl::parseComplex(xml::lite::Element* element,
@@ -498,7 +556,14 @@ void XMLControl::parseString(xml::lite::Element* element, std::string& value)
 void XMLControl::parseBooleanType(xml::lite::Element* element,
                                   BooleanType& value)
 {
-    value = str::toType<BooleanType>(element->getCharacterData());
+    try
+    {
+        value = str::toType<BooleanType>(element->getCharacterData());
+    }
+    catch (except::BadCastException& ex)
+    {
+        mLog->warn(Ctxt(FmtX("Unable to parse: %s", ex.toString().c_str())));
+    }
 }
 
 void XMLControl::parseParameter(xml::lite::Element* element, Parameter& p)

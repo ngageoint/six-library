@@ -44,7 +44,7 @@ class DerivedXMLControl : public XMLControl
 
 public:
 
-    DerivedXMLControl()
+    DerivedXMLControl(logging::Logger* log = NULL) : XMLControl(log)
     {
         mURI = "urn:SIDD:0.0.4";
     }
