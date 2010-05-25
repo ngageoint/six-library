@@ -70,6 +70,9 @@ template<> std::string toString(const six::DateTime& value);
 template<> std::string toString(const six::DataClass& value);
 template<> std::string toString(const six::DataType& value);
 template<> std::string toString(const six::EarthModelType& value);
+template<> six::OrientationType toType<six::OrientationType>(
+        const std::string& s);
+template<> std::string toString(const six::OrientationType& value);
 template<> six::PolarizationType toType<six::PolarizationType> (
         const std::string& s);
 template<> std::string toString(const six::PolarizationType& value);
@@ -91,6 +94,8 @@ template<> six::ImageBeamCompensationType
         toType<six::ImageBeamCompensationType> (const std::string& s);
 template<> std::string toString(const six::AutofocusType& value);
 template<> six::AutofocusType toType<six::AutofocusType> (const std::string& s);
+template<> std::string toString(const six::RMAlgoType& value);
+template<> six::RMAlgoType toType<six::RMAlgoType> (const std::string& s);
 template<> six::PosVelError::FrameType toType<six::PosVelError::FrameType> (
         const std::string& s);
 template<> std::string toString(const six::SideOfTrackType& value);

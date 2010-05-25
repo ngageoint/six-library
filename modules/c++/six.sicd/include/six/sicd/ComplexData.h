@@ -37,6 +37,7 @@
 #include "six/sicd/SCPCOA.h"
 #include "six/sicd/Antenna.h"
 #include "six/sicd/PFA.h"
+#include "six/sicd/RMA.h"
 #include "six/sicd/MatchInformation.h"
 
 namespace six
@@ -108,14 +109,13 @@ struct ComplexData: public Data
     //!  (Optioanl) Params describing other related imaging collections
     MatchInformation* matchInformation;
 
-    /*!
-     *  Polar Format Algorithm params
-     *
-     *  This is technically conditional on imageFormationAlgorithm => PFA, but
-     *  currently there is no other supported algorithm
-     *
-     */
+    //!  (Optional/Choice) Polar Format Algorithm params -- if this is set,
+    //          rma should remain NULL.
     PFA* pfa;
+
+    //!  (Optional/Choice) Range Migration Algorithm params -- if this is
+    //          set, pfa should remain NULL.
+    RMA* rma;
 
     ComplexData();
 

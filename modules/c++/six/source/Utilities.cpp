@@ -298,6 +298,45 @@ template<> std::string str::toString(const six::EarthModelType& t)
     }
 }
 
+template<> six::OrientationType str::toType<six::OrientationType>(
+        const std::string& s)
+{
+    std::string type(s);
+    str::trim(type);
+
+    if (type == "UP")
+        return six::ORIENT_UP;
+    else if (type == "DOWN")
+        return six::ORIENT_DOWN;
+    else if (type == "LEFT")
+        return six::ORIENT_LEFT;
+    else if (type == "RIGHT")
+        return six::ORIENT_RIGHT;
+    else if (type == "ARBITRARY")
+        return six::ORIENT_ARBITRARY;
+    else
+        throw except::Exception(Ctxt("Unsupported orientation type"));
+}
+
+template<> std::string str::toString(const six::OrientationType& t)
+{
+    switch (t)
+    {
+    case six::ORIENT_UP:
+        return "UP";
+    case six::ORIENT_DOWN:
+        return "DOWN";
+    case six::ORIENT_LEFT:
+        return "LEFT";
+    case six::ORIENT_RIGHT:
+        return "RIGHT";
+    case six::ORIENT_ARBITRARY:
+        return "ARBITRARY";
+    default:
+        throw except::Exception(Ctxt("Unsupported orientation"));
+    }
+}
+
 template<> six::PolarizationType str::toType<six::PolarizationType>(
         const std::string& s)
 {
@@ -425,10 +464,8 @@ template<> six::ImageFormationType str::toType<six::ImageFormationType>(
         return six::IF_PFA;
     else if (type == "RMA")
         return six::IF_RMA;
-    else if (type == "CSA")
-        return six::IF_CSA;
-    else if (type == "RDA")
-        return six::IF_RDA;
+    else if (type == "RGAZCOMP")
+        return six::IF_RGAZCOMP;
     else
         throw except::Exception(Ctxt("Unsupported image formation type"));
 }
@@ -443,10 +480,8 @@ template<> std::string str::toString(const six::ImageFormationType& t)
         return "PFA";
     case six::IF_RMA:
         return "RMA";
-    case six::IF_CSA:
-        return "CSA";
-    case six::IF_RDA:
-        return "RDA";
+    case six::IF_RGAZCOMP:
+        return "RGAZCOMP";
     default:
         throw except::Exception(Ctxt("Unsupported image formation type"));
     }
@@ -542,6 +577,35 @@ template<> std::string str::toString(const six::AutofocusType& t)
     }
 }
 
+template<> six::RMAlgoType str::toType<six::RMAlgoType>(const std::string& s)
+{
+    std::string type(s);
+    str::trim(type);
+    if (type == "OMEGA_K")
+        return six::RMA_OMEGA_K;
+    else if (type == "CSA")
+        return six::RMA_CSA;
+    else if (type == "RG_DOP")
+        return six::RMA_RG_DOP;
+    else
+        throw except::Exception(Ctxt("Unsupported RM algorithm type"));
+}
+
+template<> std::string str::toString(const six::RMAlgoType& t)
+{
+    switch (t)
+    {
+    case six::RMA_OMEGA_K:
+        return "OMEGA_K";
+    case six::RMA_CSA:
+        return "CSA";
+    case six::RMA_RG_DOP:
+        return "RG_DOP";
+    default:
+        throw except::Exception(Ctxt("Unsupported RM algorithm type"));
+    }
+}
+
 template<> six::PosVelError::FrameType str::toType<six::PosVelError::FrameType>(
         const std::string& s)
 {
@@ -622,8 +686,12 @@ template<> six::ComplexImageGridType str::toType<six::ComplexImageGridType>(
         return six::GRID_RGAZIM;
     else if (type == "RGZERO")
         return six::GRID_RGZERO;
-    else if (type == "CARTESIAN")
-        return six::GRID_CARTESIAN;
+    else if (type == "XRGYCR")
+        return six::GRID_XRGYCR;
+    else if (type == "XCTYAT")
+        return six::GRID_XCTYAT;
+    else if (type == "PLANE")
+        return six::GRID_PLANE;
     else
         throw except::Exception(Ctxt("Unsupported complex image grid"));
 }
@@ -636,8 +704,12 @@ template<> std::string str::toString(const six::ComplexImageGridType& t)
         return "RGAZIM";
     case six::GRID_RGZERO:
         return "RGZERO";
-    case six::GRID_CARTESIAN:
-        return "CARTESIAN";
+    case six::GRID_XRGYCR:
+        return "XRGYCR";
+    case six::GRID_XCTYAT:
+        return "XCTYAT";
+    case six::GRID_PLANE:
+        return "PLANE";
     default:
         throw except::Exception(Ctxt("Unsupported complex image grid"));
     }

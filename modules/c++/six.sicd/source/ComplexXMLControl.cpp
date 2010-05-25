@@ -65,6 +65,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
 
     xml::lite::Element *matchInfoXML = getOptional(root, "MatchInfo");
     xml::lite::Element *pfaXML = getOptional(root, "PFA");
+    xml::lite::Element *rmaXML = getOptional(root, "RMA");
 
     xmlToCollectionInfo(collectionInfoXML, sicd->collectionInformation);
 
@@ -112,6 +113,12 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
         sicd->pfa = new PFA();
         xmlToPFA(pfaXML, sicd->pfa);
     }
+    if (rmaXML != NULL)
+    {
+        sicd->rma = new RMA();
+        xmlToRMA(rmaXML, sicd->rma);
+    }
+
     return sicd;
 }
 
@@ -150,9 +157,15 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
         errorStatisticsToXML(sicd->errorStatistics, root);
     if (sicd->matchInformation && !sicd->matchInformation->collects.empty())
         matchInfoToXML(sicd->matchInformation, root);
-    // Hack for now
+
     if (sicd->pfa)
         pfaToXML(sicd->pfa, root);
+    else if (sicd->rma)
+        rmaToXML(sicd->rma, root);
+    else if (!sicd->pfa && !sicd->rma)
+        throw except::Exception("One of PFA and RMA must be defined -- both "
+                "are undefined.");
+
     return doc;
 }
 
@@ -191,7 +204,7 @@ xml::lite::Element* ComplexXMLControl::collectionInfoToXML(
         createString("ModeID", collInfo->radarModeID, radarModeXML);
 
     //TODO maybe add more class. info in the future
-    createString("Classification", collInfo->classification.level, radarModeXML);
+    createString("Classification", collInfo->classification.level, collInfoXML);
 
     for (std::vector<std::string>::iterator it = collInfo->countryCodes.begin(); it
             != collInfo->countryCodes.end(); ++it)
@@ -269,7 +282,7 @@ xml::lite::Element* ComplexXMLControl::geoDataToXML(GeoData *geoData,
     createLatLonAlt("LLH", geoData->scp.llh, scpXML);
 
     //createFootprint
-    createFootprint("ImageCorners", "ICP", geoData->imageCorners, geoDataXML);
+    createFootprint("ImageCorners", "ICP", geoData->imageCorners, false, geoDataXML);
 
     //only if 3+ vertices
     unsigned int numVertices = geoData->validData.size();
@@ -474,30 +487,6 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
 {
     xml::lite::Element* radarXML = newElement("RadarCollection", parent);
 
-    if (radar->resolution)
-    {
-        xml::lite::Element* resXML = newElement("Res", radarXML);
-        createDouble("RgImpResWid",
-                     radar->resolution->rangeImpulseResponseWidth, resXML);
-        createDouble("AzImpResWid",
-                     radar->resolution->azimuthImpulseResponseWidth, resXML);
-
-        if (!Init::isUndefined<double>(radar->resolution->referencePoint[0])
-                && !Init::isUndefined<double>(
-                                              radar->resolution->referencePoint[1])
-                && !Init::isUndefined<double>(
-                                              radar->resolution->referencePoint[2]))
-        {
-            xml::lite::Element *refXML =
-                    createVector3D("ReferencePoint",
-                                   radar->resolution->referencePoint, resXML);
-            if (!radar->resolution->referenceName.empty())
-            {
-                setAttribute(refXML, "name", radar->resolution->referenceName);
-            }
-        }
-    }
-
     if (!Init::isUndefined<int>(radar->refFrequencyIndex))
     {
         createInt("RefFreqIndex", radar->refFrequencyIndex, radarXML);
@@ -662,11 +651,8 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
                 }
             }
 
-            if (plane->timeCOAPoly.orderX() >= 0 && plane->timeCOAPoly.orderY()
-                    >= 0)
-            {
-                createPoly2D("TimeCOAPoly", plane->timeCOAPoly, planeXML);
-            }
+            createString("Orientation", str::toString<OrientationType>(
+                    plane->orientation), planeXML);
         }
     }
 
@@ -762,6 +748,18 @@ xml::lite::Element* ComplexXMLControl::imageFormationToXML(
                  imageFormationXML);
     createString("RgAutofocus", str::toString(imageFormation->rangeAutofocus),
                  imageFormationXML);
+
+    for (unsigned int i = 0; i < imageFormation->processing.size(); ++i)
+    {
+        Processing* proc = &imageFormation->processing[i];
+
+        xml::lite::Element* procXML = newElement("Processing",
+                imageFormationXML);
+
+        createString("Type", proc->type, procXML);
+        require(createBooleanType("Applied", proc->applied, procXML),"Applied");
+        addParameters("Parameter", proc->parameters, procXML);
+    }
 
     if (imageFormation->polarizationCalibration)
     {
@@ -954,16 +952,61 @@ xml::lite::Element* ComplexXMLControl::pfaToXML(PFA *pfa,
         createPoly2D("STDPhasePoly",
                      pfa->slowTimeDeskew->slowTimeDeskewPhasePoly, stdXML);
     }
-    for (std::vector<Compensation*>::iterator it = pfa->compensations.begin(); it
-            != pfa->compensations.end(); ++it)
-    {
-        Compensation *comp = *it;
-        xml::lite::Element* compXML = newElement("Comp", pfaXML);
-        createString("Type", comp->type, compXML);
-        require(createBooleanType("Applied", comp->applied, compXML), "Applied");
-        addParameters("Parameter", comp->parameters, compXML);
-    }
+
     return pfaXML;
+}
+
+xml::lite::Element* ComplexXMLControl::rmaToXML(RMA *rma,
+        xml::lite::Element* parent)
+{
+    xml::lite::Element* rmaXML = newElement("RMA", parent);
+
+    createString("RMAlgoType", str::toString<six::RMAlgoType>(rma->algoType),
+            rmaXML);
+ 
+    if (rma->rmat)
+    {
+        createString("ImageType", "RMAT", rmaXML);
+
+        xml::lite::Element* rmatXML = newElement("RMAT", rmaXML);
+        RMAT* rmat = rma->rmat;
+
+        createDouble("RMRefTime", rmat->refTime, rmatXML);
+        createVector3D("RMPosRef", rmat->refPos, rmatXML);
+        createVector3D("RMVelRef", rmat->refVel, rmatXML);
+        createPoly2D("CosDCACOAPoly", rmat->cosDCACOAPoly, rmatXML);
+        createDouble("Kx1", rmat->kx1, rmatXML);
+        createDouble("Kx2", rmat->kx2, rmatXML);
+        createDouble("Ky1", rmat->ky1, rmatXML);
+        createDouble("Ky2", rmat->ky2, rmatXML);
+    }
+    else if (rma->inca)
+    {
+        createString("ImageType", "INCA", rmaXML);
+
+        xml::lite::Element* incaXML = newElement("INCA", rmaXML);
+        INCA* inca = rma->inca;
+
+        createPoly1D("TimeCAPoly", inca->timeCAPoly, incaXML);
+        createDouble("R_CA_SCP", inca->rangeCA, incaXML);
+        createDouble("FreqZero", inca->freqZero, incaXML);
+        createPoly2D("DRateSFPoly", inca->dopplerRateScaleFactorPoly, incaXML);
+
+        if (inca->dopplerCentroidPoly.orderX() >= 0
+                && inca->dopplerCentroidPoly.orderY() >= 0)
+            createPoly2D("DopCentroidPoly", inca->dopplerCentroidPoly, incaXML);
+
+        if (!Init::isUndefined<BooleanType>(inca->dopplerCentroidCOA))
+            createBooleanType("DopCentroidCOA", inca->dopplerCentroidCOA,
+                    incaXML);
+    }
+    else
+    {
+        throw except::Exception("One of RMAT and INCA must be defined -- both "
+                "are undefined."); 
+    }
+
+    return rmaXML;
 }
 
 void ComplexXMLControl::xmlToCollectionInfo(
@@ -1359,33 +1402,6 @@ void ComplexXMLControl::xmlToRadarCollection(
     xml::lite::Element* tmpElem = NULL;
     xml::lite::Element* optElem = NULL;
 
-    tmpElem = getOptional(radarCollectionXML, "Res");
-    if (tmpElem)
-    {
-        radarCollection->resolution = new ResolutionParameters();
-
-        parseDouble(getFirstAndOnly(tmpElem, "RgImpResWid"),
-                    radarCollection->resolution->rangeImpulseResponseWidth);
-        parseDouble(getFirstAndOnly(tmpElem, "AzImpResWid"),
-                    radarCollection->resolution->azimuthImpulseResponseWidth);
-
-        xml::lite::Element *refXML = getOptional(tmpElem, "ReferencePoint");
-        if (refXML)
-        {
-            //optional
-            parseVector3D(refXML, radarCollection->resolution->referencePoint);
-            //this will throw if it the name doesn't exist, but that't ok - it's optional
-            try
-            {
-                radarCollection->resolution->referenceName
-                        = refXML->getAttributes().getValue("name");
-            }
-            catch (except::Exception& e)
-            {
-            }
-        }
-    }
-
     tmpElem = getOptional(radarCollectionXML, "RefFreqIndex");
     if (tmpElem)
     {
@@ -1643,12 +1659,9 @@ void ComplexXMLControl::xmlToRadarCollection(
                 }
             }
 
-            //optional
-            optElem = getOptional(planeXML, "TimeCOAPoly");
-            if (optElem)
-            {
-                parsePoly2D(optElem, radarCollection->area->plane->timeCOAPoly);
-            }
+            radarCollection->area->plane->orientation = str::toType<
+                    OrientationType>(getFirstAndOnly(planeXML, "Orientation")
+                    ->getCharacterData());
         }
     }
 
@@ -1740,6 +1753,20 @@ void ComplexXMLControl::xmlToImageFormation(
             = str::toType<AutofocusType>(
                                          getFirstAndOnly(imageFormationXML,
                                                          "RgAutofocus")->getCharacterData());
+
+    std::vector<xml::lite::Element*> procXML;
+    imageFormationXML->getElementsByTagName("Processing", procXML);
+
+    for (unsigned int i = 0; i < procXML.size(); ++i)
+    {
+        Processing* proc = new Processing();
+
+        parseString(getFirstAndOnly(procXML[i], "Type"), proc->type);
+        parseBooleanType(getFirstAndOnly(procXML[i], "Applied"), proc->applied);
+        parseParameters(procXML[i], "Parameter", proc->parameters);
+
+        imageFormation->processing.push_back(*proc);
+    }
 
     xml::lite::Element* polCalXML = getOptional(imageFormationXML,
                                                 "PolarizationCalibration");
@@ -2018,22 +2045,55 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
         parsePoly2D(getFirstAndOnly(deskewXML, "STDSPhasePoly"),
                     pfa->slowTimeDeskew->slowTimeDeskewPhasePoly);
     }
+}
 
-    //optional
-    std::vector<xml::lite::Element*> compsXML;
-    pfaXML->getElementsByTagName("Comp", compsXML);
-    for (std::vector<xml::lite::Element*>::iterator it = compsXML.begin(); it
-            != compsXML.end(); ++it)
+void ComplexXMLControl::xmlToRMA(xml::lite::Element* rmaXML, RMA* rma)
+{
+    rma->algoType = str::toType<RMAlgoType>(getFirstAndOnly(rmaXML,
+            "RMAlgoType")->getCharacterData());
+
+    xml::lite::Element* rmatElem = getOptional(rmaXML, "RMAT");
+
+    if (rmatElem)
     {
-        Compensation* comp = new Compensation();
+        rma->rmat = new RMAT();
+        RMAT* rmat = rma->rmat;
 
-        parseString(getFirstAndOnly(*it, "Type"), comp->type);
-        parseBooleanType(getFirstAndOnly(*it, "Applied"), comp->applied);
+        parseDouble(getFirstAndOnly(rmatElem, "RMRefTime"), rmat->refTime);
+        parseVector3D(getFirstAndOnly(rmatElem, "RMPosRef"), rmat->refPos);
+        parseVector3D(getFirstAndOnly(rmatElem, "RMVelRef"), rmat->refVel);
+        parsePoly2D(getFirstAndOnly(rmatElem, "CosDCACOAPoly"),
+                rmat->cosDCACOAPoly);
+        parseDouble(getFirstAndOnly(rmatElem, "Kx1"), rmat->kx1);
+        parseDouble(getFirstAndOnly(rmatElem, "Kx2"), rmat->kx2);
+        parseDouble(getFirstAndOnly(rmatElem, "Ky1"), rmat->ky1);
+        parseDouble(getFirstAndOnly(rmatElem, "Ky2"), rmat->ky2);
+    }
 
-        //optional
-        parseParameters(*it, "Parameter", comp->parameters);
+    xml::lite::Element* incaElem = getOptional(rmaXML, "INCA");
 
-        pfa->compensations.push_back(comp);
+    if (incaElem)
+    {
+        rma->inca = new INCA();
+        INCA* inca = rma->inca;
+
+        parsePoly1D(getFirstAndOnly(incaElem, "TimeCAPoly"), inca->timeCAPoly);
+        parseDouble(getFirstAndOnly(incaElem, "R_CA_SCP"), inca->rangeCA);
+        parseDouble(getFirstAndOnly(incaElem, "FreqZero"), inca->freqZero);
+        parsePoly2D(getFirstAndOnly(incaElem, "DRateSFPoly"),
+                inca->dopplerRateScaleFactorPoly);
+
+        xml::lite::Element* tmpElem = getOptional(incaElem, "DopCentroidPoly");
+        if (tmpElem)
+        {
+            parsePoly2D(tmpElem, inca->dopplerCentroidPoly);
+        }
+
+        tmpElem = getOptional(incaElem, "DopCentroidCOA");
+        if (tmpElem)
+        {
+            parseBooleanType(tmpElem, inca->dopplerCentroidCOA);
+        }
     }
 }
 
@@ -2050,12 +2110,8 @@ void ComplexXMLControl::parseFootprint(xml::lite::Element* footprint,
     for (unsigned int i = 0; i < vertices.size(); i++)
     {
         //check the index attr to know which corner it is
-        int
-                idx =
-                        str::toType<int>(
-                                         vertices[i]->getAttributes().getValue(
-                                                                               "index"))
-                                - 1;
+        int idx = str::toType<int>(vertices[i]->getAttributes().getValue(
+                "index").substr(0, 1)) - 1;
 
         parseLatLon(vertices[i], value[idx]);
 

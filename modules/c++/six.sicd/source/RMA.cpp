@@ -19,34 +19,52 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sicd/PFA.h"
+#include "six/sicd/RMA.h"
 
 using namespace six;
 using namespace six::sicd;
 
-
-PFA::~PFA()
+RMAT::RMAT()
 {
-    if (slowTimeDeskew)
-        delete slowTimeDeskew;
+    refTime = Init::undefined<double>();
+    refPos = Init::undefined<Vector3>();
+    refVel = Init::undefined<Vector3>();
+    kx1 = Init::undefined<double>();
+    kx2 = Init::undefined<double>();
+    ky1 = Init::undefined<double>();
+    ky2 = Init::undefined<double>();
 }
 
-PFA* PFA::clone() const
+INCA::INCA()
 {
-    PFA* pfa = new PFA();
-    pfa->focusPlaneNormal = focusPlaneNormal;
-    pfa->imagePlaneNormal = imagePlaneNormal;
-    pfa->polarAngleRefTime = polarAngleRefTime;
-    pfa->polarAnglePoly = polarAnglePoly;
-    pfa->spatialFrequencyScaleFactorPoly = 
-        spatialFrequencyScaleFactorPoly;
-    pfa->krg1 = krg1;
-    pfa->krg2 = krg2;
-    pfa->kaz1 = kaz1;
-    pfa->kaz2 = kaz2;
-    
-    if (slowTimeDeskew)
-        pfa->slowTimeDeskew = slowTimeDeskew->clone();
+    rangeCA = Init::undefined<double>();
+    freqZero = Init::undefined<double>();
+    dopplerCentroidCOA = Init::undefined<BooleanType>();
+}
 
-    return pfa;
+RMA::RMA()
+    : algoType(RMA_NOT_SET), rmat(NULL), inca(NULL)
+{
+}
+
+RMA::~RMA()
+{
+    if (rmat)
+        delete rmat;
+    if (inca)
+        delete inca;
+}
+
+RMA* RMA::clone() const
+{
+    RMA* rma = new RMA();
+
+    rma->algoType = algoType;
+
+    if (rmat)
+        rma->rmat = new RMAT(*rmat);
+    if (inca)
+        rma->inca = new INCA(*inca);
+
+    return rma;
 }

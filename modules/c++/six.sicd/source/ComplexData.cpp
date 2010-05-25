@@ -57,6 +57,8 @@ Data* ComplexData::clone() const
 
     if (pfa)
         data->pfa = pfa->clone();
+    if (rma)
+        data->rma = rma->clone();
 
     return data;
 
@@ -92,11 +94,13 @@ ComplexData::~ComplexData()
         delete matchInformation;
     if (pfa)
         delete pfa;
+    if (rma)
+        delete rma;
 }
 
 ComplexData::ComplexData() :
     imageCreation(NULL), radiometric(NULL), antenna(NULL),
-            errorStatistics(NULL), matchInformation(NULL)
+            errorStatistics(NULL), matchInformation(NULL), pfa(NULL), rma(NULL)
 {
     //only initialize the mandatory elements
     collectionInformation = new CollectionInformation();
@@ -108,7 +112,5 @@ ComplexData::ComplexData() :
     radarCollection = new RadarCollection();
     imageFormation = new ImageFormation();
     scpcoa = new SCPCOA();
-    // This is a choice in 0.4, this is a temporary workaround for 0.4 data
-    pfa = NULL;//new PFA();
 }
 

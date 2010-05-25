@@ -150,6 +150,16 @@ enum DecimationMethod
     DEC_LAGRANGE
 };
 
+enum OrientationType
+{
+    ORIENT_NOT_SET,
+    ORIENT_UP,
+    ORIENT_DOWN,
+    ORIENT_LEFT,
+    ORIENT_RIGHT,
+    ORIENT_ARBITRARY
+};
+
 enum PolarizationType
 {
     POL_NOT_SET, POL_OTHER, POL_V, POL_H, POL_RHC, POL_LHC
@@ -442,7 +452,7 @@ enum ComplexImagePlaneType
 };
 enum ComplexImageGridType
 {
-    GRID_RGAZIM, GRID_RGZERO, GRID_CARTESIAN
+    GRID_RGAZIM, GRID_RGZERO, GRID_XRGYCR, GRID_XCTYAT, GRID_PLANE
 };
 enum DemodType
 {
@@ -454,7 +464,7 @@ enum DisplayType
 };
 enum ImageFormationType
 {
-    IF_OTHER, IF_PFA, IF_RMA, IF_CSA, IF_RDA
+    IF_OTHER, IF_PFA, IF_RMA, IF_RGAZCOMP
 };
 
 enum SlowTimeBeamCompensationType
@@ -469,6 +479,11 @@ enum ImageBeamCompensationType
 enum AutofocusType
 {
     AUTOFOCUS_NO, AUTOFOCUS_GLOBAL, AUTOFOCUS_SV
+};
+
+enum RMAlgoType
+{
+    RMA_NOT_SET, RMA_OMEGA_K, RMA_CSA, RMA_RG_DOP
 };
 
 /*!

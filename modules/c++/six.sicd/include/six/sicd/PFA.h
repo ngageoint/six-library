@@ -65,35 +65,6 @@ struct SlowTimeDeskew
 };
 
 /*!
- *  \struct Compensation
- *  \brief SICD Comp
- *
- *  Parameters to describe types of PFA specific compensations
- *  that may have been applied.  Name changed for API consistency
- */
-struct Compensation
-{
-    //!  Constructor
-    Compensation()
-    {
-        applied = Init::undefined<BooleanType>();
-    }
-
-    //!  Destructor
-    ~Compensation()
-    {
-    }
-
-    //! Text describing the type of compensation applied
-    std::string type;
-    //! Parameter indicating if compenstation has been applied
-    BooleanType applied;
-    //! Free format field to pass forward compensation info
-    std::vector<Parameter> parameters;
-
-};
-
-/*!
  *  \struct PFA
  *  \brief SICD Polar format algorithm block
  *
@@ -174,9 +145,6 @@ struct PFA
 
     //! SICD STDeskew parameter
     SlowTimeDeskew* slowTimeDeskew;
-
-    //! SICD Comp parameter
-    std::vector<Compensation*> compensations;
 
 };
 
