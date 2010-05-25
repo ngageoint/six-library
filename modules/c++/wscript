@@ -5,7 +5,7 @@ from build import CPPBuildContext
 #override the default build context with our own
 Utils.g_module.build_context = Utils.g_module.install_context = Utils.g_module.clean_context = CPPBuildContext
 
-MODULES = 'except str sys io mt nitf math.linear math.poly scene six six.sicd six.sidd tiff xml.lite'
+MODULES = 'except str sys io mt logging nitf math.linear math.poly scene six six.sicd six.sidd tiff xml.lite'
 #MODULES += ' sio.lite'
 SAMPLES = 'samples'
 def set_options(opt):
