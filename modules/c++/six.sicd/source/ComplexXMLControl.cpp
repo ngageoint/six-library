@@ -990,7 +990,7 @@ xml::lite::Element* ComplexXMLControl::rmaToXML(RMA *rma,
         createPoly1D("TimeCAPoly", inca->timeCAPoly, incaXML);
         createDouble("R_CA_SCP", inca->rangeCA, incaXML);
         createDouble("FreqZero", inca->freqZero, incaXML);
-        createPoly2D("DRateSFPoly", inca->dopplerRateScaleFactorPoly, incaXML);
+        createPoly1D("DRateSFPoly", inca->dopplerRateScaleFactorPoly, incaXML);
 
         if (inca->dopplerCentroidPoly.orderX() >= 0
                 && inca->dopplerCentroidPoly.orderY() >= 0)
@@ -2080,7 +2080,7 @@ void ComplexXMLControl::xmlToRMA(xml::lite::Element* rmaXML, RMA* rma)
         parsePoly1D(getFirstAndOnly(incaElem, "TimeCAPoly"), inca->timeCAPoly);
         parseDouble(getFirstAndOnly(incaElem, "R_CA_SCP"), inca->rangeCA);
         parseDouble(getFirstAndOnly(incaElem, "FreqZero"), inca->freqZero);
-        parsePoly2D(getFirstAndOnly(incaElem, "DRateSFPoly"),
+        parsePoly1D(getFirstAndOnly(incaElem, "DRateSFPoly"),
                 inca->dopplerRateScaleFactorPoly);
 
         xml::lite::Element* tmpElem = getOptional(incaElem, "DopCentroidPoly");

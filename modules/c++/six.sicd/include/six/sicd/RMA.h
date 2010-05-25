@@ -45,23 +45,36 @@ struct RMAT
     {
     }
 
+    //!  Reference time when the reference position and velocity
+    //   are defined.
     double refTime;
 
+    //!  Platform reference position used to establish the reference
+    //   trajectory line.  
     Vector3 refPos;
 
+    //!  Reference unit velocity vector used to establish the
+    //   reference trajectory line.
     Vector3 refVel;
 
+    //!  Polynomial function that yields the distance along the
+    //   reference straight line trajectory as function of time.
+    // Poly1D distRefLinePoly;
+
+    //!  Polynomial function that yields the cosine of the Doppler
+    //   cone angle at COA as a function of the image location.
     Poly2D cosDCACOAPoly;
 
     double kx1;
-
     double kx2;
-
     double ky1;
-
     double ky2;
 };
 
+/*!
+ *  \struct  INCA
+ *  \brief   Parameters for Imaging Near Closest Approach.
+ */
 struct INCA
 {
     //!  Constructor
@@ -72,13 +85,19 @@ struct INCA
     {
     }
 
+    //! Polynomial function that yields time of closest approach as
+    //  function of image column coordinate.
     Poly1D timeCAPoly;
 
+    //! Range as closest approach for the SCP.
     double rangeCA;
 
+    //! RF frequency used for computing Doppler centroid values.
     double freqZero;
 
-    Poly2D dopplerRateScaleFactorPoly;
+    //! Polynomial function that yields doppler rate scale factor as
+    //  a function of image location.
+    Poly1D dopplerRateScaleFactorPoly;
 
     //! (Optional) Polynomial that yields Doppler Centroid value as a function
     //  of image location.
@@ -88,6 +107,11 @@ struct INCA
     BooleanType dopplerCentroidCOA;
 };
 
+/*!
+ *  \struct  RMA
+ *  \brief   Range Migration Algorithm (RMA) parameters, included when
+ *           the image is formed with RMA.
+ */
 struct RMA
 {
     //!  Constructor
