@@ -122,6 +122,7 @@ protected:
     * matchInfoToXML(MatchInformation *obj, xml::lite::Element* parent = NULL);
 
     xml::lite::Element* pfaToXML(PFA *obj, xml::lite::Element* parent = NULL);
+    xml::lite::Element* rmaToXML(RMA *obj, xml::lite::Element* parent = NULL);
     xml::lite::Element
             * areaLineDirectionParametersToXML(std::string name,
                                                AreaDirectionParameters *obj,
@@ -157,6 +158,7 @@ protected:
                            MatchInformation *obj);
 
     void xmlToPFA(xml::lite::Element* pfaXML, PFA *obj);
+    void xmlToRMA(xml::lite::Element* rmaXML, RMA *obj);
 
     void parseFootprint(xml::lite::Element* footprint, std::string cornerName,
                         std::vector<LatLon>& value, bool alt);

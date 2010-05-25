@@ -33,10 +33,6 @@ TxStep* TxStep::clone() const
 {
     return new TxStep(*this);
 }
-ResolutionParameters* ResolutionParameters::clone() const
-{
-    return new ResolutionParameters(*this);
-}
 WaveformParameters::WaveformParameters()
 {
     txPulseLength = Init::undefined<double>();
@@ -95,6 +91,7 @@ AreaPlane::AreaPlane()
     xDirection = new AreaDirectionParameters();
     yDirection = new AreaDirectionParameters();
     referencePoint = Init::undefined<ReferencePoint>();
+    orientation = ORIENT_NOT_SET;
 }
 
 AreaPlane::~AreaPlane()
@@ -145,9 +142,6 @@ Area* Area::clone() const
 
 RadarCollection::~RadarCollection()
 {
-    if (resolution)
-        delete resolution;
-
     if (area)
         delete area;
 
@@ -166,8 +160,6 @@ RadarCollection::~RadarCollection()
 RadarCollection* RadarCollection::clone() const
 {
     RadarCollection* r = new RadarCollection(*this);
-    if (resolution)
-        r->resolution = resolution->clone();
     if (area)
         r->area = area->clone();
     for (unsigned int i = 0; i < waveform.size(); ++i)

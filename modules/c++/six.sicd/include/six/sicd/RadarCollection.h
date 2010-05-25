@@ -53,42 +53,6 @@ struct TxStep
     //! Transmit signal polarization for this step
     PolarizationType txPolarization;
 };
-/*!
- *  \struct ResolutionParameters
- *  \brief  SICD 'Res' Parameter
- *
- *  Fineset achievable resolution parameters.  This optional
- *  section contains the rg/az half-power impulse response width supported
- *  by the collection.  It contains an optional reference point name, e.g.
- *  "SCP"
- */
-struct ResolutionParameters
-{
-    //!  Constructor
-    ResolutionParameters()
-    {
-        referencePoint = Vector3(Init::undefined<double>());
-    }
-    //!  Destructor
-    ~ResolutionParameters() {}
-
-    //!  Clone the data
-    ResolutionParameters* clone() const;
-
-    //! Slant plane range half power impulse response width supported
-    //! by collection
-    double rangeImpulseResponseWidth;
-
-    //! Slant plane az half power impulse response width supported
-    //! by collection
-    double azimuthImpulseResponseWidth;
-
-    //! Point in imaged scene for which listed resolutions are acheived
-    Vector3 referencePoint;
-
-    //! Optional name identifies point (e.g., SCP)
-    std::string referenceName;
-};
 
 /*!
  *  \struct WaveformParameters
@@ -312,12 +276,11 @@ struct AreaPlane
      */
     std::vector<Segment*> segmentList;
 
-
-    /*!
-     *  (Optional) Polynomial function that yields the Center of Aperture
-     *  time in the X direction (variable 1) and Y direction (variable 2)
-     */
-    Poly2D timeCOAPoly;
+     /*!
+      * Orientation type describing the shadow intent of the geo-reference
+      * display plane defined above.
+      */
+    OrientationType orientation;
 };
 
 /*!
@@ -374,7 +337,7 @@ struct RadarCollection
      *  therefore is set to NULL, as is Area
      */
     RadarCollection() :
-        resolution(NULL), area(NULL)
+        area(NULL)
     {
         refFrequencyIndex = Init::undefined<int>();
     }
@@ -384,9 +347,6 @@ struct RadarCollection
 
     //!  Clone.  Makes a deep copy of resolution if non-NULL
     RadarCollection* clone() const;
-
-    //!  SICD Res paramter
-    ResolutionParameters* resolution;
 
     //! Indicates the RF freq values expressed as offsets from a ref freq
     int refFrequencyIndex;

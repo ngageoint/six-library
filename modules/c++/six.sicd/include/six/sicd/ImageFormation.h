@@ -222,6 +222,36 @@ struct PolarizationCalibration
 };
 
 /*!
+ * \struct Processing
+ * \brief  SICD Image formation processing block
+ *
+ * Describes types of specific processing that may have been applied.
+ *
+ */
+struct Processing
+{
+    //! Constructor.
+    Processing()
+    {
+        applied = Init::undefined<BooleanType>();
+    }
+
+    //! Destructor.
+    ~Processing()
+    {
+    }
+
+    //! Text describing the type of processing applied
+    std::string type;
+
+    //! Flag indicating whether process has been applied
+    BooleanType applied;
+
+    //! (Optional) Additional parameters
+    std::vector<Parameter> parameters;
+};
+
+/*!
  *  \struct ImageFormation
  *  \brief SICD ImageFormation block
  *
@@ -328,6 +358,12 @@ struct ImageFormation
      *  were applied
      */
     AutofocusType rangeAutofocus;
+
+    /*!
+     * (Optional) Parameters to describe types of specific processing
+     * that may have been applied such as additional compensations.
+     */
+    std::vector<Processing> processing;
 
     /*!
      *  Parameters describing the polarization calibration applied
