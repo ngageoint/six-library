@@ -143,17 +143,3 @@ void ErrorStatistics::initialize(SCPType type)
     scpType = scpType;
 }
 
-template<> std::string str::toString(const six::PosVelError::FrameType& value)
-{
-    switch (value)
-    {
-    case six::PosVelError::FRAME_ECF:
-        return "ECF";
-    case six::PosVelError::FRAME_RIC_ECF:
-        return "RIC_ECF";
-    case six::PosVelError::FRAME_RIC_ECI:
-        return "RIC_ECI";
-    default:
-        throw except::Exception(Ctxt("Unsupported frame type"));
-    }
-}

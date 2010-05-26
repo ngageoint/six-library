@@ -15,24 +15,31 @@ std::vector<six::LatLon> makeUpCornersFromDMS()
     int lonWestDMS[3] = { -83, 45, 44 };
 
     double latTopDecimal = nitf::Utils::geographicToDecimal(latTopDMS[0],
-            latTopDMS[1], latTopDMS[2]);
+                                                            latTopDMS[1],
+                                                            latTopDMS[2]);
 
     double latBottomDecimal = nitf::Utils::geographicToDecimal(latBottomDMS[0],
-            latBottomDMS[1], latBottomDMS[2]);
+                                                               latBottomDMS[1],
+                                                               latBottomDMS[2]);
 
     double lonEastDecimal = nitf::Utils::geographicToDecimal(lonEastDMS[0],
-            lonEastDMS[1], lonEastDMS[2]);
+                                                             lonEastDMS[1],
+                                                             lonEastDMS[2]);
 
     double lonWestDecimal = nitf::Utils::geographicToDecimal(lonWestDMS[0],
-            lonWestDMS[1], lonWestDMS[2]);
+                                                             lonWestDMS[1],
+                                                             lonWestDMS[2]);
 
     std::vector<six::LatLon> c(4);
-    c[six::FIRST_ROW_FIRST_COL] = six::LatLon(latTopDecimal, lonWestDecimal);
-    c[six::FIRST_ROW_LAST_COL] = six::LatLon(latTopDecimal, lonEastDecimal);
-    c[six::LAST_ROW_LAST_COL] = six::LatLon(latBottomDecimal, lonEastDecimal);
-    c[six::LAST_ROW_FIRST_COL] = six::LatLon(latBottomDecimal, lonWestDecimal);
+    c[six::CornerIndex::FIRST_ROW_FIRST_COL] = six::LatLon(latTopDecimal,
+                                                           lonWestDecimal);
+    c[six::CornerIndex::FIRST_ROW_LAST_COL] = six::LatLon(latTopDecimal,
+                                                          lonEastDecimal);
+    c[six::CornerIndex::LAST_ROW_LAST_COL] = six::LatLon(latBottomDecimal,
+                                                         lonEastDecimal);
+    c[six::CornerIndex::LAST_ROW_FIRST_COL] = six::LatLon(latBottomDecimal,
+                                                          lonWestDecimal);
     return c;
 }
-
 
 #endif

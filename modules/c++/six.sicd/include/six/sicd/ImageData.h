@@ -43,7 +43,7 @@ struct ImageData
     ImageData() :
         amplitudeTable(NULL)
     {
-        pixelType = PIXEL_TYPE_NOT_SET;
+        pixelType = PixelType::PIXEL_TYPE_NOT_SET;
         numRows = Init::undefined<unsigned long>();
         numCols = Init::undefined<unsigned long>();
         firstRow = 0;

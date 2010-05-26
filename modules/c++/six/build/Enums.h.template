@@ -19,50 +19,22 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/Data.h"
+#ifndef __SIX_ENUMS_H__
+#define __SIX_ENUMS_H__
 
-using namespace six;
+#include <import/except.h>
+#include <import/str.h>
+#include <import/sys.h>
 
-/*!
- *  Num bytes per pixel can be determined also by the pixel type
- */
-unsigned long Data::getNumBytesPerPixel() const
+// -----------------------------------------------------------------------------
+// This file is auto-generated - please do NOT edit directly
+// -----------------------------------------------------------------------------
+
+namespace six
 {
-    int nbpp = 1;
-    PixelType pixelType = getPixelType();
-    switch (pixelType)
-    {
-    case PixelType::RE32F_IM32F:
-        nbpp = 8;
-        break;
 
-    case PixelType::RE16I_IM16I:
-        nbpp = 4;
-        break;
-    case PixelType::RGB24I:
-        nbpp = 3;
-        break;
-    default:
-        break;
-    }
-    return nbpp;
+${CODE}
+
 }
 
-unsigned long Data::getNumChannels() const
-{
-    long numChannels = 1;
-    PixelType pixelType = getPixelType();
-    switch (pixelType)
-    {
-    case PixelType::RE32F_IM32F:
-    case PixelType::RE16I_IM16I:
-        numChannels = 2;
-        break;
-    case PixelType::RGB24I:
-        numChannels = 3;
-        break;
-    default:
-        break;
-    }
-    return numChannels;
-}
+#endif

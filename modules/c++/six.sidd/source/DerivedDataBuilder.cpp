@@ -40,25 +40,24 @@ DerivedDataBuilder::~DerivedDataBuilder()
         delete mData;
 }
 
-DerivedDataBuilder& DerivedDataBuilder::addDisplay(
-        PixelType pixelType)
+DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
 {
     if (mData->display)
         delete mData->display;
 
-
-
-    DisplayType displayType = DISPLAY_COLOR;
-    if (pixelType == MONO8LU || pixelType == MONO8I || pixelType
-            == MONO16I)
-        displayType = DISPLAY_MONO;
+    DisplayType displayType = DisplayType::DISPLAY_COLOR;
+    if (pixelType == PixelType::MONO8LU || pixelType == PixelType::MONO8I
+            || pixelType == PixelType::MONO16I)
+    {
+        displayType = DisplayType::DISPLAY_MONO;
+    }
     mData->display = new Display(displayType);
     mData->display->pixelType = pixelType;
     return *this;
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget(
-        RegionType regionType)
+                                                               RegionType regionType)
 {
     if (mData->geographicAndTarget)
         delete mData->geographicAndTarget;
@@ -68,7 +67,7 @@ DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget(
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addMeasurement(
-        ProjectionType projectionType)
+                                                       ProjectionType projectionType)
 {
     if (mData->measurement)
         delete mData->measurement;
@@ -78,7 +77,7 @@ DerivedDataBuilder& DerivedDataBuilder::addMeasurement(
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addExploitationFeatures(
-        unsigned int num)
+                                                                unsigned int num)
 {
     if (mData->exploitationFeatures)
         delete mData->exploitationFeatures;

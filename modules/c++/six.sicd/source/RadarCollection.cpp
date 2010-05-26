@@ -27,7 +27,7 @@ using namespace six::sicd;
 TxStep::TxStep()
 {
     waveformIndex = Init::undefined<int>();
-    txPolarization = POL_NOT_SET;
+    txPolarization = PolarizationType::POL_NOT_SET;
 }
 TxStep* TxStep::clone() const
 {
@@ -39,7 +39,7 @@ WaveformParameters::WaveformParameters()
     txRFBandwidth = Init::undefined<double>();
     txFrequencyStart = Init::undefined<double>();
     txFMRate = Init::undefined<double>();
-    rcvDemodType = DEMOD_NOT_SET;
+    rcvDemodType = DemodType::DEMOD_NOT_SET;
     rcvWindowLength = Init::undefined<double>();
     adcSampleRate = Init::undefined<double>();
     rcvIFBandwidth = Init::undefined<double>();
@@ -53,7 +53,7 @@ WaveformParameters* WaveformParameters::clone() const
 ChannelParameters::ChannelParameters()
 {
     rcvAPCIndex = Init::undefined<int>();
-    txRcvPolarization = DUAL_POL_NOT_SET;
+    txRcvPolarization = DualPolarizationType::DUAL_POL_NOT_SET;
 }
 ChannelParameters* ChannelParameters::clone() const
 {
@@ -91,7 +91,7 @@ AreaPlane::AreaPlane()
     xDirection = new AreaDirectionParameters();
     yDirection = new AreaDirectionParameters();
     referencePoint = Init::undefined<ReferencePoint>();
-    orientation = ORIENT_NOT_SET;
+    orientation = OrientationType::ORIENT_NOT_SET;
 }
 
 AreaPlane::~AreaPlane()

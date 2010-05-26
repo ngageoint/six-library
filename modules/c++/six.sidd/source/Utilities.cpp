@@ -1,10 +1,9 @@
 #include "six/sidd/Utilities.h"
 
 using namespace six;
-using namespace six::sidd;
 
 scene::SceneGeometry*
-Utilities::getSceneGeometry(DerivedData* derived)
+six::sidd::Utilities::getSceneGeometry(DerivedData* derived)
 {
 
     if (! derived->measurement->projection->isMeasurable() )
@@ -38,29 +37,29 @@ Utilities::getSceneGeometry(DerivedData* derived)
 }
 
 
-void Utilities::setProductValues(Poly2D timeCOAPoly,
-                                 PolyXYZ arpPoly, 
-                                 ReferencePoint ref, 
+void six::sidd::Utilities::setProductValues(Poly2D timeCOAPoly,
+                                 PolyXYZ arpPoly,
+                                 ReferencePoint ref,
                                  Vector3* row,
-                                 Vector3* col, 
+                                 Vector3* col,
                                  RangeAzimuth<double> res,
                                  Product* product)
 {
     double scpTime = timeCOAPoly(ref.rowCol.row, ref.rowCol.col);
-    
+
     Vector3 arpPos = arpPoly(scpTime);
     PolyXYZ arpVelPoly = arpPoly.derivative();
     Vector3 arpVel = arpVelPoly(scpTime);
-    
+
     setProductValues(arpVel, arpPos, ref.ecef, row, col, res, product);
 }
 
-void Utilities::setProductValues(Vector3 arpVel, 
+void six::sidd::Utilities::setProductValues(Vector3 arpVel,
                                  Vector3 arpPos,
-                                 Vector3 refPos, 
-                                 Vector3* row, 
+                                 Vector3 refPos,
+                                 Vector3* row,
                                  Vector3* col,
-                                 RangeAzimuth<double> res, 
+                                 RangeAzimuth<double> res,
                                  Product* product)
 {
     scene::SceneGeometry* sceneGeom = new scene::SceneGeometry(arpVel, arpPos,
@@ -83,11 +82,11 @@ void Utilities::setProductValues(Vector3 arpVel,
     delete sceneGeom;
 }
 
-void Utilities::setCollectionValues(Poly2D timeCOAPoly,
-                                    PolyXYZ arpPoly, 
-                                    ReferencePoint ref, 
+void six::sidd::Utilities::setCollectionValues(Poly2D timeCOAPoly,
+                                    PolyXYZ arpPoly,
+                                    ReferencePoint ref,
                                     Vector3* row,
-                                    Vector3* col, 
+                                    Vector3* col,
                                     Collection* collection)
 {
     double scpTime = timeCOAPoly(ref.rowCol.row, ref.rowCol.col);
@@ -99,7 +98,7 @@ void Utilities::setCollectionValues(Poly2D timeCOAPoly,
     setCollectionValues(arpVel, arpPos, ref.ecef, row, col, collection);
 }
 
-void Utilities::setCollectionValues(Vector3 arpVel,
+void six::sidd::Utilities::setCollectionValues(Vector3 arpVel,
         Vector3 arpPos, Vector3 refPos, Vector3* row,
         Vector3* col, Collection* collection)
 {

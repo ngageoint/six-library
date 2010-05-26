@@ -39,17 +39,15 @@ using namespace six;
 const char* USAGE =
         "Usage: %s <sidd-image-file> (-sr <d>) (-nr <d>) (-sc <d>) (-nc <d>) (-sio)\n";
 
-void writeSIOFileHeader(long numRows, 
-			long numCols, 
-			unsigned long nbpp,
-			io::OutputStream& outputStream)
+void writeSIOFileHeader(long numRows, long numCols, unsigned long nbpp,
+                        io::OutputStream& outputStream)
 {
 #ifdef USE_SIO_LITE
 
     int type = nbpp == 1 ? 1 : 22;
     // Write out the SIO header first
     sio::lite::FileHeader fileHeader(numRows, numCols, nbpp, type);
-    
+
     fileHeader.to(1, outputStream);
 
 #endif
@@ -111,17 +109,15 @@ int main(int argc, char** argv)
 
     try
     {
-        XMLControlFactory::getInstance().
-            addCreator(
-                six::DATA_COMPLEX, 
-                new XMLControlCreatorT<six::sicd::ComplexXMLControl>()
-                );
+        XMLControlFactory::getInstance(). addCreator(
+                                                     DataClass::DATA_COMPLEX,
+                                                     new XMLControlCreatorT<
+                                                             six::sicd::ComplexXMLControl>());
 
-        XMLControlFactory::getInstance().
-            addCreator(
-                six::DATA_DERIVED, 
-                new XMLControlCreatorT<six::sidd::DerivedXMLControl>()
-                );
+        XMLControlFactory::getInstance(). addCreator(
+                                                     DataClass::DATA_DERIVED,
+                                                     new XMLControlCreatorT<
+                                                             six::sidd::DerivedXMLControl>());
 
         ReadControl* reader = new NITFReadControl();
         reader->load(inputFile);
@@ -132,7 +128,8 @@ int main(int argc, char** argv)
 
         for (; numImages < container->getNumData(); ++numImages)
         {
-            if (container->getData(numImages)->getDataClass() == six::DATA_COMPLEX)
+            if (container->getData(numImages)->getDataClass()
+                    == DataClass::DATA_COMPLEX)
             {
                 // Assume for now it can only be the last one
                 break;
@@ -178,14 +175,16 @@ int main(int argc, char** argv)
                 numCols = width;
 
             std::string outputFile = FmtX("%s_%d-%dx%d-%d_%d-image-%d.%s",
-                    base.c_str(), startRow, startRow + numRows, startCol,
-                    startCol + numCols, nbpp, i, isSIO ? "sio" : "raw");
+                                          base.c_str(), startRow, startRow
+                                                  + numRows, startCol, startCol
+                                                  + numCols, nbpp, i,
+                                          isSIO ? "sio" : "raw");
 
             io::FileOutputStream outputStream(outputFile);
 
             if (isSIO)
             {
-		writeSIOFileHeader(numRows, numCols, nbpp, outputStream);
+                writeSIOFileHeader(numRows, numCols, nbpp, outputStream);
             }
 
             for (unsigned int j = startRow; j < numRows + startRow; j++)

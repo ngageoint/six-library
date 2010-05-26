@@ -25,6 +25,7 @@
 #include "six/Adapters.h"
 #include "six/Container.h"
 #include "six/Data.h"
+#include "six/Enums.h"
 #include "six/ErrorStatistics.h"
 #include "six/NITFImageInfo.h"
 #include "six/NITFImageInputStream.h"

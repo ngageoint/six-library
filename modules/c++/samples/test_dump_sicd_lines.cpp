@@ -38,7 +38,6 @@ using namespace six;
 const char* USAGE =
         "Usage: %s <sicd-image-file> (-sr <d>) (-nr <d>) (-sc <d>) (-nc <d>) (-sio)\n";
 
-
 /*!
  *  If this is going to be an SIO file, and there is an SIO file writer,
  *  use it.  Otherwise, this function will be empty.  That way its less
@@ -50,8 +49,8 @@ void writeSIOHeader(long numRows, long numCols, io::OutputStream& outputStream)
 #ifdef USE_SIO_LITE
     // Write out the SIO header first
     sio::lite::FileHeader fileHeader(numRows, numCols, 4,
-				     sio::lite::FileHeader::COMPLEX_FLOAT);
-    
+            sio::lite::FileHeader::COMPLEX_FLOAT);
+
     fileHeader.to(1, outputStream);
 #endif
 }
@@ -111,11 +110,10 @@ int main(int argc, char** argv)
     try
     {
 
-        XMLControlFactory::getInstance().
-            addCreator(
-                six::DATA_COMPLEX, 
-                new XMLControlCreatorT<six::sicd::ComplexXMLControl>()
-                );
+        XMLControlFactory::getInstance(). addCreator(
+                                                     DataClass::DATA_COMPLEX,
+                                                     new XMLControlCreatorT<
+                                                             six::sicd::ComplexXMLControl>());
         NITFReadControl* reader = new NITFReadControl();
         reader->load(inputFile);
 
@@ -150,15 +148,15 @@ int main(int argc, char** argv)
             numCols = width;
 
         std::string outputFile = FmtX("%s_%d-%dx%d-%d_%d.%s", base.c_str(),
-                startRow, startRow + numRows, startCol, startCol + numCols,
-                nbpp, isSIO ? "sio" : "raw");
+                                      startRow, startRow + numRows, startCol,
+                                      startCol + numCols, nbpp, isSIO ? "sio"
+                                                                      : "raw");
 
         io::FileOutputStream outputStream(outputFile);
 
-
         if (isSIO)
         {
-	    writeSIOHeader(numRows, numCols, outputStream);
+            writeSIOHeader(numRows, numCols, outputStream);
         }
 
         for (unsigned int i = startRow; i < numRows + startRow; i++)

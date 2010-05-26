@@ -23,6 +23,7 @@
 #define __SIX_ERROR_STATISTICS_H__
 
 #include "six/Types.h"
+#include "six/Utilities.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include <import/str.h>
@@ -73,12 +74,6 @@ struct CorrCoefs
  */
 struct PosVelError
 {
-    //!  Frame types
-    enum FrameType
-    {
-        FRAME_ECF, FRAME_RIC_ECF, FRAME_RIC_ECI
-    };
-
     //! Coordinate frame used for expressing P,V error statistics
     FrameType frame;
     
@@ -364,12 +359,7 @@ struct ErrorStatistics
     void initialize(SCPType type);
 
 };
-}
 
-//extend the str namespace to have some useful converters
-namespace str
-{
-template<> std::string toString(const six::PosVelError::FrameType& value);
 }
 
 #endif
