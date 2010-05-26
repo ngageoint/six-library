@@ -5,12 +5,9 @@ MODULE_DEPS     = 'scene tiff nitf xml.lite six six.sicd six.sidd'
 DEFS = ''
 #MODULE_DEPS += ' sio.lite'
 set_options = configure = distclean = lambda p: None
+samples = 'test_extract_xml test_create_sicd test_dump_sicd_lines test_dump_sidd_lines test_create_sidd test_create_sidd_from_mem test_parse_xml'
+#test_round_trip_sicd
 
 def build(bld):
-    bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_extract_xml.cpp', name='test_extract_xml')
-    bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_create_sicd.cpp', name='test_create_sicd')
-    bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_dump_sicd_lines.cpp', name='test_dump_sicd_lines')
-    bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_dump_sidd_lines.cpp', name='test_dump_sidd_lines')
-    bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_create_sidd.cpp', name='test_create_sidd')
-    bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_create_sidd_from_mem.cpp', name='test_create_sidd_from_mem')
-    bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='test_parse_xml.cpp', name='test_parse_xml')
+    for sample in samples.split():
+        bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='%s.cpp' % sample, name=sample)
