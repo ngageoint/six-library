@@ -172,6 +172,7 @@ template<> PixelType six::toType<PixelType>(const std::string& s)
     if (p == PixelType::PIXEL_TYPE_NOT_SET)
         throw except::Exception(Ctxt(FmtX("Type not understood [%s]",
                                           type.c_str())));
+    return p;
 }
 
 template<> std::string six::toString(const PixelType& type)
