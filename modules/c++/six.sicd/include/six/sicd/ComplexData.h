@@ -128,7 +128,7 @@ struct ComplexData: public Data
      */
     DataClass getDataClass() const
     {
-        return DATA_COMPLEX;
+        return DataClass::DATA_COMPLEX;
     }
 
     /*!

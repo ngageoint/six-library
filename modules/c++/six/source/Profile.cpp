@@ -65,15 +65,15 @@ Data* StubProfile::newData(const Options& options)
     // Get the SICD DOM
     xml::lite::Document *doc = xmlParser.getDocument();
     
-    DataClass dataClass = DATA_UNKNOWN;
+    DataClass dataClass = DataClass::DATA_UNKNOWN;
     xml::lite::Element* element = doc->getRootElement();
     
     if (element->getLocalName() == "SICD")
-        dataClass = DATA_COMPLEX;
+        dataClass = DataClass::DATA_COMPLEX;
     else if (element->getLocalName() == "SIDD")
-        dataClass = DATA_DERIVED;
+        dataClass = DataClass::DATA_DERIVED;
     
-    if (dataClass == DATA_UNKNOWN)
+    if (dataClass == DataClass::DATA_UNKNOWN)
         throw except::Exception(
             Ctxt(FmtX("Unknown file with root: <%s>", 
                       element->getLocalName().c_str()

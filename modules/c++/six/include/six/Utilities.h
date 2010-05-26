@@ -32,96 +32,96 @@
 namespace six
 {
 
-struct Utilities
+// TODO eventually replace enum toString/toType methods below directly in the
+// Enums.h header - it is currently being generated so we won't change it yet
+
+template<typename T> std::string toString(const T& value)
 {
-
-    /*!
-     *  Analyze the NITF's image subheader and give us back a pixel type
-     *  TODO: Put me in NITFImageInfo
-     */
-    static PixelType getNITFPixelType(nitf::ImageSubheader& subheader);
-
-};
+    return str::toString<T>(value);
 }
 
-//extend the str namespace to have some useful converters
-namespace str
+template<typename T> T toType(const std::string& s)
 {
-template<> six::EarthModelType toType<six::EarthModelType> (
-        const std::string& s);
-template<> six::MagnificationMethod toType<six::MagnificationMethod> (
-        const std::string& s);
+    return str::toType<T>(s);
+}
+
+template<> six::EarthModelType
+        toType<six::EarthModelType>(const std::string& s);
+template<> six::MagnificationMethod
+        toType<six::MagnificationMethod>(const std::string& s);
 template<> std::string toString(const six::MagnificationMethod& value);
-template<> six::MagnificationMethod toType<six::MagnificationMethod> (
-        const std::string& s);
-template<> six::DecimationMethod toType<six::DecimationMethod> (
-        const std::string& s);
+template<> six::MagnificationMethod
+        toType<six::MagnificationMethod>(const std::string& s);
+template<> six::DecimationMethod
+        toType<six::DecimationMethod>(const std::string& s);
 template<> std::string toString(const six::DecimationMethod& value);
 
-template<> six::PixelType toType<six::PixelType> (const std::string& s);
+template<> six::PixelType toType<six::PixelType>(const std::string& s);
 template<> std::string toString(const six::PixelType& value);
 
-template<> six::RadarModeType toType<six::RadarModeType> (const std::string& s);
+template<> six::RadarModeType toType<six::RadarModeType>(const std::string& s);
 template<> std::string toString(const six::RadarModeType& value);
 
-template<> six::DateTime toType<six::DateTime> (const std::string& s);
+template<> six::DateTime toType<six::DateTime>(const std::string& s);
 template<> std::string toString(const six::DateTime& value);
 
 template<> std::string toString(const six::DataClass& value);
 template<> std::string toString(const six::DataType& value);
 template<> std::string toString(const six::EarthModelType& value);
-template<> six::OrientationType toType<six::OrientationType>(
-        const std::string& s);
+template<> six::OrientationType
+        toType<six::OrientationType>(const std::string& s);
 template<> std::string toString(const six::OrientationType& value);
-template<> six::PolarizationType toType<six::PolarizationType> (
-        const std::string& s);
+template<> six::PolarizationType
+        toType<six::PolarizationType>(const std::string& s);
 template<> std::string toString(const six::PolarizationType& value);
 
 template<> std::string toString(const six::DualPolarizationType& value);
-template<> six::DualPolarizationType toType<six::DualPolarizationType> (
-        const std::string& s);
-template<> six::DemodType toType<six::DemodType> (const std::string& s);
+template<> six::DualPolarizationType
+        toType<six::DualPolarizationType>(const std::string& s);
+template<> six::DemodType toType<six::DemodType>(const std::string& s);
 template<> std::string toString(const six::DemodType& value);
 
 template<> std::string toString(const six::ImageFormationType& value);
-template<> six::ImageFormationType toType<six::ImageFormationType> (
-        const std::string& s);
+template<> six::ImageFormationType
+        toType<six::ImageFormationType>(const std::string& s);
 template<> std::string toString(const six::SlowTimeBeamCompensationType& value);
 template<> six::SlowTimeBeamCompensationType toType<
-        six::SlowTimeBeamCompensationType> (const std::string& s);
+        six::SlowTimeBeamCompensationType>(const std::string& s);
 template<> std::string toString(const six::ImageBeamCompensationType& value);
 template<> six::ImageBeamCompensationType
-        toType<six::ImageBeamCompensationType> (const std::string& s);
+toType<six::ImageBeamCompensationType>(const std::string& s);
 template<> std::string toString(const six::AutofocusType& value);
-template<> six::AutofocusType toType<six::AutofocusType> (const std::string& s);
+template<> six::AutofocusType toType<six::AutofocusType>(const std::string& s);
 template<> std::string toString(const six::RMAlgoType& value);
-template<> six::RMAlgoType toType<six::RMAlgoType> (const std::string& s);
-template<> six::PosVelError::FrameType toType<six::PosVelError::FrameType> (
-        const std::string& s);
+template<> six::RMAlgoType toType<six::RMAlgoType>(const std::string& s);
 template<> std::string toString(const six::SideOfTrackType& value);
 
-template<> six::BooleanType toType<six::BooleanType> (const std::string& s);
+template<> six::BooleanType toType<six::BooleanType>(const std::string& s);
 template<> std::string toString(const six::BooleanType& value);
 
-template<> six::SideOfTrackType toType<six::SideOfTrackType> (
-        const std::string& s);
+template<> six::SideOfTrackType
+        toType<six::SideOfTrackType>(const std::string& s);
 
-template<> six::ComplexImagePlaneType toType<six::ComplexImagePlaneType> (
-        const std::string& s);
+template<> six::ComplexImagePlaneType
+        toType<six::ComplexImagePlaneType>(const std::string& s);
 template<> std::string toString(const six::ComplexImagePlaneType& value);
 
-template<> six::ComplexImageGridType toType<six::ComplexImageGridType> (
-        const std::string& s);
+template<> six::ComplexImageGridType
+        toType<six::ComplexImageGridType>(const std::string& s);
 template<> std::string toString(const six::ComplexImageGridType& value);
 
-template<> six::FFTSign toType<six::FFTSign> (const std::string& s);
+template<> six::FFTSign toType<six::FFTSign>(const std::string& s);
 template<> std::string toString(const six::FFTSign& value);
 
-template<> six::AppliedType toType<six::AppliedType> (const std::string& s);
+template<> six::AppliedType toType<six::AppliedType>(const std::string& s);
 template<> std::string toString(const six::AppliedType& value);
 
-template<> six::CollectType toType<six::CollectType> (const std::string& s);
+template<> six::CollectType toType<six::CollectType>(const std::string& s);
 template<> std::string toString(const six::CollectType& value);
+
+template<> six::FrameType toType<six::FrameType>(const std::string& s);
+template<> std::string toString(const six::FrameType& value);
+
 }
 
 #endif

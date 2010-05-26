@@ -144,7 +144,7 @@ void NITFImageInfo::compute()
 PixelType NITFImageInfo::getPixelTypeFromNITF(nitf::ImageSubheader& subheader)
 {
     //std::string pvType = subheader.getPixelValueType()
-    return RE32F_IM32F;
+    return PixelType::RE32F_IM32F;
 }
 
 // Currently punts on LU
@@ -154,8 +154,8 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
 
     switch (data->getPixelType())
     {
-    case RE32F_IM32F:
-    case RE16I_IM16I:
+    case PixelType::RE32F_IM32F:
+    case PixelType::RE16I_IM16I:
     {
         nitf::BandInfo band1;
         band1.getSubcategory().set("I");
@@ -166,7 +166,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         bands.push_back(band2);
     }
         break;
-    case RGB24I:
+    case PixelType::RGB24I:
     {
         nitf::BandInfo band1;
         band1.getRepresentation().set("R");
@@ -183,8 +183,8 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
     }
         break;
 
-    case MONO8I:
-    case MONO16I:
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
     {
         nitf::BandInfo band1;
         band1.getRepresentation().set("M");
@@ -192,7 +192,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
     }
         break;
 
-    case MONO8LU:
+    case PixelType::MONO8LU:
     {
         nitf::BandInfo band1;
 
@@ -224,7 +224,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
      }
     break;
 
-    case RGB8LU:
+    case PixelType::RGB8LU:
     {
         nitf::BandInfo band1;
 

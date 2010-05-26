@@ -23,6 +23,7 @@
 #define __SIX_SET_H__
 
 #include "six/Types.h"
+#include "six/Classification.h"
 #include <import/except.h>
 
 namespace six
@@ -60,6 +61,7 @@ template<> unsigned long Init::undefined<unsigned long>();
 template<> float Init::undefined<float>();
 template<> double Init::undefined<double>();
 template<> PixelType Init::undefined<PixelType>();
+template<> EarthModelType Init::undefined<EarthModelType>();
 template<> MagnificationMethod Init::undefined<MagnificationMethod>();
 template<> DecimationMethod Init::undefined<DecimationMethod>();
 template<> RadarModeType Init::undefined<RadarModeType>();
@@ -78,6 +80,10 @@ template<> SideOfTrackType Init::undefined<SideOfTrackType>();
 template<> ReferencePoint Init::undefined<ReferencePoint>();
 template<> FFTSign Init::undefined<FFTSign>();
 template<> AppliedType Init::undefined<AppliedType>();
+template<> Poly1D Init::undefined<Poly1D>();
+template<> Poly2D Init::undefined<Poly2D>();
+template<> PolyXYZ Init::undefined<PolyXYZ>();
+template<> Classification Init::undefined<Classification>();
 
 }
 

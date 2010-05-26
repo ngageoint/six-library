@@ -33,7 +33,6 @@
 
 std::string generateKML(six::Data* data, const sys::Path& outputDir);
 
-
 /*
  *  Open the round trip product in whatever you use to view XML files
  *  (e.g., Altova XMLSpy).  This only works currently on windows
@@ -41,17 +40,17 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir);
  */
 #if defined(WIN32) && defined(PREVIEW)
 #   include <shellapi.h>
-    void preview(std::string outputFile)
-    {        
-        // ShellExecute might get assigned to ShellExecuteW if we arent careful
-        ShellExecuteA(NULL, "open", outputFile.c_str(), NULL, NULL, SW_SHOWDEFAULT);
-    }
+void preview(std::string outputFile)
+{
+    // ShellExecute might get assigned to ShellExecuteW if we arent careful
+    ShellExecuteA(NULL, "open", outputFile.c_str(), NULL, NULL, SW_SHOWDEFAULT);
+}
 #   else
-    // TODO Could open this using EDITOR or html view
-    void preview(std::string outputFile)
-    {
-        std::cerr << "Preview unavailable for: " << outputFile << std::endl;
-    }
+// TODO Could open this using EDITOR or html view
+void preview(std::string outputFile)
+{
+    std::cerr << "Preview unavailable for: " << outputFile << std::endl;
+}
 #endif
 
 /*
@@ -60,35 +59,34 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir);
  */
 void registerHandlers()
 {
-    
-    six::XMLControlFactory::getInstance().
-        addCreator(
-                six::DATA_COMPLEX, 
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
-    );
 
-    six::XMLControlFactory::getInstance().
-        addCreator(
-                six::DATA_DERIVED, 
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>()
-    );
+    six::XMLControlFactory::getInstance(). addCreator(
+                                                      six::DataClass::DATA_COMPLEX,
+                                                      new six::XMLControlCreatorT<
+                                                              six::sicd::ComplexXMLControl>());
+
+    six::XMLControlFactory::getInstance(). addCreator(
+                                                      six::DataClass::DATA_DERIVED,
+                                                      new six::XMLControlCreatorT<
+                                                              six::sidd::DerivedXMLControl>());
 
 }
 /*
  * Dump all files out to the local directory
  *
  */
-std::vector<std::string> extractXML(std::string inputFile, const sys::Path& outputDir)
+std::vector<std::string> extractXML(std::string inputFile,
+                                    const sys::Path& outputDir)
 {
     std::vector<std::string> allFiles;
     std::string prefix = sys::Path::basename(inputFile, true);
-    
+
     nitf::Reader reader;
     nitf::IOHandle io(inputFile);
     io.setAutoClose(true);
     nitf::Record record = reader.read(io);
 
-    nitf::Uint32 numDES =  record.getNumDataExtensions();
+    nitf::Uint32 numDES = record.getNumDataExtensions();
     for (nitf::Uint32 i = 0; i < numDES; ++i)
     {
         nitf::DESegment segment = record.getDataExtensions()[i];
@@ -99,8 +97,8 @@ std::vector<std::string> extractXML(std::string inputFile, const sys::Path& outp
 
         std::string typeID = subheader.getTypeID().toString();
         str::trim(typeID);
-        sys::Path fileName(outputDir,
-            FmtX("%s-%s%d.xml", prefix.c_str(), typeID.c_str(), i));
+        sys::Path fileName(outputDir, FmtX("%s-%s%d.xml", prefix.c_str(),
+                                           typeID.c_str(), i));
 
         char* xml = new char[size];
         deReader.read(xml, size);
@@ -113,11 +111,10 @@ std::vector<std::string> extractXML(std::string inputFile, const sys::Path& outp
 
         xml::lite::Document* doc = parser.getDocument();
 
-
         io::FileOutputStream fos(fileName.getPath());
         doc->getRootElement()->prettyPrint(fos);
         fos.close();
-        delete [] xml;
+        delete[] xml;
         allFiles.push_back(fileName.getPath());
     }
     return allFiles;
@@ -128,19 +125,22 @@ void run(std::string inputFile, std::string dataType)
     try
     {
         // Create an output directory if it doesnt already exist
-        sys::Path outputDir( sys::Path::basename(inputFile, true) );
+        sys::Path outputDir(sys::Path::basename(inputFile, true));
         if (!outputDir.exists())
             outputDir.mkdir();
 
         std::string xmlFile = inputFile;
-        
+
         // Check if the file is a NITF - if so, extract all the parts into our outputDir
         if (nitf::Reader::getNITFVersion(inputFile) != NITF_VER_UNKNOWN)
         {
-            std::vector<std::string> allFiles = extractXML(inputFile, outputDir);
+            std::vector<std::string> allFiles =
+                    extractXML(inputFile, outputDir);
             if (!allFiles.size())
-                throw except::Exception(Ctxt(std::string("Invalid input NITF: ") + 
-                                             inputFile));
+                throw except::Exception(
+                                        Ctxt(
+                                             std::string("Invalid input NITF: ")
+                                                     + inputFile));
             xmlFile = allFiles[0];
         }
 
@@ -153,23 +153,24 @@ void run(std::string inputFile, std::string dataType)
         treeBuilder.parse(xmlFileStream);
         xmlFileStream.close();
 
-        six::DataClass dataClass = (dataType == "sicd") ? six::DATA_COMPLEX : six::DATA_DERIVED;
+        six::DataClass dataClass =
+                (dataType == "sicd") ? six::DataClass::DATA_COMPLEX
+                                     : six::DataClass::DATA_DERIVED;
 
         six::XMLControl *control =
-            six::XMLControlFactory::getInstance().newXMLControl(dataClass);
-                
+                six::XMLControlFactory::getInstance().newXMLControl(dataClass);
+
         six::Data *data = control->fromXML(treeBuilder.getDocument());
 
         // Dump some core info
-        std::cout << "Data Class: " << str::toString(data->getDataClass())
+        std::cout << "Data Class: " << six::toString(data->getDataClass())
                 << std::endl;
-        std::cout << "Pixel Type: " << str::toString(data->getPixelType())
+        std::cout << "Pixel Type: " << six::toString(data->getPixelType())
                 << std::endl;
-        std::cout << "Num Rows  : " << str::toString(data->getNumRows())
+        std::cout << "Num Rows  : " << six::toString(data->getNumRows())
                 << std::endl;
-        std::cout << "Num Cols  : " << str::toString(data->getNumCols())
+        std::cout << "Num Cols  : " << six::toString(data->getNumCols())
                 << std::endl;
-
 
         // Generate a KML in this directory
         preview(generateKML(data, outputDir));
@@ -184,7 +185,6 @@ void run(std::string inputFile, std::string dataType)
 
         // Now show the output file if PREVIEW
         preview(outputFile.getPath());
-        
 
         delete control;
         delete data;
@@ -195,7 +195,6 @@ void run(std::string inputFile, std::string dataType)
     }
 }
 
-
 int main(int argc, char** argv)
 {
 
@@ -203,8 +202,6 @@ int main(int argc, char** argv)
     {
         die_printf("Usage: %s <nitf/xml-file/nitf-dir> <sidd|sicd>\n", argv[0]);
     }
-
-   
 
     // Is the data type SICD or SIDD
     std::string dataType = argv[2];
@@ -222,16 +219,15 @@ int main(int argc, char** argv)
     // The input file (an XML or a NITF file)
     sys::Path inputFile(argv[1]);
     std::vector<sys::Path> paths;
-    
-    
+
     if (inputFile.isDirectory())
     {
         std::vector<std::string> listing = inputFile.list();
         for (unsigned int i = 0; i < listing.size(); ++i)
         {
-            if (str::endsWith(listing[i], "ntf") ||
-                str::endsWith(listing[i], "nitf") ||
-                str::endsWith(listing[i], "xml"))
+            if (str::endsWith(listing[i], "ntf") || str::endsWith(listing[i],
+                                                                  "nitf")
+                    || str::endsWith(listing[i], "xml"))
             {
                 paths.push_back(sys::Path(inputFile, listing[i]));
             }
@@ -254,71 +250,78 @@ const std::string GX_URI = "http://www.google.com/kml/ext/2.2";
 const std::string FOOTPRINT_COLOR = "ffff0000";
 
 xml::lite::Element* createPath(std::vector<six::LatLonAlt>& coords,
-                               std::string name,
-                               std::string envelopeType = "LineString",
-                               std::string envelopeURI = KML_URI)
+                               std::string name, std::string envelopeType =
+                                       "LineString", std::string envelopeURI =
+                                       KML_URI)
 {
     std::ostringstream oss;
     if (coords.size() < 1)
         throw except::Exception(Ctxt("Unexpected zero-length coordinates"));
-    unsigned int less1 = (unsigned int)(coords.size() - 1);
-    
+    unsigned int less1 = (unsigned int) (coords.size() - 1);
+
     for (unsigned int i = 0; i < less1; ++i)
     {
-        oss << coords[i].getLon()
-            << "," << coords[i].getLat()
-            << "," << coords[i].getAlt();
+        oss << coords[i].getLon() << "," << coords[i].getLat() << ","
+                << coords[i].getAlt();
         oss << " ";
     }
-    oss << coords[less1].getLon()
-        << "," << coords[less1].getLat()
-        << "," << coords[less1].getAlt();
+    oss << coords[less1].getLon() << "," << coords[less1].getLat() << ","
+            << coords[less1].getAlt();
 
     // Repeat the first element
     if (envelopeType == "LinearRing")
     {
         oss << " ";
-        oss << coords[0].getLon()
-            << "," << coords[0].getLat()
-            << "," << coords[0].getAlt();
+        oss << coords[0].getLon() << "," << coords[0].getLat() << ","
+                << coords[0].getAlt();
     }
 
-    xml::lite::Element* coordsXML = new xml::lite::Element("coordinates", KML_URI, oss.str());
-    xml::lite::Element* envelopeXML = new xml::lite::Element(envelopeType, KML_URI);
+    xml::lite::Element* coordsXML = new xml::lite::Element("coordinates",
+                                                           KML_URI, oss.str());
+    xml::lite::Element* envelopeXML = new xml::lite::Element(envelopeType,
+                                                             KML_URI);
     envelopeXML->addChild(coordsXML);
-    
-    xml::lite::Element* placemarkXML = new xml::lite::Element("Placemark", KML_URI);
+
+    xml::lite::Element* placemarkXML = new xml::lite::Element("Placemark",
+                                                              KML_URI);
     placemarkXML->addChild(new xml::lite::Element("name", KML_URI, name));
-    placemarkXML->addChild(new xml::lite::Element("styleUrl", KML_URI, std::string("#") + name));
+    placemarkXML->addChild(new xml::lite::Element("styleUrl", KML_URI,
+                                                  std::string("#") + name));
     placemarkXML->addChild(envelopeXML);
-    
+
     return placemarkXML;
 
 }
 
 xml::lite::Element* createTimeSnapshot(const six::DateTime& dt)//, int seconds)
 {
-    xml::lite::Element* timeSnapshot = new xml::lite::Element("TimeStamp", KML_URI);
-    timeSnapshot->addChild(new xml::lite::Element("when", KML_URI, 
-        str::toString<six::DateTime>(dt)));
+    xml::lite::Element* timeSnapshot = new xml::lite::Element("TimeStamp",
+                                                              KML_URI);
+    timeSnapshot->addChild(
+                           new xml::lite::Element(
+                                                  "when",
+                                                  KML_URI,
+                                                  six::toString<six::DateTime>(
+                                                                               dt)));
     return timeSnapshot;
 }
 
-void generateKMLForSICD(xml::lite::Element* docXML, six::sicd::ComplexData* data)
+void generateKMLForSICD(xml::lite::Element* docXML,
+                        six::sicd::ComplexData* data)
 {
 
     std::vector<six::LatLonAlt> v;
     // Lets go ahead and try to add the ARP poly
-    
+
     v.push_back(data->geoData->scp.llh);
     v.push_back(scene::Utilities::ecefToLatLon(data->scpcoa->arpPos));
-    
+
     docXML->addChild(createPath(v, "arpToSceneCenter", "LineString"));
 
     // Time associated with start
     six::DateTime dateTime = data->timeline->collectStart;
 
-    int durationInSeconds = (int)data->timeline->collectDuration;
+    int durationInSeconds = (int) data->timeline->collectDuration;
     six::Vector3 atTimeX;
     for (unsigned int i = 0; i < durationInSeconds; ++i)
     {
@@ -326,26 +329,27 @@ void generateKMLForSICD(xml::lite::Element* docXML, six::sicd::ComplexData* data
         v[1] = scene::Utilities::ecefToLatLon(atTimeX);
         xml::lite::Element* arpPolyXML = createPath(v, "arpPoly", "LineString");
         six::DateTime dt(dateTime.getTimeInMillis() + i * 1000);
-        arpPolyXML->addChild( createTimeSnapshot(dt));
+        arpPolyXML->addChild(createTimeSnapshot(dt));
         docXML->addChild(arpPolyXML);
     }
 
-
 }
 
-xml::lite::Element* createLineStyle(std::string styleID, std::string color, int width)
+xml::lite::Element* createLineStyle(std::string styleID, std::string color,
+                                    int width)
 {
     xml::lite::Element* styleXML = new xml::lite::Element("Style", KML_URI);
     styleXML->attribute("id") = styleID;
 
-    xml::lite::Element* lineStyleXML = new xml::lite::Element("LineStyle", KML_URI);
+    xml::lite::Element* lineStyleXML = new xml::lite::Element("LineStyle",
+                                                              KML_URI);
     lineStyleXML->addChild(new xml::lite::Element("color", KML_URI, color));
-    lineStyleXML->addChild(new xml::lite::Element("width", KML_URI, str::toString<int>(width)));
+    lineStyleXML->addChild(new xml::lite::Element("width", KML_URI,
+                                                  str::toString<int>(width)));
 
     styleXML->addChild(lineStyleXML);
     return styleXML;
 }
-
 
 std::string generateKML(six::Data* data, const sys::Path& outputDir)
 {
@@ -359,21 +363,21 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir)
     root->addChild(docXML);
 
     // Add name, and open the document
-    docXML->addChild(new xml::lite::Element("name", KML_URI, data->getName() ) );
+    docXML->addChild(new xml::lite::Element("name", KML_URI, data->getName()));
     docXML->addChild(new xml::lite::Element("open", KML_URI, "1"));
 
     // Now add some styles
-    docXML->addChild(createLineStyle("footprint", FOOTPRINT_COLOR, 4)); 
+    docXML->addChild(createLineStyle("footprint", FOOTPRINT_COLOR, 4));
     docXML->addChild(createLineStyle("arpToSceneCenter", "ff0000ff", 2));
     docXML->addChild(createLineStyle("arpPoly", "ff00007f", 2));
-    
+
     // Create footprint
     std::vector<six::LatLonAlt> corners = data->getImageCorners();
     docXML->addChild(createPath(corners, "footprint", "LinearRing"));
 
     // Specifics to SICD
-    if (data->getDataClass() == six::DATA_COMPLEX)
-        generateKMLForSICD(docXML, (six::sicd::ComplexData*)data);
+    if (data->getDataClass() == six::DataClass::DATA_COMPLEX)
+        generateKMLForSICD(docXML, (six::sicd::ComplexData*) data);
 
     root->prettyPrint(fos);
     delete root;

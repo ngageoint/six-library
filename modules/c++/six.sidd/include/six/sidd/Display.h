@@ -73,7 +73,7 @@ struct MonochromeDisplayRemap: public Remap
      */
     MonochromeDisplayRemap()
     {
-        this->displayType = DISPLAY_MONO;
+        this->displayType = DisplayType::DISPLAY_MONO;
     }
     /*!
      *  Clone this object, and any sub-LUT
@@ -119,7 +119,7 @@ struct ColorDisplayRemap: public Remap
     //!  Constructor
     ColorDisplayRemap()
     {
-        this->displayType = DISPLAY_COLOR;
+        this->displayType = DisplayType::DISPLAY_COLOR;
     }
     //!  Clone the remap
     virtual Remap* clone() const

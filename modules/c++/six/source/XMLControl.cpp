@@ -276,9 +276,9 @@ xml::lite::Element* XMLControl::createBooleanType(std::string name,
                                                   BooleanType p,
                                                   xml::lite::Element* parent)
 {
-    if (p == six::BOOL_NOT_SET)
+    if (p == six::BooleanType::BOOL_NOT_SET)
         return NULL;
-    return newElement(name, str::toString<BooleanType>(p), parent);
+    return newElement(name, six::toString<BooleanType>(p), parent);
 }
 
 xml::lite::Element* XMLControl::createDateTime(std::string name, std::string s,
@@ -290,7 +290,7 @@ xml::lite::Element* XMLControl::createDateTime(std::string name, std::string s,
 xml::lite::Element* XMLControl::createDateTime(std::string name, DateTime p,
                                                xml::lite::Element* parent)
 {
-    std::string s = str::toString<DateTime>(p);
+    std::string s = six::toString<DateTime>(p);
     return createDateTime(name, s, parent);
 }
 
@@ -419,7 +419,7 @@ xml::lite::Element* XMLControl::createEarthModelType(
                                                      const EarthModelType& value,
                                                      xml::lite::Element* parent)
 {
-    return createString(name, str::toString(value), parent);
+    return createString(name, six::toString(value), parent);
 }
 
 xml::lite::Element* XMLControl::createSideOfTrackType(
@@ -427,7 +427,7 @@ xml::lite::Element* XMLControl::createSideOfTrackType(
                                                       const SideOfTrackType& value,
                                                       xml::lite::Element* parent)
 {
-    return createString(name, str::toString(value), parent);
+    return createString(name, six::toString(value), parent);
 }
 
 void XMLControl::setAttribute(xml::lite::Element* e, std::string name,
@@ -520,7 +520,7 @@ void XMLControl::parseBooleanType(xml::lite::Element* element,
 {
     try
     {
-        value = str::toType<BooleanType>(element->getCharacterData());
+        value = six::toType<BooleanType>(element->getCharacterData());
     }
     catch (except::BadCastException& ex)
     {
@@ -592,13 +592,13 @@ void XMLControl::parseDecorrType(xml::lite::Element* decorrXML,
 void XMLControl::parseEarthModelType(xml::lite::Element* element,
                                      EarthModelType& value)
 {
-    value = str::toType<EarthModelType>(element->getCharacterData());
+    value = six::toType<EarthModelType>(element->getCharacterData());
 }
 
 void XMLControl::parseSideOfTrackType(xml::lite::Element* element,
                                       SideOfTrackType& value)
 {
-    value = str::toType<SideOfTrackType>(element->getCharacterData());
+    value = six::toType<SideOfTrackType>(element->getCharacterData());
 }
 
 void XMLControl::parseFootprint(xml::lite::Element* footprint,
@@ -665,7 +665,7 @@ void XMLControl::parseRangeAzimuth(xml::lite::Element* parent, RangeAzimuth<
 
 void XMLControl::parseDateTime(xml::lite::Element* element, DateTime& value)
 {
-    value = str::toType<DateTime>(element->getCharacterData());
+    value = six::toType<DateTime>(element->getCharacterData());
 }
 
 void XMLControl::parseRowColDouble(xml::lite::Element* parent,
@@ -803,7 +803,7 @@ xml::lite::Element* XMLControl::errorStatisticsToXML(
             xml::lite::Element* posVelErrXML = newElement("PosVelErr",
                                                           componentsXML);
 
-            createString("Frame", str::toString(posVelError->frame),
+            createString("Frame", six::toString(posVelError->frame),
                          posVelErrXML);
             createDouble("P1", posVelError->p1, posVelErrXML);
             createDouble("P2", posVelError->p2, posVelErrXML);
@@ -1005,7 +1005,7 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
     if (posVelErrXML != NULL)
     {
         errorStatistics->components->posVelError->frame
-                = str::toType<PosVelError::FrameType>(
+                = six::toType<FrameType>(
                                                       getFirstAndOnly(
                                                                       posVelErrXML,
                                                                       "Frame")->getCharacterData());
@@ -1224,7 +1224,7 @@ void XMLControl::xmlToRadiometric(xml::lite::Element* radiometricXML,
     {
         //optional
         radiometric->sigmaZeroSFIncidenceMap
-                = str::toType<six::AppliedType>(tmpElem->getCharacterData());
+                = six::toType<six::AppliedType>(tmpElem->getCharacterData());
     }
 
     tmpElem = getOptional(radiometricXML, "GammaZeroSFPoly");
@@ -1239,7 +1239,7 @@ void XMLControl::xmlToRadiometric(xml::lite::Element* radiometricXML,
     {
         //optional
         radiometric->gammaZeroSFIncidenceMap
-                = str::toType<six::AppliedType>(tmpElem->getCharacterData());
+                = six::toType<six::AppliedType>(tmpElem->getCharacterData());
     }
 }
 
@@ -1257,20 +1257,20 @@ xml::lite::Element* XMLControl::radiometricToXML(Radiometric *r,
     if (r->sigmaZeroSFPoly.orderX() >= 0 && r->sigmaZeroSFPoly.orderY() >= 0)
         createPoly2D("SigmaZeroSFPoly", r->sigmaZeroSFPoly, rXML);
 
-    if (r->sigmaZeroSFIncidenceMap != six::APPLIED_NOT_SET)
+    if (r->sigmaZeroSFIncidenceMap != AppliedType::APPLIED_NOT_SET)
     {
         createString(
                      "SigmaZeroSFIncidenceMap",
-                     str::toString<six::AppliedType>(r->sigmaZeroSFIncidenceMap),
+                     six::toString<six::AppliedType>(r->sigmaZeroSFIncidenceMap),
                      rXML);
     }
     if (r->gammaZeroSFPoly.orderX() >= 0 && r->gammaZeroSFPoly.orderY() >= 0)
         createPoly2D("GammaZeroSFPoly", r->sigmaZeroSFPoly, rXML);
-    if (r->gammaZeroSFIncidenceMap != six::APPLIED_NOT_SET)
+    if (r->gammaZeroSFIncidenceMap != AppliedType::APPLIED_NOT_SET)
     {
         createString(
                      "GammaZeroSFIncidenceMap",
-                     str::toString<six::AppliedType>(r->gammaZeroSFIncidenceMap),
+                     six::toString<six::AppliedType>(r->gammaZeroSFIncidenceMap),
                      rXML);
     }
     return rXML;

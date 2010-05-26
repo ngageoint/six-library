@@ -31,6 +31,7 @@
 #include <import/io.h>
 #include <limits>
 #include "scene/Types.h"
+#include "six/Enums.h"
 
 /*!
  *  \macro SIX_LIB_VERSION 
@@ -99,95 +100,6 @@ typedef scene::LatLonAlt LatLonAlt;
 
 typedef except::Context ValidationContext;
 
-
-
-enum DataType
-{
-    TYPE_UNKNOWN = 0, TYPE_COMPLEX, TYPE_DERIVED
-};
-
-enum DataClass
-{
-    DATA_UNKNOWN = 0, DATA_COMPLEX, DATA_DERIVED
-};
-
-enum PixelType
-{
-    PIXEL_TYPE_NOT_SET = 0,
-    RE32F_IM32F,
-    RE16I_IM16I,
-    MONO8I,
-    MONO16I,
-    MONO8LU,
-    RGB8LU,
-    RGB24I
-};
-
-// For reads/writes
-enum ByteSwapping
-{
-    BYTE_SWAP_OFF = 0, BYTE_SWAP_ON, BYTE_SWAP_AUTO
-};
-
-enum RowColEnum
-{
-    RC_ROW = 0, RC_COL = 1
-};
-enum XYZEnum
-{
-    XYZ_X = 0, XYZ_Y, XYZ_Z
-};
-enum MagnificationMethod
-{
-    MAG_NOT_SET, MAG_NEAREST_NEIGHBOR, MAG_BILINEAR
-};
-enum DecimationMethod
-{
-    DEC_NOT_SET,
-    DEC_NEAREST_NEIGHBOR,
-    DEC_BILINEAR,
-    DEC_BRIGHTEST_PIXEL,
-    DEC_LAGRANGE
-};
-
-enum OrientationType
-{
-    ORIENT_NOT_SET,
-    ORIENT_UP,
-    ORIENT_DOWN,
-    ORIENT_LEFT,
-    ORIENT_RIGHT,
-    ORIENT_ARBITRARY
-};
-
-enum PolarizationType
-{
-    POL_NOT_SET, POL_OTHER, POL_V, POL_H, POL_RHC, POL_LHC
-};
-
-enum DualPolarizationType
-{
-    DUAL_POL_NOT_SET,
-    DUAL_POL_OTHER,
-    DUAL_POL_V_V,
-    DUAL_POL_V_H,
-    DUAL_POL_H_V,
-    DUAL_POL_H_H,
-    DUAL_POL_RHC_RHC,
-    DUAL_POL_RHC_LHC,
-    DUAL_POL_LHC_LHC
-};
-
-enum EarthModelType
-{
-    EARTH_NOT_SET, EARTH_WGS84
-};
-
-enum FFTSign
-{
-    FFT_SIGN_NOT_SET = 0, FFT_SIGN_NEG = -1, FFT_SIGN_POS = 1
-};
-
 /*!
  *  \struct RangeAzimuth
  *  \brief Range/azimuth pair type
@@ -211,10 +123,9 @@ template<typename T> struct RangeAzimuth
      */
     bool operator==(const RangeAzimuth<T>& t) const
     {
-        return math::linear::equals(range, t.range) && 
-            math::linear::equals(azimuth, t.azimuth);
+        return math::linear::equals(range, t.range)
+                && math::linear::equals(azimuth, t.azimuth);
     }
-
 
 };
 
@@ -227,14 +138,15 @@ template<typename T> struct RangeAzimuth
  *  type should be RowCol<long>)
  */
 
-
 template<typename T> struct RowCol
 {
     T row;
     T col;
-    
+
     RowCol(T r = (T) 0.0, T c = (T) 0.0) :
-        row(r), col(c) {}
+        row(r), col(c)
+    {
+    }
 
     template<typename Other_T> RowCol(const RowCol<Other_T>& p)
     {
@@ -252,8 +164,8 @@ template<typename T> struct RowCol
     {
         if (this != &p)
         {
-            row = (T)p.row;
-            col = (T)p.col;
+            row = (T) p.row;
+            col = (T) p.col;
         }
         return *this;
     }
@@ -265,27 +177,26 @@ template<typename T> struct RowCol
         return *this;
     }
 
-    
     template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p)
     {
-        row += (T)p.row;
-        col += (T)p.col;
+        row += (T) p.row;
+        col += (T) p.col;
         return *this;
     }
-    
+
     template<typename Other_T> RowCol operator+(const RowCol<Other_T>& p)
     {
         RowCol copy(*this);
         return copy += p;
     }
-    
+
     template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p)
     {
-        row -= (T)p.row;
-        col -= (T)p.col;
+        row -= (T) p.row;
+        col -= (T) p.col;
         return *this;
     }
-    
+
     template<typename Other_T> RowCol operator-(const RowCol<Other_T>& p)
     {
         RowCol copy(*this);
@@ -304,7 +215,7 @@ template<typename T> struct RowCol
         RowCol copy(*this);
         return copy += scalar;
     }
-    
+
     RowCol& operator-=(T scalar)
     {
         row -= scalar;
@@ -330,7 +241,7 @@ template<typename T> struct RowCol
         RowCol copy(*this);
         return copy *= scalar;
     }
-    
+
     RowCol& operator/=(T scalar)
     {
         row /= scalar;
@@ -343,7 +254,7 @@ template<typename T> struct RowCol
         RowCol copy(*this);
         return copy /= scalar;
     }
-    
+
     /*!
      *  Compare the types considering that some
      *  specializations (e.g., double)
@@ -351,21 +262,20 @@ template<typename T> struct RowCol
      */
     bool operator==(const RowCol<T>& p) const
     {
-        return math::linear::equals(row, p.row) && 
-            math::linear::equals(col, p.col);
+        return math::linear::equals(row, p.row) && math::linear::equals(col,
+                                                                        p.col);
     }
-
 
     bool operator!=(const RowCol<T>& p) const
     {
-        return ! (RowCol::operator==(p));
+        return !(RowCol::operator==(p));
     }
-        
+
 };
 
 // These are heavily used and we dont want any mistakes
-typedef RowCol<double> RowColDouble;
-typedef RowCol<long> RowColInt;
+typedef RowCol<double>RowColDouble;
+typedef RowCol<long>RowColInt;
 
 /*!
  *  \struct DecorrType
@@ -392,99 +302,12 @@ struct DecorrType
  *  2-D polynomial pair
  */
 
-typedef RowCol<Poly2D> RowColPoly2D;
+typedef RowCol<Poly2D>RowColPoly2D;
 
 /*!
  *  2-D lat-lon sample spacing (Required for SIDD 0.1.1)
  */
-typedef RowCol<LatLon> RowColLatLon;
-
-// Collection type
-enum CollectType
-{
-    COLLECT_NOT_SET, COLLECT_MONOSTATIC, COLLECT_BISTATIC
-};
-
-enum ProjectionType
-{
-    PROJECTION_NOT_SET, 
-    PROJECTION_PLANE, 
-    PROJECTION_GEOGRAPHIC, 
-    PROJECTION_CYLINDRICAL,
-    PROJECTION_POLYNOMIAL
-};
-
-enum RegionType
-{
-    REGION_NOT_SET, REGION_SUB_REGION, REGION_GEOGRAPHIC_INFO
-};
-
-// Radar mode
-enum RadarModeType
-{
-    MODE_INVALID,
-    MODE_NOT_SET,
-    MODE_SPOTLIGHT,
-    MODE_STRIPMAP,
-    MODE_DYNAMIC_STRIPMAP
-};
-
-enum SideOfTrackType
-{
-    SIDE_NOT_SET = 0,
-    SIDE_LEFT = -1,
-    SIDE_RIGHT = 1
-};
-
-enum BooleanType
-{
-    BOOL_NOT_SET = -1, BOOL_FALSE = 0, BOOL_TRUE = 1
-};
-
-enum AppliedType
-{
-    APPLIED_NOT_SET = -1, APPLIED_TRUE = 0, APPLIED_FALSE = 1
-};
-
-enum ComplexImagePlaneType
-{
-    PLANE_OTHER, PLANE_SLANT, PLANE_GROUND
-};
-enum ComplexImageGridType
-{
-    GRID_RGAZIM, GRID_RGZERO, GRID_XRGYCR, GRID_XCTYAT, GRID_PLANE
-};
-enum DemodType
-{
-    DEMOD_NOT_SET, DEMOD_STRETCH, DEMOD_CHIRP
-};
-enum DisplayType
-{
-    DISPLAY_NOT_SET, DISPLAY_COLOR, DISPLAY_MONO
-};
-enum ImageFormationType
-{
-    IF_OTHER, IF_PFA, IF_RMA, IF_RGAZCOMP
-};
-
-enum SlowTimeBeamCompensationType
-{
-    SLOW_TIME_BEAM_NO, SLOW_TIME_BEAM_GLOBAL, SLOW_TIME_BEAM_SV
-};
-enum ImageBeamCompensationType
-{
-    IMAGE_BEAM_NO, IMAGE_BEAM_SV
-};
-
-enum AutofocusType
-{
-    AUTOFOCUS_NO, AUTOFOCUS_GLOBAL, AUTOFOCUS_SV
-};
-
-enum RMAlgoType
-{
-    RMA_NOT_SET, RMA_OMEGA_K, RMA_CSA, RMA_RG_DOP
-};
+typedef RowCol<LatLon>RowColLatLon;
 
 /*!
  *  \struct Constants
@@ -500,8 +323,7 @@ struct Constants
 
     enum GTKeys
     {
-        GT_SICD_KEY = 52766,
-        GT_SIDD_KEY = 58543
+        GT_SICD_KEY = 52766, GT_SIDD_KEY = 58543
     };
 
     enum
@@ -519,26 +341,26 @@ struct Constants
      */
     inline static int getNumBytesPerPixel(PixelType type)
     {
-        switch (type)
+        switch (type.value)
         {
-        case RE32F_IM32F:
+        case PixelType::RE32F_IM32F:
             return 8;
 
-        case RE16I_IM16I:
+        case PixelType::RE16I_IM16I:
             return 4;
 
-        case MONO8I:
-        case MONO8LU:
-        case RGB8LU:
+        case PixelType::MONO8I:
+        case PixelType::MONO8LU:
+        case PixelType::RGB8LU:
             return 1;
-        case MONO16I:
+        case PixelType::MONO16I:
             return 2;
-        case RGB24I:
+        case PixelType::RGB24I:
             return 3;
 
         default:
             throw except::Exception(Ctxt(FmtX("Unknown pixel type [%d]",
-                    (int) type)));
+                                              (int) type)));
         }
     }
 
@@ -558,14 +380,14 @@ struct ReferencePoint
     Vector3 ecef;
 
     //!  Row col pixel location of point
-    RowCol<double> rowCol;
+    RowCol<double>rowCol;
 
     //!  (Optional) name.  Leave it blank if you dont need it
     std::string name;
 
     //!  Construct, init all fields at once (except optional name)
     ReferencePoint(double x = 0, double y = 0, double z = 0, double row = 0,
-            double col = 0) :
+                   double col = 0) :
         rowCol(row, col)
     {
         ecef[0] = x;
@@ -573,11 +395,11 @@ struct ReferencePoint
         ecef[2] = z;
     }
     //!  Alternate construct, sitll init all fields at once
-    ReferencePoint(Vector3 xyz, RowCol<double> rcd) :
+    ReferencePoint(Vector3 xyz, RowCol<double>rcd) :
         ecef(xyz), rowCol(rcd)
     {
     }
-    
+
     //!  Are two points the same
     bool operator==(const ReferencePoint& x) const
     {
@@ -597,21 +419,6 @@ struct SCP
     Vector3 ecf;
     LatLonAlt llh;
 };
-
-
-/*!
- *  Since the spec doesnt order the corners
- *  like you might think, its a good idea to
- *  use these indices
- */
-enum CornerIndex
-{
-    FIRST_ROW_FIRST_COL = 0,
-    FIRST_ROW_LAST_COL,
-    LAST_ROW_LAST_COL,
-    LAST_ROW_FIRST_COL
-};
-
 
 /*!
  *  \struct LUT
@@ -684,14 +491,19 @@ struct LUT
 struct AmplitudeTable : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable() : LUT(256, sizeof(double)) {}
+    AmplitudeTable() :
+        LUT(256, sizeof(double))
+    {
+    }
 
     //!  Destructor.  Relies on base class for LUT deletion
-    virtual ~AmplitudeTable() {}
+    virtual ~AmplitudeTable()
+    {
+    }
     //!  Clone (again)
     LUT* clone()
     {
-	AmplitudeTable* lut = new AmplitudeTable();
+        AmplitudeTable* lut = new AmplitudeTable();
         for (unsigned int i = 0; i < numEntries * elementSize; ++i)
         {
             lut->table[i] = table[i];
@@ -700,7 +512,6 @@ struct AmplitudeTable : public LUT
 
     }
 };
-
 
 }
 

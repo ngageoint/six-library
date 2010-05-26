@@ -124,7 +124,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
 
 xml::lite::Document* ComplexXMLControl::toXML(Data *data)
 {
-    if (data->getDataClass() != DATA_COMPLEX)
+    if (data->getDataClass() != DataClass::DATA_COMPLEX)
     {
         throw except::Exception("Data must be SICD");
     }
@@ -173,7 +173,7 @@ xml::lite::Element* ComplexXMLControl::createFFTSign(std::string name,
                                                      six::FFTSign sign,
                                                      xml::lite::Element* parent)
 {
-    std::string charData = (sign == FFT_SIGN_NEG) ? ("-1") : ("+1");
+    std::string charData = (sign == FFTSign::FFT_SIGN_NEG) ? ("-1") : ("+1");
     xml::lite::Element* e = newElement(name, charData, parent);
     xml::lite::AttributeNode node;
     node.setQName("class");
@@ -195,11 +195,11 @@ xml::lite::Element* ComplexXMLControl::collectionInfoToXML(
     createString("CoreName", collInfo->coreName, collInfoXML);
     if (!Init::isUndefined<CollectType>(collInfo->collectType))
         createString("CollectType",
-                     str::toString<six::CollectType>(collInfo->collectType),
+                     six::toString<six::CollectType>(collInfo->collectType),
                      collInfoXML);
 
     xml::lite::Element* radarModeXML = newElement("RadarMode", collInfoXML);
-    createString("ModeType", str::toString(collInfo->radarMode), radarModeXML);
+    createString("ModeType", six::toString(collInfo->radarMode), radarModeXML);
     if (!collInfo->radarModeID.empty())
         createString("ModeID", collInfo->radarModeID, radarModeXML);
 
@@ -239,7 +239,7 @@ xml::lite::Element * ComplexXMLControl::imageDataToXML(
 {
     xml::lite::Element* imageDataXML = newElement("ImageData", parent);
 
-    createString("PixelType", str::toString(imageData->pixelType), imageDataXML);
+    createString("PixelType", six::toString(imageData->pixelType), imageDataXML);
     if (imageData->amplitudeTable)
     {
         //TODO AmpTable
@@ -348,8 +348,8 @@ xml::lite::Element* ComplexXMLControl::gridToXML(Grid *grid,
 {
     xml::lite::Element* gridXML = newElement("Grid", parent);
 
-    createString("ImagePlane", str::toString(grid->imagePlane), gridXML);
-    createString("Type", str::toString(grid->type), gridXML);
+    createString("ImagePlane", six::toString(grid->imagePlane), gridXML);
+    createString("Type", six::toString(grid->type), gridXML);
     createPoly2D("TimeCOAPoly", grid->timeCOAPoly, gridXML);
 
     xml::lite::Element* rowDirXML = newElement("Row", gridXML);
@@ -496,9 +496,9 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
     createDouble("Min", radar->txFrequencyMin, txFreqXML);
     createDouble("Max", radar->txFrequencyMax, txFreqXML);
 
-    if (radar->txPolarization != six::POL_NOT_SET)
+    if (radar->txPolarization != PolarizationType::POL_NOT_SET)
     {
-        createString("TxPolarization", str::toString(radar->txPolarization),
+        createString("TxPolarization", six::toString(radar->txPolarization),
                      radarXML);
     }
 
@@ -522,10 +522,10 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
             {
                 createInt("WFIndex", tx->waveformIndex, txStepXML);
             }
-            if (tx->txPolarization != six::POL_NOT_SET)
+            if (tx->txPolarization != PolarizationType::POL_NOT_SET)
             {
                 createString("TxPolarization",
-                             str::toString(tx->txPolarization), txStepXML);
+                             six::toString(tx->txPolarization), txStepXML);
             }
         }
     }
@@ -551,8 +551,8 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
                 createDouble("TxFreqStart", wf->txFrequencyStart, wfpXML);
             if (!Init::isUndefined<double>(wf->txFMRate))
                 createDouble("TxFMRate", wf->txFMRate, wfpXML);
-            if (wf->rcvDemodType != six::DEMOD_NOT_SET)
-                createString("RcvDemodType", str::toString(wf->rcvDemodType),
+            if (wf->rcvDemodType != DemodType::DEMOD_NOT_SET)
+                createString("RcvDemodType", six::toString(wf->rcvDemodType),
                              wfpXML);
             if (!Init::isUndefined<double>(wf->rcvWindowLength))
                 createDouble("RcvWindowLength", wf->rcvWindowLength, wfpXML);
@@ -579,7 +579,7 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
         if (!Init::isUndefined<int>(cp->rcvAPCIndex))
             createInt("RcvAPCIndex", cp->rcvAPCIndex, cpXML);
 
-        if (cp->txRcvPolarization != six::DUAL_POL_NOT_SET)
+        if (cp->txRcvPolarization != DualPolarizationType::DUAL_POL_NOT_SET)
         {
             createString("TxRcvPolarization", str::toString<
                     DualPolarizationType>(cp->txRcvPolarization), cpXML);
@@ -651,7 +651,7 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
                 }
             }
 
-            createString("Orientation", str::toString<OrientationType>(
+            createString("Orientation", six::toString<OrientationType>(
                     plane->orientation), planeXML);
         }
     }
@@ -718,15 +718,15 @@ xml::lite::Element* ComplexXMLControl::imageFormationToXML(
             createInt("ChanIndex", *it, rcvChanXML);
         }
     }
-    if (imageFormation->txRcvPolarizationProc != six::DUAL_POL_NOT_SET)
+    if (imageFormation->txRcvPolarizationProc != DualPolarizationType::DUAL_POL_NOT_SET)
     {
         createString("TxRcvPolarizationProc",
-                     str::toString(imageFormation->txRcvPolarizationProc),
+                     six::toString(imageFormation->txRcvPolarizationProc),
                      imageFormationXML);
     }
 
     createString("ImageFormAlgo",
-                 str::toString(imageFormation->imageFormationAlgorithm),
+                 six::toString(imageFormation->imageFormationAlgorithm),
                  imageFormationXML);
 
     createDouble("TStartProc", imageFormation->tStartProc, imageFormationXML);
@@ -738,15 +738,15 @@ xml::lite::Element* ComplexXMLControl::imageFormationToXML(
     createDouble("MaxProc", imageFormation->txFrequencyProcMax, txFreqXML);
 
     createString("STBeamComp",
-                 str::toString(imageFormation->slowTimeBeamCompensation),
+                 six::toString(imageFormation->slowTimeBeamCompensation),
                  imageFormationXML);
     createString("ImageBeamComp",
-                 str::toString(imageFormation->imageBeamCompensation),
+                 six::toString(imageFormation->imageBeamCompensation),
                  imageFormationXML);
     createString("AzAutofocus",
-                 str::toString(imageFormation->azimuthAutofocus),
+                 six::toString(imageFormation->azimuthAutofocus),
                  imageFormationXML);
-    createString("RgAutofocus", str::toString(imageFormation->rangeAutofocus),
+    createString("RgAutofocus", six::toString(imageFormation->rangeAutofocus),
                  imageFormationXML);
 
     for (unsigned int i = 0; i < imageFormation->processing.size(); ++i)
@@ -825,7 +825,7 @@ xml::lite::Element* ComplexXMLControl::scpcoaToXML(SCPCOA *scpcoa,
     createVector3D("ARPPos", scpcoa->arpPos, scpcoaXML);
     createVector3D("ARPVel", scpcoa->arpVel, scpcoaXML);
     createVector3D("ARPAcc", scpcoa->arpAcc, scpcoaXML);
-    createString("SideOfTrack", str::toString(scpcoa->sideOfTrack), scpcoaXML);
+    createString("SideOfTrack", six::toString(scpcoa->sideOfTrack), scpcoaXML);
     createDouble("SlantRange", scpcoa->slantRange, scpcoaXML);
     createDouble("GroundRange", scpcoa->groundRange, scpcoaXML);
     createDouble("DopplerConeAng", scpcoa->dopplerConeAngle, scpcoaXML);
@@ -961,7 +961,7 @@ xml::lite::Element* ComplexXMLControl::rmaToXML(RMA *rma,
 {
     xml::lite::Element* rmaXML = newElement("RMA", parent);
 
-    createString("RMAlgoType", str::toString<six::RMAlgoType>(rma->algoType),
+    createString("RMAlgoType", six::toString<six::RMAlgoType>(rma->algoType),
             rmaXML);
  
     if (rma->rmat)
@@ -1028,13 +1028,13 @@ void ComplexXMLControl::xmlToCollectionInfo(
     element = getOptional(collectionInfoXML, "CollectType");
     if (element)
         collInfo->collectType
-                = str::toType<six::CollectType>(element->getCharacterData());
+                = six::toType<six::CollectType>(element->getCharacterData());
 
     xml::lite::Element* radarModeXML = getFirstAndOnly(collectionInfoXML,
                                                        "RadarMode");
 
     collInfo->radarMode
-            = str::toType<RadarModeType>(
+            = six::toType<RadarModeType>(
                                          getFirstAndOnly(radarModeXML,
                                                          "ModeType")->getCharacterData());
 
@@ -1088,7 +1088,7 @@ void ComplexXMLControl::xmlToImageData(xml::lite::Element* imageDataXML,
                                        ImageData *imageData)
 {
     imageData->pixelType
-            = str::toType<PixelType>(
+            = six::toType<PixelType>(
                                      getFirstAndOnly(imageDataXML, "PixelType")->getCharacterData());
 
     xml::lite::Element* ampTableXML = getOptional(imageDataXML, "AmpTable");
@@ -1220,11 +1220,11 @@ void ComplexXMLControl::xmlToGeoInfo(xml::lite::Element* geoInfoXML,
 void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
 {
     grid->imagePlane
-            = str::toType<ComplexImagePlaneType>(
+            = six::toType<ComplexImagePlaneType>(
                                                  getFirstAndOnly(gridXML,
                                                                  "ImagePlane")->getCharacterData());
     grid->type
-            = str::toType<ComplexImageGridType>(
+            = six::toType<ComplexImageGridType>(
                                                 getFirstAndOnly(gridXML, "Type")->getCharacterData());
 
     xml::lite::Element* tmpElem = getFirstAndOnly(gridXML, "TimeCOAPoly");
@@ -1236,7 +1236,7 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
     parseDouble(getFirstAndOnly(tmpElem, "ImpRespWid"),
                 grid->row->impulseResponseWidth);
     grid->row->sign
-            = str::toType<six::FFTSign>(
+            = six::toType<six::FFTSign>(
                                         getFirstAndOnly(tmpElem, "Sgn")->getCharacterData());
     parseDouble(getFirstAndOnly(tmpElem, "ImpRespBW"),
                 grid->row->impulseResponseBandwidth);
@@ -1280,7 +1280,7 @@ void ComplexXMLControl::xmlToGrid(xml::lite::Element* gridXML, Grid *grid)
     parseDouble(getFirstAndOnly(tmpElem, "ImpRespWid"),
                 grid->col->impulseResponseWidth);
     grid->col->sign
-            = str::toType<six::FFTSign>(
+            = six::toType<six::FFTSign>(
                                         getFirstAndOnly(tmpElem, "Sgn")->getCharacterData());
     parseDouble(getFirstAndOnly(tmpElem, "ImpRespBW"),
                 grid->col->impulseResponseBandwidth);
@@ -1420,7 +1420,7 @@ void ComplexXMLControl::xmlToRadarCollection(
     {
         //optional
         radarCollection->txPolarization
-                = str::toType<PolarizationType>(tmpElem->getCharacterData());
+                = six::toType<PolarizationType>(tmpElem->getCharacterData());
     }
 
     tmpElem = getOptional(radarCollectionXML, "PolarizationHVAnglePoly");
@@ -1454,7 +1454,7 @@ void ComplexXMLControl::xmlToRadarCollection(
             {
                 //optional
                 step->txPolarization
-                        = str::toType<PolarizationType>(
+                        = six::toType<PolarizationType>(
                                                         optElem->getCharacterData());
             }
 
@@ -1507,7 +1507,7 @@ void ComplexXMLControl::xmlToRadarCollection(
             {
                 //optional
                 wfParams->rcvDemodType
-                        = str::toType<DemodType>(optElem->getCharacterData());
+                        = six::toType<DemodType>(optElem->getCharacterData());
             }
 
             optElem = getOptional(*it, "RcvWindowLength");
@@ -1570,7 +1570,7 @@ void ComplexXMLControl::xmlToRadarCollection(
         {
             //optional
             chanParams->txRcvPolarization
-                    = str::toType<DualPolarizationType>(
+                    = six::toType<DualPolarizationType>(
                                                         childXML->getCharacterData());
         }
 
@@ -1659,7 +1659,7 @@ void ComplexXMLControl::xmlToRadarCollection(
                 }
             }
 
-            radarCollection->area->plane->orientation = str::toType<
+            radarCollection->area->plane->orientation = six::toType<
                     OrientationType>(getFirstAndOnly(planeXML, "Orientation")
                     ->getCharacterData());
         }
@@ -1708,12 +1708,12 @@ void ComplexXMLControl::xmlToImageFormation(
 
     if (tmpElem)
     {
-        imageFormation->txRcvPolarizationProc = str::toType<
+        imageFormation->txRcvPolarizationProc = six::toType<
                 DualPolarizationType>(tmpElem->getCharacterData());
     }
 
     imageFormation->imageFormationAlgorithm
-            = str::toType<ImageFormationType>(
+            = six::toType<ImageFormationType>(
                                               getFirstAndOnly(
                                                               imageFormationXML,
                                                               "ImageFormAlgo")->getCharacterData());
@@ -1733,24 +1733,24 @@ void ComplexXMLControl::xmlToImageFormation(
                 imageFormation->txFrequencyProcMax);
 
     imageFormation->slowTimeBeamCompensation
-            = str::toType<SlowTimeBeamCompensationType>(
+            = six::toType<SlowTimeBeamCompensationType>(
                                                         getFirstAndOnly(
                                                                         imageFormationXML,
                                                                         "STBeamComp")->getCharacterData());
 
     imageFormation->imageBeamCompensation
-            = str::toType<ImageBeamCompensationType>(
+            = six::toType<ImageBeamCompensationType>(
                                                      getFirstAndOnly(
                                                                      imageFormationXML,
                                                                      "ImageBeamComp")->getCharacterData());
 
     imageFormation->azimuthAutofocus
-            = str::toType<AutofocusType>(
+            = six::toType<AutofocusType>(
                                          getFirstAndOnly(imageFormationXML,
                                                          "AzAutofocus")->getCharacterData());
 
     imageFormation->rangeAutofocus
-            = str::toType<AutofocusType>(
+            = six::toType<AutofocusType>(
                                          getFirstAndOnly(imageFormationXML,
                                                          "RgAutofocus")->getCharacterData());
 
@@ -2049,7 +2049,7 @@ void ComplexXMLControl::xmlToPFA(xml::lite::Element* pfaXML, PFA *pfa)
 
 void ComplexXMLControl::xmlToRMA(xml::lite::Element* rmaXML, RMA* rma)
 {
-    rma->algoType = str::toType<RMAlgoType>(getFirstAndOnly(rmaXML,
+    rma->algoType = six::toType<RMAlgoType>(getFirstAndOnly(rmaXML,
             "RMAlgoType")->getCharacterData());
 
     xml::lite::Element* rmatElem = getOptional(rmaXML, "RMAT");
@@ -2234,7 +2234,7 @@ xml::lite::Element* ComplexXMLControl::createDateTime(std::string name, std::str
 xml::lite::Element* ComplexXMLControl::createDateTime(std::string name, DateTime p,
                                                xml::lite::Element* parent)
 {
-    std::string s = str::toString<DateTime>(p);
+    std::string s = six::toString<DateTime>(p);
     return createDateTime(name, s, parent);
 }
 

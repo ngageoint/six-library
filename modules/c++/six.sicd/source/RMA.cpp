@@ -43,7 +43,7 @@ INCA::INCA()
 }
 
 RMA::RMA()
-    : algoType(RMA_NOT_SET), rmat(NULL), inca(NULL)
+    : algoType(RMAlgoType::RMA_NOT_SET), rmat(NULL), inca(NULL)
 {
 }
 

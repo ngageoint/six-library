@@ -67,7 +67,7 @@ public:
         std::string type;
         switch (data->getPixelType())
         {
-        case RE32F_IM32F:
+        case PixelType::RE32F_IM32F:
             type = "R";
             break;
 
@@ -84,15 +84,15 @@ public:
         std::string irep;
         switch (data->getPixelType())
         {
-        case MONO8LU:
-        case MONO8I:
-        case MONO16I:
+        case PixelType::MONO8LU:
+        case PixelType::MONO8I:
+        case PixelType::MONO16I:
             irep = "MONO";
             break;
-        case RGB8LU:
+        case PixelType::RGB8LU:
             irep = "RGB/LUT";
             break;
-        case RGB24I:
+        case PixelType::RGB24I:
             irep = "RGB";
             break;
 
@@ -108,10 +108,10 @@ public:
         std::string imode;
         switch (data->getPixelType())
         {
-        case RGB8LU:
-        case MONO8LU:
-        case MONO8I:
-        case MONO16I:
+        case PixelType::RGB8LU:
+        case PixelType::MONO8LU:
+        case PixelType::MONO8I:
+        case PixelType::MONO16I:
             imode = "B";
             break;
         default:

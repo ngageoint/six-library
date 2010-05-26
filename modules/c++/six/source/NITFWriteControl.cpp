@@ -33,11 +33,15 @@ void NITFWriteControl::initialize(Container* container)
 
     sys::Uint32_T ilocMax = Constants::ILOC_MAX;
     // TODO: Validate they are below this!
-    sys::Uint32_T maxRows = mOptions.getParameter(OPT_MAX_ILOC_ROWS, Parameter(
-            ilocMax));
+    sys::Uint32_T maxRows = mOptions.getParameter(OPT_MAX_ILOC_ROWS,
+                                                  Parameter(ilocMax));
 
-    sys::Uint64_T maxSize = (sys::Uint64_T) mOptions.getParameter(
-            OPT_MAX_PRODUCT_SIZE, Parameter(six::Constants::IS_SIZE_MAX));
+    sys::Uint64_T
+            maxSize =
+                    (sys::Uint64_T) mOptions.getParameter(
+                                                          OPT_MAX_PRODUCT_SIZE,
+                                                          Parameter(
+                                                                    six::Constants::IS_SIZE_MAX));
 
     /*
      *  If our container is SICD, must have only one image.
@@ -46,17 +50,17 @@ void NITFWriteControl::initialize(Container* container)
      *  image, and not every Data necessarily needs an image
      *
      */
-    if (mContainer->getDataType() == TYPE_COMPLEX)
+    if (mContainer->getDataType() == DataType::TYPE_COMPLEX)
     {
         mInfos.push_back(new NITFImageInfo(mContainer->getData(0), maxRows,
-                maxSize, true));
+                                           maxSize, true));
     }
     else
     {
         for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
         {
             Data* ith = mContainer->getData(i);
-            if (ith->getDataClass() == DATA_DERIVED)
+            if (ith->getDataClass() == DataClass::DATA_DERIVED)
                 mInfos.push_back(new NITFImageInfo(ith, maxRows, maxSize, true));
         }
     }
@@ -65,7 +69,7 @@ void NITFWriteControl::initialize(Container* container)
     DataType dataType = mContainer->getDataType();
     std::string name = mInfos[0]->getData()->getName();
     std::string fileTitle = FmtX("%s: %s", str::toString(dataType).c_str(),
-            name.c_str());
+                                 name.c_str());
 
     mRecord.getHeader().getFileTitle().set(fileTitle);
 
@@ -88,18 +92,18 @@ void NITFWriteControl::initialize(Container* container)
         std::string targetId = "";
 
         // TODO: Subclass to get this?
-        // if (info->getData()->getDataClass() == DATA_DERIVED)
-//         {
-//             DerivedData* derived = (DerivedData*)info->getData();
-//             if(derived->geographicAndTarget && derived->geographicAndTarget->targetInformation.size() > 0)
-//             {
-//                 six::TargetInformation* target = derived->geographicAndTarget->targetInformation[0];
-//                 if (target->identifiers.size() > 0)
-//                 {
-//                     targetId = target->identifiers[0].str();
-//                 }
-//             }
-//         }
+        // if (info->getData()->getDataClass() == DataClass::DATA_DERIVED)
+        //         {
+        //             DerivedData* derived = (DerivedData*)info->getData();
+        //             if(derived->geographicAndTarget && derived->geographicAndTarget->targetInformation.size() > 0)
+        //             {
+        //                 six::TargetInformation* target = derived->geographicAndTarget->targetInformation[0];
+        //                 if (target->identifiers.size() > 0)
+        //                 {
+        //                     targetId = target->identifiers[0].str();
+        //                 }
+        //             }
+        //         }
 
         // Update this info's startIndex
         info->setStartIndex(startIndex);
@@ -117,8 +121,8 @@ void NITFWriteControl::initialize(Container* container)
             DateTime creationTime = info->getData()->getCreationTime();
             subheader.getImageDateAndTime().set(creationTime);
 
-            std::string iid = str::toString(dataType);
-            if (dataType == TYPE_COMPLEX)
+            std::string iid = six::toString(dataType);
+            if (dataType == DataType::TYPE_COMPLEX)
             {
                 iid = FmtX("%s%03d", iid.c_str(), numIS > 1 ? j + 1 : j);
             }
@@ -128,18 +132,21 @@ void NITFWriteControl::initialize(Container* container)
             }
             subheader.getImageId().set(iid);
             subheader.getImageLocation().set(FmtX("%05d00000",
-                    segmentInfo.rowOffset));
+                                                  segmentInfo.rowOffset));
 
             subheader.getTargetId().set(targetId);
 
             std::vector<nitf::BandInfo> bandInfo = info->getBandInfo();
 
             subheader.setPixelInformation(pvtype, nbpp, nbpp, "R", irep, "SAR",
-                    bandInfo);
+                                          bandInfo);
 
-            subheader.setBlocking(segmentInfo.numRows, numCols,
-                    segmentInfo.numRows > 8192 ? 0 : segmentInfo.numRows,
-                    numCols > 8192 ? 0 : numCols, imode);
+            subheader.setBlocking(
+                                  segmentInfo.numRows,
+                                  numCols,
+                                  segmentInfo.numRows > 8192 ? 0
+                                                             : segmentInfo.numRows,
+                                  numCols > 8192 ? 0 : numCols, imode);
             subheader.getImageSyncCode().set(0);
             if (j == 0)
             {
@@ -149,8 +156,10 @@ void NITFWriteControl::initialize(Container* container)
             else
             {
                 // Need to attach to last segment
-                subheader.getImageAttachmentLevel().set((nitf::Uint16)(
-                        info->getStartIndex() + j));
+                subheader.getImageAttachmentLevel().set(
+                                                        (nitf::Uint16)(
+                                                                       info->getStartIndex()
+                                                                               + j));
             }
             corners[0][0] = segmentInfo.corners[0].getLat();
             corners[0][1] = segmentInfo.corners[0].getLon();
@@ -174,8 +183,8 @@ void NITFWriteControl::initialize(Container* container)
         // Write out a DES
         nitf::DESegment seg = mRecord.newDataExtensionSegment();
         nitf::DESubheader subheader = seg.getSubheader();
-        std::string desid = str::toString(
-                mContainer->getData(i)->getDataClass()) + "_XML";
+        std::string desid =
+                six::toString(mContainer->getData(i)->getDataClass()) + "_XML";
         subheader.getTypeID().set(desid);
         // BUG? Is DESVER BCS A or N?
         subheader.getVersion().set("01");
@@ -187,7 +196,7 @@ void NITFWriteControl::initialize(Container* container)
 }
 
 void NITFWriteControl::setImageSecurity(six::Classification c,
-        nitf::ImageSubheader& subheader)
+                                        nitf::ImageSubheader& subheader)
 {
     //This requires a normalized name to get set correctly
     subheader.getImageSecurityClass().set(getNITFClassification(c.level));
@@ -200,7 +209,8 @@ void NITFWriteControl::setImageSecurity(six::Classification c,
 
     for (unsigned int j = 0; j < c.securityMarkings.size(); j++)
     {
-        if (j) code += " ";
+        if (j)
+            code += " ";
         code += c.securityMarkings[j];
     }
 
@@ -229,7 +239,7 @@ void NITFWriteControl::setImageSecurity(six::Classification c,
 
     // CLAS
     std::string clas = c.fileOptions.getParameter(Classification::OPT_ISCLAS,
-            Parameter("")).str();
+                                                  Parameter("")).str();
     if (clas.length() == 1)
     {
         subheader.getImageSecurityClass().set(clas);
@@ -237,67 +247,81 @@ void NITFWriteControl::setImageSecurity(six::Classification c,
 
     // CLSY
     std::string clsy = c.fileOptions.getParameter(Classification::OPT_ISCLSY,
-            Parameter("")).str();
-    if (clsy.length()) security.getClassificationSystem().set(clsy);
+                                                  Parameter("")).str();
+    if (clsy.length())
+        security.getClassificationSystem().set(clsy);
 
     // CLTX
     std::string cltx = c.fileOptions.getParameter(Classification::OPT_ISCLTX,
-            Parameter("")).str();
-    if (cltx.length()) security.getClassificationText().set(cltx);
+                                                  Parameter("")).str();
+    if (cltx.length())
+        security.getClassificationText().set(cltx);
 
     // CODE
-    code = c.fileOptions.getParameter(Classification::OPT_ISCODE,
-            Parameter("")).str();
-    if (code.length()) security.getCodewords().set(code);
+    code
+            = c.fileOptions.getParameter(Classification::OPT_ISCODE,
+                                         Parameter("")).str();
+    if (code.length())
+        security.getCodewords().set(code);
 
     // CRSN
     std::string crsn = c.fileOptions.getParameter(Classification::OPT_ISCRSN,
-            Parameter("")).str();
-    if (crsn.length()) security.getClassificationReason().set(crsn);
+                                                  Parameter("")).str();
+    if (crsn.length())
+        security.getClassificationReason().set(crsn);
 
     // CTLH
     std::string ctlh = c.fileOptions.getParameter(Classification::OPT_ISCTLH,
-            Parameter("")).str();
-    if (ctlh.length()) security.getControlAndHandling().set(ctlh);
+                                                  Parameter("")).str();
+    if (ctlh.length())
+        security.getControlAndHandling().set(ctlh);
 
     // CTLN
     std::string ctln = c.fileOptions.getParameter(Classification::OPT_ISCTLN,
-            Parameter("")).str();
-    if (ctln.length()) security.getSecurityControlNumber().set(ctln);
+                                                  Parameter("")).str();
+    if (ctln.length())
+        security.getSecurityControlNumber().set(ctln);
 
     // DCDT
     std::string dcdt = c.fileOptions.getParameter(Classification::OPT_ISDCDT,
-            Parameter("")).str();
-    if (dcdt.length()) security.getDeclassificationDate().set(dcdt);
+                                                  Parameter("")).str();
+    if (dcdt.length())
+        security.getDeclassificationDate().set(dcdt);
 
     // DCXM
     std::string dcxm = c.fileOptions.getParameter(Classification::OPT_ISDCXM,
-            Parameter("")).str();
-    if (dcxm.length()) security.getDeclassificationExemption().set(dcxm);
+                                                  Parameter("")).str();
+    if (dcxm.length())
+        security.getDeclassificationExemption().set(dcxm);
 
     // DG
     std::string dg = c.fileOptions.getParameter(Classification::OPT_ISDG,
-            Parameter("")).str();
-    if (dg.length()) security.getDowngrade().set(dg);
+                                                Parameter("")).str();
+    if (dg.length())
+        security.getDowngrade().set(dg);
 
     // DGDT
     std::string dgdt = c.fileOptions.getParameter(Classification::OPT_ISDGDT,
-            Parameter("")).str();
-    if (dgdt.length()) security.getDowngradeDateTime().set(dgdt);
+                                                  Parameter("")).str();
+    if (dgdt.length())
+        security.getDowngradeDateTime().set(dgdt);
 
     // REL
     std::string rel = c.fileOptions.getParameter(Classification::OPT_ISREL,
-            Parameter("")).str();
-    if (rel.length()) security.getReleasingInstructions().set(rel);
+                                                 Parameter("")).str();
+    if (rel.length())
+        security.getReleasingInstructions().set(rel);
 
     // SRDT
-    srdt = c.fileOptions.getParameter(Classification::OPT_ISSRDT,
-            Parameter("")).str();
-    if (srdt.length()) security.getSecuritySourceDate().set(srdt);
+    srdt
+            = c.fileOptions.getParameter(Classification::OPT_ISSRDT,
+                                         Parameter("")).str();
+    if (srdt.length())
+        security.getSecuritySourceDate().set(srdt);
 }
 
 void NITFWriteControl::setDESecurity(six::Classification c,
-        nitf::DESubheader& subheader)
+                                     nitf::DESubheader& subheader)
 {
     subheader.getSecurityClass().set(getNITFClassification(c.level));
     nitf::FileSecurity security = subheader.getSecurityGroup();
@@ -309,7 +333,8 @@ void NITFWriteControl::setDESecurity(six::Classification c,
 
     for (unsigned int j = 0; j < c.securityMarkings.size(); j++)
     {
-        if (j) code += " ";
+        if (j)
+            code += " ";
         code += c.securityMarkings[j];
     }
 
@@ -338,7 +363,7 @@ void NITFWriteControl::setDESecurity(six::Classification c,
 
     // CLAS
     std::string clas = c.fileOptions.getParameter(Classification::OPT_DESCLAS,
-            Parameter("")).str();
+                                                  Parameter("")).str();
     if (clas.length() == 1)
     {
         subheader.getSecurityClass().set(clas);
@@ -346,63 +371,75 @@ void NITFWriteControl::setDESecurity(six::Classification c,
 
     // CLSY
     std::string clsy = c.fileOptions.getParameter(Classification::OPT_DESCLSY,
-            Parameter("")).str();
-    if (clsy.length()) security.getClassificationSystem().set(clsy);
+                                                  Parameter("")).str();
+    if (clsy.length())
+        security.getClassificationSystem().set(clsy);
 
     // CLTX
     std::string cltx = c.fileOptions.getParameter(Classification::OPT_DESCLTX,
-            Parameter("")).str();
-    if (cltx.length()) security.getClassificationText().set(cltx);
+                                                  Parameter("")).str();
+    if (cltx.length())
+        security.getClassificationText().set(cltx);
 
     // CODE
     code = c.fileOptions.getParameter(Classification::OPT_DESCODE,
-            Parameter("")).str();
-    if (code.length()) security.getCodewords().set(code);
+                                      Parameter("")).str();
+    if (code.length())
+        security.getCodewords().set(code);
 
     // CRSN
     std::string crsn = c.fileOptions.getParameter(Classification::OPT_DESCRSN,
-            Parameter("")).str();
-    if (crsn.length()) security.getClassificationReason().set(crsn);
+                                                  Parameter("")).str();
+    if (crsn.length())
+        security.getClassificationReason().set(crsn);
 
     // CTLH
     std::string ctlh = c.fileOptions.getParameter(Classification::OPT_DESCTLH,
-            Parameter("")).str();
-    if (ctlh.length()) security.getControlAndHandling().set(ctlh);
+                                                  Parameter("")).str();
+    if (ctlh.length())
+        security.getControlAndHandling().set(ctlh);
 
     // CTLN
     std::string ctln = c.fileOptions.getParameter(Classification::OPT_DESCTLN,
-            Parameter("")).str();
-    if (ctln.length()) security.getSecurityControlNumber().set(ctln);
+                                                  Parameter("")).str();
+    if (ctln.length())
+        security.getSecurityControlNumber().set(ctln);
 
     // DCDT
     std::string dcdt = c.fileOptions.getParameter(Classification::OPT_DESDCDT,
-            Parameter("")).str();
-    if (dcdt.length()) security.getDeclassificationDate().set(dcdt);
+                                                  Parameter("")).str();
+    if (dcdt.length())
+        security.getDeclassificationDate().set(dcdt);
 
     // DCXM
     std::string dcxm = c.fileOptions.getParameter(Classification::OPT_DESDCXM,
-            Parameter("")).str();
-    if (dcxm.length()) security.getDeclassificationExemption().set(dcxm);
+                                                  Parameter("")).str();
+    if (dcxm.length())
+        security.getDeclassificationExemption().set(dcxm);
 
     // DG
     std::string dg = c.fileOptions.getParameter(Classification::OPT_DESDG,
-            Parameter("")).str();
-    if (dg.length()) security.getDowngrade().set(dg);
+                                                Parameter("")).str();
+    if (dg.length())
+        security.getDowngrade().set(dg);
 
     // DGDT
     std::string dgdt = c.fileOptions.getParameter(Classification::OPT_DESDGDT,
-            Parameter("")).str();
-    if (dgdt.length()) security.getDowngradeDateTime().set(dgdt);
+                                                  Parameter("")).str();
+    if (dgdt.length())
+        security.getDowngradeDateTime().set(dgdt);
 
     // REL
     std::string rel = c.fileOptions.getParameter(Classification::OPT_DESREL,
-            Parameter("")).str();
-    if (rel.length()) security.getReleasingInstructions().set(rel);
+                                                 Parameter("")).str();
+    if (rel.length())
+        security.getReleasingInstructions().set(rel);
 
     // SRDT
     srdt = c.fileOptions.getParameter(Classification::OPT_DESSRDT,
-            Parameter("")).str();
-    if (srdt.length()) security.getSecuritySourceDate().set(srdt);
+                                      Parameter("")).str();
+    if (srdt.length())
+        security.getSecuritySourceDate().set(srdt);
 }
 
 std::string NITFWriteControl::getNITFClassification(std::string level)
@@ -437,21 +474,20 @@ void NITFWriteControl::updateFileHeaderSecurity()
 {
     bool changed = false;
     std::string classOrder = "URCST";
-    int classIndex = classOrder.find(
-            mRecord.getHeader().getClassification().toString());
+    int classIndex =
+            classOrder.find(mRecord.getHeader().getClassification().toString());
     classIndex = classIndex != std::string::npos ? classIndex : -1;
 
     nitf::FileSecurity highest = mRecord.getHeader().getSecurityGroup();
 
     for (int i = 0, size = mRecord.getImages().getSize(); i < size; i++)
     {
-        nitf::ImageSubheader subheader = nitf::ImageSegment(
-                mRecord.getImages()[i]).getSubheader();
-        int idx = classOrder.find(
-                subheader.getImageSecurityClass().toString());
+        nitf::ImageSubheader subheader =
+                nitf::ImageSegment(mRecord.getImages()[i]).getSubheader();
+        int idx = classOrder.find(subheader.getImageSecurityClass().toString());
         idx = idx != std::string::npos ? idx : -1;
 
-        if(idx > classIndex)
+        if (idx > classIndex)
         {
             highest = subheader.getSecurityGroup();
             classIndex = idx;
@@ -461,13 +497,12 @@ void NITFWriteControl::updateFileHeaderSecurity()
 
     for (int i = 0, size = mRecord.getDataExtensions().getSize(); i < size; i++)
     {
-        nitf::DESubheader subheader = nitf::DESegment(
-                mRecord.getDataExtensions()[i]).getSubheader();
-        int idx = classOrder.find(
-                subheader.getSecurityClass().toString());
+        nitf::DESubheader subheader =
+                nitf::DESegment(mRecord.getDataExtensions()[i]).getSubheader();
+        int idx = classOrder.find(subheader.getSecurityClass().toString());
         idx = idx != std::string::npos ? idx : -1;
 
-        if(idx > classIndex)
+        if (idx > classIndex)
         {
             highest = subheader.getSecurityGroup();
             classIndex = idx;
@@ -477,8 +512,8 @@ void NITFWriteControl::updateFileHeaderSecurity()
 
     if (changed)
     {
-        mRecord.getHeader().getClassification() = classOrder.substr(
-                classIndex, 1);
+        mRecord.getHeader().getClassification() = classOrder.substr(classIndex,
+                                                                    1);
         mRecord.getHeader().setSecurityGroup(highest.clone());
     }
 }
@@ -502,16 +537,20 @@ void NITFWriteControl::save(SourceList& imageData, std::string outputFile)
 }
 
 void NITFWriteControl::saveIO(SourceList& imageData,
-        nitf::IOInterface& outputFile)
+                              nitf::IOInterface& outputFile)
 {
 
     mWriter.prepareIO(outputFile, mRecord);
     bool doByteSwap;
 
-    int byteSwapping = (int) mOptions.getParameter(OPT_BYTE_SWAP, Parameter(
-            (int) BYTE_SWAP_AUTO));
+    int
+            byteSwapping =
+                    (int) mOptions.getParameter(
+                                                OPT_BYTE_SWAP,
+                                                Parameter(
+                                                          (int) ByteSwapping::BYTE_SWAP_AUTO));
 
-    if (byteSwapping == BYTE_SWAP_AUTO)
+    if (byteSwapping == ByteSwapping::BYTE_SWAP_AUTO)
     {
         // Have to if its not a BE machine
         doByteSwap = !sys::isBigEndianSystem();
@@ -520,12 +559,12 @@ void NITFWriteControl::saveIO(SourceList& imageData,
     {
         // Do what they say.  You really shouldnt do this
         // unless you know what you're doing anyway!
-	doByteSwap = byteSwapping ? true: false;
+        doByteSwap = byteSwapping ? true : false;
     }
 
     if (mInfos.size() != imageData.size())
         throw except::Exception(Ctxt(FmtX("Require %d images, received %s",
-                mInfos.size(), imageData.size())));
+                                          mInfos.size(), imageData.size())));
 
     size_t numImages = mInfos.size();
 
@@ -542,19 +581,18 @@ void NITFWriteControl::saveIO(SourceList& imageData,
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            nitf::WriteHandler* writeHandler = new StreamWriteHandler(
-                    segmentInfo, imageData[i], numCols, numChannels, pixelSize,
-                    doByteSwap);
+            nitf::WriteHandler* writeHandler =
+                    new StreamWriteHandler(segmentInfo, imageData[i], numCols,
+                                           numChannels, pixelSize, doByteSwap);
 
             mWriter.setImageWriteHandler(info->getStartIndex() + j,
-                    writeHandler);
+                                         writeHandler);
         }
     }
 
     addDataAndWrite();
 
 }
-
 
 void NITFWriteControl::save(BufferList& imageData, std::string outputFile)
 {
@@ -575,7 +613,7 @@ void NITFWriteControl::save(BufferList& imageData, std::string outputFile)
 }
 
 void NITFWriteControl::saveIO(BufferList& imageData,
-        nitf::IOInterface& outputFile)
+                              nitf::IOInterface& outputFile)
 {
 
     mWriter.prepareIO(outputFile, mRecord);
@@ -585,7 +623,7 @@ void NITFWriteControl::saveIO(BufferList& imageData,
 
     if (mInfos.size() != imageData.size())
         throw except::Exception(Ctxt(FmtX("Require %d images, received %s",
-                mInfos.size(), imageData.size())));
+                                          mInfos.size(), imageData.size())));
 
     size_t numImages = mInfos.size();
     for (unsigned int i = 0; i < numImages; ++i)
@@ -601,18 +639,18 @@ void NITFWriteControl::saveIO(BufferList& imageData,
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            nitf::WriteHandler* writeHandler = new MemoryWriteHandler(
-                    segmentInfo, imageData[i], segmentInfo.firstRow, numCols,
-                    numChannels, pixelSize, doByteSwap);
+            nitf::WriteHandler* writeHandler =
+                    new MemoryWriteHandler(segmentInfo, imageData[i],
+                                           segmentInfo.firstRow, numCols,
+                                           numChannels, pixelSize, doByteSwap);
             // Could set start index here
             mWriter.setImageWriteHandler(info->getStartIndex() + j,
-                    writeHandler);
+                                         writeHandler);
         }
     }
 
     addDataAndWrite();
 }
-
 
 void NITFWriteControl::addDataAndWrite()
 {
@@ -626,8 +664,8 @@ void NITFWriteControl::addDataAndWrite()
 
         raw[i] = six::toXMLCharArray(data);
         nitf::SegmentWriter* deWriter = mWriter.newDEWriter(i);
-        nitf::SegmentSource* segSource = new nitf::SegmentMemorySource(raw[i],
-                strlen(raw[i]), 0, 0);
+        nitf::SegmentSource* segSource =
+                new nitf::SegmentMemorySource(raw[i], strlen(raw[i]), 0, 0);
         deWriter->attachSource(segSource, true);
     }
     mWriter.write();
