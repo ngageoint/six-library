@@ -101,7 +101,6 @@ public:
      *
      *  Once read, the image buffer is set in both the region pointer,
      *  and in the return value, for convenience
-     *
      */
     virtual UByte* interleaved(Region& region, int imageNumber) = 0;
 

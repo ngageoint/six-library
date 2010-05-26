@@ -41,7 +41,7 @@ DataType NITFReadControl::getDataType(std::string fromFile)
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
-				      NITFImageInfo* info)
+                                      NITFImageInfo* info)
 {
 
     unsigned long numBandsSeg =
@@ -62,17 +62,22 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
     unsigned long nbpp = info->getData()->getNumBytesPerPixel();
     if (numBytesSeg != nbpp)
     {
-        throw except::Exception(Ctxt(FmtX(
-                "Expected [%d] bytes per pixel IQ, found [%d]",
-                nbpp, numBytesSeg)));
+        throw except::Exception(
+                                Ctxt(
+                                     FmtX(
+                                          "Expected [%d] bytes per pixel IQ, found [%d]",
+                                          nbpp, numBytesSeg)));
     }
 
     unsigned long numCols = info->getData()->getNumCols();
     if ((unsigned long) (nitf::Uint32) subheader.getNumCols() != numCols)
     {
-        throw except::Exception(Ctxt(FmtX(
-                "Invalid column width.  Was expecting [%d], got [%d]",
-                numCols, (nitf::Uint32) subheader.getNumCols())));
+        throw except::Exception(
+                                Ctxt(
+                                     FmtX(
+                                          "Invalid column width.  Was expecting [%d], got [%d]",
+                                          numCols,
+                                          (nitf::Uint32) subheader.getNumCols())));
     }
 
 }
@@ -114,14 +119,14 @@ void NITFReadControl::load(std::string fromFile)
             xmlParser.parse(ioAdapter);
             xml::lite::Document* doc = xmlParser.getDocument();
 
-            XMLControl* xmlControl = XMLControlFactory::getInstance().
-                newXMLControl(desid);
+            XMLControl* xmlControl =
+                    XMLControlFactory::getInstance(). newXMLControl(desid);
 
             Data* data = xmlControl->fromXML(doc);
 
-	    // Note that DE override data never should clash, there
-	    // is one DES per data, so its safe to do this
-	    addDEClassOptions(subheader, data->getClassification());
+            // Note that DE override data never should clash, there
+            // is one DES per data, so its safe to do this
+            addDEClassOptions(subheader, data->getClassification());
 
             delete xmlControl;
 
@@ -136,8 +141,9 @@ void NITFReadControl::load(std::string fromFile)
 
     if (numImages == 0)
     {
-        throw except::Exception(Ctxt(
-                "SICD/SIDD files must have at least one image"));
+        throw except::Exception(
+                                Ctxt(
+                                     "SICD/SIDD files must have at least one image"));
     }
 
     // How do we know how many images we should have?
@@ -188,11 +194,11 @@ void NITFReadControl::load(std::string fromFile)
         // columns match, and the pixel type, etc.
         validateSegment(subheader, currentInfo);
 
-	// We are propagating the last segment's
-	// security markings through.  This should be okay, since, if you
-	// segment, you have the same security markings
-	addImageClassOptions(subheader, 
-			     currentInfo->getData()->getClassification());
+        // We are propagating the last segment's
+        // security markings through.  This should be okay, since, if you
+        // segment, you have the same security markings
+        addImageClassOptions(subheader,
+                             currentInfo->getData()->getClassification());
 
         NITFSegmentInfo si;
         si.numRows = numRowsSeg;
@@ -224,7 +230,7 @@ void NITFReadControl::load(std::string fromFile)
 }
 
 void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
-					   six::Classification& c)
+                                           six::Classification& c)
 {
 
     Parameter p;
@@ -241,7 +247,7 @@ void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
     // CLTX
     p = security.getClassificationText().toString();
     c.fileOptions.setParameter(Classification::OPT_ISCLTX, p);
-    
+
     // CODE
     p = security.getCodewords().toString();
     c.fileOptions.setParameter(Classification::OPT_ISCODE, p);
@@ -261,16 +267,15 @@ void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
     // DCDT
     p = security.getDeclassificationDate().toString();
     c.fileOptions.setParameter(Classification::OPT_ISDCDT, p);
-    
+
     // DCXM
     p = security.getDeclassificationExemption().toString();
     c.fileOptions.setParameter(Classification::OPT_ISDCXM, p);
-    
 
     // DG
     p = security.getDowngrade().toString();
     c.fileOptions.setParameter(Classification::OPT_ISDG, p);
-    
+
     // DGDT
     p = security.getDowngradeDateTime().toString();
     c.fileOptions.setParameter(Classification::OPT_ISDGDT, p);
@@ -282,7 +287,7 @@ void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
 }
 
 void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
-					six::Classification& c)
+                                        six::Classification& c)
 {
 
     Parameter p;
@@ -299,7 +304,7 @@ void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
     // CLTX
     p = security.getClassificationText().toString();
     c.fileOptions.setParameter(Classification::OPT_DESCLTX, p);
-    
+
     // CODE
     p = security.getCodewords().toString();
     c.fileOptions.setParameter(Classification::OPT_DESCODE, p);
@@ -319,16 +324,15 @@ void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
     // DCDT
     p = security.getDeclassificationDate().toString();
     c.fileOptions.setParameter(Classification::OPT_DESDCDT, p);
-    
+
     // DCXM
     p = security.getDeclassificationExemption().toString();
     c.fileOptions.setParameter(Classification::OPT_DESDCXM, p);
-    
 
     // DG
     p = security.getDowngrade().toString();
     c.fileOptions.setParameter(Classification::OPT_DESDG, p);
-    
+
     // DGDT
     p = security.getDowngradeDateTime().toString();
     c.fileOptions.setParameter(Classification::OPT_DESDGDT, p);
@@ -337,7 +341,6 @@ void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
     p = security.getSecuritySourceDate().toString();
     c.fileOptions.setParameter(Classification::OPT_DESSRDT, p);
 
-    
 }
 
 std::pair<int, int> NITFReadControl::getIndices(nitf::ImageSubheader& subheader)
@@ -407,11 +410,11 @@ UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
         throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]",
-                numRowsReq)));
+                                          numRowsReq)));
 
     if (extentCols > numColsTotal || startCol > numColsTotal)
         throw except::Exception(Ctxt(FmtX("Too many cols requested [%d]",
-                numColsReq)));
+                                          numColsReq)));
 
     // Allocate one band
     nitf::Uint32 *bandList = new nitf::Uint32[1];
@@ -419,13 +422,13 @@ UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
 
     nitf::Uint8* buffer = region.getBuffer();
 
-    size_t subWindowSize = numRowsReq * numColsReq *
-            thisImage->getData()->getNumBytesPerPixel();
+    size_t subWindowSize = numRowsReq * numColsReq
+            * thisImage->getData()->getNumBytesPerPixel();
 
     if (buffer == NULL)
     {
         buffer = new nitf::Uint8[subWindowSize];
-	region.setBuffer(buffer);
+        region.setBuffer(buffer);
     }
 
     // Do segmenting here
@@ -470,8 +473,9 @@ UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
     int startIndex = thisImage->getStartIndex();
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
-        unsigned long numRowsReqSeg = std::min<unsigned long>(numRowsLeft,
-                imageSegments[i].numRows - sw.getStartRow());
+        unsigned long numRowsReqSeg =
+                std::min<unsigned long>(numRowsLeft, imageSegments[i].numRows
+                        - sw.getStartRow());
 
         sw.setNumRows(numRowsReqSeg);
         nitf::ImageReader imageReader = mReader.newImageReader(startIndex + i);

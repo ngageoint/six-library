@@ -110,25 +110,22 @@ public:
 
     /*!
      *  Utility for Writing out one InputStream only.
-     *
      */
-    void save(io::InputStream* source, std::string toFile) 
+    void save(io::InputStream* source, std::string toFile)
     {
-	SourceList sources;
-	sources.push_back(source);
-	save(sources, toFile);
+        SourceList sources;
+        sources.push_back(source);
+        save(sources, toFile);
     }
 
     /*!
      *  Utility for Writing out one buffer image only.
-     *
      */
-
     void save(UByte* buffer, std::string toFile)
     {
-	BufferList sources;
-	sources.push_back( buffer );
-	save(sources, toFile);
+        BufferList sources;
+        sources.push_back(buffer);
+        save(sources, toFile);
     }
 
     /*!
