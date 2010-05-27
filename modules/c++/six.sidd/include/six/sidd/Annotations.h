@@ -40,7 +40,7 @@ struct Annotation
     std::vector<SFAGeometry*> objects;
 
     Annotation() :
-        identifier("")
+        identifier(""), spatialReferenceSystem(NULL)
     {
     }
     ~Annotation()

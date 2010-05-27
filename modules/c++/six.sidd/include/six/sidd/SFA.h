@@ -302,9 +302,41 @@ protected:
     }
 };
 
+struct PrimeMeridian
+{
+    std::string name;
+    double longitude;
+};
+
+struct Spheroid
+{
+    std::string name;
+    double semiMajorAxis;
+    double inverseFlattening;
+};
+
+struct Parameter
+{
+    std::string name;
+    double value;
+};
+
+struct Projection
+{
+    std::string name;
+};
+
+struct Datum
+{
+    Spheroid spheroid;
+};
+
 struct GeocentricCoordinateSystem : public CoordinateSystem
 {
-    //TODO
+    std::string name;
+    Datum datum;
+    PrimeMeridian primeMeridian;
+    std::string linearUnit;
 
     GeocentricCoordinateSystem() :
         CoordinateSystem(TYPE_NAME)
@@ -316,9 +348,14 @@ struct GeocentricCoordinateSystem : public CoordinateSystem
 private:
     static const char TYPE_NAME[];
 };
+
 struct GeographicCoordinateSystem : public CoordinateSystem
 {
-    //TODO
+    std::string name;
+    Datum datum;
+    PrimeMeridian primeMeridian;
+    std::string angularUnit;
+    std::string linearUnit;
 
     GeographicCoordinateSystem() :
         CoordinateSystem(TYPE_NAME)
@@ -330,16 +367,23 @@ struct GeographicCoordinateSystem : public CoordinateSystem
 private:
     static const char TYPE_NAME[];
 };
+
 struct ProjectedCoordinateSystem : public CoordinateSystem
 {
-    //TODO
+    std::string name;
+    GeographicCoordinateSystem *geographicCoordinateSystem;
+    Projection projection;
+    Parameter parameter;
+    std::string linearUnit;
 
     ProjectedCoordinateSystem() :
-        CoordinateSystem(TYPE_NAME)
+        CoordinateSystem(TYPE_NAME), geographicCoordinateSystem(NULL)
     {
     }
     ~ProjectedCoordinateSystem()
     {
+        if (geographicCoordinateSystem)
+            delete geographicCoordinateSystem;
     }
 private:
     static const char TYPE_NAME[];
@@ -350,7 +394,8 @@ struct ReferenceSystem
     CoordinateSystem *coordinateSystem;
     std::vector<std::string> axisNames;
 
-    ReferenceSystem()
+    ReferenceSystem() :
+        coordinateSystem(NULL)
     {
     }
     virtual ~ReferenceSystem()
