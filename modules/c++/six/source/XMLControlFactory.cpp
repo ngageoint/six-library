@@ -51,11 +51,11 @@ XMLControl* XMLControlRegistry::newXMLControl(std::string identifier)
 
     if (identifier == "SICD_XML")
     {
-        dataClass = DataClass::DATA_COMPLEX;
+        dataClass = DataClass::COMPLEX;
     }
     else if (identifier == "SIDD_XML")
     {
-        dataClass = DataClass::DATA_DERIVED;
+        dataClass = DataClass::DERIVED;
     }
 
     return newXMLControl(dataClass);

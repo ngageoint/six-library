@@ -96,7 +96,7 @@ int main(int argc, char** argv)
         //--------------------------------------------------------------------
         six::XMLControlFactory::getInstance().
             addCreator(
-                six::DATA_COMPLEX, 
+                six::COMPLEX, 
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
                 );
 
@@ -129,14 +129,14 @@ int main(int argc, char** argv)
         data->setName("corename");
         data->setCreationTime(six::DateTime());
         data->setImageCorners(makeUpCornersFromDMS());
-        data->collectionInformation->radarMode = six::MODE_SPOTLIGHT;
-        data->scpcoa->sideOfTrack = six::SIDE_LEFT;
+        data->collectionInformation->radarMode = six::SPOTLIGHT;
+        data->scpcoa->sideOfTrack = six::LEFT;
         data->grid->timeCOAPoly = six::Poly2D(0, 0);
         data->grid->timeCOAPoly[0][0] = 15605743.142846;
         data->position->arpPoly = six::PolyXYZ(0);
         data->position->arpPoly[0] = 0;
 
-        data->grid->row->sign = six::FFT_SIGN_POS;
+        data->grid->row->sign = six::POS;
         data->grid->row->unitVector = 0;
         data->grid->row->sampleSpacing = 0;
         data->grid->row->impulseResponseWidth = 0;
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
         data->grid->row->kCenter = 0;
         data->grid->row->deltaK1 = 0;
         data->grid->row->deltaK2 = 0;
-        data->grid->col->sign = six::FFT_SIGN_POS;
+        data->grid->col->sign = six::POS;
         data->grid->col->unitVector = 0;
         data->grid->col->sampleSpacing = 0;
         data->grid->col->impulseResponseWidth = 0;
@@ -186,7 +186,7 @@ int main(int argc, char** argv)
         data->imageFormation->txFrequencyProcMin = 0;
         data->imageFormation->txFrequencyProcMax = 0;
 
-        six::Container* container = new six::Container(six::TYPE_COMPLEX);
+        six::Container* container = new six::Container(six::COMPLEX);
         container->addData(data);
         six::WriteControl* writer = new six::NITFWriteControl();
 

@@ -37,7 +37,7 @@ using namespace six;
 
 template<> DataClass Init::undefined<DataClass>()
 {
-    return DataClass::DATA_UNKNOWN;
+    return DataClass::UNKNOWN;
 }
 
 template<> std::string Init::undefined<std::string>()
@@ -107,25 +107,25 @@ template<> double Init::undefined<double>()
 
 template<> EarthModelType Init::undefined<EarthModelType>()
 {
-    return EarthModelType::EARTH_NOT_SET;
+    return EarthModelType::NOT_SET;
 }
 template<> PixelType Init::undefined<PixelType>()
 {
-    return PixelType::PIXEL_TYPE_NOT_SET;
+    return PixelType::UNDEFINED;
 }
 template<> MagnificationMethod Init::undefined<MagnificationMethod>()
 {
-    return MagnificationMethod::MAG_NOT_SET;
+    return MagnificationMethod::NOT_SET;
 }
 
 template<> DecimationMethod Init::undefined<DecimationMethod>()
 {
-    return DecimationMethod::DEC_NOT_SET;
+    return DecimationMethod::NOT_SET;
 }
 
 template<> RadarModeType Init::undefined<RadarModeType>()
 {
-    return RadarModeType::MODE_NOT_SET;
+    return RadarModeType::NOT_SET;
 }
 
 template<> RangeAzimuth<double>Init::undefined<RangeAzimuth<double> >()
@@ -162,7 +162,7 @@ template<> DateTime Init::undefined<DateTime>()
 
 template<> CollectType Init::undefined<CollectType>()
 {
-    return CollectType::COLLECT_NOT_SET;
+    return CollectType::NOT_SET;
 }
 
 template<> Vector3 Init::undefined<Vector3>()
@@ -185,12 +185,12 @@ template<> LatLon Init::undefined<LatLon>()
 
 template<> BooleanType Init::undefined<BooleanType>()
 {
-    return BooleanType::BOOL_NOT_SET;
+    return BooleanType::NOT_SET;
 }
 
 template<> SideOfTrackType Init::undefined<SideOfTrackType>()
 {
-    return SideOfTrackType::SIDE_NOT_SET;
+    return SideOfTrackType::NOT_SET;
 }
 
 template<> ReferencePoint Init::undefined<ReferencePoint>()
@@ -201,12 +201,12 @@ template<> ReferencePoint Init::undefined<ReferencePoint>()
 
 template<> FFTSign Init::undefined<FFTSign>()
 {
-    return FFTSign::FFT_SIGN_NOT_SET;
+    return FFTSign::NOT_SET;
 }
 
 template<> AppliedType Init::undefined<AppliedType>()
 {
-    return AppliedType::APPLIED_NOT_SET;
+    return AppliedType::NOT_SET;
 }
 
 template<> Poly1D Init::undefined<Poly1D>()

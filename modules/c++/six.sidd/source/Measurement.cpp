@@ -28,19 +28,19 @@ Measurement::Measurement(ProjectionType projectionType) :
     projection(NULL)
 {
     pixelFootprint = Init::undefined<RowColInt>();
-    if (projectionType == ProjectionType::PROJECTION_GEOGRAPHIC)
+    if (projectionType == ProjectionType::GEOGRAPHIC)
     {
         projection = new GeographicProjection();
     }
-    else if (projectionType == ProjectionType::PROJECTION_CYLINDRICAL)
+    else if (projectionType == ProjectionType::CYLINDRICAL)
     {
         projection = new CylindricalProjection();
     }
-    else if (projectionType == ProjectionType::PROJECTION_PLANE)
+    else if (projectionType == ProjectionType::PLANE)
     {
         projection = new PlaneProjection();
     }
-    else if (projectionType == ProjectionType::PROJECTION_POLYNOMIAL)
+    else if (projectionType == ProjectionType::POLYNOMIAL)
     {
         projection = new PolynomialProjection();
     }
@@ -48,7 +48,7 @@ Measurement::Measurement(ProjectionType projectionType) :
 
 Measurement* Measurement::clone()
 {
-    Measurement* m = new Measurement(ProjectionType::PROJECTION_NOT_SET);
+    Measurement* m = new Measurement(ProjectionType::NOT_SET);
     if (projection)
         m->projection = projection->clone();
     m->pixelFootprint = pixelFootprint;

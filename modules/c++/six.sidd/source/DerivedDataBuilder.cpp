@@ -45,11 +45,11 @@ DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
     if (mData->display)
         delete mData->display;
 
-    DisplayType displayType = DisplayType::DISPLAY_COLOR;
+    DisplayType displayType = DisplayType::COLOR;
     if (pixelType == PixelType::MONO8LU || pixelType == PixelType::MONO8I
             || pixelType == PixelType::MONO16I)
     {
-        displayType = DisplayType::DISPLAY_MONO;
+        displayType = DisplayType::MONO;
     }
     mData->display = new Display(displayType);
     mData->display->pixelType = pixelType;

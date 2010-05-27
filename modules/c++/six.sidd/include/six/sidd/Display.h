@@ -62,7 +62,7 @@ struct Remap
  *  \brief Mono remap derived class
  *
  *  Monochrome remap.  Correctly sets the remap info for
- *  DISPLAY_MONO
+ *  MONO
  *
  */
 struct MonochromeDisplayRemap: public Remap
@@ -73,7 +73,7 @@ struct MonochromeDisplayRemap: public Remap
      */
     MonochromeDisplayRemap()
     {
-        this->displayType = DisplayType::DISPLAY_MONO;
+        this->displayType = DisplayType::MONO;
     }
     /*!
      *  Clone this object, and any sub-LUT
@@ -119,7 +119,7 @@ struct ColorDisplayRemap: public Remap
     //!  Constructor
     ColorDisplayRemap()
     {
-        this->displayType = DisplayType::DISPLAY_COLOR;
+        this->displayType = DisplayType::COLOR;
     }
     //!  Clone the remap
     virtual Remap* clone() const

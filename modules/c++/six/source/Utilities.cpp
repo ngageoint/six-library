@@ -29,16 +29,16 @@ template<> BooleanType six::toType<BooleanType>(const std::string& s)
     str::trim(type);
     str::lower(type);
     if (type == "true" || type == "1" || type == "yes")
-        return BooleanType::BOOL_TRUE;
+        return BooleanType::TRUE;
     else if (type == "false" || type == "0" || type == "no")
-        return BooleanType::BOOL_FALSE;
+        return BooleanType::FALSE;
     else
-        return BooleanType::BOOL_NOT_SET;
+        return BooleanType::NOT_SET;
 }
 
 template<> std::string toString<BooleanType>(const BooleanType& value)
 {
-    return toString<bool>(value == BooleanType::BOOL_TRUE);
+    return toString<bool>(value == BooleanType::TRUE);
 }
 
 template<> DateTime six::toType<DateTime>(const std::string& dateTime)
@@ -107,14 +107,14 @@ template<> std::string six::toString(const RadarModeType& type)
     std::string mode = "SPOTLIGHT";
     switch (type)
     {
-    case RadarModeType::MODE_INVALID:
+    case RadarModeType::INVALID:
         throw except::Exception(Ctxt("Radar mode is not valid!"));
-    case RadarModeType::MODE_NOT_SET:
+    case RadarModeType::NOT_SET:
         throw except::Exception(Ctxt("Radar mode not set!"));
-    case RadarModeType::MODE_STRIPMAP:
+    case RadarModeType::STRIPMAP:
         mode = "STRIPMAP";
         break;
-    case RadarModeType::MODE_DYNAMIC_STRIPMAP:
+    case RadarModeType::DYNAMIC_STRIPMAP:
         mode = "DYNAMIC STRIPMAP";
         break;
     default:
@@ -128,23 +128,23 @@ template<> RadarModeType six::toType<RadarModeType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "SPOTLIGHT")
-        return RadarModeType::MODE_SPOTLIGHT;
+        return RadarModeType::SPOTLIGHT;
     if (type == "STRIPMAP")
-        return RadarModeType::MODE_STRIPMAP;
+        return RadarModeType::STRIPMAP;
     if (type == "DYNAMIC STRIPMAP")
-        return RadarModeType::MODE_DYNAMIC_STRIPMAP;
+        return RadarModeType::DYNAMIC_STRIPMAP;
     if (type.empty())
-        return RadarModeType::MODE_NOT_SET;
-    return RadarModeType::MODE_INVALID;
+        return RadarModeType::NOT_SET;
+    return RadarModeType::INVALID;
 }
 
 template<> std::string six::toString(const DataClass& type)
 {
     switch (type)
     {
-    case DataClass::DATA_COMPLEX:
+    case DataClass::COMPLEX:
         return "SICD";
-    case DataClass::DATA_DERIVED:
+    case DataClass::DERIVED:
         return "SIDD";
     default:
         throw except::Exception(Ctxt("Unsupported data class"));
@@ -155,9 +155,9 @@ template<> std::string six::toString(const DataType& type)
 {
     switch (type)
     {
-    case DataType::TYPE_COMPLEX:
+    case DataType::COMPLEX:
         return "SICD";
-    case DataType::TYPE_DERIVED:
+    case DataType::DERIVED:
         return "SIDD";
     default:
         throw except::Exception(Ctxt("Unsupported data type"));
@@ -169,7 +169,7 @@ template<> PixelType six::toType<PixelType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     PixelType p(type);
-    if (p == PixelType::PIXEL_TYPE_NOT_SET)
+    if (p == PixelType::UNDEFINED)
         throw except::Exception(Ctxt(FmtX("Type not understood [%s]",
                                           type.c_str())));
     return p;
@@ -177,7 +177,7 @@ template<> PixelType six::toType<PixelType>(const std::string& s)
 
 template<> std::string six::toString(const PixelType& type)
 {
-    if (type == PixelType::PIXEL_TYPE_NOT_SET)
+    if (type == PixelType::UNDEFINED)
     {
         throw except::Exception(Ctxt("Unsupported pixel type"));
     }
@@ -190,19 +190,19 @@ template<> MagnificationMethod six::toType<MagnificationMethod>(
     std::string type(s);
     str::trim(type);
     if (type == "NEAREST_NEIGHBOR")
-        return MagnificationMethod::MAG_NEAREST_NEIGHBOR;
+        return MagnificationMethod::NEAREST_NEIGHBOR;
     if (type == "BILINEAR")
-        return MagnificationMethod::MAG_BILINEAR;
-    return MagnificationMethod::MAG_NOT_SET;
+        return MagnificationMethod::BILINEAR;
+    return MagnificationMethod::NOT_SET;
 }
 
 template<> std::string six::toString(const MagnificationMethod& method)
 {
     switch (method)
     {
-    case MagnificationMethod::MAG_NEAREST_NEIGHBOR:
+    case MagnificationMethod::NEAREST_NEIGHBOR:
         return "NEAREST_NEIGHBOR";
-    case MagnificationMethod::MAG_BILINEAR:
+    case MagnificationMethod::BILINEAR:
         return "BILINEAR";
     default:
         throw except::Exception(Ctxt("Unsupported method"));
@@ -214,27 +214,27 @@ template<> DecimationMethod six::toType<DecimationMethod>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "NEAREST_NEIGHBOR")
-        return DecimationMethod::DEC_NEAREST_NEIGHBOR;
+        return DecimationMethod::NEAREST_NEIGHBOR;
     if (type == "BILINEAR")
-        return DecimationMethod::DEC_BILINEAR;
+        return DecimationMethod::BILINEAR;
     if (type == "BRIGHTEST_PIXEL")
-        return DecimationMethod::DEC_BRIGHTEST_PIXEL;
+        return DecimationMethod::BRIGHTEST_PIXEL;
     if (type == "LAGRANGE")
-        return DecimationMethod::DEC_LAGRANGE;
-    return DecimationMethod::DEC_NOT_SET;
+        return DecimationMethod::LAGRANGE;
+    return DecimationMethod::NOT_SET;
 }
 
 template<> std::string six::toString(const DecimationMethod& method)
 {
     switch (method)
     {
-    case DecimationMethod::DEC_NEAREST_NEIGHBOR:
+    case DecimationMethod::NEAREST_NEIGHBOR:
         return "NEAREST_NEIGHBOR";
-    case DecimationMethod::DEC_BILINEAR:
+    case DecimationMethod::BILINEAR:
         return "BILINEAR";
-    case DecimationMethod::DEC_BRIGHTEST_PIXEL:
+    case DecimationMethod::BRIGHTEST_PIXEL:
         return "BRIGHTEST_PIXEL";
-    case DecimationMethod::DEC_LAGRANGE:
+    case DecimationMethod::LAGRANGE:
         return "LAGRANGE";
     default:
         throw except::Exception(Ctxt("Unsupported method"));
@@ -246,15 +246,15 @@ template<> EarthModelType six::toType<EarthModelType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "WGS_84")
-        return EarthModelType::EARTH_WGS84;
-    return EarthModelType::EARTH_NOT_SET;
+        return EarthModelType::WGS84;
+    return EarthModelType::NOT_SET;
 }
 
 template<> std::string six::toString(const EarthModelType& t)
 {
     switch (t)
     {
-    case EarthModelType::EARTH_WGS84:
+    case EarthModelType::WGS84:
         return "WGS_84";
     default:
         throw except::Exception(Ctxt("Unsupported earth model"));
@@ -267,15 +267,15 @@ template<> OrientationType six::toType<OrientationType>(const std::string& s)
     str::trim(type);
 
     if (type == "UP")
-        return OrientationType::ORIENT_UP;
+        return OrientationType::UP;
     else if (type == "DOWN")
-        return OrientationType::ORIENT_DOWN;
+        return OrientationType::DOWN;
     else if (type == "LEFT")
-        return OrientationType::ORIENT_LEFT;
+        return OrientationType::LEFT;
     else if (type == "RIGHT")
-        return OrientationType::ORIENT_RIGHT;
+        return OrientationType::RIGHT;
     else if (type == "ARBITRARY")
-        return OrientationType::ORIENT_ARBITRARY;
+        return OrientationType::ARBITRARY;
     else
         throw except::Exception(Ctxt("Unsupported orientation type"));
 }
@@ -284,15 +284,15 @@ template<> std::string six::toString(const OrientationType& t)
 {
     switch (t)
     {
-    case OrientationType::ORIENT_UP:
+    case OrientationType::UP:
         return "UP";
-    case OrientationType::ORIENT_DOWN:
+    case OrientationType::DOWN:
         return "DOWN";
-    case OrientationType::ORIENT_LEFT:
+    case OrientationType::LEFT:
         return "LEFT";
-    case OrientationType::ORIENT_RIGHT:
+    case OrientationType::RIGHT:
         return "RIGHT";
-    case OrientationType::ORIENT_ARBITRARY:
+    case OrientationType::ARBITRARY:
         return "ARBITRARY";
     default:
         throw except::Exception(Ctxt("Unsupported orientation"));
@@ -304,15 +304,15 @@ template<> PolarizationType six::toType<PolarizationType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "OTHER")
-        return PolarizationType::POL_OTHER;
+        return PolarizationType::OTHER;
     else if (type == "V")
-        return PolarizationType::POL_V;
+        return PolarizationType::V;
     else if (type == "H")
-        return PolarizationType::POL_H;
+        return PolarizationType::H;
     else if (type == "RHC")
-        return PolarizationType::POL_RHC;
+        return PolarizationType::RHC;
     else if (type == "LHC")
-        return PolarizationType::POL_LHC;
+        return PolarizationType::LHC;
     else
         throw except::Exception(Ctxt("Unsupported polarization type"));
 }
@@ -321,15 +321,15 @@ template<> std::string six::toString(const PolarizationType& t)
 {
     switch (t)
     {
-    case PolarizationType::POL_OTHER:
+    case PolarizationType::OTHER:
         return "OTHER";
-    case PolarizationType::POL_V:
+    case PolarizationType::V:
         return "V";
-    case PolarizationType::POL_H:
+    case PolarizationType::H:
         return "H";
-    case PolarizationType::POL_RHC:
+    case PolarizationType::RHC:
         return "RHC";
-    case PolarizationType::POL_LHC:
+    case PolarizationType::LHC:
         return "LHC";
     default:
         throw except::Exception(
@@ -344,21 +344,21 @@ template<> DualPolarizationType six::toType<DualPolarizationType>(
     std::string type(s);
     str::trim(type);
     if (type == "OTHER")
-        return DualPolarizationType::DUAL_POL_OTHER;
+        return DualPolarizationType::OTHER;
     else if (type == "V:V")
-        return DualPolarizationType::DUAL_POL_V_V;
+        return DualPolarizationType::V_V;
     else if (type == "V:H")
-        return DualPolarizationType::DUAL_POL_V_H;
+        return DualPolarizationType::V_H;
     else if (type == "H:V")
-        return DualPolarizationType::DUAL_POL_H_V;
+        return DualPolarizationType::H_V;
     else if (type == "H:H")
-        return DualPolarizationType::DUAL_POL_H_H;
+        return DualPolarizationType::H_H;
     else if (type == "RHC:RHC")
-        return DualPolarizationType::DUAL_POL_RHC_RHC;
+        return DualPolarizationType::RHC_RHC;
     else if (type == "RHC:LHC")
-        return DualPolarizationType::DUAL_POL_RHC_LHC;
+        return DualPolarizationType::RHC_LHC;
     else if (type == "LHC:LHC")
-        return DualPolarizationType::DUAL_POL_LHC_LHC;
+        return DualPolarizationType::LHC_LHC;
     else
         throw except::Exception(
                                 Ctxt(
@@ -369,21 +369,21 @@ template<> std::string six::toString(const DualPolarizationType& t)
 {
     switch (t)
     {
-    case DualPolarizationType::DUAL_POL_OTHER:
+    case DualPolarizationType::OTHER:
         return "OTHER";
-    case DualPolarizationType::DUAL_POL_V_V:
+    case DualPolarizationType::V_V:
         return "V:V";
-    case DualPolarizationType::DUAL_POL_V_H:
+    case DualPolarizationType::V_H:
         return "V:H";
-    case DualPolarizationType::DUAL_POL_H_V:
+    case DualPolarizationType::H_V:
         return "H:V";
-    case DualPolarizationType::DUAL_POL_H_H:
+    case DualPolarizationType::H_H:
         return "H:H";
-    case DualPolarizationType::DUAL_POL_RHC_RHC:
+    case DualPolarizationType::RHC_RHC:
         return "RHC:RHC";
-    case DualPolarizationType::DUAL_POL_RHC_LHC:
+    case DualPolarizationType::RHC_LHC:
         return "RHC:LHC";
-    case DualPolarizationType::DUAL_POL_LHC_LHC:
+    case DualPolarizationType::LHC_LHC:
         return "LHC:LHC";
     default:
         throw except::Exception(
@@ -397,9 +397,9 @@ template<> DemodType six::toType<DemodType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "STRETCH")
-        return DemodType::DEMOD_STRETCH;
+        return DemodType::STRETCH;
     else if (type == "CHIRP")
-        return DemodType::DEMOD_CHIRP;
+        return DemodType::CHIRP;
     else
         throw except::Exception(Ctxt("Unsupported demod type"));
 }
@@ -408,9 +408,9 @@ template<> std::string six::toString(const DemodType& t)
 {
     switch (t)
     {
-    case DemodType::DEMOD_STRETCH:
+    case DemodType::STRETCH:
         return "STRETCH";
-    case DemodType::DEMOD_CHIRP:
+    case DemodType::CHIRP:
         return "CHIRP";
     default:
         throw except::Exception(Ctxt("Unsupported demod type"));
@@ -423,13 +423,13 @@ template<> ImageFormationType six::toType<ImageFormationType>(
     std::string type(s);
     str::trim(type);
     if (type == "OTHER")
-        return ImageFormationType::IF_OTHER;
+        return ImageFormationType::OTHER;
     else if (type == "PFA")
-        return ImageFormationType::IF_PFA;
+        return ImageFormationType::PFA;
     else if (type == "RMA")
-        return ImageFormationType::IF_RMA;
+        return ImageFormationType::RMA;
     else if (type == "RGAZCOMP")
-        return ImageFormationType::IF_RGAZCOMP;
+        return ImageFormationType::RGAZCOMP;
     else
         throw except::Exception(Ctxt("Unsupported image formation type"));
 }
@@ -438,13 +438,13 @@ template<> std::string six::toString(const ImageFormationType& t)
 {
     switch (t)
     {
-    case ImageFormationType::IF_OTHER:
+    case ImageFormationType::OTHER:
         return "OTHER";
-    case ImageFormationType::IF_PFA:
+    case ImageFormationType::PFA:
         return "PFA";
-    case ImageFormationType::IF_RMA:
+    case ImageFormationType::RMA:
         return "RMA";
-    case ImageFormationType::IF_RGAZCOMP:
+    case ImageFormationType::RGAZCOMP:
         return "RGAZCOMP";
     default:
         throw except::Exception(Ctxt("Unsupported image formation type"));
@@ -457,11 +457,11 @@ template<> SlowTimeBeamCompensationType six::toType<
     std::string type(s);
     str::trim(type);
     if (type == "NO")
-        return SlowTimeBeamCompensationType::SLOW_TIME_BEAM_NO;
+        return SlowTimeBeamCompensationType::NO;
     else if (type == "GLOBAL")
-        return SlowTimeBeamCompensationType::SLOW_TIME_BEAM_GLOBAL;
+        return SlowTimeBeamCompensationType::GLOBAL;
     else if (type == "SV")
-        return SlowTimeBeamCompensationType::SLOW_TIME_BEAM_SV;
+        return SlowTimeBeamCompensationType::SV;
     else
         throw except::Exception(
                                 Ctxt(
@@ -472,11 +472,11 @@ template<> std::string six::toString(const SlowTimeBeamCompensationType& t)
 {
     switch (t)
     {
-    case SlowTimeBeamCompensationType::SLOW_TIME_BEAM_NO:
+    case SlowTimeBeamCompensationType::NO:
         return "NO";
-    case SlowTimeBeamCompensationType::SLOW_TIME_BEAM_GLOBAL:
+    case SlowTimeBeamCompensationType::GLOBAL:
         return "GLOBAL";
-    case SlowTimeBeamCompensationType::SLOW_TIME_BEAM_SV:
+    case SlowTimeBeamCompensationType::SV:
         return "SV";
     default:
         throw except::Exception(
@@ -491,9 +491,9 @@ template<> ImageBeamCompensationType six::toType<ImageBeamCompensationType>(
     std::string type(s);
     str::trim(type);
     if (type == "NO")
-        return ImageBeamCompensationType::IMAGE_BEAM_NO;
+        return ImageBeamCompensationType::NO;
     else if (type == "SV")
-        return ImageBeamCompensationType::IMAGE_BEAM_SV;
+        return ImageBeamCompensationType::SV;
     else
         throw except::Exception(
                                 Ctxt("Unsupported image beam compensation type"));
@@ -503,9 +503,9 @@ template<> std::string six::toString(const ImageBeamCompensationType& t)
 {
     switch (t)
     {
-    case ImageBeamCompensationType::IMAGE_BEAM_NO:
+    case ImageBeamCompensationType::NO:
         return "NO";
-    case ImageBeamCompensationType::IMAGE_BEAM_SV:
+    case ImageBeamCompensationType::SV:
         return "SV";
     default:
         throw except::Exception(
@@ -518,11 +518,11 @@ template<> AutofocusType six::toType<AutofocusType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "NO")
-        return AutofocusType::AUTOFOCUS_NO;
+        return AutofocusType::NO;
     else if (type == "GLOBAL")
-        return AutofocusType::AUTOFOCUS_GLOBAL;
+        return AutofocusType::GLOBAL;
     else if (type == "SV")
-        return AutofocusType::AUTOFOCUS_SV;
+        return AutofocusType::SV;
     else
         throw except::Exception(Ctxt("Unsupported autofocus type"));
 }
@@ -531,11 +531,11 @@ template<> std::string six::toString(const AutofocusType& t)
 {
     switch (t)
     {
-    case AutofocusType::AUTOFOCUS_NO:
+    case AutofocusType::NO:
         return "NO";
-    case AutofocusType::AUTOFOCUS_GLOBAL:
+    case AutofocusType::GLOBAL:
         return "GLOBAL";
-    case AutofocusType::AUTOFOCUS_SV:
+    case AutofocusType::SV:
         return "SV";
     default:
         throw except::Exception(Ctxt("Unsupported autofocus type"));
@@ -547,11 +547,11 @@ template<> RMAlgoType six::toType<RMAlgoType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "OMEGA_K")
-        return RMAlgoType::RMA_OMEGA_K;
+        return RMAlgoType::OMEGA_K;
     else if (type == "CSA")
-        return RMAlgoType::RMA_CSA;
+        return RMAlgoType::CSA;
     else if (type == "RG_DOP")
-        return RMAlgoType::RMA_RG_DOP;
+        return RMAlgoType::RG_DOP;
     else
         throw except::Exception(Ctxt("Unsupported RM algorithm type"));
 }
@@ -560,11 +560,11 @@ template<> std::string six::toString(const RMAlgoType& t)
 {
     switch (t)
     {
-    case RMAlgoType::RMA_OMEGA_K:
+    case RMAlgoType::OMEGA_K:
         return "OMEGA_K";
-    case RMAlgoType::RMA_CSA:
+    case RMAlgoType::CSA:
         return "CSA";
-    case RMAlgoType::RMA_RG_DOP:
+    case RMAlgoType::RG_DOP:
         return "RG_DOP";
     default:
         throw except::Exception(Ctxt("Unsupported RM algorithm type"));
@@ -576,9 +576,9 @@ template<> SideOfTrackType six::toType<SideOfTrackType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "L")
-        return SideOfTrackType::SIDE_LEFT;
+        return SideOfTrackType::LEFT;
     else if (type == "R")
-        return SideOfTrackType::SIDE_RIGHT;
+        return SideOfTrackType::RIGHT;
     else
         throw except::Exception(Ctxt("Unsupported side of track"));
 }
@@ -587,9 +587,9 @@ template<> std::string six::toString(const SideOfTrackType& t)
 {
     switch (t)
     {
-    case SideOfTrackType::SIDE_LEFT:
+    case SideOfTrackType::LEFT:
         return "L";
-    case SideOfTrackType::SIDE_RIGHT:
+    case SideOfTrackType::RIGHT:
         return "R";
     default:
         throw except::Exception(Ctxt("Unsupported side of track"));
@@ -602,11 +602,11 @@ template<> ComplexImagePlaneType six::toType<ComplexImagePlaneType>(
     std::string type(s);
     str::trim(type);
     if (type == "OTHER")
-        return ComplexImagePlaneType::PLANE_OTHER;
+        return ComplexImagePlaneType::OTHER;
     else if (type == "SLANT")
-        return ComplexImagePlaneType::PLANE_SLANT;
+        return ComplexImagePlaneType::SLANT;
     else if (type == "GROUND")
-        return ComplexImagePlaneType::PLANE_GROUND;
+        return ComplexImagePlaneType::GROUND;
     else
         throw except::Exception(Ctxt("Unsupported complex image plane"));
 }
@@ -615,11 +615,11 @@ template<> std::string six::toString(const ComplexImagePlaneType& t)
 {
     switch (t)
     {
-    case ComplexImagePlaneType::PLANE_OTHER:
+    case ComplexImagePlaneType::OTHER:
         return "OTHER";
-    case ComplexImagePlaneType::PLANE_SLANT:
+    case ComplexImagePlaneType::SLANT:
         return "SLANT";
-    case ComplexImagePlaneType::PLANE_GROUND:
+    case ComplexImagePlaneType::GROUND:
         return "GROUND";
     default:
         throw except::Exception(Ctxt("Unsupported complex image plane"));
@@ -632,15 +632,15 @@ template<> ComplexImageGridType six::toType<ComplexImageGridType>(
     std::string type(s);
     str::trim(type);
     if (type == "RGAZIM")
-        return ComplexImageGridType::GRID_RGAZIM;
+        return ComplexImageGridType::RGAZIM;
     else if (type == "RGZERO")
-        return ComplexImageGridType::GRID_RGZERO;
+        return ComplexImageGridType::RGZERO;
     else if (type == "XRGYCR")
-        return ComplexImageGridType::GRID_XRGYCR;
+        return ComplexImageGridType::XRGYCR;
     else if (type == "XCTYAT")
-        return ComplexImageGridType::GRID_XCTYAT;
+        return ComplexImageGridType::XCTYAT;
     else if (type == "PLANE")
-        return ComplexImageGridType::GRID_PLANE;
+        return ComplexImageGridType::PLANE;
     else
         throw except::Exception(Ctxt("Unsupported complex image grid"));
 }
@@ -649,15 +649,15 @@ template<> std::string six::toString(const ComplexImageGridType& t)
 {
     switch (t)
     {
-    case ComplexImageGridType::GRID_RGAZIM:
+    case ComplexImageGridType::RGAZIM:
         return "RGAZIM";
-    case ComplexImageGridType::GRID_RGZERO:
+    case ComplexImageGridType::RGZERO:
         return "RGZERO";
-    case ComplexImageGridType::GRID_XRGYCR:
+    case ComplexImageGridType::XRGYCR:
         return "XRGYCR";
-    case ComplexImageGridType::GRID_XCTYAT:
+    case ComplexImageGridType::XCTYAT:
         return "XCTYAT";
-    case ComplexImageGridType::GRID_PLANE:
+    case ComplexImageGridType::PLANE:
         return "PLANE";
     default:
         throw except::Exception(Ctxt("Unsupported complex image grid"));
@@ -669,11 +669,11 @@ template<> FFTSign six::toType<FFTSign>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "-1")
-        return FFTSign::FFT_SIGN_NEG;
+        return FFTSign::NEG;
     else if (type == "+1")
-        return FFTSign::FFT_SIGN_POS;
+        return FFTSign::POS;
     else if (type == "0")
-        return FFTSign::FFT_SIGN_NOT_SET;
+        return FFTSign::NOT_SET;
     else
         throw except::Exception(Ctxt("Unsupported fft sign"));
 }
@@ -682,11 +682,11 @@ template<> std::string six::toString(const FFTSign& value)
 {
     switch (value)
     {
-    case FFTSign::FFT_SIGN_NEG:
+    case FFTSign::NEG:
         return "-1";
-    case FFTSign::FFT_SIGN_POS:
+    case FFTSign::POS:
         return "+1";
-    case FFTSign::FFT_SIGN_NOT_SET:
+    case FFTSign::NOT_SET:
         return "0";
     default:
         throw except::Exception(Ctxt("Unsupported fft sign"));
@@ -700,9 +700,9 @@ template<> AppliedType six::toType<AppliedType>(const std::string& s)
     // TODO: Needs correction -- added alternate value to match schema
     // from 03/17/2009.
     if (type == "APPLIED" || type == "APPILED")
-        return AppliedType::APPLIED_TRUE;
+        return AppliedType::TRUE;
     else if (type == "NOT_APPLIED")
-        return AppliedType::APPLIED_FALSE;
+        return AppliedType::FALSE;
     else
         throw except::Exception(Ctxt("Unsupported applied type"));
 }
@@ -711,11 +711,11 @@ template<> std::string six::toString(const AppliedType& value)
 {
     switch (value)
     {
-    case AppliedType::APPLIED_TRUE:
+    case AppliedType::TRUE:
         // TODO: Needs correction -- support alternate value to match
         // schema from 03/17/2009.
         return "APPILED";
-    case AppliedType::APPLIED_FALSE:
+    case AppliedType::FALSE:
         return "NOT_APPLIED";
     default:
         throw except::Exception(Ctxt("Unsupported applied type"));
@@ -727,9 +727,9 @@ template<> CollectType six::toType<CollectType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "MONOSTATIC")
-        return CollectType::COLLECT_MONOSTATIC;
+        return CollectType::MONOSTATIC;
     else if (type == "BISTATIC")
-        return CollectType::COLLECT_BISTATIC;
+        return CollectType::BISTATIC;
     else
         throw except::Exception(Ctxt("Unsupported collect type"));
 }
@@ -738,9 +738,9 @@ template<> std::string six::toString(const CollectType& value)
 {
     switch (value)
     {
-    case CollectType::COLLECT_MONOSTATIC:
+    case CollectType::MONOSTATIC:
         return "MONOSTATIC";
-    case CollectType::COLLECT_BISTATIC:
+    case CollectType::BISTATIC:
         return "BISTATIC";
     default:
         throw except::Exception(Ctxt("Unsupported collect type"));
@@ -751,11 +751,11 @@ template<> std::string six::toString(const six::FrameType& value)
 {
     switch (value)
     {
-    case FrameType::FRAME_ECF:
+    case FrameType::ECF:
         return "ECF";
-    case FrameType::FRAME_RIC_ECF:
+    case FrameType::RIC_ECF:
         return "RIC_ECF";
-    case FrameType::FRAME_RIC_ECI:
+    case FrameType::RIC_ECI:
         return "RIC_ECI";
     default:
         throw except::Exception(Ctxt("Unsupported frame type"));
@@ -767,11 +767,11 @@ template<> six::FrameType six::toType<six::FrameType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     if (type == "ECF")
-        return FrameType::FRAME_ECF;
+        return FrameType::ECF;
     else if (type == "RIC_ECF")
-        return FrameType::FRAME_RIC_ECF;
+        return FrameType::RIC_ECF;
     else if (type == "RIC_ECI")
-        return FrameType::FRAME_RIC_ECI;
+        return FrameType::RIC_ECI;
     else
         throw except::Exception(Ctxt("Unsupported frame type"));
 }

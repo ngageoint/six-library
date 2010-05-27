@@ -276,7 +276,7 @@ xml::lite::Element* XMLControl::createBooleanType(std::string name,
                                                   BooleanType p,
                                                   xml::lite::Element* parent)
 {
-    if (p == six::BooleanType::BOOL_NOT_SET)
+    if (p == six::BooleanType::NOT_SET)
         return NULL;
     return newElement(name, six::toString<BooleanType>(p), parent);
 }
@@ -771,7 +771,7 @@ xml::lite::Element* XMLControl::errorStatisticsToXML(
     {
         xml::lite::Element* scpXML = newElement("CompositeSCP", errorStatsXML);
 
-        if (errorStatistics->scpType == ErrorStatistics::SCP_RG_AZ)
+        if (errorStatistics->scpType == ErrorStatistics::RG_AZ)
         {
             xml::lite::Element* rgAzXML = newElement("RgAzErr", scpXML);
             createDouble("Rg", errorStatistics->compositeSCP->xErr, rgAzXML);
@@ -927,21 +927,21 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
         tmpElem = getOptional(compositeSCPXML, "RgAzErr");
         if (tmpElem)
         {
-            //errorStatistics->initialize(ErrorStatistics::SCP_RG_AZ);
-            errorStatistics->scpType = ErrorStatistics::SCP_RG_AZ;
+            //errorStatistics->initialize(ErrorStatistics::RG_AZ);
+            errorStatistics->scpType = ErrorStatistics::RG_AZ;
         }
         else
         {
             tmpElem = getOptional(compositeSCPXML, "RowColErr");
             if (tmpElem)
             {
-                //errorStatistics->initialize(ErrorStatistics::SCP_ROW_COL);
-                errorStatistics->scpType = ErrorStatistics::SCP_ROW_COL;
+                //errorStatistics->initialize(ErrorStatistics::ROW_COL);
+                errorStatistics->scpType = ErrorStatistics::ROW_COL;
             }
         }
 
         if (tmpElem != NULL && errorStatistics->scpType
-                == ErrorStatistics::SCP_RG_AZ)
+                == ErrorStatistics::RG_AZ)
         {
             parseDouble(getFirstAndOnly(tmpElem, "Rg"),
                         errorStatistics->compositeSCP->xErr);
@@ -951,7 +951,7 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
                         errorStatistics->compositeSCP->xyErr);
         }
         else if (tmpElem != NULL && errorStatistics->scpType
-                == ErrorStatistics::SCP_ROW_COL)
+                == ErrorStatistics::ROW_COL)
         {
             parseDouble(getFirstAndOnly(tmpElem, "Row"),
                         errorStatistics->compositeSCP->xErr);
@@ -1257,7 +1257,7 @@ xml::lite::Element* XMLControl::radiometricToXML(Radiometric *r,
     if (r->sigmaZeroSFPoly.orderX() >= 0 && r->sigmaZeroSFPoly.orderY() >= 0)
         createPoly2D("SigmaZeroSFPoly", r->sigmaZeroSFPoly, rXML);
 
-    if (r->sigmaZeroSFIncidenceMap != AppliedType::APPLIED_NOT_SET)
+    if (r->sigmaZeroSFIncidenceMap != AppliedType::NOT_SET)
     {
         createString(
                      "SigmaZeroSFIncidenceMap",
@@ -1266,7 +1266,7 @@ xml::lite::Element* XMLControl::radiometricToXML(Radiometric *r,
     }
     if (r->gammaZeroSFPoly.orderX() >= 0 && r->gammaZeroSFPoly.orderY() >= 0)
         createPoly2D("GammaZeroSFPoly", r->sigmaZeroSFPoly, rXML);
-    if (r->gammaZeroSFIncidenceMap != AppliedType::APPLIED_NOT_SET)
+    if (r->gammaZeroSFIncidenceMap != AppliedType::NOT_SET)
     {
         createString(
                      "GammaZeroSFIncidenceMap",

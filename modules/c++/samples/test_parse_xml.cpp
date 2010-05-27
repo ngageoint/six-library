@@ -61,12 +61,12 @@ void registerHandlers()
 {
 
     six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataClass::DATA_COMPLEX,
+                                                      six::DataClass::COMPLEX,
                                                       new six::XMLControlCreatorT<
                                                               six::sicd::ComplexXMLControl>());
 
     six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataClass::DATA_DERIVED,
+                                                      six::DataClass::DERIVED,
                                                       new six::XMLControlCreatorT<
                                                               six::sidd::DerivedXMLControl>());
 
@@ -154,8 +154,8 @@ void run(std::string inputFile, std::string dataType)
         xmlFileStream.close();
 
         six::DataClass dataClass =
-                (dataType == "sicd") ? six::DataClass::DATA_COMPLEX
-                                     : six::DataClass::DATA_DERIVED;
+                (dataType == "sicd") ? six::DataClass::COMPLEX
+                                     : six::DataClass::DERIVED;
 
         six::XMLControl *control =
                 six::XMLControlFactory::getInstance().newXMLControl(dataClass);
@@ -376,7 +376,7 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir)
     docXML->addChild(createPath(corners, "footprint", "LinearRing"));
 
     // Specifics to SICD
-    if (data->getDataClass() == six::DataClass::DATA_COMPLEX)
+    if (data->getDataClass() == six::DataClass::COMPLEX)
         generateKMLForSICD(docXML, (six::sicd::ComplexData*) data);
 
     root->prettyPrint(fos);

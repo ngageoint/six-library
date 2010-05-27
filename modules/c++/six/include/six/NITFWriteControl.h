@@ -143,7 +143,7 @@ class NITFWriteControl : public WriteControl
      *  swap the source.
      *
      *  If you are using a big endian file as the supply stream,
-     *  you should set BYTE_SWAP_OFF, and if you are using a little
+     *  you should set SWAP_OFF, and if you are using a little
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
@@ -158,7 +158,7 @@ class NITFWriteControl : public WriteControl
      *  swap the source.
      *
      *  If you are using a big endian file as the supply stream,
-     *  you should set BYTE_SWAP_OFF, and if you are using a little
+     *  you should set SWAP_OFF, and if you are using a little
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
@@ -259,7 +259,7 @@ public:
      *  swap the source.
      *
      *  If you are using a big endian file as the supply stream,
-     *  you should set BYTE_SWAP_OFF, and if you are using a little
+     *  you should set SWAP_OFF, and if you are using a little
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */

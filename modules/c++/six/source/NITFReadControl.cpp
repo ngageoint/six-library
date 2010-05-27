@@ -33,11 +33,11 @@ DataType NITFReadControl::getDataType(std::string fromFile)
         nitf::Record rec = mReader.read(inFile);
         std::string title = rec.getHeader().getFileTitle().toString();
         if (str::startsWith(title, "SICD"))
-            return DataType::TYPE_COMPLEX;
+            return DataType::COMPLEX;
         else if (str::startsWith(title, "SIDD"))
-            return DataType::TYPE_DERIVED;
+            return DataType::DERIVED;
     }
-    return DataType::TYPE_UNKNOWN;
+    return DataType::UNKNOWN;
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
@@ -92,9 +92,9 @@ void NITFReadControl::load(std::string fromFile)
     std::string title = mRecord.getHeader().getFileTitle().toString();
 
     if (str::startsWith(title, "SICD"))
-        dataType = DataType::TYPE_COMPLEX;
+        dataType = DataType::COMPLEX;
     else if (str::startsWith(title, "SIDD"))
-        dataType = DataType::TYPE_DERIVED;
+        dataType = DataType::DERIVED;
     else
         throw except::Exception(Ctxt("Unexpected file type"));
 
@@ -149,7 +149,7 @@ void NITFReadControl::load(std::string fromFile)
     // How do we know how many images we should have?
     // If its SICD, we have one image info
     // If its SIPD, we have one per SIPD
-    if (mContainer->getDataType() == DataType::TYPE_COMPLEX)
+    if (mContainer->getDataType() == DataType::COMPLEX)
     {
         mInfos.push_back(new NITFImageInfo(mContainer->getData(0)));
     }
@@ -158,7 +158,7 @@ void NITFReadControl::load(std::string fromFile)
         for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
         {
             Data* ith = mContainer->getData(i);
-            if (ith->getDataClass() == DataClass::DATA_DERIVED)
+            if (ith->getDataClass() == DataClass::DERIVED)
                 mInfos.push_back(new NITFImageInfo(ith));
         }
     }
@@ -359,7 +359,7 @@ std::pair<int, int> NITFReadControl::getIndices(nitf::ImageSubheader& subheader)
      *  Always first = 0, second = N - 1 (where N is numSegments)
      *
      */
-    if (mContainer->getDataType() == DataType::TYPE_COMPLEX)
+    if (mContainer->getDataType() == DataType::COMPLEX)
     {
         // We need to find the SICD data here, and there is
         // only one

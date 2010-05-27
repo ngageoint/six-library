@@ -87,7 +87,7 @@ public:
      *
      */
     virtual DerivedDataBuilder& addMeasurement(ProjectionType projectionType =
-            ProjectionType::PROJECTION_PLANE);
+            ProjectionType::PLANE);
 
     /*!
      *  Add the section associated with exploitation features.  The parameter

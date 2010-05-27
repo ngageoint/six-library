@@ -111,7 +111,7 @@ int main(int argc, char** argv)
     {
 
         XMLControlFactory::getInstance(). addCreator(
-                                                     DataClass::DATA_COMPLEX,
+                                                     DataClass::COMPLEX,
                                                      new XMLControlCreatorT<
                                                              six::sicd::ComplexXMLControl>());
         NITFReadControl* reader = new NITFReadControl();
