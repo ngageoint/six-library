@@ -31,3 +31,10 @@ const char six::sidd::sfa::TriangulatedIrregularNetwork::TYPE_NAME[] =
 const char six::sidd::sfa::MultiPoint::TYPE_NAME[] = "MultiPoint";
 const char six::sidd::sfa::MultiLineString::TYPE_NAME[] = "MultiLineString";
 const char six::sidd::sfa::MultiPolygon::TYPE_NAME[] = "MultiPolygon";
+
+const char six::sidd::sfa::GeocentricCoordinateSystem::TYPE_NAME[] =
+        "GeocentricCoordinateSystem";
+const char six::sidd::sfa::GeographicCoordinateSystem::TYPE_NAME[] =
+        "GeographicCoordinateSystem";
+const char six::sidd::sfa::ProjectedCoordinateSystem::TYPE_NAME[] =
+        "ProjectedCoordinateSystem";
