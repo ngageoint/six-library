@@ -265,17 +265,17 @@ struct ImageFormation
         rcvChannelProcessed(NULL), polarizationCalibration(NULL)
     {
         // Assumption here for now
-        imageFormationAlgorithm = ImageFormationType::IF_PFA;
+        imageFormationAlgorithm = ImageFormationType::PFA;
 
         tStartProc = Init::undefined<double>();
         tEndProc = Init::undefined<double>();
         txFrequencyProcMin = Init::undefined<double>();
         txFrequencyProcMax = Init::undefined<double>();
-        slowTimeBeamCompensation = SlowTimeBeamCompensationType::SLOW_TIME_BEAM_NO;
-        imageBeamCompensation = ImageBeamCompensationType::IMAGE_BEAM_NO;
-        azimuthAutofocus = AutofocusType::AUTOFOCUS_NO;
-        rangeAutofocus = AutofocusType::AUTOFOCUS_NO;
-        txRcvPolarizationProc = DualPolarizationType::DUAL_POL_NOT_SET;
+        slowTimeBeamCompensation = SlowTimeBeamCompensationType::NO;
+        imageBeamCompensation = ImageBeamCompensationType::NO;
+        azimuthAutofocus = AutofocusType::NO;
+        rangeAutofocus = AutofocusType::NO;
+        txRcvPolarizationProc = DualPolarizationType::NOT_SET;
         rcvChannelProcessed = new RcvChannelProcessed();
     }
 

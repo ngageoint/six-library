@@ -208,13 +208,13 @@ int main(int argc, char** argv)
 
         six::XMLControlFactory::getInstance().
             addCreator(
-                six::DATA_COMPLEX, 
+                six::COMPLEX, 
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
                 );
 
         six::XMLControlFactory::getInstance().
             addCreator(
-                six::DATA_DERIVED, 
+                six::DERIVED, 
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>()
                 );
 
@@ -228,7 +228,7 @@ int main(int argc, char** argv)
         six::Data* complexData = profile.newData(options);
 
         // Create a file container
-        six::Container* container = new six::Container(six::TYPE_DERIVED);
+        six::Container* container = new six::Container(six::DERIVED);
 
         // We have a source for each image
         std::vector<io::InputStream*> sources;
@@ -260,8 +260,8 @@ int main(int argc, char** argv)
             six::sidd::DerivedData* data = builder.steal(); //steal it
 
             builder.addDisplay(pixelType);
-            builder.addGeographicAndTarget(six::REGION_GEOGRAPHIC_INFO);
-            builder.addMeasurement(six::PROJECTION_PLANE);
+            builder.addGeographicAndTarget(six::GEOGRAPHIC_INFO);
+            builder.addMeasurement(six::PLANE);
             builder.addExploitationFeatures(1);
 
             data->setNumRows(fileHeader->getNumLines());
@@ -279,8 +279,8 @@ int main(int argc, char** argv)
             processorInformation->site = "Ypsilanti, MI";
 
             data->display->pixelType = pixelType; 
-            data->display->decimationMethod = six::DEC_BRIGHTEST_PIXEL;
-            data->display->magnificationMethod = six::MAG_NEAREST_NEIGHBOR;
+            data->display->decimationMethod = DecimationMethod::BRIGHTEST_PIXEL;
+            data->display->magnificationMethod = MagnificationMethod::NEAREST_NEIGHBOR;
 
             // Give'em our LUT
             data->display->remapInformation->remapLUT = lut;
@@ -303,7 +303,7 @@ int main(int argc, char** argv)
             parent->information->resolution.azimuth = 0;
             parent->information->collectionDuration = 0;
             parent->information->collectionDateTime = six::DateTime();
-            parent->information->radarMode = six::MODE_SPOTLIGHT;
+            parent->information->radarMode = six::SPOTLIGHT;
             parent->information->sensorName = "";
             data->exploitationFeatures->product.resolution.row = 0;
             data->exploitationFeatures->product.resolution.col = 0;

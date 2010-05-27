@@ -1757,7 +1757,7 @@ six::sicd::ComplexData* getComplexData(std::string sicdXMLName)
     six::XMLControl
             * xmlControl =
                     six::XMLControlFactory::getInstance().newXMLControl(
-                                                                        DataClass::DATA_COMPLEX);
+                                                                        DataClass::COMPLEX);
 
     six::Data* data = xmlControl->fromXML(doc);
     delete xmlControl;
@@ -1782,12 +1782,12 @@ int main(int argc, char** argv)
     }
 
     six::XMLControlFactory::getInstance(). addCreator(
-                                                      DataClass::DATA_COMPLEX,
+                                                      DataClass::COMPLEX,
                                                       new six::XMLControlCreatorT<
                                                               six::sicd::ComplexXMLControl>());
 
     six::XMLControlFactory::getInstance(). addCreator(
-                                                      DataClass::DATA_DERIVED,
+                                                      DataClass::DERIVED,
                                                       new six::XMLControlCreatorT<
                                                               six::sidd::DerivedXMLControl>());
 
@@ -1837,7 +1837,7 @@ int main(int argc, char** argv)
         }
 
         // Create a file container
-        six::Container* container = new six::Container(DataType::TYPE_DERIVED);
+        six::Container* container = new six::Container(DataType::DERIVED);
 
         // We know our input image in this example is RGB data
         six::PixelType pixelType = PixelType::RGB24I;
@@ -1853,10 +1853,10 @@ int main(int argc, char** argv)
         // the other.  Here is how you add them individually
         //-----------------------------------------------------------
         siddBuilder.addDisplay(pixelType);
-        siddBuilder.addGeographicAndTarget(RegionType::REGION_GEOGRAPHIC_INFO);
+        siddBuilder.addGeographicAndTarget(RegionType::GEOGRAPHIC_INFO);
 
         // Here is how you can cascade them
-        siddBuilder.addMeasurement(ProjectionType::PROJECTION_PLANE) .addExploitationFeatures(
+        siddBuilder.addMeasurement(ProjectionType::PLANE) .addExploitationFeatures(
                                                                                               1);
 
         //---------------------------------------------------------
@@ -1883,9 +1883,9 @@ int main(int argc, char** argv)
 
         // Or directly if preferred
         siddData->display->decimationMethod
-                = DecimationMethod::DEC_BRIGHTEST_PIXEL;
+                = DecimationMethod::BRIGHTEST_PIXEL;
         siddData->display->magnificationMethod
-                = MagnificationMethod::MAG_NEAREST_NEIGHBOR;
+                = MagnificationMethod::NEAREST_NEIGHBOR;
 
         //---------------------------------------------------------------
         // We can only do this because we know its PGD in this example
@@ -1893,7 +1893,7 @@ int main(int argc, char** argv)
         // dynamic_cast<> since there is an enum in projection for this:
         // siddData->measurement->projection->projectionType
         // In this case:
-        //    == six::PROJECTION_PLANE
+        //    == six::PLANE
         //---------------------------------------------------------------
         six::sidd::PlaneProjection* planeProjection =
                 (six::sidd::PlaneProjection*) siddData->measurement->projection;
@@ -1950,7 +1950,7 @@ int main(int argc, char** argv)
 
         // This demo sets the collection time to now (not true)
         parent->information->collectionDateTime = six::DateTime();
-        parent->information->radarMode = RadarModeType::MODE_SPOTLIGHT;
+        parent->information->radarMode = RadarModeType::SPOTLIGHT;
         parent->information->sensorName = "";
         siddData->exploitationFeatures->product.resolution.row = 0;
         siddData->exploitationFeatures->product.resolution.col = 0;

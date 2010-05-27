@@ -28,11 +28,11 @@ Display::Display(DisplayType displayType) :
     remapInformation(NULL), histogramOverrides(NULL),
             monitorCompensationApplied(NULL)
 {
-    pixelType = PixelType::PIXEL_TYPE_NOT_SET;
-    magnificationMethod = MagnificationMethod::MAG_NOT_SET;
-    decimationMethod = DecimationMethod::DEC_NOT_SET;
+    pixelType = PixelType::UNDEFINED;
+    magnificationMethod = MagnificationMethod::NOT_SET;
+    decimationMethod = DecimationMethod::NOT_SET;
 
-    if (displayType == DisplayType::DISPLAY_MONO)
+    if (displayType == DisplayType::MONO)
     {
         remapInformation = new MonochromeDisplayRemap();
     }

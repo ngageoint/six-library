@@ -178,7 +178,7 @@ namespace sicd
 
         /*!
          *  Parameter indication the mainlobe width chainges with
-         *  frequency.  BOOL_FALSE = No change with frequency.  BOOL_TRUE =
+         *  frequency.  FALSE = No change with frequency.  TRUE =
          *  Change with frequency per ideal array theory
          */
         BooleanType mainlobeFrequencyDilation;

@@ -72,8 +72,8 @@ struct CollectionInformation
     CollectType collectType;
 
     /*!
-     *  Radar Mode, must be MODE_SPOTLIGHT, MODE_STRIPMAP, or
-     *  MODE_DYNAMIC_STRIPMAP
+     *  Radar Mode, must be SPOTLIGHT, STRIPMAP, or
+     *  DYNAMIC_STRIPMAP
      *
      */
     RadarModeType radarMode;

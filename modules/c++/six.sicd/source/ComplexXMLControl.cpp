@@ -124,7 +124,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
 
 xml::lite::Document* ComplexXMLControl::toXML(Data *data)
 {
-    if (data->getDataClass() != DataClass::DATA_COMPLEX)
+    if (data->getDataClass() != DataClass::COMPLEX)
     {
         throw except::Exception("Data must be SICD");
     }
@@ -173,7 +173,7 @@ xml::lite::Element* ComplexXMLControl::createFFTSign(std::string name,
                                                      six::FFTSign sign,
                                                      xml::lite::Element* parent)
 {
-    std::string charData = (sign == FFTSign::FFT_SIGN_NEG) ? ("-1") : ("+1");
+    std::string charData = (sign == FFTSign::NEG) ? ("-1") : ("+1");
     xml::lite::Element* e = newElement(name, charData, parent);
     xml::lite::AttributeNode node;
     node.setQName("class");
@@ -496,7 +496,7 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
     createDouble("Min", radar->txFrequencyMin, txFreqXML);
     createDouble("Max", radar->txFrequencyMax, txFreqXML);
 
-    if (radar->txPolarization != PolarizationType::POL_NOT_SET)
+    if (radar->txPolarization != PolarizationType::NOT_SET)
     {
         createString("TxPolarization", six::toString(radar->txPolarization),
                      radarXML);
@@ -522,7 +522,7 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
             {
                 createInt("WFIndex", tx->waveformIndex, txStepXML);
             }
-            if (tx->txPolarization != PolarizationType::POL_NOT_SET)
+            if (tx->txPolarization != PolarizationType::NOT_SET)
             {
                 createString("TxPolarization",
                              six::toString(tx->txPolarization), txStepXML);
@@ -551,7 +551,7 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
                 createDouble("TxFreqStart", wf->txFrequencyStart, wfpXML);
             if (!Init::isUndefined<double>(wf->txFMRate))
                 createDouble("TxFMRate", wf->txFMRate, wfpXML);
-            if (wf->rcvDemodType != DemodType::DEMOD_NOT_SET)
+            if (wf->rcvDemodType != DemodType::NOT_SET)
                 createString("RcvDemodType", six::toString(wf->rcvDemodType),
                              wfpXML);
             if (!Init::isUndefined<double>(wf->rcvWindowLength))
@@ -579,7 +579,7 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
         if (!Init::isUndefined<int>(cp->rcvAPCIndex))
             createInt("RcvAPCIndex", cp->rcvAPCIndex, cpXML);
 
-        if (cp->txRcvPolarization != DualPolarizationType::DUAL_POL_NOT_SET)
+        if (cp->txRcvPolarization != DualPolarizationType::NOT_SET)
         {
             createString("TxRcvPolarization", str::toString<
                     DualPolarizationType>(cp->txRcvPolarization), cpXML);
@@ -718,7 +718,7 @@ xml::lite::Element* ComplexXMLControl::imageFormationToXML(
             createInt("ChanIndex", *it, rcvChanXML);
         }
     }
-    if (imageFormation->txRcvPolarizationProc != DualPolarizationType::DUAL_POL_NOT_SET)
+    if (imageFormation->txRcvPolarizationProc != DualPolarizationType::NOT_SET)
     {
         createString("TxRcvPolarizationProc",
                      six::toString(imageFormation->txRcvPolarizationProc),

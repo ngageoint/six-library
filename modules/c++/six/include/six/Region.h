@@ -19,8 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_REGION_H__
-#define __SIX_REGION_H__
+#ifndef __SIX_H__
+#define __SIX_H__
 
 #include "six/Types.h"
 

@@ -47,9 +47,9 @@ DirectionParameters* DirectionParameters::clone() const
 Grid::Grid() : row(NULL), col(NULL)
 {
     // This is a good assumption, I think
-    imagePlane = ComplexImagePlaneType::PLANE_SLANT;
+    imagePlane = ComplexImagePlaneType::SLANT;
     // Not so sure about this one
-    type = ComplexImageGridType::GRID_RGAZIM;
+    type = ComplexImageGridType::RGAZIM;
     row = new DirectionParameters();
     col = new DirectionParameters();
 }

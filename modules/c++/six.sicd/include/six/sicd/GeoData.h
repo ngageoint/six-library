@@ -81,7 +81,7 @@ struct GeoData
 {
     //!  Constructor, force WGS84, since spec does.
     GeoData() :
-        earthModel(EarthModelType::EARTH_WGS84)
+        earthModel(EarthModelType::WGS84)
     {
     }
 

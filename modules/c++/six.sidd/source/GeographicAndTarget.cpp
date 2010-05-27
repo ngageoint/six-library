@@ -50,7 +50,7 @@ GeographicCoverage::GeographicCoverage(RegionType rt) :
     regionType(rt), geographicInformation(NULL)
 {
     //! TODO: add one to all one or more types
-    if (regionType == RegionType::REGION_GEOGRAPHIC_INFO)
+    if (regionType == RegionType::GEOGRAPHIC_INFO)
         geographicInformation = new GeographicInformation();
 }
 
@@ -88,7 +88,7 @@ GeographicAndTarget::~GeographicAndTarget()
 
 GeographicAndTarget* GeographicAndTarget::clone()
 {
-    GeographicAndTarget* g = new GeographicAndTarget(RegionType::REGION_NOT_SET);
+    GeographicAndTarget* g = new GeographicAndTarget(RegionType::NOT_SET);
     if (geographicCoverage)
         g->geographicCoverage = geographicCoverage->clone();
 

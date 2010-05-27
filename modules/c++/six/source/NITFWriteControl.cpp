@@ -50,7 +50,7 @@ void NITFWriteControl::initialize(Container* container)
      *  image, and not every Data necessarily needs an image
      *
      */
-    if (mContainer->getDataType() == DataType::TYPE_COMPLEX)
+    if (mContainer->getDataType() == DataType::COMPLEX)
     {
         mInfos.push_back(new NITFImageInfo(mContainer->getData(0), maxRows,
                                            maxSize, true));
@@ -60,7 +60,7 @@ void NITFWriteControl::initialize(Container* container)
         for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
         {
             Data* ith = mContainer->getData(i);
-            if (ith->getDataClass() == DataClass::DATA_DERIVED)
+            if (ith->getDataClass() == DataClass::DERIVED)
                 mInfos.push_back(new NITFImageInfo(ith, maxRows, maxSize, true));
         }
     }
@@ -92,7 +92,7 @@ void NITFWriteControl::initialize(Container* container)
         std::string targetId = "";
 
         // TODO: Subclass to get this?
-        // if (info->getData()->getDataClass() == DataClass::DATA_DERIVED)
+        // if (info->getData()->getDataClass() == DataClass::DERIVED)
         //         {
         //             DerivedData* derived = (DerivedData*)info->getData();
         //             if(derived->geographicAndTarget && derived->geographicAndTarget->targetInformation.size() > 0)
@@ -122,7 +122,7 @@ void NITFWriteControl::initialize(Container* container)
             subheader.getImageDateAndTime().set(creationTime);
 
             std::string iid = six::toString(dataType);
-            if (dataType == DataType::TYPE_COMPLEX)
+            if (dataType == DataType::COMPLEX)
             {
                 iid = FmtX("%s%03d", iid.c_str(), numIS > 1 ? j + 1 : j);
             }
@@ -548,9 +548,9 @@ void NITFWriteControl::saveIO(SourceList& imageData,
                     (int) mOptions.getParameter(
                                                 OPT_BYTE_SWAP,
                                                 Parameter(
-                                                          (int) ByteSwapping::BYTE_SWAP_AUTO));
+                                                          (int) ByteSwapping::SWAP_AUTO));
 
-    if (byteSwapping == ByteSwapping::BYTE_SWAP_AUTO)
+    if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
         // Have to if its not a BE machine
         doByteSwap = !sys::isBigEndianSystem();

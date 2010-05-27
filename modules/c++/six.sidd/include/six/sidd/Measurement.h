@@ -89,7 +89,7 @@ struct PolynomialProjection : public Projection
     //!  Initialize base class projection type
     PolynomialProjection()
     {
-        this->projectionType = ProjectionType::PROJECTION_POLYNOMIAL;
+        this->projectionType = ProjectionType::POLYNOMIAL;
     }
 
     virtual ~PolynomialProjection() {}
@@ -151,7 +151,7 @@ struct GeographicProjection : public MeasurableProjection
     //!  Initialize base class projection type
     GeographicProjection()
     {
-        this->projectionType = ProjectionType::PROJECTION_GEOGRAPHIC;
+        this->projectionType = ProjectionType::GEOGRAPHIC;
     }
 
     //!  Define a clone operation
@@ -181,7 +181,7 @@ struct CylindricalProjection : public MeasurableProjection
     //!  Cylindrical projection creation (curvature is undefined)
     CylindricalProjection()
     {
-        this->projectionType = ProjectionType::PROJECTION_CYLINDRICAL;
+        this->projectionType = ProjectionType::CYLINDRICAL;
         this->curvatureRadius = Init::undefined<double>();
     }
 
@@ -222,7 +222,7 @@ struct PlaneProjection : public MeasurableProjection
     //!  Constructor
     PlaneProjection()
     {
-        this->projectionType = ProjectionType::PROJECTION_PLANE;
+        this->projectionType = ProjectionType::PLANE;
     }
     
     virtual ~PlaneProjection() {}

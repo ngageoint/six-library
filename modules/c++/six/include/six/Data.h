@@ -56,8 +56,8 @@ struct Data
     virtual Data* clone() const = 0;
 
     /*!
-     *  Data class is DATA_DERIVED for DerivedData and 
-     *  DATA_COMPLEX for ComplexData
+     *  Data class is DERIVED for DerivedData and 
+     *  COMPLEX for ComplexData
      */
     virtual DataClass getDataClass() const = 0;
 

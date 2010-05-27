@@ -313,7 +313,7 @@ struct ErrorStatistics
     //!  Types
     enum SCPType
     {
-        SCP_ROW_COL, SCP_RG_AZ
+        ROW_COL, RG_AZ
     };
 
     //!  Note that how this is defined determines how CompositeSCP

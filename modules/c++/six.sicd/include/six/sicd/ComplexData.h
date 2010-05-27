@@ -122,13 +122,13 @@ struct ComplexData: public Data
     ~ComplexData();
 
     /*!
-     *  Returns DATA_COMPLEX.  This is used by Read/Write to determine
+     *  Returns COMPLEX.  This is used by Read/Write to determine
      *  whether we have a ComplexData (SICD) object or a DerivedData (SIDD)
      *  product in the Container.
      */
     DataClass getDataClass() const
     {
-        return DataClass::DATA_COMPLEX;
+        return DataClass::COMPLEX;
     }
 
     /*!

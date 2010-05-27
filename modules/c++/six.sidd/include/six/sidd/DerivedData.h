@@ -115,7 +115,7 @@ struct DerivedData: public Data
      */
     DataClass getDataClass() const
     {
-        return DataClass::DATA_DERIVED;
+        return DataClass::DERIVED;
     }
 
     /*!

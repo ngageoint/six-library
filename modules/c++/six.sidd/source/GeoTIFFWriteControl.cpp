@@ -39,7 +39,7 @@ GeoTIFFWriteControl::GeoTIFFWriteControl()
 void GeoTIFFWriteControl::initialize(Container* container)
 {
 
-    if (container->getDataType() != DataType::TYPE_DERIVED)
+    if (container->getDataType() != DataType::DERIVED)
         throw except::Exception(Ctxt("SICD spec. does not support GeoTIFF"));
 
     // There still could be complex data in the container though, so we
@@ -49,9 +49,9 @@ void GeoTIFFWriteControl::initialize(Container* container)
     for (unsigned int i = 0; i < container->getNumData(); ++i)
     {
         Data* data = container->getData(i);
-        if (data->getDataClass() == DataClass::DATA_COMPLEX)
+        if (data->getDataClass() == DataClass::COMPLEX)
             mComplexData.push_back(data);
-        else if (data->getDataClass() == DataClass::DATA_DERIVED)
+        else if (data->getDataClass() == DataClass::DERIVED)
         {
             //length = ??
             length += (sys::Uint64_T) data->getNumBytesPerPixel()

@@ -44,25 +44,25 @@ struct AppliedType
     //! The enumerations allowed
     enum
     {
-        APPLIED_NOT_SET = -1,
-        APPLIED_TRUE = 0,
-        APPLIED_FALSE = 1
+        NOT_SET = -1,
+        TRUE = 0,
+        FALSE = 1
     };
 
     //! Default constructor
-    AppliedType(){ value = APPLIED_NOT_SET; }
+    AppliedType(){ value = NOT_SET; }
 
     //! string constructor
     AppliedType(std::string s)
     {
-        if (s == "APPLIED_NOT_SET")
-            value = APPLIED_NOT_SET;
-        else if (s == "APPLIED_TRUE")
-            value = APPLIED_TRUE;
-        else if (s == "APPLIED_FALSE")
-            value = APPLIED_FALSE;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "TRUE")
+            value = TRUE;
+        else if (s == "FALSE")
+            value = FALSE;
         else
-            value = APPLIED_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -71,16 +71,16 @@ struct AppliedType
         switch(i)
         {
         case -1:
-            value = APPLIED_NOT_SET;
+            value = NOT_SET;
             break;
         case 0:
-            value = APPLIED_TRUE;
+            value = TRUE;
             break;
         case 1:
-            value = APPLIED_FALSE;
+            value = FALSE;
             break;
         default:
-            value = APPLIED_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -93,13 +93,13 @@ struct AppliedType
         switch(value)
         {
         case -1:
-            return "APPLIED_NOT_SET";
+            return "NOT_SET";
         case 0:
-            return "APPLIED_TRUE";
+            return "TRUE";
         case 1:
-            return "APPLIED_FALSE";
+            return "FALSE";
         default:
-            return "APPLIED_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -138,25 +138,25 @@ struct AutofocusType
     //! The enumerations allowed
     enum
     {
-        AUTOFOCUS_NO = 0,
-        AUTOFOCUS_GLOBAL = 1,
-        AUTOFOCUS_SV = 2
+        NO = 0,
+        GLOBAL = 1,
+        SV = 2
     };
 
     //! Default constructor
-    AutofocusType(){ value = AUTOFOCUS_NO; }
+    AutofocusType(){ value = NO; }
 
     //! string constructor
     AutofocusType(std::string s)
     {
-        if (s == "AUTOFOCUS_NO")
-            value = AUTOFOCUS_NO;
-        else if (s == "AUTOFOCUS_GLOBAL")
-            value = AUTOFOCUS_GLOBAL;
-        else if (s == "AUTOFOCUS_SV")
-            value = AUTOFOCUS_SV;
+        if (s == "NO")
+            value = NO;
+        else if (s == "GLOBAL")
+            value = GLOBAL;
+        else if (s == "SV")
+            value = SV;
         else
-            value = AUTOFOCUS_NO;
+            value = NO;
     }
 
     //! int constructor
@@ -165,16 +165,16 @@ struct AutofocusType
         switch(i)
         {
         case 0:
-            value = AUTOFOCUS_NO;
+            value = NO;
             break;
         case 1:
-            value = AUTOFOCUS_GLOBAL;
+            value = GLOBAL;
             break;
         case 2:
-            value = AUTOFOCUS_SV;
+            value = SV;
             break;
         default:
-            value = AUTOFOCUS_NO;
+            value = NO;
         }
     }
 
@@ -187,13 +187,13 @@ struct AutofocusType
         switch(value)
         {
         case 0:
-            return "AUTOFOCUS_NO";
+            return "NO";
         case 1:
-            return "AUTOFOCUS_GLOBAL";
+            return "GLOBAL";
         case 2:
-            return "AUTOFOCUS_SV";
+            return "SV";
         default:
-            return "AUTOFOCUS_NO";
+            return "NO";
         }
     }
 
@@ -232,25 +232,25 @@ struct BooleanType
     //! The enumerations allowed
     enum
     {
-        BOOL_NOT_SET = -1,
-        BOOL_FALSE = 0,
-        BOOL_TRUE = 1
+        NOT_SET = -1,
+        FALSE = 0,
+        TRUE = 1
     };
 
     //! Default constructor
-    BooleanType(){ value = BOOL_NOT_SET; }
+    BooleanType(){ value = NOT_SET; }
 
     //! string constructor
     BooleanType(std::string s)
     {
-        if (s == "BOOL_NOT_SET")
-            value = BOOL_NOT_SET;
-        else if (s == "BOOL_FALSE")
-            value = BOOL_FALSE;
-        else if (s == "BOOL_TRUE")
-            value = BOOL_TRUE;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "FALSE")
+            value = FALSE;
+        else if (s == "TRUE")
+            value = TRUE;
         else
-            value = BOOL_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -259,16 +259,16 @@ struct BooleanType
         switch(i)
         {
         case -1:
-            value = BOOL_NOT_SET;
+            value = NOT_SET;
             break;
         case 0:
-            value = BOOL_FALSE;
+            value = FALSE;
             break;
         case 1:
-            value = BOOL_TRUE;
+            value = TRUE;
             break;
         default:
-            value = BOOL_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -281,13 +281,13 @@ struct BooleanType
         switch(value)
         {
         case -1:
-            return "BOOL_NOT_SET";
+            return "NOT_SET";
         case 0:
-            return "BOOL_FALSE";
+            return "FALSE";
         case 1:
-            return "BOOL_TRUE";
+            return "TRUE";
         default:
-            return "BOOL_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -326,25 +326,25 @@ struct ByteSwapping
     //! The enumerations allowed
     enum
     {
-        BYTE_SWAP_OFF = 0,
-        BYTE_SWAP_ON = 1,
-        BYTE_SWAP_AUTO = 2
+        SWAP_OFF = 0,
+        SWAP_ON = 1,
+        SWAP_AUTO = 2
     };
 
     //! Default constructor
-    ByteSwapping(){ value = BYTE_SWAP_OFF; }
+    ByteSwapping(){ value = SWAP_OFF; }
 
     //! string constructor
     ByteSwapping(std::string s)
     {
-        if (s == "BYTE_SWAP_OFF")
-            value = BYTE_SWAP_OFF;
-        else if (s == "BYTE_SWAP_ON")
-            value = BYTE_SWAP_ON;
-        else if (s == "BYTE_SWAP_AUTO")
-            value = BYTE_SWAP_AUTO;
+        if (s == "SWAP_OFF")
+            value = SWAP_OFF;
+        else if (s == "SWAP_ON")
+            value = SWAP_ON;
+        else if (s == "SWAP_AUTO")
+            value = SWAP_AUTO;
         else
-            value = BYTE_SWAP_OFF;
+            value = SWAP_OFF;
     }
 
     //! int constructor
@@ -353,16 +353,16 @@ struct ByteSwapping
         switch(i)
         {
         case 0:
-            value = BYTE_SWAP_OFF;
+            value = SWAP_OFF;
             break;
         case 1:
-            value = BYTE_SWAP_ON;
+            value = SWAP_ON;
             break;
         case 2:
-            value = BYTE_SWAP_AUTO;
+            value = SWAP_AUTO;
             break;
         default:
-            value = BYTE_SWAP_OFF;
+            value = SWAP_OFF;
         }
     }
 
@@ -375,13 +375,13 @@ struct ByteSwapping
         switch(value)
         {
         case 0:
-            return "BYTE_SWAP_OFF";
+            return "SWAP_OFF";
         case 1:
-            return "BYTE_SWAP_ON";
+            return "SWAP_ON";
         case 2:
-            return "BYTE_SWAP_AUTO";
+            return "SWAP_AUTO";
         default:
-            return "BYTE_SWAP_OFF";
+            return "SWAP_OFF";
         }
     }
 
@@ -420,25 +420,25 @@ struct CollectType
     //! The enumerations allowed
     enum
     {
-        COLLECT_NOT_SET = 0,
-        COLLECT_MONOSTATIC = 1,
-        COLLECT_BISTATIC = 2
+        NOT_SET = 0,
+        MONOSTATIC = 1,
+        BISTATIC = 2
     };
 
     //! Default constructor
-    CollectType(){ value = COLLECT_NOT_SET; }
+    CollectType(){ value = NOT_SET; }
 
     //! string constructor
     CollectType(std::string s)
     {
-        if (s == "COLLECT_NOT_SET")
-            value = COLLECT_NOT_SET;
-        else if (s == "COLLECT_MONOSTATIC")
-            value = COLLECT_MONOSTATIC;
-        else if (s == "COLLECT_BISTATIC")
-            value = COLLECT_BISTATIC;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "MONOSTATIC")
+            value = MONOSTATIC;
+        else if (s == "BISTATIC")
+            value = BISTATIC;
         else
-            value = COLLECT_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -447,16 +447,16 @@ struct CollectType
         switch(i)
         {
         case 0:
-            value = COLLECT_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = COLLECT_MONOSTATIC;
+            value = MONOSTATIC;
             break;
         case 2:
-            value = COLLECT_BISTATIC;
+            value = BISTATIC;
             break;
         default:
-            value = COLLECT_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -469,13 +469,13 @@ struct CollectType
         switch(value)
         {
         case 0:
-            return "COLLECT_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "COLLECT_MONOSTATIC";
+            return "MONOSTATIC";
         case 2:
-            return "COLLECT_BISTATIC";
+            return "BISTATIC";
         default:
-            return "COLLECT_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -514,31 +514,31 @@ struct ComplexImageGridType
     //! The enumerations allowed
     enum
     {
-        GRID_RGAZIM = 0,
-        GRID_RGZERO = 1,
-        GRID_XRGYCR = 2,
-        GRID_XCTYAT = 3,
-        GRID_PLANE = 4
+        RGAZIM = 0,
+        RGZERO = 1,
+        XRGYCR = 2,
+        XCTYAT = 3,
+        PLANE = 4
     };
 
     //! Default constructor
-    ComplexImageGridType(){ value = GRID_RGAZIM; }
+    ComplexImageGridType(){ value = RGAZIM; }
 
     //! string constructor
     ComplexImageGridType(std::string s)
     {
-        if (s == "GRID_RGAZIM")
-            value = GRID_RGAZIM;
-        else if (s == "GRID_RGZERO")
-            value = GRID_RGZERO;
-        else if (s == "GRID_XRGYCR")
-            value = GRID_XRGYCR;
-        else if (s == "GRID_XCTYAT")
-            value = GRID_XCTYAT;
-        else if (s == "GRID_PLANE")
-            value = GRID_PLANE;
+        if (s == "RGAZIM")
+            value = RGAZIM;
+        else if (s == "RGZERO")
+            value = RGZERO;
+        else if (s == "XRGYCR")
+            value = XRGYCR;
+        else if (s == "XCTYAT")
+            value = XCTYAT;
+        else if (s == "PLANE")
+            value = PLANE;
         else
-            value = GRID_RGAZIM;
+            value = RGAZIM;
     }
 
     //! int constructor
@@ -547,22 +547,22 @@ struct ComplexImageGridType
         switch(i)
         {
         case 0:
-            value = GRID_RGAZIM;
+            value = RGAZIM;
             break;
         case 1:
-            value = GRID_RGZERO;
+            value = RGZERO;
             break;
         case 2:
-            value = GRID_XRGYCR;
+            value = XRGYCR;
             break;
         case 3:
-            value = GRID_XCTYAT;
+            value = XCTYAT;
             break;
         case 4:
-            value = GRID_PLANE;
+            value = PLANE;
             break;
         default:
-            value = GRID_RGAZIM;
+            value = RGAZIM;
         }
     }
 
@@ -575,17 +575,17 @@ struct ComplexImageGridType
         switch(value)
         {
         case 0:
-            return "GRID_RGAZIM";
+            return "RGAZIM";
         case 1:
-            return "GRID_RGZERO";
+            return "RGZERO";
         case 2:
-            return "GRID_XRGYCR";
+            return "XRGYCR";
         case 3:
-            return "GRID_XCTYAT";
+            return "XCTYAT";
         case 4:
-            return "GRID_PLANE";
+            return "PLANE";
         default:
-            return "GRID_RGAZIM";
+            return "RGAZIM";
         }
     }
 
@@ -624,25 +624,25 @@ struct ComplexImagePlaneType
     //! The enumerations allowed
     enum
     {
-        PLANE_OTHER = 0,
-        PLANE_SLANT = 1,
-        PLANE_GROUND = 2
+        OTHER = 0,
+        SLANT = 1,
+        GROUND = 2
     };
 
     //! Default constructor
-    ComplexImagePlaneType(){ value = PLANE_OTHER; }
+    ComplexImagePlaneType(){ value = OTHER; }
 
     //! string constructor
     ComplexImagePlaneType(std::string s)
     {
-        if (s == "PLANE_OTHER")
-            value = PLANE_OTHER;
-        else if (s == "PLANE_SLANT")
-            value = PLANE_SLANT;
-        else if (s == "PLANE_GROUND")
-            value = PLANE_GROUND;
+        if (s == "OTHER")
+            value = OTHER;
+        else if (s == "SLANT")
+            value = SLANT;
+        else if (s == "GROUND")
+            value = GROUND;
         else
-            value = PLANE_OTHER;
+            value = OTHER;
     }
 
     //! int constructor
@@ -651,16 +651,16 @@ struct ComplexImagePlaneType
         switch(i)
         {
         case 0:
-            value = PLANE_OTHER;
+            value = OTHER;
             break;
         case 1:
-            value = PLANE_SLANT;
+            value = SLANT;
             break;
         case 2:
-            value = PLANE_GROUND;
+            value = GROUND;
             break;
         default:
-            value = PLANE_OTHER;
+            value = OTHER;
         }
     }
 
@@ -673,13 +673,13 @@ struct ComplexImagePlaneType
         switch(value)
         {
         case 0:
-            return "PLANE_OTHER";
+            return "OTHER";
         case 1:
-            return "PLANE_SLANT";
+            return "SLANT";
         case 2:
-            return "PLANE_GROUND";
+            return "GROUND";
         default:
-            return "PLANE_OTHER";
+            return "OTHER";
         }
     }
 
@@ -820,25 +820,25 @@ struct DataClass
     //! The enumerations allowed
     enum
     {
-        DATA_UNKNOWN = 0,
-        DATA_COMPLEX = 1,
-        DATA_DERIVED = 2
+        UNKNOWN = 0,
+        COMPLEX = 1,
+        DERIVED = 2
     };
 
     //! Default constructor
-    DataClass(){ value = DATA_UNKNOWN; }
+    DataClass(){ value = UNKNOWN; }
 
     //! string constructor
     DataClass(std::string s)
     {
-        if (s == "DATA_UNKNOWN")
-            value = DATA_UNKNOWN;
-        else if (s == "DATA_COMPLEX")
-            value = DATA_COMPLEX;
-        else if (s == "DATA_DERIVED")
-            value = DATA_DERIVED;
+        if (s == "UNKNOWN")
+            value = UNKNOWN;
+        else if (s == "COMPLEX")
+            value = COMPLEX;
+        else if (s == "DERIVED")
+            value = DERIVED;
         else
-            value = DATA_UNKNOWN;
+            value = UNKNOWN;
     }
 
     //! int constructor
@@ -847,16 +847,16 @@ struct DataClass
         switch(i)
         {
         case 0:
-            value = DATA_UNKNOWN;
+            value = UNKNOWN;
             break;
         case 1:
-            value = DATA_COMPLEX;
+            value = COMPLEX;
             break;
         case 2:
-            value = DATA_DERIVED;
+            value = DERIVED;
             break;
         default:
-            value = DATA_UNKNOWN;
+            value = UNKNOWN;
         }
     }
 
@@ -869,13 +869,13 @@ struct DataClass
         switch(value)
         {
         case 0:
-            return "DATA_UNKNOWN";
+            return "UNKNOWN";
         case 1:
-            return "DATA_COMPLEX";
+            return "COMPLEX";
         case 2:
-            return "DATA_DERIVED";
+            return "DERIVED";
         default:
-            return "DATA_UNKNOWN";
+            return "UNKNOWN";
         }
     }
 
@@ -914,25 +914,25 @@ struct DataType
     //! The enumerations allowed
     enum
     {
-        TYPE_UNKNOWN = 0,
-        TYPE_COMPLEX = 1,
-        TYPE_DERIVED = 2
+        UNKNOWN = 0,
+        COMPLEX = 1,
+        DERIVED = 2
     };
 
     //! Default constructor
-    DataType(){ value = TYPE_UNKNOWN; }
+    DataType(){ value = UNKNOWN; }
 
     //! string constructor
     DataType(std::string s)
     {
-        if (s == "TYPE_UNKNOWN")
-            value = TYPE_UNKNOWN;
-        else if (s == "TYPE_COMPLEX")
-            value = TYPE_COMPLEX;
-        else if (s == "TYPE_DERIVED")
-            value = TYPE_DERIVED;
+        if (s == "UNKNOWN")
+            value = UNKNOWN;
+        else if (s == "COMPLEX")
+            value = COMPLEX;
+        else if (s == "DERIVED")
+            value = DERIVED;
         else
-            value = TYPE_UNKNOWN;
+            value = UNKNOWN;
     }
 
     //! int constructor
@@ -941,16 +941,16 @@ struct DataType
         switch(i)
         {
         case 0:
-            value = TYPE_UNKNOWN;
+            value = UNKNOWN;
             break;
         case 1:
-            value = TYPE_COMPLEX;
+            value = COMPLEX;
             break;
         case 2:
-            value = TYPE_DERIVED;
+            value = DERIVED;
             break;
         default:
-            value = TYPE_UNKNOWN;
+            value = UNKNOWN;
         }
     }
 
@@ -963,13 +963,13 @@ struct DataType
         switch(value)
         {
         case 0:
-            return "TYPE_UNKNOWN";
+            return "UNKNOWN";
         case 1:
-            return "TYPE_COMPLEX";
+            return "COMPLEX";
         case 2:
-            return "TYPE_DERIVED";
+            return "DERIVED";
         default:
-            return "TYPE_UNKNOWN";
+            return "UNKNOWN";
         }
     }
 
@@ -1008,31 +1008,31 @@ struct DecimationMethod
     //! The enumerations allowed
     enum
     {
-        DEC_NOT_SET = 0,
-        DEC_NEAREST_NEIGHBOR = 1,
-        DEC_BILINEAR = 2,
-        DEC_BRIGHTEST_PIXEL = 3,
-        DEC_LAGRANGE = 4
+        NOT_SET = 0,
+        NEAREST_NEIGHBOR = 1,
+        BILINEAR = 2,
+        BRIGHTEST_PIXEL = 3,
+        LAGRANGE = 4
     };
 
     //! Default constructor
-    DecimationMethod(){ value = DEC_NOT_SET; }
+    DecimationMethod(){ value = NOT_SET; }
 
     //! string constructor
     DecimationMethod(std::string s)
     {
-        if (s == "DEC_NOT_SET")
-            value = DEC_NOT_SET;
-        else if (s == "DEC_NEAREST_NEIGHBOR")
-            value = DEC_NEAREST_NEIGHBOR;
-        else if (s == "DEC_BILINEAR")
-            value = DEC_BILINEAR;
-        else if (s == "DEC_BRIGHTEST_PIXEL")
-            value = DEC_BRIGHTEST_PIXEL;
-        else if (s == "DEC_LAGRANGE")
-            value = DEC_LAGRANGE;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "NEAREST_NEIGHBOR")
+            value = NEAREST_NEIGHBOR;
+        else if (s == "BILINEAR")
+            value = BILINEAR;
+        else if (s == "BRIGHTEST_PIXEL")
+            value = BRIGHTEST_PIXEL;
+        else if (s == "LAGRANGE")
+            value = LAGRANGE;
         else
-            value = DEC_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -1041,22 +1041,22 @@ struct DecimationMethod
         switch(i)
         {
         case 0:
-            value = DEC_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = DEC_NEAREST_NEIGHBOR;
+            value = NEAREST_NEIGHBOR;
             break;
         case 2:
-            value = DEC_BILINEAR;
+            value = BILINEAR;
             break;
         case 3:
-            value = DEC_BRIGHTEST_PIXEL;
+            value = BRIGHTEST_PIXEL;
             break;
         case 4:
-            value = DEC_LAGRANGE;
+            value = LAGRANGE;
             break;
         default:
-            value = DEC_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -1069,17 +1069,17 @@ struct DecimationMethod
         switch(value)
         {
         case 0:
-            return "DEC_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "DEC_NEAREST_NEIGHBOR";
+            return "NEAREST_NEIGHBOR";
         case 2:
-            return "DEC_BILINEAR";
+            return "BILINEAR";
         case 3:
-            return "DEC_BRIGHTEST_PIXEL";
+            return "BRIGHTEST_PIXEL";
         case 4:
-            return "DEC_LAGRANGE";
+            return "LAGRANGE";
         default:
-            return "DEC_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -1118,25 +1118,25 @@ struct DemodType
     //! The enumerations allowed
     enum
     {
-        DEMOD_NOT_SET = 0,
-        DEMOD_STRETCH = 1,
-        DEMOD_CHIRP = 2
+        NOT_SET = 0,
+        STRETCH = 1,
+        CHIRP = 2
     };
 
     //! Default constructor
-    DemodType(){ value = DEMOD_NOT_SET; }
+    DemodType(){ value = NOT_SET; }
 
     //! string constructor
     DemodType(std::string s)
     {
-        if (s == "DEMOD_NOT_SET")
-            value = DEMOD_NOT_SET;
-        else if (s == "DEMOD_STRETCH")
-            value = DEMOD_STRETCH;
-        else if (s == "DEMOD_CHIRP")
-            value = DEMOD_CHIRP;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "STRETCH")
+            value = STRETCH;
+        else if (s == "CHIRP")
+            value = CHIRP;
         else
-            value = DEMOD_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -1145,16 +1145,16 @@ struct DemodType
         switch(i)
         {
         case 0:
-            value = DEMOD_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = DEMOD_STRETCH;
+            value = STRETCH;
             break;
         case 2:
-            value = DEMOD_CHIRP;
+            value = CHIRP;
             break;
         default:
-            value = DEMOD_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -1167,13 +1167,13 @@ struct DemodType
         switch(value)
         {
         case 0:
-            return "DEMOD_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "DEMOD_STRETCH";
+            return "STRETCH";
         case 2:
-            return "DEMOD_CHIRP";
+            return "CHIRP";
         default:
-            return "DEMOD_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -1212,25 +1212,25 @@ struct DisplayType
     //! The enumerations allowed
     enum
     {
-        DISPLAY_NOT_SET = 0,
-        DISPLAY_COLOR = 1,
-        DISPLAY_MONO = 2
+        NOT_SET = 0,
+        COLOR = 1,
+        MONO = 2
     };
 
     //! Default constructor
-    DisplayType(){ value = DISPLAY_NOT_SET; }
+    DisplayType(){ value = NOT_SET; }
 
     //! string constructor
     DisplayType(std::string s)
     {
-        if (s == "DISPLAY_NOT_SET")
-            value = DISPLAY_NOT_SET;
-        else if (s == "DISPLAY_COLOR")
-            value = DISPLAY_COLOR;
-        else if (s == "DISPLAY_MONO")
-            value = DISPLAY_MONO;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "COLOR")
+            value = COLOR;
+        else if (s == "MONO")
+            value = MONO;
         else
-            value = DISPLAY_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -1239,16 +1239,16 @@ struct DisplayType
         switch(i)
         {
         case 0:
-            value = DISPLAY_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = DISPLAY_COLOR;
+            value = COLOR;
             break;
         case 2:
-            value = DISPLAY_MONO;
+            value = MONO;
             break;
         default:
-            value = DISPLAY_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -1261,13 +1261,13 @@ struct DisplayType
         switch(value)
         {
         case 0:
-            return "DISPLAY_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "DISPLAY_COLOR";
+            return "COLOR";
         case 2:
-            return "DISPLAY_MONO";
+            return "MONO";
         default:
-            return "DISPLAY_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -1306,43 +1306,43 @@ struct DualPolarizationType
     //! The enumerations allowed
     enum
     {
-        DUAL_POL_NOT_SET = 0,
-        DUAL_POL_OTHER = 1,
-        DUAL_POL_V_V = 2,
-        DUAL_POL_V_H = 3,
-        DUAL_POL_H_V = 4,
-        DUAL_POL_H_H = 5,
-        DUAL_POL_RHC_RHC = 6,
-        DUAL_POL_RHC_LHC = 7,
-        DUAL_POL_LHC_LHC = 8
+        NOT_SET = 0,
+        OTHER = 1,
+        V_V = 2,
+        V_H = 3,
+        H_V = 4,
+        H_H = 5,
+        RHC_RHC = 6,
+        RHC_LHC = 7,
+        LHC_LHC = 8
     };
 
     //! Default constructor
-    DualPolarizationType(){ value = DUAL_POL_NOT_SET; }
+    DualPolarizationType(){ value = NOT_SET; }
 
     //! string constructor
     DualPolarizationType(std::string s)
     {
-        if (s == "DUAL_POL_NOT_SET")
-            value = DUAL_POL_NOT_SET;
-        else if (s == "DUAL_POL_OTHER")
-            value = DUAL_POL_OTHER;
-        else if (s == "DUAL_POL_V_V")
-            value = DUAL_POL_V_V;
-        else if (s == "DUAL_POL_V_H")
-            value = DUAL_POL_V_H;
-        else if (s == "DUAL_POL_H_V")
-            value = DUAL_POL_H_V;
-        else if (s == "DUAL_POL_H_H")
-            value = DUAL_POL_H_H;
-        else if (s == "DUAL_POL_RHC_RHC")
-            value = DUAL_POL_RHC_RHC;
-        else if (s == "DUAL_POL_RHC_LHC")
-            value = DUAL_POL_RHC_LHC;
-        else if (s == "DUAL_POL_LHC_LHC")
-            value = DUAL_POL_LHC_LHC;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "OTHER")
+            value = OTHER;
+        else if (s == "V_V")
+            value = V_V;
+        else if (s == "V_H")
+            value = V_H;
+        else if (s == "H_V")
+            value = H_V;
+        else if (s == "H_H")
+            value = H_H;
+        else if (s == "RHC_RHC")
+            value = RHC_RHC;
+        else if (s == "RHC_LHC")
+            value = RHC_LHC;
+        else if (s == "LHC_LHC")
+            value = LHC_LHC;
         else
-            value = DUAL_POL_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -1351,34 +1351,34 @@ struct DualPolarizationType
         switch(i)
         {
         case 0:
-            value = DUAL_POL_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = DUAL_POL_OTHER;
+            value = OTHER;
             break;
         case 2:
-            value = DUAL_POL_V_V;
+            value = V_V;
             break;
         case 3:
-            value = DUAL_POL_V_H;
+            value = V_H;
             break;
         case 4:
-            value = DUAL_POL_H_V;
+            value = H_V;
             break;
         case 5:
-            value = DUAL_POL_H_H;
+            value = H_H;
             break;
         case 6:
-            value = DUAL_POL_RHC_RHC;
+            value = RHC_RHC;
             break;
         case 7:
-            value = DUAL_POL_RHC_LHC;
+            value = RHC_LHC;
             break;
         case 8:
-            value = DUAL_POL_LHC_LHC;
+            value = LHC_LHC;
             break;
         default:
-            value = DUAL_POL_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -1391,25 +1391,25 @@ struct DualPolarizationType
         switch(value)
         {
         case 0:
-            return "DUAL_POL_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "DUAL_POL_OTHER";
+            return "OTHER";
         case 2:
-            return "DUAL_POL_V_V";
+            return "V_V";
         case 3:
-            return "DUAL_POL_V_H";
+            return "V_H";
         case 4:
-            return "DUAL_POL_H_V";
+            return "H_V";
         case 5:
-            return "DUAL_POL_H_H";
+            return "H_H";
         case 6:
-            return "DUAL_POL_RHC_RHC";
+            return "RHC_RHC";
         case 7:
-            return "DUAL_POL_RHC_LHC";
+            return "RHC_LHC";
         case 8:
-            return "DUAL_POL_LHC_LHC";
+            return "LHC_LHC";
         default:
-            return "DUAL_POL_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -1448,22 +1448,22 @@ struct EarthModelType
     //! The enumerations allowed
     enum
     {
-        EARTH_NOT_SET = 0,
-        EARTH_WGS84 = 1
+        NOT_SET = 0,
+        WGS84 = 1
     };
 
     //! Default constructor
-    EarthModelType(){ value = EARTH_NOT_SET; }
+    EarthModelType(){ value = NOT_SET; }
 
     //! string constructor
     EarthModelType(std::string s)
     {
-        if (s == "EARTH_NOT_SET")
-            value = EARTH_NOT_SET;
-        else if (s == "EARTH_WGS84")
-            value = EARTH_WGS84;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "WGS84")
+            value = WGS84;
         else
-            value = EARTH_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -1472,13 +1472,13 @@ struct EarthModelType
         switch(i)
         {
         case 0:
-            value = EARTH_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = EARTH_WGS84;
+            value = WGS84;
             break;
         default:
-            value = EARTH_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -1491,11 +1491,11 @@ struct EarthModelType
         switch(value)
         {
         case 0:
-            return "EARTH_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "EARTH_WGS84";
+            return "WGS84";
         default:
-            return "EARTH_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -1534,25 +1534,25 @@ struct FFTSign
     //! The enumerations allowed
     enum
     {
-        FFT_SIGN_NEG = -1,
-        FFT_SIGN_NOT_SET = 0,
-        FFT_SIGN_POS = 1
+        NEG = -1,
+        NOT_SET = 0,
+        POS = 1
     };
 
     //! Default constructor
-    FFTSign(){ value = FFT_SIGN_NOT_SET; }
+    FFTSign(){ value = NOT_SET; }
 
     //! string constructor
     FFTSign(std::string s)
     {
-        if (s == "FFT_SIGN_NEG")
-            value = FFT_SIGN_NEG;
-        else if (s == "FFT_SIGN_NOT_SET")
-            value = FFT_SIGN_NOT_SET;
-        else if (s == "FFT_SIGN_POS")
-            value = FFT_SIGN_POS;
+        if (s == "NEG")
+            value = NEG;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "POS")
+            value = POS;
         else
-            value = FFT_SIGN_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -1561,16 +1561,16 @@ struct FFTSign
         switch(i)
         {
         case -1:
-            value = FFT_SIGN_NEG;
+            value = NEG;
             break;
         case 0:
-            value = FFT_SIGN_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = FFT_SIGN_POS;
+            value = POS;
             break;
         default:
-            value = FFT_SIGN_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -1583,13 +1583,13 @@ struct FFTSign
         switch(value)
         {
         case -1:
-            return "FFT_SIGN_NEG";
+            return "NEG";
         case 0:
-            return "FFT_SIGN_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "FFT_SIGN_POS";
+            return "POS";
         default:
-            return "FFT_SIGN_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -1628,25 +1628,25 @@ struct FrameType
     //! The enumerations allowed
     enum
     {
-        FRAME_ECF = 0,
-        FRAME_RIC_ECF = 1,
-        FRAME_RIC_ECI = 2
+        ECF = 0,
+        RIC_ECF = 1,
+        RIC_ECI = 2
     };
 
     //! Default constructor
-    FrameType(){ value = FRAME_ECF; }
+    FrameType(){ value = ECF; }
 
     //! string constructor
     FrameType(std::string s)
     {
-        if (s == "FRAME_ECF")
-            value = FRAME_ECF;
-        else if (s == "FRAME_RIC_ECF")
-            value = FRAME_RIC_ECF;
-        else if (s == "FRAME_RIC_ECI")
-            value = FRAME_RIC_ECI;
+        if (s == "ECF")
+            value = ECF;
+        else if (s == "RIC_ECF")
+            value = RIC_ECF;
+        else if (s == "RIC_ECI")
+            value = RIC_ECI;
         else
-            value = FRAME_ECF;
+            value = ECF;
     }
 
     //! int constructor
@@ -1655,16 +1655,16 @@ struct FrameType
         switch(i)
         {
         case 0:
-            value = FRAME_ECF;
+            value = ECF;
             break;
         case 1:
-            value = FRAME_RIC_ECF;
+            value = RIC_ECF;
             break;
         case 2:
-            value = FRAME_RIC_ECI;
+            value = RIC_ECI;
             break;
         default:
-            value = FRAME_ECF;
+            value = ECF;
         }
     }
 
@@ -1677,13 +1677,13 @@ struct FrameType
         switch(value)
         {
         case 0:
-            return "FRAME_ECF";
+            return "ECF";
         case 1:
-            return "FRAME_RIC_ECF";
+            return "RIC_ECF";
         case 2:
-            return "FRAME_RIC_ECI";
+            return "RIC_ECI";
         default:
-            return "FRAME_ECF";
+            return "ECF";
         }
     }
 
@@ -1722,22 +1722,22 @@ struct ImageBeamCompensationType
     //! The enumerations allowed
     enum
     {
-        IMAGE_BEAM_NO = 0,
-        IMAGE_BEAM_SV = 1
+        NO = 0,
+        SV = 1
     };
 
     //! Default constructor
-    ImageBeamCompensationType(){ value = IMAGE_BEAM_NO; }
+    ImageBeamCompensationType(){ value = NO; }
 
     //! string constructor
     ImageBeamCompensationType(std::string s)
     {
-        if (s == "IMAGE_BEAM_NO")
-            value = IMAGE_BEAM_NO;
-        else if (s == "IMAGE_BEAM_SV")
-            value = IMAGE_BEAM_SV;
+        if (s == "NO")
+            value = NO;
+        else if (s == "SV")
+            value = SV;
         else
-            value = IMAGE_BEAM_NO;
+            value = NO;
     }
 
     //! int constructor
@@ -1746,13 +1746,13 @@ struct ImageBeamCompensationType
         switch(i)
         {
         case 0:
-            value = IMAGE_BEAM_NO;
+            value = NO;
             break;
         case 1:
-            value = IMAGE_BEAM_SV;
+            value = SV;
             break;
         default:
-            value = IMAGE_BEAM_NO;
+            value = NO;
         }
     }
 
@@ -1765,11 +1765,11 @@ struct ImageBeamCompensationType
         switch(value)
         {
         case 0:
-            return "IMAGE_BEAM_NO";
+            return "NO";
         case 1:
-            return "IMAGE_BEAM_SV";
+            return "SV";
         default:
-            return "IMAGE_BEAM_NO";
+            return "NO";
         }
     }
 
@@ -1808,28 +1808,28 @@ struct ImageFormationType
     //! The enumerations allowed
     enum
     {
-        IF_OTHER = 0,
-        IF_PFA = 1,
-        IF_RMA = 2,
-        IF_RGAZCOMP = 3
+        OTHER = 0,
+        PFA = 1,
+        RMA = 2,
+        RGAZCOMP = 3
     };
 
     //! Default constructor
-    ImageFormationType(){ value = IF_OTHER; }
+    ImageFormationType(){ value = OTHER; }
 
     //! string constructor
     ImageFormationType(std::string s)
     {
-        if (s == "IF_OTHER")
-            value = IF_OTHER;
-        else if (s == "IF_PFA")
-            value = IF_PFA;
-        else if (s == "IF_RMA")
-            value = IF_RMA;
-        else if (s == "IF_RGAZCOMP")
-            value = IF_RGAZCOMP;
+        if (s == "OTHER")
+            value = OTHER;
+        else if (s == "PFA")
+            value = PFA;
+        else if (s == "RMA")
+            value = RMA;
+        else if (s == "RGAZCOMP")
+            value = RGAZCOMP;
         else
-            value = IF_OTHER;
+            value = OTHER;
     }
 
     //! int constructor
@@ -1838,19 +1838,19 @@ struct ImageFormationType
         switch(i)
         {
         case 0:
-            value = IF_OTHER;
+            value = OTHER;
             break;
         case 1:
-            value = IF_PFA;
+            value = PFA;
             break;
         case 2:
-            value = IF_RMA;
+            value = RMA;
             break;
         case 3:
-            value = IF_RGAZCOMP;
+            value = RGAZCOMP;
             break;
         default:
-            value = IF_OTHER;
+            value = OTHER;
         }
     }
 
@@ -1863,15 +1863,15 @@ struct ImageFormationType
         switch(value)
         {
         case 0:
-            return "IF_OTHER";
+            return "OTHER";
         case 1:
-            return "IF_PFA";
+            return "PFA";
         case 2:
-            return "IF_RMA";
+            return "RMA";
         case 3:
-            return "IF_RGAZCOMP";
+            return "RGAZCOMP";
         default:
-            return "IF_OTHER";
+            return "OTHER";
         }
     }
 
@@ -1910,25 +1910,25 @@ struct MagnificationMethod
     //! The enumerations allowed
     enum
     {
-        MAG_NOT_SET = 0,
-        MAG_NEAREST_NEIGHBOR = 1,
-        MAG_BILINEAR = 2
+        NOT_SET = 0,
+        NEAREST_NEIGHBOR = 1,
+        BILINEAR = 2
     };
 
     //! Default constructor
-    MagnificationMethod(){ value = MAG_NOT_SET; }
+    MagnificationMethod(){ value = NOT_SET; }
 
     //! string constructor
     MagnificationMethod(std::string s)
     {
-        if (s == "MAG_NOT_SET")
-            value = MAG_NOT_SET;
-        else if (s == "MAG_NEAREST_NEIGHBOR")
-            value = MAG_NEAREST_NEIGHBOR;
-        else if (s == "MAG_BILINEAR")
-            value = MAG_BILINEAR;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "NEAREST_NEIGHBOR")
+            value = NEAREST_NEIGHBOR;
+        else if (s == "BILINEAR")
+            value = BILINEAR;
         else
-            value = MAG_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -1937,16 +1937,16 @@ struct MagnificationMethod
         switch(i)
         {
         case 0:
-            value = MAG_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = MAG_NEAREST_NEIGHBOR;
+            value = NEAREST_NEIGHBOR;
             break;
         case 2:
-            value = MAG_BILINEAR;
+            value = BILINEAR;
             break;
         default:
-            value = MAG_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -1959,13 +1959,13 @@ struct MagnificationMethod
         switch(value)
         {
         case 0:
-            return "MAG_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "MAG_NEAREST_NEIGHBOR";
+            return "NEAREST_NEIGHBOR";
         case 2:
-            return "MAG_BILINEAR";
+            return "BILINEAR";
         default:
-            return "MAG_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -2004,34 +2004,34 @@ struct OrientationType
     //! The enumerations allowed
     enum
     {
-        ORIENT_NOT_SET = 0,
-        ORIENT_UP = 1,
-        ORIENT_DOWN = 2,
-        ORIENT_LEFT = 3,
-        ORIENT_RIGHT = 4,
-        ORIENT_ARBITRARY = 5
+        NOT_SET = 0,
+        UP = 1,
+        DOWN = 2,
+        LEFT = 3,
+        RIGHT = 4,
+        ARBITRARY = 5
     };
 
     //! Default constructor
-    OrientationType(){ value = ORIENT_NOT_SET; }
+    OrientationType(){ value = NOT_SET; }
 
     //! string constructor
     OrientationType(std::string s)
     {
-        if (s == "ORIENT_NOT_SET")
-            value = ORIENT_NOT_SET;
-        else if (s == "ORIENT_UP")
-            value = ORIENT_UP;
-        else if (s == "ORIENT_DOWN")
-            value = ORIENT_DOWN;
-        else if (s == "ORIENT_LEFT")
-            value = ORIENT_LEFT;
-        else if (s == "ORIENT_RIGHT")
-            value = ORIENT_RIGHT;
-        else if (s == "ORIENT_ARBITRARY")
-            value = ORIENT_ARBITRARY;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "UP")
+            value = UP;
+        else if (s == "DOWN")
+            value = DOWN;
+        else if (s == "LEFT")
+            value = LEFT;
+        else if (s == "RIGHT")
+            value = RIGHT;
+        else if (s == "ARBITRARY")
+            value = ARBITRARY;
         else
-            value = ORIENT_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -2040,25 +2040,25 @@ struct OrientationType
         switch(i)
         {
         case 0:
-            value = ORIENT_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = ORIENT_UP;
+            value = UP;
             break;
         case 2:
-            value = ORIENT_DOWN;
+            value = DOWN;
             break;
         case 3:
-            value = ORIENT_LEFT;
+            value = LEFT;
             break;
         case 4:
-            value = ORIENT_RIGHT;
+            value = RIGHT;
             break;
         case 5:
-            value = ORIENT_ARBITRARY;
+            value = ARBITRARY;
             break;
         default:
-            value = ORIENT_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -2071,19 +2071,19 @@ struct OrientationType
         switch(value)
         {
         case 0:
-            return "ORIENT_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "ORIENT_UP";
+            return "UP";
         case 2:
-            return "ORIENT_DOWN";
+            return "DOWN";
         case 3:
-            return "ORIENT_LEFT";
+            return "LEFT";
         case 4:
-            return "ORIENT_RIGHT";
+            return "RIGHT";
         case 5:
-            return "ORIENT_ARBITRARY";
+            return "ARBITRARY";
         default:
-            return "ORIENT_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -2122,7 +2122,7 @@ struct PixelType
     //! The enumerations allowed
     enum
     {
-        PIXEL_TYPE_NOT_SET = 0,
+        UNDEFINED = 0,
         RE32F_IM32F = 1,
         RE16I_IM16I = 2,
         MONO8I = 3,
@@ -2133,13 +2133,13 @@ struct PixelType
     };
 
     //! Default constructor
-    PixelType(){ value = PIXEL_TYPE_NOT_SET; }
+    PixelType(){ value = UNDEFINED; }
 
     //! string constructor
     PixelType(std::string s)
     {
-        if (s == "PIXEL_TYPE_NOT_SET")
-            value = PIXEL_TYPE_NOT_SET;
+        if (s == "UNDEFINED")
+            value = UNDEFINED;
         else if (s == "RE32F_IM32F")
             value = RE32F_IM32F;
         else if (s == "RE16I_IM16I")
@@ -2155,7 +2155,7 @@ struct PixelType
         else if (s == "RGB24I")
             value = RGB24I;
         else
-            value = PIXEL_TYPE_NOT_SET;
+            value = UNDEFINED;
     }
 
     //! int constructor
@@ -2164,7 +2164,7 @@ struct PixelType
         switch(i)
         {
         case 0:
-            value = PIXEL_TYPE_NOT_SET;
+            value = UNDEFINED;
             break;
         case 1:
             value = RE32F_IM32F;
@@ -2188,7 +2188,7 @@ struct PixelType
             value = RGB24I;
             break;
         default:
-            value = PIXEL_TYPE_NOT_SET;
+            value = UNDEFINED;
         }
     }
 
@@ -2201,7 +2201,7 @@ struct PixelType
         switch(value)
         {
         case 0:
-            return "PIXEL_TYPE_NOT_SET";
+            return "UNDEFINED";
         case 1:
             return "RE32F_IM32F";
         case 2:
@@ -2217,7 +2217,7 @@ struct PixelType
         case 7:
             return "RGB24I";
         default:
-            return "PIXEL_TYPE_NOT_SET";
+            return "UNDEFINED";
         }
     }
 
@@ -2256,34 +2256,34 @@ struct PolarizationType
     //! The enumerations allowed
     enum
     {
-        POL_NOT_SET = 0,
-        POL_OTHER = 1,
-        POL_V = 2,
-        POL_H = 3,
-        POL_RHC = 4,
-        POL_LHC = 5
+        NOT_SET = 0,
+        OTHER = 1,
+        V = 2,
+        H = 3,
+        RHC = 4,
+        LHC = 5
     };
 
     //! Default constructor
-    PolarizationType(){ value = POL_NOT_SET; }
+    PolarizationType(){ value = NOT_SET; }
 
     //! string constructor
     PolarizationType(std::string s)
     {
-        if (s == "POL_NOT_SET")
-            value = POL_NOT_SET;
-        else if (s == "POL_OTHER")
-            value = POL_OTHER;
-        else if (s == "POL_V")
-            value = POL_V;
-        else if (s == "POL_H")
-            value = POL_H;
-        else if (s == "POL_RHC")
-            value = POL_RHC;
-        else if (s == "POL_LHC")
-            value = POL_LHC;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "OTHER")
+            value = OTHER;
+        else if (s == "V")
+            value = V;
+        else if (s == "H")
+            value = H;
+        else if (s == "RHC")
+            value = RHC;
+        else if (s == "LHC")
+            value = LHC;
         else
-            value = POL_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -2292,25 +2292,25 @@ struct PolarizationType
         switch(i)
         {
         case 0:
-            value = POL_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = POL_OTHER;
+            value = OTHER;
             break;
         case 2:
-            value = POL_V;
+            value = V;
             break;
         case 3:
-            value = POL_H;
+            value = H;
             break;
         case 4:
-            value = POL_RHC;
+            value = RHC;
             break;
         case 5:
-            value = POL_LHC;
+            value = LHC;
             break;
         default:
-            value = POL_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -2323,19 +2323,19 @@ struct PolarizationType
         switch(value)
         {
         case 0:
-            return "POL_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "POL_OTHER";
+            return "OTHER";
         case 2:
-            return "POL_V";
+            return "V";
         case 3:
-            return "POL_H";
+            return "H";
         case 4:
-            return "POL_RHC";
+            return "RHC";
         case 5:
-            return "POL_LHC";
+            return "LHC";
         default:
-            return "POL_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -2374,31 +2374,31 @@ struct ProjectionType
     //! The enumerations allowed
     enum
     {
-        PROJECTION_NOT_SET = 0,
-        PROJECTION_PLANE = 1,
-        PROJECTION_GEOGRAPHIC = 2,
-        PROJECTION_CYLINDRICAL = 3,
-        PROJECTION_POLYNOMIAL = 4
+        NOT_SET = 0,
+        PLANE = 1,
+        GEOGRAPHIC = 2,
+        CYLINDRICAL = 3,
+        POLYNOMIAL = 4
     };
 
     //! Default constructor
-    ProjectionType(){ value = PROJECTION_NOT_SET; }
+    ProjectionType(){ value = NOT_SET; }
 
     //! string constructor
     ProjectionType(std::string s)
     {
-        if (s == "PROJECTION_NOT_SET")
-            value = PROJECTION_NOT_SET;
-        else if (s == "PROJECTION_PLANE")
-            value = PROJECTION_PLANE;
-        else if (s == "PROJECTION_GEOGRAPHIC")
-            value = PROJECTION_GEOGRAPHIC;
-        else if (s == "PROJECTION_CYLINDRICAL")
-            value = PROJECTION_CYLINDRICAL;
-        else if (s == "PROJECTION_POLYNOMIAL")
-            value = PROJECTION_POLYNOMIAL;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "PLANE")
+            value = PLANE;
+        else if (s == "GEOGRAPHIC")
+            value = GEOGRAPHIC;
+        else if (s == "CYLINDRICAL")
+            value = CYLINDRICAL;
+        else if (s == "POLYNOMIAL")
+            value = POLYNOMIAL;
         else
-            value = PROJECTION_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -2407,22 +2407,22 @@ struct ProjectionType
         switch(i)
         {
         case 0:
-            value = PROJECTION_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = PROJECTION_PLANE;
+            value = PLANE;
             break;
         case 2:
-            value = PROJECTION_GEOGRAPHIC;
+            value = GEOGRAPHIC;
             break;
         case 3:
-            value = PROJECTION_CYLINDRICAL;
+            value = CYLINDRICAL;
             break;
         case 4:
-            value = PROJECTION_POLYNOMIAL;
+            value = POLYNOMIAL;
             break;
         default:
-            value = PROJECTION_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -2435,17 +2435,17 @@ struct ProjectionType
         switch(value)
         {
         case 0:
-            return "PROJECTION_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "PROJECTION_PLANE";
+            return "PLANE";
         case 2:
-            return "PROJECTION_GEOGRAPHIC";
+            return "GEOGRAPHIC";
         case 3:
-            return "PROJECTION_CYLINDRICAL";
+            return "CYLINDRICAL";
         case 4:
-            return "PROJECTION_POLYNOMIAL";
+            return "POLYNOMIAL";
         default:
-            return "PROJECTION_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -2484,28 +2484,28 @@ struct RMAlgoType
     //! The enumerations allowed
     enum
     {
-        RMA_NOT_SET = 0,
-        RMA_OMEGA_K = 1,
-        RMA_CSA = 2,
-        RMA_RG_DOP = 3
+        NOT_SET = 0,
+        OMEGA_K = 1,
+        CSA = 2,
+        RG_DOP = 3
     };
 
     //! Default constructor
-    RMAlgoType(){ value = RMA_NOT_SET; }
+    RMAlgoType(){ value = NOT_SET; }
 
     //! string constructor
     RMAlgoType(std::string s)
     {
-        if (s == "RMA_NOT_SET")
-            value = RMA_NOT_SET;
-        else if (s == "RMA_OMEGA_K")
-            value = RMA_OMEGA_K;
-        else if (s == "RMA_CSA")
-            value = RMA_CSA;
-        else if (s == "RMA_RG_DOP")
-            value = RMA_RG_DOP;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "OMEGA_K")
+            value = OMEGA_K;
+        else if (s == "CSA")
+            value = CSA;
+        else if (s == "RG_DOP")
+            value = RG_DOP;
         else
-            value = RMA_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -2514,19 +2514,19 @@ struct RMAlgoType
         switch(i)
         {
         case 0:
-            value = RMA_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = RMA_OMEGA_K;
+            value = OMEGA_K;
             break;
         case 2:
-            value = RMA_CSA;
+            value = CSA;
             break;
         case 3:
-            value = RMA_RG_DOP;
+            value = RG_DOP;
             break;
         default:
-            value = RMA_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -2539,15 +2539,15 @@ struct RMAlgoType
         switch(value)
         {
         case 0:
-            return "RMA_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "RMA_OMEGA_K";
+            return "OMEGA_K";
         case 2:
-            return "RMA_CSA";
+            return "CSA";
         case 3:
-            return "RMA_RG_DOP";
+            return "RG_DOP";
         default:
-            return "RMA_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -2586,31 +2586,31 @@ struct RadarModeType
     //! The enumerations allowed
     enum
     {
-        MODE_INVALID = 0,
-        MODE_NOT_SET = 1,
-        MODE_SPOTLIGHT = 2,
-        MODE_STRIPMAP = 3,
-        MODE_DYNAMIC_STRIPMAP = 4
+        INVALID = 0,
+        NOT_SET = 1,
+        SPOTLIGHT = 2,
+        STRIPMAP = 3,
+        DYNAMIC_STRIPMAP = 4
     };
 
     //! Default constructor
-    RadarModeType(){ value = MODE_INVALID; }
+    RadarModeType(){ value = INVALID; }
 
     //! string constructor
     RadarModeType(std::string s)
     {
-        if (s == "MODE_INVALID")
-            value = MODE_INVALID;
-        else if (s == "MODE_NOT_SET")
-            value = MODE_NOT_SET;
-        else if (s == "MODE_SPOTLIGHT")
-            value = MODE_SPOTLIGHT;
-        else if (s == "MODE_STRIPMAP")
-            value = MODE_STRIPMAP;
-        else if (s == "MODE_DYNAMIC_STRIPMAP")
-            value = MODE_DYNAMIC_STRIPMAP;
+        if (s == "INVALID")
+            value = INVALID;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "SPOTLIGHT")
+            value = SPOTLIGHT;
+        else if (s == "STRIPMAP")
+            value = STRIPMAP;
+        else if (s == "DYNAMIC_STRIPMAP")
+            value = DYNAMIC_STRIPMAP;
         else
-            value = MODE_INVALID;
+            value = INVALID;
     }
 
     //! int constructor
@@ -2619,22 +2619,22 @@ struct RadarModeType
         switch(i)
         {
         case 0:
-            value = MODE_INVALID;
+            value = INVALID;
             break;
         case 1:
-            value = MODE_NOT_SET;
+            value = NOT_SET;
             break;
         case 2:
-            value = MODE_SPOTLIGHT;
+            value = SPOTLIGHT;
             break;
         case 3:
-            value = MODE_STRIPMAP;
+            value = STRIPMAP;
             break;
         case 4:
-            value = MODE_DYNAMIC_STRIPMAP;
+            value = DYNAMIC_STRIPMAP;
             break;
         default:
-            value = MODE_INVALID;
+            value = INVALID;
         }
     }
 
@@ -2647,17 +2647,17 @@ struct RadarModeType
         switch(value)
         {
         case 0:
-            return "MODE_INVALID";
+            return "INVALID";
         case 1:
-            return "MODE_NOT_SET";
+            return "NOT_SET";
         case 2:
-            return "MODE_SPOTLIGHT";
+            return "SPOTLIGHT";
         case 3:
-            return "MODE_STRIPMAP";
+            return "STRIPMAP";
         case 4:
-            return "MODE_DYNAMIC_STRIPMAP";
+            return "DYNAMIC_STRIPMAP";
         default:
-            return "MODE_INVALID";
+            return "INVALID";
         }
     }
 
@@ -2696,25 +2696,25 @@ struct RegionType
     //! The enumerations allowed
     enum
     {
-        REGION_NOT_SET = 0,
-        REGION_SUB_REGION = 1,
-        REGION_GEOGRAPHIC_INFO = 2
+        NOT_SET = 0,
+        SUB_REGION = 1,
+        GEOGRAPHIC_INFO = 2
     };
 
     //! Default constructor
-    RegionType(){ value = REGION_NOT_SET; }
+    RegionType(){ value = NOT_SET; }
 
     //! string constructor
     RegionType(std::string s)
     {
-        if (s == "REGION_NOT_SET")
-            value = REGION_NOT_SET;
-        else if (s == "REGION_SUB_REGION")
-            value = REGION_SUB_REGION;
-        else if (s == "REGION_GEOGRAPHIC_INFO")
-            value = REGION_GEOGRAPHIC_INFO;
+        if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "SUB_REGION")
+            value = SUB_REGION;
+        else if (s == "GEOGRAPHIC_INFO")
+            value = GEOGRAPHIC_INFO;
         else
-            value = REGION_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -2723,16 +2723,16 @@ struct RegionType
         switch(i)
         {
         case 0:
-            value = REGION_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = REGION_SUB_REGION;
+            value = SUB_REGION;
             break;
         case 2:
-            value = REGION_GEOGRAPHIC_INFO;
+            value = GEOGRAPHIC_INFO;
             break;
         default:
-            value = REGION_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -2745,13 +2745,13 @@ struct RegionType
         switch(value)
         {
         case 0:
-            return "REGION_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "REGION_SUB_REGION";
+            return "SUB_REGION";
         case 2:
-            return "REGION_GEOGRAPHIC_INFO";
+            return "GEOGRAPHIC_INFO";
         default:
-            return "REGION_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -2790,22 +2790,22 @@ struct RowColEnum
     //! The enumerations allowed
     enum
     {
-        RC_ROW = 0,
-        RC_COL = 1
+        ROW = 0,
+        COL = 1
     };
 
     //! Default constructor
-    RowColEnum(){ value = RC_ROW; }
+    RowColEnum(){ value = ROW; }
 
     //! string constructor
     RowColEnum(std::string s)
     {
-        if (s == "RC_ROW")
-            value = RC_ROW;
-        else if (s == "RC_COL")
-            value = RC_COL;
+        if (s == "ROW")
+            value = ROW;
+        else if (s == "COL")
+            value = COL;
         else
-            value = RC_ROW;
+            value = ROW;
     }
 
     //! int constructor
@@ -2814,13 +2814,13 @@ struct RowColEnum
         switch(i)
         {
         case 0:
-            value = RC_ROW;
+            value = ROW;
             break;
         case 1:
-            value = RC_COL;
+            value = COL;
             break;
         default:
-            value = RC_ROW;
+            value = ROW;
         }
     }
 
@@ -2833,11 +2833,11 @@ struct RowColEnum
         switch(value)
         {
         case 0:
-            return "RC_ROW";
+            return "ROW";
         case 1:
-            return "RC_COL";
+            return "COL";
         default:
-            return "RC_ROW";
+            return "ROW";
         }
     }
 
@@ -2962,25 +2962,25 @@ struct SideOfTrackType
     //! The enumerations allowed
     enum
     {
-        SIDE_LEFT = -1,
-        SIDE_NOT_SET = 0,
-        SIDE_RIGHT = 1
+        LEFT = -1,
+        NOT_SET = 0,
+        RIGHT = 1
     };
 
     //! Default constructor
-    SideOfTrackType(){ value = SIDE_NOT_SET; }
+    SideOfTrackType(){ value = NOT_SET; }
 
     //! string constructor
     SideOfTrackType(std::string s)
     {
-        if (s == "SIDE_LEFT")
-            value = SIDE_LEFT;
-        else if (s == "SIDE_NOT_SET")
-            value = SIDE_NOT_SET;
-        else if (s == "SIDE_RIGHT")
-            value = SIDE_RIGHT;
+        if (s == "LEFT")
+            value = LEFT;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else if (s == "RIGHT")
+            value = RIGHT;
         else
-            value = SIDE_NOT_SET;
+            value = NOT_SET;
     }
 
     //! int constructor
@@ -2989,16 +2989,16 @@ struct SideOfTrackType
         switch(i)
         {
         case -1:
-            value = SIDE_LEFT;
+            value = LEFT;
             break;
         case 0:
-            value = SIDE_NOT_SET;
+            value = NOT_SET;
             break;
         case 1:
-            value = SIDE_RIGHT;
+            value = RIGHT;
             break;
         default:
-            value = SIDE_NOT_SET;
+            value = NOT_SET;
         }
     }
 
@@ -3011,13 +3011,13 @@ struct SideOfTrackType
         switch(value)
         {
         case -1:
-            return "SIDE_LEFT";
+            return "LEFT";
         case 0:
-            return "SIDE_NOT_SET";
+            return "NOT_SET";
         case 1:
-            return "SIDE_RIGHT";
+            return "RIGHT";
         default:
-            return "SIDE_NOT_SET";
+            return "NOT_SET";
         }
     }
 
@@ -3056,25 +3056,25 @@ struct SlowTimeBeamCompensationType
     //! The enumerations allowed
     enum
     {
-        SLOW_TIME_BEAM_NO = 0,
-        SLOW_TIME_BEAM_GLOBAL = 1,
-        SLOW_TIME_BEAM_SV = 2
+        NO = 0,
+        GLOBAL = 1,
+        SV = 2
     };
 
     //! Default constructor
-    SlowTimeBeamCompensationType(){ value = SLOW_TIME_BEAM_NO; }
+    SlowTimeBeamCompensationType(){ value = NO; }
 
     //! string constructor
     SlowTimeBeamCompensationType(std::string s)
     {
-        if (s == "SLOW_TIME_BEAM_NO")
-            value = SLOW_TIME_BEAM_NO;
-        else if (s == "SLOW_TIME_BEAM_GLOBAL")
-            value = SLOW_TIME_BEAM_GLOBAL;
-        else if (s == "SLOW_TIME_BEAM_SV")
-            value = SLOW_TIME_BEAM_SV;
+        if (s == "NO")
+            value = NO;
+        else if (s == "GLOBAL")
+            value = GLOBAL;
+        else if (s == "SV")
+            value = SV;
         else
-            value = SLOW_TIME_BEAM_NO;
+            value = NO;
     }
 
     //! int constructor
@@ -3083,16 +3083,16 @@ struct SlowTimeBeamCompensationType
         switch(i)
         {
         case 0:
-            value = SLOW_TIME_BEAM_NO;
+            value = NO;
             break;
         case 1:
-            value = SLOW_TIME_BEAM_GLOBAL;
+            value = GLOBAL;
             break;
         case 2:
-            value = SLOW_TIME_BEAM_SV;
+            value = SV;
             break;
         default:
-            value = SLOW_TIME_BEAM_NO;
+            value = NO;
         }
     }
 
@@ -3105,13 +3105,13 @@ struct SlowTimeBeamCompensationType
         switch(value)
         {
         case 0:
-            return "SLOW_TIME_BEAM_NO";
+            return "NO";
         case 1:
-            return "SLOW_TIME_BEAM_GLOBAL";
+            return "GLOBAL";
         case 2:
-            return "SLOW_TIME_BEAM_SV";
+            return "SV";
         default:
-            return "SLOW_TIME_BEAM_NO";
+            return "NO";
         }
     }
 
@@ -3150,25 +3150,25 @@ struct XYZEnum
     //! The enumerations allowed
     enum
     {
-        XYZ_X = 0,
-        XYZ_Y = 1,
-        XYZ_Z = 2
+        X = 0,
+        Y = 1,
+        Z = 2
     };
 
     //! Default constructor
-    XYZEnum(){ value = XYZ_X; }
+    XYZEnum(){ value = X; }
 
     //! string constructor
     XYZEnum(std::string s)
     {
-        if (s == "XYZ_X")
-            value = XYZ_X;
-        else if (s == "XYZ_Y")
-            value = XYZ_Y;
-        else if (s == "XYZ_Z")
-            value = XYZ_Z;
+        if (s == "X")
+            value = X;
+        else if (s == "Y")
+            value = Y;
+        else if (s == "Z")
+            value = Z;
         else
-            value = XYZ_X;
+            value = X;
     }
 
     //! int constructor
@@ -3177,16 +3177,16 @@ struct XYZEnum
         switch(i)
         {
         case 0:
-            value = XYZ_X;
+            value = X;
             break;
         case 1:
-            value = XYZ_Y;
+            value = Y;
             break;
         case 2:
-            value = XYZ_Z;
+            value = Z;
             break;
         default:
-            value = XYZ_X;
+            value = X;
         }
     }
 
@@ -3199,13 +3199,13 @@ struct XYZEnum
         switch(value)
         {
         case 0:
-            return "XYZ_X";
+            return "X";
         case 1:
-            return "XYZ_Y";
+            return "Y";
         case 2:
-            return "XYZ_Z";
+            return "Z";
         default:
-            return "XYZ_X";
+            return "X";
         }
     }
 
@@ -3234,7 +3234,7 @@ struct XYZEnum
 
 };
 
-// code auto-generated 2010-05-26 15:37:44.078483
+// code auto-generated 2010-05-27 13:54:31.026152
 
 }
 

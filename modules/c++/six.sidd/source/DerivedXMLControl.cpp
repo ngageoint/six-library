@@ -115,7 +115,7 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
     if (remapInformationXML)
     {
         if (display->remapInformation->displayType
-                == DisplayType::DISPLAY_COLOR)
+                == DisplayType::COLOR)
         {
 
             xml::lite::Element* remapXML = getFirstAndOnly(remapInformationXML,
@@ -148,7 +148,7 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
             }
         }
         else if (display->remapInformation->displayType
-                == DisplayType::DISPLAY_MONO)
+                == DisplayType::MONO)
         {
             xml::lite::Element* remapXML =
                     getFirstAndOnly(remapInformationXML,
@@ -313,7 +313,7 @@ void DerivedXMLControl::xmlToGeographicCoverage(
     {
         geographicCoverage->subRegion.push_back(
                                                 new GeographicCoverage(
-                                                                       RegionType::REGION_SUB_REGION));
+                                                                       RegionType::SUB_REGION));
         xmlToGeographicCoverage(*it, geographicCoverage->subRegion[i++]);
     }
 
@@ -367,17 +367,17 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
 
     xml::lite::Element* projXML;
     if (measurement->projection->projectionType
-            == ProjectionType::PROJECTION_PLANE)
+            == ProjectionType::PLANE)
     {
         projXML = getFirstAndOnly(measurementXML, "PlaneProjection");
     }
     else if (measurement->projection->projectionType
-            == ProjectionType::PROJECTION_CYLINDRICAL)
+            == ProjectionType::CYLINDRICAL)
     {
         projXML = getFirstAndOnly(measurementXML, "CylindricalProjection");
     }
     else if (measurement->projection->projectionType
-            == ProjectionType::PROJECTION_GEOGRAPHIC)
+            == ProjectionType::GEOGRAPHIC)
     {
         projXML = getFirstAndOnly(measurementXML, "GeographicProjection");
     }
@@ -391,7 +391,7 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
                       measurement->projection->referencePoint.rowCol);
 
     if (measurement->projection->projectionType
-            == ProjectionType::PROJECTION_PLANE)
+            == ProjectionType::PLANE)
     {
         PlaneProjection* planeProj = (PlaneProjection*) measurement->projection;
         parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
@@ -409,7 +409,7 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
                       planeProj->productPlane.colUnitVector);
     }
     else if (measurement->projection->projectionType
-            == ProjectionType::PROJECTION_GEOGRAPHIC)
+            == ProjectionType::GEOGRAPHIC)
     {
         GeographicProjection* geographicProj =
                 (GeographicProjection*) measurement->projection;
@@ -421,7 +421,7 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
                           geographicProj->sampleSpacing);
     }
     else if (measurement->projection->projectionType
-            == ProjectionType::PROJECTION_CYLINDRICAL)
+            == ProjectionType::CYLINDRICAL)
     {
         // Now, we go TimeCOA, SampleSpacing, CurvatureRadius
         CylindricalProjection* cylindricalProj =
@@ -441,7 +441,7 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
         }
     }
     else if (measurement->projection->projectionType
-            == ProjectionType::PROJECTION_POLYNOMIAL)
+            == ProjectionType::POLYNOMIAL)
     {
         PolynomialProjection* polyProj =
                 (PolynomialProjection*) measurement->projection;
@@ -679,31 +679,31 @@ Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
                                                            "PixelType")->getCharacterData());
     builder.addDisplay(pixelType);
 
-    RegionType regionType = RegionType::REGION_SUB_REGION;
+    RegionType regionType = RegionType::SUB_REGION;
     xml::lite::Element* tmpElem = getFirstAndOnly(geographicAndTargetXML,
                                                   "GeographicCoverage");
     // see if GeographicCoverage contains SubRegion or GeographicInfo
 
     if (getOptional(tmpElem, "SubRegion"))
     {
-        regionType = RegionType::REGION_SUB_REGION;
+        regionType = RegionType::SUB_REGION;
     }
     else if (getOptional(tmpElem, "GeographicInfo"))
     {
-        regionType = RegionType::REGION_GEOGRAPHIC_INFO;
+        regionType = RegionType::GEOGRAPHIC_INFO;
     }
     builder.addGeographicAndTarget(regionType);
 
-    six::ProjectionType projType = ProjectionType::PROJECTION_NOT_SET;
+    six::ProjectionType projType = ProjectionType::NOT_SET;
 
     if (getOptional(measurementXML, "GeographicProjection"))
-        projType = ProjectionType::PROJECTION_GEOGRAPHIC;
+        projType = ProjectionType::GEOGRAPHIC;
     else if (getOptional(measurementXML, "CylindricalProjection"))
-        projType = ProjectionType::PROJECTION_CYLINDRICAL;
+        projType = ProjectionType::CYLINDRICAL;
     else if (getOptional(measurementXML, "PlaneProjection"))
-        projType = ProjectionType::PROJECTION_PLANE;
+        projType = ProjectionType::PLANE;
     else if (getOptional(measurementXML, "PolynomialProjection"))
-        projType = ProjectionType::PROJECTION_POLYNOMIAL;
+        projType = ProjectionType::POLYNOMIAL;
 
     builder.addMeasurement(projType);
 
@@ -870,14 +870,14 @@ DerivedXMLControl::displayToXML(Display* display, xml::lite::Element* parent)
     }
 
     //MagnificationMethod - optional
-    if (display->magnificationMethod != MagnificationMethod::MAG_NOT_SET)
+    if (display->magnificationMethod != MagnificationMethod::NOT_SET)
     {
         createString("MagnificationMethod",
                      str::toString(display->magnificationMethod), displayXML);
     }
 
     //DecimationMethod - optional
-    if (display->decimationMethod != DecimationMethod::DEC_NOT_SET)
+    if (display->decimationMethod != DecimationMethod::NOT_SET)
     {
         createString("DecimationMethod",
                      str::toString(display->decimationMethod), displayXML);
@@ -1010,7 +1010,7 @@ DerivedXMLControl::measurementToXML(Measurement* measurement,
 
     switch (projection->projectionType)
     {
-    case ProjectionType::PROJECTION_PLANE:
+    case ProjectionType::PLANE:
     {
         projectionXML->setLocalName("PlaneProjection");
         PlaneProjection* planeProj = (PlaneProjection*) projection;
@@ -1036,7 +1036,7 @@ DerivedXMLControl::measurementToXML(Measurement* measurement,
     }
         break;
 
-    case ProjectionType::PROJECTION_GEOGRAPHIC:
+    case ProjectionType::GEOGRAPHIC:
     {
         projectionXML->setLocalName("GeographicProjection");
         GeographicProjection* geographicProj =
@@ -1054,7 +1054,7 @@ DerivedXMLControl::measurementToXML(Measurement* measurement,
     }
         break;
 
-    case ProjectionType::PROJECTION_CYLINDRICAL:
+    case ProjectionType::CYLINDRICAL:
     {
         projectionXML->setLocalName("CylindricalProjection");
 
@@ -1078,7 +1078,7 @@ DerivedXMLControl::measurementToXML(Measurement* measurement,
     }
         break;
 
-    case ProjectionType::PROJECTION_POLYNOMIAL:
+    case ProjectionType::POLYNOMIAL:
     {
         projectionXML->setLocalName("PolynomialProjection");
         PolynomialProjection* polyProj = (PolynomialProjection*) projection;
@@ -1278,7 +1278,7 @@ DerivedXMLControl::exploitationFeaturesToXML(
 
 xml::lite::Document* DerivedXMLControl::toXML(Data* data)
 {
-    if (data->getDataClass() != DataClass::DATA_DERIVED)
+    if (data->getDataClass() != DataClass::DERIVED)
     {
         throw except::Exception("Data must be derived");
     }

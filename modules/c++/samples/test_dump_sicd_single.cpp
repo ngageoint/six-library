@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     {
         XMLControlFactory::getInstance().
             addCreator(
-                six::DATA_COMPLEX, 
+                six::COMPLEX, 
                 new XMLControlCreatorT<six::sicd::ComplexXMLCreator>()
                 );
         ReadControl* reader = new NITFReadControl();
