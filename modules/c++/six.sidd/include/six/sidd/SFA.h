@@ -34,22 +34,32 @@ namespace sidd
 namespace sfa
 {
 
-struct Geometry
+struct Typed
+{
+    virtual ~Typed()
+    {
+    }
+    inline std::string getType() const
+    {
+        return mType;
+    }
+
+protected:
+    std::string mType;
+    Typed(std::string typeName) :
+        mType(typeName)
+    {
+    }
+};
+
+struct Geometry : public Typed
 {
     virtual ~Geometry()
     {
     }
-
-    inline std::string get() const
-    {
-        return m;
-    }
-
 protected:
-    std::string m;
-
     Geometry(std::string typeName) :
-        m(typeName)
+        Typed(typeName)
     {
     }
 };
@@ -93,6 +103,9 @@ struct LineString : public Curve
     }
     virtual ~LineString()
     {
+        for (size_t i = 0, n = vertices.size(); i < n; ++i)
+            if (vertices[i])
+                delete vertices[i];
     }
 private:
     static const char TYPE_NAME[];
@@ -124,6 +137,9 @@ struct Polygon : public Surface
     }
     virtual ~Polygon()
     {
+        for (size_t i = 0, n = rings.size(); i < n; ++i)
+            if (rings[i])
+                delete rings[i];
     }
 private:
     static const char TYPE_NAME[];
@@ -134,7 +150,7 @@ struct Triangle : public Polygon
     Triangle() :
         Polygon()
     {
-        m = TYPE_NAME;
+        mType = TYPE_NAME;
     }
     ~Triangle()
     {
@@ -153,6 +169,9 @@ struct PolyhedralSurface : public Surface
     }
     virtual ~PolyhedralSurface()
     {
+        for (size_t i = 0, n = patches.size(); i < n; ++i)
+            if (patches[i])
+                delete patches[i];
     }
 private:
     static const char TYPE_NAME[];
@@ -170,6 +189,9 @@ struct TriangulatedIrregularNetwork : public Surface
     }
     virtual ~TriangulatedIrregularNetwork()
     {
+        for (size_t i = 0, n = patches.size(); i < n; ++i)
+            if (patches[i])
+                delete patches[i];
     }
 private:
     static const char TYPE_NAME[];
@@ -198,6 +220,9 @@ struct MultiPoint : public GeometryCollection
     }
     virtual ~MultiPoint()
     {
+        for (size_t i = 0, n = vertices.size(); i < n; ++i)
+            if (vertices[i])
+                delete vertices[i];
     }
 private:
     static const char TYPE_NAME[];
@@ -226,6 +251,9 @@ struct MultiLineString : public MultiCurve
     }
     virtual ~MultiLineString()
     {
+        for (size_t i = 0, n = elements.size(); i < n; ++i)
+            if (elements[i])
+                delete elements[i];
     }
 private:
     static const char TYPE_NAME[];
@@ -254,9 +282,82 @@ struct MultiPolygon : public MultiSurface
     }
     virtual ~MultiPolygon()
     {
+        for (size_t i = 0, n = elements.size(); i < n; ++i)
+            if (elements[i])
+                delete elements[i];
     }
 private:
     static const char TYPE_NAME[];
+};
+
+struct CoordinateSystem : public Typed
+{
+    virtual ~CoordinateSystem()
+    {
+    }
+protected:
+    CoordinateSystem(std::string typeName) :
+        Typed(typeName)
+    {
+    }
+};
+
+struct GeocentricCoordinateSystem : public CoordinateSystem
+{
+    //TODO
+
+    GeocentricCoordinateSystem() :
+        CoordinateSystem(TYPE_NAME)
+    {
+    }
+    ~GeocentricCoordinateSystem()
+    {
+    }
+private:
+    static const char TYPE_NAME[];
+};
+struct GeographicCoordinateSystem : public CoordinateSystem
+{
+    //TODO
+
+    GeographicCoordinateSystem() :
+        CoordinateSystem(TYPE_NAME)
+    {
+    }
+    ~GeographicCoordinateSystem()
+    {
+    }
+private:
+    static const char TYPE_NAME[];
+};
+struct ProjectedCoordinateSystem : public CoordinateSystem
+{
+    //TODO
+
+    ProjectedCoordinateSystem() :
+        CoordinateSystem(TYPE_NAME)
+    {
+    }
+    ~ProjectedCoordinateSystem()
+    {
+    }
+private:
+    static const char TYPE_NAME[];
+};
+
+struct ReferenceSystem
+{
+    CoordinateSystem *coordinateSystem;
+    std::vector<std::string> axisNames;
+
+    ReferenceSystem()
+    {
+    }
+    virtual ~ReferenceSystem()
+    {
+        if (coordinateSystem)
+            delete coordinateSystem;
+    }
 };
 
 }

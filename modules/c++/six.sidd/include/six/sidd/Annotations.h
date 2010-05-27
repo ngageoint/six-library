@@ -33,8 +33,10 @@ namespace sidd
 struct Annotation
 {
     typedef ::six::sidd::sfa::Geometry SFAGeometry;
+    typedef ::six::sidd::sfa::ReferenceSystem SFAReferenceSystem;
 
     std::string identifier;
+    SFAReferenceSystem* spatialReferenceSystem;
     std::vector<SFAGeometry*> objects;
 
     Annotation() :
@@ -43,6 +45,9 @@ struct Annotation
     }
     ~Annotation()
     {
+        if (spatialReferenceSystem)
+            delete spatialReferenceSystem;
+
         for (size_t i = 0, n = objects.size(); i < n; ++i)
             if (objects[i])
                 delete objects[i];
