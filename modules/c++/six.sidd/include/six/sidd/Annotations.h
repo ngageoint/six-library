@@ -19,23 +19,38 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SIX_SIDD_H__
-#define __IMPORT_SIX_SIDD_H__
+#ifndef __SIX_SIDD_ANNOTATIONS_H__
+#define __SIX_SIDD_ANNOTATIONS_H__
 
 #include <import/six.h>
-
-#include "six/sidd/Annotations.h"
-#include "six/sidd/DerivedData.h"
-#include "six/sidd/DerivedDataBuilder.h"
-#include "six/sidd/DerivedXMLControl.h"
-#include "six/sidd/Display.h"
-#include "six/sidd/DownstreamReprocessing.h"
-#include "six/sidd/ExploitationFeatures.h"
-#include "six/sidd/GeographicAndTarget.h"
-#include "six/sidd/GeoTIFFWriteControl.h"
-#include "six/sidd/ProductCreation.h"
-#include "six/sidd/ProductProcessing.h"
 #include "six/sidd/SFA.h"
-#include "six/sidd/Utilities.h"
 
+namespace six
+{
+namespace sidd
+{
+
+struct Annotation
+{
+    typedef ::six::sidd::sfa::Geometry SFAGeometry;
+
+    std::string identifier;
+    std::vector<SFAGeometry*> objects;
+
+    Annotation() :
+        identifier("")
+    {
+    }
+    ~Annotation()
+    {
+        for (size_t i = 0, n = objects.size(); i < n; ++i)
+            if (objects[i])
+                delete objects[i];
+    }
+};
+
+typedef std::vector<Annotation*> Annotations;
+
+}
+}
 #endif

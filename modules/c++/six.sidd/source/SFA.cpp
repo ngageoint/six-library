@@ -19,23 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SIX_SIDD_H__
-#define __IMPORT_SIX_SIDD_H__
-
-#include <import/six.h>
-
-#include "six/sidd/Annotations.h"
-#include "six/sidd/DerivedData.h"
-#include "six/sidd/DerivedDataBuilder.h"
-#include "six/sidd/DerivedXMLControl.h"
-#include "six/sidd/Display.h"
-#include "six/sidd/DownstreamReprocessing.h"
-#include "six/sidd/ExploitationFeatures.h"
-#include "six/sidd/GeographicAndTarget.h"
-#include "six/sidd/GeoTIFFWriteControl.h"
-#include "six/sidd/ProductCreation.h"
-#include "six/sidd/ProductProcessing.h"
 #include "six/sidd/SFA.h"
-#include "six/sidd/Utilities.h"
 
-#endif
+const char six::sidd::sfa::Point::TYPE_NAME[] = "Point";
+const char six::sidd::sfa::LineString::TYPE_NAME[] = "LineString";
+const char six::sidd::sfa::Polygon::TYPE_NAME[] = "Polygon";
+const char six::sidd::sfa::Triangle::TYPE_NAME[] = "Triangle";
+const char six::sidd::sfa::PolyhedralSurface::TYPE_NAME[] = "PolyhedralSurface";
+const char six::sidd::sfa::TriangulatedIrregularNetwork::TYPE_NAME[] =
+        "TriangulatedIrregularNetwork";
+const char six::sidd::sfa::MultiPoint::TYPE_NAME[] = "MultiPoint";
+const char six::sidd::sfa::MultiLineString::TYPE_NAME[] = "MultiLineString";
+const char six::sidd::sfa::MultiPolygon::TYPE_NAME[] = "MultiPolygon";
