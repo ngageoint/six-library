@@ -132,10 +132,10 @@ int main(int argc, char** argv)
         data->grid->timeCOAPoly = six::Poly2D(0, 0);
         data->grid->timeCOAPoly[0][0] = 15605743.142846;
         data->position->arpPoly = six::PolyXYZ(0);
-        data->position->arpPoly[0] = 0;
+        data->position->arpPoly[0] = 0.0;
 
         data->grid->row->sign = six::FFTSign::POS;
-        data->grid->row->unitVector = 0;
+        data->grid->row->unitVector = 0.0;
         data->grid->row->sampleSpacing = 0;
         data->grid->row->impulseResponseWidth = 0;
         data->grid->row->impulseResponseBandwidth = 0;
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
         data->grid->row->deltaK1 = 0;
         data->grid->row->deltaK2 = 0;
         data->grid->col->sign = six::FFTSign::POS;
-        data->grid->col->unitVector = 0;
+        data->grid->col->unitVector = 0.0;
         data->grid->col->sampleSpacing = 0;
         data->grid->col->impulseResponseWidth = 0;
         data->grid->col->impulseResponseBandwidth = 0;
@@ -169,13 +169,13 @@ int main(int argc, char** argv)
         data->scpcoa->incidenceAngle = 0;
         data->scpcoa->twistAngle = 0;
         data->scpcoa->slopeAngle = 0;
-        data->scpcoa->arpPos = 0;
-        data->scpcoa->arpVel = 0;
-        data->scpcoa->arpAcc = 0;
+        data->scpcoa->arpPos = 0.0;
+        data->scpcoa->arpVel = 0.0;
+        data->scpcoa->arpAcc = 0.0;
 
-        data->pfa->focusPlaneNormal = 0;
-        data->pfa->imagePlaneNormal = 0;
-        data->pfa->polarAngleRefTime = 0;
+        data->pfa->focusPlaneNormal = 0.0;
+        data->pfa->imagePlaneNormal = 0.0;
+        data->pfa->polarAngleRefTime = 0.0;
         data->pfa->krg1 = 0;
         data->pfa->krg2 = 0;
         data->pfa->kaz1 = 0;

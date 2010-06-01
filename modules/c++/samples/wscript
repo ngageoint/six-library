@@ -1,13 +1,16 @@
 NAME            = 'samples'
 VERSION         = '0.1'
 MODULE_DEPS     = 'scene tiff nitf xml.lite six six.sicd six.sidd'
-#DEFS = 'USE_SIO_LITE'
-DEFS = ''
-#MODULE_DEPS += ' sio.lite'
+USELIB          = 'SIX_SAMPLES'
+
 set_options = configure = distclean = lambda p: None
-samples = 'test_extract_xml test_create_sicd test_dump_sicd_lines test_dump_sidd_lines test_create_sidd test_create_sidd_from_mem test_parse_xml'
+
+SAMPLES = 'test_extract_xml test_create_sicd test_dump_sicd_lines test_dump_sidd_lines test_create_sidd test_create_sidd_from_mem test_parse_xml'
 #test_round_trip_sicd
 
 def build(bld):
-    for sample in samples.split():
-        bld.program(defines=DEFS, module_deps=MODULE_DEPS, source='%s.cpp' % sample, name=sample)
+    for sample in SAMPLES.split():
+        bld.program(uselib=USELIB,
+                    module_deps=MODULE_DEPS,
+                    source='%s.cpp' % sample,
+                    name=sample)
