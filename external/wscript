@@ -1,8 +1,27 @@
+import Options
+
+def set_options(opt):
+    opt.add_option('--enable-openjpeg', action='store_true', dest='openjpeg',
+                   help='Enable openjpeg', default=False)
+    
 def configure(conf):
-    conf.sub_config('drivers jasper-plugins openjpeg-plugins')
+    conf.sub_config('drivers jasper-plugins')
+    
+    conf.check_message_1('Enabling OpenJPEG plug-in')
+    if Options.options.openjpeg:
+        conf.check_message_2('yes')
+        conf.sub_config('openjpeg-plugins')
+        conf.env['OPENJPEG'] = True
+    else:
+        conf.check_message_2('no', 'YELLOW')
 
 def build(bld):
-    bld.add_subdirs('drivers jasper-plugins libjpeg-plugins openjpeg-plugins')
+    bld.add_subdirs('drivers jasper-plugins libjpeg-plugins')
+    
+    variant = bld.env['VARIANT'] or 'default'
+    env = bld.env_of_name(variant)
+    if 'OPENJPEG' in env and env['OPENJPEG']:
+        bld.add_subdirs('openjpeg-plugins')
 
 def distclean(context):
-    context.recurse('drivers jasper-plugins libjpeg-plugins openjpeg-plugins')
+    context.recurse('drivers jasper-plugins libjpeg-plugins')

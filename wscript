@@ -9,7 +9,7 @@ blddir  = 'target'
 
 def set_options(opt):
     opt.tool_options('build', tooldir='build')
-    opt.sub_options('c c++ java python')
+    opt.sub_options('c c++ java python external')
 
 def configure(conf):
     conf.env['APPNAME'] = APPNAME
