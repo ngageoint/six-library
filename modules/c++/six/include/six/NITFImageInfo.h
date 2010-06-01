@@ -71,6 +71,10 @@ public:
             type = "R";
             break;
 
+        case PixelType::RE16I_IM16I:
+            type = "SI";
+            break;
+
         default:
             type = "INT";
 
