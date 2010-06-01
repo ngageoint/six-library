@@ -279,8 +279,8 @@ int main(int argc, char** argv)
             processorInformation->site = "Ypsilanti, MI";
 
             data->display->pixelType = pixelType; 
-            data->display->decimationMethod = DecimationMethod::BRIGHTEST_PIXEL;
-            data->display->magnificationMethod = MagnificationMethod::NEAREST_NEIGHBOR;
+            data->display->decimationMethod = six::DecimationMethod::BRIGHTEST_PIXEL;
+            data->display->magnificationMethod = six::MagnificationMethod::NEAREST_NEIGHBOR;
 
             // Give'em our LUT
             data->display->remapInformation->remapLUT = lut;
@@ -292,9 +292,9 @@ int main(int argc, char** argv)
             planeProjection->timeCOAPoly = six::Poly2D(0, 0);
             planeProjection->timeCOAPoly[0][0] = 1;
             data->measurement->arpPoly = six::PolyXYZ(0);
-            data->measurement->arpPoly[0] = 0;
-            planeProjection->productPlane.rowUnitVector = 0;
-            planeProjection->productPlane.colUnitVector = 0;
+            data->measurement->arpPoly[0] = 0.0;
+            planeProjection->productPlane.rowUnitVector = 0.0;
+            planeProjection->productPlane.colUnitVector = 0.0;
 
             six::sidd::Collection* parent =
                 data->exploitationFeatures->collections[0];
