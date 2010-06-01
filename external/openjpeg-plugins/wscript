@@ -1,0 +1,19 @@
+import os, shutil
+import Options
+
+configure = distclean = lambda x: False
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
+    
+    libPattern = env['shlib_PATTERN']
+    if libPattern.startswith('lib'):
+        libPattern = libPattern[3:]
+    libEnv = env.copy()
+    lib = bld.new_task_gen('cc', 'shlib', target='OpenJPEGDecompress',
+                           uselib_local='OPENJPEG nitf-c'.split(), env=libEnv,
+                           install_path='${PREFIX}/share/nitf/plugins')
+    lib.find_sources_in_dirs('./source', excludes=[])
+    libEnv['shlib_PATTERN'] = libPattern
+

@@ -1,10 +1,8 @@
 def configure(conf):
-    conf.sub_config('drivers jasper-plugins')
+    conf.sub_config('drivers jasper-plugins openjpeg-plugins')
 
 def build(bld):
-    bld.add_subdirs('drivers jasper-plugins libjpeg-plugins')
-    #bld.add_subdirs('libjpeg-plugins')
+    bld.add_subdirs('drivers jasper-plugins libjpeg-plugins openjpeg-plugins')
 
 def distclean(context):
-    context.recurse('drivers jasper-plugins libjpeg-plugins')
-    #context.recurse('libjpeg-plugins')
+    context.recurse('drivers jasper-plugins libjpeg-plugins openjpeg-plugins')
