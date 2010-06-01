@@ -75,7 +75,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
         six::PixelType& pixelType)
 {
 
-    pixelType = six::MONO8I;
+    pixelType = six::PixelType::MONO8I;
 
     int et = fileHeader->getElementType();
     int es = fileHeader->getElementSize();
@@ -89,11 +89,11 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
 
     if (es == 2)
     {
-        pixelType = six::MONO16I;
+        pixelType = six::PixelType::MONO16I;
     }
     else if (es == 3)
     {
-        pixelType = six::RGB24I;
+        pixelType = six::PixelType::RGB24I;
     }
 
     if (!fileHeader->getNumUserDataFields())
@@ -108,7 +108,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
     {
         if (p->first == IMGMANIP_COLORMAP)
         {
-            pixelType = six::RGB8LU;
+            pixelType = six::PixelType::RGB8LU;
             // Switch the mode, and dont forget to slurp the colormap
             lut = new six::LUT((unsigned char*) &(p->second)[0], 256, 3);
             break;
@@ -208,13 +208,13 @@ int main(int argc, char** argv)
 
         six::XMLControlFactory::getInstance().
             addCreator(
-                six::COMPLEX, 
+                six::DataClass::COMPLEX,
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
                 );
 
         six::XMLControlFactory::getInstance().
             addCreator(
-                six::DERIVED, 
+                six::DataClass::DERIVED,
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>()
                 );
 
@@ -228,7 +228,7 @@ int main(int argc, char** argv)
         six::Data* complexData = profile.newData(options);
 
         // Create a file container
-        six::Container* container = new six::Container(six::DERIVED);
+        six::Container* container = new six::Container(six::DataType::DERIVED);
 
         // We have a source for each image
         std::vector<io::InputStream*> sources;
@@ -260,8 +260,8 @@ int main(int argc, char** argv)
             six::sidd::DerivedData* data = builder.steal(); //steal it
 
             builder.addDisplay(pixelType);
-            builder.addGeographicAndTarget(six::GEOGRAPHIC_INFO);
-            builder.addMeasurement(six::PLANE);
+            builder.addGeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO);
+            builder.addMeasurement(six::ProjectionType::PLANE);
             builder.addExploitationFeatures(1);
 
             data->setNumRows(fileHeader->getNumLines());
@@ -303,7 +303,7 @@ int main(int argc, char** argv)
             parent->information->resolution.azimuth = 0;
             parent->information->collectionDuration = 0;
             parent->information->collectionDateTime = six::DateTime();
-            parent->information->radarMode = six::SPOTLIGHT;
+            parent->information->radarMode = six::RadarModeType::SPOTLIGHT;
             parent->information->sensorName = "";
             data->exploitationFeatures->product.resolution.row = 0;
             data->exploitationFeatures->product.resolution.col = 0;

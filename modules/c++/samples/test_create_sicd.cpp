@@ -31,7 +31,6 @@
 // For SICD implementation
 #include <import/six/sicd.h>
 
-
 /*!
  *  This file takes in an SIO and turns it in to a SICD.
  *  It uses the WriteControl::save() function to stream
@@ -60,7 +59,6 @@
  *  test_dump_sicd_lines WRA_sicd.nitf -sio
  */
 
-
 /*!
  *  We want to create a SICD NITF from something
  *  else.  For this simple example, I will use
@@ -78,8 +76,8 @@ int main(int argc, char** argv)
     if (argc != 3 && argc != 5)
     {
         die_printf(
-                "Usage: %s <sio-image-file> <sicd-output-file> (Max product size) (N rows limit)\n",
-                argv[0]);
+                   "Usage: %s <sio-image-file> <sicd-output-file> (Max product size) (N rows limit)\n",
+                   argv[0]);
     }
 
     std::string inputName(argv[1]);
@@ -94,11 +92,10 @@ int main(int argc, char** argv)
         // If its called from multiple threads, must be synchronized
         // TODO: Replace with lazy plugin?
         //--------------------------------------------------------------------
-        six::XMLControlFactory::getInstance().
-            addCreator(
-                six::COMPLEX, 
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
-                );
+        six::XMLControlFactory::getInstance(). addCreator(
+                                                          six::DataClass::COMPLEX,
+                                                          new six::XMLControlCreatorT<
+                                                                  six::sicd::ComplexXMLControl>());
 
         // Open a file with inputName
         io::FileInputStream inputFile(inputName);
@@ -117,26 +114,27 @@ int main(int argc, char** argv)
 
         // And that its std::complex<float>-able
         if (fileHeader->getElementSize() != 8)
-            throw except::Exception(Ctxt(
-                    "Expected a 4-real 4-imag complex image!"));
+            throw except::Exception(
+                                    Ctxt(
+                                         "Expected a 4-real 4-imag complex image!"));
 
         // Create the Data
         // TODO: Use a ComplexDataBuilder?
         six::sicd::ComplexData* data = new six::sicd::ComplexData();
-        data->setPixelType(six::RE32F_IM32F);
+        data->setPixelType(six::PixelType::RE32F_IM32F);
         data->setNumRows(fileHeader->getNumLines());
         data->setNumCols(fileHeader->getNumElements());
         data->setName("corename");
         data->setCreationTime(six::DateTime());
         data->setImageCorners(makeUpCornersFromDMS());
-        data->collectionInformation->radarMode = six::SPOTLIGHT;
-        data->scpcoa->sideOfTrack = six::LEFT;
+        data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
+        data->scpcoa->sideOfTrack = six::SideOfTrackType::LEFT;
         data->grid->timeCOAPoly = six::Poly2D(0, 0);
         data->grid->timeCOAPoly[0][0] = 15605743.142846;
         data->position->arpPoly = six::PolyXYZ(0);
         data->position->arpPoly[0] = 0;
 
-        data->grid->row->sign = six::POS;
+        data->grid->row->sign = six::FFTSign::POS;
         data->grid->row->unitVector = 0;
         data->grid->row->sampleSpacing = 0;
         data->grid->row->impulseResponseWidth = 0;
@@ -144,7 +142,7 @@ int main(int argc, char** argv)
         data->grid->row->kCenter = 0;
         data->grid->row->deltaK1 = 0;
         data->grid->row->deltaK2 = 0;
-        data->grid->col->sign = six::POS;
+        data->grid->col->sign = six::FFTSign::POS;
         data->grid->col->unitVector = 0;
         data->grid->col->sampleSpacing = 0;
         data->grid->col->impulseResponseWidth = 0;
@@ -186,7 +184,7 @@ int main(int argc, char** argv)
         data->imageFormation->txFrequencyProcMin = 0;
         data->imageFormation->txFrequencyProcMax = 0;
 
-        six::Container* container = new six::Container(six::COMPLEX);
+        six::Container* container = new six::Container(six::DataType::COMPLEX);
         container->addData(data);
         six::WriteControl* writer = new six::NITFWriteControl();
 
@@ -206,12 +204,12 @@ int main(int argc, char** argv)
             std::cout << "Overriding NITF product size and max ILOC"
                     << std::endl;
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, str::toType<
-                            long>(argv[3]));
+                                              six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                                              str::toType<long>(argv[3]));
 
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
-                    str::toType<long>(argv[4]));
+                                              six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+                                              str::toType<long>(argv[4]));
 
         }
 
@@ -219,8 +217,10 @@ int main(int argc, char** argv)
         bool needsByteSwap = sys::isBigEndianSystem()
                 && fileHeader->isDifferentByteOrdering();
 
-        writer->getOptions().setParameter(six::WriteControl::OPT_BYTE_SWAP,
-                six::Parameter((sys::Uint16_T) needsByteSwap));
+        writer->getOptions().setParameter(
+                                          six::WriteControl::OPT_BYTE_SWAP,
+                                          six::Parameter(
+                                                         (sys::Uint16_T) needsByteSwap));
 
         writer->initialize(container);
         std::vector<io::InputStream*> sources;
@@ -240,8 +240,8 @@ int main(int argc, char** argv)
 #else
 int main(int argc, char** argv)
 {
-    std::cout << "sio.lite module not compiled in, test could not be run" 
-	      << std::endl;
+    std::cout << "sio.lite module not compiled in, test could not be run"
+    << std::endl;
     return 0;
 }
 #endif
