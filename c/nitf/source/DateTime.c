@@ -165,7 +165,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_setMinute(nitf_DateTime *dateTime,
 }
 
 NITFAPI(NITF_BOOL) nitf_DateTime_setSecond(nitf_DateTime *dateTime,
-        int second,
+        double second,
         nitf_Error *error)
 {
     dateTime->second = second;
@@ -330,7 +330,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
                 return NITF_FAILURE;
             }
 
-            memset(newFmtString, 0, strlen(format) - formatLength + 3);
+            memset(newFmtString, 0, strlen(format) - formatLength + strlen(tempString) + 1);
             strncpy(newFmtString, format, begStringLen);
             strcat(newFmtString, "%S.");
             strcat(newFmtString, tempString);

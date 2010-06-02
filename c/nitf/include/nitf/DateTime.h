@@ -118,7 +118,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_setMinute(nitf_DateTime *dateTime,
  * Sets the second of a DateTime object and updates the timeInMillis.
  */
 NITFAPI(NITF_BOOL) nitf_DateTime_setSecond(nitf_DateTime *dateTime,
-                                           int second,
+                                           double second,
                                            nitf_Error *error);
 
 /*!
