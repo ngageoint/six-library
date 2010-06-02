@@ -47,7 +47,8 @@ template<> DateTime six::toType<DateTime>(const std::string& dateTime)
     {
         //Try an XML format type
         if (dateTime.length() >= 19)
-            return DateTime(dateTime.substr(0, 19), "%Y-%m-%dT%H:%M:%S");
+            return DateTime(dateTime.substr(0, dateTime.length() - 1),
+                    "%Y-%m-%dT%H:%M:%S");
     }
     catch (except::Exception&)
     {
