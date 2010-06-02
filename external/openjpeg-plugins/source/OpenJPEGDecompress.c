@@ -47,6 +47,9 @@ NITFPRIV(void) implMemFree(void* p);
 NITFPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data);
 NITFPRIV(bool) implStreamSeek(OPJ_SIZE_T bytes, void *data);
 NITFPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data);
+NITFPRIV(void) implErrorCallback(const char *msg, void *data);
+NITFPRIV(void) implWarningCallback(const char *msg, void *data);
+NITFPRIV(void) implInfoCallback(const char *msg, void *data);
 
 static char *ident[] = { "DECOMPRESSION", /*  This is a decompression handler  */
 "C8", /*  JPEG2000 is C8 in the NITF spec  */
@@ -160,10 +163,17 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
 
     /*printf("Block number: %d\n", blockNumber);*/
 
-    /* setup the decoder */
+    /* create the decoder */
     codec = opj_create_decompress(CODEC_J2K);
+
+    /* add some message callback handlers */
+    opj_set_error_handler(codec, (opj_msg_callback)implErrorCallback, NULL);
+    opj_set_warning_handler(codec, (opj_msg_callback)implWarningCallback, NULL);
+    opj_set_info_handler(codec, (opj_msg_callback)implInfoCallback, NULL);
+
     opj_set_default_decoder_parameters(&parameters);
 
+    /* setup the decoder */
     if (!opj_setup_decoder(codec, &parameters))
     {
         opj_destroy_codec(codec);
@@ -190,7 +200,7 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
             opj_destroy_codec(codec);
             implMemFree((void *)buf);
             nitf_Error_init(error,
-                    "Error reading tile header",
+                    "Error reading header",
                     NITF_CTXT,
                     NITF_ERR_DECOMPRESSION);
             return NULL;
@@ -211,6 +221,11 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                     NITF_ERR_DECOMPRESSION);
             return NULL;
         }
+
+        /*printf("decoding area: %d, %d  %d, %d\n", blockCol * blockWidth,
+                        blockRow * blockHeight,
+                        (blockCol + 1) * blockWidth,
+                        (blockRow + 1) * blockHeight);*/
 
         while(keepGoing)
         {
@@ -345,7 +360,8 @@ NITFPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
 NITFPRIV(bool) implStreamSeek(OPJ_SIZE_T bytes, void *data)
 {
     ImplControl *ctrl = (ImplControl*)data;
-    if (!nitf_IOInterface_seek(ctrl->io, bytes, NITF_SEEK_SET, &ctrl->error))
+    if (!nitf_IOInterface_seek(ctrl->io, ctrl->offset + bytes,
+                               NITF_SEEK_SET, &ctrl->error))
     {
         return 0;
     }
@@ -362,3 +378,17 @@ NITFPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data)
     return bytes;
 }
 
+NITFPRIV(void) implErrorCallback(const char *msg, void *data)
+{
+    fprintf(stderr, "Error: %s\n", msg);
+}
+
+NITFPRIV(void) implWarningCallback(const char *msg, void *data)
+{
+    fprintf(stdout, "Warning: %s\n", msg);
+}
+
+NITFPRIV(void) implInfoCallback(const char *msg, void *data)
+{
+    fprintf(stdout, "Info: %s\n", msg);
+}
