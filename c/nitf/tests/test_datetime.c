@@ -155,7 +155,7 @@ TEST_CASE(testMillis)
 {
     nitf_Error e;
     char buf[MAX_DATE_STRING];
-    const char* timeStr = "2010-01-12T22:55:37.467000Z";
+    const char* timeStr = "2010-01-12T22:55:37.123456Z";
     nitf_DateTime *date = NULL;
 
     date = nitf_DateTime_fromString(timeStr, "%Y-%m-%dT%H:%M:%SZ", &e);

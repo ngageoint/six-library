@@ -22,7 +22,7 @@
 
 #include "nitf/DateTime.h"
 
-NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm, int *millis);
+NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm, double *millis);
 
 NITFAPI(nitf_DateTime*) nitf_DateTime_now(nitf_Error *error)
 {
@@ -204,7 +204,7 @@ NITFAPI(nitf_DateTime*) nitf_DateTime_fromString(const char* string,
 {
     struct tm t, lt;
     time_t gmtSeconds;
-    int millis = 0;
+    double millis = 0.0;
 
     gmtSeconds = (time_t)(nitf_Utils_getCurrentTimeMillis() / 1000.0); /* gmt */
     lt = *localtime(&gmtSeconds);
@@ -242,7 +242,6 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
         const char* format, char* outBuf, size_t maxSize, nitf_Error *error)
 {
     time_t timeInSeconds;
-    time_t remainingMillis;
     double fractSeconds;
     struct tm t;
     char *newFmtString = NULL;
@@ -256,7 +255,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
 
     timeInSeconds = (time_t)(millis / 1000);
     t = *gmtime(&timeInSeconds);
-    remainingMillis = (time_t)(((millis / 1000.0) - timeInSeconds) * 1000 + 0.5);
+    fractSeconds = (millis / 1000.0) - timeInSeconds;
 
     /* Search for "%...S" string */
     formatLength = strlen(format);
@@ -303,8 +302,9 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
         if (decimalPlaces > 0)
         {
             char *tempString;
+            int newFmtLen;
 
-            tempString = NITF_MALLOC(decimalPlaces + 1);
+            tempString = NITF_MALLOC(decimalPlaces + 3); /* add extra for 0. */
             if (!tempString)
             {
                 nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -312,17 +312,18 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
                 return NITF_FAILURE;
             }
 
-            memset(tempString, 0, decimalPlaces + 1);
+            memset(tempString, 0, decimalPlaces + 3);
 
+            /* removed this so we don't overflow a double */
             /* Get the fractional value while also */
             /* moving the decimal to the right */
-            fractSeconds = (remainingMillis / 1000.0);
-            for(i = 0; i < decimalPlaces; ++i)
-                fractSeconds *= 10;
+            /*for(i = 0; i < decimalPlaces; ++i)
+                fractSeconds *= 10;*/
 
-            sprintf(tempString, "%0*d", decimalPlaces, (int)(fractSeconds + 0.5));
+            sprintf(tempString, "%.*f", decimalPlaces, fractSeconds);
 
-            newFmtString = (char*)NITF_MALLOC(strlen(format) - formatLength + strlen(tempString) + 1);
+            newFmtLen = begStringLen + 2 + strlen(tempString) - 1 + strlen(endString);
+            newFmtString = (char*)NITF_MALLOC(newFmtLen);
             if (!newFmtString)
             {
                 nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -330,10 +331,10 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
                 return NITF_FAILURE;
             }
 
-            memset(newFmtString, 0, strlen(format) - formatLength + strlen(tempString) + 1);
+            memset(newFmtString, 0, newFmtLen);
             strncpy(newFmtString, format, begStringLen);
-            strcat(newFmtString, "%S.");
-            strcat(newFmtString, tempString);
+            strcat(newFmtString, "%S");
+            strcat(newFmtString, &tempString[1]);
             strcat(newFmtString, endString);
 
             NITF_FREE(tempString);
@@ -386,7 +387,7 @@ static const char *am_pm[2] =
 
 NITFPRIV(int) _nitf_convNum(const char **, int *, int, int);
 
-NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm, int *millis)
+NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm, double *millis)
 {
     char c;
     const char *bp;
@@ -394,7 +395,7 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm, 
     int alt_format, i, split_year = 0;
 
     bp = buf;
-    *millis = 0;
+    *millis = 0.0;
 
     /* init */
     tm->tm_sec = tm->tm_min = tm->tm_hour = tm->tm_mday =
@@ -634,14 +635,31 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm, 
             /* Determine if the next character is a decimal... */
             if (*bp == '.')
             {
+                int decimalPlaces = 0;
                 /* Get the fractional seconds value */
                 bp++;
-                if (!(_nitf_convNum(&bp, millis, 0, 1000)))
-                return NULL;
-
-                /* clear out some trailing precision, which we can't track */
                 while(*bp >= '0' && *bp <= '9')
-                    bp++;
+                {
+                    double num = (double)(*bp++ - '0');
+                    decimalPlaces++;
+
+                    switch(decimalPlaces)
+                    {
+                    case 1:
+                        num *= 100;
+                        break;
+                    case 2:
+                        num *= 10;
+                        break;
+                    case 3:
+                        break;
+                    default:
+                        for(i = 0; i < decimalPlaces - 3; ++i)
+                            num /= 10.0;
+                        break;
+                    }
+                    *millis += num;
+                }
             }
             break;
 
