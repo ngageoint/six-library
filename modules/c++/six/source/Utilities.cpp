@@ -91,13 +91,7 @@ template<> std::string six::toString(const DateTime& dateTime)
 {
     char date[256];
     date[255] = 0;
-
-    // FIXME!!
-#ifndef WIN32
-    dateTime.format("%FT%TZ", date, 255);
-#else
-    dateTime.format("%Y-%m-%dT%H:%M:%SZ", date, 255);
-#endif
+    dateTime.format("%Y-%m-%dT%H:%M:%.6SZ", date, 255);
     std::string strDate(date);
     return strDate;
 }
