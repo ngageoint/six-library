@@ -23,6 +23,8 @@
 
 const char six::sidd::sfa::Point::TYPE_NAME[] = "Point";
 const char six::sidd::sfa::LineString::TYPE_NAME[] = "LineString";
+const char six::sidd::sfa::Line::TYPE_NAME[] = "Line";
+const char six::sidd::sfa::LinearRing::TYPE_NAME[] = "LinearRing";
 const char six::sidd::sfa::Polygon::TYPE_NAME[] = "Polygon";
 const char six::sidd::sfa::Triangle::TYPE_NAME[] = "Triangle";
 const char six::sidd::sfa::PolyhedralSurface::TYPE_NAME[] = "PolyhedralSurface";

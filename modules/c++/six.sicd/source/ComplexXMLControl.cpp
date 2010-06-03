@@ -87,7 +87,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
     if (radiometricXML != NULL)
     {
         builder.addRadiometric();
-        xmlToRadiometric(radiometricXML, sicd->radiometric);
+        XMLControl::fromXML(radiometricXML, sicd->radiometric);
     }
 
     if (antennaXML != NULL)
@@ -99,7 +99,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
     if (errorStatisticsXML != NULL)
     {
         builder.addErrorStatistics();
-        xmlToErrorStatistics(errorStatisticsXML, sicd->errorStatistics);
+        XMLControl::fromXML(errorStatisticsXML, sicd->errorStatistics);
     }
 
     if (matchInfoXML != NULL)
@@ -150,11 +150,11 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
     imageFormationToXML(sicd->imageFormation, root);
     scpcoaToXML(sicd->scpcoa, root);
     if (sicd->radiometric)
-        radiometricToXML(sicd->radiometric, root);
+        XMLControl::toXML(sicd->radiometric, root);
     if (sicd->antenna)
         antennaToXML(sicd->antenna, root);
     if (sicd->errorStatistics)
-        errorStatisticsToXML(sicd->errorStatistics, root);
+        XMLControl::toXML(sicd->errorStatistics, root);
     if (sicd->matchInformation && !sicd->matchInformation->collects.empty())
         matchInfoToXML(sicd->matchInformation, root);
 

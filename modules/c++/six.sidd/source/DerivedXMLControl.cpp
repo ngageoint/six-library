@@ -30,12 +30,13 @@
 using namespace six;
 using namespace six::sidd;
 
-void DerivedXMLControl::xmlToProductCreation(
-                                             xml::lite::Element* productCreationXML,
-                                             ProductCreation* productCreation)
+typedef xml::lite::Element* XMLElem;
+
+void DerivedXMLControl::fromXML(XMLElem productCreationXML,
+                                ProductCreation* productCreation)
 {
-    xml::lite::Element* informationXML =
-            getFirstAndOnly(productCreationXML, "ProcessorInformation");
+    XMLElem informationXML = getFirstAndOnly(productCreationXML,
+                                             "ProcessorInformation");
     productCreation->processorInformation->application
             = getFirstAndOnly(informationXML, "Application")->getCharacterData();
 
@@ -45,7 +46,7 @@ void DerivedXMLControl::xmlToProductCreation(
     productCreation->processorInformation->site
             = getFirstAndOnly(informationXML, "Site")->getCharacterData();
 
-    xml::lite::Element* profileXML = getOptional(informationXML, "Profile");
+    XMLElem profileXML = getOptional(informationXML, "Profile");
     if (profileXML)
     {
         productCreation->processorInformation->profile
@@ -53,22 +54,21 @@ void DerivedXMLControl::xmlToProductCreation(
     }
 
     //Classification
-    xml::lite::Element* classificationXML = getFirstAndOnly(productCreationXML,
-                                                            "Classification");
+    XMLElem classificationXML = getFirstAndOnly(productCreationXML,
+                                                "Classification");
     productCreation->classification.level
             = getFirstAndOnly(classificationXML, "Level")->getCharacterData();
 
-    std::vector<xml::lite::Element*> secMarkingsXML;
+    std::vector<XMLElem> secMarkingsXML;
     classificationXML->getElementsByTagName("SecurityMarkings", secMarkingsXML);
-    for (std::vector<xml::lite::Element*>::iterator it = secMarkingsXML.begin(); it
+    for (std::vector<XMLElem>::iterator it = secMarkingsXML.begin(); it
             != secMarkingsXML.end(); ++it)
     {
         productCreation->classification.securityMarkings. push_back(
                                                                     (*it)->getCharacterData());
     }
 
-    xml::lite::Element* classGuidanceXML = getOptional(classificationXML,
-                                                       "Guidance");
+    XMLElem classGuidanceXML = getOptional(classificationXML, "Guidance");
     if (classGuidanceXML)
     {
         ClassificationGuidance* classGuidance = new ClassificationGuidance();
@@ -85,8 +85,7 @@ void DerivedXMLControl::xmlToProductCreation(
     productCreation->productClass
             = getFirstAndOnly(productCreationXML, "ProductClass")->getCharacterData();
 
-    xml::lite::Element* productTypeXML = getOptional(productCreationXML,
-                                                     "ProductType");
+    XMLElem productTypeXML = getOptional(productCreationXML, "ProductType");
     if (productTypeXML)
     {
         productCreation->productType = productTypeXML->getCharacterData();
@@ -102,27 +101,23 @@ void DerivedXMLControl::xmlToProductCreation(
     }
 }
 
-void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
-                                     Display* display)
+void DerivedXMLControl::fromXML(XMLElem displayXML, Display* display)
 {
     display->pixelType
             = six::toType<PixelType>(
                                      getFirstAndOnly(displayXML, "PixelType")->getCharacterData());
 
     //RemapInformation
-    xml::lite::Element* remapInformationXML = getOptional(displayXML,
-                                                          "RemapInformation");
+    XMLElem remapInformationXML = getOptional(displayXML, "RemapInformation");
     if (remapInformationXML)
     {
-        if (display->remapInformation->displayType
-                == DisplayType::COLOR)
+        if (display->remapInformation->displayType == DisplayType::COLOR)
         {
 
-            xml::lite::Element* remapXML = getFirstAndOnly(remapInformationXML,
-                                                           "ColorDisplayRemap");
+            XMLElem remapXML = getFirstAndOnly(remapInformationXML,
+                                               "ColorDisplayRemap");
 
-            xml::lite::Element* remapLUTXML = getFirstAndOnly(remapXML,
-                                                              "RemapLUT");
+            XMLElem remapLUTXML = getFirstAndOnly(remapXML, "RemapLUT");
 
             //get size attribute
             int
@@ -147,15 +142,12 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
                 }
             }
         }
-        else if (display->remapInformation->displayType
-                == DisplayType::MONO)
+        else if (display->remapInformation->displayType == DisplayType::MONO)
         {
-            xml::lite::Element* remapXML =
-                    getFirstAndOnly(remapInformationXML,
-                                    "MonochromeDisplayRemap");
+            XMLElem remapXML = getFirstAndOnly(remapInformationXML,
+                                               "MonochromeDisplayRemap");
 
-            xml::lite::Element* remapLUTXML = getFirstAndOnly(remapXML,
-                                                              "RemapLUT");
+            XMLElem remapLUTXML = getFirstAndOnly(remapXML, "RemapLUT");
 
             //get size attribute
             int
@@ -200,8 +192,8 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
                                             getFirstAndOnly(displayXML,
                                                             "DecimationMethod")->getCharacterData());
 
-    xml::lite::Element* histogramOverridesXML =
-            getOptional(displayXML, "DRAHistogramOverrides");
+    XMLElem histogramOverridesXML = getOptional(displayXML,
+                                                "DRAHistogramOverrides");
     if (histogramOverridesXML)
     {
         display->histogramOverrides = new DRAHistogramOverrides();
@@ -212,8 +204,8 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
     }
 
     //MonitorCompensationApplied
-    xml::lite::Element* monitorCompensationXML =
-            getOptional(displayXML, "MonitorCompensationApplied");
+    XMLElem monitorCompensationXML = getOptional(displayXML,
+                                                 "MonitorCompensationApplied");
     if (monitorCompensationXML)
     {
         display->monitorCompensationApplied = new MonitorCompensationApplied();
@@ -235,22 +227,20 @@ void DerivedXMLControl::xmlToDisplay(xml::lite::Element* displayXML,
 
 }
 
-void DerivedXMLControl::xmlToGeographicAndTarget(
-                                                 xml::lite::Element* geographicAndTargetXML,
-                                                 GeographicAndTarget* geographicAndTarget)
+void DerivedXMLControl::fromXML(XMLElem geographicAndTargetXML,
+                                GeographicAndTarget* geographicAndTarget)
 {
-    xml::lite::Element* geographicCoverageXML =
-            getFirstAndOnly(geographicAndTargetXML, "GeographicCoverage");
+    XMLElem geographicCoverageXML = getFirstAndOnly(geographicAndTargetXML,
+                                                    "GeographicCoverage");
 
-    xmlToGeographicCoverage(geographicCoverageXML,
-                            geographicAndTarget->geographicCoverage);
+    fromXML(geographicCoverageXML, geographicAndTarget->geographicCoverage);
 
     //TargetInformation
-    std::vector<xml::lite::Element*> targetInfosXML;
+    std::vector<XMLElem> targetInfosXML;
     geographicAndTargetXML->getElementsByTagName("TargetInformation",
                                                  targetInfosXML);
 
-    for (std::vector<xml::lite::Element*>::iterator it = targetInfosXML.begin(); it
+    for (std::vector<XMLElem>::iterator it = targetInfosXML.begin(); it
             != targetInfosXML.end(); ++it)
     {
         TargetInformation* ti = new TargetInformation();
@@ -259,10 +249,10 @@ void DerivedXMLControl::xmlToGeographicAndTarget(
         parseParameters(*it, "Identifier", ti->identifiers);
 
         //Footprint
-        std::vector<xml::lite::Element*> footprintsXML;
+        std::vector<XMLElem> footprintsXML;
         (*it)->getElementsByTagName("Footprint", footprintsXML);
-        for (std::vector<xml::lite::Element*>::iterator it2 =
-                footprintsXML.begin(); it2 != footprintsXML.end(); ++it2)
+        for (std::vector<XMLElem>::iterator it2 = footprintsXML.begin(); it2
+                != footprintsXML.end(); ++it2)
         {
             std::vector<LatLon> fp;
             parseFootprint(*it2, "Vertex", fp, false);
@@ -278,65 +268,61 @@ void DerivedXMLControl::xmlToGeographicAndTarget(
         catch (except::Exception&)
         {
         }
-
     }
-
 }
 
-void DerivedXMLControl::xmlToGeographicCoverage(
-                                                xml::lite::Element* geographicCoverageXML,
-                                                GeographicCoverage* geographicCoverage)
+void DerivedXMLControl::fromXML(XMLElem geographicCoverageXML,
+                                GeographicCoverage* geographicCoverage)
 {
-    std::vector<xml::lite::Element*> georegionIdsXML;
+    std::vector<XMLElem> georegionIdsXML;
     geographicCoverageXML->getElementsByTagName("GeoregionIdentifier",
                                                 georegionIdsXML);
-    for (std::vector<xml::lite::Element*>::iterator it =
-            georegionIdsXML.begin(); it != georegionIdsXML.end(); ++it)
+    for (std::vector<XMLElem>::iterator it = georegionIdsXML.begin(); it
+            != georegionIdsXML.end(); ++it)
     {
         geographicCoverage->georegionIdentifiers.push_back(
                                                            (*it)->getCharacterData());
     }
 
-    xml::lite::Element* footprintXML = getFirstAndOnly(geographicCoverageXML,
-                                                       "Footprint");
+    XMLElem footprintXML = getFirstAndOnly(geographicCoverageXML, "Footprint");
 
     //Footprint
     parseFootprint(footprintXML, "Vertex", geographicCoverage->footprint, false);
 
     //If there are subregions, recurse
-    std::vector<xml::lite::Element*> subRegionsXML;
+    std::vector<XMLElem> subRegionsXML;
     geographicCoverageXML->getElementsByTagName("SubRegion", subRegionsXML);
 
     int i = 0;
-    for (std::vector<xml::lite::Element*>::iterator it = subRegionsXML.begin(); it
+    for (std::vector<XMLElem>::iterator it = subRegionsXML.begin(); it
             != subRegionsXML.end(); ++it)
     {
         geographicCoverage->subRegion.push_back(
                                                 new GeographicCoverage(
                                                                        RegionType::SUB_REGION));
-        xmlToGeographicCoverage(*it, geographicCoverage->subRegion[i++]);
+        fromXML(*it, geographicCoverage->subRegion[i++]);
     }
 
     //Otherwise read the GeographicInfo
     if (subRegionsXML.size() == 0)
     {
-        xml::lite::Element* geographicInfoXML =
-                getFirstAndOnly(geographicCoverageXML, "GeographicInfo");
+        XMLElem geographicInfoXML = getFirstAndOnly(geographicCoverageXML,
+                                                    "GeographicInfo");
 
         geographicCoverage->geographicInformation = new GeographicInformation();
 
-        std::vector<xml::lite::Element*> countryCodes;
+        std::vector<XMLElem> countryCodes;
         geographicInfoXML->getElementsByTagName("CountryCode", countryCodes);
-        for (std::vector<xml::lite::Element*>::iterator it =
-                countryCodes.begin(); it != countryCodes.end(); ++it)
+        for (std::vector<XMLElem>::iterator it = countryCodes.begin(); it
+                != countryCodes.end(); ++it)
         {
-            xml::lite::Element* countryCode = *it;
+            XMLElem countryCode = *it;
             geographicCoverage->geographicInformation->countryCodes.push_back(
                                                                               countryCode->getCharacterData());
         }
 
-        xml::lite::Element* securityInformationXML =
-                getOptional(geographicInfoXML, "SecurityInformation");
+        XMLElem securityInformationXML = getOptional(geographicInfoXML,
+                                                     "SecurityInformation");
         if (securityInformationXML)
         {
             geographicCoverage->geographicInformation->securityInformation
@@ -354,20 +340,18 @@ void DerivedXMLControl::xmlToGeographicCoverage(
         catch (except::Exception&)
         {
         }
-
     }
 }
 
 // This function ASSUMES that the measurement projection has already been set!
-void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
-                                         Measurement* measurement)
+void DerivedXMLControl::fromXML(XMLElem measurementXML,
+                                Measurement* measurement)
 {
     parseRowColInt(getFirstAndOnly(measurementXML, "PixelFootprint"),
                    measurement->pixelFootprint);
 
-    xml::lite::Element* projXML;
-    if (measurement->projection->projectionType
-            == ProjectionType::PLANE)
+    XMLElem projXML;
+    if (measurement->projection->projectionType == ProjectionType::PLANE)
     {
         projXML = getFirstAndOnly(measurementXML, "PlaneProjection");
     }
@@ -382,7 +366,7 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
         projXML = getFirstAndOnly(measurementXML, "GeographicProjection");
     }
 
-    xml::lite::Element* refXML = getFirstAndOnly(projXML, "ReferencePoint");
+    XMLElem refXML = getFirstAndOnly(projXML, "ReferencePoint");
 
     parseVector3D(getFirstAndOnly(refXML, "ECEF"),
                   measurement->projection->referencePoint.ecef);
@@ -390,8 +374,7 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
     parseRowColDouble(getFirstAndOnly(refXML, "Point"),
                       measurement->projection->referencePoint.rowCol);
 
-    if (measurement->projection->projectionType
-            == ProjectionType::PLANE)
+    if (measurement->projection->projectionType == ProjectionType::PLANE)
     {
         PlaneProjection* planeProj = (PlaneProjection*) measurement->projection;
         parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
@@ -400,8 +383,7 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
         parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
                           planeProj->sampleSpacing);
 
-        xml::lite::Element* prodPlaneXML = getFirstAndOnly(projXML,
-                                                           "ProductPlane");
+        XMLElem prodPlaneXML = getFirstAndOnly(projXML, "ProductPlane");
 
         parseVector3D(getFirstAndOnly(prodPlaneXML, "RowUnitVector"),
                       planeProj->productPlane.rowUnitVector);
@@ -433,8 +415,7 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
         parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
                           cylindricalProj->sampleSpacing);
 
-        xml::lite::Element* curvRadiusXML = getOptional(projXML,
-                                                        "CurvatureRadius");
+        XMLElem curvRadiusXML = getOptional(projXML, "CurvatureRadius");
         if (curvRadiusXML)
         {
             parseDouble(curvRadiusXML, cylindricalProj->curvatureRadius);
@@ -453,8 +434,7 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
         parsePoly2D(getFirstAndOnly(projXML, "RowColToLon"),
                     polyProj->rowColToLat);
 
-        xml::lite::Element* optionalAltPolyXML = getOptional(projXML,
-                                                             "RowColToAlt");
+        XMLElem optionalAltPolyXML = getOptional(projXML, "RowColToAlt");
         if (optionalAltPolyXML)
         {
             parsePoly2D(optionalAltPolyXML, polyProj->rowColToAlt);
@@ -470,25 +450,24 @@ void DerivedXMLControl::xmlToMeasurement(xml::lite::Element* measurementXML,
     else
         throw except::Exception(Ctxt("Unknown projection type"));
 
-    xml::lite::Element* tmpElem = getFirstAndOnly(measurementXML, "ARPPoly");
+    XMLElem tmpElem = getFirstAndOnly(measurementXML, "ARPPoly");
     parsePolyXYZ(tmpElem, measurement->arpPoly);
 
 }
 
-void DerivedXMLControl::xmlToExploitationFeatures(
-                                                  xml::lite::Element* exploitationFeaturesXML,
-                                                  ExploitationFeatures* exploitationFeatures)
+void DerivedXMLControl::fromXML(XMLElem exploitationFeaturesXML,
+                                ExploitationFeatures* exploitationFeatures)
 {
-    xml::lite::Element* tmpElem;
+    XMLElem tmpElem;
 
-    std::vector<xml::lite::Element*> collectionsXML;
+    std::vector<XMLElem> collectionsXML;
     exploitationFeaturesXML->getElementsByTagName("Collection", collectionsXML);
 
     unsigned int idx = 0;
-    for (std::vector<xml::lite::Element*>::iterator it = collectionsXML.begin(); it
+    for (std::vector<XMLElem>::iterator it = collectionsXML.begin(); it
             != collectionsXML.end(); ++it)
     {
-        xml::lite::Element* collectionXML = *it;
+        XMLElem collectionXML = *it;
         Collection* coll;
         if (exploitationFeatures->collections.size() <= idx)
         {
@@ -502,14 +481,12 @@ void DerivedXMLControl::xmlToExploitationFeatures(
 
         // Information
         Information* info = coll->information;
-        xml::lite::Element* informationXML = getFirstAndOnly(collectionXML,
-                                                             "Information");
+        XMLElem informationXML = getFirstAndOnly(collectionXML, "Information");
 
         info->sensorName
                 = getFirstAndOnly(informationXML, "SensorName")->getCharacterData();
 
-        xml::lite::Element* radarModeXML = getFirstAndOnly(informationXML,
-                                                           "RadarMode");
+        XMLElem radarModeXML = getFirstAndOnly(informationXML, "RadarMode");
         info->radarMode
                 = six::toType<RadarModeType>(
                                              getFirstAndOnly(radarModeXML,
@@ -535,7 +512,7 @@ void DerivedXMLControl::xmlToExploitationFeatures(
         parseRangeAzimuth(getFirstAndOnly(informationXML, "Resolution"),
                           info->resolution);
 
-        xml::lite::Element* roiXML = getOptional(informationXML, "InputROI");
+        XMLElem roiXML = getOptional(informationXML, "InputROI");
         if (roiXML)
         {
             info->inputROI = new InputROI();
@@ -546,8 +523,7 @@ void DerivedXMLControl::xmlToExploitationFeatures(
                               info->inputROI->upperLeft);
         }
 
-        xml::lite::Element* polXML =
-                getOptional(informationXML, "Polarization");
+        XMLElem polXML = getOptional(informationXML, "Polarization");
         if (polXML)
         {
             info->polarization = new TxRcvPolarization();
@@ -561,8 +537,7 @@ void DerivedXMLControl::xmlToExploitationFeatures(
         }
 
         // Geometry
-        xml::lite::Element* geometryXML =
-                getOptional(collectionXML, "Geometry");
+        XMLElem geometryXML = getOptional(collectionXML, "Geometry");
 
         if (geometryXML)
         {
@@ -602,8 +577,7 @@ void DerivedXMLControl::xmlToExploitationFeatures(
 
         // Phenomenology
 
-        xml::lite::Element* phenomenologyXML = getOptional(collectionXML,
-                                                           "Phenomenology");
+        XMLElem phenomenologyXML = getOptional(collectionXML, "Phenomenology");
 
         if (phenomenologyXML)
         {
@@ -643,8 +617,7 @@ void DerivedXMLControl::xmlToExploitationFeatures(
         }
     }
 
-    xml::lite::Element* productXML = getFirstAndOnly(exploitationFeaturesXML,
-                                                     "Product");
+    XMLElem productXML = getFirstAndOnly(exploitationFeaturesXML, "Product");
     Product prod = exploitationFeatures->product;
 
     parseRowColDouble(getFirstAndOnly(productXML, "Resolution"),
@@ -657,16 +630,15 @@ void DerivedXMLControl::xmlToExploitationFeatures(
 
 Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
 {
-    xml::lite::Element *root = doc->getRootElement();
+    XMLElem root = doc->getRootElement();
 
-    xml::lite::Element* productCreationXML = getFirstAndOnly(root,
-                                                             "ProductCreation");
-    xml::lite::Element* displayXML = getFirstAndOnly(root, "Display");
-    xml::lite::Element* measurementXML = getFirstAndOnly(root, "Measurement");
-    xml::lite::Element* exploitationFeaturesXML =
-            getFirstAndOnly(root, "ExploitationFeatures");
-    xml::lite::Element* geographicAndTargetXML =
-            getFirstAndOnly(root, "GeographicAndTarget");
+    XMLElem productCreationXML = getFirstAndOnly(root, "ProductCreation");
+    XMLElem displayXML = getFirstAndOnly(root, "Display");
+    XMLElem measurementXML = getFirstAndOnly(root, "Measurement");
+    XMLElem exploitationFeaturesXML = getFirstAndOnly(root,
+                                                      "ExploitationFeatures");
+    XMLElem geographicAndTargetXML = getFirstAndOnly(root,
+                                                     "GeographicAndTarget");
 
     DerivedDataBuilder builder;
     DerivedData *data = builder.steal(); //steal it
@@ -680,8 +652,8 @@ Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
     builder.addDisplay(pixelType);
 
     RegionType regionType = RegionType::SUB_REGION;
-    xml::lite::Element* tmpElem = getFirstAndOnly(geographicAndTargetXML,
-                                                  "GeographicCoverage");
+    XMLElem tmpElem = getFirstAndOnly(geographicAndTargetXML,
+                                      "GeographicCoverage");
     // see if GeographicCoverage contains SubRegion or GeographicInfo
 
     if (getOptional(tmpElem, "SubRegion"))
@@ -707,64 +679,71 @@ Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
 
     builder.addMeasurement(projType);
 
-    std::vector<xml::lite::Element*> elements;
+    std::vector<XMLElem> elements;
     exploitationFeaturesXML->getElementsByTagName("ExploitationFeatures",
                                                   elements);
     builder.addExploitationFeatures(elements.size());
 
-    xmlToProductCreation(productCreationXML, data->productCreation);
-    xmlToDisplay(displayXML, data->display);
-    xmlToGeographicAndTarget(geographicAndTargetXML, data->geographicAndTarget);
-    xmlToMeasurement(measurementXML, data->measurement);
-    xmlToExploitationFeatures(exploitationFeaturesXML,
-                              data->exploitationFeatures);
+    fromXML(productCreationXML, data->productCreation);
+    fromXML(displayXML, data->display);
+    fromXML(geographicAndTargetXML, data->geographicAndTarget);
+    fromXML(measurementXML, data->measurement);
+    fromXML(exploitationFeaturesXML, data->exploitationFeatures);
 
-    xml::lite::Element *productProcessingXML = getOptional(root,
-                                                           "ProductProcessing");
+    XMLElem productProcessingXML = getOptional(root, "ProductProcessing");
     if (productProcessingXML)
     {
         builder.addProductProcessing();
-        xmlToProductProcessing(productProcessingXML, data->productProcessing);
+        fromXML(productProcessingXML, data->productProcessing);
     }
 
-    xml::lite::Element *downstreamReprocessingXML =
-            getOptional(root, "DownstreamReprocessing");
+    XMLElem downstreamReprocessingXML = getOptional(root,
+                                                    "DownstreamReprocessing");
     if (downstreamReprocessingXML)
     {
         builder.addDownstreamReprocessing();
-        xmlToDownstreamReprocessing(downstreamReprocessingXML,
-                                    data->downstreamReprocessing);
+        fromXML(downstreamReprocessingXML, data->downstreamReprocessing);
     }
 
-    xml::lite::Element *errorStatisticsXML = getOptional(root,
-                                                         "ErrorStatistics");
+    XMLElem errorStatisticsXML = getOptional(root, "ErrorStatistics");
     if (errorStatisticsXML)
     {
         builder.addErrorStatistics();
-        xmlToErrorStatistics(errorStatisticsXML, data->errorStatistics);
+        XMLControl::fromXML(errorStatisticsXML, data->errorStatistics);
     }
 
-    xml::lite::Element *radiometricXML = getOptional(root, "Radiometric");
+    XMLElem radiometricXML = getOptional(root, "Radiometric");
     if (radiometricXML)
     {
         builder.addRadiometric();
-        xmlToRadiometric(radiometricXML, data->radiometric);
+        XMLControl::fromXML(radiometricXML, data->radiometric);
+    }
+
+    XMLElem annotationsXML = getOptional(root, "Annotations");
+    if (annotationsXML)
+    {
+        std::vector<XMLElem> annChildren;
+        annotationsXML->getElementsByTagName("Annotation", annChildren);
+        for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
+        {
+            Annotation *a = new Annotation();
+            fromXML(annChildren[i], a);
+            data->annotations.push_back(a);
+        }
     }
 
     return data;
 }
 
-xml::lite::Element* DerivedXMLControl::productCreationToXML(
-                                                            ProductCreation* productCreation,
-                                                            xml::lite::Element* parent)
+XMLElem DerivedXMLControl::toXML(ProductCreation* productCreation,
+                                 XMLElem parent)
 {
     // Make the XML node
-    xml::lite::Element* productCreationXML = newElement("ProductCreation",
-                                                        parent);
+    XMLElem productCreationXML = newElement("ProductCreation", parent);
 
     // Processor Info
-    xml::lite::Element* procInfoXML = newElement("ProcessorInformation",
-                                                 productCreationXML);
+    XMLElem procInfoXML =
+            newElement("ProcessorInformation", productCreationXML);
 
     createString("Application",
                  productCreation->processorInformation->application,
@@ -786,8 +765,7 @@ xml::lite::Element* DerivedXMLControl::productCreationToXML(
     }
 
     //Classification
-    xml::lite::Element* classXML = newElement("Classification",
-                                              productCreationXML);
+    XMLElem classXML = newElement("Classification", productCreationXML);
     createString("Level", productCreation->classification.level, classXML);
 
     for (std::vector<std::string>::iterator it =
@@ -802,7 +780,7 @@ xml::lite::Element* DerivedXMLControl::productCreationToXML(
 
     if (productCreation->classification.guidance)
     {
-        xml::lite::Element* guidanceXML = newElement("Guidance", classXML);
+        XMLElem guidanceXML = newElement("Guidance", classXML);
         createString("Authority",
                      productCreation->classification.guidance->authority,
                      guidanceXML);
@@ -832,10 +810,9 @@ xml::lite::Element* DerivedXMLControl::productCreationToXML(
     return productCreationXML;
 }
 
-xml::lite::Element*
-DerivedXMLControl::displayToXML(Display* display, xml::lite::Element* parent)
+XMLElem DerivedXMLControl::toXML(Display* display, XMLElem parent)
 {
-    xml::lite::Element* displayXML = newElement("Display", parent);
+    XMLElem displayXML = newElement("Display", parent);
 
     createString("PixelType", str::toString(display->pixelType), displayXML);
 
@@ -843,10 +820,9 @@ DerivedXMLControl::displayToXML(Display* display, xml::lite::Element* parent)
     if (display->remapInformation && (display->pixelType == PixelType::RGB8LU
             || display->pixelType == PixelType::MONO8LU))
     {
-        xml::lite::Element* remapInfoXML = newElement("RemapInformation",
-                                                      displayXML);
+        XMLElem remapInfoXML = newElement("RemapInformation", displayXML);
 
-        xml::lite::Element* remapXML;
+        XMLElem remapXML;
         if (display->pixelType == PixelType::RGB8LU)
         {
             remapXML = newElement("ColorDisplayRemap", remapInfoXML);
@@ -886,8 +862,7 @@ DerivedXMLControl::displayToXML(Display* display, xml::lite::Element* parent)
     //DRAHistogramOverrides - optional
     if (display->histogramOverrides)
     {
-        xml::lite::Element *histo = newElement("DRAHistogramOverrides",
-                                               displayXML);
+        XMLElem histo = newElement("DRAHistogramOverrides", displayXML);
         createInt("ClipMin", display->histogramOverrides->clipMin, histo);
         createInt("ClipMax", display->histogramOverrides->clipMax, histo);
     }
@@ -895,8 +870,7 @@ DerivedXMLControl::displayToXML(Display* display, xml::lite::Element* parent)
     if (display->monitorCompensationApplied)
     {
         //MonitorCompensationApplied - optional
-        xml::lite::Element *monComp = newElement("MonitorCompensationApplied",
-                                                 displayXML);
+        XMLElem monComp = newElement("MonitorCompensationApplied", displayXML);
         createDouble("Gamma", display->monitorCompensationApplied->gamma,
                      monComp);
         createDouble("XMin", display->monitorCompensationApplied->xMin, monComp);
@@ -906,16 +880,12 @@ DerivedXMLControl::displayToXML(Display* display, xml::lite::Element* parent)
     return displayXML;
 }
 
-xml::lite::Element*
-DerivedXMLControl::geographicAndTargetToXML(
-                                            GeographicAndTarget* geographicAndTarget,
-                                            xml::lite::Element* parent)
+XMLElem DerivedXMLControl::toXML(GeographicAndTarget* geographicAndTarget,
+                                 XMLElem parent)
 {
-    xml::lite::Element* geographicAndTargetXML =
-            newElement("GeographicAndTarget", parent);
+    XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
 
-    geographicCoverageToXML(geographicAndTarget->geographicCoverage,
-                            geographicAndTargetXML);
+    toXML(geographicAndTarget->geographicCoverage, geographicAndTargetXML);
 
     //loop over TargetInformation
     for (std::vector<TargetInformation*>::iterator it =
@@ -923,8 +893,7 @@ DerivedXMLControl::geographicAndTargetToXML(
             != geographicAndTarget->targetInformation.end(); ++it)
     {
         TargetInformation* ti = *it;
-        xml::lite::Element* tiXML = newElement("TargetInformation",
-                                               geographicAndTargetXML);
+        XMLElem tiXML = newElement("TargetInformation", geographicAndTargetXML);
 
         addParameters("Identifier", ti->identifiers, tiXML);
         for (unsigned int i = 0; i < ti->footprints.size(); i++)
@@ -937,13 +906,11 @@ DerivedXMLControl::geographicAndTargetToXML(
     return geographicAndTargetXML;
 }
 
-xml::lite::Element* DerivedXMLControl::geographicCoverageToXML(
-                                                               GeographicCoverage* geoCoverage,
-                                                               xml::lite::Element* parent)
+XMLElem DerivedXMLControl::toXML(GeographicCoverage* geoCoverage,
+                                 XMLElem parent)
 {
     //GeographicAndTarget
-    xml::lite::Element* geoCoverageXML = newElement("GeographicCoverage",
-                                                    parent);
+    XMLElem geoCoverageXML = newElement("GeographicCoverage", parent);
 
     //Georegion Identifiers
     addParameters("GeoregionIdentifier", geoCoverage->georegionIdentifiers,
@@ -956,8 +923,7 @@ xml::lite::Element* DerivedXMLControl::geographicCoverageToXML(
     // GeographicInfo
     if (geoCoverage->geographicInformation)
     {
-        xml::lite::Element* geoInfoXML = newElement("GeographicInfo",
-                                                    geoCoverageXML);
+        XMLElem geoInfoXML = newElement("GeographicInfo", geoCoverageXML);
 
         for (unsigned int i = 0, numCC =
                 geoCoverage->geographicInformation->countryCodes.size(); i
@@ -983,24 +949,20 @@ xml::lite::Element* DerivedXMLControl::geographicCoverageToXML(
                 geoCoverage->subRegion.begin(); it
                 != geoCoverage->subRegion.end(); ++it)
         {
-            xml::lite::Element* subRegionXML =
-                    geographicCoverageToXML(*it, geoCoverageXML);
+            XMLElem subRegionXML = toXML(*it, geoCoverageXML);
             subRegionXML->setQName("SubRegion");
         }
     }
     return geoCoverageXML;
 }
 
-xml::lite::Element*
-DerivedXMLControl::measurementToXML(Measurement* measurement,
-                                    xml::lite::Element* parent)
+XMLElem DerivedXMLControl::toXML(Measurement* measurement, XMLElem parent)
 {
-    xml::lite::Element* measurementXML = newElement("Measurement", parent);
+    XMLElem measurementXML = newElement("Measurement", parent);
 
     Projection* projection = measurement->projection;
-    xml::lite::Element* projectionXML = newElement("", measurementXML);
-    xml::lite::Element* referencePointXML = newElement("ReferencePoint",
-                                                       projectionXML);
+    XMLElem projectionXML = newElement("", measurementXML);
+    XMLElem referencePointXML = newElement("ReferencePoint", projectionXML);
     setAttribute(referencePointXML, "name", projection->referencePoint.name);
 
     //ECEF
@@ -1016,14 +978,13 @@ DerivedXMLControl::measurementToXML(Measurement* measurement,
         PlaneProjection* planeProj = (PlaneProjection*) projection;
 
         //TimeCOAPoly
-        xml::lite::Element* timeCOAPolyXML =
-                createPoly2D("TimeCOAPoly", planeProj->timeCOAPoly,
-                             projectionXML);
+        XMLElem timeCOAPolyXML = createPoly2D("TimeCOAPoly",
+                                              planeProj->timeCOAPoly,
+                                              projectionXML);
 
         createRowCol("SampleSpacing", planeProj->sampleSpacing, projectionXML);
 
-        xml::lite::Element* productPlaneXML = newElement("ProductPlane",
-                                                         projectionXML);
+        XMLElem productPlaneXML = newElement("ProductPlane", projectionXML);
 
         //RowBasis
         createVector3D("RowUnitVector", planeProj->productPlane.rowUnitVector,
@@ -1043,13 +1004,13 @@ DerivedXMLControl::measurementToXML(Measurement* measurement,
                 (GeographicProjection*) projection;
 
         //TimeCOAPoly
-        xml::lite::Element* timeCOAPolyXML =
-                createPoly2D("TimeCOAPoly", geographicProj->timeCOAPoly,
-                             projectionXML);
+        XMLElem timeCOAPolyXML = createPoly2D("TimeCOAPoly",
+                                              geographicProj->timeCOAPoly,
+                                              projectionXML);
 
         //TODO set a parent
-        xml::lite::Element* sampleSpacingXML =
-                createRowCol("SampleSpacing", geographicProj->sampleSpacing);
+        XMLElem sampleSpacingXML = createRowCol("SampleSpacing",
+                                                geographicProj->sampleSpacing);
 
     }
         break;
@@ -1062,9 +1023,9 @@ DerivedXMLControl::measurementToXML(Measurement* measurement,
                 (CylindricalProjection*) projection;
 
         //TimeCOAPoly
-        xml::lite::Element* timeCOAPolyXML =
-                createPoly2D("TimeCOAPoly", cylindricalProj->timeCOAPoly,
-                             projectionXML);
+        XMLElem timeCOAPolyXML = createPoly2D("TimeCOAPoly",
+                                              cylindricalProj->timeCOAPoly,
+                                              projectionXML);
 
         createRowCol("SampleSpacing", cylindricalProj->sampleSpacing,
                      projectionXML);
@@ -1108,30 +1069,26 @@ DerivedXMLControl::measurementToXML(Measurement* measurement,
     return measurementXML;
 }
 
-xml::lite::Element*
-DerivedXMLControl::exploitationFeaturesToXML(
-                                             ExploitationFeatures* exploitationFeatures,
-                                             xml::lite::Element* parent)
+XMLElem DerivedXMLControl::toXML(ExploitationFeatures* exploitationFeatures,
+                                 XMLElem parent)
 {
 
-    xml::lite::Element* exploitationFeaturesXML =
+    XMLElem exploitationFeaturesXML =
             newElement("ExploitationFeatures", parent);
 
     for (unsigned int i = 0; i < exploitationFeatures->collections.size(); ++i)
     {
         Collection* collection = exploitationFeatures->collections[i];
-        xml::lite::Element* collectionXML = newElement("Collection",
-                                                       exploitationFeaturesXML);
+        XMLElem collectionXML = newElement("Collection",
+                                           exploitationFeaturesXML);
         setAttribute(collectionXML, "identifier", collection->identifier);
 
-        xml::lite::Element* informationXML = newElement("Information",
-                                                        collectionXML);
+        XMLElem informationXML = newElement("Information", collectionXML);
 
         createString("SensorName", collection->information->sensorName,
                      informationXML);
 
-        xml::lite::Element* radarModeXML = newElement("RadarMode",
-                                                      informationXML);
+        XMLElem radarModeXML = newElement("RadarMode", informationXML);
         //ModeType - Incomplete?
         createString("ModeType",
                      str::toString(collection->information->radarMode),
@@ -1168,7 +1125,7 @@ DerivedXMLControl::exploitationFeaturesToXML(
         //InputROI
         if (collection->information->inputROI != NULL)
         {
-            xml::lite::Element* roiXML = newElement("InputROI", informationXML);
+            XMLElem roiXML = newElement("InputROI", informationXML);
             createRowCol("Size", collection->information->inputROI->size,
                          roiXML);
             createRowCol("UpperLeft",
@@ -1178,7 +1135,7 @@ DerivedXMLControl::exploitationFeaturesToXML(
         if (collection->information->polarization != NULL)
         {
             //TODO add parent - informationXML?
-            xml::lite::Element* polXML = newElement("Polarization");
+            XMLElem polXML = newElement("Polarization");
             createString(
                          "TxPolarization",
                          str::toString(
@@ -1195,8 +1152,7 @@ DerivedXMLControl::exploitationFeaturesToXML(
 
         if (geom != NULL)
         {
-            xml::lite::Element* geometryXML = newElement("Geometry",
-                                                         collectionXML);
+            XMLElem geometryXML = newElement("Geometry", collectionXML);
 
             if (geom->azimuth != Init::undefined<double>())
             {
@@ -1228,21 +1184,19 @@ DerivedXMLControl::exploitationFeaturesToXML(
         Phenomenology* phenom = collection->phenomenology;
         if (phenom != NULL)
         {
-            xml::lite::Element* phenomenologyXML = newElement("Phenomenology",
-                                                              collectionXML);
+            XMLElem phenomenologyXML = newElement("Phenomenology",
+                                                  collectionXML);
 
             if (phenom->shadow != Init::undefined<AngleMagnitude>())
             {
-                xml::lite::Element* shadow = newElement("Shadow",
-                                                        phenomenologyXML);
+                XMLElem shadow = newElement("Shadow", phenomenologyXML);
                 createDouble("Angle", phenom->shadow.angle, shadow);
                 createDouble("Magnitude", phenom->shadow.magnitude, shadow);
             }
 
             if (phenom->layover != Init::undefined<AngleMagnitude>())
             {
-                xml::lite::Element* layover = newElement("Layover",
-                                                         phenomenologyXML);
+                XMLElem layover = newElement("Layover", phenomenologyXML);
                 createDouble("Angle", phenom->layover.angle, layover);
                 createDouble("Magnitude", phenom->layover.magnitude, layover);
             }
@@ -1261,8 +1215,7 @@ DerivedXMLControl::exploitationFeaturesToXML(
     }
 
     //Product
-    xml::lite::Element* productXML = newElement("Product",
-                                                exploitationFeaturesXML);
+    XMLElem productXML = newElement("Product", exploitationFeaturesXML);
 
     //Resolution
     createRowCol("Resolution", exploitationFeatures->product.resolution,
@@ -1283,40 +1236,40 @@ xml::lite::Document* DerivedXMLControl::toXML(Data* data)
         throw except::Exception("Data must be derived");
     }
     xml::lite::Document* doc = new xml::lite::Document();
-    xml::lite::Element* root = newElement("SIDD");
+    XMLElem root = newElement("SIDD");
     doc->setRootElement(root);
 
     DerivedData *derived = (DerivedData*) data;
 
-    productCreationToXML(derived->productCreation, root);
-    displayToXML(derived->display, root);
-    geographicAndTargetToXML(derived->geographicAndTarget, root);
-    measurementToXML(derived->measurement, root);
-    exploitationFeaturesToXML(derived->exploitationFeatures, root);
+    toXML(derived->productCreation, root);
+    toXML(derived->display, root);
+    toXML(derived->geographicAndTarget, root);
+    toXML(derived->measurement, root);
+    toXML(derived->exploitationFeatures, root);
 
     if (derived->productProcessing)
     {
-        productProcessingToXML(derived->productProcessing, root);
+        toXML(derived->productProcessing, root);
     }
     if (derived->errorStatistics)
     {
-        errorStatisticsToXML(derived->errorStatistics, root);
+        XMLControl::toXML(derived->errorStatistics, root);
     }
     if (derived->radiometric)
     {
-        radiometricToXML(derived->radiometric, root);
+        XMLControl::toXML(derived->radiometric, root);
     }
+    //TODO annotations
     return doc;
 }
 
-xml::lite::Element* DerivedXMLControl::createLUT(std::string name, LUT *lut,
-                                                 xml::lite::Element* parent)
+XMLElem DerivedXMLControl::createLUT(std::string name, LUT *lut, XMLElem parent)
 {
     //     unsigned char* table;
     //     unsigned int numEntries;
     //     unsigned int elementSize;
 
-    xml::lite::Element* lutElement = newElement(name, parent);
+    XMLElem lutElement = newElement(name, parent);
     setAttribute(lutElement, "size", str::toString(lut->numEntries));
 
     std::ostringstream oss;
@@ -1346,30 +1299,25 @@ xml::lite::Element* DerivedXMLControl::createLUT(std::string name, LUT *lut,
     return lutElement;
 }
 
-xml::lite::Element* DerivedXMLControl::productProcessingToXML(
-                                                              ProductProcessing* productProcessing,
-                                                              xml::lite::Element* parent)
+XMLElem DerivedXMLControl::toXML(ProductProcessing* productProcessing,
+                                 XMLElem parent)
 {
-    xml::lite::Element* productProcessingXML = newElement("ProductProcessing",
-                                                          parent);
+    XMLElem productProcessingXML = newElement("ProductProcessing", parent);
 
     for (std::vector<ProcessingModule*>::iterator it =
             productProcessing->processingModules.begin(); it
             != productProcessing->processingModules.end(); ++it)
     {
-        processingModuleToXML(*it, productProcessingXML);
+        toXML(*it, productProcessingXML);
     }
     return productProcessingXML;
 }
 
-xml::lite::Element* DerivedXMLControl::processingModuleToXML(
-                                                             ProcessingModule* procMod,
-                                                             xml::lite::Element* parent)
+XMLElem DerivedXMLControl::toXML(ProcessingModule* procMod, XMLElem parent)
 {
-    xml::lite::Element* procModXML = newElement("ProcessingModule", parent);
-    xml::lite::Element *modNameXML = createString("ModuleName",
-                                                  procMod->moduleName.str(),
-                                                  procModXML);
+    XMLElem procModXML = newElement("ProcessingModule", parent);
+    XMLElem modNameXML = createString("ModuleName", procMod->moduleName.str(),
+                                      procModXML);
     setAttribute(modNameXML, "name", procMod->moduleName.getName());
 
     if (!procMod->processingModules.empty())
@@ -1378,7 +1326,7 @@ xml::lite::Element* DerivedXMLControl::processingModuleToXML(
                 procMod->processingModules.begin(); it
                 != procMod->processingModules.end(); ++it)
         {
-            processingModuleToXML(*it, procModXML);
+            toXML(*it, procModXML);
         }
     }
     else
@@ -1389,16 +1337,15 @@ xml::lite::Element* DerivedXMLControl::processingModuleToXML(
 
 }
 
-xml::lite::Element* DerivedXMLControl::downstreamReprocessingToXML(
-                                                                   DownstreamReprocessing* downstreamReproc,
-                                                                   xml::lite::Element* parent)
+XMLElem DerivedXMLControl::toXML(DownstreamReprocessing* downstreamReproc,
+                                 XMLElem parent)
 {
-    xml::lite::Element* epXML = newElement("DownstreamReprocessing", parent);
+    XMLElem epXML = newElement("DownstreamReprocessing", parent);
 
     GeometricChip *geoChip = downstreamReproc->geometricChip;
     if (geoChip)
     {
-        xml::lite::Element* geoChipXML = newElement("GeometricChip", epXML);
+        XMLElem geoChipXML = newElement("GeometricChip", epXML);
         createRowCol("ChipSize", geoChip->chipSize, geoChipXML);
         createRowCol("OriginalUpperLeftCoordinate",
                      geoChip->originalUpperLeftCoordinate, geoChipXML);
@@ -1416,8 +1363,7 @@ xml::lite::Element* DerivedXMLControl::downstreamReprocessingToXML(
                 != downstreamReproc->processingEvents.end(); ++it)
         {
             ProcessingEvent *procEvent = *it;
-            xml::lite::Element* procEventXML = newElement("ProcessingEvent",
-                                                          epXML);
+            XMLElem procEventXML = newElement("ProcessingEvent", epXML);
             createString("ApplicationName", procEvent->applicationName,
                          procEventXML);
             createDateTime("AppliedDateTime", procEvent->appliedDateTime,
@@ -1434,50 +1380,46 @@ xml::lite::Element* DerivedXMLControl::downstreamReprocessingToXML(
     return epXML;
 }
 
-void DerivedXMLControl::xmlToProcessingModule(xml::lite::Element* procXML,
-                                              ProcessingModule* procMod)
+void DerivedXMLControl::fromXML(XMLElem procXML, ProcessingModule* procMod)
 {
-    xml::lite::Element *moduleName = getFirstAndOnly(procXML, "ModuleName");
+    XMLElem moduleName = getFirstAndOnly(procXML, "ModuleName");
     procMod->moduleName = Parameter(moduleName->getCharacterData());
     procMod->moduleName.setName(moduleName->getAttributes().getValue("name"));
 
     parseParameters(procXML, "ModuleParameter", procMod->moduleParameters);
 
-    std::vector<xml::lite::Element*> procModuleXML;
+    std::vector<XMLElem> procModuleXML;
     procXML->getElementsByTagName("ProcessingModule", procModuleXML);
 
     for (unsigned int i = 0, size = procModuleXML.size(); i < size; ++i)
     {
         ProcessingModule *pm = new ProcessingModule();
-        xmlToProcessingModule(procModuleXML[i], pm);
+        fromXML(procModuleXML[i], pm);
         procMod->processingModules.push_back(pm);
     }
 }
 
-void DerivedXMLControl::xmlToProductProcessing(
-                                               xml::lite::Element* elem,
-                                               ProductProcessing* productProcessing)
+void DerivedXMLControl::fromXML(XMLElem elem,
+                                ProductProcessing* productProcessing)
 {
-    std::vector<xml::lite::Element*> procModuleXML;
+    std::vector<XMLElem> procModuleXML;
     elem->getElementsByTagName("ProcessingModule", procModuleXML);
 
     for (unsigned int i = 0, size = procModuleXML.size(); i < size; ++i)
     {
         ProcessingModule *procMod = new ProcessingModule();
-        xmlToProcessingModule(procModuleXML[i], procMod);
+        fromXML(procModuleXML[i], procMod);
         productProcessing->processingModules.push_back(procMod);
     }
 }
 
-void DerivedXMLControl::xmlToDownstreamReprocessing(
-                                                    xml::lite::Element* elem,
-                                                    DownstreamReprocessing* downstreamReproc)
+void DerivedXMLControl::fromXML(XMLElem elem,
+                                DownstreamReprocessing* downstreamReproc)
 {
-    xml::lite::Element *geometricChipXML = getOptional(elem, "GeometricChip");
-    std::vector<xml::lite::Element*> procEventXML;
+    XMLElem geometricChipXML = getOptional(elem, "GeometricChip");
+    std::vector<XMLElem> procEventXML;
     elem->getElementsByTagName("ProcessingEvent", procEventXML);
-    xml::lite::Element *processingEventXML = getOptional(elem,
-                                                         "ProcessingEvent");
+    XMLElem processingEventXML = getOptional(elem, "ProcessingEvent");
 
     if (geometricChipXML)
     {
@@ -1508,18 +1450,192 @@ void DerivedXMLControl::xmlToDownstreamReprocessing(
     {
         ProcessingEvent *procEvent = new ProcessingEvent();
         downstreamReproc->processingEvents.push_back(procEvent);
-        xml::lite::Element *peXML = procEventXML[i];
+        XMLElem peXML = procEventXML[i];
 
         procEvent->applicationName
                 = getFirstAndOnly(peXML, "ApplicationName")->getCharacterData();
         parseDateTime(getFirstAndOnly(peXML, "AppliedDateTime"),
                       procEvent->appliedDateTime);
 
-        xml::lite::Element *tmpElem = getOptional(peXML, "InterpolationMethod");
+        XMLElem tmpElem = getOptional(peXML, "InterpolationMethod");
         if (tmpElem)
         {
             procEvent->interpolationMethod = tmpElem->getCharacterData();
         }
         parseParameters(peXML, "Descriptor", procEvent->descriptor);
     }
+}
+
+void DerivedXMLControl::fromXML(XMLElem elem, Annotation *a)
+{
+    a->identifier = getFirstAndOnly(elem, "Identifier")->getCharacterData();
+    XMLElem spatialXML = getOptional(elem, "SpatialReferenceSystem");
+    if (spatialXML)
+    {
+        //TODO
+    }
+
+    std::vector<XMLElem> objectsXML;
+    elem->getElementsByTagName("Object", objectsXML);
+    for (unsigned int i = 0, size = objectsXML.size(); i < size; ++i)
+    {
+        XMLElem obj = objectsXML[i];
+        //there should be only one child - a choice between types
+        std::vector<XMLElem>& children = obj->getChildren();
+        if (children.size() > 0)
+        {
+            //just get the first one
+            XMLElem child = children[0];
+            ::six::sidd::sfa::Geometry *geoType = NULL;
+            std::string childName = child->getLocalName();
+            if (childName == "Point")
+            {
+                geoType = new ::six::sidd::sfa::Point;
+            }
+            else if (childName == "Line")
+            {
+                geoType = new ::six::sidd::sfa::Line;
+            }
+            else if (childName == "LinearRing")
+            {
+                geoType = new ::six::sidd::sfa::LinearRing;
+            }
+            else if (childName == "Polygon")
+            {
+                geoType = new ::six::sidd::sfa::Polygon;
+            }
+            else if (childName == "PolyhedralSurface")
+            {
+                geoType = new ::six::sidd::sfa::PolyhedralSurface;
+            }
+            else if (childName == "MultiPolygon")
+            {
+                geoType = new ::six::sidd::sfa::MultiPolygon;
+            }
+            else if (childName == "MultiLineString")
+            {
+                geoType = new ::six::sidd::sfa::MultiLineString;
+            }
+            else if (childName == "MultiPoint")
+            {
+                geoType = new ::six::sidd::sfa::MultiPoint;
+            }
+            if (geoType)
+            {
+                fromXML(child, geoType);
+                a->objects.push_back(geoType);
+            }
+        }
+    }
+}
+
+XMLElem DerivedXMLControl::toXML(Annotation *a, XMLElem parent)
+{
+    //TODO
+    return NULL;
+}
+
+void DerivedXMLControl::fromXML(XMLElem elem, ::six::sidd::sfa::Geometry *g)
+{
+    std::string geoType = g->getType();
+    if (geoType == ::six::sidd::sfa::Point::TYPE_NAME)
+    {
+        ::six::sidd::sfa::Point *p = (::six::sidd::sfa::Point*) g;
+        parseDouble(getFirstAndOnly(elem, "X"), p->x);
+        parseDouble(getFirstAndOnly(elem, "Y"), p->y);
+        parseDouble(getFirstAndOnly(elem, "Z"), p->z);
+
+        XMLElem tmpElem = getOptional(elem, "M");
+        if (tmpElem)
+            parseDouble(tmpElem, p->m);
+    }
+    //for now, line, linearring, and linestring are parsed the same
+    else if (geoType == ::six::sidd::sfa::Line::TYPE_NAME || geoType
+            == ::six::sidd::sfa::LinearRing::TYPE_NAME || geoType
+            == ::six::sidd::sfa::LineString::TYPE_NAME)
+    {
+        //cast to the common base - LineString
+        ::six::sidd::sfa::LineString *p = (::six::sidd::sfa::LineString*) g;
+        std::vector<XMLElem> vXML;
+        elem->getElementsByTagName("Vertex", vXML);
+        for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
+        {
+            ::six::sidd::sfa::Point *vertex = new ::six::sidd::sfa::Point;
+            fromXML(vXML[i], vertex);
+            p->vertices.push_back(vertex);
+        }
+    }
+    else if (geoType == ::six::sidd::sfa::Polygon::TYPE_NAME)
+    {
+        ::six::sidd::sfa::Polygon *p = (::six::sidd::sfa::Polygon*) g;
+        std::vector<XMLElem> ringXML;
+        elem->getElementsByTagName("Ring", ringXML);
+        for (unsigned int i = 0, size = ringXML.size(); i < size; ++i)
+        {
+            ::six::sidd::sfa::LinearRing *ring =
+                    new ::six::sidd::sfa::LinearRing;
+            fromXML(ringXML[i], ring);
+            p->rings.push_back(ring);
+        }
+    }
+    else if (geoType == ::six::sidd::sfa::PolyhedralSurface::TYPE_NAME)
+    {
+        ::six::sidd::sfa::PolyhedralSurface *p =
+                (::six::sidd::sfa::PolyhedralSurface*) g;
+        std::vector<XMLElem> polyXML;
+        elem->getElementsByTagName("Patch", polyXML);
+        for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
+        {
+            ::six::sidd::sfa::Polygon *polygon = new ::six::sidd::sfa::Polygon;
+            fromXML(polyXML[i], polygon);
+            p->patches.push_back(polygon);
+        }
+    }
+    else if (geoType == ::six::sidd::sfa::MultiPolygon::TYPE_NAME)
+    {
+        ::six::sidd::sfa::MultiPolygon *p = (::six::sidd::sfa::MultiPolygon*) g;
+        std::vector<XMLElem> polyXML;
+        elem->getElementsByTagName("Element", polyXML);
+        for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
+        {
+            ::six::sidd::sfa::Polygon *polygon = new ::six::sidd::sfa::Polygon;
+            fromXML(polyXML[i], polygon);
+            p->elements.push_back(polygon);
+        }
+    }
+    else if (geoType == ::six::sidd::sfa::MultiLineString::TYPE_NAME)
+    {
+        ::six::sidd::sfa::MultiLineString *p =
+                (::six::sidd::sfa::MultiLineString*) g;
+        std::vector<XMLElem> lineXML;
+        elem->getElementsByTagName("Element", lineXML);
+        for (unsigned int i = 0, size = lineXML.size(); i < size; ++i)
+        {
+            ::six::sidd::sfa::LineString *ls = new ::six::sidd::sfa::LineString;
+            fromXML(lineXML[i], ls);
+            p->elements.push_back(ls);
+        }
+    }
+    else if (geoType == ::six::sidd::sfa::MultiPoint::TYPE_NAME)
+    {
+        ::six::sidd::sfa::MultiPoint *p = (::six::sidd::sfa::MultiPoint*) g;
+        std::vector<XMLElem> vXML;
+        elem->getElementsByTagName("Vertex", vXML);
+        for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
+        {
+            ::six::sidd::sfa::Point *vertex = new ::six::sidd::sfa::Point;
+            fromXML(vXML[i], vertex);
+            p->vertices.push_back(vertex);
+        }
+    }
+    else
+    {
+        mLog->warn(Ctxt(FmtX("Unable to parse unknown geometry type")));
+    }
+}
+
+XMLElem DerivedXMLControl::toXML(::six::sidd::sfa::Geometry *g, XMLElem parent)
+{
+    //TODO
+    return NULL;
 }

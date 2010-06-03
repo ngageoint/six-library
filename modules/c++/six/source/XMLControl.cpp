@@ -759,7 +759,7 @@ xml::lite::Element* XMLControl::createFootprint(
     return footprint;
 }
 
-xml::lite::Element* XMLControl::errorStatisticsToXML(
+xml::lite::Element* XMLControl::toXML(
                                                      ErrorStatistics* errorStatistics,
                                                      xml::lite::Element* parent)
 {
@@ -912,7 +912,7 @@ xml::lite::Element* XMLControl::errorStatisticsToXML(
     return errorStatsXML;
 }
 
-void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
+void XMLControl::fromXML(xml::lite::Element* errorStatsXML,
                                       ErrorStatistics* errorStatistics)
 {
     xml::lite::Element* tmpElem = NULL;
@@ -1186,7 +1186,7 @@ void XMLControl::xmlToErrorStatistics(xml::lite::Element* errorStatsXML,
     }
 }
 
-void XMLControl::xmlToRadiometric(xml::lite::Element* radiometricXML,
+void XMLControl::fromXML(xml::lite::Element* radiometricXML,
                                   Radiometric *radiometric)
 {
     xml::lite::Element* tmpElem = NULL;
@@ -1243,7 +1243,7 @@ void XMLControl::xmlToRadiometric(xml::lite::Element* radiometricXML,
     }
 }
 
-xml::lite::Element* XMLControl::radiometricToXML(Radiometric *r,
+xml::lite::Element* XMLControl::toXML(Radiometric *r,
                                                  xml::lite::Element* parent)
 {
     xml::lite::Element* rXML = newElement("Radiometric", parent);

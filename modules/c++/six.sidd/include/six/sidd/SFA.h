@@ -24,9 +24,6 @@
 
 #include <import/six.h>
 
-// TODO if we change the definition of the typedefs in the schema, then we need
-// to remove them as typedefs and add real structs that derive their bases
-
 namespace six
 {
 namespace sidd
@@ -76,7 +73,6 @@ struct Point : public Geometry
     virtual ~Point()
     {
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -107,12 +103,33 @@ struct LineString : public Curve
             if (vertices[i])
                 delete vertices[i];
     }
-private:
     static const char TYPE_NAME[];
 };
 
-typedef LineString Line;
-typedef LineString LinearRing;
+struct Line : public LineString
+{
+    Line() : LineString()
+    {
+        mType = TYPE_NAME;
+    }
+    virtual ~Line()
+    {
+    }
+    static const char TYPE_NAME[];
+};
+
+struct LinearRing : public LineString
+{
+    LinearRing() : LineString()
+    {
+        mType = TYPE_NAME;
+    }
+    virtual ~LinearRing()
+    {
+    }
+    static const char TYPE_NAME[];
+};
+
 
 //! Abstract type
 struct Surface : public Geometry
@@ -141,7 +158,6 @@ struct Polygon : public Surface
             if (rings[i])
                 delete rings[i];
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -155,7 +171,6 @@ struct Triangle : public Polygon
     ~Triangle()
     {
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -173,7 +188,6 @@ struct PolyhedralSurface : public Surface
             if (patches[i])
                 delete patches[i];
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -193,7 +207,6 @@ struct TriangulatedIrregularNetwork : public Surface
             if (patches[i])
                 delete patches[i];
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -224,7 +237,6 @@ struct MultiPoint : public GeometryCollection
             if (vertices[i])
                 delete vertices[i];
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -255,7 +267,6 @@ struct MultiLineString : public MultiCurve
             if (elements[i])
                 delete elements[i];
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -286,7 +297,6 @@ struct MultiPolygon : public MultiSurface
             if (elements[i])
                 delete elements[i];
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -345,7 +355,6 @@ struct GeocentricCoordinateSystem : public CoordinateSystem
     ~GeocentricCoordinateSystem()
     {
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -364,7 +373,6 @@ struct GeographicCoordinateSystem : public CoordinateSystem
     ~GeographicCoordinateSystem()
     {
     }
-private:
     static const char TYPE_NAME[];
 };
 
@@ -385,7 +393,6 @@ struct ProjectedCoordinateSystem : public CoordinateSystem
         if (geographicCoordinateSystem)
             delete geographicCoordinateSystem;
     }
-private:
     static const char TYPE_NAME[];
 };
 
