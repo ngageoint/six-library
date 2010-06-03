@@ -24,6 +24,7 @@
 
 #include "six/XMLControl.h"
 #include "six/sidd/DerivedData.h"
+#include "six/sidd/SFA.h"
 #include <import/xml/lite.h>
 
 namespace six
@@ -44,7 +45,8 @@ class DerivedXMLControl : public XMLControl
 
 public:
 
-    DerivedXMLControl(logging::Logger* log = NULL) : XMLControl(log)
+    DerivedXMLControl(logging::Logger* log = NULL) :
+        XMLControl(log)
     {
         mURI = "urn:SIDD:0.0.4";
     }
@@ -64,69 +66,31 @@ public:
     virtual Data* fromXML(xml::lite::Document* doc);
 
 protected:
-    //    virtual xml::lite::Element* createLUT3(
-    //            std::string name, char *lutTable, size_t numElems, xml::lite::Element* parent = NULL);
-    virtual xml::lite::Element* createLUT(std::string name, LUT *lut,
-                                          xml::lite::Element* parent = NULL);
+    typedef xml::lite::Element* XMLElem;
 
-    xml::lite::Element* productCreationToXML(ProductCreation* productCreation,
-                                             xml::lite::Element* parent = NULL);
-
-    xml::lite::Element
-            * productProcessingToXML(ProductProcessing* productProcessing,
-                                     xml::lite::Element* parent = NULL);
-    void xmlToProductProcessing(xml::lite::Element* elem,
-                                ProductProcessing* productProcessing);
-
-    xml::lite::Element
-            * processingModuleToXML(ProcessingModule* procMod,
-                                    xml::lite::Element* parent = NULL);
-    void xmlToProcessingModule(xml::lite::Element* elem,
-                               ProcessingModule* procMod);
-
-    xml::lite::Element
-            * downstreamReprocessingToXML(
-                                          DownstreamReprocessing* downstreamReproc,
-                                          xml::lite::Element* parent = NULL);
-    void xmlToDownstreamReprocessing(xml::lite::Element* elem,
-                                     DownstreamReprocessing* downstreamReproc);
-
-    xml::lite::Element* displayToXML(Display* display,
-                                     xml::lite::Element* parent = NULL);
-
-    xml::lite::Element
-            * geographicAndTargetToXML(
-                                       GeographicAndTarget* geographicAndTarget,
-                                       xml::lite::Element* parent = NULL);
-
-    xml::lite::Element
-            * geographicCoverageToXML(GeographicCoverage* geographicCoverage,
-                                      xml::lite::Element* parent = NULL);
-
-    xml::lite::Element* measurementToXML(Measurement* measurement,
-                                         xml::lite::Element* parent = NULL);
-
-    xml::lite::Element
-            * exploitationFeaturesToXML(
-                                        ExploitationFeatures* exploitationFeatures,
-                                        xml::lite::Element* parent = NULL);
-
-    void xmlToProductCreation(xml::lite::Element* productCreationXML,
-                              ProductCreation* productCreation);
-
-    void xmlToDisplay(xml::lite::Element* displayXML, Display* display);
-
-    void xmlToMeasurement(xml::lite::Element* measurementXML,
-                          Measurement* measurement);
-
-    void xmlToGeographicAndTarget(xml::lite::Element* geographicAndTargetXML,
-                                  GeographicAndTarget* geographicAndTarget);
-
-    void xmlToGeographicCoverage(xml::lite::Element* geographicCoverageXML,
-                                 GeographicCoverage* geographicCoverage);
-
-    void xmlToExploitationFeatures(xml::lite::Element* exploitationFeaturesXML,
-                                   ExploitationFeatures* exploitationFeatures);
+    virtual XMLElem createLUT(std::string name, LUT *l, XMLElem parent = NULL);
+    XMLElem toXML(ProductCreation* productCreation, XMLElem parent = NULL);
+    XMLElem toXML(ProductProcessing* productProcessing, XMLElem parent = NULL);
+    void fromXML(XMLElem elem, ProductProcessing* productProcessing);
+    XMLElem toXML(ProcessingModule* procMod, XMLElem parent = NULL);
+    void fromXML(XMLElem elem, ProcessingModule* procMod);
+    XMLElem toXML(DownstreamReprocessing* d, XMLElem parent = NULL);
+    void fromXML(XMLElem elem, DownstreamReprocessing* downstreamReproc);
+    XMLElem toXML(Display* display, XMLElem parent = NULL);
+    XMLElem toXML(GeographicAndTarget* g, XMLElem parent = NULL);
+    XMLElem toXML(GeographicCoverage* g, XMLElem parent = NULL);
+    XMLElem toXML(Measurement* measurement, XMLElem parent = NULL);
+    XMLElem toXML(ExploitationFeatures* exFeatures, XMLElem parent = NULL);
+    XMLElem toXML(Annotation *a, XMLElem parent = NULL);
+    void fromXML(XMLElem productCreationXML, ProductCreation* productCreation);
+    void fromXML(XMLElem displayXML, Display* display);
+    void fromXML(XMLElem measurementXML, Measurement* measurement);
+    void fromXML(XMLElem elem, GeographicAndTarget* geographicAndTarget);
+    void fromXML(XMLElem elem, GeographicCoverage* geoCoverage);
+    void fromXML(XMLElem elem, ExploitationFeatures* exFeatures);
+    void fromXML(XMLElem annotationXML, Annotation *a);
+    void fromXML(XMLElem elem, ::six::sidd::sfa::Geometry *g);
+    XMLElem toXML(::six::sidd::sfa::Geometry *g, XMLElem parent = NULL);
 };
 
 }

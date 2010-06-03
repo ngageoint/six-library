@@ -32,6 +32,7 @@
 #include "six/sidd/ProductProcessing.h"
 #include "six/sidd/DownstreamReprocessing.h"
 #include "six/Radiometric.h"
+#include "six/sidd/Annotations.h"
 
 namespace six
 {
@@ -99,6 +100,11 @@ struct DerivedData: public Data
      *  (Optional) Contains radiometric calibration params
      */
     Radiometric* radiometric;
+
+    /*!
+     * (Optional) Contains SFA annotations
+     */
+    Annotations annotations;
 
     /*!
      *  Constructor.  Creates only the product creation.  All other
