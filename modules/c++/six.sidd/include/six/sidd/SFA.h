@@ -65,8 +65,23 @@ struct Point : public Geometry
 {
     double x, y, z, m;
 
-    Point(double _x = 0, double _y = 0, double _z = ::six::Init::undefined<
-            double>(), double _m = ::six::Init::undefined<double>()) :
+    Point() :
+        Geometry(TYPE_NAME)
+    {
+        x = 0;
+        y = 0;
+        z = ::six::Init::undefined<double>();
+        m = ::six::Init::undefined<double>();
+    }
+    
+    Point(double _x, double _y) :
+        Geometry(TYPE_NAME), x(_x), y(_y)
+    {
+        z = ::six::Init::undefined<double>();
+        m = ::six::Init::undefined<double>();
+    }
+    
+    Point(double _x, double _y, double _z, double _m) :
         Geometry(TYPE_NAME), x(_x), y(_y), z(_z), m(_m)
     {
     }
