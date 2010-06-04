@@ -45,8 +45,8 @@ struct AppliedType
     enum
     {
         NOT_SET = -1,
-        TRUE = 0,
-        FALSE = 1
+        IS_FALSE = 0,
+        IS_TRUE = 1
     };
 
     //! Default constructor
@@ -57,12 +57,12 @@ struct AppliedType
     {
         if (s == "NOT_SET")
             value = NOT_SET;
-        else if (s == "TRUE")
-            value = TRUE;
-        else if (s == "FALSE")
-            value = FALSE;
+        else if (s == "IS_FALSE")
+            value = IS_FALSE;
+        else if (s == "IS_TRUE")
+            value = IS_TRUE;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -74,13 +74,13 @@ struct AppliedType
             value = NOT_SET;
             break;
         case 0:
-            value = TRUE;
+            value = IS_FALSE;
             break;
         case 1:
-            value = FALSE;
+            value = IS_TRUE;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -93,13 +93,13 @@ struct AppliedType
         switch(value)
         {
         case -1:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 0:
-            return "TRUE";
+            return std::string("IS_FALSE");
         case 1:
-            return "FALSE";
+            return std::string("IS_TRUE");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -156,7 +156,7 @@ struct AutofocusType
         else if (s == "SV")
             value = SV;
         else
-            value = NO;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -174,7 +174,7 @@ struct AutofocusType
             value = SV;
             break;
         default:
-            value = NO;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -187,13 +187,13 @@ struct AutofocusType
         switch(value)
         {
         case 0:
-            return "NO";
+            return std::string("NO");
         case 1:
-            return "GLOBAL";
+            return std::string("GLOBAL");
         case 2:
-            return "SV";
+            return std::string("SV");
         default:
-            return "NO";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -233,8 +233,8 @@ struct BooleanType
     enum
     {
         NOT_SET = -1,
-        FALSE = 0,
-        TRUE = 1
+        IS_FALSE = 0,
+        IS_TRUE = 1
     };
 
     //! Default constructor
@@ -245,12 +245,12 @@ struct BooleanType
     {
         if (s == "NOT_SET")
             value = NOT_SET;
-        else if (s == "FALSE")
-            value = FALSE;
-        else if (s == "TRUE")
-            value = TRUE;
+        else if (s == "IS_FALSE")
+            value = IS_FALSE;
+        else if (s == "IS_TRUE")
+            value = IS_TRUE;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -262,13 +262,13 @@ struct BooleanType
             value = NOT_SET;
             break;
         case 0:
-            value = FALSE;
+            value = IS_FALSE;
             break;
         case 1:
-            value = TRUE;
+            value = IS_TRUE;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -281,13 +281,13 @@ struct BooleanType
         switch(value)
         {
         case -1:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 0:
-            return "FALSE";
+            return std::string("IS_FALSE");
         case 1:
-            return "TRUE";
+            return std::string("IS_TRUE");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -344,7 +344,7 @@ struct ByteSwapping
         else if (s == "SWAP_AUTO")
             value = SWAP_AUTO;
         else
-            value = SWAP_OFF;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -362,7 +362,7 @@ struct ByteSwapping
             value = SWAP_AUTO;
             break;
         default:
-            value = SWAP_OFF;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -375,13 +375,13 @@ struct ByteSwapping
         switch(value)
         {
         case 0:
-            return "SWAP_OFF";
+            return std::string("SWAP_OFF");
         case 1:
-            return "SWAP_ON";
+            return std::string("SWAP_ON");
         case 2:
-            return "SWAP_AUTO";
+            return std::string("SWAP_AUTO");
         default:
-            return "SWAP_OFF";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -438,7 +438,7 @@ struct CollectType
         else if (s == "BISTATIC")
             value = BISTATIC;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -456,7 +456,7 @@ struct CollectType
             value = BISTATIC;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -469,13 +469,13 @@ struct CollectType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "MONOSTATIC";
+            return std::string("MONOSTATIC");
         case 2:
-            return "BISTATIC";
+            return std::string("BISTATIC");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -538,7 +538,7 @@ struct ComplexImageGridType
         else if (s == "PLANE")
             value = PLANE;
         else
-            value = RGAZIM;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -562,7 +562,7 @@ struct ComplexImageGridType
             value = PLANE;
             break;
         default:
-            value = RGAZIM;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -575,17 +575,17 @@ struct ComplexImageGridType
         switch(value)
         {
         case 0:
-            return "RGAZIM";
+            return std::string("RGAZIM");
         case 1:
-            return "RGZERO";
+            return std::string("RGZERO");
         case 2:
-            return "XRGYCR";
+            return std::string("XRGYCR");
         case 3:
-            return "XCTYAT";
+            return std::string("XCTYAT");
         case 4:
-            return "PLANE";
+            return std::string("PLANE");
         default:
-            return "RGAZIM";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -642,7 +642,7 @@ struct ComplexImagePlaneType
         else if (s == "GROUND")
             value = GROUND;
         else
-            value = OTHER;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -660,7 +660,7 @@ struct ComplexImagePlaneType
             value = GROUND;
             break;
         default:
-            value = OTHER;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -673,13 +673,13 @@ struct ComplexImagePlaneType
         switch(value)
         {
         case 0:
-            return "OTHER";
+            return std::string("OTHER");
         case 1:
-            return "SLANT";
+            return std::string("SLANT");
         case 2:
-            return "GROUND";
+            return std::string("GROUND");
         default:
-            return "OTHER";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -739,7 +739,7 @@ struct CornerIndex
         else if (s == "LAST_ROW_FIRST_COL")
             value = LAST_ROW_FIRST_COL;
         else
-            value = FIRST_ROW_FIRST_COL;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -760,7 +760,7 @@ struct CornerIndex
             value = LAST_ROW_FIRST_COL;
             break;
         default:
-            value = FIRST_ROW_FIRST_COL;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -773,15 +773,15 @@ struct CornerIndex
         switch(value)
         {
         case 0:
-            return "FIRST_ROW_FIRST_COL";
+            return std::string("FIRST_ROW_FIRST_COL");
         case 1:
-            return "FIRST_ROW_LAST_COL";
+            return std::string("FIRST_ROW_LAST_COL");
         case 2:
-            return "LAST_ROW_LAST_COL";
+            return std::string("LAST_ROW_LAST_COL");
         case 3:
-            return "LAST_ROW_FIRST_COL";
+            return std::string("LAST_ROW_FIRST_COL");
         default:
-            return "FIRST_ROW_FIRST_COL";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -838,7 +838,7 @@ struct DataClass
         else if (s == "DERIVED")
             value = DERIVED;
         else
-            value = UNKNOWN;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -856,7 +856,7 @@ struct DataClass
             value = DERIVED;
             break;
         default:
-            value = UNKNOWN;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -869,13 +869,13 @@ struct DataClass
         switch(value)
         {
         case 0:
-            return "UNKNOWN";
+            return std::string("UNKNOWN");
         case 1:
-            return "COMPLEX";
+            return std::string("COMPLEX");
         case 2:
-            return "DERIVED";
+            return std::string("DERIVED");
         default:
-            return "UNKNOWN";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -932,7 +932,7 @@ struct DataType
         else if (s == "DERIVED")
             value = DERIVED;
         else
-            value = UNKNOWN;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -950,7 +950,7 @@ struct DataType
             value = DERIVED;
             break;
         default:
-            value = UNKNOWN;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -963,13 +963,13 @@ struct DataType
         switch(value)
         {
         case 0:
-            return "UNKNOWN";
+            return std::string("UNKNOWN");
         case 1:
-            return "COMPLEX";
+            return std::string("COMPLEX");
         case 2:
-            return "DERIVED";
+            return std::string("DERIVED");
         default:
-            return "UNKNOWN";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1032,7 +1032,7 @@ struct DecimationMethod
         else if (s == "LAGRANGE")
             value = LAGRANGE;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1056,7 +1056,7 @@ struct DecimationMethod
             value = LAGRANGE;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1069,17 +1069,17 @@ struct DecimationMethod
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "NEAREST_NEIGHBOR";
+            return std::string("NEAREST_NEIGHBOR");
         case 2:
-            return "BILINEAR";
+            return std::string("BILINEAR");
         case 3:
-            return "BRIGHTEST_PIXEL";
+            return std::string("BRIGHTEST_PIXEL");
         case 4:
-            return "LAGRANGE";
+            return std::string("LAGRANGE");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1136,7 +1136,7 @@ struct DemodType
         else if (s == "CHIRP")
             value = CHIRP;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1154,7 +1154,7 @@ struct DemodType
             value = CHIRP;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1167,13 +1167,13 @@ struct DemodType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "STRETCH";
+            return std::string("STRETCH");
         case 2:
-            return "CHIRP";
+            return std::string("CHIRP");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1230,7 +1230,7 @@ struct DisplayType
         else if (s == "MONO")
             value = MONO;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1248,7 +1248,7 @@ struct DisplayType
             value = MONO;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1261,13 +1261,13 @@ struct DisplayType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "COLOR";
+            return std::string("COLOR");
         case 2:
-            return "MONO";
+            return std::string("MONO");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1342,7 +1342,7 @@ struct DualPolarizationType
         else if (s == "LHC_LHC")
             value = LHC_LHC;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1378,7 +1378,7 @@ struct DualPolarizationType
             value = LHC_LHC;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1391,25 +1391,25 @@ struct DualPolarizationType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "OTHER";
+            return std::string("OTHER");
         case 2:
-            return "V_V";
+            return std::string("V_V");
         case 3:
-            return "V_H";
+            return std::string("V_H");
         case 4:
-            return "H_V";
+            return std::string("H_V");
         case 5:
-            return "H_H";
+            return std::string("H_H");
         case 6:
-            return "RHC_RHC";
+            return std::string("RHC_RHC");
         case 7:
-            return "RHC_LHC";
+            return std::string("RHC_LHC");
         case 8:
-            return "LHC_LHC";
+            return std::string("LHC_LHC");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1463,7 +1463,7 @@ struct EarthModelType
         else if (s == "WGS84")
             value = WGS84;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1478,7 +1478,7 @@ struct EarthModelType
             value = WGS84;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1491,11 +1491,11 @@ struct EarthModelType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "WGS84";
+            return std::string("WGS84");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1552,7 +1552,7 @@ struct FFTSign
         else if (s == "POS")
             value = POS;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1570,7 +1570,7 @@ struct FFTSign
             value = POS;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1583,13 +1583,13 @@ struct FFTSign
         switch(value)
         {
         case -1:
-            return "NEG";
+            return std::string("NEG");
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "POS";
+            return std::string("POS");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1646,7 +1646,7 @@ struct FrameType
         else if (s == "RIC_ECI")
             value = RIC_ECI;
         else
-            value = ECF;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1664,7 +1664,7 @@ struct FrameType
             value = RIC_ECI;
             break;
         default:
-            value = ECF;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1677,13 +1677,13 @@ struct FrameType
         switch(value)
         {
         case 0:
-            return "ECF";
+            return std::string("ECF");
         case 1:
-            return "RIC_ECF";
+            return std::string("RIC_ECF");
         case 2:
-            return "RIC_ECI";
+            return std::string("RIC_ECI");
         default:
-            return "ECF";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1737,7 +1737,7 @@ struct ImageBeamCompensationType
         else if (s == "SV")
             value = SV;
         else
-            value = NO;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1752,7 +1752,7 @@ struct ImageBeamCompensationType
             value = SV;
             break;
         default:
-            value = NO;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1765,11 +1765,11 @@ struct ImageBeamCompensationType
         switch(value)
         {
         case 0:
-            return "NO";
+            return std::string("NO");
         case 1:
-            return "SV";
+            return std::string("SV");
         default:
-            return "NO";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1829,7 +1829,7 @@ struct ImageFormationType
         else if (s == "RGAZCOMP")
             value = RGAZCOMP;
         else
-            value = OTHER;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1850,7 +1850,7 @@ struct ImageFormationType
             value = RGAZCOMP;
             break;
         default:
-            value = OTHER;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1863,15 +1863,15 @@ struct ImageFormationType
         switch(value)
         {
         case 0:
-            return "OTHER";
+            return std::string("OTHER");
         case 1:
-            return "PFA";
+            return std::string("PFA");
         case 2:
-            return "RMA";
+            return std::string("RMA");
         case 3:
-            return "RGAZCOMP";
+            return std::string("RGAZCOMP");
         default:
-            return "OTHER";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -1928,7 +1928,7 @@ struct MagnificationMethod
         else if (s == "BILINEAR")
             value = BILINEAR;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -1946,7 +1946,7 @@ struct MagnificationMethod
             value = BILINEAR;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -1959,13 +1959,13 @@ struct MagnificationMethod
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "NEAREST_NEIGHBOR";
+            return std::string("NEAREST_NEIGHBOR");
         case 2:
-            return "BILINEAR";
+            return std::string("BILINEAR");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2031,7 +2031,7 @@ struct OrientationType
         else if (s == "ARBITRARY")
             value = ARBITRARY;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2058,7 +2058,7 @@ struct OrientationType
             value = ARBITRARY;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -2071,19 +2071,19 @@ struct OrientationType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "UP";
+            return std::string("UP");
         case 2:
-            return "DOWN";
+            return std::string("DOWN");
         case 3:
-            return "LEFT";
+            return std::string("LEFT");
         case 4:
-            return "RIGHT";
+            return std::string("RIGHT");
         case 5:
-            return "ARBITRARY";
+            return std::string("ARBITRARY");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2155,7 +2155,7 @@ struct PixelType
         else if (s == "RGB24I")
             value = RGB24I;
         else
-            value = UNDEFINED;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2188,7 +2188,7 @@ struct PixelType
             value = RGB24I;
             break;
         default:
-            value = UNDEFINED;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -2201,23 +2201,23 @@ struct PixelType
         switch(value)
         {
         case 0:
-            return "UNDEFINED";
+            return std::string("UNDEFINED");
         case 1:
-            return "RE32F_IM32F";
+            return std::string("RE32F_IM32F");
         case 2:
-            return "RE16I_IM16I";
+            return std::string("RE16I_IM16I");
         case 3:
-            return "MONO8I";
+            return std::string("MONO8I");
         case 4:
-            return "MONO16I";
+            return std::string("MONO16I");
         case 5:
-            return "MONO8LU";
+            return std::string("MONO8LU");
         case 6:
-            return "RGB8LU";
+            return std::string("RGB8LU");
         case 7:
-            return "RGB24I";
+            return std::string("RGB24I");
         default:
-            return "UNDEFINED";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2283,7 +2283,7 @@ struct PolarizationType
         else if (s == "LHC")
             value = LHC;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2310,7 +2310,7 @@ struct PolarizationType
             value = LHC;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -2323,19 +2323,19 @@ struct PolarizationType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "OTHER";
+            return std::string("OTHER");
         case 2:
-            return "V";
+            return std::string("V");
         case 3:
-            return "H";
+            return std::string("H");
         case 4:
-            return "RHC";
+            return std::string("RHC");
         case 5:
-            return "LHC";
+            return std::string("LHC");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2398,7 +2398,7 @@ struct ProjectionType
         else if (s == "POLYNOMIAL")
             value = POLYNOMIAL;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2422,7 +2422,7 @@ struct ProjectionType
             value = POLYNOMIAL;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -2435,17 +2435,17 @@ struct ProjectionType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "PLANE";
+            return std::string("PLANE");
         case 2:
-            return "GEOGRAPHIC";
+            return std::string("GEOGRAPHIC");
         case 3:
-            return "CYLINDRICAL";
+            return std::string("CYLINDRICAL");
         case 4:
-            return "POLYNOMIAL";
+            return std::string("POLYNOMIAL");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2505,7 +2505,7 @@ struct RMAlgoType
         else if (s == "RG_DOP")
             value = RG_DOP;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2526,7 +2526,7 @@ struct RMAlgoType
             value = RG_DOP;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -2539,15 +2539,15 @@ struct RMAlgoType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "OMEGA_K";
+            return std::string("OMEGA_K");
         case 2:
-            return "CSA";
+            return std::string("CSA");
         case 3:
-            return "RG_DOP";
+            return std::string("RG_DOP");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2610,7 +2610,7 @@ struct RadarModeType
         else if (s == "DYNAMIC_STRIPMAP")
             value = DYNAMIC_STRIPMAP;
         else
-            value = INVALID;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2634,7 +2634,7 @@ struct RadarModeType
             value = DYNAMIC_STRIPMAP;
             break;
         default:
-            value = INVALID;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -2647,17 +2647,17 @@ struct RadarModeType
         switch(value)
         {
         case 0:
-            return "INVALID";
+            return std::string("INVALID");
         case 1:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 2:
-            return "SPOTLIGHT";
+            return std::string("SPOTLIGHT");
         case 3:
-            return "STRIPMAP";
+            return std::string("STRIPMAP");
         case 4:
-            return "DYNAMIC_STRIPMAP";
+            return std::string("DYNAMIC_STRIPMAP");
         default:
-            return "INVALID";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2714,7 +2714,7 @@ struct RegionType
         else if (s == "GEOGRAPHIC_INFO")
             value = GEOGRAPHIC_INFO;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2732,7 +2732,7 @@ struct RegionType
             value = GEOGRAPHIC_INFO;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -2745,13 +2745,13 @@ struct RegionType
         switch(value)
         {
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "SUB_REGION";
+            return std::string("SUB_REGION");
         case 2:
-            return "GEOGRAPHIC_INFO";
+            return std::string("GEOGRAPHIC_INFO");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2805,7 +2805,7 @@ struct RowColEnum
         else if (s == "COL")
             value = COL;
         else
-            value = ROW;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2820,7 +2820,7 @@ struct RowColEnum
             value = COL;
             break;
         default:
-            value = ROW;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -2833,11 +2833,11 @@ struct RowColEnum
         switch(value)
         {
         case 0:
-            return "ROW";
+            return std::string("ROW");
         case 1:
-            return "COL";
+            return std::string("COL");
         default:
-            return "ROW";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2891,7 +2891,7 @@ struct SCPType
         else if (s == "SCP_RG_AZ")
             value = SCP_RG_AZ;
         else
-            value = SCP_ROW_COL;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2906,7 +2906,7 @@ struct SCPType
             value = SCP_RG_AZ;
             break;
         default:
-            value = SCP_ROW_COL;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -2919,11 +2919,11 @@ struct SCPType
         switch(value)
         {
         case 0:
-            return "SCP_ROW_COL";
+            return std::string("SCP_ROW_COL");
         case 1:
-            return "SCP_RG_AZ";
+            return std::string("SCP_RG_AZ");
         default:
-            return "SCP_ROW_COL";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -2980,7 +2980,7 @@ struct SideOfTrackType
         else if (s == "RIGHT")
             value = RIGHT;
         else
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -2998,7 +2998,7 @@ struct SideOfTrackType
             value = RIGHT;
             break;
         default:
-            value = NOT_SET;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -3011,13 +3011,13 @@ struct SideOfTrackType
         switch(value)
         {
         case -1:
-            return "LEFT";
+            return std::string("LEFT");
         case 0:
-            return "NOT_SET";
+            return std::string("NOT_SET");
         case 1:
-            return "RIGHT";
+            return std::string("RIGHT");
         default:
-            return "NOT_SET";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -3074,7 +3074,7 @@ struct SlowTimeBeamCompensationType
         else if (s == "SV")
             value = SV;
         else
-            value = NO;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -3092,7 +3092,7 @@ struct SlowTimeBeamCompensationType
             value = SV;
             break;
         default:
-            value = NO;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -3105,13 +3105,13 @@ struct SlowTimeBeamCompensationType
         switch(value)
         {
         case 0:
-            return "NO";
+            return std::string("NO");
         case 1:
-            return "GLOBAL";
+            return std::string("GLOBAL");
         case 2:
-            return "SV";
+            return std::string("SV");
         default:
-            return "NO";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -3168,7 +3168,7 @@ struct XYZEnum
         else if (s == "Z")
             value = Z;
         else
-            value = X;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -3186,7 +3186,7 @@ struct XYZEnum
             value = Z;
             break;
         default:
-            value = X;
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
     }
 
@@ -3199,13 +3199,13 @@ struct XYZEnum
         switch(value)
         {
         case 0:
-            return "X";
+            return std::string("X");
         case 1:
-            return "Y";
+            return std::string("Y");
         case 2:
-            return "Z";
+            return std::string("Z");
         default:
-            return "X";
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
     }
 
@@ -3234,7 +3234,7 @@ struct XYZEnum
 
 };
 
-// code auto-generated 2010-05-27 13:54:31.026152
+// code auto-generated 2010-06-04 15:33:32.195605
 
 }
 

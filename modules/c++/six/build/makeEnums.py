@@ -72,7 +72,7 @@ def makeEnums(filenames):
         for (i, (name, value)) in enumerate(values):
             s.write('        %sif (s == "%s")\n            value = %s;\n' % (i > 0 and 'else ' or '',
                                                                name, name))
-        s.write('        else\n            value = %s;\n' % dflt)
+        s.write('        else\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));\n')
         s.write('    }\n\n')
         
         s.write('    //! int constructor\n')
@@ -83,7 +83,7 @@ def makeEnums(filenames):
                 idx = value
             s.write('        case %d:\n            value = %s;\n            break;\n' % (idx, name))
             idx += 1
-        s.write('        default:\n            value = %s;\n' % dflt)
+        s.write('        default:\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));\n')
         s.write('        }\n    }\n\n')
         
         s.write('    //! destructor\n')
@@ -95,9 +95,9 @@ def makeEnums(filenames):
         for (i, (name, value)) in enumerate(values):
             if value is not None:
                 idx = value
-            s.write('        case %d:\n            return "%s";\n' % (idx, name))
+            s.write('        case %d:\n            return std::string("%s");\n' % (idx, name))
             idx += 1
-        s.write('        default:\n            return "%s";\n' % dflt)
+        s.write('        default:\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));\n')
         s.write('        }\n    }\n\n')
         
         s.write('    //! assignment operator\n')

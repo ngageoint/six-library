@@ -122,14 +122,14 @@ __default__=0
 
 [BooleanType]
 NOT_SET=-1
-FALSE=0
-TRUE=1
+IS_FALSE=0
+IS_TRUE=1
 __default__=-1
 
 [AppliedType]
 NOT_SET=-1
-TRUE=0
-FALSE=1
+IS_FALSE=0
+IS_TRUE=1
 __default__=-1
 
 [ComplexImagePlaneType]
