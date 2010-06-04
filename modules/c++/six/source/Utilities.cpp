@@ -36,9 +36,9 @@ template<> BooleanType six::toType<BooleanType>(const std::string& s)
         return BooleanType::NOT_SET;
 }
 
-template<> std::string toString<BooleanType>(const BooleanType& value)
+template<> std::string six::toString<BooleanType>(const BooleanType& value)
 {
-    return toString<bool>(value == BooleanType::IS_TRUE);
+    return six::toString<bool>(value == BooleanType::IS_TRUE);
 }
 
 template<> DateTime six::toType<DateTime>(const std::string& dateTime)
