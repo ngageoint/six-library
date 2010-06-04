@@ -29,16 +29,16 @@ template<> BooleanType six::toType<BooleanType>(const std::string& s)
     str::trim(type);
     str::lower(type);
     if (type == "true" || type == "1" || type == "yes")
-        return BooleanType::TRUE;
+        return BooleanType::IS_TRUE;
     else if (type == "false" || type == "0" || type == "no")
-        return BooleanType::FALSE;
+        return BooleanType::IS_FALSE;
     else
         return BooleanType::NOT_SET;
 }
 
 template<> std::string toString<BooleanType>(const BooleanType& value)
 {
-    return toString<bool>(value == BooleanType::TRUE);
+    return toString<bool>(value == BooleanType::IS_TRUE);
 }
 
 template<> DateTime six::toType<DateTime>(const std::string& dateTime)
@@ -695,9 +695,9 @@ template<> AppliedType six::toType<AppliedType>(const std::string& s)
     // TODO: Needs correction -- added alternate value to match schema
     // from 03/17/2009.
     if (type == "APPLIED" || type == "APPILED")
-        return AppliedType::TRUE;
+        return AppliedType::IS_TRUE;
     else if (type == "NOT_APPLIED")
-        return AppliedType::FALSE;
+        return AppliedType::IS_FALSE;
     else
         throw except::Exception(Ctxt("Unsupported applied type"));
 }
@@ -706,11 +706,11 @@ template<> std::string six::toString(const AppliedType& value)
 {
     switch (value)
     {
-    case AppliedType::TRUE:
+    case AppliedType::IS_TRUE:
         // TODO: Needs correction -- support alternate value to match
         // schema from 03/17/2009.
         return "APPILED";
-    case AppliedType::FALSE:
+    case AppliedType::IS_FALSE:
         return "NOT_APPLIED";
     default:
         throw except::Exception(Ctxt("Unsupported applied type"));
