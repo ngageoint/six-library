@@ -71,7 +71,12 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
                          std::vector<nitf::BandInfo>& bands) throw(nitf::NITFException)
 {
     nitf::Uint32 bandCount = bands.size();
-    nitf_BandInfo ** bandInfo = new nitf_BandInfo * [bandCount];
+    nitf_BandInfo ** bandInfo = (nitf_BandInfo **)NITF_MALLOC(
+            sizeof(nitf_BandInfo*) * bandCount);
+    if (!bandInfo)
+    {
+        throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
+    }
 
     for (nitf::Uint32 i = 0; i < bandCount; i++)
     {
