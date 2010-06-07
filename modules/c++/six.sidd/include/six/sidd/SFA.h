@@ -28,12 +28,10 @@ namespace six
 {
 namespace sidd
 {
-namespace sfa
-{
 
-struct Typed
+struct SFATyped
 {
-    virtual ~Typed()
+    virtual ~SFATyped()
     {
     }
     inline std::string getType() const
@@ -43,30 +41,30 @@ struct Typed
 
 protected:
     std::string mType;
-    Typed(std::string typeName) :
+    SFATyped(std::string typeName) :
         mType(typeName)
     {
     }
 };
 
-struct Geometry : public Typed
+struct SFAGeometry : public SFATyped
 {
-    virtual ~Geometry()
+    virtual ~SFAGeometry()
     {
     }
 protected:
-    Geometry(std::string typeName) :
-        Typed(typeName)
+    SFAGeometry(std::string typeName) :
+        SFATyped(typeName)
     {
     }
 };
 
-struct Point : public Geometry
+struct SFAPoint : public SFAGeometry
 {
     double x, y, z, m;
 
-    Point() :
-        Geometry(TYPE_NAME)
+    SFAPoint() :
+        SFAGeometry(TYPE_NAME)
     {
         x = 0;
         y = 0;
@@ -74,45 +72,45 @@ struct Point : public Geometry
         m = ::six::Init::undefined<double>();
     }
     
-    Point(double _x, double _y) :
-        Geometry(TYPE_NAME), x(_x), y(_y)
+    SFAPoint(double _x, double _y) :
+        SFAGeometry(TYPE_NAME), x(_x), y(_y)
     {
         z = ::six::Init::undefined<double>();
         m = ::six::Init::undefined<double>();
     }
     
-    Point(double _x, double _y, double _z, double _m) :
-        Geometry(TYPE_NAME), x(_x), y(_y), z(_z), m(_m)
+    SFAPoint(double _x, double _y, double _z, double _m) :
+        SFAGeometry(TYPE_NAME), x(_x), y(_y), z(_z), m(_m)
     {
     }
-    virtual ~Point()
+    virtual ~SFAPoint()
     {
     }
     static const char TYPE_NAME[];
 };
 
 //! Abstract type
-struct Curve : public Geometry
+struct SFACurve : public SFAGeometry
 {
-    virtual ~Curve()
+    virtual ~SFACurve()
     {
     }
 protected:
-    Curve(std::string typeName) :
-        Geometry(typeName)
+    SFACurve(std::string typeName) :
+        SFAGeometry(typeName)
     {
     }
 };
 
-struct LineString : public Curve
+struct SFALineString : public SFACurve
 {
-    std::vector<Point*> vertices;
+    std::vector<SFAPoint*> vertices;
 
-    LineString() :
-        Curve(TYPE_NAME)
+    SFALineString() :
+        SFACurve(TYPE_NAME)
     {
     }
-    virtual ~LineString()
+    virtual ~SFALineString()
     {
         for (size_t i = 0, n = vertices.size(); i < n; ++i)
             if (vertices[i])
@@ -121,53 +119,54 @@ struct LineString : public Curve
     static const char TYPE_NAME[];
 };
 
-struct Line : public LineString
+struct SFALine : public SFALineString
 {
-    Line() : LineString()
+    SFALine() :
+        SFALineString()
     {
         mType = TYPE_NAME;
     }
-    virtual ~Line()
+    virtual ~SFALine()
     {
     }
     static const char TYPE_NAME[];
 };
 
-struct LinearRing : public LineString
+struct SFALinearRing : public SFALineString
 {
-    LinearRing() : LineString()
+    SFALinearRing() :
+        SFALineString()
     {
         mType = TYPE_NAME;
     }
-    virtual ~LinearRing()
+    virtual ~SFALinearRing()
     {
     }
     static const char TYPE_NAME[];
 };
-
 
 //! Abstract type
-struct Surface : public Geometry
+struct SFASurface : public SFAGeometry
 {
-    virtual ~Surface()
+    virtual ~SFASurface()
     {
     }
 protected:
-    Surface(std::string typeName) :
-        Geometry(typeName)
+    SFASurface(std::string typeName) :
+        SFAGeometry(typeName)
     {
     }
 };
 
-struct Polygon : public Surface
+struct SFAPolygon : public SFASurface
 {
-    std::vector<LinearRing*> rings;
+    std::vector<SFALinearRing*> rings;
 
-    Polygon() :
-        Surface(TYPE_NAME)
+    SFAPolygon() :
+        SFASurface(TYPE_NAME)
     {
     }
-    virtual ~Polygon()
+    virtual ~SFAPolygon()
     {
         for (size_t i = 0, n = rings.size(); i < n; ++i)
             if (rings[i])
@@ -176,28 +175,28 @@ struct Polygon : public Surface
     static const char TYPE_NAME[];
 };
 
-struct Triangle : public Polygon
+struct SFATriangle : public SFAPolygon
 {
-    Triangle() :
-        Polygon()
+    SFATriangle() :
+        SFAPolygon()
     {
         mType = TYPE_NAME;
     }
-    ~Triangle()
+    ~SFATriangle()
     {
     }
     static const char TYPE_NAME[];
 };
 
-struct PolyhedralSurface : public Surface
+struct SFAPolyhedralSurface : public SFASurface
 {
-    std::vector<Polygon*> patches;
+    std::vector<SFAPolygon*> patches;
 
-    PolyhedralSurface() :
-        Surface(TYPE_NAME)
+    SFAPolyhedralSurface() :
+        SFASurface(TYPE_NAME)
     {
     }
-    virtual ~PolyhedralSurface()
+    virtual ~SFAPolyhedralSurface()
     {
         for (size_t i = 0, n = patches.size(); i < n; ++i)
             if (patches[i])
@@ -208,15 +207,15 @@ struct PolyhedralSurface : public Surface
 
 // note that we are deriving Surface rather than PolyhedralSurface
 // this is to avoid the patches name clash
-struct TriangulatedIrregularNetwork : public Surface
+struct SFATriangulatedIrregularNetwork : public SFASurface
 {
-    std::vector<Polygon*> patches;
+    std::vector<SFAPolygon*> patches;
 
-    TriangulatedIrregularNetwork() :
-        Surface(TYPE_NAME)
+    SFATriangulatedIrregularNetwork() :
+        SFASurface(TYPE_NAME)
     {
     }
-    virtual ~TriangulatedIrregularNetwork()
+    virtual ~SFATriangulatedIrregularNetwork()
     {
         for (size_t i = 0, n = patches.size(); i < n; ++i)
             if (patches[i])
@@ -226,27 +225,27 @@ struct TriangulatedIrregularNetwork : public Surface
 };
 
 //! Abstract type
-struct GeometryCollection : public Geometry
+struct SFAGeometryCollection : public SFAGeometry
 {
-    virtual ~GeometryCollection()
+    virtual ~SFAGeometryCollection()
     {
     }
 protected:
-    GeometryCollection(std::string typeName) :
-        Geometry(typeName)
+    SFAGeometryCollection(std::string typeName) :
+        SFAGeometry(typeName)
     {
     }
 };
 
-struct MultiPoint : public GeometryCollection
+struct SFAMultiPoint : public SFAGeometryCollection
 {
-    std::vector<Point*> vertices;
+    std::vector<SFAPoint*> vertices;
 
-    MultiPoint() :
-        GeometryCollection(TYPE_NAME)
+    SFAMultiPoint() :
+        SFAGeometryCollection(TYPE_NAME)
     {
     }
-    virtual ~MultiPoint()
+    virtual ~SFAMultiPoint()
     {
         for (size_t i = 0, n = vertices.size(); i < n; ++i)
             if (vertices[i])
@@ -256,27 +255,27 @@ struct MultiPoint : public GeometryCollection
 };
 
 //! Abstract type
-struct MultiCurve : public GeometryCollection
+struct SFAMultiCurve : public SFAGeometryCollection
 {
-    virtual ~MultiCurve()
+    virtual ~SFAMultiCurve()
     {
     }
 protected:
-    MultiCurve(std::string typeName) :
-        GeometryCollection(typeName)
+    SFAMultiCurve(std::string typeName) :
+        SFAGeometryCollection(typeName)
     {
     }
 };
 
-struct MultiLineString : public MultiCurve
+struct SFAMultiLineString : public SFAMultiCurve
 {
-    std::vector<LineString*> elements;
+    std::vector<SFALineString*> elements;
 
-    MultiLineString() :
-        MultiCurve(TYPE_NAME)
+    SFAMultiLineString() :
+        SFAMultiCurve(TYPE_NAME)
     {
     }
-    virtual ~MultiLineString()
+    virtual ~SFAMultiLineString()
     {
         for (size_t i = 0, n = elements.size(); i < n; ++i)
             if (elements[i])
@@ -286,27 +285,27 @@ struct MultiLineString : public MultiCurve
 };
 
 //! Abstract type
-struct MultiSurface : public GeometryCollection
+struct SFAMultiSurface : public SFAGeometryCollection
 {
-    virtual ~MultiSurface()
+    virtual ~SFAMultiSurface()
     {
     }
 protected:
-    MultiSurface(std::string typeName) :
-        GeometryCollection(typeName)
+    SFAMultiSurface(std::string typeName) :
+        SFAGeometryCollection(typeName)
     {
     }
 };
 
-struct MultiPolygon : public MultiSurface
+struct SFAMultiPolygon : public SFAMultiSurface
 {
-    std::vector<Polygon*> elements;
+    std::vector<SFAPolygon*> elements;
 
-    MultiPolygon() :
-        MultiSurface(TYPE_NAME)
+    SFAMultiPolygon() :
+        SFAMultiSurface(TYPE_NAME)
     {
     }
-    virtual ~MultiPolygon()
+    virtual ~SFAMultiPolygon()
     {
         for (size_t i = 0, n = elements.size(); i < n; ++i)
             if (elements[i])
@@ -315,95 +314,95 @@ struct MultiPolygon : public MultiSurface
     static const char TYPE_NAME[];
 };
 
-struct CoordinateSystem : public Typed
+struct SFACoordinateSystem : public SFATyped
 {
-    virtual ~CoordinateSystem()
+    virtual ~SFACoordinateSystem()
     {
     }
 protected:
-    CoordinateSystem(std::string typeName) :
-        Typed(typeName)
+    SFACoordinateSystem(std::string typeName) :
+        SFATyped(typeName)
     {
     }
 };
 
-struct PrimeMeridian
+struct SFAPrimeMeridian
 {
     std::string name;
     double longitude;
 };
 
-struct Spheroid
+struct SFASpheroid
 {
     std::string name;
     double semiMajorAxis;
     double inverseFlattening;
 };
 
-struct Parameter
+struct SFAParameter
 {
     std::string name;
     double value;
 };
 
-struct Projection
+struct SFAProjection
 {
     std::string name;
 };
 
-struct Datum
+struct SFADatum
 {
-    Spheroid spheroid;
+    SFASpheroid spheroid;
 };
 
-struct GeocentricCoordinateSystem : public CoordinateSystem
+struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
 {
     std::string name;
-    Datum datum;
-    PrimeMeridian primeMeridian;
+    SFADatum datum;
+    SFAPrimeMeridian primeMeridian;
     std::string linearUnit;
 
-    GeocentricCoordinateSystem() :
-        CoordinateSystem(TYPE_NAME)
+    SFAGeocentricCoordinateSystem() :
+        SFACoordinateSystem(TYPE_NAME)
     {
     }
-    ~GeocentricCoordinateSystem()
+    ~SFAGeocentricCoordinateSystem()
     {
     }
     static const char TYPE_NAME[];
 };
 
-struct GeographicCoordinateSystem : public CoordinateSystem
+struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
 {
     std::string name;
-    Datum datum;
-    PrimeMeridian primeMeridian;
+    SFADatum datum;
+    SFAPrimeMeridian primeMeridian;
     std::string angularUnit;
     std::string linearUnit;
 
-    GeographicCoordinateSystem() :
-        CoordinateSystem(TYPE_NAME)
+    SFAGeographicCoordinateSystem() :
+        SFACoordinateSystem(TYPE_NAME)
     {
     }
-    ~GeographicCoordinateSystem()
+    ~SFAGeographicCoordinateSystem()
     {
     }
     static const char TYPE_NAME[];
 };
 
-struct ProjectedCoordinateSystem : public CoordinateSystem
+struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
 {
     std::string name;
-    GeographicCoordinateSystem *geographicCoordinateSystem;
-    Projection projection;
-    Parameter parameter;
+    SFAGeographicCoordinateSystem *geographicCoordinateSystem;
+    SFAProjection projection;
+    SFAParameter parameter;
     std::string linearUnit;
 
-    ProjectedCoordinateSystem() :
-        CoordinateSystem(TYPE_NAME), geographicCoordinateSystem(NULL)
+    SFAProjectedCoordinateSystem() :
+        SFACoordinateSystem(TYPE_NAME), geographicCoordinateSystem(NULL)
     {
     }
-    ~ProjectedCoordinateSystem()
+    ~SFAProjectedCoordinateSystem()
     {
         if (geographicCoordinateSystem)
             delete geographicCoordinateSystem;
@@ -411,23 +410,22 @@ struct ProjectedCoordinateSystem : public CoordinateSystem
     static const char TYPE_NAME[];
 };
 
-struct ReferenceSystem
+struct SFAReferenceSystem
 {
-    CoordinateSystem *coordinateSystem;
+    SFACoordinateSystem *coordinateSystem;
     std::vector<std::string> axisNames;
 
-    ReferenceSystem() :
+    SFAReferenceSystem() :
         coordinateSystem(NULL)
     {
     }
-    virtual ~ReferenceSystem()
+    virtual ~SFAReferenceSystem()
     {
         if (coordinateSystem)
             delete coordinateSystem;
     }
 };
 
-}
 }
 }
 #endif

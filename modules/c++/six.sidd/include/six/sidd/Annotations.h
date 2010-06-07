@@ -32,9 +32,6 @@ namespace sidd
 
 struct Annotation
 {
-    typedef ::six::sidd::sfa::Geometry SFAGeometry;
-    typedef ::six::sidd::sfa::ReferenceSystem SFAReferenceSystem;
-
     std::string identifier;
     SFAReferenceSystem* spatialReferenceSystem;
     std::vector<SFAGeometry*> objects;

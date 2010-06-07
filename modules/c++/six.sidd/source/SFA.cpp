@@ -21,22 +21,22 @@
  */
 #include "six/sidd/SFA.h"
 
-const char six::sidd::sfa::Point::TYPE_NAME[] = "Point";
-const char six::sidd::sfa::LineString::TYPE_NAME[] = "LineString";
-const char six::sidd::sfa::Line::TYPE_NAME[] = "Line";
-const char six::sidd::sfa::LinearRing::TYPE_NAME[] = "LinearRing";
-const char six::sidd::sfa::Polygon::TYPE_NAME[] = "Polygon";
-const char six::sidd::sfa::Triangle::TYPE_NAME[] = "Triangle";
-const char six::sidd::sfa::PolyhedralSurface::TYPE_NAME[] = "PolyhedralSurface";
-const char six::sidd::sfa::TriangulatedIrregularNetwork::TYPE_NAME[] =
+const char six::sidd::SFAPoint::TYPE_NAME[] = "Point";
+const char six::sidd::SFALineString::TYPE_NAME[] = "LineString";
+const char six::sidd::SFALine::TYPE_NAME[] = "Line";
+const char six::sidd::SFALinearRing::TYPE_NAME[] = "LinearRing";
+const char six::sidd::SFAPolygon::TYPE_NAME[] = "Polygon";
+const char six::sidd::SFATriangle::TYPE_NAME[] = "Triangle";
+const char six::sidd::SFAPolyhedralSurface::TYPE_NAME[] = "PolyhedralSurface";
+const char six::sidd::SFATriangulatedIrregularNetwork::TYPE_NAME[] =
         "TriangulatedIrregularNetwork";
-const char six::sidd::sfa::MultiPoint::TYPE_NAME[] = "MultiPoint";
-const char six::sidd::sfa::MultiLineString::TYPE_NAME[] = "MultiLineString";
-const char six::sidd::sfa::MultiPolygon::TYPE_NAME[] = "MultiPolygon";
+const char six::sidd::SFAMultiPoint::TYPE_NAME[] = "MultiPoint";
+const char six::sidd::SFAMultiLineString::TYPE_NAME[] = "MultiLineString";
+const char six::sidd::SFAMultiPolygon::TYPE_NAME[] = "MultiPolygon";
 
-const char six::sidd::sfa::GeocentricCoordinateSystem::TYPE_NAME[] =
+const char six::sidd::SFAGeocentricCoordinateSystem::TYPE_NAME[] =
         "GeocentricCoordinateSystem";
-const char six::sidd::sfa::GeographicCoordinateSystem::TYPE_NAME[] =
+const char six::sidd::SFAGeographicCoordinateSystem::TYPE_NAME[] =
         "GeographicCoordinateSystem";
-const char six::sidd::sfa::ProjectedCoordinateSystem::TYPE_NAME[] =
+const char six::sidd::SFAProjectedCoordinateSystem::TYPE_NAME[] =
         "ProjectedCoordinateSystem";

@@ -89,8 +89,8 @@ protected:
     void fromXML(XMLElem elem, GeographicCoverage* geoCoverage);
     void fromXML(XMLElem elem, ExploitationFeatures* exFeatures);
     void fromXML(XMLElem annotationXML, Annotation *a);
-    void fromXML(XMLElem elem, ::six::sidd::sfa::Geometry *g);
-    XMLElem toXML(::six::sidd::sfa::Geometry *g, XMLElem parent = NULL);
+    void fromXML(XMLElem elem, SFAGeometry *g);
+    XMLElem toXML(SFAGeometry *g, XMLElem parent = NULL);
 };
 
 }
