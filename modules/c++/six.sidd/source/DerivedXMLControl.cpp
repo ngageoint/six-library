@@ -1486,39 +1486,39 @@ void DerivedXMLControl::fromXML(XMLElem elem, Annotation *a)
         {
             //just get the first one
             XMLElem child = children[0];
-            ::six::sidd::sfa::Geometry *geoType = NULL;
+            SFAGeometry *geoType = NULL;
             std::string childName = child->getLocalName();
             if (childName == "Point")
             {
-                geoType = new ::six::sidd::sfa::Point;
+                geoType = new SFAPoint;
             }
             else if (childName == "Line")
             {
-                geoType = new ::six::sidd::sfa::Line;
+                geoType = new SFALine;
             }
             else if (childName == "LinearRing")
             {
-                geoType = new ::six::sidd::sfa::LinearRing;
+                geoType = new SFALinearRing;
             }
             else if (childName == "Polygon")
             {
-                geoType = new ::six::sidd::sfa::Polygon;
+                geoType = new SFAPolygon;
             }
             else if (childName == "PolyhedralSurface")
             {
-                geoType = new ::six::sidd::sfa::PolyhedralSurface;
+                geoType = new SFAPolyhedralSurface;
             }
             else if (childName == "MultiPolygon")
             {
-                geoType = new ::six::sidd::sfa::MultiPolygon;
+                geoType = new SFAMultiPolygon;
             }
             else if (childName == "MultiLineString")
             {
-                geoType = new ::six::sidd::sfa::MultiLineString;
+                geoType = new SFAMultiLineString;
             }
             else if (childName == "MultiPoint")
             {
-                geoType = new ::six::sidd::sfa::MultiPoint;
+                geoType = new SFAMultiPoint;
             }
             if (geoType)
             {
@@ -1535,12 +1535,12 @@ XMLElem DerivedXMLControl::toXML(Annotation *a, XMLElem parent)
     return NULL;
 }
 
-void DerivedXMLControl::fromXML(XMLElem elem, ::six::sidd::sfa::Geometry *g)
+void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
 {
     std::string geoType = g->getType();
-    if (geoType == ::six::sidd::sfa::Point::TYPE_NAME)
+    if (geoType == SFAPoint::TYPE_NAME)
     {
-        ::six::sidd::sfa::Point *p = (::six::sidd::sfa::Point*) g;
+        SFAPoint *p = (SFAPoint*) g;
         parseDouble(getFirstAndOnly(elem, "X"), p->x);
         parseDouble(getFirstAndOnly(elem, "Y"), p->y);
         parseDouble(getFirstAndOnly(elem, "Z"), p->z);
@@ -1550,80 +1550,76 @@ void DerivedXMLControl::fromXML(XMLElem elem, ::six::sidd::sfa::Geometry *g)
             parseDouble(tmpElem, p->m);
     }
     //for now, line, linearring, and linestring are parsed the same
-    else if (geoType == ::six::sidd::sfa::Line::TYPE_NAME || geoType
-            == ::six::sidd::sfa::LinearRing::TYPE_NAME || geoType
-            == ::six::sidd::sfa::LineString::TYPE_NAME)
+    else if (geoType == SFALine::TYPE_NAME || geoType
+            == SFALinearRing::TYPE_NAME || geoType == SFALineString::TYPE_NAME)
     {
         //cast to the common base - LineString
-        ::six::sidd::sfa::LineString *p = (::six::sidd::sfa::LineString*) g;
+        SFALineString *p = (SFALineString*) g;
         std::vector<XMLElem> vXML;
         elem->getElementsByTagName("Vertex", vXML);
         for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
         {
-            ::six::sidd::sfa::Point *vertex = new ::six::sidd::sfa::Point;
+            SFAPoint *vertex = new SFAPoint;
             fromXML(vXML[i], vertex);
             p->vertices.push_back(vertex);
         }
     }
-    else if (geoType == ::six::sidd::sfa::Polygon::TYPE_NAME)
+    else if (geoType == SFAPolygon::TYPE_NAME)
     {
-        ::six::sidd::sfa::Polygon *p = (::six::sidd::sfa::Polygon*) g;
+        SFAPolygon *p = (SFAPolygon*) g;
         std::vector<XMLElem> ringXML;
         elem->getElementsByTagName("Ring", ringXML);
         for (unsigned int i = 0, size = ringXML.size(); i < size; ++i)
         {
-            ::six::sidd::sfa::LinearRing *ring =
-                    new ::six::sidd::sfa::LinearRing;
+            SFALinearRing *ring = new SFALinearRing;
             fromXML(ringXML[i], ring);
             p->rings.push_back(ring);
         }
     }
-    else if (geoType == ::six::sidd::sfa::PolyhedralSurface::TYPE_NAME)
+    else if (geoType == SFAPolyhedralSurface::TYPE_NAME)
     {
-        ::six::sidd::sfa::PolyhedralSurface *p =
-                (::six::sidd::sfa::PolyhedralSurface*) g;
+        SFAPolyhedralSurface *p = (SFAPolyhedralSurface*) g;
         std::vector<XMLElem> polyXML;
         elem->getElementsByTagName("Patch", polyXML);
         for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
         {
-            ::six::sidd::sfa::Polygon *polygon = new ::six::sidd::sfa::Polygon;
+            SFAPolygon *polygon = new SFAPolygon;
             fromXML(polyXML[i], polygon);
             p->patches.push_back(polygon);
         }
     }
-    else if (geoType == ::six::sidd::sfa::MultiPolygon::TYPE_NAME)
+    else if (geoType == SFAMultiPolygon::TYPE_NAME)
     {
-        ::six::sidd::sfa::MultiPolygon *p = (::six::sidd::sfa::MultiPolygon*) g;
+        SFAMultiPolygon *p = (SFAMultiPolygon*) g;
         std::vector<XMLElem> polyXML;
         elem->getElementsByTagName("Element", polyXML);
         for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
         {
-            ::six::sidd::sfa::Polygon *polygon = new ::six::sidd::sfa::Polygon;
+            SFAPolygon *polygon = new SFAPolygon;
             fromXML(polyXML[i], polygon);
             p->elements.push_back(polygon);
         }
     }
-    else if (geoType == ::six::sidd::sfa::MultiLineString::TYPE_NAME)
+    else if (geoType == SFAMultiLineString::TYPE_NAME)
     {
-        ::six::sidd::sfa::MultiLineString *p =
-                (::six::sidd::sfa::MultiLineString*) g;
+        SFAMultiLineString *p = (SFAMultiLineString*) g;
         std::vector<XMLElem> lineXML;
         elem->getElementsByTagName("Element", lineXML);
         for (unsigned int i = 0, size = lineXML.size(); i < size; ++i)
         {
-            ::six::sidd::sfa::LineString *ls = new ::six::sidd::sfa::LineString;
+            SFALineString *ls = new SFALineString;
             fromXML(lineXML[i], ls);
             p->elements.push_back(ls);
         }
     }
-    else if (geoType == ::six::sidd::sfa::MultiPoint::TYPE_NAME)
+    else if (geoType == SFAMultiPoint::TYPE_NAME)
     {
-        ::six::sidd::sfa::MultiPoint *p = (::six::sidd::sfa::MultiPoint*) g;
+        SFAMultiPoint *p = (SFAMultiPoint*) g;
         std::vector<XMLElem> vXML;
         elem->getElementsByTagName("Vertex", vXML);
         for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
         {
-            ::six::sidd::sfa::Point *vertex = new ::six::sidd::sfa::Point;
+            SFAPoint *vertex = new SFAPoint;
             fromXML(vXML[i], vertex);
             p->vertices.push_back(vertex);
         }
@@ -1634,7 +1630,7 @@ void DerivedXMLControl::fromXML(XMLElem elem, ::six::sidd::sfa::Geometry *g)
     }
 }
 
-XMLElem DerivedXMLControl::toXML(::six::sidd::sfa::Geometry *g, XMLElem parent)
+XMLElem DerivedXMLControl::toXML(SFAGeometry *g, XMLElem parent)
 {
     //TODO
     return NULL;
