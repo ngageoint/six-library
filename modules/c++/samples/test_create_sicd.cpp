@@ -152,6 +152,8 @@ int main(int argc, char** argv)
         data->grid->col->deltaK2 = 0;
 
         data->imageFormation->rcvChannelProcessed->numChannelsProcessed = 1;
+
+        data->pfa = new six::sicd::PFA();
         data->pfa->spatialFrequencyScaleFactorPoly = six::Poly1D(0);
         data->pfa->spatialFrequencyScaleFactorPoly[0] = 42;
         data->pfa->polarAnglePoly = six::Poly1D(0);
