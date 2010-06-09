@@ -814,7 +814,7 @@ XMLElem DerivedXMLControl::toXML(Display* display, XMLElem parent)
 {
     XMLElem displayXML = newElement("Display", parent);
 
-    createString("PixelType", str::toString(display->pixelType), displayXML);
+    createString("PixelType", six::toString(display->pixelType), displayXML);
 
     //RemapInformation - optional
     if (display->remapInformation && (display->pixelType == PixelType::RGB8LU
@@ -833,7 +833,7 @@ XMLElem DerivedXMLControl::toXML(Display* display, XMLElem parent)
             remapXML = newElement("MonochromeDisplayRemap", remapInfoXML);
             createString(
                          "RemapType",
-                         str::toString(
+                         six::toString(
                                        ((MonochromeDisplayRemap*) display->remapInformation)->remapType),
                          remapXML);
             createLUT("RemapLUT", display->remapInformation->remapLUT, remapXML);
@@ -849,14 +849,14 @@ XMLElem DerivedXMLControl::toXML(Display* display, XMLElem parent)
     if (display->magnificationMethod != MagnificationMethod::NOT_SET)
     {
         createString("MagnificationMethod",
-                     str::toString(display->magnificationMethod), displayXML);
+                     six::toString(display->magnificationMethod), displayXML);
     }
 
     //DecimationMethod - optional
     if (display->decimationMethod != DecimationMethod::NOT_SET)
     {
         createString("DecimationMethod",
-                     str::toString(display->decimationMethod), displayXML);
+                     six::toString(display->decimationMethod), displayXML);
     }
 
     //DRAHistogramOverrides - optional
@@ -1092,7 +1092,7 @@ XMLElem DerivedXMLControl::toXML(ExploitationFeatures* exploitationFeatures,
         XMLElem radarModeXML = newElement("RadarMode", informationXML);
         //ModeType - Incomplete?
         createString("ModeType",
-                     str::toString(collection->information->radarMode),
+                     six::toString(collection->information->radarMode),
                      radarModeXML);
         if (collection->information->radarModeID
                 != Init::undefined<std::string>())
@@ -1139,7 +1139,7 @@ XMLElem DerivedXMLControl::toXML(ExploitationFeatures* exploitationFeatures,
             XMLElem polXML = newElement("Polarization");
             createString(
                          "TxPolarization",
-                         str::toString(
+                         six::toString(
                                        collection->information->polarization->txPolarization),
                          polXML);
             createDouble(
