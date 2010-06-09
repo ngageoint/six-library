@@ -898,7 +898,8 @@ XMLElem DerivedXMLControl::toXML(GeographicAndTarget* geographicAndTarget,
         addParameters("Identifier", ti->identifiers, tiXML);
         for (unsigned int i = 0; i < ti->footprints.size(); i++)
         {
-            createFootprint("Footprint", "Vertex", ti->footprints[i], tiXML);
+            createFootprint("Footprint", "Vertex", ti->footprints[i], false,
+                            tiXML);
         }
         addParameters("TargetInformationExtension",
                       ti->targetInformationExtensions, tiXML);
@@ -917,7 +918,7 @@ XMLElem DerivedXMLControl::toXML(GeographicCoverage* geoCoverage,
                   geoCoverageXML);
 
     //Footprint
-    createFootprint("Footprint", "Vertex", geoCoverage->footprint,
+    createFootprint("Footprint", "Vertex", geoCoverage->footprint, false,
                     geoCoverageXML);
 
     // GeographicInfo
