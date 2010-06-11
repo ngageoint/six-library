@@ -229,3 +229,7 @@ template<> Classification Init::undefined<Classification>()
     //TODO is this good enough, or should we init differently?
     return Classification();
 }
+template<> Parameter Init::undefined<Parameter>()
+{
+    return Parameter();
+}

@@ -142,6 +142,12 @@ public:
     {
         return mValue.c_str();
     }
+
+    bool operator==(const Parameter& o) const
+    {
+        return mName == o.mName && mValue == o.mValue;
+    }
+
 protected:
     std::string mValue;
     std::string mName;

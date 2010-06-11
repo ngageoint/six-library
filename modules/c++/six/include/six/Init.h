@@ -24,6 +24,7 @@
 
 #include "six/Types.h"
 #include "six/Classification.h"
+#include "six/Parameter.h"
 #include <import/except.h>
 
 namespace six
@@ -84,6 +85,7 @@ template<> Poly1D Init::undefined<Poly1D>();
 template<> Poly2D Init::undefined<Poly2D>();
 template<> PolyXYZ Init::undefined<PolyXYZ>();
 template<> Classification Init::undefined<Classification>();
+template<> Parameter Init::undefined<Parameter>();
 
 }
 
