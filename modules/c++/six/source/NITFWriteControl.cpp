@@ -68,7 +68,7 @@ void NITFWriteControl::initialize(Container* container)
 
     DataType dataType = mContainer->getDataType();
     std::string name = mInfos[0]->getData()->getName();
-    std::string fileTitle = FmtX("%s: %s", str::toString(dataType).c_str(),
+    std::string fileTitle = FmtX("%s: %s", six::toString(dataType).c_str(),
                                  name.c_str());
 
     mRecord.getHeader().getFileTitle().set(fileTitle);

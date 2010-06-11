@@ -581,7 +581,7 @@ xml::lite::Element* ComplexXMLControl::radarCollectionToXML(
 
         if (cp->txRcvPolarization != DualPolarizationType::NOT_SET)
         {
-            createString("TxRcvPolarization", str::toString<
+            createString("TxRcvPolarization", six::toString<
                     DualPolarizationType>(cp->txRcvPolarization), cpXML);
         }
     }
