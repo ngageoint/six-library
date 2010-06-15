@@ -224,6 +224,11 @@ NRL                N/A                        0,255 (Supposed to be display read
 		<xs:complexContent>
 			<xs:extension base="BaseProjectionType">
 				<xs:sequence>
+					<xs:element name="SampleSpacing" type="sicommon:RowColDoubleType">
+						<xs:annotation>
+							<xs:documentation>Sample spacing in row and column.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 					<xs:element name="TimeCOAPoly" type="sicommon:Poly2DType">
 						<xs:annotation>
 							<xs:documentation>Time (units = seconds) at which center of aperture for a given pixel coordinate in the product occurs.</xs:documentation>
@@ -240,11 +245,6 @@ NRL                N/A                        0,255 (Supposed to be display read
 		<xs:complexContent>
 			<xs:extension base="MeasurableProjectionType">
 				<xs:sequence>
-					<xs:element name="SampleSpacing" type="sicommon:RowColDoubleType">
-						<xs:annotation>
-							<xs:documentation>Sample spacing in row and column in meters.</xs:documentation>
-						</xs:annotation>
-					</xs:element>
 					<xs:element name="ProductPlane" type="ProductPlaneType">
 						<xs:annotation>
 							<xs:documentation>Plane definition for the product.</xs:documentation>
@@ -275,15 +275,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 			<xs:documentation>Geographic mapping of the pixel grid.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="MeasurableProjectionType">
-				<xs:sequence>
-					<xs:element name="SampleSpacing" type="sicommon:RowColLatLonType">
-						<xs:annotation>
-							<xs:documentation>Sample spacing in row and column each provided in (lat, lon) in arc-seconds.</xs:documentation>
-						</xs:annotation>
-					</xs:element>
-				</xs:sequence>
-			</xs:extension>
+			<xs:extension base="MeasurableProjectionType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="CylindricalProjectionType">
@@ -293,9 +285,9 @@ NRL                N/A                        0,255 (Supposed to be display read
 		<xs:complexContent>
 			<xs:extension base="MeasurableProjectionType">
 				<xs:sequence>
-					<xs:element name="SampleSpacing" type="sicommon:RowColDoubleType">
+					<xs:element name="StripmapDirection" type="sicommon:XYZType">
 						<xs:annotation>
-							<xs:documentation>Sample spacing in row and column given in meters.</xs:documentation>
+							<xs:documentation>Along stripmap direction</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="CurvatureRadius" type="xs:double" minOccurs="0">
@@ -463,7 +455,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 	</xs:complexType>
 	<xs:complexType name="FootprintType">
 		<xs:sequence>
-			<xs:element name="Vertex" minOccurs="4" maxOccurs="4" type="sicommon:LatLonVertexType"/>
+			<xs:element name="Vertex" type="sicommon:LatLonVertexType" minOccurs="4" maxOccurs="4"/>
 		</xs:sequence>
 		<xs:attribute name="size" type="xs:int" use="required"/>
 	</xs:complexType>
@@ -727,9 +719,14 @@ NRL                N/A                        0,255 (Supposed to be display read
 					<xs:documentation>Polarization transmit type</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="RcvPolarization" type="sicommon:Neg180To180Type">
+			<xs:element name="RcvPolarization" type="sicommon:PolarizationType">
 				<xs:annotation>
-					<xs:documentation>Angle from transmit to receive polarization defined at center of aperture.</xs:documentation>
+					<xs:documentation>Receive polarization type</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RcvPolarizationOffset" type="sicommon:Neg180To180Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Optional angle offset for the receive polarization defined at aperture center.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -774,7 +771,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 					<xs:documentation>ROI representing portion of input data used to make this product.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="Polarization" type="TxRcvPolarizationType" minOccurs="0">
+			<xs:element name="Polarization" type="TxRcvPolarizationType" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Transmit and receive polarization.</xs:documentation>
 				</xs:annotation>
