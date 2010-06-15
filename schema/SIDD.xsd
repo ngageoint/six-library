@@ -781,7 +781,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 					<xs:documentation>The duration of the collection (units = seconds).</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="Resolution" type="sicommon:RangeAzimuthType">
+			<xs:element name="Resolution" type="sicommon:RangeAzimuthType" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Uniformly-weighted resolution (range and azimuth) processed in the slant plane.</xs:documentation>
 				</xs:annotation>
