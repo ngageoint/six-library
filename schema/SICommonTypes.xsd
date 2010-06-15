@@ -93,12 +93,14 @@
 			<xsd:element name="Col" type="xsd:double"/>
 		</xsd:sequence>
 	</xsd:complexType>
+	<!--
 	<xsd:complexType name="RowColLatLonType">
 		<xsd:sequence>
 			<xsd:element name="Row" type="LatLonType"/>
 			<xsd:element name="Col" type="LatLonType"/>
 		</xsd:sequence>
 	</xsd:complexType>
+    -->
 	<xsd:complexType name="ComplexType">
 		<xsd:sequence>
 			<xsd:element name="Real" type="xsd:double"/>
@@ -477,7 +479,7 @@
 	</xsd:complexType>
 	<xsd:complexType name="ReferencePointType">
 		<xsd:annotation>
-			<xsd:documentation>The reference point of the plane.</xsd:documentation>
+			<xsd:documentation>The reference point</xsd:documentation>
 		</xsd:annotation>
 		<xsd:sequence>
 			<xsd:element name="ECEF" type="XYZType">
