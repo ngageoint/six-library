@@ -183,14 +183,20 @@ void DerivedXMLControl::fromXML(XMLElem displayXML, Display* display)
         }
     }
 
+    XMLElem magXML = getOptional(displayXML, "MagnificationMethod");
+    XMLElem decXML = getOptional(displayXML, "DecimationMethod");
+
+    //optional
     display->magnificationMethod
-            = six::toType<MagnificationMethod>(
-                                               getFirstAndOnly(displayXML,
-                                                               "MagnificationMethod")->getCharacterData());
+            = magXML ? six::toType<MagnificationMethod>(
+                                                        magXML->getCharacterData())
+                     : MagnificationMethod::NOT_SET;
+
+    //optional
     display->decimationMethod
-            = six::toType<DecimationMethod>(
-                                            getFirstAndOnly(displayXML,
-                                                            "DecimationMethod")->getCharacterData());
+            = decXML ? six::toType<DecimationMethod>(decXML->getCharacterData())
+                     : DecimationMethod::NOT_SET;
+
 
     XMLElem histogramOverridesXML = getOptional(displayXML,
                                                 "DRAHistogramOverrides");
