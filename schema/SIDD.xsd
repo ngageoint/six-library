@@ -263,12 +263,12 @@ NRL                N/A                        0,255 (Supposed to be display read
 				<xs:sequence>
 					<xs:element name="RowColToLat" type="sicommon:Poly2DType">
 						<xs:annotation>
-							<xs:documentation>Polynomial that converts Row/Col to Latitude (radians).</xs:documentation>
+							<xs:documentation>Polynomial that converts Row/Col to Latitude (degrees).</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="RowColToLon" type="sicommon:Poly2DType">
 						<xs:annotation>
-							<xs:documentation>Polynomial that converts Row/Col to Longitude (radians).</xs:documentation>
+							<xs:documentation>Polynomial that converts Row/Col to Longitude (degrees).</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="RowColToAlt" type="sicommon:Poly2DType" minOccurs="0">
@@ -278,12 +278,12 @@ NRL                N/A                        0,255 (Supposed to be display read
 					</xs:element>
 					<xs:element name="LatLonToRow" type="sicommon:Poly2DType">
 						<xs:annotation>
-							<xs:documentation>Polynomial that converts Latitude (radians) and Longitude (radians) to pixel row location.</xs:documentation>
+							<xs:documentation>Polynomial that converts Latitude (degrees) and Longitude (degrees) to pixel row location.</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="LatLonToCol" type="sicommon:Poly2DType">
 						<xs:annotation>
-							<xs:documentation>Polynomial that converts Latitude (radians) and Longitude (radians) to pixel column location</xs:documentation>
+							<xs:documentation>Polynomial that converts Latitude (degrees) and Longitude (degrees) to pixel column location</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 				</xs:sequence>
