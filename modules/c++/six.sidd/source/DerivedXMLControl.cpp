@@ -1250,6 +1250,7 @@ xml::lite::Document* DerivedXMLControl::toXML(Data* data)
     }
     xml::lite::Document* doc = new xml::lite::Document();
     XMLElem root = newElement("SIDD");
+    setAttribute(root, "xmlns", mURI);
     doc->setRootElement(root);
 
     DerivedData *derived = (DerivedData*) data;
