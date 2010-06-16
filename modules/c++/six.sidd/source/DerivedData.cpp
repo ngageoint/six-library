@@ -24,6 +24,8 @@
 using namespace six;
 using namespace six::sidd;
 
+const char DerivedData::VENDOR_ID[] = "GDAIS";
+
 DerivedData::~DerivedData()
 {
     if (productCreation != NULL)

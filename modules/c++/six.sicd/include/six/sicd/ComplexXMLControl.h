@@ -52,7 +52,7 @@ public:
     //!  Constructor
     ComplexXMLControl(logging::Logger* log = NULL) : XMLControl(log)
     {
-        mURI = "urn:SICD:0.3.1";
+        mURI = "urn:SICD:0.4.0";
     }
 
     //!  Destructor

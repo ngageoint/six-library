@@ -270,6 +270,13 @@ struct DerivedData: public Data
     {
         return display->remapInformation->remapLUT;
     }
+
+    virtual std::string getVendorID() const
+    {
+        return std::string(VENDOR_ID);
+    }
+
+    static const char VENDOR_ID[];
 };
 }
 }
