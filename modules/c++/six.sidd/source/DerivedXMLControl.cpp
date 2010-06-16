@@ -931,13 +931,17 @@ XMLElem DerivedXMLControl::toXML(GeographicCoverage* geoCoverage,
     {
         XMLElem geoInfoXML = newElement("GeographicInfo", geoCoverageXML);
 
-        for (unsigned int i = 0, numCC =
-                geoCoverage->geographicInformation->countryCodes.size(); i
-                < numCC; ++i)
+        size_t numCC = geoCoverage->geographicInformation->countryCodes.size();
+        for (size_t i = 0; i < numCC; ++i)
         {
             createString("CountryCode",
                          geoCoverage->geographicInformation->countryCodes[i],
                          geoInfoXML);
+        }
+        // always write at least one - it is required - possibly remove this
+        if (numCC == 0)
+        {
+            createString("CountryCode", "", geoInfoXML);
         }
 
         // optional, so check if empty
