@@ -1053,8 +1053,7 @@ XMLElem DerivedXMLControl::toXML(Measurement* measurement, XMLElem parent)
         createPoly2D("RowColToLat", polyProj->rowColToLat, projectionXML);
         createPoly2D("RowColToLon", polyProj->rowColToLon, projectionXML);
 
-        if (polyProj->rowColToAlt.orderX() >= 0
-                && polyProj->rowColToAlt.orderY() >= 0)
+        if (polyProj->rowColToAlt != Init::undefined<Poly2D>())
         {
             createPoly2D("RowColToAlt", polyProj->rowColToAlt, projectionXML);
         }
