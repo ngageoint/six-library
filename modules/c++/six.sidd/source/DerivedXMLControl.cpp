@@ -1268,7 +1268,15 @@ xml::lite::Document* DerivedXMLControl::toXML(Data* data)
     {
         XMLControl::toXML(derived->radiometric, root);
     }
-    //TODO annotations
+
+    if (!derived->annotations.empty())
+    {
+        XMLElem annotationsElem = newElement("Annotations", root);
+        for (size_t i = 0, num = derived->annotations.size(); i < num; ++i)
+        {
+            toXML(derived->annotations[i], annotationsElem);
+        }
+    }
     return doc;
 }
 
@@ -1540,8 +1548,17 @@ void DerivedXMLControl::fromXML(XMLElem elem, Annotation *a)
 
 XMLElem DerivedXMLControl::toXML(Annotation *a, XMLElem parent)
 {
-    //TODO
-    return NULL;
+    XMLElem annXML = newElement("Annotation", parent);
+    createString("Identifier", a->identifier, annXML);
+
+    //TODO spatialreferencesystem
+
+    for (size_t i = 0, num = a->objects.size(); i < num; ++i)
+    {
+        XMLElem objXML = newElement("Object", annXML);
+        toXML(a->objects[i], "", objXML);
+    }
+    return annXML;
 }
 
 void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
@@ -1552,9 +1569,12 @@ void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
         SFAPoint *p = (SFAPoint*) g;
         parseDouble(getFirstAndOnly(elem, "X"), p->x);
         parseDouble(getFirstAndOnly(elem, "Y"), p->y);
-        parseDouble(getFirstAndOnly(elem, "Z"), p->z);
 
-        XMLElem tmpElem = getOptional(elem, "M");
+        XMLElem tmpElem = getOptional(elem, "Z");
+        if (tmpElem)
+            parseDouble(tmpElem, p->z);
+
+        tmpElem = getOptional(elem, "M");
         if (tmpElem)
             parseDouble(tmpElem, p->m);
     }
@@ -1639,8 +1659,98 @@ void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
     }
 }
 
-XMLElem DerivedXMLControl::toXML(SFAGeometry *g, XMLElem parent)
+XMLElem DerivedXMLControl::toXML(SFAGeometry *g, std::string useName,
+                                 XMLElem parent)
 {
-    //TODO
-    return NULL;
+    XMLElem geoXML = NULL;
+
+    std::string geoType = g->getType();
+    if (geoType == SFAPoint::TYPE_NAME)
+    {
+        geoXML = newElement(useName.empty() ? "Point" : useName, parent);
+        SFAPoint *p = (SFAPoint*) g;
+        createDouble("X", p->x, geoXML);
+        createDouble("Y", p->y, geoXML);
+        if (!Init::isUndefined(p->z))
+            createDouble("Z", p->z, geoXML);
+        if (!Init::isUndefined(p->m))
+            createDouble("M", p->m, geoXML);
+    }
+    //for now, line, linearring, and linestring are parsed the same
+    else if (geoType == SFALine::TYPE_NAME || geoType
+            == SFALinearRing::TYPE_NAME || geoType == SFALineString::TYPE_NAME)
+    {
+        std::string
+                eName =
+                        useName.empty() ? (geoType == SFALine::TYPE_NAME ? "Line"
+                                                                         : (geoType
+                                                                                == SFALinearRing::TYPE_NAME ? "LinearRing"
+                                                                                                            : "LineString"))
+                                        : useName;
+        geoXML = newElement(eName, parent);
+
+        //cast to the common base - LineString
+        SFALineString *p = (SFALineString*) g;
+        for (size_t i = 0, size = p->vertices.size(); i < size; ++i)
+        {
+            toXML(p->vertices[i], "Vertex", geoXML);
+        }
+    }
+    else if (geoType == SFAPolygon::TYPE_NAME)
+    {
+        geoXML = newElement(useName.empty() ? "Polygon" : useName, parent);
+        SFAPolygon *p = (SFAPolygon*) g;
+        for (size_t i = 0, size = p->rings.size(); i < size; ++i)
+        {
+            toXML(p->rings[i], "Ring", geoXML);
+        }
+    }
+    else if (geoType == SFAPolyhedralSurface::TYPE_NAME)
+    {
+        geoXML = newElement(useName.empty() ? "PolyhedralSurface" : useName,
+                            parent);
+        SFAPolyhedralSurface *p = (SFAPolyhedralSurface*) g;
+        for (size_t i = 0, size = p->patches.size(); i < size; ++i)
+        {
+            toXML(p->patches[i], "Patch", geoXML);
+        }
+    }
+    else if (geoType == SFAMultiPolygon::TYPE_NAME)
+    {
+        geoXML = newElement(useName.empty() ? "MultiPolygon" : useName, parent);
+        SFAMultiPolygon *p = (SFAMultiPolygon*) g;
+        for (size_t i = 0, size = p->elements.size(); i < size; ++i)
+        {
+            toXML(p->elements[i], "Element", geoXML);
+        }
+    }
+    else if (geoType == SFAMultiLineString::TYPE_NAME)
+    {
+        geoXML = newElement(useName.empty() ? "MultiLineString" : useName,
+                            parent);
+        SFAMultiLineString *p = (SFAMultiLineString*) g;
+        for (size_t i = 0, size = p->elements.size(); i < size; ++i)
+        {
+            toXML(p->elements[i], "Element", geoXML);
+        }
+    }
+    else if (geoType == SFAMultiPoint::TYPE_NAME)
+    {
+        geoXML = newElement(useName.empty() ? "MultiPoint" : useName, parent);
+        SFAMultiPoint *p = (SFAMultiPoint*) g;
+        for (size_t i = 0, size = p->vertices.size(); i < size; ++i)
+        {
+            toXML(p->vertices[i], "Vertex", geoXML);
+        }
+    }
+    else
+    {
+        throw except::InvalidArgumentException(
+                                               Ctxt(
+                                                    FmtX(
+                                                         "Invalid geo type: [%s]",
+                                                         geoType.c_str())));
+    }
+
+    return geoXML;
 }
