@@ -130,6 +130,8 @@ struct MeasurableProjection : public Projection
 {
     virtual ~MeasurableProjection() {}
 
+    RowColDouble sampleSpacing;
+
     //!  SIDD TimeCOAPoly
     Poly2D timeCOAPoly;
 
@@ -161,9 +163,6 @@ struct GeographicProjection : public MeasurableProjection
         return g;
     }
     virtual ~GeographicProjection() {}
-
-    //!  SIDD 0.1.1, this allows non-north-up
-    RowColLatLon sampleSpacing;
 
 };
 
@@ -197,8 +196,7 @@ struct CylindricalProjection : public MeasurableProjection
         return c;
     }
 
-    // SIDD 0.1.1, this is pushed down to derived
-    RowColDouble sampleSpacing;
+    Vector3 stripmapDirection;
 
     /*!
      *  Radius of Curvature defined at scene center.  
@@ -233,9 +231,6 @@ struct PlaneProjection : public MeasurableProjection
         PlaneProjection* p = new PlaneProjection(*this);
         return p;
     }
-
-    // SIDD 0.1.1, this is pushed down to derived
-    RowColDouble sampleSpacing;
 
     //!  Product plane definition (defined by a basis)
     ProductPlane productPlane;
