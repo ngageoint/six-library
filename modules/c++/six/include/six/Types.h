@@ -513,6 +513,13 @@ struct AmplitudeTable : public LUT
     }
 };
 
+/*!
+ *  \class MissingRequiredException
+ *  \brief Throwable related to a required element being null,
+ *         undefined, etc.
+ */
+DECLARE_EXCEPTION(MissingRequired)
+
 }
 
 //std::ostream& operator<<(std::ostream& os, const six::Corners& corners);
