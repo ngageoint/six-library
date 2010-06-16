@@ -273,6 +273,13 @@ struct ComplexData: public Data
     {
         throw except::Exception(Ctxt("Display LUT operation not supported"));
     }
+
+    virtual std::string getVendorID() const
+    {
+        return std::string(VENDOR_ID);
+    }
+
+    static const char VENDOR_ID[];
 };
 
 }

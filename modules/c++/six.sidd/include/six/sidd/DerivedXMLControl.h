@@ -48,7 +48,7 @@ public:
     DerivedXMLControl(logging::Logger* log = NULL) :
         XMLControl(log)
     {
-        mURI = "urn:SIDD:0.0.4";
+        mURI = "urn:SIDD:0.2.0";
     }
 
     virtual ~DerivedXMLControl()

@@ -24,6 +24,8 @@
 using namespace six;
 using namespace six::sicd;
 
+const char ComplexData::VENDOR_ID[] = "GDAIS";
+
 Data* ComplexData::clone() const
 {
     ComplexData *data = new ComplexData();

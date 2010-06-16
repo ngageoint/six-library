@@ -66,7 +66,7 @@ struct Data
      *  This is stored in the SICD along with the width  
      *
      *  Maps to: /SICD/ImageData/PixelType,
-     *  /SIDD/Display/PixelType
+     *  /SIDD/Display/PixelTypeking with. In other words, a
      */
     virtual PixelType getPixelType() const = 0;
     virtual void setPixelType(PixelType pixelType) = 0;
@@ -163,6 +163,11 @@ struct Data
     virtual void setClassification(Classification classification) = 0;
 
     virtual LUT* getDisplayLUT() = 0;
+
+    /*!
+     * Returns an identifier of the Vendor supplying the implementation code.
+     */
+    virtual std::string getVendorID() const = 0;
 
 };
 

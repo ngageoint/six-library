@@ -358,7 +358,7 @@ int main(int argc, char** argv)
     }
     catch (except::Exception& ex)
     {
-        std::cout << ex.getMessage() << std::endl;
+        std::cout << ex.toString() << std::endl;
     }
 
     delete writer;
