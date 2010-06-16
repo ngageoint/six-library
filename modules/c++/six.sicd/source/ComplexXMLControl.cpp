@@ -132,6 +132,7 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
     xml::lite::Document* doc = new xml::lite::Document();
 
     xml::lite::Element* root = newElement("SICD");
+    setAttribute(root, "xmlns", mURI);
     doc->setRootElement(root);
 
     ComplexData *sicd = (ComplexData*) data;
