@@ -382,11 +382,12 @@ void DerivedXMLControl::fromXML(XMLElem measurementXML,
     if (measurement->projection->projectionType == ProjectionType::PLANE)
     {
         PlaneProjection* planeProj = (PlaneProjection*) measurement->projection;
-        parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
-                    planeProj->timeCOAPoly);
 
         parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
                           planeProj->sampleSpacing);
+
+        parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
+                    planeProj->timeCOAPoly);
 
         XMLElem prodPlaneXML = getFirstAndOnly(projXML, "ProductPlane");
 
@@ -401,11 +402,11 @@ void DerivedXMLControl::fromXML(XMLElem measurementXML,
         GeographicProjection* geographicProj =
                 (GeographicProjection*) measurement->projection;
 
+        parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
+                          geographicProj->sampleSpacing);
+
         parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
                     geographicProj->timeCOAPoly);
-
-        parseRowColLatLon(getFirstAndOnly(projXML, "SampleSpacing"),
-                          geographicProj->sampleSpacing);
     }
     else if (measurement->projection->projectionType
             == ProjectionType::CYLINDRICAL)
@@ -414,11 +415,14 @@ void DerivedXMLControl::fromXML(XMLElem measurementXML,
         CylindricalProjection* cylindricalProj =
                 (CylindricalProjection*) measurement->projection;
 
+        parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
+                          cylindricalProj->sampleSpacing);
+
         parsePoly2D(getFirstAndOnly(projXML, "TimeCOAPoly"),
                     cylindricalProj->timeCOAPoly);
 
-        parseRowColDouble(getFirstAndOnly(projXML, "SampleSpacing"),
-                          cylindricalProj->sampleSpacing);
+        parseVector3D(getFirstAndOnly(projXML, "StripmapDirection"),
+                      cylindricalProj->stripmapDirection);
 
         XMLElem curvRadiusXML = getOptional(projXML, "CurvatureRadius");
         if (curvRadiusXML)
@@ -450,7 +454,6 @@ void DerivedXMLControl::fromXML(XMLElem measurementXML,
 
         parsePoly2D(getFirstAndOnly(projXML, "LatLonToCol"),
                     polyProj->latLonToCol);
-
     }
     else
         throw except::Exception(Ctxt("Unknown projection type"));
@@ -538,7 +541,12 @@ void DerivedXMLControl::fromXML(XMLElem exploitationFeaturesXML,
                     = six::toType<PolarizationType>(tmpElem->getCharacterData());
 
             tmpElem = getFirstAndOnly(polXML, "RcvPolarization");
-            parseDouble(tmpElem, info->polarization->rcvPolarization);
+            info->polarization->rcvPolarization
+                    = six::toType<PolarizationType>(tmpElem->getCharacterData());
+
+            tmpElem = getOptional(polXML, "RcvPolarizationOffset");
+            if (tmpElem)
+                parseDouble(tmpElem, info->polarization->rcvPolarizationOffset);
         }
 
         // Geometry
@@ -991,12 +999,12 @@ XMLElem DerivedXMLControl::toXML(Measurement* measurement, XMLElem parent)
         projectionXML->setLocalName("PlaneProjection");
         PlaneProjection* planeProj = (PlaneProjection*) projection;
 
+        createRowCol("SampleSpacing", planeProj->sampleSpacing, projectionXML);
+
         //TimeCOAPoly
         XMLElem timeCOAPolyXML = createPoly2D("TimeCOAPoly",
                                               planeProj->timeCOAPoly,
                                               projectionXML);
-
-        createRowCol("SampleSpacing", planeProj->sampleSpacing, projectionXML);
 
         XMLElem productPlaneXML = newElement("ProductPlane", projectionXML);
 
@@ -1017,14 +1025,14 @@ XMLElem DerivedXMLControl::toXML(Measurement* measurement, XMLElem parent)
         GeographicProjection* geographicProj =
                 (GeographicProjection*) projection;
 
+        XMLElem sampleSpacingXML = createRowCol("SampleSpacing",
+                                                geographicProj->sampleSpacing,
+                                                projectionXML);
+
         //TimeCOAPoly
         XMLElem timeCOAPolyXML = createPoly2D("TimeCOAPoly",
                                               geographicProj->timeCOAPoly,
                                               projectionXML);
-
-        //TODO set a parent
-        XMLElem sampleSpacingXML = createRowCol("SampleSpacing",
-                                                geographicProj->sampleSpacing);
 
     }
         break;
@@ -1036,13 +1044,16 @@ XMLElem DerivedXMLControl::toXML(Measurement* measurement, XMLElem parent)
         CylindricalProjection* cylindricalProj =
                 (CylindricalProjection*) projection;
 
+        createRowCol("SampleSpacing", cylindricalProj->sampleSpacing,
+                     projectionXML);
+
         //TimeCOAPoly
         XMLElem timeCOAPolyXML = createPoly2D("TimeCOAPoly",
                                               cylindricalProj->timeCOAPoly,
                                               projectionXML);
 
-        createRowCol("SampleSpacing", cylindricalProj->sampleSpacing,
-                     projectionXML);
+        createVector3D("StripmapDirection", cylindricalProj->stripmapDirection,
+                       projectionXML);
 
         if (cylindricalProj->curvatureRadius != Init::undefined<double>())
         {
@@ -1147,17 +1158,25 @@ XMLElem DerivedXMLControl::toXML(ExploitationFeatures* exploitationFeatures,
 
         if (collection->information->polarization != NULL)
         {
-            //TODO add parent - informationXML?
-            XMLElem polXML = newElement("Polarization");
+            XMLElem polXML = newElement("Polarization", informationXML);
             createString(
                          "TxPolarization",
                          six::toString(
                                        collection->information->polarization->txPolarization),
                          polXML);
-            createDouble(
+            createString(
                          "RcvPolarization",
-                         collection->information->polarization->rcvPolarization,
+                         six::toString(
+                                       collection->information->polarization->rcvPolarization),
                          polXML);
+
+            double
+                    rcvOffset =
+                            collection->information->polarization->rcvPolarizationOffset;
+            if (!Init::isUndefined(rcvOffset))
+            {
+                createDouble("RcvPolarization", rcvOffset, polXML);
+            }
         }
 
         //Geometry
