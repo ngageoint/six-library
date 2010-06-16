@@ -197,7 +197,6 @@ void DerivedXMLControl::fromXML(XMLElem displayXML, Display* display)
             = decXML ? six::toType<DecimationMethod>(decXML->getCharacterData())
                      : DecimationMethod::NOT_SET;
 
-
     XMLElem histogramOverridesXML = getOptional(displayXML,
                                                 "DRAHistogramOverrides");
     if (histogramOverridesXML)
@@ -941,9 +940,13 @@ XMLElem DerivedXMLControl::toXML(GeographicCoverage* geoCoverage,
                          geoInfoXML);
         }
 
-        createString("SecurityInfo",
-                     geoCoverage->geographicInformation->securityInformation,
-                     geoInfoXML);
+        // optional, so check if empty
+        std::string secInfo =
+                geoCoverage->geographicInformation->securityInformation;
+        str::trim(secInfo);
+        if (!secInfo.empty())
+            createString("SecurityInfo", secInfo, geoInfoXML);
+
         addParameters(
                       "GeographicInfoExtension",
                       geoCoverage->geographicInformation->geographicInformationExtensions,
