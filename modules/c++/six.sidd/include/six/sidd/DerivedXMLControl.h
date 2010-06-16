@@ -48,7 +48,7 @@ public:
     DerivedXMLControl(logging::Logger* log = NULL) :
         XMLControl(log)
     {
-        mURI = "urn:SIDD:0.2.0";
+        mURI = "urn:SIDD:0.2";
     }
 
     virtual ~DerivedXMLControl()
@@ -90,7 +90,7 @@ protected:
     void fromXML(XMLElem elem, ExploitationFeatures* exFeatures);
     void fromXML(XMLElem annotationXML, Annotation *a);
     void fromXML(XMLElem elem, SFAGeometry *g);
-    XMLElem toXML(SFAGeometry *g, XMLElem parent = NULL);
+    XMLElem toXML(SFAGeometry *g, std::string useName, XMLElem parent = NULL);
 };
 
 }
