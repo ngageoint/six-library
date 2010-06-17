@@ -517,8 +517,12 @@ void DerivedXMLControl::fromXML(XMLElem exploitationFeaturesXML,
         parseDouble(getFirstAndOnly(informationXML, "CollectionDuration"),
                     info->collectionDuration);
 
-        parseRangeAzimuth(getFirstAndOnly(informationXML, "Resolution"),
-                          info->resolution);
+        // Optional in 0.2 spec.
+        XMLElem resXML = getOptional(informationXML, "Resolution");
+        if (resXML)
+        {
+            parseRangeAzimuth(resXML, info->resolution);
+        }
 
         XMLElem roiXML = getOptional(informationXML, "InputROI");
         if (roiXML)
@@ -531,22 +535,27 @@ void DerivedXMLControl::fromXML(XMLElem exploitationFeaturesXML,
                               info->inputROI->upperLeft);
         }
 
-        XMLElem polXML = getOptional(informationXML, "Polarization");
-        if (polXML)
+        // optional and unbounded
+        std::vector<XMLElem> polarization;
+        informationXML->getElementsByTagName("Polarization", polarization);
+
+        for (size_t i = 0, nElems = polarization.size(); i < nElems; ++i)
         {
-            info->polarization = new TxRcvPolarization();
+            XMLElem polXML = polarization[i];
+            TxRcvPolarization *p = new TxRcvPolarization();
+            info->polarization.push_back(p);
 
             tmpElem = getFirstAndOnly(polXML, "TxPolarization");
-            info->polarization->txPolarization
+            p->txPolarization
                     = six::toType<PolarizationType>(tmpElem->getCharacterData());
 
             tmpElem = getFirstAndOnly(polXML, "RcvPolarization");
-            info->polarization->rcvPolarization
+            p->rcvPolarization
                     = six::toType<PolarizationType>(tmpElem->getCharacterData());
 
             tmpElem = getOptional(polXML, "RcvPolarizationOffset");
             if (tmpElem)
-                parseDouble(tmpElem, info->polarization->rcvPolarizationOffset);
+                parseDouble(tmpElem, p->rcvPolarizationOffset);
         }
 
         // Geometry
@@ -1142,9 +1151,13 @@ XMLElem DerivedXMLControl::toXML(ExploitationFeatures* exploitationFeatures,
                      collection->information->collectionDuration,
                      informationXML);
 
-        //Resolution
-        createRangeAzimuth("Resolution", collection->information->resolution,
-                           informationXML);
+        //Resolution - optional
+        if (!Init::isUndefined(collection->information->resolution))
+        {
+            createRangeAzimuth("Resolution",
+                               collection->information->resolution,
+                               informationXML);
+        }
 
         //InputROI
         if (collection->information->inputROI != NULL)
@@ -1156,26 +1169,20 @@ XMLElem DerivedXMLControl::toXML(ExploitationFeatures* exploitationFeatures,
                          collection->information->inputROI->upperLeft, roiXML);
         }
 
-        if (collection->information->polarization != NULL)
+        for (size_t n = 0, nElems =
+                collection->information->polarization.size(); n < nElems; ++n)
         {
+            TxRcvPolarization *p = collection->information->polarization[n];
             XMLElem polXML = newElement("Polarization", informationXML);
-            createString(
-                         "TxPolarization",
-                         six::toString(
-                                       collection->information->polarization->txPolarization),
+            createString("TxPolarization", six::toString(p->txPolarization),
                          polXML);
-            createString(
-                         "RcvPolarization",
-                         six::toString(
-                                       collection->information->polarization->rcvPolarization),
+            createString("RcvPolarization", six::toString(p->rcvPolarization),
                          polXML);
 
-            double
-                    rcvOffset =
-                            collection->information->polarization->rcvPolarizationOffset;
-            if (!Init::isUndefined(rcvOffset))
+            if (!Init::isUndefined(p->rcvPolarizationOffset))
             {
-                createDouble("RcvPolarization", rcvOffset, polXML);
+                createDouble("RcvPolarization", p->rcvPolarizationOffset,
+                             polXML);
             }
         }
 
