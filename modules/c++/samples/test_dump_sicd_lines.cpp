@@ -22,6 +22,8 @@
 #include <import/six.h>
 #include <import/six/sicd.h>
 
+#define USE_SIO_LITE
+
 #ifdef USE_SIO_LITE
 #  include <import/sio/lite.h>
 #endif
@@ -174,6 +176,7 @@ int main(int argc, char** argv)
         xmlStream.write(xmlData.c_str(), xmlData.length());
 
         delete[] workBuffer;
+	delete reader;
         workBuffer = NULL;
         outputStream.close();
         return 0;
