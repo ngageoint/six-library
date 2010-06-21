@@ -86,6 +86,8 @@ template<> Poly2D Init::undefined<Poly2D>();
 template<> PolyXYZ Init::undefined<PolyXYZ>();
 template<> Classification Init::undefined<Classification>();
 template<> Parameter Init::undefined<Parameter>();
+template<> DualPolarizationType Init::undefined<DualPolarizationType>();
+template<> PolarizationType Init::undefined<PolarizationType>();
 
 }
 

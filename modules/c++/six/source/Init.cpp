@@ -233,3 +233,11 @@ template<> Parameter Init::undefined<Parameter>()
 {
     return Parameter();
 }
+template<> PolarizationType Init::undefined<PolarizationType>()
+{
+    return PolarizationType::NOT_SET;
+}
+template<> DualPolarizationType Init::undefined<DualPolarizationType>()
+{
+    return DualPolarizationType::NOT_SET;
+}
