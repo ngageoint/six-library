@@ -27,7 +27,7 @@ void writeImage(nitf::ImageSegment & segment,
                 char *imageName,
                 nitf::ImageReader & deserializer, int imageNumber,
                 nitf_Uint32 rowSkipFactor,
-                nitf_Uint32 columnSkipFactor)
+                nitf_Uint32 columnSkipFactor, bool optz)
 {
     size_t subWindowSize;
     nitf::SubWindow subWindow;
@@ -52,6 +52,32 @@ void writeImage(nitf::ImageSegment & segment,
     subWindowSize = (size_t)(nRows / rowSkipFactor) *
         (size_t)(nCols / columnSkipFactor) *
         (size_t)NITF_NBPP_TO_BYTES(nBits);
+
+    if (optz)
+    {
+        std::string irep =
+                segment.getSubheader().getImageRepresentation().toString();
+        std::string ic =
+                segment.getSubheader().getImageCompression().toString();
+
+        if (nBands == 3 && segment.getSubheader().getImageMode().toString()
+                == "P" && str::startsWith(irep, "RGB")
+                && NITF_NBPP_TO_BYTES(nBits) == 1 && str::startsWith(ic, "N"))
+        {
+            subWindowSize *= nBands;
+            nBands = 1;
+            std::cout << "Using accelerated 3-band RGB mode pix-interleaved image" << std::endl;
+        }
+        if (nBands == 2 && segment.getSubheader().getImageMode().toString()
+                == "P" && str::startsWith(ic, "N"))
+        {
+
+            subWindowSize *= nBands;
+            nBands = 1;
+            std::cout << "Using accelerated 2-band IQ mode pix-interleaved image" << std::endl;
+        }
+    }
+
 
     std::cout << "NBANDS -> " << nBands << std::endl;
     std::cout << "XBANDS -> " << xBands << std::endl;
@@ -154,12 +180,14 @@ int main(int argc, char **argv)
     try
     {
         /*  If you didnt give us a nitf file, we're croaking  */
-        if (argc != 2)
+        if (argc < 2)
         {
-            std::cout << "Usage: " << argv[0] << " <nitf-file>"
+            std::cout << "Usage: " << argv[0] << " <nitf-file> [-o]"
                       << std::endl;
             exit(EXIT_FAILURE);
         }
+
+        bool optz = (argc > 2 && std::string(argv[2]) == "-o");
 
         /*  This is the reader  */
         nitf::Reader reader;
@@ -190,7 +218,7 @@ int main(int argc, char **argv)
             std::cout << "Writing image... " << std::endl;
 
             /*  Write the thing out  */
-            writeImage(imageSegment, argv[1], deserializer, count, rowSkipFactor, columnSkipFactor);
+            writeImage(imageSegment, argv[1], deserializer, count, rowSkipFactor, columnSkipFactor, optz);
             std::cout << "done." << std::endl;
         }
     }
