@@ -48,7 +48,7 @@ void Container::addData(Data* data)
 {
     mData.push_back(data);
 }
-void Container::setData(unsigned int i, Data* data)
+void Container::setData(size_t i, Data* data)
 {
     if (mData.size() <= i)
     {
@@ -81,7 +81,7 @@ void Container::removeData(Data* data)
 
 Container::~Container()
 {
-    for (unsigned int i = 0; i < mData.size(); ++i)
+    for (size_t i = 0; i < mData.size(); ++i)
     {
         if (mData[i])
             delete mData[i];

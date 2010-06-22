@@ -95,18 +95,18 @@ public:
      *  \param i The slot number
      *  \param data A pointer to the data object
      */
-    void setData(unsigned int i, Data* data);
+    void setData(size_t i, Data* data);
 
     /*!
      *  Get the item leaving in the ith slot.
      *  \return The data
      */
-    Data* getData(unsigned int i)
+    Data* getData(size_t i)
     {
         return this->mData[i];
     }
 
-    unsigned int getNumData() const
+    size_t getNumData() const
     {
         return this->mData.size();
     }
