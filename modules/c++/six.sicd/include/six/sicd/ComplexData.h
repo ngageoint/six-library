@@ -220,6 +220,22 @@ struct ComplexData: public Data
     }
 
     /*!
+     *  Maps to: /SICD/CollectionInfo/CollectorName,
+     */
+    virtual std::string getSource() const
+    {
+        return collectionInformation->collectorName;
+    }
+
+    /*!
+     *  Maps to: /SICD/CollectionInfo/CollectorName,
+     */
+    virtual void setSource(std::string name)
+    {
+        collectionInformation->collectorName = name;
+    }
+
+    /*!
      *  Maps to: /SICD/Timeline/CollectStart,  
      */
     virtual DateTime getCreationTime() const

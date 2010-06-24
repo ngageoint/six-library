@@ -125,6 +125,7 @@ int main(int argc, char** argv)
         data->setNumRows(fileHeader->getNumLines());
         data->setNumCols(fileHeader->getNumElements());
         data->setName("corename");
+        data->setSource("sensorname");
         data->setCreationTime(six::DateTime());
         data->setImageCorners(makeUpCornersFromDMS());
         data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;

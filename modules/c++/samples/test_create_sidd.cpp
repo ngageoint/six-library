@@ -304,7 +304,7 @@ int main(int argc, char** argv)
             parent->information->collectionDuration = 0;
             parent->information->collectionDateTime = six::DateTime();
             parent->information->radarMode = six::RadarModeType::SPOTLIGHT;
-            parent->information->sensorName = "";
+            parent->information->sensorName = "the sensor";
             data->exploitationFeatures->product.resolution.row = 0;
             data->exploitationFeatures->product.resolution.col = 0;
 

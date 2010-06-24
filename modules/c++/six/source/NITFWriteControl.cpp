@@ -131,6 +131,10 @@ void NITFWriteControl::initialize(Container* container)
                 iid = FmtX("%s%03d%03d", iid.c_str(), i + 1, j + 1);
             }
             subheader.getImageId().set(iid);
+
+            std::string isorce = info->getData()->getSource();
+            subheader.getImageSource().set(isorce);
+
             subheader.getImageLocation().set(FmtX("%05d00000",
                                                   segmentInfo.rowOffset));
 
