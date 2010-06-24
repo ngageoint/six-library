@@ -89,38 +89,24 @@ protected:
     //! Returns the URI to use with SI Common types
     std::string getSICommonURI() const;
 
-    XMLElem collectionInfoToXML(CollectionInformation *obj, XMLElem parent =
+    XMLElem toXML(CollectionInformation *obj, XMLElem parent = NULL);
+    XMLElem toXML(ImageCreation *obj, XMLElem parent = NULL);
+    XMLElem toXML(ImageData *obj, XMLElem parent = NULL);
+    XMLElem toXML(GeoData *obj, XMLElem parent = NULL);
+    XMLElem toXML(GeoInfo *obj, XMLElem parent = NULL);
+    XMLElem toXML(Grid *obj, XMLElem parent = NULL);
+    XMLElem toXML(Timeline *obj, XMLElem parent = NULL);
+    XMLElem toXML(Position *obj, XMLElem parent = NULL);
+    XMLElem toXML(RadarCollection *obj, XMLElem parent = NULL);
+    XMLElem toXML(ImageFormation *obj, XMLElem parent = NULL);
+    XMLElem toXML(SCPCOA *obj, XMLElem parent = NULL);
+    XMLElem toXML(Antenna *obj, XMLElem parent = NULL);
+    XMLElem toXML(std::string name, AntennaParameters *ap, XMLElem parent =
             NULL);
+    XMLElem toXML(MatchInformation *obj, XMLElem parent = NULL);
+    XMLElem toXML(PFA *obj, XMLElem parent = NULL);
+    XMLElem toXML(RMA *obj, XMLElem parent = NULL);
 
-    XMLElem imageCreationToXML(ImageCreation *obj, XMLElem parent = NULL);
-
-    XMLElem imageDataToXML(ImageData *obj, XMLElem parent = NULL);
-
-    XMLElem geoDataToXML(GeoData *obj, XMLElem parent = NULL);
-
-    XMLElem geoInfoToXML(GeoInfo *obj, XMLElem parent = NULL);
-
-    XMLElem gridToXML(Grid *obj, XMLElem parent = NULL);
-
-    XMLElem timelineToXML(Timeline *obj, XMLElem parent = NULL);
-
-    XMLElem positionToXML(Position *obj, XMLElem parent = NULL);
-
-    XMLElem radarCollectionToXML(RadarCollection *obj, XMLElem parent = NULL);
-
-    XMLElem imageFormationToXML(ImageFormation *obj, XMLElem parent = NULL);
-
-    XMLElem scpcoaToXML(SCPCOA *obj, XMLElem parent = NULL);
-
-    XMLElem antennaToXML(Antenna *obj, XMLElem parent = NULL);
-
-    XMLElem antennaParametersToXML(std::string name, AntennaParameters *obj,
-                                   XMLElem parent = NULL);
-
-    XMLElem matchInfoToXML(MatchInformation *obj, XMLElem parent = NULL);
-
-    XMLElem pfaToXML(PFA *obj, XMLElem parent = NULL);
-    XMLElem rmaToXML(RMA *obj, XMLElem parent = NULL);
     XMLElem areaLineDirectionParametersToXML(std::string name,
                                              AreaDirectionParameters *obj,
                                              XMLElem parent = NULL);
@@ -128,27 +114,22 @@ protected:
                                                AreaDirectionParameters *obj,
                                                XMLElem parent = NULL);
 
-    void xmlToCollectionInfo(XMLElem collectionInfoXML,
-                             CollectionInformation *obj);
-    void xmlToImageCreation(XMLElem imageCreationXML, ImageCreation *obj);
-    void xmlToImageData(XMLElem imageDataXML, ImageData *obj);
-    void xmlToGeoData(XMLElem geoDataXML, GeoData *obj);
-    void xmlToGeoInfo(XMLElem geoInfoXML, GeoInfo *obj);
-    void xmlToGrid(XMLElem gridXML, Grid *obj);
-    void xmlToTimeline(XMLElem timelineXML, Timeline *obj);
-    void xmlToPosition(XMLElem positionXML, Position *obj);
-    void xmlToRadarCollection(XMLElem radarCollectionXML, RadarCollection *obj);
-    void xmlToImageFormation(XMLElem imageFormationXML, ImageFormation *obj);
-    void xmlToSCPCOA(XMLElem scpcoaXML, SCPCOA *obj);
-    void xmlToAntenna(XMLElem antennaXML, Antenna *obj);
-    void
-    xmlToAntennaParams(XMLElem antennaParamsXML, AntennaParameters* params);
-
-    void
-    xmlToMatchInfo(XMLElem matchInfoXML, MatchInformation *obj);
-
-    void xmlToPFA(XMLElem pfaXML, PFA *obj);
-    void xmlToRMA(XMLElem rmaXML, RMA *obj);
+    void fromXML(XMLElem collectionInfoXML, CollectionInformation *obj);
+    void fromXML(XMLElem imageCreationXML, ImageCreation *obj);
+    void fromXML(XMLElem imageDataXML, ImageData *obj);
+    void fromXML(XMLElem geoDataXML, GeoData *obj);
+    void fromXML(XMLElem geoInfoXML, GeoInfo *obj);
+    void fromXML(XMLElem gridXML, Grid *obj);
+    void fromXML(XMLElem timelineXML, Timeline *obj);
+    void fromXML(XMLElem positionXML, Position *obj);
+    void fromXML(XMLElem radarCollectionXML, RadarCollection *obj);
+    void fromXML(XMLElem imageFormationXML, ImageFormation *obj);
+    void fromXML(XMLElem scpcoaXML, SCPCOA *obj);
+    void fromXML(XMLElem antennaXML, Antenna *obj);
+    void fromXML(XMLElem antennaParamsXML, AntennaParameters* params);
+    void fromXML(XMLElem matchInfoXML, MatchInformation *obj);
+    void fromXML(XMLElem pfaXML, PFA *obj);
+    void fromXML(XMLElem rmaXML, RMA *obj);
 
     void parseFootprint(XMLElem footprint, std::string cornerName, std::vector<
             LatLon>& value, bool alt);
