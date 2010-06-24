@@ -34,6 +34,7 @@ typedef xml::lite::Element* XMLElem;
 
 const char DerivedXMLControl::SIDD_URI[] = "urn:SIDD:0.2";
 const char DerivedXMLControl::SI_COMMON_URI[] = "urn:SICommon:0.1";
+const char DerivedXMLControl::SFA_URI[] = "urn:SFA:1.2.0";
 
 std::string DerivedXMLControl::getDefaultURI() const
 {
@@ -43,6 +44,11 @@ std::string DerivedXMLControl::getDefaultURI() const
 std::string DerivedXMLControl::getSICommonURI() const
 {
     return SI_COMMON_URI;
+}
+
+std::string DerivedXMLControl::getSFAURI() const
+{
+    return SFA_URI;
 }
 
 void DerivedXMLControl::fromXML(XMLElem productCreationXML,
@@ -1289,7 +1295,6 @@ xml::lite::Document* DerivedXMLControl::toXML(Data* data)
     }
     xml::lite::Document* doc = new xml::lite::Document();
     XMLElem root = newElement("SIDD");
-    //    setAttribute(root, "xmlns", mURI);
     doc->setRootElement(root);
 
     DerivedData *derived = (DerivedData*) data;
@@ -1325,6 +1330,7 @@ xml::lite::Document* DerivedXMLControl::toXML(Data* data)
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", getSICommonURI());
+    root->setNamespacePrefix("sfa", getSFAURI());
 
     return doc;
 }
@@ -1713,17 +1719,22 @@ XMLElem DerivedXMLControl::toXML(SFAGeometry *g, std::string useName,
 {
     XMLElem geoXML = NULL;
 
+    std::string topURI = useName.empty() ? getDefaultURI() : getSFAURI();
+    std::string sfaURI = getSFAURI();
+
     std::string geoType = g->getType();
     if (geoType == SFAPoint::TYPE_NAME)
     {
-        geoXML = newElement(useName.empty() ? "Point" : useName, parent);
+        geoXML
+                = newElement(useName.empty() ? "Point" : useName, topURI,
+                             parent);
         SFAPoint *p = (SFAPoint*) g;
-        createDouble("X", p->x, geoXML);
-        createDouble("Y", p->y, geoXML);
+        createDouble("X", sfaURI, p->x, geoXML);
+        createDouble("Y", sfaURI, p->y, geoXML);
         if (!Init::isUndefined(p->z))
-            createDouble("Z", p->z, geoXML);
+            createDouble("Z", sfaURI, p->z, geoXML);
         if (!Init::isUndefined(p->m))
-            createDouble("M", p->m, geoXML);
+            createDouble("M", sfaURI, p->m, geoXML);
     }
     //for now, line, linearring, and linestring are parsed the same
     else if (geoType == SFALine::TYPE_NAME || geoType
@@ -1736,7 +1747,7 @@ XMLElem DerivedXMLControl::toXML(SFAGeometry *g, std::string useName,
                                                                                 == SFALinearRing::TYPE_NAME ? "LinearRing"
                                                                                                             : "LineString"))
                                         : useName;
-        geoXML = newElement(eName, parent);
+        geoXML = newElement(eName, topURI, parent);
 
         //cast to the common base - LineString
         SFALineString *p = (SFALineString*) g;
@@ -1747,7 +1758,8 @@ XMLElem DerivedXMLControl::toXML(SFAGeometry *g, std::string useName,
     }
     else if (geoType == SFAPolygon::TYPE_NAME)
     {
-        geoXML = newElement(useName.empty() ? "Polygon" : useName, parent);
+        geoXML = newElement(useName.empty() ? "Polygon" : useName, topURI,
+                            parent);
         SFAPolygon *p = (SFAPolygon*) g;
         for (size_t i = 0, size = p->rings.size(); i < size; ++i)
         {
@@ -1757,7 +1769,7 @@ XMLElem DerivedXMLControl::toXML(SFAGeometry *g, std::string useName,
     else if (geoType == SFAPolyhedralSurface::TYPE_NAME)
     {
         geoXML = newElement(useName.empty() ? "PolyhedralSurface" : useName,
-                            parent);
+                            topURI, parent);
         SFAPolyhedralSurface *p = (SFAPolyhedralSurface*) g;
         for (size_t i = 0, size = p->patches.size(); i < size; ++i)
         {
@@ -1766,7 +1778,8 @@ XMLElem DerivedXMLControl::toXML(SFAGeometry *g, std::string useName,
     }
     else if (geoType == SFAMultiPolygon::TYPE_NAME)
     {
-        geoXML = newElement(useName.empty() ? "MultiPolygon" : useName, parent);
+        geoXML = newElement(useName.empty() ? "MultiPolygon" : useName, topURI,
+                            parent);
         SFAMultiPolygon *p = (SFAMultiPolygon*) g;
         for (size_t i = 0, size = p->elements.size(); i < size; ++i)
         {
@@ -1776,7 +1789,7 @@ XMLElem DerivedXMLControl::toXML(SFAGeometry *g, std::string useName,
     else if (geoType == SFAMultiLineString::TYPE_NAME)
     {
         geoXML = newElement(useName.empty() ? "MultiLineString" : useName,
-                            parent);
+                            topURI, parent);
         SFAMultiLineString *p = (SFAMultiLineString*) g;
         for (size_t i = 0, size = p->elements.size(); i < size; ++i)
         {
@@ -1785,7 +1798,8 @@ XMLElem DerivedXMLControl::toXML(SFAGeometry *g, std::string useName,
     }
     else if (geoType == SFAMultiPoint::TYPE_NAME)
     {
-        geoXML = newElement(useName.empty() ? "MultiPoint" : useName, parent);
+        geoXML = newElement(useName.empty() ? "MultiPoint" : useName, topURI,
+                            parent);
         SFAMultiPoint *p = (SFAMultiPoint*) g;
         for (size_t i = 0, size = p->vertices.size(); i < size; ++i)
         {

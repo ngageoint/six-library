@@ -69,12 +69,15 @@ protected:
 
     static const char SIDD_URI[];
     static const char SI_COMMON_URI[];
+    static const char SFA_URI[];
 
     //! Returns the default URI
     std::string getDefaultURI() const;
 
     //! Returns the URI to use with SI Common types
     std::string getSICommonURI() const;
+
+    std::string getSFAURI() const;
 
     virtual XMLElem createLUT(std::string name, LUT *l, XMLElem parent = NULL);
     XMLElem toXML(ProductCreation* productCreation, XMLElem parent = NULL);
