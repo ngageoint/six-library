@@ -221,6 +221,32 @@ struct DerivedData: public Data
 
     /*!
      *  Maps to:
+     *  /SIDD/AdvancedExploitation/Collection/Information/SensorName
+     */
+    virtual std::string getSource() const
+    {
+        // TODO throw exception instead of returning empty string?
+        return (exploitationFeatures
+                && !exploitationFeatures->collections.empty() ? exploitationFeatures->collections[0]->information->sensorName
+                                                              : std::string(""));
+    }
+
+    /*!
+     *  Maps to:
+     *  /SIDD/AdvancedExploitation/Collection/Information/SensorName
+     */
+    virtual void setSource(std::string name)
+    {
+        // TODO throw exception if cannot set?
+        if (exploitationFeatures && !exploitationFeatures->collections.empty())
+        {
+            exploitationFeatures->collections[0]->information->sensorName
+                    = name;
+        }
+    }
+
+    /*!
+     *  Maps to:
      *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime  
      */
     virtual DateTime getCreationTime() const

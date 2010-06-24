@@ -121,6 +121,18 @@ struct Data
     virtual void setName(std::string name) = 0;
 
     /*!
+     *  Maps to: /SICD/CollectionInfo/CollectorName,
+     *  /SIDD/AdvancedExploitation/Collection/Information/SensorName
+     */
+    virtual std::string getSource() const = 0;
+
+    /*!
+     *  Maps to: /SICD/CollectionInfo/CollectorName,
+     *  /SIDD/AdvancedExploitation/Collection/Information/SensorName
+     */
+    virtual void setSource(std::string name) = 0;
+
+    /*!
      *  Maps to: /SICD/ImageCreation/DateTime,  
      *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime  
      */
