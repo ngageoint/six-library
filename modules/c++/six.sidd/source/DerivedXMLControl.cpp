@@ -32,6 +32,19 @@ using namespace six::sidd;
 
 typedef xml::lite::Element* XMLElem;
 
+const char DerivedXMLControl::SIDD_URI[] = "urn:SIDD:0.2";
+const char DerivedXMLControl::SI_COMMON_URI[] = "urn:SICommon:0.1";
+
+std::string DerivedXMLControl::getDefaultURI() const
+{
+    return SIDD_URI;
+}
+
+std::string DerivedXMLControl::getSICommonURI() const
+{
+    return SI_COMMON_URI;
+}
+
 void DerivedXMLControl::fromXML(XMLElem productCreationXML,
                                 ProductCreation* productCreation)
 {
@@ -1276,7 +1289,7 @@ xml::lite::Document* DerivedXMLControl::toXML(Data* data)
     }
     xml::lite::Document* doc = new xml::lite::Document();
     XMLElem root = newElement("SIDD");
-    setAttribute(root, "xmlns", mURI);
+    //    setAttribute(root, "xmlns", mURI);
     doc->setRootElement(root);
 
     DerivedData *derived = (DerivedData*) data;
@@ -1308,6 +1321,11 @@ xml::lite::Document* DerivedXMLControl::toXML(Data* data)
             toXML(derived->annotations[i], annotationsElem);
         }
     }
+
+    //set the XMLNS
+    root->setNamespacePrefix("", getDefaultURI());
+    root->setNamespacePrefix("si", getSICommonURI());
+
     return doc;
 }
 

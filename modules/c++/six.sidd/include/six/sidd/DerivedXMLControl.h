@@ -48,7 +48,6 @@ public:
     DerivedXMLControl(logging::Logger* log = NULL) :
         XMLControl(log)
     {
-        mURI = "urn:SIDD:0.2";
     }
 
     virtual ~DerivedXMLControl()
@@ -67,6 +66,15 @@ public:
 
 protected:
     typedef xml::lite::Element* XMLElem;
+
+    static const char SIDD_URI[];
+    static const char SI_COMMON_URI[];
+
+    //! Returns the default URI
+    std::string getDefaultURI() const;
+
+    //! Returns the URI to use with SI Common types
+    std::string getSICommonURI() const;
 
     virtual XMLElem createLUT(std::string name, LUT *l, XMLElem parent = NULL);
     XMLElem toXML(ProductCreation* productCreation, XMLElem parent = NULL);

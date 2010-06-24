@@ -83,15 +83,39 @@ public:
 protected:
     typedef xml::lite::Element* XMLElem;
 
-    std::string mURI;
     logging::Logger *mLog;
     bool mOwnLog;
 
-    XMLElem newElement(std::string name, XMLElem parent = NULL);
+    //! Returns the default URI
+    virtual std::string getDefaultURI() const = 0;
 
-    XMLElem newElement(std::string name, std::string characterData,
-                       XMLElem parent = NULL);
+    //! Returns the URI to use with SI Common types
+    virtual std::string getSICommonURI() const = 0;
 
+    XMLElem newElement(std::string name, XMLElem prnt = NULL);
+
+    XMLElem newElement(std::string name, std::string uri, XMLElem prnt = NULL);
+
+    XMLElem newElement(std::string name, std::string uri,
+                       std::string characterData, XMLElem parent = NULL);
+
+    // generic element creation methods, w/URI
+    virtual XMLElem createString(std::string name, std::string uri,
+                                 std::string p = "", XMLElem parent = NULL);
+    virtual XMLElem createInt(std::string name, std::string uri, int p = 0,
+                              XMLElem parent = NULL);
+    virtual XMLElem createDouble(std::string name, std::string uri, double p =
+            0, XMLElem parent = NULL);
+    virtual XMLElem createBooleanType(std::string name, std::string uri,
+                                      BooleanType b, XMLElem parent = NULL);
+    virtual XMLElem createDateTime(std::string name, std::string uri,
+                                   DateTime p, XMLElem parent = NULL);
+    virtual XMLElem createDateTime(std::string name, std::string uri,
+                                   std::string s, XMLElem parent = NULL);
+    virtual XMLElem createDate(std::string name, std::string uri, DateTime p,
+                               XMLElem parent = NULL);
+
+    // generic element creation methods, using default URI
     virtual XMLElem createString(std::string name, std::string p = "",
                                  XMLElem parent = NULL);
     virtual XMLElem createInt(std::string name, int p = 0, XMLElem parent =
@@ -106,6 +130,7 @@ protected:
                                    XMLElem parent = NULL);
     virtual XMLElem createDate(std::string name, DateTime p, XMLElem parent =
             NULL);
+
     XMLElem createComplex(std::string name, std::complex<double> c,
                           XMLElem parent = NULL);
     XMLElem createVector3D(std::string name, Vector3 p = 0.0, XMLElem parent =
@@ -137,12 +162,26 @@ protected:
     virtual XMLElem createFootprint(std::string name, std::string cornerName,
                                     const std::vector<LatLon>& c, bool alt =
                                             false, XMLElem parent = NULL);
+    XMLElem createPoly1D(std::string name, std::string uri,
+                         const Poly1D& poly1D, XMLElem parent = NULL);
+    XMLElem createPoly2D(std::string name, std::string uri,
+                         const Poly2D& poly2D, XMLElem parent = NULL);
     XMLElem createPoly1D(std::string name, const Poly1D& poly1D,
                          XMLElem parent = NULL);
     XMLElem createPoly2D(std::string name, const Poly2D& poly2D,
                          XMLElem parent = NULL);
     XMLElem createPolyXYZ(std::string name, const PolyXYZ& polyXYZ,
                           XMLElem parent = NULL);
+    XMLElem createParameter(std::string name, std::string uri,
+                            const Parameter& value, XMLElem parent = NULL);
+    void addParameters(std::string name, std::string uri,
+                       std::vector<Parameter>& props, XMLElem parent = NULL);
+    XMLElem createParameter(std::string name, const Parameter& value,
+                            XMLElem parent = NULL);
+    void addParameters(std::string name, std::vector<Parameter>& props,
+                       XMLElem parent = NULL);
+    void addDecorrType(std::string name, std::string uri, DecorrType& dt,
+                       XMLElem p);
 
     void parseInt(XMLElem element, int& value);
     void parseInt(XMLElem element, long& value);
@@ -188,14 +227,6 @@ protected:
     static XMLElem getOptional(XMLElem parent, std::string tag);
     static XMLElem getFirstAndOnly(XMLElem parent, std::string tag);
 
-    XMLElem createParameter(std::string name, const Parameter& value,
-                            XMLElem parent = NULL);
-    void addParameters(std::string name, std::vector<Parameter>& props,
-                       XMLElem parent = NULL);
-
-    void
-            addDecorrType(std::string name, DecorrType& decorrType,
-                          XMLElem parent);
     void parseDecorrType(XMLElem decorrXML, DecorrType& decorrType);
 
     XMLElem toXML(ErrorStatistics* errorStatistics, XMLElem parent = NULL);
