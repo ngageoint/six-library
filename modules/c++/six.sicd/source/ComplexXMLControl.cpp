@@ -77,22 +77,22 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
     XMLElem pfaXML = getOptional(root, "PFA");
     XMLElem rmaXML = getOptional(root, "RMA");
 
-    xmlToCollectionInfo(collectionInfoXML, sicd->collectionInformation);
+    fromXML(collectionInfoXML, sicd->collectionInformation);
 
     if (imageCreationXML != NULL)
     {
         builder.addImageCreation();
-        xmlToImageCreation(imageCreationXML, sicd->imageCreation);
+        fromXML(imageCreationXML, sicd->imageCreation);
     }
 
-    xmlToImageData(imageDataXML, sicd->imageData);
-    xmlToGeoData(geoDataXML, sicd->geoData);
-    xmlToGrid(gridXML, sicd->grid);
-    xmlToTimeline(timelineXML, sicd->timeline);
-    xmlToPosition(positionXML, sicd->position);
-    xmlToRadarCollection(radarCollectionXML, sicd->radarCollection);
-    xmlToImageFormation(imageFormationXML, sicd->imageFormation);
-    xmlToSCPCOA(scpcoaXML, sicd->scpcoa);
+    fromXML(imageDataXML, sicd->imageData);
+    fromXML(geoDataXML, sicd->geoData);
+    fromXML(gridXML, sicd->grid);
+    fromXML(timelineXML, sicd->timeline);
+    fromXML(positionXML, sicd->position);
+    fromXML(radarCollectionXML, sicd->radarCollection);
+    fromXML(imageFormationXML, sicd->imageFormation);
+    fromXML(scpcoaXML, sicd->scpcoa);
 
     if (radiometricXML != NULL)
     {
@@ -103,7 +103,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
     if (antennaXML != NULL)
     {
         builder.addAntenna();
-        xmlToAntenna(antennaXML, sicd->antenna);
+        fromXML(antennaXML, sicd->antenna);
     }
 
     if (errorStatisticsXML != NULL)
@@ -115,18 +115,18 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
     if (matchInfoXML != NULL)
     {
         builder.addMatchInformation();
-        xmlToMatchInfo(matchInfoXML, sicd->matchInformation);
+        fromXML(matchInfoXML, sicd->matchInformation);
     }
 
     if (pfaXML != NULL)
     {
         sicd->pfa = new PFA();
-        xmlToPFA(pfaXML, sicd->pfa);
+        fromXML(pfaXML, sicd->pfa);
     }
     if (rmaXML != NULL)
     {
         sicd->rma = new RMA();
-        xmlToRMA(rmaXML, sicd->rma);
+        fromXML(rmaXML, sicd->rma);
     }
 
     return sicd;
@@ -147,32 +147,32 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
 
     ComplexData *sicd = (ComplexData*) data;
 
-    collectionInfoToXML(sicd->collectionInformation, root);
+    toXML(sicd->collectionInformation, root);
     if (sicd->imageCreation)
     {
-        imageCreationToXML(sicd->imageCreation, root);
+        toXML(sicd->imageCreation, root);
     }
-    imageDataToXML(sicd->imageData, root);
-    geoDataToXML(sicd->geoData, root);
-    gridToXML(sicd->grid, root);
-    timelineToXML(sicd->timeline, root);
-    positionToXML(sicd->position, root);
-    radarCollectionToXML(sicd->radarCollection, root);
-    imageFormationToXML(sicd->imageFormation, root);
-    scpcoaToXML(sicd->scpcoa, root);
+    toXML(sicd->imageData, root);
+    toXML(sicd->geoData, root);
+    toXML(sicd->grid, root);
+    toXML(sicd->timeline, root);
+    toXML(sicd->position, root);
+    toXML(sicd->radarCollection, root);
+    toXML(sicd->imageFormation, root);
+    toXML(sicd->scpcoa, root);
     if (sicd->radiometric)
         XMLControl::toXML(sicd->radiometric, root);
     if (sicd->antenna)
-        antennaToXML(sicd->antenna, root);
+        toXML(sicd->antenna, root);
     if (sicd->errorStatistics)
         XMLControl::toXML(sicd->errorStatistics, root);
     if (sicd->matchInformation && !sicd->matchInformation->collects.empty())
-        matchInfoToXML(sicd->matchInformation, root);
+        toXML(sicd->matchInformation, root);
 
     if (sicd->pfa)
-        pfaToXML(sicd->pfa, root);
+        toXML(sicd->pfa, root);
     else if (sicd->rma)
-        rmaToXML(sicd->rma, root);
+        toXML(sicd->rma, root);
     else if (!sicd->pfa && !sicd->rma)
         throw except::Exception("One of PFA and RMA must be defined -- both "
             "are undefined.");
@@ -197,8 +197,8 @@ XMLElem ComplexXMLControl::createFFTSign(std::string name, six::FFTSign sign,
     return e;
 }
 
-XMLElem ComplexXMLControl::collectionInfoToXML(CollectionInformation *collInfo,
-                                               XMLElem parent)
+XMLElem ComplexXMLControl::toXML(CollectionInformation *collInfo,
+                                 XMLElem parent)
 {
     XMLElem collInfoXML = newElement("CollectionInfo", parent);
 
@@ -233,8 +233,7 @@ XMLElem ComplexXMLControl::collectionInfoToXML(CollectionInformation *collInfo,
     return collInfoXML;
 }
 
-XMLElem ComplexXMLControl::imageCreationToXML(ImageCreation *imageCreation,
-                                              XMLElem parent)
+XMLElem ComplexXMLControl::toXML(ImageCreation *imageCreation, XMLElem parent)
 {
     XMLElem imageCreationXML = newElement("ImageCreation", parent);
 
@@ -253,7 +252,7 @@ XMLElem ComplexXMLControl::imageCreationToXML(ImageCreation *imageCreation,
     return imageCreationXML;
 }
 
-XMLElem ComplexXMLControl::imageDataToXML(ImageData *imageData, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(ImageData *imageData, XMLElem parent)
 {
     XMLElem imageDataXML = newElement("ImageData", parent);
 
@@ -288,7 +287,7 @@ XMLElem ComplexXMLControl::imageDataToXML(ImageData *imageData, XMLElem parent)
     return imageDataXML;
 }
 
-XMLElem ComplexXMLControl::geoDataToXML(GeoData *geoData, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(GeoData *geoData, XMLElem parent)
 {
     XMLElem geoDataXML = newElement("GeoData", parent);
 
@@ -320,13 +319,13 @@ XMLElem ComplexXMLControl::geoDataToXML(GeoData *geoData, XMLElem parent)
     for (std::vector<GeoInfo*>::iterator it = geoData->geoInfos.begin(); it
             != geoData->geoInfos.end(); ++it)
     {
-        geoInfoToXML(*it, geoDataXML);
+        toXML(*it, geoDataXML);
     }
 
     return geoDataXML;
 }
 
-XMLElem ComplexXMLControl::geoInfoToXML(GeoInfo *geoInfo, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(GeoInfo *geoInfo, XMLElem parent)
 {
     XMLElem geoInfoXML = newElement("GeoInfo", parent);
     if (!geoInfo->name.empty())
@@ -335,7 +334,7 @@ XMLElem ComplexXMLControl::geoInfoToXML(GeoInfo *geoInfo, XMLElem parent)
     for (std::vector<GeoInfo*>::iterator it = geoInfo->geoInfos.begin(); it
             != geoInfo->geoInfos.end(); ++it)
     {
-        geoInfoToXML(*it, geoInfoXML);
+        toXML(*it, geoInfoXML);
     }
 
     addParameters("Desc", geoInfo->desc, geoInfoXML);
@@ -359,7 +358,7 @@ XMLElem ComplexXMLControl::geoInfoToXML(GeoInfo *geoInfo, XMLElem parent)
     return geoInfoXML;
 }
 
-XMLElem ComplexXMLControl::gridToXML(Grid *grid, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
 {
     XMLElem gridXML = newElement("Grid", parent);
 
@@ -436,7 +435,7 @@ XMLElem ComplexXMLControl::gridToXML(Grid *grid, XMLElem parent)
     return gridXML;
 }
 
-XMLElem ComplexXMLControl::timelineToXML(Timeline *timeline, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(Timeline *timeline, XMLElem parent)
 {
     XMLElem timelineXML = newElement("Timeline", parent);
 
@@ -466,7 +465,7 @@ XMLElem ComplexXMLControl::timelineToXML(Timeline *timeline, XMLElem parent)
     return timelineXML;
 }
 
-XMLElem ComplexXMLControl::positionToXML(Position *position, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(Position *position, XMLElem parent)
 {
     XMLElem positionXML = newElement("Position", parent);
 
@@ -491,8 +490,7 @@ XMLElem ComplexXMLControl::positionToXML(Position *position, XMLElem parent)
     return positionXML;
 }
 
-XMLElem ComplexXMLControl::radarCollectionToXML(RadarCollection *radar,
-                                                XMLElem parent)
+XMLElem ComplexXMLControl::toXML(RadarCollection *radar, XMLElem parent)
 {
     XMLElem radarXML = newElement("RadarCollection", parent);
 
@@ -690,8 +688,7 @@ XMLElem ComplexXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
-XMLElem ComplexXMLControl::imageFormationToXML(ImageFormation *imageFormation,
-                                               XMLElem parent)
+XMLElem ComplexXMLControl::toXML(ImageFormation *imageFormation, XMLElem parent)
 {
     XMLElem imageFormationXML = newElement("ImageFormation", parent);
 
@@ -816,7 +813,7 @@ XMLElem ComplexXMLControl::imageFormationToXML(ImageFormation *imageFormation,
     return imageFormationXML;
 }
 
-XMLElem ComplexXMLControl::scpcoaToXML(SCPCOA *scpcoa, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(SCPCOA *scpcoa, XMLElem parent)
 {
     XMLElem scpcoaXML = newElement("SCPCOA", parent);
     createDouble("SCPTime", scpcoa->scpTime, scpcoaXML);
@@ -834,23 +831,22 @@ XMLElem ComplexXMLControl::scpcoaToXML(SCPCOA *scpcoa, XMLElem parent)
     return scpcoaXML;
 }
 
-XMLElem ComplexXMLControl::antennaToXML(Antenna *antenna, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(Antenna *antenna, XMLElem parent)
 {
     XMLElem antennaXML = newElement("Antenna", parent);
 
     if (antenna->tx)
-        antennaParametersToXML("Tx", antenna->tx, antennaXML);
+        toXML("Tx", antenna->tx, antennaXML);
     if (antenna->rcv)
-        antennaParametersToXML("Rcv", antenna->rcv, antennaXML);
+        toXML("Rcv", antenna->rcv, antennaXML);
     if (antenna->twoWay)
-        antennaParametersToXML("TwoWay", antenna->twoWay, antennaXML);
+        toXML("TwoWay", antenna->twoWay, antennaXML);
 
     return antennaXML;
 }
 
-XMLElem ComplexXMLControl::antennaParametersToXML(std::string name,
-                                                  AntennaParameters *params,
-                                                  XMLElem parent)
+XMLElem ComplexXMLControl::toXML(std::string name, AntennaParameters *params,
+                                 XMLElem parent)
 {
     XMLElem apXML = newElement(name, parent);
 
@@ -895,8 +891,7 @@ XMLElem ComplexXMLControl::antennaParametersToXML(std::string name,
     return apXML;
 }
 
-XMLElem ComplexXMLControl::matchInfoToXML(MatchInformation *matchInfo,
-                                          XMLElem parent)
+XMLElem ComplexXMLControl::toXML(MatchInformation *matchInfo, XMLElem parent)
 {
     XMLElem matchInfoXML = newElement("MatchInfo", parent);
 
@@ -923,7 +918,7 @@ XMLElem ComplexXMLControl::matchInfoToXML(MatchInformation *matchInfo,
     return matchInfoXML;
 }
 
-XMLElem ComplexXMLControl::pfaToXML(PFA *pfa, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(PFA *pfa, XMLElem parent)
 {
     XMLElem pfaXML = newElement("PFA", parent);
 
@@ -950,7 +945,7 @@ XMLElem ComplexXMLControl::pfaToXML(PFA *pfa, XMLElem parent)
     return pfaXML;
 }
 
-XMLElem ComplexXMLControl::rmaToXML(RMA *rma, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(RMA *rma, XMLElem parent)
 {
     XMLElem rmaXML = newElement("RMA", parent);
 
@@ -1002,8 +997,8 @@ XMLElem ComplexXMLControl::rmaToXML(RMA *rma, XMLElem parent)
     return rmaXML;
 }
 
-void ComplexXMLControl::xmlToCollectionInfo(XMLElem collectionInfoXML,
-                                            CollectionInformation *collInfo)
+void ComplexXMLControl::fromXML(XMLElem collectionInfoXML,
+                                CollectionInformation *collInfo)
 {
     parseString(getFirstAndOnly(collectionInfoXML, "CollectorName"),
                 collInfo->collectorName);
@@ -1052,8 +1047,8 @@ void ComplexXMLControl::xmlToCollectionInfo(XMLElem collectionInfoXML,
     parseParameters(collectionInfoXML, "Parameter", collInfo->parameters);
 }
 
-void ComplexXMLControl::xmlToImageCreation(XMLElem imageCreationXML,
-                                           ImageCreation *imageCreation)
+void ComplexXMLControl::fromXML(XMLElem imageCreationXML,
+                                ImageCreation *imageCreation)
 {
     // Optional
     XMLElem element = getOptional(imageCreationXML, "Application");
@@ -1073,8 +1068,7 @@ void ComplexXMLControl::xmlToImageCreation(XMLElem imageCreationXML,
         parseString(element, imageCreation->profile);
 }
 
-void ComplexXMLControl::xmlToImageData(XMLElem imageDataXML,
-                                       ImageData *imageData)
+void ComplexXMLControl::fromXML(XMLElem imageDataXML, ImageData *imageData)
 {
     imageData->pixelType
             = six::toType<PixelType>(
@@ -1130,7 +1124,7 @@ void ComplexXMLControl::xmlToImageData(XMLElem imageDataXML,
 
 }
 
-void ComplexXMLControl::xmlToGeoData(XMLElem geoDataXML, GeoData *geoData)
+void ComplexXMLControl::fromXML(XMLElem geoDataXML, GeoData *geoData)
 {
     parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
                         geoData->earthModel);
@@ -1156,13 +1150,13 @@ void ComplexXMLControl::xmlToGeoData(XMLElem geoDataXML, GeoData *geoData)
             != geoInfosXML.end(); ++it)
     {
         GeoInfo *gi = new GeoInfo();
-        xmlToGeoInfo(*it, gi);
+        fromXML(*it, gi);
         geoData->geoInfos.push_back(gi);
     }
 
 }
 
-void ComplexXMLControl::xmlToGeoInfo(XMLElem geoInfoXML, GeoInfo* geoInfo)
+void ComplexXMLControl::fromXML(XMLElem geoInfoXML, GeoInfo* geoInfo)
 {
     std::vector<XMLElem> geoInfosXML;
     geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
@@ -1174,7 +1168,7 @@ void ComplexXMLControl::xmlToGeoInfo(XMLElem geoInfoXML, GeoInfo* geoInfo)
             != geoInfosXML.end(); ++it)
     {
         GeoInfo *gi = new GeoInfo();
-        xmlToGeoInfo(*it, gi);
+        fromXML(*it, gi);
         geoInfo->geoInfos.push_back(gi);
     }
 
@@ -1204,7 +1198,7 @@ void ComplexXMLControl::xmlToGeoInfo(XMLElem geoInfoXML, GeoInfo* geoInfo)
     }
 }
 
-void ComplexXMLControl::xmlToGrid(XMLElem gridXML, Grid *grid)
+void ComplexXMLControl::fromXML(XMLElem gridXML, Grid *grid)
 {
     grid->imagePlane
             = six::toType<ComplexImagePlaneType>(
@@ -1307,7 +1301,7 @@ void ComplexXMLControl::xmlToGrid(XMLElem gridXML, Grid *grid)
     }
 }
 
-void ComplexXMLControl::xmlToTimeline(XMLElem timelineXML, Timeline *timeline)
+void ComplexXMLControl::fromXML(XMLElem timelineXML, Timeline *timeline)
 {
     parseDateTime(getFirstAndOnly(timelineXML, "CollectStart"),
                   timeline->collectStart);
@@ -1342,7 +1336,7 @@ void ComplexXMLControl::xmlToTimeline(XMLElem timelineXML, Timeline *timeline)
     }
 }
 
-void ComplexXMLControl::xmlToPosition(XMLElem positionXML, Position *position)
+void ComplexXMLControl::fromXML(XMLElem positionXML, Position *position)
 {
     XMLElem tmpElem = getFirstAndOnly(positionXML, "ARPPoly");
     parsePolyXYZ(tmpElem, position->arpPoly);
@@ -1380,8 +1374,8 @@ void ComplexXMLControl::xmlToPosition(XMLElem positionXML, Position *position)
     }
 }
 
-void ComplexXMLControl::xmlToRadarCollection(XMLElem radarCollectionXML,
-                                             RadarCollection *radarCollection)
+void ComplexXMLControl::fromXML(XMLElem radarCollectionXML,
+                                RadarCollection *radarCollection)
 {
     XMLElem tmpElem = NULL;
     XMLElem optElem = NULL;
@@ -1653,8 +1647,8 @@ void ComplexXMLControl::xmlToRadarCollection(XMLElem radarCollectionXML,
                     radarCollection->parameters);
 }
 
-void ComplexXMLControl::xmlToImageFormation(XMLElem imageFormationXML,
-                                            ImageFormation *imageFormation)
+void ComplexXMLControl::fromXML(XMLElem imageFormationXML,
+                                ImageFormation *imageFormation)
 {
     XMLElem tmpElem = getOptional(imageFormationXML, "SegmentIdentifier");
     if (tmpElem)
@@ -1836,7 +1830,7 @@ void ComplexXMLControl::xmlToImageFormation(XMLElem imageFormationXML,
     }
 }
 
-void ComplexXMLControl::xmlToSCPCOA(XMLElem scpcoaXML, SCPCOA *scpcoa)
+void ComplexXMLControl::fromXML(XMLElem scpcoaXML, SCPCOA *scpcoa)
 {
     parseDouble(getFirstAndOnly(scpcoaXML, "SCPTime"), scpcoa->scpTime);
 
@@ -1857,8 +1851,8 @@ void ComplexXMLControl::xmlToSCPCOA(XMLElem scpcoaXML, SCPCOA *scpcoa)
     parseDouble(getFirstAndOnly(scpcoaXML, "SlopeAng"), scpcoa->slopeAngle);
 }
 
-void ComplexXMLControl::xmlToAntennaParams(XMLElem antennaParamsXML,
-                                           AntennaParameters* params)
+void ComplexXMLControl::fromXML(XMLElem antennaParamsXML,
+                                AntennaParameters* params)
 {
     parsePolyXYZ(getFirstAndOnly(antennaParamsXML, "XAxisPoly"),
                  params->xAxisPoly);
@@ -1929,32 +1923,32 @@ void ComplexXMLControl::xmlToAntennaParams(XMLElem antennaParamsXML,
     }
 }
 
-void ComplexXMLControl::xmlToAntenna(XMLElem antennaXML, Antenna *antenna)
+void ComplexXMLControl::fromXML(XMLElem antennaXML, Antenna *antenna)
 {
     XMLElem antennaParamsXML = getOptional(antennaXML, "Tx");
     if (antennaParamsXML)
     {
         antenna->tx = new AntennaParameters();
-        xmlToAntennaParams(antennaParamsXML, antenna->tx);
+        fromXML(antennaParamsXML, antenna->tx);
     }
 
     antennaParamsXML = getOptional(antennaXML, "Rcv");
     if (antennaParamsXML)
     {
         antenna->rcv = new AntennaParameters();
-        xmlToAntennaParams(antennaParamsXML, antenna->rcv);
+        fromXML(antennaParamsXML, antenna->rcv);
     }
 
     antennaParamsXML = getOptional(antennaXML, "TwoWay");
     if (antennaParamsXML)
     {
         antenna->twoWay = new AntennaParameters();
-        xmlToAntennaParams(antennaParamsXML, antenna->twoWay);
+        fromXML(antennaParamsXML, antenna->twoWay);
     }
 }
 
-void ComplexXMLControl::xmlToMatchInfo(XMLElem matchInfoXML,
-                                       MatchInformation *matchInfo)
+void ComplexXMLControl::fromXML(XMLElem matchInfoXML,
+                                MatchInformation *matchInfo)
 {
     XMLElem optElem = NULL;
 
@@ -1996,7 +1990,7 @@ void ComplexXMLControl::xmlToMatchInfo(XMLElem matchInfoXML,
     }
 }
 
-void ComplexXMLControl::xmlToPFA(XMLElem pfaXML, PFA *pfa)
+void ComplexXMLControl::fromXML(XMLElem pfaXML, PFA *pfa)
 {
     parseVector3D(getFirstAndOnly(pfaXML, "FPN"), pfa->focusPlaneNormal);
     parseVector3D(getFirstAndOnly(pfaXML, "IPN"), pfa->imagePlaneNormal);
@@ -2022,7 +2016,7 @@ void ComplexXMLControl::xmlToPFA(XMLElem pfaXML, PFA *pfa)
     }
 }
 
-void ComplexXMLControl::xmlToRMA(XMLElem rmaXML, RMA* rma)
+void ComplexXMLControl::fromXML(XMLElem rmaXML, RMA* rma)
 {
     rma->algoType
             = six::toType<RMAlgoType>(
