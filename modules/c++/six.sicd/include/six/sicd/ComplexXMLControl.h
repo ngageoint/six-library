@@ -64,7 +64,11 @@ public:
      *  This function takes in a ComplexData object and converts
      *  it to a new-allocated XML DOM.
      *
-     *  \param data Either a ComplexData or DerivedData object
+     *  \param data Either a ComplexData or Deriv    XMLElem createEarthModelType(std::string name, const EarthModelType& value,
+     XMLElem parent = NULL);
+     XMLElem createSideOfTrackType(std::string name,
+     const SideOfTrackType& value, XMLElem parent =
+     NULL);edData object
      *  \return An XML DOM
      */
     virtual xml::lite::Document* toXML(Data* data);
@@ -133,12 +137,19 @@ protected:
 
     void parseFootprint(XMLElem footprint, std::string cornerName, std::vector<
             LatLon>& value, bool alt);
+    void parseEarthModelType(XMLElem element, EarthModelType& value);
+    void parseSideOfTrackType(XMLElem element, SideOfTrackType& value);
 
     XMLElem createFFTSign(std::string name, six::FFTSign sign, XMLElem parent =
             NULL);
     XMLElem createFootprint(std::string name, std::string cornerName,
                             const std::vector<LatLon>& corners, bool alt =
                                     false, XMLElem parent = NULL);
+    XMLElem createEarthModelType(std::string name, const EarthModelType& value,
+                                 XMLElem parent = NULL);
+    XMLElem createSideOfTrackType(std::string name,
+                                  const SideOfTrackType& value, XMLElem parent =
+                                          NULL);
 
     // Overridden methods from the base XMLControl, for adding attributes
     XMLElem createString(std::string name, std::string uri, std::string p = "",

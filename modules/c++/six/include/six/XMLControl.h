@@ -154,11 +154,7 @@ protected:
             NULL);
     XMLElem createLatLonAlt(std::string name, const LatLonAlt& value,
                             XMLElem parent = NULL);
-    XMLElem createEarthModelType(std::string name, const EarthModelType& value,
-                                 XMLElem parent = NULL);
-    XMLElem createSideOfTrackType(std::string name,
-                                  const SideOfTrackType& value, XMLElem parent =
-                                          NULL);
+
     virtual XMLElem createFootprint(std::string name, std::string cornerName,
                                     const std::vector<LatLon>& c, bool alt =
                                             false, XMLElem parent = NULL);
@@ -204,9 +200,7 @@ protected:
     void parseRangeAzimuth(XMLElem parent, RangeAzimuth<double>& value);
     virtual void parseFootprint(XMLElem footprint, std::string cornerName,
                                 std::vector<LatLon>& value, bool alt);
-    void
-    parseEarthModelType(XMLElem element, EarthModelType& value);
-    void parseSideOfTrackType(XMLElem element, SideOfTrackType& value);
+
     void parseDateTime(XMLElem element, DateTime& value);
     void parseRowColDouble(XMLElem parent, std::string rowName,
                            std::string colName, RowColDouble& rc);
