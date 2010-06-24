@@ -138,7 +138,6 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
     {
         throw except::Exception("Data must be SICD");
     }
-    typedef xml::lite::Element* XMLElem;
     xml::lite::Document* doc = new xml::lite::Document();
 
     XMLElem root = newElement("SICD");
@@ -2265,4 +2264,30 @@ XMLElem ComplexXMLControl::createDate(std::string name, DateTime p,
                                       XMLElem parent)
 {
     return createDate(name, getDefaultURI(), p, parent);
+}
+
+XMLElem ComplexXMLControl::createEarthModelType(std::string name,
+                                                const EarthModelType& value,
+                                                XMLElem parent)
+{
+    return createString(name, six::toString(value), parent);
+}
+
+XMLElem ComplexXMLControl::createSideOfTrackType(std::string name,
+                                                 const SideOfTrackType& value,
+                                                 XMLElem parent)
+{
+    return createString(name, six::toString(value), parent);
+}
+
+void ComplexXMLControl::parseEarthModelType(XMLElem element,
+                                            EarthModelType& value)
+{
+    value = six::toType<EarthModelType>(element->getCharacterData());
+}
+
+void ComplexXMLControl::parseSideOfTrackType(XMLElem element,
+                                             SideOfTrackType& value)
+{
+    value = six::toType<SideOfTrackType>(element->getCharacterData());
 }
