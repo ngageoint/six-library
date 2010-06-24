@@ -50,9 +50,9 @@ class ComplexXMLControl : public XMLControl
 
 public:
     //!  Constructor
-    ComplexXMLControl(logging::Logger* log = NULL) : XMLControl(log)
+    ComplexXMLControl(logging::Logger* log = NULL) :
+        XMLControl(log)
     {
-        mURI = "urn:SICD:0.4.0";
     }
 
     //!  Destructor
@@ -79,113 +79,111 @@ public:
 
 protected:
 
-    xml::lite::Element* collectionInfoToXML(CollectionInformation *obj,
-                                            xml::lite::Element* parent = NULL);
+    typedef xml::lite::Element* XMLElem;
 
-    xml::lite::Element* imageCreationToXML(ImageCreation *obj,
-                                           xml::lite::Element* parent = NULL);
+    static const char SICD_URI[];
 
-    xml::lite::Element* imageDataToXML(ImageData *obj, xml::lite::Element* parent = NULL);
+    //! Returns the default URI
+    std::string getDefaultURI() const;
 
-    xml::lite::Element* geoDataToXML(GeoData *obj, xml::lite::Element* parent =
+    //! Returns the URI to use with SI Common types
+    std::string getSICommonURI() const;
+
+    XMLElem collectionInfoToXML(CollectionInformation *obj, XMLElem parent =
             NULL);
 
-    xml::lite::Element* geoInfoToXML(GeoInfo *obj, xml::lite::Element* parent =
-            NULL);
+    XMLElem imageCreationToXML(ImageCreation *obj, XMLElem parent = NULL);
 
-    xml::lite::Element* gridToXML(Grid *obj, xml::lite::Element* parent = NULL);
+    XMLElem imageDataToXML(ImageData *obj, XMLElem parent = NULL);
 
-    xml::lite::Element* timelineToXML(Timeline *obj,
-                                      xml::lite::Element* parent = NULL);
+    XMLElem geoDataToXML(GeoData *obj, XMLElem parent = NULL);
 
-    xml::lite::Element* positionToXML(Position *obj,
-                                      xml::lite::Element* parent = NULL);
+    XMLElem geoInfoToXML(GeoInfo *obj, XMLElem parent = NULL);
 
-    xml::lite::Element* radarCollectionToXML(RadarCollection *obj,
-                                             xml::lite::Element* parent = NULL);
+    XMLElem gridToXML(Grid *obj, XMLElem parent = NULL);
 
-    xml::lite::Element* imageFormationToXML(ImageFormation *obj,
-                                            xml::lite::Element* parent = NULL);
+    XMLElem timelineToXML(Timeline *obj, XMLElem parent = NULL);
 
-    xml::lite::Element* scpcoaToXML(SCPCOA *obj, xml::lite::Element* parent =
-            NULL);
+    XMLElem positionToXML(Position *obj, XMLElem parent = NULL);
 
-    xml::lite::Element* antennaToXML(Antenna *obj, xml::lite::Element* parent =
-            NULL);
+    XMLElem radarCollectionToXML(RadarCollection *obj, XMLElem parent = NULL);
 
-    xml::lite::Element* antennaParametersToXML(std::string name,
-                                               AntennaParameters *obj,
-                                               xml::lite::Element* parent =
-                                                       NULL);
+    XMLElem imageFormationToXML(ImageFormation *obj, XMLElem parent = NULL);
 
-    xml::lite::Element
-    * matchInfoToXML(MatchInformation *obj, xml::lite::Element* parent = NULL);
+    XMLElem scpcoaToXML(SCPCOA *obj, XMLElem parent = NULL);
 
-    xml::lite::Element* pfaToXML(PFA *obj, xml::lite::Element* parent = NULL);
-    xml::lite::Element* rmaToXML(RMA *obj, xml::lite::Element* parent = NULL);
-    xml::lite::Element
-            * areaLineDirectionParametersToXML(std::string name,
+    XMLElem antennaToXML(Antenna *obj, XMLElem parent = NULL);
+
+    XMLElem antennaParametersToXML(std::string name, AntennaParameters *obj,
+                                   XMLElem parent = NULL);
+
+    XMLElem matchInfoToXML(MatchInformation *obj, XMLElem parent = NULL);
+
+    XMLElem pfaToXML(PFA *obj, XMLElem parent = NULL);
+    XMLElem rmaToXML(RMA *obj, XMLElem parent = NULL);
+    XMLElem areaLineDirectionParametersToXML(std::string name,
+                                             AreaDirectionParameters *obj,
+                                             XMLElem parent = NULL);
+    XMLElem areaSampleDirectionParametersToXML(std::string name,
                                                AreaDirectionParameters *obj,
-                                               xml::lite::Element* parent =
-                                                       NULL);
-    xml::lite::Element
-            * areaSampleDirectionParametersToXML(std::string name,
-                                                 AreaDirectionParameters *obj,
-                                                 xml::lite::Element* parent =
-                                                         NULL);
+                                               XMLElem parent = NULL);
 
-    void xmlToCollectionInfo(xml::lite::Element* collectionInfoXML,
+    void xmlToCollectionInfo(XMLElem collectionInfoXML,
                              CollectionInformation *obj);
-    void xmlToImageCreation(xml::lite::Element* imageCreationXML,
-                            ImageCreation *obj);
-    void xmlToImageData(xml::lite::Element* imageDataXML, ImageData *obj);
-    void xmlToGeoData(xml::lite::Element* geoDataXML, GeoData *obj);
-    void xmlToGeoInfo(xml::lite::Element* geoInfoXML, GeoInfo *obj);
-    void xmlToGrid(xml::lite::Element* gridXML, Grid *obj);
-    void xmlToTimeline(xml::lite::Element* timelineXML, Timeline *obj);
-    void xmlToPosition(xml::lite::Element* positionXML, Position *obj);
-    void xmlToRadarCollection(xml::lite::Element* radarCollectionXML,
-                              RadarCollection *obj);
-    void xmlToImageFormation(xml::lite::Element* imageFormationXML,
-                             ImageFormation *obj);
-    void xmlToSCPCOA(xml::lite::Element* scpcoaXML, SCPCOA *obj);
-    void xmlToAntenna(xml::lite::Element* antennaXML, Antenna *obj);
-    void xmlToAntennaParams(xml::lite::Element* antennaParamsXML,
-                            AntennaParameters* params);
+    void xmlToImageCreation(XMLElem imageCreationXML, ImageCreation *obj);
+    void xmlToImageData(XMLElem imageDataXML, ImageData *obj);
+    void xmlToGeoData(XMLElem geoDataXML, GeoData *obj);
+    void xmlToGeoInfo(XMLElem geoInfoXML, GeoInfo *obj);
+    void xmlToGrid(XMLElem gridXML, Grid *obj);
+    void xmlToTimeline(XMLElem timelineXML, Timeline *obj);
+    void xmlToPosition(XMLElem positionXML, Position *obj);
+    void xmlToRadarCollection(XMLElem radarCollectionXML, RadarCollection *obj);
+    void xmlToImageFormation(XMLElem imageFormationXML, ImageFormation *obj);
+    void xmlToSCPCOA(XMLElem scpcoaXML, SCPCOA *obj);
+    void xmlToAntenna(XMLElem antennaXML, Antenna *obj);
+    void
+    xmlToAntennaParams(XMLElem antennaParamsXML, AntennaParameters* params);
 
     void
-            xmlToMatchInfo(xml::lite::Element* matchInfoXML,
-                           MatchInformation *obj);
+    xmlToMatchInfo(XMLElem matchInfoXML, MatchInformation *obj);
 
-    void xmlToPFA(xml::lite::Element* pfaXML, PFA *obj);
-    void xmlToRMA(xml::lite::Element* rmaXML, RMA *obj);
+    void xmlToPFA(XMLElem pfaXML, PFA *obj);
+    void xmlToRMA(XMLElem rmaXML, RMA *obj);
 
-    void parseFootprint(xml::lite::Element* footprint, std::string cornerName,
-                        std::vector<LatLon>& value, bool alt);
+    void parseFootprint(XMLElem footprint, std::string cornerName, std::vector<
+            LatLon>& value, bool alt);
 
-    xml::lite::Element* createFFTSign(std::string name, six::FFTSign sign,
-                                      xml::lite::Element* parent = NULL);
-    xml::lite::Element* createFootprint(std::string name,
-                                        std::string cornerName,
-                                        const std::vector<LatLon>& corners,
-                                        bool alt = false,
-                                        xml::lite::Element* parent = NULL);
+    XMLElem createFFTSign(std::string name, six::FFTSign sign, XMLElem parent =
+            NULL);
+    XMLElem createFootprint(std::string name, std::string cornerName,
+                            const std::vector<LatLon>& corners, bool alt =
+                                    false, XMLElem parent = NULL);
 
     // Overridden methods from the base XMLControl, for adding attributes
-    xml::lite::Element* createString(std::string name, std::string p = "",
-                                     xml::lite::Element* parent = NULL);
-    xml::lite::Element* createInt(std::string name, int p = 0,
-                                  xml::lite::Element* parent = NULL);
-    xml::lite::Element* createDouble(std::string name, double p = 0,
-                                     xml::lite::Element* parent = NULL);
-    xml::lite::Element* createBooleanType(std::string name, BooleanType b,
-                                          xml::lite::Element* parent = NULL);
-    xml::lite::Element* createDateTime(std::string name, std::string s,
-                                       xml::lite::Element* parent = NULL);
-    xml::lite::Element* createDateTime(std::string name, DateTime p,
-                                       xml::lite::Element* parent = NULL);
-    xml::lite::Element* createDate(std::string name, DateTime p,
-                                   xml::lite::Element* parent = NULL);
+    XMLElem createString(std::string name, std::string uri, std::string p = "",
+                         XMLElem parent = NULL);
+    XMLElem createInt(std::string name, std::string uri, int p = 0,
+                      XMLElem parent = NULL);
+    XMLElem createDouble(std::string name, std::string uri, double p = 0,
+                         XMLElem parent = NULL);
+    XMLElem createBooleanType(std::string name, std::string uri, BooleanType b,
+                              XMLElem parent = NULL);
+    XMLElem createDateTime(std::string name, std::string uri, std::string s,
+                           XMLElem parent = NULL);
+    XMLElem createDateTime(std::string name, std::string uri, DateTime p,
+                           XMLElem parent = NULL);
+    XMLElem createDate(std::string name, std::string uri, DateTime p,
+                       XMLElem parent = NULL);
+    XMLElem createString(std::string name, std::string p = "", XMLElem parent =
+            NULL);
+    XMLElem createInt(std::string name, int p = 0, XMLElem parent = NULL);
+    XMLElem createDouble(std::string name, double p = 0, XMLElem parent = NULL);
+    XMLElem createBooleanType(std::string name, BooleanType b, XMLElem parent =
+            NULL);
+    XMLElem createDateTime(std::string name, std::string s, XMLElem parent =
+            NULL);
+    XMLElem createDateTime(std::string name, DateTime p, XMLElem parent = NULL);
+    XMLElem createDate(std::string name, DateTime p, XMLElem parent = NULL);
 
 };
 

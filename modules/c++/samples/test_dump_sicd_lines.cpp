@@ -22,8 +22,6 @@
 #include <import/six.h>
 #include <import/six/sicd.h>
 
-#define USE_SIO_LITE
-
 #ifdef USE_SIO_LITE
 #  include <import/sio/lite.h>
 #endif
