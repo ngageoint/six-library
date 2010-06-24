@@ -136,7 +136,6 @@ struct DerivedData: public Data
     virtual unsigned long getNumRows() const
     {
         return measurement->pixelFootprint.row;
-
     }
 
     /*!
@@ -276,6 +275,7 @@ struct DerivedData: public Data
         return std::string(VENDOR_ID);
     }
 
+private:
     static const char VENDOR_ID[];
 };
 }

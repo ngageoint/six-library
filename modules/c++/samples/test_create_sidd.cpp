@@ -308,6 +308,11 @@ int main(int argc, char** argv)
             data->exploitationFeatures->product.resolution.row = 0;
             data->exploitationFeatures->product.resolution.col = 0;
 
+            six::sidd::Annotation *ann = new six::sidd::Annotation;
+            ann->identifier = "1st Annotation";
+            ann->objects.push_back(new six::sidd::SFAPoint);
+            data->annotations.push_back(ann);
+
             sources.push_back(sioReader);
             container->addData(data);
         }
