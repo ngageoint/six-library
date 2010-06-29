@@ -126,6 +126,55 @@ CATCH_ERROR:
 }
 
 
+NITFPRIV(nitf_CompressionInterface *) getCompIface(const char *comp,
+        int *bad,
+        nitf_Error * error)
+{
+    nitf_PluginRegistry *reg;
+    nitf_CompressionInterface *compIface;
+    NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION constructCompIface;
+
+    /*  Set bad to 0 (we are good so far) */
+    *bad = 0;
+
+    /*  Find the decompression interface here  */
+    reg = nitf_PluginRegistry_getInstance(error);
+    if (!reg)
+    {
+        /*  The plugin registry populated this error */
+        *bad = 1;
+        return NULL;
+    }
+    /*  Now retrieve the comp iface creator  */
+    constructCompIface =
+        nitf_PluginRegistry_retrieveCompConstructor(reg,
+                comp, bad, error);
+    if (*bad)
+    {
+        /*  The plugin registry encountered an error */
+        return NULL;
+    }
+
+    if (constructCompIface == NULL)
+    {
+        /*  We have no compressor registered, so ignore  */
+        nitf_Debug_flogf(stderr,
+                         "****Setting NULL interface for compressor!******\n");
+        return NULL;
+    }
+    compIface =
+        (nitf_CompressionInterface *) (*constructCompIface) (comp,
+                error);
+    if (compIface == NULL)
+    {
+        /*  We had a bad encounter while creating the */
+        /*  compression object.  The error should be populated, */
+        /*  so go home... */
+        *bad = 1;
+    }
+    return compIface;
+}
+
 
 NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
         nitf_ImageSubheader *subheader, nitf_Error * error)
@@ -138,6 +187,9 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
 
     ImageWriterImpl *impl = NULL;
     nitf_ImageWriter *imageWriter = NULL;
+    char compBuf[NITF_IC_SZ + 1];       /* holds the compression string */
+    int bad = 0;
+    nitf_CompressionInterface *compIface = NULL;
 
     impl = (ImageWriterImpl *) NITF_MALLOC(sizeof(ImageWriterImpl));
     if (!impl)
@@ -155,8 +207,24 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
 
     impl->imageSource = NULL;
 
-    /* TODO: currently the compIface is always NULL.. */
-    impl->imageBlocker = nitf_ImageIO_construct(subheader, 0, 0, NULL, NULL, error);
+    /* Check for compression and get compression interface */
+    /* get the compression string */
+
+    nitf_Field_get(subheader->NITF_IC,
+            compBuf, NITF_CONV_STRING, NITF_IC_SZ + 1, error);
+
+    if(memcmp(compBuf, "NC", 2) != 0 && memcmp(compBuf, "NM", 2) != 0)
+    {
+        /* get the decompression interface */
+        compIface = getCompIface(compBuf, &bad, error);
+        if (bad)
+        {
+            /*  The getDecompIface() function failed  */
+            goto CATCH_ERROR;
+        }
+    }
+
+    impl->imageBlocker = nitf_ImageIO_construct(subheader, 0, 0, compIface, NULL, error);
     if (!impl->imageBlocker)
         goto CATCH_ERROR;
 

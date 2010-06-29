@@ -66,6 +66,10 @@
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_C - Complex floating point */
 #define NITF_IMAGE_IO_PIXEL_TYPE_C ((nitf_Uint32) 0x00800000)
 
+/* Psuedo type for 12 bit integer (NBPP == 12 and ABPP = 12) */
+/*! \def NITF_IMAGE_IO_PIXEL_TYPE_12 - 12 bit integer signed or unsigned */
+#define NITF_IMAGE_IO_PIXEL_TYPE_12 ((nitf_Uint32) 0x01000000)
+
 NITF_CXX_GUARD
 
 /*!
@@ -282,6 +286,147 @@ nitf_ImageIO_setPadPixel(nitf_ImageIO * object,
 
 
 /*!
+  \brief nitf_CompressionControl - Compression control object
+
+  The nitf_CompressionControl object manages the writing of blocks for
+  one image segment. The use of this object is not thread safe but the
+  reader objects that are created from it are thread safe if thread safe
+  operations are supported.
+
+  The object has no public fields and may be different for each compression
+  library
+*/
+
+typedef void nitf_CompressionControl;
+
+/*!
+    \brief NITF_COMPRESSION_INTERFACE_OPEN_FUNCTION - Image compression
+  interface open function
+
+  This function pointer type is the type for the open field in the
+  compression interface object. The function creates the interface control
+  object and extracts any required values from the supplied image sub-header
+
+  The plugin object should not retain a reference to the subheader object.
+
+  The plugin may modify subheader values to be consistent with the compression
+  type's BIIF specification. For example a required block size. It may also
+  generate an error if some subheader fields are not the required values.
+
+  \ar subheader          - Associated image subheader
+  \ar error              - Error object
+
+  \return The new nitf_CompressionControl structure or NULL on error
+*/
+
+typedef nitf_CompressionControl *
+(*NITF_COMPRESSION_INTERFACE_OPEN_FUNCTION)
+ (nitf_ImageSubheader * subheader,nitf_Error * error);
+
+/*!
+    \brief NITF_COMPRESSION_INTERFACE_START_FUNCTION - Image compression
+  interface start function
+
+  This function pointer type is the type for the start field in the
+  compression interface object. The function initializes the compression
+
+  \ar object             - The compression control from the open function
+  \ar offset             - File offset to start of compressed data output
+  \ar dataLength         - Length of uncompressed data
+  \ar blockMask          - Block mask, possibly updated during compression
+  \ar padMask            - Pad mask, possibly updated during compression
+  \ar error              - Error object
+
+  \return True on success and false on error
+
+  The mask may be updated as the blocks are written by the write block
+  function or after compression is complete by the end function. Copies
+  of the pointers are maintained internally. If the masks are NULL, then
+  the compression type is unmasked (i.e., C3 v M3)
+
+  In order to avoid major complicated logic in the main library, the start
+  function is responsible for verifying any plugin specific requirements such
+  as allowed pixel size and type
+
+  The plugin may retain the mask pointers and the IO interface supplied to the
+  write block function
+
+  On error, the error object is set
+*/
+
+typedef NITF_BOOL
+(*NITF_COMPRESSION_INTERFACE_START_FUNCTION)
+(nitf_CompressionControl *object,
+ nitf_Uint64 offset,nitf_Uint64 dataLength,
+ nitf_Uint64 * blockMask,
+ nitf_Uint64 * padMask, nitf_Error * error);
+
+/*!
+    \brief NITF_COMPRESSION_INTERFACE_WRITE_BLOCK_FUNCTION - Image
+  compression interface write block function
+
+  This function pointer type is the type for the writeBlock field in the
+  compression interface object. The function writes a block.
+
+  The data is supplied to the compressor in order, starting with the first
+  block. If pad is true, then the block contains pad pixels. If noData is true,
+  then this is a pad-only,missing block. The compression type may or may not
+  support missing blocks.
+
+  \ar object           - Associated compression control
+  \ar handle           - The IO handle for image IO
+  \ar data             - Block data
+  \ar NITF_BOOL pad    - Block contains some pad block
+  \ar NITF_BOOL noData - Block has no data (pad only)
+  \ar error            - Error object
+
+  \return Error flag, false means error
+
+*/
+
+typedef NITF_BOOL (*NITF_COMPRESSION_INTERFACE_WRITE_BLOCK_FUNCTION)
+(nitf_CompressionControl * object, nitf_IOInterface* io,nitf_Uint8 *data,
+    NITF_BOOL pad,NITF_BOOL noData,nitf_Error *error);
+
+/*!
+    \brief NITF_COMPRESSION_INTERFACE_END_FUNCTION - Image compression
+  interface end function
+
+  This function pointer type is the type for the end field in the
+  compression interface object. The function completes the writing of
+  the compressed data and makes any final changes to the block masks
+
+  \ar object          - Associated compression control
+  \ar handle          - The IO handle for image IO
+  \ar error           - Error object
+
+  \return Error flag, false means error
+
+*/
+
+typedef NITF_BOOL (*NITF_COMPRESSION_INTERFACE_END_FUNCTION)
+(nitf_CompressionControl * object,nitf_IOInterface* io,nitf_Error *error);
+
+/*!
+    \brief NITF_COMPRESSION_CONTROL_DESTROY_FUNCTION - Image compression
+    interface control object destructor
+
+  This function pointer type is the type for the destroy field in the
+  compression interface object. The function destroys a interface control
+  object.
+
+  \ar object      - Associated interface control
+
+  \return none
+
+  On error, the error object is set
+*/
+
+typedef void (*NITF_COMPRESSION_CONTROL_DESTROY_FUNCTION)
+(nitf_CompressionControl ** object);
+
+
+/*!
   \brief nitf_DecompressionControl - Decompression control object
  
   The nitf_DecompressionControl object manages the reading of blocks for
@@ -396,7 +541,30 @@ typedef void (*NITF_DECOMPRESSION_CONTROL_DESTROY_FUNCTION)
  
 */
 
-typedef void nitf_CompressionInterface; /* Place holder for now */
+/*!
+  \brief nitf_CompressionInterface - Interface object for compression
+
+  The nitf_CompressionInterface object provides function entry points for
+  compressing image data. Each object handles a particular type of compression.
+
+*/
+
+typedef struct _nitf_CompressionInterface
+{
+    NITF_COMPRESSION_INTERFACE_OPEN_FUNCTION open;
+                           /*!< Open compression */
+    NITF_COMPRESSION_INTERFACE_START_FUNCTION start;
+                           /*!< Start compression */
+    NITF_COMPRESSION_INTERFACE_WRITE_BLOCK_FUNCTION writeBlock;
+                           /*!< Write a block */
+    NITF_COMPRESSION_INTERFACE_END_FUNCTION end;
+                           /*!< End compression */
+    NITF_COMPRESSION_CONTROL_DESTROY_FUNCTION destroyControl;
+                           /*!< Destructor for compression control object */
+    void *internal;
+                           /*!< Pointer to compression specific internal data */
+}
+nitf_CompressionInterface;
 
 /*!
   \brief nitf_DecompressionInterface - Interface object for decompression
