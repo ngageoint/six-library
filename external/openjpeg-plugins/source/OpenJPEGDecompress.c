@@ -350,7 +350,9 @@ NITFPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
 
     bytesLeft = ctrl->fileLength - (offset - ctrl->offset);
     toRead = bytesLeft < bytes ? (OPJ_UINT32)bytesLeft : bytes;
-    if (!nitf_IOInterface_read(ctrl->io, (char*)buf, toRead, &ctrl->error))
+    /*printf("left: %lld, toRead: %d\n", bytesLeft, toRead);*/
+    if (toRead <= 0 || !nitf_IOInterface_read(
+            ctrl->io, (char*)buf, toRead, &ctrl->error))
     {
         return -1;
     }
