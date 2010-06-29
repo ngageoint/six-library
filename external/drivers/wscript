@@ -129,18 +129,18 @@ def build(bld):
     #---------------------------------------------------------------------------
     ###### OPEN JPEG
     if 'OPENJPEG' in env and env['OPENJPEG']:
-        fname = 'openjpeg-v2'
+        fname = 'libopenjpeg-v2-r599'
         driverNode = bld.path.find_dir(fname)
         
-        includes = ('libopenjpeg')
+        includes = ('.')
         sources = ('bio.c', 'cio.c', 'dwt.c', 'event.c', 'image.c', 'j2k.c',
                    'j2k_lib.c', 'jp2.c', 'jpt.c', 'mct.c', 'mqc.c', 'openjpeg.c',
                    'pi.c', 'raw.c', 't1.c', 't2.c', 'tcd.c', 'tgt.c',
                    'function_list.c', 'invert.c', 'profile.c')
         jasper = bld.new_task_gen('cc', 'staticlib', includes=includes,
-                                  source=['libopenjpeg/%s' % s for s in sources],
+                                  source=sources,
                                   target='openjpeg', path=driverNode,
-                                  export_incdirs='libopenjpeg',
+                                  export_incdirs='.',
                                   defines=defList,
                                   env=env.copy(),
                                   name='OPENJPEG')
