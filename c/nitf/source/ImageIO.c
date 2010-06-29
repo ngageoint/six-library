@@ -8843,7 +8843,6 @@ nitf_ImageIO_12PixelOpen(nitf_IOInterface* io,
                         nitf_Error *error)
 {
     nitf_ImageIO_12PixelControl *icntl;
-    uint32_t blockPixelCount;
 
     icntl =
         (nitf_ImageIO_12PixelControl *)
