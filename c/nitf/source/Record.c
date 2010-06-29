@@ -854,7 +854,7 @@ NITFAPI(nitf_ImageSegment *) nitf_Record_newImageSegment(nitf_Record* record,
     nitf_ComponentInfo *info = NULL;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_Uint32 num;
-    int i;
+    nitf_Uint32 i;
     nitf_Version version;
 
 
@@ -945,7 +945,7 @@ nitf_Record_newGraphicSegment(nitf_Record* record,
     nitf_ComponentInfo *info = NULL;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_Uint32 num;
-    int i;
+    nitf_Uint32 i;
     nitf_Version version;
 
     /* Get current num of graphics */
@@ -1053,7 +1053,7 @@ NITFAPI(nitf_TextSegment *) nitf_Record_newTextSegment(nitf_Record* record,
     nitf_ComponentInfo *info = NULL;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_Uint32 num;
-    int i;
+    nitf_Uint32 i;
     nitf_Version version;
 
 
@@ -1159,7 +1159,7 @@ nitf_Record_newDataExtensionSegment(nitf_Record * record,
     nitf_ComponentInfo *info = NULL;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_Uint32 num;
-    int i;
+    nitf_Uint32 i;
     nitf_Version version;
 
     /* Get current num of DEs */
@@ -1262,7 +1262,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeImageSegment(nitf_Record * record,
     nitf_Uint32 num;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_ImageSegment* segment = NULL;
-    int i;
+    nitf_Uint32 i;
     nitf_ListIterator iter = nitf_List_at(record->images, segmentNumber);
     
     if (iter.current == NULL)
@@ -1338,7 +1338,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeGraphicSegment(nitf_Record * record,
     nitf_Uint32 num;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_GraphicSegment* segment = NULL;
-    int i;
+    nitf_Uint32 i;
     nitf_ListIterator iter = nitf_List_at(record->graphics, segmentNumber);
     
     if (iter.current == NULL)
@@ -1412,7 +1412,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeLabelSegment(nitf_Record * record,
     nitf_Uint32 num;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_LabelSegment* segment = NULL;
-    int i;
+    nitf_Uint32 i;
 
     nitf_ListIterator iter = nitf_List_at(record->labels, segmentNumber);
 
@@ -1487,7 +1487,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeTextSegment(nitf_Record * record,
     nitf_Uint32 num;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_TextSegment* segment = NULL;
-    int i;
+    nitf_Uint32 i;
     nitf_ListIterator iter = nitf_List_at(record->texts, segmentNumber);
     
     if (iter.current == NULL)
@@ -1556,7 +1556,7 @@ nitf_Record_removeDataExtensionSegment(nitf_Record * record,
     nitf_Uint32 num;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_DESegment* segment = NULL;
-    int i;
+    nitf_Uint32 i;
     nitf_ListIterator iter = 
         nitf_List_at(record->dataExtensions, segmentNumber);
 
@@ -1629,7 +1629,7 @@ nitf_Record_removeReservedExtensionSegment(nitf_Record * record,
     nitf_Uint32 num;
     nitf_ComponentInfo **infoArray = NULL;
     nitf_RESegment* segment = NULL;
-    int i;
+    nitf_Uint32 i;
 
     nitf_ListIterator iter = 
         nitf_List_at(record->reservedExtensions, segmentNumber);

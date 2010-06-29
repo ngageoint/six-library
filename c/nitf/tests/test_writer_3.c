@@ -508,14 +508,14 @@ void writeDEData(nitf_DESegment * segment,
         if (amtToRead > leftToRead)
             amtToRead = leftToRead;
         fprintf(stderr, "XXX Data Ext C2 %lld\n", amtToRead);
-        if (nitf_SegmentReader_read(reader, buf, amtToRead, error) != NITF_SUCCESS)
+        if (nitf_SegmentReader_read(reader, buf, (size_t)amtToRead, error) != NITF_SUCCESS)
         {
             /* TODO populate error */
             goto CATCH_ERROR;
         }
 
         fprintf(stderr, "XXX Data Ext D %lld\n", amtToRead);
-        if (!nitf_IOHandle_write(file, (const char*)buf, amtToRead, error))
+        if (!nitf_IOHandle_write(file, (const char*)buf, (size_t)amtToRead, error))
             goto CATCH_ERROR;
         fprintf(stderr, "XXX Data Ext E\n");
 

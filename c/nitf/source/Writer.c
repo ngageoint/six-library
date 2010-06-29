@@ -738,11 +738,11 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
                                             nitf_IOInterface* io,
                                             nitf_Error* error)
 {
-    int i;
-    int numImages;
-    int numTexts;
-    int numGraphics;
-    int numDEs;
+    nitf_Int32 i;
+    nitf_Int32 numImages;
+    nitf_Int32 numTexts;
+    nitf_Int32 numGraphics;
+    nitf_Int32 numDEs;
     nitf_ListIterator iter;
 
     if (!writer)
@@ -1132,7 +1132,7 @@ nitf_Writer_writeImageSubheader(nitf_Writer * writer,
                                 nitf_Error * error)
 {
     nitf_Uint32 bands;
-    int i;
+    nitf_Uint32 i;
     nitf_Uint32 numComments;
     nitf_Uint32 udidl, udofl, ixshdl, ixsofl;
     nitf_ListIterator iter, end;
@@ -1608,7 +1608,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
 
     /* Length of teh file header */
     nitf_Uint32 hdrLen;
-    int i = 0;
+    nitf_Uint32 i = 0;
     int skipBytes = 0;
     nitf_Version fver;
 

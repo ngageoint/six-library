@@ -61,7 +61,7 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
                                       nitf_Error * error)
 {
     nitf_Uint8 **user = NULL;
-    int row, band;
+    nitf_Uint32 row, band;
     size_t rowSize;
     nitf_Uint32 numImageBands = 0;
     nitf_Off offset;
@@ -158,8 +158,8 @@ NITFPRIV(nitf_CompressionInterface *) getCompIface(const char *comp,
     if (constructCompIface == NULL)
     {
         /*  We have no compressor registered, so ignore  */
-        nitf_Debug_flogf(stderr,
-                         "****Setting NULL interface for compressor!******\n");
+        /*nitf_Debug_flogf(stderr,
+                         "****Setting NULL interface for compressor!******\n");*/
         return NULL;
     }
     compIface =
