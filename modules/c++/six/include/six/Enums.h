@@ -2586,22 +2586,20 @@ struct RadarModeType
     //! The enumerations allowed
     enum
     {
-        INVALID = 0,
-        NOT_SET = 1,
-        SPOTLIGHT = 2,
-        STRIPMAP = 3,
-        DYNAMIC_STRIPMAP = 4
+        NOT_SET = 0,
+        SPOTLIGHT = 1,
+        STRIPMAP = 2,
+        DYNAMIC_STRIPMAP = 3,
+        SCANSAR = 4
     };
 
     //! Default constructor
-    RadarModeType(){ value = INVALID; }
+    RadarModeType(){ value = NOT_SET; }
 
     //! string constructor
     RadarModeType(std::string s)
     {
-        if (s == "INVALID")
-            value = INVALID;
-        else if (s == "NOT_SET")
+        if (s == "NOT_SET")
             value = NOT_SET;
         else if (s == "SPOTLIGHT")
             value = SPOTLIGHT;
@@ -2609,6 +2607,8 @@ struct RadarModeType
             value = STRIPMAP;
         else if (s == "DYNAMIC_STRIPMAP")
             value = DYNAMIC_STRIPMAP;
+        else if (s == "SCANSAR")
+            value = SCANSAR;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2619,19 +2619,19 @@ struct RadarModeType
         switch(i)
         {
         case 0:
-            value = INVALID;
-            break;
-        case 1:
             value = NOT_SET;
             break;
-        case 2:
+        case 1:
             value = SPOTLIGHT;
             break;
-        case 3:
+        case 2:
             value = STRIPMAP;
             break;
-        case 4:
+        case 3:
             value = DYNAMIC_STRIPMAP;
+            break;
+        case 4:
+            value = SCANSAR;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2647,15 +2647,15 @@ struct RadarModeType
         switch(value)
         {
         case 0:
-            return std::string("INVALID");
-        case 1:
             return std::string("NOT_SET");
-        case 2:
+        case 1:
             return std::string("SPOTLIGHT");
-        case 3:
+        case 2:
             return std::string("STRIPMAP");
-        case 4:
+        case 3:
             return std::string("DYNAMIC_STRIPMAP");
+        case 4:
+            return std::string("SCANSAR");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -3234,7 +3234,7 @@ struct XYZEnum
 
 };
 
-// code auto-generated 2010-06-04 15:33:32.195605
+// code auto-generated 2010-06-30 13:06:09.297233
 
 }
 

@@ -99,23 +99,19 @@ template<> std::string six::toString(const DateTime& dateTime)
 
 template<> std::string six::toString(const RadarModeType& type)
 {
-    std::string mode = "SPOTLIGHT";
     switch (type)
     {
-    case RadarModeType::INVALID:
-        throw except::Exception(Ctxt("Radar mode is not valid!"));
-    case RadarModeType::NOT_SET:
-        throw except::Exception(Ctxt("Radar mode not set!"));
+    case RadarModeType::SPOTLIGHT:
+        return "SPOTLIGHT";
     case RadarModeType::STRIPMAP:
-        mode = "STRIPMAP";
-        break;
+        return "STRIPMAP";
     case RadarModeType::DYNAMIC_STRIPMAP:
-        mode = "DYNAMIC STRIPMAP";
-        break;
+        return "DYNAMIC STRIPMAP";
+    case RadarModeType::SCANSAR:
+        return "SCANSAR";
     default:
-        break;
+        throw except::Exception(Ctxt("Radar mode not set!"));
     }
-    return mode;
 }
 
 template<> RadarModeType six::toType<RadarModeType>(const std::string& s)
@@ -127,10 +123,10 @@ template<> RadarModeType six::toType<RadarModeType>(const std::string& s)
     if (type == "STRIPMAP")
         return RadarModeType::STRIPMAP;
     if (type == "DYNAMIC STRIPMAP")
+        return RadarModeType::SCANSAR;
+    if (type == "SCANSAR")
         return RadarModeType::DYNAMIC_STRIPMAP;
-    if (type.empty())
-        return RadarModeType::NOT_SET;
-    return RadarModeType::INVALID;
+    return RadarModeType::NOT_SET;
 }
 
 template<> std::string six::toString(const DataClass& type)
