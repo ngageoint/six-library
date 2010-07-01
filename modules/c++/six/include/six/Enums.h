@@ -34,6 +34,8 @@
 namespace six
 {
 
+const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
+
 
 /*!
  *  \struct AppliedType 
@@ -45,9 +47,9 @@ struct AppliedType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = -1,
         IS_FALSE = 0,
-        IS_TRUE = 1
+        IS_TRUE = 1,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -56,12 +58,12 @@ struct AppliedType
     //! string constructor
     AppliedType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "IS_FALSE")
+        if (s == "IS_FALSE")
             value = IS_FALSE;
         else if (s == "IS_TRUE")
             value = IS_TRUE;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -71,14 +73,14 @@ struct AppliedType
     {
         switch(i)
         {
-        case -1:
-            value = NOT_SET;
-            break;
         case 0:
             value = IS_FALSE;
             break;
         case 1:
             value = IS_TRUE;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -93,12 +95,12 @@ struct AppliedType
     {
         switch(value)
         {
-        case -1:
-            return std::string("NOT_SET");
         case 0:
             return std::string("IS_FALSE");
         case 1:
             return std::string("IS_TRUE");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -124,6 +126,7 @@ struct AppliedType
     bool operator<=(const AppliedType& o) const { return value <= o.value; }
     bool operator>=(const AppliedType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -141,11 +144,12 @@ struct AutofocusType
     {
         NO = 0,
         GLOBAL = 1,
-        SV = 2
+        SV = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    AutofocusType(){ value = NO; }
+    AutofocusType(){ value = NOT_SET; }
 
     //! string constructor
     AutofocusType(std::string s)
@@ -156,6 +160,8 @@ struct AutofocusType
             value = GLOBAL;
         else if (s == "SV")
             value = SV;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -173,6 +179,9 @@ struct AutofocusType
             break;
         case 2:
             value = SV;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -193,6 +202,8 @@ struct AutofocusType
             return std::string("GLOBAL");
         case 2:
             return std::string("SV");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -218,6 +229,7 @@ struct AutofocusType
     bool operator<=(const AutofocusType& o) const { return value <= o.value; }
     bool operator>=(const AutofocusType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -233,9 +245,9 @@ struct BooleanType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = -1,
         IS_FALSE = 0,
-        IS_TRUE = 1
+        IS_TRUE = 1,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -244,12 +256,12 @@ struct BooleanType
     //! string constructor
     BooleanType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "IS_FALSE")
+        if (s == "IS_FALSE")
             value = IS_FALSE;
         else if (s == "IS_TRUE")
             value = IS_TRUE;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -259,14 +271,14 @@ struct BooleanType
     {
         switch(i)
         {
-        case -1:
-            value = NOT_SET;
-            break;
         case 0:
             value = IS_FALSE;
             break;
         case 1:
             value = IS_TRUE;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -281,12 +293,12 @@ struct BooleanType
     {
         switch(value)
         {
-        case -1:
-            return std::string("NOT_SET");
         case 0:
             return std::string("IS_FALSE");
         case 1:
             return std::string("IS_TRUE");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -312,6 +324,7 @@ struct BooleanType
     bool operator<=(const BooleanType& o) const { return value <= o.value; }
     bool operator>=(const BooleanType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -329,11 +342,12 @@ struct ByteSwapping
     {
         SWAP_OFF = 0,
         SWAP_ON = 1,
-        SWAP_AUTO = 2
+        SWAP_AUTO = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    ByteSwapping(){ value = SWAP_OFF; }
+    ByteSwapping(){ value = NOT_SET; }
 
     //! string constructor
     ByteSwapping(std::string s)
@@ -344,6 +358,8 @@ struct ByteSwapping
             value = SWAP_ON;
         else if (s == "SWAP_AUTO")
             value = SWAP_AUTO;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -361,6 +377,9 @@ struct ByteSwapping
             break;
         case 2:
             value = SWAP_AUTO;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -381,6 +400,8 @@ struct ByteSwapping
             return std::string("SWAP_ON");
         case 2:
             return std::string("SWAP_AUTO");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -406,6 +427,7 @@ struct ByteSwapping
     bool operator<=(const ByteSwapping& o) const { return value <= o.value; }
     bool operator>=(const ByteSwapping& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -421,9 +443,9 @@ struct CollectType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         MONOSTATIC = 1,
-        BISTATIC = 2
+        BISTATIC = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -432,12 +454,12 @@ struct CollectType
     //! string constructor
     CollectType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "MONOSTATIC")
+        if (s == "MONOSTATIC")
             value = MONOSTATIC;
         else if (s == "BISTATIC")
             value = BISTATIC;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -447,14 +469,14 @@ struct CollectType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = MONOSTATIC;
             break;
         case 2:
             value = BISTATIC;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -469,12 +491,12 @@ struct CollectType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("MONOSTATIC");
         case 2:
             return std::string("BISTATIC");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -500,6 +522,7 @@ struct CollectType
     bool operator<=(const CollectType& o) const { return value <= o.value; }
     bool operator>=(const CollectType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -519,11 +542,12 @@ struct ComplexImageGridType
         RGZERO = 1,
         XRGYCR = 2,
         XCTYAT = 3,
-        PLANE = 4
+        PLANE = 4,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    ComplexImageGridType(){ value = RGAZIM; }
+    ComplexImageGridType(){ value = NOT_SET; }
 
     //! string constructor
     ComplexImageGridType(std::string s)
@@ -538,6 +562,8 @@ struct ComplexImageGridType
             value = XCTYAT;
         else if (s == "PLANE")
             value = PLANE;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -562,6 +588,9 @@ struct ComplexImageGridType
         case 4:
             value = PLANE;
             break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
@@ -585,6 +614,8 @@ struct ComplexImageGridType
             return std::string("XCTYAT");
         case 4:
             return std::string("PLANE");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -610,6 +641,7 @@ struct ComplexImageGridType
     bool operator<=(const ComplexImageGridType& o) const { return value <= o.value; }
     bool operator>=(const ComplexImageGridType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -627,11 +659,12 @@ struct ComplexImagePlaneType
     {
         OTHER = 0,
         SLANT = 1,
-        GROUND = 2
+        GROUND = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    ComplexImagePlaneType(){ value = OTHER; }
+    ComplexImagePlaneType(){ value = NOT_SET; }
 
     //! string constructor
     ComplexImagePlaneType(std::string s)
@@ -642,6 +675,8 @@ struct ComplexImagePlaneType
             value = SLANT;
         else if (s == "GROUND")
             value = GROUND;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -659,6 +694,9 @@ struct ComplexImagePlaneType
             break;
         case 2:
             value = GROUND;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -679,6 +717,8 @@ struct ComplexImagePlaneType
             return std::string("SLANT");
         case 2:
             return std::string("GROUND");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -704,6 +744,7 @@ struct ComplexImagePlaneType
     bool operator<=(const ComplexImagePlaneType& o) const { return value <= o.value; }
     bool operator>=(const ComplexImagePlaneType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -722,11 +763,12 @@ struct CornerIndex
         FIRST_ROW_FIRST_COL = 0,
         FIRST_ROW_LAST_COL = 1,
         LAST_ROW_LAST_COL = 2,
-        LAST_ROW_FIRST_COL = 3
+        LAST_ROW_FIRST_COL = 3,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    CornerIndex(){ value = FIRST_ROW_FIRST_COL; }
+    CornerIndex(){ value = NOT_SET; }
 
     //! string constructor
     CornerIndex(std::string s)
@@ -739,6 +781,8 @@ struct CornerIndex
             value = LAST_ROW_LAST_COL;
         else if (s == "LAST_ROW_FIRST_COL")
             value = LAST_ROW_FIRST_COL;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -759,6 +803,9 @@ struct CornerIndex
             break;
         case 3:
             value = LAST_ROW_FIRST_COL;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -781,6 +828,8 @@ struct CornerIndex
             return std::string("LAST_ROW_LAST_COL");
         case 3:
             return std::string("LAST_ROW_FIRST_COL");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -806,6 +855,7 @@ struct CornerIndex
     bool operator<=(const CornerIndex& o) const { return value <= o.value; }
     bool operator>=(const CornerIndex& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -821,23 +871,23 @@ struct DataType
     //! The enumerations allowed
     enum
     {
-        UNKNOWN = 0,
         COMPLEX = 1,
-        DERIVED = 2
+        DERIVED = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    DataType(){ value = UNKNOWN; }
+    DataType(){ value = NOT_SET; }
 
     //! string constructor
     DataType(std::string s)
     {
-        if (s == "UNKNOWN")
-            value = UNKNOWN;
-        else if (s == "COMPLEX")
+        if (s == "COMPLEX")
             value = COMPLEX;
         else if (s == "DERIVED")
             value = DERIVED;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -847,14 +897,14 @@ struct DataType
     {
         switch(i)
         {
-        case 0:
-            value = UNKNOWN;
-            break;
         case 1:
             value = COMPLEX;
             break;
         case 2:
             value = DERIVED;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -869,12 +919,12 @@ struct DataType
     {
         switch(value)
         {
-        case 0:
-            return std::string("UNKNOWN");
         case 1:
             return std::string("COMPLEX");
         case 2:
             return std::string("DERIVED");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -900,6 +950,7 @@ struct DataType
     bool operator<=(const DataType& o) const { return value <= o.value; }
     bool operator>=(const DataType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -915,11 +966,11 @@ struct DecimationMethod
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         NEAREST_NEIGHBOR = 1,
         BILINEAR = 2,
         BRIGHTEST_PIXEL = 3,
-        LAGRANGE = 4
+        LAGRANGE = 4,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -928,9 +979,7 @@ struct DecimationMethod
     //! string constructor
     DecimationMethod(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "NEAREST_NEIGHBOR")
+        if (s == "NEAREST_NEIGHBOR")
             value = NEAREST_NEIGHBOR;
         else if (s == "BILINEAR")
             value = BILINEAR;
@@ -938,6 +987,8 @@ struct DecimationMethod
             value = BRIGHTEST_PIXEL;
         else if (s == "LAGRANGE")
             value = LAGRANGE;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -947,9 +998,6 @@ struct DecimationMethod
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = NEAREST_NEIGHBOR;
             break;
@@ -961,6 +1009,9 @@ struct DecimationMethod
             break;
         case 4:
             value = LAGRANGE;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -975,8 +1026,6 @@ struct DecimationMethod
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("NEAREST_NEIGHBOR");
         case 2:
@@ -985,6 +1034,8 @@ struct DecimationMethod
             return std::string("BRIGHTEST_PIXEL");
         case 4:
             return std::string("LAGRANGE");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1010,6 +1061,7 @@ struct DecimationMethod
     bool operator<=(const DecimationMethod& o) const { return value <= o.value; }
     bool operator>=(const DecimationMethod& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1025,9 +1077,9 @@ struct DemodType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         STRETCH = 1,
-        CHIRP = 2
+        CHIRP = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -1036,12 +1088,12 @@ struct DemodType
     //! string constructor
     DemodType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "STRETCH")
+        if (s == "STRETCH")
             value = STRETCH;
         else if (s == "CHIRP")
             value = CHIRP;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1051,14 +1103,14 @@ struct DemodType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = STRETCH;
             break;
         case 2:
             value = CHIRP;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -1073,12 +1125,12 @@ struct DemodType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("STRETCH");
         case 2:
             return std::string("CHIRP");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1104,6 +1156,7 @@ struct DemodType
     bool operator<=(const DemodType& o) const { return value <= o.value; }
     bool operator>=(const DemodType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1119,9 +1172,9 @@ struct DisplayType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         COLOR = 1,
-        MONO = 2
+        MONO = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -1130,12 +1183,12 @@ struct DisplayType
     //! string constructor
     DisplayType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "COLOR")
+        if (s == "COLOR")
             value = COLOR;
         else if (s == "MONO")
             value = MONO;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1145,14 +1198,14 @@ struct DisplayType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = COLOR;
             break;
         case 2:
             value = MONO;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -1167,12 +1220,12 @@ struct DisplayType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("COLOR");
         case 2:
             return std::string("MONO");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1198,6 +1251,7 @@ struct DisplayType
     bool operator<=(const DisplayType& o) const { return value <= o.value; }
     bool operator>=(const DisplayType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1213,7 +1267,6 @@ struct DualPolarizationType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         OTHER = 1,
         V_V = 2,
         V_H = 3,
@@ -1221,7 +1274,8 @@ struct DualPolarizationType
         H_H = 5,
         RHC_RHC = 6,
         RHC_LHC = 7,
-        LHC_LHC = 8
+        LHC_LHC = 8,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -1230,9 +1284,7 @@ struct DualPolarizationType
     //! string constructor
     DualPolarizationType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "OTHER")
+        if (s == "OTHER")
             value = OTHER;
         else if (s == "V_V")
             value = V_V;
@@ -1248,6 +1300,8 @@ struct DualPolarizationType
             value = RHC_LHC;
         else if (s == "LHC_LHC")
             value = LHC_LHC;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1257,9 +1311,6 @@ struct DualPolarizationType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = OTHER;
             break;
@@ -1284,6 +1335,9 @@ struct DualPolarizationType
         case 8:
             value = LHC_LHC;
             break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
         }
@@ -1297,8 +1351,6 @@ struct DualPolarizationType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("OTHER");
         case 2:
@@ -1315,6 +1367,8 @@ struct DualPolarizationType
             return std::string("RHC_LHC");
         case 8:
             return std::string("LHC_LHC");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1340,6 +1394,7 @@ struct DualPolarizationType
     bool operator<=(const DualPolarizationType& o) const { return value <= o.value; }
     bool operator>=(const DualPolarizationType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1355,8 +1410,8 @@ struct EarthModelType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
-        WGS84 = 1
+        WGS84 = 1,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -1365,10 +1420,10 @@ struct EarthModelType
     //! string constructor
     EarthModelType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "WGS84")
+        if (s == "WGS84")
             value = WGS84;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1378,11 +1433,11 @@ struct EarthModelType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = WGS84;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -1397,10 +1452,10 @@ struct EarthModelType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("WGS84");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1426,6 +1481,7 @@ struct EarthModelType
     bool operator<=(const EarthModelType& o) const { return value <= o.value; }
     bool operator>=(const EarthModelType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1442,8 +1498,8 @@ struct FFTSign
     enum
     {
         NEG = -1,
-        NOT_SET = 0,
-        POS = 1
+        POS = 1,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -1454,10 +1510,10 @@ struct FFTSign
     {
         if (s == "NEG")
             value = NEG;
-        else if (s == "NOT_SET")
-            value = NOT_SET;
         else if (s == "POS")
             value = POS;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1470,11 +1526,11 @@ struct FFTSign
         case -1:
             value = NEG;
             break;
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = POS;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -1491,10 +1547,10 @@ struct FFTSign
         {
         case -1:
             return std::string("NEG");
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("POS");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1520,6 +1576,7 @@ struct FFTSign
     bool operator<=(const FFTSign& o) const { return value <= o.value; }
     bool operator>=(const FFTSign& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1537,11 +1594,12 @@ struct FrameType
     {
         ECF = 0,
         RIC_ECF = 1,
-        RIC_ECI = 2
+        RIC_ECI = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    FrameType(){ value = ECF; }
+    FrameType(){ value = NOT_SET; }
 
     //! string constructor
     FrameType(std::string s)
@@ -1552,6 +1610,8 @@ struct FrameType
             value = RIC_ECF;
         else if (s == "RIC_ECI")
             value = RIC_ECI;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1569,6 +1629,9 @@ struct FrameType
             break;
         case 2:
             value = RIC_ECI;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -1589,6 +1652,8 @@ struct FrameType
             return std::string("RIC_ECF");
         case 2:
             return std::string("RIC_ECI");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1614,6 +1679,7 @@ struct FrameType
     bool operator<=(const FrameType& o) const { return value <= o.value; }
     bool operator>=(const FrameType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1630,11 +1696,12 @@ struct ImageBeamCompensationType
     enum
     {
         NO = 0,
-        SV = 1
+        SV = 1,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    ImageBeamCompensationType(){ value = NO; }
+    ImageBeamCompensationType(){ value = NOT_SET; }
 
     //! string constructor
     ImageBeamCompensationType(std::string s)
@@ -1643,6 +1710,8 @@ struct ImageBeamCompensationType
             value = NO;
         else if (s == "SV")
             value = SV;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1657,6 +1726,9 @@ struct ImageBeamCompensationType
             break;
         case 1:
             value = SV;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -1675,6 +1747,8 @@ struct ImageBeamCompensationType
             return std::string("NO");
         case 1:
             return std::string("SV");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1700,6 +1774,7 @@ struct ImageBeamCompensationType
     bool operator<=(const ImageBeamCompensationType& o) const { return value <= o.value; }
     bool operator>=(const ImageBeamCompensationType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1718,11 +1793,12 @@ struct ImageFormationType
         OTHER = 0,
         PFA = 1,
         RMA = 2,
-        RGAZCOMP = 3
+        RGAZCOMP = 3,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    ImageFormationType(){ value = OTHER; }
+    ImageFormationType(){ value = NOT_SET; }
 
     //! string constructor
     ImageFormationType(std::string s)
@@ -1735,6 +1811,8 @@ struct ImageFormationType
             value = RMA;
         else if (s == "RGAZCOMP")
             value = RGAZCOMP;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1755,6 +1833,9 @@ struct ImageFormationType
             break;
         case 3:
             value = RGAZCOMP;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -1777,6 +1858,8 @@ struct ImageFormationType
             return std::string("RMA");
         case 3:
             return std::string("RGAZCOMP");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1802,6 +1885,7 @@ struct ImageFormationType
     bool operator<=(const ImageFormationType& o) const { return value <= o.value; }
     bool operator>=(const ImageFormationType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1817,9 +1901,9 @@ struct MagnificationMethod
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         NEAREST_NEIGHBOR = 1,
-        BILINEAR = 2
+        BILINEAR = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -1828,12 +1912,12 @@ struct MagnificationMethod
     //! string constructor
     MagnificationMethod(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "NEAREST_NEIGHBOR")
+        if (s == "NEAREST_NEIGHBOR")
             value = NEAREST_NEIGHBOR;
         else if (s == "BILINEAR")
             value = BILINEAR;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1843,14 +1927,14 @@ struct MagnificationMethod
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = NEAREST_NEIGHBOR;
             break;
         case 2:
             value = BILINEAR;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -1865,12 +1949,12 @@ struct MagnificationMethod
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("NEAREST_NEIGHBOR");
         case 2:
             return std::string("BILINEAR");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -1896,6 +1980,7 @@ struct MagnificationMethod
     bool operator<=(const MagnificationMethod& o) const { return value <= o.value; }
     bool operator>=(const MagnificationMethod& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -1911,12 +1996,12 @@ struct OrientationType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         UP = 1,
         DOWN = 2,
         LEFT = 3,
         RIGHT = 4,
-        ARBITRARY = 5
+        ARBITRARY = 5,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -1925,9 +2010,7 @@ struct OrientationType
     //! string constructor
     OrientationType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "UP")
+        if (s == "UP")
             value = UP;
         else if (s == "DOWN")
             value = DOWN;
@@ -1937,6 +2020,8 @@ struct OrientationType
             value = RIGHT;
         else if (s == "ARBITRARY")
             value = ARBITRARY;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -1946,9 +2031,6 @@ struct OrientationType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = UP;
             break;
@@ -1963,6 +2045,9 @@ struct OrientationType
             break;
         case 5:
             value = ARBITRARY;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -1977,8 +2062,6 @@ struct OrientationType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("UP");
         case 2:
@@ -1989,6 +2072,8 @@ struct OrientationType
             return std::string("RIGHT");
         case 5:
             return std::string("ARBITRARY");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2014,6 +2099,7 @@ struct OrientationType
     bool operator<=(const OrientationType& o) const { return value <= o.value; }
     bool operator>=(const OrientationType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2029,38 +2115,41 @@ struct PixelType
     //! The enumerations allowed
     enum
     {
-        UNDEFINED = 0,
         RE32F_IM32F = 1,
         RE16I_IM16I = 2,
-        MONO8I = 3,
-        MONO16I = 4,
+        AMP8I_PHS8I = 3,
+        MONO8I = 4,
         MONO8LU = 5,
-        RGB8LU = 6,
-        RGB24I = 7
+        MONO16I = 6,
+        RGB8LU = 7,
+        RGB24I = 8,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    PixelType(){ value = UNDEFINED; }
+    PixelType(){ value = NOT_SET; }
 
     //! string constructor
     PixelType(std::string s)
     {
-        if (s == "UNDEFINED")
-            value = UNDEFINED;
-        else if (s == "RE32F_IM32F")
+        if (s == "RE32F_IM32F")
             value = RE32F_IM32F;
         else if (s == "RE16I_IM16I")
             value = RE16I_IM16I;
+        else if (s == "AMP8I_PHS8I")
+            value = AMP8I_PHS8I;
         else if (s == "MONO8I")
             value = MONO8I;
-        else if (s == "MONO16I")
-            value = MONO16I;
         else if (s == "MONO8LU")
             value = MONO8LU;
+        else if (s == "MONO16I")
+            value = MONO16I;
         else if (s == "RGB8LU")
             value = RGB8LU;
         else if (s == "RGB24I")
             value = RGB24I;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2070,9 +2159,6 @@ struct PixelType
     {
         switch(i)
         {
-        case 0:
-            value = UNDEFINED;
-            break;
         case 1:
             value = RE32F_IM32F;
             break;
@@ -2080,19 +2166,25 @@ struct PixelType
             value = RE16I_IM16I;
             break;
         case 3:
-            value = MONO8I;
+            value = AMP8I_PHS8I;
             break;
         case 4:
-            value = MONO16I;
+            value = MONO8I;
             break;
         case 5:
             value = MONO8LU;
             break;
         case 6:
-            value = RGB8LU;
+            value = MONO16I;
             break;
         case 7:
+            value = RGB8LU;
+            break;
+        case 8:
             value = RGB24I;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2107,22 +2199,24 @@ struct PixelType
     {
         switch(value)
         {
-        case 0:
-            return std::string("UNDEFINED");
         case 1:
             return std::string("RE32F_IM32F");
         case 2:
             return std::string("RE16I_IM16I");
         case 3:
-            return std::string("MONO8I");
+            return std::string("AMP8I_PHS8I");
         case 4:
-            return std::string("MONO16I");
+            return std::string("MONO8I");
         case 5:
             return std::string("MONO8LU");
         case 6:
-            return std::string("RGB8LU");
+            return std::string("MONO16I");
         case 7:
+            return std::string("RGB8LU");
+        case 8:
             return std::string("RGB24I");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2148,6 +2242,7 @@ struct PixelType
     bool operator<=(const PixelType& o) const { return value <= o.value; }
     bool operator>=(const PixelType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2163,12 +2258,12 @@ struct PolarizationType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         OTHER = 1,
         V = 2,
         H = 3,
         RHC = 4,
-        LHC = 5
+        LHC = 5,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -2177,9 +2272,7 @@ struct PolarizationType
     //! string constructor
     PolarizationType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "OTHER")
+        if (s == "OTHER")
             value = OTHER;
         else if (s == "V")
             value = V;
@@ -2189,6 +2282,8 @@ struct PolarizationType
             value = RHC;
         else if (s == "LHC")
             value = LHC;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2198,9 +2293,6 @@ struct PolarizationType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = OTHER;
             break;
@@ -2215,6 +2307,9 @@ struct PolarizationType
             break;
         case 5:
             value = LHC;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2229,8 +2324,6 @@ struct PolarizationType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("OTHER");
         case 2:
@@ -2241,6 +2334,8 @@ struct PolarizationType
             return std::string("RHC");
         case 5:
             return std::string("LHC");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2266,6 +2361,7 @@ struct PolarizationType
     bool operator<=(const PolarizationType& o) const { return value <= o.value; }
     bool operator>=(const PolarizationType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2281,11 +2377,11 @@ struct ProjectionType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         PLANE = 1,
         GEOGRAPHIC = 2,
         CYLINDRICAL = 3,
-        POLYNOMIAL = 4
+        POLYNOMIAL = 4,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -2294,9 +2390,7 @@ struct ProjectionType
     //! string constructor
     ProjectionType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "PLANE")
+        if (s == "PLANE")
             value = PLANE;
         else if (s == "GEOGRAPHIC")
             value = GEOGRAPHIC;
@@ -2304,6 +2398,8 @@ struct ProjectionType
             value = CYLINDRICAL;
         else if (s == "POLYNOMIAL")
             value = POLYNOMIAL;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2313,9 +2409,6 @@ struct ProjectionType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = PLANE;
             break;
@@ -2327,6 +2420,9 @@ struct ProjectionType
             break;
         case 4:
             value = POLYNOMIAL;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2341,8 +2437,6 @@ struct ProjectionType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("PLANE");
         case 2:
@@ -2351,6 +2445,8 @@ struct ProjectionType
             return std::string("CYLINDRICAL");
         case 4:
             return std::string("POLYNOMIAL");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2376,6 +2472,7 @@ struct ProjectionType
     bool operator<=(const ProjectionType& o) const { return value <= o.value; }
     bool operator>=(const ProjectionType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2391,10 +2488,10 @@ struct RMAlgoType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         OMEGA_K = 1,
         CSA = 2,
-        RG_DOP = 3
+        RG_DOP = 3,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -2403,14 +2500,14 @@ struct RMAlgoType
     //! string constructor
     RMAlgoType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "OMEGA_K")
+        if (s == "OMEGA_K")
             value = OMEGA_K;
         else if (s == "CSA")
             value = CSA;
         else if (s == "RG_DOP")
             value = RG_DOP;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2420,9 +2517,6 @@ struct RMAlgoType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = OMEGA_K;
             break;
@@ -2431,6 +2525,9 @@ struct RMAlgoType
             break;
         case 3:
             value = RG_DOP;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2445,14 +2542,14 @@ struct RMAlgoType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("OMEGA_K");
         case 2:
             return std::string("CSA");
         case 3:
             return std::string("RG_DOP");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2478,6 +2575,7 @@ struct RMAlgoType
     bool operator<=(const RMAlgoType& o) const { return value <= o.value; }
     bool operator>=(const RMAlgoType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2493,11 +2591,11 @@ struct RadarModeType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         SPOTLIGHT = 1,
         STRIPMAP = 2,
         DYNAMIC_STRIPMAP = 3,
-        SCANSAR = 4
+        SCANSAR = 4,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -2506,9 +2604,7 @@ struct RadarModeType
     //! string constructor
     RadarModeType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "SPOTLIGHT")
+        if (s == "SPOTLIGHT")
             value = SPOTLIGHT;
         else if (s == "STRIPMAP")
             value = STRIPMAP;
@@ -2516,6 +2612,8 @@ struct RadarModeType
             value = DYNAMIC_STRIPMAP;
         else if (s == "SCANSAR")
             value = SCANSAR;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2525,9 +2623,6 @@ struct RadarModeType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = SPOTLIGHT;
             break;
@@ -2539,6 +2634,9 @@ struct RadarModeType
             break;
         case 4:
             value = SCANSAR;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2553,8 +2651,6 @@ struct RadarModeType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("SPOTLIGHT");
         case 2:
@@ -2563,6 +2659,8 @@ struct RadarModeType
             return std::string("DYNAMIC_STRIPMAP");
         case 4:
             return std::string("SCANSAR");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2588,6 +2686,7 @@ struct RadarModeType
     bool operator<=(const RadarModeType& o) const { return value <= o.value; }
     bool operator>=(const RadarModeType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2603,9 +2702,9 @@ struct RegionType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         SUB_REGION = 1,
-        GEOGRAPHIC_INFO = 2
+        GEOGRAPHIC_INFO = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -2614,12 +2713,12 @@ struct RegionType
     //! string constructor
     RegionType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "SUB_REGION")
+        if (s == "SUB_REGION")
             value = SUB_REGION;
         else if (s == "GEOGRAPHIC_INFO")
             value = GEOGRAPHIC_INFO;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2629,14 +2728,14 @@ struct RegionType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case 1:
             value = SUB_REGION;
             break;
         case 2:
             value = GEOGRAPHIC_INFO;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2651,12 +2750,12 @@ struct RegionType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case 1:
             return std::string("SUB_REGION");
         case 2:
             return std::string("GEOGRAPHIC_INFO");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2682,6 +2781,7 @@ struct RegionType
     bool operator<=(const RegionType& o) const { return value <= o.value; }
     bool operator>=(const RegionType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2698,11 +2798,12 @@ struct RowColEnum
     enum
     {
         ROW = 0,
-        COL = 1
+        COL = 1,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    RowColEnum(){ value = ROW; }
+    RowColEnum(){ value = NOT_SET; }
 
     //! string constructor
     RowColEnum(std::string s)
@@ -2711,6 +2812,8 @@ struct RowColEnum
             value = ROW;
         else if (s == "COL")
             value = COL;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2725,6 +2828,9 @@ struct RowColEnum
             break;
         case 1:
             value = COL;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2743,6 +2849,8 @@ struct RowColEnum
             return std::string("ROW");
         case 1:
             return std::string("COL");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2768,6 +2876,7 @@ struct RowColEnum
     bool operator<=(const RowColEnum& o) const { return value <= o.value; }
     bool operator>=(const RowColEnum& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2784,11 +2893,12 @@ struct SCPType
     enum
     {
         SCP_ROW_COL = 0,
-        SCP_RG_AZ = 1
+        SCP_RG_AZ = 1,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    SCPType(){ value = SCP_ROW_COL; }
+    SCPType(){ value = NOT_SET; }
 
     //! string constructor
     SCPType(std::string s)
@@ -2797,6 +2907,8 @@ struct SCPType
             value = SCP_ROW_COL;
         else if (s == "SCP_RG_AZ")
             value = SCP_RG_AZ;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2811,6 +2923,9 @@ struct SCPType
             break;
         case 1:
             value = SCP_RG_AZ;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2829,6 +2944,8 @@ struct SCPType
             return std::string("SCP_ROW_COL");
         case 1:
             return std::string("SCP_RG_AZ");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2854,6 +2971,7 @@ struct SCPType
     bool operator<=(const SCPType& o) const { return value <= o.value; }
     bool operator>=(const SCPType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2869,9 +2987,9 @@ struct SideOfTrackType
     //! The enumerations allowed
     enum
     {
-        NOT_SET = 0,
         LEFT = scene::TRACK_LEFT,
-        RIGHT = scene::TRACK_RIGHT
+        RIGHT = scene::TRACK_RIGHT,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
@@ -2880,12 +2998,12 @@ struct SideOfTrackType
     //! string constructor
     SideOfTrackType(std::string s)
     {
-        if (s == "NOT_SET")
-            value = NOT_SET;
-        else if (s == "LEFT")
+        if (s == "LEFT")
             value = LEFT;
         else if (s == "RIGHT")
             value = RIGHT;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2895,14 +3013,14 @@ struct SideOfTrackType
     {
         switch(i)
         {
-        case 0:
-            value = NOT_SET;
-            break;
         case scene::TRACK_LEFT:
             value = LEFT;
             break;
         case scene::TRACK_RIGHT:
             value = RIGHT;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -2917,12 +3035,12 @@ struct SideOfTrackType
     {
         switch(value)
         {
-        case 0:
-            return std::string("NOT_SET");
         case scene::TRACK_LEFT:
             return std::string("LEFT");
         case scene::TRACK_RIGHT:
             return std::string("RIGHT");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -2948,6 +3066,7 @@ struct SideOfTrackType
     bool operator<=(const SideOfTrackType& o) const { return value <= o.value; }
     bool operator>=(const SideOfTrackType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -2965,11 +3084,12 @@ struct SlowTimeBeamCompensationType
     {
         NO = 0,
         GLOBAL = 1,
-        SV = 2
+        SV = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    SlowTimeBeamCompensationType(){ value = NO; }
+    SlowTimeBeamCompensationType(){ value = NOT_SET; }
 
     //! string constructor
     SlowTimeBeamCompensationType(std::string s)
@@ -2980,6 +3100,8 @@ struct SlowTimeBeamCompensationType
             value = GLOBAL;
         else if (s == "SV")
             value = SV;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -2997,6 +3119,9 @@ struct SlowTimeBeamCompensationType
             break;
         case 2:
             value = SV;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -3017,6 +3142,8 @@ struct SlowTimeBeamCompensationType
             return std::string("GLOBAL");
         case 2:
             return std::string("SV");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -3042,6 +3169,7 @@ struct SlowTimeBeamCompensationType
     bool operator<=(const SlowTimeBeamCompensationType& o) const { return value <= o.value; }
     bool operator>=(const SlowTimeBeamCompensationType& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
@@ -3059,11 +3187,12 @@ struct XYZEnum
     {
         X = 0,
         Y = 1,
-        Z = 2
+        Z = 2,
+        NOT_SET = six::NOT_SET_VALUE
     };
 
     //! Default constructor
-    XYZEnum(){ value = X; }
+    XYZEnum(){ value = NOT_SET; }
 
     //! string constructor
     XYZEnum(std::string s)
@@ -3074,6 +3203,8 @@ struct XYZEnum
             value = Y;
         else if (s == "Z")
             value = Z;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -3091,6 +3222,9 @@ struct XYZEnum
             break;
         case 2:
             value = Z;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -3111,6 +3245,8 @@ struct XYZEnum
             return std::string("Y");
         case 2:
             return std::string("Z");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -3136,12 +3272,13 @@ struct XYZEnum
     bool operator<=(const XYZEnum& o) const { return value <= o.value; }
     bool operator>=(const XYZEnum& o) const { return value >= o.value; }
     operator int() const { return value; }
+    operator std::string() const { return toString(); }
 
     int value;
 
 };
 
-// code auto-generated 2010-07-01 11:25:56.849839
+// code auto-generated 2010-07-01 17:07:15.815500
 
 }
 

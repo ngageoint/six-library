@@ -28,7 +28,7 @@ Display::Display(DisplayType displayType) :
     remapInformation(NULL), histogramOverrides(NULL),
             monitorCompensationApplied(NULL)
 {
-    pixelType = PixelType::UNDEFINED;
+    pixelType = PixelType::NOT_SET;
     magnificationMethod = MagnificationMethod::NOT_SET;
     decimationMethod = DecimationMethod::NOT_SET;
 

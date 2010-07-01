@@ -35,11 +35,6 @@ using namespace six;
 /*         return s.length(); */
 /*     } */
 
-template<> DataType Init::undefined<DataType>()
-{
-    return DataType::UNKNOWN;
-}
-
 template<> std::string Init::undefined<std::string>()
 {
     return std::string("");
@@ -105,28 +100,6 @@ template<> double Init::undefined<double>()
 /*         return d != std::numeric_limits<double>::infinity(); */
 /*     } */
 
-template<> EarthModelType Init::undefined<EarthModelType>()
-{
-    return EarthModelType::NOT_SET;
-}
-template<> PixelType Init::undefined<PixelType>()
-{
-    return PixelType::UNDEFINED;
-}
-template<> MagnificationMethod Init::undefined<MagnificationMethod>()
-{
-    return MagnificationMethod::NOT_SET;
-}
-
-template<> DecimationMethod Init::undefined<DecimationMethod>()
-{
-    return DecimationMethod::NOT_SET;
-}
-
-template<> RadarModeType Init::undefined<RadarModeType>()
-{
-    return RadarModeType::NOT_SET;
-}
 
 template<> RangeAzimuth<double>Init::undefined<RangeAzimuth<double> >()
 {
@@ -160,11 +133,6 @@ template<> DateTime Init::undefined<DateTime>()
     return DateTime(0.0);
 }
 
-template<> CollectType Init::undefined<CollectType>()
-{
-    return CollectType::NOT_SET;
-}
-
 template<> Vector3 Init::undefined<Vector3>()
 {
     return Vector3(Init::undefined<double>());
@@ -183,30 +151,11 @@ template<> LatLon Init::undefined<LatLon>()
 //                         Init::undefined<LatLon>());
 // }
 
-template<> BooleanType Init::undefined<BooleanType>()
-{
-    return BooleanType::NOT_SET;
-}
-
-template<> SideOfTrackType Init::undefined<SideOfTrackType>()
-{
-    return SideOfTrackType::NOT_SET;
-}
 
 template<> ReferencePoint Init::undefined<ReferencePoint>()
 {
     double ud = Init::undefined<double>();
     return ReferencePoint(ud, ud, ud, ud, ud);
-}
-
-template<> FFTSign Init::undefined<FFTSign>()
-{
-    return FFTSign::NOT_SET;
-}
-
-template<> AppliedType Init::undefined<AppliedType>()
-{
-    return AppliedType::NOT_SET;
 }
 
 template<> Poly1D Init::undefined<Poly1D>()
@@ -233,11 +182,159 @@ template<> Parameter Init::undefined<Parameter>()
 {
     return Parameter();
 }
+
+
+template<> AppliedType Init::undefined<AppliedType>()
+{
+    return AppliedType::NOT_SET;
+}
+
+template<> AutofocusType Init::undefined<AutofocusType>()
+{
+    return AutofocusType::NOT_SET;
+}
+
+template<> BooleanType Init::undefined<BooleanType>()
+{
+    return BooleanType::NOT_SET;
+}
+
+template<> ByteSwapping Init::undefined<ByteSwapping>()
+{
+    return ByteSwapping::NOT_SET;
+}
+
+template<> CollectType Init::undefined<CollectType>()
+{
+    return CollectType::NOT_SET;
+}
+
+template<> ComplexImageGridType Init::undefined<ComplexImageGridType>()
+{
+    return ComplexImageGridType::NOT_SET;
+}
+
+template<> ComplexImagePlaneType Init::undefined<ComplexImagePlaneType>()
+{
+    return ComplexImagePlaneType::NOT_SET;
+}
+
+template<> CornerIndex Init::undefined<CornerIndex>()
+{
+    return CornerIndex::NOT_SET;
+}
+
+template<> DataType Init::undefined<DataType>()
+{
+    return DataType::NOT_SET;
+}
+
+template<> DecimationMethod Init::undefined<DecimationMethod>()
+{
+    return DecimationMethod::NOT_SET;
+}
+
+template<> DemodType Init::undefined<DemodType>()
+{
+    return DemodType::NOT_SET;
+}
+
+template<> DisplayType Init::undefined<DisplayType>()
+{
+    return DisplayType::NOT_SET;
+}
+
+template<> DualPolarizationType Init::undefined<DualPolarizationType>()
+{
+    return DualPolarizationType::NOT_SET;
+}
+
+template<> EarthModelType Init::undefined<EarthModelType>()
+{
+    return EarthModelType::NOT_SET;
+}
+
+template<> FFTSign Init::undefined<FFTSign>()
+{
+    return FFTSign::NOT_SET;
+}
+
+template<> FrameType Init::undefined<FrameType>()
+{
+    return FrameType::NOT_SET;
+}
+
+template<> ImageBeamCompensationType Init::undefined<ImageBeamCompensationType>()
+{
+    return ImageBeamCompensationType::NOT_SET;
+}
+
+template<> ImageFormationType Init::undefined<ImageFormationType>()
+{
+    return ImageFormationType::NOT_SET;
+}
+
+template<> MagnificationMethod Init::undefined<MagnificationMethod>()
+{
+    return MagnificationMethod::NOT_SET;
+}
+
+template<> OrientationType Init::undefined<OrientationType>()
+{
+    return OrientationType::NOT_SET;
+}
+
+template<> PixelType Init::undefined<PixelType>()
+{
+    return PixelType::NOT_SET;
+}
+
 template<> PolarizationType Init::undefined<PolarizationType>()
 {
     return PolarizationType::NOT_SET;
 }
-template<> DualPolarizationType Init::undefined<DualPolarizationType>()
+
+template<> ProjectionType Init::undefined<ProjectionType>()
 {
-    return DualPolarizationType::NOT_SET;
+    return ProjectionType::NOT_SET;
+}
+
+template<> RMAlgoType Init::undefined<RMAlgoType>()
+{
+    return RMAlgoType::NOT_SET;
+}
+
+template<> RadarModeType Init::undefined<RadarModeType>()
+{
+    return RadarModeType::NOT_SET;
+}
+
+template<> RegionType Init::undefined<RegionType>()
+{
+    return RegionType::NOT_SET;
+}
+
+template<> RowColEnum Init::undefined<RowColEnum>()
+{
+    return RowColEnum::NOT_SET;
+}
+
+template<> SCPType Init::undefined<SCPType>()
+{
+    return SCPType::NOT_SET;
+}
+
+template<> SideOfTrackType Init::undefined<SideOfTrackType>()
+{
+    return SideOfTrackType::NOT_SET;
+}
+
+template<> SlowTimeBeamCompensationType Init::undefined<SlowTimeBeamCompensationType>()
+{
+    return SlowTimeBeamCompensationType::NOT_SET;
+}
+
+template<> XYZEnum Init::undefined<XYZEnum>()
+{
+    return XYZEnum::NOT_SET;
 }

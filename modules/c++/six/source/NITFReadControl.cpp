@@ -37,7 +37,7 @@ DataType NITFReadControl::getDataType(std::string fromFile)
         else if (str::startsWith(title, "SIDD"))
             return DataType::DERIVED;
     }
-    return DataType::UNKNOWN;
+    return DataType::NOT_SET;
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
