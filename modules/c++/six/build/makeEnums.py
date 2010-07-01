@@ -25,7 +25,9 @@ def makeEnums(filenames):
             if name == '__default__':
                 dflt = int(value)
                 continue
-            value = int(value)
+            try:
+                value = int(value)
+            except:{}
             values.append((name, value))
         
         #sort by value
@@ -35,7 +37,10 @@ def makeEnums(filenames):
             elif x[1] == y[1]:
                 return 0
             return 1
-        values = sorted(values, cmp=cmpValues)
+        
+        try:
+            values = sorted(values, cmp=cmpValues)
+        except:{}
         
         if dflt is not None:
             for (name, value) in values:
@@ -81,8 +86,10 @@ def makeEnums(filenames):
         for (i, (name, value)) in enumerate(values):
             if value is not None:
                 idx = value
-            s.write('        case %d:\n            value = %s;\n            break;\n' % (idx, name))
-            idx += 1
+            s.write('        case %s:\n            value = %s;\n            break;\n' % (idx, name))
+            try:
+                idx += 1
+            except:{}
         s.write('        default:\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));\n')
         s.write('        }\n    }\n\n')
         
@@ -95,8 +102,10 @@ def makeEnums(filenames):
         for (i, (name, value)) in enumerate(values):
             if value is not None:
                 idx = value
-            s.write('        case %d:\n            return std::string("%s");\n' % (idx, name))
-            idx += 1
+            s.write('        case %s:\n            return std::string("%s");\n' % (idx, name))
+            try:
+                idx += 1
+            except:{}
         s.write('        default:\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));\n')
         s.write('        }\n    }\n\n')
         
