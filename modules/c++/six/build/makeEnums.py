@@ -23,7 +23,10 @@ def makeEnums(filenames):
         for (name, value) in c.items(enum):
             name, value = map(lambda x: x.strip(), [name, value])
             if name == '__default__':
-                dflt = int(value)
+                dflt = value
+                try:
+                    dflt = int(dflt)
+                except:{}
                 continue
             try:
                 value = int(value)
@@ -123,10 +126,14 @@ def makeEnums(filenames):
         s.write('    bool operator>(const %s& o) const { return value > o.value; }\n' % enum)
         s.write('    bool operator<=(const %s& o) const { return value <= o.value; }\n' % enum)
         s.write('    bool operator>=(const %s& o) const { return value >= o.value; }\n' % enum)
-        s.write('    operator int() const { return value; }\n\n')
+        s.write('    operator int() const { return value; }\n')
+        s.write('    operator std::string() const { return toString(); }\n\n')
         s.write('    int value;\n\n')
         s.write('};\n')
-    
+        
+#        print('template<> %s Init::undefined<%s>();' % (enum, enum))
+#        print('template<> %s Init::undefined<%s>()\n{\n    return %s::NOT_SET;\n}\n' % (enum, enum, enum))
+        
     return s.getvalue()
         
 if __name__ == '__main__':

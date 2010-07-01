@@ -147,7 +147,7 @@ template<> PixelType six::toType<PixelType>(const std::string& s)
     std::string type(s);
     str::trim(type);
     PixelType p(type);
-    if (p == PixelType::UNDEFINED)
+    if (p == PixelType::NOT_SET)
         throw except::Exception(Ctxt(FmtX("Type not understood [%s]",
                                           type.c_str())));
     return p;
@@ -155,7 +155,7 @@ template<> PixelType six::toType<PixelType>(const std::string& s)
 
 template<> std::string six::toString(const PixelType& type)
 {
-    if (type == PixelType::UNDEFINED)
+    if (type == PixelType::NOT_SET)
     {
         throw except::Exception(Ctxt("Unsupported pixel type"));
     }
