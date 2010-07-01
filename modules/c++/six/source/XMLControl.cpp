@@ -29,25 +29,25 @@ using namespace six;
 typedef xml::lite::Element* XMLElem;
 
 XMLControl::XMLControl(logging::Logger* log) :
-    mLog(NULL), mOwnLog(false)
+    mLog(NULL)
 {
     setLogger(log);
 }
 
 XMLControl::~XMLControl()
 {
-    if (mLog && mOwnLog)
-        delete mLog;
+    // if (mLog && mOwnLog)
+    //    delete mLog;
 }
 
 void XMLControl::setLogger(logging::Logger* log)
 {
-    if (mLog && mOwnLog && log != mLog)
-        delete mLog;
-    // create a dummy logger if one wasn't supplied - this lets us use the log
-    // without checking for NULL every time
-    mLog = log ? log : new logging::Logger("XMLControl");
-    mOwnLog = !log;
+//    if (mLog && mOwnLog && log != mLog)
+//        delete mLog;
+
+    // for now, use the root logger provided by the LoggerFactory
+    mLog = (log != NULL) ? log : logging::getLogger();
+    //mOwnLog = !log;
 }
 
 XMLElem XMLControl::newElement(std::string name, XMLElem parent)
