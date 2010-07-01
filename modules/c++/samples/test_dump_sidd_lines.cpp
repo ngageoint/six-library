@@ -110,12 +110,12 @@ int main(int argc, char** argv)
     try
     {
         XMLControlFactory::getInstance(). addCreator(
-                                                     DataClass::COMPLEX,
+                                                     DataType::COMPLEX,
                                                      new XMLControlCreatorT<
                                                              six::sicd::ComplexXMLControl>());
 
         XMLControlFactory::getInstance(). addCreator(
-                                                     DataClass::DERIVED,
+                                                     DataType::DERIVED,
                                                      new XMLControlCreatorT<
                                                              six::sidd::DerivedXMLControl>());
 
@@ -128,8 +128,8 @@ int main(int argc, char** argv)
 
         for (; numImages < container->getNumData(); ++numImages)
         {
-            if (container->getData(numImages)->getDataClass()
-                    == DataClass::COMPLEX)
+            if (container->getData(numImages)->getDataType()
+                    == DataType::COMPLEX)
             {
                 // Assume for now it can only be the last one
                 break;

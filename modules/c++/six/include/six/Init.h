@@ -53,7 +53,7 @@ struct Init
 
 };
 
-template<> DataClass Init::undefined<DataClass>();
+template<> DataType Init::undefined<DataType>();
 template<> std::string Init::undefined<std::string>();
 template<> int Init::undefined<int>();
 template<> unsigned int Init::undefined<unsigned int>();

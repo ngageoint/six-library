@@ -56,10 +56,10 @@ struct Data
     virtual Data* clone() const = 0;
 
     /*!
-     *  Data class is DERIVED for DerivedData and 
+     *  Data type/class is DERIVED for DerivedData and
      *  COMPLEX for ComplexData
      */
-    virtual DataClass getDataClass() const = 0;
+    virtual DataType getDataType() const = 0;
 
     /*!
      *  Utility function for getting the pixel type.  

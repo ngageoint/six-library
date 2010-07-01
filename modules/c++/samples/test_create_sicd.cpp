@@ -93,7 +93,7 @@ int main(int argc, char** argv)
         // TODO: Replace with lazy plugin?
         //--------------------------------------------------------------------
         six::XMLControlFactory::getInstance(). addCreator(
-                                                          six::DataClass::COMPLEX,
+                                                          six::DataType::COMPLEX,
                                                           new six::XMLControlCreatorT<
                                                                   six::sicd::ComplexXMLControl>());
 

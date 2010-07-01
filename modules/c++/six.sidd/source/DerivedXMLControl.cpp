@@ -1289,7 +1289,7 @@ XMLElem DerivedXMLControl::toXML(ExploitationFeatures* exploitationFeatures,
 
 xml::lite::Document* DerivedXMLControl::toXML(Data* data)
 {
-    if (data->getDataClass() != DataClass::DERIVED)
+    if (data->getDataType() != DataType::DERIVED)
     {
         throw except::Exception("Data must be derived");
     }

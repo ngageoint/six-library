@@ -61,12 +61,12 @@ void registerHandlers()
 {
 
     six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataClass::COMPLEX,
+                                                      six::DataType::COMPLEX,
                                                       new six::XMLControlCreatorT<
                                                               six::sicd::ComplexXMLControl>());
 
     six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataClass::DERIVED,
+                                                      six::DataType::DERIVED,
                                                       new six::XMLControlCreatorT<
                                                               six::sidd::DerivedXMLControl>());
 
@@ -153,17 +153,17 @@ void run(std::string inputFile, std::string dataType)
         treeBuilder.parse(xmlFileStream);
         xmlFileStream.close();
 
-        six::DataClass dataClass =
-                (dataType == "sicd") ? six::DataClass::COMPLEX
-                                     : six::DataClass::DERIVED;
+        six::DataType dt =
+                (dataType == "sicd") ? six::DataType::COMPLEX
+                                     : six::DataType::DERIVED;
 
         six::XMLControl *control =
-                six::XMLControlFactory::getInstance().newXMLControl(dataClass);
+                six::XMLControlFactory::getInstance().newXMLControl(dt);
 
         six::Data *data = control->fromXML(treeBuilder.getDocument());
 
         // Dump some core info
-        std::cout << "Data Class: " << six::toString(data->getDataClass())
+        std::cout << "Data Class: " << six::toString(data->getDataType())
                 << std::endl;
         std::cout << "Pixel Type: " << six::toString(data->getPixelType())
                 << std::endl;
@@ -376,7 +376,7 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir)
     docXML->addChild(createPath(corners, "footprint", "LinearRing"));
 
     // Specifics to SICD
-    if (data->getDataClass() == six::DataClass::COMPLEX)
+    if (data->getDataType() == six::DataType::COMPLEX)
         generateKMLForSICD(docXML, (six::sicd::ComplexData*) data);
 
     root->prettyPrint(fos);

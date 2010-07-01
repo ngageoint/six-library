@@ -65,7 +65,6 @@ template<> std::string toString(const six::RadarModeType& value);
 template<> six::DateTime toType<six::DateTime>(const std::string& s);
 template<> std::string toString(const six::DateTime& value);
 
-template<> std::string toString(const six::DataClass& value);
 template<> std::string toString(const six::DataType& value);
 template<> std::string toString(const six::EarthModelType& value);
 template<> six::OrientationType

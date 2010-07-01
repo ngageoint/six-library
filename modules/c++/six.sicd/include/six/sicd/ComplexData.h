@@ -126,9 +126,9 @@ struct ComplexData: public Data
      *  whether we have a ComplexData (SICD) object or a DerivedData (SIDD)
      *  product in the Container.
      */
-    DataClass getDataClass() const
+    DataType getDataType() const
     {
-        return DataClass::COMPLEX;
+        return DataType::COMPLEX;
     }
 
     /*!

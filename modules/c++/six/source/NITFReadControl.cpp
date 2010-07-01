@@ -158,7 +158,7 @@ void NITFReadControl::load(std::string fromFile)
         for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
         {
             Data* ith = mContainer->getData(i);
-            if (ith->getDataClass() == DataClass::DERIVED)
+            if (ith->getDataType() == DataType::DERIVED)
                 mInfos.push_back(new NITFImageInfo(ith));
         }
     }

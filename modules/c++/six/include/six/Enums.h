@@ -812,100 +812,6 @@ struct CornerIndex
 };
 
 /*!
- *  \struct DataClass 
- *
- *  Enumeration used to represent DataClasss
- */
-struct DataClass
-{
-    //! The enumerations allowed
-    enum
-    {
-        UNKNOWN = 0,
-        COMPLEX = 1,
-        DERIVED = 2
-    };
-
-    //! Default constructor
-    DataClass(){ value = UNKNOWN; }
-
-    //! string constructor
-    DataClass(std::string s)
-    {
-        if (s == "UNKNOWN")
-            value = UNKNOWN;
-        else if (s == "COMPLEX")
-            value = COMPLEX;
-        else if (s == "DERIVED")
-            value = DERIVED;
-        else
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
-    }
-
-    //! int constructor
-    DataClass(int i)
-    {
-        switch(i)
-        {
-        case 0:
-            value = UNKNOWN;
-            break;
-        case 1:
-            value = COMPLEX;
-            break;
-        case 2:
-            value = DERIVED;
-            break;
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
-        }
-    }
-
-    //! destructor
-    ~DataClass(){}
-
-    //! Returns string representation of the value
-    std::string toString() const
-    {
-        switch(value)
-        {
-        case 0:
-            return std::string("UNKNOWN");
-        case 1:
-            return std::string("COMPLEX");
-        case 2:
-            return std::string("DERIVED");
-        default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-        }
-    }
-
-    //! assignment operator
-    DataClass& operator=(const DataClass& o)
-    {
-        if (&o != this)
-        {
-            value = o.value;
-        }
-        return *this;
-    }
-
-    bool operator==(const DataClass& o) const { return value == o.value; }
-    bool operator!=(const DataClass& o) const { return value != o.value; }
-    bool operator==(const int& o) const { return value == o; }
-    bool operator!=(const int& o) const { return value != o; }
-    DataClass& operator=(const int& o) { value = o; return *this; }
-    bool operator<(const DataClass& o) const { return value < o.value; }
-    bool operator>(const DataClass& o) const { return value > o.value; }
-    bool operator<=(const DataClass& o) const { return value <= o.value; }
-    bool operator>=(const DataClass& o) const { return value >= o.value; }
-    operator int() const { return value; }
-
-    int value;
-
-};
-
-/*!
  *  \struct DataType 
  *
  *  Enumeration used to represent DataTypes
@@ -3235,7 +3141,7 @@ struct XYZEnum
 
 };
 
-// code auto-generated 2010-07-01 11:19:28.014942
+// code auto-generated 2010-07-01 11:25:56.849839
 
 }
 

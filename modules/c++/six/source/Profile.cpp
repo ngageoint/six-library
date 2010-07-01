@@ -21,68 +21,61 @@
  */
 #include "six/Profile.h"
 
-
 using namespace six;
 const char StubProfile::OPT_CONTAINER_FILE_LIST[] = "FileList";
 const char StubProfile::OPT_XML_FILE[] = "XMLFile";
 const char StubProfile::OPT_CONTAINER_TYPE[] = "ContainerType";
 
-Container* StubProfile::newContainer(const Options& options) 
+Container* StubProfile::newContainer(const Options& options)
 {
-    const char* inFileList =
-        options.getParameter(OPT_CONTAINER_FILE_LIST);
-    
-    DataType containerType = (DataType)
-        (int)options.getParameter(OPT_CONTAINER_TYPE);
-    std::vector<std::string> files = str::Tokenizer(std::string(inFileList), 
+    const char* inFileList = options.getParameter(OPT_CONTAINER_FILE_LIST);
+
+    DataType containerType =
+            (DataType) (int) options.getParameter(OPT_CONTAINER_TYPE);
+    std::vector<std::string> files = str::Tokenizer(std::string(inFileList),
                                                     ",");
     Container* container = new Container(containerType);
-    
+
     Options copy = options;
-    
+
     for (unsigned int i = 0; i < files.size(); ++i)
     {
         copy.setParameter(OPT_XML_FILE, Parameter(files[i]));
-        container->addData( newData(copy) );
+        container->addData(newData(copy));
     }
     return container;
 }
 
 Data* StubProfile::newData(const Options& options)
 {
-    
-    std::string inFileName =
-        (std::string)options.getParameter(OPT_XML_FILE);
-        
+
+    std::string inFileName = (std::string) options.getParameter(OPT_XML_FILE);
+
     io::FileInputStream fis(inFileName);
-    
+
     // Create an XML parser
     xml::lite::MinidomParser xmlParser;
-    
+
     // Parse the XML input file
     xmlParser.parse(fis);
-    
+
     // Get the SICD DOM
     xml::lite::Document *doc = xmlParser.getDocument();
-    
-    DataClass dataClass = DataClass::UNKNOWN;
+
+    DataType dataType = DataType::UNKNOWN;
     xml::lite::Element* element = doc->getRootElement();
-    
+
     if (element->getLocalName() == "SICD")
-        dataClass = DataClass::COMPLEX;
+        dataType = DataType::COMPLEX;
     else if (element->getLocalName() == "SIDD")
-        dataClass = DataClass::DERIVED;
-    
-    if (dataClass == DataClass::UNKNOWN)
-        throw except::Exception(
-            Ctxt(FmtX("Unknown file with root: <%s>", 
-                      element->getLocalName().c_str()
-                     )
-                )
-            );
-    
-    XMLControl* control = XMLControlFactory::getInstance().
-        newXMLControl(dataClass);
+        dataType = DataType::DERIVED;
+
+    if (dataType == DataType::UNKNOWN)
+        throw except::Exception(Ctxt(FmtX("Unknown file with root: <%s>",
+                                          element->getLocalName().c_str())));
+
+    XMLControl* control =
+            XMLControlFactory::getInstance(). newXMLControl(dataType);
     Data* data = control->fromXML(doc);
     delete control;
     return data;
