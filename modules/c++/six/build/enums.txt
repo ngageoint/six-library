@@ -116,8 +116,8 @@ SCANSAR=4
 
 [SideOfTrackType]
 NOT_SET=0
-LEFT=-1
-RIGHT=1
+LEFT=scene::TRACK_LEFT
+RIGHT=scene::TRACK_RIGHT
 __default__=0
 
 [BooleanType]

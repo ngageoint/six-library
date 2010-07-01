@@ -25,6 +25,7 @@
 #include <import/except.h>
 #include <import/str.h>
 #include <import/sys.h>
+#include <import/scene.h>
 
 // -----------------------------------------------------------------------------
 // This file is auto-generated - please do NOT edit directly
@@ -2962,9 +2963,9 @@ struct SideOfTrackType
     //! The enumerations allowed
     enum
     {
-        LEFT = -1,
         NOT_SET = 0,
-        RIGHT = 1
+        LEFT = scene::TRACK_LEFT,
+        RIGHT = scene::TRACK_RIGHT
     };
 
     //! Default constructor
@@ -2973,10 +2974,10 @@ struct SideOfTrackType
     //! string constructor
     SideOfTrackType(std::string s)
     {
-        if (s == "LEFT")
-            value = LEFT;
-        else if (s == "NOT_SET")
+        if (s == "NOT_SET")
             value = NOT_SET;
+        else if (s == "LEFT")
+            value = LEFT;
         else if (s == "RIGHT")
             value = RIGHT;
         else
@@ -2988,13 +2989,13 @@ struct SideOfTrackType
     {
         switch(i)
         {
-        case -1:
-            value = LEFT;
-            break;
         case 0:
             value = NOT_SET;
             break;
-        case 1:
+        case scene::TRACK_LEFT:
+            value = LEFT;
+            break;
+        case scene::TRACK_RIGHT:
             value = RIGHT;
             break;
         default:
@@ -3010,11 +3011,11 @@ struct SideOfTrackType
     {
         switch(value)
         {
-        case -1:
-            return std::string("LEFT");
         case 0:
             return std::string("NOT_SET");
-        case 1:
+        case scene::TRACK_LEFT:
+            return std::string("LEFT");
+        case scene::TRACK_RIGHT:
             return std::string("RIGHT");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
@@ -3234,7 +3235,7 @@ struct XYZEnum
 
 };
 
-// code auto-generated 2010-06-30 13:06:09.297233
+// code auto-generated 2010-07-01 11:19:28.014942
 
 }
 
