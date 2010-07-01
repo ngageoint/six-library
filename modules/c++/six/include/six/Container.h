@@ -50,7 +50,7 @@ public:
     /*! 
      *  The data class is either COMPLEX or DERIVED
      *  This just tells us what kind of container.  Note that, in 
-     *  the case of DERIVED, one or more Data*'s DataClass will
+     *  the case of DERIVED, one or more Data*'s DataType will
      *  be DERIVED.
      *
      */

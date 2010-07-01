@@ -134,7 +134,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
 
 xml::lite::Document* ComplexXMLControl::toXML(Data *data)
 {
-    if (data->getDataClass() != DataClass::COMPLEX)
+    if (data->getDataType() != DataType::COMPLEX)
     {
         throw except::Exception("Data must be SICD");
     }

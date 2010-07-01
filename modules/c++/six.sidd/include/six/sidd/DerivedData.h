@@ -119,9 +119,9 @@ struct DerivedData: public Data
     /*!
      *  We are dealing with derived data
      */
-    DataClass getDataClass() const
+    DataType getDataType() const
     {
-        return DataClass::DERIVED;
+        return DataType::DERIVED;
     }
 
     /*!

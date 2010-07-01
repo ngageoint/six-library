@@ -208,13 +208,13 @@ int main(int argc, char** argv)
 
         six::XMLControlFactory::getInstance().
             addCreator(
-                six::DataClass::COMPLEX,
+                six::DataType::COMPLEX,
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
                 );
 
         six::XMLControlFactory::getInstance().
             addCreator(
-                six::DataClass::DERIVED,
+                six::DataType::DERIVED,
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>()
                 );
 

@@ -1757,7 +1757,7 @@ six::sicd::ComplexData* getComplexData(std::string sicdXMLName)
     six::XMLControl
             * xmlControl =
                     six::XMLControlFactory::getInstance().newXMLControl(
-                                                                        DataClass::COMPLEX);
+                                                                        DataType::COMPLEX);
 
     six::Data* data = xmlControl->fromXML(doc);
     delete xmlControl;
@@ -1782,12 +1782,12 @@ int main(int argc, char** argv)
     }
 
     six::XMLControlFactory::getInstance(). addCreator(
-                                                      DataClass::COMPLEX,
+                                                      DataType::COMPLEX,
                                                       new six::XMLControlCreatorT<
                                                               six::sicd::ComplexXMLControl>());
 
     six::XMLControlFactory::getInstance(). addCreator(
-                                                      DataClass::DERIVED,
+                                                      DataType::DERIVED,
                                                       new six::XMLControlCreatorT<
                                                               six::sidd::DerivedXMLControl>());
 

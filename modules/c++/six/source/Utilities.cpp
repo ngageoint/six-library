@@ -129,19 +129,6 @@ template<> RadarModeType six::toType<RadarModeType>(const std::string& s)
     return RadarModeType::NOT_SET;
 }
 
-template<> std::string six::toString(const DataClass& type)
-{
-    switch (type)
-    {
-    case DataClass::COMPLEX:
-        return "SICD";
-    case DataClass::DERIVED:
-        return "SIDD";
-    default:
-        throw except::Exception(Ctxt("Unsupported data class"));
-    }
-}
-
 template<> std::string six::toString(const DataType& type)
 {
     switch (type)

@@ -23,42 +23,42 @@
 
 using namespace six;
 
-XMLControl* XMLControlRegistry::newXMLControl(DataClass dataClass)
+XMLControl* XMLControlRegistry::newXMLControl(DataType dataType)
 {
-    XMLControlCreator* creator = mRegistry[ dataClass ];
+    XMLControlCreator* creator = mRegistry[dataType];
     if (creator == NULL)
         throw except::NoSuchKeyException(Ctxt(FmtX("No data class creator %d",
-                                                   (int)dataClass )));
+                                                   (int) dataType)));
     return creator->newXMLControl();
 }
 
 //!  Destructor
 XMLControlRegistry::~XMLControlRegistry()
 {
-    for (std::map<DataClass, XMLControlCreator*>::iterator p = 
-             mRegistry.begin(); p != mRegistry.end(); ++p)
+    for (std::map<DataType, XMLControlCreator*>::iterator p = mRegistry.begin(); p
+            != mRegistry.end(); ++p)
     {
         if (p->second)
             delete p->second;
     }
     mRegistry.clear();
-    
+
 }
 
 XMLControl* XMLControlRegistry::newXMLControl(std::string identifier)
 {
-    DataClass dataClass;
+    DataType dataType;
 
     if (identifier == "SICD_XML")
     {
-        dataClass = DataClass::COMPLEX;
+        dataType = DataType::COMPLEX;
     }
     else if (identifier == "SIDD_XML")
     {
-        dataClass = DataClass::DERIVED;
+        dataType = DataType::DERIVED;
     }
 
-    return newXMLControl(dataClass);
+    return newXMLControl(dataType);
 
 }
 
@@ -72,10 +72,10 @@ char* six::toXMLCharArray(Data* data)
 }
 std::string six::toXMLString(Data* data)
 {
-    XMLControl* xmlControl = 
-        XMLControlFactory::getInstance().newXMLControl(data->getDataClass());
+    XMLControl* xmlControl =
+            XMLControlFactory::getInstance().newXMLControl(data->getDataType());
     xml::lite::Document *doc = xmlControl->toXML(data);
-    
+
     io::ByteStream bs;
     doc->getRootElement()->print(bs);
     delete xmlControl;

@@ -76,29 +76,29 @@ template <typename T> struct XMLControlCreatorT : public XMLControlCreator
  *  \brief Dynamic registry pattern for generating a new XML reader/writer
  *
  *  This class generates the proper reader/writer for the Data content.
- *  There are two methods currently, one that uses the DataClass to
+ *  There are two methods currently, one that uses the DataType to
  *  identify which reader/writer to create, and one that uses a
  *  string (the same one that identifies the type in the container)
  */
 class XMLControlRegistry
 {
-    std::map<DataClass, XMLControlCreator*> mRegistry;
+    std::map<DataType, XMLControlCreator*> mRegistry;
 public:
     //!  Constructor
     XMLControlRegistry()
     {
     }
 
-    inline void addCreator(DataClass dataClass, XMLControlCreator* creator)
+    inline void addCreator(DataType dataType, XMLControlCreator* creator)
     {
-        mRegistry[ dataClass ] = creator;
+        mRegistry[ dataType ] = creator;
     }
 
     //!  Destructor
     virtual ~XMLControlRegistry();
 
 
-    XMLControl* newXMLControl(DataClass dataClass);
+    XMLControl* newXMLControl(DataType dataType);
 
     /*!
      *  Static method to create a new XMLControl from a string.  

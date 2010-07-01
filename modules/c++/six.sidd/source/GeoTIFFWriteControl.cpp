@@ -49,9 +49,9 @@ void GeoTIFFWriteControl::initialize(Container* container)
     for (unsigned int i = 0; i < container->getNumData(); ++i)
     {
         Data* data = container->getData(i);
-        if (data->getDataClass() == DataClass::COMPLEX)
+        if (data->getDataType() == DataType::COMPLEX)
             mComplexData.push_back(data);
-        else if (data->getDataClass() == DataClass::DERIVED)
+        else if (data->getDataType() == DataType::DERIVED)
         {
             //length = ??
             length += (sys::Uint64_T) data->getNumBytesPerPixel()

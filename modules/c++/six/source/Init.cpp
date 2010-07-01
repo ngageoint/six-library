@@ -35,9 +35,9 @@ using namespace six;
 /*         return s.length(); */
 /*     } */
 
-template<> DataClass Init::undefined<DataClass>()
+template<> DataType Init::undefined<DataType>()
 {
-    return DataClass::UNKNOWN;
+    return DataType::UNKNOWN;
 }
 
 template<> std::string Init::undefined<std::string>()

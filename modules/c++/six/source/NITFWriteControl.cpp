@@ -60,7 +60,7 @@ void NITFWriteControl::initialize(Container* container)
         for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
         {
             Data* ith = mContainer->getData(i);
-            if (ith->getDataClass() == DataClass::DERIVED)
+            if (ith->getDataType() == DataType::DERIVED)
                 mInfos.push_back(new NITFImageInfo(ith, maxRows, maxSize, true));
         }
     }
@@ -92,7 +92,7 @@ void NITFWriteControl::initialize(Container* container)
         std::string targetId = "";
 
         // TODO: Subclass to get this?
-        // if (info->getData()->getDataClass() == DataClass::DERIVED)
+        // if (info->getData()->getDataType() == DataType::DERIVED)
         //         {
         //             DerivedData* derived = (DerivedData*)info->getData();
         //             if(derived->geographicAndTarget && derived->geographicAndTarget->targetInformation.size() > 0)
@@ -188,7 +188,7 @@ void NITFWriteControl::initialize(Container* container)
         nitf::DESegment seg = mRecord.newDataExtensionSegment();
         nitf::DESubheader subheader = seg.getSubheader();
         std::string desid =
-                six::toString(mContainer->getData(i)->getDataClass()) + "_XML";
+                six::toString(mContainer->getData(i)->getDataType()) + "_XML";
         subheader.getTypeID().set(desid);
         // BUG? Is DESVER BCS A or N?
         subheader.getVersion().set("01");
