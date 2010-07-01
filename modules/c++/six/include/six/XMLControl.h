@@ -84,7 +84,6 @@ protected:
     typedef xml::lite::Element* XMLElem;
 
     logging::Logger *mLog;
-    bool mOwnLog;
 
     //! Returns the default URI
     virtual std::string getDefaultURI() const = 0;
