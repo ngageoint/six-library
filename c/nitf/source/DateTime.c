@@ -301,28 +301,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
 
         if (decimalPlaces > 0)
         {
-            char *tempString;
-            int newFmtLen;
-
-            tempString = NITF_MALLOC(decimalPlaces + 3); /* add extra for 0. */
-            if (!tempString)
-            {
-                nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                                NITF_CTXT, NITF_ERR_MEMORY);
-                return NITF_FAILURE;
-            }
-
-            memset(tempString, 0, decimalPlaces + 3);
-
-            /* removed this so we don't overflow a double */
-            /* Get the fractional value while also */
-            /* moving the decimal to the right */
-            /*for(i = 0; i < decimalPlaces; ++i)
-                fractSeconds *= 10;*/
-
-            sprintf(tempString, "%.*f", decimalPlaces, fractSeconds);
-
-            newFmtLen = begStringLen + 2 + strlen(tempString) - 1 + strlen(endString);
+            int newFmtLen = begStringLen + strlen(endString) + 3;
             newFmtString = (char*)NITF_MALLOC(newFmtLen);
             if (!newFmtString)
             {
@@ -334,10 +313,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
             memset(newFmtString, 0, newFmtLen);
             strncpy(newFmtString, format, begStringLen);
             strcat(newFmtString, "%S");
-            strcat(newFmtString, &tempString[1]);
             strcat(newFmtString, endString);
-
-            NITF_FREE(tempString);
         }
     }
 
