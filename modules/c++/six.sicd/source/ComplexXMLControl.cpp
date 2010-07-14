@@ -763,14 +763,14 @@ XMLElem ComplexXMLControl::toXML(ImageFormation *imageFormation, XMLElem parent)
         require(
                 createBooleanType(
                                   "HvAngleCompApplied",
-                                  imageFormation->polarizationCalibration ->hvAngleCompensationApplied,
-                                  imageFormationXML), "HvAngleCompApplied");
+                                  imageFormation->polarizationCalibration->hvAngleCompensationApplied,
+                                  pcXML), "HvAngleCompApplied");
 
         require(
                 createBooleanType(
                                   "DistortionCorrectionApplied",
                                   imageFormation ->polarizationCalibration->distortionCorrectionApplied,
-                                  imageFormationXML),
+                                  pcXML),
                 "DistortionCorrectionApplied");
 
         //TODO this is required, but doing this for safety - once we decide on a policy, maybe throw an exception
