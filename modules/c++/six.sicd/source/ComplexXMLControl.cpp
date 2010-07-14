@@ -32,7 +32,7 @@ using namespace six::sicd;
 
 typedef xml::lite::Element* XMLElem;
 
-const char ComplexXMLControl::SICD_URI[] = "urn:SICD:0.4.0";
+const char ComplexXMLControl::SICD_URI[] = "urn:SICD:0.4.1";
 
 std::string ComplexXMLControl::getDefaultURI() const
 {
