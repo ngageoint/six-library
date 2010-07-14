@@ -386,14 +386,17 @@ XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
         createString("WgtType", grid->row->weightType, rowDirXML);
     }
 
-    if (grid->row->weights.size() > 0)
+    size_t numWeights = grid->row->weights.size();
+    if (numWeights > 0)
     {
-        XMLElem wgtFuncXML = newElement("WgtFunc", rowDirXML);
+        XMLElem wgtFuncXML = newElement("WgtFunct", rowDirXML);
+        setAttribute(wgtFuncXML, "size", str::toString(numWeights));
 
-        for (std::vector<double>::iterator it = grid->row->weights.begin(); it
-                != grid->row->weights.end(); ++it)
+        for(size_t i = 1; i <= numWeights; ++i)
         {
-            createDouble("Wgt", *it, wgtFuncXML);
+            XMLElem wgtXML = createDouble("Wgt", grid->row->weights[i],
+                                          wgtFuncXML);
+            setAttribute(wgtXML, "index", str::toString(i));
         }
     }
 
