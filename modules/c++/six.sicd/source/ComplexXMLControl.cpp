@@ -936,7 +936,7 @@ XMLElem ComplexXMLControl::toXML(PFA *pfa, XMLElem parent)
         require(createBooleanType("Applied", pfa->slowTimeDeskew->applied,
                                   stdXML), "Applied");
 
-        createPoly2D("STDPhasePoly",
+        createPoly2D("STDSPhasePoly",
                      pfa->slowTimeDeskew->slowTimeDeskewPhasePoly, stdXML);
     }
 
