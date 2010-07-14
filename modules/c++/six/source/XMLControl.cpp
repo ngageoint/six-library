@@ -624,7 +624,6 @@ void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
     footprint->getElementsByTagName(cornerName, vertices);
 
     value.clear();
-    value.resize(4);
 
     for (unsigned int i = 0; i < vertices.size(); i++)
     {
@@ -637,7 +636,7 @@ void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
                                                                                "index"));
 
         parseLatLon(vertices[i], ll);
-        value[idx] = ll;
+        value.push_back(ll);
     }
 }
 
@@ -648,7 +647,6 @@ void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
     footprint->getElementsByTagName(cornerName, vertices);
 
     value.clear();
-    value.resize(4);
 
     for (unsigned int i = 0; i < vertices.size(); i++)
     {
@@ -658,7 +656,7 @@ void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
         str::trim(idxStr);
         int idx = str::toType<int>(idxStr.substr(0, 1));
         parseLatLonAlt(vertices[i], lla);
-        value[idx] = lla;
+        value.push_back(lla);
     }
 }
 
