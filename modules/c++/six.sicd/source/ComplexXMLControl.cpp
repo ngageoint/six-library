@@ -258,7 +258,15 @@ XMLElem ComplexXMLControl::toXML(ImageData *imageData, XMLElem parent)
     createString("PixelType", six::toString(imageData->pixelType), imageDataXML);
     if (imageData->amplitudeTable)
     {
-        //TODO AmpTable
+        AmplitudeTable& ampTable = *(imageData->amplitudeTable);
+        XMLElem ampTableXML = newElement("AmpTable", imageDataXML);
+        setAttribute(ampTableXML, "size", str::toString(ampTable.numEntries));
+        for (unsigned int i = 0; i < ampTable.numEntries; ++i)
+        {
+            XMLElem ampXML = createDouble("Amplitude", *(double*) ampTable[i],
+                                          ampTableXML);
+            setAttribute(ampXML, "index", str::toString(i));
+        }
     }
     createInt("NumRows", imageData->numRows, imageDataXML);
     createInt("NumCols", imageData->numCols, imageDataXML);
@@ -392,7 +400,7 @@ XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
         XMLElem wgtFuncXML = newElement("WgtFunct", rowDirXML);
         setAttribute(wgtFuncXML, "size", str::toString(numWeights));
 
-        for(size_t i = 1; i <= numWeights; ++i)
+        for (size_t i = 1; i <= numWeights; ++i)
         {
             XMLElem wgtXML = createDouble("Wgt", grid->row->weights[i],
                                           wgtFuncXML);
@@ -773,8 +781,7 @@ XMLElem ComplexXMLControl::toXML(ImageFormation *imageFormation, XMLElem parent)
                 createBooleanType(
                                   "DistortionCorrectionApplied",
                                   imageFormation ->polarizationCalibration->distortionCorrectionApplied,
-                                  pcXML),
-                "DistortionCorrectionApplied");
+                                  pcXML), "DistortionCorrectionApplied");
 
         //TODO this is required, but doing this for safety - once we decide on a policy, maybe throw an exception
         Distortion *distortion =
@@ -1081,17 +1088,37 @@ void ComplexXMLControl::fromXML(XMLElem imageDataXML, ImageData *imageData)
     {
         std::vector<XMLElem> ampsXML;
         ampTableXML->getElementsByTagName("Amplitude", ampsXML);
-
-        int i = 0;
-        //TODO make sure there is at least 1 and not more than 256
         imageData->amplitudeTable = new AmplitudeTable();
 
         AmplitudeTable& ampTable = *(imageData->amplitudeTable);
-
         for (std::vector<XMLElem>::iterator it = ampsXML.begin(); it
                 != ampsXML.end(); ++it)
         {
-            parseDouble(*it, *(double*) ampTable[i++]);
+            XMLElem ampXML = *it;
+            xml::lite::Attributes atts = ampXML->getAttributes();
+            if (atts.contains("index"))
+            {
+                int index = str::toType<int>(atts.getValue("index"));
+                if (index < 0 || index > 255)
+                {
+                    mLog->warn(
+                               Ctxt(
+                                    FmtX(
+                                         "Unable to parse ampTable value - invalid index: %d",
+                                         index)));
+                }
+                else
+                {
+                    parseDouble(*it, *(double*) ampTable[index]);
+                }
+            }
+            else
+            {
+                mLog->warn(
+                           Ctxt(
+                                FmtX(
+                                     "Unable to parse ampTable value - no index provided")));
+            }
         }
     }
 
@@ -2089,7 +2116,8 @@ XMLElem ComplexXMLControl::createFootprint(std::string name,
     return footprint;
 }
 
-XMLElem ComplexXMLControl::createFootprint(std::string name,
+XMLElem ComplexXMLControl::createFootprint(
+                                           std::string name,
                                            std::string cornerName,
                                            const std::vector<LatLonAlt>& corners,
                                            XMLElem parent)
