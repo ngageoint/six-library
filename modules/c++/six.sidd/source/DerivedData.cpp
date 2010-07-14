@@ -57,12 +57,12 @@ DerivedData::~DerivedData()
 }
 
 DerivedData::DerivedData() :
-    display(NULL), geographicAndTarget(NULL), measurement(NULL),
+    productCreation(new ProductCreation), display(NULL),
+            geographicAndTarget(NULL), measurement(NULL),
             exploitationFeatures(NULL), productProcessing(NULL),
-            downstreamReprocessing(NULL), errorStatistics(NULL), radiometric(
-                    NULL)
+            downstreamReprocessing(NULL), errorStatistics(NULL),
+            radiometric(NULL)
 {
-    productCreation = new ProductCreation();
 }
 
 Data* DerivedData::clone() const
@@ -70,7 +70,11 @@ Data* DerivedData::clone() const
     DerivedData *data = new DerivedData();
 
     if (productCreation != NULL)
+    {
+        if (data->productCreation)
+            delete data->productCreation;
         data->productCreation = productCreation->clone();
+    }
 
     if (display != NULL)
         data->display = display->clone();
