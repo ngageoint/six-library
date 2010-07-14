@@ -135,16 +135,17 @@ protected:
     void fromXML(XMLElem pfaXML, PFA *obj);
     void fromXML(XMLElem rmaXML, RMA *obj);
 
-    void parseFootprint(XMLElem footprint, std::string cornerName, std::vector<
-            LatLon>& value, bool alt);
     void parseEarthModelType(XMLElem element, EarthModelType& value);
     void parseSideOfTrackType(XMLElem element, SideOfTrackType& value);
 
     XMLElem createFFTSign(std::string name, six::FFTSign sign, XMLElem parent =
             NULL);
     XMLElem createFootprint(std::string name, std::string cornerName,
-                            const std::vector<LatLon>& corners, bool alt =
-                                    false, XMLElem parent = NULL);
+                            const std::vector<LatLon>& corners,
+                            XMLElem parent = NULL);
+    XMLElem createFootprint(std::string name, std::string cornerName,
+                            const std::vector<LatLonAlt>& corners,
+                            XMLElem parent = NULL);
     XMLElem createEarthModelType(std::string name, const EarthModelType& value,
                                  XMLElem parent = NULL);
     XMLElem createSideOfTrackType(std::string name,

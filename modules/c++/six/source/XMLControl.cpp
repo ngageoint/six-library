@@ -42,8 +42,8 @@ XMLControl::~XMLControl()
 
 void XMLControl::setLogger(logging::Logger* log)
 {
-//    if (mLog && mOwnLog && log != mLog)
-//        delete mLog;
+    //    if (mLog && mOwnLog && log != mLog)
+    //        delete mLog;
 
     // for now, use the root logger provided by the LoggerFactory
     mLog = (log != NULL) ? log : logging::getLogger();
@@ -618,7 +618,31 @@ void XMLControl::parseDecorrType(XMLElem decorrXML, DecorrType& decorrType)
 }
 
 void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
-                                std::vector<LatLon>& value, bool alt)
+                                std::vector<LatLon>& value)
+{
+    std::vector<XMLElem> vertices;
+    footprint->getElementsByTagName(cornerName, vertices);
+
+    value.clear();
+    value.resize(4);
+
+    for (unsigned int i = 0; i < vertices.size(); i++)
+    {
+        LatLon ll;
+        //check the index attr to know which corner it is
+        int
+                idx =
+                        str::toType<int>(
+                                         vertices[i]->getAttributes().getValue(
+                                                                               "index"));
+
+        parseLatLon(vertices[i], ll);
+        value[idx] = ll;
+    }
+}
+
+void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
+                                std::vector<LatLonAlt>& value)
 {
     std::vector<XMLElem> vertices;
     footprint->getElementsByTagName(cornerName, vertices);
@@ -630,17 +654,10 @@ void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
     {
         LatLonAlt lla;
         //check the index attr to know which corner it is
-        int
-                idx =
-                        str::toType<int>(
-                                         vertices[i]->getAttributes().getValue(
-                                                                               "index"));
-
-        if (alt)
-            parseLatLonAlt(vertices[i], lla);
-        else
-            parseLatLon(vertices[i], lla);
-
+        std::string idxStr = vertices[i]->getAttributes().getValue("index");
+        str::trim(idxStr);
+        int idx = str::toType<int>(idxStr.substr(0, 1));
+        parseLatLonAlt(vertices[i], lla);
         value[idx] = lla;
     }
 }
@@ -714,7 +731,7 @@ void XMLControl::parseRowColInt(XMLElem parent, RowColInt& rc)
 
 XMLElem XMLControl::createFootprint(std::string name, std::string cornerName,
                                     const std::vector<LatLon>& corners,
-                                    bool alt, XMLElem parent)
+                                    XMLElem parent)
 {
     XMLElem footprint = newElement(name, getDefaultURI(), parent);
     xml::lite::AttributeNode node;
@@ -723,48 +740,52 @@ XMLElem XMLControl::createFootprint(std::string name, std::string cornerName,
 
     footprint->getAttributes().add(node);
 
-    XMLElem vertex;
     node.setQName("index");
-
-    vertex = newElement(cornerName, getDefaultURI(), footprint);
+    XMLElem vertex = createLatLon(cornerName, corners[0], footprint);
     node.setValue("0");
     vertex->getAttributes().add(node);
-    createDouble("Lat", getSICommonURI(), corners[0].getLat(), vertex);
-    createDouble("Lon", getSICommonURI(), corners[0].getLon(), vertex);
-    if (alt)
-    {
-        createDouble("HAE", getSICommonURI(), corners[0].getAlt(), vertex);
-    }
 
-    vertex = newElement(cornerName, getDefaultURI(), footprint);
+    vertex = createLatLon(cornerName, corners[1], footprint);
     node.setValue("1");
     vertex->getAttributes().add(node);
-    createDouble("Lat", getSICommonURI(), corners[1].getLat(), vertex);
-    createDouble("Lon", getSICommonURI(), corners[1].getLon(), vertex);
-    if (alt)
-    {
-        createDouble("HAE", getSICommonURI(), corners[1].getAlt(), vertex);
-    }
 
-    vertex = newElement(cornerName, getDefaultURI(), footprint);
+    vertex = createLatLon(cornerName, corners[2], footprint);
     node.setValue("2");
     vertex->getAttributes().add(node);
-    createDouble("Lat", getSICommonURI(), corners[2].getLat(), vertex);
-    createDouble("Lon", getSICommonURI(), corners[2].getLon(), vertex);
-    if (alt)
-    {
-        createDouble("HAE", getSICommonURI(), corners[2].getAlt(), vertex);
-    }
 
-    vertex = newElement(cornerName, getDefaultURI(), footprint);
+    vertex = createLatLon(cornerName, corners[3], footprint);
     node.setValue("3");
     vertex->getAttributes().add(node);
-    createDouble("Lat", getSICommonURI(), corners[3].getLat(), vertex);
-    createDouble("Lon", getSICommonURI(), corners[3].getLon(), vertex);
-    if (alt)
-    {
-        createDouble("HAE", getSICommonURI(), corners[3].getAlt(), vertex);
-    }
+    return footprint;
+}
+
+XMLElem XMLControl::createFootprint(std::string name, std::string cornerName,
+                                    const std::vector<LatLonAlt>& corners,
+                                    XMLElem parent)
+{
+    XMLElem footprint = newElement(name, getDefaultURI(), parent);
+    xml::lite::AttributeNode node;
+    node.setQName("size");
+    node.setValue("4");
+
+    footprint->getAttributes().add(node);
+
+    node.setQName("index");
+    XMLElem vertex = createLatLonAlt(cornerName, corners[0], footprint);
+    node.setValue("0");
+    vertex->getAttributes().add(node);
+
+    vertex = createLatLonAlt(cornerName, corners[1], footprint);
+    node.setValue("1");
+    vertex->getAttributes().add(node);
+
+    vertex = createLatLonAlt(cornerName, corners[2], footprint);
+    node.setValue("2");
+    vertex->getAttributes().add(node);
+
+    vertex = createLatLonAlt(cornerName, corners[3], footprint);
+    node.setValue("3");
+    vertex->getAttributes().add(node);
     return footprint;
 }
 

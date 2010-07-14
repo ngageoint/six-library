@@ -70,6 +70,8 @@ ComplexData::~ComplexData()
 {
     if (collectionInformation)
         delete collectionInformation;
+    if (imageCreation)
+        delete imageCreation;
     if (imageData)
         delete imageData;
     if (geoData)
