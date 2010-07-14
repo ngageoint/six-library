@@ -109,8 +109,8 @@ AreaPlane::~AreaPlane()
 
 Area::Area()
 {
-    LatLon initial = Init::undefined<LatLon>();
-    apcCorners = std::vector<LatLon>(4, initial);
+    LatLonAlt initial = Init::undefined<LatLonAlt>();
+    acpCorners = std::vector<LatLonAlt>(4, initial);
     plane = NULL;
 }
 

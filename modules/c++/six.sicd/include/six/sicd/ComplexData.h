@@ -236,19 +236,24 @@ struct ComplexData: public Data
     }
 
     /*!
-     *  Maps to: /SICD/Timeline/CollectStart,  
+     *  Maps to: /SICD/ImageCreation/DateTime
      */
     virtual DateTime getCreationTime() const
     {
-        return timeline->collectStart;
+        /* TODO throw an exception instead? */
+        if (!imageCreation)
+            throw except::Exception(Ctxt("Must add an imageCreation member first"));
+        return imageCreation->dateTime;
     }
 
     /*!
-     *  Maps to: /SICD/Timeline/CollectStart,  
+     *  Maps to: /SICD/ImageCreation/DateTime
      */
     virtual void setCreationTime(DateTime creationTime)
     {
-        timeline->collectStart = creationTime;
+        if (!imageCreation)
+            imageCreation = new ImageCreation;
+        imageCreation->dateTime = creationTime;
     }
 
     /*!

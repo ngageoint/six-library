@@ -41,6 +41,7 @@ namespace scene
     const double DEGREES_TO_RADIANS = M_PI/180.0;
     const double RADIANS_TO_DEGREES = 180.0/M_PI;
 
+    typedef math::linear::VectorN<2> Vector2;
     typedef math::linear::VectorN<3> Vector3;
 
     enum SideOfTrack {
@@ -85,34 +86,32 @@ namespace scene
         }
     };
 
-    class LatLonAlt
+    class LatLon
     {
     public:
-        LatLonAlt(double scalar = 0.0) :
-	    mLat(scalar), mLon(scalar), mAlt(scalar) {}
+        LatLon(double scalar = 0.0) :
+            mLat(scalar), mLon(scalar)
+        {
+        }
 
-        LatLonAlt(double lat, double lon, double alt = 0)
-            : mLat(lat), mLon(lon), mAlt(alt)
+        LatLon(double lat, double lon)
+            : mLat(lat), mLon(lon)
         {
         }
 
 
-        LatLonAlt(const LatLonAlt& lla)
+        LatLon(const LatLon& lla)
         {
             mLat = lla.mLat;
             mLon = lla.mLon;
-            mAlt = lla.mAlt;
-            
         }
 
-        LatLonAlt& operator=(const LatLonAlt& lla)
+        LatLon& operator=(const LatLon& lla)
         {
             if (this != &lla)
             {
                 mLat = lla.mLat;
                 mLon = lla.mLon;
-                mAlt = lla.mAlt;
-
             }
             return *this;
         }
@@ -148,10 +147,60 @@ namespace scene
         {
             mLat = (lat * RADIANS_TO_DEGREES);
         }
+
         void setLonRadians(double lon)
         {
             mLon = (lon * RADIANS_TO_DEGREES);
         }
+
+        bool operator==(const LatLon& x) const
+        {
+            return mLat == x.mLat && mLon == x.mLon;
+        }
+
+    protected:
+        double mLat;
+        double mLon;
+    };
+
+    class LatLonAlt : public LatLon
+    {
+    public:
+        LatLonAlt(double scalar = 0.0) : LatLon(scalar), mAlt(scalar)
+        {
+        }
+
+        LatLonAlt(double lat, double lon, double alt = 0)
+            : LatLon(lat, lon), mAlt(alt)
+        {
+        }
+
+        LatLonAlt(const LatLonAlt& lla)
+        {
+            mLat = lla.mLat;
+            mLon = lla.mLon;
+            mAlt = lla.mAlt;
+        }
+
+        LatLonAlt& operator=(const LatLonAlt& lla)
+        {
+            if (this != &lla)
+            {
+                mLat = lla.mLat;
+                mLon = lla.mLon;
+                mAlt = lla.mAlt;
+            }
+            return *this;
+        }
+
+        using LatLon::getLat;
+        using LatLon::getLon;
+        using LatLon::getLatRadians;
+        using LatLon::getLonRadians;
+        using LatLon::setLat;
+        using LatLon::setLon;
+        using LatLon::setLatRadians;
+        using LatLon::setLonRadians;
 
         double getAlt() const
         {
@@ -169,8 +218,6 @@ namespace scene
         }
 
     protected:
-        double mLat;
-        double mLon;
         double mAlt;
     };
 

@@ -310,7 +310,7 @@ struct Area
      *  parameters indexed x = 1,2,3,4 clockwise.  Note that six
      *  automatically creates these indices, so the user doesnt see them.
      */
-    std::vector<LatLon> apcCorners;
+    std::vector<LatLonAlt> acpCorners;
 
     /*!
      *  (Optional) SICD Plane parameter, See AreaPlane.

@@ -68,6 +68,7 @@ template<> AngleMagnitude Init::undefined<AngleMagnitude>();
 template<> DateTime Init::undefined<DateTime>();
 template<> Vector3 Init::undefined<Vector3>();
 template<> LatLon Init::undefined<LatLon>();
+template<> LatLonAlt Init::undefined<LatLonAlt>();
 //template<> Corners Init::undefined<Corners>();
 template<> ReferencePoint Init::undefined<ReferencePoint>();
 template<> Poly1D Init::undefined<Poly1D>();

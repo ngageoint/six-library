@@ -95,7 +95,9 @@ typedef math::poly::OneD<Vector3> PolyXYZ;
 typedef scene::AngleMagnitude AngleMagnitude;
 
 //! Lat Lon
-typedef scene::LatLonAlt LatLon;
+typedef scene::LatLon LatLon;
+
+//! Lat Lon Alt
 typedef scene::LatLonAlt LatLonAlt;
 
 typedef except::Context ValidationContext;

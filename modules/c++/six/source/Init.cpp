@@ -143,6 +143,12 @@ template<> LatLon Init::undefined<LatLon>()
     return LatLon(Init::undefined<double>(), Init::undefined<double>());
 }
 
+template<> LatLonAlt Init::undefined<LatLonAlt>()
+{
+    return LatLonAlt(Init::undefined<double>(), Init::undefined<double>(),
+                  Init::undefined<double>());
+}
+
 // template<> Corners Init::undefined<Corners>()
 // {
 //     return Corners(Init::undefined<LatLon>(),

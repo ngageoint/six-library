@@ -153,9 +153,8 @@ void run(std::string inputFile, std::string dataType)
         treeBuilder.parse(xmlFileStream);
         xmlFileStream.close();
 
-        six::DataType dt =
-                (dataType == "sicd") ? six::DataType::COMPLEX
-                                     : six::DataType::DERIVED;
+        six::DataType dt = (dataType == "sicd") ? six::DataType::COMPLEX
+                                                : six::DataType::DERIVED;
 
         six::XMLControl *control =
                 six::XMLControlFactory::getInstance().newXMLControl(dt);
@@ -249,6 +248,46 @@ const std::string KML_URI = "http://www.opengis.net/kml/2.2";
 const std::string GX_URI = "http://www.google.com/kml/ext/2.2";
 const std::string FOOTPRINT_COLOR = "ffff0000";
 
+xml::lite::Element* createPath(std::vector<six::LatLon>& coords,
+                               std::string name, std::string envelopeType =
+                                       "LineString", std::string envelopeURI =
+                                       KML_URI)
+{
+    std::ostringstream oss;
+    if (coords.size() < 1)
+        throw except::Exception(Ctxt("Unexpected zero-length coordinates"));
+    unsigned int less1 = (unsigned int) (coords.size() - 1);
+
+    for (unsigned int i = 0; i < less1; ++i)
+    {
+        oss << coords[i].getLon() << "," << coords[i].getLat();
+        oss << " ";
+    }
+    oss << coords[less1].getLon() << "," << coords[less1].getLat();
+
+    // Repeat the first element
+    if (envelopeType == "LinearRing")
+    {
+        oss << " ";
+        oss << coords[0].getLon() << "," << coords[0].getLat();
+    }
+
+    xml::lite::Element* coordsXML = new xml::lite::Element("coordinates",
+                                                           KML_URI, oss.str());
+    xml::lite::Element* envelopeXML = new xml::lite::Element(envelopeType,
+                                                             KML_URI);
+    envelopeXML->addChild(coordsXML);
+
+    xml::lite::Element* placemarkXML = new xml::lite::Element("Placemark",
+                                                              KML_URI);
+    placemarkXML->addChild(new xml::lite::Element("name", KML_URI, name));
+    placemarkXML->addChild(new xml::lite::Element("styleUrl", KML_URI,
+                                                  std::string("#") + name));
+    placemarkXML->addChild(envelopeXML);
+
+    return placemarkXML;
+}
+
 xml::lite::Element* createPath(std::vector<six::LatLonAlt>& coords,
                                std::string name, std::string envelopeType =
                                        "LineString", std::string envelopeURI =
@@ -290,7 +329,6 @@ xml::lite::Element* createPath(std::vector<six::LatLonAlt>& coords,
     placemarkXML->addChild(envelopeXML);
 
     return placemarkXML;
-
 }
 
 xml::lite::Element* createTimeSnapshot(const six::DateTime& dt)//, int seconds)
@@ -372,7 +410,7 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir)
     docXML->addChild(createLineStyle("arpPoly", "ff00007f", 2));
 
     // Create footprint
-    std::vector<six::LatLonAlt> corners = data->getImageCorners();
+    std::vector<six::LatLon> corners = data->getImageCorners();
     docXML->addChild(createPath(corners, "footprint", "LinearRing"));
 
     // Specifics to SICD

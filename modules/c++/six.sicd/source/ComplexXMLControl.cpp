@@ -297,8 +297,7 @@ XMLElem ComplexXMLControl::toXML(GeoData *geoData, XMLElem parent)
     createLatLonAlt("LLH", geoData->scp.llh, scpXML);
 
     //createFootprint
-    createFootprint("ImageCorners", "ICP", geoData->imageCorners, false,
-                    geoDataXML);
+    createFootprint("ImageCorners", "ICP", geoData->imageCorners, geoDataXML);
 
     //only if 3+ vertices
     unsigned int numVertices = geoData->validData.size();
@@ -597,20 +596,20 @@ XMLElem ComplexXMLControl::toXML(RadarCollection *radar, XMLElem parent)
         XMLElem areaXML = newElement("Area", radarXML);
         Area *area = radar->area;
 
-        bool haveApcCorners = true;
+        bool haveACPCorners = true;
 
-        for (unsigned int i = 0; i < area->apcCorners.size(); ++i)
+        for (unsigned int i = 0; i < area->acpCorners.size(); ++i)
         {
-            if (Init::isUndefined<LatLon>(area->apcCorners[i]))
+            if (Init::isUndefined<LatLonAlt>(area->acpCorners[i]))
             {
-                haveApcCorners = false;
+                haveACPCorners = false;
                 break;
             }
         }
 
-        if (haveApcCorners)
+        if (haveACPCorners)
         {
-            createFootprint("Corner", "APC", area->apcCorners, true, areaXML);
+            createFootprint("Corner", "ACP", area->acpCorners, areaXML);
         }
 
         AreaPlane *plane = area->plane;
@@ -1133,7 +1132,7 @@ void ComplexXMLControl::fromXML(XMLElem geoDataXML, GeoData *geoData)
     parseLatLonAlt(getFirstAndOnly(tmpElem, "LLH"), geoData->scp.llh);
 
     parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP",
-                   geoData->imageCorners, false);
+                   geoData->imageCorners);
 
     tmpElem = getOptional(geoDataXML, "ValidData");
     if (tmpElem != NULL)
@@ -1564,8 +1563,7 @@ void ComplexXMLControl::fromXML(XMLElem radarCollectionXML,
         if (optElem)
         {
             //optional
-            parseFootprint(optElem, "APC", radarCollection->area->apcCorners,
-                           true);
+            parseFootprint(optElem, "ACP", radarCollection->area->acpCorners);
         }
 
         XMLElem planeXML = getOptional(areaXML, "Plane");
@@ -2066,44 +2064,10 @@ void ComplexXMLControl::fromXML(XMLElem rmaXML, RMA* rma)
     }
 }
 
-void ComplexXMLControl::parseFootprint(XMLElem footprint,
-                                       std::string cornerName, std::vector<
-                                               LatLon>& value, bool alt)
-{
-    std::vector<XMLElem> vertices;
-    footprint->getElementsByTagName(cornerName, vertices);
-
-    value.clear();
-    value.resize(4);
-
-    for (unsigned int i = 0; i < vertices.size(); i++)
-    {
-        //check the index attr to know which corner it is
-        int
-                idx =
-                        str::toType<int>(
-                                         vertices[i]->getAttributes().getValue(
-                                                                               "index").substr(
-                                                                                               0,
-                                                                                               1))
-                                - 1;
-
-        parseLatLon(vertices[i], value[idx]);
-
-        if (alt)
-        {
-            double hae;
-
-            parseDouble(getFirstAndOnly(vertices[i], "HAE"), hae);
-            value[idx].setAlt(hae);
-        }
-    }
-}
-
 XMLElem ComplexXMLControl::createFootprint(std::string name,
                                            std::string cornerName,
                                            const std::vector<LatLon>& corners,
-                                           bool alt, XMLElem parent)
+                                           XMLElem parent)
 {
     XMLElem footprint = newElement(name, parent);
 
@@ -2117,6 +2081,28 @@ XMLElem ComplexXMLControl::createFootprint(std::string name,
     setAttribute(vertex, "index", "3:LRLC");
 
     vertex = createLatLon(cornerName, corners[3], footprint);
+    setAttribute(vertex, "index", "4:LRFC");
+
+    return footprint;
+}
+
+XMLElem ComplexXMLControl::createFootprint(std::string name,
+                                           std::string cornerName,
+                                           const std::vector<LatLonAlt>& corners,
+                                           XMLElem parent)
+{
+    XMLElem footprint = newElement(name, parent);
+
+    XMLElem vertex = createLatLonAlt(cornerName, corners[0], footprint);
+    setAttribute(vertex, "index", "1:FRFC");
+
+    vertex = createLatLonAlt(cornerName, corners[1], footprint);
+    setAttribute(vertex, "index", "2:FRLC");
+
+    vertex = createLatLonAlt(cornerName, corners[2], footprint);
+    setAttribute(vertex, "index", "3:LRLC");
+
+    vertex = createLatLonAlt(cornerName, corners[3], footprint);
     setAttribute(vertex, "index", "4:LRFC");
 
     return footprint;

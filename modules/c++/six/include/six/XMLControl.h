@@ -155,8 +155,11 @@ protected:
                             XMLElem parent = NULL);
 
     virtual XMLElem createFootprint(std::string name, std::string cornerName,
-                                    const std::vector<LatLon>& c, bool alt =
-                                            false, XMLElem parent = NULL);
+                                    const std::vector<LatLon>& c,
+                                    XMLElem parent = NULL);
+    virtual XMLElem createFootprint(std::string name, std::string cornerName,
+                                    const std::vector<LatLonAlt>& c,
+                                    XMLElem parent = NULL);
     XMLElem createPoly1D(std::string name, std::string uri,
                          const Poly1D& poly1D, XMLElem parent = NULL);
     XMLElem createPoly2D(std::string name, std::string uri,
@@ -198,7 +201,9 @@ protected:
             LatLon>& llVec);
     void parseRangeAzimuth(XMLElem parent, RangeAzimuth<double>& value);
     virtual void parseFootprint(XMLElem footprint, std::string cornerName,
-                                std::vector<LatLon>& value, bool alt);
+                                std::vector<LatLon>& value);
+    virtual void parseFootprint(XMLElem footprint, std::string cornerName,
+                                std::vector<LatLonAlt>& value);
 
     void parseDateTime(XMLElem element, DateTime& value);
     void parseRowColDouble(XMLElem parent, std::string rowName,
