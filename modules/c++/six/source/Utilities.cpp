@@ -692,7 +692,8 @@ template<> std::string six::toString(const AppliedType& value)
     case AppliedType::IS_TRUE:
         // TODO: Needs correction -- support alternate value to match
         // schema from 03/17/2009.
-        return "APPILED";
+//        return "APPILED";
+        return "APPLIED"; // fixed in 2010-07-08 version of schema
     case AppliedType::IS_FALSE:
         return "NOT_APPLIED";
     default:
