@@ -493,7 +493,7 @@ XMLElem ComplexXMLControl::toXML(Position *position, XMLElem parent)
         {
             PolyXYZ xyz = position->rcvAPC->rcvAPCPolys[0];
             XMLElem xyzXML = createPolyXYZ("RcvAPCPoly", xyz, rcvXML);
-            setAttribute(xyzXML, "index", str::toString(i));
+            setAttribute(xyzXML, "index", str::toString(i + 1));
         }
     }
     return positionXML;
@@ -590,7 +590,7 @@ XMLElem ComplexXMLControl::toXML(RadarCollection *radar, XMLElem parent)
     {
         ChannelParameters *cp = radar->rcvChannels[i];
         XMLElem cpXML = newElement("ChanParameters", rcvChanXML);
-        setAttribute(cpXML, "index", str::toString(i));
+        setAttribute(cpXML, "index", str::toString(i + 1));
 
         if (!Init::isUndefined<int>(cp->rcvAPCIndex))
             createInt("RcvAPCIndex", cp->rcvAPCIndex, cpXML);
@@ -773,9 +773,9 @@ XMLElem ComplexXMLControl::toXML(ImageFormation *imageFormation, XMLElem parent)
 
         require(
                 createBooleanType(
-                                  "HvAngleCompApplied",
+                                  "HVAngleCompApplied",
                                   imageFormation->polarizationCalibration->hvAngleCompensationApplied,
-                                  pcXML), "HvAngleCompApplied");
+                                  pcXML), "HVAngleCompApplied");
 
         require(
                 createBooleanType(
@@ -967,9 +967,10 @@ XMLElem ComplexXMLControl::toXML(RMA *rma, XMLElem parent)
         XMLElem rmatXML = newElement("RMAT", rmaXML);
         RMAT* rmat = rma->rmat;
 
-        createDouble("RMRefTime", rmat->refTime, rmatXML);
-        createVector3D("RMPosRef", rmat->refPos, rmatXML);
-        createVector3D("RMVelRef", rmat->refVel, rmatXML);
+        createDouble("RefTime", rmat->refTime, rmatXML);
+        createVector3D("PosRef", rmat->refPos, rmatXML);
+        createVector3D("UnitVelRef", rmat->refVel, rmatXML);
+        createPoly1D("DistRLPoly", rmat->distRefLinePoly, rmatXML);
         createPoly2D("CosDCACOAPoly", rmat->cosDCACOAPoly, rmatXML);
         createDouble("Kx1", rmat->kx1, rmatXML);
         createDouble("Kx2", rmat->kx2, rmatXML);
@@ -986,7 +987,7 @@ XMLElem ComplexXMLControl::toXML(RMA *rma, XMLElem parent)
         createPoly1D("TimeCAPoly", inca->timeCAPoly, incaXML);
         createDouble("R_CA_SCP", inca->rangeCA, incaXML);
         createDouble("FreqZero", inca->freqZero, incaXML);
-        createPoly1D("DRateSFPoly", inca->dopplerRateScaleFactorPoly, incaXML);
+        createPoly2D("DRateSFPoly", inca->dopplerRateScaleFactorPoly, incaXML);
 
         if (inca->dopplerCentroidPoly.orderX() >= 0
                 && inca->dopplerCentroidPoly.orderY() >= 0)
@@ -2001,8 +2002,8 @@ void ComplexXMLControl::fromXML(XMLElem matchInfoXML,
         //optional
         std::vector<XMLElem> matchTypesXML;
         (*it)->getElementsByTagName("MatchType", matchTypesXML);
-        for (std::vector<XMLElem>::iterator it2 = collectsXML.begin(); it2
-                != collectsXML.end(); ++it2)
+        for (std::vector<XMLElem>::iterator it2 = matchTypesXML.begin(); it2
+                != matchTypesXML.end(); ++it2)
         {
             std::string value;
 
@@ -2056,9 +2057,11 @@ void ComplexXMLControl::fromXML(XMLElem rmaXML, RMA* rma)
         rma->rmat = new RMAT();
         RMAT* rmat = rma->rmat;
 
-        parseDouble(getFirstAndOnly(rmatElem, "RMRefTime"), rmat->refTime);
-        parseVector3D(getFirstAndOnly(rmatElem, "RMPosRef"), rmat->refPos);
-        parseVector3D(getFirstAndOnly(rmatElem, "RMVelRef"), rmat->refVel);
+        parseDouble(getFirstAndOnly(rmatElem, "RefTime"), rmat->refTime);
+        parseVector3D(getFirstAndOnly(rmatElem, "PosRef"), rmat->refPos);
+        parseVector3D(getFirstAndOnly(rmatElem, "UnitVelRef"), rmat->refVel);
+        parsePoly1D(getFirstAndOnly(rmatElem, "DistRLPoly"), 
+		    rmat->distRefLinePoly);
         parsePoly2D(getFirstAndOnly(rmatElem, "CosDCACOAPoly"),
                     rmat->cosDCACOAPoly);
         parseDouble(getFirstAndOnly(rmatElem, "Kx1"), rmat->kx1);
@@ -2077,7 +2080,7 @@ void ComplexXMLControl::fromXML(XMLElem rmaXML, RMA* rma)
         parsePoly1D(getFirstAndOnly(incaElem, "TimeCAPoly"), inca->timeCAPoly);
         parseDouble(getFirstAndOnly(incaElem, "R_CA_SCP"), inca->rangeCA);
         parseDouble(getFirstAndOnly(incaElem, "FreqZero"), inca->freqZero);
-        parsePoly1D(getFirstAndOnly(incaElem, "DRateSFPoly"),
+        parsePoly2D(getFirstAndOnly(incaElem, "DRateSFPoly"),
                     inca->dopplerRateScaleFactorPoly);
 
         XMLElem tmpElem = getOptional(incaElem, "DopCentroidPoly");
