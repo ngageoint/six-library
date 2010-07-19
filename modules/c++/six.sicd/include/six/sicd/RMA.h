@@ -59,7 +59,7 @@ struct RMAT
 
     //!  Polynomial function that yields the distance along the
     //   reference straight line trajectory as function of time.
-    // Poly1D distRefLinePoly;
+    Poly1D distRefLinePoly;
 
     //!  Polynomial function that yields the cosine of the Doppler
     //   cone angle at COA as a function of the image location.
@@ -97,7 +97,7 @@ struct INCA
 
     //! Polynomial function that yields doppler rate scale factor as
     //  a function of image location.
-    Poly1D dopplerRateScaleFactorPoly;
+    Poly2D dopplerRateScaleFactorPoly;
 
     //! (Optional) Polynomial that yields Doppler Centroid value as a function
     //  of image location.
