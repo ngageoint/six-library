@@ -340,6 +340,7 @@ struct RadarCollection
         area(NULL)
     {
         refFrequencyIndex = Init::undefined<int>();
+	polarizationHVAnglePoly = Init::undefined<Poly1D>();
     }
 
     //!  Destructor.  Deletes children if non_NULL
