@@ -402,7 +402,7 @@ XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
 
         for (size_t i = 1; i <= numWeights; ++i)
         {
-            XMLElem wgtXML = createDouble("Wgt", grid->row->weights[i],
+            XMLElem wgtXML = createDouble("Wgt", grid->row->weights[i-1],
                                           wgtFuncXML);
             setAttribute(wgtXML, "index", str::toString(i));
         }
@@ -430,16 +430,19 @@ XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
         createString("WgtType", grid->col->weightType, colDirXML);
     }
 
-    if (grid->col->weights.size() > 0)
+    numWeights = grid->col->weights.size();
+    if (numWeights > 0)
     {
         XMLElem wgtFuncXML = newElement("WgtFunc", colDirXML);
+        setAttribute(wgtFuncXML, "size", str::toString(numWeights));
 
-        for (std::vector<double>::iterator it = grid->col->weights.begin(); it
-                != grid->col->weights.end(); ++it)
+        for (size_t i = 1; i <= numWeights; ++i)
         {
-            createDouble("Wgt", *it, wgtFuncXML);
+            XMLElem wgtXML = createDouble("Wgt", grid->col->weights[i-1],
+                                          wgtFuncXML);
+            setAttribute(wgtXML, "index", str::toString(i));
         }
-    }
+   }
 
     return gridXML;
 }
@@ -1986,7 +1989,18 @@ void ComplexXMLControl::fromXML(XMLElem matchInfoXML,
     for (std::vector<XMLElem>::iterator it = collectsXML.begin(); it
             != collectsXML.end(); ++it)
     {
-        MatchCollection* coll = new MatchCollection();
+      	// The MatchInformation object was given a MatchCollection when
+      	// it was instantiated.  The first time through, just populate it.
+
+	MatchCollection* coll;
+      	if (it == collectsXML.begin())
+      	{
+	   coll = matchInfo->collects[0];
+     	 }
+      	else
+      	{
+       	   coll = new MatchCollection();
+      	}
 
         parseString(getFirstAndOnly(*it, "CollectorName"), coll->collectorName);
 
@@ -2014,7 +2028,11 @@ void ComplexXMLControl::fromXML(XMLElem matchInfoXML,
         //optional
         parseParameters(*it, "Parameter", coll->parameters);
 
-        matchInfo->collects.push_back(coll);
+	// The first MatchCollection object is already in matchInfo.
+	if (it != collectsXML.begin())
+        {
+           matchInfo->collects.push_back(coll);
+        }
     }
 }
 
