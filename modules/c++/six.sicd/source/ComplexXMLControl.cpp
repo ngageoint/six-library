@@ -433,7 +433,7 @@ XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
     numWeights = grid->col->weights.size();
     if (numWeights > 0)
     {
-        XMLElem wgtFuncXML = newElement("WgtFunc", colDirXML);
+        XMLElem wgtFuncXML = newElement("WgtFunct", colDirXML);
         setAttribute(wgtFuncXML, "size", str::toString(numWeights));
 
         for (size_t i = 1; i <= numWeights; ++i)
@@ -530,12 +530,17 @@ XMLElem ComplexXMLControl::toXML(RadarCollection *radar, XMLElem parent)
     if (!radar->txSequence.empty())
     {
         XMLElem txSeqXML = newElement("TxSequence", radarXML);
+ 	setAttribute(txSeqXML, "size", 
+		str::toString(radar->txSequence.size()));
+
+	int i=1;
         for (std::vector<TxStep*>::iterator it = radar->txSequence.begin(); it
                 != radar->txSequence.end(); ++it)
         {
             TxStep *tx = *it;
 
             XMLElem txStepXML = newElement("TxStep", txSeqXML);
+	    setAttribute(txStepXML, "index", str::toString(i++));
 
             if (!Init::isUndefined<int>(tx->waveformIndex))
             {
