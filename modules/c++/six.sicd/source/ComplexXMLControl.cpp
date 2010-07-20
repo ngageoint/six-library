@@ -136,7 +136,7 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
 {
     if (data->getDataType() != DataType::COMPLEX)
     {
-        throw except::Exception("Data must be SICD");
+        throw except::Exception(Ctxt("Data must be SICD"));
     }
     xml::lite::Document* doc = new xml::lite::Document();
 
@@ -173,8 +173,8 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
     else if (sicd->rma)
         toXML(sicd->rma, root);
     else if (!sicd->pfa && !sicd->rma)
-        throw except::Exception("One of PFA and RMA must be defined -- both "
-            "are undefined.");
+        throw except::Exception(Ctxt("One of PFA and RMA must be defined -- "
+		"both are undefined."));
 
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
@@ -383,8 +383,7 @@ XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
     createDouble("DeltaK1", grid->row->deltaK1, rowDirXML);
     createDouble("DeltaK2", grid->row->deltaK2, rowDirXML);
 
-    if (grid->row->deltaKCOAPoly.orderX() >= 0
-            && grid->row->deltaKCOAPoly.orderY() >= 0)
+    if (!Init::isUndefined<Poly2D>(grid->row->deltaKCOAPoly))
     {
         createPoly2D("DeltaKCOAPoly", grid->row->deltaKCOAPoly, rowDirXML);
     }
@@ -419,8 +418,7 @@ XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
     createDouble("DeltaK1", grid->col->deltaK1, colDirXML);
     createDouble("DeltaK2", grid->col->deltaK2, colDirXML);
 
-    if (grid->col->deltaKCOAPoly.orderX() >= 0
-            && grid->col->deltaKCOAPoly.orderY() >= 0)
+    if (!Init::isUndefined<Poly2D>(grid->row->deltaKCOAPoly))
     {
         createPoly2D("DeltaKCOAPoly", grid->col->deltaKCOAPoly, colDirXML);
     }
@@ -482,9 +480,9 @@ XMLElem ComplexXMLControl::toXML(Position *position, XMLElem parent)
     XMLElem positionXML = newElement("Position", parent);
 
     createPolyXYZ("ARPPoly", position->arpPoly, positionXML);
-    if (position->grpPoly.order() >= 0)
+    if (!Init::isUndefined<PolyXYZ>(position->grpPoly))
         createPolyXYZ("GRPPoly", position->grpPoly, positionXML);
-    if (position->txAPCPoly.order() >= 0)
+    if (!Init::isUndefined<PolyXYZ>(position->txAPCPoly))
         createPolyXYZ("TxAPCPoly", position->txAPCPoly, positionXML);
     if (position->rcvAPC && !position->rcvAPC->rcvAPCPolys.empty())
     {
@@ -521,7 +519,7 @@ XMLElem ComplexXMLControl::toXML(RadarCollection *radar, XMLElem parent)
                      radarXML);
     }
 
-    if (radar->polarizationHVAnglePoly.order() >= 0)
+    if (!Init::isUndefined<Poly1D>(radar->polarizationHVAnglePoly))
     {
         createPoly1D("PolarizationHVAnglePoly", radar->polarizationHVAnglePoly,
                      radarXML);
@@ -1007,8 +1005,8 @@ XMLElem ComplexXMLControl::toXML(RMA *rma, XMLElem parent)
     }
     else
     {
-        throw except::Exception("One of RMAT and INCA must be defined -- both "
-            "are undefined.");
+        throw except::Exception(Ctxt("One of RMAT and INCA must be defined -- both "
+            "are undefined."));
     }
 
     return rmaXML;
