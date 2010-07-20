@@ -95,6 +95,9 @@ struct Position
     Position() :
         rcvAPC(NULL)
     {
+	// Initialize other optional elements
+    	grpPoly = Init::undefined<PolyXYZ>();
+    	txAPCPoly = Init::undefined<PolyXYZ>();
     }
     //!  Destroy, including rcvAPC if not NULL
     ~Position();
