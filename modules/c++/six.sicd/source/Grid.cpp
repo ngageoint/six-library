@@ -35,7 +35,7 @@ DirectionParameters::DirectionParameters()
     deltaK1 = Init::undefined<double>();
     deltaK2 = Init::undefined<double>();
     weightType = Init::undefined<std::string>();
-    
+    deltaKCOAPoly = Init::undefined<Poly2D>();   
 }
 
 DirectionParameters* DirectionParameters::clone() const 
