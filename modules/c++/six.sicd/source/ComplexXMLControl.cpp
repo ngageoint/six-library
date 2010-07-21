@@ -141,7 +141,6 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
     xml::lite::Document* doc = new xml::lite::Document();
 
     XMLElem root = newElement("SICD");
-    //setAttribute(root, "xmlns", getDefaultURI());
     doc->setRootElement(root);
 
     ComplexData *sicd = (ComplexData*) data;
@@ -168,13 +167,15 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
     if (sicd->matchInformation && !sicd->matchInformation->collects.empty())
         toXML(sicd->matchInformation, root);
 
+    if (sicd->pfa && sicd->rma)
+    {
+        throw except::Exception(Ctxt("Only one of PFA and RMA can be defined"));
+    }
+
     if (sicd->pfa)
         toXML(sicd->pfa, root);
     else if (sicd->rma)
         toXML(sicd->rma, root);
-    else if (!sicd->pfa && !sicd->rma)
-        throw except::Exception(Ctxt("One of PFA and RMA must be defined -- "
-		"both are undefined."));
 
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
