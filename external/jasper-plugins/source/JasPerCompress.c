@@ -41,10 +41,10 @@ typedef struct _ImplControl
     nitf_Uint32 nbpr; /*!< Number of blocks per row */
     nitf_Uint32 nbpc; /*!< Number of blocks per column */
     char irep[NITF_IREP_SZ + 1];
-    char comRat[NITF_COMRAT_SZ + 1];
     nitf_Uint64 offset; /*!< Saved start argument */
     nitf_Uint64 dataLength; /*!< Saved start argument */
     jas_image_t *jasImage;
+    nitf_Field *comratField;
     nitf_Uint32 curBlock;
 } ImplControl;
 
@@ -84,7 +84,6 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader * subheader,
     char ic[NITF_IC_SZ+1];
     char imode[NITF_IMODE_SZ+1];
     char irep[NITF_IREP_SZ+1];
-    char comRat[NITF_COMRAT_SZ+1];
 
     if(!nitf_Field_get(subheader->NITF_NROWS, &nRows,
                     NITF_CONV_INT, sizeof(nitf_Uint32), error))
@@ -150,11 +149,6 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader * subheader,
     {
         return NULL;
     }
-    if(!nitf_Field_get(subheader->NITF_COMRAT, comRat, NITF_CONV_STRING,
-                    NITF_COMRAT_SZ+1, error))
-    {
-        return NULL;
-    }
 
     nitf_Field_trimString(pvtype);
     if(strcmp(pvtype, "INT") != 0 && strcmp(pvtype, "SI") != 0
@@ -203,8 +197,6 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader * subheader,
         return NULL;
     }
 
-    nitf_Field_trimString(comRat);
-
     /*  Allocate the compression control structure */
     icntl = implMemAlloc(sizeof(ImplControl), error);
     if (!icntl)
@@ -223,10 +215,10 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader * subheader,
     icntl->nbpc= nbpc;
 
     strcpy(icntl->irep, irep);
-    strcpy(icntl->comRat, comRat);
     icntl->jasImage = NULL;
 
     icntl->curBlock = 0;
+    icntl->comratField = subheader->NITF_COMRAT;
 
     return icntl;
 }
@@ -378,8 +370,13 @@ NITFPRIV(NITF_BOOL) implEnd( nitf_CompressionControl * control,
     ImplControl *icntl;
     jas_stream_t *stream;
     int rc;
+    nitf_Off offset;
+    size_t compressedSize, rawSize;
+    nitf_Uint32 comratInt;
+    float comrat;
 
     icntl = (ImplControl *) control;
+    offset = nitf_IOInterface_tell(io, error);
     stream = JasPer_wrapIOInterface(io, JAS_STREAM_WRITE| JAS_STREAM_BINARY,
                                     error);
     if (!stream)
@@ -411,6 +408,25 @@ NITFPRIV(NITF_BOOL) implEnd( nitf_CompressionControl * control,
 
     jas_image_clearfmts();
     jas_image_destroy(icntl->jasImage);
+
+    /* figure out the compression ratio */
+    compressedSize = (size_t)(nitf_IOInterface_tell(io, error) - offset);
+    rawSize = icntl->nRows * icntl->nCols * icntl->nBands * icntl->nBytes;
+
+    /*
+        Nxyz = JPEG 2000 numerically lossless, where
+        "xyz" indicates the expected achieved bit rate (in
+        bits per pixel per band) for the final layer of each tile.
+        The decimal point is implicit and assumed to be one
+        digit from the right (i.e. xy.z).
+     */
+    comrat = (1.0f * compressedSize * icntl->nBits) / rawSize;
+    comratInt = (nitf_Uint32)(comrat * 10.0f + 0.5f);
+
+    /* write the comrat field */
+    NITF_SNPRINTF(icntl->comratField->raw, icntl->comratField->length + 1,
+                  "N%03d", comratInt);
+    /*printf("compression ratio: %f, %s\n", comrat, icntl->comratField->raw);*/
 
     return NITF_SUCCESS;
 }
