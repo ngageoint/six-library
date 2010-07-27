@@ -56,17 +56,17 @@ struct Data
     virtual Data* clone() const = 0;
 
     /*!
-     *  Data class is DATA_DERIVED for DerivedData and 
-     *  DATA_COMPLEX for ComplexData
+     *  Data type/class is DERIVED for DerivedData and
+     *  COMPLEX for ComplexData
      */
-    virtual DataClass getDataClass() const = 0;
+    virtual DataType getDataType() const = 0;
 
     /*!
      *  Utility function for getting the pixel type.  
      *  This is stored in the SICD along with the width  
      *
      *  Maps to: /SICD/ImageData/PixelType,
-     *  /SIDD/Display/PixelType
+     *  /SIDD/Display/PixelTypeking with. In other words, a
      */
     virtual PixelType getPixelType() const = 0;
     virtual void setPixelType(PixelType pixelType) = 0;
@@ -100,13 +100,13 @@ struct Data
      *  Maps to: /SICD/GeoData/ImageCorners,
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
      */
-    virtual Corners getImageCorners() const = 0;
+    virtual std::vector<LatLon> getImageCorners() const = 0;
 
     /*!
      *  Maps to: /SICD/GeoData/ImageCorners,
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
      */
-    virtual void setImageCorners(Corners imageCorners) = 0;
+    virtual void setImageCorners(const std::vector<LatLon>& corners) = 0;
 
     /*!
      *  Maps to: /SICD/CollectionInfo/CoreName,
@@ -119,6 +119,18 @@ struct Data
      *  /SIDD/ProductCreation/ProductName
      */
     virtual void setName(std::string name) = 0;
+
+    /*!
+     *  Maps to: /SICD/CollectionInfo/CollectorName,
+     *  /SIDD/AdvancedExploitation/Collection/Information/SensorName
+     */
+    virtual std::string getSource() const = 0;
+
+    /*!
+     *  Maps to: /SICD/CollectionInfo/CollectorName,
+     *  /SIDD/AdvancedExploitation/Collection/Information/SensorName
+     */
+    virtual void setSource(std::string name) = 0;
 
     /*!
      *  Maps to: /SICD/ImageCreation/DateTime,  
@@ -161,6 +173,13 @@ struct Data
      *  specific to SICD or SIDD).
      */
     virtual void setClassification(Classification classification) = 0;
+
+    virtual LUT* getDisplayLUT() = 0;
+
+    /*!
+     * Returns an identifier of the Vendor supplying the implementation code.
+     */
+    virtual std::string getVendorID() const = 0;
 
 };
 

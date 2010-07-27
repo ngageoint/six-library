@@ -131,7 +131,7 @@ std::ostream& operator<<(std::ostream& os, const Classification& c)
     if (cg)
     {
         os << "Guidance: " << std::endl;
-        //os << "   Date: " << str::toString<DateTime>(cg->date) << std::endl;
+        //os << "   Date: " << six::toString<DateTime>(cg->date) << std::endl;
         os << "   Authority: " << cg->authority << std::endl;
     }
 

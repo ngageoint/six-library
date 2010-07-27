@@ -52,57 +52,57 @@ public:
     template<typename T>
     Parameter(T value)
     {
-        mData = str::toString<T>(value);
+        mValue = str::toString<T>(value);
     }
     //!  Return a double
     inline operator double() const
     {
-        return str::toType<double>(mData);
+        return str::toType<double>(mValue);
     }
     //!  Return a uchar
     inline operator sys::Uint8_T() const
     {
-        return str::toType<sys::Uint8_T>(mData);
+        return str::toType<sys::Uint8_T>(mValue);
     }
     //!  Return a char
     inline operator sys::Int8_T() const
     {
-        return str::toType<sys::Uint8_T>(mData);
+        return str::toType<sys::Uint8_T>(mValue);
     }
     //!  Return a ushort
     inline operator sys::Uint16_T() const
     {
-        return str::toType<sys::Uint16_T>(mData);
+        return str::toType<sys::Uint16_T>(mValue);
     }
     //!  Return a short
     inline operator sys::Int16_T() const
     {
-        return str::toType<sys::Uint16_T>(mData);
+        return str::toType<sys::Uint16_T>(mValue);
     }
     //!  Return a uint
     inline operator sys::Uint32_T() const
     {
-        return str::toType<sys::Uint32_T>(mData);
+        return str::toType<sys::Uint32_T>(mValue);
     }
     //!  Return an int
     inline operator sys::Int32_T() const
     {
-        return str::toType<sys::Uint32_T>(mData);
+        return str::toType<sys::Uint32_T>(mValue);
     }
     //!  64-bit uint
     inline operator sys::Uint64_T() const
     {
-        return str::toType<sys::Uint64_T>(mData);
+        return str::toType<sys::Uint64_T>(mValue);
     }
     //!  64-bit int
     inline operator sys::Int64_T() const
     {
-        return str::toType<sys::Int64_T>(mData);
+        return str::toType<sys::Int64_T>(mValue);
     }
 
     /*         inline operator bool() const */
     /*         { */
-    /*             std::string other = mData; */
+    /*             std::string other = mValue; */
     /*             str::lower(other); */
     /*             str::trim(other); */
 
@@ -117,7 +117,7 @@ public:
     //!  Get a string as a string
     inline std::string str() const
     {
-        return mData;
+        return mValue;
     }
     //!  Get the parameter's name
     inline std::string getName() const
@@ -130,17 +130,27 @@ public:
         mName = name;
     }
 
+    //!  Set the parameters' value
+    template<typename T>
+    void setValue(T value)
+    {
+        mValue = str::toString<T>(value);
+    }
+
     //!  Get back const char*
     operator const char*() const
     {
-        return mData.c_str();
+        return mValue.c_str();
     }
+
+    bool operator==(const Parameter& o) const
+    {
+        return mName == o.mName && mValue == o.mValue;
+    }
+
 protected:
-    std::string mData;
+    std::string mValue;
     std::string mName;
-//private:
-    // Don't allow this cast, ever.
-   
 
 };
 

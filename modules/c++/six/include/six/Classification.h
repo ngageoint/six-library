@@ -28,16 +28,16 @@
 namespace six
 {
 
-    /*!
-     *  \struct ClassificationGuidance
-     *  \brief Represents SIDD classification guidance block
-     *
-     *  This struct attempts to populate both SICD and SIDD guidance
-     *  information.  SICD does not actually have such a structure,
-     *  but its components are also used to initialize the SICD container
-     */
-    struct ClassificationGuidance
-  {
+/*!
+ *  \struct ClassificationGuidance
+ *  \brief Represents SIDD classification guidance block
+ *
+ *  This struct attempts to populate both SICD and SIDD guidance
+ *  information.  SICD does not actually have such a structure,
+ *  but its components are also used to initialize the SICD container
+ */
+struct ClassificationGuidance
+{
     ClassificationGuidance()
     {
     }

@@ -48,10 +48,10 @@ public:
     //std::string getContainerType() const { return mContainerType; }
 
     /*! 
-     *  The data class is either TYPE_COMPLEX or TYPE_DERIVED
+     *  The data class is either COMPLEX or DERIVED
      *  This just tells us what kind of container.  Note that, in 
-     *  the case of TYPE_DERIVED, one or more Data*'s DataClass will
-     *  be DATA_DERIVED.
+     *  the case of DERIVED, one or more Data*'s DataType will
+     *  be DERIVED.
      *
      */
     DataType getDataType() const
@@ -60,8 +60,8 @@ public:
     }
 
     /*!
-     *  Construct a container of type TYPE_COMPLEX (for SICD products)
-     *  or TYPE_DERIVED (for SIDD products).
+     *  Construct a container of type COMPLEX (for SICD products)
+     *  or DERIVED (for SIDD products).
      *
      */
     Container(DataType dataType) :
@@ -95,18 +95,18 @@ public:
      *  \param i The slot number
      *  \param data A pointer to the data object
      */
-    void setData(unsigned int i, Data* data);
+    void setData(size_t i, Data* data);
 
     /*!
      *  Get the item leaving in the ith slot.
      *  \return The data
      */
-    Data* getData(unsigned int i)
+    Data* getData(size_t i)
     {
         return this->mData[i];
     }
 
-    unsigned int getNumData() const
+    size_t getNumData() const
     {
         return this->mData.size();
     }

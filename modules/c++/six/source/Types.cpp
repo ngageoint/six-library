@@ -30,12 +30,14 @@ std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
     return os;
 }
 
+/*
 std::ostream& operator<<(std::ostream& os, const Corners& corners)
 {
     os << "{" << corners.corner[0] << ',' << corners.corner[1] << ','
             << corners.corner[2] << ',' << corners.corner[3];
     return os;
 }
+*/
 
 
 const sys::Uint64_T Constants::IS_SIZE_MAX = 9999999998LL;

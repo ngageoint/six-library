@@ -23,34 +23,48 @@
 
 using namespace six;
 
-six::XMLControl* six::XMLControlFactory::newXMLControl(DataClass dataClass)
- {
-     switch (dataClass)
-     {
-     case six::DATA_COMPLEX:
-         return new six::ComplexXMLControl();
-     case six::DATA_DERIVED:
-         return new six::DerivedXMLControl();
-     default:
-         throw except::Exception("Invalid data class");
-     }
- }
-
-six::XMLControl* six::XMLControlFactory::newXMLControl(std::string identifier)
+XMLControl* XMLControlRegistry::newXMLControl(DataType dataType)
 {
+    XMLControlCreator* creator = mRegistry[dataType];
+    if (creator == NULL)
+        throw except::NoSuchKeyException(Ctxt(FmtX("No data class creator %d",
+                                                   (int) dataType)));
+    return creator->newXMLControl();
+}
+
+//!  Destructor
+XMLControlRegistry::~XMLControlRegistry()
+{
+    for (std::map<DataType, XMLControlCreator*>::iterator p = mRegistry.begin(); p
+            != mRegistry.end(); ++p)
+    {
+        if (p->second)
+            delete p->second;
+    }
+    mRegistry.clear();
+
+}
+
+XMLControl* XMLControlRegistry::newXMLControl(std::string identifier)
+{
+    DataType dataType;
+
     if (identifier == "SICD_XML")
     {
-        return new six::ComplexXMLControl();
+        dataType = DataType::COMPLEX;
     }
-    else
+    else if (identifier == "SIDD_XML")
     {
-        return new six::DerivedXMLControl();
+        dataType = DataType::DERIVED;
     }
+
+    return newXMLControl(dataType);
+
 }
 
 char* six::toXMLCharArray(Data* data)
 {
-    std::string xml = six::toXMLString(data);
+    std::string xml = toXMLString(data);
     char* raw = new char[xml.length() + 1];
     strcpy(raw, xml.c_str());
     return raw;
@@ -58,10 +72,10 @@ char* six::toXMLCharArray(Data* data)
 }
 std::string six::toXMLString(Data* data)
 {
-    six::XMLControl* xmlControl = 
-        six::XMLControlFactory::newXMLControl(data->getDataClass());
+    XMLControl* xmlControl =
+            XMLControlFactory::getInstance().newXMLControl(data->getDataType());
     xml::lite::Document *doc = xmlControl->toXML(data);
-    
+
     io::ByteStream bs;
     doc->getRootElement()->print(bs);
     delete xmlControl;

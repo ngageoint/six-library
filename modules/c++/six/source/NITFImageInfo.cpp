@@ -45,14 +45,13 @@ void NITFImageInfo::computeImageInfo()
 
 void NITFImageInfo::computeSegmentInfo()
 {
-    Corners corners = data->getImageCorners();
     if (productSize <= maxProductSize)
     {
         imageSegments.resize(1);
         imageSegments[0].numRows = data->getNumRows();
         imageSegments[0].firstRow = 0;
         imageSegments[0].rowOffset = 0;
-        imageSegments[0].corners = corners;
+        imageSegments[0].corners = data->getImageCorners();
     }
 
     else
@@ -81,16 +80,16 @@ void NITFImageInfo::computeSegmentInfo()
 
 void NITFImageInfo::computeSegmentCorners()
 {
-    Corners corners = data->getImageCorners();
+    std::vector<LatLon> corners = data->getImageCorners();
 
     // (0, 0)
-    Vector3 icp1 = scene::Utilities::latLonToECEF(corners.corner[0]);
+    Vector3 icp1 = scene::Utilities::latLonToECEF(corners[0]);
     // (0, N)
-    Vector3 icp2 = scene::Utilities::latLonToECEF(corners.corner[1]);
+    Vector3 icp2 = scene::Utilities::latLonToECEF(corners[1]);
     // (M, N)
-    Vector3 icp3 = scene::Utilities::latLonToECEF(corners.corner[2]);
+    Vector3 icp3 = scene::Utilities::latLonToECEF(corners[2]);
     // (M, 0)
-    Vector3 icp4 = scene::Utilities::latLonToECEF(corners.corner[3]);
+    Vector3 icp4 = scene::Utilities::latLonToECEF(corners[3]);
 
     size_t numIS = imageSegments.size();
     double total = data->getNumRows() - 1.0;
@@ -106,35 +105,29 @@ void NITFImageInfo::computeSegmentCorners()
         // This requires an operator overload for scalar * vector
         ecef = wgt1 * icp1 + wgt2 * icp4;
 
-        imageSegments[i].corners.corner[0] =
+        imageSegments[i].corners[0] =
                 scene::Utilities::ecefToLatLon(ecef);
 
         // Now do it for the first
         ecef = wgt1 * icp2 + wgt2 * icp3;
 
-        imageSegments[i].corners.corner[1] =
+        imageSegments[i].corners[1] =
                 scene::Utilities::ecefToLatLon(ecef);
     }
 
     for (i = 0; i < numIS - 1; i++)
     {
-        imageSegments[i].corners.setLat(2, imageSegments[i + 1].corners.getLat(
-                1));
+        imageSegments[i].corners[2].setLat(imageSegments[i + 1].corners[1].getLat());
+        imageSegments[i].corners[2].setLon(imageSegments[i + 1].corners[1].getLon());
 
-        imageSegments[i].corners.setLon(2, imageSegments[i + 1].corners.getLon(
-                1));
+        imageSegments[i].corners[3].setLat(imageSegments[i + 1].corners[0].getLat());
 
-        imageSegments[i].corners.setLat(3, imageSegments[i + 1].corners.getLat(
-                0));
-
-        imageSegments[i].corners.setLon(3, imageSegments[i + 1].corners.getLon(
-                0));
-
+        imageSegments[i].corners[3].setLon(imageSegments[i + 1].corners[0].getLon());
     }
 
     // This last one is cake
-    imageSegments[i].corners.corner[2] = corners.corner[2];
-    imageSegments[i].corners.corner[3] = corners.corner[3];
+    imageSegments[i].corners[2] = corners[2];
+    imageSegments[i].corners[3] = corners[3];
 
     // SHOULD WE JUST ASSUME THAT WHATEVER IS IN THE XML GeoData is what
     // we want?  For now, this makes sense
@@ -151,7 +144,7 @@ void NITFImageInfo::compute()
 PixelType NITFImageInfo::getPixelTypeFromNITF(nitf::ImageSubheader& subheader)
 {
     //std::string pvType = subheader.getPixelValueType()
-    return RE32F_IM32F;
+    return PixelType::RE32F_IM32F;
 }
 
 // Currently punts on LU
@@ -161,8 +154,8 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
 
     switch (data->getPixelType())
     {
-    case RE32F_IM32F:
-    case RE16I_IM16I:
+    case PixelType::RE32F_IM32F:
+    case PixelType::RE16I_IM16I:
     {
         nitf::BandInfo band1;
         band1.getSubcategory().set("I");
@@ -173,7 +166,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         bands.push_back(band2);
     }
         break;
-    case RGB24I:
+    case PixelType::RGB24I:
     {
         nitf::BandInfo band1;
         band1.getRepresentation().set("R");
@@ -190,8 +183,8 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
     }
         break;
 
-    case MONO8I:
-    case MONO16I:
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
     {
         nitf::BandInfo band1;
         band1.getRepresentation().set("M");
@@ -199,45 +192,45 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
     }
         break;
 
-    case MONO8LU:
+    case PixelType::MONO8LU:
     {
         nitf::BandInfo band1;
 
-        LUT* lut = ((DerivedData*)data)->display->remapInformation->remapLUT->clone();
+        LUT* lut = data->getDisplayLUT()->clone();
         sys::byteSwap((sys::byte*)lut->table, 
-		      lut->elementSize, lut->numEntries);
+ 		      lut->elementSize, lut->numEntries);
 
         unsigned char* table =
-                new unsigned char[lut->numEntries * lut->elementSize];
+            new unsigned char[lut->numEntries * lut->elementSize];
 
-        for (unsigned int i = 0; i < lut->numEntries; ++i)
-        {
-            // Need two LUTS in the nitf, with high order
-            // bits in the first and low order in the second
-            table[i] = (short)(*lut)[i][0];
-            table[lut->numEntries + i] = (short)(*lut)[i][1];
+         for (unsigned int i = 0; i < lut->numEntries; ++i)
+         {
+             // Need two LUTS in the nitf, with high order
+             // bits in the first and low order in the second
+             table[i] = (short)(*lut)[i][0];
+             table[lut->numEntries + i] = (short)(*lut)[i][1];
 
-        }
+         }
 
-        //I would like to set it this way but it does not seem to work.
-        //Using the init function instead.
-        //band1.getRepresentation().set("LU");
-        //band1.getLookupTable().setTable(table, 2, lut->numEntries);
+//         //I would like to set it this way but it does not seem to work.
+//         //Using the init function instead.
+//         //band1.getRepresentation().set("LU");
+//         //band1.getLookupTable().setTable(table, 2, lut->numEntries);
 
-        nitf::LookupTable lookupTable(band1.getLookupTable());
-        lookupTable.setTable(table, 2, lut->numEntries);
-        band1.init("LU", "", "", "", 2, lut->numEntries, lookupTable);
-        bands.push_back(band1);
-    }
-        break;
+         nitf::LookupTable lookupTable(band1.getLookupTable());
+         lookupTable.setTable(table, 2, lut->numEntries);
+         band1.init("LU", "", "", "", 2, lut->numEntries, lookupTable);
+         bands.push_back(band1);
+     }
+    break;
 
-    case RGB8LU:
+    case PixelType::RGB8LU:
     {
         nitf::BandInfo band1;
 
-        LUT* lut = ((DerivedData*)data)->display->remapInformation->remapLUT;
+        LUT* lut = data->getDisplayLUT();
         unsigned char* table =
-                new unsigned char[lut->numEntries * lut->elementSize];
+            new unsigned char[lut->numEntries * lut->elementSize];
 
         for (unsigned int i = 0, k = 0; i < lut->numEntries; ++i)
         {
@@ -247,7 +240,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
                 table[j * lut->numEntries + i] = lut->table[k];
             }
         }
-
+        
         //I would like to set it this way but it does not seem to work.
         //Using the init function instead.
         //band1.getRepresentation().set("LU");
@@ -258,7 +251,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         band1.init("LU", "", "", "", 3, lut->numEntries, lookupTable);
         bands.push_back(band1);
     }
-        break;
+    break;
 
     default:
         throw except::Exception(Ctxt("Unknown pixel type"));

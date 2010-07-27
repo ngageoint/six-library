@@ -12,11 +12,12 @@ def set_options(opt):
     opt.sub_options('drivers c++')
 
 def configure(conf):
-    Options.options.enable_fft = True #force it
     conf.check_tool('build', tooldir='build')
     conf.sub_config('drivers c++')
 
 def build(bld):
+    # I wish
+    #Options.options.libs_only = True
     bld.add_subdirs('drivers drivers/nitf c++')
 
 def distclean(context):
