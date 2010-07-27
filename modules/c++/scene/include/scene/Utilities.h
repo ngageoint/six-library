@@ -39,6 +39,7 @@ struct Utilities
      *
      */
     static Vector3 latLonToECEF(LatLonAlt latLon);
+    static Vector3 latLonToECEF(LatLon latLon);
 
     /*!
      *  Convert a vector representing an ECEF coordinate

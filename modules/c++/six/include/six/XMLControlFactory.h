@@ -22,35 +22,83 @@
 #ifndef __SIX_XML_CONTROL_FACTORY_H__
 #define __SIX_XML_CONTROL_FACTORY_H__
 
+#include <import/mt.h>
+
 #include "six/XMLControl.h"
-#include "six/ComplexXMLControl.h"
-#include "six/DerivedXMLControl.h"
 
 namespace six
 {
 
 /*!
- *  \class XMLControlFactory
- *  \brief Factory design pattern for generating a new XML reader/writer
+ *  \class XMLControlCreator
+ *  \brief Creator design pattern for producing an XMLControl
+ *
+ *  These objects are registered to the XMLControlFactory singleton
+ *  prior to data requests for objects of that type.  This allows
+ *  the application developer to enable the proper driver for the
+ *  data
+ *
+ */
+struct XMLControlCreator
+{
+    //!  Constructor
+    XMLControlCreator() {}
+
+    //!  Destructor
+    virtual ~XMLControlCreator() {}
+
+    /*!
+     *  This method creates a new XMLControl object of derived type
+     *  on demand
+     *
+     */
+    virtual six::XMLControl* newXMLControl() const = 0;
+
+};
+
+/*!
+ *  \class XMLControlCreatorT
+ *  \brief Templated implementation of XMLControlCreator
+ *
+ *  This utility Creator simply uses a default constructor to instantiate
+ *  an object T.  This is usually all that a derived implementation will
+ *  need
+ *
+ */
+template <typename T> struct XMLControlCreatorT : public XMLControlCreator
+{
+    ~XMLControlCreatorT() {}
+    six::XMLControl* newXMLControl() const { return new T(); }
+};
+
+/*!
+ *  \class XMLControlRegistry
+ *  \brief Dynamic registry pattern for generating a new XML reader/writer
  *
  *  This class generates the proper reader/writer for the Data content.
- *  There are two methods currently, one that uses the DataClass to
+ *  There are two methods currently, one that uses the DataType to
  *  identify which reader/writer to create, and one that uses a
  *  string (the same one that identifies the type in the container)
  */
-class XMLControlFactory
+class XMLControlRegistry
 {
+    std::map<DataType, XMLControlCreator*> mRegistry;
 public:
     //!  Constructor
-    XMLControlFactory()
-    {
-    }
-    //!  Destructor
-    virtual ~XMLControlFactory()
+    XMLControlRegistry()
     {
     }
 
-    static XMLControl* newXMLControl(DataClass dataClass);
+    inline void addCreator(DataType dataType, XMLControlCreator* creator)
+    {
+        mRegistry[ dataType ] = creator;
+    }
+
+    //!  Destructor
+    virtual ~XMLControlRegistry();
+
+
+    XMLControl* newXMLControl(DataType dataType);
 
     /*!
      *  Static method to create a new XMLControl from a string.  
@@ -61,7 +109,7 @@ public:
      *  \return XMLControl the produced XML bridge
      *
      */
-    static XMLControl* newXMLControl(std::string identifier);
+    XMLControl* newXMLControl(std::string identifier);
 
 };
 
@@ -85,6 +133,9 @@ char* toXMLCharArray(Data* data);
  */
 std::string toXMLString(Data* data);
 
+
+//!  Singleton declaration of our XMLControlRegistry
+typedef mt::Singleton<XMLControlRegistry, true> XMLControlFactory;
 
 }
 

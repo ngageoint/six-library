@@ -31,6 +31,12 @@ Vector3 Utilities::latLonToECEF(LatLonAlt latLon)
     return toECEF.transform(latLon);
 }
 
+Vector3 Utilities::latLonToECEF(LatLon latLon)
+{
+    scene::LatLonAlt lla(latLon.getLat(), latLon.getLon());
+    return latLonToECEF(lla);
+}
+
 LatLonAlt Utilities::ecefToLatLon(Vector3 vec)
 {
     scene::ECEFToLLATransform toLLA;

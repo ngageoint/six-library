@@ -32,22 +32,20 @@ unsigned long Data::getNumBytesPerPixel() const
     PixelType pixelType = getPixelType();
     switch (pixelType)
     {
-    case RE32F_IM32F:
+    case PixelType::RE32F_IM32F:
         nbpp = 8;
         break;
 
-    case RE16I_IM16I:
+    case PixelType::RE16I_IM16I:
         nbpp = 4;
         break;
-    case RGB24I:
+    case PixelType::RGB24I:
         nbpp = 3;
         break;
-
     default:
         break;
     }
     return nbpp;
-
 }
 
 unsigned long Data::getNumChannels() const
@@ -56,12 +54,11 @@ unsigned long Data::getNumChannels() const
     PixelType pixelType = getPixelType();
     switch (pixelType)
     {
-    case RE32F_IM32F:
-    case RE16I_IM16I:
+    case PixelType::RE32F_IM32F:
+    case PixelType::RE16I_IM16I:
         numChannels = 2;
         break;
-
-    case RGB24I:
+    case PixelType::RGB24I:
         numChannels = 3;
         break;
     default:

@@ -24,21 +24,16 @@
 using namespace six;
 
 #ifdef min
-    #undef min
+#undef min
 #endif
 #ifdef max
-    #undef max
+#undef max
 #endif
 
 /*     template<> bool Init::isUndefined<std::string>(std::string s) */
 /*     { */
 /*         return s.length(); */
 /*     } */
-
-template<> DataClass Init::undefined<DataClass>()
-{
-    return DATA_UNKNOWN;
-}
 
 template<> std::string Init::undefined<std::string>()
 {
@@ -65,7 +60,6 @@ template<> unsigned int Init::undefined<unsigned int>()
     return std::numeric_limits<unsigned int>::max();
 }
 
-
 /*     template<> bool Init::isUndefined<long>(long l) */
 /*     { */
 /*         return l != std::numeric_limits<long>::max(); */
@@ -81,7 +75,6 @@ template<> unsigned long Init::undefined<unsigned long>()
     return std::numeric_limits<unsigned long>::max();
 }
 
-
 /*     template<> bool Init::isUndefined<long>(unsigned long l) */
 /*     { */
 /*         return l != std::numeric_limits<unsigned long>::max(); */
@@ -92,83 +85,52 @@ template<> float Init::undefined<float>()
     return std::numeric_limits<float>::infinity();
 }
 
-
 /*     template<> bool Init::isUndefined<float>(float f) */
 /*     { */
 /*         return f != std::numeric_limits<float>::infinity(); */
 /*     } */
-
 
 template<> double Init::undefined<double>()
 {
     return std::numeric_limits<double>::infinity();
 }
 
-
 /*     template<> bool Init::isUndefined<float>(double d) */
 /*     { */
 /*         return d != std::numeric_limits<double>::infinity(); */
 /*     } */
 
-template<> PixelType Init::undefined<PixelType>()
-{
-    return PIXEL_TYPE_NOT_SET;
-}
-template<> MagnificationMethod Init::undefined<MagnificationMethod>()
-{
-    return MAG_NOT_SET;
-}
 
-template<> DecimationMethod Init::undefined<DecimationMethod>()
+template<> RangeAzimuth<double>Init::undefined<RangeAzimuth<double> >()
 {
-    return DEC_NOT_SET;
-}
-
-template<> RadarModeType Init::undefined<RadarModeType>()
-{
-    return MODE_NOT_SET;
-}
-
-template<> RangeAzimuth Init::undefined<RangeAzimuth>()
-{
-    return RangeAzimuth(Init::undefined<double>(),
-                             Init::undefined<double>());
+    return RangeAzimuth<double>(Init::undefined<double>(), Init::undefined<
+            double>());
 }
 
 template<> RowColInt Init::undefined<RowColInt>()
 {
-    return RowColInt(Init::undefined<unsigned long>(),
-                     Init::undefined<unsigned long>());
+    return RowColInt(Init::undefined<unsigned long>(), Init::undefined<
+            unsigned long>());
 }
 
 template<> RowColDouble Init::undefined<RowColDouble>()
 {
-    return RowColDouble(Init::undefined<double>(),
-                        Init::undefined<double>());
+    return RowColDouble(Init::undefined<double>(), Init::undefined<double>());
 }
 
 template<> AngleMagnitude Init::undefined<AngleMagnitude>()
 {
-    return AngleMagnitude(Init::undefined<double>(),
-                          Init::undefined<double>());
+    return AngleMagnitude(Init::undefined<double>(), Init::undefined<double>());
 }
 
 template<> DecorrType Init::undefined<DecorrType>()
 {
-    return DecorrType(Init::undefined<double>(),
-                      Init::undefined<double>());
+    return DecorrType(Init::undefined<double>(), Init::undefined<double>());
 }
-
-
 
 template<> DateTime Init::undefined<DateTime>()
 {
     return DateTime(0.0);
-}
-
-template<> CollectType Init::undefined<CollectType>()
-{
-    return COLLECT_NOT_SET;
 }
 
 template<> Vector3 Init::undefined<Vector3>()
@@ -178,27 +140,23 @@ template<> Vector3 Init::undefined<Vector3>()
 
 template<> LatLon Init::undefined<LatLon>()
 {
-    return LatLon(Init::undefined<double>(),
+    return LatLon(Init::undefined<double>(), Init::undefined<double>());
+}
+
+template<> LatLonAlt Init::undefined<LatLonAlt>()
+{
+    return LatLonAlt(Init::undefined<double>(), Init::undefined<double>(),
                   Init::undefined<double>());
 }
 
-template<> Corners Init::undefined<Corners>()
-{
-    return Corners(Init::undefined<LatLon>(),
-                        Init::undefined<LatLon>(),
-                        Init::undefined<LatLon>(),
-                        Init::undefined<LatLon>());
-}
+// template<> Corners Init::undefined<Corners>()
+// {
+//     return Corners(Init::undefined<LatLon>(),
+//                         Init::undefined<LatLon>(),
+//                         Init::undefined<LatLon>(),
+//                         Init::undefined<LatLon>());
+// }
 
-template<> BooleanType Init::undefined<BooleanType>()
-{
-    return BOOL_NOT_SET;
-}
-
-template<> SideOfTrackType Init::undefined<SideOfTrackType>()
-{
-    return SIDE_NOT_SET;
-}
 
 template<> ReferencePoint Init::undefined<ReferencePoint>()
 {
@@ -206,12 +164,183 @@ template<> ReferencePoint Init::undefined<ReferencePoint>()
     return ReferencePoint(ud, ud, ud, ud, ud);
 }
 
-template<> FFTSign Init::undefined<FFTSign>()
+template<> Poly1D Init::undefined<Poly1D>()
 {
-    return FFT_SIGN_NOT_SET;
+    //TODO is this good enough, or should we init differently?
+    return Poly1D();
 }
+template<> Poly2D Init::undefined<Poly2D>()
+{
+    //TODO is this good enough, or should we init differently?
+    return Poly2D();
+}
+template<> PolyXYZ Init::undefined<PolyXYZ>()
+{
+    //TODO is this good enough, or should we init differently?
+    return PolyXYZ();
+}
+template<> Classification Init::undefined<Classification>()
+{
+    //TODO is this good enough, or should we init differently?
+    return Classification();
+}
+template<> Parameter Init::undefined<Parameter>()
+{
+    return Parameter();
+}
+
 
 template<> AppliedType Init::undefined<AppliedType>()
 {
-    return APPLIED_NOT_SET;
+    return AppliedType::NOT_SET;
+}
+
+template<> AutofocusType Init::undefined<AutofocusType>()
+{
+    return AutofocusType::NOT_SET;
+}
+
+template<> BooleanType Init::undefined<BooleanType>()
+{
+    return BooleanType::NOT_SET;
+}
+
+template<> ByteSwapping Init::undefined<ByteSwapping>()
+{
+    return ByteSwapping::NOT_SET;
+}
+
+template<> CollectType Init::undefined<CollectType>()
+{
+    return CollectType::NOT_SET;
+}
+
+template<> ComplexImageGridType Init::undefined<ComplexImageGridType>()
+{
+    return ComplexImageGridType::NOT_SET;
+}
+
+template<> ComplexImagePlaneType Init::undefined<ComplexImagePlaneType>()
+{
+    return ComplexImagePlaneType::NOT_SET;
+}
+
+template<> CornerIndex Init::undefined<CornerIndex>()
+{
+    return CornerIndex::NOT_SET;
+}
+
+template<> DataType Init::undefined<DataType>()
+{
+    return DataType::NOT_SET;
+}
+
+template<> DecimationMethod Init::undefined<DecimationMethod>()
+{
+    return DecimationMethod::NOT_SET;
+}
+
+template<> DemodType Init::undefined<DemodType>()
+{
+    return DemodType::NOT_SET;
+}
+
+template<> DisplayType Init::undefined<DisplayType>()
+{
+    return DisplayType::NOT_SET;
+}
+
+template<> DualPolarizationType Init::undefined<DualPolarizationType>()
+{
+    return DualPolarizationType::NOT_SET;
+}
+
+template<> EarthModelType Init::undefined<EarthModelType>()
+{
+    return EarthModelType::NOT_SET;
+}
+
+template<> FFTSign Init::undefined<FFTSign>()
+{
+    return FFTSign::NOT_SET;
+}
+
+template<> FrameType Init::undefined<FrameType>()
+{
+    return FrameType::NOT_SET;
+}
+
+template<> ImageBeamCompensationType Init::undefined<ImageBeamCompensationType>()
+{
+    return ImageBeamCompensationType::NOT_SET;
+}
+
+template<> ImageFormationType Init::undefined<ImageFormationType>()
+{
+    return ImageFormationType::NOT_SET;
+}
+
+template<> MagnificationMethod Init::undefined<MagnificationMethod>()
+{
+    return MagnificationMethod::NOT_SET;
+}
+
+template<> OrientationType Init::undefined<OrientationType>()
+{
+    return OrientationType::NOT_SET;
+}
+
+template<> PixelType Init::undefined<PixelType>()
+{
+    return PixelType::NOT_SET;
+}
+
+template<> PolarizationType Init::undefined<PolarizationType>()
+{
+    return PolarizationType::NOT_SET;
+}
+
+template<> ProjectionType Init::undefined<ProjectionType>()
+{
+    return ProjectionType::NOT_SET;
+}
+
+template<> RMAlgoType Init::undefined<RMAlgoType>()
+{
+    return RMAlgoType::NOT_SET;
+}
+
+template<> RadarModeType Init::undefined<RadarModeType>()
+{
+    return RadarModeType::NOT_SET;
+}
+
+template<> RegionType Init::undefined<RegionType>()
+{
+    return RegionType::NOT_SET;
+}
+
+template<> RowColEnum Init::undefined<RowColEnum>()
+{
+    return RowColEnum::NOT_SET;
+}
+
+template<> SCPType Init::undefined<SCPType>()
+{
+    return SCPType::NOT_SET;
+}
+
+template<> SideOfTrackType Init::undefined<SideOfTrackType>()
+{
+    return SideOfTrackType::NOT_SET;
+}
+
+template<> SlowTimeBeamCompensationType Init::undefined<SlowTimeBeamCompensationType>()
+{
+    return SlowTimeBeamCompensationType::NOT_SET;
+}
+
+template<> XYZEnum Init::undefined<XYZEnum>()
+{
+    return XYZEnum::NOT_SET;
 }

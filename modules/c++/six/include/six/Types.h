@@ -31,6 +31,7 @@
 #include <import/io.h>
 #include <limits>
 #include "scene/Types.h"
+#include "six/Enums.h"
 
 /*!
  *  \macro SIX_LIB_VERSION 
@@ -68,7 +69,7 @@
  *  library or specification overhauls associated with the file
  *  format
  */
-#define SIX_MICRO_VERSION_NUMBER 0
+#define SIX_MICRO_VERSION_NUMBER 1
 
 namespace six
 {
@@ -94,148 +95,190 @@ typedef math::poly::OneD<Vector3> PolyXYZ;
 typedef scene::AngleMagnitude AngleMagnitude;
 
 //! Lat Lon
-typedef scene::LatLonAlt LatLon;
+typedef scene::LatLon LatLon;
+
+//! Lat Lon Alt
 typedef scene::LatLonAlt LatLonAlt;
 
 typedef except::Context ValidationContext;
-
-enum DataType
-{
-    TYPE_UNKNOWN = 0, TYPE_COMPLEX, TYPE_DERIVED
-};
-
-enum DataClass
-{
-    DATA_UNKNOWN = 0, DATA_COMPLEX, DATA_DERIVED
-};
-
-enum PixelType
-{
-    PIXEL_TYPE_NOT_SET = 0,
-    RE32F_IM32F,
-    RE16I_IM16I,
-    MONO8I,
-    MONO16I,
-    MONO8LU,
-    RGB8LU,
-    RGB24I
-};
-
-// For reads/writes
-enum ByteSwapping
-{
-    BYTE_SWAP_OFF = 0, BYTE_SWAP_ON, BYTE_SWAP_AUTO
-};
-
-enum RowColEnum
-{
-    RC_ROW = 0, RC_COL = 1
-};
-enum XYZEnum
-{
-    XYZ_X, XYZ_Y, XYZ_Z
-};
-enum MagnificationMethod
-{
-    MAG_NOT_SET, MAG_NEAREST_NEIGHBOR, MAG_BILINEAR
-};
-enum DecimationMethod
-{
-    DEC_NOT_SET,
-    DEC_NEAREST_NEIGHBOR,
-    DEC_BILINEAR,
-    DEC_BRIGHTEST_PIXEL,
-    DEC_LAGRANGE
-};
-
-enum PolarizationType
-{
-    POL_NOT_SET, POL_OTHER, POL_V, POL_H, POL_RHC, POL_LHC
-};
-
-enum DualPolarizationType
-{
-    DUAL_POL_NOT_SET,
-    DUAL_POL_OTHER,
-    DUAL_POL_V_V,
-    DUAL_POL_V_H,
-    DUAL_POL_H_V,
-    DUAL_POL_H_H,
-    DUAL_POL_RHC_RHC,
-    DUAL_POL_RHC_LHC,
-    DUAL_POL_LHC_LHC
-};
-
-enum EarthModelType
-{
-    EARTH_NOT_SET, EARTH_WGS84
-};
-
-enum FFTSign
-{
-    FFT_SIGN_NOT_SET = 0, FFT_SIGN_NEG = -1, FFT_SIGN_POS = 1
-};
 
 /*!
  *  \struct RangeAzimuth
  *  \brief Range/azimuth pair type
  *
- *  Pair storage for range azimuth
+ *
+ *  Templated pair storage for  range azimuth values.
  *
  */
-struct RangeAzimuth
+template<typename T> struct RangeAzimuth
 {
-    RangeAzimuth(double r = 0, double a = 0) :
+    RangeAzimuth(T r = 0, T a = 0) :
         range(r), azimuth(a)
     {
     }
-    double range;
-    double azimuth;
+    T range;
+    T azimuth;
+
+    /*!
+     *  Compare the types considering that some specializations (e.g., double)
+     *  are not exact
+     */
+    bool operator==(const RangeAzimuth<T>& t) const
+    {
+        return math::linear::equals(range, t.range)
+                && math::linear::equals(azimuth, t.azimuth);
+    }
+
 };
 
 /*!
- *  \struct RowColInt
+ *  \struct RowCol
  *  \brief Row/Col pair type
  *
- *  Pair storage for row/col unsigned integer.
- *
+ *  Templated pair storage for row/col values.  This is typedef'd
+ *  below to prevent incorrect type assigment (e.g., RowCol<int> where
+ *  type should be RowCol<long>)
  */
 
-struct RowColInt
+template<typename T> struct RowCol
 {
-    RowColInt(unsigned long r = 0, unsigned long c = 0) :
+    T row;
+    T col;
+
+    RowCol(T r = (T) 0.0, T c = (T) 0.0) :
         row(r), col(c)
     {
     }
-    unsigned long row;
-    unsigned long col;
+
+    template<typename Other_T> RowCol(const RowCol<Other_T>& p)
+    {
+        row = p.row;
+        col = p.col;
+    }
+
+    RowCol(const std::pair<T, T>& p)
+    {
+        row = p.first;
+        col = p.second;
+    }
+
+    template<typename Other_T> RowCol& operator=(const RowCol<Other_T>& p)
+    {
+        if (this != &p)
+        {
+            row = (T) p.row;
+            col = (T) p.col;
+        }
+        return *this;
+    }
+
+    RowCol& operator=(const std::pair<T, T>& p)
+    {
+        row = p.first;
+        col = p.second;
+        return *this;
+    }
+
+    template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p)
+    {
+        row += (T) p.row;
+        col += (T) p.col;
+        return *this;
+    }
+
+    template<typename Other_T> RowCol operator+(const RowCol<Other_T>& p)
+    {
+        RowCol copy(*this);
+        return copy += p;
+    }
+
+    template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p)
+    {
+        row -= (T) p.row;
+        col -= (T) p.col;
+        return *this;
+    }
+
+    template<typename Other_T> RowCol operator-(const RowCol<Other_T>& p)
+    {
+        RowCol copy(*this);
+        return copy -= p;
+    }
+
+    RowCol& operator+=(T scalar)
+    {
+        row += scalar;
+        col += scalar;
+        return *this;
+    }
+
+    RowCol operator+(T scalar)
+    {
+        RowCol copy(*this);
+        return copy += scalar;
+    }
+
+    RowCol& operator-=(T scalar)
+    {
+        row -= scalar;
+        col -= scalar;
+        return *this;
+    }
+
+    RowCol operator-(T scalar)
+    {
+        RowCol copy(*this);
+        return copy -= scalar;
+    }
+
+    RowCol& operator*=(T scalar)
+    {
+        row *= scalar;
+        col *= scalar;
+        return *this;
+    }
+
+    RowCol operator*(T scalar)
+    {
+        RowCol copy(*this);
+        return copy *= scalar;
+    }
+
+    RowCol& operator/=(T scalar)
+    {
+        row /= scalar;
+        col /= scalar;
+        return *this;
+    }
+
+    RowCol operator/(T scalar)
+    {
+        RowCol copy(*this);
+        return copy /= scalar;
+    }
+
+    /*!
+     *  Compare the types considering that some
+     *  specializations (e.g., double)
+     *  are not exact
+     */
+    bool operator==(const RowCol<T>& p) const
+    {
+        return math::linear::equals(row, p.row) && math::linear::equals(col,
+                                                                        p.col);
+    }
+
+    bool operator!=(const RowCol<T>& p) const
+    {
+        return !(RowCol::operator==(p));
+    }
+
 };
 
-/*!
- *  \struct RowColDouble
- *  \brief Row/Col pair type
- *
- *  Pair storage for row/col double
- */
-struct RowColDouble
-{
-    RowColDouble(double r = 0, double c = 0) :
-        row(r), col(c)
-    {
-    }
-    RowColDouble(const RowColDouble & rc) :
-        row(rc.row), col(rc.col)
-    {
-    }
-    double row;
-    double col;
+// These are heavily used and we dont want any mistakes
+typedef RowCol<double>RowColDouble;
+typedef RowCol<long>RowColInt;
 
-    bool operator==(const RowColDouble& x) const
-    {
-        return row == x.row && col == x.col;
-    }
-
-};
 /*!
  *  \struct DecorrType
  *  \brief Reuse type for ErrorStatistics
@@ -258,109 +301,15 @@ struct DecorrType
 };
 
 /*!
- *  \struct RowColPoly2D
- *  \brief Pair for 2D polys
- *
- *  2-Dimensional polynomial pair
+ *  2-D polynomial pair
  */
-struct RowColPoly2D
-{
-    RowColPoly2D()
-    {
-    }
 
-    /*     RowColPoly2D(const Poly2D& r, const Poly2D& c) : */
-    /*         row(r), col(c) */
-    /*     { */
-    /*     } */
-    /*     RowColPoly2D(const RowColPoly2D & rc) : */
-    /*         row(rc.row), col(rc.col) */
-    /*     { */
-    /*     } */
-    Poly2D row;
-    Poly2D col;
-};
+typedef RowCol<Poly2D>RowColPoly2D;
 
-// Collection type
-enum CollectType
-{
-    COLLECT_NOT_SET, COLLECT_MONOSTATIC, COLLECT_BISTATIC
-};
-
-enum ProjectionType
-{
-    PROJECTION_NOT_SET, 
-    PROJECTION_PLANE, 
-    PROJECTION_GEOGRAPHIC, 
-    PROJECTION_CYLINDRICAL
-};
-
-enum RegionType
-{
-    REGION_NOT_SET, REGION_SUB_REGION, REGION_GEOGRAPHIC_INFO
-};
-
-// Radar mode
-enum RadarModeType
-{
-    MODE_INVALID,
-    MODE_NOT_SET,
-    MODE_SPOTLIGHT,
-    MODE_STRIPMAP,
-    MODE_DYNAMIC_STRIPMAP
-};
-
-enum SideOfTrackType
-{
-    SIDE_NOT_SET = 0,
-    SIDE_LEFT = -1,
-    SIDE_RIGHT = 1
-};
-
-enum BooleanType
-{
-    BOOL_NOT_SET = -1, BOOL_FALSE = 0, BOOL_TRUE = 1
-};
-
-enum AppliedType
-{
-    APPLIED_NOT_SET = -1, APPLIED_TRUE = 0, APPLIED_FALSE = 1
-};
-
-enum ComplexImagePlaneType
-{
-    PLANE_OTHER, PLANE_SLANT, PLANE_GROUND
-};
-enum ComplexImageGridType
-{
-    GRID_RGAZIM, GRID_RGZERO, GRID_CARTESIAN
-};
-enum DemodType
-{
-    DEMOD_NOT_SET, DEMOD_STRETCH, DEMOD_CHIRP
-};
-enum DisplayType
-{
-    DISPLAY_NOT_SET, DISPLAY_COLOR, DISPLAY_MONO
-};
-enum ImageFormationType
-{
-    IF_OTHER, IF_PFA, IF_RMA, IF_CSA, IF_RDA
-};
-
-enum SlowTimeBeamCompensationType
-{
-    SLOW_TIME_BEAM_NO, SLOW_TIME_BEAM_GLOBAL, SLOW_TIME_BEAM_SV
-};
-enum ImageBeamCompensationType
-{
-    IMAGE_BEAM_NO, IMAGE_BEAM_SV
-};
-
-enum AutofocusType
-{
-    AUTOFOCUS_NO, AUTOFOCUS_GLOBAL, AUTOFOCUS_SV
-};
+/*!
+ *  2-D lat-lon sample spacing (Required for SIDD 0.1.1)
+ */
+typedef RowCol<LatLon>RowColLatLon;
 
 /*!
  *  \struct Constants
@@ -371,13 +320,12 @@ enum AutofocusType
 struct Constants
 {
     //!  This is the upper bound of a NITF segment
-    const static sys::Uint64_T IS_SIZE_MAX;// = 9999999998LL;
+    const static sys::Uint64_T IS_SIZE_MAX; // = 9999999998LL;
     const static sys::Uint64_T GT_SIZE_MAX;
 
     enum GTKeys
     {
-        GT_SICD_KEY = 52766,
-        GT_SIDD_KEY = 58543
+        GT_SICD_KEY = 52766, GT_SIDD_KEY = 58543
     };
 
     enum
@@ -395,26 +343,26 @@ struct Constants
      */
     inline static int getNumBytesPerPixel(PixelType type)
     {
-        switch (type)
+        switch (type.value)
         {
-        case RE32F_IM32F:
+        case PixelType::RE32F_IM32F:
             return 8;
 
-        case RE16I_IM16I:
+        case PixelType::RE16I_IM16I:
             return 4;
 
-        case MONO8I:
-        case MONO8LU:
-        case RGB8LU:
+        case PixelType::MONO8I:
+        case PixelType::MONO8LU:
+        case PixelType::RGB8LU:
             return 1;
-        case MONO16I:
+        case PixelType::MONO16I:
             return 2;
-        case RGB24I:
+        case PixelType::RGB24I:
             return 3;
 
         default:
             throw except::Exception(Ctxt(FmtX("Unknown pixel type [%d]",
-                    (int) type)));
+                                              (int) type)));
         }
     }
 
@@ -434,14 +382,14 @@ struct ReferencePoint
     Vector3 ecef;
 
     //!  Row col pixel location of point
-    RowColDouble rowCol;
+    RowCol<double>rowCol;
 
     //!  (Optional) name.  Leave it blank if you dont need it
     std::string name;
 
     //!  Construct, init all fields at once (except optional name)
     ReferencePoint(double x = 0, double y = 0, double z = 0, double row = 0,
-            double col = 0) :
+                   double col = 0) :
         rowCol(row, col)
     {
         ecef[0] = x;
@@ -449,16 +397,15 @@ struct ReferencePoint
         ecef[2] = z;
     }
     //!  Alternate construct, sitll init all fields at once
-    ReferencePoint(Vector3 xyz, RowColDouble rcd) :
+    ReferencePoint(Vector3 xyz, RowCol<double>rcd) :
         ecef(xyz), rowCol(rcd)
     {
     }
-    
+
     //!  Are two points the same
     bool operator==(const ReferencePoint& x) const
     {
-        return ecef[0] == x.ecef[0] && ecef[1] == x.ecef[1] && ecef[2]
-                == x.ecef[2] && rowCol == x.rowCol;
+        return ecef == x.ecef && rowCol == x.rowCol;
     }
 };
 
@@ -473,136 +420,6 @@ struct SCP
 {
     Vector3 ecf;
     LatLonAlt llh;
-};
-
-/*!
- *  \struct Corners
- *  \brief Generic cross-format model for geo-corners
- *
- *  This model object is used by both SICD and SIDD reader/writers
- *  but frees the user from the details of the implementation of the
- *  XML.  Note that the enumeration defines the winding order (clockwise)
- *
- */
-struct Corners
-{
-    scene::LatLonAlt corner[4];
-
-    /*!
-     *  Since the spec doesnt order the corners
-     *  like you might think, its a good idea to
-     *  use these indices
-     */
-    enum
-    {
-        FIRST_ROW_FIRST_COL = 0,
-        FIRST_ROW_LAST_COL,
-        LAST_ROW_LAST_COL,
-        LAST_ROW_FIRST_COL
-    };
-
-    //!  Default constructor
-    Corners()
-    {
-    }
-
-    /*!
-     *  Constructor that allows the four corners
-     *  to be set up front.
-     *
-     */
-    Corners(scene::LatLonAlt firstRowFirstCol,
-            scene::LatLonAlt firstRowLastCol, scene::LatLonAlt lastRowLastCol,
-            scene::LatLonAlt lastRowFirstCol)
-    {
-        corner[0] = firstRowFirstCol;
-        corner[1] = firstRowLastCol;
-        corner[2] = lastRowLastCol;
-        corner[3] = lastRowFirstCol;
-    }
-    ~Corners()
-    {
-    }
-
-    /*!
-     *  Get latitude of corner i in degrees.  The 
-     *  enums above may be used for the parameter
-     */
-    double getLat(int i) const
-    {
-        return corner[i].getLat();
-    }
-
-    /*!
-     *  Get longitude of corner i in degrees.  The 
-     *  enums above may be used for the parameter
-     */
-    double getLon(int i) const
-    {
-        return corner[i].getLon();
-    }
-
-    /*!
-     *  Get latitude of corner i in radians.  The 
-     *  enums above may be used for the parameter
-     */
-    double getLatRadians(int i) const
-    {
-        return corner[i].getLatRadians();
-    }
-
-    /*!
-     *  Get longitude of corner i in radians.  The 
-     *  enums above may be used for the parameter
-     */
-    double getLonRadians(int i) const
-    {
-        return corner[i].getLonRadians();
-    }
-
-    /*!
-     *  Set latitude of corner i in degrees.  The 
-     *  enums above may be used for the parameter
-     */
-    void setLat(int i, double lat)
-    {
-        corner[i].setLat(lat);
-    }
-
-    /*!
-     *  Set longitude of corner i in degrees.  The 
-     *  enums above may be used for the parameter
-     */
-    void setLon(int i, double lon)
-    {
-        corner[i].setLon(lon);
-    }
-
-    /*!
-     *  Set latitude of corner i in radians.  The 
-     *  enums above may be used for the parameter
-     */
-    void setLatRadians(int i, double lat)
-    {
-        corner[i].setLatRadians(lat);
-    }
-
-    /*!
-     *  Set longitude of corner i in radians.  The 
-     *  enums above may be used for the parameter
-     */
-    void setLonRadians(int i, double lon)
-    {
-        corner[i].setLonRadians(lon);
-    }
-
-    //!  Are these corners the same as this?
-    bool operator==(const Corners& x) const
-    {
-        return corner[0] == x.corner[0] && corner[1] == x.corner[1]
-                && corner[2] == x.corner[2] && corner[3] == x.corner[3];
-    }
-
 };
 
 /*!
@@ -676,14 +493,19 @@ struct LUT
 struct AmplitudeTable : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable() : LUT(256, sizeof(double)) {}
+    AmplitudeTable() :
+        LUT(256, sizeof(double))
+    {
+    }
 
     //!  Destructor.  Relies on base class for LUT deletion
-    virtual ~AmplitudeTable() {}
+    virtual ~AmplitudeTable()
+    {
+    }
     //!  Clone (again)
     LUT* clone()
     {
-	AmplitudeTable* lut = new AmplitudeTable();
+        AmplitudeTable* lut = new AmplitudeTable();
         for (unsigned int i = 0; i < numEntries * elementSize; ++i)
         {
             lut->table[i] = table[i];
@@ -693,10 +515,15 @@ struct AmplitudeTable : public LUT
     }
 };
 
+/*!
+ *  \class MissingRequiredException
+ *  \brief Throwable related to a required element being null,
+ *         undefined, etc.
+ */
+DECLARE_EXCEPTION(MissingRequired)
+
 }
 
-//std::ostream& operator<<(std::ostream& os, const RowColType& rc);
-std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt);
-std::ostream& operator<<(std::ostream& os, const six::Corners& corners);
+//std::ostream& operator<<(std::ostream& os, const six::Corners& corners);
 
 #endif

@@ -23,6 +23,8 @@
 #define __SIX_SET_H__
 
 #include "six/Types.h"
+#include "six/Classification.h"
+#include "six/Parameter.h"
 #include <import/except.h>
 
 namespace six
@@ -51,7 +53,6 @@ struct Init
 
 };
 
-template<> DataClass Init::undefined<DataClass>();
 template<> std::string Init::undefined<std::string>();
 template<> int Init::undefined<int>();
 template<> unsigned int Init::undefined<unsigned int>();
@@ -59,25 +60,58 @@ template<> long Init::undefined<long>();
 template<> unsigned long Init::undefined<unsigned long>();
 template<> float Init::undefined<float>();
 template<> double Init::undefined<double>();
-template<> PixelType Init::undefined<PixelType>();
-template<> MagnificationMethod Init::undefined<MagnificationMethod>();
-template<> DecimationMethod Init::undefined<DecimationMethod>();
-template<> RadarModeType Init::undefined<RadarModeType>();
-template<> RangeAzimuth Init::undefined<RangeAzimuth>();
+template<> RangeAzimuth<double> Init::undefined<RangeAzimuth<double> >();
 template<> RowColInt Init::undefined<RowColInt>();
 template<> RowColDouble Init::undefined<RowColDouble>();
-template<> AngleMagnitude Init::undefined<AngleMagnitude>();
 template<> DecorrType Init::undefined<DecorrType>();
+template<> AngleMagnitude Init::undefined<AngleMagnitude>();
 template<> DateTime Init::undefined<DateTime>();
-template<> CollectType Init::undefined<CollectType>();
 template<> Vector3 Init::undefined<Vector3>();
 template<> LatLon Init::undefined<LatLon>();
-template<> Corners Init::undefined<Corners>();
-template<> BooleanType Init::undefined<BooleanType>();
-template<> SideOfTrackType Init::undefined<SideOfTrackType>();
+template<> LatLonAlt Init::undefined<LatLonAlt>();
+//template<> Corners Init::undefined<Corners>();
 template<> ReferencePoint Init::undefined<ReferencePoint>();
-template<> FFTSign Init::undefined<FFTSign>();
+template<> Poly1D Init::undefined<Poly1D>();
+template<> Poly2D Init::undefined<Poly2D>();
+template<> PolyXYZ Init::undefined<PolyXYZ>();
+template<> Classification Init::undefined<Classification>();
+template<> Parameter Init::undefined<Parameter>();
+
+// enums
 template<> AppliedType Init::undefined<AppliedType>();
+template<> AutofocusType Init::undefined<AutofocusType>();
+template<> BooleanType Init::undefined<BooleanType>();
+template<> ByteSwapping Init::undefined<ByteSwapping>();
+template<> CollectType Init::undefined<CollectType>();
+template<> ComplexImageGridType Init::undefined<ComplexImageGridType>();
+template<> ComplexImagePlaneType Init::undefined<ComplexImagePlaneType>();
+template<> CornerIndex Init::undefined<CornerIndex>();
+template<> DataType Init::undefined<DataType>();
+template<> DecimationMethod Init::undefined<DecimationMethod>();
+template<> DemodType Init::undefined<DemodType>();
+template<> DisplayType Init::undefined<DisplayType>();
+template<> DualPolarizationType Init::undefined<DualPolarizationType>();
+template<> EarthModelType Init::undefined<EarthModelType>();
+template<> FFTSign Init::undefined<FFTSign>();
+template<> FrameType Init::undefined<FrameType>();
+template<> ImageBeamCompensationType Init::undefined<ImageBeamCompensationType>();
+template<> ImageFormationType Init::undefined<ImageFormationType>();
+template<> MagnificationMethod Init::undefined<MagnificationMethod>();
+template<> OrientationType Init::undefined<OrientationType>();
+template<> PixelType Init::undefined<PixelType>();
+template<> PolarizationType Init::undefined<PolarizationType>();
+template<> ProjectionType Init::undefined<ProjectionType>();
+template<> RMAlgoType Init::undefined<RMAlgoType>();
+template<> RadarModeType Init::undefined<RadarModeType>();
+template<> RegionType Init::undefined<RegionType>();
+template<> RowColEnum Init::undefined<RowColEnum>();
+template<> SCPType Init::undefined<SCPType>();
+template<> SideOfTrackType Init::undefined<SideOfTrackType>();
+template<> SlowTimeBeamCompensationType Init::undefined<SlowTimeBeamCompensationType>();
+template<> XYZEnum Init::undefined<XYZEnum>();
+
+
+
 
 }
 

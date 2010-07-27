@@ -5,6 +5,14 @@ import Tools.misc as misc
 
 
 def set_options(opt):
+    opt.add_option('--disable-pcre', action='store_false', dest='enable_pcre',
+                   help='turn off PCRE')
+    opt.add_option('--enable-pcre', action='store_true',
+                   default=True, help='turn on PCRE (default)')
+    opt.add_option('--with-pcre-home', action='store',
+                   help='Specify the PCRE Home - where PCRE is installed to')
+    opt.add_option('--build-pcre', action='store_true',
+                   default=False, help='force building PCRE from scratch')
     opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'xerces'],
                    dest='xml_layer', default='expat', help='Specify the XML layer')
     opt.add_option('--with-xml-home', action='store', dest='xml_home',
@@ -17,7 +25,29 @@ def configure(conf):
     xmlHome = Options.options.xml_home
     xmlLayer = Options.options.xml_layer
     makeXML = Options.options.build_xml
+    pcreHome = Options.options.with_pcre_home
+    enablePCRE = Options.options.enable_pcre
     
+    if enablePCRE:
+        makePCRE = False
+        if Options.options.build_pcre:
+            makePCRE = True
+        elif pcreHome:
+            conf.check_message_2('setting pcre home to %s' % pcreHome)
+            conf.env.append_value('LIBPATH_PCRE', os.path.join(pcreHome, 'lib'))
+            conf.env.append_value('CPPPATH_PCRE', os.path.join(pcreHome, 'include'))
+        else:
+            if not conf.check_cxx(lib='pcre', mandatory=False,
+                                  uselib_store='PCRE'):
+                #default to building locally
+                makePCRE = True
+        if makePCRE:
+            conf.env['MAKE_PCRE'] = makePCRE
+            conf.check_message_1('Building local lib')
+            conf.check_message_2('pcre')
+        else:
+            conf.env['LIB_PCRE'] = ['pcre']
+
     if makeXML:
         xmlLayer = 'expat'
     
@@ -155,13 +185,77 @@ def build(bld):
     #defs = map(lambda t: '%s=%s' % t, [(k, v) for k, v in bld.env['defines'].iteritems()])
 
     driversNode = bld.path
+
+    if 'MAKE_PCRE' in env:
+        fname = 'pcre-5.0'
+        ut = bld.new_task_gen(path=bld.path, env=env.copy(),
+                              fname='%s.tar' % fname, before='dftables')
+        ut.features = ['untar']
+        bld.add_group()
+        
+        driverNode = driversNode.ensure_dir_node_from_path(fname)
+        
+        #we need to do a few substitution transformations
+        #these taken from the configure.in in the package
+        pcreDict = dict(PCRE_MAJOR=5, PCRE_MINOR=0, PCRE_DATE='13-Sep-2004',
+                        MATCH_LIMIT=10000000, POSIX_MALLOC_THRESHOLD=10,
+                        HAVE_STRERROR=env['HAVE_STRERROR'],
+                        HAVE_MEMMOVE=env['HAVE_MEMMOVE'],
+                        HAVE_BCOPY=env['HAVE_BCOPY'],
+                        EBCDIC=0, NEWLINE="'\\n'", LINK_SIZE=2,
+                        EXPORT=None)
+        
+        configH = bld.new_task_gen(output='config.h',
+                                   path=driverNode, env=env.copy(),
+                                   defs=pcreDict, before='dftables')
+        configH.features = ['makeHeader']
+        
+        pcreH = bld.new_task_gen(input='pcre.in', output='pcre.h', env=env.copy(),
+                                 dict=pcreDict, path=driverNode, before='dftables')
+        pcreH.features = ['m4subst']
+        
+        #make the dftables executable
+        dfTables = bld.new_task_gen('cc', 'program', source='dftables.c',
+                                    includes=['.'],
+                                    target='dftables',
+                                    path=driverNode,
+                                    install_path=None,
+                                    env=env.copy(),
+                                    before='chartables')
+        bld.add_group()
+        
+        appName = Options.platform.startswith('win32') and 'dftables.exe' or 'dftables'
+        charTables = bld.new_task_gen(source=appName, path=driverNode,
+                                      rule='${SRC} "%s/chartables.c"' % driverNode.abspath(),
+                                      install_path=None, name='chartables',
+                                      env=env.copy(), before='pcre')
+        bld.add_group()
+        
+        
+        pcreposix = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
+                         includes=['.'], env=env.copy(),
+                         target='pcreposix', source='pcreposix.c',
+                         path=driverNode, export_incdirs='.')
+    
+        pcre = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
+                         includes=['.'],
+                         export_incdirs='.',
+                         target='pcre',
+                         source='maketables.c get.c study.c pcre.c',
+                         path=driverNode,
+                         env=env.copy(),
+                         name='PCRE')
+        
+        bld.install_files('${PREFIX}/include',
+                          map(lambda x: os.path.join(driverNode.abspath(), x),
+                              'pcre.h pcreposix.h'.split()))
     
     if 'MAKE_XML' in env:
         
         driver = Options.options.xml_layer
         
         if driver == 'expat':
-            fname = 'expat-1.95.7'
+            fname = 'expat-2.0.0'
             ut = bld.new_task_gen(path=bld.path, fname='%s.tar' % fname,
                                   env=env.copy(), before='XML')
             ut.features = ['untar']
@@ -169,11 +263,11 @@ def build(bld):
             
             driverNode = driversNode.ensure_dir_node_from_path(fname)
         
-            expatDefs = ['PACKAGE_VERSION="1.95.7"',
+            expatDefs = ['PACKAGE_VERSION="2.0.0"',
                          'XML_CONTEXT_BYTES=1024',
                          'XML_DTD=1',
                          'XML_NS=1',
-                         'PACKAGE_STRING="expat 1.95.7"',
+                         'PACKAGE_STRING="expat 2.0.0"',
                          'XML_STATIC=1']
             
             sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
@@ -182,9 +276,9 @@ def build(bld):
                              target='expat', path=driverNode,
                              uselib='XML', name='XML', env=env.copy(),
                              defines=defList + expatDefs)
-            
-            bld.install_files('${PREFIX}/include',
-                          os.path.join(driverNode.abspath(), 'lib/expat.h'))
+            for f in ['expat.h', 'expat_external.h']:
+                bld.install_files('${PREFIX}/include',
+                              os.path.join(driverNode.abspath(), 'lib/%s' % f))
         else:
             raise Exception('Invalid XML driver: %s' % driver)
     
@@ -193,7 +287,7 @@ def distclean(context):
     import shutil
     
     dirs = map(lambda d: os.path.join(context.curdir, d),
-               ['expat-1.95.7'])
+               ['expat-2.0.0'])
     for d in dirs:
         try:
             if os.path.exists(d):

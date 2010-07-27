@@ -28,7 +28,6 @@
 
 namespace six
 {
-
 /*!
  *  \struct Radiometric
  *  \brief Radiometric calibration parameters
@@ -95,5 +94,4 @@ struct Radiometric
 };
 
 }
-
 #endif

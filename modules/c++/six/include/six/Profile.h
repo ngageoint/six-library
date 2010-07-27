@@ -132,14 +132,14 @@ namespace six
 	 *  where N is the number of right-hand-side, comma-delimited
 	 *  substrings in the OPT_CONTAINER_FILE_LIST option.
 	 *  We also require the OPT_CONTAINER_TYPE to be set with a
-	 *  DataType object: TYPE_COMPLEX for SICD containers 
-	 *  or TYPE_DERIVED for SIDD containers.  The latter is allowed
+	 *  DataType object: COMPLEX for SICD containers 
+	 *  or DERIVED for SIDD containers.  The latter is allowed
 	 *  to have SICD ComplexData objects (generated from SICD XML
 	 *  templates within the file list).
 	 *
 	 *  \param options Options map including OPT_CONTAINER_FILE_LIST
 	 *  (std::string, comma-delimetd) and OPT_CONTAINER_TYPE
-	 *  (TYPE_COMPLEX or TYPE_DERIVED)
+	 *  (COMPLEX or DERIVED)
 	 *  \return A Container created from template XML files
 	 */
         virtual Container* newContainer(const Options& options);
