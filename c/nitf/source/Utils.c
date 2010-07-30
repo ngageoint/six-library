@@ -395,7 +395,7 @@ NITFPROT(void) nitf_Utils_geographicLatToCharArray(int degrees,
         degrees *= -1;
     }
     NITF_SNPRINTF(buffer7, 8, "%02d%02d%02d%c",
-             degrees, minutes, (int)seconds, dir);
+             degrees, minutes, (int)(seconds + 0.5), dir);
 }
 
 NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
@@ -411,7 +411,7 @@ NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
         degrees *= -1;
     }
     NITF_SNPRINTF(buffer8, 9, "%03d%02d%02d%c",
-                  degrees, minutes, (int)seconds, dir);
+                  degrees, minutes, (int)(seconds + 0.5), dir);
 
 }
 
