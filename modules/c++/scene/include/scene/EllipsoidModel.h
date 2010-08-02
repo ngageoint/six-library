@@ -34,7 +34,9 @@ public:
     /**
      * Default constructor
      */
-    EllipsoidModel(){}
+    EllipsoidModel() :
+        units(INVALID_UNITS),
+        angularUnits(INVALID_ANGULAR_UNITS) {}
 
     /**
      * This constructor initializes the EllipsoidModel object with
