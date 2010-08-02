@@ -2102,8 +2102,33 @@ void ComplexXMLControl::fromXML(XMLElem rmaXML, RMA* rma)
         parsePoly1D(getFirstAndOnly(incaElem, "TimeCAPoly"), inca->timeCAPoly);
         parseDouble(getFirstAndOnly(incaElem, "R_CA_SCP"), inca->rangeCA);
         parseDouble(getFirstAndOnly(incaElem, "FreqZero"), inca->freqZero);
-        parsePoly2D(getFirstAndOnly(incaElem, "DRateSFPoly"),
-                    inca->dopplerRateScaleFactorPoly);
+
+        // NOTE - the following lines should be replaced with the just the
+        // 0.4.1 path - or, once we come up with a better way to track previous
+        // versions this should get reworked
+
+        // the dopplerRateScaleFactorPoly changed from 1D to 2D between 0.4.0 and 0.4.1
+        XMLElem drateSFPoly = getFirstAndOnly(incaElem, "DRateSFPoly");
+        if (!drateSFPoly->getAttributes().contains("order2"))
+        {
+            Poly1D oldPoly;
+            parsePoly1D(drateSFPoly, oldPoly);
+            // set x order -> 0, y order -> oldPoly
+            size_t yOrder = oldPoly.order();
+            inca->dopplerRateScaleFactorPoly = Poly2D(0, yOrder);
+
+            double* yVals = inca->dopplerRateScaleFactorPoly[0];
+            for(size_t i = 0; i <= yOrder; ++i)
+            {
+                yVals[i] = oldPoly[i];
+            }
+            mLog->warn(Ctxt("Parsing DRateSFPoly as Poly1D to support version 0.4.0"));
+        }
+        else
+        {
+            // 0.4.1 - Poly2D
+            parsePoly2D(drateSFPoly, inca->dopplerRateScaleFactorPoly);
+        }
 
         XMLElem tmpElem = getOptional(incaElem, "DopCentroidPoly");
         if (tmpElem)
