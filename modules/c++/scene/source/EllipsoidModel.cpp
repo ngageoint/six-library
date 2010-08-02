@@ -22,9 +22,9 @@
 #include "scene/EllipsoidModel.h"
 
 scene::EllipsoidModel::EllipsoidModel(scene::Units unitsVal,
-                   scene::AngularUnits angularUnitsVal,
-                   double eqRadiusVal,
-                   double polRadiusVal)
+        scene::AngularUnits angularUnitsVal, double eqRadiusVal,
+        double polRadiusVal) : units(INVALID_UNITS),
+            angularUnits(INVALID_ANGULAR_UNITS)
 {
     setUnits(unitsVal);
     setAngularUnits(angularUnitsVal);
