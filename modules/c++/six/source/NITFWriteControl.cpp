@@ -70,7 +70,7 @@ void NITFWriteControl::initialize(Container* container)
     std::string name = mInfos[0]->getData()->getName();
     std::string fileTitle = FmtX("%s: %s", six::toString(dataType).c_str(),
                                  name.c_str());
-
+    fileTitle = fileTitle.substr(0, NITF_FTITLE_SZ); //truncate past 80
     mRecord.getHeader().getFileTitle().set(fileTitle);
 
     int startIndex = 0;
