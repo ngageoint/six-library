@@ -70,6 +70,7 @@ extern "C" NITF_BOOL __nitf_DataSource_setSize(NITF_DATA* data, nitf::Off size,
     if (!data)
         throw except::NullPointerReference(Ctxt("DataSource_setSize"));
     ((nitf::DataSource*) data)->setSize(size);
+    return NITF_SUCCESS;
 }
 
 void nitf::KnownDataSource::read(char * buf, nitf::Off size)
