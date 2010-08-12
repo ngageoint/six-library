@@ -251,6 +251,10 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
                                         const char *str, nitf_Error * error);
 
 
+NITFAPI(NITF_BOOL) nitf_Field_setAndTrimString(nitf_Field * field,
+                                               const char *str, nitf_Error * error);
+
+
 /**
  * Sets the value of the field to the formatted date string, represented by
  * the given DateTime and date format.

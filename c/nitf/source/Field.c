@@ -390,6 +390,54 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
     return (NITF_SUCCESS);
 }
 
+NITFAPI(NITF_BOOL) nitf_Field_setAndTrimString(nitf_Field * field,
+                                               const char *str, nitf_Error * error)
+{
+    nitf_Uint32 strLen;         /* Length of input string */
+
+    /*  Check the field type */
+
+    if (field->type == NITF_BINARY)
+    {
+        nitf_Error_init(error,
+                        "Type for string set for field can not be binary",
+                        NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        return (NITF_FAILURE);
+    }
+
+    /*  Transfer and pad result (check for correct characters) */
+
+    strLen = strlen(str);
+
+    /* if it's resizable and a different length, we resize */
+    if (field->resizable && strLen != field->length)
+    {
+        if (!nitf_Field_resizeField(field, strLen, error))
+            return NITF_FAILURE;
+    }
+
+    if (strLen > field->length)
+    {
+        /* set strLen to the field length so we only copy that amount */
+        strLen = field->length;
+    }
+
+    if (field->type == NITF_BCS_A)
+    {
+        if (!isBCSA(str, strLen, error))
+            return (NITF_FAILURE);
+        copyAndFillSpaces(field, str, strLen, error);
+    }
+    else
+    {
+        if (!isBCSN(str, strLen, error))
+            return (NITF_FAILURE);
+        copyAndFillZeros(field, str, strLen, error);
+    }
+
+    return (NITF_SUCCESS);
+}
+
 NITFAPI(NITF_BOOL) nitf_Field_setDateTime(nitf_Field * field,
         nitf_DateTime *dateTime, const char *dateFormat, nitf_Error * error)
 {

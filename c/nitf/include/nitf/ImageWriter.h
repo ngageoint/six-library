@@ -91,6 +91,9 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_setPadPixel(nitf_ImageWriter* imageWriter,
                                                 nitf_Uint32 length,
                                                 nitf_Error* error);
 
+
+NITFAPI(nitf_ImageSource*) nitf_ImageWriter_getSource(nitf_ImageWriter * writer);
+
 NITF_CXX_ENDGUARD
 
 #endif

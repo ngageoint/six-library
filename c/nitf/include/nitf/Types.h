@@ -101,7 +101,7 @@ typedef int8_t             nitf_Int8;
 typedef int16_t            nitf_Int16;
 typedef int32_t            nitf_Int32;
 typedef int64_t            nitf_Int64;
-typedef int                nitf_IOHandle;
+typedef long               nitf_IOHandle;
 typedef off_t              nitf_Off;
 
 typedef void*             NITF_DLL_FUNCTION_PTR;

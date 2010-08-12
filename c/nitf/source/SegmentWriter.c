@@ -59,7 +59,8 @@ NITFPRIV(NITF_BOOL) SegmentWriter_write(NITF_DATA * data,
     char* buf = NULL;
     SegmentWriterImpl *impl = (SegmentWriterImpl *) data;
     
-    size = (*impl->segmentSource->iface->getSize)(impl->segmentSource->data);
+    size = (*impl->segmentSource->iface->getSize)(impl->segmentSource->data, error);
+    /* TODO check error */
     bytesLeft = size;
 
     buf = (char*) NITF_MALLOC(readSize);

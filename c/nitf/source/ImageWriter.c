@@ -280,3 +280,9 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_setPadPixel(nitf_ImageWriter* imageWriter,
     ImageWriterImpl *impl = (ImageWriterImpl*)imageWriter->data;
     return nitf_ImageIO_setPadPixel(impl->imageBlocker, value, length, error); 
 }
+
+NITFAPI(nitf_ImageSource*) nitf_ImageWriter_getSource(nitf_ImageWriter * writer)
+{
+    ImageWriterImpl *impl = (ImageWriterImpl*)writer->data;
+    return impl->imageSource;
+}
