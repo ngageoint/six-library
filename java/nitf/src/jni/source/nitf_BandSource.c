@@ -120,6 +120,55 @@ NITFPRIV(void) BandSource_destruct(NITF_DATA * data)
         (*vm)->DetachCurrentThread(vm);
 }
 
+NITFPRIV(nitf_Off) BandSource_getSize(NITF_DATA *data, nitf_Error *error)
+{
+    jclass bandSourceClass = NULL;
+    jmethodID methodID = NULL;
+    BandSourceImpl *impl = NULL;
+    JNIEnv *env = NULL;
+    JavaVM *vm = NULL;
+    int detach;
+    jlong val = 0;
+
+    detach = _GetJNIEnv(&vm, &env);
+
+    impl = (BandSourceImpl *) data;
+    bandSourceClass =
+        (*env)->GetObjectClass(env, (jobject) impl->self);
+
+    methodID = (*env)->GetMethodID(env, bandSourceClass, "getSize",
+                                      "()L");
+    val = (*env)->CallLongMethod(env, impl->self, methodID);
+
+    if (detach)
+        (*vm)->DetachCurrentThread(vm);
+    return (nitf_Off)val;
+}
+
+NITFPRIV(NITF_BOOL) BandSource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *error)
+{
+    jclass bandSourceClass = NULL;
+    jmethodID methodID = NULL;
+    BandSourceImpl *impl = NULL;
+    JNIEnv *env = NULL;
+    JavaVM *vm = NULL;
+    int detach;
+
+    detach = _GetJNIEnv(&vm, &env);
+
+    impl = (BandSourceImpl *) data;
+    bandSourceClass =
+        (*env)->GetObjectClass(env, (jobject) impl->self);
+
+    methodID = (*env)->GetMethodID(env, bandSourceClass, "setSize",
+                                      "(L)V");
+    (*env)->CallVoidMethod(env, impl->self, methodID, (jlong)size);
+
+    if (detach)
+        (*vm)->DetachCurrentThread(vm);
+    return NITF_SUCCESS;
+}
+
 
 JNIEXPORT void JNICALL Java_nitf_BandSource_construct
     (JNIEnv * env, jobject self)
@@ -127,7 +176,9 @@ JNIEXPORT void JNICALL Java_nitf_BandSource_construct
     /* make the interface */
     static nitf_IDataSource iBandSource = {
         &BandSource_read,
-        &BandSource_destruct
+        &BandSource_destruct,
+        &BandSource_getSize,
+        &BandSource_setSize
     };
 
     /* the return bandSource */

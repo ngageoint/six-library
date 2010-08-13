@@ -25,6 +25,22 @@ JNIEXPORT void JNICALL Java_nitf_FileSource_construct
 JNIEXPORT void JNICALL Java_nitf_FileSource_read
   (JNIEnv *, jobject, jbyteArray, jint);
 
+/*
+ * Class:     nitf_FileSource
+ * Method:    getSize
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_nitf_FileSource_getSize
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     nitf_FileSource
+ * Method:    setSize
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_nitf_FileSource_setSize
+  (JNIEnv *, jobject, jlong);
+
 #ifdef __cplusplus
 }
 #endif

@@ -93,5 +93,11 @@ public final class MemorySource extends BandSource
      * @see nitf.BandSource#read(byte[], int)
      */
     public native void read(byte[] buf, int size) throws NITFException;
+    
+    @Override
+    public native long getSize() throws NITFException;
+    
+    @Override
+    public native void setSize(long size) throws NITFException;
 
 }

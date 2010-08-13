@@ -32,6 +32,7 @@
 #   include <sys/types.h>
 #   include <ctype.h>
 #   include <time.h>
+
 #ifdef WIN32
 #      define WIN32_LEAN_AND_MEAN
 #      include <windows.h>
@@ -101,7 +102,11 @@ typedef int8_t             nitf_Int8;
 typedef int16_t            nitf_Int16;
 typedef int32_t            nitf_Int32;
 typedef int64_t            nitf_Int64;
-typedef nitf_Int64         nitf_IOHandle;
+#if __WORDSIZE == 64
+typedef long               nitf_IOHandle;
+#else
+typedef int                nitf_IOHandle;
+#endif
 typedef off_t              nitf_Off;
 
 typedef void*             NITF_DLL_FUNCTION_PTR;

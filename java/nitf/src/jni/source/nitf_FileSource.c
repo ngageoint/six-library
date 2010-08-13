@@ -101,3 +101,31 @@ JNIEXPORT void JNICALL Java_nitf_FileSource_read
     return;
 }
 
+JNIEXPORT jlong JNICALL Java_nitf_FileSource_getSize
+  (JNIEnv *env, jobject self)
+{
+    nitf_BandSource *source = _GetObj(env, self);
+    nitf_Error error;
+    nitf_Off size;
+
+    if (0 > (size = source->iface->getSize(source->data, &error)))
+    {
+        _ThrowNITFException(env, error.message);
+        return -1;
+    }
+    return (jlong)size;
+}
+
+JNIEXPORT void JNICALL Java_nitf_FileSource_setSize
+  (JNIEnv *env, jobject self, jlong size)
+{
+    nitf_BandSource *source = _GetObj(env, self);
+    nitf_Error error;
+
+    if (!source->iface->setSize(source->data, (nitf_Off)size, &error))
+    {
+        _ThrowNITFException(env, error.message);
+        return;
+    }
+}
+

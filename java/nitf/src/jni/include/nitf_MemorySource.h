@@ -25,6 +25,22 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
 JNIEXPORT void JNICALL Java_nitf_MemorySource_read
   (JNIEnv *, jobject, jbyteArray, jint);
 
+/*
+ * Class:     nitf_MemorySource
+ * Method:    getSize
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_nitf_MemorySource_getSize
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     nitf_MemorySource
+ * Method:    setSize
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_nitf_MemorySource_setSize
+  (JNIEnv *, jobject, jlong);
+
 #ifdef __cplusplus
 }
 #endif

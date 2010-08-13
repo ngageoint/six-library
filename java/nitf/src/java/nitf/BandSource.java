@@ -105,6 +105,10 @@ public abstract class BandSource extends DestructibleObject
      * @throws NITFException
      */
     public abstract void read(byte[] buf, int size) throws NITFException;
+    
+    public abstract long getSize() throws NITFException;
+    
+    public abstract void setSize(long size) throws NITFException;
 
     /**
      * This returns the BandSource object represented by the given underlying
