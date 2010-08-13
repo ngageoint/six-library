@@ -41,9 +41,9 @@ extern "C"
     //! Needed for the engine interface
     void __nitf_DataSource_destruct(NITF_DATA* data);
 
-    nitf::Off __nitf_DataSource_getSize(NITF_DATA* data);
+    nitf::Off __nitf_DataSource_getSize(NITF_DATA* data, nitf_Error *e);
 
-    void __nitf_DataSource_setSize(NITF_DATA* data, nitf::Off size);
+    NITF_BOOL __nitf_DataSource_setSize(NITF_DATA* data, nitf::Off size, nitf_Error *e);
 }
 
 /*!

@@ -35,7 +35,7 @@ nitf_Record *doRead(const char *inFile);
 #define SHOW(X) printf("%s=[%s]\n", #X, X)
 #define SHOWI(X) printf("%s=[%ld]\n", #X, X)
 #define SHOWLL(X) printf("%s=[%lld]\n", #X, X)
-#define SHOW_VAL(X) printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:X->length)), ((X==0)?"(nulptr)":((X->raw==0)?"(nul)":X->raw)))
+#define SHOW_VAL(X) printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:(int)X->length)), ((X==0)?"(nulptr)":((X->raw==0)?"(nul)":X->raw)))
 
 #define GET_UINT32(FIELD, DATA_PTR, ERROR) \
     success = nitf_Field_get(FIELD, DATA_PTR, NITF_CONV_UINT, NITF_INT32_SZ, ERROR); \
@@ -139,7 +139,7 @@ void showFileHeader(nitf_FileHeader * header)
         GET_UINT64(header->imageInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the IMAGE data: %lld bytes\n\n", dataLen);
+        printf("\tThe length of the IMAGE data: %lu bytes\n\n", dataLen);
     }
 
     return;
@@ -476,7 +476,7 @@ void writeDEData(nitf_DESegment * segment,
 
     leftToRead = (size_t)(segment->end - segment->offset); 
     //leftToRead = (size_t) reader->user->virtualLength;
-    fprintf(stderr, "XXX Data Ext write %lld %lld %lld\n", leftToRead, segment->end , segment->offset);
+    fprintf(stderr, "XXX Data Ext write %lu %lu %lu\n", leftToRead, segment->end , segment->offset);
 
     buf = (char*)NITF_MALLOC(toRead + 1);
     if (!buf)
@@ -507,14 +507,14 @@ void writeDEData(nitf_DESegment * segment,
         amtToRead = DE_READ_SIZE;
         if (amtToRead > leftToRead)
             amtToRead = leftToRead;
-        fprintf(stderr, "XXX Data Ext C2 %lld\n", amtToRead);
+        fprintf(stderr, "XXX Data Ext C2 %lu\n", amtToRead);
         if (nitf_SegmentReader_read(reader, buf, (size_t)amtToRead, error) != NITF_SUCCESS)
         {
             /* TODO populate error */
             goto CATCH_ERROR;
         }
 
-        fprintf(stderr, "XXX Data Ext D %lld\n", amtToRead);
+        fprintf(stderr, "XXX Data Ext D %lu\n", amtToRead);
         if (!nitf_IOHandle_write(file, (const char*)buf, (size_t)amtToRead, error))
             goto CATCH_ERROR;
         fprintf(stderr, "XXX Data Ext E\n");
@@ -573,27 +573,27 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
            xBands,
            nRows,
            nColumns,
-           segment->subheader->pixelValueType->length,
+           (int)segment->subheader->pixelValueType->length,
            segment->subheader->pixelValueType->raw,
-           segment->subheader->numBitsPerPixel->length,
+           (int)segment->subheader->numBitsPerPixel->length,
            segment->subheader->numBitsPerPixel->raw,
-           segment->subheader->actualBitsPerPixel->length,
+           (int)segment->subheader->actualBitsPerPixel->length,
            segment->subheader->actualBitsPerPixel->raw,
-           segment->subheader->pixelJustification->length,
+           (int)segment->subheader->pixelJustification->length,
            segment->subheader->pixelJustification->raw,
-           segment->subheader->imageMode->length,
+           (int)segment->subheader->imageMode->length,
            segment->subheader->imageMode->raw,
-           segment->subheader->numBlocksPerRow->length,
+           (int)segment->subheader->numBlocksPerRow->length,
            segment->subheader->numBlocksPerRow->raw,
-           segment->subheader->numBlocksPerCol->length,
+           (int)segment->subheader->numBlocksPerCol->length,
            segment->subheader->numBlocksPerCol->raw,
-           segment->subheader->numPixelsPerHorizBlock->length,
+           (int)segment->subheader->numPixelsPerHorizBlock->length,
            segment->subheader->numPixelsPerHorizBlock->raw,
-           segment->subheader->numPixelsPerVertBlock->length,
+           (int)segment->subheader->numPixelsPerVertBlock->length,
            segment->subheader->numPixelsPerVertBlock->raw,
-           segment->subheader->imageCompression->length,
+           (int)segment->subheader->imageCompression->length,
            segment->subheader->imageCompression->raw,
-           segment->subheader->compressionRate->length,
+           (int)segment->subheader->compressionRate->length,
            segment->subheader->compressionRate->raw);
 
 

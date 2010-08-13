@@ -52,7 +52,7 @@ void lookForTREField(nitf_Extensions* ext,
 	{
 	    nitf_Pair* pair = nitf_ListIterator_get(&currentInst);
 	    nitf_Field* field = (nitf_Field*)pair->data;
-	    printf("Found: %s [%.*s]\n", pair->key, field->length, field->raw);
+	    printf("Found: %s [%.*s]\n", pair->key, (int)field->length, field->raw);
 	    nitf_ListIterator_increment(&currentInst);
 
 	}

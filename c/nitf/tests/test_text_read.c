@@ -101,8 +101,8 @@ int main(int argc, char *argv[])
         }
 
         fprintf(stdout, "Data length = %d\n", textReader->dataLength);
-        fprintf(stdout, "File offset = %lld\n", textReader->baseOffset);
-        fprintf(stdout, "Virtual offset = %lld\n", textReader->virtualOffset);
+        fprintf(stdout, "File offset = %lu\n", textReader->baseOffset);
+        fprintf(stdout, "Virtual offset = %lu\n", textReader->virtualOffset);
 
         data = (char *) NITF_MALLOC
                (nitf_SegmentReader_getSize(textReader, error) + 1);

@@ -303,7 +303,7 @@ NITFPRIV(NITF_BOOL) writeInt64Field(nitf_Writer * writer,
     char buf[20];
 
     memset(buf, '\0', 20);
-    NITF_SNPRINTF(buf, 20, "%lld", field);
+    NITF_SNPRINTF(buf, 20, "%lu", field);
 
     if (padString(writer, buf, length, fill, fillDir, error))
     {

@@ -66,7 +66,7 @@
     exit(EXIT_FAILURE); \
 }
 #define TEST_ASSERT_EQ_INT(X1, X2) if ((X1) != (X2)) { \
-    fprintf(stderr, "%s (%s,%s,%d) : FAILED: Recv'd %d, Expected %d\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE, X1, X2); \
+    fprintf(stderr, "%s (%s,%s,%d) : FAILED: Recv'd %d, Expected %d\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE, (int)X1, (int)X2); \
     exit(EXIT_FAILURE); \
 }
 /* TODO use epsilon for comparing floating points */

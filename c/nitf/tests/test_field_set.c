@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
     nitf_Field_get(fhdr->NITF_FL, (NITF_DATA *) & valueU64After,
                    NITF_CONV_UINT, NITF_INT64_SZ, error);
     fprintf(stdout,
-            "Set of FL via nitf_Field_setUint64 original %lld readback %lld\n",
+            "Set of FL via nitf_Field_setUint64 original %lu readback %lu\n",
             valueU64Before, valueU64After);
 
     valueStrBefore = "TestStr";
@@ -168,8 +168,8 @@ int main(int argc, char *argv[])
         nitf_Error_print(error, stdout,
                          "Expected error setting NCOLS via nitf_Field_setString");
 
-    valueStrBefore = "12g";
-    if (nitf_Field_setUint32(subhdr->NITF_NBANDS, (nitf_Uint32)valueStrBefore, error))
+    valueU32Before = 3;
+    if (nitf_Field_setUint32(subhdr->NITF_NBANDS, valueU32Before, error))
         fprintf(stdout,
                 "Set of NBANDS via nitf_Field_setUint32 worked expected error\n");
     else

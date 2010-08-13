@@ -62,7 +62,7 @@ void lookForTREField(nitf_Extensions* ext,
 	{
 	    nitf_Pair* pair = nitf_ListIterator_get(&currentInst);
 	    nitf_Field* field = (nitf_Field*)pair->data;
-	    printf("Found: %s [%.*s]\n", pair->key, field->length, field->raw);
+	    printf("Found: %s [%.*s]\n", pair->key, (int)field->length, field->raw);
 	    printf("Replacing with [%s]\n", replace);
 	    if (!nitf_TRE_setField(tre, 
 				   pair->key, 
@@ -75,7 +75,7 @@ void lookForTREField(nitf_Extensions* ext,
 	    }
 	    
 	    field = nitf_TRE_getField(tre, pair->key);
-	    printf("Round Trip Value: %s [%.*s]\n", pair->key, field->length, field->raw);
+	    printf("Round Trip Value: %s [%.*s]\n", pair->key, (int)field->length, field->raw);
 	    nitf_ListIterator_increment(&currentInst);
 
 	}

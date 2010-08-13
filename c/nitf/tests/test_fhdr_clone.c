@@ -26,7 +26,7 @@
 #define SHOW(X) printf("%s=[%s]\n", #X, X)
 #define SHOWI(X) printf("%s=[%ld]\n", #X, X)
 #define PRINT_HDR(X) printf("%s:\n", #X); printHdr(X)
-#define SHOW_VAL(X) printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:X->length)), ((X==0)?"(nulptr)":((X->raw==0)?"(nul)":X->raw)))
+#define SHOW_VAL(X) printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:(int)X->length)), ((X==0)?"(nulptr)":((X->raw==0)?"(nul)":X->raw)))
 
 void printHdr(nitf_FileHeader* header)
 {
@@ -83,7 +83,7 @@ void printHdr(nitf_FileHeader* header)
         NITF_TRY_GET_UINT64(header->imageInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the IMAGE data: %lld bytes\n\n",
+        printf("\tThe length of the IMAGE data: %lu bytes\n\n",
                dataLen);
     }
 

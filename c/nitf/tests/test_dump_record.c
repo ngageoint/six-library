@@ -41,7 +41,7 @@
     printf("%s(R,G,B)=[0x%x,0x%x,0x%x]\n", #X, (short)(X->raw[0]), (short)(X->raw[1]), (short)(X->raw[2]))
 
 #define SHOW_VAL(X) \
-    printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:X->length)), \
+    printf("%s=[%.*s]\n", #X, ((X==0)?8:((X->raw==0)?5:(int)X->length)), \
                   ((X==0)?"(nulptr)":((X->raw==0)?"(nul)":X->raw)))
 
 
@@ -234,7 +234,7 @@ void showFileHeader(nitf_FileHeader * header)
 
         printf("\tThe length of image subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the image data: %lld bytes\n\n", dataLen);
+        printf("\tThe length of the image data: %lu bytes\n\n", dataLen);
     }
 
     if (!nitf_Field_get(header->numGraphics,
