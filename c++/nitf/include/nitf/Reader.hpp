@@ -117,16 +117,6 @@ public:
     //! Get the warningList
     nitf::List getWarningList();
 
-    nitf::IOInterface getIOInterface() const
-    {
-        return nitf::IOInterface(getNativeOrThrow()->input);
-    }
-
-    nitf::Record getRecord() const
-    {
-        return nitf::Record(getNativeOrThrow()->record);
-    }
-
 private:
     nitf_Error error;
 };

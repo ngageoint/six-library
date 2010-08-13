@@ -53,10 +53,12 @@ class Field : public nitf::Object<nitf_Field>
 public:
     enum FieldType
     {
-        BCS_A = NITF_BCS_A, BCS_N = NITF_BCS_N, BINARY = NITF_BINARY
+        BCS_A = NITF_BCS_A,
+        BCS_N = NITF_BCS_N,
+        BINARY = NITF_BINARY
     };
 
-    Field & operator=(const char * value) throw (nitf::NITFException)
+    Field & operator=(const char * value) throw(nitf::NITFException)
     {
         set(value);
         return *this;
@@ -151,44 +153,42 @@ public:
 
     Field(NITF_DATA * x)
     {
-        setNative((nitf_Field*) x);
+        setNative((nitf_Field*)x);
         getNativeOrThrow();
     }
 
     Field & operator=(NITF_DATA * x)
     {
-        setNative((nitf_Field*) x);
+        setNative((nitf_Field*)x);
         getNativeOrThrow();
         return *this;
     }
 
     //! Destructor
-    ~Field()
-    {
-    }
+    ~Field() {}
 
     void set(nitf::Uint8 data)
     {
-        if (!nitf_Field_setUint32(getNativeOrThrow(), nitf::Uint32(data),
-                                  &error))
+        if (!nitf_Field_setUint32(getNativeOrThrow(),
+                                  nitf::Uint32(data), &error))
             throw nitf::NITFException(&error);
     }
 
     void set(nitf::Uint16 data)
     {
-        if (!nitf_Field_setUint32(getNativeOrThrow(), nitf::Uint32(data),
-                                  &error))
+        if (!nitf_Field_setUint32(getNativeOrThrow(),
+                                  nitf::Uint32(data), &error))
             throw nitf::NITFException(&error);
     }
 
-    void set(nitf::Uint32 data) throw (nitf::NITFException)
+    void set(nitf::Uint32 data) throw(nitf::NITFException)
     {
         NITF_BOOL x = nitf_Field_setUint32(getNativeOrThrow(), data, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
 
-    void set(nitf::Uint64 data) throw (nitf::NITFException)
+    void set(nitf::Uint64 data) throw(nitf::NITFException)
     {
         NITF_BOOL x = nitf_Field_setUint64(getNativeOrThrow(), data, &error);
         if (!x)
@@ -197,72 +197,72 @@ public:
 
     void set(nitf::Int8 data)
     {
-        if (!nitf_Field_setInt32(getNativeOrThrow(), nitf::Uint32(data), &error))
+        if (!nitf_Field_setInt32(getNativeOrThrow(),
+                                 nitf::Uint32(data), &error))
             throw nitf::NITFException(&error);
     }
 
     void set(nitf::Int16 data)
     {
-        if (!nitf_Field_setInt32(getNativeOrThrow(), nitf::Uint32(data), &error))
+        if (!nitf_Field_setInt32(getNativeOrThrow(),
+                                 nitf::Uint32(data), &error))
             throw nitf::NITFException(&error);
     }
 
     void set(nitf::Int32 data)
     {
-        if (!nitf_Field_setInt32(getNativeOrThrow(), nitf::Uint32(data), &error))
+        if (!nitf_Field_setInt32(getNativeOrThrow(),
+                                 nitf::Uint32(data), &error))
             throw nitf::NITFException(&error);
     }
 
     void set(nitf::Int64 data)
     {
-        if (!nitf_Field_setInt64(getNativeOrThrow(), nitf::Uint32(data), &error))
+        if (!nitf_Field_setInt64(getNativeOrThrow(),
+                                 nitf::Uint32(data), &error))
             throw nitf::NITFException(&error);
     }
 
     void set(float data)
     {
-        if (!nitf_Field_setReal(getNativeOrThrow(), "f", false, double(data),
-                                &error))
+        if (!nitf_Field_setReal(getNativeOrThrow(),
+                                "f", false, double(data), &error))
             throw nitf::NITFException(&error);
     }
 
     void set(double data)
     {
-        if (!nitf_Field_setReal(getNativeOrThrow(), "f", false, data, &error))
+        if (!nitf_Field_setReal(getNativeOrThrow(),
+                                "f", false, data, &error))
             throw nitf::NITFException(&error);
     }
 
-    void set(const char * data) throw (nitf::NITFException)
+    void set(const char * data) throw(nitf::NITFException)
     {
-        if (!nitf_Field_setString(getNativeOrThrow(), (char*) data, &error))
-            throw nitf::NITFException(&error);
-    }
-
-    void set(std::string data, bool trim = false) throw (nitf::NITFException)
-    {
-        if (!(trim ? nitf_Field_setAndTrimString(getNativeOrThrow(),
-                                                 (char*) data.c_str(), &error)
-                   : nitf_Field_setString(getNativeOrThrow(),
-                                          (char*) data.c_str(), &error)))
-            throw nitf::NITFException(&error);
-    }
-
-    void set(nitf::DateTime dateTime, std::string format = NITF_DATE_FORMAT_21)
-            throw (nitf::NITFException)
-    {
-        NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(),
-                                             dateTime.getNative(),
-                                             (char*) format.c_str(), &error);
+        NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), (char*)data, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
 
-    nitf::DateTime asDateTime(std::string format = NITF_DATE_FORMAT_21)
-            throw (nitf::NITFException)
+    void set(std::string data) throw(nitf::NITFException)
     {
-        nitf_DateTime *x =
-                nitf_Field_asDateTime(getNativeOrThrow(),
-                                      (char*) format.c_str(), &error);
+        NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), (char*)data.c_str(), &error);
+        if (!x)
+            throw nitf::NITFException(&error);
+    }
+
+    void set(nitf::DateTime dateTime, std::string format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
+    {
+        NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(),
+                dateTime.getNative(), (char*)format.c_str(), &error);
+        if (!x)
+            throw nitf::NITFException(&error);
+    }
+
+    nitf::DateTime asDateTime(std::string format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
+    {
+        nitf_DateTime *x = nitf_Field_asDateTime(getNativeOrThrow(),
+                (char*)format.c_str(), &error);
         if (!x)
             throw nitf::NITFException(&error);
         nitf::DateTime d(x);
@@ -273,13 +273,13 @@ public:
     //! Get the type
     FieldType getType() const
     {
-        return (FieldType) getNativeOrThrow()->type;
+        return (FieldType)getNativeOrThrow()->type;
     }
 
     //! Set the type
     void setType(FieldType type)
     {
-        getNativeOrThrow()->type = (nitf_FieldType) type;
+        getNativeOrThrow()->type = (nitf_FieldType)type;
     }
 
     //! Get the data
@@ -288,7 +288,7 @@ public:
         return getNativeOrThrow()->raw;
     }
     //! Set the data
-    void setRawData(char * raw, size_t length) throw (nitf::NITFException)
+    void setRawData(char * raw, size_t length) throw(nitf::NITFException)
     {
         set(raw, length);
     }
@@ -376,29 +376,26 @@ public:
 
     std::string toString() const
     {
-        return std::string(getNativeOrThrow()->raw, getNativeOrThrow()->length);
+        return std::string(getNativeOrThrow()->raw,
+                           getNativeOrThrow()->length );
     }
 
 private:
-    Field()
-    {
-    } //private -- does not make sense to construct a Field from scratch
+    Field(){} //private -- does not make sense to construct a Field from scratch
 
     //! get the value
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
     {
         nitf_Error e;
-        NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length,
-                                     &e);
+        NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
         if (!x)
             throw nitf::NITFException(&e);
     }
 
     //! set the value
-    void set(NITF_DATA* inval, size_t length) throw (nitf::NITFException)
+    void set(NITF_DATA* inval, size_t length) throw(nitf::NITFException)
     {
-        NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length,
-                                            &error);
+        NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }

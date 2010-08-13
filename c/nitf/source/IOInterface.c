@@ -43,8 +43,8 @@ NITFAPI(NITF_BOOL) nitf_IOInterface_close(nitf_IOInterface* io,
                                           nitf_Error* error)
 {
     return io->iface->close(io->data, error);
-}
 
+}
 NITFAPI(void) nitf_IOInterface_destruct(nitf_IOInterface** io)
 {
     if (*io)

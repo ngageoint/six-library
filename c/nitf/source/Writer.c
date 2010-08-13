@@ -2234,8 +2234,6 @@ NITFAPI(NITF_BOOL) nitf_Writer_setImageWriteHandler(nitf_Writer *writer,
     /* destroy any previously existing one */
     if (writer->imageWriters[index])
         nitf_WriteHandler_destruct(&writer->imageWriters[index]);
-    else
-        writer->numImageWriters++;
     writer->imageWriters[index] = writeHandler;
     return NITF_SUCCESS;
 
@@ -2255,8 +2253,6 @@ NITFAPI(NITF_BOOL) nitf_Writer_setGraphicWriteHandler(nitf_Writer *writer,
     /* destroy any previously existing one */
     if (writer->graphicWriters[index])
         nitf_WriteHandler_destruct(&writer->graphicWriters[index]);
-    else
-        writer->numGraphicWriters++;
     writer->graphicWriters[index] = writeHandler;
     return NITF_SUCCESS;
 
@@ -2276,8 +2272,6 @@ NITFAPI(NITF_BOOL) nitf_Writer_setTextWriteHandler(nitf_Writer *writer,
     /* destroy any previously existing one */
     if (writer->textWriters[index])
         nitf_WriteHandler_destruct(&writer->textWriters[index]);
-    else
-        writer->numTextWriters++;
     writer->textWriters[index] = writeHandler;
     return NITF_SUCCESS;
 
@@ -2297,8 +2291,6 @@ NITFAPI(NITF_BOOL) nitf_Writer_setDEWriteHandler(nitf_Writer *writer,
     /* destroy any previously existing one */
     if (writer->dataExtensionWriters[index])
         nitf_WriteHandler_destruct(&writer->dataExtensionWriters[index]);
-    else
-        writer->numDataExtensionWriters++;
     writer->dataExtensionWriters[index] = writeHandler;
     return NITF_SUCCESS;
 

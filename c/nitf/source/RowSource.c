@@ -106,16 +106,10 @@ NITFPRIV(void) RowSource_destruct(NITF_DATA * data)
 }
 
 
-NITFPRIV(nitf_Off) RowSource_getSize(NITF_DATA * data, nitf_Error *error)
+NITFPRIV(nitf_Off) RowSource_getSize(NITF_DATA * data)
 {
     RowSourceImpl *impl = (RowSourceImpl *) data;
     return (nitf_Off)impl->numRows * (nitf_Off)impl->rowLength;
-}
-
-NITFPRIV(NITF_BOOL) RowSource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *error)
-{
-    /* TODO */
-    return NITF_SUCCESS;
 }
 
 
@@ -125,8 +119,7 @@ static nitf_IDataSource iRowSource =
     {
         RowSource_read,
         RowSource_destruct,
-        RowSource_getSize,
-        RowSource_setSize
+        RowSource_getSize
     };
 
 /*========================= nitf_RowSource_construct =====================*/

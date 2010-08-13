@@ -40,6 +40,9 @@ NITF_CXX_GUARD
 /*!
  *  \struct nitf_Reader
  *  \brief  This object represents the 2.1 file reader
+ *
+ *  This reader class contains the
+ *
  */
 typedef struct _nitf_Reader
 {

@@ -49,15 +49,16 @@ typedef void (*NITF_IDATASOURCE_DESTRUCT) (NITF_DATA *);
 
 /*!
  *  Get the size of the data source
+ *
  */
-typedef nitf_Off (*NITF_IDATASOURCE_GET_SIZE) (NITF_DATA *, nitf_Error *error);
+typedef nitf_Off (*NITF_IDATASOURCE_GET_SIZE) (NITF_DATA *);
 
 /*!
  *  Set the size of the data source.  (NITRO 2.0).  This is useful
  *  when we want to stream a file into our NITF.  That way our user
  *  does not have to write his/her own file source.
  */
-typedef NITF_BOOL (*NITF_IDATASOURCE_SET_SIZE) (NITF_DATA *, nitf_Off size, nitf_Error *error);
+typedef void (*NITF_IDATASOURCE_SET_SIZE) (NITF_DATA *, nitf_Off size);
 
 
 

@@ -112,19 +112,18 @@ NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 }
 
 
-NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error *error)
+NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     assert(memorySource);
     return memorySource->size;
 }
 
-NITFPRIV(NITF_BOOL) MemorySource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *error)
+NITFPRIV(void) MemorySource_setSize(NITF_DATA * data, nitf_Off size)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     assert(memorySource);
     memorySource->size = size;
-    return NITF_SUCCESS;
 }
 
 
@@ -192,7 +191,7 @@ NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
     NITF_FREE(data);
 }
 
-NITFPRIV(nitf_Off) FileSource_getSize(NITF_DATA * data, nitf_Error *error)
+NITFPRIV(nitf_Off) FileSource_getSize(NITF_DATA * data)
 {
     FileSourceImpl *fileSource = (FileSourceImpl *) data;
     assert(fileSource);
@@ -200,12 +199,11 @@ NITFPRIV(nitf_Off) FileSource_getSize(NITF_DATA * data, nitf_Error *error)
 }
 
 
-NITFPRIV(NITF_BOOL) FileSource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *error)
+NITFPRIV(void) FileSource_setSize(NITF_DATA * data, nitf_Off size)
 {
     FileSourceImpl *fileSource = (FileSourceImpl *) data;
     assert(fileSource);
     fileSource->size = size;
-    return NITF_SUCCESS;
 }
 
 
