@@ -78,7 +78,6 @@ nitf::Off BufferedWriter::seek(nitf::Off offset, int whence)
 
 nitf::Off BufferedWriter::tell() throw(nitf::NITFException)
 {
-        
     return ( (nitf::Off)mPosition + IOHandle::tell());
 }
 

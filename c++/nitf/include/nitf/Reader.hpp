@@ -123,7 +123,13 @@ public:
         throw (nitf::NITFException);
 
     //! Get the warningList
-    nitf::List getWarningList();
+    nitf::List getWarningList() const;
+
+    //! Return the record
+    nitf::Record getRecord() const;
+
+    //! Return the input
+    nitf::IOInterface getInput() const;
 
 private:
     nitf_Error error;

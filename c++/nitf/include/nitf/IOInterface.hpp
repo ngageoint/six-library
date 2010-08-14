@@ -34,11 +34,19 @@
 namespace nitf
 {
 
+struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
+{
+    ~IOInterfaceDestructor()
+    {
+    }
+    void operator()(nitf_IOInterface *io);
+};
+
 /*!
  *  \class IOInterface
  *  \brief  The C++ wrapper for the nitf_IOInterface
  */
-DECLARE_CLASS(IOInterface)
+class IOInterface : public nitf::Object<nitf_IOInterface, IOInterfaceDestructor>
 {
 public:
 

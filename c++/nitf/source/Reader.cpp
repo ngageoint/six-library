@@ -27,19 +27,22 @@ using namespace nitf;
 
 void ReaderDestructor::operator()(nitf_Reader *reader)
 {
-    if (reader && reader->record)
+    if (reader)
     {
-        // this tells the handle manager that the Record is no longer managed
-        nitf::Record rec(reader->record);
-        rec.setManaged(false);
+        if (reader->record)
+        {
+            // this tells the handle manager that the Record is no longer managed
+            nitf::Record rec(reader->record);
+            rec.setManaged(false);
+        }
+        if (reader->input && !reader->ownInput)
+        {
+            // this tells the handle manager that the IOInterface is no longer managed
+            nitf::IOInterface io(reader->input);
+            io.setManaged(false);
+        }
+        nitf_Reader_destruct(&reader);
     }
-    if (reader && reader->input)
-    {
-        // this tells the handle manager that the IOInterface is no longer managed
-        nitf::IOInterface io(reader->input);
-        io.setManaged(false);
-    }
-    nitf_Reader_destruct(&reader);
 }
 
 Reader::Reader(const Reader & x)
@@ -81,6 +84,19 @@ nitf::Record Reader::read(nitf::IOHandle & io) throw (nitf::NITFException)
 
 nitf::Record Reader::readIO(nitf::IOInterface & io) throw (nitf::NITFException)
 {
+    //free up the existing record, if we have one
+    nitf_Reader *reader = getNativeOrThrow();
+    if (reader->record)
+    {
+        nitf::Record rec(reader->record);
+        rec.setManaged(false);
+    }
+    if (reader->input && !reader->ownInput)
+    {
+        nitf::IOInterface oldIO(reader->input);
+        oldIO.setManaged(false);
+    }
+
     nitf_Record * x = nitf_Reader_readIO(getNativeOrThrow(), io.getNative(), &error);
     if (!x)
         throw nitf::NITFException(&error);
@@ -145,7 +161,17 @@ nitf::SegmentReader Reader::newTextReader(int segmentNumber)
     return reader;
 }
 
-nitf::List Reader::getWarningList()
+nitf::List Reader::getWarningList() const
 {
     return nitf::List(getNativeOrThrow()->warningList);
+}
+
+nitf::Record Reader::getRecord() const
+{
+    return nitf::Record(getNativeOrThrow()->record);
+}
+
+nitf::IOInterface Reader::getInput() const
+{
+    return nitf::IOInterface(getNativeOrThrow()->input);
 }

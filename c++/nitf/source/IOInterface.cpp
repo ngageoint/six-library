@@ -22,6 +22,15 @@
 
 #include "nitf/IOInterface.hpp"
 
+void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io)
+{
+    if (io)
+    {
+        nitf_Error error;
+        nitf_IOInterface_close(io, &error);
+        nitf_IOInterface_destruct(&io);
+    }
+}
 
 void nitf::IOInterface::read(char * buf, size_t size)
 {
