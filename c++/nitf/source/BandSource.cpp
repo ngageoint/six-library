@@ -39,6 +39,7 @@ nitf::FileSource::FileSource(nitf::IOHandle & io,
 {
     setNative(nitf_FileSource_construct(io.getHandle(), start, numBytesPerPixel, pixelSkip, &error));
     setManaged(false);
+    io.setManaged(true); //TODO must release this on destruction
 }
 
 
