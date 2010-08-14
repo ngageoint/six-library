@@ -34,26 +34,6 @@
  *  \brief  Contains wrapper implementations for DownSamplers
  */
 
-extern "C"
-{
-    //! Allows the engine to call the apply function for this object
-    NITF_BOOL __nitf_DownSampler_apply(nitf_DownSampler* userData,
-                                       NITF_DATA** inputWindow,
-                                       NITF_DATA** outputWindow,
-                                       nitf_Uint32 numBands,
-                                       nitf_Uint32 numWindowRows,
-                                       nitf_Uint32 numWindowCols,
-                                       nitf_Uint32 numInputCols,
-                                       nitf_Uint32 numSubWindowCols,
-                                       nitf_Uint32 pixelType,
-                                       nitf_Uint32 pixelSize,
-                                       nitf_Uint32 rowsInLastWindow,
-                                       nitf_Uint32 colsInLastWindow,
-                                       nitf_Error* error);
-    //! Needed for the engine interface
-    void __nitf_DownSampler_destruct(NITF_DATA* data);
-}
-
 namespace nitf
 {
 
@@ -125,71 +105,18 @@ public:
                        nitf::Uint32 pixelType,
                        nitf::Uint32 pixelSize,
                        nitf::Uint32 rowsInLastWindow,
-                       nitf::Uint32 colsInLastWindow) throw (nitf::NITFException)
-    {}
+                       nitf::Uint32 colsInLastWindow) throw (nitf::NITFException);
 
     nitf::Uint32 getRowSkip();
 
     nitf::Uint32 getColSkip();
 
-private:
-
-
 protected:
-    void setMembers(){}
-
-    //! Get the down sampler interface
-    nitf_IDownSampler getIDownSampler()
-    {
-        // Create a band source interface that
-        // the native layer can use
-        nitf_IDownSampler downSampler =
-            {
-                &__nitf_DownSampler_apply,
-                &__nitf_DownSampler_destruct
-            };
-        return downSampler;
-    }
-
-    //! Constructor
-    DownSampler(nitf::Uint32 rowSkip,
-                nitf::Uint32 colSkip) throw (nitf::NITFException);
 
     DownSampler(){}
     nitf_Error error;
 };
 
-/*!
- *  \class KnownDownSampler
- *  \brief  The base class for known down samplers in
- *  the engine.
- */
-class KnownDownSampler : public DownSampler
-{
-public:
-    //! Constructor
-    KnownDownSampler(nitf::Uint32 rowSkip,
-                     nitf::Uint32 colSkip);
-
-    //! Destructor
-    virtual ~KnownDownSampler() = 0;
-
-    virtual void apply(NITF_DATA ** inputWindow,
-                       NITF_DATA ** outputWindow,
-                       nitf::Uint32 numBands,
-                       nitf::Uint32 numWindowRows,
-                       nitf::Uint32 numWindowCols,
-                       nitf::Uint32 numInputCols,
-                       nitf::Uint32 numSubWindowCols,
-                       nitf::Uint32 pixelType,
-                       nitf::Uint32 pixelSize,
-                       nitf::Uint32 rowsInLastWindow,
-                       nitf::Uint32 colsInLastWindow) throw (nitf::NITFException);
-
-protected:
-    NITF_DATA * mData;
-    nitf_IDownSampler * mIface;
-};
 
 /*!
  *  \class PixelSkip
@@ -206,7 +133,7 @@ protected:
  *  drawbacks of this type of down sampling, please refer to
  *  the NITF manual.
  */
-class PixelSkip : public KnownDownSampler
+class PixelSkip : public DownSampler
 {
 public:
     /*!
@@ -236,7 +163,7 @@ public:
  *  of this type of down sampling, please refer to the NITF manual.
  *
  */
-class MaxDownSample : public KnownDownSampler
+class MaxDownSample : public DownSampler
 {
 public:
     /*!
@@ -262,7 +189,7 @@ public:
  *  For a more comprehensive discussion of the merits and drawbacks
  *  of this type of down-sampling, please refer to the NITF manual.
  */
-class SumSq2DownSample : public KnownDownSampler
+class SumSq2DownSample : public DownSampler
 {
 public:
     /*!
@@ -287,7 +214,7 @@ public:
  *  For a more comprehensive discussion of the merits and drawbacks
  *  of this type of down-sampling, please refer to the NITF manual.
  */
-class Select2DownSample : public KnownDownSampler
+class Select2DownSample : public DownSampler
 {
 public:
     /*!

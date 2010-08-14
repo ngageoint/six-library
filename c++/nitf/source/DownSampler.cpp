@@ -22,58 +22,6 @@
 
 #include "nitf/DownSampler.hpp"
 
-extern "C" NITF_BOOL __nitf_DownSampler_apply(nitf_DownSampler* userData,
-                                              NITF_DATA ** inputWindow,
-                                              NITF_DATA ** outputWindow,
-                                              nitf_Uint32 numBands,
-                                              nitf_Uint32 numWindowRows,
-                                              nitf_Uint32 numWindowCols,
-                                              nitf_Uint32 numInputCols,
-                                              nitf_Uint32 numSubWindowCols,
-                                              nitf_Uint32 pixelType,
-                                              nitf_Uint32 pixelSize,
-                                              nitf_Uint32 rowsInLastWindow,
-                                              nitf_Uint32 colsInLastWindow,
-                                              nitf_Error* error)
-{
-    // Get our object from the data and call the read function
-    if (!userData) throw except::NullPointerReference(Ctxt("DownSampler_read"));
-    ((nitf::DownSampler*)(userData->data))->apply(inputWindow,
-                                                  outputWindow,
-                                                  numBands,
-                                                  numWindowRows,
-                                                  numWindowCols,
-                                                  numInputCols,
-                                                  numSubWindowCols,
-                                                  pixelType,
-                                                  pixelSize,
-                                                  rowsInLastWindow,
-                                                  colsInLastWindow);
-    return true;
-}
-
-extern "C" void __nitf_DownSampler_destruct(NITF_DATA* data){}
-
-nitf::DownSampler::DownSampler(nitf::Uint32 rowSkip, nitf::Uint32 colSkip) throw (nitf::NITFException)
-{
-    static nitf_IDownSampler iDownSampler = getIDownSampler();
-
-    // Create the dummy handle
-    nitf_DownSampler * downSampler = (nitf_DownSampler*)NITF_MALLOC(sizeof(nitf_DownSampler));
-    setNative(downSampler);
-    if (!isValid())
-        throw nitf::NITFException(Ctxt("Could not create down sampler"));
-
-    // Attach 'this' as the data, which will be the data
-    // for the DownSampler_read function
-    downSampler->data = this;
-    downSampler->rowSkip = rowSkip;
-    downSampler->colSkip = colSkip;
-    downSampler->iface = &iDownSampler;
-
-    setManaged(false);
-}
-
 nitf::Uint32 nitf::DownSampler::getRowSkip()
 {
     return getNativeOrThrow()->rowSkip;
@@ -84,117 +32,69 @@ nitf::Uint32 nitf::DownSampler::getColSkip()
     return getNativeOrThrow()->colSkip;
 }
 
-nitf::KnownDownSampler::KnownDownSampler(nitf::Uint32 rowSkip,
-        nitf::Uint32 colSkip)
-        : mData(NULL), mIface(NULL){}
-
-nitf::KnownDownSampler::~KnownDownSampler(){}
-
-void nitf::KnownDownSampler::apply(NITF_DATA ** inputWindow,
-                                   NITF_DATA ** outputWindow,
-                                   nitf::Uint32 numBands,
-                                   nitf::Uint32 numWindowRows,
-                                   nitf::Uint32 numWindowCols,
-                                   nitf::Uint32 numInputCols,
-                                   nitf::Uint32 numSubWindowCols,
-                                   nitf::Uint32 pixelType,
-                                   nitf::Uint32 pixelSize,
-                                   nitf::Uint32 rowsInLastWindow,
-                                   nitf::Uint32 colsInLastWindow) throw (nitf::NITFException)
+void nitf::DownSampler::apply(NITF_DATA ** inputWindow,
+        NITF_DATA ** outputWindow, nitf::Uint32 numBands,
+        nitf::Uint32 numWindowRows, nitf::Uint32 numWindowCols,
+        nitf::Uint32 numInputCols, nitf::Uint32 numSubWindowCols,
+        nitf::Uint32 pixelType, nitf::Uint32 pixelSize,
+        nitf::Uint32 rowsInLastWindow, nitf::Uint32 colsInLastWindow)
+        throw (nitf::NITFException)
 {
-    if (mIface)
+    nitf_DownSampler *ds = getNativeOrThrow();
+    if (ds && ds->iface)
     {
-        NITF_BOOL x = mIface->apply(getNativeOrThrow(),
-                                    inputWindow,
-                                    outputWindow,
-                                    numBands,
-                                    numWindowRows,
-                                    numWindowCols,
-                                    numInputCols,
-                                    numSubWindowCols,
-                                    pixelType,
-                                    pixelSize,
-                                    rowsInLastWindow,
-                                    colsInLastWindow,
-                                    &error);
-        if (!x)
+        if (!ds->iface->apply(ds, inputWindow, outputWindow, numBands,
+                              numWindowRows, numWindowCols, numInputCols,
+                              numSubWindowCols, pixelType, pixelSize,
+                              rowsInLastWindow, colsInLastWindow, &error))
             throw nitf::NITFException(&error);
     }
     else
     {
-        throw except::NullPointerReference(Ctxt("KnownDownSampler"));
+        throw except::NullPointerReference(Ctxt("DownSampler"));
     }
 }
 
-
-nitf::PixelSkip::PixelSkip(nitf::Uint32 rowSkip,
-                           nitf::Uint32 colSkip) throw (nitf::NITFException)
-        : nitf::KnownDownSampler(rowSkip, colSkip)
+nitf::PixelSkip::PixelSkip(nitf::Uint32 rowSkip, nitf::Uint32 colSkip)
+        throw (nitf::NITFException)
 {
     setNative(nitf_PixelSkip_construct(rowSkip, colSkip, &error));
-    getNativeOrThrow();
-
-    static nitf_IDownSampler iDownSampler = getIDownSampler();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iDownSampler;
+    setManaged(false);
 }
 
-nitf::PixelSkip::~PixelSkip(){}
+nitf::PixelSkip::~PixelSkip()
+{
+}
 
-nitf::MaxDownSample::MaxDownSample(nitf::Uint32 rowSkip,
-                                   nitf::Uint32 colSkip) throw (nitf::NITFException)
-        : nitf::KnownDownSampler(rowSkip, colSkip)
+nitf::MaxDownSample::MaxDownSample(nitf::Uint32 rowSkip, nitf::Uint32 colSkip)
+        throw (nitf::NITFException)
 {
     setNative(nitf_MaxDownSample_construct(rowSkip, colSkip, &error));
-    getNativeOrThrow();
-
-    static nitf_IDownSampler iDownSampler = getIDownSampler();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iDownSampler;
+    setManaged(false);
 }
 
-nitf::MaxDownSample::~MaxDownSample(){}
+nitf::MaxDownSample::~MaxDownSample()
+{
+}
 
 nitf::SumSq2DownSample::SumSq2DownSample(nitf::Uint32 rowSkip,
         nitf::Uint32 colSkip) throw (nitf::NITFException)
-        : nitf::KnownDownSampler(rowSkip, colSkip)
 {
     setNative(nitf_SumSq2DownSample_construct(rowSkip, colSkip, &error));
-    getNativeOrThrow();
-
-    static nitf_IDownSampler iDownSampler = getIDownSampler();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iDownSampler;
+    setManaged(false);
 }
 
-nitf::SumSq2DownSample::~SumSq2DownSample(){}
+nitf::SumSq2DownSample::~SumSq2DownSample()
+{
+}
 
 nitf::Select2DownSample::Select2DownSample(nitf::Uint32 rowSkip,
         nitf::Uint32 colSkip) throw (nitf::NITFException)
-        : nitf::KnownDownSampler(rowSkip, colSkip)
 {
     setNative(nitf_Select2DownSample_construct(rowSkip, colSkip, &error));
-    getNativeOrThrow();
-
-    static nitf_IDownSampler iDownSampler = getIDownSampler();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iDownSampler;
+    setManaged(false);
 }
 
-nitf::Select2DownSample::~Select2DownSample(){}
+nitf::Select2DownSample::~Select2DownSample()
+{
+}
