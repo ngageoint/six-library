@@ -40,11 +40,19 @@
 namespace nitf
 {
 
+struct ReaderDestructor : public nitf::MemoryDestructor<nitf_Reader>
+{
+    ~ReaderDestructor()
+    {
+    }
+    void operator()(nitf_Reader *reader);
+};
+
 /*!
  *  \class Reader
  *  \brief  The C++ wrapper for the nitf_Reader
  */
-DECLARE_CLASS(Reader)
+class Reader : public nitf::Object<nitf_Reader, ReaderDestructor>
 {
 public:
     //! Copy constructor

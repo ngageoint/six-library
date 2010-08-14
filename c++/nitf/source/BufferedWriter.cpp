@@ -13,7 +13,7 @@ void BufferedWriter::flushBuffer()
     if (!mPosition)
         return;
 
-    mIOHandle.write(mBuffer, mPosition);
+    IOHandle::write(mBuffer, mPosition);
 
     //fsync(mIOHandle.getHandle());
     mTotalWritten += (nitf::Off)mPosition;
@@ -73,13 +73,13 @@ nitf::Off BufferedWriter::seek(nitf::Off offset, int whence)
     // This is very unfortunate, since it creates a partial block
     flushBuffer();
     
-    return mIOHandle.seek(offset, whence);
+    return IOHandle::seek(offset, whence);
 }
 
 nitf::Off BufferedWriter::tell() throw(nitf::NITFException)
 {
         
-    return ( (nitf::Off)mPosition + mIOHandle.tell());
+    return ( (nitf::Off)mPosition + IOHandle::tell());
 }
 
 nitf::Off BufferedWriter::getSize() throw(nitf::NITFException)
@@ -90,6 +90,5 @@ nitf::Off BufferedWriter::getSize() throw(nitf::NITFException)
 void BufferedWriter::close()
 {
     flushBuffer();
-    mIOHandle.close();
-    
+    IOHandle::close();
 }

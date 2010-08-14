@@ -24,6 +24,24 @@
 
 using namespace nitf;
 
+
+void ReaderDestructor::operator()(nitf_Reader *reader)
+{
+    if (reader && reader->record)
+    {
+        // this tells the handle manager that the Record is no longer managed
+        nitf::Record rec(reader->record);
+        rec.setManaged(false);
+    }
+    if (reader && reader->input)
+    {
+        // this tells the handle manager that the IOInterface is no longer managed
+        nitf::IOInterface io(reader->input);
+        io.setManaged(false);
+    }
+    nitf_Reader_destruct(&reader);
+}
+
 Reader::Reader(const Reader & x)
 {
     setNative(x.getNative());
@@ -69,7 +87,8 @@ nitf::Record Reader::readIO(nitf::IOInterface & io) throw (nitf::NITFException)
     nitf::Record rec(x);
     //set it so it is NOT managed by the underlying library
     //this means Records are subject to deletion when refcount == 0
-    rec.setManaged(false);
+    rec.setManaged(true);
+    io.setManaged(true);
     return rec;
 }
 

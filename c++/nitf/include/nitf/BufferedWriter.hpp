@@ -31,7 +31,7 @@
 namespace nitf
 {
 
-class BufferedWriter : public IOInterface
+class BufferedWriter : public IOHandle
 {
 
 private:
@@ -42,15 +42,14 @@ private:
     nitf::Off mTotalWritten;
     nitf::Off mBlocksWritten;
     nitf::Off mPartialBlocks;
-    nitf::IOHandle mIOHandle;
 public:
 
     BufferedWriter(std::string file, nitf::Off bufferSize) 
         throw(nitf::NITFException)
-        : mBufferSize(bufferSize), mOwn(true), mPosition(0), 
+        : IOHandle(file, NITF_ACCESS_WRITEONLY, NITF_CREATE),
+          mBufferSize(bufferSize), mOwn(true), mBuffer(NULL), mPosition(0),
           mTotalWritten(0), mBlocksWritten(0), mPartialBlocks(0)
     {
-        mIOHandle.create(file, NITF_ACCESS_WRITEONLY, NITF_CREATE);
         mBuffer = new char[bufferSize];
         if (!mBuffer)
             throw nitf::NITFException(Ctxt("Out of memory"));
@@ -59,11 +58,11 @@ public:
     BufferedWriter(std::string file, char *buffer, 
                nitf::Off size, bool adopt = false) 
         throw(nitf::NITFException)
-            : mBufferSize(size), mOwn(adopt), 
+            : IOHandle(file, NITF_ACCESS_WRITEONLY, NITF_CREATE),
+              mBufferSize(size), mOwn(adopt),
               mBuffer(buffer), mPosition(0), 
               mTotalWritten(0), mBlocksWritten(0), mPartialBlocks(0)
     {
-        mIOHandle.create(file, NITF_ACCESS_WRITEONLY, NITF_CREATE);
     }
 
     ~BufferedWriter();

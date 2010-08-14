@@ -28,28 +28,6 @@
 #include "nitf/IOInterface.h"
 #include <string>
 
-extern "C"
-{
-    NITF_BOOL __nitf_IOInterfaceImpl_read(NITF_DATA* data,
-            char* buf, size_t size, nitf_Error* error);
-
-    NITF_BOOL __nitf_IOInterfaceImpl_write(NITF_DATA* data,
-            const char* buf, size_t size, nitf_Error* error);
-
-    nitf::Off __nitf_IOInterfaceImpl_seek(NITF_DATA* data,
-            nitf::Off offset, int whence, nitf_Error* error);
-
-    nitf::Off __nitf_IOInterfaceImpl_tell(NITF_DATA* data,
-                                          nitf_Error* error);
-
-    nitf::Off __nitf_IOInterfaceImpl_getSize(NITF_DATA* data,
-                                             nitf_Error* error);
-
-    NITF_BOOL __nitf_IOInterfaceImpl_close(NITF_DATA* data,
-                                           nitf_Error* error);
-
-    void __nitf_IOInterfaceImpl_destruct(NITF_DATA* data);
-}
 /*!
  *  \file IOInterface.hpp
  */
@@ -88,59 +66,6 @@ public:
     //! Destructor
     virtual ~IOInterface(){}
 
-    virtual void read(char * buf, size_t size) {}
-
-    virtual void write(const char * buf, size_t size) throw(nitf::NITFException) {}
-
-    virtual nitf::Off seek(nitf::Off offset, int whence) throw(nitf::NITFException) { return -1; }
-
-    virtual nitf::Off tell() throw(nitf::NITFException) { return -1; }
-
-    virtual nitf::Off getSize() throw(nitf::NITFException) { return -1; }
-
-    virtual void close() {}
-
-
-protected:
-
-    //! Get the native data source interface
-    nitf_IIOInterface getIOInterfaceImpl()
-    {
-        nitf_IIOInterface iIOHandle =
-        {
-            &__nitf_IOInterfaceImpl_read,
-            &__nitf_IOInterfaceImpl_write,
-            &__nitf_IOInterfaceImpl_seek,
-            &__nitf_IOInterfaceImpl_tell,
-            &__nitf_IOInterfaceImpl_getSize,
-            &__nitf_IOInterfaceImpl_close,
-            &__nitf_IOInterfaceImpl_destruct,
-        };
-        return iIOHandle;
-    }
-
-    //! Constructor
-    IOInterface() throw (nitf::NITFException);
-
-    nitf_Error error;
-};
-
-
-
-/*!
- *  \class NativeIOInterface
- *  The Native wrapper for the IOInterface.
- */
-class NativeIOInterface : public IOInterface
-{
-public:
-    // Set native object
-    NativeIOInterface(nitf_IOInterface * x) : IOInterface(x) {}
-
-    NativeIOInterface() : IOInterface() {}
-
-    virtual ~NativeIOInterface() {}
-
     virtual void read(char * buf, size_t size);
 
     virtual void write(const char * buf, size_t size) throw(nitf::NITFException);
@@ -152,6 +77,11 @@ public:
     virtual nitf::Off getSize() throw(nitf::NITFException);
 
     virtual void close();
+
+
+protected:
+    IOInterface() {}
+    nitf_Error error;
 };
 
 }

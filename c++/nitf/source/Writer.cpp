@@ -24,6 +24,23 @@
 
 using namespace nitf;
 
+void WriterDestructor::operator()(nitf_Writer *writer)
+{
+    if (writer && writer->record)
+    {
+        // this tells the handle manager that the Record is no longer managed
+        nitf::Record rec(writer->record);
+        rec.setManaged(false);
+    }
+    if (writer && writer->output)
+    {
+        // this tells the handle manager that the IOInterface is no longer managed
+        nitf::IOInterface io(writer->output);
+        io.setManaged(false);
+    }
+    nitf_Writer_destruct(&writer);
+}
+
 Writer::Writer(const Writer & x)
 {
     setNative(x.getNative());
@@ -78,6 +95,8 @@ void Writer::prepareIO(nitf::IOInterface & io, nitf::Record & record)
             io.getNative(), &error);
     if (!x)
         throw nitf::NITFException(&error);
+    io.setManaged(true);
+    record.setManaged(true);
 }
 
 void Writer::setImageWriteHandler(int index, WriteHandler* writeHandler,

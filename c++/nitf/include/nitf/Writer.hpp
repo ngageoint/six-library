@@ -42,11 +42,19 @@
 namespace nitf
 {
 
+struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
+{
+    ~WriterDestructor()
+    {
+    }
+    void operator()(nitf_Writer *writer);
+};
+
 /*!
  *  \class Writer
  *  \brief  The C++ wrapper for the nitf_Writer
  */
-DECLARE_CLASS(Writer)
+class Writer : public nitf::Object<nitf_Writer, WriterDestructor>
 {
 public:
     //! Copy constructor

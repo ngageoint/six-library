@@ -47,7 +47,7 @@ extern "C" NITF_BOOL __nitf_WriteHandler_write(NITF_DATA * data,
     // Get our object from the data and call the read function
     if (!data)
         throw except::NullPointerReference(Ctxt("WriteHandler_write"));
-    nitf::NativeIOInterface interface(io);
+    nitf::IOInterface interface(io);
     ((nitf::WriteHandler*) data)->write(interface);
     return true;
 }

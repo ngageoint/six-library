@@ -97,20 +97,17 @@ class BoundHandle : public Handle
 {
 private:
     Class_T* handle;
-    bool managed;
+    int managed;
 
 public:
-    //! Constructor
-    BoundHandle() : handle(NULL), managed(true) {}
-
     //! Create handle from native object
-    BoundHandle(Class_T* h) : handle(h), managed(true) {}
+    BoundHandle(Class_T* h = NULL) : handle(h), managed(1) {}
 
     //! Destructor
     virtual ~BoundHandle()
     {
         //call the destructor, to destroy the object
-        if(handle && !managed)
+        if(handle && managed <= 0)
         {
             DestructFunctor_T functor;
             functor(handle);
@@ -138,10 +135,10 @@ public:
      * be passed to the DestructFunctor_T functor, and most likely destroyed,
      * depending on what the functor does.
      */
-    void setManaged(bool flag) { managed = flag; }
+    void setManaged(bool flag) { managed += flag ? 1 : (managed == 0 ? 0 : -1); }
 
     //! Is the native object managed?
-    bool isManaged() { return managed; }
+    bool isManaged() { return managed > 0; }
 
 };
 

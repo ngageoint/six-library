@@ -64,6 +64,8 @@ public:
         }
         BoundHandle<T, DestructFunctor_T>* handle =
             (BoundHandle<T, DestructFunctor_T>*)mHandleMap[object];
+        obtainLock.manualUnlock();
+
         handle->incRef();
         return handle;
     }
@@ -78,8 +80,9 @@ public:
             Handle* handle = (Handle*)it->second;
             if (handle->decRef() <= 0)
             {
-                delete handle;
                 mHandleMap.erase(it);
+                obtainLock.manualUnlock();
+                delete handle;
             }
         }
     }
