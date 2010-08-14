@@ -47,6 +47,7 @@ NITFAPI(NITF_BOOL) nitf_SegmentWriter_attachSource(nitf_SegmentWriter *writer,
         nitf_SegmentSource *segmentSource,
         nitf_Error *error);
 
+
 NITF_CXX_ENDGUARD
 
 #endif

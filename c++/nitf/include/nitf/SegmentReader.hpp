@@ -41,6 +41,10 @@ namespace nitf
 DECLARE_CLASS(SegmentReader)
 {
 public:
+    SegmentReader()
+    {
+    }
+
     //! Copy constructor
     SegmentReader(const SegmentReader & x);
 
@@ -108,7 +112,6 @@ public:
     nitf::Off getSize();
 
 private:
-    SegmentReader() throw(nitf::NITFException){}
     nitf_Error error;
 };
 

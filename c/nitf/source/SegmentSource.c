@@ -355,3 +355,64 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
     segmentSource->iface = &iFileSource;
     return segmentSource;
 }
+
+
+
+NITFPRIV(void) SegmentReader_destruct(NITF_DATA * data)
+{
+    /* nothing... */
+}
+
+NITFPRIV(nitf_Off) SegmentReader_getSize(NITF_DATA * data, nitf_Error *e)
+{
+    nitf_SegmentReader *reader =  (nitf_SegmentReader*)data;
+    assert(reader);
+    return reader->dataLength;
+}
+
+NITFPRIV(NITF_BOOL) SegmentReader_setSize(NITF_DATA* data, nitf_Off size, nitf_Error *e)
+{
+    /* does nothing... - should we return an error instead? */
+    return NITF_SUCCESS;
+}
+
+
+/*
+ *  Private read implementation for file source.
+ */
+NITFPRIV(NITF_BOOL) SegmentReader_read(NITF_DATA * data,
+                                    char *buf,
+                                    nitf_Off size, nitf_Error * error)
+{
+    nitf_SegmentReader *reader =  (nitf_SegmentReader*)data;
+    assert(reader);
+    return nitf_SegmentReader_read(reader, buf, (size_t)size, error);
+}
+
+
+NITFAPI(nitf_SegmentSource *) nitf_SegmentReaderSource_construct
+(
+    nitf_SegmentReader *reader,
+    nitf_Error * error
+)
+{
+    static nitf_IDataSource iSource =
+    {
+        &SegmentReader_read,
+        &SegmentReader_destruct,
+        &SegmentReader_getSize,
+        &SegmentReader_setSize
+    };
+    nitf_SegmentSource *segmentSource = NULL;
+
+    segmentSource = (nitf_SegmentSource *) NITF_MALLOC(sizeof(nitf_SegmentSource));
+    if (!segmentSource)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                        NITF_ERR_MEMORY);
+        return NULL;
+    }
+    segmentSource->data = reader;
+    segmentSource->iface = &iSource;
+    return segmentSource;
+}

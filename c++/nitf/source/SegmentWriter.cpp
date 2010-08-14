@@ -24,10 +24,20 @@
 
 using namespace nitf;
 
-SegmentWriter::SegmentWriter(nitf_SegmentWriter *x) throw (nitf::NITFException) :
-    nitf::KnownWriteHandler(), mAdopt(false), mSegmentSource(NULL)
+SegmentWriter::SegmentWriter() throw (nitf::NITFException) :
+    mAdopt(false), mSegmentSource(NULL)
 {
-    setKnownHandler(x ? x : nitf_SegmentWriter_construct(&error));
+    setNative(nitf_SegmentWriter_construct(&error));
+    setManaged(false);
+}
+
+SegmentWriter::SegmentWriter(nitf::SegmentSource* segmentSource, bool adopt)
+        throw (nitf::NITFException) :
+    mAdopt(adopt), mSegmentSource(segmentSource)
+{
+    setNative(nitf_SegmentWriter_construct(&error));
+    setManaged(false);
+    attachSource(segmentSource, adopt);
 }
 
 SegmentWriter::~SegmentWriter()
@@ -42,8 +52,8 @@ SegmentWriter::~SegmentWriter()
 void SegmentWriter::attachSource(nitf::SegmentSource* segmentSource, bool adopt)
         throw (nitf::NITFException)
 {
-    if (!nitf_SegmentWriter_attachSource(knownHandler,
-            segmentSource->getNative(), &error))
+    if (!nitf_SegmentWriter_attachSource(getNativeOrThrow(),
+                                         segmentSource->getNative(), &error))
         throw nitf::NITFException(&error);
     segmentSource->setManaged(true);
     segmentSource->incRef();

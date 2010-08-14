@@ -27,6 +27,7 @@
 #include "nitf/System.h"
 #include "nitf/IOHandle.h"
 #include "nitf/DataSource.h"
+#include "nitf/SegmentReader.h"
 
 
 NITF_CXX_GUARD
@@ -93,6 +94,13 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
     nitf_IOHandle handle,
     nitf_Off start,
     int byteSkip,
+    nitf_Error * error
+);
+
+
+NITFAPI(nitf_SegmentSource *) nitf_SegmentReaderSource_construct
+(
+    nitf_SegmentReader *reader,
     nitf_Error * error
 );
 

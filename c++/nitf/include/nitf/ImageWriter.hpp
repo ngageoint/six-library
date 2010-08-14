@@ -42,7 +42,7 @@ namespace nitf
  *  \class ImageWriter
  *  \brief  The C++ wrapper for the nitf_ImageWriter
  */
-class ImageWriter : public KnownWriteHandler
+class ImageWriter : public WriteHandler
 {
 public:
     /*!
@@ -50,7 +50,11 @@ public:
      *  \param subheader    The subheader of the Image to write
      */
     ImageWriter(nitf::ImageSubheader& subheader) throw(nitf::NITFException);
-    ImageWriter(nitf_ImageWriter * x) throw(nitf::NITFException);
+
+    // Set native object
+    ImageWriter(nitf_ImageWriter *x) : WriteHandler(x)
+    {
+    }
 
     ~ImageWriter();
 

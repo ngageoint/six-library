@@ -38,3 +38,12 @@ nitf::SegmentFileSource::SegmentFileSource(nitf::IOHandle & io,
     setManaged(false);
     io.setManaged(true); //TODO unmanage on deletion
 }
+
+nitf::SegmentReaderSource::SegmentReaderSource(nitf::SegmentReader reader)
+        throw (nitf::NITFException)
+{
+    setNative(nitf_SegmentReaderSource_construct(reader.getNativeOrThrow(),
+                                                 &error));
+    setManaged(false);
+    reader.setManaged(true); //TODO unmanage on deletion
+}

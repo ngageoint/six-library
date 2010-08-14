@@ -25,6 +25,7 @@
 
 #include "nitf/DataSource.hpp"
 #include "nitf/SegmentSource.h"
+#include "nitf/SegmentReader.hpp"
 #include "nitf/IOHandle.hpp"
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
@@ -40,7 +41,6 @@ namespace nitf
 
 //! SegmentSource === DataSource
 typedef DataSource SegmentSource;
-
 
 /*!
  *  \class SegmentMemorySource
@@ -65,14 +65,12 @@ public:
      *  \param start    The start offset
      *  \param byteSkip The amount of bytes to skip
      */
-    SegmentMemorySource(
-        char * data,
-        size_t size,
-        nitf::Off start,
-        int byteSkip) throw(nitf::NITFException);
+            SegmentMemorySource(char * data, size_t size, nitf::Off start,
+                    int byteSkip) throw (nitf::NITFException);
 
-    //! Destructor
-    ~SegmentMemorySource(){}
+    ~SegmentMemorySource()
+    {
+    }
 };
 
 /*!
@@ -92,13 +90,28 @@ public:
      *  \param start    The location to seek to (as the beginning)
      *  \param byteSkip The number of bytes to skip
      */
-    SegmentFileSource(
-        nitf::IOHandle & io,
-        nitf::Off start,
-        int byteSkip) throw(nitf::NITFException);
+    SegmentFileSource(nitf::IOHandle & io, nitf::Off start, int byteSkip)
+            throw (nitf::NITFException);
 
-    //! Destructor
-    ~SegmentFileSource(){}
+    ~SegmentFileSource()
+    {
+    }
+};
+
+class SegmentReaderSource : public SegmentSource
+{
+public:
+    /*!
+     *  Constructor
+     *  \param handle   The handle to store
+     *  \param start    The location to seek to (as the beginning)
+     *  \param byteSkip The number of bytes to skip
+     */
+    SegmentReaderSource(nitf::SegmentReader reader) throw (nitf::NITFException);
+
+    ~SegmentReaderSource()
+    {
+    }
 };
 }
 #endif

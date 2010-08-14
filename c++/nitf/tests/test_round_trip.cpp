@@ -123,9 +123,10 @@ int main(int argc, char **argv)
         {
             writer.setGraphicWriteHandler(
                                           i,
-                                          new nitf::SegmentWriteHandler(
-                                                                        reader.newGraphicReader(
-                                                                                                i)));
+                                          new nitf::SegmentWriter(
+                                                                  new nitf::SegmentReaderSource(
+                                                                                                reader.newGraphicReader(
+                                                                                                                        i))));
         }
 
         num = record.getNumTexts();
@@ -133,9 +134,10 @@ int main(int argc, char **argv)
         {
             writer.setTextWriteHandler(
                                        i,
-                                       new nitf::SegmentWriteHandler(
-                                                                     reader.newTextReader(
-                                                                                          i)));
+                                       new nitf::SegmentWriter(
+                                                               new nitf::SegmentReaderSource(
+                                                                                             reader.newTextReader(
+                                                                                                                  i))));
         }
 
         num = record.getNumDataExtensions();
@@ -143,9 +145,10 @@ int main(int argc, char **argv)
         {
             writer.setDEWriteHandler(
                                      i,
-                                     new nitf::SegmentWriteHandler(
-                                                                   reader.newDEReader(
-                                                                                      i)));
+                                     new nitf::SegmentWriter(
+                                                             new nitf::SegmentReaderSource(
+                                                                                           reader.newDEReader(
+                                                                                                              i))));
         }
 
         writer.write();
