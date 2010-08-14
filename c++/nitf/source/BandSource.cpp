@@ -29,18 +29,6 @@ nitf::MemorySource::MemorySource(char * data,
                                  int pixelSkip) throw(nitf::NITFException)
 {
     setNative(nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSkip, &error));
-    getNativeOrThrow();
-
-    static nitf_IDataSource iBandSource = getIDataSource();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    // Attach 'this' as the data, which will be the data
-    // for the BandSource_read function
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iBandSource;
-
     setManaged(false);
 }
 
@@ -50,43 +38,9 @@ nitf::FileSource::FileSource(nitf::IOHandle & io,
                              int pixelSkip) throw(nitf::NITFException)
 {
     setNative(nitf_FileSource_construct(io.getHandle(), start, numBytesPerPixel, pixelSkip, &error));
-    getNativeOrThrow();
-
-    static nitf_IDataSource iBandSource = getIDataSource();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    // Attach 'this' as the data, which will be the data
-    // for the BandSource_read function
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iBandSource;
-
     setManaged(false);
 }
 
-
-nitf::RowSource::RowSource(nitf::Uint32 band, nitf::Uint32 numRows,
-        nitf::Uint32 numCols, nitf::Uint32 pixelSize) throw(nitf::NITFException)
-    : mBand(band), mNumRows(numRows), mNumCols(numCols), mPixelSize(pixelSize)
-{
-    setNative(nitf_RowSource_construct((void*)this, &__nitf_RowSource_nextRow,
-                                       mBand, mNumRows, 
-                                       mNumCols * mPixelSize, &error));
-    getNativeOrThrow();
-
-    static nitf_IDataSource iBandSource = getIDataSource();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    // Attach 'this' as the data, which will be the data
-    // for the BandSource_read function
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iBandSource;
-
-    setManaged(false);
-}
 
 
 extern "C" NITF_BOOL __nitf_RowSource_nextRow(void *algorithm,
@@ -94,10 +48,10 @@ extern "C" NITF_BOOL __nitf_RowSource_nextRow(void *algorithm,
                                               NITF_DATA * buffer,
                                               nitf_Error * error)
 {
-    nitf::RowSource *source = (nitf::RowSource*)algorithm;
+    nitf::RowSourceCallback *callback = (nitf::RowSourceCallback*)algorithm;
     try
     {
-        source->nextRow((char*)buffer);
+        callback->nextRow(band, (char*)buffer);
     }
     catch(nitf::NITFException &ex)
     {
@@ -107,3 +61,16 @@ extern "C" NITF_BOOL __nitf_RowSource_nextRow(void *algorithm,
     }
     return NITF_SUCCESS;
 }
+
+
+
+nitf::RowSource::RowSource(nitf::Uint32 band, nitf::Uint32 numRows,
+        nitf::Uint32 numCols, nitf::Uint32 pixelSize, nitf::RowSourceCallback *callback) throw(nitf::NITFException)
+    : mBand(band), mNumRows(numRows), mNumCols(numCols), mPixelSize(pixelSize)
+{
+    setNative(nitf_RowSource_construct((void*)callback, &__nitf_RowSource_nextRow,
+                                       mBand, mNumRows,
+                                       mNumCols * mPixelSize, &error));
+    setManaged(false);
+}
+

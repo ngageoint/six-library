@@ -28,24 +28,6 @@
 #include "nitf/Object.hpp"
 #include <string>
 
-
-extern "C"
-{
-    //! Allows the engine to call the read function for this object
-    NITF_BOOL __nitf_DataSource_read(NITF_DATA * data,
-                                     char * buf,
-                                     nitf::Off size,
-                                     nitf_Error * error);
-    
-
-    //! Needed for the engine interface
-    void __nitf_DataSource_destruct(NITF_DATA* data);
-
-    nitf::Off __nitf_DataSource_getSize(NITF_DATA* data, nitf_Error *e);
-
-    NITF_BOOL __nitf_DataSource_setSize(NITF_DATA* data, nitf::Off size, nitf_Error *e);
-}
-
 /*!
  *  \file DataSource.hpp
  *  \brief  Contains wrapper implementations for DataSources
@@ -81,79 +63,31 @@ public:
         getNativeOrThrow();
     }
 
+    DataSource()
+    {
+    }
+
     //! Destructor
-    virtual ~DataSource(){}
+    virtual ~DataSource()
+    {
+    }
 
     /*!
      *  Read from the DataSource into the buffer
      *  \param buf  The buffer
      *  \param size  The size of the buffer
      */
-    virtual void read(char * buf, nitf::Off size) throw (nitf::NITFException){}
+    virtual void read(char * buf, nitf::Off size) throw (nitf::NITFException);
 
     /*
      * Returns the size of the DataSource, in bytes
      */
-    virtual nitf::Off getSize() { return 0; }
-    virtual void setSize(nitf::Off size) {}
-private:
-
-
-protected:
-
-    //! Get the native data source interface
-    nitf_IDataSource getIDataSource()
-    {
-        // Create a data source interface that
-        // the native layer can use
-        nitf_IDataSource dataSource =
-        {
-            &__nitf_DataSource_read,
-            &__nitf_DataSource_destruct,
-            &__nitf_DataSource_getSize,
-            &__nitf_DataSource_setSize
-        };
-        return dataSource;
-    }
-
-    //! Constructor
-    DataSource() throw (nitf::NITFException);
-
-    //Here so nothing gets initialized
-    DataSource(bool b){}
-
-    nitf_Error error;
-};
-
-
-
-/*!
- *  \class KnownDataSource
- *  \brief  The base class for known data sources in the engine.
- */
-class KnownDataSource : public DataSource
-{
-public:
-    //! Constructor
-    KnownDataSource(): DataSource(false), mData(NULL), mIface(NULL){}
-    //! Destructor
-    virtual ~KnownDataSource() {}
-
-    /*!
-     *  Read from the KnownDataSource into the buffer
-     *  \param buf  The buffer
-     *  \param size  The size of the buffer
-     */
-    virtual void read(char * buf, nitf::Off size) throw (nitf::NITFException);
-
-    /*
-     * Returns the size of the segment
-     */
     virtual nitf::Off getSize();
+
     virtual void setSize(nitf::Off size);
-protected:
-    NITF_DATA * mData;
-    nitf_IDataSource * mIface;
+
+protected    :
+    nitf_Error error;
 };
 
 }

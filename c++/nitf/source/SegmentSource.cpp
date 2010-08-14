@@ -22,41 +22,19 @@
 
 #include "nitf/SegmentSource.hpp"
 
-nitf::SegmentMemorySource::SegmentMemorySource(
-    char * data,
-    size_t size,
-    nitf::Off start,
-    int byteSkip) throw(nitf::NITFException)
+nitf::SegmentMemorySource::SegmentMemorySource(char * data, size_t size,
+        nitf::Off start, int byteSkip) throw (nitf::NITFException)
 {
-    setNative(nitf_SegmentMemorySource_construct(data, size, start, byteSkip, &error));
-    getNativeOrThrow();
-
-    static nitf_IDataSource iSegmentSource = getIDataSource();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    // Attach 'this' as the data, which will be the data
-    // for the BandSource_read function
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iSegmentSource;
+    setNative(nitf_SegmentMemorySource_construct(data, size, start, byteSkip,
+                                                 &error));
+    setManaged(false);
 }
 
-nitf::SegmentFileSource::SegmentFileSource(
-    nitf::IOHandle & io,
-    nitf::Off start,
-    int byteSkip) throw(nitf::NITFException)
+nitf::SegmentFileSource::SegmentFileSource(nitf::IOHandle & io,
+        nitf::Off start, int byteSkip) throw (nitf::NITFException)
 {
-    setNative(nitf_SegmentFileSource_construct(io.getHandle(), start, byteSkip, &error));
-    getNativeOrThrow();
-
-    static nitf_IDataSource iSegmentSource = getIDataSource();
-
-    mData = getNativeOrThrow()->data;
-    mIface = getNativeOrThrow()->iface;
-
-    // Attach 'this' as the data, which will be the data
-    // for the BandSource_read function
-    getNativeOrThrow()->data = this;
-    getNativeOrThrow()->iface = &iSegmentSource;
+    setNative(nitf_SegmentFileSource_construct(io.getHandle(), start, byteSkip,
+                                               &error));
+    setManaged(false);
+    io.setManaged(true); //TODO unmanage on deletion
 }

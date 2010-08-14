@@ -31,13 +31,13 @@
  * of how users can write the image data to their NITF file
  */
 
-class RowStreamer: public nitf::RowSource
+class RowStreamer : public nitf::RowSource, public nitf::RowSourceCallback
 {
 public:
     RowStreamer(nitf::Uint32 band, nitf::Uint32 numRows, nitf::Uint32 numCols,
             nitf::Uint32 pixelSize, nitf::ImageReader reader)
             throw (nitf::NITFException) :
-        RowSource(band, numRows, numCols, pixelSize), mReader(reader)
+        RowSource(band, numRows, numCols, pixelSize, this), mReader(reader)
     {
         mWindow.setStartRow(0);
         mWindow.setNumRows(1);
@@ -51,12 +51,13 @@ public:
     {
     }
 
-    void nextRow(char* buffer) throw (nitf::NITFException)
+    void nextRow(nitf::Uint32 band, char* buffer) throw (nitf::NITFException)
     {
         int padded;
         mReader.read(mWindow, (nitf::Uint8**) &buffer, &padded);
         mWindow.setStartRow(mWindow.getStartRow() + 1);
     }
+
 protected:
     nitf::ImageReader mReader;
     nitf::SubWindow mWindow;
@@ -104,13 +105,15 @@ int main(int argc, char **argv)
             nitf::Uint32 nBands = imseg.getSubheader().getNumImageBands();
             nitf::Uint32 nRows = imseg.getSubheader().getNumRows();
             nitf::Uint32 nCols = imseg.getSubheader().getNumCols();
-            nitf::Uint32 pixelSize = NITF_NBPP_TO_BYTES(
-                    imseg.getSubheader().getNumBitsPerPixel());
+            nitf::Uint32
+                    pixelSize =
+                            NITF_NBPP_TO_BYTES(
+                                               imseg.getSubheader().getNumBitsPerPixel());
 
             for (nitf::Uint32 i = 0; i < nBands; i++)
             {
                 iSource->addBand(new RowStreamer(i, nRows, nCols, pixelSize,
-                        iReader));
+                                                 iReader));
             }
             iWriter->attachSource(iSource, true);
         }
@@ -118,22 +121,31 @@ int main(int argc, char **argv)
         num = record.getNumGraphics();
         for (nitf::Uint32 i = 0; i < num; i++)
         {
-            writer.setGraphicWriteHandler(i, new nitf::SegmentWriteHandler(
-                    reader.newGraphicReader(i)));
+            writer.setGraphicWriteHandler(
+                                          i,
+                                          new nitf::SegmentWriteHandler(
+                                                                        reader.newGraphicReader(
+                                                                                                i)));
         }
 
         num = record.getNumTexts();
         for (nitf::Uint32 i = 0; i < num; i++)
         {
-            writer.setTextWriteHandler(i, new nitf::SegmentWriteHandler(
-                    reader.newTextReader(i)));
+            writer.setTextWriteHandler(
+                                       i,
+                                       new nitf::SegmentWriteHandler(
+                                                                     reader.newTextReader(
+                                                                                          i)));
         }
 
         num = record.getNumDataExtensions();
         for (nitf::Uint32 i = 0; i < num; i++)
         {
-            writer.setDEWriteHandler(i, new nitf::SegmentWriteHandler(
-                    reader.newDEReader(i)));
+            writer.setDEWriteHandler(
+                                     i,
+                                     new nitf::SegmentWriteHandler(
+                                                                   reader.newDEReader(
+                                                                                      i)));
         }
 
         writer.write();

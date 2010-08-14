@@ -40,7 +40,6 @@ namespace nitf
 
 //! SegmentSource === DataSource
 typedef DataSource SegmentSource;
-typedef KnownDataSource KnownSegmentSource;
 
 
 /*!
@@ -56,7 +55,7 @@ typedef KnownDataSource KnownSegmentSource;
  *  times during the case of memory mapping, although it may be used
  *  to sample down or cut the data into pieces).
  */
-class SegmentMemorySource : public KnownSegmentSource
+class SegmentMemorySource : public SegmentSource
 {
 public:
     /*!
@@ -84,7 +83,7 @@ public:
  *  file descriptor or handle.  Due to any number of constraints,
  *  we allow the creator to specify a start point, and a byte skip.
  */
-class SegmentFileSource : public KnownSegmentSource
+class SegmentFileSource : public SegmentSource
 {
 public:
     /*!

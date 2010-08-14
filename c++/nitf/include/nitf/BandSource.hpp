@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __NITF_BANDSOURCE_HPP__
 #define __NITF_BANDSOURCE_HPP__
 
@@ -39,8 +38,6 @@ namespace nitf
 {
 //! BandSource === DataSource
 typedef DataSource BandSource;
-typedef KnownDataSource KnownBandSource;
-
 
 /*!
  *  \class MemorySource
@@ -55,7 +52,7 @@ typedef KnownDataSource KnownBandSource;
  *  times during the case of memory mapping, although it may be used
  *  to sample down or cut the image into pieces).
  */
-class MemorySource : public KnownBandSource
+class MemorySource : public BandSource
 {
 public:
     /*!
@@ -66,14 +63,13 @@ public:
      *  \param start  The start offset
      *  \param pixelSkip  The amount of pixels to skip
      */
-    MemorySource(char * data,
-                 size_t size,
-                 nitf::Off start,
-                 int numBytesPerPixel,
-                 int pixelSkip) throw(nitf::NITFException);
+    MemorySource(char * data, size_t size, nitf::Off start,
+            int numBytesPerPixel, int pixelSkip) throw (nitf::NITFException);
 
     //! Destructor
-    ~MemorySource(){}
+    ~MemorySource()
+    {
+    }
 };
 
 /*!
@@ -86,7 +82,7 @@ public:
  *  we allow the creator to specify a start point, and a pixel skip
  *  (this would help you create a thumbnail as well).
  */
-class FileSource : public KnownBandSource
+class FileSource : public BandSource
 {
 public:
     /*!
@@ -96,36 +92,34 @@ public:
      *  \param numBytesPerPixel The number of bytes per pixel
      *  \param pixelSkip  The number of pixels to skip each time
      */
-    FileSource(nitf::IOHandle & io,
-               nitf::Off start,
-               int numBytesPerPixel,
-               int pixelSkip) throw(nitf::NITFException);
+    FileSource(nitf::IOHandle & io, nitf::Off start, int numBytesPerPixel,
+            int pixelSkip) throw (nitf::NITFException);
 
     //! Destructor
-    ~FileSource(){}
+    ~FileSource()
+    {
+    }
 };
 
+struct RowSourceCallback
+{
+    virtual void nextRow(nitf::Uint32 band, char* buf) throw (nitf::NITFException) = 0;
+};
 
-class RowSource : public KnownBandSource
+class RowSource : public BandSource
 {
 public:
     RowSource(nitf::Uint32 band, nitf::Uint32 numRows, nitf::Uint32 numCols,
-              nitf::Uint32 pixelSize) throw(nitf::NITFException);
+            nitf::Uint32 pixelSize, RowSourceCallback *callback)
+            throw (nitf::NITFException);
 
-    ~RowSource(){}
-
-    virtual void nextRow(char* buffer) throw(nitf::NITFException) = 0;
-
+    ~RowSource()
+    {
+    }
 protected:
     nitf::Uint32 mBand, mNumRows, mNumCols, mPixelSize;
 };
 
-
 }
 
-extern "C"
-{
-    NITF_BOOL __nitf_RowSource_nextRow(void *algorithm, nitf_Uint32 band,
-                                       NITF_DATA * buffer, nitf_Error * error);
-}
 #endif
