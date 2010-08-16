@@ -42,11 +42,11 @@ SegmentWriter::SegmentWriter(nitf::SegmentSource* segmentSource, bool adopt)
 
 SegmentWriter::~SegmentWriter()
 {
-    if (mAdopt && mSegmentSource)
-    {
-        mSegmentSource->decRef();
-        delete mSegmentSource;
-    }
+//    if (mAdopt && mSegmentSource)
+//    {
+//        mSegmentSource->decRef();
+//        delete mSegmentSource;
+//    }
 }
 
 void SegmentWriter::attachSource(nitf::SegmentSource* segmentSource, bool adopt)

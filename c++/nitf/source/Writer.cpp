@@ -105,6 +105,7 @@ void Writer::setImageWriteHandler(int index, WriteHandler* writeHandler,
     if (!nitf_Writer_setImageWriteHandler(getNativeOrThrow(), index,
             writeHandler->getNative(), &error))
         throw nitf::NITFException(&error);
+    writeHandler->setManaged(true);
 
     if (adopt)
     {
@@ -118,6 +119,7 @@ void Writer::setGraphicWriteHandler(int index, WriteHandler* writeHandler,
     if (!nitf_Writer_setGraphicWriteHandler(getNativeOrThrow(), index,
             writeHandler->getNative(), &error))
         throw nitf::NITFException(&error);
+    writeHandler->setManaged(true);
 
     if (adopt)
     {
@@ -131,6 +133,7 @@ void Writer::setTextWriteHandler(int index, WriteHandler* writeHandler,
     if (!nitf_Writer_setTextWriteHandler(getNativeOrThrow(), index,
             writeHandler->getNative(), &error))
         throw nitf::NITFException(&error);
+    writeHandler->setManaged(true);
 
     if (adopt)
     {
@@ -144,6 +147,7 @@ void Writer::setDEWriteHandler(int index, WriteHandler* writeHandler,
     if (!nitf_Writer_setDEWriteHandler(getNativeOrThrow(), index,
             writeHandler->getNative(), &error))
         throw nitf::NITFException(&error);
+    writeHandler->setManaged(true);
 
     if (adopt)
     {
