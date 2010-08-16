@@ -99,9 +99,9 @@ int main(int argc, char *argv[])
         nitf::IOHandle output_io(argv[2], NITF_ACCESS_WRITEONLY, NITF_CREATE);
         writer.prepare(output_io, record);
 
-        nitf::SegmentWriter* sWriter = writer.newDEWriter(0);
+        nitf::SegmentWriter sWriter = writer.newDEWriter(0);
         nitf::SegmentMemorySource sSource(data, strlen(data), 0, 0);
-        sWriter->attachSource(&sSource, false);
+        sWriter.attachSource(&sSource, false);
         writer.write();
 
         exit(EXIT_SUCCESS);

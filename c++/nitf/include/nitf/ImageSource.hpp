@@ -62,10 +62,10 @@ public:
     ~ImageSource();
 
     //! Add a band
-    void addBand(nitf::BandSource* bandSource) throw(nitf::NITFException);
+    void addBand(nitf::BandSource bandSource) throw(nitf::NITFException);
 
     //! Get a band
-    nitf::BandSource* getBand(int n) throw (nitf::NITFException);
+    nitf::BandSource getBand(int n) throw (nitf::NITFException);
 
 private:
     nitf_Error error;

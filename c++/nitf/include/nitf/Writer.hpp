@@ -67,7 +67,7 @@ public:
     Writer(nitf_Writer * x);
 
     //! Constructor
-    Writer() throw(nitf::NITFException);
+    Writer() throw (nitf::NITFException);
 
     ~Writer();
 
@@ -80,7 +80,7 @@ public:
      *  \param record  The record to write out
      */
     void prepare(nitf::IOHandle & io, nitf::Record & record)
-        throw (nitf::NITFException);
+            throw (nitf::NITFException);
 
     /*!
      *  Prepare the writer
@@ -88,67 +88,62 @@ public:
      *  \param record  The record to write out
      */
     void prepareIO(nitf::IOInterface & io, nitf::Record & record)
-        throw (nitf::NITFException);
+            throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the Image at the given index.
      */
-    void setImageWriteHandler(int index, WriteHandler* writeHandler,
-                              bool adopt = true)
-        throw (nitf::NITFException);
+    void setImageWriteHandler(int index, WriteHandler writeHandler)
+            throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the Graphic at the given index.
      */
-    void setGraphicWriteHandler(int index, WriteHandler* writeHandler,
-                                bool adopt = true)
-        throw (nitf::NITFException);
+    void setGraphicWriteHandler(int index, WriteHandler writeHandler)
+            throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the Text at the given index.
      */
-    void setTextWriteHandler(int index, WriteHandler* writeHandler,
-                             bool adopt = true)
-        throw (nitf::NITFException);
+    void setTextWriteHandler(int index, WriteHandler writeHandler)
+            throw (nitf::NITFException);
 
     /*!
      * Sets the WriteHandler for the DE Segment at the given index.
      */
-    void setDEWriteHandler(int index, WriteHandler* writeHandler,
-                           bool adopt = true)
-        throw (nitf::NITFException);
+    void setDEWriteHandler(int index, WriteHandler writeHandler)
+            throw (nitf::NITFException);
 
     /**
      * Returns a NEW ImageWriter for the given index
      *
      * The pointer is deleted by the library, so don't delete it yourself.
      */
-    nitf::ImageWriter* newImageWriter(int imageNumber)
-        throw (nitf::NITFException);
+    nitf::ImageWriter newImageWriter(int imageNumber)
+            throw (nitf::NITFException);
 
     /**
      * Returns a NEW SegmentWriter for the given index
      *
      * The pointer is deleted by the library, so don't delete it yourself.
      */
-    nitf::SegmentWriter* newGraphicWriter(int graphicNumber)
-        throw (nitf::NITFException);
+    nitf::SegmentWriter newGraphicWriter(int graphicNumber)
+            throw (nitf::NITFException);
 
     /**
      * Returns a NEW SegmentWriter for the given index
      *
      * The pointer is deleted by the library, so don't delete it yourself.
      */
-    nitf::SegmentWriter* newTextWriter(int textNumber)
-        throw (nitf::NITFException);
+    nitf::SegmentWriter newTextWriter(int textNumber)
+            throw (nitf::NITFException);
 
     /**
      * Returns a NEW SegmentWriter for the given index
      *
      * The pointer is deleted by the library, so don't delete it yourself.
      */
-    nitf::SegmentWriter* newDEWriter(int deNumber)
-        throw (nitf::NITFException);
+    nitf::SegmentWriter newDEWriter(int deNumber) throw (nitf::NITFException);
 
     //! Get the warningList
     nitf::List getWarningList();
@@ -156,7 +151,7 @@ public:
 private:
     nitf_Error error;
     //keep track of so we can delete later
-    std::vector<nitf::WriteHandler*> mWriteHandlers;
+    //    std::vector<nitf::WriteHandler*> mWriteHandlers;
 };
 
 }

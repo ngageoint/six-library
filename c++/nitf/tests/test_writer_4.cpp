@@ -51,10 +51,9 @@ int main(int argc, char **argv)
         {
             nitf::ImageSegment segment = images[i];
             long offset = segment.getImageOffset();
-            nitf::StreamIOWriteHandler* handler =
-                    new nitf::StreamIOWriteHandler(input, offset,
+            nitf::StreamIOWriteHandler handler(input, offset,
                             segment.getImageEnd() - offset);
-            writer.setImageWriteHandler(i, handler, true);
+            writer.setImageWriteHandler(i, handler);
         }
 
         nitf::List graphics = record.getImages();
@@ -62,10 +61,9 @@ int main(int argc, char **argv)
         {
             nitf::GraphicSegment segment = graphics[i];
             long offset = segment.getOffset();
-            nitf::StreamIOWriteHandler* handler =
-                    new nitf::StreamIOWriteHandler(input, offset,
+            nitf::StreamIOWriteHandler handler(input, offset,
                             segment.getEnd() - offset);
-            writer.setGraphicWriteHandler(i, handler, true);
+            writer.setGraphicWriteHandler(i, handler);
         }
 
         nitf::List texts = record.getTexts();
@@ -73,10 +71,9 @@ int main(int argc, char **argv)
         {
             nitf::TextSegment segment = texts[i];
             long offset = segment.getOffset();
-            nitf::StreamIOWriteHandler* handler =
-                    new nitf::StreamIOWriteHandler(input, offset,
+            nitf::StreamIOWriteHandler handler(input, offset,
                             segment.getEnd() - offset);
-            writer.setTextWriteHandler(i, handler, true);
+            writer.setTextWriteHandler(i, handler);
         }
 
         //once everything is set, write it!

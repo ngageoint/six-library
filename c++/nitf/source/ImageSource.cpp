@@ -32,7 +32,7 @@ ImageSource::ImageSource(const ImageSource & x)
 ImageSource & ImageSource::operator=(const ImageSource & x)
 {
     if (&x != this)
-    setNative(x.getNative());
+        setNative(x.getNative());
     return *this;
 }
 
@@ -42,7 +42,7 @@ ImageSource::ImageSource(nitf_ImageSource * x)
     getNativeOrThrow();
 }
 
-ImageSource::ImageSource() throw(nitf::NITFException)
+ImageSource::ImageSource() throw (nitf::NITFException)
 {
     setNative(nitf_ImageSource_construct(&error));
     getNativeOrThrow();
@@ -51,34 +51,35 @@ ImageSource::ImageSource() throw(nitf::NITFException)
 
 ImageSource::~ImageSource()
 {
-    //go through and delete all the attached bands
-    for(std::vector<nitf::BandSource*>::iterator it = mBands.begin();
-        it != mBands.end(); ++it)
-    {
-        (*it)->decRef();
-        delete *it;
-    }
+    //    //go through and delete all the attached bands
+    //    for(std::vector<nitf::BandSource*>::iterator it = mBands.begin();
+    //        it != mBands.end(); ++it)
+    //    {
+    //        (*it)->decRef();
+    //        delete *it;
+    //    }
 }
 
-void ImageSource::addBand(nitf::BandSource* bandSource)
-        throw(nitf::NITFException)
+void ImageSource::addBand(nitf::BandSource bandSource)
+        throw (nitf::NITFException)
 {
     NITF_BOOL x = nitf_ImageSource_addBand(getNativeOrThrow(),
-            bandSource->getNative(), &error);
+                                           bandSource.getNative(), &error);
     if (!x)
         throw nitf::NITFException(&error);
-    bandSource->setManaged(true); //the underlying memory is managed now
-    mBands.push_back(bandSource);
-    bandSource->incRef();
+    bandSource.setManaged(true); //the underlying memory is managed now
+    //    mBands.push_back(bandSource);
+    //    bandSource->incRef();
 }
 
-nitf::BandSource* ImageSource::getBand(int n) throw (nitf::NITFException)
+nitf::BandSource ImageSource::getBand(int n) throw (nitf::NITFException)
 {
     nitf_DataSource * x = nitf_ImageSource_getBand(getNativeOrThrow(), n,
-            &error);
+                                                   &error);
     if (!x)
         throw nitf::NITFException(&error);
 
-    //return the cached version
-    return mBands[n];
+    nitf::BandSource bandSource(x);
+    bandSource.setManaged(true);
+    return bandSource;
 }

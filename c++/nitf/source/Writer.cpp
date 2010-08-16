@@ -68,11 +68,11 @@ Writer::Writer() throw (nitf::NITFException)
 
 Writer::~Writer()
 {
-    for (std::vector<nitf::WriteHandler*>::iterator it = mWriteHandlers.begin(); it
-            != mWriteHandlers.end(); ++it)
-    {
-        delete *it;
-    }
+//    for (std::vector<nitf::WriteHandler*>::iterator it = mWriteHandlers.begin(); it
+//            != mWriteHandlers.end(); ++it)
+//    {
+//        delete *it;
+//    }
 }
 
 void Writer::write()
@@ -92,122 +92,103 @@ void Writer::prepareIO(nitf::IOInterface & io, nitf::Record & record)
         throw (nitf::NITFException)
 {
     NITF_BOOL x = nitf_Writer_prepareIO(getNativeOrThrow(), record.getNative(),
-            io.getNative(), &error);
+                                        io.getNative(), &error);
     if (!x)
         throw nitf::NITFException(&error);
     io.setManaged(true);
     record.setManaged(true);
 }
 
-void Writer::setImageWriteHandler(int index, WriteHandler* writeHandler,
-        bool adopt) throw (nitf::NITFException)
+void Writer::setImageWriteHandler(int index, WriteHandler writeHandler)
+        throw (nitf::NITFException)
 {
     if (!nitf_Writer_setImageWriteHandler(getNativeOrThrow(), index,
-            writeHandler->getNative(), &error))
+                                          writeHandler.getNative(), &error))
         throw nitf::NITFException(&error);
-    writeHandler->setManaged(true);
-
-    if (adopt)
-    {
-        mWriteHandlers.push_back(writeHandler);
-    }
+    writeHandler.setManaged(true);
 }
 
-void Writer::setGraphicWriteHandler(int index, WriteHandler* writeHandler,
-        bool adopt) throw (nitf::NITFException)
+void Writer::setGraphicWriteHandler(int index, WriteHandler writeHandler)
+        throw (nitf::NITFException)
 {
     if (!nitf_Writer_setGraphicWriteHandler(getNativeOrThrow(), index,
-            writeHandler->getNative(), &error))
+                                            writeHandler.getNative(), &error))
         throw nitf::NITFException(&error);
-    writeHandler->setManaged(true);
-
-    if (adopt)
-    {
-        mWriteHandlers.push_back(writeHandler);
-    }
+    writeHandler.setManaged(true);
 }
 
-void Writer::setTextWriteHandler(int index, WriteHandler* writeHandler,
-        bool adopt) throw (nitf::NITFException)
+void Writer::setTextWriteHandler(int index, WriteHandler writeHandler)
+        throw (nitf::NITFException)
 {
     if (!nitf_Writer_setTextWriteHandler(getNativeOrThrow(), index,
-            writeHandler->getNative(), &error))
+                                         writeHandler.getNative(), &error))
         throw nitf::NITFException(&error);
-    writeHandler->setManaged(true);
-
-    if (adopt)
-    {
-        mWriteHandlers.push_back(writeHandler);
-    }
+    writeHandler.setManaged(true);
 }
 
-void Writer::setDEWriteHandler(int index, WriteHandler* writeHandler,
-        bool adopt) throw (nitf::NITFException)
+void Writer::setDEWriteHandler(int index, WriteHandler writeHandler)
+        throw (nitf::NITFException)
 {
     if (!nitf_Writer_setDEWriteHandler(getNativeOrThrow(), index,
-            writeHandler->getNative(), &error))
+                                       writeHandler.getNative(), &error))
         throw nitf::NITFException(&error);
-    writeHandler->setManaged(true);
-
-    if (adopt)
-    {
-        mWriteHandlers.push_back(writeHandler);
-    }
+    writeHandler.setManaged(true);
 }
 
-nitf::ImageWriter* Writer::newImageWriter(int imageNumber)
+nitf::ImageWriter Writer::newImageWriter(int imageNumber)
         throw (nitf::NITFException)
 {
-    nitf_ImageWriter * x = nitf_Writer_newImageWriter(getNativeOrThrow(),
-            imageNumber, &error);
+    nitf_SegmentWriter * x = nitf_Writer_newImageWriter(getNativeOrThrow(),
+                                                        imageNumber, &error);
     if (!x)
         throw nitf::NITFException(&error);
 
     //manage the writer
-    nitf::ImageWriter* writer = new nitf::ImageWriter(x);
-    mWriteHandlers.push_back(writer);
+    nitf::ImageWriter writer(x);
+    writer.setManaged(true);
     return writer;
 }
 
-nitf::SegmentWriter* Writer::newGraphicWriter(int graphicNumber)
+nitf::SegmentWriter Writer::newGraphicWriter(int graphicNumber)
         throw (nitf::NITFException)
 {
-    nitf_SegmentWriter * x = nitf_Writer_newGraphicWriter(getNativeOrThrow(),
-            graphicNumber, &error);
+    nitf_SegmentWriter * x =
+            nitf_Writer_newGraphicWriter(getNativeOrThrow(), graphicNumber,
+                                         &error);
     if (!x)
         throw nitf::NITFException(&error);
 
     //manage the writer
-    nitf::SegmentWriter* writer = new nitf::SegmentWriter(x);
-    mWriteHandlers.push_back(writer);
+    nitf::SegmentWriter writer(x);
+    writer.setManaged(true);
     return writer;
 }
 
-nitf::SegmentWriter* Writer::newTextWriter(int textNumber)
+nitf::SegmentWriter Writer::newTextWriter(int textNumber)
         throw (nitf::NITFException)
 {
     nitf_SegmentWriter * x = nitf_Writer_newTextWriter(getNativeOrThrow(),
-            textNumber, &error);
+                                                       textNumber, &error);
     if (!x)
         throw nitf::NITFException(&error);
 
     //manage the writer
-    nitf::SegmentWriter* writer = new nitf::SegmentWriter(x);
-    mWriteHandlers.push_back(writer);
+    nitf::SegmentWriter writer(x);
+    writer.setManaged(true);
     return writer;
 }
 
-nitf::SegmentWriter* Writer::newDEWriter(int deNumber)
+nitf::SegmentWriter Writer::newDEWriter(int deNumber)
         throw (nitf::NITFException)
 {
     nitf_SegmentWriter * x = nitf_Writer_newDEWriter(getNativeOrThrow(),
-            deNumber, &error);
+                                                     deNumber, &error);
     if (!x)
         throw nitf::NITFException(&error);
 
     //manage the writer
-    nitf::SegmentWriter* writer = new nitf::SegmentWriter(x);
-    mWriteHandlers.push_back(writer);
+    nitf::SegmentWriter writer(x);
+    writer.setManaged(true);
     return writer;
 }
 
