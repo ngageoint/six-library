@@ -83,7 +83,6 @@ std::vector<std::string> extractXML(std::string inputFile,
 
     nitf::Reader reader;
     nitf::IOHandle io(inputFile);
-    io.setAutoClose(true);
     nitf::Record record = reader.read(io);
 
     nitf::Uint32 numDES = record.getNumDataExtensions();
@@ -117,6 +116,7 @@ std::vector<std::string> extractXML(std::string inputFile,
         delete[] xml;
         allFiles.push_back(fileName.getPath());
     }
+    io.close();
     return allFiles;
 }
 

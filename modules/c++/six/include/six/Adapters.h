@@ -115,14 +115,6 @@ public:
  */
 class MemoryWriteHandler: public nitf::WriteHandler
 {
-    NITFSegmentInfo mSegmentInfo;
-    const UByte* mImageBuffer;
-    unsigned long mFirstRow;
-    unsigned long mNumCols;
-    unsigned long mNumChannels;
-    unsigned long mPixelSize;
-    bool mDoByteSwap;
-
 public:
     MemoryWriteHandler(const NITFSegmentInfo& info, 
 		       const UByte* buffer,
@@ -130,26 +122,7 @@ public:
 		       unsigned long numCols,
 		       unsigned long numChannels, 
 		       unsigned long pixelSize, 
-		       bool doByteSwap) :
-      mSegmentInfo(info), mImageBuffer(buffer), mFirstRow(firstRow),
-      mNumCols(numCols), mNumChannels(numChannels), 
-      mPixelSize(pixelSize), mDoByteSwap(doByteSwap)
-    {
-        // Dont do it if we only have a byte!
-        if (pixelSize / numChannels == 1)
-            mDoByteSwap = false;
-    }
-
-    /*!
-     *  We will choose not to seek here. 
-     *  That way we can assume that the offset
-     *  is positioned correctly.  This makes it very easy
-     *  to use a portion of a file (minus its header) as 
-     *  a source for us
-     */
-
-    virtual void write(nitf::IOInterface& handle) throw (nitf::NITFException);
-
+		       bool doByteSwap);
 };
 
 /*!
@@ -170,34 +143,10 @@ public:
  */
 class StreamWriteHandler: public nitf::WriteHandler
 {
-    NITFSegmentInfo mSegmentInfo;
-    io::InputStream* mInputStream;
-    unsigned long mNumCols;
-    unsigned long mNumChannels;
-    unsigned long mPixelSize;
-    bool mDoByteSwap;
-
 public:
     StreamWriteHandler(const NITFSegmentInfo& info, io::InputStream* is,
             unsigned long numCols, unsigned long numChannels,
-            unsigned long pixelSize, bool doByteSwap) :
-        mSegmentInfo(info), mInputStream(is), mNumCols(numCols), mNumChannels(
-                numChannels), mPixelSize(pixelSize), mDoByteSwap(doByteSwap)
-    {
-        // Dont do it if we only have a byte!
-        if ((pixelSize / numChannels) == 1)
-            mDoByteSwap = false;
-    }
-
-    /*!
-     *  We will choose not to seek here. 
-     *  That way we can assume that the offset
-     *  is positioned correctly.  This makes it very easy
-     *  to use a portion of a file (minus its header) as 
-     *  a source for us
-     */
-
-    virtual void write(nitf::IOInterface& handle) throw (nitf::NITFException);
+            unsigned long pixelSize, bool doByteSwap);
 
 };
 

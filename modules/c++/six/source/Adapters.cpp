@@ -23,47 +23,197 @@
 
 using namespace six;
 
-void MemoryWriteHandler::write(nitf::IOInterface& handle)
-        throw (nitf::NITFException)
+extern "C"
 {
-    unsigned long rowSize = mPixelSize * mNumCols;
-    sys::Uint64_T off = mFirstRow * rowSize;
+void __six_StreamWriteHandler_destruct(NITF_DATA * data);
+NITF_BOOL __six_StreamWriteHandler_write(NITF_DATA * data,
+        nitf_IOInterface* io, nitf_Error * error);
 
-    UByte* rowCopy = new UByte[rowSize];
+void __six_MemoryWriteHandler_destruct(NITF_DATA * data);
+NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
+        nitf_IOInterface* io, nitf_Error * error);
+}
 
-    for (unsigned int i = 0; i < mSegmentInfo.numRows; i++)
+typedef struct _MemoryWriteHandlerImpl
+{
+    const UByte* buffer;
+    unsigned long firstRow;
+    unsigned long numCols;
+    unsigned long numRows;
+    unsigned long numChannels;
+    unsigned long pixelSize;
+    int doByteSwap;
+} MemoryWriteHandlerImpl;
+
+extern "C" void __six_MemoryWriteHandler_destruct(NITF_DATA * data)
+{
+    MemoryWriteHandlerImpl *impl = (MemoryWriteHandlerImpl *) data;
+    if (impl)
+        NITF_FREE(impl);
+}
+
+extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
+        nitf_IOInterface* io, nitf_Error * error)
+{
+    unsigned long rowSize;
+    sys::Uint64_T off;
+    UByte* rowCopy;
+    unsigned int i;
+
+    MemoryWriteHandlerImpl *impl = (MemoryWriteHandlerImpl *) data;
+
+    rowSize = impl->pixelSize * impl->numCols;
+    off = impl->firstRow * rowSize;
+    rowCopy = new UByte[rowSize];
+
+    for (i = 0; i < impl->numRows; i++)
     {
 
-        memcpy(rowCopy, (const sys::byte*) &mImageBuffer[off], rowSize);
+        memcpy(rowCopy, (const sys::byte*) &impl->buffer[off], rowSize);
 
-        if (mDoByteSwap)
-	    sys::byteSwap((sys::byte*) rowCopy, mPixelSize / mNumChannels, mNumCols
-                    * mNumChannels);
+        if (impl->doByteSwap)
+            sys::byteSwap((sys::byte*) rowCopy, impl->pixelSize
+                    / impl->numChannels, impl->numCols * impl->numChannels);
         // And write it back
-        handle.write((const sys::byte*) rowCopy, rowSize);
+        if (!nitf_IOInterface_write(io, (const sys::byte*) rowCopy, rowSize,
+                                    error))
+            goto CATCH_ERROR;
         off += rowSize;
     }
     delete[] rowCopy;
+    return NITF_SUCCESS;
+
+    CATCH_ERROR: delete[] rowCopy;
+    return NITF_FAILURE;
 }
 
-void StreamWriteHandler::write(nitf::IOInterface& handle)
-        throw (nitf::NITFException)
+MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
+        const UByte* buffer, unsigned long firstRow, unsigned long numCols,
+        unsigned long numChannels, unsigned long pixelSize, bool doByteSwap)
 {
-    unsigned long rowSize = mPixelSize * mNumCols;
+    // Dont do it if we only have a byte!
+    if (pixelSize / numChannels == 1)
+        doByteSwap = false;
 
-    UByte* rowCopy = new UByte[rowSize];
+    static nitf_IWriteHandler iWriteHandler =
+            { &__six_MemoryWriteHandler_write,
+              &__six_MemoryWriteHandler_destruct };
 
-    for (unsigned int i = 0; i < mSegmentInfo.numRows; i++)
+    MemoryWriteHandlerImpl
+            *impl =
+                    (MemoryWriteHandlerImpl *) NITF_MALLOC(
+                                                           sizeof(MemoryWriteHandlerImpl));
+    if (!impl)
+        throw nitf::NITFException(Ctxt("Out of memory"));
+    impl->buffer = buffer;
+    impl->firstRow = firstRow;
+    impl->numCols = numCols;
+    impl->numRows = info.numRows;
+    impl->numChannels = numChannels;
+    impl->pixelSize = pixelSize;
+    impl->doByteSwap = doByteSwap;
+
+    nitf_SegmentWriter *segmentWriter =
+            (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
+    if (!segmentWriter)
+        throw nitf::NITFException(Ctxt("Out of memory"));
+    segmentWriter->data = impl;
+    segmentWriter->iface = &iWriteHandler;
+
+    setNative(segmentWriter);
+    setManaged(false);
+}
+
+//
+// StreamWriteHandler
+//
+
+
+typedef struct _StreamWriteHandlerImpl
+{
+    io::InputStream* inputStream;
+    unsigned long numCols;
+    unsigned long numRows;
+    unsigned long numChannels;
+    unsigned long pixelSize;
+    int doByteSwap;
+} StreamWriteHandlerImpl;
+
+extern "C" void __six_StreamWriteHandler_destruct(NITF_DATA * data)
+{
+    StreamWriteHandlerImpl *impl = (StreamWriteHandlerImpl *) data;
+    if (impl)
+        NITF_FREE(impl);
+}
+
+extern "C" NITF_BOOL __six_StreamWriteHandler_write(NITF_DATA * data,
+        nitf_IOInterface* io, nitf_Error * error)
+{
+    unsigned long rowSize;
+    UByte* rowCopy;
+    unsigned int i;
+
+    StreamWriteHandlerImpl *impl = (StreamWriteHandlerImpl *) data;
+
+    rowSize = impl->pixelSize * impl->numCols;
+    rowCopy = new UByte[rowSize];
+
+    for (i = 0; i < impl->numRows; i++)
     {
 
-        mInputStream->read((sys::byte*) rowCopy, rowSize);
+        impl->inputStream->read((sys::byte*) rowCopy, rowSize);
 
-        if (mDoByteSwap)
-            sys::byteSwap((sys::byte*) rowCopy, mPixelSize / mNumChannels, mNumCols
-                    * mNumChannels);
+        if (impl->doByteSwap)
+            sys::byteSwap((sys::byte*) rowCopy, impl->pixelSize
+                    / impl->numChannels, impl->numCols * impl->numChannels);
 
         // And write it back
-        handle.write((const sys::byte*) rowCopy, rowSize);
+        if (!nitf_IOInterface_write(io, (const sys::byte*) rowCopy, rowSize,
+                                    error))
+            goto CATCH_ERROR;
     }
     delete[] rowCopy;
+    return NITF_SUCCESS;
+
+    CATCH_ERROR: delete[] rowCopy;
+    return NITF_FAILURE;
 }
+
+StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
+        io::InputStream* is, unsigned long numCols, unsigned long numChannels,
+        unsigned long pixelSize, bool doByteSwap)
+{
+    // Dont do it if we only have a byte!
+    if ((pixelSize / numChannels) == 1)
+        doByteSwap = false;
+
+    static nitf_IWriteHandler iWriteHandler =
+            { &__six_StreamWriteHandler_write,
+              &__six_StreamWriteHandler_destruct };
+
+    StreamWriteHandlerImpl
+            *impl =
+                    (StreamWriteHandlerImpl *) NITF_MALLOC(
+                                                           sizeof(StreamWriteHandlerImpl));
+    if (!impl)
+        throw nitf::NITFException(Ctxt("Out of memory"));
+
+    impl->inputStream = is;
+    impl->numCols = numCols;
+    impl->numRows = info.numRows;
+    impl->numChannels = numChannels;
+    impl->pixelSize = pixelSize;
+    impl->doByteSwap = doByteSwap;
+
+    nitf_SegmentWriter *segmentWriter =
+            (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
+    if (!segmentWriter)
+        throw nitf::NITFException(Ctxt("Out of memory"));
+
+    segmentWriter->data = impl;
+    segmentWriter->iface = &iWriteHandler;
+
+    setNative( segmentWriter);
+    setManaged(false);
+}
+
