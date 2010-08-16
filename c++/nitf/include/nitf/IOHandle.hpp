@@ -76,7 +76,7 @@ public:
     //!  Get native object
     nitf_IOHandle getHandle()
     {
-        return (nitf_IOHandle) getNativeOrThrow()->data;
+        return (nitf_IOHandle)(long) getNativeOrThrow()->data;
     }
 
     void create(const std::string& fname, nitf::AccessFlags access =
