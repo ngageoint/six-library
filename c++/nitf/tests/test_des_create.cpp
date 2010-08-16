@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 
         nitf::SegmentWriter sWriter = writer.newDEWriter(0);
         nitf::SegmentMemorySource sSource(data, strlen(data), 0, 0);
-        sWriter.attachSource(&sSource, false);
+        sWriter.attachSource(sSource);
         writer.write();
 
         exit(EXIT_SUCCESS);

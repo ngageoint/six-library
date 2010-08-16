@@ -45,7 +45,7 @@ class SegmentWriter : public WriteHandler
 public:
     SegmentWriter() throw (nitf::NITFException);
 
-    SegmentWriter(nitf::SegmentSource* segmentSource, bool adopt = false)
+    SegmentWriter(nitf::SegmentSource segmentSource)
             throw (nitf::NITFException);
 
     // Set native object
@@ -59,13 +59,13 @@ public:
      *  Attach a segment source from which to write.
      *  \param segmentSource  The segment source from which to write
      */
-    void attachSource(nitf::SegmentSource* segmentSource, bool adopt = false)
+    void attachSource(nitf::SegmentSource segmentSource)
             throw (nitf::NITFException);
 
 private:
     nitf_Error error;
-    bool mAdopt;
-    nitf::SegmentSource* mSegmentSource;
+//    bool mAdopt;
+//    nitf::SegmentSource* mSegmentSource;
 };
 
 }

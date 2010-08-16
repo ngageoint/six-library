@@ -122,33 +122,24 @@ int main(int argc, char **argv)
         num = record.getNumGraphics();
         for (nitf::Uint32 i = 0; i < num; i++)
         {
-            nitf::SegmentWriter
-                    segmentWriter(
-                                  new nitf::SegmentReaderSource(
-                                                                reader.newGraphicReader(
-                                                                                        i)));
+            nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
+            nitf::SegmentWriter segmentWriter(readerSource);
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
 
         num = record.getNumTexts();
         for (nitf::Uint32 i = 0; i < num; i++)
         {
-            nitf::SegmentWriter
-                    segmentWriter(
-                                  new nitf::SegmentReaderSource(
-                                                                reader.newTextReader(
-                                                                                     i)));
+            nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
+            nitf::SegmentWriter segmentWriter(readerSource);
             writer.setTextWriteHandler(i, segmentWriter);
         }
 
         num = record.getNumDataExtensions();
         for (nitf::Uint32 i = 0; i < num; i++)
         {
-            nitf::SegmentWriter
-                    segmentWriter(
-                                  new nitf::SegmentReaderSource(
-                                                                reader.newDEReader(
-                                                                                   i)));
+            nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
+            nitf::SegmentWriter segmentWriter(readerSource);
             writer.setDEWriteHandler(i, segmentWriter);
         }
 
