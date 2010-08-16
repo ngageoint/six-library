@@ -43,7 +43,6 @@ int main(int argc, char** argv)
     {
         nitf::Reader reader;
         nitf::IOHandle io(inputFile);
-	io.setAutoClose(true);
         nitf::Record record = reader.read(io);
 
         nitf::Uint32 numDES =  record.getNumDataExtensions();
@@ -77,6 +76,7 @@ int main(int argc, char** argv)
             fos.close();
             delete [] xml;
         }
+        io.close();
     }
     catch (except::Exception& e)
     {

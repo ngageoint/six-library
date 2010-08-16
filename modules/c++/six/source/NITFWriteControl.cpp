@@ -590,7 +590,7 @@ void NITFWriteControl::saveIO(SourceList& imageData,
                                            numChannels, pixelSize, doByteSwap);
 
             mWriter.setImageWriteHandler(info->getStartIndex() + j,
-                                         writeHandler);
+                                         writeHandler, true);
         }
     }
 
