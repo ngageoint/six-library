@@ -101,7 +101,7 @@ int main(int argc, char **argv)
             iter++;
             nitf::ImageReader iReader = reader.newImageReader(i);
             nitf::ImageWriter iWriter = writer.newImageWriter(i);
-            nitf::ImageSource* iSource = new nitf::ImageSource();
+            nitf::ImageSource iSource;
             nitf::Uint32 nBands = imseg.getSubheader().getNumImageBands();
             nitf::Uint32 nRows = imseg.getSubheader().getNumRows();
             nitf::Uint32 nCols = imseg.getSubheader().getNumCols();
@@ -114,9 +114,9 @@ int main(int argc, char **argv)
             {
                 nitf::RowSource rowSource(i, nRows, nCols, pixelSize,
                                           new RowStreamer(i, nCols, iReader));
-                iSource->addBand(rowSource);
+                iSource.addBand(rowSource);
             }
-            iWriter.attachSource(iSource, true);
+            iWriter.attachSource(iSource);
         }
 
         num = record.getNumGraphics();

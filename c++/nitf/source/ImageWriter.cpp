@@ -25,31 +25,30 @@
 using namespace nitf;
 
 ImageWriter::ImageWriter(nitf::ImageSubheader& subheader)
-        throw (nitf::NITFException) :
-    mAdopt(false), mImageSource(NULL)
+        throw (nitf::NITFException)
 {
     setNative(nitf_ImageWriter_construct(subheader.getNative(), &error));
 }
 
 ImageWriter::~ImageWriter()
 {
-    if (mAdopt && mImageSource)
-    {
-        mImageSource->decRef();
-        delete mImageSource;
-    }
+    //    if (mAdopt && mImageSource)
+    //    {
+    //        mImageSource->decRef();
+    //        delete mImageSource;
+    //    }
 }
 
-void ImageWriter::attachSource(nitf::ImageSource* imageSource, bool adopt)
+void ImageWriter::attachSource(nitf::ImageSource imageSource)
         throw (nitf::NITFException)
 {
     if (!nitf_ImageWriter_attachSource(getNativeOrThrow(),
-                                       imageSource->getNative(), &error))
+                                       imageSource.getNative(), &error))
         throw nitf::NITFException(&error);
-    imageSource->setManaged(true);
-    imageSource->incRef();
-    mImageSource = imageSource;
-    mAdopt = adopt;
+    imageSource.setManaged(true);
+    //    imageSource->incRef();
+    //    mImageSource = imageSource;
+    //    mAdopt = adopt;
 }
 
 void ImageWriter::setWriteCaching(int enable)

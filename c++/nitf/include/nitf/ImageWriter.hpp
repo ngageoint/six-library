@@ -62,7 +62,7 @@ public:
      *  Attach an image source from which to write.
      *  \param imageSource  The image source from which to write
      */
-    void attachSource(nitf::ImageSource* imageSource, bool adopt = false)
+    void attachSource(nitf::ImageSource imageSource)
             throw (nitf::NITFException);
 
     //! Enable/disable cached writes
@@ -77,8 +77,8 @@ public:
 
 private:
     nitf_Error error;
-    bool mAdopt;
-    nitf::ImageSource* mImageSource;
+//    bool mAdopt;
+//    nitf::ImageSource* mImageSource;
 };
 
 }

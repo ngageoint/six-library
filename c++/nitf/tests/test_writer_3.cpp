@@ -46,15 +46,15 @@ std::string makeBandName(const std::string& rootFile, int imageNum, int bandNum)
     return newFile;
 }
 
-nitf::ImageSource* setupBands(int nbands, int imageNum, const std::string& inRootFile)
+nitf::ImageSource setupBands(int nbands, int imageNum, const std::string& inRootFile)
 {
-    nitf::ImageSource* iSource = new nitf::ImageSource();
+    nitf::ImageSource iSource;
     for (int i = 0; i < nbands; i++)
     {
         std::string inFile = makeBandName(inRootFile, imageNum, i);
         nitf::IOHandle sourceHandle(inFile);
         nitf::FileSource fs(sourceHandle, 0, 1, 0);
-        iSource->addBand(fs);
+        iSource.addBand(fs);
     }
     return iSource;
 }
@@ -75,8 +75,8 @@ void doWrite(nitf::Record record, const std::string& inRootFile, const std::stri
         imseg = *iter;
         int nbands = imseg.getSubheader().getNumImageBands();
         nitf::ImageWriter iWriter = writer.newImageWriter(i);
-        nitf::ImageSource* iSource = setupBands(nbands, i, inRootFile);
-        iWriter.attachSource(iSource, true);
+        nitf::ImageSource iSource = setupBands(nbands, i, inRootFile);
+        iWriter.attachSource(iSource);
     }
     writer.write();
     output.close();
