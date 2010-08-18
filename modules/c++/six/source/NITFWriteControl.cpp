@@ -78,7 +78,8 @@ void NITFWriteControl::initialize(Container* container)
     {
         NITFImageInfo* info = mInfos[i];
 
-        std::vector<NITFSegmentInfo> imageSegments = info->getImageSegments();
+        std::vector < NITFSegmentInfo > imageSegments
+                = info->getImageSegments();
 
         size_t numIS = imageSegments.size();
         int nbpp = info->getNumBitsPerPixel();
@@ -140,7 +141,7 @@ void NITFWriteControl::initialize(Container* container)
 
             subheader.getTargetId().set(targetId);
 
-            std::vector<nitf::BandInfo> bandInfo = info->getBandInfo();
+            std::vector < nitf::BandInfo > bandInfo = info->getBandInfo();
 
             subheader.setPixelInformation(pvtype, nbpp, nbpp, "R", irep, "SAR",
                                           bandInfo);
@@ -200,7 +201,7 @@ void NITFWriteControl::initialize(Container* container)
 }
 
 void NITFWriteControl::setImageSecurity(six::Classification c,
-                                        nitf::ImageSubheader& subheader)
+        nitf::ImageSubheader& subheader)
 {
     //This requires a normalized name to get set correctly
     subheader.getImageSecurityClass().set(getNITFClassification(c.level));
@@ -325,7 +326,7 @@ void NITFWriteControl::setImageSecurity(six::Classification c,
 }
 
 void NITFWriteControl::setDESecurity(six::Classification c,
-                                     nitf::DESubheader& subheader)
+        nitf::DESubheader& subheader)
 {
     subheader.getSecurityClass().set(getNITFClassification(c.level));
     nitf::FileSecurity security = subheader.getSecurityGroup();
@@ -541,7 +542,7 @@ void NITFWriteControl::save(SourceList& imageData, std::string outputFile)
 }
 
 void NITFWriteControl::saveIO(SourceList& imageData,
-                              nitf::IOInterface& outputFile)
+        nitf::IOInterface& outputFile)
 {
 
     mWriter.prepareIO(outputFile, mRecord);
@@ -575,7 +576,8 @@ void NITFWriteControl::saveIO(SourceList& imageData,
     for (unsigned int i = 0; i < numImages; ++i)
     {
         NITFImageInfo* info = mInfos[i];
-        std::vector<NITFSegmentInfo> imageSegments = info->getImageSegments();
+        std::vector < NITFSegmentInfo > imageSegments
+                = info->getImageSegments();
         size_t numIS = imageSegments.size();
         unsigned long pixelSize = info->getData()->getNumBytesPerPixel();
         unsigned long numCols = info->getData()->getNumCols();
@@ -585,12 +587,11 @@ void NITFWriteControl::saveIO(SourceList& imageData,
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            nitf::WriteHandler* writeHandler =
-                    new StreamWriteHandler(segmentInfo, imageData[i], numCols,
-                                           numChannels, pixelSize, doByteSwap);
+            StreamWriteHandler writeHandler(segmentInfo, imageData[i], numCols,
+                                            numChannels, pixelSize, doByteSwap);
 
             mWriter.setImageWriteHandler(info->getStartIndex() + j,
-                                         writeHandler, true);
+                                         writeHandler);
         }
     }
 
@@ -617,7 +618,7 @@ void NITFWriteControl::save(BufferList& imageData, std::string outputFile)
 }
 
 void NITFWriteControl::saveIO(BufferList& imageData,
-                              nitf::IOInterface& outputFile)
+        nitf::IOInterface& outputFile)
 {
 
     mWriter.prepareIO(outputFile, mRecord);
@@ -633,7 +634,8 @@ void NITFWriteControl::saveIO(BufferList& imageData,
     for (unsigned int i = 0; i < numImages; ++i)
     {
         NITFImageInfo* info = mInfos[i];
-        std::vector<NITFSegmentInfo> imageSegments = info->getImageSegments();
+        std::vector < NITFSegmentInfo > imageSegments
+                = info->getImageSegments();
         size_t numIS = imageSegments.size();
         unsigned long pixelSize = info->getData()->getNumBytesPerPixel();
         unsigned long numCols = info->getData()->getNumCols();
@@ -643,10 +645,9 @@ void NITFWriteControl::saveIO(BufferList& imageData,
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            nitf::WriteHandler* writeHandler =
-                    new MemoryWriteHandler(segmentInfo, imageData[i],
-                                           segmentInfo.firstRow, numCols,
-                                           numChannels, pixelSize, doByteSwap);
+            MemoryWriteHandler writeHandler(segmentInfo, imageData[i],
+                                            segmentInfo.firstRow, numCols,
+                                            numChannels, pixelSize, doByteSwap);
             // Could set start index here
             mWriter.setImageWriteHandler(info->getStartIndex() + j,
                                          writeHandler);
@@ -667,10 +668,9 @@ void NITFWriteControl::addDataAndWrite()
         Data* data = mContainer->getData(i);
 
         raw[i] = six::toXMLCharArray(data);
-        nitf::SegmentWriter* deWriter = mWriter.newDEWriter(i);
-        nitf::SegmentSource* segSource =
-                new nitf::SegmentMemorySource(raw[i], strlen(raw[i]), 0, 0);
-        deWriter->attachSource(segSource, true);
+        nitf::SegmentWriter deWriter = mWriter.newDEWriter(i);
+        nitf::SegmentMemorySource segSource(raw[i], strlen(raw[i]), 0, 0);
+        deWriter.attachSource(segSource);
     }
     mWriter.write();
 
