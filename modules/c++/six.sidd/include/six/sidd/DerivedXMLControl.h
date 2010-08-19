@@ -57,12 +57,12 @@ public:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
      */
-    virtual xml::lite::Document* toXML(Data* data);
+    virtual xml::lite::Document* toXML(const Data* data);
     /*!
      *  Returns a new allocated DerivedData*, created from the DOM Document*
      *
      */
-    virtual Data* fromXML(xml::lite::Document* doc);
+    virtual Data* fromXML(const xml::lite::Document* doc);
 
 protected:
     typedef xml::lite::Element* XMLElem;
@@ -79,29 +79,29 @@ protected:
 
     std::string getSFAURI() const;
 
-    virtual XMLElem createLUT(std::string name, LUT *l, XMLElem parent = NULL);
-    XMLElem toXML(ProductCreation* productCreation, XMLElem parent = NULL);
-    XMLElem toXML(ProductProcessing* productProcessing, XMLElem parent = NULL);
-    void fromXML(XMLElem elem, ProductProcessing* productProcessing);
-    XMLElem toXML(ProcessingModule* procMod, XMLElem parent = NULL);
-    void fromXML(XMLElem elem, ProcessingModule* procMod);
-    XMLElem toXML(DownstreamReprocessing* d, XMLElem parent = NULL);
-    void fromXML(XMLElem elem, DownstreamReprocessing* downstreamReproc);
-    XMLElem toXML(Display* display, XMLElem parent = NULL);
-    XMLElem toXML(GeographicAndTarget* g, XMLElem parent = NULL);
-    XMLElem toXML(GeographicCoverage* g, XMLElem parent = NULL);
-    XMLElem toXML(Measurement* measurement, XMLElem parent = NULL);
-    XMLElem toXML(ExploitationFeatures* exFeatures, XMLElem parent = NULL);
-    XMLElem toXML(Annotation *a, XMLElem parent = NULL);
-    void fromXML(XMLElem productCreationXML, ProductCreation* productCreation);
-    void fromXML(XMLElem displayXML, Display* display);
-    void fromXML(XMLElem measurementXML, Measurement* measurement);
-    void fromXML(XMLElem elem, GeographicAndTarget* geographicAndTarget);
-    void fromXML(XMLElem elem, GeographicCoverage* geoCoverage);
-    void fromXML(XMLElem elem, ExploitationFeatures* exFeatures);
-    void fromXML(XMLElem annotationXML, Annotation *a);
-    void fromXML(XMLElem elem, SFAGeometry *g);
-    XMLElem toXML(SFAGeometry *g, std::string useName, XMLElem parent = NULL);
+    virtual XMLElem createLUT(std::string name, const LUT *l, XMLElem parent = NULL);
+    XMLElem toXML(const ProductCreation* productCreation, XMLElem parent = NULL);
+    XMLElem toXML(const ProductProcessing* productProcessing, XMLElem parent = NULL);
+    void fromXML(const XMLElem elem, ProductProcessing* productProcessing);
+    XMLElem toXML(const ProcessingModule* procMod, XMLElem parent = NULL);
+    void fromXML(const XMLElem elem, ProcessingModule* procMod);
+    XMLElem toXML(const DownstreamReprocessing* d, XMLElem parent = NULL);
+    void fromXML(const XMLElem elem, DownstreamReprocessing* downstreamReproc);
+    XMLElem toXML(const Display* display, XMLElem parent = NULL);
+    XMLElem toXML(const GeographicAndTarget* g, XMLElem parent = NULL);
+    XMLElem toXML(const GeographicCoverage* g, XMLElem parent = NULL);
+    XMLElem toXML(const Measurement* measurement, XMLElem parent = NULL);
+    XMLElem toXML(const ExploitationFeatures* exFeatures, XMLElem parent = NULL);
+    XMLElem toXML(const Annotation *a, XMLElem parent = NULL);
+    void fromXML(const XMLElem productCreationXML, ProductCreation* productCreation);
+    void fromXML(const XMLElem displayXML, Display* display);
+    void fromXML(const XMLElem measurementXML, Measurement* measurement);
+    void fromXML(const XMLElem elem, GeographicAndTarget* geographicAndTarget);
+    void fromXML(const XMLElem elem, GeographicCoverage* geoCoverage);
+    void fromXML(const XMLElem elem, ExploitationFeatures* exFeatures);
+    void fromXML(const XMLElem annotationXML, Annotation *a);
+    void fromXML(const XMLElem elem, SFAGeometry *g);
+    XMLElem toXML(const SFAGeometry *g, std::string useName, XMLElem parent = NULL);
 };
 
 }

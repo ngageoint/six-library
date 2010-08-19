@@ -56,13 +56,13 @@ XMLElem XMLControl::newElement(std::string name, XMLElem parent)
 }
 
 XMLElem XMLControl::newElement(std::string name, std::string uri,
-                               XMLElem parent)
+        XMLElem parent)
 {
     return newElement(name, uri, "", parent);
 }
 
 XMLElem XMLControl::newElement(std::string name, std::string uri,
-                               std::string characterData, XMLElem parent)
+        std::string characterData, XMLElem parent)
 {
     XMLElem elem = new xml::lite::Element(name, uri, characterData);
     if (parent)
@@ -100,7 +100,7 @@ XMLElem XMLControl::createVector3D(std::string name, Vector3 p, XMLElem parent)
 }
 
 XMLElem XMLControl::createPoly1D(std::string name, std::string uri,
-                                 const Poly1D& poly1D, XMLElem parent)
+        const Poly1D& poly1D, XMLElem parent)
 {
     int order = poly1D.order();
     XMLElem poly1DXML = newElement(name, uri, parent);
@@ -116,7 +116,7 @@ XMLElem XMLControl::createPoly1D(std::string name, std::string uri,
 }
 
 XMLElem XMLControl::createPoly1D(std::string name, const Poly1D& poly1D,
-                                 XMLElem parent)
+        XMLElem parent)
 {
     return createPoly1D(name, getDefaultURI(), poly1D, parent);
 }
@@ -130,9 +130,9 @@ void XMLControl::parsePolyXYZ(XMLElem polyXML, PolyXYZ& polyXYZ)
     int order = str::toType<int>(xXML->getAttributes().getValue("order1"));
     PolyXYZ pXYZ(order);
 
-    std::vector<XMLElem> xCoeffsXML;
-    std::vector<XMLElem> yCoeffsXML;
-    std::vector<XMLElem> zCoeffsXML;
+    std::vector < XMLElem > xCoeffsXML;
+    std::vector < XMLElem > yCoeffsXML;
+    std::vector < XMLElem > zCoeffsXML;
 
     xXML->getElementsByTagName("Coef", xCoeffsXML);
     yXML->getElementsByTagName("Coef", yCoeffsXML);
@@ -165,7 +165,7 @@ void XMLControl::parsePolyXYZ(XMLElem polyXML, PolyXYZ& polyXYZ)
 }
 
 XMLElem XMLControl::createPolyXYZ(std::string name, const PolyXYZ& polyXYZ,
-                                  XMLElem parent)
+        XMLElem parent)
 {
     int order = polyXYZ.order();
     XMLElem polyXML = newElement(name, getDefaultURI(), parent);
@@ -199,7 +199,7 @@ void XMLControl::parsePoly1D(XMLElem polyXML, Poly1D& poly1D)
     int order1 = str::toType<int>(polyXML->getAttributes().getValue("order1"));
     Poly1D p1D(order1);
 
-    std::vector<XMLElem> coeffsXML;
+    std::vector < XMLElem > coeffsXML;
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
     int exp1;
@@ -218,7 +218,7 @@ void XMLControl::parsePoly2D(XMLElem polyXML, Poly2D& poly2D)
     int order2 = str::toType<int>(polyXML->getAttributes().getValue("order2"));
     Poly2D p2D(order1, order2);
 
-    std::vector<XMLElem> coeffsXML;
+    std::vector < XMLElem > coeffsXML;
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
     int exp1, exp2;
@@ -233,7 +233,7 @@ void XMLControl::parsePoly2D(XMLElem polyXML, Poly2D& poly2D)
 }
 
 XMLElem XMLControl::createPoly2D(std::string name, std::string uri,
-                                 const Poly2D& poly2D, XMLElem parent)
+        const Poly2D& poly2D, XMLElem parent)
 {
     xml::lite::AttributeNode node;
     XMLElem poly2DXML = newElement(name, uri, parent);
@@ -255,25 +255,25 @@ XMLElem XMLControl::createPoly2D(std::string name, std::string uri,
 }
 
 XMLElem XMLControl::createPoly2D(std::string name, const Poly2D& poly2D,
-                                 XMLElem parent)
+        XMLElem parent)
 {
     return createPoly2D(name, getDefaultURI(), poly2D, parent);
 }
 
 XMLElem XMLControl::createString(std::string name, std::string uri,
-                                 std::string p, XMLElem parent)
+        std::string p, XMLElem parent)
 {
     return newElement(name, uri, p, parent);
 }
 
 XMLElem XMLControl::createString(std::string name, std::string p,
-                                 XMLElem parent)
+        XMLElem parent)
 {
     return createString(name, getDefaultURI(), p, parent);
 }
 
 XMLElem XMLControl::createInt(std::string name, std::string uri, int p,
-                              XMLElem parent)
+        XMLElem parent)
 {
     return newElement(name, uri, str::toString<int>(p), parent);
 }
@@ -284,7 +284,7 @@ XMLElem XMLControl::createInt(std::string name, int p, XMLElem parent)
 }
 
 XMLElem XMLControl::createDouble(std::string name, std::string uri, double p,
-                                 XMLElem parent)
+        XMLElem parent)
 {
     return newElement(name, uri, str::toString<double>(p), parent);
 }
@@ -295,7 +295,7 @@ XMLElem XMLControl::createDouble(std::string name, double p, XMLElem parent)
 }
 
 XMLElem XMLControl::createComplex(std::string name, std::complex<double> c,
-                                  XMLElem parent)
+        XMLElem parent)
 {
     XMLElem e = newElement(name, getDefaultURI(), parent);
     createDouble("Real", getSICommonURI(), c.real(), e);
@@ -304,7 +304,7 @@ XMLElem XMLControl::createComplex(std::string name, std::complex<double> c,
 }
 
 XMLElem XMLControl::createBooleanType(std::string name, std::string uri,
-                                      BooleanType p, XMLElem parent)
+        BooleanType p, XMLElem parent)
 {
     if (p == six::BooleanType::NOT_SET)
         return NULL;
@@ -312,25 +312,25 @@ XMLElem XMLControl::createBooleanType(std::string name, std::string uri,
 }
 
 XMLElem XMLControl::createBooleanType(std::string name, BooleanType p,
-                                      XMLElem parent)
+        XMLElem parent)
 {
     return createBooleanType(name, getDefaultURI(), p, parent);
 }
 
 XMLElem XMLControl::createDateTime(std::string name, std::string uri,
-                                   std::string s, XMLElem parent)
+        std::string s, XMLElem parent)
 {
     return newElement(name, uri, s, parent);
 }
 
 XMLElem XMLControl::createDateTime(std::string name, std::string s,
-                                   XMLElem parent)
+        XMLElem parent)
 {
     return createDateTime(name, getDefaultURI(), s, parent);
 }
 
 XMLElem XMLControl::createDateTime(std::string name, std::string uri,
-                                   DateTime p, XMLElem parent)
+        DateTime p, XMLElem parent)
 {
     std::string s = six::toString<DateTime>(p);
     return createDateTime(name, uri, s, parent);
@@ -342,7 +342,7 @@ XMLElem XMLControl::createDateTime(std::string name, DateTime p, XMLElem parent)
 }
 
 XMLElem XMLControl::createDate(std::string name, std::string uri, DateTime p,
-                               XMLElem parent)
+        XMLElem parent)
 {
     char date[256];
     date[255] = 0;
@@ -359,7 +359,7 @@ XMLElem XMLControl::createDate(std::string name, DateTime p, XMLElem parent)
 
 XMLElem XMLControl::getFirstAndOnly(XMLElem parent, std::string tag)
 {
-    std::vector<XMLElem> children;
+    std::vector < XMLElem > children;
     parent->getElementsByTagName(tag, children);
     if (children.size() != 1)
     {
@@ -370,7 +370,7 @@ XMLElem XMLControl::getFirstAndOnly(XMLElem parent, std::string tag)
 }
 XMLElem XMLControl::getOptional(XMLElem parent, std::string tag)
 {
-    std::vector<XMLElem> children;
+    std::vector < XMLElem > children;
     parent->getElementsByTagName(tag, children);
     if (children.size() != 1)
         return NULL;
@@ -386,8 +386,7 @@ XMLElem XMLControl::require(XMLElem element, std::string name)
 }
 
 XMLElem XMLControl::createRowCol(std::string name, std::string rowName,
-                                 std::string colName, const RowColInt& value,
-                                 XMLElem parent)
+        std::string colName, const RowColInt& value, XMLElem parent)
 {
     XMLElem e = newElement(name, getDefaultURI(), parent);
     createInt(rowName, getSICommonURI(), value.row, e);
@@ -396,8 +395,7 @@ XMLElem XMLControl::createRowCol(std::string name, std::string rowName,
 }
 
 XMLElem XMLControl::createRowCol(std::string name, std::string rowName,
-                                 std::string colName,
-                                 const RowColDouble& value, XMLElem parent)
+        std::string colName, const RowColDouble& value, XMLElem parent)
 {
     XMLElem e = newElement(name, getDefaultURI(), parent);
     createDouble(rowName, getSICommonURI(), value.row, e);
@@ -406,19 +404,19 @@ XMLElem XMLControl::createRowCol(std::string name, std::string rowName,
 }
 
 XMLElem XMLControl::createRowCol(std::string name, const RowColInt& value,
-                                 XMLElem parent)
+        XMLElem parent)
 {
     return createRowCol(name, "Row", "Col", value, parent);
 }
 
 XMLElem XMLControl::createRowCol(std::string name, const RowColDouble& value,
-                                 XMLElem parent)
+        XMLElem parent)
 {
     return createRowCol(name, "Row", "Col", value, parent);
 }
 
 XMLElem XMLControl::createRowCol(std::string name, const RowColLatLon& value,
-                                 XMLElem parent)
+        XMLElem parent)
 {
     XMLElem e = newElement(name, getDefaultURI(), parent);
     createLatLon("Row", value.row, e);
@@ -436,7 +434,7 @@ XMLElem XMLControl::createRangeAzimuth(std::string name, const RangeAzimuth<
 }
 
 XMLElem XMLControl::createLatLon(std::string name, const LatLon& value,
-                                 XMLElem parent)
+        XMLElem parent)
 {
     XMLElem e = newElement(name, getDefaultURI(), parent);
     createDouble("Lat", getSICommonURI(), value.getLat(), e);
@@ -445,7 +443,7 @@ XMLElem XMLControl::createLatLon(std::string name, const LatLon& value,
 }
 
 XMLElem XMLControl::createLatLonAlt(std::string name, const LatLonAlt& value,
-                                    XMLElem parent)
+        XMLElem parent)
 {
     XMLElem e = createLatLon(name, value, parent);
     createDouble("HAE", getSICommonURI(), value.getAlt(), e);
@@ -554,9 +552,9 @@ void XMLControl::parseParameter(XMLElem element, Parameter& p)
 }
 
 void XMLControl::parseParameters(XMLElem paramXML, std::string paramName,
-                                 std::vector<Parameter>& props)
+        std::vector<Parameter>& props)
 {
-    std::vector<XMLElem> elemXML;
+    std::vector < XMLElem > elemXML;
     paramXML->getElementsByTagName(paramName, elemXML);
 
     for (std::vector<XMLElem>::iterator it = elemXML.begin(); it
@@ -569,7 +567,7 @@ void XMLControl::parseParameters(XMLElem paramXML, std::string paramName,
 }
 
 XMLElem XMLControl::createParameter(std::string name, std::string uri,
-                                    const Parameter& value, XMLElem parent)
+        const Parameter& value, XMLElem parent)
 {
     XMLElem element = createString(name, uri, value.str(), parent);
     setAttribute(element, "name", value.getName());
@@ -577,28 +575,29 @@ XMLElem XMLControl::createParameter(std::string name, std::string uri,
 }
 
 XMLElem XMLControl::createParameter(std::string name, const Parameter& value,
-                                    XMLElem parent)
+        XMLElem parent)
 {
     return createParameter(name, getDefaultURI(), value, parent);
 }
 
-void XMLControl::addParameters(std::string name, std::string uri, std::vector<
-        Parameter>& props, XMLElem parent)
+void XMLControl::addParameters(std::string name, std::string uri,
+        const std::vector<Parameter>& props, XMLElem parent)
 {
-    for (std::vector<Parameter>::iterator it = props.begin(); it != props.end(); ++it)
+    for (std::vector<Parameter>::const_iterator it = props.begin(); it
+            != props.end(); ++it)
     {
         createParameter(name, uri, *it, parent);
     }
 }
 
-void XMLControl::addParameters(std::string name, std::vector<Parameter>& props,
-                               XMLElem parent)
+void XMLControl::addParameters(std::string name,
+        const std::vector<Parameter>& props, XMLElem parent)
 {
     addParameters(name, getDefaultURI(), props, parent);
 }
 
 void XMLControl::addDecorrType(std::string name, std::string uri,
-                               DecorrType& decorrType, XMLElem parent)
+        DecorrType& decorrType, XMLElem parent)
 {
     //only adds it if it needs to
     if (!Init::isUndefined<double>(decorrType.corrCoefZero)
@@ -618,9 +617,9 @@ void XMLControl::parseDecorrType(XMLElem decorrXML, DecorrType& decorrType)
 }
 
 void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
-                                std::vector<LatLon>& value)
+        std::vector<LatLon>& value)
 {
-    std::vector<XMLElem> vertices;
+    std::vector < XMLElem > vertices;
     footprint->getElementsByTagName(cornerName, vertices);
 
     value.clear();
@@ -641,9 +640,9 @@ void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
 }
 
 void XMLControl::parseFootprint(XMLElem footprint, std::string cornerName,
-                                std::vector<LatLonAlt>& value)
+        std::vector<LatLonAlt>& value)
 {
-    std::vector<XMLElem> vertices;
+    std::vector < XMLElem > vertices;
     footprint->getElementsByTagName(cornerName, vertices);
 
     value.clear();
@@ -672,9 +671,9 @@ void XMLControl::parseLatLon(XMLElem parent, LatLon& ll)
 }
 
 void XMLControl::parseLatLons(XMLElem pointsXML, std::string pointName,
-                              std::vector<LatLon>& llVec)
+        std::vector<LatLon>& llVec)
 {
-    std::vector<XMLElem> latLonsXML;
+    std::vector < XMLElem > latLonsXML;
     pointsXML->getElementsByTagName(pointName, latLonsXML);
 
     for (std::vector<XMLElem>::iterator it = latLonsXML.begin(); it
@@ -698,7 +697,7 @@ void XMLControl::parseDateTime(XMLElem element, DateTime& value)
 }
 
 void XMLControl::parseRowColDouble(XMLElem parent, std::string rowName,
-                                   std::string colName, RowColDouble& rc)
+        std::string colName, RowColDouble& rc)
 {
     parseDouble(getFirstAndOnly(parent, rowName), rc.row);
     parseDouble(getFirstAndOnly(parent, colName), rc.col);
@@ -716,7 +715,7 @@ void XMLControl::parseRowColDouble(XMLElem parent, RowColDouble& rc)
 }
 
 void XMLControl::parseRowColInt(XMLElem parent, std::string rowName,
-                                std::string colName, RowColInt& rc)
+        std::string colName, RowColInt& rc)
 {
     parseInt(getFirstAndOnly(parent, rowName), rc.row);
     parseInt(getFirstAndOnly(parent, colName), rc.col);
@@ -728,8 +727,7 @@ void XMLControl::parseRowColInt(XMLElem parent, RowColInt& rc)
 }
 
 XMLElem XMLControl::createFootprint(std::string name, std::string cornerName,
-                                    const std::vector<LatLon>& corners,
-                                    XMLElem parent)
+        const std::vector<LatLon>& corners, XMLElem parent)
 {
     XMLElem footprint = newElement(name, getDefaultURI(), parent);
     xml::lite::AttributeNode node;
@@ -758,8 +756,7 @@ XMLElem XMLControl::createFootprint(std::string name, std::string cornerName,
 }
 
 XMLElem XMLControl::createFootprint(std::string name, std::string cornerName,
-                                    const std::vector<LatLonAlt>& corners,
-                                    XMLElem parent)
+        const std::vector<LatLonAlt>& corners, XMLElem parent)
 {
     XMLElem footprint = newElement(name, getDefaultURI(), parent);
     xml::lite::AttributeNode node;
@@ -787,7 +784,8 @@ XMLElem XMLControl::createFootprint(std::string name, std::string cornerName,
     return footprint;
 }
 
-XMLElem XMLControl::toXML(ErrorStatistics* errorStatistics, XMLElem parent)
+XMLElem XMLControl::toXML(const ErrorStatistics* errorStatistics,
+        XMLElem parent)
 {
     XMLElem errorStatsXML = newElement("ErrorStatistics", getDefaultURI(),
                                        parent);
@@ -939,8 +937,8 @@ XMLElem XMLControl::toXML(ErrorStatistics* errorStatistics, XMLElem parent)
     return errorStatsXML;
 }
 
-void XMLControl::fromXML(XMLElem errorStatsXML,
-                         ErrorStatistics* errorStatistics)
+void XMLControl::fromXML(const XMLElem errorStatsXML,
+        ErrorStatistics* errorStatistics)
 {
     XMLElem tmpElem = NULL;
     //optional
@@ -1210,7 +1208,7 @@ void XMLControl::fromXML(XMLElem errorStatsXML,
     }
 }
 
-void XMLControl::fromXML(XMLElem radiometricXML, Radiometric *radiometric)
+void XMLControl::fromXML(const XMLElem radiometricXML, Radiometric *radiometric)
 {
     XMLElem tmpElem = NULL;
 
@@ -1266,7 +1264,7 @@ void XMLControl::fromXML(XMLElem radiometricXML, Radiometric *radiometric)
     }
 }
 
-XMLElem XMLControl::toXML(Radiometric *r, XMLElem parent)
+XMLElem XMLControl::toXML(const Radiometric *r, XMLElem parent)
 {
     XMLElem rXML = newElement("Radiometric", getDefaultURI(), parent);
 

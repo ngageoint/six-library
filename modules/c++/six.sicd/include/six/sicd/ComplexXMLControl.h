@@ -71,7 +71,7 @@ public:
      NULL);edData object
      *  \return An XML DOM
      */
-    virtual xml::lite::Document* toXML(Data* data);
+    virtual xml::lite::Document* toXML(const Data* data);
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
@@ -79,7 +79,7 @@ public:
      *
      *  
      */
-    virtual Data* fromXML(xml::lite::Document* doc);
+    virtual Data* fromXML(const xml::lite::Document* doc);
 
 protected:
 
@@ -93,50 +93,50 @@ protected:
     //! Returns the URI to use with SI Common types
     std::string getSICommonURI() const;
 
-    XMLElem toXML(CollectionInformation *obj, XMLElem parent = NULL);
-    XMLElem toXML(ImageCreation *obj, XMLElem parent = NULL);
-    XMLElem toXML(ImageData *obj, XMLElem parent = NULL);
-    XMLElem toXML(GeoData *obj, XMLElem parent = NULL);
-    XMLElem toXML(GeoInfo *obj, XMLElem parent = NULL);
-    XMLElem toXML(Grid *obj, XMLElem parent = NULL);
-    XMLElem toXML(Timeline *obj, XMLElem parent = NULL);
-    XMLElem toXML(Position *obj, XMLElem parent = NULL);
-    XMLElem toXML(RadarCollection *obj, XMLElem parent = NULL);
-    XMLElem toXML(ImageFormation *obj, XMLElem parent = NULL);
-    XMLElem toXML(SCPCOA *obj, XMLElem parent = NULL);
-    XMLElem toXML(Antenna *obj, XMLElem parent = NULL);
+    XMLElem toXML(const CollectionInformation *obj, XMLElem parent = NULL);
+    XMLElem toXML(const ImageCreation *obj, XMLElem parent = NULL);
+    XMLElem toXML(const ImageData *obj, XMLElem parent = NULL);
+    XMLElem toXML(const GeoData *obj, XMLElem parent = NULL);
+    XMLElem toXML(const GeoInfo *obj, XMLElem parent = NULL);
+    XMLElem toXML(const Grid *obj, XMLElem parent = NULL);
+    XMLElem toXML(const Timeline *obj, XMLElem parent = NULL);
+    XMLElem toXML(const Position *obj, XMLElem parent = NULL);
+    XMLElem toXML(const RadarCollection *obj, XMLElem parent = NULL);
+    XMLElem toXML(const ImageFormation *obj, XMLElem parent = NULL);
+    XMLElem toXML(const SCPCOA *obj, XMLElem parent = NULL);
+    XMLElem toXML(const Antenna *obj, XMLElem parent = NULL);
     XMLElem toXML(std::string name, AntennaParameters *ap, XMLElem parent =
             NULL);
-    XMLElem toXML(MatchInformation *obj, XMLElem parent = NULL);
-    XMLElem toXML(PFA *obj, XMLElem parent = NULL);
-    XMLElem toXML(RMA *obj, XMLElem parent = NULL);
+    XMLElem toXML(const MatchInformation *obj, XMLElem parent = NULL);
+    XMLElem toXML(const PFA *obj, XMLElem parent = NULL);
+    XMLElem toXML(const RMA *obj, XMLElem parent = NULL);
 
     XMLElem areaLineDirectionParametersToXML(std::string name,
-                                             AreaDirectionParameters *obj,
-                                             XMLElem parent = NULL);
+            const AreaDirectionParameters *obj,
+            XMLElem parent = NULL);
     XMLElem areaSampleDirectionParametersToXML(std::string name,
-                                               AreaDirectionParameters *obj,
-                                               XMLElem parent = NULL);
+            const AreaDirectionParameters *obj,
+            XMLElem parent = NULL);
 
-    void fromXML(XMLElem collectionInfoXML, CollectionInformation *obj);
-    void fromXML(XMLElem imageCreationXML, ImageCreation *obj);
-    void fromXML(XMLElem imageDataXML, ImageData *obj);
-    void fromXML(XMLElem geoDataXML, GeoData *obj);
-    void fromXML(XMLElem geoInfoXML, GeoInfo *obj);
-    void fromXML(XMLElem gridXML, Grid *obj);
-    void fromXML(XMLElem timelineXML, Timeline *obj);
-    void fromXML(XMLElem positionXML, Position *obj);
-    void fromXML(XMLElem radarCollectionXML, RadarCollection *obj);
-    void fromXML(XMLElem imageFormationXML, ImageFormation *obj);
-    void fromXML(XMLElem scpcoaXML, SCPCOA *obj);
-    void fromXML(XMLElem antennaXML, Antenna *obj);
-    void fromXML(XMLElem antennaParamsXML, AntennaParameters* params);
-    void fromXML(XMLElem matchInfoXML, MatchInformation *obj);
-    void fromXML(XMLElem pfaXML, PFA *obj);
-    void fromXML(XMLElem rmaXML, RMA *obj);
+    void fromXML(const XMLElem collectionInfoXML, CollectionInformation *obj);
+    void fromXML(const XMLElem imageCreationXML, ImageCreation *obj);
+    void fromXML(const XMLElem imageDataXML, ImageData *obj);
+    void fromXML(const XMLElem geoDataXML, GeoData *obj);
+    void fromXML(const XMLElem geoInfoXML, GeoInfo *obj);
+    void fromXML(const XMLElem gridXML, Grid *obj);
+    void fromXML(const XMLElem timelineXML, Timeline *obj);
+    void fromXML(const XMLElem positionXML, Position *obj);
+    void fromXML(const XMLElem radarCollectionXML, RadarCollection *obj);
+    void fromXML(const XMLElem imageFormationXML, ImageFormation *obj);
+    void fromXML(const XMLElem scpcoaXML, SCPCOA *obj);
+    void fromXML(const XMLElem antennaXML, Antenna *obj);
+    void fromXML(const XMLElem antennaParamsXML, AntennaParameters* params);
+    void fromXML(const XMLElem matchInfoXML, MatchInformation *obj);
+    void fromXML(const XMLElem pfaXML, PFA *obj);
+    void fromXML(const XMLElem rmaXML, RMA *obj);
 
-    void parseEarthModelType(XMLElem element, EarthModelType& value);
-    void parseSideOfTrackType(XMLElem element, SideOfTrackType& value);
+    void parseEarthModelType(const XMLElem element, EarthModelType& value);
+    void parseSideOfTrackType(const XMLElem element, SideOfTrackType& value);
 
     XMLElem createFFTSign(std::string name, six::FFTSign sign, XMLElem parent =
             NULL);

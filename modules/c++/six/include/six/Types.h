@@ -473,7 +473,7 @@ struct LUT
     }
 
     //!  Gives back a pointer at table[i * elementSize]
-    unsigned char* operator[](unsigned int i)
+    unsigned char* operator[](unsigned int i) const
     {
         return &(table[i * elementSize]);
     }
