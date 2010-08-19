@@ -71,18 +71,18 @@ public:
 
     virtual void read(char * buf, size_t size)
     {
-        if ((mPosition + size) > mCapacity)
+        if ((mPosition + (nitf::Off)size) > mCapacity)
             throw nitf::NITFException(Ctxt("Attempting to read past buffer boundary."));
         memcpy(buf, (char*)(mBuffer + mPosition), size);
-        mPosition += size;
+        mPosition += (nitf::Off)size;
     }
 
     virtual void write(const char * buf, size_t size) throw(nitf::NITFException)
     {
-        if ((mPosition + size) > mCapacity)
+        if ((mPosition + (nitf::Off)size) > mCapacity)
             throw nitf::NITFException(Ctxt("Attempting to write past buffer boundary."));
         memcpy((char*)(mBuffer + mPosition), buf, size);
-        mPosition += size;
+        mPosition += (nitf::Off)size;
     }
 
     virtual nitf::Off seek(nitf::Off offset, int whence) throw(nitf::NITFException)

@@ -65,7 +65,7 @@ NITFPRIV(NITF_BOOL) IOHandleAdaptor_read(NITF_DATA* data,
                                          size_t size,
                                          nitf_Error* error)
 {
-    return nitf_IOHandle_read( (nitf_IOHandle)data,
+    return nitf_IOHandle_read( (nitf_IOHandle)(long)data,
                                buf, size, error);
 
 }
@@ -74,7 +74,7 @@ NITFPRIV(NITF_BOOL) IOHandleAdaptor_write(NITF_DATA* data,
                                           size_t size,
                                           nitf_Error* error)
 {
-    return nitf_IOHandle_write( (nitf_IOHandle)data,
+    return nitf_IOHandle_write( (nitf_IOHandle)(long)data,
                                 buf, size, error);
 }
 
@@ -84,7 +84,7 @@ NITFPRIV(nitf_Off) IOHandleAdaptor_seek(NITF_DATA* data,
                                         int whence,
                                         nitf_Error* error)
 {
-    return nitf_IOHandle_seek( (nitf_IOHandle)data,
+    return nitf_IOHandle_seek( (nitf_IOHandle)(long)data,
                                offset, whence, error);
 }
 
@@ -92,21 +92,21 @@ NITFPRIV(nitf_Off) IOHandleAdaptor_seek(NITF_DATA* data,
 NITFPRIV(nitf_Off) IOHandleAdaptor_tell(NITF_DATA* data,
                                      nitf_Error* error)
 {
-    return nitf_IOHandle_tell( (nitf_IOHandle)data,
+    return nitf_IOHandle_tell( (nitf_IOHandle)(long)data,
                                error);
 }
 
 NITFPRIV(nitf_Off) IOHandleAdaptor_getSize(NITF_DATA* data,
                                         nitf_Error* error)
 {
-    return nitf_IOHandle_getSize( (nitf_IOHandle)data,
+    return nitf_IOHandle_getSize( (nitf_IOHandle)(long)data,
                                   error);
 }
 
 NITFPRIV(NITF_BOOL) IOHandleAdaptor_close(NITF_DATA* data,
                                      nitf_Error* error)
 {
-    nitf_IOHandle_close((nitf_IOHandle)data);
+    nitf_IOHandle_close((nitf_IOHandle)(long)data);
     return NITF_SUCCESS;
 }
 
@@ -137,7 +137,7 @@ nitf_IOHandleAdaptor_construct(nitf_IOHandle handle, nitf_Error* error)
                         NITF_ERR_MEMORY);
         return NULL;
     }
-    impl->data = (NITF_DATA*)handle;
+    impl->data = (NITF_DATA*)(long)handle;
     impl->iface = &iIOHandle;
     return impl;
 }
