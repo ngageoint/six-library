@@ -24,7 +24,6 @@
 
 using namespace nitf;
 
-
 void ReaderDestructor::operator()(nitf_Reader *reader)
 {
     if (reader)
@@ -63,14 +62,16 @@ Reader::Reader(nitf_Reader * x)
     getNativeOrThrow();
 }
 
-Reader::Reader() throw(nitf::NITFException)
+Reader::Reader() throw (nitf::NITFException)
 {
     setNative(nitf_Reader_construct(&error));
     getNativeOrThrow();
     setManaged(false);
 }
 
-Reader::~Reader(){}
+Reader::~Reader()
+{
+}
 
 nitf::Version Reader::getNITFVersion(const std::string& fileName)
 {
@@ -97,21 +98,21 @@ nitf::Record Reader::readIO(nitf::IOInterface & io) throw (nitf::NITFException)
         oldIO.setManaged(false);
     }
 
-    nitf_Record * x = nitf_Reader_readIO(getNativeOrThrow(), io.getNative(), &error);
+    nitf_Record * x = nitf_Reader_readIO(getNativeOrThrow(), io.getNative(),
+                                         &error);
     if (!x)
         throw nitf::NITFException(&error);
     nitf::Record rec(x);
-    //set it so it is NOT managed by the underlying library
-    //this means Records are subject to deletion when refcount == 0
-    rec.setManaged(true);
     io.setManaged(true);
     return rec;
 }
 
 nitf::ImageReader Reader::newImageReader(int imageSegmentNumber)
-    throw (nitf::NITFException)
+        throw (nitf::NITFException)
 {
-    nitf_ImageReader * x = nitf_Reader_newImageReader(getNativeOrThrow(), imageSegmentNumber, &error);
+    nitf_ImageReader * x = nitf_Reader_newImageReader(getNativeOrThrow(),
+                                                      imageSegmentNumber,
+                                                      &error);
     if (!x)
         throw nitf::NITFException(&error);
     nitf::ImageReader reader(x);
@@ -122,10 +123,10 @@ nitf::ImageReader Reader::newImageReader(int imageSegmentNumber)
 }
 
 nitf::SegmentReader Reader::newDEReader(int deSegmentNumber)
-    throw (nitf::NITFException)
+        throw (nitf::NITFException)
 {
     nitf_SegmentReader * x = nitf_Reader_newDEReader(getNativeOrThrow(),
-            deSegmentNumber, &error);
+                                                     deSegmentNumber, &error);
     if (!x)
         throw nitf::NITFException(&error);
     nitf::SegmentReader reader(x);
@@ -136,9 +137,11 @@ nitf::SegmentReader Reader::newDEReader(int deSegmentNumber)
 }
 
 nitf::SegmentReader Reader::newGraphicReader(int segmentNumber)
-    throw (nitf::NITFException)
+        throw (nitf::NITFException)
 {
-    nitf_SegmentReader * x = nitf_Reader_newGraphicReader(getNativeOrThrow(), segmentNumber, &error);
+    nitf_SegmentReader * x =
+            nitf_Reader_newGraphicReader(getNativeOrThrow(), segmentNumber,
+                                         &error);
     if (!x)
         throw nitf::NITFException(&error);
     nitf::SegmentReader reader(x);
@@ -149,9 +152,10 @@ nitf::SegmentReader Reader::newGraphicReader(int segmentNumber)
 }
 
 nitf::SegmentReader Reader::newTextReader(int segmentNumber)
-    throw (nitf::NITFException)
+        throw (nitf::NITFException)
 {
-    nitf_SegmentReader * x = nitf_Reader_newTextReader(getNativeOrThrow(), segmentNumber, &error);
+    nitf_SegmentReader * x = nitf_Reader_newTextReader(getNativeOrThrow(),
+                                                       segmentNumber, &error);
     if (!x)
         throw nitf::NITFException(&error);
     nitf::SegmentReader reader(x);
