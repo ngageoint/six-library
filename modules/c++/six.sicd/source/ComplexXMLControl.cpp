@@ -44,7 +44,7 @@ std::string ComplexXMLControl::getSICommonURI() const
     return SICD_URI;
 }
 
-Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
+Data* ComplexXMLControl::fromXML(const xml::lite::Document* doc)
 {
     ComplexDataBuilder builder;
     ComplexData *sicd = builder.steal();
@@ -132,7 +132,7 @@ Data* ComplexXMLControl::fromXML(xml::lite::Document* doc)
     return sicd;
 }
 
-xml::lite::Document* ComplexXMLControl::toXML(Data *data)
+xml::lite::Document* ComplexXMLControl::toXML(const Data *data)
 {
     if (data->getDataType() != DataType::COMPLEX)
     {
@@ -143,7 +143,7 @@ xml::lite::Document* ComplexXMLControl::toXML(Data *data)
     XMLElem root = newElement("SICD");
     doc->setRootElement(root);
 
-    ComplexData *sicd = (ComplexData*) data;
+    const ComplexData *sicd = (const ComplexData*) data;
 
     toXML(sicd->collectionInformation, root);
     if (sicd->imageCreation)
@@ -197,7 +197,7 @@ XMLElem ComplexXMLControl::createFFTSign(std::string name, six::FFTSign sign,
     return e;
 }
 
-XMLElem ComplexXMLControl::toXML(CollectionInformation *collInfo,
+XMLElem ComplexXMLControl::toXML(const CollectionInformation *collInfo,
                                  XMLElem parent)
 {
     XMLElem collInfoXML = newElement("CollectionInfo", parent);
@@ -224,7 +224,7 @@ XMLElem ComplexXMLControl::toXML(CollectionInformation *collInfo,
     createString("Classification", si, collInfo->classification.level,
                  collInfoXML);
 
-    for (std::vector<std::string>::iterator it = collInfo->countryCodes.begin(); it
+    for (std::vector<std::string>::const_iterator it = collInfo->countryCodes.begin(); it
             != collInfo->countryCodes.end(); ++it)
     {
         createString("CountryCode", si, *it, collInfoXML);
@@ -233,7 +233,7 @@ XMLElem ComplexXMLControl::toXML(CollectionInformation *collInfo,
     return collInfoXML;
 }
 
-XMLElem ComplexXMLControl::toXML(ImageCreation *imageCreation, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const ImageCreation *imageCreation, XMLElem parent)
 {
     XMLElem imageCreationXML = newElement("ImageCreation", parent);
 
@@ -252,7 +252,7 @@ XMLElem ComplexXMLControl::toXML(ImageCreation *imageCreation, XMLElem parent)
     return imageCreationXML;
 }
 
-XMLElem ComplexXMLControl::toXML(ImageData *imageData, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const ImageData *imageData, XMLElem parent)
 {
     XMLElem imageDataXML = newElement("ImageData", parent);
 
@@ -295,7 +295,7 @@ XMLElem ComplexXMLControl::toXML(ImageData *imageData, XMLElem parent)
     return imageDataXML;
 }
 
-XMLElem ComplexXMLControl::toXML(GeoData *geoData, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const GeoData *geoData, XMLElem parent)
 {
     XMLElem geoDataXML = newElement("GeoData", parent);
 
@@ -323,7 +323,7 @@ XMLElem ComplexXMLControl::toXML(GeoData *geoData, XMLElem parent)
         }
     }
 
-    for (std::vector<GeoInfo*>::iterator it = geoData->geoInfos.begin(); it
+    for (std::vector<GeoInfo*>::const_iterator it = geoData->geoInfos.begin(); it
             != geoData->geoInfos.end(); ++it)
     {
         toXML(*it, geoDataXML);
@@ -332,13 +332,13 @@ XMLElem ComplexXMLControl::toXML(GeoData *geoData, XMLElem parent)
     return geoDataXML;
 }
 
-XMLElem ComplexXMLControl::toXML(GeoInfo *geoInfo, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const GeoInfo *geoInfo, XMLElem parent)
 {
     XMLElem geoInfoXML = newElement("GeoInfo", parent);
     if (!geoInfo->name.empty())
         setAttribute(geoInfoXML, "name", geoInfo->name);
 
-    for (std::vector<GeoInfo*>::iterator it = geoInfo->geoInfos.begin(); it
+    for (std::vector<GeoInfo*>::const_iterator it = geoInfo->geoInfos.begin(); it
             != geoInfo->geoInfos.end(); ++it)
     {
         toXML(*it, geoInfoXML);
@@ -365,7 +365,7 @@ XMLElem ComplexXMLControl::toXML(GeoInfo *geoInfo, XMLElem parent)
     return geoInfoXML;
 }
 
-XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const Grid *grid, XMLElem parent)
 {
     XMLElem gridXML = newElement("Grid", parent);
 
@@ -446,7 +446,7 @@ XMLElem ComplexXMLControl::toXML(Grid *grid, XMLElem parent)
     return gridXML;
 }
 
-XMLElem ComplexXMLControl::toXML(Timeline *timeline, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const Timeline *timeline, XMLElem parent)
 {
     XMLElem timelineXML = newElement("Timeline", parent);
 
@@ -476,7 +476,7 @@ XMLElem ComplexXMLControl::toXML(Timeline *timeline, XMLElem parent)
     return timelineXML;
 }
 
-XMLElem ComplexXMLControl::toXML(Position *position, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const Position *position, XMLElem parent)
 {
     XMLElem positionXML = newElement("Position", parent);
 
@@ -501,7 +501,7 @@ XMLElem ComplexXMLControl::toXML(Position *position, XMLElem parent)
     return positionXML;
 }
 
-XMLElem ComplexXMLControl::toXML(RadarCollection *radar, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const RadarCollection *radar, XMLElem parent)
 {
     XMLElem radarXML = newElement("RadarCollection", parent);
 
@@ -533,7 +533,7 @@ XMLElem ComplexXMLControl::toXML(RadarCollection *radar, XMLElem parent)
 		str::toString(radar->txSequence.size()));
 
 	int i=1;
-        for (std::vector<TxStep*>::iterator it = radar->txSequence.begin(); it
+        for (std::vector<TxStep*>::const_iterator it = radar->txSequence.begin(); it
                 != radar->txSequence.end(); ++it)
         {
             TxStep *tx = *it;
@@ -680,7 +680,7 @@ XMLElem ComplexXMLControl::toXML(RadarCollection *radar, XMLElem parent)
 
 XMLElem ComplexXMLControl::areaLineDirectionParametersToXML(
                                                             std::string name,
-                                                            AreaDirectionParameters *adp,
+                                                            const AreaDirectionParameters *adp,
                                                             XMLElem parent)
 {
     XMLElem adpXML = newElement(name, parent);
@@ -693,7 +693,7 @@ XMLElem ComplexXMLControl::areaLineDirectionParametersToXML(
 
 XMLElem ComplexXMLControl::areaSampleDirectionParametersToXML(
                                                               std::string name,
-                                                              AreaDirectionParameters *adp,
+                                                              const AreaDirectionParameters *adp,
                                                               XMLElem parent)
 {
     XMLElem adpXML = newElement(name, parent);
@@ -704,7 +704,7 @@ XMLElem ComplexXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
-XMLElem ComplexXMLControl::toXML(ImageFormation *imageFormation, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const ImageFormation *imageFormation, XMLElem parent)
 {
     XMLElem imageFormationXML = newElement("ImageFormation", parent);
 
@@ -725,7 +725,7 @@ XMLElem ComplexXMLControl::toXML(ImageFormation *imageFormation, XMLElem parent)
                          imageFormation->rcvChannelProcessed->prfScaleFactor,
                          rcvChanXML);
 
-        for (std::vector<int>::iterator it =
+        for (std::vector<int>::const_iterator it =
                 imageFormation->rcvChannelProcessed->channelIndex.begin(); it
                 != imageFormation->rcvChannelProcessed->channelIndex.end(); ++it)
         {
@@ -764,7 +764,7 @@ XMLElem ComplexXMLControl::toXML(ImageFormation *imageFormation, XMLElem parent)
 
     for (unsigned int i = 0; i < imageFormation->processing.size(); ++i)
     {
-        Processing* proc = &imageFormation->processing[i];
+        const Processing* proc = &imageFormation->processing[i];
 
         XMLElem procXML = newElement("Processing", imageFormationXML);
 
@@ -828,7 +828,7 @@ XMLElem ComplexXMLControl::toXML(ImageFormation *imageFormation, XMLElem parent)
     return imageFormationXML;
 }
 
-XMLElem ComplexXMLControl::toXML(SCPCOA *scpcoa, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const SCPCOA *scpcoa, XMLElem parent)
 {
     XMLElem scpcoaXML = newElement("SCPCOA", parent);
     createDouble("SCPTime", scpcoa->scpTime, scpcoaXML);
@@ -846,7 +846,7 @@ XMLElem ComplexXMLControl::toXML(SCPCOA *scpcoa, XMLElem parent)
     return scpcoaXML;
 }
 
-XMLElem ComplexXMLControl::toXML(Antenna *antenna, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const Antenna *antenna, XMLElem parent)
 {
     XMLElem antennaXML = newElement("Antenna", parent);
 
@@ -860,7 +860,7 @@ XMLElem ComplexXMLControl::toXML(Antenna *antenna, XMLElem parent)
     return antennaXML;
 }
 
-XMLElem ComplexXMLControl::toXML(std::string name, AntennaParameters *params,
+XMLElem ComplexXMLControl::toXML(const std::string name, AntennaParameters *params,
                                  XMLElem parent)
 {
     XMLElem apXML = newElement(name, parent);
@@ -906,7 +906,7 @@ XMLElem ComplexXMLControl::toXML(std::string name, AntennaParameters *params,
     return apXML;
 }
 
-XMLElem ComplexXMLControl::toXML(MatchInformation *matchInfo, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const MatchInformation *matchInfo, XMLElem parent)
 {
     XMLElem matchInfoXML = newElement("MatchInfo", parent);
 
@@ -922,7 +922,7 @@ XMLElem ComplexXMLControl::toXML(MatchInformation *matchInfo, XMLElem parent)
             createString("IlluminatorName", mc->illuminatorName, mcXML);
         createString("CoreName", mc->coreName, mcXML);
 
-        for (std::vector<std::string>::iterator it = mc->matchType.begin(); it
+        for (std::vector<std::string>::const_iterator it = mc->matchType.begin(); it
                 != mc->matchType.end(); ++it)
         {
             createString("MatchType", *it, mcXML);
@@ -933,7 +933,7 @@ XMLElem ComplexXMLControl::toXML(MatchInformation *matchInfo, XMLElem parent)
     return matchInfoXML;
 }
 
-XMLElem ComplexXMLControl::toXML(PFA *pfa, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const PFA *pfa, XMLElem parent)
 {
     XMLElem pfaXML = newElement("PFA", parent);
 
@@ -960,7 +960,7 @@ XMLElem ComplexXMLControl::toXML(PFA *pfa, XMLElem parent)
     return pfaXML;
 }
 
-XMLElem ComplexXMLControl::toXML(RMA *rma, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const RMA *rma, XMLElem parent)
 {
     XMLElem rmaXML = newElement("RMA", parent);
 
@@ -1013,7 +1013,7 @@ XMLElem ComplexXMLControl::toXML(RMA *rma, XMLElem parent)
     return rmaXML;
 }
 
-void ComplexXMLControl::fromXML(XMLElem collectionInfoXML,
+void ComplexXMLControl::fromXML(const XMLElem collectionInfoXML,
                                 CollectionInformation *collInfo)
 {
     parseString(getFirstAndOnly(collectionInfoXML, "CollectorName"),
@@ -1050,7 +1050,7 @@ void ComplexXMLControl::fromXML(XMLElem collectionInfoXML,
     collectionInfoXML->getElementsByTagName("CountryCode", countryCodeXML);
 
     //optional
-    for (std::vector<XMLElem>::iterator it = countryCodeXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = countryCodeXML.begin(); it
             != countryCodeXML.end(); ++it)
     {
         std::string cc;
@@ -1063,7 +1063,7 @@ void ComplexXMLControl::fromXML(XMLElem collectionInfoXML,
     parseParameters(collectionInfoXML, "Parameter", collInfo->parameters);
 }
 
-void ComplexXMLControl::fromXML(XMLElem imageCreationXML,
+void ComplexXMLControl::fromXML(const XMLElem imageCreationXML,
                                 ImageCreation *imageCreation)
 {
     // Optional
@@ -1084,7 +1084,7 @@ void ComplexXMLControl::fromXML(XMLElem imageCreationXML,
         parseString(element, imageCreation->profile);
 }
 
-void ComplexXMLControl::fromXML(XMLElem imageDataXML, ImageData *imageData)
+void ComplexXMLControl::fromXML(const XMLElem imageDataXML, ImageData *imageData)
 {
     imageData->pixelType
             = six::toType<PixelType>(
@@ -1099,7 +1099,7 @@ void ComplexXMLControl::fromXML(XMLElem imageDataXML, ImageData *imageData)
         imageData->amplitudeTable = new AmplitudeTable();
 
         AmplitudeTable& ampTable = *(imageData->amplitudeTable);
-        for (std::vector<XMLElem>::iterator it = ampsXML.begin(); it
+        for (std::vector<XMLElem>::const_iterator it = ampsXML.begin(); it
                 != ampsXML.end(); ++it)
         {
             XMLElem ampXML = *it;
@@ -1148,7 +1148,7 @@ void ComplexXMLControl::fromXML(XMLElem imageDataXML, ImageData *imageData)
         validDataXML->getElementsByTagName("Vertex", verticesXML);
 
         //TODO make sure there are at least 3
-        for (std::vector<XMLElem>::iterator it = verticesXML.begin(); it
+        for (std::vector<XMLElem>::const_iterator it = verticesXML.begin(); it
                 != verticesXML.end(); ++it)
         {
             RowColInt rowCol;
@@ -1160,7 +1160,7 @@ void ComplexXMLControl::fromXML(XMLElem imageDataXML, ImageData *imageData)
 
 }
 
-void ComplexXMLControl::fromXML(XMLElem geoDataXML, GeoData *geoData)
+void ComplexXMLControl::fromXML(const XMLElem geoDataXML, GeoData *geoData)
 {
     parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
                         geoData->earthModel);
@@ -1182,7 +1182,7 @@ void ComplexXMLControl::fromXML(XMLElem geoDataXML, GeoData *geoData)
     geoDataXML->getElementsByTagName("GeoInfo", geoInfosXML);
 
     //optional
-    for (std::vector<XMLElem>::iterator it = geoInfosXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
             != geoInfosXML.end(); ++it)
     {
         GeoInfo *gi = new GeoInfo();
@@ -1192,7 +1192,7 @@ void ComplexXMLControl::fromXML(XMLElem geoDataXML, GeoData *geoData)
 
 }
 
-void ComplexXMLControl::fromXML(XMLElem geoInfoXML, GeoInfo* geoInfo)
+void ComplexXMLControl::fromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo)
 {
     std::vector<XMLElem> geoInfosXML;
     geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
@@ -1200,7 +1200,7 @@ void ComplexXMLControl::fromXML(XMLElem geoInfoXML, GeoInfo* geoInfo)
 
     int i = 0;
     //optional
-    for (std::vector<XMLElem>::iterator it = geoInfosXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
             != geoInfosXML.end(); ++it)
     {
         GeoInfo *gi = new GeoInfo();
@@ -1234,7 +1234,7 @@ void ComplexXMLControl::fromXML(XMLElem geoInfoXML, GeoInfo* geoInfo)
     }
 }
 
-void ComplexXMLControl::fromXML(XMLElem gridXML, Grid *grid)
+void ComplexXMLControl::fromXML(const XMLElem gridXML, Grid *grid)
 {
     grid->imagePlane
             = six::toType<ComplexImagePlaneType>(
@@ -1282,7 +1282,7 @@ void ComplexXMLControl::fromXML(XMLElem gridXML, Grid *grid)
         //TODO make sure there is at least one and not more than 512 wgts
         std::vector<XMLElem> weightsXML;
         weightFuncXML->getElementsByTagName("Wgt", weightsXML);
-        for (std::vector<XMLElem>::iterator it = weightsXML.begin(); it
+        for (std::vector<XMLElem>::const_iterator it = weightsXML.begin(); it
                 != weightsXML.end(); ++it)
         {
             double value;
@@ -1327,7 +1327,7 @@ void ComplexXMLControl::fromXML(XMLElem gridXML, Grid *grid)
         //TODO make sure there is at least one and not more than 512 wgts
         std::vector<XMLElem> weightsXML;
         weightFuncXML->getElementsByTagName("Wgt", weightsXML);
-        for (std::vector<XMLElem>::iterator it = weightsXML.begin(); it
+        for (std::vector<XMLElem>::const_iterator it = weightsXML.begin(); it
                 != weightsXML.end(); ++it)
         {
             double value;
@@ -1337,7 +1337,7 @@ void ComplexXMLControl::fromXML(XMLElem gridXML, Grid *grid)
     }
 }
 
-void ComplexXMLControl::fromXML(XMLElem timelineXML, Timeline *timeline)
+void ComplexXMLControl::fromXML(const XMLElem timelineXML, Timeline *timeline)
 {
     parseDateTime(getFirstAndOnly(timelineXML, "CollectStart"),
                   timeline->collectStart);
@@ -1351,7 +1351,7 @@ void ComplexXMLControl::fromXML(XMLElem timelineXML, Timeline *timeline)
         //TODO make sure there is at least one
         std::vector<XMLElem> setsXML;
         ippXML->getElementsByTagName("Set", setsXML);
-        for (std::vector<XMLElem>::iterator it = setsXML.begin(); it
+        for (std::vector<XMLElem>::const_iterator it = setsXML.begin(); it
                 != setsXML.end(); ++it)
         {
             // Use the first set that is already available.
@@ -1372,7 +1372,7 @@ void ComplexXMLControl::fromXML(XMLElem timelineXML, Timeline *timeline)
     }
 }
 
-void ComplexXMLControl::fromXML(XMLElem positionXML, Position *position)
+void ComplexXMLControl::fromXML(const XMLElem positionXML, Position *position)
 {
     XMLElem tmpElem = getFirstAndOnly(positionXML, "ARPPoly");
     parsePolyXYZ(tmpElem, position->arpPoly);
@@ -1400,7 +1400,7 @@ void ComplexXMLControl::fromXML(XMLElem positionXML, Position *position)
         //TODO make sure there is at least one
         std::vector<XMLElem> polysXML;
         tmpElem->getElementsByTagName("RcvAPCPoly", polysXML);
-        for (std::vector<XMLElem>::iterator it = polysXML.begin(); it
+        for (std::vector<XMLElem>::const_iterator it = polysXML.begin(); it
                 != polysXML.end(); ++it)
         {
             PolyXYZ p;
@@ -1410,7 +1410,7 @@ void ComplexXMLControl::fromXML(XMLElem positionXML, Position *position)
     }
 }
 
-void ComplexXMLControl::fromXML(XMLElem radarCollectionXML,
+void ComplexXMLControl::fromXML(const XMLElem radarCollectionXML,
                                 RadarCollection *radarCollection)
 {
     XMLElem tmpElem = NULL;
@@ -1451,7 +1451,7 @@ void ComplexXMLControl::fromXML(XMLElem radarCollectionXML,
         //TODO make sure there is at least one
         std::vector<XMLElem> txStepsXML;
         tmpElem->getElementsByTagName("TxStep", txStepsXML);
-        for (std::vector<XMLElem>::iterator it = txStepsXML.begin(); it
+        for (std::vector<XMLElem>::const_iterator it = txStepsXML.begin(); it
                 != txStepsXML.end(); ++it)
         {
             TxStep* step = new TxStep();
@@ -1483,7 +1483,7 @@ void ComplexXMLControl::fromXML(XMLElem radarCollectionXML,
         //TODO make sure there is at least one
         std::vector<XMLElem> wfParamsXML;
         tmpElem->getElementsByTagName("WFParameters", wfParamsXML);
-        for (std::vector<XMLElem>::iterator it = wfParamsXML.begin(); it
+        for (std::vector<XMLElem>::const_iterator it = wfParamsXML.begin(); it
                 != wfParamsXML.end(); ++it)
         {
             WaveformParameters* wfParams = new WaveformParameters();
@@ -1568,7 +1568,7 @@ void ComplexXMLControl::fromXML(XMLElem radarCollectionXML,
     //optional
     std::vector<XMLElem> channelsXML;
     tmpElem->getElementsByTagName("ChanParameters", channelsXML);
-    for (std::vector<XMLElem>::iterator it = channelsXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = channelsXML.begin(); it
             != channelsXML.end(); ++it)
     {
         ChannelParameters* chanParams = new ChannelParameters();
@@ -1654,7 +1654,7 @@ void ComplexXMLControl::fromXML(XMLElem radarCollectionXML,
                 std::vector<XMLElem> segmentsXML;
                 segmentListXML->getElementsByTagName("Segment", segmentsXML);
 
-                for (std::vector<XMLElem>::iterator it = segmentsXML.begin(); it
+                for (std::vector<XMLElem>::const_iterator it = segmentsXML.begin(); it
                         != segmentsXML.end(); ++it)
                 {
                     Segment* seg = new Segment();
@@ -1682,7 +1682,7 @@ void ComplexXMLControl::fromXML(XMLElem radarCollectionXML,
                     radarCollection->parameters);
 }
 
-void ComplexXMLControl::fromXML(XMLElem imageFormationXML,
+void ComplexXMLControl::fromXML(const XMLElem imageFormationXML,
                                 ImageFormation *imageFormation)
 {
     XMLElem tmpElem = getOptional(imageFormationXML, "SegmentIdentifier");
@@ -1707,7 +1707,7 @@ void ComplexXMLControl::fromXML(XMLElem imageFormationXML,
     //TODO make sure there is at least one
     std::vector<XMLElem> chansXML;
     tmpElem->getElementsByTagName("ChanIndex", chansXML);
-    for (std::vector<XMLElem>::iterator it = chansXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = chansXML.begin(); it
             != chansXML.end(); ++it)
     {
         int value;
@@ -1865,7 +1865,7 @@ void ComplexXMLControl::fromXML(XMLElem imageFormationXML,
     }
 }
 
-void ComplexXMLControl::fromXML(XMLElem scpcoaXML, SCPCOA *scpcoa)
+void ComplexXMLControl::fromXML(const XMLElem scpcoaXML, SCPCOA *scpcoa)
 {
     parseDouble(getFirstAndOnly(scpcoaXML, "SCPTime"), scpcoa->scpTime);
 
@@ -1886,7 +1886,7 @@ void ComplexXMLControl::fromXML(XMLElem scpcoaXML, SCPCOA *scpcoa)
     parseDouble(getFirstAndOnly(scpcoaXML, "SlopeAng"), scpcoa->slopeAngle);
 }
 
-void ComplexXMLControl::fromXML(XMLElem antennaParamsXML,
+void ComplexXMLControl::fromXML(const XMLElem antennaParamsXML,
                                 AntennaParameters* params)
 {
     parsePolyXYZ(getFirstAndOnly(antennaParamsXML, "XAxisPoly"),
@@ -1958,7 +1958,7 @@ void ComplexXMLControl::fromXML(XMLElem antennaParamsXML,
     }
 }
 
-void ComplexXMLControl::fromXML(XMLElem antennaXML, Antenna *antenna)
+void ComplexXMLControl::fromXML(const XMLElem antennaXML, Antenna *antenna)
 {
     XMLElem antennaParamsXML = getOptional(antennaXML, "Tx");
     if (antennaParamsXML)
@@ -1982,7 +1982,7 @@ void ComplexXMLControl::fromXML(XMLElem antennaXML, Antenna *antenna)
     }
 }
 
-void ComplexXMLControl::fromXML(XMLElem matchInfoXML,
+void ComplexXMLControl::fromXML(const XMLElem matchInfoXML,
                                 MatchInformation *matchInfo)
 {
     XMLElem optElem = NULL;
@@ -1990,7 +1990,7 @@ void ComplexXMLControl::fromXML(XMLElem matchInfoXML,
     //TODO make sure there is at least one
     std::vector<XMLElem> collectsXML;
     matchInfoXML->getElementsByTagName("Collect", collectsXML);
-    for (std::vector<XMLElem>::iterator it = collectsXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = collectsXML.begin(); it
             != collectsXML.end(); ++it)
     {
       	// The MatchInformation object was given a MatchCollection when
@@ -2020,7 +2020,7 @@ void ComplexXMLControl::fromXML(XMLElem matchInfoXML,
         //optional
         std::vector<XMLElem> matchTypesXML;
         (*it)->getElementsByTagName("MatchType", matchTypesXML);
-        for (std::vector<XMLElem>::iterator it2 = matchTypesXML.begin(); it2
+        for (std::vector<XMLElem>::const_iterator it2 = matchTypesXML.begin(); it2
                 != matchTypesXML.end(); ++it2)
         {
             std::string value;
@@ -2040,7 +2040,7 @@ void ComplexXMLControl::fromXML(XMLElem matchInfoXML,
     }
 }
 
-void ComplexXMLControl::fromXML(XMLElem pfaXML, PFA *pfa)
+void ComplexXMLControl::fromXML(const XMLElem pfaXML, PFA *pfa)
 {
     parseVector3D(getFirstAndOnly(pfaXML, "FPN"), pfa->focusPlaneNormal);
     parseVector3D(getFirstAndOnly(pfaXML, "IPN"), pfa->imagePlaneNormal);
@@ -2066,7 +2066,7 @@ void ComplexXMLControl::fromXML(XMLElem pfaXML, PFA *pfa)
     }
 }
 
-void ComplexXMLControl::fromXML(XMLElem rmaXML, RMA* rma)
+void ComplexXMLControl::fromXML(const XMLElem rmaXML, RMA* rma)
 {
     rma->algoType
             = six::toType<RMAlgoType>(

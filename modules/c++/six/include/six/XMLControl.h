@@ -71,14 +71,14 @@ public:
      *  \param data the Data model
      *  \return An XML DOM
      */
-    virtual xml::lite::Document* toXML(Data* data) = 0;
+    virtual xml::lite::Document* toXML(const Data* data) = 0;
 
     /*!
      *  Convert a document from a DOM into a Data model
      *  \param doc
      *  \return a Data model
      */
-    virtual Data* fromXML(xml::lite::Document* doc) = 0;
+    virtual Data* fromXML(const xml::lite::Document* doc) = 0;
 
 protected:
     typedef xml::lite::Element* XMLElem;
@@ -173,10 +173,10 @@ protected:
     XMLElem createParameter(std::string name, std::string uri,
                             const Parameter& value, XMLElem parent = NULL);
     void addParameters(std::string name, std::string uri,
-                       std::vector<Parameter>& props, XMLElem parent = NULL);
+            const std::vector<Parameter>& props, XMLElem parent = NULL);
     XMLElem createParameter(std::string name, const Parameter& value,
                             XMLElem parent = NULL);
-    void addParameters(std::string name, std::vector<Parameter>& props,
+    void addParameters(std::string name, const std::vector<Parameter>& props,
                        XMLElem parent = NULL);
     void addDecorrType(std::string name, std::string uri, DecorrType& dt,
                        XMLElem p);
@@ -227,12 +227,12 @@ protected:
 
     void parseDecorrType(XMLElem decorrXML, DecorrType& decorrType);
 
-    XMLElem toXML(ErrorStatistics* errorStatistics, XMLElem parent = NULL);
+    XMLElem toXML(const ErrorStatistics* errorStatistics, XMLElem parent = NULL);
 
-    void fromXML(XMLElem errorStatsXML, ErrorStatistics* errorStatistics);
+    void fromXML(const XMLElem errorStatsXML, ErrorStatistics* errorStatistics);
 
-    XMLElem toXML(Radiometric *obj, XMLElem parent = NULL);
-    void fromXML(XMLElem radiometricXML, Radiometric *obj);
+    XMLElem toXML(const Radiometric *obj, XMLElem parent = NULL);
+    void fromXML(const XMLElem radiometricXML, Radiometric *obj);
 
     /*!
      * Require an element to be not NULL

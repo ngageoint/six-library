@@ -51,8 +51,8 @@ std::string DerivedXMLControl::getSFAURI() const
     return SFA_URI;
 }
 
-void DerivedXMLControl::fromXML(XMLElem productCreationXML,
-                                ProductCreation* productCreation)
+void DerivedXMLControl::fromXML(const XMLElem productCreationXML,
+        ProductCreation* productCreation)
 {
     XMLElem informationXML = getFirstAndOnly(productCreationXML,
                                              "ProcessorInformation");
@@ -78,9 +78,9 @@ void DerivedXMLControl::fromXML(XMLElem productCreationXML,
     productCreation->classification.level
             = getFirstAndOnly(classificationXML, "Level")->getCharacterData();
 
-    std::vector<XMLElem> secMarkingsXML;
+    std::vector < XMLElem > secMarkingsXML;
     classificationXML->getElementsByTagName("SecurityMarkings", secMarkingsXML);
-    for (std::vector<XMLElem>::iterator it = secMarkingsXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = secMarkingsXML.begin(); it
             != secMarkingsXML.end(); ++it)
     {
         productCreation->classification.securityMarkings. push_back(
@@ -120,7 +120,7 @@ void DerivedXMLControl::fromXML(XMLElem productCreationXML,
     }
 }
 
-void DerivedXMLControl::fromXML(XMLElem displayXML, Display* display)
+void DerivedXMLControl::fromXML(const XMLElem displayXML, Display* display)
 {
     display->pixelType
             = six::toType<PixelType>(
@@ -148,12 +148,12 @@ void DerivedXMLControl::fromXML(XMLElem displayXML, Display* display)
 
             std::string lutStr =
                     getFirstAndOnly(remapXML, "RemapLUT")->getCharacterData();
-            std::vector<std::string> lutVals = str::split(lutStr, " ");
+            std::vector < std::string > lutVals = str::split(lutStr, " ");
 
             int k = 0;
             for (unsigned int i = 0; i < lutVals.size(); i++)
             {
-                std::vector<std::string> rgb = str::split(lutVals[i], ",");
+                std::vector < std::string > rgb = str::split(lutVals[i], ",");
                 for (unsigned int j = 0; j < rgb.size(); j++)
                 {
                     display->remapInformation->remapLUT->table[k++]
@@ -178,7 +178,7 @@ void DerivedXMLControl::fromXML(XMLElem displayXML, Display* display)
 
             std::string lutStr =
                     getFirstAndOnly(remapXML, "RemapLUT")->getCharacterData();
-            std::vector<std::string> lutVals = str::split(lutStr, " ");
+            std::vector < std::string > lutVals = str::split(lutStr, " ");
             for (unsigned int i = 0; i < lutVals.size(); i++)
             {
                 display->remapInformation->remapLUT->table[i]
@@ -251,8 +251,8 @@ void DerivedXMLControl::fromXML(XMLElem displayXML, Display* display)
 
 }
 
-void DerivedXMLControl::fromXML(XMLElem geographicAndTargetXML,
-                                GeographicAndTarget* geographicAndTarget)
+void DerivedXMLControl::fromXML(const XMLElem geographicAndTargetXML,
+        GeographicAndTarget* geographicAndTarget)
 {
     XMLElem geographicCoverageXML = getFirstAndOnly(geographicAndTargetXML,
                                                     "GeographicCoverage");
@@ -260,11 +260,11 @@ void DerivedXMLControl::fromXML(XMLElem geographicAndTargetXML,
     fromXML(geographicCoverageXML, geographicAndTarget->geographicCoverage);
 
     //TargetInformation
-    std::vector<XMLElem> targetInfosXML;
+    std::vector < XMLElem > targetInfosXML;
     geographicAndTargetXML->getElementsByTagName("TargetInformation",
                                                  targetInfosXML);
 
-    for (std::vector<XMLElem>::iterator it = targetInfosXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = targetInfosXML.begin(); it
             != targetInfosXML.end(); ++it)
     {
         TargetInformation* ti = new TargetInformation();
@@ -273,12 +273,12 @@ void DerivedXMLControl::fromXML(XMLElem geographicAndTargetXML,
         parseParameters(*it, "Identifier", ti->identifiers);
 
         //Footprint
-        std::vector<XMLElem> footprintsXML;
+        std::vector < XMLElem > footprintsXML;
         (*it)->getElementsByTagName("Footprint", footprintsXML);
-        for (std::vector<XMLElem>::iterator it2 = footprintsXML.begin(); it2
+        for (std::vector<XMLElem>::const_iterator it2 = footprintsXML.begin(); it2
                 != footprintsXML.end(); ++it2)
         {
-            std::vector<LatLon> fp;
+            std::vector < LatLon > fp;
             parseFootprint(*it2, "Vertex", fp);
             ti->footprints.push_back(fp);
         }
@@ -295,13 +295,13 @@ void DerivedXMLControl::fromXML(XMLElem geographicAndTargetXML,
     }
 }
 
-void DerivedXMLControl::fromXML(XMLElem geographicCoverageXML,
-                                GeographicCoverage* geographicCoverage)
+void DerivedXMLControl::fromXML(const XMLElem geographicCoverageXML,
+        GeographicCoverage* geographicCoverage)
 {
-    std::vector<XMLElem> georegionIdsXML;
+    std::vector < XMLElem > georegionIdsXML;
     geographicCoverageXML->getElementsByTagName("GeoregionIdentifier",
                                                 georegionIdsXML);
-    for (std::vector<XMLElem>::iterator it = georegionIdsXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = georegionIdsXML.begin(); it
             != georegionIdsXML.end(); ++it)
     {
         geographicCoverage->georegionIdentifiers.push_back(
@@ -314,11 +314,11 @@ void DerivedXMLControl::fromXML(XMLElem geographicCoverageXML,
     parseFootprint(footprintXML, "Vertex", geographicCoverage->footprint);
 
     //If there are subregions, recurse
-    std::vector<XMLElem> subRegionsXML;
+    std::vector < XMLElem > subRegionsXML;
     geographicCoverageXML->getElementsByTagName("SubRegion", subRegionsXML);
 
     int i = 0;
-    for (std::vector<XMLElem>::iterator it = subRegionsXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = subRegionsXML.begin(); it
             != subRegionsXML.end(); ++it)
     {
         geographicCoverage->subRegion.push_back(
@@ -335,9 +335,9 @@ void DerivedXMLControl::fromXML(XMLElem geographicCoverageXML,
 
         geographicCoverage->geographicInformation = new GeographicInformation();
 
-        std::vector<XMLElem> countryCodes;
+        std::vector < XMLElem > countryCodes;
         geographicInfoXML->getElementsByTagName("CountryCode", countryCodes);
-        for (std::vector<XMLElem>::iterator it = countryCodes.begin(); it
+        for (std::vector<XMLElem>::const_iterator it = countryCodes.begin(); it
                 != countryCodes.end(); ++it)
         {
             XMLElem countryCode = *it;
@@ -368,8 +368,8 @@ void DerivedXMLControl::fromXML(XMLElem geographicCoverageXML,
 }
 
 // This function ASSUMES that the measurement projection has already been set!
-void DerivedXMLControl::fromXML(XMLElem measurementXML,
-                                Measurement* measurement)
+void DerivedXMLControl::fromXML(const XMLElem measurementXML,
+        Measurement* measurement)
 {
     parseRowColInt(getFirstAndOnly(measurementXML, "PixelFootprint"),
                    measurement->pixelFootprint);
@@ -482,16 +482,16 @@ void DerivedXMLControl::fromXML(XMLElem measurementXML,
 
 }
 
-void DerivedXMLControl::fromXML(XMLElem exploitationFeaturesXML,
-                                ExploitationFeatures* exploitationFeatures)
+void DerivedXMLControl::fromXML(const XMLElem exploitationFeaturesXML,
+        ExploitationFeatures* exploitationFeatures)
 {
     XMLElem tmpElem;
 
-    std::vector<XMLElem> collectionsXML;
+    std::vector < XMLElem > collectionsXML;
     exploitationFeaturesXML->getElementsByTagName("Collection", collectionsXML);
 
     unsigned int idx = 0;
-    for (std::vector<XMLElem>::iterator it = collectionsXML.begin(); it
+    for (std::vector<XMLElem>::const_iterator it = collectionsXML.begin(); it
             != collectionsXML.end(); ++it)
     {
         XMLElem collectionXML = *it;
@@ -555,7 +555,7 @@ void DerivedXMLControl::fromXML(XMLElem exploitationFeaturesXML,
         }
 
         // optional and unbounded
-        std::vector<XMLElem> polarization;
+        std::vector < XMLElem > polarization;
         informationXML->getElementsByTagName("Polarization", polarization);
 
         for (size_t i = 0, nElems = polarization.size(); i < nElems; ++i)
@@ -669,7 +669,7 @@ void DerivedXMLControl::fromXML(XMLElem exploitationFeaturesXML,
         parseDouble(tmpElem, prod.north);
 }
 
-Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
+Data* DerivedXMLControl::fromXML(const xml::lite::Document* doc)
 {
     XMLElem root = doc->getRootElement();
 
@@ -720,7 +720,7 @@ Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
 
     builder.addMeasurement(projType);
 
-    std::vector<XMLElem> elements;
+    std::vector < XMLElem > elements;
     exploitationFeaturesXML->getElementsByTagName("ExploitationFeatures",
                                                   elements);
     builder.addExploitationFeatures(elements.size());
@@ -763,7 +763,7 @@ Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
     XMLElem annotationsXML = getOptional(root, "Annotations");
     if (annotationsXML)
     {
-        std::vector<XMLElem> annChildren;
+        std::vector < XMLElem > annChildren;
         annotationsXML->getElementsByTagName("Annotation", annChildren);
         for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
         {
@@ -776,8 +776,8 @@ Data* DerivedXMLControl::fromXML(xml::lite::Document* doc)
     return data;
 }
 
-XMLElem DerivedXMLControl::toXML(ProductCreation* productCreation,
-                                 XMLElem parent)
+XMLElem DerivedXMLControl::toXML(const ProductCreation* productCreation,
+        XMLElem parent)
 {
     // Make the XML node
     XMLElem productCreationXML = newElement("ProductCreation", parent);
@@ -809,7 +809,7 @@ XMLElem DerivedXMLControl::toXML(ProductCreation* productCreation,
     XMLElem classXML = newElement("Classification", productCreationXML);
     createString("Level", productCreation->classification.level, classXML);
 
-    for (std::vector<std::string>::iterator it =
+    for (std::vector<std::string>::const_iterator it =
             productCreation->classification.securityMarkings.begin(); it
             != productCreation->classification.securityMarkings.end(); ++it)
     {
@@ -851,7 +851,7 @@ XMLElem DerivedXMLControl::toXML(ProductCreation* productCreation,
     return productCreationXML;
 }
 
-XMLElem DerivedXMLControl::toXML(Display* display, XMLElem parent)
+XMLElem DerivedXMLControl::toXML(const Display* display, XMLElem parent)
 {
     XMLElem displayXML = newElement("Display", parent);
 
@@ -921,15 +921,15 @@ XMLElem DerivedXMLControl::toXML(Display* display, XMLElem parent)
     return displayXML;
 }
 
-XMLElem DerivedXMLControl::toXML(GeographicAndTarget* geographicAndTarget,
-                                 XMLElem parent)
+XMLElem DerivedXMLControl::toXML(
+        const GeographicAndTarget* geographicAndTarget, XMLElem parent)
 {
     XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
 
     toXML(geographicAndTarget->geographicCoverage, geographicAndTargetXML);
 
     //loop over TargetInformation
-    for (std::vector<TargetInformation*>::iterator it =
+    for (std::vector<TargetInformation*>::const_iterator it =
             geographicAndTarget->targetInformation.begin(); it
             != geographicAndTarget->targetInformation.end(); ++it)
     {
@@ -947,8 +947,8 @@ XMLElem DerivedXMLControl::toXML(GeographicAndTarget* geographicAndTarget,
     return geographicAndTargetXML;
 }
 
-XMLElem DerivedXMLControl::toXML(GeographicCoverage* geoCoverage,
-                                 XMLElem parent)
+XMLElem DerivedXMLControl::toXML(const GeographicCoverage* geoCoverage,
+        XMLElem parent)
 {
     //GeographicAndTarget
     XMLElem geoCoverageXML = newElement("GeographicCoverage", parent);
@@ -994,7 +994,7 @@ XMLElem DerivedXMLControl::toXML(GeographicCoverage* geoCoverage,
     else
     {
         //loop over SubRegions
-        for (std::vector<GeographicCoverage*>::iterator it =
+        for (std::vector<GeographicCoverage*>::const_iterator it =
                 geoCoverage->subRegion.begin(); it
                 != geoCoverage->subRegion.end(); ++it)
         {
@@ -1005,7 +1005,7 @@ XMLElem DerivedXMLControl::toXML(GeographicCoverage* geoCoverage,
     return geoCoverageXML;
 }
 
-XMLElem DerivedXMLControl::toXML(Measurement* measurement, XMLElem parent)
+XMLElem DerivedXMLControl::toXML(const Measurement* measurement, XMLElem parent)
 {
     XMLElem measurementXML = newElement("Measurement", parent);
 
@@ -1120,8 +1120,8 @@ XMLElem DerivedXMLControl::toXML(Measurement* measurement, XMLElem parent)
     return measurementXML;
 }
 
-XMLElem DerivedXMLControl::toXML(ExploitationFeatures* exploitationFeatures,
-                                 XMLElem parent)
+XMLElem DerivedXMLControl::toXML(
+        const ExploitationFeatures* exploitationFeatures, XMLElem parent)
 {
 
     XMLElem exploitationFeaturesXML =
@@ -1286,7 +1286,7 @@ XMLElem DerivedXMLControl::toXML(ExploitationFeatures* exploitationFeatures,
     return exploitationFeaturesXML;
 }
 
-xml::lite::Document* DerivedXMLControl::toXML(Data* data)
+xml::lite::Document* DerivedXMLControl::toXML(const Data* data)
 {
     if (data->getDataType() != DataType::DERIVED)
     {
@@ -1296,7 +1296,7 @@ xml::lite::Document* DerivedXMLControl::toXML(Data* data)
     XMLElem root = newElement("SIDD");
     doc->setRootElement(root);
 
-    DerivedData *derived = (DerivedData*) data;
+    const DerivedData *derived = (const DerivedData*) data;
 
     toXML(derived->productCreation, root);
     toXML(derived->display, root);
@@ -1334,7 +1334,7 @@ xml::lite::Document* DerivedXMLControl::toXML(Data* data)
     return doc;
 }
 
-XMLElem DerivedXMLControl::createLUT(std::string name, LUT *lut, XMLElem parent)
+XMLElem DerivedXMLControl::createLUT(std::string name, const LUT *lut, XMLElem parent)
 {
     //     unsigned char* table;
     //     unsigned int numEntries;
@@ -1370,12 +1370,12 @@ XMLElem DerivedXMLControl::createLUT(std::string name, LUT *lut, XMLElem parent)
     return lutElement;
 }
 
-XMLElem DerivedXMLControl::toXML(ProductProcessing* productProcessing,
-                                 XMLElem parent)
+XMLElem DerivedXMLControl::toXML(const ProductProcessing* productProcessing,
+        XMLElem parent)
 {
     XMLElem productProcessingXML = newElement("ProductProcessing", parent);
 
-    for (std::vector<ProcessingModule*>::iterator it =
+    for (std::vector<ProcessingModule*>::const_iterator it =
             productProcessing->processingModules.begin(); it
             != productProcessing->processingModules.end(); ++it)
     {
@@ -1384,7 +1384,8 @@ XMLElem DerivedXMLControl::toXML(ProductProcessing* productProcessing,
     return productProcessingXML;
 }
 
-XMLElem DerivedXMLControl::toXML(ProcessingModule* procMod, XMLElem parent)
+XMLElem DerivedXMLControl::toXML(const ProcessingModule* procMod,
+        XMLElem parent)
 {
     XMLElem procModXML = newElement("ProcessingModule", parent);
     XMLElem modNameXML = createString("ModuleName", procMod->moduleName.str(),
@@ -1393,7 +1394,7 @@ XMLElem DerivedXMLControl::toXML(ProcessingModule* procMod, XMLElem parent)
 
     if (!procMod->processingModules.empty())
     {
-        for (std::vector<ProcessingModule*>::iterator it =
+        for (std::vector<ProcessingModule*>::const_iterator it =
                 procMod->processingModules.begin(); it
                 != procMod->processingModules.end(); ++it)
         {
@@ -1408,8 +1409,8 @@ XMLElem DerivedXMLControl::toXML(ProcessingModule* procMod, XMLElem parent)
 
 }
 
-XMLElem DerivedXMLControl::toXML(DownstreamReprocessing* downstreamReproc,
-                                 XMLElem parent)
+XMLElem DerivedXMLControl::toXML(
+        const DownstreamReprocessing* downstreamReproc, XMLElem parent)
 {
     XMLElem epXML = newElement("DownstreamReprocessing", parent);
 
@@ -1429,7 +1430,7 @@ XMLElem DerivedXMLControl::toXML(DownstreamReprocessing* downstreamReproc,
     }
     if (!downstreamReproc->processingEvents.empty())
     {
-        for (std::vector<ProcessingEvent*>::iterator it =
+        for (std::vector<ProcessingEvent*>::const_iterator it =
                 downstreamReproc->processingEvents.begin(); it
                 != downstreamReproc->processingEvents.end(); ++it)
         {
@@ -1451,7 +1452,8 @@ XMLElem DerivedXMLControl::toXML(DownstreamReprocessing* downstreamReproc,
     return epXML;
 }
 
-void DerivedXMLControl::fromXML(XMLElem procXML, ProcessingModule* procMod)
+void DerivedXMLControl::fromXML(const XMLElem procXML,
+        ProcessingModule* procMod)
 {
     XMLElem moduleName = getFirstAndOnly(procXML, "ModuleName");
     procMod->moduleName = Parameter(moduleName->getCharacterData());
@@ -1459,7 +1461,7 @@ void DerivedXMLControl::fromXML(XMLElem procXML, ProcessingModule* procMod)
 
     parseParameters(procXML, "ModuleParameter", procMod->moduleParameters);
 
-    std::vector<XMLElem> procModuleXML;
+    std::vector < XMLElem > procModuleXML;
     procXML->getElementsByTagName("ProcessingModule", procModuleXML);
 
     for (unsigned int i = 0, size = procModuleXML.size(); i < size; ++i)
@@ -1470,10 +1472,10 @@ void DerivedXMLControl::fromXML(XMLElem procXML, ProcessingModule* procMod)
     }
 }
 
-void DerivedXMLControl::fromXML(XMLElem elem,
-                                ProductProcessing* productProcessing)
+void DerivedXMLControl::fromXML(const XMLElem elem,
+        ProductProcessing* productProcessing)
 {
-    std::vector<XMLElem> procModuleXML;
+    std::vector < XMLElem > procModuleXML;
     elem->getElementsByTagName("ProcessingModule", procModuleXML);
 
     for (unsigned int i = 0, size = procModuleXML.size(); i < size; ++i)
@@ -1484,11 +1486,11 @@ void DerivedXMLControl::fromXML(XMLElem elem,
     }
 }
 
-void DerivedXMLControl::fromXML(XMLElem elem,
-                                DownstreamReprocessing* downstreamReproc)
+void DerivedXMLControl::fromXML(const XMLElem elem,
+        DownstreamReprocessing* downstreamReproc)
 {
     XMLElem geometricChipXML = getOptional(elem, "GeometricChip");
-    std::vector<XMLElem> procEventXML;
+    std::vector < XMLElem > procEventXML;
     elem->getElementsByTagName("ProcessingEvent", procEventXML);
     XMLElem processingEventXML = getOptional(elem, "ProcessingEvent");
 
@@ -1537,7 +1539,7 @@ void DerivedXMLControl::fromXML(XMLElem elem,
     }
 }
 
-void DerivedXMLControl::fromXML(XMLElem elem, Annotation *a)
+void DerivedXMLControl::fromXML(const XMLElem elem, Annotation *a)
 {
     a->identifier = getFirstAndOnly(elem, "Identifier")->getCharacterData();
     XMLElem spatialXML = getOptional(elem, "SpatialReferenceSystem");
@@ -1546,13 +1548,13 @@ void DerivedXMLControl::fromXML(XMLElem elem, Annotation *a)
         //TODO
     }
 
-    std::vector<XMLElem> objectsXML;
+    std::vector < XMLElem > objectsXML;
     elem->getElementsByTagName("Object", objectsXML);
     for (unsigned int i = 0, size = objectsXML.size(); i < size; ++i)
     {
         XMLElem obj = objectsXML[i];
         //there should be only one child - a choice between types
-        std::vector<XMLElem>& children = obj->getChildren();
+        std::vector < XMLElem > &children = obj->getChildren();
         if (children.size() > 0)
         {
             //just get the first one
@@ -1600,7 +1602,7 @@ void DerivedXMLControl::fromXML(XMLElem elem, Annotation *a)
     }
 }
 
-XMLElem DerivedXMLControl::toXML(Annotation *a, XMLElem parent)
+XMLElem DerivedXMLControl::toXML(const Annotation *a, XMLElem parent)
 {
     XMLElem annXML = newElement("Annotation", parent);
     createString("Identifier", a->identifier, annXML);
@@ -1615,7 +1617,7 @@ XMLElem DerivedXMLControl::toXML(Annotation *a, XMLElem parent)
     return annXML;
 }
 
-void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
+void DerivedXMLControl::fromXML(const XMLElem elem, SFAGeometry *g)
 {
     std::string geoType = g->getType();
     if (geoType == SFAPoint::TYPE_NAME)
@@ -1638,7 +1640,7 @@ void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
     {
         //cast to the common base - LineString
         SFALineString *p = (SFALineString*) g;
-        std::vector<XMLElem> vXML;
+        std::vector < XMLElem > vXML;
         elem->getElementsByTagName("Vertex", vXML);
         for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
         {
@@ -1650,7 +1652,7 @@ void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAPolygon::TYPE_NAME)
     {
         SFAPolygon *p = (SFAPolygon*) g;
-        std::vector<XMLElem> ringXML;
+        std::vector < XMLElem > ringXML;
         elem->getElementsByTagName("Ring", ringXML);
         for (unsigned int i = 0, size = ringXML.size(); i < size; ++i)
         {
@@ -1662,7 +1664,7 @@ void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAPolyhedralSurface::TYPE_NAME)
     {
         SFAPolyhedralSurface *p = (SFAPolyhedralSurface*) g;
-        std::vector<XMLElem> polyXML;
+        std::vector < XMLElem > polyXML;
         elem->getElementsByTagName("Patch", polyXML);
         for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
         {
@@ -1674,7 +1676,7 @@ void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAMultiPolygon::TYPE_NAME)
     {
         SFAMultiPolygon *p = (SFAMultiPolygon*) g;
-        std::vector<XMLElem> polyXML;
+        std::vector < XMLElem > polyXML;
         elem->getElementsByTagName("Element", polyXML);
         for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
         {
@@ -1686,7 +1688,7 @@ void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAMultiLineString::TYPE_NAME)
     {
         SFAMultiLineString *p = (SFAMultiLineString*) g;
-        std::vector<XMLElem> lineXML;
+        std::vector < XMLElem > lineXML;
         elem->getElementsByTagName("Element", lineXML);
         for (unsigned int i = 0, size = lineXML.size(); i < size; ++i)
         {
@@ -1698,7 +1700,7 @@ void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAMultiPoint::TYPE_NAME)
     {
         SFAMultiPoint *p = (SFAMultiPoint*) g;
-        std::vector<XMLElem> vXML;
+        std::vector < XMLElem > vXML;
         elem->getElementsByTagName("Vertex", vXML);
         for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
         {
@@ -1713,8 +1715,8 @@ void DerivedXMLControl::fromXML(XMLElem elem, SFAGeometry *g)
     }
 }
 
-XMLElem DerivedXMLControl::toXML(SFAGeometry *g, std::string useName,
-                                 XMLElem parent)
+XMLElem DerivedXMLControl::toXML(const SFAGeometry *g, std::string useName,
+        XMLElem parent)
 {
     XMLElem geoXML = NULL;
 
