@@ -76,6 +76,7 @@ public:
     //!  Get native object
     nitf_IOHandle getHandle()
     {
+        // must double-cast in order to avoid errors on certain systems
         return (nitf_IOHandle)(long) getNativeOrThrow()->data;
     }
 
