@@ -24,3 +24,14 @@ def distclean(context):
     context.recurse('c c++ java python external')
     Scripting.distclean(context)
 
+def init(context):
+    """
+    Override the lockfile - which allows you to build on multiple platforms
+    from the same sandbox without needing to re-configure every time you swap
+    between platforms.
+    
+    In other words, configure once per platform, then you can build for each
+    """
+    from build import getPlatform
+    platform = getPlatform()
+    Options.lockfile = '.lock-%s' % platform
