@@ -96,9 +96,6 @@ struct MonochromeDisplayRemap: public Remap
     {
     }
 
-    //!  The remap name
-    std::string name;
-
     //!  The remap type
     std::string remapType;
 

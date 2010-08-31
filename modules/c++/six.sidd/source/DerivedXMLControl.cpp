@@ -874,8 +874,7 @@ XMLElem DerivedXMLControl::toXML(const Display* display, XMLElem parent)
             remapXML = newElement("MonochromeDisplayRemap", remapInfoXML);
             createString(
                          "RemapType",
-                         six::toString(
-                                       ((MonochromeDisplayRemap*) display->remapInformation)->remapType),
+                         ((MonochromeDisplayRemap*) display->remapInformation)->remapType,
                          remapXML);
             createLUT("RemapLUT", display->remapInformation->remapLUT, remapXML);
             //should we do this cast (i.e. assume the pixelType is correct)?
