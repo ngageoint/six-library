@@ -70,7 +70,7 @@ struct DerivedData: public Data
 
     /*!
      *  Contains the meta-data necessary for performing
-     *  measurments
+     *  measurements
      */
     Measurement* measurement;
 

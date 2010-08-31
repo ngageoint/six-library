@@ -1274,7 +1274,8 @@ struct DualPolarizationType
         H_H = 5,
         RHC_RHC = 6,
         RHC_LHC = 7,
-        LHC_LHC = 8,
+        LHC_RHC = 8,
+        LHC_LHC = 9,
         NOT_SET = six::NOT_SET_VALUE
     };
 
@@ -1298,6 +1299,8 @@ struct DualPolarizationType
             value = RHC_RHC;
         else if (s == "RHC_LHC")
             value = RHC_LHC;
+        else if (s == "LHC_RHC")
+            value = LHC_RHC;
         else if (s == "LHC_LHC")
             value = LHC_LHC;
         else if (s == "NOT_SET")
@@ -1333,6 +1336,9 @@ struct DualPolarizationType
             value = RHC_LHC;
             break;
         case 8:
+            value = LHC_RHC;
+            break;
+        case 9:
             value = LHC_LHC;
             break;
         case six::NOT_SET_VALUE:
@@ -1366,6 +1372,8 @@ struct DualPolarizationType
         case 7:
             return std::string("RHC_LHC");
         case 8:
+            return std::string("LHC_RHC");
+        case 9:
             return std::string("LHC_LHC");
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
@@ -3278,7 +3286,7 @@ struct XYZEnum
 
 };
 
-// code auto-generated 2010-07-01 17:07:15.815500
+// code auto-generated 2010-08-31 15:10:30.479133
 
 }
 
