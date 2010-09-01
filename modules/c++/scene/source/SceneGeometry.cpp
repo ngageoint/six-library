@@ -82,9 +82,9 @@ scene::SceneGeometry::SceneGeometry(Vector3 arpVel,
 scene::SceneGeometry::~SceneGeometry()
 {
     if (mOwn && mC)
-        delete [] mC;
+        delete mC;
     if (mOwn && mR)
-        delete [] mR;
+        delete mR;
 }
 
 void scene::SceneGeometry::setImageVectors(Vector3* row, Vector3* col)
