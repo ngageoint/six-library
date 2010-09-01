@@ -304,22 +304,44 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd, const std::vector<
     double ties[6];
     memset(ties, 0, sizeof(double) * 6);
 
-    // 0, 0, lat(0), lon(0)
-    ties[3] = c[0].getLat();
-    ties[4] = c[0].getLon();
-    addTiepoint(entry, ties);
+    // SIDD footprint starts at upper left corner, then counter-clockwise
 
-    // 0, NC, lat(1), lon(1)
-    ties[1] = numCols;
-    ties[3] = c[1].getLat();
-    ties[4] = c[1].getLon();
-    addTiepoint(entry, ties);
+    size_t numPoints = c.size();
 
-    // NR, NC, lat(2), lon(2)
-    ties[0] = numRows;
-    ties[3] = c[2].getLat();
-    ties[4] = c[2].getLon();
-    addTiepoint(entry, ties);
+    if (numPoints > 0)
+    {
+        // 0, 0, lon(0), lat(0) - Upper Left
+        ties[3] = c[0].getLon();
+        ties[4] = c[0].getLat();
+        addTiepoint(entry, ties);
+    }
+
+    if (numPoints > 1)
+    {
+        // 0, NR lon(1), lat(1) - Lower Left
+        ties[1] = numRows;
+        ties[3] = c[1].getLon();
+        ties[4] = c[1].getLat();
+        addTiepoint(entry, ties);
+    }
+
+    if (numPoints > 2)
+    {
+        // NC, RW lon(2), lat(2) - Lower Right
+        ties[0] = numCols;
+        ties[3] = c[2].getLon();
+        ties[4] = c[2].getLat();
+        addTiepoint(entry, ties);
+    }
+
+    if (numPoints > 3)
+    {
+        // NC, 0, lon(3), lat(3) - Upper Right
+        ties[1] = 0;
+        ties[3] = c[3].getLon();
+        ties[4] = c[3].getLat();
+        addTiepoint(entry, ties);
+    }
 }
 
 #endif
