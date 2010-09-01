@@ -48,10 +48,11 @@ public:
      */
     SceneGeometry(Vector3 arpVel, Vector3 arpPos, Vector3 refPos, 
                   Vector3* row = NULL,
-                  Vector3* col = NULL);
+                  Vector3* col = NULL,
+                  bool own = false);
 
     //!  Destroy the object.  We do not take ownership of the row/col
-    virtual ~SceneGeometry() {}
+    virtual ~SceneGeometry();
 
     /*!
      *  Set the image vectors.  This must be done prior to any computations
@@ -131,6 +132,9 @@ protected:
 
     //! Image plane column vector
     Vector3* mC;
+
+    //! boolean whether we own the row and column vectors
+    bool mOwn;
 
 
     //! North vector
