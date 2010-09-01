@@ -28,9 +28,10 @@ scene::SceneGeometry::SceneGeometry(Vector3 arpVel,
                                     Vector3 arpPos, 
                                     Vector3 refPos,
                                     Vector3* row,
-                                    Vector3* col)
+                                    Vector3* col,
+                                    bool own)
     : mVa(arpVel), mPa(arpPos), mPo(refPos), mSideOfTrack(1),
-      mR(row), mC(col)
+      mR(row), mC(col), mOwn(own)
 {
     // Compute slant plane vectors
     mXs = mPa - mPo;
@@ -76,6 +77,14 @@ scene::SceneGeometry::SceneGeometry(Vector3 arpVel,
 
 
 
+}
+
+scene::SceneGeometry::~SceneGeometry()
+{
+    if (mOwn && mC)
+        delete [] mC;
+    if (mOwn && mR)
+        delete [] mR;
 }
 
 void scene::SceneGeometry::setImageVectors(Vector3* row, Vector3* col)
