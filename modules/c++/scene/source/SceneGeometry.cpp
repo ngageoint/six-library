@@ -152,6 +152,12 @@ double scene::SceneGeometry::getAzimuthAngle() const
     return atan2(east.dot(mXs), mNorth.dot(mXs)) * RADIANS_TO_DEGREES;
 }
 
+double scene::SceneGeometry::getHeadingAngle() const
+{
+    Vector3 east = math::linear::cross(mNorth, mZg);
+    return atan2(east.dot(mVa), mNorth.dot(mVa)) * RADIANS_TO_DEGREES;
+}
+
 double scene::SceneGeometry::getRotationAngle() const
 {
     return -getImageAngle(mRg * -1);

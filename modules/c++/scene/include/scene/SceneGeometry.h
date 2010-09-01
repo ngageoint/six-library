@@ -87,6 +87,7 @@ public:
     virtual double getMultiPathAngle() const;
     virtual Vector3 getNorthVector() const;
     virtual double getNorthAngle() const;
+    virtual double getHeadingAngle() const;
     virtual Vector3 getLayoverVector() const;
     virtual AngleMagnitude getLayover() const;
     virtual Vector3 getShadowVector() const;
