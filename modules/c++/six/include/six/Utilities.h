@@ -45,6 +45,7 @@ template<typename T> T toType(const std::string& s)
     return str::toType<T>(s);
 }
 
+template<> std::string toString(const double& value);
 template<> six::EarthModelType
         toType<six::EarthModelType>(const std::string& s);
 template<> six::MagnificationMethod

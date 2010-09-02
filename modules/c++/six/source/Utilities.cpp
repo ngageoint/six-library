@@ -36,6 +36,21 @@ template<> BooleanType six::toType<BooleanType>(const std::string& s)
         return BooleanType::NOT_SET;
 }
 
+template<> std::string toString<double>(const double& value)
+{
+   std::ostringstream os;
+   os << std::uppercase << std::scientific << std::setprecision(15) << value;
+   std::string strValue = os.str();
+
+   // remove any + in scientific notation to meet SICD XML standard
+   size_t plusPos = strValue.find("+");
+   if(plusPos != std::string::npos)
+   {
+      strValue.erase(plusPos, 1);
+   }
+   return strValue;
+}
+
 template<> std::string six::toString<BooleanType>(const BooleanType& value)
 {
     return six::toString<bool>(value == BooleanType::IS_TRUE);

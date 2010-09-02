@@ -104,13 +104,13 @@ XMLElem XMLControl::createPoly1D(std::string name, std::string uri,
 {
     int order = poly1D.order();
     XMLElem poly1DXML = newElement(name, uri, parent);
-    setAttribute(poly1DXML, "order1", str::toString(order));
+    setAttribute(poly1DXML, "order1", six::toString(order));
 
     for (int i = 0; i <= order; ++i)
     {
         XMLElem coefXML = createDouble("Coef", getSICommonURI(), poly1D[i],
                                        poly1DXML);
-        setAttribute(coefXML, "exponent1", str::toString(i));
+        setAttribute(coefXML, "exponent1", six::toString(i));
     }
     return poly1DXML;
 }
@@ -176,9 +176,9 @@ XMLElem XMLControl::createPolyXYZ(std::string name, const PolyXYZ& polyXYZ,
     XMLElem yXML = newElement("Y", si, polyXML);
     XMLElem zXML = newElement("Z", si, polyXML);
 
-    setAttribute(xXML, "order1", str::toString(order));
-    setAttribute(yXML, "order1", str::toString(order));
-    setAttribute(zXML, "order1", str::toString(order));
+    setAttribute(xXML, "order1", six::toString(order));
+    setAttribute(yXML, "order1", six::toString(order));
+    setAttribute(zXML, "order1", six::toString(order));
 
     for (int i = 0; i <= order; ++i)
     {
@@ -187,9 +187,9 @@ XMLElem XMLControl::createPolyXYZ(std::string name, const PolyXYZ& polyXYZ,
         XMLElem yCoefXML = createDouble("Coef", si, v3[1], yXML);
         XMLElem zCoefXML = createDouble("Coef", si, v3[2], zXML);
 
-        setAttribute(xCoefXML, "exponent1", str::toString(i));
-        setAttribute(yCoefXML, "exponent1", str::toString(i));
-        setAttribute(zCoefXML, "exponent1", str::toString(i));
+        setAttribute(xCoefXML, "exponent1", six::toString(i));
+        setAttribute(yCoefXML, "exponent1", six::toString(i));
+        setAttribute(zCoefXML, "exponent1", six::toString(i));
     }
     return polyXML;
 }
@@ -237,8 +237,8 @@ XMLElem XMLControl::createPoly2D(std::string name, std::string uri,
 {
     xml::lite::AttributeNode node;
     XMLElem poly2DXML = newElement(name, uri, parent);
-    setAttribute(poly2DXML, "order1", str::toString(poly2D.orderX()));
-    setAttribute(poly2DXML, "order2", str::toString(poly2D.orderY()));
+    setAttribute(poly2DXML, "order1", six::toString(poly2D.orderX()));
+    setAttribute(poly2DXML, "order2", six::toString(poly2D.orderY()));
 
     for (int i = 0; i <= poly2D.orderX(); i++)
     {
@@ -246,8 +246,8 @@ XMLElem XMLControl::createPoly2D(std::string name, std::string uri,
         {
             XMLElem coefXML = createDouble("Coef", getSICommonURI(),
                                            poly2D[i][j], poly2DXML);
-            setAttribute(coefXML, "exponent1", str::toString(i));
-            setAttribute(coefXML, "exponent2", str::toString(j));
+            setAttribute(coefXML, "exponent1", six::toString(i));
+            setAttribute(coefXML, "exponent2", six::toString(j));
         }
     }
 
@@ -275,7 +275,7 @@ XMLElem XMLControl::createString(std::string name, std::string p,
 XMLElem XMLControl::createInt(std::string name, std::string uri, int p,
         XMLElem parent)
 {
-    return newElement(name, uri, str::toString<int>(p), parent);
+    return newElement(name, uri, six::toString<int>(p), parent);
 }
 
 XMLElem XMLControl::createInt(std::string name, int p, XMLElem parent)
@@ -286,7 +286,7 @@ XMLElem XMLControl::createInt(std::string name, int p, XMLElem parent)
 XMLElem XMLControl::createDouble(std::string name, std::string uri, double p,
         XMLElem parent)
 {
-    return newElement(name, uri, str::toString<double>(p), parent);
+    return newElement(name, uri, six::toString<double>(p), parent);
 }
 
 XMLElem XMLControl::createDouble(std::string name, double p, XMLElem parent)
