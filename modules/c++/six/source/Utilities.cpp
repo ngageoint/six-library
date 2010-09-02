@@ -36,7 +36,7 @@ template<> BooleanType six::toType<BooleanType>(const std::string& s)
         return BooleanType::NOT_SET;
 }
 
-template<> std::string toString<double>(const double& value)
+template<> std::string six::toString<double>(const double& value)
 {
    std::ostringstream os;
    os << std::uppercase << std::scientific << std::setprecision(15) << value;
