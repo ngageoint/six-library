@@ -30,7 +30,6 @@ TEST_CASE(testCreate)
     TEST_ASSERT(l);
     nitf_List_destruct(&l);
     TEST_ASSERT_NULL(l);
-    return TEST_SUCCESS;
 }
 
 TEST_CASE(testPushPop)
@@ -69,7 +68,6 @@ TEST_CASE(testPushPop)
     TEST_ASSERT_EQ_INT(0, nitf_List_size(l));
     nitf_List_destruct(&l);
     TEST_ASSERT_NULL(l);
-    return TEST_SUCCESS;
 }
 
 char* cloneString(char* data, nitf_Error* error)
@@ -112,7 +110,6 @@ TEST_CASE(testClone)
     TEST_ASSERT_NULL(dolly);
     nitf_List_destruct(&l);
     TEST_ASSERT_NULL(l);
-    return TEST_SUCCESS;
 }
 
 TEST_CASE(testIterate)
@@ -144,7 +141,6 @@ TEST_CASE(testIterate)
 
     nitf_List_destruct(&l);
     TEST_ASSERT_NULL(l);
-    return TEST_SUCCESS;
 }
 
 TEST_CASE(testIterateRemove)
@@ -173,16 +169,14 @@ TEST_CASE(testIterateRemove)
 
     nitf_List_destruct(&l);
     TEST_ASSERT_NULL(l);
-    return TEST_SUCCESS;
 }
 
 int main(int argc, char **argv)
 {
-    int rc = TEST_SUCCESS;
     CHECK(testCreate);
     CHECK(testPushPop);
     CHECK(testClone);
     CHECK(testIterate);
     CHECK(testIterateRemove);
-    return rc ? 0 : 1;
+    return 0;
 }

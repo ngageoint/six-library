@@ -96,12 +96,10 @@ TEST_CASE( testField)
     TEST_ASSERT_NULL(ubin);
     TEST_ASSERT_NULL(hl);
     TEST_ASSERT_NULL(realField);
-    return TEST_SUCCESS;
 }
 
 int main(int argc, char **argv)
 {
-    int rc = TEST_SUCCESS;
     CHECK(testField);
-    return rc ? 0 : 1;
+    return 0;
 }

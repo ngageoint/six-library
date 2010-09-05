@@ -32,12 +32,10 @@ TEST_CASE(testCreate)
     TEST_ASSERT(!NITF_INVALID_HANDLE(handle));
 
     nitf_IOHandle_close(handle);
-    return TEST_SUCCESS;
 }
 
 int main(int argc, char **argv)
 {
-    int rc = TEST_SUCCESS;
     CHECK(testCreate);
-    return rc ? 0 : 1;
+    return 0;
 }

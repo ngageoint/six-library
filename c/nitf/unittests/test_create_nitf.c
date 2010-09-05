@@ -1227,7 +1227,6 @@ TEST_CASE_ARGS(testCreate)
     TEST_ASSERT(addImageSegment(record, &error));
     TEST_ASSERT(writeNITF(record, outname, &error));
     nitf_Record_destruct(&record);
-    return TEST_SUCCESS;
 }
 
 TEST_CASE_ARGS(testRead)
@@ -1245,14 +1244,12 @@ TEST_CASE_ARGS(testRead)
     TEST_ASSERT(record);
     nitf_Reader_destruct(&reader);
     nitf_Record_destruct(&record);
-    return TEST_SUCCESS;
 }
 
 int main(int argc, char **argv)
 {
-    int rc = TEST_SUCCESS;
     CHECK_ARGS(testCreate);
     CHECK_ARGS(testRead);
-    return rc ? 0 : 1;
+    return 0;
 }
 

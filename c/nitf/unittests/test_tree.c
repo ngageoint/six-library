@@ -39,7 +39,7 @@ NITF_BOOL deleteData(nitf_TreeNode *source, NITF_DATA* userData, int depth,
     return 1;
 }
 
-int makeTree(nitf_Tree* t, const char* testName)
+void makeTree(nitf_Tree* t, const char* testName)
 {
     nitf_Error e;
     nitf_TreeNode* an, *ancho, *abso;
@@ -68,7 +68,6 @@ int makeTree(nitf_Tree* t, const char* testName)
     nitf_TreeNode_addChild(abso, nitf_TreeNode_construct(C("absolute"), &e), &e);
     nitf_TreeNode_addChild(abso, nitf_TreeNode_construct(C("absolution"), &e),
                            &e);
-    return TEST_SUCCESS;
 
 }
 
@@ -93,7 +92,7 @@ TEST_CASE(testTree)
     nitf_Tree *tc = NULL;
     TEST_ASSERT(t);
 
-    TEST_ASSERT(makeTree(t, testName));
+    makeTree(t, testName);
     printf("Pre-order traversal:\n");
     printf("=======================================================\n");
     TEST_ASSERT(nitf_Tree_walk(t, &printElement, NITF_PRE_ORDER, NULL, &e));
@@ -115,12 +114,10 @@ TEST_CASE(testTree)
 
     TEST_ASSERT_NULL(t);
     TEST_ASSERT_NULL(tc);
-    return 0;
 }
 
 int main(int argc, char **argv)
 {
-    int rc = TEST_SUCCESS;
     CHECK(testTree);
-    return rc ? 0 : 1;
+    return 0;
 }

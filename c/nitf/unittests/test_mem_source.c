@@ -97,13 +97,10 @@ TEST_CASE(testMemorySource)
     TEST_ASSERT_NULL(bs0);
     TEST_ASSERT_NULL(bs1);
     TEST_ASSERT_NULL(bs2);
-
-    return TEST_SUCCESS;
 }
 
 int main(int argc, char **argv)
 {
-    int rc = TEST_SUCCESS;
     CHECK(testMemorySource);
-    return rc ? 0 : 1;
+    return 0;
 }

@@ -23,9 +23,6 @@
 #ifndef __TEST_H__
 #define __TEST_H__
 
-#define TEST_SUCCESS 1
-#define TEST_FAILURE 0
-
 #ifdef __cplusplus
 
 #include <import/sys.h>
@@ -55,32 +52,32 @@
 #    define TEST_FUNC __func__
 #endif
 
-#define CHECK(X) if(rc &= X(#X) == TEST_SUCCESS) { fprintf(stderr, "%s : PASSED\n", #X); }
-#define CHECK_ARGS(X) if(rc &= X(#X,argc,argv) == TEST_SUCCESS) { fprintf(stderr, "%s : PASSED\n", #X); }
+#define CHECK(X) X(#X); fprintf(stderr, "%s : PASSED\n", #X);
+#define CHECK_ARGS(X) X(#X,argc,argv); fprintf(stderr, "%s : PASSED\n", #X);
 #define TEST_ASSERT(X) if (!(X)) { \
     fprintf(stderr, "%s (%s,%s,%d) : FAILED: Value should not be NULL\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE); \
-    return TEST_FAILURE; \
+    exit(EXIT_FAILURE); \
 }
 #define TEST_ASSERT_NULL(X) if ((X) != NULL) { \
     fprintf(stderr, "%s (%s,%s,%d) : FAILED: Value should be NULL\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE); \
-    return TEST_FAILURE; \
+    exit(EXIT_FAILURE); \
 }
 #define TEST_ASSERT_EQ_STR(X1, X2) if (strcmp((X1), (X2)) != 0) { \
     fprintf(stderr, "%s (%s,%s,%d) : FAILED: Recv'd %s, Expected %s\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE, X1, X2); \
-    return TEST_FAILURE; \
+    exit(EXIT_FAILURE); \
 }
 #define TEST_ASSERT_EQ_INT(X1, X2) if ((X1) != (X2)) { \
     fprintf(stderr, "%s (%s,%s,%d) : FAILED: Recv'd %d, Expected %d\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE, (int)X1, (int)X2); \
-    return TEST_FAILURE; \
+    exit(EXIT_FAILURE); \
 }
 /* TODO use epsilon for comparing floating points */
 #define TEST_ASSERT_EQ_FLOAT(X1, X2) if (fabs((X1) - (X2)) > .0000001f) { \
     fprintf(stderr, "%s (%s,%s,%d) : FAILED: Recv'd %f, Expected %f\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE, X1, X2); \
-    return TEST_FAILURE; \
+    exit(EXIT_FAILURE); \
 }
 
-#define TEST_CASE(X) int X(const char* testName)
-#define TEST_CASE_ARGS(X) int X(const char* testName, int argc, char **argv)
+#define TEST_CASE(X) void X(const char* testName)
+#define TEST_CASE_ARGS(X) void X(const char* testName, int argc, char **argv)
 
 #endif
 

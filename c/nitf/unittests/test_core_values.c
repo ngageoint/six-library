@@ -62,12 +62,10 @@ TEST_CASE(testCoreValues)
         printf("Ok: (str: %s) [%lld]\n", ok, NITF_ATO64(ok));
         printf("Bad: (str: %s) [%lld]\n", bad, NITF_ATO64(bad));
     }
-    return TEST_SUCCESS;
 }
 
 int main(int argc, char **argv)
 {
-    int rc = TEST_SUCCESS;
     CHECK(testCoreValues);
-    return rc ? 0 : 1;
+    return 0;
 }

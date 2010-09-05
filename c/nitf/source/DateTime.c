@@ -251,7 +251,6 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
     int startIndex;
     int i, j;
     int found = 0;
-    NITF_BOOL returnValue = NITF_SUCCESS;
 
     timeInSeconds = (time_t)(millis / 1000);
     t = *gmtime(&timeInSeconds);
@@ -301,36 +300,119 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
 
         if (decimalPlaces > 0)
         {
-            int newFmtLen = begStringLen + strlen(endString) + 3;
+            char buf[256];
+            int newFmtLen = 0;
+            size_t bufIdx = 0;
+            size_t endStringLen = endString ? strlen(endString) : 0;
+
+            newFmtLen = begStringLen + 1;
             newFmtString = (char*)NITF_MALLOC(newFmtLen);
             if (!newFmtString)
             {
                 nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
                                 NITF_CTXT, NITF_ERR_MEMORY);
-                return NITF_FAILURE;
+                goto CATCH_ERROR;
+            }
+            memset(newFmtString, 0, newFmtLen);
+
+            if (begStringLen > 0)
+            {
+                /* do the first part of the format */
+                strncpy(newFmtString, format, begStringLen);
+
+                if (strftime(outBuf, maxSize, newFmtString, &t) == 0)
+                {
+                    nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                            "Unknown error caused by the call to strftime with format string: [%s]",
+                            format);
+                    goto CATCH_ERROR;
+                }
+                bufIdx = strlen(outBuf);
             }
 
-            memset(newFmtString, 0, newFmtLen);
-            strncpy(newFmtString, format, begStringLen);
-            strcat(newFmtString, "%S");
-            strcat(newFmtString, endString);
+            /* do the seconds - separately */
+            memset(buf, 0, 256);
+            if (strftime(buf, 256, "%S", &t) == 0)
+            {
+                nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                        "Unknown error caused by the call to strftime with format string: [%s]",
+                        format);
+                goto CATCH_ERROR;
+            }
+
+            if (strlen(buf) + bufIdx + 1 > maxSize)
+            {
+                nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                                 "Format string will cause buffer to overflow: [%s]",
+                                 format);
+                goto CATCH_ERROR;
+            }
+
+            /* tack it on the end */
+            strcpy((char*)(outBuf + bufIdx), buf);
+            bufIdx = strlen(outBuf);
+
+            memset(buf, 0, 256);
+            NITF_SNPRINTF(buf, 256, "%.*g", decimalPlaces, fractSeconds);
+
+            if (strlen(buf) + bufIdx + 1 > maxSize)
+            {
+                nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                                 "Format string will cause buffer to overflow: [%s]",
+                                 format);
+                goto CATCH_ERROR;
+            }
+
+            /* tack on the fractional seconds - spare the leading 0 */
+            strcpy((char*)(outBuf + bufIdx), (char*)(buf + 1));
+            bufIdx = strlen(outBuf);
+
+            if (endStringLen > 0)
+            {
+                /* tack on the end part */
+                memset(buf, 0, 256);
+                if (strftime(buf, 256, endString, &t) == 0)
+                {
+                    nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                            "Unknown error caused by the call to strftime with format string: [%s]",
+                            format);
+                    goto CATCH_ERROR;
+                }
+
+                if (strlen(buf) + bufIdx + 1 > maxSize)
+                {
+                    nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                                     "Format string will cause buffer to overflow: [%s]",
+                                     format);
+                    goto CATCH_ERROR;
+                }
+                strcpy((char*)(outBuf + bufIdx), buf);
+            }
         }
     }
 
-    if (strftime(outBuf, maxSize,
-                 newFmtString != NULL ? newFmtString : format, &t) == 0)
+    if (newFmtString == NULL)
     {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
-                "Unknown error caused by the call to strftime with format string: [%s]",
-                newFmtString != NULL ? newFmtString : format);
-
-        returnValue = NITF_FAILURE;
+        if (strftime(outBuf, maxSize,
+                        newFmtString != NULL ? newFmtString : format, &t) == 0)
+        {
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
+                    "Unknown error caused by the call to strftime with format string: [%s]",
+                    newFmtString != NULL ? newFmtString : format);
+            goto CATCH_ERROR;
+        }
     }
-
-    if (newFmtString != NULL)
+    else
         NITF_FREE(newFmtString);
 
-    return returnValue;
+    return NITF_SUCCESS;
+
+
+  CATCH_ERROR:
+    if (newFmtString)
+        NITF_FREE(newFmtString);
+
+    return NITF_FAILURE;
 }
 
 /* http://social.msdn.microsoft.com/forums/en-US/vcgeneral/thread/25a654f9-b6b6-490a-8f36-c87483bb36b7 */

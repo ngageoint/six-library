@@ -45,14 +45,16 @@ class CPPBuildContext(BuildContext):
                 p = subprocess.Popen([test], shell=True, stdout=stdout, stderr=stderr)
                 stdout, stderr = p.communicate()
                 rc = p.returncode
-                if rc == 1:
-                    failed.extend(map(lambda x: (split(test)[1], x),
-                                      filter(lambda x: x.find('FAILED') >= 0, stderr.split('\n'))))
-                elif rc == 0:
-                    passed.extend(map(lambda x: (split(test)[1], x),
-                                      filter(lambda x: x.find('PASSED') >= 0, stderr.split('\n'))))
-                else:
-                    failed.append((split(test)[1], 'FAILURE: %d : %s' % (p.returncode, stderr.strip())))
+                passed.extend(map(lambda x: (split(test)[1], x),
+                                  filter(lambda x: x.find('PASSED') >= 0, stderr.split('\n'))))
+                if rc != 0:
+                    fails = map(lambda x: (split(test)[1], x),
+                                filter(lambda x: x.find('FAILED') >= 0, stderr.split('\n')))
+                    if fails:
+                        failed.extend(fails)
+                    else:
+                        failed.append((split(test)[1],
+                                       'FAILURE: %d : %s' % (p.returncode, stderr.strip())))
             
             num = len(passed) + len(failed)
             print 'Test Results: %d of %d Test(s) Passed (%.2f%%)' % (len(passed), num, 100.0 * len(passed) / num)

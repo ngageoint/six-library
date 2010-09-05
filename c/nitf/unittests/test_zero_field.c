@@ -28,12 +28,10 @@ TEST_CASE( testZeroField)
     nitf_Error error;
     nitf_Field *field = nitf_Field_construct(0, NITF_BCS_A, &error);
     TEST_ASSERT_NULL(field);
-    return TEST_SUCCESS;
 }
 
 int main(int argc, char **argv)
 {
-    int rc = TEST_SUCCESS;
     CHECK(testZeroField);
-    return rc ? 0 : 1;
+    return 0;
 }
