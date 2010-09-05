@@ -21,23 +21,16 @@
  */
 
 #include <import/nitf.h>
+#include "Test.h"
 
 #define MEMBUF "ABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC"
+#define BAND1 "AAAAAAAAAAAAAAAA"
+#define BAND2 "BBBBBBBBBBBBBBBB"
+#define BAND3 "CCCCCCCCCCCCCCCC"
 #define MEMSIZE strlen(MEMBUF)
 #define NUM_BANDS 3
 
-void print_band(char *band, const char *s, int size)
-{
-    int i;
-    printf("Band %s: [", s);
-    for (i = 0; i < size; i++)
-    {
-        printf("%c", band[i]);
-    }
-    printf("]\n");
-}
-
-int main(int argc, char **argv)
+TEST_CASE(testMemorySource)
 {
     /*  Get the error object       */
     nitf_Error error;
@@ -46,20 +39,22 @@ int main(int argc, char **argv)
 
     /*  Construct the band sources  */
     nitf_BandSource *bs0 = nitf_MemorySource_construct(MEMBUF, MEMSIZE, 0,
-                           numBytesPerPix,
-                           NUM_BANDS - 1,
-                           &error);
+                                                       numBytesPerPix,
+                                                       NUM_BANDS - 1, &error);
     nitf_BandSource *bs1 = nitf_MemorySource_construct(MEMBUF, MEMSIZE, 1,
-                           numBytesPerPix,
-                           NUM_BANDS - 1,
-                           &error);
+                                                       numBytesPerPix,
+                                                       NUM_BANDS - 1, &error);
     nitf_BandSource *bs2 = nitf_MemorySource_construct(MEMBUF, MEMSIZE, 2,
-                           numBytesPerPix,
-                           NUM_BANDS - 1,
-                           &error);
+                                                       numBytesPerPix,
+                                                       NUM_BANDS - 1, &error);
     nitf_BandSource *all = nitf_MemorySource_construct(MEMBUF, MEMSIZE, 0,
-                           numBytesPerPix, 0,
-                           &error);
+                                                       numBytesPerPix, 0,
+                                                       &error);
+
+    TEST_ASSERT(bs0);
+    TEST_ASSERT(bs1);
+    TEST_ASSERT(bs2);
+    TEST_ASSERT(all);
 
     /*  Construct in memory band buffers for testing -- 0 terminate strings */
     char *band_0 = (char *) NITF_MALLOC(bandSize + 1);
@@ -67,8 +62,8 @@ int main(int argc, char **argv)
     char *band_2 = (char *) NITF_MALLOC(bandSize + 1);
     char *all_bands = (char *) NITF_MALLOC(MEMSIZE + 1);
     band_0[bandSize] = 0;
-    band_1[bandSize] = 1;
-    band_2[bandSize] = 2;
+    band_1[bandSize] = 0;
+    band_2[bandSize] = 0;
     all_bands[MEMSIZE] = 0;
 
     /*  Read half of the info for one band.  This makes sure that we  */
@@ -78,24 +73,18 @@ int main(int argc, char **argv)
     bs2->iface->read(bs2->data, band_2, (MEMSIZE / NUM_BANDS / 2), &error);
 
     /*  Pick up where we left off and keep going  */
-    bs0->iface->read(bs0->data, &band_0[MEMSIZE / NUM_BANDS / 2],
-                     (MEMSIZE / NUM_BANDS / 2), &error);
-    bs1->iface->read(bs1->data, &band_1[MEMSIZE / NUM_BANDS / 2],
-                     (MEMSIZE / NUM_BANDS / 2), &error);
-    bs2->iface->read(bs2->data, &band_2[MEMSIZE / NUM_BANDS / 2],
-                     (MEMSIZE / NUM_BANDS / 2), &error);
+    bs0->iface->read(bs0->data, &band_0[MEMSIZE / NUM_BANDS / 2], (MEMSIZE
+            / NUM_BANDS / 2), &error);
+    bs1->iface->read(bs1->data, &band_1[MEMSIZE / NUM_BANDS / 2], (MEMSIZE
+            / NUM_BANDS / 2), &error);
+    bs2->iface->read(bs2->data, &band_2[MEMSIZE / NUM_BANDS / 2], (MEMSIZE
+            / NUM_BANDS / 2), &error);
     all->iface->read(all->data, all_bands, MEMSIZE, &error);
 
-    /*  Now we would like to verify the results of our reading  */
-
-    /*  The first three bands should be all of the same letter B1=A, B2=B, B3=C */
-    print_band(band_0, "1", MEMSIZE / NUM_BANDS);
-    print_band(band_1, "2", MEMSIZE / NUM_BANDS);
-    print_band(band_2, "3", MEMSIZE / NUM_BANDS);
-
-    /*  The last band source was applied to the entire buffer, so it should  */
-    /*  look the same as the original memory source                          */
-    print_band(all_bands, "ALL", MEMSIZE);
+    TEST_ASSERT_EQ_STR(band_0, BAND1);
+    TEST_ASSERT_EQ_STR(band_1, BAND2);
+    TEST_ASSERT_EQ_STR(band_2, BAND3);
+    TEST_ASSERT_EQ_STR(all_bands, MEMBUF);
 
     NITF_FREE(band_0);
     NITF_FREE(band_1);
@@ -104,5 +93,17 @@ int main(int argc, char **argv)
     nitf_BandSource_destruct(&bs0);
     nitf_BandSource_destruct(&bs1);
     nitf_BandSource_destruct(&bs2);
-    return 0;
+
+    TEST_ASSERT_NULL(bs0);
+    TEST_ASSERT_NULL(bs1);
+    TEST_ASSERT_NULL(bs2);
+
+    return TEST_SUCCESS;
+}
+
+int main(int argc, char **argv)
+{
+    int rc = TEST_SUCCESS;
+    CHECK(testMemorySource);
+    return rc ? 0 : 1;
 }

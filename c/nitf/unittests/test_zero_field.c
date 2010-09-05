@@ -21,22 +21,19 @@
  */
 
 #include <import/nitf.h>
+#include "Test.h"
 
-int main()
+TEST_CASE( testZeroField)
 {
-
     nitf_Error error;
-    nitf_Field *field =
-        nitf_Field_construct(0, NITF_BCS_A, &error);
+    nitf_Field *field = nitf_Field_construct(0, NITF_BCS_A, &error);
+    TEST_ASSERT_NULL(field);
+    return TEST_SUCCESS;
+}
 
-    if (!field)
-    {
-        nitf_Error_print(&error, stdout, "Emtpy field!");
-    }
-    else
-    {
-        printf("No issues with 0 malloc on this platform\n");
-    }
-
-    return 0;
+int main(int argc, char **argv)
+{
+    int rc = TEST_SUCCESS;
+    CHECK(testZeroField);
+    return rc ? 0 : 1;
 }

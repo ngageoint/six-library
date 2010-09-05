@@ -1,4 +1,4 @@
-import os
+import os, subprocess
 import Options
 
 NAME            = 'nitf'
@@ -90,3 +90,4 @@ def build(bld):
                 targets.remove(k)
         newTargets.extend(targets) #add the remaining targets, if any
     Options.options.compile_targets = ','.join(newTargets) #reset the options
+

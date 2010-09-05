@@ -33,9 +33,8 @@ progs:
 	cd apps; make
 
 unit-tests:
-	if test "@have_unit_tests@" = "yes"; \
-        then cd unit-tests; make; \
-        fi
+	cd unittests; make
+
 ############################################
 #  Make the doxygen
 docs:
@@ -80,9 +79,11 @@ install:
 #  CAUTION: This will delete all the libraries, 
 #  not just for one platform...
 clean:
-	rm -f ./lib/@target@/*$(LIBEXT)
-	rm -f ./lib/@target@/*$(DSOEXT)
-	rm -f ./unit-tests/@target@/*
+	rm -rf ./lib/@target@
+	rm -rf ./lib/@target@
+	rm -rf ./unittests/@target@
+	rm -rf ./apps/@target@
+	rm -rf ./tests/@target@
 	perl @build_dir@/rfk.pl -f
 
 
@@ -97,7 +98,9 @@ raw:
 	make clean
 	rm -f Makefile
 	rm -f source/Makefile
+	rm -f shared/Makefile
 	rm -f tests/Makefile
+	rm -f unittests/Makefile
 	rm -f config.log
 	rm -f config.status
 	rm -rf lib

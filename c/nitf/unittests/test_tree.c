@@ -21,7 +21,7 @@
  */
 
 #include <import/nitf.h>
-
+#include "Test.h"
 
 char* C(const char* p)
 {
@@ -30,28 +30,24 @@ char* C(const char* p)
     return x;
 }
 
-NITF_BOOL deleteData(nitf_TreeNode *source, 
-                     NITF_DATA* userData,
-                     int depth,
-                     nitf_Error *error)
+NITF_BOOL deleteData(nitf_TreeNode *source, NITF_DATA* userData, int depth,
+        nitf_Error *error)
 {
-    char* p = (char*)source->data;
+    char* p = (char*) source->data;
     printf("Deleting %s\n", p);
     free(p);
-
     return 1;
 }
 
-void makeTree(nitf_Tree* t)
+int makeTree(nitf_Tree* t, const char* testName)
 {
-
     nitf_Error e;
     nitf_TreeNode* an, *ancho, *abso;
     t->root = nitf_TreeNode_construct(C("a"), &e);
-    assert(t->root);
+    TEST_ASSERT(t->root);
 
     an = nitf_TreeNode_construct(C("an"), &e);
-    assert(an);
+    TEST_ASSERT(an);
 
     nitf_TreeNode_addChild(t->root, an, &e);
 
@@ -59,78 +55,72 @@ void makeTree(nitf_Tree* t)
 
     nitf_TreeNode_addChild(an, ancho, &e);
 
-
     nitf_TreeNode_addChild(an, nitf_TreeNode_construct(C("anomaly"), &e), &e);
-     
+
     nitf_TreeNode_addChild(ancho, nitf_TreeNode_construct(C("anchovy"), &e), &e);
     nitf_TreeNode_addChild(ancho, nitf_TreeNode_construct(C("anchor"), &e), &e);
 
-
     abso = nitf_TreeNode_construct(C("absolut"), &e);
-    assert(abso);
+    TEST_ASSERT(abso);
 
     nitf_TreeNode_addChild(t->root, abso, &e);
 
     nitf_TreeNode_addChild(abso, nitf_TreeNode_construct(C("absolute"), &e), &e);
-    nitf_TreeNode_addChild(abso, nitf_TreeNode_construct(C("absolution"), &e), &e);
-
-    
-
-
+    nitf_TreeNode_addChild(abso, nitf_TreeNode_construct(C("absolution"), &e),
+                           &e);
+    return TEST_SUCCESS;
 
 }
 
-
-
-NITF_BOOL printElement(nitf_TreeNode* t, NITF_DATA* ud, int depth, nitf_Error* e)
+NITF_BOOL printElement(nitf_TreeNode* t, NITF_DATA* ud, int depth,
+        nitf_Error* e)
 {
     const char* p = (const char*) t->data;
     int i;
 
-    for (i = 0; i < depth; i++) 
+    for (i = 0; i < depth; i++)
         printf("   ");
     printf("%s depth=\"%d\"\n", p, depth);
     return 1;
 }
 
-
-int main(int argc, char **argv)
+TEST_CASE(testTree)
 {
-    /*  We need the error  */
     nitf_Error e;
 
     /*  Create a tree - root can be passed during or after*/
-    nitf_Tree *t = nitf_Tree_construct(NULL, &e); 
+    nitf_Tree *t = nitf_Tree_construct(NULL, &e);
     nitf_Tree *tc = NULL;
-    assert(t);
+    TEST_ASSERT(t);
 
-    makeTree(t);
+    TEST_ASSERT(makeTree(t, testName));
     printf("Pre-order traversal:\n");
     printf("=======================================================\n");
-    assert(nitf_Tree_walk(t, &printElement, NITF_PRE_ORDER, NULL, &e));
-    
+    TEST_ASSERT(nitf_Tree_walk(t, &printElement, NITF_PRE_ORDER, NULL, &e));
+
     printf("\n\n");
 
-    tc = nitf_Tree_clone(t, (NITF_DATA_ITEM_CLONE)&C, &e);
-    assert(tc);
-
+    tc = nitf_Tree_clone(t, (NITF_DATA_ITEM_CLONE) & C, &e);
+    TEST_ASSERT(tc);
 
     printf("Post-order traversal (cloned):\n");
     printf("=======================================================\n");
-    assert(nitf_Tree_walk(tc, &printElement, NITF_POST_ORDER, NULL, &e));
+    TEST_ASSERT(nitf_Tree_walk(tc, &printElement, NITF_POST_ORDER, NULL, &e));
 
+    TEST_ASSERT(nitf_Tree_walk(t, &deleteData, NITF_POST_ORDER, NULL, &e));
+    TEST_ASSERT(nitf_Tree_walk(tc, &deleteData, NITF_POST_ORDER, NULL, &e));
 
-    assert(nitf_Tree_walk(t, &deleteData,  NITF_POST_ORDER, NULL, &e));
-    assert(nitf_Tree_walk(tc, &deleteData,  NITF_POST_ORDER, NULL, &e));
-    
-    /*  Destroy the list  */
     nitf_Tree_destruct(&t);
-
-
-    /*  Destroy the list  */
     nitf_Tree_destruct(&tc);
 
-    /*  Double check  */
-    assert( t == NULL );
+    TEST_ASSERT_NULL(t);
+    TEST_ASSERT_NULL(tc);
     return 0;
+}
+
+int main(int argc, char **argv)
+{
+    int rc = TEST_SUCCESS;
+    CHECK(testTree);
+    return rc ? 0 : 1;
 }

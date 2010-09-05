@@ -48,6 +48,7 @@ TEST_CASE(testNow)
 
     nitf_DateTime_destruct(&date);
     TEST_ASSERT_NULL(date);
+    return TEST_SUCCESS;
 }
 
 TEST_CASE(testFromMillis)
@@ -67,6 +68,7 @@ TEST_CASE(testFromMillis)
     nitf_DateTime_destruct(&date2);
     TEST_ASSERT_NULL(date);
     TEST_ASSERT_NULL(date2);
+    return TEST_SUCCESS;
 }
 
 TEST_CASE(testRoundTrip)
@@ -103,6 +105,7 @@ TEST_CASE(testRoundTrip)
     nitf_DateTime_destruct(&date2);
     TEST_ASSERT_NULL(date);
     TEST_ASSERT_NULL(date2);
+    return TEST_SUCCESS;
 }
 
 TEST_CASE(testSetIdentity)
@@ -149,6 +152,7 @@ TEST_CASE(testSetIdentity)
 
     nitf_DateTime_destruct(&date);
     TEST_ASSERT_NULL(date);
+    return TEST_SUCCESS;
 }
 
 TEST_CASE(testMillis)
@@ -162,16 +166,17 @@ TEST_CASE(testMillis)
     TEST_ASSERT(date);
 
     nitf_DateTime_format(date, "%Y-%m-%dT%H:%M:%.6SZ", buf, MAX_DATE_STRING, &e);
-    TEST_ASSERT_EQ_STR(timeStr, buf);
+    TEST_ASSERT_EQ_STR(buf, timeStr);
+    return TEST_SUCCESS;
 }
 
 int main(int argc, char **argv)
 {
+    int rc = TEST_SUCCESS;
     CHECK(testNow);
     CHECK(testFromMillis);
     CHECK(testRoundTrip);
     CHECK(testSetIdentity);
     CHECK(testMillis);
-
-    return 0;
+    return rc ? 0 : 1;
 }

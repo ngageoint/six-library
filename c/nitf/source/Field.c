@@ -58,8 +58,12 @@ NITFAPI(nitf_Field *) nitf_Field_construct(size_t length,
 {
     nitf_Field *field = NULL;
 
-    /* punt on this for now */
-    assert(length > 0);
+    if (length == 0)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                         "Cannot create field of size 0");
+        goto CATCH_ERROR;
+    }
 
     field = (nitf_Field *) NITF_MALLOC(sizeof(nitf_Field));
     if (!field)

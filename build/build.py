@@ -1,9 +1,22 @@
-import sys, os, types, re, fnmatch
+import sys, os, types, re, fnmatch, subprocess
+from os.path import split, isdir, isfile, exists
 
 import Options, Utils
 from Configure import conf
 from Build import BuildContext
 from TaskGen import taskgen, feature, after, before
+
+
+# provide a partial function if we don't have one
+try:
+    from functools import partial
+except:
+    def partial(fn, *cargs, **ckwargs):
+        def call_fn(*fargs, **fkwargs):
+            d = ckwargs.copy()
+            d.update(fkwargs)
+            return fn(*(cargs + fargs), **d)
+        return call_fn
 
 
 class CPPBuildContext(BuildContext):
@@ -15,6 +28,36 @@ class CPPBuildContext(BuildContext):
     
     def safeVersion(self, version):
         return re.sub(r'[^\w]', '.', version)
+    
+    def runUnitTests(self, path):
+        path = path or self.path.abspath()
+        
+        print path
+        
+        exes = filter(lambda x: os.path.isfile(x) and os.access(x, os.X_OK),
+                                       map(lambda x: os.path.join(path, x),
+                                           os.listdir(path)))
+        
+        if exes:
+            passed, failed = [], []
+            for test in exes:
+                stdout = stderr = subprocess.PIPE
+                p = subprocess.Popen([test], shell=True, stdout=stdout, stderr=stderr)
+                stdout, stderr = p.communicate()
+                rc = p.returncode
+                if rc == 1:
+                    failed.extend(map(lambda x: (split(test)[1], x),
+                                      filter(lambda x: x.find('FAILED') >= 0, stderr.split('\n'))))
+                elif rc == 0:
+                    passed.extend(map(lambda x: (split(test)[1], x),
+                                      filter(lambda x: x.find('PASSED') >= 0, stderr.split('\n'))))
+                else:
+                    failed.append((split(test)[1], 'FAILURE: %d : %s' % (p.returncode, stderr.strip())))
+            
+            num = len(passed) + len(failed)
+            print 'Test Results: %d of %d Test(s) Passed (%.2f%%)' % (len(passed), num, 100.0 * len(passed) / num)
+            for test, err in failed:
+                print '%s\t --> %s' % (test, err)
     
     def module(self, **modArgs):
         """
@@ -80,6 +123,24 @@ class CPPBuildContext(BuildContext):
                         target=os.path.splitext(test)[0], path=testNode,
                         install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
         
+        testNode = path.find_dir('unittests')
+        if testNode and not Options.options.libs_only:
+            if not headersOnly:
+                uselib_local = libName
+            
+            sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+            for test in filter(modArgs.get('unittest_filter', None),
+                               testNode.find_iter(in_pat=['*%s' % sourceExt],
+                                                  maxdepth=1, flat=True).split()):
+                exe = bld.new_task_gen(libExeType, 'program', source=test,
+                        uselib_local=uselib_local, uselib=uselib, env=env.copy(), includes='.',
+                        target=os.path.splitext(test)[0], path=testNode)
+            
+            # add a post-build hook to run the unit tests
+            # I use partial so I can pass arguments to a post build hook
+            bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
+                                     path=self.getBuildDir(testNode)))
+        
         return env
     
     def plugin(self, **modArgs):
@@ -140,6 +201,18 @@ class CPPBuildContext(BuildContext):
         if not source:
             exe.find_sources_in_dirs(modArgs.get('sourcedir', 'source'))
             exe.source = filter(modArgs.get('source_filter', None), exe.source)
+    
+    def getBuildDir(self, path=None):
+        """
+        Returns the build dir, relative to where you currently are (bld.path)
+        """
+        cwd = path and path.abspath() or self.path.abspath()
+        bldDir = self.srcnode.abspath(self.env)
+        for i in range(len(cwd)):
+            if not bldDir.startswith(cwd[:i]):
+                bldDir = os.path.join(bldDir, cwd[i - 1:])
+                break
+        return bldDir
 
 
 class GlobDirectoryWalker:

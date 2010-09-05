@@ -9,7 +9,7 @@ CCDEFINES = @cc_defs@
 # Dll Compile flags
 DLLFLAGS = @dll_flags@
 # Generic Compile Flags
-CCFLAGS = @cc_flags@ @cc_unit_test_flags@
+CCFLAGS = @cc_flags@
 # Where do the includes live?
 INCLUDEPATH = -I../include $(EXTINCLUDEPATH) @cc_includes@
 
@@ -32,18 +32,21 @@ TESTDIR = @target@
 LIBRARYPATH = -L$(LIBDIR) $(EXTLIBPATH) @link_libpath@
 
 # Libs to link with
-LIBS = @link_prelibs@ $(EXTLIBS) @link_unit_test_libs@ @link_autolibs@ @link_postlibs@
+LIBS = @link_prelibs@ $(EXTLIBS) @link_autolibs@ @link_postlibs@
 
 # The link suffixes
 LINK = $(LIBRARYPATH) $(LFLAGS) $(LIBS)
 
-OBJS   = $(UNIT_TEST_MAIN:.c=.o)
-EXE    = $(UNIT_TEST_MAIN:.c=)
+OBJS   = $(UNITTESTS:.c=.o)
+EXE    = $(UNITTESTS:.c=)
+# If you have several executables which depend on the same set of
+# object files, list them here.
+COMMON_OBJS =
 
 all: $(EXE)
 
-$(EXE):  $(OBJS) $(UNIT_TESTS) testdir
-	$(COMPILE) -o $@ $@.o $(UNIT_TESTS) $(LINK)
+$(EXE):  $(OBJS) $(COMMON_OBJS) testdir
+	$(COMPILE) -o $@ $@.o $(COMMON_OBJS) $(LINK)
 	mv $@ $(TESTDIR)
 
 testdir:

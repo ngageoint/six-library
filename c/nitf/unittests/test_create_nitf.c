@@ -28,6 +28,7 @@
 
 
 #include <import/nitf.h>
+#include "Test.h"
 
 
 static const struct {
@@ -1215,56 +1216,43 @@ NITF_BOOL writeNITF(nitf_Record *record, const char* filename, nitf_Error *error
 }
 
 
+TEST_CASE_ARGS(testCreate)
+{
+    nitf_Record *record = NULL;
+    nitf_Error error;
+    char* outname = argc > 1 ? argv[1] : "test_create.ntf";
+
+    TEST_ASSERT((record = nitf_Record_construct(NITF_VER_21, &error)));
+    TEST_ASSERT(populateFileHeader(record, outname, &error));
+    TEST_ASSERT(addImageSegment(record, &error));
+    TEST_ASSERT(writeNITF(record, outname, &error));
+    nitf_Record_destruct(&record);
+    return TEST_SUCCESS;
+}
+
+TEST_CASE_ARGS(testRead)
+{
+    nitf_Reader *reader = NULL;
+    nitf_Record *record = NULL;
+    nitf_Error error;
+    nitf_IOHandle io;
+    char* outname = argc > 1 ? argv[1] : "test_create.ntf";
+
+    io = nitf_IOHandle_create(outname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING, &error);
+    reader = nitf_Reader_construct(&error);
+    TEST_ASSERT(reader);
+    record = nitf_Reader_read(reader, io, &error);
+    TEST_ASSERT(record);
+    nitf_Reader_destruct(&reader);
+    nitf_Record_destruct(&record);
+    return TEST_SUCCESS;
+}
 
 int main(int argc, char **argv)
 {
-
-    nitf_Record *record = NULL; /* a record object */
-    nitf_Error error;           /* error object */
-
-    if (argc != 2)
-    {
-        printf("Usage: %s <output-file> \n", argv[0]);
-        goto CATCH_ERROR;
-    }
-
-    /* first, we need to create a new Record */
-    record = nitf_Record_construct(NITF_VER_21, &error);
-    if (!record)
-    {
-        nitf_Error_print(&error, stderr, "While constructing record...");
-        goto CATCH_ERROR;
-    }
-
-    /* let's populate the file header */
-    if (!populateFileHeader(record, argv[1], &error))
-    {
-        nitf_Error_print(&error, stderr, "While populating file header...");
-        goto CATCH_ERROR;
-    }
-
-    /* now, add an image segment to the record */
-    if (!addImageSegment(record, &error))
-    {
-        nitf_Error_print(&error, stderr, "While adding image segment...");
-        goto CATCH_ERROR;
-    }
-
-    /* now we should have the record ready to go... so let's write it! */
-    if (!writeNITF(record, argv[1], &error))
-    {
-        nitf_Error_print(&error, stderr, "While trying to write...");
-        goto CATCH_ERROR;
-    }
-
-    printf("Successfully wrote NITF: %s\n", argv[1]);
-
-    /* cleanup! */
-    nitf_Record_destruct(&record);
-
-    return 0;
-
-  CATCH_ERROR:
-    if (record) nitf_Record_destruct(&record);
-    return 1;
+    int rc = TEST_SUCCESS;
+    CHECK_ARGS(testCreate);
+    CHECK_ARGS(testRead);
+    return rc ? 0 : 1;
 }
+

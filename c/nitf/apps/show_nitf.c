@@ -21,7 +21,6 @@
  */
 
 #include <import/nitf.h>
-#include "nitf/TREUtils.h"
 
 /*
  *  These macros are just for retrieving the data simply as raw
