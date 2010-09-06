@@ -101,32 +101,27 @@ SOURCES = BandInfo.c \
           WriteHandler.c \
           Writer.c 
 
-#        DefaultUserSegment.c \
-#          UserSegment.c \
-#          DEReader.c \
-
-TESTS = test_replace_field.c test_find_field.c test_field.c \
+TESTS = test_replace_field.c test_find_field.c \
         test_dll_1.c \
         test_debug_mem_1.c test_hash_table_1.c \
-        test_dump_record.c test_image_loading.c \
+        test_image_loading.c \
         test_fhdr_clone.c \
         test_hash_table_clone.c test_imsub_clone.c \
         test_image_source.c test_writer_3.c \
-        test_file_source.c test_mem_source.c test_tree_1.c \
+        test_file_source.c \
         test_tre_mods.c test_create_xmltre.c \
         test_insert_raw_xmltre.c test_geo_utils.c
 
-# test_ext_iter.c \
-#        test_ImageIO_read_data.c test_ImageIO_writePattern.c \
-#        test_record_clone.c test_tre_mods.c \
-#        test_read_acftb.c test_des_read.c test_field_set.c \
-#        test_text_read.c test_des_write.c
-
 #unit test info
 UNITTESTS = test_core_values.c\
+            test_create_nitf.c \
             test_create.c \
             test_datetime.c \
-            test_list.c
+            test_field.c \
+            test_list.c \
+            test_mem_source.c \
+            test_tree.c \
+            test_zero_field.c
 
 APPS = get_nitf_version.c image_footprint_kml.c show_nitf.c
 
