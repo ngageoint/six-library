@@ -32,8 +32,6 @@ class CPPBuildContext(BuildContext):
     def runUnitTests(self, path):
         path = path or self.path.abspath()
         
-        print path
-        
         exes = filter(lambda x: os.path.isfile(x) and os.access(x, os.X_OK),
                                        map(lambda x: os.path.join(path, x),
                                            os.listdir(path)))
