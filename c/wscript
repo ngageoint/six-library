@@ -9,7 +9,7 @@ def configure(conf):
     
 
 def build(bld):
-    bld.add_subdirs('nitf cgm')
+    bld.add_subdirs('nrt nitf cgm')
 
 def distclean(context):
     pass

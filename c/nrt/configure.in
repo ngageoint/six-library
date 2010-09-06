@@ -1,0 +1,87 @@
+dnl Disable cache file creation.
+define([AC_CACHE_LOAD], )
+define([AC_CACHE_SAVE], )
+
+AC_INIT(configure.in)
+AC_CONFIG_AUX_DIR(build)
+
+# Location of makefiles directory.
+here=`pwd`
+build_dir="${here}/build/"
+
+# Get system type.
+AC_CANONICAL_SYSTEM
+
+# Get install program
+AC_PROG_INSTALL
+#AC_C_BIGENDIAN
+AC_C_BIGENDIAN([ac_big_endian=yes, AC_DEFINE(WORDS_BIGENDIAN)],ac_big_endian=no)
+
+
+# Set value of POSIX string; This string is placed in Makefiles
+# on compliant systems to indicate POSIX mode.
+POSIX=".POSIX:"
+
+AC_PROG_CC
+
+dnl ##############################################
+dnl INCLUDES
+dnl ##############################################
+dnl # first let's configure for the system
+builtin(include, ../../build/conf/configure.sun.in)
+builtin(include, ../../build/conf/configure.sgi.in)
+builtin(include, ../../build/conf/configure.linux.in)
+builtin(include, ../../build/conf/configure.ibm.in)
+builtin(include, ../../build/conf/configure.apple.in)
+dnl # set some variables/options based on the architecture choices
+dnl # the core_options must go after we do the architecture setup
+builtin(include, ../../build/conf/configure.core_options.in)
+builtin(include, ../../build/conf/configure.mt.in)
+builtin(include, ../../build/conf/configure.unit_tests.in)
+
+
+#disable optz if we are debugging
+if test "${cc_debug_flags}" != ""
+then
+    cc_optz_flags=""
+fi
+
+
+cc_includes="${cc_includes} ${cc_thread_includes}"
+cc_defs="${cc_defs} ${cc_thread_defs}"
+cc_flags="${cc_flags} ${cc_optz_flags} ${cc_thread_flags} ${cc_64_flags} ${cc_verb_flags} ${cc_debug_flags} ${cc_warn_flags}"
+
+if test "${enabled_64bit}" != "false"
+then
+    target="${target}-64"
+fi
+
+link_autolibs="${link_thread_libs} ${link_autolibs}"
+link_libpath="${libpath} ${link_thread_libpath}"
+
+
+AC_SUBST(cc_includes)
+AC_SUBST(cc_flags)
+AC_SUBST(cc_defs)
+AC_SUBST(POSIX)
+AC_SUBST(CC)
+AC_SUBST(ar_flags)
+AC_SUBST(dll_flags)
+AC_SUBST(build_dir)
+AC_SUBST(AR)
+AC_SUBST(link_prelibs)
+AC_SUBST(link_autolibs)
+AC_SUBST(link_postlibs)
+AC_SUBST(link_libpath)
+AC_SUBST(link_flags)
+AC_SUBST(lib_dir)
+
+
+# Figure out which Makefile.ins to process; look here and
+# in all subdirectories for any file named Makefile.in, and
+# turn it into a Makefile.
+# If you want to process other files, you can add them
+# along with this variable.
+
+makefile_in_subs=`find . -name Makefile.in -print | sed 's/.in$//'`
+AC_OUTPUT(${makefile_in_subs})
