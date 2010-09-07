@@ -30,13 +30,20 @@ NRT_CXX_GUARD
 
 /*!
  *  These are values for ownership.  You may elect either policy.
- *  Here is the difference.  In the hash table, the data field is
- *  a pointer to an object.  That object may have been allocated by
- *  you, or it may be static, I dont know.  You may wish to remove it
- *  yourself, or I may be told to remove it for you.  If you do not tell
- *  me, I will assume that you own it.
+ *  Here is the difference.  In the hash table, the datafield is
+ * a pointer to an object. That object may have
+ been allocated by
+ * you, or it may be stat ic, I dont know. Y
+ ou may wish to remove it
+ * yourself, or I m ay be told to remo
+ ve it foryou. If you do not tell
+ * me, I will assume that you ow
+ n it.
  */
-enum { NRT_DATA_RETAIN_OWNER = 0, NRT_DATA_ADOPT = 1 };
+enum
+{
+    NRT_DATA_RETAIN_OWNER = 0, NRT_DATA_ADOPT = 1
+};
 
 /*!
  *  \struct nrt_HashTable
@@ -49,16 +56,13 @@ typedef struct _NRT_HashTable
     nrt_List **buckets;
     int nbuckets;
     int adopt;
-    unsigned int (*hash) (struct _NRT_HashTable *, const char *);
-}
-nrt_HashTable;
+    unsigned int (*hash)(struct _NRT_HashTable *, const char *);
+} nrt_HashTable;
 
-typedef unsigned int (*NRT_HASH_FUNCTION) (nrt_HashTable *,
-        const char *);
+typedef unsigned int (*NRT_HASH_FUNCTION)(nrt_HashTable *, const char *);
 
-typedef int (*NRT_HASH_FUNCTOR) (nrt_HashTable *, nrt_Pair * pair,
-                                  NRT_DATA* userData, nrt_Error * error);
-
+typedef int (*NRT_HASH_FUNCTOR)(nrt_HashTable *, nrt_Pair * pair,
+        NRT_DATA* userData, nrt_Error * error);
 
 /*!
  *  \struct nrt_HashTableIterator
@@ -69,10 +73,7 @@ typedef struct _NRT_HashTableIterator
     nrt_HashTable *hash; /*! The hash this is an iterator for */
     int curBucket; /*! The current bucket */
     nrt_ListIterator listIter; /*! The iterator for the current bucket chain */
-}
-nrt_HashTableIterator;
-
-
+} nrt_HashTableIterator;
 
 /*!
  *  Constructor.  This creates the hash table.
@@ -83,7 +84,6 @@ nrt_HashTableIterator;
  */
 NRTAPI(nrt_HashTable *) nrt_HashTable_construct(int nbuckets,
         nrt_Error * error);
-
 
 /*!
  *  Clone this object.  This is a deep copy operation.
@@ -96,7 +96,6 @@ NRTAPI(nrt_HashTable *) nrt_HashTable_construct(int nbuckets,
 NRTAPI(nrt_HashTable *) nrt_HashTable_clone(nrt_HashTable * source,
         NRT_DATA_ITEM_CLONE cloner,
         nrt_Error * error);
-
 
 /*!
  *  This function controls ownership.  You may elect either policy,
@@ -111,7 +110,6 @@ NRTAPI(nrt_HashTable *) nrt_HashTable_clone(nrt_HashTable * source,
  *         or NRT_DATA_RETAIN_OWNER
  */
 NRTAPI(void) nrt_HashTable_setPolicy(nrt_HashTable * ht, int policy);
-
 
 /*!
  *  Remove data from the hash table.  Here is the removal policy:
@@ -140,8 +138,7 @@ NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht,
  *  \param ht The hash table object
  *  \param key The string key
  */
-unsigned int __NRT_HashTable_defaultHash(nrt_HashTable * ht,
-        const char *key);
+unsigned int __NRT_HashTable_defaultHash(nrt_HashTable * ht, const char *key);
 
 /*!
  *  The default initializer.  This assigns the hash function to
@@ -203,7 +200,6 @@ NRTAPI(NRT_BOOL) nrt_HashTable_foreach(nrt_HashTable * ht,
         NRT_DATA* userData,
         nrt_Error * error);
 
-
 /*!
  *  Insert this key/data pair into the hash table
  *  \param ht The hash table to insert to
@@ -226,8 +222,6 @@ NRTAPI(NRT_BOOL) nrt_HashTable_insert(nrt_HashTable * ht,
 NRTAPI(nrt_Pair *)
 nrt_HashTable_find(nrt_HashTable * ht, const char *key);
 
-
-
 /*!
  *  Check to see if two iterators point at the same thing
  *
@@ -248,7 +242,6 @@ NRTAPI(NRT_BOOL) nrt_HashTableIterator_equals(nrt_HashTableIterator * it1,
 NRTAPI(NRT_BOOL) nrt_HashTableIterator_notEqualTo(nrt_HashTableIterator * it1,
         nrt_HashTableIterator * it2);
 
-
 /*!
  *  Return an iterator to the head of the chain
  *
@@ -256,7 +249,6 @@ NRTAPI(NRT_BOOL) nrt_HashTableIterator_notEqualTo(nrt_HashTableIterator * it1,
  *  \return An iterator to the head of the chain
  */
 NRTAPI(nrt_HashTableIterator) nrt_HashTable_begin(nrt_HashTable * ht);
-
 
 /*!
  *  Get an iterator to the tail of the chain
@@ -266,7 +258,6 @@ NRTAPI(nrt_HashTableIterator) nrt_HashTable_begin(nrt_HashTable * ht);
  */
 NRTAPI(nrt_HashTableIterator) nrt_HashTable_end(nrt_HashTable * ht);
 
-
 /*!
  *  Increment the iterator.  Eventually, this will point at NULL.
  *
@@ -275,14 +266,12 @@ NRTAPI(nrt_HashTableIterator) nrt_HashTable_end(nrt_HashTable * ht);
  */
 NRTAPI(void) nrt_HashTableIterator_increment(nrt_HashTableIterator * iter);
 
-
 /*!
  *  Get the pair (key, value) this iterator points to
  *
  *  \return The data
  */
 NRTAPI(nrt_Pair*) nrt_HashTableIterator_get(nrt_HashTableIterator * iter);
-
 
 NRT_CXX_ENDGUARD
 

@@ -24,7 +24,6 @@
 #define __NRT_TREE_H__
 
 #include "nrt/System.h"
-#include "nrt/Error.h"
 #include "nrt/List.h"
 
 NRT_CXX_GUARD

@@ -24,7 +24,6 @@
 #define __NRT_IO_HANDLE_H__
 
 #include "nrt/System.h"
-#include "nrt/Error.h"
 
 #   define NRT_IO_SUCCESS(I) ((I) >= 0)
 
@@ -52,7 +51,6 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
         nrt_CreationFlags creation,
         nrt_Error * error);
 
-
 /*!
  *  Read from the IO handle.  This function is guaranteed to return
  *  after having read the requisite number of bytes or fail out.
@@ -65,9 +63,8 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
  *  \return       1 on success and 0 otherwise
  */
 NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle,
-                                      char *buf, size_t size,
-                                      nrt_Error * error);
-
+        char *buf, size_t size,
+        nrt_Error * error);
 
 /*!
  *  Write to the IO handle.  This function attempts to write to the IO handle
@@ -81,8 +78,8 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle,
  *  \return NRT_SUCCESS if the method succeeds, NRT_FAILURE on failure.
  */
 NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle,
-                                       const char *buf, size_t size,
-                                       nrt_Error * error);
+        const char *buf, size_t size,
+        nrt_Error * error);
 
 /*!
  *  Seek into the handle at this point.  Basically
@@ -99,8 +96,8 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle,
  *  \return The offset from the beginning to the current position
  */
 NRTAPI(nrt_Off) nrt_IOHandle_seek(nrt_IOHandle handle,
-                                  nrt_Off offset, int whence,
-                                  nrt_Error * error);
+        nrt_Off offset, int whence,
+        nrt_Error * error);
 
 /*!
  *  Tell the location that the handle is pointing to.  On failure,
@@ -112,8 +109,7 @@ NRTAPI(nrt_Off) nrt_IOHandle_seek(nrt_IOHandle handle,
  *  \return The offset
  */
 NRTAPI(nrt_Off) nrt_IOHandle_tell(nrt_IOHandle handle,
-                                  nrt_Error * error);
-
+        nrt_Error * error);
 
 /*!
  *  Get the size of the handle (how big is the file).
@@ -126,7 +122,7 @@ NRTAPI(nrt_Off) nrt_IOHandle_tell(nrt_IOHandle handle,
  *  \return The size of the file
  */
 NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle,
-                                     nrt_Error * error);
+        nrt_Error * error);
 
 /*!
  *  Close the IO handle.

@@ -33,7 +33,6 @@
  *  The structures are modeled on the C++ Standard Template Library.
  */
 #include "nrt/System.h"
-#include "nrt/Error.h"
 
 NRT_CXX_GUARD
 /*!
@@ -52,11 +51,9 @@ typedef struct _NRT_ListNode
     struct _NRT_ListNode *prev;
     /*!  The data  */
     NRT_DATA *data;
+} nrt_ListNode;
 
-}
-nrt_ListNode;
-
-typedef NRT_DATA *(*NRT_DATA_ITEM_CLONE) (NRT_DATA *, nrt_Error *);
+typedef NRT_DATA *(*NRT_DATA_ITEM_CLONE)(NRT_DATA *, nrt_Error *);
 
 /*!
  *  \struct nrt_ListIterator
@@ -70,8 +67,7 @@ typedef struct _NRT_ListIterator
     /*!  Pointer to the current node  */
     nrt_ListNode *current;
 
-}
-nrt_ListIterator;
+} nrt_ListIterator;
 
 /*!
  *  \struct nrt_List
@@ -87,8 +83,7 @@ typedef struct _NRT_List
     /*!  A pointer to the final node  */
     nrt_ListNode *last;
 
-}
-nrt_List;
+} nrt_List;
 
 /*!
  *  Construct a new node.  This node will be attached to its
@@ -132,8 +127,8 @@ NRTAPI(NRT_BOOL) nrt_List_isEmpty(nrt_List * this_chain);
  *  \param error An error if one occurred
  */
 NRTAPI(NRT_BOOL) nrt_List_pushFront(nrt_List * this_chain,
-                                       NRT_DATA * data,
-                                       nrt_Error * error);
+        NRT_DATA * data,
+        nrt_Error * error);
 
 /*!
  *  Push something onto the back of our chain
@@ -142,8 +137,8 @@ NRTAPI(NRT_BOOL) nrt_List_pushFront(nrt_List * this_chain,
  *  \param error The error if one occurred
  */
 NRTAPI(NRT_BOOL) nrt_List_pushBack(nrt_List * this_chain,
-                                      NRT_DATA * data,
-                                      nrt_Error * error);
+        NRT_DATA * data,
+        nrt_Error * error);
 
 /*!
  *  Pop the node off the front and return it.
@@ -165,7 +160,6 @@ NRTAPI(NRT_DATA *) nrt_List_popFront(nrt_List * this_chain);
  */
 NRTAPI(NRT_DATA *) nrt_List_popBack(nrt_List * this_chain);
 
-
 /*!
  *  Construct our chain and null-initialize the first and last pointers
  *  \param  error An error to populate on failure
@@ -182,8 +176,8 @@ NRTAPI(nrt_List *) nrt_List_construct(nrt_Error * error);
  *  \return A new object that is identical to the old
  */
 NRTAPI(nrt_List *) nrt_List_clone(nrt_List * source,
-                                     NRT_DATA_ITEM_CLONE cloner,
-                                     nrt_Error * error);
+        NRT_DATA_ITEM_CLONE cloner,
+        nrt_Error * error);
 
 /*!
  *  Delete the chain (from the back).  This means we destruct each node.
@@ -263,8 +257,8 @@ NRTAPI(nrt_ListIterator) nrt_List_end(nrt_List * this_chain);
  *  \return 1 on success, 0 on failure
  */
 NRTAPI(NRT_BOOL) nrt_List_insert(nrt_List * chain,
-                                    nrt_ListIterator iter,
-                                    NRT_DATA * data, nrt_Error * error);
+        nrt_ListIterator iter,
+        NRT_DATA * data, nrt_Error * error);
 
 /*!
  *  Remove the data from an arbitrary point in the list.
@@ -278,8 +272,7 @@ NRTAPI(NRT_BOOL) nrt_List_insert(nrt_List * chain,
  *  \return We dont know how to delete YOUR object, so return it
  */
 NRTAPI(NRT_DATA *) nrt_List_remove(nrt_List * chain,
-                                      nrt_ListIterator * where);
-
+        nrt_ListIterator * where);
 
 /*!
  *  Moves the data located at oldIndex to newIndex.
@@ -290,9 +283,9 @@ NRTAPI(NRT_DATA *) nrt_List_remove(nrt_List * chain,
  *  \return NRT_SUCCESS on success, or NRT_FAILURE
  */
 NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain,
-                                  nrt_Uint32 oldIndex,
-                                  nrt_Uint32 newIndex,
-                                  nrt_Error * error);
+        nrt_Uint32 oldIndex,
+        nrt_Uint32 newIndex,
+        nrt_Error * error);
 
 /*!
  *  Return the size of the list
@@ -301,7 +294,6 @@ NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain,
  *  \return size of the list
  */
 NRTAPI(nrt_Uint32) nrt_List_size(nrt_List * list);
-
 
 /*!
  *  Return the element at the specified position in the list
@@ -313,9 +305,8 @@ NRTAPI(nrt_Uint32) nrt_List_size(nrt_List * list);
  *  \return the data at the specified position
  */
 NRTAPI(NRT_DATA*) nrt_List_get(nrt_List * list,
-                                  int index,
-                                  nrt_Error* error);
-
+        int index,
+        nrt_Error* error);
 
 /*!
  *  Increment the iterator.  Eventually, this will point at NULL.

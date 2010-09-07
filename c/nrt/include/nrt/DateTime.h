@@ -23,17 +23,10 @@
 #ifndef __NRT_DATE_TIME_H__
 #define __NRT_DATE_TIME_H__
 
-#include "nrt/Error.h"
 #include "nrt/System.h"
 #include "nrt/Utils.h"
 
-
-#define NRT_DATE_FORMAT_20  "%d%H%M%SZ%b%y"
-#define NRT_DATE_FORMAT_21  "%Y%m%d%H%M%S"
-
-
 NRT_CXX_GUARD
-
 
 /*!
  * The DateTime structure represents time. All dates are stored to reflect the
@@ -53,7 +46,6 @@ typedef struct _NRT_DateTime
     double timeInMillis;
 } nrt_DateTime;
 
-
 /*!
  * Returns a DateTime object representing the current moment in time.
  */
@@ -69,65 +61,65 @@ NRTAPI(nrt_DateTime*) nrt_DateTime_fromMillis(double millis, nrt_Error*);
  * Sets the year of a DateTime object and updates the timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setYear(nrt_DateTime *dateTime,
-                                         int year,
-                                         nrt_Error *error);
+        int year,
+        nrt_Error *error);
 
 /*!
  * Sets the month of a DateTime object and updates the timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setMonth(nrt_DateTime *dateTime,
-                                          int month,
-                                          nrt_Error *error);
+        int month,
+        nrt_Error *error);
 
 /*!
  * Sets the dayOfMonth of a DateTime object and updates the timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfMonth(nrt_DateTime *dateTime,
-                                               int dayOfMonth,
-                                               nrt_Error *error);
+        int dayOfMonth,
+        nrt_Error *error);
 
 /*!
  * Sets the dayOfWeek of a DateTime object and updates the timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfWeek(nrt_DateTime *dateTime,
-                                              int dayOfWeek,
-                                              nrt_Error *error);
+        int dayOfWeek,
+        nrt_Error *error);
 
 /*!
  * Sets the dayOfYear of a DateTime object and updates the timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime *dateTime,
-                                              int dayOfYear,
-                                              nrt_Error *error);
+        int dayOfYear,
+        nrt_Error *error);
 
 /*!
  * Sets the hour of a DateTime object and updates the timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setHour(nrt_DateTime *dateTime,
-                                         int hour,
-                                         nrt_Error *error);
+        int hour,
+        nrt_Error *error);
 
 /*!
  * Sets the minute of a DateTime object and updates the timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setMinute(nrt_DateTime *dateTime,
-                                           int minute,
-                                           nrt_Error *error);
+        int minute,
+        nrt_Error *error);
 
 /*!
  * Sets the second of a DateTime object and updates the timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setSecond(nrt_DateTime *dateTime,
-                                           double second,
-                                           nrt_Error *error);
+        double second,
+        nrt_Error *error);
 
 /*!
  * Sets the timeInMillis of a DateTime object and updates
  * the remaining fields to match the new timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime *dateTime,
-                                                 double timeInMillis,
-                                                 nrt_Error *error);
+        double timeInMillis,
+        nrt_Error *error);
 
 /*!
  * Returns a DateTime object from the string with the given format.
@@ -168,7 +160,6 @@ NRTAPI(NRT_BOOL) nrt_DateTime_format(nrt_DateTime *dateTime,
 NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
         const char* format, char* outBuf,
         size_t maxSize, nrt_Error *error);
-
 
 NRT_CXX_ENDGUARD
 

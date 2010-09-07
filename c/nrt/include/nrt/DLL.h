@@ -23,28 +23,23 @@
 #ifndef __NRT_DLL_H__
 #define __NRT_DLL_H__
 
-
 #include "nrt/Defines.h"
 #include "nrt/Types.h"
 #include "nrt/Memory.h"
 #include "nrt/Error.h"
-
-
 
 #ifdef WIN32
 /*  Under windows, a dynamic shared object is a DLL  */
 #    define  NRT_DLL_EXTENSION ".dll"
 #else
 /*
-*  BE WARY: Under Unix, we expect a DSO to have a .so extension,
-*  in addition to the NRT_PLUGIN_PATH.  That means that,
-*  despite a weak type extension system, your plugin won't
-*  get loaded without an .so extension.
-*/
+ *  BE WARY: Under Unix, we expect a DSO to have a .so extension,
+ *  in addition to the NRT_PLUGIN_PATH.  That means that,
+ *  despite a weak type extension system, your plugin won't
+ *  get loaded without an .so extension.
+ */
 #    define  NRT_DLL_EXTENSION ".so"
 #endif
-
-
 
 /*!
  *  \struct nrt_DLL
@@ -52,10 +47,9 @@
  */
 typedef struct _NRT_DLL
 {
-    char *libname;    /* The name of the library */
-    NRT_NATIVE_DLL lib;        /* A handle to the library */
-}
-nrt_DLL;
+    char *libname; /* The name of the library */
+    NRT_NATIVE_DLL lib; /* A handle to the library */
+} nrt_DLL;
 
 NRT_CXX_GUARD
 
@@ -66,7 +60,7 @@ NRT_CXX_GUARD
  *  \param error An error object to fill on problem
  *  \return A DLL object, or NULL upon failure
  */
-NRTAPI(nrt_DLL *) nrt_DLL_construct(nrt_Error * error);
+NRTAPI(nrt_DLL*) nrt_DLL_construct(nrt_Error * error);
 
 /*!
  *  Destroy the dll object.  If the lib value is not null,
@@ -84,7 +78,7 @@ NRTAPI(void) nrt_DLL_destruct(nrt_DLL ** dll);
  *  \return A status to be tested using NRT_FAILURE()
  */
 NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll,
-                                 const char *libname, nrt_Error * error);
+        const char *libname, nrt_Error * error);
 
 /*!
  *  Unload the structure.  This may shrink the executable size.

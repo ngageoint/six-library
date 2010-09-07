@@ -30,15 +30,15 @@
 NRT_CXX_GUARD
 
 #if defined(WIN32)
-    typedef LPCRITICAL_SECTION nrt_Mutex;
+typedef LPCRITICAL_SECTION nrt_Mutex;
 #elif defined(__sgi)
 #   include <sys/atomic_ops.h>
 #   define NRT_MUTEX_INIT 0
-    typedef int nrt_Mutex;
+typedef int nrt_Mutex;
 #else
 #   include <pthread.h>
 #   define NRT_MUTEX_INIT PTHREAD_MUTEX_INITIALIZER
-    typedef pthread_mutex_t nrt_Mutex;
+typedef pthread_mutex_t nrt_Mutex;
 #endif
 
 NRTPROT(void) nrt_Mutex_lock(nrt_Mutex* m);

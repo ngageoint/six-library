@@ -23,11 +23,9 @@
 #ifndef __NRT_STREAM_IO_WRITE_HANDLER_H__
 #define __NRT_STREAM_IO_WRITE_HANDLER_H__
 
-#include "nrt/Error.h"
 #include "nrt/System.h"
 #include "nrt/IOInterface.h"
 #include "nrt/WriteHandler.h"
-
 
 NRT_CXX_GUARD
 
@@ -43,11 +41,10 @@ NRT_CXX_GUARD
  * \return              a nrt_WriteHandler*, or NULL on error
  */
 NRTAPI(nrt_WriteHandler*) nrt_StreamIOWriteHandler_construct(
-    nrt_IOInterface *io,
-    nrt_Uint64 offset,
-    nrt_Uint64 bytes,
-    nrt_Error *error);
-
+        nrt_IOInterface *io,
+        nrt_Uint64 offset,
+        nrt_Uint64 bytes,
+        nrt_Error *error);
 
 NRT_CXX_ENDGUARD
 

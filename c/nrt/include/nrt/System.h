@@ -31,5 +31,5 @@
 #include "nrt/Sync.h"
 #include "nrt/Directory.h"
 #include "nrt/IOHandle.h"
-/*  Now we are cross-platform (except for IO -- see IOHandle.h)  */
+
 #endif

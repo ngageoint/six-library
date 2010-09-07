@@ -23,14 +23,11 @@
 #ifndef __NRT_DEBUG_H__
 #define __NRT_DEBUG_H__
 
-
-
 #include "nrt/Defines.h"
 #include "nrt/Types.h"
 #ifdef NRT_DEBUG
 
 #    define NRT_MEM_LOG "memory_trace"
-
 
 NRT_CXX_GUARD
 
@@ -59,7 +56,7 @@ NRTPROT(void *) nrt_Debug_malloc(const char *file, int line, size_t sz);
  *  \return The pointer or NULL on failure
  */
 NRTPROT(void *) nrt_Debug_realloc(const char *file,
-                                    int line, void *ptr, size_t sz);
+        int line, void *ptr, size_t sz);
 
 /*!
  *  Free some space and record that space in a file.

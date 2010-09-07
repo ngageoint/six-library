@@ -23,7 +23,6 @@
 #ifndef __NRT_WRITE_HANDLER_H__
 #define __NRT_WRITE_HANDLER_H__
 
-#include "nrt/Error.h"
 #include "nrt/System.h"
 #include "nrt/IOInterface.h"
 
@@ -35,17 +34,14 @@ NRT_CXX_GUARD
  *  \param io       The output interface
  *  \param error    populated on error
  */
-typedef NRT_BOOL(*NRT_IWRITEHANDLER_WRITE) (NRT_DATA *data,
-                                              nrt_IOInterface* output,
-                                              nrt_Error *error);
-
+typedef NRT_BOOL(*NRT_IWRITEHANDLER_WRITE)(NRT_DATA *data,
+        nrt_IOInterface* output, nrt_Error *error);
 
 /*
  *  Function pointer for destructing the data structure
  *  \param data     The ancillary "helper" data
  */
-typedef void (*NRT_IWRITEHANDLER_DESTRUCT) (NRT_DATA *);
-
+typedef void (*NRT_IWRITEHANDLER_DESTRUCT)(NRT_DATA *);
 
 /*!
  *  \struct nrt_IWriteHandler
@@ -57,17 +53,13 @@ typedef struct _NRT_IWriteHandler
     NRT_IWRITEHANDLER_DESTRUCT destruct;
 } nrt_IWriteHandler;
 
-
 typedef struct _NRT_WriteHandler
 {
     nrt_IWriteHandler *iface;
     NRT_DATA *data;
-}nrt_WriteHandler;
+} nrt_WriteHandler;
 
-
-NRTAPI(void) nrt_WriteHandler_destruct(nrt_WriteHandler ** writeHandler);
-
-
+NRTAPI(void) nrt_WriteHandler_destruct(nrt_WriteHandler **writeHandler);
 
 NRT_CXX_ENDGUARD
 

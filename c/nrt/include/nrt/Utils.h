@@ -24,7 +24,6 @@
 #define __NRT_UTILS_H__
 
 #include "nrt/System.h"
-#include "nrt/Error.h"
 #include "nrt/List.h"
 
 NRT_CXX_GUARD
@@ -37,7 +36,6 @@ NRT_CXX_GUARD
  */
 NRTAPI(nrt_List*) nrt_Utils_splitString(
         char *str, unsigned int max, nrt_Error* error);
-
 
 NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(char *str);
 
@@ -67,9 +65,8 @@ NRTPROT(void) nrt_Utils_replace(char* str, char oldValue, char newValue);
  * \param extension The extension name
  */
 NRTAPI(void) nrt_Utils_baseName(char* base,
-                                  const char* fullName,
-                                  const char* extension);
-
+        const char* fullName,
+        const char* extension);
 
 /*!
  *  Take in a decimal degree format string and convert it into
@@ -81,9 +78,8 @@ NRTAPI(void) nrt_Utils_baseName(char* base,
  *
  */
 NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char* d,
-                                                 double* decimal,
-                                                 nrt_Error* error);
-
+        double* decimal,
+        nrt_Error* error);
 
 NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
 

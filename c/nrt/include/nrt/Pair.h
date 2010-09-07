@@ -38,9 +38,7 @@ typedef struct _NRT_Pair
 {
     char *key;
     NRT_DATA *data;
-}
-nrt_Pair;
-
+} nrt_Pair;
 
 /*!
  *  Copy the key, maintain a pointer to the data
@@ -49,8 +47,7 @@ nrt_Pair;
  *  \param data The data in the pair (not a copy)
  */
 NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key,
-                             NRT_DATA * data);
-
+        NRT_DATA * data);
 
 /*!
  *  This simply calls the init method
