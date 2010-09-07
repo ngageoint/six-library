@@ -23,48 +23,13 @@
 #ifndef __NITF_DIRECTORY_H__
 #define __NITF_DIRECTORY_H__
 
-#include "nitf/System.h"
+#include "nrt/Directory.h"
 
-NITF_CXX_GUARD
-
-typedef void nitf_Directory;
-
-/*!
- *  Create a directory object.  Gives back a directory object
- *  \param error An error to populate on failure
- *  \return A directory object
- */
-NITFAPI(nitf_Directory *) nitf_Directory_construct(nitf_Error * error);
-
-/*!
- *  Find the first file in a directory.
- *  \param dir The directory object to operate on
- *  \param path The path to assign this directory
- *  \return The name of the first file in the directory
- */
-NITFAPI(const char *) nitf_Directory_findFirstFile(nitf_Directory * dir,
-        const char *path);
-
-/*!
- *  Opens the next file in a directory.  This call should be made
- *  after a call has been already made to findFirstFile
- *  \param dir The directory object to operate on
- *  \return The name of the next file in the directory, or NULL if none
- */
-NITFAPI(const char *) nitf_Directory_findNextFile(nitf_Directory * dir);
-
-/*!
- *  Destroy the directory object in question
- */
-NITFAPI(void) nitf_Directory_destruct(nitf_Directory ** dir);
-
-/*!
- *  Check if the directory exists
- *  \param dir The name of the directory to check
- *  \return 1 if exists, 0 if not exists
- */
-NITFAPI(NITF_BOOL) nitf_Directory_exists(const char *dir);
-
-NITF_CXX_ENDGUARD
+typedef nrt_Directory                   nitf_Directory;
+#define nitf_Directory_construct        nrt_Directory_construct
+#define nitf_Directory_findFirstFile    nrt_Directory_findFirstFile
+#define nitf_Directory_findNextFile     nrt_Directory_findNextFile
+#define nitf_Directory_destruct         nrt_Directory_destruct
+#define nitf_Directory_exists           nrt_Directory_exists
 
 #endif
