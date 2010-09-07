@@ -23,10 +23,7 @@
 #ifndef __NITF_DIRECTORY_H__
 #define __NITF_DIRECTORY_H__
 
-#include "nitf/Defines.h"
-#include "nitf/Types.h"
-#include "nitf/Error.h"
-#include "nitf/Memory.h"
+#include "nitf/System.h"
 
 NITF_CXX_GUARD
 

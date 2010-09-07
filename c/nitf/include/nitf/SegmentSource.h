@@ -23,7 +23,6 @@
 #ifndef __NITF_SEGMENT_SOURCE_H__
 #define __NITF_SEGMENT_SOURCE_H__
 
-#include "nitf/Error.h"
 #include "nitf/System.h"
 #include "nitf/IOHandle.h"
 #include "nitf/DataSource.h"

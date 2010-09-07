@@ -24,7 +24,6 @@
 #define __NITF_INT_STACK_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
 
 #define NITF_INT_STACK_DEPTH 10
 

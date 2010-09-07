@@ -36,7 +36,6 @@
 
 #include <import/nitf.h>
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/IOHandle.h"
 #include "nitf/Field.h"
 #include "nitf/ImageIO.h"

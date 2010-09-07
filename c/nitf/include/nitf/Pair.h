@@ -24,41 +24,13 @@
 #define __NITF_PAIR_H__
 
 #include "nitf/System.h"
+#include "nrt/Pair.h"
 
 NITF_CXX_GUARD
 
-/*!
- *  \struct nitf_Pair
- *  \brief  This is an object containing the data and the key
- *
- *  The nitf_Pair is an object similar to a std::pair<char, nitf_Data
- *
- */
-typedef struct _nitf_Pair
-{
-    char *key;
-    NITF_DATA *data;
-}
-nitf_Pair;
-
-
-/*!
- *  Copy the key, maintain a pointer to the data
- *  \param pair The structure to initialize
- *  \param key  The key in the pair (is copied)
- *  \param data The data in the pair (not a copy)
- */
-NITFAPI(void) nitf_Pair_init(nitf_Pair * pair, const char *key,
-                             NITF_DATA * data);
-
-
-/*!
- *  This simply calls the init method
- *  \param dst The destination
- *  \param src The source
- *
- */
-NITFAPI(void) nitf_Pair_copy(nitf_Pair * dst, nitf_Pair * src);
+typedef nrt_Pair        nitf_Pair;
+#define nitf_Pair_init  nrt_Pair_init
+#define nitf_Pair_copy  nrt_Pair_copy
 
 NITF_CXX_ENDGUARD
 

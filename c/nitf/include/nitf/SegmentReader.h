@@ -25,7 +25,6 @@
 
 #include "nitf/IOInterface.h"
 #include "nitf/System.h"
-#include "nitf/Error.h"
 
 NITF_CXX_GUARD
 

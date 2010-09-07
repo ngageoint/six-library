@@ -23,7 +23,6 @@
 #ifndef __NITF_WRITER_H__
 #define __NITF_WRITER_H__
 
-#include "nitf/Error.h"
 #include "nitf/IOInterface.h"
 #include "nitf/PluginRegistry.h"
 #include "nitf/Record.h"

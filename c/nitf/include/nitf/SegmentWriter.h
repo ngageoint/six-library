@@ -25,7 +25,6 @@
 
 #include "nitf/IOInterface.h"
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/SegmentSource.h"
 #include "nitf/WriteHandler.h"
 

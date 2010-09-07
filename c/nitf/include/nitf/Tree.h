@@ -24,7 +24,6 @@
 #define __NITF_TREE_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/List.h"
 
 NITF_CXX_GUARD

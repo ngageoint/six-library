@@ -24,7 +24,6 @@
 #define __NITF_DE_SEGMENT_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/DESubheader.h"
 
 

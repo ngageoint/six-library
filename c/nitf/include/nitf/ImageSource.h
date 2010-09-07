@@ -25,7 +25,6 @@
 
 #include "nitf/BandSource.h"
 #include "nitf/List.h"
-#include "nitf/Error.h"
 
 NITF_CXX_GUARD
 
