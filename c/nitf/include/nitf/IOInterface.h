@@ -23,101 +23,26 @@
 #ifndef __NITF_IO_INTERFACE_H__
 #define __NITF_IO_INTERFACE_H__
 
-/* Default implementation */
-#include "nitf/IOHandle.h"
+#include "nrt/IOInterface.h"
 
-NITF_CXX_GUARD
+typedef NRT_IO_INTERFACE_READ           NITF_IO_INTERFACE_READ;
+typedef NRT_IO_INTERFACE_WRITE          NITF_IO_INTERFACE_WRITE;
+typedef NRT_IO_INTERFACE_SEEK           NITF_IO_INTERFACE_SEEK;
+typedef NRT_IO_INTERFACE_TELL           NITF_IO_INTERFACE_TELL;
+typedef NRT_IO_INTERFACE_GET_SIZE       NITF_IO_INTERFACE_GET_SIZE;
+typedef NRT_IO_INTERFACE_CLOSE          NITF_IO_INTERFACE_CLOSE;
+typedef NRT_IO_INTERFACE_DESTRUCT       NITF_IO_INTERFACE_DESTRUCT;
 
+typedef nrt_IIOInterface                nitf_IIOInterface;
+typedef nrt_IOInterface                 nitf_IOInterface;
 
-typedef NITF_BOOL (*NITF_IO_INTERFACE_READ) (NITF_DATA* data,
-                                             char *buf, size_t size,
-                                             nitf_Error *error);
-
-typedef NITF_BOOL (*NITF_IO_INTERFACE_WRITE)(NITF_DATA* data,
-                                             const char *buf, size_t size,
-                                             nitf_Error * error);
-
-typedef nitf_Off    (*NITF_IO_INTERFACE_SEEK)(NITF_DATA* data,
-                                              nitf_Off offset, int whence,
-                                              nitf_Error* error);
-
-typedef nitf_Off     (*NITF_IO_INTERFACE_TELL)(NITF_DATA* data,
-                                               nitf_Error * error);
-
-typedef nitf_Off     (*NITF_IO_INTERFACE_GET_SIZE)(NITF_DATA* data,
-                                                   nitf_Error * error);
-
-typedef NITF_BOOL (*NITF_IO_INTERFACE_CLOSE)(NITF_DATA* data,
-                                             nitf_Error* error);
-
-typedef void      (*NITF_IO_INTERFACE_DESTRUCT) (NITF_DATA *);
-
-typedef struct _nitf_IIOInterface
-{
-    NITF_IO_INTERFACE_READ     read;
-    NITF_IO_INTERFACE_WRITE    write;
-    NITF_IO_INTERFACE_SEEK     seek;
-    NITF_IO_INTERFACE_TELL     tell;
-    NITF_IO_INTERFACE_GET_SIZE getSize;
-    NITF_IO_INTERFACE_CLOSE    close;
-    NITF_IO_INTERFACE_DESTRUCT destruct;
-}
-nitf_IIOInterface;
-
-typedef struct _nitf_IOInterface
-{
-    NITF_DATA* data;
-    nitf_IIOInterface* iface;
-}
-nitf_IOInterface;
-
-NITFAPI(NITF_BOOL) nitf_IOInterface_read(nitf_IOInterface*,
-                                         char *buf, size_t size,
-                                         nitf_Error *error);
-
-NITFAPI(NITF_BOOL) nitf_IOInterface_write(nitf_IOInterface* io,
-                                          const char *buf,
-                                          size_t size,
-                                          nitf_Error* error);
-
-NITFAPI(nitf_Off) nitf_IOInterface_seek(nitf_IOInterface* io,
-                                        nitf_Off offset,
-                                        int whence,
-                                        nitf_Error* error);
-
-NITFAPI(nitf_Off) nitf_IOInterface_tell(nitf_IOInterface* io,
-                                     nitf_Error* error);
-
-
-
-NITFAPI(nitf_Off) nitf_IOInterface_getSize(nitf_IOInterface* io,
-                                        nitf_Error* error);
-
-
-NITFAPI(NITF_BOOL) nitf_IOInterface_close(nitf_IOInterface* io,
-                                          nitf_Error* error);
-/*!
- *  'Destructor' for IOInterface.  This relies on its internal iface,
- *  pointer table to determine how/if to destruct the NITF_DATA* data
- *  field.
- *
- */
-NITFAPI(void) nitf_IOInterface_destruct(nitf_IOInterface** io);
-
-/*!
- *  This special 'subclass' puts the IOHandle into the IOInterface
- *  that is needed to supply it for reads and writes within the library.
- *
- *  You can define your own
- *  interfaces, and set them using the nitf_Reader_setInputSource()
- *  and the nitf_Writer_setOutputDest()
- */
-NITFAPI(nitf_IOInterface*) nitf_IOHandleAdaptor_construct(nitf_IOHandle handle,
-                                                          nitf_Error* error);
-
-
-
-
-NITF_CXX_ENDGUARD
+#define nitf_IOInterface_read           nrt_IOInterface_read
+#define nitf_IOInterface_write          nrt_IOInterface_write
+#define nitf_IOInterface_seek           nrt_IOInterface_seek
+#define nitf_IOInterface_tell           nrt_IOInterface_tell
+#define nitf_IOInterface_getSize        nrt_IOInterface_getSize
+#define nitf_IOInterface_close          nrt_IOInterface_close
+#define nitf_IOInterface_destruct       nrt_IOInterface_destruct
+#define nitf_IOHandleAdaptor_construct  nrt_IOHandleAdaptor_construct
 
 #endif

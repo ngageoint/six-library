@@ -23,17 +23,10 @@
 #ifndef __NITF_DATE_TIME_H__
 #define __NITF_DATE_TIME_H__
 
-#include "nitf/System.h"
-#include "nitf/Utils.h"
-
+#include "nrt/DateTime.h"
 
 #define NITF_DATE_FORMAT_20  "%d%H%M%SZ%b%y"
 #define NITF_DATE_FORMAT_21  "%Y%m%d%H%M%S"
-
-#include "nrt/DateTime.h"
-
-
-NITF_CXX_GUARD
 
 typedef nrt_DateTime                    nitf_DateTime;
 #define nitf_DateTime_now               nrt_DateTime_now
@@ -51,7 +44,5 @@ typedef nrt_DateTime                    nitf_DateTime;
 #define nitf_DateTime_destruct          nrt_DateTime_destruct
 #define nitf_DateTime_format            nrt_DateTime_format
 #define nitf_DateTime_formatMillis      nrt_DateTime_formatMillis
-
-NITF_CXX_ENDGUARD
 
 #endif

@@ -29,8 +29,6 @@
 #define NITF_IO_SUCCESS         NRT_IO_SUCCESS
 #define NITF_MAX_READ_ATTEMPTS  NRT_MAX_READ_ATTEMPTS
 
-NITF_CXX_GUARD
-
 #define nitf_IOHandle_create    nrt_IOHandle_create
 #define nitf_IOHandle_read      nrt_IOHandle_read
 #define nitf_IOHandle_write     nrt_IOHandle_write
@@ -38,7 +36,5 @@ NITF_CXX_GUARD
 #define nitf_IOHandle_tell      nrt_IOHandle_tell
 #define nitf_IOHandle_getSize   nrt_IOHandle_getSize
 #define nitf_IOHandle_close     nrt_IOHandle_close
-
-NITF_CXX_ENDGUARD
 
 #endif

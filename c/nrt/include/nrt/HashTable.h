@@ -26,9 +26,6 @@
 #include "nrt/Pair.h"
 #include "nrt/List.h"
 
-/*  How many chains are in the hashes, by default  */
-#   define NRT_TRE_HASH_SIZE 8
-
 NRT_CXX_GUARD
 
 /*!
