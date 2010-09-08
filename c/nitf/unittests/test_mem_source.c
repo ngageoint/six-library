@@ -36,6 +36,7 @@ TEST_CASE(testMemorySource)
     nitf_Error error;
     int bandSize = MEMSIZE / NUM_BANDS;
     int numBytesPerPix = 1;
+    char *band_0 = NULL, *band_1 = NULL, *band_2 = NULL, *all_bands = NULL;
 
     /*  Construct the band sources  */
     nitf_BandSource *bs0 = nitf_MemorySource_construct(MEMBUF, MEMSIZE, 0,
@@ -57,10 +58,10 @@ TEST_CASE(testMemorySource)
     TEST_ASSERT(all);
 
     /*  Construct in memory band buffers for testing -- 0 terminate strings */
-    char *band_0 = (char *) NITF_MALLOC(bandSize + 1);
-    char *band_1 = (char *) NITF_MALLOC(bandSize + 1);
-    char *band_2 = (char *) NITF_MALLOC(bandSize + 1);
-    char *all_bands = (char *) NITF_MALLOC(MEMSIZE + 1);
+    band_0 = (char *) NITF_MALLOC(bandSize + 1);
+    band_1 = (char *) NITF_MALLOC(bandSize + 1);
+    band_2 = (char *) NITF_MALLOC(bandSize + 1);
+    all_bands = (char *) NITF_MALLOC(MEMSIZE + 1);
     band_0[bandSize] = 0;
     band_1[bandSize] = 0;
     band_2[bandSize] = 0;
