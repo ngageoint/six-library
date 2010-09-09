@@ -30,10 +30,10 @@ GeoTIFFWriteControl::GeoTIFFWriteControl()
 {
     // Fix us, we are broken
     tiff::KnownTagsRegistry::getInstance().addEntry(Constants::GT_SICD_KEY,
-                                                    tiff::Const::Type::ASCII,
+                                                    tiff::Const::Type::UNDEFINED,
                                                     "SICDXMLTag");
     tiff::KnownTagsRegistry::getInstance().addEntry(Constants::GT_SIDD_KEY,
-                                                    tiff::Const::Type::ASCII,
+                                                    tiff::Const::Type::UNDEFINED,
                                                     "SIDDXMLTag");
 }
 void GeoTIFFWriteControl::initialize(Container* container)
