@@ -132,13 +132,13 @@ std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data,
     tiff::IFDEntry* bitsPerSample = (*ifd)[tiff::KnownTags::BITS_PER_SAMPLE];
 
     unsigned short numBands = data->getNumChannels();
-    unsigned short eight(8);
+    unsigned short bitDepth = data->getNumBytesPerPixel() * 8 / numBands;
 
     for (unsigned int j = 0; j < numBands; ++j)
     {
         bitsPerSample->addValue(
                                 tiff::TypeFactory::create(
-                                                          (unsigned char*) &eight,
+                                                          (unsigned char*) &bitDepth,
                                                           tiff::Const::Type::SHORT));
     }
 
