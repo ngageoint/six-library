@@ -1,5 +1,5 @@
 import sys, os, types, re, fnmatch, subprocess
-from os.path import split, isdir, isfile, exists
+from os.path import split, isdir, isfile, exists, splitext
 
 import Options, Utils
 from Configure import conf
@@ -29,12 +29,20 @@ class CPPBuildContext(BuildContext):
     def safeVersion(self, version):
         return re.sub(r'[^\w]', '.', version)
     
-    def runUnitTests(self, path):
+    def runUnitTests(self, tests, path):
         path = path or self.path.abspath()
         
-        exes = filter(lambda x: os.path.isfile(x) and os.access(x, os.X_OK),
-                                       map(lambda x: os.path.join(path, x),
-                                           os.listdir(path)))
+        def _isTest(x):
+            isTest = os.path.isfile(x) and os.access(x, os.X_OK) and \
+                           splitext(split(x)[1])[0] in tests
+            if isTest and sys.platform.startswith('win'):
+                isTest = x.endswith('.exe')
+            elif isTest:
+                isTest = split(x)[1] in tests
+            return isTest
+        
+        exes = filter(_isTest, map(lambda x: os.path.join(path, x),
+                                  os.listdir(path)))
         
         if exes:
             passed, failed = [], []
@@ -129,17 +137,20 @@ class CPPBuildContext(BuildContext):
                 uselib_local = libName
             
             sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+            tests = []
             for test in filter(modArgs.get('unittest_filter', None),
                                testNode.find_iter(in_pat=['*%s' % sourceExt],
                                                   maxdepth=1, flat=True).split()):
+                exeName = os.path.splitext(test)[0]
                 exe = bld.new_task_gen(libExeType, 'program', source=test,
                         uselib_local=uselib_local, uselib=uselib, env=env.copy(), includes='.',
-                        target=os.path.splitext(test)[0], path=testNode)
+                        target=exeName, path=testNode)
+                tests.append(exeName)
             
             # add a post-build hook to run the unit tests
             # I use partial so I can pass arguments to a post build hook
             bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
-                                     path=self.getBuildDir(testNode)))
+                                     tests=tests, path=self.getBuildDir(testNode)))
         
         return env
     
