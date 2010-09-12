@@ -20,16 +20,16 @@
  *
  */
 
-#include "nrt/WriteHandler.h"
+#include "nitf/WriteHandler.h"
 
 
-NRTAPI(void) nrt_WriteHandler_destruct(nrt_WriteHandler ** writeHandler)
+NITFAPI(void) nitf_WriteHandler_destruct(nitf_WriteHandler ** writeHandler)
 {
     if (*writeHandler)
     {
         if ((*writeHandler)->iface)
             (*writeHandler)->iface->destruct((*writeHandler)->data);
-        NRT_FREE(*writeHandler);
+        NITF_FREE(*writeHandler);
         *writeHandler = NULL;
     }
 }

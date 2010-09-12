@@ -25,6 +25,7 @@
 
 #include "nitf/System.h"
 #include "nitf/SegmentSource.h"
+#include "nitf/WriteHandler.h"
 
 NITF_CXX_GUARD
 

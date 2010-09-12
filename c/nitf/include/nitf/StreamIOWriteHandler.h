@@ -24,6 +24,7 @@
 #define __NITF_STREAM_IO_WRITE_HANDLER_H__
 
 #include "nitf/System.h"
+#include "nitf/WriteHandler.h"
 
 
 NITF_CXX_GUARD

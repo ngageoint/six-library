@@ -20,13 +20,12 @@
  *
  */
 
-#ifndef __NRT_WRITE_HANDLER_H__
-#define __NRT_WRITE_HANDLER_H__
+#ifndef __NITF_WRITE_HANDLER_H__
+#define __NITF_WRITE_HANDLER_H__
 
-#include "nrt/System.h"
-#include "nrt/IOInterface.h"
+#include "nitf/System.h"
 
-NRT_CXX_GUARD
+NITF_CXX_GUARD
 
 /*
  *  Function pointer for writing.
@@ -34,33 +33,33 @@ NRT_CXX_GUARD
  *  \param io       The output interface
  *  \param error    populated on error
  */
-typedef NRT_BOOL(*NRT_IWRITEHANDLER_WRITE)(NRT_DATA *data,
-        nrt_IOInterface* output, nrt_Error *error);
+typedef NITF_BOOL(*NITF_IWRITEHANDLER_WRITE)(NITF_DATA *data,
+        nitf_IOInterface* output, nitf_Error *error);
 
 /*
  *  Function pointer for destructing the data structure
  *  \param data     The ancillary "helper" data
  */
-typedef void (*NRT_IWRITEHANDLER_DESTRUCT)(NRT_DATA *);
+typedef void (*NITF_IWRITEHANDLER_DESTRUCT)(NITF_DATA *);
 
 /*!
- *  \struct nrt_IWriteHandler
+ *  \struct nitf_IWriteHandler
  *  \brief The "write handler" interface, which handles writing data
  */
-typedef struct _NRT_IWriteHandler
+typedef struct _NITF_IWriteHandler
 {
-    NRT_IWRITEHANDLER_WRITE write;
-    NRT_IWRITEHANDLER_DESTRUCT destruct;
-} nrt_IWriteHandler;
+    NITF_IWRITEHANDLER_WRITE write;
+    NITF_IWRITEHANDLER_DESTRUCT destruct;
+} nitf_IWriteHandler;
 
-typedef struct _NRT_WriteHandler
+typedef struct _NITF_WriteHandler
 {
-    nrt_IWriteHandler *iface;
-    NRT_DATA *data;
-} nrt_WriteHandler;
+    nitf_IWriteHandler *iface;
+    NITF_DATA *data;
+} nitf_WriteHandler;
 
-NRTAPI(void) nrt_WriteHandler_destruct(nrt_WriteHandler **writeHandler);
+NITFAPI(void) nitf_WriteHandler_destruct(nitf_WriteHandler **writeHandler);
 
-NRT_CXX_ENDGUARD
+NITF_CXX_ENDGUARD
 
 #endif

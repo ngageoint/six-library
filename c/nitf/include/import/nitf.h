@@ -65,6 +65,7 @@
 #include "nitf/TextSegment.h"
 #include "nitf/TextSubheader.h"
 #include "nitf/Utils.h"
+#include "nitf/WriteHandler.h"
 #include "nitf/Writer.h"
 
 #endif
