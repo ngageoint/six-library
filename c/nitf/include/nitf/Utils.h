@@ -24,20 +24,6 @@
 #define __NITF_UTILS_H__
 
 #include "nitf/System.h"
-#include "nitf/List.h"
-#include "nrt/Utils.h"
-
-#define nitf_Utils_splitString          nrt_Utils_splitString
-#define nitf_Utils_isNumeric            nrt_Utils_isNumeric
-#define nitf_Utils_isAlpha              nrt_Utils_isAlpha
-#define nitf_Utils_isBlank              nrt_Utils_isBlank
-#define nitf_Utils_trimString           nrt_Utils_trimString
-#define nitf_Utils_replace              nrt_Utils_replace
-#define nitf_Utils_baseName             nrt_Utils_baseName
-#define nitf_Utils_parseDecimalString   nrt_Utils_parseDecimalString
-#define nitf_Utils_getCurrentTimeMillis nrt_Utils_getCurrentTimeMillis
-#define nitf_Utils_strncasecmp          nrt_Utils_strncasecmp
-
 
 NITF_CXX_GUARD
 

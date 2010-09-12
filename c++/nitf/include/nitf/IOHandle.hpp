@@ -25,7 +25,6 @@
 
 #include "nitf/NITFException.hpp"
 #include "nitf/System.hpp"
-#include "nitf/IOHandle.h"
 #include "nitf/IOInterface.hpp"
 #include <string>
 

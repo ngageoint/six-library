@@ -23,7 +23,6 @@
 #ifndef __NITF_LIST_HPP__
 #define __NITF_LIST_HPP__
 
-#include "nitf/List.h"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
 #include <string>

@@ -24,7 +24,6 @@
 #define __NITF_SEGMENT_SOURCE_H__
 
 #include "nitf/System.h"
-#include "nitf/IOHandle.h"
 #include "nitf/DataSource.h"
 #include "nitf/SegmentReader.h"
 

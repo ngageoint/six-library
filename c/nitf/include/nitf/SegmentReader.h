@@ -23,7 +23,6 @@
 #ifndef __NITF_SEGMENT_READER_H__
 #define __NITF_SEGMENT_READER_H__
 
-#include "nitf/IOInterface.h"
 #include "nitf/System.h"
 
 NITF_CXX_GUARD

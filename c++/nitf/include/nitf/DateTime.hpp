@@ -23,7 +23,7 @@
 #ifndef __NITF_DATETIME_HPP__
 #define __NITF_DATETIME_HPP__
 
-#include "nitf/DateTime.h"
+#include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
 

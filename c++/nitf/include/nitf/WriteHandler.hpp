@@ -23,9 +23,8 @@
 #ifndef __NITF_WRITE_HANDLER_HPP__
 #define __NITF_WRITE_HANDLER_HPP__
 
-#include "nitf/WriteHandler.h"
-#include "nitf/StreamIOWriteHandler.h"
 #include "nitf/System.hpp"
+#include "nitf/StreamIOWriteHandler.h"
 #include "nitf/Object.hpp"
 #include "nitf/IOInterface.hpp"
 #include <string>

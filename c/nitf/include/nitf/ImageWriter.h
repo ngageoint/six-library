@@ -25,7 +25,6 @@
 
 #include "nitf/System.h"
 #include "nitf/ImageSource.h"
-#include "nitf/WriteHandler.h"
 #include "nitf/ImageSubheader.h"
 
 NITF_CXX_GUARD

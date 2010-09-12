@@ -24,7 +24,6 @@
 #define __NITF_BAND_SOURCE_H__
 
 #include "nitf/System.h"
-#include "nitf/IOHandle.h"
 #include "nitf/DataSource.h"
 
 NITF_CXX_GUARD

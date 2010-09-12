@@ -24,7 +24,6 @@
 #define __NITF_DATA_SOURCE_H__
 
 #include "nitf/System.h"
-#include "nitf/IOHandle.h"
 
 
 NITF_CXX_GUARD

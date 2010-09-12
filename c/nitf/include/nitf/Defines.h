@@ -26,28 +26,6 @@
 /* The version of the NITF library */
 #define NITF_LIB_VERSION    "2.5"
 
-#include "nrt/Defines.h"
-
-#define NITF_C              NRT_C
-#define NITF_GUARD          NRT_GUARD
-#define NITF_ENDGUARD       NRT_ENDGUARD
-#define NITF_BOOL           NRT_BOOL
-#define NITFAPI             NRTAPI
-#define NITFPROT            NRTPROT
-#define NITF_ATO32          NRT_ATO32
-#define NITF_ATOU32         NRT_ATOU32
-#define NITF_ATOU32_BASE    NRT_ATOU32_BASE
-#define NITF_ATO64          NRT_ATO64
-#define NITF_SNPRINTF       NRT_SNPRINTF
-#define NITF_VSNPRINTF      NRT_VSNPRINTF
-#define NITF_CXX_GUARD      NRT_CXX_GUARD
-#define NITF_CXX_ENDGUARD   NRT_CXX_ENDGUARD
-#define NITFPRIV            NRTPRIV
-#define NITF_FILE           NRT_FILE
-#define NITF_LINE           NRT_LINE
-#define NITF_FUNC           NRT_FUNC
-
-
 /**
  * Macro which declares a TRE Plugin
  *

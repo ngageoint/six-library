@@ -23,12 +23,9 @@
 #ifndef __NITF_TRE_H__
 #define __NITF_TRE_H__
 
-#include "nitf/IOInterface.h"
 #include "nitf/System.h"
 #include "nitf/Field.h"
 #include "nitf/IntStack.h"
-#include "nitf/Pair.h"
-#include "nitf/List.h"
 #include "nitf/TREDescription.h"
 
 /*!
