@@ -55,8 +55,8 @@
     if (!writeStringField(writer, own_->fld_, fld_##_SZ, fil_, dir_, error)) \
         goto CATCH_ERROR;
 
-#define NITF_WRITE_INT_FIELD(own_, fld_, fil_, dir_) \
-    if (!writeIntField(writer, own_->fld_, fld_##_SZ, fil_, dir_, error)) \
+#define NITF_WRITE_INT_FIELD(value_, fld_, fil_, dir_) \
+    if (!writeIntField(writer, value_, fld_##_SZ, fil_, dir_, error)) \
         goto CATCH_ERROR;
 
 #define NITF_WRITE_INT64_FIELD(value_, fld_, fil_, dir_) \
@@ -303,7 +303,7 @@ NITFPRIV(NITF_BOOL) writeInt64Field(nitf_Writer * writer,
     char buf[20];
 
     memset(buf, '\0', 20);
-    NITF_SNPRINTF(buf, 20, "%lu", field);
+    NITF_SNPRINTF(buf, 20, "%lld", field);
 
     if (padString(writer, buf, length, fill, fillDir, error))
     {
@@ -2053,7 +2053,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
 
 
     /*    Fix the image subheader and data lengths */
-    NITF_WRITE_INT64_FIELD((nitf_Off) numImgs, NITF_NUMI, ZERO, FILL_LEFT);
+    NITF_WRITE_INT_FIELD(numImgs, NITF_NUMI, ZERO, FILL_LEFT);
+    if (!nitf_Field_setUint32(header->NITF_NUMI, numImgs, error))
+        goto CATCH_ERROR;
     for (i = 0; i < numImgs; i++)
     {
         NITF_WRITE_INT64_FIELD(imageSubLens[i], NITF_LISH, ZERO, FILL_LEFT);
@@ -2071,8 +2073,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     }
 
     /*    Fix the graphic subheader and data lengths */
-    NITF_WRITE_INT64_FIELD((nitf_Off) numGraphics, NITF_NUMS, ZERO, FILL_LEFT);
-    if (!nitf_Field_setUint64(header->NITF_NUMS, numGraphics, error))
+    NITF_WRITE_INT_FIELD(numGraphics, NITF_NUMS, ZERO, FILL_LEFT);
+    if (!nitf_Field_setUint32(header->NITF_NUMS, numGraphics, error))
         goto CATCH_ERROR;
 
     for (i = 0; i < numGraphics; i++)
@@ -2101,8 +2103,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         goto CATCH_ERROR;
 
     /*    Fix the text subheader and data lengths */
-    NITF_WRITE_INT64_FIELD((nitf_Off) numTexts, NITF_NUMT, ZERO, FILL_LEFT);
-    if (!nitf_Field_setUint64(header->NITF_NUMT, numTexts, error))
+    NITF_WRITE_INT_FIELD(numTexts, NITF_NUMT, ZERO, FILL_LEFT);
+    if (!nitf_Field_setUint32(header->NITF_NUMT, numTexts, error))
         goto CATCH_ERROR;
 
     for (i = 0; i < numTexts; i++)
@@ -2124,8 +2126,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     }
 
     /*    Fix the data extension subheader and data lengths */
-    NITF_WRITE_INT64_FIELD((nitf_Off) numDEs, NITF_NUMDES, ZERO, FILL_LEFT);
-    if (!nitf_Field_setUint64(header->NITF_NUMDES, numDEs, error))
+    NITF_WRITE_INT_FIELD(numDEs, NITF_NUMDES, ZERO, FILL_LEFT);
+    if (!nitf_Field_setUint32(header->NITF_NUMDES, numDEs, error))
         goto CATCH_ERROR;
 
     for (i = 0; i < numDEs; i++)
