@@ -138,9 +138,9 @@ template<> RadarModeType six::toType<RadarModeType>(const std::string& s)
     if (type == "STRIPMAP")
         return RadarModeType::STRIPMAP;
     if (type == "DYNAMIC STRIPMAP")
-        return RadarModeType::SCANSAR;
-    if (type == "SCANSAR")
         return RadarModeType::DYNAMIC_STRIPMAP;
+    if (type == "SCANSAR")
+        return RadarModeType::SCANSAR;
     return RadarModeType::NOT_SET;
 }
 
