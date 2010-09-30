@@ -614,17 +614,9 @@ public class NITFReader extends ImageReader
                  * read all bands, then scale down what we return to the user
                  * based on their actual request.
                  */
-
-                int[] requestBands = bandOffsets;
-                /*
-                 * if (nBands != bandOffsets.length && bandOffsets.length == 1
-                 * && bandOffsets[0] != 0)
-                 * {
-                 * requestBands = new int[nBands];
-                 * for (int i = 0; i < nBands; ++i)
-                 * requestBands[i] = i;
-                 * }
-                 */
+                int[] requestBands = new int[nBands];
+                for (int i = 0; i < nBands; ++i)
+                    requestBands[i] = i;
 
                 byte[][] rowBuf = new byte[requestBands.length][colBytes];
 
@@ -655,19 +647,10 @@ public class NITFReader extends ImageReader
                 // swap = pixelJustification.equals("R") ? 1 : 0;
 
                 List<ByteBuffer> bandBufs = new ArrayList<ByteBuffer>();
-                for (int i = 0; i < bandOffsets.length; ++i)
+                for (int i = 0; i < requestBands.length; ++i)
                 {
                     ByteBuffer bandBuf = null;
-
-                    // the special "fix" we added needs to do this
-                    if (bandOffsets.length != requestBands.length)
-                    {
-                        bandBuf = ByteBuffer.wrap(rowBuf[bandOffsets[i]]);
-                    }
-                    else
-                    {
-                        bandBuf = ByteBuffer.wrap(rowBuf[i]);
-                    }
+                    bandBuf = ByteBuffer.wrap(rowBuf[i]);
                     // bandBuf.order(ByteOrder.nativeOrder());
                     // bandBuf.order(swap == 0 ? ByteOrder.BIG_ENDIAN
                     // : ByteOrder.LITTLE_ENDIAN);
@@ -718,7 +701,7 @@ public class NITFReader extends ImageReader
 
                         for (int i = 0; i < bandOffsets.length; ++i)
                         {
-                            ByteBuffer bandBuf = bandBufs.get(i);
+                            ByteBuffer bandBuf = bandBufs.get(bandOffsets[i]);
 
                             switch (pixelSize)
                             {
