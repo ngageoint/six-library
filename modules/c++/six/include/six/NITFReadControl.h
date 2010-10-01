@@ -42,7 +42,7 @@ namespace six
  *  pixel-interleaved, or single band data.
  *
  */
-class NITFReadControl: public ReadControl
+class NITFReadControl : public ReadControl
 {
     //! We keep a ref to the reader
     nitf::Reader mReader;
@@ -80,8 +80,9 @@ public:
     //!  Destructor
     virtual ~NITFReadControl()
     {
-        //if (mContainer) delete mContainer;
+        reset();
     }
+
     virtual DataType getDataType(std::string fromFile);
 
     /*!
@@ -97,12 +98,6 @@ public:
      *  method provided with the same name
      */
     virtual void load(std::string fromFile);
-
-    /*!
-     *  Read in the NITF file using the IOInterface.
-     *
-     */
-    //virtual void loadIO(nitf::IOInterface& fromFile);
 
     virtual UByte* interleaved(Region& region, int imageNumber);
 
@@ -123,13 +118,16 @@ public:
         return mReader;
     }
 
-
-  
     void addImageClassOptions(nitf::ImageSubheader& subheader,
-			      six::Classification& c);
-    
-    void addDEClassOptions(nitf::DESubheader& subheader,
-			   six::Classification& c);
+            six::Classification& c);
+
+    void
+            addDEClassOptions(nitf::DESubheader& subheader,
+                    six::Classification& c);
+
+protected:
+    void reset();
+
 };
 
 }

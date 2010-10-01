@@ -41,7 +41,7 @@ DataType NITFReadControl::getDataType(std::string fromFile)
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
-                                      NITFImageInfo* info)
+        NITFImageInfo* info)
 {
 
     unsigned long numBandsSeg =
@@ -84,6 +84,8 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 
 void NITFReadControl::load(std::string fromFile)
 {
+    reset();
+
     DataType dataType;
 
     nitf::IOHandle inFile(fromFile);
@@ -203,8 +205,8 @@ void NITFReadControl::load(std::string fromFile)
         NITFSegmentInfo si;
         si.numRows = numRowsSeg;
 
-        std::vector<NITFSegmentInfo> imageSegments =
-                currentInfo->getImageSegments();
+        std::vector < NITFSegmentInfo > imageSegments
+                = currentInfo->getImageSegments();
 
         if (j != 0)
         {
@@ -230,7 +232,7 @@ void NITFReadControl::load(std::string fromFile)
 }
 
 void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
-                                           six::Classification& c)
+        six::Classification& c)
 {
 
     Parameter p;
@@ -287,7 +289,7 @@ void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
 }
 
 void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
-                                        six::Classification& c)
+        six::Classification& c)
 {
 
     Parameter p;
@@ -438,7 +440,8 @@ UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
     sw.setNumBands(1);
     sw.setBandList(bandList);
 
-    std::vector<NITFSegmentInfo> imageSegments = thisImage->getImageSegments();
+    std::vector < NITFSegmentInfo > imageSegments
+            = thisImage->getImageSegments();
     size_t numIS = imageSegments.size();
     unsigned long startOff = 0;
     nitf::Uint8** bufferPtr = new nitf::Uint8*[1];
@@ -491,4 +494,12 @@ UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
     delete[] bufferPtr;
     delete[] bandList;
     return buffer;
+}
+
+void NITFReadControl::reset()
+{
+    for (size_t i = 0, s = mInfos.size(); i < s; ++i)
+        if (mInfos[i])
+            delete mInfos[i];
+    mInfos.clear();
 }
