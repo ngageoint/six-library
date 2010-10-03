@@ -45,10 +45,13 @@ clean:
 	cd sys;    make clean
 	cd mt;     make clean
 	cd nitf;   make clean
+	rm -rf libs
+	rm -rf bin
 
 raw:
 	rm -f Makefile
 	rm -f config.status
+	rm -f config.log
 	rm -rf install
 	cd except; make raw
 	cd str;    make raw

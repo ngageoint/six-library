@@ -101,10 +101,10 @@ AC_SUBST(lib_dir)
 
 
 # Figure out which Makefile.ins to process
-makefile_in_subs=`find . -name Makefile.in -print | sed 's/.in$//'`
-proj_make_in=`find . -name project.make.in -print | sed 's/.in$//'`
-xml_in=`find . -name *.xml.in -print | sed 's/.in$//'`
-sh_in=`find . -name *.sh.in -print | sed 's/.in$//'`
+makefile_in_subs=`find -L . -name Makefile.in -print | sed 's/.in$//'`
+proj_make_in=`find -L . -name project.make.in -print | sed 's/.in$//'`
+xml_in=`find -L . -name *.xml.in -print | sed 's/.in$//'`
+sh_in=`find -L . -name *.sh.in -print | sed 's/.in$//'`
 AC_OUTPUT(${makefile_in_subs} ${proj_make_in} ${xml_in} ${sh_in})
 
 #now, expand the dependencies within the project.make files

@@ -22,50 +22,34 @@
 #----------------------------------------
 # General area
 #----------------------------------------
-include ./build/project.make
+include ../build/Makefile
+
+EXE    = $(APPS:.cpp=)
+OBJS = ${APPS:.cpp=.o}
+#----------------------------------------
+# Build commands
+#----------------------------------------
+all: $(EXE)
+
+$(EXE):  $(OBJS) dirs
+	$(COMPILE) -o $@ $@.o $(LINK)
+	mv $@ $(TESTDIR)
 
 #----------------------------------------
-# Build rules
+# Rule for setting up dir. structure
 #----------------------------------------
+dirs:
+	\mkdir -p $(TESTDIR)
 
 
-#----------------------------------------
-# This is specified by the user in the 
-# project.make.  It is a space delimited 
-# set of rules 
-#----------------------------------------
-
-all: library unit-tests progs
-
-library:
-	cd source; make
-
-unit-tests:
-	cd tests; make
-
-progs:
-	cd apps; make
+.SUFFIXES: .o .cpp
+.cpp.o:
+	$(COMPILE) -c $?
 
 clean:
-	cd source; make clean
-	cd tests; make clean
-	cd apps; make clean
-	rm -rf lib; rm -rf bin
+	\rm -f $(OBJS)
+	\rm -rf $(TESTDIR)
 
 raw: clean
-	cd source; make raw
-	cd tests; make raw
-	cd apps; make raw
-	cd build; rm -f Makefile; rm -f project.make
-	rm -f Makefile
+	\rm -f Makefile
 
-
-dist:
-	perl @build_dir@/makedist.pl $(PACKAGE) $(VERSION) @target@
-
-copy: dist
-	mkdir -p @prefix@
-	mv $(PACKAGE)_$(VERSION)_@target@.tar @prefix@/
-
-install: copy
-	cd @prefix@; tar -xvf $(PACKAGE)_$(VERSION)_@target@.tar; \rm -f $(PACKAGE)_$(VERSION)_@target@.tar

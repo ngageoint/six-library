@@ -58,11 +58,7 @@ def build(bld):
     appsDir = bld.path.find_dir('apps')
     apps = appsDir.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
     for app in apps:
-        exe = bld.new_task_gen('cc', 'program', source=app,
-                               uselib_local='nitf-c',
-                               target=os.path.splitext(app)[0],
-                               path=appsDir, env=env.copy(),
-                               install_path='${PREFIX}/share/nitf/apps')
+        bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-2], lang='c')
 
     #install headers
     for f in bld.path.find_dir('include').find_iter():
