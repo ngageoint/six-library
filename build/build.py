@@ -611,8 +611,8 @@ def detect(self):
             env.append_value('CCFLAGS_THREAD', '-mt')
 
     elif re.match(winRegex, platform):
-        if Options.options.enable64:
-            platform = 'win'
+        #if Options.options.enable64:
+        #    platform = 'win'
 
         env.append_value('LIB_RPC', 'rpcrt4')
         env.append_value('LIB_SOCKET', 'Ws2_32')
@@ -675,15 +675,18 @@ def detect(self):
         variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
         variant.append_value('CCFLAGS', config['cc'].get('optz_%s' % optz, ''))
         
-    
-    #check if the system is 64-bit capable
     is64Bit = False
-    if '64' in config['cxx']:
-        if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
-            is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
+    #check if the system is 64-bit capable
+    if re.match(winRegex, platform):
+        is64Bit = Options.options.enable64
+    elif not Options.options.enable32:
+        if '64' in config['cxx']:
+            if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
+                is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
 
-    if is64Bit and not Options.options.enable32:
-        variantName = '%s-64' % variantName
+    if is64Bit:
+        if not re.match(winRegex, platform):
+            variantName = '%s-64' % variantName
         variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
         variant.append_value('CCFLAGS', config['cc'].get('64', ''))
         variant.append_value('LINKFLAGS', config['cc'].get('linkflags_64', ''))
