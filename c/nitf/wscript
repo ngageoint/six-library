@@ -18,7 +18,14 @@ TEST_FILTER     = lambda x: x not in ['test_1band_rw_line.c', 'test_fileIO.c',
                                       'test_ImageIO_writePattern.c', 'test_static_plugin.c']
 
 
-set_options = configure = distclean = lambda p: None
+set_options = distclean = lambda p: None
+
+def configure(conf):
+    #add some flags for the nitro lib - if a lib states NITRO as a uselib (or uselib local)
+    #these flags will get applied automatically
+    conf.env.append_value('CCFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
+    conf.env.append_value('CXXFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
+
 
 def build(bld):
     env = bld.module(**globals())
