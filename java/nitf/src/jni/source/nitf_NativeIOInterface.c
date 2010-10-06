@@ -147,7 +147,8 @@ JNIEXPORT void JNICALL Java_nitf_NativeIOInterface_close
     nitf_Error error;
     nitf_IOInterface *interface = _GetObj(env, self);
 
-    if (!interface->iface->close(interface->data, &error))
+    if (interface && interface->iface &&
+            !interface->iface->close(interface->data, &error))
         _ThrowNITFException(env, error.message);
 }
 

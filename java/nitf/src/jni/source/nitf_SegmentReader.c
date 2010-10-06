@@ -34,6 +34,10 @@ JNIEXPORT jboolean JNICALL Java_nitf_SegmentReader_00024Destructor_destructMemor
     nitf_SegmentReader *reader = (nitf_SegmentReader*)address;
     if (reader)
     {
+        /* nitf_Reader.c: Java_nitf_Reader_getNewImageReader sets this */
+        if (reader->input)
+            _ManageObject(env, (jlong)reader->input, JNI_TRUE);
+
         nitf_SegmentReader_destruct(&reader);
         return JNI_TRUE;
     }

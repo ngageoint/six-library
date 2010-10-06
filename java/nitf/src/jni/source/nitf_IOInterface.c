@@ -280,7 +280,8 @@ JNIEXPORT jboolean JNICALL Java_nitf_IOInterface_00024Destructor_destructMemory
     nitf_Error error;
     if (interface)
     {
-        /*nitf_IOInterface_close(interface, &error);*/
+        if (interface && interface->iface && interface->data)
+            nitf_IOInterface_close(interface, &error);
         nitf_IOInterface_destruct(&interface);
         return JNI_TRUE;
     }

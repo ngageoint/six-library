@@ -44,16 +44,6 @@ public class NativeIOInterface extends IOInterface
 
     public native void close() throws NITFException;
 
-    // protected void setNativeIO(long nativeIO)
-    // {
-    // this.nativeIO = nativeIO;
-    // }
-    //
-    // protected long getNativeIO()
-    // {
-    // return nativeIO;
-    // }
-
     @Override
     protected void construct()
     {
