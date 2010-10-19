@@ -6,7 +6,7 @@ MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net
 VERSION         = '2.6-dev'
 MODULE_DEPS     = ''
 LANG            = 'c'
-USELIB          = 'THREAD DL MATH nitf-c'
+USELIB          = 'THREAD DL RT MATH nitf-c'
 DEFINES         = 'NITF_MODULE_EXPORTS'
 TEST_FILTER     = lambda x: x not in ['test_1band_rw_line.c', 'test_fileIO.c',
                                       'test_hash_table_2.c', 'test_writer_s.c',
@@ -65,7 +65,8 @@ def build(bld):
     appsDir = bld.path.find_dir('apps')
     apps = appsDir.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
     for app in apps:
-        bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-2], lang='c')
+        bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-2],
+                    lang='c')
 
     #install headers
     for f in bld.path.find_dir('include').find_iter():
