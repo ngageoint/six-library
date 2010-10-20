@@ -858,9 +858,16 @@ NITFPRIV(NITF_BOOL) basicWrite(nitf_IOInterface* io,
                                nitf_Error* error)
 {
     nitf_Uint32 length;
-    char* data = nitf_TREUtils_getRawData(tre, &length, error);
-    if (!data) return NITF_FAILURE;
-    return nitf_IOInterface_write(io, data, length, error);
+    char* data = NULL;
+    NITF_BOOL ok = NITF_FAILURE;
+
+    data = nitf_TREUtils_getRawData(tre, &length, error);
+    if (data)
+    {
+        ok = nitf_IOInterface_write(io, data, length, error);
+        NITF_FREE(data);
+    }
+    return ok;
 }
 
 NITFPRIV(int) basicGetCurrentSize(nitf_TRE* tre, nitf_Error* error)

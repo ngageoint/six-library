@@ -161,6 +161,11 @@ NITFAPI(void) nitf_TREPrivateData_destruct(nitf_TREPrivateData **priv)
     nitf_Error e;
     if (*priv)
     {
+        if ((*priv)->descriptionName)
+        {
+            NITF_FREE((*priv)->descriptionName);
+            (*priv)->descriptionName = NULL;
+        }
         if ((*priv)->hash)
         {
             /* destruct each field in the hash */
