@@ -29,6 +29,16 @@ class CPPBuildContext(BuildContext):
     def safeVersion(self, version):
         return re.sub(r'[^\w]', '.', version)
     
+    def __getDefines(self, env):
+        defines = []
+        for k, v in env.defines.iteritems():
+            if v is not None and v != ():
+                if k.startswith('HAVE_') or k.startswith('USE_'):
+                    defines.append(k)
+                else:
+                    defines.append('%s=%s' % (k, v))
+        return defines
+    
     def runUnitTests(self, tests, path):
         path = path or self.path.abspath()
         
@@ -85,7 +95,7 @@ class CPPBuildContext(BuildContext):
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split()
+        defines = self.__getDefines(env) + modArgs.get('defines', '').split()
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
@@ -120,15 +130,21 @@ class CPPBuildContext(BuildContext):
 
         testNode = path.find_dir('tests')
         if testNode and not Options.options.libs_only:
+            
+            test_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('test_deps', '').split()) or module_deps
+            test_uselib_local = test_deps + modArgs.get('test_uselib_local', '').split()
+            test_uselib = modArgs.get('test_uselib', modArgs.get('uselib', '')).split() + ['CSTD', 'CRUN']
+            
             if not headersOnly:
-                uselib_local = libName
+                test_uselib_local.insert(0, libName)
             
             sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
             for test in filter(modArgs.get('test_filter', None),
                                testNode.find_iter(in_pat=['*%s' % sourceExt],
                                                   maxdepth=1, flat=True).split()):
                 exe = bld.new_task_gen(libExeType, 'program', source=test,
-                        uselib_local=uselib_local, uselib=uselib, env=env.copy(), includes='.',
+                        uselib_local=test_uselib_local, uselib=test_uselib, env=env.copy(),
+                        includes=includes + ['.'],
                         target=os.path.splitext(test)[0], path=testNode,
                         install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
         
@@ -174,14 +190,14 @@ class CPPBuildContext(BuildContext):
                    'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
+        defines = self.__getDefines(env) + modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
         source = modArgs.get('source', '').split() or None
         
-        lib = bld.new_task_gen(libExeType, 'shlib', includes=includes,
+        lib = bld.new_task_gen(libExeType, 'shlib', includes=includes, source=source,
                 target=libName, name=libName, export_incdirs=exportIncludes,
                 uselib_local=uselib_local, uselib=uselib, env=env.copy(),
                 defines=defines, path=path,
@@ -189,6 +205,12 @@ class CPPBuildContext(BuildContext):
         if not source:
             lib.find_sources_in_dirs(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
+        
+        confDir = path.find_dir('conf')
+        if confDir:
+            for f in confDir.find_iter():
+                relpath = f.relpath_gen(path)
+                bld.install_files('${PREFIX}/share/%s/conf' % plugin, f.abspath())
     
     
     def program(self, **modArgs):
@@ -208,13 +230,14 @@ class CPPBuildContext(BuildContext):
                    'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split()
+        defines = self.__getDefines(env) + modArgs.get('defines', '').split()
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         source = modArgs.get('source', '').split() or None
         
         exe = bld.new_task_gen(libExeType, 'program', source=source,
+                               includes=includes, defines=defines,
                                uselib_local=uselib_local, uselib=uselib,
                                env=env.copy(), target=progName, path=path,
                                install_path='${PREFIX}/bin')
@@ -385,6 +408,10 @@ int main()
 '''
 
 def detect(self):
+    
+    if self.env['DETECTED_BUILD_PY']:
+        return
+    
     platform = getPlatform(default=Options.platform)
     
     self.check_message_custom('platform', '', platform, color='GREEN')
@@ -431,9 +458,12 @@ def detect(self):
     self.check_cc(fragment='int main(){unsigned char i; return 0;}',
                   define_name='HAVE_UNSIGNED_CHAR', msg='Checking for unsigned char')
     self.check_cc(lib="m", mandatory=False, uselib_store='MATH')
+    self.check_cc(lib="rt", mandatory=False, uselib_store='RT')
     self.check_cc(lib="sqrt", mandatory=False, uselib_store='SQRT')
     
     self.check_cc(function_name='gettimeofday', header_name='sys/time.h')
+    if self.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h'):
+        self.env.defines['USE_CLOCK_GETTIME']= 1
     self.check_cc(function_name='BSDgettimeofday', header_name='sys/time.h')
     self.check_cc(function_name='gethrtime', header_name='sys/time.h')
     self.check_cc(function_name='getpagesize', header_name='unistd.h')
@@ -598,9 +628,9 @@ def detect(self):
             config['cc']['warn']           = ''
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = '-xtarget=generic64'
+            config['cc']['linkflags_64'] = '-xtarget=generic64'
+            config['cc']['linkflags_32'] = '-xtarget=generic'
             config['cc']['32']             = '-xtarget=generic'
-            config['cc']['linkflags_32']   = '-xtarget=generic'
-            config['cc']['linkflags_64']   = '-xtarget=generic64'
             config['cc']['optz_med']       = '-xO2'
             config['cc']['optz_fast']      = '-xO3'
             config['cc']['optz_fastest']   = '-fast'
@@ -702,6 +732,9 @@ def detect(self):
     self.setenv(variantName)
     
     env['VARIANT'] = variant['VARIANT'] = variantName
+    
+    #flag that we already detected
+    self.env['DETECTED_BUILD_PY'] = True
 
 
 @taskgen

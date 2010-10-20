@@ -803,7 +803,9 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     nitf_Field_trimString(desID);
 
     /* read the two conditional fields if TRE_OVERFLOW */
-    if (strcmp(desID, "TRE_OVERFLOW") == 0)
+    if ((IS_NITF20(fver) && ((strcmp(desID, "Registered Extensions") == 0) ||
+                            (strcmp(desID, "Controlled Extensions") == 0))) ||
+            (IS_NITF21(fver) && strcmp(desID, "TRE_OVERFLOW") == 0))
     {
         TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_DESOFLW);
         TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_DESITEM);
@@ -838,7 +840,6 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
 
     /* see if we need to read the data now as part of a TRE */
     if ((strcmp(desID, "TRE_OVERFLOW") == 0) ||
-        (strcmp(desID, "Registered Extensions") == 0) ||
         (strcmp(desID, "Controlled Extensions") == 0))
     {
         currentOffset = segment->offset;
@@ -990,8 +991,23 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader * reader, nitf_Error * error)
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FSCOP);
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FSCPYS);
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_ENCRYP);
-    TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FBKGC);
-    TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_ONAME);
+
+    /* In 2.0 there wasn't a FBKGC field, so we resize ONAME and read */
+    if (IS_NITF20(fver))
+    {
+        if (!nitf_Field_resetLength(fileHeader->NITF_ONAME,
+                                    NITF_FBKGC_SZ + NITF_ONAME_SZ, 0, error))
+            goto CATCH_ERROR;
+
+        if (!readValue(reader, fileHeader->NITF_ONAME,
+                       NITF_FBKGC_SZ + NITF_ONAME_SZ, error))
+            goto CATCH_ERROR;
+    }
+    else
+    {
+        TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_FBKGC);
+        TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_ONAME);
+    }
     TRY_READ_MEMBER_VALUE(reader, fileHeader, NITF_OPHONE);
 
     /* FL */

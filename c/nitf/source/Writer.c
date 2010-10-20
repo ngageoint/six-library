@@ -1020,21 +1020,18 @@ NITFPRIV(NITF_BOOL) writeHeader(nitf_Writer * writer,
     NITF_WRITE_VALUE(writer->record->header, NITF_FSCPYS, ZERO, FILL_LEFT);
     NITF_WRITE_VALUE(writer->record->header, NITF_ENCRYP, ZERO, FILL_LEFT);
 
-    /* KEEP IN MIND HERE THAT THE UPDATED 2.0 SPEC HAS A BACKGROUND
-     * COLOR FIELD, AND REDUCED THE ONAME FIELD SIZE TO 24.
-     * WHEN USING THE OLD SPEC, SUCH AS WITH CIB, PLACE THE FIRST
-     * 3 CHARACTERS OF THE ONAME INTO THE FILE BACKGROUND FIELD
-     */
     if (IS_NITF20(fver))
     {
-        NITF_WRITE_VALUE(writer->record->header, NITF_FBKGC, 0, FILL_LEFT);
+        if (!writeValue(writer, writer->record->header->NITF_ONAME,
+                        NITF_FBKGC_SZ + NITF_ONAME_SZ, SPACE, FILL_RIGHT, error))
+            goto CATCH_ERROR;
     }
     else
     {
         NITF_WRITE_VALUE(writer->record->header, NITF_FBKGC, 0, FILL_LEFT);
+        NITF_WRITE_VALUE(writer->record->header, NITF_ONAME, SPACE, FILL_RIGHT);
     }
 
-    NITF_WRITE_VALUE(writer->record->header, NITF_ONAME, SPACE, FILL_RIGHT);
     NITF_WRITE_VALUE(writer->record->header, NITF_OPHONE, SPACE, FILL_RIGHT);
 
     *fileLenOff = nitf_IOInterface_tell(writer->output, error);
