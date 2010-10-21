@@ -179,7 +179,7 @@ void showSecurityGroup(nitf_FileSecurity* securityGroup)
  *  lengths, file length, header length, and security level
  *  for the file.
  */
-void showFileHeader(nitf_FileHeader * header)
+void showFileHeader(nitf_Record * record)
 {
     unsigned int i;
     nitf_Uint32 num;
@@ -187,8 +187,14 @@ void showFileHeader(nitf_FileHeader * header)
     nitf_Uint32 len;
     nitf_Uint64 dataLen;
     nitf_Uint32 dataLen32;
+    nitf_Version fver;
+    nitf_FileHeader *header;
     
+    fver = nitf_Record_getVersion(record);
+
     /* Sanity check */
+    assert( record );
+    header = record->header;
     assert( header );
 
     /* Dump the values in order */
@@ -207,7 +213,9 @@ void showFileHeader(nitf_FileHeader * header)
     SHOW_VAL(header->messageCopyNum);
     SHOW_VAL(header->messageNumCopies);
     SHOW_VAL(header->encrypted);
-    SHOW_RGB(header->backgroundColor);
+
+    if (IS_NITF21(fver))
+        SHOW_RGB(header->backgroundColor);
     SHOW_VAL(header->originatorName);
     SHOW_VAL(header->originatorPhone);
     SHOW_VAL(header->fileLength);
@@ -775,7 +783,7 @@ int main(int argc, char **argv)
     if (!record) goto CATCH_ERROR;
 
     /* Now show the header */
-    showFileHeader(record->header);
+    showFileHeader(record);
 
     num = nitf_Record_getNumImages(record, &error);
 

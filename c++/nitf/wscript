@@ -10,3 +10,9 @@ set_options = configure = distclean = lambda p: None
 
 def build(bld):
     bld.module(**globals())
+    
+    #build apps
+    appsDir = bld.path.find_dir('apps')
+    apps = appsDir.find_iter(in_pat=['*.cpp'], maxdepth=1, flat=True).split(' ')
+    for app in apps:
+        bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-4])

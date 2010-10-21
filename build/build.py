@@ -29,6 +29,16 @@ class CPPBuildContext(BuildContext):
     def safeVersion(self, version):
         return re.sub(r'[^\w]', '.', version)
     
+    def __getDefines(self, env):
+        defines = []
+        for k, v in env.defines.iteritems():
+            if v is not None and v != ():
+                if k.startswith('HAVE_') or k.startswith('USE_'):
+                    defines.append(k)
+                else:
+                    defines.append('%s=%s' % (k, v))
+        return defines
+    
     def runUnitTests(self, tests, path):
         path = path or self.path.abspath()
         
@@ -81,10 +91,11 @@ class CPPBuildContext(BuildContext):
         lang = modArgs.get('lang', 'c++')
         libExeType = {'c++':'cxx', 'c':'cc'}.get(lang, 'cxx')
         libName = '%s-%s' % (modArgs['name'], lang)
-        path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
+        path = modArgs.get('path',
+                           'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split()
+        defines = self.__getDefines(env) + modArgs.get('defines', '').split()
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
@@ -104,7 +115,7 @@ class CPPBuildContext(BuildContext):
                     target=targetName, name=libName, export_incdirs=exportIncludes,
                     uselib_local=uselib_local, uselib=uselib, env=env.copy(),
                     defines=defines, path=path, install_path='${PREFIX}/lib')
-            lib.find_sources_in_dirs('source')
+            lib.find_sources_in_dirs(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
             
             if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks:
@@ -119,15 +130,21 @@ class CPPBuildContext(BuildContext):
 
         testNode = path.find_dir('tests')
         if testNode and not Options.options.libs_only:
+            
+            test_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('test_deps', '').split()) or module_deps
+            test_uselib_local = test_deps + modArgs.get('test_uselib_local', '').split()
+            test_uselib = modArgs.get('test_uselib', modArgs.get('uselib', '')).split() + ['CSTD', 'CRUN']
+            
             if not headersOnly:
-                uselib_local = libName
+                test_uselib_local.insert(0, libName)
             
             sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
             for test in filter(modArgs.get('test_filter', None),
                                testNode.find_iter(in_pat=['*%s' % sourceExt],
                                                   maxdepth=1, flat=True).split()):
                 exe = bld.new_task_gen(libExeType, 'program', source=test,
-                        uselib_local=uselib_local, uselib=uselib, env=env.copy(), includes='.',
+                        uselib_local=test_uselib_local, uselib=test_uselib, env=env.copy(),
+                        includes=includes + ['.'],
                         target=os.path.splitext(test)[0], path=testNode,
                         install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
         
@@ -165,24 +182,35 @@ class CPPBuildContext(BuildContext):
         env.set_variant(variant)
         
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
-        libName = '%s-c++' % modArgs['name']
+        lang = modArgs.get('lang', 'c++')
+        libExeType = {'c++':'cxx', 'c':'cc'}.get(lang, 'cxx')
+        libName = '%s-%s' % (modArgs['name'], lang)
         plugin = modArgs.get('plugin', '')
-        path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
+        path = modArgs.get('path',
+                   'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
-        module_deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
+        module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
+        defines = self.__getDefines(env) + modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
+        source = modArgs.get('source', '').split() or None
         
-        lib = bld.new_task_gen('cxx', 'shlib', includes=includes,
+        lib = bld.new_task_gen(libExeType, 'shlib', includes=includes, source=source,
                 target=libName, name=libName, export_incdirs=exportIncludes,
                 uselib_local=uselib_local, uselib=uselib, env=env.copy(),
                 defines=defines, path=path,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
-        lib.find_sources_in_dirs('source')
-        lib.source = filter(modArgs.get('source_filter', None), lib.source)
+        if not source:
+            lib.find_sources_in_dirs(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
+            lib.source = filter(modArgs.get('source_filter', None), lib.source)
+        
+        confDir = path.find_dir('conf')
+        if confDir:
+            for f in confDir.find_iter():
+                relpath = f.relpath_gen(path)
+                bld.install_files('${PREFIX}/share/%s/conf' % plugin, f.abspath())
     
     
     def program(self, **modArgs):
@@ -195,22 +223,26 @@ class CPPBuildContext(BuildContext):
         env.set_variant(variant)
         
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        lang = modArgs.get('lang', 'c++')
+        libExeType = {'c++':'cxx', 'c':'cc'}.get(lang, 'cxx')
         progName = modArgs['name']
-        path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
+        path = modArgs.get('path',
+                   'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
-        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split()
-        uselib_local = deps + modArgs.get('uselib_local', '').split()
+        module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
+        defines = self.__getDefines(env) + modArgs.get('defines', '').split()
+        uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         source = modArgs.get('source', '').split() or None
         
-        exe = bld.new_task_gen('cxx', 'program', source=source,
+        exe = bld.new_task_gen(libExeType, 'program', source=source,
+                               includes=includes, defines=defines,
                                uselib_local=uselib_local, uselib=uselib,
                                env=env.copy(), target=progName, path=path,
                                install_path='${PREFIX}/bin')
         if not source:
-            exe.find_sources_in_dirs(modArgs.get('sourcedir', 'source'))
+            exe.find_sources_in_dirs(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
             exe.source = filter(modArgs.get('source_filter', None), exe.source)
     
     def getBuildDir(self, path=None):
@@ -320,13 +352,18 @@ def set_options(opt):
     
     if Options.platform == 'win32':
         opt.tool_options('msvc')
-    
+        opt.add_option('--with-crt', action='store', choices=['MD', 'MT'],
+                       dest='crt', default='MT', help='Specify Windows CRT library - MT (default) or MD')
+
     opt.add_option('--enable-warnings', action='store_true', dest='warnings',
                    help='Enable warnings')
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
+    #TODO - get rid of enable64 - it's useless now
     opt.add_option('--enable-64bit', action='store_true', dest='enable64',
                    help='Enable 64bit builds')
+    opt.add_option('--enable-32bit', action='store_true', dest='enable32',
+                   help='Enable 32bit builds')
     opt.add_option('--enable-doxygen', action='store_true', dest='doxygen',
                    help='Enable running doxygen')
     opt.add_option('--with-cflags', action='store', nargs=1, dest='cflags',
@@ -371,6 +408,10 @@ int main()
 '''
 
 def detect(self):
+    
+    if self.env['DETECTED_BUILD_PY']:
+        return
+    
     platform = getPlatform(default=Options.platform)
     
     self.check_message_custom('platform', '', platform, color='GREEN')
@@ -417,9 +458,12 @@ def detect(self):
     self.check_cc(fragment='int main(){unsigned char i; return 0;}',
                   define_name='HAVE_UNSIGNED_CHAR', msg='Checking for unsigned char')
     self.check_cc(lib="m", mandatory=False, uselib_store='MATH')
+    self.check_cc(lib="rt", mandatory=False, uselib_store='RT')
     self.check_cc(lib="sqrt", mandatory=False, uselib_store='SQRT')
     
     self.check_cc(function_name='gettimeofday', header_name='sys/time.h')
+    if self.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h'):
+        self.env.defines['USE_CLOCK_GETTIME']= 1
     self.check_cc(function_name='BSDgettimeofday', header_name='sys/time.h')
     self.check_cc(function_name='gethrtime', header_name='sys/time.h')
     self.check_cc(function_name='getpagesize', header_name='unistd.h')
@@ -568,6 +612,8 @@ def detect(self):
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = '-xtarget=generic64'
             config['cxx']['32']             = '-xtarget=generic'
+            config['cxx']['linkflags_32'] = '-xtarget=generic'
+            config['cxx']['linkflags_64'] = '-xtarget=generic64'
             config['cxx']['optz_med']       = '-xO3'
             config['cxx']['optz_fast']      = '-xO4'
             config['cxx']['optz_fastest']   = '-fast'
@@ -582,6 +628,8 @@ def detect(self):
             config['cc']['warn']           = ''
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = '-xtarget=generic64'
+            config['cc']['linkflags_64'] = '-xtarget=generic64'
+            config['cc']['linkflags_32'] = '-xtarget=generic'
             config['cc']['32']             = '-xtarget=generic'
             config['cc']['optz_med']       = '-xO2'
             config['cc']['optz_fast']      = '-xO3'
@@ -592,28 +640,26 @@ def detect(self):
             env.append_value('CCFLAGS', '-KPIC'.split())
             env.append_value('CCFLAGS_THREAD', '-mt')
 
-        if Options.options.enable64:
-            env.append_value('LINKFLAGS', config['cc']['64'].split())
-        else:
-            env.append_value('LINKFLAGS', config['cc']['32'].split())
-
-    
     elif re.match(winRegex, platform):
-        if Options.options.enable64:
-            platform = 'win'
+        #if Options.options.enable64:
+        #    platform = 'win'
 
         env.append_value('LIB_RPC', 'rpcrt4')
         env.append_value('LIB_SOCKET', 'Ws2_32')
         
+        crtFlag = '/%s' % Options.options.crt
+        crtDebug = '%sd' % crtFlag
+
         vars = {}
-        vars['debug']          = '/Zi /MTd'.split()
+        vars['debug']          = ['/Zi', crtDebug]
         vars['warn']           = '/Wall'
         vars['nowarn']         = '/W3 /wd4290'.split()
         vars['verbose']        = ''
-        vars['64']             = '/MACHINE:x64'
-        vars['optz_med']       = '-O2 /MT'.split()
-        vars['optz_fast']      = '-O2 /MT'.split()
-        vars['optz_fastest']   = '-Ox /MT'.split()
+        vars['64']             = '/MACHINE:X64 '
+        vars['optz_med']       = ['-O2', crtFlag]
+        vars['optz_fast']      = ['-O2', crtFlag]
+        vars['optz_fastest']   = ['-Ox', crtFlag]
+        vars['linkflags_32'] = vars['linkflags_64'] = '/STACK:80000000'
         
         # choose the runtime to link against
         # [/MD /MDd /MT /MTd]
@@ -621,7 +667,7 @@ def detect(self):
         config['cxx'].update(vars)
         config['cc'].update(vars)
 
-        defines = '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE WIN32'.split()
+        defines = '_CRT_SECURE_NO_WARNINGS _FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE WIN32'.split()
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
         threadFlags = '/D_REENTRANT'
         
@@ -658,21 +704,37 @@ def detect(self):
         optz = Options.options.with_optz
         variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
         variant.append_value('CCFLAGS', config['cc'].get('optz_%s' % optz, ''))
-    
-    if Options.options.enable64:
-        variantName = '%s-64' % variantName
+        
+    is64Bit = False
+    #check if the system is 64-bit capable
+    if re.match(winRegex, platform):
+        is64Bit = Options.options.enable64
+    elif not Options.options.enable32:
+        if '64' in config['cxx']:
+            if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
+                is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
+
+    if is64Bit:
+        if not re.match(winRegex, platform):
+            variantName = '%s-64' % variantName
         variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
         variant.append_value('CCFLAGS', config['cc'].get('64', ''))
+        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_64', ''))
     else:
         variant.append_value('CXXFLAGS', config['cxx'].get('32', ''))
         variant.append_value('CCFLAGS', config['cc'].get('32', ''))
-        
+        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_32', ''))
+    
+    
     self.set_env_name(variantName, variant)
     variant.set_variant(variantName)
     env.set_variant(variantName)
     self.setenv(variantName)
     
     env['VARIANT'] = variant['VARIANT'] = variantName
+    
+    #flag that we already detected
+    self.env['DETECTED_BUILD_PY'] = True
 
 
 @taskgen
