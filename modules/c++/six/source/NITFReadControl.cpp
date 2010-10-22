@@ -31,6 +31,7 @@ DataType NITFReadControl::getDataType(std::string fromFile)
     {
         nitf::IOHandle inFile(fromFile);
         nitf::Record rec = mReader.read(inFile);
+        inFile.close();
         std::string title = rec.getHeader().getFileTitle().toString();
         if (str::startsWith(title, "SICD"))
             return DataType::COMPLEX;
@@ -88,9 +89,9 @@ void NITFReadControl::load(std::string fromFile)
 
     DataType dataType;
 
-    nitf::IOHandle inFile(fromFile);
+    nitf::IOHandle handle(fromFile);
 
-    mRecord = mReader.read(inFile);
+    mRecord = mReader.read(handle);
     std::string title = mRecord.getHeader().getFileTitle().toString();
 
     if (str::startsWith(title, "SICD"))

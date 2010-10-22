@@ -419,7 +419,7 @@ XMLElem ComplexXMLControl::toXML(const Grid *grid, XMLElem parent)
     createDouble("DeltaK1", grid->col->deltaK1, colDirXML);
     createDouble("DeltaK2", grid->col->deltaK2, colDirXML);
 
-    if (!Init::isUndefined<Poly2D>(grid->row->deltaKCOAPoly))
+    if (!Init::isUndefined<Poly2D>(grid->col->deltaKCOAPoly))
     {
         createPoly2D("DeltaKCOAPoly", grid->col->deltaKCOAPoly, colDirXML);
     }
@@ -1671,10 +1671,11 @@ void ComplexXMLControl::fromXML(const XMLElem radarCollectionXML,
                 }
             }
 
-            radarCollection->area->plane->orientation
-                    = six::toType<OrientationType>(
-                                                   getFirstAndOnly(planeXML,
-                                                                   "Orientation") ->getCharacterData());
+            // TODO:  This is required for 0.4.x, but treat as
+            // optional to support 0.3.1 data.
+            if (tmpElem = getOptional(planeXML, "Orientation"))
+                radarCollection->area->plane->orientation
+                        = six::toType<OrientationType>(tmpElem->getCharacterData());
         }
     }
 
