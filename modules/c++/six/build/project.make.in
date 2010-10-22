@@ -1,6 +1,6 @@
 PACKAGE = six
 BUILD = library unit-tests
-MAJOR_VERSION = 0 
+MAJOR_VERSION = 0
 MINOR_VERSION = 1
 VERSION_SUFFIX = RC1
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
@@ -8,59 +8,25 @@ DESCRIPTION = Reference Library for Sensor Independent Derived Data
 
 SOURCES = \
 Adapters.cpp \
-Antenna.cpp \
 Classification.cpp \
-CollectionInformation.cpp \
-ComplexData.cpp \
-ComplexDataBuilder.cpp \
-ComplexXMLControl.cpp \
 Container.cpp \
 Data.cpp \
-DerivedData.cpp \
-DerivedDataBuilder.cpp \
-DerivedXMLControl.cpp \
-Display.cpp \
-DownstreamReprocessing.cpp \
 ErrorStatistics.cpp \
-ExploitationFeatures.cpp \
-GeoData.cpp \
-GeoTIFFWriteControl.cpp \
-GeographicAndTarget.cpp \
-Grid.cpp \
-ImageData.cpp \
-ImageFormation.cpp \
 Init.cpp \
-MatchInformation.cpp \
-Measurement.cpp \
 NITFImageInfo.cpp \
 NITFImageInputStream.cpp \
 NITFReadControl.cpp \
 NITFWriteControl.cpp \
 Options.cpp \
-PFA.cpp \
-Position.cpp \
-ProductCreation.cpp \
-ProductProcessing.cpp \
 Profile.cpp \
-RadarCollection.cpp \
 Radiometric.cpp \
-SCPCOA.cpp \
-Timeline.cpp \
 Types.cpp \
 Utilities.cpp \
 WriteControl.cpp \
 XMLControl.cpp \
 XMLControlFactory.cpp
 
-TESTS	= \
-test_create_sidd_from_mem.cpp \
-test_create_sicd.cpp \
-test_dump_sicd_lines.cpp \
-test_dump_sicd_single.cpp \
-test_create_sidd.cpp \
-test_dump_sidd_lines.cpp \
-test_extract_xml.cpp \
-test_parse_xml.cpp
+TESTS	= 
 
 MY_CXXFLAGS = 
 MY_CXXDEFINES =
