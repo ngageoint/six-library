@@ -1776,7 +1776,7 @@ I/O error
 /*!< IO handle for read */
 /*!< File offset for read */
 NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io, nitf_Uint64 fileOffset, nitf_Uint8 * buffer,      /*!< Data buffer to read into */
-                                        nitf_Uint32 count,      /*!< Number of bytes to read */
+                                        size_t count,      /*!< Number of bytes to read */
                                         nitf_Error * errorBuffer        /*!< Error object */
                                        );
 
@@ -6548,8 +6548,8 @@ NITFPROT(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl,
 {
     _nitf_ImageIO *nitf; /* Parent _nitf_ImageIO object */
     _nitf_ImageIOBlock *blockIO; /* The current  block IO structure */
-    nitf_Uint32 pixelCount; /* Total pixel count (size of one band in pixels) */
-    nitf_Uint32 count;      /* Total read count (size of one band in bytes) */
+    size_t pixelCount; /* Total pixel count (size of one band in pixels) */
+    size_t count;      /* Total read count (size of one band in bytes) */
 
     nitf = cntl->nitf;
     blockIO = &(cntl->blockIO[0][0]);
@@ -6938,7 +6938,7 @@ NITFPROT(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
 NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
                                         nitf_Uint64 fileOffset,
                                         nitf_Uint8 * buffer,
-                                        nitf_Uint32 count,
+                                        size_t count,
                                         nitf_Error * error)
 {
     size_t bytes;               /* Amount of current read */
