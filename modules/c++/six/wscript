@@ -1,6 +1,7 @@
 NAME            = 'six'
 VERSION         = '0.1'
 MODULE_DEPS     = 'scene nitf xml.lite logging'
+USELIB          = 'MATH_POLY'
 
 set_options = configure = distclean = lambda p: None
 
