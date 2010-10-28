@@ -2,7 +2,7 @@ NAME            = 'scene'
 MAINTAINER      = 'dan.pressel@gd-ais.com martina.schultz@gd-ais.com'
 VERSION         = '1.0'
 MODULE_DEPS     = 'io'
-USELIB          = 'MATH_LINEAR LINMATH MATH_POLY'
+USELIB          = 'MATH_LINEAR'
 TEST_FILTER     = lambda t: t.find('test_scene') < 0
 
 set_options = configure = distclean = lambda p: None

@@ -136,7 +136,8 @@ double scene::SceneGeometry::getTiltAngle() const
 
 double scene::SceneGeometry::getDopplerConeAngle() const
 {
-    return acos((-1.0 * mXs).dot(mVa)) * RADIANS_TO_DEGREES;
+    Vector3 normVa = mVa / mVa.norm();
+    return acos((-1.0 * mXs).dot(normVa)) * RADIANS_TO_DEGREES;
 }
 
 double scene::SceneGeometry::getSquintAngle() const
