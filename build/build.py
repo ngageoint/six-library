@@ -161,7 +161,7 @@ class CPPBuildContext(BuildContext):
                 exeName = os.path.splitext(test)[0]
                 exe = bld.new_task_gen(libExeType, 'program', source=test,
                         uselib_local=uselib_local, uselib=uselib, env=env.copy(), includes='.',
-                        target=exeName, path=testNode)
+                        target=exeName, path=testNode, install_path=None)
                 tests.append(exeName)
             
             # add a post-build hook to run the unit tests

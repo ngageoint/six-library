@@ -16,3 +16,6 @@ def build(bld):
     apps = appsDir.find_iter(in_pat=['*.cpp'], maxdepth=1, flat=True).split(' ')
     for app in apps:
         bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-4])
+    # this is here for backwards-compatibility
+    bld.program(dir='apps', source='show_nitf++.cpp', module_deps=NAME,
+                name='test_image_loading++')

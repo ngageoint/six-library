@@ -67,6 +67,9 @@ def build(bld):
     for app in apps:
         bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-2],
                     lang='c')
+    # this is here for backwards-compatibility
+    bld.program(dir='apps', source='show_nitf.c', module_deps=NAME,
+                name='test_image_loading', lang='c')
 
     #install headers
     for f in bld.path.find_dir('include').find_iter():
