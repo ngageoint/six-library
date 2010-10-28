@@ -93,10 +93,10 @@ public:
     void setNumColsPerBlock(nitf::Uint32 value);
 
     //! Get the length
-    nitf::Uint32 getLength() const;
+    size_t getLength() const;
 
     //! Set the length
-    void setLength(nitf::Uint32 value);
+    void setLength(size_t value);
 
     //! Print the blocking into to file
     void print(FILE *file);

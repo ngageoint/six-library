@@ -92,12 +92,12 @@ void BlockingInfo::setNumColsPerBlock(nitf::Uint32 value)
     getNativeOrThrow()->numColsPerBlock = value;
 }
 
-nitf::Uint32 BlockingInfo::getLength() const
+size_t BlockingInfo::getLength() const
 {
     return getNativeOrThrow()->length;
 }
 
-void BlockingInfo::setLength(nitf::Uint32 value)
+void BlockingInfo::setLength(size_t value)
 {
     getNativeOrThrow()->length = value;
 }

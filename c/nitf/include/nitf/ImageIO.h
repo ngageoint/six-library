@@ -98,7 +98,7 @@ typedef struct _nitf_BlockingInfo
     nitf_Uint32 numBlocksPerCol;        /*!< Number of blocks per column */
     nitf_Uint32 numRowsPerBlock;        /*!< Number of rows per block */
     nitf_Uint32 numColsPerBlock;        /*!< Number of columns per block */
-    nitf_Uint32 length;         /*!< Total block length in bytes */
+    size_t length;                      /*!< Total block length in bytes */
 }
 nitf_BlockingInfo;
 

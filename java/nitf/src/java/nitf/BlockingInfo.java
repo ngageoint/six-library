@@ -104,14 +104,14 @@ public final class BlockingInfo extends DestructibleObject
      * 
      * @return
      */
-    public native int getLength();
+    public native long getLength();
 
     /**
      * Sets the length
      * 
      * @param length
      */
-    public native void setLength(int length);
+    public native void setLength(long length);
 
     /**
      * Prints the data pertaining to this object to an OutputStream
