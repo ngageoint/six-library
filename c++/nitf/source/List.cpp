@@ -98,7 +98,11 @@ bool nitf::ListIterator::operator!=(const nitf::ListIterator& it2)
     return this->notEqualTo((nitf::ListIterator&)it2);
 }
 
-void nitf::ListIterator::increment() { nitf_ListIterator_increment(&handle); }
+void nitf::ListIterator::increment()
+{
+    nitf_ListIterator_increment(&handle);
+    setMembers();
+}
 
 void nitf::ListIterator::operator++(int x) { increment(); }
 

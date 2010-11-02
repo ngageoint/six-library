@@ -144,9 +144,6 @@ public:
     //! Get the current
     nitf::ListNode & getCurrent() { return mCurrent; }
 
-    //! Set the current
-    void setCurrent(const nitf::ListNode & value) { mCurrent = value; }
-
 private:
     nitf_ListIterator handle;
     nitf::ListNode mCurrent;
@@ -160,6 +157,9 @@ private:
 
     //! Reset member objects
     void setMembers() { mCurrent.setNative(handle.current); }
+
+    //! Set the current
+    void setCurrent(const nitf::ListNode & value) { mCurrent = value; }
 };
 
 
