@@ -44,14 +44,7 @@ DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
 {
     if (mData->display)
         delete mData->display;
-
-    DisplayType displayType = DisplayType::COLOR;
-    if (pixelType == PixelType::MONO8LU || pixelType == PixelType::MONO8I
-            || pixelType == PixelType::MONO16I)
-    {
-        displayType = DisplayType::MONO;
-    }
-    mData->display = new Display(displayType);
+    mData->display = new Display;
     mData->display->pixelType = pixelType;
     return *this;
 }

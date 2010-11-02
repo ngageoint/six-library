@@ -78,7 +78,7 @@ void DerivedXMLControl::fromXML(const XMLElem productCreationXML,
     productCreation->classification.level
             = getFirstAndOnly(classificationXML, "Level")->getCharacterData();
 
-    std::vector < XMLElem > secMarkingsXML;
+    std::vector<XMLElem> secMarkingsXML;
     classificationXML->getElementsByTagName("SecurityMarkings", secMarkingsXML);
     for (std::vector<XMLElem>::const_iterator it = secMarkingsXML.begin(); it
             != secMarkingsXML.end(); ++it)
@@ -130,12 +130,13 @@ void DerivedXMLControl::fromXML(const XMLElem displayXML, Display* display)
     XMLElem remapInformationXML = getOptional(displayXML, "RemapInformation");
     if (remapInformationXML)
     {
-        if (display->remapInformation->displayType == DisplayType::COLOR)
+        if (display->remapInformation)
+            delete display->remapInformation;
+
+        XMLElem remapXML =
+                getOptional(remapInformationXML, "ColorDisplayRemap");
+        if (remapXML)
         {
-
-            XMLElem remapXML = getFirstAndOnly(remapInformationXML,
-                                               "ColorDisplayRemap");
-
             XMLElem remapLUTXML = getFirstAndOnly(remapXML, "RemapLUT");
 
             //get size attribute
@@ -144,62 +145,70 @@ void DerivedXMLControl::fromXML(const XMLElem displayXML, Display* display)
                             str::toType<int>(
                                              remapLUTXML->getAttributes().getValue(
                                                                                    "size"));
-            display->remapInformation->remapLUT = new LUT(size, 3);
-
-            std::string lutStr =
-                    getFirstAndOnly(remapXML, "RemapLUT")->getCharacterData();
-            std::vector < std::string > lutVals = str::split(lutStr, " ");
+            std::string lutStr = remapLUTXML->getCharacterData();
+            std::vector<std::string> lutVals = str::split(lutStr, " ");
+            LUT *remapLUT = new LUT(size, 3);
 
             int k = 0;
             for (unsigned int i = 0; i < lutVals.size(); i++)
             {
-                std::vector < std::string > rgb = str::split(lutVals[i], ",");
+                std::vector<std::string> rgb = str::split(lutVals[i], ",");
                 for (unsigned int j = 0; j < rgb.size(); j++)
                 {
-                    display->remapInformation->remapLUT->table[k++]
-                            = rgb[j].at(0);
+                    remapLUT->table[k++] = rgb[j].at(0);
                 }
             }
+            display->remapInformation = new ColorDisplayRemap(remapLUT);
         }
-        else if (display->remapInformation->displayType == DisplayType::MONO)
+        else
         {
-            XMLElem remapXML = getFirstAndOnly(remapInformationXML,
-                                               "MonochromeDisplayRemap");
-
-            XMLElem remapLUTXML = getFirstAndOnly(remapXML, "RemapLUT");
-
-            //get size attribute
-            int
-                    size =
-                            str::toType<int>(
-                                             remapLUTXML->getAttributes().getValue(
-                                                                                   "size"));
-            display->remapInformation->remapLUT = new LUT(size, 1);
-
-            std::string lutStr =
-                    getFirstAndOnly(remapXML, "RemapLUT")->getCharacterData();
-            std::vector < std::string > lutVals = str::split(lutStr, " ");
-            for (unsigned int i = 0; i < lutVals.size(); i++)
+            remapXML = getOptional(remapInformationXML,
+                                   "MonochromeDisplayRemap");
+            if (remapXML)
             {
-                display->remapInformation->remapLUT->table[i]
-                        = lutVals[i].at(0);
+                std::string
+                        remapType =
+                                getFirstAndOnly(remapXML, "RemapType")->getCharacterData();
+                XMLElem remapLUTXML = getOptional(remapXML, "RemapLUT");
+
+                LUT *remapLUT = NULL;
+                if (remapLUTXML)
+                {
+                    //get size attribute
+                    int
+                            size =
+                                    str::toType<int>(
+                                                     remapLUTXML->getAttributes().getValue(
+                                                                                           "size"));
+                    std::string lutStr = remapLUTXML->getCharacterData();
+                    std::vector<std::string> lutVals = str::split(lutStr, " ");
+                    remapLUT = new LUT(size, 1);
+                    for (unsigned int i = 0; i < lutVals.size(); i++)
+                    {
+                        remapLUT->table[i] = lutVals[i].at(0);
+                    }
+                }
+
+                MonochromeDisplayRemap *monoRemap =
+                        new MonochromeDisplayRemap(remapType, remapLUT);
+                display->remapInformation = monoRemap;
+
+                //RemapParameters
+                try
+                {
+                    parseParameters(remapXML, "RemapParameter",
+                                    monoRemap->remapParameters);
+                }
+                catch (except::Exception&)
+                {
+                }
             }
-
-            ((MonochromeDisplayRemap*) display->remapInformation)->remapType
-                    = getFirstAndOnly(remapXML, "RemapType")->getCharacterData();
-
-            //RemapParameters
-            try
+            else
             {
-                parseParameters(
-                                remapXML,
-                                "RemapParameter",
-                                ((MonochromeDisplayRemap*) display-> remapInformation)->remapParameters);
-            }
-            catch (except::Exception&)
-            {
+                throw except::Exception(Ctxt("Invalid or missing Remap choice"));
             }
         }
+
     }
 
     XMLElem magXML = getOptional(displayXML, "MagnificationMethod");
@@ -260,7 +269,7 @@ void DerivedXMLControl::fromXML(const XMLElem geographicAndTargetXML,
     fromXML(geographicCoverageXML, geographicAndTarget->geographicCoverage);
 
     //TargetInformation
-    std::vector < XMLElem > targetInfosXML;
+    std::vector<XMLElem> targetInfosXML;
     geographicAndTargetXML->getElementsByTagName("TargetInformation",
                                                  targetInfosXML);
 
@@ -273,12 +282,12 @@ void DerivedXMLControl::fromXML(const XMLElem geographicAndTargetXML,
         parseParameters(*it, "Identifier", ti->identifiers);
 
         //Footprint
-        std::vector < XMLElem > footprintsXML;
+        std::vector<XMLElem> footprintsXML;
         (*it)->getElementsByTagName("Footprint", footprintsXML);
         for (std::vector<XMLElem>::const_iterator it2 = footprintsXML.begin(); it2
                 != footprintsXML.end(); ++it2)
         {
-            std::vector < LatLon > fp;
+            std::vector<LatLon> fp;
             parseFootprint(*it2, "Vertex", fp);
             ti->footprints.push_back(fp);
         }
@@ -298,7 +307,7 @@ void DerivedXMLControl::fromXML(const XMLElem geographicAndTargetXML,
 void DerivedXMLControl::fromXML(const XMLElem geographicCoverageXML,
         GeographicCoverage* geographicCoverage)
 {
-    std::vector < XMLElem > georegionIdsXML;
+    std::vector<XMLElem> georegionIdsXML;
     geographicCoverageXML->getElementsByTagName("GeoregionIdentifier",
                                                 georegionIdsXML);
     for (std::vector<XMLElem>::const_iterator it = georegionIdsXML.begin(); it
@@ -314,7 +323,7 @@ void DerivedXMLControl::fromXML(const XMLElem geographicCoverageXML,
     parseFootprint(footprintXML, "Vertex", geographicCoverage->footprint);
 
     //If there are subregions, recurse
-    std::vector < XMLElem > subRegionsXML;
+    std::vector<XMLElem> subRegionsXML;
     geographicCoverageXML->getElementsByTagName("SubRegion", subRegionsXML);
 
     int i = 0;
@@ -335,7 +344,7 @@ void DerivedXMLControl::fromXML(const XMLElem geographicCoverageXML,
 
         geographicCoverage->geographicInformation = new GeographicInformation();
 
-        std::vector < XMLElem > countryCodes;
+        std::vector<XMLElem> countryCodes;
         geographicInfoXML->getElementsByTagName("CountryCode", countryCodes);
         for (std::vector<XMLElem>::const_iterator it = countryCodes.begin(); it
                 != countryCodes.end(); ++it)
@@ -487,7 +496,7 @@ void DerivedXMLControl::fromXML(const XMLElem exploitationFeaturesXML,
 {
     XMLElem tmpElem;
 
-    std::vector < XMLElem > collectionsXML;
+    std::vector<XMLElem> collectionsXML;
     exploitationFeaturesXML->getElementsByTagName("Collection", collectionsXML);
 
     unsigned int idx = 0;
@@ -555,7 +564,7 @@ void DerivedXMLControl::fromXML(const XMLElem exploitationFeaturesXML,
         }
 
         // optional and unbounded
-        std::vector < XMLElem > polarization;
+        std::vector<XMLElem> polarization;
         informationXML->getElementsByTagName("Polarization", polarization);
 
         for (size_t i = 0, nElems = polarization.size(); i < nElems; ++i)
@@ -720,7 +729,7 @@ Data* DerivedXMLControl::fromXML(const xml::lite::Document* doc)
 
     builder.addMeasurement(projType);
 
-    std::vector < XMLElem > elements;
+    std::vector<XMLElem> elements;
     exploitationFeaturesXML->getElementsByTagName("ExploitationFeatures",
                                                   elements);
     builder.addExploitationFeatures(elements.size());
@@ -763,7 +772,7 @@ Data* DerivedXMLControl::fromXML(const xml::lite::Document* doc)
     XMLElem annotationsXML = getOptional(root, "Annotations");
     if (annotationsXML)
     {
-        std::vector < XMLElem > annChildren;
+        std::vector<XMLElem> annChildren;
         annotationsXML->getElementsByTagName("Annotation", annChildren);
         for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
         {
@@ -858,30 +867,28 @@ XMLElem DerivedXMLControl::toXML(const Display* display, XMLElem parent)
     createString("PixelType", six::toString(display->pixelType), displayXML);
 
     //RemapInformation - optional
-    if (display->remapInformation && (display->pixelType == PixelType::RGB8LU
-            || display->pixelType == PixelType::MONO8LU))
+    if (display->remapInformation)
     {
         XMLElem remapInfoXML = newElement("RemapInformation", displayXML);
 
-        XMLElem remapXML;
-        if (display->pixelType == PixelType::RGB8LU)
+        if (display->remapInformation->displayType == DisplayType::COLOR)
         {
-            remapXML = newElement("ColorDisplayRemap", remapInfoXML);
-            createLUT("RemapLUT", display->remapInformation->remapLUT, remapXML);
-        }
-        else
-        {
-            remapXML = newElement("MonochromeDisplayRemap", remapInfoXML);
-            createString(
-                         "RemapType",
-                         ((MonochromeDisplayRemap*) display->remapInformation)->remapType,
-                         remapXML);
-            createLUT("RemapLUT", display->remapInformation->remapLUT, remapXML);
-            //should we do this cast (i.e. assume the pixelType is correct)?
-            addParameters(
-                          "RemapParameter",
-                          ((MonochromeDisplayRemap*) display->remapInformation)->remapParameters,
+            XMLElem remapXML = newElement("ColorDisplayRemap", remapInfoXML);
+            if (display->remapInformation->remapLUT)
+                createLUT("RemapLUT", display->remapInformation->remapLUT,
                           remapXML);
+        }
+        else if (display->remapInformation->displayType == DisplayType::MONO)
+        {
+            XMLElem remapXML = newElement("MonochromeDisplayRemap",
+                                          remapInfoXML);
+            // a little risky, but let's assume the displayType is correct
+            MonochromeDisplayRemap* mdr =
+                    (MonochromeDisplayRemap*) display->remapInformation;
+            createString("RemapType", mdr->remapType, remapXML);
+            if (mdr->remapLUT)
+                createLUT("RemapLUT", mdr->remapLUT, remapXML);
+            addParameters("RemapParameter", mdr->remapParameters, remapXML);
         }
     }
 
@@ -1333,7 +1340,8 @@ xml::lite::Document* DerivedXMLControl::toXML(const Data* data)
     return doc;
 }
 
-XMLElem DerivedXMLControl::createLUT(std::string name, const LUT *lut, XMLElem parent)
+XMLElem DerivedXMLControl::createLUT(std::string name, const LUT *lut,
+        XMLElem parent)
 {
     //     unsigned char* table;
     //     unsigned int numEntries;
@@ -1460,7 +1468,7 @@ void DerivedXMLControl::fromXML(const XMLElem procXML,
 
     parseParameters(procXML, "ModuleParameter", procMod->moduleParameters);
 
-    std::vector < XMLElem > procModuleXML;
+    std::vector<XMLElem> procModuleXML;
     procXML->getElementsByTagName("ProcessingModule", procModuleXML);
 
     for (unsigned int i = 0, size = procModuleXML.size(); i < size; ++i)
@@ -1474,7 +1482,7 @@ void DerivedXMLControl::fromXML(const XMLElem procXML,
 void DerivedXMLControl::fromXML(const XMLElem elem,
         ProductProcessing* productProcessing)
 {
-    std::vector < XMLElem > procModuleXML;
+    std::vector<XMLElem> procModuleXML;
     elem->getElementsByTagName("ProcessingModule", procModuleXML);
 
     for (unsigned int i = 0, size = procModuleXML.size(); i < size; ++i)
@@ -1489,7 +1497,7 @@ void DerivedXMLControl::fromXML(const XMLElem elem,
         DownstreamReprocessing* downstreamReproc)
 {
     XMLElem geometricChipXML = getOptional(elem, "GeometricChip");
-    std::vector < XMLElem > procEventXML;
+    std::vector<XMLElem> procEventXML;
     elem->getElementsByTagName("ProcessingEvent", procEventXML);
     XMLElem processingEventXML = getOptional(elem, "ProcessingEvent");
 
@@ -1547,13 +1555,13 @@ void DerivedXMLControl::fromXML(const XMLElem elem, Annotation *a)
         //TODO
     }
 
-    std::vector < XMLElem > objectsXML;
+    std::vector<XMLElem> objectsXML;
     elem->getElementsByTagName("Object", objectsXML);
     for (unsigned int i = 0, size = objectsXML.size(); i < size; ++i)
     {
         XMLElem obj = objectsXML[i];
         //there should be only one child - a choice between types
-        std::vector < XMLElem > &children = obj->getChildren();
+        std::vector<XMLElem> &children = obj->getChildren();
         if (children.size() > 0)
         {
             //just get the first one
@@ -1639,7 +1647,7 @@ void DerivedXMLControl::fromXML(const XMLElem elem, SFAGeometry *g)
     {
         //cast to the common base - LineString
         SFALineString *p = (SFALineString*) g;
-        std::vector < XMLElem > vXML;
+        std::vector<XMLElem> vXML;
         elem->getElementsByTagName("Vertex", vXML);
         for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
         {
@@ -1651,7 +1659,7 @@ void DerivedXMLControl::fromXML(const XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAPolygon::TYPE_NAME)
     {
         SFAPolygon *p = (SFAPolygon*) g;
-        std::vector < XMLElem > ringXML;
+        std::vector<XMLElem> ringXML;
         elem->getElementsByTagName("Ring", ringXML);
         for (unsigned int i = 0, size = ringXML.size(); i < size; ++i)
         {
@@ -1663,7 +1671,7 @@ void DerivedXMLControl::fromXML(const XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAPolyhedralSurface::TYPE_NAME)
     {
         SFAPolyhedralSurface *p = (SFAPolyhedralSurface*) g;
-        std::vector < XMLElem > polyXML;
+        std::vector<XMLElem> polyXML;
         elem->getElementsByTagName("Patch", polyXML);
         for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
         {
@@ -1675,7 +1683,7 @@ void DerivedXMLControl::fromXML(const XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAMultiPolygon::TYPE_NAME)
     {
         SFAMultiPolygon *p = (SFAMultiPolygon*) g;
-        std::vector < XMLElem > polyXML;
+        std::vector<XMLElem> polyXML;
         elem->getElementsByTagName("Element", polyXML);
         for (unsigned int i = 0, size = polyXML.size(); i < size; ++i)
         {
@@ -1687,7 +1695,7 @@ void DerivedXMLControl::fromXML(const XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAMultiLineString::TYPE_NAME)
     {
         SFAMultiLineString *p = (SFAMultiLineString*) g;
-        std::vector < XMLElem > lineXML;
+        std::vector<XMLElem> lineXML;
         elem->getElementsByTagName("Element", lineXML);
         for (unsigned int i = 0, size = lineXML.size(); i < size; ++i)
         {
@@ -1699,7 +1707,7 @@ void DerivedXMLControl::fromXML(const XMLElem elem, SFAGeometry *g)
     else if (geoType == SFAMultiPoint::TYPE_NAME)
     {
         SFAMultiPoint *p = (SFAMultiPoint*) g;
-        std::vector < XMLElem > vXML;
+        std::vector<XMLElem> vXML;
         elem->getElementsByTagName("Vertex", vXML);
         for (unsigned int i = 0, size = vXML.size(); i < size; ++i)
         {
