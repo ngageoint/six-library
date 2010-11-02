@@ -24,31 +24,18 @@
 using namespace six;
 using namespace six::sidd;
 
-Display::Display(DisplayType displayType) :
+Display::Display() :
     remapInformation(NULL), histogramOverrides(NULL),
             monitorCompensationApplied(NULL)
 {
     pixelType = PixelType::NOT_SET;
     magnificationMethod = MagnificationMethod::NOT_SET;
     decimationMethod = DecimationMethod::NOT_SET;
-
-    if (displayType == DisplayType::MONO)
-    {
-        remapInformation = new MonochromeDisplayRemap();
-    }
-    else
-        remapInformation = new ColorDisplayRemap();
 }
 
 Display* Display::clone() const
 {
-    Display* d = new Display(remapInformation->displayType);
-    if (d->remapInformation)
-    {
-        delete d->remapInformation;
-        d->remapInformation = NULL;
-    }
-
+    Display* d = new Display;
     d->pixelType = pixelType;
     if (remapInformation)
         d->remapInformation = remapInformation->clone();

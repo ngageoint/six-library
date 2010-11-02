@@ -42,10 +42,11 @@ namespace sidd
  */
 struct Remap
 {
-    Remap() :
-        remapLUT(NULL)
+    Remap(LUT* lut = NULL) :
+        remapLUT(lut)
     {
     }
+
     DisplayType displayType;
     LUT* remapLUT; // MonoLUT or ColorLUT or NULL
     virtual ~Remap()
@@ -65,13 +66,14 @@ struct Remap
  *  MONO
  *
  */
-struct MonochromeDisplayRemap: public Remap
+struct MonochromeDisplayRemap : public Remap
 {
     /*!
      *  Create a remap object, but does not set up a LUT.  LUT
      *  remains uninitialized
      */
-    MonochromeDisplayRemap()
+    MonochromeDisplayRemap(std::string _remapType, LUT* lut = NULL) :
+        Remap(lut), remapType(_remapType)
     {
         this->displayType = DisplayType::MONO;
     }
@@ -81,11 +83,10 @@ struct MonochromeDisplayRemap: public Remap
      */
     virtual Remap* clone() const
     {
-        Remap* r = new MonochromeDisplayRemap(*this);
-        if (r->remapLUT)
-        {
-            r->remapLUT = remapLUT->clone();
-        }
+        MonochromeDisplayRemap *r =
+                new MonochromeDisplayRemap(remapType,
+                                           remapLUT ? remapLUT->clone() : NULL);
+        r->remapParameters = remapParameters;
         return r;
     }
     /*!
@@ -111,25 +112,23 @@ struct MonochromeDisplayRemap: public Remap
  *  A color display remap contains clipping information, and possibly
  *  also contains a remap LUT.
  */
-struct ColorDisplayRemap: public Remap
+struct ColorDisplayRemap : public Remap
 {
     //!  Constructor
-    ColorDisplayRemap()
+    ColorDisplayRemap(LUT* lut = NULL) :
+        Remap(lut)
     {
         this->displayType = DisplayType::COLOR;
     }
     //!  Clone the remap
     virtual Remap* clone() const
     {
-        Remap* r = new ColorDisplayRemap(*this);
-        if (r->remapLUT)
-        {
-            r->remapLUT = remapLUT->clone();
-        }
-        return r;
+        return new ColorDisplayRemap(remapLUT ? remapLUT->clone() : NULL);
     }
     //!  Destructor, relies on base to delete any non-NULL LUT
-    virtual ~ColorDisplayRemap() {}
+    virtual ~ColorDisplayRemap()
+    {
+    }
 
 };
 
@@ -200,7 +199,7 @@ struct DRAHistogramOverrides
  */
 struct Display
 {
-    Display(DisplayType displayType);
+    Display();
 
     ~Display();
 
