@@ -69,7 +69,7 @@ def build(bld):
                     lang='c')
     # this is here for backwards-compatibility
     bld.program(dir='apps', source='show_nitf.c', module_deps=NAME,
-                name='test_image_loading', lang='c')
+                name='test_dump_record', lang='c')
 
     #install headers
     for f in bld.path.find_dir('include').find_iter():

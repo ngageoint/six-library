@@ -18,4 +18,4 @@ def build(bld):
         bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-4])
     # this is here for backwards-compatibility
     bld.program(dir='apps', source='show_nitf++.cpp', module_deps=NAME,
-                name='test_image_loading++')
+                name='test_dump_record++')

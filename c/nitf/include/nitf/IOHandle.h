@@ -29,7 +29,9 @@
 #   define NITF_IO_SUCCESS(I) ((I) >= 0)
 
 /* How many times should we try to read until we declare the IOHandle dead.  Use a timeout later. */
+#ifndef NITF_MAX_READ_ATTEMPTS
 #define NITF_MAX_READ_ATTEMPTS 100
+#endif
 
 NITF_CXX_GUARD
 
