@@ -172,6 +172,41 @@ public:
     //! TODO dont forget me!!
     static PixelType getPixelTypeFromNITF(nitf::ImageSubheader& subheader);
 
+    //!  File security classification system
+    static const char CLSY[];
+    //!  File security codewords
+    static const char CODE[];
+    //!  File control and handling
+    static const char CTLH[];
+    //!  File releasing instructions
+    static const char REL[];
+    //!  File security declassification type
+    static const char DCTP[];
+    //!  File security declassification date
+    static const char DCDT[];
+    //!  File security declassification exemption
+    static const char DCXM[];
+    //!  File security downgrade
+    static const char DG[];
+    //!  File security downgrade date
+    static const char DGDT[];
+    //!  File security classification text
+    static const char CLTX[];
+    //!  File security classification Authority type
+    static const char CATP[];
+    //!  File security classification Authority
+    static const char CAUT[];
+    //!  File security reason
+    static const char CRSN[];
+    //!  File security source date
+    static const char SRDT[];
+    //!  File security control number
+    static const char CTLN[];
+
+    //! Utility that generates a key for the given field, with optional prefix and index
+    static std::string generateFieldKey(const std::string& field,
+            std::string prefix = "", int index = -1);
+
 protected:
     Data* data;
 

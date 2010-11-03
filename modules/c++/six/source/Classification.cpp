@@ -58,63 +58,6 @@ Classification& Classification::operator=(const Classification& c)
     return *this;
 }
 
-//!  File security classification system
-const char Classification::OPT_ISCLAS[] = "ISCLAS";
-//!  File security classification system
-const char Classification::OPT_ISCLSY[] = "ISCLSY";
-//!  File classification text
-const char Classification::OPT_ISCLTX[] = "ISCLTX";
-//!  File security codewords
-const char Classification::OPT_ISCODE[] = "ISCODE";
-//!  File security reason 
-const char Classification::OPT_ISCRSN[] = "ISCRSN";
-//!  File control and handling
-const char Classification::OPT_ISCTLH[] = "ISCTLH";
-//!  File security control number
-const char Classification::OPT_ISCTLN[] = "ISCTLN";
-//!  File security declassification date
-const char Classification::OPT_ISDCDT[] = "ISDCDT";
-//!  File security declassification type
-const char Classification::OPT_ISDCTP[] = "ISDCTP";
-//!  File security declassification exemption
-const char Classification::OPT_ISDCXM[] = "ISDCXM";
-//!  File security downgrade
-const char Classification::OPT_ISDG[] = "ISDG";
-//!  File security downgrade date
-const char Classification::OPT_ISDGDT[] = "ISDGDT";
-//!  File releasing instructions
-const char Classification::OPT_ISREL[] = "ISREL";
-//!  File security source date
-const char Classification::OPT_ISSRDT[] = "ISSRDT";
-
-const char Classification::OPT_DESCLAS[] = "DESCLAS";
-//!  File security classification system
-const char Classification::OPT_DESCLSY[] = "DESCLSY";
-//!  File classification text
-const char Classification::OPT_DESCLTX[] = "DESCLTX";
-//!  File security codewords
-const char Classification::OPT_DESCODE[] = "DESCODE";
-//!  File security reason 
-const char Classification::OPT_DESCRSN[] = "DESCRSN";
-//!  File control and handling
-const char Classification::OPT_DESCTLH[] = "DESCTLH";
-//!  File security control number
-const char Classification::OPT_DESCTLN[] = "DESCTLN";
-//!  File security declassification date
-const char Classification::OPT_DESDCDT[] = "DESDCDT";
-//!  File security declassification type
-const char Classification::OPT_DESDCTP[] = "DESDCTP";
-//!  File security declassification exemption
-const char Classification::OPT_DESDCXM[] = "DESDCXM";
-//!  File security downgrade
-const char Classification::OPT_DESDG[] = "DESDG";
-//!  File security downgrade date
-const char Classification::OPT_DESDGDT[] = "DESDGDT";
-//!  File releasing instructions
-const char Classification::OPT_DESREL[] = "DESREL";
-//!  File security source date
-const char Classification::OPT_DESSRDT[] = "DESSRDT";
-
 std::ostream& operator<<(std::ostream& os, const Classification& c)
 {
     os << "Classification: " << std::endl;

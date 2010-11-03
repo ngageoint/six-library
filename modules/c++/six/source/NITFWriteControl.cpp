@@ -200,251 +200,205 @@ void NITFWriteControl::initialize(Container* container)
     updateFileHeaderSecurity();
 }
 
-void NITFWriteControl::setImageSecurity(six::Classification c,
+void NITFWriteControl::setImageSecurity(six::Classification& c,
         nitf::ImageSubheader& subheader)
 {
     //This requires a normalized name to get set correctly
     subheader.getImageSecurityClass().set(getNITFClassification(c.level));
-    nitf::FileSecurity security = subheader.getSecurityGroup();
-
-    //First use SIDD placement
-    security.getClassificationSystem().set("US");
-    std::string srdt;
-    std::string code;
-
-    for (unsigned int j = 0; j < c.securityMarkings.size(); j++)
-    {
-        if (j)
-            code += " ";
-        code += c.securityMarkings[j];
-    }
-
-    security.getCodewords().set(code);
-
-    if (c.level != "UNCLASSIFIED")
-    {
-        security.getDeclassificationType().set("X");
-        security.getClassificationAuthorityType().set("D");
-
-        if (c.guidance)
-        {
-            security.getClassificationAuthority().set(c.guidance->authority);
-
-            char raw[256];
-            raw[255] = 0;
-            c.guidance->date.format("%Y%m%d", raw, 255);
-            srdt = raw;
-            security.getSecuritySourceDate().set(srdt);
-        }
-    }
-
-    // If they went to the trouble of setting the file options,
-    // we eill write those into the security record.  If we already
-    // set a value, oh well, we'll overwrite it.
-
-    // CLAS
-    std::string clas = c.fileOptions.getParameter(Classification::OPT_ISCLAS,
-                                                  Parameter("")).str();
-    if (clas.length() == 1)
-    {
-        subheader.getImageSecurityClass().set(clas);
-    }
-
-    // CLSY
-    std::string clsy = c.fileOptions.getParameter(Classification::OPT_ISCLSY,
-                                                  Parameter("")).str();
-    if (clsy.length())
-        security.getClassificationSystem().set(clsy);
-
-    // CLTX
-    std::string cltx = c.fileOptions.getParameter(Classification::OPT_ISCLTX,
-                                                  Parameter("")).str();
-    if (cltx.length())
-        security.getClassificationText().set(cltx);
-
-    // CODE
-    code
-            = c.fileOptions.getParameter(Classification::OPT_ISCODE,
-                                         Parameter("")).str();
-    if (code.length())
-        security.getCodewords().set(code);
-
-    // CRSN
-    std::string crsn = c.fileOptions.getParameter(Classification::OPT_ISCRSN,
-                                                  Parameter("")).str();
-    if (crsn.length())
-        security.getClassificationReason().set(crsn);
-
-    // CTLH
-    std::string ctlh = c.fileOptions.getParameter(Classification::OPT_ISCTLH,
-                                                  Parameter("")).str();
-    if (ctlh.length())
-        security.getControlAndHandling().set(ctlh);
-
-    // CTLN
-    std::string ctln = c.fileOptions.getParameter(Classification::OPT_ISCTLN,
-                                                  Parameter("")).str();
-    if (ctln.length())
-        security.getSecurityControlNumber().set(ctln);
-
-    // DCDT
-    std::string dcdt = c.fileOptions.getParameter(Classification::OPT_ISDCDT,
-                                                  Parameter("")).str();
-    if (dcdt.length())
-        security.getDeclassificationDate().set(dcdt);
-
-    // DCXM
-    std::string dcxm = c.fileOptions.getParameter(Classification::OPT_ISDCXM,
-                                                  Parameter("")).str();
-    if (dcxm.length())
-        security.getDeclassificationExemption().set(dcxm);
-
-    // DG
-    std::string dg = c.fileOptions.getParameter(Classification::OPT_ISDG,
-                                                Parameter("")).str();
-    if (dg.length())
-        security.getDowngrade().set(dg);
-
-    // DGDT
-    std::string dgdt = c.fileOptions.getParameter(Classification::OPT_ISDGDT,
-                                                  Parameter("")).str();
-    if (dgdt.length())
-        security.getDowngradeDateTime().set(dgdt);
-
-    // REL
-    std::string rel = c.fileOptions.getParameter(Classification::OPT_ISREL,
-                                                 Parameter("")).str();
-    if (rel.length())
-        security.getReleasingInstructions().set(rel);
-
-    // SRDT
-    srdt
-            = c.fileOptions.getParameter(Classification::OPT_ISSRDT,
-                                         Parameter("")).str();
-    if (srdt.length())
-        security.getSecuritySourceDate().set(srdt);
+    setSecurity(c, subheader.getSecurityGroup(), "IS");
 }
 
-void NITFWriteControl::setDESecurity(six::Classification c,
+void NITFWriteControl::setDESecurity(six::Classification& c,
         nitf::DESubheader& subheader)
 {
     subheader.getSecurityClass().set(getNITFClassification(c.level));
-    nitf::FileSecurity security = subheader.getSecurityGroup();
+    setSecurity(c, subheader.getSecurityGroup(), "DES");
+}
 
-    //First use SIDD placement
-    security.getClassificationSystem().set("US");
-    std::string srdt;
+void NITFWriteControl::setSecurity(six::Classification& c,
+        nitf::FileSecurity security, std::string prefix)
+{
+
+    std::string k;
+    Options& ops = c.fileOptions;
+
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CLSY, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getClassificationSystem().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CODE, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getCodewords().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CTLH, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getControlAndHandling().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::REL, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getReleasingInstructions().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCTP, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getDeclassificationType().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCDT, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getDeclassificationDate().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCXM, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getDeclassificationExemption().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DG, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getDowngrade().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DGDT, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getDowngradeDateTime().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CLTX, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getClassificationText().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CATP, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getClassificationAuthorityType().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CAUT, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getClassificationAuthority().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CRSN, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getClassificationReason().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::SRDT, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getSecuritySourceDate().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CTLN, prefix);
+    if (ops.hasParameter(k))
+    {
+        Parameter p = ops.getParameter(k);
+        security.getSecurityControlNumber().set(p.str());
+        mLog->debug(Ctxt(FmtX("Using NITF security option: [%s]->[%s]",
+                              k.c_str(), (const char*) p)));
+    }
+
+    // Now, do some specific overrides
+    if (security.getClassificationSystem().toString().empty())
+    {
+        security.getClassificationSystem().set("US");
+        mLog->debug(Ctxt("Forcing NITF Classification System to [US]"));
+    }
+
     std::string code;
-
     for (unsigned int j = 0; j < c.securityMarkings.size(); j++)
     {
         if (j)
             code += " ";
         code += c.securityMarkings[j];
     }
+    str::trim(code);
+    if (!code.empty())
+    {
+        security.getCodewords().set(code);
+        k = NITFImageInfo::generateFieldKey(NITFImageInfo::CODE, prefix);
+        mLog->debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
+                              k.c_str(), code.c_str())));
+    }
 
-    security.getCodewords().set(code);
-
+    std::string srdt;
     if (c.level != "UNCLASSIFIED")
     {
         security.getDeclassificationType().set("X");
+        k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCTP, prefix);
+        mLog->debug(Ctxt(FmtX("Setting NITF [%s] as [X]", k.c_str())));
+
         security.getClassificationAuthorityType().set("D");
+        k = NITFImageInfo::generateFieldKey(NITFImageInfo::CATP, prefix);
+        mLog->debug(Ctxt(FmtX("Setting NITF [%s] as [D]", k.c_str())));
 
         if (c.guidance)
         {
             security.getClassificationAuthority().set(c.guidance->authority);
+            k = NITFImageInfo::generateFieldKey(NITFImageInfo::CAUT, prefix);
+            mLog->debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
+                                  k.c_str(), c.guidance->authority.c_str())));
 
             char raw[256];
             raw[255] = 0;
             c.guidance->date.format("%Y%m%d", raw, 255);
-            srdt = raw;
-            security.getSecuritySourceDate().set(srdt);
+            srdt.assign(raw);
+
+            str::trim(srdt);
         }
     }
-
-    // If they went to the trouble of setting the file options,
-    // we eill write those into the security record.  If we already
-    // set a value, oh well, we'll overwrite it.
-
-    // CLAS
-    std::string clas = c.fileOptions.getParameter(Classification::OPT_DESCLAS,
-                                                  Parameter("")).str();
-    if (clas.length() == 1)
+    if (!srdt.empty())
     {
-        subheader.getSecurityClass().set(clas);
-    }
-
-    // CLSY
-    std::string clsy = c.fileOptions.getParameter(Classification::OPT_DESCLSY,
-                                                  Parameter("")).str();
-    if (clsy.length())
-        security.getClassificationSystem().set(clsy);
-
-    // CLTX
-    std::string cltx = c.fileOptions.getParameter(Classification::OPT_DESCLTX,
-                                                  Parameter("")).str();
-    if (cltx.length())
-        security.getClassificationText().set(cltx);
-
-    // CODE
-    code = c.fileOptions.getParameter(Classification::OPT_DESCODE,
-                                      Parameter("")).str();
-    if (code.length())
-        security.getCodewords().set(code);
-
-    // CRSN
-    std::string crsn = c.fileOptions.getParameter(Classification::OPT_DESCRSN,
-                                                  Parameter("")).str();
-    if (crsn.length())
-        security.getClassificationReason().set(crsn);
-
-    // CTLH
-    std::string ctlh = c.fileOptions.getParameter(Classification::OPT_DESCTLH,
-                                                  Parameter("")).str();
-    if (ctlh.length())
-        security.getControlAndHandling().set(ctlh);
-
-    // CTLN
-    std::string ctln = c.fileOptions.getParameter(Classification::OPT_DESCTLN,
-                                                  Parameter("")).str();
-    if (ctln.length())
-        security.getSecurityControlNumber().set(ctln);
-
-    // DCDT
-    std::string dcdt = c.fileOptions.getParameter(Classification::OPT_DESDCDT,
-                                                  Parameter("")).str();
-    if (dcdt.length())
-        security.getDeclassificationDate().set(dcdt);
-
-    // DCXM
-    std::string dcxm = c.fileOptions.getParameter(Classification::OPT_DESDCXM,
-                                                  Parameter("")).str();
-    if (dcxm.length())
-        security.getDeclassificationExemption().set(dcxm);
-
-    // DG
-    std::string dg = c.fileOptions.getParameter(Classification::OPT_DESDG,
-                                                Parameter("")).str();
-    if (dg.length())
-        security.getDowngrade().set(dg);
-
-    // DGDT
-    std::string dgdt = c.fileOptions.getParameter(Classification::OPT_DESDGDT,
-                                                  Parameter("")).str();
-    if (dgdt.length())
-        security.getDowngradeDateTime().set(dgdt);
-
-    // REL
-    std::string rel = c.fileOptions.getParameter(Classification::OPT_DESREL,
-                                                 Parameter("")).str();
-    if (rel.length())
-        security.getReleasingInstructions().set(rel);
-
-    // SRDT
-    srdt = c.fileOptions.getParameter(Classification::OPT_DESSRDT,
-                                      Parameter("")).str();
-    if (srdt.length())
+        k = NITFImageInfo::generateFieldKey(NITFImageInfo::SRDT, prefix);
         security.getSecuritySourceDate().set(srdt);
+        mLog->debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
+                              k.c_str(), srdt.c_str())));
+    }
 }
 
 std::string NITFWriteControl::getNITFClassification(std::string level)

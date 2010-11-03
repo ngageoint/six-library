@@ -26,6 +26,8 @@
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
+#include <import/logging.h>
+
 namespace six
 {
 
@@ -53,9 +55,6 @@ typedef std::vector<UByte*> BufferList;
  */
 class WriteControl
 {
-protected:
-    Container* mContainer;
-    Options mOptions;
 public:
 
     //!  Global byte swap option.  Normally, you should leave this up to us
@@ -69,8 +68,9 @@ public:
 
     //!  Constructor.  Null-sets the Container
     WriteControl() :
-        mContainer(NULL)
+        mContainer(NULL), mLog(NULL), mOwnLog(false)
     {
+        setLogger( NULL);
     }
 
     //!  Destructor.  Does not release any memory
@@ -161,6 +161,23 @@ public:
     {
         return mOptions;
     }
+
+    /*!
+     * Sets the logger to use internally
+     */
+    void setLogger(logging::Logger* log, bool ownLog = false)
+    {
+        if (mLog && mOwnLog && log != mLog)
+            delete mLog;
+        mLog = log ? log : new logging::NullLogger;
+        mOwnLog = log ? ownLog : true;
+    }
+
+protected:
+    Container* mContainer;
+    Options mOptions;
+    logging::Logger *mLog;
+    bool mOwnLog;
 
 };
 

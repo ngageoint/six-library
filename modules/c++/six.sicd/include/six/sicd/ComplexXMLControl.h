@@ -50,8 +50,8 @@ class ComplexXMLControl : public XMLControl
 
 public:
     //!  Constructor
-    ComplexXMLControl(logging::Logger* log = NULL) :
-        XMLControl(log)
+    ComplexXMLControl(logging::Logger* log = NULL, bool ownLog = false) :
+        XMLControl(log, ownLog)
     {
     }
 
@@ -112,11 +112,9 @@ protected:
     XMLElem toXML(const RMA *obj, XMLElem parent = NULL);
 
     XMLElem areaLineDirectionParametersToXML(std::string name,
-            const AreaDirectionParameters *obj,
-            XMLElem parent = NULL);
+            const AreaDirectionParameters *obj, XMLElem parent = NULL);
     XMLElem areaSampleDirectionParametersToXML(std::string name,
-            const AreaDirectionParameters *obj,
-            XMLElem parent = NULL);
+            const AreaDirectionParameters *obj, XMLElem parent = NULL);
 
     void fromXML(const XMLElem collectionInfoXML, CollectionInformation *obj);
     void fromXML(const XMLElem imageCreationXML, ImageCreation *obj);
@@ -141,32 +139,29 @@ protected:
     XMLElem createFFTSign(std::string name, six::FFTSign sign, XMLElem parent =
             NULL);
     XMLElem createFootprint(std::string name, std::string cornerName,
-                            const std::vector<LatLon>& corners,
-                            XMLElem parent = NULL);
+            const std::vector<LatLon>& corners, XMLElem parent = NULL);
     XMLElem createFootprint(std::string name, std::string cornerName,
-                            const std::vector<LatLonAlt>& corners,
-                            XMLElem parent = NULL);
+            const std::vector<LatLonAlt>& corners, XMLElem parent = NULL);
     XMLElem createEarthModelType(std::string name, const EarthModelType& value,
-                                 XMLElem parent = NULL);
+            XMLElem parent = NULL);
     XMLElem createSideOfTrackType(std::string name,
-                                  const SideOfTrackType& value, XMLElem parent =
-                                          NULL);
+            const SideOfTrackType& value, XMLElem parent = NULL);
 
     // Overridden methods from the base XMLControl, for adding attributes
     XMLElem createString(std::string name, std::string uri, std::string p = "",
-                         XMLElem parent = NULL);
+            XMLElem parent = NULL);
     XMLElem createInt(std::string name, std::string uri, int p = 0,
-                      XMLElem parent = NULL);
+            XMLElem parent = NULL);
     XMLElem createDouble(std::string name, std::string uri, double p = 0,
-                         XMLElem parent = NULL);
+            XMLElem parent = NULL);
     XMLElem createBooleanType(std::string name, std::string uri, BooleanType b,
-                              XMLElem parent = NULL);
+            XMLElem parent = NULL);
     XMLElem createDateTime(std::string name, std::string uri, std::string s,
-                           XMLElem parent = NULL);
+            XMLElem parent = NULL);
     XMLElem createDateTime(std::string name, std::string uri, DateTime p,
-                           XMLElem parent = NULL);
+            XMLElem parent = NULL);
     XMLElem createDate(std::string name, std::string uri, DateTime p,
-                       XMLElem parent = NULL);
+            XMLElem parent = NULL);
     XMLElem createString(std::string name, std::string p = "", XMLElem parent =
             NULL);
     XMLElem createInt(std::string name, int p = 0, XMLElem parent = NULL);

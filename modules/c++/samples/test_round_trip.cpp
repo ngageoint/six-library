@@ -23,6 +23,10 @@ void usageAndDie(const char* prog)
     std::cerr << "\t-h\t--help\t\tPrint usage" << std::endl;
     std::cerr << "\t-e\t--expand\tExpand RE16I_IM16I to RE32F_IM32F"
             << std::endl;
+    std::cerr << "\t--log <file|console>\tLog to a file or console"
+            << std::endl;
+    std::cerr << "\t-l\t--level <debug|info|warn|error>\tLevel at which to log"
+            << std::endl;
     exit(CONV_EX_USAGE);
 }
 
@@ -32,6 +36,8 @@ int main(int argc, char** argv)
     std::string inputFile;
     std::string outputFile;
     bool expand = false;
+    std::string logFile;
+    logging::LogLevel logLevel = logging::LOG_INFO;
 
     for (int i = 1; i < argc; ++i)
     {
@@ -41,6 +47,29 @@ int main(int argc, char** argv)
             expand = true;
         else if (arg == "-h" || arg == "--help")
             usageAndDie(argv[0]);
+        else if (arg == "--log")
+        {
+            if (argc == (i + 1))
+                usageAndDie(argv[0]);
+            logFile = argv[++i];
+        }
+        else if (arg == "-l" || arg == "--level")
+        {
+            if (argc == (i + 1))
+                usageAndDie(argv[0]);
+
+            std::string level = argv[++i];
+            str::lower(level);
+            str::trim(level);
+            if (level == "info")
+                logLevel = logging::LOG_INFO;
+            else if (level == "debug")
+                logLevel = logging::LOG_DEBUG;
+            else if (level == "warn")
+                logLevel = logging::LOG_WARN;
+            else if (level == "error")
+                logLevel = logging::LOG_ERROR;
+        }
         else if (inputFile.empty())
             inputFile = arg;
         else if (outputFile.empty())
@@ -60,7 +89,22 @@ int main(int argc, char** argv)
                                                          six::DataType::DERIVED,
                                                          new six::XMLControlCreatorT<
                                                                  six::sidd::DerivedXMLControl>());
+
+        logging::Logger log;
+        if (!logFile.empty())
+        {
+            if (logFile == "console")
+                log.addHandler(new logging::StreamHandler(logLevel), true);
+            else
+                log.addHandler(new logging::FileHandler(logFile, logLevel),
+                               true);
+        }
+        else
+            log.addHandler(new logging::NullHandler, true);
+
         six::NITFReadControl reader;
+        reader.setLogger(&log);
+
         reader.load(inputFile);
         six::Container* container = reader.getContainer();
 
@@ -102,6 +146,7 @@ int main(int argc, char** argv)
         }
 
         six::WriteControl *writer = new six::NITFWriteControl;
+        writer->setLogger(&log);
         writer->initialize(container);
         writer->save(images, outputFile);
 
