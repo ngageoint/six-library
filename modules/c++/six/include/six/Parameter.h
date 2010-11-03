@@ -100,20 +100,6 @@ public:
         return str::toType<sys::Int64_T>(mValue);
     }
 
-    /*         inline operator bool() const */
-    /*         { */
-    /*             std::string other = mValue; */
-    /*             str::lower(other); */
-    /*             str::trim(other); */
-
-    /*             if (other == "true" || other == "1") */
-    /*                 return true; */
-    /*             return false; */
-    /*         } */
-/*     inline operator std::string() const */
-/*     { */
-/*         return str(); */
-/*     } */
     //!  Get a string as a string
     inline std::string str() const
     {

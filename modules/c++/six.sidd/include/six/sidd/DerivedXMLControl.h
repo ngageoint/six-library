@@ -45,8 +45,8 @@ class DerivedXMLControl : public XMLControl
 
 public:
 
-    DerivedXMLControl(logging::Logger* log = NULL) :
-        XMLControl(log)
+    DerivedXMLControl(logging::Logger* log = NULL, bool ownLog = false) :
+        XMLControl(log, ownLog)
     {
     }
 
@@ -79,9 +79,12 @@ protected:
 
     std::string getSFAURI() const;
 
-    virtual XMLElem createLUT(std::string name, const LUT *l, XMLElem parent = NULL);
-    XMLElem toXML(const ProductCreation* productCreation, XMLElem parent = NULL);
-    XMLElem toXML(const ProductProcessing* productProcessing, XMLElem parent = NULL);
+    virtual XMLElem createLUT(std::string name, const LUT *l, XMLElem parent =
+            NULL);
+    XMLElem
+            toXML(const ProductCreation* productCreation, XMLElem parent = NULL);
+    XMLElem toXML(const ProductProcessing* productProcessing, XMLElem parent =
+            NULL);
     void fromXML(const XMLElem elem, ProductProcessing* productProcessing);
     XMLElem toXML(const ProcessingModule* procMod, XMLElem parent = NULL);
     void fromXML(const XMLElem elem, ProcessingModule* procMod);
@@ -91,9 +94,11 @@ protected:
     XMLElem toXML(const GeographicAndTarget* g, XMLElem parent = NULL);
     XMLElem toXML(const GeographicCoverage* g, XMLElem parent = NULL);
     XMLElem toXML(const Measurement* measurement, XMLElem parent = NULL);
-    XMLElem toXML(const ExploitationFeatures* exFeatures, XMLElem parent = NULL);
+    XMLElem
+            toXML(const ExploitationFeatures* exFeatures, XMLElem parent = NULL);
     XMLElem toXML(const Annotation *a, XMLElem parent = NULL);
-    void fromXML(const XMLElem productCreationXML, ProductCreation* productCreation);
+    void fromXML(const XMLElem productCreationXML,
+            ProductCreation* productCreation);
     void fromXML(const XMLElem displayXML, Display* display);
     void fromXML(const XMLElem measurementXML, Measurement* measurement);
     void fromXML(const XMLElem elem, GeographicAndTarget* geographicAndTarget);
@@ -101,7 +106,8 @@ protected:
     void fromXML(const XMLElem elem, ExploitationFeatures* exFeatures);
     void fromXML(const XMLElem annotationXML, Annotation *a);
     void fromXML(const XMLElem elem, SFAGeometry *g);
-    XMLElem toXML(const SFAGeometry *g, std::string useName, XMLElem parent = NULL);
+    XMLElem toXML(const SFAGeometry *g, std::string useName, XMLElem parent =
+            NULL);
 };
 
 }

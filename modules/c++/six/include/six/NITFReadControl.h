@@ -44,32 +44,6 @@ namespace six
  */
 class NITFReadControl : public ReadControl
 {
-    //! We keep a ref to the reader
-    nitf::Reader mReader;
-
-    //! We keep a ref to the record
-    nitf::Record mRecord;
-
-    std::vector<NITFImageInfo*> mInfos;
-
-    /*!
-     *  This function grabs the IID out of the NITF file.
-     *  If the data is Complex, it follows the following convention.
-     *
-     *  - Single-segment NITF: IID is 000
-     *  - Multi-segment NITF: IID 001-999
-     *
-     *  If the data is Derived, the conventions are as follows:
-     *
-     *  - First 3 characters are the image #, second three characters
-     *    are the segment #
-     *
-     *  NOTE: We are using the image # to populate the Data ID.  Therefore
-     *  it is only unique when its Complex data.
-     *
-     */
-    std::pair<int, int> getIndices(nitf::ImageSubheader& subheader);
-
 public:
 
     //!  Constructor
@@ -118,14 +92,42 @@ public:
         return mReader;
     }
 
-    void addImageClassOptions(nitf::ImageSubheader& subheader,
-            six::Classification& c);
-
-    void
-            addDEClassOptions(nitf::DESubheader& subheader,
-                    six::Classification& c);
-
 protected:
+    //! We keep a ref to the reader
+    nitf::Reader mReader;
+
+    //! We keep a ref to the record
+    nitf::Record mRecord;
+
+    std::vector<NITFImageInfo*> mInfos;
+
+    /*!
+     *  This function grabs the IID out of the NITF file.
+     *  If the data is Complex, it follows the following convention.
+     *
+     *  - Single-segment NITF: IID is 000
+     *  - Multi-segment NITF: IID 001-999
+     *
+     *  If the data is Derived, the conventions are as follows:
+     *
+     *  - First 3 characters are the image #, second three characters
+     *    are the segment #
+     *
+     *  NOTE: We are using the image # to populate the Data ID.  Therefore
+     *  it is only unique when its Complex data.
+     *
+     */
+    std::pair<int, int> getIndices(nitf::ImageSubheader& subheader);
+
+    void addImageClassOptions(nitf::ImageSubheader& s,
+            six::Classification& c) const;
+
+    void addDEClassOptions(nitf::DESubheader& s, six::Classification& c) const;
+
+    void addSecurityOptions(nitf::FileSecurity security,
+            const std::string prefix, six::Options& options) const;
+
+    //! Resets the object internals
     void reset();
 
 };

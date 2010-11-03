@@ -24,18 +24,53 @@
 
 using namespace six;
 
+//!  File security classification system
+const char NITFImageInfo::CLSY[] = "CLSY";
+//!  File security codewords
+const char NITFImageInfo::CODE[] = "CODE";
+//!  File control and handling
+const char NITFImageInfo::CTLH[] = "CTLH";
+//!  File releasing instructions
+const char NITFImageInfo::REL[] = "REL";
+//!  File security declassification type
+const char NITFImageInfo::DCTP[] = "DCTP";
+//!  File security declassification date
+const char NITFImageInfo::DCDT[] = "DCDT";
+//!  File security declassification exemption
+const char NITFImageInfo::DCXM[] = "DCXM";
+//!  File security downgrade
+const char NITFImageInfo::DG[] = "DG";
+//!  File security downgrade date
+const char NITFImageInfo::DGDT[] = "DGDT";
+//!  File security classification text
+const char NITFImageInfo::CLTX[] = "CLTX";
+//!  File security classification Authority type
+const char NITFImageInfo::CATP[] = "CATP";
+//!  File security classification Authority
+const char NITFImageInfo::CAUT[] = "CAUT";
+//!  File security reason
+const char NITFImageInfo::CRSN[] = "CRSN";
+//!  File security source date
+const char NITFImageInfo::SRDT[] = "SRDT";
+//!  File security control number
+const char NITFImageInfo::CTLN[] = "CTLN";
+
 void NITFImageInfo::computeImageInfo()
 {
-    unsigned long bytesPerRow = data->getNumBytesPerPixel() * data->getNumCols();
+    unsigned long bytesPerRow = data->getNumBytesPerPixel()
+            * data->getNumCols();
 
     // This, to be safe, should be a 64bit number
-    sys::Uint64_T limit1 = (sys::Uint64_T)std::floor((double) maxProductSize
+    sys::Uint64_T limit1 = (sys::Uint64_T) std::floor((double) maxProductSize
             / (double) bytesPerRow);
 
     if (limit1 == 0)
-        throw except::Exception(Ctxt(FmtX(
-                "maxProductSize [%f] < bytesPerRow [%f]",
-                (double) maxProductSize, (double) (sys::Uint64_T) bytesPerRow)));
+        throw except::Exception(
+                                Ctxt(
+                                     FmtX(
+                                          "maxProductSize [%f] < bytesPerRow [%f]",
+                                          (double) maxProductSize,
+                                          (double) (sys::Uint64_T) bytesPerRow)));
 
     if (limit1 < (sys::Uint64_T) numRowsLimit)
     {
@@ -56,7 +91,8 @@ void NITFImageInfo::computeSegmentInfo()
 
     else
     {
-        size_t numIS = (size_t)std::ceil(data->getNumRows() / (double) numRowsLimit);
+        size_t numIS = (size_t) std::ceil(data->getNumRows()
+                / (double) numRowsLimit);
         imageSegments.resize(numIS);
         imageSegments[0].numRows = numRowsLimit;
         imageSegments[0].firstRow = 0;
@@ -71,7 +107,8 @@ void NITFImageInfo::computeSegmentInfo()
 
         imageSegments[i].firstRow = i * numRowsLimit;
         imageSegments[i].rowOffset = numRowsLimit;
-        imageSegments[i].numRows = data->getNumRows() - (numIS - 1) * numRowsLimit;
+        imageSegments[i].numRows = data->getNumRows() - (numIS - 1)
+                * numRowsLimit;
 
     }
 
@@ -80,7 +117,7 @@ void NITFImageInfo::computeSegmentInfo()
 
 void NITFImageInfo::computeSegmentCorners()
 {
-    std::vector<LatLon> corners = data->getImageCorners();
+    std::vector < LatLon > corners = data->getImageCorners();
 
     // (0, 0)
     Vector3 icp1 = scene::Utilities::latLonToECEF(corners[0]);
@@ -105,24 +142,26 @@ void NITFImageInfo::computeSegmentCorners()
         // This requires an operator overload for scalar * vector
         ecef = wgt1 * icp1 + wgt2 * icp4;
 
-        imageSegments[i].corners[0] =
-                scene::Utilities::ecefToLatLon(ecef);
+        imageSegments[i].corners[0] = scene::Utilities::ecefToLatLon(ecef);
 
         // Now do it for the first
         ecef = wgt1 * icp2 + wgt2 * icp3;
 
-        imageSegments[i].corners[1] =
-                scene::Utilities::ecefToLatLon(ecef);
+        imageSegments[i].corners[1] = scene::Utilities::ecefToLatLon(ecef);
     }
 
     for (i = 0; i < numIS - 1; i++)
     {
-        imageSegments[i].corners[2].setLat(imageSegments[i + 1].corners[1].getLat());
-        imageSegments[i].corners[2].setLon(imageSegments[i + 1].corners[1].getLon());
+        imageSegments[i].corners[2].setLat(
+                                           imageSegments[i + 1].corners[1].getLat());
+        imageSegments[i].corners[2].setLon(
+                                           imageSegments[i + 1].corners[1].getLon());
 
-        imageSegments[i].corners[3].setLat(imageSegments[i + 1].corners[0].getLat());
+        imageSegments[i].corners[3].setLat(
+                                           imageSegments[i + 1].corners[0].getLat());
 
-        imageSegments[i].corners[3].setLon(imageSegments[i + 1].corners[0].getLon());
+        imageSegments[i].corners[3].setLon(
+                                           imageSegments[i + 1].corners[0].getLon());
     }
 
     // This last one is cake
@@ -150,7 +189,7 @@ PixelType NITFImageInfo::getPixelTypeFromNITF(nitf::ImageSubheader& subheader)
 // Currently punts on LU
 std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
 {
-    std::vector<nitf::BandInfo> bands;
+    std::vector < nitf::BandInfo > bands;
 
     switch (data->getPixelType())
     {
@@ -197,40 +236,40 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         nitf::BandInfo band1;
 
         LUT* lut = data->getDisplayLUT()->clone();
-        sys::byteSwap((sys::byte*)lut->table, 
- 		      lut->elementSize, lut->numEntries);
+        sys::byteSwap((sys::byte*) lut->table, lut->elementSize,
+                      lut->numEntries);
 
-        unsigned char* table =
-            new unsigned char[lut->numEntries * lut->elementSize];
+        unsigned char* table = new unsigned char[lut->numEntries
+                * lut->elementSize];
 
-         for (unsigned int i = 0; i < lut->numEntries; ++i)
-         {
-             // Need two LUTS in the nitf, with high order
-             // bits in the first and low order in the second
-             table[i] = (short)(*lut)[i][0];
-             table[lut->numEntries + i] = (short)(*lut)[i][1];
+        for (unsigned int i = 0; i < lut->numEntries; ++i)
+        {
+            // Need two LUTS in the nitf, with high order
+            // bits in the first and low order in the second
+            table[i] = (short) (*lut)[i][0];
+            table[lut->numEntries + i] = (short) (*lut)[i][1];
 
-         }
+        }
 
-//         //I would like to set it this way but it does not seem to work.
-//         //Using the init function instead.
-//         //band1.getRepresentation().set("LU");
-//         //band1.getLookupTable().setTable(table, 2, lut->numEntries);
+        //         //I would like to set it this way but it does not seem to work.
+        //         //Using the init function instead.
+        //         //band1.getRepresentation().set("LU");
+        //         //band1.getLookupTable().setTable(table, 2, lut->numEntries);
 
-         nitf::LookupTable lookupTable(band1.getLookupTable());
-         lookupTable.setTable(table, 2, lut->numEntries);
-         band1.init("LU", "", "", "", 2, lut->numEntries, lookupTable);
-         bands.push_back(band1);
-     }
-    break;
+        nitf::LookupTable lookupTable(band1.getLookupTable());
+        lookupTable.setTable(table, 2, lut->numEntries);
+        band1.init("LU", "", "", "", 2, lut->numEntries, lookupTable);
+        bands.push_back(band1);
+    }
+        break;
 
     case PixelType::RGB8LU:
     {
         nitf::BandInfo band1;
 
         LUT* lut = data->getDisplayLUT();
-        unsigned char* table =
-            new unsigned char[lut->numEntries * lut->elementSize];
+        unsigned char* table = new unsigned char[lut->numEntries
+                * lut->elementSize];
 
         for (unsigned int i = 0, k = 0; i < lut->numEntries; ++i)
         {
@@ -240,7 +279,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
                 table[j * lut->numEntries + i] = lut->table[k];
             }
         }
-        
+
         //I would like to set it this way but it does not seem to work.
         //Using the init function instead.
         //band1.getRepresentation().set("LU");
@@ -251,7 +290,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         band1.init("LU", "", "", "", 3, lut->numEntries, lookupTable);
         bands.push_back(band1);
     }
-    break;
+        break;
 
     default:
         throw except::Exception(Ctxt("Unknown pixel type"));
@@ -262,4 +301,14 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         bands[i].getImageFilterCondition().set("N");
     }
     return bands;
+}
+
+std::string NITFImageInfo::generateFieldKey(const std::string& field,
+        std::string prefix, int index)
+{
+    std::ostringstream s;
+    s << prefix << field;
+    if (index >= 0)
+        s << "[" << str::toString(index) << "]";
+    return s.str();
 }

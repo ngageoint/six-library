@@ -26,6 +26,8 @@
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
+#include <import/logging.h>
+
 namespace six
 {
 /*!
@@ -47,21 +49,20 @@ namespace six
  */
 class ReadControl
 {
-protected:
-    Container* mContainer;
-    Options mOptions;
-
 public:
 
     //!  Constructor.  Null-set the current container reference
     ReadControl() :
-        mContainer(NULL)
+        mContainer(NULL), mLog(NULL), mOwnLog(false)
     {
+        setLogger( NULL);
     }
 
     //!  Destructor doesnt release anything
     virtual ~ReadControl()
     {
+        if (mLog && mOwnLog)
+            delete mLog;
     }
 
     /*!
@@ -128,6 +129,23 @@ public:
     {
         return mOptions;
     }
+
+    /*!
+     * Sets the logger to use internally
+     */
+    void setLogger(logging::Logger* log, bool ownLog = false)
+    {
+        if (mLog && mOwnLog && log != mLog)
+            delete mLog;
+        mLog = log ? log : new logging::NullLogger;
+        mOwnLog = log ? ownLog : true;
+    }
+
+protected:
+    Container* mContainer;
+    Options mOptions;
+    logging::Logger *mLog;
+    bool mOwnLog;
 
 };
 

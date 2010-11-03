@@ -43,6 +43,69 @@ namespace six
  */
 class NITFWriteControl : public WriteControl
 {
+public:
+
+    //!  Constructor
+    NITFWriteControl()
+    {
+    }
+    //!  Destructor
+    ~NITFWriteControl()
+    {
+    }
+
+    //!  We are a 'NITF'
+    std::string getFileType() const
+    {
+        return "NITF";
+    }
+
+    //!  Keys that allow us to override the ILOC rules for tests
+    static const char OPT_MAX_PRODUCT_SIZE[];
+    static const char OPT_MAX_ILOC_ROWS[];
+
+    //!  Buffered IO
+    enum
+    {
+        DEFAULT_BUFFER_SIZE = 8192
+    };
+
+    // Get the container that we were initialized from (const)
+    const Container* getContainer() const
+    {
+        return mContainer;
+    }
+
+    // Get the record that was generated during initialization
+    nitf::Record getRecord() const
+    {
+        return mRecord;
+    }
+
+    void initialize(Container* container);
+
+    void save(SourceList& imageData, std::string outputFile);
+
+    /*!
+     *  Bind an interleaved (IQIQIQIQ) memory buffer
+     *  to this record and write out a SICD, or interleaved
+     *  or single band equivalents for SIDD
+     *
+     *  This function creates a nitf::BufferedWriter with
+     *  the buffer size set to the third argument.  We do
+     *  automatic byte swapping unless you tell us otherwise.
+     *
+     *  This means that if the system is little endian, we
+     *  swap the source.
+     *
+     *  If you are using a big endian file as the supply stream,
+     *  you should set SWAP_OFF, and if you are using a little
+     *  endian file as the supply stream, you should set BYTE_SWAP to
+     *  on.
+     */
+    void save(BufferList& imageData, std::string outputFile);
+
+protected:
     nitf::Writer mWriter;
     nitf::Record mRecord;
     std::vector<NITFImageInfo*> mInfos;
@@ -176,7 +239,7 @@ class NITFWriteControl : public WriteControl
      *  classification object.  This allows a manual override of
      *  these fields in the NITF product.
      */
-    void setImageSecurity(six::Classification c,
+    void setImageSecurity(six::Classification& c,
             nitf::ImageSubheader& subheader);
 
     /*!
@@ -185,8 +248,10 @@ class NITFWriteControl : public WriteControl
      *  classification object.  This allows a manual override of
      *  these fields in the NITF product.
      */
-    void setDESecurity(six::Classification c,
-            nitf::DESubheader& subheader);
+    void setDESecurity(six::Classification& c, nitf::DESubheader& subheader);
+
+    void setSecurity(six::Classification& c, nitf::FileSecurity security,
+            std::string prefix);
 
     /*!
      *  Takes in a string representing the classification level
@@ -201,69 +266,6 @@ class NITFWriteControl : public WriteControl
      *  image segments.
      */
     void updateFileHeaderSecurity();
-
-
-public:
-    
-    //!  Constructor
-    NITFWriteControl()
-    {
-    }
-    //!  Destructor
-    ~NITFWriteControl()
-    {
-    }
-
-    //!  We are a 'NITF'
-    std::string getFileType() const
-    {
-        return "NITF";
-    }
-
-    //!  Keys that allow us to override the ILOC rules for tests
-    static const char OPT_MAX_PRODUCT_SIZE[];
-    static const char OPT_MAX_ILOC_ROWS[];
-
-    //!  Buffered IO
-    enum
-    {
-        DEFAULT_BUFFER_SIZE = 8192
-    };
-
-    // Get the container that we were initialized from (const)
-    const Container* getContainer() const
-    {
-        return mContainer;
-    }
-
-    // Get the record that was generated during initialization
-    nitf::Record getRecord() const
-    {
-        return mRecord;
-    }
-
-    void initialize(Container* container);
-
-    void save(SourceList& imageData, std::string outputFile);
-
-    /*!
-     *  Bind an interleaved (IQIQIQIQ) memory buffer
-     *  to this record and write out a SICD, or interleaved
-     *  or single band equivalents for SIDD
-     *
-     *  This function creates a nitf::BufferedWriter with
-     *  the buffer size set to the third argument.  We do
-     *  automatic byte swapping unless you tell us otherwise.
-     *
-     *  This means that if the system is little endian, we
-     *  swap the source.
-     *
-     *  If you are using a big endian file as the supply stream,
-     *  you should set SWAP_OFF, and if you are using a little
-     *  endian file as the supply stream, you should set BYTE_SWAP to
-     *  on.
-     */
-    void save(BufferList& imageData, std::string outputFile);
 
 };
 

@@ -98,64 +98,6 @@ struct Classification
     //!  Assignment operator
     Classification& operator=(const Classification& c);
 
-    //!  This lets you override the subheader classification
-    static const char OPT_ISCLAS[];
-    //!  File security classification system
-    static const char OPT_ISCLSY[];
-    //!  File classification text
-    static const char OPT_ISCLTX[];
-    //!  File security codewors
-    static const char OPT_ISCODE[];
-    //!  File security reason 
-    static const char OPT_ISCRSN[];
-    //!  File control and handling
-    static const char OPT_ISCTLH[];
-    //!  File security control number
-    static const char OPT_ISCTLN[];
-    //!  File security declassification date
-    static const char OPT_ISDCDT[];
-    //!  File security declassification type
-    static const char OPT_ISDCTP[];
-    //!  File security declassification exemption
-    static const char OPT_ISDCXM[];
-    //!  File security downgrade
-    static const char OPT_ISDG[];
-    //!  File security downgrade date
-    static const char OPT_ISDGDT[];
-    //!  File releasing instructions
-    static const char OPT_ISREL[];
-    //!  File security source date
-    static const char OPT_ISSRDT[];
-
-    //!  This lets you override the subheader classification
-    static const char OPT_DESCLAS[];
-    //!  File security classification system
-    static const char OPT_DESCLSY[];
-    //!  File classification text
-    static const char OPT_DESCLTX[];
-    //!  File security codewors
-    static const char OPT_DESCODE[];
-    //!  File security reason 
-    static const char OPT_DESCRSN[];
-    //!  File control and handling
-    static const char OPT_DESCTLH[];
-    //!  File security control number
-    static const char OPT_DESCTLN[];
-    //!  File security declassification date
-    static const char OPT_DESDCDT[];
-    //!  File security declassification type
-    static const char OPT_DESDCTP[];
-    //!  File security declassification exemption
-    static const char OPT_DESDCXM[];
-    //!  File security downgrade
-    static const char OPT_DESDG[];
-    //!  File security downgrade date
-    static const char OPT_DESDGDT[];
-    //!  File releasing instructions
-    static const char OPT_DESREL[];
-    //!  File security source date
-    static const char OPT_DESSRDT[];
-
     //!  Within both SICD and SIDD, populate the actual class level
     std::string level;
 
