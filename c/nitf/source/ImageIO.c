@@ -1040,7 +1040,7 @@ On error, the supplied error object is set. Possible errors include:
 Invalid type code
 */
 
-NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
                                        nitf_ImageSubheader *subhdr,
                                        nitf_Error * errorBuffer);
 
@@ -1053,7 +1053,7 @@ NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
  * \param nitfI        the ImageIO structure
  * \param numBands    the number of bands (when reading), or 0 when writing.
  */
-NITFPROT(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, 
+NITFPRIV(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI,
                                                  int numBands);
 
 
@@ -1076,7 +1076,7 @@ by the user.
 */
 
 /*!< nitf_ImageIO object */
-NITFPROT(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf);
+NITFPRIV(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf);
 
 /*!
   \brief nitf_ImageIO_setPixelDef - Set the pixel definition
@@ -1106,7 +1106,7 @@ NITFPROT(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf);
   
 */
 
-NITFPROT(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf, 
+NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
                                        char *pixelType, 
                                        nitf_Uint32 nBits,
                                        nitf_Uint32 nBitsActual,
@@ -1132,7 +1132,7 @@ by the user.
 */
 
 /*!< nitf_ImageIO object */
-NITFPROT(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf);
+NITFPRIV(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf);
 
 /*!
   \brief nitf_ImageIO_allocBlockArray -  Allocate the IO control structure's
@@ -1157,7 +1157,7 @@ Memory allocation error
 
 /*!< Number of block columns */
 /*!< Number of bands */
-NITFPROT(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray(nitf_Uint32 numColumns, nitf_Uint32 numBands, nitf_Error * error       /*! Error object */
+NITFPRIV(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray(nitf_Uint32 numColumns, nitf_Uint32 numBands, nitf_Error * error       /*! Error object */
                                                             );
 
 /*!
@@ -1171,7 +1171,7 @@ NITFPROT(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray(nitf_Uint32 numColu
 */
 
 /*!< The array to free */
-NITFPROT(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs);
+NITFPRIV(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs);
 
 /*!
   \brief nitf_ImageIO_setup_SBR - Do read/write setup for the "S", "B", and "R"
@@ -1330,7 +1330,7 @@ Memory allocation error
 
 /*!< nitf_ImageIO object */
 /*!< IO handle for read */
-NITFPROT(_nitf_ImageIOControl *) nitf_ImageIOControl_construct(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Uint8 ** user,  /*!< User data buffer pointers */
+NITFPRIV(_nitf_ImageIOControl *) nitf_ImageIOControl_construct(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Uint8 ** user,  /*!< User data buffer pointers */
         nitf_SubWindow * subWindow,      /*!< Sub-window to process */
         int reading,     /*!< Reading if TRUE, else writing */
         nitf_Error * error       /*!< Error object */
@@ -1363,7 +1363,7 @@ directly by the user.
 */
 
 /*!< Pointer to nitf_ImageIO I/O control object */
-NITFPROT(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl);
+NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl);
 
 /*!
   \brief nitf_ImageIOWriteControl_construct - Allocate and initialize a write
@@ -1384,7 +1384,7 @@ Memory allocation error
 
 /*!< Associated I/O control object */
 /*!< Associated IO handle */
-NITFPROT(_nitf_ImageIOWriteControl *) nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, _nitf_ImageIO_writeMethod method,   /*!< Writing method that will be used */
+NITFPRIV(_nitf_ImageIOWriteControl *) nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, _nitf_ImageIO_writeMethod method,   /*!< Writing method that will be used */
         nitf_Error * error     /*!< Error object */
                                                                         );
 
@@ -1396,7 +1396,7 @@ NITFPROT(_nitf_ImageIOWriteControl *) nitf_ImageIOWriteControl_construct(_nitf_I
   */
 
 /*!< Pointer to write control object */
-NITFPROT(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
+NITFPRIV(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
         ** cntl);
 
 /*!
@@ -1417,7 +1417,7 @@ Memory allocation error
 
 /*!< Associated I/O control object */
 /*!< Sub-window to read */
-NITFPROT(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct(_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow, nitf_Error * error      /*!< Error object */
+NITFPRIV(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct(_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow, nitf_Error * error      /*!< Error object */
                                                                       );
 
 /*!
@@ -1428,7 +1428,7 @@ NITFPROT(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct(_nitf_Ima
   */
 
 /*!< Pointer to read control object */
-NITFPROT(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
+NITFPRIV(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
         cntl);
 
 /*!
@@ -1448,7 +1448,7 @@ directly by the user.
 
 */
 
-NITFPROT(int) nitf_ImageIO_bigEndian(void);
+NITFPRIV(int) nitf_ImageIO_bigEndian(void);
 
 /*!
   \brief nitf_ImageIO_checkSubWindow - Check a sub-window
@@ -1478,7 +1478,7 @@ Invalid dimension or band
 
 /*!< The nitf_ImageIO object used do the check */
 /*!< The sub-window to check */
-NITFPROT(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf, nitf_SubWindow * subWindow, int *all,   /*!< Returns TRUE if the sub-window is the entire image */
+NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf, nitf_SubWindow * subWindow, int *all,   /*!< Returns TRUE if the sub-window is the entire image */
         nitf_Error * error    /*!< Error object */
                                          );
 
@@ -1515,7 +1515,7 @@ No compression (for now)
 
 /*!< The NITF object internal data */
 /*!< Entire image is being read if TRUE */
-NITFPROT(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
+NITFPRIV(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
         NITF_BOOL all);
 
 /*!
@@ -1548,7 +1548,7 @@ I/O Error
 
 /*!< The ImageIO object */
 /*!< IO handle for reads */
-NITFPROT(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img, nitf_IOInterface* io, int reading,       /*!< Read operation if TRUE */
+NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img, nitf_IOInterface* io, int reading,       /*!< Read operation if TRUE */
                                    nitf_Error * error   /*!< Used for error handling */
                                   );
 
@@ -1577,7 +1577,7 @@ I/O Error
 
 /*!< The ImageIO object */
 /*!< IO handle for reads */
-NITFPROT(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface *io, nitf_Uint32 blockCount,   /*!< Total number of blocks in the file */
+NITFPRIV(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface *io, nitf_Uint32 blockCount,   /*!< Total number of blocks in the file */
         int reading,  /*!< Read operation if TRUE */
         nitf_Error * error    /*!< Used for error handling */
                                          );
@@ -1595,7 +1595,7 @@ NITFPROT(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface
 
 /*!< The ImageIO object */
 /*!< IO handle for reads */
-NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Error * error        /*!< Used for error handling */
+NITFPRIV(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Error * error        /*!< Used for error handling */
                                          );
 
 /*!
@@ -1610,7 +1610,7 @@ NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface
 */
 
 /*<! the header to byte swap */
-NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
+NITFPRIV(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
         header);
 
 /*!
@@ -1626,7 +1626,7 @@ NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
 
 /*!< The ImageIO object */
 /*!< IO handle for reads */
-NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Error * error    /*!< Used for error handling */
+NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Error * error    /*!< Used for error handling */
                                      );
 
 /*!
@@ -1656,7 +1656,7 @@ I/O error
 
 /*!< The control structure */
 /*!< I/O handle */
-NITFPROT(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, nitf_Error * error        /*!< Error object */
+NITFPRIV(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, nitf_Error * error        /*!< Error object */
                                   );
 
 /*!
@@ -1681,7 +1681,7 @@ I/O error
 
 /*!< The control structure */
 /*!< I/O handle */
-NITFPROT(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, nitf_Error * error    /*!< Error object */
+NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, nitf_Error * error    /*!< Error object */
                                       );
 
 /*!
@@ -1706,7 +1706,7 @@ I/O error
 
 /*!< The control structure */
 /*!< Associated sub-window object */
-NITFPROT(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow, nitf_IOInterface* io, /*!< I/O handle */
+NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow, nitf_IOInterface* io, /*!< I/O handle */
         nitf_Error * error     /*!< Error object */
                                                 );
 
@@ -1729,7 +1729,7 @@ Memory allocation error
 
 /*!< Associated I/O control structure */
 /*!< Error object */
-NITFPROT(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
+NITFPRIV(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
                                        nitf_Error * error);
 
 /*!
@@ -1753,7 +1753,7 @@ Memory allocation error
 
 /*!< NITF block structure */
 /*!< Error object */
-NITFPROT(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
                                    nitf_Error * error);
 
 /*!
@@ -1776,7 +1776,7 @@ I/O error
 
 /*!< IO handle for read */
 /*!< File offset for read */
-NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io, nitf_Uint64 fileOffset, nitf_Uint8 * buffer,      /*!< Data buffer to read into */
+NITFPRIV(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io, nitf_Uint64 fileOffset, nitf_Uint8 * buffer,      /*!< Data buffer to read into */
                                         size_t count,      /*!< Number of bytes to read */
                                         nitf_Error * errorBuffer        /*!< Error object */
                                        );
@@ -1801,7 +1801,7 @@ I/O error
 
 /*!< IO handle for write */
 /*!< File offset for write */
-NITFPROT(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io, 
+NITFPRIV(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
                                        nitf_Uint64 fileOffset, const nitf_Uint8 * buffer, /*!< Data buffer to write from */
                                        size_t count,       /*!< Number of bytes to write */
                                        nitf_Error * errorBuffer /*!< Error object */
@@ -1844,7 +1844,7 @@ On error, the supplied error object is set. Possible errors include:
 I/O error
 */
 
-NITFPROT(int) nitf_ImageIO_writeToBlock
+NITFPRIV(int) nitf_ImageIO_writeToBlock
 (
     _nitf_ImageIOBlock * blockIO, /*!< Associated block control */
     nitf_IOInterface* io,         /*!< IO handle for write */
@@ -1874,7 +1874,7 @@ directly by the user.
 
 /*!< NITF block structure */
 /*!< Do not increment user buffer pointer if TRUE */
-NITFPROT(void) nitf_ImageIO_nextRow(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(void) nitf_ImageIO_nextRow(_nitf_ImageIOBlock * blockIO,
                                     NITF_BOOL noUserInc);
 
 /*!
@@ -2603,7 +2603,7 @@ directly by the user.
 
 /*!< nitf_ImageIO object */
 /*!< FILE to use for print */
-NITFPROT(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file);
+NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file);
 
 /*!
   \brief nitf_ImageIOControl_print Do a formatted print of a
@@ -2624,7 +2624,7 @@ directly by the user.
 
 /*!< nitf_ImageIO control object */
 /*!< FILE to use for print */
-NITFPROT(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl, FILE * file, int full     /*!< Full print if TRUE */
+NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl, FILE * file, int full     /*!< Full print if TRUE */
                                         );
 
 /*!
@@ -2644,7 +2644,7 @@ directly by the user.
 
 */
 
-NITFPROT(void) nitf_ImageIOBlock_print
+NITFPRIV(void) nitf_ImageIOBlock_print
 (_nitf_ImageIOBlock * blockIO, FILE * file, int longIndent);
 
 /*!
@@ -3647,7 +3647,7 @@ NITFPROT(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info)
 
 /*=================== nitf_ImageIO_getBlockingInfo ===========================*/
 
-NITFPROT(nitf_BlockingInfo *) 
+NITFPROT(nitf_BlockingInfo *)
 nitf_ImageIO_getBlockingInfo(nitf_ImageIO *
                              image,
                              nitf_IOInterface* io,
@@ -3770,7 +3770,7 @@ NITFPROT(void) nitf_BlockingInfo_print(nitf_BlockingInfo * info,
 /*======================== Internal Functions ================================*/
 /*============================================================================*/
 
-NITFPROT(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBands)
+NITFPRIV(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBands)
 {
     if (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_RGB24 &&
         (numBands == 3 || numBands == 0))
@@ -3823,7 +3823,7 @@ NITFPROT(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBa
 
 /*======================== nitf_ImageIO_decodeModes ==========================*/
 
-NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
                                        nitf_ImageSubheader *subhdr,
                                        nitf_Error * error)
 {
@@ -4009,7 +4009,7 @@ NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
     return NITF_SUCCESS;
 }
 
-NITFPROT(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf)
+NITFPRIV(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf)
 {
 
     /* For now, used uncached reading for uncompressed images */
@@ -4249,7 +4249,7 @@ static unformatTable table[NENTRIES] =
     }
 };
 
-NITFPROT(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
                                        char *pixelType, 
                                        nitf_Uint32 nBits,
                                        nitf_Uint32 nBitsActual,
@@ -4380,7 +4380,7 @@ NITFPROT(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
+NITFPRIV(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
 {
 
     /*
@@ -4424,7 +4424,7 @@ NITFPROT(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
     return;
 }
 
-NITFPROT(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray
+NITFPRIV(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray
 (nitf_Uint32 numColumns, nitf_Uint32 numBands, nitf_Error * error)
 {
     _nitf_ImageIOBlock **blockIOs;        /*!< The result */
@@ -4466,7 +4466,7 @@ NITFPROT(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray
 }
 
 
-NITFPROT(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs)
+NITFPRIV(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs)
 {
     /* Dereferenced argument */
     _nitf_ImageIOBlock **blockIOsDeref;
@@ -5473,7 +5473,7 @@ int nitf_ImageIO_done_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 }
 
 
-NITFPROT(_nitf_ImageIOControl *)
+NITFPRIV(_nitf_ImageIOControl *)
 nitf_ImageIOControl_construct(_nitf_ImageIO * nitf, 
                               nitf_IOInterface* io,
                               nitf_Uint8 ** user,
@@ -5643,7 +5643,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
     return cntl;
 }
 
-NITFPROT(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
+NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
 {
     _nitf_ImageIOBlock *blocks;     /* Block I/Os as a linrar array */
     nitf_Uint32 i;
@@ -5704,7 +5704,7 @@ NITFPROT(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
     return;
 }
 
-NITFPROT(_nitf_ImageIOWriteControl *)
+NITFPRIV(_nitf_ImageIOWriteControl *)
 nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl,
                                    nitf_IOInterface* io,
                                    _nitf_ImageIO_writeMethod method,
@@ -5730,7 +5730,7 @@ nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl,
     return result;
 }
 
-NITFPROT(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
+NITFPRIV(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
                                                  ** cntl)
 {
     NITF_FREE(*cntl);
@@ -5739,7 +5739,7 @@ NITFPROT(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
 }
 
 
-NITFPROT(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct
+NITFPRIV(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct
 (_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow,
  nitf_Error * error)
 {
@@ -5761,7 +5761,7 @@ NITFPROT(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct
     return result;
 }
 
-NITFPROT(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
+NITFPRIV(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
         cntl)
 {
     NITF_FREE(*cntl);
@@ -5770,7 +5770,7 @@ NITFPROT(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
 }
 
 
-NITFPROT(int) nitf_ImageIO_bigEndian(void)
+NITFPRIV(int) nitf_ImageIO_bigEndian(void)
 {
     nitf_Uint8 p8[2] =          /* For big-endian test */
         {
@@ -5783,7 +5783,7 @@ NITFPROT(int) nitf_ImageIO_bigEndian(void)
     return ((*p16 == 0x102) ? 1 : 0);
 }
 
-NITFPROT(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
                                           nitf_SubWindow * subWindow,
                                           int *all, nitf_Error * error)
 {
@@ -5900,7 +5900,7 @@ NITFPROT(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
+NITFPRIV(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
                                               NITF_BOOL all)
 {
     NITF_BOOL oneReadA;  /* Complete request in one read flag, partial logic */
@@ -5978,7 +5978,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
 }
 
 
-NITFPROT(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
+NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
                                    nitf_IOInterface* io, int reading,
                                    nitf_Error * error)
 {
@@ -6163,7 +6163,7 @@ NITF_IMAGE_IO_PAD_SCANNER(_nitf_Image_IO_pad_scan_2, nitf_Uint16)
 NITF_IMAGE_IO_PAD_SCANNER(_nitf_Image_IO_pad_scan_4, nitf_Uint32)
 NITF_IMAGE_IO_PAD_SCANNER(_nitf_Image_IO_pad_scan_8, nitf_Uint64)
 
-NITFPROT(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf,
                                           nitf_IOInterface* io,
                                           nitf_Uint32 blockCount,
                                           int reading, 
@@ -6265,7 +6265,7 @@ NITFPROT(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf,
                                           nitf_IOInterface* io,
                                           nitf_Error * error)
 {
@@ -6325,7 +6325,7 @@ NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
                                       nitf_IOInterface* io,
                                       nitf_Error * error)
 {
@@ -6511,7 +6511,7 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
+NITFPRIV(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
         header)
 {
     nitf_Uint8 *hp;             /* Points into header */
@@ -6544,7 +6544,7 @@ NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
 }
 
 
-NITFPROT(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl,
+NITFPRIV(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl,
                                    nitf_IOInterface* io,
                                    nitf_Error * error)
 {
@@ -6577,7 +6577,7 @@ NITFPROT(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl,
 
 /* This function is used when FR == DR (no down-Sampling) */
 
-NITFPROT(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
+NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                                        nitf_IOInterface* io,
                                        nitf_Error * error)
 {
@@ -6641,7 +6641,7 @@ NITFPROT(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
 }
 
 /* This function is used when FR != DR (down-Sampling) */
-NITFPROT(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
+NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                                                  cntl,
                                                  nitf_SubWindow *
                                                  subWindow,
@@ -6890,7 +6890,7 @@ NITFPROT(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
     return NITF_SUCCESS;
 }
 
-NITFPROT(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
+NITFPRIV(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
                                        nitf_Error * error)
 {
     _nitf_ImageIO *nitf;        /* NITF block structure */
@@ -6921,7 +6921,7 @@ NITFPROT(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
 }
 
 
-NITFPROT(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
                                    nitf_Error * error)
 {
     _nitf_ImageIOControl *cntl; /* Control structure */
@@ -6937,7 +6937,7 @@ NITFPROT(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
 }
 
 
-NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
+NITFPRIV(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
                                         nitf_Uint64 fileOffset,
                                         nitf_Uint8 * buffer,
                                         size_t count,
@@ -6963,7 +6963,7 @@ NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
     return NITF_SUCCESS;
 }
 
-NITFPROT(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
+NITFPRIV(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
                                        nitf_Uint64 fileOffset,
                                        const nitf_Uint8 * buffer,
                                        size_t count,
@@ -6982,7 +6982,7 @@ NITFPROT(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
     
     return NITF_SUCCESS;
 }
-NITFPROT(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                                         nitf_IOInterface* io,
                                         size_t blockOffset,
                                         const nitf_Uint8 * buffer,
@@ -7151,7 +7151,7 @@ NITFPROT(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
     return NITF_SUCCESS;
 }
 
-NITFPROT(void) nitf_ImageIO_nextRow(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(void) nitf_ImageIO_nextRow(_nitf_ImageIOBlock * blockIO,
                                     NITF_BOOL noUserInc)
 {
     _nitf_ImageIOControl *cntl; /* Associated I/O control structure */
@@ -9140,7 +9140,7 @@ void nitf_ImageIO_12PixelComDestroy(nitf_CompressionControl ** object)
 
 /*========================= nitf_ImageIO_print ===============================*/
 
-NITFPROT(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
+NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
 {
 #ifdef NITF_DEBUG
     /* Correct type for pointer */
@@ -9209,7 +9209,7 @@ NITFPROT(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
 }
 
 
-NITFPROT(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
+NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
                                          FILE * file, int full)
 {
 #ifdef NITF_DEBUG
@@ -9261,7 +9261,7 @@ NITFPROT(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
     return;
 }
 
-NITFPROT(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
                                        FILE * file, int longIndent)
 {
 #ifdef NITF_BLOCK_DEBUG
