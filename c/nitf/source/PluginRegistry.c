@@ -510,7 +510,7 @@ nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
 
 }
 
-NITFPROT( NITF_BOOL)
+NITFPRIV( NITF_BOOL)
 nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry * reg,
         const char *dirName, nitf_Error * error)
 {

@@ -61,40 +61,6 @@ typedef struct _nitf_TRECursor
 nitf_TRECursor;
 
 
-
-
-
-NITFAPI(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
-                                               char *descTag,
-                                               char idx_str[10][10],
-                                               int looping,
-                                               nitf_Error * error);
-
-
-
-NITFAPI(int) nitf_TRECursor_evalIf(nitf_TRE * tre,
-                                   nitf_TREDescription * desc_ptr,
-                                   char idx_str[10][10],
-                                   int looping,
-                                   nitf_Error * error);
-
-/**
- * Helper function for evaluating loops
- * Returns the number of loops that will be processed
- */
-NITFAPI(int) nitf_TRECursor_evalLoops(nitf_TRE * tre,
-                                      nitf_TREDescription * desc_ptr,
-                                      char idx_str[10][10],
-                                      int looping,
-                                      nitf_Error * error);
-
-
-NITFAPI(int) nitf_TRECursor_evalCondLength(nitf_TRE * tre,
-                                           nitf_TREDescription * desc_ptr,
-                                           char idx_str[10][10],
-                                           int looping,
-                                           nitf_Error * error);
-
 /*!
  *  Initializes the cursor
  *
@@ -142,30 +108,6 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_clone(nitf_TRECursor *tre_cursor,
  */
 NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                               nitf_Error * error);
-
-
-/*!
- *  Evaluates the given postfix expression, looking up fields in the TRE, or
- *  using constant integers.
- *
- *  \param tre      The TRE to use
- *  \param idx      The loop index/values
- *  \param looping  The current loop level
- *  \param expression The postfix expression
- *  \param error The error to populate on failure
- *  \return NITF_SUCCESS on sucess or NITF_FAILURE otherwise
- */
-NITFAPI(int) nitf_TRECursor_evaluatePostfix(
-        nitf_TRE *tre,
-        char idx[10][10],
-        int looping,
-        char *expression,
-        nitf_Error *error);
-
-typedef unsigned int (*NITF_TRE_CURSOR_COUNT_FUNCTION) (nitf_TRE *,
-                                                        char idx[10][10],
-                                                        int,
-                                                        nitf_Error*);
 
 
 NITF_CXX_ENDGUARD
