@@ -100,29 +100,32 @@ NITFPRIV(NITF_BOOL) MemorySource_read(NITF_DATA * data,
         return MemorySource_contigRead(memorySource, buf, size, error);
 
     return MemorySource_offsetRead(memorySource, buf, size, error);
-
 }
 
 
 NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
-    assert(memorySource);
-    NITF_FREE(memorySource);
+    if (memorySource)
+        NITF_FREE(memorySource);
 }
 
 
 NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error *e)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
-    assert(memorySource);
-    return memorySource->size;
+    return memorySource ? memorySource->size : 0;
 }
 
 NITFPRIV(NITF_BOOL) MemorySource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *e)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
-    assert(memorySource);
+    if (!memorySource)
+    {
+        nitf_Error_init(e, "Null pointer reference",
+                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        return NITF_FAILURE;
+    }
     memorySource->size = size;
     return NITF_SUCCESS;
 }
@@ -195,15 +198,19 @@ NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
 NITFPRIV(nitf_Off) FileSource_getSize(NITF_DATA * data, nitf_Error *e)
 {
     FileSourceImpl *fileSource = (FileSourceImpl *) data;
-    assert(fileSource);
-    return (nitf_Off)fileSource->size;
+    return fileSource ? (nitf_Off)fileSource->size : 0;
 }
 
 
 NITFPRIV(NITF_BOOL) FileSource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *e)
 {
     FileSourceImpl *fileSource = (FileSourceImpl *) data;
-    assert(fileSource);
+    if (!fileSource)
+    {
+        nitf_Error_init(e, "Null pointer reference",
+                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        return NITF_FAILURE;
+    }
     fileSource->size = size;
     return NITF_SUCCESS;
 }

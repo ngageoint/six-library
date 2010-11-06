@@ -67,16 +67,27 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     nitf_Off offset;
     nitf_BandSource *bandSrc = NULL;
     ImageWriterImpl *impl = (ImageWriterImpl *) data;
+    NITF_BOOL rc = NITF_SUCCESS;
 
     numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
     rowSize = impl->numCols * NITF_NBPP_TO_BYTES(impl->numBitsPerPixel);
 
     user = (nitf_Uint8 **) NITF_MALLOC(sizeof(nitf_Uint8*) * numImageBands);
-    assert(user);
+    if (!user)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
     for (band = 0; band < numImageBands; band++)
     {
         user[band] = (nitf_Uint8 *) NITF_MALLOC(rowSize);
-        assert(user[band]);
+        if (!user[band])
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                            NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
     }
 
     offset = nitf_IOInterface_tell(output, error);
@@ -112,17 +123,19 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     if (!nitf_ImageIO_writeDone(impl->imageBlocker, output, error))
         goto CATCH_ERROR;
 
-    for (band = 0; band < numImageBands; band++)
-    {
-        NITF_FREE(user[band]);
-    }
-
-    NITF_FREE(user);
-
-    return NITF_SUCCESS;
+    goto CLEANUP;
 
 CATCH_ERROR:
-    return NITF_FAILURE;
+    rc = NITF_FAILURE;
+
+CLEANUP:
+    for (band = 0; band < numImageBands; band++)
+    {
+        if (user != NULL && user[band] != NULL)
+            NITF_FREE(user[band]);
+    }
+    NITF_FREE(user);
+    return rc;
 }
 
 

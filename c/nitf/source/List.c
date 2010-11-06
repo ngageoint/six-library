@@ -65,10 +65,7 @@ NITFAPI(void) nitf_ListNode_destruct(nitf_ListNode ** this_node)
 
 NITFAPI(NITF_BOOL) nitf_List_isEmpty(nitf_List * this_list)
 {
-    /*  Be ruthless with our assertions  */
-    assert(this_list);
-
-    return !this_list->first;
+    return !this_list || !this_list->first;
 }
 
 
@@ -145,10 +142,7 @@ NITFAPI(NITF_DATA *) nitf_List_popFront(nitf_List * this_list)
     NITF_DATA *data = NULL;
 
     /*  Get ourselves a pointer to the first link  */
-    nitf_ListNode *popped = this_list->first;
-
-    /*  Be ruthless with our assertions  */
-    assert(this_list);
+    nitf_ListNode *popped = this_list ? this_list->first : NULL;
 
     /*  If it exists, reassign the pointers  */
     if (popped)
@@ -177,10 +171,7 @@ NITFAPI(NITF_DATA *) nitf_List_popBack(nitf_List * this_list)
     NITF_DATA *data = NULL;
 
     /*  Get a pointer to the current last  */
-    nitf_ListNode *popped = this_list->last;
-
-    /*  Be ruthless with our assertions  */
-    assert(this_list);
+    nitf_ListNode *popped = this_list ? this_list->last : NULL;
 
     /*  If we have an element  */
     if (popped)
@@ -200,10 +191,6 @@ NITFAPI(NITF_DATA *) nitf_List_popBack(nitf_List * this_list)
         }
         data = popped->data;
         nitf_ListNode_destruct(&popped);
-
-        /*  Technically, you could put empty data on here,  */
-        /*  but why would you???                            */
-        assert(data);
     }
     /*  Return the popped node  */
     return data;

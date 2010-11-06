@@ -97,12 +97,12 @@ NITFPRIV(NITF_BOOL) RowSource_read(NITF_DATA * data, char *buf, nitf_Off size,  
 NITFPRIV(void) RowSource_destruct(NITF_DATA * data)
 {
     RowSourceImpl *impl = (RowSourceImpl *) data;
-    assert(impl);
-
-    if (impl->rowBuffer != NULL)
-        NITF_FREE(impl->rowBuffer);
-
-    NITF_FREE(impl);
+    if (impl)
+    {
+        if (impl->rowBuffer != NULL)
+            NITF_FREE(impl->rowBuffer);
+        NITF_FREE(impl);
+    }
 }
 
 

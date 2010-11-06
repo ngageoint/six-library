@@ -101,8 +101,8 @@ NITFPRIV(NITF_BOOL) MemorySource_read(NITF_DATA * data,
 NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
-    assert(memorySource);
-    NITF_FREE(memorySource);
+    if (memorySource)
+        NITF_FREE(memorySource);
 }
 
 NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error *e)
