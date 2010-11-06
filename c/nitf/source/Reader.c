@@ -1193,9 +1193,7 @@ NITFPRIV(NITF_BOOL) readTRE(nitf_Reader * reader,
         goto CATCH_ERROR;
 
     /* blank trim the tag */
-    blanki = strlen(etag) - 1;
-    while ((blanki >= 0) && (etag[blanki] == ' '))
-        etag[blanki--] = 0;
+    nitf_Field_trimString(etag);
 
     TRY_READ_VALUE(reader, lengthValue, NITF_EL_SZ);
     NITF_TRY_GET_UINT32(lengthValue, &length, error);
