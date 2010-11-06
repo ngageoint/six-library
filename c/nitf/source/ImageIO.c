@@ -9291,14 +9291,14 @@ NITFPROT(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
     fprintf(file, "%sData's current byte offset in block: %ld\n",
             sp, blockIO->blockOffset.mark);
     fprintf(file, "%sRead count in bytes: %ld\n", sp, blockIO->readCount);
-    fprintf(file, "%sOffset into read/write buffer: %ld\n", sp,
+    /*fprintf(file, "%sOffset into read/write buffer: %ld\n", sp,
             blockIO->bufferOffset);
     fprintf(file, "%sOriginal offset into read/write buffer: %ld\n", sp,
             blockIO->bufferOffsetOrg);
     fprintf(file, "%sOffset into user buffer: %ld\n", sp,
             blockIO->userOffset);
     fprintf(file, "%sOriginal offset into user buffer: %ld\n", sp,
-            blockIO->userOffsetOrg);
+            blockIO->userOffsetOrg);*/
     fprintf(file, "%sRead/write buffer is user buffer if TRUE: %ld\n", sp,
             blockIO->userEqBuffer);
     fprintf(file,
