@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>nitro-nitf</groupId>
+	<artifactId>nitf-master</artifactId>
+	<packaging>pom</packaging>
+	<version>${nitf-master.version}</version>
+	<inceptionYear>2004</inceptionYear>
+	<name>NITRO</name>
+	<url>http://nitro-nitf.sourceforge.net/</url>
+
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License, Version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>
+            svcm:svn:https://nitro-nitf.svn.sourceforge.net/svnroot/nitro-nitf
+        </connection>
+		<url>
+            http://nitro-nitf.svn.sourceforge.net/viewvc/nitro-nitf/
+        </url>
+	</scm>
+
+
+	<properties>
+		<nitf-master.version>1.0-SNAPSHOT</nitf-master.version>
+	</properties>
+
+	<developers>
+		<developer>
+			<name>D. Pressel</name>
+			<id>gojira_1</id>
+			<email>gojira_1@users.sourceforge.net</email>
+		</developer>
+		<developer>
+			<name>Tom Zellman</name>
+			<id>tzellman</id>
+			<email>tzellman@users.sourceforge.net</email>
+		</developer>
+	</developers>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<inherited>true</inherited>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<debug>false</debug>
+						<optimize>true</optimize>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<modules>
+		<module>nitf</module>
+		<module>nitf.imageio</module>
+		<module>nitf.imagej</module>
+		<module>cgm</module>
+	</modules>
+
+</project>

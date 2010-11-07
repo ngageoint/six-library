@@ -9,6 +9,14 @@
     <inceptionYear>2004</inceptionYear>
     <name>NITRO Java Bindings</name>
     <url>http://nitro-nitf.sourceforge.net/</url>
+    
+    <!-- inherits the parent pom -->
+    <parent>
+        <groupId>nitro-nitf</groupId>
+        <artifactId>nitf-master</artifactId>
+        <version>${nitf-master.version}</version>
+        <relativePath>..</relativePath>
+    </parent>
 
     <description>
         NITRO is a full-fledged, extensible library solution for reading

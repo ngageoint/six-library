@@ -1,140 +1,147 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>nitro-nitf</groupId>
-    <artifactId>NITF_ImageJ</artifactId>
-    <packaging>jar</packaging>
-    <version>${nitro.version}</version>
-    <inceptionYear>2004</inceptionYear>
-    <name>NITRO ImageJ plug-in</name>
-    <url>http://nitro-nitf.sourceforge.net/</url>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>nitro-nitf</groupId>
+	<artifactId>NITF_ImageJ</artifactId>
+	<packaging>jar</packaging>
+	<version>${nitro.version}</version>
+	<inceptionYear>2004</inceptionYear>
+	<name>NITRO ImageJ plug-in</name>
+	<url>http://nitro-nitf.sourceforge.net/</url>
 
-    <licenses>
-        <license>
-            <name>GNU Lesser General Public License, Version 3</name>
-            <url>http://www.gnu.org/licenses/lgpl.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+	<!-- inherits the parent pom -->
+	<parent>
+		<groupId>nitro-nitf</groupId>
+		<artifactId>nitf-master</artifactId>
+		<version>${nitf-master.version}</version>
+		<relativePath>..</relativePath>
+	</parent>
 
-    <scm>
-        <connection>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License, Version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>
             svcm:svn:https://nitro-nitf.svn.sourceforge.net/svnroot/nitro-nitf
         </connection>
-        <url>
+		<url>
             http://nitro-nitf.svn.sourceforge.net/viewvc/nitro-nitf/
         </url>
-    </scm>
+	</scm>
 
 
-    <developers>
-        <developer>
-            <name>D. Pressel</name>
-            <id>gojira_1</id>
-            <email>gojira_1@users.sourceforge.net</email>
-        </developer>
-        <developer>
-            <name>Tom Zellman</name>
-            <id>tzellman</id>
-            <email>tzellman@users.sourceforge.net</email>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<name>D. Pressel</name>
+			<id>gojira_1</id>
+			<email>gojira_1@users.sourceforge.net</email>
+		</developer>
+		<developer>
+			<name>Tom Zellman</name>
+			<id>tzellman</id>
+			<email>tzellman@users.sourceforge.net</email>
+		</developer>
+	</developers>
 
-    <properties>
-        <nitro.version>2.6-dev</nitro.version>
-        <log4j.version>1.2.14</log4j.version>
-        <commons-logging.version>1.1.1</commons-logging.version>
-        <commons-lang.version>2.4</commons-lang.version>
-        <commons-io.version>1.4</commons-io.version>
-        <junit.version>4.4</junit.version>
-        <imagej.version>1.42</imagej.version>
-    </properties>
+	<properties>
+		<nitro.version>2.6-dev</nitro.version>
+		<log4j.version>1.2.14</log4j.version>
+		<commons-logging.version>1.1.1</commons-logging.version>
+		<commons-lang.version>2.4</commons-lang.version>
+		<commons-io.version>1.4</commons-io.version>
+		<junit.version>4.4</junit.version>
+		<imagej.version>1.42</imagej.version>
+	</properties>
 
-    <!--
-        By default, http://repo1.maven.org/maven2/ is used, but some jars aren't available there, so we add the local
-        lib path where we have some jars under version control
-    -->
-    <repositories>
-        <repository>
-            <id>local</id>
-            <name>local</name>
-            <url>file://${basedir}/libs</url>
-        </repository>
-    </repositories>
+	<!-- By default, http://repo1.maven.org/maven2/ is used, but some jars aren't 
+		available there, so we add the local lib path where we have some jars under 
+		version control -->
+	<repositories>
+		<repository>
+			<id>local</id>
+			<name>local</name>
+			<url>file://${basedir}/libs</url>
+		</repository>
+	</repositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>${commons-logging.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>nitro-nitf</groupId>
-            <artifactId>nitf</artifactId>
-            <version>${nitro.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>nitro-nitf</groupId>
-            <artifactId>imageio</artifactId>
-            <version>${nitro.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>imagej</groupId>
-            <artifactId>ij</artifactId>
-            <version>${imagej.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons-logging.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-lang.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>nitro-nitf</groupId>
+			<artifactId>nitf</artifactId>
+			<version>${nitro.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>nitro-nitf</groupId>
+			<artifactId>imageio</artifactId>
+			<version>${nitro.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>imagej</groupId>
+			<artifactId>ij</artifactId>
+			<version>${imagej.version}</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
 
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <inherited>true</inherited>
-                    <configuration>
-                        <source>1.5</source>
-                        <target>1.5</target>
-                        <debug>false</debug>
-                        <optimize>true</optimize>
-                        <showDeprecation>true</showDeprecation>
-                        <showWarnings>true</showWarnings>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <sourceDirectory>src/java</sourceDirectory>
-        <testSourceDirectory>src/test</testSourceDirectory>
-    </build>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<inherited>true</inherited>
+					<configuration>
+						<source>1.5</source>
+						<target>1.5</target>
+						<debug>false</debug>
+						<optimize>true</optimize>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<sourceDirectory>src/java</sourceDirectory>
+		<testSourceDirectory>src/test</testSourceDirectory>
+	</build>
 
 </project>
