@@ -370,6 +370,8 @@ def set_options(opt):
                    help='Set non-standard CFLAGS', metavar='FLAGS')
     opt.add_option('--with-cxxflags', action='store', nargs=1, dest='cxxflags',
                    help='Set non-standard CXXFLAGS (C++)', metavar='FLAGS')
+    opt.add_option('--with-linkflags', action='store', nargs=1, dest='linkflags',
+                   help='Set non-standard LINKFLAGS (C/C++)', metavar='FLAGS')
     opt.add_option('--with-defs', action='store', nargs=1, dest='_defs',
                    help='Use DEFS as macro definitions', metavar='DEFS')
     opt.add_option('--with-optz', action='store',
@@ -509,6 +511,7 @@ def detect(self):
     
     env.append_unique('CXXFLAGS', Options.options.cxxflags or '')
     env.append_unique('CCFLAGS', Options.options.cflags or '')
+    env.append_unique('LINKFLAGS', Options.options.linkflags or '')
     if Options.options._defs:
         env.append_unique('CCDEFINES', Options.options._defs.split(','))
         env.append_unique('CXXDEFINES', Options.options._defs.split(','))
