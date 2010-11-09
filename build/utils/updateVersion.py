@@ -78,7 +78,7 @@ if __name__ == '__main__':
     #update python setup.py
     setupFile = os.path.join(top_dir, 'python/nitf/setup.py')
     for line in fileinput.input(setupFile, inplace=1):
-        line = re.sub(r'version\s*=\s*\'.*\',', r"version = '%s'" % fullVersion, line)
+        line = re.sub(r'version\s*=\s*\'.*\',', r"version = '%s'," % fullVersion, line)
         sys.stdout.write(line)
     
     #update windows installer

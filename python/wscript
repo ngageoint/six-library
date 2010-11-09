@@ -7,6 +7,8 @@ def set_options(opt):
                    help='Disable python', default=True)
     opt.add_option('--require-python', action='store_true', dest='force_python',
                    help='Require Python lib/headers (configure option)', default=False)
+    opt.sub_options('nitf')
+    
     
 def configure(conf):
     if Options.options.python:
@@ -14,6 +16,7 @@ def configure(conf):
         try:
             conf.check_python_version((2,4,2))
             conf.check_python_headers()
+            conf.sub_config('nitf')
         except Exception, ex:
 #            conf.env.pop('PYTHON', None)
 #            if 'PYTHON' in conf.env:

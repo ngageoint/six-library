@@ -1,4 +1,5 @@
-set_options = configure = distclean = lambda p: None
+
+distclean = set_options = configure = lambda p: None
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
@@ -8,13 +9,24 @@ def build(bld):
     obj = bld.new_task_gen(features = 'py', env=env.copy(),
 						   install_path='${PYTHONDIR}/nitf')
     obj.find_sources_in_dirs('src/python/nitf/', exts=['.py'])
-
+    
     # then a c extension module
-    bld.new_task_gen(
-        features = 'cc cshlib pyext',
-        source = 'src/swig/nitro_wrap.c',
-        target = '_nitropy',
-        uselib_local='nitf-c',
-        env=env.copy(),
-        install_path='${PYTHONDIR}/nitf')
+    if 'SWIG_VERSION' in env and env['SWIG_VERSION']:
+        e = env.copy()
+        bld.new_task_gen(
+            features = 'cc cshlib pyext',
+            source = 'src/swig/nitro.i',
+            target = '_nitropy',
+            uselib_local='nitf-c',
+            env=env.copy(),
+            swig_flags='-python',
+            install_path='${PYTHONDIR}/nitf')
+    else:
+        bld.new_task_gen(
+            features = 'cc cshlib pyext',
+            source = 'src/swig/nitro_wrap.c',
+            target = '_nitropy',
+            uselib_local='nitf-c',
+            env=env.copy(),
+            install_path='${PYTHONDIR}/nitf')
 
