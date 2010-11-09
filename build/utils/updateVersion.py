@@ -81,6 +81,12 @@ if __name__ == '__main__':
         line = re.sub(r'version\s*=\s*\'.*\',', r"version = '%s'," % fullVersion, line)
         sys.stdout.write(line)
     
+    #update NITF_LIB_VERSION
+    setupFile = os.path.join(top_dir, 'c/nitf/include/nitf/Defines.h')
+    for line in fileinput.input(setupFile, inplace=1):
+        line = re.sub(r'(NITF_LIB_VERSION\s*)["][^"]+["]', r'\g<1>"%s.%s"' % (major, minor), line)
+        sys.stdout.write(line)
+    
     #update windows installer
     setupFile = os.path.join(top_dir, 'build/installer/nitro_installer.iss')
     for line in fileinput.input(setupFile, inplace=1):
