@@ -33,6 +33,18 @@ import logging, types, new
 from nitropy import nitf_Error as Error
 Error.__repr__=lambda s: s.message
 
+__all__ = ['BandSource', 'ComponentInfo', 'DESegment', 'DESubheader',
+           'DataSource', 'DownSampler', 'Error', 'Extensions', 'Field',
+           'FieldHeader', 'FileBandSource', 'FileHeader', 'FileSecurity',
+           'FileSegmentSource', 'GraphicSegment', 'GraphicSubheader', 'Header',
+           'IOHandle', 'ImageReader', 'ImageSegment', 'ImageSource',
+           'ImageSubheader', 'ImageWriter', 'LabelSegment', 'LabelSubheader',
+           'MaxDownSampler', 'MemoryBandSource', 'MemorySegmentSource',
+           'NITF_VER_20', 'NITF_VER_21', 'NITF_VER_UNKNOWN',
+           'PixelSkipDownSampler', 'PluginRegistry', 'RESegment', 'RESubheader',
+           'Reader', 'Record', 'RecordSegment', 'SegmentReader',
+           'SegmentSource', 'SegmentWriter', 'SubWindow', 'TRE', 'TextSegment',
+           'TextSubheader', 'Writer', 'open', 'metadata']
 
 FILE_HEADER_FIELDS = [
     {'id' : 'FHDR', 'name' : 'fileHeader', },
@@ -288,15 +300,16 @@ class Reader:
     def __init__(self):
         self.error = Error()
         self.ref = nitropy.nitf_Reader_construct(self.error)
-        self.record = None
+        self.io, self.record = None, None
     
     def __del__(self):
         logging.debug('destruct Reader')
+        if self.io: self.io.close()
         if self.ref: nitropy.nitf_Reader_destruct(self.ref)
     
     def read(self, handle):
-        self.handle = handle #must set this so it doesn't get ref-counted away
-        record = nitropy.nitf_Reader_read(self.ref, handle.ref, self.error)
+        self.io = handle #must set this so it doesn't get ref-counted away
+        record = nitropy.nitf_Reader_read(self.ref, self.io.ref, self.error)
         if not record:
             raise Exception, self.error.message 
         self.record = Record(record)
@@ -401,7 +414,7 @@ class Field:
     def __init__(self, ref):
         self.ref = ref
 
-    def __str__(self):
+    def __repr__(self):
         return self.__str__()
 
     def __int__(self):
@@ -790,6 +803,9 @@ class DESubheader(Header):
         ])
         return fields.__iter__()
 
+    def getUDHD(self):
+        return Extensions(self.ref.userDefinedSection)
+
 #NITF RESubheader class
 class RESubheader(Header):
     pass
@@ -1109,11 +1125,12 @@ class Writer:
         self.ref = nitropy.nitf_Writer_construct(self.error)
         if not self.ref:
             raise Exception('Unable to create Writer')
-        self._imageWriters = []
-        self._graphicWriters = []
+        self._imageWriters, self._graphicWriters = [], []
+        self.io = None
     
     def __del__(self):
         logging.debug('destruct Writer')
+        if self.io: self.io.close()
         if self.ref: nitropy.nitf_Writer_destruct(self.ref)
     
     def newImageWriter(self, imagenum):
@@ -1135,8 +1152,8 @@ class Writer:
         raise Exception, 'Unable to get new GraphicWriter: (%s)' % self.error.message
     
     def prepare(self, record, handle):
-        self.handle = handle #must set this so it doesn't get ref-counted away
-        return nitropy.nitf_Writer_prepare(self.ref, record.ref, handle.ref, self.error) == 1
+        self.io = handle #must set this so it doesn't get ref-counted away
+        return nitropy.nitf_Writer_prepare(self.ref, record.ref, self.io.ref, self.error) == 1
     
     def write(self):
         if not nitropy.nitf_Writer_write(self.ref, self.error) == 1:
@@ -1169,6 +1186,55 @@ class PluginRegistry:
         val = nitropy.nitf_PluginRegistry_retrieveTREHandler(self.ref, tre_name, has_err, self.error)
         return val
 
+
+def open(filename):
+    '''
+    Opens the given file and returns a (Reader, Record) tuple.
+    '''
+    handle = IOHandle(filename)
+    reader = Reader()
+    return (reader, reader.read(handle))
+
+def metadata(filename):
+    '''
+    Dumps the metadata from the given nitf file. You can optionally pass
+    a nitf Record object instead of a filename.
+    '''
+    def dumpTRE(tre, section):
+        print('--- %s TRE [%s] - (%d) ---' % (section, tre.getTag(), tre.getCurrentSize()))
+        for fieldname, field in tre:
+            print("%s(%s) = '%s'" % (fieldname,
+                                     field.getLength(), str(field)))
+
+    def dumpHeader(header, desc, extensions={}):
+        print('--- %s ---' % desc)
+        print(str(header))
+        for section, tres in extensions.iteritems():
+            for tre in tres:
+                dumpTRE(tre, section)
+    
+    if type(filename) == str:
+        reader, record = open(filename)
+    else:
+        record = filename
+
+    dumpHeader(record.header, "FileHeader",
+               {'UDHD':record.header.getUDHD(),
+                'XHD':record.header.getXHD()})
+
+    for i, segment in enumerate(record.getImages()):
+        dumpHeader(segment.subheader, 'Image [%d]' % (i + 1),
+                     {'UDHD':segment.subheader.getUDHD(),
+                      'XHD':segment.subheader.getXHD()})
+    for i, segment in enumerate(record.getGraphics()):
+        dumpHeader(segment.subheader, 'Graphic [%d]' % (i + 1),
+                     {'XHD':segment.subheader.getXHD()})
+    for i, segment in enumerate(record.getTexts()):
+        dumpHeader(segment.subheader, 'Text [%d]' % (i + 1),
+                   {'XHD':segment.subheader.getXHD()})
+    for i, segment in enumerate(record.getDataExtensions()):
+        dumpHeader(segment.subheader, 'DES [%d]' % (i + 1),
+                   {'XHD':segment.subheader.getUDHD()})
 
 #set the NITF_PLUGIN_PATH
 #import os, inspect
