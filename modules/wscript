@@ -2,7 +2,7 @@ import os
 import Scripting, Options
 from Build import BuildContext
 
-VERSION = '0.1-RC1'
+VERSION = '1.0'
 APPNAME = 'Sensor Independent XML'
 srcdir  = '.'
 blddir  = 'target'
