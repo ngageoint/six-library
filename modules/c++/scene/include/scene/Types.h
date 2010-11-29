@@ -26,10 +26,7 @@
 #include <import/str.h>
 #include <import/sys.h>
 
-#ifdef WIN32
-#define _USE_MATH_DEFINES
-#endif
-#include <math.h>
+#include <cmath>
 
 #include "math/linear/MatrixMxN.h"
 #include "math/linear/VectorN.h"
@@ -219,6 +216,154 @@ namespace scene
 
     protected:
         double mAlt;
+    };
+
+    /*!
+     *  \struct RowCol
+     *  \brief Row/Col pair type
+     *
+     *  Templated pair storage for row/col values.  This is typedef'd
+     *  below to prevent incorrect type assigment (e.g., RowCol<int> where
+     *  type should be RowCol<long>)
+     */
+    
+    template<typename T> struct RowCol
+    {
+        T row;
+        T col;
+        
+        // Splitting these in two prevents probable unintended effect
+        // row being set and column being zero, instead of implicit 
+        // promotion
+        RowCol(T r, T c) :
+            row(r), col(c) {}
+        
+        
+        RowCol() : row((T)0.0), col((T)0.0) {}
+                       
+        template<typename Other_T> RowCol(const RowCol<Other_T>& p)
+        {
+            row = p.row;
+            col = p.col;
+        }
+        
+        RowCol(const std::pair<T, T>& p)
+        {
+            row = p.first;
+            col = p.second;
+        }
+        
+        template<typename Other_T> RowCol& operator=(const RowCol<Other_T>& p)
+        {
+            if (this != &p)
+            {
+                row = (T) p.row;
+                col = (T) p.col;
+            }
+            return *this;
+        }
+            
+        RowCol& operator=(const std::pair<T, T>& p)
+        {
+            row = p.first;
+            col = p.second;
+            return *this;
+        }
+            
+        template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p)
+        {
+            row += (T) p.row;
+            col += (T) p.col;
+            return *this;
+        }
+        
+        template<typename Other_T> RowCol operator+(const RowCol<Other_T>& p)
+        {
+            RowCol copy(*this);
+            return copy += p;
+        }
+        
+        template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p)
+        {
+            row -= (T) p.row;
+            col -= (T) p.col;
+            return *this;
+        }
+        
+        template<typename Other_T> RowCol operator-(const RowCol<Other_T>& p)
+        {
+            RowCol copy(*this);
+            return copy -= p;
+        }
+        
+        RowCol& operator+=(T scalar)
+        {
+            row += scalar;
+            col += scalar;
+            return *this;
+        }
+        
+        RowCol operator+(T scalar)
+        {
+            RowCol copy(*this);
+            return copy += scalar;
+        }
+        
+        RowCol& operator-=(T scalar)
+        {
+            row -= scalar;
+            col -= scalar;
+            return *this;
+        }
+        
+        RowCol operator-(T scalar)
+        {
+            RowCol copy(*this);
+            return copy -= scalar;
+        }
+        
+        RowCol& operator*=(T scalar)
+        {
+            row *= scalar;
+            col *= scalar;
+            return *this;
+        }
+        
+        RowCol operator*(T scalar)
+        {
+            RowCol copy(*this);
+            return copy *= scalar;
+        }
+        
+        RowCol& operator/=(T scalar)
+        {
+            row /= scalar;
+            col /= scalar;
+            return *this;
+        }
+        
+        RowCol operator/(T scalar)
+        {
+            RowCol copy(*this);
+            return copy /= scalar;
+        }
+        
+        /*!
+         *  Compare the types considering that some
+         *  specializations (e.g., double)
+         *  are not exact
+         */
+        bool operator==(const RowCol<T>& p) const
+        {
+            return math::linear::equals(row, p.row) && math::linear::equals(col,
+                                                                            p.col);
+        }
+        
+        bool operator!=(const RowCol<T>& p) const
+        {
+            return !(RowCol::operator==(p));
+        }
+        
     };
 
 }

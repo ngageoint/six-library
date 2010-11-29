@@ -64,16 +64,13 @@ Grid::~Grid()
 
 Grid* Grid::clone() const 
 {
-    Grid* g = new Grid(*this);
-
-    if (g->row)
-        delete g->row;
-    if (g->col)
-        delete g->col;
-
-    if (row)
-        g->row = row->clone();
-    if (col)
-        g->col = col->clone();
+    Grid* g = new Grid;
+    g->imagePlane = this->imagePlane;
+    g->type = this->type;
+    g->timeCOAPoly = this->timeCOAPoly;
+    if (this->row)
+        g->row = this->row->clone();
+    if (this->col)
+        g->col = this->col->clone();
     return g;
 }

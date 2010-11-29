@@ -28,42 +28,7 @@ const char ComplexData::VENDOR_ID[] = "GDAIS";
 
 Data* ComplexData::clone() const
 {
-    ComplexData *data = new ComplexData();
-    if (collectionInformation)
-        data->collectionInformation = collectionInformation->clone();
-    if (imageData)
-        data->imageData = imageData->clone();
-
-    if (geoData)
-        data->geoData = geoData->clone();
-    if (grid)
-        data->grid = grid->clone();
-    if (timeline)
-        data->timeline = timeline->clone();
-    if (position)
-        data->position = position->clone();
-    if (radarCollection)
-        data->radarCollection = radarCollection->clone();
-    if (imageFormation)
-        data->imageFormation = imageFormation->clone();
-    if (scpcoa)
-        data->scpcoa = scpcoa->clone();
-    if (radiometric)
-        data->radiometric = radiometric->clone();
-    if (antenna)
-        data->antenna = antenna->clone();
-    if (errorStatistics)
-        data->errorStatistics = errorStatistics->clone();
-    if (matchInformation)
-        data->matchInformation = matchInformation->clone();
-
-    if (pfa)
-        data->pfa = pfa->clone();
-    if (rma)
-        data->rma = rma->clone();
-
-    return data;
-
+    return new ComplexData(this);
 }
 
 ComplexData::~ComplexData()
@@ -103,8 +68,11 @@ ComplexData::~ComplexData()
 }
 
 ComplexData::ComplexData() :
-    imageCreation(NULL), radiometric(NULL), antenna(NULL),
-            errorStatistics(NULL), matchInformation(NULL), pfa(NULL), rma(NULL)
+    collectionInformation(NULL), imageCreation(NULL), imageData(NULL),
+            geoData(NULL), grid(NULL), timeline(NULL), position(NULL),
+            radarCollection(NULL), imageFormation(NULL), scpcoa(NULL),
+            radiometric(NULL), antenna(NULL), errorStatistics(NULL),
+            matchInformation(NULL), pfa(NULL), rma(NULL)
 {
     //only initialize the mandatory elements
     collectionInformation = new CollectionInformation();
@@ -118,3 +86,43 @@ ComplexData::ComplexData() :
     scpcoa = new SCPCOA();
 }
 
+ComplexData::ComplexData(const ComplexData* cloner) :
+    collectionInformation(NULL), imageCreation(NULL), imageData(NULL),
+            geoData(NULL), grid(NULL), timeline(NULL), position(NULL),
+            radarCollection(NULL), imageFormation(NULL), scpcoa(NULL),
+            radiometric(NULL), antenna(NULL), errorStatistics(NULL),
+            matchInformation(NULL), pfa(NULL), rma(NULL)
+{
+    if (cloner->collectionInformation)
+        collectionInformation = cloner->collectionInformation->clone();
+    if (cloner->imageCreation)
+        imageCreation = cloner->imageCreation->clone();
+    if (cloner->imageData)
+        imageData = cloner->imageData->clone();
+    if (cloner->geoData)
+        geoData = cloner->geoData->clone();
+    if (cloner->grid)
+        grid = cloner->grid->clone();
+    if (cloner->timeline)
+        timeline = cloner->timeline->clone();
+    if (cloner->position)
+        position = cloner->position->clone();
+    if (cloner->radarCollection)
+        radarCollection = cloner->radarCollection->clone();
+    if (cloner->imageFormation)
+        imageFormation = cloner->imageFormation->clone();
+    if (cloner->scpcoa)
+        scpcoa = cloner->scpcoa->clone();
+    if (cloner->radiometric)
+        radiometric = cloner->radiometric->clone();
+    if (cloner->antenna)
+        antenna = cloner->antenna->clone();
+    if (cloner->errorStatistics)
+        errorStatistics = cloner->errorStatistics->clone();
+    if (cloner->matchInformation)
+        matchInformation = cloner->matchInformation->clone();
+    if (cloner->pfa)
+        pfa = cloner->pfa->clone();
+    if (cloner->rma)
+        rma = cloner->rma->clone();
+}
