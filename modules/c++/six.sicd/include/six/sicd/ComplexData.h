@@ -301,6 +301,9 @@ struct ComplexData: public Data
     }
 
     static const char VENDOR_ID[];
+
+private:
+    ComplexData(const ComplexData* cloner);
 };
 
 }

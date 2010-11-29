@@ -224,8 +224,8 @@ XMLElem ComplexXMLControl::toXML(const CollectionInformation *collInfo,
     createString("Classification", si, collInfo->classification.level,
                  collInfoXML);
 
-    for (std::vector<std::string>::const_iterator it = collInfo->countryCodes.begin(); it
-            != collInfo->countryCodes.end(); ++it)
+    for (std::vector<std::string>::const_iterator it =
+            collInfo->countryCodes.begin(); it != collInfo->countryCodes.end(); ++it)
     {
         createString("CountryCode", si, *it, collInfoXML);
     }
@@ -233,7 +233,8 @@ XMLElem ComplexXMLControl::toXML(const CollectionInformation *collInfo,
     return collInfoXML;
 }
 
-XMLElem ComplexXMLControl::toXML(const ImageCreation *imageCreation, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const ImageCreation *imageCreation,
+                                 XMLElem parent)
 {
     XMLElem imageCreationXML = newElement("ImageCreation", parent);
 
@@ -289,7 +290,7 @@ XMLElem ComplexXMLControl::toXML(const ImageData *imageData, XMLElem parent)
         {
             XMLElem vertexXML = createRowCol("Vertex", imageData->validData[i],
                                              vXML);
-            setAttribute(vertexXML, "index", str::toString(i));
+            setAttribute(vertexXML, "index", str::toString(i + 1));
         }
     }
     return imageDataXML;
@@ -319,7 +320,7 @@ XMLElem ComplexXMLControl::toXML(const GeoData *geoData, XMLElem parent)
         {
             XMLElem vertexXML = createLatLon("Vertex", geoData->validData[i],
                                              vXML);
-            setAttribute(vertexXML, "index", str::toString(i));
+            setAttribute(vertexXML, "index", str::toString(i + 1));
         }
     }
 
@@ -402,7 +403,7 @@ XMLElem ComplexXMLControl::toXML(const Grid *grid, XMLElem parent)
 
         for (size_t i = 1; i <= numWeights; ++i)
         {
-            XMLElem wgtXML = createDouble("Wgt", grid->row->weights[i-1],
+            XMLElem wgtXML = createDouble("Wgt", grid->row->weights[i - 1],
                                           wgtFuncXML);
             setAttribute(wgtXML, "index", str::toString(i));
         }
@@ -437,11 +438,11 @@ XMLElem ComplexXMLControl::toXML(const Grid *grid, XMLElem parent)
 
         for (size_t i = 1; i <= numWeights; ++i)
         {
-            XMLElem wgtXML = createDouble("Wgt", grid->col->weights[i-1],
+            XMLElem wgtXML = createDouble("Wgt", grid->col->weights[i - 1],
                                           wgtFuncXML);
             setAttribute(wgtXML, "index", str::toString(i));
         }
-   }
+    }
 
     return gridXML;
 }
@@ -529,17 +530,16 @@ XMLElem ComplexXMLControl::toXML(const RadarCollection *radar, XMLElem parent)
     if (!radar->txSequence.empty())
     {
         XMLElem txSeqXML = newElement("TxSequence", radarXML);
- 	setAttribute(txSeqXML, "size", 
-		str::toString(radar->txSequence.size()));
+        setAttribute(txSeqXML, "size", str::toString(radar->txSequence.size()));
 
-	int i=1;
-        for (std::vector<TxStep*>::const_iterator it = radar->txSequence.begin(); it
-                != radar->txSequence.end(); ++it)
+        int i = 1;
+        for (std::vector<TxStep*>::const_iterator it =
+                radar->txSequence.begin(); it != radar->txSequence.end(); ++it)
         {
             TxStep *tx = *it;
 
             XMLElem txStepXML = newElement("TxStep", txSeqXML);
-	    setAttribute(txStepXML, "index", str::toString(i++));
+            setAttribute(txStepXML, "index", str::toString(i++));
 
             if (!Init::isUndefined<int>(tx->waveformIndex))
             {
@@ -564,7 +564,7 @@ XMLElem ComplexXMLControl::toXML(const RadarCollection *radar, XMLElem parent)
             WaveformParameters *wf = radar->waveform[i];
 
             XMLElem wfpXML = newElement("WFParameters", wfXML);
-            setAttribute(wfpXML, "index", str::toString(i));
+            setAttribute(wfpXML, "index", str::toString(i + 1));
 
             if (!Init::isUndefined<double>(wf->txPulseLength))
                 createDouble("TxPulseLength", wf->txPulseLength, wfpXML);
@@ -704,7 +704,8 @@ XMLElem ComplexXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
-XMLElem ComplexXMLControl::toXML(const ImageFormation *imageFormation, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const ImageFormation *imageFormation,
+                                 XMLElem parent)
 {
     XMLElem imageFormationXML = newElement("ImageFormation", parent);
 
@@ -860,8 +861,8 @@ XMLElem ComplexXMLControl::toXML(const Antenna *antenna, XMLElem parent)
     return antennaXML;
 }
 
-XMLElem ComplexXMLControl::toXML(const std::string name, AntennaParameters *params,
-                                 XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const std::string name,
+                                 AntennaParameters *params, XMLElem parent)
 {
     XMLElem apXML = newElement(name, parent);
 
@@ -906,7 +907,8 @@ XMLElem ComplexXMLControl::toXML(const std::string name, AntennaParameters *para
     return apXML;
 }
 
-XMLElem ComplexXMLControl::toXML(const MatchInformation *matchInfo, XMLElem parent)
+XMLElem ComplexXMLControl::toXML(const MatchInformation *matchInfo,
+                                 XMLElem parent)
 {
     XMLElem matchInfoXML = newElement("MatchInfo", parent);
 
@@ -922,8 +924,8 @@ XMLElem ComplexXMLControl::toXML(const MatchInformation *matchInfo, XMLElem pare
             createString("IlluminatorName", mc->illuminatorName, mcXML);
         createString("CoreName", mc->coreName, mcXML);
 
-        for (std::vector<std::string>::const_iterator it = mc->matchType.begin(); it
-                != mc->matchType.end(); ++it)
+        for (std::vector<std::string>::const_iterator it =
+                mc->matchType.begin(); it != mc->matchType.end(); ++it)
         {
             createString("MatchType", *it, mcXML);
         }
@@ -1006,8 +1008,9 @@ XMLElem ComplexXMLControl::toXML(const RMA *rma, XMLElem parent)
     }
     else
     {
-        throw except::Exception(Ctxt("One of RMAT and INCA must be defined -- both "
-            "are undefined."));
+        throw except::Exception(Ctxt(
+                                     "One of RMAT and INCA must be defined -- both "
+                                         "are undefined."));
     }
 
     return rmaXML;
@@ -1046,7 +1049,7 @@ void ComplexXMLControl::fromXML(const XMLElem collectionInfoXML,
     parseString(getFirstAndOnly(collectionInfoXML, "Classification"),
                 collInfo->classification.level);
 
-    std::vector<XMLElem> countryCodeXML;
+    std::vector < XMLElem > countryCodeXML;
     collectionInfoXML->getElementsByTagName("CountryCode", countryCodeXML);
 
     //optional
@@ -1084,7 +1087,8 @@ void ComplexXMLControl::fromXML(const XMLElem imageCreationXML,
         parseString(element, imageCreation->profile);
 }
 
-void ComplexXMLControl::fromXML(const XMLElem imageDataXML, ImageData *imageData)
+void ComplexXMLControl::fromXML(const XMLElem imageDataXML,
+                                ImageData *imageData)
 {
     imageData->pixelType
             = six::toType<PixelType>(
@@ -1094,7 +1098,7 @@ void ComplexXMLControl::fromXML(const XMLElem imageDataXML, ImageData *imageData
 
     if (ampTableXML != NULL)
     {
-        std::vector<XMLElem> ampsXML;
+        std::vector < XMLElem > ampsXML;
         ampTableXML->getElementsByTagName("Amplitude", ampsXML);
         imageData->amplitudeTable = new AmplitudeTable();
 
@@ -1144,7 +1148,7 @@ void ComplexXMLControl::fromXML(const XMLElem imageDataXML, ImageData *imageData
     XMLElem validDataXML = getOptional(imageDataXML, "ValidData");
     if (validDataXML)
     {
-        std::vector<XMLElem> verticesXML;
+        std::vector < XMLElem > verticesXML;
         validDataXML->getElementsByTagName("Vertex", verticesXML);
 
         //TODO make sure there are at least 3
@@ -1178,7 +1182,7 @@ void ComplexXMLControl::fromXML(const XMLElem geoDataXML, GeoData *geoData)
         parseLatLons(tmpElem, "Vertex", geoData->validData);
     }
 
-    std::vector<XMLElem> geoInfosXML;
+    std::vector < XMLElem > geoInfosXML;
     geoDataXML->getElementsByTagName("GeoInfo", geoInfosXML);
 
     //optional
@@ -1194,7 +1198,7 @@ void ComplexXMLControl::fromXML(const XMLElem geoDataXML, GeoData *geoData)
 
 void ComplexXMLControl::fromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo)
 {
-    std::vector<XMLElem> geoInfosXML;
+    std::vector < XMLElem > geoInfosXML;
     geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
     geoInfo->name = geoInfoXML->getAttributes().getValue("name");
 
@@ -1280,7 +1284,7 @@ void ComplexXMLControl::fromXML(const XMLElem gridXML, Grid *grid)
     {
         //optional
         //TODO make sure there is at least one and not more than 512 wgts
-        std::vector<XMLElem> weightsXML;
+        std::vector < XMLElem > weightsXML;
         weightFuncXML->getElementsByTagName("Wgt", weightsXML);
         for (std::vector<XMLElem>::const_iterator it = weightsXML.begin(); it
                 != weightsXML.end(); ++it)
@@ -1325,7 +1329,7 @@ void ComplexXMLControl::fromXML(const XMLElem gridXML, Grid *grid)
         //optional
 
         //TODO make sure there is at least one and not more than 512 wgts
-        std::vector<XMLElem> weightsXML;
+        std::vector < XMLElem > weightsXML;
         weightFuncXML->getElementsByTagName("Wgt", weightsXML);
         for (std::vector<XMLElem>::const_iterator it = weightsXML.begin(); it
                 != weightsXML.end(); ++it)
@@ -1349,7 +1353,7 @@ void ComplexXMLControl::fromXML(const XMLElem timelineXML, Timeline *timeline)
     {
         timeline->interPulsePeriod = new InterPulsePeriod();
         //TODO make sure there is at least one
-        std::vector<XMLElem> setsXML;
+        std::vector < XMLElem > setsXML;
         ippXML->getElementsByTagName("Set", setsXML);
         for (std::vector<XMLElem>::const_iterator it = setsXML.begin(); it
                 != setsXML.end(); ++it)
@@ -1398,7 +1402,7 @@ void ComplexXMLControl::fromXML(const XMLElem positionXML, Position *position)
         position->rcvAPC = new RcvAPC();
 
         //TODO make sure there is at least one
-        std::vector<XMLElem> polysXML;
+        std::vector < XMLElem > polysXML;
         tmpElem->getElementsByTagName("RcvAPCPoly", polysXML);
         for (std::vector<XMLElem>::const_iterator it = polysXML.begin(); it
                 != polysXML.end(); ++it)
@@ -1449,7 +1453,7 @@ void ComplexXMLControl::fromXML(const XMLElem radarCollectionXML,
     {
         //optional
         //TODO make sure there is at least one
-        std::vector<XMLElem> txStepsXML;
+        std::vector < XMLElem > txStepsXML;
         tmpElem->getElementsByTagName("TxStep", txStepsXML);
         for (std::vector<XMLElem>::const_iterator it = txStepsXML.begin(); it
                 != txStepsXML.end(); ++it)
@@ -1481,7 +1485,7 @@ void ComplexXMLControl::fromXML(const XMLElem radarCollectionXML,
     {
         //optional
         //TODO make sure there is at least one
-        std::vector<XMLElem> wfParamsXML;
+        std::vector < XMLElem > wfParamsXML;
         tmpElem->getElementsByTagName("WFParameters", wfParamsXML);
         for (std::vector<XMLElem>::const_iterator it = wfParamsXML.begin(); it
                 != wfParamsXML.end(); ++it)
@@ -1566,7 +1570,7 @@ void ComplexXMLControl::fromXML(const XMLElem radarCollectionXML,
     tmpElem = getFirstAndOnly(radarCollectionXML, "RcvChannels");
 
     //optional
-    std::vector<XMLElem> channelsXML;
+    std::vector < XMLElem > channelsXML;
     tmpElem->getElementsByTagName("ChanParameters", channelsXML);
     for (std::vector<XMLElem>::const_iterator it = channelsXML.begin(); it
             != channelsXML.end(); ++it)
@@ -1651,11 +1655,11 @@ void ComplexXMLControl::fromXML(const XMLElem radarCollectionXML,
             if (segmentListXML != NULL)
             {
                 //TODO make sure there is at least one
-                std::vector<XMLElem> segmentsXML;
+                std::vector < XMLElem > segmentsXML;
                 segmentListXML->getElementsByTagName("Segment", segmentsXML);
 
-                for (std::vector<XMLElem>::const_iterator it = segmentsXML.begin(); it
-                        != segmentsXML.end(); ++it)
+                for (std::vector<XMLElem>::const_iterator it =
+                        segmentsXML.begin(); it != segmentsXML.end(); ++it)
                 {
                     Segment* seg = new Segment();
 
@@ -1674,8 +1678,8 @@ void ComplexXMLControl::fromXML(const XMLElem radarCollectionXML,
             // TODO:  This is required for 0.4.x, but treat as
             // optional to support 0.3.1 data.
             if (tmpElem = getOptional(planeXML, "Orientation"))
-                radarCollection->area->plane->orientation
-                        = six::toType<OrientationType>(tmpElem->getCharacterData());
+                radarCollection->area->plane->orientation = six::toType<
+                        OrientationType>(tmpElem->getCharacterData());
         }
     }
 
@@ -1706,7 +1710,7 @@ void ComplexXMLControl::fromXML(const XMLElem imageFormationXML,
     }
 
     //TODO make sure there is at least one
-    std::vector<XMLElem> chansXML;
+    std::vector < XMLElem > chansXML;
     tmpElem->getElementsByTagName("ChanIndex", chansXML);
     for (std::vector<XMLElem>::const_iterator it = chansXML.begin(); it
             != chansXML.end(); ++it)
@@ -1766,7 +1770,7 @@ void ComplexXMLControl::fromXML(const XMLElem imageFormationXML,
                                          getFirstAndOnly(imageFormationXML,
                                                          "RgAutofocus")->getCharacterData());
 
-    std::vector<XMLElem> procXML;
+    std::vector < XMLElem > procXML;
     imageFormationXML->getElementsByTagName("Processing", procXML);
 
     for (unsigned int i = 0; i < procXML.size(); ++i)
@@ -1989,23 +1993,23 @@ void ComplexXMLControl::fromXML(const XMLElem matchInfoXML,
     XMLElem optElem = NULL;
 
     //TODO make sure there is at least one
-    std::vector<XMLElem> collectsXML;
+    std::vector < XMLElem > collectsXML;
     matchInfoXML->getElementsByTagName("Collect", collectsXML);
     for (std::vector<XMLElem>::const_iterator it = collectsXML.begin(); it
             != collectsXML.end(); ++it)
     {
-      	// The MatchInformation object was given a MatchCollection when
-      	// it was instantiated.  The first time through, just populate it.
+        // The MatchInformation object was given a MatchCollection when
+        // it was instantiated.  The first time through, just populate it.
 
-	MatchCollection* coll;
-      	if (it == collectsXML.begin())
-      	{
-	   coll = matchInfo->collects[0];
-     	 }
-      	else
-      	{
-       	   coll = new MatchCollection();
-      	}
+        MatchCollection* coll;
+        if (it == collectsXML.begin())
+        {
+            coll = matchInfo->collects[0];
+        }
+        else
+        {
+            coll = new MatchCollection();
+        }
 
         parseString(getFirstAndOnly(*it, "CollectorName"), coll->collectorName);
 
@@ -2019,7 +2023,7 @@ void ComplexXMLControl::fromXML(const XMLElem matchInfoXML,
         parseString(getFirstAndOnly(*it, "CoreName"), coll->coreName);
 
         //optional
-        std::vector<XMLElem> matchTypesXML;
+        std::vector < XMLElem > matchTypesXML;
         (*it)->getElementsByTagName("MatchType", matchTypesXML);
         for (std::vector<XMLElem>::const_iterator it2 = matchTypesXML.begin(); it2
                 != matchTypesXML.end(); ++it2)
@@ -2033,10 +2037,10 @@ void ComplexXMLControl::fromXML(const XMLElem matchInfoXML,
         //optional
         parseParameters(*it, "Parameter", coll->parameters);
 
-	// The first MatchCollection object is already in matchInfo.
-	if (it != collectsXML.begin())
+        // The first MatchCollection object is already in matchInfo.
+        if (it != collectsXML.begin())
         {
-           matchInfo->collects.push_back(coll);
+            matchInfo->collects.push_back(coll);
         }
     }
 }
@@ -2083,8 +2087,8 @@ void ComplexXMLControl::fromXML(const XMLElem rmaXML, RMA* rma)
         parseDouble(getFirstAndOnly(rmatElem, "RefTime"), rmat->refTime);
         parseVector3D(getFirstAndOnly(rmatElem, "PosRef"), rmat->refPos);
         parseVector3D(getFirstAndOnly(rmatElem, "UnitVelRef"), rmat->refVel);
-        parsePoly1D(getFirstAndOnly(rmatElem, "DistRLPoly"), 
-		    rmat->distRefLinePoly);
+        parsePoly1D(getFirstAndOnly(rmatElem, "DistRLPoly"),
+                    rmat->distRefLinePoly);
         parsePoly2D(getFirstAndOnly(rmatElem, "CosDCACOAPoly"),
                     rmat->cosDCACOAPoly);
         parseDouble(getFirstAndOnly(rmatElem, "Kx1"), rmat->kx1);
@@ -2119,11 +2123,13 @@ void ComplexXMLControl::fromXML(const XMLElem rmaXML, RMA* rma)
             inca->dopplerRateScaleFactorPoly = Poly2D(0, yOrder);
 
             double* yVals = inca->dopplerRateScaleFactorPoly[0];
-            for(size_t i = 0; i <= yOrder; ++i)
+            for (size_t i = 0; i <= yOrder; ++i)
             {
                 yVals[i] = oldPoly[i];
             }
-            mLog->warn(Ctxt("Parsing DRateSFPoly as Poly1D to support version 0.4.0"));
+            mLog->warn(
+                       Ctxt(
+                            "Parsing DRateSFPoly as Poly1D to support version 0.4.0"));
         }
         else
         {

@@ -148,12 +148,20 @@ RadarCollection::~RadarCollection()
     for (unsigned int i = 0; i < waveform.size(); ++i)
     {
         WaveformParameters* wfp = waveform[i];
-        delete wfp;
+        if (wfp)
+            delete wfp;
     }
     for (unsigned int i = 0; i < rcvChannels.size(); ++i)
     {
         ChannelParameters* rcv = rcvChannels[i];
-        delete rcv;
+        if (rcv)
+            delete rcv;
+    }
+    for (unsigned int i = 0; i < txSequence.size(); ++i)
+    {
+        TxStep* t = txSequence[i];
+        if (t)
+            delete t;
     }
 }
 
@@ -162,15 +170,18 @@ RadarCollection* RadarCollection::clone() const
     RadarCollection* r = new RadarCollection(*this);
     if (area)
         r->area = area->clone();
+
     for (unsigned int i = 0; i < waveform.size(); ++i)
     {
-        WaveformParameters* wfp = waveform[i];
-        r->waveform.push_back(wfp->clone());
+        r->waveform[i] = waveform[i]->clone();
     }
     for (unsigned int i = 0; i < rcvChannels.size(); ++i)
     {
-        ChannelParameters* rcv = rcvChannels[i];
-        r->rcvChannels.push_back(rcv->clone());
+        r->rcvChannels[i] = rcvChannels[i]->clone();
+    }
+    for (unsigned int i = 0; i < txSequence.size(); ++i)
+    {
+        r->txSequence[i] = txSequence[i]->clone();
     }
     return r;
 }

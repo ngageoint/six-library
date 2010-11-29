@@ -131,153 +131,10 @@ template<typename T> struct RangeAzimuth
 
 };
 
-/*!
- *  \struct RowCol
- *  \brief Row/Col pair type
- *
- *  Templated pair storage for row/col values.  This is typedef'd
- *  below to prevent incorrect type assigment (e.g., RowCol<int> where
- *  type should be RowCol<long>)
- */
-
-template<typename T> struct RowCol
-{
-    T row;
-    T col;
-
-    RowCol(T r = (T) 0.0, T c = (T) 0.0) :
-        row(r), col(c)
-    {
-    }
-
-    template<typename Other_T> RowCol(const RowCol<Other_T>& p)
-    {
-        row = p.row;
-        col = p.col;
-    }
-
-    RowCol(const std::pair<T, T>& p)
-    {
-        row = p.first;
-        col = p.second;
-    }
-
-    template<typename Other_T> RowCol& operator=(const RowCol<Other_T>& p)
-    {
-        if (this != &p)
-        {
-            row = (T) p.row;
-            col = (T) p.col;
-        }
-        return *this;
-    }
-
-    RowCol& operator=(const std::pair<T, T>& p)
-    {
-        row = p.first;
-        col = p.second;
-        return *this;
-    }
-
-    template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p)
-    {
-        row += (T) p.row;
-        col += (T) p.col;
-        return *this;
-    }
-
-    template<typename Other_T> RowCol operator+(const RowCol<Other_T>& p)
-    {
-        RowCol copy(*this);
-        return copy += p;
-    }
-
-    template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p)
-    {
-        row -= (T) p.row;
-        col -= (T) p.col;
-        return *this;
-    }
-
-    template<typename Other_T> RowCol operator-(const RowCol<Other_T>& p)
-    {
-        RowCol copy(*this);
-        return copy -= p;
-    }
-
-    RowCol& operator+=(T scalar)
-    {
-        row += scalar;
-        col += scalar;
-        return *this;
-    }
-
-    RowCol operator+(T scalar)
-    {
-        RowCol copy(*this);
-        return copy += scalar;
-    }
-
-    RowCol& operator-=(T scalar)
-    {
-        row -= scalar;
-        col -= scalar;
-        return *this;
-    }
-
-    RowCol operator-(T scalar)
-    {
-        RowCol copy(*this);
-        return copy -= scalar;
-    }
-
-    RowCol& operator*=(T scalar)
-    {
-        row *= scalar;
-        col *= scalar;
-        return *this;
-    }
-
-    RowCol operator*(T scalar)
-    {
-        RowCol copy(*this);
-        return copy *= scalar;
-    }
-
-    RowCol& operator/=(T scalar)
-    {
-        row /= scalar;
-        col /= scalar;
-        return *this;
-    }
-
-    RowCol operator/(T scalar)
-    {
-        RowCol copy(*this);
-        return copy /= scalar;
-    }
-
-    /*!
-     *  Compare the types considering that some
-     *  specializations (e.g., double)
-     *  are not exact
-     */
-    bool operator==(const RowCol<T>& p) const
-    {
-        return math::linear::equals(row, p.row) && math::linear::equals(col,
-                                                                        p.col);
-    }
-
-    bool operator!=(const RowCol<T>& p) const
-    {
-        return !(RowCol::operator==(p));
-    }
-
-};
 
 // These are heavily used and we dont want any mistakes
-typedef RowCol<double>RowColDouble;
-typedef RowCol<long>RowColInt;
+typedef scene::RowCol<double> RowColDouble;
+typedef scene::RowCol<long> RowColInt;
 
 /*!
  *  \struct DecorrType
@@ -304,12 +161,12 @@ struct DecorrType
  *  2-D polynomial pair
  */
 
-typedef RowCol<Poly2D>RowColPoly2D;
+typedef scene::RowCol<Poly2D> RowColPoly2D;
 
 /*!
  *  2-D lat-lon sample spacing (Required for SIDD 0.1.1)
  */
-typedef RowCol<LatLon>RowColLatLon;
+typedef scene::RowCol<LatLon> RowColLatLon;
 
 /*!
  *  \struct Constants
@@ -382,7 +239,7 @@ struct ReferencePoint
     Vector3 ecef;
 
     //!  Row col pixel location of point
-    RowCol<double>rowCol;
+    RowColDouble rowCol;
 
     //!  (Optional) name.  Leave it blank if you dont need it
     std::string name;
@@ -397,7 +254,7 @@ struct ReferencePoint
         ecef[2] = z;
     }
     //!  Alternate construct, sitll init all fields at once
-    ReferencePoint(Vector3 xyz, RowCol<double>rcd) :
+    ReferencePoint(Vector3 xyz, RowColDouble rcd) :
         ecef(xyz), rowCol(rcd)
     {
     }

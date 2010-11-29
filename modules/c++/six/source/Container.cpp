@@ -25,9 +25,11 @@ using namespace six;
 
 Container::Container(const Container& c)
 {
-    for (DataIterator p = mData.begin(); p != mData.end(); ++p)
+    cleanup();
+    mDataType = c.mDataType;
+    for (ConstDataIterator p = c.mData.begin(); p != c.mData.end(); ++p)
     {
-        mData.push_back((*p)->clone());
+        addData((*p)->clone());
     }
 }
 
@@ -35,11 +37,12 @@ Container& Container::operator=(const Container& c)
 {
     if (&c != this)
     {
-        for (DataIterator p = mData.begin(); p != mData.end(); ++p)
+        cleanup();
+        mDataType = c.mDataType;
+        for (ConstDataIterator p = c.mData.begin(); p != c.mData.end(); ++p)
         {
-            mData.push_back((*p)->clone());
+            addData((*p)->clone());
         }
-
     }
     return *this;
 }
@@ -48,6 +51,7 @@ void Container::addData(Data* data)
 {
     mData.push_back(data);
 }
+
 void Container::setData(size_t i, Data* data)
 {
     if (mData.size() <= i)
@@ -76,15 +80,19 @@ void Container::removeData(Data* data)
             break;
         }
     }
-
 }
 
 Container::~Container()
 {
-    for (size_t i = 0; i < mData.size(); ++i)
+    cleanup();
+}
+
+void Container::cleanup()
+{
+    for (size_t i = 0, s = mData.size(); i < s; ++i)
     {
         if (mData[i])
             delete mData[i];
-        mData.clear();
     }
+    mData.clear();
 }

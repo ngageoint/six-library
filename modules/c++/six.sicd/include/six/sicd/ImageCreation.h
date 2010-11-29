@@ -60,6 +60,11 @@ struct ImageCreation
      *  SICD product
      */
     std::string profile;
+
+    ImageCreation* clone() const
+    {
+        return new ImageCreation(*this);
+    }
 };
 
 }
