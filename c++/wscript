@@ -11,6 +11,7 @@ def set_options(opt):
     opt.sub_options(MODULES)
 
 def configure(conf):
+    conf.env.append_value('CPPPATH_UNITTEST', os.path.join(conf.curdir, 'include'))
     conf.sub_config(MODULES)
 
 def build(bld):

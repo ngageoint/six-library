@@ -169,13 +169,13 @@ class CPPBuildContext(BuildContext):
 
         testNode = path.find_dir('unittests')
         if testNode:
-            test_deps = modArgs.get('module_deps', '').split()
-            test_uselib = modArgs.get('uselib', '').split()
-            #add to the UNITTEST var in other places to define what it means
-            test_uselib.append('UNITTEST')
+            test_deps = modArgs.get('unittest_deps', modArgs.get('module_deps', '')).split()
+            test_uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')).split()
             
             if not headersOnly:
                 test_deps.append(modArgs['name'])
+            else:
+                test_uselib.append(modArgs['name'])
             
             sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
             tests = []
@@ -184,8 +184,9 @@ class CPPBuildContext(BuildContext):
                                                   maxdepth=1, flat=True).split()):
                 
                 exe = self.unittest(env=env, test=test, module_deps=' '.join(test_deps),
-                             uselib=' '.join(test_uselib),
-                             lang=lang, path=testNode, disabled=True)
+                             uselib = ' '.join(test_uselib),
+                             lang=lang, path=testNode, disabled=True,
+                             includes='.')
                 tests.append(splitext(test)[0])
                 
             # add a post-build hook to run the unit tests
@@ -194,8 +195,6 @@ class CPPBuildContext(BuildContext):
                 bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
                                          tests=tests,
                                          path=self.getBuildDir(testNode)))
-                
-
         return env
     
     
@@ -215,12 +214,14 @@ class CPPBuildContext(BuildContext):
         test = modArgs['test']
         path = modArgs.get('path',
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
+        includes = modArgs.get('includes', 'include')
 
         exe = self.program(env=env, name=splitext(test)[0], source=test,
                      module_deps=' '.join(test_deps),
                      uselib=' '.join(test_uselib),
+                     uselib_local=modArgs.get('uselib_local', ''),
                      lang=modArgs.get('lang', 'c++'), path=path,
-                     install_path=None)
+                     install_path=None, includes=includes)
 
         if 'disabled' not in modArgs:
             # add a post-build hook to run the unit tests
