@@ -243,14 +243,8 @@ NITFPRIV(NITF_CLEVEL) checkBlockSize(nitf_Record* record, nitf_Error* error)
 
 NITFPRIV(NITF_CLEVEL) checkNumImages(nitf_Record* record, nitf_Error* error)
 {
-
-
-    int clevel = NITF_CLEVEL_03;
     nitf_Uint32 numi = nitf_Record_getNumImages(record, error);
-
-    if (numi > 20)
-        return clevel = NITF_CLEVEL_05;
-
+    return (numi > 20) ? NITF_CLEVEL_05 : NITF_CLEVEL_03;
 }
 
 NITFPRIV(NITF_CLEVEL) checkNumDES(nitf_Record* record, nitf_Error* error)
