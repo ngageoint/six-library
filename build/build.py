@@ -143,7 +143,8 @@ class CPPBuildContext(BuildContext):
                 bld.symlink_as(symlinkLoc, env['staticlib_PATTERN'] % lib.target, env=env)
             
 
-        for f in path.find_dir('include').find_iter():
+        incNode = path.find_dir('include')
+        for f in (incNode and incNode.find_iter() or []):
             relpath = f.relpath_gen(path)
             bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
                               f.abspath())
