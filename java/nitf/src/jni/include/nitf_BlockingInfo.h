@@ -84,18 +84,18 @@ JNIEXPORT void JNICALL Java_nitf_BlockingInfo_setNumColsPerBlock
 /*
  * Class:     nitf_BlockingInfo
  * Method:    getLength
- * Signature: ()I
+ * Signature: ()J
  */
-JNIEXPORT jint JNICALL Java_nitf_BlockingInfo_getLength
+JNIEXPORT jlong JNICALL Java_nitf_BlockingInfo_getLength
   (JNIEnv *, jobject);
 
 /*
  * Class:     nitf_BlockingInfo
  * Method:    setLength
- * Signature: (I)V
+ * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_nitf_BlockingInfo_setLength
-  (JNIEnv *, jobject, jint);
+  (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus
 }

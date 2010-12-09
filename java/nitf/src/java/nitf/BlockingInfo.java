@@ -3,7 +3,7 @@
  * This file is part of NITRO
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -104,14 +104,14 @@ public final class BlockingInfo extends DestructibleObject
      * 
      * @return
      */
-    public native int getLength();
+    public native long getLength();
 
     /**
      * Sets the length
      * 
      * @param length
      */
-    public native void setLength(int length);
+    public native void setLength(long length);
 
     /**
      * Prints the data pertaining to this object to an OutputStream

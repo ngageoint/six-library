@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -65,10 +65,7 @@ NRTAPI(void) nrt_ListNode_destruct(nrt_ListNode ** this_node)
 
 NRTAPI(NRT_BOOL) nrt_List_isEmpty(nrt_List * this_list)
 {
-    /*  Be ruthless with our assertions  */
-    assert(this_list);
-
-    return !this_list->first;
+    return !this_list || !this_list->first;
 }
 
 
@@ -145,10 +142,7 @@ NRTAPI(NRT_DATA *) nrt_List_popFront(nrt_List * this_list)
     NRT_DATA *data = NULL;
 
     /*  Get ourselves a pointer to the first link  */
-    nrt_ListNode *popped = this_list->first;
-
-    /*  Be ruthless with our assertions  */
-    assert(this_list);
+    nrt_ListNode *popped = this_list ? this_list->first : NULL;
 
     /*  If it exists, reassign the pointers  */
     if (popped)
@@ -177,10 +171,7 @@ NRTAPI(NRT_DATA *) nrt_List_popBack(nrt_List * this_list)
     NRT_DATA *data = NULL;
 
     /*  Get a pointer to the current last  */
-    nrt_ListNode *popped = this_list->last;
-
-    /*  Be ruthless with our assertions  */
-    assert(this_list);
+    nrt_ListNode *popped = this_list ? this_list->last : NULL;
 
     /*  If we have an element  */
     if (popped)
@@ -200,10 +191,6 @@ NRTAPI(NRT_DATA *) nrt_List_popBack(nrt_List * this_list)
         }
         data = popped->data;
         nrt_ListNode_destruct(&popped);
-
-        /*  Technically, you could put empty data on here,  */
-        /*  but why would you???                            */
-        assert(data);
     }
     /*  Return the popped node  */
     return data;

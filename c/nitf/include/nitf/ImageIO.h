@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -96,7 +96,7 @@ typedef struct _nitf_BlockingInfo
     nitf_Uint32 numBlocksPerCol;        /*!< Number of blocks per column */
     nitf_Uint32 numRowsPerBlock;        /*!< Number of rows per block */
     nitf_Uint32 numColsPerBlock;        /*!< Number of columns per block */
-    nitf_Uint32 length;         /*!< Total block length in bytes */
+    size_t length;                      /*!< Total block length in bytes */
 }
 nitf_BlockingInfo;
 

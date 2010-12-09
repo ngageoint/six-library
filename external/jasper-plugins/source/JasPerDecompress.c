@@ -226,8 +226,14 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
     imageRowLength = implControl->nCols*(implControl->nBytes);
     
     buf = NITF_MALLOC(implControl->blockInfo.length);
-    if(buf == NULL)
-        return(NULL);
+    if(!buf)
+    {
+        nitf_Error_init(error,
+                        NITF_STRERROR( NITF_ERRNO ),
+                        NITF_CTXT,
+                        NITF_ERR_MEMORY);
+        return NULL;
+    }
     memset(buf,0,implControl->blockInfo.length);
     
     blockRow = blockNumber / implControl->blockInfo.numBlocksPerRow;
@@ -295,6 +301,11 @@ for (i = 0; i < numRows; ++i) { \
 #define PRIV_READ_MATRIX(_SZ) { \
 nitf_Uint##_SZ* data##_SZ = (nitf_Uint##_SZ*)outputp; \
 jas_matrix_t* matrix##_SZ = jas_matrix_create(numRows, numCols); \
+if (!matrix##_SZ){ \
+    nitf_Error_init(error, "Cannot allocate memory - JasPer jas_matrix_create failed!", \
+            NITF_CTXT, NITF_ERR_MEMORY); \
+    return 0; \
+} \
 jas_image_readcmpt (image, component, 0, 0, numCols, numRows, matrix##_SZ); \
 for (i = 0; i < numRows; ++i){ \
     for (j = 0; j < numCols; ++j){ \
@@ -317,7 +328,7 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
     jas_stream_t *inStr;   /* Jasper input stream */
     int fmtid;             /* Format ID */
     char *fmtname;         /* Format name */
-    jas_image_t *image;    /* The input image */
+    jas_image_t *image = NULL;    /* The input image */
     /* Number of image components */
     nitf_Uint32 numComponents;
     nitf_Uint32 i, j;
@@ -396,28 +407,11 @@ NITFPRIV(int) readJPEG2000(nitf_Uint8 *input,
 
     /*      Copy the result to the output buffer */
     outputp = *output;
-    /*printf("component size: [%d]\n", componentLength);*/
     for (component = 0; component < numComponents; component++)
     {
-        /*jas_stream_memobj_t* memobj = NULL;*/
-
         numRows       = jas_image_cmptheight(image, component);
         numCols       = jas_image_cmptwidth(image, component);
         assert(jas_image_cmptprec(image, component) == numBits);
-
-        /*printf("Real Rows [%d]\n", numRows);
-        printf("Real Cols [%d]\n", numCols);*/
-
-        /*outStr = image->cmpts_[component]->stream_;
-        memobj = (jas_stream_memobj_t*) outStr->obj_;*/
-        /*jas_stream_flush(outStr);*/
-
-        /*printf("Total bufsize for component #%d: [%d]\n", component,
-               memobj->bufsize_);*/
-
-        /* When we skip, we leave zeros from (c)alloc */
-        /*memcpy(outputp, outStr->ptr_, outStr->cnt_);*/
-        /*memcpy(outputp, memobj->buf_, memobj->bufsize_);*/
 
         if (numBytes == 1)
         {
@@ -462,36 +456,35 @@ NITFPRIV(int) decode(ImplControl* implControl,
                      nitf_IOInterface* io,
                      nitf_Error* error)
 {
-    nitf_Uint8 *input;        /* Input (compressed) image data */
-    nitf_Uint8 *output;       /* Output (decompressed) image data */
-    nitf_Uint64 outputLen;    /* Output (decompressed) image data */
-    nitf_Uint64 expected = 
+    nitf_Uint8 *input = NULL;  /* Input (compressed) image data */
+    nitf_Uint8 *output = NULL; /* Output (decompressed) image data */
+    nitf_Uint64 outputLen;     /* Output (decompressed) image data */
+    nitf_Uint64 expected;
+    nitf_Off found;
+
+    expected =
         (nitf_Uint64)(implControl->blockInfo.length) *
         (nitf_Uint64)(implControl->blockInfo.numBlocksPerRow) *
         (nitf_Uint64)(implControl->blockInfo.numBlocksPerCol);
 
-    int check;
-
     /*      Seek the handle to the start of data */
-    nitf_Off found = nitf_IOInterface_seek(io,
-                                           implControl->offset,
-                                           NITF_SEEK_SET, error);
+    found = nitf_IOInterface_seek(io, implControl->offset,
+                                  NITF_SEEK_SET, error);
 
-    if (!NITF_IO_SUCCESS(found)) return 0;
+    if (!NITF_IO_SUCCESS(found))
+        goto CATCH_ERROR;
 
     /*  Allocate read buffer */
-    input = implMemAlloc(implControl->fileLength, error);
-    if (input == NULL) return 0;
+    if (!(input = implMemAlloc(implControl->fileLength, error)))
+        goto CATCH_ERROR;
 
     /*  Read compressed data */
-
-    check = nitf_IOInterface_read(io, (char*)input, 
-                                  implControl->fileLength, error);
-
-    if (!NITF_IO_SUCCESS(check)) return 0;
+    if (!NITF_IO_SUCCESS(nitf_IOInterface_read(
+            io, (char*)input, implControl->fileLength, error)))
+        goto CATCH_ERROR;
 
     /*  Decompress image */
-    check = readJPEG2000(input, 
+    if (!readJPEG2000(input,
                          (nitf_Uint32) (implControl->fileLength),
                          &output,
                          &outputLen,
@@ -499,13 +492,10 @@ NITFPRIV(int) decode(ImplControl* implControl,
                          &(implControl->nBytes),
                          &(implControl->nBands),
                          expected,
-                         error);
-    implControl->imageSkip = outputLen/implControl->nBands;
+                         error))
+        goto CATCH_ERROR;
 
-    /*  Free input buffer  */
-    implMemFree(input);
-    input = NULL;
-    if (!check) return 0;
+    implControl->imageSkip = outputLen/implControl->nBands;
     if (outputLen > expected)
     {
         nitf_Error_initf(error,
@@ -514,26 +504,37 @@ NITFPRIV(int) decode(ImplControl* implControl,
                            "Bad decompressed block size %lld. (expected %lld)",
                            outputLen,
                            expected);
-        return 0;
+        goto CATCH_ERROR;
     }
+
+    implMemFree(input);
     implControl->data = output;
     return 1;
+
+  CATCH_ERROR:
+    if (input)
+        implMemFree(input);
+    if (output)
+        implMemFree(output);
+    return 0;
 }
-
-
 
 NITFPRIV(void) implClose(nitf_DecompressionControl** control)
 {
     ImplControl *implControl;   /* The object */
     implControl = (ImplControl *) * control;
-    if (implControl->data != NULL)
+    if (implControl)
     {
-        implMemFree((void*)implControl->data);
-        implControl->data = NULL;
+        if (implControl->data != NULL)
+        {
+            implMemFree((void*)implControl->data);
+            implControl->data = NULL;
+        }
+        implMemFree((void *)(*control));
     }
-    implMemFree((void *)(*control));
     *control = NULL;
 }
+
 NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
                                               nitf_Uint64        offset,
                                               nitf_Uint64        fileLength,
@@ -541,7 +542,7 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
                                               nitf_Uint64*       blockMask,
                                               nitf_Error*        error)
 {
-    ImplControl *implControl;    /* The answer */
+    ImplControl *implControl = NULL;
 
     /*      Allocate the result */
     implControl = (ImplControl *) NITF_MALLOC(sizeof(ImplControl));
@@ -558,6 +559,11 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
     implControl->data       = NULL;
     implControl->fileLength = fileLength;
     implControl->blockInfo  = *blockInfo;
+    implControl->nCols      = 0;
+    implControl->nBytes     = 0;
+    implControl->nBands     = 0;
+    implControl->imageSkip  = 0;
+    implControl->data       = NULL;
 
     /*     Decode data */
     if ( ! decode(implControl, io, error) )

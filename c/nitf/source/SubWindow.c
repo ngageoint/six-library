@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -48,11 +48,9 @@ NITFAPI(nitf_SubWindow *) nitf_SubWindow_construct(nitf_Error * error)
 }
 
 
-NITFAPI(NITF_BOOL) nitf_SubWindow_setDownSampler(nitf_SubWindow *
-        subWindow,
-        nitf_DownSampler *
-        downsampler,
-        nitf_Error * error)
+NITFAPI(NITF_BOOL) nitf_SubWindow_setDownSampler(nitf_SubWindow *subWindow,
+                                                 nitf_DownSampler *downsampler,
+                                                 nitf_Error * error)
 {
     assert(subWindow);
     subWindow->downsampler = downsampler;
@@ -64,13 +62,6 @@ NITFAPI(void) nitf_SubWindow_destruct(nitf_SubWindow ** subWindow)
 {
     if (*subWindow)
     {
-        /*
-           if ( (*subWindow)->downsampler)
-           {
-           nitf_DownSampler_destruct( & (*subWindow)->downsampler );
-
-           }
-         */
         NITF_FREE(*subWindow);
         *subWindow = NULL;
     }

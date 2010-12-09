@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,5 +31,10 @@
 #include "nrt/Sync.h"
 #include "nrt/Directory.h"
 #include "nrt/IOHandle.h"
+
+NRTPROT(nrt_Uint16) nrt_System_swap16(nrt_Uint16 ins);
+NRTPROT(nrt_Uint32) nrt_System_swap32(nrt_Uint32 inl);
+NRTPROT(nrt_Uint32) nrt_System_swap64c(nrt_Uint64 inl);
+NRTPROT(nrt_Uint64) nrt_System_swap64(nrt_Uint64 inl);
 
 #endif

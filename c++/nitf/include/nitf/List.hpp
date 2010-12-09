@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -143,9 +143,6 @@ public:
     //! Get the current
     nitf::ListNode & getCurrent() { return mCurrent; }
 
-    //! Set the current
-    void setCurrent(const nitf::ListNode & value) { mCurrent = value; }
-
 private:
     nitf_ListIterator handle;
     nitf::ListNode mCurrent;
@@ -159,6 +156,9 @@ private:
 
     //! Reset member objects
     void setMembers() { mCurrent.setNative(handle.current); }
+
+    //! Set the current
+    void setCurrent(const nitf::ListNode & value) { mCurrent = value; }
 };
 
 

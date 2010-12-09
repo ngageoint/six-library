@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -98,7 +98,11 @@ bool nitf::ListIterator::operator!=(const nitf::ListIterator& it2)
     return this->notEqualTo((nitf::ListIterator&)it2);
 }
 
-void nitf::ListIterator::increment() { nitf_ListIterator_increment(&handle); }
+void nitf::ListIterator::increment()
+{
+    nitf_ListIterator_increment(&handle);
+    setMembers();
+}
 
 void nitf::ListIterator::operator++(int x) { increment(); }
 

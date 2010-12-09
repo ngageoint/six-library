@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -46,13 +46,13 @@ typedef void (*NITF_IWRITEHANDLER_DESTRUCT)(NITF_DATA *);
  *  \struct nitf_IWriteHandler
  *  \brief The "write handler" interface, which handles writing data
  */
-typedef struct _NITF_IWriteHandler
+typedef struct _nitf_IWriteHandler
 {
     NITF_IWRITEHANDLER_WRITE write;
     NITF_IWRITEHANDLER_DESTRUCT destruct;
 } nitf_IWriteHandler;
 
-typedef struct _NITF_WriteHandler
+typedef struct _nitf_WriteHandler
 {
     nitf_IWriteHandler *iface;
     NITF_DATA *data;

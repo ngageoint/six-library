@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,7 @@
 #define __NITF_DEFINES_H__
 
 /* The version of the NITF library */
-#define NITF_LIB_VERSION    "2.5"
+#define NITF_LIB_VERSION    "2.7"
 
 /**
  * Macro which declares a TRE Plugin

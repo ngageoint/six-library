@@ -1,19 +1,19 @@
 [Setup]
 AppName=NITRO
-AppVersion=2.6-dev
-AppVerName=NITRO 2.6-dev
+AppVersion=2.7-dev
+AppVerName=NITRO 2.7-dev
 AppPublisherURL=http://nitro-nitf.sourceforge.net/
 AppSupportURL=http://nitro-nitf.sourceforge.net/
 AppUpdatesURL=http://sourceforge.net/projects/nitro-nitf/
-DefaultDirName={pf}\nitro-nitf\nitro-2.6-dev
+DefaultDirName={pf}\nitro-nitf\nitro-2.7-dev
 DefaultGroupName=NITRO
 AllowNoIcons=yes
 LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=nitro-2.6-dev-setup
-UninstallDisplayName=NITRO 2.6-dev
+OutputBaseFilename=nitro-2.7-dev-setup
+UninstallDisplayName=NITRO 2.7-dev
 SetupIconFile=NITRO.ico
 WizardSmallImageFile=NITRO_small.bmp
 WizardImageFile=NITRO.bmp
@@ -75,7 +75,7 @@ Source: "..\..\java\nitf\src\test\*"; DestDir: "{app}\share\nitf\samples\java"; 
 Source: "..\..\python\nitf\src\python\nitf\*.py"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\target\win32-release\python\nitf\*.pyd"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\python\nitf\src\test\python\*.py"; DestDir: "{app}\share\nitf\samples\python"; Flags: ignoreversion skipifsourcedoesntexist; Components: samples\python;
-;Source: "..\..\python\nitf\dist\nitro-python-2.6-dev.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
+;Source: "..\..\python\nitf\dist\nitro-python-2.7-dev.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\java\nitf\target\site\apidocs\*"; DestDir: "{app}\share\nitf\doc\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;
 Source: "..\..\c\nitf\doc\html\*"; DestDir: "{app}\share\nitf\doc\api\c"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\c;
 Source: "..\..\c++\doc\html\*"; DestDir: "{app}\share\nitf\doc\api\c++"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\cpp;
@@ -105,6 +105,6 @@ Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "NITF_PLUGIN_PA
 Name: "{group}\{cm:UninstallProgram,NITRO}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: "{app}\nitro-python-2.6-dev.win32.exe"; Description: "Install Python Bindings"; Flags: skipifsilent skipifdoesntexist
+Filename: "{app}\nitro-python-2.7-dev.win32.exe"; Description: "Install Python Bindings"; Flags: skipifsilent skipifdoesntexist
 
 

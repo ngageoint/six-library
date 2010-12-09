@@ -31,12 +31,14 @@ if __name__ == '__main__':
     
     #update version of C Makefiles
     makefiles = [os.path.join(top_dir, 'c/nitf/build/Makefile.in'),
+                 os.path.join(top_dir, 'c/cgm/build/Makefile.in'),
+                 os.path.join(top_dir, 'c++/nitf/build/project.make.in'),
                  os.path.join(top_dir, 'java/cgm/src/jni/build/Makefile.in'),
                  os.path.join(top_dir, 'java/nitf/src/jni/build/Makefile.in'),]
     for line in fileinput.input(makefiles, inplace=1):
         line = re.sub(r'(\s*MAJOR_VERSION\s*=\s*)\d+', r'\g<1>%s' % major, line)
         line = re.sub(r'(\s*MINOR_VERSION\s*=\s*)\d+', r'\g<1>%s' % minor, line)
-        line = re.sub(r'(\s*VERSION_SUFFIX\s*=\s*).+', r'\g<1>%s' % suffix or '', line)
+        line = re.sub(r'(\s*VERSION_SUFFIX\s*=)\s*.+', r'\g<1>%s' % suffix or '', line)
         sys.stdout.write(line)
     
     #update java properties file
@@ -76,7 +78,13 @@ if __name__ == '__main__':
     #update python setup.py
     setupFile = os.path.join(top_dir, 'python/nitf/setup.py')
     for line in fileinput.input(setupFile, inplace=1):
-        line = re.sub(r'version\s*=\s*\'.*\',', r"version = '%s'" % fullVersion, line)
+        line = re.sub(r'version\s*=\s*\'.*\',', r"version = '%s'," % fullVersion, line)
+        sys.stdout.write(line)
+    
+    #update NITF_LIB_VERSION
+    setupFile = os.path.join(top_dir, 'c/nitf/include/nitf/Defines.h')
+    for line in fileinput.input(setupFile, inplace=1):
+        line = re.sub(r'(NITF_LIB_VERSION\s*)["][^"]+["]', r'\g<1>"%s.%s"' % (major, minor), line)
         sys.stdout.write(line)
     
     #update windows installer

@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -33,6 +33,10 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageReader_00024Destructor_destructMemory
     nitf_ImageReader *reader = (nitf_ImageReader*)address;
     if (reader)
     {
+        /* nitf_Reader.c: Java_nitf_Reader_getNewImageReader sets this */
+        if (reader->input)
+            _ManageObject(env, (jlong)reader->input, JNI_TRUE);
+
         nitf_ImageReader_destruct(&reader);
         return JNI_TRUE;
     }

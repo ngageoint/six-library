@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -28,7 +28,9 @@
 #   define NRT_IO_SUCCESS(I) ((I) >= 0)
 
 /* How many times should we try to read until we declare the IOHandle dead.  Use a timeout later. */
+#ifndef NITF_MAX_READ_ATTEMPTS
 #define NRT_MAX_READ_ATTEMPTS 100
+#endif
 
 NRT_CXX_GUARD
 

@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -280,7 +280,8 @@ JNIEXPORT jboolean JNICALL Java_nitf_IOInterface_00024Destructor_destructMemory
     nitf_Error error;
     if (interface)
     {
-        /*nitf_IOInterface_close(interface, &error);*/
+        if (interface && interface->iface && interface->data)
+            nitf_IOInterface_close(interface, &error);
         nitf_IOInterface_destruct(&interface);
         return JNI_TRUE;
     }

@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -238,7 +238,7 @@ typedef void (*_NITF_IMAGE_IO_PACK_FUNC)
 */
 
 typedef void (*_NITF_IMAGE_IO_UNFORMAT_FUNC)
-(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount);
+(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount);
 
 /*!
   \brief _NITF_IMAGE_IO_FORMAT_FUNC - Pixel format function pointer
@@ -251,7 +251,7 @@ typedef void (*_NITF_IMAGE_IO_UNFORMAT_FUNC)
 */
 
 typedef void (*_NITF_IMAGE_IO_FORMAT_FUNC)
-(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount);
+(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount);
 
 /*!
   \brief Pad pixel scan function pointer
@@ -511,7 +511,7 @@ typedef struct
     nitf_Uint32 nBlocksPerColumn; /*!< Number of blocks per column */
     nitf_Uint32 numRowsPerBlock;    /*!< Number of rows per block */
     nitf_Uint32 numColumnsPerBlock; /*!< Number of columns per block */
-    nitf_Uint32 blockSize;      /*!< Block size in bytes */
+    size_t blockSize;               /*!< Block size in bytes */
     nitf_Uint32 nBlocksTotal;     /*!< Total number of blocks */
     nitf_Uint32 numRowsActual;    /*!< Actual number of rows */
     nitf_Uint32 numColumnsActual; /*!< Actual number of columns */
@@ -659,10 +659,10 @@ typedef struct _nitf_ImageIOControl_s
     int padded;
 
     /*! Total I/O count */
-    nitf_Uint32 ioCount;
+    size_t ioCount;
 
     /*! I/O done count down */
-    nitf_Uint32 ioCountDown;
+    size_t ioCountDown;
 
     /*! Save buffer for partial down-sample windows */
     nitf_Uint8 *columnSave;
@@ -832,16 +832,16 @@ typedef struct _nitf_ImageIOBlock_s
     nitf_Uint32 userEqBuffer;
 
     /*! Read count in bytes */
-    nitf_Uint32 readCount;
+    size_t readCount;
 
     /*! Pixel count for this operation, FR */
-    nitf_Uint32 pixelCountFR;
+    size_t pixelCountFR;
 
     /*! Pixel count for this operation, DR */
-    nitf_Uint32 pixelCountDR;
+    size_t pixelCountDR;
 
     /*! Format count for this operation */
-    nitf_Uint32 formatCount;
+    size_t formatCount;
 
     /*! Byte count of pad pixel columns to write */
     nitf_Uint32 padColumnCount;
@@ -933,8 +933,9 @@ typedef struct _nitf_ImageIO_BPixelControl
     
     /*! Saved open argument */
     nitf_Uint64 *blockMask;
+
     /*! Size of compressed block in bytes */
-    nitf_Uint32 blockSizeCompressed;
+    size_t blockSizeCompressed;
 
     /*! Buffer for compressed block */
     nitf_Uint8 *buffer;
@@ -965,10 +966,10 @@ typedef struct _nitf_ImageIO_12PixelControl
     nitf_Uint32 odd;
 
     /*! Number of pixels in block */
-    nitf_Uint32 blockPixelCount;
+    size_t blockPixelCount;
 
     /*! Size of compressed block in bytes */
-    nitf_Uint32 blockSizeCompressed;
+    size_t blockSizeCompressed;
 
     /*! Buffer for compressed block */
     nitf_Uint8 *buffer;
@@ -1002,13 +1003,13 @@ typedef struct _nitf_ImageIO_12PixelComControl
     nitf_Uint32 odd;
 
     /*! Number of pixels in block */
-    nitf_Uint32 blockPixelCount;
+    size_t blockPixelCount;
 
     /*! Size of uncompressed block in bytes */
-    nitf_Uint32 blockSizeUncompressed;
+    size_t blockSizeUncompressed;
 
     /*! Size of compressed block in bytes */
-    nitf_Uint32 blockSizeCompressed;
+    size_t blockSizeCompressed;
 
     /*! Amount of data written so far */
     nitf_Uint64 written;
@@ -1039,7 +1040,7 @@ On error, the supplied error object is set. Possible errors include:
 Invalid type code
 */
 
-NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
                                        nitf_ImageSubheader *subhdr,
                                        nitf_Error * errorBuffer);
 
@@ -1052,7 +1053,7 @@ NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
  * \param nitfI        the ImageIO structure
  * \param numBands    the number of bands (when reading), or 0 when writing.
  */
-NITFPROT(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, 
+NITFPRIV(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI,
                                                  int numBands);
 
 
@@ -1075,7 +1076,7 @@ by the user.
 */
 
 /*!< nitf_ImageIO object */
-NITFPROT(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf);
+NITFPRIV(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf);
 
 /*!
   \brief nitf_ImageIO_setPixelDef - Set the pixel definition
@@ -1105,7 +1106,7 @@ NITFPROT(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf);
   
 */
 
-NITFPROT(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf, 
+NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
                                        char *pixelType, 
                                        nitf_Uint32 nBits,
                                        nitf_Uint32 nBitsActual,
@@ -1131,7 +1132,7 @@ by the user.
 */
 
 /*!< nitf_ImageIO object */
-NITFPROT(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf);
+NITFPRIV(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf);
 
 /*!
   \brief nitf_ImageIO_allocBlockArray -  Allocate the IO control structure's
@@ -1156,7 +1157,7 @@ Memory allocation error
 
 /*!< Number of block columns */
 /*!< Number of bands */
-NITFPROT(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray(nitf_Uint32 numColumns, nitf_Uint32 numBands, nitf_Error * error       /*! Error object */
+NITFPRIV(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray(nitf_Uint32 numColumns, nitf_Uint32 numBands, nitf_Error * error       /*! Error object */
                                                             );
 
 /*!
@@ -1170,7 +1171,7 @@ NITFPROT(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray(nitf_Uint32 numColu
 */
 
 /*!< The array to free */
-NITFPROT(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs);
+NITFPRIV(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs);
 
 /*!
   \brief nitf_ImageIO_setup_SBR - Do read/write setup for the "S", "B", and "R"
@@ -1329,7 +1330,7 @@ Memory allocation error
 
 /*!< nitf_ImageIO object */
 /*!< IO handle for read */
-NITFPROT(_nitf_ImageIOControl *) nitf_ImageIOControl_construct(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Uint8 ** user,  /*!< User data buffer pointers */
+NITFPRIV(_nitf_ImageIOControl *) nitf_ImageIOControl_construct(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Uint8 ** user,  /*!< User data buffer pointers */
         nitf_SubWindow * subWindow,      /*!< Sub-window to process */
         int reading,     /*!< Reading if TRUE, else writing */
         nitf_Error * error       /*!< Error object */
@@ -1362,7 +1363,7 @@ directly by the user.
 */
 
 /*!< Pointer to nitf_ImageIO I/O control object */
-NITFPROT(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl);
+NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl);
 
 /*!
   \brief nitf_ImageIOWriteControl_construct - Allocate and initialize a write
@@ -1383,7 +1384,7 @@ Memory allocation error
 
 /*!< Associated I/O control object */
 /*!< Associated IO handle */
-NITFPROT(_nitf_ImageIOWriteControl *) nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, _nitf_ImageIO_writeMethod method,   /*!< Writing method that will be used */
+NITFPRIV(_nitf_ImageIOWriteControl *) nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, _nitf_ImageIO_writeMethod method,   /*!< Writing method that will be used */
         nitf_Error * error     /*!< Error object */
                                                                         );
 
@@ -1395,7 +1396,7 @@ NITFPROT(_nitf_ImageIOWriteControl *) nitf_ImageIOWriteControl_construct(_nitf_I
   */
 
 /*!< Pointer to write control object */
-NITFPROT(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
+NITFPRIV(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
         ** cntl);
 
 /*!
@@ -1416,7 +1417,7 @@ Memory allocation error
 
 /*!< Associated I/O control object */
 /*!< Sub-window to read */
-NITFPROT(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct(_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow, nitf_Error * error      /*!< Error object */
+NITFPRIV(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct(_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow, nitf_Error * error      /*!< Error object */
                                                                       );
 
 /*!
@@ -1427,7 +1428,7 @@ NITFPROT(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct(_nitf_Ima
   */
 
 /*!< Pointer to read control object */
-NITFPROT(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
+NITFPRIV(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
         cntl);
 
 /*!
@@ -1447,7 +1448,7 @@ directly by the user.
 
 */
 
-NITFPROT(int) nitf_ImageIO_bigEndian(void);
+NITFPRIV(int) nitf_ImageIO_bigEndian(void);
 
 /*!
   \brief nitf_ImageIO_checkSubWindow - Check a sub-window
@@ -1477,7 +1478,7 @@ Invalid dimension or band
 
 /*!< The nitf_ImageIO object used do the check */
 /*!< The sub-window to check */
-NITFPROT(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf, nitf_SubWindow * subWindow, int *all,   /*!< Returns TRUE if the sub-window is the entire image */
+NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf, nitf_SubWindow * subWindow, int *all,   /*!< Returns TRUE if the sub-window is the entire image */
         nitf_Error * error    /*!< Error object */
                                          );
 
@@ -1514,7 +1515,7 @@ No compression (for now)
 
 /*!< The NITF object internal data */
 /*!< Entire image is being read if TRUE */
-NITFPROT(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
+NITFPRIV(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
         NITF_BOOL all);
 
 /*!
@@ -1547,7 +1548,7 @@ I/O Error
 
 /*!< The ImageIO object */
 /*!< IO handle for reads */
-NITFPROT(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img, nitf_IOInterface* io, int reading,       /*!< Read operation if TRUE */
+NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img, nitf_IOInterface* io, int reading,       /*!< Read operation if TRUE */
                                    nitf_Error * error   /*!< Used for error handling */
                                   );
 
@@ -1576,7 +1577,7 @@ I/O Error
 
 /*!< The ImageIO object */
 /*!< IO handle for reads */
-NITFPROT(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface *io, nitf_Uint32 blockCount,   /*!< Total number of blocks in the file */
+NITFPRIV(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface *io, nitf_Uint32 blockCount,   /*!< Total number of blocks in the file */
         int reading,  /*!< Read operation if TRUE */
         nitf_Error * error    /*!< Used for error handling */
                                          );
@@ -1594,7 +1595,7 @@ NITFPROT(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface
 
 /*!< The ImageIO object */
 /*!< IO handle for reads */
-NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Error * error        /*!< Used for error handling */
+NITFPRIV(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Error * error        /*!< Used for error handling */
                                          );
 
 /*!
@@ -1609,7 +1610,7 @@ NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf, nitf_IOInterface
 */
 
 /*<! the header to byte swap */
-NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
+NITFPRIV(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
         header);
 
 /*!
@@ -1625,7 +1626,7 @@ NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
 
 /*!< The ImageIO object */
 /*!< IO handle for reads */
-NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Error * error    /*!< Used for error handling */
+NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf, nitf_IOInterface* io, nitf_Error * error    /*!< Used for error handling */
                                      );
 
 /*!
@@ -1655,7 +1656,7 @@ I/O error
 
 /*!< The control structure */
 /*!< I/O handle */
-NITFPROT(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, nitf_Error * error        /*!< Error object */
+NITFPRIV(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, nitf_Error * error        /*!< Error object */
                                   );
 
 /*!
@@ -1680,7 +1681,7 @@ I/O error
 
 /*!< The control structure */
 /*!< I/O handle */
-NITFPROT(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, nitf_Error * error    /*!< Error object */
+NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, nitf_Error * error    /*!< Error object */
                                       );
 
 /*!
@@ -1705,7 +1706,7 @@ I/O error
 
 /*!< The control structure */
 /*!< Associated sub-window object */
-NITFPROT(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow, nitf_IOInterface* io, /*!< I/O handle */
+NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow, nitf_IOInterface* io, /*!< I/O handle */
         nitf_Error * error     /*!< Error object */
                                                 );
 
@@ -1728,7 +1729,7 @@ Memory allocation error
 
 /*!< Associated I/O control structure */
 /*!< Error object */
-NITFPROT(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
+NITFPRIV(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
                                        nitf_Error * error);
 
 /*!
@@ -1752,7 +1753,7 @@ Memory allocation error
 
 /*!< NITF block structure */
 /*!< Error object */
-NITFPROT(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
                                    nitf_Error * error);
 
 /*!
@@ -1775,8 +1776,8 @@ I/O error
 
 /*!< IO handle for read */
 /*!< File offset for read */
-NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io, nitf_Uint64 fileOffset, nitf_Uint8 * buffer,      /*!< Data buffer to read into */
-                                        nitf_Uint32 count,      /*!< Number of bytes to read */
+NITFPRIV(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io, nitf_Uint64 fileOffset, nitf_Uint8 * buffer,      /*!< Data buffer to read into */
+                                        size_t count,      /*!< Number of bytes to read */
                                         nitf_Error * errorBuffer        /*!< Error object */
                                        );
 
@@ -1800,9 +1801,9 @@ I/O error
 
 /*!< IO handle for write */
 /*!< File offset for write */
-NITFPROT(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io, 
+NITFPRIV(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
                                        nitf_Uint64 fileOffset, const nitf_Uint8 * buffer, /*!< Data buffer to write from */
-                                       nitf_Uint32 count,       /*!< Number of bytes to write */
+                                       size_t count,       /*!< Number of bytes to write */
                                        nitf_Error * errorBuffer /*!< Error object */
                                       );
 
@@ -1843,13 +1844,13 @@ On error, the supplied error object is set. Possible errors include:
 I/O error
 */
 
-NITFPROT(int) nitf_ImageIO_writeToBlock
+NITFPRIV(int) nitf_ImageIO_writeToBlock
 (
     _nitf_ImageIOBlock * blockIO, /*!< Associated block control */
     nitf_IOInterface* io,         /*!< IO handle for write */
-    nitf_Uint32 blockOffset,      /*!< Offset into block buffer for write */
+    size_t blockOffset,      /*!< Offset into block buffer for write */
     const nitf_Uint8 * buffer,    /*!< Data buffer to write from */
-    nitf_Uint32 count,            /*!< Number of bytes to write */
+    size_t count,            /*!< Number of bytes to write */
     nitf_Error * error            /*!< Error object */
 );
 
@@ -1873,7 +1874,7 @@ directly by the user.
 
 /*!< NITF block structure */
 /*!< Do not increment user buffer pointer if TRUE */
-NITFPROT(void) nitf_ImageIO_nextRow(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(void) nitf_ImageIO_nextRow(_nitf_ImageIOBlock * blockIO,
                                     NITF_BOOL noUserInc);
 
 /*!
@@ -2114,22 +2115,22 @@ directly by the user.
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatExtend_1(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_unformatExtend_1(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatExtend_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_unformatExtend_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatExtend_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_unformatExtend_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatExtend_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_unformatExtend_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!
@@ -2160,22 +2161,22 @@ directly by the user.
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatShift_1(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount        /*!< Number of bits to shift */
+void nitf_ImageIO_unformatShift_1(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount        /*!< Number of bits to shift */
                                  );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatShift_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount        /*!< Number of bits to shift */
+void nitf_ImageIO_unformatShift_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount        /*!< Number of bits to shift */
                                  );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatShift_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount        /*!< Number of bits to shift */
+void nitf_ImageIO_unformatShift_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount        /*!< Number of bits to shift */
                                  );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatShift_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount        /*!< Number of bits to shift */
+void nitf_ImageIO_unformatShift_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount        /*!< Number of bits to shift */
                                  );
 
 /*!
@@ -2206,22 +2207,22 @@ directly by the user.
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatUShift_1(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_unformatUShift_1(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatUShift_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_unformatUShift_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatUShift_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_unformatUShift_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatUShift_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_unformatUShift_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!
@@ -2258,37 +2259,37 @@ directly by the user.
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_swapOnly_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount     /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_swapOnly_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount     /*!< Number of bits to shift (unused) */
                             );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_swapOnly_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount     /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_swapOnly_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount     /*!< Number of bits to shift (unused) */
                             );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount    /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount    /*!< Number of bits to shift (unused) */
                              );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount    /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount    /*!< Number of bits to shift (unused) */
                              );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_swapOnly_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount     /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_swapOnly_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount     /*!< Number of bits to shift (unused) */
                             );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_swapOnly_8c(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount    /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_swapOnly_8c(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount    /*!< Number of bits to shift (unused) */
                              );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_swapOnly_16c(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_swapOnly_16c(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift (unused) */
                               );
 
 /*!
@@ -2318,17 +2319,17 @@ directly by the user.
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatSwapExtend_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_unformatSwapExtend_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift (unused) */
                                       );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatSwapExtend_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_unformatSwapExtend_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift (unused) */
                                       );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatSwapExtend_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift (unused) */
+void nitf_ImageIO_unformatSwapExtend_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift (unused) */
                                       );
 
 /*!
@@ -2358,17 +2359,17 @@ directly by the user.
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatSwapShift_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount    /*!< Number of bits to shift */
+void nitf_ImageIO_unformatSwapShift_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount    /*!< Number of bits to shift */
                                      );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatSwapShift_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount    /*!< Number of bits to shift */
+void nitf_ImageIO_unformatSwapShift_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount    /*!< Number of bits to shift */
                                      );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatSwapShift_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount    /*!< Number of bits to shift */
+void nitf_ImageIO_unformatSwapShift_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount    /*!< Number of bits to shift */
                                      );
 
 /*!
@@ -2398,17 +2399,17 @@ directly by the user.
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatSwapUShift_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
+void nitf_ImageIO_unformatSwapUShift_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
                                       );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatSwapUShift_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
+void nitf_ImageIO_unformatSwapUShift_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
                                       );
 
 /*!< Buffer holding the data to unformat */
 /*!< Number of values to unformat */
-void nitf_ImageIO_unformatSwapUShift_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
+void nitf_ImageIO_unformatSwapUShift_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
                                       );
 
 /*!
@@ -2439,22 +2440,22 @@ the user.
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatShift_1(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount  /*!< Number of bits to shift */
+void nitf_ImageIO_formatShift_1(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount  /*!< Number of bits to shift */
                                );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatShift_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount  /*!< Number of bits to shift */
+void nitf_ImageIO_formatShift_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount  /*!< Number of bits to shift */
                                );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatShift_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount  /*!< Number of bits to shift */
+void nitf_ImageIO_formatShift_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount  /*!< Number of bits to shift */
                                );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatShift_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount  /*!< Number of bits to shift */
+void nitf_ImageIO_formatShift_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount  /*!< Number of bits to shift */
                                );
 
 /*!
@@ -2484,22 +2485,22 @@ the user.
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatMask_1(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
+void nitf_ImageIO_formatMask_1(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
                               );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatMask_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
+void nitf_ImageIO_formatMask_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
                               );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatMask_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
+void nitf_ImageIO_formatMask_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
                               );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatMask_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
+void nitf_ImageIO_formatMask_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount   /*!< Number of bits to shift */
                               );
 
 /*!
@@ -2529,17 +2530,17 @@ the user.
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatShiftSwap_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount      /*!< Number of bits to shift */
+void nitf_ImageIO_formatShiftSwap_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount      /*!< Number of bits to shift */
                                    );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatShiftSwap_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount      /*!< Number of bits to shift */
+void nitf_ImageIO_formatShiftSwap_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount      /*!< Number of bits to shift */
                                    );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatShiftSwap_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount      /*!< Number of bits to shift */
+void nitf_ImageIO_formatShiftSwap_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount      /*!< Number of bits to shift */
                                    );
 
 /*!
@@ -2570,17 +2571,17 @@ the user.
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatMaskSwap_2(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_formatMaskSwap_2(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatMaskSwap_4(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_formatMaskSwap_4(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!< Buffer holding the data to format */
 /*!< Number of values to format */
-void nitf_ImageIO_formatMaskSwap_8(nitf_Uint8 * buffer, nitf_Uint32 count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
+void nitf_ImageIO_formatMaskSwap_8(nitf_Uint8 * buffer, size_t count, nitf_Uint32 shiftCount       /*!< Number of bits to shift */
                                   );
 
 /*!
@@ -2602,7 +2603,7 @@ directly by the user.
 
 /*!< nitf_ImageIO object */
 /*!< FILE to use for print */
-NITFPROT(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file);
+NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file);
 
 /*!
   \brief nitf_ImageIOControl_print Do a formatted print of a
@@ -2623,7 +2624,7 @@ directly by the user.
 
 /*!< nitf_ImageIO control object */
 /*!< FILE to use for print */
-NITFPROT(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl, FILE * file, int full     /*!< Full print if TRUE */
+NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl, FILE * file, int full     /*!< Full print if TRUE */
                                         );
 
 /*!
@@ -2643,7 +2644,7 @@ directly by the user.
 
 */
 
-NITFPROT(void) nitf_ImageIOBlock_print
+NITFPRIV(void) nitf_ImageIOBlock_print
 (_nitf_ImageIOBlock * blockIO, FILE * file, int longIndent);
 
 /*!
@@ -3023,12 +3024,13 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
     {
         nitf->nBlocksTotal =
             nitf->nBlocksPerRow * nitf->nBlocksPerColumn * nitf->numBands;
-        nitf->blockSize = numRowsPerBlock * numColumnsPerBlock * (nitf->pixel.bytes);
+        nitf->blockSize = (size_t)numRowsPerBlock *
+                (size_t)numColumnsPerBlock * (nitf->pixel.bytes);
     }
     else
     {
         nitf->nBlocksTotal = nitf->nBlocksPerRow * nitf->nBlocksPerColumn;
-        nitf->blockSize = numRowsPerBlock * numColumnsPerBlock *
+        nitf->blockSize = (size_t)numRowsPerBlock * (size_t)numColumnsPerBlock *
                         (nitf->pixel.bytes) * (nitf->numBands);
     }
 
@@ -3645,7 +3647,7 @@ NITFPROT(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info)
 
 /*=================== nitf_ImageIO_getBlockingInfo ===========================*/
 
-NITFPROT(nitf_BlockingInfo *) 
+NITFPROT(nitf_BlockingInfo *)
 nitf_ImageIO_getBlockingInfo(nitf_ImageIO *
                              image,
                              nitf_IOInterface* io,
@@ -3768,7 +3770,7 @@ NITFPROT(void) nitf_BlockingInfo_print(nitf_BlockingInfo * info,
 /*======================== Internal Functions ================================*/
 /*============================================================================*/
 
-NITFPROT(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBands)
+NITFPRIV(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBands)
 {
     if (nitfI->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_RGB24 &&
         (numBands == 3 || numBands == 0))
@@ -3821,7 +3823,7 @@ NITFPROT(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBa
 
 /*======================== nitf_ImageIO_decodeModes ==========================*/
 
-NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
                                        nitf_ImageSubheader *subhdr,
                                        nitf_Error * error)
 {
@@ -4007,7 +4009,7 @@ NITFPROT(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
     return NITF_SUCCESS;
 }
 
-NITFPROT(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf)
+NITFPRIV(void) nitf_ImageIO_setIO(_nitf_ImageIO * nitf)
 {
 
     /* For now, used uncached reading for uncompressed images */
@@ -4247,7 +4249,7 @@ static unformatTable table[NENTRIES] =
     }
 };
 
-NITFPROT(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
                                        char *pixelType, 
                                        nitf_Uint32 nBits,
                                        nitf_Uint32 nBitsActual,
@@ -4378,7 +4380,7 @@ NITFPROT(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
+NITFPRIV(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
 {
 
     /*
@@ -4422,7 +4424,7 @@ NITFPROT(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
     return;
 }
 
-NITFPROT(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray
+NITFPRIV(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray
 (nitf_Uint32 numColumns, nitf_Uint32 numBands, nitf_Error * error)
 {
     _nitf_ImageIOBlock **blockIOs;        /*!< The result */
@@ -4464,7 +4466,7 @@ NITFPROT(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray
 }
 
 
-NITFPROT(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs)
+NITFPRIV(void) nitf_ImageIO_freeBlockArray(_nitf_ImageIOBlock *** blockIOs)
 {
     /* Dereferenced argument */
     _nitf_ImageIOBlock **blockIOsDeref;
@@ -4995,7 +4997,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
         }
     }
     
-    cntl->ioCount = nBlockCols * nitf->numBands * cntl->numRows;
+    cntl->ioCount = (size_t)nBlockCols * nitf->numBands * cntl->numRows;
     return NITF_SUCCESS;
 }
 
@@ -5460,7 +5462,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
         }
     }
 
-    cntl->ioCount = nBlockCols * nitf->numBands * cntl->numRows;
+    cntl->ioCount = (size_t)nBlockCols * nitf->numBands * cntl->numRows;
     return NITF_SUCCESS;
 }
 
@@ -5471,7 +5473,7 @@ int nitf_ImageIO_done_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 }
 
 
-NITFPROT(_nitf_ImageIOControl *)
+NITFPRIV(_nitf_ImageIOControl *)
 nitf_ImageIOControl_construct(_nitf_ImageIO * nitf, 
                               nitf_IOInterface* io,
                               nitf_Uint8 ** user,
@@ -5641,7 +5643,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
     return cntl;
 }
 
-NITFPROT(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
+NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
 {
     _nitf_ImageIOBlock *blocks;     /* Block I/Os as a linrar array */
     nitf_Uint32 i;
@@ -5702,7 +5704,7 @@ NITFPROT(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
     return;
 }
 
-NITFPROT(_nitf_ImageIOWriteControl *)
+NITFPRIV(_nitf_ImageIOWriteControl *)
 nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl,
                                    nitf_IOInterface* io,
                                    _nitf_ImageIO_writeMethod method,
@@ -5728,7 +5730,7 @@ nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl,
     return result;
 }
 
-NITFPROT(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
+NITFPRIV(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
                                                  ** cntl)
 {
     NITF_FREE(*cntl);
@@ -5737,7 +5739,7 @@ NITFPROT(void) nitf_ImageIOWriteControl_destruct(_nitf_ImageIOWriteControl
 }
 
 
-NITFPROT(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct
+NITFPRIV(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct
 (_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow,
  nitf_Error * error)
 {
@@ -5759,7 +5761,7 @@ NITFPROT(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct
     return result;
 }
 
-NITFPROT(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
+NITFPRIV(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
         cntl)
 {
     NITF_FREE(*cntl);
@@ -5768,7 +5770,7 @@ NITFPROT(void) nitf_ImageIOReadControl_destruct(_nitf_ImageIOReadControl **
 }
 
 
-NITFPROT(int) nitf_ImageIO_bigEndian(void)
+NITFPRIV(int) nitf_ImageIO_bigEndian(void)
 {
     nitf_Uint8 p8[2] =          /* For big-endian test */
         {
@@ -5781,7 +5783,7 @@ NITFPROT(int) nitf_ImageIO_bigEndian(void)
     return ((*p16 == 0x102) ? 1 : 0);
 }
 
-NITFPROT(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
                                           nitf_SubWindow * subWindow,
                                           int *all, nitf_Error * error)
 {
@@ -5898,7 +5900,7 @@ NITFPROT(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
+NITFPRIV(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
                                               NITF_BOOL all)
 {
     NITF_BOOL oneReadA;  /* Complete request in one read flag, partial logic */
@@ -5976,7 +5978,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_checkOneRead(_nitf_ImageIO * nitfI,
 }
 
 
-NITFPROT(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
+NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
                                    nitf_IOInterface* io, int reading,
                                    nitf_Error * error)
 {
@@ -5986,7 +5988,7 @@ NITFPROT(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
     nitf_Uint32 maskSizeFile;   /* Block mask size in bytes in the file */
     nitf_Uint64 maskOffset;     /* Current mask offset */
     nitf_Uint64 *maskp;         /* Current mask entry */
-    nitf_Uint32 bytesPerBlock;  /* Total bytes in one block */
+    size_t bytesPerBlock;       /* Total bytes in one block */
     nitf_Uint32 headerOffset;   /* File offset of masks due to mask header */
     nitf_Uint32 padOffset;      /* File offset of pad mask due to block mask */
     nitf_Uint32 i;
@@ -6161,7 +6163,7 @@ NITF_IMAGE_IO_PAD_SCANNER(_nitf_Image_IO_pad_scan_2, nitf_Uint16)
 NITF_IMAGE_IO_PAD_SCANNER(_nitf_Image_IO_pad_scan_4, nitf_Uint32)
 NITF_IMAGE_IO_PAD_SCANNER(_nitf_Image_IO_pad_scan_8, nitf_Uint64)
 
-NITFPROT(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf,
                                           nitf_IOInterface* io,
                                           nitf_Uint32 blockCount,
                                           int reading, 
@@ -6263,7 +6265,7 @@ NITFPROT(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf,
                                           nitf_IOInterface* io,
                                           nitf_Error * error)
 {
@@ -6323,7 +6325,7 @@ NITFPROT(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
+NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
                                       nitf_IOInterface* io,
                                       nitf_Error * error)
 {
@@ -6396,7 +6398,7 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
     {
         if (!nitf_ImageIO_writeToFile(io, maskOffset,
                                       nitf->pixel.pad,
-                                      nitf->maskHeader.padPixelValueLength,
+                                      (size_t)nitf->maskHeader.padPixelValueLength,
                                       error))
         {
             return NITF_FAILURE;
@@ -6445,7 +6447,7 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
 
         if (!nitf_ImageIO_writeToFile(io, maskOffset,
                                       (nitf_Uint8 *) fileMask,
-                                      nitf->nBlocksTotal *
+                                      (size_t)nitf->nBlocksTotal *
                                       sizeof(nitf_Uint32), error))
         {
             NITF_FREE(fileMask);
@@ -6495,7 +6497,7 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
 
         if (!nitf_ImageIO_writeToFile(io, maskOffset,
                                       (nitf_Uint8 *) fileMask,
-                                      nitf->nBlocksTotal *
+                                      (size_t)nitf->nBlocksTotal *
                                       sizeof(nitf_Uint32), error))
         {
             NITF_FREE(fileMask);
@@ -6509,7 +6511,7 @@ NITFPROT(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
 }
 
 
-NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
+NITFPRIV(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
         header)
 {
     nitf_Uint8 *hp;             /* Points into header */
@@ -6542,18 +6544,18 @@ NITFPROT(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
 }
 
 
-NITFPROT(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl,
+NITFPRIV(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl,
                                    nitf_IOInterface* io,
                                    nitf_Error * error)
 {
     _nitf_ImageIO *nitf; /* Parent _nitf_ImageIO object */
     _nitf_ImageIOBlock *blockIO; /* The current  block IO structure */
-    nitf_Uint32 pixelCount; /* Total pixel count (size of one band in pixels) */
-    nitf_Uint32 count;      /* Total read count (size of one band in bytes) */
+    size_t pixelCount; /* Total pixel count (size of one band in pixels) */
+    size_t count;      /* Total read count (size of one band in bytes) */
 
     nitf = cntl->nitf;
     blockIO = &(cntl->blockIO[0][0]);
-    pixelCount = nitf->numRowsActual * nitf->numColumnsActual;
+    pixelCount = (size_t)nitf->numRowsActual * (size_t)nitf->numColumnsActual;
     count = pixelCount * nitf->pixel.bytes;
 
     if (!nitf_ImageIO_readFromFile(io,
@@ -6575,7 +6577,7 @@ NITFPROT(int) nitf_ImageIO_oneRead(_nitf_ImageIOControl * cntl,
 
 /* This function is used when FR == DR (no down-Sampling) */
 
-NITFPROT(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
+NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                                        nitf_IOInterface* io,
                                        nitf_Error * error)
 {
@@ -6639,7 +6641,7 @@ NITFPROT(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
 }
 
 /* This function is used when FR != DR (down-Sampling) */
-NITFPROT(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
+NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                                                  cntl,
                                                  nitf_SubWindow *
                                                  subWindow,
@@ -6888,7 +6890,7 @@ NITFPROT(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
     return NITF_SUCCESS;
 }
 
-NITFPROT(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
+NITFPRIV(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
                                        nitf_Error * error)
 {
     _nitf_ImageIO *nitf;        /* NITF block structure */
@@ -6919,7 +6921,7 @@ NITFPROT(int) nitf_ImageIO_allocatePad(_nitf_ImageIOControl * cntl,
 }
 
 
-NITFPROT(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
                                    nitf_Error * error)
 {
     _nitf_ImageIOControl *cntl; /* Control structure */
@@ -6935,10 +6937,10 @@ NITFPROT(int) nitf_ImageIO_readPad(_nitf_ImageIOBlock * blockIO,
 }
 
 
-NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
+NITFPRIV(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
                                         nitf_Uint64 fileOffset,
                                         nitf_Uint8 * buffer,
-                                        nitf_Uint32 count,
+                                        size_t count,
                                         nitf_Error * error)
 {
     size_t bytes;               /* Amount of current read */
@@ -6961,10 +6963,10 @@ NITFPROT(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
     return NITF_SUCCESS;
 }
 
-NITFPROT(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
+NITFPRIV(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
                                        nitf_Uint64 fileOffset,
                                        const nitf_Uint8 * buffer,
-                                       nitf_Uint32 count,
+                                       size_t count,
                                        nitf_Error * error)
 {
     
@@ -6980,11 +6982,11 @@ NITFPROT(int) nitf_ImageIO_writeToFile(nitf_IOInterface* io,
     
     return NITF_SUCCESS;
 }
-NITFPROT(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                                         nitf_IOInterface* io,
-                                        nitf_Uint32 blockOffset,
+                                        size_t blockOffset,
                                         const nitf_Uint8 * buffer,
-                                        nitf_Uint32 count, 
+                                        size_t count,
                                         nitf_Error * error)
 {
     _nitf_ImageIO *nitf;        /* Associated image I/O object */
@@ -7149,7 +7151,7 @@ NITFPROT(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
     return NITF_SUCCESS;
 }
 
-NITFPROT(void) nitf_ImageIO_nextRow(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(void) nitf_ImageIO_nextRow(_nitf_ImageIOBlock * blockIO,
                                     NITF_BOOL noUserInc)
 {
     _nitf_ImageIOControl *cntl; /* Associated I/O control structure */
@@ -7336,7 +7338,7 @@ int nitf_ImageIO_uncachedWriter(_nitf_ImageIOBlock * blockIO,
                                       blockIO->blockOffset.mark + 
                                       blockIO->readCount,
                                       cntl->padBuffer,
-                                      blockIO->padColumnCount, 
+                                      (size_t)blockIO->padColumnCount,
                                       error))
             return NITF_FAILURE;
         /* Fill not pad blockIO->padMask[blockIO->number] = blockIO->blockMask[blockIO->number]; */
@@ -7345,9 +7347,9 @@ int nitf_ImageIO_uncachedWriter(_nitf_ImageIOBlock * blockIO,
     if ((blockIO->padRowCount != 0)
         && (blockIO->currentRow >= (nitf->numRows - 1)))
     {
-        nitf_Uint32 writeCount; /* Amount to write each row */
+        size_t writeCount;      /* Amount to write each row */
         nitf_Uint64 offset;     /* File offset for each write */
-        nitf_Uint64 increment;  /* Byte increment between writes */
+        size_t increment;       /* Byte increment between writes */
         nitf_Uint32 rowIdx;     /* Rwo counter */
         
         if (cntl->padBuffer == NULL)
@@ -7408,8 +7410,8 @@ int nitf_ImageIO_cachedWriter(_nitf_ImageIOBlock * blockIO,
     if ((blockIO->padRowCount != 0)
         && (blockIO->currentRow >= (nitf->numRows - 1)))
     {
-        nitf_Uint32 writeCount; /* Amount to write each row */
-        nitf_Uint32 offset;     /* Current offset into block buffer */
+        size_t writeCount; /* Amount to write each row */
+        size_t offset;     /* Current offset into block buffer */
         
         if (cntl->padBuffer == NULL)
             if (!nitf_ImageIO_allocatePad(cntl, error))
@@ -7447,13 +7449,13 @@ void nitf_ImageIO_setDefaultParameters(_nitf_ImageIO * object)
 
 
 void nitf_ImageIO_unformatExtend_1(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Int8 shift;            /* Shift count */
     nitf_Int8 *bp8;             /* Buffer pointer, 8 bit */
     nitf_Int16 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int8) shiftCount;
     bp8 = (nitf_Int8 *) buffer;
@@ -7468,13 +7470,13 @@ void nitf_ImageIO_unformatExtend_1(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatExtend_2(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Int16 shift;           /* Shift count */
     nitf_Int16 *bp16;           /* Buffer pointer, 16 bit */
     nitf_Int16 tmp16;           /* Temp value, 16 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int16) shiftCount;
     bp16 = (nitf_Int16 *) buffer;
@@ -7489,13 +7491,13 @@ void nitf_ImageIO_unformatExtend_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatExtend_4(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Int32 shift;           /* Shift count */
     nitf_Int32 *bp32;           /* Buffer pointer, 32 bit */
     nitf_Int32 tmp32;           /* Temp value, 32 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int32) shiftCount;
     bp32 = (nitf_Int32 *) buffer;
@@ -7512,13 +7514,13 @@ void nitf_ImageIO_unformatExtend_4(nitf_Uint8 * buffer,
 /* Uses 64 bit types */
 
 void nitf_ImageIO_unformatExtend_8(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Int64 shift;           /* Shift count */
     nitf_Int64 *bp64;           /* Buffer pointer, 64 bit */
     nitf_Int64 tmp64;           /* Temp value, 64 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int64) shiftCount;
     bp64 = (nitf_Int64 *) buffer;
@@ -7535,12 +7537,12 @@ void nitf_ImageIO_unformatExtend_8(nitf_Uint8 * buffer,
 /*========================= nitf_ImageIO_unformatShift_* =====================*/
 
 void nitf_ImageIO_unformatShift_1(nitf_Uint8 * buffer,
-                                  nitf_Uint32 count,
+                                  size_t count,
                                   nitf_Uint32 shiftCount)
 {
     nitf_Int8 shift;            /* Shift count */
     nitf_Int8 *bp8;             /* Buffer pointer, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int8) shiftCount;
     bp8 = (nitf_Int8 *) buffer;
@@ -7552,12 +7554,12 @@ void nitf_ImageIO_unformatShift_1(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatShift_2(nitf_Uint8 * buffer,
-                                  nitf_Uint32 count,
+                                  size_t count,
                                   nitf_Uint32 shiftCount)
 {
     nitf_Int16 shift;           /* Shift count */
     nitf_Int16 *bp16;           /* Buffer pointer, 16 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int16) shiftCount;
     bp16 = (nitf_Int16 *) buffer;
@@ -7569,12 +7571,12 @@ void nitf_ImageIO_unformatShift_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatShift_4(nitf_Uint8 * buffer,
-                                  nitf_Uint32 count,
+                                  size_t count,
                                   nitf_Uint32 shiftCount)
 {
     nitf_Int32 shift;           /* Shift count */
     nitf_Int32 *bp32;           /* Buffer pointer, 32 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int32) shiftCount;
     bp32 = (nitf_Int32 *) buffer;
@@ -7588,12 +7590,12 @@ void nitf_ImageIO_unformatShift_4(nitf_Uint8 * buffer,
 /* Uses 64 bit types */
 
 void nitf_ImageIO_unformatShift_8(nitf_Uint8 * buffer,
-                                  nitf_Uint32 count,
+                                  size_t count,
                                   nitf_Uint32 shiftCount)
 {
     nitf_Int64 shift;           /* Shift count */
     nitf_Int64 *bp64;           /* Buffer pointer, 64 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int64) shiftCount;
     bp64 = (nitf_Int64 *) buffer;
@@ -7604,12 +7606,12 @@ void nitf_ImageIO_unformatShift_8(nitf_Uint8 * buffer,
 }
 
 void nitf_ImageIO_unformatUShift_1(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Uint8 shift;           /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Uint8) shiftCount;
     bp8 = (nitf_Uint8 *) buffer;
@@ -7621,12 +7623,12 @@ void nitf_ImageIO_unformatUShift_1(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatUShift_2(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Uint16 shift;          /* Shift count */
     nitf_Uint16 *bp16;          /* Buffer pointer, 16 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Uint16) shiftCount;
     bp16 = (nitf_Uint16 *) buffer;
@@ -7638,12 +7640,12 @@ void nitf_ImageIO_unformatUShift_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatUShift_4(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Uint32 shift;          /* Shift count */
     nitf_Uint32 *bp32;          /* Buffer pointer, 32 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Uint32) shiftCount;
     bp32 = (nitf_Uint32 *) buffer;
@@ -7656,12 +7658,12 @@ void nitf_ImageIO_unformatUShift_4(nitf_Uint8 * buffer,
 
 /* Uses 64 bit types */
 void nitf_ImageIO_unformatUShift_8(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Uint64 shift;          /* Shift count */
     nitf_Uint64 *bp64;          /* Buffer pointer, 64 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Uint64) shiftCount;
     bp64 = (nitf_Uint64 *) buffer;
@@ -7672,12 +7674,12 @@ void nitf_ImageIO_unformatUShift_8(nitf_Uint8 * buffer,
 }
 
 void nitf_ImageIO_swapOnly_2(nitf_Uint8 * buffer,
-                             nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint16 *bp16;          /* Buffer pointer, 16 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     bp16 = (nitf_Uint16 *) buffer;
     for (i = 0; i < count; i++)
@@ -7693,12 +7695,12 @@ void nitf_ImageIO_swapOnly_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_swapOnly_4(nitf_Uint8 * buffer,
-                             nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint32 *bp32;          /* Buffer pointer, 32 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     bp32 = (nitf_Uint32 *) buffer;
     for (i = 0; i < count; i++)
@@ -7717,12 +7719,12 @@ void nitf_ImageIO_swapOnly_4(nitf_Uint8 * buffer,
 }
 
 void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer,
-                             nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint32 *bp32;          /* Buffer pointer, 32 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
 
     bp32 = (nitf_Uint32 *) buffer;
     for (i = 0; i < count; i++)
@@ -7742,12 +7744,12 @@ void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_swapOnly_8(nitf_Uint8 * buffer,
-                             nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint64 *bp64;          /* Buffer pointer, 64 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     bp64 = (nitf_Uint64 *) buffer;
     for (i = 0; i < count; i++)
@@ -7773,12 +7775,12 @@ void nitf_ImageIO_swapOnly_8(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_swapOnly_8c(nitf_Uint8 * buffer,
-                              nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint64 *bp64;          /* Buffer pointer, 64 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     bp64 = (nitf_Uint64 *) buffer;
     for (i = 0; i < count; i++)
@@ -7804,12 +7806,12 @@ void nitf_ImageIO_swapOnly_8c(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_swapOnly_16c(nitf_Uint8 * buffer,
-                               nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint64 *bp64;          /* Buffer pointer, 64 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     bp64 = (nitf_Uint64 *) buffer;
     for (i = 0; i < count; i++)
@@ -7850,7 +7852,7 @@ void nitf_ImageIO_swapOnly_16c(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatSwapExtend_2(nitf_Uint8 * buffer,
-                                       nitf_Uint32 count,
+                                       size_t count,
                                        nitf_Uint32 shiftCount)
 {
     nitf_Int16 shift;           /* Shift count */
@@ -7858,7 +7860,7 @@ void nitf_ImageIO_unformatSwapExtend_2(nitf_Uint8 * buffer,
     nitf_Int16 *bp16;           /* Buffer pointer, 16 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
     nitf_Uint16 tmp16;          /* Temp value, 16 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int16) shiftCount;
     bp16 = (nitf_Int16 *) buffer;
@@ -7878,7 +7880,7 @@ void nitf_ImageIO_unformatSwapExtend_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatSwapExtend_4(nitf_Uint8 * buffer,
-                                       nitf_Uint32 count,
+                                       size_t count,
                                        nitf_Uint32 shiftCount)
 {
     nitf_Int32 shift;           /* Shift count */
@@ -7886,7 +7888,7 @@ void nitf_ImageIO_unformatSwapExtend_4(nitf_Uint8 * buffer,
     nitf_Int32 *bp32;           /* Buffer pointer, 32 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
     nitf_Uint8 tmp32;           /* Temp value, 32 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int32) shiftCount;
     bp32 = (nitf_Int32 *) buffer;
@@ -7911,7 +7913,7 @@ void nitf_ImageIO_unformatSwapExtend_4(nitf_Uint8 * buffer,
 
 /* Uses 64 bit types */
 void nitf_ImageIO_unformatSwapExtend_8(nitf_Uint8 * buffer,
-                                       nitf_Uint32 count,
+                                       size_t count,
                                        nitf_Uint32 shiftCount)
 {
     nitf_Int64 shift;           /* Shift count */
@@ -7919,7 +7921,7 @@ void nitf_ImageIO_unformatSwapExtend_8(nitf_Uint8 * buffer,
     nitf_Int64 *bp64;           /* Buffer pointer, 64 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
     nitf_Uint64 tmp64;          /* Temp value, 64 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int64) shiftCount;
     bp64 = (nitf_Int64 *) buffer;
@@ -7949,14 +7951,14 @@ void nitf_ImageIO_unformatSwapExtend_8(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatSwapShift_2(nitf_Uint8 * buffer,
-                                      nitf_Uint32 count,
+                                      size_t count,
                                       nitf_Uint32 shiftCount)
 {
     nitf_Int16 shift;           /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Int16 *bp16;           /* Buffer pointer, 16 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int16) shiftCount;
     bp16 = (nitf_Int16 *) buffer;
@@ -7975,14 +7977,14 @@ void nitf_ImageIO_unformatSwapShift_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatSwapShift_4(nitf_Uint8 * buffer,
-                                      nitf_Uint32 count,
+                                      size_t count,
                                       nitf_Uint32 shiftCount)
 {
     nitf_Int32 shift;           /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Int32 *bp32;           /* Buffer pointer, 32 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int32) shiftCount;
     bp32 = (nitf_Int32 *) buffer;
@@ -8006,14 +8008,14 @@ void nitf_ImageIO_unformatSwapShift_4(nitf_Uint8 * buffer,
 
 /* Uses 64 bit types */
 void nitf_ImageIO_unformatSwapShift_8(nitf_Uint8 * buffer,
-                                      nitf_Uint32 count,
+                                      size_t count,
                                       nitf_Uint32 shiftCount)
 {
     nitf_Int64 shift;           /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Int64 *bp64;           /* Buffer pointer, 64 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int64) shiftCount;
     bp64 = (nitf_Int64 *) buffer;
@@ -8042,14 +8044,14 @@ void nitf_ImageIO_unformatSwapShift_8(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_unformatSwapUShift_2(nitf_Uint8 * buffer,
-                                       nitf_Uint32 count,
+                                       size_t count,
                                        nitf_Uint32 shiftCount)
 {
     nitf_Uint16 shift;          /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint16 *bp16;          /* Buffer pointer, 16 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Uint16) shiftCount;
     bp16 = (nitf_Uint16 *) buffer;
@@ -8067,14 +8069,14 @@ void nitf_ImageIO_unformatSwapUShift_2(nitf_Uint8 * buffer,
 }
 
 void nitf_ImageIO_unformatSwapUShift_4(nitf_Uint8 * buffer,
-                                       nitf_Uint32 count,
+                                       size_t count,
                                        nitf_Uint32 shiftCount)
 {
     nitf_Uint32 shift;          /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint32 *bp32;          /* Buffer pointer, 32 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Uint32) shiftCount;
     bp32 = (nitf_Uint32 *) buffer;
@@ -8098,14 +8100,14 @@ void nitf_ImageIO_unformatSwapUShift_4(nitf_Uint8 * buffer,
 
 /* Uses 64 bit types */
 void nitf_ImageIO_unformatSwapUShift_8(nitf_Uint8 * buffer,
-                                       nitf_Uint32 count,
+                                       size_t count,
                                        nitf_Uint32 shiftCount)
 {
     nitf_Uint64 shift;          /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint64 *bp64;          /* Buffer pointer, 64 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Uint64) shiftCount;
     bp64 = (nitf_Uint64 *) buffer;
@@ -8138,9 +8140,9 @@ void nitf_ImageIO_unpack_P_1(_nitf_ImageIOBlock * blockIO,
 {
     nitf_Uint8 *src;            /* Source buffer */
     nitf_Uint8 *dst;            /* Destination buffer */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src = (nitf_Uint8 *) (blockIO->rwBuffer.buffer
                           + blockIO->rwBuffer.offset.mark);
@@ -8163,9 +8165,9 @@ void nitf_ImageIO_unpack_P_2(_nitf_ImageIOBlock * blockIO,
 {
     nitf_Uint16 *src;           /* Source buffer */
     nitf_Uint16 *dst;           /* Destination buffer */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src = (nitf_Uint16 *) (blockIO->rwBuffer.buffer
                            + blockIO->rwBuffer.offset.mark);
@@ -8188,9 +8190,9 @@ void nitf_ImageIO_unpack_P_4(_nitf_ImageIOBlock * blockIO,
 {
     nitf_Uint32 *src;           /* Source buffer */
     nitf_Uint32 *dst;           /* Destination buffer */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src = (nitf_Uint32 *) (blockIO->rwBuffer.buffer
                            + blockIO->rwBuffer.offset.mark);
@@ -8213,9 +8215,9 @@ void nitf_ImageIO_unpack_P_8(_nitf_ImageIOBlock * blockIO,
 {
     nitf_Uint64 *src;           /* Source buffer */
     nitf_Uint64 *dst;           /* Destination buffer */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
                            + blockIO->rwBuffer.offset.mark);
@@ -8240,9 +8242,9 @@ void nitf_ImageIO_unpack_P_16(_nitf_ImageIOBlock * blockIO,
     nitf_Uint64 *dst1;          /* Destination buffer 1 */
     nitf_Uint64 *src2;          /* Source buffer 2 */
     nitf_Uint64 *dst2;          /* Destination buffer 2 */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src1 = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
                             + blockIO->rwBuffer.offset.mark);
@@ -8267,9 +8269,9 @@ void nitf_ImageIO_pack_P_1(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
 {
     nitf_Uint8 *src;            /* Source buffer */
     nitf_Uint8 *dst;            /* Destination buffer */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src = (nitf_Uint8 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst = (nitf_Uint8 *) (blockIO->rwBuffer.buffer);
@@ -8290,9 +8292,9 @@ void nitf_ImageIO_pack_P_2(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
 {
     nitf_Uint16 *src;           /* Source buffer */
     nitf_Uint16 *dst;           /* Destination buffer */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src = (nitf_Uint16 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst = (nitf_Uint16 *) (blockIO->rwBuffer.buffer);
@@ -8313,9 +8315,9 @@ void nitf_ImageIO_pack_P_4(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
 {
     nitf_Uint32 *src;           /* Source buffer */
     nitf_Uint32 *dst;           /* Destination buffer */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src = (nitf_Uint32 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst = (nitf_Uint32 *) (blockIO->rwBuffer.buffer);
@@ -8336,9 +8338,9 @@ void nitf_ImageIO_pack_P_8(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
 {
     nitf_Uint64 *src;           /* Source buffer */
     nitf_Uint64 *dst;           /* Destination buffer */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src = (nitf_Uint64 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst = (nitf_Uint64 *) (blockIO->rwBuffer.buffer);
@@ -8361,9 +8363,9 @@ void nitf_ImageIO_pack_P_16(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
     nitf_Uint64 *dst1;          /* Destination buffer 1 */
     nitf_Uint64 *src2;          /* Source buffer 2 */
     nitf_Uint64 *dst2;          /* Destination buffer 2 */
-    nitf_Uint32 count;          /* Number of pixels to transfer */
+    size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
-    nitf_Uint32 i;
+    size_t i;
     
     src1 = (nitf_Uint64 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst1 = (nitf_Uint64 *) (blockIO->rwBuffer.buffer);
@@ -8384,11 +8386,11 @@ void nitf_ImageIO_pack_P_16(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
 }
 
 void nitf_ImageIO_formatShift_1(nitf_Uint8 * buffer,
-                                nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Int8 shift;            /* Shift count */
     nitf_Int8 *bp8;             /* Buffer pointer, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int8) shiftCount;
     bp8 = (nitf_Int8 *) buffer;
@@ -8400,11 +8402,11 @@ void nitf_ImageIO_formatShift_1(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_formatShift_2(nitf_Uint8 * buffer,
-                                nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Int16 shift;           /* Shift count */
     nitf_Int16 *bp16;           /* Buffer pointer, 16 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int16) shiftCount;
     bp16 = (nitf_Int16 *) buffer;
@@ -8416,11 +8418,11 @@ void nitf_ImageIO_formatShift_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_formatShift_4(nitf_Uint8 * buffer,
-                                nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Int32 shift;           /* Shift count */
     nitf_Int32 *bp32;           /* Buffer pointer, 32 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int32) shiftCount;
     bp32 = (nitf_Int32 *) buffer;
@@ -8434,11 +8436,11 @@ void nitf_ImageIO_formatShift_4(nitf_Uint8 * buffer,
 /* Uses 64 bit types */
 
 void nitf_ImageIO_formatShift_8(nitf_Uint8 * buffer,
-                                nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Int64 shift;           /* Shift count */
     nitf_Int64 *bp64;           /* Buffer pointer, 64 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int64) shiftCount;
     bp64 = (nitf_Int64 *) buffer;
@@ -8449,11 +8451,11 @@ void nitf_ImageIO_formatShift_8(nitf_Uint8 * buffer,
 }
 
 void nitf_ImageIO_formatMask_1(nitf_Uint8 * buffer,
-                               nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 mask;            /* The mask */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     mask = ((nitf_Uint8) - 1) << (8 - shiftCount);
     bp8 = (nitf_Uint8 *) buffer;
@@ -8464,11 +8466,11 @@ void nitf_ImageIO_formatMask_1(nitf_Uint8 * buffer,
 }
 
 void nitf_ImageIO_formatMask_2(nitf_Uint8 * buffer,
-                               nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 mask;            /* The mask */
     nitf_Uint16 *bp16;          /* Buffer pointer, 16 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     mask = ((nitf_Uint16) - 1) << (16 - shiftCount);
     bp16 = (nitf_Uint16 *) buffer;
@@ -8480,11 +8482,11 @@ void nitf_ImageIO_formatMask_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_formatMask_4(nitf_Uint8 * buffer,
-                               nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 mask;            /* The mask */
     nitf_Uint32 *bp32;          /* Buffer pointer, 32 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     mask = ((nitf_Uint32) - 1) << (32 - shiftCount);
     bp32 = (nitf_Uint32 *) buffer;
@@ -8498,11 +8500,11 @@ void nitf_ImageIO_formatMask_4(nitf_Uint8 * buffer,
 /* Uses 64 bit types */
 
 void nitf_ImageIO_formatMask_8(nitf_Uint8 * buffer,
-                               nitf_Uint32 count, nitf_Uint32 shiftCount)
+        size_t count, nitf_Uint32 shiftCount)
 {
     nitf_Uint8 mask;            /* The mask */
     nitf_Uint64 *bp64;          /* Buffer pointer, 64 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     mask = ((nitf_Uint64) - 1) << (64 - shiftCount);
     bp64 = (nitf_Uint64 *) buffer;
@@ -8514,14 +8516,14 @@ void nitf_ImageIO_formatMask_8(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_formatShiftSwap_2(nitf_Uint8 * buffer,
-                                    nitf_Uint32 count,
+                                    size_t count,
                                     nitf_Uint32 shiftCount)
 {
     nitf_Int16 shift;           /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Int16 *bp16;           /* Buffer pointer, 16 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int16) shiftCount;
     bp16 = (nitf_Int16 *) buffer;
@@ -8540,14 +8542,14 @@ void nitf_ImageIO_formatShiftSwap_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_formatShiftSwap_4(nitf_Uint8 * buffer,
-                                    nitf_Uint32 count,
+                                    size_t count,
                                     nitf_Uint32 shiftCount)
 {
     nitf_Int32 shift;           /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Int32 *bp32;           /* Buffer pointer, 32 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int32) shiftCount;
     bp32 = (nitf_Int32 *) buffer;
@@ -8571,14 +8573,14 @@ void nitf_ImageIO_formatShiftSwap_4(nitf_Uint8 * buffer,
 
 /* Uses 64 bit types */
 void nitf_ImageIO_formatShiftSwap_8(nitf_Uint8 * buffer,
-                                    nitf_Uint32 count,
+                                    size_t count,
                                     nitf_Uint32 shiftCount)
 {
     nitf_Int64 shift;           /* Shift count */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Int64 *bp64;           /* Buffer pointer, 64 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     shift = (nitf_Int64) shiftCount;
     bp64 = (nitf_Int64 *) buffer;
@@ -8607,14 +8609,14 @@ void nitf_ImageIO_formatShiftSwap_8(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_formatMaskSwap_2(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Uint8 mask;            /* The mask */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint16 *bp16;          /* Buffer pointer, 16 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     mask = ((nitf_Uint16) - 1) << (16 - shiftCount);
     bp16 = (nitf_Uint16 *) buffer;
@@ -8633,14 +8635,14 @@ void nitf_ImageIO_formatMaskSwap_2(nitf_Uint8 * buffer,
 
 
 void nitf_ImageIO_formatMaskSwap_4(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Uint8 mask;            /* The mask */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint32 *bp32;          /* Buffer pointer, 32 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     mask = ((nitf_Uint32) - 1) << (32 - shiftCount);
     bp32 = (nitf_Uint32 *) buffer;
@@ -8664,14 +8666,14 @@ void nitf_ImageIO_formatMaskSwap_4(nitf_Uint8 * buffer,
 
 /* Uses 64 bit types */
 void nitf_ImageIO_formatMaskSwap_8(nitf_Uint8 * buffer,
-                                   nitf_Uint32 count,
+                                   size_t count,
                                    nitf_Uint32 shiftCount)
 {
     nitf_Uint8 mask;            /* The mask */
     nitf_Uint8 *bp8;            /* Buffer pointer, 8 bit */
     nitf_Uint64 *bp64;          /* Buffer pointer, 64 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
-    nitf_Uint32 i;
+    size_t i;
     
     mask = ((nitf_Uint64) - 1) << (64 - shiftCount);
     bp64 = (nitf_Uint64 *) buffer;
@@ -8755,12 +8757,12 @@ nitf_ImageIO_bPixelReadBlock(nitf_DecompressionControl * control,
 {
     /* Actual control type */
     nitf_ImageIO_BPixelControl *icntl;
-    nitf_Uint32 uncompressedLen;        /* Length of uncompressed block */
+    size_t uncompressedLen;     /* Length of uncompressed block */
     nitf_Uint8 *block;          /* Uncompressed result */
     nitf_Uint8 *blockPtr;       /* Pointer in uncompressed result */
     nitf_Uint8 *compPtr;        /* Pointer in compressed input */
     nitf_Uint8 current;         /* Current byte of compressed data */
-    nitf_Uint32 i;
+    size_t i;
     
     icntl = (nitf_ImageIO_BPixelControl *) control;
     uncompressedLen = icntl->blockInfo->length;
@@ -8890,14 +8892,14 @@ nitf_ImageIO_12PixelReadBlock(nitf_DecompressionControl * control,
 {
     /* Actual control type */
     nitf_ImageIO_12PixelControl *icntl;
-    nitf_Uint32 uncompressedLen;   /* Length of uncompressed block */
+    size_t uncompressedLen;        /* Length of uncompressed block */
     nitf_Uint8 *block;             /* Uncompressed result */
     nitf_Uint16 *blockPtr;         /* Pointer in uncompressed result */
     nitf_Uint8 *compPtr;           /* Pointer in compressed input */
     nitf_Uint16 a;                 /* Components of compressed pixel */
     nitf_Uint16 b;
     nitf_Uint16 c;
-    nitf_Uint32 i;
+    size_t i;
 
     icntl = (nitf_ImageIO_12PixelControl *) control;
     uncompressedLen = icntl->blockInfo->length;
@@ -8995,7 +8997,7 @@ nitf_CompressionControl  *nitf_ImageIO_12PixelComOpen
                         error);
 
 /* Does not work for S mode which is not supported */
-  icntl->blockPixelCount = numRowsPerBlock*numColumnsPerBlock*numBands;
+  icntl->blockPixelCount = (size_t)numRowsPerBlock*numColumnsPerBlock*numBands;
   icntl->odd = icntl->blockPixelCount & 1;
   icntl->blockSizeCompressed = 3*(icntl->blockPixelCount/2) + 2*(icntl->odd);
   icntl->blockSizeUncompressed = icntl->blockPixelCount*2;
@@ -9054,13 +9056,13 @@ NITF_BOOL nitf_ImageIO_12PixelComWriteBlock
   nitf_Error *error)
 {
   nitf_ImageIO_12PixelComControl *icntl;  /* The internal data structure */
-  nitf_Uint32 pairs;           /* Number of pixel pairs */
+  size_t pairs;                /* Number of pixel pairs */
   nitf_Uint16 *dp;             /* Pointer into input buffer */
   nitf_Uint8 *bp;              /* Pointer into output buffer */
   nitf_Uint16 i1;              /* First pixel in input pair */
   nitf_Uint16 i2;              /* Second pixel in input pair */
   nitf_Off fileOffset;         /* File offset for write */
-  nitf_Uint32 i;
+  size_t i;
 
   icntl = (nitf_ImageIO_12PixelComControl *) object;
 
@@ -9138,7 +9140,7 @@ void nitf_ImageIO_12PixelComDestroy(nitf_CompressionControl ** object)
 
 /*========================= nitf_ImageIO_print ===============================*/
 
-NITFPROT(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
+NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
 {
 #ifdef NITF_DEBUG
     /* Correct type for pointer */
@@ -9207,7 +9209,7 @@ NITFPROT(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
 }
 
 
-NITFPROT(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
+NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
                                          FILE * file, int full)
 {
 #ifdef NITF_DEBUG
@@ -9259,7 +9261,7 @@ NITFPROT(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
     return;
 }
 
-NITFPROT(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
+NITFPRIV(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
                                        FILE * file, int longIndent)
 {
 #ifdef NITF_BLOCK_DEBUG
@@ -9289,14 +9291,14 @@ NITFPROT(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
     fprintf(file, "%sData's current byte offset in block: %ld\n",
             sp, blockIO->blockOffset.mark);
     fprintf(file, "%sRead count in bytes: %ld\n", sp, blockIO->readCount);
-    fprintf(file, "%sOffset into read/write buffer: %ld\n", sp,
+    /*fprintf(file, "%sOffset into read/write buffer: %ld\n", sp,
             blockIO->bufferOffset);
     fprintf(file, "%sOriginal offset into read/write buffer: %ld\n", sp,
             blockIO->bufferOffsetOrg);
     fprintf(file, "%sOffset into user buffer: %ld\n", sp,
             blockIO->userOffset);
     fprintf(file, "%sOriginal offset into user buffer: %ld\n", sp,
-            blockIO->userOffsetOrg);
+            blockIO->userOffsetOrg);*/
     fprintf(file, "%sRead/write buffer is user buffer if TRUE: %ld\n", sp,
             blockIO->userEqBuffer);
     fprintf(file,
