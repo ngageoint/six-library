@@ -8,20 +8,19 @@ srcdir  = '.'
 blddir  = 'target'
 
 def set_options(opt):
-    opt.tool_options('build swig', tooldir='build')
+    opt.tool_options('build swig javatool', tooldir='build')
     opt.sub_options('c c++ java python external')
 
 def configure(conf):
     conf.env['APPNAME'] = APPNAME
     conf.env['VERSION'] = VERSION
-    conf.check_tool('build', tooldir='build')
+    conf.check_tool('build javatool', tooldir='build')
     
     try:
         conf.check_tool('swig', tooldir='build')
         conf.env['SWIG_VERSION'] = conf.check_swig_version()
         conf.check_message_custom('program', 'swig', 'ok', color='GREEN')
     except Exception, e:
-        print e
         conf.check_message_custom('program', 'swig', 'not found', color='YELLOW')
         conf.env['SWIG_VERSION'] = None
     
