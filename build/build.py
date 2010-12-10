@@ -1,5 +1,5 @@
 import sys, os, types, re, fnmatch, subprocess
-from os.path import split, isdir, isfile, exists, splitext
+from os.path import split, isdir, isfile, exists, splitext, abspath, join
 
 import Options, Utils, Logs
 from Configure import conf
@@ -48,6 +48,45 @@ class CPPBuildContext(BuildContext):
             sys.stderr.write("%s%s " % (Logs.colors(colors[i % len(colors)]), s))
         sys.stderr.write("%s%s" % (Logs.colors.NORMAL, os.linesep))
     
+    def fromConfig(self, path):
+        from ConfigParser import SafeConfigParser as Parser, NoSectionError
+        cp = Parser()
+        
+        if isdir(path):
+            for f in 'project.cfg module.cfg project.ini module.ini'.split():
+                configFile = join(path, f)
+                if isfile(configFile):
+                    cp.read(configFile)
+        elif isfile(path):
+            cp.read(path)
+        
+        sectionDict = lambda x: dict(cp.items(filter(lambda x: cp.has_section(x), [x, x.lower(), x.upper()])[0]))
+        
+        args = sectionDict('module')
+        try:
+            testArgs = sectionDict('tests')
+            fileFilter = testArgs.get('filter', None)
+            if fileFilter is not None:
+                if type(fileFilter) == str:
+                    args['test_filter'] = lambda t: t not in fileFilter.split()
+                else:
+                    args['test_filter'] = fileFilter
+            elif 'files' in testArgs:
+                files = testArgs.get('files', None)
+                if type(files) == str:
+                    args['test_filter'] = lambda t: t in files.split()
+        except NoSectionError:{}
+        self.module(**args)
+        
+        try:
+            progArgs = sectionDict('programs')
+            files = progArgs.get('files', '')
+            for f in files.split():
+                parts = f.split('|', 2)
+                self.program(module_deps=args['name'], source=parts[0],
+                             name=splitext(len(parts) == 2 and parts[1] or parts[0])[0])
+        except NoSectionError:{}
+    
     def runUnitTests(self, tests, path):
         path = path or self.path.abspath()
         
@@ -60,8 +99,7 @@ class CPPBuildContext(BuildContext):
                 isTest = split(x)[1] in tests
             return isTest
         
-        exes = filter(_isTest, map(lambda x: os.path.join(path, x),
-                                  os.listdir(path)))
+        exes = filter(_isTest, map(lambda x: join(path, x), os.listdir(path)))
         
         if exes:
             self.pprint('Running Unit Tests:', path, colors='blue pink')
@@ -120,6 +158,7 @@ class CPPBuildContext(BuildContext):
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
         libVersion = modArgs.get('version', None)
+        installPath = modArgs.get('install_path', None)
         
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
@@ -133,16 +172,16 @@ class CPPBuildContext(BuildContext):
             lib = bld.new_task_gen(libExeType, env['LIB_TYPE'] or 'staticlib', includes=includes,
                     target=targetName, name=libName, export_incdirs=exportIncludes,
                     uselib_local=uselib_local, uselib=uselib, env=env.copy(),
-                    defines=defines, path=path, install_path='${PREFIX}/lib')
+                    defines=defines, path=path, install_path=installPath or '${PREFIX}/lib')
             lib.find_sources_in_dirs(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
             
+            pattern = env['%s_PATTERN' % (env['LIB_TYPE'] or 'staticlib')]
             if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks:
-                symlinkLoc = '%s/%s' % (lib.install_path, env['staticlib_PATTERN'] % libName)
+                symlinkLoc = '%s/%s' % (lib.install_path, pattern % libName)
 #                bld.add_group()
-                bld.symlink_as(symlinkLoc, env['staticlib_PATTERN'] % lib.target, env=env)
+                bld.symlink_as(symlinkLoc, pattern % lib.target, env=env)
             
-
         incNode = path.find_dir('include')
         for f in (incNode and incNode.find_iter() or []):
             relpath = f.relpath_gen(path)
@@ -324,7 +363,7 @@ class CPPBuildContext(BuildContext):
         bldDir = self.srcnode.abspath(self.env)
         for i in range(len(cwd)):
             if not bldDir.startswith(cwd[:i]):
-                bldDir = os.path.join(bldDir, cwd[i - 1:])
+                bldDir = join(bldDir, cwd[i - 1:])
                 break
         return bldDir
 
@@ -357,7 +396,7 @@ class GlobDirectoryWalker:
                 self.index = 0
             else:
                 # got a filename
-                fullname = os.path.join(self.directory, file)
+                fullname = join(self.directory, file)
                 if isdir(fullname):# and not os.path.islink(fullname):
                     self.stack.append(fullname)
                 for p in self.patterns:
@@ -406,11 +445,11 @@ def unzipper(inFile, outDir):
     dirs.sort()
     
     for d in filter(lambda x: not exists(x),
-                    map(lambda x: os.path.join(outDir, x), dirs)):
+                    map(lambda x: join(outDir, x), dirs)):
         os.mkdir(d)
 
     for i, name in enumerate(filter(lambda x: not x.endswith('/'), zf.namelist())):
-        outFile = open(os.path.join(outDir, name), 'wb')
+        outFile = open(join(outDir, name), 'wb')
         outFile.write(zf.read(name))
         outFile.flush()
         outFile.close()
@@ -840,8 +879,8 @@ def m4subst(tsk):
     m4_re = re.compile('@(\w+)@', re.M)
 
     env = tsk.env
-    infile = os.path.join(tsk.path.abspath(), tsk.input)
-    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    infile = join(tsk.path.abspath(), tsk.input)
+    outfile = join(tsk.path.abspath(), tsk.output)
     
     file = open(infile, 'r')
     code = file.read()
@@ -869,8 +908,8 @@ def m4subst(tsk):
 def commentUndefs(tsk):
     import re
     env = tsk.env
-    infile = os.path.join(tsk.path.abspath(), tsk.input)
-    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    infile = join(tsk.path.abspath(), tsk.input)
+    outfile = join(tsk.path.abspath(), tsk.output)
     
     file = open(infile, 'r')
     code = file.read()
@@ -886,7 +925,7 @@ def commentUndefs(tsk):
 @taskgen
 @feature('makeHeader')
 def makeHeader(tsk):
-    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    outfile = join(tsk.path.abspath(), tsk.output)
     dest = open(outfile, 'w')
     guard = '__CONFIG_H__'
     dest.write('#ifndef %s\n#define %s\n\n' % (guard, guard))

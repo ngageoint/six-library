@@ -1,21 +1,4 @@
-NAME            = 'nitf'
-MAINTAINER      = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
-VERSION         = '2.7-dev'
-MODULE_DEPS     = 'mt sys'
-USELIB          = 'THREAD DL'
-USELIB_LOCAL    = 'nitf-c'
-TEST_FILTER     = lambda t: t not in 'test_functional.cpp test_handles.cpp test_mem_source.cpp test_static_plugin.cpp'.split()
-
 set_options = configure = distclean = lambda p: None
 
 def build(bld):
-    bld.module(**globals())
-    
-    #build apps
-    appsDir = bld.path.find_dir('apps')
-    apps = appsDir.find_iter(in_pat=['*.cpp'], maxdepth=1, flat=True).split(' ')
-    for app in apps:
-        bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-4])
-    # this is here for backwards-compatibility
-    bld.program(dir='apps', source='show_nitf++.cpp', module_deps=NAME,
-                name='test_dump_record++')
+    bld.fromConfig(bld.curdir)
