@@ -68,11 +68,17 @@ class CPPBuildContext(BuildContext):
         args = sectionDict('module')
         args.update(overrides)
         
-        if 'path' not in args and 'dir' not in args:
-            pardir = abspath(dirname(path))
-            curdir = abspath(bld.curdir)
-            if pardir.startswith(curdir):
-                args['dir'] = './%s' % pardir[len(curdir):].lstrip(os.sep)
+        if 'path' not in args:
+            if 'dir' in args:
+                args['path'] = bld.path.find_dir(args.pop('dir'))
+            else:
+                pardir = abspath(dirname(path))
+                curdir = abspath(bld.curdir)
+                if pardir.startswith(curdir):
+                    relDir = './%s' % pardir[len(curdir):].lstrip(os.sep)
+                    args['path'] = bld.path.find_dir(relDir)
+                else:
+                    args['path'] = bld.path
         
         #get the env
         if 'env' in args:
@@ -125,6 +131,7 @@ class CPPBuildContext(BuildContext):
             for f in files.split():
                 parts = f.split('|', 2)
                 self.program(module_deps=args['name'], source=parts[0],
+                             path=args['path'],
                              name=splitext(len(parts) == 2 and parts[1] or parts[0])[0])
         except Exception:{}
     

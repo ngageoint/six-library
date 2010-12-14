@@ -1,4 +1,0 @@
-set_options = configure = distclean = lambda p: None
-
-def build(bld):
-    bld.fromConfig(bld.curdir)
