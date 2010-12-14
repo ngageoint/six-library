@@ -1,5 +1,5 @@
 import sys, os, types, re, fnmatch, subprocess
-from os.path import split, isdir, isfile, exists, splitext, abspath, join
+from os.path import split, isdir, isfile, exists, splitext, abspath, join, basename, dirname
 
 import Options, Utils, Logs
 from Configure import conf
@@ -48,8 +48,9 @@ class CPPBuildContext(BuildContext):
             sys.stderr.write("%s%s " % (Logs.colors(colors[i % len(colors)]), s))
         sys.stderr.write("%s%s" % (Logs.colors.NORMAL, os.linesep))
     
-    def fromConfig(self, path):
-        from ConfigParser import SafeConfigParser as Parser, NoSectionError
+    def fromConfig(self, path, **overrides):
+        bld = self
+        from ConfigParser import SafeConfigParser as Parser
         cp = Parser()
         
         if isdir(path):
@@ -57,35 +58,75 @@ class CPPBuildContext(BuildContext):
                 configFile = join(path, f)
                 if isfile(configFile):
                     cp.read(configFile)
+                    path = configFile
+                    break
         elif isfile(path):
             cp.read(path)
         
         sectionDict = lambda x: dict(cp.items(filter(lambda x: cp.has_section(x), [x, x.lower(), x.upper()])[0]))
         
         args = sectionDict('module')
+        args.update(overrides)
+        
+        if 'path' not in args and 'dir' not in args:
+            pardir = abspath(dirname(path))
+            curdir = abspath(bld.curdir)
+            if pardir.startswith(curdir):
+                args['dir'] = './%s' % pardir[len(curdir):].lstrip(os.sep)
+        
+        #get the env
+        if 'env' in args:
+            env = args['env']
+        else:
+            variant = args.get('variant', bld.env['VARIANT'] or 'default')
+            env = bld.env_of_name(variant)
+            env.set_variant(variant)
+        
+        # do some special processing for the module
+        excludes = args.pop('exclude', None)
+        if excludes is not None:
+            if type(excludes) == str:
+                args['source_filter'] = partial(lambda x, t: basename(t) not in x,
+                                                excludes.split())
+        elif 'source' in args:
+            source = args.pop('source', None)
+            if type(source) == str:
+                args['source_filter'] = partial(lambda x, t: basename(t) in x,
+                                                source.split())
+        
+        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        uselibCheck = args.pop('uselib_check', None)
+        if uselibCheck:
+            if ('MAKE_%s' % uselibCheck) in env:
+                args['uselib_local'] = ' '.join([uselibCheck, args.get('uselib_local', '')])
+            else:
+                args['uselib'] = ' '.join([uselibCheck, args.get('uselib', '')])
+        
+        
         try:
             testArgs = sectionDict('tests')
-            fileFilter = testArgs.get('filter', None)
-            if fileFilter is not None:
-                if type(fileFilter) == str:
-                    args['test_filter'] = lambda t: t not in fileFilter.split()
-                else:
-                    args['test_filter'] = fileFilter
-            elif 'files' in testArgs:
-                files = testArgs.get('files', None)
-                if type(files) == str:
-                    args['test_filter'] = lambda t: t in files.split()
-        except NoSectionError:{}
+            excludes = testArgs.pop('exclude', None)
+            if excludes is not None:
+                if type(excludes) == str:
+                    args['test_filter'] = partial(lambda x, t: basename(t) not in x,
+                                                excludes.split())
+            elif 'source' in testArgs:
+                source = testArgs.pop('source', None)
+                if type(source) == str:
+                    args['test_filter'] = partial(lambda x, t: basename(t) in x,
+                                                source.split())
+        except Exception:{}
         self.module(**args)
         
         try:
             progArgs = sectionDict('programs')
-            files = progArgs.get('files', '')
+            files = progArgs.pop('files', '')
             for f in files.split():
                 parts = f.split('|', 2)
                 self.program(module_deps=args['name'], source=parts[0],
                              name=splitext(len(parts) == 2 and parts[1] or parts[0])[0])
-        except NoSectionError:{}
+        except Exception:{}
     
     def runUnitTests(self, tests, path):
         path = path or self.path.abspath()
@@ -185,7 +226,7 @@ class CPPBuildContext(BuildContext):
         incNode = path.find_dir('include')
         for f in (incNode and incNode.find_iter() or []):
             relpath = f.relpath_gen(path)
-            bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
+            bld.install_files('${PREFIX}/%s' % dirname(relpath),
                               f.abspath())
         
         testNode = path.find_dir('tests')
@@ -359,13 +400,17 @@ class CPPBuildContext(BuildContext):
         """
         Returns the build dir, relative to where you currently are (bld.path)
         """
-        cwd = path and path.abspath() or self.path.abspath()
+        if type(path) == str:
+            cwd = path
+        else:
+            cwd = path and path.abspath() or self.path.abspath()
         bldDir = self.srcnode.abspath(self.env)
         for i in range(len(cwd)):
             if not bldDir.startswith(cwd[:i]):
                 bldDir = join(bldDir, cwd[i - 1:])
                 break
         return bldDir
+    
 
 
 class GlobDirectoryWalker:
