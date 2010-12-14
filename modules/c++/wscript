@@ -1,31 +1,41 @@
-import os
+from os.path import join, exists
 import Options, Utils
 from build import CPPBuildContext
 
 #override the default build context with our own
-Utils.g_module.build_context = Utils.g_module.install_context = Utils.g_module.clean_context = CPPBuildContext
+Utils.g_module.build_context = Utils.g_module.install_context = \
+        Utils.g_module.clean_context = CPPBuildContext
 
-MODULES = 'except str sys io mt logging nitf math.linear math.poly scene six six.sicd six.sidd tiff xml.lite'
+MODULES = 'except io logging math.linear math.poly mt nitf scene ' \
+          'six six.sicd six.sidd str sys tiff xml.lite'
 #MODULES += ' sio.lite'
 SAMPLES = 'samples'
+
 def set_options(opt):
-    opt.sub_options(MODULES)
+        opt.sub_options(filter(lambda x: exists(join(opt.curdir, x, 'wscript')),
+                           MODULES.split()))
 
 def configure(conf):
-    
     # Add this to take the cleanup leak over the warning
     if conf.env['PLATFORM'].startswith('sparc-sun'):
         conf.env.append_unique('CXXDEFINES', 'ELIMINATE_BROKEN_LINKAGE')
-    conf.env.append_value('CPPPATH_UNITTEST', os.path.join(conf.curdir, 'include'))
-
-    conf.sub_config(MODULES)
+    conf.env.append_value('CPPPATH_UNITTEST', join(conf.curdir, 'include'))
+    
+    conf.sub_config(filter(lambda x: exists(join(conf.curdir, x, 'wscript')),
+                           MODULES.split()))
     conf.sub_config(SAMPLES)
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
     env.set_variant(variant)
-    bld.add_subdirs(MODULES)
+    
+    configBuilds = filter(lambda m: not exists(join(bld.curdir, m, 'wscript')),
+                          MODULES.split())
+    # build these modules from their config files
+    map(bld.fromConfig, map(lambda m: join(bld.curdir, m), configBuilds))
+    map(bld.add_subdirs, filter(lambda m: m not in configBuilds, MODULES.split()))
+    
     bld.add_subdirs(SAMPLES)
     if 'DOXYGEN' in env and Options.is_install:
         bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
@@ -38,5 +48,6 @@ def build(bld):
 
 
 def distclean(context):
-    context.recurse(MODULES)
+    context.recurse(filter(lambda x: exists(join(context.curdir, x, 'wscript')),
+                           MODULES.split()))
     context.recurse(SAMPLES)
