@@ -8,20 +8,18 @@ srcdir  = '.'
 blddir  = 'target'
 
 def set_options(opt):
-    opt.tool_options('build', tooldir='build')
-    opt.sub_options('drivers c++')
+    opt.tool_options('build swig pythontool', tooldir='build')
+    opt.sub_options('drivers c++ python')
 
 def configure(conf):
-    conf.check_tool('build', tooldir='build')
-    conf.sub_config('drivers c++')
+    conf.check_tool('build swig pythontool', tooldir='build')
+    conf.sub_config('drivers c++ python')
 
 def build(bld):
-    # I wish
-    #Options.options.libs_only = True
-    bld.add_subdirs('drivers drivers/nitf c++')
+    bld.add_subdirs('drivers drivers/nitf c++ python')
 
 def distclean(context):
-    context.recurse('drivers c++')
+    context.recurse('drivers c++ python')
     Scripting.distclean(context)
 
 def init(context):
