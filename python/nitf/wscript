@@ -1,4 +1,4 @@
-
+from os.path import join, basename
 distclean = set_options = configure = lambda p: None
 
 def build(bld):
@@ -8,23 +8,35 @@ def build(bld):
     # first compile a few py files
     obj = bld.new_task_gen(features = 'py', env=env.copy(),
 						   install_path='${PYTHONDIR}/nitf')
-    obj.find_sources_in_dirs('src/python/nitf/', exts=['.py'])
+    obj.find_sources_in_dirs('source', exts=['.py'])
     
     # then a c extension module
-    if 'SWIG_VERSION' in env and env['SWIG_VERSION']:
-        e = env.copy()
+    if 'SWIG' in env and env['SWIG']:
         tsk = bld.new_task_gen(
             features = 'cc cshlib pyext',
-            source = 'src/swig/nitro.i',
+            source = 'source/nitro.i',
             target = '_nitropy',
             uselib_local='nitf-c',
             env=env.copy(),
             swig_flags='-python',
             install_path='${PYTHONDIR}/nitf')
+        
+        def copyGeneratedSources(bld, path, sourceDir):
+            import shutil, glob
+            files = glob.glob(join(path, '*.c'))
+            outFiles = map(lambda x: basename(x).split('.')[0] + '_wrap.c', files)
+            for fin, fout in zip(files, outFiles):
+                shutil.copy2(fin, join(sourceDir, fout))
+        
+        from build import partial
+        bld.add_post_fun(partial(copyGeneratedSources,
+                                 path=join(bld.getBuildDir(), 'source'),
+                                 sourceDir=join(bld.path.abspath(), 'source')))
+        
     else:
         bld.new_task_gen(
             features = 'cc cshlib pyext',
-            source = 'src/swig/nitro_wrap.c',
+            source = 'source/nitropy_wrap.c',
             target = '_nitropy',
             uselib_local='nitf-c',
             env=env.copy(),

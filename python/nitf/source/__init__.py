@@ -796,11 +796,11 @@ class DESubheader(Header):
             ('DESCLAS', self['securityClass']),
         ]
         fields.extend(list(self.fileSecurity.__iter__(prefix='D')))
-        fields.extend([
-            ('DESOFLW', self['overflowHeaderType']),
-            ('DESITEM', self['dataItemOverflowed']),
-            ('DESSHL', self['subheaderFieldsLength']),
-        ])
+        for (k, f) in [('DESOFLW', 'overflowHeaderType'),
+                       ('DESITEM', 'dataItemOverflowed'),
+                       ('DESSHL', 'subheaderFieldsLength')]:
+            if f in self:
+                fields.append((k, self[f]))
         return fields.__iter__()
 
     def getUDHD(self):

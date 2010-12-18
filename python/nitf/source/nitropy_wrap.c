@@ -31438,7 +31438,7 @@ SWIG_init(void) {
   SWIG_InstallConstants(d,swig_const_table);
   
   
-  SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.5"));
+  SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.7"));
   SWIG_Python_SetConstant(d, "NITF_FUNC",SWIG_FromCharPtr("unknown function"));
   SWIG_Python_SetConstant(d, "NITF_DEFAULT_PERM",SWIG_From_int((int)(0644)));
   SWIG_Python_SetConstant(d, "NITF_INVALID_HANDLE_VALUE",SWIG_From_int((int)(-1)));

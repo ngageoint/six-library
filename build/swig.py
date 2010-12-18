@@ -205,9 +205,10 @@ def set_options(opt):
                    help='Require swig (configure option)', default=False)
 
 def detect(conf):
-	swig = conf.find_program('swig', var='SWIG', mandatory=Options.options.require_swig)
-	if not swig: return
-	swigver = Options.options.swigver
-	if swigver:
-		swigver = map(int, swigver.split('.'))
-	conf.check_swig_version(minver=swigver)
+	if Options.options.swig:
+		swig = conf.find_program('swig', var='SWIG', mandatory=Options.options.require_swig)
+		if not swig: return
+		swigver = Options.options.swigver
+		if swigver:
+			swigver = map(int, swigver.split('.'))
+		conf.check_swig_version(minver=swigver)
