@@ -41,4 +41,8 @@ def build(bld):
             uselib_local='nitf-c',
             env=env.copy(),
             install_path='${PYTHONDIR}/nitf')
+    
+    bld.install_as('${PYTHONDIR}/nitf/nitropy.py',
+           join(bld.getBuildDir(), 'source', 'nitropy.py'),
+           env=env.copy())
 
