@@ -27,11 +27,17 @@ def build(bld):
             outFiles = map(lambda x: basename(x).split('.')[0] + '_wrap.c', files)
             for fin, fout in zip(files, outFiles):
                 shutil.copy2(fin, join(sourceDir, fout))
+            for f in glob.glob(join(path, '*.py')):
+                shutil.copy2(f, join(sourceDir, basename(f)))
         
         from build import partial
         bld.add_post_fun(partial(copyGeneratedSources,
                                  path=join(bld.getBuildDir(), 'source'),
                                  sourceDir=join(bld.path.abspath(), 'source')))
+        
+        bld.install_as('${PYTHONDIR}/nitf/nitropy.py',
+                       join(bld.getBuildDir(), 'source', 'nitropy.py'),
+                       env=env.copy())
         
     else:
         bld.new_task_gen(
