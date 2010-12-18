@@ -2788,7 +2788,7 @@ namespace swig {
 
 
 
-    PyObject* readXMLs(const char* filename)
+    PyObject* readXML(const char* filename)
     {
         nitf::Reader reader;
         nitf::IOHandle io(filename);
@@ -2953,7 +2953,7 @@ SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
 #ifdef __cplusplus
 extern "C" {
 #endif
-SWIGINTERN PyObject *_wrap_readXMLs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_readXML(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
   int res1 ;
@@ -2962,13 +2962,13 @@ SWIGINTERN PyObject *_wrap_readXMLs(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   PyObject * obj0 = 0 ;
   PyObject *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:readXMLs",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:readXML",&obj0)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "readXMLs" "', argument " "1"" of type '" "char const *""'");
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "readXML" "', argument " "1"" of type '" "char const *""'");
   }
   arg1 = reinterpret_cast< char * >(buf1);
-  result = (PyObject *)readXMLs((char const *)arg1);
+  result = (PyObject *)readXML((char const *)arg1);
   resultobj = result;
   if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
   return resultobj;
@@ -3005,7 +3005,7 @@ fail:
 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
-	 { (char *)"readXMLs", _wrap_readXMLs, METH_VARARGS, NULL},
+	 { (char *)"readXML", _wrap_readXML, METH_VARARGS, NULL},
 	 { (char *)"readImages", _wrap_readImages, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
