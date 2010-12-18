@@ -30,7 +30,7 @@
 
 %inline %{
 
-    PyObject* readXMLs(const char* filename)
+    PyObject* readXML(const char* filename)
     {
         nitf::Reader reader;
         nitf::IOHandle io(filename);

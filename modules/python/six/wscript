@@ -7,6 +7,10 @@ def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
     
+#    obj = bld.new_task_gen(features = 'py', env=env.copy(),
+#                           install_path='${PYTHONDIR}/six')
+#    obj.find_sources_in_dirs('source', exts=['.py'])
+    
     deps = 'six.sidd six.sicd six scene tiff nitf xml.lite logging io mt sys str except'
     uselib_local = map(lambda x: '%s-c++' % x, deps.split())
     uselib_local.append('nitf-c')
@@ -28,11 +32,16 @@ def build(bld):
             outFiles = map(lambda x: basename(x).split('.')[0] + '_wrap.cpp', files)
             for fin, fout in zip(files, outFiles):
                 shutil.copy2(fin, join(sourceDir, fout))
+            shutil.copy2(join(path, 'six.py'), join(sourceDir, '__init__.py'))
         
         from build import partial
         bld.add_post_fun(partial(copyGeneratedSources,
                                  path=join(bld.getBuildDir(), 'source'),
                                  sourceDir=join(bld.path.abspath(), 'source')))
+        
+        bld.install_as('${PYTHONDIR}/six/__init__.py',
+                       os.path.join(bld.getBuildDir(), 'source', 'six.py'),
+                       env=env.copy())
         
     else:
         bld.new_task_gen(
@@ -44,7 +53,4 @@ def build(bld):
             env=env.copy(),
             install_path='${PYTHONDIR}/six')
     
-    bld.install_as('${PYTHONDIR}/six/__init__.py',
-               os.path.join(bld.getBuildDir(), 'source', 'six.py'),
-               env=env.copy())
 
