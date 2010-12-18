@@ -21,7 +21,6 @@ def build(bld):
             env=env.copy(),
             swig_flags='-python',
             install_path='${PYTHONDIR}/nitf')
-        print tsk, dir(tsk), tsk.name_to_obj
     else:
         bld.new_task_gen(
             features = 'cc cshlib pyext',
