@@ -1,4 +1,5 @@
 from os.path import join, basename
+import Utils
 distclean = set_options = configure = lambda p: None
 
 def build(bld):
@@ -8,7 +9,7 @@ def build(bld):
     # first compile a few py files
     obj = bld.new_task_gen(features = 'py', env=env.copy(),
 						   install_path='${PYTHONDIR}/nitf')
-    obj.find_sources_in_dirs('source', exts=['.py'])
+    obj.find_sources_in_dirs('source source/generated', exts=['.py'])
     
     # then a c extension module
     if 'SWIG' in env and env['SWIG']:
@@ -21,34 +22,28 @@ def build(bld):
             swig_flags='-python',
             install_path='${PYTHONDIR}/nitf')
         
-        def copyGeneratedSources(bld, path, sourceDir):
+        def copyGeneratedSources(bld, path, sourceDir, pythonDir):
             import shutil, glob
             files = glob.glob(join(path, '*.c'))
             outFiles = map(lambda x: basename(x).split('.')[0] + '_wrap.c', files)
             for fin, fout in zip(files, outFiles):
-                shutil.copy2(fin, join(sourceDir, fout))
+                shutil.copy2(fin, join(sourceDir, 'generated', fout))
             for f in glob.glob(join(path, '*.py')):
-                shutil.copy2(f, join(sourceDir, basename(f)))
+                shutil.copy2(f, join(sourceDir, 'generated', basename(f)))
+                shutil.copy2(f, join(pythonDir, 'nitf', basename(f)))
         
         from build import partial
         bld.add_post_fun(partial(copyGeneratedSources,
                                  path=join(bld.getBuildDir(), 'source'),
-                                 sourceDir=join(bld.path.abspath(), 'source')))
-        
-        bld.install_as('${PYTHONDIR}/nitf/nitropy.py',
-                       join(bld.getBuildDir(), 'source', 'nitropy.py'),
-                       env=env.copy())
+                                 sourceDir=join(bld.path.abspath(), 'source'),
+                                 pythonDir=Utils.subst_vars('${PYTHONDIR}', env)))
         
     else:
         bld.new_task_gen(
             features = 'cc cshlib pyext',
-            source = 'source/nitropy_wrap.c',
+            source = 'source/generated/nitropy_wrap.c',
             target = '_nitropy',
             uselib_local='nitf-c',
             env=env.copy(),
             install_path='${PYTHONDIR}/nitf')
-    
-    bld.install_as('${PYTHONDIR}/nitf/nitropy.py',
-           join(bld.getBuildDir(), 'source', 'nitropy.py'),
-           env=env.copy())
 
