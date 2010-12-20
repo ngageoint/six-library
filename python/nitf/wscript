@@ -30,7 +30,8 @@ def build(bld):
                 shutil.copy2(fin, join(sourceDir, 'generated', fout))
             for f in glob.glob(join(path, '*.py')):
                 shutil.copy2(f, join(sourceDir, 'generated', basename(f)))
-                shutil.copy2(f, join(pythonDir, 'nitf', basename(f)))
+                if bld.is_install:
+                    shutil.copy2(f, join(pythonDir, 'nitf', basename(f)))
         
         from build import partial
         bld.add_post_fun(partial(copyGeneratedSources,
