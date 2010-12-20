@@ -93,8 +93,11 @@
             six::UByte *buf = new six::UByte[imageSize];
             region.setBuffer(buf);
             reader->interleaved(region, i);
+            
+            PyObject *pySize = Py_BuildValue("(ii)", width, height);
+            PyObject *pyData = PyBuffer_FromMemory((void*)buf, imageSize);
 
-            PyList_SetItem(l, i, PyBuffer_FromMemory((void*)buf, imageSize));
+            PyList_SetItem(l, i, Py_BuildValue("(OO)", pyData, pySize));
         }
         return l;
     }
