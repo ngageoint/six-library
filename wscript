@@ -7,31 +7,24 @@ APPNAME = 'nitro'
 srcdir  = '.'
 blddir  = 'target'
 
+TOOLS = 'build swig javatool pythontool'
+
 def set_options(opt):
-    opt.tool_options('build swig', tooldir='build')
-    opt.sub_options('c c++ java python external')
+    opt.tool_options(TOOLS, tooldir='build')
+    opt.sub_options('c c++ java external')
 
 def configure(conf):
     conf.env['APPNAME'] = APPNAME
     conf.env['VERSION'] = VERSION
-    conf.check_tool('build', tooldir='build')
+    conf.check_tool(TOOLS, tooldir='build')
     
-    try:
-        conf.check_tool('swig', tooldir='build')
-        conf.env['SWIG_VERSION'] = conf.check_swig_version()
-        conf.check_message_custom('program', 'swig', 'ok', color='GREEN')
-    except Exception, e:
-        print e
-        conf.check_message_custom('program', 'swig', 'not found', color='YELLOW')
-        conf.env['SWIG_VERSION'] = None
-    
-    conf.sub_config('c c++ java python external')
+    conf.sub_config('c c++ java external')
 
 def build(bld):
-    bld.add_subdirs('c c++ java python external')
+    bld.add_subdirs('c c++ java external')
 
 def distclean(context):
-    context.recurse('c c++ java python external')
+    context.recurse('c c++ java external')
     Scripting.distclean(context)
 
 def init(context):

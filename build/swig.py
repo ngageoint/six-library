@@ -2,9 +2,10 @@
 # encoding: UTF-8
 # Petar Forai
 # Thomas Nagy 2008
+# Tom Zellman 2010
 
 import re
-import Task, Utils, Logs
+import Task, Utils, Logs, Options
 from TaskGen import extension, taskgen, feature, after
 from Configure import conf
 import preproc
@@ -194,6 +195,20 @@ def check_swig_version(conf, minver=None):
 		conf.check_message('swig version', '>= %s' % (minver_str,), result, option=swigver_full)
 	return result
 
-def detect(conf):
-	swig = conf.find_program('swig', var='SWIG', mandatory=True)
 
+def set_options(opt):
+    opt.add_option('--disable-swig', action='store_false', dest='swig',
+                   help='Disable swig', default=True)
+    opt.add_option('--swig-version', action='store', dest='swigver',
+                   default=None, help='Specify the minimum swig version')
+    opt.add_option('--require-swig', action='store_true', dest='require_swig',
+                   help='Require swig (configure option)', default=False)
+
+def detect(conf):
+	if Options.options.swig:
+		swig = conf.find_program('swig', var='SWIG', mandatory=Options.options.require_swig)
+		if not swig: return
+		swigver = Options.options.swigver
+		if swigver:
+			swigver = map(int, swigver.split('.'))
+		conf.check_swig_version(minver=swigver)

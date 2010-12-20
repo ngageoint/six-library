@@ -1,5 +1,5 @@
 import sys, os, types, re, fnmatch, subprocess
-from os.path import split, isdir, isfile, exists, splitext
+from os.path import split, isdir, isfile, exists, splitext, abspath, join, basename, dirname
 
 import Options, Utils, Logs
 from Configure import conf
@@ -48,6 +48,93 @@ class CPPBuildContext(BuildContext):
             sys.stderr.write("%s%s " % (Logs.colors(colors[i % len(colors)]), s))
         sys.stderr.write("%s%s" % (Logs.colors.NORMAL, os.linesep))
     
+    def fromConfig(self, path, **overrides):
+        bld = self
+        from ConfigParser import SafeConfigParser as Parser
+        cp = Parser()
+        
+        if isdir(path):
+            for f in 'project.cfg module.cfg project.ini module.ini'.split():
+                configFile = join(path, f)
+                if isfile(configFile):
+                    cp.read(configFile)
+                    path = configFile
+                    break
+        elif isfile(path):
+            cp.read(path)
+        
+        sectionDict = lambda x: dict(cp.items(filter(lambda x: cp.has_section(x), [x, x.lower(), x.upper()])[0]))
+        
+        args = sectionDict('module')
+        args.update(overrides)
+        
+        if 'path' not in args:
+            if 'dir' in args:
+                args['path'] = bld.path.find_dir(args.pop('dir'))
+            else:
+                pardir = abspath(dirname(path))
+                curdir = abspath(bld.curdir)
+                if pardir.startswith(curdir):
+                    relDir = './%s' % pardir[len(curdir):].lstrip(os.sep)
+                    args['path'] = bld.path.find_dir(relDir)
+                else:
+                    args['path'] = bld.path
+        
+        #get the env
+        if 'env' in args:
+            env = args['env']
+        else:
+            variant = args.get('variant', bld.env['VARIANT'] or 'default')
+            env = bld.env_of_name(variant)
+            env.set_variant(variant)
+        
+        # do some special processing for the module
+        excludes = args.pop('exclude', None)
+        if excludes is not None:
+            if type(excludes) == str:
+                args['source_filter'] = partial(lambda x, t: basename(t) not in x,
+                                                excludes.split())
+        elif 'source' in args:
+            source = args.pop('source', None)
+            if type(source) == str:
+                args['source_filter'] = partial(lambda x, t: basename(t) in x,
+                                                source.split())
+        
+        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        uselibCheck = args.pop('uselib_check', None)
+        if uselibCheck:
+            if ('MAKE_%s' % uselibCheck) in env:
+                args['uselib_local'] = ' '.join([uselibCheck, args.get('uselib_local', '')])
+            else:
+                args['uselib'] = ' '.join([uselibCheck, args.get('uselib', '')])
+        
+        
+        try:
+            testArgs = sectionDict('tests')
+            excludes = testArgs.pop('exclude', None)
+            if excludes is not None:
+                if type(excludes) == str:
+                    args['test_filter'] = partial(lambda x, t: basename(t) not in x,
+                                                excludes.split())
+            elif 'source' in testArgs:
+                source = testArgs.pop('source', None)
+                if type(source) == str:
+                    args['test_filter'] = partial(lambda x, t: basename(t) in x,
+                                                source.split())
+        except Exception:{}
+        self.module(**args)
+        
+        try:
+            progArgs = sectionDict('programs')
+            files = progArgs.pop('files', '')
+            for f in files.split():
+                parts = f.split('|', 2)
+                self.program(module_deps=args['name'], source=parts[0],
+                             path=args['path'],
+                             name=splitext(len(parts) == 2 and parts[1] or parts[0])[0])
+        except Exception:{}
+    
     def runUnitTests(self, tests, path):
         path = path or self.path.abspath()
         
@@ -60,8 +147,7 @@ class CPPBuildContext(BuildContext):
                 isTest = split(x)[1] in tests
             return isTest
         
-        exes = filter(_isTest, map(lambda x: os.path.join(path, x),
-                                  os.listdir(path)))
+        exes = filter(_isTest, map(lambda x: join(path, x), os.listdir(path)))
         
         if exes:
             self.pprint('Running Unit Tests:', path, colors='blue pink')
@@ -120,6 +206,7 @@ class CPPBuildContext(BuildContext):
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
         libVersion = modArgs.get('version', None)
+        installPath = modArgs.get('install_path', None)
         
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
@@ -133,20 +220,20 @@ class CPPBuildContext(BuildContext):
             lib = bld.new_task_gen(libExeType, env['LIB_TYPE'] or 'staticlib', includes=includes,
                     target=targetName, name=libName, export_incdirs=exportIncludes,
                     uselib_local=uselib_local, uselib=uselib, env=env.copy(),
-                    defines=defines, path=path, install_path='${PREFIX}/lib')
+                    defines=defines, path=path, install_path=installPath or '${PREFIX}/lib')
             lib.find_sources_in_dirs(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
             
+            pattern = env['%s_PATTERN' % (env['LIB_TYPE'] or 'staticlib')]
             if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks:
-                symlinkLoc = '%s/%s' % (lib.install_path, env['staticlib_PATTERN'] % libName)
+                symlinkLoc = '%s/%s' % (lib.install_path, pattern % libName)
 #                bld.add_group()
-                bld.symlink_as(symlinkLoc, env['staticlib_PATTERN'] % lib.target, env=env)
+                bld.symlink_as(symlinkLoc, pattern % lib.target, env=env)
             
-
         incNode = path.find_dir('include')
         for f in (incNode and incNode.find_iter() or []):
             relpath = f.relpath_gen(path)
-            bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
+            bld.install_files('${PREFIX}/%s' % dirname(relpath),
                               f.abspath())
         
         testNode = path.find_dir('tests')
@@ -320,13 +407,17 @@ class CPPBuildContext(BuildContext):
         """
         Returns the build dir, relative to where you currently are (bld.path)
         """
-        cwd = path and path.abspath() or self.path.abspath()
+        if type(path) == str:
+            cwd = path
+        else:
+            cwd = path and path.abspath() or self.path.abspath()
         bldDir = self.srcnode.abspath(self.env)
         for i in range(len(cwd)):
             if not bldDir.startswith(cwd[:i]):
-                bldDir = os.path.join(bldDir, cwd[i - 1:])
+                bldDir = join(bldDir, cwd[i - 1:])
                 break
         return bldDir
+    
 
 
 class GlobDirectoryWalker:
@@ -357,7 +448,7 @@ class GlobDirectoryWalker:
                 self.index = 0
             else:
                 # got a filename
-                fullname = os.path.join(self.directory, file)
+                fullname = join(self.directory, file)
                 if isdir(fullname):# and not os.path.islink(fullname):
                     self.stack.append(fullname)
                 for p in self.patterns:
@@ -406,11 +497,11 @@ def unzipper(inFile, outDir):
     dirs.sort()
     
     for d in filter(lambda x: not exists(x),
-                    map(lambda x: os.path.join(outDir, x), dirs)):
+                    map(lambda x: join(outDir, x), dirs)):
         os.mkdir(d)
 
     for i, name in enumerate(filter(lambda x: not x.endswith('/'), zf.namelist())):
-        outFile = open(os.path.join(outDir, name), 'wb')
+        outFile = open(join(outDir, name), 'wb')
         outFile.write(zf.read(name))
         outFile.flush()
         outFile.close()
@@ -840,8 +931,8 @@ def m4subst(tsk):
     m4_re = re.compile('@(\w+)@', re.M)
 
     env = tsk.env
-    infile = os.path.join(tsk.path.abspath(), tsk.input)
-    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    infile = join(tsk.path.abspath(), tsk.input)
+    outfile = join(tsk.path.abspath(), tsk.output)
     
     file = open(infile, 'r')
     code = file.read()
@@ -869,8 +960,8 @@ def m4subst(tsk):
 def commentUndefs(tsk):
     import re
     env = tsk.env
-    infile = os.path.join(tsk.path.abspath(), tsk.input)
-    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    infile = join(tsk.path.abspath(), tsk.input)
+    outfile = join(tsk.path.abspath(), tsk.output)
     
     file = open(infile, 'r')
     code = file.read()
@@ -886,7 +977,7 @@ def commentUndefs(tsk):
 @taskgen
 @feature('makeHeader')
 def makeHeader(tsk):
-    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    outfile = join(tsk.path.abspath(), tsk.output)
     dest = open(outfile, 'w')
     guard = '__CONFIG_H__'
     dest.write('#ifndef %s\n#define %s\n\n' % (guard, guard))

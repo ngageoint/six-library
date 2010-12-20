@@ -1,4 +1,4 @@
-import os, re
+from os.path import join, exists
 import Options, Utils
 from build import CPPBuildContext
 
@@ -8,15 +8,22 @@ Utils.g_module.build_context = Utils.g_module.install_context = Utils.g_module.c
 MODULES = 'except str sys mt nitf'
 
 def set_options(opt):
-    opt.sub_options(MODULES)
+    opt.sub_options(filter(lambda x: exists(join(opt.curdir, x, 'wscript')),
+                           MODULES.split()))
 
 def configure(conf):
-    conf.env.append_value('CPPPATH_UNITTEST', os.path.join(conf.curdir, 'include'))
-    conf.sub_config(MODULES)
+    conf.env.append_value('CPPPATH_UNITTEST', join(conf.curdir, 'include'))
+    conf.sub_config(filter(lambda x: exists(join(conf.curdir, x, 'wscript')),
+                           MODULES.split()))
 
 def build(bld):
-    bld.add_subdirs(MODULES)
+    configBuilds = filter(lambda m: not exists(join(bld.curdir, m, 'wscript')),
+                          MODULES.split())
+    # build these modules from their config files
+    map(bld.fromConfig, map(lambda m: join(bld.curdir, m), configBuilds))
+    map(bld.add_subdirs, filter(lambda m: m not in configBuilds, MODULES.split()))
 
 def distclean(context):
-    context.recurse(MODULES)
+    context.recurse(filter(lambda x: exists(join(context.curdir, x, 'wscript')),
+                           MODULES.split()))
 
