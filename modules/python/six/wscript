@@ -33,7 +33,9 @@ def build(bld):
             for fin, fout in zip(files, outFiles):
                 shutil.copy2(fin, join(sourceDir, fout))
             shutil.copy2(join(path, 'six.py'), join(sourceDir, '__init__.py'))
-            shutil.copy2(join(path, 'six.py'), join(pythonDir, 'six', '__init__.py'))
+            if bld.is_install:
+                shutil.copy2(join(path, 'six.py'),
+                             join(pythonDir, 'six', '__init__.py'))
         
         from build import partial
         bld.add_post_fun(partial(copyGeneratedSources,
