@@ -170,11 +170,14 @@
 %typemap(out) nitf_Uint8 {$result = SWIG_From_char((char)($1));}
 
 
+%include "nrt/Defines.h"
+%include "nrt/Types.h"
 %include "nitf/Defines.h"
 %include "nitf/Types.h"
 %include "nrt/Error.h"
 %include "nrt/IOHandle.h"
 %include "nrt/IOInterface.h"
+%include "nitf/NRTCompat.h"
 
 
 
@@ -184,7 +187,7 @@
  * I think it has to do with the leading underscores...
  * Will comment out for now, since we don't access it from Python.
  */
-%ignore __nitf_HashTable_defaultHash;
+%ignore __nrt_HashTable_defaultHash;
 
 
 

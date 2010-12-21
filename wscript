@@ -11,20 +11,20 @@ TOOLS = 'build swig javatool pythontool'
 
 def set_options(opt):
     opt.tool_options(TOOLS, tooldir='build')
-    opt.sub_options('c c++ java external')
+    opt.sub_options('c c++ java external python')
 
 def configure(conf):
     conf.env['APPNAME'] = APPNAME
     conf.env['VERSION'] = VERSION
     conf.check_tool(TOOLS, tooldir='build')
     
-    conf.sub_config('c c++ java external')
+    conf.sub_config('c c++ java external python')
 
 def build(bld):
-    bld.add_subdirs('c c++ java external')
+    bld.add_subdirs('c c++ java external python')
 
 def distclean(context):
-    context.recurse('c c++ java external')
+    context.recurse('c c++ java external python')
     Scripting.distclean(context)
 
 def init(context):

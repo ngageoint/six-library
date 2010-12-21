@@ -54,8 +54,8 @@
 #define NITF_GUARD          NRT_GUARD
 #define NITF_ENDGUARD       NRT_ENDGUARD
 #define NITF_BOOL           NRT_BOOL
-#define NITFAPI             NRTAPI
-#define NITFPROT            NRTPROT
+#define NITFAPI(RT)         NRTAPI(RT)
+#define NITFPROT(RT)        NRTPROT(RT)
 #define NITF_ATO32          NRT_ATO32
 #define NITF_ATOU32         NRT_ATOU32
 #define NITF_ATOU32_BASE    NRT_ATOU32_BASE
