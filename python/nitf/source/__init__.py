@@ -44,7 +44,7 @@ __all__ = ['BandSource', 'ComponentInfo', 'DESegment', 'DESubheader',
            'PixelSkipDownSampler', 'PluginRegistry', 'RESegment', 'RESubheader',
            'Reader', 'Record', 'RecordSegment', 'SegmentReader',
            'SegmentSource', 'SegmentWriter', 'SubWindow', 'TRE', 'TextSegment',
-           'TextSubheader', 'Writer', 'open', 'metadata']
+           'TextSubheader', 'Writer', 'read', 'metadata']
 
 FILE_HEADER_FIELDS = [
     {'id' : 'FHDR', 'name' : 'fileHeader', },
@@ -1187,7 +1187,7 @@ class PluginRegistry:
         return val
 
 
-def open(filename):
+def read(filename):
     '''
     Opens the given file and returns a (Reader, Record) tuple.
     '''
@@ -1214,7 +1214,7 @@ def metadata(filename):
                 dumpTRE(tre, section)
     
     if type(filename) == str:
-        reader, record = open(filename)
+        reader, record = read(filename)
     else:
         record = filename
 
