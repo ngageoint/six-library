@@ -54,8 +54,8 @@ def detect(self):
                       recursiveGlob(abspath(join(matlabHome, 'extern', 'lib')), searches)))
         
         if re.match(winRegex, platform):
-            archdir = self.env['64BIT'] and 'win64' or 'win32'
-            arch = self.env['64BIT'] and 'w64' or 'w32'
+            archdir = self.env['IS64BIT'] and 'win64' or 'win32'
+            arch = self.env['IS64BIT'] and 'w64' or 'w32'
         else:
             #retrieve the matlab environment
             matlabEnvCmd = '%s -nojvm -nosplash -nodisplay -e' % self.env['matlab']

@@ -892,7 +892,6 @@ int main() {
 '''         
             output = self.check(fragment=frag64,
                                 execute=1, msg='Checking for 64-bit system')
-            print output
             is64Bit = bool(int(output))
         elif '64' in config['cxx']:
             if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
@@ -909,7 +908,7 @@ int main() {
         variant.append_value('CCFLAGS', config['cc'].get('32', ''))
         variant.append_value('LINKFLAGS', config['cc'].get('linkflags_32', ''))
     
-    env['64BIT'] = is64Bit
+    env['IS64BIT'] = is64Bit
     self.set_env_name(variantName, variant)
     variant.set_variant(variantName)
     env.set_variant(variantName)
