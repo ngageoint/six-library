@@ -877,8 +877,24 @@ def detect(self):
     #check if the system is 64-bit capable
     if re.match(winRegex, platform):
         is64Bit = Options.options.enable64
-    elif not Options.options.enable32:
-        if '64' in config['cxx']:
+    if not Options.options.enable32:
+        #ifdef _WIN64
+        if re.match(winRegex, platform):
+            frag64 = '''
+#include <stdio.h>
+int main() {
+    #ifdef _WIN64
+    printf("1");
+    #else
+    printf("0");
+    #endif
+    return 0; }
+'''         
+            output = self.check(fragment=frag64,
+                                execute=1, msg='Checking for 64-bit system')
+            print output
+            is64Bit = bool(int(output))
+        elif '64' in config['cxx']:
             if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
                 is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
 
@@ -893,6 +909,7 @@ def detect(self):
         variant.append_value('CCFLAGS', config['cc'].get('32', ''))
         variant.append_value('LINKFLAGS', config['cc'].get('linkflags_32', ''))
     
+    env['64BIT'] = is64Bit
     self.set_env_name(variantName, variant)
     variant.set_variant(variantName)
     env.set_variant(variantName)

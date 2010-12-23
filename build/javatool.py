@@ -22,21 +22,26 @@ def detect(self):
     if Options.options.java_home:
         self.environ['JAVA_HOME'] = Options.options.java_home 
     
-    self.check_tool('javaw')
-    
-    #copied from the waf trunk - which I committed - this is required until we
-    #start using a version higher than 1.5.8
-    
     """
     Check for jni headers and libraries
 
     On success the environment variable xxx_JAVA is added for uselib
     """
+    
+    try:
+        self.check_tool('javaw')
+    except Exception, e:
+        if Options.options.force_java:
+            raise e
+        else:
+            return
 
     if not self.env.CC_NAME and not self.env.CXX_NAME:
         self.fatal('load a compiler first (gcc, g++, ..)')
 
     try:
+        
+    
         if not self.env.JAVA_HOME:
             self.fatal('set JAVA_HOME in the system environment')
     
