@@ -11,10 +11,9 @@ def build(bld):
         
         #override the shlib pattern
         env = env.copy()
-        ext = '.mex%s' % env['matlab_env']['ARCH'][-3:]
         if env['shlib_PATTERN'].startswith('lib'):
             env['shlib_PATTERN'] = env['shlib_PATTERN'][3:]
-        env['shlib_PATTERN'] = splitext(env['shlib_PATTERN'])[0] + ext
+        env['shlib_PATTERN'] = splitext(env['shlib_PATTERN'])[0] + env['MEX_EXT']
         
         files = map(lambda x: join('nitf', x), 'nitf_image.c nitf_metadata.c'.split())
         for src in 'nitf_image.c nitf_metadata.c'.split():
@@ -24,3 +23,4 @@ def build(bld):
                              source=join('nitf', src),
                              install_path='${PREFIX}/bin/mex',
                              target=splitext(src)[0])
+
