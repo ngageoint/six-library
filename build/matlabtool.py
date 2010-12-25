@@ -67,7 +67,7 @@ def detect(self):
             arch = archdir[-3:]
         self.env['MEX_EXT'] = '.mex%s' % arch
         
-        filtered = filter(lambda x: x.endswith(archdir), libDirs)
+        filtered = filter(lambda x: archdir in x, libDirs)
         if filtered:
             libDirs = filtered
         libDirs = list(set(libDirs))
@@ -89,9 +89,11 @@ def detect(self):
                        # type='cshlib', mandatory=True, env=env)
             self.check(lib='%smex' % libPrefix, libpath=libDirs, uselib_store='MEX', uselib='MEX',
                        type='cshlib', mandatory=True, env=env)
-            # self.check(lib='%smx' % libPrefix, libpath=libDirs, uselib_store='MEX', uselib='MEX',
-                       # type='cshlib', mandatory=True, env=env)
+            self.check(lib='%smx' % libPrefix, libpath=libDirs, uselib_store='MEX', uselib='MEX',
+                       type='cshlib', mandatory=True, env=env)
             
+            if re.match(winRegex, platform):
+                self.env.append_value('LINKFLAGS_MEX', '/EXPORT:mexFunction'.split())
 
         except ConfigurationError, ex:
             err = str(ex).strip()

@@ -34,6 +34,7 @@ Name: "cpp"; Description: "C++ Bindings"; Types: full compact
 Name: "java"; Description: "Java Bindings"; Types: full compact
 Name: "java\imagej"; Description: "ImageJ PlugIn"; Types: full compact
 Name: "python"; Description: "Python Bindings"; Types: full compact
+Name: "matlab"; Description: "Matlab/Mex Exports"; Types: full compact
 Name: "plugins"; Description: "Plugins"; Types: full compact
 Name: "plugins\tres"; Description: "TREs"; Types: full compact
 Name: "plugins\jpeg"; Description: "JPEG"; Types: full compact
@@ -66,6 +67,7 @@ Source: "..\..\c\nitf\tests\*.c"; DestDir: "{app}\share\nitf\samples\c"; Flags: 
 Source: "..\..\target\win32-release\c\nitf\tests\*.exe"; DestDir: "{app}\share\nitf\tests"; Flags: ignoreversion recursesubdirs; Components: tests;
 Source: "..\..\target\win32-release\c\nitf\apps\*.exe"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs; Components: apps;
 Source: "..\..\target\win32-release\java\nitf\*.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
+Source: "..\..\target\win32-release\mex\*.mex*"; DestDir: "{app}\bin\mex"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: matlab;
 Source: "..\..\java\nitf\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "..\..\java\cgm\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "..\..\java\nitf.imageio\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;

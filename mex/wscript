@@ -17,10 +17,11 @@ def build(bld):
         
         files = map(lambda x: join('nitf', x), 'nitf_image.c nitf_metadata.c'.split())
         for src in 'nitf_image.c nitf_metadata.c'.split():
-            bld.new_task_gen('cc', 'shlib', name=splitext(src)[0],
+            name = splitext(src)[0]
+            bld.new_task_gen('cc', 'shlib', name=name,
                              uselib_local='nitf-c',
                              uselib='MEX', env=env.copy(),
                              source=join('nitf', src),
                              install_path='${PREFIX}/bin/mex',
-                             target=splitext(src)[0])
+                             target=name)
 

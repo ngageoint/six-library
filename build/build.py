@@ -892,7 +892,9 @@ int main() {
 '''         
             output = self.check(fragment=frag64,
                                 execute=1, msg='Checking for 64-bit system')
-            is64Bit = bool(int(output))
+            try:
+                is64Bit = bool(int(output))
+            except:{}
         elif '64' in config['cxx']:
             if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
                 is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
