@@ -74,8 +74,8 @@ Source: "..\..\java\nitf.imageio\target\*.jar"; DestDir: "{app}\lib"; Flags: ign
 Source: "..\..\java\nitf.imagej\target\*.jar"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
 Source: "..\..\java\nitf.imagej\target\dependency\*"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
 Source: "..\..\java\nitf\src\test\*"; DestDir: "{app}\share\nitf\samples\java"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: samples\java;
-Source: "..\..\python\nitf\source\*.py"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
-Source: "..\..\target\win32-release\python\nitf\*.pyd"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
+Source: "..\..\python\nitf\source\*.py"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: python;
+Source: "..\..\target\win32-release\python\nitf\*.pyd"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: python;
 Source: "..\..\python\nitf\samples\*.py"; DestDir: "{app}\share\nitf\samples\python"; Flags: ignoreversion skipifsourcedoesntexist; Components: samples\python;
 ;Source: "..\..\python\nitf\dist\nitro-python-2.7-dev.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\java\nitf\target\site\apidocs\*"; DestDir: "{app}\share\nitf\doc\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;
