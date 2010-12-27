@@ -1,0 +1,23 @@
+set_options = distclean = configure = lambda x: None
+
+def build(bld):
+    for src in 'nitf_image.c nitf_metadata.c'.split():
+        bld.mexify(source=src, uselib_local='nitf-c', lang='c')
+#    env = bld.env_of_name(bld.env['VARIANT'] or 'default')
+#    if env['HAVE_MEX_H']:
+#        
+#        #override the shlib pattern
+#        env = env.copy()
+#        if env['shlib_PATTERN'].startswith('lib'):
+#            env['shlib_PATTERN'] = env['shlib_PATTERN'][3:]
+#        env['shlib_PATTERN'] = splitext(env['shlib_PATTERN'])[0] + env['MEX_EXT']
+#        
+#        files = map(lambda x: join('nitf', x), 'nitf_image.c nitf_metadata.c'.split())
+#        for src in 'nitf_image.c nitf_metadata.c'.split():
+#            name = splitext(src)[0]
+#            bld.new_task_gen('cc', 'shlib', name=name,
+#                             uselib_local='nitf-c',
+#                             uselib='MEX', env=env.copy(),
+#                             source=join('nitf', src),
+#                             install_path='${PREFIX}/bin/mex',
+#                             target=name)
