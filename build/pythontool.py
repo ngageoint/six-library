@@ -15,7 +15,8 @@ def detect(conf):
     if Options.options.python:
     
         try:
-            if not conf.check_tool('python'):
+            conf.check_tool('python')
+            if not conf.env['PYTHON']:
                 raise Exception('python not found')
         except Exception, e:
             if Options.options.force_python:
