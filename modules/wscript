@@ -1,18 +1,21 @@
 import os
+from os.path import join
 import Scripting, Options
 from Build import BuildContext
 
-VERSION = '0.1-RC1'
+VERSION = '0.2'
 APPNAME = 'Sensor Independent XML'
 srcdir  = '.'
 blddir  = 'target'
 
 def set_options(opt):
-    opt.tool_options('build swig pythontool', tooldir='build')
+    opt.tool_options('build swig pythontool',
+                     tooldir=join(opt.curdir, 'build'))
     opt.sub_options('drivers c++ python')
 
 def configure(conf):
-    conf.check_tool('build swig pythontool', tooldir='build')
+    conf.check_tool('build swig pythontool',
+                    tooldir=join(conf.curdir, 'build'))
     conf.sub_config('drivers c++ python')
 
 def build(bld):
