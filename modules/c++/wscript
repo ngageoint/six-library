@@ -7,7 +7,7 @@ Utils.g_module.build_context = Utils.g_module.install_context = \
         Utils.g_module.clean_context = CPPBuildContext
 
 MODULES = 'except io logging math.linear math.poly mt nitf scene ' \
-          'six six.sicd six.sidd str sys tiff xml.lite'
+          'six six.sicd six.sidd str sys tiff xml.lite cli'
 #MODULES += ' sio.lite'
 SAMPLES = 'samples'
 
