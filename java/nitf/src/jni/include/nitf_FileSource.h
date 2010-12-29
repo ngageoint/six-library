@@ -12,7 +12,7 @@ extern "C" {
 /*
  * Class:     nitf_FileSource
  * Method:    construct
- * Signature: (Lnitf/IOHandle;JII)V
+ * Signature: (Lnitf/IOInterface;JII)V
  */
 JNIEXPORT void JNICALL Java_nitf_FileSource_construct
   (JNIEnv *, jobject, jobject, jlong, jint, jint);

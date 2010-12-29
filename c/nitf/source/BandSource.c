@@ -179,67 +179,65 @@ NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(char *data,
 /*
  *  Private implementation struct
  */
-typedef struct _FileSourceImpl
+typedef struct _IOSourceImpl
 {
-    nitf_IOHandle handle;
+    nitf_IOInterface *io;
     nitf_Off start;
     nitf_Off size;
     int numBytesPerPixel;
     int pixelSkip;
     nitf_Off mark;
 }
-FileSourceImpl;
+IOSourceImpl;
 
-NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
+NITFPRIV(void) IOSource_destruct(NITF_DATA * data)
 {
     NITF_FREE(data);
 }
 
-NITFPRIV(nitf_Off) FileSource_getSize(NITF_DATA * data, nitf_Error *e)
+NITFPRIV(nitf_Off) IOSource_getSize(NITF_DATA * data, nitf_Error *e)
 {
-    FileSourceImpl *fileSource = (FileSourceImpl *) data;
-    return fileSource ? (nitf_Off)fileSource->size : 0;
+    IOSourceImpl *source = (IOSourceImpl *) data;
+    return source ? (nitf_Off)source->size : 0;
 }
 
 
-NITFPRIV(NITF_BOOL) FileSource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *e)
+NITFPRIV(NITF_BOOL) IOSource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *e)
 {
-    FileSourceImpl *fileSource = (FileSourceImpl *) data;
-    if (!fileSource)
+    IOSourceImpl *source = (IOSourceImpl *) data;
+    if (!source)
     {
         nitf_Error_init(e, "Null pointer reference",
                 NITF_CTXT, NITF_ERR_INVALID_OBJECT);
         return NITF_FAILURE;
     }
-    fileSource->size = size;
+    source->size = size;
     return NITF_SUCCESS;
 }
 
 
-NITFPRIV(FileSourceImpl *) toFileSource(NITF_DATA * data,
-                                        nitf_Error * error)
+NITFPRIV(IOSourceImpl *) toIOSource(NITF_DATA * data, nitf_Error *error)
 {
-    FileSourceImpl *fileSource = (FileSourceImpl *) data;
-    if (fileSource == NULL)
+    IOSourceImpl *source = (IOSourceImpl *) data;
+    if (source == NULL)
     {
         nitf_Error_init(error, "Null pointer reference",
                         NITF_CTXT, NITF_ERR_INVALID_OBJECT);
         return NULL;
     }
-    return fileSource;
-
+    return source;
 }
 
 
-NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
-        char *buf,
-        nitf_Off size, nitf_Error * error)
+NITFPRIV(NITF_BOOL) IOSource_contigRead(IOSourceImpl * source,
+                                        char *buf,
+                                        nitf_Off size,
+                                        nitf_Error * error)
 {
-
-    if (!NITF_IO_SUCCESS(nitf_IOHandle_read(fileSource->handle,
+    if (!NITF_IO_SUCCESS(nitf_IOInterface_read(source->io,
                                             buf, size, error)))
         return NITF_FAILURE;
-    fileSource->mark += size;
+    source->mark += size;
     return NITF_SUCCESS;
 
 }
@@ -247,7 +245,7 @@ NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
 
 /*
  *  The idea here is we will speed it up by creating a temporary buffer
- *  for reading from the io handle.  Even with the allocation, this should
+ *  for reading from the io interface.  Even with the allocation, this should
  *  be much faster than seeking every time.
  *
  *  The basic idea is that we allocate the temporary buffer to the request
@@ -258,7 +256,7 @@ NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
  *  If this proves to be a problem, I will revert it back to a seek/read paradigm
  *  -DP
  */
-NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
+NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
         char *buf,
         nitf_Off size, nitf_Error * error)
 {
@@ -267,14 +265,14 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
      * read method takes in size as number of bytes, not number of pixels */
 
     /* TODO - this *could* be smaller, but this should be ok for now */
-    nitf_Off tsize = size * (fileSource->pixelSkip + 1);
+    nitf_Off tsize = size * (source->pixelSkip + 1);
 
     char *tbuf;
     nitf_Off lmark = 0;
     int i = 0;
     int j = 0;
-    if (tsize + fileSource->mark > fileSource->size)
-        tsize = fileSource->size - fileSource->mark;
+    if (tsize + source->mark > source->size)
+        tsize = source->size - source->mark;
 
     tbuf = (char *) NITF_MALLOC(tsize);
     if (!tbuf)
@@ -285,7 +283,7 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
         return NITF_FAILURE;
     }
 
-    if (!nitf_IOHandle_read(fileSource->handle, tbuf, tsize, error))
+    if (!nitf_IOInterface_read(source->io, tbuf, tsize, error))
     {
         NITF_FREE(tbuf);
         return NITF_FAILURE;
@@ -293,13 +291,13 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
     /*  Downsize for buf */
     while (i < size)
     {
-        for (j = 0; j < fileSource->numBytesPerPixel; ++j, ++i)
+        for (j = 0; j < source->numBytesPerPixel; ++j, ++i)
         {
             buf[i] = *(tbuf + lmark++);
         }
-        lmark += (fileSource->pixelSkip * fileSource->numBytesPerPixel);
+        lmark += (source->pixelSkip * source->numBytesPerPixel);
     }
-    fileSource->mark += lmark;
+    source->mark += lmark;
     NITF_FREE(tbuf);
     return NITF_SUCCESS;
 }
@@ -308,52 +306,52 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
 /*
  *  Private read implementation for file source.
  */
-NITFPRIV(NITF_BOOL) FileSource_read(NITF_DATA * data,
+NITFPRIV(NITF_BOOL) IOSource_read(NITF_DATA * data,
                                     char *buf,
                                     nitf_Off size, nitf_Error * error)
 {
-    FileSourceImpl *fileSource = toFileSource(data, error);
-    if (!fileSource)
+    IOSourceImpl *source = toIOSource(data, error);
+    if (!source)
         return NITF_FAILURE;
 
-    if (!NITF_IO_SUCCESS(nitf_IOHandle_seek(fileSource->handle,
-                                            fileSource->mark,
-                                            NITF_SEEK_SET, error)))
+    if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(source->io,
+                                               source->mark,
+                                               NITF_SEEK_SET, error)))
         return NITF_FAILURE;
-    if (fileSource->pixelSkip == 0)
-        return FileSource_contigRead(fileSource, buf, size, error);
-    return FileSource_offsetRead(fileSource, buf, size, error);
+    if (source->pixelSkip == 0)
+        return IOSource_contigRead(source, buf, size, error);
+    return IOSource_offsetRead(source, buf, size, error);
 }
 
 
-NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle handle,
+NITFAPI(nitf_BandSource *) nitf_IOSource_construct(nitf_IOInterface *io,
         nitf_Off start,
         int numBytesPerPixel,
         int pixelSkip,
         nitf_Error * error)
 {
-    static nitf_IDataSource iFileSource =
-        {
-            &FileSource_read,
-            &FileSource_destruct,
-            &FileSource_getSize,
-            &FileSource_setSize
-        };
-    FileSourceImpl *impl;
+    static nitf_IDataSource iIOSource =
+    {
+        &IOSource_read,
+        &IOSource_destruct,
+        &IOSource_getSize,
+        &IOSource_setSize
+    };
+    IOSourceImpl *impl;
     nitf_BandSource *bandSource;
 
-    impl = (FileSourceImpl *) NITF_MALLOC(sizeof(FileSourceImpl));
+    impl = (IOSourceImpl *) NITF_MALLOC(sizeof(IOSourceImpl));
     if (!impl)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
                         NITF_ERR_MEMORY);
         return NULL;
     }
-    impl->handle = handle;
+    impl->io = io;
     impl->numBytesPerPixel = numBytesPerPixel > 0 ? numBytesPerPixel : 1;
     impl->pixelSkip = pixelSkip >= 0 ? pixelSkip : 0;
     impl->mark = impl->start = (start >= 0 ? start : 0);
-    impl->size = nitf_IOHandle_getSize(handle, error);
+    impl->size = nitf_IOInterface_getSize(io, error);
 
     if (!NITF_IO_SUCCESS(impl->size))
     {
@@ -369,6 +367,21 @@ NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle handle,
         return NULL;
     }
     bandSource->data = impl;
-    bandSource->iface = &iFileSource;
+    bandSource->iface = &iIOSource;
     return bandSource;
+}
+
+NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle handle,
+        nitf_Off start,
+        int numBytesPerPixel,
+        int pixelSkip,
+        nitf_Error * error)
+{
+    nitf_IOInterface *interface = NULL;
+
+    if (!(interface = nitf_IOHandleAdaptor_construct(handle, error)))
+        return NULL;
+
+    return nitf_IOSource_construct(interface, start, numBytesPerPixel,
+                                   pixelSkip, error);
 }
