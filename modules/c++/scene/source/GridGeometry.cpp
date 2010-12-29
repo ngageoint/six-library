@@ -14,7 +14,7 @@ scene::Vector3 scene::PlanarGridGeometry::rowColToECEF(double row,
     return mRefPt + rowDisp + colDisp;
 }
 
-scene::Vector3 scene::CircularGridGeometry::rowColToECEF(double row,
+scene::Vector3 scene::CylindricalGridGeometry::rowColToECEF(double row,
                                                      double col)
 {
     double theta = mSampleSpacingCols * (col - mSceneCenterCol) / mRs;

@@ -96,6 +96,7 @@ struct Position
         rcvAPC(NULL)
     {
 	// Initialize other optional elements
+        arpPoly = Init::undefined<PolyXYZ>();
     	grpPoly = Init::undefined<PolyXYZ>();
     	txAPCPoly = Init::undefined<PolyXYZ>();
     }

@@ -57,7 +57,7 @@ namespace scene
                              double col);
     };
 
-    class CircularGridGeometry : public GridGeometry
+    class CylindricalGridGeometry : public GridGeometry
     {
     protected:
         Vector3 mRow;
@@ -66,7 +66,7 @@ namespace scene
         Vector3 mRefPt;
         double  mRs;
     public:
-        CircularGridGeometry(double sampleSpacingRows,
+        CylindricalGridGeometry(double sampleSpacingRows,
                              double sampleSpacingCols,
                              double sceneCenterRow,
                              double sceneCenterCol,
@@ -81,7 +81,7 @@ namespace scene
             mRefPt(refPt),
             mRs(radiusOfCurvStripmap) {}
          
-        ~CircularGridGeometry() {} 
+        ~CylindricalGridGeometry() {}
         
         Vector3 rowColToECEF(double row,
                              double col);
