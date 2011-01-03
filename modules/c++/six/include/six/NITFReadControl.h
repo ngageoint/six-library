@@ -72,7 +72,8 @@ public:
      *  Fulfills our obligationss to the parent class, using the IOInterface
      *  method provided with the same name
      */
-    virtual void load(std::string fromFile);
+    virtual void load(std::string fromFile,
+                      XMLControlRegistry* xmlRegistry = NULL);
 
     virtual UByte* interleaved(Region& region, int imageNumber);
 

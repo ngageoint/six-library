@@ -31,7 +31,7 @@
 using namespace six;
 
 void writeSIOFileHeader(long numRows, long numCols, unsigned long nbpp,
-        io::OutputStream& outputStream)
+                        io::OutputStream& outputStream)
 {
 #ifdef USE_SIO_LITE
 
@@ -42,7 +42,6 @@ void writeSIOFileHeader(long numRows, long numCols, unsigned long nbpp,
     fileHeader.to(1, outputStream);
 
 #endif
-
 }
 
 int main(int argc, char** argv)
@@ -53,7 +52,7 @@ int main(int argc, char** argv)
         // create a parser and add our options to it
         cli::ArgumentParser parser;
         parser.setDescription(
-                              "This program reads in SIDD images and dumps the images as separate files.");
+                              "This program reads in a single SICD or SIDD file and dumps its images as separate files.");
         parser.addArgument("-d --dir", "Write to output directory", cli::STORE)->setDefault(
                                                                                             ".");
         parser.addArgument("--sr", "Start Row", cli::STORE, "startRow", "ROW")->setDefault(
@@ -69,31 +68,28 @@ int main(int argc, char** argv)
         parser.addArgument("--one --single",
                            "Read input image in one read, rather than lines",
                            cli::STORE_TRUE, "oneRead");
-        parser.addArgument("sidd", "SIDD input file", cli::STORE, "sidd",
-                           "SIDD", 1, 1);
+        parser.addArgument("file", "SICD/SIDD input file", cli::STORE, "file",
+                           "FILE", 1, 1);
 
         cli::Results *options = parser.parse(argc, (const char**) argv);
 
-        long startRow(options->get<long>("startRow"));
-        long numRows(options->get<long>("numRows"));
-        long startCol(options->get<long>("startCol"));
-        long numCols(options->get<long>("numCols"));
-        bool isSIO(options->get<bool>("sio"));
-        bool oneRead(options->get<bool>("oneRead"));
-        std::string inputFile(options->get<std::string>("sidd"));
-        std::string outputDir(options->get<std::string>("dir"));
+        long startRow(options->get<long> ("startRow"));
+        long numRows(options->get<long> ("numRows"));
+        long startCol(options->get<long> ("startCol"));
+        long numCols(options->get<long> ("numCols"));
+        bool isSIO(options->get<bool> ("sio"));
+        bool oneRead(options->get<bool> ("oneRead"));
+        std::string inputFile(options->get<std::string> ("file"));
+        std::string outputDir(options->get<std::string> ("dir"));
 
-        // TODO update to not use the singleton once the Readers are able
-        // to be handed a registry, rather than always using the singleton
-        XMLControlFactory::getInstance(). addCreator(
-                                                     DataType::COMPLEX,
-                                                     new XMLControlCreatorT<
-                                                             six::sicd::ComplexXMLControl>());
-
-        XMLControlFactory::getInstance(). addCreator(
-                                                     DataType::DERIVED,
-                                                     new XMLControlCreatorT<
-                                                             six::sidd::DerivedXMLControl>());
+        // create an XML registry
+        // The reason to do this is to avoid adding XMLControlCreators to the
+        // XMLControlFactory singleton - this way has more fine-grained control
+        XMLControlRegistry xmlRegistry;
+        xmlRegistry.addCreator(DataType::COMPLEX, new XMLControlCreatorT<
+                six::sicd::ComplexXMLControl> ());
+        xmlRegistry.addCreator(DataType::DERIVED, new XMLControlCreatorT<
+                six::sidd::DerivedXMLControl> ());
 
         // create a Reader registry (now, only NITF and TIFF)
         ReadControlRegistry readerRegistry;
@@ -102,40 +98,52 @@ int main(int argc, char** argv)
 
         // get the correct ReadControl for the given file
         ReadControl *reader = readerRegistry.newReadControl(inputFile);
-        reader->load(inputFile);
+        // load the file, passing in the optional registry, since we have one
+        reader->load(inputFile, &xmlRegistry);
 
         Container* container = reader->getContainer();
         std::string base = sys::Path::basename(inputFile, true);
-        unsigned int numImages = 0;
+        size_t numImages = 0;
 
-        for (; numImages < container->getNumData(); ++numImages)
+        if (container->getDataType() == DataType::COMPLEX
+                && container->getNumData() > 0)
         {
-            if (container->getData(numImages)->getDataType()
-                    == DataType::COMPLEX)
-            {
-                // Assume for now it can only be the last one
-                break;
-            }
+            numImages = 1;
         }
-        std::cout << "Found: " << numImages << " images" << std::endl;
+        else if (container->getDataType() == DataType::DERIVED)
+        {
+            for (; numImages < container->getNumData()
+                    && container->getData(numImages)->getDataType()
+                            == DataType::DERIVED; ++numImages)
+                ;
+        }
+
+        std::cout << "Found: " << numImages << " image(s)" << std::endl;
 
         sys::OS os;
         if (!os.exists(outputDir))
             os.makeDirectory(outputDir);
 
-        for (unsigned int i = 0; i < numImages; ++i)
+        // first, write out the XMLs
+        for (size_t i = 0, total = container->getNumData(); i < total; ++i)
+        {
+            Data* data = container->getData(i);
+            std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);
+            std::string xmlFile = sys::Path::joinPaths(outputDir, filename);
+            io::FileOutputStream xmlStream(xmlFile);
+
+            std::string xmlData = six::toXMLString(data, &xmlRegistry);
+            xmlStream.write(xmlData.c_str(), xmlData.length());
+            xmlStream.close();
+        }
+
+        //  now, dump the images
+        for (size_t i = 0; i < numImages; ++i)
         {
             Data* data = container->getData(i);
             unsigned long nbpp = data->getNumBytesPerPixel();
             unsigned long height = data->getNumRows();
             unsigned long width = data->getNumCols();
-
-            std::string xmlFile = FmtX("%s_DES_%d.xml", base.c_str(), i);
-            io::FileOutputStream xmlStream(xmlFile);
-
-            std::string xmlData = six::toXMLString(data);
-            xmlStream.write(xmlData.c_str(), xmlData.length());
-            xmlStream.close();
 
             if (numRows == -1)
                 numRows = height;

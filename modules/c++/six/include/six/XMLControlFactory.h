@@ -121,7 +121,7 @@ public:
  *  \return A new allocated string containing the XML representation of the
  *  data
  */
-char* toXMLCharArray(Data* data);
+char* toXMLCharArray(Data* data, XMLControlRegistry *xmlRegistry = NULL);
 
 /*!
  *  Convenience method to convert from a ComplexData or DerivedData
@@ -131,7 +131,7 @@ char* toXMLCharArray(Data* data);
  *  \return A C++ string object containing the XML
  *
  */
-std::string toXMLString(Data* data);
+std::string toXMLString(Data* data, XMLControlRegistry *xmlRegistry = NULL);
 
 
 //!  Singleton declaration of our XMLControlRegistry

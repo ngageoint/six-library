@@ -5,7 +5,7 @@ USELIB          = 'SIX_SAMPLES'
 
 set_options = configure = distclean = lambda p: None
 
-SAMPLES = 'test_round_trip test_extract_xml test_create_sicd test_dump_sicd_lines test_dump_sidd_lines test_create_sidd test_create_sidd_from_mem test_parse_xml'
+SAMPLES = 'test_round_trip test_extract_xml test_create_sicd test_dump_images test_create_sidd test_create_sidd_from_mem test_parse_xml'
 
 def build(bld):
     for sample in SAMPLES.split():
