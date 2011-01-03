@@ -61,7 +61,8 @@ six::DataType six::sidd::GeoTIFFReadControl::getDataType(std::string fromFile)
     return six::DataType::NOT_SET;
 }
 
-void six::sidd::GeoTIFFReadControl::load(std::string fromFile)
+void six::sidd::GeoTIFFReadControl::load(std::string fromFile,
+                                         six::XMLControlRegistry* xmlRegistry)
 {
     mReader.openFile(fromFile);
 
@@ -83,12 +84,12 @@ void six::sidd::GeoTIFFReadControl::load(std::string fromFile)
 
     mContainer = new six::Container(six::DataType::DERIVED);
 
+    if (!xmlRegistry)
+        xmlRegistry = &six::XMLControlFactory::getInstance();
+
     for (size_t i = 0, n = sidds.size(); i < n; ++i)
     {
-        six::XMLControl
-                * xmlControl =
-                        six::XMLControlFactory::getInstance(). newXMLControl(
-                                                                             "SIDD_XML");
+        six::XMLControl * xmlControl = xmlRegistry->newXMLControl("SIDD_XML");
 
         std::string xmlString = sidds[i];
         str::trim(xmlString);
@@ -111,10 +112,7 @@ void six::sidd::GeoTIFFReadControl::load(std::string fromFile)
     }
     for (size_t i = 0, n = sicds.size(); i < n; ++i)
     {
-        six::XMLControl
-                * xmlControl =
-                        six::XMLControlFactory::getInstance(). newXMLControl(
-                                                                             "SICD_XML");
+        six::XMLControl * xmlControl = xmlRegistry->newXMLControl("SICD_XML");
 
         std::string xmlString = sicds[i];
         str::trim(xmlString);
@@ -139,7 +137,7 @@ void six::sidd::GeoTIFFReadControl::load(std::string fromFile)
 }
 
 six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
-        int imIndex)
+                                                       int imIndex)
 {
     if (mReader.getImageCount() <= imIndex || imIndex < 0)
         throw except::IndexOutOfRangeException(Ctxt(FmtX("Invalid index: %d",
@@ -191,9 +189,9 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     {
         six::UByte* rowBuf = new six::UByte[numColsTotal * elemSize];
 
-//        // skip past rows
-//        for (size_t i = 0; i < startRow; ++i)
-//            imReader->getData(rowBuf, numColsTotal);
+        //        // skip past rows
+        //        for (size_t i = 0; i < startRow; ++i)
+        //            imReader->getData(rowBuf, numColsTotal);
 
         size_t offset = 0;
         // this is not the most efficient, but it works

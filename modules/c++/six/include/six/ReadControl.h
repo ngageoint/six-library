@@ -26,10 +26,12 @@
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
+#include "six/XMLControlFactory.h"
 #include <import/logging.h>
 
 namespace six
 {
+
 /*!
  *  \class ReadControl
  *  \brief Interface for reading a SICD/SIDD from a container format
@@ -76,7 +78,8 @@ public:
      *  done this, you can get the image data back using the interleaved
      *  function
      */
-    virtual void load(std::string fromFile) = 0;
+    virtual void load(std::string fromFile,
+                      XMLControlRegistry* xmlRegistry = NULL) = 0;
 
     /*!
      *  Get a const pointer to the current container.  This

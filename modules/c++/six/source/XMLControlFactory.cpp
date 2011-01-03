@@ -62,7 +62,7 @@ XMLControl* XMLControlRegistry::newXMLControl(std::string identifier)
 
 }
 
-char* six::toXMLCharArray(Data* data)
+char* six::toXMLCharArray(Data* data, six::XMLControlRegistry *xmlRegistry)
 {
     std::string xml = toXMLString(data);
     char* raw = new char[xml.length() + 1];
@@ -70,10 +70,11 @@ char* six::toXMLCharArray(Data* data)
     return raw;
 
 }
-std::string six::toXMLString(Data* data)
+std::string six::toXMLString(Data* data, six::XMLControlRegistry *xmlRegistry)
 {
-    XMLControl* xmlControl =
-            XMLControlFactory::getInstance().newXMLControl(data->getDataType());
+    if (!xmlRegistry)
+        xmlRegistry = &XMLControlFactory::getInstance();
+    XMLControl* xmlControl = xmlRegistry->newXMLControl(data->getDataType());
     xml::lite::Document *doc = xmlControl->toXML(data);
 
     io::ByteStream bs;

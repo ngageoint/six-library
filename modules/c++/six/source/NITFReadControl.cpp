@@ -83,7 +83,8 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 
 }
 
-void NITFReadControl::load(std::string fromFile)
+void NITFReadControl::load(std::string fromFile,
+                           XMLControlRegistry* xmlRegistry)
 {
     reset();
 
@@ -124,8 +125,9 @@ void NITFReadControl::load(std::string fromFile)
             xmlParser.parse(ioAdapter);
             xml::lite::Document* doc = xmlParser.getDocument();
 
-            XMLControl* xmlControl =
-                    XMLControlFactory::getInstance(). newXMLControl(desid);
+            if (!xmlRegistry)
+                xmlRegistry = &XMLControlFactory::getInstance();
+            XMLControl *xmlControl = xmlRegistry->newXMLControl(desid);
 
             Data* data = xmlControl->fromXML(doc);
 

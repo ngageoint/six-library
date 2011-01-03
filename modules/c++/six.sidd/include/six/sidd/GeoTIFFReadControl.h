@@ -48,7 +48,8 @@ public:
 
     virtual DataType getDataType(std::string fromFile);
 
-    virtual void load(std::string fromFile);
+    virtual void load(std::string fromFile,
+                      XMLControlRegistry* xmlRegistry = NULL);
 
     virtual UByte* interleaved(Region& region, int imageNumber);
 
