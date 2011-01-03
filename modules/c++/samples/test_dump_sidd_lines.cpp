@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <import/cli.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
@@ -29,18 +30,8 @@
 
 using namespace six;
 
-/*!
- *  We need to read in a NITF SICD file and dump the data as a raw
- *  file to an output file.  This output can be compared against
- *  test_dump_record in by cat-ing the results of each segment from
- *  TDR together and diffing against this file.
- */
-
-const char* USAGE =
-        "Usage: %s <sidd-image-file> (-sr <d>) (-nr <d>) (-sc <d>) (-nc <d>) (-sio)\n";
-
 void writeSIOFileHeader(long numRows, long numCols, unsigned long nbpp,
-                        io::OutputStream& outputStream)
+        io::OutputStream& outputStream)
 {
 #ifdef USE_SIO_LITE
 
@@ -57,58 +48,43 @@ void writeSIOFileHeader(long numRows, long numCols, unsigned long nbpp,
 int main(int argc, char** argv)
 {
 
-    long startRow = 0;
-    long startCol = 0;
-    long numRows = -1;
-    long numCols = -1;
-    bool isSIO = false;
-
-    std::string inputFile;
-    if (argc < 2)
-    {
-        die_printf(USAGE, argv[0]);
-    }
-    if (argc == 2)
-        inputFile = argv[1];
-    else
-    {
-        for (int i = 1; i < argc; i++)
-        {
-            std::string arg(argv[i]);
-            if (arg == "-sr")
-            {
-                startRow = str::toType<long>(argv[++i]);
-            }
-            else if (arg == "-nr")
-            {
-                numRows = str::toType<long>(argv[++i]);
-            }
-            else if (arg == "-sc")
-            {
-                startCol = str::toType<long>(argv[++i]);
-            }
-            else if (arg == "-nc")
-            {
-                numCols = str::toType<long>(argv[++i]);
-            }
-#ifdef USE_SIO_LITE
-            else if (arg == "-sio")
-            {
-                isSIO = true;
-            }
-#endif
-            else
-            {
-                inputFile = argv[i];
-            }
-        }
-        if (inputFile.empty())
-            die_printf(USAGE, argv[0]);
-    }
-    UByte* workBuffer = NULL;
-
     try
     {
+        // create a parser and add our options to it
+        cli::ArgumentParser parser;
+        parser.setDescription(
+                              "This program reads in SIDD images and dumps the images as separate files.");
+        parser.addArgument("-d --dir", "Write to output directory", cli::STORE)->setDefault(
+                                                                                            ".");
+        parser.addArgument("--sr", "Start Row", cli::STORE, "startRow", "ROW")->setDefault(
+                                                                                           0);
+        parser.addArgument("--nr", "Number of Rows", cli::STORE, "numRows",
+                           "ROWS")->setDefault(-1);
+        parser.addArgument("--sc", "Start Col", cli::STORE, "startCol", "COL")->setDefault(
+                                                                                           0);
+        parser.addArgument("--nc", "Number of Cols", cli::STORE, "numCols",
+                           "COLS")->setDefault(-1);
+        parser.addArgument("--sio", "Write out an SIO instead of a RAW file",
+                           cli::STORE_TRUE, "sio");
+        parser.addArgument("--one --single",
+                           "Read input image in one read, rather than lines",
+                           cli::STORE_TRUE, "oneRead");
+        parser.addArgument("sidd", "SIDD input file", cli::STORE, "sidd",
+                           "SIDD", 1, 1);
+
+        cli::Results *options = parser.parse(argc, (const char**) argv);
+
+        long startRow(options->get<long>("startRow"));
+        long numRows(options->get<long>("numRows"));
+        long startCol(options->get<long>("startCol"));
+        long numCols(options->get<long>("numCols"));
+        bool isSIO(options->get<bool>("sio"));
+        bool oneRead(options->get<bool>("oneRead"));
+        std::string inputFile(options->get<std::string>("sidd"));
+        std::string outputDir(options->get<std::string>("dir"));
+
+        // TODO update to not use the singleton once the Readers are able
+        // to be handed a registry, rather than always using the singleton
         XMLControlFactory::getInstance(). addCreator(
                                                      DataType::COMPLEX,
                                                      new XMLControlCreatorT<
@@ -119,7 +95,13 @@ int main(int argc, char** argv)
                                                      new XMLControlCreatorT<
                                                              six::sidd::DerivedXMLControl>());
 
-        ReadControl* reader = new NITFReadControl();
+        // create a Reader registry (now, only NITF and TIFF)
+        ReadControlRegistry readerRegistry;
+        readerRegistry.addCreator(new NITFReadControlCreator());
+        readerRegistry.addCreator(new six::sidd::GeoTIFFReadControlCreator());
+
+        // get the correct ReadControl for the given file
+        ReadControl *reader = readerRegistry.newReadControl(inputFile);
         reader->load(inputFile);
 
         Container* container = reader->getContainer();
@@ -137,19 +119,12 @@ int main(int argc, char** argv)
         }
         std::cout << "Found: " << numImages << " images" << std::endl;
 
+        sys::OS os;
+        if (!os.exists(outputDir))
+            os.makeDirectory(outputDir);
+
         for (unsigned int i = 0; i < numImages; ++i)
         {
-            // In this version, I will allocate the work buffer since I know
-            // exactly how big it will be and we are reading lines, so I dont
-            // want a new one allocated every time I read
-            // case
-
-            Region region;
-            region.setStartRow(startRow);
-            region.setStartCol(startCol);
-            region.setNumCols(numCols);
-            region.setNumRows(1);
-
             Data* data = container->getData(i);
             unsigned long nbpp = data->getNumBytesPerPixel();
             unsigned long height = data->getNumRows();
@@ -162,24 +137,19 @@ int main(int argc, char** argv)
             xmlStream.write(xmlData.c_str(), xmlData.length());
             xmlStream.close();
 
-            // This is just to show off that this function is available
-            unsigned long nbpr = nbpp * width;
-            workBuffer = new UByte[nbpr];
-
-            region.setBuffer(workBuffer);
-
             if (numRows == -1)
                 numRows = height;
 
             if (numCols == -1)
                 numCols = width;
 
-            std::string outputFile = FmtX("%s_%d-%dx%d-%d_%d-image-%d.%s",
-                                          base.c_str(), startRow, startRow
-                                                  + numRows, startCol, startCol
-                                                  + numCols, nbpp, i,
-                                          isSIO ? "sio" : "raw");
+            std::string filename = FmtX("%s_%d-%dx%d-%d_%d-image-%d.%s",
+                                        base.c_str(), startRow, startRow
+                                                + numRows, startCol, startCol
+                                                + numCols, nbpp, i,
+                                        isSIO ? "sio" : "raw");
 
+            std::string outputFile = sys::Path::joinPaths(outputDir, filename);
             io::FileOutputStream outputStream(outputFile);
 
             if (isSIO)
@@ -187,25 +157,59 @@ int main(int argc, char** argv)
                 writeSIOFileHeader(numRows, numCols, nbpp, outputStream);
             }
 
-            for (unsigned int j = startRow; j < numRows + startRow; j++)
-            {
-                region.setStartRow(j);
-                UByte* line = reader->interleaved(region, i);
-                outputStream.write((const sys::byte*) line, nbpr);
+            Region region;
+            region.setStartRow(startRow);
+            region.setStartCol(startCol);
+            region.setNumCols(numCols);
 
+            if (oneRead)
+            {
+                region.setNumRows(numRows);
+                unsigned long totalBytes = nbpp * width * height;
+                UByte* workBuffer = new UByte[totalBytes];
+                region.setBuffer(workBuffer);
+
+                reader->interleaved(region, i);
+                outputStream.write((const sys::byte*) workBuffer, totalBytes);
+                delete[] workBuffer;
+            }
+            else
+            {
+                region.setNumRows(1);
+                unsigned long nbpr = nbpp * width;
+
+                // allocate this so we can reuse it for each row
+                UByte* workBuffer = new UByte[nbpr];
+                region.setBuffer(workBuffer);
+
+                for (unsigned int j = startRow; j < numRows + startRow; j++)
+                {
+                    region.setStartRow(j);
+                    UByte* line = reader->interleaved(region, i);
+                    outputStream.write((const sys::byte*) line, nbpr);
+                    // std::cout << "Writing row: " << (j + 1) << std::endl;
+                }
+                delete[] workBuffer;
             }
             outputStream.close();
-            delete[] workBuffer;
-
+            std::cout << "Wrote file: " << outputFile << std::endl;
         }
 
-        workBuffer = NULL;
-        return 0;
     }
-    catch (except::Exception& e)
+    catch (const except::Exception& e)
     {
-        std::cout << e.getMessage() << std::endl;
-        if (workBuffer)
-            delete[] workBuffer;
+        std::cout << e.toString() << std::endl;
+        exit(1);
     }
+    catch (const std::exception& cppE)
+    {
+        std::cout << "C++ exception: " << cppE.what() << std::endl;
+        exit(1);
+    }
+    catch (...)
+    {
+        std::cout << "Unknown exception" << std::endl;
+        exit(1);
+    }
+    return 0;
 }

@@ -506,3 +506,22 @@ void NITFReadControl::reset()
             delete mInfos[i];
     mInfos.clear();
 }
+
+
+six::ReadControl* NITFReadControlCreator::newReadControl() const
+{
+    return new NITFReadControl();
+}
+
+bool NITFReadControlCreator::supports(const std::string& filename) const
+{
+    try
+    {
+        NITFReadControl control;
+        return control.getDataType(filename) != DataType::NOT_SET;
+    }
+    catch(except::Exception&)
+    {
+        return false;
+    }
+}

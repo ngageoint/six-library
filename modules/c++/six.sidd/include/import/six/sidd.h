@@ -32,6 +32,7 @@
 #include "six/sidd/DownstreamReprocessing.h"
 #include "six/sidd/ExploitationFeatures.h"
 #include "six/sidd/GeographicAndTarget.h"
+#include "six/sidd/GeoTIFFReadControl.h"
 #include "six/sidd/GeoTIFFWriteControl.h"
 #include "six/sidd/ProductCreation.h"
 #include "six/sidd/ProductProcessing.h"

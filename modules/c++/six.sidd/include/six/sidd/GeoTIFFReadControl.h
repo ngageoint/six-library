@@ -19,30 +19,59 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SIX_H__
-#define __IMPORT_SIX_H__
+#ifndef __SIX_SIDD_GEOTIFF_READ_CONTROL_H__
+#define __SIX_SIDD_GEOTIFF_READ_CONTROL_H__
 
-#include "six/Adapters.h"
-#include "six/Container.h"
-#include "six/Data.h"
-#include "six/Enums.h"
-#include "six/ErrorStatistics.h"
-#include "six/NITFImageInfo.h"
-#include "six/NITFImageInputStream.h"
-#include "six/NITFSegmentInfo.h"
-#include "six/NITFReadControl.h"
-#include "six/NITFWriteControl.h"
-#include "six/Options.h"
-#include "six/Profile.h"
-#include "six/Init.h"
-#include "six/Types.h"
-#include "six/Utilities.h"
-#include "six/Parameter.h"
-#include "six/Region.h"
 #include "six/ReadControl.h"
 #include "six/ReadControlFactory.h"
-#include "six/WriteControl.h"
-#include "six/XMLControl.h"
-#include "six/XMLControlFactory.h"
+#include "six/Adapters.h"
+#include <import/tiff.h>
+
+namespace six
+{
+namespace sidd
+{
+
+class GeoTIFFReadControl : public ReadControl
+{
+public:
+
+    //!  Constructor
+    GeoTIFFReadControl()
+    {
+    }
+
+    //!  Destructor
+    virtual ~GeoTIFFReadControl()
+    {
+    }
+
+    virtual DataType getDataType(std::string fromFile);
+
+    virtual void load(std::string fromFile);
+
+    virtual UByte* interleaved(Region& region, int imageNumber);
+
+    virtual std::string getFileType() const
+    {
+        return "TIFF";
+    }
+
+protected:
+
+    tiff::FileReader mReader;
+
+};
+
+struct GeoTIFFReadControlCreator : public ReadControlCreator
+{
+    six::ReadControl* newReadControl() const;
+
+    bool supports(const std::string& filename) const;
+
+};
+
+}
+}
 
 #endif
