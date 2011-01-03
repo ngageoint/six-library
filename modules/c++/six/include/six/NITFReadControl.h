@@ -24,6 +24,7 @@
 
 #include "six/NITFImageInfo.h"
 #include "six/ReadControl.h"
+#include "six/ReadControlFactory.h"
 #include "six/Adapters.h"
 #include <import/nitf.hpp>
 
@@ -131,6 +132,16 @@ protected:
     void reset();
 
 };
+
+
+struct NITFReadControlCreator : public ReadControlCreator
+{
+    six::ReadControl* newReadControl() const;
+
+    bool supports(const std::string& filename) const;
+
+};
+
 
 }
 

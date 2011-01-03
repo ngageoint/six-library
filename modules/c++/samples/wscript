@@ -1,6 +1,6 @@
 NAME            = 'samples'
 VERSION         = '0.1'
-MODULE_DEPS     = 'scene tiff nitf xml.lite six six.sicd six.sidd'
+MODULE_DEPS     = 'scene tiff nitf xml.lite six six.sicd six.sidd cli'
 USELIB          = 'SIX_SAMPLES'
 
 set_options = configure = distclean = lambda p: None

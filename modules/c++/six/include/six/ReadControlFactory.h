@@ -19,30 +19,54 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SIX_H__
-#define __IMPORT_SIX_H__
+#ifndef __SIX_READ_CONTROL_FACTORY_H__
+#define __SIX_READ_CONTROL_FACTORY_H__
 
-#include "six/Adapters.h"
-#include "six/Container.h"
-#include "six/Data.h"
-#include "six/Enums.h"
-#include "six/ErrorStatistics.h"
-#include "six/NITFImageInfo.h"
-#include "six/NITFImageInputStream.h"
-#include "six/NITFSegmentInfo.h"
-#include "six/NITFReadControl.h"
-#include "six/NITFWriteControl.h"
-#include "six/Options.h"
-#include "six/Profile.h"
-#include "six/Init.h"
-#include "six/Types.h"
-#include "six/Utilities.h"
-#include "six/Parameter.h"
-#include "six/Region.h"
+#include <import/mt.h>
+
 #include "six/ReadControl.h"
-#include "six/ReadControlFactory.h"
-#include "six/WriteControl.h"
-#include "six/XMLControl.h"
-#include "six/XMLControlFactory.h"
+
+namespace six
+{
+
+struct ReadControlCreator
+{
+    ReadControlCreator() {}
+
+    virtual ~ReadControlCreator() {}
+
+    virtual six::ReadControl* newReadControl() const = 0;
+
+    virtual bool supports(const std::string& filename) const = 0;
+
+};
+
+
+class ReadControlRegistry
+{
+    std::list<ReadControlCreator*> mCreators;
+public:
+    ReadControlRegistry()
+    {
+    }
+
+    virtual ~ReadControlRegistry();
+
+    /**
+     * Add a known creator to the registry. The registry takes ownership.
+     */
+    inline void addCreator(ReadControlCreator* creator)
+    {
+        mCreators.push_back(creator);
+    }
+
+    virtual six::ReadControl* newReadControl(const std::string& filename) const;
+
+};
+
+//!  Singleton declaration of our ReadControlRegistry
+typedef mt::Singleton<ReadControlRegistry, true> ReadControlFactory;
+
+}
 
 #endif
