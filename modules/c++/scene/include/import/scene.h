@@ -30,5 +30,6 @@
 #include "scene/GridGeometry.h"
 #include "scene/Types.h"
 #include "scene/Utilities.h"
+#include "scene/ProjectionModel.h"
 
 #endif
