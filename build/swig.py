@@ -197,8 +197,10 @@ def check_swig_version(conf, minver=None):
 
 
 def set_options(opt):
+    opt.add_option('--enable-swig', action='store_true', dest='swig',
+                   help='Disable swig', default=False)
     opt.add_option('--disable-swig', action='store_false', dest='swig',
-                   help='Disable swig', default=True)
+                   help='Disable swig')
     opt.add_option('--swig-version', action='store', dest='swigver',
                    default=None, help='Specify the minimum swig version')
     opt.add_option('--require-swig', action='store_true', dest='require_swig',
