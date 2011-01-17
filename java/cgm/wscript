@@ -1,4 +1,4 @@
-
+configure = set_options = distclean = lambda x: None
 
 def build(bld):
     variant = bld.env['VARIANT']
