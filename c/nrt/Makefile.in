@@ -8,7 +8,7 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 
 # This target builds the library.  The targets are defined below...
-all: library unit-tests test plugin progs
+all: library unit-tests
 ##############################################
 #  The ".PHONY" directive tells make not to try 
 #  to find any dependencies.  This keeps it 
@@ -23,15 +23,6 @@ library:
 
 ############################################
 #  Make the tests
-test:
-	cd tests; make
-
-plugin:
-	cd shared; make
-
-progs:
-	cd apps; make
-
 unit-tests:
 	cd unittests; make
 
@@ -46,8 +37,7 @@ docs:
 #  in the appropriate place...  
 _LIBDIR = @libdir@
 _INCDIR = @includedir@
-_PLUGDIR = ${prefix}/share/nitf
-_DOCDIR = ${prefix}/share/doc/nitf
+_DOCDIR = ${prefix}/share/doc/nrt
 _TESTDIR = ${prefix}/tests
 _TESTBINDIR = ${_TESTDIR}/bin
 _APPBINDIR = ${prefix}/bin
@@ -58,21 +48,16 @@ install:
 	mkdir -p ${_LIBDIR}
 	mkdir -p ${_INCDIR}
 	mkdir -p ${_INCDIR}/import
-	mkdir -p ${_INCDIR}/nitf
-	mkdir -p ${_PLUGDIR}
+	mkdir -p ${_INCDIR}/nrt
 	mkdir -p ${_TESTDIR}
 	mkdir -p ${_TESTBINDIR}
 	mkdir -p ${_APPBINDIR}
-	cp ./include/import/nitf.h ${_INCDIR}/import
-	cp ./include/nitf/*.h ${_INCDIR}/nitf
+	cp ./include/import/nrt.h ${_INCDIR}/import
+	cp ./include/nrt/*.h ${_INCDIR}/nrt
 	( cd ./lib/@target@; tar cf - . | ( cd ${_LIBDIR} && tar xfB - ) )
-	cp ./plugins/@target@/*${DSOEXT} ${_PLUGDIR}
 	mkdir -p ${_DOCDIR}
 	cp COPYING* ${_DOCDIR} 
-	cp README* ${_DOCDIR} 
-	cp ./tests/*.c ${_TESTDIR}
-	cp ./tests/@target@/* ${_TESTBINDIR}
-	cp ./apps/@target@/* ${_APPBINDIR}
+#	cp README* ${_DOCDIR} 
 
 
 #############################################
@@ -82,8 +67,6 @@ clean:
 	rm -rf ./lib/@target@
 	rm -rf ./lib/@target@
 	rm -rf ./unittests/@target@
-	rm -rf ./apps/@target@
-	rm -rf ./tests/@target@
 	perl @build_dir@/rfk.pl -f
 
 
@@ -107,9 +90,7 @@ raw:
 	rm -rf docs
 	rm -rf bin
 	rm -rf obj
-	rm -rf apps/Makefile
 	rm -rf build/Makefile
-	rm -rf plugins
 	rm -rf tests/@target@
 
 dist:

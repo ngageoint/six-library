@@ -41,8 +41,7 @@ OBJS   = $(TESTS:.c=.o)
 EXE    = $(TESTS:.c=)
 # If you have several executables which depend on the same set of
 # object files, list them here.
-COMMON_OBJS = \
-	test_ImageIO_support.o
+COMMON_OBJS =
 
 all: $(EXE)
 
