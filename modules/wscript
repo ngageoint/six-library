@@ -16,10 +16,10 @@ def set_options(opt):
 def configure(conf):
     conf.check_tool('build swig pythontool',
                     tooldir=join(conf.curdir, 'build'))
-    conf.sub_config('drivers c++ python')
+    conf.sub_config('drivers drivers/nrt drivers/nitf c++ python')
 
 def build(bld):
-    bld.add_subdirs('drivers drivers/nitf c++ python')
+    bld.add_subdirs('drivers drivers/nrt drivers/nitf c++ python')
 
 def distclean(context):
     context.recurse('drivers c++ python')
