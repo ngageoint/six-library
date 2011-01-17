@@ -32,9 +32,11 @@ LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
 LIBHANDLERS = lib$(PACKAGE)-handlers
 LIBEXT  = .a
 DSOEXT  = .so
-EXTLIBS = -lnitf-c
-EXTINCLUDEPATH = -I@top_srcdir@/include -I@top_srcdir@/tests
-EXTLIBPATH = -L@top_srcdir@/lib/@target@
+EXTLIBS = -lnitf-c -lnrt-c
+EXTINCLUDEPATH = -I@top_srcdir@/include -I@top_srcdir@/tests \
+                 -I@top_srcdir@/../nrt/include
+EXTLIBPATH = -L@top_srcdir@/lib/@target@ \
+             -L@top_srcdir@/../nrt/lib/@target@
 CFGDEFS = @DEFS@
 SOURCES = BandInfo.c \
           BandSource.c \

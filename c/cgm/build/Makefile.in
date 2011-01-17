@@ -8,12 +8,14 @@ MAINTAINER = gojira_1@users.sourceforge.net
 LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
 LIBEXT  = .a
 DSOEXT  = .so
-EXTLIBS = -lcgm-c -lnitf-c
+EXTLIBS = -lcgm-c -lnitf-c -lnrt-c
 EXTINCLUDEPATH = -I@top_srcdir@/include \
-                 -I@top_srcdir@/../nitf/include
+                 -I@top_srcdir@/../nitf/include \
+                 -I@top_srcdir@/../nrt/include
 
 EXTLIBPATH = -L@top_srcdir@/lib/@target@ \
-             -L@top_srcdir@/../nitf/lib/@target@
+             -L@top_srcdir@/../nitf/lib/@target@ \
+             -L@top_srcdir@/../nrt/lib/@target@
 
 CFGDEFS = @DEFS@
 SOURCES = CircleElement.c Element.c PictureBody.c Picture.c Metafile.c \
