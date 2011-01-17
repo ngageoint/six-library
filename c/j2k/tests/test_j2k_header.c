@@ -1,0 +1,54 @@
+#include <import/nrt.h>
+#include <import/j2k.h>
+
+int main(int argc, char **argv)
+{
+    int rc = 0;
+    int argIt;
+    int useJasPer = 0;
+    nrt_Error error;
+    j2k_Container *container = NULL;
+    char *fname = NULL;
+
+    for (argIt = 1; argIt < argc; ++argIt)
+    {
+        if (!fname)
+        {
+            fname = argv[argIt];
+        }
+    }
+
+    if (!fname)
+    {
+        nrt_Error_init(&error, "Usage: [options] <j2k-file>", NRT_CTXT,
+                       NRT_ERR_INVALID_OBJECT);
+        goto CATCH_ERROR;
+    }
+
+    if (!(container = j2k_Container_open(fname, &error)))
+        goto CATCH_ERROR;
+
+    printf("tile width:\t%d\n", j2k_Container_getTileWidth(container, &error));
+    printf("tile height:\t%d\n", j2k_Container_getTileHeight(container, &error));
+    printf("x tiles:\t%d\n", j2k_Container_getTilesX(container, &error));
+    printf("y tiles:\t%d\n", j2k_Container_getTilesY(container, &error));
+    printf("width:\t\t%d\n", j2k_Container_getWidth(container, &error));
+    printf("height:\t\t%d\n", j2k_Container_getHeight(container, &error));
+    printf("components:\t%d\n", j2k_Container_getNumComponents(container, &error));
+    printf("component bpp:\t%d\n", j2k_Container_getComponentBytes(container, &error));
+
+    goto CLEANUP;
+
+    CATCH_ERROR:
+    {
+        nrt_Error_print(&error, stdout, "Exiting...");
+        rc = 1;
+    }
+    CLEANUP:
+    {
+        if (container)
+            j2k_Container_destruct(&container);
+    }
+    return rc;
+
+}

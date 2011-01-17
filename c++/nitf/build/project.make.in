@@ -100,4 +100,4 @@ MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/mt/lib/@target@/@lib_dir@
-MY_LIBS = -lnitf-c -lmt-c++ -lsys-c++ -lstr-c++ -lexcept-c++
+MY_LIBS = -lnitf-c -lnrt-c -lmt-c++ -lsys-c++ -lstr-c++ -lexcept-c++
