@@ -24,8 +24,6 @@
 #define __NITF_EXTENSIONS_H__
 
 #include "nitf/System.h"
-#include "nitf/List.h"
-#include "nitf/HashTable.h"
 #include "nitf/TRE.h"
 
 NITF_CXX_GUARD

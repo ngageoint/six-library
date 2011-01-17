@@ -35,7 +35,6 @@
  */
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/Field.h"
 
 /*

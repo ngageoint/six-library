@@ -23,11 +23,7 @@
 #ifndef __NITF_READER_H__
 #define __NITF_READER_H__
 
-#include "nitf/Error.h"
 #include "nitf/System.h"
-#include "nitf/Debug.h"
-#include "nitf/IOHandle.h"
-#include "nitf/IOInterface.h"
 #include "nitf/PluginRegistry.h"
 #include "nitf/DefaultTRE.h"
 #include "nitf/Record.h"

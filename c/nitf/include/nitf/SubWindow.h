@@ -24,7 +24,6 @@
 #define __NITF_SUB_WINDOW_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/DownSampler.h"
 
 

@@ -24,9 +24,7 @@
 #define __NITF_IMAGE_READER_H__
 
 #include "nitf/ImageIO.h"
-#include "nitf/IOInterface.h"
 #include "nitf/System.h"
-#include "nitf/Error.h"
 
 NITF_CXX_GUARD
 

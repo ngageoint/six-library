@@ -22,7 +22,6 @@
 
 #include "nitf/TRE.h"
 #include "nitf/IntStack.h"
-#include "nitf/IOHandle.h"
 #include "nitf/PluginRegistry.h"
 
 

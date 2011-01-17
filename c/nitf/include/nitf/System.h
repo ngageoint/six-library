@@ -23,19 +23,8 @@
 #ifndef __NITF_SYSTEM_H__
 #define __NITF_SYSTEM_H__
 
+#include "nitf/NRTCompat.h"
 #include "nitf/Defines.h"
 #include "nitf/Types.h"
-#include "nitf/Error.h"
-#include "nitf/Memory.h"
-#include "nitf/DLL.h"
-#include "nitf/Sync.h"
-#include "nitf/Directory.h"
-#include "nitf/IOHandle.h"
-/*  Now we are cross-platform (except for IO -- see IOHandle.h)  */
-
-NITFPROT(nitf_Uint16) nitf_System_swap16(nitf_Uint16 ins);
-NITFPROT(nitf_Uint32) nitf_System_swap32(nitf_Uint32 inl);
-NITFPROT(nitf_Uint32) nitf_System_swap64c(nitf_Uint64 inl);
-NITFPROT(nitf_Uint64) nitf_System_swap64(nitf_Uint64 inl);
 
 #endif

@@ -32,11 +32,12 @@ docs:
 ############################################
 #  Install the library(ies) and include files 
 #  in the appropriate place...  
-_LIBDIR = @libdir@
-_INCDIR = @includedir@
+_LIBDIR = @prefix@/lib
+_INCDIR = @prefix@/include
+_DOCDIR = ${prefix}/share/doc/cgm
 _TESTDIR = ${prefix}/tests
 _TESTBINDIR = ${_TESTDIR}/bin
-_APPBINDIR = ${prefix}/bin
+
 
 install:
 	echo "Installing ${PACKAGE}-${VERSION} to @prefix@"

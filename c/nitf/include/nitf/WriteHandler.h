@@ -23,9 +23,7 @@
 #ifndef __NITF_WRITE_HANDLER_H__
 #define __NITF_WRITE_HANDLER_H__
 
-#include "nitf/Error.h"
 #include "nitf/System.h"
-#include "nitf/IOInterface.h"
 
 NITF_CXX_GUARD
 
@@ -35,17 +33,14 @@ NITF_CXX_GUARD
  *  \param io       The output interface
  *  \param error    populated on error
  */
-typedef NITF_BOOL(*NITF_IWRITEHANDLER_WRITE) (NITF_DATA *data,
-                                              nitf_IOInterface* output,
-                                              nitf_Error *error);
-
+typedef NITF_BOOL(*NITF_IWRITEHANDLER_WRITE)(NITF_DATA *data,
+        nitf_IOInterface* output, nitf_Error *error);
 
 /*
  *  Function pointer for destructing the data structure
  *  \param data     The ancillary "helper" data
  */
-typedef void (*NITF_IWRITEHANDLER_DESTRUCT) (NITF_DATA *);
-
+typedef void (*NITF_IWRITEHANDLER_DESTRUCT)(NITF_DATA *);
 
 /*!
  *  \struct nitf_IWriteHandler
@@ -57,17 +52,13 @@ typedef struct _nitf_IWriteHandler
     NITF_IWRITEHANDLER_DESTRUCT destruct;
 } nitf_IWriteHandler;
 
-
 typedef struct _nitf_WriteHandler
 {
     nitf_IWriteHandler *iface;
     NITF_DATA *data;
-}nitf_WriteHandler;
+} nitf_WriteHandler;
 
-
-NITFAPI(void) nitf_WriteHandler_destruct(nitf_WriteHandler ** writeHandler);
-
-
+NITFAPI(void) nitf_WriteHandler_destruct(nitf_WriteHandler **writeHandler);
 
 NITF_CXX_ENDGUARD
 

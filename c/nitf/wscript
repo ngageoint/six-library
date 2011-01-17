@@ -4,9 +4,9 @@ import Options
 NAME            = 'nitf'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
 VERSION         = '2.7-dev'
-MODULE_DEPS     = ''
+MODULE_DEPS     = 'nrt'
 LANG            = 'c'
-USELIB          = 'THREAD DL RT MATH nitf-c'
+USELIB          = 'THREAD DL MATH nitf-c'
 DEFINES         = 'NITF_MODULE_EXPORTS'
 TEST_FILTER     = lambda x: x not in ['test_1band_rw_line.c', 'test_fileIO.c',
                                       'test_hash_table_2.c', 'test_writer_s.c',
@@ -18,14 +18,7 @@ TEST_FILTER     = lambda x: x not in ['test_1band_rw_line.c', 'test_fileIO.c',
                                       'test_ImageIO_writePattern.c', 'test_static_plugin.c']
 
 
-set_options = distclean = lambda p: None
-
-def configure(conf):
-    #add some flags for the nitro lib - if a lib states NITRO as a uselib (or uselib local)
-    #these flags will get applied automatically
-    conf.env.append_value('CCFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
-    conf.env.append_value('CXXFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
-
+set_options = configure = distclean = lambda p: None
 
 def build(bld):
     env = bld.module(**globals())
@@ -36,6 +29,9 @@ def build(bld):
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
     
+    
+    uselib_local = ['nitf-c'] + map(lambda x: '%s-%s' % (x, LANG), MODULE_DEPS.split())
+    
     pluginList = []
     plugins = pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
     plugins.sort()
@@ -45,10 +41,10 @@ def build(bld):
         pluginName = os.path.splitext(p)[0]
         plugin = bld.new_task_gen('cc', source=p,
                                   target='%s_obj' % pluginName,
-                                  includes='../include',
+                                  includes=['../include', '../../nrt/include'],
                                   defines = 'NITF_MODULE_EXPORTS',
                                   path=pluginNode, env=env.copy())
-        plugin = bld.new_task_gen('cc', 'shlib', uselib_local='nitf-c',
+        plugin = bld.new_task_gen('cc', 'shlib', uselib_local=uselib_local,
                                   target=pluginName, add_objects='%s_obj' % pluginName,
                                   path=pluginNode, env=pEnv,
                                   install_path='${PREFIX}/share/nitf/plugins')
@@ -57,7 +53,7 @@ def build(bld):
     #now, to support static linkage, make the plug-ins as a static library
     lib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', includes='include',
                            target='%s-handlers' % NAME, env=env.copy(),
-                           uselib_local = 'nitf-c', add_objects = pluginList)
+                           uselib_local = uselib_local, add_objects = pluginList)
     #lib.find_sources_in_dirs('./shared', excludes=[])
         
     
@@ -67,9 +63,6 @@ def build(bld):
     for app in apps:
         bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-2],
                     lang='c')
-    # this is here for backwards-compatibility
-    bld.program(dir='apps', source='show_nitf.c', module_deps=NAME,
-                name='test_dump_record', lang='c')
 
     #install headers
     for f in bld.path.find_dir('include').find_iter():

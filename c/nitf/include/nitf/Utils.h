@@ -24,52 +24,8 @@
 #define __NITF_UTILS_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
-#include "nitf/List.h"
 
 NITF_CXX_GUARD
-
-/*!
- * Splits a string apart, delimited by spaces. This does not use strtok since
- * it is not thread safe.)
- * \param str   null-terminated string
- * \param max   the maximum # of parts to split into (0 = split all)
- */
-NITFAPI(nitf_List*) nitf_Utils_splitString(
-        char *str, unsigned int max, nitf_Error* error);
-
-
-NITFAPI(NITF_BOOL) nitf_Utils_isNumeric(char *str);
-
-NITFAPI(NITF_BOOL) nitf_Utils_isAlpha(char *str);
-
-/**
- * Returns 1 if the input string is either null, empty (strlen == 0), or
- * if every character is a whitespace char.
- */
-NITFAPI(NITF_BOOL) nitf_Utils_isBlank(char *str);
-
-NITFAPI(void) nitf_Utils_trimString(char* str);
-
-/*!
- *  Replace the oldValue with the newValue within this string
- *
- */
-NITFPROT(void) nitf_Utils_replace(char* str, char oldValue, char newValue);
-
-/*!
- * Return the base name for the fullName, up until the
- * extension is encountered.  Both base and fullName should
- * have at least NITF_MAX_PATH number of elements.
- *
- * \param base A user supplied base name target
- * \param fullName The source string
- * \param extension The extension name
- */
-NITFAPI(void) nitf_Utils_baseName(char* base,
-                                  const char* fullName,
-                                  const char* extension);
-
 
 /*!
  *  Convert a double representing decimal degrees into 3 integers,
@@ -168,19 +124,6 @@ NITFPROT(void) nitf_Utils_decimalLonToGeoCharArray(double decimal,
                                                    char *buffer8);
 
 /*!
- *  Take in a decimal degree format string and convert it into
- *  a double.  The string will be of the format +-ddd.dd or +-dd.dd.
- *
- *  \todo This function can be expanded to handle arbitrary
- *  size conversions.  It is TBD whether this is desirable, since the
- *  IGEOLO itself is very strict about what is allowed
- *
- */
-NITFAPI(NITF_BOOL) nitf_Utils_parseDecimalString(char* d,
-                                                 double* decimal,
-                                                 nitf_Error* error);
-
-/*!
  *  Convert the corners type to a string.  If for some reason, the type
  *  is not known, return it as ' ', which is the only other valid NITF
  *  value.
@@ -188,10 +131,6 @@ NITFAPI(NITF_BOOL) nitf_Utils_parseDecimalString(char* d,
  */
 NITFAPI(char) nitf_Utils_cornersTypeAsCoordRep(nitf_CornersType type);
 
-
-NITFAPI(double) nitf_Utils_getCurrentTimeMillis();
-
-NITFAPI(int) nitf_Utils_strncasecmp(char *s1, char *s2, size_t n);
 
 NITF_CXX_ENDGUARD
 

@@ -32,26 +32,21 @@ LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
 LIBHANDLERS = lib$(PACKAGE)-handlers
 LIBEXT  = .a
 DSOEXT  = .so
-EXTLIBS = -lnitf-c
-EXTINCLUDEPATH = -I@top_srcdir@/include -I@top_srcdir@/tests
-EXTLIBPATH = -L@top_srcdir@/lib/@target@
+EXTLIBS = -lnitf-c -lnrt-c
+EXTINCLUDEPATH = -I@top_srcdir@/include -I@top_srcdir@/tests \
+                 -I@top_srcdir@/../nrt/include
+EXTLIBPATH = -L@top_srcdir@/lib/@target@ \
+             -L@top_srcdir@/../nrt/lib/@target@
 CFGDEFS = @DEFS@
 SOURCES = BandInfo.c \
           BandSource.c \
           ComplexityLevel.c \
           ComponentInfo.c \
           DataSource.c \
-          DateTime.c \
-          Debug.c \
           DESegment.c \
           DESubheader.c \
-          DLLUnix.c \
-          DLLWin32.c \
           DefaultTRE.c \
-          DirectoryUnix.c \
-          DirectoryWin32.c \
           DownSampler.c \
-          Error.c \
           Extensions.c \
           Field.c \
           FieldWarning.c \
@@ -59,10 +54,6 @@ SOURCES = BandInfo.c \
           FileSecurity.c \
           GraphicSegment.c \
           GraphicSubheader.c \
-          HashTable.c \
-          IOHandleUnix.c \
-          IOHandleWin32.c \
-          IOInterface.c \
           ImageIO.c \
           ImageReader.c \
           ImageSegment.c \
@@ -72,9 +63,7 @@ SOURCES = BandInfo.c \
           IntStack.c \
           LabelSegment.c \
           LabelSubheader.c \
-          List.c \
           LookupTable.c \
-          Pair.c \
           PluginRegistry.c \
           RESegment.c \
           RESubheader.c \
@@ -86,13 +75,8 @@ SOURCES = BandInfo.c \
           SegmentWriter.c \
           StreamIOWriteHandler.c \
           SubWindow.c \
-          SyncUnix.c \
-          SyncIrix.c \
-          SyncWin32.c \
-          System.c \
           TRE.c \
           TRECursor.c \
-          Tree.c \
           TREPrivateData.c \
           TREUtils.c \
           TextSegment.c \

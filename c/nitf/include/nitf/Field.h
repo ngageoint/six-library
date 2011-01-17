@@ -24,7 +24,6 @@
 #define __NITF_FIELD_H__
 
 #include "nitf/System.h"
-#include "nitf/DateTime.h"
 #include "nitf/Utils.h"
 
 NITF_CXX_GUARD

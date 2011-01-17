@@ -23,9 +23,7 @@
 #ifndef __NITF_SEGMENT_WRITER_H__
 #define __NITF_SEGMENT_WRITER_H__
 
-#include "nitf/IOInterface.h"
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/SegmentSource.h"
 #include "nitf/WriteHandler.h"
 

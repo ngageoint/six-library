@@ -25,7 +25,6 @@
 
 #include "nitf/TRE.h"
 #include "nitf/TREDescription.h"
-#include "nitf/HashTable.h"
 
 NITF_CXX_GUARD
 

@@ -30,7 +30,7 @@ import nitropy
 from nitropy import NITF_VER_20, NITF_VER_21, NITF_VER_UNKNOWN
 import logging, types, new
 
-from nitropy import nitf_Error as Error
+from nitropy import nrt_Error as Error
 Error.__repr__=lambda s: s.message
 
 __all__ = ['BandSource', 'ComponentInfo', 'DESegment', 'DESubheader',
@@ -157,23 +157,23 @@ class IOHandle:
     def write(self, data, size=-1):
         if size == -1:
             size = len(data)
-        return nitropy.nitf_IOHandle_write(self.ref, data, size, self.error) == 1
+        return nitropy.nrt_IOHandle_write(self.ref, data, size, self.error) == 1
     
     def read(self, size):
         return nitropy.py_IOHandle_read(self.ref, size, self.error)
     
     def tell(self):
-        return nitropy.nitf_IOHandle_tell(self.ref, self.error)
+        return nitropy.nrt_IOHandle_tell(self.ref, self.error)
     
     def seek(self, offset, whence=SEEK_CUR):
         return nitropy.py_IOHandle_seek(self.ref, offset, whence, self.error)
     
     def getSize(self):
-        return nitropy.nitf_IOHandle_getSize(self.ref, self.error)
+        return nitropy.nrt_IOHandle_getSize(self.ref, self.error)
     
     def close(self):
         if hasattr(self, 'open') and self.open:
-            nitropy.nitf_IOHandle_close(self.ref)
+            nitropy.nrt_IOHandle_close(self.ref)
             self.open = False
 
 
@@ -1189,7 +1189,7 @@ class PluginRegistry:
 
 def read(filename):
     '''
-    Opens the given file and returns a (Reader, Record) tuple.
+    Opens and reads the given file, returning a (Reader, Record) tuple.
     '''
     handle = IOHandle(filename)
     reader = Reader()
@@ -1235,6 +1235,7 @@ def metadata(filename):
     for i, segment in enumerate(record.getDataExtensions()):
         dumpHeader(segment.subheader, 'DES [%d]' % (i + 1),
                    {'XHD':segment.subheader.getUDHD()})
+
 
 #set the NITF_PLUGIN_PATH
 #import os, inspect

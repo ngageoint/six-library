@@ -24,7 +24,6 @@
 #define __NITF_TEXT_SEGMENT_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/TextSubheader.h"
 
 

@@ -24,8 +24,6 @@
 #define __NITF_RECORD_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
-#include "nitf/List.h"
 #include "nitf/FileHeader.h"
 #include "nitf/ImageSegment.h"
 #include "nitf/GraphicSegment.h"

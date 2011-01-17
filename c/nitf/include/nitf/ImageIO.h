@@ -37,8 +37,6 @@
 #define NITF_IMAGE_IO_INCLUDED
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
-#include "nitf/IOInterface.h"
 #include "nitf/PluginIdentifier.h"
 #include "nitf/ImageSubheader.h"
 #include "nitf/SubWindow.h"

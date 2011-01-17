@@ -24,7 +24,6 @@
 #define __NITF_COMPONENT_INFO_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/Field.h"
 
 NITF_CXX_GUARD

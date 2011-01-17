@@ -23,12 +23,9 @@
 #ifndef __NITF_TRE_H__
 #define __NITF_TRE_H__
 
-#include "nitf/IOInterface.h"
 #include "nitf/System.h"
 #include "nitf/Field.h"
 #include "nitf/IntStack.h"
-#include "nitf/Pair.h"
-#include "nitf/List.h"
 #include "nitf/TREDescription.h"
 
 /*!
@@ -91,8 +88,8 @@ struct _nitf_TREHandler;
  */
 typedef struct _nitf_TRE
 {
-	struct _nitf_TREHandler* handler;  /*! The plug-in handler */
-	NITF_DATA* priv;                   /*! Private data the plug-in knows about */
+    struct _nitf_TREHandler* handler;  /*! The plug-in handler */
+    NITF_DATA* priv;                   /*! Private data the plug-in knows about */
     char tag[NITF_MAX_TAG + 1];        /* the TRE tag */
 } nitf_TRE;
 
@@ -120,10 +117,10 @@ typedef const char* (*NITF_TRE_ITERATOR_GET_DESCRIPTION)(
 
 typedef struct _nitf_TREEnumerator
 {
-	NITF_TRE_ITERATOR_INCREMENT next;
-	NITF_TRE_ITERATOR_HAS_NEXT hasNext;
-	NITF_TRE_ITERATOR_GET_DESCRIPTION getFieldDescription;
-	NITF_DATA* data;
+    NITF_TRE_ITERATOR_INCREMENT next;
+    NITF_TRE_ITERATOR_HAS_NEXT hasNext;
+    NITF_TRE_ITERATOR_GET_DESCRIPTION getFieldDescription;
+    NITF_DATA* data;
 } nitf_TREEnumerator;
 
 #define NITF_TRE_END NULL
@@ -399,8 +396,8 @@ NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
  *
  */
 NITFAPI(nitf_List*) nitf_TRE_find(nitf_TRE* tre,
-				  const char* pattern,
-				  nitf_Error* error);
+                  const char* pattern,
+                  nitf_Error* error);
 
 
 /*!
@@ -418,7 +415,7 @@ NITFAPI(nitf_List*) nitf_TRE_find(nitf_TRE* tre,
  *  \return Return NULL if no such field exists in the TRE, otherwise, the value
  */
 NITFAPI(nitf_Field*) nitf_TRE_getField(nitf_TRE* tre,
-				       const char* tag);
+                       const char* tag);
 
 
 NITFAPI(nitf_TREEnumerator*) nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error);

@@ -24,7 +24,6 @@
 #define __NITF_LOOKUP_TABLE_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
 
 NITF_CXX_GUARD
 

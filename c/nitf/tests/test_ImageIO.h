@@ -35,12 +35,6 @@
 #define TEST_NITF_IMAGE_IO_INCLUDED
 
 #include <import/nitf.h>
-#include "nitf/System.h"
-#include "nitf/Error.h"
-#include "nitf/IOHandle.h"
-#include "nitf/Field.h"
-#include "nitf/ImageIO.h"
-#include "nitf/ImageSubheader.h"
 
 #ifdef __cplusplus
 extern "C"

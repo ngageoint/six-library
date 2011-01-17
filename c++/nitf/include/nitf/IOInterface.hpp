@@ -25,7 +25,6 @@
 
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include "nitf/IOInterface.h"
 #include <string>
 
 /*!

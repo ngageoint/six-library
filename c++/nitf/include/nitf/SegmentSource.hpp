@@ -65,8 +65,8 @@ public:
      *  \param start    The start offset
      *  \param byteSkip The amount of bytes to skip
      */
-    SegmentMemorySource(char * data, size_t size, nitf::Off start,
-            int byteSkip) throw (nitf::NITFException);
+            SegmentMemorySource(char * data, size_t size, nitf::Off start,
+                    int byteSkip) throw (nitf::NITFException);
 
     ~SegmentMemorySource()
     {

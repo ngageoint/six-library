@@ -23,9 +23,7 @@
 #ifndef __NITF_DATA_SOURCE_H__
 #define __NITF_DATA_SOURCE_H__
 
-#include "nitf/Error.h"
 #include "nitf/System.h"
-#include "nitf/IOHandle.h"
 
 
 NITF_CXX_GUARD

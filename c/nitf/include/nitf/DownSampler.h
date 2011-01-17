@@ -25,7 +25,6 @@
 
 
 #include "nitf/System.h"
-#include "nitf/IOHandle.h"
 
 /*! \def NITF_PIXEL_TYPE_INT - Integer */
 #   define NITF_PIXEL_TYPE_INT ((nitf_Uint32) 0x00080000)

@@ -24,7 +24,7 @@
 #define __NITF_EXCEPTION_HPP__
 
 #include <import/except.h>
-#include "nitf/Error.h"
+#include "nitf/System.hpp"
 
 /*!
  *  \file NITFException.hpp

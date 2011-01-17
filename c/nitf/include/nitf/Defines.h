@@ -26,84 +26,6 @@
 /* The version of the NITF library */
 #define NITF_LIB_VERSION    "2.7"
 
-
-#ifdef __cplusplus
-#   define NITF_C extern "C"
-#   define NITF_GUARD {
-#   define NITF_ENDGUARD }
-#   define NITF_BOOL bool
-#else
-#   define NITF_C
-#   define NITF_GUARD
-#   define NITF_ENDGUARD
-#   define NITF_BOOL int
-#endif
-
-#ifdef WIN32
-/*  Negotiate the meaning of NITFAPI, NITFPROT (for public and protected)  */
-#      if defined(NITF_MODULE_EXPORTS)
-#          define NITFAPI(RT)  NITF_C __declspec(dllexport) RT
-#          define NITFPROT(RT) NITF_C __declspec(dllexport) RT
-#      elif defined(NITF_MODULE_IMPORTS)
-#          define NITFAPI(RT)  NITF_C __declspec(dllimport) RT
-#          define NITFPROT(RT) NITF_C __declspec(dllexport) RT
-#      else /* Static library */
-#          define NITFAPI(RT) NITF_C RT
-#          define NITFPROT(RT) NITF_C RT
-#      endif
-/*  String conversion, on windows  */
-#      define  NITF_ATO32(A) strtol(A, (char **)NULL, 10)
-#      define  NITF_ATOU32(A) strtoul(A, (char **)NULL, 10)
-#      define  NITF_ATOU32_BASE(A,B) strtoul(A, (char **)NULL, B)
-#      define  NITF_ATO64(A) _atoi64(A)
-#      define  NITF_SNPRINTF _snprintf
-#      define  NITF_VSNPRINTF _vsnprintf
-#else
-/*
-*  NITFAPI and NITFPROT don't mean as much on Unix since they
-*  Don't try and mangle functions for you in C
-*/
-#      define  NITFAPI(RT)  NITF_C RT
-#      define  NITFPROT(RT) NITF_C RT
-#      define  NITF_ATO32(A) strtol(A, (char **)NULL, 10)
-#      define  NITF_ATOU32(A) strtoul(A, (char **)NULL, 10)
-#      define  NITF_ATOU32_BASE(A,B) strtoul(A, (char **)NULL, B)
-#      if defined(__aix__)
-#          define  NITF_ATO64(A) strtoll(A, 0, 0)
-#      else
-#          define  NITF_ATO64(A) atoll(A)
-#      endif
-#      define NITF_SNPRINTF snprintf
-#      define NITF_VSNPRINTF vsnprintf
-#endif
-/*
- *  This section describes a set of macros to help with
- *  C++ compilation.  The 'extern C' set is required to
- *  prevent name-mangling.
- *
- *  We also define a boolean according to the language,
- *  since it is obnoxious to use an int when C++ has a
- *  perfectly good one already.
- */
-
-#define NITF_CXX_GUARD     NITF_C NITF_GUARD
-#define NITF_CXX_ENDGUARD  NITF_ENDGUARD
-
-/*  Private declarations.  */
-#define NITFPRIV(RT) static RT
-
-/*  Negotiate the 'context'  */
-#define NITF_FILE __FILE__
-#define NITF_LINE __LINE__
-#if defined(__GNUC__)
-#    define NITF_FUNC __PRETTY_FUNCTION__
-#elif __STDC_VERSION__ < 199901
-#    define NITF_FUNC "unknown function"
-#else /* Should be c99 */
-#    define NITF_FUNC __func__
-#endif
-
-
 /**
  * Macro which declares a TRE Plugin
  *
@@ -148,11 +70,11 @@
  */
 
 #ifdef __cplusplus
-#   define NITF_TRE_STATIC_HANDLER_REF(_Tre) \
+#define NITF_TRE_STATIC_HANDLER_REF(_Tre) \
         extern "C" char** _Tre##_init(nitf_Error*); \
         extern "C" nitf_TREHandler* _Tre##_handler(nitf_Error*);
 #else
-#   define NITF_TRE_STATIC_HANDLER_REF(_Tre) \
+#define NITF_TRE_STATIC_HANDLER_REF(_Tre) \
         extern char** _Tre##_init(nitf_Error*); \
         extern nitf_TREHandler* _Tre##_handler(nitf_Error*);
 #endif

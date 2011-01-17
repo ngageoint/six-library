@@ -23,7 +23,6 @@
 #ifndef __NITF_PAIR_HPP__
 #define __NITF_PAIR_HPP__
 
-#include "nitf/Pair.h"
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"

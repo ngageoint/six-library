@@ -2,9 +2,6 @@
 #define __NITF_PLUGIN_REGISTRY_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
-#include "nitf/HashTable.h"
-#include "nitf/DLL.h"
 #include "nitf/TRE.h"
 #include "nitf/Utils.h"
 #include "nitf/PluginIdentifier.h"

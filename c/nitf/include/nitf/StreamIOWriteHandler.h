@@ -23,9 +23,7 @@
 #ifndef __NITF_STREAM_IO_WRITE_HANDLER_H__
 #define __NITF_STREAM_IO_WRITE_HANDLER_H__
 
-#include "nitf/Error.h"
 #include "nitf/System.h"
-#include "nitf/IOInterface.h"
 #include "nitf/WriteHandler.h"
 
 

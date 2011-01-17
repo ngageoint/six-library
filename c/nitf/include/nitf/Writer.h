@@ -23,17 +23,13 @@
 #ifndef __NITF_WRITER_H__
 #define __NITF_WRITER_H__
 
-#include "nitf/Error.h"
-#include "nitf/IOInterface.h"
 #include "nitf/PluginRegistry.h"
 #include "nitf/Record.h"
 #include "nitf/ImageIO.h"
-#include "nitf/WriteHandler.h"
 #include "nitf/ImageWriter.h"
 #include "nitf/SegmentWriter.h"
 #include "nitf/ComplexityLevel.h"
 #include "nitf/Utils.h"
-#include "nitf/DateTime.h"
 
 NITF_CXX_GUARD
 

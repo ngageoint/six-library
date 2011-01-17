@@ -23,10 +23,7 @@
 #ifndef __NITF_BAND_SOURCE_H__
 #define __NITF_BAND_SOURCE_H__
 
-#include "nitf/Error.h"
 #include "nitf/System.h"
-#include "nitf/IOHandle.h"
-#include "nitf/IOInterface.h"
 #include "nitf/DataSource.h"
 
 NITF_CXX_GUARD

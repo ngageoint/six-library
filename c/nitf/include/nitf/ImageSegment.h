@@ -24,7 +24,6 @@
 #define __NITF_IMAGE_SEGMENT_H__
 
 #include "nitf/System.h"
-#include "nitf/Error.h"
 #include "nitf/ImageSource.h"
 #include "nitf/ImageSubheader.h"
 #include "nitf/ImageIO.h"

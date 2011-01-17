@@ -1,0 +1,97 @@
+##############################################
+# This will include the package information 
+# such as the VERSION, PACKAGE and LANGUAGE
+##############################################
+include build/Makefile
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+# This target builds the library.  The targets are defined below...
+all: library unit-tests
+##############################################
+#  The ".PHONY" directive tells make not to try 
+#  to find any dependencies.  This keeps it 
+#  working even if there's a file called "libs" 
+#  or "clean".
+.PHONY: libs test shared docs clean raw install fresh progs unit-tests
+
+############################################
+#  Make the library
+library:
+	cd source;make
+
+############################################
+#  Make the tests
+unit-tests:
+	cd unittests; make
+
+############################################
+#  Make the doxygen
+docs:
+	doxygen Doxyfile
+
+
+############################################
+#  Install the library(ies) and include files 
+#  in the appropriate place...  
+_LIBDIR = @libdir@
+_INCDIR = @includedir@
+_DOCDIR = ${prefix}/share/doc/nrt
+_TESTDIR = ${prefix}/tests
+_TESTBINDIR = ${_TESTDIR}/bin
+_APPBINDIR = ${prefix}/bin
+
+
+install:
+	echo "Installing ${PACKAGE}-${VERSION} to @prefix@"
+	mkdir -p ${_LIBDIR}
+	mkdir -p ${_INCDIR}
+	mkdir -p ${_INCDIR}/import
+	mkdir -p ${_INCDIR}/nrt
+	mkdir -p ${_TESTDIR}
+	mkdir -p ${_TESTBINDIR}
+	mkdir -p ${_APPBINDIR}
+	cp ./include/import/nrt.h ${_INCDIR}/import
+	cp ./include/nrt/*.h ${_INCDIR}/nrt
+	( cd ./lib/@target@; tar cf - . | ( cd ${_LIBDIR} && tar xfB - ) )
+	mkdir -p ${_DOCDIR}
+	cp COPYING* ${_DOCDIR} 
+#	cp README* ${_DOCDIR} 
+
+
+#############################################
+#  CAUTION: This will delete all the libraries, 
+#  not just for one platform...
+clean:
+	rm -rf ./lib/@target@
+	rm -rf ./lib/@target@
+	rm -rf ./unittests/@target@
+	perl @build_dir@/rfk.pl -f
+
+
+fresh: 
+	make clean
+	make all
+
+#############################################
+# This target will clean out _everything_!  It removes all the
+# platform-specific build directories and all libraries...
+raw:
+	make clean
+	rm -f Makefile
+	rm -f source/Makefile
+	rm -f shared/Makefile
+	rm -f tests/Makefile
+	rm -f unittests/Makefile
+	rm -f config.log
+	rm -f config.status
+	rm -rf lib
+	rm -rf docs
+	rm -rf bin
+	rm -rf obj
+	rm -rf build/Makefile
+	rm -rf tests/@target@
+
+dist:
+	perl @build_dir@/makedist.pl $(PACKAGE) $(VERSION) @target@

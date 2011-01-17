@@ -23,9 +23,8 @@
 #ifndef __NITF_IMAGE_SOURCE_H__
 #define __NITF_IMAGE_SOURCE_H__
 
+#include "nitf/System.h"
 #include "nitf/BandSource.h"
-#include "nitf/List.h"
-#include "nitf/Error.h"
 
 NITF_CXX_GUARD
 

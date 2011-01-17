@@ -3,9 +3,9 @@ import Options
 NAME            = 'cgm'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
 VERSION         = '2.7-dev'
-MODULE_DEPS     = 'nitf'
+MODULE_DEPS     = 'nitf nrt'
 LANG            = 'c'
-USELIB_LOCAL    = 'nitf-c'
+USELIB_LOCAL    = 'nitf-c nrt-c'
 DEFINES         = 'NITF_MODULE_EXPORTS'
 TEST_FILTER     = lambda x: False #no tests for now
 

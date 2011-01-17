@@ -24,8 +24,6 @@
 #define __NITF_DEFAULT_TRE_H__
 
 #include "nitf/System.h"
-#include "nitf/HashTable.h"
-#include "nitf/IOHandle.h"
 #include "nitf/TRE.h"
 #include "nitf/TREUtils.h"
 

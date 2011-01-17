@@ -170,11 +170,14 @@
 %typemap(out) nitf_Uint8 {$result = SWIG_From_char((char)($1));}
 
 
+%include "nrt/Defines.h"
+%include "nrt/Types.h"
 %include "nitf/Defines.h"
 %include "nitf/Types.h"
-%include "nitf/Error.h"
-%include "nitf/IOHandle.h"
-%include "nitf/IOInterface.h"
+%include "nrt/Error.h"
+%include "nrt/IOHandle.h"
+%include "nrt/IOInterface.h"
+%include "nitf/NRTCompat.h"
 
 
 
@@ -184,7 +187,7 @@
  * I think it has to do with the leading underscores...
  * Will comment out for now, since we don't access it from Python.
  */
-%ignore __nitf_HashTable_defaultHash;
+%ignore __nrt_HashTable_defaultHash;
 
 
 
@@ -202,8 +205,8 @@
 /* for TREs */
 %typemap(out) nitf_List* {	NITF_LIST_TO_PYTHON_LIST(nitf_TRE) }
 %include "nitf/Extensions.h"
-%include "nitf/HashTable.h"
-%include "nitf/Pair.h"
+%include "nrt/HashTable.h"
+%include "nrt/Pair.h"
 /* for bandsource list */
 %typemap(out) nitf_List* {	NITF_LIST_TO_PYTHON_LIST(nitf_BandSource) }
 %include "nitf/ImageSource.h"
