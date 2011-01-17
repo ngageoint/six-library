@@ -34,6 +34,7 @@ Name: "cpp"; Description: "C++ Bindings"; Types: full compact
 Name: "java"; Description: "Java Bindings"; Types: full compact
 Name: "java\imagej"; Description: "ImageJ PlugIn"; Types: full compact
 Name: "python"; Description: "Python Bindings"; Types: full compact
+Name: "matlab"; Description: "Matlab/Mex Exports"; Types: full compact
 Name: "plugins"; Description: "Plugins"; Types: full compact
 Name: "plugins\tres"; Description: "TREs"; Types: full compact
 Name: "plugins\jpeg"; Description: "JPEG"; Types: full compact
@@ -66,14 +67,15 @@ Source: "..\..\c\nitf\tests\*.c"; DestDir: "{app}\share\nitf\samples\c"; Flags: 
 Source: "..\..\target\win32-release\c\nitf\tests\*.exe"; DestDir: "{app}\share\nitf\tests"; Flags: ignoreversion recursesubdirs; Components: tests;
 Source: "..\..\target\win32-release\c\nitf\apps\*.exe"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs; Components: apps;
 Source: "..\..\target\win32-release\java\nitf\*.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
+Source: "..\..\target\win32-release\mex\*.mex*"; DestDir: "{app}\bin\mex"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: matlab;
 Source: "..\..\java\nitf\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "..\..\java\cgm\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "..\..\java\nitf.imageio\target\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "..\..\java\nitf.imagej\target\*.jar"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
 Source: "..\..\java\nitf.imagej\target\dependency\*"; DestDir: "{app}\share\ImageJ\plugins\nitf"; Flags: ignoreversion; Components: java\imagej;
 Source: "..\..\java\nitf\src\test\*"; DestDir: "{app}\share\nitf\samples\java"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: samples\java;
-Source: "..\..\python\nitf\source\*.py"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
-Source: "..\..\target\win32-release\python\nitf\*.pyd"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion recursesubdirs; Components: python;
+Source: "..\..\python\nitf\source\*.py"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: python;
+Source: "..\..\target\win32-release\python\nitf\*.pyd"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: python;
 Source: "..\..\python\nitf\samples\*.py"; DestDir: "{app}\share\nitf\samples\python"; Flags: ignoreversion skipifsourcedoesntexist; Components: samples\python;
 ;Source: "..\..\python\nitf\dist\nitro-python-2.7-dev.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\java\nitf\target\site\apidocs\*"; DestDir: "{app}\share\nitf\doc\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;

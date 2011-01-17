@@ -71,10 +71,10 @@ public final class FileSource extends BandSource
      *            is 0, it signifies a contiguous read.
      * @throws NITFException
      */
-    public FileSource(IOHandle handle, long start, int numBytesPerPixel,
+    public FileSource(IOInterface io, long start, int numBytesPerPixel,
             int pixelSkip) throws NITFException
     {
-        construct(handle, start, numBytesPerPixel, pixelSkip);
+        construct(io, start, numBytesPerPixel, pixelSkip);
     }
 
     /**
@@ -84,7 +84,7 @@ public final class FileSource extends BandSource
      * @param start
      * @param pixelSkip
      */
-    private native void construct(IOHandle handle, long start,
+    private native void construct(IOInterface handle, long start,
             int numBytesPerPixel, int pixelSkip);
 
     /*
@@ -100,5 +100,4 @@ public final class FileSource extends BandSource
     @Override
     public native void setSize(long size) throws NITFException;
     
-
 }

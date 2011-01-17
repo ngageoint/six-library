@@ -1,0 +1,5 @@
+set_options = distclean = configure = lambda x: None
+
+def build(bld):
+    for src in 'nitf_image.c nitf_metadata.c'.split():
+        bld.mexify(source=src, uselib_local='nitf-c', lang='c')

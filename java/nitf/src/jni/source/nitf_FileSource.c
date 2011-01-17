@@ -29,33 +29,35 @@ NITF_JNI_DECLARE_OBJ(nitf_BandSource)
 /*
  * Class:     nitf_FileSource
  * Method:    construct
- * Signature: (Lnitf/IOHandle;JI)V
+ * Signature: (Lnitf/IOInterface;JI)V
  */
 JNIEXPORT void JNICALL Java_nitf_FileSource_construct
-    (JNIEnv * env, jobject self, jobject handle, jlong start,
+    (JNIEnv * env, jobject self, jobject interface, jlong start,
      jint numBytesPerPixel, jint pixelSkip)
 {
-    jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
     nitf_Error error;
     jmethodID methodID;
-    nitf_BandSource *fileSource;
-    nitf_IOHandle ioHandle;
+    jclass inputClass;
+    nitf_BandSource *fileSource = NULL;
+    nitf_IOInterface *io = NULL;
+    jfieldID fieldID;
 
     jclass bandSourceClass = (*env)->FindClass(env, "nitf/BandSource");
     jmethodID bandSourceMethodID = (*env)->GetStaticMethodID(env,
         bandSourceClass, "register", "(Lnitf/BandSource;)V");
 
-    methodID =
-        (*env)->GetMethodID(env, ioHandleClass, "getIOHandle", "()J");
-    ioHandle =
-        (nitf_IOHandle) ((*env)->CallLongMethod(env, handle, methodID));
+    inputClass = (*env)->GetObjectClass(env, interface);
+    methodID = (*env)->GetMethodID(env, inputClass, "getAddress", "()J");
+    io = (nitf_IOInterface *) (*env)->CallLongMethod(env, interface, methodID);
+
+    /* mark the record as being safe from Java GC destruction */
+    /*_ManageObject(env, (jlong)io, JNI_FALSE);*/
 
     if (pixelSkip <= 0)
         pixelSkip = 0;
 
-    fileSource =
-        nitf_FileSource_construct(ioHandle, start,
-            numBytesPerPixel, pixelSkip, &error);
+    fileSource = nitf_IOSource_construct(io, start, numBytesPerPixel,
+                                         pixelSkip, &error);
     if (!fileSource)
     {
         _ThrowNITFException(env, error.message);
