@@ -8,21 +8,23 @@ APPNAME = 'Sensor Independent XML'
 srcdir  = '.'
 blddir  = 'target'
 
+DIRS = 'drivers drivers/nrt drivers/nitf drivers/j2k c++ python'
+
 def set_options(opt):
     opt.tool_options('build swig pythontool',
                      tooldir=join(opt.curdir, 'build'))
-    opt.sub_options('drivers c++ python')
+    opt.sub_options(DIRS)
 
 def configure(conf):
     conf.check_tool('build swig pythontool',
                     tooldir=join(conf.curdir, 'build'))
-    conf.sub_config('drivers drivers/nrt drivers/nitf c++ python')
+    conf.sub_config(DIRS)
 
 def build(bld):
-    bld.add_subdirs('drivers drivers/nrt drivers/nitf c++ python')
+    bld.add_subdirs(DIRS)
 
 def distclean(context):
-    context.recurse('drivers c++ python')
+    context.recurse(DIRS)
     Scripting.distclean(context)
 
 def init(context):
