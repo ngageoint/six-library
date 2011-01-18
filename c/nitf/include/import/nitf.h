@@ -47,7 +47,6 @@
 #include "nitf/LabelSegment.h"
 #include "nitf/LabelSubheader.h"
 #include "nitf/LookupTable.h"
-#include "nitf/NRTCompat.h"
 #include "nitf/PluginIdentifier.h"
 #include "nitf/PluginRegistry.h"
 #include "nitf/RESegment.h"
