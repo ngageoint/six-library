@@ -22,6 +22,14 @@
 
 #include "j2k/Container.h"
 
+NRTAPI(NRT_BOOL) j2k_Container_canReadTiles(j2k_Container *container, nrt_Error *error)
+{
+    if (container->iface->canReadTiles)
+        return container->iface->canReadTiles(container->data, error);
+    /* otherwise, no */
+    return NRT_FAILURE;
+}
+
 NRTAPI(nrt_Uint32) j2k_Container_getTilesX(j2k_Container *container, nrt_Error *error)
 {
     return container->iface->getTilesX(container->data, error);

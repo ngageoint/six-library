@@ -271,6 +271,12 @@ OpenJPEG_readHeader(OpenJPEGContainerImpl *impl, nrt_Error *error)
     return rc;
 }
 
+NRTPRIV( NRT_BOOL)
+OpenJPEG_canReadTiles(J2K_USER_DATA *data, nrt_Error *error)
+{
+    return NRT_SUCCESS;
+}
+
 NRTPRIV( nrt_Uint32)
 OpenJPEG_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
 {
@@ -570,7 +576,7 @@ NRTAPI(j2k_Container*) j2k_Container_openIO(nrt_IOInterface *io,
                                             nrt_Error *error)
 {
     static j2k_IContainer containerInterface =
-    { &OpenJPEG_getTilesX,
+    { &OpenJPEG_canReadTiles, &OpenJPEG_getTilesX,
       &OpenJPEG_getTilesY, &OpenJPEG_getTileWidth, &OpenJPEG_getTileHeight,
       &OpenJPEG_getWidth, &OpenJPEG_getHeight, &OpenJPEG_getNumComponents,
       &OpenJPEG_getComponentBytes, &OpenJPEG_readTile, &OpenJPEG_readRegion,

@@ -228,6 +228,12 @@ protected:
 }
 
 
+NRTPRIV( NRT_BOOL)
+Kakadu_canReadTiles(J2K_USER_DATA *data, nrt_Error *error)
+{
+    return NRT_SUCCESS;
+}
+
 NRTPRIV( nrt_Uint32)
 Kakadu_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
 {
@@ -366,7 +372,7 @@ NRTAPI(j2k_Container*) j2k_Container_open(const char *fname, nrt_Error *error)
 NRTAPI(j2k_Container*) j2k_Container_openIO(nrt_IOInterface *io, nrt_Error *error)
 {
     static j2k_IContainer containerInterface =
-    { &Kakadu_getTilesX,
+    { &Kakadu_canReadTiles, &Kakadu_getTilesX,
       &Kakadu_getTilesY, &Kakadu_getTileWidth, &Kakadu_getTileHeight,
       &Kakadu_getWidth, &Kakadu_getHeight, &Kakadu_getNumComponents,
       &Kakadu_getComponentBytes, &Kakadu_readTile, &Kakadu_readRegion,

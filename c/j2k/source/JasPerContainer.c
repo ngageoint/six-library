@@ -462,6 +462,7 @@ JasPer_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
 
     /* TODO - for now, we are treating the image as 1x1 */
+    /* might want to return an error instead */
     return (nrt_Uint32)JasPer_readRegion(data, 0, 0, impl->width,
                                          impl->height, buf, error);
 }
@@ -527,11 +528,12 @@ NRTAPI(j2k_Container*) j2k_Container_openIO(nrt_IOInterface *io,
                                             nrt_Error *error)
 {
     static j2k_IContainer containerInterface =
-    { &JasPer_getTilesX,
-      &JasPer_getTilesY, &JasPer_getTileWidth, &JasPer_getTileHeight,
-      &JasPer_getWidth, &JasPer_getHeight, &JasPer_getNumComponents,
-      &JasPer_getComponentBytes, &JasPer_readTile, &JasPer_readRegion,
-      &JasPer_destruct };
+    { /* since we can't access the tiling information, we can't read tiles */
+      NULL,
+      &JasPer_getTilesX, &JasPer_getTilesY, &JasPer_getTileWidth,
+      &JasPer_getTileHeight, &JasPer_getWidth, &JasPer_getHeight,
+      &JasPer_getNumComponents, &JasPer_getComponentBytes, &JasPer_readTile,
+      &JasPer_readRegion, &JasPer_destruct };
 
     JasPerContainerImpl *impl = NULL;
     j2k_Container *container = NULL;

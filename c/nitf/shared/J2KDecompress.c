@@ -57,6 +57,15 @@ static nitf_DecompressionInterface interfaceTable =
     implOpen, implReadBlock, implFreeBlock, implClose, NULL
 };
 
+typedef struct _ImplControl
+{
+    nitf_BlockingInfo blockInfo; /* Kept for convience */
+    j2k_Container *container;    /* j2k Container */
+    nitf_Uint64 offset;          /* File offset to data */
+    nitf_Uint64 fileLength;      /* Length of compressed data in file */
+}
+ImplControl;
+
 NITF_CXX_ENDGUARD
 
 
@@ -99,20 +108,33 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                                     nitf_Uint32 blockNumber,
                                     nitf_Error* error)
 {
-    /* TODO */
+    ImplControl *implControl = (ImplControl*)control;
+
+    if (j2k_Container_canReadTiles(implControl->container, error))
+    {
+        /* TODO use j2k_Container_readTile */
+    }
+    else
+    {
+        /* TODO use j2k_Container_readRegion using the block info */
+    }
+
     return NULL;
 }
 
 NITFPRIV(void*) implMemAlloc(size_t size, nitf_Error* error)
 {
     void * p = NITF_MALLOC(size);
-    memset(p, 0, size);
     if (!p)
     {
         nitf_Error_init(error,
                         NITF_STRERROR( NITF_ERRNO ),
                         NITF_CTXT,
                         NITF_ERR_MEMORY);
+    }
+    else
+    {
+        memset(p, 0, size);
     }
     return p;
 }
@@ -122,11 +144,16 @@ NITFPRIV(void) implMemFree(void* p)
     if (p) NITF_FREE(p);
 }
 
-
-
 NITFPRIV(void) implClose(nitf_DecompressionControl** control)
 {
-    /* TODO */
+    ImplControl *implControl = (ImplControl*)control;
+
+    if (implControl)
+    {
+        if (implControl->container)
+            j2k_Container_destruct(&implControl->container);
+        implMemFree(implControl);
+    }
 }
 
 NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
@@ -136,7 +163,25 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
                                               nitf_Uint64*       blockMask,
                                               nitf_Error*        error)
 {
-    /* TODO */
+    ImplControl *implControl = NULL;
+
+    if (!(implControl = (ImplControl*)implMemAlloc(sizeof(ImplControl), error)))
+        goto CATCH_ERROR;
+
+    if (!(implControl->container = j2k_Container_openIO(io, error)))
+        goto CATCH_ERROR;
+
+    implControl->offset     = offset;
+    implControl->fileLength = fileLength;
+    implControl->blockInfo  = *blockInfo;
+    return((nitf_DecompressionControl*) implControl);
+
+    CATCH_ERROR:
+    {
+        implMemFree(implControl);
+        return NULL;
+    }
+
 }
 
 #endif
