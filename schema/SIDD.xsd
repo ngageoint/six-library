@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by General Dynamics AIS (General Dynamics AIS) -->
-<!-- SIDD v0.2 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sicommon="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SID:0.2" targetNamespace="urn:SID:0.2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<!-- SIDD v1.0.0 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sicommon="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SIDD:1.0.0" targetNamespace="urn:SIDD:1.0.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="urn:SICommon:0.1" schemaLocation="SICommonTypes.xsd"/>
 	<xs:import namespace="urn:SFA:1.2.0" schemaLocation="SFA.xsd"/>
 	<xs:simpleType name="LUTListType">
@@ -749,7 +749,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 					<xs:documentation>Optional angle offset for the receive polarization defined at aperture center.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="Processed" type="xs:boolean" minOccurs="0" maxOccurs="1">
+			<xs:element name="Processed" type="xs:boolean" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Optional flag to describe whether this input polarization was used in processing the product.</xs:documentation>
 				</xs:annotation>
