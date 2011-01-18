@@ -1,5 +1,6 @@
 import os, subprocess
 import Options
+from os.path import splitext, dirname
 
 NAME            = 'nitf'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
@@ -25,20 +26,19 @@ def build(bld):
     
     #make all of plug-ins normally - as separate DSOs
     pluginNode = bld.path.find_dir('shared')
-    libPattern = env['shlib_PATTERN']
-    if libPattern.startswith('lib'):
-        libPattern = libPattern[3:]
+    pEnv = env.copy()
+    if pEnv['shlib_PATTERN'].startswith('lib'):
+        pEnv['shlib_PATTERN'] = pEnv['shlib_PATTERN'][3:]
     
-    
-    uselib_local = ['nitf-c'] + map(lambda x: '%s-%s' % (x, LANG), MODULE_DEPS.split())
+    uselib_local = 'nitf-c nrt-c'
     
     pluginList = []
-    plugins = pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
+    plugins = filter(lambda x: 'J2K' not in x,
+                     pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' '))
     plugins.sort()
+    
     for p in plugins:
-        pEnv = env.copy()
-        pEnv['shlib_PATTERN'] = libPattern
-        pluginName = os.path.splitext(p)[0]
+        pluginName = splitext(p)[0]
         plugin = bld.new_task_gen('cc', source=p,
                                   target='%s_obj' % pluginName,
                                   includes=['../include', '../../nrt/include'],
@@ -46,16 +46,23 @@ def build(bld):
                                   path=pluginNode, env=env.copy())
         plugin = bld.new_task_gen('cc', 'shlib', uselib_local=uselib_local,
                                   target=pluginName, add_objects='%s_obj' % pluginName,
-                                  path=pluginNode, env=pEnv,
+                                  path=pluginNode, env=pEnv.copy(),
                                   install_path='${PREFIX}/share/nitf/plugins')
         pluginList.append('%s_obj' % pluginName)
     
     #now, to support static linkage, make the plug-ins as a static library
-    lib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', includes='include',
+    lib = bld.new_task_gen('cc', 'staticlib', includes='include',
                            target='%s-handlers' % NAME, env=env.copy(),
                            uselib_local = uselib_local, add_objects = pluginList)
-    #lib.find_sources_in_dirs('./shared', excludes=[])
-        
+    
+    #J2K plug-ins
+    if env['CCFLAGS_j2k-c']:
+        bld.new_task_gen('cc', 'shlib', source='J2KDecompress.c',
+                         target='J2KDecompress',
+                         uselib_local='nitf-c j2k-c nrt-c',
+                         uselib='nitf-c j2k-c nrt-c',
+                         path=pluginNode, env=pEnv.copy(),
+                         install_path='${PREFIX}/share/nitf/plugins')
     
     #build apps
     appsDir = bld.path.find_dir('apps')
@@ -67,7 +74,7 @@ def build(bld):
     #install headers
     for f in bld.path.find_dir('include').find_iter():
         relpath = f.relpath_gen(bld.path)
-        bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath), relpath)
+        bld.install_files('${PREFIX}/%s' % dirname(relpath), relpath)
         
     #run doxygen
     if 'DOXYGEN' in env and Options.is_install:

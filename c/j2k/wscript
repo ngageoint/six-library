@@ -13,15 +13,16 @@ def configure(conf):
     j2klib = Options.options.j2klib
     
     if conf.env['IS64BIT'] and j2klib == 'jasper':
-        #JasPer does not work on 64-bit architectures... so we'll use openjpeg
-        j2klib = 'openjpeg'
+        conf.check_message_custom('JPEG2000 library', '', 'jasper not available on 64-bit architectures', color='YELLOW')
+        j2klib = None
     
-    conf.check_message_custom('JPEG2000 library', '', j2klib, color='GREEN')
     conf.env['J2KLIB'] = j2klib
     
-    j2klibDir = {'openjpeg':'openjpeg', 'kdu':'kakadu', 'jasper':'jasper'}[j2klib]
+    j2klibDir = {'openjpeg':'openjpeg', 'kdu':'kakadu', 'jasper':'jasper'}.get(j2klib, None)
     
-    if isdir(join(conf.curdir, 'external', j2klibDir)):
+    if j2klibDir and isdir(join(conf.curdir, 'external', j2klibDir)):
+        conf.check_message_custom('JPEG2000 library', '', j2klib, color='GREEN')
+        conf.env.append_value('CCFLAGS_j2k-c', '-DHAVE_J2K_H')
         if j2klib == 'kdu':
             conf.env.append_value('CCFLAGS_kdu', '-DHAVE_KAKADU_H')
             conf.env.append_value('CXXFLAGS_kdu', '-DHAVE_KAKADU_H')
@@ -46,18 +47,18 @@ def configure(conf):
                     conf.env.append_unique('jasper-defs', 'longlong=long long') 
                 if not ulonglong:
                     conf.env.append_unique('jasper-defs', 'ulonglong=unsigned long long')
+    elif j2klibDir:
+        conf.check_message_custom('JPEG2000 library', '', 'not found', color='YELLOW')
 
 
 
 def build(bld):
     
     env = bld.env_of_name(bld.env['VARIANT'] or 'default')
+    j2klib = env['J2KLIB'] or None
+    j2klibDir = {'openjpeg':'openjpeg', 'kdu':'kakadu', 'jasper':'jasper'}.get(j2klib, None)
     
-    j2klib = env['J2KLIB']
-    j2klibDir = {'openjpeg':'openjpeg', 'kdu':'kakadu', 'jasper':'jasper'}[j2klib]
-    
-    if isdir(join(bld.curdir, 'external', j2klibDir)):
-        
+    if j2klibDir and isdir(join(bld.curdir, 'external', j2klibDir)):
         if j2klib == 'kdu':
             #next, build kakadu
             sources = ('common/kdu_arch.cpp',

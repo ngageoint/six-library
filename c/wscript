@@ -1,4 +1,4 @@
-MODULES = 'nrt nitf cgm j2k'
+MODULES = 'nrt j2k nitf cgm'
 
 def set_options(opt):
     opt.sub_options(MODULES)
