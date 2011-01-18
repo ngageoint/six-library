@@ -56,18 +56,7 @@ def build(bld):
     j2klib = env['J2KLIB']
     j2klibDir = {'openjpeg':'openjpeg', 'kdu':'kakadu', 'jasper':'jasper'}[j2klib]
     
-    if isdir(join(bld.curdir, 'external', j2klibDir)) and \
-            isdir(join(bld.curdir, 'external', 'nrt')) and \
-            isdir(join(bld.curdir, 'external', 'nitf')):
-        
-        #first, build nrt
-        bld.add_subdirs('external/nrt')
-        
-        #next, build our special version of nitro that relies on nrt
-        bld.module(name='nitf-nrt', lang='c', version='2.7-dev', module_deps='nrt',
-                   uselib='THREAD DL MATH nitf-nrt-c', defines='NITF_MODULE_EXPORTS',
-                   test_filter=lambda x: None, dir='external/nitf')
-        
+    if isdir(join(bld.curdir, 'external', j2klibDir)):
         
         if j2klib == 'kdu':
             #next, build kakadu
@@ -110,7 +99,7 @@ def build(bld):
                                       source='source/KakaduContainer.cpp',
                                       target='kducpp',
                                       uselib='kdu',
-                                      includes='include external/nrt/include %s' % ' '.join(map(lambda x: 'external/kakadu/coresys/%s' % x, kduIncludes.split())),
+                                      includes='include ../nrt/include %s' % ' '.join(map(lambda x: 'external/kakadu/coresys/%s' % x, kduIncludes.split())),
                                       path=bld.path,
                                       env=env.copy())
             
@@ -246,7 +235,7 @@ def build(bld):
         #j2k/nitf tests
         for t in ['test_j2k_nitf']:
             bld.new_task_gen(linker, 'program', target=t, name=t,
-                             source='%s.c' % t, uselib_local='j2k-c nitf-nrt-c',
+                             source='%s.c' % t, uselib_local='j2k-c nitf-c',
                              env=env.copy(), path=bld.path.find_dir('tests'))
         
         #if j2klib == 'kdu':
