@@ -25,6 +25,8 @@
 #include "j2k/Container.h"
 #include <string>
 #include <kdu_compressed.h>
+#include <iostream>
+#include <sstream>
 
 namespace j2k
 {
@@ -96,6 +98,32 @@ private:
     nrt_Off mOffset;
     nrt_Error mError;
 };
+
+
+class ErrorHandler : public kdu_message
+{
+public:
+    void put_text(const char *s)
+    {
+        mStream << s;
+        throw std::string(s);
+    }
+
+    void put_text(const kdu_uint16 *s)
+    {
+        mStream << s;
+    }
+
+    void flush(bool endOfMessage = false)
+    {
+        if (endOfMessage)
+            throw std::string(mStream.str());
+    }
+
+protected:
+    std::stringstream mStream;
+};
+
 
 
 class UserContainer
@@ -186,22 +214,23 @@ protected:
     nrt_IOInterface *mIO;
     IOStream *mSource;
     kdu_codestream *mCodestream;
-    nrt_Off mOffset;
     nrt_Uint32 mComponents, mHeight, mWidth, mBytes, mTileWidth, mTileHeight;
     nrt_Uint32 mTilesX, mTilesY;
     nrt_Error mError;
 
     void init()
     {
-        mOffset = nrt_IOInterface_tell(mIO, &mError);
+        ErrorHandler errHandler;
+        kdu_customize_errors(&errHandler);
+
         mSource = new IOStream(mIO);
 
         if (!(mCodestream = new kdu_codestream))
             throw std::string("Unable to create codestream");
+
         mCodestream->create(mSource);
         mCodestream->apply_input_restrictions(0, 0, 0, 0, NULL,
                                               KDU_WANT_OUTPUT_COMPONENTS);
-
 
         // cache some metadata
         mComponents = mCodestream->get_num_components(true);
@@ -221,6 +250,7 @@ protected:
         mCodestream->get_valid_tiles(indices);
         mTilesX = indices.size.x;
         mTilesY = indices.size.y;
+
     }
 };
 
@@ -385,6 +415,7 @@ NRTAPI(j2k_Container*) j2k_Container_openIO(nrt_IOInterface *io, nrt_Error *erro
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
         goto CATCH_ERROR;
     }
+    memset(container, 0, sizeof(j2k_Container));
 
     try
     {

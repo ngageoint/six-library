@@ -8,23 +8,25 @@ srcdir  = '.'
 blddir  = 'target'
 
 TOOLS = 'build swig javatool pythontool matlabtool'
+DIRS = 'c c++ java python mex'
+#external
 
 def set_options(opt):
     opt.tool_options(TOOLS, tooldir='build')
-    opt.sub_options('c c++ java python external mex')
+    opt.sub_options(DIRS)
 
 def configure(conf):
     conf.env['APPNAME'] = APPNAME
     conf.env['VERSION'] = VERSION
     conf.check_tool(TOOLS, tooldir='build')
     
-    conf.sub_config('c c++ java python external mex')
+    conf.sub_config(DIRS)
 
 def build(bld):
-    bld.add_subdirs('c c++ java python external mex')
+    bld.add_subdirs(DIRS)
 
 def distclean(context):
-    context.recurse('c c++ java python external mex')
+    context.recurse(DIRS)
     Scripting.distclean(context)
 
 def init(context):

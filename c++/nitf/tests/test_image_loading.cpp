@@ -23,9 +23,10 @@
 #include <import/nitf.hpp>
 #include <import/except.h>
 
-void writeImage(nitf::ImageSegment & segment,
-                char *imageName,
-                nitf::ImageReader & deserializer, int imageNumber,
+void writeImage(nitf::ImageSegment &segment,
+                nitf::Reader &reader,
+                const int imageNumber,
+                const char *imageName,
                 nitf_Uint32 rowSkipFactor,
                 nitf_Uint32 columnSkipFactor, bool optz)
 {
@@ -33,9 +34,11 @@ void writeImage(nitf::ImageSegment & segment,
     nitf::SubWindow subWindow;
     unsigned int i;
     int padded;
-    nitf::Uint8 ** buffer;
+    nitf::Uint8* buffer = NULL;
     nitf::Uint32 band;
     nitf::Uint32 * bandList;
+
+    nitf::ImageReader deserializer = reader.newImageReader(imageNumber);
 
     // missing skip factor
     nitf::ImageSubheader subheader = segment.getSubheader();
@@ -97,16 +100,13 @@ void writeImage(nitf::ImageSegment & segment,
 
     std::cout << "Allocating work buffer..." << std::endl;
 
-    buffer = new nitf::Uint8*[nBands];
+    buffer = new nitf::Uint8[subWindowSize * nBands];
+    assert(buffer);
 
     band = 0;
-    std::cout << "Allocating band list... " << sizeof(nitf::Uint32 *) *
-    nBands << std::endl;
     bandList = new nitf::Uint32[nBands];
-    std::cout << "Setting up subWindow... " << std::endl;
 
     subWindow.setStartCol(0);
-    std::cout << "Setting up start row... " << std::endl;
     subWindow.setStartRow(0);
 
     subWindow.setNumRows(nRows / rowSkipFactor);
@@ -116,25 +116,13 @@ void writeImage(nitf::ImageSegment & segment,
 
     subWindow.setDownSampler(&pixelSkip);
 
-    std::cout << "Assigning bands" << std::endl;
     for (band = 0; band < nBands; band++)
-    {
         bandList[band] = band;
-        std::cout << "# " << band << std::endl;
-    }
-    std::cout << "Assigning band list to sub-image" << std::endl;
     subWindow.setBandList(bandList);
     subWindow.setNumBands(nBands);
 
-    std::cout << "Allocating band buffers..." << std::endl;
-    for (i = 0; i < nBands; i++)
-    {
-        std::cout << "# " << i << " allocated to size: " << subWindowSize << std::endl;
-        buffer[i] = new nitf::Uint8[subWindowSize];
-        assert(buffer[i]);
-    }
-
-    deserializer.read(subWindow, buffer, &padded);
+    std::cout << "Reading image..." << std::endl;
+    deserializer.read(subWindow, &buffer, &padded);
 
     std::cout << "Call completed!" << std::endl;
 
@@ -155,17 +143,11 @@ void writeImage(nitf::ImageSegment & segment,
              << nBits << "_band_" << i << ".out";
 
         nitf::IOHandle toFile(file.str(), NITF_ACCESS_WRITEONLY, NITF_CREATE);
-        toFile.write((const char *) buffer[i], subWindowSize);
+        toFile.write((const char *) &buffer[i * subWindowSize], subWindowSize);
         toFile.close();
-
         std::cout << "Finished # " << i << std::endl;
     }
 
-    /* free buffers */
-    for (i = 0; i < nBands; i++)
-    {
-        delete [] buffer[i];
-    }
     delete [] buffer;
     delete [] bandList;
 }
@@ -211,21 +193,18 @@ int main(int argc, char **argv)
             std::cout << "Getting image segment..." << std::endl;
             nitf::ImageSegment imageSegment((nitf_ImageSegment *) iter.get());
 
-            nitf::ImageReader deserializer =
-                reader.newImageReader(count);
-
             std::cout << "Retrieved." << std::endl;
             std::cout << "Writing image... " << std::endl;
 
             /*  Write the thing out  */
-            writeImage(imageSegment, argv[1], deserializer, count, rowSkipFactor, columnSkipFactor, optz);
+            writeImage(imageSegment, reader, count, argv[1],
+                       rowSkipFactor, columnSkipFactor, optz);
             std::cout << "done." << std::endl;
         }
     }
-    catch (except::Throwable & thr)
+    catch (except::Exception &thr)
     {
-        std::cout << "Caught module exception: " << thr.getMessage() << std::endl;
-        std::cout << thr.getTrace() << std::endl;
+        std::cout << "Caught module exception: " << thr.toString() << std::endl;
     }
     catch (std::exception & ex)
     {

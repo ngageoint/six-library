@@ -113,6 +113,19 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
     if (j2k_Container_canReadTiles(implControl->container, error))
     {
         /* TODO use j2k_Container_readTile */
+        nrt_Uint8 *buf = NULL;
+        nitf_Uint32 tileX, tileY;
+
+        tileY = blockNumber / implControl->blockInfo.numBlocksPerRow;
+        tileX = blockNumber % implControl->blockInfo.numBlocksPerRow;
+
+        if (!j2k_Container_readTile(implControl->container, tileX, tileY, &buf,
+                                   error))
+        {
+            implMemFree(buf);
+            return NULL;
+        }
+        return buf;
     }
     else
     {
@@ -146,14 +159,15 @@ NITFPRIV(void) implMemFree(void* p)
 
 NITFPRIV(void) implClose(nitf_DecompressionControl** control)
 {
-    ImplControl *implControl = (ImplControl*)control;
+    ImplControl **implControl = (ImplControl**)control;
 
-    if (implControl)
+    if (implControl && *implControl)
     {
-        if (implControl->container)
-            j2k_Container_destruct(&implControl->container);
-        implMemFree(implControl);
+        if ((*implControl)->container)
+            j2k_Container_destruct(&(*implControl)->container);
+        implMemFree(*implControl);
     }
+    *implControl = NULL;
 }
 
 NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
@@ -166,6 +180,9 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
     ImplControl *implControl = NULL;
 
     if (!(implControl = (ImplControl*)implMemAlloc(sizeof(ImplControl), error)))
+        goto CATCH_ERROR;
+
+    if (nitf_IOInterface_seek(io, offset, NITF_SEEK_SET, error) < 0)
         goto CATCH_ERROR;
 
     if (!(implControl->container = j2k_Container_openIO(io, error)))

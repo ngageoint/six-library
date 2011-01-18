@@ -126,6 +126,7 @@ int main(int argc, char **argv)
             {
                 j2k_Container *container = NULL;
                 printf("Image %d contains J2K compressed data\n", (i + 1));
+                printf("Offset: %d\n", segment->imageOffset);
                 if (!nrt_IOInterface_seek(io, segment->imageOffset,
                                           NRT_SEEK_SET, &error))
                     goto CATCH_ERROR;
