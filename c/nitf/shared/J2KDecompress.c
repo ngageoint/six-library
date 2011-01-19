@@ -109,11 +109,11 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                                     nitf_Error* error)
 {
     ImplControl *implControl = (ImplControl*)control;
+    nrt_Uint8 *buf = NULL;
 
     if (j2k_Container_canReadTiles(implControl->container, error))
     {
-        /* TODO use j2k_Container_readTile */
-        nrt_Uint8 *buf = NULL;
+        /* use j2k_Container_readTile */
         nitf_Uint32 tileX, tileY;
 
         tileY = blockNumber / implControl->blockInfo.numBlocksPerRow;
@@ -125,14 +125,34 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
             implMemFree(buf);
             return NULL;
         }
-        return buf;
     }
     else
     {
-        /* TODO use j2k_Container_readRegion using the block info */
-    }
+        /* use j2k_Container_readRegion using the block info */
+        nitf_Uint32 tileX, tileY, x0, x1, y0, y1, totalRows, totalCols;
 
-    return NULL;
+        tileY = blockNumber / implControl->blockInfo.numBlocksPerRow;
+        tileX = blockNumber % implControl->blockInfo.numBlocksPerRow;
+
+        x0 = tileX * implControl->blockInfo.numColsPerBlock;
+        x1 = x0 + implControl->blockInfo.numColsPerBlock;
+        y0 = tileY * implControl->blockInfo.numRowsPerBlock;
+        y1 = y0 + implControl->blockInfo.numRowsPerBlock;
+
+        /* check for last tiles */
+        if (x1 > totalCols)
+            x1 = totalCols;
+        if (y1 > totalRows)
+            y1 = totalRows;
+
+        if (!j2k_Container_readRegion(implControl->container, x0, y0, x1, y1,
+                                      &buf, error))
+        {
+            implMemFree(buf);
+            return NULL;
+        }
+    }
+    return buf;
 }
 
 NITFPRIV(void*) implMemAlloc(size_t size, nitf_Error* error)
