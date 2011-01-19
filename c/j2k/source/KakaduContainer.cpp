@@ -25,6 +25,8 @@
 #include "j2k/Container.h"
 #include <string>
 #include <kdu_compressed.h>
+#include <kdu_block_coding.h>
+#include <kdu_sample_processing.h>
 #include <iostream>
 #include <sstream>
 
@@ -126,6 +128,77 @@ protected:
 
 
 
+void copyLine(nrt_Uint8 *dest, kdu_line_buf &src, int bitsPerSample,
+              int outputBytes)
+{
+    int samples = src.get_width();
+
+    if (src.get_buf32())
+    {
+        throw std::string("Not implemented");
+    }
+    else if (src.get_buf16())
+    {
+        kdu_sample16 *sp = src.get_buf16();
+        kdu_int16 val;
+        kdu_int16 bitShift = 0;
+
+        switch(outputBytes)
+        {
+        case 1:
+        {
+            bitShift = bitsPerSample < 8 ? 8 - bitsPerSample : 0;
+            for(; samples > 0; --samples, ++sp, ++dest)
+            {
+                val = (sp->ival << bitShift) + 128;
+                *dest = (kdu_byte)val;
+            }
+            break;
+        }
+        case 2:
+        {
+            /* TODO */
+        }
+        default:
+            throw std::string("Not implemented");
+        }
+    }
+    else
+    {
+        throw std::string("Unsupported/invalid line buffer");
+    }
+}
+
+
+#if 0
+void
+copyBlock(nrt_Uint8 *dest, kdu_block *block, int bitsPerSample, int outputBytes)
+{
+    size_t samples = (size_t)block->size.x * block->size.y;
+    size_t i;
+    kdu_int32 *inPtr = block->sample_buffer;
+    kdu_int32 bitShift, val;
+
+    switch(outputBytes)
+    {
+    case 1:
+    {
+        bitShift = 32 - bitsPerSample;
+        for(; samples > 0; --samples, ++inPtr, dest += outputBytes)
+        {
+            val = (*inPtr << bitShift) + 128;
+            *dest = (kdu_byte)val;
+        }
+        break;
+    }
+    default:
+        throw std::string("Not yet implemented");
+    }
+
+}
+#endif
+
+
 class UserContainer
 {
 public:
@@ -191,8 +264,12 @@ public:
 
     nrt_Uint32 readTile(nrt_Uint32 tileX, nrt_Uint32 tileY, nrt_Uint8 **buf)
     {
-        nrt_Uint32 bufSize = getTileWidth() * getTileHeight() *
-                getComponentBytes() * getNumComponents();
+        nrt_Uint32 nComps = getNumComponents();
+        nrt_Uint32 sampleSize = getComponentBytes();
+        nrt_Uint64 lineSize = (nrt_Uint64)getTileWidth() * sampleSize;
+        nrt_Uint64 compSize = lineSize * getTileHeight();
+
+        nrt_Uint64 bufSize = compSize * nComps;
         if (buf && !*buf)
         {
             *buf = (nrt_Uint8*)NRT_MALLOC(bufSize);
@@ -203,7 +280,68 @@ public:
         kdu_coords tileIndex(tileX, tileY);
         kdu_tile tile = mCodestream->open_tile(tileIndex, NULL);
 
-        //TODO actually read the tile
+        int tileComponents = tile.get_num_components();
+        assert(tileComponents == nComps);
+
+        nrt_Uint8 *bufPtr = *buf;
+        for(nrt_Uint32 i = 0; i < nComps; ++i)
+        {
+            kdu_tile_comp tileComponent = tile.access_component(i);
+            kdu_resolution tileRes = tileComponent.access_resolution();
+            int bitDepth = tileComponent.get_bit_depth();
+
+            kdu_dims tileSize;
+            tileRes.get_dims(tileSize);
+
+            bool shortBuffer = sampleSize <= 2;
+            kdu_line_buf line;
+            kdu_sample_allocator allocator;
+            line.pre_create(&allocator, tileSize.size.x,
+                            tileComponent.get_reversible(), shortBuffer);
+
+            kdu_pull_ifc engine;
+            if (tileRes.which() == 0)
+                engine = kdu_decoder(tileRes.access_subband(LL_BAND),
+                                     &allocator, shortBuffer);
+            else
+                engine = kdu_synthesis(tileRes, &allocator, shortBuffer);
+            allocator.finalize();
+            line.create();
+
+            for(int y = 0; y < tileSize.size.y; y++ )
+            {
+                engine.pull(line, true);
+                copyLine(bufPtr + y * lineSize, line, bitDepth, sampleSize);
+            }
+            engine.destroy();
+
+#if 0
+            int minBand;
+            nrt_Uint32 nBands = tileRes.get_valid_band_indices(minBand);
+
+            for(nrt_Uint32 b = minBand; nBands > 0; --nBands, ++b)
+            {
+                kdu_subband tileBand = tileRes.access_subband(b);
+                kdu_dims validBlocks;
+                tileBand.get_valid_blocks(validBlocks);
+
+                kdu_coords idx;
+                for(idx.y = 0; idx.y < validBlocks.size.y; ++idx.y)
+                {
+                    for (idx.x = 0; idx.x < validBlocks.size.x; ++idx.x)
+                    {
+                        kdu_block *block = tileBand.open_block(idx + validBlocks.pos);
+                        kdu_block_decoder decoder;
+                        decoder.decode(block);
+
+                        copyBlock(bufPtr, block, bitDepth, sampleSize);
+                        bufPtr += block->size.x * block->size.y;
+                        tileBand.close_block(block);
+                    }
+                }
+            }
+#endif
+        }
 
         tile.close();
         return bufSize;
@@ -250,7 +388,6 @@ protected:
         mCodestream->get_valid_tiles(indices);
         mTilesX = indices.size.x;
         mTilesY = indices.size.y;
-
     }
 };
 
@@ -439,10 +576,6 @@ NRTAPI(j2k_Container*) j2k_Container_openIO(nrt_IOInterface *io, nrt_Error *erro
         }
         return NULL;
     }
-//
-//    nrt_Error_init(error, "Kakadu container not yet implemented", NRT_CTXT,
-//                   NRT_ERR_INVALID_OBJECT);
-//    return NULL;
 }
 
 #endif
