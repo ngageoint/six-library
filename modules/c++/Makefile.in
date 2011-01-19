@@ -15,7 +15,10 @@ raw: six_raw
 
 #  Build NITRO.  You need to do this only if your configure could not
 #  detect a working version of nitro
-nitf_driver:
+nrt_driver:
+	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/nrt_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@"
+
+nitf_driver: nrt_driver
 	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/nitf_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@"
 
 #  Build the SAX driver.  You need to do this only if your configure
@@ -55,6 +58,10 @@ six_install:
 
 drivers_clean:
 	cd ../drivers; rm -rf expat-2.0.0
+	if test -f ../drivers/nrt/Makefile; \
+	then cd ../drivers/nrt; make clean; \
+	     rm -f *INSTALL_SUCCEEDED; \
+	fi
 	if test -f ../drivers/nitf/Makefile; \
 	then cd ../drivers/nitf; make clean; \
 	     rm -f *INSTALL_SUCCEEDED; \
