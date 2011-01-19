@@ -31,16 +31,6 @@ typedef enum _nitf_Version
     NITF_VER_UNKNOWN
 } nitf_Version;
 
-typedef enum _nitf_CornersType
-{
-    NITF_CORNERS_UNKNOWN = -1,
-    NITF_CORNERS_UTM,
-    NITF_CORNERS_UTM_UPS_S,
-    NITF_CORNERS_UTM_UPS_N,
-    NITF_CORNERS_GEO,
-    NITF_CORNERS_DECIMAL
-} nitf_CornersType;
-
 /* These macros check the NITF Version */
 #define IS_NITF20(V) ((V) == NITF_VER_20)
 #define IS_NITF21(V) ((V) == NITF_VER_21)

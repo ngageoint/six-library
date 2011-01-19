@@ -177,7 +177,7 @@
 %include "nrt/Error.h"
 %include "nrt/IOHandle.h"
 %include "nrt/IOInterface.h"
-%include "nitf/NRTCompat.h"
+%include "nitf/System.h"
 
 
 

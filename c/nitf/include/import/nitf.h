@@ -43,7 +43,6 @@
 #include "nitf/ImageSource.h"
 #include "nitf/ImageSubheader.h"
 #include "nitf/ImageWriter.h"
-#include "nitf/IntStack.h"
 #include "nitf/LabelSegment.h"
 #include "nitf/LabelSubheader.h"
 #include "nitf/LookupTable.h"
@@ -63,7 +62,6 @@
 #include "nitf/TREUtils.h"
 #include "nitf/TextSegment.h"
 #include "nitf/TextSubheader.h"
-#include "nitf/Utils.h"
 #include "nitf/WriteHandler.h"
 #include "nitf/Writer.h"
 

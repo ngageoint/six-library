@@ -23,50 +23,25 @@
 #ifndef __NITF_UTILS_HPP__
 #define __NITF_UTILS_HPP__
 
-#include "nitf/Utils.h"
 #include "nitf/System.hpp"
 #include <string>
 
 namespace nitf
 {
-    /*!
-     *  This struct externalizes all of the utilities from
-     *  Utils.h that are NITFAPI.  However, some of the functions
-     *  in the C NITFAPI are trivial in C++ using std::string
-     *  so we dont include those at all
-     *
-     *  Since its a 1:1 mapping, we'll just inline everything
-     *
-     */
-    struct Utils
-    {
-        static bool isNumeric(std::string str);
+struct Utils
+{
+    static bool isNumeric(std::string str);
 
-        static bool isAlpha(std::string str);
+    static bool isAlpha(std::string str);
 
-        static void decimalToGeographic(double decimal, 
-                                        int* degrees, 
-                                        int* minutes,
-                                        double* seconds);
-        
-        static double geographicToDecimal(int degrees, 
-                                          int minutes, 
-                                          double seconds);
-        
-        /*
-        // Not sure whether we should actually publicize these?
-        static void parseGeographicString(std::string dms,
-                                          int *degrees,
-                                          int *minutes,
-                                          int *seconds) throw(nitf::Exception);
-        
-        static parseDecimalString(std::string d, double* decimal)
-            throw (nitf::Exception);
-        */
-        static char cornersTypeAsCoordRep(nitf::CornersType type);
-        
-        
-    };
+    static void decimalToGeographic(double decimal, int* degrees, int* minutes,
+                                    double* seconds);
+
+    static double geographicToDecimal(int degrees, int minutes, double seconds);
+
+    static char cornersTypeAsCoordRep(nitf::CornersType type);
+
+};
 
 }
 

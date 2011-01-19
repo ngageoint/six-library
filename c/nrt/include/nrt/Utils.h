@@ -85,6 +85,110 @@ NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
 
 NRTAPI(int) nrt_Utils_strncasecmp(char *s1, char *s2, size_t n);
 
+/*!
+ *  Convert a double representing decimal degrees into 3 integers,
+ *  one for degrees, one for minutes, and one for seconds.
+ *
+ *  The function returns these values through the passed in parameters.
+ *  parameters may not be NULL
+ *
+ *  \param decimal An existing decimal degree
+ *  \param degrees [output] The degrees as an integer
+ *  \param minutes [output] The minutes as an integer
+ *  \param seconds [output] The seconds as an integer
+ */
+NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal,
+        int *degrees,
+        int *minutes,
+        double *seconds);
+
+/*!
+ *  Convert the geographic coordinates (i.e., DMS) into decimal
+ *  degrees as a double.
+ *
+ *  \param degrees geographic degrees
+ *  \param minutes geographic minutes
+ *  \param seconds geographic seconds
+ */
+NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees,
+        int minutes,
+        double seconds);
+
+/*!
+ *  Take in a degree of DMS format and convert it into integers
+ *  The string will be of the format dddmmss[NSEW] or ddmmss[NSEW]
+ *  Blank values are accepted (per NRT 2500C) and converted to 0s.
+ *
+ *  Any other string will produce an error object with code
+ *  NRT_ERR_INVALID_PARAMETER.
+ *
+ *  \param dms The string
+ *  \param degrees [output] The degrees as an integer
+ *  \param minutes [output] The minutes as an integer
+ *  \param seconds [output] The seconds as an integer
+ *
+ */
+NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char* dms,
+        int* degrees,
+        int* minutes,
+        double* seconds,
+        nrt_Error* error);
+
+/*!
+ *  Turn the geographic value into a string.  You must have a buffer
+ *  with 7 elements to hand in to this function, otherwise you will
+ *  have memory corruption.
+ */
+NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees,
+        int minutes,
+        double seconds,
+        char *buffer7);
+
+/*!
+ *  Turn the geographic value into a string.  You must have a buffer
+ *  with 7 elements to hand in to this function, otherwise you will
+ *  have memory corruption.
+ */
+NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees,
+        int minutes,
+        double seconds,
+        char *buffer8);
+
+/*!
+ *  Turn the decimal value into a string +-dd.ddd.  You must have a buffer
+ *  with 7 elements to hand in to this function, otherwise you will
+ *  have memory corruption.
+ */
+NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal,
+        char *buffer7);
+
+/*!
+ *  Turn the decimal value into a string +-ddd.ddd.  You must have a buffer
+ *  with 7 elements to hand in to this function, otherwise you will
+ *  have memory corruption.
+ */
+NRTPROT(void) nrt_Utils_decimalLonToCharArray(double decimal,
+        char *buffer8);
+
+NRTPROT(void) nrt_Utils_decimalLatToGeoCharArray(double decimal,
+        char *buffer7);
+
+/*!
+ *  Turn the decimal value into a string +-ddd.ddd.  You must have a buffer
+ *  with 7 elements to hand in to this function, otherwise you will
+ *  have memory corruption.
+ */
+NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal,
+        char *buffer8);
+
+/*!
+ *  Convert the corners type to a string.  If for some reason, the type
+ *  is not known, return it as ' ', which is the only other valid NRT
+ *  value.
+ *
+ */
+NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
+
 NRT_CXX_ENDGUARD
 
 #endif

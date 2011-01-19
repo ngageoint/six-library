@@ -2673,40 +2673,40 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p__NRT_Pair swig_types[12]
 #define SWIGTYPE_p__nitf_ComponentInfo swig_types[13]
 #define SWIGTYPE_p__nitf_ConvType swig_types[14]
-#define SWIGTYPE_p__nitf_CornersType swig_types[15]
-#define SWIGTYPE_p__nitf_DESegment swig_types[16]
-#define SWIGTYPE_p__nitf_DESubheader swig_types[17]
-#define SWIGTYPE_p__nitf_DataSource swig_types[18]
-#define SWIGTYPE_p__nitf_DownSampler swig_types[19]
-#define SWIGTYPE_p__nitf_Extensions swig_types[20]
-#define SWIGTYPE_p__nitf_ExtensionsIterator swig_types[21]
-#define SWIGTYPE_p__nitf_Field swig_types[22]
-#define SWIGTYPE_p__nitf_FieldType swig_types[23]
-#define SWIGTYPE_p__nitf_FileHeader swig_types[24]
-#define SWIGTYPE_p__nitf_FileSecurity swig_types[25]
-#define SWIGTYPE_p__nitf_GraphicSegment swig_types[26]
-#define SWIGTYPE_p__nitf_GraphicSubheader swig_types[27]
-#define SWIGTYPE_p__nitf_IDataSource swig_types[28]
-#define SWIGTYPE_p__nitf_IDownSampler swig_types[29]
-#define SWIGTYPE_p__nitf_ImageReader swig_types[30]
-#define SWIGTYPE_p__nitf_ImageSegment swig_types[31]
-#define SWIGTYPE_p__nitf_ImageSource swig_types[32]
-#define SWIGTYPE_p__nitf_ImageSubheader swig_types[33]
-#define SWIGTYPE_p__nitf_LabelSegment swig_types[34]
-#define SWIGTYPE_p__nitf_LabelSubheader swig_types[35]
-#define SWIGTYPE_p__nitf_RESegment swig_types[36]
-#define SWIGTYPE_p__nitf_RESubheader swig_types[37]
-#define SWIGTYPE_p__nitf_Reader swig_types[38]
-#define SWIGTYPE_p__nitf_Record swig_types[39]
-#define SWIGTYPE_p__nitf_SegmentReader swig_types[40]
-#define SWIGTYPE_p__nitf_SubWindow swig_types[41]
-#define SWIGTYPE_p__nitf_TRE swig_types[42]
-#define SWIGTYPE_p__nitf_TREEnumerator swig_types[43]
-#define SWIGTYPE_p__nitf_TREHandler swig_types[44]
-#define SWIGTYPE_p__nitf_TextSegment swig_types[45]
-#define SWIGTYPE_p__nitf_TextSubheader swig_types[46]
-#define SWIGTYPE_p__nitf_Version swig_types[47]
-#define SWIGTYPE_p__nitf_Writer swig_types[48]
+#define SWIGTYPE_p__nitf_DESegment swig_types[15]
+#define SWIGTYPE_p__nitf_DESubheader swig_types[16]
+#define SWIGTYPE_p__nitf_DataSource swig_types[17]
+#define SWIGTYPE_p__nitf_DownSampler swig_types[18]
+#define SWIGTYPE_p__nitf_Extensions swig_types[19]
+#define SWIGTYPE_p__nitf_ExtensionsIterator swig_types[20]
+#define SWIGTYPE_p__nitf_Field swig_types[21]
+#define SWIGTYPE_p__nitf_FieldType swig_types[22]
+#define SWIGTYPE_p__nitf_FileHeader swig_types[23]
+#define SWIGTYPE_p__nitf_FileSecurity swig_types[24]
+#define SWIGTYPE_p__nitf_GraphicSegment swig_types[25]
+#define SWIGTYPE_p__nitf_GraphicSubheader swig_types[26]
+#define SWIGTYPE_p__nitf_IDataSource swig_types[27]
+#define SWIGTYPE_p__nitf_IDownSampler swig_types[28]
+#define SWIGTYPE_p__nitf_ImageReader swig_types[29]
+#define SWIGTYPE_p__nitf_ImageSegment swig_types[30]
+#define SWIGTYPE_p__nitf_ImageSource swig_types[31]
+#define SWIGTYPE_p__nitf_ImageSubheader swig_types[32]
+#define SWIGTYPE_p__nitf_LabelSegment swig_types[33]
+#define SWIGTYPE_p__nitf_LabelSubheader swig_types[34]
+#define SWIGTYPE_p__nitf_RESegment swig_types[35]
+#define SWIGTYPE_p__nitf_RESubheader swig_types[36]
+#define SWIGTYPE_p__nitf_Reader swig_types[37]
+#define SWIGTYPE_p__nitf_Record swig_types[38]
+#define SWIGTYPE_p__nitf_SegmentReader swig_types[39]
+#define SWIGTYPE_p__nitf_SubWindow swig_types[40]
+#define SWIGTYPE_p__nitf_TRE swig_types[41]
+#define SWIGTYPE_p__nitf_TREEnumerator swig_types[42]
+#define SWIGTYPE_p__nitf_TREHandler swig_types[43]
+#define SWIGTYPE_p__nitf_TextSegment swig_types[44]
+#define SWIGTYPE_p__nitf_TextSubheader swig_types[45]
+#define SWIGTYPE_p__nitf_Version swig_types[46]
+#define SWIGTYPE_p__nitf_Writer swig_types[47]
+#define SWIGTYPE_p__nrt_CornersType swig_types[48]
 #define SWIGTYPE_p__protected_nitf_PluginRegistry swig_types[49]
 #define SWIGTYPE_p_a_2__double swig_types[50]
 #define SWIGTYPE_p_char swig_types[51]
@@ -2748,63 +2748,64 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_nrt_DLL swig_types[87]
 #define SWIGTYPE_p_nrt_DateTime swig_types[88]
 #define SWIGTYPE_p_nrt_Directory swig_types[89]
-#define SWIGTYPE_p_nrt_List swig_types[90]
-#define SWIGTYPE_p_nrt_ListIterator swig_types[91]
-#define SWIGTYPE_p_nrt_ListNode swig_types[92]
-#define SWIGTYPE_p_nrt_Traversal swig_types[93]
-#define SWIGTYPE_p_nrt_Tree swig_types[94]
-#define SWIGTYPE_p_nrt_TreeNode swig_types[95]
-#define SWIGTYPE_p_off_t swig_types[96]
-#define SWIGTYPE_p_p__NRT_HashTable swig_types[97]
-#define SWIGTYPE_p_p__NRT_IOInterface swig_types[98]
-#define SWIGTYPE_p_p__nitf_ComponentInfo swig_types[99]
-#define SWIGTYPE_p_p__nitf_DESegment swig_types[100]
-#define SWIGTYPE_p_p__nitf_DESubheader swig_types[101]
-#define SWIGTYPE_p_p__nitf_DataSource swig_types[102]
-#define SWIGTYPE_p_p__nitf_DownSampler swig_types[103]
-#define SWIGTYPE_p_p__nitf_Extensions swig_types[104]
-#define SWIGTYPE_p_p__nitf_Field swig_types[105]
-#define SWIGTYPE_p_p__nitf_FileHeader swig_types[106]
-#define SWIGTYPE_p_p__nitf_FileSecurity swig_types[107]
-#define SWIGTYPE_p_p__nitf_GraphicSegment swig_types[108]
-#define SWIGTYPE_p_p__nitf_GraphicSubheader swig_types[109]
-#define SWIGTYPE_p_p__nitf_ImageReader swig_types[110]
-#define SWIGTYPE_p_p__nitf_ImageSegment swig_types[111]
-#define SWIGTYPE_p_p__nitf_ImageSource swig_types[112]
-#define SWIGTYPE_p_p__nitf_ImageSubheader swig_types[113]
-#define SWIGTYPE_p_p__nitf_LabelSegment swig_types[114]
-#define SWIGTYPE_p_p__nitf_LabelSubheader swig_types[115]
-#define SWIGTYPE_p_p__nitf_RESegment swig_types[116]
-#define SWIGTYPE_p_p__nitf_RESubheader swig_types[117]
-#define SWIGTYPE_p_p__nitf_Reader swig_types[118]
-#define SWIGTYPE_p_p__nitf_Record swig_types[119]
-#define SWIGTYPE_p_p__nitf_SegmentReader swig_types[120]
-#define SWIGTYPE_p_p__nitf_SubWindow swig_types[121]
-#define SWIGTYPE_p_p__nitf_TRE swig_types[122]
-#define SWIGTYPE_p_p__nitf_TREEnumerator swig_types[123]
-#define SWIGTYPE_p_p__nitf_TextSegment swig_types[124]
-#define SWIGTYPE_p_p__nitf_TextSubheader swig_types[125]
-#define SWIGTYPE_p_p__nitf_Writer swig_types[126]
-#define SWIGTYPE_p_p_f_p_struct__NRT_HashTable_p_q_const__char__unsigned_int swig_types[127]
-#define SWIGTYPE_p_p_f_p_struct__NRT_HashTable_p_struct__NRT_Pair_p_void_p_struct__NRT_Error__int swig_types[128]
-#define SWIGTYPE_p_p_f_p_void__void swig_types[129]
-#define SWIGTYPE_p_p_f_p_void_off_t_int_p_struct__NRT_Error__off_t swig_types[130]
-#define SWIGTYPE_p_p_f_p_void_p_char_size_t_p_struct__NRT_Error__int swig_types[131]
-#define SWIGTYPE_p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int swig_types[132]
-#define SWIGTYPE_p_p_f_p_void_p_struct__NRT_Error__int swig_types[133]
-#define SWIGTYPE_p_p_f_p_void_p_struct__NRT_Error__off_t swig_types[134]
-#define SWIGTYPE_p_p_nitf_BandInfo swig_types[135]
-#define SWIGTYPE_p_p_nitf_WriteHandler swig_types[136]
-#define SWIGTYPE_p_p_nrt_List swig_types[137]
-#define SWIGTYPE_p_p_uint8_t swig_types[138]
-#define SWIGTYPE_p_p_void swig_types[139]
-#define SWIGTYPE_p_uint16_t swig_types[140]
-#define SWIGTYPE_p_uint32_t swig_types[141]
-#define SWIGTYPE_p_uint64_t swig_types[142]
-#define SWIGTYPE_p_uint8_t swig_types[143]
-#define SWIGTYPE_p_void swig_types[144]
-static swig_type_info *swig_types[146];
-static swig_module_info swig_module = {swig_types, 145, 0, 0, 0, 0};
+#define SWIGTYPE_p_nrt_IntStack swig_types[90]
+#define SWIGTYPE_p_nrt_List swig_types[91]
+#define SWIGTYPE_p_nrt_ListIterator swig_types[92]
+#define SWIGTYPE_p_nrt_ListNode swig_types[93]
+#define SWIGTYPE_p_nrt_Traversal swig_types[94]
+#define SWIGTYPE_p_nrt_Tree swig_types[95]
+#define SWIGTYPE_p_nrt_TreeNode swig_types[96]
+#define SWIGTYPE_p_off_t swig_types[97]
+#define SWIGTYPE_p_p__NRT_HashTable swig_types[98]
+#define SWIGTYPE_p_p__NRT_IOInterface swig_types[99]
+#define SWIGTYPE_p_p__nitf_ComponentInfo swig_types[100]
+#define SWIGTYPE_p_p__nitf_DESegment swig_types[101]
+#define SWIGTYPE_p_p__nitf_DESubheader swig_types[102]
+#define SWIGTYPE_p_p__nitf_DataSource swig_types[103]
+#define SWIGTYPE_p_p__nitf_DownSampler swig_types[104]
+#define SWIGTYPE_p_p__nitf_Extensions swig_types[105]
+#define SWIGTYPE_p_p__nitf_Field swig_types[106]
+#define SWIGTYPE_p_p__nitf_FileHeader swig_types[107]
+#define SWIGTYPE_p_p__nitf_FileSecurity swig_types[108]
+#define SWIGTYPE_p_p__nitf_GraphicSegment swig_types[109]
+#define SWIGTYPE_p_p__nitf_GraphicSubheader swig_types[110]
+#define SWIGTYPE_p_p__nitf_ImageReader swig_types[111]
+#define SWIGTYPE_p_p__nitf_ImageSegment swig_types[112]
+#define SWIGTYPE_p_p__nitf_ImageSource swig_types[113]
+#define SWIGTYPE_p_p__nitf_ImageSubheader swig_types[114]
+#define SWIGTYPE_p_p__nitf_LabelSegment swig_types[115]
+#define SWIGTYPE_p_p__nitf_LabelSubheader swig_types[116]
+#define SWIGTYPE_p_p__nitf_RESegment swig_types[117]
+#define SWIGTYPE_p_p__nitf_RESubheader swig_types[118]
+#define SWIGTYPE_p_p__nitf_Reader swig_types[119]
+#define SWIGTYPE_p_p__nitf_Record swig_types[120]
+#define SWIGTYPE_p_p__nitf_SegmentReader swig_types[121]
+#define SWIGTYPE_p_p__nitf_SubWindow swig_types[122]
+#define SWIGTYPE_p_p__nitf_TRE swig_types[123]
+#define SWIGTYPE_p_p__nitf_TREEnumerator swig_types[124]
+#define SWIGTYPE_p_p__nitf_TextSegment swig_types[125]
+#define SWIGTYPE_p_p__nitf_TextSubheader swig_types[126]
+#define SWIGTYPE_p_p__nitf_Writer swig_types[127]
+#define SWIGTYPE_p_p_f_p_struct__NRT_HashTable_p_q_const__char__unsigned_int swig_types[128]
+#define SWIGTYPE_p_p_f_p_struct__NRT_HashTable_p_struct__NRT_Pair_p_void_p_struct__NRT_Error__int swig_types[129]
+#define SWIGTYPE_p_p_f_p_void__void swig_types[130]
+#define SWIGTYPE_p_p_f_p_void_off_t_int_p_struct__NRT_Error__off_t swig_types[131]
+#define SWIGTYPE_p_p_f_p_void_p_char_size_t_p_struct__NRT_Error__int swig_types[132]
+#define SWIGTYPE_p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int swig_types[133]
+#define SWIGTYPE_p_p_f_p_void_p_struct__NRT_Error__int swig_types[134]
+#define SWIGTYPE_p_p_f_p_void_p_struct__NRT_Error__off_t swig_types[135]
+#define SWIGTYPE_p_p_nitf_BandInfo swig_types[136]
+#define SWIGTYPE_p_p_nitf_WriteHandler swig_types[137]
+#define SWIGTYPE_p_p_nrt_List swig_types[138]
+#define SWIGTYPE_p_p_uint8_t swig_types[139]
+#define SWIGTYPE_p_p_void swig_types[140]
+#define SWIGTYPE_p_uint16_t swig_types[141]
+#define SWIGTYPE_p_uint32_t swig_types[142]
+#define SWIGTYPE_p_uint64_t swig_types[143]
+#define SWIGTYPE_p_uint8_t swig_types[144]
+#define SWIGTYPE_p_void swig_types[145]
+static swig_type_info *swig_types[147];
+static swig_module_info swig_module = {swig_types, 146, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -15274,6 +15275,60 @@ SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(se
   }
   arg5 = (nitf_Error *)(argp5);
   result = (nitf_BandSource *)nitf_FileSource_construct(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_DataSource, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_IOSource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_IOInterface *arg1 = (nitf_IOInterface *) 0 ;
+  nitf_Off arg2 ;
+  int arg3 ;
+  int arg4 ;
+  nitf_Error *arg5 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  nitf_BandSource *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_IOSource_construct",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_IOSource_construct" "', argument " "1"" of type '" "nitf_IOInterface *""'"); 
+  }
+  arg1 = (nitf_IOInterface *)(argp1);
+  {
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
+  }
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nitf_IOSource_construct" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "nitf_IOSource_construct" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = (int)(val4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_IOSource_construct" "', argument " "5"" of type '" "nitf_Error *""'"); 
+  }
+  arg5 = (nitf_Error *)(argp5);
+  result = (nitf_BandSource *)nitf_IOSource_construct(arg1,arg2,arg3,arg4,arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_DataSource, 0 |  0 );
   return resultobj;
 fail:
@@ -29861,6 +29916,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_DataSource_destruct", _wrap_nitf_DataSource_destruct, METH_VARARGS, NULL},
 	 { (char *)"nitf_MemorySource_construct", _wrap_nitf_MemorySource_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileSource_construct", _wrap_nitf_FileSource_construct, METH_VARARGS, NULL},
+	 { (char *)"nitf_IOSource_construct", _wrap_nitf_IOSource_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_ImageWriter_construct", _wrap_nitf_ImageWriter_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_ImageWriter_attachSource", _wrap_nitf_ImageWriter_attachSource, METH_VARARGS, NULL},
 	 { (char *)"nitf_ImageWriter_setWriteCaching", _wrap_nitf_ImageWriter_setWriteCaching, METH_VARARGS, NULL},
@@ -30410,7 +30466,6 @@ static swig_type_info _swigt__p__NRT_IOInterface = {"_p__NRT_IOInterface", "stru
 static swig_type_info _swigt__p__NRT_Pair = {"_p__NRT_Pair", "struct _NRT_Pair *|nitf_Pair *|nrt_Pair *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_ComponentInfo = {"_p__nitf_ComponentInfo", "struct _nitf_ComponentInfo *|nitf_ComponentInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_ConvType = {"_p__nitf_ConvType", "enum _nitf_ConvType *|nitf_ConvType *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p__nitf_CornersType = {"_p__nitf_CornersType", "enum _nitf_CornersType *|nitf_CornersType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_DESegment = {"_p__nitf_DESegment", "struct _nitf_DESegment *|nitf_DESegment *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_DESubheader = {"_p__nitf_DESubheader", "struct _nitf_DESubheader *|nitf_DESubheader *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_DataSource = {"_p__nitf_DataSource", "struct _nitf_DataSource *|nitf_SegmentSource *|nitf_BandSource *|nitf_DataSource *", 0, 0, (void*)0, 0};
@@ -30444,6 +30499,7 @@ static swig_type_info _swigt__p__nitf_TextSegment = {"_p__nitf_TextSegment", "st
 static swig_type_info _swigt__p__nitf_TextSubheader = {"_p__nitf_TextSubheader", "struct _nitf_TextSubheader *|nitf_TextSubheader *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_Version = {"_p__nitf_Version", "enum _nitf_Version *|nitf_Version *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_Writer = {"_p__nitf_Writer", "struct _nitf_Writer *|nitf_Writer *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p__nrt_CornersType = {"_p__nrt_CornersType", "enum _nrt_CornersType *|nrt_CornersType *|nitf_CornersType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__protected_nitf_PluginRegistry = {"_p__protected_nitf_PluginRegistry", "struct _protected_nitf_PluginRegistry *|nitf_PluginRegistry *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_a_2__double = {"_p_a_2__double", "double (*)[2]", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
@@ -30485,6 +30541,7 @@ static swig_type_info _swigt__p_nitf_WriteHandler = {"_p_nitf_WriteHandler", "ni
 static swig_type_info _swigt__p_nrt_DLL = {"_p_nrt_DLL", "nrt_DLL *|nitf_DLL *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nrt_DateTime = {"_p_nrt_DateTime", "nrt_DateTime *|nitf_DateTime *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nrt_Directory = {"_p_nrt_Directory", "nrt_Directory *|nitf_Directory *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nrt_IntStack = {"_p_nrt_IntStack", "nrt_IntStack *|nitf_IntStack *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nrt_List = {"_p_nrt_List", "nrt_List *|nitf_List *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nrt_ListIterator = {"_p_nrt_ListIterator", "nrt_ListIterator *|nitf_ListIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nrt_ListNode = {"_p_nrt_ListNode", "nrt_ListNode *|nitf_ListNode *", 0, 0, (void*)0, 0};
@@ -30557,7 +30614,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p__NRT_Pair,
   &_swigt__p__nitf_ComponentInfo,
   &_swigt__p__nitf_ConvType,
-  &_swigt__p__nitf_CornersType,
   &_swigt__p__nitf_DESegment,
   &_swigt__p__nitf_DESubheader,
   &_swigt__p__nitf_DataSource,
@@ -30591,6 +30647,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p__nitf_TextSubheader,
   &_swigt__p__nitf_Version,
   &_swigt__p__nitf_Writer,
+  &_swigt__p__nrt_CornersType,
   &_swigt__p__protected_nitf_PluginRegistry,
   &_swigt__p_a_2__double,
   &_swigt__p_char,
@@ -30632,6 +30689,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_nrt_DLL,
   &_swigt__p_nrt_DateTime,
   &_swigt__p_nrt_Directory,
+  &_swigt__p_nrt_IntStack,
   &_swigt__p_nrt_List,
   &_swigt__p_nrt_ListIterator,
   &_swigt__p_nrt_ListNode,
@@ -30704,7 +30762,6 @@ static swig_cast_info _swigc__p__NRT_IOInterface[] = {  {&_swigt__p__NRT_IOInter
 static swig_cast_info _swigc__p__NRT_Pair[] = {  {&_swigt__p__NRT_Pair, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_ComponentInfo[] = {  {&_swigt__p__nitf_ComponentInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_ConvType[] = {  {&_swigt__p__nitf_ConvType, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p__nitf_CornersType[] = {  {&_swigt__p__nitf_CornersType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_DESegment[] = {  {&_swigt__p__nitf_DESegment, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_DESubheader[] = {  {&_swigt__p__nitf_DESubheader, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_DataSource[] = {  {&_swigt__p__nitf_DataSource, 0, 0, 0},{0, 0, 0, 0}};
@@ -30738,6 +30795,7 @@ static swig_cast_info _swigc__p__nitf_TextSegment[] = {  {&_swigt__p__nitf_TextS
 static swig_cast_info _swigc__p__nitf_TextSubheader[] = {  {&_swigt__p__nitf_TextSubheader, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_Version[] = {  {&_swigt__p__nitf_Version, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_Writer[] = {  {&_swigt__p__nitf_Writer, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p__nrt_CornersType[] = {  {&_swigt__p__nrt_CornersType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__protected_nitf_PluginRegistry[] = {  {&_swigt__p__protected_nitf_PluginRegistry, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_a_2__double[] = {  {&_swigt__p_a_2__double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
@@ -30779,6 +30837,7 @@ static swig_cast_info _swigc__p_nitf_WriteHandler[] = {  {&_swigt__p_nitf_WriteH
 static swig_cast_info _swigc__p_nrt_DLL[] = {  {&_swigt__p_nrt_DLL, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nrt_DateTime[] = {  {&_swigt__p_nrt_DateTime, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nrt_Directory[] = {  {&_swigt__p_nrt_Directory, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nrt_IntStack[] = {  {&_swigt__p_nrt_IntStack, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nrt_List[] = {  {&_swigt__p_nrt_List, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nrt_ListIterator[] = {  {&_swigt__p_nrt_ListIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nrt_ListNode[] = {  {&_swigt__p_nrt_ListNode, 0, 0, 0},{0, 0, 0, 0}};
@@ -30851,7 +30910,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p__NRT_Pair,
   _swigc__p__nitf_ComponentInfo,
   _swigc__p__nitf_ConvType,
-  _swigc__p__nitf_CornersType,
   _swigc__p__nitf_DESegment,
   _swigc__p__nitf_DESubheader,
   _swigc__p__nitf_DataSource,
@@ -30885,6 +30943,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p__nitf_TextSubheader,
   _swigc__p__nitf_Version,
   _swigc__p__nitf_Writer,
+  _swigc__p__nrt_CornersType,
   _swigc__p__protected_nitf_PluginRegistry,
   _swigc__p_a_2__double,
   _swigc__p_char,
@@ -30926,6 +30985,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_nrt_DLL,
   _swigc__p_nrt_DateTime,
   _swigc__p_nrt_Directory,
+  _swigc__p_nrt_IntStack,
   _swigc__p_nrt_List,
   _swigc__p_nrt_ListIterator,
   _swigc__p_nrt_ListNode,
@@ -31582,16 +31642,16 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NRT_MAX_PATH",SWIG_From_int((int)(1024)));
   SWIG_Python_SetConstant(d, "NRT_SUCCESS",SWIG_From_int((int)((1))));
   SWIG_Python_SetConstant(d, "NRT_FAILURE",SWIG_From_int((int)((0))));
+  SWIG_Python_SetConstant(d, "NRT_CORNERS_UNKNOWN",SWIG_From_int((int)(NRT_CORNERS_UNKNOWN)));
+  SWIG_Python_SetConstant(d, "NRT_CORNERS_UTM",SWIG_From_int((int)(NRT_CORNERS_UTM)));
+  SWIG_Python_SetConstant(d, "NRT_CORNERS_UTM_UPS_S",SWIG_From_int((int)(NRT_CORNERS_UTM_UPS_S)));
+  SWIG_Python_SetConstant(d, "NRT_CORNERS_UTM_UPS_N",SWIG_From_int((int)(NRT_CORNERS_UTM_UPS_N)));
+  SWIG_Python_SetConstant(d, "NRT_CORNERS_GEO",SWIG_From_int((int)(NRT_CORNERS_GEO)));
+  SWIG_Python_SetConstant(d, "NRT_CORNERS_DECIMAL",SWIG_From_int((int)(NRT_CORNERS_DECIMAL)));
   SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.7"));
   SWIG_Python_SetConstant(d, "NITF_VER_20",SWIG_From_int((int)(NITF_VER_20)));
   SWIG_Python_SetConstant(d, "NITF_VER_21",SWIG_From_int((int)(NITF_VER_21)));
   SWIG_Python_SetConstant(d, "NITF_VER_UNKNOWN",SWIG_From_int((int)(NITF_VER_UNKNOWN)));
-  SWIG_Python_SetConstant(d, "NITF_CORNERS_UNKNOWN",SWIG_From_int((int)(NITF_CORNERS_UNKNOWN)));
-  SWIG_Python_SetConstant(d, "NITF_CORNERS_UTM",SWIG_From_int((int)(NITF_CORNERS_UTM)));
-  SWIG_Python_SetConstant(d, "NITF_CORNERS_UTM_UPS_S",SWIG_From_int((int)(NITF_CORNERS_UTM_UPS_S)));
-  SWIG_Python_SetConstant(d, "NITF_CORNERS_UTM_UPS_N",SWIG_From_int((int)(NITF_CORNERS_UTM_UPS_N)));
-  SWIG_Python_SetConstant(d, "NITF_CORNERS_GEO",SWIG_From_int((int)(NITF_CORNERS_GEO)));
-  SWIG_Python_SetConstant(d, "NITF_CORNERS_DECIMAL",SWIG_From_int((int)(NITF_CORNERS_DECIMAL)));
   SWIG_Python_SetConstant(d, "NRT_MAX_EMESSAGE",SWIG_From_int((int)(1024)));
   SWIG_Python_SetConstant(d, "NRT_NO_ERR",SWIG_From_int((int)(NRT_NO_ERR)));
   SWIG_Python_SetConstant(d, "NRT_ERR_MEMORY",SWIG_From_int((int)(NRT_ERR_MEMORY)));

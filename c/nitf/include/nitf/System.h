@@ -114,6 +114,14 @@ typedef nrt_Off                     nitf_Off;
 #define NITF_SUCCESS                NRT_SUCCESS
 #define NITF_FAILURE                NRT_FAILURE
 
+typedef nrt_CornersType             nitf_CornersType;
+#define NITF_CORNERS_UNKNOWN        NRT_CORNERS_UNKNOWN
+#define NITF_CORNERS_UTM            NRT_CORNERS_UTM
+#define NITF_CORNERS_UTM_UPS_S      NRT_CORNERS_UTM_UPS_S
+#define NITF_CORNERS_UTM_UPS_N      NRT_CORNERS_UTM_UPS_N
+#define NITF_CORNERS_GEO            NRT_CORNERS_GEO
+#define NITF_CORNERS_DECIMAL        NRT_CORNERS_DECIMAL
+
 #define nitf_System_swap16          nrt_System_swap16
 #define nitf_System_swap32          nrt_System_swap32
 #define nitf_System_swap64          nrt_System_swap64
@@ -349,6 +357,23 @@ typedef nrt_HashTableIterator               nitf_HashTableIterator;
 
 
 /******************************************************************************/
+/* INTSTACK                                                                   */
+/******************************************************************************/
+#include "nrt/IntStack.h"
+typedef nrt_IntStack                nitf_IntStack;
+
+#define nitf_IntStack_construct     nrt_IntStack_construct
+#define nitf_IntStack_clone         nrt_IntStack_clone
+#define nitf_IntStack_destruct      nrt_IntStack_destruct
+#define nitf_IntStack_top           nrt_IntStack_top
+#define nitf_IntStack_push          nrt_IntStack_push
+#define nitf_IntStack_pop           nrt_IntStack_pop
+#define nitf_IntStack_depth         nrt_IntStack_depth
+
+#define NITF_INT_STACK_DEPTH        NRT_INT_STACK_DEPTH
+
+
+/******************************************************************************/
 /* TREE                                                                       */
 /******************************************************************************/
 #include "nrt/Tree.h"
@@ -376,17 +401,26 @@ typedef NRT_TREE_TRAVERSER          NITF_TREE_TRAVERSER;
 /* UTILS                                                                      */
 /******************************************************************************/
 #include "nrt/Utils.h"
-#define nitf_Utils_splitString          nrt_Utils_splitString
-#define nitf_Utils_isNumeric            nrt_Utils_isNumeric
-#define nitf_Utils_isAlpha              nrt_Utils_isAlpha
-#define nitf_Utils_isBlank              nrt_Utils_isBlank
-#define nitf_Utils_trimString           nrt_Utils_trimString
-#define nitf_Utils_replace              nrt_Utils_replace
-#define nitf_Utils_baseName             nrt_Utils_baseName
-#define nitf_Utils_parseDecimalString   nrt_Utils_parseDecimalString
-#define nitf_Utils_getCurrentTimeMillis nrt_Utils_getCurrentTimeMillis
-#define nitf_Utils_strncasecmp          nrt_Utils_strncasecmp
-
+#define nitf_Utils_splitString                  nrt_Utils_splitString
+#define nitf_Utils_isNumeric                    nrt_Utils_isNumeric
+#define nitf_Utils_isAlpha                      nrt_Utils_isAlpha
+#define nitf_Utils_isBlank                      nrt_Utils_isBlank
+#define nitf_Utils_trimString                   nrt_Utils_trimString
+#define nitf_Utils_replace                      nrt_Utils_replace
+#define nitf_Utils_baseName                     nrt_Utils_baseName
+#define nitf_Utils_parseDecimalString           nrt_Utils_parseDecimalString
+#define nitf_Utils_getCurrentTimeMillis         nrt_Utils_getCurrentTimeMillis
+#define nitf_Utils_strncasecmp                  nrt_Utils_strncasecmp
+#define nitf_Utils_decimalToGeographic          nrt_Utils_decimalToGeographic
+#define nitf_Utils_geographicToDecimal          nrt_Utils_geographicToDecimal
+#define nitf_Utils_parseGeographicString        nrt_Utils_parseGeographicString
+#define nitf_Utils_geographicLatToCharArray     nrt_Utils_geographicLatToCharArray
+#define nitf_Utils_geographicLonToCharArray     nrt_Utils_geographicLonToCharArray
+#define nitf_Utils_decimalLatToCharArray        nrt_Utils_decimalLatToCharArray
+#define nitf_Utils_decimalLonToCharArray        nrt_Utils_decimalLonToCharArray
+#define nitf_Utils_decimalLatToGeoCharArray     nrt_Utils_decimalLatToGeoCharArray
+#define nitf_Utils_decimalLonToGeoCharArray     nrt_Utils_decimalLonToGeoCharArray
+#define nitf_Utils_cornersTypeAsCoordRep        nrt_Utils_cornersTypeAsCoordRep
 
 /******************************************************************************/
 /* NITRO-SPECIFIC DEFINES/TYPES                                               */

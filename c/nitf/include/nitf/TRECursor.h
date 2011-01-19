@@ -23,10 +23,8 @@
 #ifndef __NITF_TRE_CURSOR_H__
 #define __NITF_TRE_CURSOR_H__
 
-#include "nitf/IntStack.h"
 #include "nitf/TRE.h"
 #include "nitf/TREDescription.h"
-#include "nitf/Utils.h"
 
 NITF_CXX_GUARD
 /*!

@@ -74,6 +74,12 @@ NRT_OPEN_EXISTING = _nitropy.NRT_OPEN_EXISTING
 NRT_MAX_PATH = _nitropy.NRT_MAX_PATH
 NRT_SUCCESS = _nitropy.NRT_SUCCESS
 NRT_FAILURE = _nitropy.NRT_FAILURE
+NRT_CORNERS_UNKNOWN = _nitropy.NRT_CORNERS_UNKNOWN
+NRT_CORNERS_UTM = _nitropy.NRT_CORNERS_UTM
+NRT_CORNERS_UTM_UPS_S = _nitropy.NRT_CORNERS_UTM_UPS_S
+NRT_CORNERS_UTM_UPS_N = _nitropy.NRT_CORNERS_UTM_UPS_N
+NRT_CORNERS_GEO = _nitropy.NRT_CORNERS_GEO
+NRT_CORNERS_DECIMAL = _nitropy.NRT_CORNERS_DECIMAL
 
 def nrt_System_swap16(*args):
   return _nitropy.nrt_System_swap16(*args)
@@ -94,12 +100,6 @@ NITF_LIB_VERSION = _nitropy.NITF_LIB_VERSION
 NITF_VER_20 = _nitropy.NITF_VER_20
 NITF_VER_21 = _nitropy.NITF_VER_21
 NITF_VER_UNKNOWN = _nitropy.NITF_VER_UNKNOWN
-NITF_CORNERS_UNKNOWN = _nitropy.NITF_CORNERS_UNKNOWN
-NITF_CORNERS_UTM = _nitropy.NITF_CORNERS_UTM
-NITF_CORNERS_UTM_UPS_S = _nitropy.NITF_CORNERS_UTM_UPS_S
-NITF_CORNERS_UTM_UPS_N = _nitropy.NITF_CORNERS_UTM_UPS_N
-NITF_CORNERS_GEO = _nitropy.NITF_CORNERS_GEO
-NITF_CORNERS_DECIMAL = _nitropy.NITF_CORNERS_DECIMAL
 NRT_MAX_EMESSAGE = _nitropy.NRT_MAX_EMESSAGE
 NRT_NO_ERR = _nitropy.NRT_NO_ERR
 NRT_ERR_MEMORY = _nitropy.NRT_ERR_MEMORY
@@ -1353,6 +1353,10 @@ nitf_MemorySource_construct = _nitropy.nitf_MemorySource_construct
 def nitf_FileSource_construct(*args):
   return _nitropy.nitf_FileSource_construct(*args)
 nitf_FileSource_construct = _nitropy.nitf_FileSource_construct
+
+def nitf_IOSource_construct(*args):
+  return _nitropy.nitf_IOSource_construct(*args)
+nitf_IOSource_construct = _nitropy.nitf_IOSource_construct
 
 def nitf_ImageWriter_construct(*args):
   return _nitropy.nitf_ImageWriter_construct(*args)

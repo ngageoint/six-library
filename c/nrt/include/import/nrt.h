@@ -30,6 +30,7 @@
 #include "nrt/DLL.h"
 #include "nrt/Error.h"
 #include "nrt/HashTable.h"
+#include "nrt/IntStack.h"
 #include "nrt/IOHandle.h"
 #include "nrt/IOInterface.h"
 #include "nrt/List.h"

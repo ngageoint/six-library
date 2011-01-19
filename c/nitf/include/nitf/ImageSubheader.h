@@ -28,7 +28,6 @@
 #include "nitf/FileHeader.h"
 #include "nitf/BandInfo.h"
 #include "nitf/PluginRegistry.h"
-#include "nitf/Utils.h"
 
 #define NITF_IM_SZ     2
 #define NITF_IID1_SZ   10

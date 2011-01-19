@@ -60,7 +60,6 @@ SOURCES = BandInfo.c \
           ImageSource.c \
           ImageSubheader.c \
           ImageWriter.c \
-          IntStack.c \
           LabelSegment.c \
           LabelSubheader.c \
           LookupTable.c \
@@ -81,7 +80,6 @@ SOURCES = BandInfo.c \
           TREUtils.c \
           TextSegment.c \
           TextSubheader.c \
-          Utils.c \
           WriteHandler.c \
           Writer.c 
 

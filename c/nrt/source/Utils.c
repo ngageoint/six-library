@@ -296,3 +296,194 @@ NRTAPI(int) nrt_Utils_strncasecmp(char *s1, char *s2, size_t n)
     }
     return tolower(*(unsigned char *) s1) - tolower(*(unsigned char *) s2);
 }
+
+NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal,
+                                           int *degrees,
+                                           int *minutes,
+                                           double *seconds)
+{
+    double remainder;
+    *degrees = (int)decimal;
+    remainder = fabs( decimal - (double)*degrees ) * 60.0;
+    *minutes = (int)remainder;
+    *seconds = fabs(remainder - (double)*minutes) * 60.0;
+
+}
+
+NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees,
+                                             int minutes,
+                                             double seconds)
+{
+    double decimal = fabs(degrees);
+    decimal += ((double)minutes/60.0);
+    decimal += (seconds/3600.0);
+
+    if (degrees < 0)
+    {
+        decimal *= -1;
+    }
+
+    return decimal;
+}
+
+NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char* dms,
+                                                 int* degrees,
+                                                 int* minutes,
+                                                 double* seconds,
+                                                 nrt_Error* error)
+{
+    int degreeOffset = 0;
+    int len = strlen(dms);
+    char dir;
+
+    char d[4];
+    char m[3];
+    char s[3];
+
+    /* ddmmssX or dddmmssY */
+    if (len == 7)
+    {
+        degreeOffset = 2;
+    }
+    else if (len == 8)
+    {
+        degreeOffset = 3;
+    }
+    else
+    {
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                         "Invalid decimal string: %s. Should be ddmmssX or dddmmssY",
+                         dms);
+        return NRT_FAILURE;
+    }
+    dir = dms[len - 1];
+    if (dir != 'N' && dir != 'S' && dir != 'E' && dir != 'W')
+    {
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                         "Invalid direction: %s. Should be [NSEW]",
+                         dms);
+        return NRT_FAILURE;
+    }
+
+    /* Now replace all spaces */
+    nrt_Utils_replace(dms, ' ', '0');
+
+
+    /* Now get the corners out as geographic coords */
+    d[degreeOffset] = 0;
+    memcpy(d, dms, degreeOffset);
+
+    memcpy(m, &dms[degreeOffset], 2);
+    m[2] = 0;
+
+    memcpy(s, &dms[degreeOffset+2], 2);
+    s[2] = 0;
+
+    *degrees = NRT_ATO32(d);
+    *minutes = NRT_ATO32(m);
+    *seconds = (double)NRT_ATO32(s);
+
+    if ((degreeOffset == 2 && dir == 'S') ||
+        (degreeOffset == 3 && dir == 'W'))
+    {
+        *degrees *= -1;
+    }
+
+    return NRT_SUCCESS;
+}
+
+NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
+{
+    char cornerRep = ' ';
+
+    switch (type)
+    {
+    case NRT_CORNERS_UTM:
+        cornerRep = 'U';
+        break;
+
+    case NRT_CORNERS_UTM_UPS_S:
+        cornerRep = 'S';
+        break;
+
+    case NRT_CORNERS_UTM_UPS_N:
+        cornerRep = 'N';
+        break;
+
+    case NRT_CORNERS_GEO:
+        cornerRep = 'G';
+        break;
+
+    case NRT_CORNERS_DECIMAL:
+        cornerRep = 'D';
+        break;
+    default:
+        break;
+    }
+    return cornerRep;
+}
+
+NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees,
+                                                 int minutes,
+                                                 double seconds,
+                                                 char *buffer7)
+{
+    int wtf = 0;
+    char dir = 'N';
+    if (degrees < 0)
+    {
+        dir = 'S';
+        degrees *= -1;
+    }
+    NRT_SNPRINTF(buffer7, 8, "%02d%02d%02d%c",
+             degrees, minutes, (int)(seconds + 0.5), dir);
+}
+
+NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees,
+                                                 int minutes,
+                                                 double seconds,
+                                                 char *buffer8)
+{
+    char dir = 'E';
+    int wtf = 0;
+    if (degrees < 0)
+    {
+        dir = 'W';
+        degrees *= -1;
+    }
+    NRT_SNPRINTF(buffer8, 9, "%03d%02d%02d%c",
+                  degrees, minutes, (int)(seconds + 0.5), dir);
+
+}
+
+NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal,
+                                              char *buffer7)
+{
+    NRT_SNPRINTF(buffer7, 8, "%+07.3f", decimal);
+}
+
+NRTPROT(void) nrt_Utils_decimalLonToCharArray(double decimal,
+                                              char *buffer8)
+{
+    NRT_SNPRINTF(buffer8, 9, "%+08.3f", decimal);
+}
+
+NRTPROT(void) nrt_Utils_decimalLatToGeoCharArray(double decimal,
+                                                 char *buffer7)
+{
+    int d, m;
+    double s;
+
+    nrt_Utils_decimalToGeographic(decimal, &d, &m, &s);
+    nrt_Utils_geographicLatToCharArray(d, m, s, buffer7);
+}
+
+NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal,
+                                                 char *buffer8)
+{
+    int d, m;
+    double s;
+
+    nrt_Utils_decimalToGeographic(decimal, &d, &m, &s);
+    nrt_Utils_geographicLonToCharArray(d, m, s, buffer8);
+}

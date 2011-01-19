@@ -153,6 +153,16 @@ typedef int               nrt_CreationFlags;
 #   define NRT_FAILURE  (0)
 
 
+typedef enum _nrt_CornersType
+{
+    NRT_CORNERS_UNKNOWN = -1,
+    NRT_CORNERS_UTM,
+    NRT_CORNERS_UTM_UPS_S,
+    NRT_CORNERS_UTM_UPS_N,
+    NRT_CORNERS_GEO,
+    NRT_CORNERS_DECIMAL
+} nrt_CornersType;
+
 /*
  *  Finally, we determine what kind of system you
  *  are using, and come up with our own swap routines.

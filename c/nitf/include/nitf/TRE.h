@@ -25,7 +25,6 @@
 
 #include "nitf/System.h"
 #include "nitf/Field.h"
-#include "nitf/IntStack.h"
 #include "nitf/TREDescription.h"
 
 /*!

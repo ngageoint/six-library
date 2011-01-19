@@ -42,6 +42,7 @@ SOURCES = DateTime.c \
           DirectoryWin32.c \
           Error.c \
           HashTable.c \
+          IntStack.c \
           IOHandleUnix.c \
           IOHandleWin32.c \
           IOInterface.c \

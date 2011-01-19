@@ -29,7 +29,6 @@
 #include "nitf/ImageWriter.h"
 #include "nitf/SegmentWriter.h"
 #include "nitf/ComplexityLevel.h"
-#include "nitf/Utils.h"
 
 NITF_CXX_GUARD
 
