@@ -229,7 +229,8 @@ def build(bld):
         linker = (j2klib == 'kdu') and 'cxx' or 'cc'
         
         #j2k-only tests
-        for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region']:
+        for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
+                  'test_j2k_create']:
             bld.new_task_gen(linker, 'program', target=t, name=t,
                              source='%s.c' % t, uselib_local='j2k-c',
                              env=env.copy(), path=bld.path.find_dir('tests'))

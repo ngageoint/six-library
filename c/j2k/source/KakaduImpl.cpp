@@ -250,6 +250,29 @@ class UserContainer
 {
 public:
 
+    UserContainer()
+    {
+    }
+
+    UserContainer(nrt_Uint32 width,
+                  nrt_Uint32 height,
+                  nrt_Uint32 bands,
+                  nrt_Uint32 actualBitsPerPixel,
+                  nrt_Uint32 tileWidth,
+                  nrt_Uint32 tileHeight,
+                  int imageType = J2K_TYPE_UNKNOWN,
+                  bool isSigned = false) :
+                      mWidth(width),
+                      mHeight(height),
+                      mComponents(bands),
+                      mBitsPerPixel(actualBitsPerPixel),
+                      mTileWidth(tileWidth),
+                      mTileHeight(tileHeight),
+                      mType(imageType),
+                      mSigned(isSigned)
+    {
+    }
+
     nrt_Uint32 getNumComponents() const
     {
         return mComponents;
@@ -267,7 +290,12 @@ public:
 
     nrt_Uint32 getComponentBytes() const
     {
-        return mBytes;
+        return (getActualBitsPerPixel() - 1) / 8 + 1;
+    }
+
+    nrt_Uint32 getActualBitsPerPixel() const
+    {
+        return mBitsPerPixel;
     }
 
     nrt_Uint32 getTileWidth() const
@@ -282,19 +310,31 @@ public:
 
     nrt_Uint32 getTilesX() const
     {
-        return mTilesX;
+        return mWidth / mTileWidth + (mWidth % mTileWidth == 0 ? 0 : 1);
     }
 
     nrt_Uint32 getTilesY() const
     {
-        return mTilesY;
+        return mHeight / mTileHeight + (mHeight % mTileHeight == 0 ? 0 : 1);
     }
+
+    int getType() const
+    {
+        return mType;
+    }
+
+    bool isSigned() const
+    {
+        return mSigned;
+    }
+
 
 protected:
     friend class Reader;
-    nrt_Uint32 mComponents, mHeight, mWidth, mBytes, mTileWidth, mTileHeight;
-    nrt_Uint32 mTilesX, mTilesY;
-
+    nrt_Uint32 mHeight, mWidth, mComponents, mBitsPerPixel;
+    nrt_Uint32 mTileWidth, mTileHeight;
+    int mType;
+    bool mSigned;
 };
 
 
@@ -458,17 +498,17 @@ protected:
         mCodestream->get_dims(-1, compSize, true);
         container->mWidth = (nrt_Uint32)(compSize.size.x);
         container->mHeight = (nrt_Uint32)(compSize.size.y);
-        container->mBytes = (mCodestream->get_bit_depth(-1, true) - 1) / 8 + 1;
+        container->mBitsPerPixel = mCodestream->get_bit_depth(-1, true);
 
         kdu_dims partition;
         mCodestream->get_tile_partition(partition);
         container->mTileWidth = (nrt_Uint32)partition.size.x;
         container->mTileHeight = (nrt_Uint32)partition.size.y;
 
-        kdu_dims indices;
-        mCodestream->get_valid_tiles(indices);
-        container->mTilesX = indices.size.x;
-        container->mTilesY = indices.size.y;
+//        kdu_dims indices;
+//        mCodestream->get_valid_tiles(indices);
+//        container->mTilesX = indices.size.x;
+//        container->mTilesY = indices.size.y;
 
     }
 };
@@ -678,6 +718,49 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
         if (reader)
         {
             j2k_Reader_destruct(&reader);
+        }
+        return NULL;
+    }
+}
+
+NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
+        nrt_Uint32 height,
+        nrt_Uint32 bands,
+        nrt_Uint32 actualBitsPerPixel,
+        nrt_Uint32 tileWidth,
+        nrt_Uint32 tileHeight,
+        int imageType,
+        int isSigned,
+        nrt_Error *error)
+{
+    j2k_Container *container = NULL;
+    j2k::kakadu::UserContainer *userContainer = NULL;
+
+    container = (j2k_Container*) NRT_MALLOC(sizeof(j2k_Container));
+    if (!container)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(container, 0, sizeof(j2k_Container));
+
+    if (!(container->data = new j2k::kakadu::UserContainer(width, height, bands,
+                                                           actualBitsPerPixel,
+                                                           tileWidth,
+                                                           tileHeight,
+                                                           imageType,
+                                                           isSigned)))
+        goto CATCH_ERROR;
+
+    container->iface = &ContainerInterface;
+
+    return container;
+
+    CATCH_ERROR:
+    {
+        if (container)
+        {
+            j2k_Container_destruct(&container);
         }
         return NULL;
     }

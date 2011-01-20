@@ -61,7 +61,10 @@ typedef struct _OpenJPEGContainerImpl
     nrt_Uint32 width;
     nrt_Uint32 height;
     nrt_Uint32 nComponents;
-    nrt_Uint32 bppComponent;
+    nrt_Uint32 componentBytes;
+    nrt_Uint32 inputComponentBits;
+    int imageType;
+    int isSigned;
 } OpenJPEGContainerImpl;
 
 NRTPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data);
@@ -307,12 +310,14 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
         goto CATCH_ERROR;
     }
 
-    if (image->comps[0].prec > 16)
-        container->bppComponent = 4;
-    else if (image->comps[0].prec > 8)
-        container->bppComponent = 2;
+    container->inputComponentBits = image->comps[0].prec;
+
+    if (container->inputComponentBits > 16)
+        container->componentBytes = 4;
+    else if (container->inputComponentBits > 8)
+        container->componentBytes = 2;
     else
-        container->bppComponent = 1;
+        container->componentBytes = 1;
 
     container->width = image->x1 - image->x0;
     container->height = image->y1 - image->y0;
@@ -389,7 +394,7 @@ NRTPRIV( nrt_Uint32)
 OpenJPEGContainer_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
-    return impl->bppComponent;
+    return impl->componentBytes;
 }
 
 NRTPRIV(void)
@@ -543,7 +548,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
         goto CATCH_ERROR;
     }
 
-    bufSize = (nrt_Uint64)(x1 - x0) * (y1 - y0) * container->bppComponent
+    bufSize = (nrt_Uint64)(x1 - x0) * (y1 - y0) * container->componentBytes
             * container->nComponents;
     if (buf && !*buf)
     {
@@ -735,6 +740,62 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
         else if (impl)
         {
             OpenJPEGReader_destruct((J2K_USER_DATA*) impl);
+        }
+        return NULL;
+    }
+}
+
+NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
+        nrt_Uint32 height,
+        nrt_Uint32 bands,
+        nrt_Uint32 actualBitsPerPixel,
+        nrt_Uint32 tileWidth,
+        nrt_Uint32 tileHeight,
+        int imageType,
+        int isSigned,
+        nrt_Error *error)
+{
+    j2k_Container *container = NULL;
+    OpenJPEGContainerImpl *impl = NULL;
+
+    container = (j2k_Container*) NRT_MALLOC(sizeof(j2k_Container));
+    if (!container)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(container, 0, sizeof(j2k_Container));
+
+    /* create the Container interface */
+    impl = (OpenJPEGContainerImpl *) NRT_MALLOC(sizeof(OpenJPEGContainerImpl));
+    if (!impl)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(impl, 0, sizeof(OpenJPEGContainerImpl));
+    container->data = impl;
+    container->iface = &ContainerInterface;
+
+    impl->width = width;
+    impl->height = height;
+    impl->nComponents = bands;
+    impl->componentBytes = (actualBitsPerPixel - 1) / 8 + 1;
+    impl->inputComponentBits = actualBitsPerPixel;
+    impl->tileWidth = tileWidth;
+    impl->tileHeight = tileHeight;
+    impl->imageType = imageType;
+    impl->isSigned = isSigned;
+    impl->xTiles = width / tileWidth + (width % tileWidth == 0 ? 0 : 1);
+    impl->yTiles = height / tileHeight + (height % tileHeight == 0 ? 0 : 1);
+
+    return container;
+
+    CATCH_ERROR:
+    {
+        if (container)
+        {
+            j2k_Container_destruct(&container);
         }
         return NULL;
     }

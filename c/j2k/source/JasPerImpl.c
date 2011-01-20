@@ -719,4 +719,58 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     }
 }
 
+NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
+        nrt_Uint32 height,
+        nrt_Uint32 bands,
+        nrt_Uint32 actualBitsPerPixel,
+        nrt_Uint32 tileWidth,
+        nrt_Uint32 tileHeight,
+        int imageType,
+        int isSigned,
+        nrt_Error *error)
+{
+    j2k_Container *container = NULL;
+    JasPerContainerImpl *impl = NULL;
+
+    container = (j2k_Container*) NRT_MALLOC(sizeof(j2k_Container));
+    if (!container)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(container, 0, sizeof(j2k_Container));
+
+    /* create the Container interface */
+    impl = (JasPerContainerImpl *) NRT_MALLOC(sizeof(JasPerContainerImpl));
+    if (!impl)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(impl, 0, sizeof(JasPerContainerImpl));
+    container->data = impl;
+    container->iface = &ContainerInterface;
+
+    impl->width = width;
+    impl->height = height;
+    impl->nComponents = bands;
+    impl->componentBytes = (actualBitsPerPixel - 1) / 8 + 1;
+    impl->inputComponentBits = actualBitsPerPixel;
+    impl->tileWidth = tileWidth;
+    impl->tileHeight = tileHeight;
+    impl->imageType = imageType;
+    impl->isSigned = isSigned;
+
+    return container;
+
+    CATCH_ERROR:
+    {
+        if (container)
+        {
+            j2k_Container_destruct(&container);
+        }
+        return NULL;
+    }
+}
+
 #endif
