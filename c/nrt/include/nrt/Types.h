@@ -147,11 +147,10 @@ typedef int               nrt_CreationFlags;
 #      endif
 #endif
 
-
-
-#   define NRT_SUCCESS  (1)
-#   define NRT_FAILURE  (0)
-
+#define NRT_SUCCESS  (1)
+#define NRT_FAILURE  (0)
+#define NRT_TRUE     (1)
+#define NRT_FALSE    (0)
 
 typedef enum _nrt_CornersType
 {

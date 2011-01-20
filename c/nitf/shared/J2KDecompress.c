@@ -60,7 +60,7 @@ static nitf_DecompressionInterface interfaceTable =
 typedef struct _ImplControl
 {
     nitf_BlockingInfo blockInfo; /* Kept for convience */
-    j2k_Container *container;    /* j2k Container */
+    j2k_Reader *reader;          /* j2k Reader */
     nitf_Uint64 offset;          /* File offset to data */
     nitf_Uint64 fileLength;      /* Length of compressed data in file */
 }
@@ -111,15 +111,15 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
     ImplControl *implControl = (ImplControl*)control;
     nrt_Uint8 *buf = NULL;
 
-    if (j2k_Container_canReadTiles(implControl->container, error))
+    if (j2k_Reader_canReadTiles(implControl->reader, error))
     {
-        /* use j2k_Container_readTile */
+        /* use j2k_Reader_readTile */
         nitf_Uint32 tileX, tileY;
 
         tileY = blockNumber / implControl->blockInfo.numBlocksPerRow;
         tileX = blockNumber % implControl->blockInfo.numBlocksPerRow;
 
-        if (!j2k_Container_readTile(implControl->container, tileX, tileY, &buf,
+        if (!j2k_Reader_readTile(implControl->reader, tileX, tileY, &buf,
                                    error))
         {
             implMemFree(buf);
@@ -128,7 +128,7 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
     }
     else
     {
-        /* use j2k_Container_readRegion using the block info */
+        /* use j2k_Reader_readRegion using the block info */
         nitf_Uint32 tileX, tileY, x0, x1, y0, y1, totalRows, totalCols;
 
         tileY = blockNumber / implControl->blockInfo.numBlocksPerRow;
@@ -145,8 +145,8 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
         if (y1 > totalRows)
             y1 = totalRows;
 
-        if (!j2k_Container_readRegion(implControl->container, x0, y0, x1, y1,
-                                      &buf, error))
+        if (!j2k_Reader_readRegion(implControl->reader, x0, y0, x1, y1, &buf,
+                                   error))
         {
             implMemFree(buf);
             return NULL;
@@ -183,8 +183,8 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
 
     if (implControl && *implControl)
     {
-        if ((*implControl)->container)
-            j2k_Container_destruct(&(*implControl)->container);
+        if ((*implControl)->reader)
+            j2k_Reader_destruct(&(*implControl)->reader);
         implMemFree(*implControl);
     }
     *implControl = NULL;
@@ -205,7 +205,7 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
     if (nitf_IOInterface_seek(io, offset, NITF_SEEK_SET, error) < 0)
         goto CATCH_ERROR;
 
-    if (!(implControl->container = j2k_Container_openIO(io, error)))
+    if (!(implControl->reader = j2k_Reader_openIO(io, error)))
         goto CATCH_ERROR;
 
     implControl->offset     = offset;

@@ -30,6 +30,7 @@ int main(int argc, char **argv)
     int useJasPer = 0;
     nrt_Error error;
     j2k_Container *container = NULL;
+    j2k_Reader *reader = NULL;
     char *fname = NULL;
 
     for (argIt = 1; argIt < argc; ++argIt)
@@ -47,7 +48,10 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(container = j2k_Container_open(fname, &error)))
+    if (!(reader = j2k_Reader_open(fname, &error)))
+        goto CATCH_ERROR;
+
+    if (!(container = j2k_Reader_getContainer(reader, &error)))
         goto CATCH_ERROR;
 
     printf("tile width:\t%d\n", j2k_Container_getTileWidth(container, &error));
@@ -68,8 +72,8 @@ int main(int argc, char **argv)
     }
     CLEANUP:
     {
-        if (container)
-            j2k_Container_destruct(&container);
+        if (reader)
+            j2k_Reader_destruct(&reader);
     }
     return rc;
 

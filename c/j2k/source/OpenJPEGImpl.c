@@ -23,17 +23,35 @@
 #ifdef HAVE_OPENJPEG_H
 
 #include <import/nrt.h>
+#include "j2k/Reader.h"
 #include "j2k/Container.h"
 #include <openjpeg.h>
 
-/*
- *  Private implementation struct
- */
-typedef struct _OpenJPEGContainerImpl
+
+/******************************************************************************/
+/* TYPES & DECLARATIONS                                                       */
+/******************************************************************************/
+typedef struct _IOControl
+{
+    nrt_IOInterface *io;
+    nrt_Off offset;
+    nrt_Off length;
+    int isRead;
+    nrt_Error error;
+} IOControl;
+
+
+typedef struct _OpenJPEGReaderImpl
 {
     opj_dparameters_t parameters;
     nrt_Off ioOffset;
     nrt_IOInterface *io;
+    int ownIO;
+    j2k_Container *container;
+} OpenJPEGReaderImpl;
+
+typedef struct _OpenJPEGContainerImpl
+{
     nrt_Int32 x0;
     nrt_Int32 y0;
     nrt_Uint32 tileWidth;
@@ -44,21 +62,57 @@ typedef struct _OpenJPEGContainerImpl
     nrt_Uint32 height;
     nrt_Uint32 nComponents;
     nrt_Uint32 bppComponent;
-    int ownIO;
 } OpenJPEGContainerImpl;
 
-typedef struct _IOControl
-{
-    nrt_IOInterface *io;
-    nrt_Off offset;
-    nrt_Off length;
-    int isRead;
-    nrt_Error error;
-} IOControl;
-
 NRTPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data);
-NRTPRIV(bool) implStreamSeek(OPJ_SIZE_T bytes, void *data);
+NRTPRIV(bool)       implStreamSeek(OPJ_SIZE_T bytes, void *data);
 NRTPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data);
+
+
+
+NRTPRIV( nrt_Uint32) OpenJPEGContainer_getTilesX(J2K_USER_DATA *, nrt_Error *);
+NRTPRIV( nrt_Uint32) OpenJPEGContainer_getTilesY(J2K_USER_DATA *, nrt_Error *);
+NRTPRIV( nrt_Uint32) OpenJPEGContainer_getTileWidth(J2K_USER_DATA *, nrt_Error *);
+NRTPRIV( nrt_Uint32) OpenJPEGContainer_getTileHeight(J2K_USER_DATA *, nrt_Error *);
+NRTPRIV( nrt_Uint32) OpenJPEGContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
+NRTPRIV( nrt_Uint32) OpenJPEGContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
+NRTPRIV( nrt_Uint32) OpenJPEGContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
+NRTPRIV( nrt_Uint32) OpenJPEGContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
+NRTPRIV(void)        OpenJPEGContainer_destruct(J2K_USER_DATA *);
+
+static j2k_IContainer ContainerInterface = { &OpenJPEGContainer_getTilesX,
+                                             &OpenJPEGContainer_getTilesY,
+                                             &OpenJPEGContainer_getTileWidth,
+                                             &OpenJPEGContainer_getTileHeight,
+                                             &OpenJPEGContainer_getWidth,
+                                             &OpenJPEGContainer_getHeight,
+                                             &OpenJPEGContainer_getNumComponents,
+                                             &OpenJPEGContainer_getComponentBytes,
+                                             &OpenJPEGContainer_destruct};
+
+NRTPRIV( NRT_BOOL  )     OpenJPEGReader_canReadTiles(J2K_USER_DATA *,  nrt_Error *);
+NRTPRIV( nrt_Uint64)     OpenJPEGReader_readTile(J2K_USER_DATA *, nrt_Uint32,
+                                                 nrt_Uint32, nrt_Uint8 **,
+                                                 nrt_Error *);
+NRTPRIV( nrt_Uint64)     OpenJPEGReader_readRegion(J2K_USER_DATA *, nrt_Uint32,
+                                                   nrt_Uint32, nrt_Uint32,
+                                                   nrt_Uint32, nrt_Uint8 **,
+                                                   nrt_Error *);
+NRTPRIV( j2k_Container*) OpenJPEGReader_getContainer(J2K_USER_DATA *, nrt_Error *);
+NRTPRIV(void)            OpenJPEGReader_destruct(J2K_USER_DATA *);
+
+static j2k_IReader ReaderInterface = {&OpenJPEGReader_canReadTiles,
+                                      &OpenJPEGReader_readTile,
+                                      &OpenJPEGReader_readRegion,
+                                      &OpenJPEGReader_getContainer,
+                                      &OpenJPEGReader_destruct };
+
+
+NRTPRIV(void) OpenJPEG_cleanup(opj_stream_t **, opj_codec_t **, opj_image_t **);
+
+/******************************************************************************/
+/* IO                                                                         */
+/******************************************************************************/
 
 NRTAPI(opj_stream_t*)
 OpenJPEG_createIO(nrt_IOInterface *io, nrt_Off length, nrt_Error *error)
@@ -148,7 +202,7 @@ NRTPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data)
 }
 
 NRTPRIV(void)
-OpenJPEG_destroy(opj_stream_t **stream, opj_codec_t **codec,
+OpenJPEG_cleanup(opj_stream_t **stream, opj_codec_t **codec,
                   opj_image_t **image)
 {
     if (stream && *stream)
@@ -168,8 +222,12 @@ OpenJPEG_destroy(opj_stream_t **stream, opj_codec_t **codec,
     }
 }
 
+/******************************************************************************/
+/* UTILITIES                                                                  */
+/******************************************************************************/
+
 NRTPRIV( NRT_BOOL)
-OpenJPEG_setup(OpenJPEGContainerImpl *impl, opj_stream_t **stream,
+OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
                opj_codec_t **codec, nrt_Error *error)
 {
     if (nrt_IOInterface_seek(impl->io, impl->ioOffset, NRT_SEEK_SET, error) < 0)
@@ -200,27 +258,30 @@ OpenJPEG_setup(OpenJPEGContainerImpl *impl, opj_stream_t **stream,
 
     CATCH_ERROR:
     {
-        OpenJPEG_destroy(stream, codec, NULL);
+        OpenJPEG_cleanup(stream, codec, NULL);
         return NRT_FAILURE;
     }
 }
 
 NRTPRIV( NRT_BOOL)
-OpenJPEG_readHeader(OpenJPEGContainerImpl *impl, nrt_Error *error)
+OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
 {
+    OpenJPEGContainerImpl *container = NULL;
     opj_stream_t *stream = NULL;
     opj_image_t *image = NULL;
     opj_codec_t *codec = NULL;
     NRT_BOOL rc = NRT_SUCCESS;
+
+    container = (OpenJPEGContainerImpl*)impl->container->data;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
         goto CATCH_ERROR;
     }
 
-    if (!opj_read_header(codec, &image, &impl->x0, &impl->y0, &impl->tileWidth,
-                         &impl->tileHeight, &impl->xTiles, &impl->yTiles,
-                         stream))
+    if (!opj_read_header(codec, &image, &container->x0, &container->y0,
+                         &container->tileWidth, &container->tileHeight,
+                         &container->xTiles, &container->yTiles, stream))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
@@ -247,15 +308,15 @@ OpenJPEG_readHeader(OpenJPEGContainerImpl *impl, nrt_Error *error)
     }
 
     if (image->comps[0].prec > 16)
-        impl->bppComponent = 4;
+        container->bppComponent = 4;
     else if (image->comps[0].prec > 8)
-        impl->bppComponent = 2;
+        container->bppComponent = 2;
     else
-        impl->bppComponent = 1;
+        container->bppComponent = 1;
 
-    impl->width = image->x1 - image->x0;
-    impl->height = image->y1 - image->y0;
-    impl->nComponents = image->numcomps;
+    container->width = image->x1 - image->x0;
+    container->height = image->y1 - image->y0;
+    container->nComponents = image->numcomps;
 
     goto CLEANUP;
 
@@ -266,102 +327,124 @@ OpenJPEG_readHeader(OpenJPEGContainerImpl *impl, nrt_Error *error)
 
     CLEANUP:
     {
-        OpenJPEG_destroy(&stream, &codec, &image);
+        OpenJPEG_cleanup(&stream, &codec, &image);
     }
     return rc;
 }
 
-NRTPRIV( NRT_BOOL)
-OpenJPEG_canReadTiles(J2K_USER_DATA *data, nrt_Error *error)
-{
-    return NRT_SUCCESS;
-}
+/******************************************************************************/
+/* CONTAINER                                                                  */
+/******************************************************************************/
 
 NRTPRIV( nrt_Uint32)
-OpenJPEG_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
+OpenJPEGContainer_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->xTiles;
 }
 
 NRTPRIV( nrt_Uint32)
-OpenJPEG_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
+OpenJPEGContainer_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->yTiles;
 }
 
 NRTPRIV( nrt_Uint32)
-OpenJPEG_getTileWidth(J2K_USER_DATA *data, nrt_Error *error)
+OpenJPEGContainer_getTileWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->tileWidth;
 }
 
 NRTPRIV( nrt_Uint32)
-OpenJPEG_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
+OpenJPEGContainer_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->tileHeight;
 }
 
 NRTPRIV( nrt_Uint32)
-OpenJPEG_getWidth(J2K_USER_DATA *data, nrt_Error *error)
+OpenJPEGContainer_getWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->width;
 }
 
 NRTPRIV( nrt_Uint32)
-OpenJPEG_getHeight(J2K_USER_DATA *data, nrt_Error *error)
+OpenJPEGContainer_getHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->height;
 }
 
 NRTPRIV( nrt_Uint32)
-OpenJPEG_getNumComponents(J2K_USER_DATA *data, nrt_Error *error)
+OpenJPEGContainer_getNumComponents(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->nComponents;
 }
 
 NRTPRIV( nrt_Uint32)
-OpenJPEG_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
+OpenJPEGContainer_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->bppComponent;
 }
 
+NRTPRIV(void)
+OpenJPEGContainer_destruct(J2K_USER_DATA * data)
+{
+    if (data)
+    {
+        OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
+        NRT_FREE(data);
+    }
+}
+
+/******************************************************************************/
+/* READER                                                                     */
+/******************************************************************************/
+
+NRTPRIV( NRT_BOOL)
+OpenJPEGReader_canReadTiles(J2K_USER_DATA *data, nrt_Error *error)
+{
+    return NRT_SUCCESS;
+}
+
 NRTPRIV( nrt_Uint64)
-OpenJPEG_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
+OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                   nrt_Uint8 **buf, nrt_Error *error)
 {
-    OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
+    OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
+    OpenJPEGContainerImpl *container = NULL;
 
     opj_stream_t *stream = NULL;
     opj_image_t *image = NULL;
     opj_codec_t *codec = NULL;
-    nrt_Uint64 bufSize;
+    nrt_Uint32 bufSize;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
         goto CATCH_ERROR;
     }
 
+    container = (OpenJPEGContainerImpl*)impl->container->data;
+
     /* unfortunately, we need to read the header every time ... */
-    if (!opj_read_header(codec, &image, &impl->x0, &impl->y0, &impl->tileWidth,
-                         &impl->tileHeight, &impl->xTiles, &impl->yTiles,
-                         stream))
+    if (!opj_read_header(codec, &image, &container->x0, &container->y0,
+                         &container->tileWidth, &container->tileHeight,
+                         &container->xTiles, &container->yTiles, stream))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
     }
 
     /* only decode what we want */
-    if (!opj_set_decode_area(codec, impl->tileWidth * tileX, impl->tileHeight
-            * tileY, impl->tileWidth * (tileX + 1), impl->tileHeight * (tileY
-            + 1)))
+    if (!opj_set_decode_area(codec, container->tileWidth * tileX,
+                             container->tileHeight * tileY,
+                             container->tileWidth * (tileX + 1),
+                             container->tileHeight * (tileY + 1)))
     {
         nrt_Error_init(error, "Error decoding area", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
@@ -413,17 +496,18 @@ OpenJPEG_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 
     CLEANUP:
     {
-        OpenJPEG_destroy(&stream, &codec, &image);
+        OpenJPEG_cleanup(&stream, &codec, &image);
     }
-    return bufSize;
+    return (nrt_Uint64)bufSize;
 }
 
 NRTPRIV( nrt_Uint64)
-OpenJPEG_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
-                    nrt_Uint32 x1, nrt_Uint32 y1, nrt_Uint8 **buf,
-                    nrt_Error *error)
+OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
+                          nrt_Uint32 x1, nrt_Uint32 y1, nrt_Uint8 **buf,
+                          nrt_Error *error)
 {
-    OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
+    OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
+    OpenJPEGContainerImpl *container = NULL;
 
     opj_stream_t *stream = NULL;
     opj_image_t *image = NULL;
@@ -436,19 +520,21 @@ OpenJPEG_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
         goto CATCH_ERROR;
     }
 
+    container = (OpenJPEGContainerImpl*)impl->container->data;
+
     /* unfortunately, we need to read the header every time ... */
-    if (!opj_read_header(codec, &image, &impl->x0, &impl->y0, &impl->tileWidth,
-                         &impl->tileHeight, &impl->xTiles, &impl->yTiles,
-                         stream))
+    if (!opj_read_header(codec, &image, &container->x0, &container->y0,
+                         &container->tileWidth, &container->tileHeight,
+                         &container->xTiles, &container->yTiles, stream))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
     }
 
     if (x1 == 0)
-        x1 = impl->width;
+        x1 = container->width;
     if (y1 == 0)
-        y1 = impl->height;
+        y1 = container->height;
 
     /* only decode what we want */
     if (!opj_set_decode_area(codec, x0, y0, x1, y1))
@@ -457,8 +543,8 @@ OpenJPEG_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
         goto CATCH_ERROR;
     }
 
-    bufSize = (nrt_Uint64)(x1 - x0) * (y1 - y0) * impl->bppComponent
-            * impl->nComponents;
+    bufSize = (nrt_Uint64)(x1 - x0) * (y1 - y0) * container->bppComponent
+            * container->nComponents;
     if (buf && !*buf)
     {
         *buf = (nrt_Uint8*)NRT_MALLOC(bufSize);
@@ -510,17 +596,24 @@ OpenJPEG_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
 
     CLEANUP:
     {
-        OpenJPEG_destroy(&stream, &codec, &image);
+        OpenJPEG_cleanup(&stream, &codec, &image);
     }
     return bufSize;
 }
 
+NRTPRIV( j2k_Container*)
+OpenJPEGReader_getContainer(J2K_USER_DATA *data, nrt_Error *error)
+{
+    OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
+    return impl->container;
+}
+
 NRTPRIV(void)
-OpenJPEG_destruct(J2K_USER_DATA * data)
+OpenJPEGReader_destruct(J2K_USER_DATA * data)
 {
     if (data)
     {
-        OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
+        OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
         if (impl->io && impl->ownIO)
         {
             nrt_IOInterface_destruct(&impl->io);
@@ -530,9 +623,15 @@ OpenJPEG_destruct(J2K_USER_DATA * data)
     }
 }
 
-NRTAPI(j2k_Container*) j2k_Container_open(const char *fname, nrt_Error *error)
+/******************************************************************************/
+/******************************************************************************/
+/* PUBLIC FUNCTIONS                                                           */
+/******************************************************************************/
+/******************************************************************************/
+
+NRTAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
 {
-    j2k_Container *container = NULL;
+    j2k_Reader *reader = NULL;
     nrt_IOHandle handle;
     nrt_IOInterface *io = NULL;
 
@@ -555,44 +654,68 @@ NRTAPI(j2k_Container*) j2k_Container_open(const char *fname, nrt_Error *error)
     if (!(io = nrt_IOHandleAdaptor_construct(handle, error)))
         goto CATCH_ERROR;
 
-    if (!(container = j2k_Container_openIO(io, error)))
+    if (!(reader = j2k_Reader_openIO(io, error)))
         goto CATCH_ERROR;
 
-    ((OpenJPEGContainerImpl*) container->data)->ownIO = 1;
+    ((OpenJPEGReaderImpl*) reader->data)->ownIO = 1;
 
-    return container;
+    return reader;
 
     CATCH_ERROR:
     {
         if (io)
             nrt_IOInterface_destruct(&io);
-        if (container)
-            j2k_Container_destruct(&container);
+        if (reader)
+            j2k_Reader_destruct(&reader);
         return NULL;
     }
 }
 
-NRTAPI(j2k_Container*) j2k_Container_openIO(nrt_IOInterface *io,
-                                            nrt_Error *error)
+NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
 {
-    static j2k_IContainer containerInterface =
-    { &OpenJPEG_canReadTiles, &OpenJPEG_getTilesX,
-      &OpenJPEG_getTilesY, &OpenJPEG_getTileWidth, &OpenJPEG_getTileHeight,
-      &OpenJPEG_getWidth, &OpenJPEG_getHeight, &OpenJPEG_getNumComponents,
-      &OpenJPEG_getComponentBytes, &OpenJPEG_readTile, &OpenJPEG_readRegion,
-      &OpenJPEG_destruct };
+    OpenJPEGReaderImpl *impl = NULL;
+    j2k_Reader *reader = NULL;
+    OpenJPEGContainerImpl *container = NULL;
 
-    OpenJPEGContainerImpl *impl = NULL;
-    j2k_Container *container = NULL;
-
-    impl = (OpenJPEGContainerImpl *) NRT_MALLOC(sizeof(OpenJPEGContainerImpl));
+    /* create the Reader interface */
+    impl = (OpenJPEGReaderImpl *) NRT_MALLOC(sizeof(OpenJPEGReaderImpl));
     if (!impl)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    memset(impl, 0, sizeof(OpenJPEGContainerImpl));
+    memset(impl, 0, sizeof(OpenJPEGReaderImpl));
 
+    reader = (j2k_Reader *) NRT_MALLOC(sizeof(j2k_Reader));
+    if (!reader)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(reader, 0, sizeof(j2k_Reader));
+    reader->data = impl;
+    reader->iface = &ReaderInterface;
+
+    /* create the Container interface */
+    container = (OpenJPEGContainerImpl *) NRT_MALLOC(sizeof(OpenJPEGContainerImpl));
+    if (!container)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(container, 0, sizeof(OpenJPEGContainerImpl));
+
+    impl->container = (j2k_Container*) NRT_MALLOC(sizeof(j2k_Container));
+    if (!impl->container)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(impl->container, 0, sizeof(j2k_Container));
+    impl->container->iface = &ContainerInterface;
+    impl->container->data = container;
+
+    /* initialize the interfaces */
     impl->io = io;
     impl->ioOffset = nrt_IOInterface_tell(io, error);
 
@@ -601,26 +724,17 @@ NRTAPI(j2k_Container*) j2k_Container_openIO(nrt_IOInterface *io,
         goto CATCH_ERROR;
     }
 
-    container = (j2k_Container *) NRT_MALLOC(sizeof(j2k_Container));
-    if (!container)
-    {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
-        goto CATCH_ERROR;
-    }
-
-    container->data = impl;
-    container->iface = &containerInterface;
-    return container;
+    return reader;
 
     CATCH_ERROR:
     {
-        if (container)
+        if (reader)
         {
-            j2k_Container_destruct(&container);
+            j2k_Reader_destruct(&reader);
         }
         else if (impl)
         {
-            OpenJPEG_destruct((J2K_USER_DATA*) impl);
+            OpenJPEGReader_destruct((J2K_USER_DATA*) impl);
         }
         return NULL;
     }

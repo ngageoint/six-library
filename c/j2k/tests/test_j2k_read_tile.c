@@ -65,6 +65,7 @@ int main(int argc, char **argv)
     int rc = 0;
     nrt_Error error;
     nrt_IOHandle handle;
+    j2k_Reader *reader = NULL;
     j2k_Container *container = NULL;
     int argIt = 0;
     char *fname = NULL;
@@ -99,12 +100,12 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(container = j2k_Container_open(fname, &error)))
+    if (!(reader = j2k_Reader_open(fname, &error)))
+        goto CATCH_ERROR;
+    if (!(container = j2k_Reader_getContainer(reader, &error)))
         goto CATCH_ERROR;
 
-    if ((bufSize
-            = j2k_Container_readTile(container, tileX, tileY, &buf, &error))
-            == 0)
+    if ((bufSize = j2k_Reader_readTile(reader, tileX, tileY, &buf, &error)) == 0)
     {
         goto CATCH_ERROR;
     }
@@ -123,8 +124,8 @@ int main(int argc, char **argv)
     }
     CLEANUP:
     {
-        if (container)
-            j2k_Container_destruct(&container);
+        if (reader)
+            j2k_Reader_destruct(&reader);
         if (buf)
             NRT_FREE(buf);
     }

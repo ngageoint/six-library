@@ -20,11 +20,19 @@
  *
  */
 
-#ifndef __IMPORT_J2K_H__
-#define __IMPORT_J2K_H__
+#ifndef __J2K_TYPES_H__
+#define __J2K_TYPES_H__
 
-#include "j2k/Container.h"
-#include "j2k/Reader.h"
-#include "j2k/Types.h"
+#include <import/nrt.h>
+
+typedef NRT_DATA J2K_USER_DATA;
+
+typedef enum _j2k_ImageType
+{
+    J2K_TYPE_UNKNOWN = 0,
+    J2K_TYPE_MONO,
+    J2K_TYPE_RGB
+} j2k_ImageType;
+
 
 #endif

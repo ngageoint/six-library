@@ -210,8 +210,9 @@ def build(bld):
                                       path=bld.path.find_dir('external').find_dir('jasper'))
         
         j2kSources = ('source/Container.c',
-                      'source/JasPerContainer.c',
-                      'source/OpenJPEGContainer.c')
+                      'source/JasPerImpl.c',
+                      'source/OpenJPEGImpl.c',
+                      'source/Reader.c')
         
         #build the j2k library
         lib = bld.new_task_gen('cc', 'staticlib', includes='include',

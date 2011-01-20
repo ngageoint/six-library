@@ -24,7 +24,7 @@
 #include <import/nitf.h>
 #include <import/j2k.h>
 
-NRT_BOOL writeFile(j2k_Container *container, nrt_Uint32 x0, nrt_Uint32 y0,
+NRT_BOOL writeFile(nrt_Uint32 x0, nrt_Uint32 y0,
                    nrt_Uint32 x1, nrt_Uint32 y1, nrt_Uint8 *buf,
                    nrt_Uint64 bufSize, const char* prefix, nrt_Error *error)
 {
@@ -124,13 +124,16 @@ int main(int argc, char **argv)
 
             if (strcmp(subheader->imageCompression->raw, "C8") == 0)
             {
+                j2k_Reader *j2kReader = NULL;
                 j2k_Container *container = NULL;
                 printf("Image %d contains J2K compressed data\n", (i + 1));
                 printf("Offset: %d\n", segment->imageOffset);
                 if (!nrt_IOInterface_seek(io, segment->imageOffset,
                                           NRT_SEEK_SET, &error))
                     goto CATCH_ERROR;
-                if (!(container = j2k_Container_openIO(io, &error)))
+                if (!(j2kReader = j2k_Reader_openIO(io, &error)))
+                    goto CATCH_ERROR;
+                if (!(container = j2k_Reader_getContainer(j2kReader, &error)))
                     goto CATCH_ERROR;
 
                 printf("x tiles:\t%d\n", j2k_Container_getTilesX(container,
@@ -159,16 +162,16 @@ int main(int argc, char **argv)
                     width = j2k_Container_getWidth(container, &error);
                     height = j2k_Container_getWidth(container, &error);
 
-                    if ((bufSize = j2k_Container_readRegion(container, 0, 0,
-                                                            width, height,
-                                                            &buf, &error)) == 0)
+                    if ((bufSize = j2k_Reader_readRegion(j2kReader, 0, 0,
+                                                         width, height,
+                                                         &buf, &error)) == 0)
                     {
                         goto CATCH_ERROR;
                     }
 
                     NRT_SNPRINTF(namePrefix, NRT_MAX_PATH, "image-%d", (i + 1));
-                    if (!writeFile(container, 0, 0, width, height, buf,
-                                   bufSize, namePrefix, &error))
+                    if (!writeFile(0, 0, width, height, buf, bufSize,
+                                   namePrefix, &error))
                     {
                         goto CATCH_ERROR;
                     }

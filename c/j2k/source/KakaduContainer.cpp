@@ -262,7 +262,7 @@ public:
         return mTilesY;
     }
 
-    nrt_Uint32 readTile(nrt_Uint32 tileX, nrt_Uint32 tileY, nrt_Uint8 **buf)
+    nrt_Uint64 readTile(nrt_Uint32 tileX, nrt_Uint32 tileY, nrt_Uint8 **buf)
     {
         nrt_Uint32 nComps = getNumComponents();
         nrt_Uint32 sampleSize = getComponentBytes();
@@ -457,7 +457,7 @@ Kakadu_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
     return impl->getComponentBytes();
 }
 
-NRTPRIV( nrt_Uint32)
+NRTPRIV( nrt_Uint64)
 Kakadu_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                   nrt_Uint8 **buf, nrt_Error *error)
 {

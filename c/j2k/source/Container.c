@@ -22,14 +22,6 @@
 
 #include "j2k/Container.h"
 
-NRTAPI(NRT_BOOL) j2k_Container_canReadTiles(j2k_Container *container, nrt_Error *error)
-{
-    if (container->iface->canReadTiles)
-        return container->iface->canReadTiles(container->data, error);
-    /* otherwise, no */
-    return NRT_FAILURE;
-}
-
 NRTAPI(nrt_Uint32) j2k_Container_getTilesX(j2k_Container *container, nrt_Error *error)
 {
     return container->iface->getTilesX(container->data, error);
@@ -70,26 +62,12 @@ NRTAPI(nrt_Uint32) j2k_Container_getComponentBytes(j2k_Container *container, nrt
     return container->iface->getComponentBytes(container->data, error);
 }
 
-NRTAPI(nrt_Uint32) j2k_Container_readTile(j2k_Container *container,
-        nrt_Uint32 tileX, nrt_Uint32 tileY,
-        nrt_Uint8 **buf, nrt_Error *error)
-{
-    return container->iface->readTile(container->data, tileX, tileY, buf, error);
-}
-
-NRTAPI(nrt_Uint64) j2k_Container_readRegion(j2k_Container *container,
-        nrt_Uint32 x0, nrt_Uint32 y0, nrt_Uint32 x1, nrt_Uint32 y1,
-        nrt_Uint8 **buf, nrt_Error *error)
-{
-    return container->iface->readRegion(container->data, x0, y0, x1, y1, buf, error);
-}
-
 NRTAPI(void)
 j2k_Container_destruct(j2k_Container **container)
 {
     if (*container)
     {
-        if ((*container)->iface)
+        if ((*container)->iface && (*container)->data)
             (*container)->iface->destruct((*container)->data);
         NRT_FREE(*container);
         *container = NULL;
