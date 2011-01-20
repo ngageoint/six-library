@@ -97,7 +97,7 @@ def build(bld):
             #the includes path is sort of a hack since Waf 1.5.8 has a bug
             #that doesn't allow you to set uselib_local...
             kducpp = bld.new_task_gen('cxx',
-                                      source='source/KakaduContainer.cpp',
+                                      source='source/KakaduImpl.cpp',
                                       target='kducpp',
                                       uselib='kdu',
                                       includes='include ../nrt/include %s' % ' '.join(map(lambda x: 'external/kakadu/coresys/%s' % x, kduIncludes.split())),
