@@ -729,23 +729,120 @@ JasPerReader_destruct(J2K_USER_DATA * data)
 /* WRITER                                                                     */
 /******************************************************************************/
 
+#define PRIV_WRITE_MATRIX(_SZ) { \
+nrt_Uint32 rowIdx, colIdx, cmpIdx; \
+nrt_Uint##_SZ* data##_SZ = (nrt_Uint##_SZ*)buf; \
+jas_matrix_t* matrix##_SZ = jas_matrix_create(tileHeight, tileWidth); \
+if (!matrix##_SZ){ \
+    nrt_Error_init(error, "Cannot allocate memory - JasPer jas_matrix_create failed!", \
+            NRT_CTXT, NRT_ERR_MEMORY); \
+    goto CATCH_ERROR; \
+} \
+for (cmpIdx = 0; cmpIdx < nComponents; ++cmpIdx){ \
+    for (rowIdx = 0; rowIdx < tileHeight; ++rowIdx){ \
+        for (colIdx = 0; colIdx < tileWidth; ++colIdx){ \
+            jas_matrix_set(matrix##_SZ, rowIdx, colIdx, (jas_seqent_t)*data##_SZ++); \
+        } \
+    } \
+    if (jas_image_writecmpt (impl->image, cmpIdx, tileX * tileWidth, \
+                              tileY * tileHeight, tileWidth, tileHeight, \
+                              matrix##_SZ) != 0) { \
+        nrt_Error_init(error, "JasPer was unable to write image component", \
+                NRT_CTXT, NRT_ERR_UNK); \
+        jas_matrix_destroy (matrix##_SZ); \
+        goto CATCH_ERROR; \
+    } \
+} \
+jas_matrix_destroy (matrix##_SZ); }
+
+
 J2KPRIV( NRT_BOOL)
 JasPerWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                      nrt_Uint8 *buf, nrt_Uint32 tileSize, nrt_Error *error)
 {
-    nrt_Error_init(error, "Writer->setTile not yet implemented",
-                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
-    //TODO
-    return NRT_FAILURE;
+    JasPerWriterImpl *impl = (JasPerWriterImpl*) data;
+    NRT_BOOL rc = NRT_SUCCESS;
+    nrt_Uint32 i, nComponents, tileHeight, tileWidth, nBytes;
+
+    nComponents = j2k_Container_getNumComponents(impl->container, error);
+    tileWidth = j2k_Container_getTileWidth(impl->container, error);
+    tileHeight = j2k_Container_getTileHeight(impl->container, error);
+    nBytes = j2k_Container_getComponentBytes(impl->container, error);
+
+    if (nBytes == 1)
+    {
+        PRIV_WRITE_MATRIX(8);
+    }
+    else if (nBytes == 2)
+    {
+        PRIV_WRITE_MATRIX(16);
+    }
+    else if (nBytes == 4)
+    {
+        PRIV_WRITE_MATRIX(32);
+    }
+    else
+    {
+        nrt_Error_init(error, "Invalid pixel size", NRT_CTXT,
+                       NRT_ERR_INVALID_OBJECT);
+        goto CATCH_ERROR;
+    }
+
+    goto CLEANUP;
+
+    CATCH_ERROR:
+    {
+        rc = NRT_FAILURE;
+    }
+
+    CLEANUP:
+    {
+    }
+
+    return rc;
 }
 
 J2KPRIV( NRT_BOOL)
 JasPerWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
 {
-    nrt_Error_init(error, "Writer->write not yet implemented",
-                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
-    // TODO
-    return NRT_FAILURE;
+    JasPerWriterImpl *impl = (JasPerWriterImpl*) data;
+    jas_stream_t *stream = NULL;
+    NRT_BOOL rc = NRT_SUCCESS;
+
+    if (!(stream = JasPer_createIO(io, JAS_STREAM_WRITE| JAS_STREAM_BINARY,
+                                   error)))
+    {
+        goto CATCH_ERROR;
+    }
+
+    if (jas_image_encode(impl->image, stream,
+            jas_image_strtofmt((char*)"jpc"), NULL) != 0)
+    {
+        nrt_Error_init(error, "Error encoding image", NRT_CTXT,
+                       NRT_ERR_INVALID_OBJECT);
+        goto CATCH_ERROR;
+    }
+    jas_stream_flush(stream);
+
+    if (jas_stream_close(stream) != 0)
+    {
+        nrt_Error_init(error, "Error closing stream", NRT_CTXT,
+                       NRT_ERR_INVALID_OBJECT);
+        goto CATCH_ERROR;
+    }
+
+    goto CLEANUP;
+
+    CATCH_ERROR:
+    {
+        rc = NRT_FAILURE;
+    }
+
+    CLEANUP:
+    {
+    }
+
+    return rc;
 }
 
 J2KPRIV( j2k_Container*)
@@ -761,6 +858,9 @@ JasPerWriter_destruct(J2K_USER_DATA * data)
     if (data)
     {
         JasPerWriterImpl *impl = (JasPerWriterImpl*) data;
+
+        /* should we clear the formats? */
+        /*jas_image_clearfmts();*/
         if (impl->image)
         {
             jas_image_destroy(impl->image);
@@ -957,6 +1057,14 @@ J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
 {
     j2k_Writer *writer = NULL;
     JasPerWriterImpl *impl = NULL;
+
+    /* Initialize jasper - TODO is this ok to do more than once? */
+    if (jas_init())
+    {
+        nrt_Error_init(error, "Error initializing JasPer library",
+                       NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
 
     writer = (j2k_Writer*) J2K_MALLOC(sizeof(j2k_Container));
     if (!writer)
