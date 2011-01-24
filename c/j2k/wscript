@@ -47,6 +47,8 @@ def configure(conf):
                     conf.env.append_unique('jasper-defs', 'longlong=long long') 
                 if not ulonglong:
                     conf.env.append_unique('jasper-defs', 'ulonglong=unsigned long long')
+        conf.env.append_value('CCFLAGS_j2k-c', '-DJ2K_MODULE_EXPORTS')
+        conf.env.append_value('CXXFLAGS_j2k-c', '-DJ2K_MODULE_EXPORTS')
     elif j2klibDir:
         conf.check_message_custom('JPEG2000 library', '', 'not found', color='YELLOW')
 
@@ -212,7 +214,8 @@ def build(bld):
         j2kSources = ('source/Container.c',
                       'source/JasPerImpl.c',
                       'source/OpenJPEGImpl.c',
-                      'source/Reader.c')
+                      'source/Reader.c',
+                      'source/Writer.c')
         
         #build the j2k library
         lib = bld.new_task_gen('cc', 'staticlib', includes='include',

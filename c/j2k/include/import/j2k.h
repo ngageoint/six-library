@@ -24,7 +24,8 @@
 #define __IMPORT_J2K_H__
 
 #include "j2k/Container.h"
+#include "j2k/Defines.h"
 #include "j2k/Reader.h"
-#include "j2k/Types.h"
+#include "j2k/Writer.h"
 
 #endif

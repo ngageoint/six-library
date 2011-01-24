@@ -31,6 +31,7 @@ int main(int argc, char **argv)
     char *inName = NULL, *outName = NULL;
     nrt_Error error;
     j2k_Container *container = NULL;
+    j2k_Writer *writer = NULL;
 
     for (argIt = 1; argIt < argc; ++argIt)
     {
@@ -46,7 +47,8 @@ int main(int argc, char **argv)
 
     if (!inName || !outName)
     {
-        printf("Usage: %s <raw-input> <output-j2k>\n", argv[0]);
+        nrt_Error_initf(&error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
+                        "Usage: %s <raw-input> <output-j2k>", argv[0]);
         goto CATCH_ERROR;
     }
 
@@ -63,6 +65,12 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
+    if (!(writer = j2k_Writer_construct(container, &error)))
+    {
+        goto CATCH_ERROR;
+    }
+
+
     goto CLEANUP;
 
     CATCH_ERROR:
@@ -74,6 +82,8 @@ int main(int argc, char **argv)
     {
         if (container)
             j2k_Container_destruct(&container);
+        if (writer)
+            j2k_Writer_destruct(&writer);
     }
     return rc;
 

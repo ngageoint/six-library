@@ -22,7 +22,7 @@
 
 #include "j2k/Reader.h"
 
-NRTAPI(NRT_BOOL) j2k_Reader_canReadTiles(j2k_Reader *reader, nrt_Error *error)
+J2KAPI(NRT_BOOL) j2k_Reader_canReadTiles(j2k_Reader *reader, nrt_Error *error)
 {
     if (reader->iface->canReadTiles)
         return reader->iface->canReadTiles(reader->data, error);
@@ -30,33 +30,33 @@ NRTAPI(NRT_BOOL) j2k_Reader_canReadTiles(j2k_Reader *reader, nrt_Error *error)
     return NRT_FAILURE;
 }
 
-NRTAPI(nrt_Uint64) j2k_Reader_readTile(j2k_Reader *reader,
+J2KAPI(nrt_Uint64) j2k_Reader_readTile(j2k_Reader *reader,
         nrt_Uint32 tileX, nrt_Uint32 tileY,
         nrt_Uint8 **buf, nrt_Error *error)
 {
     return reader->iface->readTile(reader->data, tileX, tileY, buf, error);
 }
 
-NRTAPI(nrt_Uint64) j2k_Reader_readRegion(j2k_Reader *reader,
+J2KAPI(nrt_Uint64) j2k_Reader_readRegion(j2k_Reader *reader,
         nrt_Uint32 x0, nrt_Uint32 y0, nrt_Uint32 x1, nrt_Uint32 y1,
         nrt_Uint8 **buf, nrt_Error *error)
 {
     return reader->iface->readRegion(reader->data, x0, y0, x1, y1, buf, error);
 }
 
-NRTAPI(j2k_Container*) j2k_Reader_getContainer(j2k_Reader *reader,
+J2KAPI(j2k_Container*) j2k_Reader_getContainer(j2k_Reader *reader,
                                                nrt_Error *error)
 {
     return reader->iface->getContainer(reader->data, error);
 }
 
-NRTAPI(void) j2k_Reader_destruct(j2k_Reader **reader)
+J2KAPI(void) j2k_Reader_destruct(j2k_Reader **reader)
 {
     if (*reader)
     {
         if ((*reader)->iface && (*reader)->data)
             (*reader)->iface->destruct((*reader)->data);
-        NRT_FREE(*reader);
+        J2K_FREE(*reader);
         *reader = NULL;
     }
 }

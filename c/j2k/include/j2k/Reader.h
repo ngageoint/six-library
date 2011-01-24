@@ -23,12 +23,11 @@
 #ifndef __J2K_READER_H__
 #define __J2K_READER_H__
 
-#include <import/nrt.h>
 #include "j2k/Container.h"
 
-NRT_CXX_GUARD
+J2K_CXX_GUARD
 
-typedef NRT_BOOL        (*J2K_IREADER_CAN_READ_TILES)(J2K_USER_DATA*, nrt_Error*);
+typedef J2K_BOOL        (*J2K_IREADER_CAN_READ_TILES)(J2K_USER_DATA*, nrt_Error*);
 typedef nrt_Uint64      (*J2K_IREADER_READ_TILE)(J2K_USER_DATA*, nrt_Uint32 tileX,
                                                 nrt_Uint32 tileY, nrt_Uint8 **buf,
                                                 nrt_Error*);
@@ -57,29 +56,29 @@ typedef struct _j2k_Reader
 /**
  * Opens a J2K Container from an IOInterface
  */
-NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface*, nrt_Error*);
+J2KAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface*, nrt_Error*);
 
 /**
  * Opens a J2K Container from a file on disk.
  */
-NRTAPI(j2k_Reader*) j2k_Reader_open(const char*, nrt_Error*);
+J2KAPI(j2k_Reader*) j2k_Reader_open(const char*, nrt_Error*);
 
 /**
  * Declares whether or not the reader can read individual tiles
  */
-NRTAPI(NRT_BOOL) j2k_Reader_canReadTiles(j2k_Reader*, nrt_Error*);
+J2KAPI(J2K_BOOL) j2k_Reader_canReadTiles(j2k_Reader*, nrt_Error*);
 
 /**
  * Reads an individual tile at the given indices
  */
-NRTAPI(nrt_Uint64) j2k_Reader_readTile(j2k_Reader*, nrt_Uint32 tileX,
+J2KAPI(nrt_Uint64) j2k_Reader_readTile(j2k_Reader*, nrt_Uint32 tileX,
                                           nrt_Uint32 tileY, nrt_Uint8 **buf,
                                           nrt_Error*);
 
 /**
  * Reads image data from the desired region
  */
-NRTAPI(nrt_Uint64) j2k_Reader_readRegion(j2k_Reader*, nrt_Uint32 x0,
+J2KAPI(nrt_Uint64) j2k_Reader_readRegion(j2k_Reader*, nrt_Uint32 x0,
                                           nrt_Uint32 y0, nrt_Uint32 x1,
                                           nrt_Uint32 y1, nrt_Uint8 **buf,
                                           nrt_Error*);
@@ -87,13 +86,13 @@ NRTAPI(nrt_Uint64) j2k_Reader_readRegion(j2k_Reader*, nrt_Uint32 x0,
 /**
  * Returns the associated container (the Reader will still own it)
  */
-NRTAPI(j2k_Container*) j2k_Reader_getContainer(j2k_Reader*, nrt_Error*);
+J2KAPI(j2k_Container*) j2k_Reader_getContainer(j2k_Reader*, nrt_Error*);
 
 /**
  * Destroys the Reader object
  */
-NRTAPI(void) j2k_Reader_destruct(j2k_Reader**);
+J2KAPI(void) j2k_Reader_destruct(j2k_Reader**);
 
-NRT_CXX_ENDGUARD
+J2K_CXX_ENDGUARD
 
 #endif

@@ -20,10 +20,41 @@
  *
  */
 
-#ifndef __J2K_TYPES_H__
-#define __J2K_TYPES_H__
+#ifndef __J2K_DEFINES_H__
+#define __J2K_DEFINES_H__
+
+
+#ifdef WIN32
+#      if defined(J2K_MODULE_EXPORTS)
+#          define NRT_MODULE_EXPORTS
+#      elif defined(J2K_MODULE_IMPORTS)
+#          define NRT_MODULE_IMPORTS
+#      endif
+#endif
 
 #include <import/nrt.h>
+
+#define J2K_C               NRT_C
+#define J2K_GUARD           NRT_GUARD
+#define J2K_ENDGUARD        NRT_ENDGUARD
+#define J2K_BOOL            NRT_BOOL
+#define J2KAPI(RT)          NRTAPI(RT)
+#define J2KPROT(RT)         NRTPROT(RT)
+#define J2K_CXX_GUARD       NRT_CXX_GUARD
+#define J2K_CXX_ENDGUARD    NRT_CXX_ENDGUARD
+#define J2KPRIV             NRTPRIV
+#define J2K_FILE            NRT_FILE
+#define J2K_LINE            NRT_LINE
+#define J2K_FUNC            NRT_FUNC
+
+#define J2K_MALLOC          NRT_MALLOC
+#define J2K_REALLOC         NRT_REALLOC
+#define J2K_FREE            NRT_FREE
+
+#define J2K_SUCCESS         NRT_SUCCESS
+#define J2K_FAILURE         NRT_FAILURE
+#define J2K_TRUE            NRT_TRUE
+#define J2K_FALSE           NRT_FALSE
 
 typedef NRT_DATA J2K_USER_DATA;
 
@@ -33,6 +64,5 @@ typedef enum _j2k_ImageType
     J2K_TYPE_MONO,
     J2K_TYPE_RGB
 } j2k_ImageType;
-
 
 #endif

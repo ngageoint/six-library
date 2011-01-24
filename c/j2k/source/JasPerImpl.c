@@ -22,11 +22,11 @@
 
 #ifdef HAVE_JASPER_H
 
-#include <import/nrt.h>
-#include <jasper/jasper.h>
-#include "j2k/Reader.h"
 #include "j2k/Container.h"
+#include "j2k/Reader.h"
+#include "j2k/Writer.h"
 
+#include <jasper/jasper.h>
 
 /******************************************************************************/
 /* TYPES & DECLARATIONS                                                       */
@@ -64,24 +64,24 @@ typedef struct _JasPerContainerImpl
 } JasPerContainerImpl;
 
 
-NRTPRIV(int) JasPerIO_read(jas_stream_obj_t *obj, char *buf, int cnt);
-NRTPRIV(int) JasPerIO_write(jas_stream_obj_t *obj, char *buf, int cnt);
-NRTPRIV(long) JasPerIO_seek(jas_stream_obj_t *obj, long offset, int origin);
-NRTPRIV(int) JasPerIO_close(jas_stream_obj_t *obj);
+J2KPRIV(int) JasPerIO_read(jas_stream_obj_t *obj, char *buf, int cnt);
+J2KPRIV(int) JasPerIO_write(jas_stream_obj_t *obj, char *buf, int cnt);
+J2KPRIV(long) JasPerIO_seek(jas_stream_obj_t *obj, long offset, int origin);
+J2KPRIV(int) JasPerIO_close(jas_stream_obj_t *obj);
 
 static jas_stream_ops_t IOInterface = {JasPerIO_read, JasPerIO_write,
                                        JasPerIO_seek, JasPerIO_close};
 
 
-NRTPRIV( nrt_Uint32) JasPerContainer_getTilesX(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) JasPerContainer_getTilesY(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) JasPerContainer_getTileWidth(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) JasPerContainer_getTileHeight(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) JasPerContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) JasPerContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) JasPerContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) JasPerContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV(void)        JasPerContainer_destruct(J2K_USER_DATA *);
+J2KPRIV( nrt_Uint32) JasPerContainer_getTilesX(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) JasPerContainer_getTilesY(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) JasPerContainer_getTileWidth(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) JasPerContainer_getTileHeight(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) JasPerContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) JasPerContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) JasPerContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) JasPerContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV(void)        JasPerContainer_destruct(J2K_USER_DATA *);
 
 static j2k_IContainer ContainerInterface = { &JasPerContainer_getTilesX,
                                              &JasPerContainer_getTilesY,
@@ -94,39 +94,53 @@ static j2k_IContainer ContainerInterface = { &JasPerContainer_getTilesX,
                                              &JasPerContainer_destruct};
 
 
-NRTPRIV( nrt_Uint64)     JasPerReader_readTile(J2K_USER_DATA *, nrt_Uint32,
+J2KPRIV( nrt_Uint64)     JasPerReader_readTile(J2K_USER_DATA *, nrt_Uint32,
                                                nrt_Uint32, nrt_Uint8 **,
                                                nrt_Error *);
-NRTPRIV( nrt_Uint64)     JasPerReader_readRegion(J2K_USER_DATA *, nrt_Uint32,
+J2KPRIV( nrt_Uint64)     JasPerReader_readRegion(J2K_USER_DATA *, nrt_Uint32,
                                                  nrt_Uint32, nrt_Uint32,
                                                  nrt_Uint32, nrt_Uint8 **,
                                                  nrt_Error *);
-NRTPRIV( j2k_Container*) JasPerReader_getContainer(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV(void)            JasPerReader_destruct(J2K_USER_DATA *);
+J2KPRIV( j2k_Container*) JasPerReader_getContainer(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV(void)            JasPerReader_destruct(J2K_USER_DATA *);
 
 static j2k_IReader ReaderInterface = {NULL, &JasPerReader_readTile,
                                       &JasPerReader_readRegion,
                                       &JasPerReader_getContainer,
                                       &JasPerReader_destruct };
 
+J2KPRIV( NRT_BOOL)       JasPerWriter_setTile(J2K_USER_DATA *,
+                                              nrt_Uint32, nrt_Uint32,
+                                              nrt_Uint8 *, nrt_Uint32,
+                                              nrt_Error *);
+J2KPRIV( NRT_BOOL)       JasPerWriter_write(J2K_USER_DATA *, nrt_IOInterface *,
+                                            nrt_Error *);
+J2KPRIV( j2k_Container*) JasPerWriter_getContainer(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV(void)            JasPerWriter_destruct(J2K_USER_DATA *);
 
-NRTPRIV( NRT_BOOL) JasPer_setup(JasPerReaderImpl *, jas_stream_t **,
+static j2k_IWriter WriterInterface = {&JasPerWriter_setTile,
+                                      &JasPerWriter_write,
+                                      &JasPerWriter_getContainer,
+                                      &JasPerWriter_destruct };
+
+
+J2KPRIV( J2K_BOOL) JasPer_setup(JasPerReaderImpl *, jas_stream_t **,
                                 jas_image_t **, nrt_Error *);
-NRTPRIV(void)      JasPer_cleanup(jas_stream_t **, jas_image_t **);
-NRTPRIV( NRT_BOOL) JasPer_readHeader(JasPerReaderImpl *, nrt_Error *);
+J2KPRIV(void)      JasPer_cleanup(jas_stream_t **, jas_image_t **);
+J2KPRIV( J2K_BOOL) JasPer_readHeader(JasPerReaderImpl *, nrt_Error *);
 
 /******************************************************************************/
 /* IO                                                                         */
 /******************************************************************************/
 
-NRTPRIV(jas_stream_t*) JasPer_createIO(nrt_IOInterface *io,
+J2KPRIV(jas_stream_t*) JasPer_createIO(nrt_IOInterface *io,
         int openMode,
         nrt_Error *error)
 {
     jas_stream_t *stream = NULL;
     IOControl *ctrl = NULL;
 
-    if (!(stream = (jas_stream_t*)NRT_MALLOC(sizeof(jas_stream_t))))
+    if (!(stream = (jas_stream_t*)J2K_MALLOC(sizeof(jas_stream_t))))
     {
         nrt_Error_init(error,
                 "Error creating stream object",
@@ -136,7 +150,7 @@ NRTPRIV(jas_stream_t*) JasPer_createIO(nrt_IOInterface *io,
     }
     memset(stream, 0, sizeof(jas_stream_t));
 
-    if (!(ctrl = (IOControl *) NRT_MALLOC(sizeof(IOControl))))
+    if (!(ctrl = (IOControl *) J2K_MALLOC(sizeof(IOControl))))
     {
         nrt_Error_init(error, "Error creating control object", NRT_CTXT,
                 NRT_ERR_MEMORY);
@@ -154,7 +168,7 @@ NRTPRIV(jas_stream_t*) JasPer_createIO(nrt_IOInterface *io,
     stream->obj_ = (void *) ctrl;
     stream->ops_ = &IOInterface;
 
-    if ((stream->bufbase_ = NRT_MALLOC(JAS_STREAM_BUFSIZE +
+    if ((stream->bufbase_ = J2K_MALLOC(JAS_STREAM_BUFSIZE +
                             JAS_STREAM_MAXPUTBACK)))
     {
         stream->bufmode_ |= JAS_STREAM_FREEBUF;
@@ -174,7 +188,7 @@ NRTPRIV(jas_stream_t*) JasPer_createIO(nrt_IOInterface *io,
     return stream;
 }
 
-NRTPRIV(int) JasPerIO_read(jas_stream_obj_t *obj, char *buf, int cnt)
+J2KPRIV(int) JasPerIO_read(jas_stream_obj_t *obj, char *buf, int cnt)
 {
     IOControl *ctrl = (IOControl*)obj;
     nrt_Off remaining;
@@ -191,7 +205,7 @@ NRTPRIV(int) JasPerIO_read(jas_stream_obj_t *obj, char *buf, int cnt)
     return cnt;
 }
 
-NRTPRIV(int) JasPerIO_write(jas_stream_obj_t *obj, char *buf, int cnt)
+J2KPRIV(int) JasPerIO_write(jas_stream_obj_t *obj, char *buf, int cnt)
 {
     nrt_Error error;
     IOControl *ctrl = (IOControl*)obj;
@@ -203,7 +217,7 @@ NRTPRIV(int) JasPerIO_write(jas_stream_obj_t *obj, char *buf, int cnt)
     return cnt;
 }
 
-NRTPRIV(long) JasPerIO_seek(jas_stream_obj_t *obj, long offset, int origin)
+J2KPRIV(long) JasPerIO_seek(jas_stream_obj_t *obj, long offset, int origin)
 {
     nrt_Off off;
     int whence = NRT_SEEK_SET;
@@ -229,7 +243,7 @@ NRTPRIV(long) JasPerIO_seek(jas_stream_obj_t *obj, long offset, int origin)
     return (long)off;
 }
 
-NRTPRIV(int) JasPerIO_close(jas_stream_obj_t *obj)
+J2KPRIV(int) JasPerIO_close(jas_stream_obj_t *obj)
 {
     /* TODO - I don't think we should close it.. */
     return 0;
@@ -240,7 +254,7 @@ NRTPRIV(int) JasPerIO_close(jas_stream_obj_t *obj)
 /* UTILITIES                                                                  */
 /******************************************************************************/
 
-NRTPRIV( NRT_BOOL)
+J2KPRIV( J2K_BOOL)
 JasPer_setup(JasPerReaderImpl *impl, jas_stream_t **stream,
              jas_image_t **image, nrt_Error *error)
 {
@@ -281,16 +295,16 @@ JasPer_setup(JasPerReaderImpl *impl, jas_stream_t **stream,
         goto CATCH_ERROR;
     }
 
-    return NRT_SUCCESS;
+    return J2K_SUCCESS;
 
     CATCH_ERROR:
     {
         JasPer_cleanup(stream, image);
-        return NRT_FAILURE;
+        return J2K_FAILURE;
     }
 }
 
-NRTPRIV(void)
+J2KPRIV(void)
 JasPer_cleanup(jas_stream_t **stream, jas_image_t **image)
 {
     if (stream && *stream)
@@ -305,7 +319,7 @@ JasPer_cleanup(jas_stream_t **stream, jas_image_t **image)
     }
 }
 
-NRTPRIV( NRT_BOOL)
+J2KPRIV( NRT_BOOL)
 JasPer_readHeader(JasPerReaderImpl *impl, nrt_Error *error)
 {
     JasPerContainerImpl *container = NULL;
@@ -364,7 +378,7 @@ JasPer_readHeader(JasPerReaderImpl *impl, nrt_Error *error)
 /* CONTAINER                                                                  */
 /******************************************************************************/
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 JasPerContainer_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
@@ -372,7 +386,7 @@ JasPerContainer_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
             (impl->width % impl->tileWidth == 0 ? 0 : 1);
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 JasPerContainer_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
@@ -380,55 +394,55 @@ JasPerContainer_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
                 (impl->height % impl->tileHeight == 0 ? 0 : 1);
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 JasPerContainer_getTileWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
     return impl->tileWidth;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 JasPerContainer_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
     return impl->tileHeight;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 JasPerContainer_getWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
     return impl->width;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 JasPerContainer_getHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
     return impl->height;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 JasPerContainer_getNumComponents(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
     return impl->nComponents;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 JasPerContainer_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
     return impl->componentBytes;
 }
 
-NRTPRIV(void)
+J2KPRIV(void)
 JasPerContainer_destruct(J2K_USER_DATA * data)
 {
     if (data)
     {
         JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-        NRT_FREE(data);
+        J2K_FREE(data);
     }
 }
 
@@ -457,7 +471,7 @@ for (rowIdx = 0; rowIdx < rowCt; ++rowIdx){ \
 jas_matrix_destroy (matrix##_SZ); }
 
 
-NRTPRIV( nrt_Uint64)
+J2KPRIV( nrt_Uint64)
 JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
                   nrt_Uint32 x1, nrt_Uint32 y1, nrt_Uint8 **buf,
                   nrt_Error *error)
@@ -487,7 +501,7 @@ JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
 
     if (buf && !*buf)
     {
-        *buf = (nrt_Uint8*)NRT_MALLOC(bufSize);
+        *buf = (nrt_Uint8*)J2K_MALLOC(bufSize);
         if (!*buf)
         {
             nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
@@ -550,7 +564,7 @@ JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     return bufSize;
 }
 
-NRTPRIV( nrt_Uint64)
+J2KPRIV( nrt_Uint64)
 JasPerReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                 nrt_Uint8 **buf, nrt_Error *error)
 {
@@ -565,7 +579,7 @@ JasPerReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                                    container->height, buf, error);
 }
 
-NRTPRIV( j2k_Container*)
+J2KPRIV( j2k_Container*)
 JasPerReader_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerReaderImpl *impl = (JasPerReaderImpl*) data;
@@ -573,7 +587,7 @@ JasPerReader_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 }
 
 
-NRTPRIV(void)
+J2KPRIV(void)
 JasPerReader_destruct(J2K_USER_DATA * data)
 {
     if (data)
@@ -588,8 +602,41 @@ JasPerReader_destruct(J2K_USER_DATA * data)
         {
             j2k_Container_destruct(&impl->container);
         }
-        NRT_FREE(data);
+        J2K_FREE(data);
     }
+}
+
+
+/******************************************************************************/
+/* WRITER                                                                     */
+/******************************************************************************/
+
+J2KPRIV( NRT_BOOL)
+JasPerWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
+                     nrt_Uint8 *buf, nrt_Uint32 tileSize, nrt_Error *error)
+{
+    //TODO
+    return NRT_FAILURE;
+}
+
+J2KPRIV( NRT_BOOL)
+JasPerWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
+{
+    // TODO
+    return NRT_FAILURE;
+}
+
+J2KPRIV( j2k_Container*)
+JasPerWriter_getContainer(J2K_USER_DATA *data, nrt_Error *error)
+{
+    //TODO
+    return NULL;
+}
+
+J2KPRIV(void)
+JasPerWriter_destruct(J2K_USER_DATA * data)
+{
+    //TODO
 }
 
 /******************************************************************************/
@@ -598,7 +645,7 @@ JasPerReader_destruct(J2K_USER_DATA * data)
 /******************************************************************************/
 /******************************************************************************/
 
-NRTAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
+J2KAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
 {
     j2k_Reader *reader = NULL;
     nrt_IOHandle handle;
@@ -641,7 +688,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
 }
 
 
-NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
+J2KAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
 {
     JasPerReaderImpl *impl = NULL;
     JasPerContainerImpl *container = NULL;
@@ -656,7 +703,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     }
 
     /* create the Reader interface */
-    impl = (JasPerReaderImpl *) NRT_MALLOC(sizeof(JasPerReaderImpl));
+    impl = (JasPerReaderImpl *) J2K_MALLOC(sizeof(JasPerReaderImpl));
     if (!impl)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -664,7 +711,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     }
     memset(impl, 0, sizeof(JasPerReaderImpl));
 
-    reader = (j2k_Reader*) NRT_MALLOC(sizeof(j2k_Reader));
+    reader = (j2k_Reader*) J2K_MALLOC(sizeof(j2k_Reader));
     if (!reader)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -675,7 +722,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     reader->iface = &ReaderInterface;
 
     /* create the Container interface */
-    container = (JasPerContainerImpl *) NRT_MALLOC(sizeof(JasPerContainerImpl));
+    container = (JasPerContainerImpl *) J2K_MALLOC(sizeof(JasPerContainerImpl));
     if (!container)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -683,7 +730,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     }
     memset(container, 0, sizeof(JasPerContainerImpl));
 
-    impl->container = (j2k_Container*) NRT_MALLOC(sizeof(j2k_Container));
+    impl->container = (j2k_Container*) J2K_MALLOC(sizeof(j2k_Container));
     if (!impl->container)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -719,7 +766,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     }
 }
 
-NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
+J2KAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
         nrt_Uint32 height,
         nrt_Uint32 bands,
         nrt_Uint32 actualBitsPerPixel,
@@ -732,7 +779,7 @@ NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
     j2k_Container *container = NULL;
     JasPerContainerImpl *impl = NULL;
 
-    container = (j2k_Container*) NRT_MALLOC(sizeof(j2k_Container));
+    container = (j2k_Container*) J2K_MALLOC(sizeof(j2k_Container));
     if (!container)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -741,7 +788,7 @@ NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
     memset(container, 0, sizeof(j2k_Container));
 
     /* create the Container interface */
-    impl = (JasPerContainerImpl *) NRT_MALLOC(sizeof(JasPerContainerImpl));
+    impl = (JasPerContainerImpl *) J2K_MALLOC(sizeof(JasPerContainerImpl));
     if (!impl)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -768,6 +815,36 @@ NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
         if (container)
         {
             j2k_Container_destruct(&container);
+        }
+        return NULL;
+    }
+}
+
+
+J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
+        nrt_Error *error)
+{
+    j2k_Writer *writer = NULL;
+
+    writer = (j2k_Writer*) J2K_MALLOC(sizeof(j2k_Container));
+    if (!writer)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(writer, 0, sizeof(j2k_Writer));
+
+    // TODO
+
+    writer->iface = &WriterInterface;
+
+    return writer;
+
+    CATCH_ERROR:
+    {
+        if (writer)
+        {
+            j2k_Writer_destruct(&writer);
         }
         return NULL;
     }

@@ -10,7 +10,11 @@ USELIB          = 'THREAD DL RT MATH nrt-c'
 DEFINES         = 'NRT_MODULE_EXPORTS'
 
 
-set_options = configure = distclean = lambda p: None
+set_options = distclean = lambda p: None
+
+def configure(conf):
+    conf.env.append_value('CCFLAGS_nrt-c', '-DNRT_MODULE_EXPORTS')
+    conf.env.append_value('CXXFLAGS_nrt-c', '-DNRT_MODULE_EXPORTS')
 
 def build(bld):
     env = bld.module(**globals())

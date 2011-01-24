@@ -22,9 +22,10 @@
 
 #ifdef HAVE_OPENJPEG_H
 
-#include <import/nrt.h>
-#include "j2k/Reader.h"
 #include "j2k/Container.h"
+#include "j2k/Reader.h"
+#include "j2k/Writer.h"
+
 #include <openjpeg.h>
 
 
@@ -67,21 +68,21 @@ typedef struct _OpenJPEGContainerImpl
     int isSigned;
 } OpenJPEGContainerImpl;
 
-NRTPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data);
-NRTPRIV(bool)       implStreamSeek(OPJ_SIZE_T bytes, void *data);
-NRTPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data);
+J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data);
+J2KPRIV(bool)       implStreamSeek(OPJ_SIZE_T bytes, void *data);
+J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data);
 
 
 
-NRTPRIV( nrt_Uint32) OpenJPEGContainer_getTilesX(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) OpenJPEGContainer_getTilesY(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) OpenJPEGContainer_getTileWidth(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) OpenJPEGContainer_getTileHeight(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) OpenJPEGContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) OpenJPEGContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) OpenJPEGContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV( nrt_Uint32) OpenJPEGContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV(void)        OpenJPEGContainer_destruct(J2K_USER_DATA *);
+J2KPRIV( nrt_Uint32) OpenJPEGContainer_getTilesX(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) OpenJPEGContainer_getTilesY(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) OpenJPEGContainer_getTileWidth(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) OpenJPEGContainer_getTileHeight(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) OpenJPEGContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) OpenJPEGContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) OpenJPEGContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) OpenJPEGContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV(void)        OpenJPEGContainer_destruct(J2K_USER_DATA *);
 
 static j2k_IContainer ContainerInterface = { &OpenJPEGContainer_getTilesX,
                                              &OpenJPEGContainer_getTilesY,
@@ -93,16 +94,16 @@ static j2k_IContainer ContainerInterface = { &OpenJPEGContainer_getTilesX,
                                              &OpenJPEGContainer_getComponentBytes,
                                              &OpenJPEGContainer_destruct};
 
-NRTPRIV( NRT_BOOL  )     OpenJPEGReader_canReadTiles(J2K_USER_DATA *,  nrt_Error *);
-NRTPRIV( nrt_Uint64)     OpenJPEGReader_readTile(J2K_USER_DATA *, nrt_Uint32,
+J2KPRIV( NRT_BOOL  )     OpenJPEGReader_canReadTiles(J2K_USER_DATA *,  nrt_Error *);
+J2KPRIV( nrt_Uint64)     OpenJPEGReader_readTile(J2K_USER_DATA *, nrt_Uint32,
                                                  nrt_Uint32, nrt_Uint8 **,
                                                  nrt_Error *);
-NRTPRIV( nrt_Uint64)     OpenJPEGReader_readRegion(J2K_USER_DATA *, nrt_Uint32,
+J2KPRIV( nrt_Uint64)     OpenJPEGReader_readRegion(J2K_USER_DATA *, nrt_Uint32,
                                                    nrt_Uint32, nrt_Uint32,
                                                    nrt_Uint32, nrt_Uint8 **,
                                                    nrt_Error *);
-NRTPRIV( j2k_Container*) OpenJPEGReader_getContainer(J2K_USER_DATA *, nrt_Error *);
-NRTPRIV(void)            OpenJPEGReader_destruct(J2K_USER_DATA *);
+J2KPRIV( j2k_Container*) OpenJPEGReader_getContainer(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV(void)            OpenJPEGReader_destruct(J2K_USER_DATA *);
 
 static j2k_IReader ReaderInterface = {&OpenJPEGReader_canReadTiles,
                                       &OpenJPEGReader_readTile,
@@ -110,14 +111,28 @@ static j2k_IReader ReaderInterface = {&OpenJPEGReader_canReadTiles,
                                       &OpenJPEGReader_getContainer,
                                       &OpenJPEGReader_destruct };
 
+J2KPRIV( NRT_BOOL)       OpenJPEGWriter_setTile(J2K_USER_DATA *,
+                                                nrt_Uint32, nrt_Uint32,
+                                                nrt_Uint8 *, nrt_Uint32,
+                                                nrt_Error *);
+J2KPRIV( NRT_BOOL)       OpenJPEGWriter_write(J2K_USER_DATA *, nrt_IOInterface *,
+                                              nrt_Error *);
+J2KPRIV( j2k_Container*) OpenJPEGWriter_getContainer(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV(void)            OpenJPEGWriter_destruct(J2K_USER_DATA *);
 
-NRTPRIV(void) OpenJPEG_cleanup(opj_stream_t **, opj_codec_t **, opj_image_t **);
+static j2k_IWriter WriterInterface = {&OpenJPEGWriter_setTile,
+                                      &OpenJPEGWriter_write,
+                                      &OpenJPEGWriter_getContainer,
+                                      &OpenJPEGWriter_destruct };
+
+
+J2KPRIV(void) OpenJPEG_cleanup(opj_stream_t **, opj_codec_t **, opj_image_t **);
 
 /******************************************************************************/
 /* IO                                                                         */
 /******************************************************************************/
 
-NRTAPI(opj_stream_t*)
+J2KAPI(opj_stream_t*)
 OpenJPEG_createIO(nrt_IOInterface *io, nrt_Off length, nrt_Error *error)
 {
     opj_stream_t *stream = NULL;
@@ -132,7 +147,7 @@ OpenJPEG_createIO(nrt_IOInterface *io, nrt_Off length, nrt_Error *error)
     else
     {
         /*      Allocate the result */
-        ioControl = (IOControl *) NRT_MALLOC(sizeof(IOControl));
+        ioControl = (IOControl *) J2K_MALLOC(sizeof(IOControl));
         if (ioControl == NULL)
         {
             nrt_Error_init(error, "Error creating control object", NRT_CTXT,
@@ -159,7 +174,7 @@ OpenJPEG_createIO(nrt_IOInterface *io, nrt_Off length, nrt_Error *error)
     return stream;
 }
 
-NRTPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
+J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     nrt_Off offset, bytesLeft, alreadyRead, len;
@@ -179,7 +194,7 @@ NRTPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
     return toRead;
 }
 
-NRTPRIV(bool) implStreamSeek(OPJ_SIZE_T bytes, void *data)
+J2KPRIV(bool) implStreamSeek(OPJ_SIZE_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (!nrt_IOInterface_seek(ctrl->io, ctrl->offset + bytes,
@@ -190,7 +205,7 @@ NRTPRIV(bool) implStreamSeek(OPJ_SIZE_T bytes, void *data)
     return 1;
 }
 
-NRTPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data)
+J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (bytes < 0)
@@ -204,7 +219,7 @@ NRTPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data)
     return bytes;
 }
 
-NRTPRIV(void)
+J2KPRIV(void)
 OpenJPEG_cleanup(opj_stream_t **stream, opj_codec_t **codec,
                   opj_image_t **image)
 {
@@ -229,7 +244,7 @@ OpenJPEG_cleanup(opj_stream_t **stream, opj_codec_t **codec,
 /* UTILITIES                                                                  */
 /******************************************************************************/
 
-NRTPRIV( NRT_BOOL)
+J2KPRIV( NRT_BOOL)
 OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
                opj_codec_t **codec, nrt_Error *error)
 {
@@ -266,7 +281,7 @@ OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
     }
 }
 
-NRTPRIV( NRT_BOOL)
+J2KPRIV( NRT_BOOL)
 OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
 {
     OpenJPEGContainerImpl *container = NULL;
@@ -341,69 +356,69 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
 /* CONTAINER                                                                  */
 /******************************************************************************/
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 OpenJPEGContainer_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->xTiles;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 OpenJPEGContainer_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->yTiles;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 OpenJPEGContainer_getTileWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->tileWidth;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 OpenJPEGContainer_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->tileHeight;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 OpenJPEGContainer_getWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->width;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 OpenJPEGContainer_getHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->height;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 OpenJPEGContainer_getNumComponents(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->nComponents;
 }
 
-NRTPRIV( nrt_Uint32)
+J2KPRIV( nrt_Uint32)
 OpenJPEGContainer_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
     return impl->componentBytes;
 }
 
-NRTPRIV(void)
+J2KPRIV(void)
 OpenJPEGContainer_destruct(J2K_USER_DATA * data)
 {
     if (data)
     {
         OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
-        NRT_FREE(data);
+        J2K_FREE(data);
     }
 }
 
@@ -411,13 +426,13 @@ OpenJPEGContainer_destruct(J2K_USER_DATA * data)
 /* READER                                                                     */
 /******************************************************************************/
 
-NRTPRIV( NRT_BOOL)
+J2KPRIV( NRT_BOOL)
 OpenJPEGReader_canReadTiles(J2K_USER_DATA *data, nrt_Error *error)
 {
     return NRT_SUCCESS;
 }
 
-NRTPRIV( nrt_Uint64)
+J2KPRIV( nrt_Uint64)
 OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                   nrt_Uint8 **buf, nrt_Error *error)
 {
@@ -474,7 +489,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 
             if (buf && !*buf)
             {
-                *buf = (nrt_Uint8*)NRT_MALLOC(bufSize);
+                *buf = (nrt_Uint8*)J2K_MALLOC(bufSize);
                 if (!*buf)
                 {
                     nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
@@ -506,7 +521,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     return (nrt_Uint64)bufSize;
 }
 
-NRTPRIV( nrt_Uint64)
+J2KPRIV( nrt_Uint64)
 OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
                           nrt_Uint32 x1, nrt_Uint32 y1, nrt_Uint8 **buf,
                           nrt_Error *error)
@@ -552,7 +567,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
             * container->nComponents;
     if (buf && !*buf)
     {
-        *buf = (nrt_Uint8*)NRT_MALLOC(bufSize);
+        *buf = (nrt_Uint8*)J2K_MALLOC(bufSize);
         if (!*buf)
         {
             nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
@@ -606,14 +621,14 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     return bufSize;
 }
 
-NRTPRIV( j2k_Container*)
+J2KPRIV( j2k_Container*)
 OpenJPEGReader_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 {
     OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
     return impl->container;
 }
 
-NRTPRIV(void)
+J2KPRIV(void)
 OpenJPEGReader_destruct(J2K_USER_DATA * data)
 {
     if (data)
@@ -624,8 +639,40 @@ OpenJPEGReader_destruct(J2K_USER_DATA * data)
             nrt_IOInterface_destruct(&impl->io);
             impl->io = NULL;
         }
-        NRT_FREE(data);
+        J2K_FREE(data);
     }
+}
+
+/******************************************************************************/
+/* WRITER                                                                     */
+/******************************************************************************/
+
+J2KPRIV( NRT_BOOL)
+OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
+                       nrt_Uint8 *buf, nrt_Uint32 tileSize, nrt_Error *error)
+{
+    //TODO
+    return NRT_FAILURE;
+}
+
+J2KPRIV( NRT_BOOL)
+OpenJPEGWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
+{
+    // TODO
+    return NRT_FAILURE;
+}
+
+J2KPRIV( j2k_Container*)
+OpenJPEGWriter_getContainer(J2K_USER_DATA *data, nrt_Error *error)
+{
+    //TODO
+    return NULL;
+}
+
+J2KPRIV(void)
+OpenJPEGWriter_destruct(J2K_USER_DATA * data)
+{
+    //TODO
 }
 
 /******************************************************************************/
@@ -634,7 +681,7 @@ OpenJPEGReader_destruct(J2K_USER_DATA * data)
 /******************************************************************************/
 /******************************************************************************/
 
-NRTAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
+J2KAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
 {
     j2k_Reader *reader = NULL;
     nrt_IOHandle handle;
@@ -676,14 +723,14 @@ NRTAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
     }
 }
 
-NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
+J2KAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
 {
     OpenJPEGReaderImpl *impl = NULL;
     j2k_Reader *reader = NULL;
     OpenJPEGContainerImpl *container = NULL;
 
     /* create the Reader interface */
-    impl = (OpenJPEGReaderImpl *) NRT_MALLOC(sizeof(OpenJPEGReaderImpl));
+    impl = (OpenJPEGReaderImpl *) J2K_MALLOC(sizeof(OpenJPEGReaderImpl));
     if (!impl)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -691,7 +738,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     }
     memset(impl, 0, sizeof(OpenJPEGReaderImpl));
 
-    reader = (j2k_Reader *) NRT_MALLOC(sizeof(j2k_Reader));
+    reader = (j2k_Reader *) J2K_MALLOC(sizeof(j2k_Reader));
     if (!reader)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -702,7 +749,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     reader->iface = &ReaderInterface;
 
     /* create the Container interface */
-    container = (OpenJPEGContainerImpl *) NRT_MALLOC(sizeof(OpenJPEGContainerImpl));
+    container = (OpenJPEGContainerImpl *) J2K_MALLOC(sizeof(OpenJPEGContainerImpl));
     if (!container)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -710,7 +757,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     }
     memset(container, 0, sizeof(OpenJPEGContainerImpl));
 
-    impl->container = (j2k_Container*) NRT_MALLOC(sizeof(j2k_Container));
+    impl->container = (j2k_Container*) J2K_MALLOC(sizeof(j2k_Container));
     if (!impl->container)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -745,7 +792,7 @@ NRTAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     }
 }
 
-NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
+J2KAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
         nrt_Uint32 height,
         nrt_Uint32 bands,
         nrt_Uint32 actualBitsPerPixel,
@@ -758,7 +805,7 @@ NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
     j2k_Container *container = NULL;
     OpenJPEGContainerImpl *impl = NULL;
 
-    container = (j2k_Container*) NRT_MALLOC(sizeof(j2k_Container));
+    container = (j2k_Container*) J2K_MALLOC(sizeof(j2k_Container));
     if (!container)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -767,7 +814,7 @@ NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
     memset(container, 0, sizeof(j2k_Container));
 
     /* create the Container interface */
-    impl = (OpenJPEGContainerImpl *) NRT_MALLOC(sizeof(OpenJPEGContainerImpl));
+    impl = (OpenJPEGContainerImpl *) J2K_MALLOC(sizeof(OpenJPEGContainerImpl));
     if (!impl)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
@@ -796,6 +843,36 @@ NRTAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
         if (container)
         {
             j2k_Container_destruct(&container);
+        }
+        return NULL;
+    }
+}
+
+
+J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
+        nrt_Error *error)
+{
+    j2k_Writer *writer = NULL;
+
+    writer = (j2k_Writer*) J2K_MALLOC(sizeof(j2k_Container));
+    if (!writer)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(writer, 0, sizeof(j2k_Writer));
+
+    // TODO
+
+    writer->iface = &WriterInterface;
+
+    return writer;
+
+    CATCH_ERROR:
+    {
+        if (writer)
+        {
+            j2k_Writer_destruct(&writer);
         }
         return NULL;
     }
