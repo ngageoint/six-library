@@ -63,11 +63,13 @@ static nitf_CompressionInterface interfaceTable =
 typedef struct _ImplControl
 {
     nitf_BlockingInfo blockInfo; /* Kept for convenience */
+    j2k_Container *container;    /* j2k Container */
     j2k_Writer *writer;          /* j2k Writer */
-    nitf_Uint64 offset;          /* File offset to data */
-    nitf_Uint64 fileLength;      /* Length of compressed data in file */
-}
-ImplControl;
+    nitf_Uint64 offset;
+    nitf_Uint64 dataLength;
+    nitf_Uint32 curBlock;
+    nitf_Field *comratField;     /* kept so we can update it */
+}ImplControl;
 
 NITF_CXX_ENDGUARD
 
@@ -102,10 +104,188 @@ NITFAPI(void*) C8_construct(char *compressionType,
 NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
                                             nitf_Error *error)
 {
-    nitf_Error_init(error, "Not implemented",
-                    NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-    /* TODO */
-    return NULL;
+    ImplControl *implControl = NULL;
+
+    nitf_Uint32 nRows;
+    nitf_Uint32 nCols;
+    nitf_Uint32 nBands;
+    nitf_Uint32 nbpp;
+    nitf_Uint32 abpp;
+    nitf_Uint32 nbpr;
+    nitf_Uint32 nbpc;
+    nitf_Uint32 nppbh;
+    nitf_Uint32 nppbv;
+    char pvtype[NITF_PVTYPE_SZ+1];
+    char ic[NITF_IC_SZ+1];
+    char imode[NITF_IMODE_SZ+1];
+    char irep[NITF_IREP_SZ+1];
+    int imageType;
+    J2K_BOOL isSigned = 0;
+
+    if(!nitf_Field_get(subheader->NITF_NROWS, &nRows,
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
+    {
+        goto CATCH_ERROR;
+    }
+    if(!nitf_Field_get(subheader->NITF_NCOLS, &nCols,
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
+    {
+        goto CATCH_ERROR;
+    }
+
+    if (0 == (nBands = nitf_ImageSubheader_getBandCount(subheader, error)))
+    {
+        goto CATCH_ERROR;
+    }
+
+    if(!nitf_Field_get(subheader->NITF_NBPP, &nbpp,
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
+    {
+        goto CATCH_ERROR;
+    }
+    if(!nitf_Field_get(subheader->NITF_ABPP, &abpp,
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
+    {
+        goto CATCH_ERROR;
+    }
+    if(!nitf_Field_get(subheader->NITF_NPPBH, &nppbh,
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
+    {
+        goto CATCH_ERROR;
+    }
+    if(!nitf_Field_get(subheader->NITF_NPPBV, &nppbv,
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
+    {
+        goto CATCH_ERROR;
+    }
+    if(!nitf_Field_get(subheader->NITF_NBPR, &nbpr,
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
+    {
+        goto CATCH_ERROR;
+    }
+    if(!nitf_Field_get(subheader->NITF_NBPC, &nbpc,
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
+    {
+        goto CATCH_ERROR;
+    }
+
+    if(!nitf_Field_get(subheader->NITF_IREP, irep, NITF_CONV_STRING,
+                    NITF_IREP_SZ+1, error))
+    {
+        goto CATCH_ERROR;
+    }
+    if(!nitf_Field_get(subheader->NITF_PVTYPE, pvtype, NITF_CONV_STRING,
+                    NITF_PVTYPE_SZ+1, error))
+    {
+        goto CATCH_ERROR;
+    }
+    if(!nitf_Field_get(subheader->NITF_IC, ic, NITF_CONV_STRING,
+                    NITF_IC_SZ+1, error))
+    {
+        goto CATCH_ERROR;
+    }
+    if(!nitf_Field_get(subheader->NITF_IMODE, imode, NITF_CONV_STRING,
+                    NITF_IMODE_SZ+1, error))
+    {
+        goto CATCH_ERROR;
+    }
+
+    nitf_Field_trimString(pvtype);
+    if(strcmp(pvtype, "INT") != 0 && strcmp(pvtype, "SI") != 0
+            && strcmp(pvtype, "B") != 0)
+    {
+        nitf_Error_init(error,
+                "For J2k compression, PVTYPE must be INT, SI or B",
+                NITF_CTXT, NITF_ERR_COMPRESSION);
+        goto CATCH_ERROR;
+    }
+    if (strcmp(pvtype, "SI") == 0)
+    {
+        isSigned = J2K_TRUE;
+    }
+
+    nitf_Field_trimString(imode);
+    if(strcmp(imode, "B") != 0)
+    {
+        nitf_Error_init(error,
+                "For J2k compression, IMODE must be B",
+                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        goto CATCH_ERROR;
+    }
+
+    nitf_Field_trimString(ic);
+    if(strcmp(ic, "C8") != 0)
+    {
+        nitf_Error_init(error,
+                "For J2k compression, IC must be C8",
+                NITF_CTXT, NITF_ERR_COMPRESSION);
+        goto CATCH_ERROR;
+    }
+
+    nitf_Field_trimString(irep);
+    if (strcmp(irep, "RGB") == 0)
+    {
+        if (nBands < 3)
+        {
+            nitf_Error_init(error,
+                    "For RGB irep, must have at least 3 bands",
+                    NITF_CTXT, NITF_ERR_COMPRESSION);
+            goto CATCH_ERROR;
+        }
+        imageType = J2K_TYPE_RGB;
+    }
+    else if (strcmp(irep, "RGB/LUT") == 0)
+    {
+        nitf_Error_init(error,
+                "RGB/LUT not yet supported",
+                NITF_CTXT, NITF_ERR_COMPRESSION);
+        goto CATCH_ERROR;
+    }
+    else
+    {
+        /* TODO should be named J2K_TYPE_GRAY */
+        imageType = J2K_TYPE_MONO;
+    }
+
+    if (!(implControl = (ImplControl*)NITF_MALLOC(sizeof(ImplControl))))
+    {
+        nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),
+                        NITF_CTXT, NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(implControl, 0, sizeof(ImplControl));
+
+    implControl->comratField = subheader->NITF_COMRAT;
+
+    if (!(implControl->container = j2k_Container_construct(nCols,
+                                                           nRows,
+                                                           nBands,
+                                                           abpp,
+                                                           nppbh,
+                                                           nppbv,
+                                                           imageType,
+                                                           isSigned,
+                                                           error)))
+    {
+        goto CATCH_ERROR;
+    }
+
+    if (!(implControl->writer = j2k_Writer_construct(implControl->container,
+                                                     error)))
+    {
+        goto CATCH_ERROR;
+    }
+
+    return((nitf_CompressionControl*) implControl);
+
+    CATCH_ERROR:
+    {
+        if(implControl)
+        {
+            implDestroy((nitf_CompressionControl **)&implControl);
+        }
+        return NULL;
+    }
 }
 
 NITFPRIV(NITF_BOOL) implStart(nitf_CompressionControl *control,
@@ -116,10 +296,12 @@ NITFPRIV(NITF_BOOL) implStart(nitf_CompressionControl *control,
                               nitf_Error *error)
 {
     ImplControl *implControl = (ImplControl*)control;
-    nitf_Error_init(error, "Not implemented",
-                    NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-    /* TODO */
-    return NITF_FAILURE;
+
+    implControl->offset = offset;
+    implControl->dataLength = dataLength;
+    implControl->curBlock = 0;
+
+    return NITF_SUCCESS;
 }
 
 NITFPRIV(NITF_BOOL) implWriteBlock(nitf_CompressionControl * control,
@@ -130,10 +312,32 @@ NITFPRIV(NITF_BOOL) implWriteBlock(nitf_CompressionControl * control,
                                    nitf_Error *error)
 {
     ImplControl *implControl = (ImplControl*)control;
-    nitf_Error_init(error, "Not implemented",
-                    NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-    /* TODO */
-    return NITF_FAILURE;
+    nitf_Uint32 tileX, tileY, tileWidth, tileHeight, tilesX, tilesY;
+    nitf_Uint32 nComponents, nBytes, bufSize;
+
+    tileWidth = j2k_Container_getTileWidth(implControl->container, error);
+    tileHeight = j2k_Container_getTileHeight(implControl->container, error);
+    tilesX = j2k_Container_getTilesX(implControl->container, error);
+    tilesY = j2k_Container_getTilesY(implControl->container, error);
+    nComponents = j2k_Container_getNumComponents(implControl->container, error);
+    nBytes = j2k_Container_getComponentBytes(implControl->container, error);
+
+    tileX = implControl->curBlock % tilesX;
+    tileY = implControl->curBlock / tilesX;
+    bufSize = tileWidth * tileHeight * nComponents * nBytes;
+
+    if (!j2k_Writer_setTile(implControl->writer, tileX, tileY, data, bufSize,
+                            error))
+    {
+        goto CATCH_ERROR;
+    }
+
+    return NITF_SUCCESS;
+
+    CATCH_ERROR:
+    {
+        return NITF_FAILURE;
+    }
 }
 
 NITFPRIV(NITF_BOOL) implEnd( nitf_CompressionControl * control,
@@ -141,15 +345,61 @@ NITFPRIV(NITF_BOOL) implEnd( nitf_CompressionControl * control,
                              nitf_Error *error)
 {
     ImplControl *implControl = (ImplControl*)control;
-    nitf_Error_init(error, "Not implemented",
-                    NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-    /* TODO */
-    return NITF_FAILURE;
+    nitf_Off offset;
+    size_t compressedSize, rawSize;
+    nitf_Uint32 comratInt;
+    float comrat;
+    nitf_Uint32 width, height, nComponents, nBytes, nBits;
+
+    width = j2k_Container_getWidth(implControl->container, error);
+    height = j2k_Container_getHeight(implControl->container, error);
+    nComponents = j2k_Container_getNumComponents(implControl->container, error);
+    nBytes = j2k_Container_getComponentBytes(implControl->container, error);
+    nBits = j2k_Container_getComponentBits(implControl->container, error);
+
+    offset = nitf_IOInterface_tell(io, error);
+
+    if (!j2k_Writer_write(implControl->writer, io, error))
+        return NITF_FAILURE;
+
+    /* figure out the compression ratio */
+    compressedSize = (size_t)(nitf_IOInterface_tell(io, error) - offset);
+    rawSize = (size_t)width * height * nComponents * nBytes;
+
+    /*
+        Nxyz = JPEG 2000 numerically lossless, where
+        "xyz" indicates the expected achieved bit rate (in
+        bits per pixel per band) for the final layer of each tile.
+        The decimal point is implicit and assumed to be one
+        digit from the right (i.e. xy.z).
+     */
+    comrat = (1.0f * compressedSize * nBits) / rawSize;
+    comratInt = (nitf_Uint32)(comrat * 10.0f + 0.5f);
+
+    /* write the comrat field */
+    NITF_SNPRINTF(implControl->comratField->raw,
+                  implControl->comratField->length + 1,
+                  "N%03d", comratInt);
+
+    return NITF_SUCCESS;
 }
 
 NITFPRIV(void) implDestroy(nitf_CompressionControl ** control)
 {
-    /* TODO */
+    if (control && *control)
+    {
+        ImplControl *implControl = (ImplControl*)*control;
+        if (implControl->container)
+        {
+            j2k_Container_destruct(&implControl->container);
+        }
+        if (implControl->writer)
+        {
+            j2k_Writer_destruct(&implControl->writer);
+        }
+        NITF_FREE(*control);
+        *control = NULL;
+    }
 }
 
 #endif
