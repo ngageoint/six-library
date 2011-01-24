@@ -35,6 +35,9 @@ typedef nrt_Uint32  (*J2K_ICONTAINER_GET_WIDTH)(J2K_USER_DATA*, nrt_Error*);
 typedef nrt_Uint32  (*J2K_ICONTAINER_GET_HEIGHT)(J2K_USER_DATA*, nrt_Error*);
 typedef nrt_Uint32  (*J2K_ICONTAINER_GET_NUM_COMPONENTS)(J2K_USER_DATA*, nrt_Error*);
 typedef nrt_Uint32  (*J2K_ICONTAINER_GET_COMPONENT_BYTES)(J2K_USER_DATA*, nrt_Error*);
+typedef nrt_Uint32  (*J2K_ICONTAINER_GET_COMPONENT_BITS)(J2K_USER_DATA*, nrt_Error*);
+typedef int         (*J2K_ICONTAINER_GET_IMAGE_TYPE)(J2K_USER_DATA*, nrt_Error*);
+typedef NRT_BOOL    (*J2K_ICONTAINER_IS_SIGNED)(J2K_USER_DATA*, nrt_Error*);
 typedef void        (*J2K_ICONTAINER_DESTRUCT)(J2K_USER_DATA *);
 
 typedef struct _j2k_IContainer
@@ -47,6 +50,9 @@ typedef struct _j2k_IContainer
     J2K_ICONTAINER_GET_HEIGHT getHeight;
     J2K_ICONTAINER_GET_NUM_COMPONENTS getNumComponents;
     J2K_ICONTAINER_GET_COMPONENT_BYTES getComponentBytes;
+    J2K_ICONTAINER_GET_COMPONENT_BITS getComponentBits;
+    J2K_ICONTAINER_GET_IMAGE_TYPE getImageType;
+    J2K_ICONTAINER_IS_SIGNED isSigned;
     J2K_ICONTAINER_DESTRUCT destruct;
 } j2k_IContainer;
 
@@ -105,9 +111,24 @@ J2KAPI(nrt_Uint32) j2k_Container_getHeight(j2k_Container*, nrt_Error*);
 J2KAPI(nrt_Uint32) j2k_Container_getNumComponents(j2k_Container*, nrt_Error*);
 
 /**
- * Returns the number of bytes per sample per component
+ * Returns the number of (expanded) bytes per sample per component
  */
 J2KAPI(nrt_Uint32) j2k_Container_getComponentBytes(j2k_Container*, nrt_Error*);
+
+/**
+ * Returns the number of relevant bits per sample per component
+ */
+J2KAPI(nrt_Uint32) j2k_Container_getComponentBits(j2k_Container*, nrt_Error*);
+
+/**
+ * Returns the image type
+ */
+J2KAPI(int) j2k_Container_getImageType(j2k_Container*, nrt_Error*);
+
+/**
+ * Returns whether the data is signed
+ */
+J2KAPI(NRT_BOOL) j2k_Container_isSigned(j2k_Container*, nrt_Error*);
 
 /**
  * Destroys the Container

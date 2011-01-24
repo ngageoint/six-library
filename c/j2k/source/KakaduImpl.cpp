@@ -46,6 +46,9 @@ J2KPRIV( nrt_Uint32) KakaduContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( nrt_Uint32) KakaduContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( nrt_Uint32) KakaduContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( nrt_Uint32) KakaduContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) KakaduContainer_getComponentBits(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( int)        KakaduContainer_getImageType(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( J2K_BOOL)   KakaduContainer_isSigned(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV(void)        KakaduContainer_destruct(J2K_USER_DATA *);
 
 static j2k_IContainer ContainerInterface = { &KakaduContainer_getTilesX,
@@ -56,6 +59,9 @@ static j2k_IContainer ContainerInterface = { &KakaduContainer_getTilesX,
                                              &KakaduContainer_getHeight,
                                              &KakaduContainer_getNumComponents,
                                              &KakaduContainer_getComponentBytes,
+                                             &KakaduContainer_getComponentBits,
+                                             &KakaduContainer_getImageType,
+                                             &KakaduContainer_isSigned,
                                              &KakaduContainer_destruct};
 
 J2KPRIV( NRT_BOOL  )     KakaduReader_canReadTiles(J2K_USER_DATA *,  nrt_Error *);
@@ -593,6 +599,27 @@ KakaduContainer_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
     return impl->getComponentBytes();
 }
 
+J2KPRIV( nrt_Uint32)
+KakaduContainer_getComponentBits(J2K_USER_DATA *data, nrt_Error *error)
+{
+    j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
+    return impl->getActualBitsPerPixel();
+}
+
+J2KPRIV( int)
+KakaduContainer_getImageType(J2K_USER_DATA *data, nrt_Error *error)
+{
+    j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
+    return impl->getType();
+}
+
+J2KPRIV( NRT_BOOL)
+KakaduContainer_isSigned(J2K_USER_DATA *data, nrt_Error *error)
+{
+    j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
+    return impl->isSigned();
+}
+
 J2KPRIV(void)
 KakaduContainer_destruct(J2K_USER_DATA * data)
 {
@@ -665,6 +692,8 @@ J2KPRIV( NRT_BOOL)
 KakaduWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                      nrt_Uint8 *buf, nrt_Uint32 tileSize, nrt_Error *error)
 {
+    nrt_Error_init(error, "Writer->setTile not yet implemented",
+                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
     //TODO
     return NRT_FAILURE;
 }
@@ -672,6 +701,8 @@ KakaduWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 J2KPRIV( NRT_BOOL)
 KakaduWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
 {
+    nrt_Error_init(error, "Writer->write not yet implemented",
+                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
     // TODO
     return NRT_FAILURE;
 }
@@ -679,6 +710,8 @@ KakaduWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
 J2KPRIV( j2k_Container*)
 KakaduWriter_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 {
+    nrt_Error_init(error, "Writer->getContainer not yet implemented",
+                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
     //TODO
     return NULL;
 }

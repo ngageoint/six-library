@@ -82,6 +82,9 @@ J2KPRIV( nrt_Uint32) OpenJPEGContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( nrt_Uint32) OpenJPEGContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( nrt_Uint32) OpenJPEGContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( nrt_Uint32) OpenJPEGContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) OpenJPEGContainer_getComponentBits(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( int)        OpenJPEGContainer_getImageType(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( J2K_BOOL)   OpenJPEGContainer_isSigned(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV(void)        OpenJPEGContainer_destruct(J2K_USER_DATA *);
 
 static j2k_IContainer ContainerInterface = { &OpenJPEGContainer_getTilesX,
@@ -92,6 +95,9 @@ static j2k_IContainer ContainerInterface = { &OpenJPEGContainer_getTilesX,
                                              &OpenJPEGContainer_getHeight,
                                              &OpenJPEGContainer_getNumComponents,
                                              &OpenJPEGContainer_getComponentBytes,
+                                             &OpenJPEGContainer_getComponentBits,
+                                             &OpenJPEGContainer_getImageType,
+                                             &OpenJPEGContainer_isSigned,
                                              &OpenJPEGContainer_destruct};
 
 J2KPRIV( NRT_BOOL  )     OpenJPEGReader_canReadTiles(J2K_USER_DATA *,  nrt_Error *);
@@ -412,6 +418,27 @@ OpenJPEGContainer_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
     return impl->componentBytes;
 }
 
+J2KPRIV( nrt_Uint32)
+OpenJPEGContainer_getComponentBits(J2K_USER_DATA *data, nrt_Error *error)
+{
+    OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
+    return impl->inputComponentBits;
+}
+
+J2KPRIV( int)
+OpenJPEGContainer_getImageType(J2K_USER_DATA *data, nrt_Error *error)
+{
+    OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
+    return impl->imageType;
+}
+
+J2KPRIV( NRT_BOOL)
+OpenJPEGContainer_isSigned(J2K_USER_DATA *data, nrt_Error *error)
+{
+    OpenJPEGContainerImpl *impl = (OpenJPEGContainerImpl*) data;
+    return impl->isSigned;
+}
+
 J2KPRIV(void)
 OpenJPEGContainer_destruct(J2K_USER_DATA * data)
 {
@@ -651,6 +678,8 @@ J2KPRIV( NRT_BOOL)
 OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                        nrt_Uint8 *buf, nrt_Uint32 tileSize, nrt_Error *error)
 {
+    nrt_Error_init(error, "Writer->setTile not yet implemented",
+                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
     //TODO
     return NRT_FAILURE;
 }
@@ -658,6 +687,8 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 J2KPRIV( NRT_BOOL)
 OpenJPEGWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
 {
+    nrt_Error_init(error, "Writer->write not yet implemented",
+                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
     // TODO
     return NRT_FAILURE;
 }
@@ -665,6 +696,8 @@ OpenJPEGWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
 J2KPRIV( j2k_Container*)
 OpenJPEGWriter_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 {
+    nrt_Error_init(error, "Writer->getContainer not yet implemented",
+                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
     //TODO
     return NULL;
 }

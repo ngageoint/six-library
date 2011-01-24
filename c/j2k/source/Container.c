@@ -62,6 +62,21 @@ J2KAPI(nrt_Uint32) j2k_Container_getComponentBytes(j2k_Container *container, nrt
     return container->iface->getComponentBytes(container->data, error);
 }
 
+J2KAPI(nrt_Uint32) j2k_Container_getComponentBits(j2k_Container *container, nrt_Error *error)
+{
+    return container->iface->getComponentBits(container->data, error);
+}
+
+J2KAPI(int) j2k_Container_getImageType(j2k_Container *container, nrt_Error *error)
+{
+    return container->iface->getImageType(container->data, error);
+}
+
+J2KAPI(NRT_BOOL) j2k_Container_isSigned(j2k_Container *container, nrt_Error *error)
+{
+    return container->iface->isSigned(container->data, error);
+}
+
 J2KAPI(void)
 j2k_Container_destruct(j2k_Container **container)
 {

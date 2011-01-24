@@ -136,18 +136,17 @@ int main(int argc, char **argv)
                 if (!(container = j2k_Reader_getContainer(j2kReader, &error)))
                     goto CATCH_ERROR;
 
-                printf("x tiles:\t%d\n", j2k_Container_getTilesX(container,
-                                                                 &error));
-                printf("y tiles:\t%d\n", j2k_Container_getTilesY(container,
-                                                                 &error));
-                printf("tile width:\t%d\n",
-                       j2k_Container_getTileWidth(container, &error));
-                printf("tile height:\t%d\n",
-                       j2k_Container_getTileHeight(container, &error));
-                printf("width:\t\t%d\n", j2k_Container_getWidth(container,
-                                                                &error));
-                printf("height:\t\t%d\n", j2k_Container_getHeight(container,
-                                                                  &error));
+                printf("tile width:\t\t%d\n", j2k_Container_getTileWidth(container, &error));
+                printf("tile height:\t\t%d\n", j2k_Container_getTileHeight(container, &error));
+                printf("x tiles:\t\t%d\n", j2k_Container_getTilesX(container, &error));
+                printf("y tiles:\t\t%d\n", j2k_Container_getTilesY(container, &error));
+                printf("width:\t\t\t%d\n", j2k_Container_getWidth(container, &error));
+                printf("height:\t\t\t%d\n", j2k_Container_getHeight(container, &error));
+                printf("components:\t\t%d\n", j2k_Container_getNumComponents(container, &error));
+                printf("component bytes:\t%d\n", j2k_Container_getComponentBytes(container, &error));
+                printf("component bits:\t\t%d\n", j2k_Container_getComponentBits(container, &error));
+                printf("image type:\t\t%d\n", j2k_Container_getImageType(container, &error));
+                printf("is signed:\t\t%d\n", j2k_Container_isSigned(container, &error));
 
                 if (dump)
                 {

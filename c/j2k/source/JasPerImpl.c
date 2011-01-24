@@ -50,6 +50,12 @@ typedef struct _JasPerReaderImpl
     j2k_Container *container;
 } JasPerReaderImpl;
 
+typedef struct _JasPerWriterImpl
+{
+    j2k_Container *container;
+    jas_image_t *image;
+} JasPerWriterImpl;
+
 typedef struct _JasPerContainerImpl
 {
     nrt_Uint32 width;
@@ -81,6 +87,9 @@ J2KPRIV( nrt_Uint32) JasPerContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( nrt_Uint32) JasPerContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( nrt_Uint32) JasPerContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( nrt_Uint32) JasPerContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( nrt_Uint32) JasPerContainer_getComponentBits(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( int)        JasPerContainer_getImageType(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( J2K_BOOL)   JasPerContainer_isSigned(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV(void)        JasPerContainer_destruct(J2K_USER_DATA *);
 
 static j2k_IContainer ContainerInterface = { &JasPerContainer_getTilesX,
@@ -91,6 +100,9 @@ static j2k_IContainer ContainerInterface = { &JasPerContainer_getTilesX,
                                              &JasPerContainer_getHeight,
                                              &JasPerContainer_getNumComponents,
                                              &JasPerContainer_getComponentBytes,
+                                             &JasPerContainer_getComponentBits,
+                                             &JasPerContainer_getImageType,
+                                             &JasPerContainer_isSigned,
                                              &JasPerContainer_destruct};
 
 
@@ -128,6 +140,7 @@ J2KPRIV( J2K_BOOL) JasPer_setup(JasPerReaderImpl *, jas_stream_t **,
                                 jas_image_t **, nrt_Error *);
 J2KPRIV(void)      JasPer_cleanup(jas_stream_t **, jas_image_t **);
 J2KPRIV( J2K_BOOL) JasPer_readHeader(JasPerReaderImpl *, nrt_Error *);
+J2KPRIV( J2K_BOOL) JasPer_initImage(JasPerWriterImpl *, nrt_Error *);
 
 /******************************************************************************/
 /* IO                                                                         */
@@ -374,6 +387,90 @@ JasPer_readHeader(JasPerReaderImpl *impl, nrt_Error *error)
     return rc;
 }
 
+J2KPRIV( NRT_BOOL)
+JasPer_initImage(JasPerWriterImpl *impl, nrt_Error *error)
+{
+    NRT_BOOL rc = NRT_SUCCESS;
+    jas_clrspc_t colorSpace;
+    jas_image_cmptparm_t *cmptparms;
+    nrt_Uint32 i, nComponents, height, width, nBits;
+    int imageType;
+    J2K_BOOL isSigned;
+
+    nComponents = j2k_Container_getNumComponents(impl->container, error);
+    width = j2k_Container_getWidth(impl->container, error);
+    height = j2k_Container_getHeight(impl->container, error);
+    nBits = j2k_Container_getComponentBits(impl->container, error);
+    isSigned = j2k_Container_isSigned(impl->container, error);
+    imageType = j2k_Container_getImageType(impl->container, error);
+
+    if (!(cmptparms = (jas_image_cmptparm_t*)J2K_MALLOC(sizeof(
+            jas_image_cmptparm_t) * nComponents)))
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+
+    for(i = 0; i < nComponents; ++i)
+    {
+        /* TODO make sure these are all correct */
+        cmptparms[i].tlx = 0;
+        cmptparms[i].tly = 0;
+        cmptparms[i].hstep = 1;
+        cmptparms[i].vstep = 1;
+        cmptparms[i].width = width;
+        cmptparms[i].height = height;
+        cmptparms[i].prec = nBits;
+        cmptparms[i].sgnd = isSigned;
+    }
+
+    if (!(impl->image = jas_image_create(nComponents, cmptparms,
+                                         JAS_CLRSPC_UNKNOWN)))
+    {
+
+        nrt_Error_init(error, "Error creating JasPer image", NRT_CTXT,
+                       NRT_ERR_INVALID_OBJECT);
+        goto CATCH_ERROR;
+    }
+
+    if (imageType == J2K_TYPE_RGB && nComponents == 3)
+    {
+        jas_image_setclrspc(impl->image, JAS_CLRSPC_GENRGB);
+        jas_image_setcmpttype(impl->image, 0,
+                              JAS_IMAGE_CT_COLOR(JAS_IMAGE_CT_RGB_R));
+        jas_image_setcmpttype(impl->image, 1,
+                              JAS_IMAGE_CT_COLOR(JAS_IMAGE_CT_RGB_G));
+        jas_image_setcmpttype(impl->image, 2,
+                              JAS_IMAGE_CT_COLOR(JAS_IMAGE_CT_RGB_B));
+    }
+    else
+    {
+        jas_image_setclrspc(impl->image, JAS_CLRSPC_GENGRAY);
+        for(i = 0; i < nComponents; ++i)
+        {
+            jas_image_setcmpttype(impl->image, i,
+                                  JAS_IMAGE_CT_COLOR(JAS_IMAGE_CT_GRAY_Y));
+        }
+    }
+
+    goto CLEANUP;
+
+    CATCH_ERROR:
+    {
+        rc = NRT_FAILURE;
+    }
+
+    CLEANUP:
+    {
+        if (cmptparms)
+            J2K_FREE(cmptparms);
+    }
+
+
+    return rc;
+}
+
 /******************************************************************************/
 /* CONTAINER                                                                  */
 /******************************************************************************/
@@ -434,6 +531,27 @@ JasPerContainer_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
 {
     JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
     return impl->componentBytes;
+}
+
+J2KPRIV( nrt_Uint32)
+JasPerContainer_getComponentBits(J2K_USER_DATA *data, nrt_Error *error)
+{
+    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
+    return impl->inputComponentBits;
+}
+
+J2KPRIV( int)
+JasPerContainer_getImageType(J2K_USER_DATA *data, nrt_Error *error)
+{
+    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
+    return impl->imageType;
+}
+
+J2KPRIV( NRT_BOOL)
+JasPerContainer_isSigned(J2K_USER_DATA *data, nrt_Error *error)
+{
+    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
+    return impl->isSigned;
 }
 
 J2KPRIV(void)
@@ -615,6 +733,8 @@ J2KPRIV( NRT_BOOL)
 JasPerWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                      nrt_Uint8 *buf, nrt_Uint32 tileSize, nrt_Error *error)
 {
+    nrt_Error_init(error, "Writer->setTile not yet implemented",
+                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
     //TODO
     return NRT_FAILURE;
 }
@@ -622,6 +742,8 @@ JasPerWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 J2KPRIV( NRT_BOOL)
 JasPerWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
 {
+    nrt_Error_init(error, "Writer->write not yet implemented",
+                   NRT_CTXT, NRT_ERR_INVALID_OBJECT);
     // TODO
     return NRT_FAILURE;
 }
@@ -629,14 +751,23 @@ JasPerWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
 J2KPRIV( j2k_Container*)
 JasPerWriter_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 {
-    //TODO
-    return NULL;
+    JasPerWriterImpl *impl = (JasPerWriterImpl*) data;
+    return impl->container;
 }
 
 J2KPRIV(void)
 JasPerWriter_destruct(J2K_USER_DATA * data)
 {
-    //TODO
+    if (data)
+    {
+        JasPerWriterImpl *impl = (JasPerWriterImpl*) data;
+        if (impl->image)
+        {
+            jas_image_destroy(impl->image);
+        }
+        /* we'll leave the container alone, unless we decide to clone it */
+        J2K_FREE(data);
+    }
 }
 
 /******************************************************************************/
@@ -825,6 +956,7 @@ J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
         nrt_Error *error)
 {
     j2k_Writer *writer = NULL;
+    JasPerWriterImpl *impl = NULL;
 
     writer = (j2k_Writer*) J2K_MALLOC(sizeof(j2k_Container));
     if (!writer)
@@ -834,8 +966,22 @@ J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
     }
     memset(writer, 0, sizeof(j2k_Writer));
 
-    // TODO
+    /* create the Writer interface */
+    impl = (JasPerWriterImpl *) J2K_MALLOC(sizeof(JasPerWriterImpl));
+    if (!impl)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+    memset(impl, 0, sizeof(JasPerWriterImpl));
+    impl->container = container;
 
+    if (!(JasPer_initImage(impl, error)))
+    {
+        goto CATCH_ERROR;
+    }
+
+    writer->data = impl;
     writer->iface = &WriterInterface;
 
     return writer;
