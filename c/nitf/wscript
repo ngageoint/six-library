@@ -61,12 +61,13 @@ def build(bld):
     
     #J2K plug-ins
     if env['CCFLAGS_j2k-c']:
-        bld.new_task_gen('cc', 'shlib', source='J2KDecompress.c',
-                         target='J2KDecompress',
-                         uselib_local='nitf-c j2k-c nrt-c',
-                         uselib='nitf-c j2k-c nrt-c',
-                         path=pluginNode, env=pEnv.copy(),
-                         install_path='${PREFIX}/share/nitf/plugins')
+        for f in ['J2KDecompress.c', 'J2KCompress.c']:
+            bld.new_task_gen('cc', 'shlib', source=f,
+                             target=splitext(f)[0],
+                             uselib_local='nitf-c j2k-c nrt-c',
+                             uselib='nitf-c j2k-c nrt-c',
+                             path=pluginNode, env=pEnv.copy(),
+                             install_path='${PREFIX}/share/nitf/plugins')
     
     #build apps
     appsDir = bld.path.find_dir('apps')

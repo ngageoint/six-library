@@ -25,6 +25,7 @@
 #include <import/nitf.h>
 #include <import/j2k.h>
 
+NITF_CXX_GUARD
 
 NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface*  io,
                                               nitf_Uint64        offset,
@@ -44,9 +45,6 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control);
 
 NITFPRIV(void) implMemFree(void* p);
 
-
-NITF_CXX_GUARD
-
 static char *ident[] =
 {
     "DECOMPRESSION", "C8", NULL
@@ -59,7 +57,7 @@ static nitf_DecompressionInterface interfaceTable =
 
 typedef struct _ImplControl
 {
-    nitf_BlockingInfo blockInfo; /* Kept for convience */
+    nitf_BlockingInfo blockInfo; /* Kept for convenience */
     j2k_Reader *reader;          /* j2k Reader */
     nitf_Uint64 offset;          /* File offset to data */
     nitf_Uint64 fileLength;      /* Length of compressed data in file */
