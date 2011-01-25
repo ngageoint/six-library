@@ -93,15 +93,14 @@ NRTAPI(NRT_BOOL) nrt_IOInterface_close(nrt_IOInterface* io,
 NRTAPI(void) nrt_IOInterface_destruct(nrt_IOInterface** io);
 
 /*!
- *  This special 'subclass' puts the IOHandle into the IOInterface
- *  that is needed to supply it for reads and writes within the library.
- *
- *  You can define your own
- *  interfaces, and set them using the nrt_Reader_setInputSource()
- *  and the nrt_Writer_setOutputDest()
+ *  This wraps the IOHandle into the IOInterface.
  */
-NRTAPI(nrt_IOInterface*) nrt_IOHandleAdaptor_construct(nrt_IOHandle handle,
+NRTAPI(nrt_IOInterface*) nrt_IOHandleAdapter_construct(nrt_IOHandle handle,
         nrt_Error* error);
+
+NRTAPI(nrt_IOInterface*) nrt_BufferAdapter_construct(char* buf, size_t size,
+                                                     NRT_BOOL ownBuf,
+                                                     nrt_Error* error);
 
 NRT_CXX_ENDGUARD
 

@@ -87,7 +87,7 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
 /*!
  *  Same as the read function, except this method allows you to change
  *  the underlying interface.  The read method calls this one using an
- *  IOInterface adaptor
+ *  IOInterface adapter.
  */
 NITFAPI(nitf_Record *) nitf_Reader_readIO(nitf_Reader* reader,
                                           nitf_IOInterface* io,

@@ -78,7 +78,7 @@ JNIEXPORT void JNICALL Java_nitf_IOHandle_createHandle
 
     /* now, we must adapt this IOHandle to fit into the IOInterface */
     /* get a nitf_IOInterface* object... */
-    if (!(interface = nitf_IOHandleAdaptor_construct(io, &error)))
+    if (!(interface = nitf_IOHandleAdapter_construct(io, &error)))
     {
         _ThrowNITFException(env, error.message);
         return;

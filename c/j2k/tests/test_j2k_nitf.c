@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     if (NRT_INVALID_HANDLE(handle))
         goto CATCH_ERROR;
 
-    if (!(io = nrt_IOHandleAdaptor_construct(handle, &error)))
+    if (!(io = nrt_IOHandleAdapter_construct(handle, &error)))
         goto CATCH_ERROR;
 
     if (!(reader = nitf_Reader_construct(&error)))

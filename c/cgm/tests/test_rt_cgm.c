@@ -73,8 +73,8 @@ int main(int argc, char** argv)
 	goto END_OF_FILE;
     }
 
-    inIO = nitf_IOHandleAdaptor_construct(in, &error);
-    outIO = nitf_IOHandleAdaptor_construct(out,& error);
+    inIO = nitf_IOHandleAdapter_construct(in, &error);
+    outIO = nitf_IOHandleAdapter_construct(out,& error);
 
     mf = cgm_MetafileReader_read(reader, inIO, &error);
     if (!mf)

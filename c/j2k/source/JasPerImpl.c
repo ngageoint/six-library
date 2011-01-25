@@ -898,7 +898,7 @@ J2KAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
         goto CATCH_ERROR;
     }
 
-    if (!(io = nrt_IOHandleAdaptor_construct(handle, error)))
+    if (!(io = nrt_IOHandleAdapter_construct(handle, error)))
         goto CATCH_ERROR;
 
     if (!(reader = j2k_Reader_openIO(io, error)))

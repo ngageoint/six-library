@@ -99,7 +99,7 @@ int main(int argc, char** argv)
         goto END_OF_FILE;
     }
 
-    io = nitf_IOHandleAdaptor_construct(in, &error);
+    io = nitf_IOHandleAdapter_construct(in, &error);
 
     mf = cgm_MetafileReader_read(reader, io, &error);
     if (!mf)

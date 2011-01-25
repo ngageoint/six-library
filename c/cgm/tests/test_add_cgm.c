@@ -197,7 +197,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
     int numSegments;
     nitf_Writer *writer = NULL;
     nitf_IOInterface *inputIO = 
-	nitf_IOHandleAdaptor_construct(input, error);
+	nitf_IOHandleAdapter_construct(input, error);
    
     if (!inputIO)
 	return NITF_FAILURE;

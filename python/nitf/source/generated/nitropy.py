@@ -285,9 +285,9 @@ def nrt_IOInterface_destruct(*args):
   return _nitropy.nrt_IOInterface_destruct(*args)
 nrt_IOInterface_destruct = _nitropy.nrt_IOInterface_destruct
 
-def nrt_IOHandleAdaptor_construct(*args):
-  return _nitropy.nrt_IOHandleAdaptor_construct(*args)
-nrt_IOHandleAdaptor_construct = _nitropy.nrt_IOHandleAdaptor_construct
+def nrt_IOHandleAdapter_construct(*args):
+  return _nitropy.nrt_IOHandleAdapter_construct(*args)
+nrt_IOHandleAdapter_construct = _nitropy.nrt_IOHandleAdapter_construct
 NITF_FUNC = _nitropy.NITF_FUNC
 NITF_MAX_PATH = _nitropy.NITF_MAX_PATH
 NITF_DEFAULT_PERM = _nitropy.NITF_DEFAULT_PERM

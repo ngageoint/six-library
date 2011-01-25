@@ -5486,7 +5486,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_nrt_IOHandleAdaptor_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_nrt_IOHandleAdapter_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nrt_IOHandle arg1 ;
   nrt_Error *arg2 = (nrt_Error *) 0 ;
@@ -5498,18 +5498,18 @@ SWIGINTERN PyObject *_wrap_nrt_IOHandleAdaptor_construct(PyObject *SWIGUNUSEDPAR
   PyObject * obj1 = 0 ;
   nrt_IOInterface *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:nrt_IOHandleAdaptor_construct",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:nrt_IOHandleAdapter_construct",&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandleAdaptor_construct" "', argument " "1"" of type '" "nrt_IOHandle""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandleAdapter_construct" "', argument " "1"" of type '" "nrt_IOHandle""'");
   } 
   arg1 = (nrt_IOHandle)(val1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_IOHandleAdaptor_construct" "', argument " "2"" of type '" "nrt_Error *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_IOHandleAdapter_construct" "', argument " "2"" of type '" "nrt_Error *""'"); 
   }
   arg2 = (nrt_Error *)(argp2);
-  result = (nrt_IOInterface *)nrt_IOHandleAdaptor_construct(arg1,arg2);
+  result = (nrt_IOInterface *)nrt_IOHandleAdapter_construct(arg1,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
   return resultobj;
 fail:
@@ -29575,7 +29575,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nrt_IOInterface_getSize", _wrap_nrt_IOInterface_getSize, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOInterface_close", _wrap_nrt_IOInterface_close, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOInterface_destruct", _wrap_nrt_IOInterface_destruct, METH_VARARGS, NULL},
-	 { (char *)"nrt_IOHandleAdaptor_construct", _wrap_nrt_IOHandleAdaptor_construct, METH_VARARGS, NULL},
+	 { (char *)"nrt_IOHandleAdapter_construct", _wrap_nrt_IOHandleAdapter_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_path_set", _wrap_nitf_PluginRegistry_path_set, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_path_get", _wrap_nitf_PluginRegistry_path_get, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_treHandlers_set", _wrap_nitf_PluginRegistry_treHandlers_set, METH_VARARGS, NULL},

@@ -379,7 +379,7 @@ NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle handle,
 {
     nitf_IOInterface *interface = NULL;
 
-    if (!(interface = nitf_IOHandleAdaptor_construct(handle, error)))
+    if (!(interface = nitf_IOHandleAdapter_construct(handle, error)))
         return NULL;
 
     return nitf_IOSource_construct(interface, start, numBytesPerPixel,

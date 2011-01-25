@@ -39,7 +39,7 @@ J2K_BOOL readFile(const char* filename, char **buf, nrt_Uint64 *bufSize,
         goto CATCH_ERROR;
     }
 
-    if (!(io = nrt_IOHandleAdaptor_construct(handle, error)))
+    if (!(io = nrt_IOHandleAdapter_construct(handle, error)))
         goto CATCH_ERROR;
 
     *bufSize = nrt_IOInterface_getSize(io, error);
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(outIO = nrt_IOHandleAdaptor_construct(outHandle, &error)))
+    if (!(outIO = nrt_IOHandleAdapter_construct(outHandle, &error)))
         goto CATCH_ERROR;
 
     if (!j2k_Writer_write(writer, outIO, &error))

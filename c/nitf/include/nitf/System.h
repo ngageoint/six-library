@@ -253,7 +253,7 @@ typedef nrt_IOInterface                 nitf_IOInterface;
 #define nitf_IOInterface_getSize        nrt_IOInterface_getSize
 #define nitf_IOInterface_close          nrt_IOInterface_close
 #define nitf_IOInterface_destruct       nrt_IOInterface_destruct
-#define nitf_IOHandleAdaptor_construct  nrt_IOHandleAdaptor_construct
+#define nitf_IOHandleAdapter_construct  nrt_IOHandleAdapter_construct
 
 
 /******************************************************************************/
