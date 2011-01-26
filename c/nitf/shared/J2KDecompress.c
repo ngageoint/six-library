@@ -108,6 +108,7 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
 {
     ImplControl *implControl = (ImplControl*)control;
     nrt_Uint8 *buf = NULL;
+    nrt_Uint64 bufSize;
 
     if (j2k_Reader_canReadTiles(implControl->reader, error))
     {
@@ -117,8 +118,8 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
         tileY = blockNumber / implControl->blockInfo.numBlocksPerRow;
         tileX = blockNumber % implControl->blockInfo.numBlocksPerRow;
 
-        if (!j2k_Reader_readTile(implControl->reader, tileX, tileY, &buf,
-                                   error))
+        if (0 == (bufSize = j2k_Reader_readTile(implControl->reader, tileX,
+                                                tileY, &buf, error)))
         {
             implMemFree(buf);
             return NULL;
@@ -143,8 +144,8 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
         if (y1 > totalRows)
             y1 = totalRows;
 
-        if (!j2k_Reader_readRegion(implControl->reader, x0, y0, x1, y1, &buf,
-                                   error))
+        if (0 == (bufSize = j2k_Reader_readRegion(implControl->reader, x0, y0,
+                                                  x1, y1, &buf, error)))
         {
             implMemFree(buf);
             return NULL;

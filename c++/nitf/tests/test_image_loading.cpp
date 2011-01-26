@@ -34,7 +34,7 @@ void writeImage(nitf::ImageSegment &segment,
     nitf::SubWindow subWindow;
     unsigned int i;
     int padded;
-    nitf::Uint8* buffer = NULL;
+    nitf::Uint8** buffer = NULL;
     nitf::Uint32 band;
     nitf::Uint32 * bandList;
 
@@ -100,7 +100,7 @@ void writeImage(nitf::ImageSegment &segment,
 
     std::cout << "Allocating work buffer..." << std::endl;
 
-    buffer = new nitf::Uint8[subWindowSize * nBands];
+    buffer = new nitf::Uint8*[nBands];
     assert(buffer);
 
     band = 0;
@@ -117,12 +117,16 @@ void writeImage(nitf::ImageSegment &segment,
     subWindow.setDownSampler(&pixelSkip);
 
     for (band = 0; band < nBands; band++)
+    {
         bandList[band] = band;
+        buffer[band] = new nitf::Uint8[subWindowSize];
+        assert(buffer[band]);
+    }
     subWindow.setBandList(bandList);
     subWindow.setNumBands(nBands);
 
     std::cout << "Reading image..." << std::endl;
-    deserializer.read(subWindow, &buffer, &padded);
+    deserializer.read(subWindow, buffer, &padded);
 
     std::cout << "Call completed!" << std::endl;
 
@@ -143,11 +147,13 @@ void writeImage(nitf::ImageSegment &segment,
              << nBits << "_band_" << i << ".out";
 
         nitf::IOHandle toFile(file.str(), NITF_ACCESS_WRITEONLY, NITF_CREATE);
-        toFile.write((const char *) &buffer[i * subWindowSize], subWindowSize);
+        toFile.write((const char *) buffer[i], subWindowSize);
         toFile.close();
         std::cout << "Finished # " << i << std::endl;
     }
 
+    for (band = 0; band < nBands; band++)
+        delete [] buffer[band];
     delete [] buffer;
     delete [] bandList;
 }
