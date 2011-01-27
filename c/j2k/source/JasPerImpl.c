@@ -56,20 +56,6 @@ typedef struct _JasPerWriterImpl
     jas_image_t *image;
 } JasPerWriterImpl;
 
-typedef struct _JasPerContainerImpl
-{
-    nrt_Uint32 width;
-    nrt_Uint32 height;
-    nrt_Uint32 nComponents;
-    nrt_Uint32 componentBytes;
-    nrt_Uint32 inputComponentBits;
-    nrt_Uint32 tileWidth;
-    nrt_Uint32 tileHeight;
-    int imageType;
-    int isSigned;
-} JasPerContainerImpl;
-
-
 J2KPRIV(int) JasPerIO_read(jas_stream_obj_t *obj, char *buf, int cnt);
 J2KPRIV(int) JasPerIO_write(jas_stream_obj_t *obj, char *buf, int cnt);
 J2KPRIV(long) JasPerIO_seek(jas_stream_obj_t *obj, long offset, int origin);
@@ -77,33 +63,6 @@ J2KPRIV(int) JasPerIO_close(jas_stream_obj_t *obj);
 
 static jas_stream_ops_t IOInterface = {JasPerIO_read, JasPerIO_write,
                                        JasPerIO_seek, JasPerIO_close};
-
-
-J2KPRIV( nrt_Uint32) JasPerContainer_getTilesX(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) JasPerContainer_getTilesY(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) JasPerContainer_getTileWidth(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) JasPerContainer_getTileHeight(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) JasPerContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) JasPerContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) JasPerContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) JasPerContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) JasPerContainer_getComponentBits(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( int)        JasPerContainer_getImageType(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( J2K_BOOL)   JasPerContainer_isSigned(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV(void)        JasPerContainer_destruct(J2K_USER_DATA *);
-
-static j2k_IContainer ContainerInterface = { &JasPerContainer_getTilesX,
-                                             &JasPerContainer_getTilesY,
-                                             &JasPerContainer_getTileWidth,
-                                             &JasPerContainer_getTileHeight,
-                                             &JasPerContainer_getWidth,
-                                             &JasPerContainer_getHeight,
-                                             &JasPerContainer_getNumComponents,
-                                             &JasPerContainer_getComponentBytes,
-                                             &JasPerContainer_getComponentBits,
-                                             &JasPerContainer_getImageType,
-                                             &JasPerContainer_isSigned,
-                                             &JasPerContainer_destruct};
 
 
 J2KPRIV( nrt_Uint64)     JasPerReader_readTile(J2K_USER_DATA *, nrt_Uint32,
@@ -335,43 +294,76 @@ JasPer_cleanup(jas_stream_t **stream, jas_image_t **image)
 J2KPRIV( NRT_BOOL)
 JasPer_readHeader(JasPerReaderImpl *impl, nrt_Error *error)
 {
-    JasPerContainerImpl *container = NULL;
     jas_stream_t *stream = NULL;
     jas_image_t *image = NULL;
     NRT_BOOL rc = NRT_SUCCESS;
     jas_clrspc_t colorSpace;
-
-    container = (JasPerContainerImpl*)impl->container->data;
 
     if (!JasPer_setup(impl, &stream, &image, error))
     {
         goto CATCH_ERROR;
     }
 
-    container->width = jas_image_width(image);
-    container->height = jas_image_height(image);
-    container->nComponents = jas_image_numcmpts(image);
-    container->inputComponentBits = jas_image_cmptprec(image, 0);
-    container->componentBytes = (container->inputComponentBits - 1) / 8 + 1;
+    if (!impl->container)
+    {
+        /* initialize the container */
+        nrt_Uint32 idx, nComponents, width, height;
+        j2k_Component **components = NULL;
+        int imageType;
 
-    colorSpace = jas_image_clrspc(image);
-    if (jas_clrspc_fam(colorSpace) == JAS_CLRSPC_FAM_RGB)
-        container->imageType = J2K_TYPE_RGB;
-    else if (jas_clrspc_fam(colorSpace) == JAS_CLRSPC_FAM_GRAY)
-        container->imageType = J2K_TYPE_MONO;
-    else
-        container->imageType = J2K_TYPE_UNKNOWN;
+        nComponents = jas_image_numcmpts(image);
 
-    container->isSigned = jas_image_cmptsgnd(image, 0);
+        if (!(components = (j2k_Component**)J2K_MALLOC(
+                sizeof(j2k_Component*) * nComponents)))
+        {
+            nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                           NRT_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
 
-    /* JasPer hides tile information inside the jpc decoder, so we do not
-     * have access to it here.
-     *
-     * For now, we will fake the tile information by representing raw J2K as
-     * having 1x1 tiles.
-     */
-    container->tileWidth = container->width;
-    container->tileHeight = container->height;
+        for(idx = 0; idx < nComponents; ++idx)
+        {
+            jas_image_cmpt_t *c = image->cmpts_[idx];
+            if (!(components[idx] = j2k_Component_construct(c->width_,
+                                                            c->height_,
+                                                            c->prec_,
+                                                            c->sgnd_,
+                                                            c->tlx_,
+                                                            c->tly_,
+                                                            c->hstep_,
+                                                            c->vstep_,
+                                                            error)))
+            {
+                goto CATCH_ERROR;
+            }
+        }
+
+        colorSpace = jas_image_clrspc(image);
+        if (jas_clrspc_fam(colorSpace) == JAS_CLRSPC_FAM_RGB)
+            imageType = J2K_TYPE_RGB;
+        else if (jas_clrspc_fam(colorSpace) == JAS_CLRSPC_FAM_GRAY)
+            imageType = J2K_TYPE_MONO;
+        else
+            imageType = J2K_TYPE_UNKNOWN;
+
+        width = jas_image_width(image);
+        height = jas_image_height(image);
+
+        /* JasPer hides tile information inside the jpc decoder, so we do not
+         * have access to it here.
+         *
+         * For now, we will fake the tile information by representing raw J2K as
+         * having 1x1 tiles.
+         */
+        if (!(impl->container = j2k_Container_construct(width, height,
+                                                        nComponents,
+                                                        components,
+                                                        width, height,
+                                                        imageType, error)))
+        {
+            goto CATCH_ERROR;
+        }
+    }
 
     goto CLEANUP;
 
@@ -392,7 +384,8 @@ JasPer_initImage(JasPerWriterImpl *impl, nrt_Error *error)
 {
     NRT_BOOL rc = NRT_SUCCESS;
     jas_clrspc_t colorSpace;
-    jas_image_cmptparm_t *cmptparms;
+    jas_image_cmptparm_t *cmptParams = NULL;
+    j2k_Component *component = NULL;
     nrt_Uint32 i, nComponents, height, width, nBits;
     int imageType;
     J2K_BOOL isSigned;
@@ -400,11 +393,10 @@ JasPer_initImage(JasPerWriterImpl *impl, nrt_Error *error)
     nComponents = j2k_Container_getNumComponents(impl->container, error);
     width = j2k_Container_getWidth(impl->container, error);
     height = j2k_Container_getHeight(impl->container, error);
-    nBits = j2k_Container_getComponentBits(impl->container, error);
-    isSigned = j2k_Container_isSigned(impl->container, error);
+    nBits = j2k_Container_getPrecision(impl->container, error);
     imageType = j2k_Container_getImageType(impl->container, error);
 
-    if (!(cmptparms = (jas_image_cmptparm_t*)J2K_MALLOC(sizeof(
+    if (!(cmptParams = (jas_image_cmptparm_t*)J2K_MALLOC(sizeof(
             jas_image_cmptparm_t) * nComponents)))
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
@@ -414,18 +406,18 @@ JasPer_initImage(JasPerWriterImpl *impl, nrt_Error *error)
 
     for(i = 0; i < nComponents; ++i)
     {
-        /* TODO make sure these are all correct */
-        cmptparms[i].tlx = 0;
-        cmptparms[i].tly = 0;
-        cmptparms[i].hstep = 1;
-        cmptparms[i].vstep = 1;
-        cmptparms[i].width = width;
-        cmptparms[i].height = height;
-        cmptparms[i].prec = nBits;
-        cmptparms[i].sgnd = isSigned;
+        component = j2k_Container_getComponent(impl->container, i, error);
+        cmptParams[i].width = j2k_Component_getWidth(component, error);
+        cmptParams[i].height = j2k_Component_getHeight(component, error);
+        cmptParams[i].prec = j2k_Component_getPrecision(component, error);
+        cmptParams[i].tlx = j2k_Component_getOffsetX(component, error);
+        cmptParams[i].tly = j2k_Component_getOffsetY(component, error);
+        cmptParams[i].hstep = j2k_Component_getSeparationX(component, error);
+        cmptParams[i].vstep = j2k_Component_getSeparationY(component, error);
+        cmptParams[i].sgnd = j2k_Component_isSigned(component, error);
     }
 
-    if (!(impl->image = jas_image_create(nComponents, cmptparms,
+    if (!(impl->image = jas_image_create(nComponents, cmptParams,
                                          JAS_CLRSPC_UNKNOWN)))
     {
 
@@ -463,107 +455,13 @@ JasPer_initImage(JasPerWriterImpl *impl, nrt_Error *error)
 
     CLEANUP:
     {
-        if (cmptparms)
-            J2K_FREE(cmptparms);
+        if (cmptParams)
+            J2K_FREE(cmptParams);
     }
 
 
     return rc;
 }
-
-/******************************************************************************/
-/* CONTAINER                                                                  */
-/******************************************************************************/
-
-J2KPRIV( nrt_Uint32)
-JasPerContainer_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->width / impl->tileWidth +
-            (impl->width % impl->tileWidth == 0 ? 0 : 1);
-}
-
-J2KPRIV( nrt_Uint32)
-JasPerContainer_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->height / impl->tileHeight +
-                (impl->height % impl->tileHeight == 0 ? 0 : 1);
-}
-
-J2KPRIV( nrt_Uint32)
-JasPerContainer_getTileWidth(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->tileWidth;
-}
-
-J2KPRIV( nrt_Uint32)
-JasPerContainer_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->tileHeight;
-}
-
-J2KPRIV( nrt_Uint32)
-JasPerContainer_getWidth(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->width;
-}
-
-J2KPRIV( nrt_Uint32)
-JasPerContainer_getHeight(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->height;
-}
-
-J2KPRIV( nrt_Uint32)
-JasPerContainer_getNumComponents(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->nComponents;
-}
-
-J2KPRIV( nrt_Uint32)
-JasPerContainer_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->componentBytes;
-}
-
-J2KPRIV( nrt_Uint32)
-JasPerContainer_getComponentBits(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->inputComponentBits;
-}
-
-J2KPRIV( int)
-JasPerContainer_getImageType(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->imageType;
-}
-
-J2KPRIV( NRT_BOOL)
-JasPerContainer_isSigned(J2K_USER_DATA *data, nrt_Error *error)
-{
-    JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-    return impl->isSigned;
-}
-
-J2KPRIV(void)
-JasPerContainer_destruct(J2K_USER_DATA * data)
-{
-    if (data)
-    {
-        JasPerContainerImpl *impl = (JasPerContainerImpl*) data;
-        J2K_FREE(data);
-    }
-}
-
 
 /******************************************************************************/
 /* READER                                                                     */
@@ -595,14 +493,11 @@ JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
                   nrt_Error *error)
 {
     JasPerReaderImpl *impl = (JasPerReaderImpl*) data;
-    JasPerContainerImpl *container = NULL;
     jas_stream_t *stream = NULL;
     jas_image_t *image = NULL;
-    nrt_Uint32 i, cmptIdx;
+    nrt_Uint32 i, cmptIdx, nBytes, nComponents;
     nrt_Uint64 bufSize, componentSize;
     nrt_Uint8 *bufPtr = NULL;
-
-    container = (JasPerContainerImpl*)impl->container->data;
 
     if (!JasPer_setup(impl, &stream, &image, error))
     {
@@ -610,12 +505,14 @@ JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     }
 
     if (x1 == 0)
-        x1 = container->width;
+        x1 = j2k_Container_getWidth(impl->container, error);
     if (y1 == 0)
-        y1 = container->height;
+        y1 = j2k_Container_getHeight(impl->container, error);
 
-    componentSize = (nrt_Uint64)(x1 - x0) * (y1 - y0) * container->componentBytes;
-    bufSize = componentSize * container->nComponents;
+    nBytes = (j2k_Container_getPrecision(impl->container, error) - 1) / 8 + 1;
+    componentSize = (nrt_Uint64)(x1 - x0) * (y1 - y0) * nBytes;
+    nComponents = j2k_Container_getNumComponents(impl->container, error);
+    bufSize = componentSize * nComponents;
 
     if (buf && !*buf)
     {
@@ -629,7 +526,7 @@ JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     }
 
     bufPtr = *buf;
-    for (cmptIdx = 0; cmptIdx < container->nComponents; ++cmptIdx)
+    for (cmptIdx = 0; cmptIdx < nComponents; ++cmptIdx)
     {
         nrt_Uint32 nRows, nCols;
         nRows = jas_image_cmptheight(image, cmptIdx) *
@@ -643,7 +540,7 @@ JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
             goto CATCH_ERROR;
         }
 
-        switch(container->componentBytes)
+        switch(nBytes)
         {
         case 1:
         {
@@ -687,14 +584,14 @@ JasPerReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                 nrt_Uint8 **buf, nrt_Error *error)
 {
     JasPerReaderImpl *impl = (JasPerReaderImpl*) data;
-    JasPerContainerImpl *container = NULL;
+    nrt_Uint32 width, height;
 
-    container = (JasPerContainerImpl*)impl->container->data;
+    width = j2k_Container_getWidth(impl->container, error);
+    height = j2k_Container_getHeight(impl->container, error);
 
     /* TODO - for now, we are treating the image as 1x1 */
     /* might want to return an error instead */
-    return JasPerReader_readRegion(data, 0, 0, container->width,
-                                   container->height, buf, error);
+    return JasPerReader_readRegion(data, 0, 0, width, height, buf, error);
 }
 
 J2KPRIV( j2k_Container*)
@@ -762,27 +659,26 @@ JasPerWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 {
     JasPerWriterImpl *impl = (JasPerWriterImpl*) data;
     NRT_BOOL rc = NRT_SUCCESS;
-    nrt_Uint32 i, nComponents, tileHeight, tileWidth, nBytes;
+    nrt_Uint32 i, nComponents, tileHeight, tileWidth, nBits, nBytes;
 
     nComponents = j2k_Container_getNumComponents(impl->container, error);
     tileWidth = j2k_Container_getTileWidth(impl->container, error);
     tileHeight = j2k_Container_getTileHeight(impl->container, error);
-    nBytes = j2k_Container_getComponentBytes(impl->container, error);
+    nBits = j2k_Container_getPrecision(impl->container, error);
+    nBytes = (nBits - 1) / 8 + 1;
 
-    if (nBytes == 1)
+    switch(nBytes)
     {
+    case 1:
         PRIV_WRITE_MATRIX(8);
-    }
-    else if (nBytes == 2)
-    {
+        break;
+    case 2:
         PRIV_WRITE_MATRIX(16);
-    }
-    else if (nBytes == 4)
-    {
+        break;
+    case 4:
         PRIV_WRITE_MATRIX(32);
-    }
-    else
-    {
+        break;
+    default:
         nrt_Error_init(error, "Invalid pixel size", NRT_CTXT,
                        NRT_ERR_INVALID_OBJECT);
         goto CATCH_ERROR;
@@ -922,7 +818,6 @@ J2KAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
 J2KAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
 {
     JasPerReaderImpl *impl = NULL;
-    JasPerContainerImpl *container = NULL;
     j2k_Reader *reader = NULL;
 
     /* Initialize jasper - TODO is this ok to do more than once? */
@@ -952,25 +847,6 @@ J2KAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     reader->data = impl;
     reader->iface = &ReaderInterface;
 
-    /* create the Container interface */
-    container = (JasPerContainerImpl *) J2K_MALLOC(sizeof(JasPerContainerImpl));
-    if (!container)
-    {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
-        goto CATCH_ERROR;
-    }
-    memset(container, 0, sizeof(JasPerContainerImpl));
-
-    impl->container = (j2k_Container*) J2K_MALLOC(sizeof(j2k_Container));
-    if (!impl->container)
-    {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
-        goto CATCH_ERROR;
-    }
-    memset(impl->container, 0, sizeof(j2k_Container));
-    impl->container->iface = &ContainerInterface;
-    impl->container->data = container;
-
     /* initialize the interfaces */
     impl->io = io;
     impl->ioOffset = nrt_IOInterface_tell(io, error);
@@ -992,60 +868,6 @@ J2KAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
         else if (impl)
         {
             JasPerReader_destruct((J2K_USER_DATA*) impl);
-        }
-        return NULL;
-    }
-}
-
-J2KAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
-        nrt_Uint32 height,
-        nrt_Uint32 bands,
-        nrt_Uint32 actualBitsPerPixel,
-        nrt_Uint32 tileWidth,
-        nrt_Uint32 tileHeight,
-        int imageType,
-        int isSigned,
-        nrt_Error *error)
-{
-    j2k_Container *container = NULL;
-    JasPerContainerImpl *impl = NULL;
-
-    container = (j2k_Container*) J2K_MALLOC(sizeof(j2k_Container));
-    if (!container)
-    {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
-        goto CATCH_ERROR;
-    }
-    memset(container, 0, sizeof(j2k_Container));
-
-    /* create the Container interface */
-    impl = (JasPerContainerImpl *) J2K_MALLOC(sizeof(JasPerContainerImpl));
-    if (!impl)
-    {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
-        goto CATCH_ERROR;
-    }
-    memset(impl, 0, sizeof(JasPerContainerImpl));
-    container->data = impl;
-    container->iface = &ContainerInterface;
-
-    impl->width = width;
-    impl->height = height;
-    impl->nComponents = bands;
-    impl->componentBytes = (actualBitsPerPixel - 1) / 8 + 1;
-    impl->inputComponentBits = actualBitsPerPixel;
-    impl->tileWidth = tileWidth;
-    impl->tileHeight = tileHeight;
-    impl->imageType = imageType;
-    impl->isSigned = isSigned;
-
-    return container;
-
-    CATCH_ERROR:
-    {
-        if (container)
-        {
-            j2k_Container_destruct(&container);
         }
         return NULL;
     }

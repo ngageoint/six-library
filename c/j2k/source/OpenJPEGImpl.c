@@ -679,7 +679,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
 
     {
         int keepGoing;
-        OPJ_UINT32 tileIndex, nComponents, reqSize;
+        OPJ_UINT32 tileIndex, reqSize;
         OPJ_INT32 tileX0, tileY0, tileX1, tileY1;
 
         do
