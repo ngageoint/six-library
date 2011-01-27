@@ -105,6 +105,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
                                             nitf_Error *error)
 {
     ImplControl *implControl = NULL;
+    j2k_Component **components = NULL;
 
     nitf_Uint32 nRows;
     nitf_Uint32 nCols;
@@ -121,6 +122,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     char irep[NITF_IREP_SZ+1];
     int imageType;
     J2K_BOOL isSigned = 0;
+    nrt_Uint32 idx;
 
     if(!nitf_Field_get(subheader->NITF_NROWS, &nRows,
                     NITF_CONV_INT, sizeof(nitf_Uint32), error))
@@ -257,14 +259,33 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
 
     implControl->comratField = subheader->NITF_COMRAT;
 
+
+    /* initialize the container */
+    if (!(components = (j2k_Component**)J2K_MALLOC(
+            sizeof(j2k_Component*) * nBands)))
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
+
+    for(idx = 0; idx < nBands; ++idx)
+    {
+        if (!(components[idx] = j2k_Component_construct(nCols, nRows, abpp,
+                                                        isSigned, 0, 0, 1, 1,
+                                                        error)))
+        {
+            goto CATCH_ERROR;
+        }
+    }
+
     if (!(implControl->container = j2k_Container_construct(nCols,
                                                            nRows,
                                                            nBands,
-                                                           abpp,
+                                                           components,
                                                            nppbh,
                                                            nppbv,
                                                            imageType,
-                                                           isSigned,
                                                            error)))
     {
         goto CATCH_ERROR;
@@ -315,12 +336,13 @@ NITFPRIV(NITF_BOOL) implWriteBlock(nitf_CompressionControl * control,
     nitf_Uint32 tileX, tileY, tileWidth, tileHeight, tilesX, tilesY;
     nitf_Uint32 nComponents, nBytes, bufSize;
 
+    /* TODO this needs to change... won't work on separated images */
     tileWidth = j2k_Container_getTileWidth(implControl->container, error);
     tileHeight = j2k_Container_getTileHeight(implControl->container, error);
     tilesX = j2k_Container_getTilesX(implControl->container, error);
     tilesY = j2k_Container_getTilesY(implControl->container, error);
     nComponents = j2k_Container_getNumComponents(implControl->container, error);
-    nBytes = j2k_Container_getComponentBytes(implControl->container, error);
+    nBytes = (j2k_Container_getPrecision(implControl->container, error) - 1) / 8 + 1;
 
     tileX = implControl->curBlock % tilesX;
     tileY = implControl->curBlock / tilesX;
@@ -354,8 +376,9 @@ NITFPRIV(NITF_BOOL) implEnd( nitf_CompressionControl * control,
     width = j2k_Container_getWidth(implControl->container, error);
     height = j2k_Container_getHeight(implControl->container, error);
     nComponents = j2k_Container_getNumComponents(implControl->container, error);
-    nBytes = j2k_Container_getComponentBytes(implControl->container, error);
-    nBits = j2k_Container_getComponentBits(implControl->container, error);
+    nBits = j2k_Container_getPrecision(implControl->container, error);
+
+    nBytes = (nBits - 1) / 8 + 1;
 
     offset = nitf_IOInterface_tell(io, error);
 
