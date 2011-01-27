@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
     int rc = 0;
     int argIt;
-    int useJasPer = 0;
+    nrt_Uint32 cmpIt, nComponents;
     nrt_Error error;
     j2k_Container *container = NULL;
     j2k_Reader *reader = NULL;
@@ -54,17 +54,30 @@ int main(int argc, char **argv)
     if (!(container = j2k_Reader_getContainer(reader, &error)))
         goto CATCH_ERROR;
 
-    printf("tile width:\t\t%d\n", j2k_Container_getTileWidth(container, &error));
-    printf("tile height:\t\t%d\n", j2k_Container_getTileHeight(container, &error));
-    printf("x tiles:\t\t%d\n", j2k_Container_getTilesX(container, &error));
-    printf("y tiles:\t\t%d\n", j2k_Container_getTilesY(container, &error));
-    printf("width:\t\t\t%d\n", j2k_Container_getWidth(container, &error));
-    printf("height:\t\t\t%d\n", j2k_Container_getHeight(container, &error));
-    printf("components:\t\t%d\n", j2k_Container_getNumComponents(container, &error));
-    printf("component bytes:\t%d\n", j2k_Container_getComponentBytes(container, &error));
-    printf("component bits:\t\t%d\n", j2k_Container_getComponentBits(container, &error));
-    printf("image type:\t\t%d\n", j2k_Container_getImageType(container, &error));
-    printf("is signed:\t\t%d\n", j2k_Container_isSigned(container, &error));
+    printf("grid width:\t%d\n", j2k_Container_getGridWidth(container, &error));
+    printf("grid height:\t%d\n", j2k_Container_getGridHeight(container, &error));
+    printf("tile width:\t%d\n", j2k_Container_getTileWidth(container, &error));
+    printf("tile height:\t%d\n", j2k_Container_getTileHeight(container, &error));
+    printf("x tiles:\t%d\n", j2k_Container_getTilesX(container, &error));
+    printf("y tiles:\t%d\n", j2k_Container_getTilesY(container, &error));
+    printf("image type:\t%d\n", j2k_Container_getImageType(container, &error));
+
+    nComponents = j2k_Container_getNumComponents(container, &error);
+    printf("components:\t%d\n", nComponents);
+
+    for(cmpIt = 0; cmpIt < nComponents; ++cmpIt)
+    {
+        printf("===component %d===\n", (cmpIt + 1));
+        j2k_Component *c = j2k_Container_getComponent(container, cmpIt, &error);
+        printf("width:\t\t%d\n", j2k_Component_getWidth(c, &error));
+        printf("height:\t\t%d\n", j2k_Component_getHeight(c, &error));
+        printf("precision:\t%d\n", j2k_Component_getPrecision(c, &error));
+        printf("x0:\t\t%d\n", j2k_Component_getOffsetX(c, &error));
+        printf("y0:\t\t%d\n", j2k_Component_getOffsetY(c, &error));
+        printf("x separation:\t%d\n", j2k_Component_getSeparationX(c, &error));
+        printf("y separation:\t%d\n", j2k_Component_getSeparationY(c, &error));
+        printf("signed:\t\t%d\n", j2k_Component_isSigned(c, &error));
+    }
 
     goto CLEANUP;
 

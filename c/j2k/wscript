@@ -212,9 +212,12 @@ def build(bld):
                                       path=bld.path.find_dir('external').find_dir('jasper'))
         
         j2kSources = ('source/Container.c',
+                      'source/Component.c',
                       'source/JasPerImpl.c',
                       'source/OpenJPEGImpl.c',
                       'source/Reader.c',
+                      'source/SimpleComponentImpl.c',
+                      'source/SimpleContainerImpl.c',
                       'source/Writer.c')
         
         #build the j2k library

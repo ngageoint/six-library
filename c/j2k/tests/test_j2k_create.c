@@ -79,12 +79,14 @@ int main(int argc, char **argv)
     int argIt = 0;
     char *inName = NULL, *outName = NULL;
     nrt_Error error;
+    j2k_Component *component = NULL;
     j2k_Container *container = NULL;
     j2k_Writer *writer = NULL;
     char *buf = NULL;
     nrt_Uint64 bufSize;
     nrt_IOHandle outHandle;
     nrt_IOInterface *outIO = NULL;
+    nrt_Uint32 width, height, precision, tileWidth, tileHeight;
 
     for (argIt = 1; argIt < argc; ++argIt)
     {
@@ -98,6 +100,13 @@ int main(int argc, char **argv)
         }
     }
 
+    /* hardcoded for now... */
+    width = 128;
+    height = 128;
+    precision = 8;
+    tileWidth = width;
+    tileHeight = height;
+
     if (!inName || !outName)
     {
         nrt_Error_initf(&error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
@@ -105,14 +114,19 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(container = j2k_Container_construct(128,
-                                              128,
+    if (!(component = j2k_Component_construct(width, height, precision,
+                                              0, 0, 0, 1, 1, &error)))
+    {
+        goto CATCH_ERROR;
+    }
+
+    if (!(container = j2k_Container_construct(width,
+                                              height,
                                               1,
-                                              8,
-                                              128,
-                                              128,
+                                              &component,
+                                              tileWidth,
+                                              tileHeight,
                                               J2K_TYPE_MONO,
-                                              0,
                                               &error)))
     {
         goto CATCH_ERROR;
