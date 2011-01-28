@@ -1123,7 +1123,7 @@ CATCH_ERROR:
 }
 
 
-NITFAPI(NITF_BOOL)
+NITFPRIV(NITF_BOOL)
 nitf_Writer_writeImageSubheader(nitf_Writer * writer,
                                 nitf_ImageSubheader *subhdr,
                                 nitf_Version fver,
