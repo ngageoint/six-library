@@ -72,27 +72,14 @@ public:
     {
     }
 
-    //!  Get native object
-    nitf_IOHandle getHandle()
-    {
-        // must double-cast in order to avoid errors on certain systems
-        return (nitf_IOHandle)(long) getNativeOrThrow()->data;
-    }
-
     void create(const std::string& fname, nitf::AccessFlags access =
             NITF_ACCESS_READONLY, nitf::CreationFlags creation =
             NITF_OPEN_EXISTING) throw (nitf::NITFException)
     {
-        nitf_IOHandle handle = nitf_IOHandle_create(fname.c_str(), access,
-                                                    creation, &error);
-        if (NITF_INVALID_HANDLE(handle))
-            throw nitf::NITFException(&error);
-
-        /* now, we must adapt this IOHandle to fit into the IOInterface */
-        /* get a nitf_IOInterface* object... */
-        nitf_IOInterface *interface = nitf_IOHandleAdapter_construct(handle,
-                                                                     access,
-                                                                     &error);
+        nitf_IOInterface *interface = nitf_IOHandleAdapter_open(fname.c_str(),
+                                                                access,
+                                                                creation,
+                                                                &error);
         if (!interface)
             throw nitf::NITFException(&error);
         setNative(interface);

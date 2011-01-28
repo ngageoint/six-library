@@ -52,8 +52,7 @@ nitf::ImageSource setupBands(int nbands, int imageNum, const std::string& inRoot
     for (int i = 0; i < nbands; i++)
     {
         std::string inFile = makeBandName(inRootFile, imageNum, i);
-        nitf::IOHandle sourceHandle(inFile);
-        nitf::FileSource fs(sourceHandle, 0, 1, 0);
+        nitf::FileSource fs(inFile, 0, 1, 0);
         iSource.addBand(fs);
     }
     return iSource;

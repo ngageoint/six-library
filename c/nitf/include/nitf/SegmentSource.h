@@ -83,13 +83,13 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
  *  Construct a file source from a handle, a start point, and
  *  a pixel skip.
  *
- *  \param handle The handle to store
+ *  \param fname The file to use
  *  \param start The location to seek to (as the beginning)
  *  \param byteSkip The number of bytes to skip(0 signifies contiguous read)
  */
 NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
 (
-    nitf_IOHandle handle,
+    const char* fname,
     nitf_Off start,
     int byteSkip,
     nitf_Error * error

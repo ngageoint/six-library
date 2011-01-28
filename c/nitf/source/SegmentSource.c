@@ -174,7 +174,7 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
  */
 typedef struct _FileSourceImpl
 {
-    nitf_IOHandle handle;
+    nitf_IOInterface *io;
     nitf_Off start;
     nitf_Off size;
     nitf_Off fileSize;
@@ -185,7 +185,18 @@ FileSourceImpl;
 
 NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
 {
-    NITF_FREE(data);
+    nitf_Error error;
+    if (data)
+    {
+        FileSourceImpl *fileSource = (FileSourceImpl *) data;
+        if (fileSource->io)
+        {
+            nrt_IOInterface_close(fileSource->io, &error);
+            nrt_IOInterface_destruct(&fileSource->io);
+            fileSource->io = NULL;
+        }
+        NITF_FREE(data);
+    }
 }
 
 NITFPRIV(nitf_Off) FileSource_getSize(NITF_DATA * data, nitf_Error *e)
@@ -224,8 +235,8 @@ NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
         char *buf,
         nitf_Off size, nitf_Error * error)
 {
-    if (!NITF_IO_SUCCESS(nitf_IOHandle_read(fileSource->handle,
-                                            buf, size, error)))
+    if (!NITF_IO_SUCCESS(nitf_IOInterface_read(fileSource->io, buf, size,
+                                               error)))
         return NITF_FAILURE;
     fileSource->mark += size;
     return NITF_SUCCESS;
@@ -267,7 +278,7 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
         return NITF_FAILURE;
     }
 
-    if (!nitf_IOHandle_read(fileSource->handle, tbuf, tsize, error))
+    if (!nitf_IOInterface_read(fileSource->io, tbuf, tsize, error))
     {
         NITF_FREE(tbuf);
         return NITF_FAILURE;
@@ -295,9 +306,9 @@ NITFPRIV(NITF_BOOL) FileSource_read(NITF_DATA * data,
     if (!fileSource)
         return NITF_FAILURE;
 
-    if (!NITF_IO_SUCCESS(nitf_IOHandle_seek(fileSource->handle,
-                                            fileSource->mark,
-                                            NITF_SEEK_SET, error)))
+    if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(fileSource->io,
+                                               fileSource->mark,
+                                               NITF_SEEK_SET, error)))
         return NITF_FAILURE;
     if (fileSource->byteSkip == 0)
         return FileSource_contigRead(fileSource, buf, size, error);
@@ -307,7 +318,7 @@ NITFPRIV(NITF_BOOL) FileSource_read(NITF_DATA * data,
 
 NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
 (
-    nitf_IOHandle handle,
+    const char* fname,
     nitf_Off start,
     int byteSkip,
     nitf_Error * error
@@ -330,10 +341,16 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
                         NITF_ERR_MEMORY);
         return NULL;
     }
-    impl->handle = handle;
+    if (!(impl->io = nrt_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY,
+                                              NRT_OPEN_EXISTING, error)))
+    {
+        NITF_FREE(impl);
+        return NULL;
+    }
+
     impl->byteSkip = byteSkip >= 0 ? byteSkip : 0;
     impl->mark = impl->start = (start >= 0 ? start : 0);
-    impl->fileSize = nitf_IOHandle_getSize(handle, error);
+    impl->fileSize = nitf_IOInterface_getSize(impl->io, error);
 
     if (!NITF_IO_SUCCESS(impl->fileSize))
     {

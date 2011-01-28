@@ -33,7 +33,7 @@ int main(int argc, char** argv)
         }
 
         nitf::IOHandle handle(argv[1], NITF_ACCESS_READONLY, NITF_CREATE);
-        if ( NITF_INVALID_HANDLE( handle.getHandle() ) )
+        if (handle.isValid())
         {
             throw nitf::NITFException(Ctxt("Test failed!"));
         }

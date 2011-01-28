@@ -92,7 +92,7 @@ public:
      *  \param numBytesPerPixel The number of bytes per pixel
      *  \param pixelSkip  The number of pixels to skip each time
      */
-    FileSource(nitf::IOHandle & io, nitf::Off start, int numBytesPerPixel,
+    FileSource(const std::string& filename, nitf::Off start, int numBytesPerPixel,
             int pixelSkip) throw (nitf::NITFException);
 
     //! Destructor

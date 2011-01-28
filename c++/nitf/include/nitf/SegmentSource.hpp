@@ -86,11 +86,11 @@ class SegmentFileSource : public SegmentSource
 public:
     /*!
      *  Constructor
-     *  \param handle   The handle to store
+     *  \param fname    The file to use as the source
      *  \param start    The location to seek to (as the beginning)
      *  \param byteSkip The number of bytes to skip
      */
-    SegmentFileSource(nitf::IOHandle & io, nitf::Off start, int byteSkip)
+    SegmentFileSource(const std::string& fname, nitf::Off start, int byteSkip)
             throw (nitf::NITFException);
 
     ~SegmentFileSource()

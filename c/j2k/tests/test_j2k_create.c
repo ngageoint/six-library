@@ -73,6 +73,7 @@ int main(int argc, char **argv)
     j2k_Component *component = NULL;
     j2k_Container *container = NULL;
     j2k_Writer *writer = NULL;
+    j2k_WriterOptions options;
     char *buf = NULL;
     nrt_Uint64 bufSize;
     nrt_IOInterface *outIO = NULL;
@@ -122,7 +123,10 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(writer = j2k_Writer_construct(container, &error)))
+    memset(&options, 0, sizeof(j2k_WriterOptions));
+    /* TODO set some options here */
+
+    if (!(writer = j2k_Writer_construct(container, &options, &error)))
     {
         goto CATCH_ERROR;
     }

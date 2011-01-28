@@ -100,7 +100,8 @@ static j2k_IWriter WriterInterface = {&OpenJPEGWriter_setTile,
 
 
 J2KPRIV(void) OpenJPEG_cleanup(opj_stream_t **, opj_codec_t **, opj_image_t **);
-J2KPRIV( J2K_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *, nrt_Error *);
+J2KPRIV( J2K_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *, j2k_WriterOptions *,
+                                      nrt_Error *);
 
 /******************************************************************************/
 /* IO                                                                         */
@@ -379,8 +380,9 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
     return rc;
 }
 
-J2KPRIV( NRT_BOOL)
-OpenJPEG_initImage(OpenJPEGWriterImpl *impl, nrt_Error *error)
+J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
+                                      j2k_WriterOptions *writerOps,
+                                      nrt_Error *error)
 {
     NRT_BOOL rc = NRT_SUCCESS;
     nrt_Uint32 i, nComponents, height, width, tileHeight, tileWidth;
@@ -402,14 +404,20 @@ OpenJPEG_initImage(OpenJPEGWriterImpl *impl, nrt_Error *error)
     yTiles = j2k_Container_getTilesY(impl->container, error);
     imageType = j2k_Container_getImageType(impl->container, error);
 
-
     /* setup the encoder parameters */
     /* TODO allow overrides somehow? */
     opj_set_default_encoder_parameters(&encoderParams);
     encoderParams.cp_disto_alloc = 1;
     encoderParams.tcp_numlayers = 1;
-    encoderParams.tcp_rates[0] = 4.0;
-    encoderParams.numresolution = 6;
+
+    if (writerOps && writerOps->compressionRatio > 0.0001)
+        encoderParams.tcp_rates[0] = 1.0 / writerOps->compressionRatio;
+    else
+        encoderParams.tcp_rates[0] = 4.0; /* default */
+    if (writerOps && writerOps->numResolutions > 0)
+        encoderParams.numresolution = writerOps->numResolutions;
+    else
+        encoderParams.numresolution = 6; /* default */
     encoderParams.prog_order = LRCP; /* the default */
     encoderParams.cp_tx0 = 0;
     encoderParams.cp_ty0 = 0;
@@ -925,7 +933,8 @@ J2KAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
 }
 
 J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
-        nrt_Error *error)
+                                         j2k_WriterOptions *writerOps,
+                                         nrt_Error *error)
 {
     j2k_Writer *writer = NULL;
     OpenJPEGWriterImpl *impl = NULL;
@@ -948,7 +957,7 @@ J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
     memset(impl, 0, sizeof(OpenJPEGWriterImpl));
     impl->container = container;
 
-    if (!(OpenJPEG_initImage(impl, error)))
+    if (!(OpenJPEG_initImage(impl, writerOps, error)))
     {
         goto CATCH_ERROR;
     }

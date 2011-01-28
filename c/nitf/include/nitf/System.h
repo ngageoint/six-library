@@ -237,9 +237,11 @@ typedef nrt_Directory                   nitf_Directory;
 
 typedef NRT_IO_INTERFACE_READ           NITF_IO_INTERFACE_READ;
 typedef NRT_IO_INTERFACE_WRITE          NITF_IO_INTERFACE_WRITE;
+typedef NRT_IO_INTERFACE_CAN_SEEK       NITF_IO_INTERFACE_CAN_SEEK;
 typedef NRT_IO_INTERFACE_SEEK           NITF_IO_INTERFACE_SEEK;
 typedef NRT_IO_INTERFACE_TELL           NITF_IO_INTERFACE_TELL;
 typedef NRT_IO_INTERFACE_GET_SIZE       NITF_IO_INTERFACE_GET_SIZE;
+typedef NRT_IO_INTERFACE_GET_MODE       NITF_IO_INTERFACE_GET_MODE;
 typedef NRT_IO_INTERFACE_CLOSE          NITF_IO_INTERFACE_CLOSE;
 typedef NRT_IO_INTERFACE_DESTRUCT       NITF_IO_INTERFACE_DESTRUCT;
 
@@ -248,12 +250,15 @@ typedef nrt_IOInterface                 nitf_IOInterface;
 
 #define nitf_IOInterface_read           nrt_IOInterface_read
 #define nitf_IOInterface_write          nrt_IOInterface_write
+#define nitf_IOInterface_canSeek        nrt_IOInterface_canSeek
 #define nitf_IOInterface_seek           nrt_IOInterface_seek
 #define nitf_IOInterface_tell           nrt_IOInterface_tell
 #define nitf_IOInterface_getSize        nrt_IOInterface_getSize
+#define nitf_IOInterface_getMode        nrt_IOInterface_getMode
 #define nitf_IOInterface_close          nrt_IOInterface_close
 #define nitf_IOInterface_destruct       nrt_IOInterface_destruct
 #define nitf_IOHandleAdapter_construct  nrt_IOHandleAdapter_construct
+#define nitf_IOHandleAdapter_open       nrt_IOHandleAdapter_open
 
 
 /******************************************************************************/

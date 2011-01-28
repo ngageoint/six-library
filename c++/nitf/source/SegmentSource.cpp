@@ -30,13 +30,12 @@ nitf::SegmentMemorySource::SegmentMemorySource(char * data, size_t size,
     setManaged(false);
 }
 
-nitf::SegmentFileSource::SegmentFileSource(nitf::IOHandle & io,
+nitf::SegmentFileSource::SegmentFileSource(const std::string& fname,
         nitf::Off start, int byteSkip) throw (nitf::NITFException)
 {
-    setNative(nitf_SegmentFileSource_construct(io.getHandle(), start, byteSkip,
+    setNative(nitf_SegmentFileSource_construct(fname.c_str(), start, byteSkip,
                                                &error));
     setManaged(false);
-    io.setManaged(true); //TODO unmanage on deletion
 }
 
 nitf::SegmentReaderSource::SegmentReaderSource(nitf::SegmentReader reader)

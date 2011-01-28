@@ -106,6 +106,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
 {
     ImplControl *implControl = NULL;
     j2k_Component **components = NULL;
+    j2k_WriterOptions options;
 
     nitf_Uint32 nRows;
     nitf_Uint32 nCols;
@@ -118,6 +119,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     nitf_Uint32 nppbv;
     char pvtype[NITF_PVTYPE_SZ+1];
     char ic[NITF_IC_SZ+1];
+    char comrat[NITF_COMRAT_SZ+1];
     char imode[NITF_IMODE_SZ+1];
     char irep[NITF_IREP_SZ+1];
     int imageType;
@@ -186,6 +188,11 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     {
         goto CATCH_ERROR;
     }
+    if(!nitf_Field_get(subheader->NITF_COMRAT, comrat, NITF_CONV_STRING,
+                    NITF_COMRAT_SZ+1, error))
+    {
+        goto CATCH_ERROR;
+    }
     if(!nitf_Field_get(subheader->NITF_IMODE, imode, NITF_CONV_STRING,
                     NITF_IMODE_SZ+1, error))
     {
@@ -224,6 +231,12 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
         goto CATCH_ERROR;
     }
 
+    nitf_Field_trimString(comrat);
+    if(strlen(comrat) != 0)
+    {
+        /* TODO compute compression ratio to pass into WriterOptions */
+    }
+
     nitf_Field_trimString(irep);
     if (strcmp(irep, "RGB") == 0)
     {
@@ -257,8 +270,10 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     }
     memset(implControl, 0, sizeof(ImplControl));
 
-    implControl->comratField = subheader->NITF_COMRAT;
+    /* reset the options */
+    memset(&options, 0, sizeof(j2k_WriterOptions));
 
+    implControl->comratField = subheader->NITF_COMRAT;
 
     /* initialize the container */
     if (!(components = (j2k_Component**)J2K_MALLOC(
@@ -292,7 +307,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     }
 
     if (!(implControl->writer = j2k_Writer_construct(implControl->container,
-                                                     error)))
+                                                     &options, error)))
     {
         goto CATCH_ERROR;
     }

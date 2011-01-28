@@ -39,7 +39,7 @@ void print_band(char* band, const char* s, int size)
 }
 
 
-nitf::IOHandle prepare_io()
+std::string prepare_io()
 {
     /*  First we'll create the file for them...  */
     nitf::IOHandle handle(FILENM, NITF_ACCESS_WRITEONLY, NITF_CREATE);
@@ -48,10 +48,7 @@ nitf::IOHandle prepare_io()
     handle.write(MEMBUF, MEMSIZE);
     handle.close();
 
-    /*  Now we'll reopen in readonly fashion  */
-    handle.create(FILENM, NITF_ACCESS_READONLY, NITF_CREATE);
-
-    return handle;
+    return std::string(FILENM);
 }
 
 
@@ -59,15 +56,15 @@ int main(int argc, char **argv)
 {
     /*  Get the error object       */
     int bandSize = MEMSIZE / NUM_BANDS;
-    nitf::IOHandle handle = prepare_io();
+    std::string fname = prepare_io();
 
     int numBytesPerPix = 1;
 
     /*  Construct the band sources  */
-    nitf::BandSource* bs0 = new nitf::FileSource(handle, 0, numBytesPerPix, NUM_BANDS - 1);
-    nitf::BandSource* bs1 = new nitf::FileSource(handle, 1, numBytesPerPix, NUM_BANDS - 1);
-    nitf::BandSource* bs2 = new nitf::FileSource(handle, 2, numBytesPerPix, NUM_BANDS - 1);
-    nitf::BandSource* all = new nitf::FileSource(handle, 0, numBytesPerPix, 0);
+    nitf::BandSource* bs0 = new nitf::FileSource(fname, 0, numBytesPerPix, NUM_BANDS - 1);
+    nitf::BandSource* bs1 = new nitf::FileSource(fname, 1, numBytesPerPix, NUM_BANDS - 1);
+    nitf::BandSource* bs2 = new nitf::FileSource(fname, 2, numBytesPerPix, NUM_BANDS - 1);
+    nitf::BandSource* all = new nitf::FileSource(fname, 0, numBytesPerPix, 0);
 
     /*  Construct in memory band buffers -- for testing -- 0 terminate strings */
     char *band_0 = (char*)NITF_MALLOC(bandSize + 1);
@@ -79,7 +76,6 @@ int main(int argc, char **argv)
     band_1[bandSize] = 1;
     band_2[bandSize] = 2;
     all_bands[ MEMSIZE ] = 0;
-    assert( handle.getSize() == MEMSIZE );
 
     /*  Read half of the info for one band.  This makes sure that we  */
     /*  are capable of picking up where we left off                   */

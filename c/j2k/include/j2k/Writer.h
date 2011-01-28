@@ -43,6 +43,13 @@ typedef struct _j2k_IWriter
     J2K_IWRITER_DESTRUCT        destruct;
 } j2k_IWriter;
 
+typedef struct _j2k_WriterOptions
+{
+    /* TODO add more options as we see fit */
+    double compressionRatio;
+    nrt_Uint32 numResolutions;
+} j2k_WriterOptions;
+
 typedef struct _j2k_Writer
 {
     j2k_IWriter *iface;
@@ -52,7 +59,8 @@ typedef struct _j2k_Writer
 /**
  * Opens a J2K Container from an IOInterface
  */
-J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container*, nrt_Error*);
+J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container*, j2k_WriterOptions*,
+                                         nrt_Error*);
 
 /**
  * Sets the uncompressed data for the tile at the given indices.

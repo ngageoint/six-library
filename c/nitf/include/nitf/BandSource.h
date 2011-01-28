@@ -89,7 +89,7 @@ NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(char *data,
  *  Construct a file source from a handle, a start point, and
  *  a pixel skip.
  *
- *  \param handle The handle to store
+ *  \param fname The file to use
  *  \param start The location to seek to (as the beginning)
  *  \param numBytesPerPixel the number of bytes per pixel
  *         (if pixelSkip is equal to 0, then numBytesPerPixel is ignored)
@@ -97,7 +97,7 @@ NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(char *data,
  *        (this will get multipled by numBytesPerPixel to figure
  *         out how many actual bytes to skip)
  */
-NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle handle,
+NITFAPI(nitf_BandSource *) nitf_FileSource_construct(const char* fname,
         nitf_Off start,
         int numBytesPerPixel,
         int pixelSkip,

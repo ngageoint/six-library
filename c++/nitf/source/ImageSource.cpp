@@ -64,7 +64,8 @@ void ImageSource::addBand(nitf::BandSource bandSource)
         throw (nitf::NITFException)
 {
     NITF_BOOL x = nitf_ImageSource_addBand(getNativeOrThrow(),
-                                           bandSource.getNative(), &error);
+                                           bandSource.getNativeOrThrow(),
+                                           &error);
     if (!x)
         throw nitf::NITFException(&error);
     bandSource.setManaged(true); //the underlying memory is managed now
