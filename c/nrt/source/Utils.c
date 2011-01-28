@@ -22,8 +22,8 @@
 
 #include "nrt/Utils.h"
 
-NRTAPI(nrt_List*) nrt_Utils_splitString(
-        char *str, unsigned int max, nrt_Error* error)
+NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
+                                         nrt_Error * error)
 {
     unsigned int count = 0;
     nrt_List *parts;
@@ -44,8 +44,8 @@ NRTAPI(nrt_List*) nrt_Utils_splitString(
         char *val = NRT_MALLOC(strLen + 1);
         if (!val)
         {
-            nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO),
-                    NRT_CTXT, NRT_ERR_MEMORY);
+            nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                           NRT_ERR_MEMORY);
             return NULL;
         }
         memset(val, 0, strLen + 1);
@@ -55,7 +55,7 @@ NRTAPI(nrt_List*) nrt_Utils_splitString(
     else
     {
         /* strtok is not thread safe */
-        while(op < end)
+        while (op < end)
         {
             char *val = NULL;
             int sz;
@@ -64,7 +64,7 @@ NRTAPI(nrt_List*) nrt_Utils_splitString(
                 ++op;
             cur = op;
 
-            while(!isspace(*op) && op < end)
+            while (!isspace(*op) && op < end)
                 ++op;
 
             if (cur == op)
@@ -74,8 +74,8 @@ NRTAPI(nrt_List*) nrt_Utils_splitString(
             val = NRT_MALLOC(sz + 1);
             if (!val)
             {
-                nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO),
-                        NRT_CTXT, NRT_ERR_MEMORY);
+                nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                               NRT_ERR_MEMORY);
                 return NULL;
             }
             memset(val, 0, sz + 1);
@@ -96,8 +96,8 @@ NRTAPI(nrt_List*) nrt_Utils_splitString(
                     val = NRT_MALLOC(sz + 1);
                     if (!val)
                     {
-                        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO),
-                                NRT_CTXT, NRT_ERR_MEMORY);
+                        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                                       NRT_ERR_MEMORY);
                         return NULL;
                     }
                     memset(val, 0, sz + 1);
@@ -126,7 +126,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(char *str)
         if (!isdigit(*(--sp)))
             return 0;
     }
-    while(sp > str);
+    while (sp > str);
     return 1;
 }
 
@@ -144,10 +144,9 @@ NRTAPI(NRT_BOOL) nrt_Utils_isAlpha(char *str)
         if (!isalpha(*(--sp)))
             return 0;
     }
-    while(sp > str);
+    while (sp > str);
     return 1;
 }
-
 
 NRTAPI(NRT_BOOL) nrt_Utils_isBlank(char *str)
 {
@@ -163,13 +162,13 @@ NRTAPI(NRT_BOOL) nrt_Utils_isBlank(char *str)
         if (!isspace(*(--sp)))
             return 0;
     }
-    while(sp > str);
+    while (sp > str);
     return 1;
 }
 
 NRTAPI(void) nrt_Utils_trimString(char *str)
 {
-    nrt_Uint32 len;            /* Length of the string */
+    nrt_Uint32 len;             /* Length of the string */
     char *strp;                 /* Pointer into the string */
     nrt_Uint32 i;
 
@@ -192,38 +191,36 @@ NRTAPI(void) nrt_Utils_trimString(char *str)
     return;
 }
 
-NRTPROT(void) nrt_Utils_replace(char* str, char oldValue, char newValue)
+NRTPROT(void) nrt_Utils_replace(char *str, char oldValue, char newValue)
 {
     char *p;
-    while( (p = strchr(str, oldValue)) != NULL)
+    while ((p = strchr(str, oldValue)) != NULL)
     {
         *p = newValue;
     }
 
 }
 
-NRTAPI(void) nrt_Utils_baseName(char *base,
-                                  const char* fullName,
-                                  const char* extension)
+NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
+                                const char *extension)
 {
     int i, begin = 0;
     int end = strlen(fullName);
     char *p = strstr(fullName, extension);
     for (i = 0; i < strlen(fullName); i++)
     {
-        if ( *(fullName + i) == '/' || *(fullName + i) == '\\')
+        if (*(fullName + i) == '/' || *(fullName + i) == '\\')
             begin = i + 1;
 
-        if ( fullName + i == p)
+        if (fullName + i == p)
             end = i - 1;
     }
     memcpy(base, &fullName[begin], end - begin + 1);
-    base[ end - begin + 1] = 0;
+    base[end - begin + 1] = 0;
 }
 
-NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char* d,
-                                                 double *decimal,
-                                                 nrt_Error* error)
+NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char *d, double *decimal,
+                                              nrt_Error * error)
 {
     /* +-dd.ddd or += ddd.ddd */
     int degreeOffset = 0;
@@ -240,8 +237,8 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char* d,
     else
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
-                         "Invalid decimal string: '%s'. Should be +-dd.ddd or +-ddd.ddd",
-                         d);
+                        "Invalid decimal string: '%s'. Should be +-dd.ddd or +-ddd.ddd",
+                        d);
         return NRT_FAILURE;
     }
     /* Now replace all spaces */
@@ -256,17 +253,16 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char* d,
     return NRT_SUCCESS;
 }
 
-
 NRTAPI(double) nrt_Utils_getCurrentTimeMillis()
 {
     double millis = 0;
 #if defined(__POSIX) && defined(USE_CLOCK_GETTIME)
     struct timespec now;
-    clock_gettime(CLOCK_REALTIME,&now);
+    clock_gettime(CLOCK_REALTIME, &now);
     millis = (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
 #elif defined(HAVE_SYS_TIME_H)
     struct timeval now;
-    gettimeofday(&now,NULL);
+    gettimeofday(&now, NULL);
     millis = (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
 #elif defined(WIN32)
     // Getting time twice may be inefficient but is quicker
@@ -275,9 +271,9 @@ NRTAPI(double) nrt_Utils_getCurrentTimeMillis()
     // does not need millisecond accuracy
     SYSTEMTIME now;
     GetLocalTime(&now);
-    millis = (double)time(NULL) * 1000 + now.wMilliseconds;
+    millis = (double) time(NULL) * 1000 + now.wMilliseconds;
 #else
-    millis = (double)time(NULL) * 1000;
+    millis = (double) time(NULL) * 1000;
 #endif
     return millis;
 }
@@ -297,26 +293,23 @@ NRTAPI(int) nrt_Utils_strncasecmp(char *s1, char *s2, size_t n)
     return tolower(*(unsigned char *) s1) - tolower(*(unsigned char *) s2);
 }
 
-NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal,
-                                           int *degrees,
-                                           int *minutes,
-                                           double *seconds)
+NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
+                                           int *minutes, double *seconds)
 {
     double remainder;
-    *degrees = (int)decimal;
-    remainder = fabs( decimal - (double)*degrees ) * 60.0;
-    *minutes = (int)remainder;
-    *seconds = fabs(remainder - (double)*minutes) * 60.0;
+    *degrees = (int) decimal;
+    remainder = fabs(decimal - (double) *degrees) * 60.0;
+    *minutes = (int) remainder;
+    *seconds = fabs(remainder - (double) *minutes) * 60.0;
 
 }
 
-NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees,
-                                             int minutes,
+NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
                                              double seconds)
 {
     double decimal = fabs(degrees);
-    decimal += ((double)minutes/60.0);
-    decimal += (seconds/3600.0);
+    decimal += ((double) minutes / 60.0);
+    decimal += (seconds / 3600.0);
 
     if (degrees < 0)
     {
@@ -326,11 +319,9 @@ NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees,
     return decimal;
 }
 
-NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char* dms,
-                                                 int* degrees,
-                                                 int* minutes,
-                                                 double* seconds,
-                                                 nrt_Error* error)
+NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
+                                                 int *minutes, double *seconds,
+                                                 nrt_Error * error)
 {
     int degreeOffset = 0;
     int len = strlen(dms);
@@ -352,22 +343,20 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char* dms,
     else
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
-                         "Invalid decimal string: %s. Should be ddmmssX or dddmmssY",
-                         dms);
+                        "Invalid decimal string: %s. Should be ddmmssX or dddmmssY",
+                        dms);
         return NRT_FAILURE;
     }
     dir = dms[len - 1];
     if (dir != 'N' && dir != 'S' && dir != 'E' && dir != 'W')
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
-                         "Invalid direction: %s. Should be [NSEW]",
-                         dms);
+                        "Invalid direction: %s. Should be [NSEW]", dms);
         return NRT_FAILURE;
     }
 
     /* Now replace all spaces */
     nrt_Utils_replace(dms, ' ', '0');
-
 
     /* Now get the corners out as geographic coords */
     d[degreeOffset] = 0;
@@ -376,15 +365,14 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char* dms,
     memcpy(m, &dms[degreeOffset], 2);
     m[2] = 0;
 
-    memcpy(s, &dms[degreeOffset+2], 2);
+    memcpy(s, &dms[degreeOffset + 2], 2);
     s[2] = 0;
 
     *degrees = NRT_ATO32(d);
     *minutes = NRT_ATO32(m);
-    *seconds = (double)NRT_ATO32(s);
+    *seconds = (double) NRT_ATO32(s);
 
-    if ((degreeOffset == 2 && dir == 'S') ||
-        (degreeOffset == 3 && dir == 'W'))
+    if ((degreeOffset == 2 && dir == 'S') || (degreeOffset == 3 && dir == 'W'))
     {
         *degrees *= -1;
     }
@@ -423,10 +411,8 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     return cornerRep;
 }
 
-NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees,
-                                                 int minutes,
-                                                 double seconds,
-                                                 char *buffer7)
+NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
+                                                 double seconds, char *buffer7)
 {
     int wtf = 0;
     char dir = 'N';
@@ -435,14 +421,12 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees,
         dir = 'S';
         degrees *= -1;
     }
-    NRT_SNPRINTF(buffer7, 8, "%02d%02d%02d%c",
-             degrees, minutes, (int)(seconds + 0.5), dir);
+    NRT_SNPRINTF(buffer7, 8, "%02d%02d%02d%c", degrees, minutes,
+                 (int) (seconds + 0.5), dir);
 }
 
-NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees,
-                                                 int minutes,
-                                                 double seconds,
-                                                 char *buffer8)
+NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
+                                                 double seconds, char *buffer8)
 {
     char dir = 'E';
     int wtf = 0;
@@ -451,25 +435,22 @@ NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees,
         dir = 'W';
         degrees *= -1;
     }
-    NRT_SNPRINTF(buffer8, 9, "%03d%02d%02d%c",
-                  degrees, minutes, (int)(seconds + 0.5), dir);
+    NRT_SNPRINTF(buffer8, 9, "%03d%02d%02d%c", degrees, minutes,
+                 (int) (seconds + 0.5), dir);
 
 }
 
-NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal,
-                                              char *buffer7)
+NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal, char *buffer7)
 {
     NRT_SNPRINTF(buffer7, 8, "%+07.3f", decimal);
 }
 
-NRTPROT(void) nrt_Utils_decimalLonToCharArray(double decimal,
-                                              char *buffer8)
+NRTPROT(void) nrt_Utils_decimalLonToCharArray(double decimal, char *buffer8)
 {
     NRT_SNPRINTF(buffer8, 9, "%+08.3f", decimal);
 }
 
-NRTPROT(void) nrt_Utils_decimalLatToGeoCharArray(double decimal,
-                                                 char *buffer7)
+NRTPROT(void) nrt_Utils_decimalLatToGeoCharArray(double decimal, char *buffer7)
 {
     int d, m;
     double s;
@@ -478,8 +459,7 @@ NRTPROT(void) nrt_Utils_decimalLatToGeoCharArray(double decimal,
     nrt_Utils_geographicLatToCharArray(d, m, s, buffer7);
 }
 
-NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal,
-                                                 char *buffer8)
+NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8)
 {
     int d, m;
     double s;

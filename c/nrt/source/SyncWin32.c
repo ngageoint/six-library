@@ -24,46 +24,41 @@
 
 NRT_CXX_GUARD
 #if defined(WIN32)
-
 NRTPROT(void) nrt_Mutex_lock(nrt_Mutex * m)
 {
     LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION) (*m);
-    /*OpenMutex(MUTEX_ALL_ACCESS, FALSE, "PluginRegistry::getMutex()"); */
+    /* OpenMutex(MUTEX_ALL_ACCESS, FALSE, "PluginRegistry::getMutex()"); */
     EnterCriticalSection(lpCriticalSection);
 }
 
-
 NRTPROT(void) nrt_Mutex_unlock(nrt_Mutex * m)
 {
-    /*ReleaseMutex((HANDLE)m); */
+    /* ReleaseMutex((HANDLE)m); */
     LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION) (*m);
     LeaveCriticalSection(lpCriticalSection);
 }
-
 
 NRTPROT(void) nrt_Mutex_init(nrt_Mutex * m)
 {
 
     LPCRITICAL_SECTION lpCriticalSection =
         (LPCRITICAL_SECTION) NRT_MALLOC(sizeof(CRITICAL_SECTION));
-    /*nrt_Debug_flogf("***Initializing Mutex***\n"); */
+    /* nrt_Debug_flogf("***Initializing Mutex***\n"); */
     InitializeCriticalSection(lpCriticalSection);
     /**m = CreateMutex(NULL, TRUE, "PluginRegistry::getMutex()");*/
-    /*if (*m && GetLastError() == ERROR_ALREADY_EXISTS)
-       OpenMutex(MUTEX_ALL_ACCESS, FALSE, "PluginRegistry::getMutex()");
-     */
+    /* if (*m && GetLastError() == ERROR_ALREADY_EXISTS)
+     * OpenMutex(MUTEX_ALL_ACCESS, FALSE, "PluginRegistry::getMutex()"); */
     *m = (nrt_Mutex) lpCriticalSection;
 }
-
 
 NRTPROT(void) nrt_Mutex_delete(nrt_Mutex * m)
 {
     LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION) (*m);
-    /*nrt_Debug_flogf("***Trying to Destroy Mutex***\n"); */
+    /* nrt_Debug_flogf("***Trying to Destroy Mutex***\n"); */
     if (lpCriticalSection)
     {
         DeleteCriticalSection(lpCriticalSection);
-        /*nrt_Debug_flogf("***Destroyed Mutex***\n"); */
+        /* nrt_Debug_flogf("***Destroyed Mutex***\n"); */
         NRT_FREE(lpCriticalSection);
     }
 }

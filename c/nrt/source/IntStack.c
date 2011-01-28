@@ -22,13 +22,13 @@
 
 #include "nrt/IntStack.h"
 
-NRTPROT(nrt_IntStack *)
-nrt_IntStack_construct(nrt_Error * error)
+NRTPROT(nrt_IntStack *) nrt_IntStack_construct(nrt_Error * error)
 {
     nrt_IntStack *stk = (nrt_IntStack *) NRT_MALLOC(sizeof(nrt_IntStack));
     if (!stk)
     {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_MEMORY);
         return NULL;
     }
 
@@ -36,11 +36,11 @@ nrt_IntStack_construct(nrt_Error * error)
     return stk;
 }
 
-NRTPROT(nrt_IntStack*)
-nrt_IntStack_clone(nrt_IntStack* stack, nrt_Error* error)
+NRTPROT(nrt_IntStack *) nrt_IntStack_clone(nrt_IntStack * stack,
+                                           nrt_Error * error)
 {
     int i;
-    nrt_IntStack* copy = nrt_IntStack_construct(error);
+    nrt_IntStack *copy = nrt_IntStack_construct(error);
     if (!copy)
         return NULL;
 
@@ -54,8 +54,7 @@ nrt_IntStack_clone(nrt_IntStack* stack, nrt_Error* error)
 
 }
 
-NRTPROT(void)
-nrt_IntStack_destruct(nrt_IntStack ** stk)
+NRTPROT(void) nrt_IntStack_destruct(nrt_IntStack ** stk)
 {
     if (*stk)
     {
@@ -64,25 +63,23 @@ nrt_IntStack_destruct(nrt_IntStack ** stk)
     }
 }
 
-NRTPROT(int)
-nrt_IntStack_top(nrt_IntStack * stack, nrt_Error * error)
+NRTPROT(int) nrt_IntStack_top(nrt_IntStack * stack, nrt_Error * error)
 {
-    /*  TODO: Someone should rewrite this class to not be so quirky */
-    /*  It is inconsistent with the rest of the library             */
+    /* TODO: Someone should rewrite this class to not be so quirky */
+    /* It is inconsistent with the rest of the library */
     if ((stack->sp >= 0) && (stack->sp < NRT_INT_STACK_DEPTH))
     {
         return stack->st[stack->sp];
     }
 
     nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INT_STACK_OVERFLOW,
-                   "Stack pointing at depth: %d", stack->sp);
+                    "Stack pointing at depth: %d", stack->sp);
     return 0;
 }
 
-NRTPROT(int)
-nrt_IntStack_push(nrt_IntStack * stack, int n, nrt_Error * error)
+NRTPROT(int) nrt_IntStack_push(nrt_IntStack * stack, int n, nrt_Error * error)
 {
-    /*  TODO: See above  */
+    /* TODO: See above */
     if ((stack->sp >= -1) && (stack->sp < NRT_INT_STACK_DEPTH - 1))
     {
         stack->st[++(stack->sp)] = n;
@@ -90,25 +87,23 @@ nrt_IntStack_push(nrt_IntStack * stack, int n, nrt_Error * error)
     }
 
     nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INT_STACK_OVERFLOW,
-                   "Stack pointing at depth: %d", stack->sp);
+                    "Stack pointing at depth: %d", stack->sp);
     return 0;
 }
 
-NRTPROT(int)
-nrt_IntStack_pop(nrt_IntStack * stack, nrt_Error * error)
+NRTPROT(int) nrt_IntStack_pop(nrt_IntStack * stack, nrt_Error * error)
 {
     if ((stack->sp >= 0) && (stack->sp < NRT_INT_STACK_DEPTH))
     {
         return stack->st[(stack->sp)--];
     }
-    /*  This return value is nonsense.  We need to */
+    /* This return value is nonsense.  We need to */
     nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INT_STACK_OVERFLOW,
-                   "Stack pointing at depth: %d", stack->sp);
+                    "Stack pointing at depth: %d", stack->sp);
     return 2147483647;
 }
 
-NRTPROT(int)
-nrt_IntStack_depth(nrt_IntStack * stack, nrt_Error * error)
+NRTPROT(int) nrt_IntStack_depth(nrt_IntStack * stack, nrt_Error * error)
 {
     return stack->sp;
 }

@@ -45,15 +45,15 @@ NRT_CXX_GUARD
  */
 typedef struct _NRT_ListNode
 {
-    /*!  Pointer to the next structure  */
+    /* ! Pointer to the next structure */
     struct _NRT_ListNode *next;
-    /*!  Pointer to the previous structure  */
+    /* ! Pointer to the previous structure */
     struct _NRT_ListNode *prev;
-    /*!  The data  */
+    /* ! The data */
     NRT_DATA *data;
 } nrt_ListNode;
 
-typedef NRT_DATA *(*NRT_DATA_ITEM_CLONE)(NRT_DATA *, nrt_Error *);
+typedef NRT_DATA *(*NRT_DATA_ITEM_CLONE) (NRT_DATA *, nrt_Error *);
 
 /*!
  *  \struct nrt_ListIterator
@@ -64,7 +64,7 @@ typedef NRT_DATA *(*NRT_DATA_ITEM_CLONE)(NRT_DATA *, nrt_Error *);
  */
 typedef struct _NRT_ListIterator
 {
-    /*!  Pointer to the current node  */
+    /* ! Pointer to the current node */
     nrt_ListNode *current;
 
 } nrt_ListIterator;
@@ -78,9 +78,9 @@ typedef struct _NRT_ListIterator
  */
 typedef struct _NRT_List
 {
-    /*!  A pointer to the beginning node  */
+    /* ! A pointer to the beginning node */
     nrt_ListNode *first;
-    /*!  A pointer to the final node  */
+    /* ! A pointer to the final node */
     nrt_ListNode *last;
 
 } nrt_List;
@@ -97,9 +97,9 @@ typedef struct _NRT_List
  *  \return The list node, or NULL if a problem occurred
  */
 NRTAPI(nrt_ListNode *) nrt_ListNode_construct(nrt_ListNode * prev,
-        nrt_ListNode * next,
-        NRT_DATA * data,
-        nrt_Error * error);
+                                              nrt_ListNode * next,
+                                              NRT_DATA * data,
+                                              nrt_Error * error);
 
 /*!
  *  Destroy the current chain link, and NULL set it
@@ -126,9 +126,8 @@ NRTAPI(NRT_BOOL) nrt_List_isEmpty(nrt_List * this_chain);
  *  \param data The data to push to the front
  *  \param error An error if one occurred
  */
-NRTAPI(NRT_BOOL) nrt_List_pushFront(nrt_List * this_chain,
-        NRT_DATA * data,
-        nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_List_pushFront(nrt_List * this_chain, NRT_DATA * data,
+                                    nrt_Error * error);
 
 /*!
  *  Push something onto the back of our chain
@@ -136,9 +135,8 @@ NRTAPI(NRT_BOOL) nrt_List_pushFront(nrt_List * this_chain,
  *  \param data The data to push onto the back
  *  \param error The error if one occurred
  */
-NRTAPI(NRT_BOOL) nrt_List_pushBack(nrt_List * this_chain,
-        NRT_DATA * data,
-        nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_List_pushBack(nrt_List * this_chain, NRT_DATA * data,
+                                   nrt_Error * error);
 
 /*!
  *  Pop the node off the front and return it.
@@ -175,9 +173,8 @@ NRTAPI(nrt_List *) nrt_List_construct(nrt_Error * error);
  *  \param error  An error to populate upon failure
  *  \return A new object that is identical to the old
  */
-NRTAPI(nrt_List *) nrt_List_clone(nrt_List * source,
-        NRT_DATA_ITEM_CLONE cloner,
-        nrt_Error * error);
+NRTAPI(nrt_List *) nrt_List_clone(nrt_List * source, NRT_DATA_ITEM_CLONE cloner,
+                                  nrt_Error * error);
 
 /*!
  *  Delete the chain (from the back).  This means we destruct each node.
@@ -214,7 +211,7 @@ NRTAPI(nrt_ListIterator) nrt_List_at(nrt_List * chain, int i);
  *  \return 1 if they are equal, 0 if not
  */
 NRTAPI(NRT_BOOL) nrt_ListIterator_equals(nrt_ListIterator * it1,
-        nrt_ListIterator * it2);
+                                         nrt_ListIterator * it2);
 
 /*!
  *  Check to see if two iterators are not pointing at the same thing
@@ -224,7 +221,7 @@ NRTAPI(NRT_BOOL) nrt_ListIterator_equals(nrt_ListIterator * it1,
  *  \return 1 if they are not equal, 0 if so
  */
 NRTAPI(NRT_BOOL) nrt_ListIterator_notEqualTo(nrt_ListIterator * it1,
-        nrt_ListIterator * it2);
+                                             nrt_ListIterator * it2);
 
 /*!
  *  Get an iterator to the tail of the chain
@@ -256,9 +253,8 @@ NRTAPI(nrt_ListIterator) nrt_List_end(nrt_List * this_chain);
  *
  *  \return 1 on success, 0 on failure
  */
-NRTAPI(NRT_BOOL) nrt_List_insert(nrt_List * chain,
-        nrt_ListIterator iter,
-        NRT_DATA * data, nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_List_insert(nrt_List * chain, nrt_ListIterator iter,
+                                 NRT_DATA * data, nrt_Error * error);
 
 /*!
  *  Remove the data from an arbitrary point in the list.
@@ -271,8 +267,7 @@ NRTAPI(NRT_BOOL) nrt_List_insert(nrt_List * chain,
  *  \param where Where to remove, this will be updated to the NEXT position
  *  \return We dont know how to delete YOUR object, so return it
  */
-NRTAPI(NRT_DATA *) nrt_List_remove(nrt_List * chain,
-        nrt_ListIterator * where);
+NRTAPI(NRT_DATA *) nrt_List_remove(nrt_List * chain, nrt_ListIterator * where);
 
 /*!
  *  Moves the data located at oldIndex to newIndex.
@@ -282,10 +277,8 @@ NRTAPI(NRT_DATA *) nrt_List_remove(nrt_List * chain,
  *  \param newIndex the index where the data item will be moved to
  *  \return NRT_SUCCESS on success, or NRT_FAILURE
  */
-NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain,
-        nrt_Uint32 oldIndex,
-        nrt_Uint32 newIndex,
-        nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, nrt_Uint32 oldIndex,
+                               nrt_Uint32 newIndex, nrt_Error * error);
 
 /*!
  *  Return the size of the list
@@ -304,9 +297,7 @@ NRTAPI(nrt_Uint32) nrt_List_size(nrt_List * list);
  *  \param error An error to populate on failure, if the index is out of bounds
  *  \return the data at the specified position
  */
-NRTAPI(NRT_DATA*) nrt_List_get(nrt_List * list,
-        int index,
-        nrt_Error* error);
+NRTAPI(NRT_DATA *) nrt_List_get(nrt_List * list, int index, nrt_Error * error);
 
 /*!
  *  Increment the iterator.  Eventually, this will point at NULL.
@@ -325,5 +316,4 @@ NRTAPI(void) nrt_ListIterator_increment(nrt_ListIterator * this_iter);
 NRTAPI(NRT_DATA *) nrt_ListIterator_get(nrt_ListIterator * this_iter);
 
 NRT_CXX_ENDGUARD
-
 #endif

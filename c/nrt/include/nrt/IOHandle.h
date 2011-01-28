@@ -33,7 +33,6 @@
 #endif
 
 NRT_CXX_GUARD
-
 /*!
  *  Create an IO handle.  If the file is set to create,
  *  the permissions will be built into the create:
@@ -49,9 +48,9 @@ NRT_CXX_GUARD
  *  \return The fresh handle.  Test this with NRT_INVALID_HANDLE()
  */
 NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
-        nrt_AccessFlags access,
-        nrt_CreationFlags creation,
-        nrt_Error * error);
+                                         nrt_AccessFlags access,
+                                         nrt_CreationFlags creation,
+                                         nrt_Error * error);
 
 /*!
  *  Read from the IO handle.  This function is guaranteed to return
@@ -64,9 +63,8 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
  *  \param error  Populated if function returns 0
  *  \return       1 on success and 0 otherwise
  */
-NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle,
-        char *buf, size_t size,
-        nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
+                                   nrt_Error * error);
 
 /*!
  *  Write to the IO handle.  This function attempts to write to the IO handle
@@ -79,9 +77,8 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle,
  *  \param error  The error, only if !NRT_IO_SUCCESS()
  *  \return NRT_SUCCESS if the method succeeds, NRT_FAILURE on failure.
  */
-NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle,
-        const char *buf, size_t size,
-        nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
+                                    size_t size, nrt_Error * error);
 
 /*!
  *  Seek into the handle at this point.  Basically
@@ -97,9 +94,8 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle,
  *  \param error   The error, if !NRT_IO_SUCCESS()
  *  \return The offset from the beginning to the current position
  */
-NRTAPI(nrt_Off) nrt_IOHandle_seek(nrt_IOHandle handle,
-        nrt_Off offset, int whence,
-        nrt_Error * error);
+NRTAPI(nrt_Off) nrt_IOHandle_seek(nrt_IOHandle handle, nrt_Off offset,
+                                  int whence, nrt_Error * error);
 
 /*!
  *  Tell the location that the handle is pointing to.  On failure,
@@ -110,8 +106,7 @@ NRTAPI(nrt_Off) nrt_IOHandle_seek(nrt_IOHandle handle,
  *  \param error The error to populate if there is a problem
  *  \return The offset
  */
-NRTAPI(nrt_Off) nrt_IOHandle_tell(nrt_IOHandle handle,
-        nrt_Error * error);
+NRTAPI(nrt_Off) nrt_IOHandle_tell(nrt_IOHandle handle, nrt_Error * error);
 
 /*!
  *  Get the size of the handle (how big is the file).
@@ -123,8 +118,7 @@ NRTAPI(nrt_Off) nrt_IOHandle_tell(nrt_IOHandle handle,
  *  \param error  A populated error if something goes wrong
  *  \return The size of the file
  */
-NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle,
-        nrt_Error * error);
+NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle, nrt_Error * error);
 
 /*!
  *  Close the IO handle.
@@ -135,5 +129,4 @@ NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle,
 NRTAPI(void) nrt_IOHandle_close(nrt_IOHandle handle);
 
 NRT_CXX_ENDGUARD
-
 #endif

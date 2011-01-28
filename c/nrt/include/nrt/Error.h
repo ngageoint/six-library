@@ -30,14 +30,14 @@
 #define  NRT_CTXT NRT_FILE, NRT_LINE, NRT_FUNC
 
 #ifdef WIN32
-#  define NRT_ERRNO GetLastError()
-#  define NRT_STRERROR(E) strerror(E)
+#   define NRT_ERRNO GetLastError()
+#   define NRT_STRERROR(E) strerror(E)
 #else
-#  define  NRT_ERRNO errno
-#  define  NRT_STRERROR(E) strerror(E)
+#   define  NRT_ERRNO errno
+#   define  NRT_STRERROR(E) strerror(E)
 #endif
-NRT_CXX_GUARD
 
+NRT_CXX_GUARD
 /*
  *
  *  An error level can be low, medium, high, or critical.
@@ -96,10 +96,9 @@ typedef struct _NRT_Error
  *  \param func Context info from NRT_CTXT (if C99)
  &  \param level The level of error (This is an enum value)
  */
-NRTPROT(void) nrt_Error_init(nrt_Error * error,
-        const char *message,
-        const char *file,
-        int line, const char *func, int level);
+NRTPROT(void) nrt_Error_init(nrt_Error * error, const char *message,
+                             const char *file, int line, const char *func,
+                             int level);
 
 /*!
  *  \fn nrt_Error_flogf
@@ -109,9 +108,8 @@ NRTPROT(void) nrt_Error_init(nrt_Error * error,
  *  \param level Not necessary [REMOVE ME]
  *  \param format The format string
  */
-NRTAPI(void) nrt_Error_flogf(nrt_Error * error,
-        FILE * file,
-        int level, const char *format, ...);
+NRTAPI(void) nrt_Error_flogf(nrt_Error * error, FILE * file, int level,
+                             const char *format, ...);
 
 /*!
  *  \fn nrt_Error_printf
@@ -120,8 +118,8 @@ NRTAPI(void) nrt_Error_flogf(nrt_Error * error,
  *  \param file An open file stream (could be stderr/stdout)
  *  \param format The format string
  */
-NRTAPI(void) nrt_Error_fprintf(nrt_Error * error,
-        FILE * file, const char *format, ...);
+NRTAPI(void) nrt_Error_fprintf(nrt_Error * error, FILE * file,
+                               const char *format, ...);
 
 /*!
  *  \fn nrt_Error_initf
@@ -133,11 +131,9 @@ NRTAPI(void) nrt_Error_fprintf(nrt_Error * error,
  *  \param level The type of error (an enum value)
  *  \param format A format string
  */
-NRTPROT(void) nrt_Error_initf(nrt_Error * error,
-        const char *file,
-        int line,
-        const char *func,
-        int level, const char *format, ...);
+NRTPROT(void) nrt_Error_initf(nrt_Error * error, const char *file, int line,
+                              const char *func, int level, const char *format,
+                              ...);
 
 /*!
  *  \fn nrt_Error_print
@@ -147,9 +143,8 @@ NRTPROT(void) nrt_Error_initf(nrt_Error * error,
  *  \param file An open file stream to write to
  *  \param userMessage Any user message data to be displayed
  */
-NRTAPI(void) nrt_Error_print(nrt_Error * error,
-        FILE * file, const char *userMessage);
+NRTAPI(void) nrt_Error_print(nrt_Error * error, FILE * file,
+                             const char *userMessage);
 
 NRT_CXX_ENDGUARD
-
 #endif

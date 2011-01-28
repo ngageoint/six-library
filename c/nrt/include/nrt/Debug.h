@@ -30,7 +30,6 @@
 #    define NRT_MEM_LOG "memory_trace"
 
 NRT_CXX_GUARD
-
 /*!
  *  This will some space, and record that space in a file.
  *  The format will look like
@@ -55,8 +54,8 @@ NRTPROT(void *) nrt_Debug_malloc(const char *file, int line, size_t sz);
  *  \param sz   The sz to allocate
  *  \return The pointer or NULL on failure
  */
-NRTPROT(void *) nrt_Debug_realloc(const char *file,
-        int line, void *ptr, size_t sz);
+NRTPROT(void *) nrt_Debug_realloc(const char *file, int line, void *ptr,
+                                  size_t sz);
 
 /*!
  *  Free some space and record that space in a file.
@@ -69,11 +68,8 @@ NRTPROT(void *) nrt_Debug_realloc(const char *file,
 NRTPROT(void) nrt_Debug_free(const char *file, int line, void *ptr);
 
 NRT_CXX_ENDGUARD
-
 #endif
-
-NRT_CXX_GUARD
-
+    NRT_CXX_GUARD
 /*!
  *  \fn nrt_Debug_flogf
  *  \brief Used for debugging.  Prints only if NRT_DEBUG is defined
@@ -86,5 +82,4 @@ NRT_CXX_GUARD
 NRTPROT(void) nrt_Debug_flogf(FILE * file, const char *format, ...);
 
 NRT_CXX_ENDGUARD
-
 #endif

@@ -25,20 +25,20 @@
 
 TEST_CASE(testCoreValues)
 {
-    TEST_ASSERT( sizeof(nrt_Uint8) == 1 );
-    TEST_ASSERT( sizeof(nrt_Uint16) == 2 );
-    TEST_ASSERT( sizeof(nrt_Uint32) == 4 );
-    TEST_ASSERT( sizeof(nrt_Uint64) == 8 );
+    TEST_ASSERT(sizeof(nrt_Uint8) == 1);
+    TEST_ASSERT(sizeof(nrt_Uint16) == 2);
+    TEST_ASSERT(sizeof(nrt_Uint32) == 4);
+    TEST_ASSERT(sizeof(nrt_Uint64) == 8);
 
-    TEST_ASSERT( sizeof(nrt_Int8) == 1 );
-    TEST_ASSERT( sizeof(nrt_Int16) == 2 );
-    TEST_ASSERT( sizeof(nrt_Int32) == 4 );
-    TEST_ASSERT( sizeof(nrt_Int64) == 8);
+    TEST_ASSERT(sizeof(nrt_Int8) == 1);
+    TEST_ASSERT(sizeof(nrt_Int16) == 2);
+    TEST_ASSERT(sizeof(nrt_Int32) == 4);
+    TEST_ASSERT(sizeof(nrt_Int64) == 8);
 
-    if ( sizeof( long ) == 4 )
+    if (sizeof(long) == 4)
     {
-        const char* ok = "2147483647";
-        const char* bad = "2147483648";
+        const char *ok = "2147483647";
+        const char *bad = "2147483648";
         /* Test our assertions for atol, format */
 
         printf("A long is 4 bytes\n");
@@ -47,13 +47,13 @@ TEST_CASE(testCoreValues)
 
         printf("As long long\n");
         printf("Ok: (str: %s) [%lld]\n", ok, NRT_ATO64(ok));
-        printf("Bad: (str: %s) [%lld]\n", bad, NRT_ATO64(bad) );
+        printf("Bad: (str: %s) [%lld]\n", bad, NRT_ATO64(bad));
 
     }
-    else if ( sizeof( long ) == 8 )
+    else if (sizeof(long) == 8)
     {
-        const char* ok = "9223372036854775807";
-        const char* bad = "9223372036854775808";
+        const char *ok = "9223372036854775807";
+        const char *bad = "9223372036854775808";
         printf("A long is 8 bytes\n");
         printf("Ok: (str: %s) [%ld]\n", ok, atol(ok));
         printf("Bad: (str: %s) [%ld]\n", bad, atol(bad));

@@ -51,7 +51,7 @@ class Field : public nitf::Object<nitf_Field>
 {
 
 public:
-    enum FieldType
+enum FieldType
     {
         BCS_A = NITF_BCS_A,
         BCS_N = NITF_BCS_N,

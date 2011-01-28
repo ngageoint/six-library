@@ -27,15 +27,14 @@
 #include "nrt/List.h"
 
 NRT_CXX_GUARD
-
 /*!
  * Splits a string apart, delimited by spaces. This does not use strtok since
  * it is not thread safe.)
  * \param str   null-terminated string
  * \param max   the maximum # of parts to split into (0 = split all)
  */
-NRTAPI(nrt_List*) nrt_Utils_splitString(
-        char *str, unsigned int max, nrt_Error* error);
+NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
+                                         nrt_Error * error);
 
 NRTAPI(NRT_BOOL) nrt_Utils_isNumeric(char *str);
 
@@ -47,13 +46,13 @@ NRTAPI(NRT_BOOL) nrt_Utils_isAlpha(char *str);
  */
 NRTAPI(NRT_BOOL) nrt_Utils_isBlank(char *str);
 
-NRTAPI(void) nrt_Utils_trimString(char* str);
+NRTAPI(void) nrt_Utils_trimString(char *str);
 
 /*!
  *  Replace the oldValue with the newValue within this string
  *
  */
-NRTPROT(void) nrt_Utils_replace(char* str, char oldValue, char newValue);
+NRTPROT(void) nrt_Utils_replace(char *str, char oldValue, char newValue);
 
 /*!
  * Return the base name for the fullName, up until the
@@ -64,9 +63,8 @@ NRTPROT(void) nrt_Utils_replace(char* str, char oldValue, char newValue);
  * \param fullName The source string
  * \param extension The extension name
  */
-NRTAPI(void) nrt_Utils_baseName(char* base,
-        const char* fullName,
-        const char* extension);
+NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
+                                const char *extension);
 
 /*!
  *  Take in a decimal degree format string and convert it into
@@ -77,9 +75,8 @@ NRTAPI(void) nrt_Utils_baseName(char* base,
  *  IGEOLO itself is very strict about what is allowed
  *
  */
-NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char* d,
-        double* decimal,
-        nrt_Error* error);
+NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char *d, double *decimal,
+                                              nrt_Error * error);
 
 NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
 
@@ -97,10 +94,8 @@ NRTAPI(int) nrt_Utils_strncasecmp(char *s1, char *s2, size_t n);
  *  \param minutes [output] The minutes as an integer
  *  \param seconds [output] The seconds as an integer
  */
-NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal,
-        int *degrees,
-        int *minutes,
-        double *seconds);
+NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
+                                           int *minutes, double *seconds);
 
 /*!
  *  Convert the geographic coordinates (i.e., DMS) into decimal
@@ -110,9 +105,8 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal,
  *  \param minutes geographic minutes
  *  \param seconds geographic seconds
  */
-NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees,
-        int minutes,
-        double seconds);
+NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
+                                             double seconds);
 
 /*!
  *  Take in a degree of DMS format and convert it into integers
@@ -128,58 +122,48 @@ NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees,
  *  \param seconds [output] The seconds as an integer
  *
  */
-NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char* dms,
-        int* degrees,
-        int* minutes,
-        double* seconds,
-        nrt_Error* error);
+NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
+                                                 int *minutes, double *seconds,
+                                                 nrt_Error * error);
 
 /*!
  *  Turn the geographic value into a string.  You must have a buffer
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees,
-        int minutes,
-        double seconds,
-        char *buffer7);
+NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
+                                                 double seconds, char *buffer7);
 
 /*!
  *  Turn the geographic value into a string.  You must have a buffer
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees,
-        int minutes,
-        double seconds,
-        char *buffer8);
+NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
+                                                 double seconds, char *buffer8);
 
 /*!
  *  Turn the decimal value into a string +-dd.ddd.  You must have a buffer
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal,
-        char *buffer7);
+NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal, char *buffer7);
 
 /*!
  *  Turn the decimal value into a string +-ddd.ddd.  You must have a buffer
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_decimalLonToCharArray(double decimal,
-        char *buffer8);
+NRTPROT(void) nrt_Utils_decimalLonToCharArray(double decimal, char *buffer8);
 
-NRTPROT(void) nrt_Utils_decimalLatToGeoCharArray(double decimal,
-        char *buffer7);
+NRTPROT(void) nrt_Utils_decimalLatToGeoCharArray(double decimal, char *buffer7);
 
 /*!
  *  Turn the decimal value into a string +-ddd.ddd.  You must have a buffer
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal,
-        char *buffer8);
+NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8);
 
 /*!
  *  Convert the corners type to a string.  If for some reason, the type
@@ -190,5 +174,4 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal,
 NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
 
 NRT_CXX_ENDGUARD
-
 #endif

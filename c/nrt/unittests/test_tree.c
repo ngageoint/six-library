@@ -23,26 +23,26 @@
 #include <import/nrt.h>
 #include "Test.h"
 
-char* C(const char* p)
+char *C(const char *p)
 {
-    char* x = malloc(strlen(p) + 1);
+    char *x = malloc(strlen(p) + 1);
     strcpy(x, p);
     return x;
 }
 
-NRT_BOOL deleteData(nrt_TreeNode *source, NRT_DATA* userData, int depth,
-        nrt_Error *error)
+NRT_BOOL deleteData(nrt_TreeNode * source, NRT_DATA * userData, int depth,
+                    nrt_Error * error)
 {
-    char* p = (char*) source->data;
+    char *p = (char *) source->data;
     printf("Deleting %s\n", p);
     free(p);
     return 1;
 }
 
-void makeTree(nrt_Tree* t, const char* testName)
+void makeTree(nrt_Tree * t, const char *testName)
 {
     nrt_Error e;
-    nrt_TreeNode* an, *ancho, *abso;
+    nrt_TreeNode *an, *ancho, *abso;
     t->root = nrt_TreeNode_construct(C("a"), &e);
     TEST_ASSERT(t->root);
 
@@ -67,14 +67,13 @@ void makeTree(nrt_Tree* t, const char* testName)
 
     nrt_TreeNode_addChild(abso, nrt_TreeNode_construct(C("absolute"), &e), &e);
     nrt_TreeNode_addChild(abso, nrt_TreeNode_construct(C("absolution"), &e),
-                           &e);
+                          &e);
 
 }
 
-NRT_BOOL printElement(nrt_TreeNode* t, NRT_DATA* ud, int depth,
-        nrt_Error* e)
+NRT_BOOL printElement(nrt_TreeNode * t, NRT_DATA * ud, int depth, nrt_Error * e)
 {
-    const char* p = (const char*) t->data;
+    const char *p = (const char *) t->data;
     int i;
 
     for (i = 0; i < depth; i++)
@@ -87,7 +86,7 @@ TEST_CASE(testTree)
 {
     nrt_Error e;
 
-    /*  Create a tree - root can be passed during or after*/
+    /* Create a tree - root can be passed during or after */
     nrt_Tree *t = nrt_Tree_construct(NULL, &e);
     nrt_Tree *tc = NULL;
     TEST_ASSERT(t);

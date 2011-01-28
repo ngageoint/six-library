@@ -34,7 +34,7 @@ namespace nitf
 class HandleManager
 {
 private:
-    typedef void* CAddress;
+typedef void* CAddress;
 
     std::map<CAddress, Handle*> mHandleMap; //! map for storing the handles
     sys::Mutex mMutex; //! mutex used for locking the map

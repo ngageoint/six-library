@@ -29,15 +29,14 @@ NRTAPI(nrt_DLL *) nrt_DLL_construct(nrt_Error * error)
     nrt_DLL *dll = (nrt_DLL *) NRT_MALLOC(sizeof(nrt_DLL));
     if (!dll)
     {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO),
-                        NRT_CTXT, NRT_ERR_MEMORY);
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_MEMORY);
 
     }
     dll->libname = NULL;
     dll->lib = NULL;
     return dll;
 }
-
 
 NRTAPI(void) nrt_DLL_destruct(nrt_DLL ** dll)
 {
@@ -46,9 +45,9 @@ NRTAPI(void) nrt_DLL_destruct(nrt_DLL ** dll)
     {
         /* destroy the lib */
         nrt_DLL_unload((*dll), &error);
-        if ( (*dll)->libname )
+        if ((*dll)->libname)
         {
-            NRT_FREE( (*dll)->libname );
+            NRT_FREE((*dll)->libname);
             (*dll)->libname = NULL;
         }
         NRT_FREE(*dll);
@@ -56,20 +55,19 @@ NRTAPI(void) nrt_DLL_destruct(nrt_DLL ** dll)
     }
 }
 
-
 NRTAPI(NRT_BOOL) nrt_DLL_isValid(nrt_DLL * dll)
 {
     return (dll->lib != (NRT_NATIVE_DLL) NULL);
 }
 
-
-NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll,
-                                 const char *libname, nrt_Error * error)
+NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll, const char *libname,
+                              nrt_Error * error)
 {
-    dll->libname = (char*)NRT_MALLOC(strlen(libname) + 1);
+    dll->libname = (char *) NRT_MALLOC(strlen(libname) + 1);
     if (!dll->libname)
     {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_MEMORY);
         return NRT_FAILURE;
     }
     strcpy(dll->libname, libname);
@@ -77,7 +75,7 @@ NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll,
     if (!dll->lib)
     {
         nrt_Error_init(error, dlerror(), NRT_CTXT, NRT_ERR_LOADING_DLL);
-        NRT_FREE( dll->libname );
+        NRT_FREE(dll->libname);
         dll->libname = NULL;
         return NRT_FAILURE;
     }
@@ -85,19 +83,17 @@ NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll,
     return NRT_SUCCESS;
 }
 
-
 NRTAPI(NRT_BOOL) nrt_DLL_unload(nrt_DLL * dll, nrt_Error * error)
 {
     if (dll->lib)
     {
-        assert( dll->libname );
-        NRT_FREE( dll->libname );
+        assert(dll->libname);
+        NRT_FREE(dll->libname);
         dll->libname = NULL;
-        
+
         if (dlclose(dll->lib) != 0)
         {
-            nrt_Error_init(error, dlerror(),
-                            NRT_CTXT, NRT_ERR_UNLOADING_DLL);
+            nrt_Error_init(error, dlerror(), NRT_CTXT, NRT_ERR_UNLOADING_DLL);
             return NRT_FAILURE;
         }
         dll->lib = NULL;
@@ -105,10 +101,9 @@ NRTAPI(NRT_BOOL) nrt_DLL_unload(nrt_DLL * dll, nrt_Error * error)
     return NRT_SUCCESS;
 }
 
-
 NRTAPI(NRT_DLL_FUNCTION_PTR) nrt_DLL_retrieve(nrt_DLL * dll,
-        const char *function,
-        nrt_Error * error)
+                                              const char *function,
+                                              nrt_Error * error)
 {
     if (dll->lib)
     {
@@ -117,16 +112,15 @@ NRTAPI(NRT_DLL_FUNCTION_PTR) nrt_DLL_retrieve(nrt_DLL * dll,
         if (ptr == (NRT_DLL_FUNCTION_PTR) NULL)
         {
             /* Problem if you couldnt produce the function */
-            nrt_Error_init(error, dlerror(),
-                            NRT_CTXT, NRT_ERR_RETRIEVING_DLL_HOOK);
+            nrt_Error_init(error, dlerror(), NRT_CTXT,
+                           NRT_ERR_RETRIEVING_DLL_HOOK);
         }
         return ptr;
 
     }
 
-    /*  You shouldnt be calling it if it didnt load */
-    nrt_Error_init(error, dlerror(),
-                    NRT_CTXT, NRT_ERR_UNINITIALIZED_DLL_READ);
+    /* You shouldnt be calling it if it didnt load */
+    nrt_Error_init(error, dlerror(), NRT_CTXT, NRT_ERR_UNINITIALIZED_DLL_READ);
     return (NRT_DLL_FUNCTION_PTR) NULL;
 }
 #endif

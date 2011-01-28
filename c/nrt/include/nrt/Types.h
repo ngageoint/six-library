@@ -39,25 +39,25 @@
 #      undef WIN32_LEAN_AND_MEAN
 
 /*  Types are defined for windows here  */
-typedef unsigned char     nrt_Uint8;
-typedef unsigned __int16  nrt_Uint16;
-typedef unsigned __int32  nrt_Uint32;
-typedef unsigned __int64  nrt_Uint64;
+typedef unsigned char nrt_Uint8;
+typedef unsigned __int16 nrt_Uint16;
+typedef unsigned __int32 nrt_Uint32;
+typedef unsigned __int64 nrt_Uint64;
 
-typedef signed char       nrt_Int8;
-typedef __int16           nrt_Int16;
-typedef __int32           nrt_Int32;
-typedef __int64           nrt_Int64;
-typedef HANDLE            nrt_IOHandle;
-typedef HINSTANCE         NRT_NATIVE_DLL;
-typedef FARPROC           NRT_DLL_FUNCTION_PTR;
-typedef DWORD             nrt_AccessFlags;
-typedef DWORD             nrt_CreationFlags;
+typedef signed char nrt_Int8;
+typedef __int16 nrt_Int16;
+typedef __int32 nrt_Int32;
+typedef __int64 nrt_Int64;
+typedef HANDLE nrt_IOHandle;
+typedef HINSTANCE NRT_NATIVE_DLL;
+typedef FARPROC NRT_DLL_FUNCTION_PTR;
+typedef DWORD nrt_AccessFlags;
+typedef DWORD nrt_CreationFlags;
 /*  Determine the maximum file path length  */
 #      define  NRT_MAX_PATH     MAX_PATH
 
 /* use nrt_Off instead of off_t, since on Windows we want nrt_Int64 used */
-typedef nrt_Int64        nrt_Off;
+typedef nrt_Int64 nrt_Off;
 
 /*  IO macros  */
 #      define  NRT_INVALID_HANDLE_VALUE INVALID_HANDLE_VALUE
@@ -75,7 +75,6 @@ typedef nrt_Int64        nrt_Off;
 /* type suffixes */
 #      define  NRT_INT64(x) x##i64
 
-
 #else
 /*
 *  Here, we define the basic libraries needed by
@@ -91,24 +90,23 @@ typedef nrt_Int64        nrt_Off;
 #      include <dlfcn.h>
 #      include <inttypes.h>
 
-
 /*  Typedefs on Unix are a different ball game */
-typedef uint8_t            nrt_Uint8;
-typedef uint16_t           nrt_Uint16;
-typedef uint32_t           nrt_Uint32;
-typedef uint64_t           nrt_Uint64;
+typedef uint8_t nrt_Uint8;
+typedef uint16_t nrt_Uint16;
+typedef uint32_t nrt_Uint32;
+typedef uint64_t nrt_Uint64;
 
-typedef int8_t             nrt_Int8;
-typedef int16_t            nrt_Int16;
-typedef int32_t            nrt_Int32;
-typedef int64_t            nrt_Int64;
-typedef int                nrt_IOHandle;
-typedef off_t              nrt_Off;
+typedef int8_t nrt_Int8;
+typedef int16_t nrt_Int16;
+typedef int32_t nrt_Int32;
+typedef int64_t nrt_Int64;
+typedef int nrt_IOHandle;
+typedef off_t nrt_Off;
 
-typedef void*             NRT_DLL_FUNCTION_PTR;
-typedef void*             NRT_NATIVE_DLL;
-typedef int               nrt_AccessFlags;
-typedef int               nrt_CreationFlags;
+typedef void *NRT_DLL_FUNCTION_PTR;
+typedef void *NRT_NATIVE_DLL;
+typedef int nrt_AccessFlags;
+typedef int nrt_CreationFlags;
 /*
 *  Under Unix, we want to provide default permissions.
 *  Some are nice enough to default to 0666, others just
@@ -126,7 +124,6 @@ typedef int               nrt_CreationFlags;
 #      define  NRT_ACCESS_READONLY      O_RDONLY
 #      define  NRT_ACCESS_WRITEONLY     O_WRONLY
 #      define  NRT_ACCESS_READWRITE     O_RDWR
-
 
 /* type suffixes */
 #      define  NRT_INT64(x) x##LL

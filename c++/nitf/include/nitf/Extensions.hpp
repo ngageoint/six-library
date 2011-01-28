@@ -175,7 +175,7 @@ DECLARE_CLASS(Extensions)
 {
 public:
 
-    typedef nitf::ExtensionsIterator Iterator;
+typedef nitf::ExtensionsIterator Iterator;
 
     //! Copy constructor
     Extensions(const Extensions & x)

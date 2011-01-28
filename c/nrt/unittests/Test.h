@@ -48,7 +48,7 @@
 #    define TEST_FUNC __PRETTY_FUNCTION__
 #elif __STDC_VERSION__ < 199901
 #    define TEST_FUNC "unknown function"
-#else /* Should be c99 */
+#else                           /* Should be c99 */
 #    define TEST_FUNC __func__
 #endif
 

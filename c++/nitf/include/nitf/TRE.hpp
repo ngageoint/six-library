@@ -172,7 +172,7 @@ DECLARE_CLASS(TRE)
 {
 public:
 
-    typedef nitf::TREFieldIterator Iterator;
+typedef nitf::TREFieldIterator Iterator;
 
     //! Copy constructor
     TRE(const TRE & x);

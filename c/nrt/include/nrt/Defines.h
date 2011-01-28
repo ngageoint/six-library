@@ -26,7 +26,6 @@
 /* The version of the NRT library */
 #define NRT_LIB_VERSION    "2.6"
 
-
 #ifdef __cplusplus
 #   define NRT_C extern "C"
 #   define NRT_GUARD {
@@ -47,7 +46,7 @@
 #      elif defined(NRT_MODULE_IMPORTS)
 #          define NRTAPI(RT)  NRT_C __declspec(dllimport) RT
 #          define NRTPROT(RT) NRT_C __declspec(dllexport) RT
-#      else /* Static library */
+#      else                     /* Static library */
 #          define NRTAPI(RT) NRT_C RT
 #          define NRTPROT(RT) NRT_C RT
 #      endif
@@ -99,9 +98,8 @@
 #    define NRT_FUNC __PRETTY_FUNCTION__
 #elif __STDC_VERSION__ < 199901
 #    define NRT_FUNC "unknown function"
-#else /* Should be c99 */
+#else                           /* Should be c99 */
 #    define NRT_FUNC __func__
 #endif
-
 
 #endif

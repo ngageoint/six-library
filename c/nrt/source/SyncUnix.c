@@ -24,15 +24,12 @@
 #include "nrt/Sync.h"
 
 NRT_CXX_GUARD
-
 #if !defined(WIN32) && !defined(__sgi)
-
 NRTPROT(void) nrt_Mutex_lock(nrt_Mutex * m)
 {
     nrt_Debug_flogf(stdout, "***Locking Mutex***\n");
     pthread_mutex_lock((pthread_mutex_t *) m);
 }
-
 
 NRTPROT(void) nrt_Mutex_unlock(nrt_Mutex * m)
 {
@@ -40,13 +37,11 @@ NRTPROT(void) nrt_Mutex_unlock(nrt_Mutex * m)
     pthread_mutex_unlock((pthread_mutex_t *) m);
 }
 
-
 NRTPROT(void) nrt_Mutex_init(nrt_Mutex * m)
 {
     nrt_Debug_flogf(stdout, "***Initializing Mutex***\n");
     pthread_mutex_init(m, NULL);
 }
-
 
 NRTPROT(void) nrt_Mutex_delete(nrt_Mutex * m)
 {

@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of NITRO
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
  * NITRO is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -27,18 +27,12 @@
 #include "nrt/List.h"
 
 NRT_CXX_GUARD
-
-/*!
- *  These are values for ownership.  You may elect either policy.
- *  Here is the difference.  In the hash table, the datafield is
- * a pointer to an object. That object may have
- been allocated by
- * you, or it may be stat ic, I dont know. Y
- ou may wish to remove it
- * yourself, or I m ay be told to remo
- ve it foryou. If you do not tell
- * me, I will assume that you ow
- n it.
+/*
+ * These are values for ownership.  You may elect either policy.
+ * Here is the difference.  In the hash table, the datafield is
+ * a pointer to an object. That object may have been allocated by
+ * you, or it may be static. You may wish to remove it
+ * yourself, or it may be told to remove it for you.
  */
 enum
 {
@@ -56,13 +50,13 @@ typedef struct _NRT_HashTable
     nrt_List **buckets;
     int nbuckets;
     int adopt;
-    unsigned int (*hash)(struct _NRT_HashTable *, const char *);
+    unsigned int (*hash) (struct _NRT_HashTable *, const char *);
 } nrt_HashTable;
 
-typedef unsigned int (*NRT_HASH_FUNCTION)(nrt_HashTable *, const char *);
+typedef unsigned int (*NRT_HASH_FUNCTION) (nrt_HashTable *, const char *);
 
-typedef int (*NRT_HASH_FUNCTOR)(nrt_HashTable *, nrt_Pair * pair,
-        NRT_DATA* userData, nrt_Error * error);
+typedef int (*NRT_HASH_FUNCTOR) (nrt_HashTable *, nrt_Pair * pair,
+                                 NRT_DATA * userData, nrt_Error * error);
 
 /*!
  *  \struct nrt_HashTableIterator
@@ -70,9 +64,9 @@ typedef int (*NRT_HASH_FUNCTOR)(nrt_HashTable *, nrt_Pair * pair,
  */
 typedef struct _NRT_HashTableIterator
 {
-    nrt_HashTable *hash; /*! The hash this is an iterator for */
-    int curBucket; /*! The current bucket */
-    nrt_ListIterator listIter; /*! The iterator for the current bucket chain */
+    nrt_HashTable *hash;        /* ! The hash this is an iterator for */
+    int curBucket;              /* ! The current bucket */
+    nrt_ListIterator listIter;  /* ! The iterator for the current bucket chain */
 } nrt_HashTableIterator;
 
 /*!
@@ -83,7 +77,7 @@ typedef struct _NRT_HashTableIterator
  *  \return NULL (on failure), or a pointer to the hash table
  */
 NRTAPI(nrt_HashTable *) nrt_HashTable_construct(int nbuckets,
-        nrt_Error * error);
+                                                nrt_Error * error);
 
 /*!
  *  Clone this object.  This is a deep copy operation.
@@ -94,8 +88,8 @@ NRTAPI(nrt_HashTable *) nrt_HashTable_construct(int nbuckets,
  *  \return A new object that is identical to the old
  */
 NRTAPI(nrt_HashTable *) nrt_HashTable_clone(nrt_HashTable * source,
-        NRT_DATA_ITEM_CLONE cloner,
-        nrt_Error * error);
+                                            NRT_DATA_ITEM_CLONE cloner,
+                                            nrt_Error * error);
 
 /*!
  *  This function controls ownership.  You may elect either policy,
@@ -120,7 +114,7 @@ NRTAPI(void) nrt_HashTable_setPolicy(nrt_HashTable * ht, int policy);
  *    - You are expected to delete the data we give you
  *
  *
- *  \note It doesnt matter if you asked us to adopt your object, if you
+ *  \note It doesn't matter if you asked us to adopt your object, if you
  *  remove it prematurely, you are required to delete it yourself.
  *
  *  \param ht The hash table
@@ -128,8 +122,7 @@ NRTAPI(void) nrt_HashTable_setPolicy(nrt_HashTable * ht, int policy);
  *  \return The data for deletion.  If you remove it, you HAVE to delete it
  *
  */
-NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht,
-        const char *key);
+NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht, const char *key);
 
 /*!
  *  This is the default hashing function.  It gets bound when
@@ -178,8 +171,7 @@ NRTAPI(void) nrt_HashTable_destruct(nrt_HashTable ** ht);
  *  \param key The key to lookup
  *  \return 1 if such a key exists, 0 if it does not
  */
-NRTAPI(NRT_BOOL) nrt_HashTable_exists(nrt_HashTable * ht,
-        const char *key);
+NRTAPI(NRT_BOOL) nrt_HashTable_exists(nrt_HashTable * ht, const char *key);
 
 /*!
  *  This is a debug tool to see what's in our hash
@@ -195,10 +187,8 @@ NRTAPI(void) nrt_HashTable_print(nrt_HashTable * ht);
  *  \param error An error if one occurred
  *  \return Status
  */
-NRTAPI(NRT_BOOL) nrt_HashTable_foreach(nrt_HashTable * ht,
-        NRT_HASH_FUNCTOR fn,
-        NRT_DATA* userData,
-        nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_HashTable_foreach(nrt_HashTable * ht, NRT_HASH_FUNCTOR fn,
+                                       NRT_DATA * userData, nrt_Error * error);
 
 /*!
  *  Insert this key/data pair into the hash table
@@ -208,10 +198,8 @@ NRTAPI(NRT_BOOL) nrt_HashTable_foreach(nrt_HashTable * ht,
  *  \param error An error if one occurred
  *  \return 1 if success, 0 if failure
  */
-NRTAPI(NRT_BOOL) nrt_HashTable_insert(nrt_HashTable * ht,
-        const char *key,
-        NRT_DATA * data,
-        nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_HashTable_insert(nrt_HashTable * ht, const char *key,
+                                      NRT_DATA * data, nrt_Error * error);
 
 /*!
  *  Retrieve some key/value pair from the hash table
@@ -219,8 +207,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_insert(nrt_HashTable * ht,
  *  \param key The key to retrieve by
  *  \return The chain link associated with the pair
  */
-NRTAPI(nrt_Pair *)
-nrt_HashTable_find(nrt_HashTable * ht, const char *key);
+NRTAPI(nrt_Pair *) nrt_HashTable_find(nrt_HashTable * ht, const char *key);
 
 /*!
  *  Check to see if two iterators point at the same thing
@@ -230,7 +217,7 @@ nrt_HashTable_find(nrt_HashTable * ht, const char *key);
  *  \return 1 if they are equal, 0 if not
  */
 NRTAPI(NRT_BOOL) nrt_HashTableIterator_equals(nrt_HashTableIterator * it1,
-        nrt_HashTableIterator * it2);
+                                              nrt_HashTableIterator * it2);
 
 /*!
  *  Check to see if two iterators are not pointing at the same thing
@@ -240,7 +227,7 @@ NRTAPI(NRT_BOOL) nrt_HashTableIterator_equals(nrt_HashTableIterator * it1,
  *  \return 1 if they are not equal, 0 if so
  */
 NRTAPI(NRT_BOOL) nrt_HashTableIterator_notEqualTo(nrt_HashTableIterator * it1,
-        nrt_HashTableIterator * it2);
+                                                  nrt_HashTableIterator * it2);
 
 /*!
  *  Return an iterator to the head of the chain
@@ -271,8 +258,7 @@ NRTAPI(void) nrt_HashTableIterator_increment(nrt_HashTableIterator * iter);
  *
  *  \return The data
  */
-NRTAPI(nrt_Pair*) nrt_HashTableIterator_get(nrt_HashTableIterator * iter);
+NRTAPI(nrt_Pair *) nrt_HashTableIterator_get(nrt_HashTableIterator * iter);
 
 NRT_CXX_ENDGUARD
-
 #endif

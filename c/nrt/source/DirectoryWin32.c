@@ -24,7 +24,6 @@
 
 #ifdef WIN32
 
-
 NRT_CXX_GUARD typedef struct _DirectoryWin32
 {
     HANDLE handle;
@@ -39,20 +38,17 @@ DirectoryWin32;
  */
 NRTAPI(nrt_Directory *) nrt_Directory_construct(nrt_Error * error)
 {
-    DirectoryWin32 *dir =
-        (DirectoryWin32 *) NRT_MALLOC(sizeof(DirectoryWin32));
+    DirectoryWin32 *dir = (DirectoryWin32 *) NRT_MALLOC(sizeof(DirectoryWin32));
     if (!dir)
     {
-        nrt_Error_init(error,
-                        NRT_STRERROR(NRT_ERRNO),
-                        NRT_CTXT, NRT_ERR_MEMORY);
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_MEMORY);
         return NULL;
     }
     dir->handle = INVALID_HANDLE_VALUE;
 
     return (nrt_Directory *) dir;
 }
-
 
 /*!
  *  Find the first file in a directory.
@@ -61,7 +57,7 @@ NRTAPI(nrt_Directory *) nrt_Directory_construct(nrt_Error * error)
  */
 
 NRTAPI(const char *) nrt_Directory_findFirstFile(nrt_Directory * dir,
-        const char *path)
+                                                 const char *path)
 {
     DirectoryWin32 *nDir = (DirectoryWin32 *) dir;
     char buffer[NRT_MAX_PATH] = "";
@@ -72,7 +68,6 @@ NRTAPI(const char *) nrt_Directory_findFirstFile(nrt_Directory * dir,
     return nDir->fileData.cFileName;
 }
 
-
 NRTAPI(const char *) nrt_Directory_findNextFile(nrt_Directory * dir)
 {
     DirectoryWin32 *nDir = (DirectoryWin32 *) dir;
@@ -80,7 +75,6 @@ NRTAPI(const char *) nrt_Directory_findNextFile(nrt_Directory * dir)
         return NULL;
     return nDir->fileData.cFileName;
 }
-
 
 NRTAPI(void) nrt_Directory_destruct(nrt_Directory ** dir)
 {
@@ -94,7 +88,6 @@ NRTAPI(void) nrt_Directory_destruct(nrt_Directory ** dir)
     }
 }
 
-
 NRTAPI(NRT_BOOL) nrt_Directory_exists(const char *dir)
 {
     DWORD what = GetFileAttributes(dir);
@@ -106,7 +99,6 @@ NRTAPI(NRT_BOOL) nrt_Directory_exists(const char *dir)
     return NRT_FAILURE;
 
 }
-
 
 NRT_CXX_ENDGUARD
 #endif

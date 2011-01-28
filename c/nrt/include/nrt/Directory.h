@@ -46,7 +46,7 @@ NRTAPI(nrt_Directory *) nrt_Directory_construct(nrt_Error * error);
  *  \return The name of the first file in the directory
  */
 NRTAPI(const char *) nrt_Directory_findFirstFile(nrt_Directory * dir,
-        const char *path);
+                                                 const char *path);
 
 /*!
  *  Opens the next file in a directory.  This call should be made
@@ -69,5 +69,4 @@ NRTAPI(void) nrt_Directory_destruct(nrt_Directory ** dir);
 NRTAPI(NRT_BOOL) nrt_Directory_exists(const char *dir);
 
 NRT_CXX_ENDGUARD
-
 #endif

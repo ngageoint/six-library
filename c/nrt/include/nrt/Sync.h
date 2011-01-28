@@ -28,7 +28,6 @@
 #include "nrt/Memory.h"
 
 NRT_CXX_GUARD
-
 #if defined(WIN32)
 typedef LPCRITICAL_SECTION nrt_Mutex;
 #elif defined(__sgi)
@@ -41,12 +40,10 @@ typedef int nrt_Mutex;
 typedef pthread_mutex_t nrt_Mutex;
 #endif
 
-NRTPROT(void) nrt_Mutex_lock(nrt_Mutex* m);
-NRTPROT(void) nrt_Mutex_unlock(nrt_Mutex* m);
-NRTPROT(void) nrt_Mutex_init(nrt_Mutex* m);
-NRTPROT(void) nrt_Mutex_delete(nrt_Mutex* m);
+NRTPROT(void) nrt_Mutex_lock(nrt_Mutex * m);
+NRTPROT(void) nrt_Mutex_unlock(nrt_Mutex * m);
+NRTPROT(void) nrt_Mutex_init(nrt_Mutex * m);
+NRTPROT(void) nrt_Mutex_delete(nrt_Mutex * m);
 
 NRT_CXX_ENDGUARD
-
 #endif
-

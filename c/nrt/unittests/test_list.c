@@ -42,17 +42,17 @@ TEST_CASE(testPushPop)
     l = nrt_List_construct(&e);
     TEST_ASSERT(l);
 
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)"NITRO", &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)"Rocks!", &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) "NITRO", &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) "Rocks!", &e));
 
     TEST_ASSERT_EQ_INT(2, nrt_List_size(l));
 
     /* test iterating */
     it = nrt_List_begin(l);
     endList = nrt_List_end(l);
-    for(; nrt_ListIterator_notEqualTo( &it, &endList ); ++i)
+    for (; nrt_ListIterator_notEqualTo(&it, &endList); ++i)
     {
-        char* p = (char*)nrt_ListIterator_get(&it);
+        char *p = (char *) nrt_ListIterator_get(&it);
         TEST_ASSERT(p);
         nrt_ListIterator_increment(&it);
     }
@@ -62,7 +62,7 @@ TEST_CASE(testPushPop)
     it = nrt_List_begin(l);
     while (!nrt_List_isEmpty(l))
     {
-        char* p = (char*)nrt_List_popFront(l);
+        char *p = (char *) nrt_List_popFront(l);
         TEST_ASSERT(p);
     }
     TEST_ASSERT_EQ_INT(0, nrt_List_size(l));
@@ -70,10 +70,10 @@ TEST_CASE(testPushPop)
     TEST_ASSERT_NULL(l);
 }
 
-char* cloneString(char* data, nrt_Error* error)
+char *cloneString(char *data, nrt_Error * error)
 {
     int data_len = strlen(data);
-    char* new_data = (char*) NRT_MALLOC(data_len + 1);
+    char *new_data = (char *) NRT_MALLOC(data_len + 1);
     new_data[data_len] = 0;
     assert(new_data);
     strcpy(new_data, data);
@@ -87,20 +87,20 @@ TEST_CASE(testClone)
     nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     TEST_ASSERT(l);
 
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("1", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("2", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("3", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("4", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("5", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("1", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("2", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("3", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("4", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("5", NULL), &e));
 
-    dolly = nrt_List_clone(l, (NRT_DATA_ITEM_CLONE)cloneString, &e);
+    dolly = nrt_List_clone(l, (NRT_DATA_ITEM_CLONE) cloneString, &e);
     TEST_ASSERT(dolly);
     TEST_ASSERT_EQ_INT(nrt_List_size(l), nrt_List_size(dolly));
 
     i = 0;
     while (!nrt_List_isEmpty(dolly))
     {
-        char* p = (char*)nrt_List_popFront(dolly);
+        char *p = (char *) nrt_List_popFront(dolly);
         TEST_ASSERT(p);
         TEST_ASSERT_EQ_INT(NRT_ATO32(p), ++i);
     }
@@ -121,19 +121,19 @@ TEST_CASE(testIterate)
 
     TEST_ASSERT(l);
 
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("1", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("2", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("3", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("4", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("5", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("1", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("2", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("3", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("4", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("5", NULL), &e));
 
     it = nrt_List_begin(l);
     end = nrt_List_end(l);
 
     i = 0;
-    while ( nrt_ListIterator_notEqualTo( &it, &end ) )
+    while (nrt_ListIterator_notEqualTo(&it, &end))
     {
-        char* p = (char*)nrt_ListIterator_get(&it);
+        char *p = (char *) nrt_ListIterator_get(&it);
         TEST_ASSERT(p);
         TEST_ASSERT_EQ_INT(NRT_ATO32(p), ++i);
         nrt_ListIterator_increment(&it);
@@ -151,18 +151,18 @@ TEST_CASE(testIterateRemove)
 
     TEST_ASSERT(l);
 
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("1", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("2", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("3", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("4", NULL), &e));
-    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA*)cloneString("5", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("1", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("2", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("3", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("4", NULL), &e));
+    TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) cloneString("5", NULL), &e));
 
     it = nrt_List_begin(l);
     end = nrt_List_end(l);
 
-    while ( nrt_ListIterator_notEqualTo( &it, &end ) )
+    while (nrt_ListIterator_notEqualTo(&it, &end))
     {
-        char* p = (char*)nrt_List_remove(l, &it);
+        char *p = (char *) nrt_List_remove(l, &it);
         TEST_ASSERT(p);
     }
     TEST_ASSERT_EQ_INT(0, nrt_List_size(l));

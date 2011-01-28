@@ -25,19 +25,18 @@
 NRTPROT(nrt_Uint16) nrt_System_swap16(nrt_Uint16 ins)
 {
     nrt_Uint16 outs;
-    unsigned char *ibytep = (unsigned char *) & ins;
-    unsigned char *obytep = (unsigned char *) & outs;
+    unsigned char *ibytep = (unsigned char *) &ins;
+    unsigned char *obytep = (unsigned char *) &outs;
     obytep[1] = ibytep[0];
     obytep[0] = ibytep[1];
     return outs;
 }
 
-
 NRTPROT(nrt_Uint32) nrt_System_swap32(nrt_Uint32 inl)
 {
     nrt_Uint32 outl;
-    unsigned char *ibytep = (unsigned char *) & inl;
-    unsigned char *obytep = (unsigned char *) & outl;
+    unsigned char *ibytep = (unsigned char *) &inl;
+    unsigned char *obytep = (unsigned char *) &outl;
     obytep[3] = ibytep[0];
     obytep[2] = ibytep[1];
     obytep[1] = ibytep[2];
@@ -48,8 +47,8 @@ NRTPROT(nrt_Uint32) nrt_System_swap32(nrt_Uint32 inl)
 NRTPROT(nrt_Uint32) nrt_System_swap64c(nrt_Uint64 inl)
 {
     nrt_Uint64 outl;
-    unsigned char *ibytep = (unsigned char *) & inl;
-    unsigned char *obytep = (unsigned char *) & outl;
+    unsigned char *ibytep = (unsigned char *) &inl;
+    unsigned char *obytep = (unsigned char *) &outl;
     obytep[7] = ibytep[4];
     obytep[6] = ibytep[5];
     obytep[5] = ibytep[6];
@@ -62,12 +61,11 @@ NRTPROT(nrt_Uint32) nrt_System_swap64c(nrt_Uint64 inl)
     return outl;
 }
 
-
 NRTPROT(nrt_Uint64) nrt_System_swap64(nrt_Uint64 inl)
 {
     nrt_Uint64 outl;
-    unsigned char *ibytep = (unsigned char *) & inl;
-    unsigned char *obytep = (unsigned char *) & outl;
+    unsigned char *ibytep = (unsigned char *) &inl;
+    unsigned char *obytep = (unsigned char *) &outl;
 
     obytep[7] = ibytep[0];
     obytep[6] = ibytep[1];

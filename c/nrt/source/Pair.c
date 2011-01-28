@@ -22,8 +22,7 @@
 
 #include "nrt/Pair.h"
 
-NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key,
-                             NRT_DATA * data)
+NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key, NRT_DATA * data)
 {
     size_t len = strlen(key);
     pair->key = (char *) NRT_MALLOC(len + 1);
@@ -32,7 +31,6 @@ NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key,
     strcpy(pair->key, key);
     pair->data = data;
 }
-
 
 NRTAPI(void) nrt_Pair_copy(nrt_Pair * dst, nrt_Pair * src)
 {

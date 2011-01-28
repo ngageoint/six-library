@@ -37,21 +37,18 @@ typedef struct _protected_nrt_IntStack
 
 NRTPROT(nrt_IntStack *) nrt_IntStack_construct(nrt_Error * error);
 
-NRTPROT(nrt_IntStack *) nrt_IntStack_clone(nrt_IntStack* stack,
-        nrt_Error* error);
+NRTPROT(nrt_IntStack *) nrt_IntStack_clone(nrt_IntStack * stack,
+                                           nrt_Error * error);
 
 NRTPROT(void) nrt_IntStack_destruct(nrt_IntStack ** stack);
 
 NRTPROT(int) nrt_IntStack_top(nrt_IntStack * stack, nrt_Error * error);
 
-NRTPROT(int) nrt_IntStack_push(nrt_IntStack * stack,
-        int n, nrt_Error * error);
+NRTPROT(int) nrt_IntStack_push(nrt_IntStack * stack, int n, nrt_Error * error);
 
 NRTPROT(int) nrt_IntStack_pop(nrt_IntStack * stack, nrt_Error * error);
 
-NRTPROT(int) nrt_IntStack_depth(nrt_IntStack * stack,
-        nrt_Error * error);
+NRTPROT(int) nrt_IntStack_depth(nrt_IntStack * stack, nrt_Error * error);
 
 NRT_CXX_ENDGUARD
-
 #endif

@@ -24,11 +24,10 @@
 
 #ifdef WIN32
 
-
 NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
-        nrt_AccessFlags access,
-        nrt_CreationFlags creation,
-        nrt_Error * error)
+                                         nrt_AccessFlags access,
+                                         nrt_CreationFlags creation,
+                                         nrt_Error * error)
 {
     HANDLE handle;
 
@@ -43,24 +42,23 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
         }
     }
 
-    handle = CreateFile(fname,
-                        access,
-                        FILE_SHARE_READ, NULL, creation, FILE_ATTRIBUTE_NORMAL, NULL);
+    handle =
+        CreateFile(fname, access, FILE_SHARE_READ, NULL, creation,
+                   FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (handle == INVALID_HANDLE_VALUE)
     {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO),
-                        NRT_CTXT, NRT_ERR_OPENING_FILE);
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_OPENING_FILE);
     }
     return handle;
 }
 
-
-NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle,
-                                      char *buf, size_t size,
-                                      nrt_Error * error)
+NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
+                                   nrt_Error * error)
 {
-    DWORD bytesRead = 0;        /* Number of bytes read during last read operation */
+    DWORD bytesRead = 0;        /* Number of bytes read during last read
+                                 * operation */
     DWORD totalBytesRead = 0;   /* Total bytes read thus far */
 
     /* Make the next read */
@@ -72,20 +70,18 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle,
     return NRT_SUCCESS;
 
     /* An error occured */
-CATCH_ERROR:
+    CATCH_ERROR:
     {
 
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
-                        NRT_ERR_READING_FROM_FILE);
+                       NRT_ERR_READING_FROM_FILE);
 
     }
     return NRT_FAILURE;
 }
 
-
-NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle,
-                                       const char *buf, size_t size,
-                                       nrt_Error * error)
+NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
+                                    size_t size, nrt_Error * error)
 {
     DWORD actuallyWritten = 0;
 
@@ -99,7 +95,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle,
         {
             /* If the function failed, we want to get the last error */
             nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
-                            NRT_ERR_READING_FROM_FILE);
+                           NRT_ERR_READING_FROM_FILE);
             /* And fail */
             return NRT_FAILURE;
         }
@@ -111,55 +107,44 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle,
     return NRT_SUCCESS;
 }
 
-
-NRTAPI(nrt_Off) nrt_IOHandle_seek(nrt_IOHandle handle,
-                                  nrt_Off offset, int whence,
-                                  nrt_Error * error)
+NRTAPI(nrt_Off) nrt_IOHandle_seek(nrt_IOHandle handle, nrt_Off offset,
+                                  int whence, nrt_Error * error)
 {
     LARGE_INTEGER largeInt;
     int lastError;
     largeInt.QuadPart = offset;
-    largeInt.LowPart = SetFilePointer(handle, largeInt.LowPart,
-                                      &largeInt.HighPart, whence);
+    largeInt.LowPart =
+        SetFilePointer(handle, largeInt.LowPart, &largeInt.HighPart, whence);
 
     lastError = GetLastError();
-    if ((largeInt.LowPart == INVALID_SET_FILE_POINTER) &&
-            (lastError != NO_ERROR))
+    if ((largeInt.LowPart == INVALID_SET_FILE_POINTER)
+        && (lastError != NO_ERROR))
     {
-        nrt_Error_initf(error,
-                         NRT_CTXT, NRT_ERR_SEEKING_IN_FILE,
-                         "SetFilePointer failed with error [%d]",
-                         lastError);
-        return (nrt_Off)-1;
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_SEEKING_IN_FILE,
+                        "SetFilePointer failed with error [%d]", lastError);
+        return (nrt_Off) - 1;
     }
     return (nrt_Off) largeInt.QuadPart;
 }
-
 
 NRTAPI(nrt_Off) nrt_IOHandle_tell(nrt_IOHandle handle, nrt_Error * error)
 {
     return nrt_IOHandle_seek(handle, 0, FILE_CURRENT, error);
 }
 
-
-NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle,
-                                     nrt_Error * error)
+NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle, nrt_Error * error)
 {
     DWORD ret;
     DWORD highOff;
     ret = GetFileSize(handle, &highOff);
     if ((ret == -1))
     {
-        nrt_Error_initf(error,
-                         NRT_CTXT,
-                         NRT_ERR_STAT_FILE,
-                         "GetFileSize failed with error [%d]",
-                         GetLastError());
-        return (nrt_Off)-1;
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_STAT_FILE,
+                        "GetFileSize failed with error [%d]", GetLastError());
+        return (nrt_Off) - 1;
     }
     return ((highOff) << 32) + ret;
 }
-
 
 NRTAPI(void) nrt_IOHandle_close(nrt_IOHandle handle)
 {

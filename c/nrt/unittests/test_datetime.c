@@ -27,7 +27,7 @@
 #define NRT_DATE_FORMAT_21  "%Y%m%d%H%M%S"
 #define NRT_FDT_SZ 14
 
-NRTPRIV(void) printDate(nrt_DateTime *date)
+NRTPRIV(void) printDate(nrt_DateTime * date)
 {
     printf("Year: %d\n", date->year);
     printf("Month: %d\n", date->month);
@@ -80,25 +80,26 @@ TEST_CASE(testRoundTrip)
     date = nrt_DateTime_now(&e);
     TEST_ASSERT(date);
 
-    /*printDate(date);*/
+    /* printDate(date); */
 
-    TEST_ASSERT((nrt_DateTime_format(date, NRT_DATE_FORMAT_21, buf,
-                            NRT_FDT_SZ + 1, &e)));
-    /*printf("Date: %s\n", buf);*/
+    TEST_ASSERT((nrt_DateTime_format
+                 (date, NRT_DATE_FORMAT_21, buf, NRT_FDT_SZ + 1, &e)));
+    /* printf("Date: %s\n", buf); */
 
     date2 = nrt_DateTime_fromString(buf, NRT_DATE_FORMAT_21, &e);
     TEST_ASSERT(date2);
 
-    TEST_ASSERT((nrt_DateTime_format(date2, NRT_DATE_FORMAT_21, buf2,
-                            NRT_FDT_SZ + 1, &e)));
-    /*printf("Date: %s\n", buf2);*/
-    /*printDate(date2);*/
+    TEST_ASSERT((nrt_DateTime_format
+                 (date2, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
+    /* printf("Date: %s\n", buf2); */
+    /* printDate(date2); */
 
     TEST_ASSERT_EQ_STR(buf, buf2);
 
-    /* must subtract off the millis - since our format string doesn't include them */
-    nrt_DateTime_setSecond(date, (int)date->second, &e);
-    nrt_DateTime_setSecond(date2, (int)date2->second, &e);
+    /* must subtract off the millis - since our format string doesn't include
+     * them */
+    nrt_DateTime_setSecond(date, (int) date->second, &e);
+    nrt_DateTime_setSecond(date2, (int) date2->second, &e);
     TEST_ASSERT_EQ_FLOAT(date->timeInMillis, date2->timeInMillis);
 
     nrt_DateTime_destruct(&date);
@@ -116,37 +117,37 @@ TEST_CASE(testSetIdentity)
     date = nrt_DateTime_now(&e);
     TEST_ASSERT(date);
 
-    TEST_ASSERT((nrt_DateTime_format(date, NRT_DATE_FORMAT_21, buf,
-                            NRT_FDT_SZ + 1, &e)));
+    TEST_ASSERT((nrt_DateTime_format
+                 (date, NRT_DATE_FORMAT_21, buf, NRT_FDT_SZ + 1, &e)));
 
     /* set hour */
     TEST_ASSERT(nrt_DateTime_setHour(date, date->hour, &e));
-    TEST_ASSERT((nrt_DateTime_format(date, NRT_DATE_FORMAT_21, buf2,
-                            NRT_FDT_SZ + 1, &e)));
+    TEST_ASSERT((nrt_DateTime_format
+                 (date, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     /* set minute */
     TEST_ASSERT(nrt_DateTime_setMinute(date, date->minute, &e));
-    TEST_ASSERT((nrt_DateTime_format(date, NRT_DATE_FORMAT_21, buf2,
-                            NRT_FDT_SZ + 1, &e)));
+    TEST_ASSERT((nrt_DateTime_format
+                 (date, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     /* set second */
     TEST_ASSERT(nrt_DateTime_setSecond(date, date->second, &e));
-    TEST_ASSERT((nrt_DateTime_format(date, NRT_DATE_FORMAT_21, buf2,
-                            NRT_FDT_SZ + 1, &e)));
+    TEST_ASSERT((nrt_DateTime_format
+                 (date, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     /* set month */
     TEST_ASSERT(nrt_DateTime_setMonth(date, date->month, &e));
-    TEST_ASSERT((nrt_DateTime_format(date, NRT_DATE_FORMAT_21, buf2,
-                            NRT_FDT_SZ + 1, &e)));
+    TEST_ASSERT((nrt_DateTime_format
+                 (date, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     /* set month */
     TEST_ASSERT(nrt_DateTime_setYear(date, date->year, &e));
-    TEST_ASSERT((nrt_DateTime_format(date, NRT_DATE_FORMAT_21, buf2,
-                            NRT_FDT_SZ + 1, &e)));
+    TEST_ASSERT((nrt_DateTime_format
+                 (date, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
     TEST_ASSERT_EQ_STR(buf, buf2);
 
     nrt_DateTime_destruct(&date);
@@ -157,13 +158,13 @@ TEST_CASE(testMillis)
 {
     nrt_Error e;
     char buf[MAX_DATE_STRING];
-    const char* timeStr = "2010-01-12T22:55:37.123456Z";
+    const char *timeStr = "2010-01-12T22:55:37.123456Z";
     nrt_DateTime *date = NULL;
 
     date = nrt_DateTime_fromString(timeStr, "%Y-%m-%dT%H:%M:%SZ", &e);
     TEST_ASSERT(date);
 
-    TEST_ASSERT_EQ_INT((int)(1000 * (date->second - (int)date->second)), 123);
+    TEST_ASSERT_EQ_INT((int) (1000 * (date->second - (int) date->second)), 123);
 
     nrt_DateTime_format(date, "%S", buf, MAX_DATE_STRING, &e);
     TEST_ASSERT_EQ_STR(buf, "37");

@@ -32,22 +32,20 @@ DirectoryUnix;
 
 NRTAPI(nrt_Directory *) nrt_Directory_construct(nrt_Error * error)
 {
-    DirectoryUnix *dir =
-        (DirectoryUnix *) NRT_MALLOC(sizeof(DirectoryUnix));
+    DirectoryUnix *dir = (DirectoryUnix *) NRT_MALLOC(sizeof(DirectoryUnix));
 
     if (!dir)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
-                        NRT_ERR_MEMORY);
+                       NRT_ERR_MEMORY);
         return NULL;
     }
     dir->handle = NULL;
     return dir;
 }
 
-
 NRTAPI(const char *) nrt_Directory_findFirstFile(nrt_Directory * dir,
-        const char *path)
+                                                 const char *path)
 {
     DirectoryUnix *nDir = (DirectoryUnix *) dir;
     nDir->handle = opendir(path);
@@ -55,7 +53,6 @@ NRTAPI(const char *) nrt_Directory_findFirstFile(nrt_Directory * dir,
         return NULL;
     return nrt_Directory_findNextFile(dir);
 }
-
 
 NRTAPI(const char *) nrt_Directory_findNextFile(nrt_Directory * dir)
 {
@@ -66,7 +63,6 @@ NRTAPI(const char *) nrt_Directory_findNextFile(nrt_Directory * dir)
         return NULL;
     return entry->d_name;
 }
-
 
 NRTAPI(void) nrt_Directory_destruct(nrt_Directory ** dir)
 {
@@ -82,7 +78,6 @@ NRTAPI(void) nrt_Directory_destruct(nrt_Directory ** dir)
         *dir = NULL;
     }
 }
-
 
 NRTAPI(NRT_BOOL) nrt_Directory_exists(const char *path)
 {

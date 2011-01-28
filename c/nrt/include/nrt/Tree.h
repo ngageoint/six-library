@@ -27,7 +27,6 @@
 #include "nrt/List.h"
 
 NRT_CXX_GUARD
-
 /*!
  *  \struct nrt_TreeNode
  *  \brief A Tree Node in a nrt_Tree
@@ -45,18 +44,18 @@ NRT_CXX_GUARD
 typedef struct _NRT_TreeNode
 {
 
-    struct _NRT_TreeNode* parent;
+    struct _NRT_TreeNode *parent;
 
-    /*! The child nodes List<TreeNode*> */
-    nrt_List* children;
+    /* ! The child nodes List<TreeNode*> */
+    nrt_List *children;
 
-    /*! The data */
-    NRT_DATA* data;
+    /* ! The data */
+    NRT_DATA *data;
 } nrt_TreeNode;
 
 typedef struct _NRT_Tree
 {
-    /*! The root node */
+    /* ! The root node */
     nrt_TreeNode *root;
 
 } nrt_Tree;
@@ -73,9 +72,8 @@ typedef struct _NRT_Tree
  *  \param error The error to return
  *
  */
-NRTAPI(nrt_TreeNode *) nrt_TreeNode_construct(NRT_DATA* data,
-                                                 nrt_Error* error);
-
+NRTAPI(nrt_TreeNode *) nrt_TreeNode_construct(NRT_DATA * data,
+                                              nrt_Error * error);
 
 /*!
  *  Destroy the current node and NULL set it.  We are not responsible
@@ -83,7 +81,7 @@ NRTAPI(nrt_TreeNode *) nrt_TreeNode_construct(NRT_DATA* data,
  *  
  *  \param node The node
  */
-NRTAPI(void) nrt_TreeNode_destruct(nrt_TreeNode** node);
+NRTAPI(void) nrt_TreeNode_destruct(nrt_TreeNode ** node);
 
 /*!
  *  Add a node to our children.  The child will be appended to the NITF
@@ -95,9 +93,8 @@ NRTAPI(void) nrt_TreeNode_destruct(nrt_TreeNode** node);
  *  \return NRT_SUCCESS on success, NRT_FAILURE on failure
  *
  */
-NRTAPI(NRT_BOOL) nrt_TreeNode_addChild(nrt_TreeNode* node,
-                                          nrt_TreeNode* child, 
-                                          nrt_Error* error);
+NRTAPI(NRT_BOOL) nrt_TreeNode_addChild(nrt_TreeNode * node,
+                                       nrt_TreeNode * child, nrt_Error * error);
 
 /*!
  *  Return if this tree node has children.  This is slightly easier than 
@@ -106,7 +103,7 @@ NRTAPI(NRT_BOOL) nrt_TreeNode_addChild(nrt_TreeNode* node,
  *  \param node The node
  *  \return 1 if we have children, 0, if not.
  */
-NRTAPI(NRT_BOOL) nrt_TreeNode_hasChildren(nrt_TreeNode* node);
+NRTAPI(NRT_BOOL) nrt_TreeNode_hasChildren(nrt_TreeNode * node);
 
 /*!
  *  Remove this child from the list.  We will remove our list element
@@ -117,17 +114,16 @@ NRTAPI(NRT_BOOL) nrt_TreeNode_hasChildren(nrt_TreeNode* node);
  *  you had it, you would have to call this function repeatedly,
  *  e.g., while (nrt_TreeNode_remove(tree, node));
  */
-NRTAPI(NRT_BOOL) nrt_TreeNode_removeChild(nrt_TreeNode* node,
-                                             nrt_TreeNode* child);
+NRTAPI(NRT_BOOL) nrt_TreeNode_removeChild(nrt_TreeNode * node,
+                                          nrt_TreeNode * child);
 
 /*!
  *  Clone our TreeNode into a new one.  We will need a clone function
  *  to tell us how to clone our NRT_DATA
  */
-NRTAPI(nrt_TreeNode*) nrt_TreeNode_clone(nrt_TreeNode* source,
-                                            NRT_DATA_ITEM_CLONE cloner,
-                                            nrt_Error* error);
-
+NRTAPI(nrt_TreeNode *) nrt_TreeNode_clone(nrt_TreeNode * source,
+                                          NRT_DATA_ITEM_CLONE cloner,
+                                          nrt_Error * error);
 
 /*!
  *  Get ourselves a top-level data structure that can be used to control
@@ -137,23 +133,20 @@ NRTAPI(nrt_TreeNode*) nrt_TreeNode_clone(nrt_TreeNode* source,
  *  \param An error.  
  *
  */
-NRTAPI(nrt_Tree*) nrt_Tree_construct(nrt_TreeNode* root,
-                                        nrt_Error* error);
+NRTAPI(nrt_Tree *) nrt_Tree_construct(nrt_TreeNode * root, nrt_Error * error);
 
 /*!
  *  Destroy our tree
  *  \param tree The tree to destruct
  */
-NRTAPI(void) nrt_Tree_destruct(nrt_Tree** tree);
+NRTAPI(void) nrt_Tree_destruct(nrt_Tree ** tree);
 
-
-typedef enum _NRT_Traversal 
-{ 
+typedef enum _NRT_Traversal
+{
     NRT_PRE_ORDER = 0,
     NRT_POST_ORDER
-    /* We are not a binary tree, so no inorder traversal */
+        /* We are not a binary tree, so no inorder traversal */
 } nrt_Traversal;
-
 
 /*!
  *  This is a traversal function.  When you call nrt_Tree_walk()
@@ -165,11 +158,8 @@ typedef enum _NRT_Traversal
  *  we will short-circuit the walk method.
  *
  */
-typedef NRT_BOOL (*NRT_TREE_TRAVERSER) (nrt_TreeNode *, 
-                                          NRT_DATA* userData,
-                                          int depth,
-                                          nrt_Error *);
-
+typedef NRT_BOOL(*NRT_TREE_TRAVERSER) (nrt_TreeNode *, NRT_DATA * userData,
+                                       int depth, nrt_Error *);
 
 /*!
  *  Walk our tree using one of the traversal methods specified.
@@ -179,11 +169,9 @@ typedef NRT_BOOL (*NRT_TREE_TRAVERSER) (nrt_TreeNode *,
  *  to have returned us an error that we will hand back to the application
  *
  */
-NRTAPI(NRT_BOOL) nrt_Tree_walk(nrt_Tree* tree, 
-                                  NRT_TREE_TRAVERSER onNode,
-                                  int traversalOrder,
-                                  NRT_DATA* userData,
-                                  nrt_Error* error);
+NRTAPI(NRT_BOOL) nrt_Tree_walk(nrt_Tree * tree, NRT_TREE_TRAVERSER onNode,
+                               int traversalOrder, NRT_DATA * userData,
+                               nrt_Error * error);
 
 /*!
  *  Only providing this because we have to.  It looks identical to the
@@ -195,14 +183,12 @@ NRTAPI(NRT_BOOL) nrt_Tree_walk(nrt_Tree* tree,
  *
  *  \return A Tree that is the clone of source
  */
-NRTAPI(nrt_Tree*) nrt_Tree_clone(nrt_Tree* source,
-                                    NRT_DATA_ITEM_CLONE cloner,
-                                    nrt_Error* error);
+NRTAPI(nrt_Tree *) nrt_Tree_clone(nrt_Tree * source, NRT_DATA_ITEM_CLONE cloner,
+                                  nrt_Error * error);
 
 /*
  *  There are lots of other tree-type functions that I will ignore
  *  for now, but that would be useful, including sub-cloning, etc.
  */
 NRT_CXX_ENDGUARD
-
 #endif

@@ -24,9 +24,7 @@
 #include "nrt/Sync.h"
 
 NRT_CXX_GUARD
-
 #if defined(__sgi)
-
 NRTPROT(void) nrt_Mutex_lock(nrt_Mutex * m)
 {
     nrt_Debug_flogf(stdout, "***Locking Mutex*** [sgi]\n");
@@ -39,13 +37,11 @@ NRTPROT(void) nrt_Mutex_unlock(nrt_Mutex * m)
     *m = 0;
 }
 
-
 NRTPROT(void) nrt_Mutex_init(nrt_Mutex * m)
 {
     nrt_Debug_flogf(stdout, "***Initializing Mutex*** [sgi]\n");
     *m = 0;
 }
-
 
 NRTPROT(void) nrt_Mutex_delete(nrt_Mutex * m)
 {

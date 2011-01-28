@@ -31,7 +31,7 @@
 
 NRTPROT(void *) nrt_Debug_malloc(const char *file, int line, size_t sz)
 {
-    /*  The pointer to allocate  */
+    /* The pointer to allocate */
     void *p;
     FILE *f;
     char name[512];
@@ -39,7 +39,7 @@ NRTPROT(void *) nrt_Debug_malloc(const char *file, int line, size_t sz)
 #ifndef WIN32
     NRT_SNPRINTF(name, 512, "%s.%d", NRT_MEM_LOG, getpid());
 #else
-    /* This can easily be modified to use GetCurrentProcessId()  */
+    /* This can easily be modified to use GetCurrentProcessId() */
     strcpy(name, NRT_MEM_LOG);
 #endif
 
@@ -55,9 +55,8 @@ NRTPROT(void *) nrt_Debug_malloc(const char *file, int line, size_t sz)
     return p;
 }
 
-
-NRTPROT(void *) nrt_Debug_realloc(const char *file,
-                                    int line, void *ptr, size_t sz)
+NRTPROT(void *) nrt_Debug_realloc(const char *file, int line, void *ptr,
+                                  size_t sz)
 {
     void *p;
     char name[512];
@@ -66,7 +65,7 @@ NRTPROT(void *) nrt_Debug_realloc(const char *file,
 #ifndef WIN32
     NRT_SNPRINTF(name, 512, "%s.%d", NRT_MEM_LOG, getpid());
 #else
-    /* This can easily be modified to use GetCurrentProcessId()  */
+    /* This can easily be modified to use GetCurrentProcessId() */
     strcpy(name, NRT_MEM_LOG);
 #endif
 
@@ -81,7 +80,6 @@ NRTPROT(void *) nrt_Debug_realloc(const char *file,
     return p;
 }
 
-
 NRTPROT(void) nrt_Debug_free(const char *file, int line, void *ptr)
 {
     FILE *f;
@@ -90,7 +88,7 @@ NRTPROT(void) nrt_Debug_free(const char *file, int line, void *ptr)
 #ifndef WIN32
     NRT_SNPRINTF(name, 512, "%s.%d", NRT_MEM_LOG, getpid());
 #else
-    /* This can easily be modified to use GetCurrentProcessId()  */
+    /* This can easily be modified to use GetCurrentProcessId() */
     strcpy(name, NRT_MEM_LOG);
 #endif
 

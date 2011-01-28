@@ -26,7 +26,6 @@
 #include "nrt/System.h"
 
 NRT_CXX_GUARD
-
 /*!
  *  \struct nrt_Pair
  *  \brief  This is an object containing the data and the key
@@ -46,8 +45,7 @@ typedef struct _NRT_Pair
  *  \param key  The key in the pair (is copied)
  *  \param data The data in the pair (not a copy)
  */
-NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key,
-        NRT_DATA * data);
+NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key, NRT_DATA * data);
 
 /*!
  *  This simply calls the init method
@@ -58,5 +56,4 @@ NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key,
 NRTAPI(void) nrt_Pair_copy(nrt_Pair * dst, nrt_Pair * src);
 
 NRT_CXX_ENDGUARD
-
 #endif

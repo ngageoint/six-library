@@ -47,12 +47,11 @@
  */
 typedef struct _NRT_DLL
 {
-    char *libname; /* The name of the library */
-    NRT_NATIVE_DLL lib; /* A handle to the library */
+    char *libname;              /* The name of the library */
+    NRT_NATIVE_DLL lib;         /* A handle to the library */
 } nrt_DLL;
 
 NRT_CXX_GUARD
-
 /*!
  *  Construct a DLL object
  *  This does nothing more than a memset, and a ZERO,
@@ -60,7 +59,7 @@ NRT_CXX_GUARD
  *  \param error An error object to fill on problem
  *  \return A DLL object, or NULL upon failure
  */
-NRTAPI(nrt_DLL*) nrt_DLL_construct(nrt_Error * error);
+NRTAPI(nrt_DLL *) nrt_DLL_construct(nrt_Error * error);
 
 /*!
  *  Destroy the dll object.  If the lib value is not null,
@@ -77,8 +76,8 @@ NRTAPI(void) nrt_DLL_destruct(nrt_DLL ** dll);
  *  \param error An error object to populate if there is a problem
  *  \return A status to be tested using NRT_FAILURE()
  */
-NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll,
-        const char *libname, nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll, const char *libname,
+                              nrt_Error * error);
 
 /*!
  *  Unload the structure.  This may shrink the executable size.
@@ -96,8 +95,8 @@ NRTAPI(NRT_BOOL) nrt_DLL_unload(nrt_DLL * dll, nrt_Error * error);
  *  \return A pointer to the FARPROC function
  */
 NRTAPI(NRT_DLL_FUNCTION_PTR) nrt_DLL_retrieve(nrt_DLL * dll,
-        const char *function,
-        nrt_Error * error);
+                                              const char *function,
+                                              nrt_Error * error);
 
 NRTAPI(NRT_BOOL) nrt_DLL_isValid(nrt_DLL * dll);
 

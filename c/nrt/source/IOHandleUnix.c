@@ -25,9 +25,9 @@
 #include "nrt/IOHandle.h"
 
 NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
-        nrt_AccessFlags access,
-        nrt_CreationFlags creation,
-        nrt_Error * error)
+                                         nrt_AccessFlags access,
+                                         nrt_CreationFlags creation,
+                                         nrt_Error * error)
 {
     int fd;
     if (access & NRT_ACCESS_WRITEONLY)
@@ -36,20 +36,18 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
 
     if (fd == -1)
     {
-        nrt_Error_init(error,
-                        strerror(errno), NRT_CTXT, NRT_ERR_OPENING_FILE);
+        nrt_Error_init(error, strerror(errno), NRT_CTXT, NRT_ERR_OPENING_FILE);
     }
 
     return fd;
 }
 
-
-NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle,
-                                      char *buf, size_t size,
-                                      nrt_Error * error)
+NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
+                                   nrt_Error * error)
 {
-    ssize_t bytesRead = 0;          /* Number of bytes read during last read operation */
-    size_t totalBytesRead = 0;     /* Total bytes read thus far */
+    ssize_t bytesRead = 0;      /* Number of bytes read during last read
+                                 * operation */
+    size_t totalBytesRead = 0;  /* Total bytes read thus far */
     int i;                      /* iterator */
 
     /* make sure the user actually wants data */
@@ -60,31 +58,29 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle,
     for (i = 1; i <= NRT_MAX_READ_ATTEMPTS; i++)
     {
         /* Make the next read */
-        bytesRead =
-            read(handle, buf + totalBytesRead, size - totalBytesRead);
+        bytesRead = read(handle, buf + totalBytesRead, size - totalBytesRead);
 
         switch (bytesRead)
         {
-            case -1:               /* Some type of error occured */
-                switch (errno)
-                {
-                    case EINTR:
-                    case EAGAIN:       /* A non-fatal error occured, keep trying */
-                        break;
-
-                    default:           /* We failed */
-                        goto CATCH_ERROR;
-                }
+        case -1:               /* Some type of error occured */
+            switch (errno)
+            {
+            case EINTR:
+            case EAGAIN:       /* A non-fatal error occured, keep trying */
                 break;
 
-            case 0:                /* EOF (unexpected) */
-                nrt_Error_init(error,
-                                "Unexpected end of file",
-                                NRT_CTXT, NRT_ERR_READING_FROM_FILE);
-                return NRT_FAILURE;
+            default:           /* We failed */
+                goto CATCH_ERROR;
+            }
+            break;
 
-            default:               /* We made progress */
-                totalBytesRead += (size_t)bytesRead;
+        case 0:                /* EOF (unexpected) */
+            nrt_Error_init(error, "Unexpected end of file", NRT_CTXT,
+                           NRT_ERR_READING_FROM_FILE);
+            return NRT_FAILURE;
+
+        default:               /* We made progress */
+            totalBytesRead += (size_t) bytesRead;
 
         }                       /* End of switch */
 
@@ -100,18 +96,14 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle,
     /* goto CATCH_ERROR; */
 
     /* An error occured */
-CATCH_ERROR:
+    CATCH_ERROR:
 
-    nrt_Error_init(error,
-                    strerror(errno),
-                    NRT_CTXT, NRT_ERR_READING_FROM_FILE);
+    nrt_Error_init(error, strerror(errno), NRT_CTXT, NRT_ERR_READING_FROM_FILE);
     return NRT_FAILURE;
 }
 
-
-NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle,
-                                       const char *buf, size_t size,
-                                       nrt_Error * error)
+NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
+                                    size_t size, nrt_Error * error)
 {
     size_t bytesActuallyWritten = 0;
 
@@ -120,54 +112,45 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle,
         ssize_t bytesThisRead = write(handle, buf, size);
         if (bytesThisRead == -1)
         {
-            nrt_Error_init(error,
-                            strerror(errno),
-                            NRT_CTXT, NRT_ERR_WRITING_TO_FILE);
+            nrt_Error_init(error, strerror(errno), NRT_CTXT,
+                           NRT_ERR_WRITING_TO_FILE);
             return NRT_FAILURE;
         }
         bytesActuallyWritten += bytesThisRead;
     }
-    while (bytesActuallyWritten < size );
+    while (bytesActuallyWritten < size);
 
     return NRT_SUCCESS;
 }
 
-
-NRTAPI(nrt_Off) nrt_IOHandle_seek(nrt_IOHandle handle,
-                                  nrt_Off offset, int whence,
-                                  nrt_Error * error)
+NRTAPI(nrt_Off) nrt_IOHandle_seek(nrt_IOHandle handle, nrt_Off offset,
+                                  int whence, nrt_Error * error)
 {
     nrt_Off off = lseek(handle, offset, whence);
     if (off == (nrt_Off) - 1)
     {
-        nrt_Error_init(error,
-                        strerror(errno),
-                        NRT_CTXT, NRT_ERR_SEEKING_IN_FILE);
+        nrt_Error_init(error, strerror(errno), NRT_CTXT,
+                       NRT_ERR_SEEKING_IN_FILE);
     }
     return off;
 }
-
 
 NRTAPI(nrt_Off) nrt_IOHandle_tell(nrt_IOHandle handle, nrt_Error * error)
 {
     return nrt_IOHandle_seek(handle, 0, SEEK_CUR, error);
 }
 
-
-NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle,
-                                     nrt_Error * error)
+NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle, nrt_Error * error)
 {
     struct stat buf;
     int rval = fstat(handle, &buf);
     if (rval == -1)
     {
-        nrt_Error_init(error,
-                        strerror(errno), NRT_CTXT, NRT_ERR_STAT_FILE);
+        nrt_Error_init(error, strerror(errno), NRT_CTXT, NRT_ERR_STAT_FILE);
         return rval;
     }
     return buf.st_size;
 }
-
 
 NRTAPI(void) nrt_IOHandle_close(nrt_IOHandle handle)
 {

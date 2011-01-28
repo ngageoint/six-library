@@ -23,7 +23,7 @@
 #include "nrt/Error.h"
 
 NRTPRIV(void) _NRT_Error_fillString(char *toFill, int maxLength,
-                                      const char *from)
+                                    const char *from)
 {
     int strlenFrom = strlen(from);
     int len = (strlenFrom < maxLength) ? (strlenFrom) : (maxLength);
@@ -31,11 +31,9 @@ NRTPRIV(void) _NRT_Error_fillString(char *toFill, int maxLength,
     memcpy(toFill, from, len);
 }
 
-
-NRTPROT(void) nrt_Error_init(nrt_Error * error,
-                               const char *message,
-                               const char *file,
-                               int line, const char *func, int level)
+NRTPROT(void) nrt_Error_init(nrt_Error * error, const char *message,
+                             const char *file, int line, const char *func,
+                             int level)
 {
     _NRT_Error_fillString(error->message, NRT_MAX_EMESSAGE, message);
     _NRT_Error_fillString(error->file, NRT_MAX_PATH, file);
@@ -45,63 +43,61 @@ NRTPROT(void) nrt_Error_init(nrt_Error * error,
     error->level = level;
 }
 
-
 NRTPRIV(const char *) _NRT_Error_urgency(int level)
 {
     switch (level)
     {
-        case NRT_ERR_MEMORY:
-            return "During memory allocation";
+    case NRT_ERR_MEMORY:
+        return "During memory allocation";
 
-        case NRT_ERR_OPENING_FILE:
-            return "While opening file";
+    case NRT_ERR_OPENING_FILE:
+        return "While opening file";
 
-        case NRT_ERR_READING_FROM_FILE:
-            return "While reading from file";
+    case NRT_ERR_READING_FROM_FILE:
+        return "While reading from file";
 
-        case NRT_ERR_SEEKING_IN_FILE:
-            return "While seeking in file";
+    case NRT_ERR_SEEKING_IN_FILE:
+        return "While seeking in file";
 
-        case NRT_ERR_WRITING_TO_FILE:
-            return "While writing to file";
+    case NRT_ERR_WRITING_TO_FILE:
+        return "While writing to file";
 
-        case NRT_ERR_STAT_FILE:
-            return "While querying file info";
+    case NRT_ERR_STAT_FILE:
+        return "While querying file info";
 
-        case NRT_ERR_LOADING_DLL:
-            return "While loading DLL";
+    case NRT_ERR_LOADING_DLL:
+        return "While loading DLL";
 
-        case NRT_ERR_UNLOADING_DLL:
-            return "While unloading DLL";
+    case NRT_ERR_UNLOADING_DLL:
+        return "While unloading DLL";
 
-        case NRT_ERR_RETRIEVING_DLL_HOOK:
-            return "While retrieving DLL hook";
+    case NRT_ERR_RETRIEVING_DLL_HOOK:
+        return "While retrieving DLL hook";
 
-        case NRT_ERR_UNINITIALIZED_DLL_READ:
-            return "Trying to read from uninitialized DLL";
+    case NRT_ERR_UNINITIALIZED_DLL_READ:
+        return "Trying to read from uninitialized DLL";
 
-        case NRT_ERR_INVALID_PARAMETER:
-            return "Attempt to make use of invalid parameter";
+    case NRT_ERR_INVALID_PARAMETER:
+        return "Attempt to make use of invalid parameter";
 
-        case NRT_ERR_INVALID_OBJECT:
-            return "Trying to perform an operation on an invalid object";
+    case NRT_ERR_INVALID_OBJECT:
+        return "Trying to perform an operation on an invalid object";
 
-        case NRT_ERR_INVALID_FILE:
-            return "Invalid file";
+    case NRT_ERR_INVALID_FILE:
+        return "Invalid file";
 
-        case NRT_ERR_COMPRESSION:
-            return "Invalid compression type";
+    case NRT_ERR_COMPRESSION:
+        return "Invalid compression type";
 
-        case NRT_ERR_DECOMPRESSION:
-            return "Invalid decompression";
+    case NRT_ERR_DECOMPRESSION:
+        return "Invalid decompression";
 
     }
     return "UNK";
 }
 
-
-void nrt_Error_flogf(nrt_Error * error,
-                      FILE * file, int level, const char *format, ...)
+void nrt_Error_flogf(nrt_Error * error, FILE * file, int level,
+                     const char *format, ...)
 {
     va_list args;
     if (error->level < level)
@@ -109,9 +105,7 @@ void nrt_Error_flogf(nrt_Error * error,
     va_start(args, format);
 
     fprintf(file, "Error [%s] (%s, %d, %s): '%s' : ",
-            _NRT_Error_urgency(error->level),
-            error->file,
-            error->line,
+            _NRT_Error_urgency(error->level), error->file, error->line,
             error->func,
             (error->level ==
              NRT_ERR_UNK) ? ("Unknown Error") : (error->message));
@@ -119,16 +113,12 @@ void nrt_Error_flogf(nrt_Error * error,
     va_end(args);
 }
 
-
-void nrt_Error_fprintf(nrt_Error * error,
-                        FILE * file, const char *format, ...)
+void nrt_Error_fprintf(nrt_Error * error, FILE * file, const char *format, ...)
 {
     va_list args;
     va_start(args, format);
     fprintf(file, "Error [%s] (%s, %d, %s): '%s' : ",
-            _NRT_Error_urgency(error->level),
-            error->file,
-            error->line,
+            _NRT_Error_urgency(error->level), error->file, error->line,
             error->func,
             (error->level ==
              NRT_ERR_UNK) ? ("Unknown Error") : (error->message));
@@ -136,19 +126,15 @@ void nrt_Error_fprintf(nrt_Error * error,
     va_end(args);
 }
 
-
-NRTAPI(void) nrt_Error_print(nrt_Error * error,
-                               FILE * file, const char *userMessage)
+NRTAPI(void) nrt_Error_print(nrt_Error * error, FILE * file,
+                             const char *userMessage)
 {
     nrt_Error_fprintf(error, file, "%s\n", userMessage);
 }
 
-
-NRTPROT(void) nrt_Error_initf(nrt_Error * error,
-                                const char *file,
-                                int line,
-                                const char *func,
-                                int level, const char *format, ...)
+NRTPROT(void) nrt_Error_initf(nrt_Error * error, const char *file, int line,
+                              const char *func, int level, const char *format,
+                              ...)
 {
     va_list args;
     va_start(args, format);

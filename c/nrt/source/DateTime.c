@@ -22,23 +22,23 @@
 
 #include "nrt/DateTime.h"
 
-NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, double *millis);
+NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
+                              double *millis);
 
-NRTAPI(nrt_DateTime*) nrt_DateTime_now(nrt_Error *error)
+NRTAPI(nrt_DateTime *) nrt_DateTime_now(nrt_Error * error)
 {
     return nrt_DateTime_fromMillis(nrt_Utils_getCurrentTimeMillis(), error);
 }
 
-NRTAPI(nrt_DateTime*) nrt_DateTime_fromMillis(double millis,
-        nrt_Error *error)
+NRTAPI(nrt_DateTime *) nrt_DateTime_fromMillis(double millis, nrt_Error * error)
 {
     nrt_DateTime *dt = NULL;
 
-    dt = (nrt_DateTime*)NRT_MALLOC(sizeof(nrt_DateTime));
+    dt = (nrt_DateTime *) NRT_MALLOC(sizeof(nrt_DateTime));
     if (!dt)
     {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO),
-                NRT_CTXT, NRT_ERR_MEMORY);
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_MEMORY);
         return NULL;
     }
 
@@ -53,9 +53,9 @@ NRTPRIV(time_t) nrt_DateTime_getLocalOffset()
     double millis;
     time_t gmtSeconds, localSeconds;
 
-    millis = nrt_Utils_getCurrentTimeMillis(); /* gmt */
+    millis = nrt_Utils_getCurrentTimeMillis();  /* gmt */
 
-    gmtSeconds = (time_t)(millis / 1000);
+    gmtSeconds = (time_t) (millis / 1000);
     gt = *gmtime(&gmtSeconds);
     lt = *localtime(&gmtSeconds);
 
@@ -65,20 +65,20 @@ NRTPRIV(time_t) nrt_DateTime_getLocalOffset()
     return (localSeconds - gmtSeconds) * 1000;
 }
 
-NRTPRIV(time_t) nrt_DateTime_timegm(struct tm *t)
+NRTPRIV(time_t) nrt_DateTime_timegm(struct tm * t)
 {
     /* just subtract off the timezone offset of our locale */
-    return mktime(t) - (nrt_DateTime_getLocalOffset() / (time_t)1000);
+    return mktime(t) - (nrt_DateTime_getLocalOffset() / (time_t) 1000);
 }
 
-NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime *dateTime,
-        nrt_Error *error)
+NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime * dateTime,
+                                            nrt_Error * error)
 {
     struct tm t, lt;
     time_t seconds;
     double fractionalSeconds;
 
-    t.tm_sec = (int)dateTime->second;
+    t.tm_sec = (int) dateTime->second;
     t.tm_min = dateTime->minute;
     t.tm_hour = dateTime->hour;
     t.tm_mday = dateTime->dayOfMonth;
@@ -88,16 +88,16 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime *dateTime,
     t.tm_yday = dateTime->dayOfYear - 1;
 
     /* adjust for local dst */
-    seconds = (time_t)(dateTime->timeInMillis / 1000.0);
+    seconds = (time_t) (dateTime->timeInMillis / 1000.0);
     lt = *localtime(&seconds);
     t.tm_isdst = lt.tm_isdst;
 
-    fractionalSeconds = dateTime->second - (double)t.tm_sec;
+    fractionalSeconds = dateTime->second - (double) t.tm_sec;
     seconds = nrt_DateTime_timegm(&t);
     if (seconds == -1)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
-                "Error retrieving seconds from given time");
+                        "Error retrieving seconds from given time");
         return NRT_FAILURE;
     }
 
@@ -108,78 +108,70 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime *dateTime,
     return NRT_SUCCESS;
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setYear(nrt_DateTime *dateTime,
-        int year,
-        nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_setYear(nrt_DateTime * dateTime, int year,
+                                      nrt_Error * error)
 {
     dateTime->year = year;
     return nrt_DateTime_updateMillis(dateTime, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setMonth(nrt_DateTime *dateTime,
-        int month,
-        nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_setMonth(nrt_DateTime * dateTime, int month,
+                                       nrt_Error * error)
 {
     dateTime->month = month;
     return nrt_DateTime_updateMillis(dateTime, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfMonth(nrt_DateTime *dateTime,
-        int dayOfMonth,
-        nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfMonth(nrt_DateTime * dateTime,
+                                            int dayOfMonth, nrt_Error * error)
 {
     dateTime->dayOfMonth = dayOfMonth;
     return nrt_DateTime_updateMillis(dateTime, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfWeek(nrt_DateTime *dateTime,
-        int dayOfWeek,
-        nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfWeek(nrt_DateTime * dateTime,
+                                           int dayOfWeek, nrt_Error * error)
 {
     dateTime->dayOfWeek = dayOfWeek;
     return nrt_DateTime_updateMillis(dateTime, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime *dateTime,
-        int dayOfYear,
-        nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
+                                           int dayOfYear, nrt_Error * error)
 {
     dateTime->dayOfYear = dayOfYear;
     return nrt_DateTime_updateMillis(dateTime, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setHour(nrt_DateTime *dateTime,
-        int hour,
-        nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_setHour(nrt_DateTime * dateTime, int hour,
+                                      nrt_Error * error)
 {
     dateTime->hour = hour;
     return nrt_DateTime_updateMillis(dateTime, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setMinute(nrt_DateTime *dateTime,
-        int minute,
-        nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_setMinute(nrt_DateTime * dateTime, int minute,
+                                        nrt_Error * error)
 {
     dateTime->minute = minute;
     return nrt_DateTime_updateMillis(dateTime, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setSecond(nrt_DateTime *dateTime,
-        double second,
-        nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_setSecond(nrt_DateTime * dateTime, double second,
+                                        nrt_Error * error)
 {
     dateTime->second = second;
     return nrt_DateTime_updateMillis(dateTime, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime *dateTime,
-        double timeInMillis,
-        nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
+                                              double timeInMillis,
+                                              nrt_Error * error)
 {
     time_t timeInSeconds;
     struct tm t;
 
-    timeInSeconds = (time_t)(timeInMillis / 1000);
+    timeInSeconds = (time_t) (timeInMillis / 1000);
     t = *gmtime(&timeInSeconds);
 
     dateTime->timeInMillis = timeInMillis;
@@ -199,30 +191,32 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime *dateTime,
     return NRT_SUCCESS;
 }
 
-NRTAPI(nrt_DateTime*) nrt_DateTime_fromString(const char* string,
-        const char* format, nrt_Error *error)
+NRTAPI(nrt_DateTime *) nrt_DateTime_fromString(const char *string,
+                                               const char *format,
+                                               nrt_Error * error)
 {
     struct tm t, lt;
     time_t gmtSeconds;
     double millis = 0.0;
 
-    gmtSeconds = (time_t)(nrt_Utils_getCurrentTimeMillis() / 1000.0); /* gmt */
+    gmtSeconds = (time_t) (nrt_Utils_getCurrentTimeMillis() / 1000.0);  /* gmt */
     lt = *localtime(&gmtSeconds);
     t.tm_isdst = lt.tm_isdst;
 
     if (!_NRT_strptime(string, format, &t, &millis))
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
-                "Unknown error caused by the call to strptime with format string: [%s]",
-                format);
+                        "Unknown error caused by the call to strptime with format string: [%s]",
+                        format);
         return NULL;
     }
-    t.tm_isdst = lt.tm_isdst; /* reset it */
+    t.tm_isdst = lt.tm_isdst;   /* reset it */
 
-    return nrt_DateTime_fromMillis((double)nrt_DateTime_timegm(&t) * 1000 + millis, error);
+    return nrt_DateTime_fromMillis((double) nrt_DateTime_timegm(&t) * 1000 +
+                                   millis, error);
 }
 
-NRTAPI(void) nrt_DateTime_destruct(nrt_DateTime **dt)
+NRTAPI(void) nrt_DateTime_destruct(nrt_DateTime ** dt)
 {
     if (*dt)
     {
@@ -231,15 +225,17 @@ NRTAPI(void) nrt_DateTime_destruct(nrt_DateTime **dt)
     }
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_format(nrt_DateTime *dateTime,
-        const char* format, char* outBuf, size_t maxSize, nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_format(nrt_DateTime * dateTime,
+                                     const char *format, char *outBuf,
+                                     size_t maxSize, nrt_Error * error)
 {
-    return nrt_DateTime_formatMillis(dateTime->timeInMillis,
-            format, outBuf, maxSize, error);
+    return nrt_DateTime_formatMillis(dateTime->timeInMillis, format, outBuf,
+                                     maxSize, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
-        const char* format, char* outBuf, size_t maxSize, nrt_Error *error)
+NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
+                                           char *outBuf, size_t maxSize,
+                                           nrt_Error * error)
 {
     time_t timeInSeconds;
     double fractSeconds;
@@ -252,7 +248,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
     int i, j;
     int found = 0;
 
-    timeInSeconds = (time_t)(millis / 1000);
+    timeInSeconds = (time_t) (millis / 1000);
     t = *gmtime(&timeInSeconds);
     fractSeconds = (millis / 1000.0) - timeInSeconds;
 
@@ -306,11 +302,11 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
             size_t endStringLen = endString ? strlen(endString) : 0;
 
             newFmtLen = begStringLen + 1;
-            newFmtString = (char*)NRT_MALLOC(newFmtLen);
+            newFmtString = (char *) NRT_MALLOC(newFmtLen);
             if (!newFmtString)
             {
-                nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO),
-                                NRT_CTXT, NRT_ERR_MEMORY);
+                nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                               NRT_ERR_MEMORY);
                 goto CATCH_ERROR;
             }
             memset(newFmtString, 0, newFmtLen);
@@ -323,8 +319,8 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
                 if (strftime(outBuf, maxSize, newFmtString, &t) == 0)
                 {
                     nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
-                            "Unknown error caused by the call to strftime with format string: [%s]",
-                            format);
+                                    "Unknown error caused by the call to strftime with format string: [%s]",
+                                    format);
                     goto CATCH_ERROR;
                 }
                 bufIdx = strlen(outBuf);
@@ -335,21 +331,21 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
             if (strftime(buf, 256, "%S", &t) == 0)
             {
                 nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
-                        "Unknown error caused by the call to strftime with format string: [%s]",
-                        format);
+                                "Unknown error caused by the call to strftime with format string: [%s]",
+                                format);
                 goto CATCH_ERROR;
             }
 
             if (strlen(buf) + bufIdx + 1 > maxSize)
             {
                 nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
-                                 "Format string will cause buffer to overflow: [%s]",
-                                 format);
+                                "Format string will cause buffer to overflow: [%s]",
+                                format);
                 goto CATCH_ERROR;
             }
 
             /* tack it on the end */
-            strcpy((char*)(outBuf + bufIdx), buf);
+            strcpy((char *) (outBuf + bufIdx), buf);
             bufIdx = strlen(outBuf);
 
             memset(buf, 0, 256);
@@ -358,13 +354,13 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
             if (strlen(buf) + bufIdx + 1 > maxSize)
             {
                 nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
-                                 "Format string will cause buffer to overflow: [%s]",
-                                 format);
+                                "Format string will cause buffer to overflow: [%s]",
+                                format);
                 goto CATCH_ERROR;
             }
 
             /* tack on the fractional seconds - spare the leading 0 */
-            strcpy((char*)(outBuf + bufIdx), (char*)(buf + 1));
+            strcpy((char *) (outBuf + bufIdx), (char *) (buf + 1));
             bufIdx = strlen(outBuf);
 
             if (endStringLen > 0)
@@ -374,31 +370,32 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
                 if (strftime(buf, 256, endString, &t) == 0)
                 {
                     nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
-                            "Unknown error caused by the call to strftime with format string: [%s]",
-                            format);
+                                    "Unknown error caused by the call to strftime with format string: [%s]",
+                                    format);
                     goto CATCH_ERROR;
                 }
 
                 if (strlen(buf) + bufIdx + 1 > maxSize)
                 {
                     nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
-                                     "Format string will cause buffer to overflow: [%s]",
-                                     format);
+                                    "Format string will cause buffer to overflow: [%s]",
+                                    format);
                     goto CATCH_ERROR;
                 }
-                strcpy((char*)(outBuf + bufIdx), buf);
+                strcpy((char *) (outBuf + bufIdx), buf);
             }
         }
     }
 
     if (newFmtString == NULL)
     {
-        if (strftime(outBuf, maxSize,
-                        newFmtString != NULL ? newFmtString : format, &t) == 0)
+        if (strftime
+            (outBuf, maxSize, newFmtString != NULL ? newFmtString : format,
+             &t) == 0)
         {
             nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
-                    "Unknown error caused by the call to strftime with format string: [%s]",
-                    newFmtString != NULL ? newFmtString : format);
+                            "Unknown error caused by the call to strftime with format string: [%s]",
+                            newFmtString != NULL ? newFmtString : format);
             goto CATCH_ERROR;
         }
     }
@@ -407,8 +404,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
 
     return NRT_SUCCESS;
 
-
-  CATCH_ERROR:
+    CATCH_ERROR:
     if (newFmtString)
         NRT_FREE(newFmtString);
 
@@ -425,27 +421,27 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis,
 #define ALT_O          0x02
 /* #define LEGAL_ALT(x)       { if (alt_format & ~(x)) return (0); } */
 #define LEGAL_ALT(x)       { ; }
-#define TM_YEAR_BASE   (1900) /* changed from 1970 */
+#define TM_YEAR_BASE   (1900)   /* changed from 1970 */
 
-static const char *day[7] =
-{   "Sunday", "Monday", "Tuesday", "Wednesday",
-    "Thursday", "Friday", "Saturday"};
-static const char
-*abday[7] =
-{   "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-static const char *mon[12] =
-{   "January", "February", "March", "April", "May",
+static const char *day[7] = { "Sunday", "Monday", "Tuesday", "Wednesday",
+    "Thursday", "Friday", "Saturday"
+};
+static const char *abday[7] =
+    { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+static const char *mon[12] = { "January", "February", "March", "April", "May",
     "June", "July", "August", "September",
-    "October", "November", "December"};
-static const char *abmon[12] =
-{   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-static const char *am_pm[2] =
-{   "AM", "PM"};
+    "October", "November", "December"
+};
+
+static const char *abmon[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+};
+static const char *am_pm[2] = { "AM", "PM" };
 
 NRTPRIV(int) _NRT_convNum(const char **, int *, int, int);
 
-NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, double *millis)
+NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
+                              double *millis)
 {
     char c;
     const char *bp;
@@ -456,8 +452,8 @@ NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, do
     *millis = 0.0;
 
     /* init */
-    tm->tm_sec = tm->tm_min = tm->tm_hour = tm->tm_mday =
-    tm->tm_mon = tm->tm_year = tm->tm_wday = tm->tm_yday = 0;
+    tm->tm_sec = tm->tm_min = tm->tm_hour = tm->tm_mday = tm->tm_mon =
+        tm->tm_year = tm->tm_wday = tm->tm_yday = 0;
     /* tm->tm_isdst = lt.tm_isdst; */
 
     while ((c = *fmt) != '\0')
@@ -469,138 +465,142 @@ NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, do
         if (isspace(c))
         {
             while (isspace(*bp))
-            bp++;
+                bp++;
 
             fmt++;
             continue;
         }
 
         if ((c = *fmt++) != '%')
-        goto literal;
+            goto literal;
 
-        again: switch (c = *fmt++)
+    again:switch (c = *fmt++)
         {
-            case '%': /* "%%" is converted to "%". */
-            literal:
+        case '%':              /* "%%" is converted to "%". */
+    literal:
             if (c != *bp++)
-            return NULL;
+                return NULL;
             break;
 
-            /*
+            /* 
              * "Alternative" modifiers. Just set the appropriate flag
              * and start over again.
              */
-            case 'E': /* "%E?" alternative conversion modifier. */
+        case 'E':              /* "%E?" alternative conversion modifier. */
             LEGAL_ALT(0);
             alt_format |= ALT_E;
             goto again;
 
-            case 'O': /* "%O?" alternative conversion modifier. */
+        case 'O':              /* "%O?" alternative conversion modifier. */
             LEGAL_ALT(0);
             alt_format |= ALT_O;
             goto again;
 
-            /*
+            /* 
              * "Complex" conversion rules, implemented through recursion.
              */
-            case 'c': /* Date and time, using the locale's format. */
+        case 'c':              /* Date and time, using the locale's format. */
             LEGAL_ALT(ALT_E);
             if (!(bp = _NRT_strptime(bp, "%x %X", tm, millis)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'D': /* The date as "%m/%d/%y". */
+        case 'D':              /* The date as "%m/%d/%y". */
             LEGAL_ALT(0);
             if (!(bp = _NRT_strptime(bp, "%m/%d/%y", tm, millis)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'R': /* The time as "%H:%M". */
+        case 'R':              /* The time as "%H:%M". */
             LEGAL_ALT(0);
             if (!(bp = _NRT_strptime(bp, "%H:%M", tm, millis)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'r': /* The time in 12-hour clock representation. */
+        case 'r':              /* The time in 12-hour clock representation. */
             LEGAL_ALT(0);
             if (!(bp = _NRT_strptime(bp, "%I:%M:%S %p", tm, millis)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'T': /* The time as "%H:%M:%S". */
+        case 'T':              /* The time as "%H:%M:%S". */
             LEGAL_ALT(0);
             if (!(bp = _NRT_strptime(bp, "%H:%M:%S", tm, millis)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'X': /* The time, using the locale's format. */
+        case 'X':              /* The time, using the locale's format. */
             LEGAL_ALT(ALT_E);
             if (!(bp = _NRT_strptime(bp, "%H:%M:%S", tm, millis)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'x': /* The date, using the locale's format. */
+        case 'x':              /* The date, using the locale's format. */
             LEGAL_ALT(ALT_E);
             if (!(bp = _NRT_strptime(bp, "%m/%d/%y", tm, millis)))
-            return NULL;
+                return NULL;
             break;
 
-            /*
+            /* 
              * "Elementary" conversion rules.
              */
-            case 'A': /* The day of week, using the locale's form. */
-            case 'a':
+        case 'A':              /* The day of week, using the locale's form. */
+        case 'a':
             LEGAL_ALT(0);
             for (i = 0; i < 7; i++)
             {
                 /* Full name. */
                 len = strlen(day[i]);
-                if (nrt_Utils_strncasecmp((char *)(day[i]), (char *)bp, len) == 0)
-                break;
+                if (nrt_Utils_strncasecmp((char *) (day[i]), (char *) bp, len)
+                    == 0)
+                    break;
 
                 /* Abbreviated name. */
                 len = strlen(abday[i]);
-                if (nrt_Utils_strncasecmp((char *)(abday[i]), (char *)bp, len) == 0)
-                break;
+                if (nrt_Utils_strncasecmp((char *) (abday[i]), (char *) bp, len)
+                    == 0)
+                    break;
             }
 
             /* Nothing matched. */
             if (i == 7)
-            return NULL;
+                return NULL;
 
             tm->tm_wday = i;
             bp += len;
             break;
 
-            case 'B': /* The month, using the locale's form. */
-            case 'b':
-            case 'h':
+        case 'B':              /* The month, using the locale's form. */
+        case 'b':
+        case 'h':
             LEGAL_ALT(0);
             for (i = 0; i < 12; i++)
             {
                 /* Full name. */
                 len = strlen(mon[i]);
-                if (nrt_Utils_strncasecmp((char *)(mon[i]), (char *)bp, len) == 0)
-                break;
+                if (nrt_Utils_strncasecmp((char *) (mon[i]), (char *) bp, len)
+                    == 0)
+                    break;
 
                 /* Abbreviated name. */
                 len = strlen(abmon[i]);
-                if (nrt_Utils_strncasecmp((char *)(abmon[i]),(char *) bp, len) == 0)
-                break;
+                if (nrt_Utils_strncasecmp((char *) (abmon[i]), (char *) bp, len)
+                    == 0)
+                    break;
             }
 
             /* Nothing matched. */
             if (i == 12)
-            return NULL;
+                return NULL;
 
             tm->tm_mon = i;
             bp += len;
             break;
 
-            case 'C': /* The century number. */
+        case 'C':              /* The century number. */
             LEGAL_ALT(ALT_E);
             if (!(_NRT_convNum(&bp, &i, 0, 99)))
-            return NULL;
+                return NULL;
 
             if (split_year)
             {
@@ -613,50 +613,50 @@ NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, do
             }
             break;
 
-            case 'd': /* The day of month. */
-            case 'e':
+        case 'd':              /* The day of month. */
+        case 'e':
             LEGAL_ALT(ALT_O);
             if (!(_NRT_convNum(&bp, &tm->tm_mday, 1, 31)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'k': /* The hour (24-hour clock representation). */
+        case 'k':              /* The hour (24-hour clock representation). */
             LEGAL_ALT(0);
             /* FALLTHROUGH */
-            case 'H':
+        case 'H':
             LEGAL_ALT(ALT_O);
             if (!(_NRT_convNum(&bp, &tm->tm_hour, 0, 23)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'l': /* The hour (12-hour clock representation). */
+        case 'l':              /* The hour (12-hour clock representation). */
             LEGAL_ALT(0);
             /* FALLTHROUGH */
-            case 'I':
+        case 'I':
             LEGAL_ALT(ALT_O);
             if (!(_NRT_convNum(&bp, &tm->tm_hour, 1, 12)))
-            return NULL;
+                return NULL;
             if (tm->tm_hour == 12)
-            tm->tm_hour = 0;
+                tm->tm_hour = 0;
             break;
 
-            case 'j': /* The day of year. */
+        case 'j':              /* The day of year. */
             LEGAL_ALT(0);
             if (!(_NRT_convNum(&bp, &i, 1, 366)))
-            return NULL;
+                return NULL;
             tm->tm_yday = i - 1;
             break;
 
-            case 'M': /* The minute. */
+        case 'M':              /* The minute. */
             LEGAL_ALT(ALT_O);
             if (!(_NRT_convNum(&bp, &tm->tm_min, 0, 59)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'm': /* The month. */
+        case 'm':              /* The month. */
             LEGAL_ALT(ALT_O);
             if (!(_NRT_convNum(&bp, &i, 1, 12)))
-            return NULL;
+                return NULL;
             tm->tm_mon = i - 1;
             break;
 
@@ -685,10 +685,10 @@ NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, do
                              Nothing matched.
                             return NULL;*/
 
-            case 'S': /* The seconds. */
+        case 'S':              /* The seconds. */
             LEGAL_ALT(ALT_O);
             if (!(_NRT_convNum(&bp, &tm->tm_sec, 0, 61)))
-            return NULL;
+                return NULL;
 
             /* Determine if the next character is a decimal... */
             if (*bp == '.')
@@ -696,12 +696,12 @@ NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, do
                 int decimalPlaces = 0;
                 /* Get the fractional seconds value */
                 bp++;
-                while(*bp >= '0' && *bp <= '9')
+                while (*bp >= '0' && *bp <= '9')
                 {
-                    double num = (double)(*bp++ - '0');
+                    double num = (double) (*bp++ - '0');
                     decimalPlaces++;
 
-                    switch(decimalPlaces)
+                    switch (decimalPlaces)
                     {
                     case 1:
                         num *= 100;
@@ -712,7 +712,7 @@ NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, do
                     case 3:
                         break;
                     default:
-                        for(i = 0; i < decimalPlaces - 3; ++i)
+                        for (i = 0; i < decimalPlaces - 3; ++i)
                             num /= 10.0;
                         break;
                     }
@@ -721,37 +721,37 @@ NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, do
             }
             break;
 
-            case 'U': /* The week of year, beginning on sunday. */
-            case 'W': /* The week of year, beginning on monday. */
+        case 'U':              /* The week of year, beginning on sunday. */
+        case 'W':              /* The week of year, beginning on monday. */
             LEGAL_ALT(ALT_O);
-            /*
+            /* 
              * XXX This is bogus, as we can not assume any valid
              * information present in the tm structure at this
              * point to calculate a real value, so just check the
              * range for now.
              */
             if (!(_NRT_convNum(&bp, &i, 0, 53)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'w': /* The day of week, beginning on sunday. */
+        case 'w':              /* The day of week, beginning on sunday. */
             LEGAL_ALT(ALT_O);
             if (!(_NRT_convNum(&bp, &tm->tm_wday, 0, 6)))
-            return NULL;
+                return NULL;
             break;
 
-            case 'Y': /* The year. */
+        case 'Y':              /* The year. */
             LEGAL_ALT(ALT_E);
             i = TM_YEAR_BASE;
             if (!(_NRT_convNum(&bp, &i, 0, 9999)))
-            return NULL;
+                return NULL;
             tm->tm_year = i - TM_YEAR_BASE;
             break;
 
-            case 'y': /* The year within 100 years of the epoch. */
+        case 'y':              /* The year within 100 years of the epoch. */
             LEGAL_ALT(ALT_E | ALT_O);
             if (!(_NRT_convNum(&bp, &i, 0, 99)))
-            return NULL;
+                return NULL;
 
             if (split_year)
             {
@@ -760,28 +760,28 @@ NRTPRIV(char*) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm, do
             }
             split_year = 1;
             if (i <= 68)
-            tm->tm_year = i + 2000 - TM_YEAR_BASE;
+                tm->tm_year = i + 2000 - TM_YEAR_BASE;
             else
-            tm->tm_year = i + 1900 - TM_YEAR_BASE;
+                tm->tm_year = i + 1900 - TM_YEAR_BASE;
             break;
-            /*
+            /* 
              * Miscellaneous conversions.
              */
-            case 'n': /* Any kind of white-space. */
-            case 't':
+        case 'n':              /* Any kind of white-space. */
+        case 't':
             LEGAL_ALT(0);
             while (isspace(*bp))
-            bp++;
+                bp++;
             break;
 
-            default: /* Unknown/unsupported conversion. */
+        default:               /* Unknown/unsupported conversion. */
             return NULL;
         }
 
     }
 
     /* LINTED functional specification */
-    return ((char *)bp);
+    return ((char *) bp);
 }
 
 static int _NRT_convNum(const char **buf, int *dest, int llim, int ulim)
@@ -808,4 +808,3 @@ static int _NRT_convNum(const char **buf, int *dest, int llim, int ulim)
     *dest = result;
     return 1;
 }
-

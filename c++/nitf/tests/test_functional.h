@@ -38,7 +38,7 @@ private:
         std::mem_fun_ref_t<nitf::Field, T> > > mVec;
 
 public:
-    typedef typename std::vector< std::pair< std::string,
+typedef typename std::vector< std::pair< std::string,
         std::mem_fun_ref_t<nitf::Field, T> > >::iterator Iterator;
 
     FieldAdapterMap() {}

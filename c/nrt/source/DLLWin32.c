@@ -24,21 +24,18 @@
 
 #if defined(WIN32)
 
-
 NRTAPI(nrt_DLL *) nrt_DLL_construct(nrt_Error * error)
 {
     nrt_DLL *dll = (nrt_DLL *) NRT_MALLOC(sizeof(nrt_DLL));
     if (!dll)
     {
-        nrt_Error_init(error,
-                        "Failed to alloc DLL", NRT_CTXT, NRT_ERR_MEMORY);
+        nrt_Error_init(error, "Failed to alloc DLL", NRT_CTXT, NRT_ERR_MEMORY);
 
     }
     dll->libname = NULL;
     dll->lib = NULL;
     return dll;
 }
-
 
 NRTAPI(void) nrt_DLL_destruct(nrt_DLL ** dll)
 {
@@ -48,9 +45,9 @@ NRTAPI(void) nrt_DLL_destruct(nrt_DLL ** dll)
         nrt_DLL_unload((*dll), &error);
         if (*dll)
         {
-            if ( (*dll)->libname )
+            if ((*dll)->libname)
             {
-                NRT_FREE( (*dll)->libname );
+                NRT_FREE((*dll)->libname);
                 (*dll)->libname = NULL;
             }
             NRT_FREE(*dll);
@@ -59,20 +56,19 @@ NRTAPI(void) nrt_DLL_destruct(nrt_DLL ** dll)
     }
 }
 
-
 NRTAPI(NRT_BOOL) nrt_DLL_isValid(nrt_DLL * dll)
 {
     return (dll->lib != (NRT_NATIVE_DLL) NULL);
 }
 
-
-NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll,
-                                 const char *libname, nrt_Error * error)
+NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll, const char *libname,
+                              nrt_Error * error)
 {
-    dll->libname = (char*)NRT_MALLOC( strlen(libname) + 1 );
+    dll->libname = (char *) NRT_MALLOC(strlen(libname) + 1);
     if (!dll->libname)
     {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_MEMORY);
         return NRT_FAILURE;
     }
 
@@ -80,32 +76,27 @@ NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll,
     dll->lib = LoadLibrary(dll->libname);
     if (!dll->lib)
     {
-        nrt_Error_initf(error,
-                         NRT_CTXT,
-                         NRT_ERR_LOADING_DLL,
-                         "Failed to load library [%s]", dll->libname);
-        NRT_FREE( dll->libname );
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_LOADING_DLL,
+                        "Failed to load library [%s]", dll->libname);
+        NRT_FREE(dll->libname);
         dll->libname = NULL;
         return NRT_FAILURE;
     }
     return NRT_SUCCESS;
 }
 
-
 NRTAPI(NRT_BOOL) nrt_DLL_unload(nrt_DLL * dll, nrt_Error * error)
 {
     if (dll->lib)
     {
         assert(dll->libname);
-        NRT_FREE( dll->libname );
+        NRT_FREE(dll->libname);
         dll->libname = NULL;
-        
+
         if (!FreeLibrary(dll->lib))
         {
-            nrt_Error_initf(error, NRT_CTXT,
-                             NRT_ERR_UNLOADING_DLL,
-                             "Failed to unload library [%s]",
-                             dll->libname);
+            nrt_Error_initf(error, NRT_CTXT, NRT_ERR_UNLOADING_DLL,
+                            "Failed to unload library [%s]", dll->libname);
 
             return NRT_FAILURE;
         }
@@ -114,36 +105,31 @@ NRTAPI(NRT_BOOL) nrt_DLL_unload(nrt_DLL * dll, nrt_Error * error)
     return 1;
 }
 
-
 NRTAPI(NRT_DLL_FUNCTION_PTR) nrt_DLL_retrieve(nrt_DLL * dll,
-        const char *function,
-        nrt_Error * error)
+                                              const char *function,
+                                              nrt_Error * error)
 {
-    /*  Make sure we actually have a dll  */
+    /* Make sure we actually have a dll */
     if (dll->lib)
     {
         NRT_DLL_FUNCTION_PTR ptr =
             (NRT_DLL_FUNCTION_PTR) GetProcAddress(dll->lib,
-                                                   function);
-        /*  Now check the resultant value  */
+                                                  function);
+        /* Now check the resultant value */
         if (ptr == NULL)
         {
             /* Problem if you couldnt produce the function */
-            nrt_Error_initf(error,
-                             NRT_CTXT,
-                             NRT_ERR_RETRIEVING_DLL_HOOK,
-                             "Failed to get function [%s] from dll [%s]",
-                             function, dll->libname);
+            nrt_Error_initf(error, NRT_CTXT, NRT_ERR_RETRIEVING_DLL_HOOK,
+                            "Failed to get function [%s] from dll [%s]",
+                            function, dll->libname);
 
         }
         return ptr;
     }
 
-    nrt_Error_initf(error,
-                     NRT_CTXT,
-                     NRT_ERR_UNINITIALIZED_DLL_READ,
-                     "Failed to retrieve function [%s] -- DLL appears to be uninitialized",
-                     function);
+    nrt_Error_initf(error, NRT_CTXT, NRT_ERR_UNINITIALIZED_DLL_READ,
+                    "Failed to retrieve function [%s] -- DLL appears to be uninitialized",
+                    function);
     return (NRT_DLL_FUNCTION_PTR) NULL;
 }
 #endif
