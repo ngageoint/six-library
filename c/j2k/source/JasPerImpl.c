@@ -99,7 +99,8 @@ J2KPRIV( J2K_BOOL) JasPer_setup(JasPerReaderImpl *, jas_stream_t **,
                                 jas_image_t **, nrt_Error *);
 J2KPRIV(void)      JasPer_cleanup(jas_stream_t **, jas_image_t **);
 J2KPRIV( J2K_BOOL) JasPer_readHeader(JasPerReaderImpl *, nrt_Error *);
-J2KPRIV( J2K_BOOL) JasPer_initImage(JasPerWriterImpl *, nrt_Error *);
+J2KPRIV( J2K_BOOL) JasPer_initImage(JasPerWriterImpl *, j2k_WriterOptions *,
+                                    nrt_Error *);
 
 /******************************************************************************/
 /* IO                                                                         */
@@ -380,7 +381,8 @@ JasPer_readHeader(JasPerReaderImpl *impl, nrt_Error *error)
 }
 
 J2KPRIV( NRT_BOOL)
-JasPer_initImage(JasPerWriterImpl *impl, nrt_Error *error)
+JasPer_initImage(JasPerWriterImpl *impl, j2k_WriterOptions *writerOps,
+                 nrt_Error *error)
 {
     NRT_BOOL rc = NRT_SUCCESS;
     jas_clrspc_t colorSpace;
@@ -866,7 +868,8 @@ J2KAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
 
 
 J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
-        nrt_Error *error)
+                                         j2k_WriterOptions *options,
+                                         nrt_Error *error)
 {
     j2k_Writer *writer = NULL;
     JasPerWriterImpl *impl = NULL;
@@ -897,7 +900,7 @@ J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
     memset(impl, 0, sizeof(JasPerWriterImpl));
     impl->container = container;
 
-    if (!(JasPer_initImage(impl, error)))
+    if (!(JasPer_initImage(impl, options, error)))
     {
         goto CATCH_ERROR;
     }

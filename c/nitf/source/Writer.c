@@ -1125,9 +1125,9 @@ CATCH_ERROR:
 
 NITFAPI(NITF_BOOL)
 nitf_Writer_writeImageSubheader(nitf_Writer * writer,
-                                nitf_ImageSubheader *
-                                subhdr,
+                                nitf_ImageSubheader *subhdr,
                                 nitf_Version fver,
+                                nitf_Off *comratOff,
                                 nitf_Error * error)
 {
     nitf_Uint32 bands;
@@ -1202,6 +1202,7 @@ nitf_Writer_writeImageSubheader(nitf_Writer * writer,
     if (strncmp(subhdr->imageCompression->raw, "NC", 2) != 0
             && strncmp(subhdr->imageCompression->raw, "NM", 2) != 0)
     {
+        *comratOff = nitf_IOInterface_tell(writer->output, error);
         NITF_WRITE_VALUE(subhdr, NITF_COMRAT, SPACE, FILL_RIGHT);
     }
 
@@ -1704,11 +1705,12 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
         i = 0; /* reset the counter */
         while (nitf_ListIterator_notEqualTo(&iter, &end))
         {
-            nitf_ImageSegment *segment =
-                (nitf_ImageSegment *) nitf_ListIterator_get(&iter);
-            if (!nitf_Writer_writeImageSubheader(writer,
-                                                 segment->subheader, fver,
-                                                 error))
+            nitf_Off comratOff = 0;
+            nitf_ImageSegment *segment = NULL;
+
+            segment = (nitf_ImageSegment *) nitf_ListIterator_get(&iter);
+            if (!nitf_Writer_writeImageSubheader(writer, segment->subheader,
+                                                 fver, &comratOff, error))
             {
                 NITF_FREE(imageSubLens);
                 NITF_FREE(imageDataLens);
@@ -1732,6 +1734,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
                 NITF_FREE(imageDataLens);
                 return NITF_FAILURE;
             }
+
             endSize = nitf_IOInterface_getSize(writer->output, error);
             if (!NITF_IO_SUCCESS(endSize))
             {
@@ -1741,6 +1744,19 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
             }
             imageDataLens[i] = endSize - startSize;
             startSize = endSize;
+
+            /* the comrat field may have changed during the write, so we
+             * need to update if it is compressed
+             */
+            if (comratOff > 0)
+            {
+                nitf_IOInterface_seek(writer->output, comratOff, NITF_SEEK_SET,
+                                      error);
+                NITF_WRITE_VALUE(segment->subheader, NITF_COMRAT, SPACE,
+                                 FILL_RIGHT);
+                nitf_IOInterface_seek(writer->output, endSize, NITF_SEEK_SET,
+                                      error);
+            }
 
             /*
                TODO - should we check the data length written

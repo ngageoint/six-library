@@ -126,6 +126,9 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     J2K_BOOL isSigned = 0;
     nrt_Uint32 idx;
 
+    /* reset the options */
+    memset(&options, 0, sizeof(j2k_WriterOptions));
+
     if(!nitf_Field_get(subheader->NITF_NROWS, &nRows,
                     NITF_CONV_INT, sizeof(nitf_Uint32), error))
     {
@@ -235,6 +238,13 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     if(strlen(comrat) != 0)
     {
         /* TODO compute compression ratio to pass into WriterOptions */
+
+        if (comrat[0] == 'N')
+        {
+            /* numerically lossless */
+           double bitRate = NITF_ATO32(&comrat[1]) / 10.0;
+           options.compressionRatio = bitRate / abpp;
+        }
     }
 
     nitf_Field_trimString(irep);
@@ -269,9 +279,6 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
         goto CATCH_ERROR;
     }
     memset(implControl, 0, sizeof(ImplControl));
-
-    /* reset the options */
-    memset(&options, 0, sizeof(j2k_WriterOptions));
 
     implControl->comratField = subheader->NITF_COMRAT;
 
