@@ -775,7 +775,6 @@ JasPerWriter_destruct(J2K_USER_DATA * data)
 J2KAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
 {
     j2k_Reader *reader = NULL;
-    nrt_IOHandle handle;
     nrt_IOInterface *io = NULL;
 
     if (!fname)
@@ -785,16 +784,8 @@ J2KAPI(j2k_Reader*) j2k_Reader_open(const char *fname, nrt_Error *error)
         goto CATCH_ERROR;
     }
 
-    handle = nrt_IOHandle_create(fname, NRT_ACCESS_READONLY,
-                                 NRT_OPEN_EXISTING, error);
-    if (NRT_INVALID_HANDLE(handle))
-    {
-        nrt_Error_init(error, "Invalid IO handle", NRT_CTXT,
-                               NRT_ERR_INVALID_OBJECT);
-        goto CATCH_ERROR;
-    }
-
-    if (!(io = nrt_IOHandleAdapter_construct(handle, error)))
+    if (!(io = nrt_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY,
+                                        NRT_OPEN_EXISTING, error)))
         goto CATCH_ERROR;
 
     if (!(reader = j2k_Reader_openIO(io, error)))

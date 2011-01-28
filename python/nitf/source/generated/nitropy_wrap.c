@@ -4774,6 +4774,57 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nrt_IIOInterface_canSeek_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nrt_IIOInterface *arg1 = (nrt_IIOInterface *) 0 ;
+  NRT_IO_INTERFACE_CAN_SEEK arg2 = (NRT_IO_INTERFACE_CAN_SEEK) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nrt_IIOInterface_canSeek_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IIOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_IIOInterface_canSeek_set" "', argument " "1"" of type '" "nrt_IIOInterface *""'"); 
+  }
+  arg1 = (nrt_IIOInterface *)(argp1);
+  {
+    int res = SWIG_ConvertFunctionPtr(obj1, (void**)(&arg2), SWIGTYPE_p_f_p_void_p_struct__NRT_Error__int);
+    if (!SWIG_IsOK(res)) {
+      SWIG_exception_fail(SWIG_ArgError(res), "in method '" "nrt_IIOInterface_canSeek_set" "', argument " "2"" of type '" "NRT_IO_INTERFACE_CAN_SEEK""'"); 
+    }
+  }
+  if (arg1) (arg1)->canSeek = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nrt_IIOInterface_canSeek_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nrt_IIOInterface *arg1 = (nrt_IIOInterface *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  NRT_IO_INTERFACE_CAN_SEEK result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nrt_IIOInterface_canSeek_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IIOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_IIOInterface_canSeek_get" "', argument " "1"" of type '" "nrt_IIOInterface *""'"); 
+  }
+  arg1 = (nrt_IIOInterface *)(argp1);
+  result = (NRT_IO_INTERFACE_CAN_SEEK) ((arg1)->canSeek);
+  resultobj = SWIG_NewFunctionPtrObj((void *)(result), SWIGTYPE_p_f_p_void_p_struct__NRT_Error__int);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_nrt_IIOInterface_seek_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nrt_IIOInterface *arg1 = (nrt_IIOInterface *) 0 ;
@@ -4921,6 +4972,57 @@ SWIGINTERN PyObject *_wrap_nrt_IIOInterface_getSize_get(PyObject *SWIGUNUSEDPARM
   arg1 = (nrt_IIOInterface *)(argp1);
   result = (NRT_IO_INTERFACE_GET_SIZE) ((arg1)->getSize);
   resultobj = SWIG_NewFunctionPtrObj((void *)(result), SWIGTYPE_p_f_p_void_p_struct__NRT_Error__off_t);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nrt_IIOInterface_getMode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nrt_IIOInterface *arg1 = (nrt_IIOInterface *) 0 ;
+  NRT_IO_INTERFACE_GET_MODE arg2 = (NRT_IO_INTERFACE_GET_MODE) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nrt_IIOInterface_getMode_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IIOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_IIOInterface_getMode_set" "', argument " "1"" of type '" "nrt_IIOInterface *""'"); 
+  }
+  arg1 = (nrt_IIOInterface *)(argp1);
+  {
+    int res = SWIG_ConvertFunctionPtr(obj1, (void**)(&arg2), SWIGTYPE_p_f_p_void_p_struct__NRT_Error__int);
+    if (!SWIG_IsOK(res)) {
+      SWIG_exception_fail(SWIG_ArgError(res), "in method '" "nrt_IIOInterface_getMode_set" "', argument " "2"" of type '" "NRT_IO_INTERFACE_GET_MODE""'"); 
+    }
+  }
+  if (arg1) (arg1)->getMode = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nrt_IIOInterface_getMode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nrt_IIOInterface *arg1 = (nrt_IIOInterface *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  NRT_IO_INTERFACE_GET_MODE result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nrt_IIOInterface_getMode_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IIOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_IIOInterface_getMode_get" "', argument " "1"" of type '" "nrt_IIOInterface *""'"); 
+  }
+  arg1 = (nrt_IIOInterface *)(argp1);
+  result = (NRT_IO_INTERFACE_GET_MODE) ((arg1)->getMode);
+  resultobj = SWIG_NewFunctionPtrObj((void *)(result), SWIGTYPE_p_f_p_void_p_struct__NRT_Error__int);
   return resultobj;
 fail:
   return NULL;
@@ -5317,6 +5419,37 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nrt_IOInterface_canSeek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nrt_IOInterface *arg1 = (nrt_IOInterface *) 0 ;
+  nrt_Error *arg2 = (nrt_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nrt_IOInterface_canSeek",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_IOInterface_canSeek" "', argument " "1"" of type '" "nrt_IOInterface *""'"); 
+  }
+  arg1 = (nrt_IOInterface *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_IOInterface_canSeek" "', argument " "2"" of type '" "nrt_Error *""'"); 
+  }
+  arg2 = (nrt_Error *)(argp2);
+  result = (int)nrt_IOInterface_canSeek(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_nrt_IOInterface_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nrt_IOInterface *arg1 = (nrt_IOInterface *) 0 ;
@@ -5434,6 +5567,37 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nrt_IOInterface_getMode(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nrt_IOInterface *arg1 = (nrt_IOInterface *) 0 ;
+  nrt_Error *arg2 = (nrt_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nrt_IOInterface_getMode",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_IOInterface_getMode" "', argument " "1"" of type '" "nrt_IOInterface *""'"); 
+  }
+  arg1 = (nrt_IOInterface *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_IOInterface_getMode" "', argument " "2"" of type '" "nrt_Error *""'"); 
+  }
+  arg2 = (nrt_Error *)(argp2);
+  result = (int)nrt_IOInterface_getMode(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_nrt_IOInterface_close(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nrt_IOInterface *arg1 = (nrt_IOInterface *) 0 ;
@@ -5489,30 +5653,143 @@ fail:
 SWIGINTERN PyObject *_wrap_nrt_IOHandleAdapter_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nrt_IOHandle arg1 ;
-  nrt_Error *arg2 = (nrt_Error *) 0 ;
+  int arg2 ;
+  nrt_Error *arg3 = (nrt_Error *) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   nrt_IOInterface *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:nrt_IOHandleAdapter_construct",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nrt_IOHandleAdapter_construct",&obj0,&obj1,&obj2)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_IOHandleAdapter_construct" "', argument " "1"" of type '" "nrt_IOHandle""'");
   } 
   arg1 = (nrt_IOHandle)(val1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_IOHandleAdapter_construct" "', argument " "2"" of type '" "nrt_Error *""'"); 
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nrt_IOHandleAdapter_construct" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nrt_IOHandleAdapter_construct" "', argument " "3"" of type '" "nrt_Error *""'"); 
   }
-  arg2 = (nrt_Error *)(argp2);
-  result = (nrt_IOInterface *)nrt_IOHandleAdapter_construct(arg1,arg2);
+  arg3 = (nrt_Error *)(argp3);
+  result = (nrt_IOInterface *)nrt_IOHandleAdapter_construct(arg1,arg2,arg3);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nrt_IOHandleAdapter_open(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *arg1 = (char *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  nrt_Error *arg4 = (nrt_Error *) 0 ;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  nrt_IOInterface *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nrt_IOHandleAdapter_open",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_IOHandleAdapter_open" "', argument " "1"" of type '" "char const *""'");
+  }
+  arg1 = (char *)(buf1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nrt_IOHandleAdapter_open" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nrt_IOHandleAdapter_open" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nrt_IOHandleAdapter_open" "', argument " "4"" of type '" "nrt_Error *""'"); 
+  }
+  arg4 = (nrt_Error *)(argp4);
+  result = (nrt_IOInterface *)nrt_IOHandleAdapter_open((char const *)arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  return resultobj;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nrt_BufferAdapter_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *arg1 = (char *) 0 ;
+  size_t arg2 ;
+  int arg3 ;
+  nrt_Error *arg4 = (nrt_Error *) 0 ;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  nrt_IOInterface *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nrt_BufferAdapter_construct",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_BufferAdapter_construct" "', argument " "1"" of type '" "char *""'");
+  }
+  arg1 = (char *)(buf1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nrt_BufferAdapter_construct" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = (size_t)(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nrt_BufferAdapter_construct" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nrt_BufferAdapter_construct" "', argument " "4"" of type '" "nrt_Error *""'"); 
+  }
+  arg4 = (nrt_Error *)(argp4);
+  result = (nrt_IOInterface *)nrt_BufferAdapter_construct(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  return resultobj;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   return NULL;
 }
 
@@ -29548,12 +29825,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nrt_IIOInterface_read_get", _wrap_nrt_IIOInterface_read_get, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_write_set", _wrap_nrt_IIOInterface_write_set, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_write_get", _wrap_nrt_IIOInterface_write_get, METH_VARARGS, NULL},
+	 { (char *)"nrt_IIOInterface_canSeek_set", _wrap_nrt_IIOInterface_canSeek_set, METH_VARARGS, NULL},
+	 { (char *)"nrt_IIOInterface_canSeek_get", _wrap_nrt_IIOInterface_canSeek_get, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_seek_set", _wrap_nrt_IIOInterface_seek_set, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_seek_get", _wrap_nrt_IIOInterface_seek_get, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_tell_set", _wrap_nrt_IIOInterface_tell_set, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_tell_get", _wrap_nrt_IIOInterface_tell_get, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_getSize_set", _wrap_nrt_IIOInterface_getSize_set, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_getSize_get", _wrap_nrt_IIOInterface_getSize_get, METH_VARARGS, NULL},
+	 { (char *)"nrt_IIOInterface_getMode_set", _wrap_nrt_IIOInterface_getMode_set, METH_VARARGS, NULL},
+	 { (char *)"nrt_IIOInterface_getMode_get", _wrap_nrt_IIOInterface_getMode_get, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_close_set", _wrap_nrt_IIOInterface_close_set, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_close_get", _wrap_nrt_IIOInterface_close_get, METH_VARARGS, NULL},
 	 { (char *)"nrt_IIOInterface_destruct_set", _wrap_nrt_IIOInterface_destruct_set, METH_VARARGS, NULL},
@@ -29570,12 +29851,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nrt_IOInterface_swigregister", nrt_IOInterface_swigregister, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOInterface_read", _wrap_nrt_IOInterface_read, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOInterface_write", _wrap_nrt_IOInterface_write, METH_VARARGS, NULL},
+	 { (char *)"nrt_IOInterface_canSeek", _wrap_nrt_IOInterface_canSeek, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOInterface_seek", _wrap_nrt_IOInterface_seek, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOInterface_tell", _wrap_nrt_IOInterface_tell, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOInterface_getSize", _wrap_nrt_IOInterface_getSize, METH_VARARGS, NULL},
+	 { (char *)"nrt_IOInterface_getMode", _wrap_nrt_IOInterface_getMode, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOInterface_close", _wrap_nrt_IOInterface_close, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOInterface_destruct", _wrap_nrt_IOInterface_destruct, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOHandleAdapter_construct", _wrap_nrt_IOHandleAdapter_construct, METH_VARARGS, NULL},
+	 { (char *)"nrt_IOHandleAdapter_open", _wrap_nrt_IOHandleAdapter_open, METH_VARARGS, NULL},
+	 { (char *)"nrt_BufferAdapter_construct", _wrap_nrt_BufferAdapter_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_path_set", _wrap_nitf_PluginRegistry_path_set, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_path_get", _wrap_nitf_PluginRegistry_path_get, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_treHandlers_set", _wrap_nitf_PluginRegistry_treHandlers_set, METH_VARARGS, NULL},
@@ -30526,7 +30811,7 @@ static swig_type_info _swigt__p_f_p_void_off_t_p_struct__NRT_Error__int = {"_p_f
 static swig_type_info _swigt__p_f_p_void_p_char_off_t_p_struct__NRT_Error__int = {"_p_f_p_void_p_char_off_t_p_struct__NRT_Error__int", "int (*)(void *,char *,off_t,struct _NRT_Error *)|NITF_IDATASOURCE_READ", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p_void_p_char_size_t_p_struct__NRT_Error__int = {"_p_f_p_void_p_char_size_t_p_struct__NRT_Error__int", "int (*)(void *,char *,size_t,struct _NRT_Error *)|NRT_IO_INTERFACE_READ", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int = {"_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int", "int (*)(void *,char const *,size_t,struct _NRT_Error *)|NRT_IO_INTERFACE_WRITE", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_f_p_void_p_struct__NRT_Error__int = {"_p_f_p_void_p_struct__NRT_Error__int", "int (*)(void *,struct _NRT_Error *)|NRT_IO_INTERFACE_CLOSE", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_f_p_void_p_struct__NRT_Error__int = {"_p_f_p_void_p_struct__NRT_Error__int", "int (*)(void *,struct _NRT_Error *)|NRT_IO_INTERFACE_CAN_SEEK|NRT_IO_INTERFACE_GET_MODE|NRT_IO_INTERFACE_CLOSE", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p_void_p_struct__NRT_Error__off_t = {"_p_f_p_void_p_struct__NRT_Error__off_t", "off_t (*)(void *,struct _NRT_Error *)|NRT_IO_INTERFACE_GET_SIZE|NITF_IDATASOURCE_GET_SIZE|NRT_IO_INTERFACE_TELL", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *|nrt_IOHandle *|nitf_IOHandle *|nrt_CreationFlags *|nitf_CreationFlags *|nrt_AccessFlags *|nitf_AccessFlags *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "nrt_Int16 *|nitf_Int16 *|int16_t *", 0, 0, (void*)0, 0};
@@ -31642,6 +31927,8 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NRT_MAX_PATH",SWIG_From_int((int)(1024)));
   SWIG_Python_SetConstant(d, "NRT_SUCCESS",SWIG_From_int((int)((1))));
   SWIG_Python_SetConstant(d, "NRT_FAILURE",SWIG_From_int((int)((0))));
+  SWIG_Python_SetConstant(d, "NRT_TRUE",SWIG_From_int((int)((1))));
+  SWIG_Python_SetConstant(d, "NRT_FALSE",SWIG_From_int((int)((0))));
   SWIG_Python_SetConstant(d, "NRT_CORNERS_UNKNOWN",SWIG_From_int((int)(NRT_CORNERS_UNKNOWN)));
   SWIG_Python_SetConstant(d, "NRT_CORNERS_UTM",SWIG_From_int((int)(NRT_CORNERS_UTM)));
   SWIG_Python_SetConstant(d, "NRT_CORNERS_UTM_UPS_S",SWIG_From_int((int)(NRT_CORNERS_UTM_UPS_S)));

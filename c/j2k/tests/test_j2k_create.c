@@ -27,19 +27,10 @@ J2K_BOOL readFile(const char* filename, char **buf, nrt_Uint64 *bufSize,
                   nrt_Error *error)
 {
     J2K_BOOL rc = J2K_TRUE;
-    nrt_IOHandle handle;
     nrt_IOInterface *io = NULL;
 
-    handle = nrt_IOHandle_create(filename, NRT_ACCESS_READONLY,
-                                 NRT_OPEN_EXISTING, error);
-    if (NRT_INVALID_HANDLE(handle))
-    {
-        nrt_Error_init(error, "Invalid IO handle", NRT_CTXT,
-                       NRT_ERR_INVALID_OBJECT);
-        goto CATCH_ERROR;
-    }
-
-    if (!(io = nrt_IOHandleAdapter_construct(handle, error)))
+    if (!(io = nrt_IOHandleAdapter_open(filename, NRT_ACCESS_READONLY,
+                                        NRT_OPEN_EXISTING, error)))
         goto CATCH_ERROR;
 
     *bufSize = nrt_IOInterface_getSize(io, error);
@@ -84,7 +75,6 @@ int main(int argc, char **argv)
     j2k_Writer *writer = NULL;
     char *buf = NULL;
     nrt_Uint64 bufSize;
-    nrt_IOHandle outHandle;
     nrt_IOInterface *outIO = NULL;
     nrt_Uint32 width, height, precision, tileWidth, tileHeight;
 
@@ -148,16 +138,8 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    outHandle = nrt_IOHandle_create(outName, NRT_ACCESS_WRITEONLY,
-                                    NRT_CREATE, &error);
-    if (NRT_INVALID_HANDLE(outHandle))
-    {
-        nrt_Error_init(&error, "Invalid IO handle", NRT_CTXT,
-                       NRT_ERR_INVALID_OBJECT);
-        goto CATCH_ERROR;
-    }
-
-    if (!(outIO = nrt_IOHandleAdapter_construct(outHandle, &error)))
+    if (!(outIO = nrt_IOHandleAdapter_open(outName, NRT_ACCESS_WRITEONLY,
+                                           NRT_CREATE, &error)))
         goto CATCH_ERROR;
 
     if (!j2k_Writer_write(writer, outIO, &error))

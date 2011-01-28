@@ -77,11 +77,15 @@ public:
 
     virtual void write(const char * buf, size_t size) throw(nitf::NITFException);
 
+    virtual bool canSeek() throw(nitf::NITFException);;
+
     virtual nitf::Off seek(nitf::Off offset, int whence) throw(nitf::NITFException);
 
     virtual nitf::Off tell() throw(nitf::NITFException);
 
     virtual nitf::Off getSize() throw(nitf::NITFException);
+
+    virtual int getMode() throw(nitf::NITFException);
 
     virtual void close();
 

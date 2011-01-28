@@ -74,6 +74,8 @@ NRT_OPEN_EXISTING = _nitropy.NRT_OPEN_EXISTING
 NRT_MAX_PATH = _nitropy.NRT_MAX_PATH
 NRT_SUCCESS = _nitropy.NRT_SUCCESS
 NRT_FAILURE = _nitropy.NRT_FAILURE
+NRT_TRUE = _nitropy.NRT_TRUE
+NRT_FALSE = _nitropy.NRT_FALSE
 NRT_CORNERS_UNKNOWN = _nitropy.NRT_CORNERS_UNKNOWN
 NRT_CORNERS_UTM = _nitropy.NRT_CORNERS_UTM
 NRT_CORNERS_UTM_UPS_S = _nitropy.NRT_CORNERS_UTM_UPS_S
@@ -211,6 +213,9 @@ class nrt_IIOInterface(_object):
     __swig_setmethods__["write"] = _nitropy.nrt_IIOInterface_write_set
     __swig_getmethods__["write"] = _nitropy.nrt_IIOInterface_write_get
     if _newclass:write = _swig_property(_nitropy.nrt_IIOInterface_write_get, _nitropy.nrt_IIOInterface_write_set)
+    __swig_setmethods__["canSeek"] = _nitropy.nrt_IIOInterface_canSeek_set
+    __swig_getmethods__["canSeek"] = _nitropy.nrt_IIOInterface_canSeek_get
+    if _newclass:canSeek = _swig_property(_nitropy.nrt_IIOInterface_canSeek_get, _nitropy.nrt_IIOInterface_canSeek_set)
     __swig_setmethods__["seek"] = _nitropy.nrt_IIOInterface_seek_set
     __swig_getmethods__["seek"] = _nitropy.nrt_IIOInterface_seek_get
     if _newclass:seek = _swig_property(_nitropy.nrt_IIOInterface_seek_get, _nitropy.nrt_IIOInterface_seek_set)
@@ -220,6 +225,9 @@ class nrt_IIOInterface(_object):
     __swig_setmethods__["getSize"] = _nitropy.nrt_IIOInterface_getSize_set
     __swig_getmethods__["getSize"] = _nitropy.nrt_IIOInterface_getSize_get
     if _newclass:getSize = _swig_property(_nitropy.nrt_IIOInterface_getSize_get, _nitropy.nrt_IIOInterface_getSize_set)
+    __swig_setmethods__["getMode"] = _nitropy.nrt_IIOInterface_getMode_set
+    __swig_getmethods__["getMode"] = _nitropy.nrt_IIOInterface_getMode_get
+    if _newclass:getMode = _swig_property(_nitropy.nrt_IIOInterface_getMode_get, _nitropy.nrt_IIOInterface_getMode_set)
     __swig_setmethods__["close"] = _nitropy.nrt_IIOInterface_close_set
     __swig_getmethods__["close"] = _nitropy.nrt_IIOInterface_close_get
     if _newclass:close = _swig_property(_nitropy.nrt_IIOInterface_close_get, _nitropy.nrt_IIOInterface_close_set)
@@ -265,6 +273,10 @@ def nrt_IOInterface_write(*args):
   return _nitropy.nrt_IOInterface_write(*args)
 nrt_IOInterface_write = _nitropy.nrt_IOInterface_write
 
+def nrt_IOInterface_canSeek(*args):
+  return _nitropy.nrt_IOInterface_canSeek(*args)
+nrt_IOInterface_canSeek = _nitropy.nrt_IOInterface_canSeek
+
 def nrt_IOInterface_seek(*args):
   return _nitropy.nrt_IOInterface_seek(*args)
 nrt_IOInterface_seek = _nitropy.nrt_IOInterface_seek
@@ -277,6 +289,10 @@ def nrt_IOInterface_getSize(*args):
   return _nitropy.nrt_IOInterface_getSize(*args)
 nrt_IOInterface_getSize = _nitropy.nrt_IOInterface_getSize
 
+def nrt_IOInterface_getMode(*args):
+  return _nitropy.nrt_IOInterface_getMode(*args)
+nrt_IOInterface_getMode = _nitropy.nrt_IOInterface_getMode
+
 def nrt_IOInterface_close(*args):
   return _nitropy.nrt_IOInterface_close(*args)
 nrt_IOInterface_close = _nitropy.nrt_IOInterface_close
@@ -288,6 +304,14 @@ nrt_IOInterface_destruct = _nitropy.nrt_IOInterface_destruct
 def nrt_IOHandleAdapter_construct(*args):
   return _nitropy.nrt_IOHandleAdapter_construct(*args)
 nrt_IOHandleAdapter_construct = _nitropy.nrt_IOHandleAdapter_construct
+
+def nrt_IOHandleAdapter_open(*args):
+  return _nitropy.nrt_IOHandleAdapter_open(*args)
+nrt_IOHandleAdapter_open = _nitropy.nrt_IOHandleAdapter_open
+
+def nrt_BufferAdapter_construct(*args):
+  return _nitropy.nrt_BufferAdapter_construct(*args)
+nrt_BufferAdapter_construct = _nitropy.nrt_BufferAdapter_construct
 NITF_FUNC = _nitropy.NITF_FUNC
 NITF_MAX_PATH = _nitropy.NITF_MAX_PATH
 NITF_DEFAULT_PERM = _nitropy.NITF_DEFAULT_PERM

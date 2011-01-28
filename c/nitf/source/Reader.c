@@ -1381,7 +1381,7 @@ NITFAPI(nitf_Record *) nitf_Reader_read(nitf_Reader * reader,
     nitf_Record *record = NULL;
     nitf_IOInterface *io = NULL;
 
-    io = nitf_IOHandleAdapter_construct(ioHandle, error);
+    io = nitf_IOHandleAdapter_construct(ioHandle, NRT_ACCESS_READONLY, error);
     if (!io)
         return NULL;
 

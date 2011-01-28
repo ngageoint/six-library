@@ -91,6 +91,7 @@ public:
         /* now, we must adapt this IOHandle to fit into the IOInterface */
         /* get a nitf_IOInterface* object... */
         nitf_IOInterface *interface = nitf_IOHandleAdapter_construct(handle,
+                                                                     access,
                                                                      &error);
         if (!interface)
             throw nitf::NITFException(&error);

@@ -66,7 +66,6 @@ int main(int argc, char **argv)
     int argIt = 0, i = 0, num = 0, dump = 0;
     char *fname = NULL;
     nrt_Error error;
-    nrt_IOHandle handle;
     nrt_IOInterface *io = NULL;
     nitf_Reader *reader = NULL;
     nitf_Record *record = NULL;
@@ -96,12 +95,8 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    handle = nrt_IOHandle_create(fname, NRT_ACCESS_READONLY, NRT_OPEN_EXISTING,
-                                 &error);
-    if (NRT_INVALID_HANDLE(handle))
-        goto CATCH_ERROR;
-
-    if (!(io = nrt_IOHandleAdapter_construct(handle, &error)))
+    if (!(io = nrt_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY, NRT_OPEN_EXISTING,
+                                        &error)))
         goto CATCH_ERROR;
 
     if (!(reader = nitf_Reader_construct(&error)))

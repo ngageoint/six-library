@@ -53,6 +53,12 @@ public class MemoryIO extends IOInterface
     {
         return buffer.capacity();
     }
+    
+    @Override
+    public int getMode() throws NITFException
+    {
+        return NITF_ACCESS_READWRITE;
+    }
 
     @Override
     public void read(byte[] buf, int size) throws NITFException
@@ -62,6 +68,12 @@ public class MemoryIO extends IOInterface
             throw new NITFException("Attempting to read past buffer boundary.");
         System.arraycopy(buffer.array(), pos, buf, 0, size);
         buffer.position(pos + size);
+    }
+    
+    @Override
+    public boolean canSeek()
+    {
+        return true;
     }
 
     @Override

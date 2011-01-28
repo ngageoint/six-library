@@ -15,6 +15,12 @@ extern "C" {
 #define nitf_IOInterface_SEEK_SET 20L
 #undef nitf_IOInterface_SEEK_END
 #define nitf_IOInterface_SEEK_END 30L
+#undef nitf_IOInterface_NITF_ACCESS_READONLY
+#define nitf_IOInterface_NITF_ACCESS_READONLY 1L
+#undef nitf_IOInterface_NITF_ACCESS_WRITEONLY
+#define nitf_IOInterface_NITF_ACCESS_WRITEONLY 2L
+#undef nitf_IOInterface_NITF_ACCESS_READWRITE
+#define nitf_IOInterface_NITF_ACCESS_READWRITE 3L
 /*
  * Class:     nitf_IOInterface
  * Method:    construct

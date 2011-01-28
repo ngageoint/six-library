@@ -48,6 +48,12 @@ void nitf::IOInterface::write(const char * buf, size_t size) throw (nitf::NITFEx
         throw nitf::NITFException(&error);
 }
 
+bool nitf::IOInterface::canSeek() throw (nitf::NITFException)
+{
+    nitf_IOInterface *io = getNativeOrThrow();
+    return io->iface->canSeek(io->data, &error) == NRT_SUCCESS;
+}
+
 nitf::Off nitf::IOInterface::seek(nitf::Off offset, int whence) throw (nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
@@ -72,6 +78,12 @@ nitf::Off nitf::IOInterface::getSize() throw (nitf::NITFException)
     if (size < 0)
         throw nitf::NITFException(&error);
     return size;
+}
+
+int nitf::IOInterface::getMode() throw (nitf::NITFException)
+{
+    nitf_IOInterface *io = getNativeOrThrow();
+    return io->iface->getMode(io->data, &error);
 }
 
 void nitf::IOInterface::close()

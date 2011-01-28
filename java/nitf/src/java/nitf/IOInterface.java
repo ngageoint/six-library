@@ -38,6 +38,21 @@ public abstract class IOInterface extends DestructibleObject
      * Seek offset is relative to end of file
      */
     public static final int SEEK_END = 30;
+    
+    /**
+     * Access mode - read-only privileges
+     */
+    public static final int NITF_ACCESS_READONLY = 0x01;
+
+    /**
+     * Access mode - write-only privileges
+     */
+    public static final int NITF_ACCESS_WRITEONLY = 0x02;
+
+    /**
+     * Access mode - reading and/or writing
+     */
+    public static final int NITF_ACCESS_READWRITE = 0x03;
 
     IOInterface(long address)
     {
@@ -97,6 +112,8 @@ public abstract class IOInterface extends DestructibleObject
         if (buf != null && buf.length > 0)
             write(buf, buf.length);
     }
+    
+    public abstract boolean canSeek();
 
     /**
      * Seeks to the specified offset relative to the position specified by
@@ -110,6 +127,7 @@ public abstract class IOInterface extends DestructibleObject
      * @throws NITFException
      */
     public abstract long seek(long offset, int whence) throws NITFException;
+    
 
     public long seek(long offset) throws NITFException
     {
@@ -131,6 +149,8 @@ public abstract class IOInterface extends DestructibleObject
      * @throws NITFException
      */
     public abstract long getSize() throws NITFException;
+    
+    public abstract int getMode() throws NITFException;
 
     /**
      * Closes the IO handle.

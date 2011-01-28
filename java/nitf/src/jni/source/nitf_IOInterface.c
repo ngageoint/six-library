@@ -99,6 +99,29 @@ NITFPRIV(NITF_BOOL) IOInterfaceImpl_write(NITF_DATA* data,
     return NITF_SUCCESS;
 }
 
+NITFPRIV(NITF_BOOL) IOInterfaceImpl_canSeek(NITF_DATA* data, nitf_Error* error)
+{
+    jclass  ioClass = NULL;
+    jmethodID methodID = NULL;
+    IOInterfaceImpl *impl = NULL;
+    JNIEnv *env = NULL;
+    JavaVM *vm = NULL;
+    int detach;
+    NITF_BOOL result;
+
+    /* cast it to the structure we know about */
+    impl = (IOInterfaceImpl *) data;
+    detach = _GetJNIEnv(&vm, &env);
+
+    ioClass = (*env)->GetObjectClass(env, impl->self);
+    methodID = (*env)->GetMethodID(env, ioClass, "canSeek", "()Z");
+    result = (*env)->CallBooleanMethod(env, impl->self, methodID) == JNI_TRUE;
+
+    if (detach)
+        (*vm)->DetachCurrentThread(vm);
+    return result;
+}
+
 NITFPRIV(nitf_Off) IOInterfaceImpl_seek(NITF_DATA* data,
                                          nitf_Off offset,
                                          int whence,
@@ -191,6 +214,36 @@ NITFPRIV(nitf_Off) IOInterfaceImpl_getSize(NITF_DATA* data,
     return NITF_SUCCESS;
 }
 
+NITFPRIV(int) IOInterfaceImpl_getMode(NITF_DATA* data, nitf_Error* error)
+{
+    jclass  ioClass = NULL;
+    jmethodID methodID = NULL;
+    IOInterfaceImpl *impl = NULL;
+    JNIEnv *env = NULL;
+    JavaVM *vm = NULL;
+    int detach;
+    int result, mode;
+
+    /* cast it to the structure we know about */
+    impl = (IOInterfaceImpl *) data;
+    detach = _GetJNIEnv(&vm, &env);
+
+    ioClass = (*env)->GetObjectClass(env, impl->self);
+    methodID = (*env)->GetMethodID(env, ioClass, "getMode", "()I");
+    mode = (*env)->CallIntMethod(env, impl->self, methodID);
+
+    if (mode == nitf_IOInterface_NITF_ACCESS_READONLY)
+        result = NITF_ACCESS_READONLY;
+    else if (mode == nitf_IOInterface_NITF_ACCESS_WRITEONLY)
+        result = NITF_ACCESS_WRITEONLY;
+    else if (mode == nitf_IOInterface_NITF_ACCESS_READWRITE)
+        result = NITF_ACCESS_READWRITE;
+
+    if (detach)
+        (*vm)->DetachCurrentThread(vm);
+    return result;
+}
+
 NITFPRIV(NITF_BOOL) IOInterfaceImpl_close(NITF_DATA* data,
                                      nitf_Error* error)
 {
@@ -225,9 +278,11 @@ JNIEXPORT void JNICALL Java_nitf_IOInterface_construct
     {
         &IOInterfaceImpl_read,
         &IOInterfaceImpl_write,
+        &IOInterfaceImpl_canSeek,
         &IOInterfaceImpl_seek,
         &IOInterfaceImpl_tell,
         &IOInterfaceImpl_getSize,
+        &IOInterfaceImpl_getMode,
         &IOInterfaceImpl_close,
         &IOInterfaceImpl_destruct,
     };

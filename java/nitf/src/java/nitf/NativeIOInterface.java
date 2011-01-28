@@ -36,11 +36,15 @@ public class NativeIOInterface extends IOInterface
 
     public native void write(final byte[] buf, int size) throws NITFException;
 
+    public native boolean canSeek();
+    
     public native long seek(long offset, int whence) throws NITFException;
 
     public native long tell() throws NITFException;
 
     public native long getSize() throws NITFException;
+    
+    public native int getMode() throws NITFException;
 
     public native void close() throws NITFException;
 

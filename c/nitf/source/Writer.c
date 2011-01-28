@@ -944,7 +944,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepare(nitf_Writer * writer,
                                        nitf_Error * error)
 {
     NITF_BOOL rc;
-    nitf_IOInterface* io = nitf_IOHandleAdapter_construct(ioHandle, error);
+    nitf_IOInterface* io = nitf_IOHandleAdapter_construct(ioHandle,
+                                                          NRT_ACCESS_WRITEONLY,
+                                                          error);
     if (!io)
         return NITF_FAILURE;
 

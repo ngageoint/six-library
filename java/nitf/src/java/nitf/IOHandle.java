@@ -45,21 +45,6 @@ public final class IOHandle extends NativeIOInterface
      */
     public static final int NITF_OPEN_EXISTING = 12;
 
-    /**
-     * Opens the file with read-only privileges
-     */
-    public static final int NITF_ACCESS_READONLY = 0x01;
-
-    /**
-     * Opens the file with write-only privileges
-     */
-    public static final int NITF_ACCESS_WRITEONLY = 0x02;
-
-    /**
-     * Opens the file for reading and/or writing
-     */
-    public static final int NITF_ACCESS_READWRITE = 0x03;
-
     private String fileName;
 
     // private long ioHandle;
