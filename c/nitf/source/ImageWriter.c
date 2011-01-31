@@ -156,25 +156,17 @@ NITFPRIV(nitf_CompressionInterface *) getCompIface(const char *comp,
     {
         /*  The plugin registry populated this error */
         *bad = 1;
-        return NULL;
+        goto CATCH_ERROR;
     }
     /*  Now retrieve the comp iface creator  */
     constructCompIface =
         nitf_PluginRegistry_retrieveCompConstructor(reg,
                 comp, bad, error);
-    if (*bad)
+    if (*bad || constructCompIface == NULL)
     {
-        /*  The plugin registry encountered an error */
-        return NULL;
+        goto CATCH_ERROR;
     }
 
-    if (constructCompIface == NULL)
-    {
-        /*  We have no compressor registered, so ignore  */
-        /*nitf_Debug_flogf(stderr,
-                         "****Setting NULL interface for compressor!******\n");*/
-        return NULL;
-    }
     compIface =
         (nitf_CompressionInterface *) (*constructCompIface) (comp,
                 error);
@@ -184,8 +176,18 @@ NITFPRIV(nitf_CompressionInterface *) getCompIface(const char *comp,
         /*  compression object.  The error should be populated, */
         /*  so go home... */
         *bad = 1;
+        goto CATCH_ERROR;
     }
+
     return compIface;
+
+    CATCH_ERROR:
+    {
+        nitf_Error_init(error, "Invalid or non-existent compression interface. "
+                        "Make sure the plug-ins are loaded before using.",
+                        NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        return NULL;
+    }
 }
 
 
@@ -211,6 +213,7 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
                         NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
+    memset(impl, 0, sizeof(ImageWriterImpl));
 
     NITF_TRY_GET_UINT32(subheader->numBitsPerPixel, &impl->numBitsPerPixel, error);
     NITF_TRY_GET_UINT32(subheader->numImageBands, &impl->numImageBands, error);
@@ -232,7 +235,6 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
         compIface = getCompIface(compBuf, &bad, error);
         if (bad)
         {
-            /*  The getDecompIface() function failed  */
             goto CATCH_ERROR;
         }
     }
@@ -248,6 +250,8 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
                         NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
+    memset(imageWriter, 0, sizeof(nitf_ImageWriter));
+
     imageWriter->data = impl;
     imageWriter->iface = &iWriteHandler;
     return imageWriter;
