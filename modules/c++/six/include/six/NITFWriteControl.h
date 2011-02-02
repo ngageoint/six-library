@@ -63,6 +63,7 @@ public:
     //!  Keys that allow us to override the ILOC rules for tests
     static const char OPT_MAX_PRODUCT_SIZE[];
     static const char OPT_MAX_ILOC_ROWS[];
+    static const char OPT_J2K_COMPRESSION[];
 
     //!  Buffered IO
     enum

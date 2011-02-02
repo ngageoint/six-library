@@ -84,7 +84,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 }
 
 void NITFReadControl::load(std::string fromFile,
-                           XMLControlRegistry* xmlRegistry)
+                           const XMLControlRegistry* xmlRegistry)
 {
     reset();
 
