@@ -26,6 +26,7 @@ using namespace six;
 
 const char NITFWriteControl::OPT_MAX_PRODUCT_SIZE[] = "MaxProductSize";
 const char NITFWriteControl::OPT_MAX_ILOC_ROWS[] = "MaxILOCRows";
+const char NITFWriteControl::OPT_J2K_COMPRESSION[] = "J2KCompression";
 
 void NITFWriteControl::initialize(Container* container)
 {
@@ -43,6 +44,10 @@ void NITFWriteControl::initialize(Container* container)
                                                           Parameter(
                                                                     six::Constants::IS_SIZE_MAX));
 
+
+    double j2kCompression = 0;
+    bool enableJ2K = false;
+
     /*
      *  If our container is SICD, must have only one image.
      *
@@ -57,6 +62,11 @@ void NITFWriteControl::initialize(Container* container)
     }
     else
     {
+        // J2K only available for derived data
+        j2kCompression = (double)mOptions.getParameter(
+                OPT_J2K_COMPRESSION, Parameter(0));
+        enableJ2K = (j2kCompression <= 1.0) && j2kCompression > 0.0001;
+
         for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
         {
             Data* ith = mContainer->getData(i);
@@ -181,6 +191,16 @@ void NITFWriteControl::initialize(Container* container)
             subheader.setCornersFromLatLons(NITF_CORNERS_GEO, corners);
 
             setImageSecurity(info->getData()->getClassification(), subheader);
+
+            if (enableJ2K)
+            {
+                subheader.getImageCompression().set("C8");
+
+                //calculate comrat
+                int comratInt = (int)((j2kCompression * nbpp * 10.0) + 0.5);
+                std::string comrat = FmtX("N%03d", comratInt);
+                subheader.getCompressionRate().set(comrat);
+            }
         }
     }
     for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
@@ -584,6 +604,15 @@ void NITFWriteControl::saveIO(BufferList& imageData,
         throw except::Exception(Ctxt(FmtX("Require %d images, received %s",
                                           mInfos.size(), imageData.size())));
 
+    // check to see if J2K compression is enabled
+    double j2kCompression = (double)mOptions.getParameter(
+            OPT_J2K_COMPRESSION, Parameter(0));
+
+    bool enableJ2K = (mContainer->getDataType() != DataType::COMPLEX) &&
+            (j2kCompression <= 1.0) && j2kCompression > 0.0001;
+
+    //TODO maybe we need to see if the compression plug-in is even available
+
     size_t numImages = mInfos.size();
     for (unsigned int i = 0; i < numImages; ++i)
     {
@@ -595,16 +624,36 @@ void NITFWriteControl::saveIO(BufferList& imageData,
         unsigned long numCols = info->getData()->getNumCols();
         unsigned long numChannels = info->getData()->getNumChannels();
 
-        for (unsigned int j = 0; j < numIS; ++j)
+        if (enableJ2K && numIS == 1)
         {
-            NITFSegmentInfo segmentInfo = imageSegments[j];
+            // We will use the ImageWriter provided by NITRO so that we can
+            // take advantage of the built-in compression capabilities
+            nitf::ImageWriter iWriter = mWriter.newImageWriter(i);
+            nitf::ImageSource iSource;
+            size_t bandSize = numCols * info->getData()->getNumRows() * pixelSize;
+            for (unsigned int j = 0; j < numChannels; ++j)
+            {
+                nitf::MemorySource ms((char *)imageData[i], bandSize, bandSize * j,
+                                      pixelSize, 0);
+                iSource.addBand(ms);
+            }
+            iWriter.attachSource(iSource);
+        }
+        else
+        {
+            // this bypasses the normal NITF ImageWriter and streams directly
+            // to the output
+            for (unsigned int j = 0; j < numIS; ++j)
+            {
+                NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            MemoryWriteHandler writeHandler(segmentInfo, imageData[i],
-                                            segmentInfo.firstRow, numCols,
-                                            numChannels, pixelSize, doByteSwap);
-            // Could set start index here
-            mWriter.setImageWriteHandler(info->getStartIndex() + j,
-                                         writeHandler);
+                MemoryWriteHandler writeHandler(segmentInfo, imageData[i],
+                                                segmentInfo.firstRow, numCols,
+                                                numChannels, pixelSize, doByteSwap);
+                // Could set start index here
+                mWriter.setImageWriteHandler(info->getStartIndex() + j,
+                                             writeHandler);
+            }
         }
     }
 

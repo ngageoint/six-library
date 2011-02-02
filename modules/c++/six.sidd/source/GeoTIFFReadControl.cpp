@@ -62,7 +62,7 @@ six::DataType six::sidd::GeoTIFFReadControl::getDataType(std::string fromFile)
 }
 
 void six::sidd::GeoTIFFReadControl::load(std::string fromFile,
-                                         six::XMLControlRegistry* xmlRegistry)
+                                         const six::XMLControlRegistry* xmlRegistry)
 {
     mReader.openFile(fromFile);
 

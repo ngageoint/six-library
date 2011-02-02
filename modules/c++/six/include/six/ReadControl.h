@@ -79,7 +79,7 @@ public:
      *  function
      */
     virtual void load(std::string fromFile,
-                      XMLControlRegistry* xmlRegistry = NULL) = 0;
+                      const XMLControlRegistry* xmlRegistry = NULL) = 0;
 
     /*!
      *  Get a const pointer to the current container.  This

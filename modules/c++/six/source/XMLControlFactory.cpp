@@ -23,13 +23,16 @@
 
 using namespace six;
 
-XMLControl* XMLControlRegistry::newXMLControl(DataType dataType)
+XMLControl* XMLControlRegistry::newXMLControl(DataType dataType) const
 {
-    XMLControlCreator* creator = mRegistry[dataType];
-    if (creator == NULL)
+    std::map<DataType, XMLControlCreator*>::const_iterator it;
+    it = mRegistry.find(dataType);
+    if (it == mRegistry.end())
+    {
         throw except::NoSuchKeyException(Ctxt(FmtX("No data class creator %d",
-                                                   (int) dataType)));
-    return creator->newXMLControl();
+                                                           (int) dataType)));
+    }
+    return it->second->newXMLControl();
 }
 
 //!  Destructor
@@ -45,7 +48,7 @@ XMLControlRegistry::~XMLControlRegistry()
 
 }
 
-XMLControl* XMLControlRegistry::newXMLControl(std::string identifier)
+XMLControl* XMLControlRegistry::newXMLControl(std::string identifier) const
 {
     DataType dataType;
 
@@ -62,7 +65,7 @@ XMLControl* XMLControlRegistry::newXMLControl(std::string identifier)
 
 }
 
-char* six::toXMLCharArray(Data* data, six::XMLControlRegistry *xmlRegistry)
+char* six::toXMLCharArray(Data* data, const six::XMLControlRegistry *xmlRegistry)
 {
     std::string xml = toXMLString(data);
     char* raw = new char[xml.length() + 1];
@@ -70,7 +73,7 @@ char* six::toXMLCharArray(Data* data, six::XMLControlRegistry *xmlRegistry)
     return raw;
 
 }
-std::string six::toXMLString(Data* data, six::XMLControlRegistry *xmlRegistry)
+std::string six::toXMLString(Data* data, const six::XMLControlRegistry *xmlRegistry)
 {
     if (!xmlRegistry)
         xmlRegistry = &XMLControlFactory::getInstance();
