@@ -6,10 +6,13 @@ set_options = distclean = lambda x: None
 def set_options(opt):
     opt.add_option('--with-j2k', action='store', dest='j2klib',
                    choices=['openjpeg', 'jasper', 'kdu'],
-                   default='openjpeg', metavar='LIB',
+                   default=None, metavar='LIB',
                    help='Specify the JPEG2000 library to link with')
 
 def configure(conf):
+    if Options.options.j2klib is None:
+        return
+    
     j2klib = Options.options.j2klib
     
     if conf.env['IS64BIT'] and j2klib == 'jasper':
