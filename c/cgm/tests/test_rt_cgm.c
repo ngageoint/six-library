@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <import/nitf.h>
 #include <import/cgm.h>
 
@@ -33,71 +32,55 @@
 int main(int argc, char** argv)
 {
     nitf_Error error;
-    nitf_IOHandle in;
-    nitf_IOHandle out;
-    nitf_IOInterface* inIO;
-    nitf_IOInterface* outIO;
+    nitf_IOInterface* inIO = NULL;
+    nitf_IOInterface* outIO = NULL;
     cgm_Metafile* mf = NULL;
     cgm_MetafileReader* reader;
     cgm_MetafileWriter* writer;
 
     if (argc != 3)
     {
-	printf("Usage: %s <Version 1 CGM> <out-file>\n", argv[0]);
-	exit(EXIT_FAILURE);
+        printf("Usage: %s <Version 1 CGM> <out-file>\n", argv[0]);
+        exit(EXIT_FAILURE);
     }
-    
+
     reader = cgm_MetafileReader_construct(&error);
     assert(reader);
 
     writer = cgm_MetafileWriter_construct(&error);
     assert(writer);
-    
-    in = nitf_IOHandle_create(argv[1], 
-			      NITF_ACCESS_READONLY,
-			      NITF_OPEN_EXISTING, &error);
-    
-    out = nitf_IOHandle_create(argv[2],
-                               NITF_ACCESS_WRITEONLY,
-                               NITF_CREATE, &error);
 
-    if (NITF_INVALID_HANDLE(in))
-    {
-	nitf_Error_print(&error, stdout, "Input file.  Exiting...");
-	goto END_OF_FILE;
-    }
-
-    if (NITF_INVALID_HANDLE(out))
-    {
-	nitf_Error_print(&error, stdout, "Output file.  Exiting...");
-	goto END_OF_FILE;
-    }
-
-    inIO = nitf_IOHandleAdapter_construct(in, &error);
-    outIO = nitf_IOHandleAdapter_construct(out,& error);
+    inIO = nitf_IOHandleAdapter_open(argv[1], NITF_ACCESS_READONLY,
+                                     NITF_OPEN_EXISTING, &error);
+    outIO = nitf_IOHandleAdapter_open(argv[2], NITF_ACCESS_WRITEONLY,
+                                      NITF_CREATE, &error);
 
     mf = cgm_MetafileReader_read(reader, inIO, &error);
     if (!mf)
     {
-	nitf_Error_print(&error, stdout, "Read file. Exiting...");
-	goto END_OF_FILE;
+        nitf_Error_print(&error, stdout, "Read file. Exiting...");
+        goto END_OF_FILE;
 
     }
 
     if (!cgm_MetafileWriter_write(writer, mf, outIO, &error))
     {
-	nitf_Error_print(&error, stdout, "Write file. Exiting...");
-	goto END_OF_FILE;
+        nitf_Error_print(&error, stdout, "Write file. Exiting...");
+        goto END_OF_FILE;
 
     }
 
     cgm_Metafile_destruct(&mf);
-    
 
-END_OF_FILE:
-    nitf_IOHandle_close(in);
-    nitf_IOHandle_close(out);
-    cgm_MetafileReader_destruct(&reader);
-    assert(!reader);
-    return 0;
+    END_OF_FILE:
+    {
+        if (inIO)
+            nitf_IOInterface_destruct(&inIO);
+        if (outIO)
+            nitf_IOInterface_destruct(&outIO);
+        if (reader)
+            cgm_MetafileReader_destruct(&reader);
+        assert(!reader);
+        return 0;
+    }
 }

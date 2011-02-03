@@ -188,7 +188,7 @@ cgm_Metafile* createCGM(nitf_Error *error)
     return NULL;
 }
 
-NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
+NITF_BOOL writeNITF(nitf_Record * record, nitf_IOInterface *input,
 		    char *outFile, cgm_Metafile *lastCGM, nitf_Error *error)
 {
     nitf_ListIterator iter;
@@ -196,12 +196,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
     int num;
     int numSegments;
     nitf_Writer *writer = NULL;
-    nitf_IOInterface *inputIO = 
-	nitf_IOHandleAdapter_construct(input, error);
    
-    if (!inputIO)
-	return NITF_FAILURE;
-
     /* open the output IO Handle */
     nitf_IOHandle output = nitf_IOHandle_create(outFile,
             NITF_ACCESS_WRITEONLY, NITF_CREATE, error);
@@ -246,7 +241,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
             nitf_ImageSegment *segment =
                     (nitf_ImageSegment *) nitf_ListIterator_get(&iter);
             
-            writeHandler = nitf_StreamIOWriteHandler_construct(inputIO,
+            writeHandler = nitf_StreamIOWriteHandler_construct(input,
                     segment->imageOffset, segment->imageEnd - segment->imageOffset,
                     error);
             if (!writeHandler)
@@ -300,7 +295,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
                 nitf_GraphicSegment *segment =
                         (nitf_GraphicSegment *) nitf_ListIterator_get(&iter);
                 
-                writeHandler = nitf_StreamIOWriteHandler_construct(inputIO,
+                writeHandler = nitf_StreamIOWriteHandler_construct(input,
                         segment->offset, segment->end - segment->offset,
                         error);
             }
@@ -344,7 +339,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
             nitf_TextSegment *segment =
                     (nitf_TextSegment *) nitf_ListIterator_get(&iter);
             
-            writeHandler = nitf_StreamIOWriteHandler_construct(inputIO,
+            writeHandler = nitf_StreamIOWriteHandler_construct(input,
                     segment->offset, segment->end - segment->offset,
                     error);
             if (!writeHandler)
@@ -386,7 +381,7 @@ NITF_BOOL writeNITF(nitf_Record * record, nitf_IOHandle input,
             nitf_DESegment *segment =
                     (nitf_DESegment *) nitf_ListIterator_get(&iter);
             
-            writeHandler = nitf_StreamIOWriteHandler_construct(inputIO,
+            writeHandler = nitf_StreamIOWriteHandler_construct(input,
                     segment->offset, segment->end - segment->offset,
                     error);
             if (!writeHandler)
@@ -428,7 +423,7 @@ int main(int argc, char **argv)
     nitf_Reader *reader = NULL;
     cgm_Metafile *metafile = NULL;
     nitf_Error error;
-    nitf_IOHandle io;
+    nitf_IOInterface *io = NULL;
     
     if (argc != 3)
     {
@@ -443,20 +438,11 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    /* open the input handle */
-    io = nitf_IOHandle_create(argv[1],
-                              NITF_ACCESS_READONLY,
-                              NITF_OPEN_EXISTING, &error);
-
-    /* check to make sure it is valid */
-    if (NITF_INVALID_HANDLE(io))
-    {
-        nitf_Error_print(&error, stderr, "IO Handle creation failed");
-        exit(EXIT_FAILURE);
-    }
+    io = nitf_IOHandleAdapter_open(argv[1], NITF_ACCESS_READONLY,
+                                   NITF_OPEN_EXISTING, &error);
 
     /*  read the file  */
-    record = nitf_Reader_read(reader, io, &error);
+    record = nitf_Reader_readIO(reader, io, &error);
     if (!record)
     {
         nitf_Error_print(&error, stderr, "Read failed");
@@ -473,7 +459,8 @@ int main(int argc, char **argv)
         nitf_Error_print(&error, stderr, "Write failed");
     }
     
-    nitf_IOHandle_close(io);
+    if (io)
+        nitf_IOInterface_destruct(&io);
     nitf_Reader_destruct(&reader);
     nitf_Record_destruct(&record);
     
