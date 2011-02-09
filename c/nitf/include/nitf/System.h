@@ -25,9 +25,13 @@
 
 #ifdef WIN32
 #      if defined(NITF_MODULE_EXPORTS)
-#          define NRT_MODULE_EXPORTS
+#          ifndef NRT_MODULE_EXPORTS
+#              define NRT_MODULE_EXPORTS
+#          endif
 #      elif defined(NITF_MODULE_IMPORTS)
-#          define NRT_MODULE_IMPORTS
+#          ifndef NRT_MODULE_IMPORTS
+#              define NRT_MODULE_IMPORTS
+#          endif
 #      endif
 #endif
 
