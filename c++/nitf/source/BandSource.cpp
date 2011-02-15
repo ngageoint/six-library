@@ -32,16 +32,27 @@ nitf::MemorySource::MemorySource(char * data,
     setManaged(false);
 }
 
-nitf::FileSource::FileSource(const std::string& fname,
+nitf::FileSource::FileSource(nitf::IOHandle & io,
                              nitf::Off start,
                              int numBytesPerPixel,
                              int pixelSkip) throw(nitf::NITFException)
 {
-    setNative(nitf_FileSource_construct(fname.c_str(), start, numBytesPerPixel,
-                                        pixelSkip, &error));
+    setNative(nitf_IOSource_construct(io.getNative(), start, numBytesPerPixel, pixelSkip, &error));
     setManaged(false);
+    io.setManaged(true); //TODO must release this on destruction
 }
 
+nitf::FileSource::FileSource(const std::string& fname,
+                             nitf::Off start,
+                             int numBytesPerPixel,
+                             int pixelSkip) throw (nitf::NITFException)
+{
+    setNative(nitf_FileSource_constructFile(fname.c_str(),
+                                            start,
+                                            numBytesPerPixel,
+                                            pixelSkip, & error));
+    setManaged(false);
+}
 
 
 extern "C" NITF_BOOL __nitf_RowSource_nextRow(void *algorithm,

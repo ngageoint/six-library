@@ -85,6 +85,11 @@ public:
 class FileSource : public BandSource
 {
 public:
+    FileSource(const std::string& fname,
+               nitf::Off start,
+               int numBytesPerPixel,
+               int pixelSkip) throw (nitf::NITFException);
+    
     /*!
      *  Constructor
      *  \param handle  The handle to store
@@ -92,8 +97,10 @@ public:
      *  \param numBytesPerPixel The number of bytes per pixel
      *  \param pixelSkip  The number of pixels to skip each time
      */
-    FileSource(const std::string& filename, nitf::Off start, int numBytesPerPixel,
-            int pixelSkip) throw (nitf::NITFException);
+    FileSource(nitf::IOHandle& io,
+               nitf::Off start,
+               int numBytesPerPixel,
+               int pixelSkip) throw (nitf::NITFException);
 
     //! Destructor
     ~FileSource()
