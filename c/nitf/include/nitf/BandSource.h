@@ -103,11 +103,17 @@ NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle,
                                                      int pixelSkip,
                                                      nitf_Error * error);
 
+NITFAPI(nitf_BandSource *) nitf_FileSource_constructFile(const char* fname,
+                                                         nitf_Off start,
+                                                         int numBytesPerPixel,
+                                                         int pixelSkip,
+                                                         nitf_Error* error);
+
 NITFAPI(nitf_BandSource *) nitf_IOSource_construct(nitf_IOInterface *io,
-        nitf_Off start,
-        int numBytesPerPixel,
-        int pixelSkip,
-        nitf_Error * error);
+                                                   nitf_Off start,
+                                                   int numBytesPerPixel,
+                                                   int pixelSkip,
+                                                   nitf_Error * error);
 
 
 NITF_CXX_ENDGUARD

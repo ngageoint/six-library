@@ -372,6 +372,57 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
 }
 
 
+NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_constructIO
+(
+    nitf_IOInterface* io,
+    nitf_Off start,
+    int byteSkip,
+    nitf_Error * error
+)
+{
+    static nitf_IDataSource iFileSource =
+    {
+        &FileSource_read,
+        &FileSource_destruct,
+        &FileSource_getSize,
+        &FileSource_setSize
+    };
+    FileSourceImpl *impl = NULL;
+    nitf_SegmentSource *segmentSource = NULL;
+
+    impl = (FileSourceImpl *) NITF_MALLOC(sizeof(FileSourceImpl));
+    if (!impl)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                        NITF_ERR_MEMORY);
+        return NULL;
+    }
+    impl->io = io;
+    impl->byteSkip = byteSkip >= 0 ? byteSkip : 0;
+    impl->mark = impl->start = (start >= 0 ? start : 0);
+    impl->fileSize = nitf_IOInterface_getSize(impl->io, error);
+
+    if (!NITF_IO_SUCCESS(impl->fileSize))
+    {
+        NITF_FREE(impl);
+        return NULL;
+    }
+
+    /* figure out the actual # oif bytes represented by the source */
+    impl->size = impl->fileSize / (impl->byteSkip + 1);
+
+    segmentSource = (nitf_SegmentSource *) NITF_MALLOC(sizeof(nitf_SegmentSource));
+    if (!segmentSource)
+    {
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                        NITF_ERR_MEMORY);
+        return NULL;
+    }
+    segmentSource->data = impl;
+    segmentSource->iface = &iFileSource;
+    return segmentSource;
+}
+
 
 NITFPRIV(void) SegmentReader_destruct(NITF_DATA * data)
 {

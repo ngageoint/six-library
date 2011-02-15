@@ -96,6 +96,14 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
 );
 
 
+NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_constructIO
+(
+    nitf_IOInterface* io,
+    nitf_Off start,
+    int byteSkip,
+    nitf_Error * error
+);
+
 NITFAPI(nitf_SegmentSource *) nitf_SegmentReaderSource_construct
 (
     nitf_SegmentReader *reader,

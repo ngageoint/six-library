@@ -387,3 +387,21 @@ NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle handle,
     return nitf_IOSource_construct(interface, start, numBytesPerPixel,
                                    pixelSkip, error);
 }
+
+NITFAPI(nitf_BandSource *) nitf_FileSource_constructFile(const char* fname,
+                                                         nitf_Off start,
+                                                         int numBytesPerPixel,
+                                                         int pixelSkip,
+                                                         nitf_Error* error)
+{
+    nitf_IOInterface *interface = NULL;
+
+    if (!(interface = nitf_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY,
+                                                NRT_OPEN_EXISTING, error)))
+        return NULL;
+
+    return nitf_IOSource_construct(interface, start, numBytesPerPixel,
+                                   pixelSkip, error);
+
+
+}
