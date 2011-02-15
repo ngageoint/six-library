@@ -89,7 +89,7 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
  */
 NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
 (
-    const char* fname,
+    nitf_IOHandle handle,
     nitf_Off start,
     int byteSkip,
     nitf_Error * error

@@ -318,7 +318,7 @@ NITFPRIV(NITF_BOOL) FileSource_read(NITF_DATA * data,
 
 NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
 (
-    const char* fname,
+    nitf_IOHandle handle,
     nitf_Off start,
     int byteSkip,
     nitf_Error * error
@@ -341,12 +341,10 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
                         NITF_ERR_MEMORY);
         return NULL;
     }
-    if (!(impl->io = nrt_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY,
-                                              NRT_OPEN_EXISTING, error)))
-    {
-        NITF_FREE(impl);
+    if (!(impl->io = nitf_IOHandleAdapter_construct(handle,
+                                                    NRT_ACCESS_READONLY,
+                                                    error)))
         return NULL;
-    }
 
     impl->byteSkip = byteSkip >= 0 ? byteSkip : 0;
     impl->mark = impl->start = (start >= 0 ? start : 0);

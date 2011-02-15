@@ -160,17 +160,20 @@ nitf_ImageSource *setupBands(int nbands, int imageNum,
     for (i = 0; i < nbands; i++)
     {
         char *inFile = makeBandName(inRootFile, "img", imageNum, i);
+
         nitf_IOHandle sourceHandle =
             nitf_IOHandle_create(inFile, NITF_ACCESS_READONLY,
                                  NITF_OPEN_EXISTING, &error);
         if (NITF_INVALID_HANDLE(sourceHandle))
             goto CATCH_ERROR;
-
+ 
         freeBandName(&inFile);
 
         bandSource = nitf_FileSource_construct(sourceHandle,
                                                0, 0 /*gets ignored */ , 0,
                                                &error);
+        freeBandName(&inFile);
+
         if (!bandSource)
         {
             goto CATCH_ERROR;
@@ -597,7 +600,7 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
            segment->subheader->compressionRate->raw);
 
 
-    buffer = (nitf_Uint8 **) malloc(8 * nBands);
+    buffer = (nitf_Uint8 **) malloc(sizeof(nitf_Uint8*) * nBands);
     band = 0;
     bandList = (nitf_Uint32 *) malloc(sizeof(nitf_Uint32 *) * nBands);
 

@@ -97,11 +97,11 @@ NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(char *data,
  *        (this will get multipled by numBytesPerPixel to figure
  *         out how many actual bytes to skip)
  */
-NITFAPI(nitf_BandSource *) nitf_FileSource_construct(const char* fname,
-        nitf_Off start,
-        int numBytesPerPixel,
-        int pixelSkip,
-        nitf_Error * error);
+NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle,
+                                                     nitf_Off start,
+                                                     int numBytesPerPixel,
+                                                     int pixelSkip,
+                                                     nitf_Error * error);
 
 NITFAPI(nitf_BandSource *) nitf_IOSource_construct(nitf_IOInterface *io,
         nitf_Off start,
