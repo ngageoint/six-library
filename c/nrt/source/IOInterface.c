@@ -178,7 +178,7 @@ NRTPRIV(NRT_BOOL) BufferAdapter_write(NRT_DATA * data, const char *buf,
     return NRT_SUCCESS;
 }
 
-NRTPRIV(nrt_Off) BufferAdapter_canSeek(NRT_DATA * data, nrt_Error * error)
+NRTPRIV(NRT_BOOL) BufferAdapter_canSeek(NRT_DATA * data, nrt_Error * error)
 {
     return NRT_SUCCESS;
 }
