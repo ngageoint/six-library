@@ -754,7 +754,8 @@ def detect(self):
         config['cxx']['optz_fastest']   = '-O3'
 
         env.append_value('CXXDEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
-        env.append_value('LINKFLAGS', '-fPIC -dynamiclib'.split())
+        #env.append_value('LINKFLAGS', '-fPIC -dynamiclib'.split())
+        env.append_value('LINKFLAGS', '-fPIC'.split())
         env.append_value('CXXFLAGS', '-fPIC')
         env.append_value('CXXFLAGS_THREAD', '-D_REENTRANT')
 
