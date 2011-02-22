@@ -32,7 +32,7 @@ using namespace six::sidd;
 
 typedef xml::lite::Element* XMLElem;
 
-const char DerivedXMLControl::SIDD_URI[] = "urn:SIDD:0.2";
+const char DerivedXMLControl::SIDD_URI[] = "urn:SIDD:1.0.0";
 const char DerivedXMLControl::SI_COMMON_URI[] = "urn:SICommon:0.1";
 const char DerivedXMLControl::SFA_URI[] = "urn:SFA:1.2.0";
 
@@ -584,6 +584,15 @@ void DerivedXMLControl::fromXML(const XMLElem exploitationFeaturesXML,
             tmpElem = getOptional(polXML, "RcvPolarizationOffset");
             if (tmpElem)
                 parseDouble(tmpElem, p->rcvPolarizationOffset);
+
+            std::vector<XMLElem> processed;
+            polXML->getElementsByTagName("Processed", processed);
+            for (size_t j = 0, nBools = processed.size(); j < nBools; ++j)
+            {
+                BooleanType isProcessed;
+                parseBooleanType(processed[j], isProcessed);
+                p->processed.push_back(isProcessed == BooleanType::IS_TRUE);
+            }
         }
 
         // Geometry
@@ -1206,6 +1215,11 @@ XMLElem DerivedXMLControl::toXML(
             if (!Init::isUndefined(p->rcvPolarizationOffset))
             {
                 createDouble("RcvPolarization", p->rcvPolarizationOffset,
+                             polXML);
+            }
+            for (size_t b = 0, nBools = p->processed.size(); b < nBools; ++b)
+            {
+                createString("Processed", six::toString(p->processed[b]),
                              polXML);
             }
         }
