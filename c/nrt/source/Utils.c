@@ -421,8 +421,24 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
         dir = 'S';
         degrees *= -1;
     }
+
+    /* Round seconds. */
+    seconds += 0.5;
+
+    /* Ensure seconds and minutes are still within valid range. */
+    if (seconds >= 60.0)
+    {
+        seconds -= 60.0;
+
+        if (++minutes >= 60)
+        {
+            minutes -= 60;
+            ++degrees;
+        }
+    }
+
     NRT_SNPRINTF(buffer7, 8, "%02d%02d%02d%c", degrees, minutes,
-                 (int) (seconds + 0.5), dir);
+                 (int) seconds, dir);
 }
 
 NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
@@ -435,9 +451,24 @@ NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
         dir = 'W';
         degrees *= -1;
     }
-    NRT_SNPRINTF(buffer8, 9, "%03d%02d%02d%c", degrees, minutes,
-                 (int) (seconds + 0.5), dir);
 
+    /* Round seconds. */
+    seconds += 0.5;
+
+    /* Ensure seconds and minutes are still within valid range. */
+    if (seconds >= 60.0)
+    {
+        seconds -= 60.0;
+
+        if (++minutes >= 60)
+        {
+            minutes -= 60;
+            ++degrees;
+        }
+    }
+
+    NRT_SNPRINTF(buffer8, 9, "%03d%02d%02d%c", degrees, minutes,
+                 (int) seconds, dir);
 }
 
 NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal, char *buffer7)
