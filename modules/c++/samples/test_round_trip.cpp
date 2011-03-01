@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     std::string outputFile;
     bool expand = false;
     std::string logFile;
-    logging::LogLevel logLevel = logging::LOG_INFO;
+    logging::LogLevel logLevel = logging::LogLevel::LOG_INFO;
 
     for (int i = 1; i < argc; ++i)
     {
@@ -61,14 +61,7 @@ int main(int argc, char** argv)
             std::string level = argv[++i];
             str::lower(level);
             str::trim(level);
-            if (level == "info")
-                logLevel = logging::LOG_INFO;
-            else if (level == "debug")
-                logLevel = logging::LOG_DEBUG;
-            else if (level == "warn")
-                logLevel = logging::LOG_WARN;
-            else if (level == "error")
-                logLevel = logging::LOG_ERROR;
+            logLevel = logging::LogLevel(level);
         }
         else if (inputFile.empty())
             inputFile = arg;
