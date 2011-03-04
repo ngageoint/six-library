@@ -349,7 +349,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             bufIdx = strlen(outBuf);
 
             memset(buf, 0, 256);
-            NRT_SNPRINTF(buf, 256, "%.*g", decimalPlaces, fractSeconds);
+            NRT_SNPRINTF(buf, 256, "%.*f", decimalPlaces, fractSeconds);
 
             if (strlen(buf) + bufIdx + 1 > maxSize)
             {
