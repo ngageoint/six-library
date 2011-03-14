@@ -24,19 +24,19 @@
     <dependencies>
         <dependency>
             <id>commons-lang</id>
-            <version>${commons-lang.version}</version>
+            <version>${commons.lang.version}</version>
             <url>http://jakarta.apache.org/commons/</url>
         </dependency>
 
         <dependency>
             <id>commons-io</id>
-            <version>${commons-io.version}</version>
+            <version>${commons.io.version}</version>
             <url>http://jakarta.apache.org/commons/</url>
         </dependency>
 
         <dependency>
             <id>commons-logging</id>
-            <version>${commons-logging.version}</version>
+            <version>${commons.logging.version}</version>
             <url>http://jakarta.apache.org/commons/</url>
         </dependency>
 
