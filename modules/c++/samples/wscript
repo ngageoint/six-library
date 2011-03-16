@@ -1,11 +1,12 @@
 NAME            = 'samples'
 VERSION         = '0.1'
-MODULE_DEPS     = 'scene tiff nitf xml.lite six six.sicd six.sidd cli'
+MODULE_DEPS     = 'scene tiff nitf xml.lite six six.sicd six.sidd cli sio.lite'
 USELIB          = 'SIX_SAMPLES'
 
 set_options = configure = distclean = lambda p: None
 
-SAMPLES = 'test_round_trip test_extract_xml test_create_sicd test_dump_images test_create_sidd test_create_sidd_from_mem test_parse_xml'
+SAMPLES = 'test_round_trip test_extract_xml test_create_sicd test_dump_images ' \
+          'test_create_sidd test_create_sidd_from_mem test_parse_xml'
 
 def build(bld):
     for sample in SAMPLES.split():

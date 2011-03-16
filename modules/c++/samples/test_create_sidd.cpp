@@ -21,8 +21,6 @@
  */
 #include <iostream>
 
-#ifdef USE_SIO_LITE
-
 #include <import/six.h>
 #include <import/six/sidd.h>
 #include <import/six/sicd.h>
@@ -370,11 +368,3 @@ int main(int argc, char** argv)
 
     return 0;
 }
-#else
-int main(int argc, char** argv)
-{
-    std::cout << "sio.lite module not compiled in, test could not be run" 
-	      << std::endl;
-    return 0;
-}
-#endif
