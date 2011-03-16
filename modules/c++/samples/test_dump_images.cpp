@@ -24,24 +24,18 @@
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 
-#ifdef USE_SIO_LITE
 #  include <import/sio/lite.h>
-#endif
 
 using namespace six;
 
 void writeSIOFileHeader(long numRows, long numCols, unsigned long nbpp,
                         io::OutputStream& outputStream)
 {
-#ifdef USE_SIO_LITE
-
     int type = nbpp == 1 ? 1 : 22;
     // Write out the SIO header first
     sio::lite::FileHeader fileHeader(numRows, numCols, nbpp, type);
 
     fileHeader.to(1, outputStream);
-
-#endif
 }
 
 int main(int argc, char** argv)

@@ -42,6 +42,7 @@ six_libs:
 	cd tiff;        make library
 	cd xml.lite;    make library
 	cd scene;       make library
+	cd sio.lite;    make library
 
 six_install:
 	cd except;      make install
@@ -55,6 +56,7 @@ six_install:
 	cd scene;       make install
 	cd math.linear; make install
 	cd math.poly;   make install
+	cd sio.lite;    make install
 
 drivers_clean:
 	cd ../drivers; rm -rf expat-2.0.0
@@ -79,6 +81,7 @@ six_clean: drivers_clean
 	cd scene;       make clean
 	cd math.linear; make clean
 	cd math.poly;   make clean
+	cd sio.lite;    make clean
 
 six_raw: six_clean
 	cd except;      make raw
@@ -92,6 +95,7 @@ six_raw: six_clean
 	cd scene;       make raw
 	cd math.linear; make raw
 	cd math.poly;   make raw
+	cd sio.lite;    make raw
 
 six_test:
 	cd six;         make unit-tests

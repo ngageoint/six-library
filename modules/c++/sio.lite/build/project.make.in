@@ -1,0 +1,27 @@
+PACKAGE = sio.lite
+BUILD = library unit-tests
+MAJOR_VERSION = 0
+MINOR_VERSION = 5
+VERSION_SUFFIX =
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Dan.Pressel@gd-ais.com Thomas.Zellman@gd-ais.com
+DESCRIPTION = SIO Utilities
+
+SOURCES = FileHeader.cpp StreamReader.cpp FileReader.cpp FileWriter.cpp
+TESTS = imdmphdr.cpp FabricateTest.cpp RoundTripTest.cpp
+
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/io/include 
+
+MY_LIBPATH = -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/io/lib/@target@/@lib_dir@ 
+            
+
+MY_LIBS = -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
