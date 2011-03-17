@@ -92,8 +92,11 @@ int main(int argc, char** argv)
 
         // get the correct ReadControl for the given file
         ReadControl *reader = readerRegistry.newReadControl(inputFile);
-        // load the file, passing in the optional registry, since we have one
-        reader->load(inputFile, &xmlRegistry);
+        // set the optional registry, since we have one
+        reader->setXMLControlRegistry(&xmlRegistry);
+
+        // load the file
+        reader->load(inputFile);
 
         Container* container = reader->getContainer();
         std::string base = sys::Path::basename(inputFile, true);
