@@ -21,6 +21,7 @@
  */
 #include <iostream>
 
+#include <import/cli.h>
 #include <import/six.h>
 #include <import/sio/lite.h>
 #include <import/io.h>
@@ -71,29 +72,42 @@
 int main(int argc, char** argv)
 {
 
-    if (argc != 3 && argc != 5)
-    {
-        die_printf(
-                   "Usage: %s <sio-image-file> <sicd-output-file> (Max product size) (N rows limit)\n",
-                   argv[0]);
-    }
-
-    std::string inputName(argv[1]);
-    std::string outputName(argv[2]);
-
     try
     {
 
-        //--------------------------------------------------------------------
-        // Registers a Creator that produces ComplexXMLControls on demand.
-        // This function must be called prior to complex object/file creation.
-        // If its called from multiple threads, must be synchronized
-        // TODO: Replace with lazy plugin?
-        //--------------------------------------------------------------------
-        six::XMLControlFactory::getInstance(). addCreator(
-                                                          six::DataType::COMPLEX,
-                                                          new six::XMLControlCreatorT<
-                                                                  six::sicd::ComplexXMLControl>());
+        // create a parser and add our options to it
+        cli::ArgumentParser parser;
+        parser.setDescription(
+                              "This program creates a sample SICD NITF file from a complex SIO input.");
+        parser.addArgument("-r --rows", "Rows limit", cli::STORE, "maxRows",
+                           "ROWS")->setDefault(-1);
+        parser.addArgument("-s --size", "Max product size", cli::STORE,
+                           "maxSize", "BYTES")->setDefault(-1);
+        parser.addArgument("--class", "Classification Level", cli::STORE,
+                           "classLevel", "LEVEL")->setDefault("UNCLASSIFIED");
+        parser.addArgument("sio", "SIO input file", cli::STORE, "sio", "SIO",
+                           1, 1);
+        parser.addArgument("output", "Output filename", cli::STORE, "output",
+                           "OUTPUT", 1, 1);
+
+        cli::Results *options = parser.parse(argc, (const char**) argv);
+
+        std::string inputName(options->get<std::string> ("sio"));
+        std::string outputName(options->get<std::string> ("output"));
+        long maxRows(options->get<long> ("maxRows"));
+        long maxSize(options->get<long> ("maxSize"));
+        std::string classLevel(options->get<std::string> ("classLevel"));
+
+        // create an XML registry
+        // The reason to do this is to avoid adding XMLControlCreators to the
+        // XMLControlFactory singleton - this way has more fine-grained control
+        //        XMLControlRegistry xmlRegistry;
+        //        xmlRegistry.addCreator(DataType::COMPLEX, new XMLControlCreatorT<
+        //                six::sicd::ComplexXMLControl> ());
+
+        six::XMLControlFactory::getInstance().addCreator(
+                six::DataType::COMPLEX,
+                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
         // Open a file with inputName
         io::FileInputStream inputFile(inputName);
@@ -124,6 +138,7 @@ int main(int argc, char** argv)
         data->setNumCols(fileHeader->getNumElements());
         data->setName("corename");
         data->setSource("sensorname");
+        data->getClassification().level = "UNCLASSIFIED";
         data->setCreationTime(six::DateTime());
         data->setImageCorners(makeUpCornersFromDMS());
         data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
@@ -200,18 +215,20 @@ int main(int argc, char** argv)
          *  the algorithm to segment early.
          *
          */
-        if (argc == 5)
+        if (maxRows > 0)
         {
-            std::cout << "Overriding NITF product size and max ILOC"
-                    << std::endl;
-            writer->getOptions().setParameter(
-                                              six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
-                                              str::toType<long>(argv[3]));
-
+            std::cout << "Overriding NITF max ILOC" << std::endl;
             writer->getOptions().setParameter(
                                               six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
-                                              str::toType<long>(argv[4]));
+                                              maxRows);
 
+        }
+        if (maxSize > 0)
+        {
+            std::cout << "Overriding NITF product size" << std::endl;
+            writer->getOptions().setParameter(
+                                              six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                                              maxSize);
         }
 
         // Means its little endian stream

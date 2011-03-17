@@ -423,28 +423,17 @@ void NITFWriteControl::setSecurity(six::Classification& c,
 
 std::string NITFWriteControl::getNITFClassification(std::string level)
 {
-    if (str::startsWith(level, "UNCLASSIFIED"))
+    str::upper(level);
+    str::trim(level);
+    if (!level.empty())
     {
-        return "U";
-    }
-    else if (str::startsWith(level, "CLASSIFIED"))
-    {
-        return "C";
-    }
-    else if (str::startsWith(level, "RESTRICTED"))
-    {
-        return "R";
-    }
-    else if (str::startsWith(level, "SECRET"))
-    {
-        return "S";
-    }
-    else if (str::startsWith(level, "TOP SECRET"))
-    {
-        return "T";
+        // if the string starts with UCRST, return the correct identifier
+        std::string firstChar = level.substr(0, 1);
+        if (str::containsOnly(firstChar, "UCRST"))
+            return firstChar;
     }
 
-    // They get one last chance to fix this using
+    // The user gets one last chance to fix this using
     // fileOptions.getParameter(Classification::OPT_*CLAS)
     return "";
 }
