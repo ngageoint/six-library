@@ -1,3 +1,26 @@
+/* =========================================================================
+ * This file is part of six-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * six-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#include <import/cli.h>
 #include <import/io.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
@@ -5,75 +28,42 @@
 
 typedef std::complex<float> ComplexFloat;
 
-enum
-{
-    CONV_OK = 0,
-    CONV_EX_USAGE,
-    CONV_EX_VER,
-    CONV_EX_INPUT_FILE_NOT_FOUND,
-    CONV_EX_OUTPUT_DIR_NOT_FOUND,
-    CONV_EX_UNKNOWN
-};
-
-void usageAndDie(const char* prog)
-{
-    std::cerr << "Usage: " << prog
-            << " [options] <sicd/sidd-file> <output-file>" << std::endl;
-    std::cerr << "Optional fields:" << std::endl;
-    std::cerr << "\t-h\t--help\t\tPrint usage" << std::endl;
-    std::cerr << "\t-e\t--expand\tExpand RE16I_IM16I to RE32F_IM32F"
-            << std::endl;
-    std::cerr << "\t--log <file|console>\tLog to a file or console"
-            << std::endl;
-    std::cerr << "\t-l\t--level <debug|info|warn|error>\tLevel at which to log"
-            << std::endl;
-    exit(CONV_EX_USAGE);
-}
-
 int main(int argc, char** argv)
 {
-
-    std::string inputFile;
-    std::string outputFile;
-    bool expand = false;
-    std::string logFile;
-    logging::LogLevel logLevel = logging::LogLevel::LOG_INFO;
-
-    for (int i = 1; i < argc; ++i)
-    {
-        std::string arg(argv[i]);
-
-        if (arg == "-e" || arg == "--expand")
-            expand = true;
-        else if (arg == "-h" || arg == "--help")
-            usageAndDie(argv[0]);
-        else if (arg == "--log")
-        {
-            if (argc == (i + 1))
-                usageAndDie(argv[0]);
-            logFile = argv[++i];
-        }
-        else if (arg == "-l" || arg == "--level")
-        {
-            if (argc == (i + 1))
-                usageAndDie(argv[0]);
-
-            std::string level = argv[++i];
-            str::lower(level);
-            str::trim(level);
-            logLevel = logging::LogLevel(level);
-        }
-        else if (inputFile.empty())
-            inputFile = arg;
-        else if (outputFile.empty())
-            outputFile = arg;
-    }
-
-    if (inputFile.empty() || outputFile.empty())
-        usageAndDie(argv[0]);
-
     try
     {
+
+        // create a parser and add our options to it
+        cli::ArgumentParser parser;
+        parser.setDescription(
+                              "This program reads a SICD or SIDD into the internal "
+                                  "memory model and round-trips it back to file.");
+        parser.addArgument("-e --expand", "Expand RE16I_IM16I to RE32F_IM32F",
+                           cli::STORE_TRUE, "expand");
+        parser.addArgument("-f --log", "Specify a log file", cli::STORE, "log",
+                           "FILE")->setDefault("console");
+        parser.addArgument("-l --level", "Specify log level", cli::STORE,
+                           "level", "LEVEL")->setChoices(
+                                                         str::split(
+                                                                    "debug info warn error"))->setDefault(
+                                                                                                          "info");
+        parser.addArgument("input", "Input SICD/SIDD", cli::STORE, "input",
+                           "INPUT", 1, 1);
+        parser.addArgument("output", "Output filename", cli::STORE, "output",
+                           "OUTPUT", 1, 1);
+
+        cli::Results *options = parser.parse(argc, (const char**) argv);
+
+        std::string inputFile(options->get<std::string> ("input"));
+        std::string outputFile(options->get<std::string> ("output"));
+        bool expand(options->get<bool> ("expand"));
+        std::string logFile(options->get<std::string> ("log"));
+        std::string level(options->get<std::string> ("level"));
+
+        str::upper(level);
+        str::trim(level);
+        logging::LogLevel logLevel(level);
+
         six::XMLControlFactory::getInstance().addCreator(
                                                          six::DataType::COMPLEX,
                                                          new six::XMLControlCreatorT<
@@ -84,16 +74,10 @@ int main(int argc, char** argv)
                                                                  six::sidd::DerivedXMLControl>());
 
         logging::Logger log;
-        if (!logFile.empty())
-        {
-            if (logFile == "console")
-                log.addHandler(new logging::StreamHandler(logLevel), true);
-            else
-                log.addHandler(new logging::FileHandler(logFile, logLevel),
-                               true);
-        }
+        if (logFile == "console")
+            log.addHandler(new logging::StreamHandler(logLevel), true);
         else
-            log.addHandler(new logging::NullHandler, true);
+            log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
         six::NITFReadControl reader;
         reader.setLogger(&log);

@@ -71,10 +71,8 @@
  */
 int main(int argc, char** argv)
 {
-
     try
     {
-
         // create a parser and add our options to it
         cli::ArgumentParser parser;
         parser.setDescription(
@@ -138,7 +136,7 @@ int main(int argc, char** argv)
         data->setNumCols(fileHeader->getNumElements());
         data->setName("corename");
         data->setSource("sensorname");
-        data->getClassification().level = "UNCLASSIFIED";
+        data->getClassification().level = classLevel;
         data->setCreationTime(six::DateTime());
         data->setImageCorners(makeUpCornersFromDMS());
         data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
