@@ -659,7 +659,7 @@ void NITFWriteControl::addDataAndWrite()
     {
         Data* data = mContainer->getData(i);
 
-        raw[i] = six::toXMLCharArray(data);
+        raw[i] = six::toXMLCharArray(data, mXMLRegistry);
         nitf::SegmentWriter deWriter = mWriter.newDEWriter(i);
         nitf::SegmentMemorySource segSource(raw[i], strlen(raw[i]), 0, 0);
         deWriter.attachSource(segSource);

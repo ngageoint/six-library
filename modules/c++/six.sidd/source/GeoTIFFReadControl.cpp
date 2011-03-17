@@ -61,8 +61,7 @@ six::DataType six::sidd::GeoTIFFReadControl::getDataType(std::string fromFile)
     return six::DataType::NOT_SET;
 }
 
-void six::sidd::GeoTIFFReadControl::load(std::string fromFile,
-                                         const six::XMLControlRegistry* xmlRegistry)
+void six::sidd::GeoTIFFReadControl::load(std::string fromFile)
 {
     mReader.openFile(fromFile);
 
@@ -84,12 +83,9 @@ void six::sidd::GeoTIFFReadControl::load(std::string fromFile,
 
     mContainer = new six::Container(six::DataType::DERIVED);
 
-    if (!xmlRegistry)
-        xmlRegistry = &six::XMLControlFactory::getInstance();
-
     for (size_t i = 0, n = sidds.size(); i < n; ++i)
     {
-        six::XMLControl * xmlControl = xmlRegistry->newXMLControl("SIDD_XML");
+        six::XMLControl * xmlControl = mXMLRegistry->newXMLControl("SIDD_XML");
 
         std::string xmlString = sidds[i];
         str::trim(xmlString);
@@ -112,7 +108,7 @@ void six::sidd::GeoTIFFReadControl::load(std::string fromFile,
     }
     for (size_t i = 0, n = sicds.size(); i < n; ++i)
     {
-        six::XMLControl * xmlControl = xmlRegistry->newXMLControl("SICD_XML");
+        six::XMLControl * xmlControl = mXMLRegistry->newXMLControl("SICD_XML");
 
         std::string xmlString = sicds[i];
         str::trim(xmlString);

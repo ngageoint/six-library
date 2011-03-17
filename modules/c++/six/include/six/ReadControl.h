@@ -57,7 +57,8 @@ public:
     ReadControl() :
         mContainer(NULL), mLog(NULL), mOwnLog(false)
     {
-        setLogger( NULL);
+        setLogger(NULL);
+        setXMLControlRegistry(NULL);
     }
 
     //!  Destructor doesnt release anything
@@ -78,8 +79,7 @@ public:
      *  done this, you can get the image data back using the interleaved
      *  function
      */
-    virtual void load(std::string fromFile,
-                      const XMLControlRegistry* xmlRegistry = NULL) = 0;
+    virtual void load(std::string fromFile) = 0;
 
     /*!
      *  Get a const pointer to the current container.  This
@@ -144,11 +144,19 @@ public:
         mOwnLog = log ? ownLog : true;
     }
 
+    void setXMLControlRegistry(const XMLControlRegistry *xmlRegistry)
+    {
+        mXMLRegistry = xmlRegistry;
+        if (!mXMLRegistry)
+            mXMLRegistry = &XMLControlFactory::getInstance();
+    }
+
 protected:
     Container* mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;
+    const XMLControlRegistry *mXMLRegistry;
 
 };
 

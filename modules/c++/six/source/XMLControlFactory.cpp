@@ -62,17 +62,16 @@ XMLControl* XMLControlRegistry::newXMLControl(std::string identifier) const
     }
 
     return newXMLControl(dataType);
-
 }
 
 char* six::toXMLCharArray(Data* data, const six::XMLControlRegistry *xmlRegistry)
 {
-    std::string xml = toXMLString(data);
+    std::string xml = toXMLString(data, xmlRegistry);
     char* raw = new char[xml.length() + 1];
     strcpy(raw, xml.c_str());
     return raw;
-
 }
+
 std::string six::toXMLString(Data* data, const six::XMLControlRegistry *xmlRegistry)
 {
     if (!xmlRegistry)

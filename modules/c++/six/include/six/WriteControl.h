@@ -26,6 +26,7 @@
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
+#include "six/XMLControlFactory.h"
 #include <import/logging.h>
 
 namespace six
@@ -70,12 +71,15 @@ public:
     WriteControl() :
         mContainer(NULL), mLog(NULL), mOwnLog(false)
     {
-        setLogger( NULL);
+        setLogger(NULL);
+        setXMLControlRegistry(NULL);
     }
 
     //!  Destructor.  Does not release any memory
     virtual ~WriteControl()
     {
+        if (mLog && mOwnLog)
+            delete mLog;
     }
 
     /*!
@@ -173,11 +177,19 @@ public:
         mOwnLog = log ? ownLog : true;
     }
 
+    void setXMLControlRegistry(const XMLControlRegistry *xmlRegistry)
+    {
+        mXMLRegistry = xmlRegistry;
+        if (!mXMLRegistry)
+            mXMLRegistry = &XMLControlFactory::getInstance();
+    }
+
 protected:
     Container* mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;
+    const XMLControlRegistry *mXMLRegistry;
 
 };
 
