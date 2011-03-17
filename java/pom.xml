@@ -4,7 +4,7 @@
 	<groupId>nitro-nitf</groupId>
 	<artifactId>nitf-master</artifactId>
 	<packaging>pom</packaging>
-	<version>${nitf-master.version}</version>
+	<version>1.0-SNAPSHOT</version>
 	<inceptionYear>2004</inceptionYear>
 	<name>NITRO</name>
 	<url>http://nitro-nitf.sourceforge.net/</url>
@@ -25,11 +25,6 @@
             http://nitro-nitf.svn.sourceforge.net/viewvc/nitro-nitf/
         </url>
 	</scm>
-
-
-	<properties>
-		<nitf-master.version>1.0-SNAPSHOT</nitf-master.version>
-	</properties>
 
 	<developers>
 		<developer>
