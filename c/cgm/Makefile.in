@@ -32,8 +32,8 @@ docs:
 ############################################
 #  Install the library(ies) and include files 
 #  in the appropriate place...  
-_LIBDIR = @prefix@/lib
-_INCDIR = @prefix@/include
+_LIBDIR = @libdir@
+_INCDIR = @includedir@
 _DOCDIR = ${prefix}/share/doc/cgm
 _TESTDIR = ${prefix}/tests
 _TESTBINDIR = ${_TESTDIR}/bin
