@@ -4,6 +4,9 @@
 ##############################################
 include build/Makefile
 
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
 # This target builds the library.  The targets are defined below...
 all: library test
 ##############################################
