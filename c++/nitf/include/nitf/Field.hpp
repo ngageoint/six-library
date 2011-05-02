@@ -402,9 +402,10 @@ private:
     //! get the value
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
     {
-        NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &error);
+        nitf_Error e;
+        NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
         if (!x)
-            throw nitf::NITFException(&error);
+            throw nitf::NITFException(&e);
     }
 
     //! set the value
