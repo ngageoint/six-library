@@ -34,7 +34,6 @@
  *  \file TRE.hpp
  *  \brief  Contains wrapper implementation for TRE
  */
-
 namespace nitf
 {
 
@@ -213,7 +212,8 @@ typedef nitf::TREFieldIterator Iterator;
     Iterator end() throw (nitf::NITFException);
 
     /*!
-     * Get the field specified by the key
+     * Get the field specified by the key. Throws an exception if the field
+     * does not exist.
      */
     nitf::Field getField(const std::string& key)
         throw(except::NoSuchKeyException);
@@ -248,7 +248,7 @@ typedef nitf::TREFieldIterator Iterator;
      */
     bool exists(const std::string& key);
 
-    //! Get the length
+    //! Get the total length of the TRE data
     size_t getCurrentSize();
 
     //! Get the tag

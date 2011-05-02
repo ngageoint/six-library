@@ -1085,9 +1085,9 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
 }
 
 
-NITFPROT(NITF_BOOL) nitf_Field_resizeField(nitf_Field *field,
-                                           size_t newLength,
-                                           nitf_Error *error)
+NITFAPI(NITF_BOOL) nitf_Field_resizeField(nitf_Field *field,
+                                          size_t newLength,
+                                          nitf_Error *error)
 {
     char fill = 0;
 

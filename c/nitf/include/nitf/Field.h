@@ -365,9 +365,9 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field);
  * resizable member of the field is false. Otherwise, it attempts to resize
  * the field, which will destroy the current raw data.
  */
-NITFPROT(NITF_BOOL) nitf_Field_resizeField(nitf_Field *field,
-                                           size_t newLength,
-                                           nitf_Error *error);
+NITFAPI(NITF_BOOL) nitf_Field_resizeField(nitf_Field *field,
+                                          size_t newLength,
+                                          nitf_Error *error);
 
 /*!
  *  TODO: Add documentation

@@ -299,6 +299,22 @@ enum FieldType
         return getNativeOrThrow()->length;
     }
 
+    /**
+     * Resizes the field to the given length.
+     * Use this method with caution as it can resize a field to be larger than
+     * it should be, according to specs.
+     */
+    void resize(size_t length)
+    {
+        nitf_Field *field = getNativeOrThrow();
+        NITF_BOOL resizable = field->resizable;
+        field->resizable = 1;
+
+        if (!nitf_Field_resizeField(field, length, &error))
+            throw nitf::NITFException(&error);
+        field->resizable = resizable;
+    }
+
     operator nitf::Uint8() const
     {
         nitf::Uint8 data;
@@ -386,10 +402,9 @@ private:
     //! get the value
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
     {
-        nitf_Error e;
-        NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
+        NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &error);
         if (!x)
-            throw nitf::NITFException(&e);
+            throw nitf::NITFException(&error);
     }
 
     //! set the value
