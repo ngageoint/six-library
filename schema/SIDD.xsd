@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by General Dynamics AIS (General Dynamics AIS) -->
 <!-- SIDD v1.0.0 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sicommon="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SIDD:1.0.0" targetNamespace="urn:SIDD:1.0.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:icism="urn:us:gov:ic:ism" xmlns:sicommon="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SIDD:1.0.0" targetNamespace="urn:SIDD:1.0.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="urn:SICommon:0.1" schemaLocation="SICommonTypes.xsd"/>
 	<xs:import namespace="urn:SFA:1.2.0" schemaLocation="SFA.xsd"/>
+	<xs:import namespace="urn:us:gov:ic:ism" schemaLocation="IC-ISM.xsd"/>
 	<xs:simpleType name="LUTListType">
 		<xs:list itemType="xs:int"/>
 	</xs:simpleType>
@@ -395,6 +396,9 @@ NRL                N/A                        0,255 (Supposed to be display read
 			<xs:documentation>The overall classification of the product.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<xs:element name="Level" type="icism:ClassificationType"/>
+		</xs:sequence>
+		<!--
 			<xs:element name="Level" type="xs:string">
 				<xs:annotation>
 					<xs:documentation>The classification level (examples: Unclassified, Secret, Top Secret, etc.).</xs:documentation>
@@ -410,7 +414,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 					<xs:documentation>Classification guidance authority (only if file is classified).</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-		</xs:sequence>
+			-->
 	</xs:complexType>
 	<xs:complexType name="ProcessorInformationType">
 		<xs:sequence>
@@ -1027,6 +1031,7 @@ NRL                N/A                        0,255 (Supposed to be display read
 					</xs:annotation>
 				</xs:element>
 			</xs:sequence>
+			<xs:attributeGroup ref="icism:SecurityAttributesGroup"/>
 		</xs:complexType>
 	</xs:element>
 </xs:schema>
