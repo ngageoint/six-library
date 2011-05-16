@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml" xmlns:mdr="http://metadata.dod.mil/" targetNamespace="http://www.opengis.net/gml" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1.1">
+	<xs:annotation>
+		<xs:documentation>
+			Change Log:
+			
+				6/05/2007 (J. Pantella) -- Created pursuant to approved CR 2007-1.  See also http://metadata.dod.mil/irs/DDMS/cm/CR/2007/DDMS-CR-2007-1.
+				6/05/2007 (J. Pantella) -- Removed all references to elements deprecated as of GML 3.2.1 pursuant to approved CR 2007-2.  See also http://metadata.dod.mil/mdr/irs/DDMS/cm/CR/2007/DDMS-CR-2007-2.
+				6/05/2007 (J. Pantella) -- Modified the PolygonType to remove the gml:interior element pursuant to approved CR 2007-3a.  See also http://metadata.dod.mil/mdr/irs/DDMS/cm/CR/2007/DDMS-CR-2007-3a.
+				6/05/2007 (J. Pantella) -- Pursuant to approved CR 2007-3b...removed the pointProperty element and it's corresponding type from the GML Profile to avoid referencing external geospatial metadata.  For discovery all metadata should be encoded in the DDMS record.  See also http://metadata.dod.mil/mdr/irs/DDMS/cm/CR/2007/DDMS-CR-2007-3b.
+				6/05/2007 (J. Pantella) -- Pursuant to approved CR 2007-4...the srsName attribute identifying the coordinate reference system is required on gml:Point and gml:Polygon in the DDMS GML Profile.  See also http://metadata.dod.mil/irs/DDMS/cm/2007/DDMS-CR-2007-4.
+				6/05/2007 (J. Pantella) -- Added developer guidance to Point and Polygon types pursuant to CR 2007-5.   See also http://metadata.dod.mil/mdr/irs/cm/CR/2007/DDMS-CR-2007-5.
+				6/05/2007 (J. Pantella) -- Added gml:id attribute definition and applied it as required to gml:Point and gml:Polygon per CR 2007-6.  See also http://metadata.dod.mil/mdr/irs/cm/CR/2007/DDMS-CR-2007-6.
+				6/05/2007 (J. Pantella) -- Commented out the gml:posList element and its references.  There was an inadvertent omission of a CR to eliminate that element to simplify the encoding of position information.  Because the CR has not been presented to and approved by the DDMS CM Panel, the element has been commented out in this schema to discourage its use (it would otherwise have been deleted completely).  Developers that wish to use gml:posList against the current recommendation not to use it may uncomment the relevant definitions in this schema.  
+				7/26/2007 (J. Pantella) -- BUG FIX --- Added gml:SRSReferenceGroupSRSNameRequired attribute group to be applied to gml:Point and gml:Polygon within the DDMS.  The gml:SRSReferenceGroup was modified to make srsName optional and applied to the gml:pos element.  This fixes a bug in the original profile which required srsName on gml:pos elements in the DDMS which is unnecessary given that the DDMS Specification explicitly states that the value of the srsName attribute on the ancestor gml:Point or gml:Polygon element of which a given gml:pos element is a descendent is controlling.  This means that if gml:pos/@srsName is specified, it must be the same as the parent gml:Point/@srsName or gml:Polygon/@srsName.  Otherwise it is considered an inconsistency and must be ignored.  Also ensured the the gml:id attribute is required on gml:Point and gml:Polygon per CR 2007-6.
+				1/4/2008 (J.Pantella) -- BUG FIX --- 7/26/2007 change failed to apply the gml:SRSReferenceGroupSRSNameRequired attribute group to the gml:Point.  This modification applies the appropriate group to the gml:Point element.
+				7/1/2008 (D. Barclay) -- Changed attributeFormDefault to change attribute form to unqualified (per CR 2008-7).
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="Polygon" type="gml:PolygonType"/>
+	<xs:complexType name="PolygonType">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>A Polygon is a special surface that is defined by a single surface patch. The boundary of this patch is coplanar and the polygon uses planar interpolation in its interior. It is backwards compatible with the Polygon of GML 2, GM_Polygon of ISO 19107 is implemented by PolygonPatch.</mdr:definition>
+				<mdr:comment>
+Developer's Note: It is required that the srsName attribute be populated on a gml:Point or gml:Polygon element within the DDMS.  Recommended values for the attribute are:
+			<!-- These Coordinate Reference System references are registered in the GSIP Governance Namespace on the DoD Metadata Registry. -->
+			1) "http://metadata.dod.mil/mdr/ns/GSIP/crs/WGS84C_3D" -- representing World Geodetic System 1984 - Earth Centered, Earth Fixed (ECEF), where the X axis is mass center - equator/prime meridian, and the units are meters; the Y axis is mass center - equator/90° E, and the units are meters; and the Z axis is mass center - North Pole, and the units are meters.  
+			OR
+			2) "http://metadata.dod.mil/mdr/ns/GSIP/crs/WGS84E_2D" -- representing World Geodetic System 1984 - Geographic, 2-Dimensional, where latitude is north positive, measured in degrees; and latitude is east positive, measured in degrees.
+			OR
+			3) "http://metadata.dod.mil/mdr/ns/GSIP/crs/WGS84E_3D" -- representing World Geodetic System 1984 - Geographic, 3-Dimensional, where latitude is north positive, measured in degrees; and latitude is east positive, measured in degrees; and height is height above ellipsoid, measured in meters.
+			See also: http://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350_2.html.
+			
+			For gml:pos elements populating the gml:Polygon/gml:exterior/gml:LinearRing/gml:pos element the following guidance should be followed:
+			1.	Latitude shall be in decimal degrees in the range -90° less than or equal to latitude greater than or equal to +90°.
+			2.	North latitudes shall be positive, south latitudes shall be negative.
+			3.	Longitude shall be in decimal degrees in the range -180° less than or equal to longitude greater than or equal to +180°; note that there are two equally acceptable values of longitude for the meridian opposite the prime meridian.
+			4.	East longitudes shall be positive, west longitudes shall be negative.
+			5.	Only the element gml:pos shall be used to encode a geographic point location as either:
+				a.	two decimal values in the order of latitude then longitude (no commas) when WGS84E_2D, or
+				b.	three decimal values in the order latitude, longitude and finally height above ellipsoid (no commas) when using the WGS84E_3D CRS. 
+
+
+Developer's Note:  The srsName attribute is required on the Polygon element.  The Polygon/@srsName is the identifier for the CRS which is controlling for the child gml:pos elements.  It is important to note that the srsName attribute may also appear on the gml:pos elements, however given the current allowable CRSs above there is no need to repeat the information on the gml:pos elements thus the srsName attribute is optional and not required.  If the srsName does appear on the gml:pos elements then it must be the same as the value of the srsName attribute on the Polygon element. 
+				</mdr:comment>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:all>
+			<xs:element ref="gml:exterior"/>
+		</xs:all>
+		<xs:attributeGroup ref="gml:SRSReferenceGroupSRSNameRequired"/>
+		<xs:attribute ref="gml:id" use="required"/>
+	</xs:complexType>
+	<xs:element name="exterior" type="gml:RingType"/>
+	<xs:complexType name="RingType">
+		<xs:sequence>
+			<xs:element ref="gml:LinearRing"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="LinearRing">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>A LinearRing is defined by four or more coordinate tuples, with linear interpolation between them; the first and last coordinates must be coincident.</mdr:definition>
+				<mdr:comment>Developer's Note:  Although gml:posList is available for use in the LinearRing it is highly recommended that this element not be used to avoid confusion and simplify the metadata representation.  The gml:posList was supposed to be removed in version 1.4 but was inadvertently left out of the set of GML Change Requests.  The posList element has been commented out in this version but if you choose to use it against this recommendation, you may uncomment it and its definition below.  Note however that this element may be eliminated pursuant to a future change request.
+			</mdr:comment>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="gml:pos" minOccurs="4" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="pos" type="gml:DirectPositionType"/>
+	<xs:complexType name="DirectPositionType">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>DirectPosition instances hold the coordinates for a position within some coordinate reference system (CRS). Since 
+			DirectPositions, as data types, will often be included in larger objects (such as geometry elements) that have references to CRS, the 
+			"srsName" attribute will in general be missing, if this particular DirectPosition is included in a larger element with such a reference to a 
+			CRS. In this case, the CRS is implicitly assumed to take on the value of the containing object's CRS.</mdr:definition>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="gml:doubleList">
+				<xs:attributeGroup ref="gml:SRSReferenceGroup"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="doubleList">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>XML List based on XML Schema double type.  An element of this type contains a space-separated list of double values</mdr:definition>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:list itemType="xs:double"/>
+	</xs:simpleType>
+	<xs:attributeGroup name="SRSReferenceGroup">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>Optional reference to the CRS used by this geometry, with optional additional information to simplify use when 
+			a more complete definition of the CRS is not needed. </mdr:definition>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:attribute name="srsName" type="xs:anyURI" use="optional">
+			<xs:annotation>
+				<xs:appinfo>
+					<mdr:definition>In general this reference points to a CRS instance of gml:CoordinateReferenceSystemType 
+				(see coordinateReferenceSystems.xsd). For well known references it is not required that the CRS description exists at the 
+				location the URI points to. If no srsName attribute is given, the CRS must be specified as part of the larger context this 
+				geometry element is part of, e.g. a geometric element like point, curve, etc. It is expected that this attribute will be specified 
+				at the direct position level only in rare cases.</mdr:definition>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="srsDimension" type="xs:positiveInteger" use="optional">
+			<xs:annotation>
+				<xs:appinfo>
+					<mdr:definition>The "srsDimension" is the length of coordinate sequence (the number of entries in the list). This dimension is 
+				specified by the coordinate reference system. When the srsName attribute is omitted, this attribute shall be omitted. </mdr:definition>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="gml:SRSInformationGroup"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="SRSReferenceGroupSRSNameRequired">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>Optional reference to the CRS used by this geometry, with optional additional information to simplify use when 
+			a more complete definition of the CRS is not needed. </mdr:definition>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:attribute name="srsName" type="xs:anyURI" use="required">
+			<xs:annotation>
+				<xs:appinfo>
+					<mdr:definition>In general this reference points to a CRS instance of gml:CoordinateReferenceSystemType 
+				(see coordinateReferenceSystems.xsd). For well known references it is not required that the CRS description exists at the 
+				location the URI points to. If no srsName attribute is given, the CRS must be specified as part of the larger context this 
+				geometry element is part of, e.g. a geometric element like point, curve, etc. It is expected that this attribute will be specified 
+				at the direct position level only in rare cases.</mdr:definition>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="srsDimension" type="xs:positiveInteger" use="optional">
+			<xs:annotation>
+				<xs:appinfo>
+					<mdr:definition>The "srsDimension" is the length of coordinate sequence (the number of entries in the list). This dimension is 
+				specified by the coordinate reference system. When the srsName attribute is omitted, this attribute shall be omitted. </mdr:definition>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="gml:SRSInformationGroup"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="SRSInformationGroup">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>Optional additional and redundant information for a CRS to simplify use when a more complete definition of the 
+			CRS is not needed. This information shall be the same as included in the more complete definition of the CRS, referenced by the 
+			srsName attribute. When the srsName attribute is included, either both or neither of the axisLabels and uomLabels attributes 
+			shall be included. When the srsName attribute is omitted, both of these attributes shall be omitted. </mdr:definition>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:attribute name="axisLabels" type="gml:NCNameList" use="optional">
+			<xs:annotation>
+				<xs:appinfo>
+					<mdr:definition>Ordered list of labels for all the axes of this CRS. The gml:axisAbbrev value should be used for these axis 
+				labels, after spaces and forbiddden characters are removed. When the srsName attribute is included, this attribute is optional. 
+				When the srsName attribute is omitted, this attribute shall also be omitted. </mdr:definition>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="uomLabels" type="gml:NCNameList" use="optional">
+			<xs:annotation>
+				<xs:appinfo>
+					<mdr:definition>Ordered list of unit of measure (uom) labels for all the axes of this CRS. The value of the string in the 
+				gml:catalogSymbol should be used for this uom labels, after spaces and forbiddden characters are removed. When the 
+				axisLabels attribute is included, this attribute shall also be included. When the axisLabels attribute is omitted, this attribute 
+				shall also be omitted. </mdr:definition>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:simpleType name="NCNameList">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>A set of values, representing a list of token with the lexical value space of NCName. The tokens are seperated by whitespace.</mdr:definition>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:list itemType="xs:NCName"/>
+	</xs:simpleType>
+	<!--	<xs:element name="posList" type="gml:DirectPositionListType"/>
+	<xs:complexType name="DirectPositionListType">
+		<xs:annotation>
+			<xs:documentation>DirectPositionList instances hold the coordinates for a sequence of direct positions within the same coordinate reference system (CRS).</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="gml:doubleList">
+				<xs:attributeGroup ref="gml:SRSReferenceGroup"/>
+				<xs:attribute name="count" type="xs:positiveInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>"count" allows to specify the number of direct positions in the list. If the attribute “count” is present then the attribute “srsDimension” shall be present, too.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType> -->
+	<xs:element name="Point" type="gml:PointType"/>
+	<xs:complexType name="PointType">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>A Point is defined by a single coordinate tuple.</mdr:definition>
+				<mdr:comment>Developer's Note: It is required that the srsName attribute be populated on a gml:Point or gml:Polygon element within the DDMS.  Recommended values for the attribute are:
+			<!-- These Coordinate Reference System references are registered in the GSIP Governance Namespace on the DoD Metadata Registry. -->
+			1) "http://metadata.dod.mil/mdr/ns/GSIP/crs/WGS84C_3D" -- representing World Geodetic System 1984 - Earth Centered, Earth Fixed (ECEF), where the X axis is mass center - equator/prime meridian, and the units are meters; the Y axis is mass center - equator/90° E, and the units are meters; and the Z axis is mass center - North Pole, and the units are meters.  
+			OR
+			2) "http://metadata.dod.mil/mdr/ns/GSIP/crs/WGS84E_2D" -- representing World Geodetic System 1984 - Geographic, 2-Dimensional, where latitude is north positive, measured in degrees; and latitude is east positive, measured in degrees.
+			OR
+			3) "http://metadata.dod.mil/mdr/ns/GSIP/crs/WGS84E_3D" -- representing World Geodetic System 1984 - Geographic, 3-Dimensional, where latitude is north positive, measured in degrees; and latitude is east positive, measured in degrees; and height is height above ellipsoid, measured in meters.
+			See also: http://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350_2.html.
+			
+			For gml:pos elements populating the gml:Polygon/gml:exterior/gml:LinearRing/gml:pos element the following guidance should be followed:
+			1.	Latitude shall be in decimal degrees in the range -90° less than or equal to latitude greater than or equal to +90°.
+			2.	North latitudes shall be positive, south latitudes shall be negative.
+			3.	Longitude shall be in decimal degrees in the range -180° less than or equal to longitude greater than or equal to +180°; note that there are two equally acceptable values of longitude for the meridian opposite the prime meridian.
+			4.	East longitudes shall be positive, west longitudes shall be negative.
+			5.	Only the element gml:pos shall be used to encode a geographic point location as either:
+				a.	two decimal values in the order of latitude then longitude (no commas) when WGS84E_2D, or
+				b.	three decimal values in the order latitude, longitude and finally height above ellipsoid (no commas) when using the WGS84E_3D CRS. 
+
+
+Developer's Note:  The srsName attribute is required on the Polygon element.  The Polygon/@srsName is the identifier for the CRS which is controlling for the child gml:pos elements.  It is important to note that the srsName attribute may also appear on the gml:pos elements, however given the current allowable CRSs above there is no need to repeat the information on the gml:pos elements thus the srsName attribute is optional and not required.  If the srsName does appear on the gml:pos elements then it must be the same as the value of the srsName attribute on the Polygon element. 
+			</mdr:comment>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:all>
+			<xs:element ref="gml:pos"/>
+		</xs:all>
+		<xs:attributeGroup ref="gml:SRSReferenceGroupSRSNameRequired"/>
+		<xs:attribute ref="gml:id" use="required"/>
+	</xs:complexType>
+	<xs:attribute name="id" type="xs:ID">
+		<xs:annotation>
+			<xs:appinfo>
+				<mdr:definition>A handle for the object.  It is of XML type "ID," so is constrained to be unique in the XML document within which it occurs.  An external identifier for the object in the form of a URI may be constructed using standard XML and XPointer methods.  This is done by concatenating the URI for the document, a fragment separator "#," and the value of the id attribute.  </mdr:definition>
+			</xs:appinfo>
+		</xs:annotation>
+	</xs:attribute>
+</xs:schema>
