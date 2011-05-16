@@ -288,10 +288,7 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd, const std::vector<
     const short header[] = { 1, 1, 2, 6, 1024, 0, 1, 2, /* GTModelTypeGeoKey - Geographic */
     1025, 0, 1, 1, /* GTRasterTypeGeoKey - RasterPixelIsArea */
     2048, 0, 1, 4326, /* GeographicTypeGeoKey - (GCSE_WGS84) 4030 */
-    2052, 0, 1, 9001, /* GeogLinearUnitsGeoKey - Linear_Meter */
-    2054, 0, 1, 9102, /* GeogAngularUnitsGeoKey - Angular Degrees */
-    2056, 0, 1, 7030, /* GeogEllipsoidGeoKey - Ellipse_WGS_84 */
-    3072, 0, 1, 0 };
+    3072, 0, 1, 0 }; /* ProjectedCSTypeGeoKey */
     for (unsigned int i = 0; i < sizeof(header) / sizeof(short); ++i)
     {
         entry->addValue(tiff::TypeFactory::create((unsigned char*) &header[i],
