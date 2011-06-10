@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <memory>
+
 #include "six/XMLControlFactory.h"
 
 using namespace six;

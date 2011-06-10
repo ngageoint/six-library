@@ -19,8 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <iostream>
-
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
 

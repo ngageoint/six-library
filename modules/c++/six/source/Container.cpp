@@ -55,6 +55,7 @@ void Container::addData(Data* data)
 void Container::addData(std::auto_ptr<Data> data)
 {
     mData.push_back(data.get());
+    data.release();
 }
 
 void Container::setData(size_t i, Data* data)

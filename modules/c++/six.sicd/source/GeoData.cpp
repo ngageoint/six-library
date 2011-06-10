@@ -43,8 +43,9 @@ GeoInfo* GeoInfo::clone() const
 
     for (size_t ii = 0; ii < geoInfos.size(); ++ii)
     {
-        const std::auto_ptr<GeoInfo> info(geoInfos[ii]->clone());
+        std::auto_ptr<GeoInfo> info(geoInfos[ii]->clone());
         dolly->geoInfos.push_back(info.get());
+        info.release();
     }
 
     GeoInfo * const dollyPtr(dolly.release());
@@ -68,8 +69,9 @@ GeoData* GeoData::clone()
     dolly->validData = validData;
     for (size_t ii = 0; ii < geoInfos.size(); ++ii)
     {
-        const std::auto_ptr<GeoInfo> info(geoInfos[ii]->clone());
+        std::auto_ptr<GeoInfo> info(geoInfos[ii]->clone());
         dolly->geoInfos.push_back(info.get());
+        info.release();
     }
 
     GeoData * const dollyPtr(dolly.release());
