@@ -36,12 +36,12 @@ namespace sicd
  *  \brief (Optional) SICD GeoInfo parameters
  *
  *  Parameters describing geographic features.
- *  Note: the GeoInfo block ma be used as a block within
+ *  Note: the GeoInfo block may be used as a block within
  *  itself
  */
-struct GeoInfo
+class GeoInfo
 {
-
+public:
     //!  Constructor
     GeoInfo()
     {
@@ -68,6 +68,11 @@ struct GeoInfo
      *
      */
     std::vector<LatLon> geometryLatLon;
+
+private:
+    // Noncopyable
+    GeoInfo(const GeoInfo& );
+    const GeoInfo& operator=(const GeoInfo& );
 };
 
 /*!
@@ -77,15 +82,16 @@ struct GeoInfo
  *  This block describes the geographic coordinates of the region
  *  covered by the image
  */
-struct GeoData
+class GeoData
 {
+public:
     //!  Constructor, force WGS84, since spec does.
     GeoData() :
         earthModel(EarthModelType::WGS84)
     {
     }
 
-    //!  Destructor, delets all GeoInfo objects
+    //!  Destructor, deletes all GeoInfo objects
     ~GeoData();
 
     //!  Clone, including non-NULL GeoInfo objects
@@ -124,6 +130,11 @@ struct GeoData
      *  Note that this may be used as a block inside of a block.
      */
     std::vector<GeoInfo*> geoInfos;
+
+private:
+    // Noncopyable
+    GeoData(const GeoData& );
+    const GeoData& operator=(const GeoData& );
 };
 
 }

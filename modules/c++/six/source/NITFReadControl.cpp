@@ -500,10 +500,14 @@ UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
 
 void NITFReadControl::reset()
 {
-    for (size_t i = 0, s = mInfos.size(); i < s; ++i)
-        if (mInfos[i])
-            delete mInfos[i];
+    for (size_t ii = 0; ii < mInfos.size(); ++ii)
+    {
+        delete mInfos[ii];
+    }
     mInfos.clear();
+
+    delete mContainer;
+    mContainer = NULL;
 }
 
 
