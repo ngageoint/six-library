@@ -49,7 +49,12 @@ Container& Container::operator=(const Container& c)
 
 void Container::addData(Data* data)
 {
-    mData.push_back(data);
+    addData(std::auto_ptr<Data>(data));
+}
+
+void Container::addData(std::auto_ptr<Data> data)
+{
+    mData.push_back(data.get());
 }
 
 void Container::setData(size_t i, Data* data)
@@ -89,10 +94,9 @@ Container::~Container()
 
 void Container::cleanup()
 {
-    for (size_t i = 0, s = mData.size(); i < s; ++i)
+    for (size_t ii = 0; ii < mData.size(); ++ii)
     {
-        if (mData[i])
-            delete mData[i];
+        delete mData[ii];
     }
     mData.clear();
 }

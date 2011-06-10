@@ -27,6 +27,7 @@
 #include <import/xml/lite.h>
 #include <import/io.h>
 #include <list>
+#include <memory>
 
 namespace six
 {
@@ -87,6 +88,16 @@ public:
      *
      */
     void addData(Data* data);
+
+    /*!
+     *  Add a new Data object to the back of this container.
+     *  If you leave the data in the container and do not remove
+     *  it we delete it for you (TODO: should we?).
+     *
+     *  \param data Add the data
+     *
+     */
+    void addData(std::auto_ptr<Data> data);
 
     /*!
      *  Set the data item at location i.  If there is an item in the

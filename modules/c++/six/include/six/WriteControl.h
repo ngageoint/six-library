@@ -100,7 +100,7 @@ public:
      *  \param sources A vector of InputStream items, one per target image
      *  \param toFile file name to write out
      */
-    virtual void save(SourceList& sources, std::string toFile) = 0;
+    virtual void save(SourceList& sources, const std::string& toFile) = 0;
 
     /*!
      *  Save a list of memory sources.  This should always be
@@ -110,12 +110,12 @@ public:
      *  \param sources A vector of memory buffers, one per target image
      *  \param toFile file name to write out
      */
-    virtual void save(BufferList& sources, std::string toFile) = 0;
+    virtual void save(BufferList& sources, const std::string& toFile) = 0;
 
     /*!
      *  Utility for Writing out one InputStream only.
      */
-    void save(io::InputStream* source, std::string toFile)
+    void save(io::InputStream* source, const std::string& toFile)
     {
         SourceList sources;
         sources.push_back(source);
@@ -125,7 +125,7 @@ public:
     /*!
      *  Utility for Writing out one buffer image only.
      */
-    void save(UByte* buffer, std::string toFile)
+    void save(UByte* buffer, const std::string& toFile)
     {
         BufferList sources;
         sources.push_back(buffer);

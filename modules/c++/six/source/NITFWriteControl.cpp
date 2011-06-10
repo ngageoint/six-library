@@ -486,7 +486,8 @@ void NITFWriteControl::updateFileHeaderSecurity()
     }
 }
 
-void NITFWriteControl::save(SourceList& imageData, std::string outputFile)
+void NITFWriteControl::save(SourceList& imageData,
+                            const std::string& outputFile)
 {
     //     int bufferSize = mOptions.getParameter(OPT_BUFFER_SIZE,
     //                                            Parameter((int)DEFAULT_BUFFER_SIZE));
@@ -562,7 +563,8 @@ void NITFWriteControl::saveIO(SourceList& imageData,
 
 }
 
-void NITFWriteControl::save(BufferList& imageData, std::string outputFile)
+void NITFWriteControl::save(BufferList& imageData,
+                            const std::string& outputFile)
 {
 
     //     int bufferSize = mOptions.getParameter(OPT_BUFFER_SIZE,

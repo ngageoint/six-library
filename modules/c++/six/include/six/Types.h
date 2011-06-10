@@ -180,10 +180,8 @@ struct Constants
     const static sys::Uint64_T IS_SIZE_MAX; // = 9999999998LL;
     const static sys::Uint64_T GT_SIZE_MAX;
 
-    enum GTKeys
-    {
-        GT_SICD_KEY = 52766, GT_SIDD_KEY = 58543
-    };
+    const static unsigned short GT_XML_KEY;
+    const static char GT_XML_TAG[];
 
     enum
     {

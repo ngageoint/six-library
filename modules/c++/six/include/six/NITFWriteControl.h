@@ -85,7 +85,7 @@ public:
 
     void initialize(Container* container);
 
-    void save(SourceList& imageData, std::string outputFile);
+    void save(SourceList& imageData, const std::string& outputFile);
 
     /*!
      *  Bind an interleaved (IQIQIQIQ) memory buffer
@@ -104,7 +104,7 @@ public:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
-    void save(BufferList& imageData, std::string outputFile);
+    void save(BufferList& imageData, const std::string& outputFile);
 
 protected:
     nitf::Writer mWriter;

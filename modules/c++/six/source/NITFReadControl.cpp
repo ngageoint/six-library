@@ -24,7 +24,7 @@
 
 using namespace six;
 
-DataType NITFReadControl::getDataType(std::string fromFile)
+DataType NITFReadControl::getDataType(const std::string& fromFile) const
 {
     // Could cache this
     if (mReader.getNITFVersion(fromFile) != NITF_VER_UNKNOWN)
@@ -83,7 +83,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 
 }
 
-void NITFReadControl::load(std::string fromFile)
+void NITFReadControl::load(const std::string& fromFile)
 {
     reset();
 
