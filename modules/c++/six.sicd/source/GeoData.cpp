@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <memory>
+
 #include "six/sicd/GeoData.h"
 
 using namespace six;
@@ -27,48 +29,49 @@ using namespace six::sicd;
 
 GeoInfo::~GeoInfo()
 {
-    for (unsigned int i = 0; i < geoInfos.size(); ++i)
+    for (size_t ii = 0; ii < geoInfos.size(); ++ii)
     {
-        GeoInfo* info = geoInfos[i];
-        geoInfos.erase(geoInfos.begin());
-        delete info;
+        delete geoInfos[ii];
     }
-
 }
+
 GeoInfo* GeoInfo::clone() const
 {
-    GeoInfo* g = new GeoInfo();
-    g->desc = desc;
-    g->geometryLatLon = geometryLatLon;
+    std::auto_ptr<GeoInfo> dolly(new GeoInfo());
+    dolly->desc = desc;
+    dolly->geometryLatLon = geometryLatLon;
 
-    for (unsigned int i = 0; i < geoInfos.size(); ++i)
+    for (size_t ii = 0; ii < geoInfos.size(); ++ii)
     {
-        GeoInfo* info = geoInfos[i];
-        g->geoInfos.push_back(info->clone());
+        const std::auto_ptr<GeoInfo> info(geoInfos[ii]->clone());
+        dolly->geoInfos.push_back(info.get());
     }
-    return g;
+
+    GeoInfo * const dollyPtr(dolly.release());
+    return dollyPtr;
 }
+
 GeoData::~GeoData()
 {
-    for (unsigned int i = 0; i < geoInfos.size(); ++i)
+    for (size_t ii = 0; ii < geoInfos.size(); ++ii)
     {
-        GeoInfo* info = geoInfos[i];
-        geoInfos.erase(geoInfos.begin());
-        delete info;
+        delete geoInfos[ii];
     }
 }
 
 GeoData* GeoData::clone()
 {
-    GeoData* g = new GeoData();
-    g->earthModel = earthModel;
-    g->scp = scp;
-    g->imageCorners = imageCorners;
-    g->validData = validData;
-    for (unsigned int i = 0; i < geoInfos.size(); ++i)
+    std::auto_ptr<GeoData> dolly(new GeoData());
+    dolly->earthModel = earthModel;
+    dolly->scp = scp;
+    dolly->imageCorners = imageCorners;
+    dolly->validData = validData;
+    for (size_t ii = 0; ii < geoInfos.size(); ++ii)
     {
-        GeoInfo* info = geoInfos[i];
-        g->geoInfos.push_back(info->clone());
+        const std::auto_ptr<GeoInfo> info(geoInfos[ii]->clone());
+        dolly->geoInfos.push_back(info.get());
     }
-    return g;
+
+    GeoData * const dollyPtr(dolly.release());
+    return dollyPtr;
 }

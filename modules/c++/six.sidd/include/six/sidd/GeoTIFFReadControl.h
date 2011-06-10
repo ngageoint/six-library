@@ -44,6 +44,7 @@ public:
     //!  Destructor
     virtual ~GeoTIFFReadControl()
     {
+        delete mContainer;
     }
 
     virtual DataType getDataType(std::string fromFile);
