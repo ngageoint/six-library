@@ -361,8 +361,9 @@ XMLElem XMLControl::getFirstAndOnly(XMLElem parent, std::string tag)
     parent->getElementsByTagName(tag, children);
     if (children.size() != 1)
     {
-        throw except::Exception(
-                                Ctxt(std::string("Expected exactly one ") + tag));
+        throw except::Exception(Ctxt(
+                 "Expected exactly one " + tag + " but got " +
+                    str::toString(children.size())));
     }
     return children[0];
 }

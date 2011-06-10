@@ -64,25 +64,29 @@ XMLControl* XMLControlRegistry::newXMLControl(std::string identifier) const
     return newXMLControl(dataType);
 }
 
-char* six::toXMLCharArray(Data* data, const six::XMLControlRegistry *xmlRegistry)
+char* six::toXMLCharArray(const Data* data,
+                          const six::XMLControlRegistry *xmlRegistry)
 {
-    std::string xml = toXMLString(data, xmlRegistry);
-    char* raw = new char[xml.length() + 1];
+    const std::string xml = toXMLString(data, xmlRegistry);
+    char* const raw = new char[xml.length() + 1];
     strcpy(raw, xml.c_str());
     return raw;
 }
 
-std::string six::toXMLString(Data* data, const six::XMLControlRegistry *xmlRegistry)
+std::string six::toXMLString(const Data* data,
+                             const six::XMLControlRegistry *xmlRegistry)
 {
     if (!xmlRegistry)
+    {
         xmlRegistry = &XMLControlFactory::getInstance();
-    XMLControl* xmlControl = xmlRegistry->newXMLControl(data->getDataType());
-    xml::lite::Document *doc = xmlControl->toXML(data);
+    }
+
+    const std::auto_ptr<XMLControl>
+        xmlControl(xmlRegistry->newXMLControl(data->getDataType()));
+    const std::auto_ptr<xml::lite::Document> doc(xmlControl->toXML(data));
 
     io::ByteStream bs;
     doc->getRootElement()->print(bs);
-    delete xmlControl;
-    delete doc;
 
     return bs.stream().str();
 }

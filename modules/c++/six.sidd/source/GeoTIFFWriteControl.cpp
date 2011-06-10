@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include "six/sidd/GeoTIFFWriteControl.h"
 
 #if !defined(SIX_TIFF_DISABLED)
@@ -28,13 +29,9 @@ using namespace six::sidd;
 
 GeoTIFFWriteControl::GeoTIFFWriteControl()
 {
-    // Fix us, we are broken
-    tiff::KnownTagsRegistry::getInstance().addEntry(Constants::GT_SICD_KEY,
-                                                    tiff::Const::Type::UNDEFINED,
-                                                    "SICDXMLTag");
-    tiff::KnownTagsRegistry::getInstance().addEntry(Constants::GT_SIDD_KEY,
-                                                    tiff::Const::Type::UNDEFINED,
-                                                    "SIDDXMLTag");
+    tiff::KnownTagsRegistry::getInstance().addEntry(Constants::GT_XML_KEY,
+                                                    tiff::Const::Type::ASCII,
+                                                    Constants::GT_XML_TAG);
 }
 void GeoTIFFWriteControl::initialize(Container* container)
 {
@@ -46,9 +43,9 @@ void GeoTIFFWriteControl::initialize(Container* container)
     // will keep those around for later
 
     sys::Uint64_T length = 0;
-    for (unsigned int i = 0; i < container->getNumData(); ++i)
+    for (size_t ii = 0; ii < container->getNumData(); ++ii)
     {
-        Data* data = container->getData(i);
+        Data* data = container->getData(ii);
         if (data->getDataType() == DataType::COMPLEX)
             mComplexData.push_back(data);
         else if (data->getDataType() == DataType::DERIVED)
@@ -70,12 +67,12 @@ void GeoTIFFWriteControl::initialize(Container* container)
                                     Ctxt(
                                          FmtX(
                                               "Data element at position [%d] in container is undefined",
-                                              i)));
+                                              ii)));
     }
 
 }
 
-void GeoTIFFWriteControl::save(SourceList& sources, std::string toFile)
+void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile)
 {
     tiff::FileWriter tiffWriter(toFile);
 
@@ -87,38 +84,34 @@ void GeoTIFFWriteControl::save(SourceList& sources, std::string toFile)
                                           "Meta-data count [%d] does not match source list [%d]",
                                           mDerivedData.size(), sources.size())));
 
-    for (unsigned int i = 0; i < sources.size(); ++i)
+    std::vector<unsigned char> buf;
+    for (size_t ii = 0; ii < sources.size(); ++ii)
     {
-        tiff::ImageWriter* imageWriter = tiffWriter.addImage();
-        DerivedData* data = (DerivedData*) mDerivedData[i];
-        unsigned long oneRow = data->getNumCols() * data->getNumBytesPerPixel();
+        tiff::ImageWriter* const imageWriter = tiffWriter.addImage();
+        const DerivedData* const data =
+            reinterpret_cast<DerivedData*>(mDerivedData[ii]);
+        const unsigned long oneRow =
+            data->getNumCols() * data->getNumBytesPerPixel();
         tiff::IFD* ifd = imageWriter->getIFD();
-        std::vector<char*> allocated = setupIFD(data, ifd);
-        unsigned char * buf = new unsigned char[oneRow];
-        unsigned long numRows = data->getNumRows();
-        unsigned long numCols = data->getNumCols();
+        setupIFD(data, ifd);
+        buf.resize(oneRow);
+        const unsigned long numRows = data->getNumRows();
+        const unsigned long numCols = data->getNumCols();
 
-        for (unsigned int j = 0; j < numRows; ++j)
+        for (unsigned long row = 0; row < numRows; ++row)
         {
-            sources[i]->read((sys::byte*) buf, oneRow);
-            imageWriter->putData(buf, numCols);
+            sources[ii]->read((sys::byte*)&buf[0], oneRow);
+            imageWriter->putData(&buf[0], numCols);
         }
-        delete[] buf;
         imageWriter->writeIFD();
-
-        for (unsigned int j = 0; j < allocated.size(); ++j)
-            delete allocated[j];
-
     }
 
     tiffWriter.close();
 
 }
 
-std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data,
-                                                 tiff::IFD* ifd)
+void GeoTIFFWriteControl::setupIFD(const DerivedData* data, tiff::IFD* ifd)
 {
-    std::vector<char*> allocated;
     PixelType pixelType = data->getPixelType();
     sys::Uint32_T numRows = (sys::Uint32_T) data->getNumRows();
     sys::Uint32_T numCols = (sys::Uint32_T) data->getNumCols();
@@ -172,54 +165,51 @@ std::vector<char*> GeoTIFFWriteControl::setupIFD(DerivedData* data,
     }
     ifd->addEntry(tiff::KnownTags::PHOTOMETRIC_INTERPRETATION, photoInterp);
 
-    allocated.push_back(
-                        addStringArray(
-                                       ifd,
-                                       "ImageDescription",
-                                       FmtX("SIDD: %s", data->getName().c_str())));
+    addStringArray(ifd,
+                   "ImageDescription",
+                   FmtX("SIDD: %s", data->getName().c_str()));
 
     unsigned short orientation(1);
     ifd->addEntry("Orientation", orientation);
     unsigned short planarConf(1);
     ifd->addEntry("PlanarConfiguration", planarConf);
 
-    allocated.push_back(
-                        addStringArray(
-                                       ifd,
-                                       "Software",
-                                       data->productCreation->processorInformation->application));
+    addStringArray(ifd,
+                   "Software",
+                   data->productCreation->processorInformation->application);
 
     char date[256];
     date[255] = 0;
     data->getCreationTime().format("%Y:%m:%d %H:%M:%S", date, 255);
-    std::string dateTime(date);
 
-    allocated.push_back(addStringArray(ifd, "DateTime", dateTime));
+    addCharArray(ifd, "DateTime", date);
 
-    allocated.push_back(
-                        addStringArray(
-                                       ifd,
-                                       "Artist",
-                                       data->productCreation->processorInformation->site));
+    addStringArray(ifd,
+                   "Artist",
+                   data->productCreation->processorInformation->site);
 
     ifd->addEntry(tiff::KnownTags::COMPRESSION,
                   (unsigned short) tiff::Const::CompressionType::NO_COMPRESSION);
-    char* siddData = toXMLCharArray(data);
-    allocated.push_back(siddData);
+
     addGeoTIFFKeys(ifd, data->getImageCorners(), numRows, numCols);
-    addCharArray(ifd, "SIDDXMLTag", siddData, tiff::Const::Type::UNDEFINED);
 
-    for (unsigned int j = 0; j < mComplexData.size(); ++j)
+    // Add in the SIDD and SICD xml in a single IFDEntry
+    // Each XML section is separated by a null character
+    if (!ifd->exists(Constants::GT_XML_TAG))
     {
-        char* sicdData = toXMLCharArray(mComplexData[j]);
-        addCharArray(ifd, "SICDXMLTag", sicdData, tiff::Const::Type::UNDEFINED);
-        delete sicdData;
+        ifd->addEntry(Constants::GT_XML_TAG);
     }
+    tiff::IFDEntry* const xmlEntry = (*ifd)[Constants::GT_XML_TAG];
 
-    return allocated;
+    addStringArray(xmlEntry, toXMLString(data));
+
+    for (size_t jj = 0; jj < mComplexData.size(); ++jj)
+    {
+        addStringArray(xmlEntry, toXMLString(mComplexData[jj]));
+    }
 }
 
-void GeoTIFFWriteControl::save(BufferList& sources, std::string toFile)
+void GeoTIFFWriteControl::save(BufferList& sources, const std::string& toFile)
 {
 
     tiff::FileWriter tiffWriter(toFile);
@@ -232,50 +222,64 @@ void GeoTIFFWriteControl::save(BufferList& sources, std::string toFile)
                                           "Meta-data count [%d] does not match source list [%d]",
                                           mDerivedData.size(), sources.size())));
 
-    for (unsigned int i = 0; i < sources.size(); ++i)
+    for (size_t ii = 0; ii < sources.size(); ++ii)
     {
 
         tiff::ImageWriter* imageWriter = tiffWriter.addImage();
         tiff::IFD* ifd = imageWriter->getIFD();
 
-        DerivedData* data = (DerivedData*) mDerivedData[i];
-        std::vector<char*> allocated = setupIFD(data, ifd);
+        DerivedData* data = (DerivedData*) mDerivedData[ii];
+        setupIFD(data, ifd);
         // Now we hack to write
 
-        imageWriter->putData(sources[i], data->getNumRows()
+        imageWriter->putData(sources[ii], data->getNumRows()
                 * data->getNumCols());
 
         imageWriter->writeIFD();
-        for (unsigned int j = 0; j < allocated.size(); ++j)
-            delete allocated[j];
-
     }
 
     tiffWriter.close();
 }
 
-void GeoTIFFWriteControl::addCharArray(tiff::IFD* ifd, std::string tag,
-                                       char* cstr, int tiffType)
+void GeoTIFFWriteControl::addCharArray(tiff::IFDEntry *entry,
+                                       const char *cstr,
+                                       int tiffType)
+{
+    const unsigned char * const cstr_ptr =
+        reinterpret_cast<const unsigned char *>(cstr);
+
+    for (size_t ii = 0, len = ::strlen(cstr) + 1; ii < len; ++ii)
+    {
+        std::auto_ptr<tiff::TypeInterface>
+            value(tiff::TypeFactory::create(cstr_ptr + ii, tiffType));
+        entry->addValue(value);
+    }
+}
+
+void GeoTIFFWriteControl::addCharArray(tiff::IFD* ifd, const std::string &tag,
+                                       const char* cstr, int tiffType)
 {
     if (!ifd->exists(tag.c_str()))
-        ifd->addEntry(tag);
-
-    tiff::IFDEntry* entry = (*ifd)[tag.c_str()];
-    size_t len = strlen(cstr) + 1;
-    for (unsigned int i = 0; i < len; ++i)
     {
-        entry->addValue(tiff::TypeFactory::create((unsigned char*) &cstr[i],
-                                                  tiffType));
+        ifd->addEntry(tag);
     }
 
+    addCharArray((*ifd)[tag.c_str()], cstr, tiffType);
 }
-char* GeoTIFFWriteControl::addStringArray(tiff::IFD* ifd, std::string tag,
-                                          std::string str, int tiffType)
+
+void GeoTIFFWriteControl::addStringArray(tiff::IFDEntry* entry,
+                                         const std::string &str,
+                                         int tiffType)
 {
-    char *copy = new char[str.length() + 1];
-    strcpy(copy, str.c_str());
-    addCharArray(ifd, tag, copy, tiffType);
-    return copy;
+    addCharArray(entry, str.c_str(), tiffType);
+}
+
+void GeoTIFFWriteControl::addStringArray(tiff::IFD* ifd,
+                                         const std::string &tag,
+                                         const std::string &str,
+                                         int tiffType)
+{
+    addCharArray(ifd, tag, str.c_str(), tiffType);
 }
 
 void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd, const std::vector<

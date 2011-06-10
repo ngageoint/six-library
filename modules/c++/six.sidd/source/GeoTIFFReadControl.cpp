@@ -19,40 +19,100 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <iostream>
+
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
 
-namespace six
+namespace
 {
-namespace sidd
+// This entry should contain XML entries as strings.  Each separate entry is
+// NULL-terminated, so we split on this.
+void parseXMLEntry(const tiff::IFDEntry *entry,
+                   std::vector<std::string> &entries)
 {
-std::vector<std::string> _parseSIXEntry(tiff::IFDEntry *entry)
-{
-    if (!entry)
-        return std::vector<std::string>();
-    std::vector<tiff::TypeInterface *> values = entry->getValues();
-    std::ostringstream s;
-    for (std::vector<tiff::TypeInterface *>::iterator it = values.begin(); it
-            != values.end(); ++it)
+    entries.clear();
+
+    if (entry)
     {
-        s << (*it)->toString();
+        const std::vector<tiff::TypeInterface *> values(entry->getValues());
+
+        std::string curStr;
+        for (std::vector<tiff::TypeInterface *>::const_iterator iter =
+                 values.begin();
+             iter != values.end();
+             ++iter)
+        {
+            const tiff::TypeInterface * const value = *iter;
+            const char * const data =
+                reinterpret_cast<const char *>(value->data());
+            const size_t size(value->size());
+
+            for (size_t ii = 0; ii < size; ++ii)
+            {
+                const char ch(data[ii]);
+                if (ch == '\0')
+                {
+                    str::trim(curStr);
+                    if (!curStr.empty())
+                    {
+                        entries.push_back(curStr);
+                        curStr.clear();
+                    }
+                }
+                else
+                {
+                    curStr += ch;
+                }
+            }
+        }
+
+        // TODO: Should we treat this as an error instead?  We expect the
+        //       string to be NULL-terminated according to the TIFF spec.
+        str::trim(curStr);
+        if (!curStr.empty())
+        {
+           entries.push_back(curStr);
+        }
     }
-    return str::split(s.str(), "|");
-}
-
 }
 }
 
-six::DataType six::sidd::GeoTIFFReadControl::getDataType(std::string fromFile)
+six::DataType
+six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
 {
     try
     {
         tiff::FileReader reader(fromFile);
         if (reader.getImageCount() > 0)
         {
-            if (reader[0]->getIFD()->exists(
-                                            (unsigned short) six::Constants::GT_SIDD_KEY))
-                return six::DataType::DERIVED;
+            if (reader[0]->getIFD()->exists(six::Constants::GT_XML_KEY))
+            {
+                std::vector<std::string> xmlStrs;
+                parseXMLEntry(
+                    (*mReader[0]->getIFD())[six::Constants::GT_XML_KEY],
+                    xmlStrs);
+
+                // If any of the XML strings is a SIDD xml, the data type is
+                // DERIVED
+                for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
+                {
+                    // Parse it into an XML document
+                    io::ByteStream stream;
+                    stream.write(xmlStrs[ii]);
+                    stream.seek(0, io::Seekable::START);
+                    xml::lite::MinidomParser xmlParser;
+                    xmlParser.preserveCharacterData(true);
+                    xmlParser.parse(stream);
+
+                    const std::string rootName =
+                        xmlParser.getDocument()->getRootElement()->getQName();
+                    if (rootName == "SIDD")
+                    {
+                        return six::DataType::DERIVED;
+                    }
+                }
+            }
         }
     }
     catch (...)
@@ -61,75 +121,77 @@ six::DataType six::sidd::GeoTIFFReadControl::getDataType(std::string fromFile)
     return six::DataType::NOT_SET;
 }
 
-void six::sidd::GeoTIFFReadControl::load(std::string fromFile)
+void six::sidd::GeoTIFFReadControl::load(const std::string& fromFile)
 {
+    // Clean up
+    delete mContainer;
+    mContainer = NULL;
+
     mReader.openFile(fromFile);
 
-    if (mReader.getImageCount() <= 0
-            || !mReader[0]->getIFD()->exists(
-                                             (unsigned short) six::Constants::GT_SIDD_KEY))
-        throw except::Exception(Ctxt("Unexpected file type"));
+    if (mReader.getImageCount() <= 0 ||
+        !mReader[0]->getIFD()->exists(six::Constants::GT_XML_KEY))
+    {
+        throw except::Exception(Ctxt(fromFile + ": unexpected file type"));
+    }
 
-    std::vector < std::string > sidds
-            = _parseSIXEntry(
-                             (*mReader[0]->getIFD())[(unsigned short) six::Constants::GT_SIDD_KEY]);
-    std::vector < std::string > sicds;
-
-    if (mReader[0]->getIFD()->exists(
-                                     (unsigned short) six::Constants::GT_SICD_KEY))
-        sicds
-                = _parseSIXEntry(
-                                 (*mReader[0]->getIFD())[(unsigned short) six::Constants::GT_SICD_KEY]);
+    std::vector<std::string> xmlStrs;
+    parseXMLEntry((*mReader[0]->getIFD())[six::Constants::GT_XML_KEY],
+                  xmlStrs);
 
     mContainer = new six::Container(six::DataType::DERIVED);
 
-    for (size_t i = 0, n = sidds.size(); i < n; ++i)
+    std::auto_ptr<six::XMLControl> siddXMLControl;
+    std::auto_ptr<six::XMLControl> sicdXMLControl;
+
+    for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
     {
-        six::XMLControl * xmlControl = mXMLRegistry->newXMLControl("SIDD_XML");
-
-        std::string xmlString = sidds[i];
-        str::trim(xmlString);
-        while ((int) xmlString[xmlString.size() - 1] == 0)
-            xmlString = xmlString.substr(0, xmlString.size() - 1);
-
+        // Parse it into an XML document
         io::ByteStream stream;
-        stream.write(xmlString);
+        stream.write(xmlStrs[ii]);
         stream.seek(0, io::Seekable::START);
         xml::lite::MinidomParser xmlParser;
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
-        xml::lite::Document* doc = xmlParser.getDocument();
-        six::Data* data = xmlControl->fromXML(doc);
-        delete xmlControl;
+        const xml::lite::Document* const doc = xmlParser.getDocument();
 
-        if (!data)
-            throw except::Exception(Ctxt("Unable to transform SIDD XML"));
-        mContainer->addData(data);
+        // Get the associated XML control
+        const std::string rootName(doc->getRootElement()->getQName());
+        six::XMLControl *xmlControl;
+        if (rootName == "SIDD")
+        {
+            if (siddXMLControl.get() == NULL)
+            {
+                siddXMLControl.reset(mXMLRegistry->newXMLControl("SIDD_XML"));
+            }
+            xmlControl = siddXMLControl.get();
+        }
+        else if (rootName == "SICD")
+        {
+            if (sicdXMLControl.get() == NULL)
+            {
+                sicdXMLControl.reset(mXMLRegistry->newXMLControl("SICD_XML"));
+            }
+            xmlControl = sicdXMLControl.get();
+        }
+        else
+        {
+            // If it's something we don't know about, just skip it
+            xmlControl = NULL;
+        }
+
+        if (xmlControl)
+        {
+            std::auto_ptr<six::Data> data(xmlControl->fromXML(doc));
+
+            if (!data.get())
+            {
+                throw except::Exception(Ctxt(
+                          "Unable to transform " + rootName + " XML"));
+            }
+            mContainer->addData(data);
+        }
     }
-    for (size_t i = 0, n = sicds.size(); i < n; ++i)
-    {
-        six::XMLControl * xmlControl = mXMLRegistry->newXMLControl("SICD_XML");
-
-        std::string xmlString = sicds[i];
-        str::trim(xmlString);
-        while ((int) xmlString[xmlString.size() - 1] == 0)
-            xmlString = xmlString.substr(0, xmlString.size() - 1);
-
-        io::ByteStream stream;
-        stream.write(xmlString);
-        stream.seek(0, io::Seekable::START);
-        xml::lite::MinidomParser xmlParser;
-        xmlParser.preserveCharacterData(true);
-        xmlParser.parse(stream);
-        xml::lite::Document* doc = xmlParser.getDocument();
-        six::Data* data = xmlControl->fromXML(doc);
-        delete xmlControl;
-
-        if (!data)
-            throw except::Exception(Ctxt("Unable to transform SICD XML"));
-        mContainer->addData(data);
-    }
-
 }
 
 six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,

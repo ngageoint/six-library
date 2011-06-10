@@ -72,14 +72,14 @@ public:
      *  This function takes in a file and tells you what kind of
      *  container is in it (SICD or SIDD)
      */
-    virtual DataType getDataType(std::string fromFile) = 0;
+    virtual DataType getDataType(const std::string& fromFile) const = 0;
 
     /*!
      *  Load the SICD or SIDD file into a container.  Once you have
      *  done this, you can get the image data back using the interleaved
      *  function
      */
-    virtual void load(std::string fromFile) = 0;
+    virtual void load(const std::string& fromFile) = 0;
 
     /*!
      *  Get a const pointer to the current container.  This

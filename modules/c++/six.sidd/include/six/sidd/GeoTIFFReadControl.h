@@ -47,9 +47,9 @@ public:
         delete mContainer;
     }
 
-    virtual DataType getDataType(std::string fromFile);
+    virtual DataType getDataType(const std::string& fromFile) const;
 
-    virtual void load(std::string fromFile);
+    virtual void load(const std::string& fromFile);
 
     virtual UByte* interleaved(Region& region, int imageNumber);
 

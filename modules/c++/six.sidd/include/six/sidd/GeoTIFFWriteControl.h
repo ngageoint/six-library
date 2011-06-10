@@ -68,11 +68,11 @@ public:
     /*!
      *  Write out a set of images from a source list
      */
-    virtual void save(SourceList& sources, std::string toFile);
+    virtual void save(SourceList& sources, const std::string& toFile);
     /*!
      *  Write out a set of images from a memory buffer source list
      */
-    virtual void save(BufferList& sources, std::string toFile);
+    virtual void save(BufferList& sources, const std::string& toFile);
     
     /*!
      *  We are a GeoTIFF handler
@@ -80,29 +80,29 @@ public:
     std::string getFileType() const { return "GeoTIFF"; }
 
 private:
-
-    void addCharArray(tiff::IFD* ifd,
-                      std::string tag,
-                      char* cstr, 
+    static
+    void addCharArray(tiff::IFDEntry *entry,
+                      const char *cstr,
                       int tiffType);
-    
 
-    char* addStringArray(tiff::IFD* ifd,
-                         std::string tag,
-                         std::string str, 
-                         int tiffType = tiff::Const::Type::ASCII);
-    
-/*     void addCharArray(tiff::IFD* ifd, */
-/*                       int tag, */
-/*                       char* cstr,  */
-/*                       int tiffType); */
-    
-/*     char* addStringArray(tiff::IFD* ifd, */
-/*                          int tag, */
-/*                          std::string str,  */
-/*                          int tiffType = tiff::Const::Type::ASCII); */
+    static
+    void addCharArray(tiff::IFD* ifd,
+                      const std::string &tag,
+                      const char* cstr,
+                      int tiffType = tiff::Const::Type::ASCII);
 
-    std::vector<char*> setupIFD(DerivedData* data, tiff::IFD* ifd);
+    static
+    void addStringArray(tiff::IFDEntry* entry,
+                        const std::string &str,
+                        int tiffType = tiff::Const::Type::ASCII);
+    
+    static
+    void addStringArray(tiff::IFD* ifd,
+                        const std::string &tag,
+                        const std::string &str,
+                        int tiffType = tiff::Const::Type::ASCII);
+
+    void setupIFD(const DerivedData* data, tiff::IFD* ifd);
    
     void addGeoTIFFKeys(tiff::IFD* ifd, 
                         const std::vector<LatLon>& corners, 

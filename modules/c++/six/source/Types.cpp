@@ -39,7 +39,8 @@ std::ostream& operator<<(std::ostream& os, const Corners& corners)
 }
 */
 
-
+const char Constants::GT_XML_TAG[] = "XMLTag";
 const sys::Uint64_T Constants::IS_SIZE_MAX = 9999999998LL;
 const sys::Uint64_T Constants::GT_SIZE_MAX = 4294967296LL;
+const unsigned short Constants::GT_XML_KEY = 50909;
 

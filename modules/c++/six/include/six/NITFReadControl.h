@@ -58,7 +58,7 @@ public:
         reset();
     }
 
-    virtual DataType getDataType(std::string fromFile);
+    virtual DataType getDataType(const std::string& fromFile) const;
 
     /*!
      *  Performs (Basic) validation when a segment is being
@@ -72,7 +72,7 @@ public:
      *  Fulfills our obligationss to the parent class, using the IOInterface
      *  method provided with the same name
      */
-    virtual void load(std::string fromFile);
+    virtual void load(const std::string& fromFile);
 
     virtual UByte* interleaved(Region& region, int imageNumber);
 
@@ -95,7 +95,7 @@ public:
 
 protected:
     //! We keep a ref to the reader
-    nitf::Reader mReader;
+    mutable nitf::Reader mReader;
 
     //! We keep a ref to the record
     nitf::Record mRecord;
