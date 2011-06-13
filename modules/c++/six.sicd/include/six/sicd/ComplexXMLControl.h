@@ -64,11 +64,7 @@ public:
      *  This function takes in a ComplexData object and converts
      *  it to a new-allocated XML DOM.
      *
-     *  \param data Either a ComplexData or Deriv    XMLElem createEarthModelType(std::string name, const EarthModelType& value,
-     XMLElem parent = NULL);
-     XMLElem createSideOfTrackType(std::string name,
-     const SideOfTrackType& value, XMLElem parent =
-     NULL);edData object
+     *  \param data A ComplexData object
      *  \return An XML DOM
      */
     virtual xml::lite::Document* toXML(const Data* data);
@@ -105,16 +101,16 @@ protected:
     XMLElem toXML(const ImageFormation *obj, XMLElem parent = NULL);
     XMLElem toXML(const SCPCOA *obj, XMLElem parent = NULL);
     XMLElem toXML(const Antenna *obj, XMLElem parent = NULL);
-    XMLElem toXML(std::string name, AntennaParameters *ap, XMLElem parent =
-            NULL);
+    XMLElem toXML(const std::string& name, AntennaParameters *ap,
+            XMLElem parent = NULL);
     XMLElem toXML(const MatchInformation *obj, XMLElem parent = NULL);
     XMLElem toXML(const PFA *obj, XMLElem parent = NULL);
     XMLElem toXML(const RMA *obj, XMLElem parent = NULL);
 
-    XMLElem areaLineDirectionParametersToXML(std::string name,
+    XMLElem areaLineDirectionParametersToXML(const std::string& name,
             const AreaDirectionParameters *obj,
             XMLElem parent = NULL);
-    XMLElem areaSampleDirectionParametersToXML(std::string name,
+    XMLElem areaSampleDirectionParametersToXML(const std::string& name,
             const AreaDirectionParameters *obj,
             XMLElem parent = NULL);
 
@@ -138,45 +134,52 @@ protected:
     void parseEarthModelType(const XMLElem element, EarthModelType& value);
     void parseSideOfTrackType(const XMLElem element, SideOfTrackType& value);
 
-    XMLElem createFFTSign(std::string name, six::FFTSign sign, XMLElem parent =
-            NULL);
-    XMLElem createFootprint(std::string name, std::string cornerName,
+    XMLElem createFFTSign(const std::string& name, six::FFTSign sign,
+            XMLElem parent = NULL);
+    XMLElem createFootprint(const std::string& name,
+                            const std::string& cornerName,
                             const std::vector<LatLon>& corners,
                             XMLElem parent = NULL);
-    XMLElem createFootprint(std::string name, std::string cornerName,
+    XMLElem createFootprint(const std::string& name,
+                            const std::string& cornerName,
                             const std::vector<LatLonAlt>& corners,
                             XMLElem parent = NULL);
-    XMLElem createEarthModelType(std::string name, const EarthModelType& value,
+    XMLElem createEarthModelType(const std::string& name,
+                                 const EarthModelType& value,
                                  XMLElem parent = NULL);
-    XMLElem createSideOfTrackType(std::string name,
+    XMLElem createSideOfTrackType(const std::string& name,
                                   const SideOfTrackType& value, XMLElem parent =
                                           NULL);
 
     // Overridden methods from the base XMLControl, for adding attributes
-    XMLElem createString(std::string name, std::string uri, std::string p = "",
+    XMLElem createString(const std::string& name, const std::string& uri,
+                         const std::string& p = "", XMLElem parent = NULL);
+    XMLElem createInt(const std::string& name, const std::string& uri,
+                      int p = 0, XMLElem parent = NULL);
+    XMLElem createDouble(const std::string& name, const std::string& uri,
+                         double p = 0, XMLElem parent = NULL);
+    XMLElem createBooleanType(const std::string& name, const std::string& uri,
+                              BooleanType b, XMLElem parent = NULL);
+    XMLElem createDateTime(const std::string& name, const std::string& uri,
+                           const std::string& s, XMLElem parent = NULL);
+    XMLElem createDateTime(const std::string& name, const std::string& uri,
+                           DateTime p, XMLElem parent = NULL);
+    XMLElem createDate(const std::string& name, const std::string& uri,
+                       DateTime p, XMLElem parent = NULL);
+    XMLElem createString(const std::string& name, const std::string& p = "",
                          XMLElem parent = NULL);
-    XMLElem createInt(std::string name, std::string uri, int p = 0,
+    XMLElem createInt(const std::string& name, int p = 0,
                       XMLElem parent = NULL);
-    XMLElem createDouble(std::string name, std::string uri, double p = 0,
+    XMLElem createDouble(const std::string& name, double p = 0,
                          XMLElem parent = NULL);
-    XMLElem createBooleanType(std::string name, std::string uri, BooleanType b,
+    XMLElem createBooleanType(const std::string& name, BooleanType b,
                               XMLElem parent = NULL);
-    XMLElem createDateTime(std::string name, std::string uri, std::string s,
+    XMLElem createDateTime(const std::string& name, const std::string& s,
                            XMLElem parent = NULL);
-    XMLElem createDateTime(std::string name, std::string uri, DateTime p,
+    XMLElem createDateTime(const std::string& name, DateTime p,
                            XMLElem parent = NULL);
-    XMLElem createDate(std::string name, std::string uri, DateTime p,
+    XMLElem createDate(const std::string& name, DateTime p,
                        XMLElem parent = NULL);
-    XMLElem createString(std::string name, std::string p = "", XMLElem parent =
-            NULL);
-    XMLElem createInt(std::string name, int p = 0, XMLElem parent = NULL);
-    XMLElem createDouble(std::string name, double p = 0, XMLElem parent = NULL);
-    XMLElem createBooleanType(std::string name, BooleanType b, XMLElem parent =
-            NULL);
-    XMLElem createDateTime(std::string name, std::string s, XMLElem parent =
-            NULL);
-    XMLElem createDateTime(std::string name, DateTime p, XMLElem parent = NULL);
-    XMLElem createDate(std::string name, DateTime p, XMLElem parent = NULL);
 
 };
 

@@ -92,91 +92,97 @@ protected:
     //! Returns the URI to use with SI Common types
     virtual std::string getSICommonURI() const = 0;
 
-    XMLElem newElement(std::string name, XMLElem prnt = NULL);
+    XMLElem newElement(const std::string& name, XMLElem prnt = NULL);
 
-    XMLElem newElement(std::string name, std::string uri, XMLElem prnt = NULL);
+    XMLElem newElement(const std::string& name, const std::string& uri,
+            XMLElem prnt = NULL);
 
-    XMLElem newElement(std::string name, std::string uri,
-            std::string characterData, XMLElem parent = NULL);
+    XMLElem newElement(const std::string& name, const std::string& uri,
+            const std::string& characterData, XMLElem parent = NULL);
 
     // generic element creation methods, w/URI
-    virtual XMLElem createString(std::string name, std::string uri,
-            std::string p = "", XMLElem parent = NULL);
-    virtual XMLElem createInt(std::string name, std::string uri, int p = 0,
+    virtual XMLElem createString(const std::string& name,
+            const std::string& uri, const std::string& p = "",
             XMLElem parent = NULL);
-    virtual XMLElem createDouble(std::string name, std::string uri, double p =
-            0, XMLElem parent = NULL);
-    virtual XMLElem createBooleanType(std::string name, std::string uri,
-            BooleanType b, XMLElem parent = NULL);
-    virtual XMLElem createDateTime(std::string name, std::string uri,
-            DateTime p, XMLElem parent = NULL);
-    virtual XMLElem createDateTime(std::string name, std::string uri,
-            std::string s, XMLElem parent = NULL);
-    virtual XMLElem createDate(std::string name, std::string uri, DateTime p,
+    virtual XMLElem createInt(const std::string& name, const std::string& uri,
+            int p = 0, XMLElem parent = NULL);
+    virtual XMLElem createDouble(const std::string& name,
+            const std::string& uri, double p = 0, XMLElem parent = NULL);
+    virtual XMLElem createBooleanType(const std::string& name,
+            const std::string& uri, BooleanType b, XMLElem parent = NULL);
+    virtual XMLElem createDateTime(const std::string& name,
+            const std::string& uri, DateTime p, XMLElem parent = NULL);
+    virtual XMLElem createDateTime(const std::string& name,
+            const std::string& uri, const std::string& s,
             XMLElem parent = NULL);
+    virtual XMLElem createDate(const std::string& name,
+            const std::string& uri, DateTime p, XMLElem parent = NULL);
 
     // generic element creation methods, using default URI
-    virtual XMLElem createString(std::string name, std::string p = "",
+    virtual XMLElem createString(const std::string& name,
+            const std::string& p = "", XMLElem parent = NULL);
+    virtual XMLElem createInt(const std::string& name, int p = 0,
             XMLElem parent = NULL);
-    virtual XMLElem createInt(std::string name, int p = 0, XMLElem parent =
-            NULL);
-    virtual XMLElem createDouble(std::string name, double p = 0,
+    virtual XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = NULL);
-    virtual XMLElem createBooleanType(std::string name, BooleanType b,
+    virtual XMLElem createBooleanType(const std::string& name, BooleanType b,
             XMLElem parent = NULL);
-    virtual XMLElem createDateTime(std::string name, DateTime p,
+    virtual XMLElem createDateTime(const std::string& name, DateTime p,
             XMLElem parent = NULL);
-    virtual XMLElem createDateTime(std::string name, std::string s,
+    virtual XMLElem createDateTime(const std::string& name,
+            const std::string& s, XMLElem parent = NULL);
+    virtual XMLElem createDate(const std::string& name, DateTime p,
             XMLElem parent = NULL);
-    virtual XMLElem createDate(std::string name, DateTime p, XMLElem parent =
-            NULL);
 
-    XMLElem createComplex(std::string name, std::complex<double> c,
+    XMLElem createComplex(const std::string& name, std::complex<double> c,
             XMLElem parent = NULL);
-    XMLElem createVector3D(std::string name, Vector3 p = 0.0, XMLElem parent =
-            NULL);
-    XMLElem createRowCol(std::string name, std::string rowName,
-            std::string colName, const RowColInt& value, XMLElem parent = NULL);
-    XMLElem createRowCol(std::string name, std::string rowName,
-            std::string colName, const RowColDouble& value, XMLElem parent =
-                    NULL);
-    XMLElem createRowCol(std::string name, const RowColInt& value,
+    XMLElem createVector3D(const std::string& name, Vector3 p = 0.0,
             XMLElem parent = NULL);
-    XMLElem createRowCol(std::string name, const RowColDouble& value,
+    XMLElem createRowCol(const std::string& name, const std::string& rowName,
+            const std::string& colName, const RowColInt& value,
             XMLElem parent = NULL);
-    XMLElem createRowCol(std::string, const RowColLatLon& value,
+    XMLElem createRowCol(const std::string& name, const std::string& rowName,
+            const std::string& colName, const RowColDouble& value,
             XMLElem parent = NULL);
-    XMLElem createRangeAzimuth(std::string name,
+    XMLElem createRowCol(const std::string& name, const RowColInt& value,
+            XMLElem parent = NULL);
+    XMLElem createRowCol(const std::string& name, const RowColDouble& value,
+            XMLElem parent = NULL);
+    XMLElem createRowCol(const std::string&, const RowColLatLon& value,
+            XMLElem parent = NULL);
+    XMLElem createRangeAzimuth(const std::string& name,
             const RangeAzimuth<double>& value, XMLElem parent = NULL);
-    XMLElem createLatLon(std::string name, const LatLon& value, XMLElem parent =
-            NULL);
-    XMLElem createLatLonAlt(std::string name, const LatLonAlt& value,
+    XMLElem createLatLon(const std::string& name, const LatLon& value,
+            XMLElem parent = NULL);
+    XMLElem createLatLonAlt(const std::string& name, const LatLonAlt& value,
             XMLElem parent = NULL);
 
-    virtual XMLElem createFootprint(std::string name, std::string cornerName,
-            const std::vector<LatLon>& c, XMLElem parent = NULL);
-    virtual XMLElem createFootprint(std::string name, std::string cornerName,
-            const std::vector<LatLonAlt>& c, XMLElem parent = NULL);
-    XMLElem createPoly1D(std::string name, std::string uri,
+    virtual XMLElem createFootprint(const std::string& name,
+            const std::string& cornerName, const std::vector<LatLon>& c,
+            XMLElem parent = NULL);
+    virtual XMLElem createFootprint(const std::string& name,
+            const std::string& cornerName, const std::vector<LatLonAlt>& c,
+            XMLElem parent = NULL);
+    XMLElem createPoly1D(const std::string& name, const std::string& uri,
             const Poly1D& poly1D, XMLElem parent = NULL);
-    XMLElem createPoly2D(std::string name, std::string uri,
+    XMLElem createPoly2D(const std::string& name, const std::string& uri,
             const Poly2D& poly2D, XMLElem parent = NULL);
-    XMLElem createPoly1D(std::string name, const Poly1D& poly1D,
+    XMLElem createPoly1D(const std::string& name, const Poly1D& poly1D,
             XMLElem parent = NULL);
-    XMLElem createPoly2D(std::string name, const Poly2D& poly2D,
+    XMLElem createPoly2D(const std::string& name, const Poly2D& poly2D,
             XMLElem parent = NULL);
-    XMLElem createPolyXYZ(std::string name, const PolyXYZ& polyXYZ,
+    XMLElem createPolyXYZ(const std::string& name, const PolyXYZ& polyXYZ,
             XMLElem parent = NULL);
-    XMLElem createParameter(std::string name, std::string uri,
+    XMLElem createParameter(const std::string& name, const std::string& uri,
             const Parameter& value, XMLElem parent = NULL);
-    void addParameters(std::string name, std::string uri, const std::vector<
-            Parameter>& props, XMLElem parent = NULL);
-    XMLElem createParameter(std::string name, const Parameter& value,
+    void addParameters(const std::string& name, const std::string& uri,
+            const std::vector<Parameter>& props, XMLElem parent = NULL);
+    XMLElem createParameter(const std::string& name, const Parameter& value,
             XMLElem parent = NULL);
-    void addParameters(std::string name, const std::vector<Parameter>& props,
-            XMLElem parent = NULL);
-    void addDecorrType(std::string name, std::string uri, DecorrType& dt,
-            XMLElem p);
+    void addParameters(const std::string& name,
+            const std::vector<Parameter>& props, XMLElem parent = NULL);
+    void addDecorrType(const std::string& name, const std::string& uri,
+            DecorrType& dt, XMLElem p);
 
     void parseInt(XMLElem element, int& value);
     void parseInt(XMLElem element, long& value);
@@ -194,40 +200,42 @@ protected:
     void parseVector3D(XMLElem vecXML, Vector3& vec);
     void parseLatLonAlt(XMLElem llaXML, LatLonAlt& lla);
     void parseLatLon(XMLElem parent, LatLon& ll);
-    void parseLatLons(XMLElem pointsXML, std::string pointName, std::vector<
-            LatLon>& llVec);
+    void parseLatLons(XMLElem pointsXML, const std::string& pointName,
+            std::vector<LatLon>& llVec);
     void parseRangeAzimuth(XMLElem parent, RangeAzimuth<double>& value);
-    virtual void parseFootprint(XMLElem footprint, std::string cornerName,
-            std::vector<LatLon>& value);
-    virtual void parseFootprint(XMLElem footprint, std::string cornerName,
-            std::vector<LatLonAlt>& value);
+    virtual void parseFootprint(XMLElem footprint,
+            const std::string& cornerName, std::vector<LatLon>& value);
+    virtual void parseFootprint(XMLElem footprint,
+            const std::string& cornerName, std::vector<LatLonAlt>& value);
 
     void parseDateTime(XMLElem element, DateTime& value);
-    void parseRowColDouble(XMLElem parent, std::string rowName,
-            std::string colName, RowColDouble& rc);
+    void parseRowColDouble(XMLElem parent, const std::string& rowName,
+            const std::string& colName, RowColDouble& rc);
     void parseRowColDouble(XMLElem parent, RowColDouble& rc);
 
-    void parseRowColInt(XMLElem parent, std::string rowName,
-            std::string colName, RowColInt& rc);
+    void parseRowColInt(XMLElem parent, const std::string& rowName,
+            const std::string& colName, RowColInt& rc);
     void parseRowColInt(XMLElem parent, RowColInt& rc);
     void parseParameter(XMLElem element, Parameter& param);
 
     void parseRowColLatLon(XMLElem parent, RowColLatLon& rc);
 
-    void parseParameters(XMLElem paramXML, std::string paramName, std::vector<
-            Parameter>& props);
+    void parseParameters(XMLElem paramXML, const std::string& paramName,
+            std::vector<Parameter>& props);
 
-    void setAttribute(XMLElem e, std::string name, std::string v);
+    void setAttribute(XMLElem e, const std::string& name,
+            const std::string& v);
 
-    static XMLElem getOptional(XMLElem parent, std::string tag);
-    static XMLElem getFirstAndOnly(XMLElem parent, std::string tag);
+    static XMLElem getOptional(XMLElem parent, const std::string& tag);
+    static XMLElem getFirstAndOnly(XMLElem parent, const std::string& tag);
 
     void parseDecorrType(XMLElem decorrXML, DecorrType& decorrType);
 
-    XMLElem
-            toXML(const ErrorStatistics* errorStatistics, XMLElem parent = NULL);
+    XMLElem toXML(const ErrorStatistics* errorStatistics,
+            XMLElem parent = NULL);
 
-    void fromXML(const XMLElem errorStatsXML, ErrorStatistics* errorStatistics);
+    void fromXML(const XMLElem errorStatsXML,
+            ErrorStatistics* errorStatistics);
 
     XMLElem toXML(const Radiometric *obj, XMLElem parent = NULL);
     void fromXML(const XMLElem radiometricXML, Radiometric *obj);
@@ -237,8 +245,16 @@ protected:
      * @throw throws an Exception if the element is NULL
      * @return returns the input Element
      */
-    static XMLElem require(XMLElem element, std::string name);
+    static XMLElem require(XMLElem element, const std::string& name);
 
+    // Takes in a set of points in any order in 'in'
+    // Produces the same points in clockwise order, starting with the upper
+    // left corner, in 'out'
+    static void toClockwise(const std::vector<LatLon>& in,
+                            std::vector<LatLon>& out);
+
+    static void toClockwise(const std::vector<LatLonAlt>& in,
+                            std::vector<LatLonAlt>& out);
 };
 
 }
