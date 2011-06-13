@@ -79,8 +79,8 @@ protected:
 
     std::string getSFAURI() const;
 
-    virtual XMLElem createLUT(std::string name, const LUT *l, XMLElem parent =
-            NULL);
+    virtual XMLElem createLUT(const std::string& name, const LUT *l,
+            XMLElem parent = NULL);
     XMLElem
             toXML(const ProductCreation* productCreation, XMLElem parent = NULL);
     XMLElem toXML(const ProductProcessing* productProcessing, XMLElem parent =
@@ -106,8 +106,8 @@ protected:
     void fromXML(const XMLElem elem, ExploitationFeatures* exFeatures);
     void fromXML(const XMLElem annotationXML, Annotation *a);
     void fromXML(const XMLElem elem, SFAGeometry *g);
-    XMLElem toXML(const SFAGeometry *g, std::string useName, XMLElem parent =
-            NULL);
+    XMLElem toXML(const SFAGeometry *g, const std::string& useName,
+            XMLElem parent = NULL);
 };
 
 }

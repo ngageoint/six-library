@@ -1354,7 +1354,7 @@ xml::lite::Document* DerivedXMLControl::toXML(const Data* data)
     return doc;
 }
 
-XMLElem DerivedXMLControl::createLUT(std::string name, const LUT *lut,
+XMLElem DerivedXMLControl::createLUT(const std::string& name, const LUT *lut,
         XMLElem parent)
 {
     //     unsigned char* table;
@@ -1736,8 +1736,8 @@ void DerivedXMLControl::fromXML(const XMLElem elem, SFAGeometry *g)
     }
 }
 
-XMLElem DerivedXMLControl::toXML(const SFAGeometry *g, std::string useName,
-        XMLElem parent)
+XMLElem DerivedXMLControl::toXML(const SFAGeometry *g,
+        const std::string& useName, XMLElem parent)
 {
     XMLElem geoXML = NULL;
 

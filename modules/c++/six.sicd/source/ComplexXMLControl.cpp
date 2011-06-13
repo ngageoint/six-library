@@ -184,7 +184,7 @@ xml::lite::Document* ComplexXMLControl::toXML(const Data *data)
     return doc;
 }
 
-XMLElem ComplexXMLControl::createFFTSign(std::string name, six::FFTSign sign,
+XMLElem ComplexXMLControl::createFFTSign(const std::string& name, six::FFTSign sign,
                                          XMLElem parent)
 {
     std::string charData = (sign == FFTSign::NEG) ? ("-1") : ("+1");
@@ -679,7 +679,7 @@ XMLElem ComplexXMLControl::toXML(const RadarCollection *radar, XMLElem parent)
 }
 
 XMLElem ComplexXMLControl::areaLineDirectionParametersToXML(
-                                                            std::string name,
+                                                            const std::string& name,
                                                             const AreaDirectionParameters *adp,
                                                             XMLElem parent)
 {
@@ -692,7 +692,7 @@ XMLElem ComplexXMLControl::areaLineDirectionParametersToXML(
 }
 
 XMLElem ComplexXMLControl::areaSampleDirectionParametersToXML(
-                                                              std::string name,
+                                                              const std::string& name,
                                                               const AreaDirectionParameters *adp,
                                                               XMLElem parent)
 {
@@ -861,7 +861,7 @@ XMLElem ComplexXMLControl::toXML(const Antenna *antenna, XMLElem parent)
     return antennaXML;
 }
 
-XMLElem ComplexXMLControl::toXML(const std::string name,
+XMLElem ComplexXMLControl::toXML(const std::string& name,
                                  AntennaParameters *params, XMLElem parent)
 {
     XMLElem apXML = newElement(name, parent);
@@ -2151,53 +2151,73 @@ void ComplexXMLControl::fromXML(const XMLElem rmaXML, RMA* rma)
     }
 }
 
-XMLElem ComplexXMLControl::createFootprint(std::string name,
-                                           std::string cornerName,
+XMLElem ComplexXMLControl::createFootprint(const std::string& name,
+                                           const std::string& cornerName,
                                            const std::vector<LatLon>& corners,
                                            XMLElem parent)
 {
+    if (corners.size() != 4)
+    {
+        throw except::Exception(Ctxt(
+                  "Expected exactly 4 corners but got " +
+                      str::toString(corners.size())));
+    }
+
     XMLElem footprint = newElement(name, parent);
 
-    XMLElem vertex = createLatLon(cornerName, corners[0], footprint);
+    std::vector<LatLon> cwCorners;
+    toClockwise(corners, cwCorners);
+
+    XMLElem vertex = createLatLon(cornerName, cwCorners[0], footprint);
     setAttribute(vertex, "index", "1:FRFC");
 
-    vertex = createLatLon(cornerName, corners[1], footprint);
+    vertex = createLatLon(cornerName, cwCorners[1], footprint);
     setAttribute(vertex, "index", "2:FRLC");
 
-    vertex = createLatLon(cornerName, corners[2], footprint);
+    vertex = createLatLon(cornerName, cwCorners[2], footprint);
     setAttribute(vertex, "index", "3:LRLC");
 
-    vertex = createLatLon(cornerName, corners[3], footprint);
+    vertex = createLatLon(cornerName, cwCorners[3], footprint);
     setAttribute(vertex, "index", "4:LRFC");
 
     return footprint;
 }
 
 XMLElem ComplexXMLControl::createFootprint(
-                                           std::string name,
-                                           std::string cornerName,
+                                           const std::string& name,
+                                           const std::string& cornerName,
                                            const std::vector<LatLonAlt>& corners,
                                            XMLElem parent)
 {
+    if (corners.size() != 4)
+    {
+        throw except::Exception(Ctxt(
+                  "Expected exactly 4 corners but got " +
+                      str::toString(corners.size())));
+    }
+
     XMLElem footprint = newElement(name, parent);
 
-    XMLElem vertex = createLatLonAlt(cornerName, corners[0], footprint);
+    std::vector<LatLonAlt> cwCorners;
+    toClockwise(corners, cwCorners);
+
+    XMLElem vertex = createLatLonAlt(cornerName, cwCorners[0], footprint);
     setAttribute(vertex, "index", "1:FRFC");
 
-    vertex = createLatLonAlt(cornerName, corners[1], footprint);
+    vertex = createLatLonAlt(cornerName, cwCorners[1], footprint);
     setAttribute(vertex, "index", "2:FRLC");
 
-    vertex = createLatLonAlt(cornerName, corners[2], footprint);
+    vertex = createLatLonAlt(cornerName, cwCorners[2], footprint);
     setAttribute(vertex, "index", "3:LRLC");
 
-    vertex = createLatLonAlt(cornerName, corners[3], footprint);
+    vertex = createLatLonAlt(cornerName, cwCorners[3], footprint);
     setAttribute(vertex, "index", "4:LRFC");
 
     return footprint;
 }
 
-XMLElem ComplexXMLControl::createString(std::string name, std::string uri,
-                                        std::string p, XMLElem parent)
+XMLElem ComplexXMLControl::createString(const std::string& name, const std::string& uri,
+                                        const std::string& p, XMLElem parent)
 {
     XMLElem e = XMLControl::createString(name, uri, p, parent);
     if (e)
@@ -2212,7 +2232,7 @@ XMLElem ComplexXMLControl::createString(std::string name, std::string uri,
     return e;
 }
 
-XMLElem ComplexXMLControl::createInt(std::string name, std::string uri, int p,
+XMLElem ComplexXMLControl::createInt(const std::string& name, const std::string& uri, int p,
                                      XMLElem parent)
 {
     XMLElem e = XMLControl::createInt(name, uri, p, parent);
@@ -2228,7 +2248,7 @@ XMLElem ComplexXMLControl::createInt(std::string name, std::string uri, int p,
     return e;
 }
 
-XMLElem ComplexXMLControl::createDouble(std::string name, std::string uri,
+XMLElem ComplexXMLControl::createDouble(const std::string& name, const std::string& uri,
                                         double p, XMLElem parent)
 {
     XMLElem e = XMLControl::createDouble(name, uri, p, parent);
@@ -2244,7 +2264,7 @@ XMLElem ComplexXMLControl::createDouble(std::string name, std::string uri,
     return e;
 }
 
-XMLElem ComplexXMLControl::createBooleanType(std::string name, std::string uri,
+XMLElem ComplexXMLControl::createBooleanType(const std::string& name, const std::string& uri,
                                              BooleanType p, XMLElem parent)
 {
     XMLElem e = XMLControl::createBooleanType(name, uri, p, parent);
@@ -2260,8 +2280,8 @@ XMLElem ComplexXMLControl::createBooleanType(std::string name, std::string uri,
     return e;
 }
 
-XMLElem ComplexXMLControl::createDateTime(std::string name, std::string uri,
-                                          std::string s, XMLElem parent)
+XMLElem ComplexXMLControl::createDateTime(const std::string& name, const std::string& uri,
+                                          const std::string& s, XMLElem parent)
 {
     XMLElem e = XMLControl::createDateTime(name, uri, s, parent);
     if (e)
@@ -2276,14 +2296,14 @@ XMLElem ComplexXMLControl::createDateTime(std::string name, std::string uri,
     return e;
 }
 
-XMLElem ComplexXMLControl::createDateTime(std::string name, std::string uri,
+XMLElem ComplexXMLControl::createDateTime(const std::string& name, const std::string& uri,
                                           DateTime p, XMLElem parent)
 {
     std::string s = six::toString<DateTime>(p);
     return createDateTime(name, uri, s, parent);
 }
 
-XMLElem ComplexXMLControl::createDate(std::string name, std::string uri,
+XMLElem ComplexXMLControl::createDate(const std::string& name, const std::string& uri,
                                       DateTime p, XMLElem parent)
 {
     XMLElem e = XMLControl::createDate(name, uri, p, parent);
@@ -2299,55 +2319,55 @@ XMLElem ComplexXMLControl::createDate(std::string name, std::string uri,
     return e;
 }
 
-XMLElem ComplexXMLControl::createString(std::string name, std::string p,
+XMLElem ComplexXMLControl::createString(const std::string& name, const std::string& p,
                                         XMLElem parent)
 {
     return createString(name, getDefaultURI(), p, parent);
 }
 
-XMLElem ComplexXMLControl::createInt(std::string name, int p, XMLElem parent)
+XMLElem ComplexXMLControl::createInt(const std::string& name, int p, XMLElem parent)
 {
     return createInt(name, getDefaultURI(), p, parent);
 }
 
-XMLElem ComplexXMLControl::createDouble(std::string name, double p,
+XMLElem ComplexXMLControl::createDouble(const std::string& name, double p,
                                         XMLElem parent)
 {
     return createDouble(name, getDefaultURI(), p, parent);
 }
 
-XMLElem ComplexXMLControl::createBooleanType(std::string name, BooleanType p,
+XMLElem ComplexXMLControl::createBooleanType(const std::string& name, BooleanType p,
                                              XMLElem parent)
 {
     return createBooleanType(name, getDefaultURI(), p, parent);
 }
 
-XMLElem ComplexXMLControl::createDateTime(std::string name, std::string s,
+XMLElem ComplexXMLControl::createDateTime(const std::string& name, const std::string& s,
                                           XMLElem parent)
 {
     return createDateTime(name, getDefaultURI(), s, parent);
 }
 
-XMLElem ComplexXMLControl::createDateTime(std::string name, DateTime p,
+XMLElem ComplexXMLControl::createDateTime(const std::string& name, DateTime p,
                                           XMLElem parent)
 {
     return createDateTime(name, getDefaultURI(), p, parent);
 }
 
-XMLElem ComplexXMLControl::createDate(std::string name, DateTime p,
+XMLElem ComplexXMLControl::createDate(const std::string& name, DateTime p,
                                       XMLElem parent)
 {
     return createDate(name, getDefaultURI(), p, parent);
 }
 
-XMLElem ComplexXMLControl::createEarthModelType(std::string name,
+XMLElem ComplexXMLControl::createEarthModelType(const std::string& name,
                                                 const EarthModelType& value,
                                                 XMLElem parent)
 {
     return createString(name, six::toString(value), parent);
 }
 
-XMLElem ComplexXMLControl::createSideOfTrackType(std::string name,
+XMLElem ComplexXMLControl::createSideOfTrackType(const std::string& name,
                                                  const SideOfTrackType& value,
                                                  XMLElem parent)
 {
