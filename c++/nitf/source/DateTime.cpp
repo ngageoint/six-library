@@ -76,6 +76,25 @@ void nitf::DateTime::format(const std::string& format, char* outBuf,
         throw nitf::NITFException(&e);
 }
 
+void nitf::DateTime::format(const std::string& format,
+                            std::string &str) const throw(nitf::NITFException)
+{
+    str.clear();
+
+    char raw[256];
+    raw[255] = '\0';
+    this->format(format, raw, 255);
+    str.assign(raw);
+}
+
+std::string nitf::DateTime::format(const std::string& format) const
+    throw(nitf::NITFException)
+{
+    std::string str;
+    this->format(format, str);
+    return str;
+}
+
 int nitf::DateTime::getYear() const
 {
     return getNativeOrThrow()->year;

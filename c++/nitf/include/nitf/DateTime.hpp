@@ -64,6 +64,12 @@ public:
     void format(const std::string& format,
             char* outBuf, size_t maxSize) const throw(nitf::NITFException);
 
+    void format(const std::string& format,
+                std::string &str) const throw(nitf::NITFException);
+
+    std::string format(const std::string& format) const
+        throw(nitf::NITFException);
+
     int getYear() const;
     int getMonth() const;
     int getDayOfMonth() const;
