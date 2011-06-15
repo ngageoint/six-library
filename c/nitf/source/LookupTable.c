@@ -131,5 +131,9 @@ NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
             memcpy(lut->table, tables, numTables * numEntries);
         }
     }
+    else
+    {
+        lut->table = NULL;
+    }
     return NITF_SUCCESS;
 }
