@@ -692,10 +692,11 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_isSane(nitf_TRE * tre)
     return status;
 }
 
-NITFPRIV(NITF_BOOL) basicRead(nitf_IOInterface* io, 
-                              nitf_Uint32 length,
-                              nitf_TRE* tre, struct _nitf_Record* record, 
-                              nitf_Error* error)
+NITFAPI(NITF_BOOL) nitf_TREUtils_basicRead(nitf_IOInterface* io,
+                                           nitf_Uint32 length,
+                                           nitf_TRE* tre,
+                                           struct _nitf_Record* record,
+                                           nitf_Error* error)
 {
     int ok;
     char *data = NULL;
@@ -778,9 +779,9 @@ NITFPRIV(NITF_BOOL) basicRead(nitf_IOInterface* io,
     return ok;
 }
 
-NITFPRIV(NITF_BOOL) basicInit(nitf_TRE * tre, 
-                              const char* id, 
-                              nitf_Error * error)
+NITFAPI(NITF_BOOL) nitf_TREUtils_basicInit(nitf_TRE * tre,
+                                           const char* id,
+                                           nitf_Error * error)
 {
     nitf_TREDescriptionSet* set = NULL;
     nitf_TREDescriptionInfo* descInfo = NULL;
@@ -852,10 +853,10 @@ NITFPRIV(NITF_BOOL) basicInit(nitf_TRE * tre,
     }
 }
 
-NITFPRIV(NITF_BOOL) basicWrite(nitf_IOInterface* io, 
-                               nitf_TRE* tre,
-                               struct _nitf_Record* record, 
-                               nitf_Error* error)
+NITFAPI(NITF_BOOL) nitf_TREUtils_basicWrite(nitf_IOInterface* io,
+                                            nitf_TRE* tre,
+                                            struct _nitf_Record* record,
+                                            nitf_Error* error)
 {
     nitf_Uint32 length;
     char* data = NULL;
@@ -870,20 +871,21 @@ NITFPRIV(NITF_BOOL) basicWrite(nitf_IOInterface* io,
     return ok;
 }
 
-NITFPRIV(int) basicGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
+NITFAPI(int) nitf_TREUtils_basicGetCurrentSize(nitf_TRE* tre,
+                                               nitf_Error* error)
 {
     return nitf_TREUtils_computeLength(tre);
 }
 
-NITFPRIV(const char*) basicGetID(nitf_TRE *tre)
+NITFAPI(const char*) nitf_TREUtils_basicGetID(nitf_TRE *tre)
 {
     return ((nitf_TREPrivateData*)tre->priv)->descriptionName;
 }
 
 
-NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
-                               nitf_TRE *tre,
-                               nitf_Error *error)
+NITFAPI(NITF_BOOL) nitf_TREUtils_basicClone(nitf_TRE *source,
+                                            nitf_TRE *tre,
+                                            nitf_Error *error)
 {
     nitf_TREPrivateData *sourcePriv = NULL;
     nitf_TREPrivateData *trePriv = NULL;
@@ -907,20 +909,19 @@ NITFPRIV(NITF_BOOL) basicClone(nitf_TRE *source,
 }
 
 
-NITFPRIV(void) basicDestruct(nitf_TRE* tre)
+NITFAPI(void) nitf_TREUtils_basicDestruct(nitf_TRE* tre)
 {
     if (tre && tre->priv)
         nitf_TREPrivateData_destruct((nitf_TREPrivateData**)&tre->priv);
 }
 
 /*
- *  TODO: Make all these private functions accessible so that our other
- *  handlers, like DefaultTRE can make use of them
+ *  TODO: Can DefaultTRE use these now that they're not private?
  *
  */
-NITFPRIV(nitf_List*) basicFind(nitf_TRE* tre,
-                               const char* pattern,
-                               nitf_Error* error)
+NITFAPI(nitf_List*) nitf_TREUtils_basicFind(nitf_TRE* tre,
+                                            const char* pattern,
+                                            nitf_Error* error)
 {
     nitf_List* list;
 
@@ -948,16 +949,17 @@ NITFPRIV(nitf_List*) basicFind(nitf_TRE* tre,
     return list;
 }
 
-NITFPRIV(NITF_BOOL) basicSetField(nitf_TRE* tre, 
-                                  const char* tag, 
-                                  NITF_DATA* data, 
-                                  size_t dataLength, 
-                                  nitf_Error* error)
+NITFAPI(NITF_BOOL) nitf_TREUtils_basicSetField(nitf_TRE* tre,
+                                               const char* tag,
+                                               NITF_DATA* data,
+                                               size_t dataLength,
+                                               nitf_Error* error)
 {
     return nitf_TREUtils_setValue(tre, tag, data, dataLength, error);
 }
 
-NITFPRIV(nitf_Field*) basicGetField(nitf_TRE* tre, const char* tag)
+NITFAPI(nitf_Field*) nitf_TREUtils_basicGetField(nitf_TRE* tre,
+                                                 const char* tag)
 {
     nitf_Pair* pair = nitf_HashTable_find(
             ((nitf_TREPrivateData*)tre->priv)->hash, tag);
@@ -1021,7 +1023,8 @@ NITFPRIV(const char*) basicGetFieldDescription(nitf_TREEnumerator* it,
     return NULL;
 }
 
-NITFPRIV(nitf_TREEnumerator*) basicBegin(nitf_TRE* tre, nitf_Error* error)
+NITFAPI(nitf_TREEnumerator*) nitf_TREUtils_basicBegin(nitf_TRE* tre,
+                                                      nitf_Error* error)
 {
     nitf_TREEnumerator* it =
         (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
@@ -1042,17 +1045,17 @@ nitf_TREUtils_createBasicHandler(nitf_TREDescriptionSet* set,
                                  nitf_TREHandler *handler,
                                  nitf_Error* error)
 {
-    handler->init = basicInit;
-    handler->getID = basicGetID;
-    handler->read = basicRead;
-    handler->setField = basicSetField;
-    handler->getField = basicGetField;
-    handler->find = basicFind;
-    handler->write = basicWrite;
-    handler->begin = basicBegin;
-    handler->getCurrentSize = basicGetCurrentSize;
-    handler->clone = basicClone;
-    handler->destruct = basicDestruct;
+    handler->init = nitf_TREUtils_basicInit;
+    handler->getID = nitf_TREUtils_basicGetID;
+    handler->read = nitf_TREUtils_basicRead;
+    handler->setField = nitf_TREUtils_basicSetField;
+    handler->getField = nitf_TREUtils_basicGetField;
+    handler->find = nitf_TREUtils_basicFind;
+    handler->write = nitf_TREUtils_basicWrite;
+    handler->begin = nitf_TREUtils_basicBegin;
+    handler->getCurrentSize = nitf_TREUtils_basicGetCurrentSize;
+    handler->clone = nitf_TREUtils_basicClone;
+    handler->destruct = nitf_TREUtils_basicDestruct;
 
     handler->data = set;
     return handler;
