@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <sys/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
 
@@ -88,7 +89,7 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
             {
                 std::vector<std::string> xmlStrs;
                 parseXMLEntry(
-                    (*mReader[0]->getIFD())[six::Constants::GT_XML_KEY],
+                    (*(reader[0]->getIFD()))[six::Constants::GT_XML_KEY],
                     xmlStrs);
 
                 // If any of the XML strings is a SIDD xml, the data type is
@@ -134,7 +135,7 @@ void six::sidd::GeoTIFFReadControl::load(const std::string& fromFile)
     }
 
     std::vector<std::string> xmlStrs;
-    parseXMLEntry((*mReader[0]->getIFD())[six::Constants::GT_XML_KEY],
+    parseXMLEntry((*(mReader[0]->getIFD()))[six::Constants::GT_XML_KEY],
                   xmlStrs);
 
     mContainer = new six::Container(six::DataType::DERIVED);
@@ -243,7 +244,9 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     }
     else
     {
-        six::UByte* rowBuf = new six::UByte[numColsTotal * elemSize];
+        const sys::ScopedArray<six::UByte>
+            scopedRowBuf(new six::UByte[numColsTotal * elemSize]);
+        six::UByte* const rowBuf(scopedRowBuf.get());
 
         //        // skip past rows
         //        for (size_t i = 0; i < startRow; ++i)
@@ -263,7 +266,6 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
             if (extentCols < numColsTotal)
                 imReader->getData(rowBuf, numColsTotal - extentCols);
         }
-        delete[] rowBuf;
     }
     return buffer;
 }
