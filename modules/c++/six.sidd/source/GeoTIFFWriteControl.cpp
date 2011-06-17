@@ -289,7 +289,13 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd, const std::vector<
     tiff::IFDEntry* entry = (*ifd)["GeoKeyDirectoryTag"];
 
     // Write the gt header
-    const short header[] = { 1, 1, 2, 6, 1024, 0, 1, 2, /* GTModelTypeGeoKey - Geographic */
+    // The first four elements are...
+    // keyDirVersion, keyRevision, keyRevisionMinor, numKeys
+    // If keys are added/removed from this header, numKeys must be kept in
+    // sync
+    const short header[] = {
+    1,    1, 2, 4,
+    1024, 0, 1, 2, /* GTModelTypeGeoKey - Geographic */
     1025, 0, 1, 1, /* GTRasterTypeGeoKey - RasterPixelIsArea */
     2048, 0, 1, 4326, /* GeographicTypeGeoKey - (GCSE_WGS84) 4030 */
     3072, 0, 1, 0 }; /* ProjectedCSTypeGeoKey */
