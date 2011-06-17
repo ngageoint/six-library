@@ -19,12 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <sys/ScopedArray.h>
 #include <import/cli.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
-
-#  include <import/sio/lite.h>
+#include <import/sio/lite.h>
 
 using namespace six;
 
@@ -65,7 +65,8 @@ int main(int argc, char** argv)
         parser.addArgument("file", "SICD/SIDD input file", cli::STORE, "file",
                            "FILE", 1, 1);
 
-        cli::Results *options = parser.parse(argc, (const char**) argv);
+        const std::auto_ptr<cli::Results>
+            options(parser.parse(argc, (const char**) argv));
 
         long startRow(options->get<long> ("startRow"));
         long numRows(options->get<long> ("numRows"));
@@ -91,7 +92,8 @@ int main(int argc, char** argv)
         readerRegistry.addCreator(new six::sidd::GeoTIFFReadControlCreator());
 
         // get the correct ReadControl for the given file
-        ReadControl *reader = readerRegistry.newReadControl(inputFile);
+        const std::auto_ptr<ReadControl>
+            reader(readerRegistry.newReadControl(inputFile));
         // set the optional registry, since we have one
         reader->setXMLControlRegistry(&xmlRegistry);
 
@@ -124,7 +126,7 @@ int main(int argc, char** argv)
         // first, write out the XMLs
         for (size_t i = 0, total = container->getNumData(); i < total; ++i)
         {
-            Data* data = container->getData(i);
+            const Data* data = container->getData(i);
             std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);
             std::string xmlFile = sys::Path::joinPaths(outputDir, filename);
             io::FileOutputStream xmlStream(xmlFile);
@@ -137,7 +139,7 @@ int main(int argc, char** argv)
         //  now, dump the images
         for (size_t i = 0; i < numImages; ++i)
         {
-            Data* data = container->getData(i);
+            const Data* data = container->getData(i);
             unsigned long nbpp = data->getNumBytesPerPixel();
             unsigned long height = data->getNumRows();
             unsigned long width = data->getNumCols();
@@ -171,12 +173,13 @@ int main(int argc, char** argv)
             {
                 region.setNumRows(numRows);
                 unsigned long totalBytes = nbpp * width * height;
-                UByte* workBuffer = new UByte[totalBytes];
-                region.setBuffer(workBuffer);
+                const sys::ScopedArray<UByte>
+                    workBuffer(new UByte[totalBytes]);
+                region.setBuffer(workBuffer.get());
 
                 reader->interleaved(region, i);
-                outputStream.write((const sys::byte*) workBuffer, totalBytes);
-                delete[] workBuffer;
+                outputStream.write((const sys::byte*) workBuffer.get(),
+                                   totalBytes);
             }
             else
             {
@@ -184,22 +187,19 @@ int main(int argc, char** argv)
                 unsigned long nbpr = nbpp * width;
 
                 // allocate this so we can reuse it for each row
-                UByte* workBuffer = new UByte[nbpr];
-                region.setBuffer(workBuffer);
+                const sys::ScopedArray<UByte> workBuffer(new UByte[nbpr]);
+                region.setBuffer(workBuffer.get());
 
                 for (unsigned int j = startRow; j < numRows + startRow; j++)
                 {
                     region.setStartRow(j);
                     UByte* line = reader->interleaved(region, i);
                     outputStream.write((const sys::byte*) line, nbpr);
-                    // std::cout << "Writing row: " << (j + 1) << std::endl;
                 }
-                delete[] workBuffer;
             }
             outputStream.close();
             std::cout << "Wrote file: " << outputFile << std::endl;
         }
-
     }
     catch (const except::Exception& e)
     {
