@@ -732,7 +732,7 @@ def detect(self):
 
     appleRegex = r'i.86-apple-.*'
     linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
-    sparcRegex = r'sparc-sun.*'
+    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*'
     winRegex = r'win32'
     
     config = {'cxx':{}, 'cc':{}}
@@ -818,7 +818,7 @@ def detect(self):
             env.append_value('CCFLAGS_THREAD', '-D_REENTRANT')
     
     #Solaris
-    elif re.match(sparcRegex, platform):
+    elif re.match(solarisRegex, platform):
         env.append_value('LIB_DL', 'dl')
         env.append_value('LIB_NSL', 'nsl')
         env.append_value('LIB_SOCKET', 'socket')
@@ -829,13 +829,14 @@ def detect(self):
         self.check_cc(lib='thread', mandatory=True)
 
         if cxxCompiler == 'sunc++':
+            (bitFlag32, bitFlag64) = getSolarisFlags(env['CXX'])
             config['cxx']['debug']          = '-g'
             config['cxx']['warn']           = ''
             config['cxx']['verbose']        = '-v'
-            config['cxx']['64']             = '-xtarget=generic64'
-            config['cxx']['32']             = '-xtarget=generic'
-            config['cxx']['linkflags_32'] = '-xtarget=generic'
-            config['cxx']['linkflags_64'] = '-xtarget=generic64'
+            config['cxx']['64']             = bitFlag64
+            config['cxx']['32']             = bitFlag32
+            config['cxx']['linkflags_32']   = bitFlag32
+            config['cxx']['linkflags_64']   = bitFlag64
             config['cxx']['optz_med']       = '-xO3'
             config['cxx']['optz_fast']      = '-xO4'
             config['cxx']['optz_fastest']   = '-fast'
@@ -846,13 +847,14 @@ def detect(self):
             env.append_value('CXXFLAGS_THREAD', '-mt')
             
         if ccCompiler == 'suncc':
+            (bitFlag32, bitFlag64) = getSolarisFlags(env['CC'])
             config['cc']['debug']          = '-g'
             config['cc']['warn']           = ''
             config['cc']['verbose']        = '-v'
-            config['cc']['64']             = '-xtarget=generic64'
-            config['cc']['linkflags_64'] = '-xtarget=generic64'
-            config['cc']['linkflags_32'] = '-xtarget=generic'
-            config['cc']['32']             = '-xtarget=generic'
+            config['cc']['64']             = bitFlag64
+            config['cc']['linkflags_64']   = bitFlag64
+            config['cc']['linkflags_32']   = bitFlag32
+            config['cc']['32']             = bitFlag32
             config['cc']['optz_med']       = '-xO2'
             config['cc']['optz_fast']      = '-xO3'
             config['cc']['optz_fastest']   = '-fast'
@@ -1114,3 +1116,19 @@ def fix_libs(self):
                 allKeys.remove(k)
     
     env['STATICLIB'] = [seen[k][0].target for k in ordered]
+
+def getSolarisFlags(compilerName):
+    # Newer Solaris compilers use -m32 and -m64, so check to see if these flags exist
+    # If they don't, default to the old -xtarget flags
+    # TODO: Is there a cleaner way to do this with check_cc() instead?
+    bitFlag32 = '-xtarget=generic'
+    bitFlag64 = '-xtarget=generic64'
+    (out, err) = subprocess.Popen([compilerName, '-flags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+            
+    for line in out.split('\n'):
+        if re.match(r'-m32.*', line):
+            bitFlag32 = '-m32'
+        elif re.match(r'-m64.*', line):
+            bitFlag64 = '-m64'
+
+    return (bitFlag32, bitFlag64)

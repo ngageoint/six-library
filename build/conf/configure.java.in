@@ -2,7 +2,7 @@ case "${target}" in
     mips-sgi-*)
         java_ident="irix"
     ;;
-    sparc-sun-*)
+    sparc-sun-*|i.86-pc-solaris.*)
         java_ident="solaris"
     ;;
     powerpc-ibm-*)
