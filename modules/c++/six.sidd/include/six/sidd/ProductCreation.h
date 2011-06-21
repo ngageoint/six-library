@@ -22,10 +22,12 @@
 #ifndef __SIX_PRODUCT_CREATION_H__
 #define __SIX_PRODUCT_CREATION_H__
 
+#include <memory>
+
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
-#include "six/Classification.h"
+#include "six/sidd/DerivedClassification.h"
 
 namespace six
 {
@@ -47,26 +49,23 @@ struct ProcessorInformation
  *
  *  Contains general information about product creation
  */
-struct ProductCreation
+class ProductCreation
 {
+public:
     //!  Allocate mandatory processorInformation
     ProductCreation() :
-        processorInformation(NULL)
+        processorInformation(new ProcessorInformation())
     {
-        processorInformation = new ProcessorInformation();
     }
-
-    //!  Delete non-NULL processorInformation
-    ~ProductCreation();
 
     //!  Clone this, including processorInformation
     ProductCreation* clone() const;
 
     //!  Details regarding processor
-    ProcessorInformation* processorInformation;
+    std::auto_ptr<ProcessorInformation> processorInformation;
 
     //!  The overall classification of the product
-    Classification classification;
+    DerivedClassification classification;
 
     //!  The output product name defined by the processor
     std::string productName;
@@ -85,6 +84,11 @@ struct ProductCreation
      *  profile-specific needs related to product creation
      */
     std::vector<Parameter> productCreationExtensions;
+
+private:
+    // Noncopyable
+    ProductCreation(const ProductCreation& );
+    const ProductCreation& operator=(const ProductCreation& );
 };
 }
 }

@@ -23,7 +23,6 @@
 #define __SIX_SET_H__
 
 #include "six/Types.h"
-#include "six/Classification.h"
 #include "six/Parameter.h"
 #include <import/except.h>
 
@@ -36,8 +35,8 @@ namespace six
  *
  *  To minimize the model, we check values against known 'undefined'
  *  values.  This allows us to specialize those calls for each type.
- *  Some times, the init value is the same as the default constructor
- *  (e.g., std::string), in which case this doesnt need to be used
+ *  Sometimes, the init value is the same as the default constructor
+ *  (e.g., std::string), in which case this doesn't need to be used
  */
 struct Init
 {
@@ -74,7 +73,6 @@ template<> ReferencePoint Init::undefined<ReferencePoint>();
 template<> Poly1D Init::undefined<Poly1D>();
 template<> Poly2D Init::undefined<Poly2D>();
 template<> PolyXYZ Init::undefined<PolyXYZ>();
-template<> Classification Init::undefined<Classification>();
 template<> Parameter Init::undefined<Parameter>();
 
 // enums

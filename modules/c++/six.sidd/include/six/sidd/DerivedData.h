@@ -268,27 +268,14 @@ struct DerivedData: public Data
      *  Maps to:
      *  /SIDD/ProductCreation/Classification
      */
+    virtual const Classification& getClassification() const
+    {
+        return productCreation->classification;
+    }
+
     virtual Classification& getClassification()
     {
         return productCreation->classification;
-    }
-
-    /*!
-     *  Maps to:
-     *  /SIDD/ProductCreation/Classification
-     */
-    virtual Classification getClassification() const
-    {
-        return productCreation->classification;
-    }
-
-    /*!
-     *  Maps to:
-     *  /SIDD/ProductCreation/Classification
-     */
-    virtual void setClassification(Classification classification)
-    {
-        productCreation->classification = classification;
     }
 
     virtual LUT* getDisplayLUT()

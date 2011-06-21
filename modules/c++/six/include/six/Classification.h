@@ -22,45 +22,15 @@
 #ifndef __SIX_CLASSIFICATION_H__
 #define __SIX_CLASSIFICATION_H__
 
+#include "logging/Logger.h"
+#include "nitf/FileSecurity.h"
 #include "six/Types.h"
 #include "six/Options.h"
 
 namespace six
 {
-
 /*!
- *  \struct ClassificationGuidance
- *  \brief Represents SIDD classification guidance block
- *
- *  This struct attempts to populate both SICD and SIDD guidance
- *  information.  SICD does not actually have such a structure,
- *  but its components are also used to initialize the SICD container
- */
-struct ClassificationGuidance
-{
-    ClassificationGuidance()
-    {
-    }
-
-    ~ClassificationGuidance()
-    {
-    }
-
-    ClassificationGuidance* clone() const
-    {
-        ClassificationGuidance* cg = new ClassificationGuidance();
-        cg->date = date;
-        cg->authority = authority;
-        return cg;
-    }
-
-    DateTime date;
-    std::string authority;
-
-};
-
-/*!
- *  \struct Classification
+ *  \class Classification
  *  \brief Security record block
  *
  *  This structure is used by both the DerivedData and ComplexData objects
@@ -68,7 +38,7 @@ struct ClassificationGuidance
  *  to be populated in the XML data, however, we also use it to write
  *  container specific information using the free parameters.
  *  
- *  SICD writers should be able to create a resonable classification block
+ *  SICD writers should be able to create a reasonable classification block
  *  in the NITF by simply populating the base parameters in this structure,
  *  however, occasionally, the developer may need to match a spec. that
  *  diverges from the stock SIDD population requirements.  In that case,
@@ -76,41 +46,35 @@ struct ClassificationGuidance
  *  directly.  The free parameters are applied last, by the file format
  *  container.  Currently only NITF free parameters are supported.
  */
-struct Classification
+class Classification
 {
-    /*!
-     *  Constructor.  Takes an optional ClassificationGuidance argument.
-     *
-     *  \param classGuidance Classification guidance information
-     */
-    Classification(ClassificationGuidance* classGuidance = NULL) :
-        guidance(classGuidance)
+public:
+    virtual ~Classification()
     {
     }
 
-    //!  Destructor
-    ~Classification();
+    // SICD spells this out, SIDD does not
+    virtual std::string getLevel() const = 0;
 
-    //!  Copy constructor.  
-    //!  TODO: This should probably be a clone() instead
-    Classification(const Classification& c);
+    bool isUnclassified() const
+    {
+        const std::string level(getLevel());
+        return (!level.empty() && ::toupper(level[0]) == 'U');
+    }
 
-    //!  Assignment operator
-    Classification& operator=(const Classification& c);
+    virtual void setSecurity(const std::string& prefix,
+                             logging::Logger& log,
+                             nitf::FileSecurity security) const
+    {
+    }
 
-    //!  Within both SICD and SIDD, populate the actual class level
-    std::string level;
-
-    //! Any security markings  
-    std::vector<std::string> securityMarkings;
+    // Print any fields specific to the derived class
+    // operator<< below will print the fileOptions
+    virtual std::ostream& put(std::ostream& os) const = 0;
 
     //! Use this to fit in anything you might need for the file container
     Options fileOptions;
-
-    //! ClassificationGuidance object
-    ClassificationGuidance* guidance;
 };
-
 }
 
 //! Print operator (utility only).

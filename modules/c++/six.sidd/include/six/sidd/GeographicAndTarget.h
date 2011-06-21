@@ -22,6 +22,8 @@
 #ifndef __SIX_GEOGRAPHIC_AND_TARGET_H__
 #define __SIX_GEOGRAPHIC_AND_TARGET_H__
 
+#include <memory>
+
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -89,8 +91,9 @@ struct GeographicInformation
  *  This object contains the information associated with some geographic
  *  coverage
  */
-struct GeographicCoverage
+class GeographicCoverage
 {
+public:
     //!  This identifier determines if we are doing SubRegion or nesting
     RegionType regionType;
 
@@ -107,7 +110,7 @@ struct GeographicCoverage
     std::vector<GeographicCoverage*> subRegion;
 
     //!  SIDD: GeographicInfo, mutually exclusive with SubRegion
-    GeographicInformation* geographicInformation;
+    std::auto_ptr<GeographicInformation> geographicInformation;
 
     //!  Constructor requires a RegionType to properly initialize
     GeographicCoverage(RegionType regionType);
@@ -117,6 +120,11 @@ struct GeographicCoverage
     
     //!  Carefully clones the sub-regions and geo information section
     GeographicCoverage* clone() const;
+
+private:
+    // Noncopyable
+    GeographicCoverage(const GeographicCoverage& );
+    const GeographicCoverage& operator=(const GeographicCoverage& );
 };
 
 /*!
@@ -127,19 +135,19 @@ struct GeographicCoverage
  *  information
  *
  */
-struct GeographicAndTarget
+class GeographicAndTarget
 {
+public:
     //!  SIDD GeographicCoverage: Provides geo coverage information
-    GeographicCoverage* geographicCoverage;
+    std::auto_ptr<GeographicCoverage> geographicCoverage;
 
     //!  (Optional, Unbounded) Provides target specific geo information
     std::vector<TargetInformation*> targetInformation;
 
     //!  Constructor, auto-initializes coverage object
     GeographicAndTarget(RegionType regionType) :
-        geographicCoverage(NULL)
+        geographicCoverage(new GeographicCoverage(regionType))
     {
-        geographicCoverage = new GeographicCoverage(regionType);
     }
 
     //!  Delete geo coverage object and any targets
@@ -147,6 +155,11 @@ struct GeographicAndTarget
 
     //!  Clones geo coverage and any targets
     GeographicAndTarget* clone();
+
+private:
+    // Noncopyable
+    GeographicAndTarget(const GeographicAndTarget& );
+    const GeographicAndTarget& operator=(const GeographicAndTarget& );
 };
 
 }

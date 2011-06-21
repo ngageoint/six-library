@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
@@ -14,30 +14,41 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SIX_COMPLEX_CLASSIFICATION_H__
+#define __SIX_COMPLEX_CLASSIFICATION_H__
+
 #include "six/Classification.h"
 
-using namespace six;
-
-std::ostream& operator<<(std::ostream& os, const Classification& c)
+namespace six
 {
-    os << "Classification: " << std::endl;
-    os << "------------------------------------" << std::endl;
-
-    c.put(os);
-
-    os << "File specific options: " << std::endl;
-    for (Options::ParameterIter iter = c.fileOptions.begin();
-         iter != c.fileOptions.end();
-         ++iter)
+namespace sicd
+{
+/*!
+ *  \class ComplexClassification
+ *  \brief The implementation of Classification for complex products
+ */
+class ComplexClassification: public Classification
+{
+public:
+    virtual std::string getLevel() const
     {
-        os << "    {" << iter->first << "}  " << iter->second.str()
-           << std::endl;
+        return level;
     }
-    return os;
-}
 
+    virtual std::ostream& put(std::ostream& os) const
+    {
+        os << "Level: " << level << "\n";
+        return os;
+    }
+
+    //! This is spelled out (i.e. 'UNCLASSIFIED')
+    std::string level;
+};
+}
+}
+#endif

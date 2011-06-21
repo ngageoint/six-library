@@ -50,9 +50,7 @@ public:
     {
     }
     //!  Destructor
-    ~NITFWriteControl()
-    {
-    }
+    ~NITFWriteControl();
 
     //!  We are a 'NITF'
     std::string getFileType() const
@@ -83,6 +81,7 @@ public:
         return mRecord;
     }
 
+    // Ownership is not transferred - 'container' must outlive this object
     void initialize(Container* container);
 
     void save(SourceList& imageData, const std::string& outputFile);
@@ -240,7 +239,7 @@ protected:
      *  classification object.  This allows a manual override of
      *  these fields in the NITF product.
      */
-    void setImageSecurity(six::Classification& c,
+    void setImageSecurity(const six::Classification& c,
             nitf::ImageSubheader& subheader);
 
     /*!
@@ -249,16 +248,18 @@ protected:
      *  classification object.  This allows a manual override of
      *  these fields in the NITF product.
      */
-    void setDESecurity(six::Classification& c, nitf::DESubheader& subheader);
+    void setDESecurity(const six::Classification& c,
+                       nitf::DESubheader& subheader);
 
-    void setSecurity(six::Classification& c, nitf::FileSecurity security,
-            std::string prefix);
+    void setSecurity(const six::Classification& c,
+                     nitf::FileSecurity security,
+                     const std::string& prefix);
 
     /*!
      *  Takes in a string representing the classification level
      *  and returns the value expected by the NITF
      */
-    std::string getNITFClassification(std::string level);
+    std::string getNITFClassification(const std::string& level);
 
     /*!
      *  This function scans through the security fields for each

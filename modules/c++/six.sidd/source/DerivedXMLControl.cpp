@@ -31,6 +31,7 @@ using namespace six;
 using namespace six::sidd;
 
 typedef xml::lite::Element* XMLElem;
+typedef xml::lite::Attributes XMLAttributes;
 
 const char DerivedXMLControl::SIDD_URI[] = "urn:SIDD:1.0.0";
 const char DerivedXMLControl::SI_COMMON_URI[] = "urn:SICommon:0.1";
@@ -49,6 +50,108 @@ std::string DerivedXMLControl::getSICommonURI() const
 std::string DerivedXMLControl::getSFAURI() const
 {
     return SFA_URI;
+}
+
+void DerivedXMLControl::getAttributeList(
+    const xml::lite::Attributes& attributes,
+    const std::string& attributeName,
+    std::vector<std::string>& values)
+{
+    values = str::split(attributes.getValue(attributeName));
+}
+
+void DerivedXMLControl::getAttributeListIfExists(
+    const xml::lite::Attributes& attributes,
+    const std::string& attributeName,
+    std::vector<std::string>& values)
+{
+    if (attributes.contains(attributeName))
+    {
+        values = str::split(attributes.getValue(attributeName));
+    }
+    else
+    {
+        values.clear();
+    }
+}
+
+void DerivedXMLControl::getAttributeIfExists(
+    const xml::lite::Attributes& attributes,
+    const std::string& attributeName,
+    std::string& value)
+{
+    if (attributes.contains(attributeName))
+    {
+        value = attributes.getValue(attributeName);
+    }
+    else
+    {
+        value.clear();
+    }
+}
+
+void DerivedXMLControl::getAttributeIfExists(
+    const xml::lite::Attributes& attributes,
+    const std::string& attributeName,
+    sys::ScopedCopyablePointer<DateTime>& date)
+{
+    if (attributes.contains(attributeName))
+    {
+        date.reset(new DateTime(toType<DateTime>(
+            attributes.getValue(attributeName))));
+    }
+    else
+    {
+        date.reset();
+    }
+}
+
+void DerivedXMLControl::setAttributeList(
+    XMLElem element,
+    const std::string& attributeName,
+    const std::vector<std::string>& values,
+    bool setIfEmpty)
+{
+    std::string value;
+    for (size_t ii = 0; ii < values.size(); ++ii)
+    {
+        std::string thisValue(values[ii]);
+        str::trim(thisValue);
+        if (!thisValue.empty())
+        {
+            if (!value.empty())
+            {
+                value += " ";
+            }
+
+            value += thisValue;
+        }
+    }
+
+    if (!value.empty() || setIfEmpty)
+    {
+        setAttribute(element, attributeName, value);
+    }
+}
+
+void DerivedXMLControl::setAttributeIfNonEmpty(XMLElem element,
+                                               const std::string& name,
+                                               const std::string& value)
+{
+    if (!value.empty())
+    {
+        setAttribute(element, name, value);
+    }
+}
+
+void DerivedXMLControl::setAttributeIfNonNull(XMLElem element,
+                                              const std::string& name,
+                                              const DateTime* value)
+{
+    if (value)
+    {
+        setAttribute(element, name, toString(*value));
+    }
 }
 
 void DerivedXMLControl::fromXML(const XMLElem productCreationXML,
@@ -72,32 +175,8 @@ void DerivedXMLControl::fromXML(const XMLElem productCreationXML,
                 = profileXML->getCharacterData();
     }
 
-    //Classification
-    XMLElem classificationXML = getFirstAndOnly(productCreationXML,
-                                                "Classification");
-    productCreation->classification.level
-            = getFirstAndOnly(classificationXML, "Level")->getCharacterData();
-
-    std::vector<XMLElem> secMarkingsXML;
-    classificationXML->getElementsByTagName("SecurityMarkings", secMarkingsXML);
-    for (std::vector<XMLElem>::const_iterator it = secMarkingsXML.begin(); it
-            != secMarkingsXML.end(); ++it)
-    {
-        productCreation->classification.securityMarkings. push_back(
-                                                                    (*it)->getCharacterData());
-    }
-
-    XMLElem classGuidanceXML = getOptional(classificationXML, "Guidance");
-    if (classGuidanceXML)
-    {
-        ClassificationGuidance* classGuidance = new ClassificationGuidance();
-        productCreation->classification.guidance = classGuidance;
-
-        parseDateTime(getFirstAndOnly(classGuidanceXML, "Date"),
-                      productCreation->classification.guidance->date);
-        productCreation->classification.guidance->authority
-                = getFirstAndOnly(classGuidanceXML, "Authority")->getCharacterData();
-    }
+    fromXML(getFirstAndOnly(productCreationXML, "Classification"),
+            productCreation->classification);
 
     productCreation->productName
             = getFirstAndOnly(productCreationXML, "ProductName")->getCharacterData();
@@ -118,6 +197,113 @@ void DerivedXMLControl::fromXML(const XMLElem productCreationXML,
     catch (except::Exception&)
     {
     }
+}
+
+void DerivedXMLControl::fromXML(const XMLElem classificationXML,
+                                DerivedClassification& classification)
+{
+    std::vector<XMLElem> secExtensionsXML;
+    classificationXML->getElementsByTagName("SecurityExtension",
+                                            secExtensionsXML);
+    for (size_t ii = 0; ii < secExtensionsXML.size(); ++ii)
+    {
+        classification.securityExtensions.push_back(
+            secExtensionsXML[ii]->getCharacterData());
+    }
+
+    const XMLAttributes& classificationAttributes =
+        classificationXML->getAttributes();
+
+    classification.desVersion = toType<sys::Int32_T>(
+        classificationAttributes.getValue("DESVersion"));
+
+    classification.createDate = toType<DateTime>(
+        classificationAttributes.getValue("createDate"));
+
+    getAttributeListIfExists(classificationAttributes,
+                             "compliesWith",
+                             classification.compliesWith);
+
+    classification.classification =
+        classificationAttributes.getValue("classification");
+
+    getAttributeList(classificationAttributes,
+                     "ownerProducer",
+                     classification.ownerProducer);
+
+    getAttributeListIfExists(classificationAttributes,
+                             "SCIcontrols",
+                             classification.sciControls);
+
+    getAttributeListIfExists(classificationAttributes,
+                             "SARIdentifier",
+                             classification.sarIdentifier);
+
+    getAttributeListIfExists(
+        classificationAttributes,
+        "disseminationControls",
+        classification.disseminationControls);
+
+    getAttributeListIfExists(classificationAttributes,
+                             "FGIsourceOpen",
+                             classification.fgiSourceOpen);
+
+    getAttributeListIfExists(
+        classificationAttributes,
+        "FGIsourceProtected",
+        classification.fgiSourceProtected);
+
+    getAttributeListIfExists(classificationAttributes,
+                             "releasableTo",
+                             classification.releasableTo);
+
+    getAttributeListIfExists(classificationAttributes,
+                             "nonICmarkings",
+                             classification.nonICMarkings);
+
+    getAttributeIfExists(classificationAttributes,
+                         "classifiedBy",
+                         classification.classifiedBy);
+
+    getAttributeIfExists(classificationAttributes,
+                         "compilationReason",
+                         classification.compilationReason);
+
+    getAttributeIfExists(classificationAttributes,
+                         "derivativelyClassifiedBy",
+                         classification.derivativelyClassifiedBy);
+
+    getAttributeIfExists(classificationAttributes,
+                         "classificationReason",
+                         classification.classificationReason);
+
+    getAttributeListIfExists(classificationAttributes,
+                             "nonUSControls",
+                             classification.nonUSControls);
+
+    getAttributeIfExists(classificationAttributes,
+                         "derivedFrom",
+                         classification.derivedFrom);
+
+    getAttributeIfExists(classificationAttributes,
+                         "declassDate",
+                         classification.declassDate);
+
+    getAttributeIfExists(classificationAttributes,
+                         "declassEvent",
+                         classification.declassEvent);
+
+    getAttributeIfExists(classificationAttributes,
+                         "declassException",
+                         classification.declassException);
+
+    getAttributeIfExists(classificationAttributes,
+                         "typeOfExemptedSource",
+                         classification.exemptedSourceType);
+
+    getAttributeIfExists(classificationAttributes,
+                         "dateOfExemptedSource",
+                         classification.exemptedSourceDate);
 }
 
 void DerivedXMLControl::fromXML(const XMLElem displayXML, Display* display)
@@ -266,7 +452,8 @@ void DerivedXMLControl::fromXML(const XMLElem geographicAndTargetXML,
     XMLElem geographicCoverageXML = getFirstAndOnly(geographicAndTargetXML,
                                                     "GeographicCoverage");
 
-    fromXML(geographicCoverageXML, geographicAndTarget->geographicCoverage);
+    fromXML(geographicCoverageXML,
+            geographicAndTarget->geographicCoverage.get());
 
     //TargetInformation
     std::vector<XMLElem> targetInfosXML;
@@ -342,7 +529,8 @@ void DerivedXMLControl::fromXML(const XMLElem geographicCoverageXML,
         XMLElem geographicInfoXML = getFirstAndOnly(geographicCoverageXML,
                                                     "GeographicInfo");
 
-        geographicCoverage->geographicInformation = new GeographicInformation();
+        geographicCoverage->geographicInformation.reset(
+            new GeographicInformation());
 
         std::vector<XMLElem> countryCodes;
         geographicInfoXML->getElementsByTagName("CountryCode", countryCodes);
@@ -794,6 +982,77 @@ Data* DerivedXMLControl::fromXML(const xml::lite::Document* doc)
     return data;
 }
 
+XMLElem DerivedXMLControl::toXML(const DerivedClassification& classification,
+                                 XMLElem parent)
+{
+    XMLElem classXML = newElement("Classification", parent);
+
+    for (size_t ii = 0; ii < classification.securityExtensions.size(); ++ii)
+    {
+        std::string extension(classification.securityExtensions[ii]);
+        str::trim(extension);
+        if (!extension.empty())
+        {
+            createString("SecurityExtension", extension, classXML);
+        }
+    }
+
+    setAttribute(classXML, "DESVersion", toString(classification.desVersion));
+    setAttribute(classXML, "resourceElement", "true");
+    setAttribute(classXML, "createDate", toString(classification.createDate));
+    setAttributeList(classXML, "compliesWith", classification.compliesWith);
+
+    setAttribute(classXML, "classification", classification.classification);
+    setAttributeList(classXML,
+                     "ownerProducer",
+                     classification.ownerProducer,
+                     true);
+    setAttributeList(classXML, "SCIcontrols", classification.sciControls);
+    setAttributeList(classXML, "SARIdentifier", classification.sarIdentifier);
+    setAttributeList(classXML,
+                     "disseminationControls",
+                     classification.disseminationControls);
+    setAttributeList(classXML, "fgiSourceOpen", classification.fgiSourceOpen);
+    setAttributeList(classXML,
+                     "fgiSourceProtected",
+                     classification.fgiSourceProtected);
+    setAttributeList(classXML, "releasableTo", classification.releasableTo);
+    setAttributeList(classXML, "nonICmarkings", classification.nonICMarkings);
+    setAttributeIfNonEmpty(classXML,
+                           "classifiedBy",
+                           classification.classifiedBy);
+    setAttributeIfNonEmpty(classXML,
+                           "compilationReason",
+                           classification.compilationReason);
+    setAttributeIfNonEmpty(classXML,
+                           "derivativelyClassifiedBy",
+                           classification.derivativelyClassifiedBy);
+    setAttributeIfNonEmpty(classXML,
+                           "classificationReason",
+                           classification.classificationReason);
+    setAttributeList(classXML, "nonUSControls", classification.nonUSControls);
+    setAttributeIfNonEmpty(classXML,
+                           "derivedFrom",
+                           classification.derivedFrom);
+    setAttributeIfNonNull(classXML,
+                          "declassDate",
+                          classification.declassDate.get());
+    setAttributeIfNonEmpty(classXML,
+                           "declassEvent",
+                           classification.declassEvent);
+    setAttributeIfNonEmpty(classXML,
+                           "declassException",
+                           classification.declassException);
+    setAttributeIfNonEmpty(classXML,
+                           "exemptedSourceType",
+                           classification.exemptedSourceType);
+    setAttributeIfNonNull(classXML,
+                          "exemptedSourceDate",
+                          classification.exemptedSourceDate.get());
+
+    return classXML;
+}
+
 XMLElem DerivedXMLControl::toXML(const ProductCreation* productCreation,
         XMLElem parent)
 {
@@ -824,28 +1083,7 @@ XMLElem DerivedXMLControl::toXML(const ProductCreation* productCreation,
     }
 
     //Classification
-    XMLElem classXML = newElement("Classification", productCreationXML);
-    createString("Level", productCreation->classification.level, classXML);
-
-    for (std::vector<std::string>::const_iterator it =
-            productCreation->classification.securityMarkings.begin(); it
-            != productCreation->classification.securityMarkings.end(); ++it)
-    {
-        std::string marking = *it;
-        str::trim(marking);
-        if (!marking.empty())
-            createString("SecurityMarkings", *it, classXML);
-    }
-
-    if (productCreation->classification.guidance)
-    {
-        XMLElem guidanceXML = newElement("Guidance", classXML);
-        createString("Authority",
-                     productCreation->classification.guidance->authority,
-                     guidanceXML);
-        createDate("Date", productCreation->classification.guidance->date,
-                   guidanceXML);
-    }
+    toXML(productCreation->classification, productCreationXML);
 
     //ProductName
     createString("ProductName", productCreation->productName,
@@ -941,7 +1179,8 @@ XMLElem DerivedXMLControl::toXML(
 {
     XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
 
-    toXML(geographicAndTarget->geographicCoverage, geographicAndTargetXML);
+    toXML(geographicAndTarget->geographicCoverage.get(),
+          geographicAndTargetXML);
 
     //loop over TargetInformation
     for (std::vector<TargetInformation*>::const_iterator it =
@@ -977,7 +1216,7 @@ XMLElem DerivedXMLControl::toXML(const GeographicCoverage* geoCoverage,
                     geoCoverageXML);
 
     // GeographicInfo
-    if (geoCoverage->geographicInformation)
+    if (geoCoverage->geographicInformation.get())
     {
         XMLElem geoInfoXML = newElement("GeographicInfo", geoCoverageXML);
 

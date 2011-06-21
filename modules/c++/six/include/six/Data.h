@@ -160,19 +160,9 @@ struct Data
      *  treats them the same, normalizing their content from different parts
      *  of the XML/NITF, etc.
      */
-    virtual Classification getClassification() const = 0;
-    
-    /*!
-     *  Non-const, by reference alterative function.
-     *
-     */
-    virtual Classification& getClassification() = 0;
+    virtual const Classification& getClassification() const = 0;
 
-    /*!
-     *  Set the classification block (without traversing the data model
-     *  specific to SICD or SIDD).
-     */
-    virtual void setClassification(Classification classification) = 0;
+    virtual Classification& getClassification() = 0;
 
     virtual LUT* getDisplayLUT() = 0;
 

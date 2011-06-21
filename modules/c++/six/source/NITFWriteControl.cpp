@@ -28,8 +28,24 @@ const char NITFWriteControl::OPT_MAX_PRODUCT_SIZE[] = "MaxProductSize";
 const char NITFWriteControl::OPT_MAX_ILOC_ROWS[] = "MaxILOCRows";
 const char NITFWriteControl::OPT_J2K_COMPRESSION[] = "J2KCompression";
 
+NITFWriteControl::~NITFWriteControl()
+{
+    for (size_t ii = 0; ii < mInfos.size(); ++ii)
+    {
+        delete mInfos[ii];
+    }
+}
+
 void NITFWriteControl::initialize(Container* container)
 {
+    // Clean up
+    // NOTE  We do not own the container, so we don't delete 'mContainer' here
+    for (size_t ii = 0; ii < mInfos.size(); ++ii)
+    {
+        delete mInfos[ii];
+    }
+    mInfos.clear();
+
     mContainer = container;
 
     sys::Uint32_T ilocMax = Constants::ILOC_MAX;
@@ -57,8 +73,14 @@ void NITFWriteControl::initialize(Container* container)
      */
     if (mContainer->getDataType() == DataType::COMPLEX)
     {
-        mInfos.push_back(new NITFImageInfo(mContainer->getData(0), maxRows,
-                                           maxSize, true));
+        std::auto_ptr<NITFImageInfo>
+            info(new NITFImageInfo(mContainer->getData(0),
+                                   maxRows,
+                                   maxSize,
+                                   true));
+
+        mInfos.resize(1);
+        mInfos[0] = info.release();
     }
     else
     {
@@ -67,11 +89,17 @@ void NITFWriteControl::initialize(Container* container)
                 OPT_J2K_COMPRESSION, Parameter(0));
         enableJ2K = (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
-        for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
+        for (size_t ii = 0; ii < mContainer->getNumData(); ++ii)
         {
-            Data* ith = mContainer->getData(i);
+            Data* const ith = mContainer->getData(ii);
             if (ith->getDataType() == DataType::DERIVED)
-                mInfos.push_back(new NITFImageInfo(ith, maxRows, maxSize, true));
+            {
+                std::auto_ptr<NITFImageInfo>
+                    info(new NITFImageInfo(ith, maxRows, maxSize, true));
+
+                mInfos.resize(mInfos.size() + 1);
+                mInfos.back() = info.release();
+            }
         }
     }
     mRecord = nitf::Record(NITF_VER_21);
@@ -84,9 +112,9 @@ void NITFWriteControl::initialize(Container* container)
     mRecord.getHeader().getFileTitle().set(fileTitle);
 
     int startIndex = 0;
-    for (unsigned int i = 0; i < mInfos.size(); ++i)
+    for (size_t ii = 0; ii < mInfos.size(); ++ii)
     {
-        NITFImageInfo* info = mInfos[i];
+        NITFImageInfo* info = mInfos[ii];
 
         std::vector < NITFSegmentInfo > imageSegments
                 = info->getImageSegments();
@@ -120,9 +148,9 @@ void NITFWriteControl::initialize(Container* container)
         info->setStartIndex(startIndex);
         startIndex += numIS;
 
-        for (unsigned int j = 0; j < numIS; j++)
+        for (size_t jj = 0; jj < numIS; ++jj)
         {
-            NITFSegmentInfo segmentInfo = imageSegments[j];
+            NITFSegmentInfo segmentInfo = imageSegments[jj];
 
             nitf::ImageSegment imageSegment = mRecord.newImageSegment();
             nitf::ImageSubheader subheader = imageSegment.getSubheader();
@@ -135,11 +163,11 @@ void NITFWriteControl::initialize(Container* container)
             std::string iid = six::toString(dataType);
             if (dataType == DataType::COMPLEX)
             {
-                iid = FmtX("%s%03d", iid.c_str(), numIS > 1 ? j + 1 : j);
+                iid = FmtX("%s%03d", iid.c_str(), numIS > 1 ? jj + 1 : jj);
             }
             else
             {
-                iid = FmtX("%s%03d%03d", iid.c_str(), i + 1, j + 1);
+                iid = FmtX("%s%03d%03d", iid.c_str(), ii + 1, jj + 1);
             }
             subheader.getImageId().set(iid);
 
@@ -163,7 +191,7 @@ void NITFWriteControl::initialize(Container* container)
                                                              : segmentInfo.numRows,
                                   numCols > 8192 ? 0 : numCols, imode);
             subheader.getImageSyncCode().set(0);
-            if (j == 0)
+            if (jj == 0)
             {
                 // Need to attach to CCS
                 subheader.getImageAttachmentLevel().set(0);
@@ -174,7 +202,7 @@ void NITFWriteControl::initialize(Container* container)
                 subheader.getImageAttachmentLevel().set(
                                                         (nitf::Uint16)(
                                                                        info->getStartIndex()
-                                                                               + j));
+                                                                               + jj));
             }
             corners[0][0] = segmentInfo.corners[0].getLat();
             corners[0][1] = segmentInfo.corners[0].getLon();
@@ -203,44 +231,44 @@ void NITFWriteControl::initialize(Container* container)
             }
         }
     }
-    for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
+    for (size_t ii = 0; ii < mContainer->getNumData(); ++ii)
     {
         // Write out a DES
         nitf::DESegment seg = mRecord.newDataExtensionSegment();
         nitf::DESubheader subheader = seg.getSubheader();
-        std::string desid =
-                six::toString(mContainer->getData(i)->getDataType()) + "_XML";
+        const std::string desid =
+            six::toString(mContainer->getData(ii)->getDataType()) + "_XML";
         subheader.getTypeID().set(desid);
-        // BUG? Is DESVER BCS A or N?
-        subheader.getVersion().set("01");
+        subheader.getVersion().set(Constants::DES_VERSION_STR);
 
-        setDESecurity(mContainer->getData(i)->getClassification(), subheader);
+        setDESecurity(mContainer->getData(ii)->getClassification(),
+                      subheader);
     }
 
     updateFileHeaderSecurity();
 }
 
-void NITFWriteControl::setImageSecurity(six::Classification& c,
+void NITFWriteControl::setImageSecurity(const six::Classification& c,
         nitf::ImageSubheader& subheader)
 {
     //This requires a normalized name to get set correctly
-    subheader.getImageSecurityClass().set(getNITFClassification(c.level));
+    subheader.getImageSecurityClass().set(
+        getNITFClassification(c.getLevel()));
     setSecurity(c, subheader.getSecurityGroup(), "IS");
 }
 
-void NITFWriteControl::setDESecurity(six::Classification& c,
+void NITFWriteControl::setDESecurity(const six::Classification& c,
         nitf::DESubheader& subheader)
 {
-    subheader.getSecurityClass().set(getNITFClassification(c.level));
+    subheader.getSecurityClass().set(getNITFClassification(c.getLevel()));
     setSecurity(c, subheader.getSecurityGroup(), "DES");
 }
 
-void NITFWriteControl::setSecurity(six::Classification& c,
-        nitf::FileSecurity security, std::string prefix)
+void NITFWriteControl::setSecurity(const six::Classification& c,
+        nitf::FileSecurity security, const std::string& prefix)
 {
-
     std::string k;
-    Options& ops = c.fileOptions;
+    const Options& ops = c.fileOptions;
 
     k = NITFImageInfo::generateFieldKey(NITFImageInfo::CLSY, prefix);
     if (ops.hasParameter(k))
@@ -370,67 +398,30 @@ void NITFWriteControl::setSecurity(six::Classification& c,
         mLog->debug(Ctxt("Forcing NITF Classification System to [US]"));
     }
 
-    std::string code;
-    for (unsigned int j = 0; j < c.securityMarkings.size(); j++)
-    {
-        if (j)
-            code += " ";
-        code += c.securityMarkings[j];
-    }
-    str::trim(code);
-    if (!code.empty())
-    {
-        security.getCodewords().set(code);
-        k = NITFImageInfo::generateFieldKey(NITFImageInfo::CODE, prefix);
-        mLog->debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                              k.c_str(), code.c_str())));
-    }
-
-    std::string srdt;
-    if (c.level != "UNCLASSIFIED")
-    {
-        security.getDeclassificationType().set("X");
-        k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCTP, prefix);
-        mLog->debug(Ctxt(FmtX("Setting NITF [%s] as [X]", k.c_str())));
-
-        security.getClassificationAuthorityType().set("D");
-        k = NITFImageInfo::generateFieldKey(NITFImageInfo::CATP, prefix);
-        mLog->debug(Ctxt(FmtX("Setting NITF [%s] as [D]", k.c_str())));
-
-        if (c.guidance)
-        {
-            security.getClassificationAuthority().set(c.guidance->authority);
-            k = NITFImageInfo::generateFieldKey(NITFImageInfo::CAUT, prefix);
-            mLog->debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                                  k.c_str(), c.guidance->authority.c_str())));
-
-            char raw[256];
-            raw[255] = 0;
-            c.guidance->date.format("%Y%m%d", raw, 255);
-            srdt.assign(raw);
-
-            str::trim(srdt);
-        }
-    }
-    if (!srdt.empty())
-    {
-        k = NITFImageInfo::generateFieldKey(NITFImageInfo::SRDT, prefix);
-        security.getSecuritySourceDate().set(srdt);
-        mLog->debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                              k.c_str(), srdt.c_str())));
-    }
+    c.setSecurity(prefix, *mLog, security);
 }
 
-std::string NITFWriteControl::getNITFClassification(std::string level)
+std::string NITFWriteControl::getNITFClassification(const std::string& level)
 {
-    str::upper(level);
-    str::trim(level);
-    if (!level.empty())
+    // If the string starts with UCRST (after any leading whitespaces),
+    // return the correct identifier
+    for (size_t ii = 0; ii < level.length(); ++ii)
     {
-        // if the string starts with UCRST, return the correct identifier
-        std::string firstChar = level.substr(0, 1);
-        if (str::containsOnly(firstChar, "UCRST"))
-            return firstChar;
+        const char ch(::toupper(level[ii]));
+        switch (ch)
+        {
+        case 'U':
+        case 'C':
+        case 'R':
+        case 'S':
+        case 'T':
+            return std::string(1, ch);
+        case ' ':
+            // Keep going
+            break;
+        default:
+            return "";
+        }
     }
 
     // The user gets one last chance to fix this using

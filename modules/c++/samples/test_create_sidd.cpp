@@ -267,14 +267,14 @@ int main(int argc, char** argv)
 
             data->productCreation->productName = "ProductName";
             data->productCreation->productClass = "Classy";
-            data->productCreation->classification.level = "Unclassified";
+            data->productCreation->classification.classification = "U";
 
-            six::sidd::ProcessorInformation* processorInformation =
-                data->productCreation->processorInformation;
+            six::sidd::ProcessorInformation& processorInformation =
+                *data->productCreation->processorInformation;
 
-            processorInformation->application = "ProcessorName";
-            processorInformation->profile = "Profile";
-            processorInformation->site = "Ypsilanti, MI";
+            processorInformation.application = "ProcessorName";
+            processorInformation.profile = "Profile";
+            processorInformation.site = "Ypsilanti, MI";
 
             data->display->pixelType = pixelType; 
             data->display->decimationMethod = six::DecimationMethod::BRIGHTEST_PIXEL;

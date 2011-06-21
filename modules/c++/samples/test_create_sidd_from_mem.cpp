@@ -1711,26 +1711,31 @@ static const struct
  *  Data will be RBG24I
  */
 
-six::WriteControl* getWriteControl(std::string outputName)
+std::auto_ptr<six::WriteControl> getWriteControl(std::string outputName)
 {
 
     sys::Path::StringPair p = sys::Path::splitExt(outputName);
     str::lower(p.second);
 
-    six::WriteControl* writer = NULL;
+    std::auto_ptr<six::WriteControl> writer;
 
     if (p.second == ".nitf" || p.second == ".ntf")
     {
-        writer = new six::NITFWriteControl();
+        writer.reset(new six::NITFWriteControl());
         std::cout << "Selecting NITF write control" << std::endl;
     }
-#if !defined(SIX_TIFF_DISABLED)
     else
     {
-        writer = new six::sidd::GeoTIFFWriteControl();
+#if !defined(SIX_TIFF_DISABLED)
+        writer.reset(new six::sidd::GeoTIFFWriteControl());
         std::cout << "Selecting GeoTIFF write control" << std::endl;
-    }
+#else
+        throw except::Exception(
+                                Ctxt(
+                                     "Invalid writer, file extension unknown"));
 #endif
+    }
+
     return writer;
 }
 
@@ -1766,12 +1771,11 @@ six::sicd::ComplexData* getComplexData(std::string sicdXMLName)
 
 // Encapsulation of initialization for demo purposes
 void initProcessorInformation(
-                              six::sidd::ProcessorInformation* processorInformation)
+    six::sidd::ProcessorInformation& processorInformation)
 {
-    processorInformation->application = "ProcessorName";
-    processorInformation->profile = "Profile";
-    processorInformation->site = "Ypsilanti, MI";
-
+    processorInformation.application = "ProcessorName";
+    processorInformation.profile = "Profile";
+    processorInformation.site = "Ypsilanti, MI";
 }
 
 int main(int argc, char** argv)
@@ -1781,32 +1785,27 @@ int main(int argc, char** argv)
         die_printf("Usage: %s <output-file> (sicd-xml)\n", argv[0]);
     }
 
-    six::XMLControlFactory::getInstance(). addCreator(
-                                                      DataType::COMPLEX,
-                                                      new six::XMLControlCreatorT<
-                                                              six::sicd::ComplexXMLControl>());
-
-    six::XMLControlFactory::getInstance(). addCreator(
-                                                      DataType::DERIVED,
-                                                      new six::XMLControlCreatorT<
-                                                              six::sidd::DerivedXMLControl>());
-
-    // Output file name
-    std::string outputName(argv[1]);
-
-    //  Get a NITF or GeoTIFF writer
-    six::WriteControl* writer = getWriteControl(outputName);
-
-    // Is the SIO in big-endian?
-    bool needsByteSwap;
-
     try
     {
+        six::XMLControlFactory::getInstance(). addCreator(
+                                                          DataType::COMPLEX,
+                                                          new six::XMLControlCreatorT<
+                                                                  six::sicd::ComplexXMLControl>());
 
-        if (writer == NULL)
-            throw except::Exception(
-                                    Ctxt(
-                                         "Invalid writer, file extension unknown"));
+        six::XMLControlFactory::getInstance(). addCreator(
+                                                          DataType::DERIVED,
+                                                          new six::XMLControlCreatorT<
+                                                                  six::sidd::DerivedXMLControl>());
+
+        // Output file name
+        std::string outputName(argv[1]);
+
+        //  Get a NITF or GeoTIFF writer
+        const std::auto_ptr<six::WriteControl>
+            writer(getWriteControl(outputName));
+
+        // Is the SIO in big-endian?
+        bool needsByteSwap;
 
         //---------------------------------------------------------
         // We might also need to write out a SICD XML section
@@ -1814,7 +1813,7 @@ int main(int argc, char** argv)
         //---------------------------------------------------------
 
 
-        six::sicd::ComplexData* sicdData = NULL;
+        std::auto_ptr<six::sicd::ComplexData> sicdData;
 
         if (argc == 3)
         {
@@ -1832,12 +1831,13 @@ int main(int argc, char** argv)
             // probably need information from the sicdData, in which
             // case you will need the derived class
             //------------------------------------------------------
-            sicdData = (six::sicd::ComplexData*) profile.newData(options);
+            sicdData.reset(reinterpret_cast<six::sicd::ComplexData*>(
+                profile.newData(options)));
 
         }
 
         // Create a file container
-        six::Container* container = new six::Container(DataType::DERIVED);
+        six::Container container(DataType::DERIVED);
 
         // We know our input image in this example is RGB data
         six::PixelType pixelType = PixelType::RGB24I;
@@ -1862,7 +1862,7 @@ int main(int argc, char** argv)
         //---------------------------------------------------------
         // Take ownership of the SIDD data, the builder still can
         // manipulate the same pointer after this happens if you
-        // want it to, but it wont try to release it when it goes
+        // want it to, but it won't try to release it when it goes
         // out of scope if you steal() it.
         //---------------------------------------------------------
         six::sidd::DerivedData* siddData = siddBuilder.steal();
@@ -1875,11 +1875,11 @@ int main(int argc, char** argv)
         // Dummy data for example
         siddData->productCreation->productName = "ProductName";
         siddData->productCreation->productClass = "Classy";
-        siddData->productCreation->classification.level = "Unclassified";
+        siddData->productCreation->classification.classification = "U";
 
-        // Can certainly be inited in a function
+        // Can certainly be init'ed in a function
         initProcessorInformation(
-                                 siddData-> productCreation-> processorInformation);
+            *siddData-> productCreation-> processorInformation);
 
         // Or directly if preferred
         siddData->display->decimationMethod
@@ -1888,15 +1888,15 @@ int main(int argc, char** argv)
                 = MagnificationMethod::NEAREST_NEIGHBOR;
 
         //---------------------------------------------------------------
-        // We can only do this because we know its PGD in this example
-        // If you dont know which it is, you dont need to use a
+        // We can only do this because we know it's PGD in this example
+        // If you don't know which it is, you don't need to use a
         // dynamic_cast<> since there is an enum in projection for this:
         // siddData->measurement->projection->projectionType
         // In this case:
         //    == six::PLANE
         //---------------------------------------------------------------
         six::sidd::PlaneProjection* planeProjection =
-                (six::sidd::PlaneProjection*) siddData->measurement->projection;
+            (six::sidd::PlaneProjection*) siddData->measurement->projection;
 
         //--------------------------------------------------
         // This is creating a constant-term polynomial 2D
@@ -1958,29 +1958,36 @@ int main(int argc, char** argv)
         //--------------------------------------------------------
         // Since our SIDD has a parent SICD XML as well, we need
         // to add the data into the container with SIDD XML first
-        // then add the SICD data
+        // then add the SICD data.  The container takes ownership
+        // of the data.
         //--------------------------------------------------------
-        container->addData(siddData);
+        container.addData(siddData);
 
-        if (sicdData)
-            container->addData(sicdData);
+        if (sicdData.get())
+            container.addData(sicdData.release());
 
         // Init the container
-        writer->initialize(container);
+        writer->initialize(&container);
 
         // Save the file
         writer->save((UByte*) IMAGE.data, outputName);
-
-        // Delete the container (and Data)
-        delete container;
-
-        // We know it exists, since we checked already
-        delete writer;
     }
-    catch (except::Exception& e)
+    catch (const except::Exception& e)
     {
-        std::cout << e.getMessage() << std::endl;
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown exception\n";
+        return 1;
     }
 
+    return 0;
 }
 
