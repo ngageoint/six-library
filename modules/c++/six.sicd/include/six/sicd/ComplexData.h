@@ -106,7 +106,7 @@ struct ComplexData: public Data
     //!  (Optional) Params needed for computing error statistics
     ErrorStatistics* errorStatistics;
 
-    //!  (Optioanl) Params describing other related imaging collections
+    //!  (Optional) Params describing other related imaging collections
     MatchInformation* matchInformation;
 
     //!  (Optional/Choice) Polar Format Algorithm params -- if this is set,
@@ -264,29 +264,14 @@ struct ComplexData: public Data
      *  be initialized directly.
      *  Maps to SICD/CollectionInfo/Classification
      */
-    virtual Classification getClassification() const
+    virtual const Classification& getClassification() const
     {
         return collectionInformation->classification;
     }
 
-    /*!
-     *  Maps to SICD/CollectionInfo/Classification
-     */
     virtual Classification& getClassification()
     {
         return collectionInformation->classification;
-    }
-
-    /*!
-     *  Classification info is needed by the NITFReadControl/NITFWriteControl
-     *  to populate the nitf::FileSecurity.  This method is defined
-     *  differently for SICD than SIDD.  Any profile parameters for 
-     *  FileSecurity that do not conform to Classification transfer must
-     *  be initialized directly.
-     */
-    virtual void setClassification(Classification classification)
-    {
-        collectionInformation->classification = classification;
     }
 
     // Okay, little bit of a hack for now

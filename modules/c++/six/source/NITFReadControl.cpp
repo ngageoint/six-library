@@ -251,7 +251,7 @@ void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
 }
 
 void NITFReadControl::addSecurityOptions(nitf::FileSecurity security,
-        const std::string prefix, six::Options& options) const
+        const std::string& prefix, six::Options& options) const
 {
     Parameter p;
     std::string k;

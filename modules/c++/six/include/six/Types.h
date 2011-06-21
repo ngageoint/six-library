@@ -132,7 +132,7 @@ template<typename T> struct RangeAzimuth
 };
 
 
-// These are heavily used and we dont want any mistakes
+// These are heavily used and we don't want any mistakes
 typedef scene::RowCol<double> RowColDouble;
 typedef scene::RowCol<long> RowColInt;
 
@@ -182,6 +182,10 @@ struct Constants
 
     const static unsigned short GT_XML_KEY;
     const static char GT_XML_TAG[];
+
+    // DESVER is 2 byte BCS-N
+    const static sys::Int32_T DES_VERSION;
+    const static char DES_VERSION_STR[];
 
     enum
     {
@@ -239,7 +243,7 @@ struct ReferencePoint
     //!  Row col pixel location of point
     RowColDouble rowCol;
 
-    //!  (Optional) name.  Leave it blank if you dont need it
+    //!  (Optional) name.  Leave it blank if you don't need it
     std::string name;
 
     //!  Construct, init all fields at once (except optional name)
@@ -251,7 +255,7 @@ struct ReferencePoint
         ecef[1] = y;
         ecef[2] = z;
     }
-    //!  Alternate construct, sitll init all fields at once
+    //!  Alternate construct, still init all fields at once
     ReferencePoint(Vector3 xyz, RowColDouble rcd) :
         ecef(xyz), rowCol(rcd)
     {

@@ -25,7 +25,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
-#include "six/Classification.h"
+#include "six/sicd/ComplexClassification.h"
 
 namespace six
 {
@@ -86,10 +86,10 @@ struct CollectionInformation
     /*!
      *  Classification.  File control & handling and any appropriate
      *  markings.  We attempt to map this to the SIDD controls.  If
-     *  this does not work, the FileSecurity for a NITF can be retreived
+     *  this does not work, the FileSecurity for a NITF can be retrieved
      *  from the NITFWriteControl or NITFReadControl
      */
-    Classification classification;
+    ComplexClassification classification;
 
     /*!
      *  (Optional)

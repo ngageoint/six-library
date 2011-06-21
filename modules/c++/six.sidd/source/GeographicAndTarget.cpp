@@ -29,73 +29,76 @@ TargetInformation* TargetInformation::clone() const
     return new TargetInformation(*this);
 }
 
-GeographicCoverage::~GeographicCoverage()
-{
-    if (geographicInformation)
-        delete geographicInformation;
-
-    for (unsigned int i = 0; i < subRegion.size(); ++i)
-    {
-        GeographicCoverage* sr = subRegion[i];
-        delete sr;
-    }
-}
-
 GeographicInformation* GeographicInformation::clone() const
 {
     return new GeographicInformation(*this);
 }
 
 GeographicCoverage::GeographicCoverage(RegionType rt) :
-    regionType(rt), geographicInformation(NULL)
+    regionType(rt)
 {
     //! TODO: add one to all one or more types
     if (regionType == RegionType::GEOGRAPHIC_INFO)
-        geographicInformation = new GeographicInformation();
+        geographicInformation.reset(new GeographicInformation());
+}
+
+GeographicCoverage::~GeographicCoverage()
+{
+    for (size_t ii = 0; ii < subRegion.size(); ++ii)
+    {
+        delete subRegion[ii];
+    }
 }
 
 GeographicCoverage* GeographicCoverage::clone() const
 {
-    GeographicCoverage* gc = new GeographicCoverage(regionType);
+    std::auto_ptr<GeographicCoverage> gc(new GeographicCoverage(regionType));
     gc->georegionIdentifiers = georegionIdentifiers;
     gc->footprint = footprint;
-    for (unsigned int i = 0; i < subRegion.size(); ++i)
+
+    gc->subRegion.resize(subRegion.size(), NULL);
+    for (size_t ii = 0; ii < subRegion.size(); ++ii)
     {
-        GeographicCoverage* sr = subRegion[i];
-        gc->subRegion.push_back(sr->clone());
+        gc->subRegion[ii] = subRegion[ii]->clone();
     }
 
-    if (gc->geographicInformation)
+    if (geographicInformation.get())
     {
-        delete gc->geographicInformation;
-        gc->geographicInformation = NULL;
+        gc->geographicInformation.reset(geographicInformation->clone());
+    }
+    else
+    {
+        gc->geographicInformation.reset();
     }
 
-    if (geographicInformation)
-        gc->geographicInformation = geographicInformation->clone();
-    return gc;
+    GeographicCoverage* const gcPtr(gc.release());
+    return gcPtr;
 }
 
 GeographicAndTarget::~GeographicAndTarget()
 {
-    if (geographicCoverage)
-        delete geographicCoverage;
-    for (unsigned int i = 0; i < targetInformation.size(); ++i)
+    for (size_t ii = 0; ii < targetInformation.size(); ++ii)
     {
-        delete targetInformation[i];
+        delete targetInformation[ii];
     }
 }
 
 GeographicAndTarget* GeographicAndTarget::clone()
 {
-    GeographicAndTarget* g = new GeographicAndTarget(RegionType::NOT_SET);
-    if (geographicCoverage)
-        g->geographicCoverage = geographicCoverage->clone();
+    std::auto_ptr<GeographicAndTarget>
+        g(new GeographicAndTarget(RegionType::NOT_SET));
 
-    for (unsigned int i = 0; i < targetInformation.size(); ++i)
+    if (geographicCoverage.get())
     {
-        TargetInformation* t = targetInformation[i];
-        g->targetInformation.push_back(t->clone());
+        g->geographicCoverage.reset(geographicCoverage->clone());
     }
-    return g;
+
+    g->targetInformation.resize(targetInformation.size(), NULL);
+    for (size_t ii = 0; ii < targetInformation.size(); ++ii)
+    {
+        g->targetInformation[ii] = targetInformation[ii]->clone();
+    }
+
+    GeographicAndTarget* const gPtr(g.release());
+    return gPtr;
 }

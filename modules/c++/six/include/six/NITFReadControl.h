@@ -123,10 +123,11 @@ protected:
     void addImageClassOptions(nitf::ImageSubheader& s,
             six::Classification& c) const;
 
-    void addDEClassOptions(nitf::DESubheader& s, six::Classification& c) const;
+    void addDEClassOptions(nitf::DESubheader& s,
+                           six::Classification& c) const;
 
     void addSecurityOptions(nitf::FileSecurity security,
-            const std::string prefix, six::Options& options) const;
+            const std::string& prefix, six::Options& options) const;
 
     //! Resets the object internals
     void reset();

@@ -30,27 +30,21 @@ six::sidd::ProcessorInformation* six::sidd::ProcessorInformation::clone() const
     return new six::sidd::ProcessorInformation(*this);
 }
 
-six::sidd::ProductCreation::~ProductCreation()
-{
-    if (processorInformation)
-        delete processorInformation;
-
-}
-
 six::sidd::ProductCreation* six::sidd::ProductCreation::clone() const
 {
-    six::sidd::ProductCreation *pc = new six::sidd::ProductCreation();
-    if (pc->processorInformation)
-    {
-        delete pc->processorInformation;
-        pc->processorInformation = NULL;
-    }
+    std::auto_ptr<ProductCreation> pc(new six::sidd::ProductCreation());
 
-    if (processorInformation)
-        pc->processorInformation = processorInformation->clone();
+    if (processorInformation.get())
+    {
+        pc->processorInformation.reset(processorInformation->clone());
+    }
+    else
+    {
+        pc->processorInformation.reset();
+    }
 
     pc->classification = classification;
 
-    return pc;
-
+    ProductCreation* const pcPtr(pc.release());
+    return pcPtr;
 }

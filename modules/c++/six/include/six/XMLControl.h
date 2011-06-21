@@ -223,6 +223,7 @@ protected:
     void parseParameters(XMLElem paramXML, const std::string& paramName,
             std::vector<Parameter>& props);
 
+    static
     void setAttribute(XMLElem e, const std::string& name,
             const std::string& v);
 

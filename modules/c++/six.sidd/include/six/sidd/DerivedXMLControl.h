@@ -64,7 +64,7 @@ public:
      */
     virtual Data* fromXML(const xml::lite::Document* doc);
 
-protected:
+private:
     typedef xml::lite::Element* XMLElem;
 
     static const char SIDD_URI[];
@@ -81,8 +81,8 @@ protected:
 
     virtual XMLElem createLUT(const std::string& name, const LUT *l,
             XMLElem parent = NULL);
-    XMLElem
-            toXML(const ProductCreation* productCreation, XMLElem parent = NULL);
+    XMLElem toXML(const ProductCreation* productCreation, XMLElem parent = NULL);
+    XMLElem toXML(const DerivedClassification& classification, XMLElem parent = NULL);
     XMLElem toXML(const ProductProcessing* productProcessing, XMLElem parent =
             NULL);
     void fromXML(const XMLElem elem, ProductProcessing* productProcessing);
@@ -94,11 +94,13 @@ protected:
     XMLElem toXML(const GeographicAndTarget* g, XMLElem parent = NULL);
     XMLElem toXML(const GeographicCoverage* g, XMLElem parent = NULL);
     XMLElem toXML(const Measurement* measurement, XMLElem parent = NULL);
-    XMLElem
-            toXML(const ExploitationFeatures* exFeatures, XMLElem parent = NULL);
+    XMLElem toXML(const ExploitationFeatures* exFeatures,
+                  XMLElem parent = NULL);
     XMLElem toXML(const Annotation *a, XMLElem parent = NULL);
     void fromXML(const XMLElem productCreationXML,
             ProductCreation* productCreation);
+    void fromXML(const XMLElem classificationXML,
+                 DerivedClassification& classification);
     void fromXML(const XMLElem displayXML, Display* display);
     void fromXML(const XMLElem measurementXML, Measurement* measurement);
     void fromXML(const XMLElem elem, GeographicAndTarget* geographicAndTarget);
@@ -108,6 +110,42 @@ protected:
     void fromXML(const XMLElem elem, SFAGeometry *g);
     XMLElem toXML(const SFAGeometry *g, const std::string& useName,
             XMLElem parent = NULL);
+
+    static
+    void getAttributeList(const xml::lite::Attributes& attributes,
+                          const std::string& attributeName,
+                          std::vector<std::string>& values);
+
+    static
+    void getAttributeListIfExists(const xml::lite::Attributes& attributes,
+                                  const std::string& attributeName,
+                                  std::vector<std::string>& values);
+
+    static
+    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+                              const std::string& attributeName,
+                              std::string& value);
+
+    static
+    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+                              const std::string& attributeName,
+                              sys::ScopedCopyablePointer<DateTime>& date);
+
+    static
+    void setAttributeList(XMLElem element,
+                          const std::string& attributeName,
+                          const std::vector<std::string>& values,
+                          bool setIfEmpty = false);
+
+    static
+    void setAttributeIfNonEmpty(XMLElem element,
+                                const std::string& name,
+                                const std::string& value);
+
+    static
+    void setAttributeIfNonNull(XMLElem element,
+                               const std::string& name,
+                               const DateTime* value);
 };
 
 }

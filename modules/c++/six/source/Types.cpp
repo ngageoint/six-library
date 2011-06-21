@@ -39,8 +39,12 @@ std::ostream& operator<<(std::ostream& os, const Corners& corners)
 }
 */
 
-const char Constants::GT_XML_TAG[] = "XMLTag";
 const sys::Uint64_T Constants::IS_SIZE_MAX = 9999999998LL;
 const sys::Uint64_T Constants::GT_SIZE_MAX = 4294967296LL;
 const unsigned short Constants::GT_XML_KEY = 50909;
+const char Constants::GT_XML_TAG[] = "XMLTag";
 
+// TODO  SIDD spec says to mark the DES version as "01" in the NITF but
+//       IC-ISM.xsd says the DESVersion attribute is fixed at 4
+const sys::Int32_T Constants::DES_VERSION = 4;
+const char Constants::DES_VERSION_STR[] = "01";
