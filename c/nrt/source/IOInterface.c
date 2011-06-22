@@ -74,6 +74,7 @@ NRTAPI(void) nrt_IOInterface_destruct(nrt_IOInterface ** io)
             if ((*io)->data)
             {
                 (*io)->iface->destruct((*io)->data);
+                free((*io)->data);
                 (*io)->data = NULL;
             }
             (*io)->iface = NULL;
@@ -242,7 +243,7 @@ NRTPRIV(NRT_BOOL) BufferAdapter_close(NRT_DATA * data, nrt_Error * error)
 NRTPRIV(void) BufferAdapter_destruct(NRT_DATA * data)
 {
     BufferIOControl *control = (BufferIOControl *) data;
-    if (control->buf && control->ownBuf)
+    if (control && control->buf && control->ownBuf)
     {
         NRT_FREE(control->buf);
         control->buf = NULL;
