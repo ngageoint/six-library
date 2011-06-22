@@ -77,6 +77,8 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
     nitf_TRECursor cursor;
     nitf_Field *field = NULL;
     nitf_TREPrivateData *privData = NULL;
+    nitf_FieldType prevValueType;
+    nitf_FieldType fieldType;
 
     /* get out if TRE is null */
     if (!tre)
@@ -95,7 +97,7 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
     }
 
     cursor = nitf_TRECursor_begin(tre);
-    nitf_FieldType prevValueType = NITF_BINARY;
+    prevValueType = NITF_BINARY;
     while (offset < privData->length && status)
     {
         if ((iterStatus =
@@ -115,7 +117,7 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
              * binary but in reality it's based on the value type field.  this
              * will be saved off for us below.  it's also critical to set this
              * correctly so that string types don't get endian swapped. */
-            const nitf_FieldType fieldType =
+            fieldType =
                 !strncmp(cursor.tag_str, "ENGDATA", 7) ?
                     prevValueType : cursor.desc_ptr->data_type;
 
