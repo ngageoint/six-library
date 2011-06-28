@@ -70,17 +70,17 @@ void toClockwiseImpl(const std::vector<LatLonT> &in,
         angle.mIndex = ii;
 
         // Get the angle
-        angle.mAngle = ::atan(::fabs((point.getLon() - lonMean) /
-                                     (point.getLat() - latMean)));
+        angle.mAngle = ::atan(::fabs((point.getLat() - latMean) /
+                                     (point.getLon() - lonMean)));
 
         // Get it in the right quadrant
         // Since 'in' should be a convex hull of points, we don't need to
         // worry about the lat/lon ever equaling the mean lat/lon value
-        if (point.getLat() > latMean)
+        if (point.getLon() > lonMean)
         {
-            angle.mAngle += ((point.getLon() > lonMean) ? M_PI / 2 : M_PI);
+            angle.mAngle += ((point.getLat() > latMean) ? M_PI / 2 : M_PI);
         }
-        else if (point.getLon() < lonMean)
+        else if (point.getLat() < latMean)
         {
             angle.mAngle += 1.5 * M_PI;
         }
