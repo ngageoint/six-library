@@ -27,8 +27,8 @@ using namespace scene;
 scene::SceneGeometry::SceneGeometry(Vector3 arpVel, 
                                     Vector3 arpPos, 
                                     Vector3 refPos,
-                                    Vector3* row,
-                                    Vector3* col,
+                                    const Vector3* row,
+                                    const Vector3* col,
                                     bool own)
     : mVa(arpVel), mPa(arpPos), mPo(refPos), mSideOfTrack(1),
       mR(row), mC(col), mOwn(own)
@@ -87,7 +87,8 @@ scene::SceneGeometry::~SceneGeometry()
         delete mR;
 }
 
-void scene::SceneGeometry::setImageVectors(Vector3* row, Vector3* col)
+void scene::SceneGeometry::setImageVectors(const Vector3* row,
+                                           const Vector3* col)
 {
     mR = row;
     mC = col;

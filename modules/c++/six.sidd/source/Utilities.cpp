@@ -90,8 +90,8 @@ six::sidd::Utilities::getSceneGeometry(DerivedData* derived)
 }
 
 void six::sidd::Utilities::setProductValues(Poly2D timeCOAPoly,
-        PolyXYZ arpPoly, ReferencePoint ref, Vector3* row, Vector3* col,
-        RangeAzimuth<double>res, Product* product)
+        PolyXYZ arpPoly, ReferencePoint ref, const Vector3* row,
+        const Vector3* col, RangeAzimuth<double>res, Product* product)
 {
     double scpTime = timeCOAPoly(ref.rowCol.row, ref.rowCol.col);
 
@@ -103,33 +103,30 @@ void six::sidd::Utilities::setProductValues(Poly2D timeCOAPoly,
 }
 
 void six::sidd::Utilities::setProductValues(Vector3 arpVel, Vector3 arpPos,
-        Vector3 refPos, Vector3* row, Vector3* col, RangeAzimuth<double>res,
-        Product* product)
+        Vector3 refPos, const Vector3* row, const Vector3* col,
+        RangeAzimuth<double>res, Product* product)
 {
-    scene::SceneGeometry* sceneGeom = new scene::SceneGeometry(arpVel, arpPos,
-                                                               refPos);
-    sceneGeom->setImageVectors(row, col);
+    scene::SceneGeometry sceneGeom(arpVel, arpPos, refPos);
+    sceneGeom.setImageVectors(row, col);
 
     //do some setup of derived data from geometry
     if (product->north == Init::undefined<double>())
     {
-        product->north = sceneGeom->getNorthAngle();
+        product->north = sceneGeom.getNorthAngle();
     }
 
     //if (product->resolution
     //    == Init::undefined<RowColDouble>())
     {
-        sceneGeom->getGroundResolution(res.range, res.azimuth,
-                                       product->resolution.row,
-                                       product->resolution.col);
+        sceneGeom.getGroundResolution(res.range, res.azimuth,
+                                      product->resolution.row,
+                                      product->resolution.col);
     }
-
-    delete sceneGeom;
 }
 
 void six::sidd::Utilities::setCollectionValues(Poly2D timeCOAPoly,
-        PolyXYZ arpPoly, ReferencePoint ref, Vector3* row, Vector3* col,
-        Collection* collection)
+        PolyXYZ arpPoly, ReferencePoint ref, const Vector3* row,
+        const Vector3* col, Collection* collection)
 {
     double scpTime = timeCOAPoly(ref.rowCol.row, ref.rowCol.col);
 
@@ -141,11 +138,11 @@ void six::sidd::Utilities::setCollectionValues(Poly2D timeCOAPoly,
 }
 
 void six::sidd::Utilities::setCollectionValues(Vector3 arpVel, Vector3 arpPos,
-        Vector3 refPos, Vector3* row, Vector3* col, Collection* collection)
+        Vector3 refPos, const Vector3* row, const Vector3* col,
+        Collection* collection)
 {
-    scene::SceneGeometry* sceneGeom = new scene::SceneGeometry(arpVel, arpPos,
-                                                               refPos);
-    sceneGeom->setImageVectors(row, col);
+    scene::SceneGeometry sceneGeom(arpVel, arpPos, refPos);
+    sceneGeom.setImageVectors(row, col);
 
     if (collection->geometry == NULL)
     {
@@ -158,45 +155,43 @@ void six::sidd::Utilities::setCollectionValues(Vector3 arpVel, Vector3 arpPos,
 
     if (collection->geometry->slope == Init::undefined<double>())
     {
-        collection->geometry->slope = sceneGeom->getSlopeAngle();
+        collection->geometry->slope = sceneGeom.getSlopeAngle();
     }
     if (collection->geometry->squint == Init::undefined<double>())
     {
-        collection->geometry->squint = sceneGeom->getSquintAngle();
+        collection->geometry->squint = sceneGeom.getSquintAngle();
     }
     if (collection->geometry->graze == Init::undefined<double>())
     {
-        collection->geometry->graze = sceneGeom->getGrazingAngle();
+        collection->geometry->graze = sceneGeom.getGrazingAngle();
     }
     if (collection->geometry->tilt == Init::undefined<double>())
     {
-        collection->geometry->tilt = sceneGeom->getTiltAngle();
+        collection->geometry->tilt = sceneGeom.getTiltAngle();
     }
     if (collection->geometry->azimuth == Init::undefined<double>())
     {
-        collection->geometry->azimuth = sceneGeom->getAzimuthAngle();
+        collection->geometry->azimuth = sceneGeom.getAzimuthAngle();
     }
     if (collection->phenomenology->multiPath == Init::undefined<double>())
     {
-        collection->phenomenology->multiPath = sceneGeom->getMultiPathAngle();
+        collection->phenomenology->multiPath = sceneGeom.getMultiPathAngle();
     }
     if (collection->phenomenology->groundTrack == Init::undefined<double>())
     {
         collection->phenomenology->groundTrack
-                = sceneGeom->getImageAngle(sceneGeom->getGroundTrack());
+                = sceneGeom.getImageAngle(sceneGeom.getGroundTrack());
     }
 
     if (collection->phenomenology->shadow == Init::undefined<AngleMagnitude>())
     {
-        collection->phenomenology->shadow = sceneGeom->getShadow();
+        collection->phenomenology->shadow = sceneGeom.getShadow();
     }
 
     if (collection->phenomenology->layover == Init::undefined<AngleMagnitude>())
     {
-        collection->phenomenology->layover = sceneGeom->getLayover();
+        collection->phenomenology->layover = sceneGeom.getLayover();
     }
-
-    delete sceneGeom;
 }
 
 six::PolarizationType _convertDualPolarization(six::DualPolarizationType pol,
