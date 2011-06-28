@@ -47,8 +47,8 @@ public:
      *
      */
     SceneGeometry(Vector3 arpVel, Vector3 arpPos, Vector3 refPos, 
-                  Vector3* row = NULL,
-                  Vector3* col = NULL,
+                  const Vector3* row = NULL,
+                  const Vector3* col = NULL,
                   bool own = false);
 
     //!  Destroy the object.  We do not take ownership of the row/col
@@ -58,7 +58,7 @@ public:
      *  Set the image vectors.  This must be done prior to any computations
      *  involving the image geometry
      */
-    virtual void setImageVectors(Vector3* row, Vector3* col);
+    virtual void setImageVectors(const Vector3* row, const Vector3* col);
 
     /*!
      *  This produces the image row vector as it is currently stored
@@ -128,10 +128,10 @@ protected:
     int mSideOfTrack;
 
     //! Image plane row vector
-    Vector3* mR;
+    const Vector3* mR;
 
     //! Image plane column vector
-    Vector3* mC;
+    const Vector3* mC;
 
     //! boolean whether we own the row and column vectors
     bool mOwn;
