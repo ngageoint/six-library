@@ -46,38 +46,55 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
 {
     // Compute the ARP distance from the plane (ARP Z)
     Vector3 tmp(arpCOA - groundRefPoint);
-    double arpZ = tmp.dot(groundPlaneNormal);
+    const double arpZ = tmp.dot(groundPlaneNormal);
     
     // Compute the ARP ground plane nadir
-    Vector3 arpGround(arpCOA - groundPlaneNormal * arpZ);
+    const Vector3 arpGround(arpCOA - groundPlaneNormal * arpZ);
     
     // Compute the ground plane distance from the ARP nadir to
     // the circle of constant range.
-    double groundRange = sqrt(rCOA * rCOA - arpZ * arpZ);
+    if (std::abs(arpZ) > std::abs(rCOA))
+    {
+        throw except::Exception(Ctxt(
+                  "No solution: arpZ = " + str::toString(arpZ) + ", rCOA = " +
+                  str::toString(rCOA)));
+    }
+    const double groundRange = sqrt(rCOA * rCOA - arpZ * arpZ);
     
     // Compute cos and sin of the grazing angle
-    double cosGraz( groundRange / rCOA );
-    double sinGraz( arpZ / rCOA );
+    const double cosGraz( groundRange / rCOA );
+    const double sinGraz( arpZ / rCOA );
     
     // Compute the velocity components normal to the ground
     // plane and parallel to the ground plane
-    double vz = velCOA.dot(groundPlaneNormal);
+    const double vz = velCOA.dot(groundPlaneNormal);
     
-    double vmag = velCOA.norm();
+    const double vmag = velCOA.norm();
     
-    double vx = sqrt(vmag * vmag - vz * vz);
+    if (std::abs(vz) >= std::abs(vmag))
+    {
+        throw except::Exception(Ctxt(
+                  "No solution: vz = " + str::toString(vz) + ", vmag = " +
+                  str::toString(vmag)));
+    }
+    const double vx = sqrt(vmag * vmag - vz * vz);
     
     // Orient the x direction in the ground plane such that
     // vx > 0.  Compute unit vectors unitX and unitY
-    Vector3 unitX = (velCOA - groundPlaneNormal * vz) / vx;
-    Vector3 unitY = cross(groundPlaneNormal, unitX);
+    const Vector3 unitX = (velCOA - groundPlaneNormal * vz) / vx;
+    const Vector3 unitY = cross(groundPlaneNormal, unitX);
     
     // Compute the cosine of the azimuth angle to the ground
     // plane point
-    double cosAzimuth =
+    const double cosAzimuth =
         (-rDotCOA + vz * sinGraz) / (vx * cosGraz);
+    if (cosAzimuth < -1.0 || cosAzimuth > 1.0)
+    {
+        throw except::Exception(Ctxt(
+                  "No solution: cosAzimuth = " + str::toString(cosAzimuth)));
+    }
     
-    double sinAzimuth =
+    const double sinAzimuth =
         mLookDir * sqrt(1.0 - cosAzimuth * cosAzimuth);
     
     return Vector3(arpGround + unitX * groundRange * cosAzimuth +
