@@ -38,7 +38,7 @@ scene::Vector3 scene::GeographicGridGeometry::rowColToECEF(double row,
         mRefPt.getLat() - (row - mSceneCenterRow) *
         mSampleSpacingRows / 3600.,
         
-        mRefPt.getLon() - (col - mSceneCenterCol) *
+        mRefPt.getLon() + (col - mSceneCenterCol) *
         mSampleSpacingCols / 3600.,
         
         mRefPt.getAlt()
