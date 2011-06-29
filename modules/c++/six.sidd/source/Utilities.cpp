@@ -2,19 +2,20 @@
 
 using namespace six;
 
-scene::SceneGeometry*
-six::sidd::Utilities::getSceneGeometry(DerivedData* derived)
+namespace
+{
+double getCenterTime(const six::sidd::DerivedData* derived)
 {
     double centerTime;
     if (derived->measurement->projection->isMeasurable())
     {
-        six::sidd::MeasurableProjection
-                *projection =
-                        (six::sidd::MeasurableProjection*) derived->measurement->projection;
-        centerTime
-                = projection->timeCOAPoly(
-                                          projection->referencePoint.rowCol.row,
-                                          projection->referencePoint.rowCol.col);
+        const six::sidd::MeasurableProjection* const projection =
+            reinterpret_cast<const six::sidd::MeasurableProjection*>(
+                derived->measurement->projection);
+
+        centerTime = projection->timeCOAPoly(
+                        projection->referencePoint.rowCol.row,
+                        projection->referencePoint.rowCol.col);
     }
     else
     {
@@ -23,6 +24,30 @@ six::sidd::Utilities::getSceneGeometry(DerivedData* derived)
                 = derived->exploitationFeatures->collections[0]->information->collectionDuration
                         / 2;
     }
+
+    return centerTime;
+}
+}
+
+scene::SideOfTrack
+six::sidd::Utilities::getSideOfTrack(const DerivedData* derived)
+{
+    const double centerTime = getCenterTime(derived);
+
+    // compute arpPos and arpVel
+    const six::Vector3 arpPos = derived->measurement->arpPoly(centerTime);
+    const six::Vector3 arpVel =
+        derived->measurement->arpPoly.derivative()(centerTime);
+    const six::Vector3 refPt =
+        derived->measurement->projection->referencePoint.ecef;
+
+    return scene::SceneGeometry(arpVel, arpPos, refPt).getSideOfTrack();
+}
+
+scene::SceneGeometry*
+six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
+{
+    const double centerTime = getCenterTime(derived);
 
     // compute arpPos and arpVel
     six::Vector3 arpPos = derived->measurement->arpPoly(centerTime);
@@ -36,9 +61,9 @@ six::sidd::Utilities::getSceneGeometry(DerivedData* derived)
     if (derived->measurement->projection->projectionType
             == six::ProjectionType::POLYNOMIAL)
     {
-        six::sidd::PolynomialProjection
-                *projection =
-                        (six::sidd::PolynomialProjection*) derived->measurement->projection;
+        const six::sidd::PolynomialProjection* projection =
+            reinterpret_cast<const six::sidd::PolynomialProjection*>(
+                derived->measurement->projection);
 
         double cR = projection->referencePoint.rowCol.row;
         double cC = projection->referencePoint.rowCol.col;
@@ -66,8 +91,9 @@ six::sidd::Utilities::getSceneGeometry(DerivedData* derived)
     else if (derived->measurement->projection->projectionType
             == six::ProjectionType::PLANE)
     {
-        six::sidd::PlaneProjection *projection =
-                (six::sidd::PlaneProjection*) derived->measurement->projection;
+        const six::sidd::PlaneProjection* projection =
+                reinterpret_cast<const six::sidd::PlaneProjection*>(
+                    derived->measurement->projection);
 
         rowVec = new six::Vector3(projection->productPlane.rowUnitVector);
         colVec = new six::Vector3(projection->productPlane.colUnitVector);
@@ -76,15 +102,8 @@ six::sidd::Utilities::getSceneGeometry(DerivedData* derived)
     {
         throw except::Exception(
                                 Ctxt(
-                                     "Geographic and Cylindrical projectsions not yet supported"));
+                                     "Geographic and Cylindrical projections not yet supported"));
     }
-
-    //    std::cout << "Center Time: " << centerTime << std::endl;
-    //    std::cout << "ARP Center Pos: " << arpPos << std::endl;
-    //    std::cout << "ARP Center Vel: " << arpVel << std::endl;
-    //    std::cout << "Scene Center Pos: " << refPt << std::endl;
-    //    std::cout << "Row Vec: " << rowVec << std::endl;
-    //    std::cout << "Col Vec: " << colVec << std::endl;
 
     return new scene::SceneGeometry(arpVel, arpPos, refPt, rowVec, colVec, true);
 }

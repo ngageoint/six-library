@@ -11,9 +11,12 @@ namespace sidd
 class Utilities
 {
 public:
+    // TODO: This is only needed because getSceneGeometry() isn't implemented
+    //       for all projection types
+    static scene::SideOfTrack getSideOfTrack(const DerivedData* derived);
 
     static scene::SceneGeometry*
-    getSceneGeometry(DerivedData* derived);
+    getSceneGeometry(const DerivedData* derived);
 
     static void setProductValues(Poly2D timeCOAPoly, PolyXYZ arpPoly,
             ReferencePoint ref, const Vector3* row, const Vector3* col,
