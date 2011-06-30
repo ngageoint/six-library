@@ -105,20 +105,27 @@ private:
     void setupIFD(const DerivedData* data, tiff::IFD* ifd);
    
     void addGeoTIFFKeys(tiff::IFD* ifd, 
-                        const std::vector<LatLon>& corners, 
-                        unsigned long numRows, unsigned long numCols);
+                        const std::vector<LatLon>& corners,
+                        const RowColDouble& sampleSpacing);
 
-    void addTiepoint(tiff::IFDEntry* entry, double ties[6])
+    static
+    void addDouble(tiff::IFDEntry* entry, double value)
     {
-        for (unsigned int i = 0; i < 6; ++i)
-        {
-            entry->addValue(
-                tiff::TypeFactory::create((unsigned char*)&ties[i],
-                                          tiff::Const::Type::DOUBLE));
-        }
-        
+        const unsigned char* const valuePtr =
+            reinterpret_cast<unsigned char *>(&value);
+
+        entry->addValue(tiff::TypeFactory::create(valuePtr,
+                                                  tiff::Const::Type::DOUBLE));
     }
 
+    static
+    void addDouble(tiff::IFDEntry* entry, double value, size_t numValues)
+    {
+        for (size_t ii = 0; ii < numValues; ++ii)
+        {
+            addDouble(entry, value);
+        }
+    }
 };
     
 }

@@ -191,7 +191,25 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data, tiff::IFD* ifd)
     ifd->addEntry(tiff::KnownTags::COMPRESSION,
                   (unsigned short) tiff::Const::CompressionType::NO_COMPRESSION);
 
-    addGeoTIFFKeys(ifd, data->getImageCorners(), numRows, numCols);
+    // Only GGD pixel space is supported
+    if (!data->measurement || !data->measurement->projection)
+    {
+        throw except::Exception(Ctxt("Projection field must be initialized"));
+    }
+
+    if (data->measurement->projection->projectionType !=
+        ProjectionType::GEOGRAPHIC)
+    {
+        throw except::Exception(Ctxt("Only a projection type of " +
+            ProjectionType(ProjectionType::GEOGRAPHIC).toString() +
+            " is supported but the type is set to " +
+            data->measurement->projection->projectionType.toString()));
+    }
+    const GeographicProjection* const projection =
+        reinterpret_cast<GeographicProjection *>(
+            data->measurement->projection);
+
+    addGeoTIFFKeys(ifd, data->getImageCorners(), projection->sampleSpacing);
 
     // Add in the SIDD and SICD xml in a single IFDEntry
     // Each XML section is separated by a null character
@@ -282,8 +300,9 @@ void GeoTIFFWriteControl::addStringArray(tiff::IFD* ifd,
     addCharArray(ifd, tag, str.c_str(), tiffType);
 }
 
-void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd, const std::vector<
-        LatLon>& c, unsigned long numRows, unsigned long numCols)
+void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd,
+                                         const std::vector<LatLon>& c,
+                                         const RowColDouble& sampleSpacing)
 {
     ifd->addEntry("GeoKeyDirectoryTag");
     tiff::IFDEntry* entry = (*ifd)["GeoKeyDirectoryTag"];
@@ -308,53 +327,24 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd, const std::vector<
     ifd->addEntry("ModelTiepointTag");
     entry = (*ifd)["ModelTiepointTag"];
 
-    double ties[6];
-    memset(ties, 0, sizeof(double) * 6);
-
     // SIDD footprint starts at upper left corner, then clockwise
-
-    size_t numPoints = c.size();
-
-    if (numPoints > 0)
+    // Here we write only the upper left corner (this is the GGD origin)
+    if (c.empty())
     {
-        // Upper Left
-        ties[0] = 0;
-        ties[1] = 0;
-        ties[3] = c[0].getLon();
-        ties[4] = c[0].getLat();
-        addTiepoint(entry, ties);
+        throw except::Exception(Ctxt("Expected at least one image corner"));
     }
 
-    if (numPoints > 1)
-    {
-        // Upper Right
-        ties[0] = numCols;
-        ties[1] = 0;
-        ties[3] = c[1].getLon();
-        ties[4] = c[1].getLat();
-        addTiepoint(entry, ties);
-    }
+    addDouble(entry, 0.0, 3);
+    addDouble(entry, c[0].getLon());
+    addDouble(entry, c[0].getLat());
+    addDouble(entry, 0.0);
 
-    if (numPoints > 2)
-    {
-        // Lower Right
-        ties[0] = numCols;
-        ties[1] = numRows;
-        ties[3] = c[2].getLon();
-        ties[4] = c[2].getLat();
-        addTiepoint(entry, ties);
-    }
-
-    if (numPoints > 3)
-    {
-        // Lower Left
-        ties[0] = 0;
-        ties[1] = numRows;
-        ties[3] = c[3].getLon();
-        ties[4] = c[3].getLat();
-        addTiepoint(entry, ties);
-    }
-
+    // (ScaleX, ScaleY, ScaleZ)
+    ifd->addEntry("ModelPixelScaleTag");
+    entry = (*ifd)["ModelPixelScaleTag"];
+    addDouble(entry, sampleSpacing.col);
+    addDouble(entry, sampleSpacing.row);
+    addDouble(entry, 0.0);
 }
 
 #endif
