@@ -131,7 +131,16 @@ NRTPRIV(int) IOHandleAdapter_getMode(NRT_DATA * data, nrt_Error * error)
 NRTPRIV(NRT_BOOL) IOHandleAdapter_close(NRT_DATA * data, nrt_Error * error)
 {
     IOHandleControl *control = (IOHandleControl *) data;
-    nrt_IOHandle_close(control->handle);
+    if (control && control->handle && !NRT_INVALID_HANDLE(control->handle))
+    {
+        nrt_IOHandle_close(control->handle);
+
+        // Invalidate the handle.  Otherwise, if a caller closes this once,
+        // then opens another IOHandle that the OS happens to give the same
+        // underlying handle value to, then the caller closes this again,
+        // they will actually close the second IOHandle.
+        control->handle = NRT_INVALID_HANDLE_VALUE;
+    }
     return NRT_SUCCESS;
 }
 
