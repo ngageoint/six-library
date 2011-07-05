@@ -76,17 +76,18 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_read(JNIEnv * env, jobject self,
     jobject record;
     nitf_IOInterface* io;
     jclass recordClass, inputClass;
-    jfieldID fieldID;
     jmethodID methodID;
 
     /* release our hold on a pre-existing record/io */
     if (reader->record)
     {
         _ManageObject(env, (jlong)reader->record, JNI_TRUE);
+        reader->record = NULL;
     }
     if (reader->input && !reader->ownInput)
     {
         _ManageObject(env, (jlong)reader->input, JNI_TRUE);
+        reader->input = NULL;
     }
 
     /* get some classIDs */
