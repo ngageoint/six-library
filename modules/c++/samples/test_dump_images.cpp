@@ -28,14 +28,42 @@
 
 using namespace six;
 
-void writeSIOFileHeader(long numRows, long numCols, unsigned long nbpp,
+void writeSIOFileHeader(long numRows,
+                        long numCols,
+                        six::PixelType pixelType,
                         io::OutputStream& outputStream)
 {
-    int type = nbpp == 1 ? 1 : 22;
-    // Write out the SIO header first
-    sio::lite::FileHeader fileHeader(numRows, numCols, nbpp, type);
+    // Get the element type
+    int elementSize;
+    int elementType;
+    switch (pixelType)
+    {
+    case six::PixelType::RE32F_IM32F:
+        elementSize = sizeof(std::complex<float>);
+        elementType = sio::lite::FileHeader::COMPLEX_FLOAT;
+        break;
+    case six::PixelType::RE16I_IM16I:
+        elementSize = sizeof(std::complex<sys::Int16_T>);
+        elementType = sio::lite::FileHeader::COMPLEX_SIGNED;
+        break;
+    case six::PixelType::MONO8I:
+        elementSize = sizeof(sys::Int8_T);
+        elementType = sio::lite::FileHeader::SIGNED;
+        break;
+    case six::PixelType::MONO16I:
+        elementSize = sizeof(sys::Int16_T);
+        elementType = sio::lite::FileHeader::SIGNED;
+        break;
+    default:
+        throw except::Exception(Ctxt("Unexpected pixel type " +
+                                         str::toString(pixelType)));
+    }
 
-    fileHeader.to(1, outputStream);
+    // Write out the SIO header first
+    sio::lite::FileHeader(numRows,
+                          numCols,
+                          elementSize,
+                          elementType).to(1, outputStream);
 }
 
 int main(int argc, char** argv)
@@ -137,12 +165,12 @@ int main(int argc, char** argv)
         }
 
         //  now, dump the images
-        for (size_t i = 0; i < numImages; ++i)
+        for (size_t ii = 0; ii < numImages; ++ii)
         {
-            const Data* data = container->getData(i);
-            unsigned long nbpp = data->getNumBytesPerPixel();
-            unsigned long height = data->getNumRows();
-            unsigned long width = data->getNumCols();
+            const Data* const data = container->getData(ii);
+            const unsigned long nbpp = data->getNumBytesPerPixel();
+            const unsigned long height = data->getNumRows();
+            const unsigned long width = data->getNumCols();
 
             if (numRows == -1)
                 numRows = height;
@@ -150,18 +178,27 @@ int main(int argc, char** argv)
             if (numCols == -1)
                 numCols = width;
 
-            std::string filename = FmtX("%s_%d-%dx%d-%d_%d-image-%d.%s",
-                                        base.c_str(), startRow, startRow
-                                                + numRows, startCol, startCol
-                                                + numCols, nbpp, i,
-                                        isSIO ? "sio" : "raw");
+            const std::string filename =
+                FmtX("%s_%d-%dx%d-%d_%d-image-%d.%s",
+                     base.c_str(),
+                     startRow,
+                     startRow + numRows,
+                     startCol,
+                     startCol + numCols,
+                     nbpp,
+                     ii,
+                     isSIO ? "sio" : "raw");
 
-            std::string outputFile = sys::Path::joinPaths(outputDir, filename);
+            const std::string outputFile =
+                sys::Path::joinPaths(outputDir, filename);
             io::FileOutputStream outputStream(outputFile);
 
             if (isSIO)
             {
-                writeSIOFileHeader(numRows, numCols, nbpp, outputStream);
+                writeSIOFileHeader(numRows,
+                                   numCols,
+                                   data->getPixelType(),
+                                   outputStream);
             }
 
             Region region;
@@ -177,7 +214,7 @@ int main(int argc, char** argv)
                     workBuffer(new UByte[totalBytes]);
                 region.setBuffer(workBuffer.get());
 
-                reader->interleaved(region, i);
+                reader->interleaved(region, ii);
                 outputStream.write((const sys::byte*) workBuffer.get(),
                                    totalBytes);
             }
@@ -190,10 +227,12 @@ int main(int argc, char** argv)
                 const sys::ScopedArray<UByte> workBuffer(new UByte[nbpr]);
                 region.setBuffer(workBuffer.get());
 
-                for (unsigned int j = startRow; j < numRows + startRow; j++)
+                for (unsigned int jj = startRow;
+                     jj < numRows + startRow;
+                     ++jj)
                 {
-                    region.setStartRow(j);
-                    UByte* line = reader->interleaved(region, i);
+                    region.setStartRow(jj);
+                    UByte* line = reader->interleaved(region, ii);
                     outputStream.write((const sys::byte*) line, nbpr);
                 }
             }
