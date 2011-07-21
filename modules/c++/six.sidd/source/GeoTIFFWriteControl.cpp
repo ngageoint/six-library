@@ -20,6 +20,12 @@
  *
  */
 
+#include <sstream>
+
+#include "io/FileOutputStream.h"
+#include "sys/Path.h"
+#include "scene/GridGeometry.h"
+#include "scene/Utilities.h"
 #include "six/sidd/GeoTIFFWriteControl.h"
 
 #if !defined(SIX_TIFF_DISABLED)
@@ -93,7 +99,7 @@ void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile)
         const unsigned long oneRow =
             data->getNumCols() * data->getNumBytesPerPixel();
         tiff::IFD* ifd = imageWriter->getIFD();
-        setupIFD(data, ifd);
+        setupIFD(data, ifd, sys::Path::splitExt(toFile).first);
         buf.resize(oneRow);
         const unsigned long numRows = data->getNumRows();
         const unsigned long numCols = data->getNumCols();
@@ -110,7 +116,9 @@ void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile)
 
 }
 
-void GeoTIFFWriteControl::setupIFD(const DerivedData* data, tiff::IFD* ifd)
+void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
+                                   tiff::IFD* ifd,
+                                   const std::string& toFilePrefix)
 {
     PixelType pixelType = data->getPixelType();
     sys::Uint32_T numRows = (sys::Uint32_T) data->getNumRows();
@@ -205,11 +213,15 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data, tiff::IFD* ifd)
             " is supported but the type is set to " +
             data->measurement->projection->projectionType.toString()));
     }
-    const GeographicProjection* const projection =
-        reinterpret_cast<GeographicProjection *>(
+    const GeographicProjection& projection =
+        *reinterpret_cast<GeographicProjection *>(
             data->measurement->projection);
 
-    addGeoTIFFKeys(ifd, data->getImageCorners(), projection->sampleSpacing);
+    addGeoTIFFKeys(projection,
+                   data->getNumRows(),
+                   data->getNumCols(),
+                   ifd,
+                   toFilePrefix + ".tfw");
 
     // Add in the SIDD and SICD xml in a single IFDEntry
     // Each XML section is separated by a null character
@@ -229,7 +241,6 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data, tiff::IFD* ifd)
 
 void GeoTIFFWriteControl::save(BufferList& sources, const std::string& toFile)
 {
-
     tiff::FileWriter tiffWriter(toFile);
 
     tiffWriter.writeHeader();
@@ -247,7 +258,7 @@ void GeoTIFFWriteControl::save(BufferList& sources, const std::string& toFile)
         tiff::IFD* ifd = imageWriter->getIFD();
 
         DerivedData* data = (DerivedData*) mDerivedData[ii];
-        setupIFD(data, ifd);
+        setupIFD(data, ifd, sys::Path::splitExt(toFile).first);
         // Now we hack to write
 
         imageWriter->putData(sources[ii], data->getNumRows()
@@ -300,9 +311,12 @@ void GeoTIFFWriteControl::addStringArray(tiff::IFD* ifd,
     addCharArray(ifd, tag, str.c_str(), tiffType);
 }
 
-void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd,
-                                         const std::vector<LatLon>& c,
-                                         const RowColDouble& sampleSpacing)
+void GeoTIFFWriteControl::addGeoTIFFKeys(
+    const GeographicProjection& projection,
+    size_t numRows,
+    size_t numCols,
+    tiff::IFD* ifd,
+    const std::string& tfwPathname)
 {
     ifd->addEntry("GeoKeyDirectoryTag");
     tiff::IFDEntry* entry = (*ifd)["GeoKeyDirectoryTag"];
@@ -324,27 +338,88 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(tiff::IFD* ifd,
                                                   tiff::Const::Type::SHORT));
     }
 
+    // Find the lat/lon of the upper left and lower right pixel corners.
+    // Since we know this is GGD, just these two are sufficient.
+    // Note that we CAN'T use the image corners from the SIDD instead because:
+    //   a) They may be approximate and aren't for analytical use
+    //   b) They may not (and probably do not) correspond to pixel locations
+    //      (0, 0) and (numRows-1, numCols-1) since we project north up -
+    //      the image likely looks rotated.
+    const scene::GeographicGridGeometry
+        gridGeometry(projection.sampleSpacing.row,
+                     projection.sampleSpacing.col,
+                     projection.referencePoint.rowCol.row,
+                     projection.referencePoint.rowCol.col,
+                     scene::Utilities::ecefToLatLon(
+                         projection.referencePoint.ecef));
+
+    LatLon const upperLeft =
+        scene::Utilities::ecefToLatLon(gridGeometry.rowColToECEF(0, 0));
+
+    LatLon const lowerRight = scene::Utilities::ecefToLatLon(
+        gridGeometry.rowColToECEF(numRows - 1, numCols - 1));
+
+    // ModelTiePointTag = (I, J, K, X, Y, Z) where
+    // (I, J, K) is the point at location (I, J) in raster space with pixel
+    // value K
+    // (X, Y, Z) is the corresponding vector in model space
+    // In 2D model space, K and Z should be set to 0
+    // So, provide the lat/lon that corresponds to pixel (0, 0)
     ifd->addEntry("ModelTiepointTag");
     entry = (*ifd)["ModelTiepointTag"];
 
-    // SIDD footprint starts at upper left corner, then clockwise
-    // Here we write only the upper left corner (this is the GGD origin)
-    if (c.empty())
-    {
-        throw except::Exception(Ctxt("Expected at least one image corner"));
-    }
-
     addDouble(entry, 0.0, 3);
-    addDouble(entry, c[0].getLon());
-    addDouble(entry, c[0].getLat());
+    addDouble(entry, upperLeft.getLon());
+    addDouble(entry, upperLeft.getLat());
     addDouble(entry, 0.0);
 
-    // (ScaleX, ScaleY, ScaleZ)
+    // ModelPixelScaleTag specifies the size of raster pixel spacing in the
+    // model space units in the form (ScaleX, ScaleY, ScaleZ)
+    // Again for 2D, ScaleZ is 0
+    // We know the lat/lon at each corner and how many pixels we have, so this
+    // calculation is simple
     ifd->addEntry("ModelPixelScaleTag");
     entry = (*ifd)["ModelPixelScaleTag"];
-    addDouble(entry, sampleSpacing.col);
-    addDouble(entry, sampleSpacing.row);
+
+    const double scaleX((lowerRight.getLon() - upperLeft.getLon()) / numCols);
+    addDouble(entry, scaleX);
+
+    const double scaleY((upperLeft.getLat() - lowerRight.getLat()) / numRows);
+    addDouble(entry, scaleY);
+
     addDouble(entry, 0.0);
+
+    // Generate a TIFF World File.
+    // This is needed in order for the GeoTIFF to lay down in Google Earth.
+    // See http://www.omg.unb.ca/~jonnyb/processing/geotiff_tifw_format.html
+    // for a description of the format.
+    // Basically, it's a six row text file.  For the case where it's an
+    // unrotated mapsheet (like we have since we projected north up), this is
+    // simple and is all stuff we've computed above:
+    //    Row 1: x-pixel resolution (i.e. scaleX)
+    //    Row 2: 0 (non-applicable rotational component)
+    //    Row 3: 0 (non-applicable rotational component)
+    //    Row 4: y-pixel resolution (i.e. scaleY).  Negative sign indicates
+    //           that the image y-axis is positive down which is the opposite
+    //           from real world coordinates.
+    //    Row 5: longitude of pixel (0, 0)
+    //    Row 6: latitude of pixel (0, 0)
+
+    std::ostringstream ostr;
+    ostr << scaleX
+         << "\n0"
+         << "\n0"
+         << "\n" << -scaleY
+         << "\n" << upperLeft.getLon()
+         << "\n" << upperLeft.getLat()
+         << "\n";
+    const std::string tfwContents(ostr.str());
+
+    io::FileOutputStream stream(tfwPathname);
+    stream.write(reinterpret_cast<const sys::byte*>(tfwContents.c_str()),
+                 tfwContents.length());
+    stream.flush();
+    stream.close();
 }
 
 #endif

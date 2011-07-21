@@ -102,11 +102,15 @@ private:
                         const std::string &str,
                         int tiffType = tiff::Const::Type::ASCII);
 
-    void setupIFD(const DerivedData* data, tiff::IFD* ifd);
+    void setupIFD(const DerivedData* data,
+                  tiff::IFD* ifd,
+                  const std::string& toFilePrefix);
    
-    void addGeoTIFFKeys(tiff::IFD* ifd, 
-                        const std::vector<LatLon>& corners,
-                        const RowColDouble& sampleSpacing);
+    void addGeoTIFFKeys(const GeographicProjection& projection,
+                        size_t numRows,
+                        size_t numCols,
+                        tiff::IFD* ifd,
+                        const std::string& tfwPathname);
 
     static
     void addDouble(tiff::IFDEntry* entry, double value)
