@@ -27,7 +27,13 @@ namespace scene
         virtual ~GridGeometry() {}
 
         virtual Vector3 rowColToECEF(double row,
-                                     double col) = 0;
+                                     double col) const = 0;
+
+        virtual RowCol<double> ecefToRowCol(const Vector3& p3) const
+        {
+            throw except::NotImplementedException(Ctxt("ecefToRowCol not implemented for this subclass"));
+        }
+
 
     };
 
@@ -43,9 +49,9 @@ namespace scene
                            double sampleSpacingCols,
                            double sceneCenterRow,
                            double sceneCenterCol,
-                           Vector3& row,
-                           Vector3& col,
-                           Vector3& refPt) :
+                           const Vector3& row,
+                           const Vector3& col,
+                           const Vector3& refPt) :
             GridGeometry(sampleSpacingRows, sampleSpacingCols,
                          sceneCenterRow, sceneCenterCol),
             mRow(row), mCol(col),
@@ -54,7 +60,9 @@ namespace scene
         ~PlanarGridGeometry() {} 
         
         Vector3 rowColToECEF(double row,
-                             double col);
+                             double col) const;
+
+        RowCol<double> ecefToRowCol(const Vector3& p3) const;
     };
 
     class CylindricalGridGeometry : public GridGeometry
@@ -67,14 +75,14 @@ namespace scene
         double  mRs;
     public:
         CylindricalGridGeometry(double sampleSpacingRows,
-                             double sampleSpacingCols,
-                             double sceneCenterRow,
-                             double sceneCenterCol,
-                             Vector3& row,
-                             Vector3& col,
-                             Vector3& normal,
-                             Vector3& refPt,
-                             double radiusOfCurvStripmap) :
+                                double sampleSpacingCols,
+                                double sceneCenterRow,
+                                double sceneCenterCol,
+                                const Vector3& row,
+                                const Vector3& col,
+                                const Vector3& normal,
+                                const Vector3& refPt,
+                                double radiusOfCurvStripmap) :
             GridGeometry(sampleSpacingRows, sampleSpacingCols,
                          sceneCenterRow, sceneCenterCol),
             mRow(row), mCol(col), mNormal(normal),
@@ -84,7 +92,7 @@ namespace scene
         ~CylindricalGridGeometry() {}
         
         Vector3 rowColToECEF(double row,
-                             double col);
+                             double col) const;
 
     };
 
@@ -98,7 +106,7 @@ namespace scene
                                double sampleSpacingCols,
                                double sceneCenterRow,
                                double sceneCenterCol,
-                               LatLonAlt refPt) :
+                               const LatLonAlt& refPt) :
             GridGeometry(sampleSpacingRows, sampleSpacingCols,
                          sceneCenterRow, sceneCenterCol),
             mRefPt(refPt) {}
@@ -107,7 +115,7 @@ namespace scene
         ~GeographicGridGeometry() {} 
         
         Vector3 rowColToECEF(double row,
-                             double col);
+                             double col) const;
 
 
     };
