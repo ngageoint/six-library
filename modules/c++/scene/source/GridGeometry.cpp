@@ -2,7 +2,7 @@
 
 
 scene::Vector3 scene::PlanarGridGeometry::rowColToECEF(double row,
-                                                 double col)
+                                                 double col) const
 {
     scene::Vector3 rowDisp = 
         mRow * mSampleSpacingRows * (row - mSceneCenterRow);
@@ -14,8 +14,17 @@ scene::Vector3 scene::PlanarGridGeometry::rowColToECEF(double row,
     return mRefPt + rowDisp + colDisp;
 }
 
+scene::RowCol<double> scene::PlanarGridGeometry::ecefToRowCol(const scene::Vector3& p3) const
+{
+    scene::Vector3 disp(p3 - mRefPt);
+    scene::RowCol<double> rgAz(disp.dot(mRow), disp.dot(mCol));
+    return scene::RowCol<double>(rgAz.row / mSampleSpacingRows + mSceneCenterRow,
+                                 rgAz.col / mSampleSpacingCols + mSceneCenterCol);
+
+}
+
 scene::Vector3 scene::CylindricalGridGeometry::rowColToECEF(double row,
-                                                     double col)
+                                                            double col) const
 {
     double theta = mSampleSpacingCols * (col - mSceneCenterCol) / mRs;
     
@@ -32,7 +41,7 @@ scene::Vector3 scene::CylindricalGridGeometry::rowColToECEF(double row,
 }
 
 scene::Vector3 scene::GeographicGridGeometry::rowColToECEF(double row,
-                                                           double col)
+                                                           double col) const
 {
     scene::LatLonAlt lla(
         mRefPt.getLat() - (row - mSceneCenterRow) *
@@ -46,4 +55,3 @@ scene::Vector3 scene::GeographicGridGeometry::rowColToECEF(double row,
 
     return scene::Utilities::latLonToECEF(lla);
 }
-
