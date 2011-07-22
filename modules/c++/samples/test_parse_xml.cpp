@@ -248,28 +248,29 @@ const std::string KML_URI = "http://www.opengis.net/kml/2.2";
 const std::string GX_URI = "http://www.google.com/kml/ext/2.2";
 const std::string FOOTPRINT_COLOR = "ffff0000";
 
-xml::lite::Element* createPath(std::vector<six::LatLon>& coords,
-                               std::string name, std::string envelopeType =
-                                       "LineString", std::string envelopeURI =
-                                       KML_URI)
+xml::lite::Element* createPath(const six::LatLonCorners& coords,
+                               const std::string& name,
+                               const std::string& envelopeType = "LineString",
+                               const std::string& envelopeURI = KML_URI)
 {
     std::ostringstream oss;
-    if (coords.size() < 1)
-        throw except::Exception(Ctxt("Unexpected zero-length coordinates"));
-    unsigned int less1 = (unsigned int) (coords.size() - 1);
 
-    for (unsigned int i = 0; i < less1; ++i)
-    {
-        oss << coords[i].getLon() << "," << coords[i].getLat();
-        oss << " ";
-    }
-    oss << coords[less1].getLon() << "," << coords[less1].getLat();
-
-    // Repeat the first element
+    // Print out all coordinates, potentially repeating the first element
+    size_t end = six::LatLonCorners::NUM_CORNERS;
     if (envelopeType == "LinearRing")
     {
-        oss << " ";
-        oss << coords[0].getLon() << "," << coords[0].getLat();
+        ++end;
+    }
+
+    for (size_t ii = 0; ii < end; ++ii)
+    {
+        if (ii > 0)
+        {
+            oss << " ";
+        }
+        const size_t idx(ii % six::LatLonCorners::NUM_CORNERS);
+        const six::LatLon& corner(coords.getCorner(idx));
+        oss << corner.getLon() << "," << corner.getLat();
     }
 
     xml::lite::Element* coordsXML = new xml::lite::Element("coordinates",
@@ -288,31 +289,35 @@ xml::lite::Element* createPath(std::vector<six::LatLon>& coords,
     return placemarkXML;
 }
 
-xml::lite::Element* createPath(std::vector<six::LatLonAlt>& coords,
-                               std::string name, std::string envelopeType =
-                                       "LineString", std::string envelopeURI =
-                                       KML_URI)
+xml::lite::Element* createPath(const std::vector<six::LatLonAlt>& coords,
+                               const std::string& name,
+                               const std::string& envelopeType = "LineString",
+                               const std::string& envelopeURI = KML_URI)
 {
     std::ostringstream oss;
-    if (coords.size() < 1)
-        throw except::Exception(Ctxt("Unexpected zero-length coordinates"));
-    unsigned int less1 = (unsigned int) (coords.size() - 1);
 
-    for (unsigned int i = 0; i < less1; ++i)
+    // Print out all coordinates, potentially repeating the first element
+    if (coords.empty())
     {
-        oss << coords[i].getLon() << "," << coords[i].getLat() << ","
-                << coords[i].getAlt();
-        oss << " ";
+        throw except::Exception(Ctxt("Unexpected zero-length coordinates"));
     }
-    oss << coords[less1].getLon() << "," << coords[less1].getLat() << ","
-            << coords[less1].getAlt();
 
-    // Repeat the first element
+    size_t end = coords.size();
     if (envelopeType == "LinearRing")
     {
-        oss << " ";
-        oss << coords[0].getLon() << "," << coords[0].getLat() << ","
-                << coords[0].getAlt();
+        ++end;
+    }
+
+    for (size_t ii = 0; ii < end; ++ii)
+    {
+        if (ii > 0)
+        {
+            oss << " ";
+        }
+        const size_t idx(ii % coords.size());
+        const six::LatLonAlt& corner(coords[idx]);
+        oss << corner.getLon() << "," << corner.getLat() << ","
+            << corner.getAlt();
     }
 
     xml::lite::Element* coordsXML = new xml::lite::Element("coordinates",
@@ -410,7 +415,7 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir)
     docXML->addChild(createLineStyle("arpPoly", "ff00007f", 2));
 
     // Create footprint
-    std::vector<six::LatLon> corners = data->getImageCorners();
+    const six::LatLonCorners corners(data->getImageCorners());
     docXML->addChild(createPath(corners, "footprint", "LinearRing"));
 
     // Specifics to SICD

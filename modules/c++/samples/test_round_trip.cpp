@@ -52,12 +52,13 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
                            "OUTPUT", 1, 1);
 
-        cli::Results *options = parser.parse(argc, (const char**) argv);
+        const std::auto_ptr<cli::Results>
+            options(parser.parse(argc, (const char**) argv));
 
-        std::string inputFile(options->get<std::string> ("input"));
-        std::string outputFile(options->get<std::string> ("output"));
-        bool expand(options->get<bool> ("expand"));
-        std::string logFile(options->get<std::string> ("log"));
+        const std::string inputFile(options->get<std::string> ("input"));
+        const std::string outputFile(options->get<std::string> ("output"));
+        const bool expand(options->get<bool> ("expand"));
+        const std::string logFile(options->get<std::string> ("log"));
         std::string level(options->get<std::string> ("level"));
 
         str::upper(level);
@@ -125,21 +126,29 @@ int main(int argc, char** argv)
             images.push_back(imageBuffer);
         }
 
-        six::WriteControl *writer = new six::NITFWriteControl;
-        writer->setLogger(&log);
-        writer->initialize(container);
-        writer->setXMLControlRegistry(&xmlRegistry);
-        writer->save(images, outputFile);
+        six::NITFWriteControl writer;
+        writer.setLogger(&log);
+        writer.initialize(container);
+        writer.setXMLControlRegistry(&xmlRegistry);
+        writer.save(images, outputFile);
 
         for (six::BufferList::iterator it = images.begin(); it != images.end(); ++it)
             delete[] *it;
-
-        delete container;
-        delete writer;
     }
-    catch (except::Exception& ex)
+    catch (const std::exception& ex)
     {
-        std::cout << ex.toString() << std::endl;
+        std::cerr << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown exception\n";
+        return 1;
     }
     return 0;
 }

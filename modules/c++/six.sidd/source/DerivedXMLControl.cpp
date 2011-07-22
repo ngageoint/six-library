@@ -471,12 +471,12 @@ void DerivedXMLControl::fromXML(const XMLElem geographicAndTargetXML,
         //Footprint
         std::vector<XMLElem> footprintsXML;
         (*it)->getElementsByTagName("Footprint", footprintsXML);
+        ti->footprints.resize(footprintsXML.size());
+        size_t ii = 0;
         for (std::vector<XMLElem>::const_iterator it2 = footprintsXML.begin(); it2
-                != footprintsXML.end(); ++it2)
+                != footprintsXML.end(); ++it2, ++ii)
         {
-            std::vector<LatLon> fp;
-            parseFootprint(*it2, "Vertex", fp);
-            ti->footprints.push_back(fp);
+            parseFootprint(*it2, "Vertex", ti->footprints[ii]);
         }
 
         //TargetInformationExtension

@@ -44,7 +44,7 @@ struct TargetInformation
     std::vector<Parameter> identifiers;
 
     //! SIDD Footprint: target footprint as defined by polygonal shape
-    std::vector< std::vector<LatLon> > footprints;
+    std::vector<LatLonCorners> footprints;
 
     /*! 
      * (Optional) SIDD TargetInformationExtension
@@ -104,7 +104,7 @@ public:
      *  The estimated ground footprint of the product (note this is required
      *  and is used to set the image corners
      */
-    std::vector<LatLon> footprint;
+    LatLonCorners footprint;
 
     //!  SIDD SubRegion info, mutually exclusive with geographicInformation
     std::vector<GeographicCoverage*> subRegion;

@@ -158,10 +158,10 @@ protected:
             XMLElem parent = NULL);
 
     virtual XMLElem createFootprint(const std::string& name,
-            const std::string& cornerName, const std::vector<LatLon>& c,
+            const std::string& cornerName, const LatLonCorners& corners,
             XMLElem parent = NULL);
     virtual XMLElem createFootprint(const std::string& name,
-            const std::string& cornerName, const std::vector<LatLonAlt>& c,
+            const std::string& cornerName, const LatLonAltCorners& corners,
             XMLElem parent = NULL);
     XMLElem createPoly1D(const std::string& name, const std::string& uri,
             const Poly1D& poly1D, XMLElem parent = NULL);
@@ -204,9 +204,9 @@ protected:
             std::vector<LatLon>& llVec);
     void parseRangeAzimuth(XMLElem parent, RangeAzimuth<double>& value);
     virtual void parseFootprint(XMLElem footprint,
-            const std::string& cornerName, std::vector<LatLon>& value);
+            const std::string& cornerName, LatLonCorners& corners);
     virtual void parseFootprint(XMLElem footprint,
-            const std::string& cornerName, std::vector<LatLonAlt>& value);
+            const std::string& cornerName, LatLonAltCorners& corners);
 
     void parseDateTime(XMLElem element, DateTime& value);
     void parseRowColDouble(XMLElem parent, const std::string& rowName,
@@ -247,15 +247,6 @@ protected:
      * @return returns the input Element
      */
     static XMLElem require(XMLElem element, const std::string& name);
-
-    // Takes in a set of points in any order in 'in'
-    // Produces the same points in clockwise order, starting with the upper
-    // left corner, in 'out'
-    static void toClockwise(const std::vector<LatLon>& in,
-                            std::vector<LatLon>& out);
-
-    static void toClockwise(const std::vector<LatLonAlt>& in,
-                            std::vector<LatLonAlt>& out);
 };
 
 }

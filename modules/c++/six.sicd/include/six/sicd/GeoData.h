@@ -116,7 +116,7 @@ public:
      *  These corners are an approximate geographic location
      *  not intended for analytical use
      */
-    std::vector<LatLon> imageCorners;
+    LatLonCorners imageCorners;
 
     /*!
      *  (Optional) indicates the full image includes both

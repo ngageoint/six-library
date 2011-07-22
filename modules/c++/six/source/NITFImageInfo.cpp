@@ -117,16 +117,16 @@ void NITFImageInfo::computeSegmentInfo()
 
 void NITFImageInfo::computeSegmentCorners()
 {
-    std::vector < LatLon > corners = data->getImageCorners();
+    const LatLonCorners corners = data->getImageCorners();
 
     // (0, 0)
-    Vector3 icp1 = scene::Utilities::latLonToECEF(corners[0]);
+    Vector3 icp1 = scene::Utilities::latLonToECEF(corners.upperLeft);
     // (0, N)
-    Vector3 icp2 = scene::Utilities::latLonToECEF(corners[1]);
+    Vector3 icp2 = scene::Utilities::latLonToECEF(corners.upperRight);
     // (M, N)
-    Vector3 icp3 = scene::Utilities::latLonToECEF(corners[2]);
+    Vector3 icp3 = scene::Utilities::latLonToECEF(corners.lowerRight);
     // (M, 0)
-    Vector3 icp4 = scene::Utilities::latLonToECEF(corners[3]);
+    Vector3 icp4 = scene::Utilities::latLonToECEF(corners.lowerLeft);
 
     size_t numIS = imageSegments.size();
     double total = data->getNumRows() - 1.0;
@@ -142,31 +142,31 @@ void NITFImageInfo::computeSegmentCorners()
         // This requires an operator overload for scalar * vector
         ecef = wgt1 * icp1 + wgt2 * icp4;
 
-        imageSegments[i].corners[0] = scene::Utilities::ecefToLatLon(ecef);
+        imageSegments[i].corners.upperLeft =
+            scene::Utilities::ecefToLatLon(ecef);
 
         // Now do it for the first
         ecef = wgt1 * icp2 + wgt2 * icp3;
 
-        imageSegments[i].corners[1] = scene::Utilities::ecefToLatLon(ecef);
+        imageSegments[i].corners.upperRight =
+            scene::Utilities::ecefToLatLon(ecef);
     }
 
     for (i = 0; i < numIS - 1; i++)
     {
-        imageSegments[i].corners[2].setLat(
-                                           imageSegments[i + 1].corners[1].getLat());
-        imageSegments[i].corners[2].setLon(
-                                           imageSegments[i + 1].corners[1].getLon());
+        LatLonCorners& theseCorners(imageSegments[i].corners);
+        const LatLonCorners& nextCorners(imageSegments[i + 1].corners);
 
-        imageSegments[i].corners[3].setLat(
-                                           imageSegments[i + 1].corners[0].getLat());
+        theseCorners.lowerRight.setLat(nextCorners.upperRight.getLat());
+        theseCorners.lowerRight.setLon(nextCorners.upperRight.getLon());
 
-        imageSegments[i].corners[3].setLon(
-                                           imageSegments[i + 1].corners[0].getLon());
+        theseCorners.lowerLeft.setLat(nextCorners.upperLeft.getLat());
+        theseCorners.lowerLeft.setLon(nextCorners.upperLeft.getLon());
     }
 
     // This last one is cake
-    imageSegments[i].corners[2] = corners[2];
-    imageSegments[i].corners[3] = corners[3];
+    imageSegments[i].corners.lowerRight = corners.lowerRight;
+    imageSegments[i].corners.lowerLeft = corners.lowerLeft;
 
     // SHOULD WE JUST ASSUME THAT WHATEVER IS IN THE XML GeoData is what
     // we want?  For now, this makes sense

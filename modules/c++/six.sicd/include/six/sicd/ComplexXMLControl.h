@@ -136,13 +136,15 @@ protected:
 
     XMLElem createFFTSign(const std::string& name, six::FFTSign sign,
             XMLElem parent = NULL);
+    virtual
     XMLElem createFootprint(const std::string& name,
                             const std::string& cornerName,
-                            const std::vector<LatLon>& corners,
+                            const LatLonCorners& corners,
                             XMLElem parent = NULL);
+    virtual
     XMLElem createFootprint(const std::string& name,
                             const std::string& cornerName,
-                            const std::vector<LatLonAlt>& corners,
+                            const LatLonAltCorners& corners,
                             XMLElem parent = NULL);
     XMLElem createEarthModelType(const std::string& name,
                                  const EarthModelType& value,
