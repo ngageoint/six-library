@@ -149,14 +149,25 @@ template<> LatLonAlt Init::undefined<LatLonAlt>()
                   Init::undefined<double>());
 }
 
-// template<> Corners Init::undefined<Corners>()
-// {
-//     return Corners(Init::undefined<LatLon>(),
-//                         Init::undefined<LatLon>(),
-//                         Init::undefined<LatLon>(),
-//                         Init::undefined<LatLon>());
-// }
+template<> LatLonCorners Init::undefined<LatLonCorners>()
+{
+    LatLonCorners corners;
+    corners.upperLeft = Init::undefined<LatLon>();
+    corners.upperRight = Init::undefined<LatLon>();
+    corners.lowerRight = Init::undefined<LatLon>();
+    corners.lowerLeft = Init::undefined<LatLon>();
+    return corners;
+}
 
+template<> LatLonAltCorners Init::undefined<LatLonAltCorners>()
+{
+    LatLonAltCorners corners;
+    corners.upperLeft = Init::undefined<LatLonAlt>();
+    corners.upperRight = Init::undefined<LatLonAlt>();
+    corners.lowerRight = Init::undefined<LatLonAlt>();
+    corners.lowerLeft = Init::undefined<LatLonAlt>();
+    return corners;
+}
 
 template<> ReferencePoint Init::undefined<ReferencePoint>()
 {
@@ -218,11 +229,6 @@ template<> ComplexImageGridType Init::undefined<ComplexImageGridType>()
 template<> ComplexImagePlaneType Init::undefined<ComplexImagePlaneType>()
 {
     return ComplexImagePlaneType::NOT_SET;
-}
-
-template<> CornerIndex Init::undefined<CornerIndex>()
-{
-    return CornerIndex::NOT_SET;
 }
 
 template<> DataType Init::undefined<DataType>()

@@ -616,9 +616,9 @@ XMLElem ComplexXMLControl::toXML(const RadarCollection *radar, XMLElem parent)
 
         bool haveACPCorners = true;
 
-        for (unsigned int i = 0; i < area->acpCorners.size(); ++i)
+        for (size_t ii = 0; ii < LatLonAltCorners::NUM_CORNERS; ++ii)
         {
-            if (Init::isUndefined<LatLonAlt>(area->acpCorners[i]))
+            if (Init::isUndefined<LatLonAlt>(area->acpCorners.getCorner(ii)))
             {
                 haveACPCorners = false;
                 break;
@@ -2153,64 +2153,46 @@ void ComplexXMLControl::fromXML(const XMLElem rmaXML, RMA* rma)
 
 XMLElem ComplexXMLControl::createFootprint(const std::string& name,
                                            const std::string& cornerName,
-                                           const std::vector<LatLon>& corners,
+                                           const LatLonCorners& corners,
                                            XMLElem parent)
 {
-    if (corners.size() != 4)
-    {
-        throw except::Exception(Ctxt(
-                  "Expected exactly 4 corners but got " +
-                      str::toString(corners.size())));
-    }
-
     XMLElem footprint = newElement(name, parent);
 
-    std::vector<LatLon> cwCorners;
-    toClockwise(corners, cwCorners);
-
-    XMLElem vertex = createLatLon(cornerName, cwCorners[0], footprint);
+    // Write the corners in CW order
+    XMLElem vertex = createLatLon(cornerName, corners.upperLeft, footprint);
     setAttribute(vertex, "index", "1:FRFC");
 
-    vertex = createLatLon(cornerName, cwCorners[1], footprint);
+    vertex = createLatLon(cornerName, corners.upperRight, footprint);
     setAttribute(vertex, "index", "2:FRLC");
 
-    vertex = createLatLon(cornerName, cwCorners[2], footprint);
+    vertex = createLatLon(cornerName, corners.lowerRight, footprint);
     setAttribute(vertex, "index", "3:LRLC");
 
-    vertex = createLatLon(cornerName, cwCorners[3], footprint);
+    vertex = createLatLon(cornerName, corners.lowerLeft, footprint);
     setAttribute(vertex, "index", "4:LRFC");
 
     return footprint;
 }
 
-XMLElem ComplexXMLControl::createFootprint(
-                                           const std::string& name,
+XMLElem ComplexXMLControl::createFootprint(const std::string& name,
                                            const std::string& cornerName,
-                                           const std::vector<LatLonAlt>& corners,
+                                           const LatLonAltCorners& corners,
                                            XMLElem parent)
 {
-    if (corners.size() != 4)
-    {
-        throw except::Exception(Ctxt(
-                  "Expected exactly 4 corners but got " +
-                      str::toString(corners.size())));
-    }
-
     XMLElem footprint = newElement(name, parent);
 
-    std::vector<LatLonAlt> cwCorners;
-    toClockwise(corners, cwCorners);
-
-    XMLElem vertex = createLatLonAlt(cornerName, cwCorners[0], footprint);
+    // Write the corners in CW order
+    XMLElem vertex =
+        createLatLonAlt(cornerName, corners.upperLeft, footprint);
     setAttribute(vertex, "index", "1:FRFC");
 
-    vertex = createLatLonAlt(cornerName, cwCorners[1], footprint);
+    vertex = createLatLonAlt(cornerName, corners.upperRight, footprint);
     setAttribute(vertex, "index", "2:FRLC");
 
-    vertex = createLatLonAlt(cornerName, cwCorners[2], footprint);
+    vertex = createLatLonAlt(cornerName, corners.lowerRight, footprint);
     setAttribute(vertex, "index", "3:LRLC");
 
-    vertex = createLatLonAlt(cornerName, cwCorners[3], footprint);
+    vertex = createLatLonAlt(cornerName, corners.lowerLeft, footprint);
     setAttribute(vertex, "index", "4:LRFC");
 
     return footprint;

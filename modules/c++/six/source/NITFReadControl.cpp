@@ -124,18 +124,19 @@ void NITFReadControl::load(const std::string& fromFile)
             xmlParser.parse(ioAdapter);
             xml::lite::Document* doc = xmlParser.getDocument();
 
-            XMLControl *xmlControl = mXMLRegistry->newXMLControl(desid);
+            const std::auto_ptr<XMLControl>
+                xmlControl(mXMLRegistry->newXMLControl(desid));
 
-            Data* data = xmlControl->fromXML(doc);
+            std::auto_ptr<Data> data(xmlControl->fromXML(doc));
+            if (data.get() == NULL)
+            {
+                throw except::Exception(Ctxt("Unable to transform XML DES"));
+            }
 
             // Note that DE override data never should clash, there
             // is one DES per data, so its safe to do this
             addDEClassOptions(subheader, data->getClassification());
 
-            delete xmlControl;
-
-            if (!data)
-                throw except::Exception(Ctxt("Unable to transform XML DES"));
             mContainer->addData(data);
         }
     }
@@ -219,14 +220,11 @@ void NITFReadControl::load(const std::string& fromFile)
             si.firstRow = 0;
         }
         subheader.getCornersAsLatLons(corners);
-        si.corners[0].setLat(corners[0][0]);
-        si.corners[0].setLon(corners[0][1]);
-        si.corners[1].setLat(corners[1][0]);
-        si.corners[1].setLat(corners[1][1]);
-        si.corners[2].setLat(corners[2][0]);
-        si.corners[2].setLat(corners[2][1]);
-        si.corners[3].setLat(corners[3][0]);
-        si.corners[3].setLat(corners[3][1]);
+        for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
+        {
+            si.corners.getCorner(kk).setLat(corners[kk][0]);
+            si.corners.getCorner(kk).setLon(corners[kk][1]);
+        }
         currentInfo->addSegment(si);
     }
 }
@@ -421,8 +419,7 @@ UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
                                           numColsReq)));
 
     // Allocate one band
-    nitf::Uint32 *bandList = new nitf::Uint32[1];
-    bandList[0] = 0;
+    nitf::Uint32 bandList(0);
 
     nitf::Uint8* buffer = region.getBuffer();
 
@@ -440,13 +437,12 @@ UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
     sw.setStartCol(startCol);
     sw.setNumCols(numColsReq);
     sw.setNumBands(1);
-    sw.setBandList(bandList);
+    sw.setBandList(&bandList);
 
     std::vector < NITFSegmentInfo > imageSegments
             = thisImage->getImageSegments();
     size_t numIS = imageSegments.size();
     unsigned long startOff = 0;
-    nitf::Uint8** bufferPtr = new nitf::Uint8*[1];
 
     size_t i;
     for (i = 0; i < numIS; i++)
@@ -485,16 +481,15 @@ UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
         sw.setNumRows(numRowsReqSeg);
         nitf::ImageReader imageReader = mReader.newImageReader(startIndex + i);
 
-        bufferPtr[0] = &buffer[totalRead];
+        nitf::Uint8* bufferPtr = buffer + totalRead;
 
         int padded;
-        imageReader.read(sw, bufferPtr, &padded);
+        imageReader.read(sw, &bufferPtr, &padded);
         totalRead += numColsReq * nbpp * numRowsReqSeg;
         sw.setStartRow(0);
         numRowsLeft -= numRowsReqSeg;
     }
-    delete[] bufferPtr;
-    delete[] bandList;
+
     return buffer;
 }
 

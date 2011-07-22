@@ -19,8 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <algorithm>
-#include <math.h>
+
+#include <set>
 
 #include "six/XMLControl.h"
 #include "six/Types.h"
@@ -30,71 +30,6 @@
 using namespace six;
 
 typedef xml::lite::Element* XMLElem;
-
-namespace
-{
-struct IndexAndAngle
-{
-    bool operator<(const IndexAndAngle& rhs) const
-    {
-        return (mAngle < rhs.mAngle);
-    }
-
-    size_t mIndex;
-    double mAngle;
-};
-
-template <typename LatLonT>
-void toClockwiseImpl(const std::vector<LatLonT> &in,
-                     std::vector<LatLonT> &out)
-{
-    // Compute mean lat/lon
-    double latMean(0.0);
-    double lonMean(0.0);
-    for (size_t ii = 0; ii < in.size(); ++ii)
-    {
-        const LatLonT& point(in[ii]);
-        latMean += point.getLat();
-        lonMean += point.getLon();
-    }
-    latMean /= in.size();
-    lonMean /= in.size();
-
-    // Compute the angle of each point in 'in' with respect to the mean
-    std::vector<IndexAndAngle> angles(in.size());
-
-    for (size_t ii = 0; ii < in.size(); ++ii)
-    {
-        const LatLonT& point(in[ii]);
-        IndexAndAngle& angle(angles[ii]);
-        angle.mIndex = ii;
-
-        // Get the angle
-        angle.mAngle = ::atan(::fabs((point.getLat() - latMean) /
-                                     (point.getLon() - lonMean)));
-
-        // Get it in the right quadrant
-        // Since 'in' should be a convex hull of points, we don't need to
-        // worry about the lat/lon ever equaling the mean lat/lon value
-        if (point.getLon() > lonMean)
-        {
-            angle.mAngle += ((point.getLat() > latMean) ? M_PI / 2 : M_PI);
-        }
-        else if (point.getLat() < latMean)
-        {
-            angle.mAngle += 1.5 * M_PI;
-        }
-    }
-
-    // By sorting the angles, we now have the indices in clockwise order
-    std::sort(angles.begin(), angles.end());
-    out.resize(in.size());
-    for (size_t ii = 0; ii < in.size(); ++ii)
-    {
-        out[ii] = in[angles[ii].mIndex];
-    }
-}
-}
 
 XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
     mLog(NULL), mOwnLog(false)
@@ -693,45 +628,58 @@ void XMLControl::parseDecorrType(XMLElem decorrXML, DecorrType& decorrType)
 }
 
 void XMLControl::parseFootprint(XMLElem footprint,
-        const std::string& cornerName, std::vector<LatLon>& value)
+                                const std::string& cornerName,
+                                LatLonCorners &corners)
 {
-    std::vector < XMLElem > vertices;
+    std::vector<XMLElem> vertices;
     footprint->getElementsByTagName(cornerName, vertices);
 
-    value.clear();
-
-    for (unsigned int i = 0; i < vertices.size(); i++)
+    std::set<size_t> indices;
+    for (size_t ii = 0; ii < vertices.size(); ++ii)
     {
-        LatLon ll;
-        //check the index attr to know which corner it is
-        int
-                idx =
-                        str::toType<int>(
-                                         vertices[i]->getAttributes().getValue(
-                                                                               "index"));
+        const XMLElem vertex(vertices[ii]);
 
-        parseLatLon(vertices[i], ll);
-        value.push_back(ll);
+        // Check the index attr to know which corner it is
+        // This is 1-based
+        const size_t idx =
+            str::toType<size_t>(vertex->getAttributes().getValue("index"));
+        indices.insert(idx);
+
+        parseLatLon(vertices[ii], corners.getCorner(idx - 1));
+    }
+
+    // We expect to get exactly NUM_CORNERS unique lat/lon's
+    if (indices.size() != LatLonCorners::NUM_CORNERS)
+    {
+        throw except::Exception(Ctxt("Didn't get all expected corners"));
     }
 }
 
 void XMLControl::parseFootprint(XMLElem footprint,
-        const std::string& cornerName, std::vector<LatLonAlt>& value)
+                                const std::string& cornerName,
+                                LatLonAltCorners& corners)
 {
-    std::vector < XMLElem > vertices;
+    std::vector<XMLElem> vertices;
     footprint->getElementsByTagName(cornerName, vertices);
 
-    value.clear();
-
-    for (unsigned int i = 0; i < vertices.size(); i++)
+    std::set<size_t> indices;
+    for (size_t ii = 0; ii < vertices.size(); ++ii)
     {
-        LatLonAlt lla;
-        //check the index attr to know which corner it is
-        std::string idxStr = vertices[i]->getAttributes().getValue("index");
-        str::trim(idxStr);
-        int idx = str::toType<int>(idxStr.substr(0, 1));
-        parseLatLonAlt(vertices[i], lla);
-        value.push_back(lla);
+        const XMLElem vertex(vertices[ii]);
+
+        // Check the index attr to know which corner it is
+        // This is 1-based
+        const size_t idx =
+            str::toType<size_t>(vertex->getAttributes().getValue("index"));
+        indices.insert(idx);
+
+        parseLatLonAlt(vertices[ii], corners.getCorner(idx - 1));
+    }
+
+    // We expect to get exactly NUM_CORNERS unique lat/lon's
+    if (indices.size() != LatLonCorners::NUM_CORNERS)
+    {
+        throw except::Exception(Ctxt("Didn't get all expected corners"));
     }
 }
 
@@ -803,67 +751,52 @@ void XMLControl::parseRowColInt(XMLElem parent, RowColInt& rc)
 }
 
 XMLElem XMLControl::createFootprint(const std::string& name,
-        const std::string& cornerName, const std::vector<LatLon>& corners,
-        XMLElem parent)
+                                    const std::string& cornerName,
+                                    const LatLonCorners& corners,
+                                    XMLElem parent)
 {
-    if (corners.size() != 4)
-    {
-        throw except::Exception(Ctxt(
-                  "Expected exactly 4 corners but got " +
-                      str::toString(corners.size())));
-    }
-
     XMLElem footprint = newElement(name, getDefaultURI(), parent);
     xml::lite::AttributeNode node;
     node.setQName("size");
-    node.setValue(str::toString(corners.size()));
+    node.setValue(str::toString(LatLonCorners::NUM_CORNERS));
 
     footprint->getAttributes().add(node);
 
+    // Write the corners out in CW order
     node.setQName("index");
 
-    std::vector<LatLon> cwCorners;
-    toClockwise(corners, cwCorners);
-
-    for (size_t ii = 0; ii < corners.size(); ++ii)
+    for (size_t corner = 0; corner < LatLonCorners::NUM_CORNERS; ++corner)
     {
-        XMLElem vertex = createLatLon(cornerName, cwCorners[ii], footprint);
-        node.setValue(str::toString(ii));
-        vertex->getAttributes().add(node);
+        node.setValue(str::toString(corner));
+        createLatLon(cornerName,
+                     corners.getCorner(corner),
+                     footprint)->getAttributes().add(node);
     }
 
     return footprint;
 }
 
 XMLElem XMLControl::createFootprint(const std::string& name,
-        const std::string& cornerName, const std::vector<LatLonAlt>& corners,
-        XMLElem parent)
+                                    const std::string& cornerName,
+                                    const LatLonAltCorners& corners,
+                                    XMLElem parent)
 {
-    if (corners.size() != 4)
-    {
-        throw except::Exception(Ctxt(
-                  "Expected exactly 4 corners but got " +
-                      str::toString(corners.size())));
-    }
-
     XMLElem footprint = newElement(name, getDefaultURI(), parent);
     xml::lite::AttributeNode node;
     node.setQName("size");
-    node.setValue(str::toString(corners.size()));
+    node.setValue(str::toString(LatLonAltCorners::NUM_CORNERS));
 
     footprint->getAttributes().add(node);
 
+    // Write the corners out in CW order
     node.setQName("index");
 
-    std::vector<LatLonAlt> cwCorners;
-    toClockwise(corners, cwCorners);
-
-    for (size_t ii = 0; ii < corners.size(); ++ii)
+    for (size_t corner = 0; corner < LatLonCorners::NUM_CORNERS; ++corner)
     {
-        XMLElem vertex =
-            createLatLonAlt(cornerName, cwCorners[ii], footprint);
-        node.setValue(str::toString(ii));
-        vertex->getAttributes().add(node);
+        node.setValue(str::toString(corner));
+        createLatLonAlt(cornerName,
+                        corners.getCorner(corner),
+                        footprint)->getAttributes().add(node);
     }
 
     return footprint;
@@ -1377,16 +1310,4 @@ XMLElem XMLControl::toXML(const Radiometric *r, XMLElem parent)
                 six::AppliedType>(r->gammaZeroSFIncidenceMap), rXML);
     }
     return rXML;
-}
-
-void XMLControl::toClockwise(const std::vector<LatLon>& in,
-                             std::vector<LatLon>& out)
-{
-    toClockwiseImpl(in, out);
-}
-
-void XMLControl::toClockwise(const std::vector<LatLonAlt>& in,
-                             std::vector<LatLonAlt>& out)
-{
-    toClockwiseImpl(in, out);
 }

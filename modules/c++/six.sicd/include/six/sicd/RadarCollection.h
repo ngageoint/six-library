@@ -307,10 +307,9 @@ struct Area
 
     /*!
      *  SICD ACP parameter.  LLH representation of the corner point
-     *  parameters indexed x = 1,2,3,4 clockwise.  Note that six
-     *  automatically creates these indices, so the user doesnt see them.
+     *  parameters.
      */
-    std::vector<LatLonAlt> acpCorners;
+    LatLonAltCorners acpCorners;
 
     /*!
      *  (Optional) SICD Plane parameter, See AreaPlane.

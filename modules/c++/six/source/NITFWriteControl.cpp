@@ -204,18 +204,12 @@ void NITFWriteControl::initialize(Container* container)
                                                                        info->getStartIndex()
                                                                                + jj));
             }
-            corners[0][0] = segmentInfo.corners[0].getLat();
-            corners[0][1] = segmentInfo.corners[0].getLon();
 
-            corners[1][0] = segmentInfo.corners[1].getLat();
-            corners[1][1] = segmentInfo.corners[1].getLon();
-
-            corners[2][0] = segmentInfo.corners[2].getLat();
-            corners[2][1] = segmentInfo.corners[2].getLon();
-
-            corners[3][0] = segmentInfo.corners[3].getLat();
-            corners[3][1] = segmentInfo.corners[3].getLon();
-
+            for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
+            {
+                corners[kk][0] = segmentInfo.corners.getCorner(kk).getLat();
+                corners[kk][1] = segmentInfo.corners.getCorner(kk).getLon();
+            }
             subheader.setCornersFromLatLons(NITF_CORNERS_GEO, corners);
 
             setImageSecurity(info->getData()->getClassification(), subheader);

@@ -375,6 +375,89 @@ struct AmplitudeTable : public LUT
 };
 
 /*!
+ *  \struct Corners
+ *  \brief Image corners
+ *
+ *  This represents the four image corners.  It's used rather than a vector
+ *  of LatLon's to make explicit which corner is which rather than assuming
+ *  they're stored in clockwise order.
+ */
+template <typename LatLonT>
+struct Corners
+{
+    static const size_t NUM_CORNERS = 4;
+
+    //! These can be used with getCorner() below
+    static const size_t UPPER_LEFT = 0;
+    static const size_t FIRST_ROW_FIRST_COL = UPPER_LEFT;
+
+    static const size_t UPPER_RIGHT = 1;
+    static const size_t FIRST_ROW_LAST_COL = UPPER_RIGHT;
+
+    static const size_t LOWER_RIGHT = 2;
+    static const size_t LAST_ROW_LAST_COL = LOWER_RIGHT;
+
+    static const size_t LOWER_LEFT = 3;
+    static const size_t LAST_ROW_FIRST_COL = LOWER_LEFT;
+
+    //! Returns the corners in clockwise order
+    const LatLonT& getCorner(size_t idx) const
+    {
+        switch (idx)
+        {
+        case UPPER_LEFT:
+            return upperLeft;
+        case UPPER_RIGHT:
+            return upperRight;
+        case LOWER_RIGHT:
+            return lowerRight;
+        case LOWER_LEFT:
+            return lowerLeft;
+        default:
+            throw except::Exception(Ctxt("Invalid index " +
+                                             str::toString(idx)));
+        }
+    }
+
+    //! Returns the corners in clockwise order
+    LatLonT& getCorner(size_t idx)
+    {
+        switch (idx)
+        {
+        case UPPER_LEFT:
+            return upperLeft;
+        case UPPER_RIGHT:
+            return upperRight;
+        case LOWER_RIGHT:
+            return lowerRight;
+        case LOWER_LEFT:
+            return lowerLeft;
+        default:
+            throw except::Exception(Ctxt("Invalid index " +
+                                             str::toString(idx)));
+        }
+    }
+
+    LatLonT upperLeft;
+    LatLonT upperRight;
+    LatLonT lowerRight;
+    LatLonT lowerLeft;
+};
+
+template <typename LatLonT> const size_t Corners<LatLonT>::NUM_CORNERS;
+template <typename LatLonT> const size_t Corners<LatLonT>::UPPER_LEFT;
+template <typename LatLonT> const size_t Corners<LatLonT>::FIRST_ROW_FIRST_COL;
+template <typename LatLonT> const size_t Corners<LatLonT>::UPPER_RIGHT;
+template <typename LatLonT> const size_t Corners<LatLonT>::FIRST_ROW_LAST_COL;
+template <typename LatLonT> const size_t Corners<LatLonT>::LOWER_RIGHT;
+template <typename LatLonT> const size_t Corners<LatLonT>::LAST_ROW_LAST_COL;
+template <typename LatLonT> const size_t Corners<LatLonT>::LOWER_LEFT;
+template <typename LatLonT> const size_t Corners<LatLonT>::LAST_ROW_FIRST_COL;
+
+typedef Corners<LatLon> LatLonCorners;
+typedef Corners<LatLonAlt> LatLonAltCorners;
+
+/*!
  *  \class MissingRequiredException
  *  \brief Throwable related to a required element being null,
  *         undefined, etc.
@@ -382,7 +465,5 @@ struct AmplitudeTable : public LUT
 DECLARE_EXCEPTION(MissingRequired)
 
 }
-
-//std::ostream& operator<<(std::ostream& os, const six::Corners& corners);
 
 #endif

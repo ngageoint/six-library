@@ -34,11 +34,6 @@ namespace six
  */
 struct NITFSegmentInfo
 {
-
-    NITFSegmentInfo() 
-    {
-        corners.resize(4);
-    }
     //! First row in the image segment in real space
     unsigned long firstRow;
 
@@ -49,8 +44,7 @@ struct NITFSegmentInfo
     unsigned long numRows;
 
     //! The image segment corner points
-    std::vector<LatLon> corners;
-
+    LatLonCorners corners;
 };
 
 }
