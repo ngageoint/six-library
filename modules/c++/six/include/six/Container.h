@@ -117,6 +117,15 @@ public:
         return this->mData[i];
     }
 
+    /*!
+     *  Get the item leaving in the ith slot.
+     *  \return The data
+     */
+    const Data* getData(size_t i) const
+    {
+        return this->mData[i];
+    }
+
     size_t getNumData() const
     {
         return this->mData.size();
