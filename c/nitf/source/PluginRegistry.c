@@ -33,9 +33,11 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
 
 #ifndef WIN32
     static nitf_Mutex  __PluginRegistryLock = NITF_MUTEX_INIT;
+    static const char DIR_DELIMITER = '/';
 #else
     static nitf_Mutex __PluginRegistryLock = NULL;
     static long __PluginRegistryInitLock = 0;
+    static const char DIR_DELIMITER = '\\';
 #endif
 /*
  *  This function retrieves the mutex that is necessary
@@ -56,8 +58,22 @@ NITFPRIV(nitf_Mutex*) GET_MUTEX()
     }
     return &__PluginRegistryLock;
 }
+
+static
+NITF_BOOL isDelimiter(char ch)
+{
+    /* On Windows, allow either delimiter */
+    return (ch == '/' || ch == '\\');
+}
 #else
 #define GET_MUTEX() &__PluginRegistryLock
+
+static
+NITF_BOOL isDelimiter(char ch)
+{
+    /* On Unix, allow only forward slash */
+    return (ch == '/');
+}
 #endif
 
 /*
@@ -175,8 +191,7 @@ NITFPRIV(NITF_BOOL) insertPlugin(nitf_PluginRegistry * reg,
 
 NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
 {
-
-
+    size_t pathLen;
     const char *pluginEnvVar;
     
     /*  Create the registry object  */
@@ -265,12 +280,14 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     /*  
      * If the we have a user-defined path, they might not
      * have terminated their environment variable with a
-     * trailing slash.  No problem, we can do it for them  
+     * trailing delimiter.  No problem, we can do it for them.
      */
-    if (reg->path[strlen(reg->path) - 1] != '/')
+    pathLen = strlen(reg->path);
+    if (!isDelimiter(reg->path[pathLen - 1]))
     {
-        /*  Need to append / to end  */
-        strcat(reg->path, "/");
+        /*  Need to append delimiter to end  */
+        reg->path[pathLen++] = DIR_DELIMITER;
+        reg->path[pathLen++] = '\0';
     }
 
     /*  Return the object, its okay!  */
@@ -579,8 +596,8 @@ NITFPROT(NITF_BOOL)
                 int pathSize = sizePath;
                 memset(fullName, 0, NITF_MAX_PATH);
                 memcpy(fullName, dirName, sizePath);
-                if (dirName[pathSize - 1] != '/')
-                    fullName[pathSize++] = '/';
+                if (!isDelimiter(dirName[pathSize - 1]))
+                    fullName[pathSize++] = DIR_DELIMITER;
                 memcpy(fullName + pathSize, name, strlen(name));
 
                 /*  See if we have .so or .dll extensions  */
