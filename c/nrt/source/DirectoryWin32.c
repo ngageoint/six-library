@@ -90,11 +90,11 @@ NRTAPI(void) nrt_Directory_destruct(nrt_Directory ** dir)
 
 NRTAPI(NRT_BOOL) nrt_Directory_exists(const char *dir)
 {
-    DWORD what = GetFileAttributes(dir);
-    if (what == 0xFFFFFFFF)
+    const DWORD what = GetFileAttributes(dir);
+    if (what == INVALID_FILE_ATTRIBUTES)
         return NRT_FAILURE;
 
-    if (what == FILE_ATTRIBUTE_DIRECTORY)
+    if (what & FILE_ATTRIBUTE_DIRECTORY)
         return NRT_SUCCESS;
     return NRT_FAILURE;
 
