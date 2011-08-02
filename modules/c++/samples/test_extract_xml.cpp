@@ -19,6 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <string.h>
+#include <vector>
+#include <iostream>
+
 #include <import/nitf.hpp>
 #include <import/xml/lite.h>
 #include <import/io.h>
@@ -28,58 +32,100 @@
  *  xml.lite and io modules.
  */
 
-const char* USAGE =
-        "Usage: %s <siXd-image-file>\n";
+namespace
+{
+static const char* USAGE =
+    "Usage: %s [--no-pretty-print] <siXd-image-file>\n";
+}
 
 int main(int argc, char** argv)
 {
 
-    if (argc != 2)
+    if (argc != 2 && argc != 3)
         die_printf(USAGE, argv[0]);
 
-    std::string inputFile = argv[1];
-    std::string prefix = sys::Path::basename(inputFile, true);
     try
     {
+        bool prettyPrint;
+        int idx(1);
+        if (argc == 2)
+        {
+            prettyPrint = true;
+        }
+        else
+        {
+            if (::strcmp(argv[idx++], "--no-pretty-print") != 0)
+            {
+                die_printf(USAGE, argv[0]);
+            }
+            prettyPrint = false;
+        }
+        const std::string inputFile = argv[idx++];
+        const std::string prefix = sys::Path::basename(inputFile, true);
+
         nitf::Reader reader;
         nitf::IOHandle io(inputFile);
         nitf::Record record = reader.read(io);
 
-        nitf::Uint32 numDES =  record.getNumDataExtensions();
-        for (nitf::Uint32 i = 0; i < numDES; ++i)
+        const nitf::Uint32 numDES = record.getNumDataExtensions();
+        std::vector<char> xmlVec;
+        for (nitf::Uint32 ii = 0; ii < numDES; ++ii)
         {
-            nitf::DESegment segment = record.getDataExtensions()[i];
+            nitf::DESegment segment = record.getDataExtensions()[ii];
             nitf::DESubheader subheader = segment.getSubheader();
 
-            nitf::SegmentReader deReader = reader.newDEReader(i);
-            nitf::Off size = deReader.getSize();
+            nitf::SegmentReader deReader = reader.newDEReader(ii);
+            const nitf::Off size = deReader.getSize();
 
             std::string typeID = subheader.getTypeID().toString();
             str::trim(typeID);
-            std::string fileName = FmtX("%s-%s%d.xml", prefix.c_str(),
-                                        typeID.c_str(), i);
+            const std::string outputFile =
+                FmtX("%s-%s%d.xml", prefix.c_str(), typeID.c_str(), ii);
 
-            char* xml = new char[size];
+            // Read the DES
+            xmlVec.resize(size);
+            char * const xml = xmlVec.empty() ? NULL : &xmlVec[0];
             deReader.read(xml, size);
 
+            // Parse it with xml::lite
+            // Do this even if we're not pretty-printing to ensure the DES is
+            // truly valid XML
             io::ByteStream bs;
             bs.write(xml, size);
 
             xml::lite::MinidomParser parser;
             parser.parse(bs);
 
-            xml::lite::Document* doc = parser.getDocument();
-
-
-            io::FileOutputStream fos(fileName);
-            doc->getRootElement()->prettyPrint(fos);
+            io::FileOutputStream fos(outputFile);
+            if (prettyPrint)
+            {
+                // Pretty print it
+                parser.getDocument()->getRootElement()->prettyPrint(fos);
+            }
+            else
+            {
+                // Just dump out the raw contents
+                fos.write(reinterpret_cast<sys::byte*>(xml), size);
+            }
             fos.close();
-            delete [] xml;
         }
         io.close();
     }
-    catch (except::Exception& e)
+    catch (const except::Exception& e)
     {
-        std::cout << e.getMessage() << std::endl;
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown exception" << std::endl;
+        return 1;
+    }
+
+    return 0;
 }
