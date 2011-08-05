@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <sys/ScopedArray.h>
+#include <mem/ScopedArray.h>
 #include <import/cli.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
@@ -210,7 +210,7 @@ int main(int argc, char** argv)
             {
                 region.setNumRows(numRows);
                 unsigned long totalBytes = nbpp * width * height;
-                const sys::ScopedArray<UByte>
+                const mem::ScopedArray<UByte>
                     workBuffer(new UByte[totalBytes]);
                 region.setBuffer(workBuffer.get());
 
@@ -224,7 +224,7 @@ int main(int argc, char** argv)
                 unsigned long nbpr = nbpp * width;
 
                 // allocate this so we can reuse it for each row
-                const sys::ScopedArray<UByte> workBuffer(new UByte[nbpr]);
+                const mem::ScopedArray<UByte> workBuffer(new UByte[nbpr]);
                 region.setBuffer(workBuffer.get());
 
                 for (unsigned int jj = startRow;

@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <sys/ScopedArray.h>
+#include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
 
@@ -244,7 +244,7 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     }
     else
     {
-        const sys::ScopedArray<six::UByte>
+        const mem::ScopedArray<six::UByte>
             scopedRowBuf(new six::UByte[numColsTotal * elemSize]);
         six::UByte* const rowBuf(scopedRowBuf.get());
 
