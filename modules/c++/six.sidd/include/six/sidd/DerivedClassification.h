@@ -22,7 +22,7 @@
 #ifndef __SIX_DERIVED_CLASSIFICATION_H__
 #define __SIX_DERIVED_CLASSIFICATION_H__
 
-#include "sys/ScopedCopyablePointer.h"
+#include "mem/ScopedCopyablePtr.h"
 #include "six/Types.h"
 #include "six/Classification.h"
 
@@ -57,22 +57,22 @@ public:
 
     //! Extensible parameters used to support profile-specific needs related
     //  to product security.
-    std::vector<std::string>             securityExtensions;
+    std::vector<std::string>         securityExtensions;
 
     //! The version number of the DES. Should there be multiple specified in
     //  an instance document the one at the root node is the one that will
     //  apply to the entire document.
-    sys::Int32_T                         desVersion;
+    sys::Int32_T                     desVersion;
 
     //! Used to designate what date the document was produced on. This is the
     //  date that will be used by various constraint rules to determine if the
     //  document meets all the business rules.
-    DateTime                             createDate;
+    DateTime                         createDate;
 
     //! An indicator of what optional ISM rule sets the documents complies
     //  with. This allows sytems to know that the document claims compliance
     //  with these rule sets and they should be enforced.
-    std::vector<std::string>             compliesWith;
+    std::vector<std::string>         compliesWith;
 
     // 'classification' and 'ownerProducer' are required
     // The rest are all optional
@@ -81,100 +81,100 @@ public:
     //  to an information resource or portion within the domain of classified
     //  national security information.
     //  VALID VALUES: 'R', 'C', 'S', 'TS', or 'U'
-    std::string                          classification;
+    std::string                      classification;
 
     //! One or more indicators identifying the national government or
     //  international organization that have purview over the classification
     //  marking of an information resource or portion therein.
-    std::vector<std::string>             ownerProducer;
+    std::vector<std::string>         ownerProducer;
 
     //! One or more indicators identifying sensitive compartmented information
     //  control system(s).
-    std::vector<std::string>             sciControls;
+    std::vector<std::string>         sciControls;
 
     //! One or more indicators identifying the defense or intelligence
     //  programs for which special access is required.
-    std::vector<std::string>             sarIdentifier;
+    std::vector<std::string>         sarIdentifier;
 
     //! One or more indicators identifying the expansion or limitation on the
     //  distribution of information.
-    std::vector<std::string>             disseminationControls;
+    std::vector<std::string>         disseminationControls;
 
     //! One or more indicators identifying information which qualifies as
     //  foreign government information for which the source(s) of the
     //  information is not concealed.
     //  The attribute can indicate that the source of information of foreign
     //  origin is unknown.
-    std::vector<std::string>             fgiSourceOpen;
+    std::vector<std::string>         fgiSourceOpen;
 
     //! A single indicator that information qualifies as foreign government
     //  information for which the source(s) of the information must be
     //  concealed.
-    std::vector<std::string>             fgiSourceProtected;
+    std::vector<std::string>         fgiSourceProtected;
 
     //! One or more indicators identifying the country or countries and/or
     //  international organization(s) to which classified information may be
     //  released based on the determination of an originator in accordance
     //  with established foreign disclosure procedures.
-    std::vector<std::string>             releasableTo;
+    std::vector<std::string>         releasableTo;
 
     //! One or more indicators of the expansion or limitation on the
     //  distribution of an information resource or portion within the domain
     //  of information originating from non-intelligence components.
-    std::vector<std::string>             nonICMarkings;
+    std::vector<std::string>         nonICMarkings;
 
     //! The identity, by name or personal identifier, and position title of
     // the original classification authority for a resource.
-    std::string                          classifiedBy;
+    std::string                      classifiedBy;
 
     //! A description of the reasons that the classification of this element
     //  is more restrictive than a simple roll-up of the sub elements would
     //  result in.
-    std::string                          compilationReason;
+    std::string                      compilationReason;
 
     //! The identity, by name or personal identifier, of the derivative
     //  classification authority.
-    std::string                          derivativelyClassifiedBy;
+    std::string                      derivativelyClassifiedBy;
 
     //! One or more reason indicators or explanatory text describing the basis
     //  for an original classification decision.
-    std::string                          classificationReason;
+    std::string                      classificationReason;
 
     //! One or more indicators of the expansion or limitation on the
     //  distribution of an information resource or portion within the domain
     //  of information originating from non-US components.
-    std::vector<std::string>             nonUSControls;
+    std::vector<std::string>         nonUSControls;
 
     //! A citation of the authoritative source or reference to multiple
     //  sources of the classification markings used in a classified resource.
-    std::string                          derivedFrom;
+    std::string                      derivedFrom;
 
     //! A specific year, month, and day upon which the information shall be
     //  automatically declassified if not properly exempted from automatic
     //  declassification.
-    sys::ScopedCopyablePointer<DateTime> declassDate;
+    mem::ScopedCopyablePtr<DateTime> declassDate;
 
     //! A description of an event upon which the information shall be
     //  automatically declassified if not properly exempted from automatic
     //  declassification.
-    std::string                          declassEvent;
+    std::string                      declassEvent;
 
     //! A single indicator describing an exemption to the nominal 25-year
     //  point for automatic declassification.  This element is used in
     //  conjunction with the declassDate or declassEvent.
-    std::string                          declassException;
+    std::string                      declassException;
 
     //! A declassification marking of a source document that causes the
     //  current, derivative document to be exempted from automatic
     //  declassification.  This is always used in conjunction with the
     //  exemptedSourceDate.
-    std::string                          exemptedSourceType;
+    std::string                      exemptedSourceType;
 
     //! A specific year, month, and day of publication or release of a source
     //  document, or the most recent source document, that was itself marked
     //  with a declassification constraint.  This is always used in
     // conjunction with the exemptedSourceType.
-    sys::ScopedCopyablePointer<DateTime> exemptedSourceDate;
+    mem::ScopedCopyablePtr<DateTime> exemptedSourceDate;
 
 private:
     static

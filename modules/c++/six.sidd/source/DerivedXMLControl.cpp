@@ -93,7 +93,7 @@ void DerivedXMLControl::getAttributeIfExists(
 void DerivedXMLControl::getAttributeIfExists(
     const xml::lite::Attributes& attributes,
     const std::string& attributeName,
-    sys::ScopedCopyablePointer<DateTime>& date)
+    mem::ScopedCopyablePtr<DateTime>& date)
 {
     if (attributes.contains(attributeName))
     {
