@@ -231,11 +231,11 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
     tiff::IFDEntry* const xmlEntry = (*ifd)[Constants::GT_XML_TAG];
 
-    addStringArray(xmlEntry, toXMLString(data));
+    xmlEntry->addValues(toXMLString(data));
 
     for (size_t jj = 0; jj < mComplexData.size(); ++jj)
     {
-        addStringArray(xmlEntry, toXMLString(mComplexData[jj]));
+        xmlEntry->addValues(toXMLString(mComplexData[jj]));
     }
 }
 
@@ -270,21 +270,6 @@ void GeoTIFFWriteControl::save(BufferList& sources, const std::string& toFile)
     tiffWriter.close();
 }
 
-void GeoTIFFWriteControl::addCharArray(tiff::IFDEntry *entry,
-                                       const char *cstr,
-                                       int tiffType)
-{
-    const unsigned char * const cstr_ptr =
-        reinterpret_cast<const unsigned char *>(cstr);
-
-    for (size_t ii = 0, len = ::strlen(cstr) + 1; ii < len; ++ii)
-    {
-        std::auto_ptr<tiff::TypeInterface>
-            value(tiff::TypeFactory::create(cstr_ptr + ii, tiffType));
-        entry->addValue(value);
-    }
-}
-
 void GeoTIFFWriteControl::addCharArray(tiff::IFD* ifd, const std::string &tag,
                                        const char* cstr, int tiffType)
 {
@@ -293,14 +278,7 @@ void GeoTIFFWriteControl::addCharArray(tiff::IFD* ifd, const std::string &tag,
         ifd->addEntry(tag);
     }
 
-    addCharArray((*ifd)[tag.c_str()], cstr, tiffType);
-}
-
-void GeoTIFFWriteControl::addStringArray(tiff::IFDEntry* entry,
-                                         const std::string &str,
-                                         int tiffType)
-{
-    addCharArray(entry, str.c_str(), tiffType);
+    (*ifd)[tag]->addValues(cstr, tiffType);
 }
 
 void GeoTIFFWriteControl::addStringArray(tiff::IFD* ifd,
@@ -308,7 +286,12 @@ void GeoTIFFWriteControl::addStringArray(tiff::IFD* ifd,
                                          const std::string &str,
                                          int tiffType)
 {
-    addCharArray(ifd, tag, str.c_str(), tiffType);
+    if (!ifd->exists(tag.c_str()))
+    {
+        ifd->addEntry(tag);
+    }
+
+    (*ifd)[tag]->addValues(str, tiffType);
 }
 
 void GeoTIFFWriteControl::addGeoTIFFKeys(
@@ -368,10 +351,10 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     ifd->addEntry("ModelTiepointTag");
     entry = (*ifd)["ModelTiepointTag"];
 
-    addDouble(entry, 0.0, 3);
-    addDouble(entry, upperLeft.getLon());
-    addDouble(entry, upperLeft.getLat());
-    addDouble(entry, 0.0);
+    entry->addValue(0.0, 3);
+    entry->addValue(upperLeft.getLon());
+    entry->addValue(upperLeft.getLat());
+    entry->addValue(0.0);
 
     // ModelPixelScaleTag specifies the size of raster pixel spacing in the
     // model space units in the form (ScaleX, ScaleY, ScaleZ)
@@ -382,12 +365,12 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     entry = (*ifd)["ModelPixelScaleTag"];
 
     const double scaleX((lowerRight.getLon() - upperLeft.getLon()) / numCols);
-    addDouble(entry, scaleX);
+    entry->addValue(scaleX);
 
     const double scaleY((upperLeft.getLat() - lowerRight.getLat()) / numRows);
-    addDouble(entry, scaleY);
+    entry->addValue(scaleY);
 
-    addDouble(entry, 0.0);
+    entry->addValue(0.0);
 
     // Generate a TIFF World File.
     // This is needed in order for the GeoTIFF to lay down in Google Earth.
