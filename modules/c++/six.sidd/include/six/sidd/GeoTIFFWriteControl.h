@@ -81,20 +81,10 @@ public:
 
 private:
     static
-    void addCharArray(tiff::IFDEntry *entry,
-                      const char *cstr,
-                      int tiffType);
-
-    static
     void addCharArray(tiff::IFD* ifd,
                       const std::string &tag,
                       const char* cstr,
                       int tiffType = tiff::Const::Type::ASCII);
-
-    static
-    void addStringArray(tiff::IFDEntry* entry,
-                        const std::string &str,
-                        int tiffType = tiff::Const::Type::ASCII);
     
     static
     void addStringArray(tiff::IFD* ifd,
@@ -111,25 +101,6 @@ private:
                         size_t numCols,
                         tiff::IFD* ifd,
                         const std::string& tfwPathname);
-
-    static
-    void addDouble(tiff::IFDEntry* entry, double value)
-    {
-        const unsigned char* const valuePtr =
-            reinterpret_cast<unsigned char *>(&value);
-
-        entry->addValue(tiff::TypeFactory::create(valuePtr,
-                                                  tiff::Const::Type::DOUBLE));
-    }
-
-    static
-    void addDouble(tiff::IFDEntry* entry, double value, size_t numValues)
-    {
-        for (size_t ii = 0; ii < numValues; ++ii)
-        {
-            addDouble(entry, value);
-        }
-    }
 };
     
 }
