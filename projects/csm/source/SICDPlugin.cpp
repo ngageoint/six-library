@@ -37,7 +37,7 @@ using namespace sicd_plugin;
 const char SICDPlugin::PLUGIN_NAME[] = "SICDPlugin";
 const char SICDPlugin::SENSOR_MODEL_NAME[] = "SICD_SENSOR_MODEL";
 const char SICDPlugin::MANUFACTURER[] = "GDAIS";
-const char SICDPlugin::RELEASE_DATE[] = "20110729";
+const char SICDPlugin::RELEASE_DATE[] = "20110822";
 const int SICDPlugin::VERSION = 1;
 
 const SICDPlugin SICDPlugin::mPlugin;
