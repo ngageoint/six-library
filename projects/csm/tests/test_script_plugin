@@ -1,0 +1,14 @@
+./results/test/test_script_plugin.csv
+
+makeModelListFromISD SICD_SENSOR_MODEL SICDPlugin
+
+findPlugin SICDPlugin
+
+getNSensorModels
+getList
+getPluginName
+getReleaseDate
+getManufacturer
+#getCollectionIdentifier
+
+Exit

@@ -1,0 +1,13 @@
+./results/test/test_script_sicd.csv
+
+vtsRead21ISDFile projects/csm/tests/data/20080828RS020700_105224_S_SM0807_N02W078_193R__C01_QHH_0104_SICD.nitf
+makeModelListFromISD SICD_SENSOR_MODEL SICDPlugin
+constructSensorModelFromISD SICD_SENSOR_MODEL
+getImageSize 
+getImageIdentifier
+getSensorIdentifier
+getCollectionIdentifier
+getReferenceDateAndTime
+getReferencePoint
+
+Exit
