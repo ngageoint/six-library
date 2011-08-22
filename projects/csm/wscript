@@ -1,0 +1,54 @@
+import sys
+
+set_options = distclean = configure = lambda x: None
+
+def build(bld):
+    env = bld.env_of_name(bld.env['VARIANT'] or 'default')
+
+
+    pEnv = env.copy()
+
+    # do this here for windows only
+    if sys.platform=='win32':
+        if pEnv['shlib_PATTERN'].startswith('lib'):
+            pEnv['shlib_PATTERN'] = pEnv['shlib_PATTERN'][3:]
+    # do this here for unix only
+    else:
+        if not pEnv['shlib_PATTERN'].startswith('lib'):
+            pEnv['shlib_PATTERN'] = 'lib' + pEnv['shlib_PATTERN']
+
+    #build the external lib
+    bld.new_task_gen('cxx', 'shlib', includes='include',
+                     source='source/TSMPlugin.cpp',
+                     target='TSMAPI', name='TSMAPI',
+                     export_incdirs='include',
+                     env=pEnv.copy(), path=bld.path.find_dir('external/TSM'),
+                     install_path='${PREFIX}/lib')
+    
+    #build VTS
+    exe = bld.new_task_gen('cxx', 'program', includes='include ../TSM/include',
+                           target='vts', name='vts',
+                           libpath=[bld.bldnode.abspath() + '/' + bld.lst_variants[0] + '/projects/csm/external/TSM'],
+                           libs='TSMAPI',
+                           uselib_local='',
+                           uselib='CSTD CRUN DL',
+                           env=pEnv.copy(),
+                           path=bld.path.find_dir('external/VTS'),
+                           install_path='${PREFIX}/bin')
+    exe.find_sources_in_dirs('source')
+
+    pEnv2 = env.copy()
+    if pEnv2['shlib_PATTERN'].startswith('lib'):
+        pEnv2['shlib_PATTERN'] = pEnv2['shlib_PATTERN'][3:]
+    
+    #build our plugin
+    lib = bld.new_task_gen('cxx', 'shlib', includes='include external/TSM/include',
+                           target='SICDPlugin[U]', name='SICDPlugin',
+                           libpath=[bld.bldnode.abspath() + '/' + bld.lst_variants[0] + '/projects/csm/external/TSM'],
+                           libs='TSMAPI',
+                           export_incdirs='include',
+                           env=pEnv2.copy(), path=bld.path,
+                           uselib_local='six.sicd-c++',
+                           install_path='${PREFIX}/share/CSM/plugins')
+    lib.find_sources_in_dirs('source')
+    

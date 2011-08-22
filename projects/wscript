@@ -1,0 +1,13 @@
+DIRS = 'csm'
+
+def set_options(opt):
+    opt.sub_options(DIRS)
+
+def configure(conf):
+    conf.sub_config(DIRS)
+
+def build(bld):
+    bld.add_subdirs(DIRS)
+
+def distclean(context):
+    context.recurse(DIRS)
