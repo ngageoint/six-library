@@ -209,7 +209,7 @@ int main(int argc, char** argv)
         {
             const double row(str::toType<double>(argv[2]));
             const double col(str::toType<double>(argv[3]));
-            converter.imageToGround(0, 0);
+            converter.imageToGround(row, col);
         }
         else
         {
