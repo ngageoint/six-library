@@ -344,7 +344,7 @@ NITFPRIV(NITF_CLEVEL) checkRGBLUTImage(nitf_ImageSubheader* subhdr,
                         sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
-    if (memcmp(subhdr->NITF_IC->raw, "NC", 2) != 0 ||
+    if (memcmp(subhdr->NITF_IC->raw, "NC", 2) != 0 &&
         memcmp(subhdr->NITF_IC->raw, "NM", 2) != 0)
         clevel = NITF_CLEVEL_09;
 
