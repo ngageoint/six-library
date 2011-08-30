@@ -74,8 +74,9 @@ public:
 
     // NOTE: The methods below are used just for testing - the underlying C
     //       function pointers are what need to be modified if you want to
-    //       have your own source behavior.  Inherit from GenericSource in
-    //       order to do this.
+    //       have your own source behavior.  If you want your own behavior
+    //       for reads, use a RowSource and provide an appropriate
+    //       RowSourceCallback.
 
     /*!
      *  Read from the DataSource into the buffer

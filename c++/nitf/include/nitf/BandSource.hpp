@@ -121,52 +121,6 @@ private:
     nitf::Uint32 mBand, mNumRows, mNumCols, mPixelSize;
 };
 
-/*!
- *  \class GenericSource
- *  \brief  The C++ wrapper for a generic DataSource.
- *
- *  Inherit from this class and implement readImpl(), getSizeImpl(), and
- *  setSizeImpl() in order to get the desired behavior.
- *
- *  TODO: This API seems half-baked.  It would be more intuitive for
- *  DataSource to provide read(), getSize(), and setSize() methods (like it
- *  does) and then have the above Source's implement these methods to provide
- *  their behavior.  However, this is not possible if we're going to re-use
- *  the C implementation for them (since we don't have access to the C
- *  functions in BandSource.c).  Should we just move to this API and
- *  re-implement the C functions (they're pretty simple)?
- */
-class GenericSource : public BandSource
-{
-public:
-    GenericSource() throw(nitf::NITFException);
-
-protected:
-    virtual void readImpl(char* buf, nitf::Off size) = 0;
-
-    virtual nitf::Off getSizeImpl() = 0;
-
-    virtual void setSizeImpl(nitf::Off size) = 0;
-
-private:
-    static
-    NITF_BOOL readInterface(NITF_DATA* data,
-                            char* buf,
-                            nitf_Off size,
-                            nitf_Error* error);
-
-    static
-    void destructInterface(NITF_DATA* data);
-
-    static
-    nitf_Off getSizeInterface(NITF_DATA* data, nitf_Error* error);
-
-    static
-    NITF_BOOL setSizeInterface(NITF_DATA* data,
-                               nitf_Off size,
-                               nitf_Error* error);
-};
-
 }
 
 #endif
