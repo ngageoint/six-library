@@ -54,35 +54,209 @@ nitf::FileSource::FileSource(const std::string& fname,
     setManaged(false);
 }
 
-
-extern "C" NITF_BOOL __nitf_RowSource_nextRow(void *algorithm,
-                                              nitf_Uint32 band,
-                                              NITF_DATA * buffer,
-                                              nitf_Error * error)
+nitf::RowSource::RowSource(
+    nitf::Uint32 band,
+    nitf::Uint32 numRows,
+    nitf::Uint32 numCols,
+    nitf::Uint32 pixelSize,
+    nitf::RowSourceCallback *callback) throw(nitf::NITFException)
+    : mBand(band),
+      mNumRows(numRows),
+      mNumCols(numCols),
+      mPixelSize(pixelSize)
 {
-    nitf::RowSourceCallback *callback = (nitf::RowSourceCallback*)algorithm;
+    setNative(nitf_RowSource_construct(callback,
+                                       &RowSource::nextRow,
+                                       mBand,
+                                       mNumRows,
+                                       mNumCols * mPixelSize,
+                                       &error));
+    setManaged(false);
+}
+
+NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
+                                   nitf_Uint32 band,
+                                   NITF_DATA* buffer,
+                                   nitf_Error* error)
+{
+    nitf::RowSourceCallback* const callback =
+        reinterpret_cast<nitf::RowSourceCallback*>(algorithm);
+    if (!callback)
+    {
+        nitf_Error_init(error, "Null pointer reference",
+                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        return NITF_FAILURE;
+    }
+
     try
     {
         callback->nextRow(band, (char*)buffer);
     }
-    catch(nitf::NITFException &ex)
+    catch (const except::Exception &ex)
     {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                ex.getMessage().c_str());
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_READING_FROM_FILE,
+                         ex.getMessage().c_str());
         return NITF_FAILURE;
     }
+    catch (const std::exception &ex)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_READING_FROM_FILE,
+                         ex.what());
+        return NITF_FAILURE;
+    }
+    catch (...)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_READING_FROM_FILE,
+                         "Unknown exception");
+        return NITF_FAILURE;
+    }
+
     return NITF_SUCCESS;
 }
 
-
-
-nitf::RowSource::RowSource(nitf::Uint32 band, nitf::Uint32 numRows,
-        nitf::Uint32 numCols, nitf::Uint32 pixelSize, nitf::RowSourceCallback *callback) throw(nitf::NITFException)
-    : mBand(band), mNumRows(numRows), mNumCols(numCols), mPixelSize(pixelSize)
+nitf::GenericSource::GenericSource() throw(nitf::NITFException)
 {
-    setNative(nitf_RowSource_construct((void*)callback, &__nitf_RowSource_nextRow,
-                                       mBand, mNumRows,
-                                       mNumCols * mPixelSize, &error));
+    static nitf_IDataSource genericSource =
+        {
+            &GenericSource::readInterface,
+            &GenericSource::destructInterface,
+            &GenericSource::getSizeInterface,
+            &GenericSource::setSizeInterface
+        };
+
+    nitf_BandSource *bandSource = reinterpret_cast<nitf_BandSource*>(
+        NITF_MALLOC(sizeof(nitf_BandSource)));
+    if (!bandSource)
+    {
+        throw nitf::NITFException(Ctxt("Out of memory"));
+    }
+
+    bandSource->data = this;
+    bandSource->iface = &genericSource;
+
+    setNative(bandSource);
     setManaged(false);
 }
 
+NITF_BOOL nitf::GenericSource::readInterface(NITF_DATA* data,
+                                             char* buf,
+                                             nitf_Off size,
+                                             nitf_Error* error)
+{
+    GenericSource* const source = reinterpret_cast<GenericSource*>(data);
+    if (!source)
+    {
+        nitf_Error_init(error, "Null pointer reference",
+                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        return NITF_FAILURE;
+    }
+
+    try
+    {
+        source->readImpl(buf, size);
+    }
+    catch (const except::Exception& ex)
+    {
+        nitf_Error_init(error,
+                        ex.getMessage().c_str(),
+                        NITF_CTXT,
+                        NITF_ERR_READING_FROM_FILE);
+        return NITF_FAILURE;
+    }
+    catch (const std::exception& ex)
+    {
+        nitf_Error_init(error,
+                        ex.what(),
+                        NITF_CTXT,
+                        NITF_ERR_READING_FROM_FILE);
+        return NITF_FAILURE;
+    }
+    catch (...)
+    {
+        nitf_Error_init(error, "Unknown exception", NITF_CTXT, NITF_ERR_READING_FROM_FILE);
+        return NITF_FAILURE;
+    }
+
+    return NITF_SUCCESS;
+}
+
+void nitf::GenericSource::destructInterface(NITF_DATA* )
+{
+}
+
+nitf_Off nitf::GenericSource::getSizeInterface(NITF_DATA* data,
+                                               nitf_Error* error)
+{
+    GenericSource* const source = reinterpret_cast<GenericSource*>(data);
+    if (!source)
+    {
+        return 0;
+    }
+
+    try
+    {
+        return source->getSizeImpl();
+    }
+    catch (const except::Exception& ex)
+    {
+        nitf_Error_init(error,
+                        ex.getMessage().c_str(),
+                        NITF_CTXT,
+                        NITF_ERR_UNK);
+        return -1;
+    }
+    catch (const std::exception& ex)
+    {
+        nitf_Error_init(error, ex.what(), NITF_CTXT, NITF_ERR_UNK);
+        return -1;
+    }
+    catch (...)
+    {
+        nitf_Error_init(error, "Unknown exception", NITF_CTXT, NITF_ERR_UNK);
+        return -1;
+    }
+}
+
+NITF_BOOL nitf::GenericSource::setSizeInterface(NITF_DATA* data,
+                                                nitf_Off size,
+                                                nitf_Error* error)
+{
+    GenericSource* const source = reinterpret_cast<GenericSource*>(data);
+    if (!source)
+    {
+        nitf_Error_init(error, "Null pointer reference",
+                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        return NITF_FAILURE;
+    }
+
+    try
+    {
+        source->setSizeImpl(size);
+    }
+    catch (const except::Exception& ex)
+    {
+        nitf_Error_init(error,
+                        ex.getMessage().c_str(),
+                        NITF_CTXT,
+                        NITF_ERR_UNK);
+        return NITF_FAILURE;
+    }
+    catch (const std::exception& ex)
+    {
+        nitf_Error_init(error, ex.what(), NITF_CTXT, NITF_ERR_UNK);
+        return NITF_FAILURE;
+    }
+    catch (...)
+    {
+        nitf_Error_init(error, "Unknown exception", NITF_CTXT, NITF_ERR_UNK);
+        return NITF_FAILURE;
+    }
+
+    return NITF_SUCCESS;
+}

@@ -72,21 +72,26 @@ public:
     {
     }
 
+    // NOTE: The methods below are used just for testing - the underlying C
+    //       function pointers are what need to be modified if you want to
+    //       have your own source behavior.  Inherit from GenericSource in
+    //       order to do this.
+
     /*!
      *  Read from the DataSource into the buffer
      *  \param buf  The buffer
      *  \param size  The size of the buffer
      */
-    virtual void read(char * buf, nitf::Off size) throw (nitf::NITFException);
+    void read(char * buf, nitf::Off size) throw (nitf::NITFException);
 
     /*
      * Returns the size of the DataSource, in bytes
      */
-    virtual nitf::Off getSize();
+    nitf::Off getSize();
 
-    virtual void setSize(nitf::Off size);
+    void setSize(nitf::Off size);
 
-protected    :
+protected:
     nitf_Error error;
 };
 
