@@ -23,6 +23,8 @@
 #include <import/nitf.hpp>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <memory>
 
 /*
  * This test tests the round-trip process of taking an input NITF
@@ -31,12 +33,16 @@
  * of how users can write the image data to their NITF file
  */
 
+namespace
+{
 class RowStreamer : public nitf::RowSourceCallback
 {
 public:
-    RowStreamer(nitf::Uint32 band, nitf::Uint32 numCols,
-            nitf::ImageReader reader) throw (nitf::NITFException) :
-        mReader(reader), mBand(band)
+    RowStreamer(nitf::Uint32 band,
+                nitf::Uint32 numCols,
+                nitf::ImageReader reader) throw (nitf::NITFException) :
+        mReader(reader),
+        mBand(band)
     {
         mWindow.setStartRow(0);
         mWindow.setNumRows(1);
@@ -46,10 +52,6 @@ public:
         mWindow.setNumBands(1);
     }
 
-    ~RowStreamer()
-    {
-    }
-
     void nextRow(nitf::Uint32 band, char* buffer) throw (nitf::NITFException)
     {
         int padded;
@@ -57,11 +59,41 @@ public:
         mWindow.setStartRow(mWindow.getStartRow() + 1);
     }
 
-protected:
+private:
     nitf::ImageReader mReader;
     nitf::SubWindow mWindow;
     nitf::Uint32 mBand;
 };
+
+// RAII for managing a list of RowStreamer's
+class RowStreamers
+{
+public:
+    ~RowStreamers()
+    {
+        for (size_t ii = 0; ii < mStreamers.size(); ++ii)
+        {
+            delete mStreamers[ii];
+        }
+    }
+
+    nitf::RowSourceCallback* add(nitf::Uint32 band,
+                                 nitf::Uint32 numCols,
+                                 nitf::ImageReader reader)
+    {
+        std::auto_ptr<RowStreamer>
+            streamer(new RowStreamer(band, numCols, reader));
+        RowStreamer* const streamerPtr(streamer.get());
+
+        mStreamers.push_back(streamerPtr);
+        streamer.release();
+        return streamerPtr;
+    }
+
+private:
+    std::vector<RowStreamer*> mStreamers;
+};
+}
 
 int main(int argc, char **argv)
 {
@@ -94,6 +126,7 @@ int main(int argc, char **argv)
 
         nitf::ListIterator iter = record.getImages().begin();
         nitf::Uint32 num = record.getNumImages();
+        RowStreamers rowStreamers;
         for (nitf::Uint32 i = 0; i < num; i++)
         {
             //for the images, we'll use a RowSource for streaming
@@ -113,7 +146,7 @@ int main(int argc, char **argv)
             for (nitf::Uint32 i = 0; i < nBands; i++)
             {
                 nitf::RowSource rowSource(i, nRows, nCols, pixelSize,
-                                          new RowStreamer(i, nCols, iReader));
+                                          rowStreamers.add(i, nCols, iReader));
                 iSource.addBand(rowSource);
             }
             iWriter.attachSource(iSource);
