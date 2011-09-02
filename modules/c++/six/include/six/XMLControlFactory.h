@@ -22,6 +22,8 @@
 #ifndef __SIX_XML_CONTROL_FACTORY_H__
 #define __SIX_XML_CONTROL_FACTORY_H__
 
+#include <memory>
+
 #include <import/mt.h>
 
 #include "six/XMLControl.h"
@@ -82,35 +84,65 @@ template <typename T> struct XMLControlCreatorT : public XMLControlCreator
  */
 class XMLControlRegistry
 {
-    std::map<DataType, XMLControlCreator*> mRegistry;
 public:
     //!  Constructor
     XMLControlRegistry()
     {
     }
 
-    inline void addCreator(DataType dataType, XMLControlCreator* creator)
-    {
-        mRegistry[ dataType ] = creator;
-    }
-
     //!  Destructor
     virtual ~XMLControlRegistry();
 
-
-    XMLControl* newXMLControl(DataType dataType) const;
+    void addCreator(const std::string& identifier,
+                    std::auto_ptr<XMLControlCreator> creator);
 
     /*!
-     *  Static method to create a new XMLControl from a string.  
-     *  The only currently valid strings are "SICD_XML" and "SIDD_XML"
+     * Takes ownership of creator
+     */
+    void addCreator(const std::string& identifier,
+                    XMLControlCreator* creator)
+    {
+        std::auto_ptr<XMLControlCreator> scopedCreator(creator);
+        addCreator(identifier, scopedCreator);
+    }
+
+    void addCreator(DataType dataType,
+                    std::auto_ptr<XMLControlCreator> creator)
+    {
+        addCreator(dataTypeToString(dataType), creator);
+    }
+
+    /*!
+     * Takes ownership of creator
+     */
+    void addCreator(DataType dataType, XMLControlCreator* creator)
+    {
+        std::auto_ptr<XMLControlCreator> scopedCreator(creator);
+        addCreator(dataType, scopedCreator);
+    }
+
+    /*!
+     *  Method to create a new XMLControl from a string.
      *  The created control must be deleted by the caller.
      *
      *  \param identifier what type of XML control to create.
      *  \return XMLControl the produced XML bridge
      *
      */
-    XMLControl* newXMLControl(std::string identifier) const;
+    XMLControl* newXMLControl(const std::string& identifier) const;
 
+    XMLControl* newXMLControl(DataType dataType) const
+    {
+        return newXMLControl(dataTypeToString(dataType));
+    }
+
+private:
+    static
+    std::string dataTypeToString(DataType dataType);
+
+private:
+    typedef std::map<std::string, XMLControlCreator*> RegistryMap;
+    RegistryMap mRegistry;
 };
 
 /*!
