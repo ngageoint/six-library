@@ -763,11 +763,12 @@ XMLElem XMLControl::createFootprint(const std::string& name,
     footprint->getAttributes().add(node);
 
     // Write the corners out in CW order
+    // The index attribute is 1-based
     node.setQName("index");
 
     for (size_t corner = 0; corner < LatLonCorners::NUM_CORNERS; ++corner)
     {
-        node.setValue(str::toString(corner));
+        node.setValue(str::toString(corner + 1));
         createLatLon(cornerName,
                      corners.getCorner(corner),
                      footprint)->getAttributes().add(node);
@@ -789,11 +790,12 @@ XMLElem XMLControl::createFootprint(const std::string& name,
     footprint->getAttributes().add(node);
 
     // Write the corners out in CW order
+    // The index attribute is 1-based
     node.setQName("index");
 
     for (size_t corner = 0; corner < LatLonCorners::NUM_CORNERS; ++corner)
     {
-        node.setValue(str::toString(corner));
+        node.setValue(str::toString(corner + 1));
         createLatLonAlt(cornerName,
                         corners.getCorner(corner),
                         footprint)->getAttributes().add(node);
