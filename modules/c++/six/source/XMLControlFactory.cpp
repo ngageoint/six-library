@@ -19,51 +19,68 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <memory>
+
+#include <str/Convert.h>
 
 #include "six/XMLControlFactory.h"
 
 using namespace six;
 
-XMLControl* XMLControlRegistry::newXMLControl(DataType dataType) const
-{
-    std::map<DataType, XMLControlCreator*>::const_iterator it;
-    it = mRegistry.find(dataType);
-    if (it == mRegistry.end())
-    {
-        throw except::NoSuchKeyException(Ctxt(FmtX("No data class creator %d",
-                                                           (int) dataType)));
-    }
-    return it->second->newXMLControl();
-}
-
-//!  Destructor
 XMLControlRegistry::~XMLControlRegistry()
 {
-    for (std::map<DataType, XMLControlCreator*>::iterator p = mRegistry.begin(); p
-            != mRegistry.end(); ++p)
+    for (RegistryMap::const_iterator iter = mRegistry.begin();
+         iter != mRegistry.end();
+         ++iter)
     {
-        if (p->second)
-            delete p->second;
+        delete iter->second;
     }
-    mRegistry.clear();
-
 }
 
-XMLControl* XMLControlRegistry::newXMLControl(std::string identifier) const
+void XMLControlRegistry::addCreator(const std::string& identifier,
+                                    std::auto_ptr<XMLControlCreator> creator)
 {
-    DataType dataType;
-
-    if (identifier == "SICD_XML")
+    const RegistryMap::iterator iter(mRegistry.lower_bound(identifier));
+    if (iter == mRegistry.end() || iter->first != identifier)
     {
-        dataType = DataType::COMPLEX;
+        // Don't have an entry for this identifier yet
+        mRegistry.insert(iter,
+                         RegistryMap::value_type(identifier, creator.get()));
     }
-    else if (identifier == "SIDD_XML")
+    else if (iter->second != creator.get())
     {
-        dataType = DataType::DERIVED;
+        // We already have an entry for this identifier - overwrite it
+        delete iter->second;
+        iter->second = creator.get();
     }
 
-    return newXMLControl(dataType);
+    // At this point we've taken ownership
+    creator.release();
+}
+
+XMLControl*
+XMLControlRegistry::newXMLControl(const std::string& identifier) const
+{
+    RegistryMap::const_iterator const iter = mRegistry.find(identifier);
+    if (iter == mRegistry.end())
+    {
+        throw except::NoSuchKeyException(Ctxt("No data class creator " +
+                                              identifier));
+    }
+    return iter->second->newXMLControl();
+}
+
+std::string XMLControlRegistry::dataTypeToString(DataType dataType)
+{
+    switch (dataType)
+    {
+    case DataType::COMPLEX:
+        return "SICD_XML";
+    case DataType::DERIVED:
+        return "SIDD_XML";
+    default:
+        throw except::Exception(Ctxt("Invalid data type " +
+                                         str::toString(dataType)));
+    }
 }
 
 char* six::toXMLCharArray(const Data* data,
