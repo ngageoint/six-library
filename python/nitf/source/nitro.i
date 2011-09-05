@@ -238,6 +238,7 @@
 %include "nitf/SubWindow.h"
 %include "nitf/DownSampler.h"
 %include "nitf/SegmentSource.h"
+%include "nitf/BandInfo.h"
 
 %clearnodefaultctor;   // Re-enable default constructors
 

@@ -1378,6 +1378,10 @@ def nitf_FileSource_construct(*args):
   return _nitropy.nitf_FileSource_construct(*args)
 nitf_FileSource_construct = _nitropy.nitf_FileSource_construct
 
+def nitf_FileSource_constructFile(*args):
+  return _nitropy.nitf_FileSource_constructFile(*args)
+nitf_FileSource_constructFile = _nitropy.nitf_FileSource_constructFile
+
 def nitf_IOSource_construct(*args):
   return _nitropy.nitf_IOSource_construct(*args)
 nitf_IOSource_construct = _nitropy.nitf_IOSource_construct
@@ -2635,9 +2639,68 @@ def nitf_SegmentFileSource_construct(*args):
   return _nitropy.nitf_SegmentFileSource_construct(*args)
 nitf_SegmentFileSource_construct = _nitropy.nitf_SegmentFileSource_construct
 
+def nitf_SegmentFileSource_constructIO(*args):
+  return _nitropy.nitf_SegmentFileSource_constructIO(*args)
+nitf_SegmentFileSource_constructIO = _nitropy.nitf_SegmentFileSource_constructIO
+
 def nitf_SegmentReaderSource_construct(*args):
   return _nitropy.nitf_SegmentReaderSource_construct(*args)
 nitf_SegmentReaderSource_construct = _nitropy.nitf_SegmentReaderSource_construct
+NITF_IREPBAND_SZ = _nitropy.NITF_IREPBAND_SZ
+NITF_ISUBCAT_SZ = _nitropy.NITF_ISUBCAT_SZ
+NITF_IFC_SZ = _nitropy.NITF_IFC_SZ
+NITF_IMFLT_SZ = _nitropy.NITF_IMFLT_SZ
+NITF_NLUTS_SZ = _nitropy.NITF_NLUTS_SZ
+NITF_NELUT_SZ = _nitropy.NITF_NELUT_SZ
+class nitf_BandInfo(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_BandInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, nitf_BandInfo, name)
+    def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined")
+    __repr__ = _swig_repr
+    __swig_setmethods__["representation"] = _nitropy.nitf_BandInfo_representation_set
+    __swig_getmethods__["representation"] = _nitropy.nitf_BandInfo_representation_get
+    if _newclass:representation = _swig_property(_nitropy.nitf_BandInfo_representation_get, _nitropy.nitf_BandInfo_representation_set)
+    __swig_setmethods__["subcategory"] = _nitropy.nitf_BandInfo_subcategory_set
+    __swig_getmethods__["subcategory"] = _nitropy.nitf_BandInfo_subcategory_get
+    if _newclass:subcategory = _swig_property(_nitropy.nitf_BandInfo_subcategory_get, _nitropy.nitf_BandInfo_subcategory_set)
+    __swig_setmethods__["imageFilterCondition"] = _nitropy.nitf_BandInfo_imageFilterCondition_set
+    __swig_getmethods__["imageFilterCondition"] = _nitropy.nitf_BandInfo_imageFilterCondition_get
+    if _newclass:imageFilterCondition = _swig_property(_nitropy.nitf_BandInfo_imageFilterCondition_get, _nitropy.nitf_BandInfo_imageFilterCondition_set)
+    __swig_setmethods__["imageFilterCode"] = _nitropy.nitf_BandInfo_imageFilterCode_set
+    __swig_getmethods__["imageFilterCode"] = _nitropy.nitf_BandInfo_imageFilterCode_get
+    if _newclass:imageFilterCode = _swig_property(_nitropy.nitf_BandInfo_imageFilterCode_get, _nitropy.nitf_BandInfo_imageFilterCode_set)
+    __swig_setmethods__["numLUTs"] = _nitropy.nitf_BandInfo_numLUTs_set
+    __swig_getmethods__["numLUTs"] = _nitropy.nitf_BandInfo_numLUTs_get
+    if _newclass:numLUTs = _swig_property(_nitropy.nitf_BandInfo_numLUTs_get, _nitropy.nitf_BandInfo_numLUTs_set)
+    __swig_setmethods__["bandEntriesPerLUT"] = _nitropy.nitf_BandInfo_bandEntriesPerLUT_set
+    __swig_getmethods__["bandEntriesPerLUT"] = _nitropy.nitf_BandInfo_bandEntriesPerLUT_get
+    if _newclass:bandEntriesPerLUT = _swig_property(_nitropy.nitf_BandInfo_bandEntriesPerLUT_get, _nitropy.nitf_BandInfo_bandEntriesPerLUT_set)
+    __swig_setmethods__["lut"] = _nitropy.nitf_BandInfo_lut_set
+    __swig_getmethods__["lut"] = _nitropy.nitf_BandInfo_lut_get
+    if _newclass:lut = _swig_property(_nitropy.nitf_BandInfo_lut_get, _nitropy.nitf_BandInfo_lut_set)
+    __swig_destroy__ = _nitropy.delete_nitf_BandInfo
+    __del__ = lambda self : None;
+nitf_BandInfo_swigregister = _nitropy.nitf_BandInfo_swigregister
+nitf_BandInfo_swigregister(nitf_BandInfo)
+
+
+def nitf_BandInfo_construct(*args):
+  return _nitropy.nitf_BandInfo_construct(*args)
+nitf_BandInfo_construct = _nitropy.nitf_BandInfo_construct
+
+def nitf_BandInfo_destruct(*args):
+  return _nitropy.nitf_BandInfo_destruct(*args)
+nitf_BandInfo_destruct = _nitropy.nitf_BandInfo_destruct
+
+def nitf_BandInfo_clone(*args):
+  return _nitropy.nitf_BandInfo_clone(*args)
+nitf_BandInfo_clone = _nitropy.nitf_BandInfo_clone
+
+def nitf_BandInfo_init(*args):
+  return _nitropy.nitf_BandInfo_init(*args)
+nitf_BandInfo_init = _nitropy.nitf_BandInfo_init
 PY_NITF_CREATE = _nitropy.PY_NITF_CREATE
 PY_NITF_TRUNCATE = _nitropy.PY_NITF_TRUNCATE
 PY_NITF_OPEN_EXISTING = _nitropy.PY_NITF_OPEN_EXISTING

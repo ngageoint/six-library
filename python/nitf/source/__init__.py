@@ -33,7 +33,7 @@ import logging, types, new
 from nitropy import nrt_Error as Error
 Error.__repr__=lambda s: s.message
 
-__all__ = ['BandSource', 'ComponentInfo', 'DESegment', 'DESubheader',
+__all__ = ['BandInfo', 'BandSource', 'ComponentInfo', 'DESegment', 'DESubheader',
            'DataSource', 'DownSampler', 'Error', 'Extensions', 'Field',
            'FieldHeader', 'FileBandSource', 'FileHeader', 'FileSecurity',
            'FileSegmentSource', 'GraphicSegment', 'GraphicSubheader', 'Header',
@@ -77,6 +77,14 @@ FILE_HEADER_FIELDS = [
     {'id' : 'XHDLOFL', 'name' : 'extendedHeaderOverflow', },
 ]
 
+BAND_INFO_FIELDS = [
+    {'id' : 'IREPBAND', 'name' : 'representation', },
+    {'id' : 'ISUBCAT', 'name' : 'subcategory', },
+    {'id' : 'IFC', 'name' : 'imageFilterCondition', },
+    {'id' : 'IMFLT', 'name' : 'imageFilterCode', },
+    {'id' : 'NLUTS', 'name' : 'numLUTs', },
+    {'id' : 'NELUT', 'name' : 'bandEntriesPerLUT', },
+]
 
 IMAGE_SUBHEADER_FIELDS = [
     {'id' : 'IM', 'name' : 'filePartType', },
@@ -649,8 +657,24 @@ class FileHeader(Header):
             ('XHDLOFL', self['extendedHeaderOverflow']),
         ])
         return fields.__iter__()
-    
-        
+
+#NITF BandInfo class
+#TODO: Add the LookupTable as well
+class BandInfo(FieldHeader):
+    def __init__(self, ref):
+        FieldHeader.__init__(self, ref, field_list=BAND_INFO_FIELDS)
+
+    def __iter__(self):
+        fields = []
+        fields.extend([
+            ('IREPBAND', self['representation']),
+            ('ISUBCAT', self['subcategory']),
+            ('IFC', self['imageFilterCondition']),
+            ('IMFLT', self['imageFilterCode']),
+            ('NLUTS', self['numLUTs']),
+            ('NELUT', self['bandEntriesPerLUT']),
+        ])
+        return fields.__iter__()
 
 #NITF ImageSubheader class
 class ImageSubheader(Header):
@@ -678,6 +702,9 @@ class ImageSubheader(Header):
     def getBandCount(self):
         return nitropy.nitf_ImageSubheader_getBandCount(self.ref, self.error)
     
+    def getBandInfo(self, index):
+        return BandInfo(nitropy.nitf_ImageSubheader_getBandInfo(self.ref, index, self.error))
+
     def __iter__(self):
         fields = []
         fields.extend([
@@ -702,10 +729,14 @@ class ImageSubheader(Header):
             ('IGEOLO', self['cornerCoordinates']),
             ('NICOM', self['numImageComments']),
         ])
-        
+
         for i, comment in enumerate(self.getComments()):
             fields.append(('ICOM[%s]' % i, comment))
-            
+
+        numBands = self['numImageBands'].intValue() + self['numMultispectralImageBands'].intValue()
+        for band in range(numBands):
+            fields.append(('BANDINFO[%s]' % band, self.getBandInfo(band)))
+
         fields.extend([
             ('IC', self['imageCompression']),
             ('COMRAT', self['compressionRate']),

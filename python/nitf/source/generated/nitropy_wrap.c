@@ -2671,141 +2671,142 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p__NRT_IIOInterface swig_types[10]
 #define SWIGTYPE_p__NRT_IOInterface swig_types[11]
 #define SWIGTYPE_p__NRT_Pair swig_types[12]
-#define SWIGTYPE_p__nitf_ComponentInfo swig_types[13]
-#define SWIGTYPE_p__nitf_ConvType swig_types[14]
-#define SWIGTYPE_p__nitf_DESegment swig_types[15]
-#define SWIGTYPE_p__nitf_DESubheader swig_types[16]
-#define SWIGTYPE_p__nitf_DataSource swig_types[17]
-#define SWIGTYPE_p__nitf_DownSampler swig_types[18]
-#define SWIGTYPE_p__nitf_Extensions swig_types[19]
-#define SWIGTYPE_p__nitf_ExtensionsIterator swig_types[20]
-#define SWIGTYPE_p__nitf_Field swig_types[21]
-#define SWIGTYPE_p__nitf_FieldType swig_types[22]
-#define SWIGTYPE_p__nitf_FileHeader swig_types[23]
-#define SWIGTYPE_p__nitf_FileSecurity swig_types[24]
-#define SWIGTYPE_p__nitf_GraphicSegment swig_types[25]
-#define SWIGTYPE_p__nitf_GraphicSubheader swig_types[26]
-#define SWIGTYPE_p__nitf_IDataSource swig_types[27]
-#define SWIGTYPE_p__nitf_IDownSampler swig_types[28]
-#define SWIGTYPE_p__nitf_ImageReader swig_types[29]
-#define SWIGTYPE_p__nitf_ImageSegment swig_types[30]
-#define SWIGTYPE_p__nitf_ImageSource swig_types[31]
-#define SWIGTYPE_p__nitf_ImageSubheader swig_types[32]
-#define SWIGTYPE_p__nitf_LabelSegment swig_types[33]
-#define SWIGTYPE_p__nitf_LabelSubheader swig_types[34]
-#define SWIGTYPE_p__nitf_RESegment swig_types[35]
-#define SWIGTYPE_p__nitf_RESubheader swig_types[36]
-#define SWIGTYPE_p__nitf_Reader swig_types[37]
-#define SWIGTYPE_p__nitf_Record swig_types[38]
-#define SWIGTYPE_p__nitf_SegmentReader swig_types[39]
-#define SWIGTYPE_p__nitf_SubWindow swig_types[40]
-#define SWIGTYPE_p__nitf_TRE swig_types[41]
-#define SWIGTYPE_p__nitf_TREEnumerator swig_types[42]
-#define SWIGTYPE_p__nitf_TREHandler swig_types[43]
-#define SWIGTYPE_p__nitf_TextSegment swig_types[44]
-#define SWIGTYPE_p__nitf_TextSubheader swig_types[45]
-#define SWIGTYPE_p__nitf_Version swig_types[46]
-#define SWIGTYPE_p__nitf_Writer swig_types[47]
-#define SWIGTYPE_p__nrt_CornersType swig_types[48]
-#define SWIGTYPE_p__protected_nitf_PluginRegistry swig_types[49]
-#define SWIGTYPE_p_a_2__double swig_types[50]
-#define SWIGTYPE_p_char swig_types[51]
-#define SWIGTYPE_p_f_p_nitf_TRE_p_nitf_Error__p__nitf_TREEnumerator swig_types[52]
-#define SWIGTYPE_p_f_p_nitf_TRE_p_q_const__char__p__nitf_Field swig_types[53]
-#define SWIGTYPE_p_f_p_p_struct__nitf_TREEnumerator__int swig_types[54]
-#define SWIGTYPE_p_f_p_struct__NRT_HashTable_p_q_const__char__unsigned_int swig_types[55]
-#define SWIGTYPE_p_f_p_struct__NRT_HashTable_p_struct__NRT_Pair_p_void_p_struct__NRT_Error__int swig_types[56]
-#define SWIGTYPE_p_f_p_struct__NRT_IOInterface_p_struct__nitf_TRE_p_struct__nitf_Record_p_struct__NRT_Error__int swig_types[57]
-#define SWIGTYPE_p_f_p_struct__NRT_IOInterface_uint32_t_p_struct__nitf_TRE_p_struct__nitf_Record_p_struct__NRT_Error__int swig_types[58]
-#define SWIGTYPE_p_f_p_struct__nitf_DownSampler_p_p_void_p_p_void_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_p_struct__NRT_Error__int swig_types[59]
-#define SWIGTYPE_p_f_p_struct__nitf_TREEnumerator_p_nitf_Error__p__NRT_Pair swig_types[60]
-#define SWIGTYPE_p_f_p_struct__nitf_TREEnumerator_p_struct__NRT_Error__p_char swig_types[61]
-#define SWIGTYPE_p_f_p_struct__nitf_TRE__p_char swig_types[62]
-#define SWIGTYPE_p_f_p_struct__nitf_TRE__void swig_types[63]
-#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_q_const__char_p_struct__NRT_Error__int swig_types[64]
-#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_q_const__char_p_struct__NRT_Error__p_nrt_List swig_types[65]
-#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_q_const__char_p_void_size_t_p_struct__NRT_Error__int swig_types[66]
-#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_struct__NRT_Error__int swig_types[67]
-#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_struct__nitf_TRE_p_struct__NRT_Error__int swig_types[68]
-#define SWIGTYPE_p_f_p_void__void swig_types[69]
-#define SWIGTYPE_p_f_p_void_off_t_int_p_struct__NRT_Error__off_t swig_types[70]
-#define SWIGTYPE_p_f_p_void_off_t_p_struct__NRT_Error__int swig_types[71]
-#define SWIGTYPE_p_f_p_void_p_char_off_t_p_struct__NRT_Error__int swig_types[72]
-#define SWIGTYPE_p_f_p_void_p_char_size_t_p_struct__NRT_Error__int swig_types[73]
-#define SWIGTYPE_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int swig_types[74]
-#define SWIGTYPE_p_f_p_void_p_struct__NRT_Error__int swig_types[75]
-#define SWIGTYPE_p_f_p_void_p_struct__NRT_Error__off_t swig_types[76]
-#define SWIGTYPE_p_int swig_types[77]
-#define SWIGTYPE_p_int16_t swig_types[78]
-#define SWIGTYPE_p_int32_t swig_types[79]
-#define SWIGTYPE_p_int64_t swig_types[80]
-#define SWIGTYPE_p_int8_t swig_types[81]
-#define SWIGTYPE_p_nitf_BandInfo swig_types[82]
+#define SWIGTYPE_p__nitf_BandInfo swig_types[13]
+#define SWIGTYPE_p__nitf_ComponentInfo swig_types[14]
+#define SWIGTYPE_p__nitf_ConvType swig_types[15]
+#define SWIGTYPE_p__nitf_DESegment swig_types[16]
+#define SWIGTYPE_p__nitf_DESubheader swig_types[17]
+#define SWIGTYPE_p__nitf_DataSource swig_types[18]
+#define SWIGTYPE_p__nitf_DownSampler swig_types[19]
+#define SWIGTYPE_p__nitf_Extensions swig_types[20]
+#define SWIGTYPE_p__nitf_ExtensionsIterator swig_types[21]
+#define SWIGTYPE_p__nitf_Field swig_types[22]
+#define SWIGTYPE_p__nitf_FieldType swig_types[23]
+#define SWIGTYPE_p__nitf_FileHeader swig_types[24]
+#define SWIGTYPE_p__nitf_FileSecurity swig_types[25]
+#define SWIGTYPE_p__nitf_GraphicSegment swig_types[26]
+#define SWIGTYPE_p__nitf_GraphicSubheader swig_types[27]
+#define SWIGTYPE_p__nitf_IDataSource swig_types[28]
+#define SWIGTYPE_p__nitf_IDownSampler swig_types[29]
+#define SWIGTYPE_p__nitf_ImageReader swig_types[30]
+#define SWIGTYPE_p__nitf_ImageSegment swig_types[31]
+#define SWIGTYPE_p__nitf_ImageSource swig_types[32]
+#define SWIGTYPE_p__nitf_ImageSubheader swig_types[33]
+#define SWIGTYPE_p__nitf_LabelSegment swig_types[34]
+#define SWIGTYPE_p__nitf_LabelSubheader swig_types[35]
+#define SWIGTYPE_p__nitf_RESegment swig_types[36]
+#define SWIGTYPE_p__nitf_RESubheader swig_types[37]
+#define SWIGTYPE_p__nitf_Reader swig_types[38]
+#define SWIGTYPE_p__nitf_Record swig_types[39]
+#define SWIGTYPE_p__nitf_SegmentReader swig_types[40]
+#define SWIGTYPE_p__nitf_SubWindow swig_types[41]
+#define SWIGTYPE_p__nitf_TRE swig_types[42]
+#define SWIGTYPE_p__nitf_TREEnumerator swig_types[43]
+#define SWIGTYPE_p__nitf_TREHandler swig_types[44]
+#define SWIGTYPE_p__nitf_TextSegment swig_types[45]
+#define SWIGTYPE_p__nitf_TextSubheader swig_types[46]
+#define SWIGTYPE_p__nitf_Version swig_types[47]
+#define SWIGTYPE_p__nitf_Writer swig_types[48]
+#define SWIGTYPE_p__nrt_CornersType swig_types[49]
+#define SWIGTYPE_p__protected_nitf_PluginRegistry swig_types[50]
+#define SWIGTYPE_p_a_2__double swig_types[51]
+#define SWIGTYPE_p_char swig_types[52]
+#define SWIGTYPE_p_f_p_nitf_TRE_p_nitf_Error__p__nitf_TREEnumerator swig_types[53]
+#define SWIGTYPE_p_f_p_nitf_TRE_p_q_const__char__p__nitf_Field swig_types[54]
+#define SWIGTYPE_p_f_p_p_struct__nitf_TREEnumerator__int swig_types[55]
+#define SWIGTYPE_p_f_p_struct__NRT_HashTable_p_q_const__char__unsigned_int swig_types[56]
+#define SWIGTYPE_p_f_p_struct__NRT_HashTable_p_struct__NRT_Pair_p_void_p_struct__NRT_Error__int swig_types[57]
+#define SWIGTYPE_p_f_p_struct__NRT_IOInterface_p_struct__nitf_TRE_p_struct__nitf_Record_p_struct__NRT_Error__int swig_types[58]
+#define SWIGTYPE_p_f_p_struct__NRT_IOInterface_uint32_t_p_struct__nitf_TRE_p_struct__nitf_Record_p_struct__NRT_Error__int swig_types[59]
+#define SWIGTYPE_p_f_p_struct__nitf_DownSampler_p_p_void_p_p_void_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_uint32_t_p_struct__NRT_Error__int swig_types[60]
+#define SWIGTYPE_p_f_p_struct__nitf_TREEnumerator_p_nitf_Error__p__NRT_Pair swig_types[61]
+#define SWIGTYPE_p_f_p_struct__nitf_TREEnumerator_p_struct__NRT_Error__p_char swig_types[62]
+#define SWIGTYPE_p_f_p_struct__nitf_TRE__p_char swig_types[63]
+#define SWIGTYPE_p_f_p_struct__nitf_TRE__void swig_types[64]
+#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_q_const__char_p_struct__NRT_Error__int swig_types[65]
+#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_q_const__char_p_struct__NRT_Error__p_nrt_List swig_types[66]
+#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_q_const__char_p_void_size_t_p_struct__NRT_Error__int swig_types[67]
+#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_struct__NRT_Error__int swig_types[68]
+#define SWIGTYPE_p_f_p_struct__nitf_TRE_p_struct__nitf_TRE_p_struct__NRT_Error__int swig_types[69]
+#define SWIGTYPE_p_f_p_void__void swig_types[70]
+#define SWIGTYPE_p_f_p_void_off_t_int_p_struct__NRT_Error__off_t swig_types[71]
+#define SWIGTYPE_p_f_p_void_off_t_p_struct__NRT_Error__int swig_types[72]
+#define SWIGTYPE_p_f_p_void_p_char_off_t_p_struct__NRT_Error__int swig_types[73]
+#define SWIGTYPE_p_f_p_void_p_char_size_t_p_struct__NRT_Error__int swig_types[74]
+#define SWIGTYPE_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int swig_types[75]
+#define SWIGTYPE_p_f_p_void_p_struct__NRT_Error__int swig_types[76]
+#define SWIGTYPE_p_f_p_void_p_struct__NRT_Error__off_t swig_types[77]
+#define SWIGTYPE_p_int swig_types[78]
+#define SWIGTYPE_p_int16_t swig_types[79]
+#define SWIGTYPE_p_int32_t swig_types[80]
+#define SWIGTYPE_p_int64_t swig_types[81]
+#define SWIGTYPE_p_int8_t swig_types[82]
 #define SWIGTYPE_p_nitf_BlockingInfo swig_types[83]
 #define SWIGTYPE_p_nitf_FieldWarning swig_types[84]
 #define SWIGTYPE_p_nitf_ImageIO swig_types[85]
-#define SWIGTYPE_p_nitf_WriteHandler swig_types[86]
-#define SWIGTYPE_p_nrt_DLL swig_types[87]
-#define SWIGTYPE_p_nrt_DateTime swig_types[88]
-#define SWIGTYPE_p_nrt_Directory swig_types[89]
-#define SWIGTYPE_p_nrt_IntStack swig_types[90]
-#define SWIGTYPE_p_nrt_List swig_types[91]
-#define SWIGTYPE_p_nrt_ListIterator swig_types[92]
-#define SWIGTYPE_p_nrt_ListNode swig_types[93]
-#define SWIGTYPE_p_nrt_Traversal swig_types[94]
-#define SWIGTYPE_p_nrt_Tree swig_types[95]
-#define SWIGTYPE_p_nrt_TreeNode swig_types[96]
-#define SWIGTYPE_p_off_t swig_types[97]
-#define SWIGTYPE_p_p__NRT_HashTable swig_types[98]
-#define SWIGTYPE_p_p__NRT_IOInterface swig_types[99]
-#define SWIGTYPE_p_p__nitf_ComponentInfo swig_types[100]
-#define SWIGTYPE_p_p__nitf_DESegment swig_types[101]
-#define SWIGTYPE_p_p__nitf_DESubheader swig_types[102]
-#define SWIGTYPE_p_p__nitf_DataSource swig_types[103]
-#define SWIGTYPE_p_p__nitf_DownSampler swig_types[104]
-#define SWIGTYPE_p_p__nitf_Extensions swig_types[105]
-#define SWIGTYPE_p_p__nitf_Field swig_types[106]
-#define SWIGTYPE_p_p__nitf_FileHeader swig_types[107]
-#define SWIGTYPE_p_p__nitf_FileSecurity swig_types[108]
-#define SWIGTYPE_p_p__nitf_GraphicSegment swig_types[109]
-#define SWIGTYPE_p_p__nitf_GraphicSubheader swig_types[110]
-#define SWIGTYPE_p_p__nitf_ImageReader swig_types[111]
-#define SWIGTYPE_p_p__nitf_ImageSegment swig_types[112]
-#define SWIGTYPE_p_p__nitf_ImageSource swig_types[113]
-#define SWIGTYPE_p_p__nitf_ImageSubheader swig_types[114]
-#define SWIGTYPE_p_p__nitf_LabelSegment swig_types[115]
-#define SWIGTYPE_p_p__nitf_LabelSubheader swig_types[116]
-#define SWIGTYPE_p_p__nitf_RESegment swig_types[117]
-#define SWIGTYPE_p_p__nitf_RESubheader swig_types[118]
-#define SWIGTYPE_p_p__nitf_Reader swig_types[119]
-#define SWIGTYPE_p_p__nitf_Record swig_types[120]
-#define SWIGTYPE_p_p__nitf_SegmentReader swig_types[121]
-#define SWIGTYPE_p_p__nitf_SubWindow swig_types[122]
-#define SWIGTYPE_p_p__nitf_TRE swig_types[123]
-#define SWIGTYPE_p_p__nitf_TREEnumerator swig_types[124]
-#define SWIGTYPE_p_p__nitf_TextSegment swig_types[125]
-#define SWIGTYPE_p_p__nitf_TextSubheader swig_types[126]
-#define SWIGTYPE_p_p__nitf_Writer swig_types[127]
-#define SWIGTYPE_p_p_f_p_struct__NRT_HashTable_p_q_const__char__unsigned_int swig_types[128]
-#define SWIGTYPE_p_p_f_p_struct__NRT_HashTable_p_struct__NRT_Pair_p_void_p_struct__NRT_Error__int swig_types[129]
-#define SWIGTYPE_p_p_f_p_void__void swig_types[130]
-#define SWIGTYPE_p_p_f_p_void_off_t_int_p_struct__NRT_Error__off_t swig_types[131]
-#define SWIGTYPE_p_p_f_p_void_p_char_size_t_p_struct__NRT_Error__int swig_types[132]
-#define SWIGTYPE_p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int swig_types[133]
-#define SWIGTYPE_p_p_f_p_void_p_struct__NRT_Error__int swig_types[134]
-#define SWIGTYPE_p_p_f_p_void_p_struct__NRT_Error__off_t swig_types[135]
-#define SWIGTYPE_p_p_nitf_BandInfo swig_types[136]
-#define SWIGTYPE_p_p_nitf_WriteHandler swig_types[137]
-#define SWIGTYPE_p_p_nrt_List swig_types[138]
-#define SWIGTYPE_p_p_uint8_t swig_types[139]
-#define SWIGTYPE_p_p_void swig_types[140]
-#define SWIGTYPE_p_uint16_t swig_types[141]
-#define SWIGTYPE_p_uint32_t swig_types[142]
-#define SWIGTYPE_p_uint64_t swig_types[143]
-#define SWIGTYPE_p_uint8_t swig_types[144]
-#define SWIGTYPE_p_void swig_types[145]
-static swig_type_info *swig_types[147];
-static swig_module_info swig_module = {swig_types, 146, 0, 0, 0, 0};
+#define SWIGTYPE_p_nitf_LookupTable swig_types[86]
+#define SWIGTYPE_p_nitf_WriteHandler swig_types[87]
+#define SWIGTYPE_p_nrt_DLL swig_types[88]
+#define SWIGTYPE_p_nrt_DateTime swig_types[89]
+#define SWIGTYPE_p_nrt_Directory swig_types[90]
+#define SWIGTYPE_p_nrt_IntStack swig_types[91]
+#define SWIGTYPE_p_nrt_List swig_types[92]
+#define SWIGTYPE_p_nrt_ListIterator swig_types[93]
+#define SWIGTYPE_p_nrt_ListNode swig_types[94]
+#define SWIGTYPE_p_nrt_Traversal swig_types[95]
+#define SWIGTYPE_p_nrt_Tree swig_types[96]
+#define SWIGTYPE_p_nrt_TreeNode swig_types[97]
+#define SWIGTYPE_p_off_t swig_types[98]
+#define SWIGTYPE_p_p__NRT_HashTable swig_types[99]
+#define SWIGTYPE_p_p__NRT_IOInterface swig_types[100]
+#define SWIGTYPE_p_p__nitf_BandInfo swig_types[101]
+#define SWIGTYPE_p_p__nitf_ComponentInfo swig_types[102]
+#define SWIGTYPE_p_p__nitf_DESegment swig_types[103]
+#define SWIGTYPE_p_p__nitf_DESubheader swig_types[104]
+#define SWIGTYPE_p_p__nitf_DataSource swig_types[105]
+#define SWIGTYPE_p_p__nitf_DownSampler swig_types[106]
+#define SWIGTYPE_p_p__nitf_Extensions swig_types[107]
+#define SWIGTYPE_p_p__nitf_Field swig_types[108]
+#define SWIGTYPE_p_p__nitf_FileHeader swig_types[109]
+#define SWIGTYPE_p_p__nitf_FileSecurity swig_types[110]
+#define SWIGTYPE_p_p__nitf_GraphicSegment swig_types[111]
+#define SWIGTYPE_p_p__nitf_GraphicSubheader swig_types[112]
+#define SWIGTYPE_p_p__nitf_ImageReader swig_types[113]
+#define SWIGTYPE_p_p__nitf_ImageSegment swig_types[114]
+#define SWIGTYPE_p_p__nitf_ImageSource swig_types[115]
+#define SWIGTYPE_p_p__nitf_ImageSubheader swig_types[116]
+#define SWIGTYPE_p_p__nitf_LabelSegment swig_types[117]
+#define SWIGTYPE_p_p__nitf_LabelSubheader swig_types[118]
+#define SWIGTYPE_p_p__nitf_RESegment swig_types[119]
+#define SWIGTYPE_p_p__nitf_RESubheader swig_types[120]
+#define SWIGTYPE_p_p__nitf_Reader swig_types[121]
+#define SWIGTYPE_p_p__nitf_Record swig_types[122]
+#define SWIGTYPE_p_p__nitf_SegmentReader swig_types[123]
+#define SWIGTYPE_p_p__nitf_SubWindow swig_types[124]
+#define SWIGTYPE_p_p__nitf_TRE swig_types[125]
+#define SWIGTYPE_p_p__nitf_TREEnumerator swig_types[126]
+#define SWIGTYPE_p_p__nitf_TextSegment swig_types[127]
+#define SWIGTYPE_p_p__nitf_TextSubheader swig_types[128]
+#define SWIGTYPE_p_p__nitf_Writer swig_types[129]
+#define SWIGTYPE_p_p_f_p_struct__NRT_HashTable_p_q_const__char__unsigned_int swig_types[130]
+#define SWIGTYPE_p_p_f_p_struct__NRT_HashTable_p_struct__NRT_Pair_p_void_p_struct__NRT_Error__int swig_types[131]
+#define SWIGTYPE_p_p_f_p_void__void swig_types[132]
+#define SWIGTYPE_p_p_f_p_void_off_t_int_p_struct__NRT_Error__off_t swig_types[133]
+#define SWIGTYPE_p_p_f_p_void_p_char_size_t_p_struct__NRT_Error__int swig_types[134]
+#define SWIGTYPE_p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int swig_types[135]
+#define SWIGTYPE_p_p_f_p_void_p_struct__NRT_Error__int swig_types[136]
+#define SWIGTYPE_p_p_f_p_void_p_struct__NRT_Error__off_t swig_types[137]
+#define SWIGTYPE_p_p_nitf_WriteHandler swig_types[138]
+#define SWIGTYPE_p_p_nrt_List swig_types[139]
+#define SWIGTYPE_p_p_uint8_t swig_types[140]
+#define SWIGTYPE_p_p_void swig_types[141]
+#define SWIGTYPE_p_uint16_t swig_types[142]
+#define SWIGTYPE_p_uint32_t swig_types[143]
+#define SWIGTYPE_p_uint64_t swig_types[144]
+#define SWIGTYPE_p_uint8_t swig_types[145]
+#define SWIGTYPE_p_void swig_types[146]
+static swig_type_info *swig_types[148];
+static swig_module_info swig_module = {swig_types, 147, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -15507,6 +15508,60 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
+  nitf_IOHandle arg1 ;
+  nitf_Off arg2 ;
+  int arg3 ;
+  int arg4 ;
+  nitf_Error *arg5 = (nitf_Error *) 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  nitf_BandSource *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_FileSource_construct",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nitf_FileSource_construct" "', argument " "1"" of type '" "nitf_IOHandle""'");
+  } 
+  arg1 = (nitf_IOHandle)(val1);
+  {
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
+  }
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nitf_FileSource_construct" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "nitf_FileSource_construct" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = (int)(val4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_FileSource_construct" "', argument " "5"" of type '" "nitf_Error *""'"); 
+  }
+  arg5 = (nitf_Error *)(argp5);
+  result = (nitf_BandSource *)nitf_FileSource_construct(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_DataSource, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_FileSource_constructFile(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
   nitf_Off arg2 ;
   int arg3 ;
@@ -15528,10 +15583,10 @@ SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj4 = 0 ;
   nitf_BandSource *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_FileSource_construct",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_FileSource_constructFile",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_FileSource_construct" "', argument " "1"" of type '" "char const *""'");
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_FileSource_constructFile" "', argument " "1"" of type '" "char const *""'");
   }
   arg1 = (char *)(buf1);
   {
@@ -15539,20 +15594,20 @@ SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(se
   }
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nitf_FileSource_construct" "', argument " "3"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nitf_FileSource_constructFile" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
   ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "nitf_FileSource_construct" "', argument " "4"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "nitf_FileSource_constructFile" "', argument " "4"" of type '" "int""'");
   } 
   arg4 = (int)(val4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_FileSource_construct" "', argument " "5"" of type '" "nitf_Error *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_FileSource_constructFile" "', argument " "5"" of type '" "nitf_Error *""'"); 
   }
   arg5 = (nitf_Error *)(argp5);
-  result = (nitf_BandSource *)nitf_FileSource_construct((char const *)arg1,arg2,arg3,arg4,arg5);
+  result = (nitf_BandSource *)nitf_FileSource_constructFile((char const *)arg1,arg2,arg3,arg4,arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_DataSource, 0 |  0 );
   if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   return resultobj;
@@ -19226,7 +19281,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_bandInfo_set(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_ImageSubheader_bandInfo_set" "', argument " "1"" of type '" "nitf_ImageSubheader *""'"); 
   }
   arg1 = (nitf_ImageSubheader *)(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_nitf_BandInfo, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p__nitf_BandInfo, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageSubheader_bandInfo_set" "', argument " "2"" of type '" "nitf_BandInfo **""'"); 
   }
@@ -19254,7 +19309,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_bandInfo_get(PyObject *SWIGUNUSED
   }
   arg1 = (nitf_ImageSubheader *)(argp1);
   result = (nitf_BandInfo **) ((arg1)->bandInfo);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_nitf_BandInfo, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p__nitf_BandInfo, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -20324,7 +20379,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setPixelInformation(PyObject *SWI
   {
     arg8 = (nitf_Uint32)PyInt_AsLong(obj7);
   }
-  res9 = SWIG_ConvertPtr(obj8, &argp9,SWIGTYPE_p_p_nitf_BandInfo, 0 |  0 );
+  res9 = SWIG_ConvertPtr(obj8, &argp9,SWIGTYPE_p_p__nitf_BandInfo, 0 |  0 );
   if (!SWIG_IsOK(res9)) {
     SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "nitf_ImageSubheader_setPixelInformation" "', argument " "9"" of type '" "nitf_BandInfo **""'"); 
   }
@@ -20412,7 +20467,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_getBandInfo(PyObject *SWIGUNUSEDP
   }
   arg3 = (nitf_Error *)(argp3);
   result = (nitf_BandInfo *)nitf_ImageSubheader_getBandInfo(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_BandInfo, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -28752,13 +28807,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  char *arg1 = (char *) 0 ;
+  nitf_IOHandle arg1 ;
   nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
-  int res1 ;
-  char *buf1 = 0 ;
-  int alloc1 = 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
   void *argp4 = 0 ;
@@ -28770,11 +28824,11 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_construct(PyObject *SWIGUNUSED
   nitf_SegmentSource *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_SegmentFileSource_construct",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_SegmentFileSource_construct" "', argument " "1"" of type '" "char const *""'");
-  }
-  arg1 = (char *)(buf1);
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nitf_SegmentFileSource_construct" "', argument " "1"" of type '" "nitf_IOHandle""'");
+  } 
+  arg1 = (nitf_IOHandle)(val1);
   {
     arg2 = (nitf_Off)PyLong_AsLong(obj1);
   }
@@ -28788,12 +28842,55 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_construct(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_SegmentFileSource_construct" "', argument " "4"" of type '" "nitf_Error *""'"); 
   }
   arg4 = (nitf_Error *)(argp4);
-  result = (nitf_SegmentSource *)nitf_SegmentFileSource_construct((char const *)arg1,arg2,arg3,arg4);
+  result = (nitf_SegmentSource *)nitf_SegmentFileSource_construct(arg1,arg2,arg3,arg4);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_DataSource, 0 |  0 );
-  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   return resultobj;
 fail:
-  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_constructIO(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_IOInterface *arg1 = (nitf_IOInterface *) 0 ;
+  nitf_Off arg2 ;
+  int arg3 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  nitf_SegmentSource *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_SegmentFileSource_constructIO",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_SegmentFileSource_constructIO" "', argument " "1"" of type '" "nitf_IOInterface *""'"); 
+  }
+  arg1 = (nitf_IOInterface *)(argp1);
+  {
+    arg2 = (nitf_Off)PyLong_AsLong(obj1);
+  }
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nitf_SegmentFileSource_constructIO" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_SegmentFileSource_constructIO" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = (nitf_Error *)(argp4);
+  result = (nitf_SegmentSource *)nitf_SegmentFileSource_constructIO(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_DataSource, 0 |  0 );
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -28825,6 +28922,570 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReaderSource_construct(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_DataSource, 0 |  0 );
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_representation_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  nitf_Field *arg2 = (nitf_Field *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_BandInfo_representation_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_representation_set" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Field, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_BandInfo_representation_set" "', argument " "2"" of type '" "nitf_Field *""'"); 
+  }
+  arg2 = (nitf_Field *)(argp2);
+  if (arg1) (arg1)->representation = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_representation_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Field *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_BandInfo_representation_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_representation_get" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  result = (nitf_Field *) ((arg1)->representation);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Field, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_subcategory_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  nitf_Field *arg2 = (nitf_Field *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_BandInfo_subcategory_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_subcategory_set" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Field, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_BandInfo_subcategory_set" "', argument " "2"" of type '" "nitf_Field *""'"); 
+  }
+  arg2 = (nitf_Field *)(argp2);
+  if (arg1) (arg1)->subcategory = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_subcategory_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Field *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_BandInfo_subcategory_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_subcategory_get" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  result = (nitf_Field *) ((arg1)->subcategory);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Field, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_imageFilterCondition_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  nitf_Field *arg2 = (nitf_Field *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_BandInfo_imageFilterCondition_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_imageFilterCondition_set" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Field, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_BandInfo_imageFilterCondition_set" "', argument " "2"" of type '" "nitf_Field *""'"); 
+  }
+  arg2 = (nitf_Field *)(argp2);
+  if (arg1) (arg1)->imageFilterCondition = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_imageFilterCondition_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Field *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_BandInfo_imageFilterCondition_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_imageFilterCondition_get" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  result = (nitf_Field *) ((arg1)->imageFilterCondition);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Field, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_imageFilterCode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  nitf_Field *arg2 = (nitf_Field *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_BandInfo_imageFilterCode_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_imageFilterCode_set" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Field, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_BandInfo_imageFilterCode_set" "', argument " "2"" of type '" "nitf_Field *""'"); 
+  }
+  arg2 = (nitf_Field *)(argp2);
+  if (arg1) (arg1)->imageFilterCode = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_imageFilterCode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Field *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_BandInfo_imageFilterCode_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_imageFilterCode_get" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  result = (nitf_Field *) ((arg1)->imageFilterCode);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Field, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_numLUTs_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  nitf_Field *arg2 = (nitf_Field *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_BandInfo_numLUTs_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_numLUTs_set" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Field, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_BandInfo_numLUTs_set" "', argument " "2"" of type '" "nitf_Field *""'"); 
+  }
+  arg2 = (nitf_Field *)(argp2);
+  if (arg1) (arg1)->numLUTs = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_numLUTs_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Field *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_BandInfo_numLUTs_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_numLUTs_get" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  result = (nitf_Field *) ((arg1)->numLUTs);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Field, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_bandEntriesPerLUT_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  nitf_Field *arg2 = (nitf_Field *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_BandInfo_bandEntriesPerLUT_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_bandEntriesPerLUT_set" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Field, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_BandInfo_bandEntriesPerLUT_set" "', argument " "2"" of type '" "nitf_Field *""'"); 
+  }
+  arg2 = (nitf_Field *)(argp2);
+  if (arg1) (arg1)->bandEntriesPerLUT = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_bandEntriesPerLUT_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Field *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_BandInfo_bandEntriesPerLUT_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_bandEntriesPerLUT_get" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  result = (nitf_Field *) ((arg1)->bandEntriesPerLUT);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Field, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_lut_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  nitf_LookupTable *arg2 = (nitf_LookupTable *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_BandInfo_lut_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_lut_set" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_nitf_LookupTable, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_BandInfo_lut_set" "', argument " "2"" of type '" "nitf_LookupTable *""'"); 
+  }
+  arg2 = (nitf_LookupTable *)(argp2);
+  if (arg1) (arg1)->lut = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_lut_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_LookupTable *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_BandInfo_lut_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_lut_get" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  result = (nitf_LookupTable *) ((arg1)->lut);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_LookupTable, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_nitf_BandInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_nitf_BandInfo",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_nitf_BandInfo" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  free((char *) arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *nitf_BandInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p__nitf_BandInfo, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Error *arg1 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_BandInfo *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_BandInfo_construct",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_construct" "', argument " "1"" of type '" "nitf_Error *""'"); 
+  }
+  arg1 = (nitf_Error *)(argp1);
+  result = (nitf_BandInfo *)nitf_BandInfo_construct(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_destruct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo **arg1 = (nitf_BandInfo **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_BandInfo_destruct",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_destruct" "', argument " "1"" of type '" "nitf_BandInfo **""'"); 
+  }
+  arg1 = (nitf_BandInfo **)(argp1);
+  nitf_BandInfo_destruct(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  nitf_BandInfo *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_BandInfo_clone",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_clone" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_BandInfo_clone" "', argument " "2"" of type '" "nitf_Error *""'"); 
+  }
+  arg2 = (nitf_Error *)(argp2);
+  result = (nitf_BandInfo *)nitf_BandInfo_clone(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_BandInfo_init(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_BandInfo *arg1 = (nitf_BandInfo *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
+  char *arg4 = (char *) 0 ;
+  char *arg5 = (char *) 0 ;
+  nitf_Uint32 arg6 ;
+  nitf_Uint32 arg7 ;
+  nitf_LookupTable *arg8 = (nitf_LookupTable *) 0 ;
+  nitf_Error *arg9 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  int res4 ;
+  char *buf4 = 0 ;
+  int alloc4 = 0 ;
+  int res5 ;
+  char *buf5 = 0 ;
+  int alloc5 = 0 ;
+  void *argp8 = 0 ;
+  int res8 = 0 ;
+  void *argp9 = 0 ;
+  int res9 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:nitf_BandInfo_init",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_BandInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_BandInfo_init" "', argument " "1"" of type '" "nitf_BandInfo *""'"); 
+  }
+  arg1 = (nitf_BandInfo *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_BandInfo_init" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = (char *)(buf2);
+  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_BandInfo_init" "', argument " "3"" of type '" "char const *""'");
+  }
+  arg3 = (char *)(buf3);
+  res4 = SWIG_AsCharPtrAndSize(obj3, &buf4, NULL, &alloc4);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_BandInfo_init" "', argument " "4"" of type '" "char const *""'");
+  }
+  arg4 = (char *)(buf4);
+  res5 = SWIG_AsCharPtrAndSize(obj4, &buf5, NULL, &alloc5);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_BandInfo_init" "', argument " "5"" of type '" "char const *""'");
+  }
+  arg5 = (char *)(buf5);
+  {
+    arg6 = (nitf_Uint32)PyInt_AsLong(obj5);
+  }
+  {
+    arg7 = (nitf_Uint32)PyInt_AsLong(obj6);
+  }
+  res8 = SWIG_ConvertPtr(obj7, &argp8,SWIGTYPE_p_nitf_LookupTable, 0 |  0 );
+  if (!SWIG_IsOK(res8)) {
+    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "nitf_BandInfo_init" "', argument " "8"" of type '" "nitf_LookupTable *""'"); 
+  }
+  arg8 = (nitf_LookupTable *)(argp8);
+  res9 = SWIG_ConvertPtr(obj8, &argp9,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res9)) {
+    SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "nitf_BandInfo_init" "', argument " "9"" of type '" "nitf_Error *""'"); 
+  }
+  arg9 = (nitf_Error *)(argp9);
+  result = (int)nitf_BandInfo_init(arg1,(char const *)arg2,(char const *)arg3,(char const *)arg4,(char const *)arg5,arg6,arg7,arg8,arg9);
+  resultobj = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  if (alloc5 == SWIG_NEWOBJ) free((char*)buf5);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  if (alloc5 == SWIG_NEWOBJ) free((char*)buf5);
   return NULL;
 }
 
@@ -30207,6 +30868,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_DataSource_destruct", _wrap_nitf_DataSource_destruct, METH_VARARGS, NULL},
 	 { (char *)"nitf_MemorySource_construct", _wrap_nitf_MemorySource_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileSource_construct", _wrap_nitf_FileSource_construct, METH_VARARGS, NULL},
+	 { (char *)"nitf_FileSource_constructFile", _wrap_nitf_FileSource_constructFile, METH_VARARGS, NULL},
 	 { (char *)"nitf_IOSource_construct", _wrap_nitf_IOSource_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_ImageWriter_construct", _wrap_nitf_ImageWriter_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_ImageWriter_attachSource", _wrap_nitf_ImageWriter_attachSource, METH_VARARGS, NULL},
@@ -30707,7 +31369,28 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_DownSampler_destruct", _wrap_nitf_DownSampler_destruct, METH_VARARGS, NULL},
 	 { (char *)"nitf_SegmentMemorySource_construct", _wrap_nitf_SegmentMemorySource_construct, METH_VARARGS, NULL},
 	 { (char *)"nitf_SegmentFileSource_construct", _wrap_nitf_SegmentFileSource_construct, METH_VARARGS, NULL},
+	 { (char *)"nitf_SegmentFileSource_constructIO", _wrap_nitf_SegmentFileSource_constructIO, METH_VARARGS, NULL},
 	 { (char *)"nitf_SegmentReaderSource_construct", _wrap_nitf_SegmentReaderSource_construct, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_representation_set", _wrap_nitf_BandInfo_representation_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_representation_get", _wrap_nitf_BandInfo_representation_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_subcategory_set", _wrap_nitf_BandInfo_subcategory_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_subcategory_get", _wrap_nitf_BandInfo_subcategory_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_imageFilterCondition_set", _wrap_nitf_BandInfo_imageFilterCondition_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_imageFilterCondition_get", _wrap_nitf_BandInfo_imageFilterCondition_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_imageFilterCode_set", _wrap_nitf_BandInfo_imageFilterCode_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_imageFilterCode_get", _wrap_nitf_BandInfo_imageFilterCode_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_numLUTs_set", _wrap_nitf_BandInfo_numLUTs_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_numLUTs_get", _wrap_nitf_BandInfo_numLUTs_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_bandEntriesPerLUT_set", _wrap_nitf_BandInfo_bandEntriesPerLUT_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_bandEntriesPerLUT_get", _wrap_nitf_BandInfo_bandEntriesPerLUT_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_lut_set", _wrap_nitf_BandInfo_lut_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_lut_get", _wrap_nitf_BandInfo_lut_get, METH_VARARGS, NULL},
+	 { (char *)"delete_nitf_BandInfo", _wrap_delete_nitf_BandInfo, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_swigregister", nitf_BandInfo_swigregister, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_construct", _wrap_nitf_BandInfo_construct, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_destruct", _wrap_nitf_BandInfo_destruct, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_clone", _wrap_nitf_BandInfo_clone, METH_VARARGS, NULL},
+	 { (char *)"nitf_BandInfo_init", _wrap_nitf_BandInfo_init, METH_VARARGS, NULL},
 	 { (char *)"py_IOHandle_create", _wrap_py_IOHandle_create, METH_VARARGS, NULL},
 	 { (char *)"py_IOHandle_seek", _wrap_py_IOHandle_seek, METH_VARARGS, NULL},
 	 { (char *)"py_Field_getString", _wrap_py_Field_getString, METH_VARARGS, NULL},
@@ -30755,6 +31438,7 @@ static swig_type_info _swigt__p__NRT_HashTableIterator = {"_p__NRT_HashTableIter
 static swig_type_info _swigt__p__NRT_IIOInterface = {"_p__NRT_IIOInterface", "struct _NRT_IIOInterface *|nrt_IIOInterface *|nitf_IIOInterface *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__NRT_IOInterface = {"_p__NRT_IOInterface", "struct _NRT_IOInterface *|nrt_IOInterface *|nitf_IOInterface *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__NRT_Pair = {"_p__NRT_Pair", "struct _NRT_Pair *|nitf_Pair *|nrt_Pair *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p__nitf_BandInfo = {"_p__nitf_BandInfo", "struct _nitf_BandInfo *|nitf_BandInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_ComponentInfo = {"_p__nitf_ComponentInfo", "struct _nitf_ComponentInfo *|nitf_ComponentInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_ConvType = {"_p__nitf_ConvType", "enum _nitf_ConvType *|nitf_ConvType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_DESegment = {"_p__nitf_DESegment", "struct _nitf_DESegment *|nitf_DESegment *", 0, 0, (void*)0, 0};
@@ -30824,10 +31508,10 @@ static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "nrt_Int16 *|nitf_Int16
 static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "int32_t *|nrt_Int32 *|nitf_Int32 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "int64_t *|nrt_Int64 *|nitf_Int64 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "nrt_Int8 *|nitf_Int8 *|int8_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf_BandInfo = {"_p_nitf_BandInfo", "nitf_BandInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_BlockingInfo = {"_p_nitf_BlockingInfo", "nitf_BlockingInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_FieldWarning = {"_p_nitf_FieldWarning", "nitf_FieldWarning *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_ImageIO = {"_p_nitf_ImageIO", "nitf_ImageIO *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_LookupTable = {"_p_nitf_LookupTable", "nitf_LookupTable *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_WriteHandler = {"_p_nitf_WriteHandler", "nitf_WriteHandler *|nitf_ImageWriter *|nitf_SegmentWriter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nrt_DLL = {"_p_nrt_DLL", "nrt_DLL *|nitf_DLL *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nrt_DateTime = {"_p_nrt_DateTime", "nrt_DateTime *|nitf_DateTime *", 0, 0, (void*)0, 0};
@@ -30842,6 +31526,7 @@ static swig_type_info _swigt__p_nrt_TreeNode = {"_p_nrt_TreeNode", "nrt_TreeNode
 static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|nitf_Off *|nrt_Off *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p__NRT_HashTable = {"_p_p__NRT_HashTable", "struct _NRT_HashTable **|nrt_HashTable **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p__NRT_IOInterface = {"_p_p__NRT_IOInterface", "struct _NRT_IOInterface **|nrt_IOInterface **", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p__nitf_BandInfo = {"_p_p__nitf_BandInfo", "struct _nitf_BandInfo **|nitf_BandInfo **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p__nitf_ComponentInfo = {"_p_p__nitf_ComponentInfo", "struct _nitf_ComponentInfo **|nitf_ComponentInfo **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p__nitf_DESegment = {"_p_p__nitf_DESegment", "struct _nitf_DESegment **|nitf_DESegment **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p__nitf_DESubheader = {"_p_p__nitf_DESubheader", "struct _nitf_DESubheader **|nitf_DESubheader **", 0, 0, (void*)0, 0};
@@ -30878,7 +31563,6 @@ static swig_type_info _swigt__p_p_f_p_void_p_char_size_t_p_struct__NRT_Error__in
 static swig_type_info _swigt__p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int = {"_p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int", "NITF_IO_INTERFACE_WRITE *|int (**)(void *,char const *,size_t,struct _NRT_Error *)", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_f_p_void_p_struct__NRT_Error__int = {"_p_p_f_p_void_p_struct__NRT_Error__int", "int (**)(void *,struct _NRT_Error *)|NITF_IO_INTERFACE_CAN_SEEK *|NITF_IO_INTERFACE_CLOSE *|NITF_IO_INTERFACE_GET_MODE *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_f_p_void_p_struct__NRT_Error__off_t = {"_p_p_f_p_void_p_struct__NRT_Error__off_t", "off_t (**)(void *,struct _NRT_Error *)|NITF_IO_INTERFACE_GET_SIZE *|NITF_IO_INTERFACE_TELL *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_p_nitf_BandInfo = {"_p_p_nitf_BandInfo", "nitf_BandInfo **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_nitf_WriteHandler = {"_p_p_nitf_WriteHandler", "nitf_WriteHandler **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_nrt_List = {"_p_p_nrt_List", "nrt_List **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_uint8_t = {"_p_p_uint8_t", "uint8_t **|nitf_Uint8 **", 0, 0, (void*)0, 0};
@@ -30903,6 +31587,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p__NRT_IIOInterface,
   &_swigt__p__NRT_IOInterface,
   &_swigt__p__NRT_Pair,
+  &_swigt__p__nitf_BandInfo,
   &_swigt__p__nitf_ComponentInfo,
   &_swigt__p__nitf_ConvType,
   &_swigt__p__nitf_DESegment,
@@ -30972,10 +31657,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_int32_t,
   &_swigt__p_int64_t,
   &_swigt__p_int8_t,
-  &_swigt__p_nitf_BandInfo,
   &_swigt__p_nitf_BlockingInfo,
   &_swigt__p_nitf_FieldWarning,
   &_swigt__p_nitf_ImageIO,
+  &_swigt__p_nitf_LookupTable,
   &_swigt__p_nitf_WriteHandler,
   &_swigt__p_nrt_DLL,
   &_swigt__p_nrt_DateTime,
@@ -30990,6 +31675,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_off_t,
   &_swigt__p_p__NRT_HashTable,
   &_swigt__p_p__NRT_IOInterface,
+  &_swigt__p_p__nitf_BandInfo,
   &_swigt__p_p__nitf_ComponentInfo,
   &_swigt__p_p__nitf_DESegment,
   &_swigt__p_p__nitf_DESubheader,
@@ -31026,7 +31712,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int,
   &_swigt__p_p_f_p_void_p_struct__NRT_Error__int,
   &_swigt__p_p_f_p_void_p_struct__NRT_Error__off_t,
-  &_swigt__p_p_nitf_BandInfo,
   &_swigt__p_p_nitf_WriteHandler,
   &_swigt__p_p_nrt_List,
   &_swigt__p_p_uint8_t,
@@ -31051,6 +31736,7 @@ static swig_cast_info _swigc__p__NRT_HashTableIterator[] = {  {&_swigt__p__NRT_H
 static swig_cast_info _swigc__p__NRT_IIOInterface[] = {  {&_swigt__p__NRT_IIOInterface, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__NRT_IOInterface[] = {  {&_swigt__p__NRT_IOInterface, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__NRT_Pair[] = {  {&_swigt__p__NRT_Pair, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p__nitf_BandInfo[] = {  {&_swigt__p__nitf_BandInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_ComponentInfo[] = {  {&_swigt__p__nitf_ComponentInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_ConvType[] = {  {&_swigt__p__nitf_ConvType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__nitf_DESegment[] = {  {&_swigt__p__nitf_DESegment, 0, 0, 0},{0, 0, 0, 0}};
@@ -31120,10 +31806,10 @@ static swig_cast_info _swigc__p_int16_t[] = {  {&_swigt__p_int16_t, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_int32_t[] = {  {&_swigt__p_int32_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int8_t[] = {  {&_swigt__p_int8_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_nitf_BandInfo[] = {  {&_swigt__p_nitf_BandInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nitf_BlockingInfo[] = {  {&_swigt__p_nitf_BlockingInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nitf_FieldWarning[] = {  {&_swigt__p_nitf_FieldWarning, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nitf_ImageIO[] = {  {&_swigt__p_nitf_ImageIO, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_nitf_LookupTable[] = {  {&_swigt__p_nitf_LookupTable, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nitf_WriteHandler[] = {  {&_swigt__p_nitf_WriteHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nrt_DLL[] = {  {&_swigt__p_nrt_DLL, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nrt_DateTime[] = {  {&_swigt__p_nrt_DateTime, 0, 0, 0},{0, 0, 0, 0}};
@@ -31138,6 +31824,7 @@ static swig_cast_info _swigc__p_nrt_TreeNode[] = {  {&_swigt__p_nrt_TreeNode, 0,
 static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p__NRT_HashTable[] = {  {&_swigt__p_p__NRT_HashTable, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p__NRT_IOInterface[] = {  {&_swigt__p_p__NRT_IOInterface, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p__nitf_BandInfo[] = {  {&_swigt__p_p__nitf_BandInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p__nitf_ComponentInfo[] = {  {&_swigt__p_p__nitf_ComponentInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p__nitf_DESegment[] = {  {&_swigt__p_p__nitf_DESegment, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p__nitf_DESubheader[] = {  {&_swigt__p_p__nitf_DESubheader, 0, 0, 0},{0, 0, 0, 0}};
@@ -31174,7 +31861,6 @@ static swig_cast_info _swigc__p_p_f_p_void_p_char_size_t_p_struct__NRT_Error__in
 static swig_cast_info _swigc__p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int[] = {  {&_swigt__p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_f_p_void_p_struct__NRT_Error__int[] = {  {&_swigt__p_p_f_p_void_p_struct__NRT_Error__int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_f_p_void_p_struct__NRT_Error__off_t[] = {  {&_swigt__p_p_f_p_void_p_struct__NRT_Error__off_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_p_nitf_BandInfo[] = {  {&_swigt__p_p_nitf_BandInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_nitf_WriteHandler[] = {  {&_swigt__p_p_nitf_WriteHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_nrt_List[] = {  {&_swigt__p_p_nrt_List, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_uint8_t[] = {  {&_swigt__p_p_uint8_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -31199,6 +31885,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p__NRT_IIOInterface,
   _swigc__p__NRT_IOInterface,
   _swigc__p__NRT_Pair,
+  _swigc__p__nitf_BandInfo,
   _swigc__p__nitf_ComponentInfo,
   _swigc__p__nitf_ConvType,
   _swigc__p__nitf_DESegment,
@@ -31268,10 +31955,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_int32_t,
   _swigc__p_int64_t,
   _swigc__p_int8_t,
-  _swigc__p_nitf_BandInfo,
   _swigc__p_nitf_BlockingInfo,
   _swigc__p_nitf_FieldWarning,
   _swigc__p_nitf_ImageIO,
+  _swigc__p_nitf_LookupTable,
   _swigc__p_nitf_WriteHandler,
   _swigc__p_nrt_DLL,
   _swigc__p_nrt_DateTime,
@@ -31286,6 +31973,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_off_t,
   _swigc__p_p__NRT_HashTable,
   _swigc__p_p__NRT_IOInterface,
+  _swigc__p_p__nitf_BandInfo,
   _swigc__p_p__nitf_ComponentInfo,
   _swigc__p_p__nitf_DESegment,
   _swigc__p_p__nitf_DESubheader,
@@ -31322,7 +32010,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_p_f_p_void_p_q_const__char_size_t_p_struct__NRT_Error__int,
   _swigc__p_p_f_p_void_p_struct__NRT_Error__int,
   _swigc__p_p_f_p_void_p_struct__NRT_Error__off_t,
-  _swigc__p_p_nitf_BandInfo,
   _swigc__p_p_nitf_WriteHandler,
   _swigc__p_p_nrt_List,
   _swigc__p_p_uint8_t,
@@ -32159,6 +32846,12 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NITF_RESVER_SZ",SWIG_From_int((int)(2)));
   SWIG_Python_SetConstant(d, "NITF_RESCLAS_SZ",SWIG_From_int((int)(1)));
   SWIG_Python_SetConstant(d, "NITF_RESSHL_SZ",SWIG_From_int((int)(4)));
+  SWIG_Python_SetConstant(d, "NITF_IREPBAND_SZ",SWIG_From_int((int)(2)));
+  SWIG_Python_SetConstant(d, "NITF_ISUBCAT_SZ",SWIG_From_int((int)(6)));
+  SWIG_Python_SetConstant(d, "NITF_IFC_SZ",SWIG_From_int((int)(1)));
+  SWIG_Python_SetConstant(d, "NITF_IMFLT_SZ",SWIG_From_int((int)(3)));
+  SWIG_Python_SetConstant(d, "NITF_NLUTS_SZ",SWIG_From_int((int)(1)));
+  SWIG_Python_SetConstant(d, "NITF_NELUT_SZ",SWIG_From_int((int)(5)));
   SWIG_Python_SetConstant(d, "PY_NITF_CREATE",SWIG_From_int((int)(1)));
   SWIG_Python_SetConstant(d, "PY_NITF_TRUNCATE",SWIG_From_int((int)(12)));
   SWIG_Python_SetConstant(d, "PY_NITF_OPEN_EXISTING",SWIG_From_int((int)(13)));
