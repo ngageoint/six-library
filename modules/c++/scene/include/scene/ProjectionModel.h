@@ -37,6 +37,33 @@ public:
     virtual ~ProjectionModel() {}
 
     /*!
+     *  Utility function that evaluates the TimeCOAPoly at the
+     *  given pixel.
+     */
+    inline double computeImageTime(const RowCol<double> pixel) const
+    {
+        return mTimeCOAPoly(pixel.row, pixel.col);
+    }
+
+    /*!
+     *  Utility function that evaluates the ARPPoly at the
+     *  given time.
+     */
+    inline Vector3 computeARPPosition(const double time) const
+    {
+        return mARPPoly(time);
+    }
+
+    /*!
+     *  Utility function that evaluates the ARPVelPoly at the
+     *  given time.
+     */
+    inline Vector3 computeARPVelocity(const double time) const
+    {
+        return mARPVelPoly(time);
+    }
+
+    /*!
      *  Implements the transform from a plane point to row column
      *  by subtracting of the SCP projecting into row and column
      *  contributions.
