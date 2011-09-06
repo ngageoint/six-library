@@ -329,6 +329,11 @@ class Reader:
         if not reader: raise Exception('Unable to get new ImageReader')
         return ImageReader(reader, nbpp)
 
+    def newTextReader(self, num):
+        reader = nitropy.nitf_Reader_newTextReader(self.ref, num, self.error)
+        if not reader: raise Exception('Unable to get new TextReader')
+        return SegmentReader(reader)
+
     def newGraphicReader(self, num):
         reader = nitropy.nitf_Reader_newGraphicReader(self.ref, num, self.error)
         if not reader: raise Exception('Unable to get new GraphicReader')
