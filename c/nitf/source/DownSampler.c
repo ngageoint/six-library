@@ -624,7 +624,7 @@ NITFAPI(nitf_DownSampler *) nitf_MaxDownSample_construct(nitf_Uint32
             { \
                 pixel0 = currentPtr0; \
                 pixel1 = currentPtr1; \
-                maxValue = (*pixel0)*(*pixel0) + (*pixel1)*(*pixel1); \
+                maxValue = (float)*pixel0 * (float)*pixel0 + (float)*pixel1 * (float)*pixel1; \
                 value0 = *pixel0; \
                 value1 = *pixel1; \
                 if(row < (numWindowRows-1)) \
@@ -636,29 +636,29 @@ NITFAPI(nitf_DownSampler *) nitf_MaxDownSample_construct(nitf_Uint32
                     if(column < (numWindowCols-1)) \
                         for(winCol=0;winCol<colSkip;winCol++) \
                         { \
-                            maxTest = (*pixel0)*(*pixel0) + (*pixel1)*(*pixel1); \
+                            maxTest = (float)*pixel0 * (float)*pixel0 + (float)*pixel1 * (float)*pixel1; \
                             if(maxValue < maxTest) \
                             { \
                                 maxValue = maxTest; \
                                 value0 = *pixel0; \
                                 value1 = *pixel1; \
                             } \
-                            pixel0 += 1; \
-                            pixel1 += 1; \
+                            ++pixel0; \
+                            ++pixel1; \
                         } \
                     else \
                     { \
                         for(winCol=0;winCol<colsInLastWindow;winCol++) \
                         { \
-                            maxTest = (*pixel0)*(*pixel0) + (*pixel1)*(*pixel1); \
+                            maxTest = (float)*pixel0 * (float)*pixel0 + (float)*pixel1 * (float)*pixel1; \
                             if(maxValue < maxTest) \
                             { \
                                 maxValue = maxTest; \
                                 value0 = *pixel0; \
                                 value1 = *pixel1; \
                             } \
-                            pixel0 += 1; \
-                            pixel1 += 1; \
+                            ++pixel0; \
+                            ++pixel1; \
                         } \
                         pixel0 += colSkip - colsInLastWindow; \
                         pixel1 += colSkip - colsInLastWindow; \
@@ -874,7 +874,7 @@ NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
             { \
                 pixel0 = currentPtr0; \
                 pixel1 = currentPtr1; \
-                maxValue = *pixel0; \
+                maxValue = (float)*pixel0; \
                 value0 = *pixel0; \
                 value1 = *pixel1; \
                 if(row < (numWindowRows-1)) \
@@ -888,12 +888,12 @@ NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
                         { \
                             if(maxValue < *pixel0) \
                             { \
-                                maxValue = *pixel0; \
+                                maxValue = (float)*pixel0; \
                                 value0 = *pixel0; \
                                 value1 = *pixel1; \
                             } \
-                            pixel0 += 1; \
-                            pixel1 += 1; \
+                            ++pixel0; \
+                            ++pixel1; \
                         } \
                     else \
                     { \
@@ -901,12 +901,12 @@ NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
                         { \
                             if(maxValue < *pixel0) \
                             { \
-                                maxValue = *pixel0; \
+                                maxValue = (float)*pixel0; \
                                 value0 = *pixel0; \
                                 value1 = *pixel1; \
                             } \
-                            pixel0 += 1; \
-                            pixel1 += 1; \
+                            ++pixel0; \
+                            ++pixel1; \
                         } \
                         pixel0 += colSkip - colsInLastWindow; \
                         pixel1 += colSkip - colsInLastWindow; \
