@@ -56,7 +56,9 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(MemorySourceImpl *
         nitf_Off size,
         nitf_Error * error)
 {
-    memcpy(buf, memorySource->data + memorySource->mark, size);
+    memcpy(buf,
+           memorySource->data + memorySource->mark,
+           (size_t)size);
     memorySource->mark += size;
     return NITF_SUCCESS;
 }
@@ -235,7 +237,9 @@ NITFPRIV(NITF_BOOL) IOSource_contigRead(IOSourceImpl * source,
                                         nitf_Error * error)
 {
     if (!NITF_IO_SUCCESS(nitf_IOInterface_read(source->io,
-                                            buf, size, error)))
+                                               buf,
+                                               (size_t)size,
+                                               error)))
         return NITF_FAILURE;
     source->mark += size;
     return NITF_SUCCESS;
@@ -274,7 +278,7 @@ NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
     if (tsize + source->mark > source->size)
         tsize = source->size - source->mark;
 
-    tbuf = (char *) NITF_MALLOC(tsize);
+    tbuf = (char *) NITF_MALLOC((size_t)tsize);
     if (!tbuf)
     {
         nitf_Error_init(error,
@@ -283,7 +287,7 @@ NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
         return NITF_FAILURE;
     }
 
-    if (!nitf_IOInterface_read(source->io, tbuf, tsize, error))
+    if (!nitf_IOInterface_read(source->io, tbuf, (size_t)tsize, error))
     {
         NITF_FREE(tbuf);
         return NITF_FAILURE;
