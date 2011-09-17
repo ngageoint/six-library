@@ -839,6 +839,9 @@ class DESubheader(Header):
                 fields.append((k, self[f]))
         return fields.__iter__()
 
+    def getSubheaderFields(self):
+        return TRE(self.ref.subheaderFields)
+
     def getUDHD(self):
         return Extensions(self.ref.userDefinedSection)
 
