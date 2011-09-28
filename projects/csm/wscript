@@ -42,13 +42,13 @@ def build(bld):
         pEnv2['shlib_PATTERN'] = pEnv2['shlib_PATTERN'][3:]
     
     #build our plugin
-    lib = bld.new_task_gen('cxx', 'shlib', includes='include external/TSM/include',
+    lib = bld.new_task_gen('cxx', 'shlib', includes='sicd/include external/TSM/include',
                            target='SICDPlugin[U]', name='SICDPlugin',
                            libpath=[bld.bldnode.abspath() + '/' + bld.lst_variants[0] + '/projects/csm/external/TSM'],
                            libs='TSMAPI',
                            export_incdirs='include',
                            env=pEnv2.copy(), path=bld.path,
-                           uselib_local='six.sicd-c++',
+                           uselib_local='six.sicd-c++ six.sidd-c++',
                            install_path='${PREFIX}/share/CSM/plugins')
-    lib.find_sources_in_dirs('source')
+    lib.find_sources_in_dirs('sicd/source')
     

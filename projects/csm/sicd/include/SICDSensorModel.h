@@ -1,24 +1,24 @@
 /* =========================================================================
-* This file is part of the CSM SICD Plugin
-* =========================================================================
-*
-* (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
-*
-* The CSM SICD Plugin is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public
-* License along with this program; if not,
-* see <http://www.gnu.org/licenses/>.
-*
-*/
+ * This file is part of the CSM SICD Plugin
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
+ *
+ * The CSM SICD Plugin is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #ifndef __SICDSENSORMODEL_H
 #define __SICDSENSORMODEL_H
@@ -627,7 +627,7 @@ public:
                                                                          throw (TSMError);
 
     /**
-     * calculates the direction of illumination at the given ground position 
+     * Calculates the direction of illumination at the given ground position 
      * x, y, z.  The returned values define a direction vector that points 
      * from the illumination source to the given ground point.
      *
@@ -737,7 +737,7 @@ public:
                         double covariance[4]) throw (TSMError);
 
     /**
-     * Gives the cross covariancefor unmodeled error between two image points 
+     * Gives the cross covariance for unmodeled error between two image points 
      * on the same image. The error is reported as the four terms of a 2x2 
      * matrix. The unmodeled cross covariance is added to any values that may 
      * already be in the cross covariance matrix. 
