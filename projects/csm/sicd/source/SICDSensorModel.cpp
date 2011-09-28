@@ -491,7 +491,7 @@ TSMWarning *SICDSensorModel::getImageTime(const double& line,
     try
     {
         scene::RowCol<double> imagePt = fromPixel(line, sample);
-        time = mData->grid->timeCOAPoly(imagePt.row, imagePt.col);
+        time = mProjection->computeImageTime(imagePt);
     }
     catch(except::Exception& e)
     {
@@ -512,8 +512,8 @@ TSMWarning *SICDSensorModel::getSensorPosition(const double& line,
     try
     {
         scene::RowCol<double> imagePt = fromPixel(line, sample);
-        double time = mData->grid->timeCOAPoly(imagePt.row, imagePt.col);
-        six::Vector3 pos = mData->position->arpPoly(time);
+        double time = mProjection->computeImageTime(imagePt);
+        six::Vector3 pos = mProjection->computeARPPosition(time); 
         x = pos[0];
         y = pos[1];
         z = pos[2];
@@ -536,7 +536,7 @@ TSMWarning *SICDSensorModel::getSensorPosition(const double& time, double& x,
 {
     try
     {
-        six::Vector3 pos = mData->position->arpPoly(time);
+        six::Vector3 pos = mProjection->computeARPPosition(time); 
         x = pos[0];
         y = pos[1];
         z = pos[2];
@@ -561,9 +561,8 @@ TSMWarning *SICDSensorModel::getSensorVelocity(const double& line,
     try
     {
         scene::RowCol<double> imagePt = fromPixel(line, sample);
-        double time = mData->grid->timeCOAPoly(imagePt.row, imagePt.col);
-        six::PolyXYZ arpVelPoly = mData->position->arpPoly.derivative();
-        six::Vector3 vel = arpVelPoly(time);
+        double time = mProjection->computeImageTime(imagePt);
+        six::Vector3 vel = mProjection->computeARPVelocity(time); 
         vx = vel[0];
         vy = vel[1];
         vz = vel[2];
@@ -586,8 +585,7 @@ TSMWarning *SICDSensorModel::getSensorVelocity(const double& time, double& vx,
 {
     try
     {
-        six::PolyXYZ arpVelPoly = mData->position->arpPoly.derivative();
-        six::Vector3 vel = arpVelPoly(time);
+        six::Vector3 vel = mProjection->computeARPVelocity(time); 
         vx = vel[0];
         vy = vel[1];
         vz = vel[2];

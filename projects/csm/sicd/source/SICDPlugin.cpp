@@ -211,6 +211,7 @@ TSMWarning *SICDPlugin::canSensorModelBeConstructedFromISD(
             }
             else if (format == "FILENAME")
             {
+                // Note: this case has not been tested
                 filenameISD *tsmFilename = (filenameISD*) &imageSupportData;
                 TSMSensorModel* sensorModel =
                         new sicd_sensor::SICDSensorModel(tsmFilename->_filename,
