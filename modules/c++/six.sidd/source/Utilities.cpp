@@ -108,6 +108,90 @@ six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
     return new scene::SceneGeometry(arpVel, arpPos, refPt, rowVec, colVec, true);
 }
 
+scene::GridGeometry*
+six::sidd::Utilities::getGridGeometry(const DerivedData* derived)
+{
+    if (!derived->measurement->projection->isMeasurable())
+    {
+        throw except::Exception(Ctxt(std::string("Projection type is not measurable: ")
+                + derived->measurement->projection->projectionType.toString()));
+    }
+
+    six::sidd::MeasurableProjection* p =
+            (six::sidd::MeasurableProjection*)derived->measurement->projection;
+
+    switch ((int) p->projectionType)
+    {
+    case six::ProjectionType::PLANE:
+        return new scene::PlanarGridGeometry(p->sampleSpacing.row,
+                                             p->sampleSpacing.col,
+                                             p->referencePoint.rowCol.row,
+                                             p->referencePoint.rowCol.col,
+                                             ((six::sidd::PlaneProjection*)p)->productPlane.rowUnitVector,
+                                             ((six::sidd::PlaneProjection*)p)->productPlane.colUnitVector,
+                                             p->referencePoint.ecef);
+
+    case six::ProjectionType::GEOGRAPHIC:
+/*
+        // Not complete or tested yet
+        return new scene::GeographicGridGeometry(p->sampleSpacing.row,
+                                                 p->sampleSpacing.col,
+                                                 p->referencePoint.rowCol.row,
+                                                 p->referencePoint.rowCol.col,
+                                                 scene::Utilities::ecefToLatLon(p->referencePoint.ecef));
+*/
+
+    case six::ProjectionType::CYLINDRICAL:
+/*
+        // Not complete or tested yet
+    {
+        six::Vector3 stripmapDir =
+                ((six::sidd::CylindricalProjection*)p)->stripmapDirection;
+        six::Vector3 ecef = p->referencePoint.ecef;
+        scene::ECEFToLLATransform ecefToLLA;
+        scene::LatLonAlt lla = ecefToLLA.transform(ecef);
+
+        scene::WGS84EllipsoidModel model;
+        double lon = lla.getLonRadians();
+        double lat = atan2(ecef[2], pow(1 - model.calculateFlattening(), 2) *
+            sqrt(pow(ecef[0], 2) + pow(ecef[1], 2)));
+
+        six::Vector3 e, n, u;
+        e[0] = -sin(lon);
+        e[1] = cos(lon);
+        e[2] = 0;
+
+        n[0] = -sin(lat) * cos(lon);
+        n[1] = -sin(lat) * sin(lon);
+        n[2] = cos(lat);
+
+        u[0] = cos(lat) * cos(lon);
+        u[1] = cos(lat) * sin(lon);
+        u[2] = sin(lat);
+
+        double a = atan2(e.dot(stripmapDir), n.dot(stripmapDir));
+        six::Vector3 colVec = cos(a) * n + sin(a) * e;
+        six::Vector3 rowVec = math::linear::cross(colVec, u);
+
+        return new scene::CylindricalGridGeometry(p->sampleSpacing.row,
+                                                  p->sampleSpacing.col,
+                                                  p->referencePoint.rowCol.row,
+                                                  p->referencePoint.rowCol.col,
+                                                  rowVec,
+                                                  colVec,
+                                                  u,
+                                                  p->referencePoint.ecef,
+                                                  ((six::sidd::CylindricalProjection*)p)->curvatureRadius);
+    }
+*/
+
+    default:
+        throw except::Exception(Ctxt(std::string("Invalid projection type: ")
+                + p->projectionType.toString()));
+
+    }
+}
+
 void six::sidd::Utilities::setProductValues(Poly2D timeCOAPoly,
         PolyXYZ arpPoly, ReferencePoint ref, const Vector3* row,
         const Vector3* col, RangeAzimuth<double>res, Product* product)

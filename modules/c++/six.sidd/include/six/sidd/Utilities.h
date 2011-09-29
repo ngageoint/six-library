@@ -18,6 +18,9 @@ public:
     static scene::SceneGeometry*
     getSceneGeometry(const DerivedData* derived);
 
+    static scene::GridGeometry*
+    getGridGeometry(const DerivedData* derived);
+
     static void setProductValues(Poly2D timeCOAPoly, PolyXYZ arpPoly,
             ReferencePoint ref, const Vector3* row, const Vector3* col,
             RangeAzimuth<double>res, Product* product);
