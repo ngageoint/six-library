@@ -998,13 +998,19 @@ XMLElem ComplexXMLControl::toXML(const RMA *rma, XMLElem parent)
         createDouble("FreqZero", inca->freqZero, incaXML);
         createPoly2D("DRateSFPoly", inca->dopplerRateScaleFactorPoly, incaXML);
 
-        if (inca->dopplerCentroidPoly.orderX() >= 0
-                && inca->dopplerCentroidPoly.orderY() >= 0)
-            createPoly2D("DopCentroidPoly", inca->dopplerCentroidPoly, incaXML);
+        if (!inca->dopplerCentroidPoly.empty())
+        {
+            createPoly2D("DopCentroidPoly",
+                         inca->dopplerCentroidPoly,
+                         incaXML);
+        }
 
         if (!Init::isUndefined<BooleanType>(inca->dopplerCentroidCOA))
-            createBooleanType("DopCentroidCOA", inca->dopplerCentroidCOA,
+        {
+            createBooleanType("DopCentroidCOA",
+                              inca->dopplerCentroidCOA,
                               incaXML);
+        }
     }
     else
     {
