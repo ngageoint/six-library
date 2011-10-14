@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
            blkInfo->numBlocksPerRow, blkInfo->numBlocksPerCol);
     printf("    Block dimensions (r,c) = %d,%d\n",
            blkInfo->numRowsPerBlock, blkInfo->numColsPerBlock);
-    printf("    Block length in bytes %d\n", blkInfo->length);
+    printf("    Block length in bytes %zu\n", blkInfo->length);
 
     /*  Get the actual information */
 
