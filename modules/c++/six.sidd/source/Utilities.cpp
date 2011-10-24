@@ -129,7 +129,9 @@ six::sidd::Utilities::getGridGeometry(const DerivedData* derived)
                                              p->referencePoint.rowCol.col,
                                              ((six::sidd::PlaneProjection*)p)->productPlane.rowUnitVector,
                                              ((six::sidd::PlaneProjection*)p)->productPlane.colUnitVector,
-                                             p->referencePoint.ecef);
+                                             p->referencePoint.ecef,
+                                             derived->measurement->arpPoly,
+                                             p->timeCOAPoly);
 
     case six::ProjectionType::GEOGRAPHIC:
 /*
