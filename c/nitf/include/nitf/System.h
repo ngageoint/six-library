@@ -263,6 +263,7 @@ typedef nrt_IOInterface                 nitf_IOInterface;
 #define nitf_IOInterface_destruct       nrt_IOInterface_destruct
 #define nitf_IOHandleAdapter_construct  nrt_IOHandleAdapter_construct
 #define nitf_IOHandleAdapter_open       nrt_IOHandleAdapter_open
+#define nitf_BufferAdapter_construct    nrt_BufferAdapter_construct
 
 
 /******************************************************************************/
