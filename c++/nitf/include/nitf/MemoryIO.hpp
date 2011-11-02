@@ -48,6 +48,17 @@ private:
     char *mBuffer;
     nitf::Off mPosition;
 
+    void create(char *buffer, nitf::Off size, bool adopt = false)
+    {
+        nitf_IOInterface* interface = nitf_BufferAdapter_construct(
+                buffer, size, adopt, &error);
+
+        if (!interface)
+            throw nitf::NITFException(&error);
+        setNative(interface);
+        setManaged(false);
+    }
+
 public:
 
     MemoryIO(nitf::Off capacity) throw(nitf::NITFException)
@@ -56,11 +67,14 @@ public:
         mBuffer = new char[capacity];
         if (!mBuffer)
             throw nitf::NITFException(Ctxt("Out of memory"));
+
+        create(mBuffer, mCapacity, mOwn);
     }
 
     MemoryIO(char *buffer, nitf::Off size, bool adopt = false) throw(nitf::NITFException)
             : mCapacity(size), mOwn(adopt), mBuffer(buffer), mPosition(0)
     {
+        create(mBuffer, mCapacity, mOwn);
     }
 
     ~MemoryIO()
