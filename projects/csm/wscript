@@ -52,3 +52,14 @@ def build(bld):
                            install_path='${PREFIX}/share/CSM/plugins')
     lib.find_sources_in_dirs('sicd/source')
     
+    #build our plugin
+    lib = bld.new_task_gen('cxx', 'shlib', includes='sidd/include external/TSM/include',
+                           target='SIDDPlugin[U]', name='SIDDPlugin',
+                           libpath=[bld.bldnode.abspath() + '/' + bld.lst_variants[0] + '/projects/csm/external/TSM'],
+                           libs='TSMAPI',
+                           export_incdirs='include',
+                           env=pEnv2.copy(), path=bld.path,
+                           uselib_local='six.sicd-c++ six.sidd-c++',
+                           install_path='${PREFIX}/share/CSM/plugins')
+    lib.find_sources_in_dirs('sidd/source')
+    
