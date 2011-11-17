@@ -28,26 +28,21 @@
 #include "nitf/IOInterface.hpp"
 
 /*!
- * \file IOHandle.hpp
- * \brief Contains wrapper implementation for IOHandle
+ * \file MemoryIO.hpp
+ * \brief Contains wrapper implementation for BufferAdapter
  */
 
 namespace nitf
 {
 
 /*!
- *  \class IOHandle
- *  \brief The C++ wrapper of the nitf_IOHandle
+ *  \class MemoryIO
+ *  \brief The C++ wrapper of the nitf_BufferAdapter
  */
 class MemoryIO : public IOInterface
 {
 
 private:
-    nitf::Off mCapacity;
-    bool mOwn;
-    char *mBuffer;
-    nitf::Off mPosition;
-
     void create(char *buffer, nitf::Off size, bool adopt = false)
     {
         nitf_IOInterface* interface = nitf_BufferAdapter_construct(
@@ -62,79 +57,21 @@ private:
 public:
 
     MemoryIO(nitf::Off capacity) throw(nitf::NITFException)
-        : mCapacity(capacity), mOwn(true), mPosition(0)
     {
-        mBuffer = new char[capacity];
-        if (!mBuffer)
+        char* buffer = new char[capacity];
+        if (!buffer)
             throw nitf::NITFException(Ctxt("Out of memory"));
 
-        create(mBuffer, mCapacity, mOwn);
+        create(buffer, capacity, true);
     }
 
-    MemoryIO(char *buffer, nitf::Off size, bool adopt = false) throw(nitf::NITFException)
-            : mCapacity(size), mOwn(adopt), mBuffer(buffer), mPosition(0)
+    MemoryIO(char *buffer, nitf::Off size, bool adopt = false) 
+            throw(nitf::NITFException)
     {
-        create(mBuffer, mCapacity, mOwn);
+        create(buffer, size, adopt);
     }
 
-    ~MemoryIO()
-    {
-        if (mOwn && mBuffer)
-            delete [] mBuffer;
-    }
-
-    virtual void read(char * buf, size_t size)
-    {
-        if ((mPosition + (nitf::Off)size) > mCapacity)
-            throw nitf::NITFException(Ctxt("Attempting to read past buffer boundary."));
-        memcpy(buf, (char*)(mBuffer + mPosition), size);
-        mPosition += (nitf::Off)size;
-    }
-
-    virtual void write(const char * buf, size_t size) throw(nitf::NITFException)
-    {
-        if ((mPosition + (nitf::Off)size) > mCapacity)
-            throw nitf::NITFException(Ctxt("Attempting to write past buffer boundary."));
-        memcpy((char*)(mBuffer + mPosition), buf, size);
-        mPosition += (nitf::Off)size;
-    }
-
-    virtual nitf::Off seek(nitf::Off offset, int whence) throw(nitf::NITFException)
-    {
-        switch (whence)
-        {
-        case NITF_SEEK_CUR:
-            if (offset + mPosition > mCapacity)
-                throw nitf::NITFException(
-                        Ctxt("Attempting to seek past buffer boundary."));
-            mPosition += offset;
-            break;
-        case NITF_SEEK_END:
-            throw nitf::NITFException(Ctxt("SEEK_END is unsupported with MemoryIO."));
-        case NITF_SEEK_SET:
-            if (offset > mCapacity)
-                throw nitf::NITFException(
-                        Ctxt("Attempting to seek past buffer boundary."));
-            mPosition = offset;
-            break;
-        }
-        return mPosition;
-    }
-
-    virtual nitf::Off tell() throw(nitf::NITFException)
-    {
-        return mPosition;
-    }
-
-    virtual nitf::Off getSize() throw(nitf::NITFException)
-    {
-        return mCapacity;
-    }
-
-    virtual void close()
-    {
-        //do nothing
-    }
+    ~MemoryIO() {}
 };
 
 }
