@@ -11,6 +11,7 @@ typedef struct _BufferIOControl
     char *buf;
     size_t size;
     size_t mark;
+    size_t bytesWritten;
     NRT_BOOL ownBuf;
 } BufferIOControl;
 
@@ -184,6 +185,10 @@ NRTPRIV(NRT_BOOL) BufferAdapter_write(NRT_DATA * data, const char *buf,
     {
         memcpy((char *) (control->buf + control->mark), buf, size);
         control->mark += size;
+        if (control->mark > control->bytesWritten)
+        {
+            control->bytesWritten = control->mark;
+        }
     }
     return NRT_SUCCESS;
 }
@@ -236,7 +241,7 @@ NRTPRIV(nrt_Off) BufferAdapter_tell(NRT_DATA * data, nrt_Error * error)
 NRTPRIV(nrt_Off) BufferAdapter_getSize(NRT_DATA * data, nrt_Error * error)
 {
     BufferIOControl *control = (BufferIOControl *) data;
-    return (nrt_Off) control->size;
+    return (nrt_Off) control->bytesWritten;
 }
 
 NRTPRIV(int) BufferAdapter_getMode(NRT_DATA * data, nrt_Error * error)
