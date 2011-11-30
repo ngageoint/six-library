@@ -22,7 +22,11 @@
 #include "TSMImageSupportData.h"
 #include "TSMPlugin.h"
 #ifndef _WIN32
+#ifndef __APPLE__
 #include <termio.h>
+#else
+#include <termios.h>
+#endif
 #include <unistd.h>
 #else
 #include <io.h>
