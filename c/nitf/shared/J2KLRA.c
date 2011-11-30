@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-sdf
+
 static nitf_TREDescription description[] = {
     {NITF_BCS_N,  1,  "original compressed data",     "ORIG" },
     {NITF_BCS_N,  2,  "number wavelet levels",        "NLEVELS_O" },
