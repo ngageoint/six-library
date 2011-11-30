@@ -201,7 +201,7 @@ protected:
     void parseLatLonAlt(XMLElem llaXML, LatLonAlt& lla);
     void parseLatLon(XMLElem parent, LatLon& ll);
     void parseLatLons(XMLElem pointsXML, const std::string& pointName,
-            std::vector<LatLon>& llVec);
+            std::vector<LatLon>& llVec, std::vector<int>& indexVec);
     void parseRangeAzimuth(XMLElem parent, RangeAzimuth<double>& value);
     virtual void parseFootprint(XMLElem footprint,
             const std::string& cornerName, LatLonCorners& corners);

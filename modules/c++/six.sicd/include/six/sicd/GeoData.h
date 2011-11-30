@@ -68,6 +68,7 @@ public:
      *
      */
     std::vector<LatLon> geometryLatLon;
+    std::vector<int> geometryLatLonIdx;
 
 private:
     // Noncopyable
@@ -124,6 +125,7 @@ public:
      *  is the number of vertices.
      */
     std::vector<LatLon> validData;
+    std::vector<int> validDataIdx;
 
     /*!
      *  (Optional) Parameters that describe geographic features.
