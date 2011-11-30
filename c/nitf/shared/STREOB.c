@@ -34,7 +34,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 5, "Begining Asymmetric Angle", "B_ASYM" },
     {NITF_BCS_A, 5, "Ending Asymmetric Angle", "E_ASYM" },
     {NITF_BCS_A, 6, "Begining Bisector Intercept Elevation", "B_BIE" },
-    {NITF_BCS_A, 6, "Ending Bisector Intercept Elevation", "E_EIE" },
+    {NITF_BCS_A, 6, "Ending Bisector Intercept Elevation", "E_BIE" },
     {NITF_END, 0, NULL, NULL}
 };
 
