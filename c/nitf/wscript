@@ -37,8 +37,9 @@ def build(bld):
     uselib_local = 'nitf-c nrt-c'
     
     pluginList = []
-    plugins = filter(lambda x: 'J2K' not in x,
-                     pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' '))
+    plugins = pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
+    plugins.remove('J2KDecompress.c')
+    plugins.remove('J2KCompress.c')
     plugins.sort()
     
     for p in plugins:
