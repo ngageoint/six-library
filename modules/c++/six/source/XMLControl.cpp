@@ -695,7 +695,7 @@ void XMLControl::parseLatLon(XMLElem parent, LatLon& ll)
 }
 
 void XMLControl::parseLatLons(XMLElem pointsXML, const std::string& pointName,
-        std::vector<LatLon>& llVec)
+        std::vector<LatLon>& llVec, std::vector<int>& indexVec)
 {
     std::vector < XMLElem > latLonsXML;
     pointsXML->getElementsByTagName(pointName, latLonsXML);
@@ -706,6 +706,9 @@ void XMLControl::parseLatLons(XMLElem pointsXML, const std::string& pointName,
         LatLon ll;
         parseLatLon(*it, ll);
         llVec.push_back(ll);
+
+        int index = str::toType<int>((*it)->getAttributes().getValue("index"));
+        indexVec.push_back(index);
     }
 }
 
@@ -1290,13 +1293,13 @@ XMLElem XMLControl::toXML(const Radiometric *r, XMLElem parent)
 
     std::string si = getSICommonURI();
 
-    if (r->noisePoly.orderX() >= 0 && r->noisePoly.orderY() >= 0)
+    if (!r->noisePoly.empty())
         createPoly2D("NoisePoly", si, r->noisePoly, rXML);
-    if (r->rcsSFPoly.orderX() >= 0 && r->rcsSFPoly.orderY() >= 0)
+    if (!r->rcsSFPoly.empty())
         createPoly2D("RCSSFPoly", si, r->rcsSFPoly, rXML);
-    if (r->betaZeroSFPoly.orderX() >= 0 && r->betaZeroSFPoly.orderY() >= 0)
+    if (!r->betaZeroSFPoly.empty())
         createPoly2D("BetaZeroSFPoly", si, r->betaZeroSFPoly, rXML);
-    if (r->sigmaZeroSFPoly.orderX() >= 0 && r->sigmaZeroSFPoly.orderY() >= 0)
+    if (!r->sigmaZeroSFPoly.empty())
         createPoly2D("SigmaZeroSFPoly", si, r->sigmaZeroSFPoly, rXML);
 
     if (r->sigmaZeroSFIncidenceMap != AppliedType::NOT_SET)
@@ -1304,7 +1307,7 @@ XMLElem XMLControl::toXML(const Radiometric *r, XMLElem parent)
         createString("SigmaZeroSFIncidenceMap", si, six::toString<
                 six::AppliedType>(r->sigmaZeroSFIncidenceMap), rXML);
     }
-    if (r->gammaZeroSFPoly.orderX() >= 0 && r->gammaZeroSFPoly.orderY() >= 0)
+    if (!r->gammaZeroSFPoly.empty())
         createPoly2D("GammaZeroSFPoly", si, r->sigmaZeroSFPoly, rXML);
     if (r->gammaZeroSFIncidenceMap != AppliedType::NOT_SET)
     {

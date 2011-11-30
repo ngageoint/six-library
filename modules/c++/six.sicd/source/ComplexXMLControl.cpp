@@ -320,7 +320,8 @@ XMLElem ComplexXMLControl::toXML(const GeoData *geoData, XMLElem parent)
         {
             XMLElem vertexXML = createLatLon("Vertex", geoData->validData[i],
                                              vXML);
-            setAttribute(vertexXML, "index", str::toString(i + 1));
+            setAttribute(vertexXML, "index", 
+                    str::toString(geoData->validDataIdx[i]));
         }
     }
 
@@ -356,11 +357,14 @@ XMLElem ComplexXMLControl::toXML(const GeoInfo *geoInfo, XMLElem parent)
     {
         XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
                                          geoInfoXML);
+        setAttribute(linePolyXML, "size", str::toString(numLatLons));
 
         for (int i = 0; i < numLatLons; ++i)
         {
-            createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
+            XMLElem v = createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
                          geoInfo->geometryLatLon[i], linePolyXML);
+            setAttribute(v, "index", 
+                    str::toString(geoInfo->geometryLatLonIdx[i]));
         }
     }
     return geoInfoXML;
@@ -894,7 +898,7 @@ XMLElem ComplexXMLControl::toXML(const std::string& name,
         createPoly2D("GainPoly", params->element->gainPoly, elemXML);
         createPoly2D("PhasePoly", params->element->phasePoly, elemXML);
     }
-    if (params->gainBSPoly.order() >= 0)
+    if (!params->gainBSPoly.empty())
     {
         createPoly1D("GainBSPoly", params->gainBSPoly, apXML);
     }
@@ -1185,7 +1189,8 @@ void ComplexXMLControl::fromXML(const XMLElem geoDataXML, GeoData *geoData)
     tmpElem = getOptional(geoDataXML, "ValidData");
     if (tmpElem != NULL)
     {
-        parseLatLons(tmpElem, "Vertex", geoData->validData);
+        parseLatLons(tmpElem, "Vertex", geoData->validData, 
+                geoData->validDataIdx);
     }
 
     std::vector < XMLElem > geoInfosXML;
@@ -1227,6 +1232,7 @@ void ComplexXMLControl::fromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo)
         LatLon ll;
         parseLatLon(tmpElem, ll);
         geoInfo->geometryLatLon.push_back(ll);
+        geoInfo->geometryLatLonIdx.push_back(0);
     }
     else
     {
@@ -1239,7 +1245,8 @@ void ComplexXMLControl::fromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo)
         }
         if (tmpElem)
         {
-            parseLatLons(tmpElem, pointName, geoInfo->geometryLatLon);
+            parseLatLons(tmpElem, pointName, geoInfo->geometryLatLon, 
+                    geoInfo->geometryLatLonIdx);
         }
     }
 }
