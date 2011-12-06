@@ -321,8 +321,14 @@ NRTAPI(nrt_IOInterface *) nrt_IOHandleAdapter_open(const char *fname,
                                               error);
     if (NRT_INVALID_HANDLE(handle))
     {
-        nrt_Error_init(error, "Invalid IO handle", NRT_CTXT,
-                       NRT_ERR_INVALID_OBJECT);
+        // Save off the original error message (i.e. that the file doesn't
+        // exist or has invalid permissions)
+        // TODO: Would really like to use one of the nrt_Error print functions
+        char origMessage[NRT_MAX_EMESSAGE + 1];
+        strcpy(origMessage, error->message);
+
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
+                        "Invalid IO handle (%s)", origMessage);
         return NULL;
     }
 
