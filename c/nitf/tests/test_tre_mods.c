@@ -64,11 +64,11 @@ NITF_BOOL testNestedMod(nitf_Error* error)
     }
     exists = nitf_TRE_setField(tre, "NUMACHZ", "01", 2, error);
     printf("Set ok? %s\n", exists ? "OK" : "FAIL");
-    exists = nitf_TRE_setField(tre, "UNIAAH[0]", "   ", 3, error);
+    exists = nitf_TRE_setField(tre, "UNIAAH[0]", "abc", 3, error);
     printf("Set ok? %s\n", exists ? "OK" : "FAIL");
     exists = nitf_TRE_setField(tre, "AAH[0]", "00000", 5, error);
     printf("Set ok? %s\n", exists ? "OK" : "FAIL");
-    exists = nitf_TRE_setField(tre, "UNIAPH[0]", "   ", 3, error);
+    exists = nitf_TRE_setField(tre, "UNIAPH[0]", "def", 3, error);
     printf("Set ok? %s\n", exists ? "OK" : "FAIL");
     exists = nitf_TRE_setField(tre, "APH[0]", "00000", 5, error);
     printf("Set ok? %s\n", exists ? "OK" : "FAIL");
