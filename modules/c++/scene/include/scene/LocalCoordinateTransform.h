@@ -68,7 +68,7 @@ public:
         double cosLat = cos(lat);
 
         // East
-        mBasis(XYZ_X, 0) = -sinLat;
+        mBasis(XYZ_X, 0) = -sinLon;
         mBasis(XYZ_X, 1) = cosLon;
         mBasis(XYZ_X, 2) = 0.0;
 
