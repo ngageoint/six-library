@@ -30,8 +30,8 @@ int main(int argc, char **argv)
     {
         if (argc != 3)
         {
-            std::cout << "Usage: %s <input-file> <output-file> \n" << argv[0]
-                    << std::endl;
+            std::cout << "Usage: " << argv[0]
+                      << " <input-file> <output-file>\n\n";
             exit(EXIT_FAILURE);
         }
 
