@@ -66,7 +66,7 @@ scene::PlanarGridGeometry::gridToScene(const scene::Vector3& gridPt,
         f(0, 0) = rMag - arpPosToPop.norm();
         f(1, 0) = arpVel.dot(lineOfSight) / rMag -
                 arpVel.dot(arpPosToPop) / arpPosToPop.norm();
-	f(2, 0) = lla.getAlt() - height; // Use the altitude of the current p
+        f(2, 0) = lla.getAlt() - height; // Use the altitude of the current p
 
         // B[0] = dFr/dP
         b(0, 0) = -rHat(0, 0);
@@ -232,7 +232,7 @@ scene::Vector3 scene::CylindricalGridGeometry::rowColToECEF(double row,
 scene::Vector3 scene::GeographicGridGeometry::rowColToECEF(double row,
                                                            double col) const
 {
-    scene::LatLonAlt lla(
+    const scene::LatLonAlt lla(
         mRefPt.getLat() - (row - mSceneCenterRow) *
         mSampleSpacingRows / 3600.,
         
@@ -243,4 +243,22 @@ scene::Vector3 scene::GeographicGridGeometry::rowColToECEF(double row,
         );
 
     return scene::Utilities::latLonToECEF(lla);
+}
+
+scene::RowCol<double>
+scene::GeographicGridGeometry::ecefToRowCol(const Vector3& p3) const
+{
+    const scene::LatLonAlt lla(scene::Utilities::ecefToLatLon(p3));
+
+    scene::RowCol<double> rowCol;
+
+    rowCol.row =
+        (mRefPt.getLat() - lla.getLat()) * 3600. / mSampleSpacingRows +
+        mSceneCenterRow;
+
+    rowCol.col =
+        (lla.getLon() - mRefPt.getLon()) * 3600. / mSampleSpacingCols +
+        mSceneCenterCol;
+
+    return rowCol;
 }
