@@ -62,6 +62,8 @@ class CPPBuildContext(BuildContext):
                     break
         elif isfile(path):
             cp.read(path)
+        else:
+            raise Exception(path + ' does not exist')
         
         sectionDict = lambda x: dict(cp.items(filter(lambda x: cp.has_section(x), [x, x.lower(), x.upper()])[0]))
         
