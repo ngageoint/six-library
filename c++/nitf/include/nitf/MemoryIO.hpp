@@ -46,7 +46,7 @@ private:
     void create(char *buffer, nitf::Off size, bool adopt = false)
     {
         nitf_IOInterface* interface = nitf_BufferAdapter_construct(
-                buffer, size, adopt, &error);
+                buffer, static_cast<size_t>(size), adopt, &error);
 
         if (!interface)
             throw nitf::NITFException(&error);
@@ -58,9 +58,7 @@ public:
 
     MemoryIO(nitf::Off capacity) throw(nitf::NITFException)
     {
-        char* buffer = new char[capacity];
-        if (!buffer)
-            throw nitf::NITFException(Ctxt("Out of memory"));
+        char* buffer = new char[static_cast<size_t>(capacity)];
 
         create(buffer, capacity, true);
     }

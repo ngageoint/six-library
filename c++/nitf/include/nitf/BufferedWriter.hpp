@@ -50,9 +50,7 @@ public:
           mBufferSize(bufferSize), mOwn(true), mBuffer(NULL), mPosition(0),
           mTotalWritten(0), mBlocksWritten(0), mPartialBlocks(0)
     {
-        mBuffer = new char[bufferSize];
-        if (!mBuffer)
-            throw nitf::NITFException(Ctxt("Out of memory"));
+        mBuffer = new char[static_cast<size_t>(bufferSize)];
     }
 
     BufferedWriter(std::string file, char *buffer, 
