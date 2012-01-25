@@ -20,6 +20,7 @@
  *
  */
 
+#include <string.h>
 #include "nitf/TRE.hpp"
 
 using namespace nitf;
@@ -55,11 +56,33 @@ TRE & TRE::operator=(NITF_DATA * x)
     return *this;
 }
 
-TRE::TRE(const std::string& tag, std::string id)
+TRE::TRE(const char* tag) throw(nitf::NITFException)
+{
+	setNative(nitf_TRE_construct(tag, NULL, &error));
+	getNativeOrThrow();
+	setManaged(false);
+}
+
+TRE::TRE(const char* tag, const char* id) throw(nitf::NITFException)
+{
+	setNative(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : NULL, &error));
+	getNativeOrThrow();
+	setManaged(false);
+}
+
+TRE::TRE(const std::string& tag) throw(nitf::NITFException)
+{
+	setNative(nitf_TRE_construct(tag.c_str(), NULL, &error));
+	getNativeOrThrow();
+	setManaged(false);
+}
+
+TRE::TRE(const std::string& tag, const std::string& id)
     throw(nitf::NITFException)
 {
-    const char* cId = id.empty() ? NULL : id.c_str();
-    setNative(nitf_TRE_construct(tag.c_str(), cId, &error));
+    setNative(nitf_TRE_construct(tag.c_str(),
+    		                     id.empty() ? NULL : id.c_str(),
+    		                     &error));
     getNativeOrThrow();
     setManaged(false);
 }

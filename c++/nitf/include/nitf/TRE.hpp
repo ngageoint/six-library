@@ -186,12 +186,16 @@ typedef nitf::TREFieldIterator Iterator;
 
     TRE & operator=(NITF_DATA * x);
 
-    /*!
-     *  Constructor
-     *  You must specify a length of the TRE
-     *  \param length  The length of the TRE data
-     */
-    TRE(const std::string& tag, std::string id = "")
+    //! Without the const char* constructors, in VS if you do something like
+    //  TRE("my_tre_tag")
+    //  You get the NITF_DATA* constructor rather than the std::string one
+    TRE(const char* tag) throw(nitf::NITFException);
+
+    TRE(const char* tag, const char* id) throw(nitf::NITFException);
+
+    TRE(const std::string& tag) throw(nitf::NITFException);
+
+    TRE(const std::string& tag, const std::string& id)
         throw(nitf::NITFException);
 
     //! Clone
