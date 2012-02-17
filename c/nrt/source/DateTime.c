@@ -20,7 +20,51 @@
  *
  */
 
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "nrt/DateTime.h"
+
+#define NRT_YEAR0 1900
+#define NRT_EPOCH_YEAR 1970 /* EPOCH = Jan 1 1970 00:00:00 */
+
+/* At the end of each month, the total number of days so far in the year.
+ * Index 0 is for non-leap years, index 1 is for leap years */
+const int NRT_CUMULATIVE_DAYS_PER_MONTH[2][12] =
+{
+    {31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365},
+    {31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366}
+};
+
+/* The number of days in a year.  Index 0 is for non-leap years, index 1 is
+ * for leap years */
+const int NRT_DAYS_PER_YEAR[2] = {365, 366};
+
+/* Returns the appropriate index into NRT_CUMULATIVE_DAYS_PER_MONTH based on
+ * whether 'year' is a leap year or not */
+NRTPRIV(int) nrtYearIndex(int year)
+{
+    return (!(year % 4) && ((year % 100) || !(year % 400)));
+}
+
+/* Returns the # of full days so far in the year
+ * 'month' and 'dayOfMonth' are 1-based
+ * So, nrtGetNumFullDaysInYearSoFar(2000, 1, 1) = 0
+ *     nrtGetNumFullDaysInYearSoFar(2000, 1, 2) = 1
+ *     nrtGetNumFullDaysInYearSoFar(2000, 2, 1) = 31
+ */
+NRTPRIV(int) nrtGetNumFullDaysInYearSoFar(int year, int month, int dayOfMonth)
+{
+    /* The number of days for all the full months so far */
+    int numFullDays = (month > 1) ?
+        NRT_CUMULATIVE_DAYS_PER_MONTH[nrtYearIndex(year)][month - 2] :
+        0;
+
+    /* The number of full days in this month so far */
+    numFullDays += dayOfMonth - 1;
+    return numFullDays;
+}
 
 NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                               double *millis);
@@ -47,63 +91,70 @@ NRTAPI(nrt_DateTime *) nrt_DateTime_fromMillis(double millis, nrt_Error * error)
     return dt;
 }
 
-NRTPRIV(time_t) nrt_DateTime_getLocalOffset()
+NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime* dateTime,
+                                            nrt_Error* error)
 {
-    struct tm gt, lt;
-    double millis;
-    time_t gmtSeconds, localSeconds;
+    long numDaysThisYear;
+    long numDaysSinceEpoch;
+    int month;
+    int year;
 
-    millis = nrt_Utils_getCurrentTimeMillis();  /* gmt */
-
-    gmtSeconds = (time_t) (millis / 1000);
-    gt = *gmtime(&gmtSeconds);
-    lt = *localtime(&gmtSeconds);
-
-    gt.tm_isdst = lt.tm_isdst;
-    localSeconds = mktime(&gt);
-
-    return (localSeconds - gmtSeconds) * 1000;
-}
-
-NRTPRIV(time_t) nrt_DateTime_timegm(struct tm * t)
-{
-    /* just subtract off the timezone offset of our locale */
-    return mktime(t) - (nrt_DateTime_getLocalOffset() / (time_t) 1000);
-}
-
-NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime * dateTime,
-                                            nrt_Error * error)
-{
-    struct tm t, lt;
-    time_t seconds;
-    double fractionalSeconds;
-
-    t.tm_sec = (int) dateTime->second;
-    t.tm_min = dateTime->minute;
-    t.tm_hour = dateTime->hour;
-    t.tm_mday = dateTime->dayOfMonth;
-    t.tm_mon = dateTime->month - 1;
-    t.tm_year = dateTime->year - 1900;
-    t.tm_wday = dateTime->dayOfWeek - 1;
-    t.tm_yday = dateTime->dayOfYear - 1;
-
-    /* adjust for local dst */
-    seconds = (time_t) (dateTime->timeInMillis / 1000.0);
-    lt = *localtime(&seconds);
-    t.tm_isdst = lt.tm_isdst;
-
-    fractionalSeconds = dateTime->second - (double) t.tm_sec;
-    seconds = nrt_DateTime_timegm(&t);
-    if (seconds == -1)
+    /* Sanity checks.  If things aren't valid, just set timeInMillis to 0. */
+    /* TODO: Not sure if we should error out instead.  The advantage of this
+     *       approach is if a caller is gradually setting fields, it won't
+     *       error out, and once they have set all 6 fields, the struct will
+     *       be in a valid state */
+    if (dateTime->second < 0.0 || dateTime->second >= 60.0 ||
+        dateTime->minute > 59 ||
+        dateTime->hour > 23 ||
+        dateTime->dayOfMonth < 1 || dateTime->dayOfMonth > 31 ||
+        dateTime->month < 1 || dateTime->month > 11 ||
+        dateTime->year < 1970 || dateTime->year > 2037)
     {
-        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
-                        "Error retrieving seconds from given time");
-        return NRT_FAILURE;
+        dateTime->timeInMillis = 0.0;
+        dateTime->dayOfYear = dateTime->dayOfWeek = 0;
+        return NRT_SUCCESS;
     }
 
-    dateTime->timeInMillis = (seconds + fractionalSeconds) * 1000.0;
-    dateTime->dayOfWeek = t.tm_wday;
-    dateTime->dayOfYear = t.tm_yday;
+    /* Essentially we are implementing a simplified variant of mktime() here.
+     * Implementation loosely based on
+     * http://www.raspberryginger.com/jbailey/minix/html/mktime_8c-source.html
+     * The problem with mktime() is that it expects local time and we are in
+     * GMT.  Note that we can't just call mktime(), then look at the
+     * difference between localtime() and gmtime() and offset the result by
+     * that amount because this approach can't reliably take daylight savings
+     * time into account.  Another option would be to trick mktime() by
+     * setting the TZ environment variable to UTC, but this wouldn't be
+     * reentrant.
+     * It is very unfortunate that there's no POSIX standard function similar
+     * to mktime() that allows you to pass in the timezone you want.
+     * */
+
+    /* Count up the # of days this year */
+    numDaysThisYear = nrtGetNumFullDaysInYearSoFar(dateTime->year,
+                                                   dateTime->month,
+                                                   dateTime->dayOfMonth);
+
+    /* Count up the # of days for all the years prior to this one
+     * TODO: This could be implemented more efficiently - see reference
+     * implementation above. */
+    numDaysSinceEpoch = 0;
+    for (year = NRT_EPOCH_YEAR; year < dateTime->year; ++year)
+    {
+        numDaysSinceEpoch += NRT_DAYS_PER_YEAR[nrtYearIndex(year)];
+    }
+    numDaysSinceEpoch += numDaysThisYear;
+
+    dateTime->timeInMillis =
+        (dateTime->second +
+         dateTime->minute * 60.0 +
+         dateTime->hour * (60.0 * 60.0) +
+         numDaysSinceEpoch * (60.0 * 60.0 * 24.0)) * 1000.0;
+
+    dateTime->dayOfYear = numDaysThisYear + 1;
+
+    /* January 1, 1970 was a Thursday (5) */
+    dateTime->dayOfWeek = (numDaysSinceEpoch + 5) % 7;
 
     return NRT_SUCCESS;
 }
@@ -195,13 +246,12 @@ NRTAPI(nrt_DateTime *) nrt_DateTime_fromString(const char *string,
                                                const char *format,
                                                nrt_Error * error)
 {
-    struct tm t, lt;
-    time_t gmtSeconds;
+    struct tm t;
+    nrt_DateTime *dateTime = NULL;
     double millis = 0.0;
 
-    gmtSeconds = (time_t) (nrt_Utils_getCurrentTimeMillis() / 1000.0);  /* gmt */
-    lt = *localtime(&gmtSeconds);
-    t.tm_isdst = lt.tm_isdst;
+    /* NOTE: _NRT_strptime() does not use the tm_isdst flag at all. */
+    t.tm_isdst = -1;
 
     if (!_NRT_strptime(string, format, &t, &millis))
     {
@@ -210,10 +260,37 @@ NRTAPI(nrt_DateTime *) nrt_DateTime_fromString(const char *string,
                         format);
         return NULL;
     }
-    t.tm_isdst = lt.tm_isdst;   /* reset it */
 
-    return nrt_DateTime_fromMillis((double) nrt_DateTime_timegm(&t) * 1000 +
-                                   millis, error);
+    /* Create a DateTime object */
+    dateTime = (nrt_DateTime *) NRT_MALLOC(sizeof(nrt_DateTime));
+    if (!dateTime)
+    {
+        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                       NRT_ERR_MEMORY);
+        return NULL;
+    }
+
+    /* Initialize it from the tm struct
+     * TODO: Update _NRT_strptime() to just use a DateTime directly */
+    dateTime->year = t.tm_year + 1900;
+
+    /* 0-based so add 1 */
+    dateTime->month = t.tm_mon + 1;
+    dateTime->dayOfMonth = t.tm_mday;
+    dateTime->dayOfWeek = t.tm_wday + 1;
+    dateTime->dayOfYear = t.tm_yday + 1;
+    dateTime->hour = t.tm_hour;
+    dateTime->minute = t.tm_min;
+    dateTime->second = t.tm_sec + millis / 1000.0;
+
+    /* Compute the # of milliseconds */
+    if (!nrt_DateTime_updateMillis(dateTime, error))
+    {
+        NRT_FREE(dateTime);
+        return NULL;
+    }
+
+    return dateTime;
 }
 
 NRTAPI(void) nrt_DateTime_destruct(nrt_DateTime ** dt)
@@ -421,7 +498,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
 #define ALT_O          0x02
 /* #define LEGAL_ALT(x)       { if (alt_format & ~(x)) return (0); } */
 #define LEGAL_ALT(x)       { ; }
-#define TM_YEAR_BASE   (1900)   /* changed from 1970 */
+#define TM_YEAR_BASE NRT_YEAR0
 
 static const char *day[7] = { "Sunday", "Monday", "Tuesday", "Wednesday",
     "Thursday", "Friday", "Saturday"
