@@ -67,6 +67,7 @@ GeoData* GeoData::clone()
     dolly->scp = scp;
     dolly->imageCorners = imageCorners;
     dolly->validData = validData;
+    dolly->validDataIdx = validDataIdx;
     for (size_t ii = 0; ii < geoInfos.size(); ++ii)
     {
         std::auto_ptr<GeoInfo> info(geoInfos[ii]->clone());
