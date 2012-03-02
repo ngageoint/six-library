@@ -185,7 +185,121 @@ ProjectionModel::imageToScene(const RowCol<double>& imageGridPoint,
                                 arpCOA, velCOA, timeCOA,
                                 groundPlaneNormal,
                                 groundRefPoint);
+}
+
+void ProjectionModel::computeProjectionPolynomials(
+    const scene::GridGeometry& gridGeom,
+    const RowCol<size_t>& inPixelStart,
+    const RowCol<double>& inSceneCenter,
+    const RowCol<double>& outSceneCenter,
+    const RowCol<double>& outSampleSpacing,
+    const RowCol<size_t>& outExtent,
+    size_t polyOrder,
+    math::poly::TwoD<double>& outputToSlantRow,
+    math::poly::TwoD<double>& outputToSlantCol,
+    math::poly::TwoD<double>& timeCOAPoly,
+    double* meanResidualErrorRow,
+    double* meanResidualErrorCol,
+    double* meanResidualErrorTCOA) const
+{
+    // Points to use in each direction
+    static const size_t POINTS_1D = 10;
+
+    // Want to sample [0, outExtent) in the loop below
+    const RowCol<double> skip(
+        static_cast<double>(outExtent.row - 1) / (POINTS_1D - 1),
+        static_cast<double>(outExtent.col - 1) / (POINTS_1D - 1));
+
+    const RowCol<double> ratio(outSceneCenter.row / inSceneCenter.row,
+                               outSceneCenter.col / inSceneCenter.col);
+
+    const RowCol<double> outOffset(inPixelStart.row * ratio.row,
+                                   inPixelStart.col * ratio.col);
+
+    math::linear::Matrix2D<double> rowMapping(POINTS_1D, POINTS_1D);
+    math::linear::Matrix2D<double> colMapping(POINTS_1D, POINTS_1D);
+    math::linear::Matrix2D<double> tcoaMapping(POINTS_1D, POINTS_1D);
+    math::linear::Matrix2D<double> lines(POINTS_1D, POINTS_1D);
+    math::linear::Matrix2D<double> samples(POINTS_1D, POINTS_1D);
+
+    RowCol<double> currentOffset(0., 0.);
     
+    for (size_t ii = 0; ii < POINTS_1D; ++ii, currentOffset.row += skip.row)
+    {
+        currentOffset.col = 0;
+        for (size_t jj = 0; jj < POINTS_1D; ++jj, currentOffset.col += skip.col)
+        {
+            // Rows, these are essentially meshgrid-like (replicated)
+            lines(ii, jj) = currentOffset.row;
+            // This represents columns
+            samples(ii, jj) = currentOffset.col;
+
+            // Find initial position in the scene
+            const scene::Vector3 sPos =
+                gridGeom.rowColToECEF(currentOffset.row, currentOffset.col);
+
+            // This HAS to be a scene coordinate
+            double timeCOA(0.0);
+            const scene::RowCol<double> rgAz = sceneToImage(sPos, &timeCOA);
+
+            // Adjust here for the start offset
+            rowMapping(ii, jj) = rgAz.row / outSampleSpacing.row +
+                    outSceneCenter.row - outOffset.row;
+            colMapping(ii, jj) = rgAz.col / outSampleSpacing.col +
+                    outSceneCenter.col - outOffset.col;
+
+            tcoaMapping(ii, jj) = timeCOA;
+        }
+    }
+
+    // Now fit the outputToSlantRows, outputToSlantCols, and timeCOAPoly
+    outputToSlantRow = math::poly::fit(lines, samples, rowMapping,
+                                       polyOrder, polyOrder);
+
+    outputToSlantCol = math::poly::fit(lines, samples, colMapping,
+                                       polyOrder, polyOrder);
+
+    timeCOAPoly = math::poly::fit(lines, samples, tcoaMapping,
+                                  polyOrder, polyOrder);
+
+    if (meanResidualErrorRow || meanResidualErrorCol || meanResidualErrorTCOA)
+    {
+        double errorSumRow(0.0);
+        double errorSumCol(0.0);
+        double errorSumTCOA(0.0);
+
+        for (size_t ii = 0; ii < POINTS_1D; ++ii)
+        {
+            for (size_t jj = 0; jj < POINTS_1D; ++jj)
+            {
+                const double row(lines(ii, jj));
+                const double col(samples(ii, jj));
+
+                double diff = rowMapping(ii, jj) - outputToSlantRow(row, col);
+                errorSumRow += diff * diff;
+
+                diff = colMapping(ii, jj) - outputToSlantCol(row, col);
+                errorSumCol += diff * diff;
+
+                diff = tcoaMapping(ii, jj) - timeCOAPoly(row, col);
+                errorSumTCOA += diff * diff;
+            }
+        }
+
+        static const size_t NUM_POINTS = POINTS_1D * POINTS_1D;
+        if (meanResidualErrorRow)
+        {
+            *meanResidualErrorRow = errorSumRow / NUM_POINTS;
+        }
+        if (meanResidualErrorCol)
+        {
+            *meanResidualErrorCol = errorSumCol / NUM_POINTS;
+        }
+        if (meanResidualErrorTCOA)
+        {
+            *meanResidualErrorTCOA = errorSumTCOA / NUM_POINTS;
+        }
+    }
 }
 
 RangeAzimProjectionModel::

@@ -2,6 +2,7 @@
 #define __SCENE_PROJECTION_MODEL_H__
 
 #include "scene/Types.h"
+#include "scene/GridGeometry.h"
 #include <import/math/poly.h>
 
 namespace scene
@@ -152,7 +153,44 @@ public:
                                 const Vector3& groundPlaneNormal,
                                 double *oTimeCOA) const;
 
-
+    /*!
+     * Samples a 10x10 grid of points that spans outExtent using
+     * imageToScene().  From these samples, fits projection and time COA
+     * polynomials of the specified order.  Optionally computes mean residual
+     * errors in these polynomials (mean of the squares of the differences).
+     *
+     * \param gridGeom Grid geometry
+     * \param inPixelStart Input space start pixel (i.e. if this is non-zero,
+     * it indicates an AOI)
+     * \param inSceneCenter Input space scene center pixel in row/col
+     * \param outSceneCenter Output space scene center pixel in row/col
+     * \param outSampleSpacing Output space sample spacing
+     * \param outExtent Output extent in row/col
+     * \param polyOrder Polynomial order to use when fitting the polynomials
+     * \param outputToSlantRow [output] Output to slant row polynomial
+     * \param outputToSlantCol [output] Output to slant col polynomial
+     * \param timeCOAPoly [output] Time center of aperture polynomial
+     * \param meanResidualErrorRow [output] Optional.  Mean residual error in
+     * outputToSlantRow
+     * \param meanResidualErrorCol [output] Optional.  Mean residual error in
+     * outputToSlantCol
+     * \param meanResidualErrorTCOA [output] Optional.  Mean residual error in
+     * timeCOAPoly
+     */
+    void computeProjectionPolynomials(
+        const scene::GridGeometry& gridGeom,
+        const RowCol<size_t>& inPixelStart,
+        const RowCol<double>& inSceneCenter,
+        const RowCol<double>& outSceneCenter,
+        const RowCol<double>& outSampleSpacing,
+        const RowCol<size_t>& outExtent,
+        size_t polyOrder,
+        math::poly::TwoD<double>& outputToSlantRow,
+        math::poly::TwoD<double>& outputToSlantCol,
+        math::poly::TwoD<double>& timeCOAPoly,
+        double* meanResidualErrorRow = NULL,
+        double* meanResidualErrorCol = NULL,
+        double* meanResidualErrorTCOA = NULL) const;
 };
 
 class RangeAzimProjectionModel : public ProjectionModel
