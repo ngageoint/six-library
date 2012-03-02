@@ -182,7 +182,7 @@ protected:
     void addParameters(const std::string& name,
             const std::vector<Parameter>& props, XMLElem parent = NULL);
     void addDecorrType(const std::string& name, const std::string& uri,
-            DecorrType& dt, XMLElem p);
+            DecorrType dt, XMLElem p);
 
     void parseInt(XMLElem element, int& value);
     void parseInt(XMLElem element, long& value);

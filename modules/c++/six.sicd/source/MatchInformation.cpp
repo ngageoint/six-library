@@ -21,26 +21,19 @@
  */
 #include "six/sicd/MatchInformation.h"
 
-using namespace six;
-using namespace six::sicd;
-
-MatchInformation::~MatchInformation()
+namespace six
 {
-    for (unsigned int i = 0; i < collects.size(); ++i)
-    {
-        MatchCollection* c = collects[i];
-        delete c;
-    }
+namespace sicd
+{
+MatchInformation::MatchInformation() :
+    collects(1)
+{
+    collects[0].reset(new MatchCollection());
 }
 
 MatchInformation* MatchInformation::clone() const
 {
-    MatchInformation* info = new MatchInformation();
-
-    for (unsigned int i = 0; i < collects.size(); ++i)
-    {
-        MatchCollection* c = collects[i];
-        info->collects.push_back(c->clone());
-    }
-    return info;
+    return new MatchInformation(*this);
+}
+}
 }

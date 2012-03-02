@@ -27,6 +27,7 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include <import/str.h>
+#include <mem/ScopedCloneablePtr.h>
 
 namespace six
 {
@@ -74,24 +75,20 @@ struct CorrCoefs
  */
 struct PosVelError
 {
-    //! Coordinate frame used for expressing P,V error statistics
-    FrameType frame;
-    
     //!  CorrCoefs are NULL, since optional
     PosVelError() :
-        corrCoefs(NULL)
+        corrCoefs(NULL),
+        positionDecorr(Init::undefined<DecorrType>())
     {
-        positionDecorr = Init::undefined<DecorrType>();
     }
 
-    //!  Destroy CorrCoefs if non-NULL
-    ~PosVelError()
+    PosVelError* clone() const
     {
-	if (corrCoefs)
-	    delete corrCoefs;
+        return new PosVelError(*this);
     }
 
-    PosVelError* clone();
+    //! Coordinate frame used for expressing P,V error statistics
+    FrameType frame;
 
     double p1;
     double p2;
@@ -99,12 +96,12 @@ struct PosVelError
     double v1;
     double v2;
     double v3;
+
     //! Optional
-    CorrCoefs* corrCoefs;
+    mem::ScopedCloneablePtr<CorrCoefs> corrCoefs;
 
     //! Can be none, make sure to set this undefined()
     DecorrType positionDecorr;
-
 };
 
 /*!
@@ -141,12 +138,8 @@ struct RadarSensor
     //!  Constructor
     RadarSensor();
 
-    //!  Destructor
-    ~RadarSensor() {}
-
     //!  Clone this object
     RadarSensor* clone() const;
-
 };
 
 /*!
@@ -180,12 +173,8 @@ struct TropoError
     //!  Constructor
     TropoError();
 
-    //!  Destructor
-    ~TropoError() {}
-
     //!  Clone this object
     TropoError* clone() const;
-
 };
 
 /*!
@@ -225,9 +214,6 @@ struct IonoError
     //!  Constructor
     IonoError();
 
-    //!  Destructor
-    ~IonoError() {}
-
     //!  Clone this object
     IonoError* clone() const;
 };
@@ -241,25 +227,18 @@ struct IonoError
  */
 struct Components
 {
-
-
-    //!  Sets all optionals to NULL
-    Components() : posVelError(NULL), radarSensor(NULL),
-        tropoError(NULL), ionoError(NULL)
+    //!  Constructor
+    Components()
     {
     }
 
-    //!  Delete any children that are non-NULL
-    ~Components();
-
-    //!  Clone any children that are non-NULL
+    //!  Clone this object
     Components* clone() const;
 
-    PosVelError* posVelError;
-    RadarSensor* radarSensor;
-    TropoError* tropoError;
-    IonoError* ionoError;
-
+    mem::ScopedCloneablePtr<PosVelError> posVelError;
+    mem::ScopedCloneablePtr<RadarSensor> radarSensor;
+    mem::ScopedCloneablePtr<TropoError> tropoError;
+    mem::ScopedCloneablePtr<IonoError> ionoError;
 };
 
 /*!
@@ -278,11 +257,6 @@ struct CompositeSCP
 {
     //!  Constructor
     CompositeSCP()
-    {
-    }
-
-    //!  Destructor
-    ~CompositeSCP()
     {
     }
 
@@ -309,7 +283,6 @@ struct CompositeSCP
  */
 struct ErrorStatistics
 {
-
     //!  Types
     enum SCPType
     {
@@ -324,13 +297,13 @@ struct ErrorStatistics
      *  (Optional) Composite error statistcis estimated at the scene
      *  center point
      */
-    CompositeSCP* compositeSCP;
+    mem::ScopedCloneablePtr<CompositeSCP> compositeSCP;
 
     /*!
      *  (Optional) error statistics components
      *
      */
-    Components* components;
+    mem::ScopedCloneablePtr<Components> components;
 
     /*!
      *  Additional parameters
@@ -339,16 +312,12 @@ struct ErrorStatistics
     std::vector<Parameter> additionalParameters;
 
     /*!
-     *  Null initialize everything.
      *  Note that scpType is not prepared, and must be supplied
      *  for us to write
      */
-    ErrorStatistics() : compositeSCP(NULL), components(NULL)
+    ErrorStatistics()
     {
     }
-
-    //!  Destroy any sub-objects that are non-NULL
-    ~ErrorStatistics();
 
     //!  Clone, including non-NULL sub-objects
     ErrorStatistics* clone() const;
@@ -357,9 +326,7 @@ struct ErrorStatistics
      *  \todo this is an API anomaly.  Revisit and remove if possible.
      */
     void initialize(SCPType type);
-
 };
-
 }
 
 #endif

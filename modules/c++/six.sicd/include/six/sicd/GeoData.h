@@ -25,6 +25,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include <mem/ScopedCloneablePtr.h>
 
 namespace six
 {
@@ -46,8 +47,15 @@ public:
     GeoInfo()
     {
     }
-    //!  Destructor, deletes all sub-nodes
-    ~GeoInfo();
+
+    /*!  Destructor (this may be required by some old compilers that otherwise
+     *   can't handle a ScopedCloneablePtr of the same object being a member
+     *   variable)
+     */
+
+    ~GeoInfo()
+    {
+    }
 
     //!  Clone, including all sub-nodes
     GeoInfo* clone() const;
@@ -56,7 +64,7 @@ public:
     std::string name;
 
     //! (Optional) sub-nodes
-    std::vector<GeoInfo*> geoInfos;
+    std::vector<mem::ScopedCloneablePtr<GeoInfo> > geoInfos;
 
     //! (Optional) description of geographic feature
     std::vector<Parameter> desc;
@@ -69,11 +77,6 @@ public:
      */
     std::vector<LatLon> geometryLatLon;
     std::vector<int> geometryLatLonIdx;
-
-private:
-    // Noncopyable
-    GeoInfo(const GeoInfo& );
-    const GeoInfo& operator=(const GeoInfo& );
 };
 
 /*!
@@ -91,9 +94,6 @@ public:
         earthModel(EarthModelType::WGS84)
     {
     }
-
-    //!  Destructor, deletes all GeoInfo objects
-    ~GeoData();
 
     //!  Clone, including non-NULL GeoInfo objects
     GeoData* clone();
@@ -131,12 +131,7 @@ public:
      *  (Optional) Parameters that describe geographic features.
      *  Note that this may be used as a block inside of a block.
      */
-    std::vector<GeoInfo*> geoInfos;
-
-private:
-    // Noncopyable
-    GeoData(const GeoData& );
-    const GeoData& operator=(const GeoData& );
+    std::vector<mem::ScopedCloneablePtr<GeoInfo> > geoInfos;
 };
 
 }
