@@ -23,58 +23,18 @@
 
 #include "six/sicd/GeoData.h"
 
-using namespace six;
-using namespace six::sicd;
-
-
-GeoInfo::~GeoInfo()
+namespace six
 {
-    for (size_t ii = 0; ii < geoInfos.size(); ++ii)
-    {
-        delete geoInfos[ii];
-    }
-}
-
+namespace sicd
+{
 GeoInfo* GeoInfo::clone() const
 {
-    std::auto_ptr<GeoInfo> dolly(new GeoInfo());
-    dolly->desc = desc;
-    dolly->geometryLatLon = geometryLatLon;
-
-    for (size_t ii = 0; ii < geoInfos.size(); ++ii)
-    {
-        std::auto_ptr<GeoInfo> info(geoInfos[ii]->clone());
-        dolly->geoInfos.push_back(info.get());
-        info.release();
-    }
-
-    GeoInfo * const dollyPtr(dolly.release());
-    return dollyPtr;
-}
-
-GeoData::~GeoData()
-{
-    for (size_t ii = 0; ii < geoInfos.size(); ++ii)
-    {
-        delete geoInfos[ii];
-    }
+    return new GeoInfo(*this);
 }
 
 GeoData* GeoData::clone()
 {
-    std::auto_ptr<GeoData> dolly(new GeoData());
-    dolly->earthModel = earthModel;
-    dolly->scp = scp;
-    dolly->imageCorners = imageCorners;
-    dolly->validData = validData;
-    dolly->validDataIdx = validDataIdx;
-    for (size_t ii = 0; ii < geoInfos.size(); ++ii)
-    {
-        std::auto_ptr<GeoInfo> info(geoInfos[ii]->clone());
-        dolly->geoInfos.push_back(info.get());
-        info.release();
-    }
-
-    GeoData * const dollyPtr(dolly.release());
-    return dollyPtr;
+    return new GeoData(*this);
+}
+}
 }

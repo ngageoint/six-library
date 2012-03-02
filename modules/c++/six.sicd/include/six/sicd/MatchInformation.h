@@ -25,6 +25,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include <mem/ScopedCloneablePtr.h>
 
 namespace six
 {
@@ -40,18 +41,16 @@ namespace sicd
  */
 struct MatchCollection
 {
-
     //! Constructor
-    MatchCollection()
+    MatchCollection() :
+        illuminatorName(Init::undefined<std::string>())
     {
-        // Optional
-        illuminatorName = Init::undefined<std::string>();
     }
 
     //! Platform id.  List rcv only platform for bistatic colls
     std::string collectorName;
 
-    //! tx platform identifier for bistatic match colls
+    //! Optional - tx platform identifier for bistatic match colls
     std::string illuminatorName;
 
     //! unique ID for collect
@@ -63,16 +62,11 @@ struct MatchCollection
     //! Relevant match params
     std::vector<Parameter> parameters;
 
-    //! Destructor
-    ~MatchCollection()
-    {
-    }
     //! Clone this object
     MatchCollection* clone() const
     {
         return new MatchCollection(*this);
     }
-
 };
 
 /*!
@@ -86,20 +80,13 @@ struct MatchCollection
 struct MatchInformation
 {
     /*!
-     *  One or more Collect objcts, containing information about
+     *  One or more Collect objects, containing information about
      *  the Nth matched collection.  Collections are indexed from 1
      */
-    std::vector<MatchCollection*> collects;
+    std::vector<mem::ScopedCloneablePtr<MatchCollection> > collects;
 
-    //!  Constructor
-    MatchInformation()
-    {
-        collects.push_back(new MatchCollection());
-    }
-
-    //!  Destructor (including non-NULL children)
-    ~MatchInformation();
-
+    //!  Constructor.  Creates a single default-constructed collection.
+    MatchInformation();
 
     //!  Clone (including clones of children)
     MatchInformation* clone() const;

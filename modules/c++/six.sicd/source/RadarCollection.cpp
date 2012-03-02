@@ -86,25 +86,17 @@ Segment* Segment::clone() const
     return new Segment(*this);
 }
 
-AreaPlane::AreaPlane()
+AreaPlane::AreaPlane() :
+    referencePoint(Init::undefined<ReferencePoint>()),
+    xDirection(new AreaDirectionParameters()),
+    yDirection(new AreaDirectionParameters()),
+    orientation(OrientationType::NOT_SET)
 {
-    xDirection = new AreaDirectionParameters();
-    yDirection = new AreaDirectionParameters();
-    referencePoint = Init::undefined<ReferencePoint>();
-    orientation = OrientationType::NOT_SET;
 }
 
-AreaPlane::~AreaPlane()
+AreaPlane* AreaPlane::clone() const
 {
-    for (unsigned int i = 0; i < segmentList.size(); ++i)
-    {
-        Segment* s = segmentList[i];
-        delete s;
-    }
-    if (xDirection)
-        delete xDirection;
-    if (yDirection)
-        delete yDirection;
+    return new AreaPlane(*this);
 }
 
 Area::Area()
@@ -114,78 +106,14 @@ Area::Area()
     {
         acpCorners.getCorner(ii) = initial;
     }
-
-    plane = NULL;
-}
-
-Area::~Area()
-{
-    if (plane)
-        delete plane;
-}
-
-AreaPlane* AreaPlane::clone() const
-{
-    AreaPlane* a = new AreaPlane();
-    for (unsigned int i = 0; i < segmentList.size(); ++i)
-    {
-        Segment* s = segmentList[i];
-        a->segmentList.push_back(s->clone());
-    }
-    a->xDirection = xDirection->clone();
-    a->yDirection = yDirection->clone();
-    return a;
 }
 
 Area* Area::clone() const
 {
-    Area *a = new Area(*this);
-    a->plane = plane ? plane->clone() : NULL;
-    return a;
-}
-
-RadarCollection::~RadarCollection()
-{
-    if (area)
-        delete area;
-
-    for (unsigned int i = 0; i < waveform.size(); ++i)
-    {
-        WaveformParameters* wfp = waveform[i];
-        if (wfp)
-            delete wfp;
-    }
-    for (unsigned int i = 0; i < rcvChannels.size(); ++i)
-    {
-        ChannelParameters* rcv = rcvChannels[i];
-        if (rcv)
-            delete rcv;
-    }
-    for (unsigned int i = 0; i < txSequence.size(); ++i)
-    {
-        TxStep* t = txSequence[i];
-        if (t)
-            delete t;
-    }
+    return new Area(*this);
 }
 
 RadarCollection* RadarCollection::clone() const
 {
-    RadarCollection* r = new RadarCollection(*this);
-    if (area)
-        r->area = area->clone();
-
-    for (unsigned int i = 0; i < waveform.size(); ++i)
-    {
-        r->waveform[i] = waveform[i]->clone();
-    }
-    for (unsigned int i = 0; i < rcvChannels.size(); ++i)
-    {
-        r->rcvChannels[i] = rcvChannels[i]->clone();
-    }
-    for (unsigned int i = 0; i < txSequence.size(); ++i)
-    {
-        r->txSequence[i] = txSequence[i]->clone();
-    }
-    return r;
+    return new RadarCollection(*this);
 }

@@ -25,6 +25,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include <mem/ScopedCloneablePtr.h>
 
 namespace six
 {
@@ -240,10 +241,6 @@ struct AreaPlane
      */
     AreaPlane();
     
-    //!  Destructor
-    ~AreaPlane();
-
-
     /*!
      *  Make a deep copy of xDirection, yDirection, and any existing
      *  segments
@@ -261,20 +258,20 @@ struct AreaPlane
      *  line direction.
      *
      */
-    AreaDirectionParameters* xDirection;
+    mem::ScopedCloneablePtr<AreaDirectionParameters> xDirection;
 
     /*!
      *  SICD YDir.  Represents parameters in the Y direction of the
      *  geo-referenced display plane.  Y direction is also the increasing
      *  samples direction.
      */
-    AreaDirectionParameters* yDirection;
+    mem::ScopedCloneablePtr<AreaDirectionParameters> yDirection;
 
     /*!
      *  (Optional) list of segments corresponding to the RadarCollection
      *  AreaPlane.
      */
-    std::vector<Segment*> segmentList;
+    std::vector<mem::ScopedCloneablePtr<Segment> > segmentList;
 
      /*!
       * Orientation type describing the shadow intent of the geo-reference
@@ -299,9 +296,6 @@ struct Area
      */
     Area();
 
-    //!  Destruct the plane sub-object if non-NULL
-    ~Area();
-
     //!  Clone the object, including the plane if non-NULL
     Area* clone() const;
 
@@ -315,7 +309,7 @@ struct Area
      *  (Optional) SICD Plane parameter, See AreaPlane.
      *  
      */
-    AreaPlane* plane;
+    mem::ScopedCloneablePtr<AreaPlane> plane;
 };
 
 /*!
@@ -336,14 +330,10 @@ struct RadarCollection
      *  therefore is set to NULL, as is Area
      */
     RadarCollection() :
-        area(NULL)
+        refFrequencyIndex(Init::undefined<int>()),
+        polarizationHVAnglePoly(Init::undefined<Poly1D>())
     {
-        refFrequencyIndex = Init::undefined<int>();
-	polarizationHVAnglePoly = Init::undefined<Poly1D>();
     }
-
-    //!  Destructor.  Deletes children if non_NULL
-    ~RadarCollection();
 
     //!  Clone.  Makes a deep copy of resolution if non-NULL
     RadarCollection* clone() const;
@@ -366,16 +356,16 @@ struct RadarCollection
     //!  Optional, indicates the transmit signal teps trhough
     //!  a repeating sequence of waveforms and/or polarizations, one step
     //!  per IPP.
-    std::vector<TxStep*> txSequence;
+    std::vector<mem::ScopedCloneablePtr<TxStep> > txSequence;
 
     //!  (Optional) waveform pararmeters
-    std::vector<WaveformParameters*> waveform;
+    std::vector<mem::ScopedCloneablePtr<WaveformParameters> > waveform;
 
     //!  (Optional) receive channels
-    std::vector<ChannelParameters*> rcvChannels;
+    std::vector<mem::ScopedCloneablePtr<ChannelParameters> > rcvChannels;
 
     //!  (Optional) area parameter
-    Area* area;
+    mem::ScopedCloneablePtr<Area> area;
 
     //!  (Optional) additional parameters
     std::vector<Parameter> parameters;

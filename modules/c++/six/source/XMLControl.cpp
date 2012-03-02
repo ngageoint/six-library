@@ -608,7 +608,7 @@ void XMLControl::addParameters(const std::string& name,
 }
 
 void XMLControl::addDecorrType(const std::string& name,
-        const std::string& uri, DecorrType& decorrType, XMLElem parent)
+        const std::string& uri, DecorrType decorrType, XMLElem parent)
 {
     //only adds it if it needs to
     if (!Init::isUndefined<double>(decorrType.corrCoefZero)
@@ -816,7 +816,7 @@ XMLElem XMLControl::toXML(const ErrorStatistics* errorStatistics,
     //TODO compositeSCP needs to be reworked
 
     std::string si = getSICommonURI();
-    if (errorStatistics->compositeSCP)
+    if (errorStatistics->compositeSCP.get())
     {
         XMLElem scpXML = newElement("CompositeSCP", si, errorStatsXML);
 
@@ -840,15 +840,15 @@ XMLElem XMLControl::toXML(const ErrorStatistics* errorStatistics,
         }
     }
 
-    Components* components = errorStatistics->components;
+    const Components* const components = errorStatistics->components.get();
     if (components)
     {
         XMLElem componentsXML = newElement("Components", si, errorStatsXML);
 
-        PosVelError* posVelError = components->posVelError;
-        RadarSensor* radarSensor = components->radarSensor;
-        TropoError* tropoError = components->tropoError;
-        IonoError* ionoError = components->ionoError;
+        const PosVelError* const posVelError = components->posVelError.get();
+        const RadarSensor* const radarSensor = components->radarSensor.get();
+        const TropoError* const tropoError = components->tropoError.get();
+        const IonoError* const ionoError = components->ionoError.get();
 
         if (posVelError)
         {
@@ -863,7 +863,7 @@ XMLElem XMLControl::toXML(const ErrorStatistics* errorStatistics,
             createDouble("V2", si, posVelError->v2, posVelErrXML);
             createDouble("V3", si, posVelError->v3, posVelErrXML);
 
-            CorrCoefs *coefs = posVelError->corrCoefs;
+            const CorrCoefs* const coefs = posVelError->corrCoefs.get();
             if (coefs)
             {
                 XMLElem coefsXML = newElement("CorrCoefs", si, posVelErrXML);
@@ -970,7 +970,7 @@ void XMLControl::fromXML(const XMLElem errorStatsXML,
     //optional
     if (compositeSCPXML)
     {
-        errorStatistics->compositeSCP = new CompositeSCP();
+        errorStatistics->compositeSCP.reset(new CompositeSCP());
         tmpElem = getOptional(compositeSCPXML, "RgAzErr");
         if (tmpElem)
         {
@@ -1018,34 +1018,34 @@ void XMLControl::fromXML(const XMLElem errorStatsXML,
     if (tmpElem)
     {
         //optional
-        errorStatistics->components = new Components();
+        errorStatistics->components.reset(new Components());
 
         posVelErrXML = getOptional(tmpElem, "PosVelErr");
         if (posVelErrXML)
         {
             //optional
-            errorStatistics->components->posVelError = new PosVelError();
+            errorStatistics->components->posVelError.reset(new PosVelError());
         }
 
         radarSensorXML = getOptional(tmpElem, "RadarSensor");
         if (radarSensorXML)
         {
             //optional
-            errorStatistics->components->radarSensor = new RadarSensor();
+            errorStatistics->components->radarSensor.reset(new RadarSensor());
         }
 
         tropoErrorXML = getOptional(tmpElem, "TropoError");
         if (tropoErrorXML)
         {
             //optional
-            errorStatistics->components->tropoError = new TropoError();
+            errorStatistics->components->tropoError.reset(new TropoError());
         }
 
         ionoErrorXML = getOptional(tmpElem, "IonoError");
         if (ionoErrorXML)
         {
             //optional
-            errorStatistics->components->ionoError = new IonoError();
+            errorStatistics->components->ionoError.reset(new IonoError());
         }
     }
 
@@ -1071,8 +1071,8 @@ void XMLControl::fromXML(const XMLElem errorStatsXML,
         if (tmpElem)
         {
             //optional
-            errorStatistics->components->posVelError->corrCoefs
-                    = new CorrCoefs();
+            errorStatistics->components->posVelError->corrCoefs.reset(
+                new CorrCoefs());
             parseDouble(
                         getFirstAndOnly(tmpElem, "P1P2"),
                         errorStatistics->components->posVelError->corrCoefs->p1p2);
