@@ -22,11 +22,11 @@
 
 #include "nitf/SegmentSource.hpp"
 
-nitf::SegmentMemorySource::SegmentMemorySource(char * data, size_t size,
-        nitf::Off start, int byteSkip) throw (nitf::NITFException)
+nitf::SegmentMemorySource::SegmentMemorySource(const char * data, size_t size,
+        nitf::Off start, int byteSkip, bool copyData) throw (nitf::NITFException)
 {
     setNative(nitf_SegmentMemorySource_construct(data, size, start, byteSkip,
-                                                 &error));
+    		                                     copyData, &error));
     setManaged(false);
 }
 

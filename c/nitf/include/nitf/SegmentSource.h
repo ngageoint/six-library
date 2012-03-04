@@ -61,15 +61,18 @@ typedef nitf_DataSource             nitf_SegmentSource;
  *  \param data The data
  *  \param size The size
  *  \param start The start offset
- *  \param byteSkip The number of bytes to skip(0 signifies contiguous read)
+ *  \param byteSkip The number of bytes to skip (0 signifies contiguous read)
+ *  \param copyData Whether or not to make a copy of the data.  If this is
+ *  false, the data must outlive the memory source.
  */
 NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
 (
-    char *data,
+    const char* data,
     nitf_Off size,
     nitf_Off start,
     int byteSkip,
-    nitf_Error * error
+    NITF_BOOL copyData,
+    nitf_Error* error
 );
 
 /*!

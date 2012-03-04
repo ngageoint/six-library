@@ -104,7 +104,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_ImageSource_getBandSources
     end = nitf_List_end(imageSource->bandSources);
     while (nitf_ListIterator_notEqualTo(&iter, &end))
     {
-        address = (nitf_BandSource *)nitf_ListIterator_get(&iter);
+        address = (jlong)((nitf_BandSource *)nitf_ListIterator_get(&iter));
         element = (*env)->CallStaticObjectMethod(env, bandSourceClass,
                 methodID, address);
         (*env)->SetObjectArrayElement(env, sources, index++, element);

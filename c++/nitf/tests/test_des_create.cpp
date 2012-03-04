@@ -42,7 +42,7 @@
     test_des_write inputFile outputFile
 */
 
-static char data[] = "123456789ABCDEF0";
+static const char data[] = "123456789ABCDEF0";
 
 /*
 *   Ugly function to create the DES user header (a TRE)
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
         writer.prepare(output_io, record);
 
         nitf::SegmentWriter sWriter = writer.newDEWriter(0);
-        nitf::SegmentMemorySource sSource(data, strlen(data), 0, 0);
+        nitf::SegmentMemorySource sSource(data, strlen(data), 0, 0, false);
         sWriter.attachSource(sSource);
         writer.write();
 

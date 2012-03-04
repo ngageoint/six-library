@@ -20,6 +20,8 @@
  *
  */
 
+#include <string.h>
+
 #include "nitf/SegmentSource.h"
 
 /*
@@ -27,7 +29,8 @@
  */
 typedef struct _MemorySourceImpl
 {
-    char *data;
+    const char *data;
+    NITF_BOOL ownData;
     nitf_Off size;
     int sizeSet;
     nitf_Off mark;
@@ -89,8 +92,8 @@ NITFPRIV(NITF_BOOL) MemorySource_read(NITF_DATA * data,
     if (!memorySource)
         return NITF_FAILURE;
 
-    /*  We like the contiguous read case, its fast  */
-    /*  We want to make sure we reward this case    */
+    /*  We like the contiguous read case, it's fast  */
+    /*  We want to make sure we reward this case     */
     if (memorySource->byteSkip == 0)
         return MemorySource_contigRead(memorySource, buf, size, error);
 
@@ -102,7 +105,13 @@ NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 {
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     if (memorySource)
+    {
+    	if (memorySource->ownData)
+    	{
+    		NITF_FREE((void*)memorySource->data);
+    	}
         NITF_FREE(memorySource);
+    }
 }
 
 NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error *e)
@@ -125,11 +134,12 @@ NITFPRIV(NITF_BOOL) MemorySource_setSize(NITF_DATA * data, nitf_Off size, nitf_E
 
 NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
 (
-    char *data,
+    const char* data,
     nitf_Off size,
     nitf_Off start,
     int byteSkip,
-    nitf_Error * error
+    NITF_BOOL copyData,
+    nitf_Error* error
 )
 {
     static nitf_IDataSource iMemorySource =
@@ -150,7 +160,27 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
         return NULL;
     }
 
-    impl->data = data;
+    if (copyData)
+    {
+    	char* dataCopy = (char*) NITF_MALLOC(size);
+
+    	if (!dataCopy)
+    	{
+    		NITF_FREE(impl);
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                            NITF_ERR_MEMORY);
+            return NULL;
+    	}
+    	memcpy(dataCopy, data, size);
+
+    	impl->data = dataCopy;
+    	impl->ownData = 1;
+    }
+    else
+    {
+    	impl->data = data;
+    	impl->ownData = 0;
+    }
     impl->size = size;
     impl->sizeSet = 0;
     impl->mark = impl->start = (start >= 0 ? start : 0);
@@ -159,6 +189,12 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentMemorySource_construct
     segmentSource = (nitf_SegmentSource *) NITF_MALLOC(sizeof(nitf_SegmentSource));
     if (!segmentSource)
     {
+    	if (copyData)
+    	{
+    		NITF_FREE((void*)impl->data);
+    	}
+    	NITF_FREE(impl);
+
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
                         NITF_ERR_MEMORY);
         return NULL;

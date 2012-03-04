@@ -56,9 +56,9 @@ NITF_BOOL initializeTextSubheader(nitf_TextSubheader* header,
 
 int main(int argc, char** argv)
 {
-    char* outText = NULL;
+    const char* outText = NULL;
     const char* outPathname = NULL;
-    nitf_IOHandle outIO = NULL;
+    nitf_IOHandle outIO = NRT_INVALID_HANDLE_VALUE;
     nitf_Writer* writer = NULL;
     nitf_TextSegment* textSegment = NULL;
     nitf_SegmentWriter* textWriter = NULL;
@@ -130,7 +130,7 @@ int main(int argc, char** argv)
 
     textSource = nitf_SegmentMemorySource_construct(outText,
                                                     strlen(outText),
-                                                    0, 0, &error);
+                                                    0, 0, 0, &error);
     if (!textSource)
     {
         goto CATCH_ERROR;
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
     nitf_Writer_write(writer, &error);
 
 CATCH_ERROR:
-    if (outIO)
+    if (!NITF_INVALID_HANDLE(outIO))
     {
         nitf_IOHandle_close(outIO);
     }

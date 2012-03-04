@@ -55,9 +55,10 @@ JNIEXPORT jobject JNICALL Java_nitf_SegmentSource_makeSegmentMemorySource
         return NULL;
     }
 
+    /* this makes a copy of the data before we release it */
     memorySource =
         nitf_SegmentMemorySource_construct(buf, size, start,
-            byteSkip, &error);
+            byteSkip, 1, &error);
 
     (*env)->ReleaseByteArrayElements(env, data, buf, 0);
 

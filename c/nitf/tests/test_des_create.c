@@ -36,7 +36,7 @@
 
 */
 
-static char data[] = "123456789ABCDEF0";
+static const char data[] = "123456789ABCDEF0";
 
 #include <string.h>
 
@@ -476,7 +476,7 @@ int main(int argc, char *argv[])
     }
 
     desData = nitf_SegmentMemorySource_construct(data, strlen(data), 
-                                                 0, 0, &error);
+                                                 0, 0, 0, &error);
     if (desData == NULL)
     {
         nitf_Error_print(&error, stderr, "Write setup failed ");

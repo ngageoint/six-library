@@ -28758,25 +28758,29 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentMemorySource_construct(PyObject *SWIGUNUS
   nitf_Off arg2 ;
   nitf_Off arg3 ;
   int arg4 ;
-  nitf_Error *arg5 = (nitf_Error *) 0 ;
+  int arg5 ;
+  nitf_Error *arg6 = (nitf_Error *) 0 ;
   int res1 ;
   char *buf1 = 0 ;
   int alloc1 = 0 ;
   int val4 ;
   int ecode4 = 0 ;
-  void *argp5 = 0 ;
-  int res5 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
   nitf_SegmentSource *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_SegmentMemorySource_construct",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:nitf_SegmentMemorySource_construct",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_SegmentMemorySource_construct" "', argument " "1"" of type '" "char *""'");
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_SegmentMemorySource_construct" "', argument " "1"" of type '" "char const *""'");
   }
   arg1 = (char *)(buf1);
   {
@@ -28790,12 +28794,17 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentMemorySource_construct(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "nitf_SegmentMemorySource_construct" "', argument " "4"" of type '" "int""'");
   } 
   arg4 = (int)(val4);
-  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_SegmentMemorySource_construct" "', argument " "5"" of type '" "nitf_Error *""'"); 
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "nitf_SegmentMemorySource_construct" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = (int)(val5);
+  res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res6)) {
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "nitf_SegmentMemorySource_construct" "', argument " "6"" of type '" "nitf_Error *""'"); 
   }
-  arg5 = (nitf_Error *)(argp5);
-  result = (nitf_SegmentSource *)nitf_SegmentMemorySource_construct(arg1,arg2,arg3,arg4,arg5);
+  arg6 = (nitf_Error *)(argp6);
+  result = (nitf_SegmentSource *)nitf_SegmentMemorySource_construct((char const *)arg1,arg2,arg3,arg4,arg5,arg6);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_DataSource, 0 |  0 );
   if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   return resultobj;

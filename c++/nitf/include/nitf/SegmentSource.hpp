@@ -64,13 +64,11 @@ public:
      *  \param size     The size of the buffer
      *  \param start    The start offset
      *  \param byteSkip The amount of bytes to skip
+     *  \param copyData Whether or not to make a copy of the data.  If this is
+     *  false, the data must outlive the memory source.
      */
-            SegmentMemorySource(char * data, size_t size, nitf::Off start,
-                    int byteSkip) throw (nitf::NITFException);
-
-    ~SegmentMemorySource()
-    {
-    }
+    SegmentMemorySource(const char* data, size_t size, nitf::Off start,
+                        int byteSkip, bool copyData) throw (nitf::NITFException);
 };
 
 /*!
