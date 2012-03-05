@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <mem/ScopedArray.h>
 #include "six/NITFWriteControl.h"
 #include "six/XMLControlFactory.h"
 
@@ -638,25 +640,25 @@ void NITFWriteControl::saveIO(BufferList& imageData,
 
 void NITFWriteControl::addDataAndWrite()
 {
-    size_t numDES = mContainer->getNumData();
+    const size_t numDES = mContainer->getNumData();
 
-    char **raw = new char*[numDES];
+    // These must stick around until mWriter.write() is called since the
+    // SegmentMemorySource's will be pointing to them
+    const mem::ScopedArray<std::string> desStrs(new std::string[numDES]);
 
-    for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
+    for (size_t ii = 0; ii < mContainer->getNumData(); ++ii)
     {
-        Data* data = mContainer->getData(i);
+        const Data* data = mContainer->getData(ii);
+        std::string& desStr(desStrs[ii]);
 
-        raw[i] = six::toXMLCharArray(data, mXMLRegistry);
-        nitf::SegmentWriter deWriter = mWriter.newDEWriter(i);
-        nitf::SegmentMemorySource segSource(raw[i], strlen(raw[i]), 0, 0);
+        desStr = six::toXMLString(data, mXMLRegistry);
+        nitf::SegmentWriter deWriter = mWriter.newDEWriter(ii);
+        nitf::SegmentMemorySource segSource(desStr.c_str(),
+                                            desStr.length(),
+                                            0,
+                                            0,
+                                            false);
         deWriter.attachSource(segSource);
     }
     mWriter.write();
-
-    for (unsigned int i = 0; i < numDES; ++i)
-    {
-        delete[] raw[i];
-    }
-    delete[] raw;
-
 }
