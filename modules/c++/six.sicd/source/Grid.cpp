@@ -24,53 +24,36 @@
 using namespace six;
 using namespace six::sicd;
 
-DirectionParameters::DirectionParameters()
+DirectionParameters::DirectionParameters() :
+    unitVector(Init::undefined<Vector3>()),
+    sampleSpacing(Init::undefined<double>()),
+    impulseResponseWidth(Init::undefined<double>()),
+    sign(Init::undefined<FFTSign>()),
+    impulseResponseBandwidth(Init::undefined<double>()),
+    kCenter(Init::undefined<double>()),
+    deltaK1(Init::undefined<double>()),
+    deltaK2(Init::undefined<double>()),
+    deltaKCOAPoly(Init::undefined<Poly2D>()),
+    weightType(Init::undefined<std::string>())
 {
-    unitVector = Init::undefined<Vector3>();
-    sampleSpacing = Init::undefined<double>();
-    impulseResponseWidth = Init::undefined<double>();
-    sign = Init::undefined<FFTSign>();
-    impulseResponseBandwidth = Init::undefined<double>();
-    kCenter = Init::undefined<double>();
-    deltaK1 = Init::undefined<double>();
-    deltaK2 = Init::undefined<double>();
-    weightType = Init::undefined<std::string>();
-    deltaKCOAPoly = Init::undefined<Poly2D>();   
 }
 
 DirectionParameters* DirectionParameters::clone() const 
 {
-    DirectionParameters* p = new DirectionParameters(*this);
-    return p;
+    return new DirectionParameters(*this);
 }
 
-Grid::Grid() : row(NULL), col(NULL)
-{
+Grid::Grid() :
     // This is a good assumption, I think
-    imagePlane = ComplexImagePlaneType::SLANT;
+    imagePlane(ComplexImagePlaneType::SLANT),
     // Not so sure about this one
-    type = ComplexImageGridType::RGAZIM;
-    row = new DirectionParameters();
-    col = new DirectionParameters();
-}
-
-Grid::~Grid()
+    type(ComplexImageGridType::RGAZIM),
+    row(new DirectionParameters()),
+    col(new DirectionParameters())
 {
-    if (row)
-        delete row;
-    if (col)
-        delete col;
 }
 
 Grid* Grid::clone() const 
 {
-    Grid* g = new Grid;
-    g->imagePlane = this->imagePlane;
-    g->type = this->type;
-    g->timeCOAPoly = this->timeCOAPoly;
-    if (this->row)
-        g->row = this->row->clone();
-    if (this->col)
-        g->col = this->col->clone();
-    return g;
+    return new Grid(*this);
 }
