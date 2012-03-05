@@ -22,6 +22,7 @@
 #ifndef __SIX_GRID_H__
 #define __SIX_GRID_H__
 
+#include <mem/ScopedCloneablePtr.h>
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -40,7 +41,6 @@ namespace sicd
 struct DirectionParameters
 {
     DirectionParameters();
-    ~DirectionParameters() {}
     DirectionParameters* clone() const;
 
     //! Unit vector in increasing row or col direction
@@ -109,14 +109,13 @@ struct Grid
 
     //! TODO what to do with plane
     Grid();
-    ~Grid();
 
     Grid* clone() const;
     ComplexImagePlaneType imagePlane;
     ComplexImageGridType type;
     Poly2D timeCOAPoly;
-    DirectionParameters* row;
-    DirectionParameters* col;
+    mem::ScopedCloneablePtr<DirectionParameters> row;
+    mem::ScopedCloneablePtr<DirectionParameters> col;
 };
 
 }
