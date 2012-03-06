@@ -495,10 +495,10 @@ nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
 /*!
   \brief  nitf_ImageSubheader_setBlocking - Set image dimensions and blocking
 
-  nitf_ImageSubheader_setDimensions sets the blocking informaiotn. The user
+  nitf_ImageSubheader_setDimensions sets the blocking information. The user
   specifies the number of rows and columns in the image, number of rows and
   columns per block, and blocking mode. The number of blocks per row and
-  colimn is calculated. The NITF 2500C large block option can be selected for
+  column is calculated. The NITF 2500C large block option can be selected for
   either dimension by setting the corresponding block dimension to 0.
 
   The only errors are associated with fetching field objects
@@ -519,12 +519,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking
 /*!
   \brief  nitf_ImageSubheader_setCompression - Set image compression
 
-  nitf_ImageSubheader_getCompression sets the comnpression type and
+  nitf_ImageSubheader_getCompression sets the compression type and
   compression rate
 
   The imageCompression argument must is a char array with at least
   NITF_IC_SZ+1 bytes. The compressionRate argument must is a char array
-  with at least NITF_CCOMRAT_SZ+1 bytes. IF eaither string is too long
+  with at least NITF_CCOMRAT_SZ+1 bytes. If either string is too long
   for the field, it is truncated.
 
   Writing of a masked image with blocking mode S is currently not supported.
@@ -554,7 +554,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setCompression
   to 9, then -1 is returned, and the comment is not added.
 
   The function assumes that the numImageComments field value and the actual
-  size of the imageComments buffer are consistent with eachother.
+  size of the imageComments buffer are consistent with each other.
 
   If the position is out of the array bounds, or less than zero, the
   comment will be appended to the end.
@@ -584,7 +584,7 @@ NITFAPI(int) nitf_ImageSubheader_insertImageComment
   to 0, nothing is done.
 
   The function assumes that the numImageComments field value and the actual
-  size of the imageComments buffer are consistent with eachother.
+  size of the imageComments buffer are consistent with each other.
 
   If the position is out of the array bounds, or less than zero, then
   nothing is done.
