@@ -278,26 +278,31 @@ NITFPRIV(NITF_CLEVEL) checkRGBImage(nitf_ImageSubheader* subhdr,
     int nbands, nbpp;
     char imode = subhdr->imageMode->raw[0];
     if (!nitf_Field_get(subhdr->NITF_NBANDS, &nbands, NITF_CONV_INT,
-                        sizeof(int), error ))
+                        sizeof(int), error))
+    {
         return NITF_CLEVEL_CHECK_FAILED;
-
+    }
 
     if (!nitf_Field_get(subhdr->NITF_NBPP, &nbpp, NITF_CONV_INT,
-                        sizeof(int), error ))
+                        sizeof(int), error))
+    {
         return NITF_CLEVEL_CHECK_FAILED;
+    }
 
-    if (memcmp(subhdr->NITF_IC->raw, "C8", 2) == 0 ||
-        memcmp(subhdr->NITF_IC->raw, "M8", 2) == 0 &&
+    if ((memcmp(subhdr->NITF_IC->raw, "C8", 2) == 0 ||
+         memcmp(subhdr->NITF_IC->raw, "M8", 2) == 0) &&
         nbpp > 32)
+    {
         clevel = NITF_CLEVEL_09;
+    }
 
-    if (memcmp(subhdr->NITF_IC->raw, "C3", 2) == 0 ||
-        memcmp(subhdr->NITF_IC->raw, "M3", 2) == 0 &&
+    if ((memcmp(subhdr->NITF_IC->raw, "C3", 2) == 0 ||
+         memcmp(subhdr->NITF_IC->raw, "M3", 2) == 0) &&
         (nbpp > 8 || imode != 'P'))
+    {
         clevel = NITF_CLEVEL_09;
-
+    }
     
-
     if (nbands != 3)
     {
         clevel = NITF_CLEVEL_09;
@@ -311,22 +316,20 @@ NITFPRIV(NITF_CLEVEL) checkRGBImage(nitf_ImageSubheader* subhdr,
     }
     else
     {
-        if (nbpp == 8)
-        {
-            /* NITF_CLEVEL_03 */
-        }
-        else if (nbpp == 16 || nbpp == 32)
+        if (nbpp == 16 || nbpp == 32)
         {
             if (clevel < NITF_CLEVEL_06)
+            {
                 clevel = NITF_CLEVEL_06;
+            }
         }
-        
-        else clevel = NITF_CLEVEL_09;
-        
+        else if (nbpp != 8)
+        {
+            clevel = NITF_CLEVEL_09;
+        }
     }
-    return clevel;
 
-    
+    return clevel;
 }
 
 NITFPRIV(NITF_CLEVEL) checkRGBLUTImage(nitf_ImageSubheader* subhdr, 
