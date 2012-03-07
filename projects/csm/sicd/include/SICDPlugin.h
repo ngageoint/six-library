@@ -1,5 +1,5 @@
-#ifndef __STUBSMPLUGIN_H
-#define __STUBSMPLUGIN_H
+#ifndef __SICDSMPLUGIN_H
+#define __SICDSMPLUGIN_H
 
 /* =========================================================================
  * This file is part of the CSM SICD Plugin
@@ -193,8 +193,12 @@ public:
     PLUGIN_API(getPluginName)(std::string& pluginName) THROWS;
 
 private:
-    typedef std::list<TSMSensorModel*> SICDModels;
+    //typedef std::list<TSMSensorModel*> SICDModels;
 
+    // This special constructor is responsible for registering this plugin by
+    // invoking the special "int" base class constructor. Since this is
+    // private, only a member of this class, e.g. theRegisteringObject, can
+    // invoke it.
     SICDPlugin();
 
     static SICD_EXPORT_API const char PLUGIN_NAME[];
@@ -202,6 +206,7 @@ private:
     static SICD_EXPORT_API const char MANUFACTURER[];
     static SICD_EXPORT_API const char RELEASE_DATE[];
     static SICD_EXPORT_API const int VERSION;
+
     static const SICDPlugin mPlugin;
 };
 

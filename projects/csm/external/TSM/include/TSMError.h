@@ -12,8 +12,8 @@
 // 
 //                            Date          Author       Comment    
 //    SOFTWARE HISTORY:   1 June 2004  Kevin Lam       CCB Change
-//                       24 June 2005  Len Tomko       CCB Change Added DATA_NOT_AVAILABLE 
-//                       10 Mar 2005   Don Leonard     CCB Change Removed DATA_NOT_AVAILABLE 
+//                       24 June 2005  Len Tomko       CCB Change Added
+//                                                     DATA_NOT_AVAILABLE 
 //
 //    NOTES:
 //
@@ -55,8 +55,8 @@ class TSM_EXPORT_API TSMError
          STRING_TOO_LONG,
          UNKNOWN_ERROR,
          UNSUPPORTED_FUNCTION,
-         UNKNOWN_SUPPORT_DATA
-         //DATA_NOT_AVAILABLE
+         UNKNOWN_SUPPORT_DATA,
+         DATA_NOT_AVAILABLE
       };
 
       TSMError()

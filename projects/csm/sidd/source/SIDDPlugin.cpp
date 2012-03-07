@@ -33,7 +33,7 @@
 
 using namespace sidd_plugin;
 
-const char SIDDPlugin::PLUGIN_NAME[] = "SIDDPlugin";
+const char SIDDPlugin::PLUGIN_NAME[] = "SIDD";
 const char SIDDPlugin::SENSOR_MODEL_NAME[] = "SIDD_SENSOR_MODEL";
 const char SIDDPlugin::MANUFACTURER[] = "GDAIS";
 const char SIDDPlugin::RELEASE_DATE[] = "20111107";

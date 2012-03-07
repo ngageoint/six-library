@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __STUBSMPLUGIN_H
-#define __STUBSMPLUGIN_H
+#ifndef __SIDDSMPLUGIN_H
+#define __SIDDSMPLUGIN_H
 
 /**
  * @class SIDDPlugin
@@ -192,8 +192,12 @@ public:
     PLUGIN_API(getPluginName)(std::string& pluginName) THROWS;
 
 private:
-    typedef std::list<TSMSensorModel*> SIDDModels;
+    //typedef std::list<TSMSensorModel*> SIDDModels;
 
+    // This special constructor is responsible for registering this plugin by
+    // invoking the special "int" base class constructor. Since this is
+    // private, only a member of this class, e.g. theRegisteringObject, can
+    // invoke it.
     SIDDPlugin();
 
     static SIDD_EXPORT_API const char PLUGIN_NAME[];
@@ -201,6 +205,7 @@ private:
     static SIDD_EXPORT_API const char MANUFACTURER[];
     static SIDD_EXPORT_API const char RELEASE_DATE[];
     static SIDD_EXPORT_API const int VERSION;
+
     static const SIDDPlugin mPlugin;
 };
 
