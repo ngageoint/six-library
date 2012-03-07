@@ -28,9 +28,6 @@
 #  define TSM_EXPORT_API
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-
    static const int MAX_NAME_LENGTH = 40;
    static const int MAX_FUNCTION_NAME_LENGTH = 80;
    static const int MAX_MESSAGE_LENGTH = 512;
