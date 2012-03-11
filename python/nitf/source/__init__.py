@@ -369,7 +369,17 @@ class Record:
         """ Creates a new graphic segment, and updates the numGraphics value """
         graphic = nitropy.nitf_Record_newGraphicSegment(self.ref, self.error)
         return GraphicSegment(graphic)
-    
+
+    def newTextSegment(self):
+        """ Creates a new text segment, and updates the numTexts value """
+        image = nitropy.nitf_Record_newTextSegment(self.ref, self.error)
+        return TextSegment(image)
+
+    def newDataExtensionSegment(self):
+        """ Creates a new data extension segment, and updates the numDataExtensions value """
+        image = nitropy.nitf_Record_newDataExtensionSegment(self.ref, self.error)
+        return DESegment(image)
+
     def getImages(self):
         return self._get_listof('images')
     def getGraphics(self):
@@ -839,6 +849,12 @@ class DESubheader(Header):
                 fields.append((k, self[f]))
         return fields.__iter__()
 
+    def newSubheaderFields(self, tag, id = None):
+        self.ref.subheaderFields = nitropy.nitf_TRE_construct(tag, id, self.error)
+        if not self.ref.subheaderFields:
+            raise Exception('Unable to create TRE with tag \'%s\'' % tag)
+        return TRE(self.ref.subheaderFields)
+
     def getSubheaderFields(self):
         return TRE(self.ref.subheaderFields)
 
@@ -939,16 +955,15 @@ class TRE:
     """ Tagged Record Extension """
     DEFAULT_LENGTH = nitropy.NITF_TRE_DEFAULT_LENGTH
     
-    def __init__(self, ref, size=DEFAULT_LENGTH):
+    def __init__(self, ref):
         """
         Create either a new TRE or refer to an existing underlying TRE
         The ref parameter is checked
         """
         self.error = Error()
         if not ref or isinstance(ref, str):
-            if size < 0: size = self.DEFAULT_LENGTH
             tag = ref
-            ref = nitropy.nitf_TRE_construct(tag, None, size, self.error)
+            ref = nitropy.nitf_TRE_construct(tag, None, self.error)
             if not ref:
                 raise Exception('Unable to create TRE with tag \'%s\'' % tag)
         self.ref = ref
@@ -979,7 +994,7 @@ class TRE:
             break
     
     def getField(self, name):
-        field = nitropy.nitf_TRE_getField(self.ref, field)
+        field = nitropy.nitf_TRE_getField(self.ref, name)
         return field and Field(field) or None
     
     def __getitem__(self, field):
