@@ -68,10 +68,7 @@ public class Field extends NITFObject
      *            input String data
      * @return true if the data gets set, false otherwise
      */
-    public boolean setData(String data)
-    {
-        return setRawData(data.getBytes());
-    }
+    public native boolean setData(String data);
 
     /**
      * Return the raw data for this Field

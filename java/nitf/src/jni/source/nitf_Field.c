@@ -109,6 +109,41 @@ JNIEXPORT jboolean JNICALL Java_nitf_Field_setRawData(JNIEnv * env,
 
 /*
  * Class:     nitf_Field
+ * Method:    setRawData
+ * Signature: ([B)Z
+ */
+JNIEXPORT jboolean JNICALL Java_nitf_Field_setData(JNIEnv* env,
+                                                   jobject self,
+                                                   jstring data)
+{
+    nitf_Field *field = _GetObj(env, self);
+    nitf_Error error;
+    jboolean status;
+    const jbyte* str = NULL;
+
+    if (data == NULL)
+    {
+    	status = nitf_Field_setString(field, "", &error);
+    }
+    else
+    {
+    	str = (*env)->GetStringUTFChars(env, data, NULL);
+    	if (str)
+    	{
+			status = nitf_Field_setString(field, str, &error);
+			(*env)->ReleaseStringUTFChars(env, data, str);
+    	}
+    	else
+    	{
+    		status = JNI_FALSE;
+    	}
+    }
+
+    return status;
+}
+
+/*
+ * Class:     nitf_Field
  * Method:    getRawData
  * Signature: ()[B
  */
@@ -130,12 +165,12 @@ JNIEXPORT jstring JNICALL Java_nitf_Field_getStringData(JNIEnv * env,
                                                         jobject self)
 {
     nitf_Field *field = _GetObj(env, self);
-    jchar *buf;
+    char *buf;
     nitf_Error error;
     jstring string;
 
     /* create buffer to copy data to */
-    buf = (jchar *) NITF_MALLOC(field->length + 1);
+    buf = (char *) NITF_MALLOC(field->length + 1);
     if (!buf)
         return NULL;
 
