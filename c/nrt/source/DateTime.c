@@ -108,7 +108,7 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime* dateTime,
         dateTime->minute > 59 ||
         dateTime->hour > 23 ||
         dateTime->dayOfMonth < 1 || dateTime->dayOfMonth > 31 ||
-        dateTime->month < 1 || dateTime->month > 11 ||
+        dateTime->month < 1 || dateTime->month > 12 ||
         dateTime->year < 1970 || dateTime->year > 2037)
     {
         dateTime->timeInMillis = 0.0;
