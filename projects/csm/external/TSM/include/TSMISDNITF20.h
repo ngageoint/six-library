@@ -25,6 +25,8 @@
 #ifndef __tsm_ISDNITF20_H
 #define __tsm_ISDNITF20_H
 
+#include <stdlib.h>
+
 #include "TSMImageSupportData.h"
 #include "TSMMisc.h"
 
