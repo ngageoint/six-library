@@ -191,6 +191,8 @@ void ProjectionModel::computeProjectionPolynomials(
     const scene::GridGeometry& gridGeom,
     const RowCol<size_t>& inPixelStart,
     const RowCol<double>& inSceneCenter,
+    const RowCol<double>& interimSceneCenter,
+    const RowCol<double>& interimSampleSpacing,
     const RowCol<double>& outSceneCenter,
     const RowCol<double>& outSampleSpacing,
     const RowCol<size_t>& outExtent,
@@ -210,8 +212,8 @@ void ProjectionModel::computeProjectionPolynomials(
         static_cast<double>(outExtent.row - 1) / (POINTS_1D - 1),
         static_cast<double>(outExtent.col - 1) / (POINTS_1D - 1));
 
-    const RowCol<double> ratio(outSceneCenter.row / inSceneCenter.row,
-                               outSceneCenter.col / inSceneCenter.col);
+    const RowCol<double> ratio(interimSceneCenter.row / inSceneCenter.row,
+                               interimSceneCenter.col / inSceneCenter.col);
 
     const RowCol<double> outOffset(inPixelStart.row * ratio.row,
                                    inPixelStart.col * ratio.col);
@@ -221,6 +223,8 @@ void ProjectionModel::computeProjectionPolynomials(
     math::linear::Matrix2D<double> tcoaMapping(POINTS_1D, POINTS_1D);
     math::linear::Matrix2D<double> lines(POINTS_1D, POINTS_1D);
     math::linear::Matrix2D<double> samples(POINTS_1D, POINTS_1D);
+    math::linear::Matrix2D<double> tcoaLines(POINTS_1D, POINTS_1D);
+    math::linear::Matrix2D<double> tcoaSamples(POINTS_1D, POINTS_1D);
 
     RowCol<double> currentOffset(0., 0.);
     
@@ -234,6 +238,14 @@ void ProjectionModel::computeProjectionPolynomials(
             // This represents columns
             samples(ii, jj) = currentOffset.col;
 
+            // For the time COA poly, we need to map lines/samples to meters
+            // from SCP in the output grid
+            tcoaLines(ii, jj) =
+                (lines(ii,jj) - outSceneCenter.row) * outSampleSpacing.row;
+
+            tcoaSamples(ii, jj) =
+                (samples(ii,jj) - outSceneCenter.col) * outSampleSpacing.col;
+
             // Find initial position in the scene
             const scene::Vector3 sPos =
                 gridGeom.rowColToECEF(currentOffset.row, currentOffset.col);
@@ -243,10 +255,10 @@ void ProjectionModel::computeProjectionPolynomials(
             const scene::RowCol<double> rgAz = sceneToImage(sPos, &timeCOA);
 
             // Adjust here for the start offset
-            rowMapping(ii, jj) = rgAz.row / outSampleSpacing.row +
-                    outSceneCenter.row - outOffset.row;
-            colMapping(ii, jj) = rgAz.col / outSampleSpacing.col +
-                    outSceneCenter.col - outOffset.col;
+            rowMapping(ii, jj) = rgAz.row / interimSampleSpacing.row +
+                    interimSceneCenter.row - outOffset.row;
+            colMapping(ii, jj) = rgAz.col / interimSampleSpacing.col +
+                    interimSceneCenter.col - outOffset.col;
 
             tcoaMapping(ii, jj) = timeCOA;
         }
@@ -259,7 +271,7 @@ void ProjectionModel::computeProjectionPolynomials(
     outputToSlantCol = math::poly::fit(lines, samples, colMapping,
                                        polyOrder, polyOrder);
 
-    timeCOAPoly = math::poly::fit(lines, samples, tcoaMapping,
+    timeCOAPoly = math::poly::fit(tcoaLines, tcoaSamples, tcoaMapping,
                                   polyOrder, polyOrder);
 
     if (meanResidualErrorRow || meanResidualErrorCol || meanResidualErrorTCOA)
