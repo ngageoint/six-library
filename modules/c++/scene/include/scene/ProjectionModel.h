@@ -163,6 +163,10 @@ public:
      * \param inPixelStart Input space start pixel (i.e. if this is non-zero,
      * it indicates an AOI)
      * \param inSceneCenter Input space scene center pixel in row/col
+     * \param interimSceneCenter Scene center pixel in row/col of the image
+     * when outputToSlantRow/Col polynomials are applied
+     * \param interimSampleSpacing Sample spacing of the image when
+     * outputToSlantRow/Col polynomials are applied
      * \param outSceneCenter Output space scene center pixel in row/col
      * \param outSampleSpacing Output space sample spacing
      * \param outExtent Output extent in row/col
@@ -181,6 +185,8 @@ public:
         const scene::GridGeometry& gridGeom,
         const RowCol<size_t>& inPixelStart,
         const RowCol<double>& inSceneCenter,
+        const RowCol<double>& interimSceneCenter,
+        const RowCol<double>& interimSampleSpacing,
         const RowCol<double>& outSceneCenter,
         const RowCol<double>& outSampleSpacing,
         const RowCol<size_t>& outExtent,
