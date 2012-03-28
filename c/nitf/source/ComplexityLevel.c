@@ -34,7 +34,7 @@ NITFPRIV(NITF_CLEVEL) checkILOC(nitf_ImageSubheader* subhdr, nitf_Error* error)
     char iloc[NITF_ILOC_SZ + 1];
     char num[6];
     int rowCoord, colCoord;
-    int rowExtent, colExtent;
+    int lastRow, lastCol;
     int nrows, ncols;
 
     if (!nitf_Field_get(subhdr->NITF_ILOC, iloc,
@@ -42,7 +42,7 @@ NITFPRIV(NITF_CLEVEL) checkILOC(nitf_ImageSubheader* subhdr, nitf_Error* error)
                         NITF_ILOC_SZ + 1, error))
         return NITF_CLEVEL_CHECK_FAILED;
 
-    num[5] = 0;
+    num[5] = '\0';
     memcpy(num, iloc, 5);
     rowCoord = atoi(num);
     memcpy(num, &iloc[5], 5);
@@ -56,20 +56,21 @@ NITFPRIV(NITF_CLEVEL) checkILOC(nitf_ImageSubheader* subhdr, nitf_Error* error)
                         NITF_CONV_INT, sizeof(int), error))
         return NITF_CLEVEL_CHECK_FAILED;
 
+    /* The Common Coordinate System Extent ranges are referring to the
+     * (inclusive) last row/col */
+    lastRow = rowCoord + nrows - 1;
+    lastCol = colCoord + ncols - 1;
 
-    rowExtent = rowCoord + nrows;
-    colExtent = colCoord + ncols;
-
-    if (rowExtent <= 2047 && colExtent <= 2047)
+    if (lastRow <= 2047 && lastCol <= 2047)
         return NITF_CLEVEL_03;
 
-    if (rowExtent <= 8191 && colExtent <= 8191)
+    if (lastRow <= 8191 && lastCol <= 8191)
         return NITF_CLEVEL_05;
 
-    if (rowExtent <= 65535 && colExtent <= 65535)
+    if (lastRow <= 65535 && lastCol <= 65535)
         return NITF_CLEVEL_06;
 
-    if (rowExtent <= 99999999 && colExtent <= 99999999)
+    if (lastRow <= 99999999 && lastCol <= 99999999)
         return NITF_CLEVEL_07;
 
     return NITF_CLEVEL_09;
