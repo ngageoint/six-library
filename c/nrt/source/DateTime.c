@@ -302,7 +302,7 @@ NRTAPI(void) nrt_DateTime_destruct(nrt_DateTime ** dt)
     }
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_format(nrt_DateTime * dateTime,
+NRTAPI(NRT_BOOL) nrt_DateTime_format(const nrt_DateTime * dateTime,
                                      const char *format, char *outBuf,
                                      size_t maxSize, nrt_Error * error)
 {
