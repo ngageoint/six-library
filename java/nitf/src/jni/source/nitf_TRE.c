@@ -45,8 +45,8 @@ JNIEXPORT void JNICALL Java_nitf_TRE_construct
   (JNIEnv *env, jobject self, jstring jTag, jstring jId)
 {
     nitf_TRE *tre = NULL;
-    char* tag = NULL;
-    char* id = NULL;
+    const char* tag = NULL;
+    const char* id = NULL;
     nitf_Error error;
     
     tag = jTag != NULL ? (*env)->GetStringUTFChars(env, jTag, 0) : NULL;
@@ -90,7 +90,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_TRE_exists
 {
     nitf_TRE *tre = _GetObj(env, self);
     jboolean exists = JNI_FALSE;
-    char *tag = (*env)->GetStringUTFChars(env, jTag, 0);
+    const char *tag = (*env)->GetStringUTFChars(env, jTag, 0);
 
     exists = nitf_TRE_exists(tre, tag) ? JNI_TRUE : JNI_FALSE;
     (*env)->ReleaseStringUTFChars(env, jTag, tag);
@@ -103,7 +103,7 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_getField
 {
     nitf_TRE *tre = _GetObj(env, self);
     nitf_Field *field = NULL;
-    char *tag = NULL;
+    const char *tag = NULL;
     jclass fieldClass;
     jmethodID methodID;
     jobject jField = NULL;
@@ -126,7 +126,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_TRE_setField
     (JNIEnv * env, jobject self, jstring jTag, jbyteArray data)
 {
     nitf_TRE *tre = _GetObj(env, self);
-    char *tag = NULL;
+    const char *tag = NULL;
     jbyte *buf = NULL;
     NITF_BOOL success;
     nitf_Error error;
@@ -166,7 +166,7 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_find
 {
     nitf_TRE *tre = _GetObj(env, self);
     
-    char* pattern = NULL;
+    const char* pattern = NULL;
     nitf_List *list = NULL;
     nitf_Error error;
     

@@ -36,7 +36,8 @@ NITFPROT(void) _ThrowNITFException(JNIEnv *env, const char *message)
 
 NITFPROT(char*) _NewCharArrayFromString(JNIEnv *env, jstring string)
 {
-    const char *tempString = NULL, *cString = NULL;
+    const char* tempString = NULL;
+    char* cString = NULL;
     size_t len;
     
     tempString = (*env)->GetStringUTFChars(env, string, 0);
@@ -48,7 +49,7 @@ NITFPROT(char*) _NewCharArrayFromString(JNIEnv *env, jstring string)
     return cString;
 }
 
-NITFPROT(char*) _NewObject(JNIEnv *env, const char* className, jlong address)
+NITFPROT(jobject) _NewObject(JNIEnv *env, const char* className, jlong address)
 {
     jclass clazz = (*env)->FindClass(env, className);
     jmethodID methodID = (*env)->GetMethodID(env, clazz, "<init>", "(J)V");

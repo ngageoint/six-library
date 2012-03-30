@@ -697,7 +697,7 @@ JNIEXPORT jint JNICALL Java_nitf_ImageSubheader_insertImageComment
 {
     nitf_ImageSubheader *header = _GetObj(env, self);
     nitf_Error error;
-    jchar *comBuf = NULL;
+    const jbyte *comBuf = NULL;
     jint indexUsed;
 
     if (comment != NULL)

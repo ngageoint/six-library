@@ -26,6 +26,7 @@
 #include "nitf_JNI.h"
 
 NITF_JNI_DECLARE_OBJ(nitf_SubWindow)
+
 /*
  * Class:     nitf_SubWindow
  * Method:    construct
@@ -246,7 +247,7 @@ JNIEXPORT void JNICALL Java_nitf_SubWindow_setDownSampler
 
     if (downSamplerObject != NULL)
     {
-        downSampler = _GetObj(env, downSamplerObject);
+        downSampler = (nitf_DownSampler*)_GetObj(env, downSamplerObject);
         subWindow->downsampler = downSampler;
     }
 }

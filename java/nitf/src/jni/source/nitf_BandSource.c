@@ -38,7 +38,7 @@ typedef struct _BandSourceImpl
  *  Private read implementation for file source.
  */
 NITFPRIV(NITF_BOOL) BandSource_read
-    (NITF_DATA * data, char *buf, size_t size, nitf_Error * error)
+    (NITF_DATA * data, char *buf, nitf_Off size, nitf_Error * error)
 {
     jclass bandSourceClass = NULL;
     jmethodID methodID = NULL;

@@ -65,7 +65,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
     nitf_ListIterator iter, end;
     nitf_TRE *tre;
     jobject treObject;
-    char *name = NULL;
+    const char *name = NULL;
     nitf_List* list;
     jobject linkedList = NULL;
     
@@ -110,7 +110,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_Extensions_exists
     (JNIEnv * env, jobject self, jstring jName)
 {
     nitf_Extensions *extensions = _GetObj(env, self);
-    char *name = NULL;
+    const char *name = NULL;
     jboolean exists = JNI_FALSE;
 
     if (extensions)
@@ -132,7 +132,7 @@ JNIEXPORT void JNICALL Java_nitf_Extensions_removeTREsByName
   (JNIEnv *env, jobject self, jstring jName)
 {
     nitf_Extensions *extensions = _GetObj(env, self);
-    char *name = NULL;
+    const char *name = NULL;
 
     if (extensions)
     {

@@ -47,7 +47,7 @@ NITFPROT(void) _ThrowNITFException(JNIEnv *env, const char *message);
 
 NITFPROT(char*) _NewCharArrayFromString(JNIEnv *env, jstring string);
 
-NITFPROT(char*) _NewObject(JNIEnv *env, const char* className, jlong address);
+NITFPROT(jobject) _NewObject(JNIEnv *env, const char* className, jlong address);
 
 NITF_CXX_ENDGUARD
 
