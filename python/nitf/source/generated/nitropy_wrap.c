@@ -3513,9 +3513,7 @@ SWIG_From_unsigned_SS_int  (unsigned int value)
         {
             PyObject* buffObj = PyBuffer_New(subimageSize * sizeof(nitf_Uint8));
             if (!buffObj) goto CATCH_ERROR;
-            buffObj->ob_type->tp_as_buffer->bf_getwritebuffer(buffObj, 0, &buf[0]);
-            /*buf[i] = NITF_MALLOC(subimageSize);
-            if (!buf[i]) goto CATCH_ERROR;*/
+            buffObj->ob_type->tp_as_buffer->bf_getwritebuffer(buffObj, 0, (void **)&buf[0]);
             
             newWindow->bandList = &window->bandList[i];
             if (!nitf_ImageReader_read(reader, newWindow, buf, &padded, error))
