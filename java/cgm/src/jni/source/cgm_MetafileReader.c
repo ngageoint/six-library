@@ -51,28 +51,27 @@ JNIEXPORT jboolean JNICALL Java_cgm_MetafileReader_00024Destructor_destructMemor
 }
 
 JNIEXPORT jobject JNICALL Java_cgm_MetafileReader_read
-  (JNIEnv *env, jobject self, jobject handle)
+  (JNIEnv *env, jobject self, jobject interface)
 {
     nitf_Error error;
-    nitf_IOHandle ioHandle;
+    nitf_IOInterface* io;
     cgm_Metafile *metafile;
     cgm_MetafileReader *reader = _GetObj(env, self);
 
     /* get some classIDs */
-    jclass ioHandleClass = (*env)->FindClass(env, "nitf/IOHandle");
+    jclass ioInterfaceClass = (*env)->GetObjectClass(env, interface);
     jclass metafileClass = (*env)->FindClass(env, "cgm/Metafile");
 
-    /* get the IOHandle */
+    /* get the IOInterface */
     jmethodID methodID =
-        (*env)->GetMethodID(env, ioHandleClass, "getIOHandle", "()J");
-    ioHandle =
-        (nitf_IOHandle) ((*env)->CallLongMethod(env, handle, methodID));
+        (*env)->GetMethodID(env, ioInterfaceClass, "getAddress", "()J");
+    io = (nitf_IOInterface*) ((*env)->CallLongMethod(env, interface, methodID));
 
     /* just to be sure, seek to start of file */
-    if (nitf_IOHandle_seek(ioHandle, 0, NITF_SEEK_SET, &error) == -1)
+    if (nitf_IOInterface_seek(io, 0, NITF_SEEK_SET, &error) == -1)
         goto CATCH_ERROR;
 
-    if (!(metafile = cgm_MetafileReader_read(reader, ioHandle, &error)))
+    if (!(metafile = cgm_MetafileReader_read(reader, io, &error)))
         goto CATCH_ERROR;
 
     methodID = (*env)->GetMethodID(env, metafileClass, "<init>", "(J)V");

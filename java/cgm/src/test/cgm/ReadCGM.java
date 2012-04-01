@@ -1,5 +1,5 @@
-package cgm;
-
+import cgm.MetafileReader;
+import cgm.Metafile;
 import nitf.IOHandle;
 import nitf.NITFException;
 

@@ -1,7 +1,7 @@
 package cgm;
 
 import nitf.DestructibleObject;
-import nitf.IOHandle;
+import nitf.IOInterface;
 import nitf.MemoryDestructor;
 import nitf.NITFException;
 
@@ -43,11 +43,11 @@ public class MetafileReader extends DestructibleObject
      * Read and parse the inputHandle into a Metafile
      * 
      * @param inputHandle
-     *            the IOHandle used to read from
+     *            the input handle used to read from
      * @return a Metafile containing the parsed data
      * @throws NITFException
      */
-    public native synchronized Metafile read(IOHandle inputHandle)
+    public native synchronized Metafile read(IOInterface inputHandle)
             throws NITFException;
 
     @Override

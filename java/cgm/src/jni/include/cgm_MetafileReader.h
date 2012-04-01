@@ -20,7 +20,7 @@ JNIEXPORT void JNICALL Java_cgm_MetafileReader_construct
 /*
  * Class:     cgm_MetafileReader
  * Method:    read
- * Signature: (Lnitf/IOHandle;)Lcgm/Metafile;
+ * Signature: (Lnitf/IOInterface;)Lcgm/Metafile;
  */
 JNIEXPORT jobject JNICALL Java_cgm_MetafileReader_read
   (JNIEnv *, jobject, jobject);
