@@ -42,7 +42,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_N, 7, "Mean GSD", "MEANGSD" },
     {NITF_BCS_A, 3, "Image Datum", "IDATUM" },
     {NITF_BCS_A, 3, "Image Ellipsoid", "IELLIP" },
-    {NITF_BCS_A, 2, "Image Proc Levl Code", "PREPROC" },
+    {NITF_BCS_A, 2, "Image Processing Level", "PREPROC" },
     {NITF_BCS_A, 2, "Image Projection System", "IPROJ" },
     {NITF_BCS_N, 8, "Satellite Track", "SATTRACK" },
     {NITF_END, 0, NULL, NULL}
