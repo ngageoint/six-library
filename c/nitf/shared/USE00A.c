@@ -26,10 +26,10 @@
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-    {NITF_BCS_A, 3, "Angle to North", "ANGLE_TO_NORTH" },
+    {NITF_BCS_N, 3, "Angle to North", "ANGLE_TO_NORTH" },
     {NITF_BCS_A, 5, "Mean GSD     ", "MEAN_GSD" },
     {NITF_BCS_A, 1, "Reserved 1", "rsrvd01" },
-    {NITF_BCS_A, 5, "Dynamic Range", "DYNAMIC_RANGE" },
+    {NITF_BCS_N, 5, "Dynamic Range", "DYNAMIC_RANGE" },
     {NITF_BCS_A, 3, "Reserved 2", "rsrvd02" },
     {NITF_BCS_A, 1, "Reserved 3", "rsrvd03" },
     {NITF_BCS_A, 3, "Reserved 4", "rsrvd04" },
@@ -42,10 +42,10 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 3, "Reserved 9", "rsrvd09" },
     {NITF_BCS_A, 1, "Reserved 10", "rsrvd10" },
     {NITF_BCS_A, 1, "Reserved 11", "rsrvd11" },
-    {NITF_BCS_A, 2, "Number of Reference Lines", "N_REF" },
-    {NITF_BCS_A, 5, "Revolution Number", "REV_NUM" },
-    {NITF_BCS_A, 3, "Number of Segments", "N_SEG" },
-    {NITF_BCS_A, 6, "Max Lines per Segment", "MAX_LP_SEG" },
+    {NITF_BCS_N, 2, "Number of Reference Lines", "N_REF" },
+    {NITF_BCS_N, 5, "Revolution Number", "REV_NUM" },
+    {NITF_BCS_N, 3, "Number of Segments", "N_SEG" },
+    {NITF_BCS_N, 6, "Max Lines per Segment", "MAX_LP_SEG" },
     {NITF_BCS_A, 6, "Reserved 12", "rsrvd12" },
     {NITF_BCS_A, 6, "Reserved 13", "rsrvd13" },
     {NITF_BCS_A, 5, "Sun Elevation", "SUN_EL" },
