@@ -42,7 +42,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 3, "Reserved 9", "rsrvd09" },
     {NITF_BCS_A, 1, "Reserved 10", "rsrvd10" },
     {NITF_BCS_A, 1, "Reserved 11", "rsrvd11" },
-    {NITF_BCS_A, 2, "Number of Referene Lines", "N_REF" },
+    {NITF_BCS_A, 2, "Number of Reference Lines", "N_REF" },
     {NITF_BCS_A, 5, "Revolution Number", "REV_NUM" },
     {NITF_BCS_A, 3, "Number of Segments", "N_SEG" },
     {NITF_BCS_A, 6, "Max Lines per Segment", "MAX_LP_SEG" },
