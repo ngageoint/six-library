@@ -50,7 +50,7 @@ SICDSensorModel::SICDSensorModel(const std::string& filename,
     // load the file, passing in the optional registry, since we have one
     reader->load(filename);
 
-    std::auto_ptr < six::Container > container(reader->getContainer());
+    six::Container* container = reader->getContainer();
     if (container->getDataType() != six::DataType::COMPLEX
             || container->getNumData() != 1
             || container->getData(0)->getDataType() != six::DataType::COMPLEX)
