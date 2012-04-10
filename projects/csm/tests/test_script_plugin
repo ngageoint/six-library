@@ -1,8 +1,8 @@
 ./results/test/test_script_plugin.csv
 
-makeModelListFromISD SICD_SENSOR_MODEL SICDPlugin
+makeModelListFromISD SICD_SENSOR_MODEL SICD
 
-findPlugin SICDPlugin
+findPlugin SICD
 
 getNSensorModels
 getList
