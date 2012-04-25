@@ -65,6 +65,8 @@ SICDSensorModel::SICDSensorModel(const std::string& filename,
     mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
     mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(), 
             mGeometry.get()));
+
+    initParameters();
 }
 
 SICDSensorModel::SICDSensorModel(NITF_2_1_ISD* isd,
@@ -124,6 +126,8 @@ SICDSensorModel::SICDSensorModel(NITF_2_1_ISD* isd,
     mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
     mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(), 
             mGeometry.get()));
+
+    initParameters();
 }
 
 SICDSensorModel::SICDSensorModel(const std::string& sensorModelState)
@@ -143,6 +147,15 @@ SICDSensorModel::SICDSensorModel(const std::string& sensorModelState)
 
     name = sensorModelState.substr(0, idx);
     sensorModelXML = sensorModelState.substr(idx + 1);
+
+    // Pull adjustable parameter xml out of the state string
+    idx = sensorModelState.find("AdjustableParams");
+    std::string adjustableParamXML = "";
+    if (idx != std::string::npos)
+    {
+        adjustableParamXML = sensorModelXML.substr(idx - 1);
+        sensorModelXML = sensorModelXML.substr(0, idx - 1);
+    }
 
     mSensorModelName = name;
 
@@ -167,10 +180,13 @@ SICDSensorModel::SICDSensorModel(const std::string& sensorModelState)
     mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
     mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(), 
             mGeometry.get()));
+
+    initParameters(adjustableParamXML);
 }
 
 SICDSensorModel::~SICDSensorModel()
 {
+    destroyParameters();
 }
 
 scene::RowCol<double> SICDSensorModel::toPixel(double l, double s)
@@ -187,6 +203,134 @@ scene::RowCol<double> SICDSensorModel::fromPixel(double l, double s)
     return scene::RowCol<double>(
             (l - ctrPt.row) * mData->grid->row->sampleSpacing,
                     (s - ctrPt.col) * mData->grid->col->sampleSpacing);
+}
+
+void SICDSensorModel::initParameters()
+{
+    const int NUM_PARAMS = 7;
+    std::string names[NUM_PARAMS] = {
+        "ARP Position Offset X",
+        "ARP Position Offset Y",
+        "ARP Position Offset Z",
+        "ARP Velocity Offset X",
+        "ARP Velocity Offset Y",
+        "ARP Velocity Offset Z",
+        "Range Bias Offset"};
+
+    // Populate the parameter vector with the supported values
+    for (unsigned int i=0; i < NUM_PARAMS; i++)
+    {
+        Parameter* p = new Parameter();
+        p->name = names[i];
+        p->type = TSMMisc::NONE;
+        p->origValue = 0.0;
+        p->currValue = 0.0;
+        p->shareable = false;
+        mAdjustableParams.push_back(p);
+    }
+}
+
+void SICDSensorModel::initParameters(std::string xmlStr)
+{
+    io::ByteStream stream;
+    stream.write(xmlStr.c_str(), xmlStr.length());
+
+    xml::lite::MinidomParser domParser;
+    domParser.parse(stream);
+    xml::lite::Element* rootElement = domParser.getDocument()->getRootElement();
+    std::vector< xml::lite::Element* > children = rootElement->getChildren();
+    mAdjustableParams.resize(children.size());
+
+    // Get each Param child and set the adjustable params
+    std::vector< xml::lite::Element* >::iterator paramIter;
+    for (paramIter = children.begin(); paramIter != children.end(); ++paramIter)
+    {
+        Parameter* p = new Parameter();
+
+        std::vector< xml::lite::Element* >::iterator it;
+        it = (*paramIter)->getChildren().begin();
+        for (; it != (*paramIter)->getChildren().end(); ++it)
+        {
+            std::string key = (*it)->getLocalName();
+            std::string val = (*it)->getCharacterData();
+
+            if (key == "name")
+                p->name = val;
+            else if (key == "type")
+                p->type = (TSMMisc::Param_CharType)str::toType<int>(val);
+            else if (key == "origValue")
+                p->origValue = str::toType<double>(val);
+            else if (key == "currValue")
+                p->currValue = str::toType<double>(val);
+            else if (key == "shareable")
+                p->shareable = str::toType<bool>(val);
+        }
+
+        int idx = str::toType<int>((*paramIter)->
+                getAttributes().getValue("index"));
+        mAdjustableParams[idx] = p;
+    }
+}
+
+std::string SICDSensorModel::getParametersXML()
+{
+    std::string xmlStr = "<AdjustableParams>";
+
+    // Store the parameter values in XML form
+    for (unsigned int i=0; i < mAdjustableParams.size(); i++)
+    {
+        Parameter* p = mAdjustableParams[i];
+
+        xmlStr += FmtX("<Param index=\"%d\"><name>%s</name><type>%d</type><origValue>%f</origValue><currValue>%f</currValue><shareable>%s</shareable></Param>", i, p->name.c_str(), p->type, p->origValue, p->currValue, str::toString(p->shareable).c_str());
+    }
+
+    xmlStr += "</AdjustableParams>";
+
+    return xmlStr;
+}
+
+void SICDSensorModel::destroyParameters()
+{
+    for (unsigned int i=0; i < mAdjustableParams.size(); i++)
+    {
+        delete mAdjustableParams[i];
+        mAdjustableParams[i] = NULL;
+    }
+}
+
+Parameter* SICDSensorModel::getParameter(const int& index)
+{
+    // Check whether the vector contains the desired index
+    if (mAdjustableParams.size() > index)
+    {
+        return mAdjustableParams[index];
+    }
+
+    throw except::Exception(Ctxt(FmtX("Parameter index out of range: %d", index)));
+}
+
+void SICDSensorModel::updateProjectionModelParams()
+{
+    // Call this function if the arpPosOffset, arpVelOffset, or rgBiasOffset
+    // parameters have changed, to update the projection model
+
+    int idx = 0;
+
+    scene::Vector3 arpPosOffset;
+    arpPosOffset[0] = mAdjustableParams[idx++]->currValue;
+    arpPosOffset[1] = mAdjustableParams[idx++]->currValue;
+    arpPosOffset[2] = mAdjustableParams[idx++]->currValue;
+
+    scene::Vector3 arpVelOffset;
+    arpVelOffset[0] = mAdjustableParams[idx++]->currValue;
+    arpVelOffset[1] = mAdjustableParams[idx++]->currValue;
+    arpVelOffset[2] = mAdjustableParams[idx++]->currValue;
+
+    double rgBiasOffset = mAdjustableParams[idx++]->currValue;
+
+    mProjection->setARPPositionOffset(arpPosOffset);
+    mProjection->setARPVelocityOffset(arpVelOffset);
+    mProjection->setRangeBiasOffset(rgBiasOffset);
 }
 
 TSMWarning *SICDSensorModel::groundToImage(const double &x, const double &y,
@@ -607,11 +751,27 @@ TSMWarning *SICDSensorModel::setCurrentParameterValue(const int& index,
                                                                            throw (TSMError)
 {
     std::string funcName = "SICDSensorModel::setCurrentParameterValue";
-    // TODO not implemented
-    TSMError tsmErr;
-    tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-                       "Function not supported", funcName);
-    throw tsmErr;
+
+    try
+    {
+        // Get the parameter at the specified index
+        Parameter* p = getParameter(index);
+
+        // Set the current value
+        p->currValue = value;
+
+        // Update the projection model if necessary
+        updateProjectionModelParams();
+    }
+    catch(except::Exception& e)
+    {
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
+                           e.getMessage(), funcName);
+        throw tsmErr;
+    }
+
+    return NULL;
 }
 
 TSMWarning * SICDSensorModel::getCurrentParameterValue(const int& index,
@@ -619,11 +779,24 @@ TSMWarning * SICDSensorModel::getCurrentParameterValue(const int& index,
                                                                     throw (TSMError)
 {
     std::string funcName = "SICDSensorModel::getCurrentParameterValue";
-    // TODO not implemented
-    TSMError tsmErr;
-    tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-                       "Function not supported", funcName);
-    throw tsmErr;
+
+    try
+    {
+        // Get the parameter at the specified index
+        Parameter* p = getParameter(index);
+
+        // Get the current value
+        ret = p->currValue;
+    }
+    catch(except::Exception& e)
+    {
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
+                           e.getMessage(), funcName);
+        throw tsmErr;
+    }
+
+    return NULL;
 }
 
 TSMWarning *SICDSensorModel::getParameterName(const int& index,
@@ -631,21 +804,33 @@ TSMWarning *SICDSensorModel::getParameterName(const int& index,
                                                                  throw (TSMError)
 {
     std::string funcName = "SICDSensorModel::getParameterName";
-    // TODO not implemented
-    TSMError tsmErr;
-    tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-                       "Function not supported", funcName);
-    throw tsmErr;
+
+    try
+    {
+        // Get the parameter at the specified index
+        Parameter* p = getParameter(index);
+
+        // Get the name
+        name = p->name;
+    }
+    catch(except::Exception& e)
+    {
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
+                           e.getMessage(), funcName);
+        throw tsmErr;
+    }
+
+    return NULL;
 }
 
 TSMWarning * SICDSensorModel::getNumParameters(int &number) throw (TSMError)
 {
     std::string funcName = "SICDSensorModel::getNumParameters";
-    // TODO not implemented
-    TSMError tsmErr;
-    tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-                       "Function not supported", funcName);
-    throw tsmErr;
+
+    number = mAdjustableParams.size();
+
+    return NULL;
 }
 
 TSMWarning *SICDSensorModel::setOriginalParameterValue(const int& index,
@@ -653,11 +838,24 @@ TSMWarning *SICDSensorModel::setOriginalParameterValue(const int& index,
                                                                             throw (TSMError)
 {
     std::string funcName = "SICDSensorModel::setOriginalParameterValue";
-    // TODO not implemented
-    TSMError tsmErr;
-    tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-                       "Function not supported", funcName);
-    throw tsmErr;
+
+    try
+    {
+        // Get the parameter at the specified index
+        Parameter* p = getParameter(index);
+
+        // Set the orig value
+        p->origValue = value;
+    }
+    catch(except::Exception& e)
+    {
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
+                           e.getMessage(), funcName);
+        throw tsmErr;
+    }
+
+    return NULL;
 }
 
 TSMWarning *SICDSensorModel::getOriginalParameterValue(const int& index,
@@ -665,11 +863,24 @@ TSMWarning *SICDSensorModel::getOriginalParameterValue(const int& index,
                                                                       throw (TSMError)
 {
     std::string funcName = "SICDSensorModel::getOriginalParameterValue";
-    // TODO not implemented
-    TSMError tsmErr;
-    tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-                       "Function not supported", funcName);
-    throw tsmErr;
+
+    try
+    {
+        // Get the parameter at the specified index
+        Parameter* p = getParameter(index);
+
+        // Get the original value
+        value = p->origValue;
+    }
+    catch(except::Exception& e)
+    {
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
+                           e.getMessage(), funcName);
+        throw tsmErr;
+    }
+
+    return NULL;
 }
 
 TSMWarning *SICDSensorModel::getParameterType(
@@ -679,14 +890,23 @@ TSMWarning *SICDSensorModel::getParameterType(
 {
     std::string funcName = "SICDSensorModel::getParameterType";
 
-    TSMMisc::Param_CharType value = TSMMisc::NONE;
-    return_val = value;
+    try
+    {
+        // Get the parameter at the specified index
+        Parameter* p = getParameter(index);
 
-    // TODO not implemented
-    TSMError tsmErr;
-    tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-                       "Function not supported", funcName);
-    throw tsmErr;
+        // Get the type
+        return_val = p->type;
+    }
+    catch(except::Exception& e)
+    {
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
+                           e.getMessage(), funcName);
+        throw tsmErr;
+    }
+
+    return NULL;
 }
 
 TSMWarning *SICDSensorModel::setParameterType(
@@ -695,11 +915,24 @@ TSMWarning *SICDSensorModel::setParameterType(
                                                                                             throw (TSMError)
 {
     std::string funcName = "SICDSensorModel::setParameterType";
-    // TODO not implemented
-    TSMError tsmErr;
-    tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-                       "Function not supported", funcName);
-    throw tsmErr;
+
+    try
+    {
+        // Get the parameter at the specified index
+        Parameter* p = getParameter(index);
+
+        // Set the type
+        p->type = parameterType;
+    }
+    catch(except::Exception& e)
+    {
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
+                           e.getMessage(), funcName);
+        throw tsmErr;
+    }
+
+    return NULL;
 }
 
 TSMWarning *SICDSensorModel::getPedigree(std::string& pedigree)
@@ -957,7 +1190,18 @@ TSMWarning *SICDSensorModel::getSensorModelName(std::string& name)
 TSMWarning *SICDSensorModel::getSensorModelState(std::string &state)
                                                                      throw (TSMError)
 {
+    int idx = mSensorModelState.find("AdjustableParams");
+    if (idx != std::string::npos)
+    {
+        // Get rid of parameters that might be outdated
+        mSensorModelState = mSensorModelState.substr(0, idx - 1);
+    }
+
+    // Append the current adjustable parameters to the state string
+    mSensorModelState += getParametersXML();
+
     state = mSensorModelState;
+
     return NULL;
 }
 
@@ -1014,11 +1258,24 @@ TSMWarning * SICDSensorModel::isParameterShareable(const int& index,
                                                                           throw (TSMError)
 {
     std::string funcName = "SICDSensorModel::isParameterShareable";
-    // TODO not implemented
-    TSMError tsmErr;
-    tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-                       "Function not supported", funcName);
-    throw tsmErr;
+
+    try
+    {
+        // Get the parameter at the specified index
+        Parameter* p = getParameter(index);
+
+        // Get the shareable flag
+        shareableSwitch = p->shareable;
+    }
+    catch(except::Exception& e)
+    {
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
+                           e.getMessage(), funcName);
+        throw tsmErr;
+    }
+
+    return NULL;
 }
 
 TSMWarning * SICDSensorModel::getParameterSharingCriteria(

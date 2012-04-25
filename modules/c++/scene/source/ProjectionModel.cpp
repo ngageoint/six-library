@@ -29,6 +29,9 @@ ProjectionModel(const Vector3& slantPlaneNormal,
     
     mARPVelPoly = mARPPoly.derivative();
     
+    mARPPosOffset = math::linear::constantVector<3>(0.0);
+    mARPVelOffset = math::linear::constantVector<3>(0.0);
+    mRgBiasOffset = 0.0;
 }
 
 /*!
@@ -181,10 +184,13 @@ ProjectionModel::imageToScene(const RowCol<double>& imageGridPoint,
                    &r,
                    &rDot);
     
-    return contourToGroundPlane(r, rDot,
-                                arpCOA, velCOA, timeCOA,
+    return contourToGroundPlane(r + mRgBiasOffset, rDot,
+                                arpCOA + mARPPosOffset,
+                                velCOA + mARPVelOffset,
+                                timeCOA,
                                 groundPlaneNormal,
                                 groundRefPoint);
+
 }
 
 void ProjectionModel::computeProjectionPolynomials(

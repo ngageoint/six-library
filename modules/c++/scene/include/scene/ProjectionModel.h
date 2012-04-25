@@ -23,6 +23,9 @@ protected:
     math::poly::OneD<Vector3> mARPVelPoly;
     math::poly::TwoD<double> mTimeCOAPoly;
     int mLookDir;
+    Vector3 mARPPosOffset;
+    Vector3 mARPVelOffset;
+    double mRgBiasOffset;
 public:
 
     enum { MAX_ITER = 50 };
@@ -197,6 +200,26 @@ public:
         double* meanResidualErrorRow = NULL,
         double* meanResidualErrorCol = NULL,
         double* meanResidualErrorTCOA = NULL) const;
+
+
+    /*!
+     *  Functions needed to support adjustable parameter offsets
+     */
+    void setARPPositionOffset(Vector3 offset)
+    {
+        mARPPosOffset = offset;
+    }
+
+    void setARPVelocityOffset(Vector3 offset)
+    {
+        mARPVelOffset = offset;
+    }
+
+    void setRangeBiasOffset(double offset)
+    {
+        mRgBiasOffset = offset;
+    }
+
 };
 
 class RangeAzimProjectionModel : public ProjectionModel

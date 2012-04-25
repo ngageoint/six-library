@@ -39,6 +39,15 @@
 namespace sicd_sensor
 {
 
+struct Parameter
+{
+    std::string name;
+    TSMMisc::Param_CharType type;
+    double origValue;
+    double currValue;
+    bool shareable;
+};
+
 class SICDSensorModel : public TSMSensorModel
 {
 
@@ -803,6 +812,7 @@ protected:
     std::auto_ptr<six::sicd::ComplexData> mData;
     std::auto_ptr<scene::SceneGeometry> mGeometry;
     std::auto_ptr<scene::ProjectionModel> mProjection;
+    std::vector<Parameter*> mAdjustableParams;
 
     /**
      * Transforms the given l, s values from units of meters with the origin
@@ -823,6 +833,13 @@ protected:
      * \return A scene::RowCol<double> containing the distance in meters from the center of the image
      */
     scene::RowCol<double> fromPixel(double l, double s);
+
+    void initParameters();
+    void initParameters(std::string xmlStr);
+    std::string getParametersXML();
+    void destroyParameters();
+    void updateProjectionModelParams();
+    Parameter* getParameter(const int& index);
 
 };
 
