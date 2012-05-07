@@ -109,14 +109,15 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
 
     do
     {
-        ssize_t bytesThisRead = write(handle, buf, size);
-        if (bytesThisRead == -1)
+        const ssize_t bytesThisWrite =
+            write(handle, buf + bytesActuallyWritten, size);
+        if (bytesThisWrite == -1)
         {
             nrt_Error_init(error, strerror(errno), NRT_CTXT,
                            NRT_ERR_WRITING_TO_FILE);
             return NRT_FAILURE;
         }
-        bytesActuallyWritten += bytesThisRead;
+        bytesActuallyWritten += bytesThisWrite;
     }
     while (bytesActuallyWritten < size);
 
