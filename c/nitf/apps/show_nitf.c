@@ -34,7 +34,8 @@
  */
 #define SHOW(X) printf("%s=[%s]\n", #X, ((X==0)?"(nul)":X))
 #define SHOW_I(X) printf("%s=[%ld]\n", #X, X)
-#define SHOW_LL(X) printf("%s=[%lld]\n", #X, X)
+#define SHOW_LLI(X) printf("%s=[%lld]\n", #X, X)
+#define SHOW_LLU(X) printf("%s=[%llu]\n", #X, X)
 
 #define SHOW_RGB(X) \
     printf("%s(R,G,B)=[0x%x,0x%x,0x%x]\n", #X, (short)(X->raw[0]), (short)(X->raw[1]), (short)(X->raw[2]))
@@ -226,7 +227,7 @@ void showFileHeader(nitf_Record * record)
         goto CATCH_ERROR;
 
 
-    printf("The number of images contained in this file [%ld]\n", (long)num);
+    printf("The number of images contained in this file [%lu]\n", num);
     for (i = 0; i < num; i++)
     {
 
@@ -239,9 +240,9 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT64_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of image subheader [%d]: %ld bytes\n",
-               i, (long)len);
-        printf("\tThe length of the image data: %lu bytes\n\n", dataLen);
+        printf("\tThe length of image subheader [%u]: %lu bytes\n",
+               i, len);
+        printf("\tThe length of the image data: %llu bytes\n\n", dataLen);
     }
 
     if (!nitf_Field_get(header->numGraphics,
@@ -249,7 +250,7 @@ void showFileHeader(nitf_Record * record)
         goto CATCH_ERROR;
 
 
-    printf("The number of graphics contained in this file [%ld]\n", (long)num);
+    printf("The number of graphics contained in this file [%ld]\n", num);
     for (i = 0; i < num; i++)
     {
 
@@ -262,17 +263,17 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of graphic subheader [%d]: %ld bytes\n",
-               i, (long)len);
-        printf("\tThe length of the graphic data: %ld bytes\n\n",
-               (long) dataLen32);
+        printf("\tThe length of graphic subheader [%u]: %lu bytes\n",
+               i, len);
+        printf("\tThe length of the graphic data: %lu bytes\n\n",
+               dataLen32);
     }
 
     if (!nitf_Field_get(header->numLabels,
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of labels contained in this file [%ld]\n", (long)num);
+    printf("The number of labels contained in this file [%ld]\n", num);
     for (i = 0; i < num; i++)
     {
 
@@ -284,11 +285,11 @@ void showFileHeader(nitf_Record * record)
                             &dataLen32,
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
-        printf("\tThe length of label subheader [%d]: %ld bytes\n",
-               i, (long)len);
+        printf("\tThe length of label subheader [%u]: %lu bytes\n",
+               i, len);
 
-        printf("\tThe length of the label data: %ld bytes\n\n",
-               (long) dataLen32);
+        printf("\tThe length of the label data: %lu bytes\n\n",
+               dataLen32);
     }
 
     if (!nitf_Field_get(header->numTexts,
@@ -296,7 +297,7 @@ void showFileHeader(nitf_Record * record)
         goto CATCH_ERROR;
 
     printf("The number of text sections contained in this file [%ld]\n", 
-           (long)num);
+           num);
 
     for (i = 0; i < num; i++)
     {
@@ -309,11 +310,11 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of text subheader [%d]: %ld bytes\n", 
-               i, (long)len);
+        printf("\tThe length of text subheader [%u]: %lu bytes\n", 
+               i, len);
 
-        printf("\tThe length of the text data: %ld bytes\n\n",
-               (long) dataLen32);
+        printf("\tThe length of the text data: %lu bytes\n\n",
+               dataLen32);
     }
 
     if (!nitf_Field_get(header->numDataExtensions,
@@ -321,7 +322,7 @@ void showFileHeader(nitf_Record * record)
         goto CATCH_ERROR;
 
     printf("The number of DES contained in this file [%ld]\n",
-           (long)num);
+           num);
 
     for (i = 0; i < num; i++)
     {
@@ -334,10 +335,10 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of DES subheader [%d]: %d bytes\n",
-               i, (int) len);
-        printf("\tThe length of the DES data: %ld bytes\n\n",
-               (long) dataLen32);
+        printf("\tThe length of DES subheader [%u]: %lu bytes\n",
+               i, len);
+        printf("\tThe length of the DES data: %lu bytes\n\n",
+               dataLen32);
     }
 
 
@@ -346,7 +347,7 @@ void showFileHeader(nitf_Record * record)
         goto CATCH_ERROR;
 
     printf("The number of RES contained in this file [%ld]\n",
-           (long)num);
+           num);
 
     for (i = 0; i < num; i++)
     {
@@ -362,18 +363,18 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of RES subheader [%d]: %d bytes\n",
-               i, (int) len);
+        printf("\tThe length of RES subheader [%u]: %lu bytes\n",
+               i, len);
 
-        printf("\tThe length of the RES data: %ld bytes\n\n",
-               (long) dataLen32);
+        printf("\tThe length of the RES data: %lu bytes\n\n",
+               dataLen32);
     }
 
     if (!nitf_Field_get(header->userDefinedHeaderLength, &num,
                         NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The user-defined header length [%ld]\n", (long)num);
+    printf("The user-defined header length [%ld]\n", num);
 
     if (header->userDefinedSection)
         showExtensions( header->userDefinedSection );
@@ -382,7 +383,7 @@ void showFileHeader(nitf_Record * record)
                         NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The extended header length [%ld]\n", (long)num);
+    printf("The extended header length [%ld]\n", num);
 
     if (header->extendedSection)
         showExtensions( header->extendedSection );
@@ -693,7 +694,7 @@ void showDESubheader(nitf_DESubheader * sub)
     if (sub->subheaderFields)
         printTRE(sub->subheaderFields);
 
-    SHOW_I((long)sub->dataLength);
+    SHOW_LLU(sub->dataLength);
 
     /*
      *  NITRO only populates this object if the DESDATA contains
@@ -724,7 +725,7 @@ void showRESubheader(nitf_RESubheader * sub)
         showSecurityGroup(sub->securityGroup);
 
     SHOW_VAL(sub->subheaderFieldsLength);
-    SHOW_I((long)sub->dataLength);
+    SHOW_LLU(sub->dataLength);
 }
 
 int main(int argc, char **argv)

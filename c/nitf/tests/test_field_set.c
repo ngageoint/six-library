@@ -34,30 +34,23 @@
 
 int main(int argc, char *argv[])
 {
-    nitf_FileHeader *fhdr;      /* File header supplying fields */
-    nitf_ImageSubheader *subhdr;        /* Subheader supplying fields */
-    nitf_Uint32 valueU32Before; /* Value buffer */
-    nitf_Uint32 valueU32After;  /* Value buffer */
-    nitf_Uint64 valueU64Before; /* Value buffer */
-    nitf_Uint64 valueU64After;  /* Value buffer */
-    char *valueStrBefore;       /* Value buffer */
+    nitf_FileHeader *fhdr;          /* File header supplying fields */
+    nitf_ImageSubheader *subhdr;    /* Subheader supplying fields */
+    nitf_Uint32 valueU32Before;     /* Value buffer */
+    nitf_Uint32 valueU32After;      /* Value buffer */
+    nitf_Uint64 valueU64Before;     /* Value buffer */
+    nitf_Uint64 valueU64After;      /* Value buffer */
+    char *valueStrBefore;           /* Value buffer */
     /* Value buffer */
     static char valueStrAfter[STR_LEN + 2];
-    nitf_Uint32 valueStrLen;    /* Value buffer */
-    static nitf_Error errorObj; /* Error object for messages */
-    nitf_Error *error;          /* Pointer to the error object */
+    nitf_Uint32 valueStrLen;        /* Value buffer */
+    static nitf_Error errorObj;     /* Error object for messages */
+    nitf_Error *error;              /* Pointer to the error object */
 
     error = &errorObj;
 
     fhdr = nitf_FileHeader_construct(error);
-    if (subhdr == NULL)
-    {
-        nitf_Error_print(error, stdout, "Error creating image subheader");
-        exit(EXIT_FAILURE);
-    }
-
-    subhdr = nitf_ImageSubheader_construct(error);
-    if (subhdr == NULL)
+    if (fhdr == NULL)
     {
         nitf_Error_print(error, stdout, "Error creating image subheader");
         exit(EXIT_FAILURE);
@@ -71,7 +64,6 @@ int main(int argc, char *argv[])
     }
 
     /*    Set some fields (should work) */
-
     valueU32Before = 12345;
     if (nitf_Field_setUint32(subhdr->NITF_XBANDS, valueU32Before, error))
         fprintf(stdout,
@@ -111,7 +103,7 @@ int main(int argc, char *argv[])
     nitf_Field_get(fhdr->NITF_FL, (NITF_DATA *) & valueU64After,
                    NITF_CONV_UINT, NITF_INT64_SZ, error);
     fprintf(stdout,
-            "Set of FL via nitf_Field_setUint64 original %lu readback %lu\n",
+            "Set of FL via nitf_Field_setUint64 original %llu readback %llu\n",
             valueU64Before, valueU64After);
 
     valueStrBefore = "TestStr";

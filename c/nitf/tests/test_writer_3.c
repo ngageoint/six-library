@@ -139,7 +139,7 @@ void showFileHeader(nitf_FileHeader * header)
         GET_UINT64(header->imageInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the IMAGE data: %lu bytes\n\n", dataLen);
+        printf("\tThe length of the IMAGE data: %llu bytes\n\n", dataLen);
     }
 
     return;
@@ -479,7 +479,7 @@ void writeDEData(nitf_DESegment * segment,
 
     leftToRead = (size_t)(segment->end - segment->offset); 
     //leftToRead = (size_t) reader->user->virtualLength;
-    fprintf(stderr, "XXX Data Ext write %lu %lu %lu\n", leftToRead, segment->end , segment->offset);
+    fprintf(stderr, "XXX Data Ext write %llu %llu %llu\n", leftToRead, segment->end , segment->offset);
 
     buf = (char*)NITF_MALLOC(toRead + 1);
     if (!buf)
@@ -510,14 +510,14 @@ void writeDEData(nitf_DESegment * segment,
         amtToRead = DE_READ_SIZE;
         if (amtToRead > leftToRead)
             amtToRead = leftToRead;
-        fprintf(stderr, "XXX Data Ext C2 %lu\n", amtToRead);
+        fprintf(stderr, "XXX Data Ext C2 %llu\n", amtToRead);
         if (nitf_SegmentReader_read(reader, buf, (size_t)amtToRead, error) != NITF_SUCCESS)
         {
             /* TODO populate error */
             goto CATCH_ERROR;
         }
 
-        fprintf(stderr, "XXX Data Ext D %lu\n", amtToRead);
+        fprintf(stderr, "XXX Data Ext D %llu\n", amtToRead);
         if (!nitf_IOHandle_write(file, (const char*)buf, (size_t)amtToRead, error))
             goto CATCH_ERROR;
         fprintf(stderr, "XXX Data Ext E\n");

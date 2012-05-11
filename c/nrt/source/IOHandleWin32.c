@@ -136,6 +136,7 @@ NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle, nrt_Error * error)
 {
     DWORD ret;
     DWORD highOff;
+    nrt_Uint64 off;
     ret = GetFileSize(handle, &highOff);
     if ((ret == -1))
     {
@@ -143,7 +144,9 @@ NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle, nrt_Error * error)
                         "GetFileSize failed with error [%d]", GetLastError());
         return (nrt_Off) - 1;
     }
-    return ((highOff) << 32) + ret;
+
+    off = (nrt_Uint64)highOff;
+    return (nrt_Off)((off << 32) + ret);
 }
 
 NRTAPI(void) nrt_IOHandle_close(nrt_IOHandle handle)

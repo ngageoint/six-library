@@ -171,7 +171,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
 
     /*  Convert the number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%lu", (long) number);
+    NITF_SNPRINTF(numberBuffer, 20, "%lu", (unsigned long) number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -219,7 +219,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
 
     /*  Convert thte number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%lu", number);
+    NITF_SNPRINTF(numberBuffer, 20, "%llu", number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -313,7 +313,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
 
     /*  Convert thte number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%ld", number);
+    NITF_SNPRINTF(numberBuffer, 20, "%lld", number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -637,7 +637,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
             nitf_Int64 int64;
             if (!toInt64(field, &int64, error))
                 goto CATCH_ERROR;
-            actualLength = NITF_SNPRINTF(buffer, 256, "%ld", int64);
+            actualLength = NITF_SNPRINTF(buffer, 256, "%lld", int64);
         }
         break;
         default:
@@ -1072,7 +1072,7 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
     {
         case NITF_BINARY:
             /* avoid printing binary */
-            printf("<binary data, length %lu>", field->length);
+            printf("<binary data, length %llu>", field->length);
             break;
 
         case NITF_BCS_N:

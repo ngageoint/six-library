@@ -84,7 +84,7 @@ void showFileHeader(nitf_FileHeader* header)
         NITF_TRY_GET_UINT64(header->imageInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the IMAGE data: %lu bytes\n\n",
+        printf("\tThe length of the IMAGE data: %llu bytes\n\n",
                dataLen);
     }
 
