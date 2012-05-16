@@ -36,7 +36,7 @@
         <echo>"====================================================="</echo>
         <echo>"                       COMPILE                       "</echo>
         <echo>"====================================================="</echo>
-        <javac srcdir="${src.dir}" destdir="${object-dir}"
+        <javac srcdir="${src.dir}" destdir="${object-dir}" classpath="lib/*"
             failonerror="yes" fork="true"/>
     </target>
 
