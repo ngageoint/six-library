@@ -37,6 +37,7 @@ def build(bld):
     uselib_local = 'nitf-c nrt-c'
     
     pluginList = []
+    pluginObjects = []
     plugins = pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
     plugins.remove('J2KDecompress.c')
     plugins.remove('J2KCompress.c')
@@ -53,12 +54,13 @@ def build(bld):
                                   target=pluginName, add_objects='%s_obj' % pluginName,
                                   path=pluginNode, env=pEnv.copy(),
                                   install_path='${PREFIX}/share/nitf/plugins')
-        pluginList.append('%s_obj' % pluginName)
+        pluginObjects.append('%s_obj' % pluginName)
+        pluginList.append(pluginName)
     
     #now, to support static linkage, make the plug-ins as a static library
     lib = bld.new_task_gen('cc', 'staticlib', includes='include',
                            target='%s-handlers' % NAME, env=env.copy(),
-                           uselib_local = uselib_local, add_objects = pluginList)
+                           uselib_local = uselib_local, add_objects = pluginObjects)
     
     #J2K plug-ins
     if env['CCFLAGS_j2k-c']:
@@ -70,7 +72,7 @@ def build(bld):
                              uselib='nitf-c j2k-c nrt-c',
                              path=pluginNode, env=pEnv.copy(),
                              install_path='${PREFIX}/share/nitf/plugins')
-            pluginList.append('%s_obj' % pluginName)
+            pluginList.append(pluginName)
     
     #build apps
     appsDir = bld.path.find_dir('apps')
