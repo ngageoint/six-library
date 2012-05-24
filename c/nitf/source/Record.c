@@ -2320,18 +2320,5 @@ NITFAPI(NITF_BOOL) nitf_Record_mergeTREs(nitf_Record * record,
         nitf_ListIterator_increment(&deIter);
     }
 
-    if(deRemoved > 0)
-    {
-        nitf_Int32 deCount;
-
-        if(!nitf_Field_get(record->header->NITF_NUMDES,&deCount,
-                           NITF_CONV_INT,NITF_INT32_SZ,error))
-            return NITF_FAILURE;
-        deCount -= deRemoved;
-        if(deCount < 0)
-            deCount = 0;
-        if(!nitf_Field_setUint32(record->header->NITF_NUMDES,deCount,error))
-            return NITF_FAILURE;
-    }
     return NITF_SUCCESS;
 }

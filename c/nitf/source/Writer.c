@@ -492,17 +492,13 @@ NITFPRIV(NITF_BOOL) writeExtras(nitf_Writer * writer,
     totalLength = nitf_Extensions_computeLength(section, version, error);
 
     /* must add the oflFieldSize if we have non-zero data length */
-    *dataLength =
-        totalLength > 0 ? totalLength + oflFieldSize : totalLength;
+    *dataLength = (totalLength > 0 || *dataOverflow != 0) ?
+                   totalLength + oflFieldSize : totalLength;
 
     /*  First, write length and overflow fields */
     if (!writeIntField(writer, *dataLength, hdlFieldSize,
                        ZERO, FILL_LEFT, error))
         goto CATCH_ERROR;
-
-    /* TODO: figure out what we should do with the overflow...
-     * for now, just set it to zero */
-    *dataOverflow = 0;
 
     if (*dataLength != 0)
     {
