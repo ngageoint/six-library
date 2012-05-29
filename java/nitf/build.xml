@@ -9,15 +9,6 @@
         <mkdir dir="${target.dir}"/>
         <loadproperties srcFile="project.properties"/>
 
-        <!-- some defaults here -->
-        <property name="nitf.dir" location="../../c/nitf/"/>
-        <property name="jni.dir" location="./"/>
-        <property name="jni.gnu" value=""/>
-        <property name="jni.debug" value=""/>
-        <property name="prefix" value="${target.dir}/nitro-java-${nitro.version}"/>
-        <condition property="isWindows">
-            <os family="windows"/>
-        </condition>
     </target>
 
 
@@ -27,8 +18,6 @@
         <echo>"====================================================="</echo>
         <delete dir="${object-dir}"/>
         <delete dir="${target.dir}"/>
-        <delete dir="${javadoc-dir}"/>
-        <delete dir="${javadoc-dir}"/>
     </target>
 
 
@@ -50,109 +39,14 @@
             classpath="${object-dir}"
             failonerror="yes" fork="true"/>
     </target>
-
-
-    <target name="_jni-nonwin" depends="init" unless="isWindows">
-        <condition property="jni.debug" value="--enable-debugging">
-            <istrue value="${debug}"/>
-        </condition>
-
-        <condition property="jni.gnu" value="--enable-gnu">
-            <istrue value="${gnu}"/>
-        </condition>
-
-        <exec dir="${jni.dir}" executable="sh">
-            <arg line="configure --prefix=${prefix} ${jni.debug} ${jni.gnu}"/>
-        </exec>
-        <exec dir="${jni.dir}" executable="make"/>
-    </target>
     
-    
-    <target name="_jni-win" depends="init" if="isWindows">
-        <condition property="jni.debug" value="debug=1">
-            <istrue value="${debug}"/>
-        </condition>
-        <exec dir="${jni.dir}" executable="cmd.exe">
-            <arg line="/c scons prefix=${prefix} ${jni.debug}"/>
-        </exec>
-    </target>
-    
-    <target name="jni">
-        <echo>"====================================================="</echo>
-        <echo>"                        JNI                          "</echo>
-        <echo>"====================================================="</echo>
-        <antcall target="_jni-win"/>
-        <antcall target="_jni-nonwin"/>
-    </target>
-    
-    
-    <target name="build" depends="compile,jni">
+    <target name="build" depends="compile">
         <echo>"====================================================="</echo>
         <echo>"                        BUILD                        "</echo>
         <echo>"====================================================="</echo>
         <jar basedir="${object-dir}" destfile="${target.dir}/${projectName}-${nitro.version}.jar"/>
     </target>
-
     
-    <target name="install" depends="build">
-        <copy todir="${prefix}/lib">
-            <mapper type="flatten"/>
-            <fileset dir="${jni.dir}" includes="lib/**/*.dll,lib/**/*.so"/>
-        </copy>
-        <copy todir="${prefix}/lib">
-            <fileset dir="${target.dir}" includes="${projectName}-${nitro.version}.jar"/>
-        </copy>
-        <copy todir="${prefix}/shared">
-            <mapper type="flatten"/>
-            <fileset dir="${nitf.dir}/plugins" includes="**/*.dll,**/*.so"/>
-        </copy>
-    </target>
-
-    <target name="dist" depends="build">
-        <antcall target="javadoc"/>
-        
-        <!-- this little chunk gets the system identifier, as provided by config.guess or SCons -->
-        <path id="lib.path">
-            <fileset dir="${jni.dir}" includes="lib/**/*.dll,lib/**/*.so"/>
-        </path>
-        <property name="temp.1" refid="lib.path"/>
-        <dirname property="temp.2" file="${temp.1}"/>
-        <basename property="sysid" file="${temp.2}"/>
-        
-        <basename property="prefixBase" file="${prefix}"/>
-        
-        <property name="dist.name" value="${prefixBase}-${sysid}"/>
-        <property name="dist.dir" value="${target.dir}/dist/${dist.name}"/>
-        
-        <copy todir="${dist.dir}/lib">
-            <mapper type="flatten"/>
-            <fileset dir="${jni.dir}" includes="lib/**/*.dll,lib/**/*.so"/>
-        </copy>
-        <copy todir="${dist.dir}/lib">
-            <fileset dir="${target.dir}" includes="${projectName}-${nitro.version}.jar"/>
-        </copy>
-        <copy todir="${dist.dir}/share/nitf">
-            <mapper type="flatten"/>
-            <fileset dir="${nitf.dir}/plugins" includes="**/*.dll,**/*.so"/>
-        </copy>
-        
-        <copy todir="${dist.dir}/share/doc/nitf/api/java">
-            <fileset dir="${javadoc.dir}" includes="**"/>
-        </copy>
-        
-        <copy todir="${dist.dir}/share/doc/nitf/">
-            <fileset dir="../../" includes="COPYING*,README*"/>
-        </copy>
-        
-        <tar tarfile="${target.dir}/${dist.name}.tar" basedir="${target.dir}/dist" includes="${dist.name}/**"/>
-        <gzip zipfile="${target.dir}/${dist.name}.tar.gz" src="${target.dir}/${dist.name}.tar"/>
-        
-        <delete file="${target.dir}/${dist.name}.tar"/>
-        <delete dir="${target.dir}/dist"/>
-        
-    </target>
-    
-
     <target name="javadoc" depends="init">
         <echo>"====================================================="</echo>
         <echo>"                       JAVADOC                       "</echo>
