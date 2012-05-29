@@ -789,3 +789,29 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveReservedExtensionSegment
     }
     return;
 }
+
+JNIEXPORT void JNICALL Java_nitf_Record_mergeTREs
+  (JNIEnv *env, jobject self)
+{
+	nitf_Record *record = _GetObj(env, self);
+    nitf_Error error;
+
+    if (!nitf_Record_mergeTREs(record, &error))
+    {
+        _ThrowNITFException(env, error.message);
+    }
+    return;
+}
+
+JNIEXPORT void JNICALL Java_nitf_Record_unmergeTREs
+  (JNIEnv *env, jobject self)
+{
+	nitf_Record *record = _GetObj(env, self);
+    nitf_Error error;
+
+    if (!nitf_Record_unmergeTREs(record, &error))
+    {
+        _ThrowNITFException(env, error.message);
+    }
+    return;
+}

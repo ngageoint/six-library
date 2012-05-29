@@ -211,6 +211,22 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveReservedExtensionSegment
 
 /*
  * Class:     nitf_Record
+ * Method:    mergeTREs
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_nitf_Record_mergeTREs
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     nitf_Record
+ * Method:    unmergeTREs
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_nitf_Record_unmergeTREs
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     nitf_Record
  * Method:    getVersion
  * Signature: ()Lnitf/Version;
  */

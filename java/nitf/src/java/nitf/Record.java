@@ -392,6 +392,23 @@ public final class Record extends CloneableObject
     }
 
     /**
+     * This moves all TREs in TRE_OVERFLOW to the appropriate header
+     * or subheader user data segment.
+     * 
+     * @throws NITFException
+     */
+    public native void mergeTREs() throws NITFException;
+    
+    /**
+     * This moves TREs that are too big to fit in header or subheader
+     * sections to TRE_OVERFLOW. NITRO will automatically call this
+     * when writing a NITF file.
+     * 
+     * @throws NITFException
+     */
+    public native void unmergeTREs() throws NITFException;
+    
+    /**
      * Returns the version of NITF this Record represents
      * 
      * @return the version of NITF this Record represents
