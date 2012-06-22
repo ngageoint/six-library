@@ -19,8 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/NITFImageInfo.h"
-#include "scene/Utilities.h"
+
+#include <memory>
+
+#include <sys/Conf.h>
+#include <except/Exception.h>
+#include <str/Convert.h>
+#include <six/NITFImageInfo.h>
+#include <scene/Utilities.h>
 
 using namespace six;
 
@@ -235,20 +241,30 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
     {
         nitf::BandInfo band1;
 
-        LUT* lut = data->getDisplayLUT()->clone();
+        // TODO: Why do we need to byte swap here?  If it is required, could
+        //       we avoid the clone and byte swap and instead index into
+        //       the LUT in the opposite order?
+        std::auto_ptr<LUT> lut(data->getDisplayLUT()->clone());
         sys::byteSwap((sys::byte*) lut->table, lut->elementSize,
                       lut->numEntries);
 
-        unsigned char* table = new unsigned char[lut->numEntries
-                * lut->elementSize];
+        if (lut->elementSize != sizeof(short))
+        {
+            throw except::Exception(Ctxt(
+                "Unexpected element size: " +
+                str::toString(lut->elementSize)));
+        }
+
+        nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
+        unsigned char* const table(lookupTable.getTable());
 
         for (unsigned int i = 0; i < lut->numEntries; ++i)
         {
             // Need two LUTS in the nitf, with high order
             // bits in the first and low order in the second
-            table[i] = (short) (*lut)[i][0];
-            table[lut->numEntries + i] = (short) (*lut)[i][1];
-
+            const unsigned char* const entry = (*lut)[i];
+            table[i] = entry[0];
+            table[lut->numEntries + i] = entry[1];
         }
 
         //         //I would like to set it this way but it does not seem to work.
@@ -256,9 +272,8 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         //         //band1.getRepresentation().set("LU");
         //         //band1.getLookupTable().setTable(table, 2, lut->numEntries);
 
-        nitf::LookupTable lookupTable(band1.getLookupTable());
-        lookupTable.setTable(table, 2, lut->numEntries);
-        band1.init("LU", "", "", "", 2, lut->numEntries, lookupTable);
+        band1.init("LU", "", "", "", lut->elementSize, lut->numEntries,
+                   lookupTable);
         bands.push_back(band1);
     }
         break;
@@ -268,8 +283,16 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         nitf::BandInfo band1;
 
         LUT* lut = data->getDisplayLUT();
-        unsigned char* table = new unsigned char[lut->numEntries
-                * lut->elementSize];
+
+        if (lut->elementSize != 3)
+        {
+            throw except::Exception(Ctxt(
+                "Unexpected element size: " +
+                str::toString(lut->elementSize)));
+        }
+
+        nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
+        unsigned char* const table(lookupTable.getTable());
 
         for (unsigned int i = 0, k = 0; i < lut->numEntries; ++i)
         {
@@ -285,9 +308,8 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         //band1.getRepresentation().set("LU");
         //band1.getLookupTable().setTable(table, 3, lut->numEntries);
 
-        nitf::LookupTable lookupTable(band1.getLookupTable());
-        lookupTable.setTable(table, 3, lut->numEntries);
-        band1.init("LU", "", "", "", 3, lut->numEntries, lookupTable);
+        band1.init("LU", "", "", "", lut->elementSize, lut->numEntries,
+                   lookupTable);
         bands.push_back(band1);
     }
         break;
