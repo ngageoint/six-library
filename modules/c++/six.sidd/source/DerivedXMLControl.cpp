@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <string.h>
+
 #include "six/Types.h"
 #include "six/Utilities.h"
 #include <import/str.h>
@@ -368,10 +371,11 @@ void DerivedXMLControl::fromXML(const XMLElem displayXML, Display* display)
                                                                                            "size"));
                     std::string lutStr = remapLUTXML->getCharacterData();
                     std::vector<std::string> lutVals = str::split(lutStr, " ");
-                    remapLUT = new LUT(size, 1);
-                    for (unsigned int i = 0; i < lutVals.size(); i++)
+                    remapLUT = new LUT(size, 2);
+                    for (size_t ii = 0; ii < lutVals.size(); ++ii)
                     {
-                        remapLUT->table[i] = lutVals[i].at(0);
+                        const short lutVal = str::toType<short>(lutVals[ii]);
+                        ::memcpy((*remapLUT)[ii], &lutVal, sizeof(short));
                     }
                 }
 
@@ -589,6 +593,10 @@ void DerivedXMLControl::fromXML(const XMLElem measurementXML,
 
     XMLElem refXML = getFirstAndOnly(projXML, "ReferencePoint");
 
+    getAttributeIfExists(refXML->getAttributes(),
+                         "name",
+                         measurement->projection->referencePoint.name);
+
     parseVector3D(getFirstAndOnly(refXML, "ECEF"),
                   measurement->projection->referencePoint.ecef);
 
@@ -702,6 +710,9 @@ void DerivedXMLControl::fromXML(const XMLElem exploitationFeaturesXML,
         {
             coll = exploitationFeatures->collections[idx];
         }
+
+        coll->identifier =
+            collectionXML->getAttributes().getValue("identifier");
 
         // Information
         Information* info = coll->information;
@@ -865,14 +876,16 @@ void DerivedXMLControl::fromXML(const XMLElem exploitationFeaturesXML,
     }
 
     XMLElem productXML = getFirstAndOnly(exploitationFeaturesXML, "Product");
-    Product prod = exploitationFeatures->product;
+    Product& prod = exploitationFeatures->product;
 
     parseRowColDouble(getFirstAndOnly(productXML, "Resolution"),
-                      exploitationFeatures->product.resolution);
+                      prod.resolution);
 
     tmpElem = getOptional(productXML, "North");
     if (tmpElem)
+    {
         parseDouble(tmpElem, prod.north);
+    }
 }
 
 Data* DerivedXMLControl::fromXML(const xml::lite::Document* doc)
@@ -1542,6 +1555,7 @@ XMLElem DerivedXMLControl::toXML(
     {
         createDouble("North", exploitationFeatures->product.north, productXML);
     }
+
     return exploitationFeaturesXML;
 }
 
