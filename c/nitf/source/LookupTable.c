@@ -37,6 +37,8 @@ NITFAPI(nitf_LookupTable *) nitf_LookupTable_construct(nitf_Uint32 tables,
         return NULL;
     }
 
+    lt->tables = tables;
+    lt->entries = entries;
     lt->table = NULL;
     if (!nitf_LookupTable_init(lt, tables, entries, NULL, error))
     {
@@ -104,12 +106,16 @@ NITFAPI(void) nitf_LookupTable_destruct(nitf_LookupTable ** lt)
 NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
         nitf_Uint32 numTables,
         nitf_Uint32 numEntries,
-        NITF_DATA * tables,
+        const NITF_DATA * tables,
         nitf_Error * error)
 {
 
-    if (lut->table != NULL)     /* Look for existing table */
+    /* Look for existing table of a different size */
+    if (lut->tables != numTables || lut->entries != numEntries)
+    {
         NITF_FREE(lut->table);
+        lut->table = NULL;
+    }
 
     lut->tables = numTables;
     lut->entries = numEntries;
@@ -117,14 +123,18 @@ NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
     /* only create the table data if we really should */
     if (numTables > 0 && numEntries > 0)
     {
-        lut->table = (nitf_Uint8 *) NITF_MALLOC(numTables * numEntries);
         if (!lut->table)
         {
-            nitf_Error_initf(error, NITF_CTXT,
-                             NITF_ERR_MEMORY,
-                             "Error allocating look-up table");
-            return NITF_FAILURE;
+            lut->table = (nitf_Uint8 *) NITF_MALLOC(numTables * numEntries);
+            if (!lut->table)
+            {
+                nitf_Error_initf(error, NITF_CTXT,
+                                 NITF_ERR_MEMORY,
+                                 "Error allocating look-up table");
+                return NITF_FAILURE;
+            }
         }
+
         /* only copy if one existed */
         if (tables)
         {

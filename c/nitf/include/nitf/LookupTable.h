@@ -100,7 +100,7 @@ NITFAPI(NITF_BOOL) nitf_LookupTable_init(
     nitf_LookupTable * lut,      /*!< The lookup table to initialize */
     nitf_Uint32 numTables,       /*!< Number of tables */
     nitf_Uint32 numEntries,      /*!< Number of entries in the tablt */
-    NITF_DATA * tables,          /*!< The tables */
+    const NITF_DATA * tables,    /*!< The tables */
     nitf_Error * error           /*!< Error object for error returns */
 );
 
