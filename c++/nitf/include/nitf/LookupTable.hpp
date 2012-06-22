@@ -24,6 +24,7 @@
 #define __NITF_LOOKUPTABLE_HPP__
 
 #include <string>
+#include <stddef.h>
 #include "nitf/LookupTable.h"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
@@ -42,6 +43,13 @@ namespace nitf
 class LookupTable : public nitf::Object<nitf_LookupTable>
 {
 public:
+    //! Create an uninitialized table of the specified dimensions
+    LookupTable(size_t numTables, size_t numEntries);
+
+    //! Create a table of the specified dimensions initialized to 'table'
+    LookupTable(const unsigned char* table,
+                size_t numTables,
+                size_t numEntries);
 
     //! Copy constructor
     LookupTable(const LookupTable & x);
@@ -56,16 +64,18 @@ public:
     ~LookupTable();
 
     //! Get the tables
-    int getTables() const;
+    size_t getTables() const;
 
     //! Get the entries
-    int getEntries() const;
+    size_t getEntries() const;
 
     //! Get the table
     unsigned char * getTable() const;
 
     //! Set the table and dimensions
-    void setTable(unsigned char *table, int numTables, int numEntries);
+    void setTable(const unsigned char* table,
+                  size_t numTables,
+                  size_t numEntries);
 
 private:
     nitf_Error error;

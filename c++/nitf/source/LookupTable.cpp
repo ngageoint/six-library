@@ -24,6 +24,33 @@
 
 using namespace nitf;
 
+LookupTable::LookupTable(size_t numTables, size_t numEntries)
+{
+    nitf_LookupTable* const lookupTable =
+        nitf_LookupTable_construct(numTables, numEntries, &error);
+    if (!lookupTable)
+    {
+        throw nitf::NITFException(&error);
+
+    }
+    setNative(lookupTable);
+}
+
+LookupTable::LookupTable(const unsigned char* table,
+                         size_t numTables,
+                         size_t numEntries)
+{
+    nitf_LookupTable* const lookupTable =
+        nitf_LookupTable_construct(numTables, numEntries, &error);
+    if (!lookupTable)
+    {
+        throw nitf::NITFException(&error);
+
+    }
+    setNative(lookupTable);
+    setTable(table, numTables, numEntries);
+}
+
 LookupTable::LookupTable(const LookupTable & x)
 {
     setNative(x.getNative());
@@ -44,12 +71,12 @@ LookupTable::LookupTable(nitf_LookupTable * x)
 
 LookupTable::~LookupTable() {}
 
-int LookupTable::getTables() const
+size_t LookupTable::getTables() const
 {
     return getNativeOrThrow()->tables;
 }
 
-int LookupTable::getEntries() const
+size_t LookupTable::getEntries() const
 {
     return getNativeOrThrow()->entries;
 }
@@ -59,7 +86,9 @@ unsigned char * LookupTable::getTable() const
     return getNativeOrThrow()->table;
 }
 
-void LookupTable::setTable(unsigned char *table, int numTables, int numEntries)
+void LookupTable::setTable(const unsigned char *table,
+                           size_t numTables,
+                           size_t numEntries)
 {
     if (!nitf_LookupTable_init(getNativeOrThrow(), numTables,
             numEntries, table, &error))
