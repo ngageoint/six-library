@@ -2,6 +2,9 @@ import os
 import Options, Build
 from Configure import ConfigurationError
 
+configure = options = lambda x: None
+
+"""
 def set_options(opt):
     opt.tool_options('javaw')
     opt.add_option('--disable-java', action='store_false', dest='java',
@@ -26,11 +29,11 @@ def configure(conf):
     #copied from the waf trunk - which I committed - this is required until we
     #start using a version higher than 1.5.8
     
-    """
+    
     Check for jni headers and libraries
 
     On success the environment variable xxx_JAVA is added for uselib
-    """
+    
 
     if not conf.env.CC_NAME and not conf.env.CXX_NAME:
         conf.fatal('load a compiler first (gcc, g++, ..)')
@@ -75,7 +78,7 @@ def configure(conf):
             conf.fatal(err)
         else:
             conf.check_message_custom('Java', 'lib/headers', err, color='YELLOW')
-
+"""
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'

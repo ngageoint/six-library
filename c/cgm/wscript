@@ -9,7 +9,7 @@ USELIB_LOCAL    = 'nitf-c nrt-c'
 DEFINES         = 'NITF_MODULE_EXPORTS'
 
 
-set_options = configure = distclean = lambda p: None
+options = configure = distclean = lambda p: None
 
 def build(bld):
     env = bld.module(**globals())

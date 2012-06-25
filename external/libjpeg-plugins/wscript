@@ -14,16 +14,17 @@ def configure(conf):
         defs.append('/UNEED_FAR_POINTERS')
         defs.append('/UNEED_SHORT_EXTERNAL_NAMES')
         defs.append('/UINCOMPLETE_TYPES_BROKEN')
-    env.append_value('CCFLAGS_LIBJPEG', defs)
+    env.append_value('CFLAGS_LIBJPEG', defs)
 
 
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.env_of_name(variant)
     
-    defs = env['defines']
+    defs = env['DEFINES']
     defList = []
-    for k, v in defs.iteritems():
+    for line in defs:
+        k, v = line.split('=')
         if v:
             defList.append('%s=%s' % (k, v))
     
@@ -33,7 +34,7 @@ def build(bld):
     ut.features = ['unzip']
     bld.add_group()
     
-    driverNode = bld.path.find_dir('build').ensure_dir_node_from_path(fname)
+    driverNode = bld.path.make_node('build').make_node(fname)
     
     defDict = dict()
     configH = bld.new_task_gen(output='jconfig.h', path=driverNode,
@@ -91,10 +92,10 @@ def build(bld):
         'jutils.c',
     )
         
-    jpeg = bld.new_task_gen('cc', 'staticlib', includes='.',
+    jpeg = bld.new_task_gen(features='c cstlib', includes='.',
                             source=sources,
                             target='jpeg', path=driverNode,
-                            export_incdirs='.',
+                            export_includes='.',
                             uselib='SOCKET LIBJPEG',
                             defines=defList,
                             env=env.copy(),
@@ -107,17 +108,17 @@ def build(bld):
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
     libEnv = env.copy()
-    lib = bld.new_task_gen('cc', 'shlib', target='LibjpegDecompress',
-                           uselib_local='LIBJPEG nitf-c'.split(),
+    lib = bld.new_task_gen(features='c cshlib', target='LibjpegDecompress',
+                           use='LIBJPEG nitf-c'.split(),
                            install_path='${PREFIX}/share/nitf/plugins',
-                           defines=defList, env=libEnv)
-    lib.find_sources_in_dirs('./source', excludes=[])
-    libEnv['shlib_PATTERN'] = libPattern
+                           defines=defList, env=libEnv,
+                           source=bld.path.ant_glob('source/*.c'))
+    libEnv['cshlib_PATTERN'] = libPattern
 
 
 
 def distclean(context):
-    unzipPath = os.path.join(context.curdir, 'build', fname)
+    unzipPath = os.path.join(context.path.abspath(), 'build', fname)
     try:
         if os.path.exists(unzipPath):
             shutil.rmtree(unzipPath, ignore_errors=True)

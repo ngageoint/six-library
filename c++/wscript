@@ -3,27 +3,27 @@ import Options, Utils
 from build import CPPBuildContext
 
 #override the default build context with our own
-Utils.g_module.build_context = Utils.g_module.install_context = Utils.g_module.clean_context = CPPBuildContext 
+#Utils.g_module.build_context = Utils.g_module.install_context = Utils.g_module.clean_context = CPPBuildContext 
 
 MODULES = 'except str sys mt nitf mem'
 
-def set_options(opt):
-    opt.sub_options(filter(lambda x: exists(join(opt.curdir, x, 'wscript')),
+def options(opt):
+    opt.sub_options(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
                            MODULES.split()))
 
 def configure(conf):
-    conf.env.append_value('CPPPATH_UNITTEST', join(conf.curdir, 'include'))
-    conf.sub_config(filter(lambda x: exists(join(conf.curdir, x, 'wscript')),
+    conf.env.append_value('CPPPATH_UNITTEST', join(conf.path.abspath(), 'include'))
+    conf.sub_config(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
                            MODULES.split()))
 
 def build(bld):
-    configBuilds = filter(lambda m: not exists(join(bld.curdir, m, 'wscript')),
+    configBuilds = filter(lambda m: not exists(join(bld.path.abspath(), m, 'wscript')),
                           MODULES.split())
     # build these modules from their config files
-    map(bld.fromConfig, map(lambda m: join(bld.curdir, m), configBuilds))
+    map(bld.fromConfig, map(lambda m: join(bld.path.abspath(), m), configBuilds))
     map(bld.add_subdirs, filter(lambda m: m not in configBuilds, MODULES.split()))
 
 def distclean(context):
-    context.recurse(filter(lambda x: exists(join(context.curdir, x, 'wscript')),
+    context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),
                            MODULES.split()))
 

@@ -25,9 +25,10 @@ def build(bld):
     variant = bld.env['VARIANT']
     env = bld.env_of_name(variant)
     
-    defs = env['defines']
+    defs = env['DEFINES']
     defList = []
-    for k, v in defs.iteritems():
+    for line in defs:
+        k, v = line.split('=')
         if v:
             defList.append('%s=%s' % (k, v))
     
@@ -116,10 +117,10 @@ def build(bld):
         'src/libjasper/ras/ras_enc.c',
     )
         
-    jasper = bld.new_task_gen('cc', 'staticlib', includes=includes,
+    jasper = bld.new_task_gen(features='c cstlib', includes=includes,
                               source=sources,
                               target='jasper', path=driverNode,
-                              export_incdirs='src/libjasper/include/',
+                              export_includes='src/libjasper/include/',
                               defines=defList + jasperDefs,
                               env=env.copy(),
                               name='JASPER')
@@ -130,17 +131,17 @@ def build(bld):
     ###### OPEN JPEG
     if 'OPENJPEG' in env and env['OPENJPEG']:
         fname = 'libopenjpeg-v2-r599'
-        driverNode = bld.path.find_dir(fname)
+        driverNode = bld.path.make_node(fname)
         
         includes = ('.')
         sources = ('bio.c', 'cio.c', 'dwt.c', 'event.c', 'image.c', 'j2k.c',
                    'j2k_lib.c', 'jp2.c', 'jpt.c', 'mct.c', 'mqc.c', 'openjpeg.c',
                    'pi.c', 'raw.c', 't1.c', 't2.c', 'tcd.c', 'tgt.c',
                    'function_list.c', 'invert.c', 'profile.c')
-        jasper = bld.new_task_gen('cc', 'staticlib', includes=includes,
+        jasper = bld.new_task_gen(features='c cstlib', includes=includes,
                                   source=sources,
                                   target='openjpeg', path=driverNode,
-                                  export_incdirs='.',
+                                  export_includes='.',
                                   defines=defList,
                                   env=env.copy(),
                                   name='OPENJPEG')

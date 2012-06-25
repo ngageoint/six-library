@@ -2,13 +2,16 @@
 <project name="nitf" basedir="." default="build">
 
     <target name="init">
-        <property name="object-dir" location="target/classes"/>
-        <property name="target.dir" location="target"/>
+        <loadproperties srcFile="project.properties"/>
+        
+        <property name="target" location="target/${projectName}-${nitro.version}.jar" />
+        <dirname property="target-dir" file="${target}" />
+        <basename property="target-name" file="${target}" />
+        
+        <property name="object-dir" value="${target-dir}/classes" />
 
         <mkdir dir="${object-dir}"/>
-        <mkdir dir="${target.dir}"/>
-        <loadproperties srcFile="project.properties"/>
-
+        <mkdir dir="${target-dir}"/>
     </target>
 
 
@@ -17,7 +20,7 @@
         <echo>"                        CLEAN                        "</echo>
         <echo>"====================================================="</echo>
         <delete dir="${object-dir}"/>
-        <delete dir="${target.dir}"/>
+        <delete dir="${target-dir}"/>
     </target>
 
 
@@ -44,7 +47,7 @@
         <echo>"====================================================="</echo>
         <echo>"                        BUILD                        "</echo>
         <echo>"====================================================="</echo>
-        <jar basedir="${object-dir}" destfile="${target.dir}/${projectName}-${nitro.version}.jar"/>
+        <jar basedir="${object-dir}" destfile="${target-dir}/${target-name}"/>
     </target>
     
     <target name="javadoc" depends="init">

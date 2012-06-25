@@ -1,6 +1,6 @@
 MODULES = 'nrt j2k nitf cgm'
 
-def set_options(opt):
+def options(opt):
     opt.sub_options(MODULES)
 
 def configure(conf):

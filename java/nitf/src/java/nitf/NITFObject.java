@@ -22,6 +22,10 @@
 
 package nitf;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 /**
  * The Base NITF Object
  * <p/>
@@ -41,7 +45,26 @@ public abstract class NITFObject
     /* Load the library */
     static
     {
-        System.loadLibrary(NITF_LIBRARY_NAME);
+        try
+		{
+			System.loadLibrary(NITF_LIBRARY_NAME);
+		}
+		catch (UnsatisfiedLinkError e)
+		{
+			/* Try to load the library in the lib directory */
+			String path;
+			try
+			{
+				path = NITFObject.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+				path = URLDecoder.decode((new File(path).getParent()), "UTF-8");
+			}
+			catch (UnsupportedEncodingException x)
+			{
+				throw new UnsatisfiedLinkError();
+			}	
+			
+			System.load(path + "/../lib/" + System.mapLibraryName(NITF_LIBRARY_NAME));
+		}
     }
 
     /* This is the memory address of the underlying native object */

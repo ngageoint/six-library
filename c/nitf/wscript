@@ -1,6 +1,6 @@
 import os, subprocess
 import Options
-from os.path import splitext, dirname
+from os.path import splitext, dirname, join
 
 NAME            = 'nitf'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
@@ -19,10 +19,10 @@ TEST_FILTER     = lambda x: x not in ['test_1band_rw_line.c', 'test_fileIO.c',
                                       'test_ImageIO_writePattern.c', 'test_static_plugin.c']
 
 
-set_options = distclean = lambda p: None
+options = distclean = lambda p: None
 
 def configure(conf):
-    conf.env.append_value('CCFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
+    conf.env.append_value('CFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
     conf.env.append_value('CXXFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
 
 def build(bld):
@@ -31,26 +31,24 @@ def build(bld):
     #make all of plug-ins normally - as separate DSOs
     pluginNode = bld.path.find_dir('shared')
     pEnv = env.copy()
-    if pEnv['shlib_PATTERN'].startswith('lib'):
-        pEnv['shlib_PATTERN'] = pEnv['shlib_PATTERN'][3:]
+    if pEnv['cshlib_PATTERN'].startswith('lib'):
+        pEnv['cshlib_PATTERN'] = pEnv['shlib_PATTERN'][3:]
     
     uselib_local = 'nitf-c nrt-c'
     
     pluginList = []
     pluginObjects = []
-    plugins = pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
-    plugins.remove('J2KDecompress.c')
-    plugins.remove('J2KCompress.c')
+    plugins = pluginNode.ant_glob('*.c', excl=['J2KDecompress.c', 'J2KCompress.c'])
     plugins.sort()
     
     for p in plugins:
-        pluginName = splitext(p)[0]
-        plugin = bld.new_task_gen('cc', source=p,
+        pluginName = splitext(str(p))[0]
+        plugin = bld.new_task_gen(features='c', source=p,
                                   target='%s_obj' % pluginName,
                                   includes=['../include', '../../nrt/include'],
                                   defines = 'NITF_MODULE_EXPORTS',
                                   path=pluginNode, env=env.copy())
-        plugin = bld.new_task_gen('cc', 'shlib', uselib_local=uselib_local,
+        plugin = bld.new_task_gen(features='c cshlib', use=uselib_local,
                                   target=pluginName, add_objects='%s_obj' % pluginName,
                                   path=pluginNode, env=pEnv.copy(),
                                   install_path='${PREFIX}/share/nitf/plugins')
@@ -58,17 +56,17 @@ def build(bld):
         pluginList.append(pluginName)
     
     #now, to support static linkage, make the plug-ins as a static library
-    lib = bld.new_task_gen('cc', 'staticlib', includes='include',
+    lib = bld.new_task_gen(features='c cstlib', includes='include',
                            target='%s-handlers' % NAME, env=env.copy(),
-                           uselib_local = uselib_local, add_objects = pluginObjects)
+                           use = uselib_local, add_objects = pluginObjects)
     
     #J2K plug-ins
-    if env['CCFLAGS_j2k-c']:
+    if env['CFLAGS_j2k-c']:
         for f in ['J2KDecompress.c', 'J2KCompress.c']:
             pluginName = splitext(f)[0]
             bld.new_task_gen('cc', 'shlib', source=f,
                              target=pluginName,
-                             uselib_local='nitf-c j2k-c nrt-c',
+                             use='nitf-c j2k-c nrt-c',
                              uselib='nitf-c j2k-c nrt-c',
                              path=pluginNode, env=pEnv.copy(),
                              install_path='${PREFIX}/share/nitf/plugins')
@@ -76,15 +74,11 @@ def build(bld):
     
     #build apps
     appsDir = bld.path.find_dir('apps')
-    apps = appsDir.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
+    apps = appsDir.ant_glob('*.c')
     for app in apps:
-        bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-2],
-                    lang='c')
+        bld.program_helper(dir='apps', source=str(app), module_deps=NAME, name=str(app)[:-2],
+                           lang='c')
 
-    #install headers
-    for f in bld.path.find_dir('include').find_iter():
-        relpath = f.relpath_gen(bld.path)
-        bld.install_files('${PREFIX}/%s' % dirname(relpath), relpath)
         
     #run doxygen
     if 'DOXYGEN' in env and Options.is_install:
@@ -96,15 +90,8 @@ def build(bld):
                 bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
         except:{}
     
-    #add some extra/custom targets
-    extraTargets = {'nitro-plugins' : pluginList, 'nitro' : pluginList + ['nitf-handlers']}
-    newTargets = []
-    if Options.options.compile_targets:
-        targets = Options.options.compile_targets.split(',')
-        for k in extraTargets.keys():
-            if k in targets:
-                newTargets.extend(extraTargets[k])
-                targets.remove(k)
-        newTargets.extend(targets) #add the remaining targets, if any
-    Options.options.compile_targets = ','.join(newTargets) #reset the options
+    bld(features='add_targets', target='nitro-plugins',
+            targets_to_add=pluginList)
+    bld(features='add_targets', target='nitro',
+            targets_to_add=pluginList + ['nitf-handlers'])
 
