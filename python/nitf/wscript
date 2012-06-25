@@ -1,4 +1,5 @@
 from os.path import join, basename
+import os
 import Utils
 distclean = options = configure = lambda p: None
 
@@ -15,6 +16,22 @@ def build(bld):
     
     # then a c extension module
     if 'SWIG' in env and env['SWIG']:
+        def copyGeneratedSources(tsk):
+            import shutil
+            genDir = tsk.inputs[0].parent.make_node('generated')
+            instDir = Utils.subst_vars(tsk.generator.install_path, tsk.env).replace('/', os.sep)
+            Utils.check_dir(genDir.abspath())
+            if tsk.generator.bld.is_install:
+                Utils.check_dir(instDir)
+            for file in tsk.outputs:
+                name = basename(str(file))
+                if file.suffix() in ['.c', '.cxx']:
+                    shutil.copy2(file.abspath(), genDir.make_node(name.split('.')[0] + '_wrap.c').abspath())
+                elif file.suffix() == '.py':
+                    shutil.copy2(file.abspath(), genDir.make_node(name).abspath())
+                    if tsk.generator.bld.is_install:
+                        shutil.copy2(file.abspath(), join(instDir, name))
+                    
         tsk = bld.new_task_gen(
             features = 'c cshlib pyext',
             source = 'source/nitro.i',
@@ -22,24 +39,9 @@ def build(bld):
             use='nitf-c',
             env=env.copy(),
             swig_flags='-python',
-            install_path='${PYTHONDIR}/nitf')
-        
-        def copyGeneratedSources(bld, path, sourceDir, pythonDir):
-            import shutil, glob
-            files = glob.glob(join(path, '*.c'))
-            outFiles = map(lambda x: basename(x).split('.')[0] + '_wrap.c', files)
-            for fin, fout in zip(files, outFiles):
-                shutil.copy2(fin, join(sourceDir, 'generated', fout))
-            for f in glob.glob(join(path, '*.py')):
-                shutil.copy2(f, join(sourceDir, 'generated', basename(f)))
-                if bld.is_install:
-                    shutil.copy2(f, join(pythonDir, 'nitf', basename(f)))
-        
-        from build import partial
-        bld.add_post_fun(partial(copyGeneratedSources,
-                                 path=join(bld.getBuildDir(), 'source'),
-                                 sourceDir=join(bld.path.abspath(), 'source'),
-                                 pythonDir=env['PYTHONDIR']))
+            install_path='${PYTHONDIR}/nitf',
+            name='nitf-python',
+            swig_install_fun=copyGeneratedSources)
         
     else:
         bld.new_task_gen(

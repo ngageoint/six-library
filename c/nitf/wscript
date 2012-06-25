@@ -64,10 +64,9 @@ def build(bld):
     if env['CFLAGS_j2k-c']:
         for f in ['J2KDecompress.c', 'J2KCompress.c']:
             pluginName = splitext(f)[0]
-            bld.new_task_gen('cc', 'shlib', source=f,
+            bld.new_task_gen(features='c cshlib', source=f,
                              target=pluginName,
                              use='nitf-c j2k-c nrt-c',
-                             uselib='nitf-c j2k-c nrt-c',
                              path=pluginNode, env=pEnv.copy(),
                              install_path='${PREFIX}/share/nitf/plugins')
             pluginList.append(pluginName)
