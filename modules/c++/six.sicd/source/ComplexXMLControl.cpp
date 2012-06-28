@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -33,7 +33,7 @@ using namespace six::sicd;
 
 typedef xml::lite::Element* XMLElem;
 
-const char ComplexXMLControl::SICD_URI[] = "urn:SICD:0.4.1";
+const char ComplexXMLControl::SICD_URI[] = "urn:SICD:1.0.0";
 
 std::string ComplexXMLControl::getDefaultURI() const
 {

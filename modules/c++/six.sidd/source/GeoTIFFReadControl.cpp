@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -161,7 +161,8 @@ void six::sidd::GeoTIFFReadControl::load(const std::string& fromFile)
         {
             if (siddXMLControl.get() == NULL)
             {
-                siddXMLControl.reset(mXMLRegistry->newXMLControl("SIDD_XML"));
+                siddXMLControl.reset(
+                    mXMLRegistry->newXMLControl(DataType::DERIVED));
             }
             xmlControl = siddXMLControl.get();
         }
@@ -169,7 +170,8 @@ void six::sidd::GeoTIFFReadControl::load(const std::string& fromFile)
         {
             if (sicdXMLControl.get() == NULL)
             {
-                sicdXMLControl.reset(mXMLRegistry->newXMLControl("SICD_XML"));
+                sicdXMLControl.reset(
+                    mXMLRegistry->newXMLControl(DataType::COMPLEX));
             }
             xmlControl = sicdXMLControl.get();
         }

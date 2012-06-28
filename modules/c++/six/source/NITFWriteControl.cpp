@@ -232,9 +232,7 @@ void NITFWriteControl::initialize(Container* container)
         // Write out a DES
         nitf::DESegment seg = mRecord.newDataExtensionSegment();
         nitf::DESubheader subheader = seg.getSubheader();
-        const std::string desid =
-            six::toString(mContainer->getData(ii)->getDataType()) + "_XML";
-        subheader.getTypeID().set(desid);
+        subheader.getTypeID().set("XML_DATA_CONTENT");
         subheader.getVersion().set(Constants::DES_VERSION_STR);
 
         setDESecurity(mContainer->getData(ii)->getClassification(),
