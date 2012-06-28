@@ -1,6 +1,6 @@
-import sys
+import sys, os
 
-set_options = distclean = configure = lambda x: None
+options = distclean = configure = lambda x: None
 
 def build(bld):
     env = bld.env_of_name(bld.env['VARIANT'] or 'default')
@@ -10,36 +10,36 @@ def build(bld):
 
     # do this here for windows only
     if sys.platform=='win32':
-        if pEnv['shlib_PATTERN'].startswith('lib'):
-            pEnv['shlib_PATTERN'] = pEnv['shlib_PATTERN'][3:]
+        if pEnv['cshlib_PATTERN'].startswith('lib'):
+            pEnv['cshlib_PATTERN'] = pEnv['cshlib_PATTERN'][3:]
     # do this here for unix only
     else:
-        if not pEnv['shlib_PATTERN'].startswith('lib'):
-            pEnv['shlib_PATTERN'] = 'lib' + pEnv['shlib_PATTERN']
+        if not pEnv['cshlib_PATTERN'].startswith('lib'):
+            pEnv['cshlib_PATTERN'] = 'lib' + pEnv['cshlib_PATTERN']
 
     #build the external lib
-    bld.new_task_gen('cxx', 'shlib', includes='include',
+    bld.new_task_gen(features = 'cxx cshlib', includes='include',
                      source='source/TSMPlugin.cpp',
                      target='TSMAPI', name='TSMAPI',
-                     export_incdirs='include',
+                     export_includes='include',
                      env=pEnv.copy(), path=bld.path.find_dir('external/TSM'),
                      install_path='${PREFIX}/lib')
     
     #build VTS
-    exe = bld.new_task_gen('cxx', 'program', includes='include ../TSM/include',
+    exe = bld.new_task_gen(features = 'cxx program', includes='include ../TSM/include',
                            target='vts', name='vts',
-                           libpath=[bld.bldnode.abspath() + '/' + bld.lst_variants[0] + '/projects/csm/external/TSM'],
+                           source=bld.path.find_dir('external/VTS/source').ant_glob('*.cpp'),
+                           libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
                            libs='TSMAPI',
-                           uselib_local='',
+                           uselocal='',
                            uselib='CSTD CRUN DL',
                            env=pEnv.copy(),
                            path=bld.path.find_dir('external/VTS'),
                            install_path='${PREFIX}/bin')
-    exe.find_sources_in_dirs('source')
 
     pEnv2 = env.copy()
-    if pEnv2['shlib_PATTERN'].startswith('lib'):
-        pEnv2['shlib_PATTERN'] = pEnv2['shlib_PATTERN'][3:]
+    if pEnv2['cshlib_PATTERN'].startswith('lib'):
+        pEnv2['cshlib_PATTERN'] = pEnv2['cshlib_PATTERN'][3:]
 
     # Flags needed for Socet GXP build on Windows 
     if pEnv2['VARIANT'] == 'win32-release':
@@ -66,24 +66,23 @@ def build(bld):
             pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + ['/DEBUG', '/SUBSYSTEM:WINDOWS', '/DYNAMICBASE', '/NXCOMPAT', '/MACHINE:X86', '/ERRORREPORT:PROMPT']
              
     #build our plugin
-    lib = bld.new_task_gen('cxx', 'shlib', includes='sicd/include external/TSM/include',
+    lib = bld.new_task_gen(features = 'cxx cshlib', includes='sicd/include external/TSM/include',
                            target='SICDPlugin[U]', name='SICDPlugin',
-                           libpath=[bld.bldnode.abspath() + '/' + bld.lst_variants[0] + '/projects/csm/external/TSM'],
+                           source=bld.path.find_dir('sicd/source').ant_glob('*.cpp'),
+                           libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
                            libs='TSMAPI',
-                           export_incdirs='include',
+                           export_includes='include',
                            env=pEnv2.copy(), path=bld.path,
-                           uselib_local='six.sicd-c++ six.sidd-c++',
+                           use='six.sicd-c++ six.sidd-c++',
                            install_path='${PREFIX}/share/CSM/plugins')
-    lib.find_sources_in_dirs('sicd/source')
     
     #build our plugin
-    lib = bld.new_task_gen('cxx', 'shlib', includes='sidd/include external/TSM/include',
+    lib = bld.new_task_gen(features = 'cxx cshlib', includes='sidd/include external/TSM/include',
                            target='SIDDPlugin[U]', name='SIDDPlugin',
-                           libpath=[bld.bldnode.abspath() + '/' + bld.lst_variants[0] + '/projects/csm/external/TSM'],
+                           source=bld.path.find_dir('sidd/source').ant_glob('*.cpp'),
+                           libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
                            libs='TSMAPI',
-                           export_incdirs='include',
+                           export_includes='include',
                            env=pEnv2.copy(), path=bld.path,
-                           uselib_local='six.sicd-c++ six.sidd-c++',
+                           use='six.sicd-c++ six.sidd-c++',
                            install_path='${PREFIX}/share/CSM/plugins')
-    lib.find_sources_in_dirs('sidd/source')
-    

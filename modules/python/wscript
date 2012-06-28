@@ -1,6 +1,6 @@
 distclean = configure = lambda p: None
 
-def set_options(opt):
+def options(opt):
     opt.sub_options('six')
 
 def build(bld):

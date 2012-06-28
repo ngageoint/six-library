@@ -5,22 +5,24 @@ from Build import BuildContext
 
 VERSION = '1.0'
 APPNAME = 'Sensor Independent XML'
-srcdir  = '.'
-blddir  = 'target'
+top  = '.'
+out  = 'target'
 
 DIRS = 'drivers drivers/nrt drivers/nitf drivers/j2k c++ python'
 
-def set_options(opt):
+def options(opt):
     opt.tool_options('build swig pythontool',
-                     tooldir=join(opt.curdir, 'build'))
+                     tooldir=join(opt.path.abspath(), 'build'))
     opt.sub_options(DIRS)
 
 def configure(conf):
     conf.check_tool('build swig pythontool',
-                    tooldir=join(conf.curdir, 'build'))
+                    tooldir=join(conf.path.abspath(), 'build'))
     conf.sub_config(DIRS)
 
 def build(bld):
+    bld.add_group()
+    bld.add_group()
     bld.add_subdirs(DIRS)
 
 def distclean(context):
