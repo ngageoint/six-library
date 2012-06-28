@@ -32,7 +32,7 @@ def build(bld):
     pluginNode = bld.path.find_dir('shared')
     pEnv = env.copy()
     if pEnv['cshlib_PATTERN'].startswith('lib'):
-        pEnv['cshlib_PATTERN'] = pEnv['shlib_PATTERN'][3:]
+        pEnv['cshlib_PATTERN'] = pEnv['cshlib_PATTERN'][3:]
     
     uselib_local = ['nitf-c', 'nrt-c']
     
