@@ -1,6 +1,6 @@
 DIRS = 'csm'
 
-def set_options(opt):
+def options(opt):
     opt.sub_options(DIRS)
 
 def configure(conf):

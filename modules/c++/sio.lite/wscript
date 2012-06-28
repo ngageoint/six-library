@@ -3,7 +3,7 @@ MAINTAINER      = 'dan.pressel@gd-ais.com thomas.zellman@gd-ais.com'
 VERSION         = '1.0'
 MODULE_DEPS     = 'io'
 
-set_options = configure = distclean = lambda p: None
+options = configure = distclean = lambda p: None
 
 def build(bld):
     bld.module(**globals())
