@@ -8,7 +8,7 @@ APPNAME = 'Sensor Independent XML'
 top  = '.'
 out  = 'target'
 
-DIRS = 'drivers drivers/nrt drivers/nitf drivers/j2k c++ python'
+DIRS = 'drivers c/nrt c/nitf c/j2k c++ python'
 
 def options(opt):
     opt.tool_options('build swig pythontool',
