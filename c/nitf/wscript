@@ -48,7 +48,7 @@ def build(bld):
                                   includes=['../include', '../../nrt/include'],
                                   defines = 'NITF_MODULE_EXPORTS',
                                   path=pluginNode, env=env.copy())
-        plugin = bld.new_task_gen(features='c cshlib', use=uselib_local + ['%s_obj' % pluginName],
+        plugin = bld.new_task_gen(features='c cshlib no_implib', use=uselib_local + ['%s_obj' % pluginName],
                                   target=pluginName,
                                   path=pluginNode, env=pEnv.copy(),
                                   install_path='${PREFIX}/share/nitf/plugins')
@@ -64,7 +64,7 @@ def build(bld):
     if env['CFLAGS_j2k-c']:
         for f in ['J2KDecompress.c', 'J2KCompress.c']:
             pluginName = splitext(f)[0]
-            bld.new_task_gen(features='c cshlib', source=f,
+            bld.new_task_gen(features='c cshlib no_implib', source=f,
                              target=pluginName,
                              use='nitf-c j2k-c nrt-c',
                              path=pluginNode, env=pEnv.copy(),
