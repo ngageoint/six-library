@@ -115,7 +115,14 @@ void NITFReadControl::load(const std::string& fromFile)
         std::string desid = subheader.getTypeID().toString();
         str::trim(desid);
 
-        if (desid == "SICD_XML" || desid == "SIDD_XML")
+        // SICD/SIDD 1.0 specify DESID as XML_DATA_CONTENT
+        // Older versions of the spec specified it as SICD_XML/SIDD_XML
+        // Here we'll accept any of these under the assumption that it's not
+        // such an old version of the spec that the XML layout itself has
+        // changed (if it did, XMLControl will end up throwing anyway)
+        if (desid == "XML_DATA_CONTENT" ||
+            desid == "SICD_XML" ||
+            desid == "SIDD_XML")
         {
             nitf::SegmentReader deReader = mReader.newDEReader(i);
             SegmentInputStreamAdapter ioAdapter(deReader);
@@ -125,7 +132,7 @@ void NITFReadControl::load(const std::string& fromFile)
             xml::lite::Document* doc = xmlParser.getDocument();
 
             const std::auto_ptr<XMLControl>
-                xmlControl(mXMLRegistry->newXMLControl(desid));
+                xmlControl(mXMLRegistry->newXMLControl(dataType));
 
             std::auto_ptr<Data> data(xmlControl->fromXML(doc));
             if (data.get() == NULL)

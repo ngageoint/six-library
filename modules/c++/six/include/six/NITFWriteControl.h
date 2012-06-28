@@ -190,10 +190,10 @@ protected:
      *  IMAG:     1.0\s    (NITRO)
      *
      *  DE:       DE       (NITRO)
-     *  DESID:    SICD_XML
+     *  DESID:    XML_DATA_CONTENT
      *  DESVER    01
      *  DESSHL    0000     (NITRO)
-     *  DESDAT    <SICD_XML Data>
+     *  DESDAT    <SICD XML Data> / <SIDD XML Data>
      *
      */
 
