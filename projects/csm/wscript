@@ -68,10 +68,9 @@ def build(bld):
                            target='SICDPlugin[U]', name='SICDPlugin',
                            source=bld.path.find_dir('sicd/source').ant_glob('*.cpp'),
                            libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
-                           libs='TSMAPI',
                            export_includes='include',
                            env=pEnv2.copy(), path=bld.path,
-                           use='six.sicd-c++ six.sidd-c++',
+                           use='six.sicd-c++ six.sidd-c++ TSMAPI',
                            install_path='${PREFIX}/share/CSM/plugins')
     
     #build our plugin
@@ -79,8 +78,7 @@ def build(bld):
                            target='SIDDPlugin[U]', name='SIDDPlugin',
                            source=bld.path.find_dir('sidd/source').ant_glob('*.cpp'),
                            libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
-                           libs='TSMAPI',
                            export_includes='include',
                            env=pEnv2.copy(), path=bld.path,
-                           use='six.sicd-c++ six.sidd-c++',
+                           use='six.sicd-c++ six.sidd-c++ TSMAPI',
                            install_path='${PREFIX}/share/CSM/plugins')
