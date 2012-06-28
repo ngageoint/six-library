@@ -34,12 +34,12 @@ def build(bld):
     if pEnv['cshlib_PATTERN'].startswith('lib'):
         pEnv['cshlib_PATTERN'] = pEnv['shlib_PATTERN'][3:]
     
-    uselib_local = 'nitf-c nrt-c'
+    uselib_local = ['nitf-c', 'nrt-c']
     
     pluginList = []
     pluginObjects = []
     plugins = pluginNode.ant_glob('*.c', excl=['J2KDecompress.c', 'J2KCompress.c'])
-    plugins.sort()
+    #plugins.sort()
     
     for p in plugins:
         pluginName = splitext(str(p))[0]
@@ -48,8 +48,8 @@ def build(bld):
                                   includes=['../include', '../../nrt/include'],
                                   defines = 'NITF_MODULE_EXPORTS',
                                   path=pluginNode, env=env.copy())
-        plugin = bld.new_task_gen(features='c cshlib', use=uselib_local,
-                                  target=pluginName, add_objects='%s_obj' % pluginName,
+        plugin = bld.new_task_gen(features='c cshlib', use=uselib_local + ['%s_obj' % pluginName],
+                                  target=pluginName,
                                   path=pluginNode, env=pEnv.copy(),
                                   install_path='${PREFIX}/share/nitf/plugins')
         pluginObjects.append('%s_obj' % pluginName)
@@ -58,7 +58,7 @@ def build(bld):
     #now, to support static linkage, make the plug-ins as a static library
     lib = bld.new_task_gen(features='c cstlib', includes='include',
                            target='%s-handlers' % NAME, env=env.copy(),
-                           use = uselib_local, add_objects = pluginObjects)
+                           use = uselib_local + pluginObjects)
     
     #J2K plug-ins
     if env['CFLAGS_j2k-c']:
