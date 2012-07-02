@@ -58,7 +58,8 @@ def build(bld):
     #now, to support static linkage, make the plug-ins as a static library
     lib = bld.new_task_gen(features='c cstlib', includes='include',
                            target='%s-handlers' % NAME, env=env.copy(),
-                           use = uselib_local + pluginObjects)
+                           use = uselib_local + pluginObjects,
+                           install_path='${PREFIX}/lib')
     
     #J2K plug-ins
     if env['CFLAGS_j2k-c']:
