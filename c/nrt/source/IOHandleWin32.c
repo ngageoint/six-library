@@ -57,52 +57,69 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
 NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
                                    nrt_Error * error)
 {
-    DWORD bytesRead = 0;        /* Number of bytes read during last read
-                                 * operation */
-    DWORD totalBytesRead = 0;   /* Total bytes read thus far */
+    static const DWORD MAX_READ_SIZE = (DWORD)-1;
+    size_t bytesRead = 0;
+    size_t bytesRemaining = size;
 
-    /* Make the next read */
-    if (!ReadFile(handle, buf, size, &bytesRead, 0))
+    while (bytesRead < size)
     {
-        goto CATCH_ERROR;
+        /* Determine how many bytes to read */
+        const DWORD bytesToRead = (bytesRemaining > MAX_READ_SIZE) ?
+            MAX_READ_SIZE : (DWORD)bytesRemaining;
+
+        /* Read from file */
+        DWORD bytesThisRead = 0;
+        if (!ReadFile(handle,
+                      buf + bytesRead,
+                      bytesToRead,
+                      &bytesThisRead,
+                      NULL))
+        {
+            nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
+                           NRT_ERR_READING_FROM_FILE);
+            return NRT_FAILURE;
+        }
+
+        bytesRead += bytesThisRead;
+        bytesRemaining -= bytesThisRead;
     }
 
     return NRT_SUCCESS;
-
-    /* An error occured */
-    CATCH_ERROR:
-    {
-
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
-                       NRT_ERR_READING_FROM_FILE);
-
-    }
-    return NRT_FAILURE;
 }
 
 NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
                                     size_t size, nrt_Error * error)
 {
-    DWORD actuallyWritten = 0;
+    static const DWORD MAX_WRITE_SIZE = (DWORD)-1;
+    size_t bytesRemaining = size;
+    size_t bytesWritten = 0;
 
-    do
+    while (bytesWritten < size)
     {
-        /* Keep track of the bytes we read */
-        DWORD bytesThisRead;
+        /* Determine how many bytes to write */
+        const DWORD bytesToWrite = (bytesRemaining > MAX_WRITE_SIZE) ?
+            MAX_WRITE_SIZE : (DWORD)bytesRemaining;
+
         /* Write the data */
-        BOOL ok = WriteFile(handle, buf, size, &bytesThisRead, NULL);
-        if (!ok)
+        DWORD bytesThisWrite = 0;
+
+        if (!WriteFile(handle,
+                       buf + bytesWritten,
+                       bytesToWrite,
+                       &bytesThisWrite,
+                       NULL))
         {
             /* If the function failed, we want to get the last error */
             nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
-                           NRT_ERR_READING_FROM_FILE);
+                           NRT_ERR_WRITING_TO_FILE);
             /* And fail */
             return NRT_FAILURE;
         }
-        /* Otherwise, we want to accumulate this read until we are done */
-        actuallyWritten += bytesThisRead;
+
+        /* Otherwise, we want to accumulate this write until we are done */
+        bytesRemaining -= bytesThisWrite;
+        bytesWritten += bytesThisWrite;
     }
-    while (actuallyWritten < size);
 
     return NRT_SUCCESS;
 }
