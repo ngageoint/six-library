@@ -472,6 +472,7 @@ NITF_BOOL measureComplexityLevel(nitf_Record* record,
         checkToRun = checks[i].check;
     }
 
+    return NITF_SUCCESS;
 }
 
 char* clevelAsString(CLEVEL clevel)
