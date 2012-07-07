@@ -252,6 +252,7 @@ NRTPRIV(int) BufferAdapter_getMode(NRT_DATA * data, nrt_Error * error)
 NRTPRIV(NRT_BOOL) BufferAdapter_close(NRT_DATA * data, nrt_Error * error)
 {
     /* nothing */
+    return NRT_SUCCESS;
 }
 
 NRTPRIV(void) BufferAdapter_destruct(NRT_DATA * data)
