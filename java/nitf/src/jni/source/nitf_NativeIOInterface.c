@@ -117,7 +117,7 @@ JNIEXPORT jlong JNICALL Java_nitf_NativeIOInterface_tell(JNIEnv *env,
     nitf_IOInterface *interface = _GetObj(env, self);
 
     tell = interface->iface->tell(interface->data, &error);
-    if (tell == NITF_INVALID_HANDLE_VALUE)
+    if (tell == (nitf_Off)NITF_INVALID_HANDLE_VALUE)
     {
         _ThrowNITFException(env, error.message);
         return -1;
@@ -133,7 +133,7 @@ JNIEXPORT jlong JNICALL Java_nitf_NativeIOInterface_getSize(JNIEnv *env,
     nitf_IOInterface *interface = _GetObj(env, self);
 
     size = interface->iface->getSize(interface->data, &error);
-    if (size == NITF_INVALID_HANDLE_VALUE)
+    if (size == (nitf_Off)NITF_INVALID_HANDLE_VALUE)
     {
         _ThrowNITFException(env, error.message);
         return -1;
