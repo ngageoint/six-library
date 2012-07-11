@@ -1,10 +1,6 @@
-import Utils
-from Utils import to_list as listify
-
 NAME            = 'samples'
 VERSION         = '0.1'
 MODULE_DEPS     = 'scene tiff nitf xml.lite six six.sicd six.sidd cli sio.lite'
-USELIB          = 'SIX_SAMPLES'
 
 options = configure = distclean = lambda p: None
 
@@ -12,10 +8,7 @@ SAMPLES = 'image_to_scene test_round_trip test_extract_xml test_create_sicd test
           'test_create_sidd test_create_sidd_from_mem test_parse_xml'
 
 def build(bld):
-    module_deps = map(lambda x: '%s-%s' % (x, 'c++'), listify(MODULE_DEPS))
     for sample in SAMPLES.split():
-        bld.program(uselib=USELIB,
-                    use=module_deps,
+        bld.program_helper(module_deps=MODULE_DEPS,
                     source='%s.cpp' % sample,
-                    name=sample,
-                    target=sample)
+                    name=sample)
