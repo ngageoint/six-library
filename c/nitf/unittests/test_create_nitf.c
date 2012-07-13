@@ -1037,13 +1037,11 @@ NITF_BOOL setCornersFromDMSBox(nitf_ImageSubheader* header, nitf_Error * error)
                                        lonWestDMS[1],
                                        lonWestDMS[2]);
 
-    double corners[4][2] =
-    {
-        { latTopDecimal,    lonWestDecimal },
-        { latTopDecimal,    lonEastDecimal },
-        { latBottomDecimal, lonEastDecimal },
-        { latBottomDecimal, lonWestDecimal }
-    };
+    double corners[4][2];
+    corners[0][0] = latTopDecimal;     corners[0][1] = lonWestDecimal;
+    corners[1][0] = latTopDecimal;     corners[1][1] = lonEastDecimal;
+    corners[2][0] = latBottomDecimal;  corners[2][1] = lonEastDecimal;
+    corners[3][0] = latBottomDecimal;  corners[3][1] = lonWestDecimal;
 
     return nitf_ImageSubheader_setCornersFromLatLons(header,
                                                      NITF_CORNERS_DECIMAL,

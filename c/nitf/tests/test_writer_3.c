@@ -478,7 +478,6 @@ void writeDEData(nitf_DESegment * segment,
     nitf_IOHandle file;
 
     leftToRead = (size_t)(segment->end - segment->offset); 
-    //leftToRead = (size_t) reader->user->virtualLength;
     fprintf(stderr, "XXX Data Ext write %llu %llu %llu\n", leftToRead, segment->end , segment->offset);
 
     buf = (char*)NITF_MALLOC(toRead + 1);

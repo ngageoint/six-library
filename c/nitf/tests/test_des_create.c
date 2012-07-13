@@ -316,8 +316,6 @@ int main(int argc, char *argv[])
         goto CATCH_ERROR;
     }
 
-
-    //nitf_Reader_destruct(&reader);
     if (!nitf_Field_get
             (record->header->numImages, &numImages, NITF_CONV_INT,
              NITF_INT32_SZ, &error))
@@ -451,8 +449,6 @@ int main(int argc, char *argv[])
                 goto CATCH_ERROR;
         }
     }
-
-    //nitf_IOHandle_close(in);
     
     /*  Create the DE segment */
 

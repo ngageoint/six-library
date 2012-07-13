@@ -119,7 +119,6 @@ int main(int argc, char** argv)
     if (!nitf_Writer_prepare(writer, record, outIO, &error))
     {
         goto CATCH_ERROR;
-        return 1;
     }
 
     textWriter = nitf_Writer_newTextWriter(writer, 0, &error);

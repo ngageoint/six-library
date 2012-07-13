@@ -297,8 +297,8 @@ NITFAPI(char**) ENGRDA_init(nitf_Error* error)
         return NULL;
     }
 
-    // Override the read function with one that will set the engineering
-    // data's field type based on the TRE's value type
+    /* Override the read function with one that will set the engineering
+       data's field type based on the TRE's value type */
     engrdaHandler.read = ENGRDA_read;
 
     return ident;

@@ -105,10 +105,6 @@ nitf_TRE* createXMLTRE(nitf_Error* error)
 	return NULL;
 
     /* Else, we will add some stuff here */
-
-
-//    if (!nitf_TRE_setField(tre, "/xmltre[1]/description[1]/vendor[1]/publish-date[1]", "March 2008", strlen("March 2008"), error))
-
     if (!nitf_TRE_setField(tre, "/xmltre[0]/description[0]", FAKE_DESC, strlen(FAKE_DESC), error))
       goto CATCH_ERROR;
 

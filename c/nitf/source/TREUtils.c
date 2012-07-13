@@ -969,7 +969,7 @@ NITFAPI(nitf_Field*) nitf_TREUtils_basicGetField(nitf_TRE* tre,
 
 NITFPRIV(nitf_Pair*) basicIncrement(nitf_TREEnumerator* it, nitf_Error* error)
 {
-    //get the next value, and incrment the cursor
+    /* get the next value, and increment the cursor */
     nitf_TRECursor* cursor = it ? (nitf_TRECursor*)it->data : NULL;
     nitf_Pair* data;
 
