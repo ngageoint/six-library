@@ -43,13 +43,29 @@ public:
      *  Construct from native object
      *  \param error  The native nitf_Error object
      */
-    NITFException(nitf_Error* error)
+    NITFException(const nitf_Error* error)
     {
-        except::Context context(std::string(error->file),
-                                error->line,
-                                std::string(error->func),
-                                std::string(""),
-                                std::string(error->message));
+        const except::Context context(std::string(error->file),
+                                      error->line,
+                                      std::string(error->func),
+                                      std::string(""),
+                                      std::string(error->message));
+        mMessage = context.getMessage();
+        mTrace.pushContext( context );
+    }
+    /*!
+     *  Construct from native object with message
+     *  \param error  The native nitf_Error object
+     *  \param message  Additional error message
+     */
+    NITFException(const nitf_Error* error, const std::string& message)
+    {
+        const except::Context context(
+                std::string(error->file),
+                error->line,
+                std::string(error->func),
+                std::string(""),
+                message + " (" + std::string(error->message) + ")");
         mMessage = context.getMessage();
         mTrace.pushContext( context );
     }
