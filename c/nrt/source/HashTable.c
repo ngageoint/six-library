@@ -90,7 +90,7 @@ NRTAPI(void) nrt_HashTable_setPolicy(nrt_HashTable * ht, int policy)
     ht->adopt = policy;
 }
 
-unsigned int __NRT_HashTable_defaultHash(nrt_HashTable * ht, const char *key)
+NRTAPI(unsigned int) __NRT_HashTable_defaultHash(nrt_HashTable * ht, const char *key)
 {
     const char *p = key;
     const char *end = &key[strlen(key) - 1];

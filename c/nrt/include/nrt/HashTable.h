@@ -131,7 +131,7 @@ NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht, const char *key);
  *  \param ht The hash table object
  *  \param key The string key
  */
-unsigned int __NRT_HashTable_defaultHash(nrt_HashTable * ht, const char *key);
+NRTAPI(unsigned int) __NRT_HashTable_defaultHash(nrt_HashTable * ht, const char *key);
 
 /*!
  *  The default initializer.  This assigns the hash function to
