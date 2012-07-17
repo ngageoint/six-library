@@ -256,8 +256,8 @@ NRTAPI(nrt_DateTime *) nrt_DateTime_fromString(const char *string,
     if (!_NRT_strptime(string, format, &t, &millis))
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
-                        "Unknown error caused by the call to strptime with format string: [%s]",
-                        format);
+                        "Unknown error caused by the call to strptime with string [%s] and format string [%s]",
+                        string, format);
         return NULL;
     }
 
