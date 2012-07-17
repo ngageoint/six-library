@@ -66,7 +66,7 @@ NITFPRIV(void) WriteHandler_destruct(NITF_DATA * data)
 }
 
 
-nitf_WriteHandler* cgm_NITFWriteHandler_construct(
+NITFAPI(nitf_WriteHandler*) cgm_NITFWriteHandler_construct(
         cgm_Metafile *mf, nitf_Error *error)
 {
     nitf_WriteHandler *writeHandler = NULL;

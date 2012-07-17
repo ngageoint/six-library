@@ -39,7 +39,7 @@ NITF_CXX_GUARD
  * \param error The error object, which will get populated on error
  * \return      a nitf_WriteHandler*, or NULL on error
  */
-nitf_WriteHandler* cgm_NITFWriteHandler_construct(
+NITFAPI(nitf_WriteHandler*) cgm_NITFWriteHandler_construct(
         cgm_Metafile *mf, nitf_Error *error);
 
 NITF_CXX_ENDGUARD
