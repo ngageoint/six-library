@@ -50,8 +50,15 @@ nitf::DateTime::DateTime(double timeInMillis) throw (nitf::NITFException)
 nitf::DateTime::DateTime(const std::string& dateString,
         const std::string& dateFormat) throw (nitf::NITFException)
 {
-    setNative(nitf_DateTime_fromString(dateString.c_str(), dateFormat.c_str(),
-            &error));
+    nitf_DateTime* const dateTime =
+            nitf_DateTime_fromString(dateString.c_str(), dateFormat.c_str(),
+                                     &error);
+    if (!dateTime)
+    {
+        throw nitf::NITFException(&error);
+    }
+
+    setNative(dateTime);
     getNativeOrThrow();
     setManaged(false);
 }
