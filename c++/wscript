@@ -1,5 +1,5 @@
 from os.path import join, exists
-import Options, Utils
+from waflib import Options, Utils
 from build import CPPBuildContext
 
 #override the default build context with our own
@@ -8,12 +8,12 @@ from build import CPPBuildContext
 MODULES = 'except str sys mt nitf mem'
 
 def options(opt):
-    opt.sub_options(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
+    opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
                            MODULES.split()))
 
 def configure(conf):
     conf.env.append_value('CPPPATH_UNITTEST', join(conf.path.abspath(), 'include'))
-    conf.sub_config(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
+    conf.recurse(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
                            MODULES.split()))
 
 def build(bld):
@@ -21,7 +21,7 @@ def build(bld):
                           MODULES.split())
     # build these modules from their config files
     map(bld.fromConfig, map(lambda m: join(bld.path.abspath(), m), configBuilds))
-    map(bld.add_subdirs, filter(lambda m: m not in configBuilds, MODULES.split()))
+    map(bld.recurse, filter(lambda m: m not in configBuilds, MODULES.split()))
 
 def distclean(context):
     context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),

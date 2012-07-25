@@ -19,7 +19,7 @@ def configure(conf):
 
 def build(bld):
     variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
+    env = bld.all_envs[variant]
     
     defs = env['DEFINES']
     defList = []
@@ -30,16 +30,16 @@ def build(bld):
     
     #---------------------------------------------------------------------------
     ###### LIB-JPEG
-    ut = bld.new_task_gen(env=env.copy(), path=bld.path.find_dir('build'), fname='%s.zip' % fname)
+    ut = bld(env=env.derive(), path=bld.path.find_dir('build'), fname='%s.zip' % fname)
     ut.features = ['unzip']
     bld.add_group()
     
     driverNode = bld.path.make_node('build').make_node(fname)
     
     defDict = dict()
-    configH = bld.new_task_gen(output='jconfig.h', path=driverNode,
+    configH = bld(output='jconfig.h', path=driverNode,
                                defs=defDict, before='LIBJPEG',
-                               env=env.copy())
+                               env=env.derive())
     configH.features = ['makeHeader']
     
     #shutil.copy('jconfig.vc', 'jconfig.h')
@@ -92,13 +92,13 @@ def build(bld):
         'jutils.c',
     )
         
-    jpeg = bld.new_task_gen(features='c cstlib', includes='.',
+    jpeg = bld(features='c cstlib', includes='.',
                             source=sources,
                             target='jpeg', path=driverNode,
                             export_includes='.',
                             uselib='SOCKET LIBJPEG',
                             defines=defList,
-                            env=env.copy(),
+                            env=env.derive(),
                             name='LIBJPEG')
     bld.add_group()
     
@@ -107,8 +107,8 @@ def build(bld):
     libPattern = env['shlib_PATTERN']
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
-    libEnv = env.copy()
-    lib = bld.new_task_gen(features='c cshlib', target='LibjpegDecompress',
+    libEnv = env.derive()
+    lib = bld(features='c cshlib', target='LibjpegDecompress',
                            use='LIBJPEG nitf-c'.split(),
                            install_path='${PREFIX}/share/nitf/plugins',
                            defines=defList, env=libEnv,

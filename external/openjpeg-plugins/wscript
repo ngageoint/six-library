@@ -1,17 +1,17 @@
 import os, shutil
-import Options
+from waflib import Options
 
 configure = distclean = lambda x: False
 
 def build(bld):
     variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
+    env = bld.all_envs[variant]
     
     libPattern = env['cshlib_PATTERN']
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
-    libEnv = env.copy()
-    lib = bld.new_task_gen(features='c cshlib', target='OpenJPEGDecompress',
+    libEnv = env.derive()
+    lib = bld(features='c cshlib', target='OpenJPEGDecompress',
                            use='OPENJPEG nitf-c'.split(), env=libEnv,
                            install_path='${PREFIX}/share/nitf/plugins',
                            source=bld.path.ant_glob('source/*.c'))

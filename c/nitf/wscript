@@ -1,5 +1,5 @@
 import os, subprocess
-import Options
+from waflib import Options
 from os.path import splitext, dirname, join
 
 NAME            = 'nitf'
@@ -30,7 +30,7 @@ def build(bld):
     
     #make all of plug-ins normally - as separate DSOs
     pluginNode = bld.path.find_dir('shared')
-    pEnv = env.copy()
+    pEnv = env.derive()
     if pEnv['cshlib_PATTERN'].startswith('lib'):
         pEnv['cshlib_PATTERN'] = pEnv['cshlib_PATTERN'][3:]
     
@@ -43,21 +43,21 @@ def build(bld):
     
     for p in plugins:
         pluginName = splitext(str(p))[0]
-        plugin = bld.new_task_gen(features='c', source=p,
+        plugin = bld(features='c', source=p,
                                   target='%s_obj' % pluginName,
                                   includes=['../include', '../../nrt/include'],
                                   defines = 'NITF_MODULE_EXPORTS',
-                                  path=pluginNode, env=env.copy())
-        plugin = bld.new_task_gen(features='c cshlib no_implib', use=uselib_local + ['%s_obj' % pluginName],
+                                  path=pluginNode, env=env.derive())
+        plugin = bld(features='c cshlib no_implib', use=uselib_local + ['%s_obj' % pluginName],
                                   target=pluginName,
-                                  path=pluginNode, env=pEnv.copy(),
+                                  path=pluginNode, env=pEnv.derive(),
                                   install_path='${PREFIX}/share/nitf/plugins')
         pluginObjects.append('%s_obj' % pluginName)
         pluginList.append(pluginName)
     
     #now, to support static linkage, make the plug-ins as a static library
-    lib = bld.new_task_gen(features='c cstlib', includes='include',
-                           target='%s-handlers' % NAME, env=env.copy(),
+    lib = bld(features='c cstlib', includes='include',
+                           target='%s-handlers' % NAME, env=env.derive(),
                            use = uselib_local + pluginObjects,
                            install_path='${PREFIX}/lib')
     
@@ -65,10 +65,10 @@ def build(bld):
     if env['CFLAGS_j2k-c']:
         for f in ['J2KDecompress.c', 'J2KCompress.c']:
             pluginName = splitext(f)[0]
-            bld.new_task_gen(features='c cshlib no_implib', source=f,
+            bld(features='c cshlib no_implib', source=f,
                              target=pluginName,
                              use='nitf-c j2k-c nrt-c',
-                             path=pluginNode, env=pEnv.copy(),
+                             path=pluginNode, env=pEnv.derive(),
                              install_path='${PREFIX}/share/nitf/plugins')
             pluginList.append(pluginName)
     
@@ -82,11 +82,11 @@ def build(bld):
         
     #run doxygen
     if 'DOXYGEN' in env and Options.is_install:
-        bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
+        bld(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
         try:
             htmlDocs = bld.path.find_dir('doc/html')
             for f in htmlDocs.find_iter():
-                relpath = f.relpath_gen(htmlDocs)
+                relpath = f.path_from(htmlDocs)
                 bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
         except:{}
     

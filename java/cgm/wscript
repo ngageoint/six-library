@@ -2,10 +2,10 @@ configure = options = distclean = lambda x: None
 
 def build(bld):
     variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
+    env = bld.all_envs[variant]
     
     if env['HAVE_JNI_H']:
-        lib = bld.new_task_gen(features='c cshlib', includes='src/jni/include',
-                               target='cgm.jni-c', env=env.copy(),
+        lib = bld(features='c cshlib', includes='src/jni/include',
+                               target='cgm.jni-c', env=env.derive(),
                                uselib='JAVA', use='cgm-c'.split())
         lib.source = bld.path.ant_glob('src/jni/source/*.c*')

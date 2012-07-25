@@ -1,6 +1,6 @@
 import os
-import Scripting, Options
-from Build import BuildContext
+from waflib import Scripting, Options
+from waflib.Build import BuildContext
 from waflib.Tools import waf_unit_test
 
 VERSION = '2.7-dev'
@@ -13,18 +13,18 @@ DIRS = 'c c++ java python mex'
 #external
 
 def options(opt):
-    opt.tool_options(TOOLS, tooldir='build')
-    opt.sub_options(DIRS)
+    opt.load(TOOLS, tooldir='build')
+    opt.recurse(DIRS)
 
 def configure(conf):
     conf.env['APPNAME'] = APPNAME
     conf.env['VERSION'] = VERSION
-    conf.check_tool(TOOLS, tooldir='build')
+    conf.load(TOOLS, tooldir='build')
     
-    conf.sub_config(DIRS)
+    conf.recurse(DIRS)
 
 def build(bld):
-    bld.add_subdirs(DIRS)
+    bld.recurse(DIRS)
     bld.add_post_fun(waf_unit_test.summary)
 
 def distclean(context):

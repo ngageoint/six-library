@@ -23,7 +23,7 @@ def configure(conf):
 
 def build(bld):
     variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
+    env = bld.all_envs[variant]
     
     defs = env['DEFINES']
     defList = []
@@ -45,8 +45,8 @@ def build(bld):
     for k, v in jDefs:
         defDict[k] = v
                    
-    configH = bld.new_task_gen(output='src/libjasper/include/jasper/jas_config.h',
-                               path=driverNode, defs=defDict, before='JASPER', env=env.copy())
+    configH = bld(output='src/libjasper/include/jasper/jas_config.h',
+                               path=driverNode, defs=defDict, before='JASPER', env=env.derive())
     configH.features = ['makeHeader']
     
     jasperDefs = []
@@ -117,12 +117,12 @@ def build(bld):
         'src/libjasper/ras/ras_enc.c',
     )
         
-    jasper = bld.new_task_gen(features='c cstlib', includes=includes,
+    jasper = bld(features='c cstlib', includes=includes,
                               source=sources,
                               target='jasper', path=driverNode,
                               export_includes='src/libjasper/include/',
                               defines=defList + jasperDefs,
-                              env=env.copy(),
+                              env=env.derive(),
                               name='JASPER')
     bld.add_group()
 
@@ -138,12 +138,12 @@ def build(bld):
                    'j2k_lib.c', 'jp2.c', 'jpt.c', 'mct.c', 'mqc.c', 'openjpeg.c',
                    'pi.c', 'raw.c', 't1.c', 't2.c', 'tcd.c', 'tgt.c',
                    'function_list.c', 'invert.c', 'profile.c')
-        jasper = bld.new_task_gen(features='c cstlib', includes=includes,
+        jasper = bld(features='c cstlib', includes=includes,
                                   source=sources,
                                   target='openjpeg', path=driverNode,
                                   export_includes='.',
                                   defines=defList,
-                                  env=env.copy(),
+                                  env=env.derive(),
                                   name='OPENJPEG')
         bld.add_group()
     

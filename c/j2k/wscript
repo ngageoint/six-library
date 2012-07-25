@@ -1,5 +1,5 @@
 from os.path import join, isdir
-import Options
+from waflib import Options
 
 options = distclean = lambda x: None
 
@@ -59,7 +59,7 @@ def configure(conf):
 
 def build(bld):
     
-    env = bld.env_of_name(bld.env['VARIANT'] or 'default')
+    env = bld.all_envs[bld.env['VARIANT'] or 'default']
     j2klib = env['J2KLIB'] or None
     j2klibDir = {'openjpeg':'openjpeg', 'kdu':'kakadu', 'jasper':'jasper'}.get(j2klib, None)
     
@@ -88,7 +88,7 @@ def build(bld):
                        'roi/roi.cpp')
             
             kduIncludes='coding common compressed kernels messaging parameters roi threads transform'
-            bld.new_task_gen(features='cxx cxxstlib',
+            bld(features='cxx cxxstlib',
                              includes=kduIncludes,
                              export_includes='common/',
                              source=sources,
@@ -96,18 +96,18 @@ def build(bld):
                              name='kdu',
                              uselib='kdu',
                              path=bld.path.make_node('external/kakadu/coresys'),
-                             env=env.copy())
+                             env=env.derive())
             
             #have to compile any C++ files separately
             #the includes path is sort of a hack since Waf 1.5.8 has a bug
             #that doesn't allow you to set uselib_local...
-            kducpp = bld.new_task_gen(features='cxx',
+            kducpp = bld(features='cxx',
                                       source='source/KakaduImpl.cpp',
                                       target='kducpp',
                                       uselib='kdu',
                                       includes='include ../nrt/include %s' % ' '.join(map(lambda x: 'external/kakadu/coresys/%s' % x, kduIncludes.split())),
                                       path=bld.path,
-                                      env=env.copy())
+                                      env=env.derive())
             
         
         elif j2klib == 'openjpeg':
@@ -116,14 +116,14 @@ def build(bld):
                        'j2k_lib.c', 'jp2.c', 'jpt.c', 'mct.c', 'mqc.c', 'openjpeg.c',
                        'pi.c', 'raw.c', 't1.c', 't2.c', 'tcd.c', 'tgt.c',
                        'function_list.c', 'invert.c', 'profile.c')
-            bld.new_task_gen(features='c cstlib',
+            bld(features='c cstlib',
                              includes='.',
                              export_includes='.',
                              source=sources,
                              target='openjpeg',
                              name='openjpeg',
                              path=bld.path.make_node('external/openjpeg'),
-                             env=env.copy())
+                             env=env.derive())
         
         elif j2klib == 'jasper':
             #next, build jasper
@@ -141,9 +141,9 @@ def build(bld):
             for k, v in jDefs:
                 defDict[k] = v
                            
-            configH = bld.new_task_gen(output='include/jasper/jas_config.h',
+            configH = bld(output='include/jasper/jas_config.h',
                                        path=bld.path.find_dir('external').find_dir('jasper'),
-                                       defs=defDict, before='jasper', env=env.copy())
+                                       defs=defDict, before='jasper', env=env.derive())
             configH.features = ['makeHeader']
             
             jasperDefs = []
@@ -205,13 +205,13 @@ def build(bld):
                 'ras/ras_enc.c',
             )
                 
-            jasper = bld.new_task_gen(features='c cstlib', includes=includes,
+            jasper = bld(features='c cstlib', includes=includes,
                                       source=sources,
                                       target='jasper',
                                       name='jasper',
                                       export_includes='include',
                                       defines=defList + jasperDefs,
-                                      env=env.copy(),
+                                      env=env.derive(),
                                       path=bld.path.make_node('external/jasper'))
         
         j2kSources = ('source/Container.c',
@@ -224,11 +224,11 @@ def build(bld):
                       'source/Writer.c')
         
         #build the j2k library
-        lib = bld.new_task_gen('c cstlib', includes='include',
+        lib = bld('c cstlib', includes='include',
                        target='j2k-c', name='j2k-c',
                        source=j2kSources,
                        export_includes='include',
-                       env=env.copy(), path=bld.path,
+                       env=env.derive(), path=bld.path,
                        use='nrt-c %s' % j2klib, uselib=j2klib,
                        install_path='${PREFIX}/lib')
         if j2klib == 'kdu':
@@ -240,20 +240,20 @@ def build(bld):
         #j2k-only tests
         for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
                   'test_j2k_create']:
-            bld.new_task_gen(features='%s %sprogram' % (linker, linker), target=t, name=t,
+            bld(features='%s %sprogram' % (linker, linker), target=t, name=t,
                              source='%s.c' % t, use='j2k-c',
-                             env=env.copy(), path=bld.path.make_node('tests'))
+                             env=env.derive(), path=bld.path.make_node('tests'))
         
         #j2k/nitf tests
         for t in ['test_j2k_nitf']:
-            bld.new_task_gen(features='%s %sprogram' % (linker, linker), target=t, name=t,
+            bld(features='%s %sprogram' % (linker, linker), target=t, name=t,
                              source='%s.c' % t, use='j2k-c nitf-c',
-                             env=env.copy(), path=bld.path.find_dir('tests'))
+                             env=env.derive(), path=bld.path.find_dir('tests'))
         
         #if j2klib == 'kdu':
         #    for t in ['test_j2k_kakadu']:
-        #        bld.new_task_gen('cxx', 'program', target=t, name=t,
+        #        bld('cxx', 'program', target=t, name=t,
         #                         source='%s.cpp' % t, uselib_local='j2k-c',
-        #                         env=env.copy(), path=bld.path.find_dir('tests'))
+        #                         env=env.derive(), path=bld.path.find_dir('tests'))
         
         

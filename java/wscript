@@ -1,12 +1,12 @@
 import os
-import Options, Build
-from Configure import ConfigurationError
+from waflib import Options, Build
+from waflib.Errors import ConfigurationError
 
 configure = options = lambda x: None
 
 """
 def set_options(opt):
-    opt.tool_options('javaw')
+    opt.load('javaw')
     opt.add_option('--disable-java', action='store_false', dest='java',
                    help='Disable java (default)', default=True)
     opt.add_option('--with-java-home', action='store', dest='java_home',
@@ -24,7 +24,7 @@ def configure(conf):
     if Options.options.java_home:
         conf.environ['JAVA_HOME'] = Options.options.java_home 
     
-    conf.check_tool('javaw')
+    conf.load('javaw')
     
     #copied from the waf trunk - which I committed - this is required until we
     #start using a version higher than 1.5.8
@@ -82,12 +82,12 @@ def configure(conf):
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
-    env = bld.env_of_name(variant)
+    env = bld.all_envs[variant]
     
     if 'JAVA' not in env:
         return #don't build anything then
     
-    bld.add_subdirs('nitf cgm')
+    bld.recurse('nitf cgm')
 
 def distclean(context):
     pass

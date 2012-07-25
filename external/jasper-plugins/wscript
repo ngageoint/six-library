@@ -5,16 +5,16 @@ configure = distclean = lambda x: False
 
 def build(bld):
     variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
+    env = bld.all_envs[variant]
     
     #---------------------------------------------------------------------------
     ###### JASPER PLUG-IN
     libPattern = env['cshlib_PATTERN']
     if libPattern.startswith('lib'):
         libPattern = libPattern[3:]
-    libEnv = env.copy()
+    libEnv = env.derive()
     
-    lib = bld.new_task_gen(features='c cshlib', target='JasPerDecompress',
+    lib = bld(features='c cshlib', target='JasPerDecompress',
                            use='JASPER nitf-c'.split(), env=libEnv,
                            install_path='${PREFIX}/share/nitf/plugins',
                            source=ant_glob('source/*.c', excl='JasPerCompress.c'))

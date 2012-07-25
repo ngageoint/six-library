@@ -1,16 +1,16 @@
 from os.path import join, basename
 import os
-import Utils
+from waflib import Utils
 distclean = options = configure = lambda p: None
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
-    env = bld.env_of_name(variant)
+    env = bld.all_envs[variant]
     # For some reason this doesn't always happen otherwise..
     bld.env['PYTHONDIR'] = env['PYTHONDIR']
 
     # first compile a few py files
-    obj = bld.new_task_gen(features = 'py', env=env.copy(),
+    obj = bld(features = 'py', env=env.derive(),
                            install_path='${PYTHONDIR}/nitf',
                            source=bld.path.make_node('source').ant_glob('**/*.py'))
     
@@ -32,23 +32,23 @@ def build(bld):
                     if tsk.generator.bld.is_install:
                         shutil.copy2(file.abspath(), join(instDir, name))
                     
-        tsk = bld.new_task_gen(
+        tsk = bld(
             features = 'c cshlib pyext',
             source = 'source/nitro.i',
             target = '_nitropy',
             use='nitf-c',
-            env=env.copy(),
+            env=env.derive(),
             swig_flags='-python',
             install_path='${PYTHONDIR}/nitf',
             name='nitf-python',
             swig_install_fun=copyGeneratedSources)
         
     else:
-        bld.new_task_gen(
+        bld(
             features = 'c cshlib pyext',
             source = 'source/generated/nitropy_wrap.c',
             target = '_nitropy',
             use='nitf-c',
-            env=env.copy(),
+            env=env.derive(),
             install_path='${PYTHONDIR}/nitf')
 

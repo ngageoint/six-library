@@ -1,27 +1,27 @@
-import Options
+from waflib import Options
 
 def options(opt):
     opt.add_option('--enable-openjpeg', action='store_true', dest='openjpeg',
                    help='Enable openjpeg', default=False)
     
 def configure(conf):
-    conf.sub_config('drivers jasper-plugins')
+    conf.recurse('drivers jasper-plugins')
     
     conf.start_msg('Enabling OpenJPEG plug-in')
     if Options.options.openjpeg:
         conf.end_msg('yes')
-        conf.sub_config('openjpeg-plugins')
+        conf.recurse('openjpeg-plugins')
         conf.env['OPENJPEG'] = True
     else:
         conf.end_msg('no', 'YELLOW')
 
 def build(bld):
-    bld.add_subdirs('drivers jasper-plugins libjpeg-plugins')
+    bld.recurse('drivers jasper-plugins libjpeg-plugins')
     
     variant = bld.env['VARIANT'] or 'default'
-    env = bld.env_of_name(variant)
+    env = bld.all_envs[variant]
     if 'OPENJPEG' in env and env['OPENJPEG']:
-        bld.add_subdirs('openjpeg-plugins')
+        bld.recurse('openjpeg-plugins')
 
 def distclean(context):
     context.recurse('drivers jasper-plugins libjpeg-plugins')

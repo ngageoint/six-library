@@ -1,5 +1,5 @@
 import os
-import Options
+from waflib import Options
 
 NAME            = 'nrt'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
@@ -22,10 +22,10 @@ def build(bld):
         
     #run doxygen
     if 'DOXYGEN' in env and Options.is_install:
-        bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
+        bld(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
         try:
             htmlDocs = bld.path.find_dir('doc/html')
             for f in htmlDocs.find_iter():
-                relpath = f.relpath_gen(htmlDocs)
+                relpath = f.path_from(htmlDocs)
                 bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
         except:{}
