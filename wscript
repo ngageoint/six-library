@@ -17,6 +17,7 @@ def options(opt):
     opt.recurse(DIRS)
 
 def configure(conf):
+
     conf.env['APPNAME'] = APPNAME
     conf.env['VERSION'] = VERSION
     conf.load(TOOLS, tooldir='build')

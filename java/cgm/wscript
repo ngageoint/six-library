@@ -4,7 +4,7 @@ def build(bld):
     variant = bld.env['VARIANT']
     env = bld.all_envs[variant]
     
-    if env['HAVE_JNI_H']:
+    if bld.is_defined('HAVE_JNI_H'):
         lib = bld(features='c cshlib', includes='src/jni/include',
                                target='cgm.jni-c', env=env.derive(),
                                uselib='JAVA', use='cgm-c'.split())
