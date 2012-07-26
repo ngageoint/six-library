@@ -1,7 +1,6 @@
 import os
 from os.path import join
-import Scripting, Options
-from Build import BuildContext
+from waflib import Scripting, Options
 
 VERSION = '1.0'
 APPNAME = 'SIDD'
@@ -9,12 +8,12 @@ top  = '.'
 out  = 'target'
 
 def options(opt):
-    opt.tool_options('build', tooldir=join(opt.path.abspath(), 'modules/build'))
-    opt.sub_options('modules projects')
+    opt.load('build', tooldir=join(opt.path.abspath(), 'modules/build'))
+    opt.recurse('modules projects')
 
 def configure(conf):
-    conf.check_tool('build', tooldir='./modules/build/')
-    conf.sub_config('modules projects')
+    conf.load('build', tooldir='./modules/build/')
+    conf.recurse('modules projects')
     
     #add some extra config for the samples, so they can build w/sio.lite
     conf.env.append_unique('CXXDEFINES_SIX_SAMPLES', 'USE_SIO_LITE')
@@ -25,9 +24,7 @@ def configure(conf):
     
 def build(bld):
     #Options.options.libs_only = True
-    bld.add_group()
-    bld.add_group()
-    bld.add_subdirs('modules projects')
+    bld.recurse('modules projects')
 
 def distclean(context):
     context.recurse('modules projects')
