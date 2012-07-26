@@ -1,13 +1,12 @@
 from os.path import join, exists
-import Options, Utils
-from build import CPPBuildContext
+from waflib import Options, Utils
 
 MODULES = 'except io logging math.linear math.poly mt nitf scene ' \
           'six six.sicd six.sidd str sys tiff xml.lite cli sio.lite mem'
 SAMPLES = 'samples'
 
 def options(opt):
-        opt.sub_options(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
+        opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
                            MODULES.split()))
 
 def configure(conf):
@@ -16,22 +15,21 @@ def configure(conf):
         conf.env.append_unique('CXXDEFINES', 'ELIMINATE_BROKEN_LINKAGE')
     conf.env.append_value('CPPPATH_UNITTEST', join(conf.path.abspath(), 'include'))
     
-    conf.sub_config(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
+    conf.recurse(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
                            MODULES.split()))
-    conf.sub_config(SAMPLES)
+    conf.recurse(SAMPLES)
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
-    env = bld.env_of_name(variant)
-    env.set_variant(variant)
+    env = bld.all_envs[variant].derive()
     
     configBuilds = filter(lambda m: not exists(join(bld.path.abspath(), m, 'wscript')),
                           MODULES.split())
     # build these modules from their config files
     map(bld.fromConfig, map(lambda m: join(bld.path.abspath(), m), configBuilds))
-    map(bld.add_subdirs, filter(lambda m: m not in configBuilds, MODULES.split()))
+    map(bld.recurse, filter(lambda m: m not in configBuilds, MODULES.split()))
     
-    bld.add_subdirs(SAMPLES)
+    bld.recurse(SAMPLES)
     if 'DOXYGEN' in env and Options.is_install:
         bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
         try:

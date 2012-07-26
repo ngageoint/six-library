@@ -1,22 +1,18 @@
 import os
 from os.path import join, basename
-import Utils
+from waflib import Utils
 distclean = options = configure = lambda p: None
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
-    env = bld.env_of_name(variant)
-    
-    #obj = bld.new_task_gen(features = 'py', env=env.copy(),
-    #                       install_path='${PYTHONDIR}/six')
-    #obj.find_sources_in_dirs('source', exts=['.py'])
+    env = bld.all_envs[variant].derive()
     
     deps = 'six.sidd six.sicd six scene tiff nitf xml.lite logging io mt sys str except'
     uselib_local = map(lambda x: '%s-c++' % x, deps.split())
     uselib_local.append('nitf-c')
     # then a c extension module
     if 'SWIG' in env and env['SWIG']:
-        tsk = bld.new_task_gen(
+        tsk = bld(
             features='cxx cshlib pyext',
             source='source/six.i',
             target='_six',
@@ -44,7 +40,7 @@ def build(bld):
                                  pythonDir=Utils.subst_vars('${PYTHONDIR}', env)))
         
     else:
-        bld.new_task_gen(
+        bld(
             features = 'cxx cshlib pyext',
             source = 'source/six_wrap.cpp',
             target = '_six',
