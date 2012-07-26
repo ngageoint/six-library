@@ -1,7 +1,6 @@
 import os
 from os.path import join
-import Scripting, Options
-from Build import BuildContext
+from waflib import Scripting, Options
 
 VERSION = '1.0'
 APPNAME = 'Sensor Independent XML'
@@ -11,19 +10,17 @@ out  = 'target'
 DIRS = 'drivers c/nrt c/nitf c/j2k c++ python'
 
 def options(opt):
-    opt.tool_options('build swig pythontool',
+    opt.load('build swig pythontool',
                      tooldir=join(opt.path.abspath(), 'build'))
-    opt.sub_options(DIRS)
+    opt.recurse(DIRS)
 
 def configure(conf):
-    conf.check_tool('build swig pythontool',
+    conf.load('build swig pythontool',
                     tooldir=join(conf.path.abspath(), 'build'))
-    conf.sub_config(DIRS)
+    conf.recurse(DIRS)
 
 def build(bld):
-    bld.add_group()
-    bld.add_group()
-    bld.add_subdirs(DIRS)
+    bld.recurse(DIRS)
 
 def distclean(context):
     context.recurse(DIRS)

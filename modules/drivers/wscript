@@ -1,13 +1,13 @@
 BLD_DIRS = 'pcre expat'
 
 def options(opt):
-    opt.sub_options(BLD_DIRS)
+    opt.recurse(BLD_DIRS)
 
 def configure(conf):
-    conf.sub_config(BLD_DIRS)
+    conf.recurse(BLD_DIRS)
 
 def build(bld):
-    bld.add_subdirs(BLD_DIRS)
+    bld.recurse(BLD_DIRS)
 
 def distclean(ctx):
     ctx.recurse(BLD_DIRS)
