@@ -5,8 +5,7 @@ options = distclean = configure = lambda x: None
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.all_envs[variant].derive()
-
-    pEnv = env.copy()
+    pEnv = env.derive()
 
     # do this here for windows only
     if sys.platform=='win32':
@@ -22,7 +21,7 @@ def build(bld):
         source='source/TSMPlugin.cpp',
         target='TSMAPI', name='TSMAPI',
         export_includes='include',
-        env=pEnv.copy(), path=bld.path.find_dir('external/TSM'),
+        env=pEnv.derive(), path=bld.path.find_dir('external/TSM'),
         install_path='${PREFIX}/lib')
     
     #build VTS
@@ -33,11 +32,11 @@ def build(bld):
               libs='TSMAPI',
               uselocal='',
               uselib='CSTD CRUN DL',
-              env=pEnv.copy(),
+              env=pEnv.derive(),
               path=bld.path.find_dir('external/VTS'),
               install_path='${PREFIX}/bin')
 
-    pEnv2 = env.copy()
+    pEnv2 = env.derive()
     if pEnv2['cshlib_PATTERN'].startswith('lib'):
         pEnv2['cshlib_PATTERN'] = pEnv2['cshlib_PATTERN'][3:]
 
@@ -69,7 +68,7 @@ def build(bld):
               source=bld.path.find_dir('sicd/source').ant_glob('*.cpp'),
               libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
               export_includes='include',
-              env=pEnv2.copy(), path=bld.path,
+              env=pEnv2.derive(), path=bld.path,
               use='six.sicd-c++ six.sidd-c++ TSMAPI',
               install_path='${PREFIX}/share/CSM/plugins')
     
@@ -79,6 +78,6 @@ def build(bld):
               source=bld.path.find_dir('sidd/source').ant_glob('*.cpp'),
               libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
               export_includes='include',
-              env=pEnv2.copy(), path=bld.path,
+              env=pEnv2.derive(), path=bld.path,
               use='six.sicd-c++ six.sidd-c++ TSMAPI',
               install_path='${PREFIX}/share/CSM/plugins')
