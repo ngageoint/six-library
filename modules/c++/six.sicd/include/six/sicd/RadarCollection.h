@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -194,27 +194,39 @@ struct Segment
     //!  Copy
     Segment* clone() const;
 
+    //! The number of lines in the segment
+    int getNumLines() const
+    {
+        return (endLine - startLine + 1);
+    }
+
+    //! The number of samples in the segment
+    int getNumSamples() const
+    {
+        return (endSample - startSample + 1);
+    }
+
     /*!
      *  SICD StartLine parameter.  Defines start line in collection plane
-     *  corresponding to the full image.
+     *  corresponding to the full image.  This is 0-based and inclusive.
      */
     int startLine;
 
     /*!
      *  SICD StartSample parameter.  Defines start sample in collection plane
-     *  corresponding to the full image
+     *  corresponding to the full image.  This is 0-based and inclusive.
      */
     int startSample;
 
     /*!
      *  SICD EndLine parameter.  Defines end line in collection plane
-     *  corresponding to the full image.
+     *  corresponding to the full image.  This is 0-based and inclusive.
      */
     int endLine;
     
     /*!
      *  SICD EndSample parameter.  Defines end sample in collection plane
-     *  corresponding to the full image
+     *  corresponding to the full image.  This is 0-based and inclusive.
      */    
     int endSample;
 
