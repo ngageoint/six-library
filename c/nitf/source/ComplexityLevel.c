@@ -397,6 +397,7 @@ NITFPRIV(NITF_CLEVEL) checkMonoImage(nitf_ImageSubheader* subhdr,
     else if (nbpp != 1 &&
              nbpp != 8 &&
              nbpp != 12 &&
+             nbpp != 16 &&
              nbpp != 32 &&
              nbpp != 64)
     {
