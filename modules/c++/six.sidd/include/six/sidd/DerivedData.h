@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -33,6 +33,7 @@
 #include "six/sidd/DownstreamReprocessing.h"
 #include "six/Radiometric.h"
 #include "six/sidd/Annotations.h"
+#include "six/sidd/Enums.h"
 
 namespace six
 {
@@ -288,8 +289,20 @@ struct DerivedData: public Data
         return std::string(VENDOR_ID);
     }
 
+    virtual std::string getVersion() const
+    {
+        return mVersion.toString();
+    }
+
+    virtual void setVersion(const std::string& version)
+    {
+        mVersion = version;
+    }
+
 private:
     static const char VENDOR_ID[];
+
+    Version mVersion;
 };
 }
 }

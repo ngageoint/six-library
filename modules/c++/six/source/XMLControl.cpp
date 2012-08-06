@@ -1316,3 +1316,64 @@ XMLElem XMLControl::toXML(const Radiometric *r, XMLElem parent)
     }
     return rXML;
 }
+
+std::string XMLControl::getDefaultURI() const
+{
+    return mDefaultURI;
+}
+
+void XMLControl::setDefaultURI(const Data& data)
+{
+    const std::string dataTypeStr =
+            dataTypeToString(data.getDataType(), false);
+
+    mDefaultURI = "urn:" + dataTypeStr + ":" + data.getVersion();
+}
+
+xml::lite::Document* XMLControl::toXML(const Data* data)
+{
+    setDefaultURI(*data);
+    return toXMLImpl(data);
+}
+
+Data* XMLControl::fromXML(const xml::lite::Document* doc)
+{
+    Data* const data = fromXMLImpl(doc);
+
+    const std::string uri = doc->getRootElement()->getUri();
+    if (!str::startsWith(uri, "urn:"))
+    {
+        throw except::Exception(Ctxt(
+                "Unable to transform XML DES: Invalid XML namespace URI: " +
+                uri));
+    }
+
+    data->setVersion(uri.substr(4)); // remove urn: from beginning
+
+    return data;
+}
+
+std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
+{
+    std::string str;
+
+    switch (dataType)
+    {
+    case DataType::COMPLEX:
+        str = "SICD";
+        break;
+    case DataType::DERIVED:
+        str = "SIDD";
+        break;
+    default:
+        throw except::Exception(Ctxt("Invalid data type " +
+                                         str::toString(dataType)));
+    }
+
+    if (appendXML)
+    {
+        str += "_XML";
+    }
+
+    return str;
+}

@@ -269,6 +269,9 @@ protected:
      */
     void updateFileHeaderSecurity();
 
+private:
+    static
+    std::string getDesTypeID(const six::Data& data);
 };
 
 }

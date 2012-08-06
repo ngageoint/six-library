@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -91,7 +91,8 @@ ComplexData::ComplexData(const ComplexData* cloner) :
             geoData(NULL), grid(NULL), timeline(NULL), position(NULL),
             radarCollection(NULL), imageFormation(NULL), scpcoa(NULL),
             radiometric(NULL), antenna(NULL), errorStatistics(NULL),
-            matchInformation(NULL), pfa(NULL), rma(NULL)
+            matchInformation(NULL), pfa(NULL), rma(NULL),
+            mVersion(cloner->mVersion)
 {
     if (cloner->collectionInformation)
         collectionInformation = cloner->collectionInformation->clone();

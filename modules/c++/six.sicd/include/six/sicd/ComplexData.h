@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -39,6 +39,7 @@
 #include "six/sicd/PFA.h"
 #include "six/sicd/RMA.h"
 #include "six/sicd/MatchInformation.h"
+#include "six/sicd/Enums.h"
 
 namespace six
 {
@@ -64,9 +65,9 @@ namespace sicd
  *
  *
  */
-struct ComplexData: public Data
+class ComplexData: public Data
 {
-
+public:
     //!  CollectionInfo block.  Contains the general collection information
     CollectionInformation* collectionInformation;
 
@@ -285,10 +286,22 @@ struct ComplexData: public Data
         return std::string(VENDOR_ID);
     }
 
-    static const char VENDOR_ID[];
+    virtual std::string getVersion() const
+    {
+        return mVersion.toString();
+    }
+
+    virtual void setVersion(const std::string& version)
+    {
+        mVersion = version;
+    }
 
 private:
+    static const char VENDOR_ID[];
+
     ComplexData(const ComplexData* cloner);
+
+    Version mVersion;
 };
 
 }

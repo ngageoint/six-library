@@ -36,14 +36,8 @@ using namespace six::sidd;
 typedef xml::lite::Element* XMLElem;
 typedef xml::lite::Attributes XMLAttributes;
 
-const char DerivedXMLControl::SIDD_URI[] = "urn:SIDD:1.0.0";
 const char DerivedXMLControl::SI_COMMON_URI[] = "urn:SICommon:0.1";
 const char DerivedXMLControl::SFA_URI[] = "urn:SFA:1.2.0";
-
-std::string DerivedXMLControl::getDefaultURI() const
-{
-    return SIDD_URI;
-}
 
 std::string DerivedXMLControl::getSICommonURI() const
 {
@@ -888,7 +882,7 @@ void DerivedXMLControl::fromXML(const XMLElem exploitationFeaturesXML,
     }
 }
 
-Data* DerivedXMLControl::fromXML(const xml::lite::Document* doc)
+Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
     XMLElem root = doc->getRootElement();
 
@@ -1559,7 +1553,7 @@ XMLElem DerivedXMLControl::toXML(
     return exploitationFeaturesXML;
 }
 
-xml::lite::Document* DerivedXMLControl::toXML(const Data* data)
+xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
 {
     if (data->getDataType() != DataType::DERIVED)
     {
