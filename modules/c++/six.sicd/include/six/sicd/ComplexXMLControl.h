@@ -55,6 +55,9 @@ public:
     {
     }
 
+    using XMLControl::toXML;
+    using XMLControl::fromXML;
+
 protected:
     /*!
      *  This function takes in a ComplexData object and converts

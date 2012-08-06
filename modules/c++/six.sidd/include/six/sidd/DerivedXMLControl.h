@@ -49,6 +49,9 @@ public:
     {
     }
 
+    using XMLControl::toXML;
+    using XMLControl::fromXML;
+
 protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
