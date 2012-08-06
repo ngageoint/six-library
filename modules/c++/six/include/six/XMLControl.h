@@ -71,14 +71,20 @@ public:
      *  \param data the Data model
      *  \return An XML DOM
      */
-    virtual xml::lite::Document* toXML(const Data* data) = 0;
+    xml::lite::Document* toXML(const Data* data);
 
     /*!
      *  Convert a document from a DOM into a Data model
      *  \param doc
      *  \return a Data model
      */
-    virtual Data* fromXML(const xml::lite::Document* doc) = 0;
+    Data* fromXML(const xml::lite::Document* doc);
+
+    /*!
+     *  Provides a mapping from COMPLEX --> SICD and DERIVED --> SIDD
+     */
+    static
+    std::string dataTypeToString(DataType dataType, bool appendXML = true);
 
 protected:
     typedef xml::lite::Element* XMLElem;
@@ -86,8 +92,22 @@ protected:
     logging::Logger *mLog;
     bool mOwnLog;
 
+    /*!
+     *  Convert a document from a DOM into a Data model
+     *  \param doc
+     *  \return a Data model
+     */
+    virtual Data* fromXMLImpl(const xml::lite::Document* doc) = 0;
+
+    /*!
+     *  Convert the Data model into an XML DOM.
+     *  \param data the Data model
+     *  \return An XML DOM
+     */
+    virtual xml::lite::Document* toXMLImpl(const Data* data) = 0;
+
     //! Returns the default URI
-    virtual std::string getDefaultURI() const = 0;
+    virtual std::string getDefaultURI() const;
 
     //! Returns the URI to use with SI Common types
     virtual std::string getSICommonURI() const = 0;
@@ -247,6 +267,11 @@ protected:
      * @return returns the input Element
      */
     static XMLElem require(XMLElem element, const std::string& name);
+
+private:
+    void setDefaultURI(const Data& data);
+
+    std::string mDefaultURI;
 };
 
 }

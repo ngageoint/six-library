@@ -33,19 +33,12 @@ using namespace six::sicd;
 
 typedef xml::lite::Element* XMLElem;
 
-const char ComplexXMLControl::SICD_URI[] = "urn:SICD:1.0.0";
-
-std::string ComplexXMLControl::getDefaultURI() const
-{
-    return SICD_URI;
-}
-
 std::string ComplexXMLControl::getSICommonURI() const
 {
-    return SICD_URI;
+    return getDefaultURI();
 }
 
-Data* ComplexXMLControl::fromXML(const xml::lite::Document* doc)
+Data* ComplexXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
     ComplexDataBuilder builder;
     ComplexData *sicd = builder.steal();
@@ -133,18 +126,18 @@ Data* ComplexXMLControl::fromXML(const xml::lite::Document* doc)
     return sicd;
 }
 
-xml::lite::Document* ComplexXMLControl::toXML(const Data *data)
+xml::lite::Document* ComplexXMLControl::toXMLImpl(const Data *data)
 {
     if (data->getDataType() != DataType::COMPLEX)
     {
         throw except::Exception(Ctxt("Data must be SICD"));
     }
+    const ComplexData *sicd = (const ComplexData*) data;
+
     xml::lite::Document* doc = new xml::lite::Document();
 
     XMLElem root = newElement("SICD");
     doc->setRootElement(root);
-
-    const ComplexData *sicd = (const ComplexData*) data;
 
     toXML(sicd->collectionInformation, root);
     if (sicd->imageCreation)

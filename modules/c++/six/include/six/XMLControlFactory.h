@@ -109,7 +109,7 @@ public:
     void addCreator(DataType dataType,
                     std::auto_ptr<XMLControlCreator> creator)
     {
-        addCreator(dataTypeToString(dataType), creator);
+        addCreator(dataType.toString(), creator);
     }
 
     /*!
@@ -133,12 +133,8 @@ public:
 
     XMLControl* newXMLControl(DataType dataType) const
     {
-        return newXMLControl(dataTypeToString(dataType));
+        return newXMLControl(dataType.toString());
     }
-
-private:
-    static
-    std::string dataTypeToString(DataType dataType);
 
 private:
     typedef std::map<std::string, XMLControlCreator*> RegistryMap;

@@ -87,13 +87,12 @@ void NITFReadControl::load(const std::string& fromFile)
 {
     reset();
 
-    DataType dataType;
-
     nitf::IOHandle handle(fromFile);
 
     mRecord = mReader.read(handle);
     std::string title = mRecord.getHeader().getFileTitle().toString();
 
+    DataType dataType;
     if (str::startsWith(title, "SICD"))
         dataType = DataType::COMPLEX;
     else if (str::startsWith(title, "SIDD"))
@@ -141,7 +140,7 @@ void NITFReadControl::load(const std::string& fromFile)
             }
 
             // Note that DE override data never should clash, there
-            // is one DES per data, so its safe to do this
+            // is one DES per data, so it's safe to do this
             addDEClassOptions(subheader, data->getClassification());
 
             mContainer->addData(data);

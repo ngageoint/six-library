@@ -69,20 +69,6 @@ XMLControlRegistry::newXMLControl(const std::string& identifier) const
     return iter->second->newXMLControl();
 }
 
-std::string XMLControlRegistry::dataTypeToString(DataType dataType)
-{
-    switch (dataType)
-    {
-    case DataType::COMPLEX:
-        return "SICD_XML";
-    case DataType::DERIVED:
-        return "SIDD_XML";
-    default:
-        throw except::Exception(Ctxt("Invalid data type " +
-                                         str::toString(dataType)));
-    }
-}
-
 char* six::toXMLCharArray(const Data* data,
                           const six::XMLControlRegistry *xmlRegistry)
 {

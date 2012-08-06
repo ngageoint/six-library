@@ -171,6 +171,13 @@ struct Data
      */
     virtual std::string getVendorID() const = 0;
 
+    /*!
+     * Returns an identifier of the Version of the model contained within
+     */
+    virtual std::string getVersion() const = 0;
+
+    //!  Set the version of the model contained within
+    virtual void setVersion(const std::string& version) = 0;
 };
 
 }

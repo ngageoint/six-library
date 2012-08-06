@@ -232,7 +232,7 @@ void NITFWriteControl::initialize(Container* container)
         // Write out a DES
         nitf::DESegment seg = mRecord.newDataExtensionSegment();
         nitf::DESubheader subheader = seg.getSubheader();
-        subheader.getTypeID().set("XML_DATA_CONTENT");
+        subheader.getTypeID().set(getDesTypeID(*mContainer->getData(ii)));
         subheader.getVersion().set(Constants::DES_VERSION_STR);
 
         setDESecurity(mContainer->getData(ii)->getClassification(),
@@ -659,4 +659,29 @@ void NITFWriteControl::addDataAndWrite()
         deWriter.attachSource(segSource);
     }
     mWriter.write();
+}
+
+std::string NITFWriteControl::getDesTypeID(const six::Data& data)
+{
+    // TODO: This requires some knowledge of the SICD/SIDD versions, but not
+    //       sure where else this logic should live.
+
+    const std::string version(data.getVersion());
+    const std::vector<std::string> versionParts(str::split(version, "."));
+
+    if (versionParts.size() < 2)
+    {
+        throw except::Exception(Ctxt("Invalid version string: " + version));
+    }
+
+    // Name of DES changed for version 1.0+
+    const std::string& majorVersion = versionParts[0];
+    if (majorVersion == "0")
+    {
+        return XMLControl::dataTypeToString(data.getDataType());
+    }
+    else
+    {
+        return "XML_DATA_CONTENT";
+    }
 }

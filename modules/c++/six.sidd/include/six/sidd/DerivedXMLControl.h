@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -44,38 +44,30 @@ class DerivedXMLControl : public XMLControl
 {
 
 public:
-
     DerivedXMLControl(logging::Logger* log = NULL, bool ownLog = false) :
         XMLControl(log, ownLog)
     {
     }
 
-    virtual ~DerivedXMLControl()
-    {
-    }
-
+protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
      */
-    virtual xml::lite::Document* toXML(const Data* data);
+    virtual xml::lite::Document* toXMLImpl(const Data* data);
     /*!
      *  Returns a new allocated DerivedData*, created from the DOM Document*
      *
      */
-    virtual Data* fromXML(const xml::lite::Document* doc);
+    virtual Data* fromXMLImpl(const xml::lite::Document* doc);
 
 private:
     typedef xml::lite::Element* XMLElem;
 
-    static const char SIDD_URI[];
     static const char SI_COMMON_URI[];
     static const char SFA_URI[];
 
-    //! Returns the default URI
-    std::string getDefaultURI() const;
-
     //! Returns the URI to use with SI Common types
-    std::string getSICommonURI() const;
+    virtual std::string getSICommonURI() const;
 
     std::string getSFAURI() const;
 
