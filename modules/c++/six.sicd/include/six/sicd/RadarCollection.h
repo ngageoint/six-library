@@ -208,25 +208,29 @@ struct Segment
 
     /*!
      *  SICD StartLine parameter.  Defines start line in collection plane
-     *  corresponding to the full image.  This is 0-based and inclusive.
+     *  corresponding to the full image.  This is inclusive.  It will normally
+     *  be 0-based or 1-based but does not necessarily have to be.
      */
     int startLine;
 
     /*!
      *  SICD StartSample parameter.  Defines start sample in collection plane
-     *  corresponding to the full image.  This is 0-based and inclusive.
+     *  corresponding to the full image.  This is inclusive.  It will normally
+     *  be 0-based or 1-based but does not necessarily have to be.
      */
     int startSample;
 
     /*!
      *  SICD EndLine parameter.  Defines end line in collection plane
-     *  corresponding to the full image.  This is 0-based and inclusive.
+     *  corresponding to the full image.  This is inclusive.  It will normally
+     *  be 0-based or 1-based but does not necessarily have to be.
      */
     int endLine;
     
     /*!
      *  SICD EndSample parameter.  Defines end sample in collection plane
-     *  corresponding to the full image.  This is 0-based and inclusive.
+     *  corresponding to the full image.  This is inclusive.  It will normally
+     *  be 0-based or 1-based but does not necessarily have to be.
      */    
     int endSample;
 
