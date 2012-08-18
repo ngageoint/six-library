@@ -197,6 +197,19 @@ NITFPRIV(void) IOSource_destruct(NITF_DATA * data)
     NITF_FREE(data);
 }
 
+NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
+{
+    if (data)
+    {
+        IOSourceImpl* const source = (IOSourceImpl*)data;
+        if (source->io)
+        {
+            nitf_IOInterface_destruct(&source->io);
+        }
+        NITF_FREE(data);
+    }
+}
+
 NITFPRIV(nitf_Off) IOSource_getSize(NITF_DATA * data, nitf_Error *e)
 {
     IOSourceImpl *source = (IOSourceImpl *) data;
@@ -381,15 +394,36 @@ NITFAPI(nitf_BandSource *) nitf_FileSource_construct(nitf_IOHandle handle,
                                                      int pixelSkip,
                                                      nitf_Error * error)
 {
+    /* We need a way to free 'interface' when we destruct - the IOSource
+     * doesn't take ownership of it.
+     */
+    static nitf_IDataSource iFileSource =
+    {
+        &IOSource_read,
+        &FileSource_destruct,
+        &IOSource_getSize,
+        &IOSource_setSize
+    };
+
     nitf_IOInterface *interface = NULL;
+    nitf_BandSource* bandSource = NULL;
 
-    if (!(interface = nitf_IOHandleAdapter_construct(handle,
-                                                     NRT_ACCESS_READONLY,
-                                                     error)))
+    interface = nitf_IOHandleAdapter_construct(handle, NRT_ACCESS_READONLY,
+                                               error);
+    if (interface == NULL)
+    {
         return NULL;
+    }
 
-    return nitf_IOSource_construct(interface, start, numBytesPerPixel,
-                                   pixelSkip, error);
+    bandSource = nitf_IOSource_construct(interface, start, numBytesPerPixel,
+                                         pixelSkip, error);
+    if (bandSource == NULL)
+    {
+        return NULL;
+    }
+
+    bandSource->iface = &iFileSource;
+    return bandSource;
 }
 
 NITFAPI(nitf_BandSource *) nitf_FileSource_constructFile(const char* fname,
@@ -398,14 +432,34 @@ NITFAPI(nitf_BandSource *) nitf_FileSource_constructFile(const char* fname,
                                                          int pixelSkip,
                                                          nitf_Error* error)
 {
-    nitf_IOInterface *interface = NULL;
+    /* We need a way to free 'interface' when we destruct - the IOSource
+     * doesn't take ownership of it.
+     */
+    static nitf_IDataSource iFileSource =
+    {
+        &IOSource_read,
+        &FileSource_destruct,
+        &IOSource_getSize,
+        &IOSource_setSize
+    };
 
-    if (!(interface = nitf_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY,
-                                                NRT_OPEN_EXISTING, error)))
+    nitf_IOInterface* interface = NULL;
+    nitf_BandSource* bandSource = NULL;
+
+    interface = nitf_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY,
+                                          NRT_OPEN_EXISTING, error);
+    if (interface == NULL)
+    {
         return NULL;
+    }
 
-    return nitf_IOSource_construct(interface, start, numBytesPerPixel,
-                                   pixelSkip, error);
+    bandSource = nitf_IOSource_construct(interface, start, numBytesPerPixel,
+                                         pixelSkip, error);
+    if (bandSource == NULL)
+    {
+        return NULL;
+    }
 
-
+    bandSource->iface = &iFileSource;
+    return bandSource;
 }
