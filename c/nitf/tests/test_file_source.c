@@ -136,5 +136,6 @@ int main(int argc, char **argv)
     nitf_BandSource_destruct(&bs0);
     nitf_BandSource_destruct(&bs1);
     nitf_BandSource_destruct(&bs2);
+    nitf_BandSource_destruct(&all);
     return 0;
 }
