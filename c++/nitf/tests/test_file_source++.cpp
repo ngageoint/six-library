@@ -20,92 +20,93 @@
  *
  */
 
+#include <vector>
+#include <string.h>
 
 #include <import/nitf.hpp>
 
-#define MEMBUF "ABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC"
-#define MEMSIZE strlen(MEMBUF)
-#define NUM_BANDS 3
-#define FILENM "test_file.src"
-void print_band(char* band, const char* s, int size)
+namespace
 {
-    int i;
-    printf("Band %s: [", s);
-    for (i = 0; i < size; i++)
+static const char* const MEMBUF = "ABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC";
+static const size_t MEMSIZE = strlen(MEMBUF);
+static const size_t NUM_BANDS = 3;
+static const char* const FILENAME = "test_file.src";
+
+void printBand(const char* band, const char* s, size_t size)
+{
+	std::cout << "Band " << s << ": [";
+    for (size_t i = 0; i < size; ++i)
     {
-        printf("%c", band[i]);
+    	std::cout << band[i];
     }
-    printf("]\n");
+    std::cout << "]\n";
 }
 
 
-std::string prepare_io()
+std::string prepareIO()
 {
     /*  First we'll create the file for them...  */
-    nitf::IOHandle handle(FILENM, NITF_ACCESS_WRITEONLY, NITF_CREATE);
+    nitf::IOHandle handle(FILENAME, NITF_ACCESS_WRITEONLY, NITF_CREATE);
 
     /*  And we'll write our buffer out  */
     handle.write(MEMBUF, MEMSIZE);
     handle.close();
 
-    return std::string(FILENM);
+    return std::string(FILENAME);
 }
-
+}
 
 int main(int argc, char **argv)
 {
-    /*  Get the error object       */
-    int bandSize = MEMSIZE / NUM_BANDS;
-    std::string fname = prepare_io();
+    const int bandSize = MEMSIZE / NUM_BANDS;
+    const std::string fname = prepareIO();
 
-    int numBytesPerPix = 1;
+    const int numBytesPerPix = 1;
 
     /*  Construct the band sources  */
-    nitf::BandSource* bs0 = new nitf::FileSource(fname, 0, numBytesPerPix, NUM_BANDS - 1);
-    nitf::BandSource* bs1 = new nitf::FileSource(fname, 1, numBytesPerPix, NUM_BANDS - 1);
-    nitf::BandSource* bs2 = new nitf::FileSource(fname, 2, numBytesPerPix, NUM_BANDS - 1);
-    nitf::BandSource* all = new nitf::FileSource(fname, 0, numBytesPerPix, 0);
+    nitf::FileSource bs0(fname, 0, numBytesPerPix, NUM_BANDS - 1);
+    nitf::FileSource bs1(fname, 1, numBytesPerPix, NUM_BANDS - 1);
+    nitf::FileSource bs2(fname, 2, numBytesPerPix, NUM_BANDS - 1);
+    nitf::FileSource all(fname, 0, numBytesPerPix, 0);
 
     /*  Construct in memory band buffers -- for testing -- 0 terminate strings */
-    char *band_0 = (char*)NITF_MALLOC(bandSize + 1);
-    char *band_1 = (char*)NITF_MALLOC(bandSize + 1);
-    char *band_2 = (char*)NITF_MALLOC(bandSize + 1);
-    char *all_bands = (char*)NITF_MALLOC( MEMSIZE + 1);
+    std::vector<char> band0Vec(bandSize + 1);
+    char* const band0 = &band0Vec[0];
 
-    band_0[bandSize] = 0;
-    band_1[bandSize] = 1;
-    band_2[bandSize] = 2;
-    all_bands[ MEMSIZE ] = 0;
+    std::vector<char> band1Vec(bandSize + 1);
+    char* const band1 = &band1Vec[0];
+
+    std::vector<char> band2Vec(bandSize + 1);
+    char* const band2 = &band2Vec[0];
+
+    std::vector<char> allBandsVec(MEMSIZE + 1);
+    char* const allBands = &allBandsVec[0];
+
+    band0[bandSize] = band1[bandSize] = band2[bandSize] = allBands[MEMSIZE] =
+            '\0';
 
     /*  Read half of the info for one band.  This makes sure that we  */
     /*  are capable of picking up where we left off                   */
-    bs0->read(band_0, (MEMSIZE / NUM_BANDS / 2));
-    bs1->read(band_1, (MEMSIZE / NUM_BANDS / 2));
-    bs2->read(band_2, (MEMSIZE / NUM_BANDS / 2));
+    bs0.read(band0, (MEMSIZE / NUM_BANDS / 2));
+    bs1.read(band1, (MEMSIZE / NUM_BANDS / 2));
+    bs2.read(band2, (MEMSIZE / NUM_BANDS / 2));
 
     /*  Pick up where we left off and keep going  */
-    bs0->read(&band_0[MEMSIZE / NUM_BANDS / 2], (MEMSIZE / NUM_BANDS / 2));
-    bs1->read(&band_1[MEMSIZE / NUM_BANDS / 2], (MEMSIZE / NUM_BANDS / 2));
-    bs2->read(&band_2[MEMSIZE / NUM_BANDS / 2], (MEMSIZE / NUM_BANDS / 2));
-    all->read(all_bands, MEMSIZE);
+    bs0.read(&band0[MEMSIZE / NUM_BANDS / 2], (MEMSIZE / NUM_BANDS / 2));
+    bs1.read(&band1[MEMSIZE / NUM_BANDS / 2], (MEMSIZE / NUM_BANDS / 2));
+    bs2.read(&band2[MEMSIZE / NUM_BANDS / 2], (MEMSIZE / NUM_BANDS / 2));
+    all.read(allBands, MEMSIZE);
 
     /*  Now we would like to verify the results of our reading  */
 
     /*  The first three bands should be all of the same letter B1=A, B2=B, B3=C*/
-    print_band(band_0, "1", MEMSIZE / NUM_BANDS);
-    print_band(band_1, "2", MEMSIZE / NUM_BANDS);
-    print_band(band_2, "3", MEMSIZE / NUM_BANDS);
+    printBand(band0, "1", MEMSIZE / NUM_BANDS);
+    printBand(band1, "2", MEMSIZE / NUM_BANDS);
+    printBand(band2, "3", MEMSIZE / NUM_BANDS);
 
     /*  The last band source was applied to the entire buffer, so it should  */
     /*  look the same as the original memory source                          */
-    print_band(all_bands, "ALL", MEMSIZE);
+    printBand(allBands, "ALL", MEMSIZE);
 
-    NITF_FREE(band_0);
-    NITF_FREE(band_1);
-    NITF_FREE(band_2);
-    NITF_FREE(all_bands);
-    delete bs0;
-    delete bs1;
-    delete bs2;
     return 0;
 }
