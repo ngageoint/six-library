@@ -254,7 +254,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
  * the given DateTime and date format.
  */
 NITFAPI(NITF_BOOL) nitf_Field_setDateTime(nitf_Field * field,
-        nitf_DateTime *dateTime, const char *format, nitf_Error * error);
+        const nitf_DateTime *dateTime, const char *format, nitf_Error * error);
 
 
 /*!
