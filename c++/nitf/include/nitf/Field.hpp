@@ -64,7 +64,7 @@ enum FieldType
         return *this;
     }
 
-    Field & operator=(std::string value)
+    Field & operator=(const std::string& value)
     {
         set(value);
         return *this;
@@ -244,30 +244,33 @@ enum FieldType
             throw nitf::NITFException(&error);
     }
 
-    void set(std::string data) throw(nitf::NITFException)
+    void set(const std::string& data) throw(nitf::NITFException)
     {
-        NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), (char*)data.c_str(), &error);
+        const NITF_BOOL x =
+                nitf_Field_setString(getNativeOrThrow(), data.c_str(), &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
 
-    void set(nitf::DateTime dateTime, std::string format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
+    void set(const nitf::DateTime& dateTime,
+             const std::string& format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
     {
-        NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(),
-                dateTime.getNative(), (char*)format.c_str(), &error);
+        const NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(),
+                dateTime.getNative(), format.c_str(), &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
 
-    nitf::DateTime asDateTime(std::string format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
+    nitf::DateTime asDateTime(const std::string& format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
     {
-        nitf_DateTime *x = nitf_Field_asDateTime(getNativeOrThrow(),
-                (char*)format.c_str(), &error);
-        if (!x)
+        nitf_DateTime* const dateTime =
+                nitf_Field_asDateTime(getNativeOrThrow(), format.c_str(),
+                                      &error);
+        if (!dateTime)
+        {
             throw nitf::NITFException(&error);
-        nitf::DateTime d(x);
-        d.setManaged(false);
-        return d;
+        }
+        return nitf::DateTime(dateTime);
     }
 
     //! Get the type

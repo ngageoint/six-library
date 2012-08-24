@@ -20,67 +20,97 @@
  *
  */
 
+#include "sys/Conf.h"
 #include "nitf/DateTime.hpp"
 
-nitf::DateTime::DateTime(const nitf::DateTime & x)
+nitf::DateTime::DateTime() throw (nitf::NITFException)
 {
-    setNative(x.getNative());
+    nitf_Error error;
+    mDateTime = nitf_DateTime_now(&error);
+    if (!mDateTime)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 
-nitf::DateTime & nitf::DateTime::operator=(const nitf::DateTime & x)
+nitf::DateTime::DateTime(nitf_DateTime* dateTime) throw(nitf::NITFException) :
+    mDateTime(dateTime)
 {
-    if (&x != this)
-        setNative(x.getNative());
-    return *this;
-}
-
-nitf::DateTime::DateTime(nitf_DateTime * x)
-{
-    setNative(x);
-    getNativeOrThrow();
+    if (!dateTime)
+    {
+        throw nitf::NITFException(Ctxt("Invalid handle"));
+    }
 }
 
 nitf::DateTime::DateTime(double timeInMillis) throw (nitf::NITFException)
 {
-    setNative(nitf_DateTime_fromMillis(timeInMillis, &error));
-    getNativeOrThrow();
-    setManaged(false);
+    nitf_Error error;
+    mDateTime = nitf_DateTime_fromMillis(timeInMillis, &error);
+    if (!mDateTime)
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 
 nitf::DateTime::DateTime(const std::string& dateString,
         const std::string& dateFormat) throw (nitf::NITFException)
 {
-    nitf_DateTime* const dateTime =
+    nitf_Error error;
+    mDateTime =
             nitf_DateTime_fromString(dateString.c_str(), dateFormat.c_str(),
                                      &error);
-    if (!dateTime)
+    if (!mDateTime)
     {
         throw nitf::NITFException(&error);
     }
-
-    setNative(dateTime);
-    getNativeOrThrow();
-    setManaged(false);
-}
-
-nitf::DateTime::DateTime() throw (nitf::NITFException)
-{
-    setNative(nitf_DateTime_now(&error));
-    getNativeOrThrow();
-    setManaged(false);
 }
 
 nitf::DateTime::~DateTime()
 {
+    nitf_DateTime_destruct(&mDateTime);
+}
+
+nitf::DateTime::DateTime(const nitf::DateTime& rhs)
+{
+    nitf_Error error;
+    mDateTime = nitf_DateTime_fromMillis(rhs.getTimeInMillis(), &error);
+    if (!mDateTime)
+    {
+        throw nitf::NITFException(&error);
+    }
+}
+
+nitf::DateTime & nitf::DateTime::operator=(const nitf::DateTime& rhs)
+{
+    if (&rhs != this)
+    {
+        nitf_Error error;
+        nitf_DateTime* const dateTime =
+                nitf_DateTime_fromMillis(rhs.getTimeInMillis(), &error);
+        if (!dateTime)
+        {
+            throw nitf::NITFException(&error);
+        }
+
+        nitf_DateTime_destruct(&mDateTime);
+        mDateTime = dateTime;
+    }
+
+    return *this;
 }
 
 void nitf::DateTime::format(const std::string& format, char* outBuf,
         size_t maxSize) const throw (nitf::NITFException)
 {
-    nitf_Error e;
-    if (!nitf_DateTime_format(getNativeOrThrow(), format.c_str(), outBuf,
-            maxSize, &e))
-        throw nitf::NITFException(&e);
+    nitf_Error error;
+    if (!nitf_DateTime_format(mDateTime,
+                              format.c_str(),
+                              outBuf,
+                              maxSize,
+                              &error))
+    {
+        throw nitf::NITFException(&error);
+    }
 }
 
 void nitf::DateTime::format(const std::string& format,
@@ -104,44 +134,45 @@ std::string nitf::DateTime::format(const std::string& format) const
 
 int nitf::DateTime::getYear() const
 {
-    return getNativeOrThrow()->year;
+    return mDateTime->year;
 }
 int nitf::DateTime::getMonth() const
 {
-    return getNativeOrThrow()->month;
+    return mDateTime->month;
 }
 int nitf::DateTime::getDayOfMonth() const
 {
-    return getNativeOrThrow()->dayOfMonth;
+    return mDateTime->dayOfMonth;
 }
 int nitf::DateTime::getDayOfWeek() const
 {
-    return getNativeOrThrow()->dayOfWeek;
+    return mDateTime->dayOfWeek;
 }
 int nitf::DateTime::getDayOfYear() const
 {
-    return getNativeOrThrow()->dayOfYear;
+    return mDateTime->dayOfYear;
 }
 int nitf::DateTime::getHour() const
 {
-    return getNativeOrThrow()->hour;
+    return mDateTime->hour;
 }
 int nitf::DateTime::getMinute() const
 {
-    return getNativeOrThrow()->minute;
+    return mDateTime->minute;
 }
 double nitf::DateTime::getSecond() const
 {
-    return getNativeOrThrow()->second;
+    return mDateTime->second;
 }
 double nitf::DateTime::getTimeInMillis() const
 {
-    return getNativeOrThrow()->timeInMillis;
+    return mDateTime->timeInMillis;
 }
 
 void nitf::DateTime::setYear(int year)
 {
-    if (nitf_DateTime_setYear(getNativeOrThrow(),
+    nitf_Error error;
+    if (nitf_DateTime_setYear(mDateTime,
                               year,
                               &error) != NITF_SUCCESS)
     {
@@ -150,7 +181,8 @@ void nitf::DateTime::setYear(int year)
 }
 void nitf::DateTime::setMonth(int month)
 {
-    if (nitf_DateTime_setMonth(getNativeOrThrow(),
+    nitf_Error error;
+    if (nitf_DateTime_setMonth(mDateTime,
                                month,
                                &error) != NITF_SUCCESS)
     {
@@ -159,7 +191,8 @@ void nitf::DateTime::setMonth(int month)
 }
 void nitf::DateTime::setDayOfMonth(int dayOfMonth)
 {
-    if (nitf_DateTime_setDayOfMonth(getNativeOrThrow(),
+    nitf_Error error;
+    if (nitf_DateTime_setDayOfMonth(mDateTime,
                                     dayOfMonth,
                                     &error) != NITF_SUCCESS)
     {
@@ -168,7 +201,8 @@ void nitf::DateTime::setDayOfMonth(int dayOfMonth)
 }
 void nitf::DateTime::setDayOfWeek(int dayOfWeek)
 {
-    if (nitf_DateTime_setDayOfWeek(getNativeOrThrow(),
+    nitf_Error error;
+    if (nitf_DateTime_setDayOfWeek(mDateTime,
                                    dayOfWeek,
                                    &error) != NITF_SUCCESS)
     {
@@ -177,7 +211,8 @@ void nitf::DateTime::setDayOfWeek(int dayOfWeek)
 }
 void nitf::DateTime::setDayOfYear(int dayOfYear)
 {
-    if (nitf_DateTime_setDayOfYear(getNativeOrThrow(),
+    nitf_Error error;
+    if (nitf_DateTime_setDayOfYear(mDateTime,
                                    dayOfYear,
                                    &error) != NITF_SUCCESS)
     {
@@ -186,7 +221,8 @@ void nitf::DateTime::setDayOfYear(int dayOfYear)
 }
 void nitf::DateTime::setHour(int hour)
 {
-    if (nitf_DateTime_setHour(getNativeOrThrow(),
+    nitf_Error error;
+    if (nitf_DateTime_setHour(mDateTime,
                               hour,
                               &error) != NITF_SUCCESS)
     {
@@ -195,7 +231,8 @@ void nitf::DateTime::setHour(int hour)
 }
 void nitf::DateTime::setMinute(int minute)
 {
-    if (nitf_DateTime_setMinute(getNativeOrThrow(),
+    nitf_Error error;
+    if (nitf_DateTime_setMinute(mDateTime,
                                 minute,
                                 &error) != NITF_SUCCESS)
     {
@@ -204,7 +241,8 @@ void nitf::DateTime::setMinute(int minute)
 }
 void nitf::DateTime::setSecond(double second)
 {
-    if (nitf_DateTime_setSecond(getNativeOrThrow(),
+    nitf_Error error;
+    if (nitf_DateTime_setSecond(mDateTime,
                                 second,
                                 &error) != NITF_SUCCESS)
     {
@@ -213,7 +251,8 @@ void nitf::DateTime::setSecond(double second)
 }
 void nitf::DateTime::setTimeInMillis(double timeInMillis)
 {
-    if (nitf_DateTime_setTimeInMillis(getNativeOrThrow(),
+    nitf_Error error;
+    if (nitf_DateTime_setTimeInMillis(mDateTime,
                                       timeInMillis,
                                       &error) != NITF_SUCCESS)
     {

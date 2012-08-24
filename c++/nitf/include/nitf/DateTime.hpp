@@ -25,7 +25,6 @@
 
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
-#include "nitf/Object.hpp"
 
 /*!
  *  \file DateTime.hpp
@@ -38,31 +37,73 @@ namespace nitf
 /*!
  *  \class DateTime
  *  \brief  The C++ wrapper for the nitf_DateTime object
+ *  Note that, unlike most of the C++ bindings, this is a deep copy
  */
-DECLARE_CLASS(DateTime)
+class DateTime
 {
 public:
+    //! Sets to current date/time
+    DateTime() throw(nitf::NITFException);
 
-    //! Copy constructor
-    DateTime(const DateTime & x);
-
-    //! Assignment Operator
-    DateTime & operator=(const DateTime & x);
-
-    //! Set native object
-    DateTime(nitf_DateTime * x);
+    //! Set native object - takes ownership
+    DateTime(nitf_DateTime* dateTime) throw(nitf::NITFException);
 
     DateTime(double timeInMillis) throw(nitf::NITFException);
 
     DateTime(const std::string& dateString,
-            const std::string& dateFormat) throw(nitf::NITFException);
-
-    DateTime() throw(nitf::NITFException);
+             const std::string& dateFormat) throw(nitf::NITFException);
 
     ~DateTime();
 
+    //! Copy constructor
+    DateTime(const DateTime& rhs);
+
+    //! Assignment Operator
+    DateTime & operator=(const DateTime& rhs);
+
+    bool operator<(const DateTime& rhs) const
+    {
+        return (mDateTime->timeInMillis < rhs.mDateTime->timeInMillis);
+    }
+
+    bool operator<=(const DateTime& rhs) const
+    {
+        return (mDateTime->timeInMillis <= rhs.mDateTime->timeInMillis);
+    }
+
+    bool operator>(const DateTime& rhs) const
+    {
+        return (mDateTime->timeInMillis > rhs.mDateTime->timeInMillis);
+    }
+
+    bool operator>=(const DateTime& rhs) const
+    {
+        return (mDateTime->timeInMillis >= rhs.mDateTime->timeInMillis);
+    }
+
+    bool operator==(const DateTime& rhs) const
+    {
+        return (mDateTime->timeInMillis == rhs.mDateTime->timeInMillis);
+    }
+
+    bool operator!=(const DateTime& rhs) const
+    {
+        return (mDateTime->timeInMillis != rhs.mDateTime->timeInMillis);
+    }
+
+    nitf_DateTime* getNative()
+    {
+        return mDateTime;
+    }
+
+    const nitf_DateTime* getNative() const
+    {
+        return mDateTime;
+    }
+
     void format(const std::string& format,
-            char* outBuf, size_t maxSize) const throw(nitf::NITFException);
+                char* outBuf,
+                size_t maxSize) const throw(nitf::NITFException);
 
     void format(const std::string& format,
                 std::string &str) const throw(nitf::NITFException);
@@ -80,18 +121,18 @@ public:
     double getSecond() const;
     double getTimeInMillis() const;
 
-    void setYear(int);
-    void setMonth(int);
-    void setDayOfMonth(int);
-    void setDayOfWeek(int);
-    void setDayOfYear(int);
-    void setHour(int);
-    void setMinute(int);
-    void setSecond(double);
-    void setTimeInMillis(double);
+    void setYear(int year);
+    void setMonth(int month);
+    void setDayOfMonth(int dayOfMonth);
+    void setDayOfWeek(int dayOfWeek);
+    void setDayOfYear(int dayOfYear);
+    void setHour(int hour);
+    void setMinute(int minute);
+    void setSecond(double second);
+    void setTimeInMillis(double timeInMillis);
 
 private:
-    nitf_Error error;
+    nitf_DateTime* mDateTime;
 };
 
 }
