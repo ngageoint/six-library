@@ -1801,8 +1801,7 @@ int main(int argc, char** argv)
         std::string outputName(argv[1]);
 
         //  Get a NITF or GeoTIFF writer
-        const std::auto_ptr<six::WriteControl>
-            writer(getWriteControl(outputName));
+        std::auto_ptr<six::WriteControl> writer(getWriteControl(outputName));
 
         // Is the SIO in big-endian?
         bool needsByteSwap;
