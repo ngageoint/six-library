@@ -100,6 +100,10 @@ public:
 
 struct RowSourceCallback
 {
+    virtual ~RowSourceCallback()
+    {
+    }
+
     virtual void nextRow(nitf::Uint32 band, char* buf) throw (nitf::NITFException) = 0;
 };
 
