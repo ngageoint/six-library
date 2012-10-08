@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project basedir="." default="build">
+
+    <target name="init">
+        <loadproperties srcFile="project.properties"/>
+    
+        <property name="target" location="target/${projectName}-${nitro.version}.jar" />
+        <dirname property="target-dir" file="${target}" />
+        <basename property="target-name" file="${target}" />
+        <property name="object-dir" location="${target-dir}/classes"/>
+        <property name="lib-dir" location="lib"/>
+        
+        <mkdir dir="${object-dir}"/>
+        <mkdir dir="${target-dir}"/>
+        
+        <property name="nitf.jar.path" value="../../modules/java/nitf/target/nitf-java.jar" />
+        <basename property="nitf.jar.name" file="${nitf.jar.path}" />
+        
+        <path id="build-classpath">
+            <fileset dir="${lib-dir}">
+                <include name="*.jar"/>
+            </fileset>
+            <pathelement path="${nitf.jar.path}" />
+        </path>
+
+    </target>
+    
+    <target name="clean" depends="init">
+        <echo>"====================================================="</echo>
+        <echo>"                        CLEAN                        "</echo>
+        <echo>"====================================================="</echo>
+        <delete dir="${object-dir}"/>
+        <delete dir="${target-dir}"/>
+    </target>
+
+
+    <target name="compile" depends="init">
+        <echo>"====================================================="</echo>
+        <echo>"                       COMPILE                       "</echo>
+        <echo>"====================================================="</echo>
+        <javac srcdir="${src.dir}" destdir="${object-dir}" failonerror="yes" fork="true">
+            <classpath refid="build-classpath"/>
+        </javac>
+    </target>
+
+    
+    <target name="build" depends="compile">
+        <echo>"====================================================="</echo>
+        <echo>"                        BUILD                        "</echo>
+        <echo>"====================================================="</echo>
+        <!--jar basedir="${object-dir}" destfile="${target-dir}/${projectName}-${version}.jar"/-->
+        
+        <jar basedir="${object-dir}" destfile="${target-dir}/${target-name}"/>
+    </target>
+    
+
+    <target name="javadoc" depends="init">
+        <echo>"====================================================="</echo>
+        <echo>"                       JAVADOC                       "</echo>
+        <echo>"====================================================="</echo>
+        <!--get the current timestamp-->
+        <tstamp>
+            <format property="touch.time" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+        </tstamp>
+
+        <javadoc packagenames="nitf.*"
+            sourcepath="${src.dir}"
+            defaultexcludes="yes"
+            destdir="${javadoc.dir}"
+            author="true"
+            version="true"
+            use="true"
+            windowtitle="NITRO ${version} API">
+            <bottom>
+                <![CDATA[
+                <i>Copyright &#169; 2004-2012 General Dynamics All Rights Reserved.</i>
+                <div style=\"float:left;\"><a href=\"http://sourceforge.net/\" target=\"_blank\"><img style=\"width: 151px; height: 38px;\" src=\"http://web.sourceforge.com/images/footer/source.gif\" alt=\"SourceForge.net\" border=\"0\" height=\"38\" width=\"151\"></a></div>
+                <script type=\"text/javascript\">
+                    var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");
+                    document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));
+
+                    </script>
+                    <script type=\"text/javascript\">
+                    var pageTracker = _gat._getTracker(\"UA-3779761-1\");
+                    pageTracker._initData();
+                    pageTracker._trackPageview();
+                </script>
+                ]]>
+            </bottom>
+            <footer><![CDATA[<b>Created: ${touch.time}</b>]]></footer>
+            <tag name="todo" scope="all" description="To do:"/>
+        </javadoc>
+    </target>
+
+</project>
