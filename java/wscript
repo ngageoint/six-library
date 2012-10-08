@@ -3,13 +3,13 @@ from waflib import Options, Build
 from waflib.Errors import ConfigurationError
 
 def options(opt):
-    opt.recurse('nitf cgm')
+    opt.recurse('nitf cgm nitf.imageio nitf.imagej')
 
 def configure(conf):
-    conf.recurse('nitf cgm')
+    conf.recurse('nitf cgm nitf.imageio nitf.imagej')
 
 def build(bld):
-    bld.recurse('nitf cgm')
+    bld.recurse('nitf cgm nitf.imageio nitf.imagej')
 
 def distclean(context):
     pass
