@@ -69,7 +69,7 @@
             windowtitle="NITRO ${version} API">
             <bottom>
                 <![CDATA[
-                <i>Copyright &#169; 2004-2008 General Dynamics All Rights Reserved.</i>
+                <i>Copyright &#169; 2004-2012 General Dynamics All Rights Reserved.</i>
                 <div style=\"float:left;\"><a href=\"http://sourceforge.net/\" target=\"_blank\"><img style=\"width: 151px; height: 38px;\" src=\"http://web.sourceforge.com/images/footer/source.gif\" alt=\"SourceForge.net\" border=\"0\" height=\"38\" width=\"151\"></a></div>
                 <script type=\"text/javascript\">
                     var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");

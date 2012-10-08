@@ -1,4 +1,10 @@
-configure = options = distclean = lambda x: None
+from waflib import Options
+
+options = distclean = lambda x: None
+
+def configure(conf):
+    Options.options.force_jni = True
+    Options.options.force_ant = True
 
 def build(bld):
     variant = bld.env['VARIANT']

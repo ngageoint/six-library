@@ -1,4 +1,10 @@
-configure = options = distclean = lambda x: None
+from waflib import Options
+
+options = distclean = lambda x: None
+
+def configure(conf):
+    Options.options.force_jni = True
+    Options.options.force_ant = True
 
 def build(bld):
     variant = bld.env['VARIANT']
@@ -7,5 +13,14 @@ def build(bld):
     if bld.is_defined('HAVE_JNI_H'):
         lib = bld(features='c cshlib', includes='src/jni/include',
                                target='cgm.jni-c', env=env.derive(),
-                               uselib='JAVA', use='cgm-c'.split())
+                               uselib='JAVA', use='cgm-c',
+                               install_path='${PREFIX}/lib')
         lib.source = bld.path.ant_glob('src/jni/source/*.c*')
+    
+        if env['ANT']:
+            nitfjava = bld.get_tgen_by_name('nitf-java')
+            bld(features='ant add_targets',
+                        source='build.xml', target='cgm-java.jar', targets_to_add=['nitf-java','cgm.jni-c'],
+                        defines='nitf.jar.path=' + nitfjava.path.find_or_declare(nitfjava.target).abspath(),
+                        after='nitf-java',
+                        always=True, install_path='${PREFIX}/lib', name='cgm-java')
