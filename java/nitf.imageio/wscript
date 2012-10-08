@@ -1,0 +1,19 @@
+from waflib import Options
+
+options = distclean = lambda x: None
+
+def configure(conf):
+    Options.options.force_jni = True
+    Options.options.force_ant = True
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.all_envs[variant]
+    
+    if env['ANT']:
+        nitfjava = bld.get_tgen_by_name('nitf-java')
+        bld(features='ant add_targets',
+                    source='build.xml', target='nitf.imageio-java.jar', targets_to_add=['nitf-java'],
+                    defines='nitf.jar.path=' + nitfjava.path.find_or_declare(nitfjava.target).abspath(),
+                    after='nitf-java',
+                    always=True, install_path='${PREFIX}/lib', name='nitf.imageio-java')
