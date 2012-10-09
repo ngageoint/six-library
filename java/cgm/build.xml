@@ -8,7 +8,7 @@
         <dirname property="target-dir" file="${target}" />
         <basename property="target-name" file="${target}" />
         <property name="object-dir" location="${target-dir}/classes"/>
-        <property name="lib-dir" location="lib"/>
+        <property name="lib-dir" location="../libs"/>
         
         <mkdir dir="${object-dir}"/>
         <mkdir dir="${target-dir}"/>

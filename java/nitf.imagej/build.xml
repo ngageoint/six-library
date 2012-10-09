@@ -8,7 +8,8 @@
         <dirname property="target-dir" file="${target}" />
         <basename property="target-name" file="${target}" />
         <property name="object-dir" location="${target-dir}/classes"/>
-        <property name="lib-dir" location="lib"/>
+        <property name="lib-dir" location="../libs"/>
+        <property name="local-lib-dir" location="lib"/>
         
         <mkdir dir="${object-dir}"/>
         <mkdir dir="${target-dir}"/>
@@ -20,6 +21,9 @@
         
         <path id="build-classpath">
             <fileset dir="${lib-dir}">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${local-lib-dir}">
                 <include name="*.jar"/>
             </fileset>
             <pathelement path="${nitf.jar.path}" />

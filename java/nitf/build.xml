@@ -9,9 +9,25 @@
         <basename property="target-name" file="${target}" />
         
         <property name="object-dir" value="${target-dir}/classes" />
+        <property name="test-object-dir" value="${target-dir}/test-classes" />
+        <property name="lib-dir" location="../libs"/>
 
         <mkdir dir="${object-dir}"/>
+        <mkdir dir="${test-object-dir}"/>
         <mkdir dir="${target-dir}"/>
+
+        <path id="test-classpath">
+            <fileset dir="${lib-dir}">
+                 <include name="*.jar"/>
+            </fileset>
+            <pathelement path="${object-dir}"/>
+        </path>
+
+        <path id="build-classpath">
+            <fileset dir="${lib-dir}">
+                <include name="*.jar"/>
+            </fileset>  
+        </path>
     </target>
 
 
@@ -29,11 +45,18 @@
         <echo>"                       COMPILE                       "</echo>
         <echo>"====================================================="</echo>
         <javac srcdir="${src.dir}" destdir="${object-dir}" classpath="lib/*"
-            failonerror="yes" fork="true"/>
+            failonerror="yes" fork="true">
+            <classpath refid="build-classpath"/>
+        </javac>
     </target>
 
+    <target name="build-tests" depends="build">
+        <javac srcdir="${test.dir}" destdir="${test-object-dir}" failonerror="yes" fork="true">
+            <classpath refid="test-classpath"/>
+        </javac>
+    </target>
 
-    <target name="tests" depends="build">
+    <target name="tests" depends="build-tests">
         <echo>"====================================================="</echo>
         <echo>"                        TESTS                        "</echo>
         <echo>"====================================================="</echo>
@@ -48,6 +71,25 @@
         <echo>"                        BUILD                        "</echo>
         <echo>"====================================================="</echo>
         <jar basedir="${object-dir}" destfile="${target-dir}/${target-name}"/>
+    </target>
+
+    <target name="test" depends="build-tests">
+        <echo>"====================================================="</echo>
+        <echo>"                        TEST                         "</echo>
+        <echo>"====================================================="</echo>
+        <junit haltonfailure="yes" printsummary="yes" showoutput="true">
+            <classpath refid="test-classpath"/>
+            <classpath>
+                <pathelement path="${test-object-dir}"/>
+            </classpath>
+            <test name="nitf.IOTest"/>
+            <!--batchtest fork="yes" todir="target/test">
+                <fileset dir="${test.dir}">
+                    <include name="**/*Test*.java"/>
+                    <exclude name="**/AllTests.java"/>
+                </fileset>
+            </batchtest-->
+        </junit>
     </target>
     
     <target name="javadoc" depends="init">
