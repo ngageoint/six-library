@@ -26,8 +26,16 @@ def configure(conf):
 
 def build(bld):
     bld.recurse(DIRS)
+	
+    bld(features='install_tgt', install_path='${PREFIX}/installer', dir=bld.path.make_node('utils/installer'), name='installer_resources',
+        files=['NITRO.bmp','NITRO.ico','NITRO_small.bmp'])
+	
+    dct = {'INSTALL':bld.env['PREFIX'], 'VERSION':bld.env['VERSION'], 'PLATFORM':bld.env['PLATFORM']}
+    bld(features='subst', dct=dct, source='utils/installer/nitro_installer.iss.in', targets_to_add=['installer_resources'],
+        target=bld.path.find_or_declare('installer/nitro_installer.iss'), install_path='${PREFIX}/installer', name='installer')
+	
     bld.add_post_fun(waf_unit_test.summary)
-
+	
 def distclean(context):
     context.recurse(DIRS)
     Scripting.distclean(context)
