@@ -75,7 +75,7 @@ Source: "..\..\python\nitf\source\*.py"; DestDir: "{app}\share\python\nitf"; Fla
 ;Source: "..\..\target\python\nitf\*.pyd"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: python;
 Source: "..\..\python\nitf\samples\*.py"; DestDir: "{app}\share\nitf\samples\python"; Flags: ignoreversion skipifsourcedoesntexist; Components: samples\python;
 ;Source: "..\..\python\nitf\dist\nitro-python-2.7-dev.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
-;Source: "..\..\java\nitf\target\site\apidocs\*"; DestDir: "{app}\share\nitf\doc\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;
+Source: "..\..\java\nitf\apidocs\*"; DestDir: "{app}\share\nitf\doc\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;
 Source: "..\..\c\nitf\doc\html\*"; DestDir: "{app}\share\nitf\doc\api\c"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\c;
 Source: "..\..\c++\doc\html\*"; DestDir: "{app}\share\nitf\doc\api\c++"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\cpp;
 ;Source: "..\..\python\nitf\src\python\nitf.html"; DestDir: "{app}\share\doc\nitf\api\python"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\cpp;
