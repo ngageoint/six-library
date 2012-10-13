@@ -206,7 +206,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_N, 11, "Lat of Patch Corner, lower right", "CG_PATCH_LTCORLR" },
     {NITF_BCS_N, 12, "Lon of Patch Corner, lower right", "CG_PATCH_LGCORLR" },
     {NITF_BCS_N, 11, "Lat of Patch Corner, lower left", "CG_PATCH_LTCORLL" },
-    {NITF_BCS_N, 12, "Lon of Patch Corner, lower left", "CG_PATH_LNGCOLL" },
+    {NITF_BCS_N, 12, "Lon of Patch Corner, lower left", "CG_PATCH_LNGCOLL" },
     {NITF_BCS_N, 9, "Latitude 95% Confidence", "CG_PATCH_LAT_CONFIDENCE" },
     {NITF_BCS_N, 9, "Longitude 95% Confidence", "CG_PATCH_LONG_CONFIDENCE" },
     {NITF_ENDIF, 0, NULL, NULL},
