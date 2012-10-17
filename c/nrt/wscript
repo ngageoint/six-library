@@ -6,15 +6,11 @@ MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net
 VERSION         = '2.6-dev'
 MODULE_DEPS     = ''
 LANG            = 'c'
-USELIB          = 'THREAD DL RT MATH nrt-c'
+USELIB          = 'THREAD DL RT MATH'
 DEFINES         = 'NRT_MODULE_EXPORTS'
 
 
-options = distclean = lambda p: None
-
-def configure(conf):
-    conf.env.append_value('CFLAGS_nrt-c', '-DNRT_MODULE_EXPORTS')
-    conf.env.append_value('CXXFLAGS_nrt-c', '-DNRT_MODULE_EXPORTS')
+configure = options = distclean = lambda p: None
 
 def build(bld):
     env = bld.module(**globals())

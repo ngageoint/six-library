@@ -7,7 +7,6 @@ MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net
 VERSION         = '2.7-dev'
 MODULE_DEPS     = 'nrt'
 LANG            = 'c'
-USELIB          = 'THREAD DL MATH nitf-c'
 DEFINES         = 'NITF_MODULE_EXPORTS'
 TEST_FILTER     = lambda x: x not in ['test_1band_rw_line.c', 'test_fileIO.c',
                                       'test_hash_table_2.c', 'test_writer_s.c',
@@ -19,11 +18,7 @@ TEST_FILTER     = lambda x: x not in ['test_1band_rw_line.c', 'test_fileIO.c',
                                       'test_ImageIO_writePattern.c', 'test_static_plugin.c']
 
 
-options = distclean = lambda p: None
-
-def configure(conf):
-    conf.env.append_value('CFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
-    conf.env.append_value('CXXFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
+configure = options = distclean = lambda p: None
 
 def build(bld):
     env = bld.module(**globals())
