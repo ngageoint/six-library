@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 
     for(cmpIt = 0; cmpIt < nComponents; ++cmpIt)
     {
+        j2k_Component* c = j2k_Container_getComponent(container, cmpIt, &error);
         printf("===component %d===\n", (cmpIt + 1));
-        j2k_Component *c = j2k_Container_getComponent(container, cmpIt, &error);
         printf("width:\t\t%d\n", j2k_Component_getWidth(c, &error));
         printf("height:\t\t%d\n", j2k_Component_getHeight(c, &error));
         printf("precision:\t%d\n", j2k_Component_getPrecision(c, &error));
