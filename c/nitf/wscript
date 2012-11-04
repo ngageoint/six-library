@@ -60,11 +60,16 @@ def build(bld):
     if env['CFLAGS_j2k-c']:
         for f in ['J2KDecompress.c', 'J2KCompress.c']:
             pluginName = splitext(f)[0]
-            bld(features='c cshlib no_implib', source=f,
-                             target=pluginName,
-                             use='nitf-c j2k-c nrt-c',
-                             path=pluginNode, env=pEnv.derive(),
-                             install_path='${PREFIX}/share/nitf/plugins')
+            bld(features='c', source=f,
+                target='%s_obj' % pluginName,
+                includes=['../include', '../../nrt/include', '../../j2k/include'],
+                defines = ['HAVE_J2K_H', 'J2K_MODULE_EXPORTS'],
+                path=pluginNode, env=env.derive())
+            bld(features='c cshlib no_implib', use=uselib_local + ['j2k-c', '%s_obj' % pluginName],
+                target=pluginName,
+                path=pluginNode, env=pEnv.derive(),
+                install_path='${PREFIX}/share/nitf/plugins')
+
             pluginList.append(pluginName)
     
     #build apps
