@@ -79,6 +79,15 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
                            NRT_ERR_READING_FROM_FILE);
             return NRT_FAILURE;
         }
+        else if (bytesThisRead == 0)
+        {
+            // CreateFile does not fail when finding the EOF --
+            // instead it reports 0 bytes read, so this stops a inifinite loop
+            // from Unexpected EOF
+            nrt_Error_init(error, "Unexpected end of file", NRT_CTXT,
+                           NRT_ERR_READING_FROM_FILE);
+            return NRT_FAILURE;
+        }
 
         bytesRead += bytesThisRead;
         bytesRemaining -= bytesThisRead;
