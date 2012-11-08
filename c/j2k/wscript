@@ -14,9 +14,10 @@ def configure(conf):
         return
     
     j2klib = Options.options.j2klib
-    
-    # TODO: Why is this restriction present?  If this is removed, everything
-    #       successfully compiles.
+
+    # NOTE: JasPer will compile in 64-bit mode, but it internally uses
+    #       32-bit integers for some offsets.  To prevent confusion/badness,
+    #       just don't allow it for a 64-bit build.
     if conf.env['IS64BIT'] and j2klib == 'jasper':
         conf.msg('JPEG2000 library', 'jasper not available on 64-bit architectures', color='YELLOW')
         j2klib = None
