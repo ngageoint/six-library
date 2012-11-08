@@ -12,7 +12,7 @@ def options(opt):
                            MODULES.split()))
 
 def configure(conf):
-    conf.env.append_value('CPPPATH_UNITTEST', join(conf.path.abspath(), 'include'))
+    conf.env.append_value('INCLUDES_UNITTEST', join(conf.path.abspath(), 'include'))
     conf.recurse(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
                            MODULES.split()))
 
