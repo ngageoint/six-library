@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -21,6 +21,8 @@
  */
 #ifndef __SIX_DISPLAY_H__
 #define __SIX_DISPLAY_H__
+
+#include <import/mem.h>
 
 #include "six/Types.h"
 #include "six/Init.h"
@@ -46,14 +48,13 @@ struct Remap
         remapLUT(lut)
     {
     }
-
-    DisplayType displayType;
-    LUT* remapLUT; // MonoLUT or ColorLUT or NULL
     virtual ~Remap()
     {
-        if (remapLUT)
-            delete remapLUT;
     }
+
+    DisplayType displayType;
+    mem::ScopedCloneablePtr<LUT> remapLUT; // MonoLUT or ColorLUT or NULL
+
     virtual Remap* clone() const = 0;
 
 };
@@ -77,24 +78,17 @@ struct MonochromeDisplayRemap : public Remap
     {
         this->displayType = DisplayType::MONO;
     }
+    virtual ~MonochromeDisplayRemap()
+    {
+    }
+
     /*!
      *  Clone this object, and any sub-LUT
      *
      */
     virtual Remap* clone() const
     {
-        MonochromeDisplayRemap *r =
-                new MonochromeDisplayRemap(remapType,
-                                           remapLUT ? remapLUT->clone() : NULL);
-        r->remapParameters = remapParameters;
-        return r;
-    }
-    /*!
-     *  Destructor, relies on base class to delete any non-NULL LUT
-     *
-     */
-    virtual ~MonochromeDisplayRemap()
-    {
+        return new MonochromeDisplayRemap(*this);
     }
 
     //!  The remap type
@@ -120,16 +114,15 @@ struct ColorDisplayRemap : public Remap
     {
         this->displayType = DisplayType::COLOR;
     }
-    //!  Clone the remap
-    virtual Remap* clone() const
-    {
-        return new ColorDisplayRemap(remapLUT ? remapLUT->clone() : NULL);
-    }
-    //!  Destructor, relies on base to delete any non-NULL LUT
     virtual ~ColorDisplayRemap()
     {
     }
 
+    //!  Clone the remap
+    virtual Remap* clone() const
+    {
+        return new ColorDisplayRemap(*this);
+    }
 };
 
 /*!
@@ -200,8 +193,9 @@ struct DRAHistogramOverrides
 struct Display
 {
     Display();
-
-    ~Display();
+    virtual ~Display()
+    {
+    }
 
     /*!
      *  Contract requires Display to clone itself properly, irrespective
@@ -219,7 +213,7 @@ struct Display
      *  (Optional) Information regarding the encoding of the pixel data.
      *  Used for 8-bit pixel types.
      */
-    Remap* remapInformation;
+    mem::ScopedCloneablePtr<Remap> remapInformation;
 
     /*!
      *  Recommended ELT magnification method for this data.
@@ -231,9 +225,10 @@ struct Display
      */
     DecimationMethod decimationMethod;
 
-    DRAHistogramOverrides* histogramOverrides;
+    mem::ScopedCloneablePtr<DRAHistogramOverrides> histogramOverrides;
 
-    MonitorCompensationApplied* monitorCompensationApplied;
+    mem::ScopedCloneablePtr<MonitorCompensationApplied> 
+            monitorCompensationApplied;
 
     std::vector<Parameter> displayExtensions;
 };

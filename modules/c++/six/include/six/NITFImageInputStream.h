@@ -26,6 +26,8 @@
 #include <import/nitf.hpp>
 #include <import/io.h>
 
+#include <mem/ScopedArray.h>
+
 namespace six
 {
 
@@ -51,7 +53,7 @@ public:
             nitf::ImageReader imageReader);
 
     //!  Destructor
-    virtual ~NITFImageInputStream();
+    virtual ~NITFImageInputStream() {}
 
     //!  How many bytes in the image
     sys::Off_T available();
@@ -67,9 +69,9 @@ protected:
     nitf::ImageReader mReader;
     sys::Off_T mAvailable;
     sys::Size_T mRowBufferRemaining, mRowSize, mRowOffset;
-    sys::byte *mRowBuffer;
+    mem::ScopedArray<sys::ubyte> mRowBuffer;
     nitf::SubWindow mWindow;
-    nitf::Uint32 * mBandList;
+    mem::ScopedArray<nitf::Uint32> mBandList;
 };
 
 }

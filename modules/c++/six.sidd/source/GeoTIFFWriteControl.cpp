@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -62,18 +62,16 @@ void GeoTIFFWriteControl::initialize(Container* container)
                     * (sys::Uint64_T) data->getNumCols();
 
             if (length > Constants::GT_SIZE_MAX)
-                throw except::Exception(
-                                        Ctxt(
-                                             "Data segments are too large to be stored in GeoTIFF format"));
+                throw except::Exception(Ctxt(
+                        "Data segments are too large to be stored in " \
+                        "GeoTIFF format"));
 
             mDerivedData.push_back(data);
         }
         else
-            throw except::Exception(
-                                    Ctxt(
-                                         FmtX(
-                                              "Data element at position [%d] in container is undefined",
-                                              ii)));
+            throw except::Exception(Ctxt(FmtX(
+                    "Data element at position [%d] in container is undefined",
+                    ii)));
     }
 
 }
@@ -84,11 +82,9 @@ void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile)
 
     tiffWriter.writeHeader();
     if (sources.size() != mDerivedData.size())
-        throw except::Exception(
-                                Ctxt(
-                                     FmtX(
-                                          "Meta-data count [%d] does not match source list [%d]",
-                                          mDerivedData.size(), sources.size())));
+        throw except::Exception(Ctxt(FmtX(
+                "Meta-data count [%d] does not match source list [%d]",
+                mDerivedData.size(), sources.size())));
 
     std::vector<unsigned char> buf;
     for (size_t ii = 0; ii < sources.size(); ++ii)
@@ -137,10 +133,9 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
 
     for (unsigned int j = 0; j < numBands; ++j)
     {
-        bitsPerSample->addValue(
-                                tiff::TypeFactory::create(
-                                                          (unsigned char*) &bitDepth,
-                                                          tiff::Const::Type::SHORT));
+        bitsPerSample->addValue(tiff::TypeFactory::create(
+                (unsigned char*) &bitDepth,
+                tiff::Const::Type::SHORT));
     }
 
     unsigned short photoInterp(1);
@@ -156,10 +151,9 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
             for (unsigned int i = 0; i < lut.numEntries; ++i)
             {
                 unsigned short lutij = lut[i][j];
-                lutEntry->addValue(
-                                   tiff::TypeFactory::create(
-                                                             (unsigned char*) &lutij,
-                                                             tiff::Const::Type::SHORT));
+                lutEntry->addValue(tiff::TypeFactory::create(
+                        (unsigned char*) &lutij,
+                        tiff::Const::Type::SHORT));
             }
         }
 
@@ -200,7 +194,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
                   (unsigned short) tiff::Const::CompressionType::NO_COMPRESSION);
 
     // Only GGD pixel space is supported
-    if (!data->measurement || !data->measurement->projection)
+    if (!data->measurement.get() || !data->measurement->projection.get())
     {
         throw except::Exception(Ctxt("Projection field must be initialized"));
     }
@@ -215,7 +209,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
     const GeographicProjection& projection =
         *reinterpret_cast<GeographicProjection *>(
-            data->measurement->projection);
+            data->measurement->projection.get());
 
     addGeoTIFFKeys(projection,
                    data->getNumRows(),
@@ -245,11 +239,9 @@ void GeoTIFFWriteControl::save(BufferList& sources, const std::string& toFile)
 
     tiffWriter.writeHeader();
     if (sources.size() != mDerivedData.size())
-        throw except::Exception(
-                                Ctxt(
-                                     FmtX(
-                                          "Meta-data count [%d] does not match source list [%d]",
-                                          mDerivedData.size(), sources.size())));
+        throw except::Exception(Ctxt(FmtX(
+                "Meta-data count [%d] does not match source list [%d]",
+                mDerivedData.size(), sources.size())));
 
     for (size_t ii = 0; ii < sources.size(); ++ii)
     {

@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -73,10 +73,8 @@ public:
      *  This could be a point if one, a line if 2, or a polygon if > 2
      *  In other words, this simultaneously represents SICD's 
      *  GeoInfo/Point, GeoInfo/Line, and GeoInfo/Polygon
-     *
      */
     std::vector<LatLon> geometryLatLon;
-    std::vector<int> geometryLatLonIdx;
 };
 
 /*!
@@ -125,7 +123,6 @@ public:
      *  is the number of vertices.
      */
     std::vector<LatLon> validData;
-    std::vector<int> validDataIdx;
 
     /*!
      *  (Optional) Parameters that describe geographic features.

@@ -23,6 +23,7 @@
 #define __SIX_TYPES_H__
 
 #include <import/except.h>
+#include <import/mem.h>
 #include <import/str.h>
 #include <import/sys.h>
 #include <import/math/linear.h>
@@ -133,8 +134,8 @@ template<typename T> struct RangeAzimuth
 
 
 // These are heavily used and we don't want any mistakes
-typedef scene::RowCol<double> RowColDouble;
-typedef scene::RowCol<long> RowColInt;
+typedef types::RowCol<double> RowColDouble;
+typedef types::RowCol<long> RowColInt;
 
 /*!
  *  \struct DecorrType
@@ -161,12 +162,12 @@ struct DecorrType
  *  2-D polynomial pair
  */
 
-typedef scene::RowCol<Poly2D> RowColPoly2D;
+typedef types::RowCol<Poly2D> RowColPoly2D;
 
 /*!
  *  2-D lat-lon sample spacing (Required for SIDD 0.1.1)
  */
-typedef scene::RowCol<LatLon> RowColLatLon;
+typedef types::RowCol<LatLon> RowColLatLon;
 
 /*!
  *  \struct Constants
@@ -292,7 +293,7 @@ struct SCP
  */
 struct LUT
 {
-    unsigned char* table;
+    mem::ScopedArray<unsigned char> table;
     unsigned int numEntries;
     unsigned int elementSize;
 
@@ -301,7 +302,7 @@ struct LUT
     {
         numEntries = entries;
         elementSize = outputSpace;
-        table = new unsigned char[numEntries * outputSpace];
+        table.reset(new unsigned char[numEntries * outputSpace]);
     }
 
     //!  Initialize with an existing LUT, which we clone
@@ -309,26 +310,16 @@ struct LUT
     {
         numEntries = entries;
         elementSize = outputSpace;
-        table = new unsigned char[numEntries * outputSpace];
-        memcpy(table, interleavedLUT, numEntries * outputSpace);
+        table.reset(new unsigned char[numEntries * outputSpace]);
+        memcpy(table.get(), interleavedLUT, numEntries * outputSpace);
     }
-    //!  Destroys the LUT table
-    virtual ~LUT()
-    {
-        if (table)
-        {
-            delete[] table;
-        }
-    }
+
+    virtual ~LUT() {}
+
     //!  Clone the LUT table
     virtual LUT* clone()
     {
-        LUT* lut = new LUT(numEntries, elementSize);
-        for (unsigned int i = 0; i < numEntries * elementSize; ++i)
-        {
-            lut->table[i] = table[i];
-        }
-        return lut;
+        return new LUT(table.get(), numEntries, elementSize);
     }
 
     //!  Gives back a pointer at table[i * elementSize]
@@ -356,22 +347,9 @@ struct AmplitudeTable : public LUT
         LUT(256, sizeof(double))
     {
     }
-
-    //!  Destructor.  Relies on base class for LUT deletion
-    virtual ~AmplitudeTable()
-    {
-    }
-    //!  Clone (again)
-    LUT* clone()
-    {
-        AmplitudeTable* lut = new AmplitudeTable();
-        for (unsigned int i = 0; i < numEntries * elementSize; ++i)
-        {
-            lut->table[i] = table[i];
-        }
-        return lut;
-
-    }
+    
+    virtual ~AmplitudeTable() {}
+    
 };
 
 /*!

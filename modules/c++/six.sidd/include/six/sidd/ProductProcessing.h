@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -57,13 +57,10 @@ struct ProcessingModule
      *  algorithm
      *
      */
-    std::vector<ProcessingModule*> processingModules;
+    std::vector<mem::ScopedCloneablePtr<ProcessingModule> > processingModules;
 
     //!  Clone
     ProcessingModule* clone() const;
-
-    //!  Destructor
-    ~ProcessingModule();
 };
 
 /*!
@@ -75,19 +72,11 @@ struct ProcessingModule
  */
 struct ProductProcessing
 {
-    //!  Constructor.  Creates the mandatory processing module
-    ProductProcessing()
-    {
-	processingModules.push_back(new ProcessingModule());
-    }
-    //!  Destructor
-    ~ProductProcessing();
-
     //!  Clone
     ProductProcessing* clone() const;
 
     //!  Contains only a set of ProcessingModule components
-    std::vector<ProcessingModule*> processingModules;
+    std::vector<mem::ScopedCloneablePtr<ProcessingModule> > processingModules;
 };
 
 }

@@ -78,6 +78,6 @@ ErrorStatistics* ErrorStatistics::clone() const
 
 void ErrorStatistics::initialize(SCPType type)
 {
-    scpType = scpType;
+    this->scpType = type;
 }
 

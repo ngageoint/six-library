@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -64,12 +64,8 @@ struct Projection
     ProjectionType projectionType;
     ReferencePoint referencePoint;
 
-    //!  Empty constructor
-    Projection() {}
-
-    //!  Empty
     virtual ~Projection() {}
-    
+
     //!  Pure
     virtual Projection* clone() const = 0;
 
@@ -100,8 +96,7 @@ struct PolynomialProjection : public Projection
      */
     virtual Projection* clone() const
     {
-        PolynomialProjection* c = new PolynomialProjection(*this);
-        return c;
+        return new PolynomialProjection(*this);
     }
 
 
@@ -116,7 +111,7 @@ struct PolynomialProjection : public Projection
 
     //! Find a row in the image associated with a lat-lon
     Poly2D latLonToRow;
-    
+
     //! Find a col in the image associated with a lat-lon
     Poly2D latLonToCol;
 
@@ -159,8 +154,7 @@ struct GeographicProjection : public MeasurableProjection
     //!  Define a clone operation
     virtual Projection* clone() const
     {
-        GeographicProjection* g = new GeographicProjection(*this);
-        return g;
+        return new GeographicProjection(*this);
     }
     virtual ~GeographicProjection() {}
 
@@ -192,8 +186,7 @@ struct CylindricalProjection : public MeasurableProjection
      */
     virtual Projection* clone() const
     {
-        CylindricalProjection* c = new CylindricalProjection(*this);
-        return c;
+        return new CylindricalProjection(*this);
     }
 
     Vector3 stripmapDirection;
@@ -228,8 +221,7 @@ struct PlaneProjection : public MeasurableProjection
     //!  Clone operation
     virtual Projection* clone() const
     {
-        PlaneProjection* p = new PlaneProjection(*this);
-        return p;
+        return new PlaneProjection(*this);
     }
 
     //!  Product plane definition (defined by a basis)
@@ -247,7 +239,7 @@ struct PlaneProjection : public MeasurableProjection
 struct Measurement
 {
     //!  PGD, GGD or CGD according to D&E
-    Projection* projection;
+    mem::ScopedCloneablePtr<Projection> projection;
 
     //!  Number of rows/cols in the SIDD product
     RowColInt pixelFootprint;
@@ -265,12 +257,6 @@ struct Measurement
     //!  Deep copy including projection
     Measurement* clone();
 
-    //!  Deletes projection if non-NULL
-    ~Measurement()
-    {
-        if (projection)
-            delete projection;
-    }
 };
 
 }

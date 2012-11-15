@@ -427,9 +427,9 @@ void NITFWriteControl::updateFileHeaderSecurity()
 {
     bool changed = false;
     std::string classOrder = "URCST";
-    int classIndex =
+    size_t foundLoc =
             classOrder.find(mRecord.getHeader().getClassification().toString());
-    classIndex = classIndex != std::string::npos ? classIndex : -1;
+    int classIndex = foundLoc != std::string::npos ? foundLoc : -1;
 
     nitf::FileSecurity highest = mRecord.getHeader().getSecurityGroup();
 
@@ -437,8 +437,8 @@ void NITFWriteControl::updateFileHeaderSecurity()
     {
         nitf::ImageSubheader subheader =
                 nitf::ImageSegment(mRecord.getImages()[i]).getSubheader();
-        int idx = classOrder.find(subheader.getImageSecurityClass().toString());
-        idx = idx != std::string::npos ? idx : -1;
+        foundLoc = classOrder.find(subheader.getImageSecurityClass().toString());
+        int idx = foundLoc != std::string::npos ? foundLoc : -1;
 
         if (idx > classIndex)
         {
@@ -452,8 +452,8 @@ void NITFWriteControl::updateFileHeaderSecurity()
     {
         nitf::DESubheader subheader =
                 nitf::DESegment(mRecord.getDataExtensions()[i]).getSubheader();
-        int idx = classOrder.find(subheader.getSecurityClass().toString());
-        idx = idx != std::string::npos ? idx : -1;
+        foundLoc = classOrder.find(subheader.getSecurityClass().toString());
+        int idx = foundLoc != std::string::npos ? foundLoc : -1;
 
         if (idx > classIndex)
         {

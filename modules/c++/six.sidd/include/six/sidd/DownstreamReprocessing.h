@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -96,10 +96,10 @@ struct DownstreamReprocessing
     /*!
      *  (Optional) chipping information
      */
-    GeometricChip* geometricChip;
-    
+    mem::ScopedCloneablePtr<GeometricChip> geometricChip;
+
     //!  (Optional, Unbounded) downstream processing events
-    std::vector<ProcessingEvent*> processingEvents;
+    std::vector<mem::ScopedCloneablePtr<ProcessingEvent> > processingEvents;
 
     //!  Constructor, initializes optional element to NULL
     DownstreamReprocessing() :
@@ -107,9 +107,6 @@ struct DownstreamReprocessing
     {
     }
 
-    //!  Destructor, deletes optional chip, events if not NULL
-    ~DownstreamReprocessing();
-    
     //!  Clone, including a chip if non-NULL or any events
     DownstreamReprocessing* clone() const;
 };

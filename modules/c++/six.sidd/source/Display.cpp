@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -25,36 +25,17 @@ using namespace six;
 using namespace six::sidd;
 
 Display::Display() :
-    remapInformation(NULL), histogramOverrides(NULL),
-            monitorCompensationApplied(NULL)
+    pixelType(PixelType::NOT_SET),
+    remapInformation(NULL), 
+    magnificationMethod(MagnificationMethod::NOT_SET),
+    decimationMethod(DecimationMethod::NOT_SET),
+    histogramOverrides(NULL),
+    monitorCompensationApplied(NULL)
 {
-    pixelType = PixelType::NOT_SET;
-    magnificationMethod = MagnificationMethod::NOT_SET;
-    decimationMethod = DecimationMethod::NOT_SET;
 }
 
 Display* Display::clone() const
 {
-    Display* d = new Display;
-    d->pixelType = pixelType;
-    if (remapInformation)
-        d->remapInformation = remapInformation->clone();
-    d->magnificationMethod = magnificationMethod;
-    d->decimationMethod = decimationMethod;
-    if (histogramOverrides)
-        d->histogramOverrides = histogramOverrides->clone();
-    if (monitorCompensationApplied)
-        d->monitorCompensationApplied = monitorCompensationApplied->clone();
-    d->displayExtensions = displayExtensions;
-    return d;
+    return new Display(*this);
 }
 
-Display::~Display()
-{
-    if (remapInformation)
-        delete remapInformation;
-    if (histogramOverrides)
-        delete histogramOverrides;
-    if (monitorCompensationApplied)
-        delete monitorCompensationApplied;
-}

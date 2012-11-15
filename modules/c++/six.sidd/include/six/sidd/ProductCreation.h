@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -38,6 +38,7 @@ struct ProcessorInformation
     std::string application;
     DateTime processingDateTime;
     std::string site;
+
     // Optional
     std::string profile;
     ProcessorInformation* clone() const;
@@ -62,7 +63,7 @@ public:
     ProductCreation* clone() const;
 
     //!  Details regarding processor
-    std::auto_ptr<ProcessorInformation> processorInformation;
+    mem::ScopedCloneablePtr<ProcessorInformation> processorInformation;
 
     //!  The overall classification of the product
     DerivedClassification classification;
@@ -84,11 +85,6 @@ public:
      *  profile-specific needs related to product creation
      */
     std::vector<Parameter> productCreationExtensions;
-
-private:
-    // Noncopyable
-    ProductCreation(const ProductCreation& );
-    const ProductCreation& operator=(const ProductCreation& );
 };
 }
 }

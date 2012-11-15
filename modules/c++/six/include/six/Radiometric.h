@@ -28,6 +28,38 @@
 
 namespace six
 {
+
+/*!
+ *  \struct NoiseLevel
+ *  \brief Noise Level Structure
+ *
+ *  Field and subfields added in 1.0.0
+ */
+struct NoiseLevel
+{
+    NoiseLevel();
+
+    /*!
+     *  Parameter to indicate that the noise
+     *  power polynomial yields either absolute
+     *  power level or power level relative to
+     *  the SCP pixel location.
+     *  Added in 1.0.0
+     */
+     std::string noiseType;
+
+    /*!
+     *  Polynomial coefficients that yield
+     *  thermal noise power (in dB) in a pixel
+     *  as a function of image row coordinate
+     *  (variable 1) and column coordinate
+     *
+     *  Moved in 1.0.0
+     */
+    Poly2D noisePoly;
+
+};
+
 /*!
  *  \struct Radiometric
  *  \brief Radiometric calibration parameters
@@ -38,20 +70,16 @@ namespace six
  */
 struct Radiometric
 {
+public:
+
+    static const char NL_ABSOLUTE[];
+    static const char NL_RELATIVE[];
+
     //!  Constructor
     Radiometric();
-    
-    //!  Destructor
-    ~Radiometric() {}
 
-    //!  Deep copy
-    Radiometric* clone() const;
-
-    /*!
-     *  Polynomial coefs that yield thermal noise power in a
-     *  in a pixel as a function of image row/col coords
-     */
-    Poly2D noisePoly;
+    //! Added in 1.0.0
+    NoiseLevel noiseLevel;
 
     /*!
      *  Polynomial coefficients that yield a scale factor to
@@ -75,6 +103,7 @@ struct Radiometric
     /*!
      *  Parameter indicating if local terrain elevation/incidence map was
      *  used to compute sigma zero coefs.
+     *  Removed in 1.0.0
      */
     AppliedType sigmaZeroSFIncidenceMap;
 
@@ -88,6 +117,7 @@ struct Radiometric
     /*!
      *  Parameter indicating if a local terrain elev/incid. map was
      *  used to compute gamma zero coefs
+     *  Removed in 1.0.0
      */
     AppliedType gammaZeroSFIncidenceMap;
 

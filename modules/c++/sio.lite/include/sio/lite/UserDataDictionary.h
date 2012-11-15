@@ -1,25 +1,3 @@
-/* =========================================================================
- * This file is part of sio.lite-c++
- * =========================================================================
- *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
- *
- * sio.lite-c++ is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
- * see <http://www.gnu.org/licenses/>.
- *
- */
-
 #ifndef __SIO_LITE_USER_DATA_DICTIONARY_H__
 #define __SIO_LITE_USER_DATA_DICTIONARY_H__
 
@@ -80,10 +58,12 @@ public:
     
     virtual size_t size() const { return mList.size(); } 
     
-    virtual void add(Key_T key, Value_T value)
+    virtual void add(Key_T key, const Value_T& value)
     {
         if (exists(key))
+        {
             remove(key);
+        }
         mMap[key] = value;
         mList.push_back(std::pair<Key_T, Value_T>(key, value));
     }

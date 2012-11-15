@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -24,6 +24,11 @@
 using namespace six;
 using namespace six::sicd;
 
+WeightType::WeightType() :
+    windowName(Init::undefined<std::string>())
+{
+}
+
 DirectionParameters::DirectionParameters() :
     unitVector(Init::undefined<Vector3>()),
     sampleSpacing(Init::undefined<double>()),
@@ -33,8 +38,7 @@ DirectionParameters::DirectionParameters() :
     kCenter(Init::undefined<double>()),
     deltaK1(Init::undefined<double>()),
     deltaK2(Init::undefined<double>()),
-    deltaKCOAPoly(Init::undefined<Poly2D>()),
-    weightType(Init::undefined<std::string>())
+    deltaKCOAPoly(Init::undefined<Poly2D>())
 {
 }
 

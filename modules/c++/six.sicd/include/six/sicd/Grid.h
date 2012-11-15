@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -22,6 +22,7 @@
 #ifndef __SIX_GRID_H__
 #define __SIX_GRID_H__
 
+#include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
 #include "six/Types.h"
 #include "six/Init.h"
@@ -31,6 +32,25 @@ namespace six
 {
 namespace sicd
 {
+struct WeightType
+{
+    WeightType();
+
+    /*!
+     *  Type of aperture weighting applied in the spatial
+     *  frequency domain to yield the impulse response in the r/c
+     *  direction.  Examples include UNIFORM, TAYLOR, HAMMING, UNKNOWN
+     */
+    std::string windowName;
+
+    /*! 
+     *  Optional free format field that can be used to pass forward the
+     *  weighting parameter information.
+     *  This is present in 1.0 (but not 0.4.1) and can be 0 to unbounded
+     */
+    std::vector<Parameter> parameters;
+};
+
 /*!
  *  \struct DirectionParameters
  *  \brief Struct for SICD Row/Col Parameters
@@ -76,12 +96,8 @@ struct DirectionParameters
      */
     Poly2D deltaKCOAPoly;
 
-    /*!
-     *  Optional type of aperture weighting applied in the spatial
-     *  frequency domain to yield the impulse response in the r/c
-     *  direction.  Examples incclude UNIFORM, TAYLOR, UNKNOWN
-     */
-    std::string weightType;
+    //!  Optional parameters describing the aperture weighting
+    mem::ScopedCopyablePtr<WeightType> weightType;
 
     /*!
      *  Sampled aperture amplitude weighting function applied

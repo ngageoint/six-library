@@ -11,7 +11,7 @@ double getCenterTime(const six::sidd::DerivedData* derived)
     {
         const six::sidd::MeasurableProjection* const projection =
             reinterpret_cast<const six::sidd::MeasurableProjection*>(
-                derived->measurement->projection);
+                derived->measurement->projection.get());
 
         centerTime = projection->timeCOAPoly(
                         projection->referencePoint.rowCol.row,
@@ -63,7 +63,7 @@ six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
     {
         const six::sidd::PolynomialProjection* projection =
             reinterpret_cast<const six::sidd::PolynomialProjection*>(
-                derived->measurement->projection);
+                derived->measurement->projection.get());
 
         double cR = projection->referencePoint.rowCol.row;
         double cC = projection->referencePoint.rowCol.col;
@@ -93,7 +93,7 @@ six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
     {
         const six::sidd::PlaneProjection* projection =
                 reinterpret_cast<const six::sidd::PlaneProjection*>(
-                    derived->measurement->projection);
+                    derived->measurement->projection.get());
 
         rowVec = new six::Vector3(projection->productPlane.rowUnitVector);
         colVec = new six::Vector3(projection->productPlane.colUnitVector);
@@ -118,7 +118,7 @@ six::sidd::Utilities::getGridGeometry(const DerivedData* derived)
     }
 
     six::sidd::MeasurableProjection* p =
-            (six::sidd::MeasurableProjection*)derived->measurement->projection;
+            (six::sidd::MeasurableProjection*)derived->measurement->projection.get();
 
     switch ((int) p->projectionType)
     {
@@ -249,13 +249,14 @@ void six::sidd::Utilities::setCollectionValues(Vector3 arpVel, Vector3 arpPos,
     scene::SceneGeometry sceneGeom(arpVel, arpPos, refPos);
     sceneGeom.setImageVectors(row, col);
 
-    if (collection->geometry == NULL)
+
+    if (collection->geometry.get() == NULL)
     {
-        collection->geometry = new Geometry();
+        collection->geometry.reset(new Geometry());
     }
-    if (collection->phenomenology == NULL)
+    if (collection->phenomenology.get() == NULL)
     {
-        collection->phenomenology = new Phenomenology();
+        collection->phenomenology.reset(new Phenomenology());
     }
 
     if (collection->geometry->slope == Init::undefined<double>())

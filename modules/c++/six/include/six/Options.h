@@ -52,7 +52,7 @@ public:
     Options()
     {
     }
-    ~Options()
+    virtual ~Options()
     {
     }
     /*!

@@ -1,7 +1,7 @@
 #ifndef __SCENE_GRID_GEOMETRY_H__
 #define __SCENE_GRID_GEOMETRY_H__
 
-#include "scene/Types.h"
+#include <types/RowCol.h>
 #include "scene/Utilities.h"
 #include "scene/LocalCoordinateTransform.h"
 #include <import/math/poly.h>
@@ -32,7 +32,7 @@ public:
 
     virtual Vector3 rowColToECEF(double row, double col) const = 0;
 
-    virtual RowCol<double> ecefToRowCol(const Vector3& p3) const
+    virtual types::RowCol<double> ecefToRowCol(const Vector3& p3) const
     {
         throw except::NotImplementedException(Ctxt("ecefToRowCol not implemented for this subclass"));
     }
@@ -109,7 +109,7 @@ public:
 
     virtual Vector3 rowColToECEF(double row, double col) const;
 
-    virtual RowCol<double> ecefToRowCol(const Vector3& p3) const;
+    virtual types::RowCol<double> ecefToRowCol(const Vector3& p3) const;
 
     /**
      *  Project a point from the geometric grid to the ground, using
@@ -191,7 +191,7 @@ public:
     //       via rowColToECEF() will then result in a different ECEF than p3.
     //       If p3 does lie on the GGD surface, round-tripping will result in
     //       the same ECEF.
-    virtual RowCol<double> ecefToRowCol(const Vector3& p3) const;
+    virtual types::RowCol<double> ecefToRowCol(const Vector3& p3) const;
 };
 }
 

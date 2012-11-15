@@ -196,9 +196,9 @@ void six::sidd::GeoTIFFReadControl::load(const std::string& fromFile)
 }
 
 six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
-                                                       int imIndex)
+                                                       size_t imIndex)
 {
-    if (mReader.getImageCount() <= imIndex || imIndex < 0)
+    if (mReader.getImageCount() <= imIndex)
         throw except::IndexOutOfRangeException(Ctxt(FmtX("Invalid index: %d",
                                                          imIndex)));
 

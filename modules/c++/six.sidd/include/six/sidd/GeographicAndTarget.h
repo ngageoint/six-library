@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -44,7 +44,7 @@ struct TargetInformation
     std::vector<Parameter> identifiers;
 
     //! SIDD Footprint: target footprint as defined by polygonal shape
-    std::vector<LatLonCorners> footprints;
+    LatLonCorners footprint;
 
     /*! 
      * (Optional) SIDD TargetInformationExtension
@@ -107,24 +107,17 @@ public:
     LatLonCorners footprint;
 
     //!  SIDD SubRegion info, mutually exclusive with geographicInformation
-    std::vector<GeographicCoverage*> subRegion;
+    std::vector<mem::ScopedCloneablePtr<GeographicCoverage> > subRegion;
 
     //!  SIDD: GeographicInfo, mutually exclusive with SubRegion
-    std::auto_ptr<GeographicInformation> geographicInformation;
+    mem::ScopedCloneablePtr<GeographicInformation> geographicInformation;
 
     //!  Constructor requires a RegionType to properly initialize
     GeographicCoverage(RegionType regionType);
 
-    //!  Destructor.  Deletes the information if non-NULL, and any sub-regions
-    ~GeographicCoverage();
-    
     //!  Carefully clones the sub-regions and geo information section
     GeographicCoverage* clone() const;
 
-private:
-    // Noncopyable
-    GeographicCoverage(const GeographicCoverage& );
-    const GeographicCoverage& operator=(const GeographicCoverage& );
 };
 
 /*!
@@ -139,10 +132,10 @@ class GeographicAndTarget
 {
 public:
     //!  SIDD GeographicCoverage: Provides geo coverage information
-    std::auto_ptr<GeographicCoverage> geographicCoverage;
+    mem::ScopedCloneablePtr<GeographicCoverage> geographicCoverage;
 
     //!  (Optional, Unbounded) Provides target specific geo information
-    std::vector<TargetInformation*> targetInformation;
+    std::vector<mem::ScopedCloneablePtr<TargetInformation> > targetInformation;
 
     //!  Constructor, auto-initializes coverage object
     GeographicAndTarget(RegionType regionType) :
@@ -150,16 +143,8 @@ public:
     {
     }
 
-    //!  Delete geo coverage object and any targets
-    ~GeographicAndTarget();
-
     //!  Clones geo coverage and any targets
-    GeographicAndTarget* clone();
-
-private:
-    // Noncopyable
-    GeographicAndTarget(const GeographicAndTarget& );
-    const GeographicAndTarget& operator=(const GeographicAndTarget& );
+    GeographicAndTarget* clone() const;
 };
 
 }

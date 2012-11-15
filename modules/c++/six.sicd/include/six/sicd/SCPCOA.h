@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -44,52 +44,55 @@ struct SCPCOA
      *  are required, and so, must be filled in.
      */
     SCPCOA();
-    
-    //!  Destructor
-    ~SCPCOA() {}
-    
-    //!  Clone this object
-    SCPCOA* clone() const
-    {
-        return new SCPCOA(*this);
-    }
-    
+
     //! Center of aperture time for the SCP at t_COA_SCP(collectionStart)
     double scpTime;
-    
+
     //! ARP position at t_COA_SCP in ECEF
     Vector3 arpPos;
-    
+
     //! ARP velocity at t_COA_SCP in ECEF
     Vector3 arpVel;
-    
+
     //! ARP acceleration at t_COA_SCP in ECEF
     Vector3 arpAcc;
-    
+
     //!  Look direction
     SideOfTrackType sideOfTrack;
-    
+
     //!  Magnitude of the range vector
     double slantRange;
-    
+
     //! Magnitude of the range vector projected into the ground, with ARP
     //! at nadir
     double groundRange;
-    
+
     //! The doppler cone angle to SCP at t_COA_SCP
     double dopplerConeAngle;
-    
+
     //! Grazing angle between the line of sight and ETP
     double grazeAngle;
-    
+
     //! Incidence angle between SCP LOS and ETP normal
     double incidenceAngle;
-    
+
     //!  angle between cross range in ETP and cross range in slant plane
     double twistAngle;
-    
+
     //!  Slope angle from ETP to slant plane at t_COA_SCP
     double slopeAngle;
+
+    //! Angle from north to the line from the SCP to
+    //  the ARP Nadir at COA. Measured clockwise
+    //  in the ETP.
+    //  Added in 1.0.0
+    double azimAngle;
+
+    //! Angle from north to the layover direction in
+    //  the ETP at COA. Measured clockwise in the
+    //  ETP.
+    //  Added in 1.0.0
+    double layoverAngle;
 };
 
 }

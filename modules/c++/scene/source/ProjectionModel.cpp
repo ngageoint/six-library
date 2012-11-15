@@ -102,7 +102,7 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
 }
 
 
-RowCol<double>
+types::RowCol<double>
 ProjectionModel::sceneToImage(const Vector3& scenePoint,
                               double* oTimeCOA) const
 {
@@ -129,7 +129,7 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
             groundPlanePoint + mSlantPlaneNormal * dist;
         
         // Compute the imageCoordinates for the plane point
-        RowCol<double> imageGridPoint =
+        types::RowCol<double> imageGridPoint =
             computeImageCoordinates(imagePlanePoint);
         
         // Find out if scene point is the same as the guessed output
@@ -154,7 +154,7 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
 }
 
 Vector3
-ProjectionModel::imageToScene(const RowCol<double>& imageGridPoint,
+ProjectionModel::imageToScene(const types::RowCol<double>& imageGridPoint,
                               const Vector3& groundRefPoint,
                               const Vector3& groundPlaneNormal,
                               double *oTimeCOA) const
@@ -189,13 +189,13 @@ ProjectionModel::imageToScene(const RowCol<double>& imageGridPoint,
 
 void ProjectionModel::computeProjectionPolynomials(
     const scene::GridGeometry& gridGeom,
-    const RowCol<size_t>& inPixelStart,
-    const RowCol<double>& inSceneCenter,
-    const RowCol<double>& interimSceneCenter,
-    const RowCol<double>& interimSampleSpacing,
-    const RowCol<double>& outSceneCenter,
-    const RowCol<double>& outSampleSpacing,
-    const RowCol<size_t>& outExtent,
+    const types::RowCol<size_t>& inPixelStart,
+    const types::RowCol<double>& inSceneCenter,
+    const types::RowCol<double>& interimSceneCenter,
+    const types::RowCol<double>& interimSampleSpacing,
+    const types::RowCol<double>& outSceneCenter,
+    const types::RowCol<double>& outSampleSpacing,
+    const types::RowCol<size_t>& outExtent,
     size_t polyOrder,
     math::poly::TwoD<double>& outputToSlantRow,
     math::poly::TwoD<double>& outputToSlantCol,
@@ -208,14 +208,14 @@ void ProjectionModel::computeProjectionPolynomials(
     static const size_t POINTS_1D = 10;
 
     // Want to sample [0, outExtent) in the loop below
-    const RowCol<double> skip(
+    const types::RowCol<double> skip(
         static_cast<double>(outExtent.row - 1) / (POINTS_1D - 1),
         static_cast<double>(outExtent.col - 1) / (POINTS_1D - 1));
 
-    const RowCol<double> ratio(interimSceneCenter.row / inSceneCenter.row,
+    const types::RowCol<double> ratio(interimSceneCenter.row / inSceneCenter.row,
                                interimSceneCenter.col / inSceneCenter.col);
 
-    const RowCol<double> outOffset(inPixelStart.row * ratio.row,
+    const types::RowCol<double> outOffset(inPixelStart.row * ratio.row,
                                    inPixelStart.col * ratio.col);
 
     math::linear::Matrix2D<double> rowMapping(POINTS_1D, POINTS_1D);
@@ -226,7 +226,7 @@ void ProjectionModel::computeProjectionPolynomials(
     math::linear::Matrix2D<double> tcoaLines(POINTS_1D, POINTS_1D);
     math::linear::Matrix2D<double> tcoaSamples(POINTS_1D, POINTS_1D);
 
-    RowCol<double> currentOffset(0., 0.);
+    types::RowCol<double> currentOffset(0., 0.);
     
     for (size_t ii = 0; ii < POINTS_1D; ++ii, currentOffset.row += skip.row)
     {
@@ -252,7 +252,7 @@ void ProjectionModel::computeProjectionPolynomials(
 
             // This HAS to be a scene coordinate
             double timeCOA(0.0);
-            const scene::RowCol<double> rgAz = sceneToImage(sPos, &timeCOA);
+            const types::RowCol<double> rgAz = sceneToImage(sPos, &timeCOA);
 
             // Adjust here for the start offset
             rowMapping(ii, jj) = rgAz.row / interimSampleSpacing.row +
@@ -341,7 +341,7 @@ void RangeAzimProjectionModel::
 computeContour(const Vector3& arpCOA,
                const Vector3& velCOA,
                double timeCOA,
-               const RowCol<double>& imageGridPoint,
+               const types::RowCol<double>& imageGridPoint,
                double* r,
                double* rDot) const
 {
@@ -402,7 +402,7 @@ void RangeZeroProjectionModel::
 computeContour(const Vector3& arpCOA,
                const Vector3& velCOA,
                double timeCOA,
-               const RowCol<double>& imageGridPoint,
+               const types::RowCol<double>& imageGridPoint,
                double* r,
                double* rDot) const
 {
@@ -447,7 +447,7 @@ void PlaneProjectionModel::
 computeContour(const Vector3& arpCOA,
                const Vector3& velCOA,
                double timeCOA,
-               const RowCol<double>& imageGridPoint,
+               const types::RowCol<double>& imageGridPoint,
                double* r,
                double* rDot) const
 {

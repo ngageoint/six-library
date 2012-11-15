@@ -63,22 +63,17 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
     unsigned long nbpp = info->getData()->getNumBytesPerPixel();
     if (numBytesSeg != nbpp)
     {
-        throw except::Exception(
-                                Ctxt(
-                                     FmtX(
-                                          "Expected [%d] bytes per pixel IQ, found [%d]",
-                                          nbpp, numBytesSeg)));
+        throw except::Exception(Ctxt(FmtX(
+                "Expected [%d] bytes per pixel IQ, found [%d]",
+                nbpp, numBytesSeg)));
     }
 
     unsigned long numCols = info->getData()->getNumCols();
     if ((unsigned long) (nitf::Uint32) subheader.getNumCols() != numCols)
     {
-        throw except::Exception(
-                                Ctxt(
-                                     FmtX(
-                                          "Invalid column width.  Was expecting [%d], got [%d]",
-                                          numCols,
-                                          (nitf::Uint32) subheader.getNumCols())));
+        throw except::Exception(Ctxt(FmtX(
+                "Invalid column width.  Was expecting [%d], got [%d]",
+                numCols, (nitf::Uint32) subheader.getNumCols())));
     }
 
 }
@@ -130,8 +125,25 @@ void NITFReadControl::load(const std::string& fromFile)
             xmlParser.parse(ioAdapter);
             xml::lite::Document* doc = xmlParser.getDocument();
 
+            //! Check the root localName for the XML type
+            std::string xmlType = doc->getRootElement()->getLocalName();
+            DataType xmlDataType;
+            if (str::startsWith(xmlType, "SICD"))
+                xmlDataType = DataType::COMPLEX;
+            else if (str::startsWith(xmlType, "SIDD"))
+                xmlDataType = DataType::DERIVED;
+            else
+                throw except::Exception(Ctxt("Unexpected XML type"));
+
+            //! Only SIDDs can have mismatch types
+            if (dataType == DataType::COMPLEX && dataType != xmlDataType)
+            {
+                throw except::Exception(Ctxt("Unexpected SIDD DES in SICD"));
+            }
+
+            //! Create the correct type of XMLControl
             const std::auto_ptr<XMLControl>
-                xmlControl(mXMLRegistry->newXMLControl(dataType));
+                xmlControl(mXMLRegistry->newXMLControl(xmlDataType));
 
             std::auto_ptr<Data> data(xmlControl->fromXML(doc));
             if (data.get() == NULL)
@@ -152,9 +164,8 @@ void NITFReadControl::load(const std::string& fromFile)
 
     if (numImages == 0)
     {
-        throw except::Exception(
-                                Ctxt(
-                                     "SICD/SIDD files must have at least one image"));
+        throw except::Exception(Ctxt(
+                "SICD/SIDD files must have at least one image"));
     }
 
     // How do we know how many images we should have?
@@ -390,7 +401,7 @@ std::pair<int, int> NITFReadControl::getIndices(nitf::ImageSubheader& subheader)
     return imageAndSegment;
 }
 
-UByte* NITFReadControl::interleaved(Region& region, int imageNumber)
+UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
 
     NITFImageInfo* thisImage = mInfos[imageNumber];

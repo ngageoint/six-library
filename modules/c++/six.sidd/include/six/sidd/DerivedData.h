@@ -22,6 +22,9 @@
 #ifndef __SIX_DERIVED_DATA_H__
 #define __SIX_DERIVED_DATA_H__
 
+#include <mem/ScopedCloneablePtr.h>
+#include <mem/ScopedCopyablePtr.h>
+
 #include "six/Data.h"
 #include "six/ErrorStatistics.h"
 #include "six/sidd/ProductCreation.h"
@@ -33,7 +36,6 @@
 #include "six/sidd/DownstreamReprocessing.h"
 #include "six/Radiometric.h"
 #include "six/sidd/Annotations.h"
-#include "six/sidd/Enums.h"
 
 namespace six
 {
@@ -55,52 +57,52 @@ struct DerivedData: public Data
      *  Information related to processor, classification,
      *  and product type
      */
-    ProductCreation* productCreation;
+    mem::ScopedCloneablePtr<ProductCreation> productCreation;
 
     /*!
      *  Contains information on the parameters needed to display
      *  the product in an exploitation tool
      */
-    Display* display;
+    mem::ScopedCloneablePtr<Display> display;
 
     /*!
      *  Contains generic and extensible targeting and geographic
      *  region information.
      */
-    GeographicAndTarget* geographicAndTarget;
+    mem::ScopedCloneablePtr<GeographicAndTarget> geographicAndTarget;
 
     /*!
      *  Contains the meta-data necessary for performing
      *  measurements
      */
-    Measurement* measurement;
+    mem::ScopedCloneablePtr<Measurement> measurement;
 
     /*!
      *  Computed metadata for collections
      */
-    ExploitationFeatures* exploitationFeatures;
+    mem::ScopedCloneablePtr<ExploitationFeatures> exploitationFeatures;
 
     /*!
      *  (Optional) Contains meta-data related to algorithms used
      *  during product generation
      */
-    ProductProcessing* productProcessing;
+    mem::ScopedCloneablePtr<ProductProcessing> productProcessing;
 
     /*!
      *  (Optional) Contains meta-data related to downstream
      *  processing of the product
      */
-    DownstreamReprocessing* downstreamReprocessing;
+    mem::ScopedCloneablePtr<DownstreamReprocessing> downstreamReprocessing;
 
     /*!
      *  (Optional) Contains error statistics structures
      */
-    ErrorStatistics* errorStatistics;
+    mem::ScopedCloneablePtr<ErrorStatistics> errorStatistics;
 
     /*!
      *  (Optional) Contains radiometric calibration params
      */
-    Radiometric* radiometric;
+    mem::ScopedCopyablePtr<Radiometric> radiometric;
 
     /*!
      * (Optional) Contains SFA annotations
@@ -113,9 +115,6 @@ struct DerivedData: public Data
      *  rather than invoking this object directly.
      */
     DerivedData();
-    
-    //!  Destructor.  Deletes all initialized child elements
-    ~DerivedData();
 
     /*!
      *  We are dealing with derived data
@@ -227,9 +226,10 @@ struct DerivedData: public Data
     virtual std::string getSource() const
     {
         // TODO throw exception instead of returning empty string?
-        return (exploitationFeatures
-                && !exploitationFeatures->collections.empty() ? exploitationFeatures->collections[0]->information->sensorName
-                                                              : std::string(""));
+        return (exploitationFeatures.get()
+                && !exploitationFeatures->collections.empty() ? 
+                    exploitationFeatures->collections[0]->information->sensorName : 
+                    std::string(""));
     }
 
     /*!
@@ -239,10 +239,11 @@ struct DerivedData: public Data
     virtual void setSource(std::string name)
     {
         // TODO throw exception if cannot set?
-        if (exploitationFeatures && !exploitationFeatures->collections.empty())
+        if (exploitationFeatures.get() && 
+            !exploitationFeatures->collections.empty())
         {
-            exploitationFeatures->collections[0]->information->sensorName
-                    = name;
+            exploitationFeatures->collections[0]->information->sensorName = 
+                name;
         }
     }
 
@@ -281,7 +282,7 @@ struct DerivedData: public Data
 
     virtual LUT* getDisplayLUT()
     {
-        return display->remapInformation->remapLUT;
+        return display->remapInformation->remapLUT.get();
     }
 
     virtual std::string getVendorID() const
@@ -291,7 +292,7 @@ struct DerivedData: public Data
 
     virtual std::string getVersion() const
     {
-        return mVersion.toString();
+        return mVersion;
     }
 
     virtual void setVersion(const std::string& version)
@@ -302,7 +303,7 @@ struct DerivedData: public Data
 private:
     static const char VENDOR_ID[];
 
-    Version mVersion;
+    std::string mVersion;
 };
 }
 }

@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.sidd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -204,6 +204,19 @@ void DerivedClassification::putImpl(const std::string& name,
         os << "    [" << strs[ii] << "]\n";
     }
 }
+
+void DerivedClassification::putImpl(const std::string& name,
+                                    const std::vector<Parameter>& params,
+                                    std::ostream& os)
+{
+    os << name << ":\n";
+    for (size_t ii = 0; ii < params.size(); ++ii)
+    {
+        os << "    [" << params[ii].getName() << " = " 
+           << params[ii].str() << "]\n";
+    }
+}
+
 
 void DerivedClassification::putImpl(const std::string& name,
                                     const DateTime* date,

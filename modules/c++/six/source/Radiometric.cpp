@@ -23,12 +23,21 @@
 
 using namespace six;
 
-Radiometric::Radiometric() 
+const char six::Radiometric::NL_ABSOLUTE[] = "ABSOLUTE";
+const char six::Radiometric::NL_RELATIVE[] = "RELATIVE";
+
+NoiseLevel::NoiseLevel() :
+    noiseType(Init::undefined<std::string>()),
+    noisePoly(Init::undefined<Poly2D>())
 {
-    sigmaZeroSFIncidenceMap = Init::undefined<AppliedType>();
-    gammaZeroSFIncidenceMap = Init::undefined<AppliedType>();
 }
-Radiometric* Radiometric::clone() const 
+
+Radiometric::Radiometric() :
+    rcsSFPoly(Init::undefined<Poly2D>()),
+    betaZeroSFPoly(Init::undefined<Poly2D>()),
+    sigmaZeroSFPoly(Init::undefined<Poly2D>()),
+    sigmaZeroSFIncidenceMap(Init::undefined<AppliedType>()),
+    gammaZeroSFPoly(Init::undefined<Poly2D>()),
+    gammaZeroSFIncidenceMap(Init::undefined<AppliedType>())
 {
-    return new Radiometric(*this); 
 }

@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -21,6 +21,8 @@
  */
 #ifndef __SIX_ANTENNA_H__
 #define __SIX_ANTENNA_H__
+
+#include <mem/ScopedCopyablePtr.h>
 
 #include "six/Types.h"
 #include "six/Init.h"
@@ -40,19 +42,13 @@ namespace sicd
      */
     struct ElectricalBoresight
     {
-	//! Constructor
-        ElectricalBoresight() {}
+        //! Constructor
+        ElectricalBoresight();
 
-	//! Destructor
-        ~ElectricalBoresight() {}
-
-	//! Clone the object
-        ElectricalBoresight* clone() const;
-
-	//! SICD DCXPoly
+        //! SICD DCXPoly
         Poly1D dcxPoly;
 
-	//! SICD DCYPoly
+        //! SICD DCYPoly
         Poly1D dcyPoly;
     };
 
@@ -62,22 +58,18 @@ namespace sicd
      *
      *  Half-power beamwidths.  For electronically steered
      *  arrays, the EB is steered to DCX = 0, DCY = 0
+     *
+     *  Removed in 1.0.0
      */
     struct HalfPowerBeamwidths
     {
-	//! Constructor
+        //! Constructor
         HalfPowerBeamwidths();
 
-	//! Destructor
-        ~HalfPowerBeamwidths(){}
-
-	//! Clone the object
-        HalfPowerBeamwidths* clone() const;
-       
-	//! SICD DCX
+        //! SICD DCX
         double dcx;
 
-	//! SICD DCY
+        //! SICD DCY
         double dcy;
     };
 
@@ -92,12 +84,7 @@ namespace sicd
     struct GainAndPhasePolys
     {        
         //! No init right now, could do that and set const coef to zero
-        GainAndPhasePolys() {}
-
-	//! Destructor
-        ~GainAndPhasePolys() {}
-
-        GainAndPhasePolys* clone() const;
+        GainAndPhasePolys();
 
         //! One way signal gain (in dB) as a function of DCX and DCY
         //! Gain relative to gain at DCX = 0, DCY = 0.  Const coeff = 0 always
@@ -115,25 +102,13 @@ namespace sicd
      */
     struct AntennaParameters
     {
-	
-	//!  Constructor
-        AntennaParameters() : 
-        electricalBoresight(NULL), halfPowerBeamwidths(NULL), array(NULL),
-            element(NULL)
-        {
-            electricalBoresightFrequencyShift = Init::undefined<BooleanType>();
-            mainlobeFrequencyDilation = Init::undefined<BooleanType>();
 
-        }
-
-        //! Deletes any non-NULL children
-        ~AntennaParameters();
-
-        //! Deep copy of this, and any initialized pointer children
-        AntennaParameters* clone() const;
+        //!  Constructor
+        AntennaParameters();
 
         //! Aperture X-axis direction in ECF as a function of time
         PolyXYZ xAxisPoly;
+
         //! Aperture Y-axis direction in ECF as a function of time
         PolyXYZ yAxisPoly;
 
@@ -142,23 +117,25 @@ namespace sicd
         double frequencyZero;
 
         //! Electrical boresight params
-        ElectricalBoresight* electricalBoresight;
+        mem::ScopedCopyablePtr<ElectricalBoresight> electricalBoresight;
 
         //! Half-power beamwidths
-        HalfPowerBeamwidths* halfPowerBeamwidths;
+        //  Removed in 1.0.0
+        mem::ScopedCopyablePtr<HalfPowerBeamwidths> halfPowerBeamwidths;
 
         /*!
          *  Mainlobe array pattern polynomials.  For
          *  electronically steered arrays, the EB is steered to
          *  DCX = 0 and DCY = 0
+         *  field is optional in 0.4 and mandatory in 1.0
          */
-        GainAndPhasePolys* array;
+        mem::ScopedCopyablePtr<GainAndPhasePolys> array;
 
         /*!
          *  Element array pattern polynomials for electronically
          *  steered arrays
          */
-        GainAndPhasePolys* element;
+        mem::ScopedCopyablePtr<GainAndPhasePolys> element;
 
         /*!
          *  Gain polynomial (dB) vs. frequency for boresight
@@ -182,8 +159,6 @@ namespace sicd
          *  Change with frequency per ideal array theory
          */
         BooleanType mainlobeFrequencyDilation;
-
-        
     };
 
 
@@ -202,24 +177,16 @@ namespace sicd
     struct Antenna
     {
         //! Transmit parameters
-        AntennaParameters* tx;
+        mem::ScopedCopyablePtr<AntennaParameters> tx;
 
         //! Receieve parameters
-        AntennaParameters* rcv;
+        mem::ScopedCopyablePtr<AntennaParameters> rcv;
 
         //! Two way parameters
-        AntennaParameters* twoWay;
+        mem::ScopedCopyablePtr<AntennaParameters> twoWay;
 
-	//!  Constructor
-        Antenna() : tx(NULL), rcv(NULL), twoWay(NULL) {}
-
-	//! Destructor
-        ~Antenna();
-
-        /*!
-         *  Make a copy of each antenna parameter if it exists
-         */
-        Antenna* clone() const;
+        //!  Constructor
+        Antenna(){}
     };
 
 
