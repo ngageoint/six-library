@@ -22,6 +22,9 @@
 #ifndef __SIX_COMPLEX_DATA_H__
 #define __SIX_COMPLEX_DATA_H__
 
+#include <mem/ScopedCloneablePtr.h>
+#include <mem/ScopedCopyablePtr.h>
+
 #include "six/Data.h"
 #include "six/ErrorStatistics.h"
 #include "six/Radiometric.h"
@@ -38,8 +41,8 @@
 #include "six/sicd/Antenna.h"
 #include "six/sicd/PFA.h"
 #include "six/sicd/RMA.h"
+#include "six/sicd/RgAzComp.h"
 #include "six/sicd/MatchInformation.h"
-#include "six/sicd/Enums.h"
 
 namespace six
 {
@@ -69,58 +72,62 @@ class ComplexData: public Data
 {
 public:
     //!  CollectionInfo block.  Contains the general collection information
-    CollectionInformation* collectionInformation;
+    mem::ScopedCloneablePtr<CollectionInformation> collectionInformation;
 
     //!  (Optional) Block contains general information about the image creation
-    ImageCreation* imageCreation;
+    mem::ScopedCloneablePtr<ImageCreation> imageCreation;
 
     //!  Block describes the image pixel data
-    ImageData* imageData;
+    mem::ScopedCloneablePtr<ImageData> imageData;
 
     //!  Describes the geographic coords of the region covered by the image
-    GeoData* geoData;
+    mem::ScopedCloneablePtr<GeoData> geoData;
 
     //!  Block of parameters describes the image sample grid
-    Grid* grid;
+    mem::ScopedCloneablePtr<Grid> grid;
 
     //!  This block describes the imaging collection timeline
-    Timeline* timeline;
+    mem::ScopedCloneablePtr<Timeline> timeline;
 
     //!  Describes the platform and the ground ref positions vs. time
-    Position* position;
+    mem::ScopedCloneablePtr<Position> position;
 
     //!  This block describes the radar collection info
-    RadarCollection* radarCollection;
+    mem::ScopedCloneablePtr<RadarCollection> radarCollection;
 
     //!  This block describes the image formation process
-    ImageFormation* imageFormation;
+    mem::ScopedCopyablePtr<ImageFormation> imageFormation;
 
     //!  Describes Center of Aperture (COA) params for Scene Center Point (SCP)
-    SCPCOA* scpcoa;
+    mem::ScopedCopyablePtr<SCPCOA> scpcoa;
 
     //!  (Optional) Radiometric calibration params
-    Radiometric* radiometric;
+    mem::ScopedCopyablePtr<Radiometric> radiometric;
 
     //!  (Optional) Params describe the antenna during collection.
-    Antenna* antenna;
+    mem::ScopedCopyablePtr<Antenna> antenna;
 
     //!  (Optional) Params needed for computing error statistics
-    ErrorStatistics* errorStatistics;
+    mem::ScopedCloneablePtr<ErrorStatistics> errorStatistics;
 
     //!  (Optional) Params describing other related imaging collections
-    MatchInformation* matchInformation;
+    mem::ScopedCopyablePtr<MatchInformation> matchInformation;
 
     //!  (Optional/Choice) Polar Format Algorithm params -- if this is set,
     //          rma should remain NULL.
-    PFA* pfa;
+    mem::ScopedCloneablePtr<PFA> pfa;
 
     //!  (Optional/Choice) Range Migration Algorithm params -- if this is
     //          set, pfa should remain NULL.
-    RMA* rma;
+    mem::ScopedCopyablePtr<RMA> rma;
+
+    //!  (Optional/Choice) Simple Range Doppler Compression params -- 
+    //   if this is set, pfa & rma should remain NULL.
+    mem::ScopedCopyablePtr<RgAzComp> rgAzComp;
 
     ComplexData();
 
-    ~ComplexData();
+    ~ComplexData(){}
 
     /*!
      *  Returns COMPLEX.  This is used by Read/Write to determine
@@ -242,7 +249,7 @@ public:
     virtual DateTime getCreationTime() const
     {
         /* TODO throw an exception instead? */
-        if (!imageCreation)
+        if (!imageCreation.get())
             throw except::Exception(Ctxt("Must add an imageCreation member first"));
         return imageCreation->dateTime;
     }
@@ -252,8 +259,8 @@ public:
      */
     virtual void setCreationTime(DateTime creationTime)
     {
-        if (!imageCreation)
-            imageCreation = new ImageCreation;
+        if (!imageCreation.get())
+            imageCreation.reset(new ImageCreation());
         imageCreation->dateTime = creationTime;
     }
 
@@ -288,7 +295,7 @@ public:
 
     virtual std::string getVersion() const
     {
-        return mVersion.toString();
+        return mVersion;
     }
 
     virtual void setVersion(const std::string& version)
@@ -299,9 +306,7 @@ public:
 private:
     static const char VENDOR_ID[];
 
-    ComplexData(const ComplexData* cloner);
-
-    Version mVersion;
+    std::string mVersion;
 };
 
 }

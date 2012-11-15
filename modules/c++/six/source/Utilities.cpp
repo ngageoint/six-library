@@ -61,11 +61,21 @@ template<> DateTime six::toType<DateTime>(const std::string& dateTime)
     try
     {
         //Try an XML format type
+        // NOTE: There may or may not be a Z on the end of this
+        //       The spec specifies that there "should" be to indicate UTC,
+        //       but Timeline/CollectStart seems to frequently be produced
+        //       without it
         if (dateTime.length() >= 19)
-            return DateTime(dateTime.substr(0, dateTime.length() - 1),
-                    "%Y-%m-%dT%H:%M:%S");
+        {
+            const bool trimStr = (dateTime[dateTime.length() - 1] == 'Z');
+
+            return DateTime(trimStr ?
+                                dateTime.substr(0, dateTime.length() - 1) :
+                                dateTime,
+                            "%Y-%m-%dT%H:%M:%S");
+        }
     }
-    catch (except::Exception&)
+    catch (const except::Exception&)
     {
     }
 
@@ -75,7 +85,7 @@ template<> DateTime six::toType<DateTime>(const std::string& dateTime)
         if (dateTime.length() >= 14)
             return DateTime(dateTime.substr(0, 14), "%Y%m%d%H%M%S");
     }
-    catch (except::Exception&)
+    catch (const except::Exception&)
     {
     }
 
@@ -85,7 +95,7 @@ template<> DateTime six::toType<DateTime>(const std::string& dateTime)
         if (dateTime.length() >= 10)
             return DateTime(dateTime.substr(0, 10), "%Y-%m-%d");
     }
-    catch (except::Exception&)
+    catch (const except::Exception&)
     {
     }
 
@@ -95,7 +105,7 @@ template<> DateTime six::toType<DateTime>(const std::string& dateTime)
         if (dateTime.length() == 8)
             return DateTime(dateTime.substr(0, 8), "%Y-%m-%d");
     }
-    catch (except::Exception&)
+    catch (const except::Exception&)
     {
     }
 

@@ -22,6 +22,7 @@
 
 #include <import/cli.h>
 #include <import/io.h>
+#include <import/mem.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
@@ -32,21 +33,19 @@ int main(int argc, char** argv)
 {
     try
     {
-
         // create a parser and add our options to it
         cli::ArgumentParser parser;
-        parser.setDescription(
-                              "This program reads a SICD or SIDD into the internal "
-                                  "memory model and round-trips it back to file.");
+        parser.setDescription("This program reads a SICD or SIDD into the "\
+                              "internal memory model and round-trips it back "\
+                              "to file.");
         parser.addArgument("-e --expand", "Expand RE16I_IM16I to RE32F_IM32F",
                            cli::STORE_TRUE, "expand");
         parser.addArgument("-f --log", "Specify a log file", cli::STORE, "log",
                            "FILE")->setDefault("console");
         parser.addArgument("-l --level", "Specify log level", cli::STORE,
                            "level", "LEVEL")->setChoices(
-                                                         str::split(
-                                                                    "debug info warn error"))->setDefault(
-                                                                                                          "info");
+                           str::split("debug info warn error"))->setDefault(
+                           "info");
         parser.addArgument("input", "Input SICD/SIDD", cli::STORE, "input",
                            "INPUT", 1, 1);
         parser.addArgument("output", "Output filename", cli::STORE, "output",
@@ -89,41 +88,63 @@ int main(int argc, char** argv)
         reader.load(inputFile);
         six::Container* container = reader.getContainer();
 
+        nitf::List imageList = reader.getRecord().getImages();
+        nitf::ListIterator imageIter = imageList.begin();
+
         six::BufferList images;
-        for (size_t i = 0, num = container->getNumData(); i < num; ++i)
+        // Now go through every image and figure out what clump its attached
+        // to and use that for the measurements
+        for (size_t i = 0; imageIter != imageList.end(); ++imageIter, ++i)
         {
-            six::Data *data = container->getData(i);
+            // Get a segment ref
+            nitf::ImageSegment segment = (nitf::ImageSegment) * imageIter;
+
+            // Get the subheader out
+            nitf::ImageSubheader subheader = segment.getSubheader();
+
+            size_t numRows = (size_t)subheader.getNumRows();
+            size_t numCols = (size_t)subheader.getNumCols();
+            size_t numBPP = (size_t)
+                    (((size_t)subheader.getActualBitsPerPixel() + 7) / 8);
 
             // read the entire image into memory
             six::Region region;
-            sys::ubyte *imageBuffer = reader.interleaved(region, 0);
+            region.setStartRow(0);
+            region.setStartCol(0);
+            region.setNumRows(numRows);
+            region.setNumCols(numCols);
 
+            mem::ScopedArray<sys::ubyte> imageBuffer (new sys::ubyte[
+                    numRows * numCols * numBPP * 
+                    (size_t)subheader.getBandCount()]);
+            region.setBuffer(imageBuffer.get());
+            reader.interleaved(region, 0);
             //only expand if we have a 16i image
-            if (expand && data->getPixelType() == six::PixelType::RE16I_IM16I)
+            if (expand && numBPP == 2)
             {
                 //compute the buf size and only allocate that
-                unsigned long expandedSize = data->getNumRows()
-                        * data->getNumCols() * sizeof(ComplexFloat);
-                sys::ubyte* expandedBuffer =
-                        (sys::ubyte*) sys::alignedAlloc(expandedSize);
+                size_t size = numRows * numCols;
+                mem::ScopedArray<std::complex<float> > expandedBuffer (
+                        new std::complex<float>[size]);
 
                 //expand the image
-                short* shorts = (short*) &imageBuffer[0];
-                ComplexFloat* cfloats = (ComplexFloat*) &expandedBuffer[0];
-                for (unsigned long i = 0, sz = data->getNumRows()
-                        * data->getNumCols() * 2; i < sz; i += 2)
+                std::complex<short>* shorts = 
+                        (std::complex<short>*)imageBuffer.get();
+                for (size_t i = 0; i < size; i++)
                 {
-                    *cfloats++ = ComplexFloat((float) shorts[i],
-                                              (float) shorts[i + 1]);
+                    expandedBuffer.get()[i] = std::complex<float>(
+                            (float)shorts[i].real(),
+                            (float)shorts[i].imag());
                 }
 
-                delete[] imageBuffer;
-                imageBuffer = expandedBuffer;
+                imageBuffer.reset((sys::ubyte*)expandedBuffer.release());
 
-                //set the new pixel type
-                data->setPixelType(six::PixelType::RE32F_IM32F);
+                //set the new pixel type in the Data object
+                container->getData(subheader.getImageId().toString(), 
+                                   imageList.getSize())->setPixelType(
+                                            six::PixelType::RE32F_IM32F);
             }
-            images.push_back(imageBuffer);
+            images.push_back(imageBuffer.release());
         }
 
         six::NITFWriteControl writer;
@@ -132,7 +153,8 @@ int main(int argc, char** argv)
         writer.setXMLControlRegistry(&xmlRegistry);
         writer.save(images, outputFile);
 
-        for (six::BufferList::iterator it = images.begin(); it != images.end(); ++it)
+        for (six::BufferList::iterator it = images.begin(); 
+                it != images.end(); ++it)
             delete[] *it;
     }
     catch (const std::exception& ex)

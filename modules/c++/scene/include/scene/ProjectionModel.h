@@ -41,7 +41,7 @@ public:
      *  Utility function that evaluates the TimeCOAPoly at the
      *  given pixel.
      */
-    inline double computeImageTime(const RowCol<double> pixel) const
+    inline double computeImageTime(const types::RowCol<double> pixel) const
     {
         return mTimeCOAPoly(pixel.row, pixel.col);
     }
@@ -69,14 +69,14 @@ public:
      *  by subtracting of the SCP projecting into row and column
      *  contributions.
      */
-    inline RowCol<double>
+    inline types::RowCol<double>
         computeImageCoordinates(const Vector3& imagePlanePoint) const
     {
         // Delta IPP = xrow * uRow + ycol * uCol
         Vector3 delta(imagePlanePoint - mSCP);
             
         // What is the x contribution?
-        return RowCol<double>(delta.dot(mImagePlaneRowVector),
+        return types::RowCol<double>(delta.dot(mImagePlaneRowVector),
                                     delta.dot(mImagePlaneColVector) );
 
     }
@@ -92,7 +92,7 @@ public:
     virtual void computeContour(const Vector3& arpCOA,
                                 const Vector3& velCOA,
                                 double timeCOA,
-                                const RowCol<double>& imageGridPoint,
+                                const types::RowCol<double>& imageGridPoint,
                                 double* r,
                                 double* rDot) const = 0;
         
@@ -127,12 +127,12 @@ public:
      *  and sometimes even Image and Slant are as well.
      *
      *  \param scenePoint A scene (ground) point in 3-space
-     *  \param oTimeCOA An optional ptr to the timeCOA,
+     *  \param oTimeCOA [output] An optional ptr to the timeCOA,
      *  which, if NULL is not set.
      *  \return An continuous surface image point
      *
      */
-    RowCol<double> sceneToImage(const Vector3& scenePoint,
+    types::RowCol<double> sceneToImage(const Vector3& scenePoint,
                                       double* oTimeCOA) const;
 
 
@@ -148,7 +148,7 @@ public:
      *                  imageGridPoint.row, imageGridPoint.col
      *  \return A scene (ground) point in 3 space
      */
-    Vector3 imageToScene(const RowCol<double>& imageGridPoint,
+    Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
                                 const Vector3& groundRefPoint,
                                 const Vector3& groundPlaneNormal,
                                 double *oTimeCOA) const;
@@ -158,6 +158,17 @@ public:
      * imageToScene().  From these samples, fits projection and time COA
      * polynomials of the specified order.  Optionally computes mean residual
      * errors in these polynomials (mean of the squares of the differences).
+     *
+     * inPixelStart and inSceneCenter are in the slant plane.
+     *
+     * interimSceneCenter and interimSampleSpacing are also in the slant
+     * plane.  These represent the image at the point when the output to slant
+     * polynomials will be applied.  They're intended to allow for any
+     * image upsampling, etc. that may be done while still in the slant plane.
+     * If no such upsampling is done, set interimSceneCenter = inSceneCenter.
+     *
+     * outSceneCenter, outSampleSpacing, and outExtent are in the output
+     * plane.
      *
      * \param gridGeom Grid geometry
      * \param inPixelStart Input space start pixel (i.e. if this is non-zero,
@@ -183,13 +194,13 @@ public:
      */
     void computeProjectionPolynomials(
         const scene::GridGeometry& gridGeom,
-        const RowCol<size_t>& inPixelStart,
-        const RowCol<double>& inSceneCenter,
-        const RowCol<double>& interimSceneCenter,
-        const RowCol<double>& interimSampleSpacing,
-        const RowCol<double>& outSceneCenter,
-        const RowCol<double>& outSampleSpacing,
-        const RowCol<size_t>& outExtent,
+        const types::RowCol<size_t>& inPixelStart,
+        const types::RowCol<double>& inSceneCenter,
+        const types::RowCol<double>& interimSceneCenter,
+        const types::RowCol<double>& interimSampleSpacing,
+        const types::RowCol<double>& outSceneCenter,
+        const types::RowCol<double>& outSampleSpacing,
+        const types::RowCol<size_t>& outExtent,
         size_t polyOrder,
         math::poly::TwoD<double>& outputToSlantRow,
         math::poly::TwoD<double>& outputToSlantCol,
@@ -223,7 +234,7 @@ public:
     virtual void computeContour(const Vector3& arpCOA,
                                 const Vector3& velCOA,
                                 double timeCOA,
-                                const RowCol<double>& imageGridPoint,
+                                const types::RowCol<double>& imageGridPoint,
                                 double* r,
                                 double* rDot) const;
 
@@ -253,7 +264,7 @@ public:
     virtual void computeContour(const Vector3& arpCOA,
                                 const Vector3& velCOA,
                                 double timeCOA,
-                                const RowCol<double>& imageGridPoint,
+                                const types::RowCol<double>& imageGridPoint,
                                 double* r,
                                 double* rDot) const;
 
@@ -276,7 +287,7 @@ public:
     virtual void computeContour(const Vector3& arpCOA,
                                 const Vector3& velCOA,
                                 double timeCOA,
-                                const RowCol<double>& imageGridPoint,
+                                const types::RowCol<double>& imageGridPoint,
                                 double* r,
                                 double* rDot) const;
 

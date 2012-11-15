@@ -126,6 +126,30 @@ public:
         return this->mData[i];
     }
 
+    /*!
+     *  Get the item from the ImageSubheader field IID1.
+     *  \return The data
+     */
+    Data* getData(const std::string& iid, size_t numImages)
+    {
+        if (!str::startsWith(iid, "SICD") && !str::startsWith(iid, "SIDD") &&
+            iid.length() >= 7)
+        {
+            throw except::Exception(Ctxt(
+                    "This is not a properly formed IID1 field"));
+        }
+
+        //! Index is 1-based except for SICDs with one image segment --
+        //  In this case it's 0-based
+        size_t dataID = str::toType<size_t>(iid.substr(4, 6));
+        if (str::startsWith(iid, "SICD") && numImages > 1)
+        {
+            --dataID;
+        }
+
+        return getData(dataID);
+    }
+
     size_t getNumData() const
     {
         return this->mData.size();

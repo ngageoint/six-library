@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -42,9 +42,7 @@ DerivedDataBuilder::~DerivedDataBuilder()
 
 DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
 {
-    if (mData->display)
-        delete mData->display;
-    mData->display = new Display;
+    mData->display.reset(new Display);
     mData->display->pixelType = pixelType;
     return *this;
 }
@@ -52,9 +50,7 @@ DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
 DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget(
                                                                RegionType regionType)
 {
-    if (mData->geographicAndTarget)
-        delete mData->geographicAndTarget;
-    mData->geographicAndTarget = new GeographicAndTarget(regionType);
+    mData->geographicAndTarget.reset(new GeographicAndTarget(regionType));
 
     return *this;
 }
@@ -62,9 +58,7 @@ DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget(
 DerivedDataBuilder& DerivedDataBuilder::addMeasurement(
                                                        ProjectionType projectionType)
 {
-    if (mData->measurement)
-        delete mData->measurement;
-    mData->measurement = new Measurement(projectionType);
+    mData->measurement.reset(new Measurement(projectionType));
 
     return *this;
 }
@@ -72,45 +66,35 @@ DerivedDataBuilder& DerivedDataBuilder::addMeasurement(
 DerivedDataBuilder& DerivedDataBuilder::addExploitationFeatures(
                                                                 unsigned int num)
 {
-    if (mData->exploitationFeatures)
-        delete mData->exploitationFeatures;
-    mData->exploitationFeatures = new ExploitationFeatures(num);
+    mData->exploitationFeatures.reset(new ExploitationFeatures(num));
 
     return *this;
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addProductProcessing()
 {
-    if (mData->productProcessing)
-        delete mData->productProcessing;
-    mData->productProcessing = new ProductProcessing();
+    mData->productProcessing.reset(new ProductProcessing());
 
     return *this;
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addDownstreamReprocessing()
 {
-    if (mData->downstreamReprocessing)
-        delete mData->downstreamReprocessing;
-    mData->downstreamReprocessing = new DownstreamReprocessing();
+    mData->downstreamReprocessing.reset(new DownstreamReprocessing());
 
     return *this;
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addErrorStatistics()
 {
-    if (mData->errorStatistics)
-        delete mData->errorStatistics;
-    mData->errorStatistics = new ErrorStatistics();
+    mData->errorStatistics.reset(new ErrorStatistics());
 
     return *this;
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addRadiometric()
 {
-    if (mData->radiometric)
-        delete mData->radiometric;
-    mData->radiometric = new Radiometric();
+    mData->radiometric.reset(new Radiometric());
 
     return *this;
 }
@@ -125,4 +109,3 @@ DerivedData* DerivedDataBuilder::steal()
     mAdopt = false;
     return get();
 }
-

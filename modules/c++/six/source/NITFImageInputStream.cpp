@@ -57,25 +57,19 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
                         "Only 1 band images (and special-case RGB) are currently supported"));
     }
 
-    mRowBuffer = new sys::byte[mRowSize];
+    mRowBuffer.reset(new sys::ubyte[mRowSize]);
     mAvailable = mRowSize * (nitf::Uint32) subheader.getNumRows();
 
-    mBandList = new nitf::Uint32[nBands];
+    mBandList.reset(new nitf::Uint32[nBands]);
     for (nitf::Uint32 band = 0; band < nBands; ++band)
-        mBandList[band] = band;
+        mBandList.get()[band] = band;
 
     //setup the window
     mWindow.setStartCol(0);
     mWindow.setNumRows(1);
     mWindow.setNumCols((nitf::Uint32) subheader.getNumCols());
-    mWindow.setBandList(mBandList);
+    mWindow.setBandList(mBandList.get());
     mWindow.setNumBands(nBands);
-}
-
-six::NITFImageInputStream::~NITFImageInputStream()
-{
-    if (mRowBuffer) delete mRowBuffer;
-    if (mBandList) delete mBandList;
 }
 
 sys::Off_T six::NITFImageInputStream::available()
@@ -98,7 +92,7 @@ sys::SSize_T six::NITFImageInputStream::read(sys::byte* b, sys::Size_T len)
         rowBufferOffset = mRowSize - mRowBufferRemaining;
         if (bytesToGo >= mRowBufferRemaining)
         {
-            memcpy(b + bOffset, mRowBuffer + rowBufferOffset,
+            memcpy(b + bOffset, mRowBuffer.get() + rowBufferOffset,
                     mRowBufferRemaining);
             bytesToGo -= mRowBufferRemaining;
             bOffset += mRowBufferRemaining;
@@ -106,7 +100,7 @@ sys::SSize_T six::NITFImageInputStream::read(sys::byte* b, sys::Size_T len)
         }
         else
         {
-            memcpy(b + bOffset, mRowBuffer + rowBufferOffset, bytesToGo);
+            memcpy(b + bOffset, mRowBuffer.get() + rowBufferOffset, bytesToGo);
             mRowBufferRemaining -= bytesToGo;
             bytesToGo = 0;
         }
@@ -119,7 +113,8 @@ sys::SSize_T six::NITFImageInputStream::readRow()
 {
     mWindow.setStartRow(mRowOffset++);
     int padded;
-    mReader.read(mWindow, (nitf::Uint8**) &mRowBuffer, &padded);
+    nitf::Uint8* buffer = mRowBuffer.get();
+    mReader.read(mWindow, &buffer, &padded);
     mRowBufferRemaining = mRowSize;
-    return mRowSize;
+    return (sys::SSize_T)mRowSize;
 }

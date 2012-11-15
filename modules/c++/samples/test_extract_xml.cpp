@@ -23,6 +23,8 @@
 #include <vector>
 #include <iostream>
 
+#include <sys/Path.h>
+#include <import/cli.h>
 #include <import/nitf.hpp>
 #include <import/xml/lite.h>
 #include <import/io.h>
@@ -31,37 +33,42 @@
  *  This extracts raw XML from each NITF DES, just using nitf,
  *  xml.lite and io modules.
  */
-
-namespace
-{
-static const char* USAGE =
-    "Usage: %s [--no-pretty-print] <siXd-image-file>\n";
-}
-
 int main(int argc, char** argv)
 {
-
-    if (argc != 2 && argc != 3)
-        die_printf(USAGE, argv[0]);
-
     try
     {
-        bool prettyPrint;
-        int idx(1);
-        if (argc == 2)
+        cli::ArgumentParser parser;
+        parser.setDescription("Pull the DES XML from the SI*D imagery.");
+        parser.addArgument("--no-pretty-print", "Use no formatting in byte stream",
+                           cli::STORE_FALSE, "prettyPrint")->setDefault(true);
+        parser.addArgument("-c --console", "Dump results to standard out", 
+                           cli::STORE_TRUE, "console")->setDefault(false);
+        parser.addArgument("-b --basename", "Use a basename for product names", 
+                           cli::STORE, "basename")->setDefault("");
+        parser.addArgument("file", "Input SICD or SIDD file", cli::STORE, "file",
+                           "", 1, 1, true);
+
+        // Parse!
+        const std::auto_ptr<cli::Results>
+            options(parser.parse(argc, (const char**) argv));
+
+        const bool prettyPrint = options->get<bool>("prettyPrint");
+        std::string basename = options->get<std::string>("basename");
+        const bool toConsole = options->get<bool>("console");
+        const std::string inputFile = options->get<std::string> ("file");
+
+        //! Check for conflicting input
+        if (!basename.empty() && toConsole)
         {
-            prettyPrint = true;
+            throw except::Exception(Ctxt("User cannot specify the --basename "
+                                         "option while using --console"));
         }
-        else
+        
+        //! Fill out basename if not user specified
+        if (basename.empty())
         {
-            if (::strcmp(argv[idx++], "--no-pretty-print") != 0)
-            {
-                die_printf(USAGE, argv[0]);
-            }
-            prettyPrint = false;
+            basename = sys::Path::basename(inputFile, true);
         }
-        const std::string inputFile = argv[idx++];
-        const std::string prefix = sys::Path::basename(inputFile, true);
 
         nitf::Reader reader;
         nitf::IOHandle io(inputFile);
@@ -79,12 +86,13 @@ int main(int argc, char** argv)
 
             std::string typeID = subheader.getTypeID().toString();
             str::trim(typeID);
-            const std::string outputFile =
-                FmtX("%s-%s%d.xml", prefix.c_str(), typeID.c_str(), ii);
+
+            std::string outPathname = basename + "-" + typeID + 
+                                      str::toString(ii) + ".xml";
 
             // Read the DES
             xmlVec.resize(size);
-            char * const xml = xmlVec.empty() ? NULL : &xmlVec[0];
+            char* const xml = xmlVec.empty() ? NULL : &xmlVec[0];
             deReader.read(xml, size);
 
             // Parse it with xml::lite
@@ -96,20 +104,31 @@ int main(int argc, char** argv)
             xml::lite::MinidomParser parser;
             parser.parse(bs);
 
-            io::FileOutputStream fos(outputFile);
+            std::auto_ptr<io::OutputStream> os;
+            if (toConsole)
+            {
+                os.reset(new io::StandardOutStream());
+            }
+            else
+            {
+                os.reset(new io::FileOutputStream(outPathname));
+            }
+
             if (prettyPrint)
             {
                 // Pretty print it
-                parser.getDocument()->getRootElement()->prettyPrint(fos);
+                parser.getDocument()->getRootElement()->prettyPrint(*os);
             }
             else
             {
                 // Just dump out the raw contents
-                fos.write(reinterpret_cast<sys::byte*>(xml), size);
+                os->write(reinterpret_cast<sys::byte*>(xml), size);
             }
-            fos.close();
+            os->close();
         }
         io.close();
+
+        return 0;
     }
     catch (const except::Exception& e)
     {
@@ -126,6 +145,4 @@ int main(int argc, char** argv)
         std::cerr << "Unknown exception" << std::endl;
         return 1;
     }
-
-    return 0;
 }

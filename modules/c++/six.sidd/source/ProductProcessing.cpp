@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -26,44 +26,10 @@ using namespace six::sidd;
 
 ProcessingModule* ProcessingModule::clone() const
 {
-    ProcessingModule* m = new ProcessingModule();
-    m->moduleParameters = moduleParameters;
-
-    for (unsigned int i = 0; i < processingModules.size(); ++i)
-    {
-        ProcessingModule* child = processingModules[i];
-        m->processingModules.push_back(child->clone());
-    }
-    return m;
-}
-
-ProcessingModule::~ProcessingModule()
-{
-    for (unsigned int i = 0; i < processingModules.size(); ++i)
-    {
-        ProcessingModule* child = processingModules[i];
-        delete child;
-    }
-}
-
-ProductProcessing::~ProductProcessing()
-{
-    for (unsigned int i = 0; i < processingModules.size(); ++i)
-    {
-        ProcessingModule* child = processingModules[i];
-        delete child;
-    }
-
+    return new ProcessingModule(*this);
 }
 
 ProductProcessing* ProductProcessing::clone() const
 {
-    ProductProcessing* p = new ProductProcessing();
-
-    for (unsigned int i = 0; i < processingModules.size(); ++i)
-    {
-        ProcessingModule* child = processingModules[i];
-        p->processingModules.push_back(child->clone());
-    }
-    return p;
+    return new ProductProcessing(*this);
 }

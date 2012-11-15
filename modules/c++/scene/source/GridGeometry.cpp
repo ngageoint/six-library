@@ -13,11 +13,11 @@ scene::Vector3 scene::PlanarGridGeometry::rowColToECEF(double row,
     return mRefPt + rowDisp + colDisp;
 }
 
-scene::RowCol<double> scene::PlanarGridGeometry::ecefToRowCol(const scene::Vector3& p3) const
+types::RowCol<double> scene::PlanarGridGeometry::ecefToRowCol(const scene::Vector3& p3) const
 {
     scene::Vector3 disp(p3 - mRefPt);
-    scene::RowCol<double> rgAz(disp.dot(mRow), disp.dot(mCol));
-    return scene::RowCol<double>(rgAz.row / mSampleSpacingRows + mSceneCenterRow,
+    types::RowCol<double> rgAz(disp.dot(mRow), disp.dot(mCol));
+    return types::RowCol<double>(rgAz.row / mSampleSpacingRows + mSceneCenterRow,
                                  rgAz.col / mSampleSpacingCols + mSceneCenterCol);
 
 }
@@ -35,7 +35,7 @@ scene::PlanarGridGeometry::gridToScene(const scene::Vector3& gridPt,
 
     // arpPos to output plane point
     scene::Vector3 disp(p - mRefPt);
-    scene::RowCol<double> rgAz(disp.dot(mRow), disp.dot(mCol));
+    types::RowCol<double> rgAz(disp.dot(mRow), disp.dot(mCol));
     double time = mTimeCOAPoly(rgAz.row, rgAz.col);
     Vector3 arpPos = mARPPoly(time);
     Vector3 arpVel = mARPVelPoly(time);
@@ -202,7 +202,7 @@ scene::PlanarGridGeometry::sceneToGrid(const scene::Vector3& groundPt) const
         currentGridPt = sceneToGrid(currentGroundPt, time);
         Vector3 outputPlaneDisp = currentGridPt - mRefPt;
 
-        scene::RowCol<double> rgAz(outputPlaneDisp.dot(mRow),
+        types::RowCol<double> rgAz(outputPlaneDisp.dot(mRow),
                                    outputPlaneDisp.dot(mCol));
 
         // Find the new time value associated with the currentGridPt
@@ -245,12 +245,12 @@ scene::Vector3 scene::GeographicGridGeometry::rowColToECEF(double row,
     return scene::Utilities::latLonToECEF(lla);
 }
 
-scene::RowCol<double>
+types::RowCol<double>
 scene::GeographicGridGeometry::ecefToRowCol(const Vector3& p3) const
 {
     const scene::LatLonAlt lla(scene::Utilities::ecefToLatLon(p3));
 
-    scene::RowCol<double> rowCol;
+    types::RowCol<double> rowCol;
 
     rowCol.row =
         (mRefPt.getLat() - lla.getLat()) * 3600. / mSampleSpacingRows +

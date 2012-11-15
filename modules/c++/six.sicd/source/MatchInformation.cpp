@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -25,15 +25,28 @@ namespace six
 {
 namespace sicd
 {
-MatchInformation::MatchInformation() :
-    collects(1)
+
+MatchCollect::MatchCollect() :
+    coreName(Init::undefined<std::string>()),
+    matchIndex(Init::undefined<int>())
 {
-    collects[0].reset(new MatchCollection());
 }
 
-MatchInformation* MatchInformation::clone() const
+MatchType::MatchType() :
+    collectorName(Init::undefined<std::string>()),
+    illuminatorName(Init::undefined<std::string>()),
+    typeID(Init::undefined<std::string>()),
+    currentIndex(Init::undefined<int>()),
+    matchCollects(1)
 {
-    return new MatchInformation(*this);
 }
+
+//! One is maditory
+MatchInformation::MatchInformation() :
+    types(1)
+{
+    types[0].reset(new MatchType());
+}
+
 }
 }

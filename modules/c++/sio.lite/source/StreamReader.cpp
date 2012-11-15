@@ -1,25 +1,3 @@
-/* =========================================================================
- * This file is part of sio.lite-c++
- * =========================================================================
- *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
- *
- * sio.lite-c++ is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
- * see <http://www.gnu.org/licenses/>.
- *
- */
-
 #include "sio/lite/StreamReader.h"
 
 
@@ -47,7 +25,7 @@ int sio::lite::StreamReader::getNextInteger()
     return buf.iVal;//(int) ( b[0] << 24 | b[1] << 16 | b[2] << 8 | b[3] );
 }
 
-void sio::lite::StreamReader::checkMagic()
+void sio::lite::StreamReader::checkMagic(bool calledFromConstructor)
 {
     // Determine whether our platform is big or
     // little endian
@@ -76,6 +54,13 @@ void sio::lite::StreamReader::checkMagic()
     }
     else
     {
+        // If called from the constructor, we don't want to leak these
+        if (calledFromConstructor)
+        {
+            killHeader();
+            killStream();
+        }
+
         throw
         sio::lite::InvalidHeaderException(
             Ctxt("Invalid magic header byte")
@@ -101,11 +86,11 @@ void sio::lite::StreamReader::killStream()
     }
 }
 
-void sio::lite::StreamReader::parseHeader()
+void sio::lite::StreamReader::parseHeader(bool calledFromConstructor)
 {
     killHeader();
     header = new FileHeader();
-    checkMagic();
+    checkMagic(calledFromConstructor);
 
     header->setNumLines( getNextInteger() );
     header->setNumElements( getNextInteger() );

@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sicd-c++
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
@@ -110,19 +110,22 @@ struct WaveformParameters
  *  \struct ChannelParameters
  *  \brief SICD 'ChanParameters' parameter
  *
- *  Parameters for a data channel.  All parameters are optional
+ *  Parameters for a data channel.
  */
 struct ChannelParameters
 {
-
     //!  Constructor
     ChannelParameters();
 
-    //!  Destructor
-    ~ChannelParameters() {}
-
     //!  Make a copy
     ChannelParameters* clone() const;
+
+    /*!
+     *  Indicates the combined transmit and receive polarization ("TX:RCV")
+     *  for the channel.
+     *  Optional for 0.4, required for 1.0.
+     */
+    DualPolarizationType txRcvPolarization;
 
     /*!
      *  (Optional) RcvAPCIndex is the index of the receive
@@ -130,12 +133,6 @@ struct ChannelParameters
      *  APC polynomials are included
      */
     int rcvAPCIndex;
-
-    /*!
-     *  Indicates the combined transmit and receive polarization ("TX:RCV")
-     *  for the channel
-     */
-    DualPolarizationType txRcvPolarization;
 };
 
 /*!
@@ -367,6 +364,7 @@ struct RadarCollection
 
     //! Optional Polarization HV ange (rad) vs time.  achieved H&V channel
     //! orientation relative to true H&V, t = 0 at coll start
+    //! Optional in 0.4, removed in 1.0
     Poly1D polarizationHVAnglePoly;
 
     //!  Optional, indicates the transmit signal teps trhough
@@ -374,7 +372,7 @@ struct RadarCollection
     //!  per IPP.
     std::vector<mem::ScopedCloneablePtr<TxStep> > txSequence;
 
-    //!  (Optional) waveform pararmeters
+    //!  (Optional) waveform parameters
     std::vector<mem::ScopedCloneablePtr<WaveformParameters> > waveform;
 
     //!  (Optional) receive channels

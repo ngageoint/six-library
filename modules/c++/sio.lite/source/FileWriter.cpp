@@ -1,25 +1,3 @@
-/* =========================================================================
- * This file is part of sio.lite-c++
- * =========================================================================
- *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
- *
- * sio.lite-c++ is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
- * see <http://www.gnu.org/licenses/>.
- *
- */
-
 #include "sio/lite/FileWriter.h"
 
 void sio::lite::FileWriter::write(sio::lite::FileHeader* header, std::vector<io::InputStream*> bandStreams)
@@ -43,8 +21,10 @@ void sio::lite::FileWriter::write(int numLines, int numElements, int elementSize
 void sio::lite::FileWriter::write(sio::lite::FileHeader* header, const sys::byte* data, int numBands)
 {
     header->to(numBands, *mStream); //write header
-    mStream->write(data, header->getNumLines() * header->getNumElements()
-                   * header->getElementSize() * numBands);
+    mStream->write(data, static_cast<sys::Size_T>(header->getNumLines())
+                    * static_cast<sys::Size_T>(header->getNumElements())
+                    * static_cast<sys::Size_T>(header->getElementSize())
+                    * static_cast<sys::Size_T>(numBands));
 }
 
 void sio::lite::FileWriter::write(int numLines, int numElements, int elementSize,

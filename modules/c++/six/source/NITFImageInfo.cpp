@@ -245,7 +245,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         //       we avoid the clone and byte swap and instead index into
         //       the LUT in the opposite order?
         std::auto_ptr<LUT> lut(data->getDisplayLUT()->clone());
-        sys::byteSwap((sys::byte*) lut->table, lut->elementSize,
+        sys::byteSwap((sys::byte*) lut->table.get(), lut->elementSize,
                       lut->numEntries);
 
         if (lut->elementSize != sizeof(short))

@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -21,6 +21,8 @@
  */
 #ifndef __SIX_RMA_H__
 #define __SIX_RMA_H__
+
+#include <mem/ScopedCopyablePtr.h>
 
 #include "six/Types.h"
 #include "six/Init.h"
@@ -40,35 +42,67 @@ struct RMAT
     //!  Constructor
     RMAT();
 
-    //!  Destructor
-    ~RMAT()
-    {
-    }
-
-    //!  Reference time when the reference position and velocity
-    //   are defined.
+    //! Reference time when the reference position and velocity
+    //  are defined.
+    //  depricated in 1.0.0
     double refTime;
 
-    //!  Platform reference position used to establish the reference
-    //   trajectory line.  
+    //! Platform reference position used to establish the reference
+    //  trajectory line.  
     Vector3 refPos;
 
-    //!  Reference unit velocity vector used to establish the
-    //   reference trajectory line.
+    //! Reference unit velocity vector used to establish the
+    //  reference trajectory line.
+    //  'UnitVelRef' changed to 'VelRef' in 1.0.0
     Vector3 refVel;
 
-    //!  Polynomial function that yields the distance along the
-    //   reference straight line trajectory as function of time.
+    //! Polynomial function that yields the distance along the
+    //  reference straight line trajectory as function of time.
+    //  depricated in 1.0.0
     Poly1D distRefLinePoly;
 
-    //!  Polynomial function that yields the cosine of the Doppler
-    //   cone angle at COA as a function of the image location.
+    //! Polynomial function that yields the cosine of the Doppler
+    //  cone angle at COA as a function of the image location.
+    //  depricated in 1.0.0
     Poly2D cosDCACOAPoly;
 
+    //!  all depricated in 1.0.0
     double kx1;
     double kx2;
     double ky1;
     double ky2;
+
+    //! Reference Doppler Cone Angle (degrees)
+    //  added in 1.0.0
+    double dopConeAngleRef;
+};
+
+/*!
+ *  \struct  RMCR
+ *  \brief   Parameters for Range Migration with 
+ *           Cross Range Motion Compensation
+ *           Added in 1.0.0
+ *
+ *  Note: this is a repeat of parameters in RMAT but 
+ *        we recreate them to avoid confusion
+ */
+struct RMCR
+{
+    //!  Constructor
+    RMCR();
+
+    //! Platform reference position (ECF) used
+    //  to establish the reference slant plane
+    //  and the range direction in the image. (meters)
+    Vector3 refPos;
+
+    //! Platform reference velocity vector
+    //  (ECF) used to establish the reference
+    //  slant plane. (meters / sec)
+    Vector3 refVel;
+
+    //! Reference Doppler Cone Angle (degrees)
+    double dopConeAngleRef;
 };
 
 /*!
@@ -79,11 +113,6 @@ struct INCA
 {
     //!  Constructor
     INCA();
-
-    //!  Destructor
-    ~INCA()
-    {
-    }
 
     //! Polynomial function that yields time of closest approach as
     //  function of image column coordinate.
@@ -97,6 +126,9 @@ struct INCA
 
     //! Polynomial function that yields doppler rate scale factor as
     //  a function of image location.
+    //  Poly1D deprecated in 0.4.0 --
+    //      NOTE: Poly1D is contained in dopplerRateScaleFactorPoly[0]
+    //  Poly2D added in 0.4.1
     Poly2D dopplerRateScaleFactorPoly;
 
     //! (Optional) Polynomial that yields Doppler Centroid value as a function
@@ -114,25 +146,24 @@ struct INCA
  */
 struct RMA
 {
-    //!  Constructor
+    //! Constructor
     RMA();
-
-    //!  Destructor
-    ~RMA();
-
-    //!  Copy this object
-    RMA* clone() const;
 
     //!  Type of migration algorithm used.
     RMAlgoType algoType;
 
-    //!  (Choice) Parameters for range migration with along track motion
-    //   compensation -- if this is present, inca should be NULL.
-    RMAT* rmat;
+    //! (Choice) Parameters for range migration with along track motion
+    //  compensation -- if this is present, rmcr & inca should be NULL.
+    mem::ScopedCopyablePtr<RMAT> rmat;
 
-    //!  (Choice) Parameter for imaging near closest approach image
-    //   description -- if this is present, rmat should be NULL.
-    INCA* inca;
+    //! (Choice) Parameters for range migration with cross range motion
+    //  compensation -- if this is present, rmat & inca should be NULL.
+    //  added in version 1.0.0
+    mem::ScopedCopyablePtr<RMCR> rmcr;
+
+    //! (Choice) Parameter for imaging near closest approach image
+    //  description -- if this is present, rmat & rmcr should be NULL.
+    mem::ScopedCopyablePtr<INCA> inca;
 };
 
 }

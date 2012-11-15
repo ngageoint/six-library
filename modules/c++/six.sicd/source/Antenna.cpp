@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -24,73 +24,33 @@
 using namespace six;
 using namespace six::sicd;
 
-ElectricalBoresight* ElectricalBoresight::clone() const 
+ElectricalBoresight::ElectricalBoresight() :
+    dcxPoly(Init::undefined<Poly1D>()),
+    dcyPoly(Init::undefined<Poly1D>())
 {
-    return new ElectricalBoresight(*this); 
-}
-HalfPowerBeamwidths::HalfPowerBeamwidths()
-{
-    // TODO: make zero?
-    dcx = Init::undefined<double>();
-    dcy = Init::undefined<double>();
-}
-HalfPowerBeamwidths* HalfPowerBeamwidths::clone() const
-{
-    return new HalfPowerBeamwidths(*this);
 }
 
-GainAndPhasePolys* GainAndPhasePolys::clone() const 
+HalfPowerBeamwidths::HalfPowerBeamwidths() :
+    dcx(Init::undefined<double>()),
+    dcy(Init::undefined<double>())
 {
-    return new GainAndPhasePolys(*this); 
 }
 
-AntennaParameters::~AntennaParameters()
+GainAndPhasePolys::GainAndPhasePolys() :
+    gainPoly(Init::undefined<Poly2D>()),
+    phasePoly(Init::undefined<Poly2D>())
 {
-    if (electricalBoresight)
-        delete electricalBoresight;
-    if (halfPowerBeamwidths)
-        delete halfPowerBeamwidths;
-    if (array)
-        delete array;
-    if (element)
-        delete element;
-}
-AntennaParameters* AntennaParameters::clone() const
-{
-    AntennaParameters* ap = new AntennaParameters(*this);
-    if (electricalBoresight)
-        ap->electricalBoresight = electricalBoresight->clone();
-    
-    if (halfPowerBeamwidths)
-        ap->halfPowerBeamwidths = halfPowerBeamwidths->clone();
-    
-    if (array)
-        ap->array = array->clone();
-    
-    if (element)
-        ap->element = element->clone();
-    return ap;
 }
 
-Antenna::~Antenna() 
-{
-    if (tx)
-        delete tx;
-    if (rcv)
-        delete rcv;
-    if (twoWay)
-        delete twoWay;
-}  
+AntennaParameters::AntennaParameters() : 
+    xAxisPoly(Init::undefined<PolyXYZ>()),
+    yAxisPoly(Init::undefined<PolyXYZ>()),
+    frequencyZero(Init::undefined<double>()),
+    gainBSPoly(Init::undefined<Poly1D>()),
+    electricalBoresightFrequencyShift(Init::undefined<BooleanType>()),
+    mainlobeFrequencyDilation(Init::undefined<BooleanType>())
 
-Antenna* Antenna::clone() const 
 {
-    Antenna* a = new Antenna();
-    if (tx)
-        a->tx = tx->clone();
-    if (rcv)
-        a->rcv = rcv->clone();
-    if (twoWay)
-        a->twoWay = twoWay->clone();
-    return a;
-    
 }
+
+

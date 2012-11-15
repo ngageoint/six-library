@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -32,19 +32,5 @@ six::sidd::ProcessorInformation* six::sidd::ProcessorInformation::clone() const
 
 six::sidd::ProductCreation* six::sidd::ProductCreation::clone() const
 {
-    std::auto_ptr<ProductCreation> pc(new six::sidd::ProductCreation());
-
-    if (processorInformation.get())
-    {
-        pc->processorInformation.reset(processorInformation->clone());
-    }
-    else
-    {
-        pc->processorInformation.reset();
-    }
-
-    pc->classification = classification;
-
-    ProductCreation* const pcPtr(pc.release());
-    return pcPtr;
+     return new six::sidd::ProductCreation(*this);
 }

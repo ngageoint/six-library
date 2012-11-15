@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -33,25 +33,16 @@ namespace sidd
 struct Annotation
 {
     std::string identifier;
-    SFAReferenceSystem* spatialReferenceSystem;
-    std::vector<SFAGeometry*> objects;
+    mem::ScopedCopyablePtr<SFAReferenceSystem> spatialReferenceSystem;
+    std::vector<mem::ScopedCopyablePtr<SFAGeometry> > objects;
 
     Annotation() :
         identifier(""), spatialReferenceSystem(NULL)
     {
     }
-    ~Annotation()
-    {
-        if (spatialReferenceSystem)
-            delete spatialReferenceSystem;
-
-        for (size_t i = 0, n = objects.size(); i < n; ++i)
-            if (objects[i])
-                delete objects[i];
-    }
 };
 
-typedef std::vector<Annotation*> Annotations;
+typedef std::vector<mem::ScopedCopyablePtr<Annotation> > Annotations;
 
 }
 }

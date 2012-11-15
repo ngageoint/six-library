@@ -51,8 +51,6 @@
 
 using namespace six;
 
-static const char* RGB[] = { "R", "G", "B" };
-
 static const struct
 {
     unsigned int width;
@@ -1803,9 +1801,6 @@ int main(int argc, char** argv)
         //  Get a NITF or GeoTIFF writer
         std::auto_ptr<six::WriteControl> writer(getWriteControl(outputName));
 
-        // Is the SIO in big-endian?
-        bool needsByteSwap;
-
         //---------------------------------------------------------
         // We might also need to write out a SICD XML section
         // in the container, if it was provided
@@ -1895,7 +1890,7 @@ int main(int argc, char** argv)
         //    == six::PLANE
         //---------------------------------------------------------------
         six::sidd::PlaneProjection* planeProjection =
-            (six::sidd::PlaneProjection*) siddData->measurement->projection;
+            (six::sidd::PlaneProjection*) siddData->measurement->projection.get();
 
         //--------------------------------------------------
         // This is creating a constant-term polynomial 2D
@@ -1936,7 +1931,7 @@ int main(int argc, char** argv)
 
         // The first collection is corresponds to the parent image
         six::sidd::Collection* parent =
-                siddData->exploitationFeatures->collections[0];
+                siddData->exploitationFeatures->collections[0].get();
 
         //--------------------------------------------------------
         // Creating this stuff from a SICD source, normally these

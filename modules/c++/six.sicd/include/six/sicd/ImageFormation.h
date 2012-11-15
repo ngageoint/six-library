@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -22,6 +22,9 @@
 #ifndef __SIX_IMAGE_FORMATION_H__
 #define __SIX_IMAGE_FORMATION_H__
 
+#include <mem/ScopedCopyablePtr.h>
+#include <mem/ScopedCloneablePtr.h>
+
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -38,23 +41,10 @@ namespace sicd
  */
 struct RcvChannelProcessed
 {
-    //!  Constructor, everything undefined
-    RcvChannelProcessed()
-    {
-        numChannelsProcessed = Init::undefined<unsigned int>();
-
-        // Optional
-        prfScaleFactor = Init::undefined<double>();
-    }
-
-    //!  Create a clone
-    RcvChannelProcessed* clone() const
-    {
-        return new RcvChannelProcessed(*this);
-    }
-
-    //!  Destructor
-    ~RcvChannelProcessed()
+    //!  Constructor
+    RcvChannelProcessed() :
+        numChannelsProcessed(Init::undefined<unsigned int>()),
+        prfScaleFactor(Init::undefined<double>())
     {
     }
 
@@ -93,6 +83,10 @@ struct RcvChannelProcessed
  */
 struct Distortion
 {
+    //! Constructor
+    Distortion()
+    {
+    }
 
     /*!
      *  (Optional) Date of calibration of measurement
@@ -151,21 +145,6 @@ struct Distortion
      */
     double phaseErrorF2;
 
-    //! Constructor
-    Distortion()
-    {
-    }
-
-    //! Destructor
-    ~Distortion()
-    {
-    }
-
-    //!  Make a deep copy of this
-    Distortion* clone() const
-    {
-        return new Distortion(*this);
-    }
 };
 
 /*!
@@ -177,6 +156,13 @@ struct Distortion
  */
 struct PolarizationCalibration
 {
+    //!  Constructor, NULLs distortion
+    PolarizationCalibration() :
+        hvAngleCompensationApplied(Init::undefined<BooleanType>()),
+        distortionCorrectionApplied(Init::undefined<BooleanType>())
+    {
+    }
+
     /*!
      *  Parameter indicating if compensation for H&V channel misalignment
      *  has been applied
@@ -192,33 +178,7 @@ struct PolarizationCalibration
     /*!
      *  Distortion parameters
      */
-    Distortion* distortion;
-
-    //!  Constructor, NULLs distortion
-    PolarizationCalibration() :
-        distortion(NULL)
-    {
-        hvAngleCompensationApplied = Init::undefined<BooleanType>();
-        distortionCorrectionApplied = Init::undefined<BooleanType>();
-    }
-    //!  Destroy including distortion if non-NULL
-    ~PolarizationCalibration()
-    {
-        if (distortion)
-            delete distortion;
-    }
-
-    //!  Clone, including distortion if non-NULL
-    PolarizationCalibration* clone() const
-    {
-        PolarizationCalibration* p = new PolarizationCalibration(*this);
-        if (p->distortion)
-        {
-            p->distortion = distortion->clone();
-        }
-        return p;
-
-    }
+    mem::ScopedCopyablePtr<Distortion> distortion;
 };
 
 /*!
@@ -231,13 +191,9 @@ struct PolarizationCalibration
 struct Processing
 {
     //! Constructor.
-    Processing()
-    {
-        applied = Init::undefined<BooleanType>();
-    }
-
-    //! Destructor.
-    ~Processing()
+    Processing() :
+        type(Init::undefined<std::string>()),
+        applied(Init::undefined<BooleanType>())
     {
     }
 
@@ -261,29 +217,7 @@ struct Processing
 struct ImageFormation
 {
     //!  Constructor, nothing is initialized, except required rcv channel
-    ImageFormation() :
-        rcvChannelProcessed(NULL), polarizationCalibration(NULL)
-    {
-        // Assumption here for now
-        imageFormationAlgorithm = ImageFormationType::PFA;
-
-        tStartProc = Init::undefined<double>();
-        tEndProc = Init::undefined<double>();
-        txFrequencyProcMin = Init::undefined<double>();
-        txFrequencyProcMax = Init::undefined<double>();
-        slowTimeBeamCompensation = SlowTimeBeamCompensationType::NO;
-        imageBeamCompensation = ImageBeamCompensationType::NO;
-        azimuthAutofocus = AutofocusType::NO;
-        rangeAutofocus = AutofocusType::NO;
-        txRcvPolarizationProc = DualPolarizationType::NOT_SET;
-        rcvChannelProcessed = new RcvChannelProcessed();
-    }
-
-    //!  Destructor
-    ~ImageFormation();
-
-    //!  Clone, including any non-NULL objects
-    ImageFormation* clone() const;
+    ImageFormation();
 
     /*! 
      *  Identifier that describes the image that was processed
@@ -296,7 +230,7 @@ struct ImageFormation
      *  Parameters of the rcv processed channel
      *
      */
-    RcvChannelProcessed* rcvChannelProcessed;
+    mem::ScopedCopyablePtr<RcvChannelProcessed> rcvChannelProcessed;
 
     /*!
      *  Indicates the combined tx and rcv polarization processed
@@ -369,7 +303,7 @@ struct ImageFormation
      *  Parameters describing the polarization calibration applied
      *  (if any)
      */
-    PolarizationCalibration* polarizationCalibration;
+    mem::ScopedCopyablePtr<PolarizationCalibration> polarizationCalibration;
 };
 
 }

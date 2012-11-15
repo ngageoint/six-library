@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sidd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -34,29 +34,7 @@ ProcessingEvent* ProcessingEvent::clone() const
     return new ProcessingEvent(*this);
 }
 
-DownstreamReprocessing::~DownstreamReprocessing()
-{
-    if (geometricChip)
-        delete geometricChip;
-
-    for (unsigned int i = 0; i < processingEvents.size(); ++i)
-    {
-        ProcessingEvent* pe = processingEvents[i];
-        delete pe;
-    }
-}
-
 DownstreamReprocessing* DownstreamReprocessing::clone() const
 {
-    DownstreamReprocessing* e = new DownstreamReprocessing();
-
-    if (geometricChip)
-        e->geometricChip = geometricChip->clone();
-
-    for (unsigned int i = 0; i < processingEvents.size(); ++i)
-    {
-        ProcessingEvent* pe = processingEvents[i];
-        e->processingEvents.push_back(pe->clone());
-    }
-    return e;
+    return new DownstreamReprocessing(*this);
 }

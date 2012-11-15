@@ -38,6 +38,5 @@
 #include "six/sidd/ProductProcessing.h"
 #include "six/sidd/SFA.h"
 #include "six/sidd/Utilities.h"
-#include "six/sidd/Enums.h"
 
 #endif

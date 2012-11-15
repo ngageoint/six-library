@@ -39,6 +39,5 @@
 #include "six/sicd/RadarCollection.h"
 #include "six/sicd/SCPCOA.h"
 #include "six/sicd/Utilities.h"
-#include "six/sicd/Enums.h"
 
 #endif

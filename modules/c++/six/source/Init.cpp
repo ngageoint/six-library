@@ -23,13 +23,6 @@
 
 using namespace six;
 
-#ifdef min
-#undef min
-#endif
-#ifdef max
-#undef max
-#endif
-
 /*     template<> bool Init::isUndefined<std::string>(std::string s) */
 /*     { */
 /*         return s.length(); */

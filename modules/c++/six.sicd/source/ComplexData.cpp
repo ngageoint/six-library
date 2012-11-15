@@ -28,102 +28,20 @@ const char ComplexData::VENDOR_ID[] = "GDAIS";
 
 Data* ComplexData::clone() const
 {
-    return new ComplexData(this);
+    return new ComplexData(*this);
 }
 
-ComplexData::~ComplexData()
-{
-    if (collectionInformation)
-        delete collectionInformation;
-    if (imageCreation)
-        delete imageCreation;
-    if (imageData)
-        delete imageData;
-    if (geoData)
-        delete geoData;
-    if (grid)
-        delete grid;
-    if (timeline)
-        delete timeline;
-    if (position)
-        delete position;
-    if (radarCollection)
-        delete radarCollection;
-    if (imageFormation)
-        delete imageFormation;
-    if (scpcoa)
-        delete scpcoa;
-    if (radiometric)
-        delete radiometric;
-    if (antenna)
-        delete antenna;
-    if (errorStatistics)
-        delete errorStatistics;
-    if (matchInformation)
-        delete matchInformation;
-    if (pfa)
-        delete pfa;
-    if (rma)
-        delete rma;
-}
-
-ComplexData::ComplexData() :
-    collectionInformation(NULL), imageCreation(NULL), imageData(NULL),
-            geoData(NULL), grid(NULL), timeline(NULL), position(NULL),
-            radarCollection(NULL), imageFormation(NULL), scpcoa(NULL),
-            radiometric(NULL), antenna(NULL), errorStatistics(NULL),
-            matchInformation(NULL), pfa(NULL), rma(NULL)
+ComplexData::ComplexData() : 
+    mVersion("1.0.0")
 {
     //only initialize the mandatory elements
-    collectionInformation = new CollectionInformation();
-    imageData = new ImageData();
-    geoData = new GeoData();
-    grid = new Grid();
-    timeline = new Timeline();
-    position = new Position();
-    radarCollection = new RadarCollection();
-    imageFormation = new ImageFormation();
-    scpcoa = new SCPCOA();
-}
-
-ComplexData::ComplexData(const ComplexData* cloner) :
-    collectionInformation(NULL), imageCreation(NULL), imageData(NULL),
-            geoData(NULL), grid(NULL), timeline(NULL), position(NULL),
-            radarCollection(NULL), imageFormation(NULL), scpcoa(NULL),
-            radiometric(NULL), antenna(NULL), errorStatistics(NULL),
-            matchInformation(NULL), pfa(NULL), rma(NULL),
-            mVersion(cloner->mVersion)
-{
-    if (cloner->collectionInformation)
-        collectionInformation = cloner->collectionInformation->clone();
-    if (cloner->imageCreation)
-        imageCreation = cloner->imageCreation->clone();
-    if (cloner->imageData)
-        imageData = cloner->imageData->clone();
-    if (cloner->geoData)
-        geoData = cloner->geoData->clone();
-    if (cloner->grid)
-        grid = cloner->grid->clone();
-    if (cloner->timeline)
-        timeline = cloner->timeline->clone();
-    if (cloner->position)
-        position = cloner->position->clone();
-    if (cloner->radarCollection)
-        radarCollection = cloner->radarCollection->clone();
-    if (cloner->imageFormation)
-        imageFormation = cloner->imageFormation->clone();
-    if (cloner->scpcoa)
-        scpcoa = cloner->scpcoa->clone();
-    if (cloner->radiometric)
-        radiometric = cloner->radiometric->clone();
-    if (cloner->antenna)
-        antenna = cloner->antenna->clone();
-    if (cloner->errorStatistics)
-        errorStatistics = cloner->errorStatistics->clone();
-    if (cloner->matchInformation)
-        matchInformation = cloner->matchInformation->clone();
-    if (cloner->pfa)
-        pfa = cloner->pfa->clone();
-    if (cloner->rma)
-        rma = cloner->rma->clone();
+    collectionInformation.reset(new CollectionInformation());
+    imageData.reset(new ImageData());
+    geoData.reset(new GeoData());
+    grid.reset(new Grid());
+    timeline.reset(new Timeline());
+    position.reset(new Position());
+    radarCollection.reset(new RadarCollection());
+    imageFormation.reset(new ImageFormation());
+    scpcoa.reset(new SCPCOA());
 }

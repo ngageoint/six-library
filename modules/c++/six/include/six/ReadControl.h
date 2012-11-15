@@ -106,7 +106,7 @@ public:
      *  Once read, the image buffer is set in both the region pointer,
      *  and in the return value, for convenience
      */
-    virtual UByte* interleaved(Region& region, int imageNumber) = 0;
+    virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
 
     /*!
      *  Get the file type.  For SICD, this will only include "NITF", but

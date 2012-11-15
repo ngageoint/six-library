@@ -199,7 +199,7 @@ int main(int argc, char** argv)
     six::WriteControl* writer = getWriteControl(outputName);
 
     // Is the SIO in big-endian?
-    bool needsByteSwap;
+    bool needsByteSwap = false;
 
     try
     {
@@ -281,11 +281,11 @@ int main(int argc, char** argv)
             data->display->magnificationMethod = six::MagnificationMethod::NEAREST_NEIGHBOR;
 
             // Give'em our LUT
-            data->display->remapInformation->remapLUT = lut;
+            data->display->remapInformation->remapLUT.reset(lut);
             data->setImageCorners(makeUpCornersFromDMS());
 
             six::sidd::PlaneProjection* planeProjection =
-                (six::sidd::PlaneProjection*) data->measurement->projection;
+                (six::sidd::PlaneProjection*) data->measurement->projection.get();
 
             planeProjection->timeCOAPoly = six::Poly2D(0, 0);
             planeProjection->timeCOAPoly[0][0] = 1;
@@ -295,7 +295,7 @@ int main(int argc, char** argv)
             planeProjection->productPlane.colUnitVector = 0.0;
 
             six::sidd::Collection* parent =
-                data->exploitationFeatures->collections[0];
+                data->exploitationFeatures->collections[0].get();
 
             parent->information->resolution.range = 0;
             parent->information->resolution.azimuth = 0;
@@ -306,10 +306,12 @@ int main(int argc, char** argv)
             data->exploitationFeatures->product.resolution.row = 0;
             data->exploitationFeatures->product.resolution.col = 0;
 
-            six::sidd::Annotation *ann = new six::sidd::Annotation;
+            data->annotations.push_back(mem::ScopedCopyablePtr<
+                    six::sidd::Annotation>(new six::sidd::Annotation));
+            six::sidd::Annotation *ann = (*data->annotations.rbegin()).get();
             ann->identifier = "1st Annotation";
-            ann->objects.push_back(new six::sidd::SFAPoint);
-            data->annotations.push_back(ann);
+            ann->objects.push_back(mem::ScopedCopyablePtr<
+                    six::sidd::SFAGeometry>(new six::sidd::SFAPoint));
 
             sources.push_back(sioReader);
             container->addData(data);

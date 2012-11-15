@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.sidd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -57,7 +57,7 @@ public:
 
     //! Extensible parameters used to support profile-specific needs related
     //  to product security.
-    std::vector<std::string>         securityExtensions;
+    std::vector<Parameter>         securityExtensions;
 
     //! The version number of the DES. Should there be multiple specified in
     //  an instance document the one at the root node is the one that will
@@ -180,6 +180,11 @@ private:
     static
     void putImpl(const std::string& name,
                  const std::vector<std::string>& strs,
+                 std::ostream& os);
+
+    static
+    void putImpl(const std::string& name,
+                 const std::vector<Parameter>& params,
                  std::ostream& os);
 
     static

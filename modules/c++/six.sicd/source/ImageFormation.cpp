@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -24,25 +24,18 @@
 using namespace six;
 using namespace six::sicd;
 
-ImageFormation::~ImageFormation()
+ImageFormation::ImageFormation() :
+    segmentIdentifier(Init::undefined<std::string>()),
+    rcvChannelProcessed(new RcvChannelProcessed()),
+    txRcvPolarizationProc(DualPolarizationType::NOT_SET),
+    imageFormationAlgorithm(ImageFormationType::PFA),
+    tStartProc(Init::undefined<double>()),
+    tEndProc(Init::undefined<double>()),
+    txFrequencyProcMin(Init::undefined<double>()),
+    txFrequencyProcMax(Init::undefined<double>()),
+    slowTimeBeamCompensation(SlowTimeBeamCompensationType::NO),
+    imageBeamCompensation(ImageBeamCompensationType::NO),
+    azimuthAutofocus(AutofocusType::NO),
+    rangeAutofocus(AutofocusType::NO)
 {
-    if (rcvChannelProcessed)
-        delete rcvChannelProcessed;
-    if (polarizationCalibration)
-        delete polarizationCalibration;
-}
-
-ImageFormation* ImageFormation::clone() const
-{
-    ImageFormation* i = new ImageFormation(*this);
-    if (i->rcvChannelProcessed)
-    {
-        i->rcvChannelProcessed = rcvChannelProcessed->clone();
-    }
-    if (i->polarizationCalibration)
-    {
-        i->polarizationCalibration = polarizationCalibration->clone();
-    }
-    
-    return i;
 }

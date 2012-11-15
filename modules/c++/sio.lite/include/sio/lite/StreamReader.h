@@ -1,25 +1,3 @@
-/* =========================================================================
- * This file is part of sio.lite-c++
- * =========================================================================
- *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
- *
- * sio.lite-c++ is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
- * see <http://www.gnu.org/licenses/>.
- *
- */
-
 #ifndef __SIO_LITE_STREAM_READER_H__
 #define __SIO_LITE_STREAM_READER_H__
 
@@ -111,7 +89,7 @@ public:
         inputStream(is), header(NULL), headerLength(0), own(adopt)
     {
         // No longer calling setInputStream directly -- its virtual now
-        parseHeader();
+        parseHeader(true);
     }
 
 
@@ -202,7 +180,7 @@ protected:
      *  off.
      *
      */
-    void checkMagic();
+    void checkMagic(bool calledFromConstructor = false);
 
     /**
      *  Since C++ doesnt do your garbage collection for you,
@@ -235,7 +213,7 @@ protected:
      *  soon as an input stream is set
      *
      */
-    void parseHeader();
+    void parseHeader(bool calledFromConstructor = false);
 
 
     io::InputStream* inputStream;

@@ -74,7 +74,7 @@ public:
      */
     virtual void load(const std::string& fromFile);
 
-    virtual UByte* interleaved(Region& region, int imageNumber);
+    virtual UByte* interleaved(Region& region, size_t imageNumber);
 
     virtual std::string getFileType() const
     {

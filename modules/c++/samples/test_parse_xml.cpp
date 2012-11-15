@@ -364,9 +364,9 @@ void generateKMLForSICD(xml::lite::Element* docXML,
     // Time associated with start
     six::DateTime dateTime = data->timeline->collectStart;
 
-    int durationInSeconds = (int) data->timeline->collectDuration;
+    size_t durationInSeconds = (size_t) data->timeline->collectDuration;
     six::Vector3 atTimeX;
-    for (unsigned int i = 0; i < durationInSeconds; ++i)
+    for (size_t i = 0; i < durationInSeconds; ++i)
     {
         atTimeX = data->position->arpPoly(i);
         v[1] = scene::Utilities::ecefToLatLon(atTimeX);

@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.sidd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -31,9 +31,11 @@ namespace sidd
 
 struct SFATyped
 {
+public:
     virtual ~SFATyped()
     {
     }
+
     inline std::string getType() const
     {
         return mType;
@@ -49,9 +51,11 @@ protected:
 
 struct SFAGeometry : public SFATyped
 {
+public:
     virtual ~SFAGeometry()
     {
     }
+
 protected:
     SFAGeometry(std::string typeName) :
         SFATyped(typeName)
@@ -83,15 +87,18 @@ struct SFAPoint : public SFAGeometry
         SFAGeometry(TYPE_NAME), x(_x), y(_y), z(_z), m(_m)
     {
     }
+
     virtual ~SFAPoint()
     {
     }
+
     static const char TYPE_NAME[];
 };
 
 //! Abstract type
 struct SFACurve : public SFAGeometry
 {
+public:
     virtual ~SFACurve()
     {
     }
@@ -104,23 +111,22 @@ protected:
 
 struct SFALineString : public SFACurve
 {
-    std::vector<SFAPoint*> vertices;
-
+public:
     SFALineString() :
         SFACurve(TYPE_NAME)
     {
     }
     virtual ~SFALineString()
     {
-        for (size_t i = 0, n = vertices.size(); i < n; ++i)
-            if (vertices[i])
-                delete vertices[i];
     }
+
+    std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
 };
 
 struct SFALine : public SFALineString
 {
+public:
     SFALine() :
         SFALineString()
     {
@@ -129,11 +135,13 @@ struct SFALine : public SFALineString
     virtual ~SFALine()
     {
     }
+
     static const char TYPE_NAME[];
 };
 
 struct SFALinearRing : public SFALineString
 {
+public:
     SFALinearRing() :
         SFALineString()
     {
@@ -142,12 +150,14 @@ struct SFALinearRing : public SFALineString
     virtual ~SFALinearRing()
     {
     }
+
     static const char TYPE_NAME[];
 };
 
 //! Abstract type
 struct SFASurface : public SFAGeometry
 {
+public:
     virtual ~SFASurface()
     {
     }
@@ -160,48 +170,46 @@ protected:
 
 struct SFAPolygon : public SFASurface
 {
-    std::vector<SFALinearRing*> rings;
-
+public:
     SFAPolygon() :
         SFASurface(TYPE_NAME)
     {
     }
     virtual ~SFAPolygon()
     {
-        for (size_t i = 0, n = rings.size(); i < n; ++i)
-            if (rings[i])
-                delete rings[i];
     }
+
+    std::vector<mem::ScopedCopyablePtr<SFALinearRing> > rings;
     static const char TYPE_NAME[];
 };
 
 struct SFATriangle : public SFAPolygon
 {
+public:
     SFATriangle() :
         SFAPolygon()
     {
         mType = TYPE_NAME;
     }
-    ~SFATriangle()
+    virtual ~SFATriangle()
     {
     }
+
     static const char TYPE_NAME[];
 };
 
 struct SFAPolyhedralSurface : public SFASurface
 {
-    std::vector<SFAPolygon*> patches;
-
+public:
     SFAPolyhedralSurface() :
         SFASurface(TYPE_NAME)
     {
     }
     virtual ~SFAPolyhedralSurface()
     {
-        for (size_t i = 0, n = patches.size(); i < n; ++i)
-            if (patches[i])
-                delete patches[i];
     }
+
+    std::vector<mem::ScopedCopyablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 };
 
@@ -209,27 +217,27 @@ struct SFAPolyhedralSurface : public SFASurface
 // this is to avoid the patches name clash
 struct SFATriangulatedIrregularNetwork : public SFASurface
 {
-    std::vector<SFAPolygon*> patches;
-
+public:
     SFATriangulatedIrregularNetwork() :
         SFASurface(TYPE_NAME)
     {
     }
     virtual ~SFATriangulatedIrregularNetwork()
     {
-        for (size_t i = 0, n = patches.size(); i < n; ++i)
-            if (patches[i])
-                delete patches[i];
     }
+
+    std::vector<mem::ScopedCopyablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 };
 
 //! Abstract type
 struct SFAGeometryCollection : public SFAGeometry
 {
-    virtual ~SFAGeometryCollection()
+public:
+    virtual ~SFAGeometryCollection() 
     {
     }
+
 protected:
     SFAGeometryCollection(std::string typeName) :
         SFAGeometry(typeName)
@@ -239,27 +247,27 @@ protected:
 
 struct SFAMultiPoint : public SFAGeometryCollection
 {
-    std::vector<SFAPoint*> vertices;
-
+public:
     SFAMultiPoint() :
         SFAGeometryCollection(TYPE_NAME)
     {
     }
     virtual ~SFAMultiPoint()
     {
-        for (size_t i = 0, n = vertices.size(); i < n; ++i)
-            if (vertices[i])
-                delete vertices[i];
     }
+
+    std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
 };
 
 //! Abstract type
 struct SFAMultiCurve : public SFAGeometryCollection
 {
+public:
     virtual ~SFAMultiCurve()
     {
     }
+
 protected:
     SFAMultiCurve(std::string typeName) :
         SFAGeometryCollection(typeName)
@@ -269,24 +277,23 @@ protected:
 
 struct SFAMultiLineString : public SFAMultiCurve
 {
-    std::vector<SFALineString*> elements;
-
+public:
     SFAMultiLineString() :
         SFAMultiCurve(TYPE_NAME)
     {
     }
     virtual ~SFAMultiLineString()
     {
-        for (size_t i = 0, n = elements.size(); i < n; ++i)
-            if (elements[i])
-                delete elements[i];
     }
+
+    std::vector<mem::ScopedCopyablePtr<SFALineString> > elements;
     static const char TYPE_NAME[];
 };
 
 //! Abstract type
 struct SFAMultiSurface : public SFAGeometryCollection
 {
+public:
     virtual ~SFAMultiSurface()
     {
     }
@@ -299,26 +306,26 @@ protected:
 
 struct SFAMultiPolygon : public SFAMultiSurface
 {
-    std::vector<SFAPolygon*> elements;
-
+public:
     SFAMultiPolygon() :
         SFAMultiSurface(TYPE_NAME)
     {
     }
     virtual ~SFAMultiPolygon()
     {
-        for (size_t i = 0, n = elements.size(); i < n; ++i)
-            if (elements[i])
-                delete elements[i];
     }
+
+    std::vector<mem::ScopedCopyablePtr<SFAPolygon> > elements;
     static const char TYPE_NAME[];
 };
 
 struct SFACoordinateSystem : public SFATyped
 {
+public:
     virtual ~SFACoordinateSystem()
     {
     }
+
 protected:
     SFACoordinateSystem(std::string typeName) :
         SFATyped(typeName)
@@ -357,7 +364,7 @@ struct SFADatum
 
 struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
 {
-    std::string name;
+    std::string csName;
     SFADatum datum;
     SFAPrimeMeridian primeMeridian;
     std::string linearUnit;
@@ -366,15 +373,13 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
         SFACoordinateSystem(TYPE_NAME)
     {
     }
-    ~SFAGeocentricCoordinateSystem()
-    {
-    }
+
     static const char TYPE_NAME[];
 };
 
 struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
 {
-    std::string name;
+    std::string csName;
     SFADatum datum;
     SFAPrimeMeridian primeMeridian;
     std::string angularUnit;
@@ -384,45 +389,33 @@ struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
         SFACoordinateSystem(TYPE_NAME)
     {
     }
-    ~SFAGeographicCoordinateSystem()
-    {
-    }
+
     static const char TYPE_NAME[];
 };
 
 struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
 {
-    std::string name;
-    SFAGeographicCoordinateSystem *geographicCoordinateSystem;
+    std::string csName;
+    mem::ScopedCopyablePtr<SFAGeographicCoordinateSystem> geographicCoordinateSystem;
     SFAProjection projection;
     SFAParameter parameter;
     std::string linearUnit;
 
     SFAProjectedCoordinateSystem() :
-        SFACoordinateSystem(TYPE_NAME), geographicCoordinateSystem(NULL)
+        SFACoordinateSystem(TYPE_NAME)
     {
     }
-    ~SFAProjectedCoordinateSystem()
-    {
-        if (geographicCoordinateSystem)
-            delete geographicCoordinateSystem;
-    }
+
     static const char TYPE_NAME[];
 };
 
 struct SFAReferenceSystem
 {
-    SFACoordinateSystem *coordinateSystem;
+    mem::ScopedCopyablePtr<SFACoordinateSystem> coordinateSystem;
     std::vector<std::string> axisNames;
 
-    SFAReferenceSystem() :
-        coordinateSystem(NULL)
+    SFAReferenceSystem()
     {
-    }
-    virtual ~SFAReferenceSystem()
-    {
-        if (coordinateSystem)
-            delete coordinateSystem;
     }
 };
 

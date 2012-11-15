@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -50,10 +50,10 @@ WaveformParameters* WaveformParameters::clone() const
 {
     return new WaveformParameters(*this);
 }
-ChannelParameters::ChannelParameters()
+ChannelParameters::ChannelParameters() :
+    txRcvPolarization(DualPolarizationType::NOT_SET),
+    rcvAPCIndex(Init::undefined<int>())
 {
-    rcvAPCIndex = Init::undefined<int>();
-    txRcvPolarization = DualPolarizationType::NOT_SET;
 }
 ChannelParameters* ChannelParameters::clone() const
 {

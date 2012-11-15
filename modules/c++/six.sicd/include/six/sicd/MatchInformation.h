@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -25,12 +25,39 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
-#include <mem/ScopedCloneablePtr.h>
+#include <mem/ScopedCopyablePtr.h>
 
 namespace six
 {
 namespace sicd
 {
+
+/*!
+ *  \struct MatchCollect
+ *  \brief  Block containing information about match collection. Block repeated
+ *          for match collection = 1 to NumMatchCollections.
+ *
+ *  Added in 1.0.0 
+ *  This object is used for fields previously in 0.4.1
+ *      - coreName
+ *      - parameters
+ */
+struct MatchCollect
+{
+    //! Constructor
+    MatchCollect();
+
+    //! Text string that uniquely identifies the matching collection.
+    std::string coreName;
+
+    //! Collection sequence index for the match collection.
+    //  Added in 1.0.0
+    int matchIndex;
+
+    //! Relevant match parameter. Attribute name identifies the parameter.
+    std::vector<Parameter> parameters;
+};
+
 /*!
  *  \struct MatchCollection
  *  \brief SICD MatchInfoo/Collect
@@ -39,34 +66,34 @@ namespace sicd
  *  collection.  Match types are text strings describing the
  *  collection (e.g., COHERENT, STEREO)
  */
-struct MatchCollection
+struct MatchType
 {
     //! Constructor
-    MatchCollection() :
-        illuminatorName(Init::undefined<std::string>())
-    {
-    }
+    MatchType();
 
     //! Platform id.  List rcv only platform for bistatic colls
+    //  only exists in 0.4.1
     std::string collectorName;
 
     //! Optional - tx platform identifier for bistatic match colls
+    //  only exists in 0.4.1
     std::string illuminatorName;
 
-    //! unique ID for collect
-    std::string coreName;
-
     //! Match type is a string describing the collect
+    //  only exists in 0.4.1
     std::vector<std::string> matchType;
 
-    //! Relevant match params
-    std::vector<Parameter> parameters;
+    //! Text string identifying the match type. Examples: “COHERENT” ,“STEREO”
+    //  added in 1.0.0
+    std::string typeID;
 
-    //! Clone this object
-    MatchCollection* clone() const
-    {
-        return new MatchCollection(*this);
-    }
+    //! Optional - Collection sequence index for the current collection.
+    //  added in 1.0.0
+    int currentIndex;
+
+    //! Block containing information about match collection. Block repeated
+    //  for match collection = 1 to NumMatchCollections.
+    std::vector<MatchCollect> matchCollects;
 };
 
 /*!
@@ -79,17 +106,17 @@ struct MatchCollection
  */
 struct MatchInformation
 {
-    /*!
-     *  One or more Collect objects, containing information about
-     *  the Nth matched collection.  Collections are indexed from 1
-     */
-    std::vector<mem::ScopedCloneablePtr<MatchCollection> > collects;
+public:
 
     //!  Constructor.  Creates a single default-constructed collection.
     MatchInformation();
 
-    //!  Clone (including clones of children)
-    MatchInformation* clone() const;
+    /*!
+     *  At least one is manditory.
+     *  called "Collect" in 0.4.x
+     *  called "MatchType" in 1.0.0
+     */
+    std::vector<mem::ScopedCopyablePtr<MatchType> > types;
 };
 
 }

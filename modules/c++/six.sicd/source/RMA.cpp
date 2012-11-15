@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six.sicd-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * six-c++ is free software; you can redistribute it and/or modify
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -24,47 +24,38 @@
 using namespace six;
 using namespace six::sicd;
 
-RMAT::RMAT()
-{
-    refTime = Init::undefined<double>();
-    refPos = Init::undefined<Vector3>();
-    refVel = Init::undefined<Vector3>();
-    kx1 = Init::undefined<double>();
-    kx2 = Init::undefined<double>();
-    ky1 = Init::undefined<double>();
-    ky2 = Init::undefined<double>();
-}
-
-INCA::INCA()
-{
-    rangeCA = Init::undefined<double>();
-    freqZero = Init::undefined<double>();
-    dopplerCentroidCOA = Init::undefined<BooleanType>();
-}
-
-RMA::RMA()
-    : algoType(RMAlgoType::NOT_SET), rmat(NULL), inca(NULL)
+RMAT::RMAT() :
+    refTime(Init::undefined<double>()),
+    refPos(Init::undefined<Vector3>()),
+    refVel(Init::undefined<Vector3>()),
+    distRefLinePoly(Init::undefined<Poly1D>()),
+    cosDCACOAPoly(Init::undefined<Poly2D>()),
+    kx1(Init::undefined<double>()),
+    kx2(Init::undefined<double>()),
+    ky1(Init::undefined<double>()),
+    ky2(Init::undefined<double>()),
+    dopConeAngleRef(Init::undefined<double>())
 {
 }
 
-RMA::~RMA()
+RMCR::RMCR() :
+    refPos(Init::undefined<Vector3>()),
+    refVel(Init::undefined<Vector3>()),
+    dopConeAngleRef(Init::undefined<double>())
 {
-    if (rmat)
-        delete rmat;
-    if (inca)
-        delete inca;
 }
 
-RMA* RMA::clone() const
+INCA::INCA() :
+    timeCAPoly(Init::undefined<Poly1D>()),
+    rangeCA(Init::undefined<double>()),
+    freqZero(Init::undefined<double>()),
+    dopplerRateScaleFactorPoly(Init::undefined<Poly2D>()),
+    dopplerCentroidPoly(Init::undefined<Poly2D>()),
+    dopplerCentroidCOA(Init::undefined<BooleanType>())
 {
-    RMA* rma = new RMA();
+}
 
-    rma->algoType = algoType;
-
-    if (rmat)
-        rma->rmat = new RMAT(*rmat);
-    if (inca)
-        rma->inca = new INCA(*inca);
-
-    return rma;
+RMA::RMA() : 
+    algoType(RMAlgoType::NOT_SET)
+{
 }
