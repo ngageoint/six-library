@@ -10,10 +10,7 @@ def options(opt):
                            MODULES.split()))
 
 def configure(conf):
-    # Add this to take the cleanup leak over the warning
-    if conf.env['PLATFORM'].startswith('sparc-sun'):
-        conf.env.append_unique('CXXDEFINES', 'ELIMINATE_BROKEN_LINKAGE')
-    conf.env.append_value('CPPPATH_UNITTEST', join(conf.path.abspath(), 'include'))
+    conf.env.append_value('INCLUDES_UNITTEST', join(conf.path.abspath(), 'include'))
     
     conf.recurse(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
                            MODULES.split()))
