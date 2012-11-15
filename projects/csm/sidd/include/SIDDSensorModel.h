@@ -804,9 +804,9 @@ protected:
      *
      * \param[in] l     Line position in terms of pixels from upper left
      * \param[in] s     Sample position in terms of pixels from upper left
-     * \return A scene::RowCol<double> containing the distance in meters from the center of the image
+     * \return A types::RowCol<double> containing the distance in meters from the center of the image
      */
-    scene::RowCol<double> fromPixel(double l, double s);
+    types::RowCol<double> fromPixel(double l, double s);
 };
 
 }

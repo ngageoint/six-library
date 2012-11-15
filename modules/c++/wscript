@@ -1,8 +1,8 @@
 from os.path import join, exists
 from waflib import Options, Utils
 
-MODULES = 'except io logging math.linear math.poly mt nitf scene ' \
-          'six six.sicd six.sidd str sys tiff xml.lite cli sio.lite mem'
+MODULES = 'cli except io logging math.linear math.poly mem mt nitf scene ' \
+          'sio.lite six six.sicd six.sidd str sys tiff types xml.lite'
 SAMPLES = 'samples'
 
 def options(opt):

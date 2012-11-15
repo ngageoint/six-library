@@ -133,13 +133,13 @@ SIDDSensorModel::SIDDSensorModel(const std::string& sensorModelState)
     std::string name = "";
     std::string funcName = "SIDDSensorModel::SIDDSensorModel";
 
-    int idx = sensorModelState.find(' ');
+    const size_t idx = sensorModelState.find(' ');
     if (idx == std::string::npos)
     {
-	TSMError tsmErr;
-	tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-			   "Invalid sensor model state", funcName);
-	throw tsmErr;
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
+                   "Invalid sensor model state", funcName);
+        throw tsmErr;
     }
 
     name = sensorModelState.substr(0, idx);
@@ -172,7 +172,7 @@ SIDDSensorModel::~SIDDSensorModel()
 {
 }
 
-scene::RowCol<double> SIDDSensorModel::fromPixel(double l, double s)
+types::RowCol<double> SIDDSensorModel::fromPixel(double l, double s)
 {
     if (!mData->measurement->projection->isMeasurable())
     {
@@ -180,11 +180,12 @@ scene::RowCol<double> SIDDSensorModel::fromPixel(double l, double s)
                 "Image projection type is not measurable."));
     }
 
-    six::sidd::MeasurableProjection* p =
-            (six::sidd::MeasurableProjection*)mData->measurement->projection;
+    const six::sidd::MeasurableProjection* const p =
+            reinterpret_cast<six::sidd::MeasurableProjection*>(
+                    mData->measurement->projection.get());
 
-    scene::RowCol<int> ctrPt = p->referencePoint.rowCol;
-    return scene::RowCol<double>(
+    types::RowCol<int> ctrPt = p->referencePoint.rowCol;
+    return types::RowCol<double>(
             (l - ctrPt.row) * p->sampleSpacing.row,
                     (s - ctrPt.col) * p->sampleSpacing.col);
 }
@@ -206,7 +207,7 @@ TSMWarning *SIDDSensorModel::groundToImage(const double &x, const double &y,
         // Project ground point into image grid and then
         // convert from ecef to RowCol
         scene::Vector3 gridPt = mGrid->sceneToGrid(groundPt);
-	scene::RowCol<double> imagePt = mGrid->ecefToRowCol(gridPt);
+	types::RowCol<double> imagePt = mGrid->ecefToRowCol(gridPt);
 
 	line = imagePt.row;
 	sample = imagePt.col;
@@ -483,17 +484,20 @@ TSMWarning *SIDDSensorModel::getImageTime(const double& line,
 {
     try
     {
-	if (!mData->measurement->projection->isMeasurable())
-	{
-	    throw except::Exception(Ctxt(
-                    "Image projection type is not measurable."));
-	}
+        if (!mData->measurement->projection->isMeasurable())
+        {
+            throw except::Exception(Ctxt(
+                        "Image projection type is not measurable."));
+        }
 
-        const scene::RowCol<double> imagePt = fromPixel(line, sample);
-        time = ((six::sidd::MeasurableProjection*)mData->measurement->
-                projection)->timeCOAPoly(imagePt.row, imagePt.col);
+        const six::sidd::MeasurableProjection* const projection =
+                reinterpret_cast<six::sidd::MeasurableProjection*>(
+                        mData->measurement->projection.get());
+
+        const types::RowCol<double> imagePt = fromPixel(line, sample);
+        time = projection->timeCOAPoly(imagePt.row, imagePt.col);
     }
-    catch(except::Exception& e)
+    catch(const except::Exception& e)
     {
         TSMError tsmErr;
         tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
@@ -511,19 +515,22 @@ TSMWarning *SIDDSensorModel::getSensorPosition(const double& line,
 {
     try
     {
-	if (!mData->measurement->projection->isMeasurable())
-	{
-	    throw except::Exception(Ctxt(
-                    "Image projection type is not measurable."));
-	}
+        if (!mData->measurement->projection->isMeasurable())
+        {
+            throw except::Exception(Ctxt(
+                        "Image projection type is not measurable."));
+        }
 
-        const scene::RowCol<double> imagePt = fromPixel(line, sample);
-	double time = ((six::sidd::MeasurableProjection*)mData->measurement->
-		projection)->timeCOAPoly(imagePt.row, imagePt.col);
-	six::Vector3 pos = mData->measurement->arpPoly(time);
-	x = pos[0];
-	y = pos[1];
-	z = pos[2];
+        const six::sidd::MeasurableProjection* const projection =
+                reinterpret_cast<six::sidd::MeasurableProjection*>(
+                        mData->measurement->projection.get());
+
+        const types::RowCol<double> imagePt = fromPixel(line, sample);
+        const double time = projection->timeCOAPoly(imagePt.row, imagePt.col);
+        const six::Vector3 pos = mData->measurement->arpPoly(time);
+        x = pos[0];
+        y = pos[1];
+        z = pos[2];
     }
     catch(except::Exception& e)
     {
@@ -567,20 +574,23 @@ TSMWarning *SIDDSensorModel::getSensorVelocity(const double& line,
 {
     try
     {
-	if (!mData->measurement->projection->isMeasurable())
-	{
-	    throw except::Exception(Ctxt(
-                    "Image projection type is not measurable."));
-	}
+        if (!mData->measurement->projection->isMeasurable())
+        {
+            throw except::Exception(Ctxt(
+                        "Image projection type is not measurable."));
+        }
 
-        const scene::RowCol<double> imagePt = fromPixel(line, sample);
-	double time = ((six::sidd::MeasurableProjection*)mData->measurement->
-		projection)->timeCOAPoly(imagePt.row, imagePt.col);
-	six::PolyXYZ arpVelPoly = mData->measurement->arpPoly.derivative();
-	six::Vector3 vel = arpVelPoly(time);
-	vx = vel[0];
-	vy = vel[1];
-	vz = vel[2];
+        const six::sidd::MeasurableProjection* const projection =
+                reinterpret_cast<six::sidd::MeasurableProjection*>(
+                        mData->measurement->projection.get());
+
+        const types::RowCol<double> imagePt = fromPixel(line, sample);
+        const double time = projection->timeCOAPoly(imagePt.row, imagePt.col);
+        const six::PolyXYZ arpVelPoly = mData->measurement->arpPoly.derivative();
+        const six::Vector3 vel = arpVelPoly(time);
+        vx = vel[0];
+        vy = vel[1];
+        vz = vel[2];
     }
     catch(except::Exception& e)
     {
@@ -779,7 +789,7 @@ TSMWarning *SIDDSensorModel::getSensorIdentifier(std::string& sensorId)
 {
     try
     {
-	sensorId = mData->getSource();
+        sensorId = mData->getSource();
     }
     catch(except::Exception& e)
     {
@@ -798,7 +808,7 @@ TSMWarning *SIDDSensorModel::getPlatformIdentifier(std::string& platformId)
 {
     try
     {
-	platformId = mData->getSource();
+        platformId = mData->getSource();
     }
     catch(except::Exception& e)
     {
@@ -817,11 +827,11 @@ TSMWarning *SIDDSensorModel::getReferencePoint(double& x, double& y, double& z)
 {
     try
     {
-	six::Vector3 refPt = 
-		mData->measurement->projection->referencePoint.ecef;
-	x = refPt[0];
-	y = refPt[1];
-	z = refPt[2];
+        six::Vector3 refPt =
+            mData->measurement->projection->referencePoint.ecef;
+        x = refPt[0];
+        y = refPt[1];
+        z = refPt[2];
     }
     catch(except::Exception& e)
     {
@@ -888,25 +898,28 @@ TSMWarning *SIDDSensorModel::getIlluminationDirection(const double& x,
 {
     try
     {
-	if (!mData->measurement->projection->isMeasurable())
-	{
-	    throw except::Exception(Ctxt(
-                    "Image projection type is not measurable."));
-	}
+        if (!mData->measurement->projection->isMeasurable())
+        {
+            throw except::Exception(Ctxt(
+                        "Image projection type is not measurable."));
+        }
 
-	scene::Vector3 groundPos;
-	groundPos[0] = x;
-	groundPos[1] = y;
-	groundPos[2] = z;
+        const six::sidd::MeasurableProjection* const projection =
+                reinterpret_cast<six::sidd::MeasurableProjection*>(
+                        mData->measurement->projection.get());
 
-	double time = ((six::sidd::MeasurableProjection*)mData->measurement->
-		projection)->timeCOAPoly(0.0, 0.0);
-	six::Vector3 arpPos = mData->measurement->arpPoly(time);
+        const double time = projection->timeCOAPoly(0.0, 0.0);
+        six::Vector3 arpPos = mData->measurement->arpPoly(time);
 
-	scene::Vector3 illumVec = groundPos - arpPos;
-	direction_x = illumVec[0];
-	direction_y = illumVec[1];
-	direction_z = illumVec[2];
+        scene::Vector3 groundPos;
+        groundPos[0] = x;
+        groundPos[1] = y;
+        groundPos[2] = z;
+
+        const scene::Vector3 illumVec = groundPos - arpPos;
+        direction_x = illumVec[0];
+        direction_y = illumVec[1];
+        direction_z = illumVec[2];
     }
     catch(except::Exception& e)
     {

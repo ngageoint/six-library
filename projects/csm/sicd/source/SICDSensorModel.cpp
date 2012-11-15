@@ -132,13 +132,13 @@ SICDSensorModel::SICDSensorModel(const std::string& sensorModelState)
     std::string name = "";
     std::string funcName = "SICDSensorModel::SICDSensorModel";
 
-    int idx = sensorModelState.find(' ');
+    const size_t idx = sensorModelState.find(' ');
     if (idx == std::string::npos)
     {
-	TSMError tsmErr;
-	tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
-			   "Invalid sensor model state", funcName);
-	throw tsmErr;
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNSUPPORTED_FUNCTION,
+                   "Invalid sensor model state", funcName);
+        throw tsmErr;
     }
 
     name = sensorModelState.substr(0, idx);
@@ -173,18 +173,18 @@ SICDSensorModel::~SICDSensorModel()
 {
 }
 
-scene::RowCol<double> SICDSensorModel::toPixel(double l, double s)
+types::RowCol<double> SICDSensorModel::toPixel(double l, double s)
 {
-    scene::RowCol<int> ctrPt = mData->imageData->scpPixel;
-    return scene::RowCol<double>(
+    types::RowCol<int> ctrPt = mData->imageData->scpPixel;
+    return types::RowCol<double>(
             (l / mData->grid->row->sampleSpacing) + ctrPt.row,
                     (s / mData->grid->col->sampleSpacing) + ctrPt.col);
 }
 
-scene::RowCol<double> SICDSensorModel::fromPixel(double l, double s)
+types::RowCol<double> SICDSensorModel::fromPixel(double l, double s)
 {
-    scene::RowCol<int> ctrPt = mData->imageData->scpPixel;
-    return scene::RowCol<double>(
+    types::RowCol<int> ctrPt = mData->imageData->scpPixel;
+    return types::RowCol<double>(
             (l - ctrPt.row) * mData->grid->row->sampleSpacing,
                     (s - ctrPt.col) * mData->grid->col->sampleSpacing);
 }
@@ -204,9 +204,9 @@ TSMWarning *SICDSensorModel::groundToImage(const double &x, const double &y,
 	groundPt[2] = z;
 
 	double timeCOA(0.0);
-	scene::RowCol<double> imagePt = mProjection->sceneToImage(groundPt,
+	types::RowCol<double> imagePt = mProjection->sceneToImage(groundPt,
 								  &timeCOA);
-	scene::RowCol<double> pixelPt = toPixel(imagePt.row, imagePt.col);
+	types::RowCol<double> pixelPt = toPixel(imagePt.row, imagePt.col);
 	line = pixelPt.row;
 	sample = pixelPt.col;
 
@@ -255,7 +255,7 @@ TSMWarning *SICDSensorModel::imageToGround(const double& line,
     try
     {
 	// TODO handle the case where the height is non-zero
-	const scene::RowCol<double> imagePt = fromPixel(line, sample);
+	const types::RowCol<double> imagePt = fromPixel(line, sample);
 	double timeCOA(0.0);
 
 	scene::Vector3 groundRefPoint = mGeometry->getReferencePosition();
@@ -490,7 +490,7 @@ TSMWarning *SICDSensorModel::getImageTime(const double& line,
 {
     try
     {
-        scene::RowCol<double> imagePt = fromPixel(line, sample);
+        types::RowCol<double> imagePt = fromPixel(line, sample);
         time = mProjection->computeImageTime(imagePt);
     }
     catch(except::Exception& e)
@@ -511,7 +511,7 @@ TSMWarning *SICDSensorModel::getSensorPosition(const double& line,
 {
     try
     {
-        scene::RowCol<double> imagePt = fromPixel(line, sample);
+        types::RowCol<double> imagePt = fromPixel(line, sample);
         double time = mProjection->computeImageTime(imagePt);
         six::Vector3 pos = mProjection->computeARPPosition(time); 
         x = pos[0];
@@ -560,7 +560,7 @@ TSMWarning *SICDSensorModel::getSensorVelocity(const double& line,
 {
     try
     {
-        scene::RowCol<double> imagePt = fromPixel(line, sample);
+        types::RowCol<double> imagePt = fromPixel(line, sample);
         double time = mProjection->computeImageTime(imagePt);
         six::Vector3 vel = mProjection->computeARPVelocity(time); 
         vx = vel[0];

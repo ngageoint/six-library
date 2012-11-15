@@ -25,12 +25,11 @@ def build(bld):
         install_path='${PREFIX}/lib')
     
     #build VTS
-    exe = bld(features = 'cxx program', includes='include ../TSM/include',
+    exe = bld.program(includes='include ../TSM/include',
               target='vts', name='vts',
               source=bld.path.find_dir('external/VTS/source').ant_glob('*.cpp'),
               libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
-              libs='TSMAPI',
-              uselocal='',
+              use='TSMAPI',
               uselib='CSTD CRUN DL',
               env=pEnv.derive(),
               path=bld.path.find_dir('external/VTS'),

@@ -112,11 +112,11 @@ void Converter::groundToImage(const scene::Vector3& groundPt) const
 {
     // Convert to image coordinates
     double timeCOA(0.0);
-    const scene::RowCol<double> imagePt(mProjModel->sceneToImage(groundPt,
+    const types::RowCol<double> imagePt(mProjModel->sceneToImage(groundPt,
                                                                  &timeCOA));
 
     // Convert to pixel coordinates
-    const scene::RowCol<double> pixelPt(
+    const types::RowCol<double> pixelPt(
         imagePt.row / mRowSampleSpacing + mSCP.row,
         imagePt.col / mColSampleSpacing + mSCP.col);
 
@@ -130,7 +130,7 @@ void Converter::groundToImage(const scene::Vector3& groundPt) const
 void Converter::imageToGround(double row, double col) const
 {
     // Convert to image coordinates
-    const scene::RowCol<double>
+    const types::RowCol<double>
         imagePt((row - mSCP.row) * mRowSampleSpacing,
                 (col - mSCP.col) * mColSampleSpacing);
 
