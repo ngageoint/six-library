@@ -810,9 +810,9 @@ protected:
      *
      * \param[in] l     Line position in terms of meters from the image center
      * \param[in] s     Sample position in terms of meters from the image center
-     * \return A scene::RowCol<double> containing the distance in pixels from the upper left of the image
+     * \return A types::RowCol<double> containing the distance in pixels from the upper left of the image
      */
-    scene::RowCol<double> toPixel(double l, double s);
+    types::RowCol<double> toPixel(double l, double s);
 
     /**
      * Transforms the given l, s values from units of pixels from upper left
@@ -820,9 +820,9 @@ protected:
      *
      * \param[in] l     Line position in terms of pixels from upper left
      * \param[in] s     Sample position in terms of pixels from upper left
-     * \return A scene::RowCol<double> containing the distance in meters from the center of the image
+     * \return A types::RowCol<double> containing the distance in meters from the center of the image
      */
-    scene::RowCol<double> fromPixel(double l, double s);
+    types::RowCol<double> fromPixel(double l, double s);
 
 };
 
