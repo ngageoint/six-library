@@ -38,7 +38,7 @@
         <echo>"====================================================="</echo>
         <echo>"                       COMPILE                       "</echo>
         <echo>"====================================================="</echo>
-        <javac srcdir="${src.dir}" destdir="${object-dir}" failonerror="yes" fork="true">
+        <javac srcdir="${src.dir}" destdir="${object-dir}" failonerror="yes" fork="true"  target="1.5">
             <classpath refid="build-classpath"/>
         </javac>
     </target>
