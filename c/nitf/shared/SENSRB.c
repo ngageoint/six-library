@@ -30,13 +30,13 @@ static nitf_TREDescription description[] = {
     {NITF_IF,     0,     "eq Y",                         "GENERAL_DATA"},
     {NITF_BCS_A,  25,    "Sensor Name",                  "SENSOR"},              /* 01a */
     {NITF_BCS_A,  32,    "Sensor URI",                   "SENSOR_URI"},          /* 01b */
-    {NITF_BCS_A,  25,    "Plaform Common Name",          "PLATFORM"},            /* 01c */
+    {NITF_BCS_A,  25,    "Platform Common Name",         "PLATFORM"},            /* 01c */
     {NITF_BCS_A,  32,    "Platform URI",                 "PLATFORM_URI"},        /* 01d */
     {NITF_BCS_A,  10,    "Operation Domain",             "OPERATION_DOMAIN"},    /* 01e */
     {NITF_BCS_N,  1,     "Content Level",                "CONTENT_LEVEL"},       /* 01f */
     {NITF_BCS_A,  5,     "Geodetic System",              "GEODETIC_SYSTEM"},     /* 01g */
     {NITF_BCS_A,  1,     "Geodetic Type",                "GEODETIC_TYPE"},       /* 01h */
-    {NITF_BCS_A,  3,     "Elevation Datum",              "ELEVAION_DATUM"},      /* 01i */
+    {NITF_BCS_A,  3,     "Elevation Datum",              "ELEVATION_DATUM"},     /* 01i */
     {NITF_BCS_A,  2,     "Length Unit",                  "LENGTH_UNIT"},         /* 01j */
     {NITF_BCS_A,  3,     "Angular Unit",                 "ANGULAR_UNIT"},        /* 01k */
     {NITF_BCS_N,  8,     "Start Date",                   "START_DATE"},          /* 01l */
@@ -116,9 +116,9 @@ static nitf_TREDescription description[] = {
     {NITF_ENDIF,  0,     NULL,                           NULL},
     {NITF_ENDIF,  0,     NULL,                           NULL},
 
-    {NITF_BCS_A,  12,    "Reference Time",               "REFERENCE_TIME"},      /* 05a */
-    {NITF_BCS_A,  8,     "Reference Pixel Row",          "REFERENCE_ROW"},       /* 05b */
-    {NITF_BCS_A,  8,     "Reference Pixel Column",       "REFERENCE_COLUMN"},    /* 05c */
+    {NITF_BCS_N,  12,    "Reference Time",               "REFERENCE_TIME"},      /* 05a */
+    {NITF_BCS_N,  8,     "Reference Pixel Row",          "REFERENCE_ROW"},       /* 05b */
+    {NITF_BCS_N,  8,     "Reference Pixel Column",       "REFERENCE_COLUMN"},    /* 05c */
 
     {NITF_BCS_N,  11,    "Latitude or X",                "LATITUDE_OR_X"},       /* 06a */
     {NITF_BCS_N,  12,    "Longitude or Y",               "LONGITUDE_OR_Y"},      /* 06b */
@@ -171,12 +171,14 @@ static nitf_TREDescription description[] = {
     {NITF_LOOP,   0,     NULL,                           "POINT_SET_DATA"},
     {NITF_BCS_A,  25,    "Point Set Type",               "POINT_SET_TYPE"},      /* 11a */
     {NITF_BCS_N,  3,     "Point Count",                  "POINT_COUNT"},         /* 11b */
+    {NITF_LOOP,   0,     NULL,                           "POINT_COUNT"},
     {NITF_BCS_N,  8,     "Point Row Location",           "P_ROW"},               /* 11c */
     {NITF_BCS_N,  8,     "Point Column Location",        "P_COLUMN"},            /* 11d */
     {NITF_BCS_N,  10,    "Point Latitude",               "P_LATITUDE"},          /* 11e */
     {NITF_BCS_N,  11,    "Point Longitude",              "P_LONGITUDE"},         /* 11f */
     {NITF_BCS_N,  6,     "Point Elevation",              "P_ELEVATION"},         /* 11g */
     {NITF_BCS_N,  8,     "Point Range",                  "P_RANGE"},             /* 11h */
+    {NITF_ENDLOOP,0,    NULL,                           NULL},
     {NITF_ENDLOOP,0,    NULL,                           NULL},
 
     /** Time Stamped Data has different types, sizes, and counts depending on
@@ -211,12 +213,12 @@ static nitf_TREDescription description[] = {
     {NITF_ENDIF, 0,     NULL,                           NULL},
     {NITF_IF,    0,     "eq 07b",                       "TIME_STAMP_TYPE"},
     {NITF_BCS_N, 10,    "Time Stamp Value",             "TIME_STAMP_VALUE"},
-    {NITF_ENDIF, 9,     NULL,                           NULL},
-    {NITF_IF,    10,    "eq 07c",                       "TIME_STAMP_TYPE"},
-    {NITF_BCS_N, 8,     "Time Stamp Value",             "TIME_STAMP_VALUE"},
+    {NITF_ENDIF, 0,     NULL,                           NULL},
+    {NITF_IF,    0,     "eq 07c",                       "TIME_STAMP_TYPE"},
+    {NITF_BCS_N, 9,     "Time Stamp Value",             "TIME_STAMP_VALUE"},
     {NITF_ENDIF, 0,     NULL,                           NULL},
     {NITF_IF,    0,     "eq 07d",                       "TIME_STAMP_TYPE"},
-    {NITF_BCS_N, 8,     "Time Stamp Value",             "TIME_STAMP_VALUE"},
+    {NITF_BCS_N, 10,    "Time Stamp Value",             "TIME_STAMP_VALUE"},
     {NITF_ENDIF, 0,     NULL,                           NULL},
     {NITF_IF,    0,     "eq 07f",                       "TIME_STAMP_TYPE"},
     {NITF_BCS_N, 9,     "Time Stamp Value",             "TIME_STAMP_VALUE"},
@@ -312,12 +314,12 @@ static nitf_TREDescription description[] = {
     {NITF_ENDIF, 0,     NULL,                           NULL},
     {NITF_IF,    0,     "eq 07b",                       "PIXEL_REFERENCE_TYPE"},
     {NITF_BCS_N, 10,    "Pixel Reference Value",        "PIXEL_REFERENCE_VALUE"},
-    {NITF_ENDIF, 9,     NULL,                           NULL},
-    {NITF_IF,    10,    "eq 07c",                       "PIXEL_REFERENCE_TYPE"},
-    {NITF_BCS_N, 8,     "Pixel Reference Value",        "PIXEL_REFERENCE_VALUE"},
+    {NITF_ENDIF, 0,     NULL,                           NULL},
+    {NITF_IF,    0,     "eq 07c",                       "PIXEL_REFERENCE_TYPE"},
+    {NITF_BCS_N, 9,     "Pixel Reference Value",        "PIXEL_REFERENCE_VALUE"},
     {NITF_ENDIF, 0,     NULL,                           NULL},
     {NITF_IF,    0,     "eq 07d",                       "PIXEL_REFERENCE_TYPE"},
-    {NITF_BCS_N, 8,     "Pixel Reference Value",        "PIXEL_REFERENCE_VALUE"},
+    {NITF_BCS_N, 10,    "Pixel Reference Value",        "PIXEL_REFERENCE_VALUE"},
     {NITF_ENDIF, 0,     NULL,                           NULL},
     {NITF_IF,    0,     "eq 07f",                       "PIXEL_REFERENCE_TYPE"},
     {NITF_BCS_N, 9,     "Pixel Reference Value",        "PIXEL_REFERENCE_VALUE"},
