@@ -468,9 +468,9 @@ mxArray* read24BitPixelArray(nitf_Reader* reader,
     /* Buffer array ptr */
     nitf_Uint8* buffers[2];
 
-    int dims[] = { numCols, numRows, 3 };
-    int numBands = 3;
-    long frame = numRows * numCols;
+    const mwSize dims[] = { numCols, numRows, 3 };
+    const int numBands = 3;
+    const size_t frame = numRows * numCols;
     /*
      *  Do this here since if it fails the whole function aborts and there is
      *   no chance to clean-up
