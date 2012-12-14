@@ -70,8 +70,8 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A,  12,    "Radial Distortion Coeff 2",    "RADIAL_DISTORT_2"},    /* 03e */
     {NITF_BCS_A,  12,    "Radial Distortion Coeff 3",    "RADIAL_DISTORT_3"},    /* 03f */
     {NITF_BCS_N,  9,     "Radial Distortion Fit Limit",  "RADIAL_DISTORT_LIMIT"},/* 03g */
-    {NITF_BCS_A,  12,    "Decentering Distortion Coeff 1","DECENT_DISTORY_1"},   /* 03h */
-    {NITF_BCS_A,  12,    "Decentering Distortion Coeff 2","DECENT_DISTORY_2"},   /* 03i */
+    {NITF_BCS_A,  12,    "Decentering Distortion Coeff 1","DECENT_DISTORT_1"},   /* 03h */
+    {NITF_BCS_A,  12,    "Decentering Distortion Coeff 2","DECENT_DISTORT_2"},   /* 03i */
     {NITF_BCS_A,  12,    "Affinity Distortion Coeff 1",  "AFFINITY_DISTORT_1"},  /* 03j */
     {NITF_BCS_A,  12,    "Affinity Distortion Coeff 2",  "AFFINITY_DISTORT_2"},  /* 03k */
     {NITF_BCS_N,  8,     "Calibration Date",             "CALIBRATION_DATE"},    /* 03l */
@@ -162,7 +162,7 @@ static nitf_TREDescription description[] = {
 
     {NITF_BCS_A,  1,     "Sensor Velocity Data",         "SENSOR_VELOCITY_DATA"},/* 10 */
     {NITF_IF,     0,     "eq Y",                         "SENSOR_VELOCITY_DATA"},
-    {NITF_BCS_N,  9,     "Sensor North Velocity",        "VELOCITY_NORTH_OR_Z"}, /* 10a */
+    {NITF_BCS_N,  9,     "Sensor North Velocity",        "VELOCITY_NORTH_OR_X"}, /* 10a */
     {NITF_BCS_N,  9,     "Sensor East Velocity",         "VELOCITY_EAST_OR_Y"},  /* 10b */
     {NITF_BCS_N,  9,     "Sensor Down Velocity",         "VELOCITY_DOWN_OR_Z"},  /* 10c */
     {NITF_ENDIF,  0,     NULL,                           NULL},
