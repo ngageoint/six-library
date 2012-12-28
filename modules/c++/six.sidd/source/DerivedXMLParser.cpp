@@ -545,6 +545,10 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
                     "MonochromeDisplayRemap"));
         }
     }
+    else
+    {
+        return NULL;
+    }
 }
 
 void DerivedXMLParser::parseDisplayFromXML(
