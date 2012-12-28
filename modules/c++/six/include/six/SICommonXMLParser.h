@@ -163,6 +163,10 @@ protected:
         ErrorStatistics* errorStatistics) const = 0;
 
 private:
+    // TODO: Can we combine this with parsePoly1D()?
+    void parsePoly(XMLElem polyXML, size_t xyzIdx, PolyXYZ& polyXYZ) const;
+
+private:
     const std::string mSICommonURI;
 };
 }

@@ -88,35 +88,46 @@ void SICommonXMLParser::parsePolyXYZ(XMLElem polyXML, PolyXYZ& polyXYZ) const
     XMLElem yXML = getFirstAndOnly(polyXML, "Y");
     XMLElem zXML = getFirstAndOnly(polyXML, "Z");
 
-    int order = str::toType<int>(xXML->getAttributes().getValue("order1"));
-    PolyXYZ pXYZ(order);
+    // Usually these polynomials will always be the same order, but there's
+    // no guarantee this will be the case.  So, we'll make a polynomial of
+    // the max order of the three polynomials - the constructor will
+    // initialize all the coefficients to 0, so we'll get the right behavior
+    // if one of these polynomials is lower-order.
+    const size_t xOrder =
+            str::toType<size_t>(xXML->getAttributes().getValue("order1"));
+    const size_t yOrder =
+            str::toType<size_t>(yXML->getAttributes().getValue("order1"));
+    const size_t zOrder =
+            str::toType<size_t>(zXML->getAttributes().getValue("order1"));
+    const size_t order =
+            std::max<size_t>(std::max<size_t>(xOrder, yOrder), zOrder);
 
-    std::vector < XMLElem > xCoeffsXML;
-    std::vector < XMLElem > yCoeffsXML;
-    std::vector < XMLElem > zCoeffsXML;
+    polyXYZ = PolyXYZ(order);
 
-    xXML->getElementsByTagName("Coef", xCoeffsXML);
-    yXML->getElementsByTagName("Coef", yCoeffsXML);
-    zXML->getElementsByTagName("Coef", zCoeffsXML);
+    parsePoly(xXML, 0, polyXYZ);
+    parsePoly(yXML, 1, polyXYZ);
+    parsePoly(zXML, 2, polyXYZ);
+}
 
-    int exp;
-    for (int i = 0; i <= order; i++)
+void SICommonXMLParser::parsePoly(XMLElem polyXML,
+                                  size_t xyzIdx,
+                                  PolyXYZ& polyXYZ) const
+{
+    std::vector<XMLElem> coeffsXML;
+    polyXML->getElementsByTagName("Coef", coeffsXML);
+
+    for (size_t ii = 0; ii < coeffsXML.size(); ++ii)
     {
-        //check the order attr, and use that index
-        exp = str::toType<int>(
-            xCoeffsXML[i]->getAttributes().getValue("exponent1"));
-        parseDouble(xCoeffsXML[i], pXYZ[exp][0]);
-
-        exp = str::toType<int>(
-            yCoeffsXML[i]->getAttributes().getValue("exponent1"));
-        parseDouble(yCoeffsXML[i], pXYZ[exp][1]);
-
-        exp = str::toType<int>(
-            zCoeffsXML[i]->getAttributes().getValue("exponent1"));
-        parseDouble(zCoeffsXML[i], pXYZ[exp][2]);
+        // Check the order attr, and use that index
+        const size_t orderIdx = str::toType<size_t>(
+            coeffsXML[ii]->getAttributes().getValue("exponent1"));
+        if (orderIdx > polyXYZ.order())
+        {
+            throw except::Exception(Ctxt(
+                    "Order " + str::toString(orderIdx) + " is out of bounds"));
+        }
+        parseDouble(coeffsXML[ii], polyXYZ[orderIdx][xyzIdx]);
     }
-
-    polyXYZ = pXYZ;
 }
 
 XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
