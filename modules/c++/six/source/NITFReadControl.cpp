@@ -42,7 +42,7 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
-        NITFImageInfo* info)
+        const NITFImageInfo* info)
 {
 
     unsigned long numBandsSeg =
@@ -85,7 +85,7 @@ void NITFReadControl::load(const std::string& fromFile)
     nitf::IOHandle handle(fromFile);
 
     mRecord = mReader.read(handle);
-    std::string title = mRecord.getHeader().getFileTitle().toString();
+    const std::string title = mRecord.getHeader().getFileTitle().toString();
 
     DataType dataType;
     if (str::startsWith(title, "SICD"))
@@ -168,20 +168,33 @@ void NITFReadControl::load(const std::string& fromFile)
                 "SICD/SIDD files must have at least one image"));
     }
 
-    // How do we know how many images we should have?
-    // If its SICD, we have one image info
-    // If its SIPD, we have one per SIPD
+    // For SICD, we'll have exactly one DES
+    // For SIDD, we'll have one SIDD DES per image product
+    // We may also have some SICD DES's (this occurs if the SIDD was generated
+    // from SICD input(s) - these serve as a reference), so we want to skip
+    // over these when saving off NITFImageInfo's
     if (mContainer->getDataType() == DataType::COMPLEX)
     {
+        if (mContainer->getNumData() != 1)
+        {
+            throw except::Exception(Ctxt(
+                    "SICD file must have exactly 1 SICD DES but got " +
+                    str::toString(mContainer->getNumData())));
+        }
+
         mInfos.push_back(new NITFImageInfo(mContainer->getData(0)));
     }
     else
     {
-        for (unsigned int i = 0; i < mContainer->getNumData(); ++i)
+        // We will validate that we got a SIDD DES per image product in the
+        // for loop below
+        for (size_t ii = 0; ii < mContainer->getNumData(); ++ii)
         {
-            Data* ith = mContainer->getData(i);
-            if (ith->getDataType() == DataType::DERIVED)
-                mInfos.push_back(new NITFImageInfo(ith));
+            Data* const data = mContainer->getData(ii);
+            if (data->getDataType() == DataType::DERIVED)
+            {
+                mInfos.push_back(new NITFImageInfo(data));
+            }
         }
     }
 
@@ -206,8 +219,14 @@ void NITFReadControl::load(const std::string& fromFile)
 
         // This function should throw if the data does not exist
         std::pair<int, int> imageAndSegment = getIndices(subheader);
+        if (imageAndSegment.first >= mInfos.size())
+        {
+            throw except::Exception(Ctxt(
+                    "Image " + str::toString(imageAndSegment.first) +
+                    " is out of bounds"));
+        }
 
-        NITFImageInfo* currentInfo = mInfos[imageAndSegment.first];
+        NITFImageInfo* const currentInfo = mInfos[imageAndSegment.first];
         int j = imageAndSegment.second;
 
         // We have to enforce a number of rules, namely that the #
