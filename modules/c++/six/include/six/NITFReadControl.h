@@ -66,7 +66,8 @@ public:
      *  segment in question at least follows some of the rules
      *  that its supposed to.
      */
-    void validateSegment(nitf::ImageSubheader subheader, NITFImageInfo* info);
+    void validateSegment(nitf::ImageSubheader subheader,
+                         const NITFImageInfo* info);
 
     /*!
      *  Fulfills our obligationss to the parent class, using the IOInterface
