@@ -19,8 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/NITFReadControl.h"
-#include "six/XMLControlFactory.h"
+#include <sstream>
+
+#include <six/NITFReadControl.h>
+#include <six/XMLControlFactory.h>
 
 using namespace six;
 
@@ -118,6 +120,32 @@ void NITFReadControl::load(const std::string& fromFile)
             desid == "SICD_XML" ||
             desid == "SIDD_XML")
         {
+            if (desid == "XML_DATA_CONTENT")
+            {
+                // We better have a user-defined subheader.  For now we
+                // don't actually store off the values, but we do check its
+                // tag and size.
+                nitf::TRE tre = subheader.getSubheaderFields();
+                if (tre.getTag() !=
+                        Constants::DES_USER_DEFINED_SUBHEADER_TAG)
+                {
+                    throw except::Exception(Ctxt(
+                        "Expected a user-defined subheader tag of " +
+                        std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
+                        " but got " + tre.getTag()));
+                }
+
+                if (tre.getCurrentSize() !=
+                        Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
+                {
+                    std::ostringstream ostr;
+                    ostr << "Expected a user-defined subheader size of "
+                         << Constants::DES_USER_DEFINED_SUBHEADER_LENGTH
+                         << " but got " << tre.getCurrentSize();
+                    throw except::Exception(Ctxt(ostr.str()));
+                }
+            }
+
             nitf::SegmentReader deReader = mReader.newDEReader(i);
             SegmentInputStreamAdapter ioAdapter(deReader);
             xml::lite::MinidomParser xmlParser;
