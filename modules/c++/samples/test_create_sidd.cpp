@@ -281,7 +281,19 @@ int main(int argc, char** argv)
             data->display->magnificationMethod = six::MagnificationMethod::NEAREST_NEIGHBOR;
 
             // Give'em our LUT
-            data->display->remapInformation->remapLUT.reset(lut);
+            if (lut)
+            {
+                if (pixelType == six::PixelType::RGB24I)
+                {
+                    data->display->remapInformation.reset(
+                        new six::sidd::ColorDisplayRemap(lut));
+                }
+                else
+                {
+                    data->display->remapInformation.reset(
+                        new six::sidd::MonochromeDisplayRemap("PEDF", lut));
+                }
+            }
             data->setImageCorners(makeUpCornersFromDMS());
 
             six::sidd::PlaneProjection* planeProjection =
@@ -309,6 +321,7 @@ int main(int argc, char** argv)
             data->annotations.push_back(mem::ScopedCopyablePtr<
                     six::sidd::Annotation>(new six::sidd::Annotation));
             six::sidd::Annotation *ann = (*data->annotations.rbegin()).get();
+            std::cout << "Hey: " << ann->spatialReferenceSystem.get() << std::endl;
             ann->identifier = "1st Annotation";
             ann->objects.push_back(mem::ScopedCopyablePtr<
                     six::sidd::SFAGeometry>(new six::sidd::SFAPoint));
