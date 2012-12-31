@@ -1979,11 +1979,11 @@ void DerivedXMLParser::parseAnnotationFromXML(
 {
     parseString(getFirstAndOnly(elem, "Identifier"), a->identifier);
 
-    a->spatialReferenceSystem.reset(new six::sidd::SFAReferenceSystem);
-
     XMLElem spatialXML = getOptional(elem, "SpatialReferenceSystem");
     if (spatialXML)
     {
+        a->spatialReferenceSystem.reset(new six::sidd::SFAReferenceSystem());
+
         // choice
         XMLElem tmpXML = getOptional(spatialXML, 
                                      "ProjectedCoordinateSystem");
@@ -2067,17 +2067,21 @@ void DerivedXMLParser::parseAnnotationFromXML(
             a->spatialReferenceSystem->axisNames.push_back(axisName);
         }
     }
+    else
+    {
+        a->spatialReferenceSystem.reset();
+    }
 
     std::vector<XMLElem> objectsXML;
     elem->getElementsByTagName("Object", objectsXML);
     a->objects.resize(objectsXML.size());
-    for (unsigned int i = 0, size = objectsXML.size(); i < size; ++i)
+    for (size_t i = 0, size = objectsXML.size(); i < size; ++i)
     {
         XMLElem obj = objectsXML[i];
 
         //there should be only one child - a choice between types
         std::vector<XMLElem> &children = obj->getChildren();
-        if (children.size() > 0)
+        if (!children.empty())
         {
             //just get the first one
             XMLElem child = children[0];
