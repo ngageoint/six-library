@@ -20,15 +20,73 @@
  *
  */
 
+#include <sstream>
+#include <iomanip>
+
 #include <mem/ScopedArray.h>
-#include "six/NITFWriteControl.h"
-#include "six/XMLControlFactory.h"
+#include <six/NITFWriteControl.h>
+#include <six/XMLControlFactory.h>
 
 using namespace six;
 
 const char NITFWriteControl::OPT_MAX_PRODUCT_SIZE[] = "MaxProductSize";
 const char NITFWriteControl::OPT_MAX_ILOC_ROWS[] = "MaxILOCRows";
 const char NITFWriteControl::OPT_J2K_COMPRESSION[] = "J2KCompression";
+
+namespace
+{
+// Print the 4 corners as a 5-point polygon (last point is the first point
+// repeated).  These are printed as lat/lon pairs with no separator other than
+// that each value always contain a leading +/- sign.  Lat values get 2
+// leading digits and lon values get 3.  Both get 8 decimal digits.
+std::string cornersToString(const six::LatLonCorners& corners)
+{
+    // BASE_WIDTH = sign + at least 2 leading digits + decimal point +
+    // decimal digits
+    static const size_t NUM_TRAILING_DIGITS = 8;
+    static const size_t BASE_WIDTH = 1 + 2 + 1 + NUM_TRAILING_DIGITS;
+
+    std::ostringstream ostr;
+    ostr.fill('0');
+
+    // This forces the leading 0's to the right of the +/- sign
+    ostr.setf(std::ios::internal, std::ios::adjustfield);
+
+    ostr << std::showpos << std::fixed
+         << std::setprecision(NUM_TRAILING_DIGITS);
+
+    for (size_t ii = 0; ii <= six::LatLonCorners::NUM_CORNERS; ++ii)
+    {
+        const six::LatLon& corner =
+                corners.getCorner(ii % six::LatLonCorners::NUM_CORNERS);
+
+        ostr << std::setw(BASE_WIDTH) << corner.getLat()
+             << std::setw(BASE_WIDTH + 1) << corner.getLon();
+    }
+
+    return ostr.str();
+}
+
+// Just using this to provide a more useful exception message
+void setField(const std::string& field,
+              const std::string& value,
+              nitf::TRE& tre)
+{
+    nitf::Field treField(tre[field]);
+    if (value.length() > treField.getLength())
+    {
+        std::ostringstream ostr;
+        ostr << "Tried to set field '" << field << "' to '" << value
+             << "' but this is " << value.length() << " characters when the "
+             << "field can only contain " << treField.getLength()
+             << " characters";
+
+        throw except::Exception(Ctxt(ostr.str()));
+    }
+
+    treField = value;
+}
+}
 
 NITFWriteControl::~NITFWriteControl()
 {
@@ -229,14 +287,20 @@ void NITFWriteControl::initialize(Container* container)
     }
     for (size_t ii = 0; ii < mContainer->getNumData(); ++ii)
     {
+        const six::Data& data(*mContainer->getData(ii));
+
         // Write out a DES
         nitf::DESegment seg = mRecord.newDataExtensionSegment();
         nitf::DESubheader subheader = seg.getSubheader();
-        subheader.getTypeID().set(getDesTypeID(*mContainer->getData(ii)));
+        subheader.getTypeID().set(getDesTypeID(data));
         subheader.getVersion().set(Constants::DES_VERSION_STR);
 
-        setDESecurity(mContainer->getData(ii)->getClassification(),
-                      subheader);
+        if (needUserDefinedSubheader(data))
+        {
+            addUserDefinedSubheader(data, subheader);
+        }
+
+        setDESecurity(data.getClassification(), subheader);
     }
 
     updateFileHeaderSecurity();
@@ -481,12 +545,6 @@ void NITFWriteControl::save(SourceList& imageData,
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
     saveIO(imageData, bufferedIO);
-    //     std::cout << "Write block info: " << std::endl;
-    //     std::cout << "------------------------------------" << std::endl;
-    //     std::cout << "Total number of blocks written: "
-    //             << bufferedIO.getNumBlocksWritten() << std::endl;
-    //     std::cout << "Of those, " << bufferedIO.getNumPartialBlocksWritten()
-    //             << " were less than buffer size " << bufferSize << std::endl;
     bufferedIO.close();
 }
 
@@ -558,12 +616,6 @@ void NITFWriteControl::save(BufferList& imageData,
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
     saveIO(imageData, bufferedIO);
-    //     std::cout << "Write block info: " << std::endl;
-    //     std::cout << "------------------------------------" << std::endl;
-    //     std::cout << "Total number of blocks written: "
-    //             << bufferedIO.getNumBlocksWritten() << std::endl;
-    //     std::cout << "Of those, " << bufferedIO.getNumPartialBlocksWritten()
-    //             << " were less than buffer size " << bufferSize << std::endl;
     bufferedIO.close();
 }
 
@@ -684,4 +736,103 @@ std::string NITFWriteControl::getDesTypeID(const six::Data& data)
     {
         return "XML_DATA_CONTENT";
     }
+}
+
+bool NITFWriteControl::needUserDefinedSubheader(const six::Data& data)
+{
+    // TODO: This requires some knowledge of the SICD/SIDD versions, but not
+    //       sure where else this logic should live.
+
+    const std::string version(data.getVersion());
+    const std::vector<std::string> versionParts(str::split(version, "."));
+
+    if (versionParts.size() < 2)
+    {
+        throw except::Exception(Ctxt("Invalid version string: " + version));
+    }
+
+    // Starting with 1.0, the user-defined subheader is required
+    const std::string& majorVersion = versionParts[0];
+    return (majorVersion != "0");
+}
+
+void NITFWriteControl::setOrganizationId(const std::string& organizationId)
+{
+    mOrganizationId = organizationId;
+}
+
+void NITFWriteControl::setLocationIdentifier(
+    const std::string& locationId,
+    const std::string& locationIdNamespace)
+{
+    mLocationId = locationId;
+    mLocationIdNamespace = locationIdNamespace;
+}
+
+void NITFWriteControl::setAbstract(const std::string& abstract)
+{
+    mAbstract = abstract;
+}
+
+void NITFWriteControl::addUserDefinedSubheader(
+        const six::Data& data,
+        nitf::DESubheader& subheader) const
+{
+    // If NITRO doesn't know this TRE (because our plugin path isn't set),
+    // we won't actually get an exception in the TRE constructor because it'll
+    // use a default handler for the TRE.  Instead, we'll get a no such key
+    // exception when it doesn't know what the fields below are.  try/catch
+    // this so we can supply a more obvious error message.
+    nitf::TRE tre(Constants::DES_USER_DEFINED_SUBHEADER_TAG,
+                  Constants::DES_USER_DEFINED_SUBHEADER_ID);
+
+    try
+    {
+        tre["DESCRC"] = "99999";
+        tre["DESSHFT"] = "XML";
+        tre["DESSHDT"] = data.getCreationTime().format("%Y-%m-%dT%H:%M:%SZ");
+        setField("DESSHRP", mOrganizationId, tre);
+
+        const std::string dataType =
+                (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
+        tre["DESSHSI"] = dataType +
+                " Volume 1 Design & Implementation Description Document";
+
+        const std::string version(data.getVersion());
+        tre["DESSHSV"] = version;
+
+        // NOTE: This is the specification date for both SICD 1.0 and SIDD 1.0
+        //       For later specs, will need to extend this logic
+        std::string specDT;
+        if (version == "1.0.0")
+        {
+            specDT = "2011-08-01T00:00:00Z";
+        }
+        else
+        {
+            throw except::Exception(Ctxt(
+                    "Need specification date for version " + version));
+        }
+        tre["DESSHSD"] = specDT;
+
+        tre["DESSHTN"] = "urn:" + dataType + ":" + version;
+        tre["DESSHLPG"] = cornersToString(data.getImageCorners());
+
+        // Spec specifies leaving this blank
+        tre["DESSHLPT"] = "";
+
+        setField("DESSHLI", mLocationId, tre);
+        setField("DESSHLIN", mLocationIdNamespace, tre);
+        setField("DESSHABS", mAbstract, tre);
+    }
+    catch (const except::NoSuchKeyException& )
+    {
+        throw except::NoSuchKeyException(Ctxt(
+                "Must have '" +
+                std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
+                "' plugin on the plugin path.  Either set the "
+                "NITF_PLUGIN_PATH environment variable or use "
+                "six::loadPluginDir()"));
+    }
+    subheader.setSubheaderFields(tre);
 }

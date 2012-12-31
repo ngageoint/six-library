@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <nitf/PluginRegistry.hpp>
 #include "six/Utilities.h"
 
 using namespace six;
@@ -778,4 +780,9 @@ template<> six::FrameType six::toType<six::FrameType>(const std::string& s)
         return FrameType::RIC_ECI;
     else
         throw except::Exception(Ctxt("Unsupported frame type"));
+}
+
+void six::loadPluginDir(const std::string& pluginDir)
+{
+    nitf::PluginRegistry::loadDir(pluginDir);
 }

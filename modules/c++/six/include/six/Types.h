@@ -188,6 +188,10 @@ struct Constants
     const static sys::Int32_T DES_VERSION;
     const static char DES_VERSION_STR[];
 
+    const static char DES_USER_DEFINED_SUBHEADER_TAG[];
+    const static char DES_USER_DEFINED_SUBHEADER_ID[];
+    const static size_t DES_USER_DEFINED_SUBHEADER_LENGTH;
+
     enum
     {
         ILOC_MAX = 99999

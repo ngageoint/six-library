@@ -105,6 +105,26 @@ public:
      */
     void save(BufferList& imageData, const std::string& outputFile);
 
+    /*!
+     *  This function sets the organization ID (the 40 character DESSHRP field
+     *  in the DES's user-defined subheader).
+     */
+    void setOrganizationId(const std::string& organizationId);
+
+    /*!
+     *  This function sets the location ID and associated namespace (the
+     *  25 character DESSHLI and 120 character DESSHLIN fields in the
+     *  DES's user-defined subheader).
+     */
+    void setLocationIdentifier(const std::string& locationId,
+                               const std::string& locationIdNamespace);
+
+    /*!
+     *  This function sets the abstract (the 200 character DESSHABS field
+     *  in the DES's user-defined subheader).
+     */
+    void setAbstract(const std::string& abstract);
+
 protected:
     nitf::Writer mWriter;
     nitf::Record mRecord;
@@ -272,6 +292,17 @@ protected:
 private:
     static
     std::string getDesTypeID(const six::Data& data);
+
+    static
+    bool needUserDefinedSubheader(const six::Data& data);
+
+    void addUserDefinedSubheader(const six::Data& data,
+                                 nitf::DESubheader& subheader) const;
+
+    std::string mOrganizationId;
+    std::string mLocationId;
+    std::string mLocationIdNamespace;
+    std::string mAbstract;
 };
 
 }
