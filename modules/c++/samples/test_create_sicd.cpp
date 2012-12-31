@@ -146,6 +146,8 @@ int main(int argc, char** argv)
         data->position->arpPoly = six::PolyXYZ(0);
         data->position->arpPoly[0] = 0.0;
 
+        data->radarCollection->txPolarization = six::PolarizationType::OTHER;
+
         data->grid->row->sign = six::FFTSign::POS;
         data->grid->row->unitVector = 0.0;
         data->grid->row->sampleSpacing = 0;
@@ -172,6 +174,8 @@ int main(int argc, char** argv)
         data->pfa->polarAnglePoly[0] = 42;
 
         data->timeline->collectDuration = 0;
+        data->imageFormation->txRcvPolarizationProc =
+                six::DualPolarizationType::OTHER;
         data->imageFormation->tStartProc = 0;
         data->imageFormation->tEndProc = 0;
 
