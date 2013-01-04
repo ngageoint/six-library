@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 int main(int argc, char **argv)
 {
@@ -43,8 +44,9 @@ int main(int argc, char **argv)
 
         //create a Writer and prepare it for the Record
         nitf::Uint32 numOfBytes = (nitf::Uint32)record.getHeader().getFileLength();
-        char* outBuf = (char*) malloc (sizeof(char)*(numOfBytes));
-        nitf::MemoryIO memOutput(outBuf, (numOfBytes), false);
+        std::vector<char> outBufVec(numOfBytes);
+        char* const outBuf(outBufVec.empty() ? NULL : &outBufVec[0]);
+        nitf::MemoryIO memOutput(outBuf, numOfBytes, false);
 
         nitf::Writer memWriter;
         memWriter.prepareIO(memOutput, record);
@@ -69,8 +71,6 @@ int main(int argc, char **argv)
 
         input.close();
         memOutput.close();
-
-        free(outBuf);
     }
     catch (except::Throwable & t)
     {

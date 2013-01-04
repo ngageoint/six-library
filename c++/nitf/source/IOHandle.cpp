@@ -20,42 +20,40 @@
  *
  */
 
-#ifndef __NITF_MEMORY_IO_HPP__
-#define __NITF_MEMORY_IO_HPP__
-
-#include "nitf/NITFException.hpp"
-#include "nitf/System.hpp"
-#include "nitf/IOInterface.hpp"
-
-/*!
- * \file MemoryIO.hpp
- * \brief Contains wrapper implementation for BufferAdapter
- */
+#include <nitf/IOHandle.hpp>
 
 namespace nitf
 {
-
-/*!
- *  \class MemoryIO
- *  \brief The C++ wrapper of the nitf_BufferAdapter
- */
-class MemoryIO : public IOInterface
+IOHandle::IOHandle(const std::string& fname,
+                   nitf::AccessFlags access,
+                   nitf::CreationFlags creation) throw (nitf::NITFException) :
+    IOInterface(open(fname.c_str(), access, creation))
 {
-public:
-    MemoryIO(size_t capacity) throw(nitf::NITFException);
-
-    // If adopt is true, the memory will be deallocated via NRT_FREE(), so it
-    // must be allocated via NRT_MALLOC() (not new[]).  If adopt is false, the
-    // allocation method does not matter.
-    MemoryIO(void* buffer, size_t size, bool adopt = false)
-            throw(nitf::NITFException);
-
-private:
-    static
-    nitf_IOInterface* create(void* buffer,
-                             size_t size,
-                             bool adopt) throw(nitf::NITFException);
-};
-
+    setManaged(false);
 }
-#endif
+
+IOHandle::IOHandle(const char* fname,
+                   nitf::AccessFlags access,
+                   nitf::CreationFlags creation) throw (nitf::NITFException) :
+    IOInterface(open(fname, access, creation))
+{
+    setManaged(false);
+}
+
+nitf_IOInterface*
+IOHandle::open(const char* fname,
+               nitf::AccessFlags access,
+               nitf::CreationFlags creation) throw (nitf::NITFException)
+{
+    nitf_Error error;
+    nitf_IOInterface* const interface =
+            nitf_IOHandleAdapter_open(fname, access, creation, &error);
+
+    if (!interface)
+    {
+        throw nitf::NITFException(&error);
+    }
+
+    return interface;
+}
+}

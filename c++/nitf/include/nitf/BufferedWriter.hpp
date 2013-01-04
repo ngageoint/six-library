@@ -23,79 +23,69 @@
 #ifndef __NITF_BUFFERED_WRITER_HPP__
 #define __NITF_BUFFERED_WRITER_HPP__
 
-#include "nitf/NITFException.hpp"
-#include "nitf/System.hpp"
-#include "nitf/IOInterface.hpp"
-#include "nitf/IOHandle.hpp"
+#include <sys/File.h>
+#include <mem/ScopedArray.h>
+#include <nitf/CustomIO.hpp>
 
 namespace nitf
 {
-
-class BufferedWriter : public IOHandle
+class BufferedWriter : public CustomIO
 {
-
-private:
-    nitf::Off mBufferSize;
-    bool mOwn;
-    char *mBuffer;
-    nitf::Off mPosition;
-    nitf::Off mTotalWritten;
-    nitf::Off mBlocksWritten;
-    nitf::Off mPartialBlocks;
 public:
+    BufferedWriter(const std::string& file, size_t bufferSize);
 
-    BufferedWriter(std::string file, nitf::Off bufferSize) 
-        throw(nitf::NITFException)
-        : IOHandle(file, NITF_ACCESS_WRITEONLY, NITF_CREATE),
-          mBufferSize(bufferSize), mOwn(true), mBuffer(NULL), mPosition(0),
-          mTotalWritten(0), mBlocksWritten(0), mPartialBlocks(0)
-    {
-        mBuffer = new char[static_cast<size_t>(bufferSize)];
-    }
+    BufferedWriter(const std::string& file,
+                   char* buffer,
+                   size_t size,
+                   bool adopt = false);
 
-    BufferedWriter(std::string file, char *buffer, 
-               nitf::Off size, bool adopt = false) 
-        throw(nitf::NITFException)
-            : IOHandle(file, NITF_ACCESS_WRITEONLY, NITF_CREATE),
-              mBufferSize(size), mOwn(adopt),
-              mBuffer(buffer), mPosition(0), 
-              mTotalWritten(0), mBlocksWritten(0), mPartialBlocks(0)
-    {
-    }
+    void flushBuffer();
 
-    ~BufferedWriter();
-
-    virtual void flushBuffer();
-
-    virtual void read(char * buf, size_t size);
-
-    virtual void write(const char * buf, size_t size) 
-        throw(nitf::NITFException);
-
-    virtual nitf::Off seek(nitf::Off offset, int whence) 
-        throw(nitf::NITFException);
-
-    virtual nitf::Off tell() throw(nitf::NITFException);
-
-    virtual nitf::Off getSize() throw(nitf::NITFException);
-
-    virtual void close();
-
-    virtual nitf::Off getTotalWritten()
+    nitf::Uint64 getTotalWritten() const
     {
         return mTotalWritten;
     }
-    virtual nitf::Off getNumBlocksWritten()
+
+    nitf::Uint64 getNumBlocksWritten() const
     {
         return mBlocksWritten;
     }
 
-    virtual nitf::Off getNumPartialBlocksWritten()
+    nitf::Uint64 getNumPartialBlocksWritten() const
     {
         return mPartialBlocks;
     }
 
+protected:
+    virtual void readImpl(char* buf, size_t size);
 
+    virtual void writeImpl(const char* buf, size_t size);
+
+    virtual bool canSeekImpl() const;
+
+    virtual nitf::Off seekImpl(nitf::Off offset, int whence);
+
+    virtual nitf::Off tellImpl() const;
+
+    virtual nitf::Off getSizeImpl() const;
+
+    virtual int getModeImpl() const;
+
+    virtual void closeImpl();
+
+private:
+    const size_t mBufferSize;
+    const mem::ScopedArray<char> mScopedBuffer;
+    char* const mBuffer;
+
+    nitf::Uint64 mPosition;
+    nitf::Uint64 mTotalWritten;
+    nitf::Uint64 mBlocksWritten;
+    nitf::Uint64 mPartialBlocks;
+
+    // NOTE: This is at the end to give us a chance to adopt the buffer
+    //       in ScopedArray in case sys::File's constructor throws
+    mutable sys::File mFile;
 };
 
 }

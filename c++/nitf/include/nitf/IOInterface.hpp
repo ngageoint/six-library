@@ -48,12 +48,21 @@ struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
 class IOInterface : public nitf::Object<nitf_IOInterface, IOInterfaceDestructor>
 {
 public:
+    // Set native object
+    IOInterface(nitf_IOInterface * x)
+    {
+        setNative(x);
+        getNativeOrThrow();
+    }
 
     //! Copy constructor
-    IOInterface(const IOInterface & x)
+    IOInterface(const IOInterface& lhs)
     {
-        setNative(x.getNative());
+        setNative(lhs.getNative());
     }
+
+    //! Destructor
+    virtual ~IOInterface() { }
 
     //! Assignment Operator
     IOInterface & operator=(const IOInterface & x)
@@ -63,36 +72,24 @@ public:
         return *this;
     }
 
-    // Set native object
-    IOInterface(nitf_IOInterface * x)
-    {
-        setNative(x);
-        getNativeOrThrow();
-    }
+    void read(char * buf, size_t size);
 
-    //! Destructor
-    virtual ~IOInterface(){}
+    void write(const char * buf, size_t size);
 
-    virtual void read(char * buf, size_t size);
+    bool canSeek() const;
 
-    virtual void write(const char * buf, size_t size) throw(nitf::NITFException);
+    nitf::Off seek(nitf::Off offset, int whence);
 
-    virtual bool canSeek() throw(nitf::NITFException);
+    nitf::Off tell() const;
 
-    virtual nitf::Off seek(nitf::Off offset, int whence) throw(nitf::NITFException);
+    nitf::Off getSize() const;
 
-    virtual nitf::Off tell() throw(nitf::NITFException);
+    int getMode() const;
 
-    virtual nitf::Off getSize() throw(nitf::NITFException);
-
-    virtual int getMode() throw(nitf::NITFException);
-
-    virtual void close();
-
+    void close();
 
 protected:
-    IOInterface() {}
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 
 }

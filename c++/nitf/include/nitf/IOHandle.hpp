@@ -23,10 +23,11 @@
 #ifndef __NITF_IOHANDLE_HPP__
 #define __NITF_IOHANDLE_HPP__
 
+#include <string>
+
 #include "nitf/NITFException.hpp"
 #include "nitf/System.hpp"
 #include "nitf/IOInterface.hpp"
-#include <string>
 
 /*!
  * \file IOHandle.hpp
@@ -49,42 +50,26 @@ public:
      * Default constructor. Only here for compatibility purposes.
      * Use the other constructor
      */
-    explicit IOHandle()
+    /*explicit IOHandle()
     {
-    }
+    }*/
 
-    explicit IOHandle(const std::string& fname, nitf::AccessFlags access =
-            NITF_ACCESS_READONLY, nitf::CreationFlags creation =
-            NITF_OPEN_EXISTING) throw (nitf::NITFException)
-    {
-        create(fname, access, creation);
-    }
+    IOHandle(const std::string& fname,
+             nitf::AccessFlags access = NITF_ACCESS_READONLY,
+             nitf::CreationFlags creation = NITF_OPEN_EXISTING)
+                 throw (nitf::NITFException);
 
-    explicit IOHandle(const char* fname, nitf::AccessFlags access =
-            NITF_ACCESS_READONLY, nitf::CreationFlags creation =
-            NITF_OPEN_EXISTING) throw (nitf::NITFException)
-    {
-        std::string fName(fname);
-        create(fName, access, creation);
-    }
+    IOHandle(const char* fname,
+             nitf::AccessFlags access = NITF_ACCESS_READONLY,
+             nitf::CreationFlags creation = NITF_OPEN_EXISTING)
+                 throw (nitf::NITFException);
 
-    ~IOHandle()
-    {
-    }
-
-    void create(const std::string& fname, nitf::AccessFlags access =
-            NITF_ACCESS_READONLY, nitf::CreationFlags creation =
-            NITF_OPEN_EXISTING) throw (nitf::NITFException)
-    {
-        nitf_IOInterface *interface = nitf_IOHandleAdapter_open(fname.c_str(),
-                                                                access,
-                                                                creation,
-                                                                &error);
-        if (!interface)
-            throw nitf::NITFException(&error);
-        setNative(interface);
-        setManaged(false);
-    }
+private:
+    static
+    nitf_IOInterface*
+    open(const char* fname,
+         nitf::AccessFlags access,
+         nitf::CreationFlags creation) throw (nitf::NITFException);
 
 };
 

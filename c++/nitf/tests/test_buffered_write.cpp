@@ -71,8 +71,8 @@ void doWrite(nitf::Record record,
     std::cout << "Preparing to write file in " << bufferSize
               << " size blocks" << std::endl;
 
+    nitf::BufferedWriter output(outFile, bufferSize);
     nitf::Writer writer;
-    nitf::BufferedWriter output(outFile, (nitf::Off)bufferSize);
     writer.prepareIO(output, record);
 
     int numImages = record.getHeader().getNumImages();
@@ -89,7 +89,7 @@ void doWrite(nitf::Record record,
         iWriter.attachSource(iSource);
     }
     writer.write();
-    output.close();
+    //output.close();
 
     std::cout << "Write block info: " << std::endl;
     std::cout << "------------------------------------" << std::endl;
