@@ -82,11 +82,15 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 
 void NITFReadControl::load(const std::string& fromFile)
 {
+    nitf::IOHandle handle(fromFile);
+    load(handle);
+}
+
+void NITFReadControl::load(nitf::IOInterface& interface)
+{
     reset();
 
-    nitf::IOHandle handle(fromFile);
-
-    mRecord = mReader.read(handle);
+    mRecord = mReader.readIO(interface);
     const std::string title = mRecord.getHeader().getFileTitle().toString();
 
     DataType dataType;

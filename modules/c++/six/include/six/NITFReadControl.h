@@ -70,10 +70,12 @@ public:
                          const NITFImageInfo* info);
 
     /*!
-     *  Fulfills our obligationss to the parent class, using the IOInterface
+     *  Fulfills our obligations to the parent class, using the IOInterface
      *  method provided with the same name
      */
     virtual void load(const std::string& fromFile);
+
+    void load(nitf::IOInterface& interface);
 
     virtual UByte* interleaved(Region& region, size_t imageNumber);
 
