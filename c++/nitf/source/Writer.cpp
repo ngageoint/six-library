@@ -93,10 +93,24 @@ void Writer::prepareIO(nitf::IOInterface & io, nitf::Record & record)
 {
     NITF_BOOL x = nitf_Writer_prepareIO(getNativeOrThrow(), record.getNative(),
                                         io.getNative(), &error);
+
+    // It's possible prepareIO() failed but actually took ownership of one
+    // or both of these objects.  So we need to call setManaged() on them
+    // properly regardless of if the function succeeded.
+    if (getNativeOrThrow()->record == record.getNative())
+    {
+        record.setManaged(true);
+    }
+
+    if (getNativeOrThrow()->output == io.getNative())
+    {
+        io.setManaged(true);
+    }
+
     if (!x)
+    {
         throw nitf::NITFException(&error);
-    io.setManaged(true);
-    record.setManaged(true);
+    }
 }
 
 void Writer::setImageWriteHandler(int index, WriteHandler writeHandler)

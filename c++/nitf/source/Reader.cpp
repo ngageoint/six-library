@@ -100,10 +100,19 @@ nitf::Record Reader::readIO(nitf::IOInterface & io) throw (nitf::NITFException)
 
     nitf_Record * x = nitf_Reader_readIO(getNativeOrThrow(), io.getNative(),
                                          &error);
+
+    // It's possible readIO() failed but actually took ownership of the
+    // io object.  So we need to call setManaged() on it regardless of if the
+    // function succeeded.
+    if (getNativeOrThrow()->input == io.getNative())
+    {
+        io.setManaged(true);
+    }
+
     if (!x)
         throw nitf::NITFException(&error);
     nitf::Record rec(x);
-    io.setManaged(true);
+
     return rec;
 }
 
