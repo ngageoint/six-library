@@ -251,7 +251,7 @@ void NITFReadControl::load(nitf::IOInterface& interface)
 
         // This function should throw if the data does not exist
         std::pair<int, int> imageAndSegment = getIndices(subheader);
-        if (imageAndSegment.first >= mInfos.size())
+        if (static_cast<size_t>(imageAndSegment.first) >= mInfos.size())
         {
             throw except::Exception(Ctxt(
                     "Image " + str::toString(imageAndSegment.first) +

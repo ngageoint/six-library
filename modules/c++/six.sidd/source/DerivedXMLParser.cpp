@@ -820,7 +820,6 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
     std::vector<XMLElem> collectionsXML;
     exploitationFeaturesXML->getElementsByTagName("Collection", collectionsXML);
 
-    unsigned int idx = 0;
     exploitationFeatures->collections.resize(collectionsXML.size());
     for (size_t i = 0; i < collectionsXML.size(); ++i)
     {
@@ -1339,8 +1338,9 @@ XMLElem DerivedXMLParser::convertGeographicCoverageToXML(
                 const_iterator it = geoCoverage->subRegion.begin(); 
                 it != geoCoverage->subRegion.end(); ++it)
         {
-            XMLElem subRegionXML = convertGeographicCoverageToXML(
-                    "SubRegion", (*it).get(), geoCoverageXML);
+            convertGeographicCoverageToXML("SubRegion",
+                                           (*it).get(),
+                                           geoCoverageXML);
         }
     }
 

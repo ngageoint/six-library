@@ -21,7 +21,6 @@
  */
 
 #include <sstream>
-#include <iomanip>
 
 #include <mem/ScopedArray.h>
 #include <six/NITFWriteControl.h>
@@ -35,39 +34,10 @@ const char NITFWriteControl::OPT_J2K_COMPRESSION[] = "J2KCompression";
 
 namespace
 {
-// Print the 4 corners as a 5-point polygon (last point is the first point
-// repeated).  These are printed as lat/lon pairs with no separator other than
-// that each value always contain a leading +/- sign.  Lat values get 2
-// leading digits and lon values get 3.  Both get 8 decimal digits.
-std::string cornersToString(const six::LatLonCorners& corners)
-{
-    // BASE_WIDTH = sign + at least 2 leading digits + decimal point +
-    // decimal digits
-    static const size_t NUM_TRAILING_DIGITS = 8;
-    static const size_t BASE_WIDTH = 1 + 2 + 1 + NUM_TRAILING_DIGITS;
-
-    std::ostringstream ostr;
-    ostr.fill('0');
-
-    // This forces the leading 0's to the right of the +/- sign
-    ostr.setf(std::ios::internal, std::ios::adjustfield);
-
-    ostr << std::showpos << std::fixed
-         << std::setprecision(NUM_TRAILING_DIGITS);
-
-    for (size_t ii = 0; ii <= six::LatLonCorners::NUM_CORNERS; ++ii)
-    {
-        const six::LatLon& corner =
-                corners.getCorner(ii % six::LatLonCorners::NUM_CORNERS);
-
-        ostr << std::setw(BASE_WIDTH) << corner.getLat()
-             << std::setw(BASE_WIDTH + 1) << corner.getLon();
-    }
-
-    return ostr.str();
-}
-
 // Just using this to provide a more useful exception message
+// TODO: Consider adding this as a utility method in NITRO.  I don't think it
+//       can just move into a method in the TRE class easily and still provide
+//       the field name in the exception message.
 void setField(const std::string& field,
               const std::string& value,
               nitf::TRE& tre)
@@ -816,7 +786,7 @@ void NITFWriteControl::addUserDefinedSubheader(
         tre["DESSHSD"] = specDT;
 
         tre["DESSHTN"] = "urn:" + dataType + ":" + version;
-        tre["DESSHLPG"] = cornersToString(data.getImageCorners());
+        tre["DESSHLPG"] = toString(data.getImageCorners());
 
         // Spec specifies leaving this blank
         tre["DESSHLPT"] = "";
