@@ -122,6 +122,8 @@ template<> std::string toString(const six::CollectType& value);
 template<> six::FrameType toType<six::FrameType>(const std::string& s);
 template<> std::string toString(const six::FrameType& value);
 
+template<> std::string toString(const six::LatLonCorners& corners);
+
 // Load the TRE plugins in the given directory
 void loadPluginDir(const std::string& pluginDir);
 }

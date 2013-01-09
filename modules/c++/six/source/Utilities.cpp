@@ -20,6 +20,9 @@
  *
  */
 
+#include <sstream>
+#include <iomanip>
+
 #include <nitf/PluginRegistry.hpp>
 #include "six/Utilities.h"
 
@@ -780,6 +783,39 @@ template<> six::FrameType six::toType<six::FrameType>(const std::string& s)
         return FrameType::RIC_ECI;
     else
         throw except::Exception(Ctxt("Unsupported frame type"));
+}
+
+template<> std::string six::toString(const six::LatLonCorners& corners)
+{
+    // Print the 4 corners as a 5-point polygon (last point is the first point
+    // repeated).  These are printed as lat/lon pairs with no separator other
+    // than that each value always contain a leading +/- sign.  Lat values get
+    // 2 leading digits and lon values get 3.  Both get 8 decimal digits.
+
+    // BASE_WIDTH = sign + at least 2 leading digits + decimal point +
+    // decimal digits
+    static const size_t NUM_TRAILING_DIGITS = 8;
+    static const size_t BASE_WIDTH = 1 + 2 + 1 + NUM_TRAILING_DIGITS;
+
+    std::ostringstream ostr;
+    ostr.fill('0');
+
+    // This forces the leading 0's to the right of the +/- sign
+    ostr.setf(std::ios::internal, std::ios::adjustfield);
+
+    ostr << std::showpos << std::fixed
+         << std::setprecision(NUM_TRAILING_DIGITS);
+
+    for (size_t ii = 0; ii <= six::LatLonCorners::NUM_CORNERS; ++ii)
+    {
+        const six::LatLon& corner =
+                corners.getCorner(ii % six::LatLonCorners::NUM_CORNERS);
+
+        ostr << std::setw(BASE_WIDTH) << corner.getLat()
+             << std::setw(BASE_WIDTH + 1) << corner.getLon();
+    }
+
+    return ostr.str();
 }
 
 void six::loadPluginDir(const std::string& pluginDir)
