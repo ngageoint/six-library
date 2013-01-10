@@ -22,63 +22,7 @@ configure = options = distclean = lambda p: None
 
 def build(bld):
     env = bld.module(**globals())
-    
-    #make all of plug-ins normally - as separate DSOs
-    pluginNode = bld.path.find_dir('shared')
-    pEnv = env.derive()
-    if pEnv['cshlib_PATTERN'].startswith('lib'):
-        pEnv['cshlib_PATTERN'] = pEnv['cshlib_PATTERN'][3:]
-    
-    uselib_local = ['nitf-c', 'nrt-c']
-    
-    pluginList = []
-    pluginObjects = []
-    plugins = pluginNode.ant_glob('*.c', excl=['J2KDecompress.c', 'J2KCompress.c'])
-    #plugins.sort()
-    
-    for p in plugins:
-        pluginName = splitext(str(p))[0]
-        plugin = bld(features='c', source=p,
-                                  target='%s_obj' % pluginName,
-                                  includes=['../include', '../../nrt/include'],
-                                  defines = 'NITF_MODULE_EXPORTS',
-                                  path=pluginNode, env=env.derive())
-        plugin = bld(features='c cshlib no_implib', use=uselib_local + ['%s_obj' % pluginName],
-                                  target=pluginName,
-                                  path=pluginNode, env=pEnv.derive(),
-                                  install_path='${PREFIX}/share/nitf/plugins')
-        pluginObjects.append('%s_obj' % pluginName)
-        pluginList.append(pluginName)
-    
-    #now, to support static linkage, make the plug-ins as a static library
-    lib = bld(features='c cstlib', includes='include',
-                           target='%s-handlers' % NAME, env=env.derive(),
-                           use = uselib_local + pluginObjects,
-                           install_path='${PREFIX}/lib')
-    
-    #J2K plug-ins
-    if env['CFLAGS_j2k-c']:
-        for f in ['J2KDecompress.c', 'J2KCompress.c']:
-            pluginName = splitext(f)[0]
-            bld(features='c', source=f,
-                target='%s_obj' % pluginName,
-                includes=['../include', '../../nrt/include', '../../j2k/include'],
-                defines = ['HAVE_J2K_H', 'J2K_MODULE_EXPORTS'],
-                path=pluginNode, env=env.derive())
-            bld(features='c cshlib no_implib', use=uselib_local + ['j2k-c', '%s_obj' % pluginName],
-                target=pluginName,
-                path=pluginNode, env=pEnv.derive(),
-                install_path='${PREFIX}/share/nitf/plugins')
-
-            pluginList.append(pluginName)
-    
-    #build apps
-    appsDir = bld.path.find_dir('apps')
-    apps = appsDir.ant_glob('*.c')
-    for app in apps:
-        bld.program_helper(dir='apps', source=str(app), module_deps=NAME, name=str(app)[:-2],
-                           lang='c')
-
+    bld.recurse('shared apps')
         
     #run doxygen
     if 'DOXYGEN' in env and Options.is_install:
@@ -89,9 +33,3 @@ def build(bld):
                 relpath = f.path_from(htmlDocs)
                 bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
         except:{}
-    
-    bld(features='add_targets', target='nitro-plugins',
-            targets_to_add=pluginList)
-    bld(features='add_targets', target='nitro',
-            targets_to_add=pluginList + ['nitf-handlers'])
-
