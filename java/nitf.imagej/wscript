@@ -1,21 +1,14 @@
 from waflib import Options
+from javatool import java_module
 
-options = distclean = lambda x: None
+NAME            = 'nitf.imagej'
+MAINTAINER      = 'asylvest@users.sourceforge.net'
+VERSION         = '2.7'
+MODULE_DEPS     = 'nitf nitf.imageio'
+CLASSPATH       = 'ij-1.42.jar'
+COMPAT          = '1.5'
 
-def configure(conf):
-    Options.options.force_jni = True
-    Options.options.force_ant = True
+configure = options = distclean = lambda x: None
 
 def build(bld):
-    variant = bld.env['VARIANT']
-    env = bld.all_envs[variant]
-    
-    if env['ANT']:
-        nitfjava = bld.get_tgen_by_name('nitf-java')
-        imageiojava = bld.get_tgen_by_name('nitf.imageio-java')
-        bld(features='ant add_targets',
-                    source='build.xml', target='nitf.imagej-java.jar', targets_to_add=['nitf.imageio-java','nitf-java'],
-                    defines=['imageio.jar.path='+ imageiojava.path.find_or_declare(imageiojava.target).abspath(),
-                             'nitf.jar.path=' + nitfjava.path.find_or_declare(nitfjava.target).abspath()],
-                    after='nitf.imageio-java',
-                    always=True, install_path='${PREFIX}/lib', name='nitf.imagej-java')
+    java_module(bld, **globals())	

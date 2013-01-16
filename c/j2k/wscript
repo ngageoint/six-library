@@ -37,14 +37,11 @@ def configure(conf):
             
             if j2klib == 'jasper':
                 conf.check_cc(header_name="sys/types.h", define_name='HAVE_SYS_TYPES_H')
-                uchar = conf.check_cc(fragment='#include <sys/types.h>\nint main(){uchar i; return 0;}',
-                                      msg='Checking for uchar', errmsg='not found', mandatory=False)
-                ushort = conf.check_cc(fragment='#include <sys/types.h>\nint main(){ushort i; return 0;}',
-                                      msg='Checking for ushort', errmsg='not found', mandatory=False)
-                longlong = conf.check_cc(fragment='#include <sys/types.h>\nint main(){longlong i; return 0;}',
-                                      msg='Checking for longlong', errmsg='not found', mandatory=False)
-                ulonglong = conf.check_cc(fragment='#include <sys/types.h>\nint main(){ulonglong i; return 0;}',
-                                      msg='Checking for ulonglong', errmsg='not found', mandatory=False)
+                uchar = conf.check_cc(type_name='uchar', header_name='sys/types.h', mandatory=False)
+                ushort = conf.check_cc(type_name='ushort', header_name='sys/types.h', mandatory=False)
+                longlong = conf.check_cc(type_name='longlong', header_name='sys/types.h', mandatory=False)
+                ulonglong = conf.check_cc(type_name='ulonglong', header_name='sys/types.h', mandatory=False)
+				
                 if not uchar:
                     conf.env.append_unique('jasper-defs', 'uchar=unsigned char') 
                 if not ushort:

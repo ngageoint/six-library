@@ -1,26 +1,15 @@
 from waflib import Options
+from javatool import java_module
 
-options = distclean = lambda x: None
+NAME            = 'cgm'
+MAINTAINER      = 'asylvest@users.sourceforge.net'
+VERSION         = '2.7'
+MODULE_DEPS     = 'nitf'
+CLASSPATH       = ''
+COMPAT          = '1.5'
+USE             = 'cgm-c'
 
-def configure(conf):
-    Options.options.force_jni = True
-    Options.options.force_ant = True
+configure = options = distclean = lambda x: None
 
 def build(bld):
-    variant = bld.env['VARIANT']
-    env = bld.all_envs[variant]
-    
-    if bld.is_defined('HAVE_JNI_H'):
-        lib = bld(features='c cshlib', includes='src/jni/include',
-                               target='cgm.jni-c', env=env.derive(),
-                               uselib='JAVA', use='cgm-c',
-                               install_path='${PREFIX}/lib')
-        lib.source = bld.path.ant_glob('src/jni/source/*.c*')
-    
-        if env['ANT']:
-            nitfjava = bld.get_tgen_by_name('nitf-java')
-            bld(features='ant add_targets',
-                        source='build.xml', target='cgm-java.jar', targets_to_add=['nitf-java','cgm.jni-c'],
-                        defines='nitf.jar.path=' + nitfjava.path.find_or_declare(nitfjava.target).abspath(),
-                        after='nitf-java',
-                        always=True, install_path='${PREFIX}/lib', name='cgm-java')
+    java_module(bld, **globals())				

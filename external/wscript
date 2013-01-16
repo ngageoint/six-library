@@ -5,7 +5,7 @@ def options(opt):
                    help='Enable openjpeg', default=False)
     
 def configure(conf):
-    conf.recurse('drivers jasper-plugins')
+    conf.recurse('drivers jasper-plugins libjpeg-plugins')
     
     conf.start_msg('Enabling OpenJPEG plug-in')
     if Options.options.openjpeg:

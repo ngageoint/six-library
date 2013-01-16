@@ -4,7 +4,7 @@ from os.path import splitext, dirname, join
 
 NAME            = 'nitf'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
-VERSION         = '2.7-dev'
+VERSION         = '2.7'
 MODULE_DEPS     = 'nrt'
 LANG            = 'c'
 DEFINES         = 'NITF_MODULE_EXPORTS'

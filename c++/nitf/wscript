@@ -2,7 +2,7 @@ from os.path import split, basename, splitext
 
 NAME            = 'nitf'
 MAINTAINER      = 'asylvest@users.sourceforge.net'
-VERSION         = '2.7-dev'
+VERSION         = '2.7'
 MODULE_DEPS     = 'mt sys'
 USELIB          = 'THREAD DL'
 USELIB_LOCAL    = 'nitf-c'

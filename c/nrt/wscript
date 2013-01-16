@@ -3,7 +3,7 @@ from waflib import Options
 
 NAME            = 'nrt'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
-VERSION         = '2.6-dev'
+VERSION         = '2.7'
 MODULE_DEPS     = ''
 LANG            = 'c'
 USELIB          = 'THREAD DL RT MATH'

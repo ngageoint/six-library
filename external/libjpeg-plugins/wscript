@@ -1,8 +1,10 @@
 import os, shutil
-import Options
+from waflib import Options
 
 fname = 'jpeg-6b'
 
+def options(opt):
+    pass
 
 def configure(conf):
     platform = Options.platform
@@ -14,20 +16,13 @@ def configure(conf):
         defs.append('/UNEED_FAR_POINTERS')
         defs.append('/UNEED_SHORT_EXTERNAL_NAMES')
         defs.append('/UINCOMPLETE_TYPES_BROKEN')
-    env.append_value('CFLAGS_LIBJPEG', defs)
+    conf.env.append_value('CFLAGS_LIBJPEG', defs)
 
 
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.all_envs[variant]
-    
-    defs = env['DEFINES']
-    defList = []
-    for line in defs:
-        k, v = line.split('=')
-        if v:
-            defList.append('%s=%s' % (k, v))
-    
+        
     #---------------------------------------------------------------------------
     ###### LIB-JPEG
     ut = bld(env=env.derive(), path=bld.path.find_dir('build'), fname='%s.zip' % fname)
@@ -96,24 +91,23 @@ def build(bld):
                             source=sources,
                             target='jpeg', path=driverNode,
                             export_includes='.',
-                            uselib='SOCKET LIBJPEG',
-                            defines=defList,
+                            uselib='SOCKET',
                             env=env.derive(),
                             name='LIBJPEG')
     bld.add_group()
     
     #---------------------------------------------------------------------------
     ###### JPEG PLUG-IN
-    libPattern = env['shlib_PATTERN']
-    if libPattern.startswith('lib'):
-        libPattern = libPattern[3:]
+    #libPattern = env['shlib_PATTERN']
+    ##if libPattern.startswith('lib'):
+    #    libPattern = libPattern[3:]
     libEnv = env.derive()
     lib = bld(features='c cshlib', target='LibjpegDecompress',
                            use='LIBJPEG nitf-c'.split(),
                            install_path='${PREFIX}/share/nitf/plugins',
-                           defines=defList, env=libEnv,
+                           env=libEnv,
                            source=bld.path.ant_glob('source/*.c'))
-    libEnv['cshlib_PATTERN'] = libPattern
+    #libEnv['cshlib_PATTERN'] = libPattern
 
 
 

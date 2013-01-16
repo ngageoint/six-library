@@ -1,16 +1,16 @@
 import os, shutil
-import Options
+from waflib import Options
+
+def options(opt):
+    pass
 
 def configure(conf):
     conf.check_cc(header_name="sys/types.h", define_name='HAVE_SYS_TYPES_H')
-    uchar = conf.check_cc(fragment='#include <sys/types.h>\nint main(){uchar i; return 0;}',
-                          msg='Checking for uchar', errmsg='not found')
-    ushort = conf.check_cc(fragment='#include <sys/types.h>\nint main(){ushort i; return 0;}',
-                          msg='Checking for ushort', errmsg='not found')
-    longlong = conf.check_cc(fragment='#include <sys/types.h>\nint main(){longlong i; return 0;}',
-                          msg='Checking for longlong', errmsg='not found')
-    ulonglong = conf.check_cc(fragment='#include <sys/types.h>\nint main(){ulonglong i; return 0;}',
-                          msg='Checking for ulonglong', errmsg='not found')
+    uchar = conf.check_cc(type_name='uchar', header_name='sys/types.h', mandatory=False)
+    ushort = conf.check_cc(type_name='ushort', header_name='sys/types.h', mandatory=False)
+    longlong = conf.check_cc(type_name='longlong', header_name='sys/types.h', mandatory=False)
+    ulonglong = conf.check_cc(type_name='ulonglong', header_name='sys/types.h', mandatory=False)
+	
     if not uchar:
         conf.env.append_unique('jasper-defs', 'uchar=unsigned char') 
     if not ushort:
@@ -24,13 +24,6 @@ def configure(conf):
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.all_envs[variant]
-    
-    defs = env['DEFINES']
-    defList = []
-    for line in defs:
-        k, v = line.split('=')
-        if v:
-            defList.append('%s=%s' % (k, v))
     
     #---------------------------------------------------------------------------
     ###### LIB-JASPER
@@ -53,7 +46,7 @@ def build(bld):
     if Options.platform.startswith('win'):
         jasperDefs.append('JAS_WIN_MSVC_BUILD')
         
-    includes = ('src/libjasper/bmp',
+    includes = ['src/libjasper/bmp',
                 'src/libjasper/include/',
                 'src/libjasper/jp2',
                 'src/libjasper/jpc',
@@ -61,9 +54,9 @@ def build(bld):
                 'src/libjasper/mif',
                 'src/libjasper/pgx',
                 'src/libjasper/pnm',
-                'src/libjasper/ras')
+                'src/libjasper/ras']
         
-    sources = (
+    sources = [
         'src/libjasper/bmp/bmp_cod.c',
         'src/libjasper/bmp/bmp_dec.c',
         'src/libjasper/bmp/bmp_enc.c',
@@ -115,13 +108,13 @@ def build(bld):
         'src/libjasper/ras/ras_cod.c',
         'src/libjasper/ras/ras_dec.c',
         'src/libjasper/ras/ras_enc.c',
-    )
+    ]
         
     jasper = bld(features='c cstlib', includes=includes,
                               source=sources,
                               target='jasper', path=driverNode,
                               export_includes='src/libjasper/include/',
-                              defines=defList + jasperDefs,
+                              defines=jasperDefs,
                               env=env.derive(),
                               name='JASPER')
     bld.add_group()
@@ -142,7 +135,6 @@ def build(bld):
                                   source=sources,
                                   target='openjpeg', path=driverNode,
                                   export_includes='.',
-                                  defines=defList,
                                   env=env.derive(),
                                   name='OPENJPEG')
         bld.add_group()

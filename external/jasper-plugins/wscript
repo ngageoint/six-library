@@ -1,7 +1,7 @@
 import os, shutil
-import Options
+from waflib import Options
 
-configure = distclean = lambda x: False
+options = configure = distclean = lambda x: False
 
 def build(bld):
     variant = bld.env['VARIANT']
@@ -17,6 +17,10 @@ def build(bld):
     lib = bld(features='c cshlib', target='JasPerDecompress',
                            use='JASPER nitf-c'.split(), env=libEnv,
                            install_path='${PREFIX}/share/nitf/plugins',
-                           source=ant_glob('source/*.c', excl='JasPerCompress.c'))
+                           source=bld.path.ant_glob('source/*.c', excl='source/JasPerCompress.c'))
+    lib = bld(features='c cshlib', target='JasPerCompress',
+                           use='JASPER nitf-c'.split(), env=libEnv,
+                           install_path='${PREFIX}/share/nitf/plugins',
+                           source=bld.path.ant_glob('source/*.c', excl='source/JasPerDecompress.c'))
     libEnv['cshlib_PATTERN'] = libPattern
 
