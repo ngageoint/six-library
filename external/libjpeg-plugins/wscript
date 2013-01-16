@@ -98,16 +98,16 @@ def build(bld):
     
     #---------------------------------------------------------------------------
     ###### JPEG PLUG-IN
-    #libPattern = env['shlib_PATTERN']
-    ##if libPattern.startswith('lib'):
-    #    libPattern = libPattern[3:]
+    libPattern = env['cshlib_PATTERN']
+    if libPattern.startswith('lib'):
+        libPattern = libPattern[3:]
     libEnv = env.derive()
     lib = bld(features='c cshlib', target='LibjpegDecompress',
                            use='LIBJPEG nitf-c'.split(),
                            install_path='${PREFIX}/share/nitf/plugins',
                            env=libEnv,
                            source=bld.path.ant_glob('source/*.c'))
-    #libEnv['cshlib_PATTERN'] = libPattern
+    libEnv['cshlib_PATTERN'] = libPattern
 
 
 
