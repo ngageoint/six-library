@@ -57,6 +57,7 @@ Name: "samples\python"; Description: "Python"; Types: full
 [Files]
 Source: "..\..\COPYING.LESSER"; DestDir: "{app}\share\nitf\doc"; Flags: ignoreversion; Components: core;
 Source: "@INSTALL@\lib\*-c.lib"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
+Source: "@INSTALL@\lib\*-c.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: core;
 Source: "@INSTALL@\include\*"; DestDir: "{app}\include"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: core;
 Source: "@INSTALL@\share\nitf\plugins\*.dll"; DestDir: "{app}\share\nitf\plugins"; Flags: ignoreversion recursesubdirs; Components: plugins\tres;
 ;Source: "..\..\target\external\libjpeg-plugins\*.dll"; DestDir: "{app}\share\nitf\plugins"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: plugins\jpeg;
@@ -65,7 +66,6 @@ Source: "@INSTALL@\share\nitf\plugins\*.dll"; DestDir: "{app}\share\nitf\plugins
 Source: "..\..\c\nitf\tests\*.c"; DestDir: "{app}\share\nitf\samples\c"; Flags: ignoreversion recursesubdirs; Components: samples\c;
 Source: "@INSTALL@\tests\nitf\*.exe"; DestDir: "{app}\tests"; Flags: ignoreversion recursesubdirs; Components: tests;
 Source: "@INSTALL@\bin\*.exe"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs; Components: apps;
-;Source: "..\..\target\java\nitf\*.dll"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "@INSTALL@\bin\mex\*.mex*"; DestDir: "{app}\bin\mex"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: matlab;
 Source: "..\..\java\libs\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
 Source: "@INSTALL@\lib\*.jar"; DestDir: "{app}\lib"; Flags: ignoreversion; Components: java;
