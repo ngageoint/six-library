@@ -12,7 +12,7 @@ LicenseFile=..\..\COPYING.LESSER
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
-OutputBaseFilename=nitro-@VERSION@-setup
+OutputBaseFilename=nitro-@VERSION@-@PLATFORM@-setup
 UninstallDisplayName=NITRO @VERSION@
 SetupIconFile=NITRO.ico
 WizardSmallImageFile=NITRO_small.bmp
@@ -78,7 +78,7 @@ Source: "..\..\java\nitf\src\test\*"; DestDir: "{app}\share\nitf\samples\java"; 
 Source: "@INSTALL@\lib\site-packages\nitf\*.py"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: python;
 Source: "@INSTALL@\lib\site-packages\nitf\*.pyd"; DestDir: "{app}\share\python\nitf"; Flags: ignoreversion skipifsourcedoesntexist recursesubdirs; Components: python;
 Source: "..\..\python\nitf\samples\*.py"; DestDir: "{app}\share\nitf\samples\python"; Flags: ignoreversion skipifsourcedoesntexist; Components: samples\python;
-;Source: "..\..\python\nitf\dist\nitro-python-2.7-dev.win32.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
+;Source: "..\..\python\nitf\dist\nitro-python-@VERSION@.@PLATFORM@.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Components: python;
 Source: "..\..\java\nitf\apidocs\*"; DestDir: "{app}\share\nitf\doc\api\java"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\java;
 Source: "..\..\c\nitf\doc\html\*"; DestDir: "{app}\share\nitf\doc\api\c"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\c;
 Source: "..\..\c++\doc\html\*"; DestDir: "{app}\share\nitf\doc\api\c++"; Flags: ignoreversion recursesubdirs skipifsourcedoesntexist; Components: docs\cpp;
