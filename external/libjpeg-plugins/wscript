@@ -5,8 +5,8 @@ from build import unzipper
 MAINTAINER         = 'adam.sylvester@gd-ais.com'
 VERSION            = '1.0'
 LANG               = 'c'
-NAME               = 'JPEGDecompress'
-LIBNAME            = 'JPEGDecompress'
+NAME               = 'LibjpegDecompress'
+LIBNAME            = 'LibjpegDecompress'
 REMOVEPLUGINPREFIX = True
 USE                = 'LIBJPEG nitf-c'
 PLUGIN             = 'nitf'
