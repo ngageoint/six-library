@@ -10,11 +10,9 @@ configure = options = distclean = lambda p: None
 
 def build(bld):
     pluginNode = bld.path
-    
-    # This is so that on Unix we name the plugins without the 'lib' prefix
-    env = bld.env.derive()
-    if env['cshlib_PATTERN'].startswith('lib'):
-        env['cshlib_PATTERN'] = env['cshlib_PATTERN'][3:]
+
+    variant = bld.env['VARIANT'] or 'default'
+    env = bld.all_envs[variant]
     
     pluginList = []
     plugins = pluginNode.ant_glob('*.c')
@@ -32,7 +30,7 @@ def build(bld):
         kw['source'] = filename
         kw['use'] = 'nitf-c'
         kw['plugin'] = 'nitf'
-        kw['env'] = env
+        kw['removePluginPrefix'] = True
         
         if isJ2KPlugin:
             kw['use'] += ' j2k-c'
