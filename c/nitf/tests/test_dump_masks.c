@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     nitf_Record *record;         /* Record used for input and output */
     nitf_IOHandle in;            /* Input I/O handle */
     nitf_ListIterator imgIter;   /* Image segment list iterator */
+    nitf_ListIterator imgEnd;   /* Image segment list iterator */
     nitf_ImageSegment *seg;      /* Image segment object */
     nitf_ImageSubheader *subhdr; /* Image subheader object */
     nitf_ImageReader *iReader;   /* Image reader */
@@ -66,6 +67,8 @@ int main(int argc, char *argv[])
     nitf_Uint8 *padValue;           /* Pad value */
     nitf_Uint64 *blockMask;         /* Block mask array */
     nitf_Uint64 *padMask;           /* Pad mask array */
+    size_t imgCtr = 0;
+    const char* pathname;
 
     error = &errorObj;
     if (argc != 2)
@@ -73,10 +76,11 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Usage %s inputFile\n", argv[0]);
         exit(EXIT_FAILURE);
     }
+    pathname = argv[1];
 
     /*    Get the input record */
 
-    in = nitf_IOHandle_create(argv[1],
+    in = nitf_IOHandle_create(pathname,
                               NITF_ACCESS_READONLY, NITF_OPEN_EXISTING, error);
     if (NITF_INVALID_HANDLE(in))
     {
@@ -101,117 +105,124 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    /*  Get information from the image subheader */
+    /* Loop through the image segments */
+    imgIter = nitf_List_begin(record->images);
+    imgEnd = nitf_List_end(record->images);
 
-    imgIter = nitf_List_at(record->images, 0);
-    seg = (nitf_ImageSegment *) nitf_ListIterator_get(&imgIter);
-    if (seg == NULL)
+    while (nitf_ListIterator_notEqualTo(&imgIter, &imgEnd))
     {
-        fprintf(stderr, "No Image segment\n");
-        nitf_Reader_destruct(&reader);
-        nitf_IOHandle_close(in);
-        exit(EXIT_FAILURE);
-    }
-    subhdr = seg->subheader;
+        /*  Get information from the image subheader */
+        seg = (nitf_ImageSegment *) nitf_ListIterator_get(&imgIter);
+        if (seg == NULL)
+        {
+            fprintf(stderr, "No Image segment\n");
+            nitf_Reader_destruct(&reader);
+            nitf_IOHandle_close(in);
+            exit(EXIT_FAILURE);
+        }
+        subhdr = seg->subheader;
 
-    nitf_Field_get(subhdr->imageMode,
-                   imageMode, NITF_CONV_STRING, NITF_IMODE_SZ + 1, error);
-    imageMode[NITF_IMODE_SZ] = 0;
+        nitf_Field_get(subhdr->imageMode,
+                       imageMode, NITF_CONV_STRING, NITF_IMODE_SZ + 1, error);
+        imageMode[NITF_IMODE_SZ] = 0;
 
-    /*  Get an image reader which creates the nitf_ImageIO were the masks are */
+        /*  Get an image reader which creates the nitf_ImageIO were the masks are */
 
-    iReader = nitf_Reader_newImageReader(reader, 0, error);
-    if (iReader == NULL)
-    {
-        nitf_Reader_destruct(&reader);
-        nitf_IOHandle_close(in);
-        nitf_Record_destruct(&record);
-        nitf_Error_print(error, stderr, "Error reading input ");
-        exit(EXIT_FAILURE);
-    }
+        iReader = nitf_Reader_newImageReader(reader, imgCtr, error);
+        if (iReader == NULL)
+        {
+            nitf_Reader_destruct(&reader);
+            nitf_IOHandle_close(in);
+            nitf_Record_destruct(&record);
+            nitf_Error_print(error, stderr, "Error reading input ");
+            exit(EXIT_FAILURE);
+        }
 
-    blkInfo = nitf_ImageReader_getBlockingInfo(iReader, error);
-    if (blkInfo == NULL)
-    {
+        blkInfo = nitf_ImageReader_getBlockingInfo(iReader, error);
+        if (blkInfo == NULL)
+        {
+            nitf_ImageReader_destruct(&iReader);
+            nitf_Reader_destruct(&reader);
+            nitf_IOHandle_close(in);
+            nitf_Record_destruct(&record);
+            nitf_Error_print(error, stderr, "Error reading input ");
+            exit(EXIT_FAILURE);
+        }
+
+        /* Print the blocking information */
+
+        printf("Image %s segment %zu:\n", pathname, imgCtr);
+        printf("  Blocking (mode is %s):\n", imageMode);
+        printf("    Block array dimensions (r,c) = %d %d\n",
+               blkInfo->numBlocksPerRow, blkInfo->numBlocksPerCol);
+        printf("    Block dimensions (r,c) = %d,%d\n",
+               blkInfo->numRowsPerBlock, blkInfo->numColsPerBlock);
+        printf("    Block length in bytes %zu\n", blkInfo->length);
+
+        /*  Get the actual information */
+
+        if (nitf_ImageIO_getMaskInfo(iReader->imageDeblocker,
+                                     &imageDataOffset, &blockRecordLength,
+                                     &padRecordLength, &padPixelValueLength,
+                                     &padValue, &blockMask, &padMask))
+        {
+            nitf_Uint64 *blkPtr;  /* Pointer into block mask */
+            nitf_Uint64 *padPtr;  /* Pointer into pad mask */
+            nitf_Uint32 i;
+            nitf_Uint32 j;
+
+            printf("  Masked image:\n");
+            printf("    Image data offset = %d\n", imageDataOffset);
+            printf("    Block and pad mask record lengths = %d %d\n",
+                   blockRecordLength, padRecordLength);
+            printf("    Pad value length = %d\n", padPixelValueLength);
+            printf("    Pad value = ");
+            for (i = 0;i < padPixelValueLength;i++)
+                printf("%x ", padValue[i]);
+            printf("\n");
+
+            if (blockRecordLength != 0)
+            {
+                blkPtr = blockMask;
+
+                printf("  Block mask:\n");
+                for (i = 0;i < blkInfo->numBlocksPerRow;i++)
+                {
+                    printf("        ");
+                    for (j = 0;j < blkInfo->numBlocksPerCol;j++)
+                        if (*(blkPtr++) == 0xffffffff)
+                            printf("*");
+                        else
+                            printf("+");
+                    printf("\n");
+                }
+            }
+            if (padRecordLength != 0)
+            {
+                padPtr = padMask;
+
+                printf("  Pad mask:\n");
+                for (i = 0;i < blkInfo->numBlocksPerRow;i++)
+                {
+                    printf("        ");
+                    for (j = 0;j < blkInfo->numBlocksPerCol;j++)
+                        if (*(padPtr++) == 0xffffffff)
+                            printf("+");
+                        else
+                            printf("*");
+                    printf("\n");
+                }
+            }
+        }
+        else
+            printf("Not a masked image\n");
+
         nitf_ImageReader_destruct(&iReader);
-        nitf_Reader_destruct(&reader);
-        nitf_IOHandle_close(in);
-        nitf_Record_destruct(&record);
-        nitf_Error_print(error, stderr, "Error reading input ");
-        exit(EXIT_FAILURE);
+        nrt_ListIterator_increment(&imgIter);
+        ++imgCtr;
     }
-
-    /* Print the blocking information */
-
-    printf("Image %s:\n", argv[1]);
-    printf("  Blocking (mode is %s):\n", imageMode);
-    printf("    Block array dimensions (r,c) = %d %d\n",
-           blkInfo->numBlocksPerRow, blkInfo->numBlocksPerCol);
-    printf("    Block dimensions (r,c) = %d,%d\n",
-           blkInfo->numRowsPerBlock, blkInfo->numColsPerBlock);
-    printf("    Block length in bytes %zu\n", blkInfo->length);
-
-    /*  Get the actual information */
-
-    if (nitf_ImageIO_getMaskInfo(iReader->imageDeblocker,
-                                 &imageDataOffset, &blockRecordLength,
-                                 &padRecordLength, &padPixelValueLength,
-                                 &padValue, &blockMask, &padMask))
-    {
-        nitf_Uint64 *blkPtr;  /* Pointer into block mask */
-        nitf_Uint64 *padPtr;  /* Pointer into pad mask */
-        nitf_Uint32 i;
-        nitf_Uint32 j;
-
-        printf("  Masked image:\n");
-        printf("    Image data offset = %d\n", imageDataOffset);
-        printf("    Block and pad mask record lengths = %d %d\n",
-               blockRecordLength, padRecordLength);
-        printf("    Pad value length = %d\n", padPixelValueLength);
-        printf("    Pad value = ");
-        for (i = 0;i < padPixelValueLength;i++)
-            printf("%x ", padValue[i]);
-        printf("\n");
-
-        if (blockRecordLength != 0)
-        {
-            blkPtr = blockMask;
-
-            printf("  Block mask:\n");
-            for (i = 0;i < blkInfo->numBlocksPerRow;i++)
-            {
-                printf("        ");
-                for (j = 0;j < blkInfo->numBlocksPerCol;j++)
-                    if (*(blkPtr++) == 0xffffffff)
-                        printf("*");
-                    else
-                        printf("+");
-                printf("\n");
-            }
-        }
-        if (padRecordLength != 0)
-        {
-            padPtr = padMask;
-
-            printf("  Pad mask:\n");
-            for (i = 0;i < blkInfo->numBlocksPerRow;i++)
-            {
-                printf("        ");
-                for (j = 0;j < blkInfo->numBlocksPerCol;j++)
-                    if (*(padPtr++) == 0xffffffff)
-                        printf("+");
-                    else
-                        printf("*");
-                printf("\n");
-            }
-        }
-    }
-    else
-        printf("Not a masked image\n");
 
     /*    Clean-up */
-
-    nitf_ImageReader_destruct(&iReader);
     nitf_Reader_destruct(&reader);
     nitf_IOHandle_close(in);
     nitf_Record_destruct(&record);
