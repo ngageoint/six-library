@@ -1,0 +1,11 @@
+NAME            = 'six.sicd'
+MAINTAINER      = 'asylvest@users.sourceforge.net'
+VERSION         = '0.1'
+MODULE_DEPS     = 'scene nitf xml.lite six mem'
+UNITTEST_DEPS   = 'cli sio.lite'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
+    

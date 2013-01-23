@@ -1,0 +1,10 @@
+NAME            = 'six.sidd'
+MAINTAINER      = 'asylvest@users.sourceforge.net'
+VERSION         = '0.1'
+MODULE_DEPS     = 'scene tiff nitf xml.lite six mem'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
+    
