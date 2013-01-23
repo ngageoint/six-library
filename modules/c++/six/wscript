@@ -1,0 +1,11 @@
+NAME            = 'six'
+MAINTAINER      = 'asylvest@users.sourceforge.net'
+VERSION         = '0.1'
+MODULE_DEPS     = 'scene nitf xml.lite logging math.poly mem'
+TARGETS_TO_ADD  = 'XML_DATA_CONTENT'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
+    
