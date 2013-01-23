@@ -22,16 +22,46 @@
 #include "scene/SceneGeometry.h"
 #include "scene/ECEFToLLATransform.h"
 
-using namespace scene;
+namespace
+{
+inline
+double square(double val)
+{
+    return (val * val);
+}
+}
 
-scene::SceneGeometry::SceneGeometry(Vector3 arpVel, 
-                                    Vector3 arpPos, 
-                                    Vector3 refPos,
-                                    const Vector3* row,
-                                    const Vector3* col,
-                                    bool own)
-    : mVa(arpVel), mPa(arpPos), mPo(refPos), mSideOfTrack(1),
-      mR(row), mC(col), mOwn(own)
+namespace scene
+{
+SceneGeometry::SceneGeometry(const Vector3& arpVel,
+                             const Vector3& arpPos,
+                             const Vector3& refPos) :
+    mVa(arpVel),
+    mPa(arpPos),
+    mPo(refPos)
+{
+    initialize();
+}
+
+SceneGeometry::SceneGeometry(const Vector3& arpVel,
+                             const Vector3& arpPos,
+                             const Vector3& refPos,
+                             const Vector3& row,
+                             const Vector3& col) :
+    mVa(arpVel),
+    mPa(arpPos),
+    mPo(refPos),
+    mR(new Vector3(row)),
+    mC(new Vector3(col))
+{
+    initialize();
+}
+
+SceneGeometry::~SceneGeometry()
+{
+}
+
+void SceneGeometry::initialize()
 {
     // Compute slant plane vectors
     mXs = mPa - mPo;
@@ -42,10 +72,7 @@ scene::SceneGeometry::SceneGeometry(Vector3 arpVel,
     mZs.normalize();
 
     // Figure out if we are pointing up or down
-    if (mZs.dot(mPo) < 0)
-    {
-        mSideOfTrack = -1;
-    }
+    mSideOfTrack = (mZs.dot(mPo) < 0) ? -1 : 1;
     mZs *= mSideOfTrack;
 
     mYs = math::linear::cross(mZs, mXs);
@@ -74,74 +101,62 @@ scene::SceneGeometry::SceneGeometry(Vector3 arpVel,
 
     // Calculate ground track
     mVg = mVa - mZg * (mVa.dot(mZg));
-
-
-
 }
 
-scene::SceneGeometry::~SceneGeometry()
+void SceneGeometry::setImageVectors(const Vector3& row,
+                                    const Vector3& col)
 {
-    if (mOwn && mC)
-        delete mC;
-    if (mOwn && mR)
-        delete mR;
+    mR.reset(new Vector3(row));
+    mC.reset(new Vector3(col));
 }
 
-void scene::SceneGeometry::setImageVectors(const Vector3* row,
-                                           const Vector3* col)
+Vector3 SceneGeometry::getRowVector() const
 {
-    mR = row;
-    mC = col;
-}
-
-Vector3 scene::SceneGeometry::getRowVector() const
-{
-    if (! mR )
+    if (mR.get() == NULL)
+    {
         throw except::Exception(Ctxt("The Row vector is not set!"));
+    }
     return *mR;
 }
 
-Vector3 scene::SceneGeometry::getColVector() const
+Vector3 SceneGeometry::getColVector() const
 {
-    if (! mC )
+    if (mC.get() == NULL)
+    {
         throw except::Exception(Ctxt("The Column vector is not set!"));
+    }
 
     return *mC;
 }
 
-SideOfTrack scene::SceneGeometry::getSideOfTrack() const 
+SideOfTrack SceneGeometry::getSideOfTrack() const
 { 
     return (SideOfTrack)mSideOfTrack; 
 }
 
-double scene::SceneGeometry::getImageAngle(Vector3 vec) const
+double SceneGeometry::getImageAngle(Vector3 vec) const
 {
-    if (mR == NULL || mC == NULL)
-    {
-        throw except::Exception("Row and Column vectors must be initialized");
-    }
-
-    return atan2(mC->dot(vec),
-                 mR->dot(vec)) * RADIANS_TO_DEGREES;
+    return atan2(getColVector().dot(vec),
+                 getRowVector().dot(vec)) * RADIANS_TO_DEGREES;
 }
 
-double scene::SceneGeometry::getGrazingAngle() const
+double SceneGeometry::getGrazingAngle() const
 {
     return asin(mXs.dot(mZg)) * RADIANS_TO_DEGREES;
 }
 
-double scene::SceneGeometry::getTiltAngle() const
+double SceneGeometry::getTiltAngle() const
 {
     return atan2(mZg.dot(mYs), mZg.dot(mZs)) * RADIANS_TO_DEGREES;
 }
 
-double scene::SceneGeometry::getDopplerConeAngle() const
+double SceneGeometry::getDopplerConeAngle() const
 {
     Vector3 normVa = mVa / mVa.norm();
     return acos((-1.0 * mXs).dot(normVa)) * RADIANS_TO_DEGREES;
 }
 
-double scene::SceneGeometry::getSquintAngle() const
+double SceneGeometry::getSquintAngle() const
 {
     Vector3 z = mPa / mPa.norm();
     Vector3 x = mVa - z * (mVa.dot(z));
@@ -151,69 +166,59 @@ double scene::SceneGeometry::getSquintAngle() const
     return atan2((-1.0 * mXs).dot(y), (-1.0 * mXs).dot(x)) * RADIANS_TO_DEGREES;
 }
 
-double scene::SceneGeometry::getSlopeAngle() const
+double SceneGeometry::getSlopeAngle() const
 {
     return acos(mZs.dot(mZg)) * RADIANS_TO_DEGREES;
 }
 
 
-double scene::SceneGeometry::getAzimuthAngle() const
+double SceneGeometry::getAzimuthAngle() const
 {
     Vector3 east = math::linear::cross(mNorth, mZg);
     return atan2(east.dot(mXs), mNorth.dot(mXs)) * RADIANS_TO_DEGREES;
 }
 
-double scene::SceneGeometry::getHeadingAngle() const
+double SceneGeometry::getHeadingAngle() const
 {
     Vector3 east = math::linear::cross(mNorth, mZg);
     return atan2(east.dot(mVa), mNorth.dot(mVa)) * RADIANS_TO_DEGREES;
 }
 
-double scene::SceneGeometry::getRotationAngle() const
+double SceneGeometry::getRotationAngle() const
 {
     return -getImageAngle(mRg * -1);
 }
 
-Vector3 scene::SceneGeometry::getMultiPathVector() const
+Vector3 SceneGeometry::getMultiPathVector() const
 {
     double scale = mXs.dot(mZg) / mZs.dot(mZg);
     return mXs - (mZs * scale);
 }
 
-double scene::SceneGeometry::getMultiPathAngle() const
+double SceneGeometry::getMultiPathAngle() const
 {
     return getImageAngle(getMultiPathVector());
 }
 
-Vector3 scene::SceneGeometry::getNorthVector() const
+Vector3 SceneGeometry::getNorthVector() const
 {
-    if (mR == NULL || mC == NULL)
-    {
-        throw except::Exception("Row and Column vectors must be initialized");
-    }
-
-    Vector3 planeZ = math::linear::cross(*mR, *mC);
-    double scale = mNorth.dot(planeZ) / mZs.dot(planeZ);
+    const Vector3 planeZ = math::linear::cross(getRowVector(), getColVector());
+    const double scale = mNorth.dot(planeZ) / mZs.dot(planeZ);
     return  mNorth - (mZs * scale);
 }
 
-double scene::SceneGeometry::getNorthAngle() const
+double SceneGeometry::getNorthAngle() const
 {
     return getImageAngle(getNorthVector());
 }
 
-Vector3 scene::SceneGeometry::getLayoverVector() const
+Vector3 SceneGeometry::getLayoverVector() const
 {
-    if (mR == NULL || mC == NULL)
-    {
-        throw except::Exception("Row and Column vectors must be initialized");
-    }
-
-    Vector3 planeZ = math::linear::cross(*mR, *mC);
+    const Vector3 planeZ = math::linear::cross(getRowVector(), getColVector());
     return planeZ - (mZs / mZs.dot(planeZ));
 }
 
-AngleMagnitude scene::SceneGeometry::getLayover() const
+AngleMagnitude SceneGeometry::getLayover() const
 {
     Vector3 layoverVec = getLayoverVector();
 
@@ -224,20 +229,27 @@ AngleMagnitude scene::SceneGeometry::getLayover() const
     return layover;
 }
 
-Vector3 scene::SceneGeometry::getShadowVector() const
+double SceneGeometry::getETPLayoverAngle() const
 {
-    if (mR == NULL || mC == NULL)
-    {
-        throw except::Exception("Row and Column vectors must be initialized");
-    }
+    const double slopeAngleRad = getSlopeAngle() * DEGREES_TO_RADIANS;
 
-    Vector3 planeZ = math::linear::cross(*mR, *mC);
-    Vector3 groundShadow = mZg - (mXs / mXs.dot(mZg));
-    double scale = groundShadow.dot(planeZ)/mZs.dot(planeZ);
+    const Vector3 layoverDir = mZs - 1 / cos(slopeAngleRad) * mZs;
+    const Vector3 east = math::linear::cross(mNorth, mZg);
+    const double etpLayoverAngleRad =
+            atan2(east.dot(layoverDir), mNorth.dot(layoverDir));
+
+    return (etpLayoverAngleRad * RADIANS_TO_DEGREES);
+}
+
+Vector3 SceneGeometry::getShadowVector() const
+{
+    const Vector3 planeZ = math::linear::cross(getRowVector(), getColVector());
+    const Vector3 groundShadow = mZg - (mXs / mXs.dot(mZg));
+    const double scale = groundShadow.dot(planeZ)/mZs.dot(planeZ);
     return groundShadow - mZs * scale;
 }
 
-AngleMagnitude scene::SceneGeometry::getShadow() const
+AngleMagnitude SceneGeometry::getShadow() const
 {
     Vector3 shadowVec = getShadowVector();
 
@@ -247,35 +259,40 @@ AngleMagnitude scene::SceneGeometry::getShadow() const
     return shadow;
 }
 
-void scene::SceneGeometry::getGroundResolution(double resRg,
-                                               double resAz,
-                                               double& resRow,
-                                               double& resCol) const
+void SceneGeometry::getGroundResolution(double resRg,
+                                        double resAz,
+                                        double& resRow,
+                                        double& resCol) const
 {
-    Vector3 z = math::linear::cross(*mR, *mC);
-    double grazingAngle = asin(mXs.dot(z)) * RADIANS_TO_DEGREES;
-    double tiltAngle = atan2(z.dot(mYs), z.dot(mZs)) * RADIANS_TO_DEGREES;
-    double rotAngle = getRotationAngle();
+    const Vector3 z = math::linear::cross(getRowVector(), getColVector());
+    const double grazingAngleRad = asin(mXs.dot(z));
+    const double tiltAngleRad = atan2(z.dot(mYs), z.dot(mZs));
+    const double rotAngleRad = getRotationAngle() * DEGREES_TO_RADIANS;
 
-    double cosRot = cos(rotAngle * DEGREES_TO_RADIANS);
-    double sinRot = sin(rotAngle * DEGREES_TO_RADIANS);
-    double sin2Rot = sin(2 * rotAngle * DEGREES_TO_RADIANS);
-    double secGraz = 1.0 / cos(grazingAngle * DEGREES_TO_RADIANS);
-    double tanGraz = tan(grazingAngle * DEGREES_TO_RADIANS);
-    double secTilt = 1.0 / cos(tiltAngle * DEGREES_TO_RADIANS);
-    double tanTilt = tan(tiltAngle * DEGREES_TO_RADIANS);
+    const double cosRot = cos(rotAngleRad);
+    const double sinRot = sin(rotAngleRad);
+    const double sin2Rot = sin(2 * rotAngleRad);
+    const double secGraz = 1.0 / cos(grazingAngleRad);
+    const double tanGraz = tan(grazingAngleRad);
+    const double secTilt = 1.0 / cos(tiltAngleRad);
+    const double tanTilt = tan(tiltAngleRad);
 
-    double kr1 = (pow(sinRot, 2) * tanGraz * tanTilt - sin2Rot * secGraz)
-                 * tanGraz* tanTilt + pow(cosRot * secGraz, 2);
+    const double sinRotSq = square(sinRot);
 
-    double kr2 = pow(sinRot * secTilt, 2);
+    const double kr1 = (sinRotSq * tanGraz * tanTilt - sin2Rot * secGraz)
+                 * tanGraz* tanTilt + square(cosRot * secGraz);
 
-    double kc1 = (pow(sinRot, 2) * secGraz - sin2Rot * tanGraz * tanTilt)
-                 * secGraz + pow(cosRot * tanGraz * tanTilt, 2);
+    const double kr2 = square(sinRot * secTilt);
 
-    double kc2 = pow(cosRot * secTilt, 2);
+    const double kc1 = (sinRotSq * secGraz - sin2Rot * tanGraz * tanTilt)
+                 * secGraz + square(cosRot * tanGraz * tanTilt);
 
-    resRow = sqrt(kr1 * pow(resRg, 2) + kr2 * pow(resAz, 2));
-    resCol = sqrt(kc1 * pow(resRg, 2) + kc2 * pow(resAz, 2));
+    const double kc2 = square(cosRot * secTilt);
+
+    const double resRgSq = square(resRg);
+    const double resAzSq = square(resAz);
+
+    resRow = sqrt(kr1 * resRgSq + kr2 * resAzSq);
+    resCol = sqrt(kc1 * resRgSq + kc2 * resAzSq);
 }
-
+}

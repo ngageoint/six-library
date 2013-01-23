@@ -55,8 +55,8 @@ six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
             derived->measurement->arpPoly.derivative()(centerTime);
     six::Vector3 refPt = derived->measurement->projection->referencePoint.ecef;
 
-    six::Vector3 *rowVec = NULL;
-    six::Vector3 *colVec = NULL;
+    six::Vector3 rowVec;
+    six::Vector3 colVec;
 
     if (derived->measurement->projection->projectionType
             == six::ProjectionType::POLYNOMIAL)
@@ -83,10 +83,10 @@ six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
         rightLLA.setLon(projection->rowColToLon(cR, cC + 1));
         six::Vector3 rightEcef = scene::Utilities::latLonToECEF(rightLLA);
 
-        rowVec = new six::Vector3(downEcef - centerEcef);
-        rowVec->normalize();
-        colVec = new six::Vector3(rightEcef - centerEcef);
-        colVec->normalize();
+        rowVec = downEcef - centerEcef;
+        rowVec.normalize();
+        colVec = rightEcef - centerEcef;
+        colVec.normalize();
     }
     else if (derived->measurement->projection->projectionType
             == six::ProjectionType::PLANE)
@@ -95,8 +95,8 @@ six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
                 reinterpret_cast<const six::sidd::PlaneProjection*>(
                     derived->measurement->projection.get());
 
-        rowVec = new six::Vector3(projection->productPlane.rowUnitVector);
-        colVec = new six::Vector3(projection->productPlane.colUnitVector);
+        rowVec = projection->productPlane.rowUnitVector;
+        colVec = projection->productPlane.colUnitVector;
     }
     else
     {
@@ -105,7 +105,7 @@ six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
                                      "Geographic and Cylindrical projections not yet supported"));
     }
 
-    return new scene::SceneGeometry(arpVel, arpPos, refPt, rowVec, colVec, true);
+    return new scene::SceneGeometry(arpVel, arpPos, refPt, rowVec, colVec);
 }
 
 scene::GridGeometry*
@@ -211,8 +211,7 @@ void six::sidd::Utilities::setProductValues(Vector3 arpVel, Vector3 arpPos,
         Vector3 refPos, const Vector3* row, const Vector3* col,
         RangeAzimuth<double>res, Product* product)
 {
-    scene::SceneGeometry sceneGeom(arpVel, arpPos, refPos);
-    sceneGeom.setImageVectors(row, col);
+    const scene::SceneGeometry sceneGeom(arpVel, arpPos, refPos, *row, *col);
 
     //do some setup of derived data from geometry
     if (product->north == Init::undefined<double>())
@@ -246,9 +245,7 @@ void six::sidd::Utilities::setCollectionValues(Vector3 arpVel, Vector3 arpPos,
         Vector3 refPos, const Vector3* row, const Vector3* col,
         Collection* collection)
 {
-    scene::SceneGeometry sceneGeom(arpVel, arpPos, refPos);
-    sceneGeom.setImageVectors(row, col);
-
+    const scene::SceneGeometry sceneGeom(arpVel, arpPos, refPos, *row, *col);
 
     if (collection->geometry.get() == NULL)
     {

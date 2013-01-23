@@ -8,9 +8,10 @@ six::sicd::Utilities::getSceneGeometry(const ComplexData* data)
     scene::SceneGeometry *geom =
             new scene::SceneGeometry(data->scpcoa->arpVel,
                                      data->scpcoa->arpPos,
-                                     data->geoData->scp.ecf);
-    geom->setImageVectors(&(data->grid->row->unitVector),
-                          &(data->grid->col->unitVector));
+                                     data->geoData->scp.ecf,
+                                     data->grid->row->unitVector,
+                                     data->grid->col->unitVector);
+
     return geom;
 }
 
