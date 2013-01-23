@@ -5,7 +5,7 @@ from build import CPPBuildContext
 #override the default build context with our own
 #Utils.g_module.build_context = Utils.g_module.install_context = Utils.g_module.clean_context = CPPBuildContext 
 
-MODULES = 'except str sys mt nitf mem'
+MODULES = 'except io mem mt nitf str sys xml.lite'
 
 def options(opt):
     opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),

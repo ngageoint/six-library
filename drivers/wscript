@@ -1,0 +1,20 @@
+from waflib import Options
+from os.path import join, exists
+
+BLD_DIRS = 'expat'
+
+def options(opt):
+    opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
+                       BLD_DIRS.split()))
+
+def configure(conf):
+    conf.recurse(filter(lambda x: exists(join(conf.path.abspath(),x,'wscript')),
+                        BLD_DIRS.split()))
+
+def build(bld):
+    bld.recurse(filter(lambda x: exists(join(bld.path.abspath(), x, 'wscript')),
+                       BLD_DIRS.split()))
+
+def distclean(ctx):
+    ctx.recurse(filter(lambda x: exists(join(ctx.path.abspath(), x, 'wscript')),
+                       BLD_DIRS.split()))
