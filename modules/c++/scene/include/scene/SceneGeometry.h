@@ -22,6 +22,8 @@
 #ifndef __SCENE_SCENE_GEOMETRY_H__
 #define __SCENE_SCENE_GEOMETRY_H__
 
+#include <memory>
+
 #include "scene/Types.h"
 // For ECEF/LLA conversions
 #include "scene/Utilities.h"
@@ -40,32 +42,43 @@ public:
      *  Establishes the scene, computing the slant plane, ground plane
      *  normal, ground track and ground range vector.
      *  
-     *  A row and column vector for the image plane may optionally be
-     *  provided, although it will not be used for initial computations.
-     *  These may be passed by address, and this object will not take ownership
-     *  of them
+     *  No computations involving the image geometry can be performed prior
+     *  to calling setImageVectors().
      *
      */
-    SceneGeometry(Vector3 arpVel, Vector3 arpPos, Vector3 refPos, 
-                  const Vector3* row = NULL,
-                  const Vector3* col = NULL,
-                  bool own = false);
+    SceneGeometry(const Vector3& arpVel,
+                  const Vector3& arpPos,
+                  const Vector3& refPos);
 
-    //!  Destroy the object.  We do not take ownership of the row/col
+    /*!
+     *
+     *  Same as above but with a row and column vector for the image plane
+     *  provided.  They will not be used for initial computations, but
+     *  computations involving the image geometry can be immediately performed
+     *  rather than needing to call setImageVectors() first.
+     *
+     */
+    SceneGeometry(const Vector3& arpVel,
+                  const Vector3& arpPos,
+                  const Vector3& refPos,
+                  const Vector3& row,
+                  const Vector3& col);
+
     virtual ~SceneGeometry();
 
     /*!
      *  Set the image vectors.  This must be done prior to any computations
-     *  involving the image geometry
+     *  involving the image geometry if they were not provided at construction
+     *  time.
      */
-    virtual void setImageVectors(const Vector3* row, const Vector3* col);
+    void setImageVectors(const Vector3& row, const Vector3& col);
 
     /*!
      *  This produces the image row vector as it is currently stored
      *
      */
-    virtual Vector3 getRowVector() const;
-    virtual Vector3 getColVector() const;
+    Vector3 getRowVector() const;
+    Vector3 getColVector() const;
     virtual Vector3 getARPPosition() const { return mPa; }
     virtual Vector3 getARPVelocity() const { return mVa; }
     virtual Vector3 getReferencePosition() const { return mPo; }
@@ -86,19 +99,59 @@ public:
     virtual double getRotationAngle() const;
     virtual Vector3 getMultiPathVector() const;
     virtual double getMultiPathAngle() const;
+
+    /*!
+     * The north vector in the pixel grid
+     */
     virtual Vector3 getNorthVector() const;
+
+    /*
+     * The north vector at scene center
+     */
+    Vector3 getSceneCenterNorthVector() const
+    {
+        return mNorth;
+    }
+
+    /*!
+     * The north angle (in [-360, 360] degrees) in the pixel grid
+     */
     virtual double getNorthAngle() const;
+
     virtual double getHeadingAngle() const;
+
+    /*!
+     * The layover vector in the pixel grid
+     */
     virtual Vector3 getLayoverVector() const;
+
+    /*!
+     * The layover angle (in [-360, 360] degrees) and magnitude in the pixel
+     * grid
+     */
     virtual AngleMagnitude getLayover() const;
+
+    /*
+     * The layover angle (in [-360, 360] degrees) in the earth tangent plane
+     * (ETP)
+     */
+    double getETPLayoverAngle() const;
+
     virtual Vector3 getShadowVector() const;
     virtual AngleMagnitude getShadow() const;
-    virtual void getGroundResolution(double resRg, double resAz, 
+    virtual void getGroundResolution(double resRg, double resAz,
                                      double& row, double& col) const;
+
+private:
+    // Noncopyable
+    SceneGeometry(const SceneGeometry& );
+    const SceneGeometry& operator=(const SceneGeometry& );
+
+    void initialize();
 
 protected:
     //! ARP Velocity vector
-    Vector3 mVa;
+    const Vector3 mVa;
 
     //! Ground track vector (nadir)
     Vector3 mVg;
@@ -107,10 +160,10 @@ protected:
     Vector3 mRg;
 
     //! ARP Position vector
-    Vector3 mPa;
+    const Vector3 mPa;
     
     //! ORP Position vector
-    Vector3 mPo;
+    const Vector3 mPo;
 
     //! Slant plane range vector (LOS)
     Vector3 mXs;
@@ -127,19 +180,15 @@ protected:
     //! AKA Look direction
     int mSideOfTrack;
 
-    //! Image plane row vector
-    const Vector3* mR;
-
-    //! Image plane column vector
-    const Vector3* mC;
-
-    //! boolean whether we own the row and column vectors
-    bool mOwn;
-
-
     //! North vector
     Vector3 mNorth;
 
+private:
+    //! Image plane row vector
+    std::auto_ptr<const Vector3> mR;
+
+    //! Image plane column vector
+    std::auto_ptr<const Vector3> mC;
 };
 
 }
