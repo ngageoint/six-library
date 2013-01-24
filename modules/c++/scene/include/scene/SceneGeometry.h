@@ -114,7 +114,7 @@ public:
     }
 
     /*!
-     * The north angle (in [-360, 360] degrees) in the pixel grid
+     * The north angle (in [-180, 180] degrees) in the pixel grid
      */
     virtual double getNorthAngle() const;
 
@@ -126,13 +126,13 @@ public:
     virtual Vector3 getLayoverVector() const;
 
     /*!
-     * The layover angle (in [-360, 360] degrees) and magnitude in the pixel
+     * The layover angle (in [-180, 180] degrees) and magnitude in the pixel
      * grid
      */
     virtual AngleMagnitude getLayover() const;
 
     /*
-     * The layover angle (in [-360, 360] degrees) in the earth tangent plane
+     * The layover angle (in [-180, 180] degrees) in the earth tangent plane
      * (ETP)
      */
     double getETPLayoverAngle() const;
