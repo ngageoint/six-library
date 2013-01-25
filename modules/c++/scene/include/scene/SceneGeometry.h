@@ -85,7 +85,7 @@ public:
     virtual Vector3 getGroundTrack() const { return mVg; }
     virtual Vector3 getGroundRange() const { return mRg; }
     virtual SideOfTrack getSideOfTrack() const;
-    virtual double getImageAngle(Vector3 vec) const;
+    virtual double getImageAngle(const Vector3& vec) const;
     virtual Vector3 getSlantPlaneX() const { return mXs; }
     virtual Vector3 getSlantPlaneY() const { return mYs; }
     virtual Vector3 getSlantPlaneZ() const { return mZs; }

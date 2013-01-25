@@ -134,7 +134,7 @@ SideOfTrack SceneGeometry::getSideOfTrack() const
     return (SideOfTrack)mSideOfTrack; 
 }
 
-double SceneGeometry::getImageAngle(Vector3 vec) const
+double SceneGeometry::getImageAngle(const Vector3& vec) const
 {
     return atan2(getColVector().dot(vec),
                  getRowVector().dot(vec)) * RADIANS_TO_DEGREES;
