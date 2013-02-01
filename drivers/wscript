@@ -1,7 +1,7 @@
 from waflib import Options
 from os.path import join, exists
 
-BLD_DIRS = 'expat'
+BLD_DIRS = 'xml'
 
 def options(opt):
     opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
