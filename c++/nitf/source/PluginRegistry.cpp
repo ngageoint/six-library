@@ -22,14 +22,14 @@
 
 #include "nitf/PluginRegistry.hpp"
 
-void nitf::PluginRegistry::loadDir(std::string dirName) throw(nitf::NITFException)
+void nitf::PluginRegistry::loadDir(const std::string& dirName) throw(nitf::NITFException)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_loadDir(dirName.c_str(), &error))
         throw nitf::NITFException(&error);
 }
 
-void nitf::PluginRegistry::loadPlugin(std::string path) throw(nitf::NITFException)
+void nitf::PluginRegistry::loadPlugin(const std::string& path) throw(nitf::NITFException)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_loadPlugin(path.c_str(), &error))

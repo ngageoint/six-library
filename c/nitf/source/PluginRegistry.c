@@ -283,7 +283,7 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
      * trailing delimiter.  No problem, we can do it for them.
      */
     pathLen = strlen(reg->path);
-    if (!isDelimiter(reg->path[pathLen - 1]))
+    if (pathLen > 0 && !isDelimiter(reg->path[pathLen - 1]))
     {
         /*  Need to append delimiter to end  */
         reg->path[pathLen++] = DIR_DELIMITER;

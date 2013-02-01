@@ -47,9 +47,9 @@ public:
      * Load plugins from the given directory
      * \param dirName  The name of the directory to load
      */
-    static void loadDir(std::string dirName) throw(nitf::NITFException);
+    static void loadDir(const std::string& dirName) throw(nitf::NITFException);
 
-    static void loadPlugin(std::string path) throw(nitf::NITFException);
+    static void loadPlugin(const std::string& path) throw(nitf::NITFException);
 
     /*!
      *  This function allows you to register your own TRE handlers.  It
