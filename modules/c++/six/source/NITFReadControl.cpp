@@ -128,7 +128,23 @@ void NITFReadControl::load(nitf::IOInterface& interface)
             {
                 // We better have a user-defined subheader.  For now we
                 // don't actually store off the values, but we do check its
-                // tag and size.
+                // tag and size.  Note that we need to check the subheader
+                // length first rather than calling tre.getCurrentSize() in
+                // case there is no subheader (in which case
+                // subheader.getSubheaderFields() will throw with a
+                // NITRO-specific message).
+                const size_t
+                        subheaderLength(subheader.getSubheaderFieldsLength());
+                if (subheaderLength !=
+                            Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
+                {
+                    std::ostringstream ostr;
+                    ostr << "Expected a user-defined subheader size of "
+                         << Constants::DES_USER_DEFINED_SUBHEADER_LENGTH
+                         << " but got " << subheaderLength;
+                    throw except::Exception(Ctxt(ostr.str()));
+                }
+
                 nitf::TRE tre = subheader.getSubheaderFields();
                 if (tre.getTag() !=
                         Constants::DES_USER_DEFINED_SUBHEADER_TAG)
@@ -137,16 +153,6 @@ void NITFReadControl::load(nitf::IOInterface& interface)
                         "Expected a user-defined subheader tag of " +
                         std::string(Constants::DES_USER_DEFINED_SUBHEADER_TAG) +
                         " but got " + tre.getTag()));
-                }
-
-                if (tre.getCurrentSize() !=
-                        Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
-                {
-                    std::ostringstream ostr;
-                    ostr << "Expected a user-defined subheader size of "
-                         << Constants::DES_USER_DEFINED_SUBHEADER_LENGTH
-                         << " but got " << tre.getCurrentSize();
-                    throw except::Exception(Ctxt(ostr.str()));
                 }
             }
 
