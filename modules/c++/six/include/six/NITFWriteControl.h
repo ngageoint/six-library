@@ -84,6 +84,8 @@ public:
     // Ownership is not transferred - 'container' must outlive this object
     void initialize(Container* container);
 
+    using WriteControl::save;
+
     void save(SourceList& imageData, const std::string& outputFile);
 
     /*!
