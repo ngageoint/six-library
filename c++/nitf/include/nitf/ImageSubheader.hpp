@@ -173,6 +173,34 @@ public:
                      const std::string& imode) throw(nitf::NITFException);
 
     /*!
+     * Compute blocking parameters
+     * The user specifies the number of rows and columns in the image and the
+     * number of rows and columns per block. The number of blocks per row and
+     * column is calculated. The NITF 2500C large block option can be selected
+     * for either dimension by setting the corresponding block dimension to 0.
+     * If numRowsPerBlock or numColsPerBlock is over the NITF maximum, it is
+     * reduced to 0 per 2500C.
+     *
+     * The number of blocks per column is a backwards way of saying the number
+     * of rows of blocks. So the numBlocksPerCol calculation involves row counts
+     * and numBlocksPerRow calculation involves column counts.
+     *
+     * \param numRows           The number of rows
+     * \param numCols           The number of columns
+     * \param numRowsPerBlock   The number of rows/block
+     * \param numColsPerBlock   The number of columns/block
+     * \param numBlocksPerCol   The number of rows of blocks
+     * \param numBlocksPerRow   The number of columns of blocks
+     */
+    static
+    void computeBlocking(nitf::Uint32 numRows,
+                         nitf::Uint32 numCols,
+                         nitf::Uint32& numRowsPerBlock,
+                         nitf::Uint32& numColsPerBlock,
+                         nitf::Uint32& numBlocksPerCol,
+                         nitf::Uint32& numBlocksPerRow);
+
+    /*!
      * Set the image dimensions and blocking.
      *
      * The blocking is set to the simplest possible blocking given the

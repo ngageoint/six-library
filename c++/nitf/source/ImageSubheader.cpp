@@ -118,6 +118,21 @@ void ImageSubheader::setBlocking(nitf::Uint32 numRows,
         throw nitf::NITFException(&error);
 }
 
+void ImageSubheader::computeBlocking(nitf::Uint32 numRows,
+                                     nitf::Uint32 numCols,
+                                     nitf::Uint32& numRowsPerBlock,
+                                     nitf::Uint32& numColsPerBlock,
+                                     nitf::Uint32& numBlocksPerCol,
+                                     nitf::Uint32& numBlocksPerRow)
+{
+    nitf_ImageSubheader_computeBlocking(numRows,
+                                        numCols,
+                                        &numRowsPerBlock,
+                                        &numColsPerBlock,
+                                        &numBlocksPerCol,
+                                        &numBlocksPerRow);
+}
+
 void ImageSubheader::setDimensions(nitf::Uint32 numRows, nitf::Uint32 numCols)
     throw(nitf::NITFException)
 {

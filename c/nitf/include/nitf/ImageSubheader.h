@@ -493,6 +493,32 @@ nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
                                         nitf_Error *error);
 
 /*!
+  \brief  nitf_ImageSubheader_computeBlocking - Compute blocking parameters
+
+  nitf_ImageSubheader_computeBlocking computes the blocking information. The
+  user specifies the number of rows and columns in the image and the number of
+  rows and columns per block. The number of blocks per row and column is
+  calculated. The NITF 2500C large block option can be selected for either
+  dimension by setting the corresponding block dimension to 0.  If
+  numRowsPerBlock or numColsPerBlock is over the NITF maximum, it is reduced
+  to 0 per 2500C.
+
+  The number of blocks per column is a backwards way of saying the number
+  of rows of blocks. So the numBlocksPerCol calculation involves row counts
+  and numBlocksPerRow calculation involves column counts.
+*/
+NITFAPI(void)
+nitf_ImageSubheader_computeBlocking
+(
+    nitf_Uint32 numRows,           /*!< The number of rows */
+    nitf_Uint32 numCols,           /*!< The number of columns */
+    nitf_Uint32* numRowsPerBlock,  /*!< The number of rows/block */
+    nitf_Uint32* numColsPerBlock,  /*!< The number of columns/block */
+    nitf_Uint32* numBlocksPerCol,  /*!< The number of blocks per column */
+    nitf_Uint32* numBlocksPerRow   /*!< The number of blocks per row */
+);
+
+/*!
   \brief  nitf_ImageSubheader_setBlocking - Set image dimensions and blocking
 
   nitf_ImageSubheader_setDimensions sets the blocking information. The user

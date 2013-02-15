@@ -37,6 +37,33 @@
 #define _NITF_BLOCK_DEFAULT_MAX (1024)
 #define _NITF_BLOCK_DEFAULT_MIN (1024)
 
+NITFPRIV(void)
+nitf_ImageSubheader_computeBlockingImpl(nitf_Uint32 numDims,
+                                        nitf_Uint32* numDimsPerBlock,
+                                        nitf_Uint32* numBlocksPerDim)
+{
+    /* for 2500C - if > 8192, then NROWS/NCOLS specifies NPPBV/NPPBH */
+    if (*numDimsPerBlock > _NITF_BLOCK_DIM_MAX)
+    {
+        *numDimsPerBlock = 0;
+    }
+
+    if (*numDimsPerBlock != 0)   /* 2500B */
+    {
+        *numBlocksPerDim = numDims / *numDimsPerBlock;
+
+        if (numDims % *numDimsPerBlock != 0)
+        {
+            /* Residual, need one more block */
+            *numBlocksPerDim += 1;
+        }
+    }
+    else
+    {
+        *numBlocksPerDim = 1;    /* 2500C */
+    }
+}
+
 NITFAPI(nitf_ImageSubheader *)
 nitf_ImageSubheader_construct(nitf_Error * error)
 {
@@ -995,6 +1022,29 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setDimensions(nitf_ImageSubheader *
 }
 
 
+NITFAPI(void)
+nitf_ImageSubheader_computeBlocking(
+        nitf_Uint32 numRows,
+        nitf_Uint32 numCols,
+        nitf_Uint32* numRowsPerBlock,
+        nitf_Uint32* numColsPerBlock,
+        nitf_Uint32* numBlocksPerCol,
+        nitf_Uint32* numBlocksPerRow)
+{
+    /*
+       The number of blocks per column is a backwards way of saying the number
+       of rows of blocks. So the numBlocksPerCol calculation involves row counts
+       and numBlocksPerRow calculation involves column counts
+     */
+    nitf_ImageSubheader_computeBlockingImpl(numRows,
+                                            numRowsPerBlock,
+                                            numBlocksPerCol);
+
+    nitf_ImageSubheader_computeBlockingImpl(numCols,
+                                            numColsPerBlock,
+                                            numBlocksPerRow);
+}
+
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking(nitf_ImageSubheader *subhdr,
         nitf_Uint32 numRows,
         nitf_Uint32 numCols,
@@ -1006,11 +1056,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking(nitf_ImageSubheader *subhdr,
     nitf_Uint32 numBlocksPerRow;        /* Number of blocks/row */
     nitf_Uint32 numBlocksPerCol;        /* Number of blocks/column */
 
-    /* for 2500C - if > 8192, then NROWS/NCOLS specifies NPPBV/NPPBH */
-    if (numRowsPerBlock > _NITF_BLOCK_DIM_MAX)
-        numRowsPerBlock = 0;
-    if (numColsPerBlock > _NITF_BLOCK_DIM_MAX)
-        numColsPerBlock = 0;
+    nitf_ImageSubheader_computeBlocking(numRows,
+                                        numCols,
+                                        &numRowsPerBlock,
+                                        &numColsPerBlock,
+                                        &numBlocksPerCol,
+                                        &numBlocksPerRow);
 
     if (!nitf_Field_setUint32(subhdr->NITF_NROWS, numRows, error))
         return (NITF_FAILURE);
@@ -1023,32 +1074,6 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking(nitf_ImageSubheader *subhdr,
 
     if (!nitf_Field_setUint32(subhdr->NITF_NPPBH, numColsPerBlock, error))
         return (NITF_FAILURE);
-
-    /*
-       The number of blocks per column is a backwards way of saying the number
-       of rows of blocks. So the numBlocksPerCol calculation involves row counts
-       and numBlocksPerRow calculation involves column counts
-     */
-
-    if (numRowsPerBlock != 0)   /* 2500B */
-    {
-        numBlocksPerCol = numRows / numRowsPerBlock;
-        /* Residual, need one more block */
-        if (numRows % numRowsPerBlock != 0)
-            numBlocksPerCol += 1;
-    }
-    else
-        numBlocksPerCol = 1;    /* 2500C */
-
-    if (numColsPerBlock != 0)   /* 2500B */
-    {
-        numBlocksPerRow = numCols / numColsPerBlock;
-        /* Residual, need one more block */
-        if (numCols % numColsPerBlock != 0)
-            numBlocksPerRow += 1;
-    }
-    else
-        numBlocksPerRow = 1;    /* 2500C */
 
     if (!nitf_Field_setUint32(subhdr->NITF_NBPC, numBlocksPerCol, error))
         return (NITF_FAILURE);
