@@ -651,8 +651,13 @@ XMLElem ComplexXMLParser::createArea(const RadarCollection* radar,
                     createString("Identifier", segment->identifier, segXML);
                 }
             }
-            createString("Orientation", 
-                six::toString<OrientationType>(plane->orientation), planeXML);
+
+            if (!Init::isUndefined<OrientationType>(plane->orientation))
+            {
+                createString("Orientation",
+                             six::toString<OrientationType>(plane->orientation),
+                             planeXML);
+            }
         }
 
         return areaXML;
@@ -1597,8 +1602,6 @@ void ComplexXMLParser::parseRadarCollectionFromXML(
                 }
             }
 
-            // TODO:  This is required for 0.4.x, but treat as
-            // optional to support 0.3.1 data.
             if ((tmpElem = getOptional(planeXML, "Orientation")) != NULL)
                 radarCollection->area->plane->orientation = six::toType<
                         OrientationType>(tmpElem->getCharacterData());
