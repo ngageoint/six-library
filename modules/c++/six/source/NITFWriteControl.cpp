@@ -766,7 +766,7 @@ void NITFWriteControl::addUserDefinedSubheader(
         const std::string dataType =
                 (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
         tre["DESSHSI"] = dataType +
-                " Volume 1 Design and Implementation Description Document";
+                " Volume 1 Design & Implementation Description Document";
 
         const std::string version(data.getVersion());
         tre["DESSHSV"] = version;
