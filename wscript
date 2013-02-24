@@ -12,7 +12,7 @@ TOOLS = 'build swig javatool pythontool matlabtool'
 DIRS = 'c c++ drivers java python mex external/libjpeg-plugins'
 
 def options(opt):
-    opt.load(TOOLS, tooldir='build')
+    opt.load(TOOLS + ' msvs dumpenv', tooldir='build')
     opt.add_option('--release', action='store_true', dest='release',
                    help='Configure release', default=False)
     opt.recurse(DIRS)
@@ -26,7 +26,7 @@ def configure(conf):
 
 def build(bld):
     bld.recurse(DIRS)
-	
+
     dct = {'INSTALL':bld.env['PREFIX'], 'VERSION':bld.env['VERSION'], 'PLATFORM':bld.env['PLATFORM']}
     bld(features='subst', dct=dct, source='utils/installer/nitro_installer.iss.in', 
         target=bld.path.find_or_declare('installer/nitro_installer.iss'), name='installer')
