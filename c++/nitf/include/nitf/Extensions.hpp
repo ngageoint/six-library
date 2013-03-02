@@ -131,7 +131,7 @@ public:
     }
 
     //! Increment the iterator (postfix)
-    void operator++(int x)
+    void operator++(int )
     {
         increment();
     }

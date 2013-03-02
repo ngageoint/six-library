@@ -81,7 +81,7 @@ protected:
 template <typename T>
 struct MemoryDestructor
 {
-    virtual void operator()(T* nativeObject) {}
+    virtual void operator()(T* /*nativeObject*/) {}
     virtual ~MemoryDestructor() {}
 };
 
