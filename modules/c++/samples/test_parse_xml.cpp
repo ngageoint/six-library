@@ -127,7 +127,7 @@ void run(std::string inputFile, std::string dataType)
         // Create an output directory if it doesnt already exist
         sys::Path outputDir(sys::Path::basename(inputFile, true));
         if (!outputDir.exists())
-            outputDir.mkdir();
+            outputDir.makeDirectory();
 
         std::string xmlFile = inputFile;
 
