@@ -5,7 +5,7 @@ APIS = ['external/openjpeg', 'external/jasper']
 
 def options(opt):
     opt.add_option('--with-j2k', action='store', dest='j2k_layer',
-                   choices=['openjpeg', 'jasper', 'kdu'], default=None, metavar='LIB',
+                   choices=['openjpeg', 'jasper'], default=None, metavar='LIB',
                    help='Specify the JPEG2000 library to link with')
 
     existingDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), APIS)
@@ -17,48 +17,6 @@ def configure(conf):
         conf.msg('Configuring with J2K layer', Options.options.j2k_layer)
         existingDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), APIS)
         conf.recurse(existingDirs)
-        
-    j2kLayer = Options.options.j2k_layer
-
-    # NOTE: JasPer will compile in 64-bit mode, but it internally uses
-    #       32-bit integers for some offsets.  To prevent confusion/badness,
-    #       just don't allow it for a 64-bit build.
-    if conf.env['IS64BIT'] and j2kLayer == 'jasper':
-        conf.msg('JPEG2000 library', 'jasper not available on 64-bit architectures', color='YELLOW')
-        j2kLayer = None
-    
-    conf.env['j2kLayer'] = j2kLayer
-    
-    j2kLayerDir = {'openjpeg':'openjpeg', 'kdu':'kakadu', 'jasper':'jasper'}.get(j2kLayer, None)
-    
-    if j2kLayerDir and isdir(join(conf.path.abspath(), 'external', j2kLayerDir)):
-        conf.msg('JPEG2000 library', j2kLayer, color='GREEN')
-        conf.env.append_value('CFLAGS_j2k-c', '-DHAVE_J2K_H')
-        if j2kLayer == 'kdu':
-            conf.env.append_value('CFLAGS_kdu', '-DHAVE_KAKADU_H')
-            conf.env.append_value('CXXFLAGS_kdu', '-DHAVE_KAKADU_H')
-        else:
-            conf.env.append_value('CFLAGS_%s' % j2kLayer, '-DHAVE_%s_H' % j2kLayer.upper())
-            
-            if j2kLayer == 'jasper':
-                conf.check_cc(header_name="sys/types.h", define_name='HAVE_SYS_TYPES_H')
-                uchar = conf.check_cc(type_name='uchar', header_name='sys/types.h', mandatory=False)
-                ushort = conf.check_cc(type_name='ushort', header_name='sys/types.h', mandatory=False)
-                longlong = conf.check_cc(type_name='longlong', header_name='sys/types.h', mandatory=False)
-                ulonglong = conf.check_cc(type_name='ulonglong', header_name='sys/types.h', mandatory=False)
-
-                if not uchar:
-                    conf.env.append_unique('jasper-defs', 'uchar=unsigned char') 
-                if not ushort:
-                    conf.env.append_unique('jasper-defs', 'ushort=unsigned short')
-                if not longlong:
-                    conf.env.append_unique('jasper-defs', 'longlong=long long') 
-                if not ulonglong:
-                    conf.env.append_unique('jasper-defs', 'ulonglong=unsigned long long')
-        conf.env.append_value('CFLAGS_j2k-c', '-DJ2K_MODULE_EXPORTS')
-        conf.env.append_value('CXXFLAGS_j2k-c', '-DJ2K_MODULE_EXPORTS')
-    elif j2kLayerDir:
-        conf.msg('JPEG2000 library', 'not found', color='YELLOW')
 
 def build(bld):
 
@@ -89,24 +47,24 @@ def build(bld):
                   source=j2kSources,
                   export_includes='include',
                   env=env.derive(), path=bld.path,
-                  use='nrt-c %s' % j2kLayer, uselib=j2kLayer)
+                  use='nrt-c J2K ' + j2kLayer)
                   
         # install j2k lib
         if env['install_libs']:
            lib.install_path = '${PREFIX}/lib'
 
         #j2k-only tests
-#        for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
-#                 'test_j2k_create']:
-#            bld(features='%s %sprogram' % (linker, linker), target=t, name=t,
-#                             source='%s.c' % t, use='j2k-c',
-#                             env=env.derive(), path=bld.path.make_node('tests'))
+        for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
+                 'test_j2k_create']:
+            bld.program_helper(dir='tests', source='%s.c' % t, 
+                               use='j2k-c J2K ' + j2kLayer, 
+                               name=t, target=t, lang='c', env=env.derive())
 
         #j2k/nitf tests
-#        for t in ['test_j2k_nitf']:
-#            bld(features='%s %sprogram' % (linker, linker), target=t, name=t,
-#                             source='%s.c' % t, use='j2k-c nitf-c',
-#                             env=env.derive(), path=bld.path.find_dir('tests'))
+        for t in ['test_j2k_nitf']:
+            bld.program_helper(dir='tests', source='%s.c' % t, 
+                               use='nitf-c j2k-c J2K', uselib=j2kLayer, 
+                               name=t, target=t, lang='c', env=env.derive())
 
 def distclean(context) :
 
