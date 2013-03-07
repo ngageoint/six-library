@@ -5,24 +5,24 @@ from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
 SOURCE         = 'openjpeg-2.0.0'
-OPENJPEG_DEFINES = ['USE_OPENJPEG', 'HAVE_OPENJPEG_H', J2K_MODULE_EXPORTS']
-#OPENJPEG_USELIBS = 'XML THREAD SOCKET'
+OPENJPEG_DEFINES = ['USE_OPENJPEG', 'HAVE_OPENJPEG_H', 'J2K_MODULE_EXPORTS']
 
 options = lambda x : None
 
 def configure(conf):
 
-    j2kLayer = Options.options.j2kLayer
+    j2kLayer = Options.options.j2k_layer
 
     if j2kLayer == 'openjpeg' :
 
-        # add flags 
-        conf.env.append_value('CFLAGS_openjpeg', '-DHAVE_OPENJPEG_H')
-        conf.env.append_value('CFLAGS_j2k-c', '-DJ2K_MODULE_EXPORTS')
-        conf.env.append_value('CXXFLAGS_j2k-c', '-DJ2K_MODULE_EXPORTS')
-    
-        # add defines -- 
-        conf.env.append_value('DEFINES_J2K', OPENJPEG_DEFINES)
+        # add defines
+        defines = OPENJPEG_DEFINES 
+        if not Options.options.shared_libs:
+            defines.append('OPJ_STATIC')
+        conf.env.append_value('DEFINES_J2K', defines)
+
+        # check functionality
+        conf.check_cc(function_name='fseeko', header_name="stdio.h", mandatory=False)
 
         # check for the source tarball
         if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
@@ -30,7 +30,7 @@ def configure(conf):
 
         # untar and setup env
         conf.env['MAKE_OPENJPEG'] = True
-        conf.env['MAKE_J2K']      = True
+        conf.env['HAVE_J2K']      = True
         conf.msg('Building local lib', j2kLayer)
         untarFile(path=conf.path, fname=SOURCE + '.tar')
 
@@ -42,220 +42,49 @@ def build(bld):
     # check it again just in case
     if 'MAKE_OPENJPEG' in env:
 
-        openjpegNode = bld.path.make_node(SOURCE)
-        xercesUselibs = XERCES_USELIBS
-        if sys.platform == 'win32':
-            # Xerces requires this standard Windows library
-            xercesUselibs += ' ADVAPI32'
+        # this node is a maditory build -- others are optional
+        openjpegNode = bld.path.make_node(join(SOURCE, 'src', 'lib', 'openjp2'))
+        
+        # make opj_config.h
+        config = join(bld.path.abspath(), SOURCE, 'src', 'lib', 'openjp2', 'opj_config.h')
+        if not exists(config) :
+            file = open(config, 'w')
+            file.write('#define OPJ_PACKAGE_VERSION "2.0.0"\n')
+            if sys.byteorder != 'little' :
+                file.write('#define OPJ_BIG_ENDIAN\n')
+            file.close()
+            
+        # build the lib
+        sources = ['bio.c', 'cio.c', 'dwt.c', 'event.c', 'image.c', 
+                   'invert.c', 'j2k.c', 'jp2.c', 'mct.c', 'mqc.c', 
+                   'openjpeg.c', 'opj_clock.c', 'pi.c', 'raw.c', 
+                   't1.c', 't2.c', 'tcd.c', 'tgt.c', 'function_list.c']
+        openjpeg = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib', 
+                       includes='.', export_includes='.',
+                       source=sources, target='openjpeg', name='openjpeg',
+                       path=openjpegNode, env=env.derive(), targets_to_add=[])
 
-        d = {}
-        for line in env['DEFINES']:
-            split = line.split('=')
-            k = split[0]
-            v = len(split) == 2 and split[1] or '1'
-            if v:
-                d[k] = v
-
-        # extra defines for config.h
-        if 'HAVE_ICONV_H=1' in env['DEFINES'] :
-            d['ICONV_USES_CONST_POINTER'] = '0'
-        if 'HAVE_SYS_TIME_H=1' in env['DEFINES'] and 'HAVE_TIME_H=1' in env['DEFINES']:
-            d['TIME_WITH_SYS_TIME'] = '1'
-        if 'HAVE_SYS_TYPES_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_SYS_TYPES_H'] = '1'
-        if 'HAVE_INTTYPES_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_INTTYPES_H'] = '1'
-        if 'HAVE_INTRIN_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_INTRIN_H'] = '1'
-        if 'HAVE_EMMINTRIN_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_EMMINTRIN_H'] = '1'
-        if 'HAVE_WCHAR_H=1' in env['DEFINES'] :
-            d['XERCES_INCLUDE_WCHAR_H'] = '1'
-        if 'HAVE_EMMINTRIN_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_SSE2_INTRINSIC'] = '1'
-        if sys.platform == 'win32' :
-            d['XERCES_USE_FILEMGR_WINDOWS']     = '1' 
-            d['XERCES_USE_MUTEXMGR_WINDOWS']    = '1'
-            d['XERCES_USE_NETACCESSOR_WINSOCK'] = '1'
-            d['XERCES_USE_TRANSCODER_WINDOWS']  = '1'
-            d['XERCES_USE_WIN32_MSGLOADER'] = '1'
-
-            d['XERCES_S16BIT_INT'] = '__int16'
-            d['XERCES_S32BIT_INT'] = '__int32'
-            d['XERCES_S64BIT_INT'] = '__int32'
-            d['XERCES_U16BIT_INT'] = 'unsigned __int16'
-            d['XERCES_U32BIT_INT'] = 'unsigned __int32'
-            d['XERCES_U64BIT_INT'] = 'unsigned __int64'
-            d['XERCES_SIZE_T']     = 'size_t'
-            if 'HAVE_WCHAR_H=1' in env['DEFINES'] :
-                d['XERCES_XMLCH_T'] = 'wchar_t'
-            else :
-                d['XERCES_XMLCH_T'] = 'unsigned __int16'
-            if 'HAVE_SSIZE_T=1' in env['DEFINES'] :
-                d['XERCES_SSIZE_T'] = 'ssize_t'
-            else :
-                if 'SIZEOF_SIZE_T=8' in env['DEFINES'] :
-                    d['XERCES_SSIZE_T']    = '__int64'
-                else :
-                    d['XERCES_SSIZE_T']    = '__int32'
-
-        # -- please note -- we diverge from the xerces-c make 
-        # system and treat all unix platforms similarly. Solaris 
-        # was make configured to use ICU and Linux the GNUICONV, 
-        # but here we use the regular ICONV for both to avoid 
-        # having complicated checks and additional build logic.
-        else :
-            d['HAVE_PTHREAD'] = '1'
-
-            d['XERCES_USE_FILEMGR_POSIX'] = '1'
-            d['XERCES_USE_MUTEXMGR_POSIX'] = '1'
-            d['XERCES_USE_TRANSCODER_ICONV'] = '1'
-            d['XERCES_USE_MSGLOADER_INMEMORY'] = '1'
-
-            d['XERCES_S16BIT_INT'] = 'int16_t'
-            d['XERCES_S32BIT_INT'] = 'int32_t'
-            d['XERCES_S64BIT_INT'] = 'int64_t'
-            d['XERCES_U16BIT_INT'] = 'uint16_t'
-            d['XERCES_U32BIT_INT'] = 'uint32_t'
-            d['XERCES_U64BIT_INT'] = 'uint64_t'
-            d['XERCES_XMLCH_T']    = 'uint16_t'
-            d['XERCES_SIZE_T']     = 'size_t'
-            d['XERCES_SSIZE_T']    = 'ssize_t'
-
-        d['LT_OBJDIR'] = '.libs/'
-        d['PACKAGE'] = 'xerces-c' 
-        d['PACKAGE_BUGREPORT'] = '' 
-        d['PACKAGE_NAME'] = 'xerces-c'
-        d['PACKAGE_STRING'] = 'xerces-c 3.1.1'
-        d['PACKAGE_TARNAME'] = 'xerces-c'
-        d['PACKAGE_URL'] = '' 
-        d['PACKAGE_VERSION'] = '3.1.1'
-        d['VERSION'] = '3.1.1'
-
-        # extra defines for Xerces_autoconf_config.hpp
-        d['HAVE_NAMESPACES'] = '1'
-        d['HAVE_SOCKET'] = '1'
-        d['HAVE_STD_LIBS'] = '1'
-        d['HAVE_STD_NAMESPACE'] = '1'
-
-        d['XERCES_AUTOCONF'] = '1'
-        d['XERCES_PLATFORM_EXPORT'] = ''
-        d['XERCES_PLATFORM_IMPORT'] = ''
-        d['XERCES_HAS_CPP_NAMESPACE'] = '1'
-        d['XERCES_STD_NAMESPACE'] = '1'
-        d['XERCES_NEW_IOSTREAMS'] = '1'
-        d['XERCES_LSTRSUPPORT'] = '1'
-        d['HAVE_BOOL'] = '1'
-
-        if 'HAVE_NL_TYPES_H=1' in env['DEFINES'] :
-            d['HAVE_CATCLOSE'] = '1'
-            d['HAVE_CATGETS']  = '1'
-            d['HAVE_CATOPEN']  = '1'
-
-        # first setup the configurable headers
-        xercesAutoH = bld(name='xercesAutoH',
-                          features='handleDefs',
-                          input='src/xercesc/util/Xerces_autoconf_config.hpp.in',
-                          output='src/xercesc/util/Xerces_autoconf_config.hpp',
-                          defs=d, path=openjpegNode,
-                          env=env.derive())
-        xercesConfigH = bld(name='xercesConfigH',
-                            features='handleDefs',
-                            input='config.h.in',
-                            output='config.h',
-                            defs=d, path=openjpegNode,
-                            env=env.derive())
-
-        # setup some known excludes per platform --
-        # we avoid building the system specific files
-        # and instead build the safely cross-platform files for all unix
-        # platforms. -- for more information see note above --
-        GENERAL_EXCLUDES = ['URLAccessCFBinInputStream.cpp', 
-                            'MacOSURLAccessCF.cpp', 'IconvGNUTransService.cpp',
-                            'MacOSUnicodeConverter.cpp', 'MsgCatalogLoader.cpp',
-                            'CurlURLInputStream.cpp', 'CurlNetAccessor.cpp',
-                            'ICUMsgLoader.cpp', 'ICUTransService.cpp']
-        UNIX_SPECIFIC = ['SocketNetAccessor.cpp','UnixHTTPURLInputStream.cpp',
-                         'PosixFileMgr.cpp', 'PosixMutexMgr.cpp', 
-                         'InMemMsgLoader.cpp', 'IconvTransService.cpp']
-        WIN_SPECIFIC  = ['Win32TransService.cpp', 'WinSockNetAccessor.cpp',
-                         'BinHTTPURLInputStream.cpp', 
-                         'BinHTTPInputStreamCommon.cpp',
-                         'WindowsFileMgr.cpp', 'WindowsMutexMgr.cpp', 
-                         'Win32MsgLoader.cpp']
-
-        # create filter for system specific files                        
-        # MacOS could be supported here as well
-        EXCLUDES = GENERAL_EXCLUDES
-        if sys.platform == 'win32' :
-            EXCLUDES += UNIX_SPECIFIC
-        else :
-            EXCLUDES += WIN_SPECIFIC
-
-        # walk the directory of files --
-        # this sorts files based on the filtering above, and
-        # whether they are sources vs headers
-        sources = []
-        headers = []
-        xercesDir = join(bld.path.abspath(), SOURCE)
-        for root,dirs,files in os.walk(join(xercesDir, 'src')) :
-            relativePath = root.replace(xercesDir + os.sep, "")
-            for file in files :
-                if file.endswith('.cpp') and 'Test' not in file and file not in EXCLUDES or \
-                   sys.platform != 'win32' and dirs == ['xercesc'] and file.endswith('.c') :
-                    sources.append(join(relativePath, file))
-                elif file.endswith('.h') or file.endswith('.hpp') or file.endswith('.c') :
-                    headers.append(join(relativePath, file))
-        sources = ' '.join(sources)
-
-        # build the library
-        xercesDefines = env['DEFINES'] + ['HAVE_CONFIG_H']
-        if sys.platform == 'win32' :
-            xercesDefines.append('XERCES_USE_WIN32_MSGLOADER')
-        xerces = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
-                     source=sources,
-                     includes=['.', 'src'], export_includes='src',
-                     target='xerces-c', path=openjpegNode,
-                     uselib=xercesUselibs, name='XML', env=env.derive(),
-                     defines=xercesDefines,
-                     targets_to_add=[xercesAutoH, xercesConfigH])
+        # install lib
         if env['install_libs']:
-            xerces.install_path = '${PREFIX}/lib'
-
-        if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
-            xerces.defs = 'lib/libxerces.def'
-
-        # install header target if necessary
+            openjpeg.install_path = '${PREFIX}/lib'
+        
+        # install headers
         if env['install_headers']:
-            # install all hpp, h, and c files into the include directory in a relative structure
-            srcNode = openjpegNode.make_node('src')
-
-            # add the config.h file to the install
-            bld(features='install_tgt', pattern='*.h', 
-                dir=openjpegNode, install_path='${PREFIX}/include',
-                name='XML_INCLUDE_CONFIG_H_INSTALL')
-            xerces.targets_to_add.append(bld(features='install_tgt add_targets', 
-                                             pattern='**/*.hpp **/*.h xercesc/**/*.c',
-                                             dir=srcNode, install_path='${PREFIX}/include', 
-                                             name='XML_INCLUDE_INSTALL',
-                                             targets_to_add=['XML_INCLUDE_CONFIG_H_INSTALL']))
-
-        # install source target if necessary
-        if env['install_source']:
-            sourceNode = bld.path.make_node('source')
-            xerces.targets_to_add.append(bld.install_tgt(files=SOURCE + '.tar',
-                                         dir=bld.path,
-                                         install_path=join('${PREFIX}',
-                                             sourceNode.path_from(bld.path)),
-                                         relative_trick=True,
-                                         name='XML_SOURCE_INSTALL'))
+            openjpeg.targets_to_add.append(
+                bld(features='install_tgt', 
+                    includes='openjpeg.h opj_stdint.h opj_config.h',
+                    dir=openjpegNode, install_path='${PREFIX}/include',
+                    name='J2K_INCLUDES_INSTALL'))
+        
 
 def distclean(context):
 
     # remove the untarred directories
     import shutil
+    
     dirs = filter(lambda x: exists(join(context.path.abspath(), x)), 
-                  ['xerces-c-3.1.1'])
+                  [SOURCE])
+
     for d in dirs:
         try:
             shutil.rmtree(join(context.path.abspath(), d), ignore_errors=True)
