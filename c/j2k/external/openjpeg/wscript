@@ -26,7 +26,7 @@ def configure(conf):
 
         # check for the source tarball
         if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
-            conf.fatal('Missing xerces tarfile')
+            conf.fatal('Missing OpenJPEG tarfile')
 
         # untar and setup env
         conf.env['MAKE_OPENJPEG'] = True
@@ -42,7 +42,7 @@ def build(bld):
     # check it again just in case
     if 'MAKE_OPENJPEG' in env:
 
-        # this node is a maditory build -- others are optional
+        # this node is a mandatory build -- others are optional
         openjpegNode = bld.path.make_node(join(SOURCE, 'src', 'lib', 'openjp2'))
         
         # make opj_config.h
