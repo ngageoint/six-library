@@ -62,7 +62,7 @@ typedef struct _OpenJPEGWriterImpl
 } OpenJPEGWriterImpl;
 
 J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data);
-J2KPRIV(bool)       implStreamSeek(OPJ_SIZE_T bytes, void *data);
+J2KPRIV(NRT_BOOL)    implStreamSeek(OPJ_SIZE_T bytes, void *data);
 J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data);
 J2KPRIV(OPJ_UINT32) implStreamWrite(void *buf, OPJ_UINT32 bytes, void *data);
 
@@ -154,7 +154,7 @@ OpenJPEG_createIO(nrt_IOInterface *io, nrt_Off length, int isInput,
 J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
-    nrt_Off offset, bytesLeft, alreadyRead, len;
+    nrt_Off offset, bytesLeft, alreadyRead;
     OPJ_UINT32 toRead;
 
     offset = nrt_IOInterface_tell(ctrl->io, &ctrl->error);
@@ -171,7 +171,7 @@ J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
     return toRead;
 }
 
-J2KPRIV(bool) implStreamSeek(OPJ_SIZE_T bytes, void *data)
+J2KPRIV(NRT_BOOL) implStreamSeek(OPJ_SIZE_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (!nrt_IOInterface_seek(ctrl->io, ctrl->offset + bytes,
@@ -250,7 +250,7 @@ OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
         goto CATCH_ERROR;
     }
 
-    if (!(*codec = opj_create_decompress(CODEC_J2K)))
+    if (!(*codec = opj_create_decompress(OPJ_CODEC_J2K)))
     {
         goto CATCH_ERROR;
     }
@@ -280,16 +280,17 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
     opj_image_t *image = NULL;
     opj_codec_t *codec = NULL;
     NRT_BOOL rc = NRT_SUCCESS;
-    OPJ_INT32 tileX0, tileY0;
-    OPJ_UINT32 tileWidth, tileHeight, nTilesX, nTilesY;
+    OPJ_UINT32 tileWidth, tileHeight;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
         goto CATCH_ERROR;
     }
 
-    if (!opj_read_header(codec, &image, &tileX0, &tileY0, &tileWidth,
-                         &tileHeight, &nTilesX, &nTilesY, stream))
+    tileWidth = ((opj_codec_private_t*)codec)->m_codec->m_cp->tdx;
+    tileHeight = ((opj_codec_private_t*)codec)->m_codec->m_cp->tdy;
+
+    if (!opj_read_header(stream, codec, &image))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
@@ -345,10 +346,10 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
 
         switch(image->color_space)
         {
-        case CLRSPC_SRGB:
+        case OPJ_CLRSPC_SRGB:
             imageType = J2K_TYPE_RGB;
             break;
-        case CLRSPC_GRAY:
+        case OPJ_CLRSPC_GRAY:
             imageType = J2K_TYPE_MONO;
             break;
         default:
@@ -390,7 +391,6 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     j2k_Component *component = NULL;
     size_t uncompressedSize;
     int imageType;
-    J2K_BOOL isSigned;
     opj_cparameters_t encoderParams;
     opj_image_cmptparm_t *cmptParams;
     OPJ_COLOR_SPACE colorSpace;
@@ -418,7 +418,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
         encoderParams.numresolution = writerOps->numResolutions;
     else
         encoderParams.numresolution = 6; /* default */
-    encoderParams.prog_order = LRCP; /* the default */
+    encoderParams.prog_order = OPJ_LRCP; /* the default */
     encoderParams.cp_tx0 = 0;
     encoderParams.cp_ty0 = 0;
     encoderParams.tile_size_on = 1;
@@ -476,13 +476,13 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     switch(imageType)
     {
     case J2K_TYPE_RGB:
-        colorSpace = CLRSPC_SRGB;
+        colorSpace = OPJ_CLRSPC_SRGB;
         break;
     default:
-        colorSpace = CLRSPC_GRAY;
+        colorSpace = OPJ_CLRSPC_GRAY;
     }
 
-    if (!(impl->codec = opj_create_compress(CODEC_J2K)))
+    if (!(impl->codec = opj_create_compress(OPJ_CODEC_J2K)))
     {
         nrt_Error_init(error, "Error creating OpenJPEG codec", NRT_CTXT,
                        NRT_ERR_INVALID_OBJECT);
@@ -555,8 +555,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     opj_image_t *image = NULL;
     opj_codec_t *codec = NULL;
     nrt_Uint32 bufSize;
-    OPJ_INT32 tileX0, tileY0;
-    OPJ_UINT32 tileWidth, tileHeight, nTilesX, nTilesY;
+    OPJ_UINT32 tileWidth, tileHeight;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
@@ -564,15 +563,14 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     }
 
     /* unfortunately, we need to read the header every time ... */
-    if (!opj_read_header(codec, &image, &tileX0, &tileY0, &tileWidth,
-                         &tileHeight, &nTilesX, &nTilesY, stream))
+    if (!opj_read_header(stream, codec, &image))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
     }
 
     /* only decode what we want */
-    if (!opj_set_decode_area(codec, tileWidth * tileX, tileHeight * tileY,
+    if (!opj_set_decode_area(codec, image, tileWidth * tileX, tileHeight * tileY,
                              tileWidth * (tileX + 1), tileHeight * (tileY + 1)))
     {
         nrt_Error_init(error, "Error decoding area", NRT_CTXT, NRT_ERR_UNK);
@@ -584,9 +582,9 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
         OPJ_UINT32 tileIndex, nComponents;
         OPJ_INT32 tileX0, tileY0, tileX1, tileY1;
 
-        if (!opj_read_tile_header(codec, &tileIndex, &bufSize, &tileX0,
+        if (!opj_read_tile_header(codec, stream, &tileIndex, &bufSize, &tileX0,
                                   &tileY0, &tileX1, &tileY1, &nComponents,
-                                  &keepGoing, stream))
+                                  &keepGoing))
         {
             nrt_Error_init(error, "Error reading tile header", NRT_CTXT,
                            NRT_ERR_UNK);
@@ -643,8 +641,6 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     nrt_Uint64 bufSize;
     nrt_Uint64 offset = 0;
     nrt_Uint32 componentBytes, nComponents;
-    OPJ_INT32 tileX0, tileY0;
-    OPJ_UINT32 tileWidth, tileHeight, nTilesX, nTilesY;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
@@ -652,8 +648,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     }
 
     /* unfortunately, we need to read the header every time ... */
-    if (!opj_read_header(codec, &image, &tileX0, &tileY0, &tileWidth,
-                         &tileHeight, &nTilesX, &nTilesY, stream))
+    if (!opj_read_header(stream, codec, &image))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
@@ -665,7 +660,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
         y1 = j2k_Container_getHeight(impl->container, error);
 
     /* only decode what we want */
-    if (!opj_set_decode_area(codec, x0, y0, x1, y1))
+    if (!opj_set_decode_area(codec, image, x0, y0, x1, y1))
     {
         nrt_Error_init(error, "Error decoding area", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
@@ -692,9 +687,9 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
 
         do
         {
-            if (!opj_read_tile_header(codec, &tileIndex, &reqSize, &tileX0,
+            if (!opj_read_tile_header(codec, stream, &tileIndex, &reqSize, &tileX0,
                                       &tileY0, &tileX1, &tileY1, &nComponents,
-                                      &keepGoing, stream))
+                                      &keepGoing))
             {
                 nrt_Error_init(error, "Error reading tile header", NRT_CTXT,
                                NRT_ERR_UNK);
@@ -762,7 +757,7 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 {
     OpenJPEGWriterImpl *impl = (OpenJPEGWriterImpl*) data;
     NRT_BOOL rc = NRT_SUCCESS;
-    nrt_Uint32 xTiles, yTiles, nTiles, tileIndex;
+    nrt_Uint32 xTiles, yTiles, tileIndex;
 
     xTiles = j2k_Container_getTilesX(impl->container, error);
     yTiles = j2k_Container_getTilesY(impl->container, error);
