@@ -279,6 +279,7 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
     opj_stream_t *stream = NULL;
     opj_image_t *image = NULL;
     opj_codec_t *codec = NULL;
+    opj_codestream_info_v2_t* codeStreamInfo = NULL;
     NRT_BOOL rc = NRT_SUCCESS;
     OPJ_UINT32 tileWidth, tileHeight;
 
@@ -287,14 +288,20 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
         goto CATCH_ERROR;
     }
 
-    tileWidth = ((opj_codec_private_t*)codec)->m_codec->m_cp->tdx;
-    tileHeight = ((opj_codec_private_t*)codec)->m_codec->m_cp->tdy;
-
     if (!opj_read_header(stream, codec, &image))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
     }
+
+    codeStreamInfo = opj_get_cstr_info(codec);
+    if (!codeStreamInfo)
+    {
+        nrt_Error_init(error, "Error reading code stream", NRT_CTXT, NRT_ERR_UNK);
+        goto CATCH_ERROR;
+    }
+    tileWidth = codeStreamInfo->tdx;
+    tileHeight = codeStreamInfo->tdy;
 
     /* sanity checking */
     if (!image)
