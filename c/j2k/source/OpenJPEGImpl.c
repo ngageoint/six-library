@@ -561,6 +561,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     opj_stream_t *stream = NULL;
     opj_image_t *image = NULL;
     opj_codec_t *codec = NULL;
+    opj_codestream_info_v2_t* codeStreamInfo = NULL;
     nrt_Uint32 bufSize;
     OPJ_UINT32 tileWidth, tileHeight;
 
@@ -575,6 +576,15 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
     }
+
+    codeStreamInfo = opj_get_cstr_info(codec);
+    if (!codeStreamInfo)
+    {
+        nrt_Error_init(error, "Error reading code stream", NRT_CTXT, NRT_ERR_UNK);
+        goto CATCH_ERROR;
+    }
+    tileWidth = codeStreamInfo->tdx;
+    tileHeight = codeStreamInfo->tdy;
 
     /* only decode what we want */
     if (!opj_set_decode_area(codec, image, tileWidth * tileX, tileHeight * tileY,
