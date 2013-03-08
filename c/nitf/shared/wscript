@@ -24,7 +24,7 @@ def build(bld):
     for p in plugins:
         filename = str(p)
         isJ2KPlugin = filename in ['J2KDecompress.c', 'J2KCompress.c']
-        if isJ2KPlugin and not env['CFLAGS_j2k-c']:
+        if isJ2KPlugin and not 'HAVE_J2K' in env:
             continue
 
         kw = globals()
