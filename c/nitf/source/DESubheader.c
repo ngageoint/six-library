@@ -120,24 +120,31 @@ nitf_DESubheader_clone(nitf_DESubheader * source, nitf_Error * error)
         success = nitf_Field_get(source->subheaderFieldsLength, &subLen,
                                  NITF_CONV_INT, sizeof(subLen), error);
         if (!success)
+        {
             goto CATCH_ERROR;
+        }
 
         subhdr->subheaderFields = NULL;
         subhdr->userDefinedSection = NULL;
 
         if (source->subheaderFields)
         {
-            memcpy(subhdr->subheaderFields,
-                   source->subheaderFields, subLen);
+            subhdr->subheaderFields =
+                nitf_TRE_clone(source->subheaderFields, error);
+            if (!subhdr->subheaderFields)
+            {
+                goto CATCH_ERROR;
+            }
         }
         if (source->userDefinedSection)
         {
-
             subhdr->userDefinedSection =
                 nitf_Extensions_clone(source->userDefinedSection, error);
 
             if (!subhdr->userDefinedSection)
+            {
                 goto CATCH_ERROR;
+            }
         }
 
         return subhdr;
