@@ -2990,12 +2990,12 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
 
     nitf->blockMask = NULL;     /* Set by first read/write */
 
-    if (!nitf_ImageIO_setPixelDef(nitf, pixelType, nBits, nBitsActual,
-                                  justification, error))
+    /* Set function pointers.  This must occur prior to setPixelDef. */
+    if (!nitf_ImageIO_decodeModes(nitf, subheader, error))
         return NULL;
 
-    /* Set function pointers */
-    if (!nitf_ImageIO_decodeModes(nitf, subheader, error))
+    if (!nitf_ImageIO_setPixelDef(nitf, pixelType, nBits, nBitsActual,
+                                  justification, error))
         return NULL;
 
     /*
@@ -4077,7 +4077,7 @@ unformatTable; /* Also used for format */
 
 #define NENTRIES 34
 
-static unformatTable table[NENTRIES] =
+static unformatTable UNFORMAT_TABLE[NENTRIES] =
 {
     /* Bi-endian full bits integers (NBPP=ABPP)
        and right justified INT */
@@ -4356,13 +4356,21 @@ NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
     found = 0;
     for (i = 0; i < NENTRIES; i++)
     {
-        if ((nitf->pixel.type & table[i].types) &&
-            ((BYTE_BASE << nitf->pixel.bytes) & table[i].bytes) &&
-            (swap & table[i].swap) &&
-            (sign & table[i].sign) && (just & table[i].just))
+        if ((nitf->pixel.type & UNFORMAT_TABLE[i].types) &&
+            ((BYTE_BASE << nitf->pixel.bytes) & UNFORMAT_TABLE[i].bytes) &&
+            (swap & UNFORMAT_TABLE[i].swap) &&
+            (sign & UNFORMAT_TABLE[i].sign) && (just & UNFORMAT_TABLE[i].just))
         {
-            nitf->vtbl.unformat = table[i].unfmt;
-            nitf->vtbl.format = table[i].fmt;
+            /* NOTE: When the imagery is compressed, the compressor/decompressor
+             * will take care of the endian swapping, so we don't want to
+             * perform any swapping in this case.  We could just skip this
+             * entire for loop but don't in order to make sure the
+             * pixel type / # bits / justification combo is sane. */
+            if (nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION)
+            {
+                nitf->vtbl.unformat = UNFORMAT_TABLE[i].unfmt;
+                nitf->vtbl.format = UNFORMAT_TABLE[i].fmt;
+            }
             found = 1;
             break;
         }

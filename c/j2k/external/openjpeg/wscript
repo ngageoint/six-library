@@ -1,0 +1,92 @@
+import os, sys
+from os.path import join, exists
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
+
+SOURCE         = 'openjpeg-2.0.0'
+OPENJPEG_DEFINES = ['USE_OPENJPEG', 'HAVE_OPENJPEG_H', 'J2K_MODULE_EXPORTS']
+
+options = lambda x : None
+
+def configure(conf):
+
+    j2kLayer = Options.options.j2k_layer
+
+    if j2kLayer == 'openjpeg' :
+
+        # add defines
+        defines = OPENJPEG_DEFINES 
+        if not Options.options.shared_libs:
+            defines.append('OPJ_STATIC')
+        conf.env.append_value('DEFINES_J2K', defines)
+
+        # check functionality
+        conf.check_cc(function_name='fseeko', header_name="stdio.h", mandatory=False)
+
+        # check for the source tarball
+        if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
+            conf.fatal('Missing OpenJPEG tarfile')
+
+        # untar and setup env
+        conf.env['MAKE_OPENJPEG'] = True
+        conf.env['HAVE_J2K']      = True
+        conf.msg('Building local lib', j2kLayer)
+        untarFile(path=conf.path, fname=SOURCE + '.tar')
+
+def build(bld):
+
+    env = bld.get_env()
+    sourceFiles = []
+
+    # check it again just in case
+    if 'MAKE_OPENJPEG' in env:
+
+        # this node is a mandatory build -- others are optional
+        openjpegNode = bld.path.make_node(join(SOURCE, 'src', 'lib', 'openjp2'))
+        
+        # make opj_config.h
+        config = join(bld.path.abspath(), SOURCE, 'src', 'lib', 'openjp2', 'opj_config.h')
+        if not exists(config) :
+            file = open(config, 'w')
+            file.write('#define OPJ_PACKAGE_VERSION "2.0.0"\n')
+            if sys.byteorder != 'little' :
+                file.write('#define OPJ_BIG_ENDIAN\n')
+            file.close()
+            
+        # build the lib
+        sources = ['bio.c', 'cio.c', 'dwt.c', 'event.c', 'image.c', 
+                   'invert.c', 'j2k.c', 'jp2.c', 'mct.c', 'mqc.c', 
+                   'openjpeg.c', 'opj_clock.c', 'pi.c', 'raw.c', 
+                   't1.c', 't2.c', 'tcd.c', 'tgt.c', 'function_list.c']
+        openjpeg = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib', 
+                       includes='.', export_includes='.',
+                       source=sources, target='openjpeg', name='openjpeg',
+                       path=openjpegNode, env=env.derive(), targets_to_add=[])
+
+        # install lib
+        if env['install_libs']:
+            openjpeg.install_path = '${PREFIX}/lib'
+        
+        # install headers
+        if env['install_headers']:
+            openjpeg.targets_to_add.append(
+                bld(features='install_tgt', 
+                    includes='openjpeg.h opj_stdint.h opj_config.h',
+                    dir=openjpegNode, install_path='${PREFIX}/include',
+                    name='J2K_INCLUDES_INSTALL'))
+        
+
+def distclean(context):
+
+    # remove the untarred directories
+    import shutil
+    
+    dirs = filter(lambda x: exists(join(context.path.abspath(), x)), 
+                  [SOURCE])
+
+    for d in dirs:
+        try:
+            shutil.rmtree(join(context.path.abspath(), d), ignore_errors=True)
+        except:{}
+

@@ -109,6 +109,13 @@ nitf_RESubheader_clone(nitf_RESubheader * source, nitf_Error * error)
         NITF_TRY_GET_UINT32(source->subheaderFieldsLength, &subLen, error);
         if (source->subheaderFields)
         {
+            subhdr->subheaderFields = (char* )NITF_MALLOC(subLen);
+            if (!subhdr->subheaderFields)
+            {
+                nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                                NITF_CTXT, NITF_ERR_MEMORY);
+                return NULL;
+            }
             memcpy(subhdr->subheaderFields,
                    source->subheaderFields, subLen);
         }

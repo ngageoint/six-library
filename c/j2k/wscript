@@ -1,221 +1,37 @@
-from os.path import join, isdir
+from os.path import join, isdir, exists
 from waflib import Options
 
-options = distclean = lambda x: None
+APIS = ['external/openjpeg', 'external/jasper']
 
 def options(opt):
-    opt.add_option('--with-j2k', action='store', dest='j2klib',
-                   choices=['openjpeg', 'jasper', 'kdu'],
-                   default=None, metavar='LIB',
+    opt.add_option('--with-j2k', action='store', dest='j2k_layer',
+                   choices=['openjpeg', 'jasper'], default=None, metavar='LIB',
                    help='Specify the JPEG2000 library to link with')
 
+    existingDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), APIS)
+    opt.recurse(existingDirs)
+
 def configure(conf):
-    if Options.options.j2klib is None:
-        return
-    
-    j2klib = Options.options.j2klib
 
-    # NOTE: JasPer will compile in 64-bit mode, but it internally uses
-    #       32-bit integers for some offsets.  To prevent confusion/badness,
-    #       just don't allow it for a 64-bit build.
-    if conf.env['IS64BIT'] and j2klib == 'jasper':
-        conf.msg('JPEG2000 library', 'jasper not available on 64-bit architectures', color='YELLOW')
-        j2klib = None
-    
-    conf.env['J2KLIB'] = j2klib
-    
-    j2klibDir = {'openjpeg':'openjpeg', 'kdu':'kakadu', 'jasper':'jasper'}.get(j2klib, None)
-    
-    if j2klibDir and isdir(join(conf.path.abspath(), 'external', j2klibDir)):
-        conf.msg('JPEG2000 library', j2klib, color='GREEN')
-        conf.env.append_value('CFLAGS_j2k-c', '-DHAVE_J2K_H')
-        if j2klib == 'kdu':
-            conf.env.append_value('CFLAGS_kdu', '-DHAVE_KAKADU_H')
-            conf.env.append_value('CXXFLAGS_kdu', '-DHAVE_KAKADU_H')
-        else:
-            conf.env.append_value('CFLAGS_%s' % j2klib, '-DHAVE_%s_H' % j2klib.upper())
-            
-            if j2klib == 'jasper':
-                conf.check_cc(header_name="sys/types.h", define_name='HAVE_SYS_TYPES_H')
-                uchar = conf.check_cc(type_name='uchar', header_name='sys/types.h', mandatory=False)
-                ushort = conf.check_cc(type_name='ushort', header_name='sys/types.h', mandatory=False)
-                longlong = conf.check_cc(type_name='longlong', header_name='sys/types.h', mandatory=False)
-                ulonglong = conf.check_cc(type_name='ulonglong', header_name='sys/types.h', mandatory=False)
-				
-                if not uchar:
-                    conf.env.append_unique('jasper-defs', 'uchar=unsigned char') 
-                if not ushort:
-                    conf.env.append_unique('jasper-defs', 'ushort=unsigned short')
-                if not longlong:
-                    conf.env.append_unique('jasper-defs', 'longlong=long long') 
-                if not ulonglong:
-                    conf.env.append_unique('jasper-defs', 'ulonglong=unsigned long long')
-        conf.env.append_value('CFLAGS_j2k-c', '-DJ2K_MODULE_EXPORTS')
-        conf.env.append_value('CXXFLAGS_j2k-c', '-DJ2K_MODULE_EXPORTS')
-    elif j2klibDir:
-        conf.msg('JPEG2000 library', 'not found', color='YELLOW')
-
-
+    if Options.options.j2k_layer : 
+        conf.msg('Configuring with J2K layer', Options.options.j2k_layer)
+        existingDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), APIS)
+        conf.recurse(existingDirs)
 
 def build(bld):
-    
-    env = bld.all_envs[bld.env['VARIANT'] or 'default']
-    j2klib = env['J2KLIB'] or None
-    j2klibDir = {'openjpeg':'openjpeg', 'kdu':'kakadu', 'jasper':'jasper'}.get(j2klib, None)
-    
-    if j2klibDir and isdir(join(bld.path.abspath(), 'external', j2klibDir)):
-        if j2klib == 'kdu':
-            #next, build kakadu
-            sources = ('common/kdu_arch.cpp',
-                       'threads/kdu_threads.cpp',
-                       'coding/mq_encoder.cpp',
-                       'coding/mq_decoder.cpp',
-                       'coding/block_coding_common.cpp',
-                       'coding/block_encoder.cpp',
-                       'coding/block_decoder.cpp',
-                       'coding/encoder.cpp',
-                       'coding/decoder.cpp',
-                       'compressed/codestream.cpp',
-                       'compressed/compressed.cpp',
-                       'compressed/blocks.cpp',
-                       'kernels/kernels.cpp',
-                       'messaging/messaging.cpp',
-                       'parameters/params.cpp',
-                       'transform/colour.cpp',
-                       'transform/analysis.cpp',
-                       'transform/synthesis.cpp',
-                       'transform/multi_transform.cpp',
-                       'roi/roi.cpp')
-            
-            kduIncludes='coding common compressed kernels messaging parameters roi threads transform'
-            bld(features='cxx cxxstlib',
-                             includes=kduIncludes,
-                             export_includes='common/',
-                             source=sources,
-                             target='kdu',
-                             name='kdu',
-                             uselib='kdu',
-                             path=bld.path.make_node('external/kakadu/coresys'),
-                             env=env.derive())
-            
-            #have to compile any C++ files separately
-            #the includes path is sort of a hack since Waf 1.5.8 has a bug
-            #that doesn't allow you to set uselib_local...
-            kducpp = bld(features='cxx',
-                                      source='source/KakaduImpl.cpp',
-                                      target='kducpp',
-                                      uselib='kdu',
-                                      includes='include ../nrt/include %s' % ' '.join(map(lambda x: 'external/kakadu/coresys/%s' % x, kduIncludes.split())),
-                                      path=bld.path,
-                                      env=env.derive())
-            
-        
-        elif j2klib == 'openjpeg':
-            #next, build openjpeg
-            sources = ('bio.c', 'cio.c', 'dwt.c', 'event.c', 'image.c', 'j2k.c',
-                       'j2k_lib.c', 'jp2.c', 'jpt.c', 'mct.c', 'mqc.c', 'openjpeg.c',
-                       'pi.c', 'raw.c', 't1.c', 't2.c', 'tcd.c', 'tgt.c',
-                       'function_list.c', 'invert.c', 'profile.c')
-            bld(features='c cstlib',
-                             includes='.',
-                             export_includes='.',
-                             source=sources,
-                             target='openjpeg',
-                             name='openjpeg',
-                             path=bld.path.make_node('external/openjpeg'),
-                             env=env.derive())
-        
-        elif j2klib == 'jasper':
-            #next, build jasper
-            #defs = env['defines']
-            #defList = []
-            #for k, v in defs.iteritems():
-            #    if v:
-            #        defList.append('%s=%s' % (k, v))
-            defList = env['DEFINES']
-            
-            jDefs = map(lambda x: x.split('='), env['jasper-defs'])
-            defDict = dict(PACKAGE='"jasper"', PACKAGE_NAME='"jasper"',
-                           JAS_VERSION='"1.900.1"', PACKAGE_STRING='"jasper 1.900.1"',
-                           PACKAGE_VERSION='"1.900.1"', PACKAGE_TARNAME='"jasper"',
-                           VERSION='"1.900.1"',)
-            for k, v in jDefs:
-                defDict[k] = v
-                           
-            configH = bld(name='config_h', output='include/jasper/jas_config.h',
-                                       path=bld.path.find_dir('external').find_dir('jasper'),
-                                       defs=defDict, env=env.derive())
-            configH.features = ['makeHeader']
-            
-            jasperDefs = []
-            if Options.platform.startswith('win'):
-                jasperDefs.append('JAS_WIN_MSVC_BUILD')
-                
-            includes = 'bmp include jp2 jpc jpg mif pgx pnm ras'.split()
-            sources = (
-                'bmp/bmp_cod.c',
-                'bmp/bmp_dec.c',
-                'bmp/bmp_enc.c',
-                'base/jas_cm.c',
-                'base/jas_debug.c',
-                'base/jas_getopt.c',
-                'base/jas_icc.c',
-                'base/jas_iccdata.c',
-                'base/jas_image.c',
-                'base/jas_init.c',
-                'base/jas_malloc.c',
-                'base/jas_seq.c',
-                'base/jas_stream.c',
-                'base/jas_string.c',
-                'base/jas_tmr.c',
-                'base/jas_tvp.c',
-                'base/jas_version.c',
-                'jp2/jp2_cod.c',
-                'jp2/jp2_dec.c',
-                'jp2/jp2_enc.c',
-                'jpc/jpc_bs.c',
-                'jpc/jpc_cs.c',
-                'jpc/jpc_dec.c',
-                'jpc/jpc_enc.c',
-                'jpc/jpc_math.c',
-                'jpc/jpc_mct.c',
-                'jpc/jpc_mqcod.c',
-                'jpc/jpc_mqdec.c',
-                'jpc/jpc_mqenc.c',
-                'jpc/jpc_qmfb.c',
-                'jpc/jpc_t1cod.c',
-                'jpc/jpc_t1dec.c',
-                'jpc/jpc_t1enc.c',
-                'jpc/jpc_t2cod.c',
-                'jpc/jpc_t2dec.c',
-                'jpc/jpc_t2enc.c',
-                'jpc/jpc_tagtree.c',
-                'jpc/jpc_tsfb.c',
-                'jpc/jpc_util.c',
-                'jpg/jpg_dummy.c',
-                'jpg/jpg_val.c',
-                'mif/mif_cod.c',
-                'pgx/pgx_cod.c',
-                'pgx/pgx_dec.c',
-                'pgx/pgx_enc.c',
-                'pnm/pnm_cod.c',
-                'pnm/pnm_dec.c',
-                'pnm/pnm_enc.c',
-                'ras/ras_cod.c',
-                'ras/ras_dec.c',
-                'ras/ras_enc.c',
-            )
-                
-            jasper = bld(features='c cstlib add_targets', includes=includes,
-                                      source=sources,
-                                      target='jasper',
-                                      name='jasper',
-                                      export_includes='include',
-                                      defines=defList + jasperDefs,
-                                      targets_to_add='config_h',
-                                      env=env.derive(),
-                                      path=bld.path.make_node('external/jasper'))
-        
+
+    env = bld.get_env()
+    if 'HAVE_J2K' in env : 
+        existingDirs = filter(lambda x: exists(join(bld.path.abspath(), x)), APIS)
+        bld.recurse(existingDirs)
+
+        if 'MAKE_OPENJPEG' in env :
+            j2kLayer = 'openjpeg'
+        elif 'MAKE_JASPER' in env :
+            j2kLayer = 'jasper'
+        else  :
+            bld.fatal('Not a supported j2k type')
+
         j2kSources = ('source/Container.c',
                       'source/Component.c',
                       'source/JasPerImpl.c',
@@ -224,38 +40,35 @@ def build(bld):
                       'source/SimpleComponentImpl.c',
                       'source/SimpleContainerImpl.c',
                       'source/Writer.c')
-        
+
         #build the j2k library
         lib = bld(features='c cstlib', includes='include',
-                       target='j2k-c', name='j2k-c',
-                       source=j2kSources,
-                       export_includes='include',
-                       env=env.derive(), path=bld.path,
-                       use='nrt-c %s' % j2klib, uselib=j2klib,
-                       install_path='${PREFIX}/lib')
-        if j2klib == 'kdu':
-            lib.add_objects='kducpp'
-        
-        #need to generate the programs with the c++ linker if we use kakadu
-        linker = (j2klib == 'kdu') and 'cxx' or 'c'
-        
+                  target='j2k-c', name='j2k-c',
+                  source=j2kSources,
+                  export_includes='include',
+                  env=env.derive(), path=bld.path,
+                  use='nrt-c J2K ' + j2kLayer)
+                  
+        # install j2k lib
+        if env['install_libs']:
+           lib.install_path = '${PREFIX}/lib'
+
         #j2k-only tests
         for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
-                  'test_j2k_create']:
-            bld(features='%s %sprogram' % (linker, linker), target=t, name=t,
-                             source='%s.c' % t, use='j2k-c',
-                             env=env.derive(), path=bld.path.make_node('tests'))
-        
+                 'test_j2k_create']:
+            bld.program_helper(dir='tests', source='%s.c' % t, 
+                               use='j2k-c J2K ' + j2kLayer, 
+                               name=t, target=t, lang='c', env=env.derive())
+
         #j2k/nitf tests
         for t in ['test_j2k_nitf']:
-            bld(features='%s %sprogram' % (linker, linker), target=t, name=t,
-                             source='%s.c' % t, use='j2k-c nitf-c',
-                             env=env.derive(), path=bld.path.find_dir('tests'))
-        
-        #if j2klib == 'kdu':
-        #    for t in ['test_j2k_kakadu']:
-        #        bld('cxx', 'program', target=t, name=t,
-        #                         source='%s.cpp' % t, uselib_local='j2k-c',
-        #                         env=env.derive(), path=bld.path.find_dir('tests'))
-        
-        
+            bld.program_helper(dir='tests', source='%s.c' % t, 
+                               use='nitf-c j2k-c J2K', uselib=j2kLayer, 
+                               name=t, target=t, lang='c', env=env.derive())
+
+def distclean(context) :
+
+    existingDirs = filter(lambda x: exists(join(context.path.abspath(), x)), APIS)
+    context.recurse(existingDirs)
+
+

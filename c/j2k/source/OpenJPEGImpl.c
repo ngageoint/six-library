@@ -22,6 +22,8 @@
 
 #ifdef HAVE_OPENJPEG_H
 
+#include <string.h>
+
 #include "j2k/Container.h"
 #include "j2k/Reader.h"
 #include "j2k/Writer.h"
@@ -62,7 +64,7 @@ typedef struct _OpenJPEGWriterImpl
 } OpenJPEGWriterImpl;
 
 J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data);
-J2KPRIV(bool)       implStreamSeek(OPJ_SIZE_T bytes, void *data);
+J2KPRIV(NRT_BOOL)    implStreamSeek(OPJ_SIZE_T bytes, void *data);
 J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data);
 J2KPRIV(OPJ_UINT32) implStreamWrite(void *buf, OPJ_UINT32 bytes, void *data);
 
@@ -154,7 +156,7 @@ OpenJPEG_createIO(nrt_IOInterface *io, nrt_Off length, int isInput,
 J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
-    nrt_Off offset, bytesLeft, alreadyRead, len;
+    nrt_Off offset, bytesLeft, alreadyRead;
     OPJ_UINT32 toRead;
 
     offset = nrt_IOInterface_tell(ctrl->io, &ctrl->error);
@@ -171,7 +173,7 @@ J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
     return toRead;
 }
 
-J2KPRIV(bool) implStreamSeek(OPJ_SIZE_T bytes, void *data)
+J2KPRIV(NRT_BOOL) implStreamSeek(OPJ_SIZE_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (!nrt_IOInterface_seek(ctrl->io, ctrl->offset + bytes,
@@ -250,7 +252,7 @@ OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
         goto CATCH_ERROR;
     }
 
-    if (!(*codec = opj_create_decompress(CODEC_J2K)))
+    if (!(*codec = opj_create_decompress(OPJ_CODEC_J2K)))
     {
         goto CATCH_ERROR;
     }
@@ -279,21 +281,30 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
     opj_stream_t *stream = NULL;
     opj_image_t *image = NULL;
     opj_codec_t *codec = NULL;
+    opj_codestream_info_v2_t* codeStreamInfo = NULL;
     NRT_BOOL rc = NRT_SUCCESS;
-    OPJ_INT32 tileX0, tileY0;
-    OPJ_UINT32 tileWidth, tileHeight, nTilesX, nTilesY;
+    OPJ_UINT32 tileWidth, tileHeight;
+    OPJ_UINT32 imageWidth, imageHeight;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
         goto CATCH_ERROR;
     }
 
-    if (!opj_read_header(codec, &image, &tileX0, &tileY0, &tileWidth,
-                         &tileHeight, &nTilesX, &nTilesY, stream))
+    if (!opj_read_header(stream, codec, &image))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
     }
+
+    codeStreamInfo = opj_get_cstr_info(codec);
+    if (!codeStreamInfo)
+    {
+        nrt_Error_init(error, "Error reading code stream", NRT_CTXT, NRT_ERR_UNK);
+        goto CATCH_ERROR;
+    }
+    tileWidth = codeStreamInfo->tdx;
+    tileHeight = codeStreamInfo->tdy;
 
     /* sanity checking */
     if (!image)
@@ -303,12 +314,24 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
         goto CATCH_ERROR;
     }
 
-    if (image->x1 - image->x0 <= 0 || image->y1 - image->y0 <= 0)
+    if (image->x0 >= image->x1 || image->y1 >= image->y0)
     {
         nrt_Error_init(error, "Invalid image offsets", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
     }
     if (image->numcomps == 0)
+    {
+        nrt_Error_init(error, "No image components found", NRT_CTXT,
+                       NRT_ERR_UNK);
+        goto CATCH_ERROR;
+    }
+
+    /* TODO: We need special handling that's not implemented in readTile() to
+     *       accommodate partial tiles with more than one band. */
+    imageWidth = image->x1 - image->x0;
+    imageHeight = image->y1 - image->y0;
+    if (image->numcomps > 1 &&
+        (imageWidth % tileWidth != 0 || imageHeight % tileHeight != 0))
     {
         nrt_Error_init(error, "No image components found", NRT_CTXT,
                        NRT_ERR_UNK);
@@ -345,10 +368,10 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
 
         switch(image->color_space)
         {
-        case CLRSPC_SRGB:
+        case OPJ_CLRSPC_SRGB:
             imageType = J2K_TYPE_RGB;
             break;
-        case CLRSPC_GRAY:
+        case OPJ_CLRSPC_GRAY:
             imageType = J2K_TYPE_MONO;
             break;
         default:
@@ -390,7 +413,6 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     j2k_Component *component = NULL;
     size_t uncompressedSize;
     int imageType;
-    J2K_BOOL isSigned;
     opj_cparameters_t encoderParams;
     opj_image_cmptparm_t *cmptParams;
     OPJ_COLOR_SPACE colorSpace;
@@ -418,7 +440,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
         encoderParams.numresolution = writerOps->numResolutions;
     else
         encoderParams.numresolution = 6; /* default */
-    encoderParams.prog_order = LRCP; /* the default */
+    encoderParams.prog_order = OPJ_LRCP; /* the default */
     encoderParams.cp_tx0 = 0;
     encoderParams.cp_ty0 = 0;
     encoderParams.tile_size_on = 1;
@@ -476,13 +498,13 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     switch(imageType)
     {
     case J2K_TYPE_RGB:
-        colorSpace = CLRSPC_SRGB;
+        colorSpace = OPJ_CLRSPC_SRGB;
         break;
     default:
-        colorSpace = CLRSPC_GRAY;
+        colorSpace = OPJ_CLRSPC_GRAY;
     }
 
-    if (!(impl->codec = opj_create_compress(CODEC_J2K)))
+    if (!(impl->codec = opj_create_compress(OPJ_CODEC_J2K)))
     {
         nrt_Error_init(error, "Error creating OpenJPEG codec", NRT_CTXT,
                        NRT_ERR_INVALID_OBJECT);
@@ -555,8 +577,11 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     opj_image_t *image = NULL;
     opj_codec_t *codec = NULL;
     nrt_Uint32 bufSize;
-    OPJ_INT32 tileX0, tileY0;
-    OPJ_UINT32 tileWidth, tileHeight, nTilesX, nTilesY;
+    const OPJ_UINT32 tileWidth = j2k_Container_getTileWidth(impl->container, error);
+    const OPJ_UINT32 tileHeight = j2k_Container_getTileHeight(impl->container, error);
+    size_t numBitsPerPixel = 0;
+    size_t numBytesPerPixel = 0;
+    nrt_Uint64 fullBufSize = 0;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
@@ -564,15 +589,14 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     }
 
     /* unfortunately, we need to read the header every time ... */
-    if (!opj_read_header(codec, &image, &tileX0, &tileY0, &tileWidth,
-                         &tileHeight, &nTilesX, &nTilesY, stream))
+    if (!opj_read_header(stream, codec, &image))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
     }
 
     /* only decode what we want */
-    if (!opj_set_decode_area(codec, tileWidth * tileX, tileHeight * tileY,
+    if (!opj_set_decode_area(codec, image, tileWidth * tileX, tileHeight * tileY,
                              tileWidth * (tileX + 1), tileHeight * (tileY + 1)))
     {
         nrt_Error_init(error, "Error decoding area", NRT_CTXT, NRT_ERR_UNK);
@@ -584,9 +608,9 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
         OPJ_UINT32 tileIndex, nComponents;
         OPJ_INT32 tileX0, tileY0, tileX1, tileY1;
 
-        if (!opj_read_tile_header(codec, &tileIndex, &bufSize, &tileX0,
+        if (!opj_read_tile_header(codec, stream, &tileIndex, &bufSize, &tileX0,
                                   &tileY0, &tileX1, &tileY1, &nComponents,
-                                  &keepGoing, stream))
+                                  &keepGoing))
         {
             nrt_Error_init(error, "Error reading tile header", NRT_CTXT,
                            NRT_ERR_UNK);
@@ -595,10 +619,53 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 
         if (keepGoing)
         {
+            /* TODO: The way blockIO->cntl->blockOffsetInc is currently
+             *       implemented in ImageIO.c corresponds with how a
+             *       non-compressed partial block would be laid out in a
+             *       NITF - the actual extra columns would have been read.
+             *       Not sure how the J2K data is laid out on disk but
+             *       OpenJPEG is hiding this from us if the extra columns are
+             *       present there.  So whenever we get a partial tile that
+             *       isn't at the full width, we need to add in these extra
+             *       columns of 0's ourselves.  Potentially we could update
+             *       ImageIO.c to not require this instead.  Note that we
+             *       don't need to pad out the extra rows for a partial block
+             *       that isn't the full height because ImageIO will never try
+             *       to memcpy these in - we only need to get the stride to
+             *       work out correctly.
+             */
+            const OPJ_UINT32 thisTileWidth = tileX1 - tileX0;
+            const OPJ_UINT32 thisTileHeight = tileY1 - tileY0;
+            if (thisTileWidth < tileWidth)
+            {
+                /* TODO: The current approach below only works for single band
+                 *       imagery.  For RGB data, I believe it is stored as all
+                 *       red, then all green, then all blue, so we would need
+                 *       a temp buffer rather than reusing the current buffer.
+                 */
+                if (nComponents != 1)
+                {
+                    nrt_Error_init(
+                        error,
+                        "Partial tile width not implemented for multi-band",
+                        NRT_CTXT, NRT_ERR_UNK);
+                    goto CATCH_ERROR;
+                }
+
+                numBitsPerPixel =
+                    j2k_Container_getPrecision(impl->container, error);
+                numBytesPerPixel =
+                    (numBitsPerPixel / 8) + (numBitsPerPixel % 8 != 0);
+                fullBufSize = tileWidth * thisTileHeight * numBytesPerPixel;
+            }
+            else
+            {
+                fullBufSize = bufSize;
+            }
 
             if (buf && !*buf)
             {
-                *buf = (nrt_Uint8*)J2K_MALLOC(bufSize);
+                *buf = (nrt_Uint8*)J2K_MALLOC(fullBufSize);
                 if (!*buf)
                 {
                     nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
@@ -613,6 +680,31 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                                NRT_ERR_UNK);
                 goto CATCH_ERROR;
             }
+
+            if (thisTileWidth < tileWidth)
+            {
+                /* We have a tile that isn't as wide as it "should" be
+                 * Need to add in the extra columns ourselves.  By marching
+                 * through the rows backwards, we can do this in place.
+                 */
+                const size_t srcStride = thisTileWidth * numBytesPerPixel;
+                const size_t destStride = tileWidth * numBytesPerPixel;
+                const size_t numLeftoverBytes = destStride - srcStride;
+                OPJ_UINT32 lastRow = thisTileHeight - 1;
+                size_t srcOffset = lastRow * srcStride;
+                size_t destOffset = lastRow * destStride;
+                OPJ_UINT32 ii;
+                nrt_Uint8* bufPtr = *buf;
+
+                for (ii = 0;
+                     ii < thisTileHeight;
+                     ++ii, srcOffset -= srcStride, destOffset -= destStride)
+                {
+                    nrt_Uint8* const dest = bufPtr + destOffset;
+                    memmove(dest, bufPtr + srcOffset, srcStride);
+                    memset(dest + srcStride, 0, numLeftoverBytes);
+                }
+            }
         }
     }
 
@@ -620,14 +712,14 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 
     CATCH_ERROR:
     {
-        bufSize = 0;
+        fullBufSize = 0;
     }
 
     CLEANUP:
     {
         OpenJPEG_cleanup(&stream, &codec, &image);
     }
-    return (nrt_Uint64)bufSize;
+    return fullBufSize;
 }
 
 J2KPRIV( nrt_Uint64)
@@ -643,8 +735,6 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     nrt_Uint64 bufSize;
     nrt_Uint64 offset = 0;
     nrt_Uint32 componentBytes, nComponents;
-    OPJ_INT32 tileX0, tileY0;
-    OPJ_UINT32 tileWidth, tileHeight, nTilesX, nTilesY;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
@@ -652,8 +742,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     }
 
     /* unfortunately, we need to read the header every time ... */
-    if (!opj_read_header(codec, &image, &tileX0, &tileY0, &tileWidth,
-                         &tileHeight, &nTilesX, &nTilesY, stream))
+    if (!opj_read_header(stream, codec, &image))
     {
         nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
@@ -665,7 +754,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
         y1 = j2k_Container_getHeight(impl->container, error);
 
     /* only decode what we want */
-    if (!opj_set_decode_area(codec, x0, y0, x1, y1))
+    if (!opj_set_decode_area(codec, image, x0, y0, x1, y1))
     {
         nrt_Error_init(error, "Error decoding area", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
@@ -692,9 +781,9 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
 
         do
         {
-            if (!opj_read_tile_header(codec, &tileIndex, &reqSize, &tileX0,
+            if (!opj_read_tile_header(codec, stream, &tileIndex, &reqSize, &tileX0,
                                       &tileY0, &tileX1, &tileY1, &nComponents,
-                                      &keepGoing, stream))
+                                      &keepGoing))
             {
                 nrt_Error_init(error, "Error reading tile header", NRT_CTXT,
                                NRT_ERR_UNK);
@@ -762,7 +851,7 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 {
     OpenJPEGWriterImpl *impl = (OpenJPEGWriterImpl*) data;
     NRT_BOOL rc = NRT_SUCCESS;
-    nrt_Uint32 xTiles, yTiles, nTiles, tileIndex;
+    nrt_Uint32 xTiles, yTiles, tileIndex;
 
     xTiles = j2k_Container_getTilesX(impl->container, error);
     yTiles = j2k_Container_getTilesY(impl->container, error);
