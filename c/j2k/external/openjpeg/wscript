@@ -23,6 +23,7 @@ def configure(conf):
 
         # check functionality
         conf.check_cc(function_name='fseeko', header_name="stdio.h", mandatory=False)
+        conf.check_cc(header_name="stdint.h", mandatory=False)
 
         # check for the source tarball
         if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
