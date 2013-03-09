@@ -1,15 +1,10 @@
-MODULES = 'nrt j2k nitf cgm'
+MODULES = 'cgm j2k jpeg nitf nrt'
 
 def options(opt):
     opt.recurse(MODULES)
 
 def configure(conf):
     conf.recurse(MODULES)
-    #add some flags for the nitro lib - if a lib states NITRO as a uselib (or uselib local)
-    #these flags will get applied automatically
-#    conf.env.append_value('CCFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
-#    conf.env.append_value('CXXFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
-    
 
 def build(bld):
     bld.recurse(MODULES)
