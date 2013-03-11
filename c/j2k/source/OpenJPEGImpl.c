@@ -314,7 +314,7 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
         goto CATCH_ERROR;
     }
 
-    if (image->x0 >= image->x1 || image->y1 >= image->y0)
+    if (image->x0 >= image->x1 || image->y0 >= image->y1)
     {
         nrt_Error_init(error, "Invalid image offsets", NRT_CTXT, NRT_ERR_UNK);
         goto CATCH_ERROR;
