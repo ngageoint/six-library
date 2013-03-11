@@ -5,7 +5,7 @@ APIS = ['external/openjpeg', 'external/jasper']
 
 def options(opt):
     opt.add_option('--with-j2k', action='store', dest='j2k_layer',
-                   choices=['openjpeg', 'jasper'], default='openjpeg', metavar='LIB',
+                   choices=['openjpeg', 'jasper'], default=None, metavar='LIB',
                    help='Specify the JPEG2000 library to link with')
 
     existingDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), APIS)
