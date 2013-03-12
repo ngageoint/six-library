@@ -104,22 +104,18 @@ NITFPROT(nitf_PluginRegistry *)
             /*  If this succeeded...  */
             if (theInstance)
             {
-                
-                int loadRet = nitf_PluginRegistry_load(theInstance, error);
-                /*  If the load failed  */
-                if (!loadRet)
+                const NITF_BOOL loadedOK =
+                        nitf_PluginRegistry_load(theInstance, error);
+                if (loadedOK)
+                {
+                	atexit(exitListener);
+                }
+                else
                 {
                     /*  Sorry, no go...  */
                     implicitDestruct(&theInstance);
                 }
-                /*  Otherwise register destruct  */
-                else
-                    atexit(exitListener);
             }
-            else
-            {
-            }
-            
         }
 
         nitf_Mutex_unlock( GET_MUTEX());
@@ -686,13 +682,20 @@ nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
     if (!nitf_HashTable_exists(reg->decompressionHandlers, ident))
     {
         *hadError = 1;
+        nitf_Error_init(error, "Decompression handlers not set", NRT_CTXT,
+        		        NRT_ERR_DECOMPRESSION);
         return NULL;
     }
     pair = nitf_HashTable_find(reg->decompressionHandlers, ident);
     
-    /*  If nothing is there, we dont have a handler, plain and simple  */
+    /*  If nothing is there, we don't have a handler, plain and simple  */
     if (!pair)
+    {
+        nitf_Error_initf(error, NRT_CTXT, NRT_ERR_DECOMPRESSION,
+        		         "Don't have a handler for '%s'",
+        		         ident);
         return NULL;
+    }
     
     return (NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION) pair->data;
 }
@@ -713,13 +716,20 @@ nitf_PluginRegistry_retrieveCompConstructor(nitf_PluginRegistry * reg,
     if (!nitf_HashTable_exists(reg->compressionHandlers, ident))
     {
         *hadError = 1;
+        nitf_Error_init(error, "Compression handlers not set", NRT_CTXT,
+        		        NRT_ERR_COMPRESSION);
         return NULL;
     }
     pair = nitf_HashTable_find(reg->compressionHandlers, ident);
     
-    /*  If nothing is there, we dont have a handler, plain and simple  */
+    /*  If nothing is there, we don't have a handler, plain and simple  */
     if (!pair)
+    {
+        nitf_Error_initf(error, NRT_CTXT, NRT_ERR_COMPRESSION,
+        		         "Don't have a handler for '%s'",
+        		         ident);
         return NULL;
+    }
     
     return (NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION) pair->data;
 }
