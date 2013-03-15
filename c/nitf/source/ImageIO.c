@@ -1020,13 +1020,32 @@ typedef struct _nitf_ImageIO_12PixelComControl
 nitf_ImageIO_12PixelComControl;
 
 /*!
-  \brief nitf_ImageIO_decodeModes - Decode compression and blocking mode
-  strings
+  \brief nitf_ImageIO_decodeCompression - Decode compression string
 
-  nitf_ImageIO_decodeModes is the function used to decode compression,
-  blocking mode and pixel type strings it sets the _nitf_ImageIO fields
-  "compression","blockingMode", and the "vtbl" fields "setup", "reader",
-  "writer", and "done"
+  nitf_ImageIO_decodeCompression is the function used to decode the
+  compression string.  It sets the _nitf_ImageIO "compression" field.
+
+  Note:
+
+This is an internal function and is not intended to be called
+directly by the user.
+
+\return Returns FALSE on error
+
+On error, the supplied error object is set. Possible errors include:
+
+Invalid type code
+*/
+NITFPRIV(int) nitf_ImageIO_decodeCompression(_nitf_ImageIO* nitf,
+                                             const nitf_ImageSubheader* subhdr,
+                                             nitf_Error* error);
+
+/*!
+  \brief nitf_ImageIO_decodeBlockingMode - Decode blocking mode string
+
+  nitf_ImageIO_decodeBlockingMode is the function used to decode the blocking
+  mode string.  It sets the _nitf_ImageIO field "blockingMode", and the "vtbl"
+  fields "setup", "reader", "writer", "done", and "unformat".
 
   Note:
 
@@ -1040,9 +1059,9 @@ On error, the supplied error object is set. Possible errors include:
 Invalid type code
 */
 
-NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
-                                       nitf_ImageSubheader *subhdr,
-                                       nitf_Error * errorBuffer);
+NITFPRIV(int) nitf_ImageIO_decodeBlockingMode(_nitf_ImageIO* nitf,
+                                              const nitf_ImageSubheader* subhdr,
+                                              nitf_Error* error);
 
 /*!
  * Reverts the optimization modes that were added 10/2007 by tzellman.
@@ -2990,13 +3009,26 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
 
     nitf->blockMask = NULL;     /* Set by first read/write */
 
-    /* Set function pointers.  This must occur prior to setPixelDef. */
-    if (!nitf_ImageIO_decodeModes(nitf, subheader, error))
+    /* The order of these calls must match what's below...
+     * 1. decodeCompression() sets nitf->compression
+     * 2. Among other things, setPixelDef() sets vtbl.unformat and vtbl.format
+     *    which handle endian swapping.  However, we don't want to do endian
+     *    swapping if we have a compressor/decompressor (because it will do
+     *    this for us), so we need to do #1 first to we know what compression
+     *    we've got.
+     * 3. For certain input types, decodeBlockingMode() will fake out the
+     *    number of bands and then override vtbl.unformat (in order to
+     *    optimize the read).  So #2 has to occur first so it doesn't clobber
+     *    what we do here (plus this step is counting on #2 having initialized
+     *    vtbl.unformat).
+     */
+    if (!nitf_ImageIO_decodeCompression(nitf, subheader, error) ||
+        !nitf_ImageIO_setPixelDef(nitf, pixelType, nBits, nBitsActual,
+                                  justification, error) ||
+        !nitf_ImageIO_decodeBlockingMode(nitf, subheader, error))
+    {
         return NULL;
-
-    if (!nitf_ImageIO_setPixelDef(nitf, pixelType, nBits, nBitsActual,
-                                  justification, error))
-        return NULL;
+    }
 
     /*
      *      Check for pixel type B (binary), if there is no decompressor, set
@@ -3821,19 +3853,13 @@ NITFPRIV(void) nitf_ImageIO_revertOptimizedModes(_nitf_ImageIO *nitfI, int numBa
     }
 }
 
-/*======================== nitf_ImageIO_decodeModes ==========================*/
 
-NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
-                                       nitf_ImageSubheader *subhdr,
-                                       nitf_Error * error)
+/*======================== nitf_ImageIO_decodeCompression ====================*/
+NITFPRIV(int) nitf_ImageIO_decodeCompression(_nitf_ImageIO* nitf,
+                                             const nitf_ImageSubheader* subhdr,
+                                             nitf_Error* error)
 {
-    /*      Decode compression */
-
-    char *blockingMode = NULL;
-    char *compression = NULL;
-
-    blockingMode = subhdr->imageMode->raw;
-    compression = subhdr->imageCompression->raw;
+    const char* const compression = subhdr->imageCompression->raw;
 
     if (strncmp(compression, "NC", 2) == 0)
     {
@@ -3898,7 +3924,18 @@ NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
         return NITF_FAILURE;
     }
 
-    if (blockingMode[0] == 'B')
+    return NITF_SUCCESS;
+}
+
+/*======================== nitf_ImageIO_decodeBlockingMode ===================*/
+
+NITFPRIV(int) nitf_ImageIO_decodeBlockingMode(_nitf_ImageIO* nitf,
+                                              const nitf_ImageSubheader *subhdr,
+                                              nitf_Error* error)
+{
+    const char blockingMode = subhdr->imageMode->raw[0];
+
+    if (blockingMode == 'B')
     {
         nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_B;
         nitf->oneBand = 0;
@@ -3907,7 +3944,7 @@ NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
         nitf->vtbl.writer = NULL;
         nitf->vtbl.done = nitf_ImageIO_done_SBR;
     }
-    else if (blockingMode[0] == 'P')
+    else if (blockingMode == 'P')
     {
         if (nitf->numBands == 3
             && strncmp("RGB", subhdr->imageRepresentation->raw, 3) == 0
@@ -3958,7 +3995,7 @@ NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
                     default:
                         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
                                          "Invalid number of bytes in complex data %d", nitf->pixel.bytes);
-                         return 0;
+                        return NITF_FAILURE;
                 }
             }
         }
@@ -3973,7 +4010,7 @@ NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
         nitf->vtbl.reader = NULL;
         nitf->vtbl.writer = NULL;
     }
-    else if (blockingMode[0] == 'R')
+    else if (blockingMode == 'R')
     {
         nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_R;
         nitf->oneBand = 0;
@@ -3982,7 +4019,7 @@ NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
         nitf->vtbl.writer = NULL;
         nitf->vtbl.done = nitf_ImageIO_done_SBR;
     }
-    else if (blockingMode[0] == 'S')
+    else if (blockingMode == 'S')
     {
         nitf->blockingMode = NITF_IMAGE_IO_BLOCKING_MODE_S;
         nitf->oneBand = 1;
@@ -3994,7 +4031,7 @@ NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
     else
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid blocking mode %s", blockingMode);
+                         "Invalid blocking mode %c", blockingMode);
         return NITF_FAILURE;
     }
 
@@ -4002,7 +4039,7 @@ NITFPRIV(int) nitf_ImageIO_decodeModes(_nitf_ImageIO * nitf,
     if (nitf->vtbl.setup == NULL)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Unimplemented blocking mode %s", blockingMode);
+                         "Unimplemented blocking mode %c", blockingMode);
         return NITF_FAILURE;
     }
 
@@ -9234,7 +9271,7 @@ NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
             cntl->numColumns);
     fprintf(file, "  Start column in the main image: %ld\n", cntl->column);
     fprintf(file, "  Column skip factor: %ld\n", cntl->columnSkip);
-    fprintf(file, "  Down-smapling flag: %ld\n", cntl->downSampling);
+    fprintf(file, "  Down-sampling flag: %ld\n", cntl->downSampling);
     fprintf(file, "  Number of bands to read/write: %ld\n",
             cntl->numBandSubset);
     fprintf(file, "  Array of bands to read/write:\n");
