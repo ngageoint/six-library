@@ -23,8 +23,6 @@
 /*
     Test program to print information relating to block masks
 
-    This program only looks at the first image segment
-
     Call:
 
    test_dump_masks inputFile
@@ -38,6 +36,42 @@ NITF_BOOL nitf_ImageIO_getMaskInfo(nitf_ImageIO *nitf,
                                    nitf_Uint32 *imageDataOffset, nitf_Uint32 *blockRecordLength,
                                    nitf_Uint32 *padRecordLength, nitf_Uint32 *padPixelValueLength,
                                    nitf_Uint8 **padValue, nitf_Uint64 **blockMask, nitf_Uint64 **padMask);
+
+void dumpMask(const char* maskType,
+              const nitf_Uint64* mask,
+              size_t numRows,
+              size_t numCols)
+{
+    size_t numBlocksPresent = 0;
+    const size_t numBlocksTotal = numRows * numCols;
+    size_t row;
+    size_t col;
+    size_t idx;
+
+    printf("  %s mask:\n", maskType);
+
+    for (row = 0, idx = 0; row < numRows; ++row)
+    {
+        printf("        ");
+        for (col = 0; col < numCols; ++col, ++idx)
+        {
+            if (mask[idx] == 0xFFFFFFFF)
+            {
+                printf("_");
+            }
+            else
+            {
+                printf("@");
+                ++numBlocksPresent;
+            }
+        }
+        printf("\n");
+    }
+
+    printf("    %s mask: %zu / %zu blocks (%f%%)\n",
+           maskType, numBlocksPresent, numBlocksTotal,
+           numBlocksPresent * 100.0 / numBlocksTotal);
+}
 
 int main(int argc, char *argv[])
 {
@@ -166,56 +200,39 @@ int main(int argc, char *argv[])
                                      &padRecordLength, &padPixelValueLength,
                                      &padValue, &blockMask, &padMask))
         {
-            nitf_Uint64 *blkPtr;  /* Pointer into block mask */
-            nitf_Uint64 *padPtr;  /* Pointer into pad mask */
             nitf_Uint32 i;
-            nitf_Uint32 j;
 
             printf("  Masked image:\n");
             printf("    Image data offset = %d\n", imageDataOffset);
-            printf("    Block and pad mask record lengths = %d %d\n",
+            printf("    Block and pad mask record lengths = %u %u\n",
                    blockRecordLength, padRecordLength);
-            printf("    Pad value length = %d\n", padPixelValueLength);
+            printf("    Pad value length = %u\n", padPixelValueLength);
             printf("    Pad value = ");
             for (i = 0;i < padPixelValueLength;i++)
+            {
                 printf("%x ", padValue[i]);
+            }
             printf("\n");
 
             if (blockRecordLength != 0)
             {
-                blkPtr = blockMask;
-
-                printf("  Block mask:\n");
-                for (i = 0;i < blkInfo->numBlocksPerRow;i++)
-                {
-                    printf("        ");
-                    for (j = 0;j < blkInfo->numBlocksPerCol;j++)
-                        if (*(blkPtr++) == 0xffffffff)
-                            printf("*");
-                        else
-                            printf("+");
-                    printf("\n");
-                }
+                dumpMask("Block",
+                         blockMask,
+                         blkInfo->numBlocksPerRow,
+                         blkInfo->numBlocksPerCol);
             }
             if (padRecordLength != 0)
             {
-                padPtr = padMask;
-
-                printf("  Pad mask:\n");
-                for (i = 0;i < blkInfo->numBlocksPerRow;i++)
-                {
-                    printf("        ");
-                    for (j = 0;j < blkInfo->numBlocksPerCol;j++)
-                        if (*(padPtr++) == 0xffffffff)
-                            printf("+");
-                        else
-                            printf("*");
-                    printf("\n");
-                }
+                dumpMask("Pad",
+                         padMask,
+                         blkInfo->numBlocksPerRow,
+                         blkInfo->numBlocksPerCol);
             }
         }
         else
+        {
             printf("Not a masked image\n");
+        }
 
         nitf_ImageReader_destruct(&iReader);
         nrt_ListIterator_increment(&imgIter);
