@@ -3793,6 +3793,10 @@ NITFPROT(void) nitf_BlockingInfo_print(nitf_BlockingInfo * info,
     fprintf(file, "  Number of columns per block: %ld\n",
             info->numColsPerBlock);
     fprintf(file, "  Block length in bytes: %ld\n", info->length);
+#else
+    /* Silence compiler warnings about unused variables */
+    (void)info;
+    (void)file;
 #endif
     return;
 }
@@ -5048,7 +5052,9 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
 
 int nitf_ImageIO_done_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
 {
-
+    /* Silence compiler warnings about unused variables */
+    (void)cntl;
+    (void)error;
     return NITF_SUCCESS;
 }
 
@@ -5513,7 +5519,9 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 
 int nitf_ImageIO_done_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 {
-
+    /* Silence compiler warnings about unused variables */
+    (void)cntl;
+    (void)error;
     return NITF_SUCCESS;
 }
 
@@ -5758,6 +5766,9 @@ nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl,
     /* The return value */
     _nitf_ImageIOWriteControl *result;
     
+    /* Silence compiler warnings about unused variables */
+    (void)io;
+
     result = (_nitf_ImageIOWriteControl *)
         NITF_MALLOC(sizeof(_nitf_ImageIOWriteControl));
     if (result == NULL)
@@ -5791,6 +5802,9 @@ NITFPRIV(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct
     /* The return value */
     _nitf_ImageIOReadControl *result;
     
+    /* Silence compiler warnings about unused variables */
+    (void)subWindow;
+
     result = (_nitf_ImageIOReadControl *)
         NITF_MALLOC(sizeof(_nitf_ImageIOReadControl));
     if (result == NULL)
@@ -7076,8 +7090,8 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
     
     if ((blockOffset + count) >= nitf->blockSize)
     {
-        NITF_BOOL padPresent;     /* Pad values in block */
-        NITF_BOOL dataPresent;    /* Data values in block */
+        NITF_BOOL padPresent = 0;     /* Pad values in block */
+        NITF_BOOL dataPresent = 1;    /* Data values in block */
         
         /*    Scan for pad if the scanner function is not NULL */
         
@@ -7726,6 +7740,9 @@ void nitf_ImageIO_swapOnly_2(nitf_Uint8 * buffer,
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)shiftCount;
+
     bp16 = (nitf_Uint16 *) buffer;
     for (i = 0; i < count; i++)
     {
@@ -7747,6 +7764,9 @@ void nitf_ImageIO_swapOnly_4(nitf_Uint8 * buffer,
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)shiftCount;
+
     bp32 = (nitf_Uint32 *) buffer;
     for (i = 0; i < count; i++)
     {
@@ -7770,6 +7790,9 @@ void nitf_ImageIO_swapOnly_4c(nitf_Uint8 * buffer,
     nitf_Uint32 *bp32;          /* Buffer pointer, 32 bit */
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
     size_t i;
+
+    /* Silence compiler warnings about unused variables */
+    (void)shiftCount;
 
     bp32 = (nitf_Uint32 *) buffer;
     for (i = 0; i < count; i++)
@@ -7796,6 +7819,9 @@ void nitf_ImageIO_swapOnly_8(nitf_Uint8 * buffer,
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)shiftCount;
+
     bp64 = (nitf_Uint64 *) buffer;
     for (i = 0; i < count; i++)
     {
@@ -7827,6 +7853,9 @@ void nitf_ImageIO_swapOnly_8c(nitf_Uint8 * buffer,
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)shiftCount;
+
     bp64 = (nitf_Uint64 *) buffer;
     for (i = 0; i < count; i++)
     {
@@ -7858,6 +7887,9 @@ void nitf_ImageIO_swapOnly_16c(nitf_Uint8 * buffer,
     nitf_Uint8 tmp8;            /* Temp value, 8 bit */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)shiftCount;
+
     bp64 = (nitf_Uint64 *) buffer;
     for (i = 0; i < count; i++)
     {
@@ -8189,6 +8221,9 @@ void nitf_ImageIO_unpack_P_1(_nitf_ImageIOBlock * blockIO,
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src = (nitf_Uint8 *) (blockIO->rwBuffer.buffer
                           + blockIO->rwBuffer.offset.mark);
     dst = (nitf_Uint8 *) (blockIO->unpacked.buffer
@@ -8214,6 +8249,9 @@ void nitf_ImageIO_unpack_P_2(_nitf_ImageIOBlock * blockIO,
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src = (nitf_Uint16 *) (blockIO->rwBuffer.buffer
                            + blockIO->rwBuffer.offset.mark);
     dst = (nitf_Uint16 *) (blockIO->unpacked.buffer
@@ -8239,6 +8277,9 @@ void nitf_ImageIO_unpack_P_4(_nitf_ImageIOBlock * blockIO,
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src = (nitf_Uint32 *) (blockIO->rwBuffer.buffer
                            + blockIO->rwBuffer.offset.mark);
     dst = (nitf_Uint32 *) (blockIO->unpacked.buffer
@@ -8264,6 +8305,9 @@ void nitf_ImageIO_unpack_P_8(_nitf_ImageIOBlock * blockIO,
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
                            + blockIO->rwBuffer.offset.mark);
     dst = (nitf_Uint64 *) (blockIO->unpacked.buffer
@@ -8291,6 +8335,9 @@ void nitf_ImageIO_unpack_P_16(_nitf_ImageIOBlock * blockIO,
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src1 = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
                             + blockIO->rwBuffer.offset.mark);
     dst1 = (nitf_Uint64 *) (blockIO->unpacked.buffer
@@ -8318,6 +8365,9 @@ void nitf_ImageIO_pack_P_1(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src = (nitf_Uint8 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst = (nitf_Uint8 *) (blockIO->rwBuffer.buffer);
     dst += blockIO->band;
@@ -8341,6 +8391,9 @@ void nitf_ImageIO_pack_P_2(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src = (nitf_Uint16 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst = (nitf_Uint16 *) (blockIO->rwBuffer.buffer);
     dst += blockIO->band;
@@ -8364,6 +8417,9 @@ void nitf_ImageIO_pack_P_4(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src = (nitf_Uint32 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst = (nitf_Uint32 *) (blockIO->rwBuffer.buffer);
     dst += blockIO->band;
@@ -8387,6 +8443,9 @@ void nitf_ImageIO_pack_P_8(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src = (nitf_Uint64 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst = (nitf_Uint64 *) (blockIO->rwBuffer.buffer);
     dst += blockIO->band;
@@ -8412,6 +8471,9 @@ void nitf_ImageIO_pack_P_16(_nitf_ImageIOBlock * blockIO, nitf_Error * error)
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
     
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     src1 = (nitf_Uint64 *) (blockIO->user.buffer + blockIO->user.offset.mark);
     dst1 = (nitf_Uint64 *) (blockIO->rwBuffer.buffer);
     dst1 += blockIO->band;
@@ -8755,6 +8817,10 @@ NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelFreeBlock(nitf_DecompressionControl
         nitf_Uint8 * block,
         nitf_Error * error)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)control;
+    (void)error;
+
     NITF_FREE(block);
     return NITF_SUCCESS;
 }
@@ -8768,6 +8834,10 @@ nitf_ImageIO_bPixelOpen(nitf_IOInterface* io,
                         nitf_Error *error)
 {
     nitf_ImageIO_BPixelControl *icntl;
+
+    /* Silence compiler warnings about unused variables */
+    (void)fileLength;
+
     icntl =
         (nitf_ImageIO_BPixelControl *)
         NITF_MALLOC(sizeof(nitf_ImageIO_BPixelControl));
@@ -8877,6 +8947,10 @@ NITFPRIV(NITF_BOOL) nitf_ImageIO_12PixelFreeBlock(nitf_DecompressionControl
         nitf_Uint8 * block,
         nitf_Error * error)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)control;
+    (void)error;
+
     NITF_FREE(block);
     return NITF_SUCCESS;
 }
@@ -8890,6 +8964,9 @@ nitf_ImageIO_12PixelOpen(nitf_IOInterface* io,
                         nitf_Error *error)
 {
     nitf_ImageIO_12PixelControl *icntl;
+
+    /* Silence compiler warnings about unused variables */
+    (void)fileLength;
 
     icntl =
         (nitf_ImageIO_12PixelControl *)
@@ -9073,6 +9150,9 @@ NITF_BOOL nitf_ImageIO_12PixelComStart
 {
   nitf_ImageIO_12PixelComControl *icntl;  /* The internal data structure */
 
+  /* Silence compiler warnings about unused variables */
+  (void)error;
+
   icntl = (nitf_ImageIO_12PixelComControl *) object;
   icntl->io = NULL;
   icntl->offset = offset;
@@ -9108,6 +9188,10 @@ NITF_BOOL nitf_ImageIO_12PixelComWriteBlock
   nitf_Uint16 i2;              /* Second pixel in input pair */
   nitf_Off fileOffset;         /* File offset for write */
   size_t i;
+
+  /* Silence compiler warnings about unused variables */
+  (void)pad;
+  (void)noData;
 
   icntl = (nitf_ImageIO_12PixelComControl *) object;
 
@@ -9155,8 +9239,12 @@ NITF_BOOL nitf_ImageIO_12PixelComWriteBlock
 NITF_BOOL nitf_ImageIO_12PixelComEnd
 ( nitf_CompressionControl * object,nitf_IOInterface* io, nitf_Error *error)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)object;
+    (void)io;
+    (void)error;
 
-  return(NITF_SUCCESS);
+    return(NITF_SUCCESS);
 }
 
 void nitf_ImageIO_12PixelComDestroy(nitf_CompressionControl ** object)
@@ -9249,6 +9337,10 @@ NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
             nitfp->oneBand);
     
     fflush(file);
+#else
+    /* Silence compiler warnings about unused variables */
+    (void)nitf;
+    (void)file;
 #endif
     return;
 }
@@ -9302,6 +9394,11 @@ NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
             cntl->ioCount, cntl->ioCountDown);
     
     fflush(file);
+#else
+    /* Silence compiler warnings about unused variables */
+    (void)cntl;
+    (void)file;
+    (void)full;
 #endif
     return;
 }
@@ -9368,6 +9465,11 @@ NITFPRIV(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
             blockIO->currentRow);
     
     fflush(file);
+#else
+    /* Silence compiler warnings about unused variables */
+    (void)blockIO;
+    (void)file;
+    (void)longIndent;
 #endif
     return;
 }

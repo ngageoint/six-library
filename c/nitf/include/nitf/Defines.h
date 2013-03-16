@@ -47,6 +47,7 @@
        return NULL; return ident; \
     } \
     NITFAPI(nitf_TREHandler*) _Tre##_handler(nitf_Error* error) { \
+        (void)error; \
         return &_Tre##Handler; \
     }
 
