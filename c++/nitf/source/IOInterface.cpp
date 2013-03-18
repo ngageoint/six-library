@@ -57,26 +57,32 @@ bool nitf::IOInterface::canSeek() const
 nitf::Off nitf::IOInterface::seek(nitf::Off offset, int whence)
 {
     nitf_IOInterface *io = getNativeOrThrow();
-    if (io->iface->seek(io->data, offset, whence, &error))
-        return io->iface->tell(io->data, &error);
-    throw nitf::NITFException(&error);
+    if (!NRT_IO_SUCCESS(io->iface->seek(io->data, offset, whence, &error)))
+    {
+        throw nitf::NITFException(&error);
+    }
+    return io->iface->tell(io->data, &error);
 }
 
 nitf::Off nitf::IOInterface::tell() const
 {
     nitf_IOInterface *io = getNativeOrThrow();
-    nitf::Off t = io->iface->tell(io->data, &error);
-    if (t < 0)
+    const nitf::Off t = io->iface->tell(io->data, &error);
+    if (!NRT_IO_SUCCESS(t))
+    {
         throw nitf::NITFException(&error);
+    }
     return t;
 }
 
 nitf::Off nitf::IOInterface::getSize() const
 {
     nitf_IOInterface *io = getNativeOrThrow();
-    nitf::Off size = io->iface->getSize(io->data, &error);
-    if (size < 0)
+    const nitf::Off size = io->iface->getSize(io->data, &error);
+    if (!NRT_IO_SUCCESS(size))
+    {
         throw nitf::NITFException(&error);
+    }
     return size;
 }
 
