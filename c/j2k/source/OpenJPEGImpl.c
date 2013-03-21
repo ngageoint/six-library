@@ -176,8 +176,10 @@ J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
 J2KPRIV(NRT_BOOL) implStreamSeek(OPJ_SIZE_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
-    if (!nrt_IOInterface_seek(ctrl->io, ctrl->offset + bytes,
-                    NRT_SEEK_SET, &ctrl->error))
+    if (!NRT_IO_SUCCESS(nrt_IOInterface_seek(ctrl->io,
+                                             ctrl->offset + bytes,
+                                             NRT_SEEK_SET,
+                                             &ctrl->error)))
     {
         return 0;
     }
@@ -191,7 +193,10 @@ J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data)
     {
         return 0;
     }
-    if (!nrt_IOInterface_seek(ctrl->io, bytes, NRT_SEEK_CUR, &ctrl->error))
+    if (!NRT_IO_SUCCESS(nrt_IOInterface_seek(ctrl->io,
+                        bytes,
+                        NRT_SEEK_CUR,
+                        &ctrl->error)))
     {
         return -1;
     }
@@ -242,7 +247,10 @@ J2KPRIV( NRT_BOOL)
 OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
                opj_codec_t **codec, nrt_Error *error)
 {
-    if (nrt_IOInterface_seek(impl->io, impl->ioOffset, NRT_SEEK_SET, error) < 0)
+    if (!NRT_IO_SUCCESS(nrt_IOInterface_seek(impl->io,
+                                             impl->ioOffset,
+                                             NRT_SEEK_SET,
+                                             error)))
     {
         goto CATCH_ERROR;
     }
