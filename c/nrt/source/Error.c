@@ -22,11 +22,11 @@
 
 #include "nrt/Error.h"
 
-NRTPRIV(void) _NRT_Error_fillString(char *toFill, int maxLength,
+NRTPRIV(void) _NRT_Error_fillString(char *toFill, size_t maxLength,
                                     const char *from)
 {
-    int strlenFrom = strlen(from);
-    int len = (strlenFrom < maxLength) ? (strlenFrom) : (maxLength);
+    const size_t strlenFrom = strlen(from);
+    const size_t len = (strlenFrom < maxLength) ? strlenFrom : maxLength;
     memset(toFill, 0, maxLength + 1);
     memcpy(toFill, from, len);
 }

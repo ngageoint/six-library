@@ -313,6 +313,10 @@ NRTAPI(NRT_BOOL) nrt_ListIterator_notEqualTo(nrt_ListIterator * it1,
 NRTAPI(nrt_ListIterator) nrt_List_end(nrt_List * this_list)
 {
     nrt_ListIterator list_iterator;
+
+    /* Silence compiler warnings about unused variables */
+    (void)this_list;
+
     list_iterator.current = NULL;
     return list_iterator;
 }

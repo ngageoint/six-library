@@ -113,5 +113,9 @@ NRTPROT(void) nrt_Debug_flogf(FILE * file, const char *format, ...)
     va_start(args, format);
     vfprintf(file, format, args);
     va_end(args);
+#else
+    /* Silence compiler warnings about unused variables */
+    (void)file;
+    (void)format;
 #endif
 }

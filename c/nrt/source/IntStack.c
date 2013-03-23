@@ -105,5 +105,7 @@ NRTPROT(int) nrt_IntStack_pop(nrt_IntStack * stack, nrt_Error * error)
 
 NRTPROT(int) nrt_IntStack_depth(nrt_IntStack * stack, nrt_Error * error)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)error;
     return stack->sp;
 }

@@ -241,6 +241,11 @@ NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht, const char *key)
 NRTPRIV(int) printIt(nrt_HashTable * ht, nrt_Pair * pair, NRT_DATA * userData,
                      nrt_Error * error)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)ht;
+    (void)userData;
+    (void)error;
+
 #ifdef NRT_DEBUG
     if (pair)
     {
@@ -250,6 +255,8 @@ NRTPRIV(int) printIt(nrt_HashTable * ht, nrt_Pair * pair, NRT_DATA * userData,
     {
         printf("No pair defined at iter pos!\n");
     }
+#else
+    (void)pair;
 #endif
     return 1;
 }

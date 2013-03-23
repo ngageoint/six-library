@@ -96,8 +96,10 @@ NRTPRIV(NRT_BOOL) nrt_DateTime_updateMillis(nrt_DateTime* dateTime,
 {
     long numDaysThisYear;
     long numDaysSinceEpoch;
-    int month;
     int year;
+
+    /* Silence compiler warnings about unused variables */
+    (void)error;
 
     /* Sanity checks.  If things aren't valid, just set timeInMillis to 0. */
     /* TODO: Not sure if we should error out instead.  The advantage of this
@@ -222,6 +224,9 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
     time_t timeInSeconds;
     struct tm t;
 
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     timeInSeconds = (time_t) (timeInMillis / 1000);
     t = *gmtime(&timeInSeconds);
 
@@ -319,11 +324,11 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
     struct tm t;
     char *newFmtString = NULL;
     const char *endString = NULL;
-    int begStringLen = 0;
-    int formatLength;
-    int startIndex;
-    int i, j;
-    int found = 0;
+    size_t begStringLen = 0;
+    size_t formatLength;
+    size_t startIndex = 0;
+    size_t i, j;
+    NRT_BOOL found = 0;
 
     timeInSeconds = (time_t) (millis / 1000);
     t = *gmtime(&timeInSeconds);
@@ -348,7 +353,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                     found = 1;
                     formatLength = j - startIndex + 1;
                     begStringLen = startIndex;
-                    endString = &(format[j + 1]);
+                    endString = format + j + 1;
                 }
             }
         }
@@ -367,14 +372,14 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             {
                 /* The digits that follow should be */
                 /* the number of decimal places */
-                sscanf(&(format[i + 1]), "%d", &decimalPlaces);
+                sscanf(format + i + 1, "%d", &decimalPlaces);
             }
         }
 
         if (decimalPlaces > 0)
         {
             char buf[256];
-            int newFmtLen = 0;
+            size_t newFmtLen = 0;
             size_t bufIdx = 0;
             size_t endStringLen = endString ? strlen(endString) : 0;
 
@@ -422,7 +427,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             }
 
             /* tack it on the end */
-            strcpy((char *) (outBuf + bufIdx), buf);
+            strcpy(outBuf + bufIdx, buf);
             bufIdx = strlen(outBuf);
 
             memset(buf, 0, 256);
@@ -437,7 +442,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             }
 
             /* tack on the fractional seconds - spare the leading 0 */
-            strcpy((char *) (outBuf + bufIdx), (char *) (buf + 1));
+            strcpy(outBuf + bufIdx, buf + 1);
             bufIdx = strlen(outBuf);
 
             if (endStringLen > 0)
@@ -459,7 +464,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                                     format);
                     goto CATCH_ERROR;
                 }
-                strcpy((char *) (outBuf + bufIdx), buf);
+                strcpy(outBuf + bufIdx, buf);
             }
         }
     }
@@ -578,43 +583,50 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
              */
         case 'c':              /* Date and time, using the locale's format. */
             LEGAL_ALT(ALT_E);
-            if (!(bp = _NRT_strptime(bp, "%x %X", tm, millis)))
+            bp = _NRT_strptime(bp, "%x %X", tm, millis);
+            if (!bp)
                 return NULL;
             break;
 
         case 'D':              /* The date as "%m/%d/%y". */
             LEGAL_ALT(0);
-            if (!(bp = _NRT_strptime(bp, "%m/%d/%y", tm, millis)))
+            bp = _NRT_strptime(bp, "%m/%d/%y", tm, millis);
+            if (!bp)
                 return NULL;
             break;
 
         case 'R':              /* The time as "%H:%M". */
             LEGAL_ALT(0);
-            if (!(bp = _NRT_strptime(bp, "%H:%M", tm, millis)))
+            bp = _NRT_strptime(bp, "%H:%M", tm, millis);
+            if (!bp)
                 return NULL;
             break;
 
         case 'r':              /* The time in 12-hour clock representation. */
             LEGAL_ALT(0);
-            if (!(bp = _NRT_strptime(bp, "%I:%M:%S %p", tm, millis)))
+            bp = _NRT_strptime(bp, "%I:%M:%S %p", tm, millis);
+            if (!bp)
                 return NULL;
             break;
 
         case 'T':              /* The time as "%H:%M:%S". */
             LEGAL_ALT(0);
-            if (!(bp = _NRT_strptime(bp, "%H:%M:%S", tm, millis)))
+            bp = _NRT_strptime(bp, "%H:%M:%S", tm, millis);
+            if (!bp)
                 return NULL;
             break;
 
         case 'X':              /* The time, using the locale's format. */
             LEGAL_ALT(ALT_E);
-            if (!(bp = _NRT_strptime(bp, "%H:%M:%S", tm, millis)))
+            bp = _NRT_strptime(bp, "%H:%M:%S", tm, millis);
+            if (!bp)
                 return NULL;
             break;
 
         case 'x':              /* The date, using the locale's format. */
             LEGAL_ALT(ALT_E);
-            if (!(bp = _NRT_strptime(bp, "%m/%d/%y", tm, millis)))
+            bp = _NRT_strptime(bp, "%m/%d/%y", tm, millis);
+            if (!bp)
                 return NULL;
             break;
 

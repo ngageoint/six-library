@@ -101,6 +101,9 @@ NRTPRIV(NRT_BOOL) IOHandleAdapter_write(NRT_DATA * data, const char *buf,
 
 NRTPRIV(NRT_BOOL) IOHandleAdapter_canSeek(NRT_DATA * data, nrt_Error * error)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)data;
+    (void)error;
     return NRT_SUCCESS;
 }
 
@@ -126,12 +129,20 @@ NRTPRIV(nrt_Off) IOHandleAdapter_getSize(NRT_DATA * data, nrt_Error * error)
 NRTPRIV(int) IOHandleAdapter_getMode(NRT_DATA * data, nrt_Error * error)
 {
     IOHandleControl *control = (IOHandleControl *) data;
+
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     return control->mode;
 }
 
 NRTPRIV(NRT_BOOL) IOHandleAdapter_close(NRT_DATA * data, nrt_Error * error)
 {
     IOHandleControl *control = (IOHandleControl *) data;
+
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     if (control && control->handle && !NRT_INVALID_HANDLE(control->handle))
     {
         nrt_IOHandle_close(control->handle);
@@ -148,6 +159,8 @@ NRTPRIV(NRT_BOOL) IOHandleAdapter_close(NRT_DATA * data, nrt_Error * error)
 
 NRTPRIV(void) IOHandleAdapter_destruct(NRT_DATA * data)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)data;
 }
 
 NRTPRIV(NRT_BOOL) BufferAdapter_read(NRT_DATA * data, char *buf, size_t size,
@@ -196,6 +209,10 @@ NRTPRIV(NRT_BOOL) BufferAdapter_write(NRT_DATA * data, const char *buf,
 
 NRTPRIV(NRT_BOOL) BufferAdapter_canSeek(NRT_DATA * data, nrt_Error * error)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)data;
+    (void)error;
+
     return NRT_SUCCESS;
 }
 
@@ -216,7 +233,7 @@ NRTPRIV(nrt_Off) BufferAdapter_seek(NRT_DATA * data, nrt_Off offset, int whence,
     }
     else if (whence == NRT_SEEK_CUR)
     {
-        if (offset >= (nrt_Off) control->size - control->mark)
+        if (offset >= (nrt_Off)control->size - (nrt_Off)control->mark)
         {
             nrt_Error_init(error, "Invalid offset requested - EOF", NRT_CTXT,
                            NRT_ERR_MEMORY);
@@ -236,22 +253,38 @@ NRTPRIV(nrt_Off) BufferAdapter_seek(NRT_DATA * data, nrt_Off offset, int whence,
 NRTPRIV(nrt_Off) BufferAdapter_tell(NRT_DATA * data, nrt_Error * error)
 {
     BufferIOControl *control = (BufferIOControl *) data;
+
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     return (nrt_Off) control->mark;
 }
 
 NRTPRIV(nrt_Off) BufferAdapter_getSize(NRT_DATA * data, nrt_Error * error)
 {
     BufferIOControl *control = (BufferIOControl *) data;
+
+    /* Silence compiler warnings about unused variables */
+    (void)error;
+
     return (nrt_Off) control->bytesWritten;
 }
 
 NRTPRIV(int) BufferAdapter_getMode(NRT_DATA * data, nrt_Error * error)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)data;
+    (void)error;
+
     return NRT_ACCESS_READWRITE;
 }
 
 NRTPRIV(NRT_BOOL) BufferAdapter_close(NRT_DATA * data, nrt_Error * error)
 {
+    /* Silence compiler warnings about unused variables */
+    (void)data;
+    (void)error;
+
     /* nothing */
     return NRT_SUCCESS;
 }
@@ -284,7 +317,8 @@ NRTAPI(nrt_IOInterface *) nrt_IOHandleAdapter_construct(nrt_IOHandle handle,
     nrt_IOInterface *impl = NULL;
     IOHandleControl *control = NULL;
 
-    if (!(impl = (nrt_IOInterface *) NRT_MALLOC(sizeof(nrt_IOInterface))))
+    impl = (nrt_IOInterface *) NRT_MALLOC(sizeof(nrt_IOInterface));
+    if (!impl)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
                        NRT_ERR_MEMORY);
@@ -292,7 +326,8 @@ NRTAPI(nrt_IOInterface *) nrt_IOHandleAdapter_construct(nrt_IOHandle handle,
     }
     memset(impl, 0, sizeof(nrt_IOInterface));
 
-    if (!(control = (IOHandleControl *) NRT_MALLOC(sizeof(IOHandleControl))))
+    control = (IOHandleControl *) NRT_MALLOC(sizeof(IOHandleControl));
+    if (!control)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
                        NRT_ERR_MEMORY);
@@ -356,7 +391,8 @@ NRTAPI(nrt_IOInterface *) nrt_BufferAdapter_construct(char *buf, size_t size,
     nrt_IOInterface *impl = NULL;
     BufferIOControl *control = NULL;
 
-    if (!(impl = (nrt_IOInterface *) NRT_MALLOC(sizeof(nrt_IOInterface))))
+    impl = (nrt_IOInterface *) NRT_MALLOC(sizeof(nrt_IOInterface));
+    if (!impl)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
                        NRT_ERR_MEMORY);
@@ -364,7 +400,8 @@ NRTAPI(nrt_IOInterface *) nrt_BufferAdapter_construct(char *buf, size_t size,
     }
     memset(impl, 0, sizeof(nrt_IOInterface));
 
-    if (!(control = (BufferIOControl *) NRT_MALLOC(sizeof(BufferIOControl))))
+    control = (BufferIOControl *) NRT_MALLOC(sizeof(BufferIOControl));
+    if (!control)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
                        NRT_ERR_MEMORY);

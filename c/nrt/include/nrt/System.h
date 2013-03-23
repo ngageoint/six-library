@@ -34,7 +34,7 @@
 
 NRTPROT(nrt_Uint16) nrt_System_swap16(nrt_Uint16 ins);
 NRTPROT(nrt_Uint32) nrt_System_swap32(nrt_Uint32 inl);
-NRTPROT(nrt_Uint32) nrt_System_swap64c(nrt_Uint64 inl);
+NRTPROT(nrt_Uint64) nrt_System_swap64c(nrt_Uint64 inl);
 NRTPROT(nrt_Uint64) nrt_System_swap64(nrt_Uint64 inl);
 
 #endif

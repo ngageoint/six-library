@@ -58,7 +58,7 @@ NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
         while (op < end)
         {
             char *val = NULL;
-            int sz;
+            size_t sz;
             /* skip past white space */
             while (isspace(*op) && op < end)
                 ++op;
@@ -168,14 +168,14 @@ NRTAPI(NRT_BOOL) nrt_Utils_isBlank(char *str)
 
 NRTAPI(void) nrt_Utils_trimString(char *str)
 {
-    nrt_Uint32 len;             /* Length of the string */
-    char *strp;                 /* Pointer into the string */
-    nrt_Uint32 i;
+    size_t len;                 /* Length of the string */
+    char* strp;                 /* Pointer into the string */
+    size_t i;
 
     /* strip the end */
-    strp = (char *) (str + strlen(str) - 1);
+    strp = str + (strlen(str) - 1);
     while (isspace(*strp) && strp != str)
-        *(strp--) = 0;
+        *(strp--) = '\0';
 
     /* strip the front */
     len = strlen(str);
@@ -186,7 +186,7 @@ NRTAPI(void) nrt_Utils_trimString(char *str)
     {
         len = str + len - strp;
         memmove(str, strp, len);
-        str[len] = 0;
+        str[len] = '\0';
     }
     return;
 }
@@ -204,8 +204,8 @@ NRTPROT(void) nrt_Utils_replace(char *str, char oldValue, char newValue)
 NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
                                 const char *extension)
 {
-    int i, begin = 0;
-    int end = strlen(fullName);
+    size_t i, begin = 0;
+    size_t end = strlen(fullName);
     char *p = strstr(fullName, extension);
     for (i = 0; i < strlen(fullName); i++)
     {
@@ -216,7 +216,7 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
             end = i - 1;
     }
     memcpy(base, &fullName[begin], end - begin + 1);
-    base[end - begin + 1] = 0;
+    base[end - begin + 1] = '\0';
 }
 
 NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char *d, double *decimal,
@@ -224,8 +224,8 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char *d, double *decimal,
 {
     /* +-dd.ddd or += ddd.ddd */
     int degreeOffset = 0;
-    int len = strlen(d);
-    char sign = d[0];
+    const size_t len = strlen(d);
+    const char sign = d[0];
     if (len == 7)
     {
         degreeOffset = 2;
@@ -324,7 +324,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(char *dms, int *degrees,
                                                  nrt_Error * error)
 {
     int degreeOffset = 0;
-    int len = strlen(dms);
+    const size_t len = strlen(dms);
     char dir;
 
     char d[4];
@@ -414,7 +414,6 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
 NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer7)
 {
-    int wtf = 0;
     char dir = 'N';
     if (degrees < 0)
     {
@@ -445,7 +444,6 @@ NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer8)
 {
     char dir = 'E';
-    int wtf = 0;
     if (degrees < 0)
     {
         dir = 'W';

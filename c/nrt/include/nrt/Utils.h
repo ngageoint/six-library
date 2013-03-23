@@ -75,7 +75,7 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
  *  IGEOLO itself is very strict about what is allowed
  *
  */
-NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char *d, double *decimal,
+NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char* d, double *decimal,
                                               nrt_Error * error);
 
 NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
