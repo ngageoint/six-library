@@ -2,10 +2,7 @@ from os.path import join, exists
 from waflib import Options, Utils
 from build import CPPBuildContext
 
-#override the default build context with our own
-#Utils.g_module.build_context = Utils.g_module.install_context = Utils.g_module.clean_context = CPPBuildContext 
-
-MODULES = 'except io mem mt nitf str sys xml.lite'
+MODULES = 'cli except io logging mem mt nitf str sys xml.lite'
 
 def options(opt):
     opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
@@ -17,11 +14,8 @@ def configure(conf):
                            MODULES.split()))
 
 def build(bld):
-    configBuilds = filter(lambda m: not exists(join(bld.path.abspath(), m, 'wscript')),
-                          MODULES.split())
-    # build these modules from their config files
-    map(bld.fromConfig, map(lambda m: join(bld.path.abspath(), m), configBuilds))
-    map(bld.recurse, filter(lambda m: m not in configBuilds, MODULES.split()))
+    bld.recurse(filter(lambda x: exists(join(bld.path.abspath(), x, 'wscript')),
+                           MODULES.split()))
 
 def distclean(context):
     context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),
