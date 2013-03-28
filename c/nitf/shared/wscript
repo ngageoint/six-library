@@ -13,30 +13,21 @@ DEFINES            = ['NITF_MODULE_EXPORTS']
 configure = options = distclean = lambda p: None
 
 def build(bld):
-    pluginNode = bld.path
-
     variant = bld.env['VARIANT'] or 'default'
     env = bld.all_envs[variant]
     
     pluginList = []
-    plugins = pluginNode.ant_glob('*.c')
+    plugins = bld.path.ant_glob('*.c')
 
     for p in plugins:
         filename = str(p)
-        isJ2KPlugin = filename in ['J2KDecompress.c', 'J2KCompress.c']
-        if isJ2KPlugin and not 'HAVE_J2K' in env:
-            continue
 
         kw = globals()
         pluginName = splitext(filename)[0]
         kw['NAME'] = pluginName
         kw['LIBNAME'] = pluginName
         kw['SOURCE'] = filename
-        
-        if isJ2KPlugin:
-            kw['USE'] += ' j2k-c'
-            kw['DEFINES'] += ['HAVE_J2K_H', 'J2K_MODULE_EXPORTS']
-        
+
         bld.plugin(**kw)
         pluginList.append(pluginName)
 

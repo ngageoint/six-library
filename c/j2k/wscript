@@ -23,7 +23,7 @@ def build(bld):
     env = bld.get_env()
     if 'HAVE_J2K' in env : 
         existingDirs = filter(lambda x: exists(join(bld.path.abspath(), x)), APIS)
-        bld.recurse(existingDirs)
+        bld.recurse(existingDirs + ['shared'])
 
         if 'MAKE_OPENJPEG' in env :
             j2kLayer = 'openjpeg'
