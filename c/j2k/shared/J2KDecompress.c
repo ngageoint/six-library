@@ -109,6 +109,7 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
     ImplControl *implControl = (ImplControl*)control;
     nrt_Uint8 *buf = NULL;
     nrt_Uint64 bufSize;
+    j2k_Container* container = NULL;
 
     if (j2k_Reader_canReadTiles(implControl->reader, error))
     {
@@ -139,6 +140,14 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
         y1 = y0 + implControl->blockInfo.numRowsPerBlock;
 
         /* check for last tiles */
+        container = j2k_Reader_getContainer(implControl->reader, error);
+        if (container == NULL)
+        {
+            return NULL;
+        }
+        totalRows = j2k_Container_getHeight(container, error);
+        totalCols = j2k_Container_getWidth(container, error);
+
         if (x1 > totalCols)
             x1 = totalCols;
         if (y1 > totalRows)
