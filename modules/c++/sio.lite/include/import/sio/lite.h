@@ -2,7 +2,7 @@
  * This file is part of sio.lite-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * sio.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef __IMPORT_SIO_LITE_H__
 #define __IMPORT_SIO_LITE_H__
 
@@ -31,3 +30,4 @@
 #include "sio/lite/UserDataDictionary.h"
 
 #endif
+
