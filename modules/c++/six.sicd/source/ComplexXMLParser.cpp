@@ -2,7 +2,7 @@
  * This file is part of six.sicd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -318,42 +318,6 @@ XMLElem ComplexXMLParser::convertGeoDataToXML(
     }
 
     return geoDataXML;
-}
-
-XMLElem ComplexXMLParser::convertGeoInfoToXML(
-    const GeoInfo *geoInfo, 
-    XMLElem parent) const
-{
-    XMLElem geoInfoXML = newElement("GeoInfo", parent);
-    if (!geoInfo->name.empty())
-        setAttribute(geoInfoXML, "name", geoInfo->name);
-
-    for (size_t ii = 0; ii < geoInfo->geoInfos.size(); ++ii)
-    {
-        convertGeoInfoToXML(geoInfo->geoInfos[ii].get(), geoInfoXML);
-    }
-
-    common().addParameters("Desc", geoInfo->desc, geoInfoXML);
-
-    const size_t numLatLons = geoInfo->geometryLatLon.size();
-    if (numLatLons == 1)
-    {
-        common().createLatLon("Point", geoInfo->geometryLatLon[0], geoInfoXML);
-    }
-    else if (numLatLons >= 2)
-    {
-        XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
-                                         geoInfoXML);
-        setAttribute(linePolyXML, "size", str::toString(numLatLons));
-
-        for (size_t ii = 0; ii < numLatLons; ++ii)
-        {
-            XMLElem v = common().createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
-                         geoInfo->geometryLatLon[ii], linePolyXML);
-            setAttribute(v, "index", str::toString(ii + 1));
-        }
-    }
-    return geoInfoXML;
 }
 
 XMLElem ComplexXMLParser::convertGridToXML(
@@ -1030,9 +994,10 @@ void ComplexXMLParser::parseImageDataFromXML(
     const XMLElem imageDataXML,
     ImageData *imageData) const
 {
-    imageData->pixelType
+    imageData->pixelType 
             = six::toType<PixelType>(
-                                     getFirstAndOnly(imageDataXML, "PixelType")->getCharacterData());
+                    getFirstAndOnly(imageDataXML, 
+                                    "PixelType")->getCharacterData());
 
     XMLElem ampTableXML = getOptional(imageDataXML, "AmpTable");
 
@@ -2053,3 +2018,4 @@ void ComplexXMLParser::parseSideOfTrackType(XMLElem element,
 
 }
 }
+

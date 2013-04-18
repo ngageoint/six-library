@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -69,13 +69,20 @@ public:
     void validateSegment(nitf::ImageSubheader subheader,
                          const NITFImageInfo* info);
 
+    using ReadControl::load;
+
     /*!
      *  Fulfills our obligations to the parent class, using the IOInterface
      *  method provided with the same name
+     *  \param fromFile    Input filepath
+     *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void load(const std::string& fromFile);
+    void load(const std::string& fromFile,
+              const std::vector<std::string>& schemaPaths);
 
     void load(nitf::IOInterface& interface);
+    void load(nitf::IOInterface& interface,
+              const std::vector<std::string>& schemaPaths);
 
     virtual UByte* interleaved(Region& region, size_t imageNumber);
 
@@ -150,3 +157,4 @@ struct NITFReadControlCreator : public ReadControlCreator
 }
 
 #endif
+

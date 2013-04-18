@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six.sidd-c++ 
+ * This file is part of six.sidd-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -76,7 +76,8 @@ void GeoTIFFWriteControl::initialize(Container* container)
 
 }
 
-void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile)
+void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile,
+                               const std::vector<std::string>& schemaPaths)
 {
     tiff::FileWriter tiffWriter(toFile);
 
@@ -95,7 +96,7 @@ void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile)
         const unsigned long oneRow =
             data->getNumCols() * data->getNumBytesPerPixel();
         tiff::IFD* ifd = imageWriter->getIFD();
-        setupIFD(data, ifd, sys::Path::splitExt(toFile).first);
+        setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         buf.resize(oneRow);
         const unsigned long numRows = data->getNumRows();
         const unsigned long numCols = data->getNumCols();
@@ -114,7 +115,8 @@ void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile)
 
 void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
                                    tiff::IFD* ifd,
-                                   const std::string& toFilePrefix)
+                                   const std::string& toFilePrefix,
+                                   const std::vector<std::string>& schemaPaths)
 {
     PixelType pixelType = data->getPixelType();
     sys::Uint32_T numRows = (sys::Uint32_T) data->getNumRows();
@@ -225,15 +227,17 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
     tiff::IFDEntry* const xmlEntry = (*ifd)[Constants::GT_XML_TAG];
 
-    xmlEntry->addValues(toXMLString(data));
+    xmlEntry->addValues(six::toValidXMLString(data, schemaPaths, mLog));
 
     for (size_t jj = 0; jj < mComplexData.size(); ++jj)
     {
-        xmlEntry->addValues(toXMLString(mComplexData[jj]));
+        xmlEntry->addValues(six::toValidXMLString(mComplexData[jj], 
+                                                  schemaPaths, mLog));
     }
 }
 
-void GeoTIFFWriteControl::save(BufferList& sources, const std::string& toFile)
+void GeoTIFFWriteControl::save(BufferList& sources, const std::string& toFile,
+                               const std::vector<std::string>& schemaPaths)
 {
     tiff::FileWriter tiffWriter(toFile);
 
@@ -250,7 +254,7 @@ void GeoTIFFWriteControl::save(BufferList& sources, const std::string& toFile)
         tiff::IFD* ifd = imageWriter->getIFD();
 
         DerivedData* data = (DerivedData*) mDerivedData[ii];
-        setupIFD(data, ifd, sys::Path::splitExt(toFile).first);
+        setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         // Now we hack to write
 
         imageWriter->putData(sources[ii], data->getNumRows()
@@ -398,3 +402,4 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
 }
 
 #endif
+

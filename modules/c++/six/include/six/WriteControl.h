@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -69,7 +69,7 @@ public:
 
     //!  Constructor.  Null-sets the Container
     WriteControl() :
-        mContainer(NULL), mLog(NULL), mOwnLog(false)
+        mContainer(NULL), mLog(NULL), mOwnLog(false), mXMLRegistry(NULL)
     {
         setLogger(NULL);
         setXMLControlRegistry(NULL);
@@ -99,8 +99,14 @@ public:
      *
      *  \param sources A vector of InputStream items, one per target image
      *  \param toFile file name to write out
+     *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(SourceList& sources, const std::string& toFile) = 0;
+    void save(SourceList& sources, const std::string& toFile)
+    {
+        save(sources, toFile, std::vector<std::string>());
+    }
+    virtual void save(SourceList& sources, const std::string& toFile,
+                      const std::vector<std::string>& schemaPaths) = 0;
 
     /*!
      *  Save a list of memory sources.  This should always be
@@ -109,17 +115,28 @@ public:
      *
      *  \param sources A vector of memory buffers, one per target image
      *  \param toFile file name to write out
+     *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(BufferList& sources, const std::string& toFile) = 0;
+    void save(BufferList& sources, const std::string& toFile)
+    {
+        save(sources, toFile, std::vector<std::string>());
+    }
+    virtual void save(BufferList& sources, const std::string& toFile,
+                      const std::vector<std::string>& schemaPaths) = 0;
 
     /*!
      *  Utility for Writing out one InputStream only.
      */
     void save(io::InputStream* source, const std::string& toFile)
     {
+        save(source, toFile, std::vector<std::string>());
+    }
+    void save(io::InputStream* source, const std::string& toFile,
+              const std::vector<std::string>& schemaPaths)
+    {
         SourceList sources;
         sources.push_back(source);
-        save(sources, toFile);
+        save(sources, toFile, schemaPaths);
     }
 
     /*!
@@ -127,9 +144,14 @@ public:
      */
     void save(UByte* buffer, const std::string& toFile)
     {
+        save(buffer, toFile, std::vector<std::string>());
+    }
+    void save(UByte* buffer, const std::string& toFile,
+              const std::vector<std::string>& schemaPaths)
+    {
         BufferList sources;
         sources.push_back(buffer);
-        save(sources, toFile);
+        save(sources, toFile, schemaPaths);
     }
 
     /*!
@@ -195,3 +217,4 @@ protected:
 
 }
 #endif
+

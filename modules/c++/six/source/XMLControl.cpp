@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -23,8 +23,67 @@
 #include <logging/NullLogger.h>
 #include <six/XMLControl.h>
 
+//! Validate the xml and log any errors
+//  NOTE: Errors are treated as detriments to valid processing
+//        and fail accordingly
+void validate(const xml::lite::Document* doc,
+              const std::vector<std::string>& schemaPaths,
+              logging::Logger* log)
+{
+    // attempt to get the schema location from the 
+    // environment if nothing is specified
+    std::vector<std::string> paths(schemaPaths);
+    sys::OS os;
+    try 
+    {
+        if (paths.empty())
+        {
+            std::string envPath = os.getEnv(six::SCHEMA_PATH);
+            str::trim(envPath);
+            if (!envPath.empty())
+            {
+                paths.push_back(envPath);
+            }
+        }
+    }
+    catch (const except::Exception& ex)
+    {
+        // do nothing here
+    }
+
+    // validate against any specified schemas
+    if (!paths.empty())
+    {
+        xml::lite::Validator validator(paths, log, true);
+
+        std::vector<xml::lite::ValidationInfo> errors;
+        validator.validate(doc->getRootElement(), 
+                           doc->getRootElement()->getUri(), 
+                           errors);
+
+        // log any error found and throw
+        if (!errors.empty())
+        {
+            for (size_t i = 0; i < errors.size(); ++i)
+            {
+                log->critical(errors[i].toString());
+            }
+
+            //! this is a unique error thrown only in this location --
+            //  if the user wants a file written regardless of the consequences
+            //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
+            //  and attempt to rewrite the file. Continuing in this manner is 
+            //  highly discouraged
+            throw six::DESValidationException(Ctxt(
+                "INVALID XML: Check both the XML being " \
+                "produced and the schemas available"));
+        }
+    }
+}
+
 namespace six
 {
+
 XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
     mLog(NULL),
     mOwnLog(false)
@@ -99,13 +158,19 @@ void XMLControl::splitVersion(const std::string& versionStr,
     }
 }
 
-xml::lite::Document* XMLControl::toXML(const Data* data)
+xml::lite::Document* XMLControl::toXML(
+        const Data* data,
+        const std::vector<std::string>& schemaPaths)
 {
-    return toXMLImpl(data);
+    xml::lite::Document* doc = toXMLImpl(data);
+    validate(doc, schemaPaths, mLog);
+    return doc;
 }
 
-Data* XMLControl::fromXML(const xml::lite::Document* doc)
+Data* XMLControl::fromXML(const xml::lite::Document* doc,
+                          const std::vector<std::string>& schemaPaths)
 {
+    validate(doc, schemaPaths, mLog);
     Data* const data = fromXMLImpl(doc);
     data->setVersion(getVersionFromURI(doc));
     return data;
@@ -136,3 +201,4 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
     return str;
 }
 }
+

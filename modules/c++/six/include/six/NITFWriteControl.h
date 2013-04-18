@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -86,7 +86,15 @@ public:
 
     using WriteControl::save;
 
-    void save(SourceList& imageData, const std::string& outputFile);
+    /*
+     *  \func  save
+     *  \brief writes the product to disk
+     *  \param imageData   List of image segments
+     *  \param outputFile  Output path to write
+     *  \param schemaPaths Directories or files of schema locations
+     */
+    void save(SourceList& imageData, const std::string& outputFile,
+              const std::vector<std::string>& schemaPaths);
 
     /*!
      *  Bind an interleaved (IQIQIQIQ) memory buffer
@@ -104,8 +112,15 @@ public:
      *  you should set SWAP_OFF, and if you are using a little
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
+     *
+     *  \func  save
+     *  \brief writes the product to disk
+     *  \param imageData   List of image segments
+     *  \param outputFile  Output path to write
+     *  \param schemaPaths Directories or files of schema locations
      */
-    void save(BufferList& imageData, const std::string& outputFile);
+    void save(BufferList& imageData, const std::string& outputFile,
+              const std::vector<std::string>& schemaPaths);
 
     /*!
      *  This function sets the organization ID (the 40 character DESSHRP field
@@ -232,7 +247,8 @@ protected:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
-    void saveIO(SourceList& list, nitf::IOInterface& outputFile);
+    void saveIO(SourceList& list, nitf::IOInterface& outputFile,
+                const std::vector<std::string>& schemaPaths);
 
     /*!
      *  Bind an interleaved (IQIQIQIQ) input stream
@@ -247,13 +263,14 @@ protected:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
-    void saveIO(BufferList& list, nitf::IOInterface& outputFile);
+    void saveIO(BufferList& list, nitf::IOInterface& outputFile,
+                const std::vector<std::string>& schemaPaths);
 
     /*!
      *  This function sets up the container data, attaching
      *  it to the DES segments.  Then it completes the write.
      */
-    void addDataAndWrite();
+    void addDataAndWrite(const std::vector<std::string>& schemaPaths);
 
     /*!
      *  This function sets the image security fields in the
@@ -309,3 +326,4 @@ private:
 
 }
 #endif
+

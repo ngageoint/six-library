@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -54,7 +54,7 @@ struct XMLControlCreator
      *  on demand
      *
      */
-    virtual six::XMLControl* newXMLControl() const = 0;
+    virtual six::XMLControl* newXMLControl(logging::Logger* log) const = 0;
 
 };
 
@@ -70,7 +70,10 @@ struct XMLControlCreator
 template <typename T> struct XMLControlCreatorT : public XMLControlCreator
 {
     ~XMLControlCreatorT() {}
-    six::XMLControl* newXMLControl() const { return new T(); }
+    six::XMLControl* newXMLControl(logging::Logger* log) const 
+    { 
+        return new T(log, false);
+    }
 };
 
 /*!
@@ -129,28 +132,19 @@ public:
      *  \return XMLControl the produced XML bridge
      *
      */
-    XMLControl* newXMLControl(const std::string& identifier) const;
+    XMLControl* newXMLControl(const std::string& identifier,
+                              logging::Logger* log) const;
 
-    XMLControl* newXMLControl(DataType dataType) const
+    XMLControl* newXMLControl(DataType dataType,
+                              logging::Logger* log) const
     {
-        return newXMLControl(dataType.toString());
+        return newXMLControl(dataType.toString(), log);
     }
 
 private:
     typedef std::map<std::string, XMLControlCreator*> RegistryMap;
     RegistryMap mRegistry;
 };
-
-/*!
- *  Method to convert from a ComplexData or DerivedData into a C-style
- *  array containing XML.  It is up to the caller to delete this array.
- * 
- *  \param a ComplexData or DerivedData object
- *  \return A new allocated string containing the XML representation of the
- *  data
- */
-char* toXMLCharArray(const Data* data,
-                     const XMLControlRegistry *xmlRegistry = NULL);
 
 /*!
  *  Convenience method to convert from a ComplexData or DerivedData
@@ -163,6 +157,16 @@ char* toXMLCharArray(const Data* data,
 std::string toXMLString(const Data* data,
                         const XMLControlRegistry *xmlRegistry = NULL);
 
+/*!
+ *  Additonally performs schema validation --
+ *  This function must must receive a valid logger to print validation errors
+ */
+std::string toValidXMLString(
+        const Data* data,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger* log,
+        const XMLControlRegistry *xmlRegistry = NULL);
+
 
 //!  Singleton declaration of our XMLControlRegistry
 typedef mt::Singleton<XMLControlRegistry, true> XMLControlFactory;
@@ -170,3 +174,4 @@ typedef mt::Singleton<XMLControlRegistry, true> XMLControlFactory;
 }
 
 #endif
+
