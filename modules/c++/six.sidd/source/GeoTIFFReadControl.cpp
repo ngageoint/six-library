@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six.sidd-c++ 
+ * This file is part of six.sidd-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -120,7 +120,9 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
     return six::DataType::NOT_SET;
 }
 
-void six::sidd::GeoTIFFReadControl::load(const std::string& fromFile)
+void six::sidd::GeoTIFFReadControl::load(
+        const std::string& fromFile,
+        const std::vector<std::string>& schemaPaths)
 {
     // Clean up
     delete mContainer;
@@ -162,7 +164,7 @@ void six::sidd::GeoTIFFReadControl::load(const std::string& fromFile)
             if (siddXMLControl.get() == NULL)
             {
                 siddXMLControl.reset(
-                    mXMLRegistry->newXMLControl(DataType::DERIVED));
+                    mXMLRegistry->newXMLControl(DataType::DERIVED, mLog));
             }
             xmlControl = siddXMLControl.get();
         }
@@ -171,7 +173,7 @@ void six::sidd::GeoTIFFReadControl::load(const std::string& fromFile)
             if (sicdXMLControl.get() == NULL)
             {
                 sicdXMLControl.reset(
-                    mXMLRegistry->newXMLControl(DataType::COMPLEX));
+                    mXMLRegistry->newXMLControl(DataType::COMPLEX, mLog));
             }
             xmlControl = sicdXMLControl.get();
         }
@@ -183,7 +185,8 @@ void six::sidd::GeoTIFFReadControl::load(const std::string& fromFile)
 
         if (xmlControl)
         {
-            std::auto_ptr<six::Data> data(xmlControl->fromXML(doc));
+            std::auto_ptr<six::Data> data(xmlControl->fromXML(doc, 
+                                                              schemaPaths));
 
             if (!data.get())
             {
@@ -289,3 +292,4 @@ bool six::sidd::GeoTIFFReadControlCreator::supports(const std::string& filename)
         return false;
     }
 }
+

@@ -2,7 +2,7 @@
  * This file is part of six.sicd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -40,6 +40,43 @@ ComplexXMLParser04x::ComplexXMLParser04x(const std::string& version,
                             versionToURI(version), log)),
                      log, ownLog)
 {
+}
+
+XMLElem ComplexXMLParser04x::convertGeoInfoToXML(
+    const GeoInfo *geoInfo, 
+    XMLElem parent) const
+{
+    //! 0.4.x has ordering (1. GeoInfo, 2. Desc, 3. choice)
+    XMLElem geoInfoXML = newElement("GeoInfo", parent);
+    if (!geoInfo->name.empty())
+        setAttribute(geoInfoXML, "name", geoInfo->name);
+
+    for (size_t ii = 0; ii < geoInfo->geoInfos.size(); ++ii)
+    {
+        convertGeoInfoToXML(geoInfo->geoInfos[ii].get(), geoInfoXML);
+    }
+
+    common().addParameters("Desc", geoInfo->desc, geoInfoXML);
+
+    const size_t numLatLons = geoInfo->geometryLatLon.size();
+    if (numLatLons == 1)
+    {
+        common().createLatLon("Point", geoInfo->geometryLatLon[0], geoInfoXML);
+    }
+    else if (numLatLons >= 2)
+    {
+        XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
+                                         geoInfoXML);
+        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+
+        for (size_t ii = 0; ii < numLatLons; ++ii)
+        {
+            XMLElem v = common().createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
+                         geoInfo->geometryLatLon[ii], linePolyXML);
+            setAttribute(v, "index", str::toString(ii + 1));
+        }
+    }
+    return geoInfoXML;
 }
 
 XMLElem ComplexXMLParser04x::convertWeightTypeToXML(
@@ -449,3 +486,4 @@ XMLElem ComplexXMLParser04x::createRcvChannels(const RadarCollection* radar,
 
 }
 }
+

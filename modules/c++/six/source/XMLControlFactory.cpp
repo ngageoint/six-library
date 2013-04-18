@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,15 +14,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <str/Convert.h>
-
 #include "six/XMLControlFactory.h"
+#include <str/Convert.h>
+#include <logging/NullLogger.h>
 
 using namespace six;
 
@@ -58,7 +58,8 @@ void XMLControlRegistry::addCreator(const std::string& identifier,
 }
 
 XMLControl*
-XMLControlRegistry::newXMLControl(const std::string& identifier) const
+XMLControlRegistry::newXMLControl(const std::string& identifier,
+                                  logging::Logger* log) const
 {
     RegistryMap::const_iterator const iter = mRegistry.find(identifier);
     if (iter == mRegistry.end())
@@ -66,20 +67,21 @@ XMLControlRegistry::newXMLControl(const std::string& identifier) const
         throw except::NoSuchKeyException(Ctxt("No data class creator " +
                                               identifier));
     }
-    return iter->second->newXMLControl();
-}
-
-char* six::toXMLCharArray(const Data* data,
-                          const six::XMLControlRegistry *xmlRegistry)
-{
-    const std::string xml = toXMLString(data, xmlRegistry);
-    char* const raw = new char[xml.length() + 1];
-    strcpy(raw, xml.c_str());
-    return raw;
+    return iter->second->newXMLControl(log);
 }
 
 std::string six::toXMLString(const Data* data,
                              const six::XMLControlRegistry *xmlRegistry)
+{
+    std::auto_ptr<logging::Logger> log (new logging::NullLogger());
+    return toValidXMLString(data, std::vector<std::string>(), 
+                            log.get(), xmlRegistry);
+}
+
+std::string six::toValidXMLString(const Data* data,
+                                  const std::vector<std::string>& schemaPaths,
+                                  logging::Logger* log,
+                                  const six::XMLControlRegistry *xmlRegistry)
 {
     if (!xmlRegistry)
     {
@@ -87,11 +89,15 @@ std::string six::toXMLString(const Data* data,
     }
 
     const std::auto_ptr<XMLControl>
-        xmlControl(xmlRegistry->newXMLControl(data->getDataType()));
-    const std::auto_ptr<xml::lite::Document> doc(xmlControl->toXML(data));
+        xmlControl(xmlRegistry->newXMLControl(data->getDataType(), log));
+
+    // this will validate if SIX_SCHEMA_PATH EnvVar is set
+    const std::auto_ptr<xml::lite::Document> doc(
+        xmlControl->toXML(data, schemaPaths));
 
     io::ByteStream bs;
     doc->getRootElement()->print(bs);
 
     return bs.stream().str();
 }
+

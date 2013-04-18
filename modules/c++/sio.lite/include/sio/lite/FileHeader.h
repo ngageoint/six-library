@@ -43,9 +43,10 @@ public:
     FileHeader(int numLines, int numElements, int elementSize,
                int elementType, int ver = 1)
             : nl(numLines), ne(numElements), es(elementSize), et(elementType),
-            version(ver) {}
+            version(ver), nullTerminatedIds(true) {}
 
-    FileHeader() : nl(0), ne(0), es(0), et(0), version(1){}
+    FileHeader() : nl(0), ne(0), es(0), et(0), version(1),
+                 nullTerminatedIds(true){}
 
     //! Destructor.
     virtual ~FileHeader() {}
@@ -102,6 +103,15 @@ public:
      */
     int getVersion() const { return version; }
     void setVersion(int newVersion) { version = newVersion; }
+
+    /**
+     *   This is the sate of null termination for id strings.  It
+     *   indicates whether user data id strings are null terminated
+     *   or not in the header data in the stream.
+     *   @return The null terminated id strings flag
+     */
+    bool idsAreNullTerminated() const { return nullTerminatedIds; }
+    void setNullTerminationFlag(bool flag) { nullTerminatedIds = flag; }
 
     /**
      *  In other words (for java), is our input stream little-endian
@@ -182,6 +192,7 @@ protected:
     int version;
 
     /** A map representing user data and its corresponding ID keys */
+    bool nullTerminatedIds;
     sio::lite::UserDataDictionary userData;
 
     /** Is our input file byte ordering different from our system's */

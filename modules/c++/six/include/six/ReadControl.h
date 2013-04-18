@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -55,7 +55,7 @@ public:
 
     //!  Constructor.  Null-set the current container reference
     ReadControl() :
-        mContainer(NULL), mLog(NULL), mOwnLog(false)
+        mContainer(NULL), mLog(NULL), mOwnLog(false), mXMLRegistry(NULL)
     {
         setLogger(NULL);
         setXMLControlRegistry(NULL);
@@ -78,8 +78,15 @@ public:
      *  Load the SICD or SIDD file into a container.  Once you have
      *  done this, you can get the image data back using the interleaved
      *  function
+     *  \param fromFile    Input filepath
+     *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void load(const std::string& fromFile) = 0;
+    void load(const std::string& fromFile)
+    {
+        load(fromFile, std::vector<std::string>());
+    }
+    virtual void load(const std::string& fromFile,
+                      const std::vector<std::string>& schemaPaths) = 0;
 
     /*!
      *  Get a const pointer to the current container.  This
@@ -163,3 +170,4 @@ protected:
 }
 
 #endif
+

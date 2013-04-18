@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six.sicd-c++ 
+ * This file is part of six.sicd-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -24,7 +24,8 @@
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLParser040.h>
 #include <six/sicd/ComplexXMLParser041.h>
-#include <six/sicd/ComplexXMLParser10x.h>
+#include <six/sicd/ComplexXMLParser100.h>
+#include <six/sicd/ComplexXMLParser101.h>
 
 namespace six
 {
@@ -73,6 +74,7 @@ ComplexXMLControl::getParser(const std::string& version) const
     //   SICD 0.4.0
     //   SICD 0.4.1
     //   SICD 1.0.0
+    //   SICD 1.0.1
     if (majorVersion == "0")
     {
         if (minorVersion == "4")
@@ -88,7 +90,9 @@ ComplexXMLControl::getParser(const std::string& version) const
         if (minorVersion == "0")
         {
             if (patchVersion == "0")
-                parser.reset(new ComplexXMLParser10x(version, mLog));
+                parser.reset(new ComplexXMLParser100(version, mLog));
+            else if (patchVersion == "1")
+                parser.reset(new ComplexXMLParser101(version, mLog));
         }
     }
 
@@ -103,3 +107,4 @@ ComplexXMLControl::getParser(const std::string& version) const
 }
 }
 }
+

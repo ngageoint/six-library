@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -31,6 +31,23 @@
 
 namespace six
 {
+
+/*!
+ *  Remaps angles into [0:360]
+ *
+ *  Others ranges are explicitly unsupported because
+ *  of remapping issues, and that angles outside those
+ *  ranges generally indicate errors. For instance a
+ *  Latitude value outside of the [-90:90] range would
+ *  be considered an error.
+ *
+ *  Unsupported ranges are:
+ *      [0:90]
+ *      [-90:90]
+ *      [-180:180]
+ */
+double remapZeroTo360(double degree);
+
 
 // TODO eventually replace enum toString/toType methods below directly in the
 // Enums.h header - it is currently being generated so we won't change it yet
@@ -129,3 +146,4 @@ void loadPluginDir(const std::string& pluginDir);
 }
 
 #endif
+

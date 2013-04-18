@@ -1,25 +1,24 @@
 /* =========================================================================
-* This file is part of six-c++ 
-* =========================================================================
-* 
-* (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
-*
-* six-c++ is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public 
-* License along with this program; If not, 
-* see <http://www.gnu.org/licenses/>.
-*
-*/
-
+ * This file is part of six.sicd-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
+ *
+ * six.sicd-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
 #include <iostream>
 #include <string> 
 #include <stdio.h> 
@@ -249,14 +248,6 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
     std::string xmlText("");
     char  geoText[256];
 
-    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0) 
-    {
-        sprintf(geoText, "<GeoInfo name=\"geoinfo%d\">", numInfos);
-        xmlText = std::string(geoText);
-        for (unsigned int i=0; i<numInfos; ++i) 
-            xmlText += initGeoInfoXML(version, numInfos-1, numParams);
-    }
-
     if (version == FRMT_1_0_0) 
     {
         for (unsigned int i=0,n=1; i<numParams; ++i,++n) 
@@ -266,7 +257,16 @@ std::string  initGeoInfoXML(unsigned int version, size_t numInfos = 4, size_t nu
         }
         xmlText += "</GeoInfo>";
     }
-    else if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
+    
+    if (version == FRMT_1_0_0 || version == FRMT_0_4_1 || version == FRMT_0_4_0) 
+    {
+        sprintf(geoText, "<GeoInfo name=\"geoinfo%d\">", numInfos);
+        xmlText = std::string(geoText);
+        for (unsigned int i=0; i<numInfos; ++i) 
+            xmlText += initGeoInfoXML(version, numInfos-1, numParams);
+    }
+
+    if (version == FRMT_0_4_1 || version == FRMT_0_4_0) 
     {
         for (unsigned int i=0,n=1; i<numParams; ++i,++n) 
         {
@@ -2416,13 +2416,17 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
         doc->getRootElement()->print(bs);
         std::string preRTxml(bs.stream().str());
 
+        std::auto_ptr<logging::Logger> log(new logging::NullLogger());
+
         // translate XML into Complex Data structure 
         const std::auto_ptr<six::XMLControl> xmlControl(
-            six::XMLControlFactory::getInstance().newXMLControl(six::DataType::COMPLEX));
-        six::sicd::ComplexData* data = (six::sicd::ComplexData*)xmlControl->fromXML(doc);
+            six::XMLControlFactory::getInstance().newXMLControl(six::DataType::COMPLEX, log.get()));
+        six::sicd::ComplexData* data = (
+            six::sicd::ComplexData*)xmlControl->fromXML(doc, std::vector<std::string>());
 
         // translate data structure to XML string 
-        const std::auto_ptr<xml::lite::Document> rtDoc(xmlControl->toXML((six::sicd::ComplexData*)data));
+        const std::auto_ptr<xml::lite::Document> rtDoc(
+            xmlControl->toXML((six::sicd::ComplexData*)data, std::vector<std::string>()));
         bs.reset();
         rtDoc->getRootElement()->print(bs);
         std::string postRTxml(bs.stream().str());
@@ -2584,3 +2588,4 @@ int main(int argc, char** argv)
         return 1;
     }
 }
+

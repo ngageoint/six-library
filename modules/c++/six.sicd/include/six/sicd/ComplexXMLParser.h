@@ -2,7 +2,7 @@
  * This file is part of six.sicd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -47,6 +47,9 @@ public:
     ComplexData* fromXML(const xml::lite::Document* doc) const;
 
 protected:
+
+    virtual XMLElem convertGeoInfoToXML(const GeoInfo *obj,
+                                        XMLElem parent = NULL) const = 0;
 
     virtual XMLElem convertWeightTypeToXML(const WeightType& obj,
                           XMLElem parent = NULL) const = 0;
@@ -150,8 +153,6 @@ private:
                                   XMLElem parent = NULL) const;
     XMLElem convertGeoDataToXML(const GeoData *obj, 
                                 XMLElem parent = NULL) const;
-    XMLElem convertGeoInfoToXML(const GeoInfo *obj, 
-                                XMLElem parent = NULL) const;
     XMLElem convertGridToXML(const Grid *obj, 
                              XMLElem parent = NULL) const;
     XMLElem convertTimelineToXML(const Timeline *obj, 
@@ -226,3 +227,4 @@ private:
 }
 
 #endif
+

@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six.sidd-c++ 
+ * This file is part of six.sidd-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -65,15 +65,29 @@ public:
      *  Init the GeoTIFF writer.  Throws if we are a SICD container
      */
     virtual void initialize(Container* container);
-    /*!
-     *  Write out a set of images from a source list
+
+    using WriteControl::save;
+
+    /*
+     *  \func  save
+     *  \brief writes the product to disk
+     *  \param imageData   List of image segments
+     *  \param outputFile  Output path to write
+     *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(SourceList& sources, const std::string& toFile);
-    /*!
-     *  Write out a set of images from a memory buffer source list
+    void save(SourceList& imageData, const std::string& outputFile,
+              const std::vector<std::string>& schemaPaths);
+
+    /*
+     *  \func  save
+     *  \brief writes the product to disk
+     *  \param imageData   List of image segments
+     *  \param outputFile  Output path to write
+     *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(BufferList& sources, const std::string& toFile);
-    
+    void save(BufferList& sources, const std::string& outputFile,
+              const std::vector<std::string>& schemaPaths);
+
     /*!
      *  We are a GeoTIFF handler
      */
@@ -85,7 +99,7 @@ private:
                       const std::string &tag,
                       const char* cstr,
                       int tiffType = tiff::Const::Type::ASCII);
-    
+
     static
     void addStringArray(tiff::IFD* ifd,
                         const std::string &tag,
@@ -94,16 +108,18 @@ private:
 
     void setupIFD(const DerivedData* data,
                   tiff::IFD* ifd,
-                  const std::string& toFilePrefix);
-   
+                  const std::string& toFilePrefix,
+                  const std::vector<std::string>& schemaPaths);
+
     void addGeoTIFFKeys(const GeographicProjection& projection,
                         size_t numRows,
                         size_t numCols,
                         tiff::IFD* ifd,
                         const std::string& tfwPathname);
 };
-    
+
 }
 }
 #endif //if SIX_TIFF_ENABLED
 #endif
+

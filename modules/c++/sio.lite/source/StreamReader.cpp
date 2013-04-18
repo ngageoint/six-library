@@ -128,6 +128,7 @@ void sio::lite::StreamReader::readType2Header()
         sys::byte *tmpBytes = new sys::byte[idSize];
         inputStream->read(tmpBytes, idSize);
         std::string id((const char*)tmpBytes);
+        header->setNullTerminationFlag(tmpBytes[idSize-1] == 0x00);
         delete [] tmpBytes;
 
         int udSize = getNextInteger();

@@ -49,8 +49,10 @@ long sio::lite::FileHeader::getLength() const
     for (sio::lite::UserDataDictionary::ConstIterator it = userData.begin();
         it != userData.end(); ++it)
     {
-        length += 4; //keysize
-        length += it->first.length() + 1; //key size + 1 (null-byte)
+        length += 4; //key size
+        length += it->first.length(); //key data
+        if (idsAreNullTerminated())
+            length += 1; //1 (null-byte)
         length += 4; //data size
         length += it->second.size(); //num bytes of data
     }

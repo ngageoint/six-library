@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -27,6 +27,33 @@
 #include "six/Utilities.h"
 
 using namespace six;
+
+double six::remapZeroTo360(double degree)
+{
+    double delta = degree;
+    while (delta < 0.) 
+    { 
+        delta += 360.;
+        if (degree == delta)
+        {
+            throw except::Exception(Ctxt(
+                "Value [" + str::toString(degree) + 
+                "] is too small to remap into the [0:360] range"));
+        }
+    }
+    while (delta > 360.) 
+    { 
+        delta -= 360.; 
+        if (degree == delta)
+        {
+            throw except::Exception(Ctxt(
+                "Value [" + str::toString(degree) + 
+                "] is too large to remap into the [0:360] range"));
+        }
+    }
+    return delta;
+}
+
 
 template<> BooleanType six::toType<BooleanType>(const std::string& s)
 {
@@ -822,3 +849,4 @@ void six::loadPluginDir(const std::string& pluginDir)
 {
     nitf::PluginRegistry::loadDir(pluginDir);
 }
+

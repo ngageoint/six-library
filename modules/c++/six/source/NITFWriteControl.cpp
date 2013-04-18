@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -83,12 +83,10 @@ void NITFWriteControl::initialize(Container* container)
     sys::Uint32_T maxRows = mOptions.getParameter(OPT_MAX_ILOC_ROWS,
                                                   Parameter(ilocMax));
 
-    sys::Uint64_T
-            maxSize =
-                    (sys::Uint64_T) mOptions.getParameter(
-                                                          OPT_MAX_PRODUCT_SIZE,
-                                                          Parameter(
-                                                                    six::Constants::IS_SIZE_MAX));
+    sys::Uint64_T maxSize =
+            (sys::Uint64_T) mOptions.getParameter(
+                    OPT_MAX_PRODUCT_SIZE,
+                    Parameter(six::Constants::IS_SIZE_MAX));
 
 
     double j2kCompression = 0;
@@ -214,8 +212,7 @@ void NITFWriteControl::initialize(Container* container)
             subheader.setPixelInformation(pvtype, nbpp, nbpp, "R", irep, "SAR",
                                           bandInfo);
 
-            subheader.setBlocking(
-                                  segmentInfo.numRows,
+            subheader.setBlocking(segmentInfo.numRows,
                                   numCols,
                                   segmentInfo.numRows > 8192 ? 0
                                                              : segmentInfo.numRows,
@@ -230,9 +227,7 @@ void NITFWriteControl::initialize(Container* container)
             {
                 // Need to attach to last segment
                 subheader.getImageAttachmentLevel().set(
-                                                        (nitf::Uint16)(
-                                                                       info->getStartIndex()
-                                                                               + jj));
+                        (nitf::Uint16)(info->getStartIndex() + jj));
             }
 
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
@@ -506,7 +501,8 @@ void NITFWriteControl::updateFileHeaderSecurity()
 }
 
 void NITFWriteControl::save(SourceList& imageData,
-                            const std::string& outputFile)
+                            const std::string& outputFile,
+                            const std::vector<std::string>& schemaPaths)
 {
     //     int bufferSize = mOptions.getParameter(OPT_BUFFER_SIZE,
     //                                            Parameter((int)DEFAULT_BUFFER_SIZE));
@@ -514,23 +510,22 @@ void NITFWriteControl::save(SourceList& imageData,
     int bufferSize = DEFAULT_BUFFER_SIZE;
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
-    saveIO(imageData, bufferedIO);
+    saveIO(imageData, bufferedIO, schemaPaths);
     bufferedIO.close();
 }
 
-void NITFWriteControl::saveIO(SourceList& imageData,
-        nitf::IOInterface& outputFile)
+void NITFWriteControl::saveIO(
+        SourceList& imageData,
+        nitf::IOInterface& outputFile,
+        const std::vector<std::string>& schemaPaths)
 {
 
     mWriter.prepareIO(outputFile, mRecord);
     bool doByteSwap;
 
-    int
-            byteSwapping =
-                    (int) mOptions.getParameter(
-                                                OPT_BYTE_SWAP,
-                                                Parameter(
-                                                          (int) ByteSwapping::SWAP_AUTO));
+    int byteSwapping =
+        (int) mOptions.getParameter(OPT_BYTE_SWAP,
+                                    Parameter((int) ByteSwapping::SWAP_AUTO));
 
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
@@ -572,12 +567,13 @@ void NITFWriteControl::saveIO(SourceList& imageData,
         }
     }
 
-    addDataAndWrite();
+    addDataAndWrite(schemaPaths);
 
 }
 
 void NITFWriteControl::save(BufferList& imageData,
-                            const std::string& outputFile)
+                            const std::string& outputFile,
+                            const std::vector<std::string>& schemaPaths)
 {
 
     //     int bufferSize = mOptions.getParameter(OPT_BUFFER_SIZE,
@@ -585,12 +581,14 @@ void NITFWriteControl::save(BufferList& imageData,
     int bufferSize = DEFAULT_BUFFER_SIZE;
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
-    saveIO(imageData, bufferedIO);
+    saveIO(imageData, bufferedIO, schemaPaths);
     bufferedIO.close();
 }
 
-void NITFWriteControl::saveIO(BufferList& imageData,
-        nitf::IOInterface& outputFile)
+void NITFWriteControl::saveIO(
+        BufferList& imageData,
+        nitf::IOInterface& outputFile,
+        const std::vector<std::string>& schemaPaths)
 {
 
     mWriter.prepareIO(outputFile, mRecord);
@@ -655,10 +653,11 @@ void NITFWriteControl::saveIO(BufferList& imageData,
         }
     }
 
-    addDataAndWrite();
+    addDataAndWrite(schemaPaths);
 }
 
-void NITFWriteControl::addDataAndWrite()
+void NITFWriteControl::addDataAndWrite(
+        const std::vector<std::string>& schemaPaths)
 {
     const size_t numDES = mContainer->getNumData();
 
@@ -671,7 +670,7 @@ void NITFWriteControl::addDataAndWrite()
         const Data* data = mContainer->getData(ii);
         std::string& desStr(desStrs[ii]);
 
-        desStr = six::toXMLString(data, mXMLRegistry);
+        desStr = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
         nitf::SegmentWriter deWriter = mWriter.newDEWriter(ii);
         nitf::SegmentMemorySource segSource(desStr.c_str(),
                                             desStr.length(),
@@ -768,20 +767,45 @@ void NITFWriteControl::addUserDefinedSubheader(
         tre["DESSHSI"] = dataType +
                 " Volume 1 Design & Implementation Description Document";
 
+        // This is the publication date and version of the
+        // Design and Implementation Description Document 
+        // for the specification -- Add to this list as more
+        // versions are published
         const std::string version(data.getVersion());
-        tre["DESSHSV"] = version;
-
-        // NOTE: This is the specification date for both SICD 1.0 and SIDD 1.0
-        //       For later specs, will need to extend this logic
+        std::string specVers;
         std::string specDT;
-        if (version == "1.0.0")
-        {
-            specDT = "2011-08-01T00:00:00Z";
+        if (dataType == "SICD")
+        {    
+            if (version == "1.0.0" || version == "1.0.1")
+            {
+                specVers = "1.0";
+                specDT = "2011-09-28T00:00:00Z";
+            }
         }
-        else
+        else if (dataType == "SIDD")
+        {
+            if (version == "1.0.0")
+            {
+                specVers = "1.0";
+                specDT = "2011-08-01T00:00:00Z";
+            }
+        }
+
+        // spec version
+        if (specVers.empty())
         {
             throw except::Exception(Ctxt(
-                    "Need specification date for version " + version));
+                "DESSHSV Failure - Unsupported in " + dataType +
+                " version: " + version));
+        }
+        tre["DESSHSV"] = specVers;
+
+        // spec publication Date/Time
+        if (specDT.empty())
+        {
+            throw except::Exception(Ctxt(
+                "DESSHSD Failure - Unsupported in " + dataType +
+                " version: " + version));
         }
         tre["DESSHSD"] = specDT;
 
@@ -806,3 +830,4 @@ void NITFWriteControl::addUserDefinedSubheader(
     }
     subheader.setSubheaderFields(tre);
 }
+

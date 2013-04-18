@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of six-c++ 
+ * This file is part of six-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ *
+ * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -44,7 +44,7 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
-        const NITFImageInfo* info)
+                                      const NITFImageInfo* info)
 {
 
     unsigned long numBandsSeg =
@@ -80,13 +80,20 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 
 }
 
-void NITFReadControl::load(const std::string& fromFile)
+void NITFReadControl::load(const std::string& fromFile,
+                           const std::vector<std::string>& schemaPaths)
 {
     nitf::IOHandle handle(fromFile);
-    load(handle);
+    load(handle, schemaPaths);
 }
 
 void NITFReadControl::load(nitf::IOInterface& interface)
+{
+    load(interface, std::vector<std::string>());
+}
+
+void NITFReadControl::load(nitf::IOInterface& interface,
+                           const std::vector<std::string>& schemaPaths)
 {
     reset();
 
@@ -181,9 +188,9 @@ void NITFReadControl::load(nitf::IOInterface& interface)
 
             //! Create the correct type of XMLControl
             const std::auto_ptr<XMLControl>
-                xmlControl(mXMLRegistry->newXMLControl(xmlDataType));
+                xmlControl(mXMLRegistry->newXMLControl(xmlDataType, mLog));
 
-            std::auto_ptr<Data> data(xmlControl->fromXML(doc));
+            std::auto_ptr<Data> data(xmlControl->fromXML(doc, schemaPaths));
             if (data.get() == NULL)
             {
                 throw except::Exception(Ctxt("Unable to transform XML DES"));
@@ -597,3 +604,4 @@ bool NITFReadControlCreator::supports(const std::string& filename) const
         return false;
     }
 }
+

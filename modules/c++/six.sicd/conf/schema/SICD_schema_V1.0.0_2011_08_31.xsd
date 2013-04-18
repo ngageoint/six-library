@@ -400,8 +400,8 @@
 
    <xs:complexType name="GeoInfoType">
       <xs:sequence>
-         <xs:element name="GeoInfo" type="GeoInfoType" minOccurs="0" maxOccurs="unbounded"/>
          <xs:element name="Desc" type="ParameterType" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="GeoInfo" type="GeoInfoType" minOccurs="0" maxOccurs="unbounded"/>
          <xs:choice minOccurs="0" maxOccurs="1">
             <xs:element name="Point" type="LatLonRestrictionType"/>
             <xs:element name="Line" type="LineType"/>
