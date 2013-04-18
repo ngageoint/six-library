@@ -83,6 +83,9 @@ int main(int argc, char** argv)
                            "maxSize", "BYTES")->setDefault(-1);
         parser.addArgument("--class", "Classification Level", cli::STORE,
                            "classLevel", "LEVEL")->setDefault("UNCLASSIFIED");
+        parser.addArgument("--schema", 
+                           "Specify a schema or directoy of schemas", 
+                           cli::STORE);
         parser.addArgument("sio", "SIO input file", cli::STORE, "sio", "SIO",
                            1, 1);
         parser.addArgument("output", "Output filename", cli::STORE, "output",
@@ -95,6 +98,12 @@ int main(int argc, char** argv)
         long maxRows(options->get<long> ("maxRows"));
         long maxSize(options->get<long> ("maxSize"));
         std::string classLevel(options->get<std::string> ("classLevel"));
+        std::vector<std::string> schemaPaths;
+        if (options->hasValue("schema"))
+        {
+            schemaPaths.push_back(
+                options->get<std::string> ("schema"));
+        }
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
@@ -238,15 +247,14 @@ int main(int argc, char** argv)
                 && fileHeader->isDifferentByteOrdering();
 
         writer->getOptions().setParameter(
-                                          six::WriteControl::OPT_BYTE_SWAP,
-                                          six::Parameter(
-                                                         (sys::Uint16_T) needsByteSwap));
+                six::WriteControl::OPT_BYTE_SWAP,
+                six::Parameter((sys::Uint16_T) needsByteSwap));
 
         writer->initialize(container);
         std::vector<io::InputStream*> sources;
         sources.push_back(sioReader);
 
-        writer->save(sources, outputName);
+        writer->save(sources, outputName, schemaPaths);
         delete container;
         delete sioReader;
         delete writer;

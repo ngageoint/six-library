@@ -117,10 +117,13 @@ SICDSensorModel::SICDSensorModel(NITF_2_1_ISD* isd,
     xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<
             six::sicd::ComplexXMLControl>());
 
-    std::auto_ptr<six::XMLControl> 
-            control(xmlRegistry.newXMLControl(six::DataType::COMPLEX));
+    std::auto_ptr<logging::Logger> log (new logging::NullLogger());
+    std::auto_ptr<six::XMLControl>
+            control(xmlRegistry.newXMLControl(
+                    six::DataType::COMPLEX, log.get()));
 
-    mData.reset((six::sicd::ComplexData*) control->fromXML(sicdXML));
+    mData.reset((six::sicd::ComplexData*) control->fromXML(
+            sicdXML, std::vector<std::string>()));
     mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
     mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(), 
             mGeometry.get()));
@@ -156,14 +159,17 @@ SICDSensorModel::SICDSensorModel(const std::string& sensorModelState)
     xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<
             six::sicd::ComplexXMLControl>());
 
+    std::auto_ptr<logging::Logger> log (new logging::NullLogger());
     std::auto_ptr<six::XMLControl> 
-            control(xmlRegistry.newXMLControl(six::DataType::COMPLEX));
+            control(xmlRegistry.newXMLControl(
+                    six::DataType::COMPLEX, log.get()));
 
     // get xml as string for sensor model state
     mSensorModelState = sensorModelState;
 
     mData.reset((six::sicd::ComplexData*) control->fromXML(
-            domParser.getDocument()));
+            domParser.getDocument(), std::vector<std::string>()));
+
     mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
     mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(), 
             mGeometry.get()));

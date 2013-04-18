@@ -161,7 +161,8 @@ six::sicd::ComplexData* getComplexData(std::string sicdXMLName)
     xml::lite::Document *doc = xmlParser.getDocument();
 
     six::sicd::ComplexXMLControl xmlControl;
-    return (six::sicd::ComplexData*) xmlControl.fromXML(doc);
+    return (six::sicd::ComplexData*) xmlControl.fromXML(
+                doc, std::vector<std::string>());
 }
 
 /*!
@@ -217,13 +218,19 @@ int main(int argc, char** argv)
                 );
 
         // Get a Complex Data structure from an XML file
-        six::StubProfile profile;
         six::Options options;
 
         // Set up the sicd
-        std::string sicdXMLName(argv[1]);
-        options.setParameter(six::StubProfile::OPT_XML_FILE, sicdXMLName);
-        six::Data* complexData = profile.newData(options);
+        io::FileInputStream fis(argv[1]);
+        xml::lite::MinidomParser parser;
+        parser.parse(fis);
+
+        std::auto_ptr<logging::Logger> log (new logging::NullLogger());
+        six::Data* complexData = 
+            six::XMLControlFactory::getInstance().newXMLControl(
+                six::DataType::COMPLEX, 
+                log.get())->fromXML(parser.getDocument(), 
+                                    std::vector<std::string>());
 
         // Create a file container
         six::Container* container = new six::Container(six::DataType::DERIVED);
