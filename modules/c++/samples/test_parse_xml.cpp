@@ -156,10 +156,12 @@ void run(std::string inputFile, std::string dataType)
         six::DataType dt = (dataType == "sicd") ? six::DataType::COMPLEX
                                                 : six::DataType::DERIVED;
 
+        std::auto_ptr<logging::Logger> log (new logging::NullLogger());
         six::XMLControl *control =
-                six::XMLControlFactory::getInstance().newXMLControl(dt);
+                six::XMLControlFactory::getInstance().newXMLControl(dt, log.get());
 
-        six::Data *data = control->fromXML(treeBuilder.getDocument());
+        six::Data *data = control->fromXML(treeBuilder.getDocument(),
+                                           std::vector<std::string>());
 
         // Dump some core info
         std::cout << "Data Class: " << six::toString(data->getDataType())
@@ -176,7 +178,8 @@ void run(std::string inputFile, std::string dataType)
 
         // Generate a Round-Trip file
         sys::Path outputFile(outputDir, "round-trip.xml");
-        xml::lite::Document* outDom = control->toXML(data);
+        xml::lite::Document* outDom = 
+            control->toXML(data, std::vector<std::string>());
         io::FileOutputStream outXML(outputFile.getPath());
         outDom->getRootElement()->prettyPrint(outXML);
         outXML.close();

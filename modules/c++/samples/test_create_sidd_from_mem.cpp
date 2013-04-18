@@ -1757,12 +1757,12 @@ six::sicd::ComplexData* getComplexData(std::string sicdXMLName)
     // Get the SICD DOM
     xml::lite::Document *doc = xmlParser.getDocument();
 
-    six::XMLControl
-            * xmlControl =
-                    six::XMLControlFactory::getInstance().newXMLControl(
-                                                                        DataType::COMPLEX);
+    std::auto_ptr<logging::Logger> log (new logging::NullLogger());
+    six::XMLControl* xmlControl =
+            six::XMLControlFactory::getInstance().newXMLControl(
+                    DataType::COMPLEX, log.get());
 
-    six::Data* data = xmlControl->fromXML(doc);
+    six::Data* data = xmlControl->fromXML(doc, std::vector<std::string>());
     delete xmlControl;
     return (six::sicd::ComplexData*) data;
 }
@@ -1785,15 +1785,15 @@ int main(int argc, char** argv)
 
     try
     {
-        six::XMLControlFactory::getInstance(). addCreator(
-                                                          DataType::COMPLEX,
-                                                          new six::XMLControlCreatorT<
-                                                                  six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator(
+                DataType::COMPLEX,
+                new six::XMLControlCreatorT<
+                        six::sicd::ComplexXMLControl>());
 
-        six::XMLControlFactory::getInstance(). addCreator(
-                                                          DataType::DERIVED,
-                                                          new six::XMLControlCreatorT<
-                                                                  six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator(
+                DataType::DERIVED,
+                new six::XMLControlCreatorT<
+                        six::sidd::DerivedXMLControl>());
 
         // Output file name
         std::string outputName(argv[1]);
@@ -1812,12 +1812,9 @@ int main(int argc, char** argv)
         if (argc == 3)
         {
             // Get a Complex Data structure from an XML file
-            six::StubProfile profile;
-            six::Options options;
-
-            // Set up the sicd
-            std::string sicdXMLName(argv[2]);
-            options.setParameter(six::StubProfile::OPT_XML_FILE, sicdXMLName);
+            io::FileInputStream fis(argv[2]);
+            xml::lite::MinidomParser parser;
+            parser.parse(fis);
 
             //------------------------------------------------------
             // It could just as easily have been a Data*, but if you
@@ -1825,8 +1822,12 @@ int main(int argc, char** argv)
             // probably need information from the sicdData, in which
             // case you will need the derived class
             //------------------------------------------------------
+            std::auto_ptr<logging::Logger> log (new logging::NullLogger());
             sicdData.reset(reinterpret_cast<six::sicd::ComplexData*>(
-                profile.newData(options)));
+                six::XMLControlFactory::getInstance().newXMLControl(
+                    six::DataType::COMPLEX, 
+                    log.get())->fromXML(parser.getDocument(), 
+                                        std::vector<std::string>())));
 
         }
 

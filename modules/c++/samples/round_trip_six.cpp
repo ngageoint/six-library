@@ -46,6 +46,9 @@ int main(int argc, char** argv)
                            "level", "LEVEL")->setChoices(
                            str::split("debug info warn error"))->setDefault(
                            "info");
+        parser.addArgument("-s --schema", 
+                           "Specify a schema or directoy of schemas", 
+                           cli::STORE)->setDefault("");
         parser.addArgument("input", "Input SICD/SIDD", cli::STORE, "input",
                            "INPUT", 1, 1);
         parser.addArgument("output", "Output filename", cli::STORE, "output",
@@ -59,6 +62,12 @@ int main(int argc, char** argv)
         const bool expand(options->get<bool> ("expand"));
         const std::string logFile(options->get<std::string> ("log"));
         std::string level(options->get<std::string> ("level"));
+        std::vector<std::string> schemaPaths;
+        if (options->hasValue("schema"))
+        {
+            schemaPaths.push_back(
+                options->get<std::string> ("schema"));
+        }
 
         str::upper(level);
         str::trim(level);
@@ -85,7 +94,7 @@ int main(int argc, char** argv)
         reader.setLogger(&log);
         reader.setXMLControlRegistry(&xmlRegistry);
 
-        reader.load(inputFile);
+        reader.load(inputFile, schemaPaths);
         six::Container* container = reader.getContainer();
 
         nitf::List imageList = reader.getRecord().getImages();
@@ -151,7 +160,7 @@ int main(int argc, char** argv)
         writer.setLogger(&log);
         writer.initialize(container);
         writer.setXMLControlRegistry(&xmlRegistry);
-        writer.save(images, outputFile);
+        writer.save(images, outputFile, schemaPaths);
 
         for (six::BufferList::iterator it = images.begin(); 
                 it != images.end(); ++it)

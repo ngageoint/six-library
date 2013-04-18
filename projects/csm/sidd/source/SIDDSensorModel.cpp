@@ -120,10 +120,13 @@ SIDDSensorModel::SIDDSensorModel(NITF_2_1_ISD* isd,
     xmlRegistry.addCreator(six::DataType::DERIVED, new six::XMLControlCreatorT<
             six::sidd::DerivedXMLControl>());
 
+    std::auto_ptr<logging::Logger> log (new logging::NullLogger());
     std::auto_ptr<six::XMLControl>
-            control(xmlRegistry.newXMLControl(six::DataType::DERIVED));
+            control(xmlRegistry.newXMLControl(
+                    six::DataType::DERIVED, log.get()));
 
-    mData.reset((six::sidd::DerivedData*) control->fromXML(siddXML));
+    mData.reset((six::sidd::DerivedData*) control->fromXML(
+            siddXML, std::vector<std::string>()));
     mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
 }
 
@@ -157,14 +160,16 @@ SIDDSensorModel::SIDDSensorModel(const std::string& sensorModelState)
     xmlRegistry.addCreator(six::DataType::DERIVED, new six::XMLControlCreatorT<
             six::sidd::DerivedXMLControl>());
 
+    std::auto_ptr<logging::Logger> log (new logging::NullLogger());
     std::auto_ptr<six::XMLControl>
-            control(xmlRegistry.newXMLControl(six::DataType::DERIVED));
+            control(xmlRegistry.newXMLControl(
+                    six::DataType::DERIVED, log.get()));
 
     // get xml as string for sensor model state
     mSensorModelState = sensorModelState;
 
     mData.reset((six::sidd::DerivedData*) control->fromXML(
-            domParser.getDocument()));
+            domParser.getDocument(), std::vector<std::string>()));
     mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
 }
 
