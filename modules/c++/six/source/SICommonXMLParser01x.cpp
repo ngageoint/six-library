@@ -68,7 +68,7 @@ XMLElem SICommonXMLParser01x::convertCompositeSCPToXML(
                          rgAzXML);
             createDouble("Col", defaultURI, errorStatistics->compositeSCP->yErr,
                          rgAzXML);
-            createDouble("RgCol", defaultURI, errorStatistics->compositeSCP->xyErr,
+            createDouble("RowCol", defaultURI, errorStatistics->compositeSCP->xyErr,
                          rgAzXML);
         }
         return scpXML;
