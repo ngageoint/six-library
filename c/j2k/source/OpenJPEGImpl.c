@@ -440,14 +440,28 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     encoderParams.cp_disto_alloc = 1;
     encoderParams.tcp_numlayers = 1;
 
-    if (writerOps && writerOps->compressionRatio > 0.0001)
+    /*if (writerOps && writerOps->compressionRatio > 0.0001)
         encoderParams.tcp_rates[0] = 1.0 / writerOps->compressionRatio;
     else
-        encoderParams.tcp_rates[0] = 4.0; /* default */
+        encoderParams.tcp_rates[0] = 4.0;
+    */
+    encoderParams.tcp_rates[0] = 1.0; /* lossless */
     if (writerOps && writerOps->numResolutions > 0)
         encoderParams.numresolution = writerOps->numResolutions;
     else
-        encoderParams.numresolution = 6; /* default */
+    {
+        /* 
+           OpenJPEG defaults this to 6, but that causes the compressor 
+           to fail if the tile sizes are less than 2^6.  So we start at 6
+           and adjust if necessary.
+         */
+        double logTwo = log(2);
+        OPJ_UINT32 res = 6;
+        OPJ_UINT32 minX = (OPJ_UINT32)floor(log(tileWidth) / logTwo);
+        OPJ_UINT32 minY = (OPJ_UINT32)floor(log(tileHeight) / logTwo);
+        OPJ_UINT32 minXY = (minX < minY) ? minX : minY;
+        encoderParams.numresolution = (minXY < res) ? minXY : res;
+    }
     encoderParams.prog_order = OPJ_LRCP; /* the default */
     encoderParams.cp_tx0 = 0;
     encoderParams.cp_ty0 = 0;
