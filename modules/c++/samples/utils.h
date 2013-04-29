@@ -1,12 +1,15 @@
 #ifndef __SIX_TEST_UTILS_H__
 #define __SIX_TEST_UTILS_H__
 
+#include <sys/OS.h>
 #include <import/six.h>
+#include <cli/Results.h>
 
 /*!
  *  This function converts DMS corners into decimal degrees using NITRO,
  *  and then puts them into a lat-lon
  */
+inline
 six::LatLonCorners makeUpCornersFromDMS()
 {
     int latTopDMS[3] = { 42, 17, 50 };
@@ -40,6 +43,41 @@ six::LatLonCorners makeUpCornersFromDMS()
     corners.lowerRight = six::LatLon(latBottomDecimal, lonEastDecimal);
     corners.lowerLeft = six::LatLon(latBottomDecimal, lonWestDecimal);
     return corners;
+}
+
+// Throws if both schemaArg isn't present and six::SCHEMA_PATH isn't set
+inline
+void getSchemaPaths(const cli::Results& options,
+                    const std::string& commandLineArg,
+                    const std::string& cliArgName,
+                    std::vector<std::string>& schemaPaths)
+{
+    if(options.hasValue(cliArgName))
+    {
+        schemaPaths.push_back(options.get<std::string>(cliArgName));
+    }
+    else
+    {
+        sys::OS os;
+        std::string schemaPath;
+        try
+        {
+            schemaPath = os.getEnv(six::SCHEMA_PATH);
+        }
+        catch(const except::Exception& )
+        {
+            throw except::Exception(Ctxt(
+                    "Must specify SICD/SIDD schema path via " +
+                    commandLineArg + " or " + six::SCHEMA_PATH +
+                    " environment variable"));
+        }
+
+        if (schemaPath.empty())
+        {
+            throw except::Exception(Ctxt(std::string(six::SCHEMA_PATH) +
+                    " environment variable is set but is empty"));
+        }
+    }
 }
 
 #endif

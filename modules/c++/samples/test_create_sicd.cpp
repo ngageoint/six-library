@@ -84,7 +84,7 @@ int main(int argc, char** argv)
         parser.addArgument("--class", "Classification Level", cli::STORE,
                            "classLevel", "LEVEL")->setDefault("UNCLASSIFIED");
         parser.addArgument("--schema", 
-                           "Specify a schema or directoy of schemas", 
+                           "Specify a schema or directory of schemas",
                            cli::STORE);
         parser.addArgument("sio", "SIO input file", cli::STORE, "sio", "SIO",
                            1, 1);
@@ -99,11 +99,7 @@ int main(int argc, char** argv)
         long maxSize(options->get<long> ("maxSize"));
         std::string classLevel(options->get<std::string> ("classLevel"));
         std::vector<std::string> schemaPaths;
-        if (options->hasValue("schema"))
-        {
-            schemaPaths.push_back(
-                options->get<std::string> ("schema"));
-        }
+        getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
