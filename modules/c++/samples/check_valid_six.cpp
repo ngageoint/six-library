@@ -26,6 +26,7 @@
 #include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
+#include "utils.h"
 
 typedef std::complex<float> ComplexFloat;
 
@@ -45,8 +46,8 @@ int main(int argc, char** argv)
                            str::split("debug info warn error"))->setDefault(
                            "info");
         parser.addArgument("-s --schema", 
-                           "Specify a schema or directoy of schemas", 
-                           cli::STORE, "schema", "FILE", 1, 1, true);
+                           "Specify a schema or directory of schemas",
+                           cli::STORE, "schema", "FILE");
         parser.addArgument("input", "Input SICD/SIDD file or directory of files", cli::STORE, "input",
                            "INPUT", 1, 1);
 
@@ -61,8 +62,8 @@ int main(int argc, char** argv)
 
         const std::string logFile(options->get<std::string> ("log"));
         std::string level(options->get<std::string> ("level"));
-        std::vector<std::string> schemaPaths (
-                1, options->get<std::string> ("schema"));
+        std::vector<std::string> schemaPaths;
+        getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
@@ -83,23 +84,32 @@ int main(int argc, char** argv)
 
         // this validates the DES of the input against the 
         // best available schema
-        for (size_t i = 0; i < nitfFiles.size(); ++i)
+        int retCode = 0;
+        six::NITFReadControl reader;
+        reader.setLogger(log.get());
+        reader.setXMLControlRegistry(&xmlRegistry);
+        for (size_t ii = 0; ii < nitfFiles.size(); ++ii)
         {
             try
             {
-                six::NITFReadControl reader;
-                reader.setLogger(log.get());
-                reader.setXMLControlRegistry(&xmlRegistry);
-                log->info(Ctxt("Reading " + nitfFiles[i]));
-                reader.load(nitfFiles[i], schemaPaths);
+                log->info(Ctxt("Reading " + nitfFiles[ii]));
+                reader.load(nitfFiles[ii], schemaPaths);
                 log->info(Ctxt("Successful: No Errors Found!"));
+            }
+            catch (const six::DESValidationException& ex)
+            {
+                log->error(Ctxt("Unsuccessful: Please contact your product "
+                               "vendor with these details!"));
+                retCode = 1;
             }
             catch (const except::Exception& ex)
             {
-                log->info(Ctxt("Unsuccessful: Please contact your product "\
-                               "vendor with these details!"));
+                log->error(ex);
+                retCode = 1;
             }
         }
+
+        return retCode;
     }
     catch (const std::exception& ex)
     {
@@ -116,5 +126,4 @@ int main(int argc, char** argv)
         std::cerr << "Unknown exception\n";
         return 1;
     }
-    return 0;
 }

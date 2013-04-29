@@ -25,6 +25,7 @@
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 #include <import/sio/lite.h>
+#include "utils.h"
 
 using namespace six;
 
@@ -87,6 +88,9 @@ int main(int argc, char** argv)
                            "COLS")->setDefault(-1);
         parser.addArgument("--sio", "Write out an SIO instead of a RAW file",
                            cli::STORE_TRUE, "sio");
+        parser.addArgument("-s --schema",
+                           "Specify a schema or directory of schemas",
+                           cli::STORE);
         parser.addArgument("--one --single",
                            "Read input image in one read, rather than lines",
                            cli::STORE_TRUE, "oneRead");
@@ -104,6 +108,8 @@ int main(int argc, char** argv)
         bool oneRead(options->get<bool> ("oneRead"));
         std::string inputFile(options->get<std::string> ("file"));
         std::string outputDir(options->get<std::string> ("dir"));
+        std::vector<std::string> schemaPaths;
+        getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
@@ -126,7 +132,7 @@ int main(int argc, char** argv)
         reader->setXMLControlRegistry(&xmlRegistry);
 
         // load the file
-        reader->load(inputFile);
+        reader->load(inputFile, schemaPaths);
 
         Container* container = reader->getContainer();
         std::string base = sys::Path::basename(inputFile, true);

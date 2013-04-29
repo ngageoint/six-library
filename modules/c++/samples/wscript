@@ -4,11 +4,15 @@ MODULE_DEPS     = 'scene tiff nitf xml.lite six six.sicd six.sidd cli sio.lite'
 
 options = configure = distclean = lambda p: None
 
-SAMPLES = 'round_trip_six test_extract_xml test_create_sicd test_dump_images ' \
-          'test_create_sidd test_create_sidd_from_mem test_parse_xml'
+SAMPLES = '''check_valid_six image_to_scene round_trip_six test_create_sicd
+             test_create_sidd_from_mem test_create_sidd test_dump_images
+             test_extract_xml test_parse_xml'''.split()
 
 def build(bld):
-    for sample in SAMPLES.split():
+    for sample in SAMPLES:
         bld.program_helper(module_deps=MODULE_DEPS,
                            source='%s.cpp' % sample,
                            name=sample)
+
+    bld(features='add_targets', target='six-samples',
+        targets_to_add=SAMPLES)

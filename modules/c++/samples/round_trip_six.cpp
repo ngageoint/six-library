@@ -26,6 +26,7 @@
 #include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
+#include "utils.h"
 
 typedef std::complex<float> ComplexFloat;
 
@@ -47,8 +48,8 @@ int main(int argc, char** argv)
                            str::split("debug info warn error"))->setDefault(
                            "info");
         parser.addArgument("-s --schema", 
-                           "Specify a schema or directoy of schemas", 
-                           cli::STORE)->setDefault("");
+                           "Specify a schema or directory of schemas",
+                           cli::STORE);
         parser.addArgument("input", "Input SICD/SIDD", cli::STORE, "input",
                            "INPUT", 1, 1);
         parser.addArgument("output", "Output filename", cli::STORE, "output",
@@ -63,11 +64,7 @@ int main(int argc, char** argv)
         const std::string logFile(options->get<std::string> ("log"));
         std::string level(options->get<std::string> ("level"));
         std::vector<std::string> schemaPaths;
-        if (options->hasValue("schema"))
-        {
-            schemaPaths.push_back(
-                options->get<std::string> ("schema"));
-        }
+        getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         str::upper(level);
         str::trim(level);
