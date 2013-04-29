@@ -75,7 +75,7 @@
 namespace six
 {
 
-const static std::string SCHEMA_PATH = "SIX_SCHEMA_PATH";
+static const char SCHEMA_PATH[] = "SIX_SCHEMA_PATH";
 
 /*!
  * \class DESValidationException
