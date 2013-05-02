@@ -63,6 +63,12 @@ typedef struct _OpenJPEGWriterImpl
     opj_stream_t *stream;
 } OpenJPEGWriterImpl;
 
+typedef struct _OpenJPEGError
+{
+    nrt_Error *error;
+    void *context;
+} OpenJPEGError;
+
 J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data);
 J2KPRIV(NRT_BOOL)    implStreamSeek(OPJ_SIZE_T bytes, void *data);
 J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data);
@@ -104,6 +110,17 @@ static j2k_IWriter WriterInterface = {&OpenJPEGWriter_setTile,
 J2KPRIV(void) OpenJPEG_cleanup(opj_stream_t **, opj_codec_t **, opj_image_t **);
 J2KPRIV( J2K_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *, j2k_WriterOptions *,
                                       nrt_Error *);
+
+J2KPRIV(void) OpenJPEG_errorHandler(const char* msg, void* data)
+{
+    nrt_Error* error = (nrt_Error*)data;
+    /* Initialize the first message, otherwise the message will be 
+       overridden up the stack */
+    if(strlen(error->message) == 0)
+    {
+        nrt_Error_init(error, msg, NRT_CTXT, NRT_ERR_INVALID_OBJECT);
+    }
+}
 
 /******************************************************************************/
 /* IO                                                                         */
@@ -262,15 +279,27 @@ OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
 
     if (!(*codec = opj_create_decompress(OPJ_CODEC_J2K)))
     {
+        nrt_Error_init(error, "Error creating OpenJPEG codec", NRT_CTXT, 
+                       NRT_ERR_INVALID_OBJECT);
         goto CATCH_ERROR;
     }
 
+    memset(error->message, 0, NRT_MAX_EMESSAGE);
+    if(!opj_set_error_handler(*codec,
+                              OpenJPEG_errorHandler,
+                              error))
+    {
+        nrt_Error_init(error, "Unable to set OpenJPEG error handler", NRT_CTXT,
+                       NRT_ERR_UNK);
+        goto CATCH_ERROR;
+    }
+    
     opj_set_default_decoder_parameters(&impl->parameters);
 
     if (!opj_setup_decoder(*codec, &impl->parameters))
     {
-        nrt_Error_init(error, "Error setting up openjpeg decoder", NRT_CTXT,
-                       NRT_ERR_UNK);
+        /*nrt_Error_init(error, "Error setting up openjpeg decoder", NRT_CTXT,
+          NRT_ERR_UNK);*/
         goto CATCH_ERROR;
     }
 
@@ -301,14 +330,14 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
 
     if (!opj_read_header(stream, codec, &image))
     {
-        nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
+        /*nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);*/
         goto CATCH_ERROR;
     }
 
     codeStreamInfo = opj_get_cstr_info(codec);
     if (!codeStreamInfo)
     {
-        nrt_Error_init(error, "Error reading code stream", NRT_CTXT, NRT_ERR_UNK);
+        /*nrt_Error_init(error, "Error reading code stream", NRT_CTXT, NRT_ERR_UNK);*/
         goto CATCH_ERROR;
     }
     tileWidth = codeStreamInfo->tdx;
@@ -470,8 +499,6 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     encoderParams.cp_tdy = tileHeight;
     encoderParams.irreversible = 0;
 
-    /* TODO set error handler */
-
     if (!(cmptParams = (opj_image_cmptparm_t*)J2K_MALLOC(sizeof(
             opj_image_cmptparm_t) * nComponents)))
     {
@@ -550,15 +577,15 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
 
     if (!opj_setup_encoder(impl->codec, &encoderParams, impl->image))
     {
-        nrt_Error_init(error, "Error setting up OpenJPEG decoder", NRT_CTXT,
-                       NRT_ERR_INVALID_OBJECT);
+        /*nrt_Error_init(error, "Error setting up OpenJPEG decoder", NRT_CTXT,
+          NRT_ERR_INVALID_OBJECT);*/
         goto CATCH_ERROR;
     }
 
     if (!opj_start_compress(impl->codec, impl->image, impl->stream))
     {
-        nrt_Error_init(error, "Error starting OpenJPEG compression", NRT_CTXT,
-                       NRT_ERR_INVALID_OBJECT);
+        /*nrt_Error_init(error, "Error starting OpenJPEG compression", NRT_CTXT,
+          NRT_ERR_INVALID_OBJECT);*/
         goto CATCH_ERROR;
     }
 
@@ -613,7 +640,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     /* unfortunately, we need to read the header every time ... */
     if (!opj_read_header(stream, codec, &image))
     {
-        nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
+        /*nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);*/
         goto CATCH_ERROR;
     }
 
@@ -621,7 +648,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     if (!opj_set_decode_area(codec, image, tileWidth * tileX, tileHeight * tileY,
                              tileWidth * (tileX + 1), tileHeight * (tileY + 1)))
     {
-        nrt_Error_init(error, "Error decoding area", NRT_CTXT, NRT_ERR_UNK);
+        /*nrt_Error_init(error, "Error decoding area", NRT_CTXT, NRT_ERR_UNK);*/
         goto CATCH_ERROR;
     }
 
@@ -634,8 +661,8 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                                   &tileY0, &tileX1, &tileY1, &nComponents,
                                   &keepGoing))
         {
-            nrt_Error_init(error, "Error reading tile header", NRT_CTXT,
-                           NRT_ERR_UNK);
+            /*nrt_Error_init(error, "Error reading tile header", NRT_CTXT,
+              NRT_ERR_UNK);*/
             goto CATCH_ERROR;
         }
 
@@ -698,8 +725,8 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 
             if (!opj_decode_tile_data(codec, tileIndex, *buf, bufSize, stream))
             {
-                nrt_Error_init(error, "Error decoding tile", NRT_CTXT,
-                               NRT_ERR_UNK);
+                /*nrt_Error_init(error, "Error decoding tile", NRT_CTXT,
+                  NRT_ERR_UNK);*/
                 goto CATCH_ERROR;
             }
 
@@ -766,7 +793,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     /* unfortunately, we need to read the header every time ... */
     if (!opj_read_header(stream, codec, &image))
     {
-        nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);
+        /*nrt_Error_init(error, "Error reading header", NRT_CTXT, NRT_ERR_UNK);*/
         goto CATCH_ERROR;
     }
 
@@ -778,7 +805,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     /* only decode what we want */
     if (!opj_set_decode_area(codec, image, x0, y0, x1, y1))
     {
-        nrt_Error_init(error, "Error decoding area", NRT_CTXT, NRT_ERR_UNK);
+        /*nrt_Error_init(error, "Error decoding area", NRT_CTXT, NRT_ERR_UNK);*/
         goto CATCH_ERROR;
     }
 
@@ -807,8 +834,8 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
                                       &tileY0, &tileX1, &tileY1, &nComponents,
                                       &keepGoing))
             {
-                nrt_Error_init(error, "Error reading tile header", NRT_CTXT,
-                               NRT_ERR_UNK);
+                /*nrt_Error_init(error, "Error reading tile header", NRT_CTXT,
+                  NRT_ERR_UNK);*/
                 goto CATCH_ERROR;
             }
 
@@ -817,8 +844,8 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
                 if (!opj_decode_tile_data(codec, tileIndex, (*buf + offset),
                                           reqSize, stream))
                 {
-                    nrt_Error_init(error, "Error decoding tile", NRT_CTXT,
-                                   NRT_ERR_UNK);
+                    /*nrt_Error_init(error, "Error decoding tile", NRT_CTXT,
+                      NRT_ERR_UNK);*/
                     goto CATCH_ERROR;
                 }
                 offset += reqSize;
@@ -879,10 +906,20 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     yTiles = j2k_Container_getTilesY(impl->container, error);
     tileIndex = tileY * xTiles + tileX;
 
+    memset(error->message, 0, NRT_MAX_EMESSAGE);
+    if(!opj_set_error_handler(impl->codec,
+                              OpenJPEG_errorHandler,
+                              error))
+    {
+        nrt_Error_init(error, "Unable to set OpenJPEG error handler", NRT_CTXT,
+                       NRT_ERR_UNK);
+        goto CATCH_ERROR;
+    }
+
     if (!opj_write_tile(impl->codec, tileIndex, buf, tileSize, impl->stream))
     {
-        nrt_Error_init(error, "Error writing tile", NRT_CTXT,
-                       NRT_ERR_INVALID_OBJECT);
+        /*nrt_Error_init(error, "Error writing tile", NRT_CTXT,
+          NRT_ERR_INVALID_OBJECT);*/
         goto CATCH_ERROR;
     }
 
@@ -907,10 +944,20 @@ OpenJPEGWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
     NRT_BOOL rc = NRT_SUCCESS;
     size_t compressedSize;
 
+    memset(error->message, 0, NRT_MAX_EMESSAGE);
+    if(!opj_set_error_handler(impl->codec,
+                              OpenJPEG_errorHandler,
+                              error))
+    {
+        nrt_Error_init(error, "Unable to set OpenJPEG error handler", NRT_CTXT,
+                       NRT_ERR_UNK);
+        goto CATCH_ERROR;
+    }
+
     if (!opj_end_compress(impl->codec, impl->stream))
     {
-        nrt_Error_init(error, "Error ending compression", NRT_CTXT,
-                       NRT_ERR_INVALID_OBJECT);
+        /*nrt_Error_init(error, "Error ending compression", NRT_CTXT,
+          NRT_ERR_INVALID_OBJECT);*/
         goto CATCH_ERROR;
     }
 
