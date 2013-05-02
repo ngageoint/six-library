@@ -510,11 +510,11 @@ void NITFWriteControl::save(SourceList& imageData,
     int bufferSize = DEFAULT_BUFFER_SIZE;
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
-    saveIO(imageData, bufferedIO, schemaPaths);
+    save(imageData, bufferedIO, schemaPaths);
     bufferedIO.close();
 }
 
-void NITFWriteControl::saveIO(
+void NITFWriteControl::save(
         SourceList& imageData,
         nitf::IOInterface& outputFile,
         const std::vector<std::string>& schemaPaths)
@@ -581,11 +581,11 @@ void NITFWriteControl::save(BufferList& imageData,
     int bufferSize = DEFAULT_BUFFER_SIZE;
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
-    saveIO(imageData, bufferedIO, schemaPaths);
+    save(imageData, bufferedIO, schemaPaths);
     bufferedIO.close();
 }
 
-void NITFWriteControl::saveIO(
+void NITFWriteControl::save(
         BufferList& imageData,
         nitf::IOInterface& outputFile,
         const std::vector<std::string>& schemaPaths)
