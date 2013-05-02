@@ -25,9 +25,12 @@
 #include "six/Types.h"
 #include "six/Parameter.h"
 #include <import/except.h>
+#include <except/Exception.h>
 
 namespace six
 {
+
+DECLARE_EXCEPTION(UninitializedValue)
 
 /*!
  *  \struct Init

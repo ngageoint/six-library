@@ -62,6 +62,11 @@ template<typename T> T toType(const std::string& s)
     return str::toType<T>(s);
 }
 
+template<> std::string toString(const int& value);
+template<> std::string toString(const unsigned int& value);
+template<> std::string toString(const long& value);
+template<> std::string toString(const unsigned long& value);
+template<> std::string toString(const float& value);
 template<> std::string toString(const double& value);
 template<> six::EarthModelType
         toType<six::EarthModelType>(const std::string& s);
