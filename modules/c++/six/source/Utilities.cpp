@@ -68,8 +68,75 @@ template<> BooleanType six::toType<BooleanType>(const std::string& s)
         return BooleanType::NOT_SET;
 }
 
+template<> std::string six::toString(const int& value)
+{
+    if (six::Init::isUndefined(value))
+    {
+        throw six::UninitializedValueException(
+            Ctxt("Attempted use of uninitialized int value"));
+    }
+    return str::toString(value);
+}
+
+template<> std::string six::toString(const unsigned int& value)
+{
+    if (six::Init::isUndefined(value))
+    {
+        throw six::UninitializedValueException(
+            Ctxt("Attempted use of uninitialized unsigned int value"));
+    }
+    return str::toString(value);
+}
+
+template<> std::string six::toString(const long& value)
+{
+    if (six::Init::isUndefined(value))
+    {
+        throw six::UninitializedValueException(
+            Ctxt("Attempted use of uninitialized long value"));
+    }
+    return str::toString(value);
+}
+
+template<> std::string six::toString(const unsigned long& value)
+{
+    if (six::Init::isUndefined(value))
+    {
+        throw six::UninitializedValueException(
+            Ctxt("Attempted use of uninitialized unsigned long value"));
+    }
+    return str::toString(value);
+}
+
+template<> std::string six::toString<float>(const float& value)
+{
+    if (six::Init::isUndefined(value))
+    {
+        throw six::UninitializedValueException(
+            Ctxt("Attempted use of uninitialized float value"));
+    }
+
+   std::ostringstream os;
+   os << std::uppercase << std::scientific << std::setprecision(15) << value;
+   std::string strValue = os.str();
+
+   // remove any + in scientific notation to meet SICD XML standard
+   size_t plusPos = strValue.find("+");
+   if(plusPos != std::string::npos)
+   {
+      strValue.erase(plusPos, 1);
+   }
+   return strValue;
+}
+
 template<> std::string six::toString<double>(const double& value)
 {
+    if (six::Init::isUndefined(value))
+    {
+        throw six::UninitializedValueException(
+            Ctxt("Attempted use of uninitialized double value"));
+    }
+
    std::ostringstream os;
    os << std::uppercase << std::scientific << std::setprecision(15) << value;
    std::string strValue = os.str();
