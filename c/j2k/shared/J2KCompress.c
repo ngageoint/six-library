@@ -375,7 +375,7 @@ NITFPRIV(NITF_BOOL) implWriteBlock(nitf_CompressionControl * control,
     {
         goto CATCH_ERROR;
     }
-
+    implControl->curBlock++;
     return NITF_SUCCESS;
 
     CATCH_ERROR:
