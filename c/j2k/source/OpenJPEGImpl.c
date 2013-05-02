@@ -900,10 +900,18 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 {
     OpenJPEGWriterImpl *impl = (OpenJPEGWriterImpl*) data;
     NRT_BOOL rc = NRT_SUCCESS;
-    nrt_Uint32 xTiles, yTiles, tileIndex;
+    nrt_Uint32 xTiles, yTiles, tileIndex, width, height, tileWidth, tileHeight;
+    nrt_Uint32 thisTileWidth, thisTileHeight, thisTileSize, nComponents, nBytes;
+    nrt_Uint8* newTileBuf = NULL;
 
     xTiles = j2k_Container_getTilesX(impl->container, error);
     yTiles = j2k_Container_getTilesY(impl->container, error);
+    width  = j2k_Container_getWidth(impl->container, error);
+    height = j2k_Container_getHeight(impl->container, error);
+    tileWidth  = j2k_Container_getTileWidth(impl->container, error);
+    tileHeight = j2k_Container_getTileHeight(impl->container, error);
+    nComponents = j2k_Container_getNumComponents(impl->container, error);
+    nBytes = (j2k_Container_getPrecision(impl->container, error) - 1) / 8 + 1;
     tileIndex = tileY * xTiles + tileX;
 
     memset(error->message, 0, NRT_MAX_EMESSAGE);
@@ -914,6 +922,59 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
         nrt_Error_init(error, "Unable to set OpenJPEG error handler", NRT_CTXT,
                        NRT_ERR_UNK);
         goto CATCH_ERROR;
+    }
+
+    /* Check for edge case where we may have partial tile */
+    thisTileWidth = tileWidth;
+    thisTileHeight = tileHeight;
+    if(tileX == xTiles - 1 && width != tileWidth)
+        thisTileWidth = width % tileWidth;
+    if(tileY == yTiles - 1 && height != tileHeight)
+        thisTileHeight = height % tileHeight;
+
+    thisTileSize = thisTileWidth * thisTileHeight * nComponents * nBytes;
+    if(thisTileSize != tileSize)
+        tileSize = thisTileSize;
+
+    if(thisTileWidth < tileWidth)
+    {
+        /* TODO: The current approach below only works for single band
+         *       imagery.  For RGB data, I believe it is stored as all
+         *       red, then all green, then all blue, so we would need
+         *       a temp buffer rather than reusing the current buffer.
+         */
+        if (nComponents != 1)
+        {
+            nrt_Error_init(
+                error,
+                "Partial tile width not implemented for multi-band",
+                NRT_CTXT, NRT_ERR_UNK);
+            goto CATCH_ERROR;
+        }
+        
+        /* We have a tile that is wider than it "should" be
+         * Need to create smaller buffer to pass to write function
+         */
+        {
+            OPJ_UINT32 ii;
+            size_t srcOffset = 0;
+            size_t destOffset = 0;
+            const size_t srcStride = tileWidth * nBytes;
+            const size_t destStride = thisTileWidth * nBytes;
+            
+            newTileBuf = (nrt_Uint8*) J2K_MALLOC(thisTileSize);
+            if(!newTileBuf)
+            {
+                nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
+                goto CATCH_ERROR;
+            }
+            
+            for(ii = 0; ii < thisTileHeight; ++ii, srcOffset += srcStride, 
+                    destOffset += destStride)
+                memcpy(newTileBuf + destOffset, buf + srcOffset, destStride);
+
+            buf = newTileBuf;
+        }
     }
 
     if (!opj_write_tile(impl->codec, tileIndex, buf, tileSize, impl->stream))
@@ -932,6 +993,8 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
 
     CLEANUP:
     {
+        if(newTileBuf)
+            J2K_FREE(newTileBuf);
     }
 
     return rc;
