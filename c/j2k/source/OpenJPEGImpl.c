@@ -463,41 +463,58 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     yTiles = j2k_Container_getTilesY(impl->container, error);
     imageType = j2k_Container_getImageType(impl->container, error);
 
-    /* setup the encoder parameters */
+    /* Set up the encoder parameters.  This defaults to lossless. */
     /* TODO allow overrides somehow? */
     opj_set_default_encoder_parameters(&encoderParams);
-    encoderParams.cp_disto_alloc = 1;
-    encoderParams.tcp_numlayers = 1;
+
+    /* For now we are enforcing lossless compression.  If we have a better
+     * way to allow overrides in the future, uncomment out the tcp_rates logic
+     * below (tcp_rates[0] == 0 via opj_set_default_encoder_parameters()).
+     * Also consider setting encoderParams.irreversible = 1; to use the
+     * lossy DWT 9-7 instead of the reversible 5-3.
+     */
 
     /*if (writerOps && writerOps->compressionRatio > 0.0001)
         encoderParams.tcp_rates[0] = 1.0 / writerOps->compressionRatio;
     else
         encoderParams.tcp_rates[0] = 4.0;
     */
-    encoderParams.tcp_rates[0] = 1.0; /* lossless */
+
+    /* TODO: These two lines should not be necessary when using lossless
+     *       encoding but appear to be needed (at least in OpenJPEG 2.0) -
+     *       otherwise we get a seg fault.
+     *       The sample opj_compress.c is doing the same thing with a comment
+     *       indicating that it's a bug. */
+    ++encoderParams.tcp_numlayers;
+    encoderParams.cp_disto_alloc = 1;
+
     if (writerOps && writerOps->numResolutions > 0)
+    {
         encoderParams.numresolution = writerOps->numResolutions;
+    }
     else
     {
         /* 
            OpenJPEG defaults this to 6, but that causes the compressor 
-           to fail if the tile sizes are less than 2^6.  So we start at 6
-           and adjust if necessary.
+           to fail if the tile sizes are less than 2^6.  So we adjust this
+           down if necessary.
          */
-        double logTwo = log(2);
-        OPJ_UINT32 res = 6;
-        OPJ_UINT32 minX = (OPJ_UINT32)floor(log(tileWidth) / logTwo);
-        OPJ_UINT32 minY = (OPJ_UINT32)floor(log(tileHeight) / logTwo);
-        OPJ_UINT32 minXY = (minX < minY) ? minX : minY;
-        encoderParams.numresolution = (minXY < res) ? minXY : res;
+        const double logTwo = log(2);
+        const OPJ_UINT32 minX = (OPJ_UINT32)floor(log(tileWidth) / logTwo);
+        const OPJ_UINT32 minY = (OPJ_UINT32)floor(log(tileHeight) / logTwo);
+        const OPJ_UINT32 minXY = (minX < minY) ? minX : minY;
+        if (minXY < encoderParams.numresolution)
+        {
+            encoderParams.numresolution = minXY;
+        }
     }
-    encoderParams.prog_order = OPJ_LRCP; /* the default */
+
+    /* Turn on tiling */
+    encoderParams.tile_size_on = 1;
     encoderParams.cp_tx0 = 0;
     encoderParams.cp_ty0 = 0;
-    encoderParams.tile_size_on = 1;
     encoderParams.cp_tdx = tileWidth;
     encoderParams.cp_tdy = tileHeight;
-    encoderParams.irreversible = 0;
 
     if (!(cmptParams = (opj_image_cmptparm_t*)J2K_MALLOC(sizeof(
             opj_image_cmptparm_t) * nComponents)))
