@@ -1,4 +1,4 @@
-BLD_DIRS = 'pcre xml'
+BLD_DIRS = 'xml'
 
 def options(opt):
     opt.recurse(BLD_DIRS)
