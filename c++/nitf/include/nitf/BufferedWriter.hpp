@@ -56,7 +56,14 @@ public:
         return mPartialBlocks;
     }
 
+    //! Time spent writing to disk in seconds
+    double getTotalWriteTime()
+    {
+        return mElapsedTime;
+    }
+
 protected:
+
     virtual void readImpl(char* buf, size_t size);
 
     virtual void writeImpl(const char* buf, size_t size);
@@ -82,10 +89,13 @@ private:
     nitf::Uint64 mTotalWritten;
     nitf::Uint64 mBlocksWritten;
     nitf::Uint64 mPartialBlocks;
+    double mElapsedTime;
 
     // NOTE: This is at the end to give us a chance to adopt the buffer
     //       in ScopedArray in case sys::File's constructor throws
     mutable sys::File mFile;
+
+    void flushBuffer(const char* buf);
 };
 
 }

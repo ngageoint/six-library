@@ -12,8 +12,14 @@ BufferedWriter::BufferedWriter(const std::string& file, size_t bufferSize) :
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
+    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE)
 {
+    if (mBufferSize == 0)
+    {
+        throw except::Exception(Ctxt(
+            "BufferedWriters must have a buffer size greater than zero"));
+    }
 }
 
 BufferedWriter::BufferedWriter(const std::string& file,
@@ -27,15 +33,29 @@ BufferedWriter::BufferedWriter(const std::string& file,
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
+    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE)
 {
+    if (mBufferSize == 0)
+    {
+        throw except::Exception(Ctxt(
+            "BufferedWriters must have a buffer size greater than zero"));
+    }
 }
 
 void BufferedWriter::flushBuffer()
 {
+    flushBuffer(mBuffer);
+}
+
+void BufferedWriter::flushBuffer(const char* buf)
+{
     if (mPosition > 0)
     {
-        mFile.writeFrom(mBuffer, mPosition);
+        sys::RealTimeStopWatch sw;
+        sw.start();
+        mFile.writeFrom(buf, mPosition);
+        mElapsedTime += (sw.stop() / 1000.);
 
         mTotalWritten += mPosition;
 
@@ -63,25 +83,40 @@ void BufferedWriter::writeImpl(const char* buf, size_t size)
     {
         size_t bytes = size;
 
-        if (mPosition == mBufferSize)
-        {
-            flushBuffer();
-        }
-
         if ((mPosition + size) > mBufferSize)
         {
             // We will be flushing the buffer
             // write as many bytes as we can
             bytes = mBufferSize - mPosition;
         }
-        if (bytes)
+
+        // copy bytes to internal buffer
+        if (bytes < mBufferSize)
         {
             // Copy over and subtract bytes from the size left
             memcpy(mBuffer + mPosition, buf + from, bytes);
-            size -= bytes;
+
+            // update counters
             mPosition += bytes;
+            size -= bytes;
             from += bytes;
 
+            // check the internal buffer
+            if (mPosition == mBufferSize)
+            {
+                flushBuffer();
+            }
+        }
+        // flush using the input buffer directly
+        else
+        {
+            // update mPosition before the flush
+            mPosition += bytes;
+            flushBuffer(buf + from);
+
+            // update counters
+            size -= bytes;
+            from += bytes;
         }
     }
 }
@@ -95,7 +130,7 @@ nitf::Off BufferedWriter::seekImpl(nitf::Off offset, int whence)
 {
     // This is very unfortunate, since it creates a partial block
     flushBuffer();
-    
+
     return mFile.seekTo(offset, whence);
 }
 
@@ -116,7 +151,9 @@ int BufferedWriter::getModeImpl() const
 
 void BufferedWriter::closeImpl()
 {
+    // flush everything first
     flushBuffer();
+    mFile.flush();
     mFile.close();
 }
 }
