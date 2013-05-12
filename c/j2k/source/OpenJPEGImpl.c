@@ -69,10 +69,10 @@ typedef struct _OpenJPEGError
     void *context;
 } OpenJPEGError;
 
-J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data);
-J2KPRIV(NRT_BOOL)    implStreamSeek(OPJ_SIZE_T bytes, void *data);
-J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data);
-J2KPRIV(OPJ_UINT32) implStreamWrite(void *buf, OPJ_UINT32 bytes, void *data);
+J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data);
+J2KPRIV(NRT_BOOL)    implStreamSeek(OPJ_OFF_T bytes, void *data);
+J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_OFF_T bytes, void *data);
+J2KPRIV(OPJ_UINT32) implStreamWrite(void *buf, OPJ_SIZE_T bytes, void *data);
 
 
 J2KPRIV( NRT_BOOL  )     OpenJPEGReader_canReadTiles(J2K_USER_DATA *,  nrt_Error *);
@@ -170,7 +170,7 @@ OpenJPEG_createIO(nrt_IOInterface *io, nrt_Off length, int isInput,
     return stream;
 }
 
-J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
+J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     nrt_Off offset, bytesLeft, alreadyRead;
@@ -190,7 +190,7 @@ J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_UINT32 bytes, void *data)
     return toRead;
 }
 
-J2KPRIV(NRT_BOOL) implStreamSeek(OPJ_SIZE_T bytes, void *data)
+J2KPRIV(NRT_BOOL) implStreamSeek(OPJ_OFF_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (!NRT_IO_SUCCESS(nrt_IOInterface_seek(ctrl->io,
@@ -203,7 +203,7 @@ J2KPRIV(NRT_BOOL) implStreamSeek(OPJ_SIZE_T bytes, void *data)
     return 1;
 }
 
-J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data)
+J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_OFF_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (bytes < 0)
@@ -220,7 +220,7 @@ J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_SIZE_T bytes, void *data)
     return bytes;
 }
 
-J2KPRIV(OPJ_UINT32) implStreamWrite(void *buf, OPJ_UINT32 bytes, void *data)
+J2KPRIV(OPJ_UINT32) implStreamWrite(void *buf, OPJ_SIZE_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (bytes == 0)
