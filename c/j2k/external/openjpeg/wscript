@@ -101,14 +101,14 @@ def build(bld):
 
         # install lib
         if env['install_libs']:
-            openjpeg.install_path = '${PREFIX}/lib'
+            openjpeg.install_path = env['install_libdir']
         
         # install headers
         if env['install_headers']:
             openjpeg.targets_to_add.append(
                 bld(features='install_tgt', 
                     includes='openjpeg.h opj_stdint.h opj_config.h',
-                    dir=openjpegNode, install_path='${PREFIX}/include',
+                    dir=openjpegNode, install_path=env['install_includedir'],
                     name='J2K_INCLUDES_INSTALL'))
         
 

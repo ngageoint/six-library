@@ -51,7 +51,7 @@ def build(bld):
                   
         # install j2k lib
         if env['install_libs']:
-           lib.install_path = '${PREFIX}/lib'
+           lib.install_path = env['install_libdir']
 
         #j2k-only tests
         for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',

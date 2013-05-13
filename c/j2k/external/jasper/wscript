@@ -136,16 +136,9 @@ def build(bld):
 
         # install lib
         if env['install_libs']:
-            jasper.install_path = '${PREFIX}/lib'
+            jasper.install_path = env['install_libdir']
         
-        # install headers
-#        if env['install_headers']:
-#            jasper.targets_to_add.append(
-#                bld(features='install_tgt', 
-#                    includes='openjpeg.h opj_stdint.h opj_config.h',
-#                    dir=openjpegNode, install_path='${PREFIX}/include',
-#                    name='J2K_INCLUDES_INSTALL'))
-
+        # TODO: install headers
 
 def distclean(context):
     pass
