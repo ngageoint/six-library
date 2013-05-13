@@ -64,12 +64,15 @@ int main(int argc, char **argv)
 
         nitf::ListIterator iter = record.getImages().begin();
         nitf::Uint32 num = record.getNumImages();
+
+        std::vector<nitf::ImageReader> imageReaders;
+
         for (nitf::Uint32 i = 0; i < num; i++)
         {
             //for the images, we'll use a DirectBlockSource for streaming
             nitf::ImageSegment imseg = *iter;
             iter++;
-            nitf::ImageReader iReader = reader.newImageReader(i);
+            imageReaders.push_back(reader.newImageReader(i));
             nitf::ImageWriter iWriter = writer.newImageWriter(i);
             nitf::ImageSource iSource;
             nitf::Uint32 nBands = imseg.getSubheader().getNumImageBands();
@@ -80,7 +83,7 @@ int main(int argc, char **argv)
                             NITF_NBPP_TO_BYTES(
                                                imseg.getSubheader().getNumBitsPerPixel());
 
-            nitf::DirectBlockSource directBlockSource(iReader, 1);
+            nitf::DirectBlockSource directBlockSource(imageReaders[i], 1);
             iSource.addBand(directBlockSource);
 
             iWriter.attachSource(iSource);

@@ -137,6 +137,8 @@ class DirectBlockSource : public BandSource
 public:
     /*!
      *  Constructor
+     *  \param reader   
+     *  \param numBands  Number of bands - currently support only 1 band
      */
     DirectBlockSource(nitf::ImageReader& reader, nitf::Uint32 numBands) 
         throw (nitf::NITFException);

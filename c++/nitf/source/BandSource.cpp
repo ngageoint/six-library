@@ -120,10 +120,11 @@ NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
     return NITF_SUCCESS;
 }
 
-nitf::DirectBlockSource::DirectBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands) 
+nitf::DirectBlockSource::DirectBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands)
     throw(nitf::NITFException)
 {
     setNative(nitf_DirectBlockSource_construct(imageReader.getNative(), numBands, &error));
     setManaged(false);
-    imageReader.setManaged(true);
+    
+
 }
