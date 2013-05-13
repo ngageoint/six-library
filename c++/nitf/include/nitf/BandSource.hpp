@@ -28,6 +28,7 @@
 #include "nitf/DataSource.hpp"
 #include "nitf/IOHandle.hpp"
 #include "nitf/System.hpp"
+#include "nitf/ImageReader.hpp"
 #include <string>
 
 /*!
@@ -124,6 +125,23 @@ private:
 private:
     nitf::Uint32 mBand, mNumRows, mNumCols, mPixelSize;
 };
+
+/*!
+ *  \class DirectBlockSource
+ *  \brief  The C++ wrapper for the nitf_DirectBlockSource.
+ *
+ *
+ */
+class DirectBlockSource : public BandSource
+{
+public:
+    /*!
+     *  Constructor
+     */
+    DirectBlockSource(nitf::ImageReader& reader, nitf::Uint32 numBands) 
+        throw (nitf::NITFException);
+};
+
 
 }
 

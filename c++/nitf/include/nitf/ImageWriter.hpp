@@ -68,6 +68,9 @@ public:
     //! Enable/disable cached writes
     void setWriteCaching(int enable);
 
+    //! Enable/disable direct block writes (if you don't know what this means, don't use it)
+    void setDirectBlockWrite(int enable);
+
     /*!
      *  Function allows the user access to the product's pad pixels.
      *  For example, if you wanted transparent pixels for fill, you would

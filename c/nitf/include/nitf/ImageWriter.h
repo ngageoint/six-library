@@ -74,6 +74,23 @@ NITFAPI(int) nitf_ImageWriter_setWriteCaching
 );
 
 /*!
+ * \brief nitf_ImageWriter_setDirectBlockWrite - Enable/disable direct block writing
+ * 
+ * nitf_ImageWriter_setDirectBlockWrite enables/disables direct block writing.
+ * If this is set to 1 and the number of image bands is 1, then each block of data 
+ * will be written directly to the NITF and bypass any manipulation or re-organization.
+ * If you know for certain that you're band sources will give you the data formatted 
+ * precisely as required for whatever you're writing out, then enable this for better 
+ * write performance.  This is most useful in conjunction with the DirectBlockSource 
+ * band source for file copies.
+ */
+NITFAPI(void) nitf_ImageWriter_setDirectBlockWrite
+(
+    nitf_ImageWriter * iWriter,     /*!< Object to modify */
+    int enable                      /*!< Enable cached writes if true */
+);
+
+/*!
  *  Function allows the user access to the product's pad pixels.
  *  For example, if you wanted transparent pixels for fill, you would
  *  set this function using arguments (writer, 0, 1, error)

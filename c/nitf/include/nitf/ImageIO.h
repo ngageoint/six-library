@@ -864,6 +864,48 @@ NITFPROT(void) nitf_BlockingInfo_print(nitf_BlockingInfo * info,  /*!< The struc
                                        FILE * file       /*!< FILE to use for print */
                                       );
 
+/*!
+  \brief nitf_ImageIO_setupDirectBlockRead - Setup direct block reading
+
+  \b nitf_ImageIO_setupDirectBlockRead does some simple checks to prepare 
+  for reading blocks directly from the NITF (bypassing any reorganization of data)
+ */
+NITFPROT(NITF_BOOL) nitf_ImageIO_setupDirectBlockRead(nitf_ImageIO *nitf,
+                                                      nitf_IOInterface *io,
+                                                      nitf_Uint32 numBands,
+                                                      nitf_Error *error);
+
+/*!
+  \brief nitf_ImageIO_readBlockDirect - Read a block of data without manipulation
+  
+  \b nitf_ImageIO_readBlockDirect reads a block of data directly from file without 
+  any manipulation or re-organization.  Only use this if you know what you're doing!
+
+  \param nitf         Image handle
+  \param io           IO handle
+  \param blockNumber  The block to read
+  \param error        Error object
+ */
+NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
+                                                   nitf_IOInterface* io, 
+                                                   nitf_Uint32 blockNumber,
+                                                   nitf_Error * error);
+
+/*!
+  \brief nitf_ImageIO_writeBlockDirect - Write a block of data without manipulation
+
+  \b nitf_ImageIO_writeBlockDirect writes a block of data directly to file without 
+  any manipulation or re-organization.  The assumption here is that the data is already 
+  formatted exactly as it needs to be and we want to avoid the performance hits of 
+  multiple small mem copies to get the data formatted properly.  Only use this if you 
+  know what you're doing!
+ */
+NITFPROT(NRT_BOOL) nitf_ImageIO_writeBlockDirect(nitf_ImageIO* object,
+                                                 nitf_IOInterface* io,
+                                                 const nitf_Uint8 * buffer,
+                                                 nitf_Uint32 blockNumber,
+                                                 nitf_Error * error);
+
 NITF_CXX_ENDGUARD
 
 #endif
