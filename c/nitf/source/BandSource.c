@@ -525,13 +525,16 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data,
                                            nitf_Off size, 
                                            nitf_Error * error)
 {
-    DirectBlockSourceImpl *directBlockSource = toDirectBlockSource(data, error);
+    nitf_Uint8* block;
+    DirectBlockSourceImpl *directBlockSource;
+
+    directBlockSource = toDirectBlockSource(data, error);
     if (!directBlockSource)
         return NITF_FAILURE;
 
-    nitf_Uint8* block = nitf_ImageIO_readBlockDirect(directBlockSource->imageReader->imageDeblocker, 
-                                                     directBlockSource->imageReader->input, 
-                                                     directBlockSource->blockNumber++, error);
+    block = nitf_ImageIO_readBlockDirect(directBlockSource->imageReader->imageDeblocker,
+                                         directBlockSource->imageReader->input,
+                                         directBlockSource->blockNumber++, error);
     if(!block)
         return NITF_FAILURE;
 
