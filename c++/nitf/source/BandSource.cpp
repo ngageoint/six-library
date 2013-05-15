@@ -123,8 +123,59 @@ NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
 nitf::DirectBlockSource::DirectBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands)
     throw(nitf::NITFException)
 {
-    setNative(nitf_DirectBlockSource_construct(imageReader.getNative(), numBands, &error));
+    setNative(nitf_DirectBlockSource_construct(this,
+                                               &DirectBlockSource::nextBlock, 
+                                               imageReader.getNative(), 
+                                               numBands, &error));
     setManaged(false);
-    
-
 }
+
+NITF_BOOL nitf::DirectBlockSource::nextBlock(void *callback,
+                                             char * buf,
+                                             nitf_Uint8 * block,
+                                             nitf_Uint32 blockNumber,
+                                             size_t blockSize,
+                                             nitf_Error * error)
+{
+    nitf::DirectBlockSource* const cb =
+        reinterpret_cast<nitf::DirectBlockSource*>(callback);
+    if (!callback)
+    {
+        nitf_Error_init(error, "Null pointer reference",
+                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+        return NITF_FAILURE;
+    }
+
+    try
+    {
+        cb->nextBlock(buf, block, blockNumber, blockSize);
+    }
+    catch (const except::Exception &ex)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_READING_FROM_FILE,
+                         ex.getMessage().c_str());
+        return NITF_FAILURE;
+    }
+    catch (const std::exception &ex)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_READING_FROM_FILE,
+                         ex.what());
+        return NITF_FAILURE;
+    }
+    catch (...)
+    {
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_READING_FROM_FILE,
+                         "Unknown exception");
+        return NITF_FAILURE;
+    }
+
+    return NITF_SUCCESS;
+}
+
+

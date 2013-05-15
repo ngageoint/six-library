@@ -64,5 +64,6 @@
 #include "nitf/TextSubheader.h"
 #include "nitf/WriteHandler.h"
 #include "nitf/Writer.h"
+#include "nitf/DirectBlockSource.h"
 
 #endif

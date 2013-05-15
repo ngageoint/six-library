@@ -116,21 +116,6 @@ NITFAPI(nitf_BandSource *) nitf_IOSource_construct(nitf_IOInterface *io,
                                                    int pixelSkip,
                                                    nitf_Error * error);
 
-/*!
- *  \fn nitf_DirectBlockSource_construct
- *  \brief  Provides impl for reading directly from a NITF without reformatting 
- the data.
- *
- *  The DirectBlockSource class is a BandSource that comes from an open image 
- *  reader.  It reads data without manipulation or re-organization from a NITF, 
- *  and is best used with ImageWriters that have direct block writing enabled for 
- *  high performance file copies.
- *
- */
-NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(nitf_ImageReader* imageReader,
-                                                            nitf_Uint32 numBands,
-                                                            nitf_Error * error);
-
 NITF_CXX_ENDGUARD
 
 #endif

@@ -26,6 +26,24 @@
 #include <vector>
 #include <memory>
 
+class TestDirectBlockSource: public nitf::DirectBlockSource
+{
+public:
+    TestDirectBlockSource(nitf::ImageReader& imageReader,
+                      nitf::Uint32 numBands)
+        throw (nitf::NITFException) : nitf::DirectBlockSource(imageReader, numBands){}
+
+protected:
+    virtual void nextBlock(char* buf, 
+                           nitf::Uint8* block, 
+                           nitf::Uint32 blockNumber,
+                           size_t blockSize) throw (nitf::NITFException)
+    {
+        std::cout << "BLOCK NUMBER: " << blockNumber << std::endl;
+        memcpy(buf, block, blockSize);
+    }
+};
+
 /*
  * This test tests the round-trip process of taking an input NITF
  * file and writing it to a new file. This includes writing the image
@@ -66,6 +84,8 @@ int main(int argc, char **argv)
         nitf::Uint32 num = record.getNumImages();
 
         std::vector<nitf::ImageReader> imageReaders;
+        std::vector<nitf::ImageWriter> imageWriters;
+        std::vector<mem::SharedPtr<nitf::DirectBlockSource> > bandSources;
 
         for (nitf::Uint32 i = 0; i < num; i++)
         {
@@ -73,7 +93,7 @@ int main(int argc, char **argv)
             nitf::ImageSegment imseg = *iter;
             iter++;
             imageReaders.push_back(reader.newImageReader(i));
-            nitf::ImageWriter iWriter = writer.newImageWriter(i);
+            imageWriters.push_back(writer.newImageWriter(i));
             nitf::ImageSource iSource;
             nitf::Uint32 nBands = imseg.getSubheader().getNumImageBands();
             nitf::Uint32 nRows = imseg.getSubheader().getNumRows();
@@ -83,11 +103,12 @@ int main(int argc, char **argv)
                             NITF_NBPP_TO_BYTES(
                                                imseg.getSubheader().getNumBitsPerPixel());
 
-            nitf::DirectBlockSource directBlockSource(imageReaders[i], 1);
-            iSource.addBand(directBlockSource);
+            bandSources.push_back(mem::SharedPtr<nitf::DirectBlockSource>(
+                                      new TestDirectBlockSource(imageReaders[i], 1)));
+            iSource.addBand(*bandSources[bandSources.size()-1]);
 
-            iWriter.attachSource(iSource);
-            iWriter.setDirectBlockWrite(1);
+            imageWriters[i].attachSource(iSource);
+            imageWriters[i].setDirectBlockWrite(1);
         }
 
         num = record.getNumGraphics();
