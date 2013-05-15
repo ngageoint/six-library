@@ -4,7 +4,7 @@ from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
-SOURCE = 'jasper-1.900.1-mod.tar'
+SOURCE = 'jasper-1.900.1-mod'
 JASPER_DEFINES = ['USE_JASPER', 'HAVE_JASPER_H', 'J2K_MODULE_EXPORTS']
 
 options = lambda x : None
