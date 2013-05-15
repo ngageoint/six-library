@@ -4,7 +4,9 @@ from waflib import Options
 APIS = ['external/openjpeg', 'external/jasper']
 
 def options(opt):
-    opt.add_option('--with-j2k', action='store', dest='j2k_layer',
+    opt.add_option('--disable-j2k', action='store_false', dest='enable_j2k', default=True,
+                   help='turn off JPEG2000 support')
+    opt.add_option('--j2k-layer', action='store', dest='j2k_layer',
                    choices=['openjpeg', 'jasper'], default='openjpeg', metavar='LIB',
                    help='Specify the JPEG2000 library to link with')
 
@@ -12,14 +14,12 @@ def options(opt):
     opt.recurse(existingDirs)
 
 def configure(conf):
-
-    if Options.options.j2k_layer : 
+    if Options.options.enable_j2k : 
         conf.msg('Configuring with J2K layer', Options.options.j2k_layer)
         existingDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), APIS)
         conf.recurse(existingDirs)
 
 def build(bld):
-
     env = bld.get_env()
     if 'HAVE_J2K' in env : 
         existingDirs = filter(lambda x: exists(join(bld.path.abspath(), x)), APIS)
