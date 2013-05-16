@@ -488,7 +488,7 @@ typedef nitf_DecompressionControl *
 
 typedef nitf_Uint8 *(*NITF_DECOMPRESSION_INTERFACE_READ_BLOCK_FUNCTION)
 (nitf_DecompressionControl * object,
- nitf_Uint32 blockNumber, nitf_Error * error);
+ nitf_Uint32 blockNumber, nitf_Uint64* blockSize, nitf_Error * error);
 
 /*!
     \brief NITF_DECOMPRESSION_INTERFACE_FREE_BLOCK_FUNCTION - Image
@@ -884,11 +884,13 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_setupDirectBlockRead(nitf_ImageIO *nitf,
   \param nitf         Image handle
   \param io           IO handle
   \param blockNumber  The block to read
+  \param blockSize    The block size read
   \param error        Error object
  */
 NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                                                    nitf_IOInterface* io, 
                                                    nitf_Uint32 blockNumber,
+                                                   nitf_Uint64* blockSize,
                                                    nitf_Error * error);
 
 /*!

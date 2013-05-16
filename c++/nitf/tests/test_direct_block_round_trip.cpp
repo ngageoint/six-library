@@ -39,8 +39,9 @@ protected:
                            nitf::Uint32 blockNumber,
                            size_t blockSize) throw (nitf::NITFException)
     {
-        std::cout << "BLOCK NUMBER: " << blockNumber << std::endl;
-        memcpy(buf, block, blockSize);
+        std::cout << "BLOCK NUMBER: " << blockNumber << " " << blockSize << std::endl;
+        if(buf)
+            memcpy(buf, block, blockSize);
     }
 };
 

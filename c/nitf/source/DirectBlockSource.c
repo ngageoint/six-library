@@ -65,12 +65,15 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, char *buf, nitf_Off
 {
     DirectBlockSourceImpl *directBlockSource = toDirectBlockSource(data, error);
     nitf_Uint8* block;
+    nitf_Uint64 blockSize;
+
     if (!directBlockSource)
         return NITF_FAILURE;
 
     block = nitf_ImageIO_readBlockDirect(directBlockSource->imageReader->imageDeblocker, 
                                          directBlockSource->imageReader->input, 
-                                         directBlockSource->blockNumber++, error);
+                                         directBlockSource->blockNumber++, 
+                                         &blockSize, error);
     if(!block)
         return NITF_FAILURE;
 
@@ -78,7 +81,7 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, char *buf, nitf_Off
                                      buf, 
                                      block, 
                                      directBlockSource->blockNumber-1, 
-                                     size,
+                                     blockSize,
                                      error))
     {
         return NITF_FAILURE;

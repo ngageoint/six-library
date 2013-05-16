@@ -36,6 +36,7 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface*  io,
 
 NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                                     nitf_Uint32 blockNumber,
+                                    nitf_Uint64* blockSize,
                                     nitf_Error* error);
 NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
                             nitf_Uint8* block,
@@ -104,6 +105,7 @@ NITFAPI(void*) C8_construct(char *compressionType,
 
 NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                                     nitf_Uint32 blockNumber,
+                                    nitf_Uint64* blockSize,
                                     nitf_Error* error)
 {
     ImplControl *implControl = (ImplControl*)control;
@@ -160,6 +162,7 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
             return NULL;
         }
     }
+    *blockSize = bufSize;
     return buf;
 }
 

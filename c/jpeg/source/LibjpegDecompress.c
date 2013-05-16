@@ -272,7 +272,7 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control);
 
 NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
                                     nitf_Uint32 blockNumber,
-                                    /*        NITF_BOOL separateBands,*/
+                                    nitf_Uint64* blockSize,
                                     nitf_Error* error);
 
 
@@ -1272,9 +1272,9 @@ NITFPRIV(NITF_BOOL) findBlockSOI(JPEGImplControl* control,
 }
 
 NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
-        nitf_Uint32 blockNumber,
-        /*        NITF_BOOL separateBands,*/
-        nitf_Error* error)
+                                    nitf_Uint32 blockNumber,
+                                    nitf_Uint64* blockSize,
+                                    nitf_Error* error)
 {
     /*
      *  For now, do as I say (to test that you dont break anything in
@@ -1447,6 +1447,7 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
 
     uncompressed = (nitf_Uint8*)(block->uncompressed);
     block->uncompressed = NULL;
+    *blockSize = _BLOCK_SIZE(block);
     JPEGBlock_destruct(&block);
 
     return uncompressed;

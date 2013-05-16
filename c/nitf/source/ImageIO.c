@@ -2757,8 +2757,11 @@ NITFPRIV(void) nitf_ImageIO_bPixelClose(nitf_DecompressionControl **
 
 /*!< Associated control structure */
 /*!< Block number to read */
-NITFPRIV(nitf_Uint8 *) nitf_ImageIO_bPixelReadBlock(nitf_DecompressionControl * control, nitf_Uint32 blockNumber, nitf_Error * error    /*!< For error returns */
-                                                   );
+NITFPRIV(nitf_Uint8 *) nitf_ImageIO_bPixelReadBlock(nitf_DecompressionControl * control, 
+                                                    nitf_Uint32 blockNumber, 
+                                                    nitf_Uint64* blockSize,
+                                                    nitf_Error * error    /*!< For error returns */
+    );
 
 /*!
   \brief nitf_ImageIO_bPixelInterface - Decompression interface for B pixel
@@ -7346,7 +7349,7 @@ int nitf_ImageIO_cachedReader(_nitf_ImageIOBlock * blockIO,
                                                error);
                 nitf->blockControl.block = 
                     (*(interface->readBlock)) (nitf->decompressionControl,
-                                               blockIO->number, error);
+                                               blockIO->number, NULL, error);
                 if (nitf->blockControl.block == NULL)
                     return NITF_FAILURE;
             }
@@ -7406,6 +7409,7 @@ NITFPROT(NRT_BOOL) nitf_ImageIO_setupDirectBlockRead(nitf_ImageIO *nitf,
 NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                                                    nitf_IOInterface* io, 
                                                    nitf_Uint32 blockNumber,
+                                                   nitf_Uint64* blockSize,
                                                    nitf_Error * error)
 {
     _nitf_ImageIO *nitfI;        /* Associated ImageIO object */
@@ -7441,6 +7445,8 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                                            nitfI->blockControl.block,
                                            nitfI->blockSize, error))
                 return NITF_FAILURE;
+
+            *blockSize = nitfI->blockSize;
         }
         else
         {
@@ -7463,7 +7469,8 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                                            error);
             nitfI->blockControl.block =
                 (*(interface->readBlock)) (nitfI->decompressionControl,
-                                           blockNumber, error);
+                                           blockNumber, blockSize, 
+                                           error);
             if (nitfI->blockControl.block == NULL)
                 return NITF_FAILURE;
         }
@@ -9051,7 +9058,9 @@ nitf_ImageIO_bPixelOpen(nitf_IOInterface* io,
 
 NITFPRIV(nitf_Uint8 *)
 nitf_ImageIO_bPixelReadBlock(nitf_DecompressionControl * control,
-                             nitf_Uint32 blockNumber, nitf_Error * error)
+                             nitf_Uint32 blockNumber, 
+                             nitf_Uint64* blockSize, 
+                             nitf_Error * error)
 {
     /* Actual control type */
     nitf_ImageIO_BPixelControl *icntl;
@@ -9103,6 +9112,7 @@ nitf_ImageIO_bPixelReadBlock(nitf_DecompressionControl * control,
         current <<= 1;
     }
 
+    *blockSize = uncompressedLen;
     return block;
 }
 
