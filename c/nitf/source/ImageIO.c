@@ -7283,6 +7283,7 @@ int nitf_ImageIO_cachedReader(_nitf_ImageIOBlock * blockIO,
 {
     _nitf_ImageIO *nitf;        /* Associated ImageIO object */
     _nitf_ImageIOControl *cntl; /* Associated control object */
+    nitf_Uint64 blockSize;
     
     cntl = blockIO->cntl;
     nitf = cntl->nitf;
@@ -7349,7 +7350,7 @@ int nitf_ImageIO_cachedReader(_nitf_ImageIOBlock * blockIO,
                                                error);
                 nitf->blockControl.block = 
                     (*(interface->readBlock)) (nitf->decompressionControl,
-                                               blockIO->number, NULL, error);
+                                               blockIO->number, &blockSize, error);
                 if (nitf->blockControl.block == NULL)
                     return NITF_FAILURE;
             }
