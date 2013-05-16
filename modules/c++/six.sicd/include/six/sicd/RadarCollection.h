@@ -344,6 +344,8 @@ struct RadarCollection
      */
     RadarCollection() :
         refFrequencyIndex(Init::undefined<int>()),
+        txFrequencyMin(Init::undefined<double>()),
+        txFrequencyMax(Init::undefined<double>()),
         polarizationHVAnglePoly(Init::undefined<Poly1D>())
     {
     }

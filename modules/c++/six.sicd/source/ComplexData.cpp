@@ -32,7 +32,7 @@ Data* ComplexData::clone() const
 }
 
 ComplexData::ComplexData() : 
-    mVersion("1.0.0")
+    mVersion("1.0.1")
 {
     //only initialize the mandatory elements
     collectionInformation.reset(new CollectionInformation());

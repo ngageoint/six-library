@@ -25,6 +25,8 @@
 #include <import/six.h>
 #include <import/sio/lite.h>
 #include <import/io.h>
+#include <logging/Setup.h>
+#include <scene/Utilities.h>
 #include "utils.h"
 
 // For SICD implementation
@@ -65,7 +67,7 @@
  *
  *  SICD data is populated using the ComplexData data structure.
  *
- *  The segmentation loophole can be exploitated by overriding the product
+ *  The segmentation loophole can be exploited by overriding the product
  *  size (essentially bluffing the 10GB limit, and overriding ILOC_R=99999,
  *  although you may not extend those limits -- they are NITF format maxes.
  */
@@ -91,7 +93,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
                            "OUTPUT", 1, 1);
 
-        cli::Results *options = parser.parse(argc, (const char**) argv);
+        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
 
         std::string inputName(options->get<std::string> ("sio"));
         std::string outputName(options->get<std::string> ("output"));
@@ -100,6 +102,9 @@ int main(int argc, char** argv)
         std::string classLevel(options->get<std::string> ("classLevel"));
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
+
+        std::auto_ptr<logging::Logger> logger(
+                logging::setupLogger(sys::Path::basename(argv[0])));
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
@@ -116,11 +121,11 @@ int main(int argc, char** argv)
         io::FileInputStream inputFile(inputName);
 
         // Assume its an SIO, and wrap the stream
-        sio::lite::FileReader *sioReader =
-                new sio::lite::FileReader(&inputFile);
+        sio::lite::FileReader sioReader(&inputFile);
 
         // Parse the SIO header
-        sio::lite::FileHeader* fileHeader = sioReader->readHeader();
+        const sio::lite::FileHeader* const fileHeader =
+                sioReader.readHeader();
 
         // Make sure its a complex file
         if (fileHeader->getElementType()
@@ -135,7 +140,8 @@ int main(int argc, char** argv)
 
         // Create the Data
         // TODO: Use a ComplexDataBuilder?
-        six::sicd::ComplexData* data = new six::sicd::ComplexData();
+        six::sicd::ComplexData* data(new six::sicd::ComplexData());
+        std::auto_ptr<six::Data> scopedData(data);
         data->setPixelType(six::PixelType::RE32F_IM32F);
         data->setNumRows(fileHeader->getNumLines());
         data->setNumCols(fileHeader->getNumElements());
@@ -146,12 +152,21 @@ int main(int argc, char** argv)
         data->setImageCorners(makeUpCornersFromDMS());
         data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
         data->scpcoa->sideOfTrack = six::SideOfTrackType::LEFT;
+        data->geoData->scp.llh = six::LatLonAlt(42.2708, -83.7264);
+        data->geoData->scp.ecf =
+                scene::Utilities::latLonToECEF(data->geoData->scp.llh);
         data->grid->timeCOAPoly = six::Poly2D(0, 0);
         data->grid->timeCOAPoly[0][0] = 15605743.142846;
         data->position->arpPoly = six::PolyXYZ(0);
         data->position->arpPoly[0] = 0.0;
 
+        data->radarCollection->txFrequencyMin = 0.0;
+        data->radarCollection->txFrequencyMax = 0.0;
         data->radarCollection->txPolarization = six::PolarizationType::OTHER;
+        mem::ScopedCloneablePtr<six::sicd::ChannelParameters>
+                rcvChannel(new six::sicd::ChannelParameters());
+        rcvChannel->txRcvPolarization = six::PolarizationType::OTHER;
+        data->radarCollection->rcvChannels.push_back(rcvChannel);
 
         data->grid->row->sign = six::FFTSign::POS;
         data->grid->row->unitVector = 0.0;
@@ -171,6 +186,7 @@ int main(int argc, char** argv)
         data->grid->col->deltaK2 = 0;
 
         data->imageFormation->rcvChannelProcessed->numChannelsProcessed = 1;
+        data->imageFormation->rcvChannelProcessed->channelIndex.push_back(0);
 
         data->pfa.reset(new six::sicd::PFA());
         data->pfa->spatialFrequencyScaleFactorPoly = six::Poly1D(0);
@@ -185,13 +201,15 @@ int main(int argc, char** argv)
         data->imageFormation->tEndProc = 0;
 
         data->scpcoa->scpTime = 15605743.142846;
-        data->scpcoa->slantRange = 0;
-        data->scpcoa->groundRange = 0;
-        data->scpcoa->dopplerConeAngle = 0;
-        data->scpcoa->grazeAngle = 0;
-        data->scpcoa->incidenceAngle = 0;
-        data->scpcoa->twistAngle = 0;
-        data->scpcoa->slopeAngle = 0;
+        data->scpcoa->slantRange = 0.0;
+        data->scpcoa->groundRange = 0.0;
+        data->scpcoa->dopplerConeAngle = 0.0;
+        data->scpcoa->grazeAngle = 0.0;
+        data->scpcoa->incidenceAngle = 0.0;
+        data->scpcoa->twistAngle = 0.0;
+        data->scpcoa->slopeAngle = 0.0;
+        data->scpcoa->azimAngle = 0.0;
+        data->scpcoa->layoverAngle = 0.0;
         data->scpcoa->arpPos = 0.0;
         data->scpcoa->arpVel = 0.0;
         data->scpcoa->arpAcc = 0.0;
@@ -207,9 +225,10 @@ int main(int argc, char** argv)
         data->imageFormation->txFrequencyProcMin = 0;
         data->imageFormation->txFrequencyProcMax = 0;
 
-        six::Container* container = new six::Container(six::DataType::COMPLEX);
-        container->addData(data);
-        six::WriteControl* writer = new six::NITFWriteControl();
+        six::Container container(six::DataType::COMPLEX);
+        container.addData(scopedData);
+        six::NITFWriteControl writer;
+        writer.setLogger(logger.get());
 
         /*
          *  Under normal circumstances, the library uses the
@@ -225,39 +244,47 @@ int main(int argc, char** argv)
         if (maxRows > 0)
         {
             std::cout << "Overriding NITF max ILOC" << std::endl;
-            writer->getOptions().setParameter(
-                                              six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
-                                              maxRows);
+            writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+                                             maxRows);
 
         }
         if (maxSize > 0)
         {
             std::cout << "Overriding NITF product size" << std::endl;
-            writer->getOptions().setParameter(
-                                              six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
-                                              maxSize);
+            writer.getOptions().setParameter(six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                                             maxSize);
         }
 
         // Means its little endian stream
-        bool needsByteSwap = sys::isBigEndianSystem()
+        const bool needsByteSwap = sys::isBigEndianSystem()
                 && fileHeader->isDifferentByteOrdering();
 
-        writer->getOptions().setParameter(
+        writer.getOptions().setParameter(
                 six::WriteControl::OPT_BYTE_SWAP,
                 six::Parameter((sys::Uint16_T) needsByteSwap));
 
-        writer->initialize(container);
+        writer.initialize(&container);
         std::vector<io::InputStream*> sources;
-        sources.push_back(sioReader);
+        sources.push_back(&sioReader);
 
-        writer->save(sources, outputName, schemaPaths);
-        delete container;
-        delete sioReader;
-        delete writer;
+        writer.save(sources, outputName, schemaPaths);
+
+        return 0;
     }
-    catch (except::Exception& ex)
+    catch (const std::exception& ex)
     {
-        std::cout << ex.toString() << std::endl;
+        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
     }
-    return 0;
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::Exception: " << ex.getMessage()
+                  << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Caught unknown exception\n";
+        return 1;
+    }
 }
