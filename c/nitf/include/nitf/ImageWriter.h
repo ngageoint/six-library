@@ -38,7 +38,9 @@ typedef nitf_WriteHandler nitf_ImageWriter;
  * for the values.
  */
 NITFAPI(nitf_ImageWriter*) 
-nitf_ImageWriter_construct(nitf_ImageSubheader *subheader, nitf_Error * error);
+    nitf_ImageWriter_construct(nitf_ImageSubheader *subheader, 
+                               nrt_HashTable* options, 
+                               nitf_Error * error);
 
 
 /*!

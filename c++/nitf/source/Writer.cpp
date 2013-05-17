@@ -153,10 +153,61 @@ nitf::ImageWriter Writer::newImageWriter(int imageNumber)
         throw (nitf::NITFException)
 {
     nitf_SegmentWriter * x = nitf_Writer_newImageWriter(getNativeOrThrow(),
-                                                        imageNumber, &error);
+                                                        imageNumber, NULL, &error);
     if (!x)
         throw nitf::NITFException(&error);
 
+    //manage the writer
+    nitf::ImageWriter writer(x);
+    writer.setManaged(true);
+    return writer;
+}
+
+nitf::ImageWriter Writer::newImageWriter(int imageNumber,
+                                         const std::map<std::string, void*>& options)
+    throw (nitf::NITFException)
+{
+    nitf_SegmentWriter* x = NULL;
+        
+    if(!options.empty())
+    {
+        nrt_HashTable* userOptions = nitf_HashTable_construct(2, &error);
+        if(!userOptions)
+            throw nitf::NITFException(&error);
+        
+        try
+        {            
+            nrt_HashTable_setPolicy(userOptions, NRT_DATA_RETAIN_OWNER);
+            
+            std::map<std::string, void*>::const_iterator iter = options.begin();
+            for(; iter != options.end(); ++iter)
+            {
+                if(!nrt_HashTable_insert(userOptions, iter->first.c_str(),
+                                         iter->second, &error))
+                    throw nitf::NITFException(&error);            
+            }
+            
+            x = nitf_Writer_newImageWriter(getNativeOrThrow(),
+                                           imageNumber, 
+                                           userOptions, &error);
+            
+            nitf_HashTable_destruct(&userOptions);
+        }
+        catch(...)
+        {
+            nitf_HashTable_destruct(&userOptions);
+            throw;
+        }
+    }
+    else
+    {
+        x = nitf_Writer_newImageWriter(getNativeOrThrow(),
+                                       imageNumber, 
+                                       NULL, &error);
+    }
+    if (!x)
+        throw nitf::NITFException(&error);
+    
     //manage the writer
     nitf::ImageWriter writer(x);
     writer.setManaged(true);

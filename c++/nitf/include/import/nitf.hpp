@@ -74,5 +74,6 @@
 #include "nitf/Utils.hpp"
 #include "nitf/WriteHandler.hpp"
 #include "nitf/Writer.hpp"
+#include "nitf/WriterOptions.hpp"
 
 #endif

@@ -2315,6 +2315,7 @@ CATCH_ERROR:
 NITFAPI(nitf_ImageWriter *)
 nitf_Writer_newImageWriter(nitf_Writer *writer,
                            int index,
+                           nrt_HashTable* options,
                            nitf_Error * error)
 {
     nitf_ListIterator iter;
@@ -2338,7 +2339,8 @@ nitf_Writer_newImageWriter(nitf_Writer *writer,
     assert(currentSegment);
     assert(currentSegment->subheader);
 
-    imageWriter = nitf_ImageWriter_construct(currentSegment->subheader, error);
+    imageWriter = nitf_ImageWriter_construct(currentSegment->subheader, 
+                                             options, error);
     if (!imageWriter)
         goto CATCH_ERROR;
 

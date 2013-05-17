@@ -252,7 +252,9 @@ NITFPRIV(nitf_CompressionInterface *) getCompIface(const char *comp,
 
 
 NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
-        nitf_ImageSubheader *subheader, nitf_Error * error)
+    nitf_ImageSubheader *subheader, 
+    nrt_HashTable* options, 
+    nitf_Error * error)
 {
     static nitf_IWriteHandler iWriteHandler =
     {
@@ -301,7 +303,11 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
         }
     }
 
-    impl->imageBlocker = nitf_ImageIO_construct(subheader, 0, 0, compIface, NULL, error);
+    impl->imageBlocker = nitf_ImageIO_construct(subheader, 0, 0, 
+                                                compIface, 
+                                                NULL, 
+                                                options, 
+                                                error);
     if (!impl->imageBlocker)
         goto CATCH_ERROR;
 

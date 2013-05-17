@@ -7816,7 +7816,7 @@ SWIGINTERN PyObject *_wrap_nitf_Writer_newImageWriter(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_newImageWriter" "', argument " "3"" of type '" "nitf_Error *""'"); 
   }
   arg3 = (nitf_Error *)(argp3);
-  result = (nitf_ImageWriter *)nitf_Writer_newImageWriter(arg1,arg2,arg3);
+  result = (nitf_ImageWriter *)nitf_Writer_newImageWriter(arg1,arg2,NULL,arg3);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
   return resultobj;
 fail:
@@ -15481,7 +15481,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageWriter_construct(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageWriter_construct" "', argument " "2"" of type '" "nitf_Error *""'"); 
   }
   arg2 = (nitf_Error *)(argp2);
-  result = (nitf_ImageWriter *)nitf_ImageWriter_construct(arg1,arg2);
+  result = (nitf_ImageWriter *)nitf_ImageWriter_construct(arg1,NULL,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
   return resultobj;
 fail:

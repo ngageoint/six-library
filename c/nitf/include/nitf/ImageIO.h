@@ -319,7 +319,8 @@ typedef void nitf_CompressionControl;
 
 typedef nitf_CompressionControl *
 (*NITF_COMPRESSION_INTERFACE_OPEN_FUNCTION)
- (nitf_ImageSubheader * subheader,nitf_Error * error);
+    (nitf_ImageSubheader * subheader, 
+     nrt_HashTable* options, nitf_Error * error);
 
 /*!
     \brief NITF_COMPRESSION_INTERFACE_START_FUNCTION - Image compression
@@ -676,8 +677,8 @@ nitf_ImageIO_construct(nitf_ImageSubheader * subheader,
                        nitf_Uint64 length,
                        nitf_CompressionInterface * compressor,
                        nitf_DecompressionInterface * decompressor,
-                       nitf_Error * error
-    );
+                       nrt_HashTable* options,
+                       nitf_Error * error);
 
 /*!
   \brief nitf_ImageIO_clone - Clone an object

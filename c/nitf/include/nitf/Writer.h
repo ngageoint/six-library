@@ -114,13 +114,16 @@ NITFAPI(NITF_BOOL) nitf_Writer_setDEWriteHandler(nitf_Writer *writer,
  * This is deprecated, but is available for backwards compatibility.
  *
  * \param writer    The Writer object
+ * \param options
  * \param index     The segment index
  *
  * \deprecated - setImageWriteHandler is the preferred method to use.
  * \return A new ImageWriter, or NULL on failure
  */
-NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer *writer,
-        int index, nitf_Error * error);
+NITFAPI(nitf_ImageWriter *) nitf_Writer_newImageWriter(nitf_Writer* writer,
+                                                       int index, 
+                                                       nrt_HashTable* options, 
+                                                       nitf_Error* error);
 
 /*!
  * Creates and returns a new SegmentWriter for the graphic at the given index.

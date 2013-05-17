@@ -56,6 +56,9 @@ typedef struct _j2k_Writer
     J2K_USER_DATA *data;
 } j2k_Writer;
 
+J2KAPI(NRT_BOOL) j2k_Writer_setOptions(j2k_WriterOptions* options, 
+                                       nrt_HashTable* userOptions, 
+                                       nrt_Error* error);
 /**
  * Opens a J2K Container from an IOInterface
  */

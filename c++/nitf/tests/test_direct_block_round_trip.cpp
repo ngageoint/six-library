@@ -86,7 +86,11 @@ int main(int argc, char **argv)
 
         std::vector<nitf::ImageReader> imageReaders;
         std::vector<nitf::ImageWriter> imageWriters;
+        std::map<std::string, void*> writerOptions;
         std::vector<mem::SharedPtr<nitf::DirectBlockSource> > bandSources;
+
+        //nitf::Uint32 numRes = 1;
+        //writerOptions[C8_NUM_RESOLUTIONS_KEY] = &numRes;
 
         for (nitf::Uint32 i = 0; i < num; i++)
         {
@@ -94,7 +98,7 @@ int main(int argc, char **argv)
             nitf::ImageSegment imseg = *iter;
             iter++;
             imageReaders.push_back(reader.newImageReader(i));
-            imageWriters.push_back(writer.newImageWriter(i));
+            imageWriters.push_back(writer.newImageWriter(i, writerOptions));
             nitf::ImageSource iSource;
             nitf::Uint32 nBands = imseg.getSubheader().getNumImageBands();
             nitf::Uint32 nRows = imseg.getSubheader().getNumRows();

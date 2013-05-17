@@ -123,6 +123,15 @@ public:
             throw (nitf::NITFException);
 
     /**
+     * Returns a NEW ImageWriter for the given index
+     *
+     * The pointer is deleted by the library, so don't delete it yourself.
+     */
+    nitf::ImageWriter newImageWriter(int imageNumber, 
+                                     const std::map<std::string, void*>& options)
+        throw (nitf::NITFException);
+    
+    /**
      * Returns a NEW SegmentWriter for the given index
      *
      * The pointer is deleted by the library, so don't delete it yourself.

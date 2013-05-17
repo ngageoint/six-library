@@ -21,6 +21,29 @@
  */
 
 #include "j2k/Writer.h"
+#include "nitf/WriterOptions.h"
+
+J2KAPI(NRT_BOOL) j2k_Writer_setOptions(j2k_WriterOptions* options, 
+                                       nrt_HashTable* userOptions, 
+                                       nrt_Error* error)
+{
+    nrt_Pair* compressionRatio;
+    nrt_Pair* numResolutions;
+    if(options && userOptions)
+    {
+        compressionRatio = nrt_HashTable_find(userOptions, C8_COMPRESSION_RATIO_KEY);
+        numResolutions = nrt_HashTable_find(userOptions, C8_NUM_RESOLUTIONS_KEY);
+
+        if(compressionRatio)
+        {
+            options->compressionRatio = *((double*)compressionRatio->data);
+        }
+        if(numResolutions)
+        {
+            options->numResolutions = *((nrt_Uint32*)numResolutions->data);
+        }
+    }
+}
 
 J2KAPI(NRT_BOOL) j2k_Writer_setTile(j2k_Writer *writer,
                                     nrt_Uint32 tileX,

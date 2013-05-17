@@ -1166,7 +1166,7 @@ NITF_BOOL writeNITF(nitf_Record *record, const char* filename, nitf_Error *error
         goto CATCH_ERROR;
 
     /* get a new ImageWriter for the 1st image (index 0) */
-    imageWriter = nitf_Writer_newImageWriter(writer, 0, error);
+    imageWriter = nitf_Writer_newImageWriter(writer, 0, NULL, error);
     if (!imageWriter)
         goto CATCH_ERROR;
 

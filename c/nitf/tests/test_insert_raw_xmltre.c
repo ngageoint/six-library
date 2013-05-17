@@ -223,7 +223,7 @@ void doWrite(nitf_Record * record, char *inRootFile, char *outFile)
                      NITF_INT32_SZ, &error))
                 goto CATCH_ERROR;
 
-            iWriter = nitf_Writer_newImageWriter(writer, i, &error);
+            iWriter = nitf_Writer_newImageWriter(writer, i, NULL, &error);
             if (!iWriter)
             {
                 goto CATCH_ERROR;

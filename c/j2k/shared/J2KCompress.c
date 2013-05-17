@@ -27,7 +27,7 @@
 
 NITF_CXX_GUARD
 
-NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader*, nitf_Error*);
+NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader*, nrt_HashTable*, nitf_Error*);
 
 NITFPRIV(NITF_BOOL) implStart(nitf_CompressionControl *control,
                               nitf_Uint64 offset,
@@ -102,6 +102,7 @@ NITFAPI(void*) C8_construct(char *compressionType,
 
 
 NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
+                                            nrt_HashTable* userOptions,
                                             nitf_Error *error)
 {
     ImplControl *implControl = NULL;
@@ -119,7 +120,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     nitf_Uint32 nppbv;
     char pvtype[NITF_PVTYPE_SZ+1];
     char ic[NITF_IC_SZ+1];
-    char comrat[NITF_COMRAT_SZ+1];
+    //char comrat[NITF_COMRAT_SZ+1];
     char imode[NITF_IMODE_SZ+1];
     char irep[NITF_IREP_SZ+1];
     int imageType;
@@ -128,6 +129,11 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
 
     /* reset the options */
     memset(&options, 0, sizeof(j2k_WriterOptions));
+    if(userOptions)
+    {
+        if(!j2k_Writer_setOptions(&options, userOptions, error))
+            goto CATCH_ERROR;
+    }
 
     if(!nitf_Field_get(subheader->NITF_NROWS, &nRows,
                     NITF_CONV_INT, sizeof(nitf_Uint32), error))
@@ -191,11 +197,11 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     {
         goto CATCH_ERROR;
     }
-    if(!nitf_Field_get(subheader->NITF_COMRAT, comrat, NITF_CONV_STRING,
+    /*if(!nitf_Field_get(subheader->NITF_COMRAT, comrat, NITF_CONV_STRING,
                     NITF_COMRAT_SZ+1, error))
     {
         goto CATCH_ERROR;
-    }
+        }*/
     if(!nitf_Field_get(subheader->NITF_IMODE, imode, NITF_CONV_STRING,
                     NITF_IMODE_SZ+1, error))
     {
@@ -234,18 +240,16 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
         goto CATCH_ERROR;
     }
 
-    nitf_Field_trimString(comrat);
+    /*nitf_Field_trimString(comrat);
     if(strlen(comrat) != 0)
     {
-        /* TODO compute compression ratio to pass into WriterOptions */
-
         if (comrat[0] == 'N')
         {
-            /* numerically lossless */
+           // numerically lossless
            double bitRate = NITF_ATO32(&comrat[1]) / 10.0;
            options.compressionRatio = bitRate / abpp;
         }
-    }
+    }*/
 
     nitf_Field_trimString(irep);
     if (strcmp(irep, "RGB") == 0)

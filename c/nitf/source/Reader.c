@@ -1738,7 +1738,7 @@ NITFPRIV(nitf_ImageIO *) allocIO(nitf_ImageSegment * segment,
     return nitf_ImageIO_construct(segment->subheader,
                                   segment->imageOffset,
                                   segment->imageEnd - segment->imageOffset,
-                                  NULL, decompIface, error);
+                                  NULL, decompIface, NULL, error);
 }
 
 

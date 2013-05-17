@@ -491,6 +491,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     if (writerOps && writerOps->numResolutions > 0)
     {
         encoderParams.numresolution = writerOps->numResolutions;
+        /* Note, if this isn't set right (see below) it will error out */
     }
     else
     {
@@ -498,7 +499,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
            OpenJPEG defaults this to 6, but that causes the compressor 
            to fail if the tile sizes are less than 2^6.  So we adjust this
            down if necessary.
-         */
+        */
         const double logTwo = log(2);
         const OPJ_UINT32 minX = (OPJ_UINT32)floor(log(tileWidth) / logTwo);
         const OPJ_UINT32 minY = (OPJ_UINT32)floor(log(tileHeight) / logTwo);
@@ -591,6 +592,16 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     impl->image->x1 = width;
     impl->image->y1 = height;
     impl->image->color_space = colorSpace;
+
+    memset(error->message, 0, NRT_MAX_EMESSAGE);
+    if(!opj_set_error_handler(impl->codec,
+                              OpenJPEG_errorHandler,
+                              error))
+    {
+        nrt_Error_init(error, "Unable to set OpenJPEG error handler", NRT_CTXT,
+                       NRT_ERR_UNK);
+        goto CATCH_ERROR;
+    }
 
     if (!opj_setup_encoder(impl->codec, &encoderParams, impl->image))
     {

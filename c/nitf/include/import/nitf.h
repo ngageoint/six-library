@@ -65,5 +65,6 @@
 #include "nitf/WriteHandler.h"
 #include "nitf/Writer.h"
 #include "nitf/DirectBlockSource.h"
+#include "nitf/WriterOptions.h"
 
 #endif

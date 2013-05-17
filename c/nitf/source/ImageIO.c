@@ -2855,7 +2855,7 @@ static nitf_DecompressionInterface nitf_ImageIO_12PixelInterface =
 */
 
 nitf_CompressionControl  *nitf_ImageIO_12PixelComOpen
-  (nitf_ImageSubheader * subheader,nitf_Error * error);
+(nitf_ImageSubheader * subheader, nrt_HashTable* options, nitf_Error * error);
 
 /*!
     \brief nitf_ImageIO_12PixelComStart - Start function for 12 bit pixel
@@ -2926,14 +2926,15 @@ static nitf_CompressionInterface nitf_ImageIO_12PixelComInterface =
 /*==================== nitf_ImageIO_construct ================================*/
 
 NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
-        subheader,
-        nitf_Uint64 offset,
-        nitf_Uint64 length,
-        nitf_CompressionInterface *
-        compressor,
-        nitf_DecompressionInterface
-        * decompressor,
-        nitf_Error * error)
+                                                subheader,
+                                                nitf_Uint64 offset,
+                                                nitf_Uint64 length,
+                                                nitf_CompressionInterface* 
+                                                compressor,
+                                                nitf_DecompressionInterface* 
+                                                decompressor,
+                                                nrt_HashTable* options,
+                                                nitf_Error * error)
 {
     _nitf_ImageIO *nitf;        /* The result */
     nitf_ImageSubheader *sub;   /* From the calling image segment */
@@ -3075,7 +3076,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
     /* Call if compressor open function if the compressor is not NULL */
     if(nitf->compressor != NULL)
     {
-        nitf->compressionControl = (*(nitf->compressor->open))(sub,error);
+        nitf->compressionControl = (*(nitf->compressor->open))(sub,options,error);
         if(nitf->compressionControl == NULL)
         {
             nitf_ImageIO_destruct((nitf_ImageIO **) &nitf);
@@ -9282,11 +9283,11 @@ nitf_ImageIO_12PixelClose(nitf_DecompressionControl **control)
 }
 
 /*============================================================================*/
-/*======================== 12-bit pixel type psuedo compressor =============*/
+/*======================== 12-bit pixel type pseudo compressor =============*/
 /*============================================================================*/
 
 nitf_CompressionControl  *nitf_ImageIO_12PixelComOpen
-( nitf_ImageSubheader * subheader,nitf_Error * error)
+( nitf_ImageSubheader * subheader, nrt_HashTable* options, nitf_Error * error)
 {
   nitf_ImageIO_12PixelComControl *icntl;   /* The result */
   nitf_Uint32 numRowsPerBlock;      /* Number of rows per block */

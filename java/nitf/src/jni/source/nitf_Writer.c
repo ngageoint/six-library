@@ -363,7 +363,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Writer_getNewImageWriter
 
     jmethodID methodID =
         (*env)->GetMethodID(env, imageWriterClass, "<init>", "(J)V");
-    imageWriter = nitf_Writer_newImageWriter(writer, imageNumber, &error);
+    imageWriter = nitf_Writer_newImageWriter(writer, imageNumber, NULL, &error);
 
     if (!imageWriter)
     {
