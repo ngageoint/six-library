@@ -43,6 +43,8 @@ J2KAPI(NRT_BOOL) j2k_Writer_setOptions(j2k_WriterOptions* options,
             options->numResolutions = *((nrt_Uint32*)numResolutions->data);
         }
     }
+
+    return NRT_SUCCESS;
 }
 
 J2KAPI(NRT_BOOL) j2k_Writer_setTile(j2k_Writer *writer,
