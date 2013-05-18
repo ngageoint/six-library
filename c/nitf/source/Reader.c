@@ -1164,17 +1164,11 @@ NITFPRIV(NITF_BOOL) readTRE(nitf_Reader * reader,
                             nitf_Extensions * ext,
                             nitf_Error * error)
 {
-    /* string index */
-    int blanki;
-
     /* character array for the tag */
     char etag[NITF_ETAG_SZ + 1];
 
     /* tre object */
     nitf_TRE *tre;
-
-    /* offset in the file where the tre was found  */
-    nitf_Off off;
 
     /* length of the TRE object */
     nitf_Uint32 length;
@@ -1197,9 +1191,6 @@ NITFPRIV(NITF_BOOL) readTRE(nitf_Reader * reader,
 
     TRY_READ_VALUE(reader, lengthValue, NITF_EL_SZ);
     NITF_TRY_GET_UINT32(lengthValue, &length, error);
-
-    /*  Figure out our current offset  */
-    off = nitf_IOInterface_tell(reader->input, error);
 
     /*  We know our constraints, so build up the tre object  */
     tre = nitf_TRE_createSkeleton(etag, error);
@@ -1396,7 +1387,6 @@ NITFAPI(nitf_Record *) nitf_Reader_readIO(nitf_Reader* reader,
                                           nitf_Error* error)
 {
     nitf_Uint32 i = 0;          /* iterator */
-    nitf_ListIterator listIter; /* list iterator */
     nitf_Uint32 num32;          /* generic uint32 */
     nitf_Uint32 length32;
     nitf_Uint64 length;
@@ -1422,7 +1412,6 @@ NITFAPI(nitf_Record *) nitf_Reader_readIO(nitf_Reader* reader,
     NITF_TRY_GET_UINT32(reader->record->header->numImages, &num32, error);
 
     /*  Foreach image, read the header and skip to the end  */
-    listIter = nitf_List_begin(reader->record->images);
     for (i = 0; i < num32; i++)
     {
         /* Construct a new segment */
