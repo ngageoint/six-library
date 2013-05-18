@@ -2830,6 +2830,7 @@ NITFPRIV(void) nitf_ImageIO_12PixelClose(nitf_DecompressionControl **control);
 NITFPRIV(nitf_Uint8 *) nitf_ImageIO_12PixelReadBlock(
   nitf_DecompressionControl * control, /*!< Associated control structure */
   nitf_Uint32 blockNumber, /*!< Block number to read */
+  nitf_Uint64* blockSize, /*!< Size of block that was read */
   nitf_Error * error);    /*!< For error returns */
 
 /*!
@@ -4307,7 +4308,6 @@ NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
     nitf_Uint32 swap;      /* Pixel characteristics flag, swap */
     nitf_Uint32 sign;      /* Pixel characteristics flag, sign */
     nitf_Uint32 just;      /* Pixel characteristics flag, just */
-    int cmplx;             /* Complex pixel type if TRUE */
     int found;             /* Found a valid unformat/format function */
     int i;
 
@@ -4355,7 +4355,6 @@ NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
     }
     *pixelTypeBufPtr = 0;
 
-    cmplx = 0;
     if ((nBits == 12) && (nBitsActual == 12))
     {
         nitf->pixel.type = NITF_IMAGE_IO_PIXEL_TYPE_12;
@@ -4387,7 +4386,6 @@ NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
     else if (pixelType[0] == 'C')
     {
         nitf->pixel.type = NITF_IMAGE_IO_PIXEL_TYPE_C;
-        cmplx = 1;
     }
     else
     {
@@ -4546,7 +4544,6 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
     nitf_Uint32 endBlockRow;    /* Ending blockRow */
     nitf_Uint32 startBlockCol;  /* Starting blockCol */
     nitf_Uint32 endBlockCol;    /* Ending blockCol */
-    nitf_Uint32 nBlockRows;     /* Number of blockRows */
     nitf_Uint32 nBlockCols;     /* Number of blockCols */
     nitf_Uint32 startBlock;     /* Block number of start block */
     nitf_Uint32 startRowInBlock0; /* Start row in the first block (pixels) */
@@ -4613,7 +4610,6 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
     if (endBlockCol >= nitf->nBlocksPerRow)
         endBlockCol -= 1;
 
-    nBlockRows = endBlockRow - startBlockRow + 1;
     nBlockCols = endBlockCol - startBlockCol + 1;
     startBlock = startBlockRow * nitf->nBlocksPerRow + startBlockCol;
 
@@ -5070,7 +5066,6 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     nitf_Uint32 endBlockRow;    /* Ending blockRow */
     nitf_Uint32 startBlockCol;  /* Starting blockCol */
     nitf_Uint32 endBlockCol;    /* Ending blockCol */
-    nitf_Uint32 nBlockRows;     /* Number of blockRows */
     nitf_Uint32 nBlockCols;     /* Number of blockCols */
     nitf_Uint32 startBlock;     /* Block number of start block */
     nitf_Uint32 startRowInBlock0; /* Start row in the first block (pixels) */
@@ -5125,7 +5120,6 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     if (endBlockCol >= nitf->nBlocksPerRow)
         endBlockCol -= 1;
     
-    nBlockRows = endBlockRow - startBlockRow + 1;
     nBlockCols = endBlockCol - startBlockCol + 1;
     startBlock = startBlockRow * nitf->nBlocksPerRow + startBlockCol;
     
@@ -7224,10 +7218,8 @@ NITFPRIV(void) nitf_ImageIO_nextRow(_nitf_ImageIOBlock * blockIO,
                                     NITF_BOOL noUserInc)
 {
     _nitf_ImageIOControl *cntl; /* Associated I/O control structure */
-    _nitf_ImageIO *nitf;        /* Parent _nitf_ImageIO object */
     
     cntl = blockIO->cntl;
-    nitf = cntl->nitf;
     
     if (blockIO->rowsUntil == 0)  /* Next block */
     {
@@ -7419,7 +7411,6 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                                                    nitf_Error * error)
 {
     _nitf_ImageIO *nitfI;        /* Associated ImageIO object */
-    _nitf_ImageIOControl *cntl; /* Associated control object */
     nitf_Uint64 imageDataOffset;
         
     nitfI = (_nitf_ImageIO*) nitf;
@@ -7502,7 +7493,6 @@ NITFPROT(NRT_BOOL) nitf_ImageIO_writeBlockDirect(nitf_ImageIO* object,
     _nitf_ImageIOWriteControl *cntl;
     /* Associated IO control object */
     _nitf_ImageIOControl *ioCntl;
-    _nitf_ImageIOBlock *blockIO; /* The current  block IO structure */
     
 
     cntl = ((_nitf_ImageIO *) object)->writeControl;
@@ -9208,8 +9198,10 @@ nitf_ImageIO_12PixelOpen(nitf_IOInterface* io,
 }
 
 NITFPRIV(nitf_Uint8 *)
-nitf_ImageIO_12PixelReadBlock(nitf_DecompressionControl * control,
-                             nitf_Uint32 blockNumber, nitf_Error * error)
+nitf_ImageIO_12PixelReadBlock(nitf_DecompressionControl* control,
+                              nitf_Uint32 blockNumber,
+                              nitf_Uint64* blockSize,
+                              nitf_Error* error)
 {
     /* Actual control type */
     nitf_ImageIO_12PixelControl *icntl;
@@ -9268,6 +9260,8 @@ nitf_ImageIO_12PixelReadBlock(nitf_DecompressionControl * control,
 
       *(blockPtr++) = (a << 4) + (b >>4);
     }
+
+    *blockSize = icntl->blockPixelCount * sizeof(nitf_Uint16);
 
     return block;
 }
