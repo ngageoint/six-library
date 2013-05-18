@@ -5704,6 +5704,7 @@ NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
 {
     _nitf_ImageIOBlock *blocks;     /* Block I/Os as a linrar array */
     nitf_Uint32 i;
+    nitf_Uint32 nBlockCols;
 
     /* Actual object */
     _nitf_ImageIOControl *cntlActual;
@@ -5714,7 +5715,6 @@ NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
     cntlActual = *cntl;
     
     /* Free fields */
-    
     if (cntlActual->blockIO != NULL)
     {
         /* Free buffer */
@@ -5732,11 +5732,15 @@ NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
          * This works because of how
          * They are allocated 
          */
+        nBlockCols = cntlActual->nBlockIO / cntlActual->numBandSubset;
         blocks = &(cntlActual->blockIO[0][0]);
-        for (i = 0;i < cntlActual->nBlockIO;i++)
-            if ((blocks[i].blockControl.block != NULL)
-                && (blocks[i].blockControl.freeFlag))
+        for (i = 0; i < nBlockCols; ++i)
+        {
+            if (blocks[i].blockControl.freeFlag)
+            {
                 NITF_FREE(blocks[i].blockControl.block);
+            }
+        }
         
         nitf_ImageIO_freeBlockArray(&(cntlActual->blockIO));
     }
