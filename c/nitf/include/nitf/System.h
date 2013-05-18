@@ -64,8 +64,9 @@
 /******************************************************************************/
 #ifdef NITF_DEBUG
     #define NRT_DEBUG 1
-    #include "nrt/Debug.h"
-
+#endif
+#include "nrt/Debug.h"
+#ifdef NITF_DEBUG
     #define NITF_MEM_LOG        NRT_MEM_LOG
     #define nitf_Debug_malloc   nrt_Debug_malloc
     #define nitf_Debug_realloc  nrt_Debug_realloc
