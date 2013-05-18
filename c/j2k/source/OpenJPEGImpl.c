@@ -94,7 +94,7 @@ static j2k_IReader ReaderInterface = {&OpenJPEGReader_canReadTiles,
 
 J2KPRIV( NRT_BOOL)       OpenJPEGWriter_setTile(J2K_USER_DATA *,
                                                 nrt_Uint32, nrt_Uint32,
-                                                nrt_Uint8 *, nrt_Uint32,
+                                                const nrt_Uint8 *, nrt_Uint32,
                                                 nrt_Error *);
 J2KPRIV( NRT_BOOL)       OpenJPEGWriter_write(J2K_USER_DATA *, nrt_IOInterface *,
                                               nrt_Error *);
@@ -924,7 +924,8 @@ OpenJPEGReader_destruct(J2K_USER_DATA * data)
 
 J2KPRIV( NRT_BOOL)
 OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
-                       nrt_Uint8 *buf, nrt_Uint32 tileSize, nrt_Error *error)
+                       const nrt_Uint8 *buf, nrt_Uint32 tileSize,
+                       nrt_Error *error)
 {
     OpenJPEGWriterImpl *impl = (OpenJPEGWriterImpl*) data;
     NRT_BOOL rc = NRT_SUCCESS;
@@ -1005,7 +1006,11 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
         }
     }
 
-    if (!opj_write_tile(impl->codec, tileIndex, buf, tileSize, impl->stream))
+    if (!opj_write_tile(impl->codec,
+                        tileIndex,
+                        (OPJ_BYTE* )buf,
+                        tileSize,
+                        impl->stream))
     {
         /*nrt_Error_init(error, "Error writing tile", NRT_CTXT,
           NRT_ERR_INVALID_OBJECT);*/

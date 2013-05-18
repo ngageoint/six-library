@@ -28,7 +28,7 @@
 J2K_CXX_GUARD
 
 typedef J2K_BOOL        (*J2K_IWRITER_SET_TILE)(J2K_USER_DATA*, nrt_Uint32,
-                                                nrt_Uint32, nrt_Uint8 *,
+                                                nrt_Uint32, const nrt_Uint8 *,
                                                 nrt_Uint32, nrt_Error*);
 typedef J2K_BOOL        (*J2K_IWRITER_WRITE)(J2K_USER_DATA*, nrt_IOInterface*,
                                              nrt_Error*);
@@ -71,7 +71,7 @@ J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container*, j2k_WriterOptions*,
  * immediately after the call returns.
  */
 J2KAPI(J2K_BOOL) j2k_Writer_setTile(j2k_Writer*, nrt_Uint32 tileX,
-                                    nrt_Uint32 tileY, nrt_Uint8 *buf,
+                                    nrt_Uint32 tileY, const nrt_Uint8 *buf,
                                     nrt_Uint32 bufSize, nrt_Error*);
 
 /**

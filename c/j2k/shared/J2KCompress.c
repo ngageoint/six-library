@@ -38,7 +38,7 @@ NITFPRIV(NITF_BOOL) implStart(nitf_CompressionControl *control,
 
 NITFPRIV(NITF_BOOL) implWriteBlock(nitf_CompressionControl * control,
                                    nitf_IOInterface *io,
-                                   nitf_Uint8 *data,
+                                   const nitf_Uint8 *data,
                                    NITF_BOOL pad,
                                    NITF_BOOL noData,
                                    nitf_Error *error);
@@ -353,20 +353,19 @@ NITFPRIV(NITF_BOOL) implStart(nitf_CompressionControl *control,
 
 NITFPRIV(NITF_BOOL) implWriteBlock(nitf_CompressionControl * control,
                                    nitf_IOInterface *io,
-                                   nitf_Uint8 *data,
+                                   const nitf_Uint8 *data,
                                    NITF_BOOL pad,
                                    NITF_BOOL noData,
                                    nitf_Error *error)
 {
     ImplControl *implControl = (ImplControl*)control;
-    nitf_Uint32 tileX, tileY, tileWidth, tileHeight, tilesX, tilesY;
+    nitf_Uint32 tileX, tileY, tileWidth, tileHeight, tilesX;
     nitf_Uint32 nComponents, nBytes, bufSize;
 
     /* TODO this needs to change... won't work on separated images */
     tileWidth = j2k_Container_getTileWidth(implControl->container, error);
     tileHeight = j2k_Container_getTileHeight(implControl->container, error);
     tilesX = j2k_Container_getTilesX(implControl->container, error);
-    tilesY = j2k_Container_getTilesY(implControl->container, error);
     nComponents = j2k_Container_getNumComponents(implControl->container, error);
     nBytes = (j2k_Container_getPrecision(implControl->container, error) - 1) / 8 + 1;
 

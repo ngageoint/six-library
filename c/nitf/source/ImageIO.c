@@ -2878,9 +2878,12 @@ NITF_BOOL nitf_ImageIO_12PixelComStart
     calling sequence
 */
 
-NITF_BOOL nitf_ImageIO_12PixelComWriteBlock (
-    nitf_CompressionControl * object, nitf_IOInterface* io,nitf_Uint8 *data,
-            NITF_BOOL pad,NITF_BOOL noData,nitf_Error *error);
+NITF_BOOL nitf_ImageIO_12PixelComWriteBlock(nitf_CompressionControl* object,
+                                            nitf_IOInterface* io,
+                                            const nitf_Uint8 *data,
+                                            NITF_BOOL pad,
+                                            NITF_BOOL noData,
+                                            nitf_Error *error);
 
 /*!
     \brief nitf_ImageIO_12PixelComEnd - End function for 12 bit pixel type
@@ -9368,7 +9371,7 @@ NITF_BOOL nitf_ImageIO_12PixelComStart
 NITF_BOOL nitf_ImageIO_12PixelComWriteBlock
 ( nitf_CompressionControl * object,
   nitf_IOInterface* io,
-  nitf_Uint8 *data,
+  const nitf_Uint8 *data,
   NITF_BOOL pad,
   NITF_BOOL noData,
   nitf_Error *error)

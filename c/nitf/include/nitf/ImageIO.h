@@ -384,7 +384,7 @@ typedef NITF_BOOL
 */
 
 typedef NITF_BOOL (*NITF_COMPRESSION_INTERFACE_WRITE_BLOCK_FUNCTION)
-(nitf_CompressionControl * object, nitf_IOInterface* io,nitf_Uint8 *data,
+(nitf_CompressionControl * object, nitf_IOInterface* io,const nitf_Uint8 *data,
     NITF_BOOL pad,NITF_BOOL noData,nitf_Error *error);
 
 /*!

@@ -50,7 +50,7 @@ J2KAPI(NRT_BOOL) j2k_Writer_setOptions(j2k_WriterOptions* options,
 J2KAPI(NRT_BOOL) j2k_Writer_setTile(j2k_Writer *writer,
                                     nrt_Uint32 tileX,
                                     nrt_Uint32 tileY,
-                                    nrt_Uint8 *buf,
+                                    const nrt_Uint8 *buf,
                                     nrt_Uint32 bufSize,
                                     nrt_Error *error)
 {

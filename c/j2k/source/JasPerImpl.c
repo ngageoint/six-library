@@ -82,7 +82,7 @@ static j2k_IReader ReaderInterface = {NULL, &JasPerReader_readTile,
 
 J2KPRIV( NRT_BOOL)       JasPerWriter_setTile(J2K_USER_DATA *,
                                               nrt_Uint32, nrt_Uint32,
-                                              nrt_Uint8 *, nrt_Uint32,
+                                              const nrt_Uint8 *, nrt_Uint32,
                                               nrt_Error *);
 J2KPRIV( NRT_BOOL)       JasPerWriter_write(J2K_USER_DATA *, nrt_IOInterface *,
                                             nrt_Error *);
@@ -657,7 +657,8 @@ jas_matrix_destroy (matrix##_SZ); }
 
 J2KPRIV( NRT_BOOL)
 JasPerWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
-                     nrt_Uint8 *buf, nrt_Uint32 tileSize, nrt_Error *error)
+                     const nrt_Uint8 *buf, nrt_Uint32 tileSize,
+                     nrt_Error *error)
 {
     JasPerWriterImpl *impl = (JasPerWriterImpl*) data;
     NRT_BOOL rc = NRT_SUCCESS;
