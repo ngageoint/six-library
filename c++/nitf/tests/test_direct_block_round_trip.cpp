@@ -100,13 +100,6 @@ int main(int argc, char **argv)
             imageReaders.push_back(reader.newImageReader(i));
             imageWriters.push_back(writer.newImageWriter(i, writerOptions));
             nitf::ImageSource iSource;
-            nitf::Uint32 nBands = imseg.getSubheader().getNumImageBands();
-            nitf::Uint32 nRows = imseg.getSubheader().getNumRows();
-            nitf::Uint32 nCols = imseg.getSubheader().getNumCols();
-            nitf::Uint32
-                    pixelSize =
-                            NITF_NBPP_TO_BYTES(
-                                               imseg.getSubheader().getNumBitsPerPixel());
 
             bandSources.push_back(mem::SharedPtr<nitf::DirectBlockSource>(
                                       new TestDirectBlockSource(imageReaders[i], 1)));
