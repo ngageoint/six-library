@@ -51,6 +51,7 @@ typedef struct _OpenJPEGReaderImpl
     nrt_IOInterface *io;
     int ownIO;
     j2k_Container *container;
+    IOControl userData;
 } OpenJPEGReaderImpl;
 
 typedef struct _OpenJPEGWriterImpl
@@ -61,6 +62,7 @@ typedef struct _OpenJPEGWriterImpl
     char *compressedBuf;
     nrt_IOInterface *compressed;
     opj_stream_t *stream;
+    IOControl userData;
 } OpenJPEGWriterImpl;
 
 typedef struct _OpenJPEGError
@@ -127,11 +129,13 @@ J2KPRIV(void) OpenJPEG_errorHandler(const char* msg, void* data)
 /******************************************************************************/
 
 J2KAPI(opj_stream_t*)
-OpenJPEG_createIO(nrt_IOInterface *io, nrt_Off length, int isInput,
+OpenJPEG_createIO(nrt_IOInterface* io,
+                  IOControl* ioControl,
+                  nrt_Off length,
+                  int isInput,
                   nrt_Error *error)
 {
     opj_stream_t *stream = NULL;
-    IOControl *ioControl = NULL;
 
     stream = opj_stream_create(1024, isInput);
     if (!stream)
@@ -141,14 +145,6 @@ OpenJPEG_createIO(nrt_IOInterface *io, nrt_Off length, int isInput,
     }
     else
     {
-        /*      Allocate the result */
-        ioControl = (IOControl *) J2K_MALLOC(sizeof(IOControl));
-        if (ioControl == NULL)
-        {
-            nrt_Error_init(error, "Error creating control object", NRT_CTXT,
-                           NRT_ERR_MEMORY);
-            return NULL;
-        }
         ioControl->io = io;
         ioControl->offset = nrt_IOInterface_tell(io, error);
         if (length > 0)
@@ -272,7 +268,7 @@ OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
         goto CATCH_ERROR;
     }
 
-    if (!(*stream = OpenJPEG_createIO(impl->io, 0, 1, error)))
+    if (!(*stream = OpenJPEG_createIO(impl->io, &impl->userData, 0, 1, error)))
     {
         goto CATCH_ERROR;
     }
@@ -446,7 +442,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
 {
     NRT_BOOL rc = NRT_SUCCESS;
     nrt_Uint32 i, nComponents, height, width, tileHeight, tileWidth;
-    nrt_Uint32 nBytes ,xTiles, yTiles;
+    nrt_Uint32 nBytes;
     j2k_Component *component = NULL;
     size_t uncompressedSize;
     int imageType;
@@ -459,8 +455,6 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     height = j2k_Container_getHeight(impl->container, error);
     tileWidth = j2k_Container_getTileWidth(impl->container, error);
     tileHeight = j2k_Container_getTileHeight(impl->container, error);
-    xTiles = j2k_Container_getTilesX(impl->container, error);
-    yTiles = j2k_Container_getTilesY(impl->container, error);
     imageType = j2k_Container_getImageType(impl->container, error);
 
     /* Set up the encoder parameters.  This defaults to lossless. */
@@ -556,7 +550,8 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
         goto CATCH_ERROR;
     }
 
-    if (!(impl->stream = OpenJPEG_createIO(impl->compressed, 0, 0, error)))
+    if (!(impl->stream = OpenJPEG_createIO(impl->compressed, &impl->userData,
+                                           0, 0, error)))
     {
         goto CATCH_ERROR;
     }
@@ -1090,10 +1085,11 @@ OpenJPEGWriter_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV(void)
 OpenJPEGWriter_destruct(J2K_USER_DATA * data)
 {
-    OpenJPEGWriterImpl *impl = (OpenJPEGWriterImpl*) data;
     if (data)
     {
+        OpenJPEGWriterImpl* const impl = (OpenJPEGWriterImpl*) data;
         OpenJPEG_cleanup(&impl->stream, &impl->codec, &impl->image);
+        nrt_IOInterface_destruct(&impl->compressed);
         NRT_FREE(data);
     }
 }
