@@ -143,6 +143,7 @@ Container_destruct(J2K_USER_DATA * data)
                 if (c)
                     j2k_Component_destruct(&c);
             }
+            J2K_FREE(impl->components);
             impl->components = NULL;
         }
         J2K_FREE(data);
