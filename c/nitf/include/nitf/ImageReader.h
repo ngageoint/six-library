@@ -35,7 +35,7 @@ typedef struct _nitf_ImageReader
 {
     nitf_IOInterface* input;
     nitf_ImageIO *imageDeblocker;
-
+    int directBlockRead;
 }
 nitf_ImageReader;
 
@@ -53,6 +53,14 @@ NITFAPI(NITF_BOOL) nitf_ImageReader_read(nitf_ImageReader * imageReader,
         nitf_SubWindow * subWindow,
         nitf_Uint8 ** user,
         int *padded, nitf_Error * error);
+
+/**
+   Read a block directly from file
+ */
+NITFAPI(nitf_Uint8*) nitf_ImageReader_readBlock(nitf_ImageReader * imageReader,
+                                                nitf_Uint32 blockNumber,
+                                                nitf_Uint64* blockSize,
+                                                nitf_Error * error);
 
 /*!
  *  TODO: Add documentation

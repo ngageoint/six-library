@@ -41,6 +41,28 @@ NITFAPI(NITF_BOOL) nitf_ImageReader_read(nitf_ImageReader * imageReader,
                                          subWindow, user, padded, error);
 }
 
+NITFAPI(nitf_Uint8*) nitf_ImageReader_readBlock(nitf_ImageReader * imageReader,
+                                                nitf_Uint32 blockNumber,
+                                                nitf_Uint64* blockSize,
+                                                nitf_Error * error)
+{
+    if(!imageReader->directBlockRead)
+    {
+        if(!nitf_ImageIO_setupDirectBlockRead(imageReader->imageDeblocker,
+                                              imageReader->input,
+                                              1,
+                                              error))
+            return NULL;
+        
+        imageReader->directBlockRead = 1;
+    }
+
+    return nitf_ImageIO_readBlockDirect(imageReader->imageDeblocker,
+                                        imageReader->input,
+                                        blockNumber,
+                                        blockSize,
+                                        error);
+}
 
 NITFAPI(void) nitf_ImageReader_destruct(nitf_ImageReader ** imageReader)
 {

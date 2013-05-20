@@ -1789,7 +1789,7 @@ NITFAPI(nitf_ImageReader *) nitf_Reader_newImageReader(nitf_Reader *
         nitf_ImageReader_destruct(&imageReader);
         return NULL;
     }
-
+    imageReader->directBlockRead = 0;
     return imageReader;
 }
 
