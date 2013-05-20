@@ -37,7 +37,7 @@ protected:
     virtual void nextBlock(char* buf, 
                            nitf::Uint8* block, 
                            nitf::Uint32 blockNumber,
-                           size_t blockSize) throw (nitf::NITFException)
+                           nitf::Uint64 blockSize) throw (nitf::NITFException)
     {
         std::cout << "BLOCK NUMBER: " << blockNumber << " " << blockSize << std::endl;
         if(buf)

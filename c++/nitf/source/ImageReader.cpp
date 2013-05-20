@@ -58,7 +58,7 @@ void ImageReader::read(nitf::SubWindow & subWindow, nitf::Uint8 ** user, int * p
 
 const nitf::Uint8* ImageReader::readBlock(nitf::Uint32 blockNumber, nitf::Uint64* blockSize)
 {
-    nitf_ImageReader_readBlock(getNativeOrThrow(), blockNumber, blockSize, &error);
+    return nitf_ImageReader_readBlock(getNativeOrThrow(), blockNumber, blockSize, &error);
 }
 
 void ImageReader::setReadCaching()

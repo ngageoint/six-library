@@ -138,14 +138,14 @@ protected:
     virtual void nextBlock(char* buf, 
                            nitf::Uint8* block, 
                            nitf::Uint32 blockNumber,
-                           size_t blockSize) throw (nitf::NITFException) = 0;
+                           nitf::Uint64 blockSize) throw (nitf::NITFException) = 0;
 private:
     static
     NITF_BOOL nextBlock(void *algorithm,
                         char * buf,
                         nitf_Uint8 * block,
                         nitf_Uint32 blockNumber,
-                        size_t blockSize,
+                        nitf_Uint64 blockSize,
                         nitf_Error * error);
 };
 

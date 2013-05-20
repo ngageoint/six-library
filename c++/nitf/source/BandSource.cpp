@@ -134,7 +134,7 @@ NITF_BOOL nitf::DirectBlockSource::nextBlock(void *callback,
                                              char * buf,
                                              nitf_Uint8 * block,
                                              nitf_Uint32 blockNumber,
-                                             size_t blockSize,
+                                             nitf_Uint64 blockSize,
                                              nitf_Error * error)
 {
     nitf::DirectBlockSource* const cb =
