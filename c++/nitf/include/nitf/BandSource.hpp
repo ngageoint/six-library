@@ -149,6 +149,27 @@ private:
                         nitf_Error * error);
 };
 
+class CopyBlockSource: public ::nitf::DirectBlockSource
+{
+public:
+    CopyBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands) 
+        throw (::nitf::NITFException) : 
+        nitf::DirectBlockSource(imageReader, numBands)
+    {}
+
+    virtual ~CopyBlockSource(){}
+    
+protected:
+    virtual void nextBlock(char* buf, 
+                           ::nitf::Uint8* block, 
+                           ::nitf::Uint32 blockNumber,
+                           ::nitf::Uint64 blockSize) throw (::nitf::NITFException)
+    {
+        memcpy(buf, block, blockSize);
+    }
+};
+
+
 }
 
 #endif
