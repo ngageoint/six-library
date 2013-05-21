@@ -71,10 +71,10 @@ typedef struct _OpenJPEGError
     void *context;
 } OpenJPEGError;
 
-J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data);
-J2KPRIV(NRT_BOOL)    implStreamSeek(OPJ_OFF_T bytes, void *data);
-J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_OFF_T bytes, void *data);
-J2KPRIV(OPJ_UINT32) implStreamWrite(void *buf, OPJ_SIZE_T bytes, void *data);
+J2KPRIV(OPJ_SIZE_T) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data);
+J2KPRIV(OPJ_BOOL)   implStreamSeek(OPJ_OFF_T bytes, void *data);
+J2KPRIV(OPJ_OFF_T)  implStreamSkip(OPJ_OFF_T bytes, void *data);
+J2KPRIV(OPJ_SIZE_T) implStreamWrite(void *buf, OPJ_SIZE_T bytes, void *data);
 
 
 J2KPRIV( NRT_BOOL  )     OpenJPEGReader_canReadTiles(J2K_USER_DATA *,  nrt_Error *);
@@ -154,30 +154,28 @@ OpenJPEG_createIO(nrt_IOInterface* io,
                     - ioControl->offset;
 
         opj_stream_set_user_data(stream, ioControl);
-        opj_stream_set_read_function(stream,
-                                     (opj_stream_read_fn) implStreamRead);
-        opj_stream_set_seek_function(stream,
-                                     (opj_stream_seek_fn) implStreamSeek);
-        opj_stream_set_skip_function(stream,
-                                     (opj_stream_skip_fn) implStreamSkip);
-        opj_stream_set_write_function(stream,
-                                     (opj_stream_write_fn) implStreamWrite);
+        opj_stream_set_read_function(stream, implStreamRead);
+        opj_stream_set_seek_function(stream, implStreamSeek);
+        opj_stream_set_skip_function(stream, implStreamSkip);
+        opj_stream_set_write_function(stream, implStreamWrite);
     }
     return stream;
 }
 
-J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data)
+J2KPRIV(OPJ_SIZE_T) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
-    nrt_Off offset, bytesLeft, alreadyRead;
-    OPJ_UINT32 toRead;
+    nrt_Off offset, alreadyRead;
+    OPJ_SIZE_T bytesLeft;
+    OPJ_SIZE_T toRead;
 
     offset = nrt_IOInterface_tell(ctrl->io, &ctrl->error);
     assert(offset >= ctrl->offset); /* probably not a good idea, but need it */
 
     alreadyRead = offset - ctrl->offset;
-    bytesLeft = alreadyRead >= ctrl->length ? 0 : ctrl->length - alreadyRead;
-    toRead = bytesLeft < (nrt_Off)bytes ? (OPJ_UINT32)bytesLeft : bytes;
+    bytesLeft = alreadyRead >= ctrl->length ?
+            0 : (OPJ_SIZE_T)(ctrl->length - alreadyRead);
+    toRead = bytesLeft < bytes ? bytesLeft : bytes;
     if (toRead <= 0 || !nrt_IOInterface_read(
                     ctrl->io, (char*)buf, toRead, &ctrl->error))
     {
@@ -186,7 +184,7 @@ J2KPRIV(OPJ_UINT32) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data)
     return toRead;
 }
 
-J2KPRIV(NRT_BOOL) implStreamSeek(OPJ_OFF_T bytes, void *data)
+J2KPRIV(OPJ_BOOL) implStreamSeek(OPJ_OFF_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (!NRT_IO_SUCCESS(nrt_IOInterface_seek(ctrl->io,
@@ -199,7 +197,7 @@ J2KPRIV(NRT_BOOL) implStreamSeek(OPJ_OFF_T bytes, void *data)
     return 1;
 }
 
-J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_OFF_T bytes, void *data)
+J2KPRIV(OPJ_OFF_T) implStreamSkip(OPJ_OFF_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (bytes < 0)
@@ -216,7 +214,7 @@ J2KPRIV(OPJ_SIZE_T) implStreamSkip(OPJ_OFF_T bytes, void *data)
     return bytes;
 }
 
-J2KPRIV(OPJ_UINT32) implStreamWrite(void *buf, OPJ_SIZE_T bytes, void *data)
+J2KPRIV(OPJ_SIZE_T) implStreamWrite(void *buf, OPJ_SIZE_T bytes, void *data)
 {
     IOControl *ctrl = (IOControl*)data;
     if (bytes == 0)
@@ -224,9 +222,9 @@ J2KPRIV(OPJ_UINT32) implStreamWrite(void *buf, OPJ_SIZE_T bytes, void *data)
         return 0;
     }
     if (!nrt_IOInterface_write(ctrl->io, (const char*)buf,
-                               (size_t)bytes, &ctrl->error))
+                               bytes, &ctrl->error))
     {
-        return -1;
+        return (OPJ_SIZE_T)-1;
     }
     return bytes;
 }
