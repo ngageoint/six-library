@@ -429,6 +429,7 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
 
     CLEANUP:
     {
+        opj_destroy_cstr_info(&codeStreamInfo);
         OpenJPEG_cleanup(&stream, &codec, &image);
     }
     return rc;
@@ -901,11 +902,16 @@ OpenJPEGReader_destruct(J2K_USER_DATA * data)
 {
     if (data)
     {
-        OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
+        OpenJPEGReaderImpl* const impl = (OpenJPEGReaderImpl*) data;
         if (impl->io && impl->ownIO)
         {
             nrt_IOInterface_destruct(&impl->io);
             impl->io = NULL;
+        }
+        if(impl->container)
+        {
+            j2k_Container_destruct(&impl->container);
+            impl->container = NULL;
         }
         J2K_FREE(data);
     }
@@ -1088,7 +1094,7 @@ OpenJPEGWriter_destruct(J2K_USER_DATA * data)
         OpenJPEGWriterImpl* const impl = (OpenJPEGWriterImpl*) data;
         OpenJPEG_cleanup(&impl->stream, &impl->codec, &impl->image);
         nrt_IOInterface_destruct(&impl->compressed);
-        NRT_FREE(data);
+        J2K_FREE(data);
     }
 }
 

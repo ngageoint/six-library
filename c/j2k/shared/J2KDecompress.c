@@ -190,15 +190,16 @@ NITFPRIV(void) implMemFree(void* p)
 
 NITFPRIV(void) implClose(nitf_DecompressionControl** control)
 {
-    ImplControl **implControl = (ImplControl**)control;
-
-    if (implControl && *implControl)
+    if (control && *control)
     {
-        if ((*implControl)->reader)
-            j2k_Reader_destruct(&(*implControl)->reader);
-        implMemFree(*implControl);
+        ImplControl *implControl = (ImplControl*)*control;
+        if (implControl->reader)
+        {
+            j2k_Reader_destruct(&implControl->reader);
+        }
+        implMemFree(implControl);
+        *control = NULL;
     }
-    *implControl = NULL;
 }
 
 NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
