@@ -40,26 +40,36 @@ def build(bld):
         pEnv2['cshlib_PATTERN'] = pEnv2['cshlib_PATTERN'][3:]
 
     # Flags needed for Socet GXP build on Windows 
+    winDefines = ['WIN32', '_WINDOWS', '_USRDLL', 'PINHOLE_LIBRARY', '_WINDLL', '_UNICODE', 'UNICODE']
+    winReleaseDefines = ['NDEBUG']
+    winDebugDefines = ['_DEBUG']
+    win64Defines = ['WIN64']
+    win32Defines = ['_USE_32BIT_TIME_T']
+    
+    winLinkerFlags = ['/SUBSYSTEM:WINDOWS', '/OPT:REF', '/OPT:ICF', '/DYNAMICBASE', '/NXCOMPAT', '/ERRORREPORT:PROMPT']
+    winReleaseLinkerFlags = ['/OPT:REF', '/OPT:ICF']
+    winDebugLinkerFlags = ['/DEBUG']
+    
     if pEnv2['VARIANT'] == 'win64-release':
         #64 bit release build
         #C:\Python26\python.exe waf configure --prefix=install-64 --enable-64bit --with-crt=MD
-        pEnv2['CXXDEFINES'] = pEnv2['CXXDEFINES'] + ['WIN32','WIN64','NDEBUG','_WINDOWS','_USRDLL','PINHOLE_LIBRARY','_WINDLL','_UNICODE','UNICODE']
-        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + ['/SUBSYSTEM:WINDOWS', '/OPT:REF', '/OPT:ICF', '/DYNAMICBASE', '/NXCOMPAT', '/MACHINE:X64', '/ERRORREPORT:PROMPT']
+        pEnv2['DEFINES'] = pEnv2['DEFINES'] + winDefines + winReleaseDefines + win64Defines
+        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + winLinkerFlags + winReleaseLinkerFlags
     elif pEnv2['VARIANT'] == 'win32-release':
         #32 bit release build
         #C:\Python26\python.exe waf configure --prefix=install-32 --enable-32bit --with-crt=MD
-        pEnv2['CXXDEFINES'] = pEnv2['CXXDEFINES'] + ['WIN32','NDEBUG','_WINDOWS','_USRDLL','_USE_32BIT_TIME_T','PINHOLE_LIBRARY','_WINDLL','_UNICODE','UNICODE']
-        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + ['/SUBSYSTEM:WINDOWS', '/OPT:REF', '/OPT:ICF', '/DYNAMICBASE', '/NXCOMPAT', '/MACHINE:X86', '/ERRORREPORT:PROMPT']
+        pEnv2['DEFINES'] = pEnv2['DEFINES'] + winDefines + winReleaseDefines + win32Defines
+        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + winLinkerFlags + winReleaseLinkerFlags
     elif pEnv2['VARIANT'] == 'win64-debug':
         #64 bit debug build
         #C:\Python26\python.exe waf configure --prefix=install-64-debug --enable-64bit --enable-debugging --with-crt=MD
-        pEnv2['CXXDEFINES'] = pEnv2['CXXDEFINES'] + ['WIN32','WIN64','_DEBUG','_WINDOWS','_USRDLL','PINHOLE_LIBRARY','_WINDLL','_UNICODE','UNICODE']
-        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + ['/DEBUG', '/SUBSYSTEM:WINDOWS', '/DYNAMICBASE', '/NXCOMPAT', '/MACHINE:X64', '/ERRORREPORT:PROMPT']
+        pEnv2['DEFINES'] = pEnv2['DEFINES'] + winDefines + winDebugDefines + win64Defines
+        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + winLinkerFlags + winDebugLinkerFlags
     elif pEnv2['VARIANT'] == 'win32-debug':
         #32 bit debug build 
         #C:\Python26\python.exe waf configure --prefix=install-32-debug --enable-32bit --enable-debugging --with-crt=MD
-        pEnv2['CXXDEFINES'] = pEnv2['CXXDEFINES'] + ['WIN32','_DEBUG','_WINDOWS','_USRDLL','_USE_32BIT_TIME_T','PINHOLE_LIBRARY','_WINDLL','_UNICODE','UNICODE']
-        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + ['/DEBUG', '/SUBSYSTEM:WINDOWS', '/DYNAMICBASE', '/NXCOMPAT', '/MACHINE:X86', '/ERRORREPORT:PROMPT']
+        pEnv2['DEFINES'] = pEnv2['DEFINES'] + winDefines + winDebugDefines + win32Defines
+        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + winLinkerFlags + winDebugLinkerFlags
              
     #build our plugin
     lib = bld(features = 'cxx cshlib', includes='sicd/include external/TSM/include',
