@@ -474,9 +474,7 @@ TSMWarning *SICDSensorModel::getReferenceDateAndTime(std::string& refDate)
 {
     try
     {
-        char buf[17];
-        mData->timeline->collectStart.format("%Y%m%dT%H%M%.2SZ", buf, 17);
-        refDate = std::string(buf);
+        mData->timeline->collectStart.format("%Y%m%dT%H%M%.2SZ", refDate);
     }
     catch(except::Exception& e)
     {

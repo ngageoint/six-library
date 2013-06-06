@@ -467,14 +467,13 @@ TSMWarning *SIDDSensorModel::getReferenceDateAndTime(std::string& refDate)
 {
     try
     {
-        char buf[17];
         mData->exploitationFeatures->collections[0]->information->
-                collectionDateTime.format("%Y%m%dT%H%M%.2SZ", buf, 17);
-        refDate = std::string(buf);
+                collectionDateTime.format("%Y%m%dT%H%M%.2SZ", refDate);
     }
     catch(except::Exception& e)
     {
-        TSMError tsmErr;         tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
+        TSMError tsmErr;
+        tsmErr.setTSMError(TSMError::UNKNOWN_ERROR,
                            e.getMessage(),
                            "SIDDSensorModel::getReferenceDateAndTime");
         throw tsmErr;
