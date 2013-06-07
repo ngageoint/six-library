@@ -955,9 +955,9 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     /* Check for edge case where we may have partial tile */
     thisTileWidth = tileWidth;
     thisTileHeight = tileHeight;
-    if(tileX == xTiles - 1 && width != tileWidth)
+    if (tileX == xTiles - 1 && width % tileWidth != 0)
         thisTileWidth = width % tileWidth;
-    if(tileY == yTiles - 1 && height != tileHeight)
+    if (tileY == yTiles - 1 && height % tileHeight != 0)
         thisTileHeight = height % tileHeight;
 
     thisTileSize = thisTileWidth * thisTileHeight * nComponents * nBytes;
