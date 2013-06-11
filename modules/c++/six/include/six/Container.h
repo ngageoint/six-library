@@ -160,11 +160,10 @@ public:
      *  data references as well.
      *
      */
-    void removeData(Data* data);
+    void removeData(const Data* data);
 
 protected:
     std::vector<Data*> mData;
-    //std::string mContainerType;
     DataType mDataType;
     typedef std::vector<Data*>::iterator DataIterator;
     typedef std::vector<Data*>::const_iterator ConstDataIterator;

@@ -64,9 +64,8 @@ void Container::setData(size_t i, Data* data)
     {
         throw except::Exception(Ctxt("Cannot set a non-existent segment!"));
     }
-    if (mData[i] != NULL)
-        delete mData[i];
 
+    delete mData[i];
     mData[i] = data;
 }
 
@@ -75,14 +74,13 @@ void Container::setData(size_t i, Data* data)
  *  data references as well.
  *
  */
-void Container::removeData(Data* data)
+void Container::removeData(const Data* data)
 {
-    //mData.remove(data);
-    for (DataIterator p = mData.begin(); p != mData.end(); ++p)
+    for (DataIterator iter = mData.begin(); iter != mData.end(); ++iter)
     {
-        if (*p == data)
+        if (*iter == data)
         {
-            mData.erase(p);
+            mData.erase(iter);
             break;
         }
     }
@@ -101,4 +99,3 @@ void Container::cleanup()
     }
     mData.clear();
 }
-
