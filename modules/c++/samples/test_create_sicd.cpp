@@ -165,7 +165,7 @@ int main(int argc, char** argv)
         data->radarCollection->txPolarization = six::PolarizationType::OTHER;
         mem::ScopedCloneablePtr<six::sicd::ChannelParameters>
                 rcvChannel(new six::sicd::ChannelParameters());
-        rcvChannel->txRcvPolarization = six::PolarizationType::OTHER;
+        rcvChannel->txRcvPolarization = six::DualPolarizationType::OTHER;
         data->radarCollection->rcvChannels.push_back(rcvChannel);
 
         data->grid->row->sign = six::FFTSign::POS;
