@@ -97,6 +97,16 @@ public:
      */
     nitf::ImageReader newImageReader(int imageSegmentNumber)
         throw (nitf::NITFException);
+    
+    /*!
+     *  Get a new image reader for the segment
+     *  \param imageSegmentNumber  The image segment number
+     *  \param options
+     *  \return  An ImageReader matching the imageSegmentNumber
+     */
+    nitf::ImageReader newImageReader(int imageSegmentNumber,
+                                     const std::map<std::string, void*>& options)
+        throw (nitf::NITFException);
 
     /*!
      *  Get a new DE reader for the segment

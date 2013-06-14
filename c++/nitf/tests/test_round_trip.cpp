@@ -138,10 +138,8 @@ int main(int argc, char **argv)
             nitf::Uint32 nBands = imseg.getSubheader().getNumImageBands();
             nitf::Uint32 nRows = imseg.getSubheader().getNumRows();
             nitf::Uint32 nCols = imseg.getSubheader().getNumCols();
-            nitf::Uint32
-                    pixelSize =
-                            NITF_NBPP_TO_BYTES(
-                                               imseg.getSubheader().getNumBitsPerPixel());
+            nitf::Uint32 pixelSize = NITF_NBPP_TO_BYTES(
+                    imseg.getSubheader().getNumBitsPerPixel());
 
             for (nitf::Uint32 i = 0; i < nBands; i++)
             {

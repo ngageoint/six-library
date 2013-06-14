@@ -121,9 +121,62 @@ nitf::ImageReader Reader::newImageReader(int imageSegmentNumber)
 {
     nitf_ImageReader * x = nitf_Reader_newImageReader(getNativeOrThrow(),
                                                       imageSegmentNumber,
-                                                      &error);
+                                                      NULL, &error);
     if (!x)
         throw nitf::NITFException(&error);
+
+    nitf::ImageReader reader(x);
+    //set it so it is NOT managed by the underlying library
+    //this means the reader is subject to deletion when refcount == 0
+    reader.setManaged(false);
+    return reader;
+}
+
+nitf::ImageReader Reader::newImageReader(int imageSegmentNumber,
+                                         const std::map<std::string, void*>& options)
+        throw (nitf::NITFException)
+{
+    nitf_ImageReader* x = NULL;
+        
+    if(!options.empty())
+    {
+        nrt_HashTable* userOptions = nitf_HashTable_construct(2, &error);
+        if(!userOptions)
+            throw nitf::NITFException(&error);
+
+        try
+        {
+            nrt_HashTable_setPolicy(userOptions, NRT_DATA_RETAIN_OWNER);
+
+            std::map<std::string, void*>::const_iterator iter = options.begin();
+            for(; iter != options.end(); ++iter)
+            {
+                if(!nrt_HashTable_insert(userOptions, iter->first.c_str(),
+                                         iter->second, &error))
+                    throw nitf::NITFException(&error);
+            }
+
+            x = nitf_Reader_newImageReader(getNativeOrThrow(),
+                                           imageSegmentNumber, 
+                                           userOptions, &error);
+
+            nitf_HashTable_destruct(&userOptions);
+        }
+        catch(...)
+        {
+            nitf_HashTable_destruct(&userOptions);
+            throw;
+        }
+    }
+    else
+    {
+        x = nitf_Reader_newImageReader(getNativeOrThrow(),
+                                       imageSegmentNumber, 
+                                       NULL, &error);
+    }
+    if (!x)
+        throw nitf::NITFException(&error);
+
     nitf::ImageReader reader(x);
     //set it so it is NOT managed by the underlying library
     //this means the reader is subject to deletion when refcount == 0

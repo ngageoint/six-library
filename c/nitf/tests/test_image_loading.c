@@ -396,7 +396,7 @@ int main(int argc, char **argv)
             (nitf_ImageSegment *) nitf_ListIterator_get(&iter);
 
         nitf_ImageReader *deserializer =
-            nitf_Reader_newImageReader(reader, count, &e);
+            nitf_Reader_newImageReader(reader, count, NULL, &e);
 
         if (!deserializer)
         {

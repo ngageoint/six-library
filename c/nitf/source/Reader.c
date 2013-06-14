@@ -1682,6 +1682,7 @@ NITFPRIV(nitf_DecompressionInterface *) getDecompIface(const char *comp,
 
 
 NITFPRIV(nitf_ImageIO *) allocIO(nitf_ImageSegment * segment,
+                                 nrt_HashTable * options,
                                  nitf_Error * error)
 {
     char compBuf[NITF_IC_SZ + 1];       /* holds the compression string */
@@ -1727,14 +1728,14 @@ NITFPRIV(nitf_ImageIO *) allocIO(nitf_ImageSegment * segment,
     return nitf_ImageIO_construct(segment->subheader,
                                   segment->imageOffset,
                                   segment->imageEnd - segment->imageOffset,
-                                  NULL, decompIface, NULL, error);
+                                  NULL, decompIface, options, error);
 }
 
 
-NITFAPI(nitf_ImageReader *) nitf_Reader_newImageReader(nitf_Reader *
-        reader,
-        int
-        imageSegmentNumber,
+NITFAPI(nitf_ImageReader *) nitf_Reader_newImageReader(
+        nitf_Reader * reader,
+        int imageSegmentNumber,
+        nrt_HashTable * options,
         nitf_Error * error)
 {
     int i;
@@ -1773,7 +1774,7 @@ NITFAPI(nitf_ImageReader *) nitf_Reader_newImageReader(nitf_Reader *
     }
 
     imageReader->input = reader->input;
-    imageReader->imageDeblocker = allocIO(segment, error);
+    imageReader->imageDeblocker = allocIO(segment, options, error);
     if (!imageReader->imageDeblocker)
     {
         nitf_ImageReader_destruct(&imageReader);

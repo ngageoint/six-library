@@ -105,6 +105,7 @@ NITFAPI(nitf_Record *) nitf_Reader_readIO(nitf_Reader* reader,
  *
  *  \param reader The reader object
  *  \param imageSegmentNumber The index
+ *  \param options 
  *  \param error A populated error if return value is zero
  *  \return new nitf_ImageReader* for the image in question
  */
@@ -112,6 +113,7 @@ NITFAPI(nitf_ImageReader *) nitf_Reader_newImageReader
 (
     nitf_Reader *reader,
     int imageSegmentNumber,
+    nrt_HashTable* options,
     nitf_Error * error
 );
 

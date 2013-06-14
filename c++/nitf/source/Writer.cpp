@@ -174,23 +174,23 @@ nitf::ImageWriter Writer::newImageWriter(int imageNumber,
         nrt_HashTable* userOptions = nitf_HashTable_construct(2, &error);
         if(!userOptions)
             throw nitf::NITFException(&error);
-        
+
         try
-        {            
+        {
             nrt_HashTable_setPolicy(userOptions, NRT_DATA_RETAIN_OWNER);
-            
+
             std::map<std::string, void*>::const_iterator iter = options.begin();
             for(; iter != options.end(); ++iter)
             {
                 if(!nrt_HashTable_insert(userOptions, iter->first.c_str(),
                                          iter->second, &error))
-                    throw nitf::NITFException(&error);            
+                    throw nitf::NITFException(&error);
             }
-            
+
             x = nitf_Writer_newImageWriter(getNativeOrThrow(),
                                            imageNumber, 
                                            userOptions, &error);
-            
+
             nitf_HashTable_destruct(&userOptions);
         }
         catch(...)
