@@ -34,6 +34,9 @@
 /******************************************************************************/
 /* TYPES & DECLARATIONS                                                       */
 /******************************************************************************/
+
+#define OPENJPEG_STREAM_SIZE 1024
+
 typedef struct _IOControl
 {
     nrt_IOInterface *io;
@@ -137,7 +140,7 @@ OpenJPEG_createIO(nrt_IOInterface* io,
 {
     opj_stream_t *stream = NULL;
 
-    stream = opj_stream_create(1024, isInput);
+    stream = opj_stream_create(OPENJPEG_STREAM_SIZE, isInput);
     if (!stream)
     {
         nrt_Error_init(error, "Error creating openjpeg stream", NRT_CTXT,
@@ -1011,6 +1014,30 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                         tileSize,
                         impl->stream))
     {
+        nrt_Error ioError;
+        const nrt_Off currentPos = nrt_IOInterface_tell(impl->compressed, &ioError);
+        const nrt_Off ioSize = nrt_IOInterface_getSize(impl->compressed, &ioError);
+        if (NRT_IO_SUCCESS(currentPos) &&
+            NRT_IO_SUCCESS(ioSize) &&
+            currentPos + OPENJPEG_STREAM_SIZE >= ioSize)
+        {
+            /* The write failed because implStreamWrite() failed because
+             * nrt_IOInterface_write() failed because we didn't have enough
+             * room left in the buffer that we copy to prior to flushing out
+             * to disk in OpenJPEGWriter_write().  The buffer is sized to the
+             * uncompressed image size, so this only occurs if the compressed
+             * image is actually larger than the uncompressed size.
+             * TODO: Handle resizing the buffer on the fly when this occurs
+             * inside implStreamWrite().  Long-term if we're able to thread
+             * per tile, we won't have to reallocate nearly as much.
+             */
+            nrt_Error_init(error,
+                           "Error writing tile: Compressed image is larger "
+                            "than uncompressed image",
+                            NRT_CTXT,
+                            NRT_ERR_INVALID_OBJECT);
+        }
+
         /*nrt_Error_init(error, "Error writing tile", NRT_CTXT,
           NRT_ERR_INVALID_OBJECT);*/
         goto CATCH_ERROR;
