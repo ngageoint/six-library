@@ -7583,7 +7583,7 @@ NITFPROT(NRT_BOOL) nitf_ImageIO_writeBlockDirect(nitf_ImageIO* object,
         if(nitf->compressor != NULL)
         {
             if(!(*(nitf->compressor->writeBlock))(nitf->compressionControl,
-                                                   io, buffer, padPresent, !dataPresent, error))
+                                                  io, buffer, padPresent, !dataPresent, error))
                 return(NITF_FAILURE);
         }
         else

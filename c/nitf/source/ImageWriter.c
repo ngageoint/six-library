@@ -210,7 +210,7 @@ NITFPRIV(nitf_CompressionInterface *) getCompIface(const char *comp,
     /*  Set bad to 0 (we are good so far) */
     *bad = 0;
 
-    /*  Find the decompression interface here  */
+    /*  Find the compression interface here  */
     reg = nitf_PluginRegistry_getInstance(error);
     if (!reg)
     {
@@ -295,7 +295,7 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
 
     if(memcmp(compBuf, "NC", 2) != 0 && memcmp(compBuf, "NM", 2) != 0)
     {
-        /* get the decompression interface */
+        /* get the compression interface */
         compIface = getCompIface(compBuf, &bad, error);
         if (bad)
         {
