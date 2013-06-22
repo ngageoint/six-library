@@ -1,0 +1,25 @@
+import sys, os
+from build import unzipper
+
+options = distclean = lambda x: None
+
+def configure(conf):
+    unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
+             conf.path.abspath())
+
+def build(bld):
+    vtsDir = 'vts_301_0'
+    bld(features = 'cxx cshlib',
+        target='CSMAPI', name='CSMAPI',
+        includes='CSM_include',
+        export_includes='CSM_include',
+        source=bld.path.find_dir(os.path.join(vtsDir, 'CSM')).ant_glob('*.cpp'),
+        path=bld.path.find_dir(vtsDir),
+        install_path=bld.env['install_libdir'])
+
+    bld.program(target='vts', name='vts',
+                includes='VTS_include',
+                source=bld.path.find_dir(os.path.join(vtsDir, 'VTS')).ant_glob('*.cpp'),
+                use='CSMAPI',
+                path=bld.path.find_dir(vtsDir),
+                install_path=bld.env['install_bindir'])

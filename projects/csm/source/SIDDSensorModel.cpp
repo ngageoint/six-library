@@ -1,0 +1,535 @@
+/* =========================================================================
+* This file is part of the CSM SICD Plugin
+* =========================================================================
+*
+* (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
+*
+* The CSM SICD Plugin is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this program; if not,
+* see <http://www.gnu.org/licenses/>.
+*
+*/
+
+#include "Error.h"
+#include <six/csm/SIDDSensorModel.h>
+#include <io/ByteStream.h>
+#include <io/StringStream.h>
+#include <logging/NullLogger.h>
+#include <six/XMLControlFactory.h>
+#include <six/NITFReadControl.h>
+#include <six/sidd/DerivedXMLControl.h>
+#include <six/sidd/Utilities.h>
+
+namespace six
+{
+namespace csm
+{
+const ::csm::Version SIDDSensorModel::VERSION(1, 0, 1);
+const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
+
+SIDDSensorModel::SIDDSensorModel(const ::csm::Isd& isd)
+{
+    const std::string& format(isd.format());
+
+    if (format == "NITF2.1")
+    {
+        initializeFromISD(dynamic_cast<const ::csm::Nitf21Isd&>(isd));
+    }
+    else if (format == "FILENAME")
+    {
+        // Note: this case has not been tested
+        initializeFromFile(isd.filename());
+    }
+    else
+    {
+        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                           "Unsupported ISD format " + format,
+                           "SIDDSensorModel::constructModelFromISD");
+    }
+
+}
+
+SIDDSensorModel::SIDDSensorModel(const std::string& sensorModelState)
+{
+    replaceModelStateImpl(sensorModelState);
+}
+
+void SIDDSensorModel::initializeFromFile(const std::string& pathname)
+{
+    // create an XML registry
+    // The reason to do this is to avoid adding XMLControlCreators to the
+    // XMLControlFactory singleton - this way has more fine-grained control
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::DERIVED, new six::XMLControlCreatorT<
+            six::sidd::DerivedXMLControl>());
+
+    // create a reader and load the file
+    six::NITFReadControl reader;
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(pathname, std::vector<std::string>());
+
+    six::Container* const container = reader.getContainer();
+    if (container->getDataType() != six::DataType::DERIVED
+            || container->getNumData() != 1
+            || container->getData(0)->getDataType() != six::DataType::DERIVED)
+    {
+        throw except::Exception(Ctxt("Not a SIDD"));
+    }
+
+    mData.reset(reinterpret_cast<six::sidd::DerivedData*>(
+            container->getData(0)));
+    container->removeData(mData.get());
+
+    // get xml as string for sensor model state
+    std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+    mSensorModelState = NAME + std::string(" ") + xmlStr;
+
+    mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+}
+
+void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
+{
+    // Check for the first SIDD DES and parse it
+    xml::lite::Document* siddXML = NULL;
+    xml::lite::MinidomParser domParser;
+
+    size_t numSIDD = 0;
+    const std::vector< ::csm::Des>& desList(isd.fileDess());
+    for (size_t ii = 0; ii < desList.size(); ++ii)
+    {
+        const std::string& desData(desList[ii].data());
+
+        if (!desData.empty())
+        {
+            try
+            {
+                io::ByteStream stream;
+                stream.write(desData.c_str(), desData.length());
+
+                domParser.clear();
+                domParser.parse(stream);
+
+                if (domParser.getDocument()->getRootElement()->getLocalName()
+                        == "SIDD")
+                {
+                    siddXML = domParser.getDocument();
+                    ++numSIDD;
+                }
+            }
+            catch(const except::Exception& )
+            {
+                // Couldn't parse DES as xml -- it's not a sidd so skip it
+            }
+        }
+    }
+
+    if (siddXML == NULL)
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           "Not a SIDD",
+                           "SIDDSensorModel::SIDDSensorModel");
+    }
+
+    if (numSIDD > 1)
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           "Only single segment SIDDs are supported",
+                           "SIDDSensorModel::SIDDSensorModel");
+    }
+
+    // get xml as string for sensor model state
+    io::StringStream stringStream;
+    siddXML->getRootElement()->print(stringStream);
+    mSensorModelState = NAME + std::string(" ") + stringStream.stream().str();
+
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::DERIVED, new six::XMLControlCreatorT<
+            six::sidd::DerivedXMLControl>());
+
+    logging::NullLogger logger;
+    std::auto_ptr<six::XMLControl>
+            control(xmlRegistry.newXMLControl(six::DataType::DERIVED, &logger));
+
+    mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
+            siddXML, std::vector<std::string>())));
+    mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+}
+
+bool SIDDSensorModel::containsDerivedDES(const ::csm::Nitf21Isd& isd)
+{
+    xml::lite::MinidomParser domParser;
+
+    const std::vector< ::csm::Des>& desList(isd.fileDess());
+    for (size_t ii = 0; ii < desList.size(); ++ii)
+    {
+        const std::string& desData(desList[ii].data());
+
+        if (!desData.empty())
+        {
+            try
+            {
+                io::ByteStream stream;
+                stream.write(desData.c_str(), desData.length());
+
+                domParser.clear();
+                domParser.parse(stream);
+
+                if (domParser.getDocument()->getRootElement()->getLocalName()
+                        == "SIDD")
+                {
+                    return true;
+                }
+            }
+            catch(const except::Exception& )
+            {
+                // Couldn't parse DES as xml -- it's not a sidd so skip it
+            }
+        }
+    }
+
+    return false;
+}
+
+::csm::Version SIDDSensorModel::getVersion() const
+{
+    return VERSION;
+}
+
+std::string SIDDSensorModel::getModelName() const
+{
+    return NAME;
+}
+
+std::string SIDDSensorModel::getPedigree() const
+{
+    return (mData->getSource() + "_" + NAME + "_SAR");
+}
+
+std::string SIDDSensorModel::getImageIdentifier() const
+{
+    return mData->getName();
+}
+
+void SIDDSensorModel::setImageIdentifier(const std::string& imageId,
+                                         ::csm::WarningList* )
+
+{
+    mData->setName(imageId);
+}
+
+std::string SIDDSensorModel::getSensorIdentifier() const
+{
+    return mData->getSource();
+}
+
+std::string SIDDSensorModel::getPlatformIdentifier() const
+{
+    return mData->getSource();
+}
+
+std::string SIDDSensorModel::getCollectionIdentifier() const
+{
+    // TODO: If there's more than one collection, what should we use?
+    return mData->exploitationFeatures->collections[0]->identifier;
+}
+
+std::string SIDDSensorModel::getSensorMode() const
+{
+    // TODO: If there's more than one collection, what should we use?
+    switch (mData->exploitationFeatures->collections[0]->information->radarMode)
+    {
+    case six::RadarModeType::SPOTLIGHT:
+        return CSM_SENSOR_MODE_SPOT;
+    case six::RadarModeType::STRIPMAP:
+    case six::RadarModeType::DYNAMIC_STRIPMAP:
+        return CSM_SENSOR_MODE_STRIP;
+    default:
+        return CSM_SENSOR_MODE_FRAME;
+    }
+}
+
+std::string SIDDSensorModel::getReferenceDateAndTime() const
+{
+    // TODO: If there's more than one collection, what should we use?
+    return mData->exploitationFeatures->collections[0]->information->
+            collectionDateTime.format("%Y%m%dT%H%M%.2SZ");
+}
+
+std::string SIDDSensorModel::getModelState() const
+{
+    return mSensorModelState;
+}
+
+void SIDDSensorModel::replaceModelState(const std::string& argState)
+{
+    if (!argState.empty())
+    {
+        replaceModelStateImpl(argState);
+    }
+}
+
+::csm::EcefCoord SIDDSensorModel::getReferencePoint() const
+{
+    const scene::Vector3 refPt =
+            mData->measurement->projection->referencePoint.ecef;
+    return ::csm::EcefCoord(refPt[0], refPt[1], refPt[2]);
+}
+
+types::RowCol<double>
+SIDDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
+{
+    const six::sidd::MeasurableProjection* projection(getProjection());
+    const types::RowCol<int> ctrPt = projection->referencePoint.rowCol;
+
+    return types::RowCol<double>(
+            (pos.line - ctrPt.row) * projection->sampleSpacing.row,
+            (pos.samp - ctrPt.col) * projection->sampleSpacing.col);
+}
+
+::csm::ImageCoord SIDDSensorModel::groundToImage(
+        const ::csm::EcefCoord& groundPt,
+        double desiredPrecision,
+        double* achievedPrecision,
+        ::csm::WarningList* ) const
+{
+    try
+    {
+        scene::Vector3 sceneGroundPt;
+        sceneGroundPt[0] = groundPt.x;
+        sceneGroundPt[1] = groundPt.y;
+        sceneGroundPt[2] = groundPt.z;
+
+        // Project ground point into image grid and then convert from ECEF to
+        // RowCol
+        const scene::Vector3 gridPt = mGrid->sceneToGrid(sceneGroundPt);
+        const types::RowCol<double> imagePt = mGrid->ecefToRowCol(gridPt);
+
+        // TODO: Not sure how to calculate achievedPrecision
+        if (achievedPrecision)
+        {
+            *achievedPrecision = desiredPrecision;
+        }
+
+        return ::csm::ImageCoord(imagePt.row, imagePt.col);
+    }
+    catch (const except::Exception& ex)
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDSensorModel::groundToImage");
+    }
+}
+
+::csm::EcefCoord SIDDSensorModel::imageToGround(
+        const ::csm::ImageCoord& imagePt,
+        double height,
+        double desiredPrecision,
+        double* achievedPrecision,
+        ::csm::WarningList* ) const
+{
+    try
+    {
+        // Convert line and sample to an ECEF point in the image grid and
+        // then project the grid point to the ground
+        const scene::Vector3 gridPt =
+                mGrid->rowColToECEF(imagePt.line, imagePt.samp);
+        const scene::Vector3 groundPt = mGrid->gridToScene(gridPt, height);
+
+        // TODO: not sure how to calculate achievedPrecision
+        if (achievedPrecision)
+        {
+            *achievedPrecision = desiredPrecision;
+        }
+
+        return ::csm::EcefCoord(groundPt[0], groundPt[1], groundPt[2]);
+    }
+    catch (const except::Exception& ex)
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDSensorModel::imageToGround");
+    }
+}
+
+::csm::ImageCoord SIDDSensorModel::getImageStart() const
+{
+    return ::csm::ImageCoord(0.0, 0.0);
+}
+
+::csm::ImageVector SIDDSensorModel::getImageSize() const
+{
+    return ::csm::ImageVector(mData->getNumRows(), mData->getNumCols());
+}
+
+::csm::EcefVector SIDDSensorModel::getIlluminationDirection(
+        const ::csm::EcefCoord& groundPt) const
+{
+    scene::Vector3 groundPos;
+    groundPos[0] = groundPt.x;
+    groundPos[1] = groundPt.y;
+    groundPos[2] = groundPt.z;
+
+    const double time = getProjection()->timeCOAPoly(0.0, 0.0);
+    const six::Vector3 arpPos = mData->measurement->arpPoly(time);
+
+    scene::Vector3 illumVec = groundPos - arpPos;
+    illumVec.normalize();
+
+    return ::csm::EcefVector(illumVec[0], illumVec[1], illumVec[2]);
+}
+
+double SIDDSensorModel::getImageTime(const ::csm::ImageCoord& imagePt) const
+{
+    try
+    {
+        const types::RowCol<double> imageECEF = fromPixel(imagePt);
+        return getProjection()->timeCOAPoly(imageECEF.row, imageECEF.col);
+    }
+    catch (const except::Exception& ex)
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDSensorModel::getImageTime");
+    }
+}
+
+::csm::EcefCoord
+SIDDSensorModel::getSensorPosition(const ::csm::ImageCoord& imagePt) const
+{
+    try
+    {
+        const types::RowCol<double> imageECEF = fromPixel(imagePt);
+        const double time =
+                getProjection()->timeCOAPoly(imageECEF.row, imageECEF.col);
+        const six::Vector3 pos = mData->measurement->arpPoly(time);
+        return ::csm::EcefCoord(pos[0], pos[1], pos[2]);
+    }
+    catch (const except::Exception& ex)
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDSensorModel::getSensorPosition");
+    }
+}
+
+::csm::EcefCoord SIDDSensorModel::getSensorPosition(double time) const
+{
+    try
+    {
+        const six::Vector3 pos = mData->measurement->arpPoly(time);
+        return ::csm::EcefCoord(pos[0], pos[1], pos[2]);
+    }
+    catch (const except::Exception& ex)
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDSensorModel::getSensorPosition");
+    }
+}
+
+::csm::EcefVector
+SIDDSensorModel::getSensorVelocity(const ::csm::ImageCoord& imagePt) const
+{
+    try
+    {
+        const types::RowCol<double> imageECEF = fromPixel(imagePt);
+        const double time =
+                getProjection()->timeCOAPoly(imageECEF.row, imageECEF.col);
+        const six::PolyXYZ arpVelPoly = mData->measurement->arpPoly.derivative();
+        const six::Vector3 vel = arpVelPoly(time);
+        return ::csm::EcefVector(vel[0], vel[1], vel[2]);
+    }
+    catch (const except::Exception& ex)
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDSensorModel::getSensorVelocity");
+    }
+}
+
+::csm::EcefVector SIDDSensorModel::getSensorVelocity(double time) const
+{
+    try
+    {
+        const six::PolyXYZ arpVelPoly =
+                mData->measurement->arpPoly.derivative();
+        const six::Vector3 vel = arpVelPoly(time);
+        return ::csm::EcefVector(vel[0], vel[1], vel[2]);
+    }
+    catch (const except::Exception& ex)
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDSensorModel::getSensorVelocity");
+    }
+}
+
+void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
+{
+    const size_t idx = sensorModelState.find(' ');
+    if (idx == std::string::npos)
+    {
+        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+                           "Invalid sensor model state",
+                           "SIDDSensorModel::replaceModelStateImpl");
+    }
+
+    const std::string sensorModelName = sensorModelState.substr(0, idx);
+    if (sensorModelName != NAME)
+    {
+        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+                           "Invalid sensor model state",
+                           "SIDDSensorModel::replaceModelStateImpl");
+    }
+
+    const std::string sensorModelXML = sensorModelState.substr(idx + 1);
+
+    io::ByteStream stream;
+    stream.write(sensorModelXML.c_str(), sensorModelXML.length());
+
+    xml::lite::MinidomParser domParser;
+    domParser.parse(stream);
+
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::DERIVED, new six::XMLControlCreatorT<
+            six::sidd::DerivedXMLControl>());
+
+    logging::NullLogger logger;
+    std::auto_ptr<six::XMLControl>
+            control(xmlRegistry.newXMLControl(six::DataType::DERIVED, &logger));
+
+    // get xml as string for sensor model state
+    mSensorModelState = sensorModelState;
+
+    mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
+            domParser.getDocument(), std::vector<std::string>())));
+
+    mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+}
+
+const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
+{
+    if (!mData->measurement->projection->isMeasurable())
+    {
+        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                           "Image projection type is not measurable",
+                           "SIDDSensorModel::getProjection");
+    }
+
+    const six::sidd::MeasurableProjection* const projection =
+            reinterpret_cast<six::sidd::MeasurableProjection*>(
+                    mData->measurement->projection.get());
+    return projection;
+}
+}
+}

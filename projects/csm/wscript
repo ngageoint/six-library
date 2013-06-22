@@ -1,92 +1,30 @@
 import sys, os
 
-options = distclean = configure = lambda x: None
+DIRS = 'external'
+
+def options(opt):
+    opt.recurse(DIRS)
+
+def configure(conf):
+    conf.recurse(DIRS)
 
 def build(bld):
+    bld.recurse(DIRS)
+
     variant = bld.env['VARIANT'] or 'default'
     env = bld.all_envs[variant].derive()
-    pEnv = env.derive()
 
-    # do this here for windows only
-    if sys.platform=='win32':
-        if pEnv['cshlib_PATTERN'].startswith('lib'):
-            pEnv['cshlib_PATTERN'] = pEnv['cshlib_PATTERN'][3:]
-    # do this here for unix only
-    else:
-        if not pEnv['cshlib_PATTERN'].startswith('lib'):
-            pEnv['cshlib_PATTERN'] = 'lib' + pEnv['cshlib_PATTERN']
+    # See previous revisions for special compiler and linker flags that were
+    # needed to work properly with Socet GXP 3.2 on Windows
 
-    #build the external lib
-    bld(features = 'cxx cshlib', includes='include',
-        source='source/TSMPlugin.cpp',
-        target='TSMAPI', name='TSMAPI',
-        export_includes='include',
-        env=pEnv.derive(), path=bld.path.find_dir('external/TSM'),
-        install_path='${PREFIX}/lib')
-    
-    #build VTS
-    exe = bld.program(includes='include ../TSM/include',
-              target='vts', name='vts',
-              source=bld.path.find_dir('external/VTS/source').ant_glob('*.cpp'),
-              libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
-              use='TSMAPI',
-              uselib='CSTD CRUN DL',
-              env=pEnv.derive(),
-              path=bld.path.find_dir('external/VTS'),
-              install_path='${PREFIX}/bin')
-
-    pEnv2 = env.derive()
-    if pEnv2['cshlib_PATTERN'].startswith('lib'):
-        pEnv2['cshlib_PATTERN'] = pEnv2['cshlib_PATTERN'][3:]
-
-    # Flags needed for Socet GXP build on Windows 
-    winDefines = ['WIN32', '_WINDOWS', '_USRDLL', 'PINHOLE_LIBRARY', '_WINDLL', '_UNICODE', 'UNICODE']
-    winReleaseDefines = ['NDEBUG']
-    winDebugDefines = ['_DEBUG']
-    win64Defines = ['WIN64']
-    win32Defines = ['_USE_32BIT_TIME_T']
-    
-    winLinkerFlags = ['/SUBSYSTEM:WINDOWS', '/OPT:REF', '/OPT:ICF', '/DYNAMICBASE', '/NXCOMPAT', '/ERRORREPORT:PROMPT']
-    winReleaseLinkerFlags = ['/OPT:REF', '/OPT:ICF']
-    winDebugLinkerFlags = ['/DEBUG']
-    
-    if pEnv2['VARIANT'] == 'win64-release':
-        #64 bit release build
-        #C:\Python26\python.exe waf configure --prefix=install-64 --enable-64bit --with-crt=MD
-        pEnv2['DEFINES'] = pEnv2['DEFINES'] + winDefines + winReleaseDefines + win64Defines
-        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + winLinkerFlags + winReleaseLinkerFlags
-    elif pEnv2['VARIANT'] == 'win32-release':
-        #32 bit release build
-        #C:\Python26\python.exe waf configure --prefix=install-32 --enable-32bit --with-crt=MD
-        pEnv2['DEFINES'] = pEnv2['DEFINES'] + winDefines + winReleaseDefines + win32Defines
-        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + winLinkerFlags + winReleaseLinkerFlags
-    elif pEnv2['VARIANT'] == 'win64-debug':
-        #64 bit debug build
-        #C:\Python26\python.exe waf configure --prefix=install-64-debug --enable-64bit --enable-debugging --with-crt=MD
-        pEnv2['DEFINES'] = pEnv2['DEFINES'] + winDefines + winDebugDefines + win64Defines
-        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + winLinkerFlags + winDebugLinkerFlags
-    elif pEnv2['VARIANT'] == 'win32-debug':
-        #32 bit debug build 
-        #C:\Python26\python.exe waf configure --prefix=install-32-debug --enable-32bit --enable-debugging --with-crt=MD
-        pEnv2['DEFINES'] = pEnv2['DEFINES'] + winDefines + winDebugDefines + win32Defines
-        pEnv2['LINKFLAGS'] = pEnv2['LINKFLAGS'] + winLinkerFlags + winDebugLinkerFlags
-             
     #build our plugin
-    lib = bld(features = 'cxx cshlib', includes='sicd/include external/TSM/include',
-              target='SICDPlugin[U]', name='SICDPlugin',
-              source=bld.path.find_dir('sicd/source').ant_glob('*.cpp'),
-              libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
-              export_includes='include',
-              env=pEnv2.derive(), path=bld.path,
-              use='six.sicd-c++ six.sidd-c++ TSMAPI',
-              install_path='${PREFIX}/share/CSM/plugins')
-    
-    #build our plugin
-    lib = bld(features = 'cxx cshlib', includes='sidd/include external/TSM/include',
-              target='SIDDPlugin[U]', name='SIDDPlugin',
-              source=bld.path.find_dir('sidd/source').ant_glob('*.cpp'),
-              libpath=[os.path.join(bld.bldnode.abspath(), 'projects', 'csm', 'external', 'TSM')],
-              export_includes='include',
-              env=pEnv2.derive(), path=bld.path,
-              use='six.sicd-c++ six.sidd-c++ TSMAPI',
-              install_path='${PREFIX}/share/CSM/plugins')
+    lib = bld(features = 'cxx cshlib',
+              includes='include',
+              target='SIXPlugin[U]', name='SIXPlugin',
+              source=bld.path.find_dir('source').ant_glob('*.cpp'),
+              env=env.derive(), path=bld.path,
+              use='six.sicd-c++ six.sidd-c++ CSMAPI',
+              install_path=os.path.join(env['install_sharedir'], 'CSM', 'plugins'))
+
+def distclean(context):
+    context.recurse(DIRS)
