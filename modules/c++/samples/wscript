@@ -1,18 +1,23 @@
 NAME            = 'samples'
 VERSION         = '0.1'
-MODULE_DEPS     = 'scene tiff nitf xml.lite six six.sicd six.sidd cli sio.lite'
 
 options = configure = distclean = lambda p: None
 
-SAMPLES = '''check_valid_six image_to_scene round_trip_six test_create_sicd
-             test_create_sidd_from_mem test_create_sidd test_dump_images
-             test_extract_xml test_parse_xml'''.split()
-
 def build(bld):
-    for sample in SAMPLES:
-        bld.program_helper(module_deps=MODULE_DEPS,
-                           source='%s.cpp' % sample,
+    samples = {'check_valid_six'           : 'cli six.sicd six.sidd',
+               'image_to_scene'            : 'six.sicd six.sidd',
+               'round_trip_six'            : 'cli six.sicd six.sidd',
+               'test_create_sicd'          : 'cli six.sicd sio.lite',
+               'test_create_sidd_from_mem' : 'cli six.sicd six.sidd',
+               'test_create_sidd'          : 'cli six.sicd six.sidd sio.lite',
+               'test_dump_images'          : 'cli six.sicd six.sidd sio.lite',
+               'test_extract_xml'          : 'cli nitf xml.lite',
+               'test_parse_xml'            : 'six.sicd six.sidd'}
+
+    for sample, module_deps in samples.iteritems():
+        bld.program_helper(module_deps=module_deps,
+                           source=sample + '.cpp',
                            name=sample)
 
     bld(features='add_targets', target='six-samples',
-        targets_to_add=SAMPLES)
+        targets_to_add=samples.keys())
