@@ -1,8 +1,10 @@
 ./results/test/test_script_sidd.csv
 
-vtsRead21ISDFile projects/csm/tests/data/28AUG08RS0207001_105224_SM0980R_02N078W_001C___QHH_0101_CST_IMAG.nitf
-makeModelListFromISD SIDD_SENSOR_MODEL SIDD
-constructSensorModelFromISD SIDD_SENSOR_MODEL
+vtsRead21ISDFile path/to/sidd.nitf
+# Set this for multi-image SIDDs to test different images
+#vtsAddIsdParam IMAGE_INDEX 3
+makeModelListFromISD SIDD_SENSOR_MODEL SIX
+constructModelFromISD SIDD_SENSOR_MODEL
 getImageSize 
 getImageIdentifier
 getSensorIdentifier

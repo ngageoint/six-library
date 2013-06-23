@@ -1,14 +1,12 @@
 ./results/test/test_script_plugin.csv
 
-makeModelListFromISD SICD_SENSOR_MODEL SICD
-
-findPlugin SICD
-
-getNSensorModels
+findPlugin SIX
 getList
 getPluginName
 getReleaseDate
 getManufacturer
-#getCollectionIdentifier
+getNumModels
+getModelName1 0
+getModelName1 1
 
 Exit

@@ -1,7 +1,8 @@
 ./results/test/test_script_not_sicd.csv
 
 vtsRead21ISDFile projects/csm/tests/data/GHSarNITF21_good.ntf
-constructSensorModelFromISD SICD_SENSOR_MODEL
-getImageSize 
+makeModelListFromISD SICD_SENSOR_MODEL SIX
+constructModelFromISD SICD_SENSOR_MODEL
+#getImageSize 
 
 Exit
