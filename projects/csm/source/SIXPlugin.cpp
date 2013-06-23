@@ -201,11 +201,11 @@ SIX_CSM_EXPORT_API ::csm::Model* SIXPlugin::constructModelFromState(
     {
         if (sensorModelName == SICDSensorModel::NAME)
         {
-            return new SICDSensorModel(modelState);
+            return new SICDSensorModel(modelState, getDataDirectory());
         }
         else if (sensorModelName == SIDDSensorModel::NAME)
         {
-            return new SIDDSensorModel(modelState);
+            return new SIDDSensorModel(modelState, getDataDirectory());
         }
     }
     catch (const except::Exception& ex)
@@ -228,11 +228,11 @@ SIX_CSM_EXPORT_API ::csm::Model* SIXPlugin::constructModelFromISD(
 {
     if (modelName == SICDSensorModel::NAME)
     {
-        return new SICDSensorModel(imageSupportData);
+        return new SICDSensorModel(imageSupportData, getDataDirectory());
     }
     else if (modelName == SIDDSensorModel::NAME)
     {
-        return new SIDDSensorModel(imageSupportData);
+        return new SIDDSensorModel(imageSupportData, getDataDirectory());
     }
     else
     {

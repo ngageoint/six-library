@@ -21,6 +21,8 @@
 */
 
 #include "Error.h"
+#include <sys/OS.h>
+#include <sys/Path.h>
 #include <six/csm/SIDDSensorModel.h>
 #include <io/ByteStream.h>
 #include <io/StringStream.h>
@@ -37,8 +39,10 @@ namespace csm
 const ::csm::Version SIDDSensorModel::VERSION(1, 0, 1);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 
-SIDDSensorModel::SIDDSensorModel(const ::csm::Isd& isd)
+SIDDSensorModel::SIDDSensorModel(const ::csm::Isd& isd,
+                                 const std::string& dataDir)
 {
+    setSchemaDir(dataDir);
     const std::string& format(isd.format());
 
     if (format == "NITF2.1")
@@ -59,110 +63,132 @@ SIDDSensorModel::SIDDSensorModel(const ::csm::Isd& isd)
 
 }
 
-SIDDSensorModel::SIDDSensorModel(const std::string& sensorModelState)
+SIDDSensorModel::SIDDSensorModel(const std::string& sensorModelState,
+                                 const std::string& dataDir)
 {
+    setSchemaDir(dataDir);
     replaceModelStateImpl(sensorModelState);
 }
 
 void SIDDSensorModel::initializeFromFile(const std::string& pathname)
 {
-    // create an XML registry
-    // The reason to do this is to avoid adding XMLControlCreators to the
-    // XMLControlFactory singleton - this way has more fine-grained control
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::DERIVED, new six::XMLControlCreatorT<
-            six::sidd::DerivedXMLControl>());
-
-    // create a reader and load the file
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(pathname, std::vector<std::string>());
-
-    six::Container* const container = reader.getContainer();
-    if (container->getDataType() != six::DataType::DERIVED
-            || container->getNumData() != 1
-            || container->getData(0)->getDataType() != six::DataType::DERIVED)
+    try
     {
-        throw except::Exception(Ctxt("Not a SIDD"));
+        // create an XML registry
+        // The reason to do this is to avoid adding XMLControlCreators to the
+        // XMLControlFactory singleton - this way has more fine-grained control
+        six::XMLControlRegistry xmlRegistry;
+        xmlRegistry.addCreator(six::DataType::DERIVED,
+                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+
+        // create a reader and load the file
+        six::NITFReadControl reader;
+        reader.setXMLControlRegistry(&xmlRegistry);
+        reader.load(pathname, mSchemaDirs);
+
+        six::Container* const container = reader.getContainer();
+        if (container->getDataType() != six::DataType::DERIVED ||
+            container->getNumData() != 1 ||
+            container->getData(0)->getDataType() != six::DataType::DERIVED)
+        {
+            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                               "Not a SIDD",
+                               "SIDDSensorModel::initializeFromFile");
+        }
+
+        mData.reset(reinterpret_cast<six::sidd::DerivedData*>(
+                container->getData(0)));
+        container->removeData(mData.get());
+
+        // get xml as string for sensor model state
+        std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+        mSensorModelState = NAME + std::string(" ") + xmlStr;
+
+        mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
     }
-
-    mData.reset(reinterpret_cast<six::sidd::DerivedData*>(
-            container->getData(0)));
-    container->removeData(mData.get());
-
-    // get xml as string for sensor model state
-    std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
-    mSensorModelState = NAME + std::string(" ") + xmlStr;
-
-    mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+    catch (const except::Exception& ex)
+    {
+        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                           ex.getMessage(),
+                           "SIDDSensorModel::initializeFromFile");
+    }
 }
 
 void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
 {
-    // Check for the first SIDD DES and parse it
-    xml::lite::Document* siddXML = NULL;
-    xml::lite::MinidomParser domParser;
-
-    size_t numSIDD = 0;
-    const std::vector< ::csm::Des>& desList(isd.fileDess());
-    for (size_t ii = 0; ii < desList.size(); ++ii)
+    try
     {
-        const std::string& desData(desList[ii].data());
+        // Check for the first SIDD DES and parse it
+        xml::lite::Document* siddXML = NULL;
+        xml::lite::MinidomParser domParser;
 
-        if (!desData.empty())
+        size_t numSIDD = 0;
+        const std::vector< ::csm::Des>& desList(isd.fileDess());
+        for (size_t ii = 0; ii < desList.size(); ++ii)
         {
-            try
+            const std::string& desData(desList[ii].data());
+
+            if (!desData.empty())
             {
-                io::ByteStream stream;
-                stream.write(desData.c_str(), desData.length());
-
-                domParser.clear();
-                domParser.parse(stream);
-
-                if (domParser.getDocument()->getRootElement()->getLocalName()
-                        == "SIDD")
+                try
                 {
-                    siddXML = domParser.getDocument();
-                    ++numSIDD;
+                    io::ByteStream stream;
+                    stream.write(desData.c_str(), desData.length());
+
+                    domParser.clear();
+                    domParser.parse(stream);
+
+                    if (domParser.getDocument()->getRootElement()->getLocalName()
+                            == "SIDD")
+                    {
+                        siddXML = domParser.getDocument();
+                        ++numSIDD;
+                    }
+                }
+                catch(const except::Exception& )
+                {
+                    // Couldn't parse DES as xml -- it's not a sidd so skip it
                 }
             }
-            catch(const except::Exception& )
-            {
-                // Couldn't parse DES as xml -- it's not a sidd so skip it
-            }
         }
-    }
 
-    if (siddXML == NULL)
+        if (siddXML == NULL)
+        {
+            throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                               "Not a SIDD",
+                               "SIDDSensorModel::SIDDSensorModel");
+        }
+
+        if (numSIDD > 1)
+        {
+            throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                               "Only single segment SIDDs are supported",
+                               "SIDDSensorModel::SIDDSensorModel");
+        }
+
+        // get xml as string for sensor model state
+        io::StringStream stringStream;
+        siddXML->getRootElement()->print(stringStream);
+        mSensorModelState = NAME + std::string(" ") + stringStream.stream().str();
+
+        six::XMLControlRegistry xmlRegistry;
+        xmlRegistry.addCreator(six::DataType::DERIVED,
+                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+
+        logging::NullLogger logger;
+        std::auto_ptr<six::XMLControl> control(
+                xmlRegistry.newXMLControl(six::DataType::DERIVED, &logger));
+
+        mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
+                siddXML, mSchemaDirs)));
+        mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+    }
+    catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
-                           "Not a SIDD",
-                           "SIDDSensorModel::SIDDSensorModel");
+        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                           ex.getMessage(),
+                           "SIDDSensorModel::initializeFromISD");
     }
-
-    if (numSIDD > 1)
-    {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
-                           "Only single segment SIDDs are supported",
-                           "SIDDSensorModel::SIDDSensorModel");
-    }
-
-    // get xml as string for sensor model state
-    io::StringStream stringStream;
-    siddXML->getRootElement()->print(stringStream);
-    mSensorModelState = NAME + std::string(" ") + stringStream.stream().str();
-
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::DERIVED, new six::XMLControlCreatorT<
-            six::sidd::DerivedXMLControl>());
-
-    logging::NullLogger logger;
-    std::auto_ptr<six::XMLControl>
-            control(xmlRegistry.newXMLControl(six::DataType::DERIVED, &logger));
-
-    mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
-            siddXML, std::vector<std::string>())));
-    mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
 }
 
 bool SIDDSensorModel::containsDerivedDES(const ::csm::Nitf21Isd& isd)
@@ -494,27 +520,36 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
 
     const std::string sensorModelXML = sensorModelState.substr(idx + 1);
 
-    io::ByteStream stream;
-    stream.write(sensorModelXML.c_str(), sensorModelXML.length());
+    try
+    {
+        io::ByteStream stream;
+        stream.write(sensorModelXML.c_str(), sensorModelXML.length());
 
-    xml::lite::MinidomParser domParser;
-    domParser.parse(stream);
+        xml::lite::MinidomParser domParser;
+        domParser.parse(stream);
 
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::DERIVED, new six::XMLControlCreatorT<
-            six::sidd::DerivedXMLControl>());
+        six::XMLControlRegistry xmlRegistry;
+        xmlRegistry.addCreator(six::DataType::DERIVED,
+                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
-    logging::NullLogger logger;
-    std::auto_ptr<six::XMLControl>
-            control(xmlRegistry.newXMLControl(six::DataType::DERIVED, &logger));
+        logging::NullLogger logger;
+        std::auto_ptr<six::XMLControl> control(xmlRegistry.newXMLControl(
+                six::DataType::DERIVED, &logger));
 
-    // get xml as string for sensor model state
-    mSensorModelState = sensorModelState;
+        // get xml as string for sensor model state
+        mSensorModelState = sensorModelState;
 
-    mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
-            domParser.getDocument(), std::vector<std::string>())));
+        mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
+                domParser.getDocument(), mSchemaDirs)));
 
-    mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+        mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+    }
+    catch (const except::Exception& ex)
+    {
+        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+                           ex.getMessage(),
+                           "SIDDSensorModel::replaceModelStateImpl");
+    }
 }
 
 const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
@@ -530,6 +565,52 @@ const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
             reinterpret_cast<six::sidd::MeasurableProjection*>(
                     mData->measurement->projection.get());
     return projection;
+}
+
+void SIDDSensorModel::setSchemaDir(const std::string& dataDir)
+{
+    sys::OS os;
+    if (dataDir.empty())
+    {
+        mSchemaDirs.clear();
+
+        // OK, but you better have your schema path set then
+        std::string schemaPath;
+        try
+        {
+            schemaPath = os.getEnv(six::SCHEMA_PATH);
+        }
+        catch(const except::Exception& )
+        {
+            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                    "Must specify SIDD schema path via "
+                    "Plugin::getDataDirectory() or " +
+                    std::string(six::SCHEMA_PATH) + " environment variable",
+                    "SIDDSensorModel::setSchemaDir");
+        }
+
+        if (schemaPath.empty())
+        {
+            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                    std::string(six::SCHEMA_PATH) +
+                    " environment variable is set but is empty",
+                    "SIDDSensorModel::setSchemaDir");
+        }
+    }
+    else
+    {
+        const std::string schemaDir =
+                sys::Path(dataDir).join("schema").join("six");
+        if (!os.exists(schemaDir))
+        {
+            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                    "Schema directory '" + schemaDir + "' does not exist",
+                    "SICDSensorModel::setSchemaDir");
+        }
+
+        mSchemaDirs.resize(1);
+        mSchemaDirs[0] = schemaDir;
+    }
 }
 }
 }
