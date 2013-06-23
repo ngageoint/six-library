@@ -8,6 +8,11 @@ def configure(conf):
              conf.path.abspath())
 
 def build(bld):
+    # NOTE: The contents of the zip file needed to be slightly modified for it
+    # to compile with a newer version of gcc that was pickier:
+    # csm.h needed string.h for memset() and memcpy()
+    # Version.cpp and NitfIsd.h needed stdlib.h for atoi()
+    # I've let the CSM folks know - hopefully this will be fixed in the future 
     vtsDir = 'vts_301_0'
     bld(features = 'cxx cshlib',
         target='CSMAPI', name='CSMAPI',
@@ -20,6 +25,6 @@ def build(bld):
     bld.program(target='vts', name='vts',
                 includes='VTS_include',
                 source=bld.path.find_dir(os.path.join(vtsDir, 'VTS')).ant_glob('*.cpp'),
-                use='CSMAPI',
+                use='CSMAPI THREAD DL',
                 path=bld.path.find_dir(vtsDir),
                 install_path=bld.env['install_bindir'])
