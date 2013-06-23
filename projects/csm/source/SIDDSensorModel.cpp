@@ -43,16 +43,39 @@ SIDDSensorModel::SIDDSensorModel(const ::csm::Isd& isd,
                                  const std::string& dataDir)
 {
     setSchemaDir(dataDir);
-    const std::string& format(isd.format());
 
+    // Support multi-segment SIDDs
+    // In this case, the ISD should tell us which image it wants to use if it's
+    // not the first one
+    const std::string imageIndexStr(isd.param(IMAGE_INDEX_PARAM));
+    size_t imageIndex;
+    if (imageIndexStr.empty())
+    {
+        imageIndex = 0;
+    }
+    else if (!str::isNumeric(imageIndexStr))
+    {
+        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                "Unexpected " + std::string(IMAGE_INDEX_PARAM) +
+                        " parameter: " + imageIndexStr,
+                "SIDDSensorModel::SIDDSensorModel");
+    }
+    else
+    {
+        imageIndex = str::toType<size_t>(imageIndexStr);
+    }
+
+    // Based on the ISD format, initialize as appropriate
+    const std::string& format(isd.format());
     if (format == "NITF2.1")
     {
-        initializeFromISD(dynamic_cast<const ::csm::Nitf21Isd&>(isd));
+        initializeFromISD(dynamic_cast<const ::csm::Nitf21Isd&>(isd),
+                          imageIndex);
     }
     else if (format == "FILENAME")
     {
         // Note: this case has not been tested
-        initializeFromFile(isd.filename());
+        initializeFromFile(isd.filename(), imageIndex);
     }
     else
     {
@@ -70,7 +93,8 @@ SIDDSensorModel::SIDDSensorModel(const std::string& sensorModelState,
     replaceModelStateImpl(sensorModelState);
 }
 
-void SIDDSensorModel::initializeFromFile(const std::string& pathname)
+void SIDDSensorModel::initializeFromFile(const std::string& pathname,
+                                         size_t imageIndex)
 {
     try
     {
@@ -86,18 +110,28 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname)
         reader.setXMLControlRegistry(&xmlRegistry);
         reader.load(pathname, mSchemaDirs);
 
+        // For multi-image SIDDs, all the SIDD DESs will appear first (in the
+        // case where SICD DESs are also present), so we just have to grab out
+        // the Nth Data object
         six::Container* const container = reader.getContainer();
         if (container->getDataType() != six::DataType::DERIVED ||
-            container->getNumData() != 1 ||
-            container->getData(0)->getDataType() != six::DataType::DERIVED)
+            container->getNumData() < imageIndex + 1)
         {
             throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SIDD",
                                "SIDDSensorModel::initializeFromFile");
         }
 
-        mData.reset(reinterpret_cast<six::sidd::DerivedData*>(
-                container->getData(0)));
+        six::Data* const data = container->getData(imageIndex);
+        if (data->getDataType() != six::DataType::DERIVED)
+        {
+            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                               "Not a SIDD",
+                               "SIDDSensorModel::initializeFromFile");
+        }
+
+        // Cast it and take ownership
+        mData.reset(reinterpret_cast<six::sidd::DerivedData*>(data));
         container->removeData(mData.get());
 
         // get xml as string for sensor model state
@@ -114,11 +148,14 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname)
     }
 }
 
-void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
+void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd,
+                                        size_t imageIndex)
 {
     try
     {
-        // Check for the first SIDD DES and parse it
+        // Check for the SIDD DES associated with imageIndex and parse it
+        // DES's are always in the same order as the images, so we just have to
+        // find the Nth DES
         xml::lite::Document* siddXML = NULL;
         xml::lite::MinidomParser domParser;
 
@@ -141,7 +178,11 @@ void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
                     if (domParser.getDocument()->getRootElement()->getLocalName()
                             == "SIDD")
                     {
-                        siddXML = domParser.getDocument();
+                        if (numSIDD == imageIndex)
+                        {
+                            siddXML = domParser.getDocument();
+                            break;
+                        }
                         ++numSIDD;
                     }
                 }
@@ -156,13 +197,6 @@ void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
         {
             throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
                                "Not a SIDD",
-                               "SIDDSensorModel::SIDDSensorModel");
-        }
-
-        if (numSIDD > 1)
-        {
-            throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
-                               "Only single segment SIDDs are supported",
                                "SIDDSensorModel::SIDDSensorModel");
         }
 
