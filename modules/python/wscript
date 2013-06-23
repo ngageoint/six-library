@@ -6,6 +6,6 @@ def options(opt):
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.all_envs[variant].derive()
-    
-    if bld.is_defined('PYTHON') and bld.is_defined('HAVE_PYTHON_H'):       
+
+    if 'PYTHON' in env and env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):       
         bld.recurse('six')

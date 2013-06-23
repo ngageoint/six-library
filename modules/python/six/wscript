@@ -15,10 +15,10 @@ def build(bld):
         tsk = bld(
             features='cxx cshlib pyext',
             source='source/six.i',
-            target='_six',
+            target='six-python',
             use=' '.join(uselib_local),
             uselib='MATH_LINEAR MATH_POLY',
-            env=env.copy(),
+            env=env.derive(),
             swig_flags='-python -c++',
             install_path='${PYTHONDIR}/six')
         
@@ -43,10 +43,10 @@ def build(bld):
         bld(
             features = 'cxx cshlib pyext',
             source = 'source/six_wrap.cpp',
-            target = '_six',
+            target = 'six-python',
             use=' '.join(uselib_local),
             uselib='MATH_LINEAR MATH_POLY',
-            env=env.copy(),
+            env=env.derive(),
             install_path='${PYTHONDIR}/six')
     
 
