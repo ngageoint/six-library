@@ -312,9 +312,9 @@ private:
 
     void replaceModelStateImpl(const std::string& sensorModelState);
 
-    void initializeFromFile(const std::string& pathname);
+    void initializeFromFile(const std::string& pathname, size_t imageIndex);
 
-    void initializeFromISD(const ::csm::Nitf21Isd& isd);
+    void initializeFromISD(const ::csm::Nitf21Isd& isd, size_t imageIndex);
 
     void setSchemaDir(const std::string& schemaDir);
 
