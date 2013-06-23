@@ -24,6 +24,7 @@
 #define __SIX_CSM_SICD_SENSOR_MODEL_H__
 
 #include <memory>
+#include <vector>
 
 #include "NitfIsd.h"
 
@@ -52,16 +53,21 @@ public:
      * Create sensor model given an ISD.  Only NITF2.1 and FILENAME formats are
      * supported.
      *
-     * \param isd  the image support data stored in an ISD struct
+     * \param isd        The image support data stored in an ISD struct
+     * \param dataDir  The plugin's data directory.  If this is an empty
+     *     string, the SIX_SCHEMA_PATH environment variable must be set.
      */
-    SICDSensorModel(const ::csm::Isd& isd);
+    SICDSensorModel(const ::csm::Isd& isd, const std::string& dataDir);
 
     /**
      * Create sensor model given sensor model state string representation.
      *
-     * \param sensorModelState the sensor model state represented as a string
+     * \param sensorModelState  The sensor model state represented as a string
+     * \param dataDir           The plugin's data directory.  If this is an
+     *     empty string, the SIX_SCHEMA_PATH environment variable must be set.
      */
-    SICDSensorModel(const std::string& sensorModelState);
+    SICDSensorModel(const std::string& sensorModelState,
+                    const std::string& dataDir);
 
     static
     bool containsComplexDES(const ::csm::Nitf21Isd& isd);
@@ -319,7 +325,10 @@ private:
 
     void initializeFromISD(const ::csm::Nitf21Isd& isd);
 
+    void setSchemaDir(const std::string& schemaDir);
+
 private:
+    std::vector<std::string> mSchemaDirs;
     std::string mSensorModelState;
     std::auto_ptr<six::sicd::ComplexData> mData;
     std::auto_ptr<const scene::SceneGeometry> mGeometry;
