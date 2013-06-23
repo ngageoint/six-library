@@ -195,8 +195,13 @@ void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd,
 
         if (siddXML == NULL)
         {
-            throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
-                               "Not a SIDD",
+            const std::string message = (numSIDD == 0) ? "Not a SIDD" :
+                    "Found " + str::toString(numSIDD) +
+                    " SIDD XMLs but requested image index " +
+                    str::toString(imageIndex);
+
+            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                               message,
                                "SIDDSensorModel::SIDDSensorModel");
         }
 
