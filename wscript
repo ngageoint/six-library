@@ -19,7 +19,7 @@ def build(bld):
     bld.recurse('modules projects')
 
     if not bld.targets:
-        bld.targets = 'six.sicd-c++,six.sidd-c++,six-samples,SIXPlugin,vts'
+        bld.targets = 'six.sicd-c++,six.sidd-c++,six-samples,six-csm,vts'
     if bld.is_defined('HAVE_MEX_H'):
         bld.targets += ',nitf_image,nitf_metadata,xml_metadata'
     if 'PYTHON' in bld.env and bld.env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
