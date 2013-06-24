@@ -140,11 +140,26 @@ void SICDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
                     domParser.clear();
                     domParser.parse(stream);
 
-                    if (domParser.getDocument()->getRootElement()->getLocalName()
-                            == "SICD")
+                    const std::string localName = domParser.getDocument()->
+                            getRootElement()->getLocalName();
+                    if (localName == "SICD")
                     {
                         sicdXML = domParser.getDocument();
                         break;
+                    }
+                    else if (localName == "SIDD")
+                    {
+                        // SIDD NITFs may also contain SICD DESs (that describe
+                        // the SICD that this SIDD was derived from).  I guess
+                        // technically we could build up a sensor model from
+                        // this, but it seems more correct to error out so that
+                        // the SIDDSensorModel will get used.  Note that a SIDD
+                        // DES will always appear prior to a SICD DES, so if we
+                        // do encounter a SICD DES before this point, we can
+                        // safely say it's a SICD NITF.
+                        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                                           "SIDD, not SICD, NITF",
+                                           "SICDSensorModel::SICDSensorModel");
                     }
                 }
                 catch(const except::Exception& )
@@ -207,10 +222,23 @@ bool SICDSensorModel::containsComplexDES(const ::csm::Nitf21Isd& isd)
                 domParser.clear();
                 domParser.parse(stream);
 
-                if (domParser.getDocument()->getRootElement()->getLocalName()
-                        == "SICD")
+                const std::string localName = domParser.getDocument()->
+                        getRootElement()->getLocalName();
+                if (localName == "SICD")
                 {
                     return true;
+                }
+                else if (localName == "SIDD")
+                {
+                    // SIDD NITFs may also contain SICD DESs (that describe the
+                    // SICD that this SIDD was derived from).  I guess
+                    // technically we could build up a sensor model from this,
+                    // but it seems more correct to return false so that the
+                    // SIDDSensorModel gets picked.  Note that a SIDD DES will
+                    // always appear prior to a SICD DES, so if we do encounter
+                    // a SICD DES before this point, we can safely say it's a
+                    // SICD NITF.
+                    return false;
                 }
             }
             catch(const except::Exception& )
