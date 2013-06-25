@@ -20,10 +20,10 @@ def build(bld):
 
     if not bld.targets:
         bld.targets = 'six.sicd-c++,six.sidd-c++,six-samples,six-csm,vts'
-    if bld.is_defined('HAVE_MEX_H'):
-        bld.targets += ',nitf_image,nitf_metadata,xml_metadata'
-    if 'PYTHON' in bld.env and bld.env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
-        bld.targets += ',six-python'
+        if bld.is_defined('HAVE_MEX_H'):
+            bld.targets += ',nitf_image,nitf_metadata,xml_metadata'
+        if 'PYTHON' in bld.env and bld.env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
+            bld.targets += ',six-python'
 
 def distclean(context):
     context.recurse('modules projects')
