@@ -186,7 +186,7 @@ mxArray* read32BitFloatPixelArray(nitf_Reader* reader,
     buffers[0] = buffer;
 
     /* Image reader (could fail) */
-    imageReader = nitf_Reader_newImageReader(reader, idx, error);
+    imageReader = nitf_Reader_newImageReader(reader, idx, NULL, error);
     if (imageReader == NULL)
         goto CATCH_ERROR;
    
@@ -263,7 +263,7 @@ mxArray* readSingleBandPixelArray(nitf_Reader* reader,
     buffers[0] = buffer;
 
     /* Image reader (could fail) */
-    imageReader = nitf_Reader_newImageReader(reader, idx, error);
+    imageReader = nitf_Reader_newImageReader(reader, idx, NULL, error);
     if (!imageReader)
         goto CATCH_ERROR;
    
@@ -382,7 +382,7 @@ mxArray* read2BandComplexPixelArray(nitf_Reader* reader,
     buffers[1] = (nitf_Uint8*)mxGetImagData(mxImageArray);
 
     /* Image reader (could fail) */
-    imageReader = nitf_Reader_newImageReader(reader, idx, error);
+    imageReader = nitf_Reader_newImageReader(reader, idx, NULL, error);
     if (!imageReader)
         goto CATCH_ERROR;
    
@@ -486,7 +486,7 @@ mxArray* read24BitPixelArray(nitf_Reader* reader,
     buffers[1] = ((nitf_Uint8*)mxGetData(mxImageArray)) + frame;
     buffers[2] = ((nitf_Uint8*)mxGetData(mxImageArray)) + 2 * frame;
     /* Image reader (could fail) */
-    imageReader = nitf_Reader_newImageReader(reader, idx, error);
+    imageReader = nitf_Reader_newImageReader(reader, idx, NULL, error);
     if (!imageReader)
         goto CATCH_ERROR;
    

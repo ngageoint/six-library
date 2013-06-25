@@ -210,6 +210,8 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
                                               nitf_Error * error)
 {
     ImplControl *implControl = NULL;
+    (void)subheader;
+    (void)options;
 
     if (!(implControl = (ImplControl*)implMemAlloc(sizeof(ImplControl), error)))
         goto CATCH_ERROR;
@@ -232,6 +234,9 @@ NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
                               nitf_Error*        error)
 {
     ImplControl *implControl = NULL;
+
+    /* TODO: In order to support M8, I think we would update this */
+    (void)blockMask;
 
     implControl = (ImplControl*)control;
 

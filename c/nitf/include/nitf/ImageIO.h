@@ -312,6 +312,7 @@ typedef void nitf_CompressionControl;
   generate an error if some subheader fields are not the required values.
 
   \ar subheader          - Associated image subheader
+  \ar options            - Compression options.  May be NULL.
   \ar error              - Error object
 
   \return The new nitf_CompressionControl structure or NULL on error
@@ -441,9 +442,12 @@ typedef void nitf_DecompressionControl;
 
 /*!
     \brief NITF_DECOMPRESSION_INTERFACE_OPEN_FUNCTION - Image decompression
-  interface open function
+  interface open function.  This creates and prepares the decompressor for
+  first image data access.
 
   \ar subheader          - Associated image subheader
+  \ar options            - Decompression options.  May be NULL.  Not needed
+                           for most decompressors
   \ar error              - Error object
 
   \return The new nitf_DecompressionControl structure or NULL on error
@@ -459,17 +463,17 @@ typedef nitf_DecompressionControl *
   interface start function
  
   This function pointer type is the type for the open field in the
-  decompression interface object. The function prepare for first image data
-  access.
+  decompression interface object.
  
-  \ar handle             - The IO handle for image IO
+  \ar object             - The decompression object
+  \ar io                 - The IO interface for image IO
   \ar offset             - File offset to start of compressed data
   \ar fileLength         - Length of compressed data in the file
   \ar blockingDefinition - Blocking information for the image
   \ar blockMask          - Block mask
   \ar error              - Error object
  
-  \return The new nitf_DecompressionControl structure or NULL on error
+  \return On error, FALSE is returned
  
   On error, the error object is set
 */

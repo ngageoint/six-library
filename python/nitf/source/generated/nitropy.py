@@ -878,6 +878,7 @@ nitf_IOSource_construct = _nitropy.nitf_IOSource_construct
 nitf_ImageWriter_construct = _nitropy.nitf_ImageWriter_construct
 nitf_ImageWriter_attachSource = _nitropy.nitf_ImageWriter_attachSource
 nitf_ImageWriter_setWriteCaching = _nitropy.nitf_ImageWriter_setWriteCaching
+nitf_ImageWriter_setDirectBlockWrite = _nitropy.nitf_ImageWriter_setDirectBlockWrite
 nitf_ImageWriter_setPadPixel = _nitropy.nitf_ImageWriter_setPadPixel
 NITF_FHDR_SZ = _nitropy.NITF_FHDR_SZ
 NITF_FVER_SZ = _nitropy.NITF_FVER_SZ
@@ -1252,6 +1253,7 @@ nitf_ImageSubheader_setDimensions = _nitropy.nitf_ImageSubheader_setDimensions
 nitf_ImageSubheader_setCornersFromLatLons = _nitropy.nitf_ImageSubheader_setCornersFromLatLons
 nitf_ImageSubheader_getCornersType = _nitropy.nitf_ImageSubheader_getCornersType
 nitf_ImageSubheader_getCornersAsLatLons = _nitropy.nitf_ImageSubheader_getCornersAsLatLons
+nitf_ImageSubheader_computeBlocking = _nitropy.nitf_ImageSubheader_computeBlocking
 nitf_ImageSubheader_setBlocking = _nitropy.nitf_ImageSubheader_setBlocking
 nitf_ImageSubheader_setCompression = _nitropy.nitf_ImageSubheader_setCompression
 nitf_ImageSubheader_insertImageComment = _nitropy.nitf_ImageSubheader_insertImageComment
@@ -1742,6 +1744,9 @@ class nitf_ImageReader(_object):
     __swig_setmethods__["imageDeblocker"] = _nitropy.nitf_ImageReader_imageDeblocker_set
     __swig_getmethods__["imageDeblocker"] = _nitropy.nitf_ImageReader_imageDeblocker_get
     if _newclass:imageDeblocker = _swig_property(_nitropy.nitf_ImageReader_imageDeblocker_get, _nitropy.nitf_ImageReader_imageDeblocker_set)
+    __swig_setmethods__["directBlockRead"] = _nitropy.nitf_ImageReader_directBlockRead_set
+    __swig_getmethods__["directBlockRead"] = _nitropy.nitf_ImageReader_directBlockRead_get
+    if _newclass:directBlockRead = _swig_property(_nitropy.nitf_ImageReader_directBlockRead_get, _nitropy.nitf_ImageReader_directBlockRead_set)
     __swig_destroy__ = _nitropy.delete_nitf_ImageReader
     __del__ = lambda self : None;
 nitf_ImageReader_swigregister = _nitropy.nitf_ImageReader_swigregister
@@ -1749,6 +1754,7 @@ nitf_ImageReader_swigregister(nitf_ImageReader)
 
 nitf_ImageReader_getBlockingInfo = _nitropy.nitf_ImageReader_getBlockingInfo
 nitf_ImageReader_read = _nitropy.nitf_ImageReader_read
+nitf_ImageReader_readBlock = _nitropy.nitf_ImageReader_readBlock
 nitf_ImageReader_destruct = _nitropy.nitf_ImageReader_destruct
 nitf_ImageReader_setReadCaching = _nitropy.nitf_ImageReader_setReadCaching
 class nitf_SegmentReader(_object):

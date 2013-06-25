@@ -76,7 +76,7 @@ compression of a one byte unsigned image.\n
 /*! \def NITF_IMAGE_IO_COMPRESSION_C6 - Reserved, no blocking */
 #define NITF_IMAGE_IO_COMPRESSION_C6            ((nitf_Uint32) 0x00000040)
 
-/*! \def NITF_IMAGE_IO_COMPRESSION_C7 - Reserved, Virtually Lossless Complex Compression (VLCC) */
+/*! \def NITF_IMAGE_IO_COMPRESSION_C7 - Reserved, Complex SAR compression */
 #define NITF_IMAGE_IO_COMPRESSION_C7            ((nitf_Uint32) 0x00000060)
 
 /*! \def NITF_IMAGE_IO_COMPRESSION_C8 - JPEG 2000 */
@@ -2731,22 +2731,7 @@ NITFPRIV(nitf_DecompressionControl*) nitf_ImageIO_bPixelOpen
 (nitf_ImageSubheader * subheader, nrt_HashTable * options, nitf_Error * error);
 
 /*!
-  \brief nitf_ImageIO_bPixelFreeBlock - Free block function for B pixel
-  type psuedo-decompression interface.
-
-  \returns TRUE on success. On error, the error object is set
-*/
-
-/*!< Associated control structure */
-/*!< Block to free */
-NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelFreeBlock(
-        nitf_DecompressionControl * control, 
-        nitf_Uint8 * block, 
-        nitf_Error * error    /*!< For error returns */
-                                                );
-
-/*!
-  \brief nitf_ImageIO_bPixelOpen - Start function for B pixel type
+  \brief nitf_ImageIO_bPixelStart - Start function for B pixel type
   psuedo-decompression interface.
 
   The control structure stores its arguments for use by the other interface
@@ -2767,6 +2752,21 @@ NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelStart(
         nitf_Uint64 * blockMask,  /*!< Associated block mask */
         nitf_Error * error        /*!< For error returns */
                                                              );
+
+/*!
+  \brief nitf_ImageIO_bPixelFreeBlock - Free block function for B pixel
+  type psuedo-decompression interface.
+
+  \returns TRUE on success. On error, the error object is set
+*/
+
+/*!< Associated control structure */
+/*!< Block to free */
+NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelFreeBlock(
+        nitf_DecompressionControl * control,
+        nitf_Uint8 * block,
+        nitf_Error * error    /*!< For error returns */
+                                                );
 
 /*!
   \brief nitf_ImageIO_bPixelClose - Close function for B pixel type
@@ -2835,7 +2835,7 @@ NITFPRIV(nitf_DecompressionControl*) nitf_ImageIO_12PixelOpen
 (nitf_ImageSubheader * subheader, nrt_HashTable * options, nitf_Error * error);
   
 /*!
-  \brief nitf_ImageIO_12PixelOpen - Open function for 12-bit pixel type
+  \brief nitf_ImageIO_12PixelStart - Open function for 12-bit pixel type
   psuedo-decompression interface.
 
   The control structure stores its arguments for use by the other interface
@@ -3782,13 +3782,18 @@ nitf_ImageIO_getBlockingInfo(nitf_ImageIO * image,
     img->blockInfo.length = img->blockSize;
 
     /*
-     * Create the decompression control object if image is compressed.
+     * Initialize the decompression control object if image is compressed.
      * This is done here because the decompressor may update the blocking
      * information.
      */
      
     if(img->decompressor != NULL)
     {
+        /* NOTE: We are counting on only getting to this point on the first
+         *       call to this function since blockInfoFlag should get set
+         *       below.  If that convention changes, this needs to get
+         *       reworked.
+         */
         if(!(*(img->decompressor->start)) (
             img->decompressionControl, io, img->pixelBase,
             img->dataLength - img->maskHeader.imageDataOffset,
@@ -9076,6 +9081,8 @@ nitf_ImageIO_bPixelOpen(nitf_ImageSubheader * subheader,
                         nitf_Error * error)
 {
     nitf_ImageIO_BPixelControl *icntl;
+    (void)subheader;
+    (void)options;
 
     icntl = (nitf_ImageIO_BPixelControl *)
         NITF_MALLOC(sizeof(nitf_ImageIO_BPixelControl));
@@ -9220,6 +9227,8 @@ nitf_ImageIO_12PixelOpen(nitf_ImageSubheader * subheader,
                          nitf_Error * error)
 {
     nitf_ImageIO_12PixelControl *icntl;
+    (void)subheader;
+    (void)options;
 
     icntl =
         (nitf_ImageIO_12PixelControl *)

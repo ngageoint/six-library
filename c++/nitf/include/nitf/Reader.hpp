@@ -101,7 +101,7 @@ public:
     /*!
      *  Get a new image reader for the segment
      *  \param imageSegmentNumber  The image segment number
-     *  \param options
+     *  \param options Options for reader
      *  \return  An ImageReader matching the imageSegmentNumber
      */
     nitf::ImageReader newImageReader(int imageSegmentNumber,
