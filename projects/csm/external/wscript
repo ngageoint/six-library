@@ -1,7 +1,7 @@
-import sys, os
+import sys, os, shutil
 from build import unzipper
 
-options = distclean = lambda x: None
+options = lambda x: None
 
 def configure(conf):
     unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
@@ -28,3 +28,13 @@ def build(bld):
                 use='CSMAPI THREAD DL',
                 path=bld.path.find_dir(vtsDir),
                 install_path=bld.env['install_bindir'])
+
+def distclean(context):
+
+    # remove the unzipped directory
+    dirs = filter(lambda x: os.path.exists(os.path.join(context.path.abspath(), x)), 
+                  ['vts_301_0'])
+    for d in dirs:
+        try:
+            shutil.rmtree(os.path.join(context.path.abspath(), d), ignore_errors=True)
+        except:{}
