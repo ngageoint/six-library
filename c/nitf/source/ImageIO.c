@@ -4510,7 +4510,8 @@ NITFPRIV(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
     /*      None of the cases are implemented */
     nitf->vtbl.unpack = nitf->vtbl.pack = NULL;
 
-    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
+    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P &&
+        (nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION))
     {
         switch (nitf->pixel.bytes)
         {
@@ -4537,6 +4538,7 @@ NITFPRIV(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
                 break;
         }
     }
+
     return;
 }
 
@@ -7072,8 +7074,7 @@ NITFPRIV(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
     /* Seek to the offset */
     bytes = count;
     bufp = (char *) buffer;
-    
-    
+
     if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(io,
                                                (nitf_Off) fileOffset,
                                                NITF_SEEK_SET, error)))
