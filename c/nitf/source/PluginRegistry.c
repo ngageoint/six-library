@@ -832,4 +832,41 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
     return theHandler;
 }
 
+NITFPROT(nitf_CompressionInterface* )
+nitf_PluginRegistry_retrieveCompInterface(const char *comp,
+                                          nitf_Error* error)
+{
+    /* In all cases below, the function we're calling should populate the
+     * error if one occurs. */
+    nitf_PluginRegistry *reg;
+    nitf_CompressionInterface *compIface;
+    NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION constructCompIface;
+    int hadError = 0;
 
+    /*  Find the compression interface here  */
+    reg = nitf_PluginRegistry_getInstance(error);
+    if (!reg)
+    {
+        return NULL;
+    }
+
+    /*  Now retrieve the comp iface creator  */
+    constructCompIface =
+        nitf_PluginRegistry_retrieveCompConstructor(reg,
+                comp, &hadError, error);
+    if (hadError || constructCompIface == NULL)
+    {
+        return NULL;
+    }
+
+    /* Now actually construct it */
+    compIface =
+        (nitf_CompressionInterface *) (*constructCompIface) (comp,
+                error);
+    if (compIface == NULL)
+    {
+        return NULL;
+    }
+
+    return compIface;
+}
