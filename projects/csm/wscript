@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, re
 
 DIRS = 'external'
 
@@ -17,10 +17,38 @@ def build(bld):
     # See previous revisions for special compiler and linker flags that were
     # needed to work properly with Socet GXP 3.2 on Windows
 
-    #build our plugin
+    # Build our plugin
+    # 
+    sensorModelVersion = '1_0_1'
+    csmVersion = '3_0_1'
+
+    # Get the platform name
+    # TODO: Should beef up the Linux and Solaris naming conventions
+    linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
+    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
+    winRegex = r'win32'
+    if re.match(linuxRegex, sys.platform):
+        platformName = 'linux'
+    elif re.match(solarisRegex, sys.platform):
+        platformName = 'solaris'
+    elif re.match(winRegex, sys.platform):
+        # NOTE: When there are multiple versions of VS installed, even if you
+        #       run in the VS command prompt that puts that version of VS first
+        #       on the path, to really get waf to set env['MSVC_VERSION']
+        #       properly, you may need to call out --msvc_version explicitly
+        #       at configure time (otherwise I think msvc.py picks a different
+        #       one but you end up with the one from the command prompt since
+        #       it's first on your path).
+        #       For example, if you're building with VS 2008 Express, use:
+        #       --enable-32bit "--msvc_version=msvc 9.0Exp" 
+        platformName = 'winVC' + str(env['MSVC_VERSION']).replace('.', '')
+    else:
+        raise Errors.WafError('Unsupported platform %s' % sys.platform)
+    targetName = 'SIX_SAR_GDAIS_' + sensorModelVersion + '_' + platformName + '_csm' + csmVersion
+
     lib = bld(features = 'cxx cshlib',
               includes='include',
-              target='SIX_GDAIS_CSM30', name='six-csm',
+              target=targetName, name='six-csm',
               source=bld.path.find_dir('source').ant_glob('*.cpp'),
               env=env.derive(), path=bld.path,
               use='six.sicd-c++ six.sidd-c++ CSMAPI',
