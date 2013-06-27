@@ -4989,7 +4989,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                     blockIO->userEqBuffer = 0;
                 }
                 else
-                {   
+                {
                     /* Read directly into user buffer */
                     blockIO->rwBuffer.buffer = blockIO->user.buffer;
                     /* FR == DR */
@@ -4999,7 +4999,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                 }
             }
             else
-            {                   
+            {
                 /* Allocate a buffer shared by all block I/O's */
                 blockIO->rwBuffer.buffer = writeBuffer;
                 blockIO->rwBuffer.offset.mark = 0;
@@ -5251,18 +5251,21 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     }
     else
         unpackedBuffer = NULL;
-    
-    ioBuffer =
-        (nitf_Uint8 *) NITF_MALLOC(nitf->numColumnsPerBlock * (nitf->numBands) *
-                                   bytes);
-    if (ioBuffer == NULL)
+
+
+    if (nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION) 
     {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
-                         "Error allocating I/O buffer: %s",
-                         NITF_STRERROR(NITF_ERRNO));
-        if (unpackedBuffer != NULL)
-            NITF_FREE(unpackedBuffer);
-        return NITF_FAILURE;
+        ioBuffer = (nitf_Uint8 *) NITF_MALLOC(nitf->numColumnsPerBlock * 
+                                              nitf->numBands * bytes);
+        if (ioBuffer == NULL)
+        {
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
+                             "Error allocating I/O buffer: %s",
+                             NITF_STRERROR(NITF_ERRNO));
+            if (unpackedBuffer != NULL)
+                NITF_FREE(unpackedBuffer);
+            return NITF_FAILURE;
+        }
     }
 
     /*    Initialize blocks */
@@ -5439,9 +5442,22 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
             else
                 blockIO->user.buffer = NULL;
 
+
+            if (nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION)
+            {
+                blockIO->rwBuffer.buffer = ioBuffer;
+                blockIO->userEqBuffer = 0;
+            }
+            else
+            {
+                /* Read directly into user buffer */
+                blockIO->rwBuffer.buffer = blockIO->user.buffer;
+                cntl->bufferInc = cntl->blockOffsetInc;
+                blockIO->userEqBuffer = 1;
+            }
+
             blockIO->user.offset.mark = userOff;
             blockIO->user.offset.orig = userOff;
-            blockIO->rwBuffer.buffer = ioBuffer;
             if (cntl->reading)
             {
                 blockIO->rwBuffer.offset.mark = bytes * band;
@@ -5452,7 +5468,6 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
                 blockIO->rwBuffer.offset.mark = 0;
                 blockIO->rwBuffer.offset.orig = 0;
             }
-            blockIO->userEqBuffer = 0;
 
             /*
              * Initialize the unpacked buffer, for P modes this is the 
@@ -6731,10 +6746,10 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                 if (blockIO->doIO)
                     if (!(*(nitf->vtbl.reader)) (blockIO, io, error))
                         return NITF_FAILURE;
-                
+
                 if (nitf->vtbl.unpack != NULL)
                     (*(nitf->vtbl.unpack)) (blockIO, error);
-                
+
                 if (nitf->vtbl.unformat != NULL)
                     (*(nitf->vtbl.unformat)) (blockIO->user.buffer +
                                               blockIO->user.offset.mark,
@@ -7419,14 +7434,13 @@ int nitf_ImageIO_cachedReader(_nitf_ImageIOBlock * blockIO,
         }
         
         /* Get data from block */
-        
         memcpy(blockIO->rwBuffer.buffer + blockIO->rwBuffer.offset.mark,
                nitf->blockControl.block + blockIO->blockOffset.mark,
                blockIO->readCount);
-        
+
         if (blockIO->padMask[blockIO->number] != NITF_IMAGE_IO_NO_OFFSET)
             blockIO->cntl->padded = 1;
-        
+
         return NITF_SUCCESS;
     }
 }
