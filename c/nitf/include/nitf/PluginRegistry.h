@@ -4,6 +4,7 @@
 #include "nitf/System.h"
 #include "nitf/TRE.h"
 #include "nitf/PluginIdentifier.h"
+#include "nitf/ImageIO.h"
 
 
 #   define NITF_COMPRESSION_HASH_SIZE 2
@@ -179,8 +180,12 @@ nitf_PluginRegistry_retrieveCompConstructor(nitf_PluginRegistry * reg,
                                             int *hadError,
                                             nitf_Error * error);
 
-
-
+/*
+ * Retrieves a compression interface for 'comp'.  Returns NULL if this fails.
+ */
+NITFPROT(nitf_CompressionInterface* )
+nitf_PluginRegistry_retrieveCompInterface(const char *comp,
+                                          nitf_Error* error);
 
 NITF_CXX_ENDGUARD
 

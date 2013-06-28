@@ -27,7 +27,6 @@
 /*  defined by including this first                  */
 #include "nitf/FileHeader.h"
 #include "nitf/BandInfo.h"
-#include "nitf/PluginRegistry.h"
 
 #define NITF_IM_SZ     2
 #define NITF_IID1_SZ   10

@@ -76,6 +76,9 @@ compression of a one byte unsigned image.\n
 /*! \def NITF_IMAGE_IO_COMPRESSION_C6 - Reserved, no blocking */
 #define NITF_IMAGE_IO_COMPRESSION_C6            ((nitf_Uint32) 0x00000040)
 
+/*! \def NITF_IMAGE_IO_COMPRESSION_C7 - Reserved, Complex SAR compression */
+#define NITF_IMAGE_IO_COMPRESSION_C7            ((nitf_Uint32) 0x00000060)
+
 /*! \def NITF_IMAGE_IO_COMPRESSION_C8 - JPEG 2000 */
 #define NITF_IMAGE_IO_COMPRESSION_C8            ((nitf_Uint32) 0x00000080)
 
@@ -1176,7 +1179,10 @@ Memory allocation error
 
 /*!< Number of block columns */
 /*!< Number of bands */
-NITFPRIV(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray(nitf_Uint32 numColumns, nitf_Uint32 numBands, nitf_Error * error       /*! Error object */
+NITFPRIV(_nitf_ImageIOBlock **) nitf_ImageIO_allocBlockArray(
+        nitf_Uint32 numColumns, 
+        nitf_Uint32 numBands, 
+        nitf_Error * error       /*! Error object */
                                                             );
 
 /*!
@@ -1403,7 +1409,10 @@ Memory allocation error
 
 /*!< Associated I/O control object */
 /*!< Associated IO handle */
-NITFPRIV(_nitf_ImageIOWriteControl *) nitf_ImageIOWriteControl_construct(_nitf_ImageIOControl * cntl, nitf_IOInterface* io, _nitf_ImageIO_writeMethod method,   /*!< Writing method that will be used */
+NITFPRIV(_nitf_ImageIOWriteControl *) nitf_ImageIOWriteControl_construct(
+        _nitf_ImageIOControl * cntl, 
+        nitf_IOInterface* io, 
+        _nitf_ImageIO_writeMethod method,   /*!< Writing method that will be used */
         nitf_Error * error     /*!< Error object */
                                                                         );
 
@@ -1436,7 +1445,10 @@ Memory allocation error
 
 /*!< Associated I/O control object */
 /*!< Sub-window to read */
-NITFPRIV(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct(_nitf_ImageIOControl * cntl, nitf_SubWindow * subWindow, nitf_Error * error      /*!< Error object */
+NITFPRIV(_nitf_ImageIOReadControl *) nitf_ImageIOReadControl_construct(
+        _nitf_ImageIOControl * cntl, 
+        nitf_SubWindow * subWindow, 
+        nitf_Error * error      /*!< Error object */
                                                                       );
 
 /*!
@@ -1497,8 +1509,10 @@ Invalid dimension or band
 
 /*!< The nitf_ImageIO object used do the check */
 /*!< The sub-window to check */
-NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf, nitf_SubWindow * subWindow, int *all,   /*!< Returns TRUE if the sub-window is the entire image */
-        nitf_Error * error    /*!< Error object */
+NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf, 
+                                          nitf_SubWindow * subWindow, 
+                                          int *all,   /*!< Returns TRUE if the sub-window is the entire image */
+                                          nitf_Error * error    /*!< Error object */
                                          );
 
 /*!
@@ -2706,19 +2720,18 @@ NITFAPI(NITF_BOOL) nitf_ImageIO_getMaskInfo
 );
 
 /*!
-  \brief nitf_ImageIO_bPixelFreeBlock - Free block function for B pixel
-  type psuedo-decompression interface.
+    \brief nitf_ImageIO_bPixelOpen - Open function for B pixel type
+  psuedo-decompression interface.
 
-  \returns TRUE on success. On error, the error object is set
+    This function follows the NITF_DECOMPRESSION_INTERFACE_OPEN_FUNCTION calling
+    sequence
 */
 
-/*!< Associated control structure */
-/*!< Block to free */
-NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelFreeBlock(nitf_DecompressionControl * control, nitf_Uint8 * block, nitf_Error * error    /*!< For error returns */
-                                                );
+NITFPRIV(nitf_DecompressionControl*) nitf_ImageIO_bPixelOpen
+(nitf_ImageSubheader * subheader, nrt_HashTable * options, nitf_Error * error);
 
 /*!
-  \brief nitf_ImageIO_bPixelOpen - Open function for B pixel type
+  \brief nitf_ImageIO_bPixelStart - Start function for B pixel type
   psuedo-decompression interface.
 
   The control structure stores its arguments for use by the other interface
@@ -2730,11 +2743,30 @@ NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelFreeBlock(nitf_DecompressionControl * con
 
 /*!< IO handle for reads */
 /*!< Offset to start of blocks */
-NITFPRIV(nitf_DecompressionControl *) nitf_ImageIO_bPixelOpen(nitf_IOInterface* io, nitf_Uint64 offset, nitf_Uint64 fileLength,     /*!< Total file length (not used) */
+NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelStart(
+        nitf_DecompressionControl * control,
+        nitf_IOInterface* io, 
+        nitf_Uint64 offset, 
+        nitf_Uint64 fileLength,     /*!< Total file length (not used) */
         nitf_BlockingInfo * blockInfo,    /*!< Associated blocking information */
         nitf_Uint64 * blockMask,  /*!< Associated block mask */
         nitf_Error * error        /*!< For error returns */
                                                              );
+
+/*!
+  \brief nitf_ImageIO_bPixelFreeBlock - Free block function for B pixel
+  type psuedo-decompression interface.
+
+  \returns TRUE on success. On error, the error object is set
+*/
+
+/*!< Associated control structure */
+/*!< Block to free */
+NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelFreeBlock(
+        nitf_DecompressionControl * control,
+        nitf_Uint8 * block,
+        nitf_Error * error    /*!< For error returns */
+                                                );
 
 /*!
   \brief nitf_ImageIO_bPixelClose - Close function for B pixel type
@@ -2771,6 +2803,7 @@ NITFPRIV(nitf_Uint8 *) nitf_ImageIO_bPixelReadBlock(nitf_DecompressionControl * 
 static nitf_DecompressionInterface nitf_ImageIO_bPixelInterface =
     {
         nitf_ImageIO_bPixelOpen,
+        nitf_ImageIO_bPixelStart,
         nitf_ImageIO_bPixelReadBlock,
         nitf_ImageIO_bPixelFreeBlock,
         nitf_ImageIO_bPixelClose,
@@ -2790,8 +2823,19 @@ NITFPRIV(NITF_BOOL) nitf_ImageIO_12PixelFreeBlock(
   nitf_DecompressionControl * control, nitf_Uint8 * block,
   nitf_Error * error);    /*!< For error returns */
 
+  
 /*!
-  \brief nitf_ImageIO_12PixelOpen - Open function for 12-bit pixel type
+    \brief nitf_ImageIO_12PixelOpen - Open function for 12-bit pixel type
+  psuedo-decompression interface.
+
+    This function follows the NITF_DECOMPRESSION_INTERFACE_OPEN_FUNCTION calling
+    sequence
+*/
+NITFPRIV(nitf_DecompressionControl*) nitf_ImageIO_12PixelOpen
+(nitf_ImageSubheader * subheader, nrt_HashTable * options, nitf_Error * error);
+  
+/*!
+  \brief nitf_ImageIO_12PixelStart - Open function for 12-bit pixel type
   psuedo-decompression interface.
 
   The control structure stores its arguments for use by the other interface
@@ -2801,13 +2845,14 @@ NITFPRIV(NITF_BOOL) nitf_ImageIO_12PixelFreeBlock(
   the error object is set
 */
 
-NITFPRIV(nitf_DecompressionControl *) nitf_ImageIO_12PixelOpen(
-   nitf_IOInterface* io, /*!< IO handle for reads */
-   nitf_Uint64 offset,   /*!< Offset to start of blocks */
-   nitf_Uint64 fileLength,     /*!< Total file length (not used) */
-   nitf_BlockingInfo * blockInfo,    /*!< Associated blocking information */
-   nitf_Uint64 * blockMask,  /*!< Associated block mask */
-   nitf_Error * error);      /*!< For error returns */
+NITFPRIV(NITF_BOOL) nitf_ImageIO_12PixelStart(
+   nitf_DecompressionControl* oontrol,
+   nitf_IOInterface* io,            /*!< IO handle for reads */
+   nitf_Uint64 offset,              /*!< Offset to start of blocks */
+   nitf_Uint64 fileLength,          /*!< Total file length (not used) */
+   nitf_BlockingInfo * blockInfo,   /*!< Associated blocking information */
+   nitf_Uint64 * blockMask,         /*!< Associated block mask */
+   nitf_Error * error);             /*!< For error returns */
 
 /*!
   \brief nitf_ImageIO_12PixelClose - Close function for 12-bit pixel type
@@ -2841,6 +2886,7 @@ NITFPRIV(nitf_Uint8 *) nitf_ImageIO_12PixelReadBlock(
 static nitf_DecompressionInterface nitf_ImageIO_12PixelInterface =
     {
         nitf_ImageIO_12PixelOpen,
+        nitf_ImageIO_12PixelStart,
         nitf_ImageIO_12PixelReadBlock,
         nitf_ImageIO_12PixelFreeBlock,
         nitf_ImageIO_12PixelClose,
@@ -2929,16 +2975,14 @@ static nitf_CompressionInterface nitf_ImageIO_12PixelComInterface =
 
 /*==================== nitf_ImageIO_construct ================================*/
 
-NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
-                                                subheader,
-                                                nitf_Uint64 offset,
-                                                nitf_Uint64 length,
-                                                nitf_CompressionInterface* 
-                                                compressor,
-                                                nitf_DecompressionInterface* 
-                                                decompressor,
-                                                nrt_HashTable* options,
-                                                nitf_Error * error)
+NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
+        nitf_ImageSubheader* subheader,
+        nitf_Uint64 offset,
+        nitf_Uint64 length,
+        nitf_CompressionInterface* compressor,
+        nitf_DecompressionInterface* decompressor,
+        nrt_HashTable* options,
+        nitf_Error* error)
 {
     _nitf_ImageIO *nitf;        /* The result */
     nitf_ImageSubheader *sub;   /* From the calling image segment */
@@ -3080,7 +3124,8 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
     /* Call if compressor open function if the compressor is not NULL */
     if(nitf->compressor != NULL)
     {
-        nitf->compressionControl = (*(nitf->compressor->open))(sub,options,error);
+        nitf->compressionControl = 
+                (*(nitf->compressor->open))(sub,options,error);
         if(nitf->compressionControl == NULL)
         {
             nitf_ImageIO_destruct((nitf_ImageIO **) &nitf);
@@ -3088,6 +3133,18 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(nitf_ImageSubheader *
         }
     }
 
+    /* Call if decompressor open function if the decompressor is not NULL */
+    if(nitf->decompressor != NULL)
+    {
+        nitf->decompressionControl = 
+                (*(nitf->decompressor->open))(sub,options,error);
+        if(nitf->decompressionControl == NULL)
+        {
+            nitf_ImageIO_destruct((nitf_ImageIO **) &nitf);
+            return(NULL);
+        }
+    }    
+    
     return (nitf_ImageIO *) nitf;
 
 CATCH_ERROR:
@@ -3687,8 +3744,7 @@ NITFPROT(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info)
 /*=================== nitf_ImageIO_getBlockingInfo ===========================*/
 
 NITFPROT(nitf_BlockingInfo *)
-nitf_ImageIO_getBlockingInfo(nitf_ImageIO *
-                             image,
+nitf_ImageIO_getBlockingInfo(nitf_ImageIO * image,
                              nitf_IOInterface* io,
                              nitf_Error *error)
 {
@@ -3726,20 +3782,22 @@ nitf_ImageIO_getBlockingInfo(nitf_ImageIO *
     img->blockInfo.length = img->blockSize;
 
     /*
-     * Create the decompression control object if image is compressed.
+     * Initialize the decompression control object if image is compressed.
      * This is done here because the decompressor may update the blocking
      * information.
      */
-    
-    if ((img->decompressor != NULL) && (img->decompressionControl == NULL))
+     
+    if(img->decompressor != NULL)
     {
-        img->decompressionControl =
-            (*(img->decompressor->open)) (io, img->pixelBase,
-                                          img->dataLength -
-                                          img->maskHeader.imageDataOffset,
-                                          &(img->blockInfo), img->blockMask,
-                                          error);
-        if (img->decompressionControl == NULL)
+        /* NOTE: We are counting on only getting to this point on the first
+         *       call to this function since blockInfoFlag should get set
+         *       below.  If that convention changes, this needs to get
+         *       reworked.
+         */
+        if(!(*(img->decompressor->start)) (
+            img->decompressionControl, io, img->pixelBase,
+            img->dataLength - img->maskHeader.imageDataOffset,
+            &(img->blockInfo), img->blockMask, error) )
         {
             nitf_BlockingInfo_destruct(&result);
             return NULL;
@@ -3900,6 +3958,10 @@ NITFPRIV(int) nitf_ImageIO_decodeCompression(_nitf_ImageIO* nitf,
     else if (strncmp(compression, "C6", 2) == 0)
     {
         nitf->compression = NITF_IMAGE_IO_COMPRESSION_C6;
+    }
+    else if (strncmp(compression, "C7", 2) == 0)
+    {
+        nitf->compression = NITF_IMAGE_IO_COMPRESSION_C7;
     }
     else if (strncmp(compression, "C8", 2) == 0)
     {
@@ -4448,7 +4510,8 @@ NITFPRIV(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
     /*      None of the cases are implemented */
     nitf->vtbl.unpack = nitf->vtbl.pack = NULL;
 
-    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
+    if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P &&
+        (nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION))
     {
         switch (nitf->pixel.bytes)
         {
@@ -4475,6 +4538,7 @@ NITFPRIV(void) nitf_ImageIO_setUnpack(_nitf_ImageIO * nitf)
                 break;
         }
     }
+
     return;
 }
 
@@ -4925,7 +4989,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                     blockIO->userEqBuffer = 0;
                 }
                 else
-                {   
+                {
                     /* Read directly into user buffer */
                     blockIO->rwBuffer.buffer = blockIO->user.buffer;
                     /* FR == DR */
@@ -4935,7 +4999,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                 }
             }
             else
-            {                   
+            {
                 /* Allocate a buffer shared by all block I/O's */
                 blockIO->rwBuffer.buffer = writeBuffer;
                 blockIO->rwBuffer.offset.mark = 0;
@@ -5187,18 +5251,21 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     }
     else
         unpackedBuffer = NULL;
-    
-    ioBuffer =
-        (nitf_Uint8 *) NITF_MALLOC(nitf->numColumnsPerBlock * (nitf->numBands) *
-                                   bytes);
-    if (ioBuffer == NULL)
+
+
+    if (nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION) 
     {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
-                         "Error allocating I/O buffer: %s",
-                         NITF_STRERROR(NITF_ERRNO));
-        if (unpackedBuffer != NULL)
-            NITF_FREE(unpackedBuffer);
-        return NITF_FAILURE;
+        ioBuffer = (nitf_Uint8 *) NITF_MALLOC(nitf->numColumnsPerBlock * 
+                                              nitf->numBands * bytes);
+        if (ioBuffer == NULL)
+        {
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
+                             "Error allocating I/O buffer: %s",
+                             NITF_STRERROR(NITF_ERRNO));
+            if (unpackedBuffer != NULL)
+                NITF_FREE(unpackedBuffer);
+            return NITF_FAILURE;
+        }
     }
 
     /*    Initialize blocks */
@@ -5375,9 +5442,22 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
             else
                 blockIO->user.buffer = NULL;
 
+
+            if (nitf->compression & NITF_IMAGE_IO_NO_COMPRESSION)
+            {
+                blockIO->rwBuffer.buffer = ioBuffer;
+                blockIO->userEqBuffer = 0;
+            }
+            else
+            {
+                /* Read directly into user buffer */
+                blockIO->rwBuffer.buffer = blockIO->user.buffer;
+                cntl->bufferInc = cntl->blockOffsetInc;
+                blockIO->userEqBuffer = 1;
+            }
+
             blockIO->user.offset.mark = userOff;
             blockIO->user.offset.orig = userOff;
-            blockIO->rwBuffer.buffer = ioBuffer;
             if (cntl->reading)
             {
                 blockIO->rwBuffer.offset.mark = bytes * band;
@@ -5388,7 +5468,6 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
                 blockIO->rwBuffer.offset.mark = 0;
                 blockIO->rwBuffer.offset.orig = 0;
             }
-            blockIO->userEqBuffer = 0;
 
             /*
              * Initialize the unpacked buffer, for P modes this is the 
@@ -5681,12 +5760,10 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
     
     if(nitf->compressor != NULL)
     {
-        if(!(*(nitf->compressor->start))(nitf->compressionControl,
-                        nitf->pixelBase,
-                        nitf->dataLength -
-                        nitf->maskHeader.imageDataOffset,
-                        nitf->blockMask,nitf->padMask,
-                        error) )
+        if(!(*(nitf->compressor->start))(
+                nitf->compressionControl, nitf->pixelBase,
+                nitf->dataLength - nitf->maskHeader.imageDataOffset,
+                nitf->blockMask,nitf->padMask, error) )
         {
             nitf_ImageIO_destruct((void **) &nitf);
             return NITF_FAILURE;
@@ -6669,10 +6746,10 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                 if (blockIO->doIO)
                     if (!(*(nitf->vtbl.reader)) (blockIO, io, error))
                         return NITF_FAILURE;
-                
+
                 if (nitf->vtbl.unpack != NULL)
                     (*(nitf->vtbl.unpack)) (blockIO, error);
-                
+
                 if (nitf->vtbl.unformat != NULL)
                     (*(nitf->vtbl.unformat)) (blockIO->user.buffer +
                                               blockIO->user.offset.mark,
@@ -7012,8 +7089,7 @@ NITFPRIV(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
     /* Seek to the offset */
     bytes = count;
     bufp = (char *) buffer;
-    
-    
+
     if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(io,
                                                (nitf_Off) fileOffset,
                                                NITF_SEEK_SET, error)))
@@ -7358,14 +7434,13 @@ int nitf_ImageIO_cachedReader(_nitf_ImageIOBlock * blockIO,
         }
         
         /* Get data from block */
-        
         memcpy(blockIO->rwBuffer.buffer + blockIO->rwBuffer.offset.mark,
                nitf->blockControl.block + blockIO->blockOffset.mark,
                blockIO->readCount);
-        
+
         if (blockIO->padMask[blockIO->number] != NITF_IMAGE_IO_NO_OFFSET)
             blockIO->cntl->padded = 1;
-        
+
         return NITF_SUCCESS;
     }
 }
@@ -7528,7 +7603,7 @@ NITFPROT(NRT_BOOL) nitf_ImageIO_writeBlockDirect(nitf_ImageIO* object,
         if(nitf->compressor != NULL)
         {
             if(!(*(nitf->compressor->writeBlock))(nitf->compressionControl,
-                                                   io, buffer, padPresent, !dataPresent, error))
+                                                  io, buffer, padPresent, !dataPresent, error))
                 return(NITF_FAILURE);
         }
         else
@@ -9014,21 +9089,17 @@ NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelFreeBlock(nitf_DecompressionControl
     return NITF_SUCCESS;
 }
 
-NITFPRIV(nitf_DecompressionControl *) 
-nitf_ImageIO_bPixelOpen(nitf_IOInterface* io,
-                        nitf_Uint64 offset,
-                        nitf_Uint64 fileLength,
-                        nitf_BlockingInfo* blockInfo,
-                        nitf_Uint64 *blockMask,
-                        nitf_Error *error)
+
+NITFPRIV(nitf_DecompressionControl*)
+nitf_ImageIO_bPixelOpen(nitf_ImageSubheader * subheader, 
+                        nrt_HashTable * options, 
+                        nitf_Error * error)
 {
     nitf_ImageIO_BPixelControl *icntl;
+    (void)subheader;
+    (void)options;
 
-    /* Silence compiler warnings about unused variables */
-    (void)fileLength;
-
-    icntl =
-        (nitf_ImageIO_BPixelControl *)
+    icntl = (nitf_ImageIO_BPixelControl *)
         NITF_MALLOC(sizeof(nitf_ImageIO_BPixelControl));
     if (icntl == NULL)
     {
@@ -9036,6 +9107,24 @@ nitf_ImageIO_bPixelOpen(nitf_IOInterface* io,
                         NITF_CTXT, NITF_ERR_DECOMPRESSION);
         return NULL;
     }
+
+    return (nitf_DecompressionControl *) icntl;
+}
+
+NITFPRIV(NITF_BOOL) nitf_ImageIO_bPixelStart(nitf_DecompressionControl * control,
+                                             nitf_IOInterface* io, 
+                                             nitf_Uint64 offset, 
+                                             nitf_Uint64 fileLength,
+                                             nitf_BlockingInfo * blockInfo,
+                                             nitf_Uint64 * blockMask,
+                                             nitf_Error * error)
+{
+    nitf_ImageIO_BPixelControl *icntl;
+
+    icntl = (nitf_ImageIO_BPixelControl *)control;
+
+    /* Silence compiler warnings about unused variables */
+    (void)fileLength;
 
     icntl->io = io;
     icntl->offset = offset;
@@ -9048,10 +9137,10 @@ nitf_ImageIO_bPixelOpen(nitf_IOInterface* io,
         nitf_Error_init(error, "Error creating control object",
                         NITF_CTXT, NITF_ERR_DECOMPRESSION);
         NITF_FREE(icntl);
-        return NULL;
+        return NITF_FAILURE;
     }
 
-    return (nitf_DecompressionControl *) icntl;
+    return NITF_SUCCESS;
 }
 
 
@@ -9147,18 +9236,14 @@ NITFPRIV(NITF_BOOL) nitf_ImageIO_12PixelFreeBlock(nitf_DecompressionControl
     return NITF_SUCCESS;
 }
 
-NITFPRIV(nitf_DecompressionControl *)
-nitf_ImageIO_12PixelOpen(nitf_IOInterface* io,
-                        nitf_Uint64 offset,
-                        nitf_Uint64 fileLength,
-                        nitf_BlockingInfo* blockInfo,
-                        nitf_Uint64 *blockMask,
-                        nitf_Error *error)
+NITFPRIV(nitf_DecompressionControl*) 
+nitf_ImageIO_12PixelOpen(nitf_ImageSubheader * subheader, 
+                         nrt_HashTable * options, 
+                         nitf_Error * error)
 {
     nitf_ImageIO_12PixelControl *icntl;
-
-    /* Silence compiler warnings about unused variables */
-    (void)fileLength;
+    (void)subheader;
+    (void)options;
 
     icntl =
         (nitf_ImageIO_12PixelControl *)
@@ -9170,6 +9255,24 @@ nitf_ImageIO_12PixelOpen(nitf_IOInterface* io,
         return NULL;
     }
 
+    return (nitf_DecompressionControl *) icntl;
+}
+
+NITFPRIV(NITF_BOOL) 
+nitf_ImageIO_12PixelStart(nitf_DecompressionControl* control,
+                          nitf_IOInterface* io,
+                          nitf_Uint64 offset,
+                          nitf_Uint64 fileLength,
+                          nitf_BlockingInfo * blockInfo,
+                          nitf_Uint64 * blockMask,
+                          nitf_Error * error)
+{
+    nitf_ImageIO_12PixelControl *icntl;
+
+    /* Silence compiler warnings about unused variables */
+    (void)fileLength;
+
+    icntl = (nitf_ImageIO_12PixelControl *)control;
     icntl->io = io;
     icntl->offset = offset;
     icntl->blockInfo = blockInfo;
@@ -9194,10 +9297,10 @@ nitf_ImageIO_12PixelOpen(nitf_IOInterface* io,
         nitf_Error_init(error, "Error creating control object",
                         NITF_CTXT, NITF_ERR_DECOMPRESSION);
         NITF_FREE(icntl);
-        return NULL;
+        return NITF_FAILURE;
     }
 
-    return (nitf_DecompressionControl *) icntl;
+    return NITF_SUCCESS;
 }
 
 NITFPRIV(nitf_Uint8 *)
@@ -9336,13 +9439,13 @@ CATCH_ERROR:
     return NULL;
 }
 
-NITF_BOOL nitf_ImageIO_12PixelComStart
-( nitf_CompressionControl *object,
-  nitf_Uint64 offset,
-  nitf_Uint64 dataLength,
-  nitf_Uint64 * blockMask,
-  nitf_Uint64 * padMask,
-  nitf_Error * error)
+NITF_BOOL 
+nitf_ImageIO_12PixelComStart(nitf_CompressionControl *object,
+                             nitf_Uint64 offset,
+                             nitf_Uint64 dataLength,
+                             nitf_Uint64 * blockMask,
+                             nitf_Uint64 * padMask,
+                             nitf_Error * error)
 {
   nitf_ImageIO_12PixelComControl *icntl;  /* The internal data structure */
 
@@ -9368,13 +9471,13 @@ NITF_BOOL nitf_ImageIO_12PixelComStart
   return(NITF_SUCCESS);
 }
 
-NITF_BOOL nitf_ImageIO_12PixelComWriteBlock
-( nitf_CompressionControl * object,
-  nitf_IOInterface* io,
-  const nitf_Uint8 *data,
-  NITF_BOOL pad,
-  NITF_BOOL noData,
-  nitf_Error *error)
+NITF_BOOL 
+nitf_ImageIO_12PixelComWriteBlock(nitf_CompressionControl * object,
+                                  nitf_IOInterface* io,
+                                  const nitf_Uint8 *data,
+                                  NITF_BOOL pad,
+                                  NITF_BOOL noData,
+                                  nitf_Error *error)
 {
   nitf_ImageIO_12PixelComControl *icntl;  /* The internal data structure */
   size_t pairs;                /* Number of pixel pairs */

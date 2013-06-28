@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
                 exit(EXIT_FAILURE);
             }
             imageSegment = (nitf_ImageSegment *) nitf_ListIterator_get(&iter);
-            deserializer = nitf_Reader_newImageReader(reader, count, &error);
+            deserializer = nitf_Reader_newImageReader(reader, count, NULL, &error);
             if (!deserializer)
             {
                 nitf_Error_print(&error, stderr, "Couldnt spawn deserializer");

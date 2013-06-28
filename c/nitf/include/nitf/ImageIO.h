@@ -312,6 +312,7 @@ typedef void nitf_CompressionControl;
   generate an error if some subheader fields are not the required values.
 
   \ar subheader          - Associated image subheader
+  \ar options            - Compression options.  May be NULL.
   \ar error              - Error object
 
   \return The new nitf_CompressionControl structure or NULL on error
@@ -441,33 +442,52 @@ typedef void nitf_DecompressionControl;
 
 /*!
     \brief NITF_DECOMPRESSION_INTERFACE_OPEN_FUNCTION - Image decompression
-  interface open function
+  interface open function.  This creates and prepares the decompressor for
+  first image data access.
+
+  \ar subheader          - Associated image subheader
+  \ar options            - Decompression options.  May be NULL.  Not needed
+                           for most decompressors
+  \ar error              - Error object
+
+  \return The new nitf_DecompressionControl structure or NULL on error
+*/
+
+typedef nitf_DecompressionControl *
+(*NITF_DECOMPRESSION_INTERFACE_OPEN_FUNCTION)
+(nitf_ImageSubheader * subheader, 
+ nrt_HashTable* options, nitf_Error * error);
+
+/*!
+    \brief NITF_DECOMPRESSION_INTERFACE_START_FUNCTION - Image decompression
+  interface start function
  
   This function pointer type is the type for the open field in the
-  decompression interface object. The function prepare for first image data
-  access.
+  decompression interface object.
  
-  \ar handle             - The IO handle for image IO
+  \ar object             - The decompression object
+  \ar io                 - The IO interface for image IO
   \ar offset             - File offset to start of compressed data
   \ar fileLength         - Length of compressed data in the file
   \ar blockingDefinition - Blocking information for the image
   \ar blockMask          - Block mask
   \ar error              - Error object
  
-  \return The new nitf_DecompressionControl structure or NULL on error
+  \return On error, FALSE is returned
  
   On error, the error object is set
 */
 
-typedef nitf_DecompressionControl *
-(*NITF_DECOMPRESSION_INTERFACE_OPEN_FUNCTION)
-(nitf_IOInterface* io,
+typedef NITF_BOOL
+(*NITF_DECOMPRESSION_INTERFACE_START_FUNCTION)
+(nitf_DecompressionControl *object,
+ nitf_IOInterface* io,
  nitf_Uint64 offset,
  nitf_Uint64 fileLength,
  nitf_BlockingInfo * blockingDefinition,
  nitf_Uint64 * blockMask, nitf_Error * error);
-
-/*!
+ 
+ /*!
     \brief NITF_DECOMPRESSION_INTERFACE_READ_BLOCK_FUNCTION - Image
   decompression interface read block function
  
@@ -550,18 +570,12 @@ typedef void (*NITF_DECOMPRESSION_CONTROL_DESTROY_FUNCTION)
 
 typedef struct _nitf_CompressionInterface
 {
-    NITF_COMPRESSION_INTERFACE_OPEN_FUNCTION open;
-                           /*!< Open compression */
-    NITF_COMPRESSION_INTERFACE_START_FUNCTION start;
-                           /*!< Start compression */
-    NITF_COMPRESSION_INTERFACE_WRITE_BLOCK_FUNCTION writeBlock;
-                           /*!< Write a block */
-    NITF_COMPRESSION_INTERFACE_END_FUNCTION end;
-                           /*!< End compression */
-    NITF_COMPRESSION_CONTROL_DESTROY_FUNCTION destroyControl;
-                           /*!< Destructor for compression control object */
-    void *internal;
-                           /*!< Pointer to compression specific internal data */
+    NITF_COMPRESSION_INTERFACE_OPEN_FUNCTION open;              /*!< Open compression */
+    NITF_COMPRESSION_INTERFACE_START_FUNCTION start;            /*!< Start compression */
+    NITF_COMPRESSION_INTERFACE_WRITE_BLOCK_FUNCTION writeBlock; /*!< Write a block */
+    NITF_COMPRESSION_INTERFACE_END_FUNCTION end;                /*!< End compression */
+    NITF_COMPRESSION_CONTROL_DESTROY_FUNCTION destroyControl;   /*!< Destructor for compression control object */
+    void *internal;                                             /*!< Pointer to compression specific internal data */
 }
 nitf_CompressionInterface;
 
@@ -576,11 +590,12 @@ nitf_CompressionInterface;
 
 typedef struct _nitf_DecompressionInterface
 {
-    NITF_DECOMPRESSION_INTERFACE_OPEN_FUNCTION open;    /*!< Prepare for first image data access */
+    NITF_DECOMPRESSION_INTERFACE_OPEN_FUNCTION open;            /*!< Setup the decompression object */
+    NITF_DECOMPRESSION_INTERFACE_START_FUNCTION start;          /*!< Prepare for first image data access */
     NITF_DECOMPRESSION_INTERFACE_READ_BLOCK_FUNCTION readBlock; /*!< Read a block */
     NITF_DECOMPRESSION_INTERFACE_FREE_BLOCK_FUNCTION freeBlock; /*!< Free block returned by readBlock */
     NITF_DECOMPRESSION_CONTROL_DESTROY_FUNCTION destroyControl; /*!< Destructor for decompression control object */
-    void *internal;             /*!< Pointer to compression specific internal data */
+    void *internal;                                             /*!< Pointer to decompression specific internal data */
 }
 nitf_DecompressionInterface;
 

@@ -128,8 +128,9 @@ JNIEXPORT jobject JNICALL Java_nitf_Reader_getNewImageReader(
     nitf_Error error;
     jobject imageReaderObject;
 
+    /* TODO: Support reader options? */
     imageReader
-            = nitf_Reader_newImageReader(reader, imageSegmentNumber, &error);
+            = nitf_Reader_newImageReader(reader, imageSegmentNumber, NULL, &error);
 
     if (!imageReader)
     {

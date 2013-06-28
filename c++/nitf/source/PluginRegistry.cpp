@@ -22,25 +22,42 @@
 
 #include "nitf/PluginRegistry.hpp"
 
-void nitf::PluginRegistry::loadDir(const std::string& dirName) throw(nitf::NITFException)
+namespace nitf
+{
+void PluginRegistry::loadDir(const std::string& dirName) throw(NITFException)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_loadDir(dirName.c_str(), &error))
-        throw nitf::NITFException(&error);
+        throw NITFException(&error);
 }
 
-void nitf::PluginRegistry::loadPlugin(const std::string& path) throw(nitf::NITFException)
+void PluginRegistry::loadPlugin(const std::string& path) throw(NITFException)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_loadPlugin(path.c_str(), &error))
-        throw nitf::NITFException(&error);
+        throw NITFException(&error);
 }
 
-void nitf::PluginRegistry::registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
+void PluginRegistry::registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
         NITF_PLUGIN_TRE_HANDLER_FUNCTION handler)
-        throw(nitf::NITFException)
+        throw(NITFException)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_registerTREHandler(init, handler, &error))
-        throw nitf::NITFException(&error);
+        throw NITFException(&error);
+}
+
+nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
+        const std::string& comp) throw(NITFException)
+{
+    nitf_Error error;
+    nitf_CompressionInterface* const compIface =
+            nitf_PluginRegistry_retrieveCompInterface(comp.c_str(), &error);
+    if (compIface == NULL)
+    {
+        throw NITFException(&error);
+    }
+
+    return compIface;
+}
 }

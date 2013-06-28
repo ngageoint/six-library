@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 
         /*  Get an image reader which creates the nitf_ImageIO were the masks are */
 
-        iReader = nitf_Reader_newImageReader(reader, imgCtr, error);
+        iReader = nitf_Reader_newImageReader(reader, imgCtr, NULL, error);
         if (iReader == NULL)
         {
             nitf_Reader_destruct(&reader);

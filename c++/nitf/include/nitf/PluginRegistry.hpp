@@ -59,6 +59,9 @@ public:
             NITF_PLUGIN_TRE_HANDLER_FUNCTION handler)
             throw(nitf::NITFException);
 
+    static nitf_CompressionInterface* retrieveCompressionInterface(
+            const std::string& comp) throw(nitf::NITFException);
+
 private:
     PluginRegistry()
     {

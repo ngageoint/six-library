@@ -27,13 +27,16 @@
 
 NITF_CXX_GUARD
 
-NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface*  io,
-                                              nitf_Uint64        offset,
-                                              nitf_Uint64        fileLength,
-                                              nitf_BlockingInfo* blockInfo,
-                                              nitf_Uint64*       blockMask,
-                                              nitf_Error*        error);
-
+NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
+                                              nrt_HashTable * options, 
+                                              nitf_Error * error);
+NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
+                              nitf_IOInterface*  io,
+                              nitf_Uint64        offset,
+                              nitf_Uint64        fileLength,
+                              nitf_BlockingInfo* blockInfo,
+                              nitf_Uint64*       blockMask,
+                              nitf_Error*        error);
 NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                                     nitf_Uint32 blockNumber,
                                     nitf_Uint64* blockSize,
@@ -53,7 +56,7 @@ static char *ident[] =
 
 static nitf_DecompressionInterface interfaceTable =
 {
-    implOpen, implReadBlock, implFreeBlock, implClose, NULL
+    implOpen, implStart, implReadBlock, implFreeBlock, implClose, NULL
 };
 
 typedef struct _ImplControl
@@ -202,17 +205,40 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
     }
 }
 
-NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
-                                              nitf_Uint64        offset,
-                                              nitf_Uint64        fileLength,
-                                              nitf_BlockingInfo* blockInfo,
-                                              nitf_Uint64*       blockMask,
-                                              nitf_Error*        error)
+NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
+                                              nrt_HashTable * options, 
+                                              nitf_Error * error)
 {
     ImplControl *implControl = NULL;
+    (void)subheader;
+    (void)options;
 
     if (!(implControl = (ImplControl*)implMemAlloc(sizeof(ImplControl), error)))
         goto CATCH_ERROR;
+
+    return((nitf_DecompressionControl*) implControl);
+
+    CATCH_ERROR:
+    {
+        implMemFree(implControl);
+        return NULL;
+    }
+}
+
+NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
+                              nitf_IOInterface*  io,
+                              nitf_Uint64        offset,
+                              nitf_Uint64        fileLength,
+                              nitf_BlockingInfo* blockInfo,
+                              nitf_Uint64*       blockMask,
+                              nitf_Error*        error)
+{
+    ImplControl *implControl = NULL;
+
+    /* TODO: In order to support M8, I think we would update this */
+    (void)blockMask;
+
+    implControl = (ImplControl*)control;
 
     if (nitf_IOInterface_seek(io, offset, NITF_SEEK_SET, error) < 0)
         goto CATCH_ERROR;
@@ -223,14 +249,13 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
     implControl->offset     = offset;
     implControl->fileLength = fileLength;
     implControl->blockInfo  = *blockInfo;
-    return((nitf_DecompressionControl*) implControl);
+    return NITF_SUCCESS;
 
     CATCH_ERROR:
     {
         implMemFree(implControl);
-        return NULL;
+        return NITF_FAILURE;
     }
-
 }
 
 #endif

@@ -121,9 +121,46 @@ nitf::ImageReader Reader::newImageReader(int imageSegmentNumber)
 {
     nitf_ImageReader * x = nitf_Reader_newImageReader(getNativeOrThrow(),
                                                       imageSegmentNumber,
-                                                      &error);
+                                                      NULL, &error);
     if (!x)
         throw nitf::NITFException(&error);
+
+    nitf::ImageReader reader(x);
+    //set it so it is NOT managed by the underlying library
+    //this means the reader is subject to deletion when refcount == 0
+    reader.setManaged(false);
+    return reader;
+}
+
+nitf::ImageReader Reader::newImageReader(int imageSegmentNumber,
+                                         const std::map<std::string, void*>& options)
+        throw (nitf::NITFException)
+{
+    nitf::HashTable userOptions;
+    nrt_HashTable* userOptionsNative = NULL;
+
+    if (!options.empty())
+    {
+        userOptions.setPolicy(NRT_DATA_RETAIN_OWNER);
+        for (std::map<std::string, void*>::const_iterator iter =
+                     options.begin();
+            iter != options.end();
+            ++iter)
+        {
+            userOptions.insert(iter->first, iter->second);
+        }
+        userOptionsNative = userOptions.getNative();
+    }
+
+    nitf_ImageReader* x = nitf_Reader_newImageReader(getNativeOrThrow(),
+                                                     imageSegmentNumber,
+                                                     userOptionsNative,
+                                                     &error);
+    if (!x)
+    {
+        throw nitf::NITFException(&error);
+    }
+
     nitf::ImageReader reader(x);
     //set it so it is NOT managed by the underlying library
     //this means the reader is subject to deletion when refcount == 0
