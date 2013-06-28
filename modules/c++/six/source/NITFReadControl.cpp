@@ -553,6 +553,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 #endif
     int nbpp = thisImage->getData()->getNumBytesPerPixel();
     int startIndex = thisImage->getStartIndex();
+    createCompressionOptions(mCompressionOptions);
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
         unsigned long numRowsReqSeg =
@@ -560,7 +561,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
                         - sw.getStartRow());
 
         sw.setNumRows(numRowsReqSeg);
-        nitf::ImageReader imageReader = mReader.newImageReader(startIndex + i);
+        nitf::ImageReader imageReader = mReader.newImageReader(startIndex + i,
+                                                               mCompressionOptions);
 
         nitf::Uint8* bufferPtr = buffer + totalRead;
 

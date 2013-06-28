@@ -610,24 +610,28 @@ void NITFWriteControl::save(
     //TODO maybe we need to see if the compression plug-in is even available
 
     size_t numImages = mInfos.size();
+    createCompressionOptions(mCompressionOptions);
     for (unsigned int i = 0; i < numImages; ++i)
     {
         NITFImageInfo* info = mInfos[i];
         std::vector < NITFSegmentInfo > imageSegments
                 = info->getImageSegments();
         size_t numIS = imageSegments.size();
-        unsigned long pixelSize = info->getData()->getNumBytesPerPixel();
-        unsigned long numCols = info->getData()->getNumCols();
-        unsigned long numChannels = info->getData()->getNumChannels();
+        size_t pixelSize = info->getData()->getNumBytesPerPixel();
+        size_t numCols = info->getData()->getNumCols();
+        size_t numChannels = info->getData()->getNumChannels();
 
-        if (enableJ2K && numIS == 1)
+        // The SIDD spec requires that a J2K compressed SIDDs be only a 
+        // single image segment. However this functionality remains untested.
+        if (enableJ2K && numIS == 1 || !mCompressionOptions.empty())
         {
             // We will use the ImageWriter provided by NITRO so that we can
             // take advantage of the built-in compression capabilities
-            nitf::ImageWriter iWriter = mWriter.newImageWriter(i);
+            nitf::ImageWriter iWriter = mWriter.newImageWriter(i, mCompressionOptions);
             nitf::ImageSource iSource;
-            size_t bandSize = numCols * info->getData()->getNumRows() * pixelSize;
-            for (unsigned int j = 0; j < numChannels; ++j)
+            size_t bandSize = numCols * info->getData()->getNumRows();
+
+            for (size_t j = 0; j < numChannels; ++j)
             {
                 nitf::MemorySource ms((char *)imageData[i], bandSize, bandSize * j,
                                       pixelSize, 0);
@@ -639,7 +643,7 @@ void NITFWriteControl::save(
         {
             // this bypasses the normal NITF ImageWriter and streams directly
             // to the output
-            for (unsigned int j = 0; j < numIS; ++j)
+            for (size_t j = 0; j < numIS; ++j)
             {
                 NITFSegmentInfo segmentInfo = imageSegments[j];
 

@@ -22,6 +22,7 @@
 #ifndef __SIX_NITF_READ_CONTROL_H__
 #define __SIX_NITF_READ_CONTROL_H__
 
+#include <map>
 #include "six/NITFImageInfo.h"
 #include "six/ReadControl.h"
 #include "six/ReadControlFactory.h"
@@ -112,6 +113,8 @@ protected:
 
     std::vector<NITFImageInfo*> mInfos;
 
+    std::map<std::string, void*> mCompressionOptions;
+
     /*!
      *  This function grabs the IID out of the NITF file.
      *  If the data is Complex, it follows the following convention.
@@ -142,6 +145,13 @@ protected:
     //! Resets the object internals
     void reset();
 
+    //! All pointers populated within the options need
+    //  to be cleaned up elsewhere. There is no access
+    //  to deallocation in NITFReadControl directly
+    virtual void createCompressionOptions(
+            std::map<std::string, void*>& options)
+    {
+    }
 };
 
 

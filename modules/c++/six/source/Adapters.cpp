@@ -99,10 +99,9 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
             { &__six_MemoryWriteHandler_write,
               &__six_MemoryWriteHandler_destruct };
 
-    MemoryWriteHandlerImpl
-            *impl =
-                    (MemoryWriteHandlerImpl *) NITF_MALLOC(
-                                                           sizeof(MemoryWriteHandlerImpl));
+    MemoryWriteHandlerImpl *impl =
+            (MemoryWriteHandlerImpl *) NITF_MALLOC(
+                    sizeof(MemoryWriteHandlerImpl));
     if (!impl)
         throw nitf::NITFException(Ctxt("Out of memory"));
     impl->buffer = buffer;
