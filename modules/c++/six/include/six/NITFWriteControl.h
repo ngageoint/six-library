@@ -22,6 +22,7 @@
 #ifndef __SIX_NITF_WRITE_CONTROL_H__
 #define __SIX_NITF_WRITE_CONTROL_H__
 
+#include <map>
 #include "six/Types.h"
 #include "six/Container.h"
 #include "six/WriteControl.h"
@@ -82,7 +83,7 @@ public:
     }
 
     // Ownership is not transferred - 'container' must outlive this object
-    void initialize(Container* container);
+    virtual void initialize(Container* container);
 
     using WriteControl::save;
 
@@ -94,7 +95,7 @@ public:
      *  \param schemaPaths Directories or files of schema locations
      */
     virtual void save(SourceList& imageData, const std::string& outputFile,
-              const std::vector<std::string>& schemaPaths);
+                      const std::vector<std::string>& schemaPaths);
 
     /*!
      *  Bind an interleaved (IQIQIQIQ) memory buffer
@@ -120,7 +121,7 @@ public:
      *  \param schemaPaths Directories or files of schema locations
      */
     virtual void save(BufferList& imageData, const std::string& outputFile,
-              const std::vector<std::string>& schemaPaths);
+                      const std::vector<std::string>& schemaPaths);
 
     /*!
      *  Bind an interleaved (IQIQIQIQ) input stream
@@ -135,8 +136,8 @@ public:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
-    void save(SourceList& list, nitf::IOInterface& outputFile,
-              const std::vector<std::string>& schemaPaths);
+    virtual void save(SourceList& list, nitf::IOInterface& outputFile,
+                      const std::vector<std::string>& schemaPaths);
 
     /*!
      *  Bind an interleaved (IQIQIQIQ) input stream
@@ -151,8 +152,8 @@ public:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
-    void save(BufferList& list, nitf::IOInterface& outputFile,
-              const std::vector<std::string>& schemaPaths);
+    virtual void save(BufferList& list, nitf::IOInterface& outputFile,
+                      const std::vector<std::string>& schemaPaths);
 
     /*!
      *  This function sets the organization ID (the 40 character DESSHRP field
@@ -178,6 +179,7 @@ protected:
     nitf::Writer mWriter;
     nitf::Record mRecord;
     std::vector<NITFImageInfo*> mInfos;
+    std::map<std::string, void*> mCompressionOptions;
 
     void writeNITF(nitf::IOInterface& os);
 
@@ -279,7 +281,7 @@ protected:
      *  these fields in the NITF product.
      */
     void setImageSecurity(const six::Classification& c,
-            nitf::ImageSubheader& subheader);
+                          nitf::ImageSubheader& subheader);
 
     /*!
      *  This function sets the image security fields in the
@@ -307,6 +309,14 @@ protected:
      *  image segments.
      */
     void updateFileHeaderSecurity();
+
+    //! All pointers populated within the options need
+    //  to be cleaned up elsewhere. There is no access
+    //  to deallocation in NITFWriteControl directly
+    virtual void createCompressionOptions(
+            std::map<std::string, void*>& options)
+    {
+    }
 
 private:
     static
