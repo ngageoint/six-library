@@ -1,39 +1,52 @@
 import sys, os, shutil
 from build import unzipper
+from waflib import Options
 
-options = lambda x: None
+def options(opt):
+    opt.add_option('--disable-csm', action='store_false', dest='enable_csm', default=True,
+                   help='turn off CSM support')
 
 def configure(conf):
-    unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
-             conf.path.abspath())
+    if Options.options.enable_csm:
+        # NOTE: This was downloaded from https://github.com/johnpdpkarp/csm on
+        #       2013.07.03.  Updates that occurred after the VTS release we got
+        #       from Leonard Tomko seem to still be considered CSM 3.0.1.
+        unzipper(os.path.join(conf.path.abspath(), 'csm-3.0.1_2013.07.03.zip'),
+                 conf.path.abspath())
+
+        # NOTE: Originally checked in the VTS zip file that was received from
+        #       Leonard Tomko that corresponded to CSM 3.0.1.  However, this
+        #       did not compile against the "latest" 3.0.1 from GitHub so
+        #       needed to make a few local mods to vts.cpp.  Since I was
+        #       re-zipping anyway, trimmed this down to just the header and
+        #       source files that were needed
+        unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
+                 conf.path.abspath())
+        conf.env['HAVE_CSM'] = True
 
 def build(bld):
-    # NOTE: The contents of the zip file needed to be slightly modified for it
-    # to compile with a newer version of gcc that was pickier:
-    # csm.h needed string.h for memset() and memcpy()
-    # Version.cpp and NitfIsd.h needed stdlib.h for atoi()
-    # I've let the CSM folks know - hopefully this will be fixed in the future 
-    vtsDir = 'vts_301_0'
-    bld(features = 'cxx cshlib',
-        target='CSMAPI', name='CSMAPI',
-        includes='CSM_include',
-        export_includes='CSM_include',
-        source=bld.path.find_dir(os.path.join(vtsDir, 'CSM')).ant_glob('*.cpp'),
-        path=bld.path.find_dir(vtsDir),
-        install_path=bld.env['install_libdir'])
+    if 'HAVE_CSM' in bld.env:
+        csmDir = 'csm-master'
+        bld(features = 'cxx cshlib',
+            target='CSMAPI', name='CSMAPI',
+            includes='.',
+            export_includes='.',
+            source=bld.path.find_dir(csmDir).ant_glob('*.cpp'),
+            path=bld.path.find_dir(csmDir),
+            install_path=bld.env['install_libdir'])
 
-    bld.program(target='vts', name='vts',
-                includes='VTS_include',
-                source=bld.path.find_dir(os.path.join(vtsDir, 'VTS')).ant_glob('*.cpp'),
-                use='CSMAPI THREAD DL',
-                path=bld.path.find_dir(vtsDir),
-                install_path=bld.env['install_bindir'])
+        vtsDir = 'vts_301_0'
+        bld.program(target='vts', name='vts',
+                    includes='include',
+                    source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
+                    use='CSMAPI THREAD DL',
+                    path=bld.path.find_dir(vtsDir),
+                    install_path=bld.env['install_bindir'])
 
 def distclean(context):
-
     # remove the unzipped directory
     dirs = filter(lambda x: os.path.exists(os.path.join(context.path.abspath(), x)), 
-                  ['vts_301_0'])
+                  ['csm-master', 'vts_301_0'])
     for d in dirs:
         try:
             shutil.rmtree(os.path.join(context.path.abspath(), d), ignore_errors=True)

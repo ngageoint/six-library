@@ -255,11 +255,11 @@ SIXSensorModel::computeGroundPartials(const ::csm::EcefCoord& ) const
                        "SIXSensorModel::computeGroundPartials");
 }
 
-const ::csm::CovarianceModel& SIXSensorModel::getCovarianceModel() const
+const ::csm::CorrelationModel& SIXSensorModel::getCorrelationModel() const
 {
     throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
-                       "SIXSensorModel::getCovarianceModel");
+                       "SIXSensorModel::getCorrelationModel");
 }
 
 std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
