@@ -3,7 +3,7 @@ from os.path import split, basename, splitext
 NAME            = 'nitf'
 MAINTAINER      = 'asylvest@users.sourceforge.net'
 VERSION         = '2.7'
-MODULE_DEPS     = 'mt sys'
+MODULE_DEPS     = 'mt sys mem'
 USELIB          = 'THREAD DL'
 USELIB_LOCAL    = 'nitf-c'
 LANG            = 'c++'
