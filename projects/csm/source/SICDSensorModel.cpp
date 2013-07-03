@@ -602,7 +602,7 @@ void SICDSensorModel::setSchemaDir(const std::string& dataDir)
         catch(const except::Exception& )
         {
             throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Must specify SCDD schema path via "
+                    "Must specify SICD schema path via "
                     "Plugin::getDataDirectory() or " +
                     std::string(six::SCHEMA_PATH) + " environment variable",
                     "SICDSensorModel::setSchemaDir");
