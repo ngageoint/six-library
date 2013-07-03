@@ -611,7 +611,7 @@ void NITFWriteControl::save(
 
     size_t numImages = mInfos.size();
     createCompressionOptions(mCompressionOptions);
-    for (unsigned int i = 0; i < numImages; ++i)
+    for (size_t i = 0; i < numImages; ++i)
     {
         NITFImageInfo* info = mInfos[i];
         std::vector < NITFSegmentInfo > imageSegments
@@ -623,7 +623,7 @@ void NITFWriteControl::save(
 
         // The SIDD spec requires that a J2K compressed SIDDs be only a 
         // single image segment. However this functionality remains untested.
-        if (enableJ2K && numIS == 1 || !mCompressionOptions.empty())
+        if ((enableJ2K && numIS == 1) || !mCompressionOptions.empty())
         {
             // We will use the ImageWriter provided by NITRO so that we can
             // take advantage of the built-in compression capabilities
@@ -834,4 +834,3 @@ void NITFWriteControl::addUserDefinedSubheader(
     }
     subheader.setSubheaderFields(tre);
 }
-
