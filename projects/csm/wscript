@@ -19,8 +19,8 @@ def build(bld):
 
     # Build our plugin
     # 
-    sensorModelVersion = '1_0_1'
-    csmVersion = '3_0_1'
+    sensorModelVersion = '101'
+    csmVersion = '301'
 
     # Get the platform name
     # TODO: Should beef up the Linux and Solaris naming conventions
@@ -44,7 +44,7 @@ def build(bld):
         platformName = 'winVC' + str(env['MSVC_VERSION']).replace('.', '')
     else:
         raise Errors.WafError('Unsupported platform %s' % sys.platform)
-    targetName = 'SIX_SAR_GDAIS_' + sensorModelVersion + '_' + platformName + '_csm' + csmVersion
+    targetName = 'SIX_SAR_GDAIS_' + sensorModelVersion + '_' + platformName + '_CSM' + csmVersion
 
     lib = bld(features = 'cxx cshlib',
               includes='include',

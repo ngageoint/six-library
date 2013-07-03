@@ -225,7 +225,7 @@ public:
     virtual std::vector<double>
     computeGroundPartials(const ::csm::EcefCoord& groundPt) const;
 
-    virtual const ::csm::CovarianceModel& getCovarianceModel() const;
+    virtual const ::csm::CorrelationModel& getCorrelationModel() const;
 
     std::vector<double> getUnmodeledCrossCovariance(
             const ::csm::ImageCoord& pt1,
