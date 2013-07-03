@@ -20,6 +20,7 @@
  *
  */
 
+#include <mem/SharedPtr.h>
 #include <import/nitf.hpp>
 #include <iostream>
 #include <string>
@@ -51,8 +52,9 @@ int main(int argc, char **argv)
         {
             nitf::ImageSegment segment = images[i];
             long offset = segment.getImageOffset();
-            nitf::StreamIOWriteHandler handler(input, offset,
-                            segment.getImageEnd() - offset);
+            mem::SharedPtr< ::nitf::WriteHandler> handler(
+                new nitf::StreamIOWriteHandler (
+                    input, offset, segment.getImageEnd() - offset));
             writer.setImageWriteHandler(i, handler);
         }
 
@@ -61,8 +63,9 @@ int main(int argc, char **argv)
         {
             nitf::GraphicSegment segment = graphics[i];
             long offset = segment.getOffset();
-            nitf::StreamIOWriteHandler handler(input, offset,
-                            segment.getEnd() - offset);
+            mem::SharedPtr< ::nitf::WriteHandler> handler(
+                new nitf::StreamIOWriteHandler (
+                    input, offset, segment.getEnd() - offset));
             writer.setGraphicWriteHandler(i, handler);
         }
 
@@ -71,8 +74,9 @@ int main(int argc, char **argv)
         {
             nitf::TextSegment segment = texts[i];
             long offset = segment.getOffset();
-            nitf::StreamIOWriteHandler handler(input, offset,
-                            segment.getEnd() - offset);
+            mem::SharedPtr< ::nitf::WriteHandler> handler(
+                new nitf::StreamIOWriteHandler (
+                    input, offset, segment.getEnd() - offset));
             writer.setTextWriteHandler(i, handler);
         }
 

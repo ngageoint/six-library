@@ -20,6 +20,7 @@
  *
  */
 
+#include <mem/SharedPtr.h>
 #include <import/nitf.hpp>
 #include <iostream>
 #include <string>
@@ -154,7 +155,8 @@ int main(int argc, char **argv)
         for (nitf::Uint32 i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
-            nitf::SegmentWriter segmentWriter(readerSource);
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+                new nitf::SegmentWriter(readerSource));
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
 
@@ -162,7 +164,8 @@ int main(int argc, char **argv)
         for (nitf::Uint32 i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
-            nitf::SegmentWriter segmentWriter(readerSource);
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+                new nitf::SegmentWriter(readerSource));
             writer.setTextWriteHandler(i, segmentWriter);
         }
 
@@ -170,7 +173,8 @@ int main(int argc, char **argv)
         for (nitf::Uint32 i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-            nitf::SegmentWriter segmentWriter(readerSource);
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+                new nitf::SegmentWriter(readerSource));
             writer.setDEWriteHandler(i, segmentWriter);
         }
 

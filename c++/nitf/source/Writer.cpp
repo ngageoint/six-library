@@ -113,40 +113,48 @@ void Writer::prepareIO(nitf::IOInterface & io, nitf::Record & record)
     }
 }
 
-void Writer::setImageWriteHandler(int index, WriteHandler writeHandler)
+void Writer::setImageWriteHandler(int index,
+                                  mem::SharedPtr<WriteHandler> writeHandler)
         throw (nitf::NITFException)
 {
+    mWriteHandlers.push_back(writeHandler);
     if (!nitf_Writer_setImageWriteHandler(getNativeOrThrow(), index,
-                                          writeHandler.getNative(), &error))
+                                          writeHandler->getNative(), &error))
         throw nitf::NITFException(&error);
-    writeHandler.setManaged(true);
+    writeHandler->setManaged(true);
 }
 
-void Writer::setGraphicWriteHandler(int index, WriteHandler writeHandler)
+void Writer::setGraphicWriteHandler(int index,
+                                    mem::SharedPtr<WriteHandler> writeHandler)
         throw (nitf::NITFException)
 {
+    mWriteHandlers.push_back(writeHandler);
     if (!nitf_Writer_setGraphicWriteHandler(getNativeOrThrow(), index,
-                                            writeHandler.getNative(), &error))
+                                            writeHandler->getNative(), &error))
         throw nitf::NITFException(&error);
-    writeHandler.setManaged(true);
+    writeHandler->setManaged(true);
 }
 
-void Writer::setTextWriteHandler(int index, WriteHandler writeHandler)
+void Writer::setTextWriteHandler(int index,
+                                 mem::SharedPtr<WriteHandler> writeHandler)
         throw (nitf::NITFException)
 {
+    mWriteHandlers.push_back(writeHandler);
     if (!nitf_Writer_setTextWriteHandler(getNativeOrThrow(), index,
-                                         writeHandler.getNative(), &error))
+                                         writeHandler->getNative(), &error))
         throw nitf::NITFException(&error);
-    writeHandler.setManaged(true);
+    writeHandler->setManaged(true);
 }
 
-void Writer::setDEWriteHandler(int index, WriteHandler writeHandler)
+void Writer::setDEWriteHandler(int index,
+                               mem::SharedPtr<WriteHandler> writeHandler)
         throw (nitf::NITFException)
 {
+    mWriteHandlers.push_back(writeHandler);
     if (!nitf_Writer_setDEWriteHandler(getNativeOrThrow(), index,
-                                       writeHandler.getNative(), &error))
+                                       writeHandler->getNative(), &error))
         throw nitf::NITFException(&error);
-    writeHandler.setManaged(true);
+    writeHandler->setManaged(true);
 }
 
 nitf::ImageWriter Writer::newImageWriter(int imageNumber)
