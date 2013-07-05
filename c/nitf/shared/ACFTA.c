@@ -120,11 +120,11 @@ static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
 #if 1
 NITF_DECLARE_PLUGIN(ACFTA)
 #else
-static char *ident[] = { NITF_PLUGIN_TRE_KEY, "ACFTA", NULL }; 
+static const char *ident[] = { NITF_PLUGIN_TRE_KEY, "ACFTA", NULL };
     
 
 static nitf_TREHandler* acftaHandler = NULL;
-NITFAPI(char**) ACFTA_init(nitf_Error* error)
+NITFAPI(const char**) ACFTA_init(nitf_Error* error)
 {
 	// Init here!
 	acftaHandler = nitf_TREUtils_createBasicHandler(&descriptionSet, error);

@@ -23,7 +23,7 @@
 NITF_CXX_GUARD
 
 struct _nitf_Record;
-typedef char **(*NITF_PLUGIN_INIT_FUNCTION) (nitf_Error * error);
+typedef const char **(*NITF_PLUGIN_INIT_FUNCTION) (nitf_Error * error);
 typedef void (*NITF_PLUGIN_CLEANUP_FUNCTION) (void);
 
 /*

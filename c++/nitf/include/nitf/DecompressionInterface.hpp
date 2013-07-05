@@ -31,34 +31,28 @@
 
 /*!
  *  This is a macro for quickly exposing hooks to a c++ layer 
- *  Compressor object. The idea here is to setup everything in
+ *  Decompressor object. The idea here is to setup everything in
  *  one shot. All the user has to do is create a 
- *  nitf_CompressionInterface 'open' method, and declare the 
- *  identifier for compression type.
+ *  nitf_DecompressionInterface 'open' method, and declare the
+ *  identifier for decompression type.
  */
 #define NITF_CREATE_CUSTOM_DECOMPRESSION(_DECOMPRESSION_ID, \
                                          _DECOMPRESSION_DLL_NAME, \
                                          _DECOMPRESSION_ADAPTER_OPEN_FUNC) \
 NITF_CXX_GUARD \
-static char* _DECOMPRESSION_ID##_ident[] = \
+static const char* _DECOMPRESSION_ID##_ident[] = \
 {\
-    "DECOMPRESSION", #_DECOMPRESSION_ID, NULL\
+    NITF_PLUGIN_DECOMPRESSION_KEY, #_DECOMPRESSION_ID, NULL\
 };\
 \
-inline nitf_DecompressionInterface* _DECOMPRESSION_ID##_createInterface()\
-{\
-    static nitf_DecompressionInterface inter = {\
-        &_DECOMPRESSION_ADAPTER_OPEN_FUNC,\
-        &nitf::DecompressionInterface::adapterStart,\
-        &nitf::DecompressionInterface::adapterReadBlock,\
-        &nitf::DecompressionInterface::adapterFreeBlock,\
-        &nitf::DecompressionInterface::adapterDestroy};\
-    return &inter;\
-}\
+static nitf_DecompressionInterface _DECOMPRESSION_ID##_INTERFACE_TABLE = {\
+    &_DECOMPRESSION_ADAPTER_OPEN_FUNC,\
+    &nitf::DecompressionInterface::adapterStart,\
+    &nitf::DecompressionInterface::adapterReadBlock,\
+    &nitf::DecompressionInterface::adapterFreeBlock,\
+    &nitf::DecompressionInterface::adapterDestroy};\
 \
-NITF_CXX_ENDGUARD \
-\
-NITFAPI(char**) _DECOMPRESSION_DLL_NAME##_init(nitf_Error *error)\
+NITFAPI(const char**) _DECOMPRESSION_DLL_NAME##_init(nitf_Error *error)\
 {\
     return _DECOMPRESSION_ID##_ident;\
 }\
@@ -78,9 +72,9 @@ NITFAPI(void*) _DECOMPRESSION_ID##_construct(char* decompressionType,\
                         NITF_ERR_DECOMPRESSION);\
         return NULL;\
     }\
-    return((void *) _DECOMPRESSION_ID##_createInterface());\
-}
-
+    return &_DECOMPRESSION_ID##_INTERFACE_TABLE;\
+}\
+NITF_CXX_ENDGUARD
 
 namespace nitf
 {

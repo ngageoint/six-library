@@ -282,9 +282,9 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
  *  C3 (and later C5), representing JPEG imagery (except JPEG2000).
  *  We terminate with a NULL.
  */
-static char *ident[] =
+static const char *ident[] =
     {
-        "DECOMPRESSION",
+        NITF_PLUGIN_DECOMPRESSION_KEY,
         "C3",
         "M3",
         /*"C5",*/
@@ -1472,7 +1472,7 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
     *control = NULL;
 }
 
-NITFAPI(char**) LibjpegDecompress_init(nitf_Error *error)
+NITFAPI(const char**) LibjpegDecompress_init(nitf_Error *error)
 {
     /*  Return the identifier structure  */
     return ident;

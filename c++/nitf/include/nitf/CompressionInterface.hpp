@@ -39,24 +39,19 @@
                                        _COMPRESSION_DLL_NAME, \
                                        _COMPRESSION_ADAPTER_OPEN_FUNC) \
 NITF_CXX_GUARD \
-static char* _COMPRESSION_ID##_ident[] = \
+static const char* _COMPRESSION_ID##_ident[] = \
 {\
-    "COMPRESSION", #_COMPRESSION_ID, NULL\
+    NITF_PLUGIN_COMPRESSION_KEY, #_COMPRESSION_ID, NULL\
 };\
 \
-inline nitf_CompressionInterface* _COMPRESSION_ID##_createInterface()\
-{\
-    static nitf_CompressionInterface inter = {\
-        &_COMPRESSION_ADAPTER_OPEN_FUNC,\
-        &nitf::CompressionInterface::adapterStart,\
-        &nitf::CompressionInterface::adapterWriteBlock,\
-        &nitf::CompressionInterface::adapterEnd,\
-        &nitf::CompressionInterface::adapterDestroy};\
-    return &inter;\
-}\
-NITF_CXX_ENDGUARD \
+static nitf_CompressionInterface _COMPRESSION_ID##_INTERFACE_TABLE = {\
+    &_COMPRESSION_ADAPTER_OPEN_FUNC,\
+    &nitf::CompressionInterface::adapterStart,\
+    &nitf::CompressionInterface::adapterWriteBlock,\
+    &nitf::CompressionInterface::adapterEnd,\
+    &nitf::CompressionInterface::adapterDestroy};\
 \
-NITFAPI(char**) _COMPRESSION_DLL_NAME##_init(nitf_Error *error)\
+NITFAPI(const char**) _COMPRESSION_DLL_NAME##_init(nitf_Error *error)\
 {\
     return _COMPRESSION_ID##_ident;\
 }\
@@ -76,9 +71,9 @@ NITFAPI(void*) _COMPRESSION_ID##_construct(char* compressionType,\
                         NITF_ERR_COMPRESSION);\
         return NULL;\
     }\
-    return((void *) _COMPRESSION_ID##_createInterface());\
-}
-
+    return &_COMPRESSION_ID##_INTERFACE_TABLE;\
+}\
+NITF_CXX_ENDGUARD
 
 namespace nitf
 {

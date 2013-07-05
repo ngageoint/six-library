@@ -49,9 +49,9 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control);
 
 NITFPRIV(void) implMemFree(void* p);
 
-static char *ident[] =
+static const char *ident[] =
 {
-    "DECOMPRESSION", "C8", NULL
+    NITF_PLUGIN_DECOMPRESSION_KEY, "C8", NULL
 };
 
 static nitf_DecompressionInterface interfaceTable =

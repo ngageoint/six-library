@@ -50,9 +50,9 @@ NITFPRIV(NITF_BOOL) implEnd( nitf_CompressionControl * control,
 NITFPRIV(void) implDestroy(nitf_CompressionControl ** control);
 
 
-static char *ident[] =
+static const char *ident[] =
 {
-    "COMPRESSION", "C8", NULL
+    NITF_PLUGIN_COMPRESSION_KEY, "C8", NULL
 };
 
 static nitf_CompressionInterface interfaceTable =
@@ -74,7 +74,7 @@ typedef struct _ImplControl
 NITF_CXX_ENDGUARD
 
 
-NITFAPI(char**) J2KCompress_init(nitf_Error *error)
+NITFAPI(const char**) J2KCompress_init(nitf_Error *error)
 {
     return ident;
 }

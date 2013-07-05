@@ -35,13 +35,13 @@
  * _Tre the name of the input TRE
  */
 #define NITF_DECLARE_PLUGIN(_Tre) \
-    static char *ident[] = { \
+    static const char *ident[] = { \
         NITF_PLUGIN_TRE_KEY, \
         #_Tre, \
         NULL \
     }; \
     static nitf_TREHandler _Tre##Handler; \
-    NITFAPI(char**) _Tre##_init(nitf_Error* error){ \
+    NITFAPI(const char**) _Tre##_init(nitf_Error* error){ \
        if (!nitf_TREUtils_createBasicHandler(&descriptionSet,\
                                         &_Tre##Handler,error)) \
        return NULL; return ident; \

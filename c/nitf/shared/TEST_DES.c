@@ -63,7 +63,7 @@ static nitf_TREDescription description[] = {
 };
 
 
-static char *ident[] = 
+static const char *ident[] =
 {
     NITF_PLUGIN_TRE_KEY,
     "TEST DES",
@@ -80,7 +80,7 @@ static nitf_TREDescriptionInfo descriptions[] = {
 static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
 static nitf_TREHandler TEST_DESHandler;
 
-NITFAPI(char**) TEST_DES_init(nitf_Error* error)
+NITFAPI(const char**) TEST_DES_init(nitf_Error* error)
 {
     if (!nitf_TREUtils_createBasicHandler(&descriptionSet,
                                           &TEST_DESHandler,error))

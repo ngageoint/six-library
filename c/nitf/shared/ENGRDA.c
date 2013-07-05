@@ -58,7 +58,7 @@ static nitf_TREDescriptionInfo descriptions[] = {
 
 static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
 
-static char *ident[] = { NITF_PLUGIN_TRE_KEY, "ENGRDA", NULL };
+static const char *ident[] = { NITF_PLUGIN_TRE_KEY, "ENGRDA", NULL };
 
 static nitf_TREHandler engrdaHandler;
 
@@ -288,7 +288,7 @@ NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
     return ok;
 }
 
-NITFAPI(char**) ENGRDA_init(nitf_Error* error)
+NITFAPI(const char**) ENGRDA_init(nitf_Error* error)
 {
     if (!nitf_TREUtils_createBasicHandler(&descriptionSet,
                                           &engrdaHandler,
