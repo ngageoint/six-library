@@ -559,8 +559,9 @@ void NITFWriteControl::save(
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            StreamWriteHandler writeHandler(segmentInfo, imageData[i], numCols,
-                                            numChannels, pixelSize, doByteSwap);
+            mem::SharedPtr< ::nitf::WriteHandler> writeHandler(
+                new StreamWriteHandler (segmentInfo, imageData[i], numCols,
+                                        numChannels, pixelSize, doByteSwap));
 
             mWriter.setImageWriteHandler(info->getStartIndex() + j,
                                          writeHandler);
@@ -647,9 +648,10 @@ void NITFWriteControl::save(
             {
                 NITFSegmentInfo segmentInfo = imageSegments[j];
 
-                MemoryWriteHandler writeHandler(segmentInfo, imageData[i],
-                                                segmentInfo.firstRow, numCols,
-                                                numChannels, pixelSize, doByteSwap);
+                mem::SharedPtr< ::nitf::WriteHandler> writeHandler(
+                    new MemoryWriteHandler (segmentInfo, imageData[i],
+                                            segmentInfo.firstRow, numCols,
+                                            numChannels, pixelSize, doByteSwap));
                 // Could set start index here
                 mWriter.setImageWriteHandler(info->getStartIndex() + j,
                                              writeHandler);
