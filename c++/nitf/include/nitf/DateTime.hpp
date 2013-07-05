@@ -124,8 +124,6 @@ public:
     void setYear(int year);
     void setMonth(int month);
     void setDayOfMonth(int dayOfMonth);
-    void setDayOfWeek(int dayOfWeek);
-    void setDayOfYear(int dayOfYear);
     void setHour(int hour);
     void setMinute(int minute);
     void setSecond(double second);

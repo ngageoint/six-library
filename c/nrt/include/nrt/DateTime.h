@@ -75,18 +75,6 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfMonth(nrt_DateTime * dateTime,
                                             int dayOfMonth, nrt_Error * error);
 
 /*!
- * Sets the dayOfWeek of a DateTime object and updates the timeInMillis.
- */
-NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfWeek(nrt_DateTime * dateTime,
-                                           int dayOfWeek, nrt_Error * error);
-
-/*!
- * Sets the dayOfYear of a DateTime object and updates the timeInMillis.
- */
-NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
-                                           int dayOfYear, nrt_Error * error);
-
-/*!
  * Sets the hour of a DateTime object and updates the timeInMillis.
  */
 NRTAPI(NRT_BOOL) nrt_DateTime_setHour(nrt_DateTime * dateTime, int hour,

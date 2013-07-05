@@ -182,20 +182,6 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfMonth(nrt_DateTime * dateTime,
     return nrt_DateTime_updateMillis(dateTime, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfWeek(nrt_DateTime * dateTime,
-                                           int dayOfWeek, nrt_Error * error)
-{
-    dateTime->dayOfWeek = dayOfWeek;
-    return nrt_DateTime_updateMillis(dateTime, error);
-}
-
-NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
-                                           int dayOfYear, nrt_Error * error)
-{
-    dateTime->dayOfYear = dayOfYear;
-    return nrt_DateTime_updateMillis(dateTime, error);
-}
-
 NRTAPI(NRT_BOOL) nrt_DateTime_setHour(nrt_DateTime * dateTime, int hour,
                                       nrt_Error * error)
 {

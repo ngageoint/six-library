@@ -199,26 +199,6 @@ void nitf::DateTime::setDayOfMonth(int dayOfMonth)
         throw nitf::NITFException(&error);
     }
 }
-void nitf::DateTime::setDayOfWeek(int dayOfWeek)
-{
-    nitf_Error error;
-    if (nitf_DateTime_setDayOfWeek(mDateTime,
-                                   dayOfWeek,
-                                   &error) != NITF_SUCCESS)
-    {
-        throw nitf::NITFException(&error);
-    }
-}
-void nitf::DateTime::setDayOfYear(int dayOfYear)
-{
-    nitf_Error error;
-    if (nitf_DateTime_setDayOfYear(mDateTime,
-                                   dayOfYear,
-                                   &error) != NITF_SUCCESS)
-    {
-        throw nitf::NITFException(&error);
-    }
-}
 void nitf::DateTime::setHour(int hour)
 {
     nitf_Error error;
