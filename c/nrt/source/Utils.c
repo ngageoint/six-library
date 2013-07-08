@@ -41,7 +41,7 @@ NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
 
     if (max == 1)
     {
-        char *val = NRT_MALLOC(strLen + 1);
+        char *val = (char* )NRT_MALLOC(strLen + 1);
         if (!val)
         {
             nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
@@ -71,7 +71,7 @@ NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
                 break;
 
             sz = op - cur;
-            val = NRT_MALLOC(sz + 1);
+            val = (char* )NRT_MALLOC(sz + 1);
             if (!val)
             {
                 nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
@@ -93,7 +93,7 @@ NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
                 if (op < end)
                 {
                     sz = end - op;
-                    val = NRT_MALLOC(sz + 1);
+                    val = (char* )NRT_MALLOC(sz + 1);
                     if (!val)
                     {
                         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
@@ -205,9 +205,10 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
                                 const char *extension)
 {
     size_t i, begin = 0;
-    size_t end = strlen(fullName);
-    char *p = strstr(fullName, extension);
-    for (i = 0; i < strlen(fullName); i++)
+    const size_t len = strlen(fullName);
+    size_t end = len;
+    const char *p = strstr(fullName, extension);
+    for (i = 0; i < len; i++)
     {
         if (*(fullName + i) == '/' || *(fullName + i) == '\\')
             begin = i + 1;
@@ -307,7 +308,7 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
 NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
                                              double seconds)
 {
-    double decimal = fabs(degrees);
+    double decimal = fabs((double)degrees);
     decimal += ((double) minutes / 60.0);
     decimal += (seconds / 3600.0);
 
