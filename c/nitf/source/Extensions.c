@@ -313,7 +313,7 @@ NITFAPI(nitf_TRE *) nitf_Extensions_remove(nitf_Extensions* ext,
         nitf_Error* error)
 {
     /* The easy part, remove from list */
-    nitf_TRE* tre = nitf_List_remove(ext->ref, &(extIt->iter));
+    nitf_TRE* tre = (nitf_TRE*)nitf_List_remove(ext->ref, &(extIt->iter));
     nitf_List* treInstances;
     nitf_ListIterator it;
     nitf_ListIterator end;

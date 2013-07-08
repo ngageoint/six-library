@@ -459,7 +459,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
 
     /* The 64 covers the puncuation and exponent and is overkill */
     bufferLen = field->length * 2 + 64;
-    buffer = NITF_MALLOC(bufferLen + 1);
+    buffer = (char* )NITF_MALLOC(bufferLen + 1);
     if (buffer == NULL)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -712,7 +712,7 @@ NITFPRIV(NITF_BOOL) toReal(nitf_Field * field, NITF_DATA * outData,
     {
         case NITF_BCS_A:
         case NITF_BCS_N:
-            tmpBuf = NITF_MALLOC(field->length + 1);
+            tmpBuf = (char* )NITF_MALLOC(field->length + 1);
             if (!tmpBuf)
             {
                 nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
