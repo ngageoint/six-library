@@ -13,7 +13,7 @@ BufferedWriter::BufferedWriter(const std::string& file, size_t bufferSize) :
     mBlocksWritten(0),
     mPartialBlocks(0),
     mElapsedTime(0),
-    mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE)
+    mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE | sys::File::TRUNCATE)
 {
     if (mBufferSize == 0)
     {
@@ -141,7 +141,7 @@ nitf::Off BufferedWriter::tellImpl() const
 
 nitf::Off BufferedWriter::getSizeImpl() const
 {
-    return (mTotalWritten + mPosition);
+    return (mFile.length() + mPosition);
 }
 
 int BufferedWriter::getModeImpl() const
