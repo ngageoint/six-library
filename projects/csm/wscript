@@ -49,11 +49,15 @@ def configure(conf):
 def build(bld):
     bld.recurse(DIRS)
 
-    # NOTE: Using just the CSM headers rather than just use=CSMAPI so that we
-    #       don't have a needless dependency on the CSM shared object
+    # NOTE: When we can (i.e. on Unix), use just the CSM headers rather than
+    #       just use=CSMAPI so that we don't have a needless dependency on the
+    #       CSM shared object.  On Windows we are stuck.
     modArgs = globals()
     modArgs['LIBNAME'] = bld.env['SIX_CSM_PLATFORM_NAME']
-    modArgs['INCLUDES'] = ['include', bld.env['INCLUDES_CSM']] 
+    if re.match(r'win32', sys.platform):
+        modArgs['USE'] = 'CSMAPI'
+    else:
+        modArgs['INCLUDES'] = ['include', bld.env['INCLUDES_CSM']] 
     bld.plugin(**modArgs)
 
 def distclean(context):
