@@ -23,6 +23,7 @@ def configure(conf):
         unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
                  conf.path.abspath())
         conf.env['HAVE_CSM'] = True
+        conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master') 
 
 def build(bld):
     if 'HAVE_CSM' in bld.env:
@@ -35,6 +36,10 @@ def build(bld):
             path=bld.path.find_dir(csmDir),
             install_path=bld.env['install_libdir'])
 
+        # NOTE: With this approach, our vts binary will be dependent on the
+        #       CSMAPI shared library.  If we wanted to eliminate the
+        #       dependency, we could recompile in the CSM source code that we
+        #       need to use.
         vtsDir = 'vts_301_0'
         bld.program(target='vts', name='vts',
                     includes='include',
