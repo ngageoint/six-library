@@ -98,7 +98,10 @@ TRE::~TRE(){}
 
 TRE::Iterator TRE::begin()
 {
-    return TRE::Iterator(nitf_TRE_begin(getNativeOrThrow(), &error));
+    nitf_TREEnumerator* iter = nitf_TRE_begin(getNativeOrThrow(), &error);
+    if(!iter)
+        throw nitf::NITFException(Ctxt("Invalid TRE: " + getTag()));
+    return TRE::Iterator(iter);
 }
 
 TRE::Iterator TRE::end() throw (nitf::NITFException)
