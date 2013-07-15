@@ -23,11 +23,16 @@
 #define __SIX_UTILITIES_H__
 
 #include "six/Types.h"
+#include "six/Data.h"
+#include "six/XMLControlFactory.h"
+#include "logging/Logger.h"
 #include "scene/SceneGeometry.h"
 #include "six/ErrorStatistics.h"
 #include <import/io.h>
 #include <import/xml/lite.h>
 #include <import/str.h>
+#include <vector>
+#include <memory>
 
 namespace six
 {
@@ -148,6 +153,13 @@ template<> std::string toString(const six::LatLonCorners& corners);
 
 // Load the TRE plugins in the given directory
 void loadPluginDir(const std::string& pluginDir);
+
+std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+                              ::io::InputStream& xmlStream,
+                              DataType dataType,
+                              const std::vector<std::string>& schemaPaths,
+                              logging::Logger& log);
+
 }
 
 #endif

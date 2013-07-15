@@ -23,6 +23,7 @@
 
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
+#include <six/Utilities.h>
 
 using namespace six;
 
@@ -165,32 +166,11 @@ void NITFReadControl::load(nitf::IOInterface& interface,
 
             nitf::SegmentReader deReader = mReader.newDEReader(i);
             SegmentInputStreamAdapter ioAdapter(deReader);
-            xml::lite::MinidomParser xmlParser;
-            xmlParser.preserveCharacterData(true);
-            xmlParser.parse(ioAdapter);
-            xml::lite::Document* doc = xmlParser.getDocument();
-
-            //! Check the root localName for the XML type
-            std::string xmlType = doc->getRootElement()->getLocalName();
-            DataType xmlDataType;
-            if (str::startsWith(xmlType, "SICD"))
-                xmlDataType = DataType::COMPLEX;
-            else if (str::startsWith(xmlType, "SIDD"))
-                xmlDataType = DataType::DERIVED;
-            else
-                throw except::Exception(Ctxt("Unexpected XML type"));
-
-            //! Only SIDDs can have mismatch types
-            if (dataType == DataType::COMPLEX && dataType != xmlDataType)
-            {
-                throw except::Exception(Ctxt("Unexpected SIDD DES in SICD"));
-            }
-
-            //! Create the correct type of XMLControl
-            const std::auto_ptr<XMLControl>
-                xmlControl(mXMLRegistry->newXMLControl(xmlDataType, mLog));
-
-            std::auto_ptr<Data> data(xmlControl->fromXML(doc, schemaPaths));
+            std::auto_ptr<Data> data(parseData(*mXMLRegistry,
+                                               ioAdapter,
+                                               dataType,
+                                               schemaPaths,
+                                               *mLog));
             if (data.get() == NULL)
             {
                 throw except::Exception(Ctxt("Unable to transform XML DES"));
