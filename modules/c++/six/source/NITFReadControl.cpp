@@ -47,36 +47,43 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
                                       const NITFImageInfo* info)
 {
+    const size_t numBandsSeg =
+            static_cast<nitf::Uint32>(subheader.getNumImageBands());
 
-    unsigned long numBandsSeg =
-            (unsigned long) (nitf::Uint32) subheader.getNumImageBands();
-
-    std::string pjust = subheader.getPixelJustification().toString();
+    const std::string pjust = subheader.getPixelJustification().toString();
     // TODO: More validation in here!
     if (pjust != "R")
+    {
         throw except::Exception(Ctxt("Expected right pixel justification"));
+    }
 
     // The number of bytes per pixel, which we count to be 3 in the
     // case of 24-bit true color and 8 in the case of complex float
     // and 1 in the case of most SIDD data
-    unsigned long numBytesSeg =
-            (unsigned long) ((nitf::Uint32) subheader.getNumBitsPerPixel() / 8)
-                    * numBandsSeg;
+    const size_t numBitsPerPixel =
+            static_cast<nitf::Uint32>(subheader.getNumBitsPerPixel());
+    const size_t numBytesPerPixel = (numBitsPerPixel + 7) / 8;
+    const size_t numBytesSeg = numBytesPerPixel * numBandsSeg;
 
-    unsigned long nbpp = info->getData()->getNumBytesPerPixel();
+    const size_t nbpp = info->getData()->getNumBytesPerPixel();
     if (numBytesSeg != nbpp)
     {
-        throw except::Exception(Ctxt(FmtX(
-                "Expected [%d] bytes per pixel IQ, found [%d]",
-                nbpp, numBytesSeg)));
+        std::ostringstream ostr;
+        ostr << "Expected [" << nbpp << "] bytes per pixel, found ["
+             << numBytesSeg << "]";
+        throw except::Exception(Ctxt(ostr.str()));
     }
 
-    unsigned long numCols = info->getData()->getNumCols();
-    if ((unsigned long) (nitf::Uint32) subheader.getNumCols() != numCols)
+    const size_t numCols = info->getData()->getNumCols();
+    const size_t numColsSubheader =
+            static_cast<nitf::Uint32>(subheader.getNumCols());
+
+    if (numColsSubheader != numCols)
     {
-        throw except::Exception(Ctxt(FmtX(
-                "Invalid column width.  Was expecting [%d], got [%d]",
-                numCols, (nitf::Uint32) subheader.getNumCols())));
+        std::ostringstream ostr;
+        ostr << "Invalid column width: was expecting [" << numCols
+             << "], got [" << numColsSubheader << "]";
+        throw except::Exception(Ctxt(ostr.str()));
     }
 
 }
@@ -586,4 +593,3 @@ bool NITFReadControlCreator::supports(const std::string& filename) const
         return false;
     }
 }
-
