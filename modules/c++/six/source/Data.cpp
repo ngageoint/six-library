@@ -28,49 +28,46 @@ using namespace six;
  */
 unsigned long Data::getNumBytesPerPixel() const
 {
-    PixelType pixelType = getPixelType();
-    switch (pixelType)
+    switch (getPixelType())
     {
     case PixelType::RE32F_IM32F:
         return 8;
     case PixelType::RE16I_IM16I:
         return 4;
     case PixelType::RGB24I:
-    case PixelType::RGB8LU:
         return 3;
     case PixelType::AMP8I_PHS8I:
     case PixelType::MONO16I:
         return 2;
     case PixelType::MONO8I:
     case PixelType::MONO8LU:
+    case PixelType::RGB8LU:
         return 1;
+    default:
+        throw except::Exception(Ctxt(
+                "Cannot determine number of bytes per pixel - invalid or "
+                "unsupported pixel type"));
     }
-
-    throw except::Exception(
-                            Ctxt(
-                                 "Cannot determine number of bytes per pixel - invalid or unsupported pixel type"));
 }
 
 unsigned long Data::getNumChannels() const
 {
-    PixelType pixelType = getPixelType();
-    switch (pixelType)
+    switch (getPixelType())
     {
     case PixelType::RE32F_IM32F:
     case PixelType::RE16I_IM16I:
     case PixelType::AMP8I_PHS8I:
         return 2;
     case PixelType::RGB24I:
-    case PixelType::RGB8LU:
         return 3;
     case PixelType::MONO16I:
     case PixelType::MONO8I:
     case PixelType::MONO8LU:
+    case PixelType::RGB8LU:
         return 1;
+    default:
+        throw except::Exception(Ctxt(
+                "Cannot determine number of channels - invalid or "
+                "unsupported pixel type"));
     }
-
-    throw except::Exception(
-                            Ctxt(
-                                 "Cannot determine number of channels - invalid or unsupported pixel type"));
 }
-
