@@ -248,7 +248,6 @@ public:
      */
     virtual DateTime getCreationTime() const
     {
-        /* TODO throw an exception instead? */
         if (!imageCreation.get())
             throw except::Exception(Ctxt("Must add an imageCreation member first"));
         return imageCreation->dateTime;
@@ -263,6 +262,11 @@ public:
             imageCreation.reset(new ImageCreation());
         imageCreation->dateTime = creationTime;
     }
+
+    /*!
+     *  Maps to: /SICD/Timeline/CollectStart
+     */
+    virtual DateTime getCollectionStartDateTime() const;
 
     /*!
      *  Classification info is needed by the NITFReadControl/NITFWriteControl

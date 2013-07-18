@@ -183,10 +183,10 @@ void NITFWriteControl::initialize(Container* container)
             nitf::ImageSegment imageSegment = mRecord.newImageSegment();
             nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
-            //numIS > 1?i+1:i));
             subheader.getImageTitle().set(fileTitle);
-            DateTime creationTime = info->getData()->getCreationTime();
-            subheader.getImageDateAndTime().set(creationTime);
+            const DateTime collectionDT =
+                    info->getData()->getCollectionStartDateTime();
+            subheader.getImageDateAndTime().set(collectionDT);
 
             std::string iid = six::toString(dataType);
             if (dataType == DataType::COMPLEX)
@@ -559,7 +559,7 @@ void NITFWriteControl::save(
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            mem::SharedPtr< ::nitf::WriteHandler> writeHandler(
+            mem::SharedPtr< ::nitf::WriteHandler> writeHandler( 
                 new StreamWriteHandler (segmentInfo, imageData[i], numCols,
                                         numChannels, pixelSize, doByteSwap));
 

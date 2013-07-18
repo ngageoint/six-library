@@ -267,6 +267,11 @@ struct DerivedData: public Data
     }
     
     /*!
+     *  Maps to: /SIDD/ExploitationFeatures/Collection[0]/Information/CollectionDateTime
+     */
+    virtual DateTime getCollectionStartDateTime() const;
+
+    /*!
      *  Maps to:
      *  /SIDD/ProductCreation/Classification
      */
