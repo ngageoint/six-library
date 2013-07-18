@@ -29,6 +29,7 @@
 
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
+#include <scene/ECEFToLLATransform.h>
 
 namespace six
 {
@@ -147,6 +148,9 @@ public: // GeometricModel methods
     virtual bool getGeometricCorrectionSwitch(int index) const;
 
 public: // RasterGM methods
+    using RasterGM::groundToImage;
+    using RasterGM::imageToGround;
+
     /**
      * Returns the minimum and maximum image coordinates in full image space
      * pixels over which the current model is valid
@@ -166,6 +170,43 @@ public: // RasterGM methods
      * there is no limit)
      */
     virtual std::pair<double,double> getValidHeightRange() const;
+
+    /*
+     * Returns the partial derivatives of line and sample (in pixels per
+     * meter) with respect to the given ground pt
+     *
+     * \param[in] groundPt Ground coordinate in ECEF meters
+     *
+     * \return A vector with six elements as follows:
+     *   -  [0] = line wrt x
+     *   -  [1] = line wrt y
+     *   -  [2] = line wrt z
+     *   -  [3] = sample wrt x
+     *   -  [4] = sample wrt y
+     *   -  [5] = sample wrt z
+     */
+    virtual std::vector<double>
+    computeGroundPartials(const ::csm::EcefCoord& groundPt) const;
+
+    /*
+     * Returns the position and direction of the imaging locus nearest the
+     * given ground point
+     *
+     * \param[in] imagePt Image position in pixels
+     * \param[in] groundPt Ground coordinate in ECEF meters
+     * \param[in] desiredPrecision Requested precision in pixels of the
+     *     calculation. Currently this parameter is ignored.
+     * \param[out] achievedPrecision  Precision in pixels to which the
+     *     calculation is achieved (currently this is just set to
+     *     desiredPrecision if non-NULL).
+     * \param[out] warnings Unused
+     */
+    virtual ::csm::EcefLocus imageToProximateImagingLocus(
+            const ::csm::ImageCoord& imagePt,
+            const ::csm::EcefCoord& groundPt,
+            double desiredPrecision,
+            double* achievedPrecision,
+            ::csm::WarningList* warnings) const;
 
 public:
     // All remaining public methods throw ::csm::Error's that they're not
@@ -194,13 +235,6 @@ public:
             double* achievedPrecision,
             ::csm::WarningList* warnings) const;
 
-    virtual ::csm::EcefLocus imageToProximateImagingLocus(
-            const ::csm::ImageCoord& imagePt,
-            const ::csm::EcefCoord& groundPt,
-            double desiredPrecision,
-            double* achievedPrecision,
-            ::csm::WarningList* warnings) const;
-
     virtual ::csm::EcefLocus imageToRemoteImagingLocus(
             const ::csm::ImageCoord& imagePt,
             double desiredPrecision,
@@ -222,14 +256,14 @@ public:
             double* achievedPrecision,
             ::csm::WarningList* warnings) const;
 
-    virtual std::vector<double>
-    computeGroundPartials(const ::csm::EcefCoord& groundPt) const;
-
     virtual const ::csm::CorrelationModel& getCorrelationModel() const;
 
     std::vector<double> getUnmodeledCrossCovariance(
             const ::csm::ImageCoord& pt1,
             const ::csm::ImageCoord& pt2) const;
+
+private:
+    const scene::ECEFToLLATransform mECEFToLLA;
 };
 }
 }
