@@ -21,9 +21,10 @@
  */
 #include "six/sicd/ComplexData.h"
 
-using namespace six;
-using namespace six::sicd;
-
+namespace six
+{
+namespace sicd
+{
 const char ComplexData::VENDOR_ID[] = "GDAIS";
 
 Data* ComplexData::clone() const
@@ -32,17 +33,23 @@ Data* ComplexData::clone() const
 }
 
 ComplexData::ComplexData() : 
-    mVersion("1.0.1")
+    mVersion("1.0.1"),
+    collectionInformation(new CollectionInformation()),
+    imageData(new ImageData()),
+    geoData(new GeoData()),
+    grid(new Grid()),
+    timeline(new Timeline()),
+    position(new Position()),
+    radarCollection(new RadarCollection()),
+    imageFormation(new ImageFormation()),
+    scpcoa(new SCPCOA())
 {
-    //only initialize the mandatory elements
-    collectionInformation.reset(new CollectionInformation());
-    imageData.reset(new ImageData());
-    geoData.reset(new GeoData());
-    grid.reset(new Grid());
-    timeline.reset(new Timeline());
-    position.reset(new Position());
-    radarCollection.reset(new RadarCollection());
-    imageFormation.reset(new ImageFormation());
-    scpcoa.reset(new SCPCOA());
+    //only initialize the mandatory elements above
 }
 
+DateTime ComplexData::getCollectionStartDateTime() const
+{
+    return timeline->collectStart;
+}
+}
+}

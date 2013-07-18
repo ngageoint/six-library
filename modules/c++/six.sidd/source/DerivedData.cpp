@@ -21,18 +21,15 @@
  */
 #include "six/sidd/DerivedData.h"
 
-using namespace six;
-using namespace six::sidd;
-
+namespace six
+{
+namespace sidd
+{
 const char DerivedData::VENDOR_ID[] = "GDAIS";
 
 DerivedData::DerivedData() :
-    productCreation(new ProductCreation), display(NULL),
-            geographicAndTarget(NULL), measurement(NULL),
-            exploitationFeatures(NULL), productProcessing(NULL),
-            downstreamReprocessing(NULL), errorStatistics(NULL),
-            radiometric(NULL),
-            mVersion("1.0.0")
+    productCreation(new ProductCreation),
+    mVersion("1.0.0")
 {
 }
 
@@ -41,3 +38,15 @@ Data* DerivedData::clone() const
     return new DerivedData(*this);
 }
 
+DateTime DerivedData::getCollectionStartDateTime() const
+{
+    if (!exploitationFeatures.get() ||
+        exploitationFeatures->collections.empty())
+    {
+        throw except::Exception(Ctxt("Must add a collection first"));
+    }
+
+    return exploitationFeatures->collections[0]->information->collectionDateTime;
+}
+}
+}

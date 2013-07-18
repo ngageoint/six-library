@@ -144,6 +144,12 @@ struct Data
      */
     virtual void setCreationTime(DateTime creationTime) = 0;
 
+    /*!
+     *  Maps to: /SICD/Timeline/CollectStart,
+     *  /SIDD/ExploitationFeatures/Collection[0]/Information/CollectionDateTime
+     */
+    virtual DateTime getCollectionStartDateTime() const = 0;
+
     //!  Get back the number of bytes per pixel for the product
     virtual unsigned long getNumBytesPerPixel() const;
 
