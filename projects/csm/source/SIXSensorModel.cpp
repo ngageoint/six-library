@@ -160,6 +160,71 @@ std::pair<double,double> SIXSensorModel::getValidHeightRange() const
     return std::pair<double, double>(-99999.0, 99999);
 }
 
+std::vector<double>
+SIXSensorModel::computeGroundPartials(const ::csm::EcefCoord& groundPt) const
+{
+    const double DELTA = 1.0;
+
+    ::csm::EcefCoord gp = groundPt;
+    const ::csm::ImageCoord imagePt0 = groundToImage(gp);
+
+    gp.x += DELTA;
+    const ::csm::ImageCoord imagePtDeltaX = groundToImage(gp);
+
+    gp = groundPt;
+    gp.y += DELTA;
+    const ::csm::ImageCoord imagePtDeltaY = groundToImage(gp);
+
+    gp = groundPt;
+    gp.z += DELTA;
+    const ::csm::ImageCoord imagePtDeltaZ = groundToImage(gp);
+
+    std::vector<double> partials;
+    partials.push_back((imagePtDeltaX.line - imagePt0.line) / DELTA);
+    partials.push_back((imagePtDeltaY.line - imagePt0.line) / DELTA);
+    partials.push_back((imagePtDeltaZ.line - imagePt0.line) / DELTA);
+    partials.push_back((imagePtDeltaX.samp - imagePt0.samp) / DELTA);
+    partials.push_back((imagePtDeltaY.samp - imagePt0.samp) / DELTA);
+    partials.push_back((imagePtDeltaZ.samp - imagePt0.samp) / DELTA);
+    return partials;
+}
+
+::csm::EcefLocus SIXSensorModel::imageToProximateImagingLocus(
+        const ::csm::ImageCoord& imagePt,
+        const ::csm::EcefCoord& groundPt,
+        double desiredPrecision,
+        double* achievedPrecision,
+        ::csm::WarningList* ) const
+{
+    scene::Vector3 sceneGroundPt;
+    sceneGroundPt[0] = groundPt.x;
+    sceneGroundPt[1] = groundPt.y;
+    sceneGroundPt[2] = groundPt.z;
+    const double height = mECEFToLLA.transform(sceneGroundPt).getAlt();
+
+    const double DELTA = 1.0;
+
+    const ::csm::EcefCoord gp0 =
+            imageToGround(imagePt, height, desiredPrecision);
+
+    const ::csm::EcefCoord gp1 =
+            imageToGround(imagePt, height + DELTA, desiredPrecision);
+
+    // TODO: Not sure how to calculate achievedPrecision
+    if (achievedPrecision)
+    {
+        *achievedPrecision = desiredPrecision;
+    }
+
+    ::csm::EcefLocus locus;
+    locus.point = gp0;
+    locus.direction.x = gp0.x - gp1.x;
+    locus.direction.y = gp0.y - gp1.y;
+    locus.direction.z = gp0.z - gp1.z;
+
+    return locus;
+}
+
 void SIXSensorModel::setReferencePoint(const ::csm::EcefCoord& )
 {
     throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
@@ -199,18 +264,6 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
                        "SIXSensorModel::imageToGround");
 }
 
-::csm::EcefLocus SIXSensorModel::imageToProximateImagingLocus(
-        const ::csm::ImageCoord& ,
-        const ::csm::EcefCoord& ,
-        double ,
-        double* ,
-        ::csm::WarningList* ) const
-{
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
-                       "Function not supported",
-                       "SIXSensorModel::imageToProximateImagingLocus");
-}
-
 ::csm::EcefLocus SIXSensorModel::imageToRemoteImagingLocus(
         const ::csm::ImageCoord& ,
         double ,
@@ -245,14 +298,6 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
     throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
                        "SIXSensorModel::computeSensorPartials");
-}
-
-std::vector<double>
-SIXSensorModel::computeGroundPartials(const ::csm::EcefCoord& ) const
-{
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
-                       "Function not supported",
-                       "SIXSensorModel::computeGroundPartials");
 }
 
 const ::csm::CorrelationModel& SIXSensorModel::getCorrelationModel() const

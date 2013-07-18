@@ -38,7 +38,8 @@ scene::ECEFToLLATransform* scene::ECEFToLLATransform::clone() const
     return newTransform;
 }
 
-scene::LatLonAlt scene::ECEFToLLATransform::transform(const Vector3& ecef)
+scene::LatLonAlt
+scene::ECEFToLLATransform::transform(const Vector3& ecef) const
 {
    LatLonAlt lla;
 
@@ -94,7 +95,7 @@ double scene::ECEFToLLATransform::computeLongitude(const Vector3& ecef)
 }
 
 double scene::ECEFToLLATransform::computeAltitude(const Vector3& ecef,
-                                                  double latitude)
+                                                  double latitude) const
 {
     double altitude;
 
@@ -115,7 +116,8 @@ double scene::ECEFToLLATransform::computeAltitude(const Vector3& ecef,
     return altitude;
 }
 
-double scene::ECEFToLLATransform::getInitialLatitude(const Vector3& ecef)
+double
+scene::ECEFToLLATransform::getInitialLatitude(const Vector3& ecef) const
 {
     double initLat;
 
@@ -136,7 +138,8 @@ double scene::ECEFToLLATransform::getInitialLatitude(const Vector3& ecef)
     return initLat;
 }
 
-double scene::ECEFToLLATransform::computeReducedLatitude(double latitude)
+double
+scene::ECEFToLLATransform::computeReducedLatitude(double latitude) const
 {
     double f = model->calculateFlattening();
     double denominator = cos(latitude);
@@ -146,8 +149,9 @@ double scene::ECEFToLLATransform::computeReducedLatitude(double latitude)
     return reducedLatitude;
 }
 
-double scene::ECEFToLLATransform::computeLatitude(const Vector3& ecef,
-                                                  double reducedLatitude)
+double
+scene::ECEFToLLATransform::computeLatitude(const Vector3& ecef,
+                                           double reducedLatitude) const
 {
     double latitude;
 
@@ -174,5 +178,3 @@ double scene::ECEFToLLATransform::computeLatitude(const Vector3& ecef,
 
     return latitude;
 }
-
-
