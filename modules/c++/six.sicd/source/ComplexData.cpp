@@ -32,8 +32,7 @@ Data* ComplexData::clone() const
     return new ComplexData(*this);
 }
 
-ComplexData::ComplexData() : 
-    mVersion("1.0.1"),
+ComplexData::ComplexData() :
     collectionInformation(new CollectionInformation()),
     imageData(new ImageData()),
     geoData(new GeoData()),
@@ -42,7 +41,8 @@ ComplexData::ComplexData() :
     position(new Position()),
     radarCollection(new RadarCollection()),
     imageFormation(new ImageFormation()),
-    scpcoa(new SCPCOA())
+    scpcoa(new SCPCOA()),
+    mVersion("1.0.1")
 {
     //only initialize the mandatory elements above
 }
