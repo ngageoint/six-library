@@ -54,15 +54,14 @@ public:
      * @param ecef  The ecef coordinate to transform
      * @return      A LatLonAlt
      */
-    LatLonAlt transform(const Vector3& ecef);
+    LatLonAlt transform(const Vector3& ecef) const;
+
 private:
-
-    double computeLongitude(const Vector3& ecef);
-    double computeAltitude(const Vector3& ecef, double latitude);
-    double getInitialLatitude(const Vector3& ecef);
-    double computeReducedLatitude(double latitude);
-    double computeLatitude(const Vector3& ecef, double reducedLatitude);
-
+    static double computeLongitude(const Vector3& ecef);
+    double computeAltitude(const Vector3& ecef, double latitude) const;
+    double getInitialLatitude(const Vector3& ecef) const;
+    double computeReducedLatitude(double latitude) const;
+    double computeLatitude(const Vector3& ecef, double reducedLatitude) const;
 };
 
 }
