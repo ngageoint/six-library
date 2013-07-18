@@ -39,6 +39,8 @@ public:
                    size_t size,
                    bool adopt = false);
 
+    virtual ~BufferedWriter();
+
     void flushBuffer();
 
     nitf::Uint64 getTotalWritten() const

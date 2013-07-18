@@ -43,6 +43,26 @@ BufferedWriter::BufferedWriter(const std::string& file,
     }
 }
 
+BufferedWriter::~BufferedWriter()
+{
+    try
+    {
+        if (mFile.isOpen())
+        {
+            // If the file is still open, we may not have flushed out our
+            // internal buffer.  Note that we can't just call closeImpl()
+            // here because it's virtual.  sys::File's destructor will take
+            // care of closing the file but wouldn't flush (i.e. fsync()) so
+            // we call this too.
+            flushBuffer();
+            mFile.flush();
+        }
+    }
+    catch (...)
+    {
+    }
+}
+
 void BufferedWriter::flushBuffer()
 {
     flushBuffer(mBuffer);
