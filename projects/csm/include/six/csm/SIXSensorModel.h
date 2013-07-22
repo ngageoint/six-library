@@ -40,6 +40,8 @@ class SIXSensorModel : public ::csm::RasterGM
 public:
     static const char FAMILY[];
 
+    SIXSensorModel();
+
 public: // Model methods
     /*
      * Returns a description of the trajectory identifier

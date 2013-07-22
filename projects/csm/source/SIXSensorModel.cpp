@@ -29,6 +29,10 @@ namespace csm
 {
 const char SIXSensorModel::FAMILY[] = CSM_GEOMETRIC_MODEL_FAMILY CSM_RASTER_FAMILY;
 
+SIXSensorModel::SIXSensorModel()
+{
+}
+
 std::string SIXSensorModel::getTrajectoryIdentifier() const
 {
     return "UNKNOWN";
