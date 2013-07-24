@@ -229,6 +229,18 @@ SIXSensorModel::computeGroundPartials(const ::csm::EcefCoord& groundPt) const
     return locus;
 }
 
+const ::csm::CorrelationModel& SIXSensorModel::getCorrelationModel() const
+{
+    return mCorrelationModel;
+}
+
+std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
+        const ::csm::ImageCoord& ,
+        const ::csm::ImageCoord& ) const
+{
+    return std::vector<double>(4, 0.0);
+}
+
 void SIXSensorModel::setReferencePoint(const ::csm::EcefCoord& )
 {
     throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
@@ -302,22 +314,6 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
     throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
                        "SIXSensorModel::computeSensorPartials");
-}
-
-const ::csm::CorrelationModel& SIXSensorModel::getCorrelationModel() const
-{
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
-                       "Function not supported",
-                       "SIXSensorModel::getCorrelationModel");
-}
-
-std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
-        const ::csm::ImageCoord& ,
-        const ::csm::ImageCoord& ) const
-{
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
-                       "Function not supported",
-                       "SIXSensorModel::getUnmodeledCrossCovariance");
 }
 }
 }

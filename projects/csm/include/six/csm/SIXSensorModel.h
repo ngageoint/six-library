@@ -26,6 +26,7 @@
 #include <memory>
 
 #include "RasterGM.h"
+#include "CorrelationModel.h"
 
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
@@ -210,6 +211,22 @@ public: // RasterGM methods
             double* achievedPrecision,
             ::csm::WarningList* warnings) const;
 
+    /*
+     * Returns a reference to a NoCorrelationModel
+     */
+    virtual const ::csm::CorrelationModel& getCorrelationModel() const;
+
+    /*
+     * Returns the 2x2 line and sample cross covariance (in pixels squared)
+     * between the given points for any model error not accounted for by the
+     * model parameters
+     *
+     * \return A four element vector of 0's
+     */
+    std::vector<double> getUnmodeledCrossCovariance(
+            const ::csm::ImageCoord& pt1,
+            const ::csm::ImageCoord& pt2) const;
+
 public:
     // All remaining public methods throw ::csm::Error's that they're not
     // implemented
@@ -258,14 +275,9 @@ public:
             double* achievedPrecision,
             ::csm::WarningList* warnings) const;
 
-    virtual const ::csm::CorrelationModel& getCorrelationModel() const;
-
-    std::vector<double> getUnmodeledCrossCovariance(
-            const ::csm::ImageCoord& pt1,
-            const ::csm::ImageCoord& pt2) const;
-
 private:
     const scene::ECEFToLLATransform mECEFToLLA;
+    const ::csm::NoCorrelationModel mCorrelationModel;
 };
 }
 }
