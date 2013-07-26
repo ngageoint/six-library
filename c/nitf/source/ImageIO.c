@@ -3588,7 +3588,6 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
                     if (!(*(nitf->vtbl.writer)) (blockIO, io, error))
                         return NITF_FAILURE;
                 }
-                blockIO->currentRow += 1;
 
                 /*
                  * You have to check for last row and not call 
@@ -3598,13 +3597,15 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
                  * setting-up for
                  * the non-existant next block.
                  */
-                if (row != nitf->numRows - 1)
+                if (blockIO->currentRow != nitf->numRows - 1)
                     nitf_ImageIO_nextRow(blockIO, 0);
 
                 if (blockIO->rowsUntil == 0)
                     blockIO->rowsUntil = nitf->numRowsPerBlock - 1;
                 else
-                    blockIO->rowsUntil -= 1;
+                    --blockIO->rowsUntil;
+
+                ++blockIO->currentRow;
             }
         }
     }
