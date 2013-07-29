@@ -102,11 +102,11 @@ std::vector<std::string> extractXML(std::string inputFile,
         char* xml = new char[size];
         deReader.read(xml, size);
 
-        io::ByteStream bs;
-        bs.write(xml, size);
+        io::StringStream oss;
+        oss.write(xml, size);
 
         xml::lite::MinidomParser parser;
-        parser.parse(bs);
+        parser.parse(oss);
 
         xml::lite::Document* doc = parser.getDocument();
 

@@ -98,11 +98,11 @@ int main(int argc, char** argv)
             // Parse it with xml::lite
             // Do this even if we're not pretty-printing to ensure the DES is
             // truly valid XML
-            io::ByteStream bs;
-            bs.write(xml, size);
+            io::StringStream oss;
+            oss.write(xml, size);
 
             xml::lite::MinidomParser parser;
-            parser.parse(bs);
+            parser.parse(oss);
 
             std::auto_ptr<io::OutputStream> os;
             if (toConsole)

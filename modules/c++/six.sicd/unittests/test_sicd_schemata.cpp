@@ -2406,15 +2406,15 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
     {
         // parse the programetically generated SICD XML string
         xml::lite::MinidomParser parser;
-        io::ByteStream bs;
-        bs.write(xmlText.c_str(), xmlText.size());
-        parser.parse(bs);
+        io::StringStream oss;
+        oss.write(xmlText.c_str(), xmlText.size());
+        parser.parse(oss);
 
         // apply parsed XML to document, print its XML string and compare to original XML string
         const xml::lite::Document* doc = parser.getDocument();
-        bs.reset();
-        doc->getRootElement()->print(bs);
-        std::string preRTxml(bs.stream().str());
+        oss.reset();
+        doc->getRootElement()->print(oss);
+        std::string preRTxml(oss.stream().str());
 
         std::auto_ptr<logging::Logger> log(new logging::NullLogger());
 
@@ -2427,9 +2427,9 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
         // translate data structure to XML string 
         const std::auto_ptr<xml::lite::Document> rtDoc(
             xmlControl->toXML((six::sicd::ComplexData*)data, std::vector<std::string>()));
-        bs.reset();
-        rtDoc->getRootElement()->print(bs);
-        std::string postRTxml(bs.stream().str());
+        oss.reset();
+        rtDoc->getRootElement()->print(oss);
+        std::string postRTxml(oss.stream().str());
 
         // if output path provided, write out XML results to files
         if (!xmlPath.empty()) 
