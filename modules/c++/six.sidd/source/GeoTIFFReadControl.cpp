@@ -97,7 +97,7 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
                 for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
                 {
                     // Parse it into an XML document
-                    io::ByteStream stream;
+                    io::StringStream stream;
                     stream.write(xmlStrs[ii]);
                     stream.seek(0, io::Seekable::START);
                     xml::lite::MinidomParser xmlParser;
@@ -148,7 +148,7 @@ void six::sidd::GeoTIFFReadControl::load(
     for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
     {
         // Parse it into an XML document
-        io::ByteStream stream;
+        io::StringStream stream;
         stream.write(xmlStrs[ii]);
         stream.seek(0, io::Seekable::START);
         xml::lite::MinidomParser xmlParser;
