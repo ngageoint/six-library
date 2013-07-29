@@ -306,27 +306,31 @@ struct SCP
 struct LUT
 {
     mem::ScopedArray<unsigned char> table;
-    unsigned int numEntries;
-    unsigned int elementSize;
+    size_t numEntries;
+    size_t elementSize;
 
     //!  Initialize with a number of entries and known output space
-    LUT(int entries, int outputSpace)
+    LUT(size_t entries, size_t outputSpace) :
+        table(new unsigned char[entries * outputSpace]),
+        numEntries(entries),
+        elementSize(outputSpace)
     {
-        numEntries = entries;
-        elementSize = outputSpace;
-        table.reset(new unsigned char[numEntries * outputSpace]);
     }
 
     //!  Initialize with an existing LUT, which we clone
-    LUT(unsigned char* interleavedLUT, int entries, int outputSpace)
+    LUT(const unsigned char* interleavedLUT,
+        size_t entries,
+        size_t outputSpace) :
+        table(new unsigned char[entries * outputSpace]),
+        numEntries(entries),
+        elementSize(outputSpace)
     {
-        numEntries = entries;
-        elementSize = outputSpace;
-        table.reset(new unsigned char[numEntries * outputSpace]);
         memcpy(table.get(), interleavedLUT, numEntries * outputSpace);
     }
 
-    virtual ~LUT() {}
+    virtual ~LUT()
+    {
+    }
 
     //!  Clone the LUT table
     virtual LUT* clone()
@@ -335,11 +339,16 @@ struct LUT
     }
 
     //!  Gives back a pointer at table[i * elementSize]
-    unsigned char* operator[](unsigned int i) const
+    unsigned char* operator[](size_t i)
     {
         return &(table[i * elementSize]);
     }
 
+    //!  Gives back a pointer at table[i * elementSize]
+    const unsigned char* operator[](size_t i) const
+    {
+        return &(table[i * elementSize]);
+    }
 };
 
 /*!
@@ -347,7 +356,7 @@ struct LUT
  *  \brief SICD 'AmpTable' parameter
  *
  *  This is a fixed size (256-element) LUT.  For AMP8I_PHS8I data,
- *  the amplitude and phase parts are store das unsigned 8-bit integers.
+ *  the amplitude and phase parts are stored as unsigned 8-bit integers.
  *  If an amplitude table is given, the amplitude component should be
  *  interpreted as an index into the AmpTable, ultimately yielding the
  *  double precision amplitude value
@@ -359,9 +368,6 @@ struct AmplitudeTable : public LUT
         LUT(256, sizeof(double))
     {
     }
-    
-    virtual ~AmplitudeTable() {}
-    
 };
 
 /*!
@@ -457,4 +463,3 @@ DECLARE_EXCEPTION(MissingRequired)
 }
 
 #endif
-
