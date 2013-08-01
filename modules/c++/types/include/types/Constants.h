@@ -20,11 +20,22 @@
  *
  */
 
-#ifndef __IMPORT_TYPES_H__
-#define __IMPORT_TYPES_H__
+#ifndef __TYPES_CONSTANTS_H__
+#define __TYPES_CONSTANTS_H__
 
-#include <types/Constants.h>
-#include <types/RgAz.h>
-#include <types/RowCol.h>
+namespace types
+{
+struct Constants
+{
+    static const double SPEED_OF_LIGHT_METERS_PER_SEC;
+    static const double FEET_TO_METERS;
+    static const double METERS_TO_FEET;
+    static const double RADIANS_TO_DEGREES;
+    static const double DEGREES_TO_RADIANS;
+    static const double NAUTICAL_MILES_TO_METERS;
+    static const double METERS_TO_NAUTICAL_MILES;
+    static const double NAUTICAL_MILES_TO_FEET;
+};
+}
 
 #endif
