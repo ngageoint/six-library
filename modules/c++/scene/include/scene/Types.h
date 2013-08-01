@@ -26,6 +26,7 @@
 #include <import/str.h>
 #include <import/sys.h>
 #include <types/RowCol.h>
+#include <types/Constants.h>
 
 #include <cmath>
 
@@ -35,9 +36,9 @@
 namespace scene
 {
 
-    const double METERS_TO_FEET = 3.280839895013122;
-    const double DEGREES_TO_RADIANS = M_PI/180.0;
-    const double RADIANS_TO_DEGREES = 180.0/M_PI;
+    const double METERS_TO_FEET = types::Constants::METERS_TO_FEET;
+    const double DEGREES_TO_RADIANS = types::Constants::DEGREES_TO_RADIANS;
+    const double RADIANS_TO_DEGREES = types::Constants::RADIANS_TO_DEGREES;
 
     typedef math::linear::VectorN<2> Vector2;
     typedef math::linear::VectorN<3> Vector3;

@@ -20,11 +20,20 @@
  *
  */
 
-#ifndef __IMPORT_TYPES_H__
-#define __IMPORT_TYPES_H__
-
+#include <math.h>
 #include <types/Constants.h>
-#include <types/RgAz.h>
-#include <types/RowCol.h>
 
-#endif
+namespace types
+{
+const double Constants::SPEED_OF_LIGHT_METERS_PER_SEC = 299792458.0;
+const double Constants::FEET_TO_METERS = 0.3048;
+const double Constants::METERS_TO_FEET = 1.0 / Constants::FEET_TO_METERS;
+const double Constants::RADIANS_TO_DEGREES = 180.0 / M_PI;
+const double Constants::DEGREES_TO_RADIANS = M_PI / 180.0;
+const double Constants::NAUTICAL_MILES_TO_METERS = 1852.0;
+const double Constants::METERS_TO_NAUTICAL_MILES =
+        1.0 / Constants::NAUTICAL_MILES_TO_METERS;
+const double Constants::NAUTICAL_MILES_TO_FEET =
+        Constants::NAUTICAL_MILES_TO_METERS * Constants::FEET_TO_METERS;
+
+}
