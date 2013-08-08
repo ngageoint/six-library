@@ -16,4 +16,5 @@ DEFINES            = 'NITF_MODULE_EXPORTS'
 configure = options = distclean = lambda p: None
 
 def build(bld):
-    bld.plugin(**globals())
+    if 'HAVE_JPEG' in bld.get_env() :
+        bld.plugin(**globals())
