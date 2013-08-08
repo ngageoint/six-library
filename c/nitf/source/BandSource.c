@@ -199,12 +199,15 @@ NITFPRIV(void) IOSource_destruct(NITF_DATA * data)
 
 NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
 {
+    nitf_Error error;
     if (data)
     {
         IOSourceImpl* const source = (IOSourceImpl*)data;
         if (source->io)
         {
-            nitf_IOInterface_destruct(&source->io);
+            nrt_IOInterface_close(source->io, &error);
+            nrt_IOInterface_destruct(&source->io);
+            source->io = NULL;
         }
         NITF_FREE(data);
     }
