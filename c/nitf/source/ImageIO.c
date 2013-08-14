@@ -5452,8 +5452,14 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
             else
             {
                 /* Read directly into user buffer */
+                /* NOTE: Here I'm assuming that you can't/won't actually
+                 * request to read a single band in via the subwindow.  I
+                 * can't just use cntl->numBandSubset here due to the C7
+                 * case where nitf->numBands == 2 but cntl->numBandSubset == 1
+                 */
                 blockIO->rwBuffer.buffer = blockIO->user.buffer;
-                cntl->bufferInc = cntl->blockOffsetInc;
+                cntl->bufferInc =
+                        cntl->numColumns * nitf->numBands * nitf->pixel.bytes;
                 blockIO->userEqBuffer = 1;
             }
 
@@ -9804,4 +9810,3 @@ NITFAPI(NITF_BOOL) nitf_ImageIO_getMaskInfo(nitf_ImageIO *nitf,
 
     return NITF_SUCCESS;
 }
-
