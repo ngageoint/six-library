@@ -55,10 +55,11 @@
 #define TRE_OVERFLOW_STR "TRE_OVERFLOW"
 #define TRE_OVERFLOW_VERSION 1
 
-NITFAPI(nitf_Uint32) nitf_Record_getNumReservedExtensions(nitf_Record* record,
-                                                          nitf_Error* error)
+NITFAPI(nitf_Uint32) nitf_Record_getNumReservedExtensions(
+        const nitf_Record* record,
+        nitf_Error* error)
 {
-    nitf_FileHeader* fhdr = record->header;
+    const nitf_FileHeader* fhdr = record->header;
     nitf_Uint32 num;
     
     /*  This can only really happen if they have junk in NUMI */
@@ -69,10 +70,11 @@ NITFAPI(nitf_Uint32) nitf_Record_getNumReservedExtensions(nitf_Record* record,
     return num;
 }
 
-NITFAPI(nitf_Uint32) nitf_Record_getNumDataExtensions(nitf_Record* record,
-                                                      nitf_Error* error)
+NITFAPI(nitf_Uint32) nitf_Record_getNumDataExtensions(
+        const nitf_Record* record,
+        nitf_Error* error)
 {
-    nitf_FileHeader* fhdr = record->header;
+    const nitf_FileHeader* fhdr = record->header;
     nitf_Uint32 num;
 
     /*  This can only really happen if they have junk in the field */
@@ -83,10 +85,10 @@ NITFAPI(nitf_Uint32) nitf_Record_getNumDataExtensions(nitf_Record* record,
     return num;
 }
 
-NITFAPI(nitf_Uint32) nitf_Record_getNumGraphics(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumGraphics(const nitf_Record* record,
                                                 nitf_Error* error)
 {
-    nitf_FileHeader* fhdr = record->header;
+    const nitf_FileHeader* fhdr = record->header;
     nitf_Uint32 num;
     
     /*  This can only really happen if they have junk in the field */
@@ -98,10 +100,10 @@ NITFAPI(nitf_Uint32) nitf_Record_getNumGraphics(nitf_Record* record,
 }
 
 
-NITFAPI(nitf_Uint32) nitf_Record_getNumTexts(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumTexts(const nitf_Record* record,
                                              nitf_Error* error)
 {
-    nitf_FileHeader* fhdr = record->header;
+    const nitf_FileHeader* fhdr = record->header;
     nitf_Uint32 num;
     
     /*  This can only really happen if they have junk in the field */
@@ -113,10 +115,10 @@ NITFAPI(nitf_Uint32) nitf_Record_getNumTexts(nitf_Record* record,
 }
 
 
-NITFAPI(nitf_Uint32) nitf_Record_getNumLabels(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumLabels(const nitf_Record* record,
                                               nitf_Error* error)
 {
-    nitf_FileHeader* fhdr = record->header;
+    const nitf_FileHeader* fhdr = record->header;
     nitf_Uint32 num;
     
     /*  This can only really happen if they have junk in the field */
@@ -128,10 +130,10 @@ NITFAPI(nitf_Uint32) nitf_Record_getNumLabels(nitf_Record* record,
 }
 
 
-NITFAPI(nitf_Uint32) nitf_Record_getNumImages(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumImages(const nitf_Record* record,
                                               nitf_Error* error)
 {
-    nitf_FileHeader* fhdr = record->header;
+    const nitf_FileHeader* fhdr = record->header;
     nitf_Uint32 num;
     
     /*  This can only really happen if they have junk in the field */
@@ -646,7 +648,7 @@ CATCH_TRAGIC:
 }
 
 
-NITFAPI(nitf_Record *) nitf_Record_clone(nitf_Record * source,
+NITFAPI(nitf_Record *) nitf_Record_clone(const nitf_Record * source,
                                          nitf_Error * error)
 {
     nitf_Record *record = NULL;
@@ -825,7 +827,7 @@ NITFAPI(void) nitf_Record_destruct(nitf_Record ** record)
 }
 
 
-NITFAPI(nitf_Version) nitf_Record_getVersion(nitf_Record * record)
+NITFAPI(nitf_Version) nitf_Record_getVersion(const nitf_Record * record)
 {
     char version[6];
     nitf_Version fver = NITF_VER_UNKNOWN;

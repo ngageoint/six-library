@@ -97,7 +97,7 @@ NITFAPI(nitf_Record *) nitf_Record_construct(nitf_Version version,
  *  \param error  An error to populate upon failure
  *  \return A new object that is identical to the old
  */
-NITFAPI(nitf_Record *) nitf_Record_clone(nitf_Record * source,
+NITFAPI(nitf_Record *) nitf_Record_clone(const nitf_Record * source,
                                          nitf_Error * error);
 
 /*!
@@ -116,7 +116,7 @@ NITFAPI(void) nitf_Record_destruct(nitf_Record ** record);
  * \param record the Record object
  * \return nitf_Version enum specifying the version
  */
-NITFAPI(nitf_Version) nitf_Record_getVersion(nitf_Record * record);
+NITFAPI(nitf_Version) nitf_Record_getVersion(const nitf_Record * record);
 
 
 /*!
@@ -129,7 +129,7 @@ NITFAPI(nitf_Version) nitf_Record_getVersion(nitf_Record * record);
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumImages(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumImages(const nitf_Record* record,
                                               nitf_Error* error);
 
 /*!
@@ -155,7 +155,7 @@ NITFAPI(nitf_ImageSegment*) nitf_Record_newImageSegment(nitf_Record * record,
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumGraphics(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumGraphics(const nitf_Record* record,
                                                 nitf_Error* error);
 
 /*!
@@ -183,7 +183,7 @@ nitf_Record_newGraphicSegment(nitf_Record * record,
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumTexts(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumTexts(const nitf_Record* record,
                                              nitf_Error* error);
 
 /*!
@@ -211,7 +211,7 @@ NITFAPI(nitf_TextSegment*) nitf_Record_newTextSegment(nitf_Record * record,
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumDataExtensions(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumDataExtensions(const nitf_Record* record,
                                                       nitf_Error* error);
                                           
 /*!
@@ -274,7 +274,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeGraphicSegment
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumLabels(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumLabels(const nitf_Record* record,
                                               nitf_Error* error);
 
 
@@ -340,7 +340,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeDataExtensionSegment
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumReservedExtensions(nitf_Record* record,
+NITFAPI(nitf_Uint32) nitf_Record_getNumReservedExtensions(const nitf_Record* record,
                                                           nitf_Error* error);
 
 /*!

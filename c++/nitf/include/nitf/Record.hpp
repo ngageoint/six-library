@@ -69,24 +69,24 @@ public:
     Record(nitf::Version version = NITF_VER_21) throw(nitf::NITFException);
 
     //! Clone
-    nitf::Record clone() throw(nitf::NITFException);
+    nitf::Record clone() const throw(nitf::NITFException);
 
     ~Record();
 
     //! Returns the NITF version
-    nitf::Version getVersion();
+    nitf::Version getVersion() const;
 
     //! Get the header
     nitf::FileHeader getHeader();
     //! Set the header
     void setHeader(nitf::FileHeader & value);
 
-    nitf::Uint32 getNumImages();
-    nitf::Uint32 getNumGraphics();
-    nitf::Uint32 getNumLabels();
-    nitf::Uint32 getNumTexts();
-    nitf::Uint32 getNumDataExtensions();
-    nitf::Uint32 getNumReservedExtensions();
+    nitf::Uint32 getNumImages() const;
+    nitf::Uint32 getNumGraphics() const;
+    nitf::Uint32 getNumLabels() const;
+    nitf::Uint32 getNumTexts() const;
+    nitf::Uint32 getNumDataExtensions() const;
+    nitf::Uint32 getNumReservedExtensions() const;
 
     //! Get the images
     nitf::List getImages();
@@ -156,7 +156,7 @@ public:
     void moveReservedExtensionSegment(nitf::Uint32 oldIndex, int newIndex = -1);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 
 }

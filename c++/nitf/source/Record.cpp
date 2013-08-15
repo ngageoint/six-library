@@ -49,16 +49,18 @@ Record::Record(nitf::Version version) throw(nitf::NITFException)
     setManaged(false);
 }
 
-nitf::Record Record::clone() throw(nitf::NITFException)
+nitf::Record Record::clone() const throw(nitf::NITFException)
 {
     nitf::Record dolly(nitf_Record_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
     return dolly;
 }
 
-Record::~Record(){}
+Record::~Record()
+{
+}
 
-nitf::Version Record::getVersion()
+nitf::Version Record::getVersion() const
 {
     return nitf_Record_getVersion(getNativeOrThrow());
 }
@@ -79,7 +81,7 @@ void Record::setHeader(nitf::FileHeader & value)
     value.setManaged(true);
 }
 
-nitf::Uint32 Record::getNumImages()
+nitf::Uint32 Record::getNumImages() const
 {
     nitf::Uint32 num = nitf_Record_getNumImages(getNativeOrThrow(), &error);
     
@@ -89,7 +91,7 @@ nitf::Uint32 Record::getNumImages()
     return num;
 }
     
-nitf::Uint32 Record::getNumGraphics()
+nitf::Uint32 Record::getNumGraphics() const
 {
 
     nitf::Uint32 num = nitf_Record_getNumGraphics(getNativeOrThrow(), &error);
@@ -100,7 +102,7 @@ nitf::Uint32 Record::getNumGraphics()
     return num;
 }
 
-nitf::Uint32 Record::getNumLabels()
+nitf::Uint32 Record::getNumLabels() const
 {
 
     nitf::Uint32 num = nitf_Record_getNumLabels(getNativeOrThrow(), &error);
@@ -111,7 +113,7 @@ nitf::Uint32 Record::getNumLabels()
     return num;
 }
 
-nitf::Uint32 Record::getNumTexts()
+nitf::Uint32 Record::getNumTexts() const
 {
     nitf::Uint32 num = nitf_Record_getNumTexts(getNativeOrThrow(), &error);
 
@@ -121,7 +123,7 @@ nitf::Uint32 Record::getNumTexts()
     return num;
 }
 
-nitf::Uint32 Record::getNumDataExtensions()
+nitf::Uint32 Record::getNumDataExtensions() const
 {
     nitf::Uint32 num = nitf_Record_getNumDataExtensions(getNativeOrThrow(), 
                                                         &error);
@@ -132,7 +134,7 @@ nitf::Uint32 Record::getNumDataExtensions()
     return num;
 }
 
-nitf::Uint32 Record::getNumReservedExtensions()
+nitf::Uint32 Record::getNumReservedExtensions() const
 {
     nitf::Uint32 num = nitf_Record_getNumReservedExtensions(getNativeOrThrow(), 
                                                             &error);
