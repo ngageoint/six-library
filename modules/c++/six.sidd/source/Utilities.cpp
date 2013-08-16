@@ -134,7 +134,7 @@ Utilities::getSceneGeometry(const DerivedData* derived)
 }
 
 std::auto_ptr<scene::GridECEFTransform>
-getGridECEFTransform(const DerivedData* derived)
+Utilities::getGridECEFTransform(const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
     {
