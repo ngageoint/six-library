@@ -27,14 +27,18 @@ namespace types
 {
 struct Constants
 {
-    static const double SPEED_OF_LIGHT_METERS_PER_SEC;
     static const double FEET_TO_METERS;
     static const double METERS_TO_FEET;
+
     static const double RADIANS_TO_DEGREES;
     static const double DEGREES_TO_RADIANS;
+
     static const double NAUTICAL_MILES_TO_METERS;
     static const double METERS_TO_NAUTICAL_MILES;
     static const double NAUTICAL_MILES_TO_FEET;
+
+    static const double SPEED_OF_LIGHT_METERS_PER_SEC;
+    static const double SPEED_OF_LIGHT_FEET_PER_SEC;
 };
 }
 

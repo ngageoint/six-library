@@ -31,6 +31,7 @@
 #include <six/csm/SIXSensorModel.h>
 #include <six/sidd/DerivedData.h>
 #include <scene/GridGeometry.h>
+#include <scene/GridECEFTransform.h>
 
 namespace six
 {
@@ -322,7 +323,8 @@ private:
     std::vector<std::string> mSchemaDirs;
     std::string mSensorModelState;
     std::auto_ptr<six::sidd::DerivedData> mData;
-    std::auto_ptr<const scene::GridGeometry> mGrid;
+    std::auto_ptr<const scene::GridGeometry> mGridGeometry;
+    std::auto_ptr<const scene::GridECEFTransform> mGridTransform;
 };
 }
 }

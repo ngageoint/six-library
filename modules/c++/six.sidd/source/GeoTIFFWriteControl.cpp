@@ -24,7 +24,7 @@
 
 #include "io/FileOutputStream.h"
 #include "sys/Path.h"
-#include "scene/GridGeometry.h"
+#include "scene/GridECEFTransform.h"
 #include "scene/Utilities.h"
 #include "six/sidd/GeoTIFFWriteControl.h"
 
@@ -324,19 +324,17 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     //   b) They may not (and probably do not) correspond to pixel locations
     //      (0, 0) and (numRows-1, numCols-1) since we project north up -
     //      the image likely looks rotated.
-    const scene::GeographicGridGeometry
-        gridGeometry(projection.sampleSpacing.row,
-                     projection.sampleSpacing.col,
-                     projection.referencePoint.rowCol.row,
-                     projection.referencePoint.rowCol.col,
-                     scene::Utilities::ecefToLatLon(
-                         projection.referencePoint.ecef));
+    const scene::GeographicGridECEFTransform
+        gridTransform(projection.sampleSpacing,
+                      projection.referencePoint.rowCol,
+                      scene::Utilities::ecefToLatLon(
+                          projection.referencePoint.ecef));
 
-    LatLon const upperLeft =
-        scene::Utilities::ecefToLatLon(gridGeometry.rowColToECEF(0, 0));
+    const LatLon upperLeft =
+        scene::Utilities::ecefToLatLon(gridTransform.rowColToECEF(0, 0));
 
-    LatLon const lowerRight = scene::Utilities::ecefToLatLon(
-        gridGeometry.rowColToECEF(numRows - 1, numCols - 1));
+    const LatLon lowerRight = scene::Utilities::ecefToLatLon(
+        gridTransform.rowColToECEF(numRows - 1, numCols - 1));
 
     // ModelTiePointTag = (I, J, K, X, Y, Z) where
     // (I, J, K) is the point at location (I, J) in raster space with pixel
