@@ -1,8 +1,8 @@
 NAME            = 'six.sicd'
-MAINTAINER      = 'asylvest@users.sourceforge.net'
-VERSION         = '0.1'
+MAINTAINER      = 'adam.sylvester@gd-ais.com'
+VERSION         = '2.0.2'
 MODULE_DEPS     = 'scene nitf xml.lite six mem'
-UNITTEST_DEPS   = 'scene nitf xml.lite six mem cli sio.lite'
+UNITTEST_DEPS   = 'cli sio.lite'
 
 options = configure = distclean = lambda p: None
 
