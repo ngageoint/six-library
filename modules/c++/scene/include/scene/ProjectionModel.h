@@ -22,8 +22,8 @@
 #ifndef __SCENE_PROJECTION_MODEL_H__
 #define __SCENE_PROJECTION_MODEL_H__
 
-#include "scene/Types.h"
-#include "scene/GridGeometry.h"
+#include <scene/Types.h>
+#include <scene/GridECEFTransform.h>
 #include <import/math/poly.h>
 
 namespace scene
@@ -191,7 +191,8 @@ public:
      * outSceneCenter, outSampleSpacing, and outExtent are in the output
      * plane.
      *
-     * \param gridGeom Grid geometry
+     * \param gridTransform Transform that knows how to convert from
+     * output row/col pixel space to ECEF space
      * \param inPixelStart Input space start pixel (i.e. if this is non-zero,
      * it indicates an AOI)
      * \param inSceneCenter Input space scene center pixel in row/col
@@ -206,6 +207,7 @@ public:
      * \param outputToSlantRow [output] Output to slant row polynomial
      * \param outputToSlantCol [output] Output to slant col polynomial
      * \param timeCOAPoly [output] Time center of aperture polynomial
+     * (in meters from outSceneCenter)
      * \param meanResidualErrorRow [output] Optional.  Mean residual error in
      * outputToSlantRow
      * \param meanResidualErrorCol [output] Optional.  Mean residual error in
@@ -214,7 +216,7 @@ public:
      * timeCOAPoly
      */
     void computeProjectionPolynomials(
-        const scene::GridGeometry& gridGeom,
+        const GridECEFTransform& gridTransform,
         const types::RowCol<size_t>& inPixelStart,
         const types::RowCol<double>& inSceneCenter,
         const types::RowCol<double>& interimSceneCenter,
@@ -229,6 +231,31 @@ public:
         double* meanResidualErrorRow = NULL,
         double* meanResidualErrorCol = NULL,
         double* meanResidualErrorTCOA = NULL) const;
+
+    /*
+     * Same process as above but only computes a pixel-based (from the
+     * upper-left corner of the output grid) TLP.
+     *
+     * TODO: Break these methods into a class that does the grid sampling once
+     * and can then provide you fitted polynomials in different units.
+     *
+     * \param gridTransform Transform that knows how to convert from
+     * output row/col pixel space to ECEF space
+     * \param outPixelStart Output space start pixel (i.e. if this is
+     * non-zero, it indicates the SCP used with gridTransform is with respect
+     * to a global space.  This basically translates to a multi-segment SICD.)
+     * \param outExtent Output extent in row/col
+     * \param polyOrder Polynomial order to use when fitting the polynomials
+     * \param timeCOAPoly [output] Time center of aperture polynomial
+     * (in pixels from the upper left corner of this extent, not the global
+     * extent).
+     */
+    void computePixelBasedTimeCOAPolynomial(
+        const GridECEFTransform& gridTransform,
+        const types::RowCol<double>& outPixelStart,
+        const types::RowCol<size_t>& outExtent,
+        size_t polyOrder,
+        math::poly::TwoD<double>& timeCOAPoly) const;
 };
 
 class RangeAzimProjectionModel : public ProjectionModel

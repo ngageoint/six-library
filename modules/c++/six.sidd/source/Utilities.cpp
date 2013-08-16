@@ -21,8 +21,6 @@
  */
 #include "six/sidd/Utilities.h"
 
-using namespace six;
-
 namespace
 {
 double getCenterTime(const six::sidd::DerivedData* derived)
@@ -50,8 +48,12 @@ double getCenterTime(const six::sidd::DerivedData* derived)
 }
 }
 
+namespace six
+{
+namespace sidd
+{
 scene::SideOfTrack
-six::sidd::Utilities::getSideOfTrack(const DerivedData* derived)
+Utilities::getSideOfTrack(const DerivedData* derived)
 {
     const double centerTime = getCenterTime(derived);
 
@@ -65,8 +67,8 @@ six::sidd::Utilities::getSideOfTrack(const DerivedData* derived)
     return scene::SceneGeometry(arpVel, arpPos, refPt).getSideOfTrack();
 }
 
-scene::SceneGeometry*
-six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
+std::auto_ptr<scene::SceneGeometry>
+Utilities::getSceneGeometry(const DerivedData* derived)
 {
     const double centerTime = getCenterTime(derived);
 
@@ -126,41 +128,47 @@ six::sidd::Utilities::getSceneGeometry(const DerivedData* derived)
                                      "Geographic and Cylindrical projections not yet supported"));
     }
 
-    return new scene::SceneGeometry(arpVel, arpPos, refPt, rowVec, colVec);
+    std::auto_ptr<scene::SceneGeometry> geom(new scene::SceneGeometry(
+            arpVel, arpPos, refPt, rowVec, colVec));
+    return geom;
 }
 
-scene::GridGeometry*
-six::sidd::Utilities::getGridGeometry(const DerivedData* derived)
+std::auto_ptr<scene::GridECEFTransform>
+getGridECEFTransform(const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
     {
-        throw except::Exception(Ctxt(std::string("Projection type is not measurable: ")
-                + derived->measurement->projection->projectionType.toString()));
+        throw except::Exception(Ctxt("Projection type is not measurable: " +
+                derived->measurement->projection->projectionType.toString()));
     }
 
-    six::sidd::MeasurableProjection* p =
-            (six::sidd::MeasurableProjection*)derived->measurement->projection.get();
+    const six::sidd::MeasurableProjection* p =
+            reinterpret_cast<const six::sidd::MeasurableProjection*>(
+                    derived->measurement->projection.get());
+
+    std::auto_ptr<scene::GridECEFTransform> transform;
 
     switch ((int) p->projectionType)
     {
     case six::ProjectionType::PLANE:
-        return new scene::PlanarGridGeometry(p->sampleSpacing.row,
-                                             p->sampleSpacing.col,
-                                             p->referencePoint.rowCol.row,
-                                             p->referencePoint.rowCol.col,
-                                             ((six::sidd::PlaneProjection*)p)->productPlane.rowUnitVector,
-                                             ((six::sidd::PlaneProjection*)p)->productPlane.colUnitVector,
-                                             p->referencePoint.ecef,
-                                             derived->measurement->arpPoly,
-                                             p->timeCOAPoly);
+    {
+        const six::sidd::PlaneProjection* const planeP =
+                reinterpret_cast<const six::sidd::PlaneProjection*>(p);
+
+        transform.reset(new scene::PlanarGridECEFTransform(
+                p->sampleSpacing,
+                p->referencePoint.rowCol,
+                planeP->productPlane.rowUnitVector,
+                planeP->productPlane.colUnitVector,
+                p->referencePoint.ecef));
+        break;
+    }
 
     case six::ProjectionType::GEOGRAPHIC:
 /*
         // Not complete or tested yet
-        return new scene::GeographicGridGeometry(p->sampleSpacing.row,
-                                                 p->sampleSpacing.col,
-                                                 p->referencePoint.rowCol.row,
-                                                 p->referencePoint.rowCol.col,
+        return new scene::GeographicGridECEFTransform(p->sampleSpacing,
+                                                 p->referencePoint.rowCol,
                                                  scene::Utilities::ecefToLatLon(p->referencePoint.ecef));
 */
 
@@ -196,10 +204,8 @@ six::sidd::Utilities::getGridGeometry(const DerivedData* derived)
         six::Vector3 colVec = cos(a) * n + sin(a) * e;
         six::Vector3 rowVec = math::linear::cross(colVec, u);
 
-        return new scene::CylindricalGridGeometry(p->sampleSpacing.row,
-                                                  p->sampleSpacing.col,
-                                                  p->referencePoint.rowCol.row,
-                                                  p->referencePoint.rowCol.col,
+        return new scene::CylindricalGridECEFTransform(p->sampleSpacing,
+                                                  p->referencePoint.rowCol,
                                                   rowVec,
                                                   colVec,
                                                   u,
@@ -209,13 +215,56 @@ six::sidd::Utilities::getGridGeometry(const DerivedData* derived)
 */
 
     default:
-        throw except::Exception(Ctxt(std::string("Invalid projection type: ")
-                + p->projectionType.toString()));
+        throw except::Exception(Ctxt("Invalid projection type: " +
+                p->projectionType.toString()));
 
     }
+
+    return transform;
 }
 
-void six::sidd::Utilities::setProductValues(Poly2D timeCOAPoly,
+std::auto_ptr<scene::GridGeometry>
+Utilities::getGridGeometry(const DerivedData* derived)
+{
+    if (!derived->measurement->projection->isMeasurable())
+    {
+        throw except::Exception(Ctxt("Projection type is not measurable: " +
+                derived->measurement->projection->projectionType.toString()));
+    }
+
+    const six::sidd::MeasurableProjection* p =
+            reinterpret_cast<const six::sidd::MeasurableProjection*>(
+                    derived->measurement->projection.get());
+
+    std::auto_ptr<scene::GridGeometry> geom;
+
+    // Only currently have an implementation for PGD
+    switch ((int) p->projectionType)
+    {
+    case six::ProjectionType::PLANE:
+    {
+        const six::sidd::PlaneProjection* const planeP =
+                reinterpret_cast<const six::sidd::PlaneProjection*>(p);
+
+        geom.reset(new scene::PlanarGridGeometry(
+                planeP->productPlane.rowUnitVector,
+                planeP->productPlane.colUnitVector,
+                p->referencePoint.ecef,
+                derived->measurement->arpPoly,
+                p->timeCOAPoly));
+        break;
+    }
+
+    default:
+        throw except::Exception(Ctxt("Invalid/unsupported projection type: " +
+                p->projectionType.toString()));
+
+    }
+
+    return geom;
+}
+
+void Utilities::setProductValues(Poly2D timeCOAPoly,
         PolyXYZ arpPoly, ReferencePoint ref, const Vector3* row,
         const Vector3* col, RangeAzimuth<double>res, Product* product)
 {
@@ -228,7 +277,7 @@ void six::sidd::Utilities::setProductValues(Poly2D timeCOAPoly,
     setProductValues(arpVel, arpPos, ref.ecef, row, col, res, product);
 }
 
-void six::sidd::Utilities::setProductValues(Vector3 arpVel, Vector3 arpPos,
+void Utilities::setProductValues(Vector3 arpVel, Vector3 arpPos,
         Vector3 refPos, const Vector3* row, const Vector3* col,
         RangeAzimuth<double>res, Product* product)
 {
@@ -249,7 +298,7 @@ void six::sidd::Utilities::setProductValues(Vector3 arpVel, Vector3 arpPos,
     }
 }
 
-void six::sidd::Utilities::setCollectionValues(Poly2D timeCOAPoly,
+void Utilities::setCollectionValues(Poly2D timeCOAPoly,
         PolyXYZ arpPoly, ReferencePoint ref, const Vector3* row,
         const Vector3* col, Collection* collection)
 {
@@ -262,7 +311,7 @@ void six::sidd::Utilities::setCollectionValues(Poly2D timeCOAPoly,
     setCollectionValues(arpVel, arpPos, ref.ecef, row, col, collection);
 }
 
-void six::sidd::Utilities::setCollectionValues(Vector3 arpVel, Vector3 arpPos,
+void Utilities::setCollectionValues(Vector3 arpVel, Vector3 arpPos,
         Vector3 refPos, const Vector3* row, const Vector3* col,
         Collection* collection)
 {
@@ -348,7 +397,7 @@ six::PolarizationType _convertDualPolarization(six::DualPolarizationType pol,
     }
 }
 
-std::pair<six::PolarizationType, six::PolarizationType> six::sidd::Utilities::convertDualPolarization(
+std::pair<six::PolarizationType, six::PolarizationType> Utilities::convertDualPolarization(
         six::DualPolarizationType pol)
 {
     std::pair<six::PolarizationType, six::PolarizationType> pols;
@@ -356,4 +405,5 @@ std::pair<six::PolarizationType, six::PolarizationType> six::sidd::Utilities::co
     pols.second = _convertDualPolarization(pol, false);
     return pols;
 }
-
+}
+}

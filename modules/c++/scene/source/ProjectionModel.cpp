@@ -21,8 +21,14 @@
  */
 #include "scene/ProjectionModel.h"
 
-using namespace scene;
+namespace
+{
+// Points to use in each direction for projection
+static const size_t POINTS_1D = 10;
+}
 
+namespace scene
+{
 ProjectionModel::
 ProjectionModel(const Vector3& slantPlaneNormal,
                 const Vector3& imagePlaneRowVector,
@@ -209,7 +215,7 @@ ProjectionModel::imageToScene(const types::RowCol<double>& imageGridPoint,
 }
 
 void ProjectionModel::computeProjectionPolynomials(
-    const scene::GridGeometry& gridGeom,
+    const GridECEFTransform& gridTransform,
     const types::RowCol<size_t>& inPixelStart,
     const types::RowCol<double>& inSceneCenter,
     const types::RowCol<double>& interimSceneCenter,
@@ -225,9 +231,6 @@ void ProjectionModel::computeProjectionPolynomials(
     double* meanResidualErrorCol,
     double* meanResidualErrorTCOA) const
 {
-    // Points to use in each direction
-    static const size_t POINTS_1D = 10;
-
     // Want to sample [0, outExtent) in the loop below
     const types::RowCol<double> skip(
         static_cast<double>(outExtent.row - 1) / (POINTS_1D - 1),
@@ -247,7 +250,7 @@ void ProjectionModel::computeProjectionPolynomials(
     math::linear::Matrix2D<double> tcoaLines(POINTS_1D, POINTS_1D);
     math::linear::Matrix2D<double> tcoaSamples(POINTS_1D, POINTS_1D);
 
-    types::RowCol<double> currentOffset(0., 0.);
+    types::RowCol<double> currentOffset(0.0, 0.0);
     
     for (size_t ii = 0; ii < POINTS_1D; ++ii, currentOffset.row += skip.row)
     {
@@ -269,7 +272,7 @@ void ProjectionModel::computeProjectionPolynomials(
 
             // Find initial position in the scene
             const scene::Vector3 sPos =
-                gridGeom.rowColToECEF(currentOffset.row, currentOffset.col);
+                    gridTransform.rowColToECEF(currentOffset);
 
             // This HAS to be a scene coordinate
             double timeCOA(0.0);
@@ -333,6 +336,53 @@ void ProjectionModel::computeProjectionPolynomials(
             *meanResidualErrorTCOA = errorSumTCOA / NUM_POINTS;
         }
     }
+}
+
+void ProjectionModel::computePixelBasedTimeCOAPolynomial(
+    const GridECEFTransform& gridTransform,
+    const types::RowCol<double>& outPixelStart,
+    const types::RowCol<size_t>& outExtent,
+    size_t polyOrder,
+    math::poly::TwoD<double>& timeCOAPoly) const
+{
+    // Want to sample [0, outExtent) in the loop below
+    const types::RowCol<double> skip(
+        static_cast<double>(outExtent.row - 1) / (POINTS_1D - 1),
+        static_cast<double>(outExtent.col - 1) / (POINTS_1D - 1));
+
+    math::linear::Matrix2D<double> tcoaMapping(POINTS_1D, POINTS_1D);
+    math::linear::Matrix2D<double> lines(POINTS_1D, POINTS_1D);
+    math::linear::Matrix2D<double> samples(POINTS_1D, POINTS_1D);
+
+    types::RowCol<double> currentOffset(outPixelStart);
+
+    for (size_t ii = 0; ii < POINTS_1D; ++ii, currentOffset.row += skip.row)
+    {
+        currentOffset.col = outPixelStart.col;
+        for (size_t jj = 0; jj < POINTS_1D; ++jj, currentOffset.col += skip.col)
+        {
+            // We want to evaluate gridTransform at the global pixel location,
+            // so we offset by outPixelStart.  But we set lines and samples
+            // based on just our grid (that is, for ii = jj = 0, we want
+            // pixel location (0, 0)).
+            // Rows, these are essentially meshgrid-like (replicated)
+            lines(ii, jj) = currentOffset.row - outPixelStart.row;
+            // This represents columns
+            samples(ii, jj) = currentOffset.col - outPixelStart.col;
+
+            // Find initial position in the scene
+            const scene::Vector3 sPos =
+                    gridTransform.rowColToECEF(currentOffset);
+
+            // This HAS to be a scene coordinate
+            double timeCOA(0.0);
+            sceneToImage(sPos, &timeCOA);
+            tcoaMapping(ii, jj) = timeCOA;
+        }
+    }
+
+    timeCOAPoly = math::poly::fit(lines, samples, tcoaMapping,
+                                  polyOrder, polyOrder);
 }
 
 RangeAzimProjectionModel::
@@ -483,4 +533,4 @@ computeContour(const Vector3& arpCOA,
     *rDot = velCOA.dot(vec) / *r;
     
 }
-
+}

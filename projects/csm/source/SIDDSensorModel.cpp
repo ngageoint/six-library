@@ -138,7 +138,9 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
 
-        mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+        mGridGeometry = six::sidd::Utilities::getGridGeometry(mData.get());
+        mGridTransform =
+                six::sidd::Utilities::getGridECEFTransform(mData.get());
     }
     catch (const except::Exception& ex)
     {
@@ -220,7 +222,9 @@ void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd,
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
                 siddXML, mSchemaDirs)));
-        mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+        mGridGeometry = six::sidd::Utilities::getGridGeometry(mData.get());
+        mGridTransform =
+                six::sidd::Utilities::getGridECEFTransform(mData.get());
     }
     catch (const except::Exception& ex)
     {
@@ -376,8 +380,10 @@ SIDDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
 
         // Project ground point into image grid and then convert from ECEF to
         // RowCol
-        const scene::Vector3 gridPt = mGrid->sceneToGrid(sceneGroundPt);
-        const types::RowCol<double> imagePt = mGrid->ecefToRowCol(gridPt);
+        const scene::Vector3 gridPt =
+                mGridGeometry->sceneToGrid(sceneGroundPt);
+        const types::RowCol<double> imagePt =
+                mGridTransform->ecefToRowCol(gridPt);
 
         // TODO: Not sure how to calculate achievedPrecision
         if (achievedPrecision)
@@ -407,8 +413,9 @@ SIDDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
         // Convert line and sample to an ECEF point in the image grid and
         // then project the grid point to the ground
         const scene::Vector3 gridPt =
-                mGrid->rowColToECEF(imagePt.line, imagePt.samp);
-        const scene::Vector3 groundPt = mGrid->gridToScene(gridPt, height);
+                mGridTransform->rowColToECEF(imagePt.line, imagePt.samp);
+        const scene::Vector3 groundPt =
+                mGridGeometry->gridToScene(gridPt, height);
 
         // TODO: not sure how to calculate achievedPrecision
         if (achievedPrecision)
@@ -581,7 +588,9 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
                 domParser.getDocument(), mSchemaDirs)));
 
-        mGrid.reset(six::sidd::Utilities::getGridGeometry(mData.get()));
+        mGridGeometry = six::sidd::Utilities::getGridGeometry(mData.get());
+        mGridTransform =
+                six::sidd::Utilities::getGridECEFTransform(mData.get());
     }
     catch (const except::Exception& ex)
     {

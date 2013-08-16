@@ -26,6 +26,7 @@
 #include "scene/ECEFToLLATransform.h"
 #include "scene/LLAToECEFTransform.h"
 #include "scene/LocalCoordinateTransform.h"
+#include "scene/GridECEFTransform.h"
 #include "scene/SceneGeometry.h"
 #include "scene/GridGeometry.h"
 #include "scene/Types.h"
