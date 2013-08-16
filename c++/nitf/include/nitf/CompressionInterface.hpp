@@ -46,10 +46,10 @@ static const char* _COMPRESSION_ID##_ident[] = \
 \
 static nitf_CompressionInterface _COMPRESSION_ID##_INTERFACE_TABLE = {\
     &_COMPRESSION_ADAPTER_OPEN_FUNC,\
-    &nitf::CompressionInterface::adapterStart,\
-    &nitf::CompressionInterface::adapterWriteBlock,\
-    &nitf::CompressionInterface::adapterEnd,\
-    &nitf::CompressionInterface::adapterDestroy};\
+    &::nitf::CompressionInterface::adapterStart,\
+    &::nitf::CompressionInterface::adapterWriteBlock,\
+    &::nitf::CompressionInterface::adapterEnd,\
+    &::nitf::CompressionInterface::adapterDestroy};\
 \
 NITFAPI(const char**) _COMPRESSION_DLL_NAME##_init(nitf_Error *error)\
 {\

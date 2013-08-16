@@ -47,10 +47,10 @@ static const char* _DECOMPRESSION_ID##_ident[] = \
 \
 static nitf_DecompressionInterface _DECOMPRESSION_ID##_INTERFACE_TABLE = {\
     &_DECOMPRESSION_ADAPTER_OPEN_FUNC,\
-    &nitf::DecompressionInterface::adapterStart,\
-    &nitf::DecompressionInterface::adapterReadBlock,\
-    &nitf::DecompressionInterface::adapterFreeBlock,\
-    &nitf::DecompressionInterface::adapterDestroy};\
+    &::nitf::DecompressionInterface::adapterStart,\
+    &::nitf::DecompressionInterface::adapterReadBlock,\
+    &::nitf::DecompressionInterface::adapterFreeBlock,\
+    &::nitf::DecompressionInterface::adapterDestroy};\
 \
 NITFAPI(const char**) _DECOMPRESSION_DLL_NAME##_init(nitf_Error *error)\
 {\
