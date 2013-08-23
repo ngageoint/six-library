@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <math/Constants.h>
 #include "scene/EllipsoidModel.h"
 
 scene::EllipsoidModel::EllipsoidModel(scene::Units unitsVal,
@@ -92,15 +93,15 @@ void scene::EllipsoidModel::setUnits(scene::Units val)
         if( val == scene::METERS)
         {
             //do feet to meters
-            equatorialRadius *= 1.0/METERS_TO_FEET;
-            polarRadius *= 1.0/METERS_TO_FEET;
+            equatorialRadius *= math::Constants::FEET_TO_METERS;
+            polarRadius *= math::Constants::FEET_TO_METERS;
             units = val;
         }
         else if(val == scene::FEET)
         {
             //do meters to feet
-            equatorialRadius *= METERS_TO_FEET;
-            polarRadius *= METERS_TO_FEET;
+            equatorialRadius *= math::Constants::METERS_TO_FEET;
+            polarRadius *= math::Constants::METERS_TO_FEET;
             units = val;
         }
         else
@@ -182,8 +183,8 @@ void scene::WGS84EllipsoidModel::initRadiusValues()
     if(getUnits() == scene::FEET)
     {
         //do meters to feet
-        equatorialRadius *= METERS_TO_FEET;
-        polarRadius *= METERS_TO_FEET;
+        equatorialRadius *= math::Constants::METERS_TO_FEET;
+        polarRadius *= math::Constants::METERS_TO_FEET;
     }
 }
 

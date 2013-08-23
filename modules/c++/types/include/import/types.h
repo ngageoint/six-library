@@ -23,7 +23,6 @@
 #ifndef __IMPORT_TYPES_H__
 #define __IMPORT_TYPES_H__
 
-#include <types/Constants.h>
 #include <types/RgAz.h>
 #include <types/RowCol.h>
 
