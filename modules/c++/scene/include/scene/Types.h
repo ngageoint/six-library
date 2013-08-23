@@ -22,24 +22,19 @@
 #ifndef __SCENE_COORDINATE_TYPES_H__
 #define __SCENE_COORDINATE_TYPES_H__
 
+#include <cmath>
+
 #include <import/except.h>
 #include <import/str.h>
 #include <import/sys.h>
 #include <types/RowCol.h>
-#include <types/Constants.h>
-
-#include <cmath>
+#include <math/Constants.h>
 
 #include "math/linear/MatrixMxN.h"
 #include "math/linear/VectorN.h"
 
 namespace scene
 {
-
-    const double METERS_TO_FEET = types::Constants::METERS_TO_FEET;
-    const double DEGREES_TO_RADIANS = types::Constants::DEGREES_TO_RADIANS;
-    const double RADIANS_TO_DEGREES = types::Constants::RADIANS_TO_DEGREES;
-
     typedef math::linear::VectorN<2> Vector2;
     typedef math::linear::VectorN<3> Vector3;
 
@@ -126,11 +121,11 @@ namespace scene
 
         double getLatRadians() const
         {
-            return mLat * DEGREES_TO_RADIANS;
+            return mLat * math::Constants::DEGREES_TO_RADIANS;
         }
         double getLonRadians() const
         {
-            return mLon * DEGREES_TO_RADIANS;
+            return mLon * math::Constants::DEGREES_TO_RADIANS;
         }
 
         void setLat(double lat)
@@ -144,12 +139,12 @@ namespace scene
 
         void setLatRadians(double lat)
         {
-            mLat = (lat * RADIANS_TO_DEGREES);
+            mLat = (lat * math::Constants::RADIANS_TO_DEGREES);
         }
 
         void setLonRadians(double lon)
         {
-            mLon = (lon * RADIANS_TO_DEGREES);
+            mLon = (lon * math::Constants::RADIANS_TO_DEGREES);
         }
 
         bool operator==(const LatLon& x) const

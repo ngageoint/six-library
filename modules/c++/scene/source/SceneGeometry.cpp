@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <math/Constants.h>
 #include "scene/SceneGeometry.h"
 #include "scene/ECEFToLLATransform.h"
 
@@ -137,23 +139,23 @@ SideOfTrack SceneGeometry::getSideOfTrack() const
 double SceneGeometry::getImageAngle(const Vector3& vec) const
 {
     return atan2(getColVector().dot(vec),
-                 getRowVector().dot(vec)) * RADIANS_TO_DEGREES;
+                 getRowVector().dot(vec)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
 double SceneGeometry::getGrazingAngle() const
 {
-    return asin(mXs.dot(mZg)) * RADIANS_TO_DEGREES;
+    return asin(mXs.dot(mZg)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
 double SceneGeometry::getTiltAngle() const
 {
-    return atan2(mZg.dot(mYs), mZg.dot(mZs)) * RADIANS_TO_DEGREES;
+    return atan2(mZg.dot(mYs), mZg.dot(mZs)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
 double SceneGeometry::getDopplerConeAngle() const
 {
     Vector3 normVa = mVa / mVa.norm();
-    return acos((-1.0 * mXs).dot(normVa)) * RADIANS_TO_DEGREES;
+    return acos((-1.0 * mXs).dot(normVa)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
 double SceneGeometry::getSquintAngle() const
@@ -163,25 +165,25 @@ double SceneGeometry::getSquintAngle() const
     x.normalize();
 
     Vector3 y = math::linear::cross(x, z);
-    return atan2((-1.0 * mXs).dot(y), (-1.0 * mXs).dot(x)) * RADIANS_TO_DEGREES;
+    return atan2((-1.0 * mXs).dot(y), (-1.0 * mXs).dot(x)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
 double SceneGeometry::getSlopeAngle() const
 {
-    return acos(mZs.dot(mZg)) * RADIANS_TO_DEGREES;
+    return acos(mZs.dot(mZg)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
 
 double SceneGeometry::getAzimuthAngle() const
 {
     Vector3 east = math::linear::cross(mNorth, mZg);
-    return atan2(east.dot(mXs), mNorth.dot(mXs)) * RADIANS_TO_DEGREES;
+    return atan2(east.dot(mXs), mNorth.dot(mXs)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
 double SceneGeometry::getHeadingAngle() const
 {
     Vector3 east = math::linear::cross(mNorth, mZg);
-    return atan2(east.dot(mVa), mNorth.dot(mVa)) * RADIANS_TO_DEGREES;
+    return atan2(east.dot(mVa), mNorth.dot(mVa)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
 double SceneGeometry::getRotationAngle() const
@@ -231,14 +233,14 @@ AngleMagnitude SceneGeometry::getLayover() const
 
 double SceneGeometry::getETPLayoverAngle() const
 {
-    const double slopeAngleRad = getSlopeAngle() * DEGREES_TO_RADIANS;
+    const double slopeAngleRad = getSlopeAngle() * math::Constants::DEGREES_TO_RADIANS;
 
     const Vector3 layoverDir = mZs - 1 / cos(slopeAngleRad) * mZs;
     const Vector3 east = math::linear::cross(mNorth, mZg);
     const double etpLayoverAngleRad =
             atan2(east.dot(layoverDir), mNorth.dot(layoverDir));
 
-    return (etpLayoverAngleRad * RADIANS_TO_DEGREES);
+    return (etpLayoverAngleRad * math::Constants::RADIANS_TO_DEGREES);
 }
 
 Vector3 SceneGeometry::getShadowVector() const
@@ -267,7 +269,8 @@ void SceneGeometry::getGroundResolution(double resRg,
     const Vector3 z = math::linear::cross(getRowVector(), getColVector());
     const double grazingAngleRad = asin(mXs.dot(z));
     const double tiltAngleRad = atan2(z.dot(mYs), z.dot(mZs));
-    const double rotAngleRad = getRotationAngle() * DEGREES_TO_RADIANS;
+    const double rotAngleRad =
+            getRotationAngle() * math::Constants::DEGREES_TO_RADIANS;
 
     const double cosRot = cos(rotAngleRad);
     const double sinRot = sin(rotAngleRad);
