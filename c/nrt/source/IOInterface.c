@@ -15,13 +15,13 @@ typedef struct _BufferIOControl
     NRT_BOOL ownBuf;
 } BufferIOControl;
 
-NRTAPI(NRT_BOOL) nrt_IOInterface_read(nrt_IOInterface * io, char *buf,
+NRTAPI(NRT_BOOL) nrt_IOInterface_read(nrt_IOInterface * io, void* buf,
                                       size_t size, nrt_Error * error)
 {
     return io->iface->read(io->data, buf, size, error);
 }
 
-NRTAPI(NRT_BOOL) nrt_IOInterface_write(nrt_IOInterface * io, const char *buf,
+NRTAPI(NRT_BOOL) nrt_IOInterface_write(nrt_IOInterface * io, const void* buf,
                                        size_t size, nrt_Error * error)
 {
     return io->iface->write(io->data, buf, size, error);

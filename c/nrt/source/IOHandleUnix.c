@@ -42,7 +42,7 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
     return fd;
 }
 
-NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
+NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, void* buf, size_t size,
                                    nrt_Error * error)
 {
     ssize_t bytesRead = 0;      /* Number of bytes read during last read
@@ -58,7 +58,9 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
     for (i = 1; i <= NRT_MAX_READ_ATTEMPTS; i++)
     {
         /* Make the next read */
-        bytesRead = read(handle, buf + totalBytesRead, size - totalBytesRead);
+        bytesRead = read(handle,
+                         (nrt_Uint8*)buf + totalBytesRead,
+                         size - totalBytesRead);
 
         switch (bytesRead)
         {
@@ -81,8 +83,8 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
 
         default:               /* We made progress */
             totalBytesRead += (size_t) bytesRead;
-
-        }                       /* End of switch */
+            break;
+        }
 
         /* Check for success */
         if (totalBytesRead == size)
@@ -102,7 +104,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
     return NRT_FAILURE;
 }
 
-NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
+NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const void *buf,
                                     size_t size, nrt_Error * error)
 {
     size_t bytesActuallyWritten = 0;
@@ -110,7 +112,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
     do
     {
         const ssize_t bytesThisWrite =
-            write(handle, buf + bytesActuallyWritten, size);
+            write(handle, (const nrt_Uint8*)buf + bytesActuallyWritten, size);
         if (bytesThisWrite == -1)
         {
             nrt_Error_init(error, strerror(errno), NRT_CTXT,

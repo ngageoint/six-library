@@ -72,9 +72,9 @@ public:
         return *this;
     }
 
-    void read(char * buf, size_t size);
+    void read(void* buf, size_t size);
 
-    void write(const char * buf, size_t size);
+    void write(const void* buf, size_t size);
 
     bool canSeek() const;
 

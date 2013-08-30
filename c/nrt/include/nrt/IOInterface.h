@@ -28,9 +28,9 @@
 
 NRT_CXX_GUARD
 
-typedef NRT_BOOL(*NRT_IO_INTERFACE_READ) (NRT_DATA *, char *, size_t,
+typedef NRT_BOOL(*NRT_IO_INTERFACE_READ) (NRT_DATA *, void *, size_t,
                                           nrt_Error *);
-typedef NRT_BOOL(*NRT_IO_INTERFACE_WRITE) (NRT_DATA *, const char *, size_t,
+typedef NRT_BOOL(*NRT_IO_INTERFACE_WRITE) (NRT_DATA *, const void *, size_t,
                                            nrt_Error *);
 typedef NRT_BOOL(*NRT_IO_INTERFACE_CAN_SEEK) (NRT_DATA *, nrt_Error *);
 typedef nrt_Off(*NRT_IO_INTERFACE_SEEK) (NRT_DATA *, nrt_Off, int, nrt_Error *);
@@ -62,13 +62,13 @@ typedef struct _NRT_IOInterface
 /**
  * Reads data from the interface
  */
-NRTAPI(NRT_BOOL) nrt_IOInterface_read(nrt_IOInterface *, char *buf, size_t size,
+NRTAPI(NRT_BOOL) nrt_IOInterface_read(nrt_IOInterface *, void* buf, size_t size,
                                       nrt_Error * error);
 
 /**
  * Writes data to the interface
  */
-NRTAPI(NRT_BOOL) nrt_IOInterface_write(nrt_IOInterface * io, const char *buf,
+NRTAPI(NRT_BOOL) nrt_IOInterface_write(nrt_IOInterface * io, const void* buf,
                                        size_t size, nrt_Error * error);
 
 /**

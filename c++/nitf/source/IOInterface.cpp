@@ -32,7 +32,7 @@ void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io)
     }
 }
 
-void nitf::IOInterface::read(char * buf, size_t size)
+void nitf::IOInterface::read(void* buf, size_t size)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     NITF_BOOL x = io->iface->read(io->data, buf, size, &error);
@@ -40,7 +40,7 @@ void nitf::IOInterface::read(char * buf, size_t size)
         throw nitf::NITFException(&error);
 }
 
-void nitf::IOInterface::write(const char * buf, size_t size)
+void nitf::IOInterface::write(const void* buf, size_t size)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     NITF_BOOL x = io->iface->write(io->data, buf, size, &error);

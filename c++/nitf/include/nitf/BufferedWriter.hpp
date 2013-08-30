@@ -66,9 +66,9 @@ public:
 
 protected:
 
-    virtual void readImpl(char* buf, size_t size);
+    virtual void readImpl(void* buf, size_t size);
 
-    virtual void writeImpl(const char* buf, size_t size);
+    virtual void writeImpl(const void* buf, size_t size);
 
     virtual bool canSeekImpl() const;
 

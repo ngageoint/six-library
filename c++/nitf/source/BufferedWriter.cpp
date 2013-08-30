@@ -90,15 +90,16 @@ void BufferedWriter::flushBuffer(const char* buf)
     }
 }
 
-void BufferedWriter::readImpl(char* , size_t )
+void BufferedWriter::readImpl(void* , size_t )
 {
     throw except::Exception(
         Ctxt("We cannot do reads on a write-only handle"));
 }
 
-void BufferedWriter::writeImpl(const char* buf, size_t size)
+void BufferedWriter::writeImpl(const void* buf, size_t size)
 {
     size_t from = 0;
+    const char* bufPtr = static_cast<const char*>(buf);
     while (size > 0)
     {
         size_t bytes = size;
@@ -114,7 +115,7 @@ void BufferedWriter::writeImpl(const char* buf, size_t size)
         if (bytes < mBufferSize)
         {
             // Copy over and subtract bytes from the size left
-            memcpy(mBuffer + mPosition, buf + from, bytes);
+            memcpy(mBuffer + mPosition, bufPtr + from, bytes);
 
             // update counters
             mPosition += bytes;
@@ -132,7 +133,7 @@ void BufferedWriter::writeImpl(const char* buf, size_t size)
         {
             // update mPosition before the flush
             mPosition += bytes;
-            flushBuffer(buf + from);
+            flushBuffer(bufPtr + from);
 
             // update counters
             size -= bytes;

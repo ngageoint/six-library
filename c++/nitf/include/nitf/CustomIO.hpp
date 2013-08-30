@@ -35,9 +35,9 @@ public:
     virtual ~CustomIO();
 
 protected:
-    virtual void readImpl(char* buf, size_t size) = 0;
+    virtual void readImpl(void* buf, size_t size) = 0;
 
-    virtual void writeImpl(const char* buf, size_t size) = 0;
+    virtual void writeImpl(const void* buf, size_t size) = 0;
 
     virtual bool canSeekImpl() const = 0;
 
@@ -56,10 +56,10 @@ private:
     nitf_IOInterface* createInterface(CustomIO* me);
 
     static
-    NRT_BOOL adapterRead(NRT_DATA* data, char* buf, size_t size, nrt_Error* error);
+    NRT_BOOL adapterRead(NRT_DATA* data, void* buf, size_t size, nrt_Error* error);
 
     static
-    NRT_BOOL adapterWrite(NRT_DATA* data, const char* buf, size_t size, nrt_Error* error);
+    NRT_BOOL adapterWrite(NRT_DATA* data, const void* buf, size_t size, nrt_Error* error);
 
     static
     NRT_BOOL adapterCanSeek(NRT_DATA* data, nrt_Error* error);

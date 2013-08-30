@@ -54,7 +54,7 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
     return handle;
 }
 
-NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
+NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, void* buf, size_t size,
                                    nrt_Error * error)
 {
     static const DWORD MAX_READ_SIZE = (DWORD)-1;
@@ -70,7 +70,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
         /* Read from file */
         DWORD bytesThisRead = 0;
         if (!ReadFile(handle,
-                      buf + bytesRead,
+                      (nrt_Uint8*)buf + bytesRead,
                       bytesToRead,
                       &bytesThisRead,
                       NULL))
@@ -96,7 +96,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
     return NRT_SUCCESS;
 }
 
-NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
+NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const void *buf,
                                     size_t size, nrt_Error * error)
 {
     static const DWORD MAX_WRITE_SIZE = (DWORD)-1;
@@ -113,7 +113,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
         DWORD bytesThisWrite = 0;
 
         if (!WriteFile(handle,
-                       buf + bytesWritten,
+                       (const nrt_Uint8*)buf + bytesWritten,
                        bytesToWrite,
                        &bytesThisWrite,
                        NULL))

@@ -63,7 +63,7 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
  *  \param error  Populated if function returns 0
  *  \return       1 on success and 0 otherwise
  */
-NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
+NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, void* buf, size_t size,
                                    nrt_Error * error);
 
 /*!
@@ -77,7 +77,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, char *buf, size_t size,
  *  \param error  The error, only if !NRT_IO_SUCCESS()
  *  \return NRT_SUCCESS if the method succeeds, NRT_FAILURE on failure.
  */
-NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const char *buf,
+NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const void* buf,
                                     size_t size, nrt_Error * error);
 
 /*!

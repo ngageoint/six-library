@@ -75,7 +75,7 @@ nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
 }
 
 NRT_BOOL CustomIO::adapterRead(NRT_DATA* data,
-                               char* buf,
+                               void* buf,
                                size_t size,
                                nrt_Error* error)
 {
@@ -105,7 +105,7 @@ NRT_BOOL CustomIO::adapterRead(NRT_DATA* data,
 }
 
 NRT_BOOL CustomIO::adapterWrite(NRT_DATA* data,
-                                const char* buf,
+                                const void* buf,
                                 size_t size,
                                 nrt_Error* error)
 {
