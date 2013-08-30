@@ -71,7 +71,7 @@ ImplControl;
 NITF_CXX_ENDGUARD
 
 
-NITFAPI(char**) J2KDecompress_init(nitf_Error *error)
+NITFAPI(const char**) J2KDecompress_init(nitf_Error *error)
 {
     return ident;
 }
