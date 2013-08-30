@@ -139,6 +139,11 @@ void NITFWriteControl::initialize(Container* container)
     fileTitle = fileTitle.substr(0, NITF_FTITLE_SZ); //truncate past 80
     mRecord.getHeader().getFileTitle().set(fileTitle);
 
+    // Make sure the date/time exactly matches what's in the XML rather than
+    // letting NITRO set it automatically at write time
+    const DateTime dt(mContainer->getData(0)->getCreationTime());
+    mRecord.getHeader().getFileDateTime().set(dt.format(NITF_DATE_FORMAT_21));
+
     int startIndex = 0;
     for (size_t ii = 0; ii < mInfos.size(); ++ii)
     {
