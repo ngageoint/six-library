@@ -94,6 +94,13 @@ int main(int argc, char** argv)
         reader.load(inputFile, schemaPaths);
         six::Container* container = reader.getContainer();
 
+        // Update the XML to reflect the creation time as right now
+        const six::DateTime now;
+        for (size_t ii = 0; ii < container->getNumData(); ++ii)
+        {
+            container->getData(ii)->setCreationTime(now);
+        }
+
         nitf::List imageList = reader.getRecord().getImages();
         nitf::ListIterator imageIter = imageList.begin();
 
