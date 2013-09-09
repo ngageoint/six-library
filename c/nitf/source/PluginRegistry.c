@@ -126,7 +126,7 @@ NITFPROT(nitf_PluginRegistry *)
 }
 
 NITFPRIV(NITF_BOOL) insertPlugin(nitf_PluginRegistry * reg,
-                                 char **ident,
+                                 const char **ident,
                                  nitf_DLL * dll, 
                                  nitf_Error * error)
 {
@@ -341,11 +341,12 @@ NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg)
  *  when the DSO is loaded
  */
 
-NITFPRIV(char **) doInit(nitf_DLL * dll,
-                         const char *prefix, nitf_Error * error)
+NITFPRIV(const char **) doInit(nitf_DLL * dll,
+                               const char *prefix,
+                               nitf_Error * error)
 {
     NITF_PLUGIN_INIT_FUNCTION init;
-    char **ident;
+    const char **ident;
 
     char name[NITF_MAX_PATH];
     memset(name, 0, NITF_MAX_PATH);
@@ -464,7 +465,7 @@ NITFAPI(NITF_BOOL)
     int ok;
     int i, begin, end;
     nitf_DLL *dll;
-    char **ident;
+    const char **ident;
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
     /*  Construct the DLL object  */
