@@ -35,13 +35,11 @@ namespace six
 struct NITFSegmentInfo
 {
     //! First row in the image segment in real space
-    unsigned long firstRow;
-
-    //! Row offset in the CCS (ILOC R)
-    unsigned long rowOffset;
+    //  This also doubles as the row offset in the CCS (ILOC R)
+    size_t firstRow;
 
     //! Number of rows in this segment
-    unsigned long numRows;
+    size_t numRows;
 
     //! The image segment corner points
     LatLonCorners corners;

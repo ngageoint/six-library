@@ -169,9 +169,6 @@ public:
     // Currently punts on LU
     std::vector<nitf::BandInfo> getBandInfo();
 
-    //! TODO dont forget me!!
-    static PixelType getPixelTypeFromNITF(nitf::ImageSubheader& subheader);
-
     //!  File security classification system
     static const char CLSY[];
     //!  File security codewords
