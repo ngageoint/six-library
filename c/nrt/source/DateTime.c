@@ -504,7 +504,7 @@ static const char *mon[12] = { "January", "February", "March", "April", "May",
 static const char *abmon[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 };
-static const char *am_pm[2] = { "AM", "PM" };
+/*static const char *am_pm[2] = { "AM", "PM" };*/
 
 NRTPRIV(int) _NRT_convNum(const char **, int *, int, int);
 
