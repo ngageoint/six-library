@@ -85,14 +85,14 @@ NRTAPI(void) nrt_IOInterface_destruct(nrt_IOInterface ** io)
     }
 }
 
-NRTPRIV(NRT_BOOL) IOHandleAdapter_read(NRT_DATA * data, char *buf, size_t size,
+NRTPRIV(NRT_BOOL) IOHandleAdapter_read(NRT_DATA * data, void *buf, size_t size,
                                        nrt_Error * error)
 {
     IOHandleControl *control = (IOHandleControl *) data;
     return nrt_IOHandle_read(control->handle, buf, size, error);
 }
 
-NRTPRIV(NRT_BOOL) IOHandleAdapter_write(NRT_DATA * data, const char *buf,
+NRTPRIV(NRT_BOOL) IOHandleAdapter_write(NRT_DATA * data, const void *buf,
                                         size_t size, nrt_Error * error)
 {
     IOHandleControl *control = (IOHandleControl *) data;
@@ -163,7 +163,7 @@ NRTPRIV(void) IOHandleAdapter_destruct(NRT_DATA * data)
     (void)data;
 }
 
-NRTPRIV(NRT_BOOL) BufferAdapter_read(NRT_DATA * data, char *buf, size_t size,
+NRTPRIV(NRT_BOOL) BufferAdapter_read(NRT_DATA * data, void *buf, size_t size,
                                      nrt_Error * error)
 {
     BufferIOControl *control = (BufferIOControl *) data;
@@ -183,7 +183,7 @@ NRTPRIV(NRT_BOOL) BufferAdapter_read(NRT_DATA * data, char *buf, size_t size,
     return NRT_SUCCESS;
 }
 
-NRTPRIV(NRT_BOOL) BufferAdapter_write(NRT_DATA * data, const char *buf,
+NRTPRIV(NRT_BOOL) BufferAdapter_write(NRT_DATA * data, const void *buf,
                                       size_t size, nrt_Error * error)
 {
     BufferIOControl *control = (BufferIOControl *) data;
