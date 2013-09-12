@@ -39,6 +39,10 @@ int main(int argc, char** argv)
         parser.setDescription("This program reads a SICD or SIDD into the "\
                               "internal memory model and round-trips it back "\
                               "to file.");
+        parser.addArgument("-r --rows", "ILOC rows limit", cli::STORE, "maxRows",
+                           "ROWS");
+        parser.addArgument("--size", "Max image segment size", cli::STORE,
+                           "maxSize", "BYTES");
         parser.addArgument("-e --expand", "Expand RE16I_IM16I to RE32F_IM32F",
                            cli::STORE_TRUE, "expand");
         parser.addArgument("-f --log", "Specify a log file", cli::STORE, "log",
@@ -55,8 +59,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
                            "OUTPUT", 1, 1);
 
-        const std::auto_ptr<cli::Results>
-            options(parser.parse(argc, (const char**) argv));
+        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const std::string inputFile(options->get<std::string> ("input"));
         const std::string outputFile(options->get<std::string> ("output"));
@@ -65,6 +68,18 @@ int main(int argc, char** argv)
         std::string level(options->get<std::string> ("level"));
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
+
+        std::string maxSize;
+        if (options->hasValue("maxSize"))
+        {
+            maxSize = options->get<std::string>("maxSize");
+        }
+
+        std::string maxILOC;
+        if (options->hasValue("maxRows"))
+        {
+            maxILOC = options->get<std::string>("maxRows");
+        }
 
         str::upper(level);
         str::trim(level);
@@ -161,6 +176,19 @@ int main(int argc, char** argv)
         }
 
         six::NITFWriteControl writer;
+        if (!maxILOC.empty())
+        {
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+                    maxILOC);
+        }
+        if (!maxSize.empty())
+        {
+            writer.getOptions().setParameter(
+                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+                    maxSize);
+        }
+
         writer.setLogger(&log);
         writer.initialize(container);
         writer.setXMLControlRegistry(&xmlRegistry);
