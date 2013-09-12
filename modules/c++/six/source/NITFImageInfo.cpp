@@ -91,7 +91,6 @@ void NITFImageInfo::computeSegmentInfo()
         imageSegments.resize(1);
         imageSegments[0].numRows = data->getNumRows();
         imageSegments[0].firstRow = 0;
-        imageSegments[0].rowOffset = 0;
         imageSegments[0].corners = data->getImageCorners();
     }
 
@@ -102,17 +101,14 @@ void NITFImageInfo::computeSegmentInfo()
         imageSegments.resize(numIS);
         imageSegments[0].numRows = numRowsLimit;
         imageSegments[0].firstRow = 0;
-        imageSegments[0].rowOffset = 0;
         size_t i;
         for (i = 1; i < numIS - 1; i++)
         {
             imageSegments[i].numRows = numRowsLimit;
             imageSegments[i].firstRow = i * numRowsLimit;
-            imageSegments[i].rowOffset = numRowsLimit;
         }
 
         imageSegments[i].firstRow = i * numRowsLimit;
-        imageSegments[i].rowOffset = numRowsLimit;
         imageSegments[i].numRows = data->getNumRows() - (numIS - 1)
                 * numRowsLimit;
 
@@ -183,13 +179,6 @@ void NITFImageInfo::compute()
 
     computeImageInfo();
     computeSegmentInfo();
-}
-
-//! TODO dont forget me!!
-PixelType NITFImageInfo::getPixelTypeFromNITF(nitf::ImageSubheader& subheader)
-{
-    //std::string pvType = subheader.getPixelValueType()
-    return PixelType::RE32F_IM32F;
 }
 
 // Currently punts on LU

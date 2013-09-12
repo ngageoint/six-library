@@ -79,7 +79,6 @@ void NITFWriteControl::initialize(Container* container)
     mContainer = container;
 
     sys::Uint32_T ilocMax = Constants::ILOC_MAX;
-    // TODO: Validate they are below this!
     sys::Uint32_T maxRows = mOptions.getParameter(OPT_MAX_ILOC_ROWS,
                                                   Parameter(ilocMax));
 
@@ -207,8 +206,21 @@ void NITFWriteControl::initialize(Container* container)
             std::string isorce = info->getData()->getSource();
             subheader.getImageSource().set(isorce);
 
-            subheader.getImageLocation().set(FmtX("%05d00000",
-                                                  segmentInfo.rowOffset));
+            // Fill out ILOC with the row offset, making sure it's in range
+            if (segmentInfo.firstRow > maxRows)
+            {
+                std::ostringstream ostr;
+                ostr << "Row offset cannot exceed " << maxRows
+                     << ", but for image segment " << jj << " it is "
+                     << segmentInfo.firstRow;
+
+                throw except::Exception(Ctxt(ostr.str()));
+            }
+
+            std::ostringstream ostr;
+            ostr.fill('0');
+            ostr << std::setw(5) << segmentInfo.firstRow << "00000";
+            subheader.getImageLocation().set(ostr.str());
 
             subheader.getTargetId().set(targetId);
 
@@ -545,12 +557,16 @@ void NITFWriteControl::save(
     }
 
     if (mInfos.size() != imageData.size())
-        throw except::Exception(Ctxt(FmtX("Require %d images, received %s",
-                                          mInfos.size(), imageData.size())));
+    {
+        std::ostringstream ostr;
+        ostr << "Require " << mInfos.size() << " images, received "
+             << imageData.size();
+        throw except::Exception(Ctxt(ostr.str()));
+    }
 
     size_t numImages = mInfos.size();
 
-    for (unsigned int i = 0; i < numImages; ++i)
+    for (size_t i = 0; i < numImages; ++i)
     {
         NITFImageInfo* info = mInfos[i];
         std::vector < NITFSegmentInfo > imageSegments
