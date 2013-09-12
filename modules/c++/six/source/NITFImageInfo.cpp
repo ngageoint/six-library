@@ -91,24 +91,30 @@ void NITFImageInfo::computeSegmentInfo()
         imageSegments.resize(1);
         imageSegments[0].numRows = data->getNumRows();
         imageSegments[0].firstRow = 0;
+        imageSegments[0].rowOffset = 0;
         imageSegments[0].corners = data->getImageCorners();
     }
 
     else
     {
+        // NOTE: See header for why rowOffset is always set to numRowsLimit
+        //       for image segments 1 and above
         size_t numIS = (size_t) std::ceil(data->getNumRows()
                 / (double) numRowsLimit);
         imageSegments.resize(numIS);
         imageSegments[0].numRows = numRowsLimit;
         imageSegments[0].firstRow = 0;
+        imageSegments[0].rowOffset = 0;
         size_t i;
         for (i = 1; i < numIS - 1; i++)
         {
             imageSegments[i].numRows = numRowsLimit;
             imageSegments[i].firstRow = i * numRowsLimit;
+            imageSegments[i].rowOffset = numRowsLimit;
         }
 
         imageSegments[i].firstRow = i * numRowsLimit;
+        imageSegments[i].rowOffset = numRowsLimit;
         imageSegments[i].numRows = data->getNumRows() - (numIS - 1)
                 * numRowsLimit;
 
@@ -307,7 +313,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
         throw except::Exception(Ctxt("Unknown pixel type"));
     }
 
-    for (unsigned i = 0; i < bands.size(); ++i)
+    for (size_t i = 0; i < bands.size(); ++i)
     {
         bands[i].getImageFilterCondition().set("N");
     }
@@ -323,4 +329,3 @@ std::string NITFImageInfo::generateFieldKey(const std::string& field,
         s << "[" << str::toString(index) << "]";
     return s.str();
 }
-
