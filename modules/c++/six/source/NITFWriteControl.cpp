@@ -207,7 +207,7 @@ void NITFWriteControl::initialize(Container* container)
             subheader.getImageSource().set(isorce);
 
             // Fill out ILOC with the row offset, making sure it's in range
-            if (segmentInfo.firstRow > maxRows)
+            if (segmentInfo.rowOffset > maxRows)
             {
                 std::ostringstream ostr;
                 ostr << "Row offset cannot exceed " << maxRows
@@ -219,7 +219,7 @@ void NITFWriteControl::initialize(Container* container)
 
             std::ostringstream ostr;
             ostr.fill('0');
-            ostr << std::setw(5) << segmentInfo.firstRow << "00000";
+            ostr << std::setw(5) << segmentInfo.rowOffset << "00000";
             subheader.getImageLocation().set(ostr.str());
 
             subheader.getTargetId().set(targetId);

@@ -274,17 +274,19 @@ void NITFReadControl::load(nitf::IOInterface& interface,
         NITFSegmentInfo si;
         si.numRows = numRowsSeg;
 
-        if (j == 0)
+        std::vector < NITFSegmentInfo > imageSegments
+                = currentInfo->getImageSegments();
+
+        if (j != 0)
         {
-            si.firstRow = 0;
+            si.rowOffset = imageSegments[j - 1].numRows;
+            si.firstRow = imageSegments[j - 1].firstRow + si.rowOffset;
         }
         else
         {
-            const NITFSegmentInfo prevSegment =
-                    currentInfo->getImageSegments()[j - 1];
-            si.firstRow = prevSegment.firstRow + prevSegment.numRows;
+            si.rowOffset = 0;
+            si.firstRow = 0;
         }
-
         subheader.getCornersAsLatLons(corners);
         for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
         {
