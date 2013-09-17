@@ -70,7 +70,7 @@
  *  library or specification overhauls associated with the file
  *  format
  */
-#define SIX_MICRO_VERSION_NUMBER 2
+#define SIX_MICRO_VERSION_NUMBER 3
 
 namespace six
 {
