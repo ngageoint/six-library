@@ -1,6 +1,6 @@
 NAME            = 'six'
 MAINTAINER      = 'adam.sylvester@gd-ais.com'
-VERSION         = '2.0.2'
+VERSION         = '2.0.3'
 MODULE_DEPS     = 'scene nitf xml.lite logging math.poly mem'
 TARGETS_TO_ADD  = 'XML_DATA_CONTENT'
 
