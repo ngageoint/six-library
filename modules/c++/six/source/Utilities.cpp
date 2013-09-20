@@ -380,7 +380,7 @@ template<> OrientationType six::toType<OrientationType>(const std::string& s)
     else if (type == "ARBITRARY")
         return OrientationType::ARBITRARY;
     else
-        throw except::Exception(Ctxt("Unsupported orientation type"));
+        throw except::Exception(Ctxt("Unsupported orientation type '" + s + "'"));
 }
 
 template<> std::string six::toString(const OrientationType& t)
@@ -417,7 +417,7 @@ template<> PolarizationType six::toType<PolarizationType>(const std::string& s)
     else if (type == "LHC")
         return PolarizationType::LHC;
     else
-        throw except::Exception(Ctxt("Unsupported polarization type"));
+        throw except::Exception(Ctxt("Unsupported polarization type '" + s + "'"));
 }
 
 template<> std::string six::toString(const PolarizationType& t)
@@ -463,9 +463,10 @@ template<> DualPolarizationType six::toType<DualPolarizationType>(
     else if (type == "LHC:LHC")
         return DualPolarizationType::LHC_LHC;
     else
-        throw except::Exception(
-                                Ctxt(
-                                     "Unsupported conversion to dual polarization type"));
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported conversion to dual polarization type '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const DualPolarizationType& t)
@@ -504,7 +505,7 @@ template<> DemodType six::toType<DemodType>(const std::string& s)
     else if (type == "CHIRP")
         return DemodType::CHIRP;
     else
-        throw except::Exception(Ctxt("Unsupported demod type"));
+        throw except::Exception(Ctxt("Unsupported demod type '" + s + "'"));
 }
 
 template<> std::string six::toString(const DemodType& t)
@@ -534,7 +535,10 @@ template<> ImageFormationType six::toType<ImageFormationType>(
     else if (type == "RGAZCOMP")
         return ImageFormationType::RGAZCOMP;
     else
-        throw except::Exception(Ctxt("Unsupported image formation type"));
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported image formation type + '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const ImageFormationType& t)
@@ -566,9 +570,10 @@ template<> SlowTimeBeamCompensationType six::toType<
     else if (type == "SV")
         return SlowTimeBeamCompensationType::SV;
     else
-        throw except::Exception(
-                                Ctxt(
-                                     "Unsupported slow time beam compensation type"));
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported slow time beam compensation type + '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const SlowTimeBeamCompensationType& t)
@@ -598,8 +603,10 @@ template<> ImageBeamCompensationType six::toType<ImageBeamCompensationType>(
     else if (type == "SV")
         return ImageBeamCompensationType::SV;
     else
-        throw except::Exception(
-                                Ctxt("Unsupported image beam compensation type"));
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported image beam compensation type + '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const ImageBeamCompensationType& t)
@@ -627,7 +634,10 @@ template<> AutofocusType six::toType<AutofocusType>(const std::string& s)
     else if (type == "SV")
         return AutofocusType::SV;
     else
-        throw except::Exception(Ctxt("Unsupported autofocus type"));
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported autofocus type + '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const AutofocusType& t)
@@ -656,7 +666,10 @@ template<> RMAlgoType six::toType<RMAlgoType>(const std::string& s)
     else if (type == "RG_DOP")
         return RMAlgoType::RG_DOP;
     else
-        throw except::Exception(Ctxt("Unsupported RM algorithm type"));
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported RM algorithm type '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const RMAlgoType& t)
@@ -683,7 +696,7 @@ template<> SideOfTrackType six::toType<SideOfTrackType>(const std::string& s)
     else if (type == "R")
         return SideOfTrackType::RIGHT;
     else
-        throw except::Exception(Ctxt("Unsupported side of track"));
+        throw except::Exception(Ctxt("Unsupported side of track '" + s + "'"));
 }
 
 template<> std::string six::toString(const SideOfTrackType& t)
@@ -711,7 +724,10 @@ template<> ComplexImagePlaneType six::toType<ComplexImagePlaneType>(
     else if (type == "GROUND")
         return ComplexImagePlaneType::GROUND;
     else
-        throw except::Exception(Ctxt("Unsupported complex image plane"));
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported complex image plane '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const ComplexImagePlaneType& t)
@@ -745,7 +761,10 @@ template<> ComplexImageGridType six::toType<ComplexImageGridType>(
     else if (type == "PLANE")
         return ComplexImageGridType::PLANE;
     else
-        throw except::Exception(Ctxt("Unsupported complex image grid"));
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported complex image grid '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const ComplexImageGridType& t)
@@ -778,7 +797,7 @@ template<> FFTSign six::toType<FFTSign>(const std::string& s)
     else if (type == "0")
         return FFTSign::NOT_SET;
     else
-        throw except::Exception(Ctxt("Unsupported fft sign"));
+        throw except::Exception(Ctxt("Unsupported fft sign '" + s + "'"));
 }
 
 template<> std::string six::toString(const FFTSign& value)
@@ -807,7 +826,7 @@ template<> AppliedType six::toType<AppliedType>(const std::string& s)
     else if (type == "NOT_APPLIED")
         return AppliedType::IS_FALSE;
     else
-        throw except::Exception(Ctxt("Unsupported applied type"));
+        throw except::Exception(Ctxt("Unsupported applied type '" + s + "'"));
 }
 
 template<> std::string six::toString(const AppliedType& value)
@@ -835,7 +854,7 @@ template<> CollectType six::toType<CollectType>(const std::string& s)
     else if (type == "BISTATIC")
         return CollectType::BISTATIC;
     else
-        throw except::Exception(Ctxt("Unsupported collect type"));
+        throw except::Exception(Ctxt("Unsupported collect type '" + s + "'"));
 }
 
 template<> std::string six::toString(const CollectType& value)
@@ -877,7 +896,7 @@ template<> six::FrameType six::toType<six::FrameType>(const std::string& s)
     else if (type == "RIC_ECI")
         return FrameType::RIC_ECI;
     else
-        throw except::Exception(Ctxt("Unsupported frame type"));
+        throw except::Exception(Ctxt("Unsupported frame type '" + s + "'"));
 }
 
 template<> std::string six::toString(const six::LatLonCorners& corners)
