@@ -342,8 +342,8 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
 
 /*  Set a string field */
 
-NITFPRIV(NITF_BOOL) isBCSN(const char *str, nitf_Uint32 len, nitf_Error * error);
-NITFPRIV(NITF_BOOL) isBCSA(const char *str, nitf_Uint32 len, nitf_Error * error);
+NITFPRIV(NITF_BOOL) isBCSN(const char *str, size_t len, nitf_Error * error);
+NITFPRIV(NITF_BOOL) isBCSA(const char *str, size_t len, nitf_Error * error);
 
 NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
                                         const char *str, nitf_Error * error)
@@ -1149,38 +1149,48 @@ NITFAPI(NITF_BOOL) nitf_Field_resizeField(nitf_Field *field,
  *  A zero length string passes
  */
 
-NITFPRIV(NITF_BOOL) isBCSN(const char *str, nitf_Uint32 len, nitf_Error * error)
+NITFPRIV(NITF_BOOL) isBCSN(const char *str, size_t len, nitf_Error * error)
 {
-    char *strp;                 /* Pointer into string */
-    nitf_Uint32 i;
+    size_t ii;
+    size_t startIdx;
+    NITF_BOOL foundDecimalPoint = 0;
 
-    strp = (char*)str;
+    /* Look for + or - which must be the first character */
+    startIdx = (len > 0 && (str[0] == '+' || str[0] == '-')) ? 1 : 0;
 
-    /*    Look for + or minus which must be the first character */
-
-    if ((*strp == '+') || (*strp == '-'))
-    {
-        strp += 1;
-        len -= 1;
-    }
-
-    for (i = 0; i < len; i++)
+    for (ii = startIdx; ii < len; ++ii)
     {
         /*
          * Some TRE's allow for all minus signs to represent
          * BCSN if number not known (e.g. BANDSB)
+         * TODO: Probably should have a rule for where / can appear too
          */
-        if (!isdigit(*strp) && (*strp != '-'))
+        const char ch = str[ii];
+        if (ch == '.')
+        {
+            if (foundDecimalPoint)
+            {
+                nitf_Error_init(error,
+                                "BCS_N string can only contain one decimal "
+                                "point",
+                                NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+                return NITF_FAILURE;
+            }
+            else
+            {
+                foundDecimalPoint = 1;
+            }
+        }
+        else if (!isdigit(ch) && ch != '-' && ch != '/')
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                              "Invalid character %c in BCS_N string",
-                             *strp);
-            return (NITF_FAILURE);
+                             ch);
+            return NITF_FAILURE;
         }
-        strp += 1;
     }
 
-    return (NITF_SUCCESS);
+    return NITF_SUCCESS;
 }
 
 
@@ -1190,24 +1200,22 @@ NITFPRIV(NITF_BOOL) isBCSN(const char *str, nitf_Uint32 len, nitf_Error * error)
  *  A zero length string passes
  */
 
-NITFPRIV(NITF_BOOL) isBCSA(const char *str, nitf_Uint32 len, nitf_Error * error)
+NITFPRIV(NITF_BOOL) isBCSA(const char *str, size_t len, nitf_Error * error)
 {
-    nitf_Uint8 *strp;           /* Pointer into string */
-    nitf_Uint32 i;
+    size_t ii;
 
-    strp = (nitf_Uint8 *) str;
-
-    for (i = 0; i < len; i++)
+    for (ii = 0; ii < len; ++ii)
     {
-        if ((*strp < 0x20) || (*strp > 0x7e))
+        const nitf_Uint8 ch = (nitf_Uint8)str[ii];
+
+        if (ch < 0x20 || ch > 0x7e)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                             "Invalid character %c in BCS_N string",
-                             *strp);
-            return (NITF_FAILURE);
+                             "Invalid character %c in BCS_A string",
+                             ch);
+            return NITF_FAILURE;
         }
-        strp += 1;
     }
 
-    return (NITF_SUCCESS);
+    return NITF_SUCCESS;
 }
