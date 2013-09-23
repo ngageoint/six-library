@@ -1163,7 +1163,9 @@ NITFPRIV(NITF_BOOL) isBCSN(const char *str, size_t len, nitf_Error * error)
         /*
          * Some TRE's allow for all minus signs to represent
          * BCSN if number not known (e.g. BANDSB)
-         * TODO: Probably should have a rule for where / can appear too
+         * TODO: Probably should have a rule for where '/' can appear too
+         *       Should also check that '.' isn't the last character in the
+         *       string
          */
         const char ch = str[ii];
         if (ch == '.')
