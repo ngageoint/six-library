@@ -92,7 +92,7 @@ struct DerivedData: public Data
      *  (Optional) Contains meta-data related to downstream
      *  processing of the product
      */
-    mem::ScopedCloneablePtr<DownstreamReprocessing> downstreamReprocessing;
+    mem::ScopedCopyablePtr<DownstreamReprocessing> downstreamReprocessing;
 
     /*!
      *  (Optional) Contains error statistics structures

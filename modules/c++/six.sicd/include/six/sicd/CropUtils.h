@@ -19,27 +19,35 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SIX_SICD_H__
-#define __IMPORT_SIX_SICD_H__
 
-#include <import/six.h>
+#ifndef __SIX_SICD_CROP_UTILS_H__
+#define __SIX_SICD_CROP_UTILS_H__
 
-#include "six/sicd/Antenna.h"
-#include "six/sicd/CollectionInformation.h"
-#include "six/sicd/ComplexData.h"
-#include "six/sicd/ComplexDataBuilder.h"
-#include "six/sicd/ComplexXMLControl.h"
-#include "six/sicd/CropUtils.h"
-#include "six/sicd/GeoData.h"
-#include "six/sicd/Grid.h"
-#include "six/sicd/ImageData.h"
-#include "six/sicd/ImageFormation.h"
-#include "six/sicd/MatchInformation.h"
-#include "six/sicd/PFA.h"
-#include "six/sicd/Position.h"
-#include "six/sicd/RadarCollection.h"
-#include "six/sicd/SCPCOA.h"
-#include "six/sicd/Utilities.h"
+#include <string>
+#include <vector>
+
+#include <types/RowCol.h>
+
+namespace six
+{
+namespace sicd
+{
+/*
+ * Reads in an AOI from a SICD and creates a cropped SICD, updating the
+ * metadata as appropriate to reflect this
+ *
+ * \param inPathname Input SICD pathname
+ * \param schemaPaths Schema paths to use for reading and writing
+ * \param aoiOffset Upper left corner of AOI
+ * \param aoiDims Size of AOI
+ * \param outPathname Output cropped SICD pathname
+ */
+void cropSICD(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname);
+}
+}
 
 #endif
-
