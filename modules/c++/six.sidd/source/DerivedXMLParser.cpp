@@ -1838,7 +1838,7 @@ XMLElem DerivedXMLParser::convertDownstreamReprocessingToXML(
     // optional to unbounded
     if (!downstreamReproc->processingEvents.empty())
     {
-        for (std::vector<mem::ScopedCloneablePtr<ProcessingEvent> >::
+        for (std::vector<mem::ScopedCopyablePtr<ProcessingEvent> >::
                 const_iterator it = downstreamReproc->processingEvents.begin(); 
                 it != downstreamReproc->processingEvents.end(); ++it)
         {

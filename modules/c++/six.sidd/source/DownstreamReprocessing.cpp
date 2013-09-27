@@ -21,21 +21,56 @@
  */
 #include "six/sidd/DownstreamReprocessing.h"
 
-using namespace six;
-using namespace six::sidd;
-
-GeometricChip* GeometricChip::clone() const
+namespace six
 {
-    return new GeometricChip(*this);
+namespace sidd
+{
+RowColDouble GeometricChip::getFullImageCoordinateFromChip(
+        const RowColDouble& chip) const
+{
+    // From section 5.1.1 of SIDD Volume 1
+
+    // Normalize the chip coordinates
+    const double u = chip.row / (chipSize.row - 1);
+    const double v = chip.col / (chipSize.col - 1);
+    const double uv = u * v;
+
+    // Compute original full image row/col coordinate bilinear coefficients
+    const RowColDouble A = originalUpperLeftCoordinate;
+    const RowColDouble B =
+            originalLowerLeftCoordinate - originalUpperLeftCoordinate;
+    const RowColDouble D =
+            originalUpperRightCoordinate - originalUpperLeftCoordinate;
+    const RowColDouble F =
+            originalUpperLeftCoordinate + originalLowerRightCoordinate -
+            originalUpperRightCoordinate - originalLowerLeftCoordinate;
+
+    // Compute full image row and col coordinates
+    const RowColDouble fullImage(
+            A.row + u * B.row + v * D.row + uv * F.row,
+            A.col + u * B.col + v * D.col + uv * F.col);
+    return fullImage;
 }
 
-ProcessingEvent* ProcessingEvent::clone() const
+RowColDouble
+GeometricChip::getChipCoordinateFromFullImage(const RowColDouble& full) const
 {
-    return new ProcessingEvent(*this);
+    if (originalUpperLeftCoordinate.row == originalUpperRightCoordinate.row &&
+        originalLowerLeftCoordinate.row == originalLowerLeftCoordinate.row &&
+        originalUpperLeftCoordinate.row < originalLowerLeftCoordinate.row &&
+        originalUpperLeftCoordinate.col == originalLowerLeftCoordinate.col &&
+        originalUpperRightCoordinate.col == originalLowerRightCoordinate.col &&
+        originalUpperLeftCoordinate.col < originalUpperRightCoordinate.col)
+    {
+        return RowColDouble(full.row - originalUpperLeftCoordinate.row,
+                            full.col - originalUpperLeftCoordinate.col);
+    }
+    else
+    {
+        // TODO: Derive equations to do 5.1.1 in reverse
+        throw except::NotImplementedException(Ctxt(
+                "Only square chipping is implemented currently"));
+    }
 }
-
-DownstreamReprocessing* DownstreamReprocessing::clone() const
-{
-    return new DownstreamReprocessing(*this);
 }
-
+}

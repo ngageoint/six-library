@@ -22,6 +22,7 @@
 #ifndef __SIX_DOWNSTREAM_REPROCESSING_H__
 #define __SIX_DOWNSTREAM_REPROCESSING_H__
 
+#include <mem/ScopedCopyablePtr.h>
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -38,7 +39,6 @@ namespace sidd
  */
 struct GeometricChip
 {
-
     //!  Size of the chipped product in pixels
     RowColInt chipSize;
 
@@ -54,8 +54,15 @@ struct GeometricChip
     //!  Lower-right corner with respect to the original product
     RowColDouble originalLowerRightCoordinate;
 
-    //!  Copy of this
-    GeometricChip* clone() const;
+    // Given chip pixel coordinates, provides full image pixel coordinates
+    RowColDouble
+    getFullImageCoordinateFromChip(const RowColDouble& chip) const;
+
+    // Given full image pixel coordinates, provides chip pixel coordinates
+    // Currently only implemented for simple rectangular chipping (throws
+    // otherwise)
+    RowColDouble
+    getChipCoordinateFromFullImage(const RowColDouble& full) const;
 };
 
 /*!
@@ -67,7 +74,6 @@ struct GeometricChip
  */
 struct ProcessingEvent
 {
-
     //!  Application which applied a modification
     std::string applicationName;
 
@@ -79,9 +85,6 @@ struct ProcessingEvent
 
     //!  (Optional, Unbounded) List of descriptors for the processing event
     std::vector<Parameter> descriptor;
-
-    //!  Copy of the object
-    ProcessingEvent* clone() const;
 };
 
 /*!
@@ -92,23 +95,13 @@ struct ProcessingEvent
  */
 struct DownstreamReprocessing
 {
-
     /*!
      *  (Optional) chipping information
      */
-    mem::ScopedCloneablePtr<GeometricChip> geometricChip;
+    mem::ScopedCopyablePtr<GeometricChip> geometricChip;
 
     //!  (Optional, Unbounded) downstream processing events
-    std::vector<mem::ScopedCloneablePtr<ProcessingEvent> > processingEvents;
-
-    //!  Constructor, initializes optional element to NULL
-    DownstreamReprocessing() :
-        geometricChip(NULL)
-    {
-    }
-
-    //!  Clone, including a chip if non-NULL or any events
-    DownstreamReprocessing* clone() const;
+    std::vector<mem::ScopedCopyablePtr<ProcessingEvent> > processingEvents;
 };
 }
 }
