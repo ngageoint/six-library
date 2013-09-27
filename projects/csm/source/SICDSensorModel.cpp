@@ -24,7 +24,6 @@
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <six/csm/SICDSensorModel.h>
-#include <io/ByteStream.h>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/XMLControlFactory.h>
@@ -134,7 +133,7 @@ void SICDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
             {
                 try
                 {
-                    io::ByteStream stream;
+                    io::StringStream stream;
                     stream.write(desData.c_str(), desData.length());
 
                     domParser.clear();
@@ -216,7 +215,7 @@ bool SICDSensorModel::containsComplexDES(const ::csm::Nitf21Isd& isd)
         {
             try
             {
-                io::ByteStream stream;
+                io::StringStream stream;
                 stream.write(desData.c_str(), desData.length());
 
                 domParser.clear();
@@ -554,7 +553,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
 
     try
     {
-        io::ByteStream stream;
+        io::StringStream stream;
         stream.write(sensorModelXML.c_str(), sensorModelXML.length());
 
         xml::lite::MinidomParser domParser;
