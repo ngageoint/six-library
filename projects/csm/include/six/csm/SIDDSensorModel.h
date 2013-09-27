@@ -319,6 +319,10 @@ private:
 
     void setSchemaDir(const std::string& schemaDir);
 
+    types::RowCol<double> ecefToRowCol(const scene::Vector3& ecef) const;
+
+    scene::Vector3 rowColToECEF(const types::RowCol<double>& imagePt) const;
+
 private:
     std::vector<std::string> mSchemaDirs;
     std::string mSensorModelState;

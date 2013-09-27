@@ -356,12 +356,64 @@ void SIDDSensorModel::replaceModelState(const std::string& argState)
 types::RowCol<double>
 SIDDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
 {
+    const types::RowCol<double> posRC(pos.line, pos.samp);
+    types::RowCol<double> fullScenePos;
+    if (mData->downstreamReprocessing.get() &&
+        mData->downstreamReprocessing->geometricChip.get())
+    {
+        fullScenePos = mData->downstreamReprocessing->geometricChip->
+                getFullImageCoordinateFromChip(posRC);
+    }
+    else
+    {
+        fullScenePos = posRC;
+    }
+
     const six::sidd::MeasurableProjection* projection(getProjection());
-    const types::RowCol<int> ctrPt = projection->referencePoint.rowCol;
+    const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
 
     return types::RowCol<double>(
-            (pos.line - ctrPt.row) * projection->sampleSpacing.row,
-            (pos.samp - ctrPt.col) * projection->sampleSpacing.col);
+            (fullScenePos.row - ctrPt.row) * projection->sampleSpacing.row,
+            (fullScenePos.col - ctrPt.col) * projection->sampleSpacing.col);
+}
+
+types::RowCol<double>
+SIDDSensorModel::ecefToRowCol(const scene::Vector3& ecef) const
+{
+    const types::RowCol<double> imagePt = mGridTransform->ecefToRowCol(ecef);
+
+    if (mData->downstreamReprocessing.get() &&
+        mData->downstreamReprocessing->geometricChip.get())
+    {
+        // 'imagePt' is with respect to the original full image, but we
+        // need it with respect to the chip that this SIDD actually represents
+        return mData->downstreamReprocessing->geometricChip->
+                        getChipCoordinateFromFullImage(imagePt);
+    }
+    else
+    {
+        return imagePt;
+    }
+}
+
+scene::Vector3
+SIDDSensorModel::rowColToECEF(const types::RowCol<double>& imagePt) const
+{
+    types::RowCol<double> fullImagePt;
+    if (mData->downstreamReprocessing.get() &&
+        mData->downstreamReprocessing->geometricChip.get())
+    {
+        // The point that was passed in was with respect to the chip
+        // mGridTransform wants it with respect to the full image
+        fullImagePt = mData->downstreamReprocessing->geometricChip->
+                getFullImageCoordinateFromChip(imagePt);
+    }
+    else
+    {
+        fullImagePt = imagePt;
+    }
+
+    return mGridTransform->rowColToECEF(fullImagePt);
 }
 
 ::csm::ImageCoord SIDDSensorModel::groundToImage(
@@ -381,8 +433,7 @@ SIDDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
         // RowCol
         const scene::Vector3 gridPt =
                 mGridGeometry->sceneToGrid(sceneGroundPt);
-        const types::RowCol<double> imagePt =
-                mGridTransform->ecefToRowCol(gridPt);
+        const types::RowCol<double> imagePt = ecefToRowCol(gridPt);
 
         // TODO: Not sure how to calculate achievedPrecision
         if (achievedPrecision)
@@ -411,8 +462,8 @@ SIDDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
     {
         // Convert line and sample to an ECEF point in the image grid and
         // then project the grid point to the ground
-        const scene::Vector3 gridPt =
-                mGridTransform->rowColToECEF(imagePt.line, imagePt.samp);
+        const scene::Vector3 gridPt = rowColToECEF(
+                types::RowCol<double>(imagePt.line, imagePt.samp));
         const scene::Vector3 groundPt =
                 mGridGeometry->gridToScene(gridPt, height);
 
