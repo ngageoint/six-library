@@ -161,7 +161,7 @@ public:
      *  Implements (Slant plane) Image to Scene (Ground plane)
      *  projection using computerContour and contourToGroundPlane
      *
-     *  \param imagePoint A point in the image surface (continuous)
+     *  \param imageGridPoint A point in the image surface (continuous)
      *  \param A ground plane reference point
      *  \param groundPlaneNormal A parameter which could just be the
      *  normalized ground plane reference point
@@ -173,6 +173,39 @@ public:
                                 const Vector3& groundRefPoint,
                                 const Vector3& groundPlaneNormal,
                                 double *oTimeCOA) const;
+
+    /*!
+     * Implements chapter 9 Precise R/Rdot To Constant HAE Surface Projection
+     * from SICD Image Projections, 9.1 Constant Height Surface & Surface
+     * Normal
+     *
+     * This method is iterative.  It computes the R/Rdot projection to one
+     * or more ground planes that are tangent to the constant height surface.
+     * Each ground plane projection point computed is slightly above the
+     * constant HAE surface.  The final surface position is computed by
+     * projecting from the final ground plane projection point down to the
+     * HAE surface
+     *
+     *  \param imageGridPoint A point (meters) in the image surface
+     *  (continuous)
+     *  \param height Surface height (meters) above the WGS-84 reference
+     *  ellipsoid
+     *  \param heightThreshold Height threshold (meters) for convergence of
+     *  iterative projection sequence.  Must be positive.  Default value will
+     *  yield highly accurate projection results, including for very short
+     *  range and step grazing angle geometries.  Reducing this threshold will
+     *  have negligible improvements in projection accuracy.
+     *  \maxNumIters Maximum number of iterations to perform.  Even for very
+     *  large images, the maximum iteration count required is expected to be
+     *  2 for the default heightThreshold.
+     *
+     *  \return A scene (ground) point in 3 space at the desired height
+     *
+     */
+    Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
+                         double height,
+                         double heightThreshold = 1.0,
+                         size_t maxNumIters = 3) const;
 
     /*!
      * Samples a 10x10 grid of points that spans outExtent using

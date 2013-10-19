@@ -19,12 +19,33 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <limits>
+
 #include "scene/ProjectionModel.h"
+#include "scene/ECEFToLLATransform.h"
+#include "scene/Utilities.h"
 
 namespace
 {
 // Points to use in each direction for projection
 static const size_t POINTS_1D = 10;
+
+// TODO: Should this be a static method instead?
+scene::Vector3 computeUnitVector(const scene::LatLonAlt& latLon)
+{
+    const double latRad = latLon.getLatRadians();
+    const double lonRad = latLon.getLonRadians();
+
+    const double cosLat = std::cos(latRad);
+
+    scene::Vector3 unitVector;
+    unitVector[0] = cosLat * std::cos(lonRad);
+    unitVector[1] = cosLat * std::sin(lonRad);
+    unitVector[2] = std::sin(latRad);
+
+    return unitVector;
+}
 }
 
 namespace scene
@@ -160,7 +181,7 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
             computeImageCoordinates(imagePlanePoint);
         
         // Find out if scene point is the same as the guessed output
-        // of imageToScenee
+        // of imageToScene
         diff = scenePoint - imageToScene(imageGridPoint,
                                          groundRefPoint,
                                          groundPlaneNormal,
@@ -212,6 +233,102 @@ ProjectionModel::imageToScene(const types::RowCol<double>& imageGridPoint,
                                 arpCOA, velCOA, timeCOA,
                                 groundPlaneNormal,
                                 groundRefPoint);
+}
+
+Vector3 ProjectionModel::imageToScene(
+        const types::RowCol<double>& imageGridPoint,
+        double height,
+        double heightThreshold,
+        size_t maxNumIters) const
+{
+    // Sanity checks
+    if (heightThreshold <= 0)
+    {
+        throw except::Exception(Ctxt("Height threshold must be positive"));
+    }
+
+    if (maxNumIters < 1)
+    {
+        throw except::Exception(Ctxt(
+                "Max number of iterations must be positive"));
+    }
+
+    // 1. Compute the geodetic ground plane normal at the SCP
+    //    Note that this is different than the value passed in to the other
+    //    imageToScene() overloading which is the spherical earth GPN (see
+    //    section 5.1 for details)
+    const ECEFToLLATransform ecefToLatLon;
+    const LatLonAlt scpLatLon = ecefToLatLon.transform(mSCP);
+    Vector3 groundPlaneNormal = computeUnitVector(scpLatLon);
+
+    Vector3 groundRefPoint =
+            mSCP + (height - scpLatLon.getAlt()) * groundPlaneNormal;
+
+    // Compute contour just once
+    double r;
+    double rDot;
+    const double timeCOA = mTimeCOAPoly(imageGridPoint.row,
+                                        imageGridPoint.col);
+    const Vector3 arpCOA = mARPPoly(timeCOA);
+    const Vector3 velCOA = mARPVelPoly(timeCOA);
+    computeContour(arpCOA, velCOA, timeCOA, imageGridPoint, &r, &rDot);
+
+    Vector3 gppECEF;
+    Vector3 uUP;
+    double deltaHeight(std::numeric_limits<double>::max());
+    for (size_t iter = 0; iter < maxNumIters; ++iter)
+    {
+        // 2. Compute precise projection along the R/Rdot contour to ground
+        //    plane
+        gppECEF = contourToGroundPlane(r, rDot,
+                                       arpCOA, velCOA, timeCOA,
+                                       groundPlaneNormal,
+                                       groundRefPoint);
+
+        const LatLonAlt gppLatLon = ecefToLatLon.transform(gppECEF);
+
+        // 3. Compute unit vector in increasing height direction at ground
+        //    plane point position
+        uUP = computeUnitVector(gppLatLon);
+
+        // TODO: Doc doesn't have this std::abs() but seems like we should for
+        //       numerical precision reasons if nothing else
+        deltaHeight = std::abs(gppLatLon.getAlt() - height);
+
+        // 4. Test to see if GPP is sufficiently close to the HAE surface
+        //    If not, adjust the ground plane normal and ground ref point and
+        //    try again
+        if (deltaHeight <= heightThreshold)
+        {
+            break;
+        }
+
+        groundPlaneNormal = uUP;
+        groundRefPoint = gppECEF - deltaHeight * uUP;
+    }
+
+    // 5. Compute the unit slant plane normal vector that's tangent to the
+    //    R/Rdot contour at the GPP.  This points away from the center of the
+    //    earth and in a direction of increasing HAE at the GPP.
+    Vector3 uSPN = math::linear::cross(velCOA * mLookDir, gppECEF - arpCOA);
+    uSPN.normalize();
+
+    // 6. Compute the straight line projection from the GPP along the slant
+    //    plane normal to point SLP.  SLP is located very close to the precise
+    //    R/Rdot contour intersection with the constant height surface.
+    const Vector3 SF = uUP.dot(uSPN);
+    Vector3 subTerm;
+    for (size_t ii = 0; ii < 3; ++ii)
+    {
+        subTerm[ii] = deltaHeight / SF[ii] * uSPN[ii];
+    }
+
+    const LatLonAlt SLP = ecefToLatLon.transform(gppECEF - subTerm);
+
+    // 7. Assign surface point SPP position by adjusting its height to be on
+    //    the HAE surface
+    const LatLonAlt SPP(SLP.getLat(), SLP.getLon(), height);
+    return scene::Utilities::latLonToECEF(SPP);
 }
 
 void ProjectionModel::computeProjectionPolynomials(
