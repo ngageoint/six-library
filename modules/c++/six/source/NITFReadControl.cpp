@@ -173,8 +173,8 @@ void NITFReadControl::load(nitf::IOInterface& interface,
 
             nitf::SegmentReader deReader = mReader.newDEReader(i);
             SegmentInputStreamAdapter ioAdapter(deReader);
-            std::auto_ptr<Data> data(parseData(*mXMLRegistry,
-                                               ioAdapter,
+            std::auto_ptr<Data> data(parseData(*mXMLRegistry, 
+                                               ioAdapter, 
                                                dataType,
                                                schemaPaths,
                                                *mLog));
