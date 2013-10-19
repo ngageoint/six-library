@@ -402,30 +402,22 @@ SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
 
 ::csm::EcefCoord SICDSensorModel::imageToGround(
         const ::csm::ImageCoord& imagePt,
-        double ,
+        double height,
         double desiredPrecision,
         double* achievedPrecision,
         ::csm::WarningList* ) const
 {
     try
     {
-        // TODO: Handle the case where the height is non-zero
         const types::RowCol<double> imagePtMeters = fromPixel(imagePt);
-        double timeCOA(0.0);
 
-        const scene::Vector3 groundRefPoint = mGeometry->getReferencePosition();
-        scene::Vector3 groundPlaneNormal(groundRefPoint);
-        groundPlaneNormal.normalize();
-
-        // TODO: Currently no way to specify desired precision
+        // TODO: imageToScene() supports specifying a height threshold in
+        //       meters but it's not obvious how to convert that to a desired
+        //       precision in pixels.  Likewise, not clear how to determine
+        //       the achieved precision in pixels afterwards.
         const scene::Vector3 groundPt =
-                mProjection->imageToScene(imagePtMeters,
-                                          groundRefPoint,
-                                          groundPlaneNormal,
-                                          &timeCOA);
+                mProjection->imageToScene(imagePtMeters, height);
 
-        // TODO: Currently no way to determine the actual precision that was
-        //       achieved, so setting it to the desired precision
         if (achievedPrecision)
         {
             *achievedPrecision = desiredPrecision;

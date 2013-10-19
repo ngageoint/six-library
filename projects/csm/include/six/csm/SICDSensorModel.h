@@ -204,7 +204,7 @@ public: // RasterGM methods
      *
      * \param[in] imagePt Image line and sample in pixels
      * \param[in] height Height in meters measured with respect to the WGS-84
-     *     ellipsoid.  Currently this is unused.
+     *     ellipsoid.
      * \param[in] desiredPrecision Requested precision in pixels of the
      *     calculation. Currently this parameter is ignored.
      * \param[out] achievedPrecision  Precision in pixels to which the
