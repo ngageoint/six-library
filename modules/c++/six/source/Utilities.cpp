@@ -937,8 +937,8 @@ void six::loadPluginDir(const std::string& pluginDir)
     nitf::PluginRegistry::loadDir(pluginDir);
 }
 
-std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
-                                   ::io::InputStream& xmlStream,
+std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg, 
+                                   ::io::InputStream& xmlStream, 
                                    DataType dataType,
                                    const std::vector<std::string>& schemaPaths,
                                    logging::Logger& log)
@@ -964,16 +964,16 @@ std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
         xmlDataType = DataType::DERIVED;
     else
         throw except::Exception(Ctxt("Unexpected XML type"));
-
+    
     //! Only SIDDs can have mismatch types
     if (dataType == DataType::COMPLEX && dataType != xmlDataType)
     {
         throw except::Exception(Ctxt("Unexpected SIDD DES in SICD"));
     }
-
+    
     //! Create the correct type of XMLControl
     const std::auto_ptr<XMLControl>
         xmlControl(xmlReg.newXMLControl(xmlDataType, &log));
-
+    
     return std::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
 }

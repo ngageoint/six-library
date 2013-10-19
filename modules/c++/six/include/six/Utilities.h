@@ -154,8 +154,8 @@ template<> std::string toString(const six::LatLonCorners& corners);
 // Load the TRE plugins in the given directory
 void loadPluginDir(const std::string& pluginDir);
 
-std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
-                              ::io::InputStream& xmlStream,
+std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg, 
+                              ::io::InputStream& xmlStream, 
                               DataType dataType,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
