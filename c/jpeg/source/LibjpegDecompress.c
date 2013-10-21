@@ -181,9 +181,11 @@ NITFPRIV(void) JPEGMarkerItem_print(
         JPEGMarkerItem* item, FILE *file)
 {
     if (file == NULL)
-    file = stdout;
+    {
+        file = stdout;
+    }
 
-    fprintf(file, "JPEG Marker: %s %lld\n", item->name, item->off);
+    fprintf(file, "JPEG Marker: %s %lld\n", item->name, (long long)item->off);
     return;
 }
 
@@ -220,6 +222,9 @@ NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
                             nitf_Uint8* block,
                             nitf_Error* error);
 
+NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader* subheader,
+                                              nrt_HashTable* options,
+                                              nitf_Error* error);
 
 /*!
  *  This function is the creator of the decompression control interface
@@ -236,13 +241,13 @@ NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
  *  \param error An error which will be populated on failure
  *  \return NULL on failure, an opaque pointer on success
  */
-NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface*  io,
-                                              nitf_Uint64 offset,
-                                              nitf_Uint64 fileLength,
-                                              nitf_BlockingInfo* blockInfo,
-                                              nitf_Uint64* blockMask,
-                                              /* float              comrat, */
-                                              nitf_Error* error);
+NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
+                              nitf_IOInterface*  io,
+                              nitf_Uint64 offset,
+                              nitf_Uint64 fileLength,
+                              nitf_BlockingInfo* blockInfo,
+                              nitf_Uint64* blockMask,
+                              nitf_Error* error);
 
 /*!
  *  This function is the symmetric counter-function to the implOpen()
@@ -467,6 +472,7 @@ void JPEGBlock_reorder(JPEGBlock* block)
 static nitf_DecompressionInterface interfaceTable =
 {
     implOpen,
+    implStart,
     implReadBlock,
     implFreeBlock,
     implClose,
@@ -951,6 +957,29 @@ CATCH_ERROR:
     return NITF_FAILURE;
 }
 
+NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader* subheader,
+                                              nrt_HashTable* options,
+                                              nitf_Error* error)
+{
+    JPEGImplControl* implControl; /* This is our local storage  */
+
+    (void)options;
+    (void)error;
+
+    implControl = (JPEGImplControl*)NITF_MALLOC(sizeof(JPEGImplControl));
+
+    if (implControl == NULL)
+    {
+        nitf_Error_init(error,
+                "Error creating control object",
+                NITF_CTXT,
+                NITF_ERR_DECOMPRESSION);
+        return NULL;
+    }
+
+    return (nitf_DecompressionControl*)implControl;
+}
+
 /*!
  *  Open our interface up.  This thing saves a reference to our
  *  io, and sets us up to read.  We call fdopen() to get a FILE*
@@ -959,16 +988,15 @@ CATCH_ERROR:
  *  \todo  This function needs to know Bits per pixel so that it
  *  can load the correct JPEG library
  */
-NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
-        nitf_Uint64 offset,
-        nitf_Uint64 fileLength,
-        nitf_BlockingInfo* blockInfo,
-        nitf_Uint64* blockMask,
-        nitf_Error* error)
+NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
+                              nitf_IOInterface* io,
+                              nitf_Uint64 offset,
+                              nitf_Uint64 fileLength,
+                              nitf_BlockingInfo* blockInfo,
+                              nitf_Uint64* blockMask,
+                              nitf_Error* error)
 {
-
-    JPEGImplControl* implControl; /* This is our local storage  */
-    implControl = (JPEGImplControl*)NITF_MALLOC(sizeof(JPEGImplControl));
+    JPEGImplControl* implControl = (JPEGImplControl*) control;
 
     DPRINT("=============================================================\n");
     DPRINT("JPEG decompression\n");
@@ -979,45 +1007,33 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
     DPRINTA1("[%d] blockInfo->numColsPerBlock\n", blockInfo->numColsPerBlock);
     DPRINTA1("[%d] blockInfo->length\n", blockInfo->length);
 
-    /*  Make sure creation succeeds, otherwise shutdown and go home  */
-    if (implControl == NULL)
-    {
-        nitf_Error_init(error,
-                "Error creating control object",
-                NITF_CTXT,
-                NITF_ERR_DECOMPRESSION);
-        return NULL;
-    }
-
     /*  For right now, we are storing this silly markerList.  I think
      this will prove to be a useless mechanism  */
     implControl->markerList = nitf_List_construct(error);
     if (!implControl->markerList)
     {
         /*  If this fails, the error is already set  */
-        return NULL;
+        return NITF_FAILURE;
     }
 
     /*  Seek to our start point, just in case... */
-    if ( ! NITF_IO_SUCCESS( nitf_IOInterface_seek(io,
-                            offset,
-                            NITF_SEEK_SET,
-                            error)
-            )
-    )
+    if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(io,
+                                               offset,
+                                               NITF_SEEK_SET,
+                                               error)))
     {
         nitf_Error_initf(error,
                 NITF_CTXT,
                 NITF_ERR_DECOMPRESSION,
                 "Error seeking to offset for JPEG block [%ld]",
                 offset);
-        return NULL;
+        return NITF_FAILURE;
     }
 
     /*  Find all marker offsets!!!!  */
     if (!scanOffsets(io, implControl->markerList, fileLength, error))
     {
-        return NULL;
+        return NITF_FAILURE;
     }
 
     {
@@ -1036,7 +1052,9 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
                 item->block = nextBlock - 1;
             }
             else
-            item->block = NITF_IMAGE_IO_NO_BLOCK;
+            {
+                item->block = NITF_IMAGE_IO_NO_BLOCK;
+            }
 
             nitf_ListIterator_increment(&x);
         }
@@ -1044,23 +1062,21 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_IOInterface* io,
     }
 
     /*  Seek to our start point, just in case... */
-    if ( ! NITF_IO_SUCCESS( nitf_IOInterface_seek(io,
-                            offset,
-                            NITF_SEEK_SET,
-                            error)
-            )
-    )
+    if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(io,
+                                               offset,
+                                               NITF_SEEK_SET,
+                                               error)))
     {
         nitf_Error_init(error,
                 "Error seeking to necessary offset for JPEG block",
                 NITF_CTXT,
                 NITF_ERR_DECOMPRESSION);
-        return NULL;
+        return NITF_FAILURE;
     }
 
     implControl->ioInterface = io;
     implControl->length = blockInfo->length;
-    return (nitf_DecompressionControl*)implControl;
+    return NITF_SUCCESS;
 }
 
 typedef struct _JPEGIOManager
@@ -1284,7 +1300,7 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl* control,
 
     /*  Get out the read object from the opaque handle  */
     JPEGImplControl* implControl = (JPEGImplControl*)control;
-    off_t soi;
+    off_t soi = 0;
 
     struct jpeg_error_mgr jerr;
     struct jpeg_decompress_struct cinfo;
