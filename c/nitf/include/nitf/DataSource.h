@@ -36,7 +36,7 @@ NITF_CXX_GUARD
  *  \param error    populated on error
  */
 typedef NITF_BOOL(*NITF_IDATASOURCE_READ) (NITF_DATA *data,
-        char *buf, nitf_Off size, nitf_Error *error);
+        void* buf, nitf_Off size, nitf_Error *error);
 
 
 /*

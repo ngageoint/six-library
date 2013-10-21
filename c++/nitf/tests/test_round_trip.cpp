@@ -53,7 +53,7 @@ public:
         mWindow.setNumBands(1);
     }
 
-    void nextRow(nitf::Uint32 band, char* buffer) throw (nitf::NITFException)
+    virtual void nextRow(nitf::Uint32 band, void* buffer) throw (nitf::NITFException)
     {
         int padded;
         mReader.read(mWindow, (nitf::Uint8**) &buffer, &padded);

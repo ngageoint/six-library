@@ -22,7 +22,7 @@
 
 #include "nitf/BandSource.hpp"
 
-nitf::MemorySource::MemorySource(char * data,
+nitf::MemorySource::MemorySource(const void* data,
                                  size_t size,
                                  nitf::Off start,
                                  int numBytesPerPixel,
@@ -130,9 +130,9 @@ nitf::DirectBlockSource::DirectBlockSource(nitf::ImageReader& imageReader, nitf:
     setManaged(false);
 }
 
-NITF_BOOL nitf::DirectBlockSource::nextBlock(void *callback,
-                                             char * buf,
-                                             nitf_Uint8 * block,
+NITF_BOOL nitf::DirectBlockSource::nextBlock(void* callback,
+                                             void* buf,
+                                             const void* block,
                                              nitf_Uint32 blockNumber,
                                              nitf_Uint64 blockSize,
                                              nitf_Error * error)
@@ -177,5 +177,3 @@ NITF_BOOL nitf::DirectBlockSource::nextBlock(void *callback,
 
     return NITF_SUCCESS;
 }
-
-

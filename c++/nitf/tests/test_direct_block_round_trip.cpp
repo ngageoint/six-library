@@ -20,12 +20,13 @@
  *
  */
 
-#include <mem/SharedPtr.h>
-#include <import/nitf.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <memory>
+#include <string.h>
+
+#include <mem/SharedPtr.h>
+#include <import/nitf.hpp>
 
 class TestDirectBlockSource: public nitf::DirectBlockSource
 {
@@ -35,14 +36,16 @@ public:
         throw (nitf::NITFException) : nitf::DirectBlockSource(imageReader, numBands){}
 
 protected:
-    virtual void nextBlock(char* buf, 
-                           nitf::Uint8* block, 
+    virtual void nextBlock(void* buf,
+                           const void* block,
                            nitf::Uint32 blockNumber,
                            nitf::Uint64 blockSize) throw (nitf::NITFException)
     {
         std::cout << "BLOCK NUMBER: " << blockNumber << " " << blockSize << std::endl;
-        if(buf)
+        if (buf)
+        {
             memcpy(buf, block, blockSize);
+        }
     }
 };
 
@@ -142,9 +145,19 @@ int main(int argc, char **argv)
         io.close();
         return 0;
     }
-    catch (except::Throwable & t)
+    catch (const std::exception& ex)
     {
-        std::cout << "ERROR!: " << t.toString() << std::endl;
+        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Throwable & t)
+    {
+        std::cerr << "Caught throwable: " << t.toString() << std::endl;
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Caught unknown exception\n";
+        return 1;
     }
 }
-

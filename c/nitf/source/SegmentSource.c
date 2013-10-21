@@ -29,7 +29,7 @@
  */
 typedef struct _MemorySourceImpl
 {
-    const char *data;
+    const void* data;
     NITF_BOOL ownData;
     nitf_Off size;
     int sizeSet;
@@ -54,8 +54,9 @@ NITFPRIV(MemorySourceImpl *) toMemorySource(NITF_DATA * data,
 }
 
 
-NITFPRIV(NITF_BOOL) MemorySource_contigRead(MemorySourceImpl *
-        memorySource, char *buf,
+NITFPRIV(NITF_BOOL) MemorySource_contigRead(
+        MemorySourceImpl* memorySource,
+        void* buf,
         nitf_Off size,
         nitf_Error * error)
 {
@@ -65,17 +66,20 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(MemorySourceImpl *
 }
 
 
-NITFPRIV(NITF_BOOL) MemorySource_offsetRead(MemorySourceImpl *
-        memorySource, char *buf,
+NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
+        MemorySourceImpl* memorySource,
+        void* buf,
         nitf_Off size,
         nitf_Error * error)
 {
     int i = 0;
+    const nitf_Uint8* src = (const nitf_Uint8*)memorySource->data;
+    nitf_Uint8* dest = (nitf_Uint8*)buf;
 
     while (i < size)
     {
-        buf[i++] = *(memorySource->data + memorySource->mark++);
-        memorySource->mark += (memorySource->byteSkip);
+        dest[i++] = src[memorySource->mark++];
+        memorySource->mark += memorySource->byteSkip;
     }
     return NITF_SUCCESS;
 }
@@ -85,17 +89,21 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(MemorySourceImpl *
  *  Private read implementation for memory source.
  */
 NITFPRIV(NITF_BOOL) MemorySource_read(NITF_DATA * data,
-                                      char *buf,
+                                      void* buf,
                                       nitf_Off size, nitf_Error * error)
 {
     MemorySourceImpl *memorySource = toMemorySource(data, error);
     if (!memorySource)
+    {
         return NITF_FAILURE;
+    }
 
     /*  We like the contiguous read case, it's fast  */
     /*  We want to make sure we reward this case     */
     if (memorySource->byteSkip == 0)
+    {
         return MemorySource_contigRead(memorySource, buf, size, error);
+    }
 
     return MemorySource_offsetRead(memorySource, buf, size, error);
 }
@@ -268,7 +276,7 @@ NITFPRIV(FileSourceImpl *) toFileSource(NITF_DATA * data,
 
 
 NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
-        char *buf,
+        void* buf,
         nitf_Off size, nitf_Error * error)
 {
     if (!NITF_IO_SUCCESS(nitf_IOInterface_read(fileSource->io, buf, size,
@@ -293,19 +301,21 @@ NITFPRIV(NITF_BOOL) FileSource_contigRead(FileSourceImpl * fileSource,
  *  -DP
  */
 NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
-        char *buf,
+        void* buf,
         nitf_Off size, nitf_Error * error)
 {
 
     nitf_Off tsize = size * (fileSource->byteSkip + 1);
 
-    char *tbuf;
+    nitf_Uint8* tbuf;
+    nitf_Uint8* bufPtr = (nitf_Uint8*)buf;
+
     nitf_Off lmark = 0;
     int i = 0;
     if (tsize + fileSource->mark > fileSource->size)
         tsize = fileSource->size - fileSource->mark;
 
-    tbuf = (char *) NITF_MALLOC(tsize);
+    tbuf = (nitf_Uint8 *) NITF_MALLOC(tsize);
     if (!tbuf)
     {
         nitf_Error_init(error,
@@ -322,7 +332,7 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
     /*  Downsize for buf */
     while (i < size)
     {
-        buf[i++] = *(tbuf + lmark++);
+        bufPtr[i++] = *(tbuf + lmark++);
         lmark += (fileSource->byteSkip);
     }
     fileSource->mark += lmark;
@@ -335,7 +345,7 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
  *  Private read implementation for file source.
  */
 NITFPRIV(NITF_BOOL) FileSource_read(NITF_DATA * data,
-                                    char *buf,
+                                    void* buf,
                                     nitf_Off size, nitf_Error * error)
 {
     FileSourceImpl *fileSource = toFileSource(data, error);
@@ -483,7 +493,7 @@ NITFPRIV(NITF_BOOL) SegmentReader_setSize(NITF_DATA* data, nitf_Off size, nitf_E
  *  Private read implementation for file source.
  */
 NITFPRIV(NITF_BOOL) SegmentReader_read(NITF_DATA * data,
-                                    char *buf,
+                                       void *buf,
                                     nitf_Off size, nitf_Error * error)
 {
     nitf_SegmentReader *reader =  (nitf_SegmentReader*)data;

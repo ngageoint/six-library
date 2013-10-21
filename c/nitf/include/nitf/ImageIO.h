@@ -920,7 +920,7 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
  */
 NITFPROT(NRT_BOOL) nitf_ImageIO_writeBlockDirect(nitf_ImageIO* object,
                                                  nitf_IOInterface* io,
-                                                 const nitf_Uint8 * buffer,
+                                                 const void* buffer,
                                                  nitf_Uint32 blockNumber,
                                                  nitf_Error * error);
 

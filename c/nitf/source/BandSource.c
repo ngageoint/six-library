@@ -27,7 +27,7 @@
  */
 typedef struct _MemorySourceImpl
 {
-    char *data;
+    const void* data;
     nitf_Off size;
     nitf_Off mark;
     int numBytesPerPixel;
@@ -51,10 +51,11 @@ NITFPRIV(MemorySourceImpl *) toMemorySource(NITF_DATA * data,
 }
 
 
-NITFPRIV(NITF_BOOL) MemorySource_contigRead(MemorySourceImpl *
-        memorySource, char *buf,
+NITFPRIV(NITF_BOOL) MemorySource_contigRead(
+        MemorySourceImpl* memorySource,
+        void* buf,
         nitf_Off size,
-        nitf_Error * error)
+        nitf_Error* error)
 {
     memcpy(buf,
            memorySource->data + memorySource->mark,
@@ -64,22 +65,27 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(MemorySourceImpl *
 }
 
 
-NITFPRIV(NITF_BOOL) MemorySource_offsetRead(MemorySourceImpl *
-        memorySource, char *buf,
+NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
+        MemorySourceImpl* memorySource,
+        void* buf,
         nitf_Off size,
         nitf_Error * error)
 {
-    int i = 0;
-    int j = 0;
+    size_t destOffset = 0;
+    const nitf_Uint8* const src = (const nitf_Uint8*)memorySource->data;
+    nitf_Uint8* const dest = (nitf_Uint8*)buf;
 
-    while (i < size)
+    while (destOffset < (size_t)size)
     {
-        for (j = 0; j < memorySource->numBytesPerPixel; ++j, ++i)
-        {
-            buf[i] = *(memorySource->data + memorySource->mark++);
-        }
-        memorySource->mark +=
-            (memorySource->pixelSkip * memorySource->numBytesPerPixel);
+        memcpy(dest + destOffset,
+               src + memorySource->mark,
+               memorySource->numBytesPerPixel);
+
+        destOffset += memorySource->numBytesPerPixel;
+
+        /* Bump up mark by what we just memcpy'd + what we want to skip */
+        memorySource->mark += memorySource->numBytesPerPixel +
+                memorySource->pixelSkip * memorySource->numBytesPerPixel;
     }
     return NITF_SUCCESS;
 }
@@ -89,17 +95,21 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(MemorySourceImpl *
  *  Private read implementation for memory source.
  */
 NITFPRIV(NITF_BOOL) MemorySource_read(NITF_DATA * data,
-                                      char *buf,
+                                      void* buf,
                                       nitf_Off size, nitf_Error * error)
 {
     MemorySourceImpl *memorySource = toMemorySource(data, error);
     if (!memorySource)
+    {
         return NITF_FAILURE;
+    }
 
     /*  We like the contiguous read case, its fast  */
     /*  We want to make sure we reward this case    */
     if (memorySource->pixelSkip == 0)
+    {
         return MemorySource_contigRead(memorySource, buf, size, error);
+    }
 
     return MemorySource_offsetRead(memorySource, buf, size, error);
 }
@@ -107,9 +117,7 @@ NITFPRIV(NITF_BOOL) MemorySource_read(NITF_DATA * data,
 
 NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 {
-    MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
-    if (memorySource)
-        NITF_FREE(memorySource);
+    NITF_FREE(data);
 }
 
 
@@ -134,7 +142,7 @@ NITFPRIV(NITF_BOOL) MemorySource_setSize(NITF_DATA * data, nitf_Off size, nitf_E
 
 
 
-NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(char *data,
+NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(const void* data,
         nitf_Off size,
         nitf_Off start,
         int numBytesPerPixel,
@@ -248,7 +256,7 @@ NITFPRIV(IOSourceImpl *) toIOSource(NITF_DATA * data, nitf_Error *error)
 
 
 NITFPRIV(NITF_BOOL) IOSource_contigRead(IOSourceImpl * source,
-                                        char *buf,
+                                        void *buf,
                                         nitf_Off size,
                                         nitf_Error * error)
 {
@@ -256,10 +264,11 @@ NITFPRIV(NITF_BOOL) IOSource_contigRead(IOSourceImpl * source,
                                                buf,
                                                (size_t)size,
                                                error)))
+    {
         return NITF_FAILURE;
+    }
     source->mark += size;
     return NITF_SUCCESS;
-
 }
 
 
@@ -277,7 +286,7 @@ NITFPRIV(NITF_BOOL) IOSource_contigRead(IOSourceImpl * source,
  *  -DP
  */
 NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
-        char *buf,
+        void* buf,
         nitf_Off size, nitf_Error * error)
 {
 
@@ -287,14 +296,15 @@ NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
     /* TODO - this *could* be smaller, but this should be ok for now */
     nitf_Off tsize = size * (source->pixelSkip + 1);
 
-    char *tbuf;
+    nitf_Uint8* tbuf;
+    nitf_Uint8* bufPtr = (nitf_Uint8*)buf;
     nitf_Off lmark = 0;
     int i = 0;
     int j = 0;
     if (tsize + source->mark > source->size)
         tsize = source->size - source->mark;
 
-    tbuf = (char *) NITF_MALLOC((size_t)tsize);
+    tbuf = (nitf_Uint8 *) NITF_MALLOC((size_t)tsize);
     if (!tbuf)
     {
         nitf_Error_init(error,
@@ -311,9 +321,9 @@ NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
     /*  Downsize for buf */
     while (i < size)
     {
-        for (j = 0; j < source->numBytesPerPixel; ++j, ++i)
+        for (j = 0; j < source->numBytesPerPixel; ++j, ++i, ++lmark)
         {
-            buf[i] = *(tbuf + lmark++);
+            bufPtr[i] = tbuf[lmark];
         }
         lmark += (source->pixelSkip * source->numBytesPerPixel);
     }
@@ -327,8 +337,9 @@ NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
  *  Private read implementation for file source.
  */
 NITFPRIV(NITF_BOOL) IOSource_read(NITF_DATA * data,
-                                    char *buf,
-                                    nitf_Off size, nitf_Error * error)
+                                  void* buf,
+                                  nitf_Off size,
+                                  nitf_Error * error)
 {
     IOSourceImpl *source = toIOSource(data, error);
     if (!source)

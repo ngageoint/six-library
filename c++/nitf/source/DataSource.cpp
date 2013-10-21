@@ -22,7 +22,7 @@
 
 #include "nitf/DataSource.hpp"
 
-void nitf::DataSource::read(char * buf, nitf::Off size)
+void nitf::DataSource::read(void* buf, nitf::Off size)
         throw (nitf::NITFException)
 {
     nitf_DataSource *ds = getNativeOrThrow();
@@ -35,7 +35,7 @@ void nitf::DataSource::read(char * buf, nitf::Off size)
         throw except::NullPointerReference(Ctxt("DataSource"));
 }
 
-nitf::Off nitf::DataSource::getSize()
+nitf::Off nitf::DataSource::getSize() const
 {
     nitf_DataSource *ds = getNativeOrThrow();
     nitf::Off size = ds->iface->getSize(ds->data, &error);

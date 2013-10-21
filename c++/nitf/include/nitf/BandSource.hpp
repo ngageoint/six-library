@@ -23,6 +23,9 @@
 #ifndef __NITF_BANDSOURCE_HPP__
 #define __NITF_BANDSOURCE_HPP__
 
+#include <string.h>
+#include <string>
+
 #include "nitf/BandSource.h"
 #include "nitf/RowSource.h"
 #include "nitf/DirectBlockSource.h"
@@ -30,7 +33,6 @@
 #include "nitf/IOHandle.hpp"
 #include "nitf/System.hpp"
 #include "nitf/ImageReader.hpp"
-#include <string>
 
 /*!
  *  \file BandSource.hpp
@@ -65,7 +67,7 @@ public:
      *  \param start  The start offset
      *  \param pixelSkip  The amount of pixels to skip
      */
-    MemorySource(char * data, size_t size, nitf::Off start,
+    MemorySource(const void* data, size_t size, nitf::Off start,
             int numBytesPerPixel, int pixelSkip) throw (nitf::NITFException);
 };
 
@@ -106,7 +108,7 @@ struct RowSourceCallback
     {
     }
 
-    virtual void nextRow(nitf::Uint32 band, char* buf) throw (nitf::NITFException) = 0;
+    virtual void nextRow(nitf::Uint32 band, void* buf) throw (nitf::NITFException) = 0;
 };
 
 class RowSource : public BandSource
@@ -135,15 +137,15 @@ public:
         throw (nitf::NITFException);
 
 protected:
-    virtual void nextBlock(char* buf, 
-                           nitf::Uint8* block, 
+    virtual void nextBlock(void* buf,
+                           const void* block,
                            nitf::Uint32 blockNumber,
                            nitf::Uint64 blockSize) throw (nitf::NITFException) = 0;
 private:
     static
     NITF_BOOL nextBlock(void *algorithm,
-                        char * buf,
-                        nitf_Uint8 * block,
+                        void* buf,
+                        const void* block,
                         nitf_Uint32 blockNumber,
                         nitf_Uint64 blockSize,
                         nitf_Error * error);
@@ -160,10 +162,10 @@ public:
     virtual ~CopyBlockSource(){}
     
 protected:
-    virtual void nextBlock(char* buf, 
-                           ::nitf::Uint8* block, 
-                           ::nitf::Uint32 blockNumber,
-                           ::nitf::Uint64 blockSize) throw (::nitf::NITFException)
+    virtual void nextBlock(void* buf,
+                           const void* block,
+                           nitf::Uint32 blockNumber,
+                           nitf::Uint64 blockSize) throw (::nitf::NITFException)
     {
         memcpy(buf, block, blockSize);
     }

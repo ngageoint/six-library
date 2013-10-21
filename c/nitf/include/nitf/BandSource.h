@@ -70,7 +70,7 @@ typedef nitf_DataSource    nitf_BandSource;
  *         (this will get multipled by numBytesPerPixel to figure
  *          out how many actual bytes to skip)
  */
-NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(char *data,
+NITFAPI(nitf_BandSource *) nitf_MemorySource_construct(const void* data,
         nitf_Off size,
         nitf_Off start,
         int numBytesPerPixel,

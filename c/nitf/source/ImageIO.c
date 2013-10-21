@@ -7517,7 +7517,7 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                     nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
                                      "Error allocating block buffer: %s",
                                      NITF_STRERROR(NITF_ERRNO));
-                    return NITF_FAILURE;
+                    return NULL;
                 }
             }
             /* Read the block */
@@ -7526,7 +7526,9 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                                            nitfI->pixelBase + imageDataOffset,
                                            nitfI->blockControl.block,
                                            nitfI->blockSize, error))
-                return NITF_FAILURE;
+            {
+                return NULL;
+            }
 
             *blockSize = nitfI->blockSize;
         }
@@ -7541,7 +7543,7 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                 nitf_Error_initf(error, NITF_CTXT,
                                  NITF_ERR_DECOMPRESSION,
                                  "No decompression plugin for compressed type");
-                return NITF_FAILURE;
+                return NULL;
             }
             
             interface = nitfI->decompressor;
@@ -7554,7 +7556,9 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                                            blockNumber, blockSize, 
                                            error);
             if (nitfI->blockControl.block == NULL)
-                return NITF_FAILURE;
+            {
+                return NULL;
+            }
         }
         nitfI->blockControl.number = blockNumber;
     }
@@ -7567,7 +7571,7 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
 
 NITFPROT(NRT_BOOL) nitf_ImageIO_writeBlockDirect(nitf_ImageIO* object,
                                                  nitf_IOInterface* io,
-                                                 const nitf_Uint8 * buffer,
+                                                 const void* buffer,
                                                  nitf_Uint32 blockNumber,
                                                  nitf_Error * error)
 {
@@ -7624,7 +7628,7 @@ NITFPROT(NRT_BOOL) nitf_ImageIO_writeBlockDirect(nitf_ImageIO* object,
             /* Write the data */
             
             if (!nitf_IOInterface_write(io,
-                                        (char *) buffer,
+                                        buffer,
                                         nitf->blockSize, error) )
                 return NITF_FAILURE;
         }

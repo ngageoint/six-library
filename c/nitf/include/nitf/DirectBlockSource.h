@@ -52,9 +52,9 @@ NITF_CXX_GUARD
 
   \return Returns true on success. On failure the error object is set
 */
-typedef NITF_BOOL(*NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK) (void *algorithm,
-                                                         char * buf,
-                                                         nitf_Uint8 * block,
+typedef NITF_BOOL(*NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK) (void* algorithm,
+                                                         void* buf,
+                                                         const void* block,
                                                          nitf_Uint32 blockNumber,
                                                          nitf_Uint64 blockSize,
                                                          nitf_Error * error);

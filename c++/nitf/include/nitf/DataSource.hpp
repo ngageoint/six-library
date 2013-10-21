@@ -83,17 +83,17 @@ public:
      *  \param buf  The buffer
      *  \param size  The size of the buffer
      */
-    void read(char * buf, nitf::Off size) throw (nitf::NITFException);
+    void read(void* buf, nitf::Off size) throw (nitf::NITFException);
 
     /*
      * Returns the size of the DataSource, in bytes
      */
-    nitf::Off getSize();
+    nitf::Off getSize() const;
 
     void setSize(nitf::Off size);
 
 protected:
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 
 }

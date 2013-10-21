@@ -60,11 +60,11 @@ NITFPRIV(DirectBlockSourceImpl *) toDirectBlockSource(NITF_DATA * data,
 
 /* Instance data */
 /* Output buffer */
-NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, char *buf, nitf_Off size,    /* Amount to read */
+NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf, nitf_Off size,    /* Amount to read */
                                            nitf_Error * error)  /* For error returns */
 {
     DirectBlockSourceImpl *directBlockSource = toDirectBlockSource(data, error);
-    nitf_Uint8* block;
+    const void* block;
     nitf_Uint64 blockSize;
 
     if (!directBlockSource)
