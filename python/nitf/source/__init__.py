@@ -323,9 +323,9 @@ class Reader:
         self.record = Record(record)
         return self.record
     
-    def newImageReader(self, num):
+    def newImageReader(self, num, options = None):
         nbpp = int(self.record.getImages()[num]['numBitsPerPixel'])
-        reader = nitropy.nitf_Reader_newImageReader(self.ref, num, self.error)
+        reader = nitropy.nitf_Reader_newImageReader(self.ref, num, options, self.error)
         if not reader: raise Exception('Unable to get new ImageReader')
         return ImageReader(reader, nbpp)
 
@@ -1100,7 +1100,7 @@ class MemoryBandSource(BandSource):
         self.error = Error()
         if size == -1:
             size = len(data)
-        BandSource.__init__(self, nitropy.nitf_MemorySource_construct(data, size, start, nbpp, pixelskip, self.error))
+        BandSource.__init__(self, nitropy.py_nitf_MemorySource_construct(data, size, start, nbpp, pixelskip, self.error))
 
     
 class FileBandSource(BandSource):
@@ -1187,8 +1187,8 @@ class Writer:
         if self.io: self.io.close()
         if self.ref: nitropy.nitf_Writer_destruct(self.ref)
     
-    def newImageWriter(self, imagenum):
-        writer = nitropy.nitf_Writer_newImageWriter(self.ref, imagenum, self.error)
+    def newImageWriter(self, imagenum, options = None):
+        writer = nitropy.nitf_Writer_newImageWriter(self.ref, imagenum, options, self.error)
         if writer:
             writer = ImageWriter(writer)
             self._imageWriters.append(writer)

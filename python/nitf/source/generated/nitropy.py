@@ -261,6 +261,7 @@ nitf_PluginRegistry_unload = _nitropy.nitf_PluginRegistry_unload
 nitf_PluginRegistry_retrieveTREHandler = _nitropy.nitf_PluginRegistry_retrieveTREHandler
 nitf_PluginRegistry_retrieveDecompConstructor = _nitropy.nitf_PluginRegistry_retrieveDecompConstructor
 nitf_PluginRegistry_retrieveCompConstructor = _nitropy.nitf_PluginRegistry_retrieveCompConstructor
+nitf_PluginRegistry_retrieveCompInterface = _nitropy.nitf_PluginRegistry_retrieveCompInterface
 class nitf_Reader(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Reader, name, value)
@@ -1959,6 +1960,9 @@ py_Record_getNumREs = _nitropy.py_Record_getNumREs
 py_Record_destruct = _nitropy.py_Record_destruct
 py_Record_getVersion = _nitropy.py_Record_getVersion
 py_FileHeader_getComponentInfo = _nitropy.py_FileHeader_getComponentInfo
+py_nitf_Reader_newImageReader = _nitropy.py_nitf_Reader_newImageReader
+py_nitf_Writer_newImageWriter = _nitropy.py_nitf_Writer_newImageWriter
+py_nitf_MemorySource_construct = _nitropy.py_nitf_MemorySource_construct
 py_SubWindow_construct = _nitropy.py_SubWindow_construct
 py_ImageReader_read = _nitropy.py_ImageReader_read
 py_Pair_getFieldData = _nitropy.py_Pair_getFieldData

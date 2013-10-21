@@ -477,6 +477,28 @@
 
 
 %inline %{
+    nitf_ImageReader* py_nitf_Reader_newImageReader(nitf_Reader* reader, int imageSegmentNumber, PyObject* options, nitf_Error* error)
+    {
+        /* TODO: Support taking in options here and converting it */
+        nrt_HashTable* nullOptions = NULL;
+        return nitf_Reader_newImageReader(reader, imageSegmentNumber, nullOptions, error);
+    }
+
+    nitf_ImageWriter* py_nitf_Writer_newImageWriter(nitf_Writer* writer, int index, PyObject* options, nitf_Error* error)
+    {
+        /* TODO: Support taking in options here and converting it */
+        nrt_HashTable* nullOptions = NULL;
+        return nitf_Writer_newImageWriter(writer, index, nullOptions, error);    
+    }
+    
+    nitf_BandSource* py_nitf_MemorySource_construct(PyObject* data, nitf_Off size, nitf_Off start, int numBytesPerPixel, int pixelSkip, nitf_Error * error)
+    {
+        /* TODO: I'm not convinced this is the right way to handle sending the data in
+                 If we are getting something like a Python string, I think we'll need
+                 to convert it differently
+         */
+        return nitf_MemorySource_construct(SWIG_as_voidptr(data), size, start, numBytesPerPixel, pixelSkip, error);
+    }
     
     /**
      * Helper function for the SubWindow constructor
@@ -602,7 +624,7 @@
     
     PyObject* py_DataSource_read(nitf_DataSource* source, size_t size, nitf_Error* error)
     {
-        char* buf = NULL;
+        void* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
         
@@ -613,13 +635,13 @@
         }
         
         source->iface->read(source->data, buf, size, error);
-        bufObj = PyBuffer_FromMemory((void*)buf, size);
+        bufObj = PyBuffer_FromMemory(buf, size);
         return bufObj;
     }
     
     PyObject* py_SegmentReader_read(nitf_SegmentReader* reader, size_t size, nitf_Error* error)
     {
-        char* buf = NULL;
+        void* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
         
@@ -630,13 +652,13 @@
         }
         
         nitf_SegmentReader_read(reader, buf, size, error);
-        bufObj = PyBuffer_FromMemory((void*)buf, size);
+        bufObj = PyBuffer_FromMemory(buf, size);
         return bufObj;
     }
     
     PyObject* py_IOHandle_read(nitf_IOHandle handle, size_t size, nitf_Error* error)
     {
-        char* buf = NULL;
+        void* buf = NULL;
         PyObject* bufObj = NULL;
         buf = NITF_MALLOC(size);
         
@@ -647,7 +669,7 @@
         }
             
         nitf_IOHandle_read(handle, buf, size, error);
-        bufObj = PyBuffer_FromMemory((void*)buf, size);
+        bufObj = PyBuffer_FromMemory(buf, size);
         return bufObj;
     }
 %}
