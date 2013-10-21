@@ -36,7 +36,7 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
      jint numBytesPerPixel, jint pixelSkip)
 {
     nitf_Error error;
-    char *buf, *copyBuf;
+    jbyte *buf, *copyBuf;
     jboolean isCopy;
     nitf_BandSource *memorySource;
 
@@ -51,7 +51,7 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
     }
 
     /* get the data */
-    buf = (char *) (*env)->GetByteArrayElements(env, data, &isCopy);
+    buf = (*env)->GetByteArrayElements(env, data, &isCopy);
     if (!buf)
     {
         _ThrowNITFException(env, "ERROR getting data from array");
@@ -66,7 +66,7 @@ JNIEXPORT void JNICALL Java_nitf_MemorySource_construct
     else
     {
     	/* we must copy ourselves */
-    	copyBuf = (char*)NITF_MALLOC(size);
+    	copyBuf = (jbyte*)NITF_MALLOC(size);
     	if (!copyBuf)
 		{
 			_ThrowNITFException(env, "Out of memory");
