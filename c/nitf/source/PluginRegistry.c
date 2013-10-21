@@ -461,9 +461,7 @@ NITFAPI(NITF_BOOL)
     
     /*  For now, the key is the dll name minus the extension  */
     char keyName[NITF_MAX_PATH] = "";
-    char* p;
     int ok;
-    int i, begin, end;
     nitf_DLL *dll;
     const char **ident;
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
@@ -519,7 +517,7 @@ nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
     
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
-    char** ident;
+    const char** ident;
     int i = 1;
     int ok = 1;
     if (!reg)
@@ -650,7 +648,6 @@ NITFAPI(NITF_BOOL) nitf_PluginRegistry_loadDir(const char *dirName,
                                                nitf_Error * error)
 {
     NITF_BOOL status;
-    nitf_Mutex mutex;
 
     /* first, get the registry */
     nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
@@ -747,7 +744,6 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
 
     /*  Get the name of the handler  */
     char name[NITF_MAX_PATH];
-    char* p = NULL;
 
     if (!nitf_DLL_isValid(dso))
     {
