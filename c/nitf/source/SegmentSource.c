@@ -60,7 +60,9 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(
         nitf_Off size,
         nitf_Error * error)
 {
-    memcpy(buf, memorySource->data + memorySource->mark, size);
+    memcpy(buf,
+           (const nitf_Uint8*)memorySource->data + memorySource->mark,
+           size);
     memorySource->mark += size;
     return NITF_SUCCESS;
 }
