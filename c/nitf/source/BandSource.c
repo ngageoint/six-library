@@ -58,7 +58,7 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(
         nitf_Error* error)
 {
     memcpy(buf,
-           memorySource->data + memorySource->mark,
+           (const nitf_Uint8*)memorySource->data + memorySource->mark,
            (size_t)size);
     memorySource->mark += size;
     return NITF_SUCCESS;
