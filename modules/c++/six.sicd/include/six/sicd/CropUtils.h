@@ -27,6 +27,7 @@
 #include <vector>
 
 #include <types/RowCol.h>
+#include <scene/Types.h>
 
 namespace six
 {
@@ -46,6 +47,36 @@ void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const types::RowCol<size_t>& aoiOffset,
               const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname);
+
+/*
+ * Reads in an AOI from a SICD and creates a cropped SICD, updating the
+ * metadata as appropriate to reflect this
+ *
+ * \param inPathname Input SICD pathname
+ * \param schemaPaths Schema paths to use for reading and writing
+ * \param corners Exactly four corners in ECEF meters.  If the corners are not
+ * rectangular in the slant plane, an AOI will be exscribed from these
+ * \param outPathname Output cropped SICD pathname
+ */
+void cropSICD(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const std::vector<scene::Vector3>& corners,
+              const std::string& outPathname);
+
+/*
+ * Reads in an AOI from a SICD and creates a cropped SICD, updating the
+ * metadata as appropriate to reflect this
+ *
+ * \param inPathname Input SICD pathname
+ * \param schemaPaths Schema paths to use for reading and writing
+ * \param corners Exactly four corners in lat/lon.  If the corners are not
+ * rectangular in the slant plane, an AOI will be exscribed from these
+ * \param outPathname Output cropped SICD pathname
+ */
+void cropSICD(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const std::vector<scene::LatLonAlt>& corners,
               const std::string& outPathname);
 }
 }
