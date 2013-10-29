@@ -143,7 +143,7 @@ template<typename T> struct RangeAzimuth
 
 // These are heavily used and we don't want any mistakes
 typedef types::RowCol<double> RowColDouble;
-typedef types::RowCol<long> RowColInt;
+typedef types::RowCol<sys::SSize_T> RowColInt;
 
 /*!
  *  \struct DecorrType

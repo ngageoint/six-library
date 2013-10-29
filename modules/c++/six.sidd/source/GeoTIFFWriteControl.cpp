@@ -93,15 +93,15 @@ void GeoTIFFWriteControl::save(SourceList& sources, const std::string& toFile,
         tiff::ImageWriter* const imageWriter = tiffWriter.addImage();
         const DerivedData* const data =
             reinterpret_cast<DerivedData*>(mDerivedData[ii]);
-        const unsigned long oneRow =
+        const size_t oneRow =
             data->getNumCols() * data->getNumBytesPerPixel();
         tiff::IFD* ifd = imageWriter->getIFD();
         setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         buf.resize(oneRow);
-        const unsigned long numRows = data->getNumRows();
-        const unsigned long numCols = data->getNumCols();
+        const size_t numRows = data->getNumRows();
+        const size_t numCols = data->getNumCols();
 
-        for (unsigned long row = 0; row < numRows; ++row)
+        for (size_t row = 0; row < numRows; ++row)
         {
             sources[ii]->read((sys::byte*)&buf[0], oneRow);
             imageWriter->putData(&buf[0], numCols);

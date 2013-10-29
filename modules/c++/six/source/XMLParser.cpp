@@ -303,54 +303,6 @@ void XMLParser::setAttribute(XMLElem e, const std::string& name,
     e->getAttributes().add(node);
 }
 
-void XMLParser::parseInt(XMLElem element, int& value) const
-{
-    try
-    {
-        value = str::toType<int>(element->getCharacterData());
-    }
-    catch (const except::BadCastException& ex)
-    {
-        mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
-    }
-}
-
-void XMLParser::parseInt(XMLElem element, long& value) const
-{
-    try
-    {
-        value = str::toType<long>(element->getCharacterData());
-    }
-    catch (const except::BadCastException& ex)
-    {
-        mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
-    }
-}
-
-void XMLParser::parseUInt(XMLElem element, unsigned int& value) const
-{
-    try
-    {
-        value = str::toType<unsigned int>(element->getCharacterData());
-    }
-    catch (const except::BadCastException& ex)
-    {
-        mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
-    }
-}
-
-void XMLParser::parseUInt(XMLElem element, unsigned long& value) const
-{
-    try
-    {
-        value = str::toType<unsigned long>(element->getCharacterData());
-    }
-    catch (const except::BadCastException& ex)
-    {
-        mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
-    }
-}
-
 void XMLParser::parseDouble(XMLElem element, double& value) const
 {
     try
@@ -395,4 +347,3 @@ void XMLParser::parseDateTime(XMLElem element, DateTime& value) const
     value = six::toType<DateTime>(element->getCharacterData());
 }
 }
-

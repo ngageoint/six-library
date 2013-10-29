@@ -22,12 +22,15 @@
 #ifndef __SIX_UTILITIES_H__
 #define __SIX_UTILITIES_H__
 
+#include <sys/Conf.h>
+#include <except/Exception.h>
 #include "six/Types.h"
 #include "six/Data.h"
 #include "six/XMLControlFactory.h"
 #include "logging/Logger.h"
 #include "scene/SceneGeometry.h"
 #include "six/ErrorStatistics.h"
+#include "six/Init.h"
 #include <import/io.h>
 #include <import/xml/lite.h>
 #include <import/str.h>
@@ -59,6 +62,12 @@ double remapZeroTo360(double degree);
 
 template<typename T> std::string toString(const T& value)
 {
+    if (six::Init::isUndefined(value))
+    {
+        throw six::UninitializedValueException(
+            Ctxt("Attempted use of uninitialized value"));
+    }
+
     return str::toString<T>(value);
 }
 
@@ -67,10 +76,6 @@ template<typename T> T toType(const std::string& s)
     return str::toType<T>(s);
 }
 
-template<> std::string toString(const int& value);
-template<> std::string toString(const unsigned int& value);
-template<> std::string toString(const long& value);
-template<> std::string toString(const unsigned long& value);
 template<> std::string toString(const float& value);
 template<> std::string toString(const double& value);
 template<> six::EarthModelType

@@ -165,7 +165,7 @@ public:
      *  Maps to: /SICD/ImageData/NumRows,
      *  /SIDD/Measurement/PixelFootprint/Row
      */
-    virtual unsigned long getNumRows() const
+    virtual size_t getNumRows() const
     {
         return imageData->numRows;
     }
@@ -174,7 +174,7 @@ public:
      *  the full image rows, and the scene center rows
      *
      */
-    virtual void setNumRows(unsigned long numRows)
+    virtual void setNumRows(size_t numRows)
     {
         imageData->numRows = numRows;
         imageData->fullImage.row = numRows;
@@ -185,7 +185,7 @@ public:
      *  Maps to: /SICD/ImageData/NumCols,
      *  /SIDD/Measurement/PixelFootprint/Col
      */
-    virtual unsigned long getNumCols() const
+    virtual size_t getNumCols() const
     {
         return imageData->numCols;
     }
@@ -194,7 +194,7 @@ public:
      *  the full image columns, and the scene center column
      *
      */
-    virtual void setNumCols(unsigned long numCols)
+    virtual void setNumCols(size_t numCols)
     {
         imageData->numCols = numCols;
         imageData->fullImage.col = numCols;

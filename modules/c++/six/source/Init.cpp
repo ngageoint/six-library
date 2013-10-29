@@ -21,78 +21,27 @@
  */
 #include "six/Init.h"
 
-using namespace six;
-
-/*     template<> bool Init::isUndefined<std::string>(std::string s) */
-/*     { */
-/*         return s.length(); */
-/*     } */
-
+namespace six
+{
 template<> std::string Init::undefined<std::string>()
 {
     return std::string("");
 }
 
-/*     template<> bool Init::isUndefined<int>(int i) */
-/*     { */
-/*         return i != std::numeric_limits<int>::max(); */
-/*     } */
-
-template<> int Init::undefined<int>()
+template<> bool Init::undefined<bool>()
 {
-    return std::numeric_limits<int>::max();
+    return false;
 }
-
-/*     template<> bool Init::isUndefined<int>(unsigned int i) */
-/*     { */
-/*         return i != std::numeric_limits<unsigned int>::max(); */
-/*     } */
-
-template<> unsigned int Init::undefined<unsigned int>()
-{
-    return std::numeric_limits<unsigned int>::max();
-}
-
-/*     template<> bool Init::isUndefined<long>(long l) */
-/*     { */
-/*         return l != std::numeric_limits<long>::max(); */
-/*     } */
-
-template<> long Init::undefined<long>()
-{
-    return std::numeric_limits<long>::max();
-}
-
-template<> unsigned long Init::undefined<unsigned long>()
-{
-    return std::numeric_limits<unsigned long>::max();
-}
-
-/*     template<> bool Init::isUndefined<long>(unsigned long l) */
-/*     { */
-/*         return l != std::numeric_limits<unsigned long>::max(); */
-/*     } */
 
 template<> float Init::undefined<float>()
 {
     return std::numeric_limits<float>::infinity();
 }
 
-/*     template<> bool Init::isUndefined<float>(float f) */
-/*     { */
-/*         return f != std::numeric_limits<float>::infinity(); */
-/*     } */
-
 template<> double Init::undefined<double>()
 {
     return std::numeric_limits<double>::infinity();
 }
-
-/*     template<> bool Init::isUndefined<float>(double d) */
-/*     { */
-/*         return d != std::numeric_limits<double>::infinity(); */
-/*     } */
-
 
 template<> RangeAzimuth<double>Init::undefined<RangeAzimuth<double> >()
 {
@@ -102,8 +51,7 @@ template<> RangeAzimuth<double>Init::undefined<RangeAzimuth<double> >()
 
 template<> RowColInt Init::undefined<RowColInt>()
 {
-    return RowColInt(Init::undefined<unsigned long>(), Init::undefined<
-            unsigned long>());
+    return RowColInt(Init::undefined<size_t>(), Init::undefined<size_t>());
 }
 
 template<> RowColDouble Init::undefined<RowColDouble>()
@@ -338,4 +286,4 @@ template<> XYZEnum Init::undefined<XYZEnum>()
 {
     return XYZEnum::NOT_SET;
 }
-
+}

@@ -174,9 +174,9 @@ int main(int argc, char** argv)
         for (size_t ii = 0; ii < numImages; ++ii)
         {
             const Data* const data = container->getData(ii);
-            const unsigned long nbpp = data->getNumBytesPerPixel();
-            const unsigned long height = data->getNumRows();
-            const unsigned long width = data->getNumCols();
+            const size_t nbpp = data->getNumBytesPerPixel();
+            const size_t height = data->getNumRows();
+            const size_t width = data->getNumCols();
 
             if (numRows == -1)
                 numRows = height;
@@ -215,7 +215,7 @@ int main(int argc, char** argv)
             if (oneRead)
             {
                 region.setNumRows(numRows);
-                unsigned long totalBytes = nbpp * width * height;
+                size_t totalBytes = nbpp * numCols * numRows;
                 const mem::ScopedArray<UByte>
                     workBuffer(new UByte[totalBytes]);
                 region.setBuffer(workBuffer.get());
@@ -227,7 +227,7 @@ int main(int argc, char** argv)
             else
             {
                 region.setNumRows(1);
-                unsigned long nbpr = nbpp * width;
+                size_t nbpr = nbpp * width;
 
                 // allocate this so we can reuse it for each row
                 const mem::ScopedArray<UByte> workBuffer(new UByte[nbpr]);

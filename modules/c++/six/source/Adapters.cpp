@@ -37,11 +37,11 @@ NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
 typedef struct _MemoryWriteHandlerImpl
 {
     const UByte* buffer;
-    unsigned long firstRow;
-    unsigned long numCols;
-    unsigned long numRows;
-    unsigned long numChannels;
-    unsigned long pixelSize;
+    size_t firstRow;
+    size_t numCols;
+    size_t numRows;
+    size_t numChannels;
+    size_t pixelSize;
     int doByteSwap;
 } MemoryWriteHandlerImpl;
 
@@ -55,7 +55,7 @@ extern "C" void __six_MemoryWriteHandler_destruct(NITF_DATA * data)
 extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
-    unsigned long rowSize;
+    size_t rowSize;
     sys::Uint64_T off;
     UByte* rowCopy;
     unsigned int i;
@@ -88,8 +88,8 @@ extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
 }
 
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
-        const UByte* buffer, unsigned long firstRow, unsigned long numCols,
-        unsigned long numChannels, unsigned long pixelSize, bool doByteSwap)
+        const UByte* buffer, size_t firstRow, size_t numCols,
+        size_t numChannels, size_t pixelSize, bool doByteSwap)
 {
     // Dont do it if we only have a byte!
     if (pixelSize / numChannels == 1)
@@ -131,10 +131,10 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
 typedef struct _StreamWriteHandlerImpl
 {
     io::InputStream* inputStream;
-    unsigned long numCols;
-    unsigned long numRows;
-    unsigned long numChannels;
-    unsigned long pixelSize;
+    size_t numCols;
+    size_t numRows;
+    size_t numChannels;
+    size_t pixelSize;
     int doByteSwap;
 } StreamWriteHandlerImpl;
 
@@ -148,7 +148,7 @@ extern "C" void __six_StreamWriteHandler_destruct(NITF_DATA * data)
 extern "C" NITF_BOOL __six_StreamWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
-    unsigned long rowSize;
+    size_t rowSize;
     UByte* rowCopy;
     unsigned int i;
 
@@ -179,10 +179,10 @@ extern "C" NITF_BOOL __six_StreamWriteHandler_write(NITF_DATA * data,
 }
 
 StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
-        io::InputStream* is, unsigned long numCols, unsigned long numChannels,
-        unsigned long pixelSize, bool doByteSwap)
+        io::InputStream* is, size_t numCols, size_t numChannels,
+        size_t pixelSize, bool doByteSwap)
 {
-    // Dont do it if we only have a byte!
+    // Don't do it if we only have a byte!
     if ((pixelSize / numChannels) == 1)
         doByteSwap = false;
 

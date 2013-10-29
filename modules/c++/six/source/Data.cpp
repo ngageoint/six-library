@@ -26,7 +26,7 @@ using namespace six;
 /*!
  *  Num bytes per pixel can be determined also by the pixel type
  */
-unsigned long Data::getNumBytesPerPixel() const
+size_t Data::getNumBytesPerPixel() const
 {
     switch (getPixelType())
     {
@@ -50,7 +50,7 @@ unsigned long Data::getNumBytesPerPixel() const
     }
 }
 
-unsigned long Data::getNumChannels() const
+size_t Data::getNumChannels() const
 {
     switch (getPixelType())
     {
