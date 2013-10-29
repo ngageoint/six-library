@@ -28,11 +28,6 @@ template<> std::string Init::undefined<std::string>()
     return std::string("");
 }
 
-template<> bool Init::undefined<bool>()
-{
-    return false;
-}
-
 template<> float Init::undefined<float>()
 {
     return std::numeric_limits<float>::infinity();

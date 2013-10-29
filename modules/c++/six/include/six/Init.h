@@ -56,11 +56,12 @@ struct Init
         // It won't compile for other types that aren't specialized below
         return std::numeric_limits<T>::max();
     }
-
 };
 
-template<> std::string Init::undefined<std::string>();
+// This is intentionally undefined in order to generate a linker error
 template<> bool Init::undefined<bool>();
+
+template<> std::string Init::undefined<std::string>();
 template<> float Init::undefined<float>();
 template<> double Init::undefined<double>();
 template<> RangeAzimuth<double> Init::undefined<RangeAzimuth<double> >();

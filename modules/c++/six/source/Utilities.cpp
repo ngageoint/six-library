@@ -113,7 +113,7 @@ template<> std::string six::toString<double>(const double& value)
 
 template<> std::string six::toString<BooleanType>(const BooleanType& value)
 {
-    return six::toString<bool>(value == BooleanType::IS_TRUE);
+    return str::toString<bool>(value == BooleanType::IS_TRUE);
 }
 
 template<> DateTime six::toType<DateTime>(const std::string& dateTime)
