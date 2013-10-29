@@ -21,6 +21,7 @@
  */
 
 #include <memory>
+#include <sstream>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -63,7 +64,7 @@ const char NITFImageInfo::CTLN[] = "CTLN";
 
 void NITFImageInfo::computeImageInfo()
 {
-    unsigned long bytesPerRow = data->getNumBytesPerPixel()
+    size_t bytesPerRow = data->getNumBytesPerPixel()
             * data->getNumCols();
 
     // This, to be safe, should be a 64bit number
@@ -71,16 +72,17 @@ void NITFImageInfo::computeImageInfo()
             / (double) bytesPerRow);
 
     if (limit1 == 0)
-        throw except::Exception(
-                                Ctxt(
-                                     FmtX(
-                                          "maxProductSize [%f] < bytesPerRow [%f]",
-                                          (double) maxProductSize,
-                                          (double) (sys::Uint64_T) bytesPerRow)));
-
-    if (limit1 < (sys::Uint64_T) numRowsLimit)
     {
-        numRowsLimit = (unsigned long) limit1;
+        std::ostringstream ostr;
+        ostr << "maxProductSize [" << maxProductSize << "] < bytesPerRow ["
+             << bytesPerRow << "]";
+
+        throw except::Exception(Ctxt(ostr.str()));
+    }
+
+    if (limit1 < numRowsLimit)
+    {
+        numRowsLimit = static_cast<size_t>(limit1);
     }
 }
 
@@ -143,7 +145,7 @@ void NITFImageInfo::computeSegmentCorners()
     size_t i;
     for (i = 0; i < numIS; i++)
     {
-        unsigned long firstRow = imageSegments[i].firstRow;
+        size_t firstRow = imageSegments[i].firstRow;
         double wgt1 = (total - firstRow) / total;
         double wgt2 = firstRow / total;
 

@@ -117,12 +117,12 @@ class MemoryWriteHandler: public nitf::WriteHandler
 {
 public:
     MemoryWriteHandler(const NITFSegmentInfo& info, 
-               const UByte* buffer,
-               unsigned long firstRow, 
-               unsigned long numCols,
-               unsigned long numChannels, 
-               unsigned long pixelSize, 
-               bool doByteSwap);
+                       const UByte* buffer,
+                       size_t firstRow,
+                       size_t numCols,
+                       size_t numChannels,
+                       size_t pixelSize,
+                       bool doByteSwap);
 };
 
 /*!
@@ -144,10 +144,12 @@ public:
 class StreamWriteHandler: public nitf::WriteHandler
 {
 public:
-    StreamWriteHandler(const NITFSegmentInfo& info, io::InputStream* is,
-            unsigned long numCols, unsigned long numChannels,
-            unsigned long pixelSize, bool doByteSwap);
-
+    StreamWriteHandler(const NITFSegmentInfo& info,
+                       io::InputStream* is,
+                       size_t numCols,
+                       size_t numChannels,
+                       size_t pixelSize,
+                       bool doByteSwap);
 };
 
 }

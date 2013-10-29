@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <str/Convert.h>
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
@@ -202,8 +204,10 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                                                        size_t imIndex)
 {
     if (mReader.getImageCount() <= imIndex)
-        throw except::IndexOutOfRangeException(Ctxt(FmtX("Invalid index: %d",
-                                                         imIndex)));
+    {
+        throw except::IndexOutOfRangeException(Ctxt(
+                "Invalid index: " + str::toString(imIndex)));
+    }
 
     tiff::ImageReader *imReader = mReader[imIndex];
     tiff::IFD *ifd = imReader->getIFD();
@@ -217,22 +221,26 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     if (region.getNumCols() == -1)
         region.setNumCols(numColsTotal);
 
-    unsigned long numRowsReq = region.getNumRows();
-    unsigned long numColsReq = region.getNumCols();
+    size_t numRowsReq = region.getNumRows();
+    size_t numColsReq = region.getNumCols();
 
-    unsigned long startRow = region.getStartRow();
-    unsigned long startCol = region.getStartCol();
+    size_t startRow = region.getStartRow();
+    size_t startCol = region.getStartCol();
 
-    unsigned long extentRows = startRow + numRowsReq;
-    unsigned long extentCols = startCol + numColsReq;
+    size_t extentRows = startRow + numRowsReq;
+    size_t extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]",
-                                          numRowsReq)));
+    {
+        throw except::Exception(Ctxt("Too many rows requested [" +
+                str::toString(numRowsReq) + "]"));
+    }
 
     if (extentCols > numColsTotal || startCol > numColsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many cols requested [%d]",
-                                          numColsReq)));
+    {
+        throw except::Exception(Ctxt("Too many cols requested [" +
+                str::toString(numColsReq) + "]"));
+    }
 
     six::UByte* buffer = region.getBuffer();
 

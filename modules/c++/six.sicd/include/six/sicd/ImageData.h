@@ -41,14 +41,15 @@ struct ImageData
 {
     //!  Everything is undefined at this time
     ImageData() :
-        amplitudeTable(NULL)
+        pixelType(PixelType::NOT_SET),
+        amplitudeTable(NULL),
+        numRows(Init::undefined<size_t>()),
+        numCols(Init::undefined<size_t>()),
+        firstRow(0),
+        firstCol(0)
     {
-        pixelType = PixelType::NOT_SET;
-        numRows = Init::undefined<unsigned long>();
-        numCols = Init::undefined<unsigned long>();
-        firstRow = 0;
-        firstCol = 0;
     }
+
     //!  Destructor, deletes amplitudeTable if non-NULL
     ~ImageData();
 
@@ -71,16 +72,16 @@ struct ImageData
     AmplitudeTable* amplitudeTable;
 
     //!  Number of rows in the product, including zero-filled pixels
-    unsigned long numRows;
+    size_t numRows;
 
     //!  Number of cols in the product, including zero-filled pixels
-    unsigned long numCols;
+    size_t numCols;
 
     //!  Global row index (assuming this is an ROI)
-    unsigned long firstRow;
+    size_t firstRow;
     
     //!  Global col index (assuming this is an ROI)
-    unsigned long firstCol;
+    size_t firstCol;
 
     //!  Global row/col size (assuming this is an ROI)
     RowColInt fullImage;

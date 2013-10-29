@@ -69,46 +69,6 @@ template<> BooleanType six::toType<BooleanType>(const std::string& s)
         return BooleanType::NOT_SET;
 }
 
-template<> std::string six::toString(const int& value)
-{
-    if (six::Init::isUndefined(value))
-    {
-        throw six::UninitializedValueException(
-            Ctxt("Attempted use of uninitialized int value"));
-    }
-    return str::toString(value);
-}
-
-template<> std::string six::toString(const unsigned int& value)
-{
-    if (six::Init::isUndefined(value))
-    {
-        throw six::UninitializedValueException(
-            Ctxt("Attempted use of uninitialized unsigned int value"));
-    }
-    return str::toString(value);
-}
-
-template<> std::string six::toString(const long& value)
-{
-    if (six::Init::isUndefined(value))
-    {
-        throw six::UninitializedValueException(
-            Ctxt("Attempted use of uninitialized long value"));
-    }
-    return str::toString(value);
-}
-
-template<> std::string six::toString(const unsigned long& value)
-{
-    if (six::Init::isUndefined(value))
-    {
-        throw six::UninitializedValueException(
-            Ctxt("Attempted use of uninitialized unsigned long value"));
-    }
-    return str::toString(value);
-}
-
 template<> std::string six::toString<float>(const float& value)
 {
     if (six::Init::isUndefined(value))

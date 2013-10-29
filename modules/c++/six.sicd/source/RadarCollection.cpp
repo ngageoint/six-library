@@ -21,65 +21,73 @@
  */
 #include "six/sicd/RadarCollection.h"
 
-using namespace six;
-using namespace six::sicd;
-
-TxStep::TxStep()
+namespace six
 {
-    waveformIndex = Init::undefined<int>();
-    txPolarization = PolarizationType::NOT_SET;
+namespace sicd
+{
+TxStep::TxStep() :
+    waveformIndex(Init::undefined<int>()),
+    txPolarization(PolarizationType::NOT_SET)
+{
 }
+
 TxStep* TxStep::clone() const
 {
     return new TxStep(*this);
 }
-WaveformParameters::WaveformParameters()
+
+WaveformParameters::WaveformParameters() :
+    txPulseLength(Init::undefined<double>()),
+    txRFBandwidth(Init::undefined<double>()),
+    txFrequencyStart(Init::undefined<double>()),
+    txFMRate(Init::undefined<double>()),
+    rcvDemodType(DemodType::NOT_SET),
+    rcvWindowLength(Init::undefined<double>()),
+    adcSampleRate(Init::undefined<double>()),
+    rcvIFBandwidth(Init::undefined<double>()),
+    rcvFrequencyStart(Init::undefined<double>()),
+    rcvFMRate(Init::undefined<double>())
 {
-    txPulseLength = Init::undefined<double>();
-    txRFBandwidth = Init::undefined<double>();
-    txFrequencyStart = Init::undefined<double>();
-    txFMRate = Init::undefined<double>();
-    rcvDemodType = DemodType::NOT_SET;
-    rcvWindowLength = Init::undefined<double>();
-    adcSampleRate = Init::undefined<double>();
-    rcvIFBandwidth = Init::undefined<double>();
-    rcvFrequencyStart = Init::undefined<double>();
-    rcvFMRate = Init::undefined<double>();
 }
+
 WaveformParameters* WaveformParameters::clone() const
 {
     return new WaveformParameters(*this);
 }
+
 ChannelParameters::ChannelParameters() :
     txRcvPolarization(DualPolarizationType::NOT_SET),
     rcvAPCIndex(Init::undefined<int>())
 {
 }
+
 ChannelParameters* ChannelParameters::clone() const
 {
     return new ChannelParameters(*this);
 }
 
-AreaDirectionParameters::AreaDirectionParameters()
+AreaDirectionParameters::AreaDirectionParameters() :
+    unitVector(Init::undefined<Vector3>()),
+    spacing(Init::undefined<double>()),
+    elements(Init::undefined<size_t>()),
+    first(Init::undefined<size_t>())
 {
-    unitVector = Init::undefined<Vector3>();
-    spacing = Init::undefined<double>();
-    elements = Init::undefined<unsigned long>();
-    first = Init::undefined<unsigned long>();
 }
 
 AreaDirectionParameters* AreaDirectionParameters::clone() const
 {
     return new AreaDirectionParameters(*this);
 }
-Segment::Segment()
+
+Segment::Segment() :
+    startLine(Init::undefined<int>()),
+    startSample(Init::undefined<int>()),
+    endLine(Init::undefined<int>()),
+    endSample(Init::undefined<int>()),
+    identifier(Init::undefined<std::string>())
 {
-    startLine = Init::undefined<int>();
-    startSample = Init::undefined<int>();
-    endLine = Init::undefined<int>();
-    endSample = Init::undefined<int>();
-    identifier = Init::undefined<std::string>();
 }
+
 Segment* Segment::clone() const
 {
 
@@ -117,4 +125,5 @@ RadarCollection* RadarCollection::clone() const
 {
     return new RadarCollection(*this);
 }
-
+}
+}

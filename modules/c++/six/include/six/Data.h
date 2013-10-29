@@ -75,26 +75,26 @@ struct Data
      *  Maps to: /SICD/ImageData/NumRows,/SICD/ImageData/FullImage/Row
      *  /SIDD/Measurement/PixelFootprint/Row
      */
-    virtual unsigned long getNumRows() const = 0;
+    virtual size_t getNumRows() const = 0;
 
     /*!
      *  Maps to: /SICD/ImageData/NumRows,/SICD/ImageData/FullImage/Row
      *  /SIDD/Measurement/PixelFootprint/Row
      */
-    virtual void setNumRows(unsigned long numRows) = 0;
+    virtual void setNumRows(size_t numRows) = 0;
 
     /*!
      *  Maps to: /SICD/ImageData/NumCols,/SICD/ImageData/FullImage/Col
      *  /SIDD/Measurement/PixelFootprint/Col
      */
-    virtual unsigned long getNumCols() const = 0;
+    virtual size_t getNumCols() const = 0;
 
 
     /*!
      *  Maps to: /SICD/ImageData/NumCols,/SICD/ImageData/FullImage/Col
      *  /SIDD/Measurement/PixelFootprint/Col
      */
-    virtual void setNumCols(unsigned long numCols) = 0;
+    virtual void setNumCols(size_t numCols) = 0;
 
     /*!
      *  Maps to: /SICD/GeoData/ImageCorners,
@@ -151,7 +151,7 @@ struct Data
     virtual DateTime getCollectionStartDateTime() const = 0;
 
     //!  Get back the number of bytes per pixel for the product
-    virtual unsigned long getNumBytesPerPixel() const;
+    virtual size_t getNumBytesPerPixel() const;
 
     /*!  
      *  This reader is only used for informational purposes, but it
@@ -159,7 +159,7 @@ struct Data
      *  this would be 3, for SIDD pseudo, it would be 1.  For SICD complex
      *  there would be 2, one for real and one for imaginary.
      */  
-    virtual unsigned long getNumChannels() const;
+    virtual size_t getNumChannels() const;
 
     /*!
      *  Classification is defined differently for SICD and SIDD, but this

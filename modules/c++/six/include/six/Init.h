@@ -22,6 +22,8 @@
 #ifndef __SIX_SET_H__
 #define __SIX_SET_H__
 
+#include <limits>
+
 #include "six/Types.h"
 #include "six/Parameter.h"
 #include <import/except.h>
@@ -50,16 +52,15 @@ struct Init
 
     template<typename T> static T undefined()
     {
-        throw except::Exception(Ctxt("No defined init value for data type"));
+        // This will handle integer types
+        // It won't compile for other types that aren't specialized below
+        return std::numeric_limits<T>::max();
     }
 
 };
 
 template<> std::string Init::undefined<std::string>();
-template<> int Init::undefined<int>();
-template<> unsigned int Init::undefined<unsigned int>();
-template<> long Init::undefined<long>();
-template<> unsigned long Init::undefined<unsigned long>();
+template<> bool Init::undefined<bool>();
 template<> float Init::undefined<float>();
 template<> double Init::undefined<double>();
 template<> RangeAzimuth<double> Init::undefined<RangeAzimuth<double> >();

@@ -133,7 +133,7 @@ struct DerivedData: public Data
      *  Maps to:
      *  /SIDD/Measurement/PixelFootprint/Row
      */
-    virtual unsigned long getNumRows() const
+    virtual size_t getNumRows() const
     {
         return measurement->pixelFootprint.row;
     }
@@ -142,7 +142,7 @@ struct DerivedData: public Data
      *  Maps to:
      *  /SIDD/Measurement/PixelFootprint/Row
      */
-    virtual void setNumRows(unsigned long numRows)
+    virtual void setNumRows(size_t numRows)
     {
         measurement->pixelFootprint.row = numRows;
     }
@@ -151,7 +151,7 @@ struct DerivedData: public Data
      *  Maps to:
      *  /SIDD/Measurement/PixelFootprint/Col
      */
-    virtual unsigned long getNumCols() const
+    virtual size_t getNumCols() const
     {
         return measurement->pixelFootprint.col;
     }
@@ -160,7 +160,7 @@ struct DerivedData: public Data
      *  Maps to:
      *  /SIDD/Measurement/PixelFootprint/Col
      */
-    virtual void setNumCols(unsigned long numCols)
+    virtual void setNumCols(size_t numCols)
     {
         measurement->pixelFootprint.col = numCols;
     }

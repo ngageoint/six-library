@@ -112,10 +112,25 @@ protected:
     XMLElem createDate(const std::string& name, const DateTime& p,
             XMLElem parent = NULL) const;
 
-    void parseInt(XMLElem element, int& value) const;
-    void parseInt(XMLElem element, long& value) const;
-    void parseUInt(XMLElem element, unsigned int& value) const;
-    void parseUInt(XMLElem element, unsigned long& value) const;
+    template <typename T>
+    void parseInt(XMLElem element, T& value) const
+    {
+        try
+        {
+            value = str::toType<T>(element->getCharacterData());
+        }
+        catch (const except::BadCastException& ex)
+        {
+            mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
+        }
+    }
+
+    template <typename T>
+    void parseUInt(XMLElem element, T& value) const
+    {
+        parseInt<T>(element, value);
+    }
+
     void parseDouble(XMLElem element, double& value) const;
     void parseComplex(XMLElem element, std::complex<double>& value) const;
     void parseString(XMLElem element, std::string& value) const;

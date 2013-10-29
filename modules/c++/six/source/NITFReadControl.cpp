@@ -246,8 +246,7 @@ void NITFReadControl::load(nitf::IOInterface& interface,
         nitf::ImageSubheader subheader = segment.getSubheader();
 
         // The number of rows in the segment (actual)
-        unsigned long numRowsSeg =
-                (unsigned long) (nitf::Uint32) subheader.getNumRows();
+        size_t numRowsSeg = (nitf::Uint32) subheader.getNumRows();
 
         // This function should throw if the data does not exist
         std::pair<int, int> imageAndSegment = getIndices(subheader);
@@ -457,8 +456,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 
     NITFImageInfo* thisImage = mInfos[imageNumber];
 
-    unsigned long numRowsTotal = thisImage->getData()->getNumRows();
-    unsigned long numColsTotal = thisImage->getData()->getNumCols();
+    size_t numRowsTotal = thisImage->getData()->getNumRows();
+    size_t numColsTotal = thisImage->getData()->getNumCols();
 
     if (region.getNumRows() == -1)
     {
@@ -469,14 +468,14 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
         region.setNumCols(numColsTotal);
     }
 
-    unsigned long numRowsReq = region.getNumRows();
-    unsigned long numColsReq = region.getNumCols();
+    size_t numRowsReq = region.getNumRows();
+    size_t numColsReq = region.getNumCols();
 
-    unsigned long startRow = region.getStartRow();
-    unsigned long startCol = region.getStartCol();
+    size_t startRow = region.getStartRow();
+    size_t startCol = region.getStartCol();
 
-    unsigned long extentRows = startRow + numRowsReq;
-    unsigned long extentCols = startCol + numColsReq;
+    size_t extentRows = startRow + numRowsReq;
+    size_t extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
         throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]",
@@ -510,12 +509,12 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     std::vector < NITFSegmentInfo > imageSegments
             = thisImage->getImageSegments();
     size_t numIS = imageSegments.size();
-    unsigned long startOff = 0;
+    size_t startOff = 0;
 
     size_t i;
     for (i = 0; i < numIS; i++)
     {
-        unsigned long firstRowSeg = imageSegments[i].firstRow;
+        size_t firstRowSeg = imageSegments[i].firstRow;
 
         if (firstRowSeg <= startRow)
         {
@@ -529,8 +528,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 
     }
     --i; // Need to get rid of the last one
-    unsigned long totalRead = 0;
-    unsigned long numRowsLeft = numRowsReq;
+    size_t totalRead = 0;
+    size_t numRowsLeft = numRowsReq;
     sw.setStartRow(startRow - startOff);
 #if DEBUG_OFFSETS
     std::cout << "startRow: " << startRow
@@ -543,8 +542,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     createCompressionOptions(mCompressionOptions);
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
-        unsigned long numRowsReqSeg =
-                std::min<unsigned long>(numRowsLeft, imageSegments[i].numRows
+        size_t numRowsReqSeg =
+                std::min<size_t>(numRowsLeft, imageSegments[i].numRows
                         - sw.getStartRow());
 
         sw.setNumRows(numRowsReqSeg);

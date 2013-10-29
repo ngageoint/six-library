@@ -161,10 +161,10 @@ struct AreaDirectionParameters
     double spacing;
 
     //!  The number of elements in this direction (SICD NumLines/NumSamples)
-    unsigned long elements;
+    size_t elements;
 
     //!  The first element in this direction (SICD FirstLine/FirstSample)
-    unsigned long first;
+    size_t first;
 };
 
 /*!

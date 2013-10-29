@@ -45,7 +45,7 @@ class NITFImageInfo
 {
 public:
 
-    NITFImageInfo(Data* d, unsigned long maxRows = Constants::ILOC_MAX,
+    NITFImageInfo(Data* d, size_t maxRows = Constants::ILOC_MAX,
             sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
             bool computeSegments = false) :
         data(d), startIndex(0), numRowsLimit(maxRows), maxProductSize(maxSize)
@@ -139,11 +139,11 @@ public:
         imageSegments.push_back(info);
     }
 
-    unsigned long getStartIndex() const
+    size_t getStartIndex() const
     {
         return startIndex;
     }
-    void setStartIndex(unsigned long index)
+    void setStartIndex(size_t index)
     {
         startIndex = index;
     }
@@ -155,7 +155,7 @@ public:
     }
 
     //! This is the total number of rows we can have in a NITF segment
-    unsigned long getNumRowsLimit() const
+    size_t getNumRowsLimit() const
     {
         return numRowsLimit;
     }
@@ -207,13 +207,13 @@ public:
 protected:
     Data* data;
 
-    unsigned long startIndex;
+    size_t startIndex;
 
     //! Number of bytes in the product
     sys::Uint64_T productSize;
 
     //! This is the total number of rows we can have in a NITF segment
-    unsigned long numRowsLimit;
+    size_t numRowsLimit;
 
     //! This is the total size that each product seg can be
     sys::Uint64_T maxProductSize;
@@ -273,7 +273,7 @@ protected:
      *
      */
     /*      void setLimits(sys::Uint64_T maxSize, */
-    /*                     unsigned long maxRows) */
+    /*                     size_t maxRows) */
     /*      { */
 
     /*          if (maxSize > Constants::IS_SIZE_MAX) */

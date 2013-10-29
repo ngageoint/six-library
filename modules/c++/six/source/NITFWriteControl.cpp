@@ -572,11 +572,11 @@ void NITFWriteControl::save(
         std::vector < NITFSegmentInfo > imageSegments
                 = info->getImageSegments();
         size_t numIS = imageSegments.size();
-        unsigned long pixelSize = info->getData()->getNumBytesPerPixel();
-        unsigned long numCols = info->getData()->getNumCols();
-        unsigned long numChannels = info->getData()->getNumChannels();
+        size_t pixelSize = info->getData()->getNumBytesPerPixel();
+        size_t numCols = info->getData()->getNumCols();
+        size_t numChannels = info->getData()->getNumChannels();
 
-        for (unsigned int j = 0; j < numIS; ++j)
+        for (size_t j = 0; j < numIS; ++j)
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
