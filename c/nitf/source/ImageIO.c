@@ -380,20 +380,6 @@ typedef struct
 _nitf_ImageIOPixelDef;
 
 /*!
-  \brief _nitf_Offsets32 - Buffer offset 32-bit
-
-  The buffer offset stucture maintains the current and original values of
-  a 32 bit offset. The current value advances through the processing and is
-  ocasionally returned to the original or base value
-*/
-
-typedef struct
-{
-    nitf_Uint32 mark;  /*!< The current offset */
-    nitf_Uint32 orig;  /*!< The original (base) offset */
-} _nitf_Offsets32;
-
-/*!
   \brief _nitf_Offsets64 - Buffer offset 64-bit
 
   The buffer offset stucture maintains the current and original values of
@@ -406,21 +392,6 @@ typedef struct
     nitf_Uint64 mark;  /*!< The current offset */
     nitf_Uint64 orig;  /*!< The original (base) offset */
 } _nitf_Offsets64;
-
-/*!
-  \brief _nitf_DataBuffer32 - Data buffer with offset, 32-bit
-
-  The data buffer with offset structure combines the common variable pairing
-  of a data buffer and associated offset. The buffer base address plus the
-  offset points to the current location in the buffer. For this type, the
-  offset is a 32-bit offset stucture with base and current offset
-*/
-
-typedef struct
-{
-    nitf_Uint8* buffer;
-    _nitf_Offsets32 offset;
-} _nitf_DataBuffer32;
 
 /*!
   \brief _nitf_DataBuffer64 - Data buffer with offset, 64-bit
@@ -823,13 +794,13 @@ typedef struct _nitf_ImageIOBlock_s
     _nitf_DataBuffer64 rwBuffer;
 
     /*! Unpacked data buffer plus offsets */
-    _nitf_DataBuffer32 unpacked;
+    _nitf_DataBuffer64 unpacked;
 
     /*! Free unpacked data buffer if TRUE */
     nitf_Uint32 unpackedNoFree;
 
     /*! User buffer plus offsets */
-    _nitf_DataBuffer32 user;
+    _nitf_DataBuffer64 user;
 
     /*! Read/write buffer is user buffer if TRUE */
     nitf_Uint32 userEqBuffer;
