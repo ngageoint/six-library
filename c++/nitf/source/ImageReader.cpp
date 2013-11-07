@@ -56,9 +56,14 @@ void ImageReader::read(nitf::SubWindow & subWindow, nitf::Uint8 ** user, int * p
         throw nitf::NITFException(&error);
 }
 
-const nitf::Uint8* ImageReader::readBlock(nitf::Uint32 blockNumber, nitf::Uint64* blockSize)
+const nitf::Uint8* ImageReader::readBlock(nitf::Uint32 blockNumber, nitf::Uint64* blockSize)  
+    throw (nitf::NITFException)
 {
-    return nitf_ImageReader_readBlock(getNativeOrThrow(), blockNumber, blockSize, &error);
+    const nitf::Uint8* x = nitf_ImageReader_readBlock(
+        getNativeOrThrow(), blockNumber, blockSize, &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+    return x;
 }
 
 void ImageReader::setReadCaching()

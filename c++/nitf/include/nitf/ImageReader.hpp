@@ -74,7 +74,8 @@ public:
      *          (something must be done with buffer before next call)
      */
     const nitf::Uint8* readBlock(nitf::Uint32 blockNumber, 
-                                 nitf::Uint64* blockSize);
+                                 nitf::Uint64* blockSize) 
+                                 throw (nitf::NITFException);
 
     //!  Set read caching
     void setReadCaching();
