@@ -1,6 +1,6 @@
 NAME            = 'six.sicd'
 MAINTAINER      = 'adam.sylvester@gd-ais.com'
-VERSION         = '2.0.3'
+VERSION         = '2.0.4'
 MODULE_DEPS     = 'scene nitf xml.lite six mem'
 UNITTEST_DEPS   = 'cli sio.lite'
 
