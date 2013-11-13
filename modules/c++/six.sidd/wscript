@@ -1,6 +1,6 @@
 NAME            = 'six.sidd'
 MAINTAINER      = 'adam.sylvester@gd-ais.com'
-VERSION         = '2.0.4'
+VERSION         = '2.0.5'
 MODULE_DEPS     = 'scene tiff nitf xml.lite six mem'
 
 options = configure = distclean = lambda p: None
