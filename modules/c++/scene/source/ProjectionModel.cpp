@@ -291,14 +291,17 @@ Vector3 ProjectionModel::imageToScene(
         //    plane point position
         uUP = computeUnitVector(gppLatLon);
 
-        // TODO: Doc doesn't have this std::abs() but seems like we should for
-        //       numerical precision reasons if nothing else
-        deltaHeight = std::abs(gppLatLon.getAlt() - height);
+        deltaHeight = gppLatLon.getAlt() - height;
 
         // 4. Test to see if GPP is sufficiently close to the HAE surface
         //    If not, adjust the ground plane normal and ground ref point and
         //    try again
-        if (deltaHeight <= heightThreshold)
+        // NOTE: The only way deltaHeight would be negative would be if we had
+        //       a concave surface, but we know that we'll always have a
+        //       convex surface (we're using the WGS-84 ellipsoid).  On the
+        //       off-chance that we're slightly negative due to a numerical
+        //       precision issue though, we might as well support this.
+        if (std::abs(deltaHeight) <= heightThreshold)
         {
             break;
         }
