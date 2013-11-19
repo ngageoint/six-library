@@ -300,8 +300,12 @@ Vector3 ProjectionModel::imageToScene(
         //       a concave surface, but we know that we'll always have a
         //       convex surface (we're using the WGS-84 ellipsoid).  On the
         //       off-chance that we're slightly negative due to a numerical
-        //       precision issue though, we might as well support this.
-        if (std::abs(deltaHeight) <= heightThreshold)
+        //       precision issue though, we should still quit... The
+        //       alternative would be to take std::abs(deltaHeight), but if
+        //       this is actually above the threshold, then we've got some
+        //       major precision issue and iterating again may just make
+        //       things worse.
+        if (deltaHeight <= heightThreshold)
         {
             break;
         }
