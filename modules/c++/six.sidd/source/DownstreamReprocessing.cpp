@@ -46,6 +46,8 @@ RowColDouble GeometricChip::getFullImageCoordinateFromChip(
             originalUpperRightCoordinate - originalLowerLeftCoordinate;
 
     // Compute full image row and col coordinates
+    // TODO: Since the chip is always rectangular, the F term will always be
+    //       0 which means the uv term itself zeros out as well.
     const RowColDouble fullImage(
             A.row + u * B.row + v * D.row + uv * F.row,
             A.col + u * B.col + v * D.col + uv * F.col);
@@ -55,22 +57,24 @@ RowColDouble GeometricChip::getFullImageCoordinateFromChip(
 RowColDouble
 GeometricChip::getChipCoordinateFromFullImage(const RowColDouble& full) const
 {
-    if (originalUpperLeftCoordinate.row == originalUpperRightCoordinate.row &&
-        originalLowerLeftCoordinate.row == originalLowerLeftCoordinate.row &&
-        originalUpperLeftCoordinate.row < originalLowerLeftCoordinate.row &&
-        originalUpperLeftCoordinate.col == originalLowerLeftCoordinate.col &&
-        originalUpperRightCoordinate.col == originalLowerRightCoordinate.col &&
-        originalUpperLeftCoordinate.col < originalUpperRightCoordinate.col)
-    {
-        return RowColDouble(full.row - originalUpperLeftCoordinate.row,
-                            full.col - originalUpperLeftCoordinate.col);
-    }
-    else
-    {
-        // TODO: Derive equations to do 5.1.1 in reverse
-        throw except::NotImplementedException(Ctxt(
-                "Only square chipping is implemented currently"));
-    }
+    const RowColDouble A = originalUpperLeftCoordinate;
+    const RowColDouble B =
+            originalLowerLeftCoordinate - originalUpperLeftCoordinate;
+    const RowColDouble D =
+            originalUpperRightCoordinate - originalUpperLeftCoordinate;
+
+    // NOTE: This is based on the logic above - the uv term is always 0 since
+    //       F is always 0.  Should update the SIDD spec to clarify this.
+    const double v =
+            (full.col - A.col - full.row * B.col / B.row +
+                 A.row * B.col / B.row) /
+            (D.col - D.row * B.col / B.row);
+
+    const double u = (full.row - A.row - v * D.row) / B.row;
+
+    const RowColDouble chip(u * (chipSize.row - 1.0),
+                            v * (chipSize.col - 1.0));
+    return chip;
 }
 }
 }
