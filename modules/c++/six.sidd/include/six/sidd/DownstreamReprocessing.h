@@ -59,8 +59,6 @@ struct GeometricChip
     getFullImageCoordinateFromChip(const RowColDouble& chip) const;
 
     // Given full image pixel coordinates, provides chip pixel coordinates
-    // Currently only implemented for simple rectangular chipping (throws
-    // otherwise)
     RowColDouble
     getChipCoordinateFromFullImage(const RowColDouble& full) const;
 };
