@@ -466,7 +466,7 @@ mxArray* read24BitPixelArray(nitf_Reader* reader,
     nitf_ImageReader* imageReader = NULL;
 
     /* Buffer array ptr */
-    nitf_Uint8* buffers[2];
+    nitf_Uint8* buffers[3];
 
     const mwSize dims[] = { numCols, numRows, 3 };
     const int numBands = 3;
