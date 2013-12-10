@@ -4773,7 +4773,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                                  NITF_STRERROR(NITF_ERRNO));
                 return NITF_FAILURE;
             }
-            freeCacheBufferReset = 1; /* Do not allocate after first band */
+            freeCacheBufferReset = 0; /* Do not allocate after first band */
         }
         else
             cacheBuffer = NULL; /* This is meaningless */
