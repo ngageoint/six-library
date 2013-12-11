@@ -14,6 +14,7 @@ def build(bld):
                'test_create_sidd'          : 'cli six.sicd six.sidd sio.lite',
                'test_dump_images'          : 'cli six.sicd six.sidd sio.lite',
                'test_extract_xml'          : 'cli nitf xml.lite',
+               'test_image_to_scene'       : 'six.sicd',
                'test_parse_xml'            : 'six.sicd six.sidd'}
 
     for sample, module_deps in samples.iteritems():
