@@ -28,6 +28,7 @@
 
 #include <types/RowCol.h>
 #include <scene/Types.h>
+#include <six/NITFReadControl.h>
 
 namespace six
 {
@@ -50,6 +51,16 @@ void cropSICD(const std::string& inPathname,
               const std::string& outPathname);
 
 /*
+ * Same as above but allow an already-opened reader to be used.
+ * NITFReadControl::load() must be called prior to calling this function.
+ */
+void cropSICD(six::NITFReadControl& reader,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname);
+
+/*
  * Reads in an AOI from a SICD and creates a cropped SICD, updating the
  * metadata as appropriate to reflect this
  *
@@ -58,11 +69,26 @@ void cropSICD(const std::string& inPathname,
  * \param corners Exactly four corners in ECEF meters.  If the corners are not
  * rectangular in the slant plane, an AOI will be exscribed from these
  * \param outPathname Output cropped SICD pathname
+ * \param trimCornersIfNeeded Specifies behavior if one of the AOI corners is
+ * outside the image.  If this is true, the corner will be silently trimmed to
+ * be in-bounds (and the SICD metadata will reflect this).  If this is false,
+ * an exception will be thrown.
  */
 void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const std::vector<scene::Vector3>& corners,
-              const std::string& outPathname);
+              const std::string& outPathname,
+              bool trimCornersIfNeeded = true);
+
+/*
+ * Same as above but allow an already-opened reader to be used.
+ * NITFReadControl::load() must be called prior to calling this function.
+ */
+void cropSICD(six::NITFReadControl& reader,
+              const std::vector<std::string>& schemaPaths,
+              const std::vector<scene::Vector3>& corners,
+              const std::string& outPathname,
+              bool trimCornersIfNeeded = true);
 
 /*
  * Reads in an AOI from a SICD and creates a cropped SICD, updating the
@@ -77,7 +103,18 @@ void cropSICD(const std::string& inPathname,
 void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const std::vector<scene::LatLonAlt>& corners,
-              const std::string& outPathname);
+              const std::string& outPathname,
+              bool trimCornersIfNeeded = true);
+
+/*
+ * Same as above but allow an already-opened reader to be used.
+ * NITFReadControl::load() must be called prior to calling this function.
+ */
+void cropSICD(six::NITFReadControl& reader,
+              const std::vector<std::string>& schemaPaths,
+              const std::vector<scene::LatLonAlt>& corners,
+              const std::string& outPathname,
+              bool trimCornersIfNeeded = true);
 }
 }
 
