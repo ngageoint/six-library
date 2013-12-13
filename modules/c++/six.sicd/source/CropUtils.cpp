@@ -30,7 +30,6 @@
 #include <scene/LLAToECEFTransform.h>
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
-#include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/CropUtils.h>
 #include <six/sicd/Utilities.h>
@@ -173,19 +172,29 @@ void cropSICD(const std::string& inPathname,
               const types::RowCol<size_t>& aoiDims,
               const std::string& outPathname)
 {
-    // Make sure it's a SICD
     six::NITFReadControl reader;
     reader.load(inPathname, schemaPaths);
-    six::Container* container = reader.getContainer();
+    cropSICD(reader, schemaPaths, aoiOffset, aoiDims, outPathname);
+}
 
-    six::Data* const dataPtr = container->getData(0);
+void cropSICD(six::NITFReadControl& reader,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname)
+{
+    // Make sure it's a SICD
+    const six::Container* const container = reader.getContainer();
+
+    const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||
         dataPtr->getDataType() != six::DataType::COMPLEX)
     {
-        throw except::Exception(Ctxt(inPathname + " is not a SICD"));
+        throw except::Exception(Ctxt("Input is not a SICD"));
     }
 
-    const ComplexData* const data = reinterpret_cast<ComplexData*>(dataPtr);
+    const ComplexData* const data =
+            reinterpret_cast<const ComplexData*>(dataPtr);
 
     // Build up the geometry info
     std::auto_ptr<const scene::SceneGeometry> geom(
@@ -202,7 +211,19 @@ void cropSICD(const std::string& inPathname,
 void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const std::vector<scene::Vector3>& corners,
-              const std::string& outPathname)
+              const std::string& outPathname,
+              bool trimCornersIfNeeded)
+{
+    six::NITFReadControl reader;
+    reader.load(inPathname, schemaPaths);
+    cropSICD(reader, schemaPaths, corners, outPathname, trimCornersIfNeeded);
+}
+
+void cropSICD(six::NITFReadControl& reader,
+              const std::vector<std::string>& schemaPaths,
+              const std::vector<scene::Vector3>& corners,
+              const std::string& outPathname,
+              bool trimCornersIfNeeded)
 {
     if (corners.size() != 4)
     {
@@ -211,19 +232,17 @@ void cropSICD(const std::string& inPathname,
     }
 
     // Make sure it's a SICD
-    six::NITFReadControl reader;
-    reader.load(inPathname, schemaPaths);
-    six::Container* container = reader.getContainer();
+    const six::Container* const container = reader.getContainer();
 
-    six::Data* const dataPtr = container->getData(0);
+    const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||
         dataPtr->getDataType() != six::DataType::COMPLEX)
     {
-        throw except::Exception(Ctxt(inPathname + " is not a SICD"));
+        throw except::Exception(Ctxt("Input is not a SICD"));
     }
 
     const six::sicd::ComplexData* const data =
-            reinterpret_cast<six::sicd::ComplexData*>(dataPtr);
+            reinterpret_cast<const six::sicd::ComplexData*>(dataPtr);
 
     // Convert ECEF corners to slant pixel pixels
     const ImageData& imageData(*data->imageData);
@@ -253,16 +272,34 @@ void cropSICD(const std::string& inPathname,
 
         updateMinMax(spPixel.row, minPixel.row, maxPixel.row);
         updateMinMax(spPixel.col, minPixel.col, maxPixel.col);
+    }
 
+    // Floor the min pixel and ceiling the max pixel
+    minPixel.row = std::floor(minPixel.row);
+    minPixel.col = std::floor(minPixel.col);
+    maxPixel.row = std::ceil(maxPixel.row);
+    maxPixel.col = std::ceil(maxPixel.col);
+
+    const types::RowCol<double> lastDim(data->getNumRows() - 1,
+                                        data->getNumCols() - 1);
+
+    if (!trimCornersIfNeeded &&
+        (minPixel.row < 0 ||
+         minPixel.col < 0 ||
+         maxPixel.row > lastDim.row ||
+         maxPixel.col > lastDim.col))
+    {
+        throw except::Exception(Ctxt(
+                "One or more corners are outside of the image bounds"));
     }
 
     const types::RowCol<size_t> upperLeft(
-            std::floor(std::max(minPixel.row, 0.0)),
-            std::floor(std::max(minPixel.col, 0.0)));
+            static_cast<size_t>(std::max(minPixel.row, 0.0)),
+            static_cast<size_t>(std::max(minPixel.col, 0.0)));
 
     const types::RowCol<size_t> lowerRight(
-            std::ceil(std::min(maxPixel.row, data->getNumRows() - 1.0)),
-            std::ceil(std::min(maxPixel.col, data->getNumCols() - 1.0)));
+            static_cast<size_t>(std::min(maxPixel.row, lastDim.row)),
+            static_cast<size_t>(std::min(maxPixel.col, lastDim.col)));
 
     // This would only happen if the "upper left" corner was actually below or
     // to the right of the footprint (the lower right corner would have been
@@ -283,8 +320,21 @@ void cropSICD(const std::string& inPathname,
 void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const std::vector<scene::LatLonAlt>& corners,
-              const std::string& outPathname)
+              const std::string& outPathname,
+              bool trimCornersIfNeeded)
 {
+    six::NITFReadControl reader;
+    reader.load(inPathname, schemaPaths);
+    cropSICD(reader, schemaPaths, corners, outPathname, trimCornersIfNeeded);
+}
+
+void cropSICD(six::NITFReadControl& reader,
+              const std::vector<std::string>& schemaPaths,
+              const std::vector<scene::LatLonAlt>& corners,
+              const std::string& outPathname,
+              bool trimCornersIfNeeded)
+{
+
     std::vector<scene::Vector3> ecefCorners(corners.size());
     scene::LLAToECEFTransform toECEF;
     for (size_t ii = 0; ii < corners.size(); ++ii)
@@ -292,7 +342,8 @@ void cropSICD(const std::string& inPathname,
         ecefCorners[ii] = toECEF.transform(corners[ii]);
     }
 
-    cropSICD(inPathname, schemaPaths, ecefCorners, outPathname);
+    cropSICD(reader, schemaPaths, ecefCorners, outPathname,
+             trimCornersIfNeeded);
 }
 }
 }

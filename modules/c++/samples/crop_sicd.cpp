@@ -114,6 +114,15 @@ int main(int argc, char** argv)
                            "Specify a schema or directory of schemas",
                            cli::STORE,
                            "schema", "<directory>");
+        parser.addArgument("--require-aoi-in-bounds",
+                           "When the AOI is specified in ECEF or lat/lon, by "
+                           "default it will be trimmed to be within the "
+                           "pixel boundaries of the image if necessary.  If "
+                           "this flag is specified, the program will instead "
+                           "exit with an error if the AOI is not completely "
+                           "in bounds.",
+                           cli::STORE_TRUE,
+                           "requireAoiInBounds")->setDefault(false);
         parser.addArgument("input", "Input SICD pathname", cli::STORE,
                            "input", "<input SICD pathname>", 1, 1);
         parser.addArgument("output", "Output SICD pathname", cli::STORE,
@@ -122,6 +131,8 @@ int main(int argc, char** argv)
         const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string inPathname(options->get<std::string> ("input"));
         const std::string outPathname(options->get<std::string> ("output"));
+        const bool trimCornersIfNeeded =
+                !options->get<bool>("requireAoiInBounds");
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
@@ -134,13 +145,15 @@ int main(int argc, char** argv)
         {
             std::vector<scene::Vector3> corners;
             parseECEF(*options, corners);
-            six::sicd::cropSICD(inPathname, schemaPaths, corners, outPathname);
+            six::sicd::cropSICD(inPathname, schemaPaths, corners,
+                                outPathname, trimCornersIfNeeded);
         }
         else if (options->hasValue("latlon"))
         {
             std::vector<scene::LatLonAlt> corners;
             parseLatLon(*options, corners);
-            six::sicd::cropSICD(inPathname, schemaPaths, corners, outPathname);
+            six::sicd::cropSICD(inPathname, schemaPaths, corners,
+                                outPathname, trimCornersIfNeeded);
         }
         else
         {
