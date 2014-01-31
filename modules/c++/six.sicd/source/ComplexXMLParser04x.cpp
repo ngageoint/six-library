@@ -31,14 +31,13 @@ namespace six
 {
 namespace sicd
 {
-ComplexXMLParser04x::ComplexXMLParser04x(const std::string& version,
-                                         logging::Logger* log,
-                                         bool ownLog) :
-    ComplexXMLParser(version, true, std::auto_ptr<six::SICommonXMLParser>(
-                        new six::SICommonXMLParser01x(
-                            versionToURI(version), true, 
-                            versionToURI(version), log)),
-                     log, ownLog)
+ComplexXMLParser04x::ComplexXMLParser04x(
+    const std::string& version,
+    bool addClassAttributes,
+    std::auto_ptr<SICommonXMLParser> comParser,
+    logging::Logger* log,
+    bool ownLog) :
+    ComplexXMLParser(version, addClassAttributes, comParser, log, ownLog)
 {
 }
 
