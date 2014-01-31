@@ -24,6 +24,7 @@
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLParser040.h>
 #include <six/sicd/ComplexXMLParser041.h>
+#include <six/sicd/ComplexXMLParser050.h>
 #include <six/sicd/ComplexXMLParser100.h>
 #include <six/sicd/ComplexXMLParser101.h>
 
@@ -73,6 +74,7 @@ ComplexXMLControl::getParser(const std::string& version) const
     // six.sicd only currently supports --
     //   SICD 0.4.0
     //   SICD 0.4.1
+    //   SICD 0.5.0
     //   SICD 1.0.0
     //   SICD 1.0.1
     if (majorVersion == "0")
@@ -83,6 +85,10 @@ ComplexXMLControl::getParser(const std::string& version) const
                 parser.reset(new ComplexXMLParser040(version, mLog));
             else if (patchVersion == "1")
                 parser.reset(new ComplexXMLParser041(version, mLog));
+        }
+        else if (minorVersion == "5" && patchVersion == "0")
+        {
+            parser.reset(new ComplexXMLParser050(version, mLog));
         }
     }
     else if (majorVersion == "1")
@@ -107,4 +113,3 @@ ComplexXMLControl::getParser(const std::string& version) const
 }
 }
 }
-

@@ -23,7 +23,6 @@
 #define __SIX_SICD_COMPLEX_XML_PARSER_04X_H__
 
 #include <six/sicd/ComplexXMLParser.h>
-#include <six/SICommonXMLParser01x.h>
 
 namespace six
 {
@@ -33,6 +32,8 @@ class ComplexXMLParser04x : public ComplexXMLParser
 {
 public:
     ComplexXMLParser04x(const std::string& version,
+                        bool addClassAttributes,
+                        std::auto_ptr<SICommonXMLParser> comParser,
                         logging::Logger* log = NULL,
                         bool ownLog = false);
 

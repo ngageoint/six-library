@@ -66,7 +66,16 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     XMLElem matchInfoXML       = getOptional(root, "MatchInfo");
     XMLElem pfaXML             = getOptional(root, "PFA");
     XMLElem rmaXML             = getOptional(root, "RMA");
-    XMLElem rgAzCompXML        = getOptional(root, "RgAzComp"); // added in 1.0.0
+    XMLElem rgAzCompXML        = getOptional(root, "RGAZCOMP");
+    if (rgAzCompXML != NULL)
+    {
+        // In 0.5, the element was in all caps and contained additional
+        // elements that disappeared in 1.0.  For the time being at least,
+        // don't support this.
+        throw except::Exception(Ctxt(
+                "SIX library does not support RGAZCOMP element"));
+    }
+    rgAzCompXML                = getOptional(root, "RgAzComp"); // added in 1.0.0
 
     parseCollectionInformationFromXML(collectionInfoXML, sicd->collectionInformation.get());
 

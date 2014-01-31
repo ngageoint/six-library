@@ -19,35 +19,37 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SICD_COMPLEX_XML_PARSER_041_H__
-#define __SIX_SICD_COMPLEX_XML_PARSER_041_H__
+#ifndef __SIX_SICD_COMPLEX_XML_PARSER_050_H__
+#define __SIX_SICD_COMPLEX_XML_PARSER_050_H__
 
-#include <six/sicd/ComplexXMLParser04x.h>
+#include <six/sicd/ComplexXMLParser041.h>
 
 namespace six
 {
 namespace sicd
 {
-class ComplexXMLParser041 : public ComplexXMLParser04x
+class ComplexXMLParser050 : public ComplexXMLParser041
 {
 public:
-    ComplexXMLParser041(const std::string& version,
+    ComplexXMLParser050(const std::string& version,
                         logging::Logger* log = NULL,
                         bool ownLog = false);
 
 protected:
-    ComplexXMLParser041(const std::string& version,
-                        bool addClassAttributes,
-                        std::auto_ptr<SICommonXMLParser> comParser,
-                        logging::Logger* log = NULL,
-                        bool ownLog = false);
+    virtual XMLElem convertWeightTypeToXML(const WeightType& obj,
+                                           XMLElem parent = NULL) const;
 
-    virtual XMLElem convertRMATToXML(const RMAT* obj, 
-                                     XMLElem parent = NULL) const;
-    virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const;
+    virtual XMLElem convertImageFormationAlgoToXML(
+        const PFA* pfa, const RMA* rma,
+        const RgAzComp* rgAzComp,
+        XMLElem parent = NULL) const;
+
+    virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
+            mem::ScopedCopyablePtr<WeightType>& obj) const;
+
+
 };
 }
 }
 
 #endif
-

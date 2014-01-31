@@ -21,6 +21,7 @@
  */
 
 #include <six/sicd/ComplexXMLParser041.h>
+#include <six/SICommonXMLParser01x.h>
 
 namespace
 {
@@ -35,7 +36,21 @@ namespace sicd
 ComplexXMLParser041::ComplexXMLParser041(const std::string& version,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser04x(version, log, ownLog)
+    ComplexXMLParser04x(version, true, std::auto_ptr<six::SICommonXMLParser>(
+                           new six::SICommonXMLParser01x(
+                               versionToURI(version), true,
+                               versionToURI(version), log)),
+                        log, ownLog)
+{
+}
+
+ComplexXMLParser041::ComplexXMLParser041(
+    const std::string& version,
+    bool addClassAttributes,
+    std::auto_ptr<SICommonXMLParser> comParser,
+    logging::Logger* log,
+    bool ownLog) :
+    ComplexXMLParser04x(version, addClassAttributes, comParser, log, ownLog)
 {
 }
 
