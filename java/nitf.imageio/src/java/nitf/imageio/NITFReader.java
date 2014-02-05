@@ -107,6 +107,12 @@ public class NITFReader extends ImageReader
         }
     }
 
+    @Override
+    public Object getInput()
+    {
+    	return this.handle;
+    }
+
     public synchronized void readHeader() throws IOException
     {
         if (reader != null)
