@@ -21,11 +21,157 @@
  */
 
 #include <six/sicd/ComplexXMLParser050.h>
-#include <six/SICommonXMLParser02x.h>
+#include <six/SICommonXMLParser01x.h>
 
 namespace
 {
 typedef xml::lite::Element* XMLElem;
+
+// This is not a "real" version of SI common
+// It matches the SICD 0.5 spec
+// Placing it here in an unnamed namespace to avoid any confusion - don't
+// expect that this would ever be useful elsewhere
+class SICommonXMLParser050 : public six::SICommonXMLParser01x
+{
+public:
+    SICommonXMLParser050(const std::string& uri, logging::Logger* log) :
+        six::SICommonXMLParser01x(uri, false, uri, log, false)
+    {
+    }
+
+    virtual XMLElem convertRadiometryToXML(
+        const six::Radiometric *obj,
+        XMLElem parent = NULL) const;
+
+    virtual void parseRadiometryFromXML(
+        const XMLElem radiometricXML,
+        six::Radiometric *obj) const;
+};
+
+XMLElem SICommonXMLParser050::convertRadiometryToXML(
+    const six::Radiometric* r, XMLElem parent) const
+{
+    std::string defaultURI = getSICommonURI();
+    XMLElem rXML = newElement("Radiometric", getDefaultURI(), parent);
+
+    if (!r->noiseLevel.noisePoly.empty())
+    {
+        createPoly2D("NoisePoly", defaultURI, r->noiseLevel.noisePoly, rXML);
+    }
+
+    if (!r->noiseLevel.noiseType.empty())
+    {
+        createString("NoiseLevelType", defaultURI, r->noiseLevel.noiseType,
+                     rXML);
+    }
+
+    if (!r->rcsSFPoly.empty())
+    {
+        createPoly2D("RCSSFPoly", defaultURI, r->rcsSFPoly, rXML);
+    }
+
+    if (!r->betaZeroSFPoly.empty())
+    {
+        createPoly2D("BetaZeroSFPoly", defaultURI, r->betaZeroSFPoly, rXML);
+    }
+
+    if (!r->sigmaZeroSFPoly.empty())
+    {
+        createPoly2D("SigmaZeroSFPoly",
+                     defaultURI,
+                     r->sigmaZeroSFPoly,
+                     rXML);
+    }
+
+    if (r->sigmaZeroSFIncidenceMap != six::AppliedType::NOT_SET)
+    {
+        createString(
+            "SigmaZeroSFIncidenceMap",
+            defaultURI,
+            six::toString<six::AppliedType>(r->sigmaZeroSFIncidenceMap),
+            rXML);
+    }
+
+    if (!r->gammaZeroSFPoly.empty())
+    {
+        createPoly2D("GammaZeroSFPoly", defaultURI, r->gammaZeroSFPoly, rXML);
+    }
+
+    if (r->gammaZeroSFIncidenceMap != six::AppliedType::NOT_SET)
+    {
+        createString(
+            "GammaZeroSFIncidenceMap",
+            defaultURI,
+            six::toString<six::AppliedType>(r->gammaZeroSFIncidenceMap),
+            rXML);
+    }
+    return rXML;
+}
+
+void SICommonXMLParser050::parseRadiometryFromXML(
+    const XMLElem radiometricXML,
+    six::Radiometric* radiometric) const
+{
+    XMLElem tmpElem = NULL;
+
+    tmpElem = getOptional(radiometricXML, "NoisePoly");
+    if (tmpElem)
+    {
+        //optional
+        parsePoly2D(tmpElem, radiometric->noiseLevel.noisePoly);
+    }
+
+    tmpElem = getOptional(radiometricXML, "NoiseLevelType");
+    if (tmpElem)
+    {
+        //optional
+        parseString(tmpElem, radiometric->noiseLevel.noiseType);
+    }
+
+    tmpElem = getOptional(radiometricXML, "RCSSFPoly");
+    if (tmpElem)
+    {
+        //optional
+        parsePoly2D(tmpElem, radiometric->rcsSFPoly);
+    }
+
+    tmpElem = getOptional(radiometricXML, "BetaZeroSFPoly");
+    if (tmpElem)
+    {
+        //optional
+        parsePoly2D(tmpElem, radiometric->betaZeroSFPoly);
+    }
+
+    tmpElem = getOptional(radiometricXML, "SigmaZeroSFPoly");
+    if (tmpElem)
+    {
+        //optional
+        parsePoly2D(tmpElem, radiometric->sigmaZeroSFPoly);
+    }
+
+    tmpElem = getOptional(radiometricXML, "SigmaZeroSFIncidenceMap");
+    if (tmpElem)
+    {
+        //optional
+        radiometric->sigmaZeroSFIncidenceMap =
+            six::toType<six::AppliedType>(tmpElem->getCharacterData());
+    }
+
+    tmpElem = getOptional(radiometricXML, "GammaZeroSFPoly");
+    if (tmpElem)
+    {
+        //optional
+        parsePoly2D(tmpElem, radiometric->gammaZeroSFPoly);
+    }
+
+    tmpElem = getOptional(radiometricXML, "GammaZeroSFIncidenceMap");
+    if (tmpElem)
+    {
+        //optional
+        radiometric->gammaZeroSFIncidenceMap =
+            six::toType<six::AppliedType>(tmpElem->getCharacterData());
+    }
+}
 }
 
 namespace six
@@ -36,8 +182,7 @@ ComplexXMLParser050::ComplexXMLParser050(const std::string& version,
                                          logging::Logger* log,
                                          bool ownLog) :
     ComplexXMLParser041(version, false, std::auto_ptr<six::SICommonXMLParser>(
-                           new six::SICommonXMLParser02x(
-                               versionToURI(version), false,
+                           new ::SICommonXMLParser050(
                                versionToURI(version), log)),
                         log, ownLog)
 {
