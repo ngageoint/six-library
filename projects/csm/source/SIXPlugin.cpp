@@ -38,7 +38,7 @@ namespace csm
 {
 const char SIXPlugin::PLUGIN_NAME[] = "SIX";
 const char SIXPlugin::MANUFACTURER[] = "GDAIS";
-const char SIXPlugin::RELEASE_DATE[] = "20130607";
+const char SIXPlugin::RELEASE_DATE[] = "20140310";
 const size_t SIXPlugin::SICD_MODEL_INDEX;
 const size_t SIXPlugin::SIDD_MODEL_INDEX;
 
