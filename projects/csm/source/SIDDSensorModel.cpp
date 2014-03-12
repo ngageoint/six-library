@@ -136,10 +136,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // get xml as string for sensor model state
         std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
-
-        mGridGeometry = six::sidd::Utilities::getGridGeometry(mData.get());
-        mGridTransform =
-                six::sidd::Utilities::getGridECEFTransform(mData.get());
+        initializeGrid();
     }
     catch (const except::Exception& ex)
     {
@@ -221,9 +218,7 @@ void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd,
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
                 siddXML, mSchemaDirs)));
-        mGridGeometry = six::sidd::Utilities::getGridGeometry(mData.get());
-        mGridTransform =
-                six::sidd::Utilities::getGridECEFTransform(mData.get());
+        initializeGrid();
     }
     catch (const except::Exception& ex)
     {
@@ -637,10 +632,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
                 domParser.getDocument(), mSchemaDirs)));
-
-        mGridGeometry = six::sidd::Utilities::getGridGeometry(mData.get());
-        mGridTransform =
-                six::sidd::Utilities::getGridECEFTransform(mData.get());
+        initializeGrid();
     }
     catch (const except::Exception& ex)
     {
@@ -709,6 +701,18 @@ void SIDDSensorModel::setSchemaDir(const std::string& dataDir)
         mSchemaDirs.resize(1);
         mSchemaDirs[0] = schemaDir;
     }
+}
+
+void SIDDSensorModel::initializeGrid()
+{
+    // Sun Studio compiler can't assign non-const auto_ptr to const
+    // auto_ptr, so need to release the other auto_ptr and reset our member
+    // variable with the raw pointer
+    mGridGeometry.reset(
+            six::sidd::Utilities::getGridGeometry(mData.get()).release());
+
+    mGridTransform.reset(
+            six::sidd::Utilities::getGridECEFTransform(mData.get()).release());
 }
 }
 }
