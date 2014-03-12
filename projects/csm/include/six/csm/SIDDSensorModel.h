@@ -317,6 +317,8 @@ private:
 
     void initializeFromISD(const ::csm::Nitf21Isd& isd, size_t imageIndex);
 
+    void initializeGrid();
+
     void setSchemaDir(const std::string& schemaDir);
 
     types::RowCol<double> ecefToRowCol(const scene::Vector3& ecef) const;
