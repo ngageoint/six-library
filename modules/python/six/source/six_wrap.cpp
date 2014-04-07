@@ -2658,10 +2658,10 @@ namespace swig {
         for (size_t i = 0; i < numData; ++i)
         {
             six::Data* d = container->getData(i);
-            unsigned long nbpp = d->getNumBytesPerPixel();
-            unsigned long height = d->getNumRows();
-            unsigned long width = d->getNumCols();
-            unsigned long imageSize = nbpp * width * height;
+            size_t nbpp = d->getNumBytesPerPixel();
+            size_t height = d->getNumRows();
+            size_t width = d->getNumCols();
+            size_t imageSize = nbpp * width * height;
             six::UByte *buf = new six::UByte[imageSize];
             region.setBuffer(buf);
             reader->interleaved(region, i);
