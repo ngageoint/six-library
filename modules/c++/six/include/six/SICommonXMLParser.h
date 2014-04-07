@@ -73,7 +73,7 @@ public:
     XMLElem createRowCol(const std::string&, const RowColLatLon& value,
             XMLElem parent = NULL) const;
     XMLElem createRangeAzimuth(const std::string& name,
-            const RangeAzimuth<double>& value, XMLElem parent = NULL) const;
+            const types::RgAz<double>& value, XMLElem parent = NULL) const;
     XMLElem createLatLon(const std::string& name, const LatLon& value,
             XMLElem parent = NULL) const;
     XMLElem createLatLonAlt(const std::string& name, const LatLonAlt& value,
@@ -109,7 +109,7 @@ public:
     void parseLatLon(XMLElem parent, LatLon& ll) const;
     void parseLatLons(XMLElem pointsXML, const std::string& pointName,
             std::vector<LatLon>& llVec) const;
-    void parseRangeAzimuth(XMLElem parent, RangeAzimuth<double>& value) const;
+    void parseRangeAzimuth(XMLElem parent, types::RgAz<double>& value) const;
 
     void parseRowColDouble(XMLElem parent, const std::string& rowName,
             const std::string& colName, RowColDouble& rc) const;
