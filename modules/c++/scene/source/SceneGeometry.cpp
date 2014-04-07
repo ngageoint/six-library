@@ -20,9 +20,12 @@
  *
  */
 
+#include <math.h>
+
 #include <math/Constants.h>
-#include "scene/SceneGeometry.h"
-#include "scene/ECEFToLLATransform.h"
+#include <scene/Utilities.h>
+#include <scene/ECEFToLLATransform.h>
+#include <scene/SceneGeometry.h>
 
 namespace
 {
@@ -30,6 +33,15 @@ inline
 double square(double val)
 {
     return (val * val);
+}
+
+inline
+scene::Vector3 normalizedCross(const scene::Vector3& lhs,
+                               const scene::Vector3& rhs)
+{
+    scene::Vector3 crossVec(math::linear::cross(lhs, rhs));
+    crossVec.normalize();
+    return crossVec;
 }
 }
 
@@ -48,19 +60,34 @@ SceneGeometry::SceneGeometry(const Vector3& arpVel,
 SceneGeometry::SceneGeometry(const Vector3& arpVel,
                              const Vector3& arpPos,
                              const Vector3& refPos,
-                             const Vector3& row,
-                             const Vector3& col) :
+                             const Vector3& imageRow,
+                             const Vector3& imageCol) :
     mVa(arpVel),
     mPa(arpPos),
     mPo(refPos),
-    mR(new Vector3(row)),
-    mC(new Vector3(col))
+    mImageRow(new Vector3(imageRow)),
+    mImageCol(new Vector3(imageCol))
 {
     initialize();
 }
 
-SceneGeometry::~SceneGeometry()
+SceneGeometry::SceneGeometry(const Vector3& arpVel,
+                             const Vector3& arpPos,
+                             const Vector3& refPos,
+                             const Vector3& imageRow,
+                             const Vector3& imageCol,
+                             const Vector3& opX,
+                             const Vector3& opY) :
+    mVa(arpVel),
+    mPa(arpPos),
+    mPo(refPos),
+    mImageRow(new Vector3(imageRow)),
+    mImageCol(new Vector3(imageCol)),
+    mXo(new Vector3(opX)),
+    mYo(new Vector3(opY)),
+    mZo(new Vector3(normalizedCross(*mXo, *mYo)))
 {
+    initialize();
 }
 
 void SceneGeometry::initialize()
@@ -108,27 +135,62 @@ void SceneGeometry::initialize()
 void SceneGeometry::setImageVectors(const Vector3& row,
                                     const Vector3& col)
 {
-    mR.reset(new Vector3(row));
-    mC.reset(new Vector3(col));
+    mImageRow.reset(new Vector3(row));
+    mImageCol.reset(new Vector3(col));
 }
 
-Vector3 SceneGeometry::getRowVector() const
+void SceneGeometry::setOutputPlaneVectors(const Vector3& opX,
+                                          const Vector3& opY)
 {
-    if (mR.get() == NULL)
-    {
-        throw except::Exception(Ctxt("The Row vector is not set!"));
-    }
-    return *mR;
+    mXo.reset(new Vector3(opX));
+    mYo.reset(new Vector3(opY));
+    mZo.reset(new Vector3(normalizedCross(*mXo, *mYo)));
 }
 
-Vector3 SceneGeometry::getColVector() const
+Vector3 SceneGeometry::getImageRowVector() const
 {
-    if (mC.get() == NULL)
+    if (mImageRow.get() == NULL)
     {
-        throw except::Exception(Ctxt("The Column vector is not set!"));
+        throw except::Exception(Ctxt("The image row vector is not set!"));
+    }
+    return *mImageRow;
+}
+
+Vector3 SceneGeometry::getImageColVector() const
+{
+    if (mImageCol.get() == NULL)
+    {
+        throw except::Exception(Ctxt("The image column vector is not set!"));
     }
 
-    return *mC;
+    return *mImageCol;
+}
+
+Vector3 SceneGeometry::getOPXVector() const
+{
+    if (mXo.get() == NULL)
+    {
+        throw except::Exception(Ctxt("The output plane x vector is not set!"));
+    }
+    return *mXo;
+}
+
+Vector3 SceneGeometry::getOPYVector() const
+{
+    if (mYo.get() == NULL)
+    {
+        throw except::Exception(Ctxt("The output plane y vector is not set!"));
+    }
+    return *mYo;
+}
+
+Vector3 SceneGeometry::getOPZVector() const
+{
+    if (mZo.get() == NULL)
+    {
+        throw except::Exception(Ctxt("The output plane z vector is not set!"));
+    }
+    return *mZo;
 }
 
 SideOfTrack SceneGeometry::getSideOfTrack() const
@@ -138,18 +200,19 @@ SideOfTrack SceneGeometry::getSideOfTrack() const
 
 double SceneGeometry::getImageAngle(const Vector3& vec) const
 {
-    return atan2(getColVector().dot(vec),
-                 getRowVector().dot(vec)) * math::Constants::RADIANS_TO_DEGREES;
+    return atan2(getImageColVector().dot(vec),
+                 getImageRowVector().dot(vec)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
-double SceneGeometry::getGrazingAngle() const
+double SceneGeometry::getGrazingAngle(const Vector3& normalVec) const
 {
-    return asin(mXs.dot(mZg)) * math::Constants::RADIANS_TO_DEGREES;
+    return asin(mXs.dot(normalVec)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
-double SceneGeometry::getTiltAngle() const
+double SceneGeometry::getTiltAngle(const Vector3& normalVec) const
 {
-    return atan2(mZg.dot(mYs), mZg.dot(mZs)) * math::Constants::RADIANS_TO_DEGREES;
+    return atan2(normalVec.dot(mYs),
+                 normalVec.dot(mZs)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
 double SceneGeometry::getDopplerConeAngle() const
@@ -168,11 +231,10 @@ double SceneGeometry::getSquintAngle() const
     return atan2((-1.0 * mXs).dot(y), (-1.0 * mXs).dot(x)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
-double SceneGeometry::getSlopeAngle() const
+double SceneGeometry::getSlopeAngle(const Vector3& normalVec) const
 {
-    return acos(mZs.dot(mZg)) * math::Constants::RADIANS_TO_DEGREES;
+    return acos(mZs.dot(normalVec)) * math::Constants::RADIANS_TO_DEGREES;
 }
-
 
 double SceneGeometry::getAzimuthAngle() const
 {
@@ -202,9 +264,48 @@ double SceneGeometry::getMultiPathAngle() const
     return getImageAngle(getMultiPathVector());
 }
 
+double SceneGeometry::getOPAngle(const Vector3& vec) const
+{
+    // Use the vector's projections onto the OP X, Y vectors
+    // and use atan2 in a way such that 0 starts at mYo and +90 is mXo
+    double opAngle = atan2(getOPXVector().dot(vec), getOPYVector().dot(vec)) *
+        math::Constants::RADIANS_TO_DEGREES;
+
+    // Keep it in range
+    if (opAngle < 0)
+    {
+        opAngle += 360;
+    }
+    else if (opAngle >= 360)
+    {
+        opAngle -= 360;
+    }
+
+    return opAngle;
+}
+
+double SceneGeometry::getOPNorthAngle() const
+{
+    return getOPAngle(mNorth);
+}
+
+double SceneGeometry::getOPLayoverAngle() const
+{
+    const Vector3 planeZ = getOPZVector();
+    return getOPAngle(planeZ - (mZs / mZs.dot(planeZ)));
+}
+
+double SceneGeometry::getOPShadowAngle() const
+{
+    const Vector3 planeZ = getOPZVector();
+    const Vector3 groundShadow = planeZ - (mXs / mXs.dot(planeZ));
+    const double scale = groundShadow.dot(planeZ) / mZs.dot(planeZ);
+    return getOPAngle(groundShadow - mZs * scale);
+}
+
 Vector3 SceneGeometry::getNorthVector() const
 {
-    const Vector3 planeZ = math::linear::cross(getRowVector(), getColVector());
+    const Vector3 planeZ = math::linear::cross(getImageRowVector(), getImageColVector());
     const double scale = mNorth.dot(planeZ) / mZs.dot(planeZ);
     return  mNorth - (mZs * scale);
 }
@@ -216,7 +317,7 @@ double SceneGeometry::getNorthAngle() const
 
 Vector3 SceneGeometry::getLayoverVector() const
 {
-    const Vector3 planeZ = math::linear::cross(getRowVector(), getColVector());
+    const Vector3 planeZ = math::linear::cross(getImageRowVector(), getImageColVector());
     return planeZ - (mZs / mZs.dot(planeZ));
 }
 
@@ -233,7 +334,8 @@ AngleMagnitude SceneGeometry::getLayover() const
 
 double SceneGeometry::getETPLayoverAngle() const
 {
-    const double slopeAngleRad = getSlopeAngle() * math::Constants::DEGREES_TO_RADIANS;
+    const double slopeAngleRad =
+            getETPSlopeAngle() * math::Constants::DEGREES_TO_RADIANS;
 
     const Vector3 layoverDir = mZs - 1 / cos(slopeAngleRad) * mZs;
     const Vector3 east = math::linear::cross(mNorth, mZg);
@@ -245,7 +347,7 @@ double SceneGeometry::getETPLayoverAngle() const
 
 Vector3 SceneGeometry::getShadowVector() const
 {
-    const Vector3 planeZ = math::linear::cross(getRowVector(), getColVector());
+    const Vector3 planeZ = math::linear::cross(getImageRowVector(), getImageColVector());
     const Vector3 groundShadow = mZg - (mXs / mXs.dot(mZg));
     const double scale = groundShadow.dot(planeZ)/mZs.dot(planeZ);
     return groundShadow - mZs * scale;
@@ -261,12 +363,10 @@ AngleMagnitude SceneGeometry::getShadow() const
     return shadow;
 }
 
-void SceneGeometry::getGroundResolution(double resRg,
-                                        double resAz,
-                                        double& resRow,
-                                        double& resCol) const
+types::RowCol<double>
+SceneGeometry::getGroundResolution(const types::RgAz<double>& res) const
 {
-    const Vector3 z = math::linear::cross(getRowVector(), getColVector());
+    const Vector3 z = math::linear::cross(getImageRowVector(), getImageColVector());
     const double grazingAngleRad = asin(mXs.dot(z));
     const double tiltAngleRad = atan2(z.dot(mYs), z.dot(mZs));
     const double rotAngleRad =
@@ -292,11 +392,12 @@ void SceneGeometry::getGroundResolution(double resRg,
 
     const double kc2 = square(cosRot * secTilt);
 
-    const double resRgSq = square(resRg);
-    const double resAzSq = square(resAz);
+    const types::RgAz<double> resSq(square(res.rg), square(res.az));
 
-    resRow = sqrt(kr1 * resRgSq + kr2 * resAzSq);
-    resCol = sqrt(kc1 * resRgSq + kc2 * resAzSq);
+    const types::RowCol<double> groundRes(
+            sqrt(kr1 * resSq.rg + kr2 * resSq.az),
+            sqrt(kc1 * resSq.rg + kc2 * resSq.az));
+    return groundRes;
 }
 }
 

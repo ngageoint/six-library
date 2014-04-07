@@ -38,10 +38,10 @@ template<> double Init::undefined<double>()
     return std::numeric_limits<double>::infinity();
 }
 
-template<> RangeAzimuth<double>Init::undefined<RangeAzimuth<double> >()
+template<> types::RgAz<double>Init::undefined<types::RgAz<double> >()
 {
-    return RangeAzimuth<double>(Init::undefined<double>(), Init::undefined<
-            double>());
+    return types::RgAz<double>(Init::undefined<double>(),
+                               Init::undefined<double>());
 }
 
 template<> RowColInt Init::undefined<RowColInt>()

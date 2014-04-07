@@ -326,8 +326,8 @@ int main(int argc, char** argv)
             six::sidd::Collection* parent =
                 data->exploitationFeatures->collections[0].get();
 
-            parent->information->resolution.range = 0;
-            parent->information->resolution.azimuth = 0;
+            parent->information->resolution.rg = 0;
+            parent->information->resolution.az = 0;
             parent->information->collectionDuration = 0;
             parent->information->collectionDateTime = six::DateTime();
             parent->information->radarMode = six::RadarModeType::SPOTLIGHT;

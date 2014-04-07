@@ -1950,8 +1950,8 @@ int main(int argc, char** argv)
         // values would mirror what was in the SICD XML
         // Here they are dummy values
         //--------------------------------------------------------
-        parent->information->resolution.range = 0;
-        parent->information->resolution.azimuth = 0;
+        parent->information->resolution.rg = 0;
+        parent->information->resolution.az = 0;
         parent->information->collectionDuration = 0;
 
         // This demo sets the collection time to now (not true)

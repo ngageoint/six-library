@@ -111,36 +111,6 @@ typedef scene::LatLonAlt LatLonAlt;
 
 typedef except::Context ValidationContext;
 
-/*!
- *  \struct RangeAzimuth
- *  \brief Range/azimuth pair type
- *
- *
- *  Templated pair storage for  range azimuth values.
- *
- */
-template<typename T> struct RangeAzimuth
-{
-    RangeAzimuth(T r = 0, T a = 0) :
-        range(r), azimuth(a)
-    {
-    }
-    T range;
-    T azimuth;
-
-    /*!
-     *  Compare the types considering that some specializations (e.g., double)
-     *  are not exact
-     */
-    bool operator==(const RangeAzimuth<T>& t) const
-    {
-        return math::linear::equals(range, t.range)
-                && math::linear::equals(azimuth, t.azimuth);
-    }
-
-};
-
-
 // These are heavily used and we don't want any mistakes
 typedef types::RowCol<double> RowColDouble;
 typedef types::RowCol<sys::SSize_T> RowColInt;

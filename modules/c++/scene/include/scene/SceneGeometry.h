@@ -22,28 +22,25 @@
 #ifndef __SCENE_SCENE_GEOMETRY_H__
 #define __SCENE_SCENE_GEOMETRY_H__
 
-#include <memory>
-
-#include "scene/Types.h"
-// For ECEF/LLA conversions
-#include "scene/Utilities.h"
+#include <mem/ScopedCopyablePtr.h>
+#include <scene/Types.h>
+#include <types/RgAz.h>
+#include <types/RowCol.h>
 
 namespace scene
 {
-
-//! \todo Remove LocalPlane*.  This should be an ETP.  Using another plane
-//! may produce incorrect results.
-//! To compute non-scene angles, you must have an image plane!
 class SceneGeometry
 {
 public:
-
     /*!
      *  Establishes the scene, computing the slant plane, ground plane
      *  normal, ground track and ground range vector.
      *  
      *  No computations involving the image geometry can be performed prior
      *  to calling setImageVectors().
+     *
+     *  No computations involving the output plane geometry can be performed
+     *  prior to calling setOutputPlaneVectors().
      *
      */
     SceneGeometry(const Vector3& arpVel,
@@ -52,58 +49,135 @@ public:
 
     /*!
      *
-     *  Same as above but with a row and column vector for the image plane
-     *  provided.  They will not be used for initial computations, but
-     *  computations involving the image geometry can be immediately performed
+     *  Same as above but with a row and column vector for the image
+     *  (i.e. slant) plane provided.  They will not be used for initial
+     *  computations, but computations involving the image geometry can be
+     *  immediately performed
      *  rather than needing to call setImageVectors() first.
      *
      */
     SceneGeometry(const Vector3& arpVel,
                   const Vector3& arpPos,
                   const Vector3& refPos,
-                  const Vector3& row,
-                  const Vector3& col);
-
-    virtual ~SceneGeometry();
+                  const Vector3& imageRow,
+                  const Vector3& imageCol);
 
     /*!
-     *  Set the image vectors.  This must be done prior to any computations
-     *  involving the image geometry if they were not provided at construction
-     *  time.
+     *
+     *  Same as above but with a row and column vector for the output plane
+     *  provided as well.  They will not be used for initial computations, but
+     *  computations involving the output plane geometry can be
+     *  immediately performed rather than needing to call
+     *  setOutputPlaneVectors() first.
+     *
+     */
+    SceneGeometry(const Vector3& arpVel,
+                  const Vector3& arpPos,
+                  const Vector3& refPos,
+                  const Vector3& imageRow,
+                  const Vector3& imageCol,
+                  const Vector3& opX,
+                  const Vector3& opY);
+
+    /*!
+     *  Set the image (i.e. slant) vectors.  This must be done prior to any
+     *  computations involving the image geometry if they were not provided at
+     *  construction time.
      */
     void setImageVectors(const Vector3& row, const Vector3& col);
+
+    /*!
+     *  Set the output plane vectors.  This must be done prior to any
+     *  computations involving the output plane geometry if they were not
+     *  provided at construction time.
+     */
+    void setOutputPlaneVectors(const Vector3& opX, const Vector3& opY);
 
     /*!
      *  This produces the image row vector as it is currently stored
      *
      */
-    Vector3 getRowVector() const;
-    Vector3 getColVector() const;
-    virtual Vector3 getARPPosition() const { return mPa; }
-    virtual Vector3 getARPVelocity() const { return mVa; }
-    virtual Vector3 getReferencePosition() const { return mPo; }
-    virtual Vector3 getGroundTrack() const { return mVg; }
-    virtual Vector3 getGroundRange() const { return mRg; }
-    virtual SideOfTrack getSideOfTrack() const;
-    virtual double getImageAngle(const Vector3& vec) const;
-    virtual Vector3 getSlantPlaneX() const { return mXs; }
-    virtual Vector3 getSlantPlaneY() const { return mYs; }
-    virtual Vector3 getSlantPlaneZ() const { return mZs; }
-    virtual Vector3 getGroundPlaneNormal() const { return mZg; }
-    virtual double getGrazingAngle() const;
-    virtual double getTiltAngle() const;
-    virtual double getDopplerConeAngle() const;
-    virtual double getSquintAngle() const;
-    virtual double getSlopeAngle() const;
-    virtual double getAzimuthAngle() const;
-    virtual double getRotationAngle() const;
-    virtual Vector3 getMultiPathVector() const;
-    virtual double getMultiPathAngle() const;
+    Vector3 getImageRowVector() const;
+
+    /*!
+     *  This produces the image col vector as it is currently stored
+     *
+     */
+    Vector3 getImageColVector() const;
+
+    Vector3 getOPXVector() const;
+    Vector3 getOPYVector() const;
+    Vector3 getOPZVector() const;
+
+    Vector3 getARPPosition() const { return mPa; }
+    Vector3 getARPVelocity() const { return mVa; }
+    Vector3 getReferencePosition() const { return mPo; }
+    Vector3 getGroundTrack() const { return mVg; }
+    Vector3 getGroundRange() const { return mRg; }
+    SideOfTrack getSideOfTrack() const;
+    double getImageAngle(const Vector3& vec) const;
+    Vector3 getSlantPlaneX() const { return mXs; }
+    Vector3 getSlantPlaneY() const { return mYs; }
+    Vector3 getSlantPlaneZ() const { return mZs; }
+    Vector3 getGroundPlaneNormal() const { return mZg; }
+
+    // In general, if you are interested in populating a SICD/SIDD with
+    // appropriate metadata, you want to use the ETP (Earth Tangent Plane)
+    // versions of these functions.  If you are interested in populating a
+    // TRE-based NITF with the appropriate metadata, you want to use the OP
+    // (Output Plane) versions of these functions.
+
+    double getGrazingAngle(const Vector3& normalVec) const;
+    double getETPGrazingAngle() const
+    {
+        return getGrazingAngle(mZg);
+    }
+    double getOPGrazingAngle() const
+    {
+        return getGrazingAngle(getOPZVector());
+    }
+
+    double getTiltAngle(const Vector3& normalVec) const;
+    double getETPTiltAngle() const
+    {
+        return getTiltAngle(mZg);
+    }
+    double getOPTiltAngle() const
+    {
+        return getTiltAngle(getOPZVector());
+    }
+
+    double getDopplerConeAngle() const;
+    double getSquintAngle() const;
+
+    double getSlopeAngle(const Vector3& normalVec) const;
+    double getETPSlopeAngle() const
+    {
+        return getSlopeAngle(mZg);
+    }
+    double getOPSlopeAngle() const
+    {
+        return getSlopeAngle(getOPZVector());
+    }
+
+    double getAzimuthAngle() const;
+    double getRotationAngle() const;
+    Vector3 getMultiPathVector() const;
+    double getMultiPathAngle() const;
+
+    /*!
+     * The angle to vec (in [0, 360) degrees CW+) in the output plane from the
+     * y vector of the output plane
+     */
+    double getOPAngle(const Vector3& vec) const;
+    double getOPNorthAngle() const;
+    double getOPLayoverAngle() const;
+    double getOPShadowAngle() const;
 
     /*!
      * The north vector in the pixel grid
      */
-    virtual Vector3 getNorthVector() const;
+    Vector3 getNorthVector() const;
 
     /*
      * The north vector at scene center
@@ -116,20 +190,20 @@ public:
     /*!
      * The north angle (in [-180, 180] degrees) in the pixel grid
      */
-    virtual double getNorthAngle() const;
+    double getNorthAngle() const;
 
-    virtual double getHeadingAngle() const;
+    double getHeadingAngle() const;
 
     /*!
      * The layover vector in the pixel grid
      */
-    virtual Vector3 getLayoverVector() const;
+    Vector3 getLayoverVector() const;
 
     /*!
      * The layover angle (in [-180, 180] degrees) and magnitude in the pixel
      * grid
      */
-    virtual AngleMagnitude getLayover() const;
+    AngleMagnitude getLayover() const;
 
     /*
      * The layover angle (in [-180, 180] degrees) in the earth tangent plane
@@ -137,10 +211,10 @@ public:
      */
     double getETPLayoverAngle() const;
 
-    virtual Vector3 getShadowVector() const;
-    virtual AngleMagnitude getShadow() const;
-    virtual void getGroundResolution(double resRg, double resAz,
-                                     double& row, double& col) const;
+    Vector3 getShadowVector() const;
+    AngleMagnitude getShadow() const;
+    types::RowCol<double>
+    getGroundResolution(const types::RgAz<double>& res) const;
 
 private:
     // Noncopyable
@@ -184,14 +258,15 @@ protected:
     Vector3 mNorth;
 
 private:
-    //! Image plane row vector
-    std::auto_ptr<const Vector3> mR;
+    //! Image (i.e. slant) plane row and col vectors
+    mem::ScopedCopyablePtr<const Vector3> mImageRow;
+    mem::ScopedCopyablePtr<const Vector3> mImageCol;
 
-    //! Image plane column vector
-    std::auto_ptr<const Vector3> mC;
+    //! Output plane x/y/z vectors
+    mem::ScopedCopyablePtr<const Vector3> mXo;
+    mem::ScopedCopyablePtr<const Vector3> mYo;
+    mem::ScopedCopyablePtr<const Vector3> mZo;
 };
-
 }
 
 #endif
-
