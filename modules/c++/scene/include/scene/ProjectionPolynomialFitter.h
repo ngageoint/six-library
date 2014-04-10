@@ -44,7 +44,7 @@ public:
      * outExtent using sceneToImage().
      *
      * \param projModel Projection model that knows how to use sceneToImage()
-     * to convert from an ECEF location to meters from the slant plane ORP
+     * to convert from an ECEF location to meters from the slant plane SCP
      * \param gridTransform Transform that knows how to convert from
      * output row/col pixel space to ECEF space
      * \param outExtent Output extent in pixels
@@ -71,7 +71,7 @@ public:
         return mOutputPlaneCols;
     }
 
-    // Returns the scene coordinates (i.e. meters from the slant plane ORP)
+    // Returns the scene coordinates (i.e. meters from the slant plane SCP)
     // computed for each grid sample in case you want to do your own
     // polynomial fitting
     const math::linear::Matrix2D<types::RowCol<double> >&

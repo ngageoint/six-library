@@ -67,8 +67,7 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
             const scene::Vector3 sPos =
                     gridTransform.rowColToECEF(currentOffset);
 
-            // Call sceneToImage() to get meters from the ORP in the slant
-            // plane
+            // Call sceneToImage() to get meters from the slant plane SCP
             double timeCOA(0.0);
             mSceneCoordinates(ii, jj) =
                     projModel.sceneToImage(sPos, &timeCOA);
@@ -101,10 +100,10 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
     {
         for (size_t jj = 0; jj < mNumPoints1D; ++jj)
         {
-            // sceneCoord is in meters from the slant plane ORP
+            // sceneCoord is in meters from the slant plane SCP
             // So, divide by the sample spacing to get it in pixels, then
-            // offset by the slant plane ORP.  Need to further offset to take
-            // non-zero inPixelStart into account.
+            // offset by the slant plane SCP pixel.  Need to further offset to
+            // take non-zero inPixelStart into account.
             const types::RowCol<double> sceneCoord(mSceneCoordinates(ii, jj));
 
             slantPlaneRows(ii, jj) =
