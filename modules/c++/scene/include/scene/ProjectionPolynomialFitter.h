@@ -109,6 +109,10 @@ public:
      * when outputToSlantRow/Col polynomials are applied
      * \param interimSampleSpacing Sample spacing of the image when
      * outputToSlantRow/Col polynomials are applied
+     * \param outPixelStart Output space start pixel (i.e. if this is
+     * non-zero, it indicates the SCP used with gridTransform is with respect
+     * to a global space.  This basically translates to the segment's
+     * startLine/startSample values for a multi-segment SICD).
      * \param polyOrderX Polynomial order to use when fitting the polynomials
      * in the x direction
      * \param polyOrderY Polynomial order to use when fitting the polynomials
@@ -127,6 +131,7 @@ public:
             const types::RowCol<double>& inSceneCenter,
             const types::RowCol<double>& interimSceneCenter,
             const types::RowCol<double>& interimSampleSpacing,
+            const types::RowCol<double>& outPixelStart,
             size_t polyOrderX,
             size_t polyOrderY,
             math::poly::TwoD<double>& outputToSlantRow,
