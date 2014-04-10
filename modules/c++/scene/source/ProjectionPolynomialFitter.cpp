@@ -81,6 +81,7 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
         const types::RowCol<double>& inSceneCenter,
         const types::RowCol<double>& interimSceneCenter,
         const types::RowCol<double>& interimSampleSpacing,
+        const types::RowCol<double>& outPixelStart,
         size_t polyOrderX,
         size_t polyOrderY,
         math::poly::TwoD<double>& outputToSlantRow,
@@ -95,6 +96,8 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
 
     math::linear::Matrix2D<double> slantPlaneRows(mNumPoints1D, mNumPoints1D);
     math::linear::Matrix2D<double> slantPlaneCols(mNumPoints1D, mNumPoints1D);
+    math::linear::Matrix2D<double> outputPlaneRows(mNumPoints1D, mNumPoints1D);
+    math::linear::Matrix2D<double> outputPlaneCols(mNumPoints1D, mNumPoints1D);
 
     for (size_t ii = 0; ii < mNumPoints1D; ++ii)
     {
@@ -113,17 +116,23 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
             slantPlaneCols(ii, jj) =
                     sceneCoord.col / interimSampleSpacing.col +
                     interimSceneCenter.col - aoiOffset.col;
+
+            // Allow the caller to offset the row/col that we fit to
+            outputPlaneRows(ii, jj) =
+                    mOutputPlaneRows(ii,jj) - outPixelStart.row;
+            outputPlaneCols(ii, jj) =
+                    mOutputPlaneCols(ii,jj) - outPixelStart.col;
         }
     }
 
     // Now fit the polynomials
-    outputToSlantRow = math::poly::fit(mOutputPlaneRows,
-                                       mOutputPlaneCols,
+    outputToSlantRow = math::poly::fit(outputPlaneRows,
+                                       outputPlaneCols,
                                        slantPlaneRows,
                                        polyOrderX, polyOrderY);
 
-    outputToSlantCol = math::poly::fit(mOutputPlaneRows,
-                                       mOutputPlaneCols,
+    outputToSlantCol = math::poly::fit(outputPlaneRows,
+                                       outputPlaneCols,
                                        slantPlaneCols,
                                        polyOrderX, polyOrderY);
 
@@ -137,8 +146,8 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
         {
             for (size_t jj = 0; jj < mNumPoints1D; ++jj)
             {
-                const double row(mOutputPlaneRows(ii, jj));
-                const double col(mOutputPlaneCols(ii, jj));
+                const double row(outputPlaneRows(ii, jj));
+                const double col(outputPlaneCols(ii, jj));
 
                 double diff =
                         slantPlaneRows(ii, jj) - outputToSlantRow(row, col);
