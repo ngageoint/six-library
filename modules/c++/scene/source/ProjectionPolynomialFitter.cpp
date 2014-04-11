@@ -82,7 +82,6 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
         const types::RowCol<double>& interimSceneCenter,
         const types::RowCol<double>& interimSampleSpacing,
         const types::RowCol<double>& outPixelStart,
-        const types::RowCol<double>& outPixelScaleFactor,
         size_t polyOrderX,
         size_t polyOrderY,
         math::poly::TwoD<double>& outputToSlantRow,
@@ -118,14 +117,12 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
                     sceneCoord.col / interimSampleSpacing.col +
                     interimSceneCenter.col - aoiOffset.col;
 
-            // Allow the caller to scale and offset the row/col that we fit to
+            // Allow the caller to offset the row/col that we fit to
             outputPlaneRows(ii, jj) =
-                    mOutputPlaneRows(ii,jj) * outPixelScaleFactor.row -
-                    outPixelStart.row;
+                    mOutputPlaneRows(ii,jj) - outPixelStart.row;
 
             outputPlaneCols(ii, jj) =
-                    mOutputPlaneCols(ii,jj) * outPixelScaleFactor.col -
-                    outPixelStart.col;
+                    mOutputPlaneCols(ii,jj) - outPixelStart.col;
         }
     }
 
@@ -172,32 +169,6 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
             *meanResidualErrorCol = errorSumCol / numPoints;
         }
     }
-}
-
-void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
-        const types::RowCol<size_t>& inPixelStart,
-        const types::RowCol<double>& inSceneCenter,
-        const types::RowCol<double>& interimSceneCenter,
-        const types::RowCol<double>& interimSampleSpacing,
-        const types::RowCol<double>& outPixelStart,
-        size_t polyOrderX,
-        size_t polyOrderY,
-        math::poly::TwoD<double>& outputToSlantRow,
-        math::poly::TwoD<double>& outputToSlantCol,
-        double* meanResidualErrorRow,
-        double* meanResidualErrorCol) const
-{
-    fitOutputToSlantPolynomials(inPixelStart,
-                                inSceneCenter,
-                                interimSceneCenter,
-                                interimSampleSpacing,
-                                types::RowCol<double>(1.0, 1.0),
-                                polyOrderX,
-                                polyOrderY,
-                                outputToSlantRow,
-                                outputToSlantCol,
-                                meanResidualErrorRow,
-                                meanResidualErrorCol);
 }
 
 void ProjectionPolynomialFitter::fitTimeCOAPolynomial(
@@ -254,6 +225,7 @@ void ProjectionPolynomialFitter::fitTimeCOAPolynomial(
 
 void ProjectionPolynomialFitter::fitPixelBasedTimeCOAPolynomial(
         const types::RowCol<double>& outPixelStart,
+        const types::RowCol<double>& outPixelScaleFactor,
         size_t polyOrderX,
         size_t polyOrderY,
         math::poly::TwoD<double>& timeCOAPoly,
@@ -266,9 +238,14 @@ void ProjectionPolynomialFitter::fitPixelBasedTimeCOAPolynomial(
     {
         for (size_t jj = 0; jj < mNumPoints1D; ++jj)
         {
-            // Allow the caller to offset the row/col that we fit to
-            rowMapping(ii, jj) = mOutputPlaneRows(ii,jj) - outPixelStart.row;
-            colMapping(ii, jj) = mOutputPlaneCols(ii,jj) - outPixelStart.col;
+            // Allow the caller to scale and offset the row/col that we fit to
+            rowMapping(ii, jj) =
+                    mOutputPlaneRows(ii,jj) * outPixelScaleFactor.row -
+                    outPixelStart.row;
+
+            colMapping(ii, jj) =
+                    mOutputPlaneCols(ii,jj) * outPixelScaleFactor.col -
+                    outPixelStart.col;
         }
     }
 
