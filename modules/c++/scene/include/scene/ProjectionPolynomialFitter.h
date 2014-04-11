@@ -113,11 +113,6 @@ public:
      * non-zero, it indicates the SCP used with gridTransform is with respect
      * to a global space.  This basically translates to the segment's
      * startLine/startSample values for a multi-segment SICD).
-     * \param outPixelScaleFactor Scale factor to multiply output plane pixel
-     * samples by (applied before outPixelStart is subtracted).  This is
-     * useful if your output plane sample spacing is actually different than
-     * what gridTransform contained (in this case, set outPixelScaleFactor =
-     * newSampleSpacing / origSampleSpacing)
      * \param polyOrderX Polynomial order to use when fitting the polynomials
      * in the x direction
      * \param polyOrderY Polynomial order to use when fitting the polynomials
@@ -131,21 +126,6 @@ public:
      * \param meanResidualErrorCol [output] Optional.  Mean residual error in
      * outputToSlantCol.
      */
-    void fitOutputToSlantPolynomials(
-            const types::RowCol<size_t>& inPixelStart,
-            const types::RowCol<double>& inSceneCenter,
-            const types::RowCol<double>& interimSceneCenter,
-            const types::RowCol<double>& interimSampleSpacing,
-            const types::RowCol<double>& outPixelStart,
-            const types::RowCol<double>& outPixelScaleFactor,
-            size_t polyOrderX,
-            size_t polyOrderY,
-            math::poly::TwoD<double>& outputToSlantRow,
-            math::poly::TwoD<double>& outputToSlantCol,
-            double* meanResidualErrorRow = NULL,
-            double* meanResidualErrorCol = NULL) const;
-
-    // Same as above but applies no output pixel scale factor
     void fitOutputToSlantPolynomials(
             const types::RowCol<size_t>& inPixelStart,
             const types::RowCol<double>& inSceneCenter,
@@ -198,6 +178,11 @@ public:
      * polynomial, so if you want a polynomial in units of 1-based pixels from
      * the upper-left corner, you would set this to (-1, -1) plus whatever
      * compensation is needed if it's a multi-segment SICD.
+     * \param outPixelScaleFactor Scale factor to multiply output plane pixel
+     * samples by (applied before outPixelStart is subtracted).  This is
+     * useful if your output plane sample spacing is actually different than
+     * what gridTransform contained (in this case, set outPixelScaleFactor =
+     * newSampleSpacing / origSampleSpacing)
      * \param polyOrderX Polynomial order to use when fitting the polynomials
      * in the x direction
      * \param polyOrderY Polynomial order to use when fitting the polynomials
@@ -209,6 +194,7 @@ public:
      */
     void fitPixelBasedTimeCOAPolynomial(
             const types::RowCol<double>& outPixelStart,
+            const types::RowCol<double>& outPixelScaleFactor,
             size_t polyOrderX,
             size_t polyOrderY,
             math::poly::TwoD<double>& timeCOAPoly,
