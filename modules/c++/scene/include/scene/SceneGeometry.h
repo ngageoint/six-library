@@ -217,10 +217,6 @@ public:
     getGroundResolution(const types::RgAz<double>& res) const;
 
 private:
-    // Noncopyable
-    SceneGeometry(const SceneGeometry& );
-    const SceneGeometry& operator=(const SceneGeometry& );
-
     void initialize();
 
 protected:
