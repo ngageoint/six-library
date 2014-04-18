@@ -20,8 +20,27 @@
  *
  */
 
-#include <math/poly/Fit.h>
 #include <scene/ProjectionPolynomialFitter.h>
+
+namespace
+{
+class Shift
+{
+public:
+    Shift(double shift) :
+        mShift(shift)
+    {
+    }
+
+    inline double operator()(double input) const
+    {
+        return (input - mShift);
+    }
+
+private:
+    const double mShift;
+};
+}
 
 namespace scene
 {
@@ -225,52 +244,16 @@ void ProjectionPolynomialFitter::fitTimeCOAPolynomial(
 
 void ProjectionPolynomialFitter::fitPixelBasedTimeCOAPolynomial(
         const types::RowCol<double>& outPixelStart,
-        const types::RowCol<double>& outPixelScaleFactor,
         size_t polyOrderX,
         size_t polyOrderY,
         math::poly::TwoD<double>& timeCOAPoly,
         double* meanResidualError) const
 {
-    math::linear::Matrix2D<double> rowMapping(mNumPoints1D, mNumPoints1D);
-    math::linear::Matrix2D<double> colMapping(mNumPoints1D, mNumPoints1D);
-
-    for (size_t ii = 0; ii < mNumPoints1D; ++ii)
-    {
-        for (size_t jj = 0; jj < mNumPoints1D; ++jj)
-        {
-            // Allow the caller to scale and offset the row/col that we fit to
-            rowMapping(ii, jj) =
-                    mOutputPlaneRows(ii,jj) * outPixelScaleFactor.row -
-                    outPixelStart.row;
-
-            colMapping(ii, jj) =
-                    mOutputPlaneCols(ii,jj) * outPixelScaleFactor.col -
-                    outPixelStart.col;
-        }
-    }
-
-    // Now fit the polynomial
-    timeCOAPoly = math::poly::fit(rowMapping, colMapping, mTimeCOA,
-                                  polyOrderX, polyOrderY);
-
-    // Optionally report the residual error
-    if (meanResidualError)
-    {
-        double errorSum(0.0);
-
-        for (size_t ii = 0; ii < mNumPoints1D; ++ii)
-        {
-            for (size_t jj = 0; jj < mNumPoints1D; ++jj)
-            {
-                const double row(rowMapping(ii, jj));
-                const double col(colMapping(ii, jj));
-
-                const double diff = mTimeCOA(ii, jj) - timeCOAPoly(row, col);
-                errorSum += diff * diff;
-            }
-        }
-
-        *meanResidualError = errorSum / (mNumPoints1D * mNumPoints1D);
-    }
+    fitPixelBasedTimeCOAPolynomial<Shift, Shift>(Shift(outPixelStart.row),
+                                                 Shift(outPixelStart.col),
+                                                 polyOrderX,
+                                                 polyOrderY,
+                                                 timeCOAPoly,
+                                                 meanResidualError);
 }
 }

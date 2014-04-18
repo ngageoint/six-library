@@ -22,6 +22,7 @@
 #ifndef __SCENE_PROJECTION_POLYNOMIAL_FITTER_H__
 #define __SCENE_PROJECTION_POLYNOMIAL_FITTER_H__
 
+#include <math/poly/Fit.h>
 #include <scene/GridECEFTransform.h>
 #include <scene/ProjectionModel.h>
 #include <math/linear/Matrix2D.h>
@@ -178,11 +179,6 @@ public:
      * polynomial, so if you want a polynomial in units of 1-based pixels from
      * the upper-left corner, you would set this to (-1, -1) plus whatever
      * compensation is needed if it's a multi-segment SICD.
-     * \param outPixelScaleFactor Scale factor to multiply output plane pixel
-     * samples by (applied before outPixelStart is subtracted).  This is
-     * useful if your output plane sample spacing is actually different than
-     * what gridTransform contained (in this case, set outPixelScaleFactor =
-     * newSampleSpacing / origSampleSpacing)
      * \param polyOrderX Polynomial order to use when fitting the polynomials
      * in the x direction
      * \param polyOrderY Polynomial order to use when fitting the polynomials
@@ -194,11 +190,59 @@ public:
      */
     void fitPixelBasedTimeCOAPolynomial(
             const types::RowCol<double>& outPixelStart,
-            const types::RowCol<double>& outPixelScaleFactor,
             size_t polyOrderX,
             size_t polyOrderY,
             math::poly::TwoD<double>& timeCOAPoly,
             double* meanResidualError = NULL) const;
+
+    // Same as above but allows an arbitrary transform to be applied to the
+    // row and column samples
+    template <typename RowTransformT, typename ColTransformT>
+    void fitPixelBasedTimeCOAPolynomial(
+            const RowTransformT& rowTransform,
+            const ColTransformT& colTransform,
+            size_t polyOrderX,
+            size_t polyOrderY,
+            math::poly::TwoD<double>& timeCOAPoly,
+            double* meanResidualError = NULL) const
+    {
+        math::linear::Matrix2D<double> rowMapping(mNumPoints1D, mNumPoints1D);
+        math::linear::Matrix2D<double> colMapping(mNumPoints1D, mNumPoints1D);
+
+        for (size_t ii = 0; ii < mNumPoints1D; ++ii)
+        {
+            for (size_t jj = 0; jj < mNumPoints1D; ++jj)
+            {
+                // Allow the caller to transform the row/col that we fit to
+                rowMapping(ii, jj) = rowTransform(mOutputPlaneRows(ii,jj));
+                colMapping(ii, jj) = colTransform(mOutputPlaneCols(ii,jj));
+            }
+        }
+
+        // Now fit the polynomial
+        timeCOAPoly = math::poly::fit(rowMapping, colMapping, mTimeCOA,
+                                      polyOrderX, polyOrderY);
+
+        // Optionally report the residual error
+        if (meanResidualError)
+        {
+            double errorSum(0.0);
+
+            for (size_t ii = 0; ii < mNumPoints1D; ++ii)
+            {
+                for (size_t jj = 0; jj < mNumPoints1D; ++jj)
+                {
+                    const double row(rowMapping(ii, jj));
+                    const double col(colMapping(ii, jj));
+
+                    const double diff = mTimeCOA(ii, jj) - timeCOAPoly(row, col);
+                    errorSum += diff * diff;
+                }
+            }
+
+            *meanResidualError = errorSum / (mNumPoints1D * mNumPoints1D);
+        }
+    }
 
 private:
     const size_t mNumPoints1D;
