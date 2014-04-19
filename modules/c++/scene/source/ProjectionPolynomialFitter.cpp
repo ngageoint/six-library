@@ -49,6 +49,7 @@ const size_t ProjectionPolynomialFitter::DEFAULTS_POINTS_1D = 10;
 ProjectionPolynomialFitter::ProjectionPolynomialFitter(
         const ProjectionModel& projModel,
         const GridECEFTransform& gridTransform,
+        const types::RowCol<double>& outPixelStart,
         const types::RowCol<size_t>& outExtent,
         size_t numPoints1D) :
     mNumPoints1D(numPoints1D),
@@ -59,13 +60,16 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
                       types::RowCol<double>(0.0, 0.0)),
     mTimeCOA(numPoints1D, numPoints1D)
 {
-    // Want to sample [0, outExtent) in the loop below
-    // That is, we are marching through the output grid in pixel space
+    // Want to sample [outPixelStart, outPixelStart + outExtent) in the loop
+    // below.  That is, we are marching through the portion of interest of the
+    // output grid in pixel space.  In the case of multi-segment SICDs, we'll
+    // only sample our part of the grid defined by outPixelStart and
+    // outExtent.
     const types::RowCol<double> skip(
         static_cast<double>(outExtent.row - 1) / (mNumPoints1D - 1),
         static_cast<double>(outExtent.col - 1) / (mNumPoints1D - 1));
 
-    types::RowCol<double> currentOffset(0.0, 0.0);
+    types::RowCol<double> currentOffset(outPixelStart);
 
     for (size_t ii = 0;
          ii < mNumPoints1D;
@@ -77,10 +81,13 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
              jj < mNumPoints1D;
              ++jj, currentOffset.col += skip.col)
         {
-            // Rows, these are essentially meshgrid-like (replicated)
-            mOutputPlaneRows(ii, jj) = currentOffset.row;
-            // This represents columns
-            mOutputPlaneCols(ii, jj) = currentOffset.col;
+            // currentOffset refers to the spot in the global output grid, so
+            // we want to offset by outPixelStart so that we are in units of
+            // pixels in terms of our portion of this output grid
+            // That is, we want (outPixelStart.row, outPixelStart.col) to
+            // correspond to (0, 0) in our grid.
+            mOutputPlaneRows(ii, jj) = currentOffset.row - outPixelStart.row;
+            mOutputPlaneCols(ii, jj) = currentOffset.col - outPixelStart.col;
 
             // Find ECEF location of this output plane pixel
             const scene::Vector3 sPos =
@@ -100,7 +107,6 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
         const types::RowCol<double>& inSceneCenter,
         const types::RowCol<double>& interimSceneCenter,
         const types::RowCol<double>& interimSampleSpacing,
-        const types::RowCol<double>& outPixelStart,
         size_t polyOrderX,
         size_t polyOrderY,
         math::poly::TwoD<double>& outputToSlantRow,
@@ -115,8 +121,6 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
 
     math::linear::Matrix2D<double> slantPlaneRows(mNumPoints1D, mNumPoints1D);
     math::linear::Matrix2D<double> slantPlaneCols(mNumPoints1D, mNumPoints1D);
-    math::linear::Matrix2D<double> outputPlaneRows(mNumPoints1D, mNumPoints1D);
-    math::linear::Matrix2D<double> outputPlaneCols(mNumPoints1D, mNumPoints1D);
 
     for (size_t ii = 0; ii < mNumPoints1D; ++ii)
     {
@@ -135,24 +139,17 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
             slantPlaneCols(ii, jj) =
                     sceneCoord.col / interimSampleSpacing.col +
                     interimSceneCenter.col - aoiOffset.col;
-
-            // Allow the caller to offset the row/col that we fit to
-            outputPlaneRows(ii, jj) =
-                    mOutputPlaneRows(ii,jj) - outPixelStart.row;
-
-            outputPlaneCols(ii, jj) =
-                    mOutputPlaneCols(ii,jj) - outPixelStart.col;
         }
     }
 
     // Now fit the polynomials
-    outputToSlantRow = math::poly::fit(outputPlaneRows,
-                                       outputPlaneCols,
+    outputToSlantRow = math::poly::fit(mOutputPlaneRows,
+                                       mOutputPlaneCols,
                                        slantPlaneRows,
                                        polyOrderX, polyOrderY);
 
-    outputToSlantCol = math::poly::fit(outputPlaneRows,
-                                       outputPlaneCols,
+    outputToSlantCol = math::poly::fit(mOutputPlaneRows,
+                                       mOutputPlaneCols,
                                        slantPlaneCols,
                                        polyOrderX, polyOrderY);
 
@@ -166,8 +163,8 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
         {
             for (size_t jj = 0; jj < mNumPoints1D; ++jj)
             {
-                const double row(outputPlaneRows(ii, jj));
-                const double col(outputPlaneCols(ii, jj));
+                const double row(mOutputPlaneRows(ii, jj));
+                const double col(mOutputPlaneCols(ii, jj));
 
                 double diff =
                         slantPlaneRows(ii, jj) - outputToSlantRow(row, col);
@@ -243,14 +240,14 @@ void ProjectionPolynomialFitter::fitTimeCOAPolynomial(
 }
 
 void ProjectionPolynomialFitter::fitPixelBasedTimeCOAPolynomial(
-        const types::RowCol<double>& outPixelStart,
+        const types::RowCol<double>& outPixelShift,
         size_t polyOrderX,
         size_t polyOrderY,
         math::poly::TwoD<double>& timeCOAPoly,
         double* meanResidualError) const
 {
-    fitPixelBasedTimeCOAPolynomial<Shift, Shift>(Shift(outPixelStart.row),
-                                                 Shift(outPixelStart.col),
+    fitPixelBasedTimeCOAPolynomial<Shift, Shift>(Shift(outPixelShift.row),
+                                                 Shift(outPixelShift.col),
                                                  polyOrderX,
                                                  polyOrderY,
                                                  timeCOAPoly,

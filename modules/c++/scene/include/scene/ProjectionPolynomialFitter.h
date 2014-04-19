@@ -48,6 +48,10 @@ public:
      * to convert from an ECEF location to meters from the slant plane SCP
      * \param gridTransform Transform that knows how to convert from
      * output row/col pixel space to ECEF space
+     * \param outPixelStart Output space start pixel (i.e. if this is
+     * non-zero, it indicates the reference point used with gridTransform is
+     * with respect to a global space.  This basically translates to the
+     * segment's startLine/startSample values for a multi-segment SICD).
      * \param outExtent Output extent in pixels
      * \param numPoints1D Number of points to use in each direction when
      * sampling the grid.  Defaults to 10.
@@ -55,6 +59,7 @@ public:
     ProjectionPolynomialFitter(
             const ProjectionModel& projModel,
             const GridECEFTransform& gridTransform,
+            const types::RowCol<double>& outPixelStart,
             const types::RowCol<size_t>& outExtent,
             size_t numPoints1D = DEFAULTS_POINTS_1D);
 
@@ -110,10 +115,6 @@ public:
      * when outputToSlantRow/Col polynomials are applied
      * \param interimSampleSpacing Sample spacing of the image when
      * outputToSlantRow/Col polynomials are applied
-     * \param outPixelStart Output space start pixel (i.e. if this is
-     * non-zero, it indicates the SCP used with gridTransform is with respect
-     * to a global space.  This basically translates to the segment's
-     * startLine/startSample values for a multi-segment SICD).
      * \param polyOrderX Polynomial order to use when fitting the polynomials
      * in the x direction
      * \param polyOrderY Polynomial order to use when fitting the polynomials
@@ -132,7 +133,6 @@ public:
             const types::RowCol<double>& inSceneCenter,
             const types::RowCol<double>& interimSceneCenter,
             const types::RowCol<double>& interimSampleSpacing,
-            const types::RowCol<double>& outPixelStart,
             size_t polyOrderX,
             size_t polyOrderY,
             math::poly::TwoD<double>& outputToSlantRow,
@@ -146,7 +146,10 @@ public:
      * outSceneCenter.  Optionally computes mean residual errors in these
      * polynomials (mean of the squares of the differences).
      *
-     * \param outSceneCenter Output space scene center pixel in row/col
+     * \param outSceneCenter Output space scene center pixel in row/col.  For
+     * multi-segment SICDs, this is in the output grid with respect to this
+     * SICD, not the global space (i.e. it is close to the center of the
+     * output extent).
      * \param outSampleSpacing Output space sample spacing
      * \param polyOrderX Polynomial order to use when fitting the polynomials
      * in the x direction
@@ -171,14 +174,10 @@ public:
      * upper-left corner.  Optionally computes mean residual errors in these
      * polynomials (mean of the squares of the differences).
      *
-     * \param outPixelStart Output space start pixel (i.e. if this is
-     * non-zero, it indicates the SCP used with gridTransform is with respect
-     * to a global space.  This basically translates to the segment's
-     * startLine/startSample values for a multi-segment SICD).
-     * This offset is subtracted from each pixel value used to fit the
-     * polynomial, so if you want a polynomial in units of 1-based pixels from
-     * the upper-left corner, you would set this to (-1, -1) plus whatever
-     * compensation is needed if it's a multi-segment SICD.
+     * \param outPixelShift This offset is subtracted from each pixel value
+     * used to fit the polynomial, so if you want a polynomial in units of
+     * 1-based pixels from the upper-left corner, you would set this to
+     * (-1, -1).
      * \param polyOrderX Polynomial order to use when fitting the polynomials
      * in the x direction
      * \param polyOrderY Polynomial order to use when fitting the polynomials
@@ -189,7 +188,7 @@ public:
      * timeCOAPoly.
      */
     void fitPixelBasedTimeCOAPolynomial(
-            const types::RowCol<double>& outPixelStart,
+            const types::RowCol<double>& outPixelShift,
             size_t polyOrderX,
             size_t polyOrderY,
             math::poly::TwoD<double>& timeCOAPoly,
