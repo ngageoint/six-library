@@ -75,7 +75,7 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
          ii < mNumPoints1D;
          ++ii, currentOffset.row += skip.row)
     {
-        currentOffset.col = 0;
+        currentOffset.col = outPixelStart.col;
 
         for (size_t jj = 0;
              jj < mNumPoints1D;
