@@ -27,7 +27,7 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include <import/str.h>
-#include <mem/ScopedCloneablePtr.h>
+#include <mem/ScopedCopyablePtr.h>
 
 namespace six
 {
@@ -44,10 +44,7 @@ struct CorrCoefs
     CorrCoefs()
     {
     }
-    CorrCoefs* clone() const
-    {
-        return new CorrCoefs(*this);
-    }
+
     double p1p2;
     double p1p3;
     double p1v1;
@@ -77,14 +74,8 @@ struct PosVelError
 {
     //!  CorrCoefs are NULL, since optional
     PosVelError() :
-        corrCoefs(NULL),
         positionDecorr(Init::undefined<DecorrType>())
     {
-    }
-
-    PosVelError* clone() const
-    {
-        return new PosVelError(*this);
     }
 
     //! Coordinate frame used for expressing P,V error statistics
@@ -98,7 +89,7 @@ struct PosVelError
     double v3;
 
     //! Optional
-    mem::ScopedCloneablePtr<CorrCoefs> corrCoefs;
+    mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
 
     //! Can be none, make sure to set this undefined()
     DecorrType positionDecorr;
@@ -137,9 +128,6 @@ struct RadarSensor
 
     //!  Constructor
     RadarSensor();
-
-    //!  Clone this object
-    RadarSensor* clone() const;
 };
 
 /*!
@@ -172,9 +160,6 @@ struct TropoError
 
     //!  Constructor
     TropoError();
-
-    //!  Clone this object
-    TropoError* clone() const;
 };
 
 /*!
@@ -213,9 +198,6 @@ struct IonoError
 
     //!  Constructor
     IonoError();
-
-    //!  Clone this object
-    IonoError* clone() const;
 };
 
 /*!
@@ -232,18 +214,18 @@ struct Components
     {
     }
 
-    //!  Clone this object
-    Components* clone() const;
-
-    mem::ScopedCloneablePtr<PosVelError> posVelError;
-    mem::ScopedCloneablePtr<RadarSensor> radarSensor;
-    mem::ScopedCloneablePtr<TropoError> tropoError;
-    mem::ScopedCloneablePtr<IonoError> ionoError;
+    mem::ScopedCopyablePtr<PosVelError> posVelError;
+    mem::ScopedCopyablePtr<RadarSensor> radarSensor;
+    mem::ScopedCopyablePtr<TropoError> tropoError;
+    mem::ScopedCopyablePtr<IonoError> ionoError;
 };
 
 /*!
  *  \struct CompositeSCP
  *  \brief SICD/SIDD CompositeSCP representation
+ *
+ *  Composite error statistics estimated at the scene center point
+ *  Choose SCP type ROW_COL or RG_AZ
  *
  *  This object takes a shortcut.  Instead of providing two mutually
  *  exclusive sub-structures, one for RgAzErr and one for RowColErr,
@@ -251,16 +233,25 @@ struct Components
  *  the data is defined as row/col, the values are written appropriately
  *  as RowColErr/Row, RowColErr/Col and RowColErr/RowCol.  In the case
  *  where they represent RgAz, we get RgAzErr/Rg RgAzErr/Az and RgAzErr/RgAz
+ *  This only applies for SICD 0.4 and 0.5 - with SICD 1.0, this is always
+ *  RG_AZ.
  *
  */
 struct CompositeSCP
 {
+    //!  Types
+    enum SCPType
+    {
+        ROW_COL, RG_AZ
+    };
+
     //!  Constructor
-    CompositeSCP()
+    CompositeSCP(SCPType scpTypeIn = RG_AZ) :
+        scpType(scpTypeIn)
     {
     }
 
-    CompositeSCP* clone() const;
+    SCPType scpType;
 
     //!  SICD/SIDD Rg or Row, depending on scpType
     double xErr;
@@ -277,33 +268,21 @@ struct CompositeSCP
  *  \param SICD/SIDD ErrorStatistics block
  *
  *  Parameters needed for computing error statistics.
- *  Composite error statistics estimated at the scene center point
- *  Choose SCP type ROW_COL or RG_AZ
  *
  */
 struct ErrorStatistics
 {
-    //!  Types
-    enum SCPType
-    {
-        ROW_COL, RG_AZ
-    };
-
-    //!  Note that how this is defined determines how CompositeSCP
-    //!  Handled    
-    SCPType scpType;
-
     /*!
-     *  (Optional) Composite error statistcis estimated at the scene
+     *  (Optional) Composite error statistics estimated at the scene
      *  center point
      */
-    mem::ScopedCloneablePtr<CompositeSCP> compositeSCP;
+    mem::ScopedCopyablePtr<CompositeSCP> compositeSCP;
 
     /*!
      *  (Optional) error statistics components
      *
      */
-    mem::ScopedCloneablePtr<Components> components;
+    mem::ScopedCopyablePtr<Components> components;
 
     /*!
      *  Additional parameters
@@ -311,21 +290,9 @@ struct ErrorStatistics
      */
     std::vector<Parameter> additionalParameters;
 
-    /*!
-     *  Note that scpType is not prepared, and must be supplied
-     *  for us to write
-     */
     ErrorStatistics()
     {
     }
-
-    //!  Clone, including non-NULL sub-objects
-    ErrorStatistics* clone() const;
-
-    /*!
-     *  \todo this is an API anomaly.  Revisit and remove if possible.
-     */
-    void initialize(SCPType type);
 };
 }
 
