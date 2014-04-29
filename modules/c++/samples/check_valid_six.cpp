@@ -21,14 +21,116 @@
  */
 
 #include <import/cli.h>
-#include <import/io.h>
-#include <import/mem.h>
+#include <io/FileInputStream.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 #include "utils.h"
 
-typedef std::complex<float> ComplexFloat;
+namespace
+{
+// TODO: Does this belong in sys?
+class ExtensionsPredicate : public sys::FileOnlyPredicate
+{
+public:
+    ExtensionsPredicate(const std::vector<std::string>& extensions,
+                        bool ignoreCase = true) :
+        mExtensions(extensions),
+        mIgnoreCase(ignoreCase)
+    {
+        if (mIgnoreCase)
+        {
+            for (size_t ii = 0; ii < mExtensions.size(); ++ii)
+            {
+                str::lower(mExtensions[ii]);
+            }
+        }
+    }
+
+    virtual bool operator()(const std::string& pathname) const
+    {
+        if (!sys::FileOnlyPredicate::operator()(pathname))
+        {
+            return false;
+        }
+
+        std::string ext = sys::Path::splitExt(pathname).second;
+        if (mIgnoreCase)
+        {
+            str::lower(ext);
+        }
+
+        for (size_t ii = 0; ii < mExtensions.size(); ++ii)
+        {
+            if (ext == mExtensions[ii])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+private:
+    std::vector<std::string> mExtensions;
+    const bool mIgnoreCase;
+};
+
+std::vector<std::string> getPathnames(const std::string& dirname)
+{
+    std::vector<std::string> extensions;
+    extensions.push_back(".nitf");
+    extensions.push_back(".ntf");
+    extensions.push_back(".xml");
+
+    return sys::FileFinder::search(ExtensionsPredicate(extensions),
+                                   std::vector<std::string>(1, dirname),
+                                   false);
+}
+
+// This is very similar to six::parseData(), but we don't want to have to
+// know if it's complex vs. derived before this call
+void parseXML(const six::XMLControlRegistry& xmlReg,
+              const std::string& pathname,
+              const std::vector<std::string>& schemaPaths,
+              logging::Logger& log)
+{
+    xml::lite::MinidomParser xmlParser;
+    xmlParser.preserveCharacterData(true);
+    io::FileInputStream inStream(pathname);
+    try
+    {
+        xmlParser.parse(inStream);
+    }
+    catch(const except::Throwable& ex)
+    {
+        throw except::Exception(ex, Ctxt("Invalid XML data"));
+    }
+    const xml::lite::Document* const doc = xmlParser.getDocument();
+
+    //! Check the root localName for the XML type
+    const std::string xmlType = doc->getRootElement()->getLocalName();
+    six::DataType xmlDataType;
+    if (str::startsWith(xmlType, "SICD"))
+    {
+        xmlDataType = six::DataType::COMPLEX;
+    }
+    else if (str::startsWith(xmlType, "SIDD"))
+    {
+        xmlDataType = six::DataType::DERIVED;
+    }
+    else
+    {
+        throw except::Exception(Ctxt("Unexpected XML type"));
+    }
+
+    //! Create the correct type of XMLControl
+    const std::auto_ptr<six::XMLControl>
+        xmlControl(xmlReg.newXMLControl(xmlDataType, &log));
+
+    std::auto_ptr<six::Data>(xmlControl->fromXML(doc, schemaPaths));
+}
+}
 
 int main(int argc, char** argv)
 {
@@ -54,14 +156,10 @@ int main(int argc, char** argv)
         const std::auto_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
 
-        sys::OS os;
-        std::vector<std::string> inputPaths(1, options->get<std::string> ("input"));
-        std::vector<std::string> nitfFiles = os.search(inputPaths, "", ".nitf", false); 
-        std::vector<std::string> ntfFiles = os.search(inputPaths, "", ".ntf", false);
-        nitfFiles.insert(nitfFiles.end(), ntfFiles.begin(), ntfFiles.end());
-
-        const std::string logFile(options->get<std::string> ("log"));
-        std::string level(options->get<std::string> ("level"));
+        const std::string inputPath(options->get<std::string>("input"));
+        std::vector<std::string> inputPathnames = getPathnames(inputPath);
+        const std::string logFile(options->get<std::string>("log"));
+        std::string level(options->get<std::string>("level"));
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
@@ -79,8 +177,7 @@ int main(int argc, char** argv)
         str::upper(level);
         str::trim(level);
         std::auto_ptr<logging::Logger> log = 
-            logging::setupLogger("check_valid_six", level, logFile);
-
+            logging::setupLogger(sys::Path::basename(argv[0]), level, logFile);
 
         // this validates the DES of the input against the 
         // best available schema
@@ -88,12 +185,25 @@ int main(int argc, char** argv)
         six::NITFReadControl reader;
         reader.setLogger(log.get());
         reader.setXMLControlRegistry(&xmlRegistry);
-        for (size_t ii = 0; ii < nitfFiles.size(); ++ii)
+        for (size_t ii = 0; ii < inputPathnames.size(); ++ii)
         {
+            const std::string& inputPathname(inputPathnames[ii]);
+            log->info(Ctxt("Reading " + inputPathname));
             try
             {
-                log->info(Ctxt("Reading " + nitfFiles[ii]));
-                reader.load(nitfFiles[ii], schemaPaths);
+                if (nitf::Reader::getNITFVersion(inputPathname) ==
+                        NITF_VER_UNKNOWN)
+                {
+                    // Assume it's just a text file containing XML
+                    parseXML(xmlRegistry,
+                             inputPathname,
+                             schemaPaths,
+                             *log);
+                }
+                else
+                {
+                    reader.load(inputPathname, schemaPaths);
+                }
                 log->info(Ctxt("Successful: No Errors Found!"));
             }
             catch (const six::DESValidationException& ex)
