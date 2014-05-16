@@ -30,6 +30,166 @@ namespace scene
 {
 
 const double DELTA_GP_MAX = 0.001;
+const double EARTH_ROTATION_RATE = 0.000072921150; // Radians/Second
+
+struct AdjustableParam
+{
+	static const int size = 7;
+	enum
+	{
+    	ARP_RADIAL = 0,
+    	ARP_INTRACK = 1,
+    	ARP_CROSSTRACK = 2,
+    	ARPVEL_RADIAL = 3,
+    	ARPVEL_INTRACK = 4,
+    	ARPVEL_CROSSTRACK = 5,
+    	RANGEBIAS = 6
+	};
+
+	static std::string name(int val)
+	{
+		switch(val)
+		{
+		case(0) :
+				return std::string("ARP Radial");
+		case(1) :
+				return std::string("ARP In-Track");
+		case(2) :
+				return std::string("ARP Cross-Track");
+		case(3) :
+				return std::string("Velocity Radial");
+		case(4) :
+				return std::string("Velocity In-Track");
+		case(5) :
+				return std::string("Velocity Cross-Track");
+		case(6) :
+				return std::string("Range Bias");
+		default :
+				throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", val)));
+		}
+	}
+
+	static std::string units(int val)
+	{
+		switch(val)
+		{
+		case(0) :
+				return std::string("m");
+		case(1) :
+				return std::string("m");
+		case(2) :
+				return std::string("m");
+		case(3) :
+				return std::string("m/s");
+		case(4) :
+				return std::string("m/s");
+		case(5) :
+				return std::string("m/s");
+		case(6) :
+				return std::string("m");
+		default :
+				throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", val)));
+		}
+	}
+};
+
+struct FrameType
+{
+    //! The enumerations allowed
+    enum
+    {
+        ECF = 0,
+        RIC_ECF = 1,
+        RIC_ECI = 2,
+        NOT_SET = 3
+    };
+
+    //! Default constructor
+    FrameType(){ value = NOT_SET; }
+
+    //! string constructor
+    FrameType(std::string s)
+    {
+        if (s == "ECF")
+            value = ECF;
+        else if (s == "RIC_ECF")
+            value = RIC_ECF;
+        else if (s == "RIC_ECI")
+            value = RIC_ECI;
+        else if (s == "NOT_SET")
+            value = NOT_SET;
+        else
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
+    }
+
+    //! int constructor
+    FrameType(int i)
+    {
+        switch(i)
+        {
+        case 0:
+            value = ECF;
+            break;
+        case 1:
+            value = RIC_ECF;
+            break;
+        case 2:
+            value = RIC_ECI;
+            break;
+        case 3:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
+        }
+    }
+
+    //! destructor
+    ~FrameType(){}
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch(value)
+        {
+        case 0:
+            return std::string("ECF");
+        case 1:
+            return std::string("RIC_ECF");
+        case 2:
+            return std::string("RIC_ECI");
+        case 3:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+        }
+    }
+
+    //! assignment operator
+    FrameType& operator=(const FrameType& o)
+    {
+        if (&o != this)
+        {
+            value = o.value;
+        }
+        return *this;
+    }
+
+    bool operator==(const FrameType& o) const { return value == o.value; }
+    bool operator!=(const FrameType& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    FrameType& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const FrameType& o) const { return value < o.value; }
+    bool operator>(const FrameType& o) const { return value > o.value; }
+    bool operator<=(const FrameType& o) const { return value <= o.value; }
+    bool operator>=(const FrameType& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    int value;
+
+};
 
 class ProjectionModel
 {
@@ -44,6 +204,28 @@ protected:
     math::poly::OneD<Vector3> mARPVelPoly;
     math::poly::TwoD<double> mTimeCOAPoly;
     int mLookDir;
+
+    // Adjustable Parameters
+    // 0-2 Rarp-ric 3-5 Varp-ric 6 Range
+    double mAdjustable[7];
+
+    // Error covariance matrices
+    //six::FrameType mFrameErrorCovar;
+    math::linear::MatrixMxN<7,7,double> mSensorErrorCovar;
+    math::linear::MatrixMxN<2,2,double> mUnmodeledErrorCovar;
+    math::linear::MatrixMxN<2,2,double> mIonoErrorCovar;
+    math::linear::MatrixMxN<1,1,double> mTropoErrorCovar;
+    scene::FrameType mFrameType;
+
+    // Returns matrix for RIC to ECEF coordinate transform.
+    // EIS = Earth Inertial Spin, set equal to 0 for RIC_ECF
+    math::linear::MatrixMxN<3,3,double> getRICtoECEFTransformMatrix(
+    		double EIS,
+    		double timeCOA) const;
+    math::linear::MatrixMxN<3,3,double> getRICtoECEFTransformMatrix(
+    		double EIS,
+    		const types::RowCol<double>& imageGridPoint) const;
+
 public:
 
     enum { MAX_ITER = 50 };
@@ -55,6 +237,19 @@ public:
                     const math::poly::OneD<Vector3>& arpPoly,
                     const math::poly::TwoD<double>& timeCOAPoly,
                     int lookDir);
+
+    ProjectionModel(const Vector3& slantPlaneNormal,
+                        const Vector3& imagePlaneRowVector,
+                        const Vector3& imagePlaneColVector,
+                        const Vector3& scp,
+                        const math::poly::OneD<Vector3>& arpPoly,
+                        const math::poly::TwoD<double>& timeCOAPoly,
+                        int lookDir,
+                        const math::linear::MatrixMxN<7,7,double>& sensorCovar,
+                        const math::linear::MatrixMxN<2,2,double>& unmodeledCovar,
+                        const math::linear::MatrixMxN<2,2,double>& ionoCovar,
+                        const math::linear::MatrixMxN<1,1,double>& tropoCovar,
+                        std::string frametype);
 
     virtual ~ProjectionModel() {}
 
@@ -154,9 +349,10 @@ public:
      *
      */
     types::RowCol<double> sceneToImage(const Vector3& scenePoint,
-                                      double* oTimeCOA) const;
+                                      double* oTimeCOA, double delta[7]) const;
 
-
+    types::RowCol<double> sceneToImage(const Vector3& scenePoint,
+                                          double* oTimeCOA) const;
     /*!
      *  Implements (Slant plane) Image to Scene (Ground plane)
      *  projection using computerContour and contourToGroundPlane
@@ -172,8 +368,12 @@ public:
     Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
                                 const Vector3& groundRefPoint,
                                 const Vector3& groundPlaneNormal,
-                                double *oTimeCOA) const;
+                                double *oTimeCOA, double delta[7]) const;
 
+    Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
+                                    const Vector3& groundRefPoint,
+                                    const Vector3& groundPlaneNormal,
+                                    double *oTimeCOA) const;
     /*!
      * Implements chapter 9 Precise R/Rdot To Constant HAE Surface Projection
      * from SICD Image Projections, 9.1 Constant Height Surface & Surface
@@ -203,10 +403,14 @@ public:
      *
      */
     Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
-                         double height,
+                         double height, double delta[7],
                          double heightThreshold = 1.0,
                          size_t maxNumIters = 3) const;
 
+    Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
+                             double height,
+                             double heightThreshold = 1.0,
+                             size_t maxNumIters = 3) const;
     /*!
      * Samples a 10x10 grid of points that spans outExtent using
      * imageToScene().  From these samples, fits projection and time COA
@@ -289,6 +493,93 @@ public:
         const types::RowCol<size_t>& outExtent,
         size_t polyOrder,
         math::poly::TwoD<double>& timeCOAPoly) const;
+
+    math::linear::MatrixMxN<3,7,double> imageToSceneSensorPartials(
+    		const types::RowCol<double>& imageGridPoint,
+            double height,
+            const Vector3& scenePoint,
+            double delta = 0.0001) const;
+
+    math::linear::MatrixMxN<3,7,double> imageToSceneSensorPartials(
+    		const types::RowCol<double>& imageGridPoint,
+    		double height,
+    		double delta = 0.0001) const;
+
+    math::linear::MatrixMxN<3,2,double> imageToScenePartials(
+    		const types::RowCol<double>& imageGridPoint,
+            double height,
+            const Vector3& scenePoint,
+            double delta = 0.0001) const;
+
+    math::linear::MatrixMxN<3,2,double> imageToScenePartials(
+    		const types::RowCol<double>& imageGridPoint,
+            double height,
+            double delta = 0.0001) const;
+
+    math::linear::MatrixMxN<2,7,double> sceneToImageSensorPartials(
+    		const Vector3& scenePoint,
+    		const types::RowCol<double>& imageGridPoint,
+            double delta = 0.0001) const;
+
+    math::linear::MatrixMxN<2,7,double> sceneToImageSensorPartials(
+    		const Vector3& scenePoint,
+            double delta = 0.0001) const;
+
+    math::linear::MatrixMxN<2,3,double> sceneToImagePartials(
+    		const Vector3& scenePoint,
+    		const types::RowCol<double>& imageGridPoint,
+            double delta = 0.0001) const;
+
+    math::linear::MatrixMxN<2,3,double> sceneToImagePartials(
+    		const Vector3& scenePoint,
+            double delta = 0.0001) const;
+
+    math::linear::MatrixMxN<7,7,double> getErrorCovariance(
+        		const Vector3& scenePoint,
+        		double timeCOA);
+    math::linear::MatrixMxN<7,7,double> getErrorCovariance(
+    		const Vector3& scenePoint,
+    		const types::RowCol<double>& imageGridPoint);
+    math::linear::MatrixMxN<7,7,double> getErrorCovariance(
+    		const Vector3& scenePoint);
+    math::linear::MatrixMxN<7,7,double> getErrorCovariance();
+
+    inline math::linear::MatrixMxN<2,2,double> getUnmodeledErrorCovariance()
+    {
+    	return mUnmodeledErrorCovar;
+    }
+
+    double getAdjustableParameter(
+    		int index) const;
+
+    void setAdjustableParameter(
+    		int index,
+    		double val);
+
+    void setErrorCovariance(
+    		int index1,
+    		int index2,
+    		double val);
+
+    double getErrorCovariance(
+    		int index1,
+    		int index2);
+
+    void setFrameType(int frame)
+    {
+    	mFrameType = scene::FrameType(frame);
+    }
+
+    void setFrameType(std::string frame)
+    {
+    	mFrameType = scene::FrameType(frame);
+    }
+
+    void setFrameType(const scene::FrameType frame)
+    {
+    	mFrameType = frame;
+    }
+
 };
 
 class RangeAzimProjectionModel : public ProjectionModel
@@ -309,6 +600,21 @@ public:
                              const math::poly::OneD<Vector3>& arpPoly,
                              const math::poly::TwoD<double>& timeCOAPoly,
                              int lookDir);
+
+    RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
+                             const math::poly::OneD<double>& ksfPoly,
+                             const Vector3& slantPlaneNormal,
+                             const Vector3& imagePlaneRowVector,
+                             const Vector3& imagePlaneColVector,
+                             const Vector3& scp,
+                             const math::poly::OneD<Vector3>& arpPoly,
+                             const math::poly::TwoD<double>& timeCOAPoly,
+                             int lookDir,
+                             const math::linear::MatrixMxN<7,7,double>& sensorCovar,
+                             const math::linear::MatrixMxN<2,2,double>& unmodeledCovar,
+                             const math::linear::MatrixMxN<2,2,double>& ionoCovar,
+                             const math::linear::MatrixMxN<1,1,double>& tropoCovar,
+                             std::string frametype);
 
     virtual ~RangeAzimProjectionModel() {}
 
@@ -340,6 +646,22 @@ public:
                              const math::poly::TwoD<double>& timeCOAPoly,
                              int lookDir);
 
+    RangeZeroProjectionModel(const math::poly::OneD<double>& timeCAPoly,
+                             const math::poly::TwoD<double>& dsrfPoly,
+                             double rangeCA,
+                             const Vector3& slantPlaneNormal,
+                             const Vector3& imagePlaneRowVector,
+                             const Vector3& imagePlaneColVector,
+                             const Vector3& scp,
+                             const math::poly::OneD<Vector3>& arpPoly,
+                             const math::poly::TwoD<double>& timeCOAPoly,
+                             int lookDir,
+                             const math::linear::MatrixMxN<7,7,double>& sensorCovar,
+                             const math::linear::MatrixMxN<2,2,double>& unmodeledCovar,
+                             const math::linear::MatrixMxN<2,2,double>& ionoCovar,
+                             const math::linear::MatrixMxN<1,1,double>& tropoCovar,
+                             std::string frametype);
+
     virtual ~RangeZeroProjectionModel() {}
 
     virtual void computeContour(const Vector3& arpCOA,
@@ -362,6 +684,20 @@ public:
                          const math::poly::OneD<Vector3>& arpPoly,
                          const math::poly::TwoD<double>& timeCOAPoly,
                          int lookDir);
+
+    PlaneProjectionModel(const Vector3& slantPlaneNormal,
+                         const Vector3& imagePlaneRowVector,
+                         const Vector3& imagePlaneColVector,
+                         const Vector3& scp,
+                         const math::poly::OneD<Vector3>& arpPoly,
+                         const math::poly::TwoD<double>& timeCOAPoly,
+                         int lookDir,
+                         const math::linear::MatrixMxN<7,7,double>& sensorCovar,
+                         const math::linear::MatrixMxN<2,2,double>& unmodeledCovar,
+                         const math::linear::MatrixMxN<2,2,double>& ionoCovar,
+                         const math::linear::MatrixMxN<1,1,double>& tropoCovar,
+                         std::string frametype);
+
 
     virtual ~PlaneProjectionModel() {}
 

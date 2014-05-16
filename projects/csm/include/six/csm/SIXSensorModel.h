@@ -223,7 +223,7 @@ public: // RasterGM methods
      *
      * \return A four element vector of 0's
      */
-    std::vector<double> getUnmodeledCrossCovariance(
+    virtual std::vector<double> getUnmodeledCrossCovariance(
             const ::csm::ImageCoord& pt1,
             const ::csm::ImageCoord& pt2) const;
 
@@ -274,6 +274,7 @@ public:
             double desiredPrecision,
             double* achievedPrecision,
             ::csm::WarningList* warnings) const;
+
 
 private:
     const scene::ECEFToLLATransform mECEFToLLA;

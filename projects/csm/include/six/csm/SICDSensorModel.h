@@ -198,6 +198,11 @@ public: // RasterGM methods
                                             double* achievedPrecision,
                                             ::csm::WarningList* warnings) const;
 
+    virtual ::csm::ImageCoordCovar groundToImage(const ::csm::EcefCoordCovar& groundPt,
+                        double desiredPrecision,
+                        double* achievedPrecision,
+                        ::csm::WarningList* warnings) const;
+
     /**
      * Converts imagePt (pixels) in image space returned EcefCoord (meters)
      * in ground space (ECEF).
@@ -219,6 +224,13 @@ public: // RasterGM methods
                                            double desiredPrecision,
                                            double* achievedPrecision,
                                            ::csm::WarningList* warnings) const;
+
+    virtual ::csm::EcefCoordCovar imageToGround(const ::csm::ImageCoordCovar& imagePt,
+    		double height,
+    		double heightVariance,
+    		double desiredPrecision,
+    		double* achievedPrecision,
+    		::csm::WarningList* warnings) const;
 
     /**
      * Returns the starting coordinate for the imaging operation.
@@ -298,6 +310,128 @@ public: // RasterGM methods
      */
     virtual ::csm::EcefVector getSensorVelocity(double time) const;
 
+    // Error prop additions
+    int getNumParameters() const;
+
+    // Return name of AdjustableParameter[index]
+    virtual std::string getParameterName(int index) const;
+
+    // Return units of AdjustableParameter[index]
+    virtual std::string getParameterUnits(int index) const;
+
+    // Not sure, leave out for now
+    //virtual bool hasShareableParameters() const;
+
+    // Not sure
+    //virtual bool isParameterShareable(int index) const;
+
+    // Not sure
+    //virtual ::csm::SharingCriteria getParameterSharingCriteria(int index) const;
+
+    virtual double getParameterValue(int index) const;
+
+    virtual void setParameterValue(int index, double value);
+
+    virtual ::csm::param::Type getParameterType(int index) const;
+
+    virtual void setParameterType(int index, ::csm::param::Type pType);
+
+    virtual double getParameterCovariance(int index1,
+                                           int index2) const;
+
+    virtual void setParameterCovariance(int index1,
+                                         int index2,
+                                         double covariance);
+
+    // return zero
+    virtual int getNumGeometricCorrectionSwitches() const;
+
+    //virtual std::string getGeometricCorrectionName(int index) const;
+
+    //virtual void setGeometricCorrectionSwitch(int index,
+    //                                           bool value,
+    //                                           ::csm::param::Type pType);
+
+    //virtual bool getGeometricCorrectionSwitch(int index) const;
+
+     /**
+      * Returns the minimum and maximum image coordinates in full image space
+      * pixels over which the current model is valid
+      *
+      * \return +/- 99,999 pixels (The CSM manual states to use this value if
+      * there is no limit to the range in a direction.  This allows the model
+      * to be used beyond the image boundaries.)
+      */
+     //virtual
+     //std::pair< ::csm::ImageCoord, ::csm::ImageCoord> getValidImageRange() const;
+
+     /*
+      * Returns the minimum and maximum heights (in meters relative to WGS-84
+      * ellipsoid) over which the model is valid.
+      *
+      * \return +/- 99,999 pixels (The CSM manual states to use this value if
+      * there is no limit)
+      */
+    //virtual std::pair<double,double> getValidHeightRange() const;
+
+     /*
+      * Returns the partial derivatives of line and sample (in pixels per
+      * meter) with respect to the given ground pt
+      *
+      * \param[in] groundPt Ground coordinate in ECEF meters
+      *
+      * \return A vector with six elements as follows:
+      *   -  [0] = line wrt x
+      *   -  [1] = line wrt y
+      *   -  [2] = line wrt z
+      *   -  [3] = sample wrt x
+      *   -  [4] = sample wrt y
+      *   -  [5] = sample wrt z
+      */
+    virtual std::vector<double>
+    computeGroundPartials(const ::csm::EcefCoord& groundPt) const;
+
+    virtual std::vector<double> getUnmodeledError(const ::csm::ImageCoord& imagePt) const;
+
+     // These are pure virtual from GeometricModel
+     //virtual void setReferencePoint(const ::csm::EcefCoord& groundPt);
+
+     //virtual std::vector<double> getCrossCovarianceMatrix(
+     //       const ::csm::GeometricModel& comparisonModel,
+     //       ::csm::param::Set pSet,
+     //       const ::csm::GeometricModel::GeometricModelList& otherModels) const;
+
+     virtual ::csm::RasterGM::SensorPartials computeSensorPartials(
+             int index,
+             const ::csm::EcefCoord& groundPt,
+             double desiredPrecision,
+             double* achievedPrecision,
+             ::csm::WarningList* warnings) const;
+
+     virtual ::csm::RasterGM::SensorPartials computeSensorPartials(
+             int index,
+             const ::csm::ImageCoord& imagePt,
+             const ::csm::EcefCoord& groundPt,
+             double desiredPrecision,
+             double* achievedPrecision,
+             ::csm::WarningList* warnings) const;
+
+     virtual std::vector<SensorPartials> computeAllSensorPartials(
+                     const ::csm::EcefCoord& groundPt,
+                     ::csm::param::Set pSet           = ::csm::param::VALID,
+                     double desiredPrecision   = 0.001,
+                     double* achievedPrecision = NULL,
+                     ::csm::WarningList* warnings     = NULL) const;
+
+     virtual std::vector<SensorPartials> computeAllSensorPartials(
+                     const ::csm::ImageCoord& imagePt,
+                     const ::csm::EcefCoord& groundPt,
+                     ::csm::param::Set pSet           = ::csm::param::VALID,
+                     double desiredPrecision   = 0.001,
+                     double* achievedPrecision = NULL,
+                     ::csm::WarningList* warnings     = NULL) const;
+
+
 private:
     /**
      * Transforms the given l, s values from units of meters with the origin
@@ -332,7 +466,8 @@ private:
     std::string mSensorModelState;
     std::auto_ptr<six::sicd::ComplexData> mData;
     std::auto_ptr<const scene::SceneGeometry> mGeometry;
-    std::auto_ptr<const scene::ProjectionModel> mProjection;
+    std::auto_ptr<scene::ProjectionModel> mProjection;
+    ::csm::param::Type AdjustableTypes[scene::AdjustableParam::size];
 };
 }
 }
