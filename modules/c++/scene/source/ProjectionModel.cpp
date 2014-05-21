@@ -705,16 +705,16 @@ math::linear::MatrixMxN<7, 7, double> ProjectionModel::getErrorCovariance(
 	math::linear::MatrixMxN<3,3,double> Trictoecef = getRICtoECEFTransformMatrix((double) 0, timeCOA);
 	math::linear::MatrixMxN<3,3,double> Tratoric = Trictoecef.transpose() * Tratoecef;
 	math::linear::MatrixMxN<3,3,double> Mtrop3D((double) 0.0);
-	Mtrop3D.add(Mtrop,0,0);
+	Mtrop3D.addInPlace(Mtrop,0,0);
 
 	math::linear::MatrixMxN<3,3,double> Mion3D((double) 0.0);
-	Mion3D.add(Mion,0,0);
+	Mion3D.addInPlace(Mion,0,0);
 
 	math::linear::MatrixMxN<3,3,double> Mtotal = Tratoric * Mtrop3D * Tratoric.transpose()
 			+ Tratoric * Mion3D * Tratoric.transpose();
 
 	math::linear::MatrixMxN<7,7,double> ReturnVal(mSensorErrorCovar);
-	ReturnVal.add(Mtotal,0,0);
+	ReturnVal.addInPlace(Mtotal,0,0);
 
 	return ReturnVal;
 
