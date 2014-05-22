@@ -102,25 +102,18 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     }
 }
 
-void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
+void ProjectionPolynomialFitter::getSlantPlaneSamples(
         const types::RowCol<size_t>& inPixelStart,
         const types::RowCol<double>& inSceneCenter,
         const types::RowCol<double>& interimSceneCenter,
         const types::RowCol<double>& interimSampleSpacing,
-        size_t polyOrderX,
-        size_t polyOrderY,
-        math::poly::TwoD<double>& outputToSlantRow,
-        math::poly::TwoD<double>& outputToSlantCol,
-        double* meanResidualErrorRow,
-        double* meanResidualErrorCol) const
+        math::linear::Matrix2D<double>& slantPlaneRows,
+        math::linear::Matrix2D<double>& slantPlaneCols) const
 {
     const types::RowCol<double> ratio(interimSceneCenter / inSceneCenter);
 
     const types::RowCol<double> aoiOffset(inPixelStart.row * ratio.row,
                                           inPixelStart.col * ratio.col);
-
-    math::linear::Matrix2D<double> slantPlaneRows(mNumPoints1D, mNumPoints1D);
-    math::linear::Matrix2D<double> slantPlaneCols(mNumPoints1D, mNumPoints1D);
 
     for (size_t ii = 0; ii < mNumPoints1D; ++ii)
     {
@@ -141,6 +134,30 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
                     interimSceneCenter.col - aoiOffset.col;
         }
     }
+}
+
+void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
+        const types::RowCol<size_t>& inPixelStart,
+        const types::RowCol<double>& inSceneCenter,
+        const types::RowCol<double>& interimSceneCenter,
+        const types::RowCol<double>& interimSampleSpacing,
+        size_t polyOrderX,
+        size_t polyOrderY,
+        math::poly::TwoD<double>& outputToSlantRow,
+        math::poly::TwoD<double>& outputToSlantCol,
+        double* meanResidualErrorRow,
+        double* meanResidualErrorCol) const
+{
+    // Collect up slant plane pixel locations for the output plane samples we
+    // have
+    math::linear::Matrix2D<double> slantPlaneRows(mNumPoints1D, mNumPoints1D);
+    math::linear::Matrix2D<double> slantPlaneCols(mNumPoints1D, mNumPoints1D);
+    getSlantPlaneSamples(inPixelStart,
+                         inSceneCenter,
+                         interimSceneCenter,
+                         interimSampleSpacing,
+                         slantPlaneRows,
+                         slantPlaneCols);
 
     // Now fit the polynomials
     outputToSlantRow = math::poly::fit(mOutputPlaneRows,
@@ -171,6 +188,74 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
                 errorSumRow += diff * diff;
 
                 diff = slantPlaneCols(ii, jj) - outputToSlantCol(row, col);
+                errorSumCol += diff * diff;
+            }
+        }
+
+        const size_t numPoints = mNumPoints1D * mNumPoints1D;
+        if (meanResidualErrorRow)
+        {
+            *meanResidualErrorRow = errorSumRow / numPoints;
+        }
+        if (meanResidualErrorCol)
+        {
+            *meanResidualErrorCol = errorSumCol / numPoints;
+        }
+    }
+}
+
+void ProjectionPolynomialFitter::fitSlantToOutputPolynomials(
+        const types::RowCol<size_t>& inPixelStart,
+        const types::RowCol<double>& inSceneCenter,
+        const types::RowCol<double>& interimSceneCenter,
+        const types::RowCol<double>& interimSampleSpacing,
+        size_t polyOrderX,
+        size_t polyOrderY,
+        math::poly::TwoD<double>& slantToOutputRow,
+        math::poly::TwoD<double>& slantToOutputCol,
+        double* meanResidualErrorRow,
+        double* meanResidualErrorCol) const
+{
+    // Collect up slant plane pixel locations for the output plane samples we
+    // have
+    math::linear::Matrix2D<double> slantPlaneRows(mNumPoints1D, mNumPoints1D);
+    math::linear::Matrix2D<double> slantPlaneCols(mNumPoints1D, mNumPoints1D);
+    getSlantPlaneSamples(inPixelStart,
+                         inSceneCenter,
+                         interimSceneCenter,
+                         interimSampleSpacing,
+                         slantPlaneRows,
+                         slantPlaneCols);
+
+    // Now fit the polynomials
+    slantToOutputRow = math::poly::fit(slantPlaneRows,
+                                       slantPlaneCols,
+                                       mOutputPlaneRows,
+                                       polyOrderX, polyOrderY);
+
+    slantToOutputCol = math::poly::fit(slantPlaneRows,
+                                       slantPlaneCols,
+                                       mOutputPlaneCols,
+                                       polyOrderX, polyOrderY);
+
+    // Optionally report the residual error
+    if (meanResidualErrorRow || meanResidualErrorCol)
+    {
+        double errorSumRow(0.0);
+        double errorSumCol(0.0);
+
+        for (size_t ii = 0; ii < mNumPoints1D; ++ii)
+        {
+            for (size_t jj = 0; jj < mNumPoints1D; ++jj)
+            {
+                const double row(slantPlaneRows(ii, jj));
+                const double col(slantPlaneCols(ii, jj));
+
+                double diff =
+                        mOutputPlaneRows(ii, jj) - slantToOutputRow(row, col);
+                errorSumRow += diff * diff;
+
+                diff = mOutputPlaneCols(ii, jj) - slantToOutputCol(row, col);
                 errorSumCol += diff * diff;
             }
         }
