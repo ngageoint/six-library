@@ -112,9 +112,9 @@ public:
      * \param inSceneCenter Original input slant plane scene center pixel in
      * row/col
      * \param interimSceneCenter Scene center pixel in row/col of the image
-     * when outputToSlantRow/Col polynomials are applied
-     * \param interimSampleSpacing Sample spacing of the image when
-     * outputToSlantRow/Col polynomials are applied
+     * in the slant plane when outputToSlantRow/Col polynomials are applied
+     * \param interimSampleSpacing Sample spacing of the image in the slant
+     * plane when outputToSlantRow/Col polynomials are applied
      * \param polyOrderX Polynomial order to use when fitting the polynomials
      * in the x direction
      * \param polyOrderY Polynomial order to use when fitting the polynomials
@@ -137,6 +137,53 @@ public:
             size_t polyOrderY,
             math::poly::TwoD<double>& outputToSlantRow,
             math::poly::TwoD<double>& outputToSlantCol,
+            double* meanResidualErrorRow = NULL,
+            double* meanResidualErrorCol = NULL) const;
+
+    /*
+     * Uses the samples computed in the constructor to fit pixel-based
+     * slant --> output polynomials of the specified order.  Optionally
+     * computes mean residual errors in these polynomials (mean of the squares
+     * of the differences).
+     *
+     * interimSceneCenter and interimSampleSpacing are also in the slant
+     * plane.  These represent the image at the point when the output to slant
+     * polynomials will be applied.  They're intended to allow for any
+     * image upsampling, etc. that may be done while still in the slant plane.
+     * If no such upsampling is done, set interimSceneCenter = inSceneCenter
+     * and interimSampleSpacing = the original input slant plane sample
+     * spacing.
+     *
+     * \param inPixelStart Original input slant plane start pixel (i.e. if
+     * this is non-zero, it indicates an AOI)
+     * \param inSceneCenter Original input slant plane scene center pixel in
+     * row/col
+     * \param interimSceneCenter Scene center pixel in row/col of the image
+     * in the slant plane when slantToOutputToRow/Col polynomials are applied
+     * \param interimSampleSpacing Sample spacing of the image in the slant
+     * plane when slantToOutputRow/Col polynomials are applied
+     * \param polyOrderX Polynomial order to use when fitting the polynomials
+     * in the x direction
+     * \param polyOrderY Polynomial order to use when fitting the polynomials
+     * in the y direction
+     * \param slantToOutputRow [output] Slant to output row polynomial.
+     * This is pixel-based.
+     * \param slantToOutputCol [output] Slant to output col polynomial.
+     * This is pixel-based.
+     * \param meanResidualErrorRow [output] Optional.  Mean residual error in
+     * slantToOutputRow.
+     * \param meanResidualErrorCol [output] Optional.  Mean residual error in
+     * slantToOutputCol.
+     */
+    void fitSlantToOutputPolynomials(
+            const types::RowCol<size_t>& inPixelStart,
+            const types::RowCol<double>& inSceneCenter,
+            const types::RowCol<double>& interimSceneCenter,
+            const types::RowCol<double>& interimSampleSpacing,
+            size_t polyOrderX,
+            size_t polyOrderY,
+            math::poly::TwoD<double>& slantToOutputRow,
+            math::poly::TwoD<double>& slantToOutputCol,
             double* meanResidualErrorRow = NULL,
             double* meanResidualErrorCol = NULL) const;
 
@@ -242,6 +289,15 @@ public:
             *meanResidualError = errorSum / (mNumPoints1D * mNumPoints1D);
         }
     }
+
+private:
+    void getSlantPlaneSamples(
+            const types::RowCol<size_t>& inPixelStart,
+            const types::RowCol<double>& inSceneCenter,
+            const types::RowCol<double>& interimSceneCenter,
+            const types::RowCol<double>& interimSampleSpacing,
+            math::linear::Matrix2D<double>& slantPlaneRows,
+            math::linear::Matrix2D<double>& slantPlaneCols) const;
 
 private:
     const size_t mNumPoints1D;
