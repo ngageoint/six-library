@@ -23,6 +23,8 @@
 #ifndef __NRT_TYPES_H__
 #define __NRT_TYPES_H__
 
+#include "nrt/nrt_config.h"
+
 #   include <assert.h>
 #   include <stdlib.h>
 #   include <string.h>

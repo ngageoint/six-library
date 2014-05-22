@@ -20,6 +20,7 @@
  *
  */
 
+#include "nrt/nrt_config.h"
 #include "nrt/Utils.h"
 
 NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
