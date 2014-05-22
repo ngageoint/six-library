@@ -20,6 +20,8 @@
  *
  */
 
+#include "j2k/j2k_config.h"
+ 
 #ifdef HAVE_OPENJPEG_H
 
 #include <string.h>

@@ -1,116 +1,109 @@
 import os, sys
 from os.path import join, exists
-from waflib import Options
+from waflib import Options, Utils
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
+from build import writeConfig
 
-SOURCE         = 'openjpeg-2.0.0'
-OPENJPEG_DEFINES = ['USE_OPENJPEG', 'HAVE_OPENJPEG_H', 'J2K_MODULE_EXPORTS']
-STATIC_DEFINE = 'OPJ_STATIC'
+SOURCE        = 'openjpeg-2.0.0'
 
 options = lambda x : None
 
 def configure(conf):
-
+    
     j2kLayer = Options.options.j2k_layer
 
     if j2kLayer == 'openjpeg' :
-
-        # add defines
-        defines = OPENJPEG_DEFINES 
-        if not Options.options.shared_libs:
-            defines.append(STATIC_DEFINE)
-        conf.env.append_value('DEFINES_J2K', defines)
-
-        # check functionality
-        check1 = conf.check_cc(function_name='fseeko', header_name="stdio.h", mandatory=False)
-        conf.check_cc(header_name="stdint.h", mandatory=False)
-        conf.check_cc(header_name="sys/stat.h", mandatory=False)
-        conf.check_cc(header_name="sys/types.h", mandatory=False)
-
+        
+        # callback function to check for all #defines used by the openjpg module
+        def opj_callback(conf):            
+            # check functionality
+            if conf.check_cc(function_name='fseeko', header_name="stdio.h", mandatory=False):
+                conf.define('HAVE_FSEEKO', '', quote=False)
+            if conf.check_cc(header_name="stdint.h", mandatory=False):
+                conf.define('HAVE_STDINT_H', '', quote=False)
+            if conf.check_cc(header_name="sys/stat.h", mandatory=False):
+                conf.define('HAVE_SYS_STAT_H', '', quote=False)
+            if conf.check_cc(header_name="sys/types.h", mandatory=False):
+                conf.define('HAVE_SYS_TYPES_H', '', quote=False)
+            if conf.check_cc(header_name="memory.h", mandatory=False):
+                conf.define('HAVE_MEMORY_H', '', quote=False)
+            
+            if conf.check_cc(header_name="inttypes.h", mandatory=False):
+                conf.define('HAVE_INTTYPES_H', '', quote=False)
+            if conf.check_cc(type_name='ssize_t', header_name='sys/types.h', mandatory=False):
+                conf.define('HAVE_SSIZE_T', '', quote=False)
+            if conf.check_cc(header_name="unistd.h", mandatory=False):
+                conf.define('HAVE_UNISTD_H', '', quote=False)
+            if conf.check_cc(header_name="fcntl.h", mandatory=False):
+                conf.define('HAVE_FCNTL_H', '', quote=False)
+            if conf.check_cc(function_name='mmap', header_name="sys/mman.h", mandatory=False):
+                conf.define('HAVE_MMAP', '', quote=False)
+            if conf.check_cc(header_name="stdbool.h", mandatory=False):
+                conf.define('HAVE_STDBOOL_H', '', quote=False)
+            
+            if 'HAVE_SSIZE_T=1' in conf.env['DEFINES']:
+                conf.define('HAVE_SSIZE_T', ' ', quote=False)
+            if '_LARGEFILE_SOURCE' in conf.env['DEFINES']:
+                conf.define('_LARGEFILE_SOURCE', ' ', quote=False)
+            if '_LARGEFILES' in conf.env['DEFINES']:
+                conf.define('_LARGEFILES', ' ', quote=False)
+            if '_FILE_OFFSET_BITS=64' in conf.env['DEFINES']:
+                conf.define('_FILE_OFFSET_BITS', '64', quote=False)
+            if 'HAVE_FSEEKO=1' in conf.env['DEFINES']:
+                conf.define('HAVE_FSEEKO', ' ', quote=False)
+            conf.define('OPJ_PACKAGE_VERSION',  '"2.0.0"', quote=False)
+            if sys.byteorder != 'little':
+                conf.define('OPJ_BIG_ENDIAN', ' ', quote=False)
+            
         # check for the source tarball
         if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
             conf.fatal('Missing OpenJPEG tarfile')
 
         # untar and setup env
         conf.env['MAKE_OPENJPEG'] = True
+        conf.env['MAKE_J2K']      = True
         conf.env['HAVE_J2K']      = True
         conf.msg('Building local lib', j2kLayer)
         untarFile(path=conf.path, fname=SOURCE + '.tar')
+        
+        # make opj_config.h
+        openjpegNode = conf.path.make_node(join(SOURCE, 'src', 'lib', 'openjp2'))
+        writeConfig(conf, opj_callback, 'opj', infile=None, outfile='opj_config.h', 
+                    path=openjpegNode, feature='makeHeader')
 
 def build(bld):
-
     env = bld.get_env()
-    sourceFiles = []
 
     # check it again just in case
     if 'MAKE_OPENJPEG' in env:
         # this node is a mandatory build -- others are optional
         openjpegNode = bld.path.make_node(join(SOURCE, 'src', 'lib', 'openjp2'))
         
-        # make opj_config.h
-        defs = {}
-        headers = 'INTTYPES MEMORY STDINT STDLIB STRINGS STRING SYS_STAT SYS_TYPES UNISTD'.split()
-
-        for header in headers:
-            define = 'HAVE_' + header + '_H'
-            if (define + '=1') in env['DEFINES']:
-                defs[define] = ''
-
-        if 'HAVE_SSIZE_T=1' in env['DEFINES']:
-            defs['HAVE_SSIZE_T'] = ''
-
-        if '_LARGEFILE_SOURCE' in env['DEFINES']:
-            defs['_LARGEFILE_SOURCE'] = ''
-        if '_LARGEFILES' in env['DEFINES']:
-            defs['_LARGEFILES'] = ''
-        if '_FILE_OFFSET_BITS=64' in env['DEFINES']:
-            defs['_FILE_OFFSET_BITS'] = '64'
-
-        if 'HAVE_FSEEKO=1' in env['DEFINES']:
-            defs['HAVE_FSEEKO'] = ''
-            
-        defs['OPJ_PACKAGE_VERSION'] = '"2.0.0"'
-        if sys.byteorder != 'little':
-            defs['OPJ_BIG_ENDIAN'] = ''
-        
-        openjpegConfigH = bld(name='openjpegConfigH',
-                              features='makeHeader',
-                              output='opj_config.h',
-                              path=openjpegNode,
-                              defs=defs,
-                              guard='__OPJ_CONFIG_H__',
-                              env=env.derive())
-            
         # build the lib
         sources = ['bio.c', 'cio.c', 'dwt.c', 'event.c', 'image.c', 
                    'invert.c', 'j2k.c', 'jp2.c', 'mct.c', 'mqc.c', 
                    'openjpeg.c', 'opj_clock.c', 'pi.c', 'raw.c', 
                    't1.c', 't2.c', 'tcd.c', 'tgt.c', 'function_list.c']
-
+        
         libType = env['LIB_TYPE'] or 'stlib'
-        defines = []
-        if libType == 'stlib':
-            defines.append(STATIC_DEFINE)
-
         openjpeg = bld(features='c c%s add_targets' % libType, 
-                       includes='.', export_includes='.',
-                       source=sources, target='openjpeg', name='openjpeg',
-                       defines=defines,
-                       path=openjpegNode, env=env.derive(), targets_to_add=[openjpegConfigH])
-
+                       includes=['.'], export_includes=['.'],
+                       source=sources, target='openjpeg', name='J2K',
+                       path=openjpegNode, env=env.derive())
+        if libType == 'stlib':
+            openjpeg.export_defines='OPJ_STATIC'
+        
         # install lib
         if env['install_libs']:
             openjpeg.install_path = env['install_libdir']
         
         # install headers
         if env['install_headers']:
-            openjpeg.targets_to_add.append(
-                bld(features='install_tgt', 
+            openjpeg.targets_to_add=[bld(features='install_tgt', 
                     includes='openjpeg.h opj_stdint.h opj_config.h',
                     dir=openjpegNode, install_path=env['install_includedir'],
-                    name='J2K_INCLUDES_INSTALL'))
-        
+                    name='J2K_INCLUDES_INSTALL')]
 
 def distclean(context):
 
