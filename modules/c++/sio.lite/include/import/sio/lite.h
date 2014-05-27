@@ -22,6 +22,8 @@
 #ifndef __IMPORT_SIO_LITE_H__
 #define __IMPORT_SIO_LITE_H__
 
+#include "sio/lite/ReadUtils.h"
+#include "sio/lite/ElementType.h"
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/UnsupportedDataTypeException.h"
 #include "sio/lite/FileHeader.h"
