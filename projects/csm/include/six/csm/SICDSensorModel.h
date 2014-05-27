@@ -171,6 +171,218 @@ public: // Model methods
 
 public: // GeometricModel methods
     /**
+     * Returns the number of adjustable parameters
+     *
+     * \return The number of adjustable parameters
+     */
+    virtual int getNumParameters() const;
+
+    /**
+     * Returns the name for the specified adjustable parameter
+     *
+     * \param index The parameter index
+     *
+     * \return The associated parameter name
+     */
+    virtual std::string getParameterName(int index) const;
+
+    /**
+     * Returns the units for the specified adjustable parameter
+     *
+     * \param index The parameter index
+     *
+     * \return The units for the associated parameter
+     */
+    virtual std::string getParameterUnits(int index) const;
+
+    /**
+     * Returns the value for the specified adjustable parameter
+     *
+     * \param index The parameter index
+     *
+     * \return The associated parameter value
+     */
+    virtual double getParameterValue(int index) const;
+
+    /**
+     * Sets the specified adjustable parameter value
+     *
+     * \param index The parameter index
+     * \param value The value to set the parameter to
+     */
+    virtual void setParameterValue(int index, double value);
+
+    /**
+     * Gets the specified adjustable parameter type
+     *
+     * \param index The parameter index
+     *
+     * \return The associated parameter type
+     */
+    virtual ::csm::param::Type getParameterType(int index) const;
+
+    /**
+     * Sets the specified adjustable parameter type
+     *
+     * \param index The parameter index
+     * \param pType The type to set the parameter to
+     */
+    virtual void setParameterType(int index, ::csm::param::Type pType);
+
+    /**
+     * Provides the covariance between the specified parameters.  To get
+     * variance of a single parameter, set index1 and index2 to the same
+     * value.
+     *
+     * \param index1 The first parameter index
+     * \param index2 The second parameter index
+     *
+     * \return The parameter covariance
+     */
+    virtual double getParameterCovariance(int index1,
+                                          int index2) const;
+
+    /**
+     * Set the covariance between the specified parameters.  To set
+     * variance of a single parameter, set index1 and index2 to the same
+     * value.
+     *
+     * \param index1 The first parameter index
+     * \param index2 The second parameter index
+     * \param covariance The covariance to set
+     */
+    virtual void setParameterCovariance(int index1,
+                                        int index2,
+                                        double covariance);
+
+    /*
+     * Returns the partial derivatives of line and sample (in pixels per
+     * meter) with respect to the given ground pt
+     *
+     * \param[in] groundPt Ground coordinate in ECEF meters
+     *
+     * \return A vector with six elements as follows:
+     *   -  [0] = line wrt x
+     *   -  [1] = line wrt y
+     *   -  [2] = line wrt z
+     *   -  [3] = sample wrt x
+     *   -  [4] = sample wrt y
+     *   -  [5] = sample wrt z
+     */
+   virtual std::vector<double>
+   computeGroundPartials(const ::csm::EcefCoord& groundPt) const;
+
+   /**
+    * This method returns the 2x2 line and sample covariance (in pixels
+    * squared) at the given imagePt for any model error not accounted for
+    * by the model parameters.
+    *
+    * \param imagePt Currently ignored
+    *
+    * \return A vector of four elements:
+    * [0] = line variance
+    * [1] = line/sample covariance
+    * [2] = sample/line covariance
+    * [3] = sample variance
+    */
+   virtual std::vector<double>
+   getUnmodeledError(const ::csm::ImageCoord& imagePt) const;
+
+   /**
+    * This method returns the partial derivatives of line and sample
+    * in pixels per the applicable model parameter units), respectively,
+    * with respect to the model parameter given by index at the given
+    * groundPt (x,y,z in ECEF meters).
+    *
+    * \param index The desired index
+    * \param groundPt Ground point
+    * \param desiredPrecision The desired precision.  Unused.
+    * \param achievedPrecision The achieved precision.  Always set to
+    * desired precision if supplied.
+    * \param warnings Warnings.
+    */
+   virtual ::csm::RasterGM::SensorPartials computeSensorPartials(
+           int index,
+           const ::csm::EcefCoord& groundPt,
+           double desiredPrecision = 0.001,
+           double* achievedPrecision = NULL,
+           ::csm::WarningList* warnings = NULL) const;
+
+   /**
+    * This method returns the partial derivatives of line and sample
+    * (in pixels per the applicable model parameter units), respectively,
+    * with respect to the model parameter given by index at the given
+    * groundPt (x,y,z in ECEF meters).
+    *
+    * \param index The desired index
+    * \param imagePt The image point corresponding to groundPt.  Results are
+    * unpredictable if it does not correspond to calling groundToImage() with
+    * groundPt
+    * \param groundPt Ground point
+    * \param desiredPrecision The desired precision.  Unused.
+    * \param achievedPrecision The achieved precision.  Always set to
+    * desired precision if supplied.
+    * \param warnings Warnings.
+    */
+   virtual ::csm::RasterGM::SensorPartials computeSensorPartials(
+           int index,
+           const ::csm::ImageCoord& imagePt,
+           const ::csm::EcefCoord& groundPt,
+           double desiredPrecision = 0.001,
+           double* achievedPrecision = NULL,
+           ::csm::WarningList* warnings = NULL) const;
+
+   /**
+    * This method returns the partial derivatives of line and sample
+    * (in pixels per the applicable model parameter units), respectively,
+    * with respect to to each of the desired model parameters at the given
+    * groundPt (x,y,z in ECEF meters).  Desired model parameters are
+    * indicated by the given pSet.
+    *
+    * \param groundPt Ground point
+    * \param pSet Desired model parameters
+    * \param desiredPrecision The desired precision.  Unused.
+    * \param achievedPrecision The achieved precision.  Always set to
+    * desired precision if supplied.
+    * \param warnings Warnings.
+    *
+    * \return Sensor partials
+    */
+   virtual std::vector<SensorPartials> computeAllSensorPartials(
+                   const ::csm::EcefCoord& groundPt,
+                   ::csm::param::Set pSet = ::csm::param::VALID,
+                   double desiredPrecision = 0.001,
+                   double* achievedPrecision = NULL,
+                   ::csm::WarningList* warnings = NULL) const;
+
+   /**
+    * This method returns the partial derivatives of line and sample
+    * (in pixels per the applicable model parameter units), respectively,
+    * with respect to to each of the desired model parameters at the given
+    * groundPt (x,y,z in ECEF meters).  Desired model parameters are
+    * indicated by the given pSet.
+    *
+    * \param imagePt The image point corresponding to groundPt.  Results are
+    * unpredictable if it does not correspond to calling groundToImage() with
+    * groundPt
+    * \param groundPt Ground point
+    * \param pSet Desired model parameters
+    * \param desiredPrecision The desired precision.  Unused.
+    * \param achievedPrecision The achieved precision.  Always set to
+    * desired precision if supplied.
+    * \param warnings Warnings.
+    *
+    * \return Sensor partials
+    */
+   virtual std::vector<SensorPartials> computeAllSensorPartials(
+                   const ::csm::ImageCoord& imagePt,
+                   const ::csm::EcefCoord& groundPt,
+                   ::csm::param::Set pSet = ::csm::param::VALID,
+                   double desiredPrecision = 0.001,
+                   double* achievedPrecision = NULL,
+                   ::csm::WarningList* warnings = NULL) const;
+
+    /**
      * Returns coordinates in meters to indicate the general location of the
      * image.
      *
@@ -199,6 +411,28 @@ public: // RasterGM methods
                                             ::csm::WarningList* warnings) const;
 
     /**
+     * Converts groundPt in ground space (ECEF) and corresponding covariance
+     * to returned ImageCoordCovar with covariance in image space.
+     *
+     * \param[in] groundPt Ground coordinate in ECEF meters and corresponding
+     *     3x3 covariance in ECEF meters squared
+     * \param[in] desiredPrecision Requested precision in pixels of the
+     *     calculation. Currently this parameter is ignored.
+     * \param[out] achievedPrecision  Precision in pixels to which the
+     *     calculation is achieved (currently this is just set to
+     *     desiredPrecision if non-NULL).
+     * \param[out] warnings Unused
+     *
+     * \return Image coordinate in pixels and corresponding 2x2 covariance in
+     * pixels squared
+     */
+    virtual ::csm::ImageCoordCovar groundToImage(
+            const ::csm::EcefCoordCovar& groundPt,
+            double desiredPrecision,
+            double* achievedPrecision,
+            ::csm::WarningList* warnings) const;
+
+    /**
      * Converts imagePt (pixels) in image space returned EcefCoord (meters)
      * in ground space (ECEF).
      *
@@ -219,6 +453,35 @@ public: // RasterGM methods
                                            double desiredPrecision,
                                            double* achievedPrecision,
                                            ::csm::WarningList* warnings) const;
+
+    /**
+     * Converts imagePt (pixels in image space and corresponding 2x2
+     * covariance in pixels squared) to a ground coordinate with covariance.
+     *
+     * \param[in] imagePt Image line and sample in pixels and covariance in
+     *     pixels squared
+     * \param[in] height Height in meters measured with respect to the WGS-84
+     *     ellipsoid.
+     * \param[in] heightVariance Height variance in meters.  This is currently
+     *     ignored - any error in the height should be translated to
+     *     ephemeris error
+     * \param[in] desiredPrecision Requested precision in pixels of the
+     *     calculation. Currently this parameter is ignored.
+     * \param[out] achievedPrecision  Precision in pixels to which the
+     *     calculation is achieved (currently this is just set to
+     *     desiredPrecision if non-NULL).
+     * \param[out] warnings Unused
+     *
+     * \return Ground coordinate with covariance (x, y, z in ECEF meters
+     * and corresponding 3x3 covariance in ECEF meters squared)
+     */
+    virtual ::csm::EcefCoordCovar imageToGround(
+            const ::csm::ImageCoordCovar& imagePt,
+            double height,
+            double heightVariance,
+            double desiredPrecision,
+            double* achievedPrecision,
+            ::csm::WarningList* warnings) const;
 
     /**
      * Returns the starting coordinate for the imaging operation.
@@ -332,7 +595,8 @@ private:
     std::string mSensorModelState;
     std::auto_ptr<six::sicd::ComplexData> mData;
     std::auto_ptr<const scene::SceneGeometry> mGeometry;
-    std::auto_ptr<const scene::ProjectionModel> mProjection;
+    std::auto_ptr<scene::ProjectionModel> mProjection;
+    ::csm::param::Type mAdjustableTypes[scene::AdjustableParams::NUM_PARAMS];
 };
 }
 }
