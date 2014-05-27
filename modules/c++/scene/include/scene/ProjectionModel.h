@@ -24,6 +24,8 @@
 
 #include <scene/Types.h>
 #include <scene/GridECEFTransform.h>
+#include <scene/AdjustableParams.h>
+#include <scene/Errors.h>
 #include <import/math/poly.h>
 
 namespace scene
@@ -33,19 +35,7 @@ const double DELTA_GP_MAX = 0.001;
 
 class ProjectionModel
 {
-protected:
-    Vector3 mSlantPlaneNormal;
-    Vector3 mImagePlaneRowVector;
-    Vector3 mImagePlaneColVector;
-    Vector3 mImagePlaneNormal;
-    Vector3 mSCP;
-    double mScaleFactor;
-    math::poly::OneD<Vector3> mARPPoly;
-    math::poly::OneD<Vector3> mARPVelPoly;
-    math::poly::TwoD<double> mTimeCOAPoly;
-    int mLookDir;
 public:
-
     enum { MAX_ITER = 50 };
 
     ProjectionModel(const Vector3& slantPlaneNormal,
@@ -54,9 +44,10 @@ public:
                     const Vector3& scp,
                     const math::poly::OneD<Vector3>& arpPoly,
                     const math::poly::TwoD<double>& timeCOAPoly,
-                    int lookDir);
+                    int lookDir,
+                    const Errors& errors = Errors());
 
-    virtual ~ProjectionModel() {}
+    virtual ~ProjectionModel();
 
     /*!
      *  Utility function that evaluates the TimeCOAPoly at the
@@ -148,14 +139,22 @@ public:
      *  and sometimes even Image and Slant are as well.
      *
      *  \param scenePoint A scene (ground) point in 3-space
+     *  \param delta Delta values to apply for the adjustable parameters
      *  \param oTimeCOA [output] An optional ptr to the timeCOA,
      *  which, if NULL is not set.
      *  \return An continuous surface image point
      *
      */
     types::RowCol<double> sceneToImage(const Vector3& scenePoint,
-                                      double* oTimeCOA) const;
+                                       const AdjustableParams& delta,
+                                       double* oTimeCOA = NULL) const;
 
+    // Same as above but with a delta of all 0's
+    types::RowCol<double> sceneToImage(const Vector3& scenePoint,
+                                       double* oTimeCOA = NULL) const
+    {
+        return sceneToImage(scenePoint, AdjustableParams(), oTimeCOA);
+    }
 
     /*!
      *  Implements (Slant plane) Image to Scene (Ground plane)
@@ -165,14 +164,29 @@ public:
      *  \param A ground plane reference point
      *  \param groundPlaneNormal A parameter which could just be the
      *  normalized ground plane reference point
+     *  \param delta Delta values to apply for the adjustable parameters
      *  \param oTimeCOA [output] optional evaluation of TimeCOAPoly at
      *                  imageGridPoint.row, imageGridPoint.col
      *  \return A scene (ground) point in 3 space
      */
     Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
-                                const Vector3& groundRefPoint,
-                                const Vector3& groundPlaneNormal,
-                                double *oTimeCOA) const;
+                         const Vector3& groundRefPoint,
+                         const Vector3& groundPlaneNormal,
+                         const AdjustableParams& delta,
+                         double* oTimeCOA = NULL) const;
+
+    // Same as above but with a delta of all 0's
+    Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
+                         const Vector3& groundRefPoint,
+                         const Vector3& groundPlaneNormal,
+                         double* oTimeCOA = NULL) const
+    {
+        return imageToScene(imageGridPoint,
+                            groundRefPoint,
+                            groundPlaneNormal,
+                            AdjustableParams(),
+                            oTimeCOA);
+    }
 
     /*!
      * Implements chapter 9 Precise R/Rdot To Constant HAE Surface Projection
@@ -190,6 +204,7 @@ public:
      *  (continuous)
      *  \param height Surface height (meters) above the WGS-84 reference
      *  ellipsoid
+     *  \param delta Delta values to apply for the adjustable parameters
      *  \param heightThreshold Height threshold (meters) for convergence of
      *  iterative projection sequence.  Must be positive.  Default value will
      *  yield highly accurate projection results, including for very short
@@ -204,8 +219,143 @@ public:
      */
     Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
                          double height,
+                         const AdjustableParams& delta = AdjustableParams(),
                          double heightThreshold = 1.0,
                          size_t maxNumIters = 3) const;
+
+    /*!
+     * Computes sensor partials for imageToScene()
+     * Provides a Jacobian matrix of form [ARP-RIC, Vel-RIC, Rbias]
+     */
+    math::linear::MatrixMxN<3, 7> imageToSceneSensorPartials(
+            const types::RowCol<double>& imageGridPoint,
+            double height,
+            const Vector3& scenePoint,
+            double delta = 0.0001) const;
+
+    // Same as above but computes scene point via imageToScene()
+    math::linear::MatrixMxN<3, 7> imageToSceneSensorPartials(
+            const types::RowCol<double>& imageGridPoint,
+            double height,
+            double delta = 0.0001) const;
+
+    /*
+     * Computes partials for imageToScene() (row and col)
+     */
+    math::linear::MatrixMxN<3, 2> imageToScenePartials(
+            const types::RowCol<double>& imageGridPoint,
+            double height,
+            const Vector3& scenePoint,
+            double delta = 0.0001) const;
+
+    // Same as above but computes scene point via imageToScene()
+    math::linear::MatrixMxN<3, 2> imageToScenePartials(
+            const types::RowCol<double>& imageGridPoint,
+            double height,
+            double delta = 0.0001) const;
+
+    /*
+     * Computes sensor partials for sceneToImage()
+     */
+    math::linear::MatrixMxN<2, 7> sceneToImageSensorPartials(
+            const Vector3& scenePoint,
+            const types::RowCol<double>& imageGridPoint,
+            double delta = 0.0001) const;
+
+    // Same as above but computes image grid point via sceneToImage()
+    math::linear::MatrixMxN<2,7,double> sceneToImageSensorPartials(
+            const Vector3& scenePoint,
+            double delta = 0.0001) const;
+
+    /*!
+     * Computes partials for sceneToImage() (row and col)
+     */
+    math::linear::MatrixMxN<2, 3> sceneToImagePartials(
+            const Vector3& scenePoint,
+            const types::RowCol<double>& imageGridPoint,
+            double delta = 0.0001) const;
+
+    // Same as above but computes image grid point via sceneToImage()
+    math::linear::MatrixMxN<2, 3> sceneToImagePartials(
+            const Vector3& scenePoint,
+            double delta = 0.0001) const;
+
+    /*!
+     * Provides sensor error covariance matrix with tropo and iono errors
+     * rolled in
+     */
+    math::linear::MatrixMxN<7, 7> getErrorCovariance(
+                const Vector3& scenePoint,
+                double timeCOA) const;
+
+    // Same as above but gets timeCOA from imageGridPoint
+    math::linear::MatrixMxN<7, 7> getErrorCovariance(
+            const Vector3& scenePoint,
+            const types::RowCol<double>& imageGridPoint) const;
+
+    // Same as above but gets imageGridPoint by using sceneToImage()
+    math::linear::MatrixMxN<7, 7> getErrorCovariance(
+            const Vector3& scenePoint) const;
+
+    // Same as above but uses the SCP as scenePoint
+    math::linear::MatrixMxN<7, 7> getErrorCovariance() const;
+
+    math::linear::MatrixMxN<2, 2> getUnmodeledErrorCovariance() const
+    {
+        return mErrors.mUnmodeledErrorCovar;
+    }
+
+    AdjustableParams& getAdjustableParams()
+    {
+        return mAdjustableParams;
+    }
+
+    const AdjustableParams& getAdjustableParams() const
+    {
+        return mAdjustableParams;
+    }
+
+    Errors& getErrors()
+    {
+        return mErrors;
+    }
+
+    const Errors& getErrors() const
+    {
+        return mErrors;
+    }
+
+private:
+    // Returns matrix for RIC to ECEF coordinate transform.
+    // Set earthInitialSpin equal to 0 for RIC_ECF
+    math::linear::MatrixMxN<3, 3> getRICtoECEFTransformMatrix(
+            double earthInitialSpin,
+            double timeCOA) const;
+
+    math::linear::MatrixMxN<3, 3> getRICtoECEFTransformMatrix(
+            double earthInitialSpin,
+            const types::RowCol<double>& imageGridPoint) const;
+
+    void imageToSceneAdjustment(const AdjustableParams& delta,
+                                double timeCOA,
+                                double& r,
+                                Vector3& arpCOA,
+                                Vector3& velCOA) const;
+
+protected:
+    Vector3 mSlantPlaneNormal;
+    Vector3 mImagePlaneRowVector;
+    Vector3 mImagePlaneColVector;
+    Vector3 mImagePlaneNormal;
+    Vector3 mSCP;
+    double mScaleFactor;
+    math::poly::OneD<Vector3> mARPPoly;
+    math::poly::OneD<Vector3> mARPVelPoly;
+    math::poly::TwoD<double> mTimeCOAPoly;
+    int mLookDir;
+
+    AdjustableParams mAdjustableParams;
+    Errors mErrors;
 };
 
 class RangeAzimProjectionModel : public ProjectionModel
@@ -225,9 +375,8 @@ public:
                              const Vector3& scp,
                              const math::poly::OneD<Vector3>& arpPoly,
                              const math::poly::TwoD<double>& timeCOAPoly,
-                             int lookDir);
-
-    virtual ~RangeAzimProjectionModel() {}
+                             int lookDir,
+                             const Errors& errors = Errors());
 
     virtual void computeContour(const Vector3& arpCOA,
                                 const Vector3& velCOA,
@@ -255,9 +404,8 @@ public:
                              const Vector3& scp,
                              const math::poly::OneD<Vector3>& arpPoly,
                              const math::poly::TwoD<double>& timeCOAPoly,
-                             int lookDir);
-
-    virtual ~RangeZeroProjectionModel() {}
+                             int lookDir,
+                             const Errors& errors = Errors());
 
     virtual void computeContour(const Vector3& arpCOA,
                                 const Vector3& velCOA,
@@ -278,9 +426,8 @@ public:
                          const Vector3& scp,
                          const math::poly::OneD<Vector3>& arpPoly,
                          const math::poly::TwoD<double>& timeCOAPoly,
-                         int lookDir);
-
-    virtual ~PlaneProjectionModel() {}
+                         int lookDir,
+                         const Errors& errors = Errors());
 
     virtual void computeContour(const Vector3& arpCOA,
                                 const Vector3& velCOA,

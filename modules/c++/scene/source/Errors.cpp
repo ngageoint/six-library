@@ -19,23 +19,41 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SCENE_H__
-#define __IMPORT_SCENE_H__
 
-#include <scene/AdjustableParams.h>
-#include <scene/CoordinateTransform.h>
-#include <scene/ECEFToLLATransform.h>
-#include <scene/EllipsoidModel.h>
 #include <scene/Errors.h>
-#include <scene/FrameType.h>
-#include <scene/LLAToECEFTransform.h>
-#include <scene/LocalCoordinateTransform.h>
-#include <scene/GridECEFTransform.h>
-#include <scene/SceneGeometry.h>
-#include <scene/GridGeometry.h>
-#include <scene/Types.h>
-#include <scene/Utilities.h>
-#include <scene/ProjectionModel.h>
-#include <scene/ProjectionPolynomialFitter.h>
 
-#endif
+namespace
+{
+template <typename MatT>
+void setToZero(MatT& matrix)
+{
+    for (size_t row = 0; row < matrix.rows(); ++row)
+    {
+        for (size_t col = 0; col < matrix.cols(); ++col)
+        {
+            matrix(row, col) = 0.0;
+        }
+    }
+}
+}
+
+namespace scene
+{
+Errors::Errors() :
+    mFrameType(FrameType::RIC_ECF),
+    mSensorErrorCovar(0.0),
+    mUnmodeledErrorCovar(0.0),
+    mIonoErrorCovar(0.0),
+    mTropoErrorCovar(0.0)
+{
+}
+
+void Errors::clear()
+{
+    mFrameType = FrameType::RIC_ECF;
+    setToZero(mSensorErrorCovar);
+    setToZero(mUnmodeledErrorCovar);
+    setToZero(mIonoErrorCovar);
+    setToZero(mTropoErrorCovar);
+}
+}

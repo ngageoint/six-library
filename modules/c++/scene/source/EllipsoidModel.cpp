@@ -22,8 +22,13 @@
 #include <math/Constants.h>
 #include "scene/EllipsoidModel.h"
 
-scene::EllipsoidModel::EllipsoidModel(scene::Units unitsVal,
-        scene::AngularUnits angularUnitsVal, double eqRadiusVal,
+namespace scene
+{
+const double WGS84EllipsoidModel::EQUATORIAL_RADIUS_METERS = 6378137.0;
+const double WGS84EllipsoidModel::POLAR_RADIUS_METERS = 6356752.3142;
+
+EllipsoidModel::EllipsoidModel(Units unitsVal,
+        AngularUnits angularUnitsVal, double eqRadiusVal,
         double polRadiusVal) : units(INVALID_UNITS),
             angularUnits(INVALID_ANGULAR_UNITS)
 {
@@ -34,13 +39,13 @@ scene::EllipsoidModel::EllipsoidModel(scene::Units unitsVal,
 
 }
 
-scene::EllipsoidModel::EllipsoidModel(const scene::EllipsoidModel & m)
+EllipsoidModel::EllipsoidModel(const EllipsoidModel & m)
 {
     *this = m;
 }
 
-scene::EllipsoidModel&
-scene::EllipsoidModel::operator=(const scene::EllipsoidModel & m)
+EllipsoidModel&
+EllipsoidModel::operator=(const EllipsoidModel & m)
 {
     setUnits(m.getUnits());
     setAngularUnits(m.getAngularUnits());
@@ -50,54 +55,54 @@ scene::EllipsoidModel::operator=(const scene::EllipsoidModel & m)
     return *this;
 }
 
-scene::Units scene::EllipsoidModel::getUnits() const
+Units EllipsoidModel::getUnits() const
 {
     return units;
 }
 
-scene::AngularUnits scene::EllipsoidModel::getAngularUnits() const
+AngularUnits EllipsoidModel::getAngularUnits() const
 {
     return angularUnits;
 }
 
-double scene::EllipsoidModel::getEquatorialRadius() const
+double EllipsoidModel::getEquatorialRadius() const
 {
     return equatorialRadius;
 }
 
-double scene::EllipsoidModel::getPolarRadius() const
+double EllipsoidModel::getPolarRadius() const
 {
     return polarRadius;
 }
 
-double scene::EllipsoidModel::calculateFlattening() const
+double EllipsoidModel::calculateFlattening() const
 {
     double flattening = equatorialRadius - polarRadius;
     flattening /= equatorialRadius;
     return flattening;
 }
 
-double scene::EllipsoidModel::calculateEccentricity() const
+double EllipsoidModel::calculateEccentricity() const
 {
     double ecc = 1.0 - pow(polarRadius,2)/pow(equatorialRadius,2);
     ecc = sqrt(ecc);
     return ecc;
 }
 
-void scene::EllipsoidModel::setUnits(scene::Units val)
+void EllipsoidModel::setUnits(Units val)
 {
     //if the units value is different from the previous one,
     //update the radius values so they are in the new units.
     if(units == INVALID_UNITS || units != val)
     {
-        if( val == scene::METERS)
+        if( val == METERS)
         {
             //do feet to meters
             equatorialRadius *= math::Constants::FEET_TO_METERS;
             polarRadius *= math::Constants::FEET_TO_METERS;
             units = val;
         }
-        else if(val == scene::FEET)
+        else if(val == FEET)
         {
             //do meters to feet
             equatorialRadius *= math::Constants::METERS_TO_FEET;
@@ -112,11 +117,11 @@ void scene::EllipsoidModel::setUnits(scene::Units val)
     }
 }
 
-void scene::EllipsoidModel::setAngularUnits(scene::AngularUnits val)
+void EllipsoidModel::setAngularUnits(AngularUnits val)
 {
     if(angularUnits == INVALID_ANGULAR_UNITS || angularUnits != val)
     {
-        if(val == scene::DEGREES || val == scene::RADIANS)
+        if(val == DEGREES || val == RADIANS)
         {
             angularUnits = val;
         }
@@ -127,7 +132,7 @@ void scene::EllipsoidModel::setAngularUnits(scene::AngularUnits val)
     }
 }
 
-void scene::EllipsoidModel::setEquatorialRadius(double val)
+void EllipsoidModel::setEquatorialRadius(double val)
 {
     if(val > 0)
     {
@@ -139,7 +144,7 @@ void scene::EllipsoidModel::setEquatorialRadius(double val)
     }
 }
 
-void scene::EllipsoidModel::setPolarRadius(double val)
+void EllipsoidModel::setPolarRadius(double val)
 {
     if(val > 0)
     {
@@ -151,36 +156,35 @@ void scene::EllipsoidModel::setPolarRadius(double val)
     }
 }
 
-scene::WGS84EllipsoidModel::WGS84EllipsoidModel()
+WGS84EllipsoidModel::WGS84EllipsoidModel()
 {
-    setUnits(scene::METERS);
-    setAngularUnits(scene::RADIANS);
+    setUnits(METERS);
+    setAngularUnits(RADIANS);
     initRadiusValues();
 }
 
-scene::WGS84EllipsoidModel::WGS84EllipsoidModel(scene::Units unitsVal,
-        scene::AngularUnits angularUnitsVal)
+WGS84EllipsoidModel::WGS84EllipsoidModel(Units unitsVal,
+        AngularUnits angularUnitsVal)
 {
     setUnits(unitsVal);
     setAngularUnits(angularUnitsVal);
     initRadiusValues();
 }
 
-scene::WGS84EllipsoidModel::WGS84EllipsoidModel(
-        const scene::WGS84EllipsoidModel & m)
+WGS84EllipsoidModel::WGS84EllipsoidModel(
+        const WGS84EllipsoidModel & m)
 {
     *this = m;
     initRadiusValues();
 }
 
-void scene::WGS84EllipsoidModel::initRadiusValues()
+void WGS84EllipsoidModel::initRadiusValues()
 {
-    //these values are in meters
-    equatorialRadius = 6378137.0;
-    polarRadius = 6356752.3142;
+    equatorialRadius = EQUATORIAL_RADIUS_METERS;
+    polarRadius = POLAR_RADIUS_METERS;
 
-    //if units are feet, update the values
-    if(getUnits() == scene::FEET)
+    // If units are feet, update the values
+    if (getUnits() == FEET)
     {
         //do meters to feet
         equatorialRadius *= math::Constants::METERS_TO_FEET;
@@ -188,24 +192,24 @@ void scene::WGS84EllipsoidModel::initRadiusValues()
     }
 }
 
-void scene::WGS84EllipsoidModel::setEquatorialRadius(double val)
+void WGS84EllipsoidModel::setEquatorialRadius(double val)
 {
     //can't change the value - do some error
     throw except::Exception(Ctxt("Tried to change the equatorial radius - not supported"));
 }
 
-void scene::WGS84EllipsoidModel::setPolarRadius(double val)
+void WGS84EllipsoidModel::setPolarRadius(double val)
 {
     throw except::Exception(Ctxt("Tried to change the polar radius - not supported"));
 
 }
 
-scene::EllipsoidModel&
-scene::WGS84EllipsoidModel::operator=(const scene::EllipsoidModel & m)
+EllipsoidModel&
+WGS84EllipsoidModel::operator=(const EllipsoidModel & m)
 {
     setUnits(m.getUnits());
     setAngularUnits(m.getAngularUnits());
 
     return *this;
 }
-
+}

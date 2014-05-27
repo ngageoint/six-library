@@ -159,6 +159,8 @@ protected:
 class WGS84EllipsoidModel : public EllipsoidModel
 {
 public:
+    static const double EQUATORIAL_RADIUS_METERS;
+    static const double POLAR_RADIUS_METERS;
 
     /**
      * This constructor initializes the object with default values.  By default

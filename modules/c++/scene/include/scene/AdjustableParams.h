@@ -19,23 +19,54 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SCENE_H__
-#define __IMPORT_SCENE_H__
+#ifndef __SCENE_ADJUSTABLE_PARAMS_H__
+#define __SCENE_ADJUSTABLE_PARAMS_H__
 
-#include <scene/AdjustableParams.h>
-#include <scene/CoordinateTransform.h>
-#include <scene/ECEFToLLATransform.h>
-#include <scene/EllipsoidModel.h>
-#include <scene/Errors.h>
-#include <scene/FrameType.h>
-#include <scene/LLAToECEFTransform.h>
-#include <scene/LocalCoordinateTransform.h>
-#include <scene/GridECEFTransform.h>
-#include <scene/SceneGeometry.h>
-#include <scene/GridGeometry.h>
+#include <string>
+
 #include <scene/Types.h>
-#include <scene/Utilities.h>
-#include <scene/ProjectionModel.h>
-#include <scene/ProjectionPolynomialFitter.h>
+
+namespace scene
+{
+// These should be in RIC_ECF
+struct AdjustableParams
+{
+    enum ParamsEnum
+    {
+        ARP_RADIAL = 0,
+        ARP_IN_TRACK = 1,
+        ARP_CROSS_TRACK = 2,
+        ARP_VEL_RADIAL = 3,
+        ARP_VEL_IN_TRACK = 4,
+        ARP_VEL_CROSS_TRACK = 5,
+        RANGE_BIAS = 6,
+        NUM_PARAMS = 7
+    };
+
+    // Initializes all parameters to 0
+    AdjustableParams();
+
+    static std::string name(ParamsEnum param);
+
+    static std::string units(ParamsEnum param);
+
+    Vector3 getARPVector() const
+    {
+        return Vector3(mParams + ARP_RADIAL);
+    }
+
+    Vector3 getARPVelocityVector() const
+    {
+        return Vector3(mParams + ARP_VEL_RADIAL);
+    }
+
+    double operator[](std::ptrdiff_t idx) const
+    {
+        return mParams[idx];
+    }
+
+    double mParams[NUM_PARAMS];
+};
+}
 
 #endif

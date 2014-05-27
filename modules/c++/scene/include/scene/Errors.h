@@ -19,23 +19,26 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SCENE_H__
-#define __IMPORT_SCENE_H__
+#ifndef __SCENE_ERRORS_H__
+#define __SCENE_ERRORS_H__
 
-#include <scene/AdjustableParams.h>
-#include <scene/CoordinateTransform.h>
-#include <scene/ECEFToLLATransform.h>
-#include <scene/EllipsoidModel.h>
-#include <scene/Errors.h>
+#include <math/linear/MatrixMxN.h>
 #include <scene/FrameType.h>
-#include <scene/LLAToECEFTransform.h>
-#include <scene/LocalCoordinateTransform.h>
-#include <scene/GridECEFTransform.h>
-#include <scene/SceneGeometry.h>
-#include <scene/GridGeometry.h>
-#include <scene/Types.h>
-#include <scene/Utilities.h>
-#include <scene/ProjectionModel.h>
-#include <scene/ProjectionPolynomialFitter.h>
+
+namespace scene
+{
+struct Errors
+{
+    Errors();
+
+    void clear();
+
+    FrameType mFrameType;
+    math::linear::MatrixMxN<7, 7> mSensorErrorCovar;
+    math::linear::MatrixMxN<2, 2> mUnmodeledErrorCovar;
+    math::linear::MatrixMxN<2, 2> mIonoErrorCovar;
+    math::linear::MatrixMxN<1, 1> mTropoErrorCovar;
+};
+}
 
 #endif
