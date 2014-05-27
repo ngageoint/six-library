@@ -34,9 +34,9 @@
 
 namespace six
 {
-namespace csm
+namespace CSM
 {
-class SIXSensorModel : public ::csm::RasterGM
+class SIXSensorModel : public csm::RasterGM
 {
 public:
     static const char FAMILY[];
@@ -91,7 +91,7 @@ public: // GeometricModel methods
     /**
      * Always throws since there are no parameters
      */
-    virtual ::csm::SharingCriteria getParameterSharingCriteria(int index) const;
+    virtual csm::SharingCriteria getParameterSharingCriteria(int index) const;
 
     /**
      * Always throws since there are no parameters
@@ -106,12 +106,12 @@ public: // GeometricModel methods
     /**
      * Always throws since there are no parameters
      */
-    virtual ::csm::param::Type getParameterType(int index) const;
+    virtual csm::param::Type getParameterType(int index) const;
 
     /**
      * Always throws since there are no parameters
      */
-    virtual void setParameterType(int index, ::csm::param::Type pType);
+    virtual void setParameterType(int index, csm::param::Type pType);
 
     /**
      * Always throws since there are no parameters
@@ -143,7 +143,7 @@ public: // GeometricModel methods
      */
     virtual void setGeometricCorrectionSwitch(int index,
                                               bool value,
-                                              ::csm::param::Type pType);
+                                              csm::param::Type pType);
 
     /**
      * Always throws since there are no geometric correction switches
@@ -163,7 +163,7 @@ public: // RasterGM methods
      * to be used beyond the image boundaries.)
      */
     virtual
-    std::pair< ::csm::ImageCoord, ::csm::ImageCoord> getValidImageRange() const;
+    std::pair< csm::ImageCoord, csm::ImageCoord> getValidImageRange() const;
 
     /*
      * Returns the minimum and maximum heights (in meters relative to WGS-84
@@ -189,7 +189,7 @@ public: // RasterGM methods
      *   -  [5] = sample wrt z
      */
     virtual std::vector<double>
-    computeGroundPartials(const ::csm::EcefCoord& groundPt) const;
+    computeGroundPartials(const csm::EcefCoord& groundPt) const;
 
     /*
      * Returns the position and direction of the imaging locus nearest the
@@ -204,17 +204,17 @@ public: // RasterGM methods
      *     desiredPrecision if non-NULL).
      * \param[out] warnings Unused
      */
-    virtual ::csm::EcefLocus imageToProximateImagingLocus(
-            const ::csm::ImageCoord& imagePt,
-            const ::csm::EcefCoord& groundPt,
+    virtual csm::EcefLocus imageToProximateImagingLocus(
+            const csm::ImageCoord& imagePt,
+            const csm::EcefCoord& groundPt,
             double desiredPrecision,
             double* achievedPrecision,
-            ::csm::WarningList* warnings) const;
+            csm::WarningList* warnings) const;
 
     /*
      * Returns a reference to a NoCorrelationModel
      */
-    virtual const ::csm::CorrelationModel& getCorrelationModel() const;
+    virtual const csm::CorrelationModel& getCorrelationModel() const;
 
     /*
      * Returns the 2x2 line and sample cross covariance (in pixels squared)
@@ -224,60 +224,60 @@ public: // RasterGM methods
      * \return A four element vector of 0's
      */
     virtual std::vector<double> getUnmodeledCrossCovariance(
-            const ::csm::ImageCoord& pt1,
-            const ::csm::ImageCoord& pt2) const;
+            const csm::ImageCoord& pt1,
+            const csm::ImageCoord& pt2) const;
 
 public:
-    // All remaining public methods throw ::csm::Error's that they're not
+    // All remaining public methods throw csm::Error's that they're not
     // implemented
 
     // These are pure virtual from GeometricModel
-    virtual void setReferencePoint(const ::csm::EcefCoord& groundPt);
+    virtual void setReferencePoint(const csm::EcefCoord& groundPt);
 
     virtual std::vector<double> getCrossCovarianceMatrix(
-           const ::csm::GeometricModel& comparisonModel,
-           ::csm::param::Set pSet,
-           const ::csm::GeometricModel::GeometricModelList& otherModels) const;
+           const csm::GeometricModel& comparisonModel,
+           csm::param::Set pSet,
+           const csm::GeometricModel::GeometricModelList& otherModels) const;
 
     // These are pure virtual from RasterGM
-    virtual ::csm::ImageCoordCovar groundToImage(
-            const ::csm::EcefCoordCovar& groundPt,
+    virtual csm::ImageCoordCovar groundToImage(
+            const csm::EcefCoordCovar& groundPt,
             double desiredPrecision,
             double* achievedPrecision,
-            ::csm::WarningList* warnings) const;
+            csm::WarningList* warnings) const;
 
-    virtual ::csm::EcefCoordCovar imageToGround(
-            const ::csm::ImageCoordCovar& imagePt,
+    virtual csm::EcefCoordCovar imageToGround(
+            const csm::ImageCoordCovar& imagePt,
             double height,
             double heightVariance,
             double desiredPrecision,
             double* achievedPrecision,
-            ::csm::WarningList* warnings) const;
+            csm::WarningList* warnings) const;
 
-    virtual ::csm::EcefLocus imageToRemoteImagingLocus(
-            const ::csm::ImageCoord& imagePt,
+    virtual csm::EcefLocus imageToRemoteImagingLocus(
+            const csm::ImageCoord& imagePt,
             double desiredPrecision,
             double* achievedPrecision,
-            ::csm::WarningList* warnings) const;
+            csm::WarningList* warnings) const;
 
-    virtual ::csm::RasterGM::SensorPartials computeSensorPartials(
+    virtual csm::RasterGM::SensorPartials computeSensorPartials(
             int index,
-            const ::csm::EcefCoord& groundPt,
+            const csm::EcefCoord& groundPt,
             double desiredPrecision,
             double* achievedPrecision,
-            ::csm::WarningList* warnings) const;
+            csm::WarningList* warnings) const;
 
-    virtual ::csm::RasterGM::SensorPartials computeSensorPartials(
+    virtual csm::RasterGM::SensorPartials computeSensorPartials(
             int index,
-            const ::csm::ImageCoord& imagePt,
-            const ::csm::EcefCoord& groundPt,
+            const csm::ImageCoord& imagePt,
+            const csm::EcefCoord& groundPt,
             double desiredPrecision,
             double* achievedPrecision,
-            ::csm::WarningList* warnings) const;
+            csm::WarningList* warnings) const;
 
 private:
     const scene::ECEFToLLATransform mECEFToLLA;
-    const ::csm::NoCorrelationModel mCorrelationModel;
+    const csm::NoCorrelationModel mCorrelationModel;
 };
 }
 }
