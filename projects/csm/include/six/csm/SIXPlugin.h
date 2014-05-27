@@ -45,9 +45,9 @@
 
 namespace six
 {
-namespace csm
+namespace CSM
 {
-class SIXPlugin: public ::csm::Plugin
+class SIXPlugin: public csm::Plugin
 {
 public:
     /**
@@ -76,7 +76,7 @@ public:
      *
      * \return CSM API version that the plugin conforms to
      */
-    virtual ::csm::Version getCsmVersion() const;
+    virtual csm::Version getCsmVersion() const;
 
     /**
      * Get number of sensor models.
@@ -110,7 +110,7 @@ public:
      *
      * \return The sensor model version
      */
-    virtual ::csm::Version getModelVersion(const std::string& modelName) const;
+    virtual csm::Version getModelVersion(const std::string& modelName) const;
 
     /**
      * Determine whether the sensor model identified by the supplied name can
@@ -126,7 +126,7 @@ public:
     virtual bool canModelBeConstructedFromState(
        const std::string& modelName,
        const std::string& modelState,
-       ::csm::WarningList* warnings) const;
+       csm::WarningList* warnings) const;
 
     /**
      * Determine whether the sensor model identified by the supplied name can
@@ -140,9 +140,9 @@ public:
      * parameters, otherwise false.
      */
     virtual bool canModelBeConstructedFromISD(
-       const ::csm::Isd& imageSupportData,
+       const csm::Isd& imageSupportData,
        const std::string& modelName,
-       ::csm::WarningList* warnings) const;
+       csm::WarningList* warnings) const;
 
     /**
      * Construct the sensor model from the given state string.
@@ -152,9 +152,9 @@ public:
      *
      * \return The sensor model object
      */
-    virtual SIX_CSM_EXPORT_API ::csm::Model* constructModelFromState(
+    virtual SIX_CSM_EXPORT_API csm::Model* constructModelFromState(
        const std::string& modelState,
-       ::csm::WarningList* warnings) const;
+       csm::WarningList* warnings) const;
 
     /**
      * Construct the sensor model from the given ISD object.
@@ -165,10 +165,10 @@ public:
      *
      * \return The sensor model object
      */
-    virtual SIX_CSM_EXPORT_API ::csm::Model* constructModelFromISD(
-       const ::csm::Isd& imageSupportData,
+    virtual SIX_CSM_EXPORT_API csm::Model* constructModelFromISD(
+       const csm::Isd& imageSupportData,
        const std::string& modelName,
-       ::csm::WarningList* warnings) const;
+       csm::WarningList* warnings) const;
 
     /**
      * Obtain the sensor model name from the given state string.
@@ -180,7 +180,7 @@ public:
      */
     virtual std::string getModelNameFromModelState(
        const std::string& modelState,
-       ::csm::WarningList* warnings) const;
+       csm::WarningList* warnings) const;
 
     /**
      * Determine whether the given ISD object can be converted into a
@@ -194,9 +194,9 @@ public:
      * parameters, otherwise false.
      */
     virtual bool canISDBeConvertedToModelState(
-       const ::csm::Isd& imageSupportData,
+       const csm::Isd& imageSupportData,
        const std::string& modelName,
-       ::csm::WarningList* warnings) const;
+       csm::WarningList* warnings) const;
 
     /**
      * Convert the given ISD object into a sensor model state string.
@@ -208,9 +208,9 @@ public:
      * \return The sensor model state string
      */
     virtual std::string convertISDToModelState(
-       const ::csm::Isd& imageSupportData,
+       const csm::Isd& imageSupportData,
        const std::string& modelName,
-       ::csm::WarningList* warnings) const;
+       csm::WarningList* warnings) const;
 
 private:
     // This special constructor is responsible for registering this plugin by

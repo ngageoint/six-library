@@ -42,12 +42,12 @@ double square(double val)
 
 namespace six
 {
-namespace csm
+namespace CSM
 {
-const ::csm::Version SICDSensorModel::VERSION(1, 0, 3);
+const csm::Version SICDSensorModel::VERSION(1, 0, 3);
 const char SICDSensorModel::NAME[] = "SICD_SENSOR_MODEL";
 
-SICDSensorModel::SICDSensorModel(const ::csm::Isd& isd,
+SICDSensorModel::SICDSensorModel(const csm::Isd& isd,
                                  const std::string& dataDir)
 {
     setSchemaDir(dataDir);
@@ -56,7 +56,7 @@ SICDSensorModel::SICDSensorModel(const ::csm::Isd& isd,
 
     if (format == "NITF2.1")
     {
-        initializeFromISD(dynamic_cast<const ::csm::Nitf21Isd&>(isd));
+        initializeFromISD(dynamic_cast<const csm::Nitf21Isd&>(isd));
     }
     else if (format == "FILENAME")
     {
@@ -65,7 +65,7 @@ SICDSensorModel::SICDSensorModel(const ::csm::Isd& isd,
     }
     else
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            "Unsupported ISD format " + format,
                            "SICDSensorModel::constructModelFromISD");
     }
@@ -99,7 +99,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
             container->getNumData() != 1 ||
             container->getData(0)->getDataType() != six::DataType::COMPLEX)
         {
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SICD",
                                "SICDSensorModel::initializeFromFile");
         }
@@ -117,17 +117,17 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
                 mGeometry.get()));
         std::fill_n(mAdjustableTypes,
                     scene::AdjustableParams::NUM_PARAMS,
-                    ::csm::param::NONE);
+                    csm::param::NONE);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            ex.getMessage(),
                            "SICDSensorModel::initializeFromFile");
     }
 }
 
-void SICDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
+void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
 {
     try
     {
@@ -135,7 +135,7 @@ void SICDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
         xml::lite::Document* sicdXML = NULL;
         xml::lite::MinidomParser domParser;
 
-        const std::vector< ::csm::Des>& desList(isd.fileDess());
+        const std::vector< csm::Des>& desList(isd.fileDess());
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
             const std::string& desData(desList[ii].data());
@@ -167,7 +167,7 @@ void SICDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
                         // DES will always appear prior to a SICD DES, so if we
                         // do encounter a SICD DES before this point, we can
                         // safely say it's a SICD NITF.
-                        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+                        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                                            "SIDD, not SICD, NITF",
                                            "SICDSensorModel::SICDSensorModel");
                     }
@@ -181,7 +181,7 @@ void SICDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
 
         if (sicdXML == NULL)
         {
-            throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+            throw csm::Error(csm::Error::UNKNOWN_ERROR,
                                "Not a SICD",
                                "SICDSensorModel::SICDSensorModel");
         }
@@ -206,21 +206,21 @@ void SICDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd)
                 mGeometry.get()));
         std::fill_n(mAdjustableTypes,
                     scene::AdjustableParams::NUM_PARAMS,
-                    ::csm::param::NONE);
+                    csm::param::NONE);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            ex.getMessage(),
                            "SICDSensorModel::initializeFromISD");
     }
 }
 
-bool SICDSensorModel::containsComplexDES(const ::csm::Nitf21Isd& isd)
+bool SICDSensorModel::containsComplexDES(const csm::Nitf21Isd& isd)
 {
     xml::lite::MinidomParser domParser;
 
-    const std::vector< ::csm::Des>& desList(isd.fileDess());
+    const std::vector< csm::Des>& desList(isd.fileDess());
     for (size_t ii = 0; ii < desList.size(); ++ii)
     {
         const std::string& desData(desList[ii].data());
@@ -264,7 +264,7 @@ bool SICDSensorModel::containsComplexDES(const ::csm::Nitf21Isd& isd)
     return false;
 }
 
-::csm::Version SICDSensorModel::getVersion() const
+csm::Version SICDSensorModel::getVersion() const
 {
     return VERSION;
 }
@@ -285,7 +285,7 @@ std::string SICDSensorModel::getImageIdentifier() const
 }
 
 void SICDSensorModel::setImageIdentifier(const std::string& imageId,
-                                         ::csm::WarningList* )
+                                         csm::WarningList* )
 
 {
     mData->setName(imageId);
@@ -348,7 +348,7 @@ std::string SICDSensorModel::getParameterName(int index) const
 {
     if (index < 0 || index >= getNumParameters())
     {
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                 "Invalid index in call in function call",
                 " SICDSensorModel::getParameterName");
     }
@@ -360,7 +360,7 @@ std::string SICDSensorModel::getParameterUnits(int index) const
 {
     if (index < 0 || index >= getNumParameters())
     {
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                 "Invalid index in call in function call",
                 " SICDSensorModel::getParameterUnits");
     }
@@ -372,7 +372,7 @@ double SICDSensorModel::getParameterValue(int index) const
 {
     if (index < 0 || index >= getNumParameters())
     {
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                 "Invalid index in call in function call",
                 " SICDSensorModel::getParameterValue");
     }
@@ -383,29 +383,29 @@ void SICDSensorModel::setParameterValue(int index, double value)
 {
     if (index < 0 || index >= getNumParameters())
     {
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                 "Invalid index in call in function call",
                 " SICDSensorModel::setParameterValue");
     }
     mProjection->getAdjustableParams().mParams[index] = value;
 }
 
-::csm::param::Type SICDSensorModel::getParameterType(int index) const
+csm::param::Type SICDSensorModel::getParameterType(int index) const
 {
     if (index < 0 || index >= getNumParameters())
     {
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                 "Invalid index in call in function call",
                 " SICDSensorModel::getParameterType");
     }
     return mAdjustableTypes[index];
 }
 
-void SICDSensorModel::setParameterType(int index, ::csm::param::Type pType)
+void SICDSensorModel::setParameterType(int index, csm::param::Type pType)
 {
     if (index < 0 || index >= getNumParameters())
     {
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                 "Invalid index in call in function call",
                 " SICDSensorModel::setParameterType");
     }
@@ -417,7 +417,7 @@ double SICDSensorModel::getParameterCovariance(int index1, int index2) const
     if (index1 < 0 || index1 >= getNumParameters() ||
         index2 < 0 || index2 >= getNumParameters())
     {
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                 "Invalid index in call in function call",
                 " SICDSensorModel::getParameterCovariance");
     }
@@ -431,7 +431,7 @@ void SICDSensorModel::setParameterCovariance(int index1,
     if (index1 < 0 || index1 >= getNumParameters() ||
         index2 < 0 || index2 >= getNumParameters() )
     {
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                 "Invalid index in call in function call",
                 " SICDSensorModel::setParameterCovariance");
     }
@@ -439,7 +439,7 @@ void SICDSensorModel::setParameterCovariance(int index1,
 }
 
 std::vector<double> SICDSensorModel::computeGroundPartials(
-        const ::csm::EcefCoord& groundPt) const
+        const csm::EcefCoord& groundPt) const
 {
     scene::Vector3 sceneGroundPt;
     sceneGroundPt[0] = groundPt.x;
@@ -467,7 +467,7 @@ std::vector<double> SICDSensorModel::computeGroundPartials(
 }
 
 std::vector<double> SICDSensorModel::getUnmodeledError(
-        const ::csm::ImageCoord& ) const
+        const csm::ImageCoord& ) const
 {
     // TODO: Our unmodeled error is not a function of image location - should
     //       it be?
@@ -486,12 +486,12 @@ std::vector<double> SICDSensorModel::getUnmodeledError(
     return unmodeledErrorVec;
 }
 
-::csm::RasterGM::SensorPartials SICDSensorModel::computeSensorPartials(
+csm::RasterGM::SensorPartials SICDSensorModel::computeSensorPartials(
         int index,
-        const ::csm::EcefCoord& groundPt,
+        const csm::EcefCoord& groundPt,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* warnings) const
+        csm::WarningList* warnings) const
 {
     try
     {
@@ -502,7 +502,7 @@ std::vector<double> SICDSensorModel::getUnmodeledError(
         const types::RowCol<double> imagePt =
                 mProjection->sceneToImage(sceneGroundPt);
         const types::RowCol<double> pixelPt = toPixel(imagePt);
-        const ::csm::ImageCoord imageCoordPt(pixelPt.row, pixelPt.col);
+        const csm::ImageCoord imageCoordPt(pixelPt.row, pixelPt.col);
         return computeSensorPartials(index,
                                      imageCoordPt,
                                      groundPt,
@@ -512,24 +512,24 @@ std::vector<double> SICDSensorModel::getUnmodeledError(
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                 ex.getMessage(),
                 "SICDSensorModel::computeSensorPartials");
     }
 
 }
 
-::csm::RasterGM::SensorPartials SICDSensorModel::computeSensorPartials(
+csm::RasterGM::SensorPartials SICDSensorModel::computeSensorPartials(
         int index,
-        const ::csm::ImageCoord& imagePt,
-        const ::csm::EcefCoord& groundPt,
+        const csm::ImageCoord& imagePt,
+        const csm::EcefCoord& groundPt,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* warnings) const
+        csm::WarningList* warnings) const
 {
     if (index < 0 || index >= getNumParameters())
     {
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                         "Invalid index in call in function call",
                         " SICDSensorModel::computeSensorPartials");
     }
@@ -555,25 +555,25 @@ std::vector<double> SICDSensorModel::getUnmodeledError(
         }
 
         // Return value is in pixels / sensor units
-        return ::csm::RasterGM::SensorPartials(
+        return csm::RasterGM::SensorPartials(
                 sensorPartials[0][index] / mData->grid->row->sampleSpacing,
                 sensorPartials[1][index] / mData->grid->col->sampleSpacing);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                 ex.getMessage(),
                 "SICDSensorModel::computeSensorPartials");
     }
 }
 
-std::vector< ::csm::RasterGM::SensorPartials>
+std::vector< csm::RasterGM::SensorPartials>
 SICDSensorModel::computeAllSensorPartials(
-        const ::csm::EcefCoord& groundPt,
-        ::csm::param::Set pSet,
+        const csm::EcefCoord& groundPt,
+        csm::param::Set pSet,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* warnings) const
+        csm::WarningList* warnings) const
 {
     try
     {
@@ -584,7 +584,7 @@ SICDSensorModel::computeAllSensorPartials(
         const types::RowCol<double> imagePt =
                 mProjection->sceneToImage(sceneGroundPt);
         const types::RowCol<double> pixelPt = toPixel(imagePt);
-        const ::csm::ImageCoord imageCoordPt(pixelPt.row, pixelPt.col);
+        const csm::ImageCoord imageCoordPt(pixelPt.row, pixelPt.col);
         return computeAllSensorPartials(imageCoordPt,
                                         groundPt,
                                         pSet,
@@ -594,20 +594,20 @@ SICDSensorModel::computeAllSensorPartials(
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                 ex.getMessage(),
                 "SICDSensorModel::computeSensorPartials");
     }
 }
 
-std::vector< ::csm::RasterGM::SensorPartials>
+std::vector< csm::RasterGM::SensorPartials>
 SICDSensorModel::computeAllSensorPartials(
-        const ::csm::ImageCoord& imagePt,
-        const ::csm::EcefCoord& groundPt,
-        ::csm::param::Set pSet,
+        const csm::ImageCoord& imagePt,
+        const csm::EcefCoord& groundPt,
+        csm::param::Set pSet,
          double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* warnings) const
+        csm::WarningList* warnings) const
 {
     try
     {
@@ -641,16 +641,16 @@ SICDSensorModel::computeAllSensorPartials(
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                 ex.getMessage(),
                 "SICDSensorModel::computeSensorPartials");
     }
 }
 
-::csm::EcefCoord SICDSensorModel::getReferencePoint() const
+csm::EcefCoord SICDSensorModel::getReferencePoint() const
 {
     const scene::Vector3 refPt = mGeometry->getReferencePosition();
-    return ::csm::EcefCoord(refPt[0], refPt[1], refPt[2]);
+    return csm::EcefCoord(refPt[0], refPt[1], refPt[2]);
 }
 
 types::RowCol<double>
@@ -670,7 +670,7 @@ SICDSensorModel::toPixel(const types::RowCol<double>& pos) const
 }
 
 types::RowCol<double>
-SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
+SICDSensorModel::fromPixel(const csm::ImageCoord& pos) const
 {
     const six::sicd::ImageData& imageData(*mData->imageData);
     const types::RowCol<double> aoiOffset(imageData.firstRow,
@@ -685,11 +685,11 @@ SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
             adjustedPos.col * mData->grid->col->sampleSpacing);
 }
 
-::csm::ImageCoord SICDSensorModel::groundToImage(
-        const ::csm::EcefCoord& groundPt,
+csm::ImageCoord SICDSensorModel::groundToImage(
+        const csm::EcefCoord& groundPt,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* ) const
+        csm::WarningList* ) const
 {
     try
     {
@@ -712,23 +712,23 @@ SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
             *achievedPrecision = desiredPrecision;
         }
 
-        return ::csm::ImageCoord(pixelPt.row, pixelPt.col);
+        return csm::ImageCoord(pixelPt.row, pixelPt.col);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SICDSensorModel::groundToImage");
     }
 }
 
-::csm::ImageCoordCovar SICDSensorModel::groundToImage(
-        const ::csm::EcefCoordCovar& groundPt,
+csm::ImageCoordCovar SICDSensorModel::groundToImage(
+        const csm::EcefCoordCovar& groundPt,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* warnings) const
+        csm::WarningList* warnings) const
 {
-    const ::csm::ImageCoord imagePt =
+    const csm::ImageCoord imagePt =
             groundToImage(groundPt, desiredPrecision, achievedPrecision, warnings);
     scene::Vector3 scenePt;
     scenePt[0] = groundPt.x;
@@ -749,7 +749,7 @@ SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
             unmodeledCovar +
             (imagePartials * userCovar * imagePartials.transpose()) +
             (sensorPartials * sensorCovar * sensorPartials.transpose());
-    ::csm::ImageCoordCovar csmErrorCovar;
+    csm::ImageCoordCovar csmErrorCovar;
     csmErrorCovar.line = imagePt.line;
     csmErrorCovar.samp = imagePt.samp;
     csmErrorCovar.covariance[0] =
@@ -765,12 +765,12 @@ SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
     return csmErrorCovar;
 }
 
-::csm::EcefCoord SICDSensorModel::imageToGround(
-        const ::csm::ImageCoord& imagePt,
+csm::EcefCoord SICDSensorModel::imageToGround(
+        const csm::ImageCoord& imagePt,
         double height,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* ) const
+        csm::WarningList* ) const
 {
     try
     {
@@ -788,25 +788,25 @@ SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
             *achievedPrecision = desiredPrecision;
         }
 
-        return ::csm::EcefCoord(groundPt[0], groundPt[1], groundPt[2]);
+        return csm::EcefCoord(groundPt[0], groundPt[1], groundPt[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SICDSensorModel::imageToGround");
     }
 }
 
-::csm::EcefCoordCovar SICDSensorModel::imageToGround(
-        const ::csm::ImageCoordCovar& imagePt,
+csm::EcefCoordCovar SICDSensorModel::imageToGround(
+        const csm::ImageCoordCovar& imagePt,
         double height,
         double /*heightVariance*/,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* warnings) const
+        csm::WarningList* warnings) const
 {
-    const ::csm::EcefCoord groundPt = imageToGround(imagePt,
+    const csm::EcefCoord groundPt = imageToGround(imagePt,
                                                     height,
                                                     desiredPrecision,
                                                     achievedPrecision,
@@ -833,7 +833,7 @@ SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
                     groundPartials.transpose()) +
             (sensorPartials * sensorCovar * sensorPartials.transpose());
 
-    ::csm::EcefCoordCovar csmErrorCovar;
+    csm::EcefCoordCovar csmErrorCovar;
     csmErrorCovar.x = groundPt.x;
     csmErrorCovar.y = groundPt.y;
     csmErrorCovar.z = groundPt.z;
@@ -848,18 +848,18 @@ SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
     return csmErrorCovar;
 }
 
-::csm::ImageCoord SICDSensorModel::getImageStart() const
+csm::ImageCoord SICDSensorModel::getImageStart() const
 {
-    return ::csm::ImageCoord(0.0, 0.0);
+    return csm::ImageCoord(0.0, 0.0);
 }
 
-::csm::ImageVector SICDSensorModel::getImageSize() const
+csm::ImageVector SICDSensorModel::getImageSize() const
 {
-    return ::csm::ImageVector(mData->getNumRows(), mData->getNumCols());
+    return csm::ImageVector(mData->getNumRows(), mData->getNumCols());
 }
 
-::csm::EcefVector SICDSensorModel::getIlluminationDirection(
-        const ::csm::EcefCoord& groundPt) const
+csm::EcefVector SICDSensorModel::getIlluminationDirection(
+        const csm::EcefCoord& groundPt) const
 {
     scene::Vector3 groundPos;
     groundPos[0] = groundPt.x;
@@ -869,10 +869,10 @@ SICDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
     scene::Vector3 illumVec = groundPos - mGeometry->getARPPosition();
     illumVec.normalize();
 
-    return ::csm::EcefVector(illumVec[0], illumVec[1], illumVec[2]);
+    return csm::EcefVector(illumVec[0], illumVec[1], illumVec[2]);
 }
 
-double SICDSensorModel::getImageTime(const ::csm::ImageCoord& imagePt) const
+double SICDSensorModel::getImageTime(const csm::ImageCoord& imagePt) const
 {
     try
     {
@@ -880,71 +880,71 @@ double SICDSensorModel::getImageTime(const ::csm::ImageCoord& imagePt) const
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SICDSensorModel::getImageTime");
     }
 }
 
-::csm::EcefCoord
-SICDSensorModel::getSensorPosition(const ::csm::ImageCoord& imagePt) const
+csm::EcefCoord
+SICDSensorModel::getSensorPosition(const csm::ImageCoord& imagePt) const
 {
     try
     {
         const double time = mProjection->computeImageTime(fromPixel(imagePt));
         const six::Vector3 pos = mProjection->computeARPPosition(time);
-        return ::csm::EcefCoord(pos[0], pos[1], pos[2]);
+        return csm::EcefCoord(pos[0], pos[1], pos[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SICDSensorModel::getSensorPosition");
     }
 }
 
-::csm::EcefCoord SICDSensorModel::getSensorPosition(double time) const
+csm::EcefCoord SICDSensorModel::getSensorPosition(double time) const
 {
     try
     {
         const six::Vector3 pos = mProjection->computeARPPosition(time);
-        return ::csm::EcefCoord(pos[0], pos[1], pos[2]);
+        return csm::EcefCoord(pos[0], pos[1], pos[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SICDSensorModel::getSensorPosition");
     }
 }
 
-::csm::EcefVector
-SICDSensorModel::getSensorVelocity(const ::csm::ImageCoord& imagePt) const
+csm::EcefVector
+SICDSensorModel::getSensorVelocity(const csm::ImageCoord& imagePt) const
 {
     try
     {
         const double time = mProjection->computeImageTime(fromPixel(imagePt));
         const six::Vector3 vel = mProjection->computeARPVelocity(time);
-        return ::csm::EcefVector(vel[0], vel[1], vel[2]);
+        return csm::EcefVector(vel[0], vel[1], vel[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SICDSensorModel::getSensorVelocity");
     }
 }
 
-::csm::EcefVector SICDSensorModel::getSensorVelocity(double time) const
+csm::EcefVector SICDSensorModel::getSensorVelocity(double time) const
 {
     try
     {
         const six::Vector3 vel = mProjection->computeARPVelocity(time);
-        return ::csm::EcefVector(vel[0], vel[1], vel[2]);
+        return csm::EcefVector(vel[0], vel[1], vel[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SICDSensorModel::getSensorVelocity");
     }
@@ -955,7 +955,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     const size_t idx = sensorModelState.find(' ');
     if (idx == std::string::npos)
     {
-        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+        throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            "Invalid sensor model state",
                            "SICDSensorModel::replaceModelStateImpl");
     }
@@ -963,7 +963,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     const std::string sensorModelName = sensorModelState.substr(0, idx);
     if (sensorModelName != NAME)
     {
-        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+        throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            "Invalid sensor model state",
                            "SICDSensorModel::replaceModelStateImpl");
     }
@@ -997,11 +997,11 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
                 mGeometry.get()));
         std::fill_n(mAdjustableTypes,
                     scene::AdjustableParams::NUM_PARAMS,
-                    ::csm::param::NONE);
+                    csm::param::NONE);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+        throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            ex.getMessage(),
                            "SICDSensorModel::replaceModelStateImpl");
     }
@@ -1022,7 +1022,7 @@ void SICDSensorModel::setSchemaDir(const std::string& dataDir)
         }
         catch(const except::Exception& )
         {
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                     "Must specify SICD schema path via "
                     "Plugin::getDataDirectory() or " +
                     std::string(six::SCHEMA_PATH) + " environment variable",
@@ -1031,7 +1031,7 @@ void SICDSensorModel::setSchemaDir(const std::string& dataDir)
 
         if (schemaPath.empty())
         {
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                     std::string(six::SCHEMA_PATH) +
                     " environment variable is set but is empty",
                     "SICDSensorModel::setSchemaDir");
@@ -1043,7 +1043,7 @@ void SICDSensorModel::setSchemaDir(const std::string& dataDir)
                 sys::Path(dataDir).join("schema").join("six");
         if (!os.exists(schemaDir))
         {
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                     "Schema directory '" + schemaDir + "' does not exist",
                     "SICDSensorModel::setSchemaDir");
         }

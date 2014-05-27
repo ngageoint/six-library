@@ -33,12 +33,12 @@
 
 namespace six
 {
-namespace csm
+namespace CSM
 {
-const ::csm::Version SIDDSensorModel::VERSION(1, 0, 3);
+const csm::Version SIDDSensorModel::VERSION(1, 0, 3);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 
-SIDDSensorModel::SIDDSensorModel(const ::csm::Isd& isd,
+SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
                                  const std::string& dataDir)
 {
     setSchemaDir(dataDir);
@@ -54,7 +54,7 @@ SIDDSensorModel::SIDDSensorModel(const ::csm::Isd& isd,
     }
     else if (!str::isNumeric(imageIndexStr))
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                 "Unexpected " + std::string(IMAGE_INDEX_PARAM) +
                         " parameter: " + imageIndexStr,
                 "SIDDSensorModel::SIDDSensorModel");
@@ -68,7 +68,7 @@ SIDDSensorModel::SIDDSensorModel(const ::csm::Isd& isd,
     const std::string& format(isd.format());
     if (format == "NITF2.1")
     {
-        initializeFromISD(dynamic_cast<const ::csm::Nitf21Isd&>(isd),
+        initializeFromISD(dynamic_cast<const csm::Nitf21Isd&>(isd),
                           imageIndex);
     }
     else if (format == "FILENAME")
@@ -78,7 +78,7 @@ SIDDSensorModel::SIDDSensorModel(const ::csm::Isd& isd,
     }
     else
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            "Unsupported ISD format " + format,
                            "SIDDSensorModel::constructModelFromISD");
     }
@@ -116,7 +116,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         if (container->getDataType() != six::DataType::DERIVED ||
             container->getNumData() < imageIndex + 1)
         {
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SIDD",
                                "SIDDSensorModel::initializeFromFile");
         }
@@ -124,7 +124,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         six::Data* const data = container->getData(imageIndex);
         if (data->getDataType() != six::DataType::DERIVED)
         {
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SIDD",
                                "SIDDSensorModel::initializeFromFile");
         }
@@ -140,13 +140,13 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            ex.getMessage(),
                            "SIDDSensorModel::initializeFromFile");
     }
 }
 
-void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd,
+void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
                                         size_t imageIndex)
 {
     try
@@ -158,7 +158,7 @@ void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd,
         xml::lite::MinidomParser domParser;
 
         size_t numSIDD = 0;
-        const std::vector< ::csm::Des>& desList(isd.fileDess());
+        const std::vector< csm::Des>& desList(isd.fileDess());
         for (size_t ii = 0; ii < desList.size(); ++ii)
         {
             const std::string& desData(desList[ii].data());
@@ -198,7 +198,7 @@ void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd,
                     " SIDD XMLs but requested image index " +
                     str::toString(imageIndex);
 
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                message,
                                "SIDDSensorModel::SIDDSensorModel");
         }
@@ -222,17 +222,17 @@ void SIDDSensorModel::initializeFromISD(const ::csm::Nitf21Isd& isd,
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            ex.getMessage(),
                            "SIDDSensorModel::initializeFromISD");
     }
 }
 
-bool SIDDSensorModel::containsDerivedDES(const ::csm::Nitf21Isd& isd)
+bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
 {
     xml::lite::MinidomParser domParser;
 
-    const std::vector< ::csm::Des>& desList(isd.fileDess());
+    const std::vector< csm::Des>& desList(isd.fileDess());
     for (size_t ii = 0; ii < desList.size(); ++ii)
     {
         const std::string& desData(desList[ii].data());
@@ -263,7 +263,7 @@ bool SIDDSensorModel::containsDerivedDES(const ::csm::Nitf21Isd& isd)
     return false;
 }
 
-::csm::Version SIDDSensorModel::getVersion() const
+csm::Version SIDDSensorModel::getVersion() const
 {
     return VERSION;
 }
@@ -284,7 +284,7 @@ std::string SIDDSensorModel::getImageIdentifier() const
 }
 
 void SIDDSensorModel::setImageIdentifier(const std::string& imageId,
-                                         ::csm::WarningList* )
+                                         csm::WarningList* )
 
 {
     mData->setName(imageId);
@@ -341,15 +341,15 @@ void SIDDSensorModel::replaceModelState(const std::string& argState)
     }
 }
 
-::csm::EcefCoord SIDDSensorModel::getReferencePoint() const
+csm::EcefCoord SIDDSensorModel::getReferencePoint() const
 {
     const scene::Vector3 refPt =
             mData->measurement->projection->referencePoint.ecef;
-    return ::csm::EcefCoord(refPt[0], refPt[1], refPt[2]);
+    return csm::EcefCoord(refPt[0], refPt[1], refPt[2]);
 }
 
 types::RowCol<double>
-SIDDSensorModel::fromPixel(const ::csm::ImageCoord& pos) const
+SIDDSensorModel::fromPixel(const csm::ImageCoord& pos) const
 {
     const types::RowCol<double> posRC(pos.line, pos.samp);
     types::RowCol<double> fullScenePos;
@@ -411,11 +411,11 @@ SIDDSensorModel::rowColToECEF(const types::RowCol<double>& imagePt) const
     return mGridTransform->rowColToECEF(fullImagePt);
 }
 
-::csm::ImageCoord SIDDSensorModel::groundToImage(
-        const ::csm::EcefCoord& groundPt,
+csm::ImageCoord SIDDSensorModel::groundToImage(
+        const csm::EcefCoord& groundPt,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* ) const
+        csm::WarningList* ) const
 {
     try
     {
@@ -436,22 +436,22 @@ SIDDSensorModel::rowColToECEF(const types::RowCol<double>& imagePt) const
             *achievedPrecision = desiredPrecision;
         }
 
-        return ::csm::ImageCoord(imagePt.row, imagePt.col);
+        return csm::ImageCoord(imagePt.row, imagePt.col);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SIDDSensorModel::groundToImage");
     }
 }
 
-::csm::EcefCoord SIDDSensorModel::imageToGround(
-        const ::csm::ImageCoord& imagePt,
+csm::EcefCoord SIDDSensorModel::imageToGround(
+        const csm::ImageCoord& imagePt,
         double height,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* ) const
+        csm::WarningList* ) const
 {
     try
     {
@@ -468,28 +468,28 @@ SIDDSensorModel::rowColToECEF(const types::RowCol<double>& imagePt) const
             *achievedPrecision = desiredPrecision;
         }
 
-        return ::csm::EcefCoord(groundPt[0], groundPt[1], groundPt[2]);
+        return csm::EcefCoord(groundPt[0], groundPt[1], groundPt[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SIDDSensorModel::imageToGround");
     }
 }
 
-::csm::ImageCoord SIDDSensorModel::getImageStart() const
+csm::ImageCoord SIDDSensorModel::getImageStart() const
 {
-    return ::csm::ImageCoord(0.0, 0.0);
+    return csm::ImageCoord(0.0, 0.0);
 }
 
-::csm::ImageVector SIDDSensorModel::getImageSize() const
+csm::ImageVector SIDDSensorModel::getImageSize() const
 {
-    return ::csm::ImageVector(mData->getNumRows(), mData->getNumCols());
+    return csm::ImageVector(mData->getNumRows(), mData->getNumCols());
 }
 
-::csm::EcefVector SIDDSensorModel::getIlluminationDirection(
-        const ::csm::EcefCoord& groundPt) const
+csm::EcefVector SIDDSensorModel::getIlluminationDirection(
+        const csm::EcefCoord& groundPt) const
 {
     scene::Vector3 groundPos;
     groundPos[0] = groundPt.x;
@@ -502,10 +502,10 @@ SIDDSensorModel::rowColToECEF(const types::RowCol<double>& imagePt) const
     scene::Vector3 illumVec = groundPos - arpPos;
     illumVec.normalize();
 
-    return ::csm::EcefVector(illumVec[0], illumVec[1], illumVec[2]);
+    return csm::EcefVector(illumVec[0], illumVec[1], illumVec[2]);
 }
 
-double SIDDSensorModel::getImageTime(const ::csm::ImageCoord& imagePt) const
+double SIDDSensorModel::getImageTime(const csm::ImageCoord& imagePt) const
 {
     try
     {
@@ -514,14 +514,14 @@ double SIDDSensorModel::getImageTime(const ::csm::ImageCoord& imagePt) const
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SIDDSensorModel::getImageTime");
     }
 }
 
-::csm::EcefCoord
-SIDDSensorModel::getSensorPosition(const ::csm::ImageCoord& imagePt) const
+csm::EcefCoord
+SIDDSensorModel::getSensorPosition(const csm::ImageCoord& imagePt) const
 {
     try
     {
@@ -529,33 +529,33 @@ SIDDSensorModel::getSensorPosition(const ::csm::ImageCoord& imagePt) const
         const double time =
                 getProjection()->timeCOAPoly(imageECEF.row, imageECEF.col);
         const six::Vector3 pos = mData->measurement->arpPoly(time);
-        return ::csm::EcefCoord(pos[0], pos[1], pos[2]);
+        return csm::EcefCoord(pos[0], pos[1], pos[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SIDDSensorModel::getSensorPosition");
     }
 }
 
-::csm::EcefCoord SIDDSensorModel::getSensorPosition(double time) const
+csm::EcefCoord SIDDSensorModel::getSensorPosition(double time) const
 {
     try
     {
         const six::Vector3 pos = mData->measurement->arpPoly(time);
-        return ::csm::EcefCoord(pos[0], pos[1], pos[2]);
+        return csm::EcefCoord(pos[0], pos[1], pos[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SIDDSensorModel::getSensorPosition");
     }
 }
 
-::csm::EcefVector
-SIDDSensorModel::getSensorVelocity(const ::csm::ImageCoord& imagePt) const
+csm::EcefVector
+SIDDSensorModel::getSensorVelocity(const csm::ImageCoord& imagePt) const
 {
     try
     {
@@ -564,28 +564,28 @@ SIDDSensorModel::getSensorVelocity(const ::csm::ImageCoord& imagePt) const
                 getProjection()->timeCOAPoly(imageECEF.row, imageECEF.col);
         const six::PolyXYZ arpVelPoly = mData->measurement->arpPoly.derivative();
         const six::Vector3 vel = arpVelPoly(time);
-        return ::csm::EcefVector(vel[0], vel[1], vel[2]);
+        return csm::EcefVector(vel[0], vel[1], vel[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SIDDSensorModel::getSensorVelocity");
     }
 }
 
-::csm::EcefVector SIDDSensorModel::getSensorVelocity(double time) const
+csm::EcefVector SIDDSensorModel::getSensorVelocity(double time) const
 {
     try
     {
         const six::PolyXYZ arpVelPoly =
                 mData->measurement->arpPoly.derivative();
         const six::Vector3 vel = arpVelPoly(time);
-        return ::csm::EcefVector(vel[0], vel[1], vel[2]);
+        return csm::EcefVector(vel[0], vel[1], vel[2]);
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            ex.getMessage(),
                            "SIDDSensorModel::getSensorVelocity");
     }
@@ -596,7 +596,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     const size_t idx = sensorModelState.find(' ');
     if (idx == std::string::npos)
     {
-        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+        throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            "Invalid sensor model state",
                            "SIDDSensorModel::replaceModelStateImpl");
     }
@@ -604,7 +604,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     const std::string sensorModelName = sensorModelState.substr(0, idx);
     if (sensorModelName != NAME)
     {
-        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+        throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            "Invalid sensor model state",
                            "SIDDSensorModel::replaceModelStateImpl");
     }
@@ -636,7 +636,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+        throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            ex.getMessage(),
                            "SIDDSensorModel::replaceModelStateImpl");
     }
@@ -646,7 +646,7 @@ const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
 {
     if (!mData->measurement->projection->isMeasurable())
     {
-        throw ::csm::Error(::csm::Error::UNKNOWN_ERROR,
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
                            "Image projection type is not measurable",
                            "SIDDSensorModel::getProjection");
     }
@@ -672,7 +672,7 @@ void SIDDSensorModel::setSchemaDir(const std::string& dataDir)
         }
         catch(const except::Exception& )
         {
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                     "Must specify SIDD schema path via "
                     "Plugin::getDataDirectory() or " +
                     std::string(six::SCHEMA_PATH) + " environment variable",
@@ -681,7 +681,7 @@ void SIDDSensorModel::setSchemaDir(const std::string& dataDir)
 
         if (schemaPath.empty())
         {
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                     std::string(six::SCHEMA_PATH) +
                     " environment variable is set but is empty",
                     "SIDDSensorModel::setSchemaDir");
@@ -693,7 +693,7 @@ void SIDDSensorModel::setSchemaDir(const std::string& dataDir)
                 sys::Path(dataDir).join("schema").join("six");
         if (!os.exists(schemaDir))
         {
-            throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                     "Schema directory '" + schemaDir + "' does not exist",
                     "SICDSensorModel::setSchemaDir");
         }

@@ -35,7 +35,7 @@
 
 namespace six
 {
-namespace csm
+namespace CSM
 {
 /**
  * @class SICDSensorModel
@@ -46,7 +46,7 @@ namespace csm
 class SICDSensorModel : public SIXSensorModel
 {
 public:
-    static const ::csm::Version VERSION;
+    static const csm::Version VERSION;
     static const char NAME[];
 
     /**
@@ -57,7 +57,7 @@ public:
      * \param dataDir  The plugin's data directory.  If this is an empty
      *     string, the SIX_SCHEMA_PATH environment variable must be set.
      */
-    SICDSensorModel(const ::csm::Isd& isd, const std::string& dataDir);
+    SICDSensorModel(const csm::Isd& isd, const std::string& dataDir);
 
     /**
      * Create sensor model given sensor model state string representation.
@@ -70,7 +70,7 @@ public:
                     const std::string& dataDir);
 
     static
-    bool containsComplexDES(const ::csm::Nitf21Isd& isd);
+    bool containsComplexDES(const csm::Nitf21Isd& isd);
 
 public: // Model methods
     /*
@@ -78,7 +78,7 @@ public: // Model methods
      *
      * \return The version of the sensor model
      */
-    virtual ::csm::Version getVersion() const;
+    virtual csm::Version getVersion() const;
 
     /**
      * Returns a string indicating the name of the sensor model.
@@ -110,7 +110,7 @@ public: // Model methods
      * \param[out] warnings  Unused
      */
     virtual void setImageIdentifier(const std::string& imageId,
-                                    ::csm::WarningList* warnings);
+                                    csm::WarningList* warnings);
 
     /**
      * Returns which sensor was used to acquire the image.  This is meant to
@@ -219,7 +219,7 @@ public: // GeometricModel methods
      *
      * \return The associated parameter type
      */
-    virtual ::csm::param::Type getParameterType(int index) const;
+    virtual csm::param::Type getParameterType(int index) const;
 
     /**
      * Sets the specified adjustable parameter type
@@ -227,7 +227,7 @@ public: // GeometricModel methods
      * \param index The parameter index
      * \param pType The type to set the parameter to
      */
-    virtual void setParameterType(int index, ::csm::param::Type pType);
+    virtual void setParameterType(int index, csm::param::Type pType);
 
     /**
      * Provides the covariance between the specified parameters.  To get
@@ -270,7 +270,7 @@ public: // GeometricModel methods
      *   -  [5] = sample wrt z
      */
    virtual std::vector<double>
-   computeGroundPartials(const ::csm::EcefCoord& groundPt) const;
+   computeGroundPartials(const csm::EcefCoord& groundPt) const;
 
    /**
     * This method returns the 2x2 line and sample covariance (in pixels
@@ -286,7 +286,7 @@ public: // GeometricModel methods
     * [3] = sample variance
     */
    virtual std::vector<double>
-   getUnmodeledError(const ::csm::ImageCoord& imagePt) const;
+   getUnmodeledError(const csm::ImageCoord& imagePt) const;
 
    /**
     * This method returns the partial derivatives of line and sample
@@ -301,12 +301,12 @@ public: // GeometricModel methods
     * desired precision if supplied.
     * \param warnings Warnings.
     */
-   virtual ::csm::RasterGM::SensorPartials computeSensorPartials(
+   virtual csm::RasterGM::SensorPartials computeSensorPartials(
            int index,
-           const ::csm::EcefCoord& groundPt,
+           const csm::EcefCoord& groundPt,
            double desiredPrecision = 0.001,
            double* achievedPrecision = NULL,
-           ::csm::WarningList* warnings = NULL) const;
+           csm::WarningList* warnings = NULL) const;
 
    /**
     * This method returns the partial derivatives of line and sample
@@ -324,13 +324,13 @@ public: // GeometricModel methods
     * desired precision if supplied.
     * \param warnings Warnings.
     */
-   virtual ::csm::RasterGM::SensorPartials computeSensorPartials(
+   virtual csm::RasterGM::SensorPartials computeSensorPartials(
            int index,
-           const ::csm::ImageCoord& imagePt,
-           const ::csm::EcefCoord& groundPt,
+           const csm::ImageCoord& imagePt,
+           const csm::EcefCoord& groundPt,
            double desiredPrecision = 0.001,
            double* achievedPrecision = NULL,
-           ::csm::WarningList* warnings = NULL) const;
+           csm::WarningList* warnings = NULL) const;
 
    /**
     * This method returns the partial derivatives of line and sample
@@ -349,11 +349,11 @@ public: // GeometricModel methods
     * \return Sensor partials
     */
    virtual std::vector<SensorPartials> computeAllSensorPartials(
-                   const ::csm::EcefCoord& groundPt,
-                   ::csm::param::Set pSet = ::csm::param::VALID,
+                   const csm::EcefCoord& groundPt,
+                   csm::param::Set pSet = csm::param::VALID,
                    double desiredPrecision = 0.001,
                    double* achievedPrecision = NULL,
-                   ::csm::WarningList* warnings = NULL) const;
+                   csm::WarningList* warnings = NULL) const;
 
    /**
     * This method returns the partial derivatives of line and sample
@@ -375,12 +375,12 @@ public: // GeometricModel methods
     * \return Sensor partials
     */
    virtual std::vector<SensorPartials> computeAllSensorPartials(
-                   const ::csm::ImageCoord& imagePt,
-                   const ::csm::EcefCoord& groundPt,
-                   ::csm::param::Set pSet = ::csm::param::VALID,
+                   const csm::ImageCoord& imagePt,
+                   const csm::EcefCoord& groundPt,
+                   csm::param::Set pSet = csm::param::VALID,
                    double desiredPrecision = 0.001,
                    double* achievedPrecision = NULL,
-                   ::csm::WarningList* warnings = NULL) const;
+                   csm::WarningList* warnings = NULL) const;
 
     /**
      * Returns coordinates in meters to indicate the general location of the
@@ -388,7 +388,7 @@ public: // GeometricModel methods
      *
      * \return Ground coordinate in meters
      */
-    virtual ::csm::EcefCoord getReferencePoint() const;
+    virtual csm::EcefCoord getReferencePoint() const;
 
 public: // RasterGM methods
     /**
@@ -405,10 +405,10 @@ public: // RasterGM methods
      *
      * \return Image coordinate in pixels
      */
-    virtual ::csm::ImageCoord groundToImage(const ::csm::EcefCoord& groundPt,
+    virtual csm::ImageCoord groundToImage(const csm::EcefCoord& groundPt,
                                             double desiredPrecision,
                                             double* achievedPrecision,
-                                            ::csm::WarningList* warnings) const;
+                                            csm::WarningList* warnings) const;
 
     /**
      * Converts groundPt in ground space (ECEF) and corresponding covariance
@@ -426,11 +426,11 @@ public: // RasterGM methods
      * \return Image coordinate in pixels and corresponding 2x2 covariance in
      * pixels squared
      */
-    virtual ::csm::ImageCoordCovar groundToImage(
-            const ::csm::EcefCoordCovar& groundPt,
+    virtual csm::ImageCoordCovar groundToImage(
+            const csm::EcefCoordCovar& groundPt,
             double desiredPrecision,
             double* achievedPrecision,
-            ::csm::WarningList* warnings) const;
+            csm::WarningList* warnings) const;
 
     /**
      * Converts imagePt (pixels) in image space returned EcefCoord (meters)
@@ -448,11 +448,11 @@ public: // RasterGM methods
      *
      * \return Ground coordinate in meters
      */
-    virtual ::csm::EcefCoord imageToGround(const ::csm::ImageCoord& imagePt,
+    virtual csm::EcefCoord imageToGround(const csm::ImageCoord& imagePt,
                                            double height,
                                            double desiredPrecision,
                                            double* achievedPrecision,
-                                           ::csm::WarningList* warnings) const;
+                                           csm::WarningList* warnings) const;
 
     /**
      * Converts imagePt (pixels in image space and corresponding 2x2
@@ -475,20 +475,20 @@ public: // RasterGM methods
      * \return Ground coordinate with covariance (x, y, z in ECEF meters
      * and corresponding 3x3 covariance in ECEF meters squared)
      */
-    virtual ::csm::EcefCoordCovar imageToGround(
-            const ::csm::ImageCoordCovar& imagePt,
+    virtual csm::EcefCoordCovar imageToGround(
+            const csm::ImageCoordCovar& imagePt,
             double height,
             double heightVariance,
             double desiredPrecision,
             double* achievedPrecision,
-            ::csm::WarningList* warnings) const;
+            csm::WarningList* warnings) const;
 
     /**
      * Returns the starting coordinate for the imaging operation.
      *
      * \return Always returns (0, 0)
      */
-    virtual ::csm::ImageCoord getImageStart() const;
+    virtual csm::ImageCoord getImageStart() const;
 
     /**
      * Returns the number of lines and samples in full image space pixels for
@@ -496,7 +496,7 @@ public: // RasterGM methods
      *
      * \return The size of the entire SICD
      */
-    virtual ::csm::ImageVector getImageSize() const;
+    virtual csm::ImageVector getImageSize() const;
 
     /**
      * Calculates the direction of illumination at the given ground position
@@ -507,8 +507,8 @@ public: // RasterGM methods
      *
      * \return Illumination direction vector
      */
-    virtual ::csm::EcefVector
-    getIlluminationDirection(const ::csm::EcefCoord& groundPt) const;
+    virtual csm::EcefVector
+    getIlluminationDirection(const csm::EcefCoord& groundPt) const;
 
     /**
      * Computes the time in seconds at which the pixel specified by imagePt was
@@ -519,7 +519,7 @@ public: // RasterGM methods
      *
      * \return Time in seconds from the reference date and time
      */
-    virtual double getImageTime(const ::csm::ImageCoord& imagePt) const;
+    virtual double getImageTime(const csm::ImageCoord& imagePt) const;
 
     /**
      * Returns the position of the physical sensor at the given position in
@@ -530,7 +530,7 @@ public: // RasterGM methods
      * \return Sensor ECEF coordinate in meters
      */
     virtual
-    ::csm::EcefCoord getSensorPosition(const ::csm::ImageCoord& imagePt) const;
+    csm::EcefCoord getSensorPosition(const csm::ImageCoord& imagePt) const;
 
     /**
      * Returns the position of the physical sensor at the given time
@@ -539,7 +539,7 @@ public: // RasterGM methods
      *
      * \return Sensor ECEF coordinate in meters
      */
-    virtual ::csm::EcefCoord getSensorPosition(double time) const;
+    virtual csm::EcefCoord getSensorPosition(double time) const;
 
     /**
      * Returns the velocity of the physical sensor at the given position in
@@ -550,7 +550,7 @@ public: // RasterGM methods
      * \return Sensor velocity in meters per second
      */
     virtual
-    ::csm::EcefVector getSensorVelocity(const ::csm::ImageCoord& imagePt) const;
+    csm::EcefVector getSensorVelocity(const csm::ImageCoord& imagePt) const;
 
     /**
      * Returns the velocity of the physical sensor at the given time
@@ -559,7 +559,7 @@ public: // RasterGM methods
      *
      * \return Sensor velocity in meters per second
      */
-    virtual ::csm::EcefVector getSensorVelocity(double time) const;
+    virtual csm::EcefVector getSensorVelocity(double time) const;
 
 private:
     /**
@@ -580,13 +580,13 @@ private:
      * \param[in] s     Sample position in terms of pixels from upper left
      * \return A types::RowCol<double> containing the distance in meters from the center of the image
      */
-    types::RowCol<double> fromPixel(const ::csm::ImageCoord& pos) const;
+    types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const;
 
     void replaceModelStateImpl(const std::string& sensorModelState);
 
     void initializeFromFile(const std::string& pathname);
 
-    void initializeFromISD(const ::csm::Nitf21Isd& isd);
+    void initializeFromISD(const csm::Nitf21Isd& isd);
 
     void setSchemaDir(const std::string& schemaDir);
 
@@ -596,7 +596,7 @@ private:
     std::auto_ptr<six::sicd::ComplexData> mData;
     std::auto_ptr<const scene::SceneGeometry> mGeometry;
     std::auto_ptr<scene::ProjectionModel> mProjection;
-    ::csm::param::Type mAdjustableTypes[scene::AdjustableParams::NUM_PARAMS];
+    csm::param::Type mAdjustableTypes[scene::AdjustableParams::NUM_PARAMS];
 };
 }
 }
