@@ -19,23 +19,42 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SCENE_H__
-#define __IMPORT_SCENE_H__
+#ifndef __SCENE_FRAME_TYPE_H__
+#define __SCENE_FRAME_TYPE_H__
 
-#include <scene/AdjustableParams.h>
-#include <scene/CoordinateTransform.h>
-#include <scene/ECEFToLLATransform.h>
-#include <scene/EllipsoidModel.h>
-#include <scene/Errors.h>
-#include <scene/FrameType.h>
-#include <scene/LLAToECEFTransform.h>
-#include <scene/LocalCoordinateTransform.h>
-#include <scene/GridECEFTransform.h>
-#include <scene/SceneGeometry.h>
-#include <scene/GridGeometry.h>
-#include <scene/Types.h>
-#include <scene/Utilities.h>
-#include <scene/ProjectionModel.h>
-#include <scene/ProjectionPolynomialFitter.h>
+#include <string>
+
+namespace scene
+{
+// NOTE: These enums and strings must exactly match what is in the SIX
+//       standard.  Since the scene module needs this concept as well though,
+//       it's present here.
+struct FrameType
+{
+    //! The enumerations allowed
+    enum FrameTypesEnum
+    {
+        ECF = 0,
+        RIC_ECF = 1,
+        RIC_ECI = 2,
+        NOT_SET = 3
+    };
+
+    //! Value constructor
+    FrameType(FrameTypesEnum value = NOT_SET);
+
+    //! String constructor
+    FrameType(const std::string& str);
+
+    //! Returns string representation of the value
+    std::string toString() const;
+
+    static
+    FrameTypesEnum fromString(const std::string& str);
+
+    FrameTypesEnum mValue;
+
+};
+}
 
 #endif

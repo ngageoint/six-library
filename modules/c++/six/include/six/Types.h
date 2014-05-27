@@ -32,6 +32,7 @@
 #include <import/io.h>
 #include <limits>
 #include "scene/Types.h"
+#include "scene/FrameType.h"
 #include "six/Enums.h"
 
 /*!
@@ -114,6 +115,8 @@ typedef except::Context ValidationContext;
 // These are heavily used and we don't want any mistakes
 typedef types::RowCol<double> RowColDouble;
 typedef types::RowCol<sys::SSize_T> RowColInt;
+
+typedef scene::FrameType FrameType;
 
 /*!
  *  \struct DecorrType
