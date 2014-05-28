@@ -30,7 +30,7 @@ namespace scene
 {
 AdjustableParams::AdjustableParams()
 {
-    std::fill_n(mParams, NUM_PARAMS, 0.0);
+    std::fill_n(mParams, static_cast<size_t>(NUM_PARAMS), 0.0);
 }
 
 std::string AdjustableParams::name(ParamsEnum param)
