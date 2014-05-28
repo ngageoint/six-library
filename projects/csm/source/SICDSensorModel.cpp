@@ -368,6 +368,31 @@ std::string SICDSensorModel::getParameterUnits(int index) const
             static_cast<scene::AdjustableParams::ParamsEnum>(index));
 }
 
+bool SICDSensorModel::isParameterShareable(int index) const
+{
+    if (index < 0 || index >= getNumParameters())
+    {
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::isParameterShareable");
+    }
+
+    return false;
+}
+
+csm::SharingCriteria
+SICDSensorModel::getParameterSharingCriteria(int index) const
+{
+    if (index < 0 || index >= getNumParameters())
+    {
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::getParameterSharingCriteria");
+    }
+
+    return csm::SharingCriteria();
+}
+
 double SICDSensorModel::getParameterValue(int index) const
 {
     if (index < 0 || index >= getNumParameters())

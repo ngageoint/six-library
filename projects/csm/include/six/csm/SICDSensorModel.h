@@ -196,6 +196,27 @@ public: // GeometricModel methods
     virtual std::string getParameterUnits(int index) const;
 
     /**
+     * Parameters are not shareable, so returns false for indices in range and
+     * throws otherwise
+     *
+     * \param index The parameter index
+     *
+     * \return Always false
+     */
+    virtual bool isParameterShareable(int index) const;
+
+    /**
+     * Parameters are not shareable, so returns a default-constructed
+     * SharingCriteria for indices in range (per MSP's suggestion) and
+     * throws otherwise
+     *
+     * \param index The parameter index
+     *
+     * \return Default-constructed SharingCriteria
+     */
+    virtual csm::SharingCriteria getParameterSharingCriteria(int index) const;
+
+    /**
      * Returns the value for the specified adjustable parameter
      *
      * \param index The parameter index

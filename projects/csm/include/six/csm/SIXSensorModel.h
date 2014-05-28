@@ -79,7 +79,7 @@ public: // GeometricModel methods
     virtual std::string getParameterUnits(int index) const;
 
     /**
-     * There are no parameters, so this always returns false
+     * Parameters are not shareable, so this always returns false
      */
     virtual bool hasShareableParameters() const;
 
