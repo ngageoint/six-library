@@ -93,7 +93,6 @@ Vector3
 ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
                                       const Vector3& arpCOA,
                                       const Vector3& velCOA,
-                                      double timeCOA,
                                       const Vector3& groundPlaneNormal,
                                       const Vector3& groundRefPoint) const
 {
@@ -244,7 +243,7 @@ ProjectionModel::imageToScene(const types::RowCol<double>& imageGridPoint,
     imageToSceneAdjustment(delta, timeCOA, r, arpCOA, velCOA);
 
     return contourToGroundPlane(r, rDot,
-                                arpCOA, velCOA, timeCOA,
+                                arpCOA, velCOA,
                                 groundPlaneNormal,
                                 groundRefPoint);
 }
@@ -300,7 +299,7 @@ Vector3 ProjectionModel::imageToScene(
         // 2. Compute precise projection along the R/Rdot contour to ground
         //    plane
         gppECEF = contourToGroundPlane(r, rDot,
-                                       arpCOA, velCOA, timeCOA,
+                                       arpCOA, velCOA,
                                        groundPlaneNormal,
                                        groundRefPoint);
 
@@ -761,8 +760,8 @@ RangeZeroProjectionModel(const math::poly::OneD<double>& timeCAPoly,
     mTimeCAPoly(timeCAPoly), mDSRFPoly(dsrfPoly), mRangeCA(rangeCA) {}
 
 void RangeZeroProjectionModel::
-computeContour(const Vector3& arpCOA,
-               const Vector3& velCOA,
+computeContour(const Vector3& /*arpCOA*/,
+               const Vector3& /*velCOA*/,
                double timeCOA,
                const types::RowCol<double>& imageGridPoint,
                double* r,
@@ -811,7 +810,7 @@ PlaneProjectionModel(const Vector3& slantPlaneNormal,
 void PlaneProjectionModel::
 computeContour(const Vector3& arpCOA,
                const Vector3& velCOA,
-               double timeCOA,
+               double /*timeCOA*/,
                const types::RowCol<double>& imageGridPoint,
                double* r,
                double* rDot) const

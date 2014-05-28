@@ -117,7 +117,6 @@ public:
         contourToGroundPlane(double rCOA, double rDotCOA,
                              const Vector3& arpCOA,
                              const Vector3& velCOA,
-                             double timeCOA,
                              const Vector3& groundPlaneNormal,
                              const Vector3& groundRefPoint) const;
 

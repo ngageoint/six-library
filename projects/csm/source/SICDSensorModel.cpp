@@ -116,7 +116,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(),
                 mGeometry.get()));
         std::fill_n(mAdjustableTypes,
-                    scene::AdjustableParams::NUM_PARAMS,
+                    static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
                     csm::param::REAL);
     }
     catch (const except::Exception& ex)
@@ -205,7 +205,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
         mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(),
                 mGeometry.get()));
         std::fill_n(mAdjustableTypes,
-                    scene::AdjustableParams::NUM_PARAMS,
+                    static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
                     csm::param::REAL);
     }
     catch (const except::Exception& ex)
@@ -996,7 +996,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(),
                 mGeometry.get()));
         std::fill_n(mAdjustableTypes,
-                    scene::AdjustableParams::NUM_PARAMS,
+                    static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
                     csm::param::REAL);
     }
     catch (const except::Exception& ex)
