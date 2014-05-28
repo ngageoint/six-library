@@ -807,10 +807,10 @@ csm::EcefCoordCovar SICDSensorModel::imageToGround(
         csm::WarningList* warnings) const
 {
     const csm::EcefCoord groundPt = imageToGround(imagePt,
-                                                    height,
-                                                    desiredPrecision,
-                                                    achievedPrecision,
-                                                    warnings);
+                                                  height,
+                                                  desiredPrecision,
+                                                  achievedPrecision,
+                                                  warnings);
 
     types::RowCol<double> imagePtMeters = fromPixel(imagePt);
     scene::Vector3 scenePt;
@@ -841,7 +841,7 @@ csm::EcefCoordCovar SICDSensorModel::imageToGround(
     {
         for (size_t jj = 0; jj < 3; ++jj)
         {
-            csmErrorCovar.covariance[jj * 3 + ii] = errorCovar[ii][jj];
+            csmErrorCovar.covariance[ii * 3 + jj] = errorCovar[ii][jj];
         }
     }
 
