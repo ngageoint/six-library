@@ -32,4 +32,3 @@
 #include "sio/lite/UserDataDictionary.h"
 
 #endif
-
