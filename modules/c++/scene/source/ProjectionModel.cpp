@@ -449,18 +449,17 @@ math::linear::MatrixMxN<3, 7> ProjectionModel::imageToSceneSensorPartials(
         const Vector3& scenePoint,
         double delta) const
 {
-    double deltaParams[7];
-    std::fill_n(deltaParams, 7, 0.0);
+    AdjustableParams deltaParams; // Initialized to all 0's
     math::linear::MatrixMxN<3, 7> jacobian(0.0);
 
     for (size_t idx = 0; idx < 7; ++idx)
     {
-        deltaParams[idx] = delta;
+        deltaParams.mParams[idx] = delta;
         Vector3 scenePointDelta =
                 imageToScene(imageGridPoint, height, deltaParams);
         scenePointDelta = (scenePointDelta - scenePoint) * (1/delta);
         jacobian.col(idx, scenePointDelta.matrix());
-        deltaParams[idx] = 0.0;
+        deltaParams.mParams[idx] = 0.0;
     }
 
     return jacobian;
@@ -511,20 +510,19 @@ math::linear::MatrixMxN<2, 7> ProjectionModel::sceneToImageSensorPartials(
         const types::RowCol<double>& imageGridPoint,
         double delta) const
 {
-    double deltaParams[7];
-    std::fill_n(deltaParams, 7, 0.0);
+    AdjustableParams deltaParams; // Initialized to all 0's
     math::linear::MatrixMxN<2, 7> jacobian(0.0);
 
     for (size_t idx = 0; idx < 7; ++idx)
     {
-        deltaParams[idx] = delta;
+        deltaParams.mParams[idx] = delta;
         const types::RowCol<double> imageGridPointDelta =
                 sceneToImage(scenePoint, deltaParams);
         jacobian(0, idx) =
                 (imageGridPointDelta.row - imageGridPoint.row) * (1 / delta);
         jacobian(1, idx) =
                 (imageGridPointDelta.col - imageGridPoint.col) * (1 / delta);
-        deltaParams[idx] = 0.0;
+        deltaParams.mParams[idx] = 0.0;
     }
 
     return jacobian;
