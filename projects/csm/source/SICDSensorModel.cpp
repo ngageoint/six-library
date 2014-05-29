@@ -660,7 +660,7 @@ SICDSensorModel::computeAllSensorPartials(
             sensorPartialsVec[idx].first =
                     sensorPartials[0][idx] / mData->grid->row->sampleSpacing;
             sensorPartialsVec[idx].second =
-                    sensorPartials[0][idx] / mData->grid->col->sampleSpacing;
+                    sensorPartials[1][idx] / mData->grid->col->sampleSpacing;
         }
         return sensorPartialsVec;
     }
