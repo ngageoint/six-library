@@ -466,49 +466,64 @@ void SICDSensorModel::setParameterCovariance(int index1,
 std::vector<double> SICDSensorModel::computeGroundPartials(
         const csm::EcefCoord& groundPt) const
 {
-    scene::Vector3 sceneGroundPt;
-    sceneGroundPt[0] = groundPt.x;
-    sceneGroundPt[1] = groundPt.y;
-    sceneGroundPt[2] = groundPt.z;
-    const types::RowCol<double> imagePt =
-            mProjection->sceneToImage(sceneGroundPt);
+    try
+    {
+        const scene::Vector3 sceneGroundPt(toVector3(groundPt));
+        const types::RowCol<double> imagePt =
+                mProjection->sceneToImage(sceneGroundPt);
 
-    const math::linear::MatrixMxN<2, 3> groundPartials =
-            mProjection->sceneToImagePartials(sceneGroundPt, imagePt);
+        const math::linear::MatrixMxN<2, 3> groundPartials =
+                mProjection->sceneToImagePartials(sceneGroundPt, imagePt);
 
-    // sceneToImagePartials() return value is in m/m, computeGroundPartials
-    // wants pixels/m
-    const types::RgAz<double> ss(mData->grid->row->sampleSpacing,
-                                 mData->grid->col->sampleSpacing);
+        // sceneToImagePartials() return value is in m/m,
+        // computeGroundPartials wants pixels/m
+        const types::RgAz<double> ss(mData->grid->row->sampleSpacing,
+                                     mData->grid->col->sampleSpacing);
 
-    std::vector<double> groundPartialsVec(6);
-    groundPartialsVec[0] = groundPartials[0][0] / ss.rg;
-    groundPartialsVec[1] = groundPartials[0][1] / ss.rg;
-    groundPartialsVec[2] = groundPartials[0][2] / ss.rg;
-    groundPartialsVec[3] = groundPartials[1][0] / ss.az;
-    groundPartialsVec[4] = groundPartials[1][1] / ss.az;
-    groundPartialsVec[5] = groundPartials[1][2] / ss.az;
-    return groundPartialsVec;
+        std::vector<double> groundPartialsVec(6);
+        groundPartialsVec[0] = groundPartials[0][0] / ss.rg;
+        groundPartialsVec[1] = groundPartials[0][1] / ss.rg;
+        groundPartialsVec[2] = groundPartials[0][2] / ss.rg;
+        groundPartialsVec[3] = groundPartials[1][0] / ss.az;
+        groundPartialsVec[4] = groundPartials[1][1] / ss.az;
+        groundPartialsVec[5] = groundPartials[1][2] / ss.az;
+        return groundPartialsVec;
+    }
+    catch (const except::Exception& ex)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SICDSensorModel::computeGroundPartials");
+    }
 }
 
 std::vector<double> SICDSensorModel::getUnmodeledError(
         const csm::ImageCoord& ) const
 {
-    // TODO: Our unmodeled error is not a function of image location - should
-    //       it be?
-    const math::linear::MatrixMxN<2, 2, double> unmodeledError =
-            mProjection->getUnmodeledErrorCovariance();
+    try
+    {
+        // TODO: Our unmodeled error is not a function of image location -
+        //       should it be?
+        const math::linear::MatrixMxN<2, 2, double> unmodeledError =
+                mProjection->getUnmodeledErrorCovariance();
 
-    // Get in the right units
-    const types::RgAz<double> ss(mData->grid->row->sampleSpacing,
-                                 mData->grid->col->sampleSpacing);
+        // Get in the right units
+        const types::RgAz<double> ss(mData->grid->row->sampleSpacing,
+                                     mData->grid->col->sampleSpacing);
 
-    std::vector<double> unmodeledErrorVec(4);
-    unmodeledErrorVec[0] = unmodeledError[0][0] / square(ss.rg);
-    unmodeledErrorVec[1] = unmodeledError[0][1] / (ss.rg * ss.az);
-    unmodeledErrorVec[2] = unmodeledError[1][0] / (ss.rg * ss.az);
-    unmodeledErrorVec[3] = unmodeledError[1][1] / square(ss.az);
-    return unmodeledErrorVec;
+        std::vector<double> unmodeledErrorVec(4);
+        unmodeledErrorVec[0] = unmodeledError[0][0] / square(ss.rg);
+        unmodeledErrorVec[1] = unmodeledError[0][1] / (ss.rg * ss.az);
+        unmodeledErrorVec[2] = unmodeledError[1][0] / (ss.rg * ss.az);
+        unmodeledErrorVec[3] = unmodeledError[1][1] / square(ss.az);
+        return unmodeledErrorVec;
+    }
+    catch (const except::Exception& ex)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SICDSensorModel::getUnmodeledError");
+    }
 }
 
 csm::RasterGM::SensorPartials SICDSensorModel::computeSensorPartials(
@@ -520,10 +535,7 @@ csm::RasterGM::SensorPartials SICDSensorModel::computeSensorPartials(
 {
     try
     {
-        scene::Vector3 sceneGroundPt;
-        sceneGroundPt[0] = groundPt.x;
-        sceneGroundPt[1] = groundPt.y;
-        sceneGroundPt[2] = groundPt.z;
+        const scene::Vector3 sceneGroundPt(toVector3(groundPt));
         const types::RowCol<double> imagePt =
                 mProjection->sceneToImage(sceneGroundPt);
         const types::RowCol<double> pixelPt = toPixel(imagePt);
@@ -561,10 +573,7 @@ csm::RasterGM::SensorPartials SICDSensorModel::computeSensorPartials(
 
     try
     {
-        scene::Vector3 sceneGroundPt;
-        sceneGroundPt[0] = groundPt.x;
-        sceneGroundPt[1] = groundPt.y;
-        sceneGroundPt[2] = groundPt.z;
+        const scene::Vector3 sceneGroundPt(toVector3(groundPt));
 
         const types::RowCol<double> pixelPt = fromPixel(imagePt);
 
@@ -602,10 +611,7 @@ SICDSensorModel::computeAllSensorPartials(
 {
     try
     {
-        scene::Vector3 sceneGroundPt;
-        sceneGroundPt[0] = groundPt.x;
-        sceneGroundPt[1] = groundPt.y;
-        sceneGroundPt[2] = groundPt.z;
+        const scene::Vector3 sceneGroundPt(toVector3(groundPt));
         const types::RowCol<double> imagePt =
                 mProjection->sceneToImage(sceneGroundPt);
         const types::RowCol<double> pixelPt = toPixel(imagePt);
@@ -636,10 +642,7 @@ SICDSensorModel::computeAllSensorPartials(
 {
     try
     {
-        scene::Vector3 sceneGroundPt;
-        sceneGroundPt[0] = groundPt.x;
-        sceneGroundPt[1] = groundPt.y;
-        sceneGroundPt[2] = groundPt.z;
+        const scene::Vector3 sceneGroundPt(toVector3(groundPt));
 
         const types::RowCol<double> pixelPt = fromPixel(imagePt);
         const math::linear::MatrixMxN<2, 7> sensorPartials =
@@ -668,14 +671,13 @@ SICDSensorModel::computeAllSensorPartials(
     {
         throw csm::Error(csm::Error::UNKNOWN_ERROR,
                 ex.getMessage(),
-                "SICDSensorModel::computeSensorPartials");
+                "SICDSensorModel::computeAllSensorPartials");
     }
 }
 
 csm::EcefCoord SICDSensorModel::getReferencePoint() const
 {
-    const scene::Vector3 refPt = mGeometry->getReferencePosition();
-    return csm::EcefCoord(refPt[0], refPt[1], refPt[2]);
+    return toEcefCoord(mGeometry->getReferencePosition());
 }
 
 types::RowCol<double>
@@ -710,6 +712,29 @@ SICDSensorModel::fromPixel(const csm::ImageCoord& pos) const
             adjustedPos.col * mData->grid->col->sampleSpacing);
 }
 
+csm::ImageCoord SICDSensorModel::groundToImageImpl(
+        const csm::EcefCoord& groundPt,
+        double desiredPrecision,
+        double* achievedPrecision) const
+{
+    const scene::Vector3 sceneGroundPt(toVector3(groundPt));
+
+    // TODO: Currently no way to specify desiredPrecision when calling
+    //       sceneToImage()
+    const types::RowCol<double> imagePt =
+            mProjection->sceneToImage(sceneGroundPt);
+    const types::RowCol<double> pixelPt = toPixel(imagePt);
+
+    // TODO: Currently no way to determine the actual precision that was
+    //       achieved, so setting it to the desired precision
+    if (achievedPrecision)
+    {
+        *achievedPrecision = desiredPrecision;
+    }
+
+    return toImageCoord(pixelPt);
+}
+
 csm::ImageCoord SICDSensorModel::groundToImage(
         const csm::EcefCoord& groundPt,
         double desiredPrecision,
@@ -718,26 +743,9 @@ csm::ImageCoord SICDSensorModel::groundToImage(
 {
     try
     {
-        scene::Vector3 sceneGroundPt;
-        sceneGroundPt[0] = groundPt.x;
-        sceneGroundPt[1] = groundPt.y;
-        sceneGroundPt[2] = groundPt.z;
-
-        // TODO: Currently no way to specify desiredPrecision when calling
-        //       sceneToImage()
-        double timeCOA(0.0);
-        const types::RowCol<double> imagePt =
-                mProjection->sceneToImage(sceneGroundPt, &timeCOA);
-        const types::RowCol<double> pixelPt = toPixel(imagePt);
-
-        // TODO: Currently no way to determine the actual precision that was
-        //       achieved, so setting it to the desired precision
-        if (achievedPrecision)
-        {
-            *achievedPrecision = desiredPrecision;
-        }
-
-        return csm::ImageCoord(pixelPt.row, pixelPt.col);
+        return groundToImageImpl(groundPt,
+                                 desiredPrecision,
+                                 achievedPrecision);
     }
     catch (const except::Exception& ex)
     {
@@ -751,43 +759,52 @@ csm::ImageCoordCovar SICDSensorModel::groundToImage(
         const csm::EcefCoordCovar& groundPt,
         double desiredPrecision,
         double* achievedPrecision,
-        csm::WarningList* warnings) const
+        csm::WarningList* ) const
 {
-    const csm::ImageCoord imagePt =
-            groundToImage(groundPt, desiredPrecision, achievedPrecision, warnings);
-    scene::Vector3 scenePt;
-    scenePt[0] = groundPt.x;
-    scenePt[1] = groundPt.y;
-    scenePt[2] = groundPt.z;
+    try
+    {
+        const csm::ImageCoord imagePt = groundToImageImpl(groundPt,
+                                                          desiredPrecision,
+                                                          achievedPrecision);
+        const scene::Vector3 scenePt(toVector3(groundPt));
 
-    // m^2
-    const math::linear::MatrixMxN<3, 3> userCovar(groundPt.covariance);
-    const math::linear::MatrixMxN<7, 7> sensorCovar =
-            mProjection->getErrorCovariance(scenePt);
-    const math::linear::MatrixMxN<2, 7> sensorPartials =
-            mProjection->sceneToImageSensorPartials(scenePt);
-    const math::linear::MatrixMxN<2, 3> imagePartials =
-            mProjection->sceneToImagePartials(scenePt);
-    const math::linear::MatrixMxN<2, 2> unmodeledCovar =
-            mProjection->getUnmodeledErrorCovariance();
-    const math::linear::MatrixMxN<2, 2> errorCovar =
-            unmodeledCovar +
-            (imagePartials * userCovar * imagePartials.transpose()) +
-            (sensorPartials * sensorCovar * sensorPartials.transpose());
-    csm::ImageCoordCovar csmErrorCovar;
-    csmErrorCovar.line = imagePt.line;
-    csmErrorCovar.samp = imagePt.samp;
-    csmErrorCovar.covariance[0] =
-            errorCovar[0][0] / square(mData->grid->row->sampleSpacing);
-    csmErrorCovar.covariance[1] =
-            errorCovar[0][1] /
-            (mData->grid->row->sampleSpacing * mData->grid->col->sampleSpacing);
-    csmErrorCovar.covariance[2] =
-            errorCovar[1][0] /
-            (mData->grid->row->sampleSpacing * mData->grid->col->sampleSpacing);
-    csmErrorCovar.covariance[3] =
-            errorCovar[1][1] / square(mData->grid->col->sampleSpacing);
-    return csmErrorCovar;
+        // m^2
+        const math::linear::MatrixMxN<3, 3> userCovar(groundPt.covariance);
+        const math::linear::MatrixMxN<7, 7> sensorCovar =
+                mProjection->getErrorCovariance(scenePt);
+        const math::linear::MatrixMxN<2, 7> sensorPartials =
+                mProjection->sceneToImageSensorPartials(scenePt);
+        const math::linear::MatrixMxN<2, 3> imagePartials =
+                mProjection->sceneToImagePartials(scenePt);
+        const math::linear::MatrixMxN<2, 2> unmodeledCovar =
+                mProjection->getUnmodeledErrorCovariance();
+        const math::linear::MatrixMxN<2, 2> errorCovar =
+                unmodeledCovar +
+                (imagePartials * userCovar * imagePartials.transpose()) +
+                (sensorPartials * sensorCovar * sensorPartials.transpose());
+        csm::ImageCoordCovar csmErrorCovar;
+        csmErrorCovar.line = imagePt.line;
+        csmErrorCovar.samp = imagePt.samp;
+        csmErrorCovar.covariance[0] =
+                errorCovar[0][0] / square(mData->grid->row->sampleSpacing);
+        csmErrorCovar.covariance[1] =
+                errorCovar[0][1] /
+                (mData->grid->row->sampleSpacing *
+                 mData->grid->col->sampleSpacing);
+        csmErrorCovar.covariance[2] =
+                errorCovar[1][0] /
+                (mData->grid->row->sampleSpacing *
+                 mData->grid->col->sampleSpacing);
+        csmErrorCovar.covariance[3] =
+                errorCovar[1][1] / square(mData->grid->col->sampleSpacing);
+        return csmErrorCovar;
+    }
+    catch (const except::Exception& ex)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SICDSensorModel::groundToImage");
+    }
 }
 
 csm::EcefCoord SICDSensorModel::imageToGround(
@@ -813,7 +830,7 @@ csm::EcefCoord SICDSensorModel::imageToGround(
             *achievedPrecision = desiredPrecision;
         }
 
-        return csm::EcefCoord(groundPt[0], groundPt[1], groundPt[2]);
+        return toEcefCoord(groundPt);
     }
     catch (const except::Exception& ex)
     {
@@ -831,46 +848,53 @@ csm::EcefCoordCovar SICDSensorModel::imageToGround(
         double* achievedPrecision,
         csm::WarningList* warnings) const
 {
-    const csm::EcefCoord groundPt = imageToGround(imagePt,
-                                                  height,
-                                                  desiredPrecision,
-                                                  achievedPrecision,
-                                                  warnings);
-
-    types::RowCol<double> imagePtMeters = fromPixel(imagePt);
-    scene::Vector3 scenePt;
-    scenePt[0] = groundPt.x;
-    scenePt[1] = groundPt.y;
-    scenePt[2] = groundPt.z;
-
-    const math::linear::MatrixMxN<2, 2> userCovar(imagePt.covariance);
-    const math::linear::MatrixMxN<7, 7> sensorCovar =
-            mProjection->getErrorCovariance(scenePt);
-    const math::linear::MatrixMxN<2, 2> unmodeledCovar =
-            mProjection->getUnmodeledErrorCovariance();
-    const math::linear::MatrixMxN<3, 2> groundPartials =
-            mProjection->imageToScenePartials(imagePtMeters, height);
-    const math::linear::MatrixMxN<3, 7> sensorPartials =
-            mProjection->imageToSceneSensorPartials(imagePtMeters, height);
-
-    const math::linear::MatrixMxN<3, 3> errorCovar =
-            (groundPartials * (userCovar + unmodeledCovar) *
-                    groundPartials.transpose()) +
-            (sensorPartials * sensorCovar * sensorPartials.transpose());
-
-    csm::EcefCoordCovar csmErrorCovar;
-    csmErrorCovar.x = groundPt.x;
-    csmErrorCovar.y = groundPt.y;
-    csmErrorCovar.z = groundPt.z;
-    for (size_t ii = 0; ii < 3; ++ii)
+    try
     {
-        for (size_t jj = 0; jj < 3; ++jj)
-        {
-            csmErrorCovar.covariance[ii * 3 + jj] = errorCovar[ii][jj];
-        }
-    }
+        const csm::EcefCoord groundPt = imageToGround(imagePt,
+                                                      height,
+                                                      desiredPrecision,
+                                                      achievedPrecision,
+                                                      warnings);
 
-    return csmErrorCovar;
+        types::RowCol<double> imagePtMeters = fromPixel(imagePt);
+        const scene::Vector3 scenePt(toVector3(groundPt));
+
+        const math::linear::MatrixMxN<2, 2> userCovar(imagePt.covariance);
+        const math::linear::MatrixMxN<7, 7> sensorCovar =
+                mProjection->getErrorCovariance(scenePt);
+        const math::linear::MatrixMxN<2, 2> unmodeledCovar =
+                mProjection->getUnmodeledErrorCovariance();
+        const math::linear::MatrixMxN<3, 2> groundPartials =
+                mProjection->imageToScenePartials(imagePtMeters, height);
+        const math::linear::MatrixMxN<3, 7> sensorPartials =
+                mProjection->imageToSceneSensorPartials(imagePtMeters,
+                                                        height);
+
+        const math::linear::MatrixMxN<3, 3> errorCovar =
+                (groundPartials * (userCovar + unmodeledCovar) *
+                        groundPartials.transpose()) +
+                (sensorPartials * sensorCovar * sensorPartials.transpose());
+
+        csm::EcefCoordCovar csmErrorCovar;
+        csmErrorCovar.x = groundPt.x;
+        csmErrorCovar.y = groundPt.y;
+        csmErrorCovar.z = groundPt.z;
+        for (size_t ii = 0; ii < 3; ++ii)
+        {
+            for (size_t jj = 0; jj < 3; ++jj)
+            {
+                csmErrorCovar.covariance[ii * 3 + jj] = errorCovar[ii][jj];
+            }
+        }
+
+        return csmErrorCovar;
+    }
+    catch (const except::Exception& ex)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SICDSensorModel::imageToGround");
+    }
 }
 
 csm::ImageCoord SICDSensorModel::getImageStart() const
@@ -886,15 +910,12 @@ csm::ImageVector SICDSensorModel::getImageSize() const
 csm::EcefVector SICDSensorModel::getIlluminationDirection(
         const csm::EcefCoord& groundPt) const
 {
-    scene::Vector3 groundPos;
-    groundPos[0] = groundPt.x;
-    groundPos[1] = groundPt.y;
-    groundPos[2] = groundPt.z;
+    const scene::Vector3 groundPos(toVector3(groundPt));
 
     scene::Vector3 illumVec = groundPos - mGeometry->getARPPosition();
     illumVec.normalize();
 
-    return csm::EcefVector(illumVec[0], illumVec[1], illumVec[2]);
+    return toEcefVector(illumVec);
 }
 
 double SICDSensorModel::getImageTime(const csm::ImageCoord& imagePt) const
@@ -917,8 +938,7 @@ SICDSensorModel::getSensorPosition(const csm::ImageCoord& imagePt) const
     try
     {
         const double time = mProjection->computeImageTime(fromPixel(imagePt));
-        const six::Vector3 pos = mProjection->computeARPPosition(time);
-        return csm::EcefCoord(pos[0], pos[1], pos[2]);
+        return toEcefCoord(mProjection->computeARPPosition(time));
     }
     catch (const except::Exception& ex)
     {
@@ -932,8 +952,7 @@ csm::EcefCoord SICDSensorModel::getSensorPosition(double time) const
 {
     try
     {
-        const six::Vector3 pos = mProjection->computeARPPosition(time);
-        return csm::EcefCoord(pos[0], pos[1], pos[2]);
+        return toEcefCoord(mProjection->computeARPPosition(time));
     }
     catch (const except::Exception& ex)
     {
@@ -949,8 +968,7 @@ SICDSensorModel::getSensorVelocity(const csm::ImageCoord& imagePt) const
     try
     {
         const double time = mProjection->computeImageTime(fromPixel(imagePt));
-        const six::Vector3 vel = mProjection->computeARPVelocity(time);
-        return csm::EcefVector(vel[0], vel[1], vel[2]);
+        return toEcefVector(mProjection->computeARPVelocity(time));
     }
     catch (const except::Exception& ex)
     {
@@ -964,8 +982,7 @@ csm::EcefVector SICDSensorModel::getSensorVelocity(double time) const
 {
     try
     {
-        const six::Vector3 vel = mProjection->computeARPVelocity(time);
-        return csm::EcefVector(vel[0], vel[1], vel[2]);
+        return toEcefVector(mProjection->computeARPVelocity(time));
     }
     catch (const except::Exception& ex)
     {

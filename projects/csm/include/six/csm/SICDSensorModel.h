@@ -611,6 +611,38 @@ private:
 
     void setSchemaDir(const std::string& schemaDir);
 
+    csm::ImageCoord groundToImageImpl(const csm::EcefCoord& groundPt,
+                                      double desiredPrecision,
+                                      double* achievedPrecision) const;
+
+    static
+    scene::Vector3 toVector3(const csm::EcefCoord& pt)
+    {
+        scene::Vector3 vec;
+        vec[0] = pt.x;
+        vec[1] = pt.y;
+        vec[2] = pt.z;
+        return vec;
+    }
+
+    static
+    csm::EcefVector toEcefVector(const scene::Vector3& vec)
+    {
+        return csm::EcefVector(vec[0], vec[1], vec[2]);
+    }
+
+    static
+    csm::EcefCoord toEcefCoord(const scene::Vector3& vec)
+    {
+        return csm::EcefCoord(vec[0], vec[1], vec[2]);
+    }
+
+    static
+    csm::ImageCoord toImageCoord(const types::RowCol<double>& pt)
+    {
+        return csm::ImageCoord(pt.row, pt.col);
+    }
+
 private:
     std::vector<std::string> mSchemaDirs;
     std::string mSensorModelState;
