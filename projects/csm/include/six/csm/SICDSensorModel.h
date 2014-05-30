@@ -643,6 +643,8 @@ private:
         return csm::ImageCoord(pt.row, pt.col);
     }
 
+    void reinitialize();
+
 private:
     std::vector<std::string> mSchemaDirs;
     std::string mSensorModelState;
@@ -650,6 +652,18 @@ private:
     std::auto_ptr<const scene::SceneGeometry> mGeometry;
     std::auto_ptr<scene::ProjectionModel> mProjection;
     csm::param::Type mAdjustableTypes[scene::AdjustableParams::NUM_PARAMS];
+
+    // NOTE: This is computed just at the SCP once each time a new SICD is
+    //       loaded rather than being recomputed for each ground point (which
+    //       the scene module does support).  This is due to avoiding a
+    //       mismatch between what the imageToGround() / groundToImage()
+    //       overloadings that compute covariance use (where you do have a
+    //       point)  and getParameterCovariance() / setParameterCovariance()
+    //       where you do not.  Given the current CSM API, the only other
+    //       solution would be to increase the number of adjustable parameters
+    //       and the covariance matrix size to 9 and not fold in the
+    //       tropo/iono error covariance into the ephemeric error covariance.
+    math::linear::MatrixMxN<7, 7> mSensorCovariance;
 };
 }
 }
