@@ -111,13 +111,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         // get xml as string for sensor model state
         std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
-
-        mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
-        mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(),
-                mGeometry.get()));
-        std::fill_n(mAdjustableTypes,
-                    static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
-                    csm::param::REAL);
+        reinitialize();
     }
     catch (const except::Exception& ex)
     {
@@ -201,12 +195,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
 
         mData.reset(reinterpret_cast<six::sicd::ComplexData*>(control->fromXML(
                 sicdXML, mSchemaDirs)));
-        mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
-        mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(),
-                mGeometry.get()));
-        std::fill_n(mAdjustableTypes,
-                    static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
-                    csm::param::REAL);
+        reinitialize();
     }
     catch (const except::Exception& ex)
     {
@@ -446,7 +435,8 @@ double SICDSensorModel::getParameterCovariance(int index1, int index2) const
                 "Invalid index in call in function call",
                 " SICDSensorModel::getParameterCovariance");
     }
-    return mProjection->getErrors().mSensorErrorCovar(index1, index2);
+
+    return mSensorCovariance(index1, index2);
 }
 
 void SICDSensorModel::setParameterCovariance(int index1,
@@ -460,7 +450,8 @@ void SICDSensorModel::setParameterCovariance(int index1,
                 "Invalid index in call in function call",
                 " SICDSensorModel::setParameterCovariance");
     }
-    mProjection->getErrors().mSensorErrorCovar(index1, index2) = covariance;
+
+    mSensorCovariance(index1, index2) = covariance;
 }
 
 std::vector<double> SICDSensorModel::computeGroundPartials(
@@ -769,9 +760,10 @@ csm::ImageCoordCovar SICDSensorModel::groundToImage(
         const scene::Vector3 scenePt(toVector3(groundPt));
 
         // m^2
+        // NOTE: See mSensorCovariance member variable definition in header
+        //       for why we're not computing the sensor covariance for this
+        //       point
         const math::linear::MatrixMxN<3, 3> userCovar(groundPt.covariance);
-        const math::linear::MatrixMxN<7, 7> sensorCovar =
-                mProjection->getErrorCovariance(scenePt);
         const math::linear::MatrixMxN<2, 7> sensorPartials =
                 mProjection->sceneToImageSensorPartials(scenePt);
         const math::linear::MatrixMxN<2, 3> imagePartials =
@@ -781,7 +773,8 @@ csm::ImageCoordCovar SICDSensorModel::groundToImage(
         const math::linear::MatrixMxN<2, 2> errorCovar =
                 unmodeledCovar +
                 (imagePartials * userCovar * imagePartials.transpose()) +
-                (sensorPartials * sensorCovar * sensorPartials.transpose());
+                (sensorPartials * mSensorCovariance *
+                 sensorPartials.transpose());
         csm::ImageCoordCovar csmErrorCovar;
         csmErrorCovar.line = imagePt.line;
         csmErrorCovar.samp = imagePt.samp;
@@ -859,9 +852,10 @@ csm::EcefCoordCovar SICDSensorModel::imageToGround(
         types::RowCol<double> imagePtMeters = fromPixel(imagePt);
         const scene::Vector3 scenePt(toVector3(groundPt));
 
+        // NOTE: See mSensorCovariance member variable definition in header
+        //       for why we're not computing the sensor covariance for this
+        //       point
         const math::linear::MatrixMxN<2, 2> userCovar(imagePt.covariance);
-        const math::linear::MatrixMxN<7, 7> sensorCovar =
-                mProjection->getErrorCovariance(scenePt);
         const math::linear::MatrixMxN<2, 2> unmodeledCovar =
                 mProjection->getUnmodeledErrorCovariance();
         const math::linear::MatrixMxN<3, 2> groundPartials =
@@ -873,7 +867,8 @@ csm::EcefCoordCovar SICDSensorModel::imageToGround(
         const math::linear::MatrixMxN<3, 3> errorCovar =
                 (groundPartials * (userCovar + unmodeledCovar) *
                         groundPartials.transpose()) +
-                (sensorPartials * sensorCovar * sensorPartials.transpose());
+                (sensorPartials * mSensorCovariance *
+                        sensorPartials.transpose());
 
         csm::EcefCoordCovar csmErrorCovar;
         csmErrorCovar.x = groundPt.x;
@@ -1033,13 +1028,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
 
         mData.reset(reinterpret_cast<six::sicd::ComplexData*>(control->fromXML(
                 domParser.getDocument(), mSchemaDirs)));
-
-        mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
-        mProjection.reset(six::sicd::Utilities::getProjectionModel(mData.get(),
-                mGeometry.get()));
-        std::fill_n(mAdjustableTypes,
-                    static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
-                    csm::param::REAL);
+        reinitialize();
     }
     catch (const except::Exception& ex)
     {
@@ -1093,6 +1082,23 @@ void SICDSensorModel::setSchemaDir(const std::string& dataDir)
         mSchemaDirs.resize(1);
         mSchemaDirs[0] = schemaDir;
     }
+}
+
+void SICDSensorModel::reinitialize()
+{
+    mGeometry.reset(six::sicd::Utilities::getSceneGeometry(mData.get()));
+
+    mProjection.reset(six::sicd::Utilities::getProjectionModel(
+            mData.get(),
+            mGeometry.get()));
+
+    std::fill_n(mAdjustableTypes,
+                static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
+                csm::param::REAL);
+
+    // NOTE: See member variable definition in header for why we're doing this
+    mSensorCovariance = mProjection->getErrorCovariance(
+            mGeometry->getReferencePosition());
 }
 }
 }
