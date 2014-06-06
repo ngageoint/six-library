@@ -224,18 +224,9 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char *d, double *decimal,
                                               nrt_Error * error)
 {
     /* +-dd.ddd or += ddd.ddd */
-    int degreeOffset = 0;
     const size_t len = strlen(d);
     const char sign = d[0];
-    if (len == 7)
-    {
-        degreeOffset = 2;
-    }
-    else if (len == 8)
-    {
-        degreeOffset = 3;
-    }
-    else
+    if (len != 7 && len != 8)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
                         "Invalid decimal string: '%s'. Should be +-dd.ddd or +-ddd.ddd",
