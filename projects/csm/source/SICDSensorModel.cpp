@@ -325,6 +325,100 @@ void SICDSensorModel::replaceModelState(const std::string& argState)
     }
 }
 
+int SICDSensorModel::getNumParameters() const
+{
+    return scene::AdjustableParam::size;
+}
+
+std::string SICDSensorModel::getParameterName(int index) const
+{
+    if (index < 0 || index >= getNumParameters() )
+    {
+        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::getParameterName");
+    }
+    return scene::AdjustableParam::name(index);
+}
+
+std::string SICDSensorModel::getParameterUnits(int index) const
+{
+    if (index < 0 || index >= getNumParameters())
+    {
+        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::getParameterUnits");
+    }
+    return scene::AdjustableParam::units(index);
+}
+
+double SICDSensorModel::getParameterValue(int index) const
+{
+    if (index < 0 || index >= getNumParameters())
+    {
+        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::getParameterValue");
+    }
+    return mProjection->getAdjustableParameter(index);
+}
+
+void SICDSensorModel::setParameterValue(int index, double value)
+{
+    if (index < 0 || index >= getNumParameters())
+    {
+        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::setParameterValue");
+    }
+    mProjection->setAdjustableParameter( index, value);
+}
+
+::csm::param::Type SICDSensorModel::getParameterType(int index) const
+{
+    if (index < 0 || index >= getNumParameters())
+    {
+        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::getParameterType");
+    }
+    return AdjustableTypes[index];
+}
+
+void SICDSensorModel::setParameterType(int index, ::csm::param::Type pType)
+{
+    if (index < 0 || index >= getNumParameters())
+    {
+        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::setParameterType");
+    }
+    AdjustableTypes[index] = pType;
+}
+
+double SICDSensorModel::getParameterCovariance(int index1, int index2) const
+{
+    if (index1 < 0 || index1 >= getNumParameters() || index2 < 0 || index2 >= getNumParameters() )
+    {
+        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::getParameterCovariance");
+    }
+    return mProjection->getErrorCovariance(index1, index2);
+}
+
+void SICDSensorModel::setParameterCovariance(int index1, int index2,
+        double covariance)
+{
+    if (index1 < 0 || index1 >= getNumParameters() || index2 < 0 || index2 >= getNumParameters() )
+    {
+        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+                "Invalid index in call in function call",
+                " SICDSensorModel::setParameterCovariance");
+    }
+    mProjection->setErrorCovariance(index1, index2, covariance);
+}
+
 ::csm::EcefCoord SICDSensorModel::getReferencePoint() const
 {
     const scene::Vector3 refPt = mGeometry->getReferencePosition();

@@ -832,7 +832,7 @@ template<> std::string six::toString(const CollectType& value)
 
 template<> std::string six::toString(const six::FrameType& value)
 {
-    switch (value)
+    switch (value.mValue)
     {
     case FrameType::ECF:
         return "ECF";

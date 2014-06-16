@@ -25,7 +25,8 @@
 #include <memory>
 
 #include <import/scene.h>
-#include "six/sidd/DerivedData.h"
+#include <types/RgAz.h>
+#include <six/sidd/DerivedData.h>
 
 namespace six
 {
@@ -49,11 +50,11 @@ public:
 
     static void setProductValues(Poly2D timeCOAPoly, PolyXYZ arpPoly,
             ReferencePoint ref, const Vector3* row, const Vector3* col,
-            RangeAzimuth<double>res, Product* product);
+            types::RgAz<double>res, Product* product);
 
     static void setProductValues(Vector3 arpVel, Vector3 arpPos,
             Vector3 refPos, const Vector3* row, const Vector3* col,
-            RangeAzimuth<double>res, Product* product);
+            types::RgAz<double>res, Product* product);
 
     static void setCollectionValues(Poly2D timeCOAPoly, PolyXYZ arpPoly,
             ReferencePoint ref, const Vector3* row, const Vector3* col,

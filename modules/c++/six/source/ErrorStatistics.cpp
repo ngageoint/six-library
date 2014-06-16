@@ -19,21 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/ErrorStatistics.h"
+#include <six/ErrorStatistics.h>
 
-using namespace six;
-
+namespace six
+{
 RadarSensor::RadarSensor() :
     rangeBias(Init::undefined<double>()),
     clockFreqSF(Init::undefined<double>()),
     transmitFreqSF(Init::undefined<double>()),
     rangeBiasDecorr(Init::undefined<DecorrType>())
 {
-}
-
-RadarSensor* RadarSensor::clone() const
-{
-    return new RadarSensor(*this);
 }
 
 TropoError::TropoError() :
@@ -43,11 +38,6 @@ TropoError::TropoError() :
 {
 }
 
-TropoError* TropoError::clone() const
-{
-    return new TropoError(*this);
-}
-
 IonoError::IonoError() :
     ionoRangeVertical(Init::undefined<double>()),
     ionoRangeRateVertical(Init::undefined<double>()),
@@ -55,30 +45,4 @@ IonoError::IonoError() :
     ionoRangeVertDecorr(Init::undefined<DecorrType>())
 {
 }
-
-IonoError* IonoError::clone() const
-{
-    return new IonoError(*this);
 }
-
-Components* Components::clone() const
-{
-    return new Components(*this);
-}
-
-CompositeSCP* CompositeSCP::clone() const
-{
-    return new CompositeSCP(*this);
-}
-
-ErrorStatistics* ErrorStatistics::clone() const
-{
-    return new ErrorStatistics(*this);
-}
-
-void ErrorStatistics::initialize(SCPType type)
-{
-    this->scpType = type;
-}
-
-

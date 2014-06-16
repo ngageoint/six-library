@@ -97,7 +97,7 @@ struct DerivedData: public Data
     /*!
      *  (Optional) Contains error statistics structures
      */
-    mem::ScopedCloneablePtr<ErrorStatistics> errorStatistics;
+    mem::ScopedCopyablePtr<ErrorStatistics> errorStatistics;
 
     /*!
      *  (Optional) Contains radiometric calibration params

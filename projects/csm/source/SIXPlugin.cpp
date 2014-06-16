@@ -34,11 +34,11 @@
 
 namespace six
 {
-namespace csm
+namespace CSM
 {
 const char SIXPlugin::PLUGIN_NAME[] = "SIX";
 const char SIXPlugin::MANUFACTURER[] = "GDAIS";
-const char SIXPlugin::RELEASE_DATE[] = "20140310";
+const char SIXPlugin::RELEASE_DATE[] = "20140527";
 const size_t SIXPlugin::SICD_MODEL_INDEX;
 const size_t SIXPlugin::SIDD_MODEL_INDEX;
 
@@ -63,7 +63,7 @@ std::string SIXPlugin::getReleaseDate() const
     return RELEASE_DATE;
 }
 
-::csm::Version SIXPlugin::getCsmVersion() const
+csm::Version SIXPlugin::getCsmVersion() const
 {
     return ::CURRENT_CSM_VERSION;
 }
@@ -82,7 +82,7 @@ std::string SIXPlugin::getModelName(size_t modelIndex) const
     case SIDD_MODEL_INDEX:
         return SIDDSensorModel::NAME;
     default:
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                            "Model index is " + str::toString(modelIndex),
                             "SIXPlugin::getModelName");
     }
@@ -97,13 +97,13 @@ std::string SIXPlugin::getModelFamily(size_t modelIndex) const
     case SIDD_MODEL_INDEX:
         return SIDDSensorModel::FAMILY;
     default:
-        throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                            "Model index is " + str::toString(modelIndex),
                             "SIXPlugin::getModelFamily");
     }
 }
 
-::csm::Version SIXPlugin::getModelVersion(const std::string& modelName) const
+csm::Version SIXPlugin::getModelVersion(const std::string& modelName) const
 {
     if (modelName == SICDSensorModel::NAME)
     {
@@ -115,7 +115,7 @@ std::string SIXPlugin::getModelFamily(size_t modelIndex) const
     }
     else
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_SUPPORTED,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_SUPPORTED,
                            "Model name is " + modelName,
                            "SIXPlugin::getModelVersion");
     }
@@ -123,7 +123,7 @@ std::string SIXPlugin::getModelFamily(size_t modelIndex) const
 
 bool SIXPlugin::canModelBeConstructedFromState(const std::string& modelName,
                                                const std::string& modelState,
-                                               ::csm::WarningList* ) const
+                                               csm::WarningList* ) const
 {
     // Assuming that if the model state starts with the model name, we're good
     // The only way to tell for sure would be to really construct a model which
@@ -135,9 +135,9 @@ bool SIXPlugin::canModelBeConstructedFromState(const std::string& modelName,
             str::startsWith(modelState, modelName + " "));
 }
 
-bool SIXPlugin::canModelBeConstructedFromISD(const ::csm::Isd& imageSupportData,
+bool SIXPlugin::canModelBeConstructedFromISD(const csm::Isd& imageSupportData,
                                               const std::string& modelName,
-                                              ::csm::WarningList* ) const
+                                              csm::WarningList* ) const
 {
     // Determine the data type that corresponds to this model
     six::DataType modelDataType;
@@ -159,8 +159,8 @@ bool SIXPlugin::canModelBeConstructedFromISD(const ::csm::Isd& imageSupportData,
     const std::string& format(imageSupportData.format());
     if (format == "NITF2.1")
     {
-        const ::csm::Nitf21Isd& nitfIsd =
-                dynamic_cast<const ::csm::Nitf21Isd&>(imageSupportData);
+        const csm::Nitf21Isd& nitfIsd =
+                dynamic_cast<const csm::Nitf21Isd&>(imageSupportData);
 
         return ((modelDataType == six::DataType::COMPLEX &&
                      SICDSensorModel::containsComplexDES(nitfIsd)) ||
@@ -189,9 +189,9 @@ bool SIXPlugin::canModelBeConstructedFromISD(const ::csm::Isd& imageSupportData,
     }
 }
 
-SIX_CSM_EXPORT_API ::csm::Model* SIXPlugin::constructModelFromState(
+SIX_CSM_EXPORT_API csm::Model* SIXPlugin::constructModelFromState(
    const std::string& modelState,
-   ::csm::WarningList* warnings) const
+   csm::WarningList* warnings) const
 {
     const std::string sensorModelName =
             getModelNameFromModelState(modelState, warnings);
@@ -210,21 +210,21 @@ SIX_CSM_EXPORT_API ::csm::Model* SIXPlugin::constructModelFromState(
     }
     catch (const except::Exception& ex)
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            ex.toString(),
                            "SIXPlugin::constructModelFromState");
     }
 
     // Must be an invalid sensor model name
-    throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+    throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                        "Invalid sensor model state: " + sensorModelName,
                        "SIXPlugin::constructModelFromState");
 }
 
-SIX_CSM_EXPORT_API ::csm::Model* SIXPlugin::constructModelFromISD(
-       const ::csm::Isd& imageSupportData,
+SIX_CSM_EXPORT_API csm::Model* SIXPlugin::constructModelFromISD(
+       const csm::Isd& imageSupportData,
        const std::string& modelName,
-       ::csm::WarningList* ) const
+       csm::WarningList* ) const
 {
     if (modelName == SICDSensorModel::NAME)
     {
@@ -236,7 +236,7 @@ SIX_CSM_EXPORT_API ::csm::Model* SIXPlugin::constructModelFromISD(
     }
     else
     {
-        throw ::csm::Error(::csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            "Invalid model name " + modelName,
                            "SIXPlugin::constructModelFromISD");
     }
@@ -244,7 +244,7 @@ SIX_CSM_EXPORT_API ::csm::Model* SIXPlugin::constructModelFromISD(
 
 std::string SIXPlugin::getModelNameFromModelState(
         const std::string& modelState,
-        ::csm::WarningList* ) const
+        csm::WarningList* ) const
 {
     if (str::startsWith(modelState, SICDSensorModel::NAME))
     {
@@ -256,25 +256,25 @@ std::string SIXPlugin::getModelNameFromModelState(
     }
     else
     {
-        throw ::csm::Error(::csm::Error::INVALID_SENSOR_MODEL_STATE,
+        throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            "Could not get sensor model name",
                            "SIXPlugin::getModelNameFromModelState");
     }
 }
 
-bool SIXPlugin::canISDBeConvertedToModelState(const ::csm::Isd& imageSupportData,
+bool SIXPlugin::canISDBeConvertedToModelState(const csm::Isd& imageSupportData,
                                                const std::string& modelName,
-                                               ::csm::WarningList* warnings) const
+                                               csm::WarningList* warnings) const
 {
     return canModelBeConstructedFromISD(imageSupportData, modelName, warnings);
 }
 
 std::string SIXPlugin::convertISDToModelState(
-       const ::csm::Isd& imageSupportData,
+       const csm::Isd& imageSupportData,
        const std::string& modelName,
-       ::csm::WarningList* warnings) const
+       csm::WarningList* warnings) const
 {
-    std::auto_ptr<const ::csm::Model>
+    std::auto_ptr<const csm::Model>
             model(constructModelFromISD(imageSupportData, modelName, warnings));
     return model->getModelState();
 }

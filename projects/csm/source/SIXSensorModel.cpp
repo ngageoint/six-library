@@ -25,7 +25,7 @@
 
 namespace six
 {
-namespace csm
+namespace CSM
 {
 const char SIXSensorModel::FAMILY[] = CSM_GEOMETRIC_MODEL_FAMILY CSM_RASTER_FAMILY;
 
@@ -50,14 +50,14 @@ int SIXSensorModel::getNumParameters() const
 
 std::string SIXSensorModel::getParameterName(int ) const
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::getParameterName");
 }
 
 std::string SIXSensorModel::getParameterUnits(int ) const
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::getParameterUnits");
 }
@@ -69,56 +69,56 @@ bool SIXSensorModel::hasShareableParameters() const
 
 bool SIXSensorModel::isParameterShareable(int i) const
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::isParameterShareable");
 }
 
-::csm::SharingCriteria SIXSensorModel::getParameterSharingCriteria(int ) const
+csm::SharingCriteria SIXSensorModel::getParameterSharingCriteria(int ) const
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::getParameterSharingCriteria");
 }
 
 double SIXSensorModel::getParameterValue(int ) const
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::getParameterValue");
 }
 
 void SIXSensorModel::setParameterValue(int , double )
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::setParameterValue");
 }
 
-::csm::param::Type SIXSensorModel::getParameterType(int ) const
+csm::param::Type SIXSensorModel::getParameterType(int ) const
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::getParameterType");
 }
 
-void SIXSensorModel::setParameterType(int , ::csm::param::Type )
+void SIXSensorModel::setParameterType(int , csm::param::Type )
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::setParameterType");
 }
 
 double SIXSensorModel::getParameterCovariance(int , int ) const
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::getParameterCovariance");
 }
 
 void SIXSensorModel::setParameterCovariance(int , int , double )
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no parameters",
                        "SIXSensorModel::setParameterCovariance");
 }
@@ -130,33 +130,33 @@ int SIXSensorModel::getNumGeometricCorrectionSwitches() const
 
 std::string SIXSensorModel::getGeometricCorrectionName(int ) const
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no geometric correction switches",
                        "SIXSensorModel::getGeometricCorrectionName");
 }
 
 void SIXSensorModel::setGeometricCorrectionSwitch(int ,
                                                   bool ,
-                                                  ::csm::param::Type )
+                                                  csm::param::Type )
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no geometric correction switches",
                        "SIXSensorModel::setGeometricCorrectionName");
 }
 
 bool SIXSensorModel::getGeometricCorrectionSwitch(int ) const
 {
-    throw ::csm::Error(::csm::Error::INDEX_OUT_OF_RANGE,
+    throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
                        "Sensor model has no geometric correction switches",
                        "SIXSensorModel::getGeometricCorrectionSwitch");
 }
 
-std::pair< ::csm::ImageCoord, ::csm::ImageCoord>
+std::pair< csm::ImageCoord, csm::ImageCoord>
 SIXSensorModel::getValidImageRange() const
 {
-    return std::pair< ::csm::ImageCoord, ::csm::ImageCoord>(
-            ::csm::ImageCoord(-99999.0, -99999.0),
-            ::csm::ImageCoord( 99999.0,  99999.0));
+    return std::pair< csm::ImageCoord, csm::ImageCoord>(
+            csm::ImageCoord(-99999.0, -99999.0),
+            csm::ImageCoord( 99999.0,  99999.0));
 }
 
 std::pair<double,double> SIXSensorModel::getValidHeightRange() const
@@ -165,23 +165,23 @@ std::pair<double,double> SIXSensorModel::getValidHeightRange() const
 }
 
 std::vector<double>
-SIXSensorModel::computeGroundPartials(const ::csm::EcefCoord& groundPt) const
+SIXSensorModel::computeGroundPartials(const csm::EcefCoord& groundPt) const
 {
     const double DELTA = 1.0;
 
-    ::csm::EcefCoord gp = groundPt;
-    const ::csm::ImageCoord imagePt0 = groundToImage(gp);
+    csm::EcefCoord gp = groundPt;
+    const csm::ImageCoord imagePt0 = groundToImage(gp);
 
     gp.x += DELTA;
-    const ::csm::ImageCoord imagePtDeltaX = groundToImage(gp);
+    const csm::ImageCoord imagePtDeltaX = groundToImage(gp);
 
     gp = groundPt;
     gp.y += DELTA;
-    const ::csm::ImageCoord imagePtDeltaY = groundToImage(gp);
+    const csm::ImageCoord imagePtDeltaY = groundToImage(gp);
 
     gp = groundPt;
     gp.z += DELTA;
-    const ::csm::ImageCoord imagePtDeltaZ = groundToImage(gp);
+    const csm::ImageCoord imagePtDeltaZ = groundToImage(gp);
 
     std::vector<double> partials;
     partials.push_back((imagePtDeltaX.line - imagePt0.line) / DELTA);
@@ -193,12 +193,12 @@ SIXSensorModel::computeGroundPartials(const ::csm::EcefCoord& groundPt) const
     return partials;
 }
 
-::csm::EcefLocus SIXSensorModel::imageToProximateImagingLocus(
-        const ::csm::ImageCoord& imagePt,
-        const ::csm::EcefCoord& groundPt,
+csm::EcefLocus SIXSensorModel::imageToProximateImagingLocus(
+        const csm::ImageCoord& imagePt,
+        const csm::EcefCoord& groundPt,
         double desiredPrecision,
         double* achievedPrecision,
-        ::csm::WarningList* ) const
+        csm::WarningList* ) const
 {
     scene::Vector3 sceneGroundPt;
     sceneGroundPt[0] = groundPt.x;
@@ -208,10 +208,10 @@ SIXSensorModel::computeGroundPartials(const ::csm::EcefCoord& groundPt) const
 
     const double DELTA = 1.0;
 
-    const ::csm::EcefCoord gp0 =
+    const csm::EcefCoord gp0 =
             imageToGround(imagePt, height, desiredPrecision);
 
-    const ::csm::EcefCoord gp1 =
+    const csm::EcefCoord gp1 =
             imageToGround(imagePt, height + DELTA, desiredPrecision);
 
     // TODO: Not sure how to calculate achievedPrecision
@@ -220,7 +220,7 @@ SIXSensorModel::computeGroundPartials(const ::csm::EcefCoord& groundPt) const
         *achievedPrecision = desiredPrecision;
     }
 
-    ::csm::EcefLocus locus;
+    csm::EcefLocus locus;
     locus.point = gp0;
     locus.direction.x = gp0.x - gp1.x;
     locus.direction.y = gp0.y - gp1.y;
@@ -229,89 +229,89 @@ SIXSensorModel::computeGroundPartials(const ::csm::EcefCoord& groundPt) const
     return locus;
 }
 
-const ::csm::CorrelationModel& SIXSensorModel::getCorrelationModel() const
+const csm::CorrelationModel& SIXSensorModel::getCorrelationModel() const
 {
     return mCorrelationModel;
 }
 
 std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
-        const ::csm::ImageCoord& ,
-        const ::csm::ImageCoord& ) const
+        const csm::ImageCoord& ,
+        const csm::ImageCoord& ) const
 {
     return std::vector<double>(4, 0.0);
 }
 
-void SIXSensorModel::setReferencePoint(const ::csm::EcefCoord& )
+void SIXSensorModel::setReferencePoint(const csm::EcefCoord& )
 {
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
+    throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
                        "SIXSensorModel::setReferencePoint");
 }
 
 std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
-       const ::csm::GeometricModel& ,
-       ::csm::param::Set ,
-       const ::csm::GeometricModel::GeometricModelList& ) const
+       const csm::GeometricModel& ,
+       csm::param::Set ,
+       const csm::GeometricModel::GeometricModelList& ) const
 {
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
+    throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
                        "SIXSensorModel::getCrossCovarianceMatrix");
 }
 
-::csm::ImageCoordCovar SIXSensorModel::groundToImage(const ::csm::EcefCoordCovar& ,
+csm::ImageCoordCovar SIXSensorModel::groundToImage(const csm::EcefCoordCovar& ,
                                                     double ,
                                                     double* ,
-                                                    ::csm::WarningList* ) const
+                                                    csm::WarningList* ) const
 {
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
+    throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
                        "SIXSensorModel::groundToImage");
 }
 
-::csm::EcefCoordCovar SIXSensorModel::imageToGround(const ::csm::ImageCoordCovar& ,
+csm::EcefCoordCovar SIXSensorModel::imageToGround(const csm::ImageCoordCovar& ,
                                                    double ,
                                                    double ,
                                                    double ,
                                                    double* ,
-                                                   ::csm::WarningList* ) const
+                                                   csm::WarningList* ) const
 {
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
+    throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
                        "SIXSensorModel::imageToGround");
 }
 
-::csm::EcefLocus SIXSensorModel::imageToRemoteImagingLocus(
-        const ::csm::ImageCoord& ,
+csm::EcefLocus SIXSensorModel::imageToRemoteImagingLocus(
+        const csm::ImageCoord& ,
         double ,
         double* ,
-        ::csm::WarningList* ) const
+        csm::WarningList* ) const
 {
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
+    throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
                        "SIXSensorModel::imageToRemoteImagingLocus");
 }
 
-::csm::RasterGM::SensorPartials SIXSensorModel::computeSensorPartials(
+csm::RasterGM::SensorPartials SIXSensorModel::computeSensorPartials(
         int ,
-        const ::csm::EcefCoord& ,
+        const csm::EcefCoord& ,
         double ,
         double* ,
-        ::csm::WarningList* ) const
+        csm::WarningList* ) const
 {
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
+    throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
                        "SIXSensorModel::computeSensorPartials");
 }
 
-::csm::RasterGM::SensorPartials SIXSensorModel::computeSensorPartials(
+csm::RasterGM::SensorPartials SIXSensorModel::computeSensorPartials(
         int ,
-        const ::csm::ImageCoord& ,
-        const ::csm::EcefCoord& ,
+        const csm::ImageCoord& ,
+        const csm::EcefCoord& ,
         double ,
         double* ,
-        ::csm::WarningList* ) const
+        csm::WarningList* ) const
 {
-    throw ::csm::Error(::csm::Error::UNSUPPORTED_FUNCTION,
+    throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                        "Function not supported",
                        "SIXSensorModel::computeSensorPartials");
 }

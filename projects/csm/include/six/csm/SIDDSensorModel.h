@@ -35,7 +35,7 @@
 
 namespace six
 {
-namespace csm
+namespace CSM
 {
 /**
  * @class SIDDSensorModel
@@ -46,7 +46,7 @@ namespace csm
 class SIDDSensorModel : public SIXSensorModel
 {
 public:
-    static const ::csm::Version VERSION;
+    static const csm::Version VERSION;
     static const char NAME[];
 
     /**
@@ -57,7 +57,7 @@ public:
      * \param dataDir  The plugin's data directory.  If this is an empty
      *     string, the SIX_SCHEMA_PATH environment variable must be set.
      */
-    SIDDSensorModel(const ::csm::Isd& isd, const std::string& dataDir);
+    SIDDSensorModel(const csm::Isd& isd, const std::string& dataDir);
 
     /**
      * Create sensor model given sensor model state string representation.
@@ -70,7 +70,7 @@ public:
                     const std::string& dataDir);
 
     static
-    bool containsDerivedDES(const ::csm::Nitf21Isd& isd);
+    bool containsDerivedDES(const csm::Nitf21Isd& isd);
 
 public: // Model methods
     /*
@@ -78,7 +78,7 @@ public: // Model methods
      *
      * \return The version of the sensor model
      */
-    virtual ::csm::Version getVersion() const;
+    virtual csm::Version getVersion() const;
 
     /**
      * Returns a string indicating the name of the sensor model.
@@ -110,7 +110,7 @@ public: // Model methods
      * \param[out] warnings  Unused
      */
     virtual void setImageIdentifier(const std::string& imageId,
-                                    ::csm::WarningList* warnings);
+                                    csm::WarningList* warnings);
 
     /**
      * Returns which sensor was used to acquire the image.  This is meant to
@@ -176,7 +176,7 @@ public: // GeometricModel methods
      *
      * \return Ground coordinate in meters
      */
-    virtual ::csm::EcefCoord getReferencePoint() const;
+    virtual csm::EcefCoord getReferencePoint() const;
 
 public: // RasterGM methods
     /**
@@ -193,10 +193,10 @@ public: // RasterGM methods
      *
      * \return Image coordinate in pixels
      */
-    virtual ::csm::ImageCoord groundToImage(const ::csm::EcefCoord& groundPt,
+    virtual csm::ImageCoord groundToImage(const csm::EcefCoord& groundPt,
                                             double desiredPrecision,
                                             double* achievedPrecision,
-                                            ::csm::WarningList* warnings) const;
+                                            csm::WarningList* warnings) const;
 
     /**
      * Converts imagePt (pixels) in image space returned EcefCoord (meters)
@@ -214,18 +214,18 @@ public: // RasterGM methods
      *
      * \return Ground coordinate in meters
      */
-    virtual ::csm::EcefCoord imageToGround(const ::csm::ImageCoord& imagePt,
+    virtual csm::EcefCoord imageToGround(const csm::ImageCoord& imagePt,
                                            double height,
                                            double desiredPrecision,
                                            double* achievedPrecision,
-                                           ::csm::WarningList* warnings) const;
+                                           csm::WarningList* warnings) const;
 
     /**
      * Returns the starting coordinate for the imaging operation.
      *
      * \return Always returns (0, 0)
      */
-    virtual ::csm::ImageCoord getImageStart() const;
+    virtual csm::ImageCoord getImageStart() const;
 
     /**
      * Returns the number of lines and samples in full image space pixels for
@@ -233,7 +233,7 @@ public: // RasterGM methods
      *
      * \return The size of the entire SICD
      */
-    virtual ::csm::ImageVector getImageSize() const;
+    virtual csm::ImageVector getImageSize() const;
 
     /**
      * Calculates the direction of illumination at the given ground position
@@ -244,8 +244,8 @@ public: // RasterGM methods
      *
      * \return Illumination direction vector
      */
-    virtual ::csm::EcefVector
-    getIlluminationDirection(const ::csm::EcefCoord& groundPt) const;
+    virtual csm::EcefVector
+    getIlluminationDirection(const csm::EcefCoord& groundPt) const;
 
     /**
      * Computes the time in seconds at which the pixel specified by imagePt was
@@ -256,7 +256,7 @@ public: // RasterGM methods
      *
      * \return Time in seconds from the reference date and time
      */
-    virtual double getImageTime(const ::csm::ImageCoord& imagePt) const;
+    virtual double getImageTime(const csm::ImageCoord& imagePt) const;
 
     /**
      * Returns the position of the physical sensor at the given position in
@@ -267,7 +267,7 @@ public: // RasterGM methods
      * \return Sensor ECEF coordinate in meters
      */
     virtual
-    ::csm::EcefCoord getSensorPosition(const ::csm::ImageCoord& imagePt) const;
+    csm::EcefCoord getSensorPosition(const csm::ImageCoord& imagePt) const;
 
     /**
      * Returns the position of the physical sensor at the given time
@@ -276,7 +276,7 @@ public: // RasterGM methods
      *
      * \return Sensor ECEF coordinate in meters
      */
-    virtual ::csm::EcefCoord getSensorPosition(double time) const;
+    virtual csm::EcefCoord getSensorPosition(double time) const;
 
     /**
      * Returns the velocity of the physical sensor at the given position in
@@ -287,7 +287,7 @@ public: // RasterGM methods
      * \return Sensor velocity in meters per second
      */
     virtual
-    ::csm::EcefVector getSensorVelocity(const ::csm::ImageCoord& imagePt) const;
+    csm::EcefVector getSensorVelocity(const csm::ImageCoord& imagePt) const;
 
     /**
      * Returns the velocity of the physical sensor at the given time
@@ -296,7 +296,7 @@ public: // RasterGM methods
      *
      * \return Sensor velocity in meters per second
      */
-    virtual ::csm::EcefVector getSensorVelocity(double time) const;
+    virtual csm::EcefVector getSensorVelocity(double time) const;
 
 private:
     /**
@@ -307,7 +307,7 @@ private:
      * \param[in] s     Sample position in terms of pixels from upper left
      * \return A types::RowCol<double> containing the distance in meters from the center of the image
      */
-    types::RowCol<double> fromPixel(const ::csm::ImageCoord& pos) const;
+    types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const;
 
     const six::sidd::MeasurableProjection* getProjection() const;
 
@@ -315,7 +315,7 @@ private:
 
     void initializeFromFile(const std::string& pathname, size_t imageIndex);
 
-    void initializeFromISD(const ::csm::Nitf21Isd& isd, size_t imageIndex);
+    void initializeFromISD(const csm::Nitf21Isd& isd, size_t imageIndex);
 
     void initializeGrid();
 

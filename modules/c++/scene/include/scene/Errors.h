@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sio.lite-c++
+ * This file is part of scene-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
- * sio.lite-c++ is free software; you can redistribute it and/or modify
+ * scene-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,16 +19,26 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SIO_LITE_H__
-#define __IMPORT_SIO_LITE_H__
+#ifndef __SCENE_ERRORS_H__
+#define __SCENE_ERRORS_H__
 
-#include "sio/lite/ReadUtils.h"
-#include "sio/lite/ElementType.h"
-#include "sio/lite/InvalidHeaderException.h"
-#include "sio/lite/UnsupportedDataTypeException.h"
-#include "sio/lite/FileHeader.h"
-#include "sio/lite/FileReader.h"
-#include "sio/lite/FileWriter.h"
-#include "sio/lite/UserDataDictionary.h"
+#include <math/linear/MatrixMxN.h>
+#include <scene/FrameType.h>
+
+namespace scene
+{
+struct Errors
+{
+    Errors();
+
+    void clear();
+
+    FrameType mFrameType;
+    math::linear::MatrixMxN<7, 7> mSensorErrorCovar;
+    math::linear::MatrixMxN<2, 2> mUnmodeledErrorCovar;
+    math::linear::MatrixMxN<2, 2> mIonoErrorCovar;
+    math::linear::MatrixMxN<1, 1> mTropoErrorCovar;
+};
+}
 
 #endif

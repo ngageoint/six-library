@@ -327,11 +327,11 @@ XMLElem SICommonXMLParser::createRowCol(const std::string& name,
 }
 
 XMLElem SICommonXMLParser::createRangeAzimuth(const std::string& name,
-        const RangeAzimuth<double>& value, XMLElem parent) const
+        const types::RgAz<double>& value, XMLElem parent) const
 {
     XMLElem e = newElement(name, getDefaultURI(), parent);
-    createDouble("Range", getSICommonURI(), value.range, e);
-    createDouble("Azimuth", getSICommonURI(), value.azimuth, e);
+    createDouble("Range", getSICommonURI(), value.rg, e);
+    createDouble("Azimuth", getSICommonURI(), value.az, e);
     return e;
 }
 
@@ -498,10 +498,10 @@ void SICommonXMLParser::parseLatLons(XMLElem pointsXML,
 }
 
 void SICommonXMLParser::parseRangeAzimuth(XMLElem parent, 
-                                          RangeAzimuth<double>& value) const
+                                          types::RgAz<double>& value) const
 {
-    parseDouble(getFirstAndOnly(parent, "Range"), value.range);
-    parseDouble(getFirstAndOnly(parent, "Azimuth"), value.azimuth);
+    parseDouble(getFirstAndOnly(parent, "Range"), value.rg);
+    parseDouble(getFirstAndOnly(parent, "Azimuth"), value.az);
 }
 
 void SICommonXMLParser::parseRowColDouble(

@@ -108,7 +108,7 @@ public:
     mem::ScopedCopyablePtr<Antenna> antenna;
 
     //!  (Optional) Params needed for computing error statistics
-    mem::ScopedCloneablePtr<ErrorStatistics> errorStatistics;
+    mem::ScopedCopyablePtr<ErrorStatistics> errorStatistics;
 
     //!  (Optional) Params describing other related imaging collections
     mem::ScopedCopyablePtr<MatchInformation> matchInformation;

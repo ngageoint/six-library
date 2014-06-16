@@ -72,7 +72,8 @@ void SICommonXMLParser10x::parseCompositeSCPFromXML(
     //optional
     if (compositeSCPXML)
     {
-        errorStatistics->compositeSCP.reset(new six::CompositeSCP());
+        errorStatistics->compositeSCP.reset(
+                new six::CompositeSCP(CompositeSCP::RG_AZ));
 
         parseDouble(getFirstAndOnly(compositeSCPXML, "Rg"),
                     errorStatistics->compositeSCP->xErr);

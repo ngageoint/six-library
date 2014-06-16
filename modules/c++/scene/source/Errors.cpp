@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sio.lite-c++
+ * This file is part of scene-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2013, General Dynamics - Advanced Information Systems
  *
- * sio.lite-c++ is free software; you can redistribute it and/or modify
+ * scene-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,16 +19,41 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SIO_LITE_H__
-#define __IMPORT_SIO_LITE_H__
 
-#include "sio/lite/ReadUtils.h"
-#include "sio/lite/ElementType.h"
-#include "sio/lite/InvalidHeaderException.h"
-#include "sio/lite/UnsupportedDataTypeException.h"
-#include "sio/lite/FileHeader.h"
-#include "sio/lite/FileReader.h"
-#include "sio/lite/FileWriter.h"
-#include "sio/lite/UserDataDictionary.h"
+#include <scene/Errors.h>
 
-#endif
+namespace
+{
+template <typename MatT>
+void setToZero(MatT& matrix)
+{
+    for (size_t row = 0; row < matrix.rows(); ++row)
+    {
+        for (size_t col = 0; col < matrix.cols(); ++col)
+        {
+            matrix(row, col) = 0.0;
+        }
+    }
+}
+}
+
+namespace scene
+{
+Errors::Errors() :
+    mFrameType(FrameType::RIC_ECF),
+    mSensorErrorCovar(0.0),
+    mUnmodeledErrorCovar(0.0),
+    mIonoErrorCovar(0.0),
+    mTropoErrorCovar(0.0)
+{
+}
+
+void Errors::clear()
+{
+    mFrameType = FrameType::RIC_ECF;
+    setToZero(mSensorErrorCovar);
+    setToZero(mUnmodeledErrorCovar);
+    setToZero(mIonoErrorCovar);
+    setToZero(mTropoErrorCovar);
+}
+}

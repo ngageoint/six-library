@@ -266,7 +266,7 @@ Utilities::getGridGeometry(const DerivedData* derived)
 
 void Utilities::setProductValues(Poly2D timeCOAPoly,
         PolyXYZ arpPoly, ReferencePoint ref, const Vector3* row,
-        const Vector3* col, RangeAzimuth<double>res, Product* product)
+        const Vector3* col, types::RgAz<double>res, Product* product)
 {
     double scpTime = timeCOAPoly(ref.rowCol.row, ref.rowCol.col);
 
@@ -279,7 +279,7 @@ void Utilities::setProductValues(Poly2D timeCOAPoly,
 
 void Utilities::setProductValues(Vector3 arpVel, Vector3 arpPos,
         Vector3 refPos, const Vector3* row, const Vector3* col,
-        RangeAzimuth<double>res, Product* product)
+        types::RgAz<double>res, Product* product)
 {
     const scene::SceneGeometry sceneGeom(arpVel, arpPos, refPos, *row, *col);
 
@@ -292,9 +292,7 @@ void Utilities::setProductValues(Vector3 arpVel, Vector3 arpPos,
     //if (product->resolution
     //    == Init::undefined<RowColDouble>())
     {
-        sceneGeom.getGroundResolution(res.range, res.azimuth,
-                                      product->resolution.row,
-                                      product->resolution.col);
+        product->resolution = sceneGeom.getGroundResolution(res);
     }
 }
 
@@ -328,7 +326,7 @@ void Utilities::setCollectionValues(Vector3 arpVel, Vector3 arpPos,
 
     if (collection->geometry->slope == Init::undefined<double>())
     {
-        collection->geometry->slope = sceneGeom.getSlopeAngle();
+        collection->geometry->slope = sceneGeom.getETPSlopeAngle();
     }
     if (collection->geometry->squint == Init::undefined<double>())
     {
@@ -336,11 +334,11 @@ void Utilities::setCollectionValues(Vector3 arpVel, Vector3 arpPos,
     }
     if (collection->geometry->graze == Init::undefined<double>())
     {
-        collection->geometry->graze = sceneGeom.getGrazingAngle();
+        collection->geometry->graze = sceneGeom.getETPGrazingAngle();
     }
     if (collection->geometry->tilt == Init::undefined<double>())
     {
-        collection->geometry->tilt = sceneGeom.getTiltAngle();
+        collection->geometry->tilt = sceneGeom.getETPTiltAngle();
     }
     if (collection->geometry->azimuth == Init::undefined<double>())
     {

@@ -24,8 +24,9 @@
 
 #include <limits>
 
-#include "six/Types.h"
-#include "six/Parameter.h"
+#include <six/Types.h>
+#include <six/Parameter.h>
+#include <types/RgAz.h>
 #include <import/except.h>
 #include <except/Exception.h>
 
@@ -64,7 +65,7 @@ template<> bool Init::undefined<bool>();
 template<> std::string Init::undefined<std::string>();
 template<> float Init::undefined<float>();
 template<> double Init::undefined<double>();
-template<> RangeAzimuth<double> Init::undefined<RangeAzimuth<double> >();
+template<> types::RgAz<double> Init::undefined<types::RgAz<double> >();
 template<> RowColInt Init::undefined<RowColInt>();
 template<> RowColDouble Init::undefined<RowColDouble>();
 template<> DecorrType Init::undefined<DecorrType>();

@@ -1,7 +1,5 @@
-NAME               = 'six-csm'
-TARGETNAME         = NAME
 MAINTAINER         = 'adam.sylvester@gd-ais.com'
-VERSION            = '1.0.2'
+VERSION            = '1.0.3'
 MODULE_DEPS        = 'six.sicd six.sidd'
 PLUGIN             = 'CSM'
 REMOVEPLUGINPREFIX = True
@@ -42,7 +40,7 @@ def configure(conf):
     else:
         raise Errors.WafError('Unsupported platform %s' % sys.platform)
 
-    pluginVersion = '102'
+    pluginVersion = '103'
     csmVersion = '301'
     conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_GDAIS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion
 
@@ -52,13 +50,22 @@ def build(bld):
     # NOTE: When we can (i.e. on Unix), use just the CSM headers rather than
     #       just use=CSMAPI so that we don't have a needless dependency on the
     #       CSM shared object.  On Windows we are stuck.
+    name = bld.env['SIX_CSM_PLATFORM_NAME']
     modArgs = globals()
-    modArgs['LIBNAME'] = bld.env['SIX_CSM_PLATFORM_NAME']
+    modArgs['NAME'] = name
+    modArgs['LIBNAME'] = name
     if re.match(r'win32', sys.platform):
         modArgs['USE'] = 'CSMAPI'
     else:
         modArgs['INCLUDES'] = ['include', bld.env['INCLUDES_CSM']] 
     bld.plugin(**modArgs)
+
+    # TODO: It seems like instead of this, I should be able to set 
+    #       modArgs['TARGETNAME'] to 'six-csm' and have that just be the name
+    #       of the target.  This works fine when building, but something about
+    #       how 'waf list' and 'waf msvs' operate makes this not work right.
+    bld(features='add_targets', target='six-csm',
+        targets_to_add=name)
 
 def distclean(context):
     context.recurse(DIRS)
