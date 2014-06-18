@@ -110,7 +110,7 @@ static nitf_TREDescription description[] = {
 
     {NITF_BCS_A, 21, "Illum Elevation Angle Coeff Per Row^2", "IERR" },
     {NITF_BCS_A, 21, "Illum Elevation Angle Coeff Per Row-Col", "IERC" },
-    {NITF_BCS_A, 21, "Illum Elevation Angle Coeff Per Col^2", "IERC" },
+    {NITF_BCS_A, 21, "Illum Elevation Angle Coeff Per Col^2", "IECC" },
 
     {NITF_BCS_A, 21, "Illum Azimuth Angle Const", "IE0" },
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Row", "IAR" },
@@ -118,7 +118,7 @@ static nitf_TREDescription description[] = {
     
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Row^2", "IARR" },
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Row-Col", "IARC" },
-    {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Col^2", "IARC" },
+    {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Col^2", "IACC" },
 
     {NITF_BCS_A, 21, "Sensor x-position", "SPX" },
     {NITF_BCS_A, 21, "Sensor x-velocity", "SVX" },
