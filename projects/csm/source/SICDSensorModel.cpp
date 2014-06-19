@@ -38,6 +38,12 @@ double square(double val)
 {
     return (val * val);
 }
+
+inline
+double cube(double val)
+{
+    return (val * val * val);
+}
 }
 
 namespace six
@@ -849,29 +855,58 @@ csm::EcefCoordCovar SICDSensorModel::imageToGround(
                                                       achievedPrecision,
                                                       warnings);
 
-        types::RowCol<double> imagePtMeters = fromPixel(imagePt);
+        const double a = scene::WGS84EllipsoidModel::EQUATORIAL_RADIUS_METERS;
+        const double b = scene::WGS84EllipsoidModel::POLAR_RADIUS_METERS;
         const scene::Vector3 scenePt(toVector3(groundPt));
 
         // NOTE: See mSensorCovariance member variable definition in header
         //       for why we're not computing the sensor covariance for this
         //       point
         const math::linear::MatrixMxN<2, 2> userCovar(imagePt.covariance);
-        const math::linear::MatrixMxN<2, 2> unmodeledCovar =
+        math::linear::MatrixMxN<2, 2> unmodeledCovar =
                 mProjection->getUnmodeledErrorCovariance();
-        const math::linear::MatrixMxN<3, 2> groundPartials =
-                mProjection->imageToScenePartials(imagePtMeters, height);
-        const math::linear::MatrixMxN<3, 7> sensorPartials =
-                mProjection->imageToSceneSensorPartials(imagePtMeters,
-                                                        height);
-        const math::linear::MatrixMxN<3, 1> heightPartial =
-                mProjection->imageToSceneHeightPartial(imagePtMeters, height);
+        math::linear::MatrixMxN<2, 3> groundPartials =
+                mProjection->sceneToImagePartials(scenePt);
+        math::linear::MatrixMxN<2, 7> sensorPartials =
+                mProjection->sceneToImageSensorPartials(scenePt);
+
+        math::linear::MatrixMxN<10, 10> fullCovar(0.0);
+        unmodeledCovar = unmodeledCovar + userCovar;
+        fullCovar.addInPlace(unmodeledCovar, 0, 0);
+        fullCovar[2][2] = heightVariance;
+        fullCovar.addInPlace(mSensorCovariance, 3, 3);
+
+        for (size_t ii = 0; ii < 3; ++ii)
+        {
+            groundPartials[0][ii] /= mData->grid->row->sampleSpacing;
+            groundPartials[1][ii] /= mData->grid->col->sampleSpacing;
+        }
+
+        for (size_t ii = 0; ii < 7; ++ii)
+        {
+            sensorPartials[0][ii] /= mData->grid->row->sampleSpacing;
+            sensorPartials[1][ii] /= mData->grid->col->sampleSpacing;
+        }
+
+        math::linear::MatrixMxN<3, 3> B(0.0);
+        B.addInPlace(groundPartials, 0, 0);
+        B[2][0] = 2 * groundPt.x / square(a + height);
+        B[2][1] = 2 * groundPt.y / square(a + height);
+        B[2][2] = 2 * groundPt.z / square(b + height);
+
+        math::linear::MatrixMxN<3, 10> A(0.0);
+        A[2][2] = -2.0 * (square(groundPt.x) + square(groundPt.y)) /
+                          cube(a + height) +
+                  square(groundPt.z) / cube(b + height);
+        A.addInPlace(sensorPartials, 0, 3);
+        A[0][0] = A[1][1] = 1.0;
+
+        const math::linear::MatrixMxN<3, 3> Q = A * fullCovar * A.transpose();
+        const math::linear::MatrixMxN<3, 3> imageToGroundCovarInv =
+                B.transpose() * math::linear::inverse(Q) * B;
 
         const math::linear::MatrixMxN<3, 3> errorCovar =
-                (groundPartials * (userCovar + unmodeledCovar) *
-                        groundPartials.transpose()) +
-                (sensorPartials * mSensorCovariance *
-                        sensorPartials.transpose()) +
-                (heightPartial * heightVariance * heightPartial.transpose());
+                math::linear::inverse(imageToGroundCovarInv);
 
         csm::EcefCoordCovar csmErrorCovar;
         csmErrorCovar.x = groundPt.x;
