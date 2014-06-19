@@ -254,6 +254,21 @@ public:
             double delta = 0.0001) const;
 
     /*
+     * Computes partial derivative for imageToScene() w.r.t. height
+     */
+    math::linear::MatrixMxN<3, 1> imageToSceneHeightPartial(
+            const types::RowCol<double>& imageGridPoint,
+            double height,
+            const Vector3& scenePoint,
+            double delta = 0.0001) const;
+
+    // Same as above but computes scene point via imageToScene()
+    math::linear::MatrixMxN<3, 1> imageToSceneHeightPartial(
+            const types::RowCol<double>& imageGridPoint,
+            double height,
+            double delta = 0.0001) const;
+
+    /*
      * Computes sensor partials for sceneToImage()
      */
     math::linear::MatrixMxN<2, 7> sceneToImageSensorPartials(
