@@ -836,7 +836,7 @@ csm::EcefCoord SICDSensorModel::imageToGround(
 csm::EcefCoordCovar SICDSensorModel::imageToGround(
         const csm::ImageCoordCovar& imagePt,
         double height,
-        double /*heightVariance*/,
+        double heightVariance,
         double desiredPrecision,
         double* achievedPrecision,
         csm::WarningList* warnings) const
@@ -863,12 +863,15 @@ csm::EcefCoordCovar SICDSensorModel::imageToGround(
         const math::linear::MatrixMxN<3, 7> sensorPartials =
                 mProjection->imageToSceneSensorPartials(imagePtMeters,
                                                         height);
+        const math::linear::MatrixMxN<3, 1> heightPartial =
+                mProjection->imageToSceneHeightPartial(imagePtMeters, height);
 
         const math::linear::MatrixMxN<3, 3> errorCovar =
                 (groundPartials * (userCovar + unmodeledCovar) *
                         groundPartials.transpose()) +
                 (sensorPartials * mSensorCovariance *
-                        sensorPartials.transpose());
+                        sensorPartials.transpose()) +
+                (heightPartial * heightVariance * heightPartial.transpose());
 
         csm::EcefCoordCovar csmErrorCovar;
         csmErrorCovar.x = groundPt.x;

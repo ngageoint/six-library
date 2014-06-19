@@ -484,7 +484,7 @@ math::linear::MatrixMxN<3, 2> ProjectionModel::imageToScenePartials(
                                               imageGridPoint.col);
     Vector3 scenePointDelta = imageToScene(imageGridPointDelta, height);
     scenePointDelta = (scenePointDelta - scenePoint) * (1 / delta);
-    math::linear::MatrixMxN<3,2,double> jacobian(0.0);
+    math::linear::MatrixMxN<3, 2> jacobian(0.0);
     jacobian.col(0, scenePointDelta.matrix());
 
     imageGridPointDelta.row = imageGridPoint.row;
@@ -503,6 +503,29 @@ math::linear::MatrixMxN<3, 2> ProjectionModel::imageToScenePartials(
 {
     const Vector3 scenePt = imageToScene(imageGridPoint, height);
     return imageToScenePartials(imageGridPoint, height, scenePt, delta);
+}
+
+math::linear::MatrixMxN<3, 1> ProjectionModel::imageToSceneHeightPartial(
+        const types::RowCol<double>& imageGridPoint,
+        double height,
+        const Vector3& scenePoint,
+        double delta) const
+{
+    const double deltaHeight = height + delta;
+    const Vector3 scenePointDelta = imageToScene(imageGridPoint, deltaHeight);
+
+    const math::linear::MatrixMxN<3, 1> jacobian =
+            ((scenePointDelta - scenePoint) * (1.0 / delta)).matrix();
+    return jacobian;
+}
+
+math::linear::MatrixMxN<3, 1> ProjectionModel::imageToSceneHeightPartial(
+        const types::RowCol<double>& imageGridPoint,
+        double height,
+        double delta) const
+{
+    const Vector3 scenePt = imageToScene(imageGridPoint, height);
+    return imageToSceneHeightPartial(imageGridPoint, height, scenePt, delta);
 }
 
 math::linear::MatrixMxN<2, 7> ProjectionModel::sceneToImageSensorPartials(
