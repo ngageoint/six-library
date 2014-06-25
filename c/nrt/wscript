@@ -17,6 +17,7 @@ from build import writeConfig
 def configure(conf):
     # callback function to check for all #defines used by the nrt module
     def nrt_callback(conf):
+        conf.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h', mandatory=False)
         conf.check_cc(header_name="sys/time.h", mandatory=False)
     writeConfig(conf, nrt_callback, NAME)
 
