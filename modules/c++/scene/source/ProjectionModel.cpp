@@ -28,8 +28,12 @@
 
 namespace
 {
-// Points to use in each direction for projection
-static const size_t POINTS_1D = 10;
+const double EARTH_ROTATION_RATE = 0.000072921150; // Radians / sec
+
+double square(double val)
+{
+    return (val * val);
+}
 
 // TODO: Should this be a static method instead?
 scene::Vector3 computeUnitVector(const scene::LatLonAlt& latLon)
@@ -57,72 +61,27 @@ ProjectionModel(const Vector3& slantPlaneNormal,
                 const Vector3& scp,
                 const math::poly::OneD<Vector3>& arpPoly,
                 const math::poly::TwoD<double>& timeCOAPoly,
-                int lookDir) :
-    mSlantPlaneNormal(slantPlaneNormal),
-    mImagePlaneRowVector(imagePlaneRowVector),
-    mImagePlaneColVector(imagePlaneColVector),
-    mSCP(scp),
-    mARPPoly(arpPoly),
-    mTimeCOAPoly(timeCOAPoly),
-    mLookDir(lookDir)
-    
-{
-    mImagePlaneNormal =
-        math::linear::cross(imagePlaneRowVector, imagePlaneColVector);
-    
-    mSlantPlaneNormal.normalize();
-    mImagePlaneNormal.normalize();
-    
-    mScaleFactor = mSlantPlaneNormal.dot(mImagePlaneNormal);
-    
-    mARPVelPoly = mARPPoly.derivative();
-    for (int idx = 0; idx < 7; idx++)
-    {
-    	mAdjustable[idx] = (double) 0.0;
-    }
-    mFrameType = scene::FrameType::RIC_ECF;
-}
-
-ProjectionModel::
-ProjectionModel(const Vector3& slantPlaneNormal,
-                const Vector3& imagePlaneRowVector,
-                const Vector3& imagePlaneColVector,
-                const Vector3& scp,
-                const math::poly::OneD<Vector3>& arpPoly,
-                const math::poly::TwoD<double>& timeCOAPoly,
                 int lookDir,
-                const math::linear::MatrixMxN<7,7,double>& sensorCovar,
-                const math::linear::MatrixMxN<2,2,double>& unmodeledCovar,
-                const math::linear::MatrixMxN<2,2,double>& ionoCovar,
-                const math::linear::MatrixMxN<1,1,double>& tropoCovar,
-                std::string frametype) :
+                const Errors& errors) :
     mSlantPlaneNormal(slantPlaneNormal),
     mImagePlaneRowVector(imagePlaneRowVector),
     mImagePlaneColVector(imagePlaneColVector),
+    mImagePlaneNormal(math::linear::cross(imagePlaneRowVector,
+                                          imagePlaneColVector)),
     mSCP(scp),
     mARPPoly(arpPoly),
+    mARPVelPoly(mARPPoly.derivative()),
     mTimeCOAPoly(timeCOAPoly),
     mLookDir(lookDir),
-	mSensorErrorCovar(sensorCovar),
-	mUnmodeledErrorCovar(unmodeledCovar),
-	mIonoErrorCovar(ionoCovar),
-	mTropoErrorCovar(tropoCovar),
-	mFrameType(frametype)
+    mErrors(errors)
 {
-    mImagePlaneNormal =
-        math::linear::cross(imagePlaneRowVector, imagePlaneColVector);
-
     mSlantPlaneNormal.normalize();
     mImagePlaneNormal.normalize();
-
     mScaleFactor = mSlantPlaneNormal.dot(mImagePlaneNormal);
+}
 
-    mARPVelPoly = mARPPoly.derivative();
-
-    for (int idx = 0; idx < 7; idx++)
-    {
-    	mAdjustable[idx] = (double) 0.0;
-    }
+ProjectionModel::~ProjectionModel()
+{
 }
 
 /*!
@@ -134,7 +93,6 @@ Vector3
 ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
                                       const Vector3& arpCOA,
                                       const Vector3& velCOA,
-                                      double timeCOA,
                                       const Vector3& groundPlaneNormal,
                                       const Vector3& groundRefPoint) const
 {
@@ -198,7 +156,8 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
 
 types::RowCol<double>
 ProjectionModel::sceneToImage(const Vector3& scenePoint,
-                              double* oTimeCOA, double delta[7]) const
+                              const AdjustableParams& delta,
+                              double* oTimeCOA) const
 {
     // For scenePoint, we will compute the spherical earth
     // unit ground plane normal (uGPN)
@@ -231,6 +190,7 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
         diff = scenePoint - imageToScene(imageGridPoint,
                                          groundRefPoint,
                                          groundPlaneNormal,
+                                         delta,
                                          oTimeCOA);
         
         dist = diff.norm();
@@ -247,37 +207,32 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
     throw except::Exception(Ctxt("Point failed to converge"));
 }
 
-types::RowCol<double>
-ProjectionModel::sceneToImage(const Vector3& scenePoint,
-                              double* oTimeCOA) const
-{
-	double delta[7] = {0};
-	return sceneToImage( scenePoint, oTimeCOA, delta);
-}
-
 Vector3
 ProjectionModel::imageToScene(const types::RowCol<double>& imageGridPoint,
                               const Vector3& groundRefPoint,
                               const Vector3& groundPlaneNormal,
-                              double *oTimeCOA, double delta[7]) const
+                              const AdjustableParams& delta,
+                              double *oTimeCOA) const
 {
     
     // Compute the timeCOA
-    double timeCOA = mTimeCOAPoly(imageGridPoint.row,
-                                  imageGridPoint.col);
+    const double timeCOA = mTimeCOAPoly(imageGridPoint.row,
+                                        imageGridPoint.col);
     
     if (oTimeCOA != NULL)
+    {
         *oTimeCOA = timeCOA;
+    }
     
     // Compute ARP position
     Vector3 arpCOA = mARPPoly(timeCOA);
     
     // Compute ARP velocity
     Vector3 velCOA = mARPVelPoly(timeCOA);
-
+    
     double r;
     double rDot;
-
+    
     computeContour(arpCOA, velCOA, timeCOA,
                    imageGridPoint,
                    &r,
@@ -285,62 +240,18 @@ ProjectionModel::imageToScene(const types::RowCol<double>& imageGridPoint,
     
     // Adjustable parameters are applied after computing R/Rdot contours
     // Adjustable parameters do not affect Rdot
-    // Now Add adjustable parameters to ARP and ARP-Velocity
-    // Adjustable parameters are in RIC, but ARP and ARP-Velocity are in ECEF
-    // Therefore, we need to convert RIC to ECEF before proceeding
-    //
-    // We need to update with correct Earth Inertial Spin value, currently using 0
-    math::linear::MatrixMxN<3,3,double> TriceciToecef = getRICtoECEFTransformMatrix(EARTH_ROTATION_RATE, timeCOA);
-    math::linear::MatrixMxN<3,3,double> TricecfToecef = getRICtoECEFTransformMatrix((double) 0.0, timeCOA);
-    Vector3 adjustedARP = &mAdjustable[AdjustableParam::ARP_RADIAL];
-    Vector3 deltaARP = &delta[AdjustableParam::ARP_RADIAL];
-    Vector3 adjustedVel = &mAdjustable[AdjustableParam::ARPVEL_RADIAL];
-    Vector3 deltaVel = &delta[AdjustableParam::ARPVEL_RADIAL];
-    //Adjustable Parameters are assumed to be in RIC_ECF
-    Vector3 arpaddition;
-    Vector3 veladdition;
+    imageToSceneAdjustment(delta, timeCOA, r, arpCOA, velCOA);
 
-    if (mFrameType == scene::FrameType::RIC_ECF)
-    {
-    	arpaddition = TricecfToecef * (deltaARP.matrix() + adjustedARP.matrix());
-    	veladdition = TricecfToecef * (deltaVel.matrix() + adjustedVel.matrix());
-    } else if (mFrameType == scene::FrameType::RIC_ECI)
-    {
-    	arpaddition = TriceciToecef * deltaARP.matrix() + TricecfToecef * adjustedARP.matrix();
-    	veladdition = TriceciToecef * deltaVel.matrix() + TricecfToecef * adjustedVel.matrix();
-    } else if (mFrameType == scene::FrameType::ECF)
-    {
-    	arpaddition = deltaARP.matrix() + TricecfToecef * adjustedARP.matrix();
-    	veladdition = deltaVel.matrix() + TricecfToecef * adjustedVel.matrix();
-    } else {
-    	throw except::Exception(Ctxt("Reference Frame for error parameters undefined"));
-    }
-
-
-    arpCOA = arpCOA + arpaddition;
-    velCOA = velCOA + veladdition;
-    r = r + mAdjustable[AdjustableParam::RANGEBIAS] + delta[AdjustableParam::RANGEBIAS];
-    
-    
     return contourToGroundPlane(r, rDot,
-                                arpCOA, velCOA, timeCOA,
+                                arpCOA, velCOA,
                                 groundPlaneNormal,
                                 groundRefPoint);
 }
 
-Vector3
-ProjectionModel::imageToScene(const types::RowCol<double>& imageGridPoint,
-                              const Vector3& groundRefPoint,
-                              const Vector3& groundPlaneNormal,
-                              double *oTimeCOA) const
-{
-	double delta[7] = {0};
-	return imageToScene(imageGridPoint, groundRefPoint, groundPlaneNormal, oTimeCOA, delta);
-}
-
 Vector3 ProjectionModel::imageToScene(
         const types::RowCol<double>& imageGridPoint,
-        double height, double delta[7],
+        double height,
+        const AdjustableParams& delta,
         double heightThreshold,
         size_t maxNumIters) const
 {
@@ -374,42 +285,11 @@ Vector3 ProjectionModel::imageToScene(
                                         imageGridPoint.col);
     Vector3 arpCOA = mARPPoly(timeCOA);
     Vector3 velCOA = mARPVelPoly(timeCOA);
-
-
     computeContour(arpCOA, velCOA, timeCOA, imageGridPoint, &r, &rDot);
 
-    // Now Add adjustable parameters to ARP and ARP-Velocity
-    // Adjustable parameters are in RIC, but ARP and ARP-Velocity are in ECEF
-    // Therefore, we need to convert RIC to ECEF before proceeding
-    math::linear::MatrixMxN<3,3,double> TriceciToecef = getRICtoECEFTransformMatrix(EARTH_ROTATION_RATE, timeCOA);
-    math::linear::MatrixMxN<3,3,double> TricecfToecef = getRICtoECEFTransformMatrix((double) 0.0, timeCOA);
-    Vector3 adjustedARP = &mAdjustable[AdjustableParam::ARP_RADIAL];
-    Vector3 deltaARP = &delta[AdjustableParam::ARP_RADIAL];
-    Vector3 adjustedVel = &mAdjustable[AdjustableParam::ARPVEL_RADIAL];
-    Vector3 deltaVel = &delta[AdjustableParam::ARPVEL_RADIAL];
-    //Adjustable Parameters are assumed to be in RIC_ECF
-    Vector3 arpaddition;
-    Vector3 veladdition;
-    if (mFrameType == scene::FrameType::RIC_ECF)
-    {
-    	arpaddition = TricecfToecef * (deltaARP.matrix() + adjustedARP.matrix());
-    	veladdition = TricecfToecef * (deltaVel.matrix() + adjustedVel.matrix());
-    } else if (mFrameType == scene::FrameType::RIC_ECI)
-    {
-    	arpaddition = TriceciToecef * deltaARP.matrix() + TricecfToecef * adjustedARP.matrix();
-    	veladdition = TriceciToecef * deltaVel.matrix() + TricecfToecef * adjustedVel.matrix();
-    } else if (mFrameType == scene::FrameType::ECF)
-    {
-    	arpaddition = deltaARP.matrix() + TricecfToecef * adjustedARP.matrix();
-    	veladdition = deltaVel.matrix() + TricecfToecef * adjustedVel.matrix();
-    } else {
-    	throw except::Exception(Ctxt("Reference Frame for error parameters undefined"));
-    }
-
-
-    arpCOA = arpCOA + arpaddition;
-    velCOA = velCOA + veladdition;
-    r = r + mAdjustable[AdjustableParam::RANGEBIAS] + delta[AdjustableParam::RANGEBIAS];
+    // Adjustable parameters are applied after computing R/Rdot contours
+    // Adjustable parameters do not affect Rdot
+    imageToSceneAdjustment(delta, timeCOA, r, arpCOA, velCOA);
 
     Vector3 gppECEF;
     Vector3 uUP;
@@ -419,7 +299,7 @@ Vector3 ProjectionModel::imageToScene(
         // 2. Compute precise projection along the R/Rdot contour to ground
         //    plane
         gppECEF = contourToGroundPlane(r, rDot,
-                                       arpCOA, velCOA, timeCOA,
+                                       arpCOA, velCOA,
                                        groundPlaneNormal,
                                        groundRefPoint);
 
@@ -476,456 +356,340 @@ Vector3 ProjectionModel::imageToScene(
     return scene::Utilities::latLonToECEF(SPP);
 }
 
-Vector3 ProjectionModel::imageToScene(
+void ProjectionModel::imageToSceneAdjustment(const AdjustableParams& delta,
+                                             double timeCOA,
+                                             double& r,
+                                             Vector3& arpCOA,
+                                             Vector3& velCOA) const
+{
+    // Now Add adjustable parameters to ARP and ARP-Velocity
+    // Adjustable parameters are in RIC, but ARP and ARP-Velocity are in ECEF
+    // Therefore, we need to convert RIC to ECEF before proceeding
+    math::linear::MatrixMxN<3, 3> ricEcfToEcef =
+            getRICtoECEFTransformMatrix(0.0, timeCOA);
+    const Vector3 adjustedARP = mAdjustableParams.getARPVector();
+    const Vector3 deltaARP = delta.getARPVector();
+    const Vector3 adjustedVel = mAdjustableParams.getARPVelocityVector();
+    const Vector3 deltaVel = delta.getARPVelocityVector();
+
+    //Adjustable Parameters are assumed to be in RIC_ECF
+    Vector3 arpAddition;
+    Vector3 velAddition;
+    switch (mErrors.mFrameType.mValue)
+    {
+    case FrameType::RIC_ECF:
+        arpAddition =
+                ricEcfToEcef * (deltaARP.matrix() + adjustedARP.matrix());
+        velAddition =
+                ricEcfToEcef * (deltaVel.matrix() + adjustedVel.matrix());
+        break;
+    case FrameType::RIC_ECI:
+    {
+        const math::linear::MatrixMxN<3, 3> ricEciToEcef =
+                getRICtoECEFTransformMatrix(EARTH_ROTATION_RATE, timeCOA);
+        arpAddition = ricEciToEcef * deltaARP.matrix() +
+                ricEcfToEcef * adjustedARP.matrix();
+        velAddition = ricEciToEcef * deltaVel.matrix() +
+                ricEcfToEcef * adjustedVel.matrix();
+    }
+        break;
+    case FrameType::ECF:
+        arpAddition = deltaARP.matrix() + ricEcfToEcef * adjustedARP.matrix();
+        velAddition = deltaVel.matrix() + ricEcfToEcef * adjustedVel.matrix();
+        break;
+    default:
+        throw except::Exception(Ctxt(
+                "Reference Frame for error parameters undefined"));
+    }
+
+    arpCOA = arpCOA + arpAddition;
+    velCOA = velCOA + velAddition;
+    r = r + mAdjustableParams[AdjustableParams::RANGE_BIAS] +
+            delta[AdjustableParams::RANGE_BIAS];
+}
+
+math::linear::MatrixMxN<3, 3> ProjectionModel::getRICtoECEFTransformMatrix(
+        double earthInitialSpin,
+        double timeCOA) const
+{
+    const Vector3 rARP = mARPPoly(timeCOA);
+    const Vector3 vARP = mARPVelPoly(timeCOA);
+    Vector3 omega = 0.0;
+    omega[2] = earthInitialSpin;
+
+    const Vector3 V = vARP + math::linear::cross(omega, rARP);
+    Vector3 radial = rARP;
+    radial.normalize();
+
+    Vector3 crossTrack = math::linear::cross(rARP, V);
+    crossTrack.normalize();
+
+    const Vector3 inTrack = math::linear::cross(crossTrack, radial);
+
+    math::linear::MatrixMxN<3, 3> ecefToRIC;
+    ecefToRIC.col(0, radial.matrix());
+    ecefToRIC.col(1, inTrack.matrix());
+    ecefToRIC.col(2, crossTrack.matrix());
+
+    return ecefToRIC;
+}
+
+math::linear::MatrixMxN<3, 3> ProjectionModel::getRICtoECEFTransformMatrix(
+        double earthInitialSpin,
+        const types::RowCol<double>& imageGridPoint) const
+{
+    return getRICtoECEFTransformMatrix(earthInitialSpin,
+                                       mTimeCOAPoly(imageGridPoint.row,
+                                                    imageGridPoint.col));
+}
+
+math::linear::MatrixMxN<3, 7> ProjectionModel::imageToSceneSensorPartials(
         const types::RowCol<double>& imageGridPoint,
         double height,
-        double heightThreshold,
-        size_t maxNumIters) const
+        const Vector3& scenePoint,
+        double delta) const
 {
-	double delta[7] = {0};
-	return imageToScene(imageGridPoint, height, delta, heightThreshold, maxNumIters);
-}
+    AdjustableParams deltaParams; // Initialized to all 0's
+    math::linear::MatrixMxN<3, 7> jacobian(0.0);
 
-void ProjectionModel::computeProjectionPolynomials(
-    const GridECEFTransform& gridTransform,
-    const types::RowCol<size_t>& inPixelStart,
-    const types::RowCol<double>& inSceneCenter,
-    const types::RowCol<double>& interimSceneCenter,
-    const types::RowCol<double>& interimSampleSpacing,
-    const types::RowCol<double>& outSceneCenter,
-    const types::RowCol<double>& outSampleSpacing,
-    const types::RowCol<size_t>& outExtent,
-    size_t polyOrder,
-    math::poly::TwoD<double>& outputToSlantRow,
-    math::poly::TwoD<double>& outputToSlantCol,
-    math::poly::TwoD<double>& timeCOAPoly,
-    double* meanResidualErrorRow,
-    double* meanResidualErrorCol,
-    double* meanResidualErrorTCOA) const
-{
-    // Want to sample [0, outExtent) in the loop below
-    const types::RowCol<double> skip(
-        static_cast<double>(outExtent.row - 1) / (POINTS_1D - 1),
-        static_cast<double>(outExtent.col - 1) / (POINTS_1D - 1));
-
-    const types::RowCol<double> ratio(interimSceneCenter.row / inSceneCenter.row,
-                               interimSceneCenter.col / inSceneCenter.col);
-
-    const types::RowCol<double> outOffset(inPixelStart.row * ratio.row,
-                                   inPixelStart.col * ratio.col);
-
-    math::linear::Matrix2D<double> rowMapping(POINTS_1D, POINTS_1D);
-    math::linear::Matrix2D<double> colMapping(POINTS_1D, POINTS_1D);
-    math::linear::Matrix2D<double> tcoaMapping(POINTS_1D, POINTS_1D);
-    math::linear::Matrix2D<double> lines(POINTS_1D, POINTS_1D);
-    math::linear::Matrix2D<double> samples(POINTS_1D, POINTS_1D);
-    math::linear::Matrix2D<double> tcoaLines(POINTS_1D, POINTS_1D);
-    math::linear::Matrix2D<double> tcoaSamples(POINTS_1D, POINTS_1D);
-
-    types::RowCol<double> currentOffset(0.0, 0.0);
-    
-    for (size_t ii = 0; ii < POINTS_1D; ++ii, currentOffset.row += skip.row)
+    for (size_t idx = 0; idx < 7; ++idx)
     {
-        currentOffset.col = 0;
-        for (size_t jj = 0; jj < POINTS_1D; ++jj, currentOffset.col += skip.col)
-        {
-            // Rows, these are essentially meshgrid-like (replicated)
-            lines(ii, jj) = currentOffset.row;
-            // This represents columns
-            samples(ii, jj) = currentOffset.col;
-
-            // For the time COA poly, we need to map lines/samples to meters
-            // from SCP in the output grid
-            tcoaLines(ii, jj) =
-                (lines(ii,jj) - outSceneCenter.row) * outSampleSpacing.row;
-
-            tcoaSamples(ii, jj) =
-                (samples(ii,jj) - outSceneCenter.col) * outSampleSpacing.col;
-
-            // Find initial position in the scene
-            const scene::Vector3 sPos =
-                    gridTransform.rowColToECEF(currentOffset);
-
-            // This HAS to be a scene coordinate
-            double timeCOA(0.0);
-            const types::RowCol<double> rgAz = sceneToImage(sPos, &timeCOA);
-
-            // Adjust here for the start offset
-            rowMapping(ii, jj) = rgAz.row / interimSampleSpacing.row +
-                    interimSceneCenter.row - outOffset.row;
-            colMapping(ii, jj) = rgAz.col / interimSampleSpacing.col +
-                    interimSceneCenter.col - outOffset.col;
-
-            tcoaMapping(ii, jj) = timeCOA;
-        }
+        deltaParams.mParams[idx] = delta;
+        Vector3 scenePointDelta =
+                imageToScene(imageGridPoint, height, deltaParams);
+        scenePointDelta = (scenePointDelta - scenePoint) * (1/delta);
+        jacobian.col(idx, scenePointDelta.matrix());
+        deltaParams.mParams[idx] = 0.0;
     }
 
-    // Now fit the outputToSlantRows, outputToSlantCols, and timeCOAPoly
-    outputToSlantRow = math::poly::fit(lines, samples, rowMapping,
-                                       polyOrder, polyOrder);
+    return jacobian;
+}
 
-    outputToSlantCol = math::poly::fit(lines, samples, colMapping,
-                                       polyOrder, polyOrder);
+math::linear::MatrixMxN<3, 7> ProjectionModel::imageToSceneSensorPartials(
+        const types::RowCol<double>& imageGridPoint,
+        double height,
+        double delta) const
+{
+    const Vector3 scenePt = imageToScene(imageGridPoint, height);
+    return imageToSceneSensorPartials(imageGridPoint, height, scenePt, delta);
+}
 
-    timeCOAPoly = math::poly::fit(tcoaLines, tcoaSamples, tcoaMapping,
-                                  polyOrder, polyOrder);
+math::linear::MatrixMxN<3, 2> ProjectionModel::imageToScenePartials(
+        const types::RowCol<double>& imageGridPoint,
+        double height,
+        const Vector3& scenePoint,
+        double delta) const
+{
+    types::RowCol<double> imageGridPointDelta(imageGridPoint.row + delta,
+                                              imageGridPoint.col);
+    Vector3 scenePointDelta = imageToScene(imageGridPointDelta, height);
+    scenePointDelta = (scenePointDelta - scenePoint) * (1 / delta);
+    math::linear::MatrixMxN<3, 2> jacobian(0.0);
+    jacobian.col(0, scenePointDelta.matrix());
 
-    if (meanResidualErrorRow || meanResidualErrorCol || meanResidualErrorTCOA)
+    imageGridPointDelta.row = imageGridPoint.row;
+    imageGridPointDelta.col = imageGridPoint.col + delta;
+    scenePointDelta = imageToScene(imageGridPointDelta, height);
+    scenePointDelta = (scenePointDelta - scenePoint) * (1 / delta);
+    jacobian.col(1, scenePointDelta.matrix());
+
+    return jacobian;
+}
+
+math::linear::MatrixMxN<3, 2> ProjectionModel::imageToScenePartials(
+        const types::RowCol<double>& imageGridPoint,
+        double height,
+        double delta) const
+{
+    const Vector3 scenePt = imageToScene(imageGridPoint, height);
+    return imageToScenePartials(imageGridPoint, height, scenePt, delta);
+}
+
+math::linear::MatrixMxN<3, 1> ProjectionModel::imageToSceneHeightPartial(
+        const types::RowCol<double>& imageGridPoint,
+        double height,
+        const Vector3& scenePoint,
+        double delta) const
+{
+    const double deltaHeight = height + delta;
+    const Vector3 scenePointDelta = imageToScene(imageGridPoint, deltaHeight);
+
+    const math::linear::MatrixMxN<3, 1> jacobian =
+            ((scenePointDelta - scenePoint) * (1.0 / delta)).matrix();
+    return jacobian;
+}
+
+math::linear::MatrixMxN<3, 1> ProjectionModel::imageToSceneHeightPartial(
+        const types::RowCol<double>& imageGridPoint,
+        double height,
+        double delta) const
+{
+    const Vector3 scenePt = imageToScene(imageGridPoint, height);
+    return imageToSceneHeightPartial(imageGridPoint, height, scenePt, delta);
+}
+
+math::linear::MatrixMxN<2, 7> ProjectionModel::sceneToImageSensorPartials(
+        const Vector3& scenePoint,
+        const types::RowCol<double>& imageGridPoint,
+        double delta) const
+{
+    AdjustableParams deltaParams; // Initialized to all 0's
+    math::linear::MatrixMxN<2, 7> jacobian(0.0);
+
+    for (size_t idx = 0; idx < 7; ++idx)
     {
-        double errorSumRow(0.0);
-        double errorSumCol(0.0);
-        double errorSumTCOA(0.0);
-
-        for (size_t ii = 0; ii < POINTS_1D; ++ii)
-        {
-            for (size_t jj = 0; jj < POINTS_1D; ++jj)
-            {
-                const double row(lines(ii, jj));
-                const double col(samples(ii, jj));
-
-                double diff = rowMapping(ii, jj) - outputToSlantRow(row, col);
-                errorSumRow += diff * diff;
-
-                diff = colMapping(ii, jj) - outputToSlantCol(row, col);
-                errorSumCol += diff * diff;
-
-                diff = tcoaMapping(ii, jj) - timeCOAPoly(row, col);
-                errorSumTCOA += diff * diff;
-            }
-        }
-
-        static const size_t NUM_POINTS = POINTS_1D * POINTS_1D;
-        if (meanResidualErrorRow)
-        {
-            *meanResidualErrorRow = errorSumRow / NUM_POINTS;
-        }
-        if (meanResidualErrorCol)
-        {
-            *meanResidualErrorCol = errorSumCol / NUM_POINTS;
-        }
-        if (meanResidualErrorTCOA)
-        {
-            *meanResidualErrorTCOA = errorSumTCOA / NUM_POINTS;
-        }
-    }
-}
-
-math::linear::MatrixMxN<3, 3, double> ProjectionModel::getRICtoECEFTransformMatrix(
-		double EIS, double timeCOA) const
-{
-	Vector3 Rarp = mARPPoly(timeCOA);
-	Vector3 Varp = mARPVelPoly(timeCOA);
-	Vector3 Omega = (double) 0.0;
-	Omega[2] = EIS;
-
-	Vector3 V = Varp + math::linear::cross(Omega,Rarp);
-	Vector3 radial = Rarp;
-	radial.normalize();
-	Vector3 crosstrack = math::linear::cross(Rarp,V);
-	crosstrack.normalize();
-	Vector3 intrack = math::linear::cross(crosstrack,radial);
-	math::linear::MatrixMxN<3, 3, double> Teceftoric;
-	// This doesn't seem like a good way to do this.
-	Teceftoric.col(0, radial.matrix());
-	Teceftoric.col(1, intrack.matrix());
-	Teceftoric.col(2, crosstrack.matrix());
-
-	return Teceftoric;
-
-}
-
-math::linear::MatrixMxN<3, 3, double> ProjectionModel::getRICtoECEFTransformMatrix(
-		double EIS, const types::RowCol<double>& imageGridPoint) const
-{
-	return getRICtoECEFTransformMatrix( EIS, mTimeCOAPoly(imageGridPoint.row, imageGridPoint.col));
-}
-
-math::linear::MatrixMxN<7, 7, double> ProjectionModel::getErrorCovariance(
-		const Vector3& scenePoint, double timeCOA)
-{
-	// Return Sensor Error Covariance Matrix with Tropo and Iono errors rolled in
-	Vector3 Rarp = mARPPoly(timeCOA);
-	Vector3 Varp = mARPVelPoly(timeCOA);
-	Vector3 range = Rarp - scenePoint;
-	range.normalize();
-	Vector3 normal = math::linear::cross(range,Varp);
-	normal.normalize();
-//	Vector3 p = (double) 0.0;
-//	p(2) = (double) 1.0;
-
-	// Normal to ellipsoid is gradient at position
-	// Need to pull in actual values from Ellipsoid model
-	const scene::ECEFToLLATransform ecefToLLA;
-	double a = (ecefToLLA.getEllipsoidModel())->getEquatorialRadius(); // X-Axis Ellipsoid radius also semi-major axis
-	double b = (ecefToLLA.getEllipsoidModel())->getEquatorialRadius(); // Y-Axis Ellipsoid radius
-	double c = (ecefToLLA.getEllipsoidModel())->getPolarRadius(); // Z-Axis Ellipsoid radius
-	Vector3 Up;
-	Up[0] = 2*scenePoint[0]/pow(a,2);
-	Up[1] = 2*scenePoint[1]/pow(b,2);
-	Up[2] = 2*scenePoint[2]/pow(c,2);
-	Up.normalize();
-
-	normal = normal*mLookDir;
-	Vector3 azimuth = math::linear::cross(normal,range);
-
-	double rv = Up.dot(range);
-	double av = Up.dot(azimuth);
-
-	// Tropo Error
-	// a should be semi-major axis of reference ellipsoid
-	double Htrop = 1 + 7000/a;
-	double htrop = sqrt((double) (pow(Htrop,2) - 1 + pow(rv,2)));
-	double ftrop = Htrop/htrop;
-	Vector3 R = scenePoint;
-	R.normalize();
-	double graze = asin((double) range.dot(R));
-	math::linear::MatrixMxN<2,1,double> Btrop;
-	Btrop(0,0) = -1.0 * ftrop;
-	Btrop(1,0) = av*pow(cos(graze),2) / pow(htrop,2);
-	math::linear::MatrixMxN<2,2,double> Mtrop = Btrop*mTropoErrorCovar*Btrop.transpose();
-
-	// Iono Error
-	double Va = azimuth.dot(Varp);
-	Vector3 denominator = scenePoint - Rarp;
-	double omegaa = Va / denominator.norm();
-	double Hion = 1 + 350000 / a;
-	double hion = sqrt(pow(Hion,2) - 1 + pow(rv,2));
-	double fion = Hion / hion;
-	math::linear::MatrixMxN<2,2,double> Bion((double) 0.0);
-	Bion(0,0) = -1.0*fion;
-	Bion(1,1) = fion / omegaa;
-	Bion(1,0) = av*pow(cos(graze),2) / pow(hion,2);
-	math::linear::MatrixMxN<2,2,double> Mion = Bion * mIonoErrorCovar * Bion.transpose();
-	math::linear::MatrixMxN<3,3,double> Tratoecef;
-	// Again, might not be the best way, if it even works
-	Tratoecef.col(0, range.matrix());
-	Tratoecef.col(1, azimuth.matrix());
-	Tratoecef.col(2, normal.matrix());
-	// Will need to put in correct Earth Inertial Spin
-	math::linear::MatrixMxN<3,3,double> Trictoecef = getRICtoECEFTransformMatrix((double) 0, timeCOA);
-	math::linear::MatrixMxN<3,3,double> Tratoric = Trictoecef.transpose() * Tratoecef;
-	math::linear::MatrixMxN<3,3,double> Mtrop3D((double) 0.0);
-	Mtrop3D.addInPlace(Mtrop,0,0);
-
-	math::linear::MatrixMxN<3,3,double> Mion3D((double) 0.0);
-	Mion3D.addInPlace(Mion,0,0);
-
-	math::linear::MatrixMxN<3,3,double> Mtotal = Tratoric * Mtrop3D * Tratoric.transpose()
-			+ Tratoric * Mion3D * Tratoric.transpose();
-
-	math::linear::MatrixMxN<7,7,double> ReturnVal(mSensorErrorCovar);
-	ReturnVal.addInPlace(Mtotal,0,0);
-
-	return ReturnVal;
-
-}
-
-math::linear::MatrixMxN<7, 7, double> ProjectionModel::getErrorCovariance(
-		const Vector3& scenePoint,
-		const types::RowCol<double>& imageGridPoint)
-{
-	return getErrorCovariance(scenePoint, mTimeCOAPoly(imageGridPoint.row,imageGridPoint.col));
-}
-
-math::linear::MatrixMxN<7, 7, double> ProjectionModel::getErrorCovariance(
-		const Vector3& scenePoint)
-{
-	return getErrorCovariance(scenePoint, sceneToImage(scenePoint, (double*) NULL));
-}
-
-math::linear::MatrixMxN<7, 7, double> ProjectionModel::getErrorCovariance()
-{
-	return getErrorCovariance(mSCP);
-}
-
-math::linear::MatrixMxN<3, 7, double> ProjectionModel::imageToSceneSensorPartials(
-		const types::RowCol<double>& imageGridPoint,
-		double height,
-		const Vector3& scenePoint,
-		double delta) const
-{
-	// Returned matrix will be a Jacobian Matrix of form [ARP-RIC, Vel-RIC, Rbias]
-	Vector3 scenePointDelta;
-	double deltaparams[7] = {0};
-	math::linear::MatrixMxN<3,7,double> Jacobian((double) 0.0);
-	for (int idx = 0; idx < 7; idx++)
-	{
-		deltaparams[idx] = delta;
-		scenePointDelta = imageToScene( imageGridPoint, height, deltaparams);
-		scenePointDelta = (scenePointDelta - scenePoint) * (1/delta);
-		Jacobian.col(idx, scenePointDelta.matrix());
-		deltaparams[idx] = (double) 0.0;
-	}
-	return Jacobian;
-}
-
-math::linear::MatrixMxN<3, 7, double> ProjectionModel::imageToSceneSensorPartials(
-		const types::RowCol<double>& imageGridPoint, double height,
-		double delta) const
-{
-	Vector3 scenePt = imageToScene( imageGridPoint, height);
-	return imageToSceneSensorPartials(imageGridPoint, height, scenePt, delta);
-}
-
-math::linear::MatrixMxN<3, 2, double> ProjectionModel::imageToScenePartials(
-		const types::RowCol<double>& imageGridPoint,
-		double height,
-		const Vector3& scenePoint,
-		double delta) const
-{
-	Vector3 scenePointDelta;
-	math::linear::MatrixMxN<3,2,double> Jacobian((double) 0.0);
-	types::RowCol<double> imageGridPointDelta;
-	imageGridPointDelta = imageGridPoint;
-	imageGridPointDelta.row = imageGridPointDelta.row + delta;
-	scenePointDelta = imageToScene( imageGridPointDelta, height);
-	scenePointDelta = (scenePointDelta - scenePoint) * (1/delta);
-	Jacobian.col(0, scenePointDelta.matrix());
-
-	imageGridPointDelta = imageGridPoint;
-	imageGridPointDelta.col = imageGridPointDelta.col + delta;
-	scenePointDelta = imageToScene( imageGridPointDelta, height);
-	scenePointDelta = (scenePointDelta - scenePoint) * (1/delta);
-	Jacobian.col(1, scenePointDelta.matrix());
-
-	return Jacobian;
-
-}
-
-math::linear::MatrixMxN<3, 2, double> ProjectionModel::imageToScenePartials(
-		const types::RowCol<double>& imageGridPoint, double height,
-		double delta) const
-{
-	Vector3 scenePt = imageToScene(imageGridPoint, height);
-	return imageToScenePartials(imageGridPoint, height, scenePt, delta);
-}
-
-math::linear::MatrixMxN<2, 7, double> ProjectionModel::sceneToImageSensorPartials(
-		const Vector3& scenePoint,
-		const types::RowCol<double>& imageGridPoint,
-		double delta) const
-{
-	types::RowCol<double> imageGridPointDelta;
-	double deltaparams[7] = {0};
-	math::linear::MatrixMxN<2,7,double> Jacobian((double) 0.0);
-	for (int idx = 0; idx < 7; idx++)
-	{
-		deltaparams[idx] = delta;
-		imageGridPointDelta = sceneToImage( scenePoint, NULL, deltaparams);
-		Jacobian(0,idx) = (imageGridPointDelta.row - imageGridPoint.row) * (1/delta);
-		Jacobian(1,idx) = (imageGridPointDelta.col - imageGridPoint.col) * (1/delta);
-		deltaparams[idx] = (double) 0.0;
-	}
-	return Jacobian;
-}
-
-math::linear::MatrixMxN<2, 7, double> ProjectionModel::sceneToImageSensorPartials(
-		const Vector3& scenePoint, double delta) const
-{
-	types::RowCol<double> imagePt = sceneToImage(scenePoint, NULL);
-	return sceneToImageSensorPartials(scenePoint, imagePt, delta);
-}
-
-math::linear::MatrixMxN<2, 3, double> ProjectionModel::sceneToImagePartials(
-		const Vector3& scenePoint,
-		const types::RowCol<double>& imageGridPoint,
-		double delta) const
-{
-	Vector3 scenePointDelta;
-	types::RowCol<double> imageGridPointDelta;
-	math::linear::MatrixMxN<2,3,double> Jacobian((double) 0.0);
-	for (int idx = 0; idx < 3; idx++)
-	{
-		scenePointDelta = scenePoint;
-		scenePointDelta[idx] = scenePointDelta[idx] + delta;
-		imageGridPointDelta = sceneToImage( scenePointDelta, NULL);
-		Jacobian(0,idx) = (imageGridPointDelta.row - imageGridPoint.row) * (1/delta);
-		Jacobian(1,idx) = (imageGridPointDelta.col - imageGridPoint.col) * (1/delta);
-	}
-
-	return Jacobian;
-}
-
-math::linear::MatrixMxN<2, 3, double> ProjectionModel::sceneToImagePartials(
-		const Vector3& scenePoint, double delta) const
-{
-	types::RowCol<double> imagePt = sceneToImage(scenePoint,NULL);
-	return sceneToImagePartials(scenePoint, imagePt, delta);
-}
-
-double ProjectionModel::getAdjustableParameter(
-		int index) const
-{
-	return mAdjustable[index];
-}
-
-void ProjectionModel::setAdjustableParameter(
-		int index,
-		double val)
-{
-	mAdjustable[index] = val;
-}
-
-void ProjectionModel::setErrorCovariance(
-		int index1,
-		int index2,
-		double val)
-{
-	mSensorErrorCovar(index1,index2) = val;
-}
-
-double ProjectionModel::getErrorCovariance(
-		int index1,
-		int index2)
-{
-	return mSensorErrorCovar(index1,index2);
-}
-
-void ProjectionModel::computePixelBasedTimeCOAPolynomial(
-    const GridECEFTransform& gridTransform,
-    const types::RowCol<double>& outPixelStart,
-    const types::RowCol<size_t>& outExtent,
-    size_t polyOrder,
-    math::poly::TwoD<double>& timeCOAPoly) const
-{
-    // Want to sample [0, outExtent) in the loop below
-    const types::RowCol<double> skip(
-        static_cast<double>(outExtent.row - 1) / (POINTS_1D - 1),
-        static_cast<double>(outExtent.col - 1) / (POINTS_1D - 1));
-
-    math::linear::Matrix2D<double> tcoaMapping(POINTS_1D, POINTS_1D);
-    math::linear::Matrix2D<double> lines(POINTS_1D, POINTS_1D);
-    math::linear::Matrix2D<double> samples(POINTS_1D, POINTS_1D);
-
-    types::RowCol<double> currentOffset(outPixelStart);
-
-    for (size_t ii = 0; ii < POINTS_1D; ++ii, currentOffset.row += skip.row)
-    {
-        currentOffset.col = outPixelStart.col;
-        for (size_t jj = 0; jj < POINTS_1D; ++jj, currentOffset.col += skip.col)
-        {
-            // We want to evaluate gridTransform at the global pixel location,
-            // so we offset by outPixelStart.  But we set lines and samples
-            // based on just our grid (that is, for ii = jj = 0, we want
-            // pixel location (0, 0)).
-            // Rows, these are essentially meshgrid-like (replicated)
-            lines(ii, jj) = currentOffset.row - outPixelStart.row;
-            // This represents columns
-            samples(ii, jj) = currentOffset.col - outPixelStart.col;
-
-            // Find initial position in the scene
-            const scene::Vector3 sPos =
-                    gridTransform.rowColToECEF(currentOffset);
-
-            // This HAS to be a scene coordinate
-            double timeCOA(0.0);
-            sceneToImage(sPos, &timeCOA);
-            tcoaMapping(ii, jj) = timeCOA;
-        }
+        deltaParams.mParams[idx] = delta;
+        const types::RowCol<double> imageGridPointDelta =
+                sceneToImage(scenePoint, deltaParams);
+        jacobian(0, idx) =
+                (imageGridPointDelta.row - imageGridPoint.row) * (1 / delta);
+        jacobian(1, idx) =
+                (imageGridPointDelta.col - imageGridPoint.col) * (1 / delta);
+        deltaParams.mParams[idx] = 0.0;
     }
 
-    timeCOAPoly = math::poly::fit(lines, samples, tcoaMapping,
-                                  polyOrder, polyOrder);
+    return jacobian;
+}
+
+math::linear::MatrixMxN<2, 7> ProjectionModel::sceneToImageSensorPartials(
+        const Vector3& scenePoint,
+        double delta) const
+{
+    const types::RowCol<double> imagePt = sceneToImage(scenePoint);
+    return sceneToImageSensorPartials(scenePoint, imagePt, delta);
+}
+
+math::linear::MatrixMxN<2, 3> ProjectionModel::sceneToImagePartials(
+        const Vector3& scenePoint,
+        const types::RowCol<double>& imageGridPoint,
+        double delta) const
+{
+    math::linear::MatrixMxN<2,3,double> jacobian(0.0);
+
+    for (size_t idx = 0; idx < 3; ++idx)
+    {
+        Vector3 scenePointDelta = scenePoint;
+        scenePointDelta[idx] = scenePointDelta[idx] + delta;
+        types::RowCol<double> imageGridPointDelta =
+                sceneToImage(scenePointDelta);
+        jacobian(0, idx) =
+                (imageGridPointDelta.row - imageGridPoint.row) * (1 / delta);
+        jacobian(1, idx) =
+                (imageGridPointDelta.col - imageGridPoint.col) * (1 / delta);
+    }
+
+    return jacobian;
+}
+
+math::linear::MatrixMxN<2, 3> ProjectionModel::sceneToImagePartials(
+        const Vector3& scenePoint,
+        double delta) const
+{
+    const types::RowCol<double> imagePt = sceneToImage(scenePoint);
+    return sceneToImagePartials(scenePoint, imagePt, delta);
+}
+
+math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
+        const Vector3& scenePoint,
+        double timeCOA) const
+{
+    const Vector3 rARP = mARPPoly(timeCOA);
+    const Vector3 vARP = mARPVelPoly(timeCOA);
+    Vector3 range = rARP - scenePoint;
+    range.normalize();
+    Vector3 normal = math::linear::cross(range,vARP);
+    normal.normalize();
+
+    // Normal to ellipsoid is gradient at position
+    // X-Axis Ellipsoid radius also semi-major axis
+    const double a = WGS84EllipsoidModel::EQUATORIAL_RADIUS_METERS;
+    // Y-Axis Ellipsoid radius
+    const double b = WGS84EllipsoidModel::EQUATORIAL_RADIUS_METERS;
+    // Z-Axis Ellipsoid radius
+    const double c = WGS84EllipsoidModel::POLAR_RADIUS_METERS;
+    Vector3 up;
+    up[0] = 2 * scenePoint[0] / square(a);
+    up[1] = 2 * scenePoint[1] / square(b);
+    up[2] = 2 * scenePoint[2] / square(c);
+    up.normalize();
+
+    normal = normal * mLookDir;
+    const Vector3 azimuth = math::linear::cross(normal,range);
+
+    const double rv = up.dot(range);
+    const double av = up.dot(azimuth);
+
+    // Tropo Error
+    // a should be semi-major axis of reference ellipsoid
+    static const double TROPOSPHERE_SCALE_HEIGHT_METERS = 7000.0;
+    const double Htrop = 1 + TROPOSPHERE_SCALE_HEIGHT_METERS / a;
+    const double htrop = sqrt((square(Htrop) - 1 + square(rv)));
+    const double ftrop = Htrop / htrop;
+    Vector3 R = scenePoint;
+    R.normalize();
+    const double graze = asin(range.dot(R));
+    math::linear::MatrixMxN<2, 1> bTrop;
+    bTrop(0, 0) = -1.0 * ftrop;
+    bTrop(1, 0) = av * square(cos(graze)) / square(htrop);
+    math::linear::MatrixMxN<2, 2> tropMat =
+            bTrop * mErrors.mTropoErrorCovar * bTrop.transpose();
+    math::linear::MatrixMxN<3, 3> tropMat3D(0.0);
+    tropMat3D.addInPlace(tropMat, 0, 0);
+
+    // Iono Error
+    static const double IONOSPHERE_SCALE_HEIGHT_METERS = 350000.0;
+    const double Va = azimuth.dot(vARP);
+    const Vector3 denominator = scenePoint - rARP;
+    const double omegaA = Va / denominator.norm();
+    const double Hion = 1 + IONOSPHERE_SCALE_HEIGHT_METERS / a;
+    const double hion = sqrt(square(Hion) - 1 + square(rv));
+    const double fion = Hion / hion;
+    math::linear::MatrixMxN<2 ,2> bIon(0.0);
+    bIon(0, 0) = -1.0 * fion;
+    bIon(1, 1) = fion / omegaA;
+    bIon(1, 0) = av * square(cos(graze)) / square(hion);
+    math::linear::MatrixMxN<2, 2> ionMat =
+            bIon * mErrors.mIonoErrorCovar * bIon.transpose();
+    math::linear::MatrixMxN<3, 3> ionMat3D(0.0);
+    ionMat3D.addInPlace(ionMat, 0, 0);
+
+    math::linear::MatrixMxN<3, 3> raToEcef;
+    raToEcef.col(0, range.matrix());
+    raToEcef.col(1, azimuth.matrix());
+    raToEcef.col(2, normal.matrix());
+    math::linear::MatrixMxN<3, 3> ricToEcef =
+            getRICtoECEFTransformMatrix(0.0, timeCOA);
+    math::linear::MatrixMxN<3, 3> raToRic =
+            ricToEcef.transpose() * raToEcef;
+
+    math::linear::MatrixMxN<3, 3> totalMat =
+            raToRic * tropMat3D * raToRic.transpose() +
+            raToRic * ionMat3D * raToRic.transpose();
+
+    math::linear::MatrixMxN<7, 7> errorCovar(mErrors.mSensorErrorCovar);
+    errorCovar.addInPlace(totalMat, 0, 0);
+
+    return errorCovar;
+}
+
+math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
+        const Vector3& scenePoint,
+        const types::RowCol<double>& imageGridPoint) const
+{
+    return getErrorCovariance(scenePoint,
+                              mTimeCOAPoly(imageGridPoint.row,
+                                           imageGridPoint.col));
+}
+
+math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
+        const Vector3& scenePoint) const
+{
+    return getErrorCovariance(scenePoint, sceneToImage(scenePoint));
+}
+
+math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance() const
+{
+    return getErrorCovariance(mSCP);
 }
 
 RangeAzimProjectionModel::
@@ -937,48 +701,20 @@ RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                          const Vector3& scp,
                          const math::poly::OneD<Vector3>& arpPoly,
                          const math::poly::TwoD<double>& timeCOAPoly,
-                         int lookDir) :
+                         int lookDir,
+                         const Errors& errors) :
     ProjectionModel(slantPlaneNormal,
                     imagePlaneRowVector,
                     imagePlaneColVector,
                     scp,
                     arpPoly,
                     timeCOAPoly,
-                    lookDir),
+                    lookDir,
+                    errors),
     mPolarAnglePoly(polarAnglePoly), mKSFPoly(ksfPoly)
 {
     mPolarAnglePolyPrime = mPolarAnglePoly.derivative();
     mKSFPolyPrime = mKSFPoly.derivative();
-}
-
-RangeAzimProjectionModel::RangeAzimProjectionModel(
-		const math::poly::OneD<double>& polarAnglePoly,
-		const math::poly::OneD<double>& ksfPoly,
-		const Vector3& slantPlaneNormal, const Vector3& imagePlaneRowVector,
-		const Vector3& imagePlaneColVector, const Vector3& scp,
-		const math::poly::OneD<Vector3>& arpPoly,
-		const math::poly::TwoD<double>& timeCOAPoly, int lookDir,
-		const math::linear::MatrixMxN<7, 7, double>& sensorCovar,
-		const math::linear::MatrixMxN<2, 2, double>& unmodeledCovar,
-		const math::linear::MatrixMxN<2, 2, double>& ionoCovar,
-		const math::linear::MatrixMxN<1, 1, double>& tropoCovar,
-		std::string frametype):
-    	   ProjectionModel(slantPlaneNormal,
-    	    				imagePlaneRowVector,
-    	    				imagePlaneColVector,
-    	    				scp,
-    	    				arpPoly,
-    	    				timeCOAPoly,
-    	    				lookDir,
-    	    				sensorCovar,
-    	    				unmodeledCovar,
-    	    				ionoCovar,
-    	    				tropoCovar,
-    	    				frametype),
-    	    				mPolarAnglePoly(polarAnglePoly), mKSFPoly(ksfPoly)
-{
-	mPolarAnglePolyPrime = mPolarAnglePoly.derivative();
-	mKSFPolyPrime = mKSFPoly.derivative();
 }
 
 void RangeAzimProjectionModel::
@@ -1032,45 +768,21 @@ RangeZeroProjectionModel(const math::poly::OneD<double>& timeCAPoly,
                          const Vector3& scp,
                          const math::poly::OneD<Vector3>& arpPoly,
                          const math::poly::TwoD<double>& timeCOAPoly,
-                         int lookDir) :
+                         int lookDir,
+                         const Errors& errors) :
     ProjectionModel(slantPlaneNormal,
                     imagePlaneRowVector,
                     imagePlaneColVector,
                     scp,
                     arpPoly,
                     timeCOAPoly,
-                    lookDir),
+                    lookDir,
+                    errors),
     mTimeCAPoly(timeCAPoly), mDSRFPoly(dsrfPoly), mRangeCA(rangeCA) {}
 
-RangeZeroProjectionModel::RangeZeroProjectionModel(
-		const math::poly::OneD<double>& timeCAPoly,
-		const math::poly::TwoD<double>& dsrfPoly, double rangeCA,
-		const Vector3& slantPlaneNormal, const Vector3& imagePlaneRowVector,
-		const Vector3& imagePlaneColVector, const Vector3& scp,
-		const math::poly::OneD<Vector3>& arpPoly,
-		const math::poly::TwoD<double>& timeCOAPoly, int lookDir,
-		const math::linear::MatrixMxN<7, 7, double>& sensorCovar,
-		const math::linear::MatrixMxN<2, 2, double>& unmodeledCovar,
-		const math::linear::MatrixMxN<2, 2, double>& ionoCovar,
-		const math::linear::MatrixMxN<1, 1, double>& tropoCovar,
-		std::string frametype) :
-    	    ProjectionModel(slantPlaneNormal,
-    	                    imagePlaneRowVector,
-    	                    imagePlaneColVector,
-    	                    scp,
-    	                    arpPoly,
-    	                    timeCOAPoly,
-    	                    lookDir,
-    	                    sensorCovar,
-    	                    unmodeledCovar,
-    	                    ionoCovar,
-    	                    tropoCovar,
-    	                    frametype),
-    	    mTimeCAPoly(timeCAPoly), mDSRFPoly(dsrfPoly), mRangeCA(rangeCA) {}
-
 void RangeZeroProjectionModel::
-computeContour(const Vector3& arpCOA,
-               const Vector3& velCOA,
+computeContour(const Vector3& /*arpCOA*/,
+               const Vector3& /*velCOA*/,
                double timeCOA,
                const types::RowCol<double>& imageGridPoint,
                double* r,
@@ -1103,41 +815,23 @@ PlaneProjectionModel(const Vector3& slantPlaneNormal,
                      const Vector3& scp,
                      const math::poly::OneD<Vector3>& arpPoly,
                      const math::poly::TwoD<double>& timeCOAPoly,
-                     int lookDir) :
+                     int lookDir,
+                     const Errors& errors) :
     ProjectionModel(slantPlaneNormal,
                     imagePlaneRowVector,
                     imagePlaneColVector,
                     scp,
                     arpPoly,
                     timeCOAPoly,
-                    lookDir) {}
-
-PlaneProjectionModel::PlaneProjectionModel(const Vector3& slantPlaneNormal,
-		const Vector3& imagePlaneRowVector, const Vector3& imagePlaneColVector,
-		const Vector3& scp, const math::poly::OneD<Vector3>& arpPoly,
-		const math::poly::TwoD<double>& timeCOAPoly, int lookDir,
-		const math::linear::MatrixMxN<7, 7, double>& sensorCovar,
-		const math::linear::MatrixMxN<2, 2, double>& unmodeledCovar,
-		const math::linear::MatrixMxN<2, 2, double>& ionoCovar,
-		const math::linear::MatrixMxN<1, 1, double>& tropoCovar,
-		std::string frametype) :
-		ProjectionModel(slantPlaneNormal,
-		                    imagePlaneRowVector,
-		                    imagePlaneColVector,
-		                    scp,
-		                    arpPoly,
-		                    timeCOAPoly,
-		                    lookDir,
-		                    sensorCovar,
-		                    unmodeledCovar,
-		                    ionoCovar,
-		                    tropoCovar,
-		                    frametype) {}
+                    lookDir,
+                    errors)
+{
+}
 
 void PlaneProjectionModel::
 computeContour(const Vector3& arpCOA,
                const Vector3& velCOA,
-               double timeCOA,
+               double /*timeCOA*/,
                const types::RowCol<double>& imageGridPoint,
                double* r,
                double* rDot) const
@@ -1151,7 +845,5 @@ computeContour(const Vector3& arpCOA,
     *r = vec.norm();
     
     *rDot = velCOA.dot(vec) / *r;
-    
 }
-
 }
