@@ -1,12 +1,47 @@
 ./results/test/test_script_sicd.csv
-vtsRead21ISDFile path/to/sicd.nitf
+vtsRead21ISDFile /data2/u/whitelon/ErrorPropDev/Test/20080828RS020700_105224_S_SM0807_N02W078_193R__C01_QVV_0204_SICD.nitf
 makeModelListFromISD SICD_SENSOR_MODEL SIX
 constructModelFromISD SICD_SENSOR_MODEL
-getImageSize 
-getImageIdentifier
-getSensorIdentifier
-getCollectionIdentifier
-getReferenceDateAndTime
+#getImageSize 
+#getImageIdentifier
+#getSensorIdentifier
+#getCollectionIdentifier
+#getReferenceDateAndTime
+#getReferencePoint
+getNumParameters
+getParameterName 0
+getParameterName 1
+getParameterName 2
+getParameterName 3
+getParameterName 4
+getParameterName 5
+getParameterName 6
+getParameterName 7
+getParameterUnits 0
+getParameterUnits 1
+getParameterUnits 2
+getParameterUnits 3
+getParameterUnits 4
+getParameterUnits 5
+getParameterUnits 6
+getParameterUnits 7
+getParameterValue 0
+getParameterValue 1
+getParameterValue 2
+getParameterValue 3
+getParameterValue 4
+getParameterValue 5
+getParameterValue 6
+getParameterValue 7
+getParameterCovariance 0
+getParameterCovariance 1
+getParameterCovariance 2
+getParameterCovariance 3
+getParameterCovariance 4
+getParameterCovariance 5
+getParameterCovariance 6
+getParameterCovariance 7
 getReferencePoint
+computeAllSensorPartials1 1353912.468915   -6228019.037719 248881.330772
 
 Exit

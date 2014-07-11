@@ -222,6 +222,11 @@ public:
                          double heightThreshold = 1.0,
                          size_t maxNumIters = 3) const;
 
+
+    math::linear::MatrixMxN<2,2> slantToImagePartials(
+    		const types::RowCol<double>& imageGridPoint,
+    		double delta = 0.0001) const;
+
     /*!
      * Computes sensor partials for imageToScene()
      * Provides a Jacobian matrix of form [ARP-RIC, Vel-RIC, Rbias]
@@ -314,10 +319,8 @@ public:
     // Same as above but uses the SCP as scenePoint
     math::linear::MatrixMxN<7, 7> getErrorCovariance() const;
 
-    math::linear::MatrixMxN<2, 2> getUnmodeledErrorCovariance() const
-    {
-        return mErrors.mUnmodeledErrorCovar;
-    }
+    math::linear::MatrixMxN<2, 2> getUnmodeledErrorCovariance(const types::RowCol<double>& imageGridPoint) const;
+
 
     AdjustableParams& getAdjustableParams()
     {
@@ -339,7 +342,8 @@ public:
         return mErrors;
     }
 
-private:
+//private:
+protected:
     // Returns matrix for RIC to ECEF coordinate transform.
     // Set earthInitialSpin equal to 0 for RIC_ECF
     math::linear::MatrixMxN<3, 3> getRICtoECEFTransformMatrix(
@@ -449,6 +453,28 @@ public:
                                 const types::RowCol<double>& imageGridPoint,
                                 double* r,
                                 double* rDot) const;
+
+    // Need to reimplement Partial Derivatives
+
+};
+
+class GeodeticProjectionModel : public PlaneProjectionModel
+{
+public:
+	GeodeticProjectionModel( const Vector3& scp,
+	                         const math::poly::OneD<Vector3>& arpPoly,
+	                         const math::poly::TwoD<double>& timeCOAPoly,
+	                         int lookDir,
+	                         const Errors& errors = Errors());
+
+//	virtual void computeContour(const Vector3& arpCOA,
+//	                                const Vector3& velCOA,
+//	                                double timeCOA,
+//	                                const types::RowCol<double>& imageGridPoint,
+//	                                double* r,
+//	                                double* rDot) const;
+
+	// Need to reimplement partial derivatives and imagetoground/groundtoimage projections
 
 };
 

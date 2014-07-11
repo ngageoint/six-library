@@ -29,9 +29,9 @@
 #include "NitfIsd.h"
 
 #include <six/csm/SIXSensorModel.h>
+#include <scene/SceneGeometry.h>
 #include <six/sidd/DerivedData.h>
-#include <scene/GridGeometry.h>
-#include <scene/GridECEFTransform.h>
+#include <scene/ProjectionModel.h>
 
 namespace six
 {
@@ -152,81 +152,10 @@ public: // Model methods
      */
     virtual std::string getReferenceDateAndTime() const;
 
-    /**
-     * Returns a string representing the state of the sensor model.  The state
-     * string is made up of the sensor model name, followed by a space, then
-     * the SICD XML as a string.
-     *
-     * \return State of the sensor model
-     */
-    virtual std::string getModelState() const;
-
-    /**
-     * Initialize the current model with argState
-     *
-     * \param[in] argState The sensor model state to update to.  If the string
-     *     is empty, the model is unchanged.
-     */
-    virtual void replaceModelState(const std::string& argState);
-
 public: // GeometricModel methods
-    /**
-     * Returns coordinates in meters to indicate the general location of the
-     * image.
-     *
-     * \return Ground coordinate in meters
-     */
-    virtual csm::EcefCoord getReferencePoint() const;
+
 
 public: // RasterGM methods
-    /**
-     * Converts groundPt in ground space (ECEF) to returned ImageCoord in image
-     * space.
-     *
-     * \param[in] groundPt Ground coordinate in meters
-     * \param[in] desiredPrecision Requested precision in pixels of the
-     *     calculation. Currently this parameter is ignored.
-     * \param[out] achievedPrecision  Precision in pixels to which the
-     *     calculation is achieved (currently this is just set to
-     *     desiredPrecision if non-NULL).
-     * \param[out] warnings Unused
-     *
-     * \return Image coordinate in pixels
-     */
-    virtual csm::ImageCoord groundToImage(const csm::EcefCoord& groundPt,
-                                            double desiredPrecision,
-                                            double* achievedPrecision,
-                                            csm::WarningList* warnings) const;
-
-    /**
-     * Converts imagePt (pixels) in image space returned EcefCoord (meters)
-     * in ground space (ECEF).
-     *
-     * \param[in] imagePt Image line and sample in pixels
-     * \param[in] height Height in meters measured with respect to the WGS-84
-     *     ellipsoid.
-     * \param[in] desiredPrecision Requested precision in pixels of the
-     *     calculation. Currently this parameter is ignored.
-     * \param[out] achievedPrecision  Precision in pixels to which the
-     *     calculation is achieved (currently this is just set to
-     *     desiredPrecision if non-NULL).
-     * \param[out] warnings Unused
-     *
-     * \return Ground coordinate in meters
-     */
-    virtual csm::EcefCoord imageToGround(const csm::ImageCoord& imagePt,
-                                           double height,
-                                           double desiredPrecision,
-                                           double* achievedPrecision,
-                                           csm::WarningList* warnings) const;
-
-    /**
-     * Returns the starting coordinate for the imaging operation.
-     *
-     * \return Always returns (0, 0)
-     */
-    virtual csm::ImageCoord getImageStart() const;
-
     /**
      * Returns the number of lines and samples in full image space pixels for
      * the imaging operation.
@@ -234,69 +163,6 @@ public: // RasterGM methods
      * \return The size of the entire SICD
      */
     virtual csm::ImageVector getImageSize() const;
-
-    /**
-     * Calculates the direction of illumination at the given ground position
-     * groundPt.  The returned values define a direction vector that points
-     * from the illumination source to the given ground point.
-     *
-     * \param[in] groundPt  Ground coordinate in meters
-     *
-     * \return Illumination direction vector
-     */
-    virtual csm::EcefVector
-    getIlluminationDirection(const csm::EcefCoord& groundPt) const;
-
-    /**
-     * Computes the time in seconds at which the pixel specified by imagePt was
-     * imaged. The time provided is relative to the reference date and time
-     * given by getReferenceDateAndTime().
-     *
-     * \param[in] imagePt Image position in pixels
-     *
-     * \return Time in seconds from the reference date and time
-     */
-    virtual double getImageTime(const csm::ImageCoord& imagePt) const;
-
-    /**
-     * Returns the position of the physical sensor at the given position in
-     * the image
-     *
-     * \param[in] imagePt Image position in pixels
-     *
-     * \return Sensor ECEF coordinate in meters
-     */
-    virtual
-    csm::EcefCoord getSensorPosition(const csm::ImageCoord& imagePt) const;
-
-    /**
-     * Returns the position of the physical sensor at the given time
-     *
-     * \param[in] time Time pixel is imaged in seconds
-     *
-     * \return Sensor ECEF coordinate in meters
-     */
-    virtual csm::EcefCoord getSensorPosition(double time) const;
-
-    /**
-     * Returns the velocity of the physical sensor at the given position in
-     * the image
-     *
-     * \param[in] imagePt Image position in pixels
-     *
-     * \return Sensor velocity in meters per second
-     */
-    virtual
-    csm::EcefVector getSensorVelocity(const csm::ImageCoord& imagePt) const;
-
-    /**
-     * Returns the velocity of the physical sensor at the given time
-     *
-     * \param[in] time Time pixel is imaged in seconds
-     *
-     * \return Sensor velocity in meters per second
-     */
-    virtual csm::EcefVector getSensorVelocity(double time) const;
 
 private:
     /**
@@ -307,9 +173,11 @@ private:
      * \param[in] s     Sample position in terms of pixels from upper left
      * \return A types::RowCol<double> containing the distance in meters from the center of the image
      */
-    types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const;
+    virtual types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const;
 
-    const six::sidd::MeasurableProjection* getProjection() const;
+    virtual types::RowCol<double> toPixel(const types::RowCol<double>& pos) const;
+
+    //const six::sidd::MeasurableProjection* getProjection() const;
 
     void replaceModelStateImpl(const std::string& sensorModelState);
 
@@ -317,20 +185,22 @@ private:
 
     void initializeFromISD(const csm::Nitf21Isd& isd, size_t imageIndex);
 
-    void initializeGrid();
+    void reinitialize();
 
-    void setSchemaDir(const std::string& schemaDir);
+    virtual types::RowCol<double> getSampleSpacing() const;
 
-    types::RowCol<double> ecefToRowCol(const scene::Vector3& ecef) const;
+//    void setSchemaDir(const std::string& schemaDir);
 
-    scene::Vector3 rowColToECEF(const types::RowCol<double>& imagePt) const;
+//    types::RowCol<double> ecefToRowCol(const scene::Vector3& ecef) const;
+
+//    scene::Vector3 rowColToECEF(const types::RowCol<double>& imagePt) const;
 
 private:
-    std::vector<std::string> mSchemaDirs;
-    std::string mSensorModelState;
+//    std::vector<std::string> mSchemaDirs;
+//    std::string mSensorModelState;
     std::auto_ptr<six::sidd::DerivedData> mData;
-    std::auto_ptr<const scene::GridGeometry> mGridGeometry;
-    std::auto_ptr<const scene::GridECEFTransform> mGridTransform;
+//    std::auto_ptr<const scene::GridGeometry> mGridGeometry;
+//    std::auto_ptr<const scene::GridECEFTransform> mGridTransform;
 };
 }
 }

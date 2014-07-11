@@ -136,7 +136,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // get xml as string for sensor model state
         std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
-        initializeGrid();
+        reinitialize();
     }
     catch (const except::Exception& ex)
     {
@@ -218,7 +218,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
                 siddXML, mSchemaDirs)));
-        initializeGrid();
+        reinitialize();
     }
     catch (const except::Exception& ex)
     {
@@ -328,26 +328,6 @@ std::string SIDDSensorModel::getReferenceDateAndTime() const
             collectionDateTime.format("%Y%m%dT%H%M%.2SZ");
 }
 
-std::string SIDDSensorModel::getModelState() const
-{
-    return mSensorModelState;
-}
-
-void SIDDSensorModel::replaceModelState(const std::string& argState)
-{
-    if (!argState.empty())
-    {
-        replaceModelStateImpl(argState);
-    }
-}
-
-csm::EcefCoord SIDDSensorModel::getReferencePoint() const
-{
-    const scene::Vector3 refPt =
-            mData->measurement->projection->referencePoint.ecef;
-    return csm::EcefCoord(refPt[0], refPt[1], refPt[2]);
-}
-
 types::RowCol<double>
 SIDDSensorModel::fromPixel(const csm::ImageCoord& pos) const
 {
@@ -364,7 +344,8 @@ SIDDSensorModel::fromPixel(const csm::ImageCoord& pos) const
         fullScenePos = posRC;
     }
 
-    const six::sidd::MeasurableProjection* projection(getProjection());
+    const six::sidd::MeasurableProjection* projection(reinterpret_cast<six::sidd::MeasurableProjection*>(
+    		                    mData->measurement->projection.get()));
     const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
 
     return types::RowCol<double>(
@@ -373,222 +354,75 @@ SIDDSensorModel::fromPixel(const csm::ImageCoord& pos) const
 }
 
 types::RowCol<double>
-SIDDSensorModel::ecefToRowCol(const scene::Vector3& ecef) const
+SIDDSensorModel::toPixel(const types::RowCol<double>& pos) const
 {
-    const types::RowCol<double> imagePt = mGridTransform->ecefToRowCol(ecef);
+	//const types::RowCol<double> posRC(pos);
+	types::RowCol<double> fullScenePos(pos);
 
-    if (mData->downstreamReprocessing.get() &&
-        mData->downstreamReprocessing->geometricChip.get())
-    {
-        // 'imagePt' is with respect to the original full image, but we
-        // need it with respect to the chip that this SIDD actually represents
-        return mData->downstreamReprocessing->geometricChip->
-                        getChipCoordinateFromFullImage(imagePt);
-    }
-    else
-    {
-        return imagePt;
-    }
+
+	const six::sidd::MeasurableProjection* projection(reinterpret_cast<six::sidd::MeasurableProjection*>(
+			mData->measurement->projection.get()));
+	const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
+
+	if (mData->downstreamReprocessing.get() &&
+			mData->downstreamReprocessing->geometricChip.get())
+	{
+		// Not sure if the function getChipCoordinateFromFullImage does what I think it does
+		return mData->downstreamReprocessing->geometricChip->getChipCoordinateFromFullImage(types::RowCol<double>(
+				(fullScenePos.row / projection->sampleSpacing.row) + ctrPt.row,
+				(fullScenePos.col / projection->sampleSpacing.col) + ctrPt.col));
+	}
+	else
+	{
+		return types::RowCol<double>(
+				(fullScenePos.row / projection->sampleSpacing.row) + ctrPt.row,
+				(fullScenePos.col / projection->sampleSpacing.col) + ctrPt.col);
+	}
+
 }
 
-scene::Vector3
-SIDDSensorModel::rowColToECEF(const types::RowCol<double>& imagePt) const
-{
-    types::RowCol<double> fullImagePt;
-    if (mData->downstreamReprocessing.get() &&
-        mData->downstreamReprocessing->geometricChip.get())
-    {
-        // The point that was passed in was with respect to the chip
-        // mGridTransform wants it with respect to the full image
-        fullImagePt = mData->downstreamReprocessing->geometricChip->
-                getFullImageCoordinateFromChip(imagePt);
-    }
-    else
-    {
-        fullImagePt = imagePt;
-    }
+//types::RowCol<double>
+//SIDDSensorModel::ecefToRowCol(const scene::Vector3& ecef) const
+//{
+//    const types::RowCol<double> imagePt = mGridTransform->ecefToRowCol(ecef);
+//
+//    if (mData->downstreamReprocessing.get() &&
+//        mData->downstreamReprocessing->geometricChip.get())
+//    {
+//        // 'imagePt' is with respect to the original full image, but we
+//        // need it with respect to the chip that this SIDD actually represents
+//        return mData->downstreamReprocessing->geometricChip->
+//                        getChipCoordinateFromFullImage(imagePt);
+//    }
+//    else
+//    {
+//        return imagePt;
+//    }
+//}
 
-    return mGridTransform->rowColToECEF(fullImagePt);
-}
-
-csm::ImageCoord SIDDSensorModel::groundToImage(
-        const csm::EcefCoord& groundPt,
-        double desiredPrecision,
-        double* achievedPrecision,
-        csm::WarningList* ) const
-{
-    try
-    {
-        scene::Vector3 sceneGroundPt;
-        sceneGroundPt[0] = groundPt.x;
-        sceneGroundPt[1] = groundPt.y;
-        sceneGroundPt[2] = groundPt.z;
-
-        // Project ground point into image grid and then convert from ECEF to
-        // RowCol
-        const scene::Vector3 gridPt =
-                mGridGeometry->sceneToGrid(sceneGroundPt);
-        const types::RowCol<double> imagePt = ecefToRowCol(gridPt);
-
-        // TODO: Not sure how to calculate achievedPrecision
-        if (achievedPrecision)
-        {
-            *achievedPrecision = desiredPrecision;
-        }
-
-        return csm::ImageCoord(imagePt.row, imagePt.col);
-    }
-    catch (const except::Exception& ex)
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           ex.getMessage(),
-                           "SIDDSensorModel::groundToImage");
-    }
-}
-
-csm::EcefCoord SIDDSensorModel::imageToGround(
-        const csm::ImageCoord& imagePt,
-        double height,
-        double desiredPrecision,
-        double* achievedPrecision,
-        csm::WarningList* ) const
-{
-    try
-    {
-        // Convert line and sample to an ECEF point in the image grid and
-        // then project the grid point to the ground
-        const scene::Vector3 gridPt = rowColToECEF(
-                types::RowCol<double>(imagePt.line, imagePt.samp));
-        const scene::Vector3 groundPt =
-                mGridGeometry->gridToScene(gridPt, height);
-
-        // TODO: not sure how to calculate achievedPrecision
-        if (achievedPrecision)
-        {
-            *achievedPrecision = desiredPrecision;
-        }
-
-        return csm::EcefCoord(groundPt[0], groundPt[1], groundPt[2]);
-    }
-    catch (const except::Exception& ex)
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           ex.getMessage(),
-                           "SIDDSensorModel::imageToGround");
-    }
-}
-
-csm::ImageCoord SIDDSensorModel::getImageStart() const
-{
-    return csm::ImageCoord(0.0, 0.0);
-}
+//scene::Vector3
+//SIDDSensorModel::rowColToECEF(const types::RowCol<double>& imagePt) const
+//{
+//    types::RowCol<double> fullImagePt;
+//    if (mData->downstreamReprocessing.get() &&
+//        mData->downstreamReprocessing->geometricChip.get())
+//    {
+//        // The point that was passed in was with respect to the chip
+//        // mGridTransform wants it with respect to the full image
+//        fullImagePt = mData->downstreamReprocessing->geometricChip->
+//                getFullImageCoordinateFromChip(imagePt);
+//    }
+//    else
+//    {
+//        fullImagePt = imagePt;
+//    }
+//
+//    return mGridTransform->rowColToECEF(fullImagePt);
+//}
 
 csm::ImageVector SIDDSensorModel::getImageSize() const
 {
     return csm::ImageVector(mData->getNumRows(), mData->getNumCols());
-}
-
-csm::EcefVector SIDDSensorModel::getIlluminationDirection(
-        const csm::EcefCoord& groundPt) const
-{
-    scene::Vector3 groundPos;
-    groundPos[0] = groundPt.x;
-    groundPos[1] = groundPt.y;
-    groundPos[2] = groundPt.z;
-
-    const double time = getProjection()->timeCOAPoly(0.0, 0.0);
-    const six::Vector3 arpPos = mData->measurement->arpPoly(time);
-
-    scene::Vector3 illumVec = groundPos - arpPos;
-    illumVec.normalize();
-
-    return csm::EcefVector(illumVec[0], illumVec[1], illumVec[2]);
-}
-
-double SIDDSensorModel::getImageTime(const csm::ImageCoord& imagePt) const
-{
-    try
-    {
-        const types::RowCol<double> imageECEF = fromPixel(imagePt);
-        return getProjection()->timeCOAPoly(imageECEF.row, imageECEF.col);
-    }
-    catch (const except::Exception& ex)
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           ex.getMessage(),
-                           "SIDDSensorModel::getImageTime");
-    }
-}
-
-csm::EcefCoord
-SIDDSensorModel::getSensorPosition(const csm::ImageCoord& imagePt) const
-{
-    try
-    {
-        const types::RowCol<double> imageECEF = fromPixel(imagePt);
-        const double time =
-                getProjection()->timeCOAPoly(imageECEF.row, imageECEF.col);
-        const six::Vector3 pos = mData->measurement->arpPoly(time);
-        return csm::EcefCoord(pos[0], pos[1], pos[2]);
-    }
-    catch (const except::Exception& ex)
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           ex.getMessage(),
-                           "SIDDSensorModel::getSensorPosition");
-    }
-}
-
-csm::EcefCoord SIDDSensorModel::getSensorPosition(double time) const
-{
-    try
-    {
-        const six::Vector3 pos = mData->measurement->arpPoly(time);
-        return csm::EcefCoord(pos[0], pos[1], pos[2]);
-    }
-    catch (const except::Exception& ex)
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           ex.getMessage(),
-                           "SIDDSensorModel::getSensorPosition");
-    }
-}
-
-csm::EcefVector
-SIDDSensorModel::getSensorVelocity(const csm::ImageCoord& imagePt) const
-{
-    try
-    {
-        const types::RowCol<double> imageECEF = fromPixel(imagePt);
-        const double time =
-                getProjection()->timeCOAPoly(imageECEF.row, imageECEF.col);
-        const six::PolyXYZ arpVelPoly = mData->measurement->arpPoly.derivative();
-        const six::Vector3 vel = arpVelPoly(time);
-        return csm::EcefVector(vel[0], vel[1], vel[2]);
-    }
-    catch (const except::Exception& ex)
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           ex.getMessage(),
-                           "SIDDSensorModel::getSensorVelocity");
-    }
-}
-
-csm::EcefVector SIDDSensorModel::getSensorVelocity(double time) const
-{
-    try
-    {
-        const six::PolyXYZ arpVelPoly =
-                mData->measurement->arpPoly.derivative();
-        const six::Vector3 vel = arpVelPoly(time);
-        return csm::EcefVector(vel[0], vel[1], vel[2]);
-    }
-    catch (const except::Exception& ex)
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           ex.getMessage(),
-                           "SIDDSensorModel::getSensorVelocity");
-    }
 }
 
 void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
@@ -632,7 +466,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
                 domParser.getDocument(), mSchemaDirs)));
-        initializeGrid();
+        reinitialize();
     }
     catch (const except::Exception& ex)
     {
@@ -642,77 +476,46 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     }
 }
 
-const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
-{
-    if (!mData->measurement->projection->isMeasurable())
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           "Image projection type is not measurable",
-                           "SIDDSensorModel::getProjection");
-    }
+//const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
+//{
+//    if (!mData->measurement->projection->isMeasurable())
+//    {
+//        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+//                           "Image projection type is not measurable",
+//                           "SIDDSensorModel::getProjection");
+//    }
+//
+//    const six::sidd::MeasurableProjection* const projection =
+//            reinterpret_cast<six::sidd::MeasurableProjection*>(
+//                    mData->measurement->projection.get());
+//    return projection;
+//}
 
-    const six::sidd::MeasurableProjection* const projection =
-            reinterpret_cast<six::sidd::MeasurableProjection*>(
-                    mData->measurement->projection.get());
-    return projection;
-}
-
-void SIDDSensorModel::setSchemaDir(const std::string& dataDir)
-{
-    sys::OS os;
-    if (dataDir.empty())
-    {
-        mSchemaDirs.clear();
-
-        // OK, but you better have your schema path set then
-        std::string schemaPath;
-        try
-        {
-            schemaPath = os.getEnv(six::SCHEMA_PATH);
-        }
-        catch(const except::Exception& )
-        {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Must specify SIDD schema path via "
-                    "Plugin::getDataDirectory() or " +
-                    std::string(six::SCHEMA_PATH) + " environment variable",
-                    "SIDDSensorModel::setSchemaDir");
-        }
-
-        if (schemaPath.empty())
-        {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    std::string(six::SCHEMA_PATH) +
-                    " environment variable is set but is empty",
-                    "SIDDSensorModel::setSchemaDir");
-        }
-    }
-    else
-    {
-        const std::string schemaDir =
-                sys::Path(dataDir).join("schema").join("six");
-        if (!os.exists(schemaDir))
-        {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Schema directory '" + schemaDir + "' does not exist",
-                    "SICDSensorModel::setSchemaDir");
-        }
-
-        mSchemaDirs.resize(1);
-        mSchemaDirs[0] = schemaDir;
-    }
-}
-
-void SIDDSensorModel::initializeGrid()
+void SIDDSensorModel::reinitialize()
 {
     // Sun Studio compiler can't assign non-const auto_ptr to const
     // auto_ptr, so need to release the other auto_ptr and reset our member
     // variable with the raw pointer
-    mGridGeometry.reset(
-            six::sidd::Utilities::getGridGeometry(mData.get()).release());
+	mGeometry = six::sidd::Utilities::getSceneGeometry(mData.get());
 
-    mGridTransform.reset(
-            six::sidd::Utilities::getGridECEFTransform(mData.get()).release());
+	mProjection.reset(six::sidd::Utilities::getProjectionModel(mData.get()));
+    std::fill_n(mAdjustableTypes,
+                static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
+                csm::param::REAL);
+
+    // NOTE: See member variable definition in header for why we're doing this
+    mSensorCovariance = mProjection->getErrorCovariance(
+            mGeometry->getReferencePosition());
+}
+
+types::RowCol<double> SIDDSensorModel::getSampleSpacing() const
+{
+			const six::sidd::MeasurableProjection* p =
+                        reinterpret_cast<const six::sidd::MeasurableProjection*>(
+                                mData->measurement->projection.get());
+            return types::RowCol<double>(p->sampleSpacing);
 }
 }
 }
+
+

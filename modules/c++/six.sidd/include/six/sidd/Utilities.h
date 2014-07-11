@@ -67,6 +67,7 @@ public:
     static std::pair<six::PolarizationType, six::PolarizationType>
             convertDualPolarization(six::DualPolarizationType pol);
 
+    static scene::ProjectionModel* getProjectionModel(const DerivedData* data);
 };
 }
 }

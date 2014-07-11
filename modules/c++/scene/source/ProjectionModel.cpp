@@ -443,6 +443,32 @@ math::linear::MatrixMxN<3, 3> ProjectionModel::getRICtoECEFTransformMatrix(
                                                     imageGridPoint.col));
 }
 
+math::linear::MatrixMxN<2,2> ProjectionModel::slantToImagePartials(
+		const types::RowCol<double>& imageGridPoint,
+		double delta) const
+{
+	// First, compute slant plane vectors
+	double timeCOA = mTimeCOAPoly(imageGridPoint.row, imageGridPoint.col);
+	Vector3 rARP = mARPPoly(timeCOA);
+	Vector3 vARP = mARPVelPoly(timeCOA);
+	Vector3 imageGridPointECEF = mSCP + imageGridPoint.row * mImagePlaneRowVector
+			+ imageGridPoint.col * mImagePlaneColVector;
+	Vector3 slantRange = imageGridPointECEF - rARP;
+	slantRange.normalize();
+	Vector3 slantNormal = math::linear::cross(slantRange, vARP);
+	slantNormal.normalize();
+	Vector3 slantAzimuth = math::linear::cross(slantNormal, slantRange);
+	slantAzimuth.normalize();
+	types::RowCol<double> rangePerturb = sceneToImage(imageGridPointECEF + delta*slantRange);
+	types::RowCol<double> azimuthPerturb = sceneToImage(imageGridPointECEF + delta*slantAzimuth);
+	math::linear::MatrixMxN<2,2> returnMatrix((double) 0.0);
+	returnMatrix[0][0] = (imageGridPoint.row - rangePerturb.row) / delta;
+	returnMatrix[0][1] = (imageGridPoint.row - azimuthPerturb.row) / delta;
+	returnMatrix[1][0] = (imageGridPoint.col - rangePerturb.col) / delta;
+	returnMatrix[1][1] = (imageGridPoint.col - azimuthPerturb.col) / delta;
+	return returnMatrix;
+}
+
 math::linear::MatrixMxN<3, 7> ProjectionModel::imageToSceneSensorPartials(
         const types::RowCol<double>& imageGridPoint,
         double height,
@@ -692,6 +718,19 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance() const
     return getErrorCovariance(mSCP);
 }
 
+math::linear::MatrixMxN<2, 2> ProjectionModel::getUnmodeledErrorCovariance(const types::RowCol<double>& imageGridPoint) const
+{
+	// unModeledError in expected to be defined in the slant plane. Therefore
+	// it is necessary to propagate the slant plane error to the image plane
+	math::linear::MatrixMxN<2,2> unmodeledCovar(mErrors.mUnmodeledErrorCovar);
+	math::linear::MatrixMxN<2,2> slantToImageJacobian = slantToImagePartials( imageGridPoint );
+
+	// Propagate UnmodeledError from Slant plane to image plane
+
+	math::linear::MatrixMxN<2,2> returnMatrix = slantToImageJacobian * unmodeledCovar * slantToImageJacobian.transpose();
+	return returnMatrix;
+}
+
 RangeAzimProjectionModel::
 RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                          const math::poly::OneD<double>& ksfPoly,
@@ -846,4 +885,22 @@ computeContour(const Vector3& arpCOA,
     
     *rDot = velCOA.dot(vec) / *r;
 }
+
+GeodeticProjectionModel::GeodeticProjectionModel( const Vector3& scp,
+                         const math::poly::OneD<Vector3>& arpPoly,
+                         const math::poly::TwoD<double>& timeCOAPoly,
+                         int lookDir,
+                         const Errors& errors) :
+    	    PlaneProjectionModel(Vector3((double) 0.0),
+    	    				Vector3((double) 0.0),
+    	    				Vector3((double) 0.0),
+    	                    scp,
+    	                    arpPoly,
+    	                    timeCOAPoly,
+    	                    lookDir,
+    	                    errors)
+{
+
+}
+
 }
