@@ -1306,286 +1306,6 @@ void ComplexXMLParser::parsePositionFromXML(
     }
 }
 
-void ComplexXMLParser::parseRadarCollectionFromXML(
-    const XMLElem radarCollectionXML,
-    RadarCollection *radarCollection) const
-{
-    XMLElem tmpElem = NULL;
-    XMLElem optElem = NULL;
-
-    tmpElem = getOptional(radarCollectionXML, "RefFreqIndex");
-    if (tmpElem)
-    {
-        //optional
-        parseInt(tmpElem, radarCollection->refFrequencyIndex);
-    }
-
-    tmpElem = getFirstAndOnly(radarCollectionXML, "TxFrequency");
-    parseDouble(getFirstAndOnly(tmpElem, "Min"),
-                radarCollection->txFrequencyMin);
-    parseDouble(getFirstAndOnly(tmpElem, "Max"),
-                radarCollection->txFrequencyMax);
-
-    tmpElem = getOptional(radarCollectionXML, "TxPolarization");
-    if (tmpElem)
-    {
-        //optional
-        radarCollection->txPolarization
-                = six::toType<PolarizationType>(tmpElem->getCharacterData());
-    }
-
-    tmpElem = getOptional(radarCollectionXML, "PolarizationHVAnglePoly");
-    if (tmpElem)
-    {
-        //optional
-        common().parsePoly1D(tmpElem, radarCollection->polarizationHVAnglePoly);
-    }
-
-    tmpElem = getOptional(radarCollectionXML, "TxSequence");
-    if (tmpElem)
-    {
-        //optional
-        //TODO make sure there is at least one
-        std::vector < XMLElem > txStepsXML;
-        tmpElem->getElementsByTagName("TxStep", txStepsXML);
-        for (std::vector<XMLElem>::const_iterator it = txStepsXML.begin(); it
-                != txStepsXML.end(); ++it)
-        {
-            radarCollection->txSequence.resize(
-                radarCollection->txSequence.size() + 1);
-            radarCollection->txSequence.back().reset(new TxStep());
-            TxStep* const step = radarCollection->txSequence.back().get();
-
-            optElem = getOptional(*it, "WFIndex");
-            if (optElem)
-            {
-                //optional
-                parseInt(optElem, step->waveformIndex);
-            }
-
-            optElem = getOptional(*it, "TxPolarization");
-            if (optElem)
-            {
-                //optional
-                step->txPolarization
-                        = six::toType<PolarizationType>(
-                                                        optElem->getCharacterData());
-            }
-        }
-    }
-
-    tmpElem = getOptional(radarCollectionXML, "Waveform");
-    if (tmpElem)
-    {
-        //optional
-        //TODO make sure there is at least one
-        std::vector < XMLElem > wfParamsXML;
-        tmpElem->getElementsByTagName("WFParameters", wfParamsXML);
-        for (std::vector<XMLElem>::const_iterator it = wfParamsXML.begin(); it
-                != wfParamsXML.end(); ++it)
-        {
-            radarCollection->waveform.resize(
-                radarCollection->waveform.size() + 1);
-            radarCollection->waveform.back().reset(new WaveformParameters());
-            WaveformParameters* const wfParams =
-                radarCollection->waveform.back().get();
-
-            optElem = getOptional(*it, "TxPulseLength");
-            if (optElem)
-            {
-                //optional
-                parseDouble(optElem, wfParams->txPulseLength);
-            }
-
-            optElem = getOptional(*it, "TxRFBandwidth");
-            if (optElem)
-            {
-                //optional
-                parseDouble(optElem, wfParams->txRFBandwidth);
-            }
-
-            optElem = getOptional(*it, "TxFreqStart");
-            if (optElem)
-            {
-                //optional
-                parseDouble(optElem, wfParams->txFrequencyStart);
-            }
-
-            optElem = getOptional(*it, "TxFMRate");
-            if (optElem)
-            {
-                //optional
-                parseDouble(optElem, wfParams->txFMRate);
-            }
-
-            optElem = getOptional(*it, "RcvDemodType");
-            if (optElem)
-            {
-                //optional
-                wfParams->rcvDemodType
-                        = six::toType<DemodType>(optElem->getCharacterData());
-            }
-
-            optElem = getOptional(*it, "RcvWindowLength");
-            if (optElem)
-            {
-                //optional
-                parseDouble(optElem, wfParams->rcvWindowLength);
-            }
-
-            optElem = getOptional(*it, "ADCSampleRate");
-            if (optElem)
-            {
-                //optional
-                parseDouble(optElem, wfParams->adcSampleRate);
-            }
-
-            optElem = getOptional(*it, "RcvIFBandwidth");
-            if (optElem)
-            {
-                //optional
-                parseDouble(optElem, wfParams->rcvIFBandwidth);
-            }
-
-            optElem = getOptional(*it, "RcvFreqStart");
-            if (optElem)
-            {
-                //optional
-                parseDouble(optElem, wfParams->rcvFrequencyStart);
-            }
-
-            optElem = getOptional(*it, "RcvFMRate");
-            if (optElem)
-            {
-                //optional
-                parseDouble(optElem, wfParams->rcvFMRate);
-            }
-        }
-    }
-
-    tmpElem = getFirstAndOnly(radarCollectionXML, "RcvChannels");
-
-    //optional
-    std::vector < XMLElem > channelsXML;
-    tmpElem->getElementsByTagName("ChanParameters", channelsXML);
-    for (std::vector<XMLElem>::const_iterator it = channelsXML.begin(); it
-            != channelsXML.end(); ++it)
-    {
-        radarCollection->rcvChannels.resize(
-            radarCollection->rcvChannels.size() + 1);
-        radarCollection->rcvChannels.back().reset(new ChannelParameters());
-        ChannelParameters* const chanParams =
-            radarCollection->rcvChannels.back().get();
-
-        XMLElem childXML = getOptional(*it, "RcvAPCIndex");
-        if (childXML)
-        {
-            parseInt(childXML, chanParams->rcvAPCIndex);
-        }
-
-        childXML = getOptional(*it, "TxRcvPolarization");
-        if (childXML)
-        {
-            //optional
-            chanParams->txRcvPolarization
-                    = six::toType<DualPolarizationType>(
-                                                        childXML->getCharacterData());
-        }
-    }
-
-    XMLElem areaXML = getOptional(radarCollectionXML, "Area");
-    if (areaXML)
-    {
-        //optional
-        radarCollection->area.reset(new Area());
-
-        optElem = getOptional(areaXML, "Corner");
-        if (optElem)
-        {
-            //optional
-            common().parseFootprint(optElem, "ACP", radarCollection->area->acpCorners);
-        }
-
-        XMLElem planeXML = getOptional(areaXML, "Plane");
-        if (planeXML)
-        {
-            //optional
-            radarCollection->area->plane.reset(new AreaPlane());
-
-            XMLElem refPtXML = getFirstAndOnly(planeXML, "RefPt");
-            try
-            {
-                radarCollection->area->plane->referencePoint.name
-                        = refPtXML->getAttributes().getValue("name");
-            }
-            catch (except::Exception &ex)
-            {
-            }
-
-            common().parseVector3D(getFirstAndOnly(refPtXML, "ECF"),
-                          radarCollection->area->plane->referencePoint.ecef);
-            parseDouble(getFirstAndOnly(refPtXML, "Line"),
-                        radarCollection->area->plane->referencePoint.rowCol.row);
-            parseDouble(getFirstAndOnly(refPtXML, "Sample"),
-                        radarCollection->area->plane->referencePoint.rowCol.col);
-
-            XMLElem dirXML = getFirstAndOnly(planeXML, "XDir");
-            common().parseVector3D(getFirstAndOnly(dirXML, "UVectECF"),
-                          radarCollection->area->plane->xDirection->unitVector);
-            parseDouble(getFirstAndOnly(dirXML, "LineSpacing"),
-                        radarCollection->area->plane->xDirection->spacing);
-            parseUInt(getFirstAndOnly(dirXML, "NumLines"),
-                      radarCollection->area->plane->xDirection->elements);
-            parseUInt(getFirstAndOnly(dirXML, "FirstLine"),
-                      radarCollection->area->plane->xDirection->first);
-
-            dirXML = getFirstAndOnly(planeXML, "YDir");
-            common().parseVector3D(getFirstAndOnly(dirXML, "UVectECF"),
-                          radarCollection->area->plane->yDirection->unitVector);
-            parseDouble(getFirstAndOnly(dirXML, "SampleSpacing"),
-                        radarCollection->area->plane->yDirection->spacing);
-            parseUInt(getFirstAndOnly(dirXML, "NumSamples"),
-                      radarCollection->area->plane->yDirection->elements);
-            parseUInt(getFirstAndOnly(dirXML, "FirstSample"),
-                      radarCollection->area->plane->yDirection->first);
-
-            XMLElem segmentListXML = getOptional(planeXML, "SegmentList");
-            if (segmentListXML != NULL)
-            {
-                //TODO make sure there is at least one
-                std::vector < XMLElem > segmentsXML;
-                segmentListXML->getElementsByTagName("Segment", segmentsXML);
-
-                for (std::vector<XMLElem>::const_iterator it =
-                        segmentsXML.begin(); it != segmentsXML.end(); ++it)
-                {
-                    radarCollection->area->plane->segmentList.resize(
-                        radarCollection->area->plane->segmentList.size() + 1);
-                    radarCollection->area->plane->segmentList.back().reset(
-                        new Segment());
-                    Segment* const seg =
-                        radarCollection->area->plane->segmentList.back().get();
-
-                    parseInt(getFirstAndOnly(*it, "StartLine"), seg->startLine);
-                    parseInt(getFirstAndOnly(*it, "StartSample"),
-                             seg->startSample);
-                    parseInt(getFirstAndOnly(*it, "EndLine"), seg->endLine);
-                    parseInt(getFirstAndOnly(*it, "EndSample"), seg->endSample);
-                    parseString(getFirstAndOnly(*it, "Identifier"),
-                                seg->identifier);
-                }
-            }
-
-            if ((tmpElem = getOptional(planeXML, "Orientation")) != NULL)
-                radarCollection->area->plane->orientation = six::toType<
-                        OrientationType>(tmpElem->getCharacterData());
-        }
-    }
-
-    common().parseParameters(radarCollectionXML, "Parameter",
-                    radarCollection->parameters);
-}
-
 void ComplexXMLParser::parseImageFormationFromXML(
     const XMLElem imageFormationXML,
     ImageFormation *imageFormation) const
@@ -1949,6 +1669,232 @@ void ComplexXMLParser::parseRgAzCompFromXML(
 {
     parseDouble(getFirstAndOnly(rgAzCompXML, "AzSF"), rgAzComp->azSF);
     common().parsePoly1D(getFirstAndOnly(rgAzCompXML, "KazPoly"), rgAzComp->kazPoly);
+}
+
+void ComplexXMLParser::parseWaveformFromXML(
+    const XMLElem waveformXML,
+    std::vector<mem::ScopedCloneablePtr<WaveformParameters> >& waveform) const
+{
+    std::vector<XMLElem> wfParamsXML;
+    waveformXML->getElementsByTagName("WFParameters", wfParamsXML);
+    if (wfParamsXML.empty())
+    {
+        throw except::Exception(Ctxt(
+                "Expected at least one WFParameters element"));
+    }
+
+    for (std::vector<XMLElem>::const_iterator it = wfParamsXML.begin(); it
+            != wfParamsXML.end(); ++it)
+    {
+        waveform.resize(waveform.size() + 1);
+        waveform.back().reset(new WaveformParameters());
+        WaveformParameters* const wfParams = waveform.back().get();
+
+        XMLElem optElem = getOptional(*it, "TxPulseLength");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->txPulseLength);
+        }
+
+        optElem = getOptional(*it, "TxRFBandwidth");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->txRFBandwidth);
+        }
+
+        optElem = getOptional(*it, "TxFreqStart");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->txFrequencyStart);
+        }
+
+        optElem = getOptional(*it, "TxFMRate");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->txFMRate);
+        }
+
+        optElem = getOptional(*it, "RcvDemodType");
+        if (optElem)
+        {
+            //optional
+            wfParams->rcvDemodType
+                    = six::toType<DemodType>(optElem->getCharacterData());
+        }
+
+        optElem = getOptional(*it, "RcvWindowLength");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->rcvWindowLength);
+        }
+
+        optElem = getOptional(*it, "ADCSampleRate");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->adcSampleRate);
+        }
+
+        optElem = getOptional(*it, "RcvIFBandwidth");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->rcvIFBandwidth);
+        }
+
+        optElem = getOptional(*it, "RcvFreqStart");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->rcvFrequencyStart);
+        }
+
+        optElem = getOptional(*it, "RcvFMRate");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->rcvFMRate);
+        }
+    }
+}
+
+void ComplexXMLParser::parseAreaFromXML(
+        const XMLElem areaXML,
+        bool cornersRequired,
+        bool planeOrientationRequired,
+        mem::ScopedCloneablePtr<Area>& area) const
+{
+    area.reset(new Area());
+
+    XMLElem optElem = getOptional(areaXML, "Corner");
+    if (optElem)
+    {
+        //optional
+        common().parseFootprint(optElem, "ACP", area->acpCorners);
+    }
+
+    XMLElem planeXML = getOptional(areaXML, "Plane");
+    if (planeXML)
+    {
+        //optional
+        area->plane.reset(new AreaPlane());
+
+        XMLElem refPtXML = getFirstAndOnly(planeXML, "RefPt");
+        try
+        {
+            area->plane->referencePoint.name
+                    = refPtXML->getAttributes().getValue("name");
+        }
+        catch (const except::Exception &ex)
+        {
+        }
+
+        common().parseVector3D(getFirstAndOnly(refPtXML, "ECF"),
+                      area->plane->referencePoint.ecef);
+        parseDouble(getFirstAndOnly(refPtXML, "Line"),
+                    area->plane->referencePoint.rowCol.row);
+        parseDouble(getFirstAndOnly(refPtXML, "Sample"),
+                    area->plane->referencePoint.rowCol.col);
+
+        XMLElem dirXML = getFirstAndOnly(planeXML, "XDir");
+        common().parseVector3D(getFirstAndOnly(dirXML, "UVectECF"),
+                      area->plane->xDirection->unitVector);
+        parseDouble(getFirstAndOnly(dirXML, "LineSpacing"),
+                    area->plane->xDirection->spacing);
+        parseUInt(getFirstAndOnly(dirXML, "NumLines"),
+                  area->plane->xDirection->elements);
+        parseUInt(getFirstAndOnly(dirXML, "FirstLine"),
+                  area->plane->xDirection->first);
+
+        dirXML = getFirstAndOnly(planeXML, "YDir");
+        common().parseVector3D(getFirstAndOnly(dirXML, "UVectECF"),
+                      area->plane->yDirection->unitVector);
+        parseDouble(getFirstAndOnly(dirXML, "SampleSpacing"),
+                    area->plane->yDirection->spacing);
+        parseUInt(getFirstAndOnly(dirXML, "NumSamples"),
+                  area->plane->yDirection->elements);
+        parseUInt(getFirstAndOnly(dirXML, "FirstSample"),
+                  area->plane->yDirection->first);
+
+        XMLElem segmentListXML = getOptional(planeXML, "SegmentList");
+        if (segmentListXML != NULL)
+        {
+            std::vector<XMLElem> segmentsXML;
+            segmentListXML->getElementsByTagName("Segment", segmentsXML);
+            if (segmentsXML.empty())
+            {
+                throw except::Exception(Ctxt(
+                        "Expected at least one Segment element"));
+            }
+
+            for (std::vector<XMLElem>::const_iterator it =
+                    segmentsXML.begin(); it != segmentsXML.end(); ++it)
+            {
+                area->plane->segmentList.resize(
+                    area->plane->segmentList.size() + 1);
+                area->plane->segmentList.back().reset(
+                    new Segment());
+                Segment* const seg =
+                    area->plane->segmentList.back().get();
+
+                parseInt(getFirstAndOnly(*it, "StartLine"), seg->startLine);
+                parseInt(getFirstAndOnly(*it, "StartSample"),
+                         seg->startSample);
+                parseInt(getFirstAndOnly(*it, "EndLine"), seg->endLine);
+                parseInt(getFirstAndOnly(*it, "EndSample"), seg->endSample);
+                parseString(getFirstAndOnly(*it, "Identifier"),
+                            seg->identifier);
+            }
+        }
+
+        XMLElem tmpElem = getOptional(planeXML, "Orientation");
+        if (tmpElem != NULL)
+        {
+            area->plane->orientation = six::toType<
+                    OrientationType>(tmpElem->getCharacterData());
+        }
+    }
+}
+
+void ComplexXMLParser::parseTxSequenceFromXML(
+        const XMLElem txSequenceXML,
+        std::vector<mem::ScopedCloneablePtr<TxStep> >& steps) const
+{
+    std::vector<XMLElem> txStepsXML;
+    txSequenceXML->getElementsByTagName("TxStep", txStepsXML);
+    if (txStepsXML.empty())
+    {
+        throw except::Exception(Ctxt(
+                "Expected at least one TxStep element"));
+    }
+
+    for (std::vector<XMLElem>::const_iterator it = txStepsXML.begin(); it
+            != txStepsXML.end(); ++it)
+    {
+        steps.resize(steps.size() + 1);
+        mem::ScopedCloneablePtr<TxStep>& step(steps.back());
+        step.reset(new TxStep());
+
+        XMLElem optElem = getOptional(*it, "WFIndex");
+        if (optElem)
+        {
+            //optional
+            parseInt(optElem, step->waveformIndex);
+        }
+
+        optElem = getOptional(*it, "TxPolarization");
+        if (optElem)
+        {
+            //optional
+            step->txPolarization = six::toType<PolarizationType>(
+                    optElem->getCharacterData());
+        }
+    }
 }
 
 XMLElem ComplexXMLParser::createLatLonFootprint(const std::string& name,

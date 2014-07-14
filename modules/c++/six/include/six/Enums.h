@@ -2043,9 +2043,154 @@ struct PixelType
 };
 
 /*!
- *  \struct PolarizationType 
+ *  \struct PolarizationSequenceType
  *
- *  Enumeration used to represent PolarizationTypes
+ *  Enumeration used to represent PolarizationSequenceTypes
+ */
+struct PolarizationSequenceType
+{
+    //! The enumerations allowed
+    enum
+    {
+        OTHER = 1,
+        V = 2,
+        H = 3,
+        RHC = 4,
+        LHC = 5,
+        UNKNOWN = 6,
+        SEQUENCE = 7,
+        NOT_SET = six::NOT_SET_VALUE
+    };
+
+    //! Default constructor
+    PolarizationSequenceType() :
+        value(NOT_SET)
+    {
+    }
+
+    //! string constructor
+    PolarizationSequenceType(const std::string& str)
+    {
+        if (str == "OTHER")
+        {
+            value = OTHER;
+        }
+        else if (str == "V")
+        {
+            value = V;
+        }
+        else if (str == "H")
+        {
+            value = H;
+        }
+        else if (str == "RHC")
+        {
+            value = RHC;
+        }
+        else if (str == "LHC")
+        {
+            value = LHC;
+        }
+        else if (str == "UNKNOWN")
+        {
+            value = UNKNOWN;
+        }
+        else if (str == "SEQUENCE")
+        {
+            value = SEQUENCE;
+        }
+        else if (str == "NOT_SET")
+        {
+            value = NOT_SET;
+        }
+        else
+        {
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str));
+        }
+    }
+
+    //! int constructor
+    PolarizationSequenceType(int intValue)
+    {
+        switch (intValue)
+        {
+        case 1:
+            value = OTHER;
+            break;
+        case 2:
+            value = V;
+            break;
+        case 3:
+            value = H;
+            break;
+        case 4:
+            value = RHC;
+            break;
+        case 5:
+            value = LHC;
+            break;
+        case 6:
+            value = UNKNOWN;
+            break;
+        case 7:
+            value = SEQUENCE;
+            break;
+        case six::NOT_SET_VALUE:
+            value = NOT_SET;
+            break;
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(intValue)));
+        }
+    }
+
+    //! Returns string representation of the value
+    std::string toString() const
+    {
+        switch(value)
+        {
+        case 1:
+            return std::string("OTHER");
+        case 2:
+            return std::string("V");
+        case 3:
+            return std::string("H");
+        case 4:
+            return std::string("RHC");
+        case 5:
+            return std::string("LHC");
+        case 6:
+            return std::string("UNKNOWN");
+        case 7:
+            return std::string("SEQUENCE");
+        case six::NOT_SET_VALUE:
+            return std::string("NOT_SET");
+        default:
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(value)));
+        }
+    }
+
+    bool operator==(const PolarizationSequenceType& o) const { return value == o.value; }
+    bool operator!=(const PolarizationSequenceType& o) const { return value != o.value; }
+    bool operator==(const int& o) const { return value == o; }
+    bool operator!=(const int& o) const { return value != o; }
+    PolarizationSequenceType& operator=(const int& o) { value = o; return *this; }
+    bool operator<(const PolarizationSequenceType& o) const { return value < o.value; }
+    bool operator>(const PolarizationSequenceType& o) const { return value > o.value; }
+    bool operator<=(const PolarizationSequenceType& o) const { return value <= o.value; }
+    bool operator>=(const PolarizationSequenceType& o) const { return value >= o.value; }
+    operator int() const { return value; }
+    operator std::string() const { return toString(); }
+
+    int value;
+};
+
+/*!
+ *  \struct PolarizationType
+ *
+ *  Enumeration used to represent Polarization2Types
  */
 struct PolarizationType
 {
@@ -2061,31 +2206,49 @@ struct PolarizationType
     };
 
     //! Default constructor
-    PolarizationType(){ value = NOT_SET; }
+    PolarizationType() :
+        value(NOT_SET)
+    {
+    }
 
     //! string constructor
-    PolarizationType(std::string s)
+    PolarizationType(const std::string& str)
     {
-        if (s == "OTHER")
+        if (str == "OTHER")
+        {
             value = OTHER;
-        else if (s == "V")
+        }
+        else if (str == "V")
+        {
             value = V;
-        else if (s == "H")
+        }
+        else if (str == "H")
+        {
             value = H;
-        else if (s == "RHC")
+        }
+        else if (str == "RHC")
+        {
             value = RHC;
-        else if (s == "LHC")
+        }
+        else if (str == "LHC")
+        {
             value = LHC;
-        else if (s == "NOT_SET")
+        }
+        else if (str == "NOT_SET")
+        {
             value = NOT_SET;
+        }
         else
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
+        {
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str));
+        }
     }
 
     //! int constructor
-    PolarizationType(int i)
+    PolarizationType(int intValue)
     {
-        switch(i)
+        switch (intValue)
         {
         case 1:
             value = OTHER;
@@ -2106,12 +2269,10 @@ struct PolarizationType
             value = NOT_SET;
             break;
         default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(intValue)));
         }
     }
-
-    //! destructor
-    ~PolarizationType(){}
 
     //! Returns string representation of the value
     std::string toString() const
@@ -2131,18 +2292,9 @@ struct PolarizationType
         case six::NOT_SET_VALUE:
             return std::string("NOT_SET");
         default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+            throw except::InvalidFormatException(Ctxt(
+                    "Invalid enum value: " + str::toString(value)));
         }
-    }
-
-    //! assignment operator
-    PolarizationType& operator=(const PolarizationType& o)
-    {
-        if (&o != this)
-        {
-            value = o.value;
-        }
-        return *this;
     }
 
     bool operator==(const PolarizationType& o) const { return value == o.value; }
@@ -2158,7 +2310,6 @@ struct PolarizationType
     operator std::string() const { return toString(); }
 
     int value;
-
 };
 
 /*!

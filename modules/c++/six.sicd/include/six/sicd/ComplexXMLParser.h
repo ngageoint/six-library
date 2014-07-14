@@ -138,6 +138,23 @@ protected:
     virtual void parseSCPCOAFromXML(const XMLElem scpcoaXML, SCPCOA *obj) const;
     virtual void parseDRateSFPolyFromXML(const XMLElem incaElem, INCA* inca) const;
 
+    virtual void parseRadarCollectionFromXML(const XMLElem radarCollectionXML,
+                                             RadarCollection *obj) const = 0;
+
+    void parseWaveformFromXML(
+            const XMLElem waveformXML,
+            std::vector<mem::ScopedCloneablePtr<WaveformParameters> >&
+                    waveform) const;
+
+    void parseAreaFromXML(const XMLElem areaXML,
+                          bool cornersRequired,
+                          bool planeOrientationRequired,
+                          mem::ScopedCloneablePtr<Area>& area) const;
+
+    void parseTxSequenceFromXML(
+            const XMLElem txSequenceXML,
+            std::vector<mem::ScopedCloneablePtr<TxStep> >& steps) const;
+
     static
     std::string versionToURI(const std::string& version)
     {
@@ -183,8 +200,6 @@ private:
     void parseGridFromXML(const XMLElem gridXML, Grid *obj) const;
     void parseTimelineFromXML(const XMLElem timelineXML, Timeline *obj) const;
     void parsePositionFromXML(const XMLElem positionXML, Position *obj) const;
-    void parseRadarCollectionFromXML(const XMLElem radarCollectionXML, 
-                                     RadarCollection *obj) const;
     void parseImageFormationFromXML(const XMLElem imageFormationXML, 
                                     ImageFormation *obj) const;
     void parseAntennaFromXML(const XMLElem antennaXML, Antenna *obj) const;

@@ -232,6 +232,11 @@ template<> PixelType Init::undefined<PixelType>()
     return PixelType::NOT_SET;
 }
 
+template<> PolarizationSequenceType Init::undefined<PolarizationSequenceType>()
+{
+    return PolarizationSequenceType::NOT_SET;
+}
+
 template<> PolarizationType Init::undefined<PolarizationType>()
 {
     return PolarizationType::NOT_SET;

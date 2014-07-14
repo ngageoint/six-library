@@ -103,6 +103,9 @@ template<> std::string toString(const six::EarthModelType& value);
 template<> six::OrientationType
         toType<six::OrientationType>(const std::string& s);
 template<> std::string toString(const six::OrientationType& value);
+template<> six::PolarizationSequenceType
+        toType<six::PolarizationSequenceType>(const std::string& s);
+template<> std::string toString(const six::PolarizationSequenceType& value);
 template<> six::PolarizationType
         toType<six::PolarizationType>(const std::string& s);
 template<> std::string toString(const six::PolarizationType& value);
