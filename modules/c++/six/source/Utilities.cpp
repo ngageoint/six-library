@@ -362,22 +362,98 @@ template<> std::string six::toString(const OrientationType& t)
     }
 }
 
+template<> PolarizationSequenceType six::toType<PolarizationSequenceType>(const std::string& s)
+{
+    std::string type(s);
+    str::trim(type);
+    if (type == "OTHER")
+    {
+        return PolarizationSequenceType::OTHER;
+    }
+    else if (type == "V")
+    {
+        return PolarizationSequenceType::V;
+    }
+    else if (type == "H")
+    {
+        return PolarizationSequenceType::H;
+    }
+    else if (type == "RHC")
+    {
+        return PolarizationSequenceType::RHC;
+    }
+    else if (type == "LHC")
+    {
+        return PolarizationSequenceType::LHC;
+    }
+    else if (type == "UNKNOWN")
+    {
+        return PolarizationSequenceType::UNKNOWN;
+    }
+    else if (type == "SEQUENCE")
+    {
+        return PolarizationSequenceType::SEQUENCE;
+    }
+    else
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported polarization type '" + s + "'"));
+    }
+}
+
+template<> std::string six::toString(const PolarizationSequenceType& t)
+{
+    switch (t)
+    {
+    case PolarizationSequenceType::OTHER:
+        return "OTHER";
+    case PolarizationSequenceType::V:
+        return "V";
+    case PolarizationSequenceType::H:
+        return "H";
+    case PolarizationSequenceType::RHC:
+        return "RHC";
+    case PolarizationSequenceType::LHC:
+        return "LHC";
+    case PolarizationSequenceType::UNKNOWN:
+        return "UNKNOWN";
+    case PolarizationSequenceType::SEQUENCE:
+        return "SEQUENCE";
+    default:
+        throw except::Exception(Ctxt(
+                "Unsupported conversion from polarization type"));
+    }
+}
+
 template<> PolarizationType six::toType<PolarizationType>(const std::string& s)
 {
     std::string type(s);
     str::trim(type);
     if (type == "OTHER")
+    {
         return PolarizationType::OTHER;
+    }
     else if (type == "V")
+    {
         return PolarizationType::V;
+    }
     else if (type == "H")
+    {
         return PolarizationType::H;
+    }
     else if (type == "RHC")
+    {
         return PolarizationType::RHC;
+    }
     else if (type == "LHC")
+    {
         return PolarizationType::LHC;
+    }
     else
-        throw except::Exception(Ctxt("Unsupported polarization type '" + s + "'"));
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported polarization type '" + s + "'"));
+    }
 }
 
 template<> std::string six::toString(const PolarizationType& t)
@@ -395,9 +471,8 @@ template<> std::string six::toString(const PolarizationType& t)
     case PolarizationType::LHC:
         return "LHC";
     default:
-        throw except::Exception(
-                                Ctxt(
-                                     "Unsupported conversion from polarization type"));
+        throw except::Exception(Ctxt(
+                "Unsupported conversion from polarization type"));
     }
 }
 

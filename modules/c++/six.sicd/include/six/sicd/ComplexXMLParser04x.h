@@ -81,6 +81,8 @@ protected:
     virtual void parseAntennaParamArrayFromXML(
         const XMLElem antennaParamsXML, 
         six::sicd::AntennaParameters* obj) const;
+    virtual void parseRadarCollectionFromXML(const XMLElem radarCollectionXML,
+                                             RadarCollection *obj) const;
 
 private:
     XMLElem createRcvChannels(const RadarCollection* radar,

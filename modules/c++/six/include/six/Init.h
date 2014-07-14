@@ -103,6 +103,7 @@ template<> ImageFormationType Init::undefined<ImageFormationType>();
 template<> MagnificationMethod Init::undefined<MagnificationMethod>();
 template<> OrientationType Init::undefined<OrientationType>();
 template<> PixelType Init::undefined<PixelType>();
+template<> PolarizationSequenceType Init::undefined<PolarizationSequenceType>();
 template<> PolarizationType Init::undefined<PolarizationType>();
 template<> ProjectionType Init::undefined<ProjectionType>();
 template<> RMAlgoType Init::undefined<RMAlgoType>();

@@ -361,15 +361,15 @@ struct RadarCollection
     //! Maximum transmitted RF frequency
     double txFrequencyMax;
 
-    //! Optional polarization type
-    PolarizationType txPolarization;
+    //! Polarization type (optional in 0.4, required in 1.x)
+    PolarizationSequenceType txPolarization;
 
     //! Optional Polarization HV ange (rad) vs time.  achieved H&V channel
     //! orientation relative to true H&V, t = 0 at coll start
     //! Optional in 0.4, removed in 1.0
     Poly1D polarizationHVAnglePoly;
 
-    //!  Optional, indicates the transmit signal teps trhough
+    //!  Optional, indicates the transmit signal steps through
     //!  a repeating sequence of waveforms and/or polarizations, one step
     //!  per IPP.
     std::vector<mem::ScopedCloneablePtr<TxStep> > txSequence;

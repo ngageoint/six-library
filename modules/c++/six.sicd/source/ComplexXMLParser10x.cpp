@@ -517,6 +517,82 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
 
     return rcvChanXML;
 }
-}
-}
 
+void ComplexXMLParser10x::parseRadarCollectionFromXML(
+        const XMLElem radarCollectionXML,
+        RadarCollection* radarCollection) const
+{
+    XMLElem tmpElem = getFirstAndOnly(radarCollectionXML, "TxFrequency");
+    parseDouble(getFirstAndOnly(tmpElem, "Min"),
+                radarCollection->txFrequencyMin);
+    parseDouble(getFirstAndOnly(tmpElem, "Max"),
+                radarCollection->txFrequencyMax);
+
+    tmpElem = getOptional(radarCollectionXML, "RefFreqIndex");
+    if (tmpElem)
+    {
+        //optional
+        parseInt(tmpElem, radarCollection->refFrequencyIndex);
+    }
+
+    tmpElem = getOptional(radarCollectionXML, "Waveform");
+    if (tmpElem)
+    {
+        //optional
+        parseWaveformFromXML(tmpElem, radarCollection->waveform);
+    }
+
+    tmpElem = getFirstAndOnly(radarCollectionXML, "TxPolarization");
+    radarCollection->txPolarization = six::toType<PolarizationSequenceType>(
+            tmpElem->getCharacterData());
+
+    tmpElem = getOptional(radarCollectionXML, "TxSequence");
+    if (tmpElem)
+    {
+        //optional
+        parseTxSequenceFromXML(tmpElem, radarCollection->txSequence);
+    }
+
+    tmpElem = getFirstAndOnly(radarCollectionXML, "RcvChannels");
+
+    std::vector<XMLElem> channelsXML;
+    tmpElem->getElementsByTagName("ChanParameters", channelsXML);
+    if (channelsXML.empty())
+    {
+        throw except::Exception(Ctxt(
+                "Expected at least one ChanParameters element"));
+    }
+
+    for (std::vector<XMLElem>::const_iterator it = channelsXML.begin();
+         it != channelsXML.end();
+         ++it)
+    {
+        radarCollection->rcvChannels.resize(
+                radarCollection->rcvChannels.size() + 1);
+        mem::ScopedCloneablePtr<ChannelParameters>& chanParams =
+                radarCollection->rcvChannels.back();
+        chanParams.reset(new ChannelParameters());
+
+        XMLElem childXML = getFirstAndOnly(*it, "TxRcvPolarization");
+        chanParams->txRcvPolarization = six::toType<DualPolarizationType>(
+                childXML->getCharacterData());
+
+        childXML = getOptional(*it, "RcvAPCIndex");
+        if (childXML)
+        {
+            parseInt(childXML, chanParams->rcvAPCIndex);
+        }
+    }
+
+    XMLElem areaXML = getOptional(radarCollectionXML, "Area");
+    if (areaXML)
+    {
+        //optional
+        parseAreaFromXML(areaXML, false, true, radarCollection->area);
+    }
+
+    common().parseParameters(radarCollectionXML, "Parameter",
+                    radarCollection->parameters);
+}
+}
+}
