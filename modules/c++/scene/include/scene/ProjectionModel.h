@@ -31,7 +31,7 @@
 namespace scene
 {
 
-const double DELTA_GP_MAX = 0.001;
+const double DELTA_GP_MAX = 0.0000001;
 
 class ProjectionModel
 {
@@ -467,14 +467,9 @@ public:
 	                         int lookDir,
 	                         const Errors& errors = Errors());
 
-//	virtual void computeContour(const Vector3& arpCOA,
-//	                                const Vector3& velCOA,
-//	                                double timeCOA,
-//	                                const types::RowCol<double>& imageGridPoint,
-//	                                double* r,
-//	                                double* rDot) const;
-
-	// Need to reimplement partial derivatives and imagetoground/groundtoimage projections
+/* Not tested yet. Probably won't work as is, certain functions probably need to be reimplemented.
+ * For Example, computeImageCoordinates.
+ */
 
 };
 

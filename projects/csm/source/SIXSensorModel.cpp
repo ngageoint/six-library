@@ -720,9 +720,9 @@ csm::EcefCoordCovar SIXSensorModel::imageToGround(
         B[2][2] = 2 * groundPt.z / square(b + height);
 
         math::linear::MatrixMxN<3, 10> A(0.0);
-        A[2][2] = -2.0 * (square(groundPt.x) + square(groundPt.y)) /
+        A[2][2] = -2.0 * ((square(groundPt.x) + square(groundPt.y)) /
                           cube(a + height) +
-                  square(groundPt.z) / cube(b + height);
+                  square(groundPt.z) / cube(b + height));
         A.addInPlace(sensorPartials, 0, 3);
         A[0][0] = A[1][1] = 1.0;
 
