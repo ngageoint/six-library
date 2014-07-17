@@ -120,12 +120,18 @@ Utilities::getSceneGeometry(const DerivedData* derived)
 
         rowVec = projection->productPlane.rowUnitVector;
         colVec = projection->productPlane.colUnitVector;
+    } else if (derived->measurement->projection->projectionType
+            == six::ProjectionType::GEOGRAPHIC)
+    {
+    	std::auto_ptr<scene::SceneGeometry> geom(new scene::SceneGeometry(
+    	            arpVel, arpPos, refPt));
+    	return geom;
     }
     else
     {
         throw except::Exception(
                                 Ctxt(
-                                     "Geographic and Cylindrical projections not yet supported"));
+                                     "Cylindrical projections not yet supported"));
     }
 
     std::auto_ptr<scene::SceneGeometry> geom(new scene::SceneGeometry(
@@ -558,7 +564,9 @@ scene::ProjectionModel* Utilities::getProjectionModel(const DerivedData* data)
 		six::sidd::MeasurableProjection* geo =
 						reinterpret_cast<six::sidd::MeasurableProjection*>(
 								data->measurement->projection.get());
-		return new scene::GeodeticProjectionModel(	geo->referencePoint.ecef,
+		geom = getSceneGeometry(data);
+		return new scene::GeodeticProjectionModel(	geom->getSlantPlaneZ(),
+													geo->referencePoint.ecef,
 													(math::poly::OneD<Vector3>&) data->measurement->arpPoly,
 													(math::poly::TwoD<double>&) geo->timeCOAPoly,
 													lookDir,

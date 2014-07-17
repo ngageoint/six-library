@@ -81,19 +81,9 @@ public:
      *  by subtracting of the SCP projecting into row and column
      *  contributions.
      */
-    inline types::RowCol<double>
-        computeImageCoordinates(const Vector3& imagePlanePoint) const
-    {
-        // Delta IPP = xrow * uRow + ycol * uCol
-        Vector3 delta(imagePlanePoint - mSCP);
-            
-        // What is the x contribution?
-        return types::RowCol<double>(delta.dot(mImagePlaneRowVector),
-                                    delta.dot(mImagePlaneColVector) );
+    virtual types::RowCol<double> computeImageCoordinates(const Vector3& imagePlanePoint) const;
 
-    }
-
-        
+    virtual Vector3 imagegridToECEF(const types::RowCol<double> gridPt) const;
     /*!
      *  Virtual method to compute the R/Rdot contour from an
      *  image grid point.  Described in Chapter 4 of
@@ -461,15 +451,16 @@ public:
 class GeodeticProjectionModel : public PlaneProjectionModel
 {
 public:
-	GeodeticProjectionModel( const Vector3& scp,
+	GeodeticProjectionModel( const Vector3& slantPlaneNormal,
+							 const Vector3& scp,
 	                         const math::poly::OneD<Vector3>& arpPoly,
 	                         const math::poly::TwoD<double>& timeCOAPoly,
 	                         int lookDir,
 	                         const Errors& errors = Errors());
 
-/* Not tested yet. Probably won't work as is, certain functions probably need to be reimplemented.
- * For Example, computeImageCoordinates.
- */
+	virtual types::RowCol<double> computeImageCoordinates(const Vector3& imagePlanePoint) const;
+
+	virtual Vector3 imagegridToECEF(const types::RowCol<double> gridPt) const;
 
 };
 

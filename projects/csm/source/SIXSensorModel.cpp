@@ -663,6 +663,29 @@ csm::EcefCoord SIXSensorModel::imageToGround(
     }
 }
 
+math::linear::MatrixMxN<3,3> pseudoInverse(const math::linear::MatrixMxN<3,3>& m)
+{
+	math::linear::Matrix2D<double> input(3,3,(double *) m.mRaw);
+	math::linear::Eigenvalue<double> Veig(input.transpose() * input);
+	math::linear::Eigenvalue<double> Ueig(input * input.transpose());
+	math::linear::Vector<double> eigs = Veig.getRealEigenvalues();
+	double eigMax = std::max(std::max(std::sqrt(eigs[0]),std::sqrt(eigs[1])), std::sqrt(eigs[2]));
+	math::linear::Matrix2D<double> D(3,3,(double) 0.0);
+	for (size_t ii = 0; ii < 3; ii++)
+	{
+		if  (std::sqrt(eigs[ii]) >= std::numeric_limits<double>::epsilon() * 3.0 * eigMax)
+		{
+			D[ii][ii] = 1/std::sqrt(eigs[ii]);
+		}
+	}
+	math::linear::Matrix2D<double> V = Veig.getV();
+	math::linear::Matrix2D<double> U = Ueig.getV();
+	math::linear::Matrix2D<double> returnVal = U*D*V.transpose();
+
+	// Feels dirty to use &returnVal[0][0], but mRaw is private and there is no get()
+	return math::linear::MatrixMxN<3,3>((double *) &returnVal[0][0]);
+}
+
 csm::EcefCoordCovar SIXSensorModel::imageToGround(
         const csm::ImageCoordCovar& imagePt,
         double height,
@@ -727,11 +750,28 @@ csm::EcefCoordCovar SIXSensorModel::imageToGround(
         A[0][0] = A[1][1] = 1.0;
 
         const math::linear::MatrixMxN<3, 3> Q = A * fullCovar * A.transpose();
-        const math::linear::MatrixMxN<3, 3> imageToGroundCovarInv =
-                B.transpose() * math::linear::inverse(Q) * B;
 
-        const math::linear::MatrixMxN<3, 3> errorCovar =
-                math::linear::inverse(imageToGroundCovarInv);
+        math::linear::MatrixMxN<3,3> Qinv;
+        try
+        {
+        	Qinv = math::linear::inverse(Q);
+        } catch (const except::Exception& ex)
+        {
+        	Qinv = pseudoInverse(Q);
+        }
+
+        const math::linear::MatrixMxN<3, 3> imageToGroundCovarInv =
+                B.transpose() * Qinv * B;
+
+        math::linear::MatrixMxN<3, 3> errorCovar;
+
+        try
+        {
+        	errorCovar = math::linear::inverse(imageToGroundCovarInv);
+        } catch (const except::Exception& ex)
+        {
+            errorCovar = pseudoInverse(imageToGroundCovarInv);
+        }
 
         csm::EcefCoordCovar csmErrorCovar;
         csmErrorCovar.x = groundPt.x;

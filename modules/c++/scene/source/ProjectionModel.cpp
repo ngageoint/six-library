@@ -408,6 +408,18 @@ void ProjectionModel::imageToSceneAdjustment(const AdjustableParams& delta,
             delta[AdjustableParams::RANGE_BIAS];
 }
 
+types::RowCol<double> ProjectionModel::computeImageCoordinates(const Vector3& imagePlanePoint) const
+{
+	Vector3 delta(imagePlanePoint- mSCP);
+	return types::RowCol<double>(delta.dot(mImagePlaneRowVector),
+			delta.dot(mImagePlaneColVector));
+}
+
+Vector3 ProjectionModel::imagegridToECEF(const types::RowCol<double> gridPt) const
+{
+	return mSCP + gridPt.row * mImagePlaneRowVector + gridPt.col * mImagePlaneColVector;
+}
+
 math::linear::MatrixMxN<3, 3> ProjectionModel::getRICtoECEFTransformMatrix(
         double earthInitialSpin,
         double timeCOA) const
@@ -451,8 +463,7 @@ math::linear::MatrixMxN<2,2> ProjectionModel::slantToImagePartials(
 	double timeCOA = mTimeCOAPoly(imageGridPoint.row, imageGridPoint.col);
 	Vector3 rARP = mARPPoly(timeCOA);
 	Vector3 vARP = mARPVelPoly(timeCOA);
-	Vector3 imageGridPointECEF = mSCP + imageGridPoint.row * mImagePlaneRowVector
-			+ imageGridPoint.col * mImagePlaneColVector;
+	Vector3 imageGridPointECEF = imagegridToECEF(imageGridPoint);
 	Vector3 slantRange = imageGridPointECEF - rARP;
 	slantRange.normalize();
 	Vector3 slantNormal = math::linear::cross(slantRange, vARP);
@@ -886,12 +897,13 @@ computeContour(const Vector3& arpCOA,
     *rDot = velCOA.dot(vec) / *r;
 }
 
-GeodeticProjectionModel::GeodeticProjectionModel( const Vector3& scp,
+GeodeticProjectionModel::GeodeticProjectionModel( const Vector3& slantPlaneNormal,
+						 const Vector3& scp,
                          const math::poly::OneD<Vector3>& arpPoly,
                          const math::poly::TwoD<double>& timeCOAPoly,
                          int lookDir,
                          const Errors& errors) :
-    	    PlaneProjectionModel(Vector3((double) 0.0),
+    	    PlaneProjectionModel(slantPlaneNormal,
     	    				Vector3((double) 0.0),
     	    				Vector3((double) 0.0),
     	                    scp,
@@ -900,7 +912,30 @@ GeodeticProjectionModel::GeodeticProjectionModel( const Vector3& scp,
     	                    lookDir,
     	                    errors)
 {
+	mImagePlaneNormal = scp;
+	mImagePlaneNormal.normalize();
+	mSlantPlaneNormal.normalize();
+	mScaleFactor = mSlantPlaneNormal.dot(mImagePlaneNormal);
+}
 
+types::RowCol<double> GeodeticProjectionModel::computeImageCoordinates(const Vector3& imagePlanePoint) const
+{
+	scene::ECEFToLLATransform eceftransform;
+	scene::LatLonAlt refPt = eceftransform.transform(mSCP);
+	scene::LatLonAlt lla(scene::Utilities::ecefToLatLon(imagePlanePoint));
+	return types::RowCol<double>((refPt.getLat() - lla.getLat()) * 3600.0,
+								 (lla.getLon() - refPt.getLon()) * 3600.0);
+
+}
+
+Vector3 GeodeticProjectionModel::imagegridToECEF(const types::RowCol<double> gridPt) const
+{
+	scene::ECEFToLLATransform eceftransform;
+	scene::LatLonAlt refPt = eceftransform.transform(mSCP);
+	scene::LatLonAlt lla( refPt.getLat() - (gridPt.row) / 3600.0,
+						  refPt.getLon() + (gridPt.col) / 3600.0,
+						  refPt.getAlt());
+	return scene::Utilities::latLonToECEF(lla);
 }
 
 }
