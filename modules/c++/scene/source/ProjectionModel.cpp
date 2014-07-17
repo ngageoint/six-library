@@ -886,11 +886,7 @@ computeContour(const Vector3& arpCOA,
                double* r,
                double* rDot) const
 {
-    Vector3 vec(
-        mSCP +
-        (mImagePlaneRowVector * imageGridPoint.row) +
-        (mImagePlaneColVector * imageGridPoint.col)
-        );
+    Vector3 vec = imagegridToECEF(imageGridPoint);
     vec = arpCOA - vec;
     *r = vec.norm();
     

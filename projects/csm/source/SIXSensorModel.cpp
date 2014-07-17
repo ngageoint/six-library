@@ -671,6 +671,11 @@ math::linear::MatrixMxN<3,3> pseudoInverse(const math::linear::MatrixMxN<3,3>& m
 	math::linear::Vector<double> eigs = Veig.getRealEigenvalues();
 	double eigMax = std::max(std::max(std::sqrt(eigs[0]),std::sqrt(eigs[1])), std::sqrt(eigs[2]));
 	math::linear::Matrix2D<double> D(3,3,(double) 0.0);
+	if (eigMax <= std::numeric_limits<double>::epsilon() * 3.0)
+	{
+		return math::linear::MatrixMxN<3,3>((double) 0.0);
+	}
+
 	for (size_t ii = 0; ii < 3; ii++)
 	{
 		if  (std::sqrt(eigs[ii]) >= std::numeric_limits<double>::epsilon() * 3.0 * eigMax)
