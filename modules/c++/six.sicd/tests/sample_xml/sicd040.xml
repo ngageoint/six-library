@@ -8,7 +8,7 @@
         <Classification class="xs:string">UNCLASSIFIED</Classification>
     </CollectionInfo>
     <ImageCreation>
-        <DateTime class="xs:dateTime">2014-07-11T21:50:27.247095Z</DateTime>
+        <DateTime class="xs:dateTime">2014-07-18T15:35:43.109798Z</DateTime>
     </ImageCreation>
     <ImageData>
         <PixelType class="xs:string">RE32F_IM32F</PixelType>
@@ -216,6 +216,14 @@
         <TwistAng class="xs:double">0.000000000000000E00</TwistAng>
         <SlopeAng class="xs:double">0.000000000000000E00</SlopeAng>
     </SCPCOA>
+    <MatchInfo>
+        <Collect index="1">
+            <CollectorName class="xs:string">Collector name</CollectorName>
+            <IlluminatorName class="xs:string">Illuminator name</IlluminatorName>
+            <CoreName class="xs:string">Some core name</CoreName>
+            <MatchType class="xs:string">Some match type</MatchType>
+        </Collect>
+    </MatchInfo>
     <PFA>
         <FPN>
             <X class="xs:double">0.000000000000000E00</X>

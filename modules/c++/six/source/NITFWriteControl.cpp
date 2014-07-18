@@ -808,6 +808,11 @@ void NITFWriteControl::addUserDefinedSubheader(
                 specVers = "1.0";
                 specDT = "2011-09-28T00:00:00Z";
             }
+            else if (version == "1.1.0")
+            {
+                specVers = "1.1";
+                specDT = "2014-07-08T00:00:00Z";
+            }
         }
         else if (dataType == "SIDD")
         {
