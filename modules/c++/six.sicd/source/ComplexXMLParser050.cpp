@@ -20,8 +20,9 @@
  *
  */
 
-#include <six/sicd/ComplexXMLParser050.h>
+#include <six/Utilities.h>
 #include <six/SICommonXMLParser01x.h>
+#include <six/sicd/ComplexXMLParser050.h>
 
 namespace
 {

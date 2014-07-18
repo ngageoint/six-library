@@ -30,9 +30,6 @@
 
 namespace scene
 {
-
-const double DELTA_GP_MAX = 0.001;
-
 class ProjectionModel
 {
 public:
@@ -81,19 +78,11 @@ public:
      *  by subtracting of the SCP projecting into row and column
      *  contributions.
      */
-    inline types::RowCol<double>
-        computeImageCoordinates(const Vector3& imagePlanePoint) const
-    {
-        // Delta IPP = xrow * uRow + ycol * uCol
-        Vector3 delta(imagePlanePoint - mSCP);
-            
-        // What is the x contribution?
-        return types::RowCol<double>(delta.dot(mImagePlaneRowVector),
-                                    delta.dot(mImagePlaneColVector) );
+    virtual types::RowCol<double>
+        computeImageCoordinates(const Vector3& imagePlanePoint) const;
 
-    }
+    virtual Vector3 imageGridToECEF(const types::RowCol<double> gridPt) const;
 
-        
     /*!
      *  Virtual method to compute the R/Rdot contour from an
      *  image grid point.  Described in Chapter 4 of
@@ -222,6 +211,10 @@ public:
                          double heightThreshold = 1.0,
                          size_t maxNumIters = 3) const;
 
+    math::linear::MatrixMxN<2, 2> slantToImagePartials(
+            const types::RowCol<double>& imageGridPoint,
+            double delta = 0.0001) const;
+
     /*!
      * Computes sensor partials for imageToScene()
      * Provides a Jacobian matrix of form [ARP-RIC, Vel-RIC, Rbias]
@@ -314,10 +307,8 @@ public:
     // Same as above but uses the SCP as scenePoint
     math::linear::MatrixMxN<7, 7> getErrorCovariance() const;
 
-    math::linear::MatrixMxN<2, 2> getUnmodeledErrorCovariance() const
-    {
-        return mErrors.mUnmodeledErrorCovar;
-    }
+    math::linear::MatrixMxN<2, 2> getUnmodeledErrorCovariance(
+            const types::RowCol<double>& imageGridPoint) const;
 
     AdjustableParams& getAdjustableParams()
     {
@@ -339,7 +330,7 @@ public:
         return mErrors;
     }
 
-private:
+protected:
     // Returns matrix for RIC to ECEF coordinate transform.
     // Set earthInitialSpin equal to 0 for RIC_ECF
     math::linear::MatrixMxN<3, 3> getRICtoECEFTransformMatrix(
@@ -450,10 +441,28 @@ public:
                                 double* r,
                                 double* rDot) const;
 
+    // TODO: Need to reimplement partial derivatives
 };
 
 typedef PlaneProjectionModel XRGYCRProjectionModel;
 typedef PlaneProjectionModel XCTYATProjectionModel;
+
+class GeodeticProjectionModel : public PlaneProjectionModel
+{
+public:
+    GeodeticProjectionModel( const Vector3& slantPlaneNormal,
+                             const Vector3& scp,
+                             const math::poly::OneD<Vector3>& arpPoly,
+                             const math::poly::TwoD<double>& timeCOAPoly,
+                             int lookDir,
+                             const Errors& errors = Errors());
+
+    virtual types::RowCol<double>
+    computeImageCoordinates(const Vector3& imagePlanePoint) const;
+
+    virtual Vector3 imageGridToECEF(const types::RowCol<double> gridPt) const;
+
+};
 }
 
 #endif

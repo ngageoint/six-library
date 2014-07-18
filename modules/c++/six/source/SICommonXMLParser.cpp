@@ -21,6 +21,8 @@
  */
 #include <set>
 
+#include <str/Convert.h>
+#include <six/Utilities.h>
 #include <six/SICommonXMLParser.h>
 
 namespace
