@@ -1,4 +1,4 @@
-<SICD xmlns="urn:SICD:1.0.1">
+<SICD xmlns="urn:SICD:1.1.0">
     <CollectionInfo>
         <CollectorName>sensorname</CollectorName>
         <CoreName>corename</CoreName>
@@ -8,7 +8,7 @@
         <Classification>UNCLASSIFIED</Classification>
     </CollectionInfo>
     <ImageCreation>
-        <DateTime>2014-07-18T15:39:23.683644Z</DateTime>
+        <DateTime>2014-07-18T15:17:10.309249Z</DateTime>
     </ImageCreation>
     <ImageData>
         <PixelType>RE32F_IM32F</PixelType>
@@ -219,15 +219,7 @@
         <MatchType index="1">
             <TypeID>Some type id</TypeID>
             <CurrentIndex>8</CurrentIndex>
-            <NumMatchCollections>2</NumMatchCollections>
-            <MatchCollection index="1">
-                <CoreName>Some core name</CoreName>
-                <MatchIndex>13</MatchIndex>
-            </MatchCollection>
-            <MatchCollection index="2">
-                <CoreName>Some other core name</CoreName>
-                <MatchIndex>99</MatchIndex>
-            </MatchCollection>
+            <NumMatchCollections>0</NumMatchCollections>
         </MatchType>
     </MatchInfo>
     <PFA>

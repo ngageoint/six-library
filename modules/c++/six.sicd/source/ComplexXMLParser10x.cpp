@@ -427,35 +427,34 @@ void ComplexXMLParser10x::parseMatchInformationFromXML(
         typesXML[i]->getElementsByTagName("MatchCollection", matchCollectionsXML);
 
         //! validate the numMatchTypes
-        if (matchCollectionsXML.size() != (size_t)numMatchCollections)
+        if (matchCollectionsXML.size() !=
+            static_cast<size_t>(numMatchCollections))
         {
             throw except::Exception(
                 Ctxt("NumMatchCollections does not match number of " \
                      "MatchCollect fields"));
         }
 
-        for (size_t j = 0; j < matchCollectionsXML.size(); j++)
+        // Need to make sure this is resized properly - at MatchType
+        // construction time, matchCollects is initialized to size 1, but in
+        // SICD 1.1 this entire block may be missing.
+        type->matchCollects.resize(matchCollectionsXML.size());
+        for (size_t jj = 0; jj < matchCollectionsXML.size(); jj++)
         {
-            // The MatchInformation object was given a MatchCollect when
-            // it was instantiated.  The first time through, just populate it.
-            if (j != 0)
-            {
-                type->matchCollects.push_back(MatchCollect());
-            }
-            MatchCollect* collect = &type->matchCollects[j];
+            MatchCollect& collect(type->matchCollects[jj]);
 
             parseString(getFirstAndOnly(
-                matchCollectionsXML[j], "CoreName"), collect->coreName);
+                matchCollectionsXML[jj], "CoreName"), collect.coreName);
 
             XMLElem matchIndexXML = 
-                getOptional(matchCollectionsXML[j], "MatchIndex");
+                getOptional(matchCollectionsXML[jj], "MatchIndex");
             if (matchIndexXML)
             {
-                parseInt(matchIndexXML, collect->matchIndex);
+                parseInt(matchIndexXML, collect.matchIndex);
             }
 
             common().parseParameters(
-                matchCollectionsXML[j], "Parameter", collect->parameters);
+                matchCollectionsXML[jj], "Parameter", collect.parameters);
         }
     }
 }

@@ -77,14 +77,19 @@ ComplexXMLControl::getParser(const std::string& version) const
     //   SICD 0.5.0
     //   SICD 1.0.0
     //   SICD 1.0.1
+    //   SICD 1.1.0
     if (majorVersion == "0")
     {
         if (minorVersion == "4")
         {
             if (patchVersion == "0")
+            {
                 parser.reset(new ComplexXMLParser040(version, mLog));
+            }
             else if (patchVersion == "1")
+            {
                 parser.reset(new ComplexXMLParser041(version, mLog));
+            }
         }
         else if (minorVersion == "5" && patchVersion == "0")
         {
@@ -96,9 +101,21 @@ ComplexXMLControl::getParser(const std::string& version) const
         if (minorVersion == "0")
         {
             if (patchVersion == "0")
+            {
                 parser.reset(new ComplexXMLParser100(version, mLog));
+            }
             else if (patchVersion == "1")
+            {
                 parser.reset(new ComplexXMLParser101(version, mLog));
+            }
+        }
+        else if (minorVersion == "1" && patchVersion == "0")
+        {
+            // The only difference between SICD 1.0.1 and 1.1.0 is that in
+            // 1.1 there was a schema change that allows MatchCollection to
+            // be optional.  We rely on the schema to do this check - the
+            // parser itself doesn't - so we can simply reuse the 1.0.1 parser.
+            parser.reset(new ComplexXMLParser101(version, mLog));
         }
     }
 

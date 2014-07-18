@@ -42,7 +42,7 @@ ComplexData::ComplexData() :
     radarCollection(new RadarCollection()),
     imageFormation(new ImageFormation()),
     scpcoa(new SCPCOA()),
-    mVersion("1.0.1")
+    mVersion("1.1.0")
 {
     //only initialize the mandatory elements above
 }

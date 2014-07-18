@@ -1,4 +1,4 @@
-<SICD xmlns="urn:SICD:1.0.1">
+<SICD xmlns="urn:SICD:1.1.0">
     <CollectionInfo>
         <CollectorName>sensorname</CollectorName>
         <CoreName>corename</CoreName>
@@ -8,7 +8,7 @@
         <Classification>UNCLASSIFIED</Classification>
     </CollectionInfo>
     <ImageCreation>
-        <DateTime>2014-07-18T15:39:23.683644Z</DateTime>
+        <DateTime>2014-07-18T15:40:06.572057Z</DateTime>
     </ImageCreation>
     <ImageData>
         <PixelType>RE32F_IM32F</PixelType>
