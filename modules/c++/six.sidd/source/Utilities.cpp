@@ -536,12 +536,11 @@ scene::ProjectionModel* Utilities::getProjectionModel(const DerivedData* data)
 {
 	const six::ProjectionType gridType = data->measurement->projection->projectionType;
 
-	// Right-look squint is positive, left-look is negative
-	const six::sidd::Collection* c =  data->exploitationFeatures->collections[0].get();
-	const int lookDir = (c->geometry->squint >= 0) ? -1 : 1;
+	scene::SideOfTrack lookDir = getSideOfTrack(data);
 	scene::Errors errors;
 	getErrors(*data, errors);
 	std::auto_ptr<scene::SceneGeometry> geom;
+
 	switch (gridType)
 	{
 	case six::ProjectionType::PLANE:
@@ -556,7 +555,7 @@ scene::ProjectionModel* Utilities::getProjectionModel(const DerivedData* data)
 												plane->referencePoint.ecef,
 												(math::poly::OneD<Vector3>&) data->measurement->arpPoly,
 												(math::poly::TwoD<double>&) plane->timeCOAPoly,
-												lookDir,
+												(int) lookDir,
 												errors);
 		}
 	case six::ProjectionType::GEOGRAPHIC:
@@ -569,7 +568,7 @@ scene::ProjectionModel* Utilities::getProjectionModel(const DerivedData* data)
 													geo->referencePoint.ecef,
 													(math::poly::OneD<Vector3>&) data->measurement->arpPoly,
 													(math::poly::TwoD<double>&) geo->timeCOAPoly,
-													lookDir,
+													(int) lookDir,
 													errors);
 	}
 	case six::ProjectionType::POLYNOMIAL:
