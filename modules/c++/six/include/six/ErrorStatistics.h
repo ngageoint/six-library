@@ -23,10 +23,8 @@
 #define __SIX_ERROR_STATISTICS_H__
 
 #include "six/Types.h"
-#include "six/Utilities.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
-#include <import/str.h>
 #include <mem/ScopedCopyablePtr.h>
 
 namespace six

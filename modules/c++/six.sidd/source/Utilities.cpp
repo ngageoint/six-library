@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/Utilities.h"
 #include "six/sidd/Utilities.h"
 
 namespace
@@ -45,6 +46,27 @@ double getCenterTime(const six::sidd::DerivedData* derived)
     }
 
     return centerTime;
+}
+
+namespace
+{
+void getErrors(const six::sidd::DerivedData& data,
+               scene::Errors& errors)
+{
+    if (!data.measurement->projection->isMeasurable())
+    {
+        throw except::Exception(Ctxt("Need measurable projection"));
+    }
+
+    const six::sidd::MeasurableProjection* const projection =
+            reinterpret_cast<const six::sidd::MeasurableProjection*>(
+                    data.measurement->projection.get());
+
+    six::getErrors(data.errorStatistics.get(),
+                   types::RgAz<double>(projection->sampleSpacing.row,
+                                       projection->sampleSpacing.col),
+                   errors);
+}
 }
 }
 
@@ -402,6 +424,64 @@ std::pair<six::PolarizationType, six::PolarizationType> Utilities::convertDualPo
     pols.first = _convertDualPolarization(pol, true);
     pols.second = _convertDualPolarization(pol, false);
     return pols;
+}
+
+std::auto_ptr<scene::ProjectionModel>
+Utilities::getProjectionModel(const DerivedData* data)
+{
+    const int lookDir = getSideOfTrack(data);
+    scene::Errors errors;
+    ::getErrors(*data, errors);
+
+    std::auto_ptr<scene::SceneGeometry> geom(getSceneGeometry(data));
+
+    const six::ProjectionType gridType =
+            data->measurement->projection->projectionType;
+
+    std::auto_ptr<scene::ProjectionModel> projModel;
+    switch (gridType)
+    {
+    case six::ProjectionType::PLANE:
+    {
+        const six::sidd::PlaneProjection* const plane =
+                reinterpret_cast<six::sidd::PlaneProjection*>(
+                        data->measurement->projection.get());
+
+        projModel.reset(new scene::PlaneProjectionModel(
+                geom->getSlantPlaneZ(),
+                plane->productPlane.rowUnitVector,
+                plane->productPlane.colUnitVector,
+                plane->referencePoint.ecef,
+                data->measurement->arpPoly,
+                plane->timeCOAPoly,
+                lookDir,
+                errors));
+    }
+    case six::ProjectionType::GEOGRAPHIC:
+    {
+        const six::sidd::MeasurableProjection* const geo =
+                reinterpret_cast<six::sidd::MeasurableProjection*>(
+                        data->measurement->projection.get());
+
+        projModel.reset(new scene::GeodeticProjectionModel(
+                geom->getSlantPlaneZ(),
+                geo->referencePoint.ecef,
+                data->measurement->arpPoly,
+                geo->timeCOAPoly,
+                lookDir,
+                errors));
+    }
+    case six::ProjectionType::POLYNOMIAL:
+    case six::ProjectionType::CYLINDRICAL:
+    case six::ProjectionType::NOT_SET:
+        throw except::Exception(Ctxt("Grid type not supported: " +
+                            gridType.toString()));
+    default:
+        throw except::Exception(Ctxt("Invalid grid type: " +
+                        gridType.toString()));
+    }
+
+    return projModel;
 }
 }
 }

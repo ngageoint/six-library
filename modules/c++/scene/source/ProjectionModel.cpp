@@ -30,6 +30,9 @@ namespace
 {
 const double EARTH_ROTATION_RATE = 0.000072921150; // Radians / sec
 
+const double DELTA_GP_MAX = 0.0000001;
+
+inline
 double square(double val)
 {
     return (val * val);
@@ -82,6 +85,25 @@ ProjectionModel(const Vector3& slantPlaneNormal,
 
 ProjectionModel::~ProjectionModel()
 {
+}
+
+types::RowCol<double> ProjectionModel::computeImageCoordinates(
+        const Vector3& imagePlanePoint) const
+{
+    // Delta IPP = xrow * uRow + ycol * uCol
+    Vector3 delta(imagePlanePoint - mSCP);
+
+    // What is the x contribution?
+    return types::RowCol<double>(delta.dot(mImagePlaneRowVector),
+                                 delta.dot(mImagePlaneColVector));
+}
+
+Vector3
+ProjectionModel::imageGridToECEF(const types::RowCol<double> gridPt) const
+{
+    return (mSCP +
+            gridPt.row * mImagePlaneRowVector +
+            gridPt.col * mImagePlaneColVector);
 }
 
 /*!
@@ -443,6 +465,34 @@ math::linear::MatrixMxN<3, 3> ProjectionModel::getRICtoECEFTransformMatrix(
                                                     imageGridPoint.col));
 }
 
+math::linear::MatrixMxN<2, 2> ProjectionModel::slantToImagePartials(
+        const types::RowCol<double>& imageGridPoint,
+        double delta) const
+{
+    // First, compute slant plane vectors
+    const double timeCOA =
+            mTimeCOAPoly(imageGridPoint.row, imageGridPoint.col);
+    const Vector3 rARP = mARPPoly(timeCOA);
+    const Vector3 vARP = mARPVelPoly(timeCOA);
+    const Vector3 imageGridPointECEF = imageGridToECEF(imageGridPoint);
+    Vector3 slantRange = imageGridPointECEF - rARP;
+    slantRange.normalize();
+    Vector3 slantNormal = math::linear::cross(slantRange, vARP);
+    slantNormal.normalize();
+    Vector3 slantAzimuth = math::linear::cross(slantNormal, slantRange);
+    slantAzimuth.normalize();
+    const types::RowCol<double> rangePerturb =
+            sceneToImage(imageGridPointECEF + delta * slantRange);
+    const types::RowCol<double> azimuthPerturb =
+            sceneToImage(imageGridPointECEF + delta * slantAzimuth);
+    math::linear::MatrixMxN<2, 2> partials(0.0);
+    partials[0][0] = (imageGridPoint.row - rangePerturb.row) / delta;
+    partials[0][1] = (imageGridPoint.row - azimuthPerturb.row) / delta;
+    partials[1][0] = (imageGridPoint.col - rangePerturb.col) / delta;
+    partials[1][1] = (imageGridPoint.col - azimuthPerturb.col) / delta;
+    return partials;
+}
+
 math::linear::MatrixMxN<3, 7> ProjectionModel::imageToSceneSensorPartials(
         const types::RowCol<double>& imageGridPoint,
         double height,
@@ -692,6 +742,23 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance() const
     return getErrorCovariance(mSCP);
 }
 
+math::linear::MatrixMxN<2, 2> ProjectionModel::getUnmodeledErrorCovariance(
+        const types::RowCol<double>& imageGridPoint) const
+{
+    // unmodeled error in expected to be defined in the slant plane. Therefore
+    // it is necessary to propagate the slant plane error to the image plane
+    const math::linear::MatrixMxN<2, 2>
+            unmodeledCovar(mErrors.mUnmodeledErrorCovar);
+    const math::linear::MatrixMxN<2,2> slantToImageJacobian =
+            slantToImagePartials(imageGridPoint);
+
+    // Propagate unmodeled error from slant plane to image plane
+    const math::linear::MatrixMxN<2, 2> returnMatrix =
+            slantToImageJacobian * unmodeledCovar *
+            slantToImageJacobian.transpose();
+    return returnMatrix;
+}
+
 RangeAzimProjectionModel::
 RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                          const math::poly::OneD<double>& ksfPoly,
@@ -836,14 +903,52 @@ computeContour(const Vector3& arpCOA,
                double* r,
                double* rDot) const
 {
-    Vector3 vec(
-        mSCP +
-        (mImagePlaneRowVector * imageGridPoint.row) +
-        (mImagePlaneColVector * imageGridPoint.col)
-        );
-    vec = arpCOA - vec;
+    const Vector3 vec = arpCOA - imageGridToECEF(imageGridPoint);
     *r = vec.norm();
     
     *rDot = velCOA.dot(vec) / *r;
+}
+
+GeodeticProjectionModel::GeodeticProjectionModel(
+        const Vector3& slantPlaneNormal,
+        const Vector3& scp,
+        const math::poly::OneD<Vector3>& arpPoly,
+        const math::poly::TwoD<double>& timeCOAPoly,
+        int lookDir,
+        const Errors& errors) :
+    PlaneProjectionModel(slantPlaneNormal,
+                         Vector3(0.0),
+                         Vector3(0.0),
+                         scp,
+                         arpPoly,
+                         timeCOAPoly,
+                         lookDir,
+                         errors)
+{
+    mImagePlaneNormal = scp;
+    mImagePlaneNormal.normalize();
+    mSlantPlaneNormal.normalize();
+    mScaleFactor = mSlantPlaneNormal.dot(mImagePlaneNormal);
+}
+
+types::RowCol<double> GeodeticProjectionModel::
+computeImageCoordinates(const Vector3& imagePlanePoint) const
+{
+    ECEFToLLATransform ecefTransform;
+    const LatLonAlt refPt = ecefTransform.transform(mSCP);
+    const LatLonAlt lla = ecefTransform.transform(imagePlanePoint);
+    return types::RowCol<double>((refPt.getLat() - lla.getLat()) * 3600.0,
+                                 (lla.getLon() - refPt.getLon()) * 3600.0);
+
+}
+
+Vector3 GeodeticProjectionModel::imageGridToECEF(
+        const types::RowCol<double> gridPt) const
+{
+    const LatLonAlt refPt = Utilities::ecefToLatLon(mSCP);
+    const LatLonAlt lla(refPt.getLat() - gridPt.row / 3600.0,
+                        refPt.getLon() + gridPt.col / 3600.0,
+                        refPt.getAlt());
+    return scene::Utilities::latLonToECEF(lla);
 }
 }

@@ -21,6 +21,7 @@
  */
 #include <set>
 
+#include <six/Utilities.h>
 #include <six/SICommonXMLParser01x.h>
 
 namespace

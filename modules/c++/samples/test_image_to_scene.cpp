@@ -32,6 +32,8 @@
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <six/sidd/DerivedXMLControl.h>
+#include <six/sidd/Utilities.h>
 #include <scene/ECEFToLLATransform.h>
 
 namespace
@@ -57,6 +59,31 @@ types::RowCol<double> pixelToImagePoint(const six::sicd::ComplexData& data,
     return imagePt;
 }
 
+types::RowCol<double> pixelToImagePoint(const six::sidd::DerivedData& data,
+                                        const types::RowCol<double>& pixelLoc)
+{
+    const types::RowCol<double> posRC(pixelLoc);
+    types::RowCol<double> fullScenePos;
+    if (data.downstreamReprocessing.get() &&
+            data.downstreamReprocessing->geometricChip.get())
+    {
+        fullScenePos = data.downstreamReprocessing->geometricChip->
+                getFullImageCoordinateFromChip(posRC);
+    }
+    else
+    {
+        fullScenePos = posRC;
+    }
+
+    const six::sidd::MeasurableProjection* projection(reinterpret_cast<six::sidd::MeasurableProjection*>(
+            data.measurement->projection.get()));
+    const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
+
+    return types::RowCol<double>(
+            (fullScenePos.row - ctrPt.row) * projection->sampleSpacing.row,
+            (fullScenePos.col - ctrPt.col) * projection->sampleSpacing.col);
+}
+
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& lla)
 {
     os << "(" << lla.getLat() << ", " << lla.getLon() << ", "
@@ -74,48 +101,60 @@ int main(int argc, char** argv)
         if (argc != 4 && argc != 5)
         {
             std::cerr << "Usage: " << progname
-                      << " <SICD pathname> <row pixel> <col pixel>"
+                      << " <SICD/SIDD pathname> <row pixel> <col pixel>"
                          " [height (m)]\n\n";
             return 1;
         }
-        const std::string sicdPathname(argv[1]);
+        const std::string sixPathname(argv[1]);
         const types::RowCol<double> pixelLoc(str::toType<double>(argv[2]),
                                              str::toType<double>(argv[3]));
         const bool haveHeight(argc == 5);
         const double height(haveHeight ? str::toType<double>(argv[4]) : 0.0);
 
-        // Read in the file
-        six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
+        // First, try to read in the file as a SICD, then try read as SIDD
+        six::XMLControlRegistry* xmlRegistry = new six::XMLControlRegistry;
+        xmlRegistry->addCreator(six::DataType::COMPLEX,
                                new six::XMLControlCreatorT<
                                        six::sicd::ComplexXMLControl>());
+        xmlRegistry->addCreator(six::DataType::DERIVED,
+                            new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
         std::auto_ptr<logging::Logger> logger(logging::setupLogger(progname));
         six::NITFReadControl reader;
         reader.setLogger(logger.get());
-        reader.setXMLControlRegistry(&xmlRegistry);
-        reader.load(sicdPathname);
-
-        // Make sure it's a SICD
-        const six::Container* const container = reader.getContainer();
-        if (container->getDataType() != six::DataType::COMPLEX)
+        reader.setXMLControlRegistry(xmlRegistry);
+        reader.load(sixPathname);
+        // Check to see if it's a SICD
+        six::Container* container = reader.getContainer();
+        std::auto_ptr<scene::ProjectionModel> projection;
+        std::auto_ptr<scene::SceneGeometry> geom;
+        types::RowCol<double> imagePt;
+        if (container->getDataType() == six::DataType::COMPLEX)
         {
-            std::cerr << sicdPathname << " is not a SICD\n";
+            const six::sicd::ComplexData* data =
+                    reinterpret_cast<six::sicd::ComplexData*>(
+                            container->getData(0));
+
+            geom.reset(six::sicd::Utilities::getSceneGeometry(data));
+            projection.reset(six::sicd::Utilities::getProjectionModel(
+                    data, geom.get()));
+            imagePt = pixelToImagePoint(*data, pixelLoc);
+        }
+        else if (container->getDataType() == six::DataType::DERIVED)
+        {
+            const six::sidd::DerivedData* data =
+                    reinterpret_cast<six::sidd::DerivedData*>(
+                            container->getData(0));
+            projection = six::sidd::Utilities::getProjectionModel(data);
+            geom = six::sidd::Utilities::getSceneGeometry(data);
+            std::cout << geom->getReferencePosition() << std::endl;
+            imagePt = pixelToImagePoint(*data, pixelLoc);
+        }
+        else
+        {
+            std::cerr << sixPathname << " is not a SICD or SIDD\n";
             return 1;
         }
-        const six::sicd::ComplexData* const data =
-                reinterpret_cast<const six::sicd::ComplexData*>(
-                        container->getData(0));
-
-        // Build up the geometry info
-        std::auto_ptr<const scene::SceneGeometry>
-                geom(six::sicd::Utilities::getSceneGeometry(data));
-        std::auto_ptr<const scene::ProjectionModel>
-                projection(six::sicd::Utilities::getProjectionModel(
-                        data, geom.get()));
-
-        const types::RowCol<double> imagePt =
-                pixelToImagePoint(*data, pixelLoc);
 
         const scene::ECEFToLLATransform ecefToLLA;
 
@@ -125,9 +164,25 @@ int main(int argc, char** argv)
         groundPlaneNormal.normalize();
 
         double timeCOA(0.0);
+        std::cout << "Converted imagePt : " <<  imagePt.row << ", "
+                  << imagePt.col << std::endl;
         const scene::Vector3 groundPt1 =
                 projection->imageToScene(imagePt, refPos, groundPlaneNormal,
                                          &timeCOA);
+        std::cout << "Ground Point : " << groundPt1 << std::endl;
+
+        types::RowCol<double> imageReturnPoint =
+                projection->sceneToImage(groundPt1, &timeCOA);
+
+        std::cout << "Image Point : " << imageReturnPoint.row << ", "
+                  << imageReturnPoint.col << std::endl;
+
+        types::RowCol<double> imageSCP =
+                projection->sceneToImage(geom->getReferencePosition(),
+                                         &timeCOA);
+
+        std::cout << "Image SCP Point : " << imageSCP.row << ", "
+                  << imageSCP.col << std::endl;
 
         const scene::LatLonAlt latLon1(ecefToLLA.transform(groundPt1));
 
