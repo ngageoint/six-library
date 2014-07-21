@@ -456,6 +456,7 @@ Utilities::getProjectionModel(const DerivedData* data)
                 plane->timeCOAPoly,
                 lookDir,
                 errors));
+        break;
     }
     case six::ProjectionType::GEOGRAPHIC:
     {
@@ -470,6 +471,7 @@ Utilities::getProjectionModel(const DerivedData* data)
                 geo->timeCOAPoly,
                 lookDir,
                 errors));
+        break;
     }
     case six::ProjectionType::POLYNOMIAL:
     case six::ProjectionType::CYLINDRICAL:
