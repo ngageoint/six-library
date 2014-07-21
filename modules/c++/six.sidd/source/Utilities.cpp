@@ -143,11 +143,19 @@ Utilities::getSceneGeometry(const DerivedData* derived)
         rowVec = projection->productPlane.rowUnitVector;
         colVec = projection->productPlane.colUnitVector;
     }
+    else if (derived->measurement->projection->projectionType
+            == six::ProjectionType::GEOGRAPHIC)
+    {
+        // In this case there are no image plane row/col vectors, so we want
+        // to use a different constructor
+        std::auto_ptr<scene::SceneGeometry> geom(new scene::SceneGeometry(
+                    arpVel, arpPos, refPt));
+        return geom;
+    }
     else
     {
-        throw except::Exception(
-                                Ctxt(
-                                     "Geographic and Cylindrical projections not yet supported"));
+        throw except::Exception(Ctxt(
+                "Cylindrical projection not yet supported"));
     }
 
     std::auto_ptr<scene::SceneGeometry> geom(new scene::SceneGeometry(
