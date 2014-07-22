@@ -130,9 +130,16 @@ struct DecorrType
         corrCoefZero(ccz), decorrRate(dr)
     {
     }
+
     DecorrType(const DecorrType& dt) :
         corrCoefZero(dt.corrCoefZero), decorrRate(dt.decorrRate)
     {
+    }
+
+    bool operator==(const DecorrType& rhs) const
+    {
+        return (corrCoefZero == rhs.corrCoefZero &&
+                decorrRate == rhs.decorrRate);
     }
 
     double corrCoefZero;
