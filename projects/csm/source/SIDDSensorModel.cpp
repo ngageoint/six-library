@@ -328,6 +328,12 @@ std::string SIDDSensorModel::getReferenceDateAndTime() const
             collectionDateTime.format("%Y%m%dT%H%M%.2SZ");
 }
 
+six::DateTime SIDDSensorModel::getSIXDateTime() const
+{
+	return mData->exploitationFeatures->collections[0]->information->
+            collectionDateTime;
+}
+
 types::RowCol<double>
 SIDDSensorModel::fromPixel(const csm::ImageCoord& pos) const
 {

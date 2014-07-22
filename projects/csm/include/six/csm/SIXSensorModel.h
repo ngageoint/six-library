@@ -574,6 +574,23 @@ public: // RasterGM methods
 			const csm::ImageCoord& pt1,
 			const csm::ImageCoord& pt2) const;
 
+	virtual std::vector<double> getCrossCovarianceMatrix(
+			const GeometricModel& comparisonModel,
+			csm::param::Set pSet = csm::param::VALID,
+			const GeometricModelList& otherModels = GeometricModelList()) const;
+
+	virtual size_t getNumSensorModelParameters() const;
+
+	virtual size_t getNumCorrelationParameterGroups() const;
+
+	virtual int getCorrelationParameterGroup(size_t smParamIndex)
+    const;
+
+	virtual double getCorrelationCoefficient(size_t cpGroupIndex,
+	                                   double deltaTime) const;
+
+
+
 public:
 	// All remaining public methods throw csm::Error's that they're not
 	// implemented
@@ -581,10 +598,7 @@ public:
 	// These are pure virtual from GeometricModel
 	virtual void setReferencePoint(const csm::EcefCoord& groundPt);
 
-	virtual std::vector<double> getCrossCovarianceMatrix(
-			const csm::GeometricModel& comparisonModel,
-			csm::param::Set pSet,
-			const csm::GeometricModel::GeometricModelList& otherModels) const;
+	virtual six::DateTime getSIXDateTime() const = 0;
 
 protected:
 	/**
@@ -644,7 +658,6 @@ protected:
     {
     	return csm::ImageCoord(pt.row, pt.col);
     }
-
 
 protected:
 	const scene::ECEFToLLATransform mECEFToLLA;

@@ -98,6 +98,17 @@ void getErrors(const six::sicd::ComplexData& data,
             getSensorCovariance(*components->posVelError,
                                 rangeBias,
                                 errors.mSensorErrorCovar);
+
+            if (!six::Init::isUndefined(components->posVelError->positionDecorr))
+            {
+            	errors.mPositionCorrCoefZero = components->posVelError->positionDecorr.corrCoefZero;
+            	errors.mPositionDecorrRate = components->posVelError->positionDecorr.decorrRate;
+            }
+            if (!six::Init::isUndefined(components->radarSensor->rangeBiasDecorr))
+            {
+            	errors.mRangeCorrCoefZero = components->radarSensor->rangeBiasDecorr.corrCoefZero;
+            	errors.mRangeDecorrRate = components->radarSensor->rangeBiasDecorr.decorrRate;
+            }
         }
 
         if (errorStats->compositeSCP.get() &&
@@ -107,18 +118,14 @@ void getErrors(const six::sicd::ComplexData& data,
                     errorStats->compositeSCP->xErr,
                     errorStats->compositeSCP->yErr);
             const double corr = errorStats->compositeSCP->xyErr;
-            const types::RgAz<double> sampleSpacing(
-                    data.grid->row->sampleSpacing,
-                    data.grid->col->sampleSpacing);
 
             errors.mUnmodeledErrorCovar(0, 0) =
-                    square(composite.rg) / square(sampleSpacing.rg);
+                    square(composite.rg);
             errors.mUnmodeledErrorCovar(1, 1) =
-                    square(composite.az) / square(sampleSpacing.az);
+                    square(composite.az);
             errors.mUnmodeledErrorCovar(0, 1) =
                     errors.mUnmodeledErrorCovar(1, 0) =
-                            corr * (composite.rg * composite.az) /
-                            (sampleSpacing.rg * sampleSpacing.az);
+                            corr * (composite.rg * composite.az);
         }
 
         if (components && components->ionoError.get())

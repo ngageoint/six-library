@@ -306,6 +306,11 @@ std::string SICDSensorModel::getReferenceDateAndTime() const
     return mData->timeline->collectStart.format("%Y%m%dT%H%M%.2SZ");
 }
 
+six::DateTime SICDSensorModel::getSIXDateTime() const
+{
+	return mData->timeline->collectStart;
+}
+
 types::RowCol<double>
 SICDSensorModel::toPixel(const types::RowCol<double>& pos) const
 {

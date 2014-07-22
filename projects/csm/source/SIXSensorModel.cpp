@@ -522,16 +522,6 @@ void SIXSensorModel::setReferencePoint(const csm::EcefCoord& )
                        "SIXSensorModel::setReferencePoint");
 }
 
-std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
-       const csm::GeometricModel& ,
-       csm::param::Set ,
-       const csm::GeometricModel::GeometricModelList& ) const
-{
-    throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
-                       "Function not supported",
-                       "SIXSensorModel::getCrossCovarianceMatrix");
-}
-
 csm::ImageCoord SIXSensorModel::groundToImageImpl(
         const csm::EcefCoord& groundPt,
         double desiredPrecision,
@@ -940,6 +930,167 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
         mSchemaDirs.resize(1);
         mSchemaDirs[0] = schemaDir;
     }
+}
+
+template<typename _T> math::linear::Matrix2D<_T> matrixSqrt(const math::linear::Matrix2D<_T>& m)
+{
+	math::linear::Eigenvalue<_T> Eig(m);
+	math::linear::Matrix2D<_T> D;
+	Eig.getD(D);
+	math::linear::Matrix2D<_T> V = Eig.getV();
+	for (size_t ii = 0; ii < m.rows(); ii++)
+	{
+		if (D[ii][ii] < 0)
+		{
+			throw except::Exception(Ctxt("Matrix is not Positive-Definite"));
+		}
+		D[ii][ii] = std::sqrt(D[ii][ii]);
+	}
+	math::linear::Matrix2D<_T> returnVal = V*D*V.transpose();
+	return returnVal;
+}
+
+template<typename _T> void printVector(const std::vector<_T> m)
+{
+	std::cout << "(";
+	for (size_t ii = 0; ii < m.size(); ii++)
+	{
+		std::cout << std::setprecision(15) << m[ii] << ", ";
+	}
+	std::cout << ")"<<std::endl;
+
+}
+template<typename _T> void printMatrix(const math::linear::Matrix2D<_T> m)
+{
+	std::cout << "[ ";
+	for (size_t ii = 0; ii < m.rows(); ii++)
+	{
+		for (size_t jj = 0; jj < m.cols(); jj++)
+		{
+			std::cout << m[ii][jj] << ", ";
+		}
+		std::cout << ";" << std::endl;
+	}
+}
+
+
+std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
+		const GeometricModel& comparisonModel,
+		csm::param::Set pSet,
+		const GeometricModelList& otherModels) const
+{
+	std::vector<int> paramSetP1 =  this->getParameterSetIndices(pSet);
+	std::vector<int> paramSetP2 = comparisonModel.getParameterSetIndices(pSet);
+	if (comparisonModel.getPlatformIdentifier() == this->getPlatformIdentifier())
+	{
+		//if (comparisonModel.getImageIdentifier() == this->getImageIdentifier())
+		//{
+		//	return this->getCovarianceMatrix( pSet);
+		//}
+		const SIXSensorModel* comparisonSIXModel = reinterpret_cast<const SIXSensorModel*>(&comparisonModel);
+		size_t numGroups = this->getNumCorrelationParameterGroups();
+		//size_t numParams = this->getNumSensorModelParameters();
+		six::DateTime timeP1 = getSIXDateTime();
+		six::DateTime timeP2 = comparisonSIXModel->getSIXDateTime();
+		double time = (double) 1000 * (timeP1.getTimeInMillis() - timeP2.getTimeInMillis());
+		size_t m[numGroups];
+		//math::linear::MatrixMxN<paramSetP1.size(),paramSetP1.size()> returnVal((double) 0.0);
+		std::vector<double> returnVal(paramSetP1.size() * paramSetP2.size(), (double) 0.0);
+		for (size_t ii = 0; ii < numGroups; ii++)
+		{
+			m[ii] = 0;
+			double corrCoeff = this->getCorrelationCoefficient(ii, time);
+			for (size_t jj = 0; jj < paramSetP1.size(); jj++)
+			{
+				if (this->getCorrelationParameterGroup(paramSetP1[jj]) == ii)
+				{
+					m[ii]++;
+				}
+			}
+			math::linear::Matrix2D<double> covarP1(m[ii],m[ii], 0.0);
+			math::linear::Matrix2D<double> covarP2(m[ii],m[ii], 0.0);
+			size_t jjP = 0;
+			size_t kkP = 0;
+			for (size_t jj = 0; jj < paramSetP1.size(); jj++)
+			{
+				kkP = 0;
+				if (this->getCorrelationParameterGroup(paramSetP1[jj]) == ii)
+				{
+					for (size_t kk = 0; kk < paramSetP1.size(); kk++)
+					{
+						if (this->getCorrelationParameterGroup(paramSetP1[kk]) == ii)
+						{
+							covarP1[jjP][kkP] = this->getParameterCovariance(jj,kk);
+							covarP2[jjP][kkP] = comparisonModel.getParameterCovariance(jj,kk);
+							kkP++;
+						}
+					}
+					jjP++;
+				}
+			}
+			math::linear::Matrix2D<double> crossCovar = matrixSqrt(covarP1) * matrixSqrt(covarP2);
+			crossCovar.scale(corrCoeff);
+
+			jjP = 0;
+			kkP = 0;
+			for (size_t jj = 0; jj < paramSetP1.size(); jj++)
+			{
+				kkP =0;
+				if (this->getCorrelationParameterGroup(paramSetP1[jj]) == ii)
+				{
+					for (size_t kk = 0; kk < paramSetP1.size(); kk++)
+					{
+						if (this->getCorrelationParameterGroup(paramSetP1[kk]) == ii)
+						{
+							returnVal[paramSetP2.size()*jj+kk] = crossCovar(jjP,kkP);
+							kkP++;
+						}
+					}
+					jjP++;
+				}
+			}
+		}
+		return returnVal;
+	} else
+	{
+		return std::vector<double>(paramSetP1.size() * paramSetP2.size(), (double) 0.0);
+	}
+}
+
+size_t SIXSensorModel::getNumSensorModelParameters() const
+{
+	return static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS);
+}
+
+size_t SIXSensorModel::getNumCorrelationParameterGroups() const
+{
+	return static_cast<size_t>(scene::AdjustableParams::NUM_CORR_GROUPS);
+}
+
+int SIXSensorModel::getCorrelationParameterGroup(size_t smParamIndex)
+const
+{
+	return scene::AdjustableParams::group(
+			static_cast<scene::AdjustableParams::ParamsEnum>(smParamIndex));
+}
+
+double SIXSensorModel::getCorrelationCoefficient(size_t cpGroupIndex,
+                                   double deltaTime) const
+{
+	scene::Errors errors = mProjection->getErrors();
+	switch (cpGroupIndex)
+	{
+	case (0):
+			return std::min(1.0, std::max(-1.0,
+					errors.mPositionCorrCoefZero - errors.mPositionDecorrRate * std::abs(deltaTime)));
+	case (1):
+			return std::min(1.0, std::max(-1.0,
+					errors.mRangeCorrCoefZero - errors.mRangeDecorrRate * std::abs(deltaTime)));
+	default:
+		throw(csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
+                    " Invalid index in call in function call ",
+                    "SIXSensorModel::getCorrelationCoefficient"));
+	}
 }
 
 }

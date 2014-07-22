@@ -40,7 +40,8 @@ struct AdjustableParams
         ARP_VEL_IN_TRACK = 4,
         ARP_VEL_CROSS_TRACK = 5,
         RANGE_BIAS = 6,
-        NUM_PARAMS = 7
+        NUM_PARAMS = 7,
+        NUM_CORR_GROUPS = 2
     };
 
     // Initializes all parameters to 0
@@ -49,6 +50,8 @@ struct AdjustableParams
     static std::string name(ParamsEnum param);
 
     static std::string units(ParamsEnum param);
+
+    static int group(ParamsEnum param);
 
     Vector3 getARPVector() const
     {

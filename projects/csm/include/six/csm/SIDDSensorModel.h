@@ -164,6 +164,8 @@ public: // RasterGM methods
      */
     virtual csm::ImageVector getImageSize() const;
 
+	virtual six::DateTime getSIXDateTime() const;
+
 private:
     /**
      * Transforms the given l, s values from units of pixels from upper left
