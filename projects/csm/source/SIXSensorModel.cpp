@@ -993,7 +993,7 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
 		six::DateTime timeP1 = getSIXDateTime();
 		six::DateTime timeP2 = comparisonSIXModel->getSIXDateTime();
 		double time = (double) 1000 * (timeP1.getTimeInMillis() - timeP2.getTimeInMillis());
-		size_t m[numGroups];
+		std::vector<size_t> m(numGroups);
 		//math::linear::MatrixMxN<paramSetP1.size(),paramSetP1.size()> returnVal((double) 0.0);
 		std::vector<double> returnVal(paramSetP1.size() * paramSetP2.size(), (double) 0.0);
 		for (size_t ii = 0; ii < numGroups; ii++)
