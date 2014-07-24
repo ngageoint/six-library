@@ -10,7 +10,7 @@ SOURCE        = 'openjpeg-2.0.0'
 options = lambda x : None
 
 def configure(conf):
-    conf.env['BUILD_PATH'] = conf.bldnode.abspath()
+    #conf.env['BUILD_PATH'] = conf.bldnode.abspath()
     
     j2kLayer = Options.options.j2k_layer
 
