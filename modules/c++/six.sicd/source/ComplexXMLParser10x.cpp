@@ -588,7 +588,7 @@ void ComplexXMLParser10x::parseRadarCollectionFromXML(
     if (areaXML)
     {
         //optional
-        parseAreaFromXML(areaXML, false, true, radarCollection->area);
+        parseAreaFromXML(areaXML, true, false, radarCollection->area);
     }
 
     common().parseParameters(radarCollectionXML, "Parameter",

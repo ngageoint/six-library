@@ -1777,6 +1777,10 @@ void ComplexXMLParser::parseAreaFromXML(
         //optional
         common().parseFootprint(optElem, "ACP", area->acpCorners);
     }
+    else if (cornersRequired)
+    {
+        throw except::Exception(Ctxt("Corner element required"));
+    }
 
     XMLElem planeXML = getOptional(areaXML, "Plane");
     if (planeXML)
@@ -1852,11 +1856,15 @@ void ComplexXMLParser::parseAreaFromXML(
             }
         }
 
-        XMLElem tmpElem = getOptional(planeXML, "Orientation");
-        if (tmpElem != NULL)
+        XMLElem orientation = getOptional(planeXML, "Orientation");
+        if (orientation)
         {
-            area->plane->orientation = six::toType<
-                    OrientationType>(tmpElem->getCharacterData());
+            area->plane->orientation = six::toType<OrientationType>(
+                    orientation->getCharacterData());
+        }
+        else if (planeOrientationRequired)
+        {
+            throw except::Exception(Ctxt("Orientation element required"));
         }
     }
 }
