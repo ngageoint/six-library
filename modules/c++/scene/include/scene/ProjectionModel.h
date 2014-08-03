@@ -26,7 +26,8 @@
 #include <scene/GridECEFTransform.h>
 #include <scene/AdjustableParams.h>
 #include <scene/Errors.h>
-#include <import/math/poly.h>
+#include <math/poly/OneD.h>
+#include <math/poly/TwoD.h>
 
 namespace scene
 {
@@ -34,15 +35,6 @@ class ProjectionModel
 {
 public:
     enum { MAX_ITER = 50 };
-
-    ProjectionModel(const Vector3& slantPlaneNormal,
-                    const Vector3& imagePlaneRowVector,
-                    const Vector3& imagePlaneColVector,
-                    const Vector3& scp,
-                    const math::poly::OneD<Vector3>& arpPoly,
-                    const math::poly::TwoD<double>& timeCOAPoly,
-                    int lookDir,
-                    const Errors& errors = Errors());
 
     virtual ~ProjectionModel();
 
@@ -79,9 +71,10 @@ public:
      *  contributions.
      */
     virtual types::RowCol<double>
-        computeImageCoordinates(const Vector3& imagePlanePoint) const;
+        computeImageCoordinates(const Vector3& imagePlanePoint) const = 0;
 
-    virtual Vector3 imageGridToECEF(const types::RowCol<double> gridPt) const;
+    virtual Vector3
+    imageGridToECEF(const types::RowCol<double> gridPt) const = 0;
 
     /*!
      *  Virtual method to compute the R/Rdot contour from an
@@ -331,6 +324,17 @@ public:
     }
 
 protected:
+    // Inheriting classes must initialize mImagePlaneNormal and mScaleFactor
+    // in their constructors
+    // TODO: Could make these virtual methods instead but this would make some
+    //       methods cost more ops
+    ProjectionModel(const Vector3& slantPlaneNormal,
+                    const Vector3& scp,
+                    const math::poly::OneD<Vector3>& arpPoly,
+                    const math::poly::TwoD<double>& timeCOAPoly,
+                    int lookDir,
+                    const Errors& errors = Errors());
+
     // Returns matrix for RIC to ECEF coordinate transform.
     // Set earthInitialSpin equal to 0 for RIC_ECF
     math::linear::MatrixMxN<3, 3> getRICtoECEFTransformMatrix(
@@ -349,8 +353,6 @@ protected:
 
 protected:
     Vector3 mSlantPlaneNormal;
-    Vector3 mImagePlaneRowVector;
-    Vector3 mImagePlaneColVector;
     Vector3 mImagePlaneNormal;
     Vector3 mSCP;
     double mScaleFactor;
@@ -363,14 +365,32 @@ protected:
     Errors mErrors;
 };
 
-class RangeAzimProjectionModel : public ProjectionModel
+class ProjectionModelWithImageVectors : public ProjectionModel
 {
-protected:
-    math::poly::OneD<double> mPolarAnglePoly;
-    math::poly::OneD<double> mPolarAnglePolyPrime;
-    math::poly::OneD<double> mKSFPoly;
-    math::poly::OneD<double> mKSFPolyPrime;
+public:
+    ProjectionModelWithImageVectors(
+        const Vector3& slantPlaneNormal,
+        const Vector3& imagePlaneRowVector,
+        const Vector3& imagePlaneColVector,
+        const Vector3& scp,
+        const math::poly::OneD<Vector3>& arpPoly,
+        const math::poly::TwoD<double>& timeCOAPoly,
+        int lookDir,
+        const Errors& errors = Errors());
 
+    virtual types::RowCol<double>
+        computeImageCoordinates(const Vector3& imagePlanePoint) const;
+
+    virtual Vector3
+    imageGridToECEF(const types::RowCol<double> gridPt) const;
+
+protected:
+    Vector3 mImagePlaneRowVector;
+    Vector3 mImagePlaneColVector;
+};
+
+class RangeAzimProjectionModel : public ProjectionModelWithImageVectors
+{
 public:
     RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                              const math::poly::OneD<double>& ksfPoly,
@@ -390,15 +410,15 @@ public:
                                 double* r,
                                 double* rDot) const;
 
+private:
+    math::poly::OneD<double> mPolarAnglePoly;
+    math::poly::OneD<double> mPolarAnglePolyPrime;
+    math::poly::OneD<double> mKSFPoly;
+    math::poly::OneD<double> mKSFPolyPrime;
 };
 
-class RangeZeroProjectionModel : public ProjectionModel
+class RangeZeroProjectionModel : public ProjectionModelWithImageVectors
 {
-protected:
-    math::poly::OneD<double> mTimeCAPoly;
-    math::poly::TwoD<double> mDSRFPoly;
-    double mRangeCA;
-    
 public:
     RangeZeroProjectionModel(const math::poly::OneD<double>& timeCAPoly,
                              const math::poly::TwoD<double>& dsrfPoly,
@@ -419,10 +439,13 @@ public:
                                 double* r,
                                 double* rDot) const;
 
+private:
+    math::poly::OneD<double> mTimeCAPoly;
+    math::poly::TwoD<double> mDSRFPoly;
+    double mRangeCA;
 };
 
-
-class PlaneProjectionModel : public ProjectionModel
+class PlaneProjectionModel : public ProjectionModelWithImageVectors
 {
 public:
     PlaneProjectionModel(const Vector3& slantPlaneNormal,
@@ -440,25 +463,30 @@ public:
                                 const types::RowCol<double>& imageGridPoint,
                                 double* r,
                                 double* rDot) const;
-
-    // TODO: Need to reimplement partial derivatives
 };
 
 typedef PlaneProjectionModel XRGYCRProjectionModel;
 typedef PlaneProjectionModel XCTYATProjectionModel;
 
-class GeodeticProjectionModel : public PlaneProjectionModel
+class GeodeticProjectionModel : public ProjectionModel
 {
 public:
-    GeodeticProjectionModel( const Vector3& slantPlaneNormal,
-                             const Vector3& scp,
-                             const math::poly::OneD<Vector3>& arpPoly,
-                             const math::poly::TwoD<double>& timeCOAPoly,
-                             int lookDir,
-                             const Errors& errors = Errors());
+    GeodeticProjectionModel(const Vector3& slantPlaneNormal,
+                            const Vector3& scp,
+                            const math::poly::OneD<Vector3>& arpPoly,
+                            const math::poly::TwoD<double>& timeCOAPoly,
+                            int lookDir,
+                            const Errors& errors = Errors());
 
     virtual types::RowCol<double>
     computeImageCoordinates(const Vector3& imagePlanePoint) const;
+
+    virtual void computeContour(const Vector3& arpCOA,
+                                const Vector3& velCOA,
+                                double timeCOA,
+                                const types::RowCol<double>& imageGridPoint,
+                                double* r,
+                                double* rDot) const;
 
     virtual Vector3 imageGridToECEF(const types::RowCol<double> gridPt) const;
 
