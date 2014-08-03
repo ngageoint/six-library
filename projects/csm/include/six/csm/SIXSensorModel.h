@@ -76,6 +76,14 @@ public: // Model methods
      */
     virtual void replaceModelState(const std::string& argState);
 
+    /**
+     * Returns a UTC (Universal Time Coordinated) date and time near the time
+     * of the trajectory for the associated image.
+     *
+     * \return String containing a representation of the date and time in ISO
+     * 8601 format
+     */
+    virtual std::string getReferenceDateAndTime() const;
 
 public: // GeometricModel methods
     /**
@@ -102,7 +110,6 @@ public: // GeometricModel methods
      * \return The units for the associated parameter
      */
     virtual std::string getParameterUnits(int index) const;
-
 
     /**
      * Parameters are not shareable, so returns false
@@ -568,17 +575,35 @@ public: // RasterGM methods
             const csm::ImageCoord& pt1,
             const csm::ImageCoord& pt2) const;
 
+    virtual std::vector<double> getCrossCovarianceMatrix(
+            const GeometricModel& comparisonModel,
+            csm::param::Set pSet = csm::param::VALID,
+            const GeometricModelList& otherModels = GeometricModelList()) const;
+
+    static
+    size_t getNumSensorModelParameters()
+    {
+        return static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS);
+    }
+
+    static
+    size_t getNumCorrelationParameterGroups()
+    {
+        return static_cast<size_t>(scene::AdjustableParams::NUM_CORR_GROUPS);
+    }
+
+    static
+    size_t getCorrelationParameterGroup(size_t smParamIndex);
+
+    double getCorrelationCoefficient(size_t cpGroupIndex,
+                                     double deltaTime) const;
+
 public:
     // All remaining public methods throw csm::Error's that they're not
     // implemented
 
     // These are pure virtual from GeometricModel
     virtual void setReferencePoint(const csm::EcefCoord& groundPt);
-
-    virtual std::vector<double> getCrossCovarianceMatrix(
-            const csm::GeometricModel& comparisonModel,
-            csm::param::Set pSet,
-            const csm::GeometricModel::GeometricModelList& otherModels) const;
 
     // These are pure virtual from RasterGM
     csm::EcefLocus imageToRemoteImagingLocus(
@@ -588,6 +613,8 @@ public:
             csm::WarningList* ) const;
 
 protected:
+    virtual six::DateTime getReferenceDateAndTimeImpl() const = 0;
+
     /**
      * Transforms the given l, s values from units of meters with the origin
      * at the center of the image to pixels from upper left.
@@ -597,7 +624,8 @@ protected:
      * \return A types::RowCol<double> containing the distance in pixels from
      * the upper left of the image
      */
-    virtual types::RowCol<double> toPixel(const types::RowCol<double>& pos) const = 0;
+    virtual
+    types::RowCol<double> toPixel(const types::RowCol<double>& pos) const = 0;
 
     /**
      * Transforms the given l, s values from units of pixels from upper left
@@ -608,9 +636,11 @@ protected:
      * \return A types::RowCol<double> containing the distance in meters from
      * the center of the image
      */
-    virtual types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const = 0;
+    virtual
+    types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const = 0;
 
-    virtual void replaceModelStateImpl(const std::string& sensorModelState) = 0;
+    virtual
+    void replaceModelStateImpl(const std::string& sensorModelState) = 0;
 
     virtual types::RowCol<double> getSampleSpacing() const = 0;
 
@@ -647,7 +677,6 @@ protected:
     {
         return csm::ImageCoord(pt.row, pt.col);
     }
-
 
 protected:
     const scene::ECEFToLLATransform mECEFToLLA;

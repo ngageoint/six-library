@@ -301,9 +301,9 @@ std::string SICDSensorModel::getSensorMode() const
     }
 }
 
-std::string SICDSensorModel::getReferenceDateAndTime() const
+six::DateTime SICDSensorModel::getReferenceDateAndTimeImpl() const
 {
-    return mData->timeline->collectStart.format("%Y%m%dT%H%M%.2SZ");
+    return mData->timeline->collectStart;
 }
 
 types::RowCol<double>

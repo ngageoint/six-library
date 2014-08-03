@@ -98,6 +98,28 @@ inverse(const math::linear::MatrixMxN<3, 3>& mat)
 
     return invMat;
 }
+
+// TODO: Does this belong in math.linear?
+template<typename T>
+math::linear::Matrix2D<T> matrixSqrt(const math::linear::Matrix2D<T>& m)
+{
+    const math::linear::Eigenvalue<T> eig(m);
+    math::linear::Matrix2D<T> diag;
+    eig.getD(diag);
+
+    for (size_t ii = 0; ii < m.rows(); ii++)
+    {
+        if (diag[ii][ii] < 0)
+        {
+            throw except::Exception(Ctxt("Matrix is not Positive-Definite"));
+        }
+
+        diag[ii][ii] = std::sqrt(diag[ii][ii]);
+    }
+
+    const math::linear::Matrix2D<T> eigenVec = eig.getV();
+    return (eigenVec * diag * eigenVec.transpose());
+}
 }
 
 namespace six
@@ -105,8 +127,6 @@ namespace six
 namespace CSM
 {
 const char SIXSensorModel::FAMILY[] = CSM_GEOMETRIC_MODEL_FAMILY CSM_RASTER_FAMILY;
-
-
 
 SIXSensorModel::SIXSensorModel()
 {
@@ -123,6 +143,11 @@ void SIXSensorModel::replaceModelState(const std::string& argState)
     {
         replaceModelStateImpl(argState);
     }
+}
+
+std::string SIXSensorModel::getReferenceDateAndTime() const
+{
+    return getReferenceDateAndTimeImpl().format("%Y%m%dT%H%M%.2SZ");
 }
 
 std::string SIXSensorModel::getTrajectoryIdentifier() const
@@ -590,16 +615,6 @@ void SIXSensorModel::setReferencePoint(const csm::EcefCoord& )
                        "SIXSensorModel::setReferencePoint");
 }
 
-std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
-       const csm::GeometricModel& ,
-       csm::param::Set ,
-       const csm::GeometricModel::GeometricModelList& ) const
-{
-    throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
-                       "Function not supported",
-                       "SIXSensorModel::getCrossCovarianceMatrix");
-}
-
 csm::ImageCoord SIXSensorModel::groundToImageImpl(
         const csm::EcefCoord& groundPt,
         double desiredPrecision,
@@ -968,5 +983,120 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
     }
 }
 
+std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
+        const GeometricModel& comparisonModel,
+        csm::param::Set pSet,
+        const GeometricModelList& otherModels) const
+{
+    const std::vector<int> paramSetP1 = getParameterSetIndices(pSet);
+    const std::vector<int> paramSetP2 =
+            comparisonModel.getParameterSetIndices(pSet);
+    std::vector<double> returnVal(paramSetP1.size() * paramSetP2.size(),
+                                  0.0);
+
+    if (comparisonModel.getPlatformIdentifier() == getPlatformIdentifier())
+    {
+        const SIXSensorModel& comparisonSIXModel =
+                dynamic_cast<const SIXSensorModel&>(comparisonModel);
+        const size_t numGroups = getNumCorrelationParameterGroups();
+        const six::DateTime timeP1 = getReferenceDateAndTimeImpl();
+        const six::DateTime timeP2 =
+                comparisonSIXModel.getReferenceDateAndTimeImpl();
+        const double time =
+                1000.0 * (timeP1.getTimeInMillis() - timeP2.getTimeInMillis());
+        std::vector<size_t> m(numGroups);
+
+        for (size_t ii = 0; ii < numGroups; ++ii)
+        {
+            m[ii] = 0;
+            const double corrCoeff = getCorrelationCoefficient(ii, time);
+            for (size_t jj = 0; jj < paramSetP1.size(); ++jj)
+            {
+                if (getCorrelationParameterGroup(paramSetP1[jj]) == ii)
+                {
+                    ++m[ii];
+                }
+            }
+            math::linear::Matrix2D<double> covarP1(m[ii], m[ii], 0.0);
+            math::linear::Matrix2D<double> covarP2(m[ii], m[ii], 0.0);
+            size_t jjP = 0;
+            size_t kkP = 0;
+            for (size_t jj = 0; jj < paramSetP1.size(); ++jj)
+            {
+                kkP = 0;
+                if (getCorrelationParameterGroup(paramSetP1[jj]) == ii)
+                {
+                    for (size_t kk = 0; kk < paramSetP1.size(); ++kk)
+                    {
+                        if (getCorrelationParameterGroup(paramSetP1[kk]) == ii)
+                        {
+                            covarP1[jjP][kkP] = getParameterCovariance(jj, kk);
+                            covarP2[jjP][kkP] =
+                                    comparisonModel.getParameterCovariance(jj, kk);
+                            ++kkP;
+                        }
+                    }
+                    ++jjP;
+                }
+            }
+            math::linear::Matrix2D<double> crossCovar =
+                    matrixSqrt(covarP1) * matrixSqrt(covarP2);
+            crossCovar.scale(corrCoeff);
+
+            jjP = 0;
+            kkP = 0;
+            for (size_t jj = 0; jj < paramSetP1.size(); ++jj)
+            {
+                kkP = 0;
+                if (getCorrelationParameterGroup(paramSetP1[jj]) == ii)
+                {
+                    for (size_t kk = 0; kk < paramSetP1.size(); ++kk)
+                    {
+                        if (getCorrelationParameterGroup(paramSetP1[kk]) == ii)
+                        {
+                            returnVal[paramSetP2.size() * jj + kk] =
+                                    crossCovar(jjP, kkP);
+                            ++kkP;
+                        }
+                    }
+                    ++jjP;
+                }
+            }
+        }
+    }
+
+    return returnVal;
+}
+
+size_t SIXSensorModel::getCorrelationParameterGroup(size_t smParamIndex)
+{
+    return scene::AdjustableParams::group(
+            static_cast<scene::AdjustableParams::ParamsEnum>(smParamIndex));
+}
+
+double SIXSensorModel::getCorrelationCoefficient(size_t cpGroupIndex,
+                                                 double deltaTime) const
+{
+    const scene::Errors errors = mProjection->getErrors();
+    switch (cpGroupIndex)
+    {
+    case 0:
+    {
+        const double coeff = errors.mPositionCorrCoefZero -
+                errors.mPositionDecorrRate * std::abs(deltaTime);
+        return std::min(1.0, std::max(-1.0, coeff));
+    }
+    case 1:
+    {
+        const double coeff = errors.mRangeCorrCoefZero -
+                errors.mRangeDecorrRate * std::abs(deltaTime);
+        return std::min(1.0, std::max(-1.0, coeff));
+    }
+    default:
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
+                         "Invalid index in call in function call",
+                         "SIXSensorModel::getCorrelationCoefficient");
+    }
+}
 }
 }

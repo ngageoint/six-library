@@ -143,18 +143,6 @@ public: // Model methods
      */
     virtual std::string getSensorMode() const;
 
-    /**
-     * Returns a UTC (Universal Time Coordinated) date and time near the time of
-     * the trajectory for the associated image.
-     *
-     * \return String containing a representation of the date and time in ISO
-     * 8601 format
-     */
-    virtual std::string getReferenceDateAndTime() const;
-
-public: // GeometricModel methods
-
-
 public: // RasterGM methods
     /**
      * Returns the number of lines and samples in full image space pixels for
@@ -163,6 +151,9 @@ public: // RasterGM methods
      * \return The size of the entire SICD
      */
     virtual csm::ImageVector getImageSize() const;
+
+protected:
+    virtual six::DateTime getReferenceDateAndTimeImpl() const;
 
 private:
     /**
@@ -188,7 +179,6 @@ private:
     void reinitialize();
 
     virtual types::RowCol<double> getSampleSpacing() const;
-
 
 private:
     std::auto_ptr<six::sidd::DerivedData> mData;
