@@ -1079,16 +1079,65 @@ void six::getErrors(const ErrorStatistics* errorStats,
     {
         const six::Components* const components(errorStats->components.get());
 
-        if (components && components->posVelError.get())
+        if (components)
         {
-            errors.mFrameType = components->posVelError->frame;
+            double rangeBias;
+            if (components->radarSensor.get())
+            {
+                const RadarSensor& radarSensor(*components->radarSensor);
 
-            const double rangeBias = (components->radarSensor.get()) ?
-                    components->radarSensor->rangeBias : 0.0;
+                if (!six::Init::isUndefined(radarSensor.rangeBiasDecorr))
+                {
+                    errors.mRangeCorrCoefZero =
+                            radarSensor.rangeBiasDecorr.corrCoefZero;
+                    errors.mRangeDecorrRate =
+                            radarSensor.rangeBiasDecorr.decorrRate;
+                }
 
-            getSensorCovariance(*components->posVelError,
-                                rangeBias,
-                                errors.mSensorErrorCovar);
+                rangeBias = radarSensor.rangeBias;
+            }
+            else
+            {
+                rangeBias = 0.0;
+            }
+
+            if (components->posVelError.get())
+            {
+                const PosVelError& posVelError(*components->posVelError);
+                errors.mFrameType = posVelError.frame;
+
+                getSensorCovariance(posVelError,
+                                    rangeBias,
+                                    errors.mSensorErrorCovar);
+
+                if (!six::Init::isUndefined(posVelError.positionDecorr))
+                {
+                    errors.mPositionCorrCoefZero =
+                            posVelError.positionDecorr.corrCoefZero;
+                    errors.mPositionDecorrRate =
+                            posVelError.positionDecorr.decorrRate;
+                }
+            }
+
+            if (components->ionoError.get())
+            {
+                const six::IonoError& ionoError(*components->ionoError);
+                errors.mIonoErrorCovar(0, 0) =
+                        square(ionoError.ionoRangeVertical);
+                errors.mIonoErrorCovar(1, 1) =
+                        square(ionoError.ionoRangeRateVertical);
+                errors.mIonoErrorCovar(0, 1) =
+                        errors.mIonoErrorCovar(1, 0) =
+                                ionoError.ionoRangeVertical *
+                                ionoError.ionoRangeRateVertical *
+                                ionoError.ionoRgRgRateCC;
+            }
+
+            if (components->tropoError.get())
+            {
+                errors.mTropoErrorCovar(0, 0) =
+                        square(components->tropoError->tropoRangeVertical);
+            }
         }
 
         if (errorStats->compositeSCP.get() &&
@@ -1099,34 +1148,11 @@ void six::getErrors(const ErrorStatistics* errorStats,
                     errorStats->compositeSCP->yErr);
             const double corr = errorStats->compositeSCP->xyErr;
 
-            errors.mUnmodeledErrorCovar(0, 0) =
-                    square(composite.rg) / square(sampleSpacing.rg);
-            errors.mUnmodeledErrorCovar(1, 1) =
-                    square(composite.az) / square(sampleSpacing.az);
+            errors.mUnmodeledErrorCovar(0, 0) = square(composite.rg);
+            errors.mUnmodeledErrorCovar(1, 1) = square(composite.az);
             errors.mUnmodeledErrorCovar(0, 1) =
                     errors.mUnmodeledErrorCovar(1, 0) =
-                            corr * (composite.rg * composite.az) /
-                            (sampleSpacing.rg * sampleSpacing.az);
-        }
-
-        if (components && components->ionoError.get())
-        {
-            const six::IonoError& ionoError(*components->ionoError);
-            errors.mIonoErrorCovar(0, 0) =
-                    square(ionoError.ionoRangeVertical);
-            errors.mIonoErrorCovar(1, 1) =
-                    square(ionoError.ionoRangeRateVertical);
-            errors.mIonoErrorCovar(0, 1) =
-                    errors.mIonoErrorCovar(1, 0) =
-                            ionoError.ionoRangeVertical *
-                            ionoError.ionoRangeRateVertical *
-                            ionoError.ionoRgRgRateCC;
-        }
-
-        if (components && components->tropoError.get())
-        {
-            errors.mTropoErrorCovar(0, 0) =
-                    square(components->tropoError->tropoRangeVertical);
+                            corr * (composite.rg * composite.az);
         }
     }
 }

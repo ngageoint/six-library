@@ -73,4 +73,22 @@ std::string AdjustableParams::units(ParamsEnum param)
         throw except::InvalidFormatException(Ctxt("Invalid enum value"));
     }
 }
+
+int AdjustableParams::group(ParamsEnum param)
+{
+    switch (param)
+    {
+    case ARP_RADIAL:
+    case ARP_IN_TRACK:
+    case ARP_CROSS_TRACK:
+    case ARP_VEL_RADIAL:
+    case ARP_VEL_IN_TRACK:
+    case ARP_VEL_CROSS_TRACK:
+        return 0;
+    case RANGE_BIAS:
+        return 1;
+    default:
+        return -1;
+    }
+}
 }
