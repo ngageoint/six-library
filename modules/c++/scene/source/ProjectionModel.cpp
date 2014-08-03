@@ -59,18 +59,12 @@ namespace scene
 {
 ProjectionModel::
 ProjectionModel(const Vector3& slantPlaneNormal,
-                const Vector3& imagePlaneRowVector,
-                const Vector3& imagePlaneColVector,
                 const Vector3& scp,
                 const math::poly::OneD<Vector3>& arpPoly,
                 const math::poly::TwoD<double>& timeCOAPoly,
                 int lookDir,
                 const Errors& errors) :
     mSlantPlaneNormal(slantPlaneNormal),
-    mImagePlaneRowVector(imagePlaneRowVector),
-    mImagePlaneColVector(imagePlaneColVector),
-    mImagePlaneNormal(math::linear::cross(imagePlaneRowVector,
-                                          imagePlaneColVector)),
     mSCP(scp),
     mARPPoly(arpPoly),
     mARPVelPoly(mARPPoly.derivative()),
@@ -79,31 +73,10 @@ ProjectionModel(const Vector3& slantPlaneNormal,
     mErrors(errors)
 {
     mSlantPlaneNormal.normalize();
-    mImagePlaneNormal.normalize();
-    mScaleFactor = mSlantPlaneNormal.dot(mImagePlaneNormal);
 }
 
 ProjectionModel::~ProjectionModel()
 {
-}
-
-types::RowCol<double> ProjectionModel::computeImageCoordinates(
-        const Vector3& imagePlanePoint) const
-{
-    // Delta IPP = xrow * uRow + ycol * uCol
-    Vector3 delta(imagePlanePoint - mSCP);
-
-    // What is the x contribution?
-    return types::RowCol<double>(delta.dot(mImagePlaneRowVector),
-                                 delta.dot(mImagePlaneColVector));
-}
-
-Vector3
-ProjectionModel::imageGridToECEF(const types::RowCol<double> gridPt) const
-{
-    return (mSCP +
-            gridPt.row * mImagePlaneRowVector +
-            gridPt.col * mImagePlaneColVector);
 }
 
 /*!
@@ -759,6 +732,52 @@ math::linear::MatrixMxN<2, 2> ProjectionModel::getUnmodeledErrorCovariance(
     return returnMatrix;
 }
 
+ProjectionModelWithImageVectors::ProjectionModelWithImageVectors(
+    const Vector3& slantPlaneNormal,
+    const Vector3& imagePlaneRowVector,
+    const Vector3& imagePlaneColVector,
+    const Vector3& scp,
+    const math::poly::OneD<Vector3>& arpPoly,
+    const math::poly::TwoD<double>& timeCOAPoly,
+    int lookDir,
+    const Errors& errors) :
+    ProjectionModel(slantPlaneNormal,
+                    scp,
+                    arpPoly,
+                    timeCOAPoly,
+                    lookDir,
+                    errors),
+    mImagePlaneRowVector(imagePlaneRowVector),
+    mImagePlaneColVector(imagePlaneColVector)
+{
+    mImagePlaneNormal = math::linear::cross(imagePlaneRowVector,
+                                            imagePlaneColVector);
+    mImagePlaneNormal.normalize();
+
+    mScaleFactor = mSlantPlaneNormal.dot(mImagePlaneNormal);
+}
+
+types::RowCol<double>
+ProjectionModelWithImageVectors::computeImageCoordinates(
+        const Vector3& imagePlanePoint) const
+{
+    // Delta IPP = xrow * uRow + ycol * uCol
+    Vector3 delta(imagePlanePoint - mSCP);
+
+    // What is the x contribution?
+    return types::RowCol<double>(delta.dot(mImagePlaneRowVector),
+                                 delta.dot(mImagePlaneColVector));
+}
+
+Vector3
+ProjectionModelWithImageVectors::imageGridToECEF(
+        const types::RowCol<double> gridPt) const
+{
+    return (mSCP +
+            gridPt.row * mImagePlaneRowVector +
+            gridPt.col * mImagePlaneColVector);
+}
+
 RangeAzimProjectionModel::
 RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                          const math::poly::OneD<double>& ksfPoly,
@@ -770,18 +789,19 @@ RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
                          const math::poly::TwoD<double>& timeCOAPoly,
                          int lookDir,
                          const Errors& errors) :
-    ProjectionModel(slantPlaneNormal,
-                    imagePlaneRowVector,
-                    imagePlaneColVector,
-                    scp,
-                    arpPoly,
-                    timeCOAPoly,
-                    lookDir,
-                    errors),
-    mPolarAnglePoly(polarAnglePoly), mKSFPoly(ksfPoly)
+    ProjectionModelWithImageVectors(slantPlaneNormal,
+                                    imagePlaneRowVector,
+                                    imagePlaneColVector,
+                                    scp,
+                                    arpPoly,
+                                    timeCOAPoly,
+                                    lookDir,
+                                    errors),
+    mPolarAnglePoly(polarAnglePoly),
+    mPolarAnglePolyPrime(mPolarAnglePoly.derivative()),
+    mKSFPoly(ksfPoly),
+    mKSFPolyPrime(mKSFPoly.derivative())
 {
-    mPolarAnglePolyPrime = mPolarAnglePoly.derivative();
-    mKSFPolyPrime = mKSFPoly.derivative();
 }
 
 void RangeAzimProjectionModel::
@@ -837,15 +857,19 @@ RangeZeroProjectionModel(const math::poly::OneD<double>& timeCAPoly,
                          const math::poly::TwoD<double>& timeCOAPoly,
                          int lookDir,
                          const Errors& errors) :
-    ProjectionModel(slantPlaneNormal,
-                    imagePlaneRowVector,
-                    imagePlaneColVector,
-                    scp,
-                    arpPoly,
-                    timeCOAPoly,
-                    lookDir,
-                    errors),
-    mTimeCAPoly(timeCAPoly), mDSRFPoly(dsrfPoly), mRangeCA(rangeCA) {}
+    ProjectionModelWithImageVectors(slantPlaneNormal,
+                                    imagePlaneRowVector,
+                                    imagePlaneColVector,
+                                    scp,
+                                    arpPoly,
+                                    timeCOAPoly,
+                                    lookDir,
+                                    errors),
+    mTimeCAPoly(timeCAPoly),
+    mDSRFPoly(dsrfPoly),
+    mRangeCA(rangeCA)
+{
+}
 
 void RangeZeroProjectionModel::
 computeContour(const Vector3& /*arpCOA*/,
@@ -884,14 +908,14 @@ PlaneProjectionModel(const Vector3& slantPlaneNormal,
                      const math::poly::TwoD<double>& timeCOAPoly,
                      int lookDir,
                      const Errors& errors) :
-    ProjectionModel(slantPlaneNormal,
-                    imagePlaneRowVector,
-                    imagePlaneColVector,
-                    scp,
-                    arpPoly,
-                    timeCOAPoly,
-                    lookDir,
-                    errors)
+    ProjectionModelWithImageVectors(slantPlaneNormal,
+                                    imagePlaneRowVector,
+                                    imagePlaneColVector,
+                                    scp,
+                                    arpPoly,
+                                    timeCOAPoly,
+                                    lookDir,
+                                    errors)
 {
 }
 
@@ -916,18 +940,16 @@ GeodeticProjectionModel::GeodeticProjectionModel(
         const math::poly::TwoD<double>& timeCOAPoly,
         int lookDir,
         const Errors& errors) :
-    PlaneProjectionModel(slantPlaneNormal,
-                         Vector3(0.0),
-                         Vector3(0.0),
-                         scp,
-                         arpPoly,
-                         timeCOAPoly,
-                         lookDir,
-                         errors)
+    ProjectionModel(slantPlaneNormal,
+                    scp,
+                    arpPoly,
+                    timeCOAPoly,
+                    lookDir,
+                    errors)
 {
     mImagePlaneNormal = scp;
     mImagePlaneNormal.normalize();
-    mSlantPlaneNormal.normalize();
+
     mScaleFactor = mSlantPlaneNormal.dot(mImagePlaneNormal);
 }
 
@@ -939,7 +961,22 @@ computeImageCoordinates(const Vector3& imagePlanePoint) const
     const LatLonAlt lla = ecefTransform.transform(imagePlanePoint);
     return types::RowCol<double>((refPt.getLat() - lla.getLat()) * 3600.0,
                                  (lla.getLon() - refPt.getLon()) * 3600.0);
+}
 
+void GeodeticProjectionModel::
+computeContour(const Vector3& arpCOA,
+               const Vector3& velCOA,
+               double /*timeCOA*/,
+               const types::RowCol<double>& imageGridPoint,
+               double* r,
+               double* rDot) const
+{
+    // TODO: This implementation is identical to PlaneProjectionModel but not
+    //       sure how to avoid this
+    const Vector3 vec = arpCOA - imageGridToECEF(imageGridPoint);
+    *r = vec.norm();
+
+    *rDot = velCOA.dot(vec) / *r;
 }
 
 Vector3 GeodeticProjectionModel::imageGridToECEF(
