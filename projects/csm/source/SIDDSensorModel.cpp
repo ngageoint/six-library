@@ -451,7 +451,10 @@ const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
 
 void SIDDSensorModel::reinitialize()
 {
-    mGeometry = six::sidd::Utilities::getSceneGeometry(mData.get());
+    // This goofiness is for Sun Studio 11 which can't figure out an auto_ptr
+    // assignment here
+    mGeometry.reset(
+            six::sidd::Utilities::getSceneGeometry(mData.get()).release());
 
     mProjection = six::sidd::Utilities::getProjectionModel(mData.get());
     std::fill_n(mAdjustableTypes,
