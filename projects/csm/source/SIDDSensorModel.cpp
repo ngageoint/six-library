@@ -321,11 +321,11 @@ std::string SIDDSensorModel::getSensorMode() const
     }
 }
 
-std::string SIDDSensorModel::getReferenceDateAndTime() const
+six::DateTime SIDDSensorModel::getReferenceDateAndTimeImpl() const
 {
     // TODO: If there's more than one collection, what should we use?
     return mData->exploitationFeatures->collections[0]->information->
-            collectionDateTime.format("%Y%m%dT%H%M%.2SZ");
+            collectionDateTime;
 }
 
 types::RowCol<double>
