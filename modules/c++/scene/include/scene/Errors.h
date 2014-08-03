@@ -38,6 +38,10 @@ struct Errors
     math::linear::MatrixMxN<2, 2> mUnmodeledErrorCovar;
     math::linear::MatrixMxN<2, 2> mIonoErrorCovar;
     math::linear::MatrixMxN<1, 1> mTropoErrorCovar;
+    double mPositionCorrCoefZero;
+    double mPositionDecorrRate;
+    double mRangeCorrCoefZero;
+    double mRangeDecorrRate;
 };
 }
 
