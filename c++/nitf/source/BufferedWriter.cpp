@@ -172,9 +172,17 @@ int BufferedWriter::getModeImpl() const
 
 void BufferedWriter::closeImpl()
 {
-    // flush everything first
+    // Flush everything first
+    // Need to time the call to flush() as well as this is spending time
+    // actually flushing the data out to disk (previously the disk may have
+    // just cached it)
     flushBuffer();
+
+    sys::RealTimeStopWatch sw;
+    sw.start();
     mFile.flush();
+    mElapsedTime += (sw.stop() / 1000.);
+
     mFile.close();
 }
 }
