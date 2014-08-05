@@ -20,6 +20,7 @@
  *
  */
 
+#include "nrt/nrt_config.h"
 #include "nrt/Utils.h"
 
 NRTAPI(nrt_List *) nrt_Utils_splitString(char *str, unsigned int max,
@@ -248,7 +249,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(char *d, double *decimal,
 NRTAPI(double) nrt_Utils_getCurrentTimeMillis()
 {
     double millis = 0;
-#if defined(__POSIX) && defined(USE_CLOCK_GETTIME)
+#if defined(HAVE_PTHREAD_H) && defined(HAVE_CLOCK_GETTIME)
     struct timespec now;
     clock_gettime(CLOCK_REALTIME, &now);
     millis = (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;

@@ -1,6 +1,8 @@
 from os.path import join, isdir, exists
 from waflib import Options
+from build import writeConfig
 
+USELIB_CHECK    = 'J2K'
 APIS = ['external/openjpeg', 'external/jasper']
 
 def options(opt):
@@ -12,8 +14,23 @@ def options(opt):
 
     existingDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), APIS)
     opt.recurse(existingDirs)
-
+    
 def configure(conf):
+    j2kLayer = Options.options.j2k_layer
+
+    def j2k_callback(conf):
+        if j2kLayer is 'openjpeg':
+            conf.define('HAVE_OPENJPEG_H', '', quote=False)
+            conf.define('J2K_MODULE_EXPORTS', '', quote=False)
+            if not Options.options.shared_libs:
+                conf.define('OPJ_STATIC', '', quote=False)
+                conf.env.append_value('DEFINES_J2K', 'OPJ_STATIC')
+        else:
+            #j2kLayer is 'jasper':
+            conf.define('HAVE_JASPER_H', '', quote=False)
+            conf.define('J2K_MODULE_EXPORTS', '', quote=False)
+    writeConfig(conf, j2k_callback, 'j2k')
+        
     if Options.options.enable_j2k : 
         conf.msg('Configuring with J2K layer', Options.options.j2k_layer)
         existingDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), APIS)
@@ -24,14 +41,14 @@ def build(bld):
     if 'HAVE_J2K' in env : 
         existingDirs = filter(lambda x: exists(join(bld.path.abspath(), x)), APIS)
         bld.recurse(existingDirs + ['shared'])
-
+        
         if 'MAKE_OPENJPEG' in env :
             j2kLayer = 'openjpeg'
         elif 'MAKE_JASPER' in env :
             j2kLayer = 'jasper'
         else  :
             bld.fatal('Not a supported j2k type')
-
+        
         j2kSources = ('source/Container.c',
                       'source/Component.c',
                       'source/JasPerImpl.c',
