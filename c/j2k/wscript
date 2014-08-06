@@ -1,4 +1,5 @@
 from os.path import join, isdir, exists
+from os import makedirs
 from waflib import Options
 from build import writeConfig
 
