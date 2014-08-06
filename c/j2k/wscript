@@ -69,6 +69,17 @@ def build(bld):
         # install j2k lib
         if env['install_libs']:
            lib.install_path = env['install_libdir']
+           
+        # install j2k_config.h
+        if env['install_headers']:
+            from shutil import copyfile            
+            installDir = join(bld.env['PREFIX'], 'include', 'j2k')
+            destFile = join(installDir, 'j2k_config.h')
+            sourceFile = join(bld.bldnode.abspath(), 'modules', 'c', 'j2k', 'include', 'j2k', 'j2k_config.h')            
+            if not exists(installDir):
+                makedirs(installDir)
+            if not exists(destFile):
+                copyfile(sourceFile, destFile)
 
         #j2k-only tests
         for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
