@@ -5,6 +5,7 @@ from build import writeConfig
 
 USELIB_CHECK    = 'J2K'
 APIS = ['external/openjpeg', 'external/jasper']
+sourcepath = 'external/openjpeg/openjpeg-2.0.0'
 
 def options(opt):
     opt.add_option('--disable-j2k', action='store_false', dest='enable_j2k', default=True,
@@ -30,8 +31,11 @@ def configure(conf):
             #j2kLayer is 'jasper':
             conf.define('HAVE_JASPER_H', '', quote=False)
             conf.define('J2K_MODULE_EXPORTS', '', quote=False)
+    
+    driverNode = conf.path.make_node(sourcepath)
+    #writeConfig(conf, j2k_callback, 'j2k', path=driverNode, feature='makeHeader')
     writeConfig(conf, j2k_callback, 'j2k')
-        
+    
     if Options.options.enable_j2k : 
         conf.msg('Configuring with J2K layer', Options.options.j2k_layer)
         existingDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), APIS)
@@ -60,7 +64,7 @@ def build(bld):
                       'source/Writer.c')
 
         #build the j2k library
-        lib = bld(features='c cstlib', includes='include',
+        lib = bld(features='c cstlib install_tgt', includes='include',
                   target='j2k-c', name='j2k-c',
                   source=j2kSources,
                   export_includes='include',
@@ -73,15 +77,23 @@ def build(bld):
            
         # install j2k_config.h
         if env['install_headers']:
+            moduleName = 'j2k'
+            d = {}
+            for line in env['header_builddir']:
+                split = line.split('=')
+                k = split[0]
+                v = join(bld.bldnode.abspath(), split[1])
+                d[k] = v
+            
             from shutil import copyfile            
             installDir = join(bld.env['PREFIX'], 'include', 'j2k')
             destFile = join(installDir, 'j2k_config.h')
-            sourceFile = join(bld.bldnode.abspath(), 'modules', 'c', 'j2k', 'include', 'j2k', 'j2k_config.h')            
+            sourceFile = join(bld.bldnode.abspath(), d[moduleName], 'j2k_config.h')            
             if not exists(installDir):
                 makedirs(installDir)
             if not exists(destFile):
                 copyfile(sourceFile, destFile)
-
+            
         #j2k-only tests
         for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
                  'test_j2k_create']:
