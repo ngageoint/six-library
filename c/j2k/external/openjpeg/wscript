@@ -93,7 +93,8 @@ def build(bld):
                        source=sources, target='openjpeg', name='J2K',
                        path=openjpegNode, env=env.derive())
         if libType == 'stlib':
-            openjpeg.export_defines='OPJ_STATIC'
+            openjpeg.defines = 'OPJ_STATIC'
+            openjpeg.export_defines = 'OPJ_STATIC'
         
         # install lib
         if env['install_libs']:
