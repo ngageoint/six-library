@@ -91,7 +91,8 @@ def build(bld):
         openjpeg = bld(features='c c%s add_targets' % libType, 
                        includes=['.'], export_includes=['.'],
                        source=sources, target='openjpeg', name='J2K',
-                       path=openjpegNode, env=env.derive())
+                       path=openjpegNode, env=env.derive(),
+                       targets_to_add=[])
         if libType == 'stlib':
             openjpeg.defines = 'OPJ_STATIC'
             openjpeg.export_defines = 'OPJ_STATIC'
