@@ -14,8 +14,7 @@ def options(opt):
                    choices=['openjpeg', 'jasper'], default='openjpeg', metavar='LIB',
                    help='Specify the JPEG2000 library to link with')
 
-    existingDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), APIS)
-    opt.recurse(existingDirs)
+    opt.recurse(APIS)
     
 def configure(conf):
     j2kLayer = Options.options.j2k_layer
@@ -35,14 +34,12 @@ def configure(conf):
         
     if Options.options.enable_j2k : 
         conf.msg('Configuring with J2K layer', Options.options.j2k_layer)
-        existingDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), APIS)
-        conf.recurse(existingDirs)
+        conf.recurse(APIS)
 
 def build(bld):
     env = bld.get_env()
     if 'HAVE_J2K' in env : 
-        existingDirs = filter(lambda x: exists(join(bld.path.abspath(), x)), APIS)
-        bld.recurse(existingDirs + ['shared'])
+        bld.recurse(APIS + ['shared'])
         
         if 'MAKE_OPENJPEG' in env :
             j2kLayer = 'openjpeg'
@@ -105,8 +102,4 @@ def build(bld):
                                name=t, target=t, lang='c', env=env.derive())
 
 def distclean(context) :
-
-    existingDirs = filter(lambda x: exists(join(context.path.abspath(), x)), APIS)
-    context.recurse(existingDirs)
-
-
+    context.recurse(APIS)

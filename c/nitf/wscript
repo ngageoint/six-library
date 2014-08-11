@@ -31,8 +31,7 @@ configure = options = distclean = lambda p: None
 
 def build(bld):
     env = bld.module(**globals())
-    bld.recurse(filter(lambda x: os.path.exists(os.path.join(bld.path.abspath(), x)),
-                           SUBDIRS.split()))
+    bld.recurse(SUBDIRS)
 
     #run doxygen
     if 'DOXYGEN' in env and Options.is_install:

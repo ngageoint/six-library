@@ -4,17 +4,13 @@ from os.path import join, exists
 BLD_DIRS = 'xml jpeg'
 
 def options(opt):
-    opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
-                       BLD_DIRS.split()))
+    opt.recurse(BLD_DIRS)
 
 def configure(conf):
-    conf.recurse(filter(lambda x: exists(join(conf.path.abspath(),x,'wscript')),
-                        BLD_DIRS.split()))
+    conf.recurse(BLD_DIRS)
 
 def build(bld):
-    bld.recurse(filter(lambda x: exists(join(bld.path.abspath(), x, 'wscript')),
-                       BLD_DIRS.split()))
+    bld.recurse(BLD_DIRS)
 
 def distclean(ctx):
-    ctx.recurse(filter(lambda x: exists(join(ctx.path.abspath(), x, 'wscript')),
-                       BLD_DIRS.split()))
+    ctx.recurse(BLD_DIRS)
