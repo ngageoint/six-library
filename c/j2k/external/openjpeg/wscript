@@ -88,11 +88,10 @@ def build(bld):
                    't1.c', 't2.c', 'tcd.c', 'tgt.c', 'function_list.c']
         
         libType = env['LIB_TYPE'] or 'stlib'
-        openjpeg = bld(features='c c%s add_targets' % libType, 
+        openjpeg = bld(features='c c%s ' % libType, 
                        includes=['.'], export_includes=['.'],
                        source=sources, target='openjpeg', name='J2K',
-                       path=openjpegNode, env=env.derive(),
-                       targets_to_add=[])
+                       path=openjpegNode, env=env.derive())
         if libType == 'stlib':
             openjpeg.defines = 'OPJ_STATIC'
             openjpeg.export_defines = 'OPJ_STATIC'
@@ -103,6 +102,7 @@ def build(bld):
         
         # install headers
         if env['install_headers']:
+            openjpeg.features += 'add_targets'
             openjpeg.targets_to_add=[bld(features='install_tgt', 
                     includes='openjpeg.h opj_stdint.h opj_config.h',
                     dir=openjpegNode, install_path=env['install_includedir'],
