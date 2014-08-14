@@ -23,9 +23,6 @@ def configure(conf):
         if j2kLayer is 'openjpeg':
             conf.define('HAVE_OPENJPEG_H', '', quote=False)
             conf.define('J2K_MODULE_EXPORTS', '', quote=False)
-            if not Options.options.shared_libs:
-                conf.define('OPJ_STATIC', '', quote=False)
-                conf.env.append_value('DEFINES_J2K', 'OPJ_STATIC')
         else:
             #j2kLayer is 'jasper':
             conf.define('HAVE_JASPER_H', '', quote=False)
