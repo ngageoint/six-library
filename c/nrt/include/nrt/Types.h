@@ -90,6 +90,15 @@ typedef nrt_Int64 nrt_Off;
 #      include <dlfcn.h>
 #      include <inttypes.h>
 
+/* Defines MAXPATHLEN
+ * Absolutely essential to include this here as otherwise we could see below
+ * that it's not defined and set NRT_MAX_PATH to 1024 and then later someone
+ * else could include sys/param.h themselves, then include nrt/Types.h, and
+ * then NRT_MAX_PATH would be set to a different value and cause a mismatch
+ * leading to crashes and a lot of confusion.
+ */
+#      include <sys/param.h>
+
 /*  Typedefs on Unix are a different ball game */
 typedef uint8_t nrt_Uint8;
 typedef uint16_t nrt_Uint16;
@@ -133,9 +142,13 @@ typedef int nrt_CreationFlags;
 #      endif
 
 /*
-*  On most systems, this gets included in limits.h, but sometimes its not
-*  there, so we make one up.  I figure we can easily get 1k on the stack,
+*  On most systems, this gets included in sys/param.h, but sometimes it's not
+*  there, so we make one up.  I figure we can easily get 1K on the stack,
 *  so if its not there, it gets set to that.
+*  TODO: Is using PATH_MAX out of limits.h more portable?
+*        Or to be safer, maybe we should do this check at configure time so
+*        there's no way this can change based on what headers someone
+*        includes.
 */
 #      if defined(MAXPATHLEN)
 #          define NRT_MAX_PATH      MAXPATHLEN
