@@ -88,6 +88,15 @@ int main(int argc, char** argv)
 {
     try
     {
+        const sys::Path::StringPair splitName(sys::Path::splitPath(argv[0]));
+        const sys::Path progDirname(splitName.first);
+        const sys::Path installPath(progDirname.join("..").getAbsolutePath());
+
+        const sys::Path nitroDir(
+            installPath.join("share").join("nitf").join("plugins"));
+        const sys::Path schemaDir(
+            installPath.join("conf").join("schema").join("six"));
+
         // Parse the command line
         cli::ArgumentParser parser;
         parser.setDescription("This program reads a SICD and crops it based "
@@ -110,10 +119,16 @@ int main(int argc, char** argv)
                            "latDegrees,lonDegrees[,altMeters] tuples",
                            cli::STORE,
                            "latlon", "#,#,#", 4, 4);
+        parser.addArgument("--nitro",
+                           "Specify a path to the NITRO plugins.  To use "
+                           "NITF_PLUGIN_PATH environment variable instead, "
+                           "use \"\".",
+                           cli::STORE)->setDefault(nitroDir);
         parser.addArgument("--schema",
-                           "Specify a schema or directory of schemas",
-                           cli::STORE,
-                           "schema", "<directory>");
+                           "Specify a schema or directory of schemas "
+                           "(or set SIX_SCHEMA_PATH). Use \"\" as value to "
+                           "skip schema validation.",
+                           cli::STORE)->setDefault(schemaDir);
         parser.addArgument("--require-aoi-in-bounds",
                            "When the AOI is specified in ECEF or lat/lon, by "
                            "default it will be trimmed to be within the "
@@ -133,8 +148,19 @@ int main(int argc, char** argv)
         const std::string outPathname(options->get<std::string> ("output"));
         const bool trimCornersIfNeeded =
                 !options->get<bool>("requireAoiInBounds");
+
+        const std::string nitroStr(options->get<std::string>("nitro"));
+        if (!nitroStr.empty())
+        {
+            six::loadPluginDir(nitroStr);
+        }
+
         std::vector<std::string> schemaPaths;
-        getSchemaPaths(*options, "--schema", "schema", schemaPaths);
+        const std::string schemaPath(options->get<std::string>("schema"));
+        if (!schemaPath.empty())
+        {
+            schemaPaths.push_back(schemaPath);
+        }
 
         // Crop it
         six::XMLControlFactory::getInstance().addCreator(
