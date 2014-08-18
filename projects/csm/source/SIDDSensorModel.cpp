@@ -35,7 +35,7 @@ namespace six
 {
 namespace CSM
 {
-const csm::Version SIDDSensorModel::VERSION(1, 0, 3);
+const csm::Version SIDDSensorModel::VERSION(1, 1, 0);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 
 SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
@@ -68,7 +68,11 @@ SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
     const std::string& format(isd.format());
     if (format == "NITF2.1")
     {
-        initializeFromISD(dynamic_cast<const csm::Nitf21Isd&>(isd),
+        // NOTE: Used dynamic_cast here previously but using it with IAI's
+        //       version of vts, it threw an exception.  Did older versions of
+        //       vts not use the /GR flag (they've since reported it worked
+        //       fine when our plugin used dynamic_cast)?
+        initializeFromISD((const csm::Nitf21Isd&)isd,
                           imageIndex);
     }
     else if (format == "FILENAME")
