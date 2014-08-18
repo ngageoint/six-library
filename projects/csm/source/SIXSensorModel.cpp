@@ -996,8 +996,12 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
 
     if (comparisonModel.getPlatformIdentifier() == getPlatformIdentifier())
     {
+        // NOTE: Used dynamic_cast here previously but using it with IAI's
+        //       version of vts, it threw an exception.  Did older versions of
+        //       vts not use the /GR flag (they've since reported it worked
+        //       fine when our plugin used dynamic_cast)?
         const SIXSensorModel& comparisonSIXModel =
-                dynamic_cast<const SIXSensorModel&>(comparisonModel);
+                (const SIXSensorModel&)comparisonModel;
         const size_t numGroups = getNumCorrelationParameterGroups();
         const six::DateTime timeP1 = getReferenceDateAndTimeImpl();
         const six::DateTime timeP2 =

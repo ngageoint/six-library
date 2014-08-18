@@ -38,7 +38,7 @@ namespace CSM
 {
 const char SIXPlugin::PLUGIN_NAME[] = "SIX";
 const char SIXPlugin::MANUFACTURER[] = "GDAIS";
-const char SIXPlugin::RELEASE_DATE[] = "20140527";
+const char SIXPlugin::RELEASE_DATE[] = "20140818";
 const size_t SIXPlugin::SICD_MODEL_INDEX;
 const size_t SIXPlugin::SIDD_MODEL_INDEX;
 
@@ -159,8 +159,12 @@ bool SIXPlugin::canModelBeConstructedFromISD(const csm::Isd& imageSupportData,
     const std::string& format(imageSupportData.format());
     if (format == "NITF2.1")
     {
+        // NOTE: Used dynamic_cast here previously but using it with IAI's
+        //       version of vts, it threw an exception.  Did older versions of
+        //       vts not use the /GR flag (they've since reported it worked
+        //       fine when our plugin used dynamic_cast)?
         const csm::Nitf21Isd& nitfIsd =
-                dynamic_cast<const csm::Nitf21Isd&>(imageSupportData);
+                (const csm::Nitf21Isd&)imageSupportData;
 
         return ((modelDataType == six::DataType::COMPLEX &&
                      SICDSensorModel::containsComplexDES(nitfIsd)) ||
