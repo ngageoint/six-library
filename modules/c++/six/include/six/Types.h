@@ -44,7 +44,7 @@
  *
  *  This string should match the number of the FFDD and D&E docs
  */
-#define SIX_LIB_VERSION "2.0"
+#define SIX_LIB_VERSION "2.1"
 
 /*!
  *  \macro SIX_MAJOR_VERSION_NUMBER 
@@ -62,7 +62,7 @@
  *  library changes, in conjunction with updates to the file format
  */
 
-#define SIX_MINOR_VERSION_NUMBER 0
+#define SIX_MINOR_VERSION_NUMBER 1
 
 /*!
  *  \macro SIX_MICRO_VERSION_NUMBER 
@@ -71,7 +71,7 @@
  *  library or specification overhauls associated with the file
  *  format
  */
-#define SIX_MICRO_VERSION_NUMBER 6
+#define SIX_MICRO_VERSION_NUMBER 0
 
 namespace six
 {
