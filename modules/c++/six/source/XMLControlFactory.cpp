@@ -95,7 +95,7 @@ std::string six::toValidXMLString(const Data* data,
     const std::auto_ptr<xml::lite::Document> doc(
         xmlControl->toXML(data, schemaPaths));
 
-    io::ByteStream bs;
+    io::StringStream bs;
     doc->getRootElement()->print(bs);
 
     return bs.stream().str();
