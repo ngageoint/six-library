@@ -2406,7 +2406,7 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
     {
         // parse the programetically generated SICD XML string
         xml::lite::MinidomParser parser;
-        io::ByteStream bs;
+        io::StringStream bs;
         bs.write(xmlText.c_str(), xmlText.size());
         parser.parse(bs);
 
