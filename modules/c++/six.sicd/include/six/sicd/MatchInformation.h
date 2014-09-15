@@ -83,7 +83,7 @@ struct MatchType
     //  only exists in 0.4.1
     std::vector<std::string> matchType;
 
-    //! Text string identifying the match type. Examples: �COHERENT� ,�STEREO�
+    //! Text string identifying the match type. Examples: COHERENT, STEREO
     //  added in 1.0.0
     std::string typeID;
 
