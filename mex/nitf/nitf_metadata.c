@@ -196,7 +196,6 @@ static mxArray* createImageCommentsMx(nitf_ImageSubheader* subheader)
  */
 static mxArray* createHeaderMx(nitf_FileHeader* header)
 {
-    mxArray* tempArray = NULL;
     int fNum = 0;
 
     mxArray *mxHeader = mxCreateStructMatrix(1, 1, 0, (const char**) NULL);
@@ -467,7 +466,6 @@ static mxArray* createRecordMx(nitf_Record* record)
     mxArray *mxList = NULL;
     mxArray *mxRecord = mxCreateStructMatrix(1, 1, 0, (const char**) NULL);
 
-    mxArray* mxStr = NULL;
     mxArray* mxHeader = NULL;
 
     fNum = mxAddField(mxRecord, "header");
