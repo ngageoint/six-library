@@ -61,7 +61,7 @@ public final class Extensions extends NITFObject
      *            the name of the TRE(s) to return
      * @return an array of TREs with the given name, or null if none exist
      */
-    public native Collection<TRE> getTREsByName(String name);
+    public native Collection<TRE> getTREsByName(String name) throws NITFException;
 
     /**
      * Remove all instances of a given TRE from this extensions object.

@@ -78,6 +78,11 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
         /* get the list */
         list = nitf_Extensions_getTREsByName(extensions, name);
         (*env)->ReleaseStringUTFChars(env, jName, name);
+        if (list == NULL)
+        {
+        	_ThrowNITFException(env, "TRE not found");
+        	return NULL;
+        }
         
         /* set up iterators */
         iter = nitf_List_begin(list);
