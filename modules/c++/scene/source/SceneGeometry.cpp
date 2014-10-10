@@ -223,12 +223,25 @@ double SceneGeometry::getDopplerConeAngle() const
 
 double SceneGeometry::getSquintAngle() const
 {
-    Vector3 z = mPa / mPa.norm();
-    Vector3 x = mVa - z * (mVa.dot(z));
-    x.normalize();
+    // Define the geocentric plane orthogonal to the ECEF ARP vector
+    const Vector3 z = mPa / mPa.norm();
 
-    Vector3 y = math::linear::cross(x, z);
-    return atan2((-1.0 * mXs).dot(y), (-1.0 * mXs).dot(x)) * math::Constants::RADIANS_TO_DEGREES;
+    // Project the slant plane x vector into the above defined plane
+    Vector3 projXs = mXs - mXs.dot(z) * z;
+    projXs.normalize();
+
+    // Project the velocity vector into the same plane
+    Vector3 projVa = mVa - mVa.dot(z) * z;
+    projVa.normalize();
+
+    // Compute the unsigned angle between the projected velocity vector and
+    // the projection of the vector from the ARP to the ORP.
+    // NOTE: Since the slant plane x vector is defined as pointing from the
+    //       ORP to the ARP, its projection is negated so that the vector
+    //       points from the ARP to the ORP.
+    const double squintAngle = acos(-1.0 * projXs.dot(projVa)) *
+            math::Constants::RADIANS_TO_DEGREES;
+    return squintAngle;
 }
 
 double SceneGeometry::getSlopeAngle(const Vector3& normalVec) const

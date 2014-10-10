@@ -148,6 +148,10 @@ public:
     }
 
     double getDopplerConeAngle() const;
+
+    // This is what the SIDD spec calls the ground plane squint angle
+    // Defined as zero looking straight forward, +90 at broadside, and +180
+    // looking straight backwards regardless of looking to the right or left
     double getSquintAngle() const;
 
     double getSlopeAngle(const Vector3& normalVec) const;
