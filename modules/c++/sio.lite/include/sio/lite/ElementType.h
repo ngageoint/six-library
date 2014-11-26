@@ -1,5 +1,5 @@
 /******************************************************************************
- * (C) Copyright 2014, General Dynamics - Advanced Information Systems, Inc.
+ * (C) Copyright 2014, MDA Information Systems LLC
  *
  * Developed in the performance of one or more U.S. Government contracts.
  * The U.S. Government has Unlimited Rights in this computer software as set

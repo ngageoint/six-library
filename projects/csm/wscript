@@ -42,7 +42,7 @@ def configure(conf):
 
     pluginVersion = '110'
     csmVersion = '301'
-    conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_GDAIS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion
+    conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_MDAIS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion
 
 def build(bld):
     bld.recurse(DIRS)
