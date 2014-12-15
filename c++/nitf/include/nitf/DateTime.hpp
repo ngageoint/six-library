@@ -50,6 +50,20 @@ public:
 
     DateTime(double timeInMillis) throw(nitf::NITFException);
 
+    /*!
+     * Construct from a string representation of a date
+     * \param dateString Date in string form
+     * \param dateFormat Description of date format.  This follows the
+     * formatters that strftime() uses.  A few common formatters are:
+     * Year:         %Y
+     * Month:        %m
+     * Day of month: %d
+     * Hour:         %H
+     * Minute:       %M
+     * Seconds:      %S
+     *
+     * For example, the NITF 2.1 format is represented as "%Y%m%d%H%M%S"
+     */
     DateTime(const std::string& dateString,
              const std::string& dateFormat) throw(nitf::NITFException);
 
