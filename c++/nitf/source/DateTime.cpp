@@ -65,6 +65,28 @@ nitf::DateTime::DateTime(const std::string& dateString,
     }
 }
 
+nitf::DateTime::DateTime(int year,
+                         int month,
+                         int dayOfMonth,
+                         int hour,
+                         int minute,
+                         double second)
+{
+    nitf_Error error;
+    mDateTime = nitf_DateTime_fromMillis(0.0, &error);
+    if (!mDateTime)
+    {
+        throw nitf::NITFException(&error);
+    }
+
+    setYear(year);
+    setMonth(month);
+    setDayOfMonth(dayOfMonth);
+    setHour(hour);
+    setMinute(minute);
+    setSecond(second);
+}
+
 nitf::DateTime::~DateTime()
 {
     nitf_DateTime_destruct(&mDateTime);
