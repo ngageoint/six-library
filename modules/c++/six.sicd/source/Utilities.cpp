@@ -19,10 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/Utilities.h"
-#include "six/sicd/Utilities.h"
 
-using namespace six;
+#include <six/Utilities.h>
+#include <six/NITFReadControl.h>
+#include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/Utilities.h>
 
 namespace
 {
@@ -36,8 +37,12 @@ void getErrors(const six::sicd::ComplexData& data,
 }
 }
 
+namespace six
+{
+namespace sicd
+{
 scene::SceneGeometry*
-six::sicd::Utilities::getSceneGeometry(const ComplexData* data)
+Utilities::getSceneGeometry(const ComplexData* data)
 {
     scene::SceneGeometry *geom =
             new scene::SceneGeometry(data->scpcoa->arpVel,
@@ -50,8 +55,8 @@ six::sicd::Utilities::getSceneGeometry(const ComplexData* data)
 }
 
 scene::ProjectionModel*
-six::sicd::Utilities::getProjectionModel(const ComplexData* data, 
-        const scene::SceneGeometry* geom)
+Utilities::getProjectionModel(const ComplexData* data,
+                              const scene::SceneGeometry* geom)
 {
     const six::ComplexImageGridType gridType = data->grid->type;
     const int lookDir = (data->scpcoa->sideOfTrack == 1) ? 1 : -1;
@@ -123,4 +128,37 @@ six::sicd::Utilities::getProjectionModel(const ComplexData* data,
         throw except::Exception(Ctxt("Invalid grid type: " +
                 gridType.toString()));
     }
+}
+
+std::auto_ptr<ComplexData> Utilities::getComplexData(
+        const std::string& sicdPathname,
+        const std::vector<std::string>& schemaPaths)
+{
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::COMPLEX,
+                           new six::XMLControlCreatorT<
+                                   six::sicd::ComplexXMLControl>());
+
+    six::NITFReadControl reader;
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(sicdPathname, schemaPaths);
+
+    six::Data* const data = reader.getContainer()->getData(0);
+    if (data->getDataType() != six::DataType::COMPLEX)
+    {
+        throw except::Exception(Ctxt(sicdPathname + " is not a SICD"));
+    }
+
+    // Now that we know it's a SICD we can safely cast to a ComplexData
+    // We can't just return a pointer to the data though because it's owned by
+    // the container which is owned by the reader (and the reader will go out
+    // of scope when this function returns), so we need to clone it.
+    // Note that you don't have to do this yourself if in your usage the
+    // reader stays in scope.
+    // TODO: If the container held shared pointers we wouldn't need to do this
+    std::auto_ptr<ComplexData> complexData(
+            reinterpret_cast<six::sicd::ComplexData*>(data->clone()));
+    return complexData;
+}
+}
 }
