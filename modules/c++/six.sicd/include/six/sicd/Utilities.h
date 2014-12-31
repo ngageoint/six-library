@@ -22,8 +22,13 @@
 #ifndef __SIX_SICD_UTILITIES_H__
 #define __SIX_SICD_UTILITIES_H__
 
-#include <import/scene.h>
-#include "six/sicd/ComplexData.h"
+#include <memory>
+#include <string>
+#include <vector>
+
+#include <scene/SceneGeometry.h>
+#include <scene/ProjectionModel.h>
+#include <six/sicd/ComplexData.h>
 
 namespace six
 {
@@ -32,11 +37,27 @@ namespace sicd
 class Utilities
 {
 public:
-
     static scene::SceneGeometry* getSceneGeometry(const ComplexData* data);
+
     static scene::ProjectionModel* getProjectionModel(const ComplexData* data, 
             const scene::SceneGeometry* geom);
 
+    /*
+     * Given a SICD pathname and list of schemas, provides a representation
+     * of the SICD XML as a ComplexData object
+     *
+     * \param sicdPathname SICD NITF pathname
+     * \param schemaPaths One or more files or directories containing SICD
+     * schemas
+     *
+     * \return ComplexData associated with the SICD NITF
+     *
+     * \throws except::Exception if file is not a SICD
+     */
+    static
+    std::auto_ptr<ComplexData> getComplexData(
+            const std::string& sicdPathname,
+            const std::vector<std::string>& schemaPaths);
 };
 }
 }
