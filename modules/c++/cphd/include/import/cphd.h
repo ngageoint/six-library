@@ -20,48 +20,24 @@
  *
  */
 
-#ifndef __CPHD_TYPES_H__
-#define __CPHD_TYPES_H__
+#ifndef __IMPORT_CPHD_H__
+#define __IMPORT_CPHD_H__
 
-#include <six/Types.h>
-#include <six/Enums.h>
-#include <six/sicd/CollectionInformation.h>
-
-namespace cphd
-{
-// Use the same types that SIX uses
-
-typedef six::Vector3 Vector3;
-
-typedef six::DateTime DateTime;
-
-typedef six::UByte UByte;
-
-typedef six::Poly1D Poly1D;
-
-typedef six::Poly2D Poly2D;
-
-typedef six::PolyXYZ PolyXYZ;
-
-typedef six::LatLon LatLon;
-
-typedef six::LatLonAlt LatLonAlt;
-
-typedef six::LatLonCorners LatLonCorners;
-
-typedef six::LatLonAltCorners LatLonAltCorners;
-
-typedef six::FFTSign FFTSign;
- 
-typedef six::RadarModeType RadarModeType;
-
-typedef six::CollectType CollectType;
-
-typedef six::DataType DataType;
-
-typedef six::BooleanType BooleanType;
-
-typedef six::sicd::CollectionInformation CollectionInformation;
-}
+#include "cphd/Antenna.h"
+#include "cphd/Channel.h"
+#include "cphd/CPHDReader.h"
+#include "cphd/CPHDWriter.h"
+#include "cphd/CPHDXMLControl.h"
+#include "cphd/Data.h"
+#include "cphd/Enums.h"
+#include "cphd/FileHeader.h"
+#include "cphd/Global.h"
+#include "cphd/Metadata.h"
+#include "cphd/SRP.h"
+#include "cphd/Types.h"
+#include "cphd/Utilities.h"
+#include "cphd/VBM.h"
+#include "cphd/VectorParameters.h"
+#include "cphd/Wideband.h"
 
 #endif
