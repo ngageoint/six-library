@@ -172,6 +172,24 @@ template<> std::string six::toString<BooleanType>(const BooleanType& value)
     return str::toString<bool>(value == BooleanType::IS_TRUE);
 }
 
+template<> std::string six::toString(const six::Vector3 & v)
+{
+    std::ostringstream os;
+    os << "(X:" << v[0] << " Y:" << v[1] << " Z:" << v[2] << ")";
+    return os.str();
+}
+
+template<> std::string six::toString(const six::PolyXYZ & p)
+{
+    std::ostringstream os;
+    for (size_t i = 0 ; i < p.size() ; i++)
+    {
+        os << toString(p[i]) << "*y^" << i << ((i != p.size()) ? " + " : "")
+           << "\n";
+    }
+    return os.str();
+}
+
 template<> DateTime six::toType<DateTime>(const std::string& dateTime)
 {
     try

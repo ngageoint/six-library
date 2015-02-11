@@ -220,6 +220,12 @@ XMLElem ComplexXMLParser050::convertImageFormationAlgoToXML(
     {
         return convertRMAToXML(rma, parent);
     }
+    else if (!pfa && !rma)
+    {
+        //! This will occur when set to OTHER. We do not want to include
+        //  a specialized image formation algorithm so we return NULL.
+        return NULL;
+    }
     else
     {
         throw except::Exception(Ctxt(
@@ -243,6 +249,17 @@ void ComplexXMLParser050::parseWeightTypeFromXML(
     {
         obj.reset();
     }
+}
+
+XMLElem ComplexXMLParser050::convertMatchInformationToXML(
+    const MatchInformation* matchInfo, 
+    XMLElem parent) const
+{
+    XMLElem matchInfoXML =
+            ComplexXMLParser04x::convertMatchInformationToXML(
+                    matchInfo, parent);
+    setAttribute(matchInfoXML, "size", str::toString(matchInfo->types.size()));
+    return matchInfoXML;
 }
 }
 }

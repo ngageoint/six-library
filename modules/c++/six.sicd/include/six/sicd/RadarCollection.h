@@ -165,7 +165,22 @@ struct AreaDirectionParameters
 
     //!  The first element in this direction (SICD FirstLine/FirstSample)
     size_t first;
+
+    bool operator==(const AreaDirectionParameters& other) const
+    {
+        return unitVector == other.unitVector &&
+               spacing == other.spacing &&
+               elements == other.elements &&
+               first == other.first;
+    }
+
+    bool operator!=(const AreaDirectionParameters& other) const
+    {
+        return !((*this) == other);
+    }
 };
+
+std::ostream& operator<< (std::ostream& os, const AreaDirectionParameters& d);
 
 /*!
  *  \struct Segment

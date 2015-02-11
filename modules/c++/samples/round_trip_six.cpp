@@ -20,6 +20,7 @@
  *
  */
 
+#include <cmath>
 #include <import/cli.h>
 #include <import/io.h>
 #include <import/mem.h>
@@ -30,6 +31,34 @@
 
 namespace
 {
+float round(float num)
+{
+    float f = num - std::floor(num);
+    return (f > 0.5f) ? std::ceil(num) : std::floor(num);
+}
+
+class CompressFloat
+{
+public:
+    CompressFloat(float min, float diff) :
+        mMin(min),
+        mDiff(diff)
+    {
+    }
+
+    inline sys::Int16_T operator()(float value) const
+    {
+        const float ret(round((((value - mMin) / mDiff) *
+                std::numeric_limits<sys::Uint16_T>::max()) +
+                        std::numeric_limits<sys::Int16_T>::min()));
+        return static_cast<sys::Int16_T>(ret);
+    }
+
+private:
+    const float mMin;
+    const float mDiff;
+};
+
 class Buffers
 {
 public:
@@ -77,6 +106,58 @@ void expandComplex(size_t numPixels, sys::ubyte* buffer)
         output[ii] = std::complex<float>(input[ii].real(), input[ii].imag());
     }
 }
+
+// Because we are compressing, it is safe to write directly on top of the
+// buffer. This will end up with a buffer that is twice as big as needed
+// because we go from a 32 to 16 bit value, but the "extra" data can
+// simply be ignored.
+//
+// Since our buffer could be in the range of [-1.0f, 1.0f] we cannot simply
+// cast to a 16 bit int. Instead we expand the values so they always go from
+// [-32K, 32K].
+void compressInteger(size_t numPixels, sys::ubyte* buffer)
+{
+    const float* const floatValues = reinterpret_cast<float*>(buffer);
+
+    // Find the min and max values of either real or imag
+    float min = floatValues[0];
+    float max = floatValues[0];
+    for (size_t ii = 1; ii < numPixels * 2; ++ii)
+    {
+        if (floatValues[ii] < min)
+        {
+            min = floatValues[ii];
+        }
+        if (floatValues[ii] > max)
+        {
+            max = floatValues[ii];
+        }
+    }
+
+    const std::complex<float>* const input =
+            reinterpret_cast<std::complex<float>*>(buffer);
+
+    std::complex<sys::Int16_T>* const output =
+            reinterpret_cast<std::complex<sys::Int16_T>*>(buffer);
+    const float diff = max - min;
+
+    // If diff ends up being zero, we will get a division by 0 error.
+    // This means that buffer is all the same value so we can just
+    // fill it with 0s.
+    if (diff == 0.0f)
+    {
+        std::fill_n(output, numPixels, std::complex<sys::Int16_T>(0, 0));
+        return;
+    }
+
+    const CompressFloat compressFloat(min, diff);
+    for (size_t ii = 0; ii < numPixels; ++ii)
+    {
+        output[ii] = std::complex<sys::Int16_T>(
+                compressFloat(input[ii].real()),
+                compressFloat(input[ii].imag()));
+    }
+}
 }
 
 int main(int argc, char** argv)
@@ -96,6 +177,9 @@ int main(int argc, char** argv)
                            "version", "VERSION");
         parser.addArgument("-e --expand", "Expand RE16I_IM16I to RE32F_IM32F",
                            cli::STORE_TRUE, "expand");
+        parser.addArgument("-i --convert-to-int",
+                           "Expand RE32F_IM32F to RE16I_IM16I",
+                           cli::STORE_TRUE, "convertToInt");
         parser.addArgument("-f --log", "Specify a log file", cli::STORE, "log",
                            "FILE")->setDefault("console");
         parser.addArgument("-l --level", "Specify log level", cli::STORE,
@@ -115,6 +199,7 @@ int main(int argc, char** argv)
         const std::string inputFile(options->get<std::string> ("input"));
         const std::string outputFile(options->get<std::string> ("output"));
         const bool expand(options->get<bool> ("expand"));
+        const bool convertToInt(options->get<bool>("convertToInt"));
         const std::string logFile(options->get<std::string> ("log"));
         std::string level(options->get<std::string> ("level"));
         std::vector<std::string> schemaPaths;
@@ -195,6 +280,9 @@ int main(int argc, char** argv)
                 const bool expandIt =
                         (expand &&
                          data->getPixelType() == six::PixelType::RE16I_IM16I);
+                const bool compressIt =
+                        (convertToInt &&
+                         data->getPixelType() == six::PixelType::RE32F_IM32F);
 
                 size_t numBytesPerPixel = data->getNumBytesPerPixel();
                 size_t offset = 0;
@@ -219,6 +307,11 @@ int main(int argc, char** argv)
                 {
                     expandComplex(numPixels, buffer);
                     data->setPixelType(six::PixelType::RE32F_IM32F);
+                }
+                if (compressIt)
+                {
+                    compressInteger(numPixels, buffer);
+                    data->setPixelType(six::PixelType::RE16I_IM16I);
                 }
                 if (!version.empty())
                 {

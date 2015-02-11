@@ -45,6 +45,11 @@ protected:
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
                                      XMLElem parent = NULL) const;
     virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const;
+
+    virtual XMLElem convertImageFormationAlgoToXML(
+            const PFA* pfa, const RMA* rma, 
+            const RgAzComp* rgAzComp, 
+            XMLElem parent = NULL) const;
 };
 }
 }

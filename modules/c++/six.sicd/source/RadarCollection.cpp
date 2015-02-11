@@ -19,7 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sicd/RadarCollection.h"
+#include <six/sicd/RadarCollection.h>
+#include <six/Utilities.h>
 
 namespace six
 {
@@ -77,6 +78,16 @@ AreaDirectionParameters::AreaDirectionParameters() :
 AreaDirectionParameters* AreaDirectionParameters::clone() const
 {
     return new AreaDirectionParameters(*this);
+}
+
+std::ostream& operator<< (std::ostream& os, const AreaDirectionParameters& d)
+{
+    os << "AreaDirectionParameters::\n"
+       << "  unitVector: " << toString(d.unitVector) << "\n"
+       << "  spacing   : " << d.spacing << "\n"
+       << "  elements  : " << d.elements << "\n"
+       << "  first     : " << d.first << "\n";
+     return os;
 }
 
 Segment::Segment() :

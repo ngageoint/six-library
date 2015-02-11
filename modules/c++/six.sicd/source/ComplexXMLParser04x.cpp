@@ -236,15 +236,27 @@ XMLElem ComplexXMLParser04x::convertImageFormationAlgoToXML(
     const RgAzComp* rgAzComp, XMLElem parent) const
 {
     if (rgAzComp)
+    {
         throw except::Exception(Ctxt(
             "RgAzComp cannot be defined in SICD 0.4"));
+    }
     else if (pfa && !rma)
+    {
         return convertPFAToXML(pfa, parent);
+    }
     else if (!pfa && rma)
+    {
         return convertRMAToXML(rma, parent);
+    }
     else
+    {
+        //! The 0.4.0 schema does not support the absence of a PFA or RMA
+        //  image formation algorithm node. So we must throw here. In
+        //  the version 0.4.1 ComplexXMLParser, there is a specialization
+        //  of this function to allow OTHER as a valid type.
         throw except::Exception(Ctxt(
             "Only one PFA or RMA can be defined in SICD 0.4"));
+    }
 }
 
 XMLElem ComplexXMLParser04x::convertRMAToXML(

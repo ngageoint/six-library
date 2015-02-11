@@ -57,7 +57,6 @@ int main(int argc, char** argv)
             const sys::Path schemaPath = progDirname.join("..").join("..").
                     join("conf").join("schema").join("six");
             schemaPaths.push_back(sys::Path::absolutePath(schemaPath));
-            std::cout << schemaPaths[0] << std::endl;
         }
 
         // Parse out the XML into a C++ structure
