@@ -114,6 +114,20 @@ struct CollectionInformation
     //! Deep copy
     CollectionInformation* clone() const;
 
+    bool operator==(const CollectionInformation& other) const
+    {
+        return collectorName == other.collectorName &&
+               collectType == other.collectType &&
+               illuminatorName == illuminatorName &&
+               coreName == coreName &&
+               radarMode == radarMode &&
+               radarModeID == radarModeID;
+    }
+
+    bool operator!=(const CollectionInformation& other) const
+    {
+        return !((*this) == other);
+    }
 };
 
 }

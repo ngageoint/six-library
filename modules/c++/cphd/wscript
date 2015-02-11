@@ -1,0 +1,10 @@
+NAME            = 'cphd'
+MAINTAINER      = 'carl.bach@gd-ais.com'
+VERSION         = '0.1'
+MODULE_DEPS     = 'six.sicd algs'
+TEST_DEPS       = 'cli'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

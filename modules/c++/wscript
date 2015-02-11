@@ -1,7 +1,7 @@
 from os.path import join, exists
 from waflib import Options, Utils
 
-MODULES = 'cli except io logging math math.linear math.poly mem mt nitf scene ' \
+MODULES = 'cphd cli except io logging math math.linear math.poly mem mt nitf scene ' \
           'sio.lite six six.sicd six.sidd str sys tiff types xml.lite'
 SAMPLES = 'samples'
 

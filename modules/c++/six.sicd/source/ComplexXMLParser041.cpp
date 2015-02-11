@@ -91,6 +91,24 @@ void ComplexXMLParser041::parseRMATFromXML(const XMLElem rmatElem,
     parseDouble(getFirstAndOnly(rmatElem, "Ky2"), rmat->ky2);
 }
 
+XMLElem ComplexXMLParser041::convertImageFormationAlgoToXML(
+    const PFA* pfa, const RMA* rma, 
+    const RgAzComp* rgAzComp, XMLElem parent) const
+{
+    //! Version 0.4.0 schema does not support the absence of a PFA or RMA
+    //  image formation algorithm node. As a result we need to specialize
+    //  0.4.1 to allow this behavior.
+    if (!pfa && !rma && !rgAzComp)
+    {
+        //! This will occur when set to OTHER. We do not want to include
+        //  a specialized image formation algorithm so we return NULL.
+        return NULL;
+    }
+
+    return ComplexXMLParser04x::convertImageFormationAlgoToXML(
+            pfa, rma, rgAzComp, parent);
+}
+
 }
 }
 

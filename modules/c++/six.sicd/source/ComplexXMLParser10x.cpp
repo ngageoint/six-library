@@ -236,14 +236,28 @@ XMLElem ComplexXMLParser10x::convertImageFormationAlgoToXML(
     const RgAzComp* rgAzComp, XMLElem parent) const
 {
     if (pfa && !rma && !rgAzComp)
+    {
         return convertPFAToXML(pfa, parent);
+    }
     else if (!pfa && rma && !rgAzComp)
+    {
         return convertRMAToXML(rma, parent);
+    }
     else if (!pfa && !rma && rgAzComp)
+    {
         return convertRgAzCompToXML(rgAzComp, parent);
+    }
+    else if (!pfa && !rma && !rgAzComp)
+    {
+        //! This will occur when set to OTHER. We do not want to include
+        //  a specialized image formation algorithm so we return NULL.
+        return NULL;
+    }
     else
+    {
         throw except::Exception(Ctxt(
             "Only one PFA, RMA, or RgAzComp can be defined in SICD 1.0"));
+    }
 }
 
 XMLElem ComplexXMLParser10x::convertSCPCOAToXML(

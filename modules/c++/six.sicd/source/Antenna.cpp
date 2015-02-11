@@ -19,15 +19,25 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sicd/Antenna.h"
+#include <six/sicd/Antenna.h>
+#include <six/Utilities.h>
 
-using namespace six;
-using namespace six::sicd;
-
+namespace six
+{
+namespace sicd
+{
 ElectricalBoresight::ElectricalBoresight() :
     dcxPoly(Init::undefined<Poly1D>()),
     dcyPoly(Init::undefined<Poly1D>())
 {
+}
+
+std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d)
+{
+    os << "ElectricalBoresight::" << "\n"
+       << "  dcxPoly: " << d.dcxPoly << "\n"
+       << "  dcyPoly: " << d.dcyPoly << "\n";
+    return os;
 }
 
 HalfPowerBeamwidths::HalfPowerBeamwidths() :
@@ -36,12 +46,26 @@ HalfPowerBeamwidths::HalfPowerBeamwidths() :
 {
 }
 
+std::ostream& operator<< (std::ostream& os, const HalfPowerBeamwidths& d)
+{
+    os << "HalfPowerBeamwidths::" << "\n"
+       << "  dcx: " << d.dcx << "\n"
+       << "  dcy: " << d.dcy << "\n";
+    return os;
+}
+
 GainAndPhasePolys::GainAndPhasePolys() :
     gainPoly(Init::undefined<Poly2D>()),
     phasePoly(Init::undefined<Poly2D>())
 {
 }
 
+std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d)
+{
+    os << "  gainPoly:\n" << d.gainPoly << "\n"
+       << "  phasePoly:\n" << d.phasePoly << "\n";
+    return os;
+}
 AntennaParameters::AntennaParameters() : 
     xAxisPoly(Init::undefined<PolyXYZ>()),
     yAxisPoly(Init::undefined<PolyXYZ>()),
@@ -53,5 +77,115 @@ AntennaParameters::AntennaParameters() :
 {
 }
 
+bool AntennaParameters::operator==(const AntennaParameters& other) const
+{
+    if (xAxisPoly != other.xAxisPoly ||
+        yAxisPoly != other.yAxisPoly ||
+        frequencyZero != other.frequencyZero ||
+        gainBSPoly != other.gainBSPoly ||
+        electricalBoresightFrequencyShift !=
+                other.electricalBoresightFrequencyShift ||
+        mainlobeFrequencyDilation != other.mainlobeFrequencyDilation)
+    {
+        return false;
+    }
 
+    if (electricalBoresight.get() && other.electricalBoresight.get())
+    {
+        if (*electricalBoresight != *other.electricalBoresight)
+        {
+            return false;
+        }
+    }
+    else if (electricalBoresight.get() || other.electricalBoresight.get())
+    {
+        return false;
+    }
 
+    if (halfPowerBeamwidths.get() && other.halfPowerBeamwidths.get())
+    {
+        if (*halfPowerBeamwidths != *other.halfPowerBeamwidths)
+        {
+            return false;
+        }
+    }
+    else if (halfPowerBeamwidths.get() || other.halfPowerBeamwidths.get())
+    {
+        return false;
+    }
+
+    if (array.get() && other.array.get())
+    {
+        if (*array != *other.array)
+        {
+            return false;
+        }
+    }
+    else if (array.get() || other.array.get())
+    {
+        return false;
+    }
+
+    if (element.get() && other.element.get())
+    {
+        if (*array != *other.array)
+        {
+            return false;
+        }
+    }
+    else if (element.get() || other.element.get())
+    {
+        return false;
+    }
+
+    return true;
+}
+
+std::ostream& operator<< (std::ostream& os, const AntennaParameters& d)
+{
+    os << "  xAxisPoly:\n" << toString(d.xAxisPoly) << "\n"
+       << "  yAxisPoly:\n" << toString(d.yAxisPoly) << "\n"
+       << "  frequencyZero: " << d.frequencyZero << "\n";
+
+    if (d.electricalBoresight.get())
+    {
+        os << "  " << *d.electricalBoresight << "\n";
+    }
+
+    if (d.halfPowerBeamwidths.get())
+    {
+        os << "  " << *d.halfPowerBeamwidths << "\n";
+    }
+
+    if (d.array.get())
+    {
+        os << "  Array:" << "\n"
+           << *d.array << "\n";
+    }
+
+    if (d.element.get())
+    {
+        os << "  Elem:" << "\n"
+           << *d.element << "\n";
+    }
+
+    if (!six::Init::isUndefined(d.gainBSPoly))
+    {
+       os << "  gainBSPoly   : " << d.gainBSPoly << "\n";
+    }
+
+    if (!six::Init::isUndefined(d.electricalBoresightFrequencyShift))
+    {
+        os << "  electricalBoresightFrequencyShift: "
+                << d.electricalBoresightFrequencyShift.toString() << "\n";
+    }
+
+    if (!six::Init::isUndefined(d.mainlobeFrequencyDilation))
+    {
+        os << "  mainlobeFrequencyDilation        : "
+           << d.mainlobeFrequencyDilation.toString() << "\n";
+    }
+     return os;
+}
+}
+}

@@ -259,6 +259,12 @@ struct ReferencePoint
     {
         return ecef == x.ecef && rowCol == x.rowCol;
     }
+
+    //! Are two point different
+    bool operator!=(const ReferencePoint& x) const
+    {
+        return !((*this) == x);
+    }
 };
 
 /*!

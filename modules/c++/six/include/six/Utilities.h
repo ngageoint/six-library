@@ -78,6 +78,8 @@ template<typename T> T toType(const std::string& s)
 
 template<> std::string toString(const float& value);
 template<> std::string toString(const double& value);
+template<> std::string toString(const six::Vector3 & v);
+template<> std::string toString(const six::PolyXYZ & p);
 template<> six::EarthModelType
         toType<six::EarthModelType>(const std::string& s);
 template<> six::MagnificationMethod

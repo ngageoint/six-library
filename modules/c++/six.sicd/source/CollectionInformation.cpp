@@ -19,11 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sicd/CollectionInformation.h"
+#include <six/sicd/CollectionInformation.h>
 
-using namespace six;
-using namespace six::sicd;
-
+namespace six
+{
+namespace sicd
+{
 CollectionInformation::CollectionInformation()
 {
     collectorName = Init::undefined<std::string>();
@@ -38,4 +39,5 @@ CollectionInformation* CollectionInformation::clone() const
 {
     return new CollectionInformation(*this);
 }
-
+}
+}

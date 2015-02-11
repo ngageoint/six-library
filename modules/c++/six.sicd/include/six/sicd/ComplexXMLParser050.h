@@ -47,6 +47,9 @@ protected:
     virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
             mem::ScopedCopyablePtr<WeightType>& obj) const;
 
+    virtual XMLElem convertMatchInformationToXML(const MatchInformation *obj, 
+                                                 XMLElem parent = NULL) const;
+
 
 };
 }
