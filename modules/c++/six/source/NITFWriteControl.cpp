@@ -566,6 +566,9 @@ void NITFWriteControl::save(
 
     size_t numImages = mInfos.size();
 
+    //! TODO: This section of code (unlike the memory section below)
+    //        does not account for blocked writing or J2K compression.
+    //        CODA ticket #443 will update support for this.
     for (size_t i = 0; i < numImages; ++i)
     {
         NITFImageInfo* info = mInfos[i];
@@ -643,20 +646,42 @@ void NITFWriteControl::save(
         size_t numCols = info->getData()->getNumCols();
         size_t numChannels = info->getData()->getNumChannels();
 
+        nitf::ImageSegment imageSegment = mRecord.getImages()[i];
+        nitf::ImageSubheader subheader = imageSegment.getSubheader();
+
+        // The SIDD spec doesn't currently support writing blocked products
+        // this is a work around to allow it to happen for the power users.
+        // Setting the blocking information in the subheader after
+        // initialization will properly allow writing of blocked products.
+        const bool isBlocking = 
+            static_cast<nitf::Uint32>(subheader.getNumBlocksPerRow()) > 1 ||
+            static_cast<nitf::Uint32>(subheader.getNumBlocksPerCol()) > 1;
+
         // The SIDD spec requires that a J2K compressed SIDDs be only a 
         // single image segment. However this functionality remains untested.
-        if ((enableJ2K && numIS == 1) || !mCompressionOptions.empty())
+        if (isBlocking || (enableJ2K && numIS == 1) || 
+            !mCompressionOptions.empty())
         {
+            if (isBlocking || (enableJ2K && numIS == 1) && 
+                info->getData()->getDataType() == six::DataType::COMPLEX)
+            {
+                throw except::Exception(Ctxt(
+                    "SICD does not support blocked or J2K compressed output"));
+            }
+
             // We will use the ImageWriter provided by NITRO so that we can
             // take advantage of the built-in compression capabilities
-            nitf::ImageWriter iWriter = mWriter.newImageWriter(i, mCompressionOptions);
+            nitf::ImageWriter iWriter = 
+                mWriter.newImageWriter(i, mCompressionOptions);
+            iWriter.setWriteCaching(1);
+
             nitf::ImageSource iSource;
             size_t bandSize = numCols * info->getData()->getNumRows();
 
             for (size_t j = 0; j < numChannels; ++j)
             {
-                nitf::MemorySource ms((char *)imageData[i], bandSize, bandSize * j,
-                                      pixelSize, 0);
+                nitf::MemorySource ms((char *)imageData[i], bandSize, 
+                                      bandSize * j, pixelSize, 0);
                 iSource.addBand(ms);
             }
             iWriter.attachSource(iSource);
