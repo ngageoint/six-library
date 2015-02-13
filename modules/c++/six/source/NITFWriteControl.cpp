@@ -662,7 +662,7 @@ void NITFWriteControl::save(
         if (isBlocking || (enableJ2K && numIS == 1) || 
             !mCompressionOptions.empty())
         {
-            if (isBlocking || (enableJ2K && numIS == 1) && 
+            if ((isBlocking || (enableJ2K && numIS == 1)) && 
                 info->getData()->getDataType() == six::DataType::COMPLEX)
             {
                 throw except::Exception(Ctxt(
