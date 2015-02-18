@@ -60,6 +60,8 @@ public:
      */
     std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
 
+    std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
+
     std::string toXMLString(const Metadata& metadata);
     size_t getXMLsize(const Metadata& metadata);
 
