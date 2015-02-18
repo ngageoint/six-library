@@ -55,10 +55,10 @@ BufferedReader::~BufferedReader()
 
 void BufferedReader::readNextBuffer()
 {
-    const sys::Size_T bufferSize = static_cast<sys::SSize_T>(
-            mFile.getCurrentOffset() + mBufferSize > mFile.length() ?
+    const sys::Size_T bufferSize = mFile.getCurrentOffset() +
+            static_cast<sys::SSize_T>(mBufferSize) > mFile.length() ?
                     mFile.length() - mFile.getCurrentOffset() :
-                    mBufferSize);
+                    static_cast<sys::SSize_T>(mBufferSize);
 
     sys::RealTimeStopWatch sw;
     sw.start();
@@ -68,7 +68,7 @@ void BufferedReader::readNextBuffer()
     mPosition = 0;
     mTotalRead += bufferSize;
     mBlocksRead += 1;
-    if (bufferSize != mBufferSize)
+    if (mBufferSize != static_cast<size_t>(bufferSize))
     {
         mPartialBlocks += 1;
     }
@@ -77,7 +77,7 @@ void BufferedReader::readNextBuffer()
 void BufferedReader::readImpl(void* buf, size_t size)
 {
     //! Ensure there is enough data to read
-    if (tell() + size > getSize())
+    if (tell() + static_cast<nitf::Off>(size) > getSize())
     {
         throw except::Exception(Ctxt(
                 "Attempting to read past the end of a buffered reader."));
