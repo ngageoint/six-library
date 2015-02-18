@@ -81,6 +81,21 @@ public:
         bool ampSFEnabled,
         DomainType domainType);
 
+    /*
+     *  \func Constructor
+     *  \brief Same as above but allows the user to pass in the VBM data.
+     *
+     *  \param data Must contain one void* per channel and each void* must
+     *         be sized correctly for that channel
+     */
+    VBM(size_t numChannels,
+        const std::vector<size_t>& numVectors,
+        bool srpTimeEnabled,
+        bool tropoSrpEnabled,
+        bool ampSFEnabled,
+        DomainType domainType,
+        const std::vector<const void*>& data);
+
     // Retrieve the value of a VBM parameter  - request must be valid
     // invalid requests throw exceptions
     double getTxTime(size_t channel, size_t vector) const;
@@ -182,6 +197,16 @@ public:
                     std::vector<sys::ubyte>& data) const;
 
     /*
+     *  \func getVBMdata
+     *  \brief Same as above but uses a void pointer.
+     *
+     *  \param channel 0 based index
+     *  \param [Output]data A preallocated buffer for the data.
+     */
+    void getVBMdata(size_t channel,
+                    void* data) const;
+
+    /*
      *  \func getVBMsize
      *  \brief Returns the number of bytes in a VBM channel.
      *
@@ -258,7 +283,7 @@ private:
 
         void getData(sys::ubyte* data) const;
 
-        void setData(sys::byte* data);
+        void setData(const sys::byte* data);
 
         bool operator==(const VectorBasedParameters& other) const;
 
@@ -280,6 +305,9 @@ private:
     };
 
     void verifyChannelVector(size_t channel, size_t vector) const;
+
+    void setupInitialData(size_t numChannels,
+                          const std::vector<size_t>& numVectors);
 
     bool mSRPTimeEnabled;
     bool mTropoSRPEnabled;

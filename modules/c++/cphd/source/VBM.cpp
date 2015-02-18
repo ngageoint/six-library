@@ -131,9 +131,9 @@ void VBM::VectorBasedParameters::getData(sys::ubyte* data) const
     }
 }
 
-void VBM::VectorBasedParameters::setData(sys::byte* data)
+void VBM::VectorBasedParameters::setData(const sys::byte* data)
 {
-    double* doubleData = reinterpret_cast<double*>(data);
+    const double* doubleData = reinterpret_cast<const double*>(data);
     size_t pos = 0;
 
     txTime = doubleData[pos++];
@@ -291,6 +291,65 @@ VBM::VBM(size_t numChannels,
     mNumBytesPerVector(0),
     mData(numChannels)
 {
+    setupInitialData(numChannels, numVectors);
+}
+
+VBM::VBM(size_t numChannels,
+         const std::vector<size_t>& numVectors,
+         bool srpTimeEnabled,
+         bool tropoSrpEnabled,
+         bool ampSFEnabled,
+         DomainType domainType,
+         const std::vector<const void*>& data) :
+    mSRPTimeEnabled(srpTimeEnabled),
+    mTropoSRPEnabled(tropoSrpEnabled),
+    mAmpSFEnabled(ampSFEnabled),
+    mDomainType(domainType),
+    mNumBytesPerVector(0),
+    mData(numChannels)
+{
+    //! Make sure there is enough data for each channel
+    if (numChannels != data.size())
+    {
+        throw except::Exception(Ctxt(
+                "VBM data contains " + str::toString<size_t>(numChannels) + 
+                " channels, but data has information for " +
+                str::toString<size_t>(data.size()) + " channels."));
+    }
+    setupInitialData(numChannels, numVectors);
+
+    //! For each channel
+    for (size_t ii = 0; ii < mData.size(); ++ii)
+    {
+        const sys::byte* ptr = static_cast<const sys::byte*>(data[ii]);
+
+        //! For each vector
+        for (size_t jj = 0;
+             jj < mData[ii].size();
+             ++jj, ptr += mNumBytesPerVector)
+        {
+            mData[ii][jj].setData(ptr);
+        }
+    }
+}
+
+void VBM::verifyChannelVector(size_t channel, size_t vector) const
+{
+    if (channel >= mData.size())
+    {
+        throw except::Exception(Ctxt(
+                "Invalid channel number: " + str::toString<size_t>(channel)));
+    }
+    if (vector >= mData[channel].size())
+    {
+        throw except::Exception(Ctxt(
+                "Invalid vector number: " + str::toString<size_t>(vector)));
+    }
+}
+
+void VBM::setupInitialData(size_t numChannels,
+                           const std::vector<size_t>& numVectors)
+{
     if (numChannels > numVectors.size())
     {
         throw except::Exception(Ctxt("Invalid numVectors parameter: "
@@ -309,20 +368,6 @@ VBM::VBM(size_t numChannels,
     if (!mData.empty() && !mData[0].empty())
     {
         mNumBytesPerVector = mData[0][0].getNumBytes();
-    }
-}
-
-void VBM::verifyChannelVector(size_t channel, size_t vector) const
-{
-    if (channel >= mData.size())
-    {
-        throw except::Exception(Ctxt(
-                "Invalid channel number: " + str::toString<size_t>(channel)));
-    }
-    if (vector >= mData[channel].size())
-    {
-        throw except::Exception(Ctxt(
-                "Invalid vector number: " + str::toString<size_t>(vector)));
     }
 }
 
@@ -591,8 +636,15 @@ void VBM::getVBMdata(size_t channel,
     data.resize(getVBMsize(channel));
     std::fill(data.begin(), data.end(), 0);
 
+    getVBMdata(channel, &data[0]);
+}
+
+void VBM::getVBMdata(size_t channel,
+                     void* data) const
+{
+    verifyChannelVector(channel, 0);
     const size_t numBytes = getNumBytesVBP();
-    sys::ubyte* ptr = &data[0];
+    sys::ubyte* ptr = static_cast<sys::ubyte*>(data);
 
     for (size_t ii = 0;
          ii < mData[channel].size();

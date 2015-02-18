@@ -223,6 +223,71 @@ TEST_CASE(testVbmCopy)
     TEST_ASSERT_EQ(vbmFx, vbmFxCopy);
     TEST_ASSERT_EQ(vbmToa, vbmToaCopy);
 }
+
+TEST_CASE(testDataConstructor)
+{
+    std::vector<std::vector<double> > actualData(NUM_CHANNELS);
+    const size_t numValuesNeeded = 18;
+    for (size_t ii = 0; ii < NUM_CHANNELS; ++ii)
+    {
+        actualData[ii].resize(numValuesNeeded * NUM_VECTORS);
+        for (size_t jj = 0; jj < NUM_VECTORS; ++jj)
+        {
+            for (size_t kk = 0; kk < numValuesNeeded; ++kk)
+            {
+                actualData[ii][(jj * numValuesNeeded) + kk] =
+                        (ii * numValuesNeeded) + kk;
+            }
+        }
+    }
+
+    std::vector<const void*> data(NUM_CHANNELS);
+    for (size_t ii = 0; ii < NUM_CHANNELS; ++ii)
+    {
+        data[ii] = &actualData[ii][0];
+    }
+
+    cphd::VBM vbm(NUM_CHANNELS,
+                  std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
+                  true,
+                  true,
+                  true,
+                  cphd::DomainType::FX,
+                  data);
+
+    for (size_t ii = 0; ii < NUM_CHANNELS; ++ii)
+    {
+        for (size_t jj = 0; jj < NUM_VECTORS; ++jj)
+        {
+            const size_t idx = jj * numValuesNeeded;
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx], vbm.getTxTime(ii, jj));
+            const cphd::Vector3 txPos = vbm.getTxPos(ii, jj);
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 1], txPos[0]);
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 2], txPos[1]);
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 3], txPos[2]);
+
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 4], vbm.getRcvTime(ii, jj));
+            const cphd::Vector3 rcvPos = vbm.getRcvPos(ii, jj);
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 5], rcvPos[0]);
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 6], rcvPos[1]);
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 7], rcvPos[2]);
+
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 8], vbm.getSRPTime(ii, jj));
+            const cphd::Vector3 srpPos = vbm.getSRPPos(ii, jj);
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 9], srpPos[0]);
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 10], srpPos[1]);
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 11], srpPos[2]);
+
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 12], vbm.getTropoSRP(ii, jj));
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 13], vbm.getAmpSF(ii, jj));
+
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 14], vbm.getFx0(ii, jj));
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 15], vbm.getFxSS(ii, jj));
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 16], vbm.getFx1(ii, jj));
+            TEST_ASSERT_ALMOST_EQ(actualData[ii][idx + 17], vbm.getFx2(ii, jj));
+        }
+    }
+}
 }
 
 int main(int , char** )
@@ -232,6 +297,7 @@ int main(int , char** )
     TEST_CHECK(testVbmToa);
     TEST_CHECK(testVbmThrow);
     TEST_CHECK(testVbmCopy);
+    TEST_CHECK(testDataConstructor);
     return 0;
 }
 

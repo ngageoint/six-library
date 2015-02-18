@@ -512,6 +512,15 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
+{
+    io::StringStream stringStream;
+    stringStream.write(xmlString.c_str(), xmlString.size());
+    xml::lite::MinidomParser parser;
+    parser.parse(stringStream);
+    return fromXML(parser.getDocument());
+}
+
 std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 {
     std::auto_ptr<Metadata> cphd(new Metadata());
