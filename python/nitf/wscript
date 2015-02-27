@@ -1,6 +1,7 @@
 from os.path import join, basename
 import os
 from waflib import Utils
+from build import swigCopyGeneratedSources
 distclean = options = configure = lambda p: None
 
 def build(bld):
@@ -18,22 +19,8 @@ def build(bld):
     
     # then a c extension module
     if 'SWIG' in env and env['SWIG']:
-        def copyGeneratedSources(tsk):
-            import shutil
-            genDir = tsk.inputs[0].parent.make_node('generated')
-            instDir = Utils.subst_vars(tsk.generator.install_path, tsk.env).replace('/', os.sep)
-            Utils.check_dir(genDir.abspath())
-            if tsk.generator.bld.is_install:
-                Utils.check_dir(instDir)
-            for file in tsk.outputs:
-                name = basename(str(file))
-                if file.suffix() in ['.c', '.cxx']:
-                    shutil.copy2(file.abspath(), genDir.make_node(name.split('.')[0] + '_wrap.c').abspath())
-                elif file.suffix() == '.py':
-                    shutil.copy2(file.abspath(), genDir.make_node(name).abspath())
-                    if tsk.generator.bld.is_install:
-                        shutil.copy2(file.abspath(), join(instDir, name))
-                    
+        # TODO: Update build.py's swigModule() to handle compiling C modules
+        #       'features' and 'swig_flags' will be different                   
         tsk = bld(
             features = 'c cshlib pyext add_targets',
             source = 'source/nitro.i',
@@ -44,7 +31,7 @@ def build(bld):
             install_path='${PYTHONDIR}/nitf',
             name='nitf-python',
             targets_to_add='_nitropy_py',
-            swig_install_fun=copyGeneratedSources)
+            swig_install_fun=swigCopyGeneratedSources)
         
     else:
         bld(
