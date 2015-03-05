@@ -101,6 +101,11 @@ int main(int argc, char** argv)
             metadata.global.imageArea.acpCorners.getCorner(ii).setLon(0.0);
             metadata.global.imageArea.acpCorners.getCorner(ii).setAlt(0.0);
         }
+        
+        //! Add a channel parameter. This will write without this but it will
+        //  not read.
+        cphd::ChannelParameters param;
+        metadata.channel.parameters.push_back(param);
 
         //! We must set SRP Type
         metadata.srp.srpType = cphd::SRPType::STEPPED;

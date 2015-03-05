@@ -300,7 +300,7 @@ private:
         Vector3 srpPos;
         double tropoSrp;
         double ampSF;
-        mem::ScopedCopyablePtr<FrequencyParameters> frequencyParamters;
+        mem::ScopedCopyablePtr<FrequencyParameters> frequencyParameters;
         mem::ScopedCopyablePtr<TOAParameters> toaParameters;
     };
 

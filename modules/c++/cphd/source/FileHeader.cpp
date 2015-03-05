@@ -94,7 +94,8 @@ void FileHeader::blockReadHeader(io::SeekableInputStream& inStream,
 {
     static const char ERROR_MSG[] = "CPHD file malformed: Header must terminate with '\\f\\n'";
 
-    mem::ScopedArray<sys::byte> buf(new sys::byte[blockSize]);
+    mem::ScopedArray<sys::byte> buf(new sys::byte[blockSize + 1]);
+    std::fill_n(buf.get(), blockSize + 1, 0);
     headerBlock.clear();
 
     // read each block in succession
