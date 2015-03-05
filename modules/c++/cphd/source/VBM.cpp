@@ -26,6 +26,39 @@
 #include <six/Init.h>
 #include <cphd/VBM.h>
 
+namespace
+{
+inline void setData(const sys::byte*& data,
+                    double& dest)
+{
+    memcpy(&dest, data, sizeof(double));
+    data += sizeof(double); 
+}
+
+inline void setData(const sys::byte*& data,
+                    cphd::Vector3& dest)
+{
+    setData(data, dest[0]);
+    setData(data, dest[1]);
+    setData(data, dest[2]);
+}
+
+inline void getData(double value,
+                    sys::ubyte*& dest)
+{
+    memcpy(dest, &value, sizeof(double));
+    dest += sizeof(double);
+}
+
+inline void getData(const cphd::Vector3& value,
+                    sys::ubyte*& dest)
+{
+    getData(value[0], dest);
+    getData(value[1], dest);
+    getData(value[2], dest);
+}
+}
+
 namespace cphd
 {
 VBM::FrequencyParameters::FrequencyParameters() :
@@ -55,7 +88,7 @@ VBM::VectorBasedParameters::VectorBasedParameters(
     srpPos(0.0),
     tropoSrp(tropoSrpEnabled ? 0.0 : six::Init::undefined<double>()),
     ampSF(ampSFEnabled ? 0.0 : six::Init::undefined<double>()),
-    frequencyParamters(domainType == DomainType::FX ?
+    frequencyParameters(domainType == DomainType::FX ?
             new FrequencyParameters() : NULL),
     toaParameters(domainType == DomainType::TOA ?
             new TOAParameters() : NULL)
@@ -78,7 +111,7 @@ size_t VBM::VectorBasedParameters::getNumBytes() const
         ret += sizeof(ampSF);
     }
 
-    if (frequencyParamters.get())
+    if (frequencyParameters.get())
     {
         ret += sizeof(FrequencyParameters);
     }
@@ -91,85 +124,73 @@ size_t VBM::VectorBasedParameters::getNumBytes() const
 
 void VBM::VectorBasedParameters::getData(sys::ubyte* data) const
 {
-    double* doubleData = reinterpret_cast<double*>(data);
-    size_t pos = 0;
-
-    doubleData[pos++] = txTime;
-    doubleData[pos++] = txPos[0];
-    doubleData[pos++] = txPos[1];
-    doubleData[pos++] = txPos[2];
-    doubleData[pos++] = rcvTime;
-    doubleData[pos++] = rcvPos[0];
-    doubleData[pos++] = rcvPos[1];
-    doubleData[pos++] = rcvPos[2];
+    //! This uses memcpy's here because on Sun these addresses may not be
+    //  8 byte aligned. So trying to derefence data as a double results in
+    //  a crash.
+    ::getData(txTime, data);
+    ::getData(txPos, data);
+    ::getData(rcvTime, data);
+    ::getData(rcvPos, data);
     if (!six::Init::isUndefined<double>(srpTime))
     {
-        doubleData[pos++] = srpTime;
+        ::getData(srpTime, data);
     }
-    doubleData[pos++] = srpPos[0];
-    doubleData[pos++] = srpPos[1];
-    doubleData[pos++] = srpPos[2];
+    ::getData(srpPos, data);
     if (!six::Init::isUndefined<double>(tropoSrp))
     {
-        doubleData[pos++] = tropoSrp;
+        ::getData(tropoSrp, data);
     }
     if (!six::Init::isUndefined<double>(ampSF))
     {
-        doubleData[pos++] = ampSF;
+        ::getData(ampSF, data);
     }
-    if (frequencyParamters.get())
+    if (frequencyParameters.get())
     {
-        doubleData[pos++] = frequencyParamters->fx0;
-        doubleData[pos++] = frequencyParamters->fxSS;
-        doubleData[pos++] = frequencyParamters->fx1;
-        doubleData[pos++] = frequencyParamters->fx2;
+        ::getData(frequencyParameters->fx0, data);
+        ::getData(frequencyParameters->fxSS, data);
+        ::getData(frequencyParameters->fx1, data);
+        ::getData(frequencyParameters->fx2, data);
     }
     else if (toaParameters.get())
     {
-        doubleData[pos++] = toaParameters->deltaTOA0;
-        doubleData[pos++] = toaParameters->toaSS;
+        ::getData(toaParameters->deltaTOA0, data);
+        ::getData(toaParameters->toaSS, data);
     }
 }
 
 void VBM::VectorBasedParameters::setData(const sys::byte* data)
 {
-    const double* doubleData = reinterpret_cast<const double*>(data);
-    size_t pos = 0;
-
-    txTime = doubleData[pos++];
-    txPos[0] = doubleData[pos++];
-    txPos[1] = doubleData[pos++];
-    txPos[2] = doubleData[pos++];
-    rcvTime = doubleData[pos++];
-    rcvPos[0] = doubleData[pos++];
-    rcvPos[1] = doubleData[pos++];
-    rcvPos[2] = doubleData[pos++];
+    //! This uses memcpy's here because on Sun these addresses may not be
+    //  8 byte aligned. So trying to derefence data as a double results in
+    //  a crash.
+    ::setData(data, txTime);
+    ::setData(data, txPos);
+    ::setData(data, rcvTime);
+    ::setData(data, rcvPos);
     if (!six::Init::isUndefined<double>(srpTime))
     {
-        srpTime = doubleData[pos++];
+        ::setData(data, srpTime);
     }
-    srpPos[0] = doubleData[pos++];
-    srpPos[1] = doubleData[pos++];
-    srpPos[2] = doubleData[pos++];
+    ::setData(data, srpPos);
     if (!six::Init::isUndefined<double>(tropoSrp))
     {
-        tropoSrp = doubleData[pos++];
+        ::setData(data, tropoSrp);
     }
     if (!six::Init::isUndefined<double>(ampSF))
     {
-        ampSF = doubleData[pos++];
+        ::setData(data, ampSF);
     }
-    if (frequencyParamters.get())
+    if (frequencyParameters.get())
     {
-        frequencyParamters->fx0 = doubleData[pos++];
-        frequencyParamters->fxSS = doubleData[pos++];
-        frequencyParamters->fx1 = doubleData[pos++];
-        frequencyParamters->fx2 = doubleData[pos++];
+        ::setData(data, frequencyParameters->fx0);
+        ::setData(data, frequencyParameters->fxSS);
+        ::setData(data, frequencyParameters->fx1);
+        ::setData(data, frequencyParameters->fx2);
     }
     else if (toaParameters.get())
     {
-        toaParameters->deltaTOA0 = doubleData[pos++];
-        toaParameters->toaSS = doubleData[pos++];
+        ::setData(data, toaParameters->deltaTOA0);
+        ::setData(data, toaParameters->toaSS);
     }
 }
 
@@ -212,14 +233,14 @@ bool VBM::VectorBasedParameters::operator==(
         }
     }
 
-    if (frequencyParamters.get() && other.frequencyParamters.get())
+    if (frequencyParameters.get() && other.frequencyParameters.get())
     {
-        if (*frequencyParamters != *other.frequencyParamters)
+        if (*frequencyParameters != *other.frequencyParameters)
         {
             return false;
         }
     }
-    else if (frequencyParamters.get() || other.frequencyParamters.get())
+    else if (frequencyParameters.get() || other.frequencyParameters.get())
     {
         return false;
     }
@@ -438,7 +459,7 @@ double VBM::getFx0(size_t channel, size_t vector) const
     {
         throw except::Exception(Ctxt("Invalid Fx0."));
     }
-    return mData[channel][vector].frequencyParamters->fx0;
+    return mData[channel][vector].frequencyParameters->fx0;
 }
 
 double VBM::getFxSS(size_t channel, size_t vector) const
@@ -448,7 +469,7 @@ double VBM::getFxSS(size_t channel, size_t vector) const
     {
         throw except::Exception(Ctxt("Invalid FxSS."));
     }
-    return mData[channel][vector].frequencyParamters->fxSS;
+    return mData[channel][vector].frequencyParameters->fxSS;
 }
 
 double VBM::getFx1(size_t channel, size_t vector) const
@@ -458,7 +479,7 @@ double VBM::getFx1(size_t channel, size_t vector) const
     {
         throw except::Exception(Ctxt("Invalid Fx1."));
     }
-    return mData[channel][vector].frequencyParamters->fx1;
+    return mData[channel][vector].frequencyParameters->fx1;
 }
 
 double VBM::getFx2(size_t channel, size_t vector) const
@@ -468,7 +489,7 @@ double VBM::getFx2(size_t channel, size_t vector) const
     {
         throw except::Exception(Ctxt("Invalid Fx2."));
     }
-    return mData[channel][vector].frequencyParamters->fx2;
+    return mData[channel][vector].frequencyParameters->fx2;
 }
 
 double VBM::getDeltaTOA0(size_t channel, size_t vector) const
@@ -558,7 +579,7 @@ void VBM::setFx0(double value, size_t channel, size_t vector)
     {
         throw except::Exception(Ctxt("Invalid Fx0."));
     }
-    mData[channel][vector].frequencyParamters->fx0 = value;
+    mData[channel][vector].frequencyParameters->fx0 = value;
 }
 
 void VBM::setFxSS(double value, size_t channel, size_t vector)
@@ -568,7 +589,7 @@ void VBM::setFxSS(double value, size_t channel, size_t vector)
     {
         throw except::Exception(Ctxt("Invalid FxSS."));
     }
-    mData[channel][vector].frequencyParamters->fxSS = value;
+    mData[channel][vector].frequencyParameters->fxSS = value;
 }
 
 void VBM::setFx1(double value, size_t channel, size_t vector)
@@ -578,7 +599,7 @@ void VBM::setFx1(double value, size_t channel, size_t vector)
     {
         throw except::Exception(Ctxt("Invalid Fx1."));
     }
-    mData[channel][vector].frequencyParamters->fx1 = value;
+    mData[channel][vector].frequencyParameters->fx1 = value;
 }
 
 void VBM::setFx2(double value, size_t channel, size_t vector)
@@ -588,7 +609,7 @@ void VBM::setFx2(double value, size_t channel, size_t vector)
     {
         throw except::Exception(Ctxt("Invalid Fx2."));
     }
-    mData[channel][vector].frequencyParamters->fx2 = value;
+    mData[channel][vector].frequencyParameters->fx2 = value;
 }
 
 void VBM::setDeltaTOA0(double value, size_t channel, size_t vector)
