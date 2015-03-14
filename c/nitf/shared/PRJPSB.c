@@ -28,7 +28,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 80, "Projection Name", "PRN" },
     {NITF_BCS_A, 2, "Projection Code", "PCO" },
     {NITF_BCS_N, 1, "Number of Projection Parameters", "NUM_PRJ" },
-    {NITF_LOOP, 0, NULL, "NUMPRJ"},
+    {NITF_LOOP, 0, NULL, "NUM_PRJ"},
     {NITF_BCS_N, 15, "Projection Parameter", "PRJ" },
     {NITF_ENDLOOP, 0, NULL, NULL},
     {NITF_BCS_N, 15, "Projection False X (Easting) Origin", "XOR" },
