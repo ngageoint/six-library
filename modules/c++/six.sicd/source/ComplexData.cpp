@@ -25,7 +25,7 @@ namespace six
 {
 namespace sicd
 {
-const char ComplexData::VENDOR_ID[] = "GDAIS";
+const char ComplexData::VENDOR_ID[] = "MDA-IS";
 
 Data* ComplexData::clone() const
 {

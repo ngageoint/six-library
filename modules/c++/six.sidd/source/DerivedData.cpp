@@ -25,7 +25,7 @@ namespace six
 {
 namespace sidd
 {
-const char DerivedData::VENDOR_ID[] = "GDAIS";
+const char DerivedData::VENDOR_ID[] = "MDA-IS";
 
 DerivedData::DerivedData() :
     productCreation(new ProductCreation),
