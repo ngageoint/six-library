@@ -20,12 +20,12 @@
  *
  */
 
+#include <except/Exception.h>
 #include <cphd/CPHDWriter.h>
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/Utilities.h>
 #include <cphd/FileHeader.h>
-#include <except/Exception.h>
-#include <algs/ByteSwap.h>
+#include <cphd/ByteSwap.h>
 
 namespace cphd
 {
@@ -67,10 +67,10 @@ void CPHDWriter::DataWriterLittleEndian::operator()(
                data + dataProcessed,
                dataToProcess);
 
-        algs::byteSwap(mScratch.get(),
-                       elementSize,
-                       dataToProcess / elementSize,
-                       mNumThreads);
+        byteSwap(mScratch.get(),
+                 elementSize,
+                 dataToProcess / elementSize,
+                 mNumThreads);
 
         mStream.write(mScratch.get(), dataToProcess);
 

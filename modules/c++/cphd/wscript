@@ -1,7 +1,7 @@
 NAME            = 'cphd'
-MAINTAINER      = 'carl.bach@gd-ais.com'
-VERSION         = '0.1'
-MODULE_DEPS     = 'six.sicd algs'
+MAINTAINER      = 'clyde.stanfield@mdaus.com'
+VERSION         = '2.1.2'
+MODULE_DEPS     = 'six.sicd'
 TEST_DEPS       = 'cli'
 
 options = configure = distclean = lambda p: None

@@ -21,9 +21,10 @@
  */
 
 #include <sstream>
+#include <string.h>
 
-#include <algs/ByteSwap.h>
 #include <six/Init.h>
+#include <cphd/ByteSwap.h>
 #include <cphd/VBM.h>
 
 namespace
@@ -769,10 +770,10 @@ sys::Off_T VBM::load(io::SeekableInputStream& inStream,
             // necessary
             if (swapToLittleEndian)
             {
-                algs::byteSwap(buf,
-                               sizeof(double),
-                               data.size() / sizeof(double),
-                               numThreads);
+                byteSwap(buf,
+                         sizeof(double),
+                         data.size() / sizeof(double),
+                         numThreads);
             }
 
             sys::byte* ptr = buf;
