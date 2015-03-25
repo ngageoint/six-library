@@ -31,7 +31,7 @@
 #include <mem/ScopedArray.h>
 #include <mem/SharedPtr.h>
 #include <io/SeekableStreams.h>
-#include <algs/BufferView.h>
+#include <mem/BufferView.h>
 #include <types/RowCol.h>
 
 namespace cphd
@@ -100,7 +100,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              const algs::BufferView<sys::ubyte>& data);
+              const mem::BufferView<sys::ubyte>& data);
 
     // Same as above but allocates the memory
     void read(size_t channel,
@@ -119,8 +119,8 @@ public:
               size_t lastSample,
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
-              const algs::BufferView<sys::ubyte>& scratch,
-              const algs::BufferView<std::complex<float> >& data);
+              const mem::BufferView<sys::ubyte>& scratch,
+              const mem::BufferView<std::complex<float> >& data);
 
 private:
     void initialize();

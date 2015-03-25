@@ -28,32 +28,12 @@
 #include <mt/ThreadPlanner.h>
 #include <except/Exception.h>
 #include <io/FileInputStream.h>
-#include <algs/ByteSwap.h>
+#include <cphd/ByteSwap.h>
 #include <cphd/Utilities.h>
 #include <cphd/Wideband.h>
 
 namespace
 {
-// TODO: Maybe this should go in sys/Conf.h
-//       It's more flexible in that it properly handles float's - you can't
-//       just call sys::byteSwap(floatVal) because the compiler may change the
-//       byte-swapped float value into a valid IEEE value beforehand.
-// TODO: If we're really looking to optimize this, could specialize it for
-//       sizes of 2, 4, and 8 to eliminate the for loop
-template <typename T>
-inline
-void byteSwap(const void* in, T& out)
-{
-    const sys::ubyte* const inPtr = static_cast<const sys::ubyte*>(in);
-    sys::ubyte* const outPtr = reinterpret_cast<sys::ubyte*>(&out);
-
-    for (size_t ii = 0, jj = sizeof(T) - 1; ii < jj; ++ii, --jj)
-    {
-        outPtr[ii] = inPtr[jj];
-        outPtr[jj] = inPtr[ii];
-    }
-}
-
 template <typename InT>
 class ScaleRunnable : public sys::Runnable
 {
@@ -147,122 +127,6 @@ void scale(const void* input,
         break;
     case 8:
         scale<float>(input, dims, scaleFactors, numThreads, output);
-        break;
-    default:
-        throw except::Exception(Ctxt(
-                "Unexpected element size " + str::toString(elementSize)));
-    }
-}
-
-template <typename InT>
-class ByteSwapAndScaleRunnable : public sys::Runnable
-{
-public:
-    ByteSwapAndScaleRunnable(const void* input,
-                             size_t startRow,
-                             size_t numRows,
-                             size_t numCols,
-                             const double* scaleFactors,
-                             std::complex<float>* output) :
-        mInput(static_cast<const sys::ubyte*>(input) +
-                       startRow * numCols * sizeof(std::complex<InT>)),
-        mDims(numRows, numCols),
-        mScaleFactors(scaleFactors + startRow),
-        mOutput(output + startRow * numCols)
-    {
-    }
-
-    virtual void run()
-    {
-        InT real(0);
-        InT imag(0);
-
-        for (size_t row = 0, inIdx = 0, outIdx = 0; row < mDims.row; ++row)
-        {
-            const double scaleFactor(mScaleFactors[row]);
-
-            for (size_t col = 0;
-                 col < mDims.col;
-                 ++col, inIdx += sizeof(std::complex<InT>), ++outIdx)
-            {
-                // Have to be careful here - can't treat mInput as a
-                // std::complex<InT> directly in case InT is a float (see
-                // explanation in byteSwap() comments)
-                const sys::ubyte* const input = mInput + inIdx;
-                byteSwap(input, real);
-                byteSwap(input + sizeof(InT), imag);
-
-                mOutput[outIdx] = std::complex<float>(real * scaleFactor,
-                                                      imag * scaleFactor);
-            }
-        }
-    }
-
-private:
-    const sys::ubyte* const mInput;
-    const types::RowCol<size_t> mDims;
-    const double* const mScaleFactors;
-    std::complex<float>* const mOutput;
-};
-
-template <typename InT>
-void byteSwapAndScale(const void* input,
-                      const types::RowCol<size_t>& dims,
-                      const double* scaleFactors,
-                      size_t numThreads,
-                      std::complex<float>* output)
-{
-    if (numThreads <= 1)
-    {
-        ByteSwapAndScaleRunnable<InT>(input, 0, dims.row, dims.col,
-                                      scaleFactors, output).run();
-    }
-    else
-    {
-        mt::ThreadGroup threads;
-        const mt::ThreadPlanner planner(dims.row, numThreads);
-
-        size_t threadNum(0);
-        size_t startRow(0);
-        size_t numRowsThisThread(0);
-        while (planner.getThreadInfo(threadNum++,
-                                     startRow,
-                                     numRowsThisThread))
-        {
-            std::auto_ptr<sys::Runnable> scaler(new ByteSwapAndScaleRunnable<InT>(
-                    input,
-                    startRow,
-                    numRowsThisThread,
-                    dims.col,
-                    scaleFactors,
-                    output));
-            threads.createThread(scaler);
-        }
-
-        threads.joinAll();
-    }
-}
-
-void byteSwapAndScale(const void* input,
-                      size_t elementSize,
-                      const types::RowCol<size_t>& dims,
-                      const double* scaleFactors,
-                      size_t numThreads,
-                      std::complex<float>* output)
-{
-    switch (elementSize)
-    {
-    case 2:
-        byteSwapAndScale<sys::Int8_T>(input, dims, scaleFactors, numThreads,
-                                      output);
-        break;
-    case 4:
-        byteSwapAndScale<sys::Int16_T>(input, dims, scaleFactors, numThreads,
-                                       output);
-        break;
-    case 8:
-        byteSwapAndScale<float>(input, dims, scaleFactors, numThreads,
-                                output);
         break;
     default:
         throw except::Exception(Ctxt(
@@ -433,7 +297,7 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    const algs::BufferView<sys::ubyte>& data)
+                    const mem::BufferView<sys::ubyte>& data)
 {
     // Sanity checks
     types::RowCol<size_t> dims;
@@ -458,7 +322,7 @@ void Wideband::read(size_t channel,
     // Element size is half mElementSize because it's complex
     if (!sys::isBigEndianSystem() && mElementSize > 2)
     {
-        algs::byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
+        byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
     }
 }
 
@@ -478,7 +342,7 @@ void Wideband::read(size_t channel,
     data.reset(new sys::ubyte[bufSize]);
 
     read(channel, firstVector, lastVector, firstSample, lastSample, numThreads,
-         algs::BufferView<sys::ubyte>(data.get(), bufSize));
+         mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 
 bool Wideband::allOnes(const std::vector<double>& vectorScaleFactors)
@@ -501,8 +365,8 @@ void Wideband::read(size_t channel,
                     size_t lastSample,
                     const std::vector<double>& vectorScaleFactors,
                     size_t numThreads,
-                    const algs::BufferView<sys::ubyte>& scratch,
-                    const algs::BufferView<std::complex<float> >& data)
+                    const mem::BufferView<sys::ubyte>& scratch,
+                    const mem::BufferView<std::complex<float> >& data)
 {
     // Sanity checks
     types::RowCol<size_t> dims;
@@ -578,8 +442,7 @@ void Wideband::read(size_t channel,
         // Element size is half mElementSize because it's complex
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
-            algs::byteSwap(data.data, mElementSize / 2, numPixels / 2,
-                           numThreads);
+            byteSwap(data.data, mElementSize / 2, numPixels / 2, numThreads);
         }
     }
 }

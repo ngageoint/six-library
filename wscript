@@ -19,7 +19,7 @@ def build(bld):
     bld.recurse('modules projects')
 
     if not bld.targets:
-        bld.targets = 'six.sicd-c++,six.sidd-c++,six-samples'
+        bld.targets = 'cphd-c++,six.sicd-c++,six.sidd-c++,six-samples'
         if 'HAVE_CSM' in bld.env:
             bld.targets += ',six-csm,vts'
         if bld.is_defined('HAVE_MEX_H'):
