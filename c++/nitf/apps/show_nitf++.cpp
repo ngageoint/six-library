@@ -274,7 +274,7 @@ void showImageSubheader(nitf::ImageSubheader imsub)
     nitf::Extensions udExts = imsub.getUserDefinedSection();
     showExtensions(udExts);
     // nitf::HashTable htUd = udExts.getHash();
-    //    htUd.foreach(showTRE);
+    //    htUd.forEach(showTRE);
 
     SHOW( (nitf::Uint32)imsub.getExtendedHeaderLength() );
     SHOW( imsub.getExtendedHeaderOverflow().toString() );
@@ -282,7 +282,7 @@ void showImageSubheader(nitf::ImageSubheader imsub)
     nitf::Extensions exExts = imsub.getExtendedSection();
     showExtensions(exExts);
     // nitf::HashTable htEx = exExts.getHash();
-    //    htEx.foreach(showTRE);
+    //    htEx.forEach(showTRE);
 
 }
 

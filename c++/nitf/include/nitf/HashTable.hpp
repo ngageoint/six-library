@@ -192,7 +192,7 @@ public:
      *  For each item in the hash table, do something (slow);
      *  \param fn  The function to perform
      */
-    void foreach(HashIterator& fun, NITF_DATA* userData = NULL)
+    void forEach(HashIterator& fun, NITF_DATA* userData = NULL)
         throw(nitf::NITFException);
 
     /*!

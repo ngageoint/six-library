@@ -138,7 +138,7 @@ void nitf::HashTable::print()
     nitf_HashTable_print(getNative());
 }
 
-void nitf::HashTable::foreach(HashIterator& fun, NITF_DATA* userData)
+void nitf::HashTable::forEach(HashIterator& fun, NITF_DATA* userData)
     throw(nitf::NITFException)
 {
     int numBuckets = getNumBuckets();
