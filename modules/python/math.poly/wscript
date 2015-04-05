@@ -1,0 +1,7 @@
+from os.path import join, basename
+import os
+from waflib import Utils
+distclean = options = configure = lambda p: None
+
+def build(bld):
+    bld.swigModule(name = 'math.poly', use = 'math.poly-c++ sys-c++')

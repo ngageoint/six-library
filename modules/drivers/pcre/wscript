@@ -1,0 +1,186 @@
+import os
+from os.path import join, split
+from waflib import Options, Utils, Context
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
+
+def options(opt):
+    opt.add_option('--disable-pcre', action='store_false', dest='enable_pcre',
+                   help='turn off PCRE')
+    opt.add_option('--enable-pcre', action='store_true',
+                   default=True, help='turn on PCRE (default)')
+    opt.add_option('--with-pcre-home', action='store', dest='pcre_home',
+                   help='Specify the PCRE Home - where PCRE is installed to')
+    opt.add_option('--build-pcre', action='store_true', dest='build_pcre',
+                   help='force building PCRE from scratch',
+                   default=os.path.exists(os.path.join(opt.path.abspath(), 'pcre-5.0.tar')))
+    opt.add_option('--nobuild-pcre', action='store_false', dest='build_pcre',
+                   help='force not building PCRE from scratch')
+
+from build import writeConfig
+
+def configure(conf):    
+    #-- PCRE -------------------------------------------------------------------
+    if Options.options.enable_pcre:
+
+        pcreHome = Options.options.pcre_home
+        if pcreHome:
+            if conf.check(lib='pcre', uselib_store='PCRE',
+                       header_name='pcre.h', function_name='pcre_version',
+                       libpath=os.path.join(pcreHome, 'lib'),
+                       includes=os.path.join(pcreHome, 'include'),
+                       msg='Checking for library pcre', okmsg=pcreHome,
+                       mandatory=False):
+                           conf.undefine('HAVE_PCRE_VERSION')
+
+        elif Options.options.build_pcre:
+            # Build is off by default when tarfile not found, fail if forced on
+            if not os.path.exists(os.path.join(conf.path.abspath(), 'pcre-5.0.tar')):
+                conf.fatal('Missing pcre tarfile')
+            
+            #pcre version variables
+            
+            # callback function to check for all #defines used by the pcre driver
+            def pcre_callback(conf):
+                conf.env['DEFINES'] = []
+                conf.define('PCRE_MAJOR', 5)
+                conf.define('PCRE_MINOR', 0)
+                conf.define('PCRE_DATE', '13-Sep-2004', quote=False)
+                conf.define('MATCH_LIMIT', 10000000)
+                conf.define('POSIX_MALLOC_THRESHOLD', 10)
+                conf.define('EBCDIC', 0)
+                conf.define('NEWLINE', "'\\n'", quote=False)
+                conf.define('LINK_SIZE', 2)
+                conf.define('EXPORT', ' ', quote=False)
+                
+                if conf.check_cc(function_name='memmove', header_name="string.h", mandatory=False):
+                    conf.define('HAVE_MEMMOVE', 1)
+                else:
+                    conf.define('HAVE_MEMMOVE', 0)
+                if conf.check_cc(function_name='strerror', header_name="string.h", mandatory=False):
+                    conf.define('HAVE_STRERROR', 1)
+                else:
+                    conf.define('HAVE_STRERROR', 0)
+                if conf.check_cc(function_name='bcopy', header_name="strings.h", mandatory=False):
+                    conf.define('HAVE_BCOPY', 1)
+                else:
+                    conf.define('HAVE_BCOPY', 0)
+                
+            conf.env['MAKE_PCRE'] = True
+            conf.msg('Building local lib', 'pcre')
+            
+            untarFile(path=conf.path, fname='pcre-5.0.tar')
+            
+            # make config.h
+            fname='pcre-5.0'
+            driverNode = conf.path.make_node(fname)
+            writeConfig(conf, pcre_callback, 'pcre', infile='config.in', outfile='config.h', 
+                        path=driverNode, feature='handleDefs')
+            
+            d = dict(PCRE_MAJOR=5, PCRE_MINOR=0, PCRE_DATE='13-Sep-2004')
+            writeConfig(conf, pcre_callback, 'pcreh', infile='pcre.in', outfile='pcre.h', 
+                        path=driverNode, feature='m4subst', substDict=d)
+            
+        else:
+            if conf.check(lib='pcre', uselib_store='PCRE',
+                       header_name='pcre.h', function_name='pcre_version',
+                       msg='Checking for library pcre',
+                       mandatory=False):
+                           conf.undefine('HAVE_PCRE_VERSION')
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.all_envs[variant]
+
+    driversNode = bld.path
+    
+    sourceFiles = []
+
+    if 'MAKE_PCRE' in env:
+        fname = 'pcre-5.0'
+
+        driverNode = driversNode.make_node(fname)
+        
+        #make the dftables executable
+        appName = Options.platform.startswith('win32') and 'dftables.exe' or 'dftables'
+        dfTablesNode = driverNode.find_or_declare(appName)
+        dfTables = bld(features='c cprogram', source='dftables.c',
+                                    includes=['.'],
+                                    target='dftables',
+                                    path=driverNode,
+                                    install_path=None,
+                                    env=env.derive(), name='dftables')
+
+        # waf complains if dfTablesNode doesn't have a signature, just use the tar file's sig.
+        if not os.path.exists(dfTablesNode.abspath()):
+            dfTablesNode.sig = Utils.h_file(os.path.join(bld.path.abspath(), '%s.tar' % fname))
+        charTables = bld(features='add_targets', source = dfTablesNode, path=driverNode,
+                                      rule='${SRC} ${TGT}', target='chartables.c',
+                                      install_path=None, deps=appName,
+                                      env=env.derive(), targets_to_add='dftables')
+        
+        pcreposix = bld(features='c c%s' % env['LIB_TYPE'] or 'stlib',
+                         includes=['.'], env=env.derive(),
+                         target='pcreposix', source='pcreposix.c',
+                         path=driverNode, export_includes='.',
+                         defines=env['DEFINES'],
+                         use='PCRE')
+        if env['install_libs']:
+            pcreposix.install_path = env['install_libdir']
+        
+        pcre = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
+                         includes=['.'],
+                         export_includes=['.'],
+                         target='pcre',
+                         source='maketables.c get.c study.c pcre.c',
+                         path=driverNode,
+                         env=env.derive(),
+                         name='PCRE',
+                         use='chartables.c',
+                         targets_to_add=[],
+                         defines=env['DEFINES'])
+
+        pcre.includes = Utils.to_list(pcre.includes)
+        pcre.includes.append(pcre.path.relpath())
+        pcre.export_includes = Utils.to_list(pcre.export_includes)
+        pcre.export_includes.append(pcre.path.relpath())
+        
+        if env['install_libs']:
+            pcre.install_path = env['install_libdir']
+        
+        if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
+            pcre.defs='libpcre.def'
+            pcreposix.defs='libpcreposix.def'
+
+        if env['install_headers']:
+            bld(features='install_tgt', install_path=env['install_includedir'],
+                dir=driverNode, files=['pcre.h', 'pcreposix.h'], 
+                name='PCRE_HEADERS_INSTALL')
+
+            pcre.targets_to_add += ['PCRE_HEADERS_INSTALL']
+
+        if env['install_source']:
+            sourceFiles += [fname + '.tar']
+            pcre.targets_to_add += ['PCRE_SOURCE_INSTALL']
+
+    if env['install_source']:
+        sourceNode = driversNode.make_node('source')
+        bld.install_tgt(files = sourceFiles,
+                        dir = driversNode,
+                        install_path = os.path.join('${PREFIX}',
+                        sourceNode.path_from(driversNode)),
+                        relative_trick=True,
+                        name='PCRE_SOURCE_INSTALL')
+
+def distclean(context):
+    #remove the untarred directories
+    import shutil
+    
+    dirs = map(lambda d: os.path.join(context.path.abspath(), d),
+               ['pcre-5.0'])
+    for d in dirs:
+        try:
+            if os.path.exists(d):
+                shutil.rmtree(d, ignore_errors=True)
+        except:{}
+    
