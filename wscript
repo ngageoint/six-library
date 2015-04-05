@@ -9,7 +9,7 @@ top     = '.'
 out     = 'target'
 
 TOOLS = 'build swig javatool pythontool matlabtool'
-DIRS = 'c c++ drivers java python mex'
+DIRS = 'externals c c++ java python mex'
 
 def options(opt):
     opt.load(TOOLS + ' msvs dumpenv', tooldir='build')

@@ -2,7 +2,7 @@ from os.path import join, exists
 from waflib import Options, Utils
 from build import CPPBuildContext
 
-MODULES = 'nitf'
+MODULES = 'coda-oss/modules/c++ coda-oss/modules/drivers'
 
 def options(opt):
     opt.recurse(MODULES)
