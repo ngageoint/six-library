@@ -1,6 +1,6 @@
 #!/bin/tcsh
 
-git remote add -f coda-oss_remote https://github.com/mdaus-oss/coda-oss.git
+git remote add -f coda-oss_remote https://github.com/mdaus/coda-oss.git
 
 # To set this up the very first time
 # This does a subtree merge and puts it in the externals/coda-oss directory.  --squash avoids copying all the history
