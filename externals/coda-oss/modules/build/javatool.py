@@ -157,6 +157,10 @@ def java_module(bld, **modArgs):
        cp_targets = []
        real_classpath = []
        classpathDirs = [bld.path.find_dir('lib'), bld.path.find_dir('libs'), bld.path.find_dir('../libs')]
+
+       # TODO: There must be a better way in waf to do this - JARS_DIR contains an absolute path
+       classpathDirs += [bld.path.find_dir(os.path.relpath(bld.env['JARS_DIR'], bld.path.find_dir('.').abspath()))]
+       
        for cp in classpath:
            for dir in classpathDirs:
                if dir is not None and os.path.exists(join(dir.abspath(), cp)):
