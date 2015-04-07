@@ -1,7 +1,7 @@
 from waflib import Options
 from os.path import join, exists
 
-BLD_DIRS = 'pcre fftw zlib uuid xml sql jpeg'
+BLD_DIRS = 'fftw jars jpeg pcre sql uuid xml zlib'
 
 def options(opt):
     opt.recurse(BLD_DIRS)
