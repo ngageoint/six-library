@@ -1,6 +1,6 @@
 distclean = configure = lambda p: None
 
-SUBDIRS = 'math.linear math.poly six'
+SUBDIRS = 'math.linear math.poly scene six'
 
 def options(opt):
     opt.recurse(SUBDIRS)
