@@ -1,0 +1,29 @@
+PACKAGE = xml.lite
+BUILD = library unit-tests
+MAJOR_VERSION = 1
+MINOR_VERSION = 1
+VERSION_SUFFIX = dev
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Dan.Pressel@gd-ais.com, Jeffrey.Randolph@gd-ais.com, Thomas.Zellman@gd-ais.com
+DESCRIPTION = XML programming made simple. It provides a low-level \
+              SAX2 API and a high-level tree model which is more \
+              conducive to C++ programming than the original DOM spec.
+
+SOURCES = Attributes.cpp Document.cpp Element.cpp XMLReaderExpat.cpp \
+          XMLReaderXerces.cpp MinidomHandler.cpp MinidomParser.cpp \
+          NamespaceStack.cpp QName.cpp
+TESTS = MinidomParserTest1.cpp NamespaceStackTest.cpp XMLReaderTest.cpp \
+         RewriteUri.cpp RewritePrefix.cpp ClearTest.cpp
+
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/io/include
+MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/io/lib/@target@/@lib_dir@
+MY_LIBS = -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++

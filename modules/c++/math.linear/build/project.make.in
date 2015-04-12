@@ -1,0 +1,29 @@
+PACKAGE = math.linear
+
+MAJOR_VERSION = 0
+MINOR_VERSION = 2
+VERSION_SUFFIX =
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+BUILD = unit-tests
+SOURCES = #Matrix.cpp
+
+TESTS = test_mx.cpp test_lin.cpp test_cx.cpp test_diag.cpp
+PLUGINS =
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+
+
+MY_INCLUDES = \
+              -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include 
+
+MY_LIBPATH = \
+             -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@
+
+MY_LIBS = -lsys-c++ -lstr-c++ -lexcept-c++ 
+
+

@@ -1,0 +1,23 @@
+PACKAGE = str
+BUILD = libs test
+MAJOR_VERSION = 1
+MINOR_VERSION = 0
+VERSION_SUFFIX =
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Dan.Pressel@gd-ais.com, Jeffrey.Randolph@gd-ais.com, Thomas.Zellman@gd-ais.com
+DESCRIPTION = The str library contains functions and classes that \
+              can be used for doing string manipulations.  \
+              Tokenizing and formatting functions \
+              are mostly the concentration here. \
+              This library requires except.
+
+SOURCES = Manip.cpp Tokenizer.cpp Format.cpp Convert.cpp
+TESTS = VersionTest.cpp NullTest.cpp
+
+MY_DEPENDS = except
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/except/include
+MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@
+MY_LIBS = -lexcept-c++

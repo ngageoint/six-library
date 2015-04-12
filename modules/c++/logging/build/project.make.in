@@ -1,0 +1,34 @@
+PACKAGE = logging
+BUILD = library unit-tests
+MAJOR_VERSION = 1
+MINOR_VERSION = 0
+VERSION_SUFFIX =
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Dan.Pressel@gd-ais.com, Jeffrey.Randolph@gd-ais.com, Thomas.Zellman@gd-ais.com
+DESCRIPTION = Logging API for C++. \
+              This library provides a logging framework, which \
+              can work in a threaded environment. At the core is a \
+              LoggerFactory which manages all available loggers in \
+              the system. It is modeled slightly after the Python \
+              logging module.
+
+SOURCES = DefaultLogger.cpp Filter.cpp Filterer.cpp Formatter.cpp Handler.cpp \
+          LogRecord.cpp Logger.cpp RotatingFileHandler.cpp StreamHandler.cpp \
+          MemoryHandler.cpp LoggerFactory.cpp
+
+TESTS =   BasicLoggerTest.cpp RotatingLoggerTest.cpp FactoryTest.cpp
+
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/mt/include \
+              -I@top_srcdir@/io/include
+MY_LIBPATH = -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/mt/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/io/lib/@target@/@lib_dir@
+MY_LIBS = -lio-c++ -lmt-c++ -lsys-c++ -lstr-c++ -lexcept-c++

@@ -1,0 +1,95 @@
+case "${target}" in
+	powerpc-apple-*)
+      	AC_MSG_RESULT(attempting to configure for mac...)
+	    AC_MSG_RESULT(selecting the gnu compiler...)
+	    AC_MSG_RESULT(selecting the ar archiver...)
+        CXX="g++"
+	    sys_cxx_debug_flags="-g"
+	    sys_cxx_warn_flags="-Wall"
+	    sys_cxx_verb_flags="-v"
+
+	    sys_cxx_optz_med="-O1"
+	    sys_cxx_optz_fast="-O2"
+	    sys_cxx_optz_fastest="-O3"
+	    
+            sys_cxx_64_flags="-m64"
+	    sys_cxx_pic_flags="-fPIC"
+
+	    def_cxx_optz_flags="${sys_cxx_optz_fast}"
+
+	    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D__APPLE_CC__"
+
+   # if --with-sysroot is given, set -isysroot to cc_flags
+	    # default sysroot is /usr/include on the mac
+	    AC_ARG_WITH(sysroot,
+	                [  --with-sysroot=PATH           Mac specific: compile with sysroot set to the given path],
+	                applesr=${withval},
+		        applesr="no")
+            AC_MSG_RESULT(setting sysroot: $applesr)
+	    if test "${applesr}" != "no" && test -n "${applesr}"
+	    then
+		cxx_flags="${cxx_flags} -isysroot ${applesr}"
+ 	    else
+	        cxx_flags="${cxx_flags}"
+	    fi
+
+            cxx_flags="${cxx_flags} -arch ppc"
+	    cxx_optz_flags="${def_cxx_optz_flags}"
+
+        link_libs="-ldl"
+
+	    AR="ar"
+
+	    ar_flags="-rs"
+	    dll_flags="${dll_flags} ${sys_cxx_pic_flags} -shared"
+
+    ;;
+esac
+
+case "${target}" in
+	i686-apple-*|i386-apple-*)
+      	AC_MSG_RESULT(attempting to configure for mac...)
+	    AC_MSG_RESULT(selecting the gnu compiler...)
+	    AC_MSG_RESULT(selecting the ar archiver...)
+        CXX="g++"
+	    sys_cxx_debug_flags="-g"
+	    sys_cxx_warn_flags="-Wall"
+	    sys_cxx_verb_flags="-v"
+
+	    sys_cxx_optz_med="-O1"
+	    sys_cxx_optz_fast="-O2"
+	    sys_cxx_optz_fastest="-O3"
+	    
+            sys_cxx_64_flags="-m64"
+	    sys_cxx_pic_flags="-fPIC"
+
+	    def_cxx_optz_flags="${sys_cxx_optz_fast}"
+
+	    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D__APPLE_CC__"
+
+            # if --with-sysroot is given, set -isysroot to cc_flags
+	    # default sysroot is /usr/include on the mac
+	    AC_ARG_WITH(sysroot,
+	                [  --with-sysroot=PATH           Mac specific: compile with sysroot set to the given path],
+	                applesr=${withval},
+		        applesr="no")
+            AC_MSG_RESULT(setting sysroot: $applesr)
+	    if test "${applesr}" != "no" && test -n "${applesr}"
+	    then
+		cxx_flags="${cxx_flags} -isysroot ${applesr}"
+ 	    else
+	        cxx_flags="${cxx_flags}"
+	    fi
+
+            cxx_flags="${cxx_flags} -arch i386"
+	    cxx_optz_flags="${def_cxx_optz_flags}"
+
+        link_libs="-ldl"
+
+	    AR="ar"
+
+	    ar_flags="-rs"
+	    dll_flags="${dll_flags} ${sys_cxx_pic_flags} -shared"
+
+    ;;
+esac

@@ -1,0 +1,11 @@
+NAME            = 'io'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '1.0'
+MODULE_DEPS     = 'sys'
+TEST_FILTER     = lambda t: t.find('mmByte') < 0
+SOURCE_FILTER   = lambda x: x.find('MMapInputStream.cpp') < 0
+
+set_options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

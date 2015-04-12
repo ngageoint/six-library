@@ -1,0 +1,34 @@
+#----------------------------------------
+# General area
+#----------------------------------------
+include ../build/Makefile
+
+EXE    = $(TESTS:.cpp=)
+OBJS = ${TESTS:.cpp=.o}
+#----------------------------------------
+# Build commands
+#----------------------------------------
+all: $(EXE)
+
+$(EXE):  $(OBJS) dirs
+	$(COMPILE) -o $@ $@.o $(LINK)
+	mv $@ $(TESTDIR)
+
+#----------------------------------------
+# Rule for setting up dir. structure
+#----------------------------------------
+dirs:
+	\mkdir -p $(TESTDIR)
+
+
+.SUFFIXES: .o .cpp
+.cpp.o:
+	$(COMPILE) -c $?
+
+clean:
+	\rm -f $(OBJS)
+	\rm -rf $(TESTDIR)
+
+raw: clean
+	\rm -f Makefile
+

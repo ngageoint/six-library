@@ -1,0 +1,56 @@
+# (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+#
+# This is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program; If not,
+# see <http://www.gnu.org/licenses/>.
+
+PACKAGE = __NAME
+
+MAJOR_VERSION = 1
+MINOR_VERSION = 0
+VERSION_SUFFIX =
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+
+BUILD = library unit-tests
+SOURCES = 
+
+TESTS = 
+PLUGINS =
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+
+
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/xml.lite/include \
+              -I@top_srcdir@/mt/include \
+              -I@top_srcdir@/plugin/include \
+              -I@top_srcdir@/logging/include \
+              -I@top_srcdir@/unique/include \
+              -I@top_srcdir@/io/include
+
+MY_LIBPATH = 
+             -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/xml.lite/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/mt/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/plugin/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/logging/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/unique/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/io/lib/@target@/@lib_dir@
+MY_LIBS = -lplugin-c++ -llogging-c++ -lxml.lite-c++ -lmt-c++ -lio-c++ -lsys-c++ -lstr-c++ -lunique-c++ -lexcept-c++ -luuid
+
+

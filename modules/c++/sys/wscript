@@ -1,0 +1,11 @@
+NAME            = 'sys'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '1.2'
+MODULE_DEPS     = 'str except'
+USELIB          = 'THREAD DL RT'
+TEST_FILTER     = lambda t: t not in 'MMapReadOnlyTest.cpp ProcessTest1.cpp'.split()
+
+set_options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

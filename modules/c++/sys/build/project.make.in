@@ -1,0 +1,72 @@
+PACKAGE = sys
+BUILD = library unit-tests
+MAJOR_VERSION = 1
+MINOR_VERSION = 2
+VERSION_SUFFIX = rc1
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Dan.Pressel@gd-ais.com, Jeffrey.Randolph@gd-ais.com, Thomas.Zellman@gd-ais.com
+DESCRIPTION = Contains robust thread layer, system dso loading layer \
+              operating system independent file API, and code for \
+              multi-processing.  Thread layer currently supports pthreads, \
+              solaris threads (sun), sproc (SGI), win32 native threads \
+              (windows) and Netscape Portable Runtime threads.
+
+SOURCES = ErrUnix.cpp \
+          FileUnix.cpp \
+          DateTime.cpp \
+          StopWatch.cpp \
+          TimeStampUnix.cpp \
+          OSUnix.cpp \
+          ErrWin32.cpp \
+          TimeStampWin32.cpp \
+          OSWin32.cpp \
+          SyncFactoryIrix.cpp \
+          MutexIrix.cpp \
+          MutexNSPR.cpp \
+          MutexWin32.cpp \
+          MutexSolaris.cpp \
+          MutexPosix.cpp \
+          ReadWriteMutex.cpp \
+          ConditionVarIrix.cpp \
+          ConditionVarNSPR.cpp \
+          ConditionVarWin32.cpp \
+          ConditionVarSolaris.cpp \
+          ConditionVarPosix.cpp \
+          SemaphoreIrix.cpp \
+          SemaphorePosix.cpp \
+          SemaphoreSolaris.cpp \
+          ThreadIrix.cpp \
+          ThreadNSPR.cpp \
+          ThreadWin32.cpp \
+          ThreadSolaris.cpp \
+          ThreadPosix.cpp \
+          DLLUnix.cpp \
+          DLLWin32.cpp \
+          ProcessUnix.cpp \
+          ProcessWin32.cpp \
+          Dbg.cpp \
+          DirectoryEntry.cpp \
+          Path.cpp \
+          Conf.cpp
+
+TESTS = OSTest.cpp \
+        DateTimeTest.cpp \
+        ReentrantTest.cpp \
+        ThreadTest4.cpp \
+        ThreadTest5.cpp \
+        RaiseTest.cpp \
+        MutexTest.cpp \
+        ReadWriteMutexTest.cpp \
+        DLLTest.cpp \
+        DirectoryTest.cpp \
+        PathTest.cpp
+
+MY_DEPENDS = str except
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include
+MY_LIBPATH =  -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+              -L@top_srcdir@/except/lib/@target@/@lib_dir@
+MY_LIBS = -lstr-c++ -lexcept-c++

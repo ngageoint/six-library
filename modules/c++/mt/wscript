@@ -1,0 +1,9 @@
+NAME            = 'mt'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '1.0-RC4'
+MODULE_DEPS     = 'sys'
+
+set_options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

@@ -1,0 +1,39 @@
+PACKAGE = io
+BUILD = library unit-tests
+MAJOR_VERSION = 1
+MINOR_VERSION = 0
+VERSION_SUFFIX = RC3
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Dan.Pressel@gd-ais.com, Jeffrey.Randolph@gd-ais.com, Thomas.Zellman@gd-ais.com
+DESCRIPTION = Simple API for IO routines, with efficient chunked streaming
+
+SOURCES = ByteStream.cpp \
+          FileInputStreamOS.cpp \
+          FileOutputStreamOS.cpp \
+          FileInputStreamIOS.cpp \
+          FileOutputStreamIOS.cpp \
+          InputStream.cpp \
+          StandardStreams.cpp \
+          StringStream.cpp
+
+TESTS =   byteStreamTest1.cpp \
+          byteStreamTest2.cpp \
+          ioTest1.cpp \
+          ioTest2.cpp \
+          ioTest3.cpp \
+          ioTest4.cpp \
+          serializeTest1.cpp \
+          stringStreamTest1.cpp \
+          stringStreamTest2.cpp \
+          seekTest1.cpp
+
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include
+MY_LIBPATH = -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@
+MY_LIBS = -lsys-c++ -lstr-c++ -lexcept-c++

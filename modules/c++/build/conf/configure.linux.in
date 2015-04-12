@@ -1,0 +1,68 @@
+dnl # By default, use gnu
+case "${target}" in
+    *-*-linux-*|i686-pc-*)
+        case "${CXX}" in
+            CC)
+                AC_MSG_RESULT(selecting the GNU g++ compiler...)
+                CXX="g++"
+            ;;
+          esac
+    ;;
+esac
+
+
+case "${target}" in
+    *-*-linux-*|i686-pc-*)
+        case `basename "${CXX}"` in
+          
+            icc)
+                AC_MSG_RESULT(selecting the intel icc compiler...)
+                AC_MSG_RESULT(selecting the ar archiver...)
+
+                sys_cxx_debug_flags="-g"
+                sys_cxx_warn_flags=""
+                sys_cxx_verb_flags=""
+                sys_cxx_64_flags=""
+                sys_cxx_optz_med="-tpp7"
+                sys_cxx_optz_fast="-tpp7"
+                sys_cxx_optz_fastest="-tpp7"
+                def_cxx_optz_flags="${sys_cxx_optz_fast}"
+        
+                auto_test_flags=""
+        
+                cxx_flags="-c99 -align"
+                cxx_defs="-D__USE_ISOC99 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE"
+                cxx_optz_flags="${def_cxx_optz_flags}"
+        
+                link_defs="${link_defs} -static"
+                link_libs="-lrt -ldl -lnsl"
+            ;;
+          
+          
+            g++)
+                AC_MSG_RESULT(selecting the gnu compiler...)
+                AC_MSG_RESULT(selecting the ar archiver...)
+                
+                sys_cxx_debug_flags="-g"
+                sys_cxx_warn_flags="-Wall"
+                sys_cxx_verb_flags="-v"
+                sys_cxx_64_flags="-m64"
+                sys_cxx_pic_flags="-fPIC"
+                sys_cxx_optz_med="-O1"
+                sys_cxx_optz_fast="-O2"
+                sys_cxx_optz_fastest="-O3"
+        
+                def_cxx_optz_flags="${sys_cxx_optz_fast}"
+                cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+                cxx_flags="-Wl,-E"
+                cxx_optz_flags="${def_cxx_optz_flags}"
+        
+                link_libs="-ldl -lnsl"
+        
+                AR="ar"
+                ar_flags="-ru"
+                dll_flags="${dll_flags} ${sys_cxx_pic_flags} -shared"
+            ;;
+        esac
+       ;;
+esac

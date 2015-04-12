@@ -1,0 +1,18 @@
+NAME            = 'xml.lite'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '1.1-dev'
+MODULE_DEPS     = 'io'
+TEST_FILTER     = lambda t: t not in 'MMParserTest1.cpp MinidomParserTest2.cpp'.split()
+
+set_options = configure = distclean = lambda p: None
+
+def build(bld):
+    variant = bld.env['VARIANT'] or 'default'
+    env = bld.env_of_name(variant)
+    
+    kw = globals().copy()
+    if 'MAKE_XML' in env:
+        kw['USELIB_LOCAL'] = 'XML'
+    else:
+        kw['USELIB'] = 'XML'
+    bld.module(**kw)

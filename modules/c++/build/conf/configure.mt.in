@@ -1,0 +1,137 @@
+cxx_thread_defs="-D_REENTRANT"
+cxx_thread_libs="-lpthread"
+
+case "${target}" in
+   mips-sgi-*)
+      case `basename "${CXX}"` in
+         CC)
+	        cxx_thread_defs="-D_REENTRANT"
+	        link_thread_libs=""
+         ;;
+         
+         g++)
+		cxx_thread_defs="-D_REENTRANT"
+		link_thread_libs=""
+         ;;
+      esac
+   ;;
+
+   sparc-sun-*)
+      case `basename "${CXX}"` in
+         CC)
+	        cxx_thread_defs="-mt"
+	        link_thread_libs="-lthread"
+         ;;
+         
+         g++)
+		cxx_thread_defs="-D_REENTRANT -D__POSIX"
+		link_thread_libs="-lpthread"
+         ;;
+      esac
+   ;;
+
+   
+   *-*-linux-*|i686-pc-*)
+      case `basename "${CXX}"` in
+         icc)
+            cxx_thread_defs="-D_REENTRANT -D__POSIX"
+	    	link_thread_libs="-lpthread"
+         ;;
+      
+         g++)
+	        cxx_thread_defs="-D_REENTRANT -D__POSIX"
+	        link_thread_libs="-lpthread"
+         ;;
+      esac
+   ;;
+   
+   powerpc-ibm-*)
+      case `basename "${CXX}"` in
+         xlC)
+	        cxx_thread_defs="-D_REENTRANT -D__POSIX"
+	        link_thread_libs="-lpthread"
+         ;;
+         g++)
+	        cxx_thread_defs="-D_REENTRANT -D__POSIX"
+	        link_thread_libs="-lpthread"
+         ;;
+      esac
+   ;;
+   
+   
+   rs6000-ibm-*)
+      case `basename "${CXX}"` in
+         xlC)
+	        cxx_thread_defs="-D_REENTRANT -D__POSIX"
+	        link_thread_libs="-lpthread"
+	     ;;
+         g++)
+	        cxx_thread_defs="-D_REENTRANT -D__POSIX"
+	        link_thread_libs="-lpthread"
+	     ;;
+      esac
+   ;;
+   
+   
+	*-apple-*)
+	    cxx_thread_defs="-D_REENTRANT -D__POSIX"
+	    link_thread_libs=""
+   	;;
+   
+esac
+
+
+
+AC_ARG_ENABLE(threading,
+	      [  --enable-threading  		Turn on threading (default is on)],
+	      ok=$enable_threading,
+	      ok="yes")
+if test "${ok}" = "no" 
+then 
+     AC_MSG_RESULT(disabling threading...)
+     cxx_thread_defs=""
+     link_thread_libs=""
+else
+     AC_MSG_RESULT(enabling threading...)
+fi
+
+
+AC_ARG_WITH(thread-layer,
+            [  --with-thread-layer=LAYER	Compile with LAYER],
+	    ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   case "${ok}" in 
+      pthreads)
+         AC_MSG_RESULT(enabling pthreads...)
+         link_thread_libs="-lpthread"
+         cxx_thread_defs="-D_REENTRANT -D__POSIX"
+      ;;
+      solaris)
+         AC_MSG_RESULT(enabling solaris threads...)
+         cxx_thread_libs="-D_REENTRANT -lthread"
+      ;;
+      irix)
+	AC_MSG_RESULT(enabling irix sproc-based threading...)
+   esac
+fi
+
+
+AC_ARG_WITH(thread-home,
+            [  --with-thread-home=HOME	Compile with HOME],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+    AC_MSG_RESULT(setting thread home... ${ok})
+    link_thread_libpath="-L${ok}/lib"
+    cxx_thread_includes="-I${ok}/include"
+fi
+
+
+cxx_includes="${cxx_includes} ${cxx_thread_includes}"
+cxx_defs="${cxx_defs} ${cxx_thread_defs}"
+cxx_flags="${cxx_flags} ${cxx_thread_flags}"
+link_libs="${link_libs} ${link_thread_libs}"
+link_libpath="${link_libpath} ${link_thread_libpath}"

@@ -1,0 +1,31 @@
+PACKAGE = math.poly
+
+MAJOR_VERSION = 0
+MINOR_VERSION = 2
+VERSION_SUFFIX =
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = James.Walter@gd-ais.com
+BUILD = unit-tests
+SOURCES =
+
+TESTS = test_poly.cpp test_inner_poly.cpp test_fixed.cpp test_llsq.cpp
+PLUGINS =
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+
+
+MY_INCLUDES = \
+              -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/math.linear/include
+
+MY_LIBPATH = \
+             -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@
+
+MY_LIBS = -lsys-c++ -lstr-c++ -lexcept-c++ 
+
+

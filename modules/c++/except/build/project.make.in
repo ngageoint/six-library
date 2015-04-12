@@ -1,0 +1,23 @@
+PACKAGE = except
+BUILD = library unit-tests
+MAJOR_VERSION = 1
+MINOR_VERSION = 0
+VERSION_SUFFIX =
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Dan.Pressel@gd-ais.com, Jeffrey.Randolph@gd-ais.com, Thomas.Zellman@gd-ais.com
+DESCRIPTION = This library defines a set of exceptions, and errors, \
+              throwables which can be caught and manipulated within \
+              the constructs of the C++ langaguge.  \
+              When used in conjunction with the sys package, this \
+              library is a necessity, and because of its simple, \
+              java-like exception hierarchy, it is easy to understand.
+
+SOURCES = Context.cpp Trace.cpp Throwable.cpp 
+TESTS = Gen2Test.cpp
+
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = 
+MY_LIBPATH = 
+MY_LIBS =

@@ -1,0 +1,69 @@
+# ==================== DO NOT EDIT THIS HEADER ======================== 
+# 
+# Copyright (c) 2006 General Dynamics - AIS
+# Ann Arbor, MI. 
+# 
+# All Rights Reserved 
+# 
+# THIS IS UNPUBLISHED COPYRIGHTED SOURCE CODE containing
+# proprietary information of General Dynamics - AIS
+# This copy has been provided on the basis of strict
+# confidentiality and on the express understanding that
+# it may not be reproduced, or revealed to any person,
+# in whole or in part, without express written permission
+# from General Dynamics - AIS, which is sole owner of
+# copyright and all other rights therein. 
+# No cost usage license granted to U.S. Government only.
+# 
+# ==================== DO NOT EDIT THIS HEADER ========================
+
+
+#----------------------------------------
+# Project specific
+#----------------------------------------
+include ../build/project.make
+
+TARGET = @target@
+LANGUAGE = c++
+#----------------------------------------
+# Compile flags
+#----------------------------------------
+CXX = @purify@ @CXX@
+CXXDEFINES = @cxx_defs@ $(MY_CXXDEFINES)
+CXXFLAGS = @cxx_flags@ $(MY_CXXFLAGS)
+INCLUDES = -I../include @cxx_includes@ $(MY_INCLUDES)
+COMPILE = $(CXX) $(CXXFLAGS) $(CXXDEFINES) $(INCLUDES)
+
+#----------------------------------------
+# Library flags
+#----------------------------------------
+ARCHIVE = @AR@ @ar_flags@
+ARCHNAME = $(PACKAGE)-$(LANGUAGE)
+LIBNAME = lib$(ARCHNAME).a
+LIBDIR = ../lib/$(TARGET)/@lib_dir@
+DSONAME = lib$(ARCHNAME).so
+LIBS = $(MY_LIBS) @link_libs@ 
+
+#----------------------------------------
+# Link
+#----------------------------------------
+LIBPATH = -L$(LIBDIR) $(MY_LIBPATH) @link_libpath@
+LINK = $(LIBPATH) $(LFLAGS) $(LIBS)
+LFLAGS = @link_flags@ $(MY_LFLAGS)
+#----------------------------------------
+# DSO flags
+#----------------------------------------
+DLLFLAGS = @dll_flags@
+DSODIR = ../plugins/$(TARGET)/@lib_dir@
+DSO    = ${PLUGINS:.cpp=.so}
+
+#----------------------------------------
+# Test flags
+#----------------------------------------
+TESTDIR = ../bin/$(TARGET)
+
+#----------------------------------------
+# Misc.
+#----------------------------------------
+DSOEXT  = .so
+LIBEXT  = .a

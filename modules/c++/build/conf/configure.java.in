@@ -1,0 +1,47 @@
+case "${target}" in
+   mips-sgi-*)
+      java_ident="irix"
+   ;;
+
+   sparc-sun-*)
+      java_ident="solaris"
+   ;;
+
+   *-*-linux-*|i686-pc-*)
+      java_ident="linux"
+   ;;
+   
+   powerpc-ibm-*)
+      java_ident="ibm"
+   ;;
+   
+   rs6000-ibm-*)
+      java_ident="ibm"
+   ;;
+   
+   powerpc-apple-*)
+      java_ident="apple"
+   	;;
+esac
+
+
+AC_ARG_WITH(java-home,
+		--with-java-home=JAVA_HOME
+		specify java home.],
+		ok=${withval},
+		ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+	cxx_java_includes="-I${ok}/include -I${ok}/include/${java_ident}"
+	link_java_libpath="-L${ok}/jre/lib"
+else
+   if test -n "${JAVA_HOME}"
+   then
+      AC_MSG_RESULT(using JAVA_HOME for includes and libs)
+	   cxx_java_includes="-I${JAVA_HOME}/include -I${JAVA_HOME}/include/${java_ident}"
+	   link_java_libpath="-L${JAVA_HOME}/jre/lib"
+	fi
+fi
+
+AC_SUBST(cxx_java_includes)
+AC_SUBST(link_java_libpath)

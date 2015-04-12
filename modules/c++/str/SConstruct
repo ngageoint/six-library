@@ -1,0 +1,28 @@
+import glob, os, string, sys, shutil
+sys.path.append('../../../utils')
+import scons_utils
+sys.path.pop()
+
+LIB_NAME = 'str'
+
+# Handle command-line options
+opts = scons_utils.add_default_options(Options())
+env = Environment(options = opts, ENV = os.environ)
+Help(opts.GenerateHelpText(env))
+
+# Get the target name, and setup all the system-dependent flags and libs
+local_lib = scons_utils.do_configure(env)
+print "Building %s for %s" % (LIB_NAME, env['PLATFORM'])
+sourceFiles = scons_utils.get_source_files('./source', ext='.cpp', platform=env['PLATFORM'])
+myLibSuffix = 'c++'
+myLibStr = '%s-' + myLibSuffix
+
+#setup the path/lib vars
+depends = ['except']
+build_libs = [{'source':sourceFiles, 'lib':'%s-%s' % (LIB_NAME, myLibSuffix), 'depends':[myLibStr % dep for dep in depends]},]
+include_path = ['include'] + ['../%s/include' % p for p in depends]
+lib_path = [('../%s/%s' % (p, local_lib)) for p in depends]
+env.Append(CPPPATH = include_path)
+
+#make the lib(s)
+libs = scons_utils.make_libs(env, build_libs, local_lib, lib_path)
