@@ -1,0 +1,103 @@
+# =========================================================================
+# This file is part of NITRO
+# =========================================================================
+# 
+# (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+#
+# NITRO is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public 
+# License along with this program; if not, If not, 
+# see <http://www.gnu.org/licenses/>.
+#
+
+PACKAGE = nitf
+BUILD = library unit-tests
+MAJOR_VERSION = 2
+MINOR_VERSION = 7
+VERSION_SUFFIX =dev
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net
+DESCRIPTION = A complete solution for reading and writing NITF \
+              files. C++ bindings for the C core library.
+
+#          BufferedReader.cpp
+SOURCES = BandInfo.cpp \
+          BandSource.cpp \
+          BlockingInfo.cpp \
+          BufferedWriter.cpp \
+          ComponentInfo.cpp \
+          DataSource.cpp \
+          DateTime.cpp \
+          DESegment.cpp \
+          DESubheader.cpp \
+          DownSampler.cpp \
+          FileHeader.cpp \
+          FileSecurity.cpp \
+          GraphicSegment.cpp \
+          GraphicSubheader.cpp \
+          Handle.cpp \
+          HashTable.cpp \
+          ImageReader.cpp \
+          ImageSegment.cpp \
+          ImageSource.cpp \
+          ImageSubheader.cpp \
+          ImageWriter.cpp \
+          IOInterface.cpp \
+          LabelSegment.cpp \
+          LabelSubheader.cpp \
+          List.cpp \
+          LookupTable.cpp \
+          PluginRegistry.cpp \
+          Reader.cpp \
+          Record.cpp \
+          RESegment.cpp \
+          RESubheader.cpp \
+          SegmentReader.cpp \
+          SegmentSource.cpp \
+          SegmentWriter.cpp \
+          SubWindow.cpp \
+          TextSegment.cpp \
+          TextSubheader.cpp \
+          TRE.cpp \
+          Utils.cpp \
+          WriteHandler.cpp \
+          Writer.cpp
+
+
+TESTS = test_buffered_write.cpp \
+        test_create.cpp \
+        test_des_create.cpp \
+        test_fh.cpp \
+        test_fhdr_clone.cpp \
+        test_file_source.cpp \
+        test_hash_table_1.cpp \
+        test_image_loading.cpp \
+        test_list_1.cpp \
+        test_list_2.cpp \
+        test_read_acftb.cpp \
+        test_tre_mods.cpp \
+        test_writer_3.cpp
+
+APPS = show_nitf++.cpp
+
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/mt/include
+MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/mt/lib/@target@/@lib_dir@
+MY_LIBS = -lnitf-c -lnrt-c -lmt-c++ -lsys-c++ -lstr-c++ -lexcept-c++
