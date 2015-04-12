@@ -1,0 +1,12 @@
+import os, subprocess
+from waflib import Options
+from os.path import splitext, dirname, join
+
+configure = options = distclean = lambda p: None
+
+def build(bld):
+    apps = bld.path.ant_glob('*.c')
+    for app in apps:
+        filename = str(app)
+        bld.program_helper(dir='apps', source=filename, module_deps='nitf', name=filename[:-2],
+                           lang='c')
