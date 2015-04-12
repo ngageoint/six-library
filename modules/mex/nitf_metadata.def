@@ -1,0 +1,2 @@
+LIBRARY nitf_metadata.mexw32
+EXPORTS mexFunction
