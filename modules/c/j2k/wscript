@@ -1,0 +1,74 @@
+from os.path import join, isdir, exists
+from waflib import Options
+
+APIS = ['external/openjpeg', 'external/jasper']
+
+def options(opt):
+    opt.add_option('--disable-j2k', action='store_false', dest='enable_j2k', default=True,
+                   help='turn off JPEG2000 support')
+    opt.add_option('--j2k-layer', action='store', dest='j2k_layer',
+                   choices=['openjpeg', 'jasper'], default='openjpeg', metavar='LIB',
+                   help='Specify the JPEG2000 library to link with')
+
+    existingDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), APIS)
+    opt.recurse(existingDirs)
+
+def configure(conf):
+    if Options.options.enable_j2k : 
+        conf.msg('Configuring with J2K layer', Options.options.j2k_layer)
+        existingDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), APIS)
+        conf.recurse(existingDirs)
+
+def build(bld):
+    env = bld.get_env()
+    if 'HAVE_J2K' in env : 
+        existingDirs = filter(lambda x: exists(join(bld.path.abspath(), x)), APIS)
+        bld.recurse(existingDirs + ['shared'])
+
+        if 'MAKE_OPENJPEG' in env :
+            j2kLayer = 'openjpeg'
+        elif 'MAKE_JASPER' in env :
+            j2kLayer = 'jasper'
+        else  :
+            bld.fatal('Not a supported j2k type')
+
+        j2kSources = ('source/Container.c',
+                      'source/Component.c',
+                      'source/JasPerImpl.c',
+                      'source/OpenJPEGImpl.c',
+                      'source/Reader.c',
+                      'source/SimpleComponentImpl.c',
+                      'source/SimpleContainerImpl.c',
+                      'source/Writer.c')
+
+        #build the j2k library
+        lib = bld(features='c cstlib', includes='include',
+                  target='j2k-c', name='j2k-c',
+                  source=j2kSources,
+                  export_includes='include',
+                  env=env.derive(), path=bld.path,
+                  use='nitf-c J2K ' + j2kLayer)
+                  
+        # install j2k lib
+        if env['install_libs']:
+           lib.install_path = env['install_libdir']
+
+        #j2k-only tests
+        for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
+                 'test_j2k_create']:
+            bld.program_helper(dir='tests', source='%s.c' % t, 
+                               use='j2k-c J2K ' + j2kLayer, 
+                               name=t, target=t, lang='c', env=env.derive())
+
+        #j2k/nitf tests
+        for t in ['test_j2k_nitf']:
+            bld.program_helper(dir='tests', source='%s.c' % t, 
+                               use='nitf-c j2k-c J2K', uselib=j2kLayer, 
+                               name=t, target=t, lang='c', env=env.derive())
+
+def distclean(context) :
+
+    existingDirs = filter(lambda x: exists(join(context.path.abspath(), x)), APIS)
+    context.recurse(existingDirs)
+
+
