@@ -1,0 +1,44 @@
+import os, subprocess
+from waflib import Options
+from os.path import splitext, dirname, join
+
+NAME            = 'nitf'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '2.7'
+MODULE_DEPS     = 'nrt'
+LANG            = 'c'
+DEFINES         = 'NITF_MODULE_EXPORTS'
+TEST_FILTER     = 'test_1band_rw_line.c ' \
+                  'test_fileIO.c ' \
+                  'test_hash_table_2.c ' \
+                  'test_writer_s.c ' \
+                  'test_des_read.c ' \
+                  'test_read_acftb.c ' \
+                  'test_add_masks.c ' \
+                  'test_plugin_reg_1.c ' \
+                  'test_des_write.c ' \
+                  'test_ImageIO_support.c ' \
+                  'test_make_pattern.c ' \
+                  'test_des.c ' \
+                  'test_ext_iter.c ' \
+                  'test_ImageIO_read_data.c ' \
+                  'test_ImageIO_writePattern.c ' \
+                  'test_static_plugin.c' 
+
+SUBDIRS = 'shared apps'
+
+configure = options = distclean = lambda p: None
+
+def build(bld):
+    env = bld.module(**globals())
+    bld.recurse(SUBDIRS)
+
+    #run doxygen
+    if 'DOXYGEN' in env and Options.is_install:
+        bld(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
+        try:
+            htmlDocs = bld.path.find_dir('doc/html')
+            for f in htmlDocs.find_iter():
+                relpath = f.path_from(htmlDocs)
+                bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
+        except:{}
