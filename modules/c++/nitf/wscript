@@ -1,0 +1,24 @@
+from os.path import split, basename, splitext
+
+NAME            = 'nitf'
+MAINTAINER      = 'asylvest@users.sourceforge.net'
+VERSION         = '2.7'
+MODULE_DEPS     = 'mt sys mem'
+USELIB          = 'THREAD DL'
+USELIB_LOCAL    = 'nitf-c'
+LANG            = 'c++'
+TEST_FILTER     = 'test_functional.cpp test_handles.cpp ' \
+                  'test_mem_source.cpp test_static_plugin.cpp'
+APPS            = 'apps/show_nitf++.cpp'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
+    
+    env = bld.get_env()
+    for app in APPS.split() :
+        bld.program_helper(module_deps=NAME,
+                           source=app, path=bld.path,
+                           name=splitext(basename(app))[0])
+
