@@ -1,0 +1,12 @@
+NAME            = 'sys'
+MAINTAINER      = 'jmrandol@users.sourceforge.net'
+VERSION         = '1.2'
+MODULE_DEPS     = 'str except'
+USELIB          = 'THREAD DL RT SOCKET'
+TEST_FILTER     = 'MMapReadOnlyTest.cpp ProcessTest1.cpp'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
+    
