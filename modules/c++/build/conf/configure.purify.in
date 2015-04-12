@@ -1,0 +1,12 @@
+purify=""
+
+AC_ARG_WITH(purify,
+            [  --with-purify=TOOL  		Use TOOL before compile command],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   purify="${ok}"
+fi
+
+AC_SUBST(purify)

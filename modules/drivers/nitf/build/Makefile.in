@@ -1,0 +1,188 @@
+#####################################################
+#_M__a__s__t__e__r_____M__a__k__e__f__i__l__e_______#
+#                                                   #
+#                                                   #
+#        - - - NITF Archive Project - - -           #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# This is the master makefile, and hence, the only  #
+# one that you should need to edit.  Please do not  #
+# change local makefiles without discussing it with #
+# the project maintainer                            #
+#                                                   #
+# To add new library files to the effort, add them  #
+# to the SOURCES variable.  Make sure that they are #
+# located in the source/ directory.  To add new     #
+# test cases, add them to the TESTS variable, and   #
+# place the tests in the tests/ subdirectory.       #
+# To add plugins (TRE-handler DSOs) to the project, #
+# add them to the PLUGINS variable, and place them  #
+# in the shared/ directory.                         #
+#                                                   #
+#___________________________________________________#
+
+PACKAGE = nitf
+MAJOR_VERSION = 2
+MINOR_VERSION = 7
+VERSION_SUFFIX =dev
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+LANGUAGE = c
+MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net
+LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
+# Only if you are forcing these as a static lib
+LIBHANDLERS = lib$(PACKAGE)-handlers
+LIBEXT  = .a
+DSOEXT  = .so
+EXTLIBS = -lnitf-c -lnrt-c
+EXTINCLUDEPATH = -I@top_srcdir@/include -I@top_srcdir@/tests \
+                 -I@top_srcdir@/../nrt/include
+EXTLIBPATH = -L@top_srcdir@/lib/@target@ \
+             -L@top_srcdir@/../nrt/lib/@target@
+CFGDEFS = @DEFS@
+SOURCES = BandInfo.c \
+          BandSource.c \
+          ComplexityLevel.c \
+          ComponentInfo.c \
+          DataSource.c \
+          DESegment.c \
+          DESubheader.c \
+          DefaultTRE.c \
+          DownSampler.c \
+          Extensions.c \
+          Field.c \
+          FieldWarning.c \
+          FileHeader.c \
+          FileSecurity.c \
+          GraphicSegment.c \
+          GraphicSubheader.c \
+          ImageIO.c \
+          ImageReader.c \
+          ImageSegment.c \
+          ImageSource.c \
+          ImageSubheader.c \
+          ImageWriter.c \
+          LabelSegment.c \
+          LabelSubheader.c \
+          LookupTable.c \
+          PluginRegistry.c \
+          RESegment.c \
+          RESubheader.c \
+          Reader.c \
+          Record.c \
+          RowSource.c \
+          SegmentReader.c \
+          SegmentSource.c \
+          SegmentWriter.c \
+          StreamIOWriteHandler.c \
+          SubWindow.c \
+          TRE.c \
+          TRECursor.c \
+          TREPrivateData.c \
+          TREUtils.c \
+          TextSegment.c \
+          TextSubheader.c \
+          WriteHandler.c \
+          Writer.c 
+
+TESTS = test_replace_field.c test_find_field.c \
+        test_dll_1.c \
+        test_debug_mem_1.c test_hash_table_1.c \
+        test_image_loading.c \
+        test_fhdr_clone.c \
+        test_hash_table_clone.c test_imsub_clone.c \
+        test_image_source.c test_writer_3.c \
+        test_file_source.c \
+        test_tre_mods.c test_create_xmltre.c \
+        test_insert_raw_xmltre.c test_geo_utils.c
+
+#unit test info
+UNITTESTS = test_core_values.c\
+            test_create_nitf.c \
+            test_create.c \
+            test_datetime.c \
+            test_field.c \
+            test_list.c \
+            test_mem_source.c \
+            test_tree.c \
+            test_zero_field.c
+
+APPS = get_nitf_version.c image_footprint_kml.c show_nitf.c
+
+#TEST_DES.c
+PLUGINS = \
+        ACCHZB.c \
+        ACCPOB.c \
+        ACCVTB.c \
+        ACFTA.c  \
+        ACFTB.c  \
+        AIMIDA.c \
+        AIMIDB.c \
+        AIPBCA.c \
+        ASTORA.c \
+        BANDSA.c \
+        BANDSB.c \
+        BCKGDA.c \
+        BLOCKA.c \
+        BNDPLB.c \
+        CLCTNA.c \
+        CLCTNB.c \
+        CMETAA.c \
+        CSDIDA.c \
+        ENGRDA.c \
+        EXOPTA.c \
+        EXPLTA.c \
+        EXPLTB.c \
+        GEOLOB.c \
+        GEOPSB.c \
+        HISTOA.c \
+        ICHIPB.c \
+        IMGDTA.c \
+        IOMAPA.c \
+        JITCID.c \
+        MAPLOB.c \
+        MENSRA.c \
+        MENSRB.c \
+        MPDSRA.c \
+        MSTGTA.c \
+        MTIRPA.c \
+        MTIRPB.c \
+        NBLOCA.c \
+        OBJCTA.c \
+        OFFSET.c \
+        PATCHA.c \
+        PATCHB.c \
+        PIAEQA.c \
+        PIAEVA.c \
+        PIAIMB.c \
+        PIAIMC.c \
+        PIAPEA.c \
+        PIAPEB.c \
+        PIAPRC.c \
+        PIAPRD.c \
+        PIATGA.c \
+        PIATGB.c \
+        PLTFMA.c \
+        PRJPSB.c \
+        REGPTB.c \
+        RPC00B.c \
+        RPFDES.c \
+        RPFHDR.c \
+        RPFIMG.c \
+        RSMAPA.c \
+        RSMDCA.c \
+        RSMECA.c \
+        RSMGGA.c \
+        RSMGIA.c \
+        RSMIDA.c \
+        RSMPCA.c \
+        RSMPIA.c \
+        SECTGA.c \
+        SENSRA.c \
+        SNSPSB.c \
+        SNSRA.c  \
+        SOURCB.c \
+        STDIDC.c \
+        STEROB.c \
+        STREOB.c \
+        TRGTA.c  \
+        TEST_DES.c \
+        USE00A.c

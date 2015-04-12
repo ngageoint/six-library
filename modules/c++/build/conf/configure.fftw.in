@@ -1,0 +1,69 @@
+make_fft_driver=""
+link_fft_libs=""
+cxx_fft_defs=""
+
+AC_ARG_WITH(fftw-home,
+            [  --with-fftw-home=FFTW_HOME Location of FFTW package],
+	    ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   AC_MSG_RESULT(setting FFTW home...)
+   cxx_fft_includes="-I${ok}/include"
+   link_fft_libpath="-L${ok}/lib/${target}"
+   link_fft_libs="-lfftw -lrfftw"
+fi
+
+AC_ARG_ENABLE(fft-layer,
+                [  --enable-fft-layer[=LAYER]  	Specify the fftw layer:
+            				fftw (default)
+                                        ],
+            ok=${enableval},
+            ok="fftw")
+
+if test "${ok}" != "no"
+then
+   case "${ok}" in 
+        fftw)
+            AC_MSG_RESULT(enabling fftw...)
+            link_fft_libs="-lfftw -lrfftw"
+            cxx_fft_defs="-DUSE_FFTW"
+         
+            # If home was not defined then check
+            # if fftw is installed
+            if test "${fftw_home_defined}" != "yes"
+            then
+                # Try this, if its there, use it, else use the driver
+                AC_CHECK_LIB(fftw, fftw_create_plan, 
+                [ echo "detected local copy of fftw..."],
+                [
+                    link_fft_libpath="-L$PWD/fft/lib/${target}/${lib_dir}"
+                    cxx_fft_includes="-I$PWD/fft/include"
+                    make_fft_driver="make fft_driver"
+		    AC_MSG_RESULT(using bundled fft driver...)
+                ]
+                )
+                AC_CHECK_HEADER(fftw.h,
+                [ echo "detected local header for fftw.h..."],
+                [
+                    link_fft_libpath="-L$PWD/fft/lib/${target}/${lib_dir}"
+                    cxx_fft_includes="-I$PWD/fft/include"
+                    make_fft_driver="make fft_driver"
+		    AC_MSG_RESULT(using bundled fft driver...)
+                ]
+                )
+            fi
+        ;;
+    esac
+    if test "${fft_home_defined}" = "yes"
+    then
+        AC_MSG_RESULT(${ok} includes directory... ${cxx_fft_includes})
+        AC_MSG_RESULT(${ok} library directory... ${link_fft_libpath})
+    fi
+fi
+
+AC_SUBST(cxx_fft_includes)
+AC_SUBST(cxx_fft_defs)
+AC_SUBST(link_fft_libpath)
+AC_SUBST(link_fft_libs)
+AC_SUBST(make_fft_driver)

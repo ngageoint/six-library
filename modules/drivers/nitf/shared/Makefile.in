@@ -1,0 +1,88 @@
+################################################
+# We include this to get package specific info,
+# more specifically, the LIBNAME and SOURCES
+include ../build/Makefile
+
+#############################################
+# C O M P I L E R
+# The compiler + pretool
+CC = @pretool@ @CC@
+# What are we defining on the compile line?
+CCDEFINES = @cc_defs@
+# Dll Compile flags
+DLLFLAGS = @dll_flags@
+# Generic Compile Flags
+CCFLAGS =  @cc_flags@
+# Where do the includes live?
+INCLUDEPATH = $(EXTINCLUDEPATH) -I../include @cc_includes@
+# The compile command
+COMPILE = $(CC) $(CCFLAGS) $(CCDEFINES) $(INCLUDEPATH)
+
+#############################################
+# A R C H I V E R
+ARCHIVE = @AR@ @ar_flags@
+
+#############################################
+# L I N K E R
+# Link flags
+LFLAGS = @link_flags@
+# THIS library's path
+DSODIR  = ../plugins/@target@
+# The testing directory
+TESTDIR = @target@
+# The general lib path
+LIBRARYPATH = -L$(DSODIR) $(EXTLIBPATH) @link_libpath@
+
+# Libs to link with
+LIBS = @link_prelibs@ $(EXTLIBS) @link_autolibs@ @link_postlibs@
+
+LIBDIR = ../lib/@target@
+
+# The link suffixes
+LINK = $(LIBRARYPATH) $(LFLAGS) $(LIBS)
+
+#OBJS   = $(TESTS:.cpp=.o)
+#EXE    = $(TESTS:.cpp=)
+
+DSO = ${PLUGINS:.c=.so}
+STATIC = ${PLUGINS:.c=.o}
+
+#################################################
+#  This is the top level rule.  It makes your 
+#  library
+all: $(DSO)
+
+#################################################
+#  This target makes the "library directory" which 
+#  is a platform-specific sub-directory named after 
+#  the OS.  All the target does is create it if
+#  it doesn't exist.  You dont need to touch this
+#  rule, but you should make sure that $(PLUGINS)
+#  depends on it
+
+$(STATIC): $(PLUGINS)
+
+$(DSO): dsodir $(PLUGINS)
+
+static: $(STATIC)
+	$(ARCHIVE) $(LIBDIR)/$(LIBHANDLERS)-$(VERSION)$(LIBEXT) $(STATIC); \
+	cd $(LIBDIR); rm -rf $(LIBHANDLERS)$(LIBEXT); ln -fs $(LIBHANDLERS)-$(VERSION)$(LIBEXT) $(LIBHANDLERS)$(LIBEXT);	
+
+dsodir:
+	\mkdir -p $(DSODIR)
+
+doxy: 
+	doxygen ../Doxyfile
+
+clean: 
+	perl -w @build_dir@/rfk.pl -f	
+
+fresh:  clean
+	make all
+
+.SUFFIXES: .so .c .o
+.c.so:
+	$(COMPILE) $(DLLFLAGS) $< -o $(DSODIR)/$@ $(LINK)
+
+.c.o:
+	$(COMPILE) -c $<

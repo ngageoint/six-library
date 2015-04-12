@@ -1,0 +1,28 @@
+pretool=""
+
+AC_ARG_WITH(dummy,
+            [
+The following groups of options allow your to set various compiler flags, options,
+and definitions individually. These override any options set by the 'enable-<feature>'
+arguments above. 
+
+Multiple arguments should be enclosed in double quotes. Many of these options
+are best set in the indvidual Makefile.in's, but are provided here for completeness.
+
+Compiler tool options. These specify a tool and it's options used before the \$(CXX) command.
+The tool and options are built from:
+ (pretool)
+ ])
+
+AC_ARG_WITH(pretool,
+            [  --with-pretool=TOOL  		Use TOOL before compile command],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   checkprog "${ok}"
+   pretool="${ok}"
+fi
+
+
+AC_SUBST(pretool)

@@ -1,0 +1,65 @@
+#####################################################
+#_M__a__s__t__e__r_____M__a__k__e__f__i__l__e_______#
+#                                                   #
+#                                                   #
+#        - - - NITF Archive Project - - -           #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# This is the master makefile, and hence, the only  #
+# one that you should need to edit.  Please do not  #
+# change local makefiles without discussing it with #
+# the project maintainer                            #
+#                                                   #
+# To add new library files to the effort, add them  #
+# to the SOURCES variable.  Make sure that they are #
+# located in the source/ directory.  To add new     #
+# test cases, add them to the TESTS variable, and   #
+# place the tests in the tests/ subdirectory.       #
+# To add plugins (TRE-handler DSOs) to the project, #
+# add them to the PLUGINS variable, and place them  #
+# in the shared/ directory.                         #
+#                                                   #
+#___________________________________________________#
+
+PACKAGE = nrt
+MAJOR_VERSION = 2
+MINOR_VERSION = 7
+VERSION_SUFFIX = dev
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+LANGUAGE = c
+MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net
+LIBNAME = lib$(PACKAGE)-$(LANGUAGE)
+LIBEXT  = .a
+DSOEXT  = .so
+EXTLIBS = -lnrt-c
+EXTINCLUDEPATH = -I@top_srcdir@/include -I@top_srcdir@/tests
+EXTLIBPATH = -L@top_srcdir@/lib/@target@
+CFGDEFS = @DEFS@
+SOURCES = DateTime.c \
+          Debug.c \
+          DLLUnix.c \
+          DLLWin32.c \
+          DirectoryUnix.c \
+          DirectoryWin32.c \
+          Error.c \
+          HashTable.c \
+          IntStack.c \
+          IOHandleUnix.c \
+          IOHandleWin32.c \
+          IOInterface.c \
+          List.c \
+          Pair.c \
+          SyncUnix.c \
+          SyncIrix.c \
+          SyncWin32.c \
+          System.c \
+          Tree.c \
+          Utils.c 
+#IntStack.c \
+
+#unit test info
+UNITTESTS = test_core_values.c\
+            test_datetime.c \
+            test_list.c \
+            test_tree.c
+
+TESTS =

@@ -1,0 +1,64 @@
+case "${target}" in
+   sparc-sun-*)
+      case `basename "${CXX}"` in
+         CC)
+            AC_MSG_RESULT(selecting the forte compiler...)
+	    AC_MSG_RESULT(selecting the xar option for archiver...)
+
+	    sys_cxx_debug_flags="-g"
+	    sys_cxx_warn_flags=""
+	    sys_cxx_verb_flags="-v"
+	    sys_cxx_64_flags="-xtarget=generic64"
+	    sys_cxx_pic_flags="-KPIC"
+	    
+	    sys_cxx_optz_med="-xO2"
+	    sys_cxx_optz_fast="-xO3"
+	    sys_cxx_optz_fastest="-fast"
+
+	    def_cxx_optz_flags="${sys_cxx_optz_fast}"
+
+	    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+            cxx_flags=" -instances=static"
+	    cxx_optz_flags="${def_cxx_optz_flags}"
+
+            link_libs="-ldl -lnsl -lsocket"
+
+	    AR="${CXX}"
+	    ar_flags="-xar -o"
+
+	    dll_flags="${dll_flags} -G ${sys_cxx_pic_flags}"
+
+         ;;
+         
+         g++)
+
+		    AC_MSG_RESULT(selecting the gnu compiler...)
+		    AC_MSG_RESULT(selecting the ar archiver...)
+	
+		    sys_cxx_debug_flags="-g"
+		    sys_cxx_warn_flags="-Wall"
+		    sys_cxx_verb_flags="-v"
+		    sys_cxx_64_flags="-m64"
+		    sys_cxx_pic_flags="-fPIC"
+		    sys_cxx_optz_med="-O2"
+		    sys_cxx_optz_fast="-O3"
+		    sys_cxx_optz_fastest="-O3"
+	
+	            auto_test_flags=""
+	
+		    def_cxx_optz_flags="${sys_cxx_optz_fast}"
+		    cxx_defs="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+	            cxx_flags=""
+		    cxx_optz_flags="${def_cxx_optz_flags}"
+	
+	            link_libs="-lrt -ldl -lnsl -lsocket"
+	
+		    AR="ar"
+		    ar_flags="-ru"
+		    dll_flags="${dll_flags} ${sys_cxx_pic_flags} -shared"
+
+         ;;
+         
+      esac
+   ;;
+esac

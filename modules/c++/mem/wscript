@@ -1,0 +1,9 @@
+import os
+
+set_options = distclean = lambda p: None
+
+def configure(conf):
+    conf.env.append_value('CPPPATH_MEM', os.path.join(conf.curdir, 'include'))
+
+def build(bld):
+    bld.fromConfig(bld.curdir)

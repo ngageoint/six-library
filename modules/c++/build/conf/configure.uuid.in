@@ -1,0 +1,11 @@
+make_uuid_driver="echo 'skipping uuid driver installation'"
+
+AC_CHECK_LIB(uuid, uuid_generate, 
+    [ echo "detected local uuid lib..."],
+    [
+		make_uuid_driver="make uuid_driver"
+		AC_MSG_RESULT(using bundled uuid driver...)
+    ]
+)
+
+AC_SUBST(make_uuid_driver)

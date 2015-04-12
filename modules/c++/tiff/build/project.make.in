@@ -1,0 +1,37 @@
+PACKAGE = tiff
+BUILD = library unit-tests
+MAJOR_VERSION = 1
+MINOR_VERSION = 0
+VERSION_SUFFIX = dev
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = thomas.zellman@gd-ais.com
+DESCRIPTION = TIFF reader/writer library
+SOURCES = Common.cpp \
+          Header.cpp \
+          KnownTags.cpp \
+          IFDEntry.cpp \
+          IFD.cpp \
+          TypeFactory.cpp \
+          ImageReader.cpp \
+          FileReader.cpp \
+          ImageWriter.cpp \
+          FileWriter.cpp \
+          Utils.cpp
+
+TESTS = DumpHeader.cpp
+
+MY_CXXFLAGS = 
+MY_CXXDEFINES = 
+MY_LFLAGS = 
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/io/include \
+              -I@top_srcdir@/mt/include
+MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/io/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/mt/lib/@target@/@lib_dir@
+MY_LIBS = -lmt-c++ -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
+

@@ -1,0 +1,106 @@
+import os, subprocess
+import Options
+from os.path import splitext, dirname
+
+NAME            = 'nitf'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '2.7-dev'
+MODULE_DEPS     = 'nrt'
+LANG            = 'c'
+USELIB          = 'THREAD DL MATH nitf-c'
+DEFINES         = 'NITF_MODULE_EXPORTS'
+TEST_FILTER     = lambda x: x not in ['test_1band_rw_line.c', 'test_fileIO.c',
+                                      'test_hash_table_2.c', 'test_writer_s.c',
+                                      'test_des_read.c', 'test_read_acftb.c',
+                                      'test_add_masks.c', 'test_plugin_reg_1.c',
+                                      'test_des_write.c', 'test_ImageIO_support.c',
+                                      'test_make_pattern.c', 'test_des.c',
+                                      'test_ext_iter.c', 'test_ImageIO_read_data.c',
+                                      'test_ImageIO_writePattern.c', 'test_static_plugin.c']
+
+
+set_options = distclean = lambda p: None
+
+def configure(conf):
+    conf.env.append_value('CCFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
+    conf.env.append_value('CXXFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
+
+def build(bld):
+    env = bld.module(**globals())
+    
+    #make all of plug-ins normally - as separate DSOs
+    pluginNode = bld.path.find_dir('shared')
+    pEnv = env.copy()
+    if pEnv['shlib_PATTERN'].startswith('lib'):
+        pEnv['shlib_PATTERN'] = pEnv['shlib_PATTERN'][3:]
+    
+    uselib_local = 'nitf-c nrt-c'
+    
+    pluginList = []
+    plugins = pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
+    plugins.remove('J2KDecompress.c')
+    plugins.remove('J2KCompress.c')
+    plugins.sort()
+    
+    for p in plugins:
+        pluginName = splitext(p)[0]
+        plugin = bld.new_task_gen('cc', source=p,
+                                  target='%s_obj' % pluginName,
+                                  includes=['../include', '../../nrt/include'],
+                                  defines = 'NITF_MODULE_EXPORTS',
+                                  path=pluginNode, env=env.copy())
+        plugin = bld.new_task_gen('cc', 'shlib', uselib_local=uselib_local,
+                                  target=pluginName, add_objects='%s_obj' % pluginName,
+                                  path=pluginNode, env=pEnv.copy(),
+                                  install_path='${PREFIX}/share/nitf/plugins')
+        pluginList.append('%s_obj' % pluginName)
+    
+    #now, to support static linkage, make the plug-ins as a static library
+    lib = bld.new_task_gen('cc', 'staticlib', includes='include',
+                           target='%s-handlers' % NAME, env=env.copy(),
+                           uselib_local = uselib_local, add_objects = pluginList)
+    
+    #J2K plug-ins
+    if env['CCFLAGS_j2k-c']:
+        for f in ['J2KDecompress.c', 'J2KCompress.c']:
+            bld.new_task_gen('cc', 'shlib', source=f,
+                             target=splitext(f)[0],
+                             uselib_local='nitf-c j2k-c nrt-c',
+                             uselib='nitf-c j2k-c nrt-c',
+                             path=pluginNode, env=pEnv.copy(),
+                             install_path='${PREFIX}/share/nitf/plugins')
+    
+    #build apps
+    appsDir = bld.path.find_dir('apps')
+    apps = appsDir.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' ')
+    for app in apps:
+        bld.program(dir='apps', source=app, module_deps=NAME, name=app[:-2],
+                    lang='c')
+
+    #install headers
+    for f in bld.path.find_dir('include').find_iter():
+        relpath = f.relpath_gen(bld.path)
+        bld.install_files('${PREFIX}/%s' % dirname(relpath), relpath)
+        
+    #run doxygen
+    if 'DOXYGEN' in env and Options.is_install:
+        bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
+        try:
+            htmlDocs = bld.path.find_dir('doc/html')
+            for f in htmlDocs.find_iter():
+                relpath = f.relpath_gen(htmlDocs)
+                bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
+        except:{}
+    
+    #add some extra/custom targets
+    extraTargets = {'nitro-plugins' : pluginList, 'nitro' : pluginList + ['nitf-handlers']}
+    newTargets = []
+    if Options.options.compile_targets:
+        targets = Options.options.compile_targets.split(',')
+        for k in extraTargets.keys():
+            if k in targets:
+                newTargets.extend(extraTargets[k])
+                targets.remove(k)
+        newTargets.extend(targets) #add the remaining targets, if any
+    Options.options.compile_targets = ','.join(newTargets) #reset the options
+

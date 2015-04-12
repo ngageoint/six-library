@@ -1,0 +1,58 @@
+def_sql_libpath="lib"
+def_sql_include="include"
+
+
+AC_ARG_WITH(sql-home,
+            [  --with-sql-home=HOME		Compile with HOME],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+    AC_MSG_RESULT(setting sql home... ${ok})
+    link_sql_libpath="-L${ok}/${def_sql_libpath}"
+    cxx_sql_includes="-I${ok}/${def_sql_include}"
+    sql_home_defined="yes"
+fi
+
+
+
+AC_ARG_ENABLE(sql-layer,
+              [  --enable-sql-layer[=LAYER] 	Specify the sql layer:
+            				pgsql:  PostgreSQL database support
+            				mysql:  MySQL database support
+                                        oracle: Oracle database support ],
+            ok=${enableval},
+            ok="no")
+
+if test "${ok}" != "no"
+then
+    case "${ok}" in 
+        pgsql)
+            AC_MSG_RESULT(enabling pgsql client api...)
+            link_sql_libs="-lpq"
+            cxx_sql_defs="-DUSE_PGSQL"
+        ;;
+        mysql)
+	    AC_MSG_RESULT(enabling mysql client api...)
+            link_sql_libs="-lmysqlclient"
+	    cxx_sql_defs="-DUSE_MYSQL"
+            def_sql_libpath="${def_sql_libpath}/mysql"
+            def_sql_include="${def_sql_include}/mysql"
+        ;;
+        oracle)
+            AC_MSG_RESULT(enabling oracle client api...)
+            link_sql_libs="-lclntsh"
+            cxx_sql_defs="-DUSE_ORACLE"
+    esac
+    if test "${sql_home_defined}" = "yes"
+    then
+        AC_MSG_RESULT(${ok} includes directory... ${cxx_sql_includes})
+        AC_MSG_RESULT(${ok} library directory... ${link_sql_libpath})
+    fi
+fi
+
+
+AC_SUBST(cxx_sql_includes)
+AC_SUBST(cxx_sql_defs)
+AC_SUBST(link_sql_libs)
+AC_SUBST(link_sql_libpath)

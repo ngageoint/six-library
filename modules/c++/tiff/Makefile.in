@@ -1,0 +1,64 @@
+# ==================== DO NOT EDIT THIS HEADER ======================== 
+# 
+# Copyright (c) 2006 General Dynamics - AIS
+# Ann Arbor, MI. 
+# 
+# All Rights Reserved 
+# 
+# THIS IS UNPUBLISHED COPYRIGHTED SOURCE CODE containing
+# proprietary information of General Dynamics - AIS
+# This copy has been provided on the basis of strict
+# confidentiality and on the express understanding that
+# it may not be reproduced, or revealed to any person,
+# in whole or in part, without express written permission
+# from General Dynamics - AIS, which is sole owner of
+# copyright and all other rights therein. 
+# No cost usage license granted to U.S. Government only.
+# 
+# ==================== DO NOT EDIT THIS HEADER ========================
+
+#----------------------------------------
+# General area
+#----------------------------------------
+include ./build/project.make
+
+#----------------------------------------
+# Build rules
+#----------------------------------------
+
+
+#----------------------------------------
+# This is specified by the user in the 
+# project.make.  It is a space delimited 
+# set of rules 
+#----------------------------------------
+
+all: library unit-tests
+
+library:
+	cd source; make
+
+unit-tests:
+	cd tests; make
+
+clean:
+	cd source; make clean
+	cd tests; make clean
+	rm -rf lib; rm -rf bin
+
+raw: clean
+	cd source; make raw
+	cd tests; make raw
+	cd build; rm -f Makefile; rm -f project.make
+	rm -f Makefile
+
+
+dist:
+	perl @build_dir@/makedist.pl $(PACKAGE) $(VERSION) @target@
+
+copy: dist
+	mkdir -p @prefix@
+	mv $(PACKAGE)_$(VERSION)_@target@.tar @prefix@/
+
+install: copy
+	cd @prefix@; tar -xvf $(PACKAGE)_$(VERSION)_@target@.tar; \rm -f $(PACKAGE)_$(VERSION)_@target@.tar

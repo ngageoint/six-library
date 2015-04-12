@@ -1,0 +1,23 @@
+PACKAGE = cli
+BUILD = library
+MAJOR_VERSION = 1
+MINOR_VERSION = 0
+VERSION_SUFFIX = 0
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Thomas.Zellman@gd-ais.com
+DESCRIPTION = Command Line Interface library
+
+SOURCES = Argument.cpp \
+          ArgumentParser.cpp
+
+TESTS =   
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include
+MY_LIBPATH = -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@
+MY_LIBS = -lsys-c++ -lstr-c++ -lexcept-c++

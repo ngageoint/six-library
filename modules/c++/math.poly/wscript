@@ -1,0 +1,11 @@
+import os
+
+set_options = distclean = lambda p: None
+
+def configure(conf):
+    conf.env.append_value('CPPPATH_math.poly', os.path.join(conf.curdir, 'include'))
+    #legacy
+    conf.env.append_value('CPPPATH_MATH_POLY', os.path.join(conf.curdir, 'include'))
+
+def build(bld):
+    bld.fromConfig(bld.curdir)

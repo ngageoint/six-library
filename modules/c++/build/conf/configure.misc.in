@@ -1,0 +1,67 @@
+dnl #####################################################################
+dnl Define some default values
+dnl #####################################################################
+cxx_linmath_default_external_includes="-I${here}/../drivers/tnt_3_0_9/"
+cxx_linmath_default_defs="-DHAVE_TNT_DRIVER"
+
+
+AC_ARG_WITH(installed-modules-home,
+            [  --with-installed-modules-home=CODA modules],
+	    ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+   AC_MSG_RESULT(setting installed modules home...)
+   cxx_includes="${cxx_includes} -I${ok}/include"
+   link_libpath="${link_libpath} -L${ok}/lib/${target}/${lib_dir}"
+   have_modules="yes"
+   installed_modules_home="${ok}"
+fi
+
+AC_SUBST(have_modules)
+AC_SUBST(installed_modules_home)
+
+
+AC_ARG_ENABLE(linmath-driver,
+            [  --enable-linmath-driver=DRIVER Compile with linear algebra driver (not mutually exclusive)],
+        ok=${enableval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+
+dnl #### If nothing is used, use the defaults (defined externally)
+   case "${ok}" in 
+      ublas)
+         AC_MSG_RESULT(enabling ublas linear algebra driver...)
+         cxx_linmath_defs="-DHAVE_UBLAS_DRIVER"
+      ;;
+      mtl)
+         AC_MSG_RESULT(enabling mtl linear algebra driver...)
+         cxx_linmath_defs="-DHAVE_MTL_DRIVER"
+      ;;
+      tnt)
+         AC_MSG_RESULT(enabling tnt linear algebra driver...)
+         cxx_linmath_defs="-DHAVE_TNT_DRIVER"
+      ;;
+   esac
+else
+    cxx_linmath_defs="${cxx_linmath_default_defs}"
+fi
+
+AC_ARG_WITH(linmath-home,
+            [  --with-linmath-home=HOME Compile with HOME],
+            ok=${withval},
+            ok="no")
+if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
+then
+    AC_MSG_RESULT(setting linear algebra package home... ${ok})
+    cxx_linmath_external_includes="-I${ok}"
+else
+    cxx_linmath_external_includes="${cxx_linmath_default_external_includes}"
+fi
+
+
+cxx_linmath_includes="${cxx_linmath_external_includes}"
+AC_SUBST(cxx_linmath_includes)
+AC_SUBST(cxx_linmath_defs)
+AC_SUBST(cxx_linmath_flags)

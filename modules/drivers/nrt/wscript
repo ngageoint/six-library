@@ -1,0 +1,35 @@
+import os
+import Options
+
+NAME            = 'nrt'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '2.6-dev'
+MODULE_DEPS     = ''
+LANG            = 'c'
+USELIB          = 'THREAD DL RT MATH nrt-c'
+DEFINES         = 'NRT_MODULE_EXPORTS'
+
+
+set_options = distclean = lambda p: None
+
+def configure(conf):
+    conf.env.append_value('CCFLAGS_nrt-c', '-DNRT_MODULE_EXPORTS')
+    conf.env.append_value('CXXFLAGS_nrt-c', '-DNRT_MODULE_EXPORTS')
+
+def build(bld):
+    env = bld.module(**globals())
+    
+    #install headers
+    for f in bld.path.find_dir('include').find_iter():
+        relpath = f.relpath_gen(bld.path)
+        bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath), relpath)
+        
+    #run doxygen
+    if 'DOXYGEN' in env and Options.is_install:
+        bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
+        try:
+            htmlDocs = bld.path.find_dir('doc/html')
+            for f in htmlDocs.find_iter():
+                relpath = f.relpath_gen(htmlDocs)
+                bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
+        except:{}
