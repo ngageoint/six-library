@@ -82,7 +82,7 @@ static const char SCHEMA_PATH[] = "SIX_SCHEMA_PATH";
  * \class DESValidationException
  * \brief Throwable related to Six schema validation problems.
  */
-DECLARE_EXCEPTION(DESValidation);
+DECLARE_EXCEPTION(DESValidation)
 
 //! Vector types
 typedef math::linear::VectorN<3> Vector3;
@@ -166,19 +166,19 @@ typedef types::RowCol<LatLon> RowColLatLon;
 struct Constants
 {
     //!  This is the upper bound of a NITF segment
-    const static sys::Uint64_T IS_SIZE_MAX; // = 9999999998LL;
-    const static sys::Uint64_T GT_SIZE_MAX;
+    static const sys::Uint64_T IS_SIZE_MAX; // = 9999999998LL;
+    static const sys::Uint64_T GT_SIZE_MAX;
 
-    const static unsigned short GT_XML_KEY;
-    const static char GT_XML_TAG[];
+    static const unsigned short GT_XML_KEY;
+    static const char GT_XML_TAG[];
 
     // DESVER is 2 byte BCS-N
-    const static sys::Int32_T DES_VERSION;
-    const static char DES_VERSION_STR[];
+    static const sys::Int32_T DES_VERSION;
+    static const char DES_VERSION_STR[];
 
-    const static char DES_USER_DEFINED_SUBHEADER_TAG[];
-    const static char DES_USER_DEFINED_SUBHEADER_ID[];
-    const static size_t DES_USER_DEFINED_SUBHEADER_LENGTH;
+    static const char DES_USER_DEFINED_SUBHEADER_TAG[];
+    static const char DES_USER_DEFINED_SUBHEADER_ID[];
+    static const size_t DES_USER_DEFINED_SUBHEADER_LENGTH;
 
     enum
     {
