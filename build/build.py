@@ -14,6 +14,8 @@ from msvs import msvs_generator
 from eclipse import eclipse
 from dumpenv import dumpenv
 from dumplib import dumplib
+from dumplibraw import dumplibraw
+from dumpconfig import dumpconfig
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -452,6 +454,12 @@ class CPPContext(Context.Context):
         installPath = os.path.join('${PYTHONDIR}', name)
         taskName = name + '-python'
 
+        # TODO: Here we're assuming we're svn:externals'ing everything in under
+        #       modules/python.  Make this more flexible... probably want to set
+        #       an environment variable for each Python module, then pull that out
+        #       here to get the include path.
+        swigIncludes = os.path.abspath(os.path.join(bld.path.abspath(), '..' ))
+
         # If we have Swig, when the Swig target runs, it'll generate both the
         # _wrap.cxx file and the .py file and then copy them both to the
         # installation directory.  If you just clobber the install directory
@@ -476,8 +484,9 @@ class CPPContext(Context.Context):
                 source = swigSource,
                 target = target,
                 use = use,
+                includes = swigIncludes,
                 env = env.derive(),
-                swig_flags = '-python -c++',
+                swig_flags = '-python -c++ -I' + swigIncludes,
                 install_path = installPath,
                 name = taskName,
                 targets_to_add = copyFilesTarget,
@@ -712,6 +721,8 @@ def options(opt):
                     help='Override installation share directory')
     opt.add_option('--install-source', action='store_true', dest='install_source', default=False,
                    help='Distribute source into the installation area (for delivering source)')
+    opt.add_option('--with-prebuilt-config', action='store', dest='prebuilt_config',
+                   help='Specify a prebuilt modules config file (created from dumpconfig)')
 
 def configureCompilerOptions(self):
     sys_platform = getPlatform(default=Options.platform)
@@ -1175,6 +1186,18 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
+    
+    
+    # Look for prebuilt modules
+    if Options.options.prebuilt_config:
+        with open(Options.options.prebuilt_config) as f:
+            fileContents = f.readlines()
+
+        print 'Adding prebuilt modules: ' + str(fileContents)
+        env['INCLUDES'].append(fileContents[0].rstrip())
+        env.append_unique('CXXFLAGS', fileContents[1].rstrip().split())
+        env['LIB_PREBUILT'] = fileContents[2].rstrip().split()
+        env['LIBPATH_PREBUILT'] = fileContents[3].rstrip()
 
     #flag that we already detected
     self.env['DETECTED_BUILD_PY'] = True
@@ -1519,3 +1542,13 @@ class CPPDumpLibContext(dumplib, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPDumpLibContext, self).__init__(**kw)
+
+class CPPDumpLibRawContext(dumplibraw, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf raw'
+        super(CPPDumpLibRawContext, self).__init__(**kw)
+
+class CPPDumpConfigContext(dumpconfig, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPDumpConfigContext, self).__init__(**kw)

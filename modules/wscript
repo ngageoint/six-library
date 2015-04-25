@@ -1,29 +1,11 @@
-import os
-from build import CPPOptionsContext
-from waflib import Scripting, Options
-from os.path import join, exists 
-
-VERSION = '2.0-dev'
-APPNAME = 'CODA'
-top  = '.'
-out  = 'target'
-
-DIRS = 'drivers c++ python'
-
-TOOLS = 'build matlabtool pythontool swig'
-
 def options(opt):
-    opt.load(TOOLS, tooldir='./build/')
-    # always set_options on all
-    opt.recurse(DIRS)
+    opt.recurse()
 
 def configure(conf):
-    conf.load(TOOLS, tooldir='./build/')
-    conf.recurse(DIRS)
+    conf.recurse()
 
 def build(bld):
-    bld.recurse(DIRS)
+    bld.recurse()
 
-def distclean(ctxt):
-    ctxt.recurse(DIRS)
-    Scripting.distclean(ctxt)
+def distclean(context):
+    context.recurse()

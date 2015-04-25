@@ -2934,15 +2934,22 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_OneDT__T_t swig_types[0]
-#define SWIGTYPE_p_char swig_types[1]
-#define SWIGTYPE_p_double swig_types[2]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[3]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[4]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[5]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_t swig_types[6]
-static swig_type_info *swig_types[8];
-static swig_module_info swig_module = {swig_types, 7, 0, 0, 0, 0};
+#define SWIGTYPE_p_Filter swig_types[0]
+#define SWIGTYPE_p_Formatter swig_types[1]
+#define SWIGTYPE_p_LogLevel swig_types[2]
+#define SWIGTYPE_p_LogRecord swig_types[3]
+#define SWIGTYPE_p_char swig_types[4]
+#define SWIGTYPE_p_except__Context swig_types[5]
+#define SWIGTYPE_p_except__Throwable swig_types[6]
+#define SWIGTYPE_p_logging__Filter swig_types[7]
+#define SWIGTYPE_p_logging__Filterer swig_types[8]
+#define SWIGTYPE_p_logging__Handler swig_types[9]
+#define SWIGTYPE_p_logging__Logger swig_types[10]
+#define SWIGTYPE_p_logging__NullHandler swig_types[11]
+#define SWIGTYPE_p_logging__NullLogger swig_types[12]
+#define SWIGTYPE_p_std__string swig_types[13]
+static swig_type_info *swig_types[15];
+static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2955,16 +2962,16 @@ static swig_module_info swig_module = {swig_types, 7, 0, 0, 0, 0};
 #endif
 
 /*-----------------------------------------------
-              @(target):= _math_poly.so
+              @(target):= _coda_logging.so
   ------------------------------------------------*/
 #if PY_VERSION_HEX >= 0x03000000
-#  define SWIG_init    PyInit__math_poly
+#  define SWIG_init    PyInit__coda_logging
 
 #else
-#  define SWIG_init    init_math_poly
+#  define SWIG_init    init_coda_logging
 
 #endif
-#define SWIG_name    "_math_poly"
+#define SWIG_name    "_coda_logging"
 
 #define SWIGVERSION 0x030005 
 #define SWIG_VERSION SWIGVERSION
@@ -3047,8 +3054,16 @@ namespace swig {
 }
 
 
-#include "math/poly/OneD.h"
-#include "math/poly/TwoD.h"
+  #include "import/logging.h"
+
+  using namespace logging;
+
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_bool  (bool value)
+{
+  return PyBool_FromLong(value ? 1 : 0);
+}
 
 
 SWIGINTERN int
@@ -3132,103 +3147,6 @@ SWIG_CanCastAsInteger(double *d, double min, double max) {
 
 
 SWIGINTERN int
-SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val) 
-{
-#if PY_VERSION_HEX < 0x03000000
-  if (PyInt_Check(obj)) {
-    long v = PyInt_AsLong(obj);
-    if (v >= 0) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      return SWIG_OverflowError;
-    }
-  } else
-#endif
-  if (PyLong_Check(obj)) {
-    unsigned long v = PyLong_AsUnsignedLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      PyErr_Clear();
-#if PY_VERSION_HEX >= 0x03000000
-      {
-        long v = PyLong_AsLong(obj);
-        if (!PyErr_Occurred()) {
-          if (v < 0) {
-            return SWIG_OverflowError;
-          }
-        } else {
-          PyErr_Clear();
-        }
-      }
-#endif
-    }
-  }
-#ifdef SWIG_PYTHON_CAST_MODE
-  {
-    int dispatch = 0;
-    unsigned long v = PyLong_AsUnsignedLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_AddCast(SWIG_OK);
-    } else {
-      PyErr_Clear();
-    }
-    if (!dispatch) {
-      double d;
-      int res = SWIG_AddCast(SWIG_AsVal_double (obj,&d));
-      if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, 0, ULONG_MAX)) {
-	if (val) *val = (unsigned long)(d);
-	return res;
-      }
-    }
-  }
-#endif
-  return SWIG_TypeError;
-}
-
-
-SWIGINTERNINLINE int
-SWIG_AsVal_size_t (PyObject * obj, size_t *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
-  if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
-  return res;
-}
-
-
-  #define SWIG_From_long   PyLong_FromLong 
-
-
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long  (unsigned long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLong(value) : PyLong_FromLong(static_cast< long >(value)); 
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-}
-
-
-SWIGINTERNINLINE PyObject*
-  SWIG_From_bool  (bool value)
-{
-  return PyBool_FromLong(value ? 1 : 0);
-}
-
-
-  #define SWIG_From_double   PyFloat_FromDouble 
-
-
-SWIGINTERN int
 SWIG_AsVal_long (PyObject *obj, long* val)
 {
   if (PyInt_Check(obj)) {
@@ -3266,1175 +3184,49 @@ SWIG_AsVal_long (PyObject *obj, long* val)
   return SWIG_TypeError;
 }
 
-SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< double > *self,long i){ return (*self)[i]; }
-SWIGINTERN void math_poly_OneD_Sl_double_Sg____setitem__(math::poly::OneD< double > *self,long i,double val){ (*self)[i] = val; }
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  int r;
+  if (!PyBool_Check(obj))
+    return SWIG_ERROR;
+  r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_Filterer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::OneD< double > *result = 0 ;
+  logging::Filterer *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)":new_Poly1D")) SWIG_fail;
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
+  if (!PyArg_ParseTuple(args,(char *)":new_Filterer")) SWIG_fail;
+  result = (logging::Filterer *)new logging::Filterer();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Filterer, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_Filterer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< double > *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_Poly1D",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__vectorT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Poly1D" "', argument " "1"" of type '" "std::vector< double > const &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Poly1D" "', argument " "1"" of type '" "std::vector< double > const &""'"); 
-  }
-  arg1 = reinterpret_cast< std::vector< double > * >(argp1);
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >((std::vector< double > const &)*arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  size_t arg1 ;
-  size_t val1 ;
-  int ecode1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_Poly1D",&obj0)) SWIG_fail;
-  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Poly1D" "', argument " "1"" of type '" "size_t""'");
-  } 
-  arg1 = static_cast< size_t >(val1);
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  size_t arg1 ;
-  double *arg2 = (double *) 0 ;
-  size_t val1 ;
-  int ecode1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:new_Poly1D",&obj0,&obj1)) SWIG_fail;
-  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Poly1D" "', argument " "1"" of type '" "size_t""'");
-  } 
-  arg1 = static_cast< size_t >(val1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Poly1D" "', argument " "2"" of type '" "double const *""'"); 
-  }
-  arg2 = reinterpret_cast< double * >(argp2);
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1,(double const *)arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly1D(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 0) {
-    return _wrap_new_Poly1D__SWIG_0(self, args);
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__vectorT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Poly1D__SWIG_1(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
-    if (_v) {
-      return _wrap_new_Poly1D__SWIG_2(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_double, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_new_Poly1D__SWIG_3(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Poly1D'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::OneD< double >::OneD()\n"
-    "    math::poly::OneD< double >::OneD(std::vector< double > const &)\n"
-    "    math::poly::OneD< double >::OneD(size_t)\n"
-    "    math::poly::OneD< double >::OneD(size_t,double const *)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_order(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  size_t result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_order",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_order" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->order();
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  size_t result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_size",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_size" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->size();
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_empty",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_empty" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = (bool)((math::poly::OneD< double > const *)arg1)->empty();
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_scaleVariable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_scaleVariable",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_scaleVariable" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_scaleVariable" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->scaleVariable(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  size_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_truncateTo",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_truncateTo" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_truncateTo" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->truncateTo(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_truncateToNonZeros",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_truncateToNonZeros" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_truncateToNonZeros",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros();
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_Poly1D_truncateToNonZeros__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly1D_truncateToNonZeros__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly1D_truncateToNonZeros'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::OneD< double >::truncateToNonZeros(double) const\n"
-    "    math::poly::OneD< double >::truncateToNonZeros() const\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly1D_transformInput",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_transformInput" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D_transformInput" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D_transformInput" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly1D_transformInput" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_transformInput",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_transformInput" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D_transformInput" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D_transformInput" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_transformInput(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[4];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly1D_transformInput__SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_Poly1D_transformInput__SWIG_0(self, args);
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly1D_transformInput'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::OneD< double >::transformInput(math::poly::OneD< double > const &,double) const\n"
-    "    math::poly::OneD< double >::transformInput(math::poly::OneD< double > const &) const\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_copyFrom(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_copyFrom",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_copyFrom" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D_copyFrom" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D_copyFrom" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  (arg1)->copyFrom((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___call__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___call__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___call__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___call__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (double)((math::poly::OneD< double > const *)arg1)->operator ()(arg2);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_integrate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly1D_integrate",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_integrate" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_integrate" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly1D_integrate" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  result = (double)((math::poly::OneD< double > const *)arg1)->integrate(arg2,arg3);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_derivative(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_derivative",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_derivative" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->derivative();
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___imul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___imul__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___imul__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator *=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___mul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___mul__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___mul__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator *(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___imul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___imul__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___imul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___imul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator *=((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___imul__(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly1D___imul____SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly1D___imul____SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly1D___imul__'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::OneD< double >::operator *=(double)\n"
-    "    math::poly::OneD< double >::operator *=(math::poly::OneD< double > const &)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___mul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___mul__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___mul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___mul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator *((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___mul__(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly1D___mul____SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly1D___mul____SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  Py_INCREF(Py_NotImplemented);
-  return Py_NotImplemented;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___iadd__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___iadd__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___iadd__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___iadd__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator +=((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___add__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___add__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___add__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___add__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator +((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___isub__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___isub__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___isub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___isub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator -=((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___sub__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___sub__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___sub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___sub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator -((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___idiv__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___idiv__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___idiv__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator /=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___div__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___div__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___div__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator /(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_power(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  size_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_power",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_power" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_power" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->power(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  long arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___getitem__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___getitem__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___getitem__" "', argument " "2"" of type '" "long""'");
-  } 
-  arg2 = static_cast< long >(val2);
-  result = (double)math_poly_OneD_Sl_double_Sg____getitem__(arg1,arg2);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  long arg2 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  long val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly1D___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___setitem__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___setitem__" "', argument " "2"" of type '" "long""'");
-  } 
-  arg2 = static_cast< long >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly1D___setitem__" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  math_poly_OneD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_Poly1D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
+  logging::Filterer *arg1 = (logging::Filterer *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_Poly1D",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Filterer",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filterer, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Poly1D" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Filterer" "', argument " "1"" of type '" "logging::Filterer *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
+  arg1 = reinterpret_cast< logging::Filterer * >(argp1);
   delete arg1;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -4443,80 +3235,1110 @@ fail:
 }
 
 
-SWIGINTERN PyObject *Poly1D_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Filterer_addFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filterer *arg1 = (logging::Filterer *) 0 ;
+  Filter *arg2 = (Filter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Filterer_addFilter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filterer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Filterer_addFilter" "', argument " "1"" of type '" "logging::Filterer *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filterer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Filter, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Filterer_addFilter" "', argument " "2"" of type '" "Filter *""'"); 
+  }
+  arg2 = reinterpret_cast< Filter * >(argp2);
+  (arg1)->addFilter(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filterer_filter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filterer *arg1 = (logging::Filterer *) 0 ;
+  LogRecord *arg2 = (LogRecord *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Filterer_filter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filterer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Filterer_filter" "', argument " "1"" of type '" "logging::Filterer const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filterer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_LogRecord, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Filterer_filter" "', argument " "2"" of type '" "LogRecord const *""'"); 
+  }
+  arg2 = reinterpret_cast< LogRecord * >(argp2);
+  result = (bool)((logging::Filterer const *)arg1)->filter((LogRecord const *)arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filterer_removeFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filterer *arg1 = (logging::Filterer *) 0 ;
+  Filter *arg2 = (Filter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Filterer_removeFilter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filterer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Filterer_removeFilter" "', argument " "1"" of type '" "logging::Filterer *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filterer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Filter, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Filterer_removeFilter" "', argument " "2"" of type '" "Filter *""'"); 
+  }
+  arg2 = reinterpret_cast< Filter * >(argp2);
+  (arg1)->removeFilter(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Filterer_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__Filterer, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_Poly2D_coeffs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_Handler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  logging::Handler *arg1 = (logging::Handler *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< math::poly::OneD< double > > *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_coeffs",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Handler",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_coeffs" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Handler" "', argument " "1"" of type '" "logging::Handler *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = (std::vector< math::poly::OneD< double > > *) &(arg1)->coeffs();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_t, 0 |  0 );
+  arg1 = reinterpret_cast< logging::Handler * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Handler_setFormatter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_Poly2D")) SWIG_fail;
-  result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  size_t arg1 ;
-  size_t arg2 ;
-  size_t val1 ;
-  int ecode1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
+  logging::Handler *arg1 = (logging::Handler *) 0 ;
+  Formatter *arg2 = (Formatter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:new_Poly2D",&obj0,&obj1)) SWIG_fail;
-  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Poly2D" "', argument " "1"" of type '" "size_t""'");
-  } 
-  arg1 = static_cast< size_t >(val1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Poly2D" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >(arg1,arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_NEW |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Handler_setFormatter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_setFormatter" "', argument " "1"" of type '" "logging::Handler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Handler * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Formatter, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Handler_setFormatter" "', argument " "2"" of type '" "Formatter *""'"); 
+  }
+  arg2 = reinterpret_cast< Formatter * >(argp2);
+  (arg1)->setFormatter(arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new_Poly2D(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_Handler_setLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Handler *arg1 = (logging::Handler *) 0 ;
+  LogLevel arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Handler_setLevel",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_setLevel" "', argument " "1"" of type '" "logging::Handler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Handler * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Handler_setLevel" "', argument " "2"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Handler_setLevel" "', argument " "2"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  (arg1)->setLevel(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Handler_getLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Handler *arg1 = (logging::Handler *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  LogLevel result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Handler_getLevel",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_getLevel" "', argument " "1"" of type '" "logging::Handler const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Handler * >(argp1);
+  result = ((logging::Handler const *)arg1)->getLevel();
+  resultobj = SWIG_NewPointerObj((new LogLevel(static_cast< const LogLevel& >(result))), SWIGTYPE_p_LogLevel, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Handler_handle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Handler *arg1 = (logging::Handler *) 0 ;
+  LogRecord *arg2 = (LogRecord *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Handler_handle",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_handle" "', argument " "1"" of type '" "logging::Handler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Handler * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_LogRecord, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Handler_handle" "', argument " "2"" of type '" "LogRecord const *""'"); 
+  }
+  arg2 = reinterpret_cast< LogRecord * >(argp2);
+  result = (bool)(arg1)->handle((LogRecord const *)arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Handler_close(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Handler *arg1 = (logging::Handler *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Handler_close",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_close" "', argument " "1"" of type '" "logging::Handler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Handler * >(argp1);
+  (arg1)->close();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Handler_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__Handler, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_Filter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  logging::Filter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Filter",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Filter" "', argument " "1"" of type '" "std::string""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Filter" "', argument " "1"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  result = (logging::Filter *)new logging::Filter(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Filter, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Filter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_Filter")) SWIG_fail;
+  result = (logging::Filter *)new logging::Filter();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Filter, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Filter(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_Filter__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Filter__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Filter'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Filter::Filter(std::string)\n"
+    "    logging::Filter::Filter()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Filter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filter *arg1 = (logging::Filter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Filter",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filter, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Filter" "', argument " "1"" of type '" "logging::Filter *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filter * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filter_filter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filter *arg1 = (logging::Filter *) 0 ;
+  LogRecord *arg2 = (LogRecord *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Filter_filter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Filter_filter" "', argument " "1"" of type '" "logging::Filter const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filter * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_LogRecord, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Filter_filter" "', argument " "2"" of type '" "LogRecord const *""'"); 
+  }
+  arg2 = reinterpret_cast< LogRecord * >(argp2);
+  result = (bool)((logging::Filter const *)arg1)->filter((LogRecord const *)arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filter_getName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filter *arg1 = (logging::Filter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Filter_getName",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Filter_getName" "', argument " "1"" of type '" "logging::Filter const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filter * >(argp1);
+  result = ((logging::Filter const *)arg1)->getName();
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Filter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__Filter, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_Logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  logging::Logger *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Logger",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Logger" "', argument " "1"" of type '" "std::string""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Logger" "', argument " "1"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  result = (logging::Logger *)new logging::Logger(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Logger, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Logger__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_Logger")) SWIG_fail;
+  result = (logging::Logger *)new logging::Logger();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Logger, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Logger(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_Logger__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Logger__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Logger'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Logger::Logger(std::string)\n"
+    "    logging::Logger::Logger()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Logger(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Logger",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Logger" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_log__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  LogLevel arg2 ;
+  std::string *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Logger_log",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_log" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_log" "', argument " "2"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_log" "', argument " "2"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Logger_log" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_log" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::string * >(argp3);
+  (arg1)->log(arg2,(std::string const &)*arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_log__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  LogLevel arg2 ;
+  except::Context *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Logger_log",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_log" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_log" "', argument " "2"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_log" "', argument " "2"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Logger_log" "', argument " "3"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_log" "', argument " "3"" of type '" "except::Context const &""'"); 
+  }
+  arg3 = reinterpret_cast< except::Context * >(argp3);
+  (arg1)->log(arg2,(except::Context const &)*arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_log__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  LogLevel arg2 ;
+  except::Throwable *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Logger_log",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_log" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_log" "', argument " "2"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_log" "', argument " "2"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_except__Throwable,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Logger_log" "', argument " "3"" of type '" "except::Throwable const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_log" "', argument " "3"" of type '" "except::Throwable const &""'"); 
+  }
+  arg3 = reinterpret_cast< except::Throwable * >(argp3);
+  (arg1)->log(arg2,(except::Throwable const &)*arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_log(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Logger_log__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_except__Context, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Logger_log__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_except__Throwable, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Logger_log__SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Logger_log'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Logger::log(LogLevel,std::string const &)\n"
+    "    logging::Logger::log(LogLevel,except::Context const &)\n"
+    "    logging::Logger::log(LogLevel,except::Throwable const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_debug__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_debug",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_debug" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_debug" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_debug" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->debug((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_info__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_info",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_info" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_info" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_info" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->info((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_warn__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_warn",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_warn" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_warn" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_warn" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->warn((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_error__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_error",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_error" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_error" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_error" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->error((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_critical__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_critical",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_critical" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_critical" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_critical" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->critical((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_debug__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Context *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_debug",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_debug" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_debug" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_debug" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Context * >(argp2);
+  (arg1)->debug((except::Context const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_info__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Context *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_info",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_info" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_info" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_info" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Context * >(argp2);
+  (arg1)->info((except::Context const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_warn__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Context *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_warn",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_warn" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_warn" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_warn" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Context * >(argp2);
+  (arg1)->warn((except::Context const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_error__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Context *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_error",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_error" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_error" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_error" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Context * >(argp2);
+  (arg1)->error((except::Context const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_critical__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Context *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_critical",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_critical" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_critical" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_critical" "', argument " "2"" of type '" "except::Context const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Context * >(argp2);
+  (arg1)->critical((except::Context const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_debug__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Throwable *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_debug",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_debug" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Throwable,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_debug" "', argument " "2"" of type '" "except::Throwable const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_debug" "', argument " "2"" of type '" "except::Throwable const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Throwable * >(argp2);
+  (arg1)->debug((except::Throwable const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_debug(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[3];
   int ii;
@@ -4526,234 +4348,82 @@ SWIGINTERN PyObject *_wrap_new_Poly2D(PyObject *self, PyObject *args) {
   for (ii = 0; (ii < 2) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
-  if (argc == 0) {
-    return _wrap_new_Poly2D__SWIG_0(self, args);
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_debug__SWIG_0(self, args);
+      }
+    }
   }
   if (argc == 2) {
     int _v;
-    {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
     if (_v) {
-      {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
+      _v = SWIG_CheckState(res);
       if (_v) {
-        return _wrap_new_Poly2D__SWIG_1(self, args);
+        return _wrap_Logger_debug__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Throwable, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_debug__SWIG_2(self, args);
       }
     }
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Poly2D'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Logger_debug'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::TwoD()\n"
-    "    math::poly::TwoD< double >::TwoD(size_t,size_t)\n");
+    "    logging::Logger::debug(std::string const &)\n"
+    "    logging::Logger::debug(except::Context const &)\n"
+    "    logging::Logger::debug(except::Throwable const &)\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_info__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Throwable *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_empty",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_empty" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = (bool)((math::poly::TwoD< double > const *)arg1)->empty();
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_orderX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  size_t result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_orderX",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_orderX" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->orderX();
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_orderY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  size_t result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_orderY",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_orderY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->orderY();
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___call__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D___call__",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_info",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___call__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_info" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___call__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D___call__" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  result = (double)((math::poly::TwoD< double > const *)arg1)->operator ()(arg2,arg3);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_integrate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  double arg3 ;
-  double arg4 ;
-  double arg5 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:Poly2D_integrate",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_integrate" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Throwable,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_info" "', argument " "2"" of type '" "except::Throwable const &""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_integrate" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_integrate" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Poly2D_integrate" "', argument " "4"" of type '" "double""'");
-  } 
-  arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Poly2D_integrate" "', argument " "5"" of type '" "double""'");
-  } 
-  arg5 = static_cast< double >(val5);
-  result = (double)((math::poly::TwoD< double > const *)arg1)->integrate(arg2,arg3,arg4,arg5);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  size_t arg2 ;
-  math::poly::OneD< double > *arg3 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_set",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_set" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_info" "', argument " "2"" of type '" "except::Throwable const &""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_set" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Poly2D_set" "', argument " "3"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_set" "', argument " "3"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg3 = reinterpret_cast< math::poly::OneD< double > * >(argp3);
-  (arg1)->set(arg2,(math::poly::OneD< double > const &)*arg3);
+  arg2 = reinterpret_cast< except::Throwable * >(argp2);
+  (arg1)->info((except::Throwable const &)*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -4761,166 +4431,415 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_flipXY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_info(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_info__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_info__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Throwable, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_info__SWIG_2(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Logger_info'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Logger::info(std::string const &)\n"
+    "    logging::Logger::info(except::Context const &)\n"
+    "    logging::Logger::info(except::Throwable const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_warn__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Throwable *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
+  PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_flipXY",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_warn",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_flipXY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_warn" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->flipXY();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Throwable,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_warn" "', argument " "2"" of type '" "except::Throwable const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_warn" "', argument " "2"" of type '" "except::Throwable const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Throwable * >(argp2);
+  (arg1)->warn((except::Throwable const &)*arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_derivativeY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_warn(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_warn__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_warn__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Throwable, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_warn__SWIG_2(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Logger_warn'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Logger::warn(std::string const &)\n"
+    "    logging::Logger::warn(except::Context const &)\n"
+    "    logging::Logger::warn(except::Throwable const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_error__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Throwable *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
+  PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_derivativeY",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_error",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_derivativeY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_error" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->derivativeY();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Throwable,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_error" "', argument " "2"" of type '" "except::Throwable const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_error" "', argument " "2"" of type '" "except::Throwable const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Throwable * >(argp2);
+  (arg1)->error((except::Throwable const &)*arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_derivativeX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_error(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_error__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_error__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Throwable, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_error__SWIG_2(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Logger_error'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Logger::error(std::string const &)\n"
+    "    logging::Logger::error(except::Context const &)\n"
+    "    logging::Logger::error(except::Throwable const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_critical__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  except::Throwable *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
+  PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_derivativeX",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_critical",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_derivativeX" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_critical" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->derivativeX();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_except__Throwable,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_critical" "', argument " "2"" of type '" "except::Throwable const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_critical" "', argument " "2"" of type '" "except::Throwable const &""'"); 
+  }
+  arg2 = reinterpret_cast< except::Throwable * >(argp2);
+  (arg1)->critical((except::Throwable const &)*arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_derivativeXY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
+SWIGINTERN PyObject *_wrap_Logger_critical(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_derivativeXY",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_derivativeXY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->derivativeXY();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_critical__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_critical__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Throwable, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_critical__SWIG_2(self, args);
+      }
+    }
+  }
+  
 fail:
-  return NULL;
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Logger_critical'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Logger::critical(std::string const &)\n"
+    "    logging::Logger::critical(except::Context const &)\n"
+    "    logging::Logger::critical(except::Throwable const &)\n");
+  return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_addHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  double arg3 ;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  logging::Handler *arg2 = (logging::Handler *) 0 ;
+  bool arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  math::poly::TwoD< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_scaleVariable",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Logger_addHandler",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_scaleVariable" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_addHandler" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_scaleVariable" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_addHandler" "', argument " "2"" of type '" "logging::Handler *""'"); 
+  }
+  arg2 = reinterpret_cast< logging::Handler * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_scaleVariable" "', argument " "3"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Logger_addHandler" "', argument " "3"" of type '" "bool""'");
   } 
-  arg3 = static_cast< double >(val3);
-  result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg3 = static_cast< bool >(val3);
+  (arg1)->addHandler(arg2,arg3);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_addHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  logging::Handler *arg2 = (logging::Handler *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_scaleVariable",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_addHandler",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_scaleVariable" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_addHandler" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_scaleVariable" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_addHandler" "', argument " "2"" of type '" "logging::Handler *""'"); 
+  }
+  arg2 = reinterpret_cast< logging::Handler * >(argp2);
+  (arg1)->addHandler(arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_addHandler(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[4];
   int ii;
@@ -4933,1022 +4852,285 @@ SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable(PyObject *self, PyObject *args) 
   if (argc == 2) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_logging__Handler, 0);
+      _v = SWIG_CheckState(res);
       if (_v) {
-        return _wrap_Poly2D_scaleVariable__SWIG_1(self, args);
+        return _wrap_Logger_addHandler__SWIG_1(self, args);
       }
     }
   }
   if (argc == 3) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_logging__Handler, 0);
+      _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_bool(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_Poly2D_scaleVariable__SWIG_0(self, args);
+          return _wrap_Logger_addHandler__SWIG_0(self, args);
         }
       }
     }
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly2D_scaleVariable'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Logger_addHandler'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::scaleVariable(double,double) const\n"
-    "    math::poly::TwoD< double >::scaleVariable(double) const\n");
+    "    logging::Logger::addHandler(logging::Handler *,bool)\n"
+    "    logging::Logger::addHandler(logging::Handler *)\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_removeHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  size_t arg2 ;
-  size_t arg3 ;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  logging::Handler *arg2 = (logging::Handler *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  size_t val3 ;
-  int ecode3 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  math::poly::TwoD< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_truncateTo",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_removeHandler",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_truncateTo" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_removeHandler" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_truncateTo" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_truncateTo" "', argument " "3"" of type '" "size_t""'");
-  } 
-  arg3 = static_cast< size_t >(val3);
-  result = ((math::poly::TwoD< double > const *)arg1)->truncateTo(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_removeHandler" "', argument " "2"" of type '" "logging::Handler *""'"); 
+  }
+  arg2 = reinterpret_cast< logging::Handler * >(argp2);
+  (arg1)->removeHandler(arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_setLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  LogLevel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_truncateToNonZeros",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_setLevel",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_setLevel" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_truncateToNonZeros" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_setLevel" "', argument " "2"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_setLevel" "', argument " "2"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  (arg1)->setLevel(arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_setName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_setName",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_setName" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_setName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_setName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->setName((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_getName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
+  std::string result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_truncateToNonZeros",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:Logger_getName",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_getName" "', argument " "1"" of type '" "logging::Logger const *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  result = ((logging::Logger const *)arg1)->getName();
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Logger_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_reset" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Logger_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__Logger, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_NullHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  LogLevel arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  logging::NullHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_NullHandler",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NullHandler" "', argument " "1"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NullHandler" "', argument " "1"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  result = (logging::NullHandler *)new logging::NullHandler(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__NullHandler, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NullHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::NullHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_NullHandler")) SWIG_fail;
+  result = (logging::NullHandler *)new logging::NullHandler();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__NullHandler, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NullHandler(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[3];
+  PyObject *argv[2];
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_NullHandler__SWIG_1(self, args);
   }
   if (argc == 1) {
     int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_LogLevel, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      return _wrap_Poly2D_truncateToNonZeros__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly2D_truncateToNonZeros__SWIG_0(self, args);
-      }
+      return _wrap_new_NullHandler__SWIG_0(self, args);
     }
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly2D_truncateToNonZeros'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_NullHandler'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::truncateToNonZeros(double) const\n"
-    "    math::poly::TwoD< double >::truncateToNonZeros() const\n");
+    "    logging::NullHandler::NullHandler(LogLevel)\n"
+    "    logging::NullHandler::NullHandler()\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_NullHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  math::poly::TwoD< double > *arg3 = 0 ;
-  double arg4 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:Poly2D_transformInput",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_transformInput" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg3 = reinterpret_cast< math::poly::TwoD< double > * >(argp3);
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Poly2D_transformInput" "', argument " "4"" of type '" "double""'");
-  } 
-  arg4 = static_cast< double >(val4);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3,arg4);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  math::poly::TwoD< double > *arg3 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_transformInput",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_transformInput" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg3 = reinterpret_cast< math::poly::TwoD< double > * >(argp3);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_transformInput",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_transformInput" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_transformInput",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_transformInput" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[5];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly2D_transformInput__SWIG_3(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          return _wrap_Poly2D_transformInput__SWIG_1(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_Poly2D_transformInput__SWIG_2(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            return _wrap_Poly2D_transformInput__SWIG_0(self, args);
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly2D_transformInput'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::transformInput(math::poly::TwoD< double > const &,math::poly::TwoD< double > const &,double) const\n"
-    "    math::poly::TwoD< double >::transformInput(math::poly::TwoD< double > const &,math::poly::TwoD< double > const &) const\n"
-    "    math::poly::TwoD< double >::transformInput(math::poly::TwoD< double > const &,double) const\n"
-    "    math::poly::TwoD< double >::transformInput(math::poly::TwoD< double > const &) const\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_atY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_atY",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_atY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_atY" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->atY(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___imul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___imul__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___imul__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator *=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___mul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___mul__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___mul__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator *(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___imul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___imul__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___imul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___imul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator *=((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___imul__(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly2D___imul____SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly2D___imul____SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly2D___imul__'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::operator *=(double)\n"
-    "    math::poly::TwoD< double >::operator *=(math::poly::TwoD< double > const &)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___mul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___mul__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___mul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___mul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator *((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___mul__(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly2D___mul____SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly2D___mul____SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  Py_INCREF(Py_NotImplemented);
-  return Py_NotImplemented;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___iadd__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___iadd__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___iadd__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___iadd__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator +=((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___add__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___add__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___add__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___add__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator +((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___isub__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___isub__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___isub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___isub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator -=((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___sub__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___sub__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___sub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___sub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator -((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___idiv__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___idiv__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___idiv__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator /=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___div__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___div__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___div__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator /(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___eq__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___eq__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___eq__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___eq__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (bool)((math::poly::TwoD< double > const *)arg1)->operator ==((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___ne__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___ne__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___ne__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___ne__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (bool)((math::poly::TwoD< double > const *)arg1)->operator !=((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_power(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  size_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_power",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_power" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_power" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->power(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_Poly2D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  logging::NullHandler *arg1 = (logging::NullHandler *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_Poly2D",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_NullHandler",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__NullHandler, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Poly2D" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NullHandler" "', argument " "1"" of type '" "logging::NullHandler *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
+  arg1 = reinterpret_cast< logging::NullHandler * >(argp1);
   delete arg1;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -5957,147 +5139,276 @@ fail:
 }
 
 
-SWIGINTERN PyObject *Poly2D_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *NullHandler_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__NullHandler, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_NullLogger__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  logging::NullLogger *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_NullLogger",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NullLogger" "', argument " "1"" of type '" "std::string const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NullLogger" "', argument " "1"" of type '" "std::string const &""'"); 
+  }
+  arg1 = reinterpret_cast< std::string * >(argp1);
+  result = (logging::NullLogger *)new logging::NullLogger((std::string const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__NullLogger, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NullLogger__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::NullLogger *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_NullLogger")) SWIG_fail;
+  result = (logging::NullLogger *)new logging::NullLogger();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__NullLogger, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NullLogger(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_NullLogger__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_NullLogger__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_NullLogger'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::NullLogger::NullLogger(std::string const &)\n"
+    "    logging::NullLogger::NullLogger()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_NullLogger(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::NullLogger *arg1 = (logging::NullLogger *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_NullLogger",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__NullLogger, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NullLogger" "', argument " "1"" of type '" "logging::NullLogger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::NullLogger * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *NullLogger_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__NullLogger, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
-	 { (char *)"new_Poly1D", _wrap_new_Poly1D, METH_VARARGS, (char *)"\n"
-		"Poly1D()\n"
-		"Poly1D(std::vector< double > const & coef)\n"
-		"Poly1D(size_t order)\n"
-		"new_Poly1D(size_t order, double const * coef) -> Poly1D\n"
+	 { (char *)"new_Filterer", _wrap_new_Filterer, METH_VARARGS, (char *)"new_Filterer() -> Filterer"},
+	 { (char *)"delete_Filterer", _wrap_delete_Filterer, METH_VARARGS, (char *)"delete_Filterer(Filterer self)"},
+	 { (char *)"Filterer_addFilter", _wrap_Filterer_addFilter, METH_VARARGS, (char *)"Filterer_addFilter(Filterer self, Filter * filter)"},
+	 { (char *)"Filterer_filter", _wrap_Filterer_filter, METH_VARARGS, (char *)"Filterer_filter(Filterer self, LogRecord const * record) -> bool"},
+	 { (char *)"Filterer_removeFilter", _wrap_Filterer_removeFilter, METH_VARARGS, (char *)"Filterer_removeFilter(Filterer self, Filter * filter)"},
+	 { (char *)"Filterer_swigregister", Filterer_swigregister, METH_VARARGS, NULL},
+	 { (char *)"delete_Handler", _wrap_delete_Handler, METH_VARARGS, (char *)"delete_Handler(Handler self)"},
+	 { (char *)"Handler_setFormatter", _wrap_Handler_setFormatter, METH_VARARGS, (char *)"Handler_setFormatter(Handler self, Formatter * formatter)"},
+	 { (char *)"Handler_setLevel", _wrap_Handler_setLevel, METH_VARARGS, (char *)"Handler_setLevel(Handler self, LogLevel level)"},
+	 { (char *)"Handler_getLevel", _wrap_Handler_getLevel, METH_VARARGS, (char *)"Handler_getLevel(Handler self) -> LogLevel"},
+	 { (char *)"Handler_handle", _wrap_Handler_handle, METH_VARARGS, (char *)"Handler_handle(Handler self, LogRecord const * record) -> bool"},
+	 { (char *)"Handler_close", _wrap_Handler_close, METH_VARARGS, (char *)"Handler_close(Handler self)"},
+	 { (char *)"Handler_swigregister", Handler_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_Filter", _wrap_new_Filter, METH_VARARGS, (char *)"\n"
+		"Filter(std::string name)\n"
+		"new_Filter() -> Filter\n"
 		""},
-	 { (char *)"Poly1D_order", _wrap_Poly1D_order, METH_VARARGS, (char *)"Poly1D_order(Poly1D self) -> size_t"},
-	 { (char *)"Poly1D_size", _wrap_Poly1D_size, METH_VARARGS, (char *)"Poly1D_size(Poly1D self) -> size_t"},
-	 { (char *)"Poly1D_empty", _wrap_Poly1D_empty, METH_VARARGS, (char *)"Poly1D_empty(Poly1D self) -> bool"},
-	 { (char *)"Poly1D_scaleVariable", _wrap_Poly1D_scaleVariable, METH_VARARGS, (char *)"Poly1D_scaleVariable(Poly1D self, double scale) -> Poly1D"},
-	 { (char *)"Poly1D_truncateTo", _wrap_Poly1D_truncateTo, METH_VARARGS, (char *)"Poly1D_truncateTo(Poly1D self, size_t order) -> Poly1D"},
-	 { (char *)"Poly1D_truncateToNonZeros", _wrap_Poly1D_truncateToNonZeros, METH_VARARGS, (char *)"\n"
-		"truncateToNonZeros(double zeroEpsilon=0.0) -> Poly1D\n"
-		"Poly1D_truncateToNonZeros(Poly1D self) -> Poly1D\n"
+	 { (char *)"delete_Filter", _wrap_delete_Filter, METH_VARARGS, (char *)"delete_Filter(Filter self)"},
+	 { (char *)"Filter_filter", _wrap_Filter_filter, METH_VARARGS, (char *)"Filter_filter(Filter self, LogRecord const * record) -> bool"},
+	 { (char *)"Filter_getName", _wrap_Filter_getName, METH_VARARGS, (char *)"Filter_getName(Filter self) -> std::string"},
+	 { (char *)"Filter_swigregister", Filter_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_Logger", _wrap_new_Logger, METH_VARARGS, (char *)"\n"
+		"Logger(std::string name)\n"
+		"new_Logger() -> Logger\n"
 		""},
-	 { (char *)"Poly1D_transformInput", _wrap_Poly1D_transformInput, METH_VARARGS, (char *)"\n"
-		"transformInput(Poly1D gx, double zeroEpsilon=0.0) -> Poly1D\n"
-		"Poly1D_transformInput(Poly1D self, Poly1D gx) -> Poly1D\n"
+	 { (char *)"delete_Logger", _wrap_delete_Logger, METH_VARARGS, (char *)"delete_Logger(Logger self)"},
+	 { (char *)"Logger_log", _wrap_Logger_log, METH_VARARGS, (char *)"\n"
+		"log(LogLevel level, std::string const & msg)\n"
+		"log(LogLevel level, except::Context const & ctxt)\n"
+		"Logger_log(Logger self, LogLevel level, except::Throwable const & t)\n"
 		""},
-	 { (char *)"Poly1D_copyFrom", _wrap_Poly1D_copyFrom, METH_VARARGS, (char *)"Poly1D_copyFrom(Poly1D self, Poly1D p)"},
-	 { (char *)"Poly1D___call__", _wrap_Poly1D___call__, METH_VARARGS, (char *)"Poly1D___call__(Poly1D self, double at) -> double"},
-	 { (char *)"Poly1D_integrate", _wrap_Poly1D_integrate, METH_VARARGS, (char *)"Poly1D_integrate(Poly1D self, double start, double end) -> double"},
-	 { (char *)"Poly1D_derivative", _wrap_Poly1D_derivative, METH_VARARGS, (char *)"Poly1D_derivative(Poly1D self) -> Poly1D"},
-	 { (char *)"Poly1D___imul__", _wrap_Poly1D___imul__, METH_VARARGS, (char *)"\n"
-		"__imul__(double cv) -> Poly1D\n"
-		"Poly1D___imul__(Poly1D self, Poly1D p) -> Poly1D\n"
+	 { (char *)"Logger_debug", _wrap_Logger_debug, METH_VARARGS, (char *)"\n"
+		"debug(std::string const & msg)\n"
+		"debug(except::Context const & ctxt)\n"
+		"Logger_debug(Logger self, except::Throwable const & t)\n"
 		""},
-	 { (char *)"Poly1D___mul__", _wrap_Poly1D___mul__, METH_VARARGS, (char *)"\n"
-		"__mul__(double cv) -> Poly1D\n"
-		"Poly1D___mul__(Poly1D self, Poly1D p) -> Poly1D\n"
+	 { (char *)"Logger_info", _wrap_Logger_info, METH_VARARGS, (char *)"\n"
+		"info(std::string const & msg)\n"
+		"info(except::Context const & ctxt)\n"
+		"Logger_info(Logger self, except::Throwable const & t)\n"
 		""},
-	 { (char *)"Poly1D___iadd__", _wrap_Poly1D___iadd__, METH_VARARGS, (char *)"Poly1D___iadd__(Poly1D self, Poly1D p) -> Poly1D"},
-	 { (char *)"Poly1D___add__", _wrap_Poly1D___add__, METH_VARARGS, (char *)"Poly1D___add__(Poly1D self, Poly1D p) -> Poly1D"},
-	 { (char *)"Poly1D___isub__", _wrap_Poly1D___isub__, METH_VARARGS, (char *)"Poly1D___isub__(Poly1D self, Poly1D p) -> Poly1D"},
-	 { (char *)"Poly1D___sub__", _wrap_Poly1D___sub__, METH_VARARGS, (char *)"Poly1D___sub__(Poly1D self, Poly1D p) -> Poly1D"},
-	 { (char *)"Poly1D___idiv__", _wrap_Poly1D___idiv__, METH_VARARGS, (char *)"Poly1D___idiv__(Poly1D self, double cv) -> Poly1D"},
-	 { (char *)"Poly1D___div__", _wrap_Poly1D___div__, METH_VARARGS, (char *)"Poly1D___div__(Poly1D self, double cv) -> Poly1D"},
-	 { (char *)"Poly1D_power", _wrap_Poly1D_power, METH_VARARGS, (char *)"Poly1D_power(Poly1D self, size_t toThe) -> Poly1D"},
-	 { (char *)"Poly1D___getitem__", _wrap_Poly1D___getitem__, METH_VARARGS, (char *)"Poly1D___getitem__(Poly1D self, long i) -> double"},
-	 { (char *)"Poly1D___setitem__", _wrap_Poly1D___setitem__, METH_VARARGS, (char *)"Poly1D___setitem__(Poly1D self, long i, double val)"},
-	 { (char *)"delete_Poly1D", _wrap_delete_Poly1D, METH_VARARGS, (char *)"delete_Poly1D(Poly1D self)"},
-	 { (char *)"Poly1D_swigregister", Poly1D_swigregister, METH_VARARGS, NULL},
-	 { (char *)"Poly2D_coeffs", _wrap_Poly2D_coeffs, METH_VARARGS, (char *)"Poly2D_coeffs(Poly2D self) -> std::vector< math::poly::OneD< double > > &"},
-	 { (char *)"new_Poly2D", _wrap_new_Poly2D, METH_VARARGS, (char *)"\n"
-		"Poly2D()\n"
-		"new_Poly2D(size_t orderX, size_t orderY) -> Poly2D\n"
+	 { (char *)"Logger_warn", _wrap_Logger_warn, METH_VARARGS, (char *)"\n"
+		"warn(std::string const & msg)\n"
+		"warn(except::Context const & ctxt)\n"
+		"Logger_warn(Logger self, except::Throwable const & t)\n"
 		""},
-	 { (char *)"Poly2D_empty", _wrap_Poly2D_empty, METH_VARARGS, (char *)"Poly2D_empty(Poly2D self) -> bool"},
-	 { (char *)"Poly2D_orderX", _wrap_Poly2D_orderX, METH_VARARGS, (char *)"Poly2D_orderX(Poly2D self) -> size_t"},
-	 { (char *)"Poly2D_orderY", _wrap_Poly2D_orderY, METH_VARARGS, (char *)"Poly2D_orderY(Poly2D self) -> size_t"},
-	 { (char *)"Poly2D___call__", _wrap_Poly2D___call__, METH_VARARGS, (char *)"Poly2D___call__(Poly2D self, double atX, double atY) -> double"},
-	 { (char *)"Poly2D_integrate", _wrap_Poly2D_integrate, METH_VARARGS, (char *)"Poly2D_integrate(Poly2D self, double xStart, double xEnd, double yStart, double yEnd) -> double"},
-	 { (char *)"Poly2D_set", _wrap_Poly2D_set, METH_VARARGS, (char *)"Poly2D_set(Poly2D self, size_t i, Poly1D p)"},
-	 { (char *)"Poly2D_flipXY", _wrap_Poly2D_flipXY, METH_VARARGS, (char *)"Poly2D_flipXY(Poly2D self) -> Poly2D"},
-	 { (char *)"Poly2D_derivativeY", _wrap_Poly2D_derivativeY, METH_VARARGS, (char *)"Poly2D_derivativeY(Poly2D self) -> Poly2D"},
-	 { (char *)"Poly2D_derivativeX", _wrap_Poly2D_derivativeX, METH_VARARGS, (char *)"Poly2D_derivativeX(Poly2D self) -> Poly2D"},
-	 { (char *)"Poly2D_derivativeXY", _wrap_Poly2D_derivativeXY, METH_VARARGS, (char *)"Poly2D_derivativeXY(Poly2D self) -> Poly2D"},
-	 { (char *)"Poly2D_scaleVariable", _wrap_Poly2D_scaleVariable, METH_VARARGS, (char *)"\n"
-		"scaleVariable(double scaleX, double scaleY) -> Poly2D\n"
-		"Poly2D_scaleVariable(Poly2D self, double scale) -> Poly2D\n"
+	 { (char *)"Logger_error", _wrap_Logger_error, METH_VARARGS, (char *)"\n"
+		"error(std::string const & msg)\n"
+		"error(except::Context const & ctxt)\n"
+		"Logger_error(Logger self, except::Throwable const & t)\n"
 		""},
-	 { (char *)"Poly2D_truncateTo", _wrap_Poly2D_truncateTo, METH_VARARGS, (char *)"Poly2D_truncateTo(Poly2D self, size_t orderX, size_t orderY) -> Poly2D"},
-	 { (char *)"Poly2D_truncateToNonZeros", _wrap_Poly2D_truncateToNonZeros, METH_VARARGS, (char *)"\n"
-		"truncateToNonZeros(double zeroEpsilon=0.0) -> Poly2D\n"
-		"Poly2D_truncateToNonZeros(Poly2D self) -> Poly2D\n"
+	 { (char *)"Logger_critical", _wrap_Logger_critical, METH_VARARGS, (char *)"\n"
+		"critical(std::string const & msg)\n"
+		"critical(except::Context const & ctxt)\n"
+		"Logger_critical(Logger self, except::Throwable const & t)\n"
 		""},
-	 { (char *)"Poly2D_transformInput", _wrap_Poly2D_transformInput, METH_VARARGS, (char *)"\n"
-		"transformInput(Poly2D gx, Poly2D gy, double zeroEpsilon=0.0) -> Poly2D\n"
-		"transformInput(Poly2D gx, Poly2D gy) -> Poly2D\n"
-		"transformInput(Poly2D gx, double zeroEpsilon=0.0) -> Poly2D\n"
-		"Poly2D_transformInput(Poly2D self, Poly2D gx) -> Poly2D\n"
+	 { (char *)"Logger_addHandler", _wrap_Logger_addHandler, METH_VARARGS, (char *)"\n"
+		"addHandler(Handler handler, bool own=False)\n"
+		"Logger_addHandler(Logger self, Handler handler)\n"
 		""},
-	 { (char *)"Poly2D_atY", _wrap_Poly2D_atY, METH_VARARGS, (char *)"Poly2D_atY(Poly2D self, double y) -> Poly1D"},
-	 { (char *)"Poly2D___imul__", _wrap_Poly2D___imul__, METH_VARARGS, (char *)"\n"
-		"__imul__(double cv) -> Poly2D\n"
-		"Poly2D___imul__(Poly2D self, Poly2D p) -> Poly2D\n"
+	 { (char *)"Logger_removeHandler", _wrap_Logger_removeHandler, METH_VARARGS, (char *)"Logger_removeHandler(Logger self, Handler handler)"},
+	 { (char *)"Logger_setLevel", _wrap_Logger_setLevel, METH_VARARGS, (char *)"Logger_setLevel(Logger self, LogLevel level)"},
+	 { (char *)"Logger_setName", _wrap_Logger_setName, METH_VARARGS, (char *)"Logger_setName(Logger self, std::string const & name)"},
+	 { (char *)"Logger_getName", _wrap_Logger_getName, METH_VARARGS, (char *)"Logger_getName(Logger self) -> std::string"},
+	 { (char *)"Logger_reset", _wrap_Logger_reset, METH_VARARGS, (char *)"Logger_reset(Logger self)"},
+	 { (char *)"Logger_swigregister", Logger_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_NullHandler", _wrap_new_NullHandler, METH_VARARGS, (char *)"\n"
+		"NullHandler(LogLevel level)\n"
+		"new_NullHandler() -> NullHandler\n"
 		""},
-	 { (char *)"Poly2D___mul__", _wrap_Poly2D___mul__, METH_VARARGS, (char *)"\n"
-		"__mul__(double cv) -> Poly2D\n"
-		"Poly2D___mul__(Poly2D self, Poly2D p) -> Poly2D\n"
+	 { (char *)"delete_NullHandler", _wrap_delete_NullHandler, METH_VARARGS, (char *)"delete_NullHandler(NullHandler self)"},
+	 { (char *)"NullHandler_swigregister", NullHandler_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_NullLogger", _wrap_new_NullLogger, METH_VARARGS, (char *)"\n"
+		"NullLogger(std::string const & name)\n"
+		"new_NullLogger() -> NullLogger\n"
 		""},
-	 { (char *)"Poly2D___iadd__", _wrap_Poly2D___iadd__, METH_VARARGS, (char *)"Poly2D___iadd__(Poly2D self, Poly2D p) -> Poly2D"},
-	 { (char *)"Poly2D___add__", _wrap_Poly2D___add__, METH_VARARGS, (char *)"Poly2D___add__(Poly2D self, Poly2D p) -> Poly2D"},
-	 { (char *)"Poly2D___isub__", _wrap_Poly2D___isub__, METH_VARARGS, (char *)"Poly2D___isub__(Poly2D self, Poly2D p) -> Poly2D"},
-	 { (char *)"Poly2D___sub__", _wrap_Poly2D___sub__, METH_VARARGS, (char *)"Poly2D___sub__(Poly2D self, Poly2D p) -> Poly2D"},
-	 { (char *)"Poly2D___idiv__", _wrap_Poly2D___idiv__, METH_VARARGS, (char *)"Poly2D___idiv__(Poly2D self, double cv) -> Poly2D"},
-	 { (char *)"Poly2D___div__", _wrap_Poly2D___div__, METH_VARARGS, (char *)"Poly2D___div__(Poly2D self, double cv) -> Poly2D"},
-	 { (char *)"Poly2D___eq__", _wrap_Poly2D___eq__, METH_VARARGS, (char *)"Poly2D___eq__(Poly2D self, Poly2D p) -> bool"},
-	 { (char *)"Poly2D___ne__", _wrap_Poly2D___ne__, METH_VARARGS, (char *)"Poly2D___ne__(Poly2D self, Poly2D p) -> bool"},
-	 { (char *)"Poly2D_power", _wrap_Poly2D_power, METH_VARARGS, (char *)"Poly2D_power(Poly2D self, size_t toThe) -> Poly2D"},
-	 { (char *)"delete_Poly2D", _wrap_delete_Poly2D, METH_VARARGS, (char *)"delete_Poly2D(Poly2D self)"},
-	 { (char *)"Poly2D_swigregister", Poly2D_swigregister, METH_VARARGS, NULL},
+	 { (char *)"delete_NullLogger", _wrap_delete_NullLogger, METH_VARARGS, (char *)"delete_NullLogger(NullLogger self)"},
+	 { (char *)"NullLogger_swigregister", NullLogger_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static swig_type_info _swigt__p_OneDT__T_t = {"_p_OneDT__T_t", "OneD< _T > *", 0, 0, (void*)0, 0};
+static void *_p_logging__NullLoggerTo_p_logging__Logger(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Logger *)  ((logging::NullLogger *) x));
+}
+static void *_p_logging__NullHandlerTo_p_logging__Handler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Handler *)  ((logging::NullHandler *) x));
+}
+static void *_p_logging__LoggerTo_p_logging__Filterer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Filterer *)  ((logging::Logger *) x));
+}
+static void *_p_logging__NullLoggerTo_p_logging__Filterer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Filterer *) (logging::Logger *) ((logging::NullLogger *) x));
+}
+static void *_p_logging__HandlerTo_p_logging__Filterer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Filterer *)  ((logging::Handler *) x));
+}
+static void *_p_logging__NullHandlerTo_p_logging__Filterer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Filterer *) (logging::Handler *) ((logging::NullHandler *) x));
+}
+static swig_type_info _swigt__p_Filter = {"_p_Filter", "Filter *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Formatter = {"_p_Formatter", "Formatter *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_LogLevel = {"_p_LogLevel", "LogLevel *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_LogRecord = {"_p_LogRecord", "LogRecord *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "math::poly::OneD< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_double_t = {"_p_std__vectorT_double_t", "std::vector< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_math__poly__OneDT_double_t_t = {"_p_std__vectorT_math__poly__OneDT_double_t_t", "std::vector< math::poly::OneD< double > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_except__Context = {"_p_except__Context", "except::Context *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_except__Throwable = {"_p_except__Throwable", "except::Throwable *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__Filter = {"_p_logging__Filter", "logging::Filter *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__Filterer = {"_p_logging__Filterer", "logging::Filterer *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__Handler = {"_p_logging__Handler", "logging::Handler *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__Logger = {"_p_logging__Logger", "logging::Logger *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__NullHandler = {"_p_logging__NullHandler", "logging::NullHandler *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__NullLogger = {"_p_logging__NullLogger", "logging::NullLogger *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
-  &_swigt__p_OneDT__T_t,
+  &_swigt__p_Filter,
+  &_swigt__p_Formatter,
+  &_swigt__p_LogLevel,
+  &_swigt__p_LogRecord,
   &_swigt__p_char,
-  &_swigt__p_double,
-  &_swigt__p_math__poly__OneDT_double_t,
-  &_swigt__p_math__poly__TwoDT_double_t,
-  &_swigt__p_std__vectorT_double_t,
-  &_swigt__p_std__vectorT_math__poly__OneDT_double_t_t,
+  &_swigt__p_except__Context,
+  &_swigt__p_except__Throwable,
+  &_swigt__p_logging__Filter,
+  &_swigt__p_logging__Filterer,
+  &_swigt__p_logging__Handler,
+  &_swigt__p_logging__Logger,
+  &_swigt__p_logging__NullHandler,
+  &_swigt__p_logging__NullLogger,
+  &_swigt__p_std__string,
 };
 
-static swig_cast_info _swigc__p_OneDT__T_t[] = {  {&_swigt__p_OneDT__T_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Filter[] = {  {&_swigt__p_Filter, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Formatter[] = {  {&_swigt__p_Formatter, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_LogLevel[] = {  {&_swigt__p_LogLevel, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_LogRecord[] = {  {&_swigt__p_LogRecord, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_math__poly__OneDT_double_t[] = {  {&_swigt__p_math__poly__OneDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_math__poly__TwoDT_double_t[] = {  {&_swigt__p_math__poly__TwoDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_double_t[] = {  {&_swigt__p_std__vectorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_math__poly__OneDT_double_t_t[] = {  {&_swigt__p_std__vectorT_math__poly__OneDT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_except__Context[] = {  {&_swigt__p_except__Context, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_except__Throwable[] = {  {&_swigt__p_except__Throwable, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__Filter[] = {  {&_swigt__p_logging__Filter, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__Filterer[] = {  {&_swigt__p_logging__NullLogger, _p_logging__NullLoggerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__Logger, _p_logging__LoggerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__Handler, _p_logging__HandlerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__NullHandler, _p_logging__NullHandlerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__Filterer, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__Handler[] = {  {&_swigt__p_logging__Handler, 0, 0, 0},  {&_swigt__p_logging__NullHandler, _p_logging__NullHandlerTo_p_logging__Handler, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__Logger[] = {  {&_swigt__p_logging__NullLogger, _p_logging__NullLoggerTo_p_logging__Logger, 0, 0},  {&_swigt__p_logging__Logger, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__NullHandler[] = {  {&_swigt__p_logging__NullHandler, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__NullLogger[] = {  {&_swigt__p_logging__NullLogger, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
-  _swigc__p_OneDT__T_t,
+  _swigc__p_Filter,
+  _swigc__p_Formatter,
+  _swigc__p_LogLevel,
+  _swigc__p_LogRecord,
   _swigc__p_char,
-  _swigc__p_double,
-  _swigc__p_math__poly__OneDT_double_t,
-  _swigc__p_math__poly__TwoDT_double_t,
-  _swigc__p_std__vectorT_double_t,
-  _swigc__p_std__vectorT_math__poly__OneDT_double_t_t,
+  _swigc__p_except__Context,
+  _swigc__p_except__Throwable,
+  _swigc__p_logging__Filter,
+  _swigc__p_logging__Filterer,
+  _swigc__p_logging__Handler,
+  _swigc__p_logging__Logger,
+  _swigc__p_logging__NullHandler,
+  _swigc__p_logging__NullLogger,
+  _swigc__p_std__string,
 };
 
 

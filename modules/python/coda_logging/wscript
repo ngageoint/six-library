@@ -1,0 +1,4 @@
+distclean = options = configure = lambda p: None
+
+def build(bld):
+  bld.swigModule(name = 'coda_logging', use = 'logging-c++')

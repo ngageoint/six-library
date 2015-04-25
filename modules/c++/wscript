@@ -1,17 +1,14 @@
-from os.path import join, exists
+import os
 
-MODULES = 'cli dbi except io logging mem math mt net net.ssl plugin re str ' \
-          'sys tiff unique xml.lite zip math.linear math.poly'
-          
 def options(opt):
-    opt.recurse(MODULES)
+    opt.recurse()
 
 def configure(conf):
-    conf.env.append_value('INCLUDES_UNITTEST', join(conf.path.abspath(), 'include'))
-    conf.recurse(MODULES)
+    conf.env.append_value('INCLUDES_UNITTEST', os.path.join(conf.path.abspath(), 'include'))
+    conf.recurse()
 
 def build(bld):
-    bld.recurse(MODULES)
+    bld.recurse()
 
-def distclean(ctxt):
-    ctxt.recurse(MODULES)
+def distclean(context):
+    context.recurse()

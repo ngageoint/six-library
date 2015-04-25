@@ -2934,15 +2934,17 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_OneDT__T_t swig_types[0]
+#define SWIGTYPE_p_XMLReader swig_types[0]
 #define SWIGTYPE_p_char swig_types[1]
-#define SWIGTYPE_p_double swig_types[2]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[3]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[4]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[5]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_t swig_types[6]
-static swig_type_info *swig_types[8];
-static swig_module_info swig_module = {swig_types, 7, 0, 0, 0, 0};
+#define SWIGTYPE_p_io__InputStream swig_types[2]
+#define SWIGTYPE_p_io__OutputStream swig_types[3]
+#define SWIGTYPE_p_std__string swig_types[4]
+#define SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t swig_types[5]
+#define SWIGTYPE_p_xml__lite__Document swig_types[6]
+#define SWIGTYPE_p_xml__lite__Element swig_types[7]
+#define SWIGTYPE_p_xml__lite__MinidomParser swig_types[8]
+static swig_type_info *swig_types[10];
+static swig_module_info swig_module = {swig_types, 9, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2955,16 +2957,16 @@ static swig_module_info swig_module = {swig_types, 7, 0, 0, 0, 0};
 #endif
 
 /*-----------------------------------------------
-              @(target):= _math_poly.so
+              @(target):= _xml_lite.so
   ------------------------------------------------*/
 #if PY_VERSION_HEX >= 0x03000000
-#  define SWIG_init    PyInit__math_poly
+#  define SWIG_init    PyInit__xml_lite
 
 #else
-#  define SWIG_init    init_math_poly
+#  define SWIG_init    init_xml_lite
 
 #endif
-#define SWIG_name    "_math_poly"
+#define SWIG_name    "_xml_lite"
 
 #define SWIGVERSION 0x030005 
 #define SWIG_VERSION SWIGVERSION
@@ -3047,8 +3049,11 @@ namespace swig {
 }
 
 
-#include "math/poly/OneD.h"
-#include "math/poly/TwoD.h"
+  #include "import/xml/lite.h"
+  using xml::lite::Element;
+  using xml::lite::Document;
+  using xml::lite::MinidomParser;
+  using xml::lite::XMLReader;
 
 
 SWIGINTERN int
@@ -3132,103 +3137,6 @@ SWIG_CanCastAsInteger(double *d, double min, double max) {
 
 
 SWIGINTERN int
-SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val) 
-{
-#if PY_VERSION_HEX < 0x03000000
-  if (PyInt_Check(obj)) {
-    long v = PyInt_AsLong(obj);
-    if (v >= 0) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      return SWIG_OverflowError;
-    }
-  } else
-#endif
-  if (PyLong_Check(obj)) {
-    unsigned long v = PyLong_AsUnsignedLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      PyErr_Clear();
-#if PY_VERSION_HEX >= 0x03000000
-      {
-        long v = PyLong_AsLong(obj);
-        if (!PyErr_Occurred()) {
-          if (v < 0) {
-            return SWIG_OverflowError;
-          }
-        } else {
-          PyErr_Clear();
-        }
-      }
-#endif
-    }
-  }
-#ifdef SWIG_PYTHON_CAST_MODE
-  {
-    int dispatch = 0;
-    unsigned long v = PyLong_AsUnsignedLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_AddCast(SWIG_OK);
-    } else {
-      PyErr_Clear();
-    }
-    if (!dispatch) {
-      double d;
-      int res = SWIG_AddCast(SWIG_AsVal_double (obj,&d));
-      if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, 0, ULONG_MAX)) {
-	if (val) *val = (unsigned long)(d);
-	return res;
-      }
-    }
-  }
-#endif
-  return SWIG_TypeError;
-}
-
-
-SWIGINTERNINLINE int
-SWIG_AsVal_size_t (PyObject * obj, size_t *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
-  if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
-  return res;
-}
-
-
-  #define SWIG_From_long   PyLong_FromLong 
-
-
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long  (unsigned long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLong(value) : PyLong_FromLong(static_cast< long >(value)); 
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-}
-
-
-SWIGINTERNINLINE PyObject*
-  SWIG_From_bool  (bool value)
-{
-  return PyBool_FromLong(value ? 1 : 0);
-}
-
-
-  #define SWIG_From_double   PyFloat_FromDouble 
-
-
-SWIGINTERN int
 SWIG_AsVal_long (PyObject *obj, long* val)
 {
   if (PyInt_Check(obj)) {
@@ -3266,1175 +3174,198 @@ SWIG_AsVal_long (PyObject *obj, long* val)
   return SWIG_TypeError;
 }
 
-SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< double > *self,long i){ return (*self)[i]; }
-SWIGINTERN void math_poly_OneD_Sl_double_Sg____setitem__(math::poly::OneD< double > *self,long i,double val){ (*self)[i] = val; }
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  int r;
+  if (!PyBool_Check(obj))
+    return SWIG_ERROR;
+  r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
+}
+
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_bool  (bool value)
+{
+  return PyBool_FromLong(value ? 1 : 0);
+}
+
+
+#include <limits.h>
+#if !defined(SWIG_NO_LLONG_MAX)
+# if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
+#   define LLONG_MAX __LONG_LONG_MAX__
+#   define LLONG_MIN (-LLONG_MAX - 1LL)
+#   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
+# endif
+#endif
+
+
+SWIGINTERN int
+SWIG_AsVal_int (PyObject * obj, int *val)
+{
+  long v;
+  int res = SWIG_AsVal_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v < INT_MIN || v > INT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< int >(v);
+    }
+  }  
+  return res;
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_Element__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::OneD< double > *result = 0 ;
+  xml::lite::Element *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)":new_Poly1D")) SWIG_fail;
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
+  if (!PyArg_ParseTuple(args,(char *)":new_Element")) SWIG_fail;
+  result = (xml::lite::Element *)new xml::lite::Element();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_Element__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< double > *arg1 = 0 ;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  std::string arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
   PyObject * obj0 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  xml::lite::Element *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:new_Poly1D",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__vectorT_double_t,  0  | 0);
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_Element",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Poly1D" "', argument " "1"" of type '" "std::vector< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Element" "', argument " "1"" of type '" "std::string const &""'"); 
   }
   if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Poly1D" "', argument " "1"" of type '" "std::vector< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Element" "', argument " "1"" of type '" "std::string const &""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< double > * >(argp1);
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >((std::vector< double > const &)*arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  size_t arg1 ;
-  size_t val1 ;
-  int ecode1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_Poly1D",&obj0)) SWIG_fail;
-  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Poly1D" "', argument " "1"" of type '" "size_t""'");
-  } 
-  arg1 = static_cast< size_t >(val1);
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  size_t arg1 ;
-  double *arg2 = (double *) 0 ;
-  size_t val1 ;
-  int ecode1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:new_Poly1D",&obj0,&obj1)) SWIG_fail;
-  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Poly1D" "', argument " "1"" of type '" "size_t""'");
-  } 
-  arg1 = static_cast< size_t >(val1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
+  arg1 = reinterpret_cast< std::string * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Poly1D" "', argument " "2"" of type '" "double const *""'"); 
-  }
-  arg2 = reinterpret_cast< double * >(argp2);
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1,(double const *)arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly1D(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 0) {
-    return _wrap_new_Poly1D__SWIG_0(self, args);
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__vectorT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Poly1D__SWIG_1(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
-    if (_v) {
-      return _wrap_new_Poly1D__SWIG_2(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_double, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_new_Poly1D__SWIG_3(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Poly1D'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::OneD< double >::OneD()\n"
-    "    math::poly::OneD< double >::OneD(std::vector< double > const &)\n"
-    "    math::poly::OneD< double >::OneD(size_t)\n"
-    "    math::poly::OneD< double >::OneD(size_t,double const *)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_order(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  size_t result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_order",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_order" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->order();
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  size_t result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_size",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_size" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->size();
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_empty",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_empty" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = (bool)((math::poly::OneD< double > const *)arg1)->empty();
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_scaleVariable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_scaleVariable",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_scaleVariable" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_scaleVariable" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->scaleVariable(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  size_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_truncateTo",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_truncateTo" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_truncateTo" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->truncateTo(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_truncateToNonZeros",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_truncateToNonZeros" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_truncateToNonZeros",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros();
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_Poly1D_truncateToNonZeros__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly1D_truncateToNonZeros__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly1D_truncateToNonZeros'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::OneD< double >::truncateToNonZeros(double) const\n"
-    "    math::poly::OneD< double >::truncateToNonZeros() const\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly1D_transformInput",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_transformInput" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D_transformInput" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Element" "', argument " "2"" of type '" "std::string const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D_transformInput" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Element" "', argument " "2"" of type '" "std::string const &""'"); 
   }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly1D_transformInput" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_transformInput",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_transformInput" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D_transformInput" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D_transformInput" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_transformInput(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[4];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly1D_transformInput__SWIG_1(self, args);
-      }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  {
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_Element" "', argument " "3"" of type '" "std::string""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Element" "', argument " "3"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
     }
   }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_Poly1D_transformInput__SWIG_0(self, args);
-        }
-      }
-    }
-  }
-  
+  result = (xml::lite::Element *)new xml::lite::Element((std::string const &)*arg1,(std::string const &)*arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, SWIG_POINTER_NEW |  0 );
+  return resultobj;
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly1D_transformInput'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::OneD< double >::transformInput(math::poly::OneD< double > const &,double) const\n"
-    "    math::poly::OneD< double >::transformInput(math::poly::OneD< double > const &) const\n");
-  return 0;
+  return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly1D_copyFrom(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_Element__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  xml::lite::Element *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_copyFrom",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_Element",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_copyFrom" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Element" "', argument " "1"" of type '" "std::string const &""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Element" "', argument " "1"" of type '" "std::string const &""'"); 
+  }
+  arg1 = reinterpret_cast< std::string * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D_copyFrom" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Element" "', argument " "2"" of type '" "std::string const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D_copyFrom" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Element" "', argument " "2"" of type '" "std::string const &""'"); 
   }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  (arg1)->copyFrom((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_Py_Void();
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  result = (xml::lite::Element *)new xml::lite::Element((std::string const &)*arg1,(std::string const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly1D___call__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_Element__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
+  std::string *arg1 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  double result;
+  xml::lite::Element *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___call__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Element",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___call__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Element" "', argument " "1"" of type '" "std::string const &""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___call__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (double)((math::poly::OneD< double > const *)arg1)->operator ()(arg2);
-  resultobj = SWIG_From_double(static_cast< double >(result));
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Element" "', argument " "1"" of type '" "std::string const &""'"); 
+  }
+  arg1 = reinterpret_cast< std::string * >(argp1);
+  result = (xml::lite::Element *)new xml::lite::Element((std::string const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly1D_integrate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_Element(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly1D_integrate",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_integrate" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_integrate" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly1D_integrate" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  result = (double)((math::poly::OneD< double > const *)arg1)->integrate(arg2,arg3);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_derivative(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly1D_derivative",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_derivative" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->derivative();
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___imul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___imul__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___imul__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator *=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___mul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___mul__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___mul__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator *(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___imul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___imul__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___imul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___imul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator *=((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___imul__(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly1D___imul____SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly1D___imul____SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly1D___imul__'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::OneD< double >::operator *=(double)\n"
-    "    math::poly::OneD< double >::operator *=(math::poly::OneD< double > const &)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___mul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___mul__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___mul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___mul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator *((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___mul__(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly1D___mul____SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly1D___mul____SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  Py_INCREF(Py_NotImplemented);
-  return Py_NotImplemented;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___iadd__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___iadd__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___iadd__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___iadd__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator +=((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___add__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___add__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___add__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___add__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator +((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___isub__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___isub__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___isub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___isub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator -=((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  math::poly::OneD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___sub__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___sub__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly1D___sub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___sub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator -((math::poly::OneD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___idiv__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___idiv__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___idiv__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator /=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___div__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___div__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___div__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator /(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D_power(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  size_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D_power",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_power" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_power" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->power(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  long arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___getitem__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___getitem__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___getitem__" "', argument " "2"" of type '" "long""'");
-  } 
-  arg2 = static_cast< long >(val2);
-  result = (double)math_poly_OneD_Sl_double_Sg____getitem__(arg1,arg2);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly1D___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
-  long arg2 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  long val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly1D___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___setitem__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___setitem__" "', argument " "2"" of type '" "long""'");
-  } 
-  arg2 = static_cast< long >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly1D___setitem__" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  math_poly_OneD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_Poly1D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_Poly1D",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Element",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Poly1D" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Element" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
   delete arg1;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -4443,317 +3374,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *Poly1D_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *_wrap_Poly2D_coeffs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_destroyChildren(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< math::poly::OneD< double > > *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_coeffs",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:Element_destroyChildren",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_coeffs" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_destroyChildren" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = (std::vector< math::poly::OneD< double > > *) &(arg1)->coeffs();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_t, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_Poly2D")) SWIG_fail;
-  result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  size_t arg1 ;
-  size_t arg2 ;
-  size_t val1 ;
-  int ecode1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:new_Poly2D",&obj0,&obj1)) SWIG_fail;
-  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Poly2D" "', argument " "1"" of type '" "size_t""'");
-  } 
-  arg1 = static_cast< size_t >(val1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Poly2D" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >(arg1,arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Poly2D(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 0) {
-    return _wrap_new_Poly2D__SWIG_0(self, args);
-  }
-  if (argc == 2) {
-    int _v;
-    {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
-    if (_v) {
-      {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_new_Poly2D__SWIG_1(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Poly2D'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::TwoD()\n"
-    "    math::poly::TwoD< double >::TwoD(size_t,size_t)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_empty",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_empty" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = (bool)((math::poly::TwoD< double > const *)arg1)->empty();
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_orderX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  size_t result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_orderX",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_orderX" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->orderX();
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_orderY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  size_t result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_orderY",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_orderY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->orderY();
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___call__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D___call__",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___call__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___call__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D___call__" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  result = (double)((math::poly::TwoD< double > const *)arg1)->operator ()(arg2,arg3);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_integrate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  double arg3 ;
-  double arg4 ;
-  double arg5 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:Poly2D_integrate",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_integrate" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_integrate" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_integrate" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Poly2D_integrate" "', argument " "4"" of type '" "double""'");
-  } 
-  arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Poly2D_integrate" "', argument " "5"" of type '" "double""'");
-  } 
-  arg5 = static_cast< double >(val5);
-  result = (double)((math::poly::TwoD< double > const *)arg1)->integrate(arg2,arg3,arg4,arg5);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  size_t arg2 ;
-  math::poly::OneD< double > *arg3 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_set",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_set" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_set" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__poly__OneDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Poly2D_set" "', argument " "3"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_set" "', argument " "3"" of type '" "math::poly::OneD< double > const &""'"); 
-  }
-  arg3 = reinterpret_cast< math::poly::OneD< double > * >(argp3);
-  (arg1)->set(arg2,(math::poly::OneD< double > const &)*arg3);
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  (arg1)->destroyChildren();
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -4761,166 +3395,32 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_flipXY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_Element__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  xml::lite::Element *arg1 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
+  xml::lite::Element *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_flipXY",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Element",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_xml__lite__Element,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_flipXY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Element" "', argument " "1"" of type '" "xml::lite::Element const &""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->flipXY();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Element" "', argument " "1"" of type '" "xml::lite::Element const &""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  result = (xml::lite::Element *)new xml::lite::Element((xml::lite::Element const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_derivativeY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_derivativeY",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_derivativeY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->derivativeY();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_derivativeX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_derivativeX",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_derivativeX" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->derivativeX();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_derivativeXY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_derivativeXY",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_derivativeXY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->derivativeXY();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  double arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_scaleVariable",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_scaleVariable" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_scaleVariable" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_scaleVariable" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_scaleVariable",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_scaleVariable" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_scaleVariable" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_Element(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[4];
   int ii;
@@ -4930,249 +3430,192 @@ SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable(PyObject *self, PyObject *args) 
   for (ii = 0; (ii < 3) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
-  if (argc == 2) {
+  if (argc == 0) {
+    return _wrap_new_Element__SWIG_0(self, args);
+  }
+  if (argc == 1) {
     int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
+      return _wrap_new_Element__SWIG_3(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Element__SWIG_4(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
       if (_v) {
-        return _wrap_Poly2D_scaleVariable__SWIG_1(self, args);
+        return _wrap_new_Element__SWIG_2(self, args);
       }
     }
   }
   if (argc == 3) {
     int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
       if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
+        _v = SWIG_CheckState(res);
         if (_v) {
-          return _wrap_Poly2D_scaleVariable__SWIG_0(self, args);
+          return _wrap_new_Element__SWIG_1(self, args);
         }
       }
     }
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly2D_scaleVariable'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Element'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::scaleVariable(double,double) const\n"
-    "    math::poly::TwoD< double >::scaleVariable(double) const\n");
+    "    xml::lite::Element::Element()\n"
+    "    xml::lite::Element::Element(std::string const &,std::string const &,std::string)\n"
+    "    xml::lite::Element::Element(std::string const &,std::string const &)\n"
+    "    xml::lite::Element::Element(std::string const &)\n"
+    "    xml::lite::Element::Element(xml::lite::Element const &)\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  size_t arg2 ;
-  size_t arg3 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  xml::lite::Element *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  size_t val3 ;
-  int ecode3 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  math::poly::TwoD< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_truncateTo",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_clone",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_truncateTo" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_clone" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_truncateTo" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_truncateTo" "', argument " "3"" of type '" "size_t""'");
-  } 
-  arg3 = static_cast< size_t >(val3);
-  result = ((math::poly::TwoD< double > const *)arg1)->truncateTo(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_xml__lite__Element,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_clone" "', argument " "2"" of type '" "xml::lite::Element const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_clone" "', argument " "2"" of type '" "xml::lite::Element const &""'"); 
+  }
+  arg2 = reinterpret_cast< xml::lite::Element * >(argp2);
+  (arg1)->clone((xml::lite::Element const &)*arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_attribute(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
+  std::string *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_truncateToNonZeros",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_attribute",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_attribute" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_truncateToNonZeros" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_attribute" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_attribute" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  result = (std::string *) &(arg1)->attribute((std::string const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__string, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagNameNS__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_truncateToNonZeros",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros();
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_Poly2D_truncateToNonZeros__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly2D_truncateToNonZeros__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly2D_truncateToNonZeros'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::truncateToNonZeros(double) const\n"
-    "    math::poly::TwoD< double >::truncateToNonZeros() const\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  math::poly::TwoD< double > *arg3 = 0 ;
-  double arg4 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  std::vector< xml::lite::Element * > *arg3 = 0 ;
+  bool arg4 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
-  double val4 ;
+  bool val4 ;
   int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  math::poly::TwoD< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:Poly2D_transformInput",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:Element_getElementsByTagNameNS",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_transformInput" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagNameNS" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagNameNS" "', argument " "2"" of type '" "std::string const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagNameNS" "', argument " "2"" of type '" "std::string const &""'"); 
   }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t,  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_getElementsByTagNameNS" "', argument " "3"" of type '" "std::vector< xml::lite::Element * > &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagNameNS" "', argument " "3"" of type '" "std::vector< xml::lite::Element * > &""'"); 
   }
-  arg3 = reinterpret_cast< math::poly::TwoD< double > * >(argp3);
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  arg3 = reinterpret_cast< std::vector< xml::lite::Element * > * >(argp3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Poly2D_transformInput" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Element_getElementsByTagNameNS" "', argument " "4"" of type '" "bool""'");
   } 
-  arg4 = static_cast< double >(val4);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3,arg4);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg4 = static_cast< bool >(val4);
+  ((xml::lite::Element const *)arg1)->getElementsByTagNameNS((std::string const &)*arg2,*arg3,arg4);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagNameNS__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  math::poly::TwoD< double > *arg3 = 0 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  std::vector< xml::lite::Element * > *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -5182,116 +3625,115 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPAR
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  math::poly::TwoD< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_transformInput",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Element_getElementsByTagNameNS",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_transformInput" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagNameNS" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagNameNS" "', argument " "2"" of type '" "std::string const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagNameNS" "', argument " "2"" of type '" "std::string const &""'"); 
   }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t,  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_getElementsByTagNameNS" "', argument " "3"" of type '" "std::vector< xml::lite::Element * > &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagNameNS" "', argument " "3"" of type '" "std::vector< xml::lite::Element * > &""'"); 
   }
-  arg3 = reinterpret_cast< math::poly::TwoD< double > * >(argp3);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg3 = reinterpret_cast< std::vector< xml::lite::Element * > * >(argp3);
+  ((xml::lite::Element const *)arg1)->getElementsByTagNameNS((std::string const &)*arg2,*arg3);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagNameNS__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  double arg3 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  bool arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  double val3 ;
+  bool val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  math::poly::TwoD< double > result;
+  SwigValueWrapper< std::vector< xml::lite::Element * > > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D_transformInput",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Element_getElementsByTagNameNS",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_transformInput" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagNameNS" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagNameNS" "', argument " "2"" of type '" "std::string const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagNameNS" "', argument " "2"" of type '" "std::string const &""'"); 
   }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Element_getElementsByTagNameNS" "', argument " "3"" of type '" "bool""'");
   } 
-  arg3 = static_cast< double >(val3);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg3 = static_cast< bool >(val3);
+  result = ((xml::lite::Element const *)arg1)->getElementsByTagNameNS((std::string const &)*arg2,arg3);
+  resultobj = SWIG_NewPointerObj((new std::vector< xml::lite::Element * >(static_cast< const std::vector< xml::lite::Element * >& >(result))), SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagNameNS__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
+  SwigValueWrapper< std::vector< xml::lite::Element * > > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_transformInput",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_getElementsByTagNameNS",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_transformInput" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagNameNS" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagNameNS" "', argument " "2"" of type '" "std::string const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagNameNS" "', argument " "2"" of type '" "std::string const &""'"); 
   }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  result = ((xml::lite::Element const *)arg1)->getElementsByTagNameNS((std::string const &)*arg2);
+  resultobj = SWIG_NewPointerObj((new std::vector< xml::lite::Element * >(static_cast< const std::vector< xml::lite::Element * >& >(result))), SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_transformInput(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagNameNS(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[5];
   int ii;
@@ -5304,29 +3746,30 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput(PyObject *self, PyObject *args)
   if (argc == 2) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        return _wrap_Poly2D_transformInput__SWIG_3(self, args);
+        return _wrap_Element_getElementsByTagNameNS__SWIG_3(self, args);
       }
     }
   }
   if (argc == 3) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
-          return _wrap_Poly2D_transformInput__SWIG_1(self, args);
+          return _wrap_Element_getElementsByTagNameNS__SWIG_1(self, args);
         }
       }
     }
@@ -5334,18 +3777,18 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput(PyObject *self, PyObject *args)
   if (argc == 3) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_bool(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_Poly2D_transformInput__SWIG_2(self, args);
+          return _wrap_Element_getElementsByTagNameNS__SWIG_2(self, args);
         }
       }
     }
@@ -5353,21 +3796,22 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput(PyObject *self, PyObject *args)
   if (argc == 4) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_bool(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            return _wrap_Poly2D_transformInput__SWIG_0(self, args);
+            return _wrap_Element_getElementsByTagNameNS__SWIG_0(self, args);
           }
         }
       }
@@ -5375,144 +3819,1294 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput(PyObject *self, PyObject *args)
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly2D_transformInput'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Element_getElementsByTagNameNS'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::transformInput(math::poly::TwoD< double > const &,math::poly::TwoD< double > const &,double) const\n"
-    "    math::poly::TwoD< double >::transformInput(math::poly::TwoD< double > const &,math::poly::TwoD< double > const &) const\n"
-    "    math::poly::TwoD< double >::transformInput(math::poly::TwoD< double > const &,double) const\n"
-    "    math::poly::TwoD< double >::transformInput(math::poly::TwoD< double > const &) const\n");
+    "    xml::lite::Element::getElementsByTagNameNS(std::string const &,std::vector< xml::lite::Element * > &,bool) const\n"
+    "    xml::lite::Element::getElementsByTagNameNS(std::string const &,std::vector< xml::lite::Element * > &) const\n"
+    "    xml::lite::Element::getElementsByTagNameNS(std::string const &,bool) const\n"
+    "    xml::lite::Element::getElementsByTagNameNS(std::string const &) const\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D_atY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagName__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  std::vector< xml::lite::Element * > *arg3 = 0 ;
+  bool arg4 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  math::poly::OneD< double > result;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_atY",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:Element_getElementsByTagName",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_atY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagName" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_atY" "', argument " "2"" of type '" "double""'");
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_getElementsByTagName" "', argument " "3"" of type '" "std::vector< xml::lite::Element * > &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "3"" of type '" "std::vector< xml::lite::Element * > &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< xml::lite::Element * > * >(argp3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Element_getElementsByTagName" "', argument " "4"" of type '" "bool""'");
   } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->atY(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg4 = static_cast< bool >(val4);
+  ((xml::lite::Element const *)arg1)->getElementsByTagName((std::string const &)*arg2,*arg3,arg4);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagName__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  std::vector< xml::lite::Element * > *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
+  PyObject * obj2 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___imul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Element_getElementsByTagName",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___imul__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagName" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___imul__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator *=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_getElementsByTagName" "', argument " "3"" of type '" "std::vector< xml::lite::Element * > &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "3"" of type '" "std::vector< xml::lite::Element * > &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< xml::lite::Element * > * >(argp3);
+  ((xml::lite::Element const *)arg1)->getElementsByTagName((std::string const &)*arg2,*arg3);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagName__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  bool arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
+  PyObject * obj2 = 0 ;
+  SwigValueWrapper< std::vector< xml::lite::Element * > > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___mul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Element_getElementsByTagName",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___mul__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagName" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___mul__" "', argument " "2"" of type '" "double""'");
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Element_getElementsByTagName" "', argument " "3"" of type '" "bool""'");
   } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator *(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg3 = static_cast< bool >(val3);
+  result = ((xml::lite::Element const *)arg1)->getElementsByTagName((std::string const &)*arg2,arg3);
+  resultobj = SWIG_NewPointerObj((new std::vector< xml::lite::Element * >(static_cast< const std::vector< xml::lite::Element * >& >(result))), SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagName__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
+  SwigValueWrapper< std::vector< xml::lite::Element * > > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___imul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_getElementsByTagName",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___imul__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagName" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___imul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___imul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
   }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator *=((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  result = ((xml::lite::Element const *)arg1)->getElementsByTagName((std::string const &)*arg2);
+  resultobj = SWIG_NewPointerObj((new std::vector< xml::lite::Element * >(static_cast< const std::vector< xml::lite::Element * >& >(result))), SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D___imul__(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagName__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::vector< xml::lite::Element * > *arg4 = 0 ;
+  bool arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:Element_getElementsByTagName",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagName" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_getElementsByTagName" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::string * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t,  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Element_getElementsByTagName" "', argument " "4"" of type '" "std::vector< xml::lite::Element * > &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "4"" of type '" "std::vector< xml::lite::Element * > &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< xml::lite::Element * > * >(argp4);
+  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Element_getElementsByTagName" "', argument " "5"" of type '" "bool""'");
+  } 
+  arg5 = static_cast< bool >(val5);
+  ((xml::lite::Element const *)arg1)->getElementsByTagName((std::string const &)*arg2,(std::string const &)*arg3,*arg4,arg5);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagName__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::vector< xml::lite::Element * > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:Element_getElementsByTagName",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getElementsByTagName" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_getElementsByTagName" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::string * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t,  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Element_getElementsByTagName" "', argument " "4"" of type '" "std::vector< xml::lite::Element * > &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getElementsByTagName" "', argument " "4"" of type '" "std::vector< xml::lite::Element * > &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< xml::lite::Element * > * >(argp4);
+  ((xml::lite::Element const *)arg1)->getElementsByTagName((std::string const &)*arg2,(std::string const &)*arg3,*arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getElementsByTagName(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[6];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 5) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Element_getElementsByTagName__SWIG_3(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Element_getElementsByTagName__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_Element_getElementsByTagName__SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_Element_getElementsByTagName__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          void *vptr = 0;
+          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_Element_getElementsByTagName__SWIG_5(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          void *vptr = 0;
+          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_Element_getElementsByTagName__SWIG_4(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Element_getElementsByTagName'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::Element::getElementsByTagName(std::string const &,std::vector< xml::lite::Element * > &,bool) const\n"
+    "    xml::lite::Element::getElementsByTagName(std::string const &,std::vector< xml::lite::Element * > &) const\n"
+    "    xml::lite::Element::getElementsByTagName(std::string const &,bool) const\n"
+    "    xml::lite::Element::getElementsByTagName(std::string const &) const\n"
+    "    xml::lite::Element::getElementsByTagName(std::string const &,std::string const &,std::vector< xml::lite::Element * > &,bool) const\n"
+    "    xml::lite::Element::getElementsByTagName(std::string const &,std::string const &,std::vector< xml::lite::Element * > &) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_setNamespacePrefix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string arg2 ;
+  std::string arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Element_setNamespacePrefix",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_setNamespacePrefix" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_setNamespacePrefix" "', argument " "2"" of type '" "std::string""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_setNamespacePrefix" "', argument " "2"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  {
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_setNamespacePrefix" "', argument " "3"" of type '" "std::string""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_setNamespacePrefix" "', argument " "3"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  (arg1)->setNamespacePrefix(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_setNamespaceURI(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string arg2 ;
+  std::string arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Element_setNamespaceURI",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_setNamespaceURI" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_setNamespaceURI" "', argument " "2"" of type '" "std::string""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_setNamespaceURI" "', argument " "2"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  {
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_setNamespaceURI" "', argument " "3"" of type '" "std::string""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_setNamespaceURI" "', argument " "3"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  (arg1)->setNamespaceURI(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element__print(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  io::OutputStream *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element__print",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element__print" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_io__OutputStream,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element__print" "', argument " "2"" of type '" "io::OutputStream &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element__print" "', argument " "2"" of type '" "io::OutputStream &""'"); 
+  }
+  arg2 = reinterpret_cast< io::OutputStream * >(argp2);
+  ((xml::lite::Element const *)arg1)->print(*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_prettyPrint__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  io::OutputStream *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Element_prettyPrint",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_prettyPrint" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_io__OutputStream,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_prettyPrint" "', argument " "2"" of type '" "io::OutputStream &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_prettyPrint" "', argument " "2"" of type '" "io::OutputStream &""'"); 
+  }
+  arg2 = reinterpret_cast< io::OutputStream * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_prettyPrint" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_prettyPrint" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::string * >(argp3);
+  ((xml::lite::Element const *)arg1)->prettyPrint(*arg2,(std::string const &)*arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_prettyPrint__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  io::OutputStream *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_prettyPrint",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_prettyPrint" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_io__OutputStream,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_prettyPrint" "', argument " "2"" of type '" "io::OutputStream &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_prettyPrint" "', argument " "2"" of type '" "io::OutputStream &""'"); 
+  }
+  arg2 = reinterpret_cast< io::OutputStream * >(argp2);
+  ((xml::lite::Element const *)arg1)->prettyPrint(*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_prettyPrint(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_io__OutputStream, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Element_prettyPrint__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_io__OutputStream, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Element_prettyPrint__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Element_prettyPrint'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::Element::prettyPrint(io::OutputStream &,std::string const &) const\n"
+    "    xml::lite::Element::prettyPrint(io::OutputStream &) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_hasElement__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_hasElement",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_hasElement" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_hasElement" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_hasElement" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  result = (bool)((xml::lite::Element const *)arg1)->hasElement((std::string const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_hasElement__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Element_hasElement",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_hasElement" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_hasElement" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_hasElement" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Element_hasElement" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_hasElement" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::string * >(argp3);
+  result = (bool)((xml::lite::Element const *)arg1)->hasElement((std::string const &)*arg2,(std::string const &)*arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_hasElement(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Element_hasElement__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Element_hasElement__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Element_hasElement'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::Element::hasElement(std::string const &) const\n"
+    "    xml::lite::Element::hasElement(std::string const &,std::string const &) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getCharacterData(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Element_getCharacterData",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getCharacterData" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  result = ((xml::lite::Element const *)arg1)->getCharacterData();
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_setCharacterData(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_setCharacterData",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_setCharacterData" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_setCharacterData" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_setCharacterData" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->setCharacterData((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_setLocalName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_setLocalName",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_setLocalName" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_setLocalName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_setLocalName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->setLocalName((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getLocalName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Element_getLocalName",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getLocalName" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  result = ((xml::lite::Element const *)arg1)->getLocalName();
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_setQName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_setQName",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_setQName" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_setQName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_setQName" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->setQName((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getQName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Element_getQName",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getQName" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  result = ((xml::lite::Element const *)arg1)->getQName();
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_setUri(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_setUri",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_setUri" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_setUri" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_setUri" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  (arg1)->setUri((std::string const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getUri(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Element_getUri",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getUri" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  result = ((xml::lite::Element const *)arg1)->getUri();
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getChildren__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< xml::lite::Element * > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Element_getChildren",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getChildren" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  result = (std::vector< xml::lite::Element * > *) &(arg1)->getChildren();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getChildren__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< xml::lite::Element * > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Element_getChildren",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getChildren" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  result = (std::vector< xml::lite::Element * > *) &((xml::lite::Element const *)arg1)->getChildren();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getChildren(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Element_getChildren__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Element_getChildren__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Element_getChildren'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::Element::getChildren()\n"
+    "    xml::lite::Element::getChildren() const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_getParent(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  xml::lite::Element *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Element_getParent",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getParent" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  result = (xml::lite::Element *)((xml::lite::Element const *)arg1)->getParent();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Element_setParent(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  xml::lite::Element *arg2 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Element_setParent",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_setParent" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_setParent" "', argument " "2"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg2 = reinterpret_cast< xml::lite::Element * >(argp2);
+  (arg1)->setParent(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Element_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_xml__lite__Element, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_Document__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  xml::lite::Document *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_Document",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Document" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Document" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  result = (xml::lite::Document *)new xml::lite::Document(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Document__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  xml::lite::Document *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Document",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Document" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
+  result = (xml::lite::Document *)new xml::lite::Document(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Document__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_Document")) SWIG_fail;
+  result = (xml::lite::Document *)new xml::lite::Document();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Document(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[3];
   int ii;
@@ -5522,433 +5116,57 @@ SWIGINTERN PyObject *_wrap_Poly2D___imul__(PyObject *self, PyObject *args) {
   for (ii = 0; (ii < 2) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
-  if (argc == 2) {
+  if (argc == 0) {
+    return _wrap_new_Document__SWIG_2(self, args);
+  }
+  if (argc == 1) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly2D___imul____SWIG_1(self, args);
-      }
+      return _wrap_new_Document__SWIG_1(self, args);
     }
   }
   if (argc == 2) {
     int _v;
     void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_bool(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_Poly2D___imul____SWIG_0(self, args);
+        return _wrap_new_Document__SWIG_0(self, args);
       }
     }
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Poly2D___imul__'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Document'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    math::poly::TwoD< double >::operator *=(double)\n"
-    "    math::poly::TwoD< double >::operator *=(math::poly::TwoD< double > const &)\n");
+    "    xml::lite::Document::Document(xml::lite::Element *,bool)\n"
+    "    xml::lite::Document::Document(xml::lite::Element *)\n"
+    "    xml::lite::Document::Document()\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_Document(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___mul__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___mul__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___mul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___mul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator *((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___mul__(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Poly2D___mul____SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__TwoDT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Poly2D___mul____SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  Py_INCREF(Py_NotImplemented);
-  return Py_NotImplemented;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___iadd__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___iadd__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___iadd__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___iadd__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator +=((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___add__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___add__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___add__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___add__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator +((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___isub__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___isub__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___isub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___isub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator -=((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___sub__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___sub__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___sub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___sub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator -((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___idiv__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___idiv__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___idiv__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator /=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___div__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___div__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___div__" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator /(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___eq__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___eq__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___eq__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___eq__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (bool)((math::poly::TwoD< double > const *)arg1)->operator ==((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  math::poly::TwoD< double > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___ne__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___ne__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Poly2D___ne__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___ne__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (bool)((math::poly::TwoD< double > const *)arg1)->operator !=((math::poly::TwoD< double > const &)*arg2);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Poly2D_power(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
-  size_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  math::poly::TwoD< double > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D_power",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_power" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_power" "', argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->power(arg2);
-  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_Poly2D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_Poly2D",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Document",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Poly2D" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Document" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
   }
-  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
   delete arg1;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -5957,147 +5175,1341 @@ fail:
 }
 
 
-SWIGINTERN PyObject *Poly2D_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Document_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  xml::lite::Document *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Document_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_clone" "', argument " "1"" of type '" "xml::lite::Document const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  result = (xml::lite::Document *)((xml::lite::Document const *)arg1)->clone();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_createElement__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  xml::lite::Element *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:Document_createElement",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_createElement" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Document_createElement" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Document_createElement" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Document_createElement" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Document_createElement" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::string * >(argp3);
+  {
+    res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Document_createElement" "', argument " "4"" of type '" "std::string""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Document_createElement" "', argument " "4"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp4);
+      arg4 = *temp;
+      if (SWIG_IsNewObj(res4)) delete temp;
+    }
+  }
+  result = (xml::lite::Element *)(arg1)->createElement((std::string const &)*arg2,(std::string const &)*arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_createElement__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  xml::lite::Element *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Document_createElement",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_createElement" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Document_createElement" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Document_createElement" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Document_createElement" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Document_createElement" "', argument " "3"" of type '" "std::string const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::string * >(argp3);
+  result = (xml::lite::Element *)(arg1)->createElement((std::string const &)*arg2,(std::string const &)*arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_createElement(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Document_createElement__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__string, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_Document_createElement__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Document_createElement'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::Document::createElement(std::string const &,std::string const &,std::string)\n"
+    "    xml::lite::Document::createElement(std::string const &,std::string const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_destroy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Document_destroy",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_destroy" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  (arg1)->destroy();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_insert(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  xml::lite::Element *arg2 = (xml::lite::Element *) 0 ;
+  xml::lite::Element *arg3 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Document_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_insert" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Document_insert" "', argument " "2"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg2 = reinterpret_cast< xml::lite::Element * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Document_insert" "', argument " "3"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg3 = reinterpret_cast< xml::lite::Element * >(argp3);
+  (arg1)->insert(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_remove__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  xml::lite::Element *arg2 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Document_remove",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_remove" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Document_remove" "', argument " "2"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg2 = reinterpret_cast< xml::lite::Element * >(argp2);
+  (arg1)->remove(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_remove__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  xml::lite::Element *arg2 = (xml::lite::Element *) 0 ;
+  xml::lite::Element *arg3 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Document_remove",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_remove" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Document_remove" "', argument " "2"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg2 = reinterpret_cast< xml::lite::Element * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Document_remove" "', argument " "3"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg3 = reinterpret_cast< xml::lite::Element * >(argp3);
+  (arg1)->remove(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_remove(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Document_remove__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Document_remove__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Document_remove'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::Document::remove(xml::lite::Element *)\n"
+    "    xml::lite::Document::remove(xml::lite::Element *,xml::lite::Element *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_setRootElement__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  xml::lite::Element *arg2 = (xml::lite::Element *) 0 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Document_setRootElement",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_setRootElement" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Document_setRootElement" "', argument " "2"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg2 = reinterpret_cast< xml::lite::Element * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Document_setRootElement" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  (arg1)->setRootElement(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_setRootElement__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  xml::lite::Element *arg2 = (xml::lite::Element *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Document_setRootElement",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_setRootElement" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Document_setRootElement" "', argument " "2"" of type '" "xml::lite::Element *""'"); 
+  }
+  arg2 = reinterpret_cast< xml::lite::Element * >(argp2);
+  (arg1)->setRootElement(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_setRootElement(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Document_setRootElement__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_xml__lite__Element, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_Document_setRootElement__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Document_setRootElement'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::Document::setRootElement(xml::lite::Element *,bool)\n"
+    "    xml::lite::Document::setRootElement(xml::lite::Element *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_getRootElement__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  xml::lite::Element *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Document_getRootElement",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_getRootElement" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Document_getRootElement" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  result = (xml::lite::Element *)(arg1)->getRootElement(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_getRootElement__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  xml::lite::Element *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Document_getRootElement",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_getRootElement" "', argument " "1"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  result = (xml::lite::Element *)(arg1)->getRootElement();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_getRootElement__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  xml::lite::Element *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Document_getRootElement",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_getRootElement" "', argument " "1"" of type '" "xml::lite::Document const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  result = (xml::lite::Element *)((xml::lite::Document const *)arg1)->getRootElement();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Element, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Document_getRootElement(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Document_getRootElement__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Document_getRootElement__SWIG_2(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Document_getRootElement__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Document_getRootElement'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::Document::getRootElement(bool)\n"
+    "    xml::lite::Document::getRootElement()\n"
+    "    xml::lite::Document::getRootElement() const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *Document_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_xml__lite__Document, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_MinidomParser(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_MinidomParser")) SWIG_fail;
+  result = (xml::lite::MinidomParser *)new xml::lite::MinidomParser();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__MinidomParser, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_MinidomParser(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MinidomParser",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MinidomParser" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_parse__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  io::InputStream *arg2 = 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:MinidomParser_parse",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_parse" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_io__InputStream,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MinidomParser_parse" "', argument " "2"" of type '" "io::InputStream &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MinidomParser_parse" "', argument " "2"" of type '" "io::InputStream &""'"); 
+  }
+  arg2 = reinterpret_cast< io::InputStream * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "MinidomParser_parse" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  (arg1)->parse(*arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_parse__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  io::InputStream *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MinidomParser_parse",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_parse" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_io__InputStream,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MinidomParser_parse" "', argument " "2"" of type '" "io::InputStream &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MinidomParser_parse" "', argument " "2"" of type '" "io::InputStream &""'"); 
+  }
+  arg2 = reinterpret_cast< io::InputStream * >(argp2);
+  (arg1)->parse(*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_parse(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__MinidomParser, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_io__InputStream, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_MinidomParser_parse__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__MinidomParser, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_io__InputStream, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_MinidomParser_parse__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'MinidomParser_parse'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::MinidomParser::parse(io::InputStream &,int)\n"
+    "    xml::lite::MinidomParser::parse(io::InputStream &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MinidomParser_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_clear" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  (arg1)->clear();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_getDocument__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  xml::lite::Document *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MinidomParser_getDocument",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_getDocument" "', argument " "1"" of type '" "xml::lite::MinidomParser const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  result = (xml::lite::Document *)((xml::lite::MinidomParser const *)arg1)->getDocument();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_getDocument__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  xml::lite::Document *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MinidomParser_getDocument",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_getDocument" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MinidomParser_getDocument" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  result = (xml::lite::Document *)(arg1)->getDocument(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_getDocument__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  xml::lite::Document *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MinidomParser_getDocument",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_getDocument" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  result = (xml::lite::Document *)(arg1)->getDocument();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_getDocument(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__MinidomParser, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_MinidomParser_getDocument__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__MinidomParser, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_MinidomParser_getDocument__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__MinidomParser, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_MinidomParser_getDocument__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'MinidomParser_getDocument'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::MinidomParser::getDocument() const\n"
+    "    xml::lite::MinidomParser::getDocument(bool)\n"
+    "    xml::lite::MinidomParser::getDocument()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_getReader__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  XMLReader *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MinidomParser_getReader",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_getReader" "', argument " "1"" of type '" "xml::lite::MinidomParser const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  result = (XMLReader *) &((xml::lite::MinidomParser const *)arg1)->getReader();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_XMLReader, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_getReader__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  XMLReader *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MinidomParser_getReader",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_getReader" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  result = (XMLReader *) &(arg1)->getReader();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_XMLReader, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_getReader(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__MinidomParser, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_MinidomParser_getReader__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__MinidomParser, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_MinidomParser_getReader__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'MinidomParser_getReader'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::MinidomParser::getReader() const\n"
+    "    xml::lite::MinidomParser::getReader()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_setDocument__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  xml::lite::Document *arg2 = (xml::lite::Document *) 0 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:MinidomParser_setDocument",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_setDocument" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MinidomParser_setDocument" "', argument " "2"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg2 = reinterpret_cast< xml::lite::Document * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "MinidomParser_setDocument" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  (arg1)->setDocument(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_setDocument__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  xml::lite::Document *arg2 = (xml::lite::Document *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MinidomParser_setDocument",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_setDocument" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MinidomParser_setDocument" "', argument " "2"" of type '" "xml::lite::Document *""'"); 
+  }
+  arg2 = reinterpret_cast< xml::lite::Document * >(argp2);
+  (arg1)->setDocument(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_setDocument(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__MinidomParser, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_MinidomParser_setDocument__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_xml__lite__MinidomParser, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_xml__lite__Document, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_MinidomParser_setDocument__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'MinidomParser_setDocument'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    xml::lite::MinidomParser::setDocument(xml::lite::Document *,bool)\n"
+    "    xml::lite::MinidomParser::setDocument(xml::lite::Document *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_MinidomParser_preserveCharacterData(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::MinidomParser *arg1 = (xml::lite::MinidomParser *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MinidomParser_preserveCharacterData",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__MinidomParser, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MinidomParser_preserveCharacterData" "', argument " "1"" of type '" "xml::lite::MinidomParser *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::MinidomParser * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MinidomParser_preserveCharacterData" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  (arg1)->preserveCharacterData(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *MinidomParser_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_xml__lite__MinidomParser, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
-	 { (char *)"new_Poly1D", _wrap_new_Poly1D, METH_VARARGS, (char *)"\n"
-		"Poly1D()\n"
-		"Poly1D(std::vector< double > const & coef)\n"
-		"Poly1D(size_t order)\n"
-		"new_Poly1D(size_t order, double const * coef) -> Poly1D\n"
+	 { (char *)"delete_Element", _wrap_delete_Element, METH_VARARGS, (char *)"delete_Element(Element self)"},
+	 { (char *)"Element_destroyChildren", _wrap_Element_destroyChildren, METH_VARARGS, (char *)"Element_destroyChildren(Element self)"},
+	 { (char *)"new_Element", _wrap_new_Element, METH_VARARGS, (char *)"\n"
+		"Element()\n"
+		"Element(std::string const & qname, std::string const & uri, std::string characterData)\n"
+		"Element(std::string const & qname, std::string const & uri)\n"
+		"Element(std::string const & qname)\n"
+		"new_Element(Element element) -> Element\n"
 		""},
-	 { (char *)"Poly1D_order", _wrap_Poly1D_order, METH_VARARGS, (char *)"Poly1D_order(Poly1D self) -> size_t"},
-	 { (char *)"Poly1D_size", _wrap_Poly1D_size, METH_VARARGS, (char *)"Poly1D_size(Poly1D self) -> size_t"},
-	 { (char *)"Poly1D_empty", _wrap_Poly1D_empty, METH_VARARGS, (char *)"Poly1D_empty(Poly1D self) -> bool"},
-	 { (char *)"Poly1D_scaleVariable", _wrap_Poly1D_scaleVariable, METH_VARARGS, (char *)"Poly1D_scaleVariable(Poly1D self, double scale) -> Poly1D"},
-	 { (char *)"Poly1D_truncateTo", _wrap_Poly1D_truncateTo, METH_VARARGS, (char *)"Poly1D_truncateTo(Poly1D self, size_t order) -> Poly1D"},
-	 { (char *)"Poly1D_truncateToNonZeros", _wrap_Poly1D_truncateToNonZeros, METH_VARARGS, (char *)"\n"
-		"truncateToNonZeros(double zeroEpsilon=0.0) -> Poly1D\n"
-		"Poly1D_truncateToNonZeros(Poly1D self) -> Poly1D\n"
+	 { (char *)"Element_clone", _wrap_Element_clone, METH_VARARGS, (char *)"Element_clone(Element self, Element element)"},
+	 { (char *)"Element_attribute", _wrap_Element_attribute, METH_VARARGS, (char *)"Element_attribute(Element self, std::string const & s) -> std::string &"},
+	 { (char *)"Element_getElementsByTagNameNS", _wrap_Element_getElementsByTagNameNS, METH_VARARGS, (char *)"\n"
+		"getElementsByTagNameNS(std::string const & qname, std::vector< xml::lite::Element * > & elements, bool recurse=False)\n"
+		"getElementsByTagNameNS(std::string const & qname, std::vector< xml::lite::Element * > & elements)\n"
+		"getElementsByTagNameNS(std::string const & qname, bool recurse=False) -> std::vector< xml::lite::Element * >\n"
+		"Element_getElementsByTagNameNS(Element self, std::string const & qname) -> std::vector< xml::lite::Element * >\n"
 		""},
-	 { (char *)"Poly1D_transformInput", _wrap_Poly1D_transformInput, METH_VARARGS, (char *)"\n"
-		"transformInput(Poly1D gx, double zeroEpsilon=0.0) -> Poly1D\n"
-		"Poly1D_transformInput(Poly1D self, Poly1D gx) -> Poly1D\n"
+	 { (char *)"Element_getElementsByTagName", _wrap_Element_getElementsByTagName, METH_VARARGS, (char *)"\n"
+		"getElementsByTagName(std::string const & localName, std::vector< xml::lite::Element * > & elements, bool recurse=False)\n"
+		"getElementsByTagName(std::string const & localName, std::vector< xml::lite::Element * > & elements)\n"
+		"getElementsByTagName(std::string const & localName, bool recurse=False) -> std::vector< xml::lite::Element * >\n"
+		"getElementsByTagName(std::string const & localName) -> std::vector< xml::lite::Element * >\n"
+		"getElementsByTagName(std::string const & uri, std::string const & localName, std::vector< xml::lite::Element * > & elements, bool recurse=False)\n"
+		"Element_getElementsByTagName(Element self, std::string const & uri, std::string const & localName, std::vector< xml::lite::Element * > & elements)\n"
 		""},
-	 { (char *)"Poly1D_copyFrom", _wrap_Poly1D_copyFrom, METH_VARARGS, (char *)"Poly1D_copyFrom(Poly1D self, Poly1D p)"},
-	 { (char *)"Poly1D___call__", _wrap_Poly1D___call__, METH_VARARGS, (char *)"Poly1D___call__(Poly1D self, double at) -> double"},
-	 { (char *)"Poly1D_integrate", _wrap_Poly1D_integrate, METH_VARARGS, (char *)"Poly1D_integrate(Poly1D self, double start, double end) -> double"},
-	 { (char *)"Poly1D_derivative", _wrap_Poly1D_derivative, METH_VARARGS, (char *)"Poly1D_derivative(Poly1D self) -> Poly1D"},
-	 { (char *)"Poly1D___imul__", _wrap_Poly1D___imul__, METH_VARARGS, (char *)"\n"
-		"__imul__(double cv) -> Poly1D\n"
-		"Poly1D___imul__(Poly1D self, Poly1D p) -> Poly1D\n"
+	 { (char *)"Element_setNamespacePrefix", _wrap_Element_setNamespacePrefix, METH_VARARGS, (char *)"Element_setNamespacePrefix(Element self, std::string prefix, std::string uri)"},
+	 { (char *)"Element_setNamespaceURI", _wrap_Element_setNamespaceURI, METH_VARARGS, (char *)"Element_setNamespaceURI(Element self, std::string prefix, std::string uri)"},
+	 { (char *)"Element__print", _wrap_Element__print, METH_VARARGS, (char *)"Element__print(Element self, io::OutputStream & stream)"},
+	 { (char *)"Element_prettyPrint", _wrap_Element_prettyPrint, METH_VARARGS, (char *)"\n"
+		"prettyPrint(io::OutputStream & stream, std::string const & formatter)\n"
+		"Element_prettyPrint(Element self, io::OutputStream & stream)\n"
 		""},
-	 { (char *)"Poly1D___mul__", _wrap_Poly1D___mul__, METH_VARARGS, (char *)"\n"
-		"__mul__(double cv) -> Poly1D\n"
-		"Poly1D___mul__(Poly1D self, Poly1D p) -> Poly1D\n"
+	 { (char *)"Element_hasElement", _wrap_Element_hasElement, METH_VARARGS, (char *)"\n"
+		"hasElement(std::string const & localName) -> bool\n"
+		"Element_hasElement(Element self, std::string const & uri, std::string const & localName) -> bool\n"
 		""},
-	 { (char *)"Poly1D___iadd__", _wrap_Poly1D___iadd__, METH_VARARGS, (char *)"Poly1D___iadd__(Poly1D self, Poly1D p) -> Poly1D"},
-	 { (char *)"Poly1D___add__", _wrap_Poly1D___add__, METH_VARARGS, (char *)"Poly1D___add__(Poly1D self, Poly1D p) -> Poly1D"},
-	 { (char *)"Poly1D___isub__", _wrap_Poly1D___isub__, METH_VARARGS, (char *)"Poly1D___isub__(Poly1D self, Poly1D p) -> Poly1D"},
-	 { (char *)"Poly1D___sub__", _wrap_Poly1D___sub__, METH_VARARGS, (char *)"Poly1D___sub__(Poly1D self, Poly1D p) -> Poly1D"},
-	 { (char *)"Poly1D___idiv__", _wrap_Poly1D___idiv__, METH_VARARGS, (char *)"Poly1D___idiv__(Poly1D self, double cv) -> Poly1D"},
-	 { (char *)"Poly1D___div__", _wrap_Poly1D___div__, METH_VARARGS, (char *)"Poly1D___div__(Poly1D self, double cv) -> Poly1D"},
-	 { (char *)"Poly1D_power", _wrap_Poly1D_power, METH_VARARGS, (char *)"Poly1D_power(Poly1D self, size_t toThe) -> Poly1D"},
-	 { (char *)"Poly1D___getitem__", _wrap_Poly1D___getitem__, METH_VARARGS, (char *)"Poly1D___getitem__(Poly1D self, long i) -> double"},
-	 { (char *)"Poly1D___setitem__", _wrap_Poly1D___setitem__, METH_VARARGS, (char *)"Poly1D___setitem__(Poly1D self, long i, double val)"},
-	 { (char *)"delete_Poly1D", _wrap_delete_Poly1D, METH_VARARGS, (char *)"delete_Poly1D(Poly1D self)"},
-	 { (char *)"Poly1D_swigregister", Poly1D_swigregister, METH_VARARGS, NULL},
-	 { (char *)"Poly2D_coeffs", _wrap_Poly2D_coeffs, METH_VARARGS, (char *)"Poly2D_coeffs(Poly2D self) -> std::vector< math::poly::OneD< double > > &"},
-	 { (char *)"new_Poly2D", _wrap_new_Poly2D, METH_VARARGS, (char *)"\n"
-		"Poly2D()\n"
-		"new_Poly2D(size_t orderX, size_t orderY) -> Poly2D\n"
+	 { (char *)"Element_getCharacterData", _wrap_Element_getCharacterData, METH_VARARGS, (char *)"Element_getCharacterData(Element self) -> std::string"},
+	 { (char *)"Element_setCharacterData", _wrap_Element_setCharacterData, METH_VARARGS, (char *)"Element_setCharacterData(Element self, std::string const & characters)"},
+	 { (char *)"Element_setLocalName", _wrap_Element_setLocalName, METH_VARARGS, (char *)"Element_setLocalName(Element self, std::string const & localName)"},
+	 { (char *)"Element_getLocalName", _wrap_Element_getLocalName, METH_VARARGS, (char *)"Element_getLocalName(Element self) -> std::string"},
+	 { (char *)"Element_setQName", _wrap_Element_setQName, METH_VARARGS, (char *)"Element_setQName(Element self, std::string const & qname)"},
+	 { (char *)"Element_getQName", _wrap_Element_getQName, METH_VARARGS, (char *)"Element_getQName(Element self) -> std::string"},
+	 { (char *)"Element_setUri", _wrap_Element_setUri, METH_VARARGS, (char *)"Element_setUri(Element self, std::string const & uri)"},
+	 { (char *)"Element_getUri", _wrap_Element_getUri, METH_VARARGS, (char *)"Element_getUri(Element self) -> std::string"},
+	 { (char *)"Element_getChildren", _wrap_Element_getChildren, METH_VARARGS, (char *)"\n"
+		"getChildren() -> std::vector< xml::lite::Element * >\n"
+		"Element_getChildren(Element self) -> std::vector< xml::lite::Element * > const &\n"
 		""},
-	 { (char *)"Poly2D_empty", _wrap_Poly2D_empty, METH_VARARGS, (char *)"Poly2D_empty(Poly2D self) -> bool"},
-	 { (char *)"Poly2D_orderX", _wrap_Poly2D_orderX, METH_VARARGS, (char *)"Poly2D_orderX(Poly2D self) -> size_t"},
-	 { (char *)"Poly2D_orderY", _wrap_Poly2D_orderY, METH_VARARGS, (char *)"Poly2D_orderY(Poly2D self) -> size_t"},
-	 { (char *)"Poly2D___call__", _wrap_Poly2D___call__, METH_VARARGS, (char *)"Poly2D___call__(Poly2D self, double atX, double atY) -> double"},
-	 { (char *)"Poly2D_integrate", _wrap_Poly2D_integrate, METH_VARARGS, (char *)"Poly2D_integrate(Poly2D self, double xStart, double xEnd, double yStart, double yEnd) -> double"},
-	 { (char *)"Poly2D_set", _wrap_Poly2D_set, METH_VARARGS, (char *)"Poly2D_set(Poly2D self, size_t i, Poly1D p)"},
-	 { (char *)"Poly2D_flipXY", _wrap_Poly2D_flipXY, METH_VARARGS, (char *)"Poly2D_flipXY(Poly2D self) -> Poly2D"},
-	 { (char *)"Poly2D_derivativeY", _wrap_Poly2D_derivativeY, METH_VARARGS, (char *)"Poly2D_derivativeY(Poly2D self) -> Poly2D"},
-	 { (char *)"Poly2D_derivativeX", _wrap_Poly2D_derivativeX, METH_VARARGS, (char *)"Poly2D_derivativeX(Poly2D self) -> Poly2D"},
-	 { (char *)"Poly2D_derivativeXY", _wrap_Poly2D_derivativeXY, METH_VARARGS, (char *)"Poly2D_derivativeXY(Poly2D self) -> Poly2D"},
-	 { (char *)"Poly2D_scaleVariable", _wrap_Poly2D_scaleVariable, METH_VARARGS, (char *)"\n"
-		"scaleVariable(double scaleX, double scaleY) -> Poly2D\n"
-		"Poly2D_scaleVariable(Poly2D self, double scale) -> Poly2D\n"
+	 { (char *)"Element_getParent", _wrap_Element_getParent, METH_VARARGS, (char *)"Element_getParent(Element self) -> Element"},
+	 { (char *)"Element_setParent", _wrap_Element_setParent, METH_VARARGS, (char *)"Element_setParent(Element self, Element parent)"},
+	 { (char *)"Element_swigregister", Element_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_Document", _wrap_new_Document, METH_VARARGS, (char *)"\n"
+		"Document(Element rootNode=None, bool own=True)\n"
+		"Document(Element rootNode=None)\n"
+		"new_Document() -> Document\n"
 		""},
-	 { (char *)"Poly2D_truncateTo", _wrap_Poly2D_truncateTo, METH_VARARGS, (char *)"Poly2D_truncateTo(Poly2D self, size_t orderX, size_t orderY) -> Poly2D"},
-	 { (char *)"Poly2D_truncateToNonZeros", _wrap_Poly2D_truncateToNonZeros, METH_VARARGS, (char *)"\n"
-		"truncateToNonZeros(double zeroEpsilon=0.0) -> Poly2D\n"
-		"Poly2D_truncateToNonZeros(Poly2D self) -> Poly2D\n"
+	 { (char *)"delete_Document", _wrap_delete_Document, METH_VARARGS, (char *)"delete_Document(Document self)"},
+	 { (char *)"Document_clone", _wrap_Document_clone, METH_VARARGS, (char *)"Document_clone(Document self) -> Document"},
+	 { (char *)"Document_createElement", _wrap_Document_createElement, METH_VARARGS, (char *)"\n"
+		"createElement(std::string const & qname, std::string const & uri, std::string characterData) -> Element\n"
+		"Document_createElement(Document self, std::string const & qname, std::string const & uri) -> Element\n"
 		""},
-	 { (char *)"Poly2D_transformInput", _wrap_Poly2D_transformInput, METH_VARARGS, (char *)"\n"
-		"transformInput(Poly2D gx, Poly2D gy, double zeroEpsilon=0.0) -> Poly2D\n"
-		"transformInput(Poly2D gx, Poly2D gy) -> Poly2D\n"
-		"transformInput(Poly2D gx, double zeroEpsilon=0.0) -> Poly2D\n"
-		"Poly2D_transformInput(Poly2D self, Poly2D gx) -> Poly2D\n"
+	 { (char *)"Document_destroy", _wrap_Document_destroy, METH_VARARGS, (char *)"Document_destroy(Document self)"},
+	 { (char *)"Document_insert", _wrap_Document_insert, METH_VARARGS, (char *)"Document_insert(Document self, Element element, Element underThis)"},
+	 { (char *)"Document_remove", _wrap_Document_remove, METH_VARARGS, (char *)"\n"
+		"remove(Element toDelete)\n"
+		"Document_remove(Document self, Element toDelete, Element fromHere)\n"
 		""},
-	 { (char *)"Poly2D_atY", _wrap_Poly2D_atY, METH_VARARGS, (char *)"Poly2D_atY(Poly2D self, double y) -> Poly1D"},
-	 { (char *)"Poly2D___imul__", _wrap_Poly2D___imul__, METH_VARARGS, (char *)"\n"
-		"__imul__(double cv) -> Poly2D\n"
-		"Poly2D___imul__(Poly2D self, Poly2D p) -> Poly2D\n"
+	 { (char *)"Document_setRootElement", _wrap_Document_setRootElement, METH_VARARGS, (char *)"\n"
+		"setRootElement(Element element, bool own=True)\n"
+		"Document_setRootElement(Document self, Element element)\n"
 		""},
-	 { (char *)"Poly2D___mul__", _wrap_Poly2D___mul__, METH_VARARGS, (char *)"\n"
-		"__mul__(double cv) -> Poly2D\n"
-		"Poly2D___mul__(Poly2D self, Poly2D p) -> Poly2D\n"
+	 { (char *)"Document_getRootElement", _wrap_Document_getRootElement, METH_VARARGS, (char *)"\n"
+		"getRootElement(bool steal=False) -> Element\n"
+		"getRootElement() -> Element\n"
+		"Document_getRootElement(Document self) -> Element\n"
 		""},
-	 { (char *)"Poly2D___iadd__", _wrap_Poly2D___iadd__, METH_VARARGS, (char *)"Poly2D___iadd__(Poly2D self, Poly2D p) -> Poly2D"},
-	 { (char *)"Poly2D___add__", _wrap_Poly2D___add__, METH_VARARGS, (char *)"Poly2D___add__(Poly2D self, Poly2D p) -> Poly2D"},
-	 { (char *)"Poly2D___isub__", _wrap_Poly2D___isub__, METH_VARARGS, (char *)"Poly2D___isub__(Poly2D self, Poly2D p) -> Poly2D"},
-	 { (char *)"Poly2D___sub__", _wrap_Poly2D___sub__, METH_VARARGS, (char *)"Poly2D___sub__(Poly2D self, Poly2D p) -> Poly2D"},
-	 { (char *)"Poly2D___idiv__", _wrap_Poly2D___idiv__, METH_VARARGS, (char *)"Poly2D___idiv__(Poly2D self, double cv) -> Poly2D"},
-	 { (char *)"Poly2D___div__", _wrap_Poly2D___div__, METH_VARARGS, (char *)"Poly2D___div__(Poly2D self, double cv) -> Poly2D"},
-	 { (char *)"Poly2D___eq__", _wrap_Poly2D___eq__, METH_VARARGS, (char *)"Poly2D___eq__(Poly2D self, Poly2D p) -> bool"},
-	 { (char *)"Poly2D___ne__", _wrap_Poly2D___ne__, METH_VARARGS, (char *)"Poly2D___ne__(Poly2D self, Poly2D p) -> bool"},
-	 { (char *)"Poly2D_power", _wrap_Poly2D_power, METH_VARARGS, (char *)"Poly2D_power(Poly2D self, size_t toThe) -> Poly2D"},
-	 { (char *)"delete_Poly2D", _wrap_delete_Poly2D, METH_VARARGS, (char *)"delete_Poly2D(Poly2D self)"},
-	 { (char *)"Poly2D_swigregister", Poly2D_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Document_swigregister", Document_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_MinidomParser", _wrap_new_MinidomParser, METH_VARARGS, (char *)"new_MinidomParser() -> MinidomParser"},
+	 { (char *)"delete_MinidomParser", _wrap_delete_MinidomParser, METH_VARARGS, (char *)"delete_MinidomParser(MinidomParser self)"},
+	 { (char *)"MinidomParser_parse", _wrap_MinidomParser_parse, METH_VARARGS, (char *)"\n"
+		"parse(io::InputStream & arg2, int size)\n"
+		"MinidomParser_parse(MinidomParser self, io::InputStream & arg3)\n"
+		""},
+	 { (char *)"MinidomParser_clear", _wrap_MinidomParser_clear, METH_VARARGS, (char *)"MinidomParser_clear(MinidomParser self)"},
+	 { (char *)"MinidomParser_getDocument", _wrap_MinidomParser_getDocument, METH_VARARGS, (char *)"\n"
+		"getDocument() -> Document\n"
+		"getDocument(bool steal=False) -> Document\n"
+		"MinidomParser_getDocument(MinidomParser self) -> Document\n"
+		""},
+	 { (char *)"MinidomParser_getReader", _wrap_MinidomParser_getReader, METH_VARARGS, (char *)"\n"
+		"getReader() -> XMLReader const\n"
+		"MinidomParser_getReader(MinidomParser self) -> XMLReader &\n"
+		""},
+	 { (char *)"MinidomParser_setDocument", _wrap_MinidomParser_setDocument, METH_VARARGS, (char *)"\n"
+		"setDocument(Document newDocument, bool own=True)\n"
+		"MinidomParser_setDocument(MinidomParser self, Document newDocument)\n"
+		""},
+	 { (char *)"MinidomParser_preserveCharacterData", _wrap_MinidomParser_preserveCharacterData, METH_VARARGS, (char *)"MinidomParser_preserveCharacterData(MinidomParser self, bool preserve)"},
+	 { (char *)"MinidomParser_swigregister", MinidomParser_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static swig_type_info _swigt__p_OneDT__T_t = {"_p_OneDT__T_t", "OneD< _T > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_XMLReader = {"_p_XMLReader", "XMLReader *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "math::poly::OneD< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_double_t = {"_p_std__vectorT_double_t", "std::vector< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_math__poly__OneDT_double_t_t = {"_p_std__vectorT_math__poly__OneDT_double_t_t", "std::vector< math::poly::OneD< double > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_io__InputStream = {"_p_io__InputStream", "io::InputStream *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_io__OutputStream = {"_p_io__OutputStream", "io::OutputStream *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_xml__lite__Element_p_t = {"_p_std__vectorT_xml__lite__Element_p_t", "std::vector< xml::lite::Element * > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_xml__lite__Document = {"_p_xml__lite__Document", "xml::lite::Document *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_xml__lite__Element = {"_p_xml__lite__Element", "xml::lite::Element *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_xml__lite__MinidomParser = {"_p_xml__lite__MinidomParser", "xml::lite::MinidomParser *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
-  &_swigt__p_OneDT__T_t,
+  &_swigt__p_XMLReader,
   &_swigt__p_char,
-  &_swigt__p_double,
-  &_swigt__p_math__poly__OneDT_double_t,
-  &_swigt__p_math__poly__TwoDT_double_t,
-  &_swigt__p_std__vectorT_double_t,
-  &_swigt__p_std__vectorT_math__poly__OneDT_double_t_t,
+  &_swigt__p_io__InputStream,
+  &_swigt__p_io__OutputStream,
+  &_swigt__p_std__string,
+  &_swigt__p_std__vectorT_xml__lite__Element_p_t,
+  &_swigt__p_xml__lite__Document,
+  &_swigt__p_xml__lite__Element,
+  &_swigt__p_xml__lite__MinidomParser,
 };
 
-static swig_cast_info _swigc__p_OneDT__T_t[] = {  {&_swigt__p_OneDT__T_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_XMLReader[] = {  {&_swigt__p_XMLReader, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_math__poly__OneDT_double_t[] = {  {&_swigt__p_math__poly__OneDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_math__poly__TwoDT_double_t[] = {  {&_swigt__p_math__poly__TwoDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_double_t[] = {  {&_swigt__p_std__vectorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_math__poly__OneDT_double_t_t[] = {  {&_swigt__p_std__vectorT_math__poly__OneDT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__InputStream[] = {  {&_swigt__p_io__InputStream, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__OutputStream[] = {  {&_swigt__p_io__OutputStream, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_xml__lite__Element_p_t[] = {  {&_swigt__p_std__vectorT_xml__lite__Element_p_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_xml__lite__Document[] = {  {&_swigt__p_xml__lite__Document, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_xml__lite__Element[] = {  {&_swigt__p_xml__lite__Element, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_xml__lite__MinidomParser[] = {  {&_swigt__p_xml__lite__MinidomParser, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
-  _swigc__p_OneDT__T_t,
+  _swigc__p_XMLReader,
   _swigc__p_char,
-  _swigc__p_double,
-  _swigc__p_math__poly__OneDT_double_t,
-  _swigc__p_math__poly__TwoDT_double_t,
-  _swigc__p_std__vectorT_double_t,
-  _swigc__p_std__vectorT_math__poly__OneDT_double_t_t,
+  _swigc__p_io__InputStream,
+  _swigc__p_io__OutputStream,
+  _swigc__p_std__string,
+  _swigc__p_std__vectorT_xml__lite__Element_p_t,
+  _swigc__p_xml__lite__Document,
+  _swigc__p_xml__lite__Element,
+  _swigc__p_xml__lite__MinidomParser,
 };
 
 
