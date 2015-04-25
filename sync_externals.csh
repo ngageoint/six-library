@@ -7,6 +7,11 @@ git remote add -f coda-oss_remote https://github.com/mdaus/coda-oss.git
 # You can replace 'master' with any branch of CODA-OSS you want
 # git subtree add --prefix externals/coda-oss coda-oss_remote master --squash
 
+# Then, let's get rid of some externals we don't care about
+# git is smart, so we only have to do this once and then future subtree pulls will never
+# pull these in
+# git rm -r externals/coda-oss/modules/drivers/fftw externals/coda-oss/modules/drivers/openssl externals/coda-oss/modules/drivers/pcre externals/coda-oss/modules/drivers/sql externals/coda-oss/modules/drivers/uuid externals/coda-oss/modules/drivers/zlib
+
 # Now we just want to update
 # Here I'm assuming you're running this on the master branch... otherwise the push command should change
 git subtree pull --prefix externals/coda-oss coda-oss_remote master --squash
