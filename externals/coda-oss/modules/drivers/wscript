@@ -1,16 +1,11 @@
-from waflib import Options
-from os.path import join, exists
-
-BLD_DIRS = 'fftw jars jpeg pcre sql uuid xml zlib'
-
 def options(opt):
-    opt.recurse(BLD_DIRS)
+    opt.recurse()
 
 def configure(conf):
-    conf.recurse(BLD_DIRS)
+    conf.recurse()
 
 def build(bld):
-    bld.recurse(BLD_DIRS)
+    bld.recurse()
 
-def distclean(ctxt):
-    ctxt.recurse(BLD_DIRS)
+def distclean(context):
+    context.recurse()

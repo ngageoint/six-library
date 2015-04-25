@@ -1,6 +1,3 @@
-from os.path import join, basename
-import os
-from waflib import Utils
 distclean = options = configure = lambda p: None
 
 def build(bld):

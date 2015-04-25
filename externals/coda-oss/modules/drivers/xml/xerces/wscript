@@ -322,7 +322,7 @@ def build(bld):
                 dir=xercesNode, install_path=env['install_includedir'],
                 name='XML_INCLUDE_CONFIG_H_INSTALL')
             xerces.targets_to_add=[bld(features='install_tgt add_targets', 
-                                             pattern='**/*.hpp **/*.h xercesc/**/*.c',
+                                             pattern='**/*.hpp xercesc/**/*.h xercesc/**/*.c',
                                              dir=srcNode, install_path=env['install_includedir'], 
                                              name='XML_INCLUDE_INSTALL',
                                              targets_to_add=['XML_INCLUDE_CONFIG_H_INSTALL'])]
