@@ -1,4 +1,5 @@
 import os
+from build import CPPOptionsContext
 from waflib import Scripting, Options
 from waflib.Build import BuildContext
 from waflib.Tools import waf_unit_test

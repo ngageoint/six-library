@@ -2,7 +2,7 @@ from os.path import join, exists
 from waflib import Options, Utils
 from build import CPPBuildContext
 
-MODULES = 'coda-oss/modules/c++ coda-oss/modules/drivers'
+MODULES = 'coda-oss/modules'
 
 def options(opt):
     opt.recurse(MODULES)
