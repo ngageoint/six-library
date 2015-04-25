@@ -1,4 +1,4 @@
-from os.path import split, basename, splitext
+from os.path import join, split, basename, splitext
 
 NAME            = 'nitf'
 MAINTAINER      = 'asylvest@users.sourceforge.net'
@@ -17,8 +17,23 @@ def build(bld):
     bld.module(**globals())
     
     env = bld.get_env()
-    for app in APPS.split() :
+    app_targets = []
+    for app in APPS.split():
+        app_name = splitext(basename(app))[0]
+        app_targets.append(app_name)
         bld.program_helper(module_deps=NAME,
                            source=app, path=bld.path,
-                           name=splitext(basename(app))[0])
+                           name=app_name)
 
+    bld(features='add_targets', target='nitf-c++-apps',
+        targets_to_add=app_targets)
+
+    tests = bld.path.ant_glob(join('tests', '*.cpp'))
+    test_targets = []
+    for test in tests:
+        test_filename = str(test)
+        if test_filename not in TEST_FILTER:
+            test_targets.append(splitext(test_filename)[0])
+
+    bld(features='add_targets', target='nitf-c++-tests',
+        targets_to_add=test_targets)

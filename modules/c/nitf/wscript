@@ -42,3 +42,23 @@ def build(bld):
                 relpath = f.path_from(htmlDocs)
                 bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
         except:{}
+
+    # Convenience target
+    # We do this mainly so that from the top-level wscript we can choose what to build
+    tests = bld.path.ant_glob(os.path.join('tests', '*.c'))
+    test_targets = []
+    for test in tests:
+        test_filename = str(test)
+        if test_filename not in TEST_FILTER:
+            test_targets.append(os.path.splitext(test_filename)[0])
+
+    bld(features='add_targets', target='nitf-c-tests',
+        targets_to_add=test_targets)
+
+    tests = bld.path.ant_glob(os.path.join('unittests', '*.c'))
+    test_targets = []
+    for test in tests:
+        test_targets.append(os.path.splitext(str(test))[0])
+    
+    bld(features='add_targets', target='nitf-c-unittests',
+        targets_to_add=test_targets)

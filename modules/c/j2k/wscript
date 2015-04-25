@@ -35,7 +35,7 @@ def configure(conf):
 
 def build(bld):
     env = bld.get_env()
-    if 'HAVE_J2K' in env : 
+    if 'HAVE_J2K' in env: 
         bld.recurse(APIS + ['shared'])
         
         if 'MAKE_OPENJPEG' in env :
@@ -86,17 +86,23 @@ def build(bld):
                 copyfile(sourceFile, destFile)
             
         #j2k-only tests
-        for t in ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
-                 'test_j2k_create']:
+        j2k_only_tests = ['test_j2k_header', 'test_j2k_read_tile', 'test_j2k_read_region',
+                          'test_j2k_create']
+        
+        for t in j2k_only_tests:
             bld.program_helper(dir='tests', source='%s.c' % t, 
                                use='j2k-c J2K ' + j2kLayer, 
                                name=t, target=t, lang='c', env=env.derive())
 
         #j2k/nitf tests
-        for t in ['test_j2k_nitf']:
+        j2k_nitf_tests = ['test_j2k_nitf']
+        for t in j2k_nitf_tests:
             bld.program_helper(dir='tests', source='%s.c' % t, 
                                use='nitf-c j2k-c J2K', uselib=j2kLayer, 
                                name=t, target=t, lang='c', env=env.derive())
+
+        bld(features='add_targets', target='j2k-tests',
+            targets_to_add=j2k_only_tests + j2k_nitf_tests)
 
 def distclean(context) :
     context.recurse(APIS)

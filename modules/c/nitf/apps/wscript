@@ -6,7 +6,13 @@ configure = options = distclean = lambda p: None
 
 def build(bld):
     apps = bld.path.ant_glob('*.c')
+    targets = []
     for app in apps:
         filename = str(app)
-        bld.program_helper(dir='apps', source=filename, module_deps='nitf', name=filename[:-2],
+        target = os.path.splitext(filename)[0]
+        targets.append(target)
+        bld.program_helper(dir='apps', source=filename, module_deps='nitf', name=target,
                            lang='c')
+
+    bld(features='add_targets', target='nitf-c-apps',
+        targets_to_add=targets)
