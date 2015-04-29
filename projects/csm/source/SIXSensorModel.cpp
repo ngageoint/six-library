@@ -1043,8 +1043,18 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
                     ++jjP;
                 }
             }
-            math::linear::Matrix2D<double> crossCovar =
-                    matrixSqrt(covarP1) * matrixSqrt(covarP2);
+            math::linear::Matrix2D<double> crossCovar;
+            if (getImageIdentifier() == comparisonModel.getImageIdentifier())
+            {
+                crossCovar = covarP1;
+            }
+            else
+            {
+                crossCovar =
+                        matrixSqrt(covarP1) * matrixSqrt(covarP2.transpose());
+            }
+
+
             crossCovar.scale(corrCoeff);
 
             jjP = 0;
