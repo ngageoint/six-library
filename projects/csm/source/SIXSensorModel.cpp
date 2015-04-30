@@ -1051,11 +1051,9 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
             else
             {
                 crossCovar =
-                        matrixSqrt(covarP1) * matrixSqrt(covarP2.transpose());
+                        matrixSqrt(covarP1) * matrixSqrt(covarP2);
+                crossCovar.scale(corrCoeff);
             }
-
-
-            crossCovar.scale(corrCoeff);
 
             jjP = 0;
             kkP = 0;
