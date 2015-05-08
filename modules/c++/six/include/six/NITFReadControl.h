@@ -81,8 +81,8 @@ public:
     void load(const std::string& fromFile,
               const std::vector<std::string>& schemaPaths);
 
-    void load(nitf::IOInterface& interface);
-    void load(nitf::IOInterface& interface,
+    void load(nitf::IOInterface& ioInterface);
+    void load(nitf::IOInterface& ioInterface,
               const std::vector<std::string>& schemaPaths);
 
     virtual UByte* interleaved(Region& region, size_t imageNumber);

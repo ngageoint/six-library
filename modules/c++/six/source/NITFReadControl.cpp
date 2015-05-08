@@ -95,17 +95,17 @@ void NITFReadControl::load(const std::string& fromFile,
     load(handle, schemaPaths);
 }
 
-void NITFReadControl::load(nitf::IOInterface& interface)
+void NITFReadControl::load(nitf::IOInterface& ioInterface)
 {
-    load(interface, std::vector<std::string>());
+    load(ioInterface, std::vector<std::string>());
 }
 
-void NITFReadControl::load(nitf::IOInterface& interface,
+void NITFReadControl::load(nitf::IOInterface& ioInterface,
                            const std::vector<std::string>& schemaPaths)
 {
     reset();
 
-    mRecord = mReader.readIO(interface);
+    mRecord = mReader.readIO(ioInterface);
     const std::string title = mRecord.getHeader().getFileTitle().toString();
 
     DataType dataType;
