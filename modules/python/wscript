@@ -1,13 +1,9 @@
 distclean = configure = lambda p: None
 
-SUBDIRS = 'math.linear math.poly scene six'
+SUBDIRS = 'except io logging math.linear math.poly mem scene sio.lite sys types'
 
 def options(opt):
     opt.recurse(SUBDIRS)
 
 def build(bld):
-    variant = bld.env['VARIANT'] or 'default'
-    env = bld.all_envs[variant].derive()
-
-    if 'PYTHON' in env and env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):       
-        bld.recurse(SUBDIRS)
+    bld.recurse(SUBDIRS)
