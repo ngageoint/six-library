@@ -155,7 +155,7 @@ public:
      *  @param size the Number of bytes to read
      *  @return The number of bytes read
      */
-    sys::SSize_T read(sys::byte* b, sys::Size_T size)
+    sys::SSize_T read(sys::byte* b, size_t size)
     {
         return inputStream->read(b, size);
     }

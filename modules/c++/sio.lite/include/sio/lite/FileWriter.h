@@ -85,14 +85,14 @@ public:
      * Writes the SIO given the FileHeader and a buffer of raw data in 
      * band-sequential format.
      */
-    void write(FileHeader* header, const sys::byte* data, int numBands = 1);
+    void write(FileHeader* header, const void* data, int numBands = 1);
     
     /*!
      * Writes a version 1 SIO given the basic file header contents and a buffer
      * of raw data in band-sequential format.
      */
     void write(int numLines, int numElements, int elementSize,
-               int elementType, const sys::byte* data, int numBands = 1);
+               int elementType, const void* data, int numBands = 1);
 
 protected:
     std::string mFileName;
