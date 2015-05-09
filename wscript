@@ -1,22 +1,27 @@
 import os
 from os.path import join
 from waflib import Scripting, Options
+from build import CPPOptionsContext
 
 VERSION = '1.0'
 APPNAME = 'SIX'
 top  = '.'
 out  = 'target'
 
+TOOLS = 'build swig matlabtool pythontool'
+TOOLS_DIR = join('externals', 'coda-oss', 'build')
+DIRS = 'externals modules projects'
+
 def options(opt):
-    opt.load('build', tooldir=join(opt.path.abspath(), 'modules/build'))
-    opt.recurse('modules projects')
+    opt.load(TOOLS, tooldir=TOOLS_DIR)
+    opt.recurse(DIRS)
 
 def configure(conf):
-    conf.load('build', tooldir='./modules/build/')
-    conf.recurse('modules projects')
+    conf.load(TOOLS, tooldir=TOOLS_DIR)
+    conf.recurse(DIRS)
     
 def build(bld):
-    bld.recurse('modules projects')
+    bld.recurse(DIRS)
 
     if not bld.targets:
         bld.targets = 'cphd-c++,six.sicd-c++,six.sidd-c++,six-samples'

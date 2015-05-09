@@ -7,16 +7,12 @@ APPNAME = 'Sensor Independent XML'
 top  = '.'
 out  = 'target'
 
-DIRS = 'drivers c/nrt c/nitf c/j2k c++ mex python'
+DIRS = 'c++ mex python'
 
 def options(opt):
-    opt.load('build swig matlabtool pythontool',
-                     tooldir=join(opt.path.abspath(), 'build'))
     opt.recurse(DIRS)
 
 def configure(conf):
-    conf.load('build swig matlabtool pythontool',
-                    tooldir=join(conf.path.abspath(), 'build'))
     conf.recurse(DIRS)
 
 def build(bld):
