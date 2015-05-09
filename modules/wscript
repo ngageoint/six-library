@@ -1,23 +1,11 @@
-import os
-from os.path import join
-from waflib import Scripting, Options
-
-VERSION = '1.0'
-APPNAME = 'Sensor Independent XML'
-top  = '.'
-out  = 'target'
-
-DIRS = 'c++ mex python'
-
 def options(opt):
-    opt.recurse(DIRS)
+    opt.recurse()
 
 def configure(conf):
-    conf.recurse(DIRS)
+    conf.recurse()
 
 def build(bld):
-    bld.recurse(DIRS)
+    bld.recurse()
 
 def distclean(context):
-    context.recurse(DIRS)
-    Scripting.distclean(context)
+    context.recurse()
