@@ -39,17 +39,20 @@ void sio::lite::FileWriter::write(int numLines, int numElements, int elementSize
 }
 
 
-void sio::lite::FileWriter::write(sio::lite::FileHeader* header, const sys::byte* data, int numBands)
+void sio::lite::FileWriter::write(sio::lite::FileHeader* header,
+                                  const void* data,
+                                  int numBands)
 {
     header->to(numBands, *mStream); //write header
-    mStream->write(data, static_cast<sys::Size_T>(header->getNumLines())
-                    * static_cast<sys::Size_T>(header->getNumElements())
-                    * static_cast<sys::Size_T>(header->getElementSize())
-                    * static_cast<sys::Size_T>(numBands));
+    mStream->write(static_cast<const sys::byte*>(data),
+                   static_cast<size_t>(header->getNumLines()) *
+                            static_cast<size_t>(header->getNumElements()) *
+                            static_cast<size_t>(header->getElementSize()) *
+                            static_cast<size_t>(numBands));
 }
 
 void sio::lite::FileWriter::write(int numLines, int numElements, int elementSize,
-                                  int elementType, const sys::byte* data, int numBands)
+                                  int elementType, const void* data, int numBands)
 {
     sio::lite::FileHeader hdr(numLines, numElements, elementSize, elementType);
     write(&hdr, data, numBands);

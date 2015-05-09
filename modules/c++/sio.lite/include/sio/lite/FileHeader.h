@@ -41,21 +41,21 @@ class FileHeader
 {
 public:
     /** Unsigned byte data */
-    const static int UNSIGNED = 1;
+    static const int UNSIGNED = 1;
     /** Signed byte data */
-    const static int SIGNED = 2;
+    static const int SIGNED = 2;
     /** Float data */
-    const static int FLOAT = 3;
+    static const int FLOAT = 3;
     /** Complex unsigned data */
-    const static int COMPLEX_UNSIGNED = 11;
+    static const int COMPLEX_UNSIGNED = 11;
     /** Complex signed data */
-    const static int COMPLEX_SIGNED = 12;
+    static const int COMPLEX_SIGNED = 12;
     /** Complex float data */
-    const static int COMPLEX_FLOAT = 13;
+    static const int COMPLEX_FLOAT = 13;
     /** N-Byte unsigned */
-    const static int N_BYTE_UNSIGNED = 21;
+    static const int N_BYTE_UNSIGNED = 21;
     /** N-Byte signed */
-    const static int N_BYTE_SIGNED = 22;
+    static const int N_BYTE_SIGNED = 22;
 
 
     /**
