@@ -26,16 +26,34 @@
 
 %feature("autodoc", "1");
 
-%include "math.linear/source/math_linear.i" 
+%include "std_vector.i"
+%include "std_string.i"
+
+%import "except.i"
+%import "math_linear.i"
+%import "math_poly.i"
+%import "types.i"
 
 %{
+  #include <cstddef>
+  #include "import/except.h"
+  #include "import/math/linear.h"
   #include "scene/Types.h"
   #include "scene/Utilities.h"
   #include "scene/CoordinateTransform.h"
   #include "scene/ECEFToLLATransform.h"
   #include "scene/LLAToECEFTransform.h"
   #include "scene/LocalCoordinateTransform.h"
-%}
+  #include "scene/SceneGeometry.h"
+  #include "scene/ProjectionModel.h"
+  #include "scene/AdjustableParams.h"
+  #include "scene/Errors.h"
+  #include "scene/FrameType.h"
+  #include "scene/GridGeometry.h"
+  typedef math::linear::VectorN<3,double> Vector3;
+%} 
+
+%rename("SceneUtilities") Scene::Utilities;
 
 %include "scene/Types.h"
 %include "scene/EllipsoidModel.h"
@@ -44,4 +62,32 @@
 %include "scene/ECEFToLLATransform.h"
 %include "scene/LLAToECEFTransform.h"
 %include "scene/LocalCoordinateTransform.h"
+%include "scene/SceneGeometry.h"
+%include "scene/FrameType.h"
+%include "scene/Errors.h"
+%include "scene/AdjustableParams.h"
+%include "scene/ProjectionModel.h"
+%include "scene/GridGeometry.h"
 
+
+
+%extend scene::AdjustableParams 
+{
+  public:
+    double __getitem__(std::ptrdiff_t idx) 
+    {
+      if(idx >= scene::AdjustableParams::NUM_PARAMS || idx < 0) 
+      {
+        return 0.0;
+      }
+      return $self->mParams[idx];
+    }
+    void __setitem__(std::ptrdiff_t idx, double val) 
+    {
+      if(idx >= scene::AdjustableParams::NUM_PARAMS || idx < 0) 
+      {
+        return;
+      }
+      $self->mParams[idx] = val;
+    }
+};
