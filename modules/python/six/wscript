@@ -1,0 +1,7 @@
+import os
+from os.path import join, basename
+from waflib import Utils
+distclean = options = configure = lambda p: None
+
+def build(bld):
+  bld.swigModule(name = 'six', use = 'six-c++ six.sicd-c++ six.sidd-c++ scene-python math.poly-python except-python')
