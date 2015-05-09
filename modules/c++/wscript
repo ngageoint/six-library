@@ -1,29 +1,17 @@
 from os.path import join, exists
 from waflib import Options, Utils
 
-MODULES = 'cphd cli except io logging math math.linear math.poly mem mt nitf scene ' \
-          'sio.lite six six.sicd six.sidd str sys tiff types xml.lite'
-SAMPLES = 'samples'
-
 def options(opt):
-        opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
-                           MODULES.split()))
+    opt.recurse()
 
 def configure(conf):
-    conf.env.append_value('INCLUDES_UNITTEST', join(conf.path.abspath(), 'include'))
-    
-    conf.recurse(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
-                           MODULES.split()))
-    conf.recurse(SAMPLES)
+    conf.recurse()
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.all_envs[variant].derive()
     
-    bld.recurse(filter(lambda x: exists(join(bld.path.abspath(), x, 'wscript')),
-                           MODULES.split()))
-    
-    bld.recurse(SAMPLES)
+    bld.recurse()
     if 'DOXYGEN' in env and Options.is_install:
         bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
         try:
@@ -35,6 +23,4 @@ def build(bld):
 
 
 def distclean(context):
-    context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),
-                           MODULES.split()))
-    context.recurse(SAMPLES)
+    context.recurse()
