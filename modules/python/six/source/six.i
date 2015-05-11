@@ -24,7 +24,8 @@
 
 %feature("autodoc","1");
 
-
+%include "std_vector.i"
+%include "std_string.i"
 
 %{
 
@@ -54,7 +55,6 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 
 %}
 
-%include "std_string.i"
 
 %import "except.i"
 %import "math_poly.i"
