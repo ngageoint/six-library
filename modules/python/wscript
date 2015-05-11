@@ -1,9 +1,7 @@
 distclean = configure = lambda p: None
 
-SUBDIRS = 'except io logging math.linear math.poly mem scene sio.lite sys types'
-
 def options(opt):
-    opt.recurse(SUBDIRS)
+    opt.recurse()
 
 def build(bld):
-    bld.recurse(SUBDIRS)
+    bld.recurse()
