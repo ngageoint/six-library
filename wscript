@@ -1,10 +1,11 @@
 import os
 from os.path import join
-from waflib import Scripting, Options
+from waflib import Scripting, Options, Context
 from build import CPPOptionsContext
 
 VERSION = '1.0'
 APPNAME = 'SIX'
+Context.APPNAME = APPNAME
 top  = '.'
 out  = 'target'
 
@@ -30,7 +31,7 @@ def build(bld):
         if bld.is_defined('HAVE_MEX_H'):
             bld.targets += ',nitf_image,nitf_metadata,xml_metadata'
         if 'PYTHON' in bld.env and bld.env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
-            bld.targets += ',except-python,io-python,logging-python,math.linear-python,math.poly-python,mem-python,scene-python,sio.lite-python,six-python,six.sicd-python,sys-python,types-python'
+            bld.targets += ',six.sicd-python,xml.lite-python,logging-python'
 
 def distclean(context):
     context.recurse('modules projects')
