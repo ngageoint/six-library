@@ -23,6 +23,7 @@
 #define __MATH_LINEAR_VECTOR_N_H__
 
 #include "math/linear/MatrixMxN.h"
+#include <cmath>
 
 namespace math
 {
@@ -210,6 +211,21 @@ public:
     {
         return mRaw.norm();
     }
+    /*
+     * Square of the Euclidean norm,
+     */
+    _T normSq() const
+    {
+        return mRaw.normSq();
+    }
+    /*
+     * Angle between this vector and v
+     */
+    _T angle(const Like_T& v) const
+    {
+        _T val = ((*this * v) / norm()) / v.norm();
+        return std::acos(std::max(-1.0, std::min(val, 1.0)));
+    }
 
     void normalize()
     {
@@ -350,9 +366,6 @@ template<size_t _ND, typename _T> VectorN<_ND, _T>
     return v;
 }
 
-}
-}
-
 template<size_t _MD, size_t _ND, typename _T> 
     math::linear::VectorN<_MD, _T>
     operator*(const math::linear::MatrixMxN<_MD, _ND, _T>& m, 
@@ -379,5 +392,7 @@ template<size_t _ND, typename _T>
     return os;
     
 }
+} // linear
+} // math
 
 #endif

@@ -90,6 +90,7 @@ except AttributeError:
     _newclass = 0
 
 
+import coda_except
 class SwigPyIterator(_object):
     """Proxy of C++ swig::SwigPyIterator class"""
     __swig_setmethods__ = {}
@@ -400,6 +401,210 @@ class std_vector_double(_object):
 std_vector_double_swigregister = _math_linear.std_vector_double_swigregister
 std_vector_double_swigregister(std_vector_double)
 
+class std_vector_vector_double(_object):
+    """Proxy of C++ std::vector<(std::vector<(double)>)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, std_vector_vector_double, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, std_vector_vector_double, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(std_vector_vector_double self) -> SwigPyIterator"""
+        return _math_linear.std_vector_vector_double_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(std_vector_vector_double self) -> bool"""
+        return _math_linear.std_vector_vector_double___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(std_vector_vector_double self) -> bool"""
+        return _math_linear.std_vector_vector_double___bool__(self)
+
+
+    def __len__(self):
+        """__len__(std_vector_vector_double self) -> std::vector< std::vector< double > >::size_type"""
+        return _math_linear.std_vector_vector_double___len__(self)
+
+
+    def pop(self):
+        """pop(std_vector_vector_double self) -> std_vector_double"""
+        return _math_linear.std_vector_vector_double_pop(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i, std::vector< std::vector< double > >::difference_type j) -> std_vector_vector_double"""
+        return _math_linear.std_vector_vector_double___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i, std::vector< std::vector< double > >::difference_type j, std_vector_vector_double v)
+        __setslice__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i, std::vector< std::vector< double > >::difference_type j)
+        """
+        return _math_linear.std_vector_vector_double___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i, std::vector< std::vector< double > >::difference_type j)"""
+        return _math_linear.std_vector_vector_double___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i)
+        __delitem__(std_vector_vector_double self, PySliceObject * slice)
+        """
+        return _math_linear.std_vector_vector_double___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(std_vector_vector_double self, PySliceObject * slice) -> std_vector_vector_double
+        __getitem__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i) -> std_vector_double
+        """
+        return _math_linear.std_vector_vector_double___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(std_vector_vector_double self, PySliceObject * slice, std_vector_vector_double v)
+        __setitem__(std_vector_vector_double self, PySliceObject * slice)
+        __setitem__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i, std_vector_double x)
+        """
+        return _math_linear.std_vector_vector_double___setitem__(self, *args)
+
+
+    def append(self, x):
+        """append(std_vector_vector_double self, std_vector_double x)"""
+        return _math_linear.std_vector_vector_double_append(self, x)
+
+
+    def empty(self):
+        """empty(std_vector_vector_double self) -> bool"""
+        return _math_linear.std_vector_vector_double_empty(self)
+
+
+    def size(self):
+        """size(std_vector_vector_double self) -> std::vector< std::vector< double > >::size_type"""
+        return _math_linear.std_vector_vector_double_size(self)
+
+
+    def clear(self):
+        """clear(std_vector_vector_double self)"""
+        return _math_linear.std_vector_vector_double_clear(self)
+
+
+    def swap(self, v):
+        """swap(std_vector_vector_double self, std_vector_vector_double v)"""
+        return _math_linear.std_vector_vector_double_swap(self, v)
+
+
+    def get_allocator(self):
+        """get_allocator(std_vector_vector_double self) -> std::vector< std::vector< double > >::allocator_type"""
+        return _math_linear.std_vector_vector_double_get_allocator(self)
+
+
+    def begin(self):
+        """begin(std_vector_vector_double self) -> std::vector< std::vector< double > >::iterator"""
+        return _math_linear.std_vector_vector_double_begin(self)
+
+
+    def end(self):
+        """end(std_vector_vector_double self) -> std::vector< std::vector< double > >::iterator"""
+        return _math_linear.std_vector_vector_double_end(self)
+
+
+    def rbegin(self):
+        """rbegin(std_vector_vector_double self) -> std::vector< std::vector< double > >::reverse_iterator"""
+        return _math_linear.std_vector_vector_double_rbegin(self)
+
+
+    def rend(self):
+        """rend(std_vector_vector_double self) -> std::vector< std::vector< double > >::reverse_iterator"""
+        return _math_linear.std_vector_vector_double_rend(self)
+
+
+    def pop_back(self):
+        """pop_back(std_vector_vector_double self)"""
+        return _math_linear.std_vector_vector_double_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(std_vector_vector_double self, std::vector< std::vector< double > >::iterator pos) -> std::vector< std::vector< double > >::iterator
+        erase(std_vector_vector_double self, std::vector< std::vector< double > >::iterator first, std::vector< std::vector< double > >::iterator last) -> std::vector< std::vector< double > >::iterator
+        """
+        return _math_linear.std_vector_vector_double_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(std::vector<(double)>)> self) -> std_vector_vector_double
+        __init__(std::vector<(std::vector<(double)>)> self, std_vector_vector_double arg2) -> std_vector_vector_double
+        __init__(std::vector<(std::vector<(double)>)> self, std::vector< std::vector< double > >::size_type size) -> std_vector_vector_double
+        __init__(std::vector<(std::vector<(double)>)> self, std::vector< std::vector< double > >::size_type size, std_vector_double value) -> std_vector_vector_double
+        """
+        this = _math_linear.new_std_vector_vector_double(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(std_vector_vector_double self, std_vector_double x)"""
+        return _math_linear.std_vector_vector_double_push_back(self, x)
+
+
+    def front(self):
+        """front(std_vector_vector_double self) -> std_vector_double"""
+        return _math_linear.std_vector_vector_double_front(self)
+
+
+    def back(self):
+        """back(std_vector_vector_double self) -> std_vector_double"""
+        return _math_linear.std_vector_vector_double_back(self)
+
+
+    def assign(self, n, x):
+        """assign(std_vector_vector_double self, std::vector< std::vector< double > >::size_type n, std_vector_double x)"""
+        return _math_linear.std_vector_vector_double_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(std_vector_vector_double self, std::vector< std::vector< double > >::size_type new_size)
+        resize(std_vector_vector_double self, std::vector< std::vector< double > >::size_type new_size, std_vector_double x)
+        """
+        return _math_linear.std_vector_vector_double_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(std_vector_vector_double self, std::vector< std::vector< double > >::iterator pos, std_vector_double x) -> std::vector< std::vector< double > >::iterator
+        insert(std_vector_vector_double self, std::vector< std::vector< double > >::iterator pos, std::vector< std::vector< double > >::size_type n, std_vector_double x)
+        """
+        return _math_linear.std_vector_vector_double_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(std_vector_vector_double self, std::vector< std::vector< double > >::size_type n)"""
+        return _math_linear.std_vector_vector_double_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(std_vector_vector_double self) -> std::vector< std::vector< double > >::size_type"""
+        return _math_linear.std_vector_vector_double_capacity(self)
+
+    __swig_destroy__ = _math_linear.delete_std_vector_vector_double
+    __del__ = lambda self: None
+std_vector_vector_double_swigregister = _math_linear.std_vector_vector_double_swigregister
+std_vector_vector_double_swigregister(std_vector_vector_double)
+
 class Matrix3x1(_object):
     """Proxy of C++ math::linear::MatrixMxN<(3,1,double)> class"""
     __swig_setmethods__ = {}
@@ -701,7 +906,7 @@ class Vector3(_object):
 
 
     def __str__(self):
-        """__str__(Vector3 self) -> char *"""
+        """__str__(Vector3 self) -> std::string"""
         return _math_linear.Vector3___str__(self)
 
 
@@ -713,9 +918,364 @@ Vector3_swigregister = _math_linear.Vector3_swigregister
 Vector3_swigregister(Vector3)
 
 
-def cross(u, v):
-    """cross(Vector3 u, Vector3 v) -> Vector3"""
-    return _math_linear.cross(u, v)
+def cross(*args):
+    """
+    cross(Vector3 u, Vector3 v) -> Vector3
+    cross(VectorDouble u, VectorDouble v) -> VectorDouble
+    """
+    return _math_linear.cross(*args)
+class VectorDouble(_object):
+    """Proxy of C++ math::linear::Vector<(double)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorDouble, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorDouble, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(math::linear::Vector<(double)> self) -> VectorDouble
+        __init__(math::linear::Vector<(double)> self, size_t sz, double sv=0.0) -> VectorDouble
+        __init__(math::linear::Vector<(double)> self, size_t sz) -> VectorDouble
+        __init__(math::linear::Vector<(double)> self, size_t sz, double const * raw) -> VectorDouble
+        __init__(math::linear::Vector<(double)> self, VectorDouble v) -> VectorDouble
+        __init__(math::linear::Vector<(double)> self, std_vector_double v) -> VectorDouble
+        __init__(math::linear::Vector<(double)> self, MatrixDouble mx) -> VectorDouble
+        """
+        this = _math_linear.new_VectorDouble(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _math_linear.delete_VectorDouble
+    __del__ = lambda self: None
+
+    def size(self):
+        """size(VectorDouble self) -> size_t"""
+        return _math_linear.VectorDouble_size(self)
+
+
+    def matrix(self, *args):
+        """
+        matrix(VectorDouble self) -> MatrixDouble
+        matrix(VectorDouble self) -> MatrixDouble
+        """
+        return _math_linear.VectorDouble_matrix(self, *args)
+
+
+    def get(self):
+        """get(VectorDouble self) -> double const *"""
+        return _math_linear.VectorDouble_get(self)
+
+
+    def dot(self, vec_):
+        """dot(VectorDouble self, VectorDouble vec_) -> double"""
+        return _math_linear.VectorDouble_dot(self, vec_)
+
+
+    def norm(self):
+        """norm(VectorDouble self) -> double"""
+        return _math_linear.VectorDouble_norm(self)
+
+
+    def normalize(self):
+        """normalize(VectorDouble self)"""
+        return _math_linear.VectorDouble_normalize(self)
+
+
+    def scale(self, scalar):
+        """scale(VectorDouble self, double scalar)"""
+        return _math_linear.VectorDouble_scale(self, scalar)
+
+
+    def unit(self):
+        """unit(VectorDouble self) -> VectorDouble"""
+        return _math_linear.VectorDouble_unit(self)
+
+
+    def __iadd__(self, v):
+        """__iadd__(VectorDouble self, VectorDouble v) -> VectorDouble"""
+        return _math_linear.VectorDouble___iadd__(self, v)
+
+
+    def __isub__(self, v):
+        """__isub__(VectorDouble self, VectorDouble v) -> VectorDouble"""
+        return _math_linear.VectorDouble___isub__(self, v)
+
+
+    def add(self, v):
+        """add(VectorDouble self, VectorDouble v) -> VectorDouble"""
+        return _math_linear.VectorDouble_add(self, v)
+
+
+    def subtract(self, v):
+        """subtract(VectorDouble self, VectorDouble v) -> VectorDouble"""
+        return _math_linear.VectorDouble_subtract(self, v)
+
+
+    def __add__(self, v):
+        """__add__(VectorDouble self, VectorDouble v) -> VectorDouble"""
+        return _math_linear.VectorDouble___add__(self, v)
+
+
+    def __sub__(self, v):
+        """__sub__(VectorDouble self, VectorDouble v) -> VectorDouble"""
+        return _math_linear.VectorDouble___sub__(self, v)
+
+
+    def __imul__(self, *args):
+        """
+        __imul__(VectorDouble self, VectorDouble v) -> VectorDouble
+        __imul__(VectorDouble self, double sv) -> VectorDouble
+        """
+        return _math_linear.VectorDouble___imul__(self, *args)
+
+
+    def __idiv__(self, v):
+        """__idiv__(VectorDouble self, VectorDouble v) -> VectorDouble"""
+        return _math_linear.VectorDouble___idiv__(self, v)
+
+
+    def __mul__(self, *args):
+        """
+        __mul__(VectorDouble self, double sv) -> VectorDouble
+        __mul__(VectorDouble self, VectorDouble v) -> VectorDouble
+        """
+        return _math_linear.VectorDouble___mul__(self, *args)
+
+
+    def __div__(self, v):
+        """__div__(VectorDouble self, VectorDouble v) -> VectorDouble"""
+        return _math_linear.VectorDouble___div__(self, v)
+
+
+    def __getitem__(self, i):
+        """__getitem__(VectorDouble self, long i) -> double"""
+        return _math_linear.VectorDouble___getitem__(self, i)
+
+
+    def __setitem__(self, i, val):
+        """__setitem__(VectorDouble self, long i, double val)"""
+        return _math_linear.VectorDouble___setitem__(self, i, val)
+
+
+    def __str__(self):
+        """__str__(VectorDouble self) -> std::string"""
+        return _math_linear.VectorDouble___str__(self)
+
+
+    def vals(self):
+        """vals(VectorDouble self) -> std_vector_double"""
+        return _math_linear.VectorDouble_vals(self)
+
+VectorDouble_swigregister = _math_linear.VectorDouble_swigregister
+VectorDouble_swigregister(VectorDouble)
+
+class MatrixDouble(_object):
+    """Proxy of C++ math::linear::Matrix2D<(double)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MatrixDouble, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MatrixDouble, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(math::linear::Matrix2D<(double)> self) -> MatrixDouble
+        __init__(math::linear::Matrix2D<(double)> self, size_t M, size_t N, double cv=0) -> MatrixDouble
+        __init__(math::linear::Matrix2D<(double)> self, size_t M, size_t N) -> MatrixDouble
+        __init__(math::linear::Matrix2D<(double)> self, size_t M, size_t N, double const * raw) -> MatrixDouble
+        __init__(math::linear::Matrix2D<(double)> self, size_t M, size_t N, std_vector_double raw) -> MatrixDouble
+        __init__(math::linear::Matrix2D<(double)> self, MatrixDouble mx) -> MatrixDouble
+        __init__(math::linear::Matrix2D<(double)> self, size_t M, size_t N, double * raw, bool adopt) -> MatrixDouble
+        """
+        this = _math_linear.new_MatrixDouble(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _math_linear.delete_MatrixDouble
+    __del__ = lambda self: None
+
+    def __call__(self, *args):
+        """
+        __call__(MatrixDouble self, size_t i, size_t j) -> double
+        __call__(MatrixDouble self, size_t i, size_t j) -> double &
+        """
+        return _math_linear.MatrixDouble___call__(self, *args)
+
+
+    def row(self, *args):
+        """
+        row(MatrixDouble self, size_t i) -> double const
+        row(MatrixDouble self, size_t i) -> double
+        row(MatrixDouble self, size_t i, double const * vec_)
+        row(MatrixDouble self, size_t i, std_vector_double vec_)
+        """
+        return _math_linear.MatrixDouble_row(self, *args)
+
+
+    def col(self, *args):
+        """
+        col(MatrixDouble self, size_t j) -> std_vector_double
+        col(MatrixDouble self, size_t j, double const * vec_)
+        col(MatrixDouble self, size_t j, std_vector_double vec_)
+        """
+        return _math_linear.MatrixDouble_col(self, *args)
+
+
+    def rows(self):
+        """rows(MatrixDouble self) -> size_t"""
+        return _math_linear.MatrixDouble_rows(self)
+
+
+    def cols(self):
+        """cols(MatrixDouble self) -> size_t"""
+        return _math_linear.MatrixDouble_cols(self)
+
+
+    def size(self):
+        """size(MatrixDouble self) -> size_t"""
+        return _math_linear.MatrixDouble_size(self)
+
+
+    def get(self):
+        """get(MatrixDouble self) -> double const *"""
+        return _math_linear.MatrixDouble_get(self)
+
+
+    def scale(self, scalar):
+        """scale(MatrixDouble self, double scalar) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_scale(self, scalar)
+
+
+    def multiply(self, *args):
+        """
+        multiply(MatrixDouble self, double scalar) -> MatrixDouble
+        multiply(MatrixDouble self, MatrixDouble mx) -> MatrixDouble
+        multiply(MatrixDouble self, MatrixDouble mx, MatrixDouble out)
+        """
+        return _math_linear.MatrixDouble_multiply(self, *args)
+
+
+    def scaleDiagonal(self, mx):
+        """scaleDiagonal(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_scaleDiagonal(self, mx)
+
+
+    def scaleDiagonalRowVector(self, mx):
+        """scaleDiagonalRowVector(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_scaleDiagonalRowVector(self, mx)
+
+
+    def multiplyDiagonal(self, mx):
+        """multiplyDiagonal(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_multiplyDiagonal(self, mx)
+
+
+    def multiplyDiagonalRowVector(self, mx):
+        """multiplyDiagonalRowVector(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_multiplyDiagonalRowVector(self, mx)
+
+
+    def __iadd__(self, mx):
+        """__iadd__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble___iadd__(self, mx)
+
+
+    def __isub__(self, mx):
+        """__isub__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble___isub__(self, mx)
+
+
+    def add(self, mx):
+        """add(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_add(self, mx)
+
+
+    def subtract(self, mx):
+        """subtract(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_subtract(self, mx)
+
+
+    def transpose(self):
+        """transpose(MatrixDouble self) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_transpose(self)
+
+
+    def decomposeLU(self, pivotsM):
+        """decomposeLU(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > & pivotsM) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_decomposeLU(self, pivotsM)
+
+
+    def permute(self, pivotsM, n=0):
+        """
+        permute(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > const & pivotsM, size_t n=0) -> MatrixDouble
+        permute(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > const & pivotsM) -> MatrixDouble
+        """
+        return _math_linear.MatrixDouble_permute(self, pivotsM, n)
+
+
+    def norm(self):
+        """norm(MatrixDouble self) -> double"""
+        return _math_linear.MatrixDouble_norm(self)
+
+
+    def normalize(self):
+        """normalize(MatrixDouble self) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_normalize(self)
+
+
+    def unit(self):
+        """unit(MatrixDouble self) -> MatrixDouble"""
+        return _math_linear.MatrixDouble_unit(self)
+
+
+    def __add__(self, mx):
+        """__add__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble___add__(self, mx)
+
+
+    def __sub__(self, mx):
+        """__sub__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
+        return _math_linear.MatrixDouble___sub__(self, mx)
+
+
+    def __div__(self, scalar):
+        """__div__(MatrixDouble self, double scalar) -> MatrixDouble"""
+        return _math_linear.MatrixDouble___div__(self, scalar)
+
+
+    def __mul__(self, *args):
+        """
+        __mul__(MatrixDouble self, double scalar) -> MatrixDouble
+        __mul__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble
+        """
+        return _math_linear.MatrixDouble___mul__(self, *args)
+
+
+    def __getitem__(self, inObj):
+        """__getitem__(MatrixDouble self, PyObject * inObj) -> double"""
+        return _math_linear.MatrixDouble___getitem__(self, inObj)
+
+
+    def __setitem__(self, inObj, val):
+        """__setitem__(MatrixDouble self, PyObject * inObj, double val)"""
+        return _math_linear.MatrixDouble___setitem__(self, inObj, val)
+
+
+    def __str__(self):
+        """__str__(MatrixDouble self) -> std::string"""
+        return _math_linear.MatrixDouble___str__(self)
+
+
+    def vals(self):
+        """vals(MatrixDouble self) -> std_vector_vector_double"""
+        return _math_linear.MatrixDouble_vals(self)
+
+MatrixDouble_swigregister = _math_linear.MatrixDouble_swigregister
+MatrixDouble_swigregister(MatrixDouble)
+
 # This file is compatible with both classic and new-style classes.
 
 

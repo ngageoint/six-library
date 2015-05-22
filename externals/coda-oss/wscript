@@ -1,9 +1,10 @@
 import os
 from build import CPPOptionsContext
-from waflib import Scripting, Options
+from waflib import Scripting, Options, Context
 
 VERSION = '3.0-dev'
 APPNAME = 'CODA-OSS'
+Context.APPNAME = APPNAME
 top  = '.'
 out  = 'target'
 

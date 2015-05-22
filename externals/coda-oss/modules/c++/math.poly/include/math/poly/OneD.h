@@ -197,6 +197,8 @@ public:
     _T operator ()(double at) const;
     _T integrate(double start, double end) const;
     OneD<_T>derivative() const;
+    _T velocity(double x) const;
+    _T acceleration(double x) const;
     _T& operator[](size_t i);
     _T operator[](size_t i) const;
     template<typename _TT>
@@ -260,3 +262,4 @@ public:
 } // math
 #include "math/poly/OneD.hpp"
 #endif
+

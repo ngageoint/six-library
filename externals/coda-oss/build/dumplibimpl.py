@@ -2,6 +2,23 @@ import os
 
 '''dumps the libs connected to the targets'''
 
+# Recursive resolution of targets 
+def handleTargets(targets, context):
+    ret = []
+
+    for target in targets:
+        if isinstance(target, basestring):
+            # Find the target
+            tsk = context.get_tgen_by_name(target)
+
+            # Actually create the task object
+            tsk.post()
+
+            ret += resolveLibType(tsk.env)
+            if hasattr(tsk, 'targets_to_add'):
+                ret += handleTargets(tsk.targets_to_add, context)
+    return ret
+
 # Returns either shared or static libs depending on the
 # waf configuration
 def resolveLibType(env):
@@ -20,18 +37,8 @@ def dumpLibImpl(context, raw):
     context.recurse([context.run_dir])
 
     targets = context.targets.split(',')
-    libs = []
+    libs = handleTargets(targets, context)
 
-    for target in targets:
-        # Find the target
-        tsk = context.get_tgen_by_name(target)
-
-        # Actually create the task object
-        tsk.post()
-
-        # Now we can grab his libs
-        libs += resolveLibType(tsk.env)
-            
     # Now run again but add all the targets we found
     # This resolves running with multiple targets
     moduleDeps = ''
@@ -48,7 +55,7 @@ def dumpLibImpl(context, raw):
     modArgs['MODULE_DEPS'] = moduleDeps
     
     # We need a source file here so it doesn't think it is headers only
-    topDir = tsk.bld.top_dir
+    topDir = context.top_dir
     buildDir = os.path.dirname(os.path.realpath(__file__))
     modArgs['SOURCE_DIR'] = os.path.relpath(buildDir, topDir)
     modArgs['SOURCE_EXT'] = 'pyc'
