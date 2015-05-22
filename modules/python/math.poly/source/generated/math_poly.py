@@ -90,6 +90,24 @@ except AttributeError:
     _newclass = 0
 
 
+import math_linear
+import coda_except
+
+def new_doubleArray(nelements):
+    """new_doubleArray(size_t nelements) -> double *"""
+    return _math_poly.new_doubleArray(nelements)
+
+def delete_doubleArray(ary):
+    """delete_doubleArray(double * ary)"""
+    return _math_poly.delete_doubleArray(ary)
+
+def doubleArray_getitem(ary, index):
+    """doubleArray_getitem(double * ary, size_t index) -> double"""
+    return _math_poly.doubleArray_getitem(ary, index)
+
+def doubleArray_setitem(ary, index, value):
+    """doubleArray_setitem(double * ary, size_t index, double value)"""
+    return _math_poly.doubleArray_setitem(ary, index, value)
 class Poly1D(_object):
     """Proxy of C++ math::poly::OneD<(double)> class"""
     __swig_setmethods__ = {}
@@ -101,7 +119,7 @@ class Poly1D(_object):
     def __init__(self, *args):
         """
         __init__(math::poly::OneD<(double)> self) -> Poly1D
-        __init__(math::poly::OneD<(double)> self, std::vector< double > const & coef) -> Poly1D
+        __init__(math::poly::OneD<(double)> self, std_vector_double coef) -> Poly1D
         __init__(math::poly::OneD<(double)> self, size_t order) -> Poly1D
         __init__(math::poly::OneD<(double)> self, size_t order, double const * coef) -> Poly1D
         """
@@ -232,6 +250,11 @@ class Poly1D(_object):
         """__setitem__(Poly1D self, long i, double val)"""
         return _math_poly.Poly1D___setitem__(self, i, val)
 
+
+    def __str__(self):
+        """__str__(Poly1D self) -> std::string"""
+        return _math_poly.Poly1D___str__(self)
+
     __swig_destroy__ = _math_poly.delete_Poly1D
     __del__ = lambda self: None
 Poly1D_swigregister = _math_poly.Poly1D_swigregister
@@ -246,7 +269,7 @@ class Poly2D(_object):
     __repr__ = _swig_repr
 
     def coeffs(self):
-        """coeffs(Poly2D self) -> std::vector< math::poly::OneD< double > > &"""
+        """coeffs(Poly2D self) -> std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > &"""
         return _math_poly.Poly2D_coeffs(self)
 
 
@@ -407,11 +430,159 @@ class Poly2D(_object):
         """power(Poly2D self, size_t toThe) -> Poly2D"""
         return _math_poly.Poly2D_power(self, toThe)
 
+
+    def __getitem__(self, inObj):
+        """__getitem__(Poly2D self, PyObject * inObj) -> double"""
+        return _math_poly.Poly2D___getitem__(self, inObj)
+
+
+    def __setitem__(self, inObj, val):
+        """__setitem__(Poly2D self, PyObject * inObj, double val)"""
+        return _math_poly.Poly2D___setitem__(self, inObj, val)
+
+
+    def __str__(self):
+        """__str__(Poly2D self) -> std::string"""
+        return _math_poly.Poly2D___str__(self)
+
     __swig_destroy__ = _math_poly.delete_Poly2D
     __del__ = lambda self: None
 Poly2D_swigregister = _math_poly.Poly2D_swigregister
 Poly2D_swigregister(Poly2D)
 
+class PolyVector3(_object):
+    """Proxy of C++ math::poly::OneD<(Vector3)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, PolyVector3, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, PolyVector3, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(math::poly::OneD<(Vector3)> self) -> PolyVector3
+        __init__(math::poly::OneD<(Vector3)> self, std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const & coef) -> PolyVector3
+        __init__(math::poly::OneD<(Vector3)> self, size_t order) -> PolyVector3
+        __init__(math::poly::OneD<(Vector3)> self, size_t order, Vector3 coef) -> PolyVector3
+        """
+        this = _math_poly.new_PolyVector3(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def order(self):
+        """order(PolyVector3 self) -> size_t"""
+        return _math_poly.PolyVector3_order(self)
+
+
+    def size(self):
+        """size(PolyVector3 self) -> size_t"""
+        return _math_poly.PolyVector3_size(self)
+
+
+    def empty(self):
+        """empty(PolyVector3 self) -> bool"""
+        return _math_poly.PolyVector3_empty(self)
+
+
+    def scaleVariable(self, scale):
+        """scaleVariable(PolyVector3 self, double scale) -> PolyVector3"""
+        return _math_poly.PolyVector3_scaleVariable(self, scale)
+
+
+    def truncateTo(self, order):
+        """truncateTo(PolyVector3 self, size_t order) -> PolyVector3"""
+        return _math_poly.PolyVector3_truncateTo(self, order)
+
+
+    def copyFrom(self, p):
+        """copyFrom(PolyVector3 self, PolyVector3 p)"""
+        return _math_poly.PolyVector3_copyFrom(self, p)
+
+
+    def __call__(self, at):
+        """__call__(PolyVector3 self, double at) -> Vector3"""
+        return _math_poly.PolyVector3___call__(self, at)
+
+
+    def derivative(self):
+        """derivative(PolyVector3 self) -> PolyVector3"""
+        return _math_poly.PolyVector3_derivative(self)
+
+
+    def __imul__(self, *args):
+        """
+        __imul__(PolyVector3 self, double cv) -> PolyVector3
+        __imul__(PolyVector3 self, PolyVector3 p) -> PolyVector3
+        """
+        return _math_poly.PolyVector3___imul__(self, *args)
+
+
+    def __mul__(self, *args):
+        """
+        __mul__(PolyVector3 self, double cv) -> PolyVector3
+        __mul__(PolyVector3 self, PolyVector3 p) -> PolyVector3
+        """
+        return _math_poly.PolyVector3___mul__(self, *args)
+
+
+    def __iadd__(self, p):
+        """__iadd__(PolyVector3 self, PolyVector3 p) -> PolyVector3"""
+        return _math_poly.PolyVector3___iadd__(self, p)
+
+
+    def __add__(self, p):
+        """__add__(PolyVector3 self, PolyVector3 p) -> PolyVector3"""
+        return _math_poly.PolyVector3___add__(self, p)
+
+
+    def __isub__(self, p):
+        """__isub__(PolyVector3 self, PolyVector3 p) -> PolyVector3"""
+        return _math_poly.PolyVector3___isub__(self, p)
+
+
+    def __sub__(self, p):
+        """__sub__(PolyVector3 self, PolyVector3 p) -> PolyVector3"""
+        return _math_poly.PolyVector3___sub__(self, p)
+
+
+    def __idiv__(self, cv):
+        """__idiv__(PolyVector3 self, double cv) -> PolyVector3"""
+        return _math_poly.PolyVector3___idiv__(self, cv)
+
+
+    def __div__(self, cv):
+        """__div__(PolyVector3 self, double cv) -> PolyVector3"""
+        return _math_poly.PolyVector3___div__(self, cv)
+
+
+    def __getitem__(self, i):
+        """__getitem__(PolyVector3 self, long i) -> Vector3"""
+        return _math_poly.PolyVector3___getitem__(self, i)
+
+
+    def __setitem__(self, i, val):
+        """__setitem__(PolyVector3 self, long i, Vector3 val)"""
+        return _math_poly.PolyVector3___setitem__(self, i, val)
+
+    __swig_destroy__ = _math_poly.delete_PolyVector3
+    __del__ = lambda self: None
+PolyVector3_swigregister = _math_poly.PolyVector3_swigregister
+PolyVector3_swigregister(PolyVector3)
+
+
+def fit(*args):
+    """
+    fit(size_t numObs, double const * x, double const * y, size_t numCoeffs) -> Poly1D
+    fit(MatrixDouble x, MatrixDouble y, MatrixDouble z, size_t nx, size_t ny) -> Poly2D
+    fit(size_t numRows, size_t numCols, double const * x, double const * y, double const * z, size_t nx, size_t ny) -> Poly2D
+    """
+    return _math_poly.fit(*args)
+
+def FitVectorDouble(x, y, numCoeffs):
+    """FitVectorDouble(VectorDouble x, VectorDouble y, size_t numCoeffs) -> Poly1D"""
+    return _math_poly.FitVectorDouble(x, y, numCoeffs)
 # This file is compatible with both classic and new-style classes.
 
 

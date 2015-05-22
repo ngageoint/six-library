@@ -23,6 +23,7 @@
 #define __MATH_LINEAR_VECTOR_H__
 
 #include "math/linear/Matrix2D.h"
+#include <cmath>
 
 namespace math
 {
@@ -233,6 +234,16 @@ public:
         return acc;
     }
 
+    _T angle(const Vector& v) const
+    {
+        _T val = ((*this * v) / norm()) / v.norm();
+        return std::acos(std::max(-1.0, std::min(val, 1.0)));
+    }
+    
+    _T normSq() const
+    {
+        return mRaw.normSq();
+    }
     /*!
      * Euclidean, L2 norm
      */

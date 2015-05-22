@@ -43,12 +43,27 @@ def configure(conf):
                 return 0;
             }
             '''
+	cpp11_str = '''
+		#include <stdio.h>
+		int main()
+		{
+			#if __cplusplus >= 201103L
+			int x  = 1;
+			#else
+			int x = 0;
+			#endif
+			if(x) printf("cpp11=True\\n");
+			else printf("cpp11=False\\n");
+			return 0;
+			
+		}
+		'''
         #find out the size of some types, etc.
         # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
         #    building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
         #    erroneously be 8 here.
         output = conf.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
-        t = Utils.str_to_dict(output or '')
+	t = Utils.str_to_dict(output or '')
         for k, v in t.iteritems():
             try:
                 v = int(v)
@@ -59,6 +74,15 @@ def configure(conf):
                 elif v == 'False':
                     v = False
             conf.define(k.upper(), v)
+	output11 = conf.check_cxx(fragment = cpp11_str, execute=1, msg='Checking for C++11 support', define_ret=True, mandatory=False)
+	t2 = Utils.str_to_dict(output11 or '')
+	for k, v in t2.iteritems():
+		v = v.strip()
+		if v == 'True':
+			v=True
+		elif v == 'False': 
+			v=False;
+		conf.define(k.upper(), v)
         
     writeConfig(conf, sys_callback, NAME)
     

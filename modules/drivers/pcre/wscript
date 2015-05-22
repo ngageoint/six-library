@@ -140,11 +140,6 @@ def build(bld):
                          targets_to_add=[],
                          defines=env['DEFINES'])
 
-        pcre.includes = Utils.to_list(pcre.includes)
-        pcre.includes.append(pcre.path.relpath())
-        pcre.export_includes = Utils.to_list(pcre.export_includes)
-        pcre.export_includes.append(pcre.path.relpath())
-        
         if env['install_libs']:
             pcre.install_path = env['install_libdir']
         

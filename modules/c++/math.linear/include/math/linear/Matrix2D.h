@@ -969,12 +969,12 @@ public:
         }
         return perm;
     }
-
-    /*!
-     *  Find the L2 norm of the matrix.
-     *  \return The norm
+    
+     /*
+     * Find the square of the L2 norm
+     * Sum of squares of the vector elements
      */
-    _T norm() const
+     _T normSq() const
     {
         size_t sz = mM * mN;
         _T acc(0);
@@ -982,9 +982,18 @@ public:
         {
             acc += mRaw[i] * mRaw[i];
         }
-        return (_T)::sqrt((const _T)acc);
+        return acc;
     }
-
+   
+    /*!
+     *  Find the L2 norm of the matrix.
+     *  \return The norm
+     */
+    _T norm() const
+    {
+        return static_cast<_T>(std::sqrt(normSq()));
+    }
+    
     /*!
      *  Scale the entire matrix inplace by the L2 norm value.
      *  \return A reference to this
