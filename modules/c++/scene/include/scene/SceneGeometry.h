@@ -201,6 +201,13 @@ public:
     /*!
      * The layover vector in the pixel grid
      */
+    Vector3 getLayoverVector(const Vector3& planeZ) const;
+
+    /*!
+     * The layover vector in the pixel grid
+     * Uses the cross product of the image row and column vectors as the
+     * z vector
+     */
     Vector3 getLayoverVector() const;
 
     /*!

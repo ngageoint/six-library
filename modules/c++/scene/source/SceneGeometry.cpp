@@ -328,10 +328,15 @@ double SceneGeometry::getNorthAngle() const
     return getImageAngle(getNorthVector());
 }
 
+Vector3 SceneGeometry::getLayoverVector(const Vector3& planeZ) const
+{
+    return planeZ - (mZs / mZs.dot(planeZ));
+}
+
 Vector3 SceneGeometry::getLayoverVector() const
 {
-    const Vector3 planeZ = math::linear::cross(getImageRowVector(), getImageColVector());
-    return planeZ - (mZs / mZs.dot(planeZ));
+    return getLayoverVector(math::linear::cross(getImageRowVector(),
+                                                getImageColVector()));
 }
 
 AngleMagnitude SceneGeometry::getLayover() const
