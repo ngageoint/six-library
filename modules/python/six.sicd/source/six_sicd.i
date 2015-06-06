@@ -36,6 +36,23 @@
 using namespace six::sicd;
 using namespace six;
 
+six::sicd::ComplexData * asComplexData(six::Data* data);
+
+/* Need this because we can't really do it on the python side of things */
+six::sicd::ComplexData * asComplexData(six::Data* data) 
+{
+  six::sicd::ComplexData * complexData = dynamic_cast<six::sicd::ComplexData*>(data);
+  if( !complexData )
+  {
+    throw except::BadCastException();
+  }
+  else 
+  {
+    return complexData;
+  }
+}
+
+
 %}
 
 %include "std_vector.i"
@@ -56,6 +73,9 @@ six::sicd::ComplexData * getComplexData( const std::string& sicdPathname, const 
   return retv.release();
 }
 %}
+
+/* wrap that function defined in the header section */
+six::sicd::ComplexData * asComplexData(six::Data* data);
 
 /* this version of the function returns the auto_ptr, ignore it */
 %rename ("$ignore", fullname=1) "six::sicd::Utilities::getComplexData";

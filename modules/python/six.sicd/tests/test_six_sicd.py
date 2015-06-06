@@ -22,11 +22,11 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
-from six import *
+from six_base import *
 from six_sicd import *
 from xml_lite import *
 from coda_io import *
-from coda_logging import *
+
 import os
 import sys
 import os.path
@@ -54,7 +54,7 @@ def roundTrip(filename):
   dt = DataType(DataType.COMPLEX)
   xml_ctrl = ComplexXMLControl()
   data = xml_ctrl.fromXML(doc, vs) 
-  cmplx = data.asComplexData()
+  cmplx = asComplexData(data)
 
   out_doc = xml_ctrl.toXML(cmplx, vs)
 
@@ -122,7 +122,7 @@ def showInfo(cmplx):
 ###############################################################################
 
 for arg in sys.argv:
-  if (arg.endswith(".ntf") or arg.endswith(".nitf")) and ("SICD" in arg):
+  if (arg.endswith(".ntf") or arg.endswith(".nitf")):
     cmplx = loadSicd(arg)
   elif arg.endswith(".xml"):
     roundTrip(arg)

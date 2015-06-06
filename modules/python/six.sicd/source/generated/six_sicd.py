@@ -199,7 +199,7 @@ SwigPyIterator_swigregister(SwigPyIterator)
 import math_poly
 import math_linear
 import coda_except
-import six
+import six_base
 import scene
 import coda_types
 import coda_io
@@ -208,14 +208,18 @@ import mem
 def getComplexData(sicdPathname, schemaPaths):
     """getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> ComplexData"""
     return _six_sicd.getComplexData(sicdPathname, schemaPaths)
-class ComplexClassification(six.Classification):
+
+def asComplexData(data):
+    """asComplexData(Data data) -> ComplexData"""
+    return _six_sicd.asComplexData(data)
+class ComplexClassification(six_base.Classification):
     """Proxy of C++ six::sicd::ComplexClassification class"""
     __swig_setmethods__ = {}
-    for _s in [six.Classification]:
+    for _s in [six_base.Classification]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ComplexClassification, name, value)
     __swig_getmethods__ = {}
-    for _s in [six.Classification]:
+    for _s in [six_base.Classification]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ComplexClassification, name)
     __repr__ = _swig_repr
@@ -2152,14 +2156,14 @@ class RgAzComp(_object):
 RgAzComp_swigregister = _six_sicd.RgAzComp_swigregister
 RgAzComp_swigregister(RgAzComp)
 
-class ComplexData(six.Data):
+class ComplexData(six_base.Data):
     """Proxy of C++ six::sicd::ComplexData class"""
     __swig_setmethods__ = {}
-    for _s in [six.Data]:
+    for _s in [six_base.Data]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ComplexData, name, value)
     __swig_getmethods__ = {}
-    for _s in [six.Data]:
+    for _s in [six_base.Data]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ComplexData, name)
     __repr__ = _swig_repr
@@ -2357,14 +2361,14 @@ class ComplexData(six.Data):
 ComplexData_swigregister = _six_sicd.ComplexData_swigregister
 ComplexData_swigregister(ComplexData)
 
-class ComplexXMLControl(six.XMLControl):
+class ComplexXMLControl(six_base.XMLControl):
     """Proxy of C++ six::sicd::ComplexXMLControl class"""
     __swig_setmethods__ = {}
-    for _s in [six.XMLControl]:
+    for _s in [six_base.XMLControl]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ComplexXMLControl, name, value)
     __swig_getmethods__ = {}
-    for _s in [six.XMLControl]:
+    for _s in [six_base.XMLControl]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ComplexXMLControl, name)
     __repr__ = _swig_repr

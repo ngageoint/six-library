@@ -1,4 +1,7 @@
-distclean = configure = lambda p: None
+distclean = lambda p: None
+
+def configure(conf):
+    conf.recurse()
 
 def options(opt):
     opt.recurse()

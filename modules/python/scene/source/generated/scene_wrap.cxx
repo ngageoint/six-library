@@ -2954,41 +2954,42 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_math__linear__MatrixMxNT_7_7_double_t swig_types[14]
 #define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[15]
 #define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[16]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[17]
-#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[18]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[19]
-#define SWIGTYPE_p_scene__AdjustableParams swig_types[20]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[21]
-#define SWIGTYPE_p_scene__CoordinateTransform swig_types[22]
-#define SWIGTYPE_p_scene__ECEFToLLATransform swig_types[23]
-#define SWIGTYPE_p_scene__ENUCoordinateTransform swig_types[24]
-#define SWIGTYPE_p_scene__EllipsoidModel swig_types[25]
-#define SWIGTYPE_p_scene__Errors swig_types[26]
-#define SWIGTYPE_p_scene__FrameType swig_types[27]
-#define SWIGTYPE_p_scene__GeodeticProjectionModel swig_types[28]
-#define SWIGTYPE_p_scene__GridGeometry swig_types[29]
-#define SWIGTYPE_p_scene__LLAToECEFTransform swig_types[30]
-#define SWIGTYPE_p_scene__LatLon swig_types[31]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[32]
-#define SWIGTYPE_p_scene__LocalCoordinateTransform swig_types[33]
-#define SWIGTYPE_p_scene__NEDCoordinateTransform swig_types[34]
-#define SWIGTYPE_p_scene__PlanarGridGeometry swig_types[35]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[36]
-#define SWIGTYPE_p_scene__ProjectionModel swig_types[37]
-#define SWIGTYPE_p_scene__ProjectionModelWithImageVectors swig_types[38]
-#define SWIGTYPE_p_scene__RangeAzimProjectionModel swig_types[39]
-#define SWIGTYPE_p_scene__RangeZeroProjectionModel swig_types[40]
-#define SWIGTYPE_p_scene__SceneGeometry swig_types[41]
-#define SWIGTYPE_p_scene__Utilities swig_types[42]
-#define SWIGTYPE_p_scene__WGS84EllipsoidModel swig_types[43]
-#define SWIGTYPE_p_size_type swig_types[44]
-#define SWIGTYPE_p_std__invalid_argument swig_types[45]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[46]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[47]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[48]
-#define SWIGTYPE_p_value_type swig_types[49]
-static swig_type_info *swig_types[51];
-static swig_module_info swig_module = {swig_types, 50, 0, 0, 0, 0};
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[17]
+#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[18]
+#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[19]
+#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[20]
+#define SWIGTYPE_p_scene__AdjustableParams swig_types[21]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[22]
+#define SWIGTYPE_p_scene__CoordinateTransform swig_types[23]
+#define SWIGTYPE_p_scene__ECEFToLLATransform swig_types[24]
+#define SWIGTYPE_p_scene__ENUCoordinateTransform swig_types[25]
+#define SWIGTYPE_p_scene__EllipsoidModel swig_types[26]
+#define SWIGTYPE_p_scene__Errors swig_types[27]
+#define SWIGTYPE_p_scene__FrameType swig_types[28]
+#define SWIGTYPE_p_scene__GeodeticProjectionModel swig_types[29]
+#define SWIGTYPE_p_scene__GridGeometry swig_types[30]
+#define SWIGTYPE_p_scene__LLAToECEFTransform swig_types[31]
+#define SWIGTYPE_p_scene__LatLon swig_types[32]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[33]
+#define SWIGTYPE_p_scene__LocalCoordinateTransform swig_types[34]
+#define SWIGTYPE_p_scene__NEDCoordinateTransform swig_types[35]
+#define SWIGTYPE_p_scene__PlanarGridGeometry swig_types[36]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[37]
+#define SWIGTYPE_p_scene__ProjectionModel swig_types[38]
+#define SWIGTYPE_p_scene__ProjectionModelWithImageVectors swig_types[39]
+#define SWIGTYPE_p_scene__RangeAzimProjectionModel swig_types[40]
+#define SWIGTYPE_p_scene__RangeZeroProjectionModel swig_types[41]
+#define SWIGTYPE_p_scene__SceneGeometry swig_types[42]
+#define SWIGTYPE_p_scene__Utilities swig_types[43]
+#define SWIGTYPE_p_scene__WGS84EllipsoidModel swig_types[44]
+#define SWIGTYPE_p_size_type swig_types[45]
+#define SWIGTYPE_p_std__invalid_argument swig_types[46]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[47]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[48]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[49]
+#define SWIGTYPE_p_value_type swig_types[50]
+static swig_type_info *swig_types[52];
+static swig_module_info swig_module = {swig_types, 51, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -14285,7 +14286,71 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SceneGeometry_getLayoverVector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SceneGeometry_getLayoverVector__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
+  scene::Vector3 *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  scene::Vector3 result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SceneGeometry_getLayoverVector",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scene__SceneGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SceneGeometry_getLayoverVector" "', argument " "1"" of type '" "scene::SceneGeometry const *""'"); 
+  }
+  arg1 = reinterpret_cast< scene::SceneGeometry * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SceneGeometry_getLayoverVector" "', argument " "2"" of type '" "scene::Vector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SceneGeometry_getLayoverVector" "', argument " "2"" of type '" "scene::Vector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< scene::Vector3 * >(argp2);
+  {
+    try
+    {
+      result = ((scene::SceneGeometry const *)arg1)->getLayoverVector((scene::Vector3 const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SceneGeometry_getLayoverVector__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   scene::SceneGeometry *arg1 = (scene::SceneGeometry *) 0 ;
   void *argp1 = 0 ;
@@ -14334,6 +14399,48 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getLayoverVector(PyObject *SWIGUNUSEDPA
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SceneGeometry_getLayoverVector(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_scene__SceneGeometry, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_SceneGeometry_getLayoverVector__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_scene__SceneGeometry, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_SceneGeometry_getLayoverVector__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'SceneGeometry_getLayoverVector'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    scene::SceneGeometry::getLayoverVector(scene::Vector3 const &) const\n"
+    "    scene::SceneGeometry::getLayoverVector() const\n");
+  return 0;
 }
 
 
@@ -25267,7 +25374,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SceneGeometry_getSceneCenterNorthVector", _wrap_SceneGeometry_getSceneCenterNorthVector, METH_VARARGS, (char *)"SceneGeometry_getSceneCenterNorthVector(SceneGeometry self) -> Vector3"},
 	 { (char *)"SceneGeometry_getNorthAngle", _wrap_SceneGeometry_getNorthAngle, METH_VARARGS, (char *)"SceneGeometry_getNorthAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getHeadingAngle", _wrap_SceneGeometry_getHeadingAngle, METH_VARARGS, (char *)"SceneGeometry_getHeadingAngle(SceneGeometry self) -> double"},
-	 { (char *)"SceneGeometry_getLayoverVector", _wrap_SceneGeometry_getLayoverVector, METH_VARARGS, (char *)"SceneGeometry_getLayoverVector(SceneGeometry self) -> Vector3"},
+	 { (char *)"SceneGeometry_getLayoverVector", _wrap_SceneGeometry_getLayoverVector, METH_VARARGS, (char *)"\n"
+		"getLayoverVector(Vector3 planeZ) -> Vector3\n"
+		"SceneGeometry_getLayoverVector(SceneGeometry self) -> Vector3\n"
+		""},
 	 { (char *)"SceneGeometry_getLayover", _wrap_SceneGeometry_getLayover, METH_VARARGS, (char *)"SceneGeometry_getLayover(SceneGeometry self) -> AngleMagnitude"},
 	 { (char *)"SceneGeometry_getETPLayoverAngle", _wrap_SceneGeometry_getETPLayoverAngle, METH_VARARGS, (char *)"SceneGeometry_getETPLayoverAngle(SceneGeometry self) -> double"},
 	 { (char *)"SceneGeometry_getShadowVector", _wrap_SceneGeometry_getShadowVector, METH_VARARGS, (char *)"SceneGeometry_getShadowVector(SceneGeometry self) -> Vector3"},
@@ -25507,6 +25617,7 @@ static swig_type_info _swigt__p_math__linear__MatrixMxNT_3_7_double_t = {"_p_mat
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_7_7_double_t = {"_p_math__linear__MatrixMxNT_7_7_double_t", "math::linear::MatrixMxN< 7,7,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_2_double_t = {"_p_math__linear__VectorNT_2_double_t", "scene::Vector2 *|math::linear::VectorN< 2,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "Vector3 *|scene::Vector3 *|math::linear::VectorN< 3,double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__linear__VectorT_double_t", "VectorDouble *|math::linear::Vector< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "math::poly::OneD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "math::poly::OneD< math::linear::VectorN< 3,double > > *|math::poly::OneD< scene::Vector3 > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
@@ -25559,6 +25670,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_math__linear__MatrixMxNT_7_7_double_t,
   &_swigt__p_math__linear__VectorNT_2_double_t,
   &_swigt__p_math__linear__VectorNT_3_double_t,
+  &_swigt__p_math__linear__VectorT_double_t,
   &_swigt__p_math__poly__OneDT_double_t,
   &_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   &_swigt__p_math__poly__TwoDT_double_t,
@@ -25611,6 +25723,7 @@ static swig_cast_info _swigc__p_math__linear__MatrixMxNT_3_7_double_t[] = {  {&_
 static swig_cast_info _swigc__p_math__linear__MatrixMxNT_7_7_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_7_7_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorNT_2_double_t[] = {  {&_swigt__p_math__linear__VectorNT_2_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorNT_3_double_t[] = {  {&_swigt__p_math__linear__VectorNT_3_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_math__linear__VectorT_double_t[] = {  {&_swigt__p_math__linear__VectorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__OneDT_double_t[] = {  {&_swigt__p_math__poly__OneDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t[] = {  {&_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__TwoDT_double_t[] = {  {&_swigt__p_math__poly__TwoDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -25663,6 +25776,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_math__linear__MatrixMxNT_7_7_double_t,
   _swigc__p_math__linear__VectorNT_2_double_t,
   _swigc__p_math__linear__VectorNT_3_double_t,
+  _swigc__p_math__linear__VectorT_double_t,
   _swigc__p_math__poly__OneDT_double_t,
   _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   _swigc__p_math__poly__TwoDT_double_t,
