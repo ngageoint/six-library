@@ -1043,9 +1043,12 @@ class SceneGeometry(_object):
         return _scene.SceneGeometry_getHeadingAngle(self)
 
 
-    def getLayoverVector(self):
-        """getLayoverVector(SceneGeometry self) -> Vector3"""
-        return _scene.SceneGeometry_getLayoverVector(self)
+    def getLayoverVector(self, *args):
+        """
+        getLayoverVector(SceneGeometry self, Vector3 planeZ) -> Vector3
+        getLayoverVector(SceneGeometry self) -> Vector3
+        """
+        return _scene.SceneGeometry_getLayoverVector(self, *args)
 
 
     def getLayover(self):
