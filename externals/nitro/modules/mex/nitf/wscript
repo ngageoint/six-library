@@ -1,0 +1,28 @@
+import os
+options = distclean = configure = lambda x: None
+
+def build(bld):
+    if 'HAVE_MATLAB' in bld.env:
+        # C files
+        c_src = bld.path.ant_glob('*.c')
+        c_targets = []
+        for src in c_src:
+            filename = str(src)
+            name = os.path.splitext(filename)[0]
+            c_targets.append(name)
+            bld.mexify(source=src, uselib_local='nitf-c', lang='c', name=name)
+
+        bld(features='add_targets', target='nitf-c-mex',
+            targets_to_add=c_targets)
+
+        # C++ files
+        cpp_src = bld.path.ant_glob('*.cpp')
+        cpp_targets = []
+        for src in cpp_src:
+            filename = str(src)
+            name = os.path.splitext(filename)[0]
+            cpp_targets.append(name)
+            bld.mexify(source=src, module_deps='xml.lite nitf', name=name)
+
+        bld(features='add_targets', target='nitf-c++-mex',
+            targets_to_add=cpp_targets)
