@@ -1,9 +1,0 @@
-NAME            = 'mem'
-MAINTAINER      = 'asylvest@users.sourceforge.net'
-VERSION         = '1.0'
-MODULE_DEPS     = 'sys'
-
-options = configure = distclean = lambda p: None
-
-def build(bld):
-    bld.module(**globals())
