@@ -1,4 +1,0 @@
-options = build = distclean = lambda p: None
-
-def configure(conf):
-    conf.env['JARS_DIR'] = conf.path.abspath()

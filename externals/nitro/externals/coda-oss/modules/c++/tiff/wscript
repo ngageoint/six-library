@@ -1,9 +1,0 @@
-NAME            = 'tiff'
-MAINTAINER      = 'jmrandol@users.sourceforge.net'
-VERSION         = '1.0'
-MODULE_DEPS     = 'mt io'
-
-options = configure = distclean = lambda p: None
-
-def build(bld):
-    bld.module(**globals())
