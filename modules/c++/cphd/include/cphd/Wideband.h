@@ -121,6 +121,41 @@ public:
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& scratch,
               const mem::BufferView<std::complex<float> >& data);
+              
+    // Same as above but for a raw pointer
+    // The pointer needs to be preallocated. Use getBufferDims for this.
+    void read(size_t channel,
+              size_t firstVector,
+              size_t lastVector,
+              size_t firstSample,
+              size_t lastSample,
+              size_t numThreads,
+              const types::RowCol<size_t>& dims,
+              void* data)
+    {
+        const mem::BufferView<sys::ubyte> buffer(
+                static_cast<sys::ubyte*>(data),
+                dims.normL1() * mElementSize);
+        read(channel, firstVector, lastVector, firstSample,
+             lastSample, numThreads, buffer);
+    }
+              
+    types::RowCol<size_t> getBufferDims(size_t channel,
+                                        size_t firstVector,
+                                        size_t lastVector,
+                                        size_t firstSample,
+                                        size_t lastSample) const
+    {
+        types::RowCol<size_t> dims;
+        checkReadInputs(channel, firstVector, lastVector,
+                        firstSample, lastSample, dims);
+        return dims;
+    }
+    
+    SampleType getSampleType() const
+    {
+        return mData.sampleType;
+    }
 
 private:
     void initialize();
