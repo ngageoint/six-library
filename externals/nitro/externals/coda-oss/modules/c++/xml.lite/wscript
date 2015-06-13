@@ -1,0 +1,27 @@
+NAME            = 'xml.lite'
+MAINTAINER      = 'jmrandol@users.sourceforge.net'
+VERSION         = '1.2'
+MODULE_DEPS     = 'io mt logging'
+USELIB_CHECK    = 'XML'
+TEST_FILTER     = 'MMParserTest1.cpp MinidomParserTest2.cpp'
+TEST_DEPS       = 'io mt cli'
+
+options = distclean = lambda p: None
+
+from waflib import Options
+from build import writeConfig
+
+def configure(conf):
+    # callback function to check for #defines used by the xml.lite module
+    def xml_lite_callback(conf):
+        if Options.options.xml_layer == 'expat':
+            conf.define('USE_EXPAT', '', quote=False)
+        elif Options.options.xml_layer == 'libxml':
+            conf.define('USE_LIBXML', '', quote=False)
+        elif Options.options.xml_layer == 'xerces':
+            conf.define('USE_XERCES', '', quote=False)
+        
+    writeConfig(conf, xml_lite_callback, NAME)
+    
+def build(bld):
+    bld.module(**globals())

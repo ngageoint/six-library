@@ -1,0 +1,9 @@
+NAME            = 'math'
+MAINTAINER      = 'asylvest@users.sourceforge.net'
+VERSION         = '0.1'
+USELIB          = 'MATH'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
