@@ -1,0 +1,15 @@
+NAME            = 'net'
+MAINTAINER      = 'jmrandol@users.sourceforge.net'
+VERSION         = '1.0'
+MODULE_DEPS     = 'logging re mt io mem'
+USELIB          = 'NSL SOCKET'
+TEST_FILTER     = 'AckMulticastSender.cpp ' \
+                  'AckMulticastSubscriber.cpp ' \
+                  'MulticastSender.cpp ' \
+                  'MulticastSubscriber.cpp ' \
+                  'SerializableTestClient.cpp'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

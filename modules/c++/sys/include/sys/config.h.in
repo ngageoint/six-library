@@ -1,0 +1,113 @@
+/* include/sys/config.h.in.  Generated from configure.in by autoheader.  */
+
+/* Define to 1 if using `getloadavg.c'. */
+#undef C_GETLOADAVG
+
+/* Define to 1 for DGUX with <sys/dg_sys_info.h>. */
+#undef DGUX
+
+/* Define to 1 if the `getloadavg' function needs to be run setuid or setgid.
+   */
+#undef GETLOADAVG_PRIVILEGED
+
+/* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
+#undef HAVE_DOPRNT
+
+/* Define to 1 if you have the `getloadavg' function. */
+#undef HAVE_GETLOADAVG
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `' library (-l). */
+#undef HAVE_LIB
+
+/* Define to 1 if you have the `dgc' library (-ldgc). */
+#undef HAVE_LIBDGC
+
+/* Define to 1 if you have the `kstat' library (-lkstat). */
+#undef HAVE_LIBKSTAT
+
+/* Define to 1 if you have the <mach/mach.h> header file. */
+#undef HAVE_MACH_MACH_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <nlist.h> header file. */
+#undef HAVE_NLIST_H
+
+/* Define to 1 if you have the `pstat_getdynamic' function. */
+#undef HAVE_PSTAT_GETDYNAMIC
+
+/* Define to 1 if you have the `setlocale' function. */
+#undef HAVE_SETLOCALE
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the `strftime' function. */
+#undef HAVE_STRFTIME
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if `n_un.n_name' is member of `struct nlist'. */
+#undef HAVE_STRUCT_NLIST_N_UN_N_NAME
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have <sys/wait.h> that is POSIX.1 compatible. */
+#undef HAVE_SYS_WAIT_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the `vprintf' function. */
+#undef HAVE_VPRINTF
+
+/* Define to 1 if your `struct nlist' has an `n_un' member. Obsolete, depend
+   on `HAVE_STRUCT_NLIST_N_UN_N_NAME */
+#undef NLIST_NAME_UNION
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* The size of a `', as computed by sizeof. */
+#undef SIZEOF_
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Define to 1 on System V Release 4. */
+#undef SVR4
+
+/* Define to 1 for Encore UMAX. */
+#undef UMAX
+
+/* Define to 1 for Encore UMAX 4.3 that has <inq_status/cpustats.h> instead of
+   <sys/cpustats.h>. */
+#undef UMAX4_3
+

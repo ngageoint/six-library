@@ -1,0 +1,221 @@
+/* =========================================================================
+ * This file is part of io-c++ 
+ * =========================================================================
+ * 
+ * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * io-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this program; If not, 
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#include <import/io.h>
+#include "TestCase.h"
+
+TEST_CASE(testStringStream)
+{
+    io::StringStream stream;
+    stream.writeln("test");
+    stream.writeln("test");
+    TEST_ASSERT_EQ(stream.available(), 10);
+    stream.seek(1, io::Seekable::START);
+    TEST_ASSERT_EQ(stream.available(), 9);
+
+    stream.write("0123456789");
+
+    TEST_ASSERT_EQ(stream.available(), 19);
+    TEST_ASSERT_EQ(stream.tell(), 1);
+
+    stream.seek(22, io::Seekable::CURRENT);
+    stream.seek(0, io::Seekable::START);
+
+    stream.reset();
+    TEST_ASSERT_EQ(stream.available(), 0);
+    stream.write("test");
+    TEST_ASSERT_EQ(stream.available(), 4);
+    sys::byte buf[255];
+    stream.read(buf, 4);
+    buf[4] = 0;
+    TEST_ASSERT_EQ(std::string(buf), "test");
+}
+
+TEST_CASE(testByteStream)
+{
+    io::ByteStream stream;
+    stream.writeln("test");
+    stream.writeln("test");
+
+    TEST_ASSERT_EQ(stream.available(), 0);
+    stream.seek(0, io::Seekable::START);
+    TEST_ASSERT_EQ(stream.available(), 10);
+
+    stream.seek(10, io::Seekable::START);
+    stream.write("0123456789");
+    TEST_ASSERT_EQ(stream.tell(), 20);
+    TEST_ASSERT_EQ(stream.available(), 0);
+
+    stream.seek(22, io::Seekable::CURRENT);
+    TEST_ASSERT_EQ(stream.tell(), -1);
+    stream.reset();
+    TEST_ASSERT_EQ(stream.tell(), 0);
+    stream.seek(0, io::Seekable::START);
+    TEST_ASSERT_EQ(stream.tell(), 0);
+
+    stream.seek(2, io::Seekable::END);
+    TEST_ASSERT_EQ(stream.tell(), 18);
+    TEST_ASSERT_EQ(stream.getSize(), 20);
+
+    stream.write("abcdef");
+    TEST_ASSERT_EQ(stream.getSize(), 24);
+
+    stream.clear();
+    TEST_ASSERT_EQ(stream.available(), 0);
+    stream.write("test");
+    stream.seek(0, io::Seekable::START);
+    TEST_ASSERT_EQ(stream.available(), 4);
+    sys::byte buf[255];
+    stream.read(buf, 4);
+    buf[4] = 0;
+    TEST_ASSERT_EQ(std::string(buf), "test");
+}
+
+TEST_CASE(testProxyOutputStream)
+{
+    io::StringStream stream;
+    io::ProxyOutputStream proxy(&stream);
+    proxy.write("test1");
+    sys::byte buf[255];
+    stream.read(buf, 5);
+    buf[5] = 0;
+    TEST_ASSERT_EQ(std::string(buf), "test1");
+}
+
+TEST_CASE(testCountingOutputStream)
+{
+    io::ByteStream stream;
+    io::CountingOutputStream counter(&stream);
+    counter.write("test1");
+    TEST_ASSERT_EQ(counter.getCount(), 5);
+}
+
+void cleanupFiles(std::string base)
+{
+    // cleanup
+    sys::OS os;
+    for (size_t i = 0;; ++i)
+    {
+        std::ostringstream oss;
+        oss << base << "." << (i + 1);
+        std::string fname(oss.str());
+        if (os.isFile(fname))
+            os.remove(fname);
+        else
+            break;
+    }
+    if (os.isFile(base))
+        os.remove(base);
+}
+
+TEST_CASE(testRotate)
+{
+    std::string outFile = "test_rotate.txt";
+    size_t maxFiles = 5;
+
+    cleanupFiles( outFile);
+
+    sys::OS os;
+
+    {
+        io::RotatingFileOutputStream out(outFile, 10, maxFiles);
+        out.write("0123456789");
+        TEST_ASSERT(os.exists(outFile));
+        TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
+
+        out.write("1");
+        TEST_ASSERT(os.isFile(outFile + ".1"));
+        TEST_ASSERT_EQ(out.getCount(), 1);
+
+        for(size_t i = 0; i < maxFiles - 1; ++i)
+        {
+            std::string fname = outFile + "." + str::toString(i + 1);
+            std::string next = outFile + "." + str::toString(i + 2);
+
+            TEST_ASSERT(os.isFile(fname));
+            TEST_ASSERT_FALSE(os.isFile(next));
+
+            out.write("0123456789");
+            TEST_ASSERT(os.isFile(next));
+        }
+    }
+
+    cleanupFiles( outFile);
+}
+
+TEST_CASE(testNeverRotate)
+{
+    std::string outFile = "test_rotate.txt";
+    cleanupFiles( outFile);
+
+    sys::OS os;
+    {
+        io::RotatingFileOutputStream out(outFile);
+        for(size_t i = 0; i < 1024; ++i)
+        out.write("0");
+        TEST_ASSERT(os.exists(outFile));
+        TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
+        TEST_ASSERT_EQ(out.getCount(), 1024);
+    }
+    cleanupFiles( outFile);
+}
+
+TEST_CASE(testRotateReset)
+{
+    std::string outFile = "test_rotate.txt";
+    cleanupFiles( outFile);
+
+    sys::OS os;
+    io::RotatingFileOutputStream out(outFile, 10);
+    out.write("01234567890");
+    TEST_ASSERT(os.exists(outFile));
+    TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
+    TEST_ASSERT_EQ(out.getCount(), 11);
+
+    out.write("0");
+    TEST_ASSERT(os.exists(outFile));
+    TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
+    TEST_ASSERT_EQ(out.getCount(), 1);
+
+    out.close();
+    try
+    {
+        out.write("0");
+        TEST_FAIL("Stream is closed; should throw.");
+    }
+    catch(except::Exception& ex)
+    {
+    }
+
+    cleanupFiles( outFile);
+}
+
+int main(int argc, char* argv[])
+{
+    TEST_CHECK(testStringStream);
+    TEST_CHECK(testByteStream);
+    TEST_CHECK(testProxyOutputStream);
+    TEST_CHECK(testCountingOutputStream);
+    TEST_CHECK(testRotate);
+    TEST_CHECK(testNeverRotate);
+    TEST_CHECK(testRotateReset);
+}
