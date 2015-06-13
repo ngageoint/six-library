@@ -1,0 +1,2 @@
+LIBRARY xml_metadata.mexw32
+EXPORTS mexFunction

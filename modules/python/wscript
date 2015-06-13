@@ -1,0 +1,14 @@
+import os
+from waflib import Options
+
+configure = distclean = lambda x: None
+
+def options(opt):
+    opt.recurse('nitf')
+    
+def build(bld):
+    variant = bld.env['VARIANT'] or 'default'
+    env = bld.all_envs[variant]
+    if 'PYTHON' in env and env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
+        bld.recurse('nitf')
+
