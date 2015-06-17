@@ -58,6 +58,7 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 
 %import "except.i"
 %import "math_poly.i"
+%import "math_linear.i"
 %import "scene.i"
 
 /* parametric elt-size array */
@@ -73,55 +74,6 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 /* prevent name conflicts */
 %rename("SixUtilities") six::Utilities;
 
-/* six::Parameter does not play nicely with SWIG currently */
-namespace six 
-{
-  %typemap(typecheck) (Parameter) 
-  {
-    if(!PyTuple_Check($input) || !(2 != PyTuple_Size($input))) 
-    {
-      $1 = 0; 
-    } 
-    else 
-    {
-      $1 = 1;
-    }
-  }
-
-  %typemap(in) (Parameter) 
-  {
-    if(!PyTuple_Check($input)) 
-    {
-      PyErr_SetString(PyExc_ValueError, "Expected a two element string tuple");
-      return NULL;
-    }
-    if(2 != PyTuple_Size($input)) 
-    {
-      PyErr_SetString(PyExc_ValueError, "Expected a two element string tuple");
-      return NULL;
-    }
-    PyObject* pyName  = PyTuple_GetItem($input,0);
-    PyObject* pyValue = PyTuple_GetItem($input,1);
-    std::string name  = PyString_AsString(pyName);
-    std::string value = PyString_AsString(pyValue);
-    six::Parameter param;
-    param.setName(name);
-    param.setValue(value);
-    $1 = param;
-  }
- 
-  %typemap(out) (Parameter) 
-  {
-    PyObject* out_tuple = PyTuple_New(2);
-    PyObject* pyName  = PyString_FromString( $1.getName().c_str() );
-    PyObject* pyValue = PyString_FromString( $1.str().c_str() );
-    PyTuple_SetItem(out_tuple, 0, pyName);
-    PyTuple_SetItem(out_tuple, 1, pyValue);
-    $result = out_tuple;
-  }
-
-}
-
 
 /* current six python interface consists of these files */
 %include "nitf/DateTime.hpp"
@@ -131,10 +83,42 @@ namespace six
 %include "six/Classification.h"
 %include "six/ErrorStatistics.h"
 %include "six/Radiometric.h"
+%include "six/Parameter.h"
 %include "six/Data.h"
 %include "six/XMLControl.h"
 %include "six/Utilities.h"
 %include "six/Options.h"
+
+%feature("shadow") six::Parameter::setValue(const std::string &)
+%{
+def setValue(self, *args):
+    if len(args) != 1:
+        raise RuntimeError("Parameter.setValue takes exactly one argument")
+    new_tuple = (str(args[0]), )
+    return $action(self, str(args[0]))
+%}
+
+
+%extend six::Parameter 
+{
+
+  public:
+    void setValue(const std::string & str) 
+    {
+      $self->setValue<std::string>(str);
+    }
+    long __int__()
+    {
+      return str::toType<long>($self->str());
+    }
+    double __float__()
+    {
+      return str::toType<double>($self->str());
+    }
+
+};
+
+/*%rename("six::Parameter::setValue") "six::Paramater::setValueString";*/
 
 %template(VectorString) std::vector<std::string>;
 %template(LatLonCorners) six::Corners<scene::LatLon>;

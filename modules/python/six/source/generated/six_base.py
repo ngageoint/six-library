@@ -3339,6 +3339,63 @@ Radiometric_swigregister(Radiometric)
 Radiometric.NL_ABSOLUTE = _six_base.cvar.Radiometric_NL_ABSOLUTE
 Radiometric.NL_RELATIVE = _six_base.cvar.Radiometric_NL_RELATIVE
 
+class Parameter(_object):
+    """Proxy of C++ six::Parameter class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Parameter, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Parameter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::Parameter self) -> Parameter"""
+        this = _six_base.new_Parameter()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_Parameter
+    __del__ = lambda self: None
+
+    def str(self):
+        """str(Parameter self) -> std::string"""
+        return _six_base.Parameter_str(self)
+
+
+    def getName(self):
+        """getName(Parameter self) -> std::string"""
+        return _six_base.Parameter_getName(self)
+
+
+    def setName(self, name):
+        """setName(Parameter self, std::string name)"""
+        return _six_base.Parameter_setName(self, name)
+
+
+    def __eq__(self, o):
+        """__eq__(Parameter self, Parameter o) -> bool"""
+        return _six_base.Parameter___eq__(self, o)
+
+    def setValue(self, *args):
+        if len(args) != 1:
+            raise RuntimeError("Parameter.setValue takes exactly one argument")
+        new_tuple = (str(args[0]), )
+        return _six_base.Parameter_setValue(self, str(args[0]))
+
+
+
+    def __int__(self):
+        """__int__(Parameter self) -> long"""
+        return _six_base.Parameter___int__(self)
+
+
+    def __float__(self):
+        """__float__(Parameter self) -> double"""
+        return _six_base.Parameter___float__(self)
+
+Parameter_swigregister = _six_base.Parameter_swigregister
+Parameter_swigregister(Parameter)
+
 class Data(_object):
     """Proxy of C++ six::Data class"""
     __swig_setmethods__ = {}

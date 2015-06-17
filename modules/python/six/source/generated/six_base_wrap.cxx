@@ -3022,47 +3022,48 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_six__NoiseLevel swig_types[82]
 #define SWIGTYPE_p_six__Options swig_types[83]
 #define SWIGTYPE_p_six__OrientationType swig_types[84]
-#define SWIGTYPE_p_six__PixelType swig_types[85]
-#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[86]
-#define SWIGTYPE_p_six__PolarizationType swig_types[87]
-#define SWIGTYPE_p_six__PosVelError swig_types[88]
-#define SWIGTYPE_p_six__ProjectionType swig_types[89]
-#define SWIGTYPE_p_six__RMAlgoType swig_types[90]
-#define SWIGTYPE_p_six__RadarModeType swig_types[91]
-#define SWIGTYPE_p_six__RadarSensor swig_types[92]
-#define SWIGTYPE_p_six__Radiometric swig_types[93]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[94]
-#define SWIGTYPE_p_six__RegionType swig_types[95]
-#define SWIGTYPE_p_six__RowColEnum swig_types[96]
-#define SWIGTYPE_p_six__SCP swig_types[97]
-#define SWIGTYPE_p_six__SCPType swig_types[98]
-#define SWIGTYPE_p_six__SideOfTrackType swig_types[99]
-#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[100]
-#define SWIGTYPE_p_six__TropoError swig_types[101]
-#define SWIGTYPE_p_six__UninitializedValueException swig_types[102]
-#define SWIGTYPE_p_six__XMLControl swig_types[103]
-#define SWIGTYPE_p_six__XYZEnum swig_types[104]
-#define SWIGTYPE_p_size_type swig_types[105]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[106]
-#define SWIGTYPE_p_std__invalid_argument swig_types[107]
-#define SWIGTYPE_p_std__mapT_std__string_Parameter_t__const_iterator swig_types[108]
-#define SWIGTYPE_p_std__ostream swig_types[109]
-#define SWIGTYPE_p_std__string swig_types[110]
-#define SWIGTYPE_p_std__vectorT_Parameter_std__allocatorT_Parameter_t_t swig_types[111]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[112]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[113]
-#define SWIGTYPE_p_sys__Int32_T swig_types[114]
-#define SWIGTYPE_p_sys__Uint64_T swig_types[115]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[116]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[117]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[118]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[119]
-#define SWIGTYPE_p_types__RowColT_sys__SSize_T_t swig_types[120]
-#define SWIGTYPE_p_unsigned_char swig_types[121]
-#define SWIGTYPE_p_value_type swig_types[122]
-#define SWIGTYPE_p_xml__lite__Document swig_types[123]
-static swig_type_info *swig_types[125];
-static swig_module_info swig_module = {swig_types, 124, 0, 0, 0, 0};
+#define SWIGTYPE_p_six__Parameter swig_types[85]
+#define SWIGTYPE_p_six__PixelType swig_types[86]
+#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[87]
+#define SWIGTYPE_p_six__PolarizationType swig_types[88]
+#define SWIGTYPE_p_six__PosVelError swig_types[89]
+#define SWIGTYPE_p_six__ProjectionType swig_types[90]
+#define SWIGTYPE_p_six__RMAlgoType swig_types[91]
+#define SWIGTYPE_p_six__RadarModeType swig_types[92]
+#define SWIGTYPE_p_six__RadarSensor swig_types[93]
+#define SWIGTYPE_p_six__Radiometric swig_types[94]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[95]
+#define SWIGTYPE_p_six__RegionType swig_types[96]
+#define SWIGTYPE_p_six__RowColEnum swig_types[97]
+#define SWIGTYPE_p_six__SCP swig_types[98]
+#define SWIGTYPE_p_six__SCPType swig_types[99]
+#define SWIGTYPE_p_six__SideOfTrackType swig_types[100]
+#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[101]
+#define SWIGTYPE_p_six__TropoError swig_types[102]
+#define SWIGTYPE_p_six__UninitializedValueException swig_types[103]
+#define SWIGTYPE_p_six__XMLControl swig_types[104]
+#define SWIGTYPE_p_six__XYZEnum swig_types[105]
+#define SWIGTYPE_p_size_type swig_types[106]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[107]
+#define SWIGTYPE_p_std__invalid_argument swig_types[108]
+#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[109]
+#define SWIGTYPE_p_std__ostream swig_types[110]
+#define SWIGTYPE_p_std__string swig_types[111]
+#define SWIGTYPE_p_std__vectorT_Parameter_std__allocatorT_six__Parameter_t_t swig_types[112]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[113]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[114]
+#define SWIGTYPE_p_sys__Int32_T swig_types[115]
+#define SWIGTYPE_p_sys__Uint64_T swig_types[116]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[117]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[118]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[119]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[120]
+#define SWIGTYPE_p_types__RowColT_sys__SSize_T_t swig_types[121]
+#define SWIGTYPE_p_unsigned_char swig_types[122]
+#define SWIGTYPE_p_value_type swig_types[123]
+#define SWIGTYPE_p_xml__lite__Document swig_types[124]
+static swig_type_info *swig_types[126];
+static swig_module_info swig_module = {swig_types, 125, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4795,6 +4796,15 @@ SWIG_From_size_t  (size_t value)
   return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
 }
 
+SWIGINTERN void six_Parameter_setValue(six::Parameter *self,std::string const &str){
+      self->setValue<std::string>(str);
+    }
+SWIGINTERN long six_Parameter___int__(six::Parameter *self){
+      return str::toType<long>(self->str());
+    }
+SWIGINTERN double six_Parameter___float__(six::Parameter *self){
+      return str::toType<double>(self->str());
+    }
 
 SWIGINTERN int
 SWIG_AsVal_bool (PyObject *obj, bool *val)
@@ -49415,7 +49425,7 @@ fail:
 SWIGINTERN PyObject *_wrap_ErrorStatistics_additionalParameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::ErrorStatistics *arg1 = (six::ErrorStatistics *) 0 ;
-  std::vector< Parameter,std::allocator< Parameter > > *arg2 = (std::vector< Parameter,std::allocator< Parameter > > *) 0 ;
+  std::vector< Parameter,std::allocator< six::Parameter > > *arg2 = (std::vector< Parameter,std::allocator< six::Parameter > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -49429,11 +49439,11 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_additionalParameters_set(PyObject *SW
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ErrorStatistics_additionalParameters_set" "', argument " "1"" of type '" "six::ErrorStatistics *""'"); 
   }
   arg1 = reinterpret_cast< six::ErrorStatistics * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_Parameter_std__allocatorT_Parameter_t_t, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_Parameter_std__allocatorT_six__Parameter_t_t, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ErrorStatistics_additionalParameters_set" "', argument " "2"" of type '" "std::vector< Parameter,std::allocator< Parameter > > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ErrorStatistics_additionalParameters_set" "', argument " "2"" of type '" "std::vector< Parameter,std::allocator< six::Parameter > > *""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< Parameter,std::allocator< Parameter > > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< Parameter,std::allocator< six::Parameter > > * >(argp2);
   {
     try
     {
@@ -49478,7 +49488,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_additionalParameters_get(PyObject *SW
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< Parameter,std::allocator< Parameter > > *result = 0 ;
+  std::vector< Parameter,std::allocator< six::Parameter > > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:ErrorStatistics_additionalParameters_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__ErrorStatistics, 0 |  0 );
@@ -49489,7 +49499,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_additionalParameters_get(PyObject *SW
   {
     try
     {
-      result = (std::vector< Parameter,std::allocator< Parameter > > *)& ((arg1)->additionalParameters);
+      result = (std::vector< Parameter,std::allocator< six::Parameter > > *)& ((arg1)->additionalParameters);
     } 
     catch (const std::exception& e)
     {
@@ -49517,7 +49527,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_additionalParameters_get(PyObject *SW
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_Parameter_std__allocatorT_Parameter_t_t, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_Parameter_std__allocatorT_six__Parameter_t_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -50931,6 +50941,508 @@ SWIGINTERN PyObject *Radiometric_swigregister(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__Radiometric, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_Parameter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_Parameter")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::Parameter *)new six::Parameter();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Parameter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *arg1 = (six::Parameter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Parameter",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Parameter, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Parameter" "', argument " "1"" of type '" "six::Parameter *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Parameter * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Parameter_str(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *arg1 = (six::Parameter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Parameter_str",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Parameter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter_str" "', argument " "1"" of type '" "six::Parameter const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Parameter * >(argp1);
+  {
+    try
+    {
+      result = ((six::Parameter const *)arg1)->str();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Parameter_getName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *arg1 = (six::Parameter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Parameter_getName",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Parameter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter_getName" "', argument " "1"" of type '" "six::Parameter const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Parameter * >(argp1);
+  {
+    try
+    {
+      result = ((six::Parameter const *)arg1)->getName();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Parameter_setName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *arg1 = (six::Parameter *) 0 ;
+  std::string arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Parameter_setName",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Parameter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter_setName" "', argument " "1"" of type '" "six::Parameter *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Parameter * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Parameter_setName" "', argument " "2"" of type '" "std::string""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    try
+    {
+      (arg1)->setName(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Parameter___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *arg1 = (six::Parameter *) 0 ;
+  six::Parameter *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Parameter___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Parameter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter___eq__" "', argument " "1"" of type '" "six::Parameter const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Parameter * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__Parameter,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Parameter___eq__" "', argument " "2"" of type '" "six::Parameter const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Parameter___eq__" "', argument " "2"" of type '" "six::Parameter const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::Parameter * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::Parameter const *)arg1)->operator ==((six::Parameter const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Parameter_setValue(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *arg1 = (six::Parameter *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Parameter_setValue",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Parameter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter_setValue" "', argument " "1"" of type '" "six::Parameter *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Parameter * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Parameter_setValue" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Parameter_setValue" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      six_Parameter_setValue(arg1,(std::string const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Parameter___int__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *arg1 = (six::Parameter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  long result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Parameter___int__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Parameter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter___int__" "', argument " "1"" of type '" "six::Parameter *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Parameter * >(argp1);
+  {
+    try
+    {
+      result = (long)six_Parameter___int__(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_long(static_cast< long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Parameter___float__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Parameter *arg1 = (six::Parameter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Parameter___float__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Parameter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter___float__" "', argument " "1"" of type '" "six::Parameter *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Parameter * >(argp1);
+  {
+    try
+    {
+      result = (double)six_Parameter___float__(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Parameter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__Parameter, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -53269,7 +53781,7 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_0(PyObject *SWIGUNUSEDPARM
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  Parameter result;
+  six::Parameter result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:Options_getParameter",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Options, 0 |  0 );
@@ -53317,14 +53829,7 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_0(PyObject *SWIGUNUSEDPARM
       SWIG_fail;
     }
   }
-  {
-    PyObject* out_tuple = PyTuple_New(2);
-    PyObject* pyName  = PyString_FromString( (&result)->getName().c_str() );
-    PyObject* pyValue = PyString_FromString( (&result)->str().c_str() );
-    PyTuple_SetItem(out_tuple, 0, pyName);
-    PyTuple_SetItem(out_tuple, 1, pyValue);
-    resultobj = out_tuple;
-  }
+  resultobj = SWIG_NewPointerObj((new six::Parameter(static_cast< const six::Parameter& >(result))), SWIGTYPE_p_six__Parameter, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -53335,13 +53840,15 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_1(PyObject *SWIGUNUSEDPARM
   PyObject *resultobj = 0;
   six::Options *arg1 = (six::Options *) 0 ;
   std::string arg2 ;
-  Parameter arg3 ;
+  six::Parameter arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  Parameter result;
+  six::Parameter result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:Options_getParameter",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Options, 0 |  0 );
@@ -53359,24 +53866,17 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_1(PyObject *SWIGUNUSEDPARM
     if (SWIG_IsNewObj(res)) delete ptr;
   }
   {
-    if(!PyTuple_Check(obj2)) 
-    {
-      PyErr_SetString(PyExc_ValueError, "Expected a two element string tuple");
-      return NULL;
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__Parameter,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Options_getParameter" "', argument " "3"" of type '" "six::Parameter""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Options_getParameter" "', argument " "3"" of type '" "six::Parameter""'");
+    } else {
+      six::Parameter * temp = reinterpret_cast< six::Parameter * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
     }
-    if(2 != PyTuple_Size(obj2)) 
-    {
-      PyErr_SetString(PyExc_ValueError, "Expected a two element string tuple");
-      return NULL;
-    }
-    PyObject* pyName  = PyTuple_GetItem(obj2,0);
-    PyObject* pyValue = PyTuple_GetItem(obj2,1);
-    std::string name  = PyString_AsString(pyName);
-    std::string value = PyString_AsString(pyValue);
-    six::Parameter param;
-    param.setName(name);
-    param.setValue(value);
-    arg3 = param;
   }
   {
     try
@@ -53409,14 +53909,7 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_1(PyObject *SWIGUNUSEDPARM
       SWIG_fail;
     }
   }
-  {
-    PyObject* out_tuple = PyTuple_New(2);
-    PyObject* pyName  = PyString_FromString( (&result)->getName().c_str() );
-    PyObject* pyValue = PyString_FromString( (&result)->str().c_str() );
-    PyTuple_SetItem(out_tuple, 0, pyName);
-    PyTuple_SetItem(out_tuple, 1, pyValue);
-    resultobj = out_tuple;
-  }
+  resultobj = SWIG_NewPointerObj((new six::Parameter(static_cast< const six::Parameter& >(result))), SWIGTYPE_p_six__Parameter, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -53455,16 +53948,8 @@ SWIGINTERN PyObject *_wrap_Options_getParameter(PyObject *self, PyObject *args) 
       int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
-        {
-          if(!PyTuple_Check(argv[2]) || !(2 != PyTuple_Size(argv[2]))) 
-          {
-            _v = 0; 
-          } 
-          else 
-          {
-            _v = 1;
-          }
-        }
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_six__Parameter, 0);
+        _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_Options_getParameter__SWIG_1(self, args);
         }
@@ -53476,7 +53961,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Options_getParameter'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    six::Options::getParameter(std::string) const\n"
-    "    six::Options::getParameter(std::string,Parameter) const\n");
+    "    six::Options::getParameter(std::string,six::Parameter) const\n");
   return 0;
 }
 
@@ -53485,9 +53970,11 @@ SWIGINTERN PyObject *_wrap_Options_setParameter(PyObject *SWIGUNUSEDPARM(self), 
   PyObject *resultobj = 0;
   six::Options *arg1 = (six::Options *) 0 ;
   std::string arg2 ;
-  Parameter arg3 ;
+  six::Parameter arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -53508,24 +53995,17 @@ SWIGINTERN PyObject *_wrap_Options_setParameter(PyObject *SWIGUNUSEDPARM(self), 
     if (SWIG_IsNewObj(res)) delete ptr;
   }
   {
-    if(!PyTuple_Check(obj2)) 
-    {
-      PyErr_SetString(PyExc_ValueError, "Expected a two element string tuple");
-      return NULL;
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__Parameter,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Options_setParameter" "', argument " "3"" of type '" "six::Parameter""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Options_setParameter" "', argument " "3"" of type '" "six::Parameter""'");
+    } else {
+      six::Parameter * temp = reinterpret_cast< six::Parameter * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
     }
-    if(2 != PyTuple_Size(obj2)) 
-    {
-      PyErr_SetString(PyExc_ValueError, "Expected a two element string tuple");
-      return NULL;
-    }
-    PyObject* pyName  = PyTuple_GetItem(obj2,0);
-    PyObject* pyValue = PyTuple_GetItem(obj2,1);
-    std::string name  = PyString_AsString(pyName);
-    std::string value = PyString_AsString(pyValue);
-    six::Parameter param;
-    param.setName(name);
-    param.setValue(value);
-    arg3 = param;
   }
   {
     try
@@ -53634,7 +54114,7 @@ SWIGINTERN PyObject *_wrap_Options_begin(PyObject *SWIGUNUSEDPARM(self), PyObjec
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  six::Options::ParameterIter result;
+  SwigValueWrapper< std::map< std::string,six::Parameter >::const_iterator > result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:Options_begin",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Options, 0 |  0 );
@@ -53673,7 +54153,7 @@ SWIGINTERN PyObject *_wrap_Options_begin(PyObject *SWIGUNUSEDPARM(self), PyObjec
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new six::Options::ParameterIter(static_cast< const six::Options::ParameterIter& >(result))), SWIGTYPE_p_std__mapT_std__string_Parameter_t__const_iterator, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new six::Options::ParameterIter(static_cast< const six::Options::ParameterIter& >(result))), SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -53686,7 +54166,7 @@ SWIGINTERN PyObject *_wrap_Options_end(PyObject *SWIGUNUSEDPARM(self), PyObject 
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  six::Options::ParameterIter result;
+  SwigValueWrapper< std::map< std::string,six::Parameter >::const_iterator > result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:Options_end",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Options, 0 |  0 );
@@ -53725,7 +54205,7 @@ SWIGINTERN PyObject *_wrap_Options_end(PyObject *SWIGUNUSEDPARM(self), PyObject 
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new six::Options::ParameterIter(static_cast< const six::Options::ParameterIter& >(result))), SWIGTYPE_p_std__mapT_std__string_Parameter_t__const_iterator, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new six::Options::ParameterIter(static_cast< const six::Options::ParameterIter& >(result))), SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -58644,8 +59124,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ErrorStatistics_compositeSCP_get", _wrap_ErrorStatistics_compositeSCP_get, METH_VARARGS, (char *)"ErrorStatistics_compositeSCP_get(ErrorStatistics self) -> mem::ScopedCopyablePtr< six::CompositeSCP >"},
 	 { (char *)"ErrorStatistics_components_set", _wrap_ErrorStatistics_components_set, METH_VARARGS, (char *)"ErrorStatistics_components_set(ErrorStatistics self, mem::ScopedCopyablePtr< six::Components > components)"},
 	 { (char *)"ErrorStatistics_components_get", _wrap_ErrorStatistics_components_get, METH_VARARGS, (char *)"ErrorStatistics_components_get(ErrorStatistics self) -> mem::ScopedCopyablePtr< six::Components >"},
-	 { (char *)"ErrorStatistics_additionalParameters_set", _wrap_ErrorStatistics_additionalParameters_set, METH_VARARGS, (char *)"ErrorStatistics_additionalParameters_set(ErrorStatistics self, std::vector< Parameter,std::allocator< Parameter > > * additionalParameters)"},
-	 { (char *)"ErrorStatistics_additionalParameters_get", _wrap_ErrorStatistics_additionalParameters_get, METH_VARARGS, (char *)"ErrorStatistics_additionalParameters_get(ErrorStatistics self) -> std::vector< Parameter,std::allocator< Parameter > > *"},
+	 { (char *)"ErrorStatistics_additionalParameters_set", _wrap_ErrorStatistics_additionalParameters_set, METH_VARARGS, (char *)"ErrorStatistics_additionalParameters_set(ErrorStatistics self, std::vector< Parameter,std::allocator< six::Parameter > > * additionalParameters)"},
+	 { (char *)"ErrorStatistics_additionalParameters_get", _wrap_ErrorStatistics_additionalParameters_get, METH_VARARGS, (char *)"ErrorStatistics_additionalParameters_get(ErrorStatistics self) -> std::vector< Parameter,std::allocator< six::Parameter > > *"},
 	 { (char *)"new_ErrorStatistics", _wrap_new_ErrorStatistics, METH_VARARGS, (char *)"new_ErrorStatistics() -> ErrorStatistics"},
 	 { (char *)"delete_ErrorStatistics", _wrap_delete_ErrorStatistics, METH_VARARGS, (char *)"delete_ErrorStatistics(ErrorStatistics self)"},
 	 { (char *)"ErrorStatistics_swigregister", ErrorStatistics_swigregister, METH_VARARGS, NULL},
@@ -58673,6 +59153,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Radiometric_gammaZeroSFIncidenceMap_get", _wrap_Radiometric_gammaZeroSFIncidenceMap_get, METH_VARARGS, (char *)"Radiometric_gammaZeroSFIncidenceMap_get(Radiometric self) -> AppliedType"},
 	 { (char *)"delete_Radiometric", _wrap_delete_Radiometric, METH_VARARGS, (char *)"delete_Radiometric(Radiometric self)"},
 	 { (char *)"Radiometric_swigregister", Radiometric_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_Parameter", _wrap_new_Parameter, METH_VARARGS, (char *)"new_Parameter() -> Parameter"},
+	 { (char *)"delete_Parameter", _wrap_delete_Parameter, METH_VARARGS, (char *)"delete_Parameter(Parameter self)"},
+	 { (char *)"Parameter_str", _wrap_Parameter_str, METH_VARARGS, (char *)"Parameter_str(Parameter self) -> std::string"},
+	 { (char *)"Parameter_getName", _wrap_Parameter_getName, METH_VARARGS, (char *)"Parameter_getName(Parameter self) -> std::string"},
+	 { (char *)"Parameter_setName", _wrap_Parameter_setName, METH_VARARGS, (char *)"Parameter_setName(Parameter self, std::string name)"},
+	 { (char *)"Parameter___eq__", _wrap_Parameter___eq__, METH_VARARGS, (char *)"Parameter___eq__(Parameter self, Parameter o) -> bool"},
+	 { (char *)"Parameter_setValue", _wrap_Parameter_setValue, METH_VARARGS, (char *)"Parameter_setValue(Parameter self, std::string const & str)"},
+	 { (char *)"Parameter___int__", _wrap_Parameter___int__, METH_VARARGS, (char *)"Parameter___int__(Parameter self) -> long"},
+	 { (char *)"Parameter___float__", _wrap_Parameter___float__, METH_VARARGS, (char *)"Parameter___float__(Parameter self) -> double"},
+	 { (char *)"Parameter_swigregister", Parameter_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Data", _wrap_delete_Data, METH_VARARGS, (char *)"delete_Data(Data self)"},
 	 { (char *)"Data_clone", _wrap_Data_clone, METH_VARARGS, (char *)"Data_clone(Data self) -> Data"},
 	 { (char *)"Data_getDataType", _wrap_Data_getDataType, METH_VARARGS, (char *)"Data_getDataType(Data self) -> DataType"},
@@ -58813,9 +59303,6 @@ static PyMethodDef SwigMethods[] = {
 static void *_p_six__AmplitudeTableTo_p_six__LUT(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((six::LUT *)  ((six::AmplitudeTable *) x));
 }
-static void *_p_scene__LatLonAltTo_p_scene__LatLon(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((scene::LatLon *)  ((scene::LatLonAlt *) x));
-}
 static void *_p_except__SerializationExceptionTo_p_except__Throwable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((except::Throwable *) (except::Exception *)(except::IOException *) ((except::SerializationException *) x));
 }
@@ -58869,6 +59356,9 @@ static void *_p_six__MissingRequiredExceptionTo_p_except__Throwable(void *x, int
 }
 static void *_p_six__UninitializedValueExceptionTo_p_except__Throwable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((except::Throwable *) (except::Exception *) ((six::UninitializedValueException *) x));
+}
+static void *_p_scene__LatLonAltTo_p_scene__LatLon(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((scene::LatLon *)  ((scene::LatLonAlt *) x));
 }
 static void *_p_except__ParseExceptionTo_p_except__Exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((except::Exception *) (except::IOException *) ((except::ParseException *) x));
@@ -58947,7 +59437,7 @@ static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_exc
 static swig_type_info _swigt__p_except__Throwable = {"_p_except__Throwable", "except::Throwable *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__Logger = {"_p_logging__Logger", "logging::Logger *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_2_double_t = {"_p_math__linear__VectorNT_2_double_t", "scene::Vector2 *|math::linear::VectorN< 2,double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "Vector3 *|scene::Vector3 *|six::Vector3 *|math::linear::VectorN< 3,double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "Vector3 *|math::poly::Vector3 *|scene::Vector3 *|six::Vector3 *|math::linear::VectorN< 3,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__linear__VectorT_double_t", "VectorDouble *|math::linear::Vector< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "six::Poly1D *|math::poly::OneD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "six::PolyXYZ *|math::poly::OneD< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
@@ -59006,6 +59496,7 @@ static swig_type_info _swigt__p_six__MissingRequiredException = {"_p_six__Missin
 static swig_type_info _swigt__p_six__NoiseLevel = {"_p_six__NoiseLevel", "six::NoiseLevel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__Options = {"_p_six__Options", "six::Options *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__OrientationType = {"_p_six__OrientationType", "six::OrientationType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__Parameter = {"_p_six__Parameter", "six::Parameter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__PixelType = {"_p_six__PixelType", "six::PixelType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__PolarizationSequenceType = {"_p_six__PolarizationSequenceType", "six::PolarizationSequenceType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__PolarizationType = {"_p_six__PolarizationType", "six::PolarizationType *", 0, 0, (void*)0, 0};
@@ -59029,10 +59520,10 @@ static swig_type_info _swigt__p_six__XYZEnum = {"_p_six__XYZEnum", "six::XYZEnum
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__mapT_std__string_Parameter_t__const_iterator = {"_p_std__mapT_std__string_Parameter_t__const_iterator", "six::Options::ParameterIter *|std::map< std::string,Parameter >::const_iterator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator = {"_p_std__mapT_std__string_six__Parameter_t__const_iterator", "std::map< std::string,six::Parameter >::const_iterator *|six::Options::ParameterIter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_Parameter_std__allocatorT_Parameter_t_t = {"_p_std__vectorT_Parameter_std__allocatorT_Parameter_t_t", "std::vector< Parameter,std::allocator< Parameter > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_Parameter_std__allocatorT_six__Parameter_t_t = {"_p_std__vectorT_Parameter_std__allocatorT_six__Parameter_t_t", "std::vector< Parameter,std::allocator< six::Parameter > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t = {"_p_std__vectorT_std__string_std__allocatorT_std__string_t_t", "std::vector< std::string,std::allocator< std::string > > *|std::vector< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sys__Int32_T = {"_p_sys__Int32_T", "sys::Int32_T *", 0, 0, (void*)0, 0};
@@ -59132,6 +59623,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__NoiseLevel,
   &_swigt__p_six__Options,
   &_swigt__p_six__OrientationType,
+  &_swigt__p_six__Parameter,
   &_swigt__p_six__PixelType,
   &_swigt__p_six__PolarizationSequenceType,
   &_swigt__p_six__PolarizationType,
@@ -59155,10 +59647,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_size_type,
   &_swigt__p_std__allocatorT_std__string_t,
   &_swigt__p_std__invalid_argument,
-  &_swigt__p_std__mapT_std__string_Parameter_t__const_iterator,
+  &_swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator,
   &_swigt__p_std__ostream,
   &_swigt__p_std__string,
-  &_swigt__p_std__vectorT_Parameter_std__allocatorT_Parameter_t_t,
+  &_swigt__p_std__vectorT_Parameter_std__allocatorT_six__Parameter_t_t,
   &_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_sys__Int32_T,
@@ -59258,6 +59750,7 @@ static swig_cast_info _swigc__p_six__MissingRequiredException[] = {  {&_swigt__p
 static swig_cast_info _swigc__p_six__NoiseLevel[] = {  {&_swigt__p_six__NoiseLevel, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__Options[] = {  {&_swigt__p_six__Options, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__OrientationType[] = {  {&_swigt__p_six__OrientationType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__Parameter[] = {  {&_swigt__p_six__Parameter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__PixelType[] = {  {&_swigt__p_six__PixelType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__PolarizationSequenceType[] = {  {&_swigt__p_six__PolarizationSequenceType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__PolarizationType[] = {  {&_swigt__p_six__PolarizationType, 0, 0, 0},{0, 0, 0, 0}};
@@ -59281,10 +59774,10 @@ static swig_cast_info _swigc__p_six__XYZEnum[] = {  {&_swigt__p_six__XYZEnum, 0,
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__mapT_std__string_Parameter_t__const_iterator[] = {  {&_swigt__p_std__mapT_std__string_Parameter_t__const_iterator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__mapT_std__string_six__Parameter_t__const_iterator[] = {  {&_swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_Parameter_std__allocatorT_Parameter_t_t[] = {  {&_swigt__p_std__vectorT_Parameter_std__allocatorT_Parameter_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_Parameter_std__allocatorT_six__Parameter_t_t[] = {  {&_swigt__p_std__vectorT_Parameter_std__allocatorT_six__Parameter_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t[] = {  {&_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sys__Int32_T[] = {  {&_swigt__p_sys__Int32_T, 0, 0, 0},{0, 0, 0, 0}};
@@ -59384,6 +59877,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__NoiseLevel,
   _swigc__p_six__Options,
   _swigc__p_six__OrientationType,
+  _swigc__p_six__Parameter,
   _swigc__p_six__PixelType,
   _swigc__p_six__PolarizationSequenceType,
   _swigc__p_six__PolarizationType,
@@ -59407,10 +59901,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_size_type,
   _swigc__p_std__allocatorT_std__string_t,
   _swigc__p_std__invalid_argument,
-  _swigc__p_std__mapT_std__string_Parameter_t__const_iterator,
+  _swigc__p_std__mapT_std__string_six__Parameter_t__const_iterator,
   _swigc__p_std__ostream,
   _swigc__p_std__string,
-  _swigc__p_std__vectorT_Parameter_std__allocatorT_Parameter_t_t,
+  _swigc__p_std__vectorT_Parameter_std__allocatorT_six__Parameter_t_t,
   _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_sys__Int32_T,
