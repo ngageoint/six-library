@@ -3346,16 +3346,19 @@ class Parameter(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, Parameter, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _six_base.delete_Parameter
+    __del__ = lambda self: None
 
-    def __init__(self):
-        """__init__(six::Parameter self) -> Parameter"""
-        this = _six_base.new_Parameter()
+    def __init__(self, *args):
+        """
+        __init__(six::Parameter self) -> Parameter
+        __init__(six::Parameter self, Parameter other) -> Parameter
+        """
+        this = _six_base.new_Parameter(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _six_base.delete_Parameter
-    __del__ = lambda self: None
 
     def str(self):
         """str(Parameter self) -> std::string"""
@@ -3382,6 +3385,11 @@ class Parameter(_object):
         new_tuple = (str(args[0]), )
         return _six_base.Parameter_setValue(self, str(args[0]))
 
+
+
+    def __str__(self):
+        """__str__(Parameter self) -> std::string"""
+        return _six_base.Parameter___str__(self)
 
 
     def __int__(self):
@@ -3644,6 +3652,210 @@ class Options(_object):
 
 Options_swigregister = _six_base.Options_swigregister
 Options_swigregister(Options)
+
+class VectorParameter(_object):
+    """Proxy of C++ std::vector<(six::Parameter)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorParameter, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorParameter, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorParameter self) -> SwigPyIterator"""
+        return _six_base.VectorParameter_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorParameter self) -> bool"""
+        return _six_base.VectorParameter___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorParameter self) -> bool"""
+        return _six_base.VectorParameter___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorParameter self) -> std::vector< six::Parameter >::size_type"""
+        return _six_base.VectorParameter___len__(self)
+
+
+    def pop(self):
+        """pop(VectorParameter self) -> Parameter"""
+        return _six_base.VectorParameter_pop(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorParameter self, std::vector< six::Parameter >::difference_type i, std::vector< six::Parameter >::difference_type j) -> VectorParameter"""
+        return _six_base.VectorParameter___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorParameter self, std::vector< six::Parameter >::difference_type i, std::vector< six::Parameter >::difference_type j, VectorParameter v)
+        __setslice__(VectorParameter self, std::vector< six::Parameter >::difference_type i, std::vector< six::Parameter >::difference_type j)
+        """
+        return _six_base.VectorParameter___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorParameter self, std::vector< six::Parameter >::difference_type i, std::vector< six::Parameter >::difference_type j)"""
+        return _six_base.VectorParameter___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorParameter self, std::vector< six::Parameter >::difference_type i)
+        __delitem__(VectorParameter self, PySliceObject * slice)
+        """
+        return _six_base.VectorParameter___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorParameter self, PySliceObject * slice) -> VectorParameter
+        __getitem__(VectorParameter self, std::vector< six::Parameter >::difference_type i) -> Parameter
+        """
+        return _six_base.VectorParameter___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorParameter self, PySliceObject * slice, VectorParameter v)
+        __setitem__(VectorParameter self, PySliceObject * slice)
+        __setitem__(VectorParameter self, std::vector< six::Parameter >::difference_type i, Parameter x)
+        """
+        return _six_base.VectorParameter___setitem__(self, *args)
+
+
+    def append(self, x):
+        """append(VectorParameter self, Parameter x)"""
+        return _six_base.VectorParameter_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorParameter self) -> bool"""
+        return _six_base.VectorParameter_empty(self)
+
+
+    def size(self):
+        """size(VectorParameter self) -> std::vector< six::Parameter >::size_type"""
+        return _six_base.VectorParameter_size(self)
+
+
+    def clear(self):
+        """clear(VectorParameter self)"""
+        return _six_base.VectorParameter_clear(self)
+
+
+    def swap(self, v):
+        """swap(VectorParameter self, VectorParameter v)"""
+        return _six_base.VectorParameter_swap(self, v)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorParameter self) -> std::vector< six::Parameter >::allocator_type"""
+        return _six_base.VectorParameter_get_allocator(self)
+
+
+    def begin(self):
+        """begin(VectorParameter self) -> std::vector< six::Parameter >::iterator"""
+        return _six_base.VectorParameter_begin(self)
+
+
+    def end(self):
+        """end(VectorParameter self) -> std::vector< six::Parameter >::iterator"""
+        return _six_base.VectorParameter_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorParameter self) -> std::vector< six::Parameter >::reverse_iterator"""
+        return _six_base.VectorParameter_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorParameter self) -> std::vector< six::Parameter >::reverse_iterator"""
+        return _six_base.VectorParameter_rend(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorParameter self)"""
+        return _six_base.VectorParameter_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorParameter self, std::vector< six::Parameter >::iterator pos) -> std::vector< six::Parameter >::iterator
+        erase(VectorParameter self, std::vector< six::Parameter >::iterator first, std::vector< six::Parameter >::iterator last) -> std::vector< six::Parameter >::iterator
+        """
+        return _six_base.VectorParameter_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(six::Parameter)> self) -> VectorParameter
+        __init__(std::vector<(six::Parameter)> self, VectorParameter arg2) -> VectorParameter
+        __init__(std::vector<(six::Parameter)> self, std::vector< six::Parameter >::size_type size) -> VectorParameter
+        __init__(std::vector<(six::Parameter)> self, std::vector< six::Parameter >::size_type size, Parameter value) -> VectorParameter
+        """
+        this = _six_base.new_VectorParameter(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorParameter self, Parameter x)"""
+        return _six_base.VectorParameter_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorParameter self) -> Parameter"""
+        return _six_base.VectorParameter_front(self)
+
+
+    def back(self):
+        """back(VectorParameter self) -> Parameter"""
+        return _six_base.VectorParameter_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorParameter self, std::vector< six::Parameter >::size_type n, Parameter x)"""
+        return _six_base.VectorParameter_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorParameter self, std::vector< six::Parameter >::size_type new_size)
+        resize(VectorParameter self, std::vector< six::Parameter >::size_type new_size, Parameter x)
+        """
+        return _six_base.VectorParameter_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorParameter self, std::vector< six::Parameter >::iterator pos, Parameter x) -> std::vector< six::Parameter >::iterator
+        insert(VectorParameter self, std::vector< six::Parameter >::iterator pos, std::vector< six::Parameter >::size_type n, Parameter x)
+        """
+        return _six_base.VectorParameter_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorParameter self, std::vector< six::Parameter >::size_type n)"""
+        return _six_base.VectorParameter_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorParameter self) -> std::vector< six::Parameter >::size_type"""
+        return _six_base.VectorParameter_capacity(self)
+
+    __swig_destroy__ = _six_base.delete_VectorParameter
+    __del__ = lambda self: None
+VectorParameter_swigregister = _six_base.VectorParameter_swigregister
+VectorParameter_swigregister(VectorParameter)
 
 class VectorString(_object):
     """Proxy of C++ std::vector<(std::string)> class"""

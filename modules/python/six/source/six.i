@@ -30,10 +30,10 @@
 %{
 
 #include <memory>
+#include <vector>
 #include <cstddef>
 using std::ptrdiff_t;
 
-#include "six/Utilities.h"
 #include "import/six.h"
 
 /* this isn't imported by the above include */
@@ -53,6 +53,22 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
   return retv.release();
 }
 
+%}
+
+%wrapper %{
+}
+
+namespace six {
+  template<>
+  six::Parameter::Parameter(swig::SwigPySequence_Ref<six::Parameter> value)
+    : mValue(((six::Parameter) value).mValue),
+      mName(((six::Parameter) value).mName)
+  {
+  
+  }
+}
+
+extern "C" {
 %}
 
 
@@ -89,6 +105,8 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %include "six/Utilities.h"
 %include "six/Options.h"
 
+%ignore "Parameter::Parameter(T)";
+
 %feature("shadow") six::Parameter::setValue(const std::string &)
 %{
 def setValue(self, *args):
@@ -107,6 +125,10 @@ def setValue(self, *args):
     {
       $self->setValue<std::string>(str);
     }
+    std::string __str__()
+    {
+      return $self->str();
+    }
     long __int__()
     {
       return str::toType<long>($self->str());
@@ -118,8 +140,7 @@ def setValue(self, *args):
 
 };
 
-/*%rename("six::Parameter::setValue") "six::Paramater::setValueString";*/
-
+%template(VectorParameter) std::vector<six::Parameter>;
 %template(VectorString) std::vector<std::string>;
 %template(LatLonCorners) six::Corners<scene::LatLon>;
 
