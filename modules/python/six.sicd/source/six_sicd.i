@@ -168,3 +168,32 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 
 %template(VectorTimelineSet)                    std::vector<six::sicd::TimelineSet*>;
 
+%{
+    void getWidebandData(const std::string& sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long arrayBuffer)
+    {
+        float* realBuffer = reinterpret_cast<float*>(arrayBuffer);
+        std::auto_ptr<six::sicd::ComplexData> realComplexData = std::auto_ptr<six::sicd::ComplexData>(complexData);
+        Utilities::getWidebandData(sicdPathname, schemaPaths, realComplexData, realBuffer);
+        
+        // complexData was passed in from Python, so let SWIG clean it up and release() realComplexData to avoid a double delete
+        realComplexData.release();
+    }
+%}
+
+void getWidebandData(std::string sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long arrayBuffer);
+
+%pythoncode %{
+import numpy as np
+from six_base import VectorString
+
+def read(inputPathname, schemaPaths = VectorString()):
+    complexData = getComplexData(inputPathname, schemaPaths)
+    
+    #Numpy has no concept of complex integers, so dtype will always be complex64
+    widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")
+    widebandBuffer, ro = widebandData.__array_interface__["data"]
+    
+    getWidebandData(inputPathname, schemaPaths, complexData, widebandBuffer)
+    
+    return widebandData, complexData
+%}

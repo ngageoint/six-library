@@ -58,6 +58,13 @@ public:
     std::auto_ptr<ComplexData> getComplexData(
             const std::string& sicdPathname,
             const std::vector<std::string>& schemaPaths);
+
+    static
+    void getWidebandData(
+            const std::string& sicdPathname,
+            const std::vector<std::string>& schemaPaths,
+            const std::auto_ptr<ComplexData>& complexData,
+            float* buffer);
 };
 }
 }

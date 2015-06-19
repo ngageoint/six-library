@@ -160,5 +160,71 @@ std::auto_ptr<ComplexData> Utilities::getComplexData(
             reinterpret_cast<six::sicd::ComplexData*>(data->clone()));
     return complexData;
 }
+
+void Utilities::getWidebandData(
+        const std::string& sicdPathname,
+        const std::vector<std::string>& schemaPaths,
+        const std::auto_ptr<ComplexData>& complexData,
+        float* buffer)
+{
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::COMPLEX,
+                           new six::XMLControlCreatorT<
+                                   six::sicd::ComplexXMLControl>());
+    six::NITFReadControl reader;
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(sicdPathname);
+
+    const PixelType pixelType = complexData->getPixelType();
+    const size_t imageNumber = 0;
+    const size_t startRow = 0;
+    const size_t startCol = 0;
+    const size_t numRows = complexData->getNumRows();
+    const size_t numCols = complexData->getNumCols();
+
+    if (pixelType == PixelType::RE32F_IM32F)
+    {
+        six::Region region;
+        region.setStartRow(startRow);
+        region.setStartCol(startCol);
+        region.setNumRows(numRows);
+        region.setNumCols(numCols);
+        region.setBuffer(reinterpret_cast<UByte*>(buffer));
+        reader.interleaved(region, imageNumber);
+    }
+    else if (pixelType == PixelType::RE16I_IM16I)
+    {
+        // One for the real component, one for imaginary of each pixel
+        const size_t elementsPerRow = numCols * 2;
+
+        for (size_t row = startRow; row < numRows; row+= 1)
+        {
+            // Allocate temp buffer
+            std::vector<short> temp = std::vector<short>(elementsPerRow);
+
+            // Read into the temp buffer
+            six::Region region;
+            region.setStartRow(row);
+            region.setStartCol(startCol);
+            region.setNumRows(1);
+            region.setNumCols(numCols);
+            region.setBuffer(reinterpret_cast<UByte*>(&temp[0]));
+            reader.interleaved(region, imageNumber);
+
+            //Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
+            for(size_t index = 0; index < elementsPerRow; index++)
+            {
+                size_t bufferOffset = (row * elementsPerRow) + index;
+                float* bufferPtr = buffer + bufferOffset;
+                short* tempPtr = &temp[0] + index;
+                *bufferPtr = (float)(*tempPtr);
+            }
+        }
+    }
+    else
+    {
+        throw except::Exception(Ctxt(sicdPathname + " has an unknown pixel type"));
+    }
+}
 }
 }
