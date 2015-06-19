@@ -46,6 +46,9 @@ public:
     double x(double y) const;
     // Determine intersection of two lines
     Point intersection(const Line2D& rhs) const;
+    // Determines if the current line intersects with the other
+    // If the lines do intersect, P is altered to be that intersecting point
+    bool intersection(const Line2D& rhs, Point& P) const;
     // Create a new line parallel to this line through point P
     Line2D parallelToLine(const Point& P) const;
     // Create a new line perpendicular to this line through point P
