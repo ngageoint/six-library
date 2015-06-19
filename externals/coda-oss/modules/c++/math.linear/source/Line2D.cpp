@@ -133,13 +133,11 @@ double Line2D::x(double y) const
     }
     return (y - mYIntercept) / mSlope;
 }
-
-Line2D::Point Line2D::intersection(const Line2D& rhs) const
+bool Line2D::intersection(const Line2D& rhs, Point& P) const
 {
-    Point P(0.0, 0.0);
     if ((mSlope == rhs.mSlope) && (mType == rhs.mType))
     {
-        throw except::Exception(Ctxt("Two parallel lines--no intersecting point"));
+        return false;
     }
     if (mType == Line2D::VERTICAL)
     {
@@ -156,7 +154,19 @@ Line2D::Point Line2D::intersection(const Line2D& rhs) const
         P.row = (rhs.mYIntercept - mYIntercept) / (mSlope - rhs.mSlope);
         P.col = y(P.row);
     }
-    return P;
+    return true;
+}
+Line2D::Point Line2D::intersection(const Line2D& rhs) const
+{
+    Point P(0,0);
+    if (!intersection(rhs, P))
+    {
+        throw except::Exception(Ctxt("Lines do not intersect"));
+    }
+    else 
+    {
+        return P;
+    }
 }
 
 Line2D Line2D::parallelToLine(const Point& P) const

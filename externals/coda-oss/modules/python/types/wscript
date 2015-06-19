@@ -4,4 +4,4 @@ def configure(conf):
   conf.env['prefix_types'] = 'coda_'
 
 def build(bld):
-  bld.swigModule(name = 'types', use = 'types-c++')
+  bld.swigModule(name = 'types', use = 'types-c++ sys-python')

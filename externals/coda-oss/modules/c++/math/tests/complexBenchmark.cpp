@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of math-c++ 
+ * This file is part of math-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * math.linear-c++ is free software; you can redistribute it and/or modify
@@ -14,14 +14,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 /* Users guide
-    
+
     To use this test, you must run the executable with 3 extra numbers
     the first number is the size of the initial array
     the second number is the growth factor, each time the size is increased,
@@ -34,13 +34,14 @@
     ./complexBenchmark 10 2 15
         --this will run the test for array sizes 10, 20, 40,... until the array
             size has been increased 15 times
-    
+
     ./complexBenchmark 10 2 15 1
         --runs the same as above, but conserves memory by looping to simulate
             increasing the size of the array
-    
+
 */
 
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -80,8 +81,8 @@ void limit(T & num)
  *      return value: The mean of the vector
  */
 std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
-                                    std::vector<std::complex<float> > in, 
-                                    size_t sze, 
+                                    std::vector<std::complex<float> > in,
+                                    size_t sze,
                                     double& duration,
                                     size_t numLoops = 1)
 {
@@ -91,7 +92,7 @@ std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
     //start the watch
     wtch.start();
 
-    //find the mean    
+    //find the mean
     for(size_t j = 0; j < numLoops; ++j)
     {
         for (size_t i = 0; i < sze; ++i)
@@ -104,7 +105,7 @@ std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
 
     //stop the watch and record the duration
     duration = wtch.stop();
-    
+
     //return the mean
     return std::complex<float>(static_cast<float>(tmp.real()),
                                static_cast<float>(tmp.imag()));
@@ -112,7 +113,7 @@ std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
 
 /*
  *  \purpose
- *      Determine the mean of the vector in, using addition of real 
+ *      Determine the mean of the vector in, using addition of real
  *          and imaginary parts separately
  *      Time how long the operation takes
  *
@@ -126,9 +127,9 @@ std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
  *      duration: The amount of time the operation took according to wtch
  *      return value: The mean of the vector
  */
-std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch, 
-                                   std::vector<std::complex<float> > in, 
-                                   size_t sze, 
+std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch,
+                                   std::vector<std::complex<float> > in,
+                                   size_t sze,
                                    double& duration,
                                    size_t numLoops = 1)
 {
@@ -151,7 +152,7 @@ std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch,
 
     meanI /= (sze * numLoops);
     meanQ /= (sze * numLoops);
-    
+
     //stop the watch and record the duration;
     duration = wtch.stop();
 
@@ -161,20 +162,20 @@ std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch,
 }
 
 //Prints out the results in a table format
-void print(std::ostream& out, size_t sze, std::complex<float> meanOne, 
+void print(std::ostream& out, size_t sze, std::complex<float> meanOne,
            std::complex<float> meanTwo, double durOne, double durTwo)
 {
     out << std::setw(15) << sze
-        << std::setw(25) << meanOne 
-        << std::setw(25) << meanTwo 
-        << std::setw(15) << durOne/1000  
+        << std::setw(25) << meanOne
+        << std::setw(25) << meanTwo
+        << std::setw(15) << durOne/1000
         << std::setw(25) << durTwo/1000 << '\n';
 }
 
 
 /*
  *  \purpose
- *      Run the looping versioin of the benchmark 
+ *      Run the looping versioin of the benchmark
  *
  *  \params
  *      size: the size of the vector
@@ -192,7 +193,7 @@ void loopingBenchmark(size_t size,
 {
     //declare the vector
     std::vector<std::complex<float> > arr(size);
-    
+
     //fill the vector based on a random number
     srand(time(NULL));
 
@@ -256,7 +257,9 @@ size_t decideSize(size_t initSize, size_t growthFactor, size_t numGrowths)
 {
     //setup size calculation variables
     const size_t MAX_SIZE = 10E10 / (sizeof( std::complex<float>));
-    size_t largestPosGrowth = initSize * std::pow<double>(growthFactor, numGrowths);
+    size_t largestPosGrowth =
+        initSize * std::pow(static_cast<double>(growthFactor),
+                            static_cast<double>(numGrowths));
     size_t largestPosSize = std::min(largestPosGrowth, MAX_SIZE);
 
     //if growth is too high, find last growth less than MaxSize
@@ -274,7 +277,7 @@ size_t decideSize(size_t initSize, size_t growthFactor, size_t numGrowths)
 
 /*
  *  \purpose
- *      Run the singlePass version of the benchmark 
+ *      Run the singlePass version of the benchmark
  *
  *  \params
  *      size: the size of the vector
@@ -302,12 +305,12 @@ void singlePassBenchmark(size_t size,
     float imag =  rand() % 100 + 1;
 
     arr.push_back(std::complex<float>(real, imag));
-    
+
     for (size_t j = 1; j < endSize; ++j)
     {
         real += (arr[j-1].real() + arr[j-1].imag());
         imag += (arr[j-1].imag() * arr[j-1].real());
-        
+
         //limit the range of the variables
         limit(real);
         limit(imag);
@@ -318,7 +321,7 @@ void singlePassBenchmark(size_t size,
     //run the simulation
     for (size_t i = 0; i < numGrowths; ++i)
     {
-    
+
         sys::RealTimeStopWatch cmplxWatch;
         sys::RealTimeStopWatch dblWatch;
 
@@ -339,7 +342,7 @@ void singlePassBenchmark(size_t size,
             //output the results
             print(out, size, cmplxMean, dblMean, cmplxTime, dblTime);
         }
-        
+
         //increase size of vector
         size *= growthFactor;
 

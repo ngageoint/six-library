@@ -29,13 +29,20 @@
 %include "std_vector.i"
 %include "std_string.i"
 
+%import "sys.i"
+
 %{
+  #include "sys/Conf.h"
   #include "types/RowCol.h"
   #include "types/RgAz.h"
 %} 
 
 %include "types/RowCol.h"
 %include "types/RgAz.h"
+
 %template(RowColDouble) types::RowCol<double>;
+%template(RowColInt) types::RowCol<sys::SSize_T>;
 %template(RowColSizeT) types::RowCol<size_t>;
 %template(RgAzDouble) types::RgAz<double>;
+
+%template(VectorRowColInt) std::vector<types::RowCol<sys::SSize_T> >;
