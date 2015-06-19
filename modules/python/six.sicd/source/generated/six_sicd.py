@@ -2414,7 +2414,7 @@ class SixSicdUtilities(_object):
     __swig_getmethods__["getProjectionModel"] = lambda x: getProjectionModel
 
     def getWidebandData(sicdPathname, schemaPaths, complexData, buffer):
-        """getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > const & complexData, float * buffer)"""
+        """getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)"""
         return _six_sicd.SixSicdUtilities_getWidebandData(sicdPathname, schemaPaths, complexData, buffer)
 
     if _newclass:
@@ -2442,7 +2442,7 @@ def SixSicdUtilities_getProjectionModel(data, geom):
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
 def SixSicdUtilities_getWidebandData(sicdPathname, schemaPaths, complexData, buffer):
-    """SixSicdUtilities_getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > const & complexData, float * buffer)"""
+    """SixSicdUtilities_getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)"""
     return _six_sicd.SixSicdUtilities_getWidebandData(sicdPathname, schemaPaths, complexData, buffer)
 
 class ScopedCloneableCollectionInformation(_object):

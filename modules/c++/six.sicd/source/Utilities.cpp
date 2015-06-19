@@ -164,8 +164,8 @@ std::auto_ptr<ComplexData> Utilities::getComplexData(
 void Utilities::getWidebandData(
         const std::string& sicdPathname,
         const std::vector<std::string>& schemaPaths,
-        const std::auto_ptr<ComplexData>& complexData,
-        float* buffer)
+        const ComplexData& complexData,
+        std::complex<float>* buffer)
 {
     six::XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator(six::DataType::COMPLEX,
@@ -175,12 +175,12 @@ void Utilities::getWidebandData(
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(sicdPathname);
 
-    const PixelType pixelType = complexData->getPixelType();
+    const PixelType pixelType = complexData.getPixelType();
     const size_t imageNumber = 0;
     const size_t startRow = 0;
     const size_t startCol = 0;
-    const size_t numRows = complexData->getNumRows();
-    const size_t numCols = complexData->getNumCols();
+    const size_t numRows = complexData.getNumRows();
+    const size_t numCols = complexData.getNumCols();
 
     if (pixelType == PixelType::RE32F_IM32F)
     {
@@ -197,27 +197,35 @@ void Utilities::getWidebandData(
         // One for the real component, one for imaginary of each pixel
         const size_t elementsPerRow = numCols * 2;
 
-        for (size_t row = startRow; row < numRows; row+= 1)
+        // Get at least 32MB per read
+        const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(short))) + 1;
+
+        // Allocate temp buffer
+        std::vector<short> tempVector(elementsPerRow * rowsAtATime);
+        short* const tempBuffer = &tempVector[0];
+
+        for (size_t row = startRow, rowsToRead = rowsAtATime; row < numRows; row += rowsToRead)
         {
-            // Allocate temp buffer
-            std::vector<short> temp = std::vector<short>(elementsPerRow);
+            // If we would read beyond the input buffer, don't
+            if (row + rowsToRead > numRows)
+            {
+                rowsToRead = numRows - row;
+            }
 
             // Read into the temp buffer
             six::Region region;
             region.setStartRow(row);
             region.setStartCol(startCol);
-            region.setNumRows(1);
+            region.setNumRows(rowsToRead);
             region.setNumCols(numCols);
-            region.setBuffer(reinterpret_cast<UByte*>(&temp[0]));
+            region.setBuffer(reinterpret_cast<UByte*>(tempBuffer));
             reader.interleaved(region, imageNumber);
 
             //Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
-            for(size_t index = 0; index < elementsPerRow; index++)
+            float* bufferPtr = reinterpret_cast<float*>(buffer) + (row * elementsPerRow);
+            for(size_t index = 0; index < elementsPerRow * rowsToRead; index++)
             {
-                size_t bufferOffset = (row * elementsPerRow) + index;
-                float* bufferPtr = buffer + bufferOffset;
-                short* tempPtr = &temp[0] + index;
-                *bufferPtr = (float)(*tempPtr);
+                bufferPtr[index] = tempBuffer[index];
             }
         }
     }

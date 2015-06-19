@@ -171,12 +171,8 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 %{
     void getWidebandData(const std::string& sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long arrayBuffer)
     {
-        float* realBuffer = reinterpret_cast<float*>(arrayBuffer);
-        std::auto_ptr<six::sicd::ComplexData> realComplexData = std::auto_ptr<six::sicd::ComplexData>(complexData);
-        Utilities::getWidebandData(sicdPathname, schemaPaths, realComplexData, realBuffer);
-        
-        // complexData was passed in from Python, so let SWIG clean it up and release() realComplexData to avoid a double delete
-        realComplexData.release();
+        std::complex<float>* realBuffer = reinterpret_cast< std::complex<float>* >(arrayBuffer);
+        Utilities::getWidebandData(sicdPathname, schemaPaths, *complexData, realBuffer);
     }
 %}
 

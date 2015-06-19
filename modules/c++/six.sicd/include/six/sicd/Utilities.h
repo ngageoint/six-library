@@ -59,12 +59,25 @@ public:
             const std::string& sicdPathname,
             const std::vector<std::string>& schemaPaths);
 
+    /*
+     * Given a SICD pathname and list of schemas, provides a representation
+     * of the SICD pixel data in a buffer
+     *
+     * \param sicdPathname SICD NITF pathname
+     * \param schemaPaths One or more files or directories containing SICD
+     * schemas
+     * \param complexData The ComplexData object associated with the SICD
+     * \param buffer The pre-sized buffer to be read into
+     *
+     * \throws except::Exception if the pixel type of the SICD is not a complex
+     * float32 or complex int16
+     */
     static
     void getWidebandData(
             const std::string& sicdPathname,
             const std::vector<std::string>& schemaPaths,
-            const std::auto_ptr<ComplexData>& complexData,
-            float* buffer);
+            const ComplexData& complexData,
+            std::complex<float>* buffer);
 };
 }
 }
