@@ -461,6 +461,21 @@ class Poly2D(_object):
 Poly2D_swigregister = _math_poly.Poly2D_swigregister
 Poly2D_swigregister(Poly2D)
 
+
+def fit(*args):
+    """
+    fit(size_t numObs, double const * x, double const * y, size_t numCoeffs) -> Poly1D
+    fit(MatrixDouble x, MatrixDouble y, MatrixDouble z, size_t nx, size_t ny) -> Poly2D
+    fit(size_t numRows, size_t numCols, double const * x, double const * y, double const * z, size_t nx, size_t ny) -> Poly2D
+    fit(VectorDouble xObs, VectorDouble yObs0, VectorDouble yObs1, VectorDouble yObs2, size_t numCoeffs) -> PolyVector3
+    fit(VectorDouble xObsVector, MatrixDouble yObsMatrix, size_t numCoeffs) -> PolyVector3
+    fit(std_vector_double xObs, std_vector_double yObs0, std_vector_double yObs1, std_vector_double yObs2, size_t numCoeffs) -> PolyVector3
+    """
+    return _math_poly.fit(*args)
+
+def FitVectorDouble(x, y, numCoeffs):
+    """FitVectorDouble(VectorDouble x, VectorDouble y, size_t numCoeffs) -> Poly1D"""
+    return _math_poly.FitVectorDouble(x, y, numCoeffs)
 class PolyVector3(_object):
     """Proxy of C++ math::poly::OneD<(Vector3)> class"""
     __swig_setmethods__ = {}
@@ -597,21 +612,6 @@ class PolyVector3(_object):
 PolyVector3_swigregister = _math_poly.PolyVector3_swigregister
 PolyVector3_swigregister(PolyVector3)
 
-
-def fit(*args):
-    """
-    fit(size_t numObs, double const * x, double const * y, size_t numCoeffs) -> Poly1D
-    fit(MatrixDouble x, MatrixDouble y, MatrixDouble z, size_t nx, size_t ny) -> Poly2D
-    fit(size_t numRows, size_t numCols, double const * x, double const * y, double const * z, size_t nx, size_t ny) -> Poly2D
-    fit(VectorDouble xObs, VectorDouble yObs0, VectorDouble yObs1, VectorDouble yObs2, size_t numCoeffs) -> PolyVector3
-    fit(VectorDouble xObsVector, MatrixDouble yObsMatrix, size_t numCoeffs) -> PolyVector3
-    fit(std_vector_double xObs, std_vector_double yObs0, std_vector_double yObs1, std_vector_double yObs2, size_t numCoeffs) -> PolyVector3
-    """
-    return _math_poly.fit(*args)
-
-def FitVectorDouble(x, y, numCoeffs):
-    """FitVectorDouble(VectorDouble x, VectorDouble y, size_t numCoeffs) -> Poly1D"""
-    return _math_poly.FitVectorDouble(x, y, numCoeffs)
 class StdVectorDouble(_object):
     """Proxy of C++ std::vector<(double)> class"""
     __swig_setmethods__ = {}

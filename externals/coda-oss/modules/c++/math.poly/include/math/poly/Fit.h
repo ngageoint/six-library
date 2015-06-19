@@ -252,8 +252,6 @@ inline math::poly::TwoD<double> fit(size_t numRows,
     return fit(xm, ym, zm, nx, ny);
 }
 
-typedef math::linear::VectorN<3, double> Vector3;
-
 /*!
  *  Perform three 1D fits using the same set of observed X values, and return a 1D polynomial with
  *  a Vector of 3 coefficients for each term.
@@ -267,7 +265,7 @@ typedef math::linear::VectorN<3, double> Vector3;
  *  \return A polynomial (B01, B02, B03)x^0 + (B11, B12, B13)x^1 + ... + (Bn1, Bn2, Bn3)x^n
  */
 
-inline math::poly::OneD<Vector3> fit(
+inline math::poly::OneD< math::linear::VectorN< 3, double > > fit(
     const math::linear::Vector<double>& xObs,
     const math::linear::Vector<double>& yObs0,
     const math::linear::Vector<double>& yObs1,
@@ -288,10 +286,11 @@ inline math::poly::OneD<Vector3> fit(
     const math::poly::OneD<double> fit1 = fit(xObs, yObs1, numCoeffs);
     const math::poly::OneD<double> fit2 = fit(xObs, yObs2, numCoeffs);
 
-    math::poly::OneD<Vector3> polyVector3 = math::poly::OneD<Vector3>(numCoeffs-1);
+    math::poly::OneD< math::linear::VectorN< 3, double > > polyVector3 =
+        math::poly::OneD< math::linear::VectorN< 3, double > >(numCoeffs-1);
     for (size_t term = 0; term < numCoeffs; term++)
     {
-        Vector3& coeffs = polyVector3[term];
+        math::linear::VectorN< 3, double >& coeffs = polyVector3[term];
         coeffs[0] = fit0[term];
         coeffs[1] = fit1[term];
         coeffs[2] = fit2[term];
@@ -311,7 +310,7 @@ inline math::poly::OneD<Vector3> fit(
  *  \return A polynomial (B01, B02, B03)x^0 + (B11, B12, B13)x^1 + ... + (Bn1, Bn2, Bn3)x^n
  */
 
-inline math::poly::OneD<Vector3> fit(
+inline math::poly::OneD< math::linear::VectorN< 3, double > > fit(
     const math::linear::Vector<double>& xObsVector,
     const math::linear::Matrix2D<double>& yObsMatrix,
     size_t numCoeffs)
@@ -327,7 +326,7 @@ inline math::poly::OneD<Vector3> fit(
     math::linear::Vector<double> yObsVector1 = math::linear::Vector<double>(numObs, yObsMatrix.row(1));
     math::linear::Vector<double> yObsVector2 = math::linear::Vector<double>(numObs, yObsMatrix.row(2));
 
-    math::poly::OneD<Vector3> polyVector3 = fit(
+    math::poly::OneD< math::linear::VectorN< 3, double > > polyVector3 = fit(
         xObsVector,
         yObsVector0,
         yObsVector1,
@@ -348,7 +347,7 @@ inline math::poly::OneD<Vector3> fit(
  *  \return A polynomial (B01, B02, B03)x^0 + (B11, B12, B13)x^1 + ... + (Bn1, Bn2, Bn3)x^n
  */
 
-inline math::poly::OneD<Vector3> fit(
+inline math::poly::OneD< math::linear::VectorN< 3, double > > fit(
         const std::vector<double>& xObs,
         const std::vector<double>& yObs0,
         const std::vector<double>& yObs1,
@@ -356,7 +355,7 @@ inline math::poly::OneD<Vector3> fit(
         size_t numCoeffs)
 {
     // Vector size error checking will be done by the base fit() function
-    math::poly::OneD<Vector3> polyVector3 = fit(
+    math::poly::OneD< math::linear::VectorN< 3, double > > polyVector3 = fit(
         math::linear::Vector<double>(xObs),
         math::linear::Vector<double>(yObs0),
         math::linear::Vector<double>(yObs1),

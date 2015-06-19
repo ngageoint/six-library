@@ -21,6 +21,9 @@ typedef math::linear::Vector<double> VectorDouble;
 #include "math/poly/Fit.h"
 %}
 
+typedef math::linear::VectorN<3,double> Vector3;
+typedef math::linear::Vector<double> VectorDouble;
+
 %import "math_linear.i"
 %import "except.i"
 
@@ -118,10 +121,12 @@ typedef math::linear::Vector<double> VectorDouble;
     }
 }
 
-typedef math::linear::VectorN<3,double> Vector3;
+%include "math/poly/Fit.h"
+%template(FitVectorDouble) math::poly::fit<VectorDouble>;
+
+// Define Python bindings for math::poly::OneD<Vector3> to be used by tests
 %template(PolyVector3) math::poly::OneD<Vector3>;
- 
-%extend math::poly::OneD<Vector3 >
+%extend math::poly::OneD<Vector3>
 {
     public:
         Vector3 __getitem__(long i) 
@@ -142,13 +147,8 @@ typedef math::linear::VectorN<3,double> Vector3;
         }
 };
 
-%include "math/poly/Fit.h"
-
-typedef math::linear::Vector<double> VectorDouble;
-%template(FitVectorDouble) math::poly::fit<VectorDouble>;
-
+// Define Python bindings for std::vector<double> to be used by tests
 %template(StdVectorDouble) std::vector<double>;
-
 %extend std::vector<double>
 {
     public:

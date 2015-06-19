@@ -24,6 +24,7 @@
 #include <import/except.h>
 #include <import/sys.h>
 #include <math/poly/Utils.h>
+#include <math/linear/VectorN.h>
 
 namespace math
 {
@@ -65,6 +66,31 @@ OneD<_T>::integrate(double start, double end) const
    return ret;
 }
 
+template<>
+math::linear::VectorN< 3, double >
+OneD< math::linear::VectorN< 3, double > >::integrate(double start, double end) const
+{
+   math::linear::VectorN< 3, double > ret(0.0);
+
+   int polyOrder = order();
+   OneD<double> poly0(polyOrder);
+   OneD<double> poly1(polyOrder);
+   OneD<double> poly2(polyOrder);
+
+   for(size_t term = 0, sz = mCoef.size(); term < sz; term++)
+   {
+       poly0[term] = mCoef[term][0];
+       poly1[term] = mCoef[term][1];
+       poly2[term] = mCoef[term][2];
+   }
+
+   ret[0] = poly0.integrate(start, end);
+   ret[1] = poly1.integrate(start, end);
+   ret[2] = poly2.integrate(start, end);
+
+   return ret;
+}
+
 template<typename _T>
 OneD<_T>
 OneD<_T>::derivative() const
@@ -80,6 +106,43 @@ OneD<_T>::derivative() const
     }
     return ret;
 }
+
+template<>
+OneD< math::linear::VectorN< 3, double > >
+OneD< math::linear::VectorN< 3, double > >::derivative() const
+{
+   OneD< math::linear::VectorN< 3, double > > ret(0);
+
+   int polyOrder = order();
+   if(polyOrder > 0)
+   {
+       OneD<double> poly0(polyOrder);
+       OneD<double> poly1(polyOrder);
+       OneD<double> poly2(polyOrder);
+
+       for(size_t term = 0, sz = mCoef.size(); term < sz; term++)
+       {
+           poly0[term] = mCoef[term][0];
+           poly1[term] = mCoef[term][1];
+           poly2[term] = mCoef[term][2];
+       }
+
+       poly0 = poly0.derivative();
+       poly1 = poly1.derivative();
+       poly2 = poly2.derivative();
+
+       ret = OneD< math::linear::VectorN< 3, double > >(polyOrder - 1);
+       for(size_t term = 0, sz = mCoef.size() -1; term < sz; term++)
+       {
+           ret[term][0] = poly0[term];
+           ret[term][1] = poly1[term];
+           ret[term][2] = poly2[term];
+       }
+   }
+
+   return ret;
+}
+
 template<typename _T>
 _T
 OneD<_T>::velocity(double x) const
@@ -277,11 +340,11 @@ OneD<_T> OneD<_T>::power(size_t toThe) const
     if (toThe == 0)
     {
         OneD<_T> zero(0);
-        zero[0] = 1;
+        zero[0] = _T(1);
         return zero;
     }
 
-    OneD<double> rv = *this;
+    OneD<_T> rv = *this;
 
     // If its 1 give it back now
     if (toThe == 1)
@@ -325,6 +388,27 @@ OneD<_T> OneD<_T>::truncateToNonZeros(double zeroEpsilon) const
     for (size_t ii = 0, idx = order(); ii <= order(); ++ii, --idx)
     {
         if (std::abs((*this)[idx]) > zeroEpsilon)
+        {
+            newOrder = idx;
+            break;
+        }
+    }
+
+    return truncateTo(newOrder);
+}
+
+template<>
+OneD< math::linear::VectorN< 3, double > > OneD< math::linear::VectorN< 3, double > >::truncateToNonZeros(double zeroEpsilon) const
+{
+    zeroEpsilon = std::abs(zeroEpsilon);
+    size_t newOrder(0);
+
+    // Find the highest order non-zero coefficient
+    for (size_t ii = 0, idx = order(); ii <= order(); ++ii, --idx)
+    {
+        if (std::abs((*this)[idx][0]) > zeroEpsilon ||
+            std::abs((*this)[idx][1]) > zeroEpsilon ||
+            std::abs((*this)[idx][2]) > zeroEpsilon)
         {
             newOrder = idx;
             break;
