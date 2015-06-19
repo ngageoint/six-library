@@ -2943,53 +2943,67 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_difference_type swig_types[3]
 #define SWIGTYPE_p_double swig_types[4]
 #define SWIGTYPE_p_except__NullPointerReferenceException swig_types[5]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_1_1_double_t swig_types[6]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_2_2_double_t swig_types[7]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_2_3_double_t swig_types[8]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_2_7_double_t swig_types[9]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t swig_types[10]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_3_2_double_t swig_types[11]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_3_3_double_t swig_types[12]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_3_7_double_t swig_types[13]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_7_7_double_t swig_types[14]
-#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[15]
-#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[16]
-#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[17]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[18]
-#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[19]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[20]
-#define SWIGTYPE_p_scene__AdjustableParams swig_types[21]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[22]
-#define SWIGTYPE_p_scene__CoordinateTransform swig_types[23]
-#define SWIGTYPE_p_scene__ECEFToLLATransform swig_types[24]
-#define SWIGTYPE_p_scene__ENUCoordinateTransform swig_types[25]
-#define SWIGTYPE_p_scene__EllipsoidModel swig_types[26]
-#define SWIGTYPE_p_scene__Errors swig_types[27]
-#define SWIGTYPE_p_scene__FrameType swig_types[28]
-#define SWIGTYPE_p_scene__GeodeticProjectionModel swig_types[29]
-#define SWIGTYPE_p_scene__GridGeometry swig_types[30]
-#define SWIGTYPE_p_scene__LLAToECEFTransform swig_types[31]
-#define SWIGTYPE_p_scene__LatLon swig_types[32]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[33]
-#define SWIGTYPE_p_scene__LocalCoordinateTransform swig_types[34]
-#define SWIGTYPE_p_scene__NEDCoordinateTransform swig_types[35]
-#define SWIGTYPE_p_scene__PlanarGridGeometry swig_types[36]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[37]
-#define SWIGTYPE_p_scene__ProjectionModel swig_types[38]
-#define SWIGTYPE_p_scene__ProjectionModelWithImageVectors swig_types[39]
-#define SWIGTYPE_p_scene__RangeAzimProjectionModel swig_types[40]
-#define SWIGTYPE_p_scene__RangeZeroProjectionModel swig_types[41]
-#define SWIGTYPE_p_scene__SceneGeometry swig_types[42]
-#define SWIGTYPE_p_scene__Utilities swig_types[43]
-#define SWIGTYPE_p_scene__WGS84EllipsoidModel swig_types[44]
-#define SWIGTYPE_p_size_type swig_types[45]
-#define SWIGTYPE_p_std__invalid_argument swig_types[46]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[47]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[48]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[49]
-#define SWIGTYPE_p_value_type swig_types[50]
-static swig_type_info *swig_types[52];
-static swig_module_info swig_module = {swig_types, 51, 0, 0, 0, 0};
+#define SWIGTYPE_p_int swig_types[6]
+#define SWIGTYPE_p_int16_t swig_types[7]
+#define SWIGTYPE_p_int32_t swig_types[8]
+#define SWIGTYPE_p_int64_t swig_types[9]
+#define SWIGTYPE_p_int8_t swig_types[10]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_1_1_double_t swig_types[11]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_2_2_double_t swig_types[12]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_2_3_double_t swig_types[13]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_2_7_double_t swig_types[14]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t swig_types[15]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_3_2_double_t swig_types[16]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_3_3_double_t swig_types[17]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_3_7_double_t swig_types[18]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_7_7_double_t swig_types[19]
+#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[20]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[21]
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[22]
+#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[23]
+#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[24]
+#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[25]
+#define SWIGTYPE_p_off_t swig_types[26]
+#define SWIGTYPE_p_pid_t swig_types[27]
+#define SWIGTYPE_p_scene__AdjustableParams swig_types[28]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[29]
+#define SWIGTYPE_p_scene__CoordinateTransform swig_types[30]
+#define SWIGTYPE_p_scene__ECEFToLLATransform swig_types[31]
+#define SWIGTYPE_p_scene__ENUCoordinateTransform swig_types[32]
+#define SWIGTYPE_p_scene__EllipsoidModel swig_types[33]
+#define SWIGTYPE_p_scene__Errors swig_types[34]
+#define SWIGTYPE_p_scene__FrameType swig_types[35]
+#define SWIGTYPE_p_scene__GeodeticProjectionModel swig_types[36]
+#define SWIGTYPE_p_scene__GridGeometry swig_types[37]
+#define SWIGTYPE_p_scene__LLAToECEFTransform swig_types[38]
+#define SWIGTYPE_p_scene__LatLon swig_types[39]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[40]
+#define SWIGTYPE_p_scene__LocalCoordinateTransform swig_types[41]
+#define SWIGTYPE_p_scene__NEDCoordinateTransform swig_types[42]
+#define SWIGTYPE_p_scene__PlanarGridGeometry swig_types[43]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[44]
+#define SWIGTYPE_p_scene__ProjectionModel swig_types[45]
+#define SWIGTYPE_p_scene__ProjectionModelWithImageVectors swig_types[46]
+#define SWIGTYPE_p_scene__RangeAzimProjectionModel swig_types[47]
+#define SWIGTYPE_p_scene__RangeZeroProjectionModel swig_types[48]
+#define SWIGTYPE_p_scene__SceneGeometry swig_types[49]
+#define SWIGTYPE_p_scene__Utilities swig_types[50]
+#define SWIGTYPE_p_scene__WGS84EllipsoidModel swig_types[51]
+#define SWIGTYPE_p_size_t swig_types[52]
+#define SWIGTYPE_p_size_type swig_types[53]
+#define SWIGTYPE_p_ssize_t swig_types[54]
+#define SWIGTYPE_p_std__invalid_argument swig_types[55]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[56]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[57]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[58]
+#define SWIGTYPE_p_uint16_t swig_types[59]
+#define SWIGTYPE_p_uint32_t swig_types[60]
+#define SWIGTYPE_p_uint64_t swig_types[61]
+#define SWIGTYPE_p_uint8_t swig_types[62]
+#define SWIGTYPE_p_unsigned_char swig_types[63]
+#define SWIGTYPE_p_value_type swig_types[64]
+static swig_type_info *swig_types[66];
+static swig_module_info swig_module = {swig_types, 65, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4479,6 +4493,7 @@ namespace swig
   #include <cstddef>
   #include "import/except.h"
   #include "import/math/linear.h"
+  #include "import/math/poly.h"
   #include "scene/Types.h"
   #include "scene/Utilities.h"
   #include "scene/CoordinateTransform.h"
@@ -4491,7 +4506,6 @@ namespace swig
   #include "scene/Errors.h"
   #include "scene/FrameType.h"
   #include "scene/GridGeometry.h"
-  typedef math::linear::VectorN<3,double> Vector3;
 
 
 SWIGINTERNINLINE PyObject*
@@ -22351,7 +22365,7 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel__SWIG_0(PyObject *SWIGUN
   scene::Vector3 *arg4 = 0 ;
   scene::Vector3 *arg5 = 0 ;
   scene::Vector3 *arg6 = 0 ;
-  math::poly::OneD< scene::Vector3 > *arg7 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > *arg7 = 0 ;
   math::poly::TwoD< double > *arg8 = 0 ;
   int arg9 ;
   scene::Errors *arg10 = 0 ;
@@ -22438,12 +22452,12 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel__SWIG_0(PyObject *SWIGUN
   arg6 = reinterpret_cast< scene::Vector3 * >(argp6);
   res7 = SWIG_ConvertPtr(obj6, &argp7, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
   if (!SWIG_IsOK(res7)) {
-    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "new_RangeAzimProjectionModel" "', argument " "7"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "new_RangeAzimProjectionModel" "', argument " "7"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
   if (!argp7) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RangeAzimProjectionModel" "', argument " "7"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RangeAzimProjectionModel" "', argument " "7"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
-  arg7 = reinterpret_cast< math::poly::OneD< scene::Vector3 > * >(argp7);
+  arg7 = reinterpret_cast< math::poly::OneD< math::poly::Vector3 > * >(argp7);
   res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
   if (!SWIG_IsOK(res8)) {
     SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "new_RangeAzimProjectionModel" "', argument " "8"" of type '" "math::poly::TwoD< double > const &""'"); 
@@ -22468,7 +22482,7 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel__SWIG_0(PyObject *SWIGUN
   {
     try
     {
-      result = (scene::RangeAzimProjectionModel *)new scene::RangeAzimProjectionModel((math::poly::OneD< double > const &)*arg1,(math::poly::OneD< double > const &)*arg2,(scene::Vector3 const &)*arg3,(scene::Vector3 const &)*arg4,(scene::Vector3 const &)*arg5,(scene::Vector3 const &)*arg6,(math::poly::OneD< scene::Vector3 > const &)*arg7,(math::poly::TwoD< double > const &)*arg8,arg9,(scene::Errors const &)*arg10);
+      result = (scene::RangeAzimProjectionModel *)new scene::RangeAzimProjectionModel((math::poly::OneD< double > const &)*arg1,(math::poly::OneD< double > const &)*arg2,(scene::Vector3 const &)*arg3,(scene::Vector3 const &)*arg4,(scene::Vector3 const &)*arg5,(scene::Vector3 const &)*arg6,(math::poly::OneD< math::poly::Vector3 > const &)*arg7,(math::poly::TwoD< double > const &)*arg8,arg9,(scene::Errors const &)*arg10);
     } 
     catch (const std::exception& e)
     {
@@ -22511,7 +22525,7 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel__SWIG_1(PyObject *SWIGUN
   scene::Vector3 *arg4 = 0 ;
   scene::Vector3 *arg5 = 0 ;
   scene::Vector3 *arg6 = 0 ;
-  math::poly::OneD< scene::Vector3 > *arg7 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > *arg7 = 0 ;
   math::poly::TwoD< double > *arg8 = 0 ;
   int arg9 ;
   void *argp1 = 0 ;
@@ -22594,12 +22608,12 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel__SWIG_1(PyObject *SWIGUN
   arg6 = reinterpret_cast< scene::Vector3 * >(argp6);
   res7 = SWIG_ConvertPtr(obj6, &argp7, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
   if (!SWIG_IsOK(res7)) {
-    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "new_RangeAzimProjectionModel" "', argument " "7"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "new_RangeAzimProjectionModel" "', argument " "7"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
   if (!argp7) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RangeAzimProjectionModel" "', argument " "7"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RangeAzimProjectionModel" "', argument " "7"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
-  arg7 = reinterpret_cast< math::poly::OneD< scene::Vector3 > * >(argp7);
+  arg7 = reinterpret_cast< math::poly::OneD< math::poly::Vector3 > * >(argp7);
   res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
   if (!SWIG_IsOK(res8)) {
     SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "new_RangeAzimProjectionModel" "', argument " "8"" of type '" "math::poly::TwoD< double > const &""'"); 
@@ -22616,7 +22630,7 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel__SWIG_1(PyObject *SWIGUN
   {
     try
     {
-      result = (scene::RangeAzimProjectionModel *)new scene::RangeAzimProjectionModel((math::poly::OneD< double > const &)*arg1,(math::poly::OneD< double > const &)*arg2,(scene::Vector3 const &)*arg3,(scene::Vector3 const &)*arg4,(scene::Vector3 const &)*arg5,(scene::Vector3 const &)*arg6,(math::poly::OneD< scene::Vector3 > const &)*arg7,(math::poly::TwoD< double > const &)*arg8,arg9);
+      result = (scene::RangeAzimProjectionModel *)new scene::RangeAzimProjectionModel((math::poly::OneD< double > const &)*arg1,(math::poly::OneD< double > const &)*arg2,(scene::Vector3 const &)*arg3,(scene::Vector3 const &)*arg4,(scene::Vector3 const &)*arg5,(scene::Vector3 const &)*arg6,(math::poly::OneD< math::poly::Vector3 > const &)*arg7,(math::poly::TwoD< double > const &)*arg8,arg9);
     } 
     catch (const std::exception& e)
     {
@@ -22753,8 +22767,8 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel(PyObject *self, PyObject
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_RangeAzimProjectionModel'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    scene::RangeAzimProjectionModel::RangeAzimProjectionModel(math::poly::OneD< double > const &,math::poly::OneD< double > const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< scene::Vector3 > const &,math::poly::TwoD< double > const &,int,scene::Errors const &)\n"
-    "    scene::RangeAzimProjectionModel::RangeAzimProjectionModel(math::poly::OneD< double > const &,math::poly::OneD< double > const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< scene::Vector3 > const &,math::poly::TwoD< double > const &,int)\n");
+    "    scene::RangeAzimProjectionModel::RangeAzimProjectionModel(math::poly::OneD< double > const &,math::poly::OneD< double > const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< math::poly::Vector3 > const &,math::poly::TwoD< double > const &,int,scene::Errors const &)\n"
+    "    scene::RangeAzimProjectionModel::RangeAzimProjectionModel(math::poly::OneD< double > const &,math::poly::OneD< double > const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< math::poly::Vector3 > const &,math::poly::TwoD< double > const &,int)\n");
   return 0;
 }
 
@@ -22940,7 +22954,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel__SWIG_0(PyObject *SWIGUN
   scene::Vector3 *arg5 = 0 ;
   scene::Vector3 *arg6 = 0 ;
   scene::Vector3 *arg7 = 0 ;
-  math::poly::OneD< scene::Vector3 > *arg8 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > *arg8 = 0 ;
   math::poly::TwoD< double > *arg9 = 0 ;
   int arg10 ;
   scene::Errors *arg11 = 0 ;
@@ -23035,12 +23049,12 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel__SWIG_0(PyObject *SWIGUN
   arg7 = reinterpret_cast< scene::Vector3 * >(argp7);
   res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
   if (!SWIG_IsOK(res8)) {
-    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "new_RangeZeroProjectionModel" "', argument " "8"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "new_RangeZeroProjectionModel" "', argument " "8"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
   if (!argp8) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RangeZeroProjectionModel" "', argument " "8"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RangeZeroProjectionModel" "', argument " "8"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
-  arg8 = reinterpret_cast< math::poly::OneD< scene::Vector3 > * >(argp8);
+  arg8 = reinterpret_cast< math::poly::OneD< math::poly::Vector3 > * >(argp8);
   res9 = SWIG_ConvertPtr(obj8, &argp9, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
   if (!SWIG_IsOK(res9)) {
     SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "new_RangeZeroProjectionModel" "', argument " "9"" of type '" "math::poly::TwoD< double > const &""'"); 
@@ -23065,7 +23079,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel__SWIG_0(PyObject *SWIGUN
   {
     try
     {
-      result = (scene::RangeZeroProjectionModel *)new scene::RangeZeroProjectionModel((math::poly::OneD< double > const &)*arg1,(math::poly::TwoD< double > const &)*arg2,arg3,(scene::Vector3 const &)*arg4,(scene::Vector3 const &)*arg5,(scene::Vector3 const &)*arg6,(scene::Vector3 const &)*arg7,(math::poly::OneD< scene::Vector3 > const &)*arg8,(math::poly::TwoD< double > const &)*arg9,arg10,(scene::Errors const &)*arg11);
+      result = (scene::RangeZeroProjectionModel *)new scene::RangeZeroProjectionModel((math::poly::OneD< double > const &)*arg1,(math::poly::TwoD< double > const &)*arg2,arg3,(scene::Vector3 const &)*arg4,(scene::Vector3 const &)*arg5,(scene::Vector3 const &)*arg6,(scene::Vector3 const &)*arg7,(math::poly::OneD< math::poly::Vector3 > const &)*arg8,(math::poly::TwoD< double > const &)*arg9,arg10,(scene::Errors const &)*arg11);
     } 
     catch (const std::exception& e)
     {
@@ -23109,7 +23123,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel__SWIG_1(PyObject *SWIGUN
   scene::Vector3 *arg5 = 0 ;
   scene::Vector3 *arg6 = 0 ;
   scene::Vector3 *arg7 = 0 ;
-  math::poly::OneD< scene::Vector3 > *arg8 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > *arg8 = 0 ;
   math::poly::TwoD< double > *arg9 = 0 ;
   int arg10 ;
   void *argp1 = 0 ;
@@ -23200,12 +23214,12 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel__SWIG_1(PyObject *SWIGUN
   arg7 = reinterpret_cast< scene::Vector3 * >(argp7);
   res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
   if (!SWIG_IsOK(res8)) {
-    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "new_RangeZeroProjectionModel" "', argument " "8"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "new_RangeZeroProjectionModel" "', argument " "8"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
   if (!argp8) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RangeZeroProjectionModel" "', argument " "8"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RangeZeroProjectionModel" "', argument " "8"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
-  arg8 = reinterpret_cast< math::poly::OneD< scene::Vector3 > * >(argp8);
+  arg8 = reinterpret_cast< math::poly::OneD< math::poly::Vector3 > * >(argp8);
   res9 = SWIG_ConvertPtr(obj8, &argp9, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
   if (!SWIG_IsOK(res9)) {
     SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "new_RangeZeroProjectionModel" "', argument " "9"" of type '" "math::poly::TwoD< double > const &""'"); 
@@ -23222,7 +23236,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel__SWIG_1(PyObject *SWIGUN
   {
     try
     {
-      result = (scene::RangeZeroProjectionModel *)new scene::RangeZeroProjectionModel((math::poly::OneD< double > const &)*arg1,(math::poly::TwoD< double > const &)*arg2,arg3,(scene::Vector3 const &)*arg4,(scene::Vector3 const &)*arg5,(scene::Vector3 const &)*arg6,(scene::Vector3 const &)*arg7,(math::poly::OneD< scene::Vector3 > const &)*arg8,(math::poly::TwoD< double > const &)*arg9,arg10);
+      result = (scene::RangeZeroProjectionModel *)new scene::RangeZeroProjectionModel((math::poly::OneD< double > const &)*arg1,(math::poly::TwoD< double > const &)*arg2,arg3,(scene::Vector3 const &)*arg4,(scene::Vector3 const &)*arg5,(scene::Vector3 const &)*arg6,(scene::Vector3 const &)*arg7,(math::poly::OneD< math::poly::Vector3 > const &)*arg8,(math::poly::TwoD< double > const &)*arg9,arg10);
     } 
     catch (const std::exception& e)
     {
@@ -23371,8 +23385,8 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel(PyObject *self, PyObject
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_RangeZeroProjectionModel'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    scene::RangeZeroProjectionModel::RangeZeroProjectionModel(math::poly::OneD< double > const &,math::poly::TwoD< double > const &,double,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< scene::Vector3 > const &,math::poly::TwoD< double > const &,int,scene::Errors const &)\n"
-    "    scene::RangeZeroProjectionModel::RangeZeroProjectionModel(math::poly::OneD< double > const &,math::poly::TwoD< double > const &,double,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< scene::Vector3 > const &,math::poly::TwoD< double > const &,int)\n");
+    "    scene::RangeZeroProjectionModel::RangeZeroProjectionModel(math::poly::OneD< double > const &,math::poly::TwoD< double > const &,double,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< math::poly::Vector3 > const &,math::poly::TwoD< double > const &,int,scene::Errors const &)\n"
+    "    scene::RangeZeroProjectionModel::RangeZeroProjectionModel(math::poly::OneD< double > const &,math::poly::TwoD< double > const &,double,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< math::poly::Vector3 > const &,math::poly::TwoD< double > const &,int)\n");
   return 0;
 }
 
@@ -23555,7 +23569,7 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel__SWIG_0(PyObject *SWIGUNUSED
   scene::Vector3 *arg2 = 0 ;
   scene::Vector3 *arg3 = 0 ;
   scene::Vector3 *arg4 = 0 ;
-  math::poly::OneD< scene::Vector3 > *arg5 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > *arg5 = 0 ;
   math::poly::TwoD< double > *arg6 = 0 ;
   int arg7 ;
   scene::Errors *arg8 = 0 ;
@@ -23620,12 +23634,12 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel__SWIG_0(PyObject *SWIGUNUSED
   arg4 = reinterpret_cast< scene::Vector3 * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
   if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_PlaneProjectionModel" "', argument " "5"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_PlaneProjectionModel" "', argument " "5"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
   if (!argp5) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PlaneProjectionModel" "', argument " "5"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PlaneProjectionModel" "', argument " "5"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
-  arg5 = reinterpret_cast< math::poly::OneD< scene::Vector3 > * >(argp5);
+  arg5 = reinterpret_cast< math::poly::OneD< math::poly::Vector3 > * >(argp5);
   res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
   if (!SWIG_IsOK(res6)) {
     SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "new_PlaneProjectionModel" "', argument " "6"" of type '" "math::poly::TwoD< double > const &""'"); 
@@ -23650,7 +23664,7 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel__SWIG_0(PyObject *SWIGUNUSED
   {
     try
     {
-      result = (scene::PlaneProjectionModel *)new scene::PlaneProjectionModel((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(scene::Vector3 const &)*arg3,(scene::Vector3 const &)*arg4,(math::poly::OneD< scene::Vector3 > const &)*arg5,(math::poly::TwoD< double > const &)*arg6,arg7,(scene::Errors const &)*arg8);
+      result = (scene::PlaneProjectionModel *)new scene::PlaneProjectionModel((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(scene::Vector3 const &)*arg3,(scene::Vector3 const &)*arg4,(math::poly::OneD< math::poly::Vector3 > const &)*arg5,(math::poly::TwoD< double > const &)*arg6,arg7,(scene::Errors const &)*arg8);
     } 
     catch (const std::exception& e)
     {
@@ -23691,7 +23705,7 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel__SWIG_1(PyObject *SWIGUNUSED
   scene::Vector3 *arg2 = 0 ;
   scene::Vector3 *arg3 = 0 ;
   scene::Vector3 *arg4 = 0 ;
-  math::poly::OneD< scene::Vector3 > *arg5 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > *arg5 = 0 ;
   math::poly::TwoD< double > *arg6 = 0 ;
   int arg7 ;
   void *argp1 = 0 ;
@@ -23752,12 +23766,12 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel__SWIG_1(PyObject *SWIGUNUSED
   arg4 = reinterpret_cast< scene::Vector3 * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
   if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_PlaneProjectionModel" "', argument " "5"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_PlaneProjectionModel" "', argument " "5"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
   if (!argp5) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PlaneProjectionModel" "', argument " "5"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PlaneProjectionModel" "', argument " "5"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
-  arg5 = reinterpret_cast< math::poly::OneD< scene::Vector3 > * >(argp5);
+  arg5 = reinterpret_cast< math::poly::OneD< math::poly::Vector3 > * >(argp5);
   res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
   if (!SWIG_IsOK(res6)) {
     SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "new_PlaneProjectionModel" "', argument " "6"" of type '" "math::poly::TwoD< double > const &""'"); 
@@ -23774,7 +23788,7 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel__SWIG_1(PyObject *SWIGUNUSED
   {
     try
     {
-      result = (scene::PlaneProjectionModel *)new scene::PlaneProjectionModel((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(scene::Vector3 const &)*arg3,(scene::Vector3 const &)*arg4,(math::poly::OneD< scene::Vector3 > const &)*arg5,(math::poly::TwoD< double > const &)*arg6,arg7);
+      result = (scene::PlaneProjectionModel *)new scene::PlaneProjectionModel((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(scene::Vector3 const &)*arg3,(scene::Vector3 const &)*arg4,(math::poly::OneD< math::poly::Vector3 > const &)*arg5,(math::poly::TwoD< double > const &)*arg6,arg7);
     } 
     catch (const std::exception& e)
     {
@@ -23895,8 +23909,8 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel(PyObject *self, PyObject *ar
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_PlaneProjectionModel'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    scene::PlaneProjectionModel::PlaneProjectionModel(scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< scene::Vector3 > const &,math::poly::TwoD< double > const &,int,scene::Errors const &)\n"
-    "    scene::PlaneProjectionModel::PlaneProjectionModel(scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< scene::Vector3 > const &,math::poly::TwoD< double > const &,int)\n");
+    "    scene::PlaneProjectionModel::PlaneProjectionModel(scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< math::poly::Vector3 > const &,math::poly::TwoD< double > const &,int,scene::Errors const &)\n"
+    "    scene::PlaneProjectionModel::PlaneProjectionModel(scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< math::poly::Vector3 > const &,math::poly::TwoD< double > const &,int)\n");
   return 0;
 }
 
@@ -24077,7 +24091,7 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel__SWIG_0(PyObject *SWIGUNU
   PyObject *resultobj = 0;
   scene::Vector3 *arg1 = 0 ;
   scene::Vector3 *arg2 = 0 ;
-  math::poly::OneD< scene::Vector3 > *arg3 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > *arg3 = 0 ;
   math::poly::TwoD< double > *arg4 = 0 ;
   int arg5 ;
   scene::Errors *arg6 = 0 ;
@@ -24120,12 +24134,12 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel__SWIG_0(PyObject *SWIGUNU
   arg2 = reinterpret_cast< scene::Vector3 * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_GeodeticProjectionModel" "', argument " "3"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_GeodeticProjectionModel" "', argument " "3"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_GeodeticProjectionModel" "', argument " "3"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_GeodeticProjectionModel" "', argument " "3"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
-  arg3 = reinterpret_cast< math::poly::OneD< scene::Vector3 > * >(argp3);
+  arg3 = reinterpret_cast< math::poly::OneD< math::poly::Vector3 > * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_GeodeticProjectionModel" "', argument " "4"" of type '" "math::poly::TwoD< double > const &""'"); 
@@ -24150,7 +24164,7 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel__SWIG_0(PyObject *SWIGUNU
   {
     try
     {
-      result = (scene::GeodeticProjectionModel *)new scene::GeodeticProjectionModel((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(math::poly::OneD< scene::Vector3 > const &)*arg3,(math::poly::TwoD< double > const &)*arg4,arg5,(scene::Errors const &)*arg6);
+      result = (scene::GeodeticProjectionModel *)new scene::GeodeticProjectionModel((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(math::poly::OneD< math::poly::Vector3 > const &)*arg3,(math::poly::TwoD< double > const &)*arg4,arg5,(scene::Errors const &)*arg6);
     } 
     catch (const std::exception& e)
     {
@@ -24189,7 +24203,7 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel__SWIG_1(PyObject *SWIGUNU
   PyObject *resultobj = 0;
   scene::Vector3 *arg1 = 0 ;
   scene::Vector3 *arg2 = 0 ;
-  math::poly::OneD< scene::Vector3 > *arg3 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > *arg3 = 0 ;
   math::poly::TwoD< double > *arg4 = 0 ;
   int arg5 ;
   void *argp1 = 0 ;
@@ -24228,12 +24242,12 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel__SWIG_1(PyObject *SWIGUNU
   arg2 = reinterpret_cast< scene::Vector3 * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_GeodeticProjectionModel" "', argument " "3"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_GeodeticProjectionModel" "', argument " "3"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_GeodeticProjectionModel" "', argument " "3"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_GeodeticProjectionModel" "', argument " "3"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
-  arg3 = reinterpret_cast< math::poly::OneD< scene::Vector3 > * >(argp3);
+  arg3 = reinterpret_cast< math::poly::OneD< math::poly::Vector3 > * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_GeodeticProjectionModel" "', argument " "4"" of type '" "math::poly::TwoD< double > const &""'"); 
@@ -24250,7 +24264,7 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel__SWIG_1(PyObject *SWIGUNU
   {
     try
     {
-      result = (scene::GeodeticProjectionModel *)new scene::GeodeticProjectionModel((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(math::poly::OneD< scene::Vector3 > const &)*arg3,(math::poly::TwoD< double > const &)*arg4,arg5);
+      result = (scene::GeodeticProjectionModel *)new scene::GeodeticProjectionModel((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(math::poly::OneD< math::poly::Vector3 > const &)*arg3,(math::poly::TwoD< double > const &)*arg4,arg5);
     } 
     catch (const std::exception& e)
     {
@@ -24355,8 +24369,8 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel(PyObject *self, PyObject 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_GeodeticProjectionModel'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    scene::GeodeticProjectionModel::GeodeticProjectionModel(scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< scene::Vector3 > const &,math::poly::TwoD< double > const &,int,scene::Errors const &)\n"
-    "    scene::GeodeticProjectionModel::GeodeticProjectionModel(scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< scene::Vector3 > const &,math::poly::TwoD< double > const &,int)\n");
+    "    scene::GeodeticProjectionModel::GeodeticProjectionModel(scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< math::poly::Vector3 > const &,math::poly::TwoD< double > const &,int,scene::Errors const &)\n"
+    "    scene::GeodeticProjectionModel::GeodeticProjectionModel(scene::Vector3 const &,scene::Vector3 const &,math::poly::OneD< math::poly::Vector3 > const &,math::poly::TwoD< double > const &,int)\n");
   return 0;
 }
 
@@ -24866,7 +24880,7 @@ SWIGINTERN PyObject *_wrap_new_PlanarGridGeometry(PyObject *SWIGUNUSEDPARM(self)
   scene::Vector3 *arg1 = 0 ;
   scene::Vector3 *arg2 = 0 ;
   scene::Vector3 *arg3 = 0 ;
-  math::poly::OneD< scene::Vector3 > *arg4 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > *arg4 = 0 ;
   math::poly::TwoD< double > *arg5 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -24912,12 +24926,12 @@ SWIGINTERN PyObject *_wrap_new_PlanarGridGeometry(PyObject *SWIGUNUSEDPARM(self)
   arg3 = reinterpret_cast< scene::Vector3 * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_PlanarGridGeometry" "', argument " "4"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_PlanarGridGeometry" "', argument " "4"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
   if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PlanarGridGeometry" "', argument " "4"" of type '" "math::poly::OneD< scene::Vector3 > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PlanarGridGeometry" "', argument " "4"" of type '" "math::poly::OneD< math::poly::Vector3 > const &""'"); 
   }
-  arg4 = reinterpret_cast< math::poly::OneD< scene::Vector3 > * >(argp4);
+  arg4 = reinterpret_cast< math::poly::OneD< math::poly::Vector3 > * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_math__poly__TwoDT_double_t,  0  | 0);
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_PlanarGridGeometry" "', argument " "5"" of type '" "math::poly::TwoD< double > const &""'"); 
@@ -24929,7 +24943,7 @@ SWIGINTERN PyObject *_wrap_new_PlanarGridGeometry(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = (scene::PlanarGridGeometry *)new scene::PlanarGridGeometry((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(scene::Vector3 const &)*arg3,(math::poly::OneD< scene::Vector3 > const &)*arg4,(math::poly::TwoD< double > const &)*arg5);
+      result = (scene::PlanarGridGeometry *)new scene::PlanarGridGeometry((scene::Vector3 const &)*arg1,(scene::Vector3 const &)*arg2,(scene::Vector3 const &)*arg3,(math::poly::OneD< math::poly::Vector3 > const &)*arg4,(math::poly::TwoD< double > const &)*arg5);
     } 
     catch (const std::exception& e)
     {
@@ -25555,6 +25569,9 @@ static PyMethodDef SwigMethods[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_scene__LatLonAltTo_p_scene__LatLon(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((scene::LatLon *)  ((scene::LatLonAlt *) x));
+}
 static void *_p_scene__ProjectionModelWithImageVectorsTo_p_scene__ProjectionModel(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scene::ProjectionModel *)  ((scene::ProjectionModelWithImageVectors *) x));
 }
@@ -25570,17 +25587,17 @@ static void *_p_scene__PlaneProjectionModelTo_p_scene__ProjectionModel(void *x, 
 static void *_p_scene__GeodeticProjectionModelTo_p_scene__ProjectionModel(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scene::ProjectionModel *)  ((scene::GeodeticProjectionModel *) x));
 }
-static void *_p_scene__ECEFToLLATransformTo_p_scene__CoordinateTransform(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((scene::CoordinateTransform *)  ((scene::ECEFToLLATransform *) x));
-}
-static void *_p_scene__LLAToECEFTransformTo_p_scene__CoordinateTransform(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((scene::CoordinateTransform *)  ((scene::LLAToECEFTransform *) x));
-}
 static void *_p_scene__ENUCoordinateTransformTo_p_scene__LocalCoordinateTransform(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scene::LocalCoordinateTransform *)  ((scene::ENUCoordinateTransform *) x));
 }
 static void *_p_scene__NEDCoordinateTransformTo_p_scene__LocalCoordinateTransform(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scene::LocalCoordinateTransform *)  ((scene::NEDCoordinateTransform *) x));
+}
+static void *_p_scene__ECEFToLLATransformTo_p_scene__CoordinateTransform(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((scene::CoordinateTransform *)  ((scene::ECEFToLLATransform *) x));
+}
+static void *_p_scene__LLAToECEFTransformTo_p_scene__CoordinateTransform(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((scene::CoordinateTransform *)  ((scene::LLAToECEFTransform *) x));
 }
 static void *_p_scene__RangeAzimProjectionModelTo_p_scene__ProjectionModelWithImageVectors(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scene::ProjectionModelWithImageVectors *)  ((scene::RangeAzimProjectionModel *) x));
@@ -25594,18 +25611,20 @@ static void *_p_scene__PlaneProjectionModelTo_p_scene__ProjectionModelWithImageV
 static void *_p_scene__PlanarGridGeometryTo_p_scene__GridGeometry(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scene::GridGeometry *)  ((scene::PlanarGridGeometry *) x));
 }
-static void *_p_scene__LatLonAltTo_p_scene__LatLon(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((scene::LatLon *)  ((scene::LatLonAlt *) x));
-}
 static void *_p_scene__WGS84EllipsoidModelTo_p_scene__EllipsoidModel(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scene::EllipsoidModel *)  ((scene::WGS84EllipsoidModel *) x));
 }
 static swig_type_info _swigt__p_Like_T = {"_p_Like_T", "Like_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "int *|sys::Handle_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "sys::Int16_T *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "sys::Int32_T *|int32_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_1_1_double_t = {"_p_math__linear__MatrixMxNT_1_1_double_t", "math::linear::MatrixMxN< 1,1,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_2_2_double_t = {"_p_math__linear__MatrixMxNT_2_2_double_t", "math::linear::MatrixMxN< 2,2,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_2_3_double_t = {"_p_math__linear__MatrixMxNT_2_3_double_t", "math::linear::MatrixMxN< 2,3,double > *", 0, 0, (void*)0, 0};
@@ -25616,11 +25635,13 @@ static swig_type_info _swigt__p_math__linear__MatrixMxNT_3_3_double_t = {"_p_mat
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_3_7_double_t = {"_p_math__linear__MatrixMxNT_3_7_double_t", "math::linear::MatrixMxN< 3,7,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_7_7_double_t = {"_p_math__linear__MatrixMxNT_7_7_double_t", "math::linear::MatrixMxN< 7,7,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_2_double_t = {"_p_math__linear__VectorNT_2_double_t", "scene::Vector2 *|math::linear::VectorN< 2,double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "Vector3 *|scene::Vector3 *|math::linear::VectorN< 3,double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "Vector3 *|math::poly::Vector3 *|scene::Vector3 *|math::linear::VectorN< 3,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__linear__VectorT_double_t", "VectorDouble *|math::linear::Vector< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "math::poly::OneD< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "math::poly::OneD< math::linear::VectorN< 3,double > > *|math::poly::OneD< scene::Vector3 > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "math::poly::OneD< math::linear::VectorN< 3,double > > *|math::poly::OneD< math::poly::Vector3 > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__AdjustableParams = {"_p_scene__AdjustableParams", "scene::AdjustableParams *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__AngleMagnitude = {"_p_scene__AngleMagnitude", "scene::AngleMagnitude *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__CoordinateTransform = {"_p_scene__CoordinateTransform", "scene::CoordinateTransform *", 0, 0, (void*)0, 0};
@@ -25645,11 +25666,18 @@ static swig_type_info _swigt__p_scene__RangeZeroProjectionModel = {"_p_scene__Ra
 static swig_type_info _swigt__p_scene__SceneGeometry = {"_p_scene__SceneGeometry", "scene::SceneGeometry *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__Utilities = {"_p_scene__Utilities", "scene::Utilities *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__WGS84EllipsoidModel = {"_p_scene__WGS84EllipsoidModel", "scene::WGS84EllipsoidModel *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RgAzT_double_t = {"_p_types__RgAzT_double_t", "types::RgAz< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_double_t = {"_p_types__RowColT_double_t", "types::RowCol< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "sys::Uint16_T *|uint16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "sys::Uint32_T *|uint32_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "sys::Uint64_T *|uint64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "sys::Uint8_T *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|sys::ubyte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -25659,6 +25687,11 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_difference_type,
   &_swigt__p_double,
   &_swigt__p_except__NullPointerReferenceException,
+  &_swigt__p_int,
+  &_swigt__p_int16_t,
+  &_swigt__p_int32_t,
+  &_swigt__p_int64_t,
+  &_swigt__p_int8_t,
   &_swigt__p_math__linear__MatrixMxNT_1_1_double_t,
   &_swigt__p_math__linear__MatrixMxNT_2_2_double_t,
   &_swigt__p_math__linear__MatrixMxNT_2_3_double_t,
@@ -25674,6 +25707,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_math__poly__OneDT_double_t,
   &_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   &_swigt__p_math__poly__TwoDT_double_t,
+  &_swigt__p_off_t,
+  &_swigt__p_pid_t,
   &_swigt__p_scene__AdjustableParams,
   &_swigt__p_scene__AngleMagnitude,
   &_swigt__p_scene__CoordinateTransform,
@@ -25698,11 +25733,18 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_scene__SceneGeometry,
   &_swigt__p_scene__Utilities,
   &_swigt__p_scene__WGS84EllipsoidModel,
+  &_swigt__p_size_t,
   &_swigt__p_size_type,
+  &_swigt__p_ssize_t,
   &_swigt__p_std__invalid_argument,
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_types__RgAzT_double_t,
   &_swigt__p_types__RowColT_double_t,
+  &_swigt__p_uint16_t,
+  &_swigt__p_uint32_t,
+  &_swigt__p_uint64_t,
+  &_swigt__p_uint8_t,
+  &_swigt__p_unsigned_char,
   &_swigt__p_value_type,
 };
 
@@ -25712,6 +25754,11 @@ static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0,
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__NullPointerReferenceException[] = {  {&_swigt__p_except__NullPointerReferenceException, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int16_t[] = {  {&_swigt__p_int16_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int32_t[] = {  {&_swigt__p_int32_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int8_t[] = {  {&_swigt__p_int8_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__MatrixMxNT_1_1_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_1_1_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__MatrixMxNT_2_2_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_2_2_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__MatrixMxNT_2_3_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_2_3_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -25727,6 +25774,8 @@ static swig_cast_info _swigc__p_math__linear__VectorT_double_t[] = {  {&_swigt__
 static swig_cast_info _swigc__p_math__poly__OneDT_double_t[] = {  {&_swigt__p_math__poly__OneDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t[] = {  {&_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__TwoDT_double_t[] = {  {&_swigt__p_math__poly__TwoDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_pid_t[] = {  {&_swigt__p_pid_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__AdjustableParams[] = {  {&_swigt__p_scene__AdjustableParams, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__AngleMagnitude[] = {  {&_swigt__p_scene__AngleMagnitude, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__CoordinateTransform[] = {  {&_swigt__p_scene__CoordinateTransform, 0, 0, 0},  {&_swigt__p_scene__ECEFToLLATransform, _p_scene__ECEFToLLATransformTo_p_scene__CoordinateTransform, 0, 0},  {&_swigt__p_scene__LLAToECEFTransform, _p_scene__LLAToECEFTransformTo_p_scene__CoordinateTransform, 0, 0},{0, 0, 0, 0}};
@@ -25751,11 +25800,18 @@ static swig_cast_info _swigc__p_scene__RangeZeroProjectionModel[] = {  {&_swigt_
 static swig_cast_info _swigc__p_scene__SceneGeometry[] = {  {&_swigt__p_scene__SceneGeometry, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__Utilities[] = {  {&_swigt__p_scene__Utilities, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scene__WGS84EllipsoidModel[] = {  {&_swigt__p_scene__WGS84EllipsoidModel, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_types__RgAzT_double_t[] = {  {&_swigt__p_types__RgAzT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_types__RowColT_double_t[] = {  {&_swigt__p_types__RowColT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint16_t[] = {  {&_swigt__p_uint16_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint32_t[] = {  {&_swigt__p_uint32_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint64_t[] = {  {&_swigt__p_uint64_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint8_t[] = {  {&_swigt__p_uint8_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -25765,6 +25821,11 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_difference_type,
   _swigc__p_double,
   _swigc__p_except__NullPointerReferenceException,
+  _swigc__p_int,
+  _swigc__p_int16_t,
+  _swigc__p_int32_t,
+  _swigc__p_int64_t,
+  _swigc__p_int8_t,
   _swigc__p_math__linear__MatrixMxNT_1_1_double_t,
   _swigc__p_math__linear__MatrixMxNT_2_2_double_t,
   _swigc__p_math__linear__MatrixMxNT_2_3_double_t,
@@ -25780,6 +25841,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_math__poly__OneDT_double_t,
   _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   _swigc__p_math__poly__TwoDT_double_t,
+  _swigc__p_off_t,
+  _swigc__p_pid_t,
   _swigc__p_scene__AdjustableParams,
   _swigc__p_scene__AngleMagnitude,
   _swigc__p_scene__CoordinateTransform,
@@ -25804,11 +25867,18 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_scene__SceneGeometry,
   _swigc__p_scene__Utilities,
   _swigc__p_scene__WGS84EllipsoidModel,
+  _swigc__p_size_t,
   _swigc__p_size_type,
+  _swigc__p_ssize_t,
   _swigc__p_std__invalid_argument,
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_types__RgAzT_double_t,
   _swigc__p_types__RowColT_double_t,
+  _swigc__p_uint16_t,
+  _swigc__p_uint32_t,
+  _swigc__p_uint64_t,
+  _swigc__p_uint8_t,
+  _swigc__p_unsigned_char,
   _swigc__p_value_type,
 };
 

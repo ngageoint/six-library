@@ -26,7 +26,7 @@
 
 #include "six/Types.h"
 #include "six/Init.h"
-#include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 
 namespace six
 {
@@ -41,7 +41,7 @@ namespace sidd
 struct TargetInformation
 {
     //! SIDD Identifier set (min occurs zero, max unbounded)
-    std::vector<Parameter> identifiers;
+    ParameterCollection identifiers;
 
     //! SIDD Footprint: target footprint as defined by polygonal shape
     LatLonCorners footprint;
@@ -51,7 +51,8 @@ struct TargetInformation
      * Generic extension.  Could be used to indicate type of target,
      * terrain, etc.
      */
-    std::vector<Parameter> targetInformationExtensions;
+    ParameterCollection targetInformationExtensions;
+
 
     //!  Clone any sub-objects if vectors are not empty
     TargetInformation* clone() const;
@@ -77,7 +78,7 @@ struct GeographicInformation
      *  SIDD GeographicInfoExtension (name differs for API consistency)
      *  Country identifier for this geographic region.
      */
-    std::vector<Parameter> geographicInformationExtensions;
+    ParameterCollection geographicInformationExtensions;
 
     //!  Clone this element and its children
     GeographicInformation* clone() const;
@@ -98,7 +99,7 @@ public:
     RegionType regionType;
 
     //!  SIDD GeoregionIdentifier: an ID for the georegion
-    std::vector<Parameter> georegionIdentifiers;
+    ParameterCollection georegionIdentifiers;
 
     /*!
      *  The estimated ground footprint of the product (note this is required

@@ -86,7 +86,7 @@ def loadSicd(filename):
   vs.push_back( os.environ['SIX_SCHEMA_PATH'] )
   cmplx = getComplexData(filename, vs)
   showInfo(cmplx)
-  out_filename = 'from_sicd_' + filename + '.xml'
+  out_filename = 'from_sicd_' + os.path.basename(filename) + '.xml'
   xml_ctrl = ComplexXMLControl()
   fos = FileOutputStream(out_filename)
   out_doc = xml_ctrl.toXML(cmplx, vs)
@@ -113,6 +113,20 @@ def showInfo(cmplx):
   print "graze angle: " + str(cmplx.scpcoa.grazeAngle)
   print "slant range: " + str(cmplx.scpcoa.slantRange)
   print "radar mode: " + cmplx.collectionInformation.radarMode.toString()
+  collectionParameters = cmplx.radarCollection.parameters
+  print "radar collection parameters: "
+  if collectionParameters.empty():
+    print '    (none)'
+  else:
+    for idx in range(0,collectionParameters.size()):
+      print "    " + collectionParameters[idx].getName() + ": " + str(collectionParameters[idx])
+  print 'image data \'validData\''
+  validData = cmplx.imageData.validData
+  if validData.empty():
+    print '    (none)'
+  else:
+    for idx in range(0,validData.size()):
+      print '    (' + str(validData[idx].row) + ',' + str(validData[idx].col) + ')'
 
 
 ###############################################################################

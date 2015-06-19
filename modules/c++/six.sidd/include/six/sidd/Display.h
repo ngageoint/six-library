@@ -27,6 +27,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 
 namespace six
 {
@@ -95,7 +96,7 @@ struct MonochromeDisplayRemap : public Remap
     std::string remapType;
 
     //!  Remap parameters
-    std::vector<Parameter> remapParameters;
+    ParameterCollection remapParameters;
 
 };
 
@@ -230,7 +231,7 @@ struct Display
     mem::ScopedCloneablePtr<MonitorCompensationApplied> 
             monitorCompensationApplied;
 
-    std::vector<Parameter> displayExtensions;
+    ParameterCollection displayExtensions;
 };
 
 }

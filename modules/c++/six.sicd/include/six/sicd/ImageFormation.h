@@ -27,7 +27,7 @@
 
 #include "six/Types.h"
 #include "six/Init.h"
-#include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 
 namespace six
 {
@@ -204,7 +204,7 @@ struct Processing
     BooleanType applied;
 
     //! (Optional) Additional parameters
-    std::vector<Parameter> parameters;
+    ParameterCollection parameters;
 };
 
 /*!

@@ -200,8 +200,9 @@ import math_poly
 import math_linear
 import coda_except
 import six_base
-import scene
 import coda_types
+import coda_sys
+import scene
 import coda_io
 import mem
 

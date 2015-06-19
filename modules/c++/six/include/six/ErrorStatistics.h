@@ -25,6 +25,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 #include <mem/ScopedCopyablePtr.h>
 
 namespace six
@@ -286,7 +287,7 @@ struct ErrorStatistics
      *  Additional parameters
      *  Note, this is Parms in SICD, but we want a consistent API
      */
-    std::vector<Parameter> additionalParameters;
+    ParameterCollection additionalParameters;
 
     ErrorStatistics()
     {

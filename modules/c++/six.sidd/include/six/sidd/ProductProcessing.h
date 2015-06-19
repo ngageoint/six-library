@@ -24,7 +24,7 @@
 
 #include "six/Types.h"
 #include "six/Init.h"
-#include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 
 namespace six
 {
@@ -49,7 +49,7 @@ struct ProcessingModule
      *  Parameters associated with the algorithm used in
      *  processing the product.
      */
-    std::vector<Parameter> moduleParameters;
+    ParameterCollection moduleParameters;
 
     /*!
      *  ProcessingModule is a repeatabl structure within

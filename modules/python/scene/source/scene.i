@@ -38,6 +38,7 @@
   #include <cstddef>
   #include "import/except.h"
   #include "import/math/linear.h"
+  #include "import/math/poly.h"
   #include "scene/Types.h"
   #include "scene/Utilities.h"
   #include "scene/CoordinateTransform.h"
@@ -50,7 +51,6 @@
   #include "scene/Errors.h"
   #include "scene/FrameType.h"
   #include "scene/GridGeometry.h"
-  typedef math::linear::VectorN<3,double> Vector3;
 %} 
 
 %rename("SceneUtilities") Scene::Utilities;

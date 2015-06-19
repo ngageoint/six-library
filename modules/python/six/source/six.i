@@ -55,23 +55,7 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 
 %}
 
-%wrapper %{
-}
-
-namespace six {
-  template<>
-  six::Parameter::Parameter(swig::SwigPySequence_Ref<six::Parameter> value)
-    : mValue(((six::Parameter) value).mValue),
-      mName(((six::Parameter) value).mName)
-  {
-  
-  }
-}
-
-extern "C" {
-%}
-
-
+%import "types.i"
 %import "except.i"
 %import "math_poly.i"
 %import "math_linear.i"
@@ -87,6 +71,11 @@ extern "C" {
  */
 %ignore parseData; 
 
+/* ignore some useless (in Python) functions in ParameterCollection */
+%ignore six::ParameterCollection::begin;
+%ignore six::ParameterCollection::end;
+
+
 /* prevent name conflicts */
 %rename("SixUtilities") six::Utilities;
 
@@ -100,12 +89,12 @@ extern "C" {
 %include "six/ErrorStatistics.h"
 %include "six/Radiometric.h"
 %include "six/Parameter.h"
+%include "six/ParameterCollection.h"
 %include "six/Data.h"
 %include "six/XMLControl.h"
 %include "six/Utilities.h"
 %include "six/Options.h"
 
-%ignore "Parameter::Parameter(T)";
 
 %feature("shadow") six::Parameter::setValue(const std::string &)
 %{
@@ -137,10 +126,20 @@ def setValue(self, *args):
     {
       return str::toType<double>($self->str());
     }
-
 };
 
-%template(VectorParameter) std::vector<six::Parameter>;
+%extend six::ParameterCollection
+{
+  public:
+    six::Parameter& __getitem__(size_t i)
+    {
+      return (*$self)[i];
+    }
+    void __setitem__(size_t i, const six::Parameter & v)
+    {
+      (*$self)[i] = v;
+    }
+};
+
 %template(VectorString) std::vector<std::string>;
 %template(LatLonCorners) six::Corners<scene::LatLon>;
-

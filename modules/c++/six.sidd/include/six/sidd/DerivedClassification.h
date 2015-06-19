@@ -25,7 +25,7 @@
 #include "mem/ScopedCopyablePtr.h"
 #include "six/Types.h"
 #include "six/Classification.h"
-
+#include "six/ParameterCollection.h"
 namespace six
 {
 namespace sidd
@@ -57,7 +57,7 @@ public:
 
     //! Extensible parameters used to support profile-specific needs related
     //  to product security.
-    std::vector<Parameter>         securityExtensions;
+    ParameterCollection         securityExtensions;
 
     //! The version number of the DES. Should there be multiple specified in
     //  an instance document the one at the root node is the one that will
@@ -184,7 +184,7 @@ private:
 
     static
     void putImpl(const std::string& name,
-                 const std::vector<Parameter>& params,
+                 const ParameterCollection& params,
                  std::ostream& os);
 
     static

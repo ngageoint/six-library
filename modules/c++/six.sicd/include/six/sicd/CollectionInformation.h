@@ -25,6 +25,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 #include "six/sicd/ComplexClassification.h"
 
 namespace six
@@ -101,7 +102,7 @@ struct CollectionInformation
     /*!
      *  (Optional) Additional parameters
      */
-    std::vector<Parameter> parameters;
+    ParameterCollection parameters;
 
     //!  Constructor
     CollectionInformation();
