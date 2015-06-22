@@ -15250,6 +15250,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Matrix3x1_normSq(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::MatrixMxN< 3,1,double > *arg1 = (math::linear::MatrixMxN< 3,1,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Matrix3x1_normSq",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Matrix3x1_normSq" "', argument " "1"" of type '" "math::linear::MatrixMxN< 3,1,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::MatrixMxN< 3,1,double > * >(argp1);
+  {
+    try
+    {
+      result = (double)((math::linear::MatrixMxN< 3,1,double > const *)arg1)->normSq();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Matrix3x1_norm(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::MatrixMxN< 3,1,double > *arg1 = (math::linear::MatrixMxN< 3,1,double > *) 0 ;
@@ -16440,6 +16492,122 @@ SWIGINTERN PyObject *_wrap_Vector3_norm(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = (double)((math::linear::VectorN< 3,double > const *)arg1)->norm();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector3_normSq(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 3,double > *arg1 = (math::linear::VectorN< 3,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector3_normSq",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector3_normSq" "', argument " "1"" of type '" "math::linear::VectorN< 3,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 3,double > * >(argp1);
+  {
+    try
+    {
+      result = (double)((math::linear::VectorN< 3,double > const *)arg1)->normSq();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector3_angle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 3,double > *arg1 = (math::linear::VectorN< 3,double > *) 0 ;
+  math::linear::VectorN< 3,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector3_angle",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector3_angle" "', argument " "1"" of type '" "math::linear::VectorN< 3,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 3,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector3_angle" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector3_angle" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 3,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = (double)((math::linear::VectorN< 3,double > const *)arg1)->angle((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
     } 
     catch (const std::exception& e)
     {
@@ -18717,6 +18885,122 @@ SWIGINTERN PyObject *_wrap_VectorDouble_dot(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::Vector< double > const *)arg1)->dot((math::linear::Vector< double > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorDouble_angle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::Vector< double > *arg1 = (math::linear::Vector< double > *) 0 ;
+  math::linear::Vector< double > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorDouble_angle",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorDouble_angle" "', argument " "1"" of type '" "math::linear::Vector< double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::Vector< double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorDouble_angle" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorDouble_angle" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::Vector< double > * >(argp2);
+  {
+    try
+    {
+      result = (double)((math::linear::Vector< double > const *)arg1)->angle((math::linear::Vector< double > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorDouble_normSq(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::Vector< double > *arg1 = (math::linear::Vector< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorDouble_normSq",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorDouble_normSq" "', argument " "1"" of type '" "math::linear::Vector< double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::Vector< double > * >(argp1);
+  {
+    try
+    {
+      result = (double)((math::linear::Vector< double > const *)arg1)->normSq();
     } 
     catch (const std::exception& e)
     {
@@ -22904,6 +23188,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_MatrixDouble_normSq(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::Matrix2D< double > *arg1 = (math::linear::Matrix2D< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MatrixDouble_normSq",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__Matrix2DT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatrixDouble_normSq" "', argument " "1"" of type '" "math::linear::Matrix2D< double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::Matrix2D< double > * >(argp1);
+  {
+    try
+    {
+      result = (double)((math::linear::Matrix2D< double > const *)arg1)->normSq();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_MatrixDouble_norm(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::Matrix2D< double > *arg1 = (math::linear::Matrix2D< double > *) 0 ;
@@ -23842,6 +24178,7 @@ static PyMethodDef SwigMethods[] = {
 		"permute(std::vector< size_t,std::allocator< size_t > > const & pivotsM, size_t n=1) -> Matrix3x1\n"
 		"Matrix3x1_permute(Matrix3x1 self, std::vector< size_t,std::allocator< size_t > > const & pivotsM) -> Matrix3x1\n"
 		""},
+	 { (char *)"Matrix3x1_normSq", _wrap_Matrix3x1_normSq, METH_VARARGS, (char *)"Matrix3x1_normSq(Matrix3x1 self) -> double"},
 	 { (char *)"Matrix3x1_norm", _wrap_Matrix3x1_norm, METH_VARARGS, (char *)"Matrix3x1_norm(Matrix3x1 self) -> double"},
 	 { (char *)"Matrix3x1_normalize", _wrap_Matrix3x1_normalize, METH_VARARGS, (char *)"Matrix3x1_normalize(Matrix3x1 self) -> Matrix3x1"},
 	 { (char *)"Matrix3x1_unit", _wrap_Matrix3x1_unit, METH_VARARGS, (char *)"Matrix3x1_unit(Matrix3x1 self) -> Matrix3x1"},
@@ -23867,6 +24204,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Vector3_dot", _wrap_Vector3_dot, METH_VARARGS, (char *)"Vector3_dot(Vector3 self, Vector3 vec) -> double"},
 	 { (char *)"Vector3_normDot", _wrap_Vector3_normDot, METH_VARARGS, (char *)"Vector3_normDot(Vector3 self, Vector3 vec) -> double"},
 	 { (char *)"Vector3_norm", _wrap_Vector3_norm, METH_VARARGS, (char *)"Vector3_norm(Vector3 self) -> double"},
+	 { (char *)"Vector3_normSq", _wrap_Vector3_normSq, METH_VARARGS, (char *)"Vector3_normSq(Vector3 self) -> double"},
+	 { (char *)"Vector3_angle", _wrap_Vector3_angle, METH_VARARGS, (char *)"Vector3_angle(Vector3 self, Vector3 v) -> double"},
 	 { (char *)"Vector3_normalize", _wrap_Vector3_normalize, METH_VARARGS, (char *)"Vector3_normalize(Vector3 self)"},
 	 { (char *)"Vector3_unit", _wrap_Vector3_unit, METH_VARARGS, (char *)"Vector3_unit(Vector3 self) -> Vector3"},
 	 { (char *)"Vector3_scale", _wrap_Vector3_scale, METH_VARARGS, (char *)"Vector3_scale(Vector3 self, double scalar)"},
@@ -23912,6 +24251,8 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"VectorDouble_get", _wrap_VectorDouble_get, METH_VARARGS, (char *)"VectorDouble_get(VectorDouble self) -> double const *"},
 	 { (char *)"VectorDouble_dot", _wrap_VectorDouble_dot, METH_VARARGS, (char *)"VectorDouble_dot(VectorDouble self, VectorDouble vec_) -> double"},
+	 { (char *)"VectorDouble_angle", _wrap_VectorDouble_angle, METH_VARARGS, (char *)"VectorDouble_angle(VectorDouble self, VectorDouble v) -> double"},
+	 { (char *)"VectorDouble_normSq", _wrap_VectorDouble_normSq, METH_VARARGS, (char *)"VectorDouble_normSq(VectorDouble self) -> double"},
 	 { (char *)"VectorDouble_norm", _wrap_VectorDouble_norm, METH_VARARGS, (char *)"VectorDouble_norm(VectorDouble self) -> double"},
 	 { (char *)"VectorDouble_normalize", _wrap_VectorDouble_normalize, METH_VARARGS, (char *)"VectorDouble_normalize(VectorDouble self)"},
 	 { (char *)"VectorDouble_scale", _wrap_VectorDouble_scale, METH_VARARGS, (char *)"VectorDouble_scale(VectorDouble self, double scalar)"},
@@ -23986,6 +24327,7 @@ static PyMethodDef SwigMethods[] = {
 		"permute(std::vector< size_t,std::allocator< size_t > > const & pivotsM, size_t n=0) -> MatrixDouble\n"
 		"MatrixDouble_permute(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > const & pivotsM) -> MatrixDouble\n"
 		""},
+	 { (char *)"MatrixDouble_normSq", _wrap_MatrixDouble_normSq, METH_VARARGS, (char *)"MatrixDouble_normSq(MatrixDouble self) -> double"},
 	 { (char *)"MatrixDouble_norm", _wrap_MatrixDouble_norm, METH_VARARGS, (char *)"MatrixDouble_norm(MatrixDouble self) -> double"},
 	 { (char *)"MatrixDouble_normalize", _wrap_MatrixDouble_normalize, METH_VARARGS, (char *)"MatrixDouble_normalize(MatrixDouble self) -> MatrixDouble"},
 	 { (char *)"MatrixDouble_unit", _wrap_MatrixDouble_unit, METH_VARARGS, (char *)"MatrixDouble_unit(MatrixDouble self) -> MatrixDouble"},

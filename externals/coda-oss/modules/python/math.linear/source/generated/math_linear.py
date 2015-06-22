@@ -734,6 +734,11 @@ class Matrix3x1(_object):
         return _math_linear.Matrix3x1_permute(self, *args)
 
 
+    def normSq(self):
+        """normSq(Matrix3x1 self) -> double"""
+        return _math_linear.Matrix3x1_normSq(self)
+
+
     def norm(self):
         """norm(Matrix3x1 self) -> double"""
         return _math_linear.Matrix3x1_norm(self)
@@ -822,6 +827,16 @@ class Vector3(_object):
     def norm(self):
         """norm(Vector3 self) -> double"""
         return _math_linear.Vector3_norm(self)
+
+
+    def normSq(self):
+        """normSq(Vector3 self) -> double"""
+        return _math_linear.Vector3_normSq(self)
+
+
+    def angle(self, v):
+        """angle(Vector3 self, Vector3 v) -> double"""
+        return _math_linear.Vector3_angle(self, v)
 
 
     def normalize(self):
@@ -971,6 +986,16 @@ class VectorDouble(_object):
     def dot(self, vec_):
         """dot(VectorDouble self, VectorDouble vec_) -> double"""
         return _math_linear.VectorDouble_dot(self, vec_)
+
+
+    def angle(self, v):
+        """angle(VectorDouble self, VectorDouble v) -> double"""
+        return _math_linear.VectorDouble_angle(self, v)
+
+
+    def normSq(self):
+        """normSq(VectorDouble self) -> double"""
+        return _math_linear.VectorDouble_normSq(self)
 
 
     def norm(self):
@@ -1214,6 +1239,11 @@ class MatrixDouble(_object):
         permute(MatrixDouble self, std::vector< size_t,std::allocator< size_t > > const & pivotsM) -> MatrixDouble
         """
         return _math_linear.MatrixDouble_permute(self, pivotsM, n)
+
+
+    def normSq(self):
+        """normSq(MatrixDouble self) -> double"""
+        return _math_linear.MatrixDouble_normSq(self)
 
 
     def norm(self):
