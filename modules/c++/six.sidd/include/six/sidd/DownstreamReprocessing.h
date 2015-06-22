@@ -25,7 +25,7 @@
 #include <mem/ScopedCopyablePtr.h>
 #include "six/Types.h"
 #include "six/Init.h"
-#include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 
 namespace six
 {
@@ -82,7 +82,7 @@ struct ProcessingEvent
     std::string interpolationMethod;
 
     //!  (Optional, Unbounded) List of descriptors for the processing event
-    std::vector<Parameter> descriptor;
+    ParameterCollection descriptor;
 };
 
 /*!

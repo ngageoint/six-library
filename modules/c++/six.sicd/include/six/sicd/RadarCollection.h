@@ -25,6 +25,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 #include <mem/ScopedCloneablePtr.h>
 
 namespace six
@@ -399,7 +400,7 @@ struct RadarCollection
     mem::ScopedCloneablePtr<Area> area;
 
     //!  (Optional) additional parameters
-    std::vector<Parameter> parameters;
+    ParameterCollection parameters;
 };
 
 }

@@ -25,6 +25,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 #include <mem/ScopedCopyablePtr.h>
 
 namespace six
@@ -55,7 +56,7 @@ struct MatchCollect
     int matchIndex;
 
     //! Relevant match parameter. Attribute name identifies the parameter.
-    std::vector<Parameter> parameters;
+    ParameterCollection parameters;
 };
 
 /*!

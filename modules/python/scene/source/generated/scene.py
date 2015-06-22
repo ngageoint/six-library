@@ -200,6 +200,7 @@ import coda_except
 import math_linear
 import math_poly
 import coda_types
+import coda_sys
 
 _scene.TRACK_LEFT_swigconstant(_scene)
 TRACK_LEFT = _scene.TRACK_LEFT

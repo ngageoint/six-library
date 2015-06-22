@@ -27,6 +27,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 
 namespace six
 {
@@ -48,7 +49,7 @@ struct WeightType
      *  weighting parameter information.
      *  This is present in 1.0 (but not 0.4.1) and can be 0 to unbounded
      */
-    std::vector<Parameter> parameters;
+    ParameterCollection parameters;
 };
 
 /*!

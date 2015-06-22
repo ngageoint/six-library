@@ -206,7 +206,7 @@ void DerivedClassification::putImpl(const std::string& name,
 }
 
 void DerivedClassification::putImpl(const std::string& name,
-                                    const std::vector<Parameter>& params,
+                                    const ParameterCollection& params,
                                     std::ostream& os)
 {
     os << name << ":\n";

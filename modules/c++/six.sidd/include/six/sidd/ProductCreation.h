@@ -26,7 +26,7 @@
 
 #include "six/Types.h"
 #include "six/Init.h"
-#include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 #include "six/sidd/DerivedClassification.h"
 
 namespace six
@@ -84,7 +84,7 @@ public:
      *  (Optional, Unbounded) Extensible params used to support
      *  profile-specific needs related to product creation
      */
-    std::vector<Parameter> productCreationExtensions;
+    ParameterCollection productCreationExtensions;
 };
 }
 }

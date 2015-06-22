@@ -25,6 +25,7 @@
 
 #include <six/XMLParser.h>
 #include <six/Parameter.h>
+#include <six/ParameterCollection.h>
 #include <six/ErrorStatistics.h>
 #include <six/Radiometric.h>
 
@@ -92,11 +93,11 @@ public:
     XMLElem createParameter(const std::string& name, const std::string& uri,
             const Parameter& value, XMLElem parent = NULL) const;
     void addParameters(const std::string& name, const std::string& uri,
-            const std::vector<Parameter>& props, XMLElem parent = NULL) const;
+            const ParameterCollection& props, XMLElem parent = NULL) const;
     XMLElem createParameter(const std::string& name, const Parameter& value,
             XMLElem parent = NULL) const;
     void addParameters(const std::string& name,
-            const std::vector<Parameter>& props, XMLElem parent = NULL) const;
+            const ParameterCollection& props, XMLElem parent = NULL) const;
     void addDecorrType(const std::string& name, const std::string& uri,
             DecorrType dt, XMLElem p) const;
 
@@ -125,7 +126,7 @@ public:
     void parseRowColLatLon(XMLElem parent, RowColLatLon& rc) const;
 
     void parseParameters(XMLElem paramXML, const std::string& paramName,
-            std::vector<Parameter>& props) const;
+            ParameterCollection& props) const;
 
     void parseDecorrType(XMLElem decorrXML, DecorrType& decorrType) const;
 

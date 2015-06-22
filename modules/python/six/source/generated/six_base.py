@@ -196,11 +196,12 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _six_base.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
+import coda_types
+import coda_sys
 import coda_except
 import math_poly
 import math_linear
 import scene
-import coda_types
 class DateTime(_object):
     """Proxy of C++ nitf::DateTime class"""
     __swig_setmethods__ = {}
@@ -3338,6 +3339,150 @@ Radiometric_swigregister = _six_base.Radiometric_swigregister
 Radiometric_swigregister(Radiometric)
 Radiometric.NL_ABSOLUTE = _six_base.cvar.Radiometric_NL_ABSOLUTE
 Radiometric.NL_RELATIVE = _six_base.cvar.Radiometric_NL_RELATIVE
+
+class Parameter(_object):
+    """Proxy of C++ six::Parameter class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Parameter, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Parameter, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_base.delete_Parameter
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(six::Parameter self) -> Parameter
+        __init__(six::Parameter self, Parameter other) -> Parameter
+        """
+        this = _six_base.new_Parameter(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def str(self):
+        """str(Parameter self) -> std::string"""
+        return _six_base.Parameter_str(self)
+
+
+    def getName(self):
+        """getName(Parameter self) -> std::string"""
+        return _six_base.Parameter_getName(self)
+
+
+    def setName(self, name):
+        """setName(Parameter self, std::string name)"""
+        return _six_base.Parameter_setName(self, name)
+
+
+    def __eq__(self, o):
+        """__eq__(Parameter self, Parameter o) -> bool"""
+        return _six_base.Parameter___eq__(self, o)
+
+
+    def __ne__(self, o):
+        """__ne__(Parameter self, Parameter o) -> bool"""
+        return _six_base.Parameter___ne__(self, o)
+
+    def setValue(self, *args):
+        if len(args) != 1:
+            raise RuntimeError("Parameter.setValue takes exactly one argument")
+        new_tuple = (str(args[0]), )
+        return _six_base.Parameter_setValue(self, str(args[0]))
+
+
+
+    def __str__(self):
+        """__str__(Parameter self) -> std::string"""
+        return _six_base.Parameter___str__(self)
+
+
+    def __int__(self):
+        """__int__(Parameter self) -> long"""
+        return _six_base.Parameter___int__(self)
+
+
+    def __float__(self):
+        """__float__(Parameter self) -> double"""
+        return _six_base.Parameter___float__(self)
+
+Parameter_swigregister = _six_base.Parameter_swigregister
+Parameter_swigregister(Parameter)
+
+class ParameterCollection(_object):
+    """Proxy of C++ six::ParameterCollection class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ParameterCollection, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ParameterCollection, name)
+    __repr__ = _swig_repr
+
+    def at(self, *args):
+        """
+        at(ParameterCollection self, size_t i) -> Parameter
+        at(ParameterCollection self, size_t i) -> Parameter
+        """
+        return _six_base.ParameterCollection_at(self, *args)
+
+
+    def push_back(self, p):
+        """push_back(ParameterCollection self, Parameter p)"""
+        return _six_base.ParameterCollection_push_back(self, p)
+
+
+    def size(self):
+        """size(ParameterCollection self) -> size_t"""
+        return _six_base.ParameterCollection_size(self)
+
+
+    def empty(self):
+        """empty(ParameterCollection self) -> bool"""
+        return _six_base.ParameterCollection_empty(self)
+
+
+    def front(self, *args):
+        """
+        front(ParameterCollection self) -> Parameter
+        front(ParameterCollection self) -> Parameter
+        """
+        return _six_base.ParameterCollection_front(self, *args)
+
+
+    def back(self, *args):
+        """
+        back(ParameterCollection self) -> Parameter
+        back(ParameterCollection self) -> Parameter
+        """
+        return _six_base.ParameterCollection_back(self, *args)
+
+
+    def findParameter(self, paramName):
+        """findParameter(ParameterCollection self, std::string const & paramName) -> size_t"""
+        return _six_base.ParameterCollection_findParameter(self, paramName)
+
+
+    def __getitem__(self, i):
+        """__getitem__(ParameterCollection self, size_t i) -> Parameter"""
+        return _six_base.ParameterCollection___getitem__(self, i)
+
+
+    def __setitem__(self, i, v):
+        """__setitem__(ParameterCollection self, size_t i, Parameter v)"""
+        return _six_base.ParameterCollection___setitem__(self, i, v)
+
+
+    def __init__(self):
+        """__init__(six::ParameterCollection self) -> ParameterCollection"""
+        this = _six_base.new_ParameterCollection()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_ParameterCollection
+    __del__ = lambda self: None
+ParameterCollection_swigregister = _six_base.ParameterCollection_swigregister
+ParameterCollection_swigregister(ParameterCollection)
 
 class Data(_object):
     """Proxy of C++ six::Data class"""

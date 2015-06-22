@@ -25,6 +25,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/ParameterCollection.h"
 #include <mem/ScopedCloneablePtr.h>
 
 namespace six
@@ -67,7 +68,7 @@ public:
     std::vector<mem::ScopedCloneablePtr<GeoInfo> > geoInfos;
 
     //! (Optional) description of geographic feature
-    std::vector<Parameter> desc;
+    ParameterCollection desc;
 
     /*!
      *  This could be a point if one, a line if 2, or a polygon if > 2

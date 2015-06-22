@@ -47,6 +47,12 @@ public:
     ~Parameter()
     {
     }
+
+    Parameter(const Parameter & other)
+      : mValue(other.mValue),
+        mName(other.mName)
+    {
+    }
     
     //!  Templated constructor, constructs from given value
     template<typename T>
@@ -132,6 +138,11 @@ public:
     bool operator==(const Parameter& o) const
     {
         return mName == o.mName && mValue == o.mValue;
+    }
+
+    bool operator!=(const Parameter& o) const
+    {
+        return !((*this) == o);
     }
 
 protected:

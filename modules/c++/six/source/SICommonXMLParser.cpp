@@ -24,6 +24,7 @@
 #include <str/Convert.h>
 #include <six/Utilities.h>
 #include <six/SICommonXMLParser.h>
+#include <six/ParameterCollection.h>
 
 namespace
 {
@@ -363,7 +364,7 @@ void SICommonXMLParser::parseParameter(XMLElem element, Parameter& p) const
 }
 
 void SICommonXMLParser::parseParameters(XMLElem paramXML,
-        const std::string& paramName, std::vector<Parameter>& props) const
+        const std::string& paramName, ParameterCollection& props) const
 {
     std::vector < XMLElem > elemXML;
     paramXML->getElementsByTagName(paramName, elemXML);
@@ -392,10 +393,10 @@ XMLElem SICommonXMLParser::createParameter(const std::string& name,
 }
 
 void SICommonXMLParser::addParameters(const std::string& name,
-        const std::string& uri, const std::vector<Parameter>& props,
+        const std::string& uri, const ParameterCollection& props,
         XMLElem parent) const
 {
-    for (std::vector<Parameter>::const_iterator it = props.begin(); it
+    for (six::ParameterCollection::ConstParameterCollectionIterator_t it = props.begin(); it
             != props.end(); ++it)
     {
         createParameter(name, uri, *it, parent);
@@ -403,7 +404,7 @@ void SICommonXMLParser::addParameters(const std::string& name,
 }
 
 void SICommonXMLParser::addParameters(const std::string& name,
-        const std::vector<Parameter>& props, XMLElem parent) const
+        const ParameterCollection& props, XMLElem parent) const
 {
     addParameters(name, getDefaultURI(), props, parent);
 }
