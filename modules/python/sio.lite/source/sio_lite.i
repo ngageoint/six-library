@@ -32,33 +32,63 @@
 %include "sio/lite/StreamReader.h"
 %include "sio/lite/FileReader.h"
 
-%pythoncode %{
+%pythoncode
+%{
+import numpy
+
+def dtypeFromSioType(elementType, elementSize):
+    """
+    Convert an SIO type & size to a NumPy dtype
+    Complex integer types are not supported
+    """
+    typeMap = {FileHeader.UNSIGNED: 'uint',
+               FileHeader.SIGNED: 'int',
+               FileHeader.FLOAT: 'float',
+               FileHeader.COMPLEX_FLOAT: 'complex'}
+
+    if not elementType in typeMap:
+        raise Exception("Unknown element type: " + elementType)
+
+    dtypeStr = "%s%s" % (typeMap[elementType], elementSize * 8)
+
+    return numpy.dtype(dtypeStr)
+
+
+def sioTypeFromDtype(dtype):
+    """
+    Convert a NumPy dtype into an SIO type & size
+    """
+    # Handle dtypes, strings, numpy types
+    dt = numpy.dtype(dtype)
+
+    kindToType = {'i': FileHeader.SIGNED,
+                  'u': FileHeader.UNSIGNED,
+                  'f': FileHeader.FLOAT,
+                  'c': FileHeader.COMPLEX_FLOAT}
+
+    if not dt.kind in kindToType:
+        raise Exception("Unknown element type: " + str(dt.kind))
+
+    return kindToType[dt.kind]
+%}
+
+%pythoncode
+%{
 def write(numpyArray, outputPathname, elementType = None):
     # Make sure this array is sized properly
     if len(numpyArray.shape) != 2:
         raise Exception("Only 2 dimensional images are supported")
 
     if elementType == None:
-        signedType = ['int8', 'int16', 'int32', 'int64']
-        unsignedType = ['uint8', 'uint16', 'uint32', 'uint64']
-        floatType = ['float32', 'float64']
-        complexFloatType = ['complex64', 'complex128']
-        
-        if numpyArray.dtype in signedType:
-            elementType = FileHeader.SIGNED
-        elif numpyArray.dtype in unsignedType:
-            elementType = FileHeader.UNSIGNED
-        elif numpyArray.dtype in floatType:
-            elementType = FileHeader.FLOAT
-        elif numpyArray.dtype in complexFloatType:
-            elementType = FileHeader.COMPLEX_FLOAT
-        else:
-            raise Exception("Unknown element type: " + str(numpyArray.dtype))
+        elementType = sioTypeFromDtype(numpyArray.dtype)
     
     if not numpyArray.flags['C_CONTIGUOUS']:
         numpyArray = numpy.ascontiguousarray(numpyArray)
             
-    header = FileHeader(numpyArray.shape[0], numpyArray.shape[1], numpyArray.strides[1], elementType);
+    header = FileHeader(numpyArray.shape[0], 
+                        numpyArray.shape[1],
+                        numpyArray.strides[1],
+                        elementType);
     
     pointer, ro = numpyArray.__array_interface__['data']
     
@@ -69,36 +99,19 @@ def write(numpyArray, outputPathname, elementType = None):
     writer.write(header, pointer)
 %}
 
-%pythoncode %{
-import numpy
-
+%pythoncode
+%{
 def read(inputPathname):
     reader = FileReader(inputPathname)
     header = reader.getHeader()
-    
-    elementType = header.getElementType()
-    elementSize = header.getElementSize()
-    
-    if elementType == FileHeader.UNSIGNED:
-        dtype = 'uint'
-    elif elementType == FileHeader.SIGNED:
-        dtype = 'int'
-    elif elementType == FileHeader.FLOAT:
-        dtype = 'float'
-    elif elementType == FileHeader.COMPLEX_FLOAT:
-        dtype = 'complex'
-    else:
-        raise Exception("Unknown element type: " + str(elementType))
-        
-    dtype += str(elementSize * 8)
 
-    numpyArray = numpy.empty(shape = (header.getNumLines(), header.getNumElements()), dtype = dtype)
+    elementSize = header.getElementSize()
+    dtype = dtypeFromSioType(header.getElementType(), elementSize)
+
+    numpyArray = numpy.empty(shape = (header.getNumLines(),
+                                      header.getNumElements()),
+                             dtype = dtype)
     pointer, ro = numpyArray.__array_interface__['data']
     reader.read(pointer, numpyArray.shape[0] * numpyArray.shape[1] * elementSize)
     return numpyArray;
 %}
-
-
-
-
-
