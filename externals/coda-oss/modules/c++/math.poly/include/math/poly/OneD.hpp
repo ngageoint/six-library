@@ -67,10 +67,11 @@ OneD<_T>::integrate(double start, double end) const
 }
 
 template<>
-math::linear::VectorN< 3, double >
-OneD< math::linear::VectorN< 3, double > >::integrate(double start, double end) const
+inline
+math::linear::VectorN<3, double>
+OneD<math::linear::VectorN<3, double> >::integrate(double start, double end) const
 {
-   math::linear::VectorN< 3, double > ret(0.0);
+   math::linear::VectorN<3, double> ret(0.0);
 
    int polyOrder = order();
    OneD<double> poly0(polyOrder);
@@ -108,10 +109,11 @@ OneD<_T>::derivative() const
 }
 
 template<>
-OneD< math::linear::VectorN< 3, double > >
-OneD< math::linear::VectorN< 3, double > >::derivative() const
+inline
+OneD< math::linear::VectorN<3, double> >
+OneD< math::linear::VectorN<3, double> >::derivative() const
 {
-   OneD< math::linear::VectorN< 3, double > > ret(0);
+   OneD< math::linear::VectorN<3, double> > ret(0);
 
    int polyOrder = order();
    if(polyOrder > 0)
@@ -131,7 +133,7 @@ OneD< math::linear::VectorN< 3, double > >::derivative() const
        poly1 = poly1.derivative();
        poly2 = poly2.derivative();
 
-       ret = OneD< math::linear::VectorN< 3, double > >(polyOrder - 1);
+       ret = OneD< math::linear::VectorN<3, double> >(polyOrder - 1);
        for(size_t term = 0, sz = mCoef.size() -1; term < sz; term++)
        {
            ret[term][0] = poly0[term];
@@ -398,7 +400,9 @@ OneD<_T> OneD<_T>::truncateToNonZeros(double zeroEpsilon) const
 }
 
 template<>
-OneD< math::linear::VectorN< 3, double > > OneD< math::linear::VectorN< 3, double > >::truncateToNonZeros(double zeroEpsilon) const
+inline
+OneD<math::linear::VectorN<3, double> >
+OneD< math::linear::VectorN<3, double> >::truncateToNonZeros(double zeroEpsilon) const
 {
     zeroEpsilon = std::abs(zeroEpsilon);
     size_t newOrder(0);
