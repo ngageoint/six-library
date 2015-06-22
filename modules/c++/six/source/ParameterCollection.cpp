@@ -3,7 +3,7 @@
 
 #include <import/except.h>
 
-size_t six::ParameterCollection::findParameterIndex(const std::string & paramName) const
+size_t six::ParameterCollection::findParameterIndex(const std::string& paramName) const
 {
     for(size_t ii = 0; ii < mParams.size(); ++ii)
     {
@@ -17,7 +17,7 @@ size_t six::ParameterCollection::findParameterIndex(const std::string & paramNam
         + "\" found in this collection");
 }
 
-bool six::ParameterCollection::containsParameter(const std::string & paramName) const
+bool six::ParameterCollection::containsParameter(const std::string& paramName) const
 {
     for(size_t ii = 0; ii < mParams.size(); ++ii)
     {
@@ -29,4 +29,3 @@ bool six::ParameterCollection::containsParameter(const std::string & paramName) 
 
     return false;
 }
-

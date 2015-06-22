@@ -3418,6 +3418,21 @@ class ParameterCollection(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, ParameterCollection, name)
     __repr__ = _swig_repr
 
+    def findParameterIndex(self, paramName):
+        """findParameterIndex(ParameterCollection self, std::string const & paramName) -> size_t"""
+        return _six_base.ParameterCollection_findParameterIndex(self, paramName)
+
+
+    def findParameter(self, paramName):
+        """findParameter(ParameterCollection self, std::string const & paramName) -> Parameter"""
+        return _six_base.ParameterCollection_findParameter(self, paramName)
+
+
+    def containsParameter(self, paramName):
+        """containsParameter(ParameterCollection self, std::string const & paramName) -> bool"""
+        return _six_base.ParameterCollection_containsParameter(self, paramName)
+
+
     def at(self, *args):
         """
         at(ParameterCollection self, size_t i) -> Parameter
@@ -3455,11 +3470,6 @@ class ParameterCollection(_object):
         back(ParameterCollection self) -> Parameter
         """
         return _six_base.ParameterCollection_back(self, *args)
-
-
-    def findParameter(self, paramName):
-        """findParameter(ParameterCollection self, std::string const & paramName) -> size_t"""
-        return _six_base.ParameterCollection_findParameter(self, paramName)
 
 
     def __getitem__(self, i):

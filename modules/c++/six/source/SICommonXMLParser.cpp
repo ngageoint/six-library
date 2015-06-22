@@ -396,7 +396,7 @@ void SICommonXMLParser::addParameters(const std::string& name,
         const std::string& uri, const ParameterCollection& props,
         XMLElem parent) const
 {
-    for (six::ParameterCollection::ConstParameterCollectionIterator_t it = props.begin(); it
+    for (six::ParameterCollection::ConstParameterCollectionIteratorT it = props.begin(); it
             != props.end(); ++it)
     {
         createParameter(name, uri, *it, parent);

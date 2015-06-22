@@ -89,7 +89,7 @@ int main()
   }
   
   six::Parameter find_p6 = *std::find(pc.begin(),pc.end(),p6);
-  six::ParameterCollection::ParameterCollectionIterator_t 
+  six::ParameterCollection::ParameterCollectionIteratorT 
       find_non_member = std::find(pc.begin(),pc.end(),non_member);
   if(find_p6 != p6 || find_non_member != pc.end()) {
     std::cout << "Does not seem to work with standard algorithms" << std::endl;

@@ -45,12 +45,12 @@ public:
     /*!
      *  ParameterCollection's iterator
      */
-    typedef std::vector<Parameter>::iterator ParameterCollectionIterator_t;
+    typedef std::vector<Parameter>::iterator ParameterCollectionIteratorT;
 
     /*!
      *  ParameterCollection's const iterator
      */
-    typedef std::vector<Parameter>::const_iterator ConstParameterCollectionIterator_t;
+    typedef std::vector<Parameter>::const_iterator ConstParameterCollectionIteratorT;
     
     /*!
      * Given the name of a parameter, this function will search
@@ -62,7 +62,7 @@ public:
      * \param paramName the name of the parameter to search for
      * \return the index of the parameter
      */
-    size_t findParameterIndex(const std::string & paramName) const;
+    size_t findParameterIndex(const std::string& paramName) const;
 
     /*!
      * Given the name of a parameter, this function will search for the
@@ -72,7 +72,7 @@ public:
      * \param paramName the name of the parameter to search for
      * \return the parameter
      */
-    const Parameter& findParameter(const std::string & paramName) const
+    const Parameter& findParameter(const std::string& paramName) const
     {
         return mParams.at( findParameterIndex(paramName) );
     }
@@ -84,7 +84,7 @@ public:
      * \param paramName the name of the parameter to search for
      * \return true if there is a suitable parameter, false otherwise
      */
-    bool containsParameter(const std::string & paramName) const;
+    bool containsParameter(const std::string& paramName) const;
 
     /*
      * Various container functions
@@ -108,7 +108,7 @@ public:
         return mParams[i];
     }
 
-    void push_back(const Parameter & p)
+    void push_back(const Parameter& p)
     {
         mParams.push_back(p);
     }
@@ -122,20 +122,20 @@ public:
         return mParams.empty();
     }
        
-    ParameterCollectionIterator_t begin()
+    ParameterCollectionIteratorT begin()
     {
         return mParams.begin();
     }
-    ParameterCollectionIterator_t end()
+    ParameterCollectionIteratorT end()
     {
         return mParams.end();
     }
 
-    ConstParameterCollectionIterator_t begin() const
+    ConstParameterCollectionIteratorT begin() const
     {
         return mParams.begin();
     }
-    ConstParameterCollectionIterator_t end() const
+    ConstParameterCollectionIteratorT end() const
     {
         return mParams.end();
     }
