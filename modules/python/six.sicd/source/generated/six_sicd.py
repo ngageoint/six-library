@@ -2414,6 +2414,14 @@ class SixSicdUtilities(_object):
         getProjectionModel = staticmethod(getProjectionModel)
     __swig_getmethods__["getProjectionModel"] = lambda x: getProjectionModel
 
+    def getWidebandData(sicdPathname, schemaPaths, complexData, buffer):
+        """getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)"""
+        return _six_sicd.SixSicdUtilities_getWidebandData(sicdPathname, schemaPaths, complexData, buffer)
+
+    if _newclass:
+        getWidebandData = staticmethod(getWidebandData)
+    __swig_getmethods__["getWidebandData"] = lambda x: getWidebandData
+
     def __init__(self):
         """__init__(six::sicd::Utilities self) -> SixSicdUtilities"""
         this = _six_sicd.new_SixSicdUtilities()
@@ -2433,6 +2441,10 @@ def SixSicdUtilities_getSceneGeometry(data):
 def SixSicdUtilities_getProjectionModel(data, geom):
     """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
+
+def SixSicdUtilities_getWidebandData(sicdPathname, schemaPaths, complexData, buffer):
+    """SixSicdUtilities_getWidebandData(std::string const & sicdPathname, VectorString schemaPaths, ComplexData complexData, std::complex< float > * buffer)"""
+    return _six_sicd.SixSicdUtilities_getWidebandData(sicdPathname, schemaPaths, complexData, buffer)
 
 class ScopedCloneableCollectionInformation(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> class"""
@@ -7745,6 +7757,24 @@ class VectorTimelineSet(_object):
     __del__ = lambda self: None
 VectorTimelineSet_swigregister = _six_sicd.VectorTimelineSet_swigregister
 VectorTimelineSet_swigregister(VectorTimelineSet)
+
+
+def getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer):
+    """getWidebandData(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long arrayBuffer)"""
+    return _six_sicd.getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer)
+import numpy as np
+from six_base import VectorString
+
+def read(inputPathname, schemaPaths = VectorString()):
+    complexData = getComplexData(inputPathname, schemaPaths)
+    
+    #Numpy has no concept of complex integers, so dtype will always be complex64
+    widebandData = np.empty(shape = (complexData.getNumRows(), complexData.getNumCols()), dtype = "complex64")
+    widebandBuffer, ro = widebandData.__array_interface__["data"]
+    
+    getWidebandData(inputPathname, schemaPaths, complexData, widebandBuffer)
+    
+    return widebandData, complexData
 
 # This file is compatible with both classic and new-style classes.
 
