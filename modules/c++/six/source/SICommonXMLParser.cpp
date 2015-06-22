@@ -24,6 +24,7 @@
 #include <str/Convert.h>
 #include <six/Utilities.h>
 #include <six/SICommonXMLParser.h>
+#include <six/ParameterCollection.h>
 
 namespace
 {
@@ -395,7 +396,7 @@ void SICommonXMLParser::addParameters(const std::string& name,
         const std::string& uri, const ParameterCollection& props,
         XMLElem parent) const
 {
-    for (const Parameter* it = props.begin(); it
+    for (six::ParameterCollection::ConstParameterCollectionIterator_t it = props.begin(); it
             != props.end(); ++it)
     {
         createParameter(name, uri, *it, parent);

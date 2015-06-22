@@ -88,9 +88,10 @@ int main()
     return 1;
   }
   
-  six::Parameter* find_p6 = std::find(pc.begin(),pc.end(),p6);
-  six::Parameter* find_non_member = std::find(pc.begin(),pc.end(),non_member);
-  if(*find_p6 != p6 || find_non_member != pc.end()) {
+  six::Parameter find_p6 = *std::find(pc.begin(),pc.end(),p6);
+  six::ParameterCollection::ParameterCollectionIterator_t 
+      find_non_member = std::find(pc.begin(),pc.end(),non_member);
+  if(find_p6 != p6 || find_non_member != pc.end()) {
     std::cout << "Does not seem to work with standard algorithms" << std::endl;
     return 1;
   }
@@ -98,3 +99,4 @@ int main()
   std::cout << "Looks like it's working" << std::endl;
   return 0;
 }
+

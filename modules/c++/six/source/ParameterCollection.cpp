@@ -1,89 +1,32 @@
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
 
-#include <algorithm>
+#include <import/except.h>
 
-six::Parameter& six::ParameterCollection::at(size_t i)
+size_t six::ParameterCollection::findParameterIndex(const std::string & paramName) const
 {
-    return mParams.at(i);
-}
-
-const six::Parameter& six::ParameterCollection::at(size_t i) const 
-{
-    return mParams.at(i);
-}
-
-six::Parameter& six::ParameterCollection::operator[](size_t i) 
-{
-    return mParams[i];
-}
-
-const six::Parameter& six::ParameterCollection::operator[](size_t i) const 
-{
-    return mParams[i];
-}
-
-void six::ParameterCollection::push_back(const six::Parameter & p) 
-{
-    mParams.push_back(p);
-}
-
-size_t six::ParameterCollection::size() const
-{
-    return mParams.size();
-}
-
-bool six::ParameterCollection::empty() const
-{
-    return mParams.empty();
-}
-
-six::Parameter* six::ParameterCollection::begin()
-{
-    return &front();
-}
-
-six::Parameter* six::ParameterCollection::end()
-{
-    return &back() + 1;
-}
-
-const six::Parameter* six::ParameterCollection::begin() const
-{
-    return &front();
-}
-
-const six::Parameter* six::ParameterCollection::end() const
-{
-    return &back() + 1; 
-}
-
-const six::Parameter& six::ParameterCollection::front() const
-{
-    return mParams.front();
-}
-
-const six::Parameter& six::ParameterCollection::back() const
-{
-    return mParams.back();
-}
-
-six::Parameter& six::ParameterCollection::front()
-{
-    return mParams.front();
-}
-
-six::Parameter& six::ParameterCollection::back()
-{
-    return mParams.back();
-}
-
-size_t six::ParameterCollection::findParameter(const std::string & paramName) const
-{
-    for(size_t i = 0; i < mParams.size(); ++i)
+    for(size_t ii = 0; ii < mParams.size(); ++ii)
     {
-        if(paramName == mParams[i].getName()) return i;
+        if (paramName == mParams[ii].getName())
+        {
+            return ii;
+        }
     }
 
-    return mParams.size();
+    throw except::Exception("No parameter with name \"" + paramName 
+        + "\" found in this collection");
 }
+
+bool six::ParameterCollection::containsParameter(const std::string & paramName) const
+{
+    for(size_t ii = 0; ii < mParams.size(); ++ii)
+    {
+        if (paramName == mParams[ii].getName())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+

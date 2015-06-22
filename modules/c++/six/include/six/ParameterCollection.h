@@ -37,52 +37,130 @@ namespace six
  *
  * This class keeps track of a set of parameters.
  *
- * @todo convienence functions
- *
  */
 class ParameterCollection
 {
 public:
-    Parameter& at(size_t i);
-    const Parameter& at(size_t i) const;
 
-    Parameter& operator[](size_t i);
-    const Parameter& operator[](size_t i) const;
+    /*!
+     *  ParameterCollection's iterator
+     */
+    typedef std::vector<Parameter>::iterator ParameterCollectionIterator_t;
 
-    void push_back(const Parameter & p);
+    /*!
+     *  ParameterCollection's const iterator
+     */
+    typedef std::vector<Parameter>::const_iterator ConstParameterCollectionIterator_t;
     
-    size_t size() const;
-    bool empty() const;
-       
-    Parameter* begin();
-    Parameter* end();
-
-    const Parameter* begin() const;
-    const Parameter* end() const;
-
-    const Parameter& front() const;
-    const Parameter& back() const;
-    
-    Parameter& front();
-    Parameter& back();
-
     /*!
      * Given the name of a parameter, this function will search
      * for the first parameter of a matching name and return its
-     * index. If a parameter with a matching name is not found, the
-     * number of parameters contained is returned (ie, an out of bounds
-     * index)
+     * index. 
+     * 
+     *
+     * \throw Exception if no matching parameter is found
+     * \param paramName the name of the parameter to search for
+     * \return the index of the parameter
+     */
+    size_t findParameterIndex(const std::string & paramName) const;
+
+    /*!
+     * Given the name of a parameter, this function will search for the
+     * first parameter of a matching name and return a reference to it.
+     *
+     * \throw Exception if no matching parameter is found
+     * \param paramName the name of the parameter to search for
+     * \return the parameter
+     */
+    const Parameter& findParameter(const std::string & paramName) const
+    {
+        return mParams.at( findParameterIndex(paramName) );
+    }
+
+    /*!
+     * Given the name of a parameter, this function will tell you if this
+     * collection contains a matching parameter.
      *
      * \param paramName the name of the parameter to search for
-     * \return the index of the parameter, or if it is not present
-     *         size() is returned.
+     * \return true if there is a suitable parameter, false otherwise
      */
-    size_t findParameter(const std::string & paramName) const;
+    bool containsParameter(const std::string & paramName) const;
+
+    /*
+     * Various container functions
+     */
+
+    Parameter& at(size_t i)
+    {
+        return mParams.at(i);
+    }
+    const Parameter& at(size_t i) const
+    {
+        return mParams.at(i);
+    }
+
+    Parameter& operator[](size_t i)
+    {
+        return mParams[i];
+    }
+    const Parameter& operator[](size_t i) const
+    {
+        return mParams[i];
+    }
+
+    void push_back(const Parameter & p)
+    {
+        mParams.push_back(p);
+    }
+    
+    size_t size() const
+    {
+        return mParams.size();
+    }
+    bool empty() const
+    {
+        return mParams.empty();
+    }
+       
+    ParameterCollectionIterator_t begin()
+    {
+        return mParams.begin();
+    }
+    ParameterCollectionIterator_t end()
+    {
+        return mParams.end();
+    }
+
+    ConstParameterCollectionIterator_t begin() const
+    {
+        return mParams.begin();
+    }
+    ConstParameterCollectionIterator_t end() const
+    {
+        return mParams.end();
+    }
+
+    const Parameter& front() const
+    {
+        return mParams.front();
+    }
+    const Parameter& back() const
+    {
+        return mParams.back();
+    }
+    
+    Parameter& front()
+    {
+        return mParams.front();
+    }
+    Parameter& back()
+    {
+        return mParams.back();
+    }
 
 private:
 
     std::vector<Parameter> mParams;
-    Parameter* mRecentlyQueried;
 };
 
 }
