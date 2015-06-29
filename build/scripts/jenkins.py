@@ -33,6 +33,8 @@ if options.build_options is not None:
     build_options = options.build_options.split(',')
 else:
     build_options = []
+    
+config_options += ["--enable-swig"]
 
 print 'Package Name: %s' % package_name
 print 'Build Dir: %s' % build_dir
