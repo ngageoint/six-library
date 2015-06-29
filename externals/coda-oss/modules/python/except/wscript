@@ -1,9 +1,4 @@
-import os
-from os.path import join, basename
-from waflib import Utils
 distclean = options = lambda p: None
-
-
 
 def configure(conf):
   conf.env['prefix_except'] = 'coda_'  

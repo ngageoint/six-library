@@ -476,11 +476,32 @@ class CPPContext(Context.Context):
             # it'll copy the file over to the installation directory for us.
             # We ensure this always runs via 'add_targets'
             copyFilesTarget = target + '_py'
-            bld(features = 'py', 
+            bld(features = 'py',
                 target = copyFilesTarget,
                 env = env.derive(),
                 install_path = installPath,
                 source = bld.path.make_node('source').ant_glob('**/*.py'))
+
+            targetsToAdd = [copyFilesTarget]
+
+            # Tried to do this in process_swig_linkage() but it's too late
+            # TODO: See if there's a cleaner way to do this
+            # Basically, for Visual Studio if the -python targets are on the
+            # use line, waf for some reason will not add in all the C++
+            # dependencies that are needed, even if you put that C++ dependency
+            # also explicitly on the use line.  On Windows, we really logically
+            # just want those to go on the targets_to_add line anyway.
+            if env['COMPILER_CXX'] == 'msvc':
+                updatedUse = []
+                targetsToAdd = [copyFilesTarget]
+                
+                for lib in use.split():
+                    if lib.endswith('-python'):
+                        targetsToAdd.append(lib)
+                    else:
+                        updatedUse.append(lib)
+                
+                use = updatedUse
 
             if 'SWIG' in env and env['SWIG']:
                 # If Swig is available, let's use it to build the .cxx file
@@ -496,7 +517,7 @@ class CPPContext(Context.Context):
                     swig_flags = '-python -c++',
                     install_path = installPath,
                     name = taskName,
-                    targets_to_add = copyFilesTarget,
+                    targets_to_add = targetsToAdd,
                     swig_install_fun = swigCopyGeneratedSources)
             else:
                 # If Swig is not available, use the cxx file already sitting around
@@ -508,7 +529,7 @@ class CPPContext(Context.Context):
                     export_includes = exportIncludes,
                     env = env.derive(),
                     name = taskName,
-                    targets_to_add = copyFilesTarget,
+                    targets_to_add = targetsToAdd,
                     install_path = installPath)
 
     def getBuildDir(self, path=None):
