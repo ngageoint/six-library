@@ -371,6 +371,11 @@ class StringStream(SeekableBidirectionalStream):
         """reset(StringStream self)"""
         return _coda_io.StringStream_reset(self)
 
+
+    def str(self):
+        """str(StringStream self) -> std::string"""
+        return _coda_io.StringStream_str(self)
+
     __swig_destroy__ = _coda_io.delete_StringStream
     __del__ = lambda self: None
 StringStream_swigregister = _coda_io.StringStream_swigregister

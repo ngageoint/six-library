@@ -398,6 +398,11 @@ class StringStream(SeekableBidirectionalStream):
         """reset(StringStream self)"""
         return _sio_lite.StringStream_reset(self)
 
+
+    def str(self):
+        """str(StringStream self) -> std::string"""
+        return _sio_lite.StringStream_str(self)
+
     __swig_destroy__ = _sio_lite.delete_StringStream
     __del__ = lambda self: None
 StringStream_swigregister = _sio_lite.StringStream_swigregister
@@ -963,7 +968,7 @@ def sioTypeFromDtype(dtype):
                   'u': FileHeader.UNSIGNED,
                   'f': FileHeader.FLOAT,
                   'c': FileHeader.COMPLEX_FLOAT}
-                  
+
     if not dt.kind in kindToType:
         raise Exception("Unknown element type: " + str(dt.kind))
 

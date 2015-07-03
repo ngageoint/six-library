@@ -3553,15 +3553,18 @@ SWIG_AsVal_int (PyObject * obj, int *val)
   return res;
 }
 
-
-    #include "import/sio/lite.h"
-
+SWIGINTERN std::string io_StringStream_str(io::StringStream *self){
+		return self->stream().str();
+	}
 
 SWIGINTERNINLINE PyObject *
 SWIG_From_std_string  (const std::string& s)
 {
   return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
+
+
+    #include "import/sio/lite.h"
 
 
 SWIGINTERN int
@@ -5414,6 +5417,28 @@ SWIGINTERN PyObject *_wrap_StringStream_reset(PyObject *SWIGUNUSEDPARM(self), Py
   arg1 = reinterpret_cast< io::StringStream * >(argp1);
   (arg1)->reset();
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StringStream_str(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::StringStream *arg1 = (io::StringStream *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:StringStream_str",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__StringStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StringStream_str" "', argument " "1"" of type '" "io::StringStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::StringStream * >(argp1);
+  result = io_StringStream_str(arg1);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
   return NULL;
@@ -9788,6 +9813,7 @@ static PyMethodDef SwigMethods[] = {
 		"StringStream_stream(StringStream self) -> std::stringstream &\n"
 		""},
 	 { (char *)"StringStream_reset", _wrap_StringStream_reset, METH_VARARGS, (char *)"StringStream_reset(StringStream self)"},
+	 { (char *)"StringStream_str", _wrap_StringStream_str, METH_VARARGS, (char *)"StringStream_str(StringStream self) -> std::string"},
 	 { (char *)"delete_StringStream", _wrap_delete_StringStream, METH_VARARGS, (char *)"delete_StringStream(StringStream self)"},
 	 { (char *)"StringStream_swigregister", StringStream_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_NullInputStream", _wrap_new_NullInputStream, METH_VARARGS, (char *)"new_NullInputStream(sys::SSize_T size) -> NullInputStream"},
