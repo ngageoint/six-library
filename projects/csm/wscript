@@ -1,5 +1,5 @@
-MAINTAINER         = 'adam.sylvester@gd-ais.com'
-VERSION            = '1.1.0'
+MAINTAINER         = 'adam.sylvester@mdaus.com'
+VERSION            = '1.1.1'
 MODULE_DEPS        = 'six.sicd six.sidd'
 PLUGIN             = 'CSM'
 REMOVEPLUGINPREFIX = True
@@ -40,7 +40,7 @@ def configure(conf):
     else:
         raise Errors.WafError('Unsupported platform %s' % sys.platform)
 
-    pluginVersion = '110'
+    pluginVersion = '111'
     csmVersion = '301'
     conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_MDAIS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion
 
