@@ -4,6 +4,8 @@
 # Do not make changes to this file unless you know what you are doing--modify
 # the SWIG interface file instead.
 
+from __future__ import absolute_import
+
 
 
 
@@ -15,20 +17,20 @@ if version_info >= (2, 6, 0):
         import imp
         fp = None
         try:
-            fp, pathname, description = imp.find_module('_coda_sys', [dirname(__file__)])
+            fp, pathname, description = imp.find_module('_sys', [dirname(__file__)])
         except ImportError:
-            import _coda_sys
-            return _coda_sys
+            import _sys
+            return _sys
         if fp is not None:
             try:
-                _mod = imp.load_module('_coda_sys', fp, pathname, description)
+                _mod = imp.load_module('_sys', fp, pathname, description)
             finally:
                 fp.close()
             return _mod
-    _coda_sys = swig_import_helper()
+    _sys = swig_import_helper()
     del swig_import_helper
 else:
-    import _coda_sys
+    import _sys
 del version_info
 try:
     _swig_property = property
@@ -91,32 +93,32 @@ except AttributeError:
 
 
 
-_coda_sys.NativeLayer_func___swigconstant(_coda_sys)
-NativeLayer_func__ = _coda_sys.NativeLayer_func__
+_sys.NativeLayer_func___swigconstant(_sys)
+NativeLayer_func__ = _sys.NativeLayer_func__
 
-_coda_sys.SYS_FUNC_swigconstant(_coda_sys)
-SYS_FUNC = _coda_sys.SYS_FUNC
+_sys.SYS_FUNC_swigconstant(_sys)
+SYS_FUNC = _sys.SYS_FUNC
 
 def isBigEndianSystem():
     """isBigEndianSystem() -> bool"""
-    return _coda_sys.isBigEndianSystem()
+    return _sys.isBigEndianSystem()
 
 def byteSwap(buffer, elemSize, numElems):
     """byteSwap(void * buffer, unsigned short elemSize, size_t numElems)"""
-    return _coda_sys.byteSwap(buffer, elemSize, numElems)
+    return _sys.byteSwap(buffer, elemSize, numElems)
 
 def alignedAlloc(*args):
     """
     alignedAlloc(size_t size, size_t alignment)
     alignedAlloc(size_t size) -> void *
     """
-    return _coda_sys.alignedAlloc(*args)
+    return _sys.alignedAlloc(*args)
 
 def alignedFree(p):
     """alignedFree(void * p)"""
-    return _coda_sys.alignedFree(p)
+    return _sys.alignedFree(p)
 # This file is compatible with both classic and new-style classes.
 
-cvar = _coda_sys.cvar
+cvar = _sys.cvar
 SSE_INSTRUCTION_ALIGNMENT = cvar.SSE_INSTRUCTION_ALIGNMENT
 

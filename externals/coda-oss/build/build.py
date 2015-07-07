@@ -452,6 +452,16 @@ class CPPContext(Context.Context):
             name = modArgs['name']
             codename = name
 
+            package_name = Context.APPNAME
+            try:
+                package_name = modArgs['package']
+            except:
+                pass
+           
+            # name for the task to generate our __init__.py file
+            # (remember we need one in each package)
+            init_tgen_name = 'python_init_file_' + package_name
+
             prefix = env['prefix_' + name]
             if prefix:
                 codename = prefix + name
@@ -462,10 +472,26 @@ class CPPContext(Context.Context):
 
             swigSource = os.path.join('source', name.replace('.', '_') + '.i')
             target = '_' + codename.replace('.', '_')
-            use = modArgs['use']
-            installPath = os.path.join('${PYTHONDIR}', Context.APPNAME)
+            use = modArgs['use'] + ' ' + init_tgen_name
+            installPath = os.path.join('${PYTHONDIR}', package_name)
             taskName = name + '-python'
             exportIncludes = listify(modArgs.get('export_includes', 'source'))
+
+            # We need to add the __init__.py file to our package to make
+            # it a legitimate python package. There's nothing in it for now
+            # so we'll just generate one.
+            #
+            # The try/except guarantees that there will only be one task
+            # to generate the file
+            # TODO: generating multiple packages
+            try:
+                bld.get_tgen_by_name(init_tgen_name)
+            except:
+                bld(rule   = 'touch ${TGT}', 
+                    target = '__init__.py',
+                    name = init_tgen_name,
+                    install_path = installPath
+                    )
 
             # If we have Swig, when the Swig target runs, it'll generate both the
             # _wrap.cxx file and the .py file and then copy them both to the

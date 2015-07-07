@@ -1,4 +1,8 @@
-%module math_poly
+%module(package="coda") math_poly
+
+%pythonbegin %{
+from __future__ import absolute_import
+%}
 
 %feature("autodoc", "1");
 

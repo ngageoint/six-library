@@ -24,7 +24,7 @@
  *
 """
 
-from sio_lite import write
+from coda.sio_lite import write
 import numpy as np
 import sys
 

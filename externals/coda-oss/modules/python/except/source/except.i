@@ -20,7 +20,11 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-%module coda_except
+%module(package="coda") coda_except
+
+%pythonbegin %{
+from __future__ import absolute_import
+%}
 
 %feature("autodoc","1");
 
