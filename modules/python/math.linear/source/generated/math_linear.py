@@ -4,6 +4,8 @@
 # Do not make changes to this file unless you know what you are doing--modify
 # the SWIG interface file instead.
 
+from __future__ import absolute_import
+
 
 
 
@@ -90,7 +92,7 @@ except AttributeError:
     _newclass = 0
 
 
-import coda_except
+import coda.coda_except
 class SwigPyIterator(_object):
     """Proxy of C++ swig::SwigPyIterator class"""
     __swig_setmethods__ = {}

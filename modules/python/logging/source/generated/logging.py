@@ -4,6 +4,8 @@
 # Do not make changes to this file unless you know what you are doing--modify
 # the SWIG interface file instead.
 
+from __future__ import absolute_import
+
 
 
 
@@ -15,20 +17,20 @@ if version_info >= (2, 6, 0):
         import imp
         fp = None
         try:
-            fp, pathname, description = imp.find_module('_coda_logging', [dirname(__file__)])
+            fp, pathname, description = imp.find_module('_logging', [dirname(__file__)])
         except ImportError:
-            import _coda_logging
-            return _coda_logging
+            import _logging
+            return _logging
         if fp is not None:
             try:
-                _mod = imp.load_module('_coda_logging', fp, pathname, description)
+                _mod = imp.load_module('_logging', fp, pathname, description)
             finally:
                 fp.close()
             return _mod
-    _coda_logging = swig_import_helper()
+    _logging = swig_import_helper()
     del swig_import_helper
 else:
-    import _coda_logging
+    import _logging
 del version_info
 try:
     _swig_property = property
@@ -100,24 +102,24 @@ class Formatter(_object):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _coda_logging.delete_Formatter
+    __swig_destroy__ = _logging.delete_Formatter
     __del__ = lambda self: None
 
     def format(self, record, os):
         """format(Formatter self, LogRecord const * record, io::OutputStream & os)"""
-        return _coda_logging.Formatter_format(self, record, os)
+        return _logging.Formatter_format(self, record, os)
 
 
     def getPrologue(self):
         """getPrologue(Formatter self) -> std::string"""
-        return _coda_logging.Formatter_getPrologue(self)
+        return _logging.Formatter_getPrologue(self)
 
 
     def getEpilogue(self):
         """getEpilogue(Formatter self) -> std::string"""
-        return _coda_logging.Formatter_getEpilogue(self)
+        return _logging.Formatter_getEpilogue(self)
 
-Formatter_swigregister = _coda_logging.Formatter_swigregister
+Formatter_swigregister = _logging.Formatter_swigregister
 Formatter_swigregister(Formatter)
 
 class StandardFormatter(Formatter):
@@ -139,22 +141,22 @@ class StandardFormatter(Formatter):
         __init__(logging::StandardFormatter self, std::string const & fmt, std::string const & prologue) -> StandardFormatter
         __init__(logging::StandardFormatter self, std::string const & fmt) -> StandardFormatter
         """
-        this = _coda_logging.new_StandardFormatter(*args)
+        this = _logging.new_StandardFormatter(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _coda_logging.delete_StandardFormatter
+    __swig_destroy__ = _logging.delete_StandardFormatter
     __del__ = lambda self: None
 
     def format(self, record, os):
         """format(StandardFormatter self, LogRecord const * record, io::OutputStream & os)"""
-        return _coda_logging.StandardFormatter_format(self, record, os)
+        return _logging.StandardFormatter_format(self, record, os)
 
-StandardFormatter_swigregister = _coda_logging.StandardFormatter_swigregister
+StandardFormatter_swigregister = _logging.StandardFormatter_swigregister
 StandardFormatter_swigregister(StandardFormatter)
-cvar = _coda_logging.cvar
-StandardFormatter.DEFAULT_FORMAT = _coda_logging.cvar.StandardFormatter_DEFAULT_FORMAT
+cvar = _logging.cvar
+StandardFormatter.DEFAULT_FORMAT = _logging.cvar.StandardFormatter_DEFAULT_FORMAT
 
 class Filterer(_object):
     """Proxy of C++ logging::Filterer class"""
@@ -166,29 +168,29 @@ class Filterer(_object):
 
     def __init__(self):
         """__init__(logging::Filterer self) -> Filterer"""
-        this = _coda_logging.new_Filterer()
+        this = _logging.new_Filterer()
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _coda_logging.delete_Filterer
+    __swig_destroy__ = _logging.delete_Filterer
     __del__ = lambda self: None
 
     def addFilter(self, filter):
         """addFilter(Filterer self, Filter * filter)"""
-        return _coda_logging.Filterer_addFilter(self, filter)
+        return _logging.Filterer_addFilter(self, filter)
 
 
     def filter(self, record):
         """filter(Filterer self, LogRecord const * record) -> bool"""
-        return _coda_logging.Filterer_filter(self, record)
+        return _logging.Filterer_filter(self, record)
 
 
     def removeFilter(self, filter):
         """removeFilter(Filterer self, Filter * filter)"""
-        return _coda_logging.Filterer_removeFilter(self, filter)
+        return _logging.Filterer_removeFilter(self, filter)
 
-Filterer_swigregister = _coda_logging.Filterer_swigregister
+Filterer_swigregister = _logging.Filterer_swigregister
 Filterer_swigregister(Filterer)
 
 class Handler(Filterer):
@@ -205,34 +207,34 @@ class Handler(Filterer):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _coda_logging.delete_Handler
+    __swig_destroy__ = _logging.delete_Handler
     __del__ = lambda self: None
 
     def setLevel(self, level):
         """setLevel(Handler self, LogLevel level)"""
-        return _coda_logging.Handler_setLevel(self, level)
+        return _logging.Handler_setLevel(self, level)
 
 
     def getLevel(self):
         """getLevel(Handler self) -> LogLevel"""
-        return _coda_logging.Handler_getLevel(self)
+        return _logging.Handler_getLevel(self)
 
 
     def handle(self, record):
         """handle(Handler self, LogRecord const * record) -> bool"""
-        return _coda_logging.Handler_handle(self, record)
+        return _logging.Handler_handle(self, record)
 
 
     def close(self):
         """close(Handler self)"""
-        return _coda_logging.Handler_close(self)
+        return _logging.Handler_close(self)
 
 
     def setFormatter(self, formatter):
         """setFormatter(Handler self, Formatter formatter)"""
-        return _coda_logging.Handler_setFormatter(self, formatter)
+        return _logging.Handler_setFormatter(self, formatter)
 
-Handler_swigregister = _coda_logging.Handler_swigregister
+Handler_swigregister = _logging.Handler_swigregister
 Handler_swigregister(Handler)
 
 class StreamHandler(Handler):
@@ -254,19 +256,19 @@ class StreamHandler(Handler):
         __init__(logging::StreamHandler self, io::OutputStream * stream, LogLevel level) -> StreamHandler
         __init__(logging::StreamHandler self, io::OutputStream * stream) -> StreamHandler
         """
-        this = _coda_logging.new_StreamHandler(*args)
+        this = _logging.new_StreamHandler(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _coda_logging.delete_StreamHandler
+    __swig_destroy__ = _logging.delete_StreamHandler
     __del__ = lambda self: None
 
     def close(self):
         """close(StreamHandler self)"""
-        return _coda_logging.StreamHandler_close(self)
+        return _logging.StreamHandler_close(self)
 
-StreamHandler_swigregister = _coda_logging.StreamHandler_swigregister
+StreamHandler_swigregister = _logging.StreamHandler_swigregister
 StreamHandler_swigregister(StreamHandler)
 
 class FileHandler(StreamHandler):
@@ -287,14 +289,14 @@ class FileHandler(StreamHandler):
         __init__(logging::FileHandler self, std::string const & fname, LogLevel level) -> FileHandler
         __init__(logging::FileHandler self, std::string const & fname) -> FileHandler
         """
-        this = _coda_logging.new_FileHandler(*args)
+        this = _logging.new_FileHandler(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _coda_logging.delete_FileHandler
+    __swig_destroy__ = _logging.delete_FileHandler
     __del__ = lambda self: None
-FileHandler_swigregister = _coda_logging.FileHandler_swigregister
+FileHandler_swigregister = _logging.FileHandler_swigregister
 FileHandler_swigregister(FileHandler)
 
 class Filter(_object):
@@ -310,24 +312,24 @@ class Filter(_object):
         __init__(logging::Filter self, std::string name) -> Filter
         __init__(logging::Filter self) -> Filter
         """
-        this = _coda_logging.new_Filter(*args)
+        this = _logging.new_Filter(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _coda_logging.delete_Filter
+    __swig_destroy__ = _logging.delete_Filter
     __del__ = lambda self: None
 
     def filter(self, record):
         """filter(Filter self, LogRecord const * record) -> bool"""
-        return _coda_logging.Filter_filter(self, record)
+        return _logging.Filter_filter(self, record)
 
 
     def getName(self):
         """getName(Filter self) -> std::string"""
-        return _coda_logging.Filter_getName(self)
+        return _logging.Filter_getName(self)
 
-Filter_swigregister = _coda_logging.Filter_swigregister
+Filter_swigregister = _logging.Filter_swigregister
 Filter_swigregister(Filter)
 
 class Logger(Filterer):
@@ -347,12 +349,12 @@ class Logger(Filterer):
         __init__(logging::Logger self, std::string name) -> Logger
         __init__(logging::Logger self) -> Logger
         """
-        this = _coda_logging.new_Logger(*args)
+        this = _logging.new_Logger(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _coda_logging.delete_Logger
+    __swig_destroy__ = _logging.delete_Logger
     __del__ = lambda self: None
 
     def log(self, *args):
@@ -361,7 +363,7 @@ class Logger(Filterer):
         log(Logger self, LogLevel level, except::Context const & ctxt)
         log(Logger self, LogLevel level, except::Throwable const & t)
         """
-        return _coda_logging.Logger_log(self, *args)
+        return _logging.Logger_log(self, *args)
 
 
     def debug(self, *args):
@@ -370,7 +372,7 @@ class Logger(Filterer):
         debug(Logger self, except::Context const & ctxt)
         debug(Logger self, except::Throwable const & t)
         """
-        return _coda_logging.Logger_debug(self, *args)
+        return _logging.Logger_debug(self, *args)
 
 
     def info(self, *args):
@@ -379,7 +381,7 @@ class Logger(Filterer):
         info(Logger self, except::Context const & ctxt)
         info(Logger self, except::Throwable const & t)
         """
-        return _coda_logging.Logger_info(self, *args)
+        return _logging.Logger_info(self, *args)
 
 
     def warn(self, *args):
@@ -388,7 +390,7 @@ class Logger(Filterer):
         warn(Logger self, except::Context const & ctxt)
         warn(Logger self, except::Throwable const & t)
         """
-        return _coda_logging.Logger_warn(self, *args)
+        return _logging.Logger_warn(self, *args)
 
 
     def error(self, *args):
@@ -397,7 +399,7 @@ class Logger(Filterer):
         error(Logger self, except::Context const & ctxt)
         error(Logger self, except::Throwable const & t)
         """
-        return _coda_logging.Logger_error(self, *args)
+        return _logging.Logger_error(self, *args)
 
 
     def critical(self, *args):
@@ -406,7 +408,7 @@ class Logger(Filterer):
         critical(Logger self, except::Context const & ctxt)
         critical(Logger self, except::Throwable const & t)
         """
-        return _coda_logging.Logger_critical(self, *args)
+        return _logging.Logger_critical(self, *args)
 
 
     def addHandler(self, handler, own=False):
@@ -414,34 +416,34 @@ class Logger(Filterer):
         addHandler(Logger self, Handler handler, bool own=False)
         addHandler(Logger self, Handler handler)
         """
-        return _coda_logging.Logger_addHandler(self, handler, own)
+        return _logging.Logger_addHandler(self, handler, own)
 
 
     def removeHandler(self, handler):
         """removeHandler(Logger self, Handler handler)"""
-        return _coda_logging.Logger_removeHandler(self, handler)
+        return _logging.Logger_removeHandler(self, handler)
 
 
     def setLevel(self, level):
         """setLevel(Logger self, LogLevel level)"""
-        return _coda_logging.Logger_setLevel(self, level)
+        return _logging.Logger_setLevel(self, level)
 
 
     def setName(self, name):
         """setName(Logger self, std::string const & name)"""
-        return _coda_logging.Logger_setName(self, name)
+        return _logging.Logger_setName(self, name)
 
 
     def getName(self):
         """getName(Logger self) -> std::string"""
-        return _coda_logging.Logger_getName(self)
+        return _logging.Logger_getName(self)
 
 
     def reset(self):
         """reset(Logger self)"""
-        return _coda_logging.Logger_reset(self)
+        return _logging.Logger_reset(self)
 
-Logger_swigregister = _coda_logging.Logger_swigregister
+Logger_swigregister = _logging.Logger_swigregister
 Logger_swigregister(Logger)
 
 class NullHandler(Handler):
@@ -461,14 +463,14 @@ class NullHandler(Handler):
         __init__(logging::NullHandler self, LogLevel level) -> NullHandler
         __init__(logging::NullHandler self) -> NullHandler
         """
-        this = _coda_logging.new_NullHandler(*args)
+        this = _logging.new_NullHandler(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _coda_logging.delete_NullHandler
+    __swig_destroy__ = _logging.delete_NullHandler
     __del__ = lambda self: None
-NullHandler_swigregister = _coda_logging.NullHandler_swigregister
+NullHandler_swigregister = _logging.NullHandler_swigregister
 NullHandler_swigregister(NullHandler)
 
 class NullLogger(Logger):
@@ -488,14 +490,14 @@ class NullLogger(Logger):
         __init__(logging::NullLogger self, std::string const & name) -> NullLogger
         __init__(logging::NullLogger self) -> NullLogger
         """
-        this = _coda_logging.new_NullLogger(*args)
+        this = _logging.new_NullLogger(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _coda_logging.delete_NullLogger
+    __swig_destroy__ = _logging.delete_NullLogger
     __del__ = lambda self: None
-NullLogger_swigregister = _coda_logging.NullLogger_swigregister
+NullLogger_swigregister = _logging.NullLogger_swigregister
 NullLogger_swigregister(NullLogger)
 
 class LoggerManager(_object):
@@ -508,7 +510,7 @@ class LoggerManager(_object):
 
     def __init__(self):
         """__init__(logging::LoggerManager self) -> LoggerManager"""
-        this = _coda_logging.new_LoggerManager()
+        this = _logging.new_LoggerManager()
         try:
             self.this.append(this)
         except:
@@ -519,7 +521,7 @@ class LoggerManager(_object):
         getLoggerSharedPtr(LoggerManager self, std::string const & name) -> mem::SharedPtr< logging::Logger >
         getLoggerSharedPtr(LoggerManager self) -> mem::SharedPtr< logging::Logger >
         """
-        return _coda_logging.LoggerManager_getLoggerSharedPtr(self, *args)
+        return _logging.LoggerManager_getLoggerSharedPtr(self, *args)
 
 
     def getLogger(self, *args):
@@ -527,11 +529,11 @@ class LoggerManager(_object):
         getLogger(LoggerManager self, std::string const & name) -> Logger
         getLogger(LoggerManager self) -> Logger
         """
-        return _coda_logging.LoggerManager_getLogger(self, *args)
+        return _logging.LoggerManager_getLogger(self, *args)
 
-    __swig_destroy__ = _coda_logging.delete_LoggerManager
+    __swig_destroy__ = _logging.delete_LoggerManager
     __del__ = lambda self: None
-LoggerManager_swigregister = _coda_logging.LoggerManager_swigregister
+LoggerManager_swigregister = _logging.LoggerManager_swigregister
 LoggerManager_swigregister(LoggerManager)
 
 
@@ -541,7 +543,7 @@ def debug(*args):
     debug(except::Context const & ctxt)
     debug(except::Throwable & t)
     """
-    return _coda_logging.debug(*args)
+    return _logging.debug(*args)
 
 def info(*args):
     """
@@ -549,7 +551,7 @@ def info(*args):
     info(except::Context const & ctxt)
     info(except::Throwable & t)
     """
-    return _coda_logging.info(*args)
+    return _logging.info(*args)
 
 def warn(*args):
     """
@@ -557,7 +559,7 @@ def warn(*args):
     warn(except::Context const & ctxt)
     warn(except::Throwable & t)
     """
-    return _coda_logging.warn(*args)
+    return _logging.warn(*args)
 
 def error(*args):
     """
@@ -565,7 +567,7 @@ def error(*args):
     error(except::Context const & ctxt)
     error(except::Throwable & t)
     """
-    return _coda_logging.error(*args)
+    return _logging.error(*args)
 
 def critical(*args):
     """
@@ -573,15 +575,15 @@ def critical(*args):
     critical(except::Context const & ctxt)
     critical(except::Throwable & t)
     """
-    return _coda_logging.critical(*args)
+    return _logging.critical(*args)
 
 def getLogger(*args):
     """getLogger() -> Logger"""
-    return _coda_logging.getLogger(*args)
+    return _logging.getLogger(*args)
 
 def getLoggerSharedPtr(*args):
     """getLoggerSharedPtr() -> mem::SharedPtr< logging::Logger >"""
-    return _coda_logging.getLoggerSharedPtr(*args)
+    return _logging.getLoggerSharedPtr(*args)
 # This file is compatible with both classic and new-style classes.
 
 

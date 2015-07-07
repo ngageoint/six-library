@@ -22,7 +22,11 @@
  *
  */
 
-%module coda_types
+%module(package="coda") types
+
+%pythonbegin %{
+from __future__ import absolute_import
+%}
 
 %feature("autodoc", "1");
 

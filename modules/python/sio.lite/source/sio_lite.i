@@ -1,4 +1,8 @@
-%module sio_lite
+%module(package="coda") sio_lite
+
+%pythonbegin %{
+from __future__ import absolute_import
+%}
 
 %feature("autodoc", "1");
 %include "sys.i"

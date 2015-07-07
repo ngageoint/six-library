@@ -24,7 +24,7 @@
  *
 """
 
-from sio_lite import read
+from coda.sio_lite import read
 import sys
 
 if __name__ == '__main__':

@@ -4,6 +4,8 @@
 # Do not make changes to this file unless you know what you are doing--modify
 # the SWIG interface file instead.
 
+from __future__ import absolute_import
+
 
 
 
@@ -90,8 +92,8 @@ except AttributeError:
     _newclass = 0
 
 
-import math_linear
-import coda_except
+import coda.math_linear
+import coda.coda_except
 
 def new_doubleArray(nelements):
     """new_doubleArray(size_t nelements) -> double *"""
