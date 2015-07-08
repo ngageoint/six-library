@@ -22,10 +22,6 @@
 
 %module(package="coda") logging
 
-%pythonbegin %{
-from __future__ import absolute_import
-%}
-
 %feature("autodoc", "1");
 
 %{

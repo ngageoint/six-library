@@ -1,8 +1,4 @@
-%module(package="coda") sys
-
-%pythonbegin %{
-from __future__ import absolute_import
-%}
+%module(package="coda") coda_sys
 
 %feature("autodoc", "1");
 

@@ -22,10 +22,6 @@
 
 %module(package="coda") io
 
-%pythonbegin %{
-from __future__ import absolute_import
-%}
-
 %feature("autodoc","1");
 %include "std_string.i"
 
