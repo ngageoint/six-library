@@ -22,7 +22,7 @@
  *
  */
 
-%module scene
+%module(package="pysix") scene
 
 %feature("autodoc", "1");
 
