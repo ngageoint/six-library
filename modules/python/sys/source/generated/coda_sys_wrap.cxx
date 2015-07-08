@@ -2964,16 +2964,16 @@ static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
 #endif
 
 /*-----------------------------------------------
-              @(target):= _sys.so
+              @(target):= _coda_sys.so
   ------------------------------------------------*/
 #if PY_VERSION_HEX >= 0x03000000
-#  define SWIG_init    PyInit__sys
+#  define SWIG_init    PyInit__coda_sys
 
 #else
-#  define SWIG_init    init_sys
+#  define SWIG_init    init_coda_sys
 
 #endif
-#define SWIG_name    "_sys"
+#define SWIG_name    "_coda_sys"
 
 #define SWIGVERSION 0x030005 
 #define SWIG_VERSION SWIGVERSION

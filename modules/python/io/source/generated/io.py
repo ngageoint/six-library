@@ -4,8 +4,6 @@
 # Do not make changes to this file unless you know what you are doing--modify
 # the SWIG interface file instead.
 
-from __future__ import absolute_import
-
 
 
 

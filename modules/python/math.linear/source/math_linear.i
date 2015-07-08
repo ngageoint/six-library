@@ -1,9 +1,5 @@
 %module(package="coda") math_linear
 
-%pythonbegin %{
-from __future__ import absolute_import
-%}
-
 %feature("autodoc", "1");
 
 %{

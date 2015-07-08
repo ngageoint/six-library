@@ -1,9 +1,5 @@
 %module(package="coda") math_poly
 
-%pythonbegin %{
-from __future__ import absolute_import
-%}
-
 %feature("autodoc", "1");
 
 %ignore math::poly::OneD<Vector3>::truncateToNonZeros;

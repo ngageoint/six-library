@@ -4,8 +4,6 @@
 # Do not make changes to this file unless you know what you are doing--modify
 # the SWIG interface file instead.
 
-from __future__ import absolute_import
-
 
 
 
@@ -198,7 +196,7 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _types.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import coda.sys
+import coda.coda_sys
 class RowColDouble(_object):
     """Proxy of C++ types::RowCol<(double)> class"""
     __swig_setmethods__ = {}
