@@ -44,11 +44,11 @@ def is_about(lhs, rhs, abs_tolerance=0.001):
 # imports
 #
 
-from math_linear import *
-from coda_except import *
-from math_poly import *
-from scene import *
-from coda_types import *
+from coda.math_linear import *
+from coda.coda_except import *
+from coda.math_poly import *
+from pysix.scene import *
+from coda.types import *
 
 #
 # First test
