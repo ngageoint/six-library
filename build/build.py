@@ -1292,11 +1292,14 @@ def process_swig_linkage(tsk):
     # TODO: Here we're using -Wl,_foo.so since if you just use -l_foo the linker
     #       assumes there's a 'lib' prefix in the filename which we don't have
     #       here.  Instead, according to the ld man page, may be able to prepend
-    #       a colon and do this instead: -l:_foo.so 
+    #       a colon and do this instead: -l:_foo.so (not sure if this works with
+    #       ld version <= 2.17)
     libpattern = tsk.env['cshlib_PATTERN']
     linkarg_pattern = '-Wl,%s'
+    rpath_pattern = '-Wl,-rpath=%s'
     if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
-      linkarg_pattern = '%s'
+        linkarg_pattern = '%s'
+        rpath_pattern = '-Rpath%s'
 
     # so swig can find .i files to import
     incstr = ''
@@ -1307,6 +1310,7 @@ def process_swig_linkage(tsk):
 
     # Search for python libraries and
     # add the target files explicitly as command line parameters for linking
+    package_list = []
     newlib = []
     for lib in tsk.env.LIB:
         
@@ -1324,6 +1328,9 @@ def process_swig_linkage(tsk):
             # this isnt a python library, ignore it
             newlib.append(lib)
             continue
+
+        dep_path = os.path.basename(tsk.bld.get_tgen_by_name(searchstr + '-python').install_path)
+        package_list.append(dep_path)
 
         if searchstr.endswith(".base"):
             searchstr = searchstr[:-5]
@@ -1354,6 +1361,15 @@ def process_swig_linkage(tsk):
     #      versions
     soname_str = linkarg_pattern % ('-h' + (libpattern % tsk.target))
     tsk.env.LINKFLAGS.append(soname_str)
+
+    # finally, we want to bake the library search paths straight in to
+    # our python extensions so we don't need to set an LD_LIBRARY_PATH
+    package_set = set(package_list)
+    base_path = os.path.join(':${ORIGIN}', '..')
+    dirlist = ''.join(str(os.path.join(base_path,s)) for s in package_set)
+    if dirlist:
+        rpath_str = rpath_pattern % (dirlist)
+        tsk.env.LINKFLAGS.append(rpath_str)
   
     # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib
