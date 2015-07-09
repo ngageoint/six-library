@@ -1329,11 +1329,11 @@ def process_swig_linkage(tsk):
             newlib.append(lib)
             continue
 
-        dep_path = os.path.basename(tsk.bld.get_tgen_by_name(searchstr + '-python').install_path)
-        package_list.append(dep_path)
-
         if searchstr.endswith(".base"):
             searchstr = searchstr[:-5]
+
+        dep_path = os.path.basename(tsk.bld.get_tgen_by_name(searchstr + '-python').install_path)
+        package_list.append(dep_path)
 
         # Python wrappers have the same module name as their associated
         # C++ modules so if waf is configured with --shared searching through
