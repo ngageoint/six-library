@@ -274,9 +274,9 @@ class RowColDouble(_object):
         return _cphd.RowColDouble___ne__(self, p)
 
 
-    def normL1(self):
-        """normL1(RowColDouble self) -> double"""
-        return _cphd.RowColDouble_normL1(self)
+    def area(self):
+        """area(RowColDouble self) -> double"""
+        return _cphd.RowColDouble_area(self)
 
 
     def normL2(self):
@@ -366,9 +366,9 @@ class RowColSizeT(_object):
         return _cphd.RowColSizeT___ne__(self, p)
 
 
-    def normL1(self):
-        """normL1(RowColSizeT self) -> size_t"""
-        return _cphd.RowColSizeT_normL1(self)
+    def area(self):
+        """area(RowColSizeT self) -> size_t"""
+        return _cphd.RowColSizeT_area(self)
 
 
     def normL2(self):

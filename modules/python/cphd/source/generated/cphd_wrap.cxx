@@ -5140,7 +5140,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RowColDouble_normL1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_RowColDouble_area(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< double > *arg1 = (types::RowCol< double > *) 0 ;
   void *argp1 = 0 ;
@@ -5148,13 +5148,13 @@ SWIGINTERN PyObject *_wrap_RowColDouble_normL1(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj0 = 0 ;
   double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:RowColDouble_normL1",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:RowColDouble_area",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_types__RowColT_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColDouble_normL1" "', argument " "1"" of type '" "types::RowCol< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColDouble_area" "', argument " "1"" of type '" "types::RowCol< double > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< double > * >(argp1);
-  result = (double)((types::RowCol< double > const *)arg1)->normL1();
+  result = (double)((types::RowCol< double > const *)arg1)->area();
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -5749,7 +5749,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RowColSizeT_normL1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_RowColSizeT_area(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< size_t > *arg1 = (types::RowCol< size_t > *) 0 ;
   void *argp1 = 0 ;
@@ -5757,13 +5757,13 @@ SWIGINTERN PyObject *_wrap_RowColSizeT_normL1(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj0 = 0 ;
   size_t result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:RowColSizeT_normL1",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:RowColSizeT_area",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_types__RowColT_size_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColSizeT_normL1" "', argument " "1"" of type '" "types::RowCol< size_t > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColSizeT_area" "', argument " "1"" of type '" "types::RowCol< size_t > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< size_t > * >(argp1);
-  result = ((types::RowCol< size_t > const *)arg1)->normL1();
+  result = ((types::RowCol< size_t > const *)arg1)->area();
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
@@ -20189,7 +20189,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RowColDouble___div__", _wrap_RowColDouble___div__, METH_VARARGS, (char *)"RowColDouble___div__(RowColDouble self, double scalar) -> RowColDouble"},
 	 { (char *)"RowColDouble___eq__", _wrap_RowColDouble___eq__, METH_VARARGS, (char *)"RowColDouble___eq__(RowColDouble self, RowColDouble p) -> bool"},
 	 { (char *)"RowColDouble___ne__", _wrap_RowColDouble___ne__, METH_VARARGS, (char *)"RowColDouble___ne__(RowColDouble self, RowColDouble p) -> bool"},
-	 { (char *)"RowColDouble_normL1", _wrap_RowColDouble_normL1, METH_VARARGS, (char *)"RowColDouble_normL1(RowColDouble self) -> double"},
+	 { (char *)"RowColDouble_area", _wrap_RowColDouble_area, METH_VARARGS, (char *)"RowColDouble_area(RowColDouble self) -> double"},
 	 { (char *)"RowColDouble_normL2", _wrap_RowColDouble_normL2, METH_VARARGS, (char *)"RowColDouble_normL2(RowColDouble self) -> double"},
 	 { (char *)"delete_RowColDouble", _wrap_delete_RowColDouble, METH_VARARGS, (char *)"delete_RowColDouble(RowColDouble self)"},
 	 { (char *)"RowColDouble_swigregister", RowColDouble_swigregister, METH_VARARGS, NULL},
@@ -20212,7 +20212,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RowColSizeT___div__", _wrap_RowColSizeT___div__, METH_VARARGS, (char *)"RowColSizeT___div__(RowColSizeT self, size_t scalar) -> RowColSizeT"},
 	 { (char *)"RowColSizeT___eq__", _wrap_RowColSizeT___eq__, METH_VARARGS, (char *)"RowColSizeT___eq__(RowColSizeT self, RowColSizeT p) -> bool"},
 	 { (char *)"RowColSizeT___ne__", _wrap_RowColSizeT___ne__, METH_VARARGS, (char *)"RowColSizeT___ne__(RowColSizeT self, RowColSizeT p) -> bool"},
-	 { (char *)"RowColSizeT_normL1", _wrap_RowColSizeT_normL1, METH_VARARGS, (char *)"RowColSizeT_normL1(RowColSizeT self) -> size_t"},
+	 { (char *)"RowColSizeT_area", _wrap_RowColSizeT_area, METH_VARARGS, (char *)"RowColSizeT_area(RowColSizeT self) -> size_t"},
 	 { (char *)"RowColSizeT_normL2", _wrap_RowColSizeT_normL2, METH_VARARGS, (char *)"RowColSizeT_normL2(RowColSizeT self) -> size_t"},
 	 { (char *)"delete_RowColSizeT", _wrap_delete_RowColSizeT, METH_VARARGS, (char *)"delete_RowColSizeT(RowColSizeT self)"},
 	 { (char *)"RowColSizeT_swigregister", RowColSizeT_swigregister, METH_VARARGS, NULL},
