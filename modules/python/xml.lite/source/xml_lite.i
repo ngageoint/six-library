@@ -21,7 +21,8 @@
  */
 
 
-%module(package="coda") xml_lite
+
+%module xml_lite
 
 %feature("autodoc", "1");
 

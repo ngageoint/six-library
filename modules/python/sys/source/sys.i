@@ -1,4 +1,4 @@
-%module(package="coda") coda_sys
+%module coda_sys
 
 %feature("autodoc", "1");
 

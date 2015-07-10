@@ -1,4 +1,4 @@
-%module(package="coda") sio_lite
+%module sio_lite
 
 %feature("autodoc", "1");
 %include "sys.i"

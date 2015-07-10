@@ -22,7 +22,7 @@
  *
  */
 
-%module(package="coda") types
+%module coda_types
 
 %feature("autodoc", "1");
 
