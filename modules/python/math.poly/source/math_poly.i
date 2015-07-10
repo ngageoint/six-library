@@ -1,4 +1,4 @@
-%module math_poly
+%module(package="coda") math_poly
 
 %feature("autodoc", "1");
 

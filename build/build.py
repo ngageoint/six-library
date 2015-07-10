@@ -452,6 +452,16 @@ class CPPContext(Context.Context):
             name = modArgs['name']
             codename = name
 
+            package_name = Context.APPNAME
+            try:
+                package_name = modArgs['package']
+            except:
+                pass
+           
+            # name for the task to generate our __init__.py file
+            # (remember we need one in each package)
+            init_tgen_name = 'python_init_file_' + package_name
+
             prefix = env['prefix_' + name]
             if prefix:
                 codename = prefix + name
@@ -462,10 +472,26 @@ class CPPContext(Context.Context):
 
             swigSource = os.path.join('source', name.replace('.', '_') + '.i')
             target = '_' + codename.replace('.', '_')
-            use = modArgs['use']
-            installPath = os.path.join('${PYTHONDIR}', Context.APPNAME)
+            use = modArgs['use'] + ' ' + init_tgen_name
+            installPath = os.path.join(env['install_pydir'], package_name)
             taskName = name + '-python'
             exportIncludes = listify(modArgs.get('export_includes', 'source'))
+
+            # We need to add the __init__.py file to our package to make
+            # it a legitimate python package. There's nothing in it for now
+            # so we'll just generate one.
+            #
+            # The try/except guarantees that there will only be one task
+            # to generate the file
+            # TODO: generating multiple packages
+            try:
+                bld.get_tgen_by_name(init_tgen_name)
+            except:
+                bld(rule   = 'touch ${TGT}', 
+                    target = '__init__.py',
+                    name = init_tgen_name,
+                    install_path = installPath
+                    )
 
             # If we have Swig, when the Swig target runs, it'll generate both the
             # _wrap.cxx file and the .py file and then copy them both to the
@@ -751,6 +777,8 @@ def options(opt):
                     help='Override installation bin directory')
     opt.add_option('--sharedir', action='store', nargs=1, dest='sharedir',
                     help='Override installation share directory')
+    opt.add_option('--pydir', action='store', nargs=1, dest='pydir',
+                    help='Override installation python directory')
     opt.add_option('--install-source', action='store_true', dest='install_source', default=False,
                    help='Distribute source into the installation area (for delivering source)')
     opt.add_option('--with-prebuilt-config', action='store', dest='prebuilt_config',
@@ -1226,6 +1254,7 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
+    env['install_pydir'] = Options.options.pydir if Options.options.pydir else '${PYTHONDIR}'
 
     # Swig memory leak output
     if Options.options.swig_silent_leak:
@@ -1266,11 +1295,14 @@ def process_swig_linkage(tsk):
     # TODO: Here we're using -Wl,_foo.so since if you just use -l_foo the linker
     #       assumes there's a 'lib' prefix in the filename which we don't have
     #       here.  Instead, according to the ld man page, may be able to prepend
-    #       a colon and do this instead: -l:_foo.so 
+    #       a colon and do this instead: -l:_foo.so (not sure if this works with
+    #       ld version <= 2.17)
     libpattern = tsk.env['cshlib_PATTERN']
     linkarg_pattern = '-Wl,%s'
+    rpath_pattern = '-Wl,-rpath=%s'
     if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
-      linkarg_pattern = '%s'
+        linkarg_pattern = '%s'
+        rpath_pattern = '-Rpath%s'
 
     # so swig can find .i files to import
     incstr = ''
@@ -1281,6 +1313,7 @@ def process_swig_linkage(tsk):
 
     # Search for python libraries and
     # add the target files explicitly as command line parameters for linking
+    package_list = []
     newlib = []
     for lib in tsk.env.LIB:
         
@@ -1301,6 +1334,9 @@ def process_swig_linkage(tsk):
 
         if searchstr.endswith(".base"):
             searchstr = searchstr[:-5]
+
+        dep_path = os.path.basename(tsk.bld.get_tgen_by_name(searchstr + '-python').install_path)
+        package_list.append(dep_path)
 
         # Python wrappers have the same module name as their associated
         # C++ modules so if waf is configured with --shared searching through
@@ -1328,6 +1364,15 @@ def process_swig_linkage(tsk):
     #      versions
     soname_str = linkarg_pattern % ('-h' + (libpattern % tsk.target))
     tsk.env.LINKFLAGS.append(soname_str)
+
+    # finally, we want to bake the library search paths straight in to
+    # our python extensions so we don't need to set an LD_LIBRARY_PATH
+    package_set = set(package_list)
+    base_path = os.path.join(':${ORIGIN}', '..')
+    dirlist = ''.join(str(os.path.join(base_path,s)) for s in package_set)
+    if dirlist:
+        rpath_str = rpath_pattern % (dirlist)
+        tsk.env.LINKFLAGS.append(rpath_str)
   
     # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib

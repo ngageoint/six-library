@@ -90,7 +90,7 @@ except AttributeError:
     _newclass = 0
 
 
-import coda_except
+import coda.coda_except
 class SwigPyIterator(_object):
     """Proxy of C++ swig::SwigPyIterator class"""
     __swig_setmethods__ = {}

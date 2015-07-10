@@ -20,7 +20,8 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-%module coda_io
+%module(package="coda") io
+
 %feature("autodoc","1");
 %include "std_string.i"
 
