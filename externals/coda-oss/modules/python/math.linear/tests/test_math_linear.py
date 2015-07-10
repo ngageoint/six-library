@@ -25,7 +25,7 @@
 """
 import sys
 import numpy as np
-from coda.math_linear import *
+from math_linear import *
 
 if __name__ == '__main__':
 

@@ -15,20 +15,20 @@ if version_info >= (2, 6, 0):
         import imp
         fp = None
         try:
-            fp, pathname, description = imp.find_module('_io', [dirname(__file__)])
+            fp, pathname, description = imp.find_module('_coda_io', [dirname(__file__)])
         except ImportError:
-            import _io
-            return _io
+            import _coda_io
+            return _coda_io
         if fp is not None:
             try:
-                _mod = imp.load_module('_io', fp, pathname, description)
+                _mod = imp.load_module('_coda_io', fp, pathname, description)
             finally:
                 fp.close()
             return _mod
-    _io = swig_import_helper()
+    _coda_io = swig_import_helper()
     del swig_import_helper
 else:
-    import _io
+    import _coda_io
 del version_info
 try:
     _swig_property = property
@@ -100,25 +100,25 @@ class InputStream(_object):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    IS_EOF = _io.InputStream_IS_EOF
-    IS_END = _io.InputStream_IS_END
-    DEFAULT_CHUNK_SIZE = _io.InputStream_DEFAULT_CHUNK_SIZE
-    __swig_destroy__ = _io.delete_InputStream
+    IS_EOF = _coda_io.InputStream_IS_EOF
+    IS_END = _coda_io.InputStream_IS_END
+    DEFAULT_CHUNK_SIZE = _coda_io.InputStream_DEFAULT_CHUNK_SIZE
+    __swig_destroy__ = _coda_io.delete_InputStream
     __del__ = lambda self: None
 
     def available(self):
         """available(InputStream self) -> sys::Off_T"""
-        return _io.InputStream_available(self)
+        return _coda_io.InputStream_available(self)
 
 
     def read(self, b, len):
         """read(InputStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
-        return _io.InputStream_read(self, b, len)
+        return _coda_io.InputStream_read(self, b, len)
 
 
     def readln(self, cStr, strLenPlusNullByte):
         """readln(InputStream self, sys::byte * cStr, sys::Size_T const strLenPlusNullByte) -> sys::SSize_T"""
-        return _io.InputStream_readln(self, cStr, strLenPlusNullByte)
+        return _coda_io.InputStream_readln(self, cStr, strLenPlusNullByte)
 
 
     def streamTo(self, *args):
@@ -126,9 +126,9 @@ class InputStream(_object):
         streamTo(InputStream self, OutputStream & soi, sys::SSize_T numBytes) -> sys::SSize_T
         streamTo(InputStream self, OutputStream & soi) -> sys::SSize_T
         """
-        return _io.InputStream_streamTo(self, *args)
+        return _coda_io.InputStream_streamTo(self, *args)
 
-InputStream_swigregister = _io.InputStream_swigregister
+InputStream_swigregister = _coda_io.InputStream_swigregister
 InputStream_swigregister(InputStream)
 
 class OutputStream(_object):
@@ -141,12 +141,12 @@ class OutputStream(_object):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _io.delete_OutputStream
+    __swig_destroy__ = _coda_io.delete_OutputStream
     __del__ = lambda self: None
 
     def writeln(self, str):
         """writeln(OutputStream self, std::string const & str)"""
-        return _io.OutputStream_writeln(self, str)
+        return _coda_io.OutputStream_writeln(self, str)
 
 
     def write(self, *args):
@@ -155,19 +155,19 @@ class OutputStream(_object):
         write(OutputStream self, std::string const & str)
         write(OutputStream self, sys::byte const * b, sys::Size_T len)
         """
-        return _io.OutputStream_write(self, *args)
+        return _coda_io.OutputStream_write(self, *args)
 
 
     def flush(self):
         """flush(OutputStream self)"""
-        return _io.OutputStream_flush(self)
+        return _coda_io.OutputStream_flush(self)
 
 
     def close(self):
         """close(OutputStream self)"""
-        return _io.OutputStream_close(self)
+        return _coda_io.OutputStream_close(self)
 
-OutputStream_swigregister = _io.OutputStream_swigregister
+OutputStream_swigregister = _coda_io.OutputStream_swigregister
 OutputStream_swigregister(OutputStream)
 
 class BidirectionalStream(InputStream, OutputStream):
@@ -184,9 +184,9 @@ class BidirectionalStream(InputStream, OutputStream):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _io.delete_BidirectionalStream
+    __swig_destroy__ = _coda_io.delete_BidirectionalStream
     __del__ = lambda self: None
-BidirectionalStream_swigregister = _io.BidirectionalStream_swigregister
+BidirectionalStream_swigregister = _coda_io.BidirectionalStream_swigregister
 BidirectionalStream_swigregister(BidirectionalStream)
 
 class Seekable(_object):
@@ -199,22 +199,22 @@ class Seekable(_object):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _io.delete_Seekable
+    __swig_destroy__ = _coda_io.delete_Seekable
     __del__ = lambda self: None
-    CURRENT = _io.Seekable_CURRENT
-    START = _io.Seekable_START
-    END = _io.Seekable_END
+    CURRENT = _coda_io.Seekable_CURRENT
+    START = _coda_io.Seekable_START
+    END = _coda_io.Seekable_END
 
     def seek(self, offset, whence):
         """seek(Seekable self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
-        return _io.Seekable_seek(self, offset, whence)
+        return _coda_io.Seekable_seek(self, offset, whence)
 
 
     def tell(self):
         """tell(Seekable self) -> sys::Off_T"""
-        return _io.Seekable_tell(self)
+        return _coda_io.Seekable_tell(self)
 
-Seekable_swigregister = _io.Seekable_swigregister
+Seekable_swigregister = _coda_io.Seekable_swigregister
 Seekable_swigregister(Seekable)
 
 class SeekableInputStream(InputStream, Seekable):
@@ -231,12 +231,12 @@ class SeekableInputStream(InputStream, Seekable):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _io.delete_SeekableInputStream
+    __swig_destroy__ = _coda_io.delete_SeekableInputStream
     __del__ = lambda self: None
 
     def read(self, b, len):
         """read(SeekableInputStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
-        return _io.SeekableInputStream_read(self, b, len)
+        return _coda_io.SeekableInputStream_read(self, b, len)
 
 
     def streamTo(self, *args):
@@ -244,9 +244,9 @@ class SeekableInputStream(InputStream, Seekable):
         streamTo(SeekableInputStream self, OutputStream & soi, sys::SSize_T numBytes) -> sys::SSize_T
         streamTo(SeekableInputStream self, OutputStream & soi) -> sys::SSize_T
         """
-        return _io.SeekableInputStream_streamTo(self, *args)
+        return _coda_io.SeekableInputStream_streamTo(self, *args)
 
-SeekableInputStream_swigregister = _io.SeekableInputStream_swigregister
+SeekableInputStream_swigregister = _coda_io.SeekableInputStream_swigregister
 SeekableInputStream_swigregister(SeekableInputStream)
 
 class SeekableOutputStream(OutputStream, Seekable):
@@ -263,14 +263,14 @@ class SeekableOutputStream(OutputStream, Seekable):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _io.delete_SeekableOutputStream
+    __swig_destroy__ = _coda_io.delete_SeekableOutputStream
     __del__ = lambda self: None
 
     def write(self, b, len):
         """write(SeekableOutputStream self, sys::byte const * b, sys::Size_T len)"""
-        return _io.SeekableOutputStream_write(self, b, len)
+        return _coda_io.SeekableOutputStream_write(self, b, len)
 
-SeekableOutputStream_swigregister = _io.SeekableOutputStream_swigregister
+SeekableOutputStream_swigregister = _coda_io.SeekableOutputStream_swigregister
 SeekableOutputStream_swigregister(SeekableOutputStream)
 
 class SeekableBidirectionalStream(BidirectionalStream, Seekable):
@@ -287,17 +287,17 @@ class SeekableBidirectionalStream(BidirectionalStream, Seekable):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _io.delete_SeekableBidirectionalStream
+    __swig_destroy__ = _coda_io.delete_SeekableBidirectionalStream
     __del__ = lambda self: None
 
     def read(self, b, len):
         """read(SeekableBidirectionalStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
-        return _io.SeekableBidirectionalStream_read(self, b, len)
+        return _coda_io.SeekableBidirectionalStream_read(self, b, len)
 
 
     def write(self, b, len):
         """write(SeekableBidirectionalStream self, sys::byte const * b, sys::Size_T len)"""
-        return _io.SeekableBidirectionalStream_write(self, b, len)
+        return _coda_io.SeekableBidirectionalStream_write(self, b, len)
 
 
     def streamTo(self, *args):
@@ -305,9 +305,9 @@ class SeekableBidirectionalStream(BidirectionalStream, Seekable):
         streamTo(SeekableBidirectionalStream self, OutputStream & soi, sys::SSize_T numBytes) -> sys::SSize_T
         streamTo(SeekableBidirectionalStream self, OutputStream & soi) -> sys::SSize_T
         """
-        return _io.SeekableBidirectionalStream_streamTo(self, *args)
+        return _coda_io.SeekableBidirectionalStream_streamTo(self, *args)
 
-SeekableBidirectionalStream_swigregister = _io.SeekableBidirectionalStream_swigregister
+SeekableBidirectionalStream_swigregister = _coda_io.SeekableBidirectionalStream_swigregister
 SeekableBidirectionalStream_swigregister(SeekableBidirectionalStream)
 
 class StringStream(SeekableBidirectionalStream):
@@ -324,7 +324,7 @@ class StringStream(SeekableBidirectionalStream):
 
     def __init__(self):
         """__init__(io::StringStream self) -> StringStream"""
-        this = _io.new_StringStream()
+        this = _coda_io.new_StringStream()
         try:
             self.this.append(this)
         except:
@@ -332,17 +332,17 @@ class StringStream(SeekableBidirectionalStream):
 
     def tell(self):
         """tell(StringStream self) -> sys::Off_T"""
-        return _io.StringStream_tell(self)
+        return _coda_io.StringStream_tell(self)
 
 
     def seek(self, offset, whence):
         """seek(StringStream self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
-        return _io.StringStream_seek(self, offset, whence)
+        return _coda_io.StringStream_seek(self, offset, whence)
 
 
     def available(self):
         """available(StringStream self) -> sys::Off_T"""
-        return _io.StringStream_available(self)
+        return _coda_io.StringStream_available(self)
 
 
     def write(self, *args):
@@ -351,12 +351,12 @@ class StringStream(SeekableBidirectionalStream):
         write(StringStream self, std::string const & str)
         write(StringStream self, sys::byte const * b, sys::Size_T size)
         """
-        return _io.StringStream_write(self, *args)
+        return _coda_io.StringStream_write(self, *args)
 
 
     def read(self, b, len):
         """read(StringStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
-        return _io.StringStream_read(self, b, len)
+        return _coda_io.StringStream_read(self, b, len)
 
 
     def stream(self, *args):
@@ -364,21 +364,21 @@ class StringStream(SeekableBidirectionalStream):
         stream(StringStream self) -> std::stringstream const
         stream(StringStream self) -> std::stringstream &
         """
-        return _io.StringStream_stream(self, *args)
+        return _coda_io.StringStream_stream(self, *args)
 
 
     def reset(self):
         """reset(StringStream self)"""
-        return _io.StringStream_reset(self)
+        return _coda_io.StringStream_reset(self)
 
 
     def str(self):
         """str(StringStream self) -> std::string"""
-        return _io.StringStream_str(self)
+        return _coda_io.StringStream_str(self)
 
-    __swig_destroy__ = _io.delete_StringStream
+    __swig_destroy__ = _coda_io.delete_StringStream
     __del__ = lambda self: None
-StringStream_swigregister = _io.StringStream_swigregister
+StringStream_swigregister = _coda_io.StringStream_swigregister
 StringStream_swigregister(StringStream)
 
 class NullInputStream(InputStream):
@@ -395,27 +395,27 @@ class NullInputStream(InputStream):
 
     def __init__(self, size):
         """__init__(io::NullInputStream self, sys::SSize_T size) -> NullInputStream"""
-        this = _io.new_NullInputStream(size)
+        this = _coda_io.new_NullInputStream(size)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _io.delete_NullInputStream
+    __swig_destroy__ = _coda_io.delete_NullInputStream
     __del__ = lambda self: None
 
     def available(self):
         """available(NullInputStream self) -> sys::Off_T"""
-        return _io.NullInputStream_available(self)
+        return _coda_io.NullInputStream_available(self)
 
 
     def read(self, b, len):
         """read(NullInputStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
-        return _io.NullInputStream_read(self, b, len)
+        return _coda_io.NullInputStream_read(self, b, len)
 
 
     def readln(self, cStr, strLenPlusNullByte):
         """readln(NullInputStream self, sys::byte * cStr, sys::Size_T const strLenPlusNullByte) -> sys::SSize_T"""
-        return _io.NullInputStream_readln(self, cStr, strLenPlusNullByte)
+        return _coda_io.NullInputStream_readln(self, cStr, strLenPlusNullByte)
 
 
     def streamTo(self, *args):
@@ -423,9 +423,9 @@ class NullInputStream(InputStream):
         streamTo(NullInputStream self, OutputStream soi, sys::SSize_T numBytes) -> sys::SSize_T
         streamTo(NullInputStream self, OutputStream soi) -> sys::SSize_T
         """
-        return _io.NullInputStream_streamTo(self, *args)
+        return _coda_io.NullInputStream_streamTo(self, *args)
 
-NullInputStream_swigregister = _io.NullInputStream_swigregister
+NullInputStream_swigregister = _coda_io.NullInputStream_swigregister
 NullInputStream_swigregister(NullInputStream)
 
 class NullOutputStream(OutputStream):
@@ -442,17 +442,17 @@ class NullOutputStream(OutputStream):
 
     def __init__(self):
         """__init__(io::NullOutputStream self) -> NullOutputStream"""
-        this = _io.new_NullOutputStream()
+        this = _coda_io.new_NullOutputStream()
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _io.delete_NullOutputStream
+    __swig_destroy__ = _coda_io.delete_NullOutputStream
     __del__ = lambda self: None
 
     def writeln(self, arg2):
         """writeln(NullOutputStream self, std::string const & arg2)"""
-        return _io.NullOutputStream_writeln(self, arg2)
+        return _coda_io.NullOutputStream_writeln(self, arg2)
 
 
     def write(self, *args):
@@ -461,14 +461,14 @@ class NullOutputStream(OutputStream):
         write(NullOutputStream self, std::string const & arg2)
         write(NullOutputStream self, sys::byte const * arg2, sys::Size_T arg3)
         """
-        return _io.NullOutputStream_write(self, *args)
+        return _coda_io.NullOutputStream_write(self, *args)
 
 
     def flush(self):
         """flush(NullOutputStream self)"""
-        return _io.NullOutputStream_flush(self)
+        return _coda_io.NullOutputStream_flush(self)
 
-NullOutputStream_swigregister = _io.NullOutputStream_swigregister
+NullOutputStream_swigregister = _coda_io.NullOutputStream_swigregister
 NullOutputStream_swigregister(NullOutputStream)
 
 class FileInputStream(SeekableInputStream):
@@ -489,49 +489,49 @@ class FileInputStream(SeekableInputStream):
         FileInputStreamOS(std::string const & inputFile) -> FileInputStream
         __init__(io::FileInputStreamOS self, sys::File const & inputFile) -> FileInputStream
         """
-        this = _io.new_FileInputStream(*args)
+        this = _coda_io.new_FileInputStream(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _io.delete_FileInputStream
+    __swig_destroy__ = _coda_io.delete_FileInputStream
     __del__ = lambda self: None
 
     def available(self):
         """available(FileInputStream self) -> sys::Off_T"""
-        return _io.FileInputStream_available(self)
+        return _coda_io.FileInputStream_available(self)
 
 
     def isOpen(self):
         """isOpen(FileInputStream self) -> bool"""
-        return _io.FileInputStream_isOpen(self)
+        return _coda_io.FileInputStream_isOpen(self)
 
 
     def create(self, str):
         """create(FileInputStream self, std::string const & str)"""
-        return _io.FileInputStream_create(self, str)
+        return _coda_io.FileInputStream_create(self, str)
 
 
     def seek(self, off, whence):
         """seek(FileInputStream self, sys::Off_T off, io::Seekable::Whence whence) -> sys::Off_T"""
-        return _io.FileInputStream_seek(self, off, whence)
+        return _coda_io.FileInputStream_seek(self, off, whence)
 
 
     def tell(self):
         """tell(FileInputStream self) -> sys::Off_T"""
-        return _io.FileInputStream_tell(self)
+        return _coda_io.FileInputStream_tell(self)
 
 
     def close(self):
         """close(FileInputStream self)"""
-        return _io.FileInputStream_close(self)
+        return _coda_io.FileInputStream_close(self)
 
 
     def read(self, b, len):
         """read(FileInputStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
-        return _io.FileInputStream_read(self, b, len)
+        return _coda_io.FileInputStream_read(self, b, len)
 
-FileInputStream_swigregister = _io.FileInputStream_swigregister
+FileInputStream_swigregister = _coda_io.FileInputStream_swigregister
 FileInputStream_swigregister(FileInputStream)
 
 class FileOutputStream(SeekableOutputStream):
@@ -552,17 +552,17 @@ class FileOutputStream(SeekableOutputStream):
         FileOutputStreamOS(std::string const & outputFile, int creationFlags) -> FileOutputStream
         __init__(io::FileOutputStreamOS self, std::string const & outputFile) -> FileOutputStream
         """
-        this = _io.new_FileOutputStream(*args)
+        this = _coda_io.new_FileOutputStream(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _io.delete_FileOutputStream
+    __swig_destroy__ = _coda_io.delete_FileOutputStream
     __del__ = lambda self: None
 
     def isOpen(self):
         """isOpen(FileOutputStream self) -> bool"""
-        return _io.FileOutputStream_isOpen(self)
+        return _coda_io.FileOutputStream_isOpen(self)
 
 
     def create(self, *args):
@@ -570,27 +570,27 @@ class FileOutputStream(SeekableOutputStream):
         create(FileOutputStream self, std::string const & str, int creationFlags)
         create(FileOutputStream self, std::string const & str)
         """
-        return _io.FileOutputStream_create(self, *args)
+        return _coda_io.FileOutputStream_create(self, *args)
 
 
     def close(self):
         """close(FileOutputStream self)"""
-        return _io.FileOutputStream_close(self)
+        return _coda_io.FileOutputStream_close(self)
 
 
     def flush(self):
         """flush(FileOutputStream self)"""
-        return _io.FileOutputStream_flush(self)
+        return _coda_io.FileOutputStream_flush(self)
 
 
     def seek(self, offset, whence):
         """seek(FileOutputStream self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
-        return _io.FileOutputStream_seek(self, offset, whence)
+        return _coda_io.FileOutputStream_seek(self, offset, whence)
 
 
     def tell(self):
         """tell(FileOutputStream self) -> sys::Off_T"""
-        return _io.FileOutputStream_tell(self)
+        return _coda_io.FileOutputStream_tell(self)
 
 
     def write(self, *args):
@@ -599,9 +599,9 @@ class FileOutputStream(SeekableOutputStream):
         write(FileOutputStream self, std::string const & str)
         write(FileOutputStream self, sys::byte const * b, sys::Size_T len)
         """
-        return _io.FileOutputStream_write(self, *args)
+        return _coda_io.FileOutputStream_write(self, *args)
 
-FileOutputStream_swigregister = _io.FileOutputStream_swigregister
+FileOutputStream_swigregister = _coda_io.FileOutputStream_swigregister
 FileOutputStream_swigregister(FileOutputStream)
 
 # This file is compatible with both classic and new-style classes.

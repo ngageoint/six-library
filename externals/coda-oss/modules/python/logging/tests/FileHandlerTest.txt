@@ -1,1 +1,0 @@
-[DEFAULT] WARNING [47268062244032] 07/06/2015, 16:57:25 ==> This text should be written to file (FileHandler)

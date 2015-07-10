@@ -1,5 +1,3 @@
-import os
-
 def options(opt):
     opt.recurse()
 

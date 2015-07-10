@@ -26,7 +26,7 @@
  *
  */
 
-%module(package="coda") mem
+%module mem
 
 %feature("autodoc", "1");
 

@@ -1,4 +1,4 @@
-%module(package="coda") math_linear
+%module math_linear
 
 %feature("autodoc", "1");
 
