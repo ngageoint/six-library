@@ -25,8 +25,8 @@
 """
 
 import sys
-from math_linear import VectorDouble, MatrixDouble
-from math_poly import *
+from coda.math_linear import VectorDouble, MatrixDouble
+from coda.math_poly import *
 
 if __name__ == '__main__':
     #################
