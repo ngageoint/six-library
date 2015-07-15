@@ -30,6 +30,16 @@ from coda.math_linear import *
 if __name__ == '__main__':
 
     ####################################
+    # VectorN<2, double> Bindings Test #
+    ####################################
+
+    vec2 = Vector2()
+    vec2[0] = 100
+    vec2[1] = 200
+    print "Vector2:"
+    print vec2
+
+    ####################################
     # VectorN<3, double> Bindings Test #
     ####################################
 

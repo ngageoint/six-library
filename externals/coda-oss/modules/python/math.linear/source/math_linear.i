@@ -26,10 +26,34 @@
 
 // define template variants we want in python
 %template(Matrix3x1) math::linear::MatrixMxN<3,1,double>;
+%template(Vector2) math::linear::VectorN<2, double>;
 %template(Vector3) math::linear::VectorN<3, double>;
 %template(cross) math::linear::cross<double>;
 %template(VectorDouble) math::linear::Vector<double>;
 %template(MatrixDouble) math::linear::Matrix2D<double>;
+
+%extend math::linear::VectorN<2,double> {
+    // SWIG doesn't automatically generate [] operator
+    double __getitem__(long i) { return (*self)[i]; };
+    void __setitem__(long i, double val) { (*self)[i] = val; };
+
+    // string representation in python
+    std::string __str__() {
+        std::ostringstream strStream;
+        strStream << *self;
+        return strStream.str();
+    }
+
+    // helper method to facilitate creating a numpy array from Vector2
+    // v = ml.Vector2([1.0, 1.0])
+    // arr = np.asarray(v.vals())
+    //
+    // ideally we should implement __array__() instead, which will allow it 
+    // to be used by most numpy functions
+    std::vector<double> vals() {
+        return self->matrix().col(0);
+    }
+}
 
 %extend math::linear::VectorN<3,double> {
     // SWIG doesn't automatically generate [] operator
