@@ -776,6 +776,162 @@ class Matrix3x1(_object):
 Matrix3x1_swigregister = _math_linear.Matrix3x1_swigregister
 Matrix3x1_swigregister(Matrix3x1)
 
+class Vector2(_object):
+    """Proxy of C++ math::linear::VectorN<(2,double)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Vector2, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Vector2, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(math::linear::VectorN<(2,double)> self) -> Vector2
+        __init__(math::linear::VectorN<(2,double)> self, double sv) -> Vector2
+        __init__(math::linear::VectorN<(2,double)> self, double const * raw) -> Vector2
+        __init__(math::linear::VectorN<(2,double)> self, Vector2 v) -> Vector2
+        __init__(math::linear::VectorN<(2,double)> self, math::linear::MatrixMxN< 2,1,double > const & mx) -> Vector2
+        __init__(math::linear::VectorN<(2,double)> self, std_vector_double raw) -> Vector2
+        """
+        this = _math_linear.new_Vector2(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _math_linear.delete_Vector2
+    __del__ = lambda self: None
+
+    def matrix(self, *args):
+        """
+        matrix(Vector2 self) -> math::linear::MatrixMxN< 2,1,double >
+        matrix(Vector2 self) -> math::linear::MatrixMxN< 2,1,double > const &
+        """
+        return _math_linear.Vector2_matrix(self, *args)
+
+
+    def size(self):
+        """size(Vector2 self) -> size_t"""
+        return _math_linear.Vector2_size(self)
+
+
+    def dot(self, vec):
+        """dot(Vector2 self, Vector2 vec) -> double"""
+        return _math_linear.Vector2_dot(self, vec)
+
+
+    def normDot(self, vec):
+        """normDot(Vector2 self, Vector2 vec) -> double"""
+        return _math_linear.Vector2_normDot(self, vec)
+
+
+    def norm(self):
+        """norm(Vector2 self) -> double"""
+        return _math_linear.Vector2_norm(self)
+
+
+    def normSq(self):
+        """normSq(Vector2 self) -> double"""
+        return _math_linear.Vector2_normSq(self)
+
+
+    def angle(self, v):
+        """angle(Vector2 self, Vector2 v) -> double"""
+        return _math_linear.Vector2_angle(self, v)
+
+
+    def normalize(self):
+        """normalize(Vector2 self)"""
+        return _math_linear.Vector2_normalize(self)
+
+
+    def unit(self):
+        """unit(Vector2 self) -> Vector2"""
+        return _math_linear.Vector2_unit(self)
+
+
+    def scale(self, scalar):
+        """scale(Vector2 self, double scalar)"""
+        return _math_linear.Vector2_scale(self, scalar)
+
+
+    def __iadd__(self, v):
+        """__iadd__(Vector2 self, Vector2 v) -> Vector2"""
+        return _math_linear.Vector2___iadd__(self, v)
+
+
+    def __isub__(self, v):
+        """__isub__(Vector2 self, Vector2 v) -> Vector2"""
+        return _math_linear.Vector2___isub__(self, v)
+
+
+    def add(self, v):
+        """add(Vector2 self, Vector2 v) -> Vector2"""
+        return _math_linear.Vector2_add(self, v)
+
+
+    def subtract(self, v):
+        """subtract(Vector2 self, Vector2 v) -> Vector2"""
+        return _math_linear.Vector2_subtract(self, v)
+
+
+    def __add__(self, v):
+        """__add__(Vector2 self, Vector2 v) -> Vector2"""
+        return _math_linear.Vector2___add__(self, v)
+
+
+    def __sub__(self, v):
+        """__sub__(Vector2 self, Vector2 v) -> Vector2"""
+        return _math_linear.Vector2___sub__(self, v)
+
+
+    def __imul__(self, *args):
+        """
+        __imul__(Vector2 self, Vector2 v) -> Vector2
+        __imul__(Vector2 self, double sv) -> Vector2
+        """
+        return _math_linear.Vector2___imul__(self, *args)
+
+
+    def __idiv__(self, v):
+        """__idiv__(Vector2 self, Vector2 v) -> Vector2"""
+        return _math_linear.Vector2___idiv__(self, v)
+
+
+    def __mul__(self, *args):
+        """
+        __mul__(Vector2 self, double sv) -> Vector2
+        __mul__(Vector2 self, Vector2 v) -> Vector2
+        """
+        return _math_linear.Vector2___mul__(self, *args)
+
+
+    def __div__(self, v):
+        """__div__(Vector2 self, Vector2 v) -> Vector2"""
+        return _math_linear.Vector2___div__(self, v)
+
+
+    def __getitem__(self, i):
+        """__getitem__(Vector2 self, long i) -> double"""
+        return _math_linear.Vector2___getitem__(self, i)
+
+
+    def __setitem__(self, i, val):
+        """__setitem__(Vector2 self, long i, double val)"""
+        return _math_linear.Vector2___setitem__(self, i, val)
+
+
+    def __str__(self):
+        """__str__(Vector2 self) -> std::string"""
+        return _math_linear.Vector2___str__(self)
+
+
+    def vals(self):
+        """vals(Vector2 self) -> std_vector_double"""
+        return _math_linear.Vector2_vals(self)
+
+Vector2_swigregister = _math_linear.Vector2_swigregister
+Vector2_swigregister(Vector2)
+
 class Vector3(_object):
     """Proxy of C++ math::linear::VectorN<(3,double)> class"""
     __swig_setmethods__ = {}
