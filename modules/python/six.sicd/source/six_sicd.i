@@ -20,7 +20,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-%module six_sicd
+%module(package="pysix") six_sicd
 
 %feature("autodoc", "1");
 

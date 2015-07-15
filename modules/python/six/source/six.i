@@ -20,7 +20,7 @@
  *
  */
 
-%module six_base
+%module(pacakge="pysix") six_base
 
 %feature("autodoc","1");
 

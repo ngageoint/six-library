@@ -196,11 +196,11 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _scene.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import coda_except
-import math_linear
-import math_poly
-import coda_types
-import coda_sys
+import coda.coda_except
+import coda.math_linear
+import coda.math_poly
+import coda.types
+import coda.coda_sys
 
 _scene.TRACK_LEFT_swigconstant(_scene)
 TRACK_LEFT = _scene.TRACK_LEFT

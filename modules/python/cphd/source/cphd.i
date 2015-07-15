@@ -20,7 +20,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-%module cphd
+%module(package="pysix") cphd
 
 %feature("autodoc", "1");
 %include "types.i"

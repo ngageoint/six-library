@@ -196,15 +196,15 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _six_sicd.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import math_poly
-import math_linear
-import coda_except
+import coda.math_poly
+import coda.math_linear
+import coda.coda_except
 import six_base
-import coda_types
-import coda_sys
-import scene
-import coda_io
-import mem
+import coda.types
+import coda.coda_sys
+import pysix.scene
+import coda.io
+import coda.mem
 
 def getComplexData(sicdPathname, schemaPaths):
     """getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> ComplexData"""

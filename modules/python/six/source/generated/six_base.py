@@ -196,12 +196,12 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _six_base.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import coda_types
-import coda_sys
-import coda_except
-import math_poly
-import math_linear
-import scene
+import coda.types
+import coda.coda_sys
+import coda.coda_except
+import coda.math_poly
+import coda.math_linear
+import pysix.scene
 class DateTime(_object):
     """Proxy of C++ nitf::DateTime class"""
     __swig_setmethods__ = {}
@@ -2573,14 +2573,14 @@ SIX_MINOR_VERSION_NUMBER = _six_base.SIX_MINOR_VERSION_NUMBER
 
 _six_base.SIX_MICRO_VERSION_NUMBER_swigconstant(_six_base)
 SIX_MICRO_VERSION_NUMBER = _six_base.SIX_MICRO_VERSION_NUMBER
-class DESValidationException(coda_except.Exception):
+class DESValidationException(coda.coda_except.Exception):
     """Proxy of C++ six::DESValidationException class"""
     __swig_setmethods__ = {}
-    for _s in [coda_except.Exception]:
+    for _s in [coda.coda_except.Exception]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, DESValidationException, name, value)
     __swig_getmethods__ = {}
-    for _s in [coda_except.Exception]:
+    for _s in [coda.coda_except.Exception]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, DESValidationException, name)
     __repr__ = _swig_repr
@@ -2786,14 +2786,14 @@ class AmplitudeTable(_object):
 AmplitudeTable_swigregister = _six_base.AmplitudeTable_swigregister
 AmplitudeTable_swigregister(AmplitudeTable)
 
-class MissingRequiredException(coda_except.Exception):
+class MissingRequiredException(coda.coda_except.Exception):
     """Proxy of C++ six::MissingRequiredException class"""
     __swig_setmethods__ = {}
-    for _s in [coda_except.Exception]:
+    for _s in [coda.coda_except.Exception]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, MissingRequiredException, name, value)
     __swig_getmethods__ = {}
-    for _s in [coda_except.Exception]:
+    for _s in [coda.coda_except.Exception]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, MissingRequiredException, name)
     __repr__ = _swig_repr
@@ -2820,14 +2820,14 @@ class MissingRequiredException(coda_except.Exception):
 MissingRequiredException_swigregister = _six_base.MissingRequiredException_swigregister
 MissingRequiredException_swigregister(MissingRequiredException)
 
-class UninitializedValueException(coda_except.Exception):
+class UninitializedValueException(coda.coda_except.Exception):
     """Proxy of C++ six::UninitializedValueException class"""
     __swig_setmethods__ = {}
-    for _s in [coda_except.Exception]:
+    for _s in [coda.coda_except.Exception]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, UninitializedValueException, name, value)
     __swig_getmethods__ = {}
-    for _s in [coda_except.Exception]:
+    for _s in [coda.coda_except.Exception]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, UninitializedValueException, name)
     __repr__ = _swig_repr
