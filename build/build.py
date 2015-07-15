@@ -7,7 +7,9 @@ from waflib.Options import OptionsContext
 from waflib.Configure import conf, ConfigurationContext
 from waflib.Build import BuildContext, ListContext, CleanContext, InstallContext
 from waflib.TaskGen import task_gen, feature, after, before
+from waflib.Task import Task
 from waflib.Utils import to_list as listify
+from waflib.Utils import h_file
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
 from msvs import msvs_generator
@@ -452,6 +454,16 @@ class CPPContext(Context.Context):
             name = modArgs['name']
             codename = name
 
+            package_name = Context.APPNAME
+            try:
+                package_name = modArgs['package']
+            except:
+                pass
+           
+            # name for the task to generate our __init__.py file
+            # (remember we need one in each package)
+            init_tgen_name = 'python_init_file_' + package_name
+
             prefix = env['prefix_' + name]
             if prefix:
                 codename = prefix + name
@@ -461,9 +473,11 @@ class CPPContext(Context.Context):
                 codename = codename + postfix
 
             swigSource = os.path.join('source', name.replace('.', '_') + '.i')
+            if env['install_headers']:
+                self.install_files(os.path.join(env['install_includedir'], 'swig'), swigSource)
             target = '_' + codename.replace('.', '_')
-            use = modArgs['use']
-            installPath = os.path.join('${PYTHONDIR}', Context.APPNAME)
+            use = modArgs['use'] + ' ' + init_tgen_name
+            installPath = os.path.join(env['install_pydir'], package_name)
             taskName = name + '-python'
             exportIncludes = listify(modArgs.get('export_includes', 'source'))
 
@@ -482,7 +496,15 @@ class CPPContext(Context.Context):
                 install_path = installPath,
                 source = bld.path.make_node('source').ant_glob('**/*.py'))
 
-            targetsToAdd = [copyFilesTarget]
+            # this turns the folder at the destination path into a package
+            
+            initTarget = init_tgen_name
+            bld(features = 'python_package',
+                name = initTarget,
+                target='__init__.py',
+                install_path = installPath)
+
+            targetsToAdd = [copyFilesTarget, initTarget]
 
             # Tried to do this in process_swig_linkage() but it's too late
             # TODO: See if there's a cleaner way to do this
@@ -751,6 +773,8 @@ def options(opt):
                     help='Override installation bin directory')
     opt.add_option('--sharedir', action='store', nargs=1, dest='sharedir',
                     help='Override installation share directory')
+    opt.add_option('--pydir', action='store', nargs=1, dest='pydir',
+                    help='Override installation python directory')
     opt.add_option('--install-source', action='store_true', dest='install_source', default=False,
                    help='Distribute source into the installation area (for delivering source)')
     opt.add_option('--with-prebuilt-config', action='store', dest='prebuilt_config',
@@ -1226,6 +1250,7 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
+    env['install_pydir'] = Options.options.pydir if Options.options.pydir else '${PYTHONDIR}'
 
     # Swig memory leak output
     if Options.options.swig_silent_leak:
@@ -1266,11 +1291,14 @@ def process_swig_linkage(tsk):
     # TODO: Here we're using -Wl,_foo.so since if you just use -l_foo the linker
     #       assumes there's a 'lib' prefix in the filename which we don't have
     #       here.  Instead, according to the ld man page, may be able to prepend
-    #       a colon and do this instead: -l:_foo.so 
+    #       a colon and do this instead: -l:_foo.so (not sure if this works with
+    #       ld version <= 2.17)
     libpattern = tsk.env['cshlib_PATTERN']
     linkarg_pattern = '-Wl,%s'
+    rpath_pattern = '-Wl,-rpath=%s'
     if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
-      linkarg_pattern = '%s'
+        linkarg_pattern = '%s'
+        rpath_pattern = '-Rpath%s'
 
     # so swig can find .i files to import
     incstr = ''
@@ -1281,6 +1309,7 @@ def process_swig_linkage(tsk):
 
     # Search for python libraries and
     # add the target files explicitly as command line parameters for linking
+    package_list = []
     newlib = []
     for lib in tsk.env.LIB:
         
@@ -1301,6 +1330,9 @@ def process_swig_linkage(tsk):
 
         if searchstr.endswith(".base"):
             searchstr = searchstr[:-5]
+
+        dep_path = os.path.basename(tsk.bld.get_tgen_by_name(searchstr + '-python').install_path)
+        package_list.append(dep_path)
 
         # Python wrappers have the same module name as their associated
         # C++ modules so if waf is configured with --shared searching through
@@ -1328,10 +1360,61 @@ def process_swig_linkage(tsk):
     #      versions
     soname_str = linkarg_pattern % ('-h' + (libpattern % tsk.target))
     tsk.env.LINKFLAGS.append(soname_str)
+
+    # finally, we want to bake the library search paths straight in to
+    # our python extensions so we don't need to set an LD_LIBRARY_PATH
+    package_set = set(package_list)
+    base_path = os.path.join(':${ORIGIN}', '..')
+    dirlist = ''.join(str(os.path.join(base_path,s)) for s in package_set)
+    if dirlist:
+        rpath_str = rpath_pattern % (dirlist)
+        tsk.env.LINKFLAGS.append(rpath_str)
   
     # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib
 
+
+
+#
+# This task generator creates tasks that install an __init__.py
+# for our python packages. Right now all it does it create an
+# empty __init__.py in the install directory but if we decide
+# to go farther with our python bindings (ie, we have more than a
+# couple packages or need to actually put stuff in the __init__.py)
+# they will go here
+#
+
+@task_gen
+@feature('python_package')
+def python_package(tg):
+
+    # setup some paths
+    # we'll create our __init__.py right in our build directory
+    install_path = tg.install_path
+    install_path = install_path.replace('${PYTHONDIR}',tg.env.PYTHONDIR)
+    dirname = os.path.join(tg.bld.bldnode.abspath(), tg.path.relpath())
+    fname = os.path.join(tg.bld.bldnode.abspath(), tg.path.relpath(), tg.target)
+
+    # make sure the build dir actually exists
+    try:
+        os.makedirs(os.path.abspath(dirname))
+    except OSError as e:
+        # we don't care if the folder already exists
+        if not e.errno == 17:
+            raise e
+
+    # append to file or create
+    open(fname,'a').close()
+
+    # to install files the 'node' associated with the file
+    # needs to have a signature; the hash of the file is
+    # good enough for us.
+    relpath = os.path.join(tg.path.relpath(),tg.target)
+    nod = tg.bld.bldnode.make_node(relpath)
+    nod.sig = h_file(fname)
+
+    # schedule the file for installation
+    tg.bld.install_files(install_path,nod)
 
 @task_gen
 @feature('untar')

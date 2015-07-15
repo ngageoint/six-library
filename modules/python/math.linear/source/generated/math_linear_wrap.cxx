@@ -2947,21 +2947,23 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_math__linear__Matrix2DT_double_t swig_types[7]
 #define SWIGTYPE_p_math__linear__MatrixMxNT_1_1_double_t swig_types[8]
 #define SWIGTYPE_p_math__linear__MatrixMxNT_1_3_double_t swig_types[9]
-#define SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t swig_types[10]
-#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[11]
-#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[12]
-#define SWIGTYPE_p_p_PyObject swig_types[13]
-#define SWIGTYPE_p_size_type swig_types[14]
-#define SWIGTYPE_p_std__allocatorT_double_t swig_types[15]
-#define SWIGTYPE_p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t swig_types[16]
-#define SWIGTYPE_p_std__invalid_argument swig_types[17]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[18]
-#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[19]
-#define SWIGTYPE_p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t swig_types[20]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[21]
-#define SWIGTYPE_p_value_type swig_types[22]
-static swig_type_info *swig_types[24];
-static swig_module_info swig_module = {swig_types, 23, 0, 0, 0, 0};
+#define SWIGTYPE_p_math__linear__MatrixMxNT_2_1_double_t swig_types[10]
+#define SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t swig_types[11]
+#define SWIGTYPE_p_math__linear__VectorNT_2_double_t swig_types[12]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[13]
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[14]
+#define SWIGTYPE_p_p_PyObject swig_types[15]
+#define SWIGTYPE_p_size_type swig_types[16]
+#define SWIGTYPE_p_std__allocatorT_double_t swig_types[17]
+#define SWIGTYPE_p_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t swig_types[18]
+#define SWIGTYPE_p_std__invalid_argument swig_types[19]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[20]
+#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[21]
+#define SWIGTYPE_p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t swig_types[22]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[23]
+#define SWIGTYPE_p_value_type swig_types[24]
+static swig_type_info *swig_types[26];
+static swig_module_info swig_module = {swig_types, 25, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4785,9 +4787,9 @@ SWIGINTERN std::vector< std::vector< double > >::iterator std_vector_Sl_std_vect
 SWIGINTERN std::vector< std::vector< double > >::iterator std_vector_Sl_std_vector_Sl_double_Sg__Sg__erase__SWIG_1(std::vector< std::vector< double > > *self,std::vector< std::vector< double > >::iterator first,std::vector< std::vector< double > >::iterator last){ return self->erase(first, last); }
 SWIGINTERN std::vector< std::vector< double > >::iterator std_vector_Sl_std_vector_Sl_double_Sg__Sg__insert__SWIG_0(std::vector< std::vector< double > > *self,std::vector< std::vector< double > >::iterator pos,std::vector< std::vector< double > >::value_type const &x){ return self->insert(pos, x); }
 SWIGINTERN void std_vector_Sl_std_vector_Sl_double_Sg__Sg__insert__SWIG_1(std::vector< std::vector< double > > *self,std::vector< std::vector< double > >::iterator pos,std::vector< std::vector< double > >::size_type n,std::vector< std::vector< double > >::value_type const &x){ self->insert(pos, n, x); }
-SWIGINTERN double math_linear_VectorN_Sl_3_Sc_double_Sg____getitem__(math::linear::VectorN< 3,double > *self,long i){ return (*self)[i]; }
-SWIGINTERN void math_linear_VectorN_Sl_3_Sc_double_Sg____setitem__(math::linear::VectorN< 3,double > *self,long i,double val){ (*self)[i] = val; }
-SWIGINTERN std::string math_linear_VectorN_Sl_3_Sc_double_Sg____str__(math::linear::VectorN< 3,double > *self){
+SWIGINTERN double math_linear_VectorN_Sl_2_Sc_double_Sg____getitem__(math::linear::VectorN< 2,double > *self,long i){ return (*self)[i]; }
+SWIGINTERN void math_linear_VectorN_Sl_2_Sc_double_Sg____setitem__(math::linear::VectorN< 2,double > *self,long i,double val){ (*self)[i] = val; }
+SWIGINTERN std::string math_linear_VectorN_Sl_2_Sc_double_Sg____str__(math::linear::VectorN< 2,double > *self){
         std::ostringstream strStream;
         strStream << *self;
         return strStream.str();
@@ -4837,6 +4839,16 @@ SWIG_From_std_string  (const std::string& s)
   return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
 
+SWIGINTERN std::vector< double,std::allocator< double > > math_linear_VectorN_Sl_2_Sc_double_Sg__vals(math::linear::VectorN< 2,double > *self){
+        return self->matrix().col(0);
+    }
+SWIGINTERN double math_linear_VectorN_Sl_3_Sc_double_Sg____getitem__(math::linear::VectorN< 3,double > *self,long i){ return (*self)[i]; }
+SWIGINTERN void math_linear_VectorN_Sl_3_Sc_double_Sg____setitem__(math::linear::VectorN< 3,double > *self,long i,double val){ (*self)[i] = val; }
+SWIGINTERN std::string math_linear_VectorN_Sl_3_Sc_double_Sg____str__(math::linear::VectorN< 3,double > *self){
+        std::ostringstream strStream;
+        strStream << *self;
+        return strStream.str();
+    }
 SWIGINTERN std::vector< double,std::allocator< double > > math_linear_VectorN_Sl_3_Sc_double_Sg__vals(math::linear::VectorN< 3,double > *self){
         return self->matrix().col(0);
     }
@@ -15715,6 +15727,2192 @@ SWIGINTERN PyObject *Matrix3x1_swigregister(PyObject *SWIGUNUSEDPARM(self), PyOb
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_Vector2")) SWIG_fail;
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::VectorN< 2,double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Vector2",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Vector2" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double *arg1 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::VectorN< 2,double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Vector2",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Vector2" "', argument " "1"" of type '" "double const *""'"); 
+  }
+  arg1 = reinterpret_cast< double * >(argp1);
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >((double const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::VectorN< 2,double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Vector2",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Vector2" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Vector2" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const &""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >((math::linear::VectorN< 2,double > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::MatrixMxN< 2,1,double > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::VectorN< 2,double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Vector2",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_math__linear__MatrixMxNT_2_1_double_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Vector2" "', argument " "1"" of type '" "math::linear::MatrixMxN< 2,1,double > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Vector2" "', argument " "1"" of type '" "math::linear::MatrixMxN< 2,1,double > const &""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::MatrixMxN< 2,1,double > * >(argp1);
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >((math::linear::MatrixMxN< 2,1,double > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< double,std::allocator< double > > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  math::linear::VectorN< 2,double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_Vector2",&obj0)) SWIG_fail;
+  {
+    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Vector2" "', argument " "1"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Vector2" "', argument " "1"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >((std::vector< double,std::allocator< double > > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Vector2(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_Vector2__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_double, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Vector2__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Vector2__SWIG_3(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_math__linear__MatrixMxNT_2_1_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Vector2__SWIG_4(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_Vector2__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<double,std::allocator< double > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Vector2__SWIG_5(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Vector2'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    math::linear::VectorN< 2,double >::VectorN()\n"
+    "    math::linear::VectorN< 2,double >::VectorN(double)\n"
+    "    math::linear::VectorN< 2,double >::VectorN(double const *)\n"
+    "    math::linear::VectorN< 2,double >::VectorN(math::linear::VectorN< 2,double > const &)\n"
+    "    math::linear::VectorN< 2,double >::VectorN(math::linear::MatrixMxN< 2,1,double > const &)\n"
+    "    math::linear::VectorN< 2,double >::VectorN(std::vector< double,std::allocator< double > > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Vector2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Vector2",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Vector2" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_matrix__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::MatrixMxN< 2,1,double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2_matrix",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_matrix" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = (math::linear::MatrixMxN< 2,1,double > *) &(arg1)->matrix();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__MatrixMxNT_2_1_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_matrix__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::MatrixMxN< 2,1,double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2_matrix",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_matrix" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = (math::linear::MatrixMxN< 2,1,double > *) &((math::linear::VectorN< 2,double > const *)arg1)->matrix();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__MatrixMxNT_2_1_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_matrix(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Vector2_matrix__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Vector2_matrix__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Vector2_matrix'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    math::linear::VectorN< 2,double >::matrix()\n"
+    "    math::linear::VectorN< 2,double >::matrix() const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_size" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_dot(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2 > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2_dot",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_dot" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2_dot" "', argument " "2"" of type '" "math::linear::VectorN< 2 > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2_dot" "', argument " "2"" of type '" "math::linear::VectorN< 2 > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2 > * >(argp2);
+  {
+    try
+    {
+      result = (double)((math::linear::VectorN< 2,double > const *)arg1)->dot((math::linear::VectorN< 2 > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_normDot(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2 > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2_normDot",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_normDot" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2_normDot" "', argument " "2"" of type '" "math::linear::VectorN< 2 > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2_normDot" "', argument " "2"" of type '" "math::linear::VectorN< 2 > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2 > * >(argp2);
+  {
+    try
+    {
+      result = (double)((math::linear::VectorN< 2,double > const *)arg1)->normDot((math::linear::VectorN< 2 > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_norm(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2_norm",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_norm" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = (double)((math::linear::VectorN< 2,double > const *)arg1)->norm();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_normSq(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2_normSq",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_normSq" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = (double)((math::linear::VectorN< 2,double > const *)arg1)->normSq();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_angle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2_angle",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_angle" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2_angle" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2_angle" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = (double)((math::linear::VectorN< 2,double > const *)arg1)->angle((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_normalize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2_normalize",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_normalize" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      (arg1)->normalize();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_unit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2_unit",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_unit" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->unit();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >::Like_T(static_cast< const math::linear::VectorN< 2,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_scale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2_scale",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_scale" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Vector2_scale" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try
+    {
+      (arg1)->scale(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___iadd__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___iadd__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___iadd__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___iadd__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator +=((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___isub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___isub__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___isub__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___isub__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___isub__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator -=((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_add(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2_add",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_add" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2_add" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2_add" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->add((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >::Like_T(static_cast< const math::linear::VectorN< 2,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_subtract(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2_subtract",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_subtract" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2_subtract" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2_subtract" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->subtract((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >::Like_T(static_cast< const math::linear::VectorN< 2,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___add__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___add__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___add__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___add__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->operator +((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >::Like_T(static_cast< const math::linear::VectorN< 2,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___sub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___sub__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___sub__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___sub__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___sub__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->operator -((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >::Like_T(static_cast< const math::linear::VectorN< 2,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___imul__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___imul__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___imul__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___imul__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator *=((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___imul__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___imul__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Vector2___imul__" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator *=(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___imul__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Vector2___imul____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Vector2___imul____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Vector2___imul__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    math::linear::VectorN< 2,double >::operator *=(math::linear::VectorN< 2,double >::Like_T const &)\n"
+    "    math::linear::VectorN< 2,double >::operator *=(double)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___mul__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___mul__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Vector2___mul__" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->operator *(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >::Like_T(static_cast< const math::linear::VectorN< 2,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___idiv__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___idiv__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___idiv__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___idiv__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator /=((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___mul__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___mul__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___mul__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___mul__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->operator *((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >::Like_T(static_cast< const math::linear::VectorN< 2,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___mul__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Vector2___mul____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Vector2___mul____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  Py_INCREF(Py_NotImplemented);
+  return Py_NotImplemented;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___div__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___div__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___div__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___div__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
+  {
+    try
+    {
+      result = ((math::linear::VectorN< 2,double > const *)arg1)->operator /((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >::Like_T(static_cast< const math::linear::VectorN< 2,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  long arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___getitem__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  ecode2 = SWIG_AsVal_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Vector2___getitem__" "', argument " "2"" of type '" "long""'");
+  } 
+  arg2 = static_cast< long >(val2);
+  {
+    try
+    {
+      result = (double)math_linear_VectorN_Sl_2_Sc_double_Sg____getitem__(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  long arg2 ;
+  double arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  long val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Vector2___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___setitem__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  ecode2 = SWIG_AsVal_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Vector2___setitem__" "', argument " "2"" of type '" "long""'");
+  } 
+  arg2 = static_cast< long >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Vector2___setitem__" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try
+    {
+      math_linear_VectorN_Sl_2_Sc_double_Sg____setitem__(arg1,arg2,arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2___str__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2___str__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___str__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = math_linear_VectorN_Sl_2_Sc_double_Sg____str__(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector2_vals(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< double,std::allocator< double > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector2_vals",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2_vals" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  {
+    try
+    {
+      result = math_linear_VectorN_Sl_2_Sc_double_Sg__vals(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = swig::from(static_cast< std::vector<double,std::allocator< double > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Vector2_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_Vector3__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::VectorN< 3,double > *result = 0 ;
@@ -24187,6 +26385,49 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Matrix3x1___mul__", _wrap_Matrix3x1___mul__, METH_VARARGS, (char *)"Matrix3x1___mul__(Matrix3x1 self, double scalar) -> Matrix3x1"},
 	 { (char *)"Matrix3x1___div__", _wrap_Matrix3x1___div__, METH_VARARGS, (char *)"Matrix3x1___div__(Matrix3x1 self, double scalar) -> Matrix3x1"},
 	 { (char *)"Matrix3x1_swigregister", Matrix3x1_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_Vector2", _wrap_new_Vector2, METH_VARARGS, (char *)"\n"
+		"Vector2()\n"
+		"Vector2(double sv)\n"
+		"Vector2(double const * raw)\n"
+		"Vector2(Vector2 v)\n"
+		"Vector2(math::linear::MatrixMxN< 2,1,double > const & mx)\n"
+		"new_Vector2(std_vector_double raw) -> Vector2\n"
+		""},
+	 { (char *)"delete_Vector2", _wrap_delete_Vector2, METH_VARARGS, (char *)"delete_Vector2(Vector2 self)"},
+	 { (char *)"Vector2_matrix", _wrap_Vector2_matrix, METH_VARARGS, (char *)"\n"
+		"matrix() -> math::linear::MatrixMxN< 2,1,double >\n"
+		"Vector2_matrix(Vector2 self) -> math::linear::MatrixMxN< 2,1,double > const &\n"
+		""},
+	 { (char *)"Vector2_size", _wrap_Vector2_size, METH_VARARGS, (char *)"Vector2_size(Vector2 self) -> size_t"},
+	 { (char *)"Vector2_dot", _wrap_Vector2_dot, METH_VARARGS, (char *)"Vector2_dot(Vector2 self, Vector2 vec) -> double"},
+	 { (char *)"Vector2_normDot", _wrap_Vector2_normDot, METH_VARARGS, (char *)"Vector2_normDot(Vector2 self, Vector2 vec) -> double"},
+	 { (char *)"Vector2_norm", _wrap_Vector2_norm, METH_VARARGS, (char *)"Vector2_norm(Vector2 self) -> double"},
+	 { (char *)"Vector2_normSq", _wrap_Vector2_normSq, METH_VARARGS, (char *)"Vector2_normSq(Vector2 self) -> double"},
+	 { (char *)"Vector2_angle", _wrap_Vector2_angle, METH_VARARGS, (char *)"Vector2_angle(Vector2 self, Vector2 v) -> double"},
+	 { (char *)"Vector2_normalize", _wrap_Vector2_normalize, METH_VARARGS, (char *)"Vector2_normalize(Vector2 self)"},
+	 { (char *)"Vector2_unit", _wrap_Vector2_unit, METH_VARARGS, (char *)"Vector2_unit(Vector2 self) -> Vector2"},
+	 { (char *)"Vector2_scale", _wrap_Vector2_scale, METH_VARARGS, (char *)"Vector2_scale(Vector2 self, double scalar)"},
+	 { (char *)"Vector2___iadd__", _wrap_Vector2___iadd__, METH_VARARGS, (char *)"Vector2___iadd__(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2___isub__", _wrap_Vector2___isub__, METH_VARARGS, (char *)"Vector2___isub__(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2_add", _wrap_Vector2_add, METH_VARARGS, (char *)"Vector2_add(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2_subtract", _wrap_Vector2_subtract, METH_VARARGS, (char *)"Vector2_subtract(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2___add__", _wrap_Vector2___add__, METH_VARARGS, (char *)"Vector2___add__(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2___sub__", _wrap_Vector2___sub__, METH_VARARGS, (char *)"Vector2___sub__(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2___imul__", _wrap_Vector2___imul__, METH_VARARGS, (char *)"\n"
+		"__imul__(Vector2 v) -> Vector2\n"
+		"Vector2___imul__(Vector2 self, double sv) -> Vector2\n"
+		""},
+	 { (char *)"Vector2___idiv__", _wrap_Vector2___idiv__, METH_VARARGS, (char *)"Vector2___idiv__(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2___mul__", _wrap_Vector2___mul__, METH_VARARGS, (char *)"\n"
+		"__mul__(double sv) -> Vector2\n"
+		"Vector2___mul__(Vector2 self, Vector2 v) -> Vector2\n"
+		""},
+	 { (char *)"Vector2___div__", _wrap_Vector2___div__, METH_VARARGS, (char *)"Vector2___div__(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2___getitem__", _wrap_Vector2___getitem__, METH_VARARGS, (char *)"Vector2___getitem__(Vector2 self, long i) -> double"},
+	 { (char *)"Vector2___setitem__", _wrap_Vector2___setitem__, METH_VARARGS, (char *)"Vector2___setitem__(Vector2 self, long i, double val)"},
+	 { (char *)"Vector2___str__", _wrap_Vector2___str__, METH_VARARGS, (char *)"Vector2___str__(Vector2 self) -> std::string"},
+	 { (char *)"Vector2_vals", _wrap_Vector2_vals, METH_VARARGS, (char *)"Vector2_vals(Vector2 self) -> std_vector_double"},
+	 { (char *)"Vector2_swigregister", Vector2_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Vector3", _wrap_new_Vector3, METH_VARARGS, (char *)"\n"
 		"Vector3()\n"
 		"Vector3(double sv)\n"
@@ -24359,7 +26600,9 @@ static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_exc
 static swig_type_info _swigt__p_math__linear__Matrix2DT_double_t = {"_p_math__linear__Matrix2DT_double_t", "math::linear::Matrix2D< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_1_1_double_t = {"_p_math__linear__MatrixMxNT_1_1_double_t", "math::linear::MatrixMxN< 1,1,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_1_3_double_t = {"_p_math__linear__MatrixMxNT_1_3_double_t", "math::linear::MatrixMxN< 1,3,double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__linear__MatrixMxNT_2_1_double_t = {"_p_math__linear__MatrixMxNT_2_1_double_t", "math::linear::MatrixMxN< 2,1,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_3_1_double_t = {"_p_math__linear__MatrixMxNT_3_1_double_t", "math::linear::MatrixMxN< 3,1 > *|math::linear::MatrixMxN< 3,1,double >::Like_T *|math::linear::MatrixMxN< 3,1,double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__linear__VectorNT_2_double_t = {"_p_math__linear__VectorNT_2_double_t", "math::linear::VectorN< 2 > *|math::linear::VectorN< 2,double >::Like_T *|math::linear::VectorN< 2,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "math::linear::VectorN< 3,double >::Like_T *|math::linear::VectorN< 3,double > *|math::linear::VectorN< 3 > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__linear__VectorT_double_t", "math::linear::Vector< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
@@ -24384,7 +26627,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_math__linear__Matrix2DT_double_t,
   &_swigt__p_math__linear__MatrixMxNT_1_1_double_t,
   &_swigt__p_math__linear__MatrixMxNT_1_3_double_t,
+  &_swigt__p_math__linear__MatrixMxNT_2_1_double_t,
   &_swigt__p_math__linear__MatrixMxNT_3_1_double_t,
+  &_swigt__p_math__linear__VectorNT_2_double_t,
   &_swigt__p_math__linear__VectorNT_3_double_t,
   &_swigt__p_math__linear__VectorT_double_t,
   &_swigt__p_p_PyObject,
@@ -24409,7 +26654,9 @@ static swig_cast_info _swigc__p_except__NullPointerReferenceException[] = {  {&_
 static swig_cast_info _swigc__p_math__linear__Matrix2DT_double_t[] = {  {&_swigt__p_math__linear__Matrix2DT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__MatrixMxNT_1_1_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_1_1_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__MatrixMxNT_1_3_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_1_3_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_math__linear__MatrixMxNT_2_1_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_2_1_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__MatrixMxNT_3_1_double_t[] = {  {&_swigt__p_math__linear__MatrixMxNT_3_1_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_math__linear__VectorNT_2_double_t[] = {  {&_swigt__p_math__linear__VectorNT_2_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorNT_3_double_t[] = {  {&_swigt__p_math__linear__VectorNT_3_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorT_double_t[] = {  {&_swigt__p_math__linear__VectorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
@@ -24434,7 +26681,9 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_math__linear__Matrix2DT_double_t,
   _swigc__p_math__linear__MatrixMxNT_1_1_double_t,
   _swigc__p_math__linear__MatrixMxNT_1_3_double_t,
+  _swigc__p_math__linear__MatrixMxNT_2_1_double_t,
   _swigc__p_math__linear__MatrixMxNT_3_1_double_t,
+  _swigc__p_math__linear__VectorNT_2_double_t,
   _swigc__p_math__linear__VectorNT_3_double_t,
   _swigc__p_math__linear__VectorT_double_t,
   _swigc__p_p_PyObject,

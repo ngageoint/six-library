@@ -20,7 +20,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-%module coda_except
+%module(package="coda") coda_except
 
 %feature("autodoc","1");
 
