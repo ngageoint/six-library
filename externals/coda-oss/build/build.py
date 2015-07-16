@@ -1391,30 +1391,27 @@ def python_package(tg):
     # setup some paths
     # we'll create our __init__.py right in our build directory
     install_path = tg.install_path
+    pkg_name = os.path.join('packages', os.path.basename(install_path))
     install_path = install_path.replace('${PYTHONDIR}',tg.env.PYTHONDIR)
-    dirname = os.path.join(tg.bld.bldnode.abspath(), tg.path.relpath())
-    fname = os.path.join(tg.bld.bldnode.abspath(), tg.path.relpath(), tg.target)
+    dirname = os.path.join(tg.bld.bldnode.abspath(), pkg_name)
+    fname = os.path.join(tg.bld.bldnode.abspath(), pkg_name, tg.target)
 
-    # make sure the build dir actually exists
-    try:
-        os.makedirs(os.path.abspath(dirname))
-    except OSError as e:
-        # we don't care if the folder already exists
-        if not e.errno == 17:
-            raise e
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
 
     # append to file or create
-    open(fname,'a').close()
+    if not os.path.isfile(fname):
+        open(fname,'a').close()
 
-    # to install files the 'node' associated with the file
-    # needs to have a signature; the hash of the file is
-    # good enough for us.
-    relpath = os.path.join(tg.path.relpath(),tg.target)
-    nod = tg.bld.bldnode.make_node(relpath)
-    nod.sig = h_file(fname)
+        # to install files the 'node' associated with the file
+        # needs to have a signature; the hash of the file is
+        # good enough for us.
+        relpath = os.path.join(pkg_name, tg.target)
+        nod = tg.bld.bldnode.make_node(relpath)
+        nod.sig = h_file(fname)
 
-    # schedule the file for installation
-    tg.bld.install_files(install_path,nod)
+        # schedule the file for installation
+        tg.bld.install_files(install_path,nod)
 
 @task_gen
 @feature('untar')
