@@ -3702,32 +3702,24 @@ class Options(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, Options, name)
     __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::Options self) -> Options"""
-        this = _six_base.new_Options()
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
     __swig_destroy__ = _six_base.delete_Options
     __del__ = lambda self: None
 
     def getParameter(self, *args):
         """
-        getParameter(Options self, std::string option) -> Parameter
-        getParameter(Options self, std::string option, Parameter defaultValue) -> Parameter
+        getParameter(Options self, std::string const & option) -> Parameter
+        getParameter(Options self, std::string const & option, Parameter defaultValue) -> Parameter
         """
         return _six_base.Options_getParameter(self, *args)
 
 
     def setParameter(self, option, value):
-        """setParameter(Options self, std::string option, Parameter value)"""
+        """setParameter(Options self, std::string const & option, Parameter value)"""
         return _six_base.Options_setParameter(self, option, value)
 
 
     def hasParameter(self, option):
-        """hasParameter(Options self, std::string option) -> bool"""
+        """hasParameter(Options self, std::string const & option) -> bool"""
         return _six_base.Options_hasParameter(self, option)
 
 
@@ -3740,6 +3732,14 @@ class Options(_object):
         """end(Options self) -> six::Options::ParameterIter"""
         return _six_base.Options_end(self)
 
+
+    def __init__(self):
+        """__init__(six::Options self) -> Options"""
+        this = _six_base.new_Options()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
 Options_swigregister = _six_base.Options_swigregister
 Options_swigregister(Options)
 

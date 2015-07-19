@@ -54973,49 +54973,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_Options(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Options *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_Options")) SWIG_fail;
-  {
-    try
-    {
-      result = (six::Options *)new six::Options();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Options, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_delete_Options(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Options *arg1 = (six::Options *) 0 ;
@@ -55070,9 +55027,10 @@ fail:
 SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Options *arg1 = (six::Options *) 0 ;
-  std::string arg2 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   six::Parameter result;
@@ -55085,17 +55043,19 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_0(PyObject *SWIGUNUSEDPARM
   arg1 = reinterpret_cast< six::Options * >(argp1);
   {
     std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Options_getParameter" "', argument " "2"" of type '" "std::string""'"); 
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Options_getParameter" "', argument " "2"" of type '" "std::string const &""'"); 
     }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Options_getParameter" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
   {
     try
     {
-      result = ((six::Options const *)arg1)->getParameter(arg2);
+      result = ((six::Options const *)arg1)->getParameter((std::string const &)*arg2);
     } 
     catch (const std::exception& e)
     {
@@ -55124,8 +55084,10 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_0(PyObject *SWIGUNUSEDPARM
     }
   }
   resultobj = SWIG_NewPointerObj((new six::Parameter(static_cast< const six::Parameter& >(result))), SWIGTYPE_p_six__Parameter, SWIG_POINTER_OWN |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -55133,10 +55095,11 @@ fail:
 SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Options *arg1 = (six::Options *) 0 ;
-  std::string arg2 ;
+  std::string *arg2 = 0 ;
   six::Parameter arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   void *argp3 ;
   int res3 = 0 ;
   PyObject * obj0 = 0 ;
@@ -55152,12 +55115,14 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_1(PyObject *SWIGUNUSEDPARM
   arg1 = reinterpret_cast< six::Options * >(argp1);
   {
     std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Options_getParameter" "', argument " "2"" of type '" "std::string""'"); 
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Options_getParameter" "', argument " "2"" of type '" "std::string const &""'"); 
     }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Options_getParameter" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
   {
     res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__Parameter,  0  | 0);
@@ -55175,7 +55140,7 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_1(PyObject *SWIGUNUSEDPARM
   {
     try
     {
-      result = ((six::Options const *)arg1)->getParameter(arg2,arg3);
+      result = ((six::Options const *)arg1)->getParameter((std::string const &)*arg2,arg3);
     } 
     catch (const std::exception& e)
     {
@@ -55204,8 +55169,10 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_1(PyObject *SWIGUNUSEDPARM
     }
   }
   resultobj = SWIG_NewPointerObj((new six::Parameter(static_cast< const six::Parameter& >(result))), SWIGTYPE_p_six__Parameter, SWIG_POINTER_OWN |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -55254,8 +55221,8 @@ SWIGINTERN PyObject *_wrap_Options_getParameter(PyObject *self, PyObject *args) 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Options_getParameter'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    six::Options::getParameter(std::string) const\n"
-    "    six::Options::getParameter(std::string,six::Parameter) const\n");
+    "    six::Options::getParameter(std::string const &) const\n"
+    "    six::Options::getParameter(std::string const &,six::Parameter) const\n");
   return 0;
 }
 
@@ -55263,10 +55230,11 @@ fail:
 SWIGINTERN PyObject *_wrap_Options_setParameter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Options *arg1 = (six::Options *) 0 ;
-  std::string arg2 ;
+  std::string *arg2 = 0 ;
   six::Parameter arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   void *argp3 ;
   int res3 = 0 ;
   PyObject * obj0 = 0 ;
@@ -55281,12 +55249,14 @@ SWIGINTERN PyObject *_wrap_Options_setParameter(PyObject *SWIGUNUSEDPARM(self), 
   arg1 = reinterpret_cast< six::Options * >(argp1);
   {
     std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Options_setParameter" "', argument " "2"" of type '" "std::string""'"); 
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Options_setParameter" "', argument " "2"" of type '" "std::string const &""'"); 
     }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Options_setParameter" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
   {
     res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_six__Parameter,  0  | 0);
@@ -55304,7 +55274,7 @@ SWIGINTERN PyObject *_wrap_Options_setParameter(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      (arg1)->setParameter(arg2,arg3);
+      (arg1)->setParameter((std::string const &)*arg2,arg3);
     } 
     catch (const std::exception& e)
     {
@@ -55333,8 +55303,10 @@ SWIGINTERN PyObject *_wrap_Options_setParameter(PyObject *SWIGUNUSEDPARM(self), 
     }
   }
   resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -55342,9 +55314,10 @@ fail:
 SWIGINTERN PyObject *_wrap_Options_hasParameter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Options *arg1 = (six::Options *) 0 ;
-  std::string arg2 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   bool result;
@@ -55357,17 +55330,19 @@ SWIGINTERN PyObject *_wrap_Options_hasParameter(PyObject *SWIGUNUSEDPARM(self), 
   arg1 = reinterpret_cast< six::Options * >(argp1);
   {
     std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Options_hasParameter" "', argument " "2"" of type '" "std::string""'"); 
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Options_hasParameter" "', argument " "2"" of type '" "std::string const &""'"); 
     }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Options_hasParameter" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
   {
     try
     {
-      result = (bool)((six::Options const *)arg1)->hasParameter(arg2);
+      result = (bool)((six::Options const *)arg1)->hasParameter((std::string const &)*arg2);
     } 
     catch (const std::exception& e)
     {
@@ -55396,8 +55371,10 @@ SWIGINTERN PyObject *_wrap_Options_hasParameter(PyObject *SWIGUNUSEDPARM(self), 
     }
   }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -55500,6 +55477,49 @@ SWIGINTERN PyObject *_wrap_Options_end(PyObject *SWIGUNUSEDPARM(self), PyObject 
     }
   }
   resultobj = SWIG_NewPointerObj((new six::Options::ParameterIter(static_cast< const six::Options::ParameterIter& >(result))), SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Options(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Options *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_Options")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::Options *)new six::Options();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Options, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -60529,16 +60549,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"remapZeroTo360", _wrap_remapZeroTo360, METH_VARARGS, (char *)"remapZeroTo360(double degree) -> double"},
 	 { (char *)"loadPluginDir", _wrap_loadPluginDir, METH_VARARGS, (char *)"loadPluginDir(std::string const & pluginDir)"},
 	 { (char *)"getErrors", _wrap_getErrors, METH_VARARGS, (char *)"getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"},
-	 { (char *)"new_Options", _wrap_new_Options, METH_VARARGS, (char *)"new_Options() -> Options"},
 	 { (char *)"delete_Options", _wrap_delete_Options, METH_VARARGS, (char *)"delete_Options(Options self)"},
 	 { (char *)"Options_getParameter", _wrap_Options_getParameter, METH_VARARGS, (char *)"\n"
-		"getParameter(std::string option) -> Parameter\n"
-		"Options_getParameter(Options self, std::string option, Parameter defaultValue) -> Parameter\n"
+		"getParameter(std::string const & option) -> Parameter\n"
+		"Options_getParameter(Options self, std::string const & option, Parameter defaultValue) -> Parameter\n"
 		""},
-	 { (char *)"Options_setParameter", _wrap_Options_setParameter, METH_VARARGS, (char *)"Options_setParameter(Options self, std::string option, Parameter value)"},
-	 { (char *)"Options_hasParameter", _wrap_Options_hasParameter, METH_VARARGS, (char *)"Options_hasParameter(Options self, std::string option) -> bool"},
+	 { (char *)"Options_setParameter", _wrap_Options_setParameter, METH_VARARGS, (char *)"Options_setParameter(Options self, std::string const & option, Parameter value)"},
+	 { (char *)"Options_hasParameter", _wrap_Options_hasParameter, METH_VARARGS, (char *)"Options_hasParameter(Options self, std::string const & option) -> bool"},
 	 { (char *)"Options_begin", _wrap_Options_begin, METH_VARARGS, (char *)"Options_begin(Options self) -> six::Options::ParameterIter"},
 	 { (char *)"Options_end", _wrap_Options_end, METH_VARARGS, (char *)"Options_end(Options self) -> six::Options::ParameterIter"},
+	 { (char *)"new_Options", _wrap_new_Options, METH_VARARGS, (char *)"new_Options() -> Options"},
 	 { (char *)"Options_swigregister", Options_swigregister, METH_VARARGS, NULL},
 	 { (char *)"VectorString_iterator", _wrap_VectorString_iterator, METH_VARARGS, (char *)"VectorString_iterator(VectorString self) -> SwigPyIterator"},
 	 { (char *)"VectorString___nonzero__", _wrap_VectorString___nonzero__, METH_VARARGS, (char *)"VectorString___nonzero__(VectorString self) -> bool"},
