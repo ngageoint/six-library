@@ -162,12 +162,13 @@ def java_module(bld, **modArgs):
        classpathDirs += [bld.path.find_dir(os.path.relpath(bld.env['JARS_DIR'], bld.path.find_dir('.').abspath()))]
        
        for cp in classpath:
-           for dir in classpathDirs:
-               if dir is not None and os.path.exists(join(dir.abspath(), cp)):
-                   real_classpath.append(join(dir.abspath(), cp))
-                   cp_targets.append(bld(name=cp, features='install_tgt', install_path=libInstallPath or '${PREFIX}/lib', dir=dir, files=[cp]))
            if os.path.exists(cp):
                real_classpath.append(cp)
+           else :
+               for dir in classpathDirs:
+                   if dir is not None and os.path.exists(join(dir.abspath(), cp)):
+                       real_classpath.append(join(dir.abspath(), cp))
+                       cp_targets.append(bld(name=cp, features='install_tgt', install_path=libInstallPath or '${PREFIX}/lib', dir=dir, files=[cp]))
 
        # We need a try/catch here for the rare case where we have javac but
        # not JNI, we're a module that doesn't depend on JNI, but we depend on
