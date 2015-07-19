@@ -289,8 +289,8 @@ protected:
      * will cause problems with some ELTs for images > 1 GB.
      */
     void setBlocking(const std::string& imode,
-    	             const types::RowCol<size_t>& segmentDims,
-    	             nitf::ImageSubheader& subheader);
+                     const types::RowCol<size_t>& segmentDims,
+                     nitf::ImageSubheader& subheader);
 
     /*!
      *  This function sets the image security fields in the

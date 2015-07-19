@@ -232,8 +232,8 @@ void NITFWriteControl::initialize(Container* container)
                                           bandInfo);
 
             setBlocking(imode,
-            		    types::RowCol<size_t>(segmentInfo.numRows, numCols),
-            		    subheader);
+                        types::RowCol<size_t>(segmentInfo.numRows, numCols),
+                        subheader);
 
             subheader.getImageSyncCode().set(0);
             if (jj == 0)
@@ -290,51 +290,51 @@ void NITFWriteControl::initialize(Container* container)
 }
 
 void NITFWriteControl::setBlocking(const std::string& imode,
-		                           const types::RowCol<size_t>& segmentDims,
-		                           nitf::ImageSubheader& subheader)
+                                   const types::RowCol<size_t>& segmentDims,
+                                   nitf::ImageSubheader& subheader)
 {
-	const bool isSICD = (mContainer->getDataType() == DataType::COMPLEX);
+    const bool isSICD = (mContainer->getDataType() == DataType::COMPLEX);
 
-	nitf::Uint32 numRowsPerBlock;
-	if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK))
-	{
-		if (isSICD)
-		{
-			throw except::Exception(Ctxt("SICDs do not support blocking"));
-		}
+    nitf::Uint32 numRowsPerBlock;
+    if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK))
+    {
+        if (isSICD)
+        {
+            throw except::Exception(Ctxt("SICDs do not support blocking"));
+        }
 
-		numRowsPerBlock = static_cast<sys::Uint32_T>(
-				mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
-	}
-	else
-	{
-		// Unblocked (per 2500C, if > 8192, should be set to 0)
-		numRowsPerBlock = (segmentDims.row > 8192) ?
-				0 : segmentDims.row;
-	}
+        numRowsPerBlock = static_cast<sys::Uint32_T>(
+                mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
+    }
+    else
+    {
+        // Unblocked (per 2500C, if > 8192, should be set to 0)
+        numRowsPerBlock = (segmentDims.row > 8192) ?
+                0 : segmentDims.row;
+    }
 
-	nitf::Uint32 numColsPerBlock;
-	if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK))
-	{
-		if (isSICD)
-		{
-			throw except::Exception(Ctxt("SICDs do not support blocking"));
-		}
+    nitf::Uint32 numColsPerBlock;
+    if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK))
+    {
+        if (isSICD)
+        {
+            throw except::Exception(Ctxt("SICDs do not support blocking"));
+        }
 
-		numColsPerBlock = static_cast<sys::Uint32_T>(
-				mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
-	}
-	else
-	{
-		// Unblocked (per 2500C, if > 8192, should be set to 0)
-		numColsPerBlock = (segmentDims.col > 8192) ? 0 : segmentDims.col;
-	}
+        numColsPerBlock = static_cast<sys::Uint32_T>(
+                mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
+    }
+    else
+    {
+        // Unblocked (per 2500C, if > 8192, should be set to 0)
+        numColsPerBlock = (segmentDims.col > 8192) ? 0 : segmentDims.col;
+    }
 
-	subheader.setBlocking(segmentDims.row,
-						  segmentDims.col,
-						  numRowsPerBlock,
-						  numColsPerBlock,
-						  imode);
+    subheader.setBlocking(segmentDims.row,
+                          segmentDims.col,
+                          numRowsPerBlock,
+                          numColsPerBlock,
+                          imode);
 }
 
 void NITFWriteControl::setImageSecurity(const six::Classification& c,
