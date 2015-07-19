@@ -57,6 +57,14 @@ void validate(const xml::lite::Document* doc,
         xml::lite::Validator validator(paths, log, true);
 
         std::vector<xml::lite::ValidationInfo> errors;
+
+        if (doc->getRootElement()->getUri().empty())
+        {
+        	throw six::DESValidationException(Ctxt(
+				"INVALID XML: URI is empty so document version cannot be "
+				"determined to use for validation"));
+        }
+
         validator.validate(doc->getRootElement(), 
                            doc->getRootElement()->getUri(), 
                            errors);
