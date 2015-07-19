@@ -60,9 +60,9 @@ void validate(const xml::lite::Document* doc,
 
         if (doc->getRootElement()->getUri().empty())
         {
-        	throw six::DESValidationException(Ctxt(
-				"INVALID XML: URI is empty so document version cannot be "
-				"determined to use for validation"));
+            throw six::DESValidationException(Ctxt(
+                "INVALID XML: URI is empty so document version cannot be "
+                "determined to use for validation"));
         }
 
         validator.validate(doc->getRootElement(), 
