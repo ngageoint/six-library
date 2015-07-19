@@ -21,11 +21,15 @@
  */
 #include "six/Options.h"
 
-using namespace six;
-
-Parameter Options::getParameter(std::string option) const
+namespace six
 {
-    ParameterIter p = mParameters.find(option);
+Options::~Options()
+{
+}
+
+Parameter Options::getParameter(const std::string& option) const
+{
+    const ParameterIter p = mParameters.find(option);
     if (p == mParameters.end())
     {
         throw except::Exception(Ctxt("No such option exists"));
@@ -33,9 +37,9 @@ Parameter Options::getParameter(std::string option) const
     return p->second;
 }
 
-Parameter Options::getParameter(std::string option, Parameter defaultValue) const
+Parameter Options::getParameter(const std::string& option, Parameter defaultValue) const
 {
-    ParameterIter p = mParameters.find(option);
+    const ParameterIter p = mParameters.find(option);
     if (p == mParameters.end())
     {
         return defaultValue;
@@ -43,14 +47,14 @@ Parameter Options::getParameter(std::string option, Parameter defaultValue) cons
     return p->second;
 }
 
-void Options::setParameter(std::string option, Parameter value)
+void Options::setParameter(const std::string& option, Parameter value)
 {
     mParameters[option] = value;
 }
 
-bool Options::hasParameter(std::string option) const
+bool Options::hasParameter(const std::string& option) const
 {
-    ParameterIter p = mParameters.find(option);
+    const ParameterIter p = mParameters.find(option);
     return (p != mParameters.end());
 }
-
+}
