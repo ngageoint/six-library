@@ -22,7 +22,7 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
-from cphd import CPHDReader
+from pysix.cphd import CPHDReader
 import sys
 import multiprocessing
 

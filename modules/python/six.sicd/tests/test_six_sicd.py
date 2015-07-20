@@ -22,8 +22,9 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
-from pysix.six_base import *
+import io
 from pysix.six_sicd import *
+from pysix.six_base import *
 from coda.xml_lite import *
 from coda.io import *
 
