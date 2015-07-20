@@ -43,23 +43,17 @@ namespace six
  */
 class Options
 {
-    std::map<std::string, Parameter> mParameters;
-
 public:
     typedef std::map<std::string, Parameter> ParameterMap;
     typedef std::map<std::string, Parameter>::const_iterator ParameterIter;
 
-    Options()
-    {
-    }
-    virtual ~Options()
-    {
-    }
+    virtual ~Options();
+
     /*!
      *  Get back the parameter with option key specified in argument
      *
      */
-    virtual Parameter getParameter(std::string option) const;
+    virtual Parameter getParameter(const std::string& option) const;
 
     /*!
      *  Get back the parameter with option key specified in argument.
@@ -67,17 +61,17 @@ public:
      *  that is passed in
      */
     virtual Parameter
-            getParameter(std::string option, Parameter defaultValue) const;
+            getParameter(const std::string& option, Parameter defaultValue) const;
 
     /*!
      *  Set a parameter with key given in option parameter
      */
-    virtual void setParameter(std::string option, Parameter value);
+    virtual void setParameter(const std::string& option, Parameter value);
 
     /*!
      *  Is there a parameter of name given in argument
      */
-    virtual bool hasParameter(std::string option) const;
+    virtual bool hasParameter(const std::string& option) const;
 
     //!  Allows us to iterate a parameter list
     ParameterIter begin() const { return mParameters.begin(); }
@@ -85,6 +79,8 @@ public:
     //!  Allows us to compare an iterator against end
     ParameterIter end() const { return mParameters.end(); }
 
+private:
+    std::map<std::string, Parameter> mParameters;
 };
 }
 

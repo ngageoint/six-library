@@ -208,6 +208,7 @@ int main(int argc, char** argv)
             }
             catch (const six::DESValidationException& ex)
             {
+                log->error(ex);
                 log->error(Ctxt("Unsuccessful: Please contact your product "
                                "vendor with these details!"));
                 retCode = 1;

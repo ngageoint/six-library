@@ -64,6 +64,13 @@ public:
     static const char OPT_MAX_ILOC_ROWS[];
     static const char OPT_J2K_COMPRESSION[];
 
+    //! These determine the NITF blocking
+    //  They only pertain to SIDD
+    //  SICDs are never blocked, so setting this for a SICD will
+    //  result in an error
+    static const char OPT_NUM_ROWS_PER_BLOCK[];
+    static const char OPT_NUM_COLS_PER_BLOCK[];
+
     //!  Buffered IO
     enum
     {
@@ -273,6 +280,17 @@ protected:
      *  it to the DES segments.  Then it completes the write.
      */
     void addDataAndWrite(const std::vector<std::string>& schemaPaths);
+
+    /*!
+     * This function sets the NITF blocking.  By default, the product
+     * will be unblocked, but for SIDDs the user can override this via
+     * the options.  To be pedantic, the SIDD spec defines the NITF
+     * header such that blocking is not allowed, but this is a typo and
+     * will cause problems with some ELTs for images > 1 GB.
+     */
+    void setBlocking(const std::string& imode,
+                     const types::RowCol<size_t>& segmentDims,
+                     nitf::ImageSubheader& subheader);
 
     /*!
      *  This function sets the image security fields in the
