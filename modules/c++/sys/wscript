@@ -43,19 +43,15 @@ def configure(conf):
                 return 0;
             }
             '''
+
+   # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
+   # both in here to make sure we have full C++11 support... otherwise,
+   # long-term we may need multiple separate configure checks and
+   # corresponding defines
 	cpp11_str = '''
-		#include <stdio.h>
 		int main()
 		{
-			#if __cplusplus >= 201103L
-			int x  = 1;
-			#else
-			int x = 0;
-			#endif
-			if(x) printf("cpp11=True\\n");
-			else printf("cpp11=False\\n");
-			return 0;
-			
+			constexpr void* FOO = nullptr;
 		}
 		'''
         #find out the size of some types, etc.
@@ -74,16 +70,7 @@ def configure(conf):
                 elif v == 'False':
                     v = False
             conf.define(k.upper(), v)
-	output11 = conf.check_cxx(fragment = cpp11_str, execute=1, msg='Checking for C++11 support', define_ret=True, mandatory=False)
-	t2 = Utils.str_to_dict(output11 or '')
-	for k, v in t2.iteritems():
-		v = v.strip()
-		if v == 'True':
-			v=True
-		elif v == 'False': 
-			v=False;
-		conf.define(k.upper(), v)
-        
+        conf.check_cxx(fragment = cpp11_str, execute=1, msg='Checking for C++11 support', define_name='__CODA_CPP11', mandatory=False)
     writeConfig(conf, sys_callback, NAME)
     
 def build(bld):

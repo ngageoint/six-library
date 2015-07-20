@@ -25,8 +25,8 @@
 """
 
 import sys
-from math_linear import VectorDouble, MatrixDouble
-from math_poly import *
+from coda.math_linear import VectorDouble, MatrixDouble
+from coda.math_poly import *
 
 if __name__ == '__main__':
     #################
@@ -149,6 +149,50 @@ if __name__ == '__main__':
     fit1D = FitVectorDouble(xObs, yObs, numCoeff)
     print "\n1D Fit from Vectors:"
     print fit1D
+
+    ############################################
+    # PolyVector3 Fit Test (math::linear args) #
+    ############################################
+    
+    xObs = VectorDouble(4)
+    xObs[0] = 1
+    xObs[1] = -1
+    xObs[2] = 2
+    xObs[3] = -2
+
+    yObs = MatrixDouble(3,4)
+    yObs[0,0] = 3
+    yObs[0,1] = 13
+    yObs[0,2] = 1
+    yObs[0,3] = 33
+    yObs[1,0] = 33
+    yObs[1,1] = 1
+    yObs[1,2] = 13
+    yObs[1,3] = 3
+    yObs[2,0] = 1
+    yObs[2,1] = -1
+    yObs[2,2] = 2
+    yObs[2,3] = -2
+
+    numCoeff = 3
+
+    fitPolyVector3 = fit(xObs, yObs, numCoeff)
+    print "\nPolyVector3 fit from math::linear args:"
+    print fitPolyVector3
+
+    ###########################################
+    # PolyVector3 Fit Test (std::vector args) #
+    ###########################################
+
+    xObs = StdVectorDouble([1, -1, 2, -2])
+    yObs0 = StdVectorDouble([3, 13, 1, 33])
+    yObs1 = StdVectorDouble([33, 1, 13, 3])
+    yObs2 = StdVectorDouble([1, -1, 2, -2])
+    numCoeff = 3
+
+    fitPolyVector3 = fit(xObs, yObs0, yObs1, yObs2, numCoeff)
+    print "\nPolyVector3 fit from std::vector args:"
+    print fitPolyVector3
 
     ############################
     # 2D Fit test (array args) #
