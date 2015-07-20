@@ -48,7 +48,7 @@ from coda.math_linear import *
 from coda.coda_except import *
 from coda.math_poly import *
 from pysix.scene import *
-from coda.types import *
+from coda.coda_types import *
 
 #
 # First test

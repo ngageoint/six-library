@@ -196,7 +196,7 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _six_base.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import coda.types
+import coda.coda_types
 import coda.coda_sys
 import coda.coda_except
 import coda.math_poly

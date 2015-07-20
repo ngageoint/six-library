@@ -127,7 +127,7 @@ VBM.toBuffer = toBuffer
 %{
 import numpy
 import multiprocessing
-from coda.types import RowColSizeT
+from coda.coda_types import RowColSizeT
 
 def read(self,
          channel = 0,
