@@ -23,7 +23,7 @@
 %module(package="pysix") cphd
 
 %feature("autodoc", "1");
-%include "types.i"
+%import "types.i"
 
 %{
 #include "import/cphd.h"
@@ -127,7 +127,7 @@ VBM.toBuffer = toBuffer
 %{
 import numpy
 import multiprocessing
-from coda_types import RowColSizeT
+from coda.coda_types import RowColSizeT
 
 def read(self,
          channel = 0,

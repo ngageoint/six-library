@@ -200,10 +200,10 @@ import coda.math_poly
 import coda.math_linear
 import coda.coda_except
 import six_base
-import coda.types
+import coda.coda_types
 import coda.coda_sys
 import pysix.scene
-import coda.io
+import coda.coda_io
 import coda.mem
 
 def getComplexData(sicdPathname, schemaPaths):

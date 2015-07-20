@@ -1,8 +1,8 @@
 import numpy as np
 import sys
 import os
-import six_sicd
-import sio_lite
+import pysix.six_sicd
+import coda.sio_lite
 
 if __name__ == '__main__':
     if len(sys.argv) >= 3:
