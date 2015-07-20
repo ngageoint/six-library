@@ -20,7 +20,8 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-%module coda_io
+%module(package="coda") io
+
 %feature("autodoc","1");
 %include "std_string.i"
 
@@ -39,6 +40,13 @@
 
 %feature("notabstract") io::StringStream;
 %include "io/StringStream.h"
+%extend io::StringStream
+{
+	std::string str()
+	{
+		return $self->stream().str();
+	}
+}
 %include "io/NullStreams.h"
 
 %feature("notabstract") io::FileOutputStreamOS;

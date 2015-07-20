@@ -3553,15 +3553,18 @@ SWIG_AsVal_int (PyObject * obj, int *val)
   return res;
 }
 
-
-    #include "import/sio/lite.h"
-
+SWIGINTERN std::string io_StringStream_str(io::StringStream *self){
+		return self->stream().str();
+	}
 
 SWIGINTERNINLINE PyObject *
 SWIG_From_std_string  (const std::string& s)
 {
   return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
+
+
+    #include "import/sio/lite.h"
 
 
 SWIGINTERN int
@@ -3869,7 +3872,9 @@ SWIGINTERN PyObject *_wrap_InputStream_read(PyObject *SWIGUNUSEDPARM(self), PyOb
   } 
   arg3 = static_cast< sys::Size_T >(val3);
   result = (arg1)->read(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -3912,7 +3917,9 @@ SWIGINTERN PyObject *_wrap_InputStream_readln(PyObject *SWIGUNUSEDPARM(self), Py
   } 
   arg3 = static_cast< sys::Size_T >(val3);
   result = (arg1)->readln(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -3930,8 +3937,6 @@ SWIGINTERN PyObject *_wrap_InputStream_streamTo__SWIG_0(PyObject *SWIGUNUSEDPARM
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -3952,20 +3957,12 @@ SWIGINTERN PyObject *_wrap_InputStream_streamTo__SWIG_0(PyObject *SWIGUNUSEDPARM
   }
   arg2 = reinterpret_cast< OutputStream * >(argp2);
   {
-    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_ssize_t,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "InputStream_streamTo" "', argument " "3"" of type '" "sys::SSize_T""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "InputStream_streamTo" "', argument " "3"" of type '" "sys::SSize_T""'");
-    } else {
-      sys::SSize_T * temp = reinterpret_cast< sys::SSize_T * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
+    arg3 = PyInt_AsSsize_t(obj2);
   }
   result = (arg1)->streamTo(*arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -3999,7 +3996,9 @@ SWIGINTERN PyObject *_wrap_InputStream_streamTo__SWIG_1(PyObject *SWIGUNUSEDPARM
   }
   arg2 = reinterpret_cast< OutputStream * >(argp2);
   result = (arg1)->streamTo(*arg2);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -4040,8 +4039,9 @@ SWIGINTERN PyObject *_wrap_InputStream_streamTo(PyObject *self, PyObject *args) 
       int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_OutputStream, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_ssize_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          _v = PyInt_Check(argv[2]) ? 1 : 0;
+        }
         if (_v) {
           return _wrap_InputStream_streamTo__SWIG_0(self, args);
         }
@@ -4530,7 +4530,9 @@ SWIGINTERN PyObject *_wrap_SeekableInputStream_read(PyObject *SWIGUNUSEDPARM(sel
   } 
   arg3 = static_cast< sys::Size_T >(val3);
   result = (arg1)->read(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -4548,8 +4550,6 @@ SWIGINTERN PyObject *_wrap_SeekableInputStream_streamTo_SWIG_0_0(PyObject *SWIGU
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -4570,20 +4570,12 @@ SWIGINTERN PyObject *_wrap_SeekableInputStream_streamTo_SWIG_0_0(PyObject *SWIGU
   }
   arg2 = reinterpret_cast< OutputStream * >(argp2);
   {
-    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_ssize_t,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SeekableInputStream_streamTo" "', argument " "3"" of type '" "sys::SSize_T""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SeekableInputStream_streamTo" "', argument " "3"" of type '" "sys::SSize_T""'");
-    } else {
-      sys::SSize_T * temp = reinterpret_cast< sys::SSize_T * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
+    arg3 = PyInt_AsSsize_t(obj2);
   }
   result = (arg1)->streamTo(*arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -4617,7 +4609,9 @@ SWIGINTERN PyObject *_wrap_SeekableInputStream_streamTo_SWIG_0_1(PyObject *SWIGU
   }
   arg2 = reinterpret_cast< OutputStream * >(argp2);
   result = (arg1)->streamTo(*arg2);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -4658,8 +4652,9 @@ SWIGINTERN PyObject *_wrap_SeekableInputStream_streamTo(PyObject *self, PyObject
       int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_OutputStream, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_ssize_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          _v = PyInt_Check(argv[2]) ? 1 : 0;
+        }
         if (_v) {
           return _wrap_SeekableInputStream_streamTo_SWIG_0_0(self, args);
         }
@@ -4808,7 +4803,9 @@ SWIGINTERN PyObject *_wrap_SeekableBidirectionalStream_read(PyObject *SWIGUNUSED
   } 
   arg3 = static_cast< sys::Size_T >(val3);
   result = (arg1)->read(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -4868,8 +4865,6 @@ SWIGINTERN PyObject *_wrap_SeekableBidirectionalStream_streamTo_SWIG_0_0(PyObjec
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -4890,20 +4885,12 @@ SWIGINTERN PyObject *_wrap_SeekableBidirectionalStream_streamTo_SWIG_0_0(PyObjec
   }
   arg2 = reinterpret_cast< OutputStream * >(argp2);
   {
-    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_ssize_t,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SeekableBidirectionalStream_streamTo" "', argument " "3"" of type '" "sys::SSize_T""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SeekableBidirectionalStream_streamTo" "', argument " "3"" of type '" "sys::SSize_T""'");
-    } else {
-      sys::SSize_T * temp = reinterpret_cast< sys::SSize_T * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
+    arg3 = PyInt_AsSsize_t(obj2);
   }
   result = (arg1)->streamTo(*arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -4937,7 +4924,9 @@ SWIGINTERN PyObject *_wrap_SeekableBidirectionalStream_streamTo_SWIG_0_1(PyObjec
   }
   arg2 = reinterpret_cast< OutputStream * >(argp2);
   result = (arg1)->streamTo(*arg2);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -4978,8 +4967,9 @@ SWIGINTERN PyObject *_wrap_SeekableBidirectionalStream_streamTo(PyObject *self, 
       int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_OutputStream, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_ssize_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          _v = PyInt_Check(argv[2]) ? 1 : 0;
+        }
         if (_v) {
           return _wrap_SeekableBidirectionalStream_streamTo_SWIG_0_0(self, args);
         }
@@ -5341,7 +5331,9 @@ SWIGINTERN PyObject *_wrap_StringStream_read(PyObject *SWIGUNUSEDPARM(self), PyO
   } 
   arg3 = static_cast< sys::Size_T >(val3);
   result = (arg1)->read(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -5431,6 +5423,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_StringStream_str(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::StringStream *arg1 = (io::StringStream *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:StringStream_str",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__StringStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StringStream_str" "', argument " "1"" of type '" "io::StringStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::StringStream * >(argp1);
+  result = io_StringStream_str(arg1);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_StringStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   io::StringStream *arg1 = (io::StringStream *) 0 ;
@@ -5462,24 +5476,12 @@ SWIGINTERN PyObject *StringStream_swigregister(PyObject *SWIGUNUSEDPARM(self), P
 SWIGINTERN PyObject *_wrap_new_NullInputStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   sys::SSize_T arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
   PyObject * obj0 = 0 ;
   io::NullInputStream *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_NullInputStream",&obj0)) SWIG_fail;
   {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_ssize_t,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NullInputStream" "', argument " "1"" of type '" "sys::SSize_T""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NullInputStream" "', argument " "1"" of type '" "sys::SSize_T""'");
-    } else {
-      sys::SSize_T * temp = reinterpret_cast< sys::SSize_T * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
-    }
+    arg1 = PyInt_AsSsize_t(obj0);
   }
   result = (io::NullInputStream *)new io::NullInputStream(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_io__NullInputStream, SWIG_POINTER_NEW |  0 );
@@ -5566,7 +5568,9 @@ SWIGINTERN PyObject *_wrap_NullInputStream_read(PyObject *SWIGUNUSEDPARM(self), 
   } 
   arg3 = static_cast< sys::Size_T >(val3);
   result = (arg1)->read(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -5609,7 +5613,9 @@ SWIGINTERN PyObject *_wrap_NullInputStream_readln(PyObject *SWIGUNUSEDPARM(self)
   } 
   arg3 = static_cast< sys::Size_T >(val3);
   result = (arg1)->readln(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -5627,8 +5633,6 @@ SWIGINTERN PyObject *_wrap_NullInputStream_streamTo__SWIG_0(PyObject *SWIGUNUSED
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -5649,20 +5653,12 @@ SWIGINTERN PyObject *_wrap_NullInputStream_streamTo__SWIG_0(PyObject *SWIGUNUSED
   }
   arg2 = reinterpret_cast< io::OutputStream * >(argp2);
   {
-    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_ssize_t,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "NullInputStream_streamTo" "', argument " "3"" of type '" "sys::SSize_T""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NullInputStream_streamTo" "', argument " "3"" of type '" "sys::SSize_T""'");
-    } else {
-      sys::SSize_T * temp = reinterpret_cast< sys::SSize_T * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
+    arg3 = PyInt_AsSsize_t(obj2);
   }
   result = (arg1)->streamTo(*arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -5696,7 +5692,9 @@ SWIGINTERN PyObject *_wrap_NullInputStream_streamTo__SWIG_1(PyObject *SWIGUNUSED
   }
   arg2 = reinterpret_cast< io::OutputStream * >(argp2);
   result = (arg1)->streamTo(*arg2);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -5737,8 +5735,9 @@ SWIGINTERN PyObject *_wrap_NullInputStream_streamTo(PyObject *self, PyObject *ar
       int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_io__OutputStream, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_ssize_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          _v = PyInt_Check(argv[2]) ? 1 : 0;
+        }
         if (_v) {
           return _wrap_NullInputStream_streamTo__SWIG_0(self, args);
         }
@@ -6372,7 +6371,9 @@ SWIGINTERN PyObject *_wrap_FileInputStream_read(PyObject *SWIGUNUSEDPARM(self), 
   } 
   arg3 = static_cast< sys::Size_T >(val3);
   result = (arg1)->read(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -9357,7 +9358,9 @@ SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   } 
   arg3 = static_cast< size_t >(val3);
   result = (arg1)->read(arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -9399,7 +9402,9 @@ SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   } 
   arg3 = static_cast< size_t >(val3);
   result = sio_lite_StreamReader_read__SWIG_1(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj((new sys::SSize_T(static_cast< const sys::SSize_T& >(result))), SWIGTYPE_p_ssize_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -9808,6 +9813,7 @@ static PyMethodDef SwigMethods[] = {
 		"StringStream_stream(StringStream self) -> std::stringstream &\n"
 		""},
 	 { (char *)"StringStream_reset", _wrap_StringStream_reset, METH_VARARGS, (char *)"StringStream_reset(StringStream self)"},
+	 { (char *)"StringStream_str", _wrap_StringStream_str, METH_VARARGS, (char *)"StringStream_str(StringStream self) -> std::string"},
 	 { (char *)"delete_StringStream", _wrap_delete_StringStream, METH_VARARGS, (char *)"delete_StringStream(StringStream self)"},
 	 { (char *)"StringStream_swigregister", StringStream_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_NullInputStream", _wrap_new_NullInputStream, METH_VARARGS, (char *)"new_NullInputStream(sys::SSize_T size) -> NullInputStream"},

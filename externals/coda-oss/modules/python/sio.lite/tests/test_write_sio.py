@@ -24,20 +24,24 @@
  *
 """
 
-from sio_lite import write
+from coda.sio_lite import write
 import numpy as np
 import sys
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 2:
-        outputPathname = sys.argv[1]
+    if len(sys.argv) >= 3:
+        arrayOutputPathname = sys.argv[1]
+        transposedOutputPathname = sys.argv[2]
     else:
-        print "Usage: " + sys.argv[0] + " <Output SIO>"
+        print "Usage: " + sys.argv[0] + " <Output SIO for array> <Output SIO for transposed array>"
         sys.exit(0)
-        
-    array = np.array([[0.1, 1.1, 2.1],
-                      [3.2, 4.2, 5.2],
-                      [6.3, 7.3, 8.3]], dtype='float32');
-                      
-    write(array, outputPathname)
-    
+
+    array = np.array([[0.1, 1.1, 2.1, 3.1],
+                      [4.2, 5.2, 6.2, 7.2],
+                      [8.3, 9.3, 10.3, 11.3]], dtype='float32');
+    write(array, arrayOutputPathname)
+
+    #np.transpose() produces a non-contiguous array
+    trans = np.transpose(array)
+    write(trans, transposedOutputPathname)
+

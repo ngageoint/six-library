@@ -56,15 +56,15 @@ void sys::File::create(const std::string& str,
 
 void sys::File::readInto(char *buffer, Size_T size)
 {
-    static const DWORD MAX_READ_SIZE = std::numeric_limits<DWORD>::max();
+    static const size_t MAX_READ_SIZE = std::numeric_limits<DWORD>::max();
     size_t bytesRead = 0;
     size_t bytesRemaining = size;
 
     while (bytesRead < size)
     {
         // Determine how many bytes to read
-        const DWORD bytesToRead =
-            std::min<DWORD>(MAX_READ_SIZE, bytesRemaining);
+        const DWORD bytesToRead = static_cast<DWORD>(
+                std::min(MAX_READ_SIZE, bytesRemaining));
 
         // Read from file
         DWORD bytesThisRead = 0;
@@ -91,15 +91,15 @@ void sys::File::readInto(char *buffer, Size_T size)
 
 void sys::File::writeFrom(const char *buffer, Size_T size)
 {
-    static const DWORD MAX_WRITE_SIZE = std::numeric_limits<DWORD>::max();
+    static const size_t MAX_WRITE_SIZE = std::numeric_limits<DWORD>::max();
     size_t bytesRemaining = size;
     size_t bytesWritten = 0;
 
     while (bytesWritten < size)
     {
         // Determine how many bytes to write
-        const DWORD bytesToWrite =
-            std::min<DWORD>(MAX_WRITE_SIZE, bytesRemaining);
+        const DWORD bytesToWrite = static_cast<DWORD>(
+            std::min(MAX_WRITE_SIZE, bytesRemaining));
 
         // Write the data
         DWORD bytesThisWrite = 0;

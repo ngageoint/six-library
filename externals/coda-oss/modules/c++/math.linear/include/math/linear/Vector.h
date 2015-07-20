@@ -236,7 +236,7 @@ public:
 
     _T angle(const Vector& v) const
     {
-        _T val = ((*this * v) / norm()) / v.norm();
+        _T val = (dot(v) / norm()) / v.norm();
         return std::acos(std::max(-1.0, std::min(val, 1.0)));
     }
     

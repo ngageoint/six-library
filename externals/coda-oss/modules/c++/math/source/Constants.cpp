@@ -23,6 +23,7 @@
 #include <math.h>
 #include <math/Constants.h>
 
+#ifndef __CODA_CPP11
 namespace math
 {
 const double Constants::FEET_TO_METERS = 0.3048;
@@ -38,3 +39,5 @@ const double Constants::SPEED_OF_LIGHT_METERS_PER_SEC = 299792458.0;
 const double Constants::SPEED_OF_LIGHT_FEET_PER_SEC =
         Constants::SPEED_OF_LIGHT_METERS_PER_SEC * Constants::METERS_TO_FEET;
 }
+
+#endif
