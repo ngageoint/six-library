@@ -1,4 +1,4 @@
-![alt tag](https://github.com/ngageoint/six-library/tree/master/docs/six_logo.png)
+![alt tag](https://raw.github.com/ngageoint/six-library/master/docs/six_logo.png?raw=true)
 
 ##What SIX does
 
