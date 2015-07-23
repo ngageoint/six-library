@@ -20,7 +20,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-%module(package="coda") logging
+%module(package="coda") coda_logging
 
 %feature("autodoc", "1");
 
