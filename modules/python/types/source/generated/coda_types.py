@@ -15,20 +15,20 @@ if version_info >= (2, 6, 0):
         import imp
         fp = None
         try:
-            fp, pathname, description = imp.find_module('_types', [dirname(__file__)])
+            fp, pathname, description = imp.find_module('_coda_types', [dirname(__file__)])
         except ImportError:
-            import _types
-            return _types
+            import _coda_types
+            return _coda_types
         if fp is not None:
             try:
-                _mod = imp.load_module('_types', fp, pathname, description)
+                _mod = imp.load_module('_coda_types', fp, pathname, description)
             finally:
                 fp.close()
             return _mod
-    _types = swig_import_helper()
+    _coda_types = swig_import_helper()
     del swig_import_helper
 else:
-    import _types
+    import _coda_types
 del version_info
 try:
     _swig_property = property
@@ -100,12 +100,12 @@ class SwigPyIterator(_object):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _types.delete_SwigPyIterator
+    __swig_destroy__ = _coda_types.delete_SwigPyIterator
     __del__ = lambda self: None
 
     def value(self):
         """value(SwigPyIterator self) -> PyObject *"""
-        return _types.SwigPyIterator_value(self)
+        return _coda_types.SwigPyIterator_value(self)
 
 
     def incr(self, n=1):
@@ -113,7 +113,7 @@ class SwigPyIterator(_object):
         incr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         incr(SwigPyIterator self) -> SwigPyIterator
         """
-        return _types.SwigPyIterator_incr(self, n)
+        return _coda_types.SwigPyIterator_incr(self, n)
 
 
     def decr(self, n=1):
@@ -121,67 +121,67 @@ class SwigPyIterator(_object):
         decr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         decr(SwigPyIterator self) -> SwigPyIterator
         """
-        return _types.SwigPyIterator_decr(self, n)
+        return _coda_types.SwigPyIterator_decr(self, n)
 
 
     def distance(self, x):
         """distance(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t"""
-        return _types.SwigPyIterator_distance(self, x)
+        return _coda_types.SwigPyIterator_distance(self, x)
 
 
     def equal(self, x):
         """equal(SwigPyIterator self, SwigPyIterator x) -> bool"""
-        return _types.SwigPyIterator_equal(self, x)
+        return _coda_types.SwigPyIterator_equal(self, x)
 
 
     def copy(self):
         """copy(SwigPyIterator self) -> SwigPyIterator"""
-        return _types.SwigPyIterator_copy(self)
+        return _coda_types.SwigPyIterator_copy(self)
 
 
     def next(self):
         """next(SwigPyIterator self) -> PyObject *"""
-        return _types.SwigPyIterator_next(self)
+        return _coda_types.SwigPyIterator_next(self)
 
 
     def __next__(self):
         """__next__(SwigPyIterator self) -> PyObject *"""
-        return _types.SwigPyIterator___next__(self)
+        return _coda_types.SwigPyIterator___next__(self)
 
 
     def previous(self):
         """previous(SwigPyIterator self) -> PyObject *"""
-        return _types.SwigPyIterator_previous(self)
+        return _coda_types.SwigPyIterator_previous(self)
 
 
     def advance(self, n):
         """advance(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
-        return _types.SwigPyIterator_advance(self, n)
+        return _coda_types.SwigPyIterator_advance(self, n)
 
 
     def __eq__(self, x):
         """__eq__(SwigPyIterator self, SwigPyIterator x) -> bool"""
-        return _types.SwigPyIterator___eq__(self, x)
+        return _coda_types.SwigPyIterator___eq__(self, x)
 
 
     def __ne__(self, x):
         """__ne__(SwigPyIterator self, SwigPyIterator x) -> bool"""
-        return _types.SwigPyIterator___ne__(self, x)
+        return _coda_types.SwigPyIterator___ne__(self, x)
 
 
     def __iadd__(self, n):
         """__iadd__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
-        return _types.SwigPyIterator___iadd__(self, n)
+        return _coda_types.SwigPyIterator___iadd__(self, n)
 
 
     def __isub__(self, n):
         """__isub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
-        return _types.SwigPyIterator___isub__(self, n)
+        return _coda_types.SwigPyIterator___isub__(self, n)
 
 
     def __add__(self, n):
         """__add__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
-        return _types.SwigPyIterator___add__(self, n)
+        return _coda_types.SwigPyIterator___add__(self, n)
 
 
     def __sub__(self, *args):
@@ -189,11 +189,11 @@ class SwigPyIterator(_object):
         __sub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator
         __sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t
         """
-        return _types.SwigPyIterator___sub__(self, *args)
+        return _coda_types.SwigPyIterator___sub__(self, *args)
 
     def __iter__(self):
         return self
-SwigPyIterator_swigregister = _types.SwigPyIterator_swigregister
+SwigPyIterator_swigregister = _coda_types.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
 import coda.coda_sys
@@ -204,14 +204,14 @@ class RowColDouble(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, RowColDouble, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["row"] = _types.RowColDouble_row_set
-    __swig_getmethods__["row"] = _types.RowColDouble_row_get
+    __swig_setmethods__["row"] = _coda_types.RowColDouble_row_set
+    __swig_getmethods__["row"] = _coda_types.RowColDouble_row_get
     if _newclass:
-        row = _swig_property(_types.RowColDouble_row_get, _types.RowColDouble_row_set)
-    __swig_setmethods__["col"] = _types.RowColDouble_col_set
-    __swig_getmethods__["col"] = _types.RowColDouble_col_get
+        row = _swig_property(_coda_types.RowColDouble_row_get, _coda_types.RowColDouble_row_set)
+    __swig_setmethods__["col"] = _coda_types.RowColDouble_col_set
+    __swig_getmethods__["col"] = _coda_types.RowColDouble_col_get
     if _newclass:
-        col = _swig_property(_types.RowColDouble_col_get, _types.RowColDouble_col_set)
+        col = _swig_property(_coda_types.RowColDouble_col_get, _coda_types.RowColDouble_col_set)
 
     def __init__(self, *args):
         """
@@ -219,7 +219,7 @@ class RowColDouble(_object):
         __init__(types::RowCol<(double)> self, double r, double c) -> RowColDouble
         __init__(types::RowCol<(double)> self, std::pair< double,double > const & p) -> RowColDouble
         """
-        this = _types.new_RowColDouble(*args)
+        this = _coda_types.new_RowColDouble(*args)
         try:
             self.this.append(this)
         except:
@@ -227,66 +227,66 @@ class RowColDouble(_object):
 
     def __iadd__(self, scalar):
         """__iadd__(RowColDouble self, double scalar) -> RowColDouble"""
-        return _types.RowColDouble___iadd__(self, scalar)
+        return _coda_types.RowColDouble___iadd__(self, scalar)
 
 
     def __add__(self, scalar):
         """__add__(RowColDouble self, double scalar) -> RowColDouble"""
-        return _types.RowColDouble___add__(self, scalar)
+        return _coda_types.RowColDouble___add__(self, scalar)
 
 
     def __isub__(self, scalar):
         """__isub__(RowColDouble self, double scalar) -> RowColDouble"""
-        return _types.RowColDouble___isub__(self, scalar)
+        return _coda_types.RowColDouble___isub__(self, scalar)
 
 
     def __sub__(self, scalar):
         """__sub__(RowColDouble self, double scalar) -> RowColDouble"""
-        return _types.RowColDouble___sub__(self, scalar)
+        return _coda_types.RowColDouble___sub__(self, scalar)
 
 
     def __imul__(self, scalar):
         """__imul__(RowColDouble self, double scalar) -> RowColDouble"""
-        return _types.RowColDouble___imul__(self, scalar)
+        return _coda_types.RowColDouble___imul__(self, scalar)
 
 
     def __mul__(self, scalar):
         """__mul__(RowColDouble self, double scalar) -> RowColDouble"""
-        return _types.RowColDouble___mul__(self, scalar)
+        return _coda_types.RowColDouble___mul__(self, scalar)
 
 
     def __idiv__(self, scalar):
         """__idiv__(RowColDouble self, double scalar) -> RowColDouble"""
-        return _types.RowColDouble___idiv__(self, scalar)
+        return _coda_types.RowColDouble___idiv__(self, scalar)
 
 
     def __div__(self, scalar):
         """__div__(RowColDouble self, double scalar) -> RowColDouble"""
-        return _types.RowColDouble___div__(self, scalar)
+        return _coda_types.RowColDouble___div__(self, scalar)
 
 
     def __eq__(self, p):
         """__eq__(RowColDouble self, RowColDouble p) -> bool"""
-        return _types.RowColDouble___eq__(self, p)
+        return _coda_types.RowColDouble___eq__(self, p)
 
 
     def __ne__(self, p):
         """__ne__(RowColDouble self, RowColDouble p) -> bool"""
-        return _types.RowColDouble___ne__(self, p)
+        return _coda_types.RowColDouble___ne__(self, p)
 
 
     def normL1(self):
         """normL1(RowColDouble self) -> double"""
-        return _types.RowColDouble_normL1(self)
+        return _coda_types.RowColDouble_normL1(self)
 
 
     def normL2(self):
         """normL2(RowColDouble self) -> double"""
-        return _types.RowColDouble_normL2(self)
+        return _coda_types.RowColDouble_normL2(self)
 
-    __swig_destroy__ = _types.delete_RowColDouble
+    __swig_destroy__ = _coda_types.delete_RowColDouble
     __del__ = lambda self: None
-RowColDouble_swigregister = _types.RowColDouble_swigregister
+RowColDouble_swigregister = _coda_types.RowColDouble_swigregister
 RowColDouble_swigregister(RowColDouble)
 
 class RowColInt(_object):
@@ -296,14 +296,14 @@ class RowColInt(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, RowColInt, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["row"] = _types.RowColInt_row_set
-    __swig_getmethods__["row"] = _types.RowColInt_row_get
+    __swig_setmethods__["row"] = _coda_types.RowColInt_row_set
+    __swig_getmethods__["row"] = _coda_types.RowColInt_row_get
     if _newclass:
-        row = _swig_property(_types.RowColInt_row_get, _types.RowColInt_row_set)
-    __swig_setmethods__["col"] = _types.RowColInt_col_set
-    __swig_getmethods__["col"] = _types.RowColInt_col_get
+        row = _swig_property(_coda_types.RowColInt_row_get, _coda_types.RowColInt_row_set)
+    __swig_setmethods__["col"] = _coda_types.RowColInt_col_set
+    __swig_getmethods__["col"] = _coda_types.RowColInt_col_get
     if _newclass:
-        col = _swig_property(_types.RowColInt_col_get, _types.RowColInt_col_set)
+        col = _swig_property(_coda_types.RowColInt_col_get, _coda_types.RowColInt_col_set)
 
     def __init__(self, *args):
         """
@@ -311,7 +311,7 @@ class RowColInt(_object):
         __init__(types::RowCol<(sys::SSize_T)> self, ssize_t r, ssize_t c) -> RowColInt
         __init__(types::RowCol<(sys::SSize_T)> self, std::pair< ssize_t,ssize_t > const & p) -> RowColInt
         """
-        this = _types.new_RowColInt(*args)
+        this = _coda_types.new_RowColInt(*args)
         try:
             self.this.append(this)
         except:
@@ -319,66 +319,66 @@ class RowColInt(_object):
 
     def __iadd__(self, scalar):
         """__iadd__(RowColInt self, ssize_t scalar) -> RowColInt"""
-        return _types.RowColInt___iadd__(self, scalar)
+        return _coda_types.RowColInt___iadd__(self, scalar)
 
 
     def __add__(self, scalar):
         """__add__(RowColInt self, ssize_t scalar) -> RowColInt"""
-        return _types.RowColInt___add__(self, scalar)
+        return _coda_types.RowColInt___add__(self, scalar)
 
 
     def __isub__(self, scalar):
         """__isub__(RowColInt self, ssize_t scalar) -> RowColInt"""
-        return _types.RowColInt___isub__(self, scalar)
+        return _coda_types.RowColInt___isub__(self, scalar)
 
 
     def __sub__(self, scalar):
         """__sub__(RowColInt self, ssize_t scalar) -> RowColInt"""
-        return _types.RowColInt___sub__(self, scalar)
+        return _coda_types.RowColInt___sub__(self, scalar)
 
 
     def __imul__(self, scalar):
         """__imul__(RowColInt self, ssize_t scalar) -> RowColInt"""
-        return _types.RowColInt___imul__(self, scalar)
+        return _coda_types.RowColInt___imul__(self, scalar)
 
 
     def __mul__(self, scalar):
         """__mul__(RowColInt self, ssize_t scalar) -> RowColInt"""
-        return _types.RowColInt___mul__(self, scalar)
+        return _coda_types.RowColInt___mul__(self, scalar)
 
 
     def __idiv__(self, scalar):
         """__idiv__(RowColInt self, ssize_t scalar) -> RowColInt"""
-        return _types.RowColInt___idiv__(self, scalar)
+        return _coda_types.RowColInt___idiv__(self, scalar)
 
 
     def __div__(self, scalar):
         """__div__(RowColInt self, ssize_t scalar) -> RowColInt"""
-        return _types.RowColInt___div__(self, scalar)
+        return _coda_types.RowColInt___div__(self, scalar)
 
 
     def __eq__(self, p):
         """__eq__(RowColInt self, RowColInt p) -> bool"""
-        return _types.RowColInt___eq__(self, p)
+        return _coda_types.RowColInt___eq__(self, p)
 
 
     def __ne__(self, p):
         """__ne__(RowColInt self, RowColInt p) -> bool"""
-        return _types.RowColInt___ne__(self, p)
+        return _coda_types.RowColInt___ne__(self, p)
 
 
     def normL1(self):
         """normL1(RowColInt self) -> ssize_t"""
-        return _types.RowColInt_normL1(self)
+        return _coda_types.RowColInt_normL1(self)
 
 
     def normL2(self):
         """normL2(RowColInt self) -> ssize_t"""
-        return _types.RowColInt_normL2(self)
+        return _coda_types.RowColInt_normL2(self)
 
-    __swig_destroy__ = _types.delete_RowColInt
+    __swig_destroy__ = _coda_types.delete_RowColInt
     __del__ = lambda self: None
-RowColInt_swigregister = _types.RowColInt_swigregister
+RowColInt_swigregister = _coda_types.RowColInt_swigregister
 RowColInt_swigregister(RowColInt)
 
 class RowColSizeT(_object):
@@ -388,14 +388,14 @@ class RowColSizeT(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, RowColSizeT, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["row"] = _types.RowColSizeT_row_set
-    __swig_getmethods__["row"] = _types.RowColSizeT_row_get
+    __swig_setmethods__["row"] = _coda_types.RowColSizeT_row_set
+    __swig_getmethods__["row"] = _coda_types.RowColSizeT_row_get
     if _newclass:
-        row = _swig_property(_types.RowColSizeT_row_get, _types.RowColSizeT_row_set)
-    __swig_setmethods__["col"] = _types.RowColSizeT_col_set
-    __swig_getmethods__["col"] = _types.RowColSizeT_col_get
+        row = _swig_property(_coda_types.RowColSizeT_row_get, _coda_types.RowColSizeT_row_set)
+    __swig_setmethods__["col"] = _coda_types.RowColSizeT_col_set
+    __swig_getmethods__["col"] = _coda_types.RowColSizeT_col_get
     if _newclass:
-        col = _swig_property(_types.RowColSizeT_col_get, _types.RowColSizeT_col_set)
+        col = _swig_property(_coda_types.RowColSizeT_col_get, _coda_types.RowColSizeT_col_set)
 
     def __init__(self, *args):
         """
@@ -403,7 +403,7 @@ class RowColSizeT(_object):
         __init__(types::RowCol<(size_t)> self, size_t r, size_t c) -> RowColSizeT
         __init__(types::RowCol<(size_t)> self, std::pair< size_t,size_t > const & p) -> RowColSizeT
         """
-        this = _types.new_RowColSizeT(*args)
+        this = _coda_types.new_RowColSizeT(*args)
         try:
             self.this.append(this)
         except:
@@ -411,66 +411,66 @@ class RowColSizeT(_object):
 
     def __iadd__(self, scalar):
         """__iadd__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
-        return _types.RowColSizeT___iadd__(self, scalar)
+        return _coda_types.RowColSizeT___iadd__(self, scalar)
 
 
     def __add__(self, scalar):
         """__add__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
-        return _types.RowColSizeT___add__(self, scalar)
+        return _coda_types.RowColSizeT___add__(self, scalar)
 
 
     def __isub__(self, scalar):
         """__isub__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
-        return _types.RowColSizeT___isub__(self, scalar)
+        return _coda_types.RowColSizeT___isub__(self, scalar)
 
 
     def __sub__(self, scalar):
         """__sub__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
-        return _types.RowColSizeT___sub__(self, scalar)
+        return _coda_types.RowColSizeT___sub__(self, scalar)
 
 
     def __imul__(self, scalar):
         """__imul__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
-        return _types.RowColSizeT___imul__(self, scalar)
+        return _coda_types.RowColSizeT___imul__(self, scalar)
 
 
     def __mul__(self, scalar):
         """__mul__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
-        return _types.RowColSizeT___mul__(self, scalar)
+        return _coda_types.RowColSizeT___mul__(self, scalar)
 
 
     def __idiv__(self, scalar):
         """__idiv__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
-        return _types.RowColSizeT___idiv__(self, scalar)
+        return _coda_types.RowColSizeT___idiv__(self, scalar)
 
 
     def __div__(self, scalar):
         """__div__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
-        return _types.RowColSizeT___div__(self, scalar)
+        return _coda_types.RowColSizeT___div__(self, scalar)
 
 
     def __eq__(self, p):
         """__eq__(RowColSizeT self, RowColSizeT p) -> bool"""
-        return _types.RowColSizeT___eq__(self, p)
+        return _coda_types.RowColSizeT___eq__(self, p)
 
 
     def __ne__(self, p):
         """__ne__(RowColSizeT self, RowColSizeT p) -> bool"""
-        return _types.RowColSizeT___ne__(self, p)
+        return _coda_types.RowColSizeT___ne__(self, p)
 
 
     def normL1(self):
         """normL1(RowColSizeT self) -> size_t"""
-        return _types.RowColSizeT_normL1(self)
+        return _coda_types.RowColSizeT_normL1(self)
 
 
     def normL2(self):
         """normL2(RowColSizeT self) -> size_t"""
-        return _types.RowColSizeT_normL2(self)
+        return _coda_types.RowColSizeT_normL2(self)
 
-    __swig_destroy__ = _types.delete_RowColSizeT
+    __swig_destroy__ = _coda_types.delete_RowColSizeT
     __del__ = lambda self: None
-RowColSizeT_swigregister = _types.RowColSizeT_swigregister
+RowColSizeT_swigregister = _coda_types.RowColSizeT_swigregister
 RowColSizeT_swigregister(RowColSizeT)
 
 class RgAzDouble(_object):
@@ -480,14 +480,14 @@ class RgAzDouble(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, RgAzDouble, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["rg"] = _types.RgAzDouble_rg_set
-    __swig_getmethods__["rg"] = _types.RgAzDouble_rg_get
+    __swig_setmethods__["rg"] = _coda_types.RgAzDouble_rg_set
+    __swig_getmethods__["rg"] = _coda_types.RgAzDouble_rg_get
     if _newclass:
-        rg = _swig_property(_types.RgAzDouble_rg_get, _types.RgAzDouble_rg_set)
-    __swig_setmethods__["az"] = _types.RgAzDouble_az_set
-    __swig_getmethods__["az"] = _types.RgAzDouble_az_get
+        rg = _swig_property(_coda_types.RgAzDouble_rg_get, _coda_types.RgAzDouble_rg_set)
+    __swig_setmethods__["az"] = _coda_types.RgAzDouble_az_set
+    __swig_getmethods__["az"] = _coda_types.RgAzDouble_az_get
     if _newclass:
-        az = _swig_property(_types.RgAzDouble_az_get, _types.RgAzDouble_az_set)
+        az = _swig_property(_coda_types.RgAzDouble_az_get, _coda_types.RgAzDouble_az_set)
 
     def __init__(self, *args):
         """
@@ -495,7 +495,7 @@ class RgAzDouble(_object):
         __init__(types::RgAz<(double)> self, double r, double c) -> RgAzDouble
         __init__(types::RgAz<(double)> self, std::pair< double,double > const & p) -> RgAzDouble
         """
-        this = _types.new_RgAzDouble(*args)
+        this = _coda_types.new_RgAzDouble(*args)
         try:
             self.this.append(this)
         except:
@@ -503,56 +503,56 @@ class RgAzDouble(_object):
 
     def __iadd__(self, scalar):
         """__iadd__(RgAzDouble self, double scalar) -> RgAzDouble"""
-        return _types.RgAzDouble___iadd__(self, scalar)
+        return _coda_types.RgAzDouble___iadd__(self, scalar)
 
 
     def __add__(self, scalar):
         """__add__(RgAzDouble self, double scalar) -> RgAzDouble"""
-        return _types.RgAzDouble___add__(self, scalar)
+        return _coda_types.RgAzDouble___add__(self, scalar)
 
 
     def __isub__(self, scalar):
         """__isub__(RgAzDouble self, double scalar) -> RgAzDouble"""
-        return _types.RgAzDouble___isub__(self, scalar)
+        return _coda_types.RgAzDouble___isub__(self, scalar)
 
 
     def __sub__(self, scalar):
         """__sub__(RgAzDouble self, double scalar) -> RgAzDouble"""
-        return _types.RgAzDouble___sub__(self, scalar)
+        return _coda_types.RgAzDouble___sub__(self, scalar)
 
 
     def __imul__(self, scalar):
         """__imul__(RgAzDouble self, double scalar) -> RgAzDouble"""
-        return _types.RgAzDouble___imul__(self, scalar)
+        return _coda_types.RgAzDouble___imul__(self, scalar)
 
 
     def __mul__(self, scalar):
         """__mul__(RgAzDouble self, double scalar) -> RgAzDouble"""
-        return _types.RgAzDouble___mul__(self, scalar)
+        return _coda_types.RgAzDouble___mul__(self, scalar)
 
 
     def __idiv__(self, scalar):
         """__idiv__(RgAzDouble self, double scalar) -> RgAzDouble"""
-        return _types.RgAzDouble___idiv__(self, scalar)
+        return _coda_types.RgAzDouble___idiv__(self, scalar)
 
 
     def __div__(self, scalar):
         """__div__(RgAzDouble self, double scalar) -> RgAzDouble"""
-        return _types.RgAzDouble___div__(self, scalar)
+        return _coda_types.RgAzDouble___div__(self, scalar)
 
 
     def __eq__(self, p):
         """__eq__(RgAzDouble self, RgAzDouble p) -> bool"""
-        return _types.RgAzDouble___eq__(self, p)
+        return _coda_types.RgAzDouble___eq__(self, p)
 
 
     def __ne__(self, p):
         """__ne__(RgAzDouble self, RgAzDouble p) -> bool"""
-        return _types.RgAzDouble___ne__(self, p)
+        return _coda_types.RgAzDouble___ne__(self, p)
 
-    __swig_destroy__ = _types.delete_RgAzDouble
+    __swig_destroy__ = _coda_types.delete_RgAzDouble
     __del__ = lambda self: None
-RgAzDouble_swigregister = _types.RgAzDouble_swigregister
+RgAzDouble_swigregister = _coda_types.RgAzDouble_swigregister
 RgAzDouble_swigregister(RgAzDouble)
 
 class VectorRowColInt(_object):
@@ -565,34 +565,34 @@ class VectorRowColInt(_object):
 
     def iterator(self):
         """iterator(VectorRowColInt self) -> SwigPyIterator"""
-        return _types.VectorRowColInt_iterator(self)
+        return _coda_types.VectorRowColInt_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
     def __nonzero__(self):
         """__nonzero__(VectorRowColInt self) -> bool"""
-        return _types.VectorRowColInt___nonzero__(self)
+        return _coda_types.VectorRowColInt___nonzero__(self)
 
 
     def __bool__(self):
         """__bool__(VectorRowColInt self) -> bool"""
-        return _types.VectorRowColInt___bool__(self)
+        return _coda_types.VectorRowColInt___bool__(self)
 
 
     def __len__(self):
         """__len__(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::size_type"""
-        return _types.VectorRowColInt___len__(self)
+        return _coda_types.VectorRowColInt___len__(self)
 
 
     def pop(self):
         """pop(VectorRowColInt self) -> RowColInt"""
-        return _types.VectorRowColInt_pop(self)
+        return _coda_types.VectorRowColInt_pop(self)
 
 
     def __getslice__(self, i, j):
         """__getslice__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, std::vector< types::RowCol< ssize_t > >::difference_type j) -> VectorRowColInt"""
-        return _types.VectorRowColInt___getslice__(self, i, j)
+        return _coda_types.VectorRowColInt___getslice__(self, i, j)
 
 
     def __setslice__(self, *args):
@@ -600,12 +600,12 @@ class VectorRowColInt(_object):
         __setslice__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, std::vector< types::RowCol< ssize_t > >::difference_type j, VectorRowColInt v)
         __setslice__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, std::vector< types::RowCol< ssize_t > >::difference_type j)
         """
-        return _types.VectorRowColInt___setslice__(self, *args)
+        return _coda_types.VectorRowColInt___setslice__(self, *args)
 
 
     def __delslice__(self, i, j):
         """__delslice__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, std::vector< types::RowCol< ssize_t > >::difference_type j)"""
-        return _types.VectorRowColInt___delslice__(self, i, j)
+        return _coda_types.VectorRowColInt___delslice__(self, i, j)
 
 
     def __delitem__(self, *args):
@@ -613,7 +613,7 @@ class VectorRowColInt(_object):
         __delitem__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i)
         __delitem__(VectorRowColInt self, PySliceObject * slice)
         """
-        return _types.VectorRowColInt___delitem__(self, *args)
+        return _coda_types.VectorRowColInt___delitem__(self, *args)
 
 
     def __getitem__(self, *args):
@@ -621,7 +621,7 @@ class VectorRowColInt(_object):
         __getitem__(VectorRowColInt self, PySliceObject * slice) -> VectorRowColInt
         __getitem__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i) -> RowColInt
         """
-        return _types.VectorRowColInt___getitem__(self, *args)
+        return _coda_types.VectorRowColInt___getitem__(self, *args)
 
 
     def __setitem__(self, *args):
@@ -630,62 +630,62 @@ class VectorRowColInt(_object):
         __setitem__(VectorRowColInt self, PySliceObject * slice)
         __setitem__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, RowColInt x)
         """
-        return _types.VectorRowColInt___setitem__(self, *args)
+        return _coda_types.VectorRowColInt___setitem__(self, *args)
 
 
     def append(self, x):
         """append(VectorRowColInt self, RowColInt x)"""
-        return _types.VectorRowColInt_append(self, x)
+        return _coda_types.VectorRowColInt_append(self, x)
 
 
     def empty(self):
         """empty(VectorRowColInt self) -> bool"""
-        return _types.VectorRowColInt_empty(self)
+        return _coda_types.VectorRowColInt_empty(self)
 
 
     def size(self):
         """size(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::size_type"""
-        return _types.VectorRowColInt_size(self)
+        return _coda_types.VectorRowColInt_size(self)
 
 
     def clear(self):
         """clear(VectorRowColInt self)"""
-        return _types.VectorRowColInt_clear(self)
+        return _coda_types.VectorRowColInt_clear(self)
 
 
     def swap(self, v):
         """swap(VectorRowColInt self, VectorRowColInt v)"""
-        return _types.VectorRowColInt_swap(self, v)
+        return _coda_types.VectorRowColInt_swap(self, v)
 
 
     def get_allocator(self):
         """get_allocator(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::allocator_type"""
-        return _types.VectorRowColInt_get_allocator(self)
+        return _coda_types.VectorRowColInt_get_allocator(self)
 
 
     def begin(self):
         """begin(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::iterator"""
-        return _types.VectorRowColInt_begin(self)
+        return _coda_types.VectorRowColInt_begin(self)
 
 
     def end(self):
         """end(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::iterator"""
-        return _types.VectorRowColInt_end(self)
+        return _coda_types.VectorRowColInt_end(self)
 
 
     def rbegin(self):
         """rbegin(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::reverse_iterator"""
-        return _types.VectorRowColInt_rbegin(self)
+        return _coda_types.VectorRowColInt_rbegin(self)
 
 
     def rend(self):
         """rend(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::reverse_iterator"""
-        return _types.VectorRowColInt_rend(self)
+        return _coda_types.VectorRowColInt_rend(self)
 
 
     def pop_back(self):
         """pop_back(VectorRowColInt self)"""
-        return _types.VectorRowColInt_pop_back(self)
+        return _coda_types.VectorRowColInt_pop_back(self)
 
 
     def erase(self, *args):
@@ -693,7 +693,7 @@ class VectorRowColInt(_object):
         erase(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::iterator pos) -> std::vector< types::RowCol< ssize_t > >::iterator
         erase(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::iterator first, std::vector< types::RowCol< ssize_t > >::iterator last) -> std::vector< types::RowCol< ssize_t > >::iterator
         """
-        return _types.VectorRowColInt_erase(self, *args)
+        return _coda_types.VectorRowColInt_erase(self, *args)
 
 
     def __init__(self, *args):
@@ -703,7 +703,7 @@ class VectorRowColInt(_object):
         __init__(std::vector<(types::RowCol<(sys::SSize_T)>)> self, std::vector< types::RowCol< ssize_t > >::size_type size) -> VectorRowColInt
         __init__(std::vector<(types::RowCol<(sys::SSize_T)>)> self, std::vector< types::RowCol< ssize_t > >::size_type size, RowColInt value) -> VectorRowColInt
         """
-        this = _types.new_VectorRowColInt(*args)
+        this = _coda_types.new_VectorRowColInt(*args)
         try:
             self.this.append(this)
         except:
@@ -711,22 +711,22 @@ class VectorRowColInt(_object):
 
     def push_back(self, x):
         """push_back(VectorRowColInt self, RowColInt x)"""
-        return _types.VectorRowColInt_push_back(self, x)
+        return _coda_types.VectorRowColInt_push_back(self, x)
 
 
     def front(self):
         """front(VectorRowColInt self) -> RowColInt"""
-        return _types.VectorRowColInt_front(self)
+        return _coda_types.VectorRowColInt_front(self)
 
 
     def back(self):
         """back(VectorRowColInt self) -> RowColInt"""
-        return _types.VectorRowColInt_back(self)
+        return _coda_types.VectorRowColInt_back(self)
 
 
     def assign(self, n, x):
         """assign(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::size_type n, RowColInt x)"""
-        return _types.VectorRowColInt_assign(self, n, x)
+        return _coda_types.VectorRowColInt_assign(self, n, x)
 
 
     def resize(self, *args):
@@ -734,7 +734,7 @@ class VectorRowColInt(_object):
         resize(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::size_type new_size)
         resize(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::size_type new_size, RowColInt x)
         """
-        return _types.VectorRowColInt_resize(self, *args)
+        return _coda_types.VectorRowColInt_resize(self, *args)
 
 
     def insert(self, *args):
@@ -742,21 +742,21 @@ class VectorRowColInt(_object):
         insert(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::iterator pos, RowColInt x) -> std::vector< types::RowCol< ssize_t > >::iterator
         insert(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::iterator pos, std::vector< types::RowCol< ssize_t > >::size_type n, RowColInt x)
         """
-        return _types.VectorRowColInt_insert(self, *args)
+        return _coda_types.VectorRowColInt_insert(self, *args)
 
 
     def reserve(self, n):
         """reserve(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::size_type n)"""
-        return _types.VectorRowColInt_reserve(self, n)
+        return _coda_types.VectorRowColInt_reserve(self, n)
 
 
     def capacity(self):
         """capacity(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::size_type"""
-        return _types.VectorRowColInt_capacity(self)
+        return _coda_types.VectorRowColInt_capacity(self)
 
-    __swig_destroy__ = _types.delete_VectorRowColInt
+    __swig_destroy__ = _coda_types.delete_VectorRowColInt
     __del__ = lambda self: None
-VectorRowColInt_swigregister = _types.VectorRowColInt_swigregister
+VectorRowColInt_swigregister = _coda_types.VectorRowColInt_swigregister
 VectorRowColInt_swigregister(VectorRowColInt)
 
 # This file is compatible with both classic and new-style classes.

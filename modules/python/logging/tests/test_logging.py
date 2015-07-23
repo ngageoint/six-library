@@ -25,7 +25,7 @@
 """
 
 import sys
-import coda.logging as cl
+import coda.coda_logging as cl
 
 if __name__ == '__main__':
 

@@ -1396,6 +1396,7 @@ def python_package(tg):
     dirname = os.path.join(tg.bld.bldnode.abspath(), pkg_name)
     fname = os.path.join(tg.bld.bldnode.abspath(), pkg_name, tg.target)
 
+    #mk the build dir if it doesn't exist
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
