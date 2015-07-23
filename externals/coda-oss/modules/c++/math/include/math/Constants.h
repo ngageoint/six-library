@@ -23,6 +23,31 @@
 #ifndef __MATH_CONSTANTS_H__
 #define __MATH_CONSTANTS_H__
 
+#include <sys/sys_config.h>
+
+#ifdef __CODA_CPP11
+#include <math.h>
+namespace math
+{
+struct Constants
+{
+    static constexpr double FEET_TO_METERS = 0.3048;
+    static constexpr double METERS_TO_FEET = 1.0 / FEET_TO_METERS;
+
+    static constexpr double RADIANS_TO_DEGREES = 180.0 / M_PI;
+    static constexpr double DEGREES_TO_RADIANS = M_PI / 180.0;
+
+    static constexpr double NAUTICAL_MILES_TO_METERS = 1852.0;
+    static constexpr double METERS_TO_NAUTICAL_MILES =
+                                    1.0 / NAUTICAL_MILES_TO_METERS;
+    static constexpr double NAUTICAL_MILES_TO_FEET =
+                                    NAUTICAL_MILES_TO_METERS * FEET_TO_METERS;
+
+    static constexpr double SPEED_OF_LIGHT_METERS_PER_SEC = 299792458.0;
+    static constexpr double SPEED_OF_LIGHT_FEET_PER_SEC =
+            SPEED_OF_LIGHT_METERS_PER_SEC * METERS_TO_FEET;};
+}
+#else
 namespace math
 {
 struct Constants
@@ -41,5 +66,5 @@ struct Constants
     static const double SPEED_OF_LIGHT_FEET_PER_SEC;
 };
 }
-
+#endif
 #endif

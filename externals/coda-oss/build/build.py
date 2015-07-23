@@ -7,7 +7,9 @@ from waflib.Options import OptionsContext
 from waflib.Configure import conf, ConfigurationContext
 from waflib.Build import BuildContext, ListContext, CleanContext, InstallContext
 from waflib.TaskGen import task_gen, feature, after, before
+from waflib.Task import Task
 from waflib.Utils import to_list as listify
+from waflib.Utils import h_file
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
 from msvs import msvs_generator
@@ -452,14 +454,30 @@ class CPPContext(Context.Context):
             name = modArgs['name']
             codename = name
 
+            package_name = Context.APPNAME
+            try:
+                package_name = modArgs['package']
+            except:
+                pass
+           
+            # name for the task to generate our __init__.py file
+            # (remember we need one in each package)
+            init_tgen_name = 'python_init_file_' + package_name
+
             prefix = env['prefix_' + name]
             if prefix:
                 codename = prefix + name
 
+            postfix = env['postfix_' + name]
+            if postfix:
+                codename = codename + postfix
+
             swigSource = os.path.join('source', name.replace('.', '_') + '.i')
+            if env['install_headers']:
+                self.install_files(os.path.join(env['install_includedir'], 'swig'), swigSource)
             target = '_' + codename.replace('.', '_')
-            use = modArgs['use']
-            installPath = os.path.join('${PYTHONDIR}', Context.APPNAME)
+            use = modArgs['use'] + ' ' + init_tgen_name
+            installPath = os.path.join(env['install_pydir'], package_name)
             taskName = name + '-python'
             exportIncludes = listify(modArgs.get('export_includes', 'source'))
 
@@ -472,11 +490,40 @@ class CPPContext(Context.Context):
             # it'll copy the file over to the installation directory for us.
             # We ensure this always runs via 'add_targets'
             copyFilesTarget = target + '_py'
-            bld(features = 'py', 
+            bld(features = 'py',
                 target = copyFilesTarget,
                 env = env.derive(),
                 install_path = installPath,
                 source = bld.path.make_node('source').ant_glob('**/*.py'))
+
+            # this turns the folder at the destination path into a package
+            
+            initTarget = init_tgen_name
+            bld(features = 'python_package',
+                name = initTarget,
+                target='__init__.py',
+                install_path = installPath)
+
+            targetsToAdd = [copyFilesTarget, initTarget]
+
+            # Tried to do this in process_swig_linkage() but it's too late
+            # TODO: See if there's a cleaner way to do this
+            # Basically, for Visual Studio if the -python targets are on the
+            # use line, waf for some reason will not add in all the C++
+            # dependencies that are needed, even if you put that C++ dependency
+            # also explicitly on the use line.  On Windows, we really logically
+            # just want those to go on the targets_to_add line anyway.
+            if env['COMPILER_CXX'] == 'msvc':
+                updatedUse = []
+                targetsToAdd = [copyFilesTarget]
+                
+                for lib in use.split():
+                    if lib.endswith('-python'):
+                        targetsToAdd.append(lib)
+                    else:
+                        updatedUse.append(lib)
+                
+                use = updatedUse
 
             if 'SWIG' in env and env['SWIG']:
                 # If Swig is available, let's use it to build the .cxx file
@@ -492,20 +539,20 @@ class CPPContext(Context.Context):
                     swig_flags = '-python -c++',
                     install_path = installPath,
                     name = taskName,
-                    targets_to_add = copyFilesTarget,
+                    targets_to_add = targetsToAdd,
                     swig_install_fun = swigCopyGeneratedSources)
             else:
                 # If Swig is not available, use the cxx file already sitting around
                 # that Swig generated sometime in the past
                 bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
-                source = os.path.join('source', 'generated', codename.replace('.', '_') + '_wrap.cxx'),
-                target = target,
-                use = use,
-                export_includes = exportIncludes,
-                env = env.derive(),
-                name = taskName,
-                targets_to_add = copyFilesTarget,
-                install_path = installPath)
+                    source = os.path.join('source', 'generated', codename.replace('.', '_') + '_wrap.cxx'),
+                    target = target,
+                    use = use,
+                    export_includes = exportIncludes,
+                    env = env.derive(),
+                    name = taskName,
+                    targets_to_add = targetsToAdd,
+                    install_path = installPath)
 
     def getBuildDir(self, path=None):
         """
@@ -687,6 +734,8 @@ def options(opt):
                    default=False, help='Treat compiler warnings as errors')
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
+    opt.add_option('--enable-cpp11', action='store_true', default=False, dest='enablecpp11',
+                   help='Enable C++11 features')
     #TODO - get rid of enable64 - it's useless now
     opt.add_option('--enable-64bit', action='store_true', dest='enable64',
                    help='Enable 64bit builds')
@@ -724,6 +773,8 @@ def options(opt):
                     help='Override installation bin directory')
     opt.add_option('--sharedir', action='store', nargs=1, dest='sharedir',
                     help='Override installation share directory')
+    opt.add_option('--pydir', action='store', nargs=1, dest='pydir',
+                    help='Override installation python directory')
     opt.add_option('--install-source', action='store_true', dest='install_source', default=False,
                    help='Distribute source into the installation area (for delivering source)')
     opt.add_option('--with-prebuilt-config', action='store', dest='prebuilt_config',
@@ -814,7 +865,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fastest']   = '-O3'
 
             gxxCompileFlags='-fPIC'
-            if cxxCompiler == 'g++' and gccHasCpp11():
+            if cxxCompiler == 'g++' and self.env['cpp11support'] and gccHasCpp11():
                 gxxCompileFlags+=' -std=c++11'
 
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
@@ -1102,7 +1153,7 @@ def configure(self):
 
     if self.env['DETECTED_BUILD_PY']:
         return
-
+    
     sys_platform = getPlatform(default=Options.platform)
     winRegex = r'win32'
 
@@ -1182,7 +1233,9 @@ def configure(self):
         env.append_unique('LINKFLAGS', Options.options.linkflags.split())
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
-
+    #if its already defined in a wscript, don't touch.
+    if not env['cpp11support']:
+        env['cpp11support'] = Options.options.enablecpp11
     configureCompilerOptions(self)
 
     env['PLATFORM'] = sys_platform
@@ -1197,6 +1250,7 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
+    env['install_pydir'] = Options.options.pydir if Options.options.pydir else '${PYTHONDIR}'
 
     # Swig memory leak output
     if Options.options.swig_silent_leak:
@@ -1222,8 +1276,10 @@ def configure(self):
 @TaskGen.after_method('process_use')
 def process_swig_linkage(tsk):
 
+    # first we need to setup some platform specific
+    # options for specifying soname and passing linker
+    # flags
     solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
-
     platform = getPlatform(default=Options.platform)
     compiler = tsk.env['COMPILER_CXX']
     if compiler == 'msvc':
@@ -1232,50 +1288,131 @@ def process_swig_linkage(tsk):
         # Not sure if cygwin/mingw does or not...
         return
 
+    # TODO: Here we're using -Wl,_foo.so since if you just use -l_foo the linker
+    #       assumes there's a 'lib' prefix in the filename which we don't have
+    #       here.  Instead, according to the ld man page, may be able to prepend
+    #       a colon and do this instead: -l:_foo.so (not sure if this works with
+    #       ld version <= 2.17)
+    libpattern = tsk.env['cshlib_PATTERN']
+    linkarg_pattern = '-Wl,%s'
+    rpath_pattern = '-Wl,-rpath=%s'
+    if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
+        linkarg_pattern = '%s'
+        rpath_pattern = '-Rpath%s'
+
+    # so swig can find .i files to import
     incstr = ''
     for nod in tsk.includes:
         incstr += ' -I' + nod.abspath()
     if hasattr(tsk,'swig_flags'):
         tsk.swig_flags = tsk.swig_flags + incstr
 
-    # TODO: Here we're using -Wl,_foo.so since if you just use -l_foo the linker
-    #       assumes there's a 'lib' prefix in the filename which we don't have
-    #       here.  Instead, according to the ld man page, may be able to prepend
-    #       a colon and do this instead: -l:_foo.so 
-    libpattern = tsk.env['cshlib_PATTERN']
-    linkarg_pattern = '-Wl,%s'
-    if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
-      linkarg_pattern = '%s'
-
+    # Search for python libraries and
+    # add the target files explicitly as command line parameters for linking
+    package_list = []
     newlib = []
     for lib in tsk.env.LIB:
+        
+        # get our library name so we
+        # can extract it's path from LIBPATH 
+        # libname is the filename we'll be linking to
+        # searchstr is the module name
         if lib.startswith('_coda_'):
             libname = libpattern % lib
             searchstr = lib[6:].replace('_','.')
-            libpath = ''
-            for libdir in tsk.env.LIBPATH:
-                if libdir.endswith(searchstr):
-                    libpath = libdir
-            libpath = os.path.join(str(libpath), libname)
-            tsk.env.LINKFLAGS.append(libpath)
         elif lib.startswith('_'):
             libname = lib + '.so'
             searchstr = lib[1:].replace('_','.')
-            for libdir in tsk.env.LIBPATH:
-                if libdir.endswith(searchstr):
-                    libpath = libdir
-            libpath = os.path.join(str(libpath), libname)
-            tsk.env.LINKFLAGS.append(libpath)
         else:
+            # this isnt a python library, ignore it
             newlib.append(lib)
+            continue
 
-    # Solaris Studio is a special case and their compiler has an option
-    # for giving a shared object a name, rather than letting us pass
-    # in options to the linker like gcc and icc
+        if searchstr.endswith(".base"):
+            searchstr = searchstr[:-5]
 
-    soname_str = linkarg_pattern % ('-h ' + (libpattern % tsk.target))
+        dep_path = os.path.basename(tsk.bld.get_tgen_by_name(searchstr + '-python').install_path)
+        package_list.append(dep_path)
+
+        # Python wrappers have the same module name as their associated
+        # C++ modules so if waf is configured with --shared searching through
+        # LIBPATH for our module name is not sufficient to find the *python* module
+        # TODO: find some way to tell the C++ and python shared libs apart without
+        #   forcing our python modules to be in a folder called 'python'
+        searchstr = os.path.join('python',searchstr)
+
+        # search for a module with a matching name
+        libpath = ''
+        for libdir in tsk.env.LIBPATH:
+            if libdir.endswith(searchstr):
+                libpath = libdir
+        libpath = os.path.join(str(libpath), libname)
+
+        # finally add the path to the referenced python library
+        tsk.env.LINKFLAGS.append(libpath) 
+
+    # We need to explicitly set our soname otherwise modules that
+    # link to *us* in the above fashion will not be able to do it 
+    # without the same path 
+    # (ie python dependencies at runtime after installation)
+    # TODO use of the -h option changes slightly sometime after ld 2.17
+    #      would be a good idea to verify that this will work with later
+    #      versions
+    soname_str = linkarg_pattern % ('-h' + (libpattern % tsk.target))
     tsk.env.LINKFLAGS.append(soname_str)
+
+    # finally, we want to bake the library search paths straight in to
+    # our python extensions so we don't need to set an LD_LIBRARY_PATH
+    package_set = set(package_list)
+    base_path = os.path.join(':${ORIGIN}', '..')
+    dirlist = ''.join(str(os.path.join(base_path,s)) for s in package_set)
+    if dirlist:
+        rpath_str = rpath_pattern % (dirlist)
+        tsk.env.LINKFLAGS.append(rpath_str)
+  
+    # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib
+
+
+
+#
+# This task generator creates tasks that install an __init__.py
+# for our python packages. Right now all it does it create an
+# empty __init__.py in the install directory but if we decide
+# to go farther with our python bindings (ie, we have more than a
+# couple packages or need to actually put stuff in the __init__.py)
+# they will go here
+#
+
+@task_gen
+@feature('python_package')
+def python_package(tg):
+
+    # setup some paths
+    # we'll create our __init__.py right in our build directory
+    install_path = tg.install_path
+    pkg_name = os.path.join('packages', os.path.basename(install_path))
+    install_path = install_path.replace('${PYTHONDIR}',tg.env.PYTHONDIR)
+    dirname = os.path.join(tg.bld.bldnode.abspath(), pkg_name)
+    fname = os.path.join(tg.bld.bldnode.abspath(), pkg_name, tg.target)
+
+    #mk the build dir if it doesn't exist
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
+    # append to file or create
+    if not os.path.isfile(fname):
+        open(fname,'a').close()
+
+        # to install files the 'node' associated with the file
+        # needs to have a signature; the hash of the file is
+        # good enough for us.
+        relpath = os.path.join(pkg_name, tg.target)
+        nod = tg.bld.bldnode.make_node(relpath)
+        nod.sig = h_file(fname)
+
+        # schedule the file for installation
+        tg.bld.install_files(install_path,nod)
 
 @task_gen
 @feature('untar')
@@ -1505,7 +1642,7 @@ def gccHasCpp11():
         output = subprocess.check_output("g++ --help=c++", stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError:
         #If gcc is too old for --help=, then it is too old for C++11
-        return false
+        return False
     for line in output.split('\n'):
         if re.search(r'-std=c\+\+11', line):
             return True

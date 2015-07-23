@@ -90,6 +90,72 @@ except AttributeError:
     _newclass = 0
 
 
+class Formatter(_object):
+    """Proxy of C++ logging::Formatter class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Formatter, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Formatter, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_logging.delete_Formatter
+    __del__ = lambda self: None
+
+    def format(self, record, os):
+        """format(Formatter self, LogRecord const * record, io::OutputStream & os)"""
+        return _coda_logging.Formatter_format(self, record, os)
+
+
+    def getPrologue(self):
+        """getPrologue(Formatter self) -> std::string"""
+        return _coda_logging.Formatter_getPrologue(self)
+
+
+    def getEpilogue(self):
+        """getEpilogue(Formatter self) -> std::string"""
+        return _coda_logging.Formatter_getEpilogue(self)
+
+Formatter_swigregister = _coda_logging.Formatter_swigregister
+Formatter_swigregister(Formatter)
+
+class StandardFormatter(Formatter):
+    """Proxy of C++ logging::StandardFormatter class"""
+    __swig_setmethods__ = {}
+    for _s in [Formatter]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StandardFormatter, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Formatter]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, StandardFormatter, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(logging::StandardFormatter self) -> StandardFormatter
+        __init__(logging::StandardFormatter self, std::string const & fmt, std::string const & prologue, std::string const & epilogue) -> StandardFormatter
+        __init__(logging::StandardFormatter self, std::string const & fmt, std::string const & prologue) -> StandardFormatter
+        __init__(logging::StandardFormatter self, std::string const & fmt) -> StandardFormatter
+        """
+        this = _coda_logging.new_StandardFormatter(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _coda_logging.delete_StandardFormatter
+    __del__ = lambda self: None
+
+    def format(self, record, os):
+        """format(StandardFormatter self, LogRecord const * record, io::OutputStream & os)"""
+        return _coda_logging.StandardFormatter_format(self, record, os)
+
+StandardFormatter_swigregister = _coda_logging.StandardFormatter_swigregister
+StandardFormatter_swigregister(StandardFormatter)
+cvar = _coda_logging.cvar
+StandardFormatter.DEFAULT_FORMAT = _coda_logging.cvar.StandardFormatter_DEFAULT_FORMAT
+
 class Filterer(_object):
     """Proxy of C++ logging::Filterer class"""
     __swig_setmethods__ = {}
@@ -142,11 +208,6 @@ class Handler(Filterer):
     __swig_destroy__ = _coda_logging.delete_Handler
     __del__ = lambda self: None
 
-    def setFormatter(self, formatter):
-        """setFormatter(Handler self, Formatter * formatter)"""
-        return _coda_logging.Handler_setFormatter(self, formatter)
-
-
     def setLevel(self, level):
         """setLevel(Handler self, LogLevel level)"""
         return _coda_logging.Handler_setLevel(self, level)
@@ -166,8 +227,75 @@ class Handler(Filterer):
         """close(Handler self)"""
         return _coda_logging.Handler_close(self)
 
+
+    def setFormatter(self, formatter):
+        """setFormatter(Handler self, Formatter formatter)"""
+        return _coda_logging.Handler_setFormatter(self, formatter)
+
 Handler_swigregister = _coda_logging.Handler_swigregister
 Handler_swigregister(Handler)
+
+class StreamHandler(Handler):
+    """Proxy of C++ logging::StreamHandler class"""
+    __swig_setmethods__ = {}
+    for _s in [Handler]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StreamHandler, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Handler]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, StreamHandler, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(logging::StreamHandler self, LogLevel level) -> StreamHandler
+        __init__(logging::StreamHandler self) -> StreamHandler
+        __init__(logging::StreamHandler self, io::OutputStream * stream, LogLevel level) -> StreamHandler
+        __init__(logging::StreamHandler self, io::OutputStream * stream) -> StreamHandler
+        """
+        this = _coda_logging.new_StreamHandler(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _coda_logging.delete_StreamHandler
+    __del__ = lambda self: None
+
+    def close(self):
+        """close(StreamHandler self)"""
+        return _coda_logging.StreamHandler_close(self)
+
+StreamHandler_swigregister = _coda_logging.StreamHandler_swigregister
+StreamHandler_swigregister(StreamHandler)
+
+class FileHandler(StreamHandler):
+    """Proxy of C++ logging::FileHandler class"""
+    __swig_setmethods__ = {}
+    for _s in [StreamHandler]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FileHandler, name, value)
+    __swig_getmethods__ = {}
+    for _s in [StreamHandler]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, FileHandler, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(logging::FileHandler self, std::string const & fname, LogLevel level, int creationFlags) -> FileHandler
+        __init__(logging::FileHandler self, std::string const & fname, LogLevel level) -> FileHandler
+        __init__(logging::FileHandler self, std::string const & fname) -> FileHandler
+        """
+        this = _coda_logging.new_FileHandler(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _coda_logging.delete_FileHandler
+    __del__ = lambda self: None
+FileHandler_swigregister = _coda_logging.FileHandler_swigregister
+FileHandler_swigregister(FileHandler)
 
 class Filter(_object):
     """Proxy of C++ logging::Filter class"""
@@ -370,6 +498,90 @@ class NullLogger(Logger):
 NullLogger_swigregister = _coda_logging.NullLogger_swigregister
 NullLogger_swigregister(NullLogger)
 
+class LoggerManager(_object):
+    """Proxy of C++ logging::LoggerManager class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LoggerManager, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, LoggerManager, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(logging::LoggerManager self) -> LoggerManager"""
+        this = _coda_logging.new_LoggerManager()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def getLoggerSharedPtr(self, *args):
+        """
+        getLoggerSharedPtr(LoggerManager self, std::string const & name) -> mem::SharedPtr< logging::Logger >
+        getLoggerSharedPtr(LoggerManager self) -> mem::SharedPtr< logging::Logger >
+        """
+        return _coda_logging.LoggerManager_getLoggerSharedPtr(self, *args)
+
+
+    def getLogger(self, *args):
+        """
+        getLogger(LoggerManager self, std::string const & name) -> Logger
+        getLogger(LoggerManager self) -> Logger
+        """
+        return _coda_logging.LoggerManager_getLogger(self, *args)
+
+    __swig_destroy__ = _coda_logging.delete_LoggerManager
+    __del__ = lambda self: None
+LoggerManager_swigregister = _coda_logging.LoggerManager_swigregister
+LoggerManager_swigregister(LoggerManager)
+
+
+def debug(*args):
+    """
+    debug(std::string const & msg)
+    debug(except::Context const & ctxt)
+    debug(except::Throwable & t)
+    """
+    return _coda_logging.debug(*args)
+
+def info(*args):
+    """
+    info(std::string const & msg)
+    info(except::Context const & ctxt)
+    info(except::Throwable & t)
+    """
+    return _coda_logging.info(*args)
+
+def warn(*args):
+    """
+    warn(std::string const & msg)
+    warn(except::Context const & ctxt)
+    warn(except::Throwable & t)
+    """
+    return _coda_logging.warn(*args)
+
+def error(*args):
+    """
+    error(std::string const & msg)
+    error(except::Context const & ctxt)
+    error(except::Throwable & t)
+    """
+    return _coda_logging.error(*args)
+
+def critical(*args):
+    """
+    critical(std::string const & msg)
+    critical(except::Context const & ctxt)
+    critical(except::Throwable & t)
+    """
+    return _coda_logging.critical(*args)
+
+def getLogger(*args):
+    """getLogger() -> Logger"""
+    return _coda_logging.getLogger(*args)
+
+def getLoggerSharedPtr(*args):
+    """getLoggerSharedPtr() -> mem::SharedPtr< logging::Logger >"""
+    return _coda_logging.getLoggerSharedPtr(*args)
 # This file is compatible with both classic and new-style classes.
 
 

@@ -2935,21 +2935,27 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define SWIGTYPE_p_Filter swig_types[0]
-#define SWIGTYPE_p_Formatter swig_types[1]
-#define SWIGTYPE_p_LogLevel swig_types[2]
-#define SWIGTYPE_p_LogRecord swig_types[3]
-#define SWIGTYPE_p_char swig_types[4]
-#define SWIGTYPE_p_except__Context swig_types[5]
-#define SWIGTYPE_p_except__Throwable swig_types[6]
-#define SWIGTYPE_p_logging__Filter swig_types[7]
-#define SWIGTYPE_p_logging__Filterer swig_types[8]
-#define SWIGTYPE_p_logging__Handler swig_types[9]
-#define SWIGTYPE_p_logging__Logger swig_types[10]
-#define SWIGTYPE_p_logging__NullHandler swig_types[11]
-#define SWIGTYPE_p_logging__NullLogger swig_types[12]
-#define SWIGTYPE_p_std__string swig_types[13]
-static swig_type_info *swig_types[15];
-static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
+#define SWIGTYPE_p_LogLevel swig_types[1]
+#define SWIGTYPE_p_LogRecord swig_types[2]
+#define SWIGTYPE_p_char swig_types[3]
+#define SWIGTYPE_p_except__Context swig_types[4]
+#define SWIGTYPE_p_except__Throwable swig_types[5]
+#define SWIGTYPE_p_io__OutputStream swig_types[6]
+#define SWIGTYPE_p_logging__FileHandler swig_types[7]
+#define SWIGTYPE_p_logging__Filter swig_types[8]
+#define SWIGTYPE_p_logging__Filterer swig_types[9]
+#define SWIGTYPE_p_logging__Formatter swig_types[10]
+#define SWIGTYPE_p_logging__Handler swig_types[11]
+#define SWIGTYPE_p_logging__Logger swig_types[12]
+#define SWIGTYPE_p_logging__LoggerManager swig_types[13]
+#define SWIGTYPE_p_logging__NullHandler swig_types[14]
+#define SWIGTYPE_p_logging__NullLogger swig_types[15]
+#define SWIGTYPE_p_logging__StandardFormatter swig_types[16]
+#define SWIGTYPE_p_logging__StreamHandler swig_types[17]
+#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[18]
+#define SWIGTYPE_p_mt__SingletonT_logging__LoggerManager_true_t swig_types[19]
+static swig_type_info *swig_types[21];
+static swig_module_info swig_module = {swig_types, 20, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3055,8 +3061,169 @@ namespace swig {
 
 
   #include "import/logging.h"
-
   using namespace logging;
+
+
+#include <string>
+
+
+SWIGINTERN swig_type_info*
+SWIG_pchar_descriptor(void)
+{
+  static int init = 0;
+  static swig_type_info* info = 0;
+  if (!init) {
+    info = SWIG_TypeQuery("_p_char");
+    init = 1;
+  }
+  return info;
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_FromCharPtrAndSize(const char* carray, size_t size)
+{
+  if (carray) {
+    if (size > INT_MAX) {
+      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+      return pchar_descriptor ? 
+	SWIG_InternalNewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : SWIG_Py_Void();
+    } else {
+#if PY_VERSION_HEX >= 0x03000000
+#if PY_VERSION_HEX >= 0x03010000
+      return PyUnicode_DecodeUTF8(carray, static_cast< int >(size), "surrogateescape");
+#else
+      return PyUnicode_FromStringAndSize(carray, static_cast< int >(size));
+#endif
+#else
+      return PyString_FromStringAndSize(carray, static_cast< int >(size));
+#endif
+    }
+  } else {
+    return SWIG_Py_Void();
+  }
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_std_string  (const std::string& s)
+{
+  return SWIG_FromCharPtrAndSize(s.data(), s.size());
+}
+
+
+SWIGINTERNINLINE PyObject * 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
+}
+
+
+SWIGINTERN int
+SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
+{
+#if PY_VERSION_HEX>=0x03000000
+  if (PyUnicode_Check(obj))
+#else  
+  if (PyString_Check(obj))
+#endif
+  {
+    char *cstr; Py_ssize_t len;
+#if PY_VERSION_HEX>=0x03000000
+    if (!alloc && cptr) {
+        /* We can't allow converting without allocation, since the internal
+           representation of string in Python 3 is UCS-2/UCS-4 but we require
+           a UTF-8 representation.
+           TODO(bhy) More detailed explanation */
+        return SWIG_RuntimeError;
+    }
+    obj = PyUnicode_AsUTF8String(obj);
+    PyBytes_AsStringAndSize(obj, &cstr, &len);
+    if(alloc) *alloc = SWIG_NEWOBJ;
+#else
+    PyString_AsStringAndSize(obj, &cstr, &len);
+#endif
+    if (cptr) {
+      if (alloc) {
+	/* 
+	   In python the user should not be able to modify the inner
+	   string representation. To warranty that, if you define
+	   SWIG_PYTHON_SAFE_CSTRINGS, a new/copy of the python string
+	   buffer is always returned.
+
+	   The default behavior is just to return the pointer value,
+	   so, be careful.
+	*/ 
+#if defined(SWIG_PYTHON_SAFE_CSTRINGS)
+	if (*alloc != SWIG_OLDOBJ) 
+#else
+	if (*alloc == SWIG_NEWOBJ) 
+#endif
+	  {
+	    *cptr = reinterpret_cast< char* >(memcpy((new char[len + 1]), cstr, sizeof(char)*(len + 1)));
+	    *alloc = SWIG_NEWOBJ;
+	  }
+	else {
+	  *cptr = cstr;
+	  *alloc = SWIG_OLDOBJ;
+	}
+      } else {
+        #if PY_VERSION_HEX>=0x03000000
+        assert(0); /* Should never reach here in Python 3 */
+        #endif
+	*cptr = SWIG_Python_str_AsChar(obj);
+      }
+    }
+    if (psize) *psize = len + 1;
+#if PY_VERSION_HEX>=0x03000000
+    Py_XDECREF(obj);
+#endif
+    return SWIG_OK;
+  } else {
+    swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+    if (pchar_descriptor) {
+      void* vptr = 0;
+      if (SWIG_ConvertPtr(obj, &vptr, pchar_descriptor, 0) == SWIG_OK) {
+	if (cptr) *cptr = (char *) vptr;
+	if (psize) *psize = vptr ? (strlen((char *)vptr) + 1) : 0;
+	if (alloc) *alloc = SWIG_OLDOBJ;
+	return SWIG_OK;
+      }
+    }
+  }
+  return SWIG_TypeError;
+}
+
+
+SWIGINTERN int
+SWIG_AsPtr_std_string (PyObject * obj, std::string **val) 
+{
+  char* buf = 0 ; size_t size = 0; int alloc = SWIG_OLDOBJ;
+  if (SWIG_IsOK((SWIG_AsCharPtrAndSize(obj, &buf, &size, &alloc)))) {
+    if (buf) {
+      if (val) *val = new std::string(buf, size - 1);
+      if (alloc == SWIG_NEWOBJ) delete[] buf;
+      return SWIG_NEWOBJ;
+    } else {
+      if (val) *val = 0;
+      return SWIG_OLDOBJ;
+    }
+  } else {
+    static int init = 0;
+    static swig_type_info* descriptor = 0;
+    if (!init) {
+      descriptor = SWIG_TypeQuery("std::string" " *");
+      init = 1;
+    }
+    if (descriptor) {
+      std::string *vptr;
+      int res = SWIG_ConvertPtr(obj, (void**)&vptr, descriptor, 0);
+      if (SWIG_IsOK(res) && val) *val = vptr;
+      return res;
+    }
+  }
+  return SWIG_ERROR;
+}
 
 
 SWIGINTERNINLINE PyObject*
@@ -3064,6 +3231,19 @@ SWIGINTERNINLINE PyObject*
 {
   return PyBool_FromLong(value ? 1 : 0);
 }
+
+SWIGINTERN void logging_Handler_setFormatter(logging::Handler *self,logging::Formatter *formatter){
+        self->setFormatter(formatter);
+    }
+
+#include <limits.h>
+#if !defined(SWIG_NO_LLONG_MAX)
+# if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
+#   define LLONG_MAX __LONG_LONG_MAX__
+#   define LLONG_MIN (-LLONG_MAX - 1LL)
+#   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
+# endif
+#endif
 
 
 SWIGINTERN int
@@ -3186,6 +3366,22 @@ SWIG_AsVal_long (PyObject *obj, long* val)
 
 
 SWIGINTERN int
+SWIG_AsVal_int (PyObject * obj, int *val)
+{
+  long v;
+  int res = SWIG_AsVal_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v < INT_MIN || v > INT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< int >(v);
+    }
+  }  
+  return res;
+}
+
+
+SWIGINTERN int
 SWIG_AsVal_bool (PyObject *obj, bool *val)
 {
   int r;
@@ -3201,6 +3397,413 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 #ifdef __cplusplus
 extern "C" {
 #endif
+SWIGINTERN PyObject *_wrap_delete_Formatter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Formatter *arg1 = (logging::Formatter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Formatter",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Formatter, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Formatter" "', argument " "1"" of type '" "logging::Formatter *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Formatter * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Formatter_format(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Formatter *arg1 = (logging::Formatter *) 0 ;
+  LogRecord *arg2 = (LogRecord *) 0 ;
+  io::OutputStream *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Formatter_format",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Formatter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Formatter_format" "', argument " "1"" of type '" "logging::Formatter const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Formatter * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_LogRecord, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Formatter_format" "', argument " "2"" of type '" "LogRecord const *""'"); 
+  }
+  arg2 = reinterpret_cast< LogRecord * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_io__OutputStream,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Formatter_format" "', argument " "3"" of type '" "io::OutputStream &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Formatter_format" "', argument " "3"" of type '" "io::OutputStream &""'"); 
+  }
+  arg3 = reinterpret_cast< io::OutputStream * >(argp3);
+  ((logging::Formatter const *)arg1)->format((LogRecord const *)arg2,*arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Formatter_getPrologue(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Formatter *arg1 = (logging::Formatter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Formatter_getPrologue",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Formatter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Formatter_getPrologue" "', argument " "1"" of type '" "logging::Formatter const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Formatter * >(argp1);
+  result = ((logging::Formatter const *)arg1)->getPrologue();
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Formatter_getEpilogue(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Formatter *arg1 = (logging::Formatter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Formatter_getEpilogue",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Formatter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Formatter_getEpilogue" "', argument " "1"" of type '" "logging::Formatter const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Formatter * >(argp1);
+  result = ((logging::Formatter const *)arg1)->getEpilogue();
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Formatter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__Formatter, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN int Swig_var_StandardFormatter_DEFAULT_FORMAT_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable StandardFormatter_DEFAULT_FORMAT is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_StandardFormatter_DEFAULT_FORMAT_get(void) {
+  PyObject *pyobj = 0;
+  
+  pyobj = SWIG_FromCharPtr(logging::StandardFormatter::DEFAULT_FORMAT);
+  return pyobj;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StandardFormatter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::StandardFormatter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StandardFormatter")) SWIG_fail;
+  result = (logging::StandardFormatter *)new logging::StandardFormatter();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StandardFormatter, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StandardFormatter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  logging::StandardFormatter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_StandardFormatter",&obj0,&obj1,&obj2)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_StandardFormatter" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StandardFormatter" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_StandardFormatter" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StandardFormatter" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_StandardFormatter" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StandardFormatter" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  result = (logging::StandardFormatter *)new logging::StandardFormatter((std::string const &)*arg1,(std::string const &)*arg2,(std::string const &)*arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StandardFormatter, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StandardFormatter__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  logging::StandardFormatter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_StandardFormatter",&obj0,&obj1)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_StandardFormatter" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StandardFormatter" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_StandardFormatter" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StandardFormatter" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  result = (logging::StandardFormatter *)new logging::StandardFormatter((std::string const &)*arg1,(std::string const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StandardFormatter, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StandardFormatter__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  logging::StandardFormatter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_StandardFormatter",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_StandardFormatter" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StandardFormatter" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  result = (logging::StandardFormatter *)new logging::StandardFormatter((std::string const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StandardFormatter, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StandardFormatter(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_StandardFormatter__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_StandardFormatter__SWIG_3(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_StandardFormatter__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_new_StandardFormatter__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_StandardFormatter'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::StandardFormatter::StandardFormatter()\n"
+    "    logging::StandardFormatter::StandardFormatter(std::string const &,std::string const &,std::string const &)\n"
+    "    logging::StandardFormatter::StandardFormatter(std::string const &,std::string const &)\n"
+    "    logging::StandardFormatter::StandardFormatter(std::string const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StandardFormatter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::StandardFormatter *arg1 = (logging::StandardFormatter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StandardFormatter",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__StandardFormatter, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StandardFormatter" "', argument " "1"" of type '" "logging::StandardFormatter *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::StandardFormatter * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StandardFormatter_format(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::StandardFormatter *arg1 = (logging::StandardFormatter *) 0 ;
+  LogRecord *arg2 = (LogRecord *) 0 ;
+  io::OutputStream *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:StandardFormatter_format",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__StandardFormatter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StandardFormatter_format" "', argument " "1"" of type '" "logging::StandardFormatter const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::StandardFormatter * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_LogRecord, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "StandardFormatter_format" "', argument " "2"" of type '" "LogRecord const *""'"); 
+  }
+  arg2 = reinterpret_cast< LogRecord * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_io__OutputStream,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "StandardFormatter_format" "', argument " "3"" of type '" "io::OutputStream &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "StandardFormatter_format" "', argument " "3"" of type '" "io::OutputStream &""'"); 
+  }
+  arg3 = reinterpret_cast< io::OutputStream * >(argp3);
+  ((logging::StandardFormatter const *)arg1)->format((LogRecord const *)arg2,*arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StandardFormatter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__StandardFormatter, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_Filterer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   logging::Filterer *result = 0 ;
@@ -3354,36 +3957,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Handler_setFormatter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  logging::Handler *arg1 = (logging::Handler *) 0 ;
-  Formatter *arg2 = (Formatter *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Handler_setFormatter",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_setFormatter" "', argument " "1"" of type '" "logging::Handler *""'"); 
-  }
-  arg1 = reinterpret_cast< logging::Handler * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Formatter, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Handler_setFormatter" "', argument " "2"" of type '" "Formatter *""'"); 
-  }
-  arg2 = reinterpret_cast< Formatter * >(argp2);
-  (arg1)->setFormatter(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Handler_setLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   logging::Handler *arg1 = (logging::Handler *) 0 ;
@@ -3496,6 +4069,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Handler_setFormatter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Handler *arg1 = (logging::Handler *) 0 ;
+  logging::Formatter *arg2 = (logging::Formatter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Handler_setFormatter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_setFormatter" "', argument " "1"" of type '" "logging::Handler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Handler * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&arg2), SWIGTYPE_p_logging__Formatter, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Handler_setFormatter" "', argument " "2"" of type '" "logging::Formatter *""'");
+  }
+  logging_Handler_setFormatter(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *Handler_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
@@ -3503,27 +4104,446 @@ SWIGINTERN PyObject *Handler_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObje
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_StreamHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  LogLevel arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  logging::StreamHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_StreamHandler",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_StreamHandler" "', argument " "1"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StreamHandler" "', argument " "1"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  result = (logging::StreamHandler *)new logging::StreamHandler(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StreamHandler, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StreamHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::StreamHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StreamHandler")) SWIG_fail;
+  result = (logging::StreamHandler *)new logging::StreamHandler();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StreamHandler, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StreamHandler__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::OutputStream *arg1 = (io::OutputStream *) 0 ;
+  LogLevel arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  logging::StreamHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_StreamHandler",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__OutputStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_StreamHandler" "', argument " "1"" of type '" "io::OutputStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::OutputStream * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_StreamHandler" "', argument " "2"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StreamHandler" "', argument " "2"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  result = (logging::StreamHandler *)new logging::StreamHandler(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StreamHandler, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StreamHandler__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::OutputStream *arg1 = (io::OutputStream *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  logging::StreamHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_StreamHandler",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__OutputStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_StreamHandler" "', argument " "1"" of type '" "io::OutputStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::OutputStream * >(argp1);
+  result = (logging::StreamHandler *)new logging::StreamHandler(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StreamHandler, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StreamHandler(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_StreamHandler__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_LogLevel, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_StreamHandler__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_io__OutputStream, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_StreamHandler__SWIG_3(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_io__OutputStream, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_StreamHandler__SWIG_2(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_StreamHandler'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::StreamHandler::StreamHandler(LogLevel)\n"
+    "    logging::StreamHandler::StreamHandler()\n"
+    "    logging::StreamHandler::StreamHandler(io::OutputStream *,LogLevel)\n"
+    "    logging::StreamHandler::StreamHandler(io::OutputStream *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StreamHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::StreamHandler *arg1 = (logging::StreamHandler *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StreamHandler",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__StreamHandler, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StreamHandler" "', argument " "1"" of type '" "logging::StreamHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::StreamHandler * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StreamHandler_close(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::StreamHandler *arg1 = (logging::StreamHandler *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:StreamHandler_close",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__StreamHandler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StreamHandler_close" "', argument " "1"" of type '" "logging::StreamHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::StreamHandler * >(argp1);
+  (arg1)->close();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StreamHandler_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__StreamHandler, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  LogLevel arg2 ;
+  int arg3 ;
+  int res1 = SWIG_OLDOBJ ;
+  void *argp2 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  logging::FileHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_FileHandler",&obj0,&obj1,&obj2)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_FileHandler" "', argument " "2"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "2"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_FileHandler" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  result = (logging::FileHandler *)new logging::FileHandler((std::string const &)*arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  LogLevel arg2 ;
+  int res1 = SWIG_OLDOBJ ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  logging::FileHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_FileHandler",&obj0,&obj1)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_FileHandler" "', argument " "2"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "2"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  result = (logging::FileHandler *)new logging::FileHandler((std::string const &)*arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  logging::FileHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_FileHandler",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  result = (logging::FileHandler *)new logging::FileHandler((std::string const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_FileHandler(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_FileHandler__SWIG_2(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_FileHandler__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_FileHandler__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_FileHandler'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::FileHandler::FileHandler(std::string const &,LogLevel,int)\n"
+    "    logging::FileHandler::FileHandler(std::string const &,LogLevel)\n"
+    "    logging::FileHandler::FileHandler(std::string const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_FileHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::FileHandler *arg1 = (logging::FileHandler *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_FileHandler",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_FileHandler" "', argument " "1"" of type '" "logging::FileHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::FileHandler * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *FileHandler_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__FileHandler, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_Filter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
   PyObject * obj0 = 0 ;
   logging::Filter *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_Filter",&obj0)) SWIG_fail;
   {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Filter" "', argument " "1"" of type '" "std::string""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Filter" "', argument " "1"" of type '" "std::string""'");
-    } else {
-      std::string * temp = reinterpret_cast< std::string * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_Filter" "', argument " "1"" of type '" "std::string""'"); 
     }
+    arg1 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
   }
   result = (logging::Filter *)new logging::Filter(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Filter, SWIG_POINTER_NEW |  0 );
@@ -3561,7 +4581,7 @@ SWIGINTERN PyObject *_wrap_new_Filter(PyObject *self, PyObject *args) {
   }
   if (argc == 1) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_new_Filter__SWIG_0(self, args);
@@ -3644,7 +4664,7 @@ SWIGINTERN PyObject *_wrap_Filter_getName(PyObject *SWIGUNUSEDPARM(self), PyObje
   }
   arg1 = reinterpret_cast< logging::Filter * >(argp1);
   result = ((logging::Filter const *)arg1)->getName();
-  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
   return NULL;
@@ -3661,24 +4681,18 @@ SWIGINTERN PyObject *Filter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObjec
 SWIGINTERN PyObject *_wrap_new_Logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
   PyObject * obj0 = 0 ;
   logging::Logger *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_Logger",&obj0)) SWIG_fail;
   {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Logger" "', argument " "1"" of type '" "std::string""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Logger" "', argument " "1"" of type '" "std::string""'");
-    } else {
-      std::string * temp = reinterpret_cast< std::string * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_Logger" "', argument " "1"" of type '" "std::string""'"); 
     }
+    arg1 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
   }
   result = (logging::Logger *)new logging::Logger(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Logger, SWIG_POINTER_NEW |  0 );
@@ -3716,7 +4730,7 @@ SWIGINTERN PyObject *_wrap_new_Logger(PyObject *self, PyObject *args) {
   }
   if (argc == 1) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_new_Logger__SWIG_0(self, args);
@@ -3762,8 +4776,7 @@ SWIGINTERN PyObject *_wrap_Logger_log__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -3787,18 +4800,23 @@ SWIGINTERN PyObject *_wrap_Logger_log__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
       if (SWIG_IsNewObj(res2)) delete temp;
     }
   }
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__string,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Logger_log" "', argument " "3"" of type '" "std::string const &""'"); 
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Logger_log" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_log" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
   }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_log" "', argument " "3"" of type '" "std::string const &""'"); 
-  }
-  arg3 = reinterpret_cast< std::string * >(argp3);
   (arg1)->log(arg2,(std::string const &)*arg3);
   resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return NULL;
 }
 
@@ -3922,23 +4940,6 @@ SWIGINTERN PyObject *_wrap_Logger_log(PyObject *self, PyObject *args) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__string, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          return _wrap_Logger_log__SWIG_0(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
         int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_except__Context, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
@@ -3964,6 +4965,23 @@ SWIGINTERN PyObject *_wrap_Logger_log(PyObject *self, PyObject *args) {
       }
     }
   }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Logger_log__SWIG_0(self, args);
+        }
+      }
+    }
+  }
   
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Logger_log'.\n"
@@ -3981,8 +4999,7 @@ SWIGINTERN PyObject *_wrap_Logger_debug__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -3992,18 +5009,23 @@ SWIGINTERN PyObject *_wrap_Logger_debug__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_debug" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
   arg1 = reinterpret_cast< logging::Logger * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_debug" "', argument " "2"" of type '" "std::string const &""'"); 
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_debug" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_debug" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_debug" "', argument " "2"" of type '" "std::string const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::string * >(argp2);
   (arg1)->debug((std::string const &)*arg2);
   resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -4014,8 +5036,7 @@ SWIGINTERN PyObject *_wrap_Logger_info__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -4025,18 +5046,23 @@ SWIGINTERN PyObject *_wrap_Logger_info__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_info" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
   arg1 = reinterpret_cast< logging::Logger * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_info" "', argument " "2"" of type '" "std::string const &""'"); 
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_info" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_info" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_info" "', argument " "2"" of type '" "std::string const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::string * >(argp2);
   (arg1)->info((std::string const &)*arg2);
   resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -4047,8 +5073,7 @@ SWIGINTERN PyObject *_wrap_Logger_warn__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -4058,18 +5083,23 @@ SWIGINTERN PyObject *_wrap_Logger_warn__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_warn" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
   arg1 = reinterpret_cast< logging::Logger * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_warn" "', argument " "2"" of type '" "std::string const &""'"); 
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_warn" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_warn" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_warn" "', argument " "2"" of type '" "std::string const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::string * >(argp2);
   (arg1)->warn((std::string const &)*arg2);
   resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -4080,8 +5110,7 @@ SWIGINTERN PyObject *_wrap_Logger_error__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -4091,18 +5120,23 @@ SWIGINTERN PyObject *_wrap_Logger_error__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_error" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
   arg1 = reinterpret_cast< logging::Logger * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_error" "', argument " "2"" of type '" "std::string const &""'"); 
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_error" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_error" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_error" "', argument " "2"" of type '" "std::string const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::string * >(argp2);
   (arg1)->error((std::string const &)*arg2);
   resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -4113,8 +5147,7 @@ SWIGINTERN PyObject *_wrap_Logger_critical__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -4124,18 +5157,23 @@ SWIGINTERN PyObject *_wrap_Logger_critical__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_critical" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
   arg1 = reinterpret_cast< logging::Logger * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_critical" "', argument " "2"" of type '" "std::string const &""'"); 
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_critical" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_critical" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_critical" "', argument " "2"" of type '" "std::string const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::string * >(argp2);
   (arg1)->critical((std::string const &)*arg2);
   resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -4354,19 +5392,6 @@ SWIGINTERN PyObject *_wrap_Logger_debug(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Logger_debug__SWIG_0(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
@@ -4384,6 +5409,19 @@ SWIGINTERN PyObject *_wrap_Logger_debug(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_Logger_debug__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_debug__SWIG_0(self, args);
       }
     }
   }
@@ -4447,19 +5485,6 @@ SWIGINTERN PyObject *_wrap_Logger_info(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Logger_info__SWIG_0(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
@@ -4477,6 +5502,19 @@ SWIGINTERN PyObject *_wrap_Logger_info(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_Logger_info__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_info__SWIG_0(self, args);
       }
     }
   }
@@ -4540,19 +5578,6 @@ SWIGINTERN PyObject *_wrap_Logger_warn(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Logger_warn__SWIG_0(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
@@ -4570,6 +5595,19 @@ SWIGINTERN PyObject *_wrap_Logger_warn(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_Logger_warn__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_warn__SWIG_0(self, args);
       }
     }
   }
@@ -4633,19 +5671,6 @@ SWIGINTERN PyObject *_wrap_Logger_error(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Logger_error__SWIG_0(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
@@ -4663,6 +5688,19 @@ SWIGINTERN PyObject *_wrap_Logger_error(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_Logger_error__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_error__SWIG_0(self, args);
       }
     }
   }
@@ -4726,19 +5764,6 @@ SWIGINTERN PyObject *_wrap_Logger_critical(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Logger_critical__SWIG_0(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_except__Context, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
@@ -4756,6 +5781,19 @@ SWIGINTERN PyObject *_wrap_Logger_critical(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_Logger_critical__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_critical__SWIG_0(self, args);
       }
     }
   }
@@ -4967,8 +6005,7 @@ SWIGINTERN PyObject *_wrap_Logger_setName(PyObject *SWIGUNUSEDPARM(self), PyObje
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -4978,18 +6015,23 @@ SWIGINTERN PyObject *_wrap_Logger_setName(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_setName" "', argument " "1"" of type '" "logging::Logger *""'"); 
   }
   arg1 = reinterpret_cast< logging::Logger * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_setName" "', argument " "2"" of type '" "std::string const &""'"); 
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_setName" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_setName" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_setName" "', argument " "2"" of type '" "std::string const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::string * >(argp2);
   (arg1)->setName((std::string const &)*arg2);
   resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -5009,7 +6051,7 @@ SWIGINTERN PyObject *_wrap_Logger_getName(PyObject *SWIGUNUSEDPARM(self), PyObje
   }
   arg1 = reinterpret_cast< logging::Logger * >(argp1);
   result = ((logging::Logger const *)arg1)->getName();
-  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
   return NULL;
@@ -5149,24 +6191,28 @@ SWIGINTERN PyObject *NullHandler_swigregister(PyObject *SWIGUNUSEDPARM(self), Py
 SWIGINTERN PyObject *_wrap_new_NullLogger__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   logging::NullLogger *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_NullLogger",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NullLogger" "', argument " "1"" of type '" "std::string const &""'"); 
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NullLogger" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NullLogger" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
   }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NullLogger" "', argument " "1"" of type '" "std::string const &""'"); 
-  }
-  arg1 = reinterpret_cast< std::string * >(argp1);
   result = (logging::NullLogger *)new logging::NullLogger((std::string const &)*arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__NullLogger, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
@@ -5199,7 +6245,7 @@ SWIGINTERN PyObject *_wrap_new_NullLogger(PyObject *self, PyObject *args) {
   }
   if (argc == 1) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_new_NullLogger__SWIG_0(self, args);
@@ -5243,8 +6289,903 @@ SWIGINTERN PyObject *NullLogger_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_LoggerManager(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::LoggerManager *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_LoggerManager")) SWIG_fail;
+  result = (logging::LoggerManager *)new logging::LoggerManager();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__LoggerManager, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LoggerManager_getLoggerSharedPtr__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::LoggerManager *arg1 = (logging::LoggerManager *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  mem::SharedPtr< logging::Logger > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:LoggerManager_getLoggerSharedPtr",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__LoggerManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LoggerManager_getLoggerSharedPtr" "', argument " "1"" of type '" "logging::LoggerManager *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::LoggerManager * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LoggerManager_getLoggerSharedPtr" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LoggerManager_getLoggerSharedPtr" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  result = (arg1)->getLoggerSharedPtr((std::string const &)*arg2);
+  resultobj = SWIG_NewPointerObj((new mem::SharedPtr< logging::Logger >(static_cast< const mem::SharedPtr< logging::Logger >& >(result))), SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t, SWIG_POINTER_OWN |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LoggerManager_getLoggerSharedPtr__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::LoggerManager *arg1 = (logging::LoggerManager *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::SharedPtr< logging::Logger > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:LoggerManager_getLoggerSharedPtr",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__LoggerManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LoggerManager_getLoggerSharedPtr" "', argument " "1"" of type '" "logging::LoggerManager *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::LoggerManager * >(argp1);
+  result = (arg1)->getLoggerSharedPtr();
+  resultobj = SWIG_NewPointerObj((new mem::SharedPtr< logging::Logger >(static_cast< const mem::SharedPtr< logging::Logger >& >(result))), SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LoggerManager_getLoggerSharedPtr(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__LoggerManager, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_LoggerManager_getLoggerSharedPtr__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__LoggerManager, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LoggerManager_getLoggerSharedPtr__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LoggerManager_getLoggerSharedPtr'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::LoggerManager::getLoggerSharedPtr(std::string const &)\n"
+    "    logging::LoggerManager::getLoggerSharedPtr()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_LoggerManager_getLogger__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::LoggerManager *arg1 = (logging::LoggerManager *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  logging::Logger *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:LoggerManager_getLogger",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__LoggerManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LoggerManager_getLogger" "', argument " "1"" of type '" "logging::LoggerManager *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::LoggerManager * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LoggerManager_getLogger" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LoggerManager_getLogger" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  result = (logging::Logger *)(arg1)->getLogger((std::string const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LoggerManager_getLogger__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::LoggerManager *arg1 = (logging::LoggerManager *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  logging::Logger *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:LoggerManager_getLogger",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__LoggerManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LoggerManager_getLogger" "', argument " "1"" of type '" "logging::LoggerManager *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::LoggerManager * >(argp1);
+  result = (logging::Logger *)(arg1)->getLogger();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Logger, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LoggerManager_getLogger(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__LoggerManager, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_LoggerManager_getLogger__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__LoggerManager, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LoggerManager_getLogger__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LoggerManager_getLogger'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::LoggerManager::getLogger(std::string const &)\n"
+    "    logging::LoggerManager::getLogger()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_LoggerManager(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::LoggerManager *arg1 = (logging::LoggerManager *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_LoggerManager",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__LoggerManager, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_LoggerManager" "', argument " "1"" of type '" "logging::LoggerManager *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::LoggerManager * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *LoggerManager_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_logging__LoggerManager, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_debug__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:debug",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "debug" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "debug" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  logging::debug((std::string const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_info__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:info",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "info" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "info" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  logging::info((std::string const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_warn__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:warn",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "warn" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "warn" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  logging::warn((std::string const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_error__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:error",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "error" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "error" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  logging::error((std::string const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_critical__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:critical",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "critical" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "critical" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  logging::critical((std::string const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_debug__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Context *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:debug",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "debug" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "debug" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Context * >(argp1);
+  logging::debug((except::Context const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_info__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Context *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:info",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "info" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "info" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Context * >(argp1);
+  logging::info((except::Context const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_warn__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Context *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:warn",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "warn" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "warn" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Context * >(argp1);
+  logging::warn((except::Context const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_error__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Context *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:error",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "error" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "error" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Context * >(argp1);
+  logging::error((except::Context const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_critical__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Context *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:critical",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Context,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "critical" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "critical" "', argument " "1"" of type '" "except::Context const &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Context * >(argp1);
+  logging::critical((except::Context const &)*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_debug__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Throwable *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:debug",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Throwable,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "debug" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "debug" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Throwable * >(argp1);
+  logging::debug(*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_debug(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_except__Context, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_debug__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_except__Throwable, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_debug__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_debug__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'debug'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::debug(std::string const &)\n"
+    "    logging::debug(except::Context const &)\n"
+    "    logging::debug(except::Throwable &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_info__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Throwable *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:info",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Throwable,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "info" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "info" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Throwable * >(argp1);
+  logging::info(*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_info(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_except__Context, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_info__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_except__Throwable, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_info__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_info__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'info'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::info(std::string const &)\n"
+    "    logging::info(except::Context const &)\n"
+    "    logging::info(except::Throwable &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_warn__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Throwable *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:warn",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Throwable,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "warn" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "warn" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Throwable * >(argp1);
+  logging::warn(*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_warn(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_except__Context, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_warn__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_except__Throwable, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_warn__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_warn__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'warn'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::warn(std::string const &)\n"
+    "    logging::warn(except::Context const &)\n"
+    "    logging::warn(except::Throwable &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_error__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Throwable *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:error",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Throwable,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "error" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "error" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Throwable * >(argp1);
+  logging::error(*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_error(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_except__Context, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_error__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_except__Throwable, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_error__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_error__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'error'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::error(std::string const &)\n"
+    "    logging::error(except::Context const &)\n"
+    "    logging::error(except::Throwable &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_critical__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  except::Throwable *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:critical",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_except__Throwable,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "critical" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "critical" "', argument " "1"" of type '" "except::Throwable &""'"); 
+  }
+  arg1 = reinterpret_cast< except::Throwable * >(argp1);
+  logging::critical(*arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_critical(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_except__Context, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_critical__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_except__Throwable, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_critical__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_critical__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'critical'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::critical(std::string const &)\n"
+    "    logging::critical(except::Context const &)\n"
+    "    logging::critical(except::Throwable &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_getLogger(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":getLogger")) SWIG_fail;
+  result = (logging::Logger *)logging::getLogger();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__Logger, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_getLoggerSharedPtr(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::SharedPtr< logging::Logger > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":getLoggerSharedPtr")) SWIG_fail;
+  result = logging::getLoggerSharedPtr();
+  resultobj = SWIG_NewPointerObj((new mem::SharedPtr< logging::Logger >(static_cast< const mem::SharedPtr< logging::Logger >& >(result))), SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
+	 { (char *)"delete_Formatter", _wrap_delete_Formatter, METH_VARARGS, (char *)"delete_Formatter(Formatter self)"},
+	 { (char *)"Formatter_format", _wrap_Formatter_format, METH_VARARGS, (char *)"Formatter_format(Formatter self, LogRecord const * record, io::OutputStream & os)"},
+	 { (char *)"Formatter_getPrologue", _wrap_Formatter_getPrologue, METH_VARARGS, (char *)"Formatter_getPrologue(Formatter self) -> std::string"},
+	 { (char *)"Formatter_getEpilogue", _wrap_Formatter_getEpilogue, METH_VARARGS, (char *)"Formatter_getEpilogue(Formatter self) -> std::string"},
+	 { (char *)"Formatter_swigregister", Formatter_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_StandardFormatter", _wrap_new_StandardFormatter, METH_VARARGS, (char *)"\n"
+		"StandardFormatter()\n"
+		"StandardFormatter(std::string const & fmt, std::string const & prologue, std::string const & epilogue)\n"
+		"StandardFormatter(std::string const & fmt, std::string const & prologue)\n"
+		"new_StandardFormatter(std::string const & fmt) -> StandardFormatter\n"
+		""},
+	 { (char *)"delete_StandardFormatter", _wrap_delete_StandardFormatter, METH_VARARGS, (char *)"delete_StandardFormatter(StandardFormatter self)"},
+	 { (char *)"StandardFormatter_format", _wrap_StandardFormatter_format, METH_VARARGS, (char *)"StandardFormatter_format(StandardFormatter self, LogRecord const * record, io::OutputStream & os)"},
+	 { (char *)"StandardFormatter_swigregister", StandardFormatter_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Filterer", _wrap_new_Filterer, METH_VARARGS, (char *)"new_Filterer() -> Filterer"},
 	 { (char *)"delete_Filterer", _wrap_delete_Filterer, METH_VARARGS, (char *)"delete_Filterer(Filterer self)"},
 	 { (char *)"Filterer_addFilter", _wrap_Filterer_addFilter, METH_VARARGS, (char *)"Filterer_addFilter(Filterer self, Filter * filter)"},
@@ -5252,12 +7193,28 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Filterer_removeFilter", _wrap_Filterer_removeFilter, METH_VARARGS, (char *)"Filterer_removeFilter(Filterer self, Filter * filter)"},
 	 { (char *)"Filterer_swigregister", Filterer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Handler", _wrap_delete_Handler, METH_VARARGS, (char *)"delete_Handler(Handler self)"},
-	 { (char *)"Handler_setFormatter", _wrap_Handler_setFormatter, METH_VARARGS, (char *)"Handler_setFormatter(Handler self, Formatter * formatter)"},
 	 { (char *)"Handler_setLevel", _wrap_Handler_setLevel, METH_VARARGS, (char *)"Handler_setLevel(Handler self, LogLevel level)"},
 	 { (char *)"Handler_getLevel", _wrap_Handler_getLevel, METH_VARARGS, (char *)"Handler_getLevel(Handler self) -> LogLevel"},
 	 { (char *)"Handler_handle", _wrap_Handler_handle, METH_VARARGS, (char *)"Handler_handle(Handler self, LogRecord const * record) -> bool"},
 	 { (char *)"Handler_close", _wrap_Handler_close, METH_VARARGS, (char *)"Handler_close(Handler self)"},
+	 { (char *)"Handler_setFormatter", _wrap_Handler_setFormatter, METH_VARARGS, (char *)"Handler_setFormatter(Handler self, Formatter formatter)"},
 	 { (char *)"Handler_swigregister", Handler_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_StreamHandler", _wrap_new_StreamHandler, METH_VARARGS, (char *)"\n"
+		"StreamHandler(LogLevel level)\n"
+		"StreamHandler()\n"
+		"StreamHandler(io::OutputStream * stream, LogLevel level)\n"
+		"new_StreamHandler(io::OutputStream * stream) -> StreamHandler\n"
+		""},
+	 { (char *)"delete_StreamHandler", _wrap_delete_StreamHandler, METH_VARARGS, (char *)"delete_StreamHandler(StreamHandler self)"},
+	 { (char *)"StreamHandler_close", _wrap_StreamHandler_close, METH_VARARGS, (char *)"StreamHandler_close(StreamHandler self)"},
+	 { (char *)"StreamHandler_swigregister", StreamHandler_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_FileHandler", _wrap_new_FileHandler, METH_VARARGS, (char *)"\n"
+		"FileHandler(std::string const & fname, LogLevel level, int creationFlags)\n"
+		"FileHandler(std::string const & fname, LogLevel level)\n"
+		"new_FileHandler(std::string const & fname) -> FileHandler\n"
+		""},
+	 { (char *)"delete_FileHandler", _wrap_delete_FileHandler, METH_VARARGS, (char *)"delete_FileHandler(FileHandler self)"},
+	 { (char *)"FileHandler_swigregister", FileHandler_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Filter", _wrap_new_Filter, METH_VARARGS, (char *)"\n"
 		"Filter(std::string name)\n"
 		"new_Filter() -> Filter\n"
@@ -5323,14 +7280,64 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"delete_NullLogger", _wrap_delete_NullLogger, METH_VARARGS, (char *)"delete_NullLogger(NullLogger self)"},
 	 { (char *)"NullLogger_swigregister", NullLogger_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_LoggerManager", _wrap_new_LoggerManager, METH_VARARGS, (char *)"new_LoggerManager() -> LoggerManager"},
+	 { (char *)"LoggerManager_getLoggerSharedPtr", _wrap_LoggerManager_getLoggerSharedPtr, METH_VARARGS, (char *)"\n"
+		"getLoggerSharedPtr(std::string const & name) -> mem::SharedPtr< logging::Logger >\n"
+		"LoggerManager_getLoggerSharedPtr(LoggerManager self) -> mem::SharedPtr< logging::Logger >\n"
+		""},
+	 { (char *)"LoggerManager_getLogger", _wrap_LoggerManager_getLogger, METH_VARARGS, (char *)"\n"
+		"getLogger(std::string const & name) -> Logger\n"
+		"LoggerManager_getLogger(LoggerManager self) -> Logger\n"
+		""},
+	 { (char *)"delete_LoggerManager", _wrap_delete_LoggerManager, METH_VARARGS, (char *)"delete_LoggerManager(LoggerManager self)"},
+	 { (char *)"LoggerManager_swigregister", LoggerManager_swigregister, METH_VARARGS, NULL},
+	 { (char *)"debug", _wrap_debug, METH_VARARGS, (char *)"\n"
+		"debug(std::string const & msg)\n"
+		"debug(except::Context const & ctxt)\n"
+		"debug(except::Throwable & t)\n"
+		""},
+	 { (char *)"info", _wrap_info, METH_VARARGS, (char *)"\n"
+		"info(std::string const & msg)\n"
+		"info(except::Context const & ctxt)\n"
+		"info(except::Throwable & t)\n"
+		""},
+	 { (char *)"warn", _wrap_warn, METH_VARARGS, (char *)"\n"
+		"warn(std::string const & msg)\n"
+		"warn(except::Context const & ctxt)\n"
+		"warn(except::Throwable & t)\n"
+		""},
+	 { (char *)"error", _wrap_error, METH_VARARGS, (char *)"\n"
+		"error(std::string const & msg)\n"
+		"error(except::Context const & ctxt)\n"
+		"error(except::Throwable & t)\n"
+		""},
+	 { (char *)"critical", _wrap_critical, METH_VARARGS, (char *)"\n"
+		"critical(std::string const & msg)\n"
+		"critical(except::Context const & ctxt)\n"
+		"critical(except::Throwable & t)\n"
+		""},
+	 { (char *)"getLogger", _wrap_getLogger, METH_VARARGS, (char *)"getLogger() -> Logger"},
+	 { (char *)"getLoggerSharedPtr", _wrap_getLoggerSharedPtr, METH_VARARGS, (char *)"getLoggerSharedPtr() -> mem::SharedPtr< logging::Logger >"},
 	 { NULL, NULL, 0, NULL }
 };
 
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_logging__StandardFormatterTo_p_logging__Formatter(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Formatter *)  ((logging::StandardFormatter *) x));
+}
 static void *_p_logging__NullLoggerTo_p_logging__Logger(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((logging::Logger *)  ((logging::NullLogger *) x));
+}
+static void *_p_logging__FileHandlerTo_p_logging__StreamHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::StreamHandler *)  ((logging::FileHandler *) x));
+}
+static void *_p_logging__StreamHandlerTo_p_logging__Handler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Handler *)  ((logging::StreamHandler *) x));
+}
+static void *_p_logging__FileHandlerTo_p_logging__Handler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Handler *) (logging::StreamHandler *) ((logging::FileHandler *) x));
 }
 static void *_p_logging__NullHandlerTo_p_logging__Handler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((logging::Handler *)  ((logging::NullHandler *) x));
@@ -5344,71 +7351,101 @@ static void *_p_logging__NullLoggerTo_p_logging__Filterer(void *x, int *SWIGUNUS
 static void *_p_logging__HandlerTo_p_logging__Filterer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((logging::Filterer *)  ((logging::Handler *) x));
 }
+static void *_p_logging__StreamHandlerTo_p_logging__Filterer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Filterer *) (logging::Handler *) ((logging::StreamHandler *) x));
+}
+static void *_p_logging__FileHandlerTo_p_logging__Filterer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((logging::Filterer *) (logging::Handler *)(logging::StreamHandler *) ((logging::FileHandler *) x));
+}
 static void *_p_logging__NullHandlerTo_p_logging__Filterer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((logging::Filterer *) (logging::Handler *) ((logging::NullHandler *) x));
 }
 static swig_type_info _swigt__p_Filter = {"_p_Filter", "Filter *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Formatter = {"_p_Formatter", "Formatter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_LogLevel = {"_p_LogLevel", "LogLevel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_LogRecord = {"_p_LogRecord", "LogRecord *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__Context = {"_p_except__Context", "except::Context *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__Throwable = {"_p_except__Throwable", "except::Throwable *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_io__OutputStream = {"_p_io__OutputStream", "io::OutputStream *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__FileHandler = {"_p_logging__FileHandler", "logging::FileHandler *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__Filter = {"_p_logging__Filter", "logging::Filter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__Filterer = {"_p_logging__Filterer", "logging::Filterer *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__Formatter = {"_p_logging__Formatter", "logging::Formatter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__Handler = {"_p_logging__Handler", "logging::Handler *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__Logger = {"_p_logging__Logger", "logging::Logger *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__LoggerManager = {"_p_logging__LoggerManager", "logging::LoggerManager *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__NullHandler = {"_p_logging__NullHandler", "logging::NullHandler *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__NullLogger = {"_p_logging__NullLogger", "logging::NullLogger *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__StandardFormatter = {"_p_logging__StandardFormatter", "logging::StandardFormatter *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_logging__StreamHandler = {"_p_logging__StreamHandler", "logging::StreamHandler *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__SharedPtrT_logging__Logger_t = {"_p_mem__SharedPtrT_logging__Logger_t", "mem::SharedPtr< logging::Logger > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mt__SingletonT_logging__LoggerManager_true_t = {"_p_mt__SingletonT_logging__LoggerManager_true_t", "logging::LoggerFactory *|mt::Singleton< logging::LoggerManager,true > *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Filter,
-  &_swigt__p_Formatter,
   &_swigt__p_LogLevel,
   &_swigt__p_LogRecord,
   &_swigt__p_char,
   &_swigt__p_except__Context,
   &_swigt__p_except__Throwable,
+  &_swigt__p_io__OutputStream,
+  &_swigt__p_logging__FileHandler,
   &_swigt__p_logging__Filter,
   &_swigt__p_logging__Filterer,
+  &_swigt__p_logging__Formatter,
   &_swigt__p_logging__Handler,
   &_swigt__p_logging__Logger,
+  &_swigt__p_logging__LoggerManager,
   &_swigt__p_logging__NullHandler,
   &_swigt__p_logging__NullLogger,
-  &_swigt__p_std__string,
+  &_swigt__p_logging__StandardFormatter,
+  &_swigt__p_logging__StreamHandler,
+  &_swigt__p_mem__SharedPtrT_logging__Logger_t,
+  &_swigt__p_mt__SingletonT_logging__LoggerManager_true_t,
 };
 
 static swig_cast_info _swigc__p_Filter[] = {  {&_swigt__p_Filter, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Formatter[] = {  {&_swigt__p_Formatter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_LogLevel[] = {  {&_swigt__p_LogLevel, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_LogRecord[] = {  {&_swigt__p_LogRecord, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__Context[] = {  {&_swigt__p_except__Context, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__Throwable[] = {  {&_swigt__p_except__Throwable, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__OutputStream[] = {  {&_swigt__p_io__OutputStream, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__FileHandler[] = {  {&_swigt__p_logging__FileHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_logging__Filter[] = {  {&_swigt__p_logging__Filter, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_logging__Filterer[] = {  {&_swigt__p_logging__NullLogger, _p_logging__NullLoggerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__Logger, _p_logging__LoggerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__Handler, _p_logging__HandlerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__NullHandler, _p_logging__NullHandlerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__Filterer, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_logging__Handler[] = {  {&_swigt__p_logging__Handler, 0, 0, 0},  {&_swigt__p_logging__NullHandler, _p_logging__NullHandlerTo_p_logging__Handler, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__Filterer[] = {  {&_swigt__p_logging__NullLogger, _p_logging__NullLoggerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__Logger, _p_logging__LoggerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__Handler, _p_logging__HandlerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__StreamHandler, _p_logging__StreamHandlerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__FileHandler, _p_logging__FileHandlerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__NullHandler, _p_logging__NullHandlerTo_p_logging__Filterer, 0, 0},  {&_swigt__p_logging__Filterer, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__Formatter[] = {  {&_swigt__p_logging__Formatter, 0, 0, 0},  {&_swigt__p_logging__StandardFormatter, _p_logging__StandardFormatterTo_p_logging__Formatter, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__Handler[] = {  {&_swigt__p_logging__Handler, 0, 0, 0},  {&_swigt__p_logging__StreamHandler, _p_logging__StreamHandlerTo_p_logging__Handler, 0, 0},  {&_swigt__p_logging__FileHandler, _p_logging__FileHandlerTo_p_logging__Handler, 0, 0},  {&_swigt__p_logging__NullHandler, _p_logging__NullHandlerTo_p_logging__Handler, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_logging__Logger[] = {  {&_swigt__p_logging__NullLogger, _p_logging__NullLoggerTo_p_logging__Logger, 0, 0},  {&_swigt__p_logging__Logger, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__LoggerManager[] = {  {&_swigt__p_logging__LoggerManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_logging__NullHandler[] = {  {&_swigt__p_logging__NullHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_logging__NullLogger[] = {  {&_swigt__p_logging__NullLogger, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__StandardFormatter[] = {  {&_swigt__p_logging__StandardFormatter, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_logging__StreamHandler[] = {  {&_swigt__p_logging__StreamHandler, 0, 0, 0},  {&_swigt__p_logging__FileHandler, _p_logging__FileHandlerTo_p_logging__StreamHandler, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mem__SharedPtrT_logging__Logger_t[] = {  {&_swigt__p_mem__SharedPtrT_logging__Logger_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mt__SingletonT_logging__LoggerManager_true_t[] = {  {&_swigt__p_mt__SingletonT_logging__LoggerManager_true_t, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Filter,
-  _swigc__p_Formatter,
   _swigc__p_LogLevel,
   _swigc__p_LogRecord,
   _swigc__p_char,
   _swigc__p_except__Context,
   _swigc__p_except__Throwable,
+  _swigc__p_io__OutputStream,
+  _swigc__p_logging__FileHandler,
   _swigc__p_logging__Filter,
   _swigc__p_logging__Filterer,
+  _swigc__p_logging__Formatter,
   _swigc__p_logging__Handler,
   _swigc__p_logging__Logger,
+  _swigc__p_logging__LoggerManager,
   _swigc__p_logging__NullHandler,
   _swigc__p_logging__NullLogger,
-  _swigc__p_std__string,
+  _swigc__p_logging__StandardFormatter,
+  _swigc__p_logging__StreamHandler,
+  _swigc__p_mem__SharedPtrT_logging__Logger_t,
+  _swigc__p_mt__SingletonT_logging__LoggerManager_true_t,
 };
 
 
@@ -6092,6 +8129,8 @@ SWIG_init(void) {
   
   SWIG_InstallConstants(d,swig_const_table);
   
+  PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
+  SWIG_addvarlink(SWIG_globals(),(char*)"StandardFormatter_DEFAULT_FORMAT",Swig_var_StandardFormatter_DEFAULT_FORMAT_get, Swig_var_StandardFormatter_DEFAULT_FORMAT_set);
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

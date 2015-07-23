@@ -20,19 +20,57 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-%module coda_logging
+%module(package="coda") coda_logging
 
 %feature("autodoc", "1");
 
 %{
   #include "import/logging.h"
-
   using namespace logging;
 %}
 
+%import "std_string.i"
+
+%include "logging/Formatter.h"
+%include "logging/StandardFormatter.h"
 %include "logging/Filterer.h"
+
+// Ignore the setFormatter methods on include of handlers.
+%rename("$ignore", %$isfunction) setFormatter;
+
 %include "logging/Handler.h"
+%include "logging/StreamHandler.h"
+%include "logging/FileHandler.h"
+
+// Stop ignoring setFormatter methods
+%rename("%s", %$isfunction) setFormatter;
+
+%extend logging::Handler {
+
+    // Handlers are assumed to take ownership of Formatter objects passed to
+    // setFormatter(), and delete those objects when needed.  If a SWIG object 
+    // Python object wrapping a C++ object) is passed this way, the following
+    // directive stops SWIG from garbage collecting the C++ part of the object
+    // and causing a segfault on the second deletion.
+    %apply SWIGTYPE *DISOWN { logging::Formatter* formatter };
+    
+    void logging::Handler::setFormatter(logging::Formatter* formatter)
+    {
+        self->setFormatter(formatter);
+    }
+
+    // Clear the typemap applied above
+    %clear logging::Formatter* formatter;
+}
+
 %include "logging/Filter.h"
 %include "logging/Logger.h"
 %include "logging/NullLogger.h"
 
+%ignore LoggerManager::LoggerManager();
+%ignore LoggerManager::getLoggerSharedPtr(const std::string& name);
+%ignore LoggerManager::getLogger(const std::string& name);
+%ignore logging::setLogLevel(LogLevel level);
+%ignore logging::getLogger(const std::string& name);
+%ignore logging::getLoggerSharedPtr(const std::string& name);
+%include "logging/LoggerFactory.h"
