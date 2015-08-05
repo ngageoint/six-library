@@ -137,7 +137,9 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 
 %template(VectorPolyXYZ)                        std::vector<PolyXYZ>;
 
-%template(ScopedCloneableAreaDirectionParameters) mem::ScopedCopyablePtr<six::sicd::AreaDirectionParameters>;
+%template(ScopedCloneableDirectionParameters) mem::ScopedCloneablePtr<six::sicd::DirectionParameters>;
+
+%template(ScopedCloneableAreaDirectionParameters) mem::ScopedCloneablePtr<six::sicd::AreaDirectionParameters>;
 %template(ScopedCloneableSegment)                 mem::ScopedCloneablePtr<six::sicd::Segment>;
 %template(ScopedCloneableTxStep)                  mem::ScopedCloneablePtr<six::sicd::TxStep>;
 %template(ScopedCloneableWaveformParameters)      mem::ScopedCloneablePtr<six::sicd::WaveformParameters>;

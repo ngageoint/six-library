@@ -4761,8 +4761,104 @@ class VectorPolyXYZ(_object):
 VectorPolyXYZ_swigregister = _six_sicd.VectorPolyXYZ_swigregister
 VectorPolyXYZ_swigregister(VectorPolyXYZ)
 
+class ScopedCloneableDirectionParameters(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::DirectionParameters)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableDirectionParameters, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableDirectionParameters, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCloneablePtr<(six::sicd::DirectionParameters)> self, DirectionParameters ptr=None) -> ScopedCloneableDirectionParameters
+        __init__(mem::ScopedCloneablePtr<(six::sicd::DirectionParameters)> self) -> ScopedCloneableDirectionParameters
+        __init__(mem::ScopedCloneablePtr<(six::sicd::DirectionParameters)> self, ScopedCloneableDirectionParameters rhs) -> ScopedCloneableDirectionParameters
+        """
+        this = _six_sicd.new_ScopedCloneableDirectionParameters(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCloneableDirectionParameters self) -> DirectionParameters"""
+        return _six_sicd.ScopedCloneableDirectionParameters_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCloneableDirectionParameters self) -> DirectionParameters"""
+        return _six_sicd.ScopedCloneableDirectionParameters___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCloneableDirectionParameters self) -> DirectionParameters"""
+        return _six_sicd.ScopedCloneableDirectionParameters___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCloneableDirectionParameters self, DirectionParameters ptr=None)
+        reset(ScopedCloneableDirectionParameters self)
+        """
+        return _six_sicd.ScopedCloneableDirectionParameters_reset(self, ptr)
+
+    __swig_destroy__ = _six_sicd.delete_ScopedCloneableDirectionParameters
+    __del__ = lambda self: None
+
+    def clone(self):
+        """clone(ScopedCloneableDirectionParameters self) -> DirectionParameters"""
+        return _six_sicd.ScopedCloneableDirectionParameters_clone(self)
+
+    __swig_setmethods__["unitVector"] = _six_sicd.ScopedCloneableDirectionParameters_unitVector_set
+    __swig_getmethods__["unitVector"] = _six_sicd.ScopedCloneableDirectionParameters_unitVector_get
+    if _newclass:
+        unitVector = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_unitVector_get, _six_sicd.ScopedCloneableDirectionParameters_unitVector_set)
+    __swig_setmethods__["sampleSpacing"] = _six_sicd.ScopedCloneableDirectionParameters_sampleSpacing_set
+    __swig_getmethods__["sampleSpacing"] = _six_sicd.ScopedCloneableDirectionParameters_sampleSpacing_get
+    if _newclass:
+        sampleSpacing = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_sampleSpacing_get, _six_sicd.ScopedCloneableDirectionParameters_sampleSpacing_set)
+    __swig_setmethods__["impulseResponseWidth"] = _six_sicd.ScopedCloneableDirectionParameters_impulseResponseWidth_set
+    __swig_getmethods__["impulseResponseWidth"] = _six_sicd.ScopedCloneableDirectionParameters_impulseResponseWidth_get
+    if _newclass:
+        impulseResponseWidth = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_impulseResponseWidth_get, _six_sicd.ScopedCloneableDirectionParameters_impulseResponseWidth_set)
+    __swig_setmethods__["sign"] = _six_sicd.ScopedCloneableDirectionParameters_sign_set
+    __swig_getmethods__["sign"] = _six_sicd.ScopedCloneableDirectionParameters_sign_get
+    if _newclass:
+        sign = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_sign_get, _six_sicd.ScopedCloneableDirectionParameters_sign_set)
+    __swig_setmethods__["impulseResponseBandwidth"] = _six_sicd.ScopedCloneableDirectionParameters_impulseResponseBandwidth_set
+    __swig_getmethods__["impulseResponseBandwidth"] = _six_sicd.ScopedCloneableDirectionParameters_impulseResponseBandwidth_get
+    if _newclass:
+        impulseResponseBandwidth = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_impulseResponseBandwidth_get, _six_sicd.ScopedCloneableDirectionParameters_impulseResponseBandwidth_set)
+    __swig_setmethods__["kCenter"] = _six_sicd.ScopedCloneableDirectionParameters_kCenter_set
+    __swig_getmethods__["kCenter"] = _six_sicd.ScopedCloneableDirectionParameters_kCenter_get
+    if _newclass:
+        kCenter = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_kCenter_get, _six_sicd.ScopedCloneableDirectionParameters_kCenter_set)
+    __swig_setmethods__["deltaK1"] = _six_sicd.ScopedCloneableDirectionParameters_deltaK1_set
+    __swig_getmethods__["deltaK1"] = _six_sicd.ScopedCloneableDirectionParameters_deltaK1_get
+    if _newclass:
+        deltaK1 = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_deltaK1_get, _six_sicd.ScopedCloneableDirectionParameters_deltaK1_set)
+    __swig_setmethods__["deltaK2"] = _six_sicd.ScopedCloneableDirectionParameters_deltaK2_set
+    __swig_getmethods__["deltaK2"] = _six_sicd.ScopedCloneableDirectionParameters_deltaK2_get
+    if _newclass:
+        deltaK2 = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_deltaK2_get, _six_sicd.ScopedCloneableDirectionParameters_deltaK2_set)
+    __swig_setmethods__["deltaKCOAPoly"] = _six_sicd.ScopedCloneableDirectionParameters_deltaKCOAPoly_set
+    __swig_getmethods__["deltaKCOAPoly"] = _six_sicd.ScopedCloneableDirectionParameters_deltaKCOAPoly_get
+    if _newclass:
+        deltaKCOAPoly = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_deltaKCOAPoly_get, _six_sicd.ScopedCloneableDirectionParameters_deltaKCOAPoly_set)
+    __swig_setmethods__["weightType"] = _six_sicd.ScopedCloneableDirectionParameters_weightType_set
+    __swig_getmethods__["weightType"] = _six_sicd.ScopedCloneableDirectionParameters_weightType_get
+    if _newclass:
+        weightType = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_weightType_get, _six_sicd.ScopedCloneableDirectionParameters_weightType_set)
+    __swig_setmethods__["weights"] = _six_sicd.ScopedCloneableDirectionParameters_weights_set
+    __swig_getmethods__["weights"] = _six_sicd.ScopedCloneableDirectionParameters_weights_get
+    if _newclass:
+        weights = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_weights_get, _six_sicd.ScopedCloneableDirectionParameters_weights_set)
+ScopedCloneableDirectionParameters_swigregister = _six_sicd.ScopedCloneableDirectionParameters_swigregister
+ScopedCloneableDirectionParameters_swigregister(ScopedCloneableDirectionParameters)
+
 class ScopedCloneableAreaDirectionParameters(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::AreaDirectionParameters)> class"""
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::AreaDirectionParameters)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableAreaDirectionParameters, name, value)
     __swig_getmethods__ = {}
@@ -4771,9 +4867,9 @@ class ScopedCloneableAreaDirectionParameters(_object):
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCopyablePtr<(six::sicd::AreaDirectionParameters)> self, AreaDirectionParameters ptr=None) -> ScopedCloneableAreaDirectionParameters
-        __init__(mem::ScopedCopyablePtr<(six::sicd::AreaDirectionParameters)> self) -> ScopedCloneableAreaDirectionParameters
-        __init__(mem::ScopedCopyablePtr<(six::sicd::AreaDirectionParameters)> self, ScopedCloneableAreaDirectionParameters rhs) -> ScopedCloneableAreaDirectionParameters
+        __init__(mem::ScopedCloneablePtr<(six::sicd::AreaDirectionParameters)> self, AreaDirectionParameters ptr=None) -> ScopedCloneableAreaDirectionParameters
+        __init__(mem::ScopedCloneablePtr<(six::sicd::AreaDirectionParameters)> self) -> ScopedCloneableAreaDirectionParameters
+        __init__(mem::ScopedCloneablePtr<(six::sicd::AreaDirectionParameters)> self, ScopedCloneableAreaDirectionParameters rhs) -> ScopedCloneableAreaDirectionParameters
         """
         this = _six_sicd.new_ScopedCloneableAreaDirectionParameters(*args)
         try:
