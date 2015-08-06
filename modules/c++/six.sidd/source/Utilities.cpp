@@ -24,24 +24,22 @@
 
 namespace
 {
-double getCenterTime(const six::sidd::DerivedData* derived)
+double getCenterTime(const six::sidd::DerivedData& derived)
 {
     double centerTime;
-    if (derived->measurement->projection->isMeasurable())
+    if (derived.measurement->projection->isMeasurable())
     {
         const six::sidd::MeasurableProjection* const projection =
             reinterpret_cast<const six::sidd::MeasurableProjection*>(
-                derived->measurement->projection.get());
+                derived.measurement->projection.get());
 
-        centerTime = projection->timeCOAPoly(
-                        projection->referencePoint.rowCol.row,
-                        projection->referencePoint.rowCol.col);
+        centerTime = projection->timeCOAPoly(0, 0);
     }
     else
     {
         // we estimate...
-        centerTime
-                = derived->exploitationFeatures->collections[0]->information->collectionDuration
+        centerTime =
+                derived.exploitationFeatures->collections[0]->information->collectionDuration
                         / 2;
     }
 
@@ -77,7 +75,7 @@ namespace sidd
 scene::SideOfTrack
 Utilities::getSideOfTrack(const DerivedData* derived)
 {
-    const double centerTime = getCenterTime(derived);
+    const double centerTime = getCenterTime(*derived);
 
     // compute arpPos and arpVel
     const six::Vector3 arpPos = derived->measurement->arpPoly(centerTime);
@@ -92,7 +90,7 @@ Utilities::getSideOfTrack(const DerivedData* derived)
 std::auto_ptr<scene::SceneGeometry>
 Utilities::getSceneGeometry(const DerivedData* derived)
 {
-    const double centerTime = getCenterTime(derived);
+    const double centerTime = getCenterTime(*derived);
 
     // compute arpPos and arpVel
     six::Vector3 arpPos = derived->measurement->arpPoly(centerTime);
@@ -298,7 +296,7 @@ void Utilities::setProductValues(Poly2D timeCOAPoly,
         PolyXYZ arpPoly, ReferencePoint ref, const Vector3* row,
         const Vector3* col, types::RgAz<double>res, Product* product)
 {
-    double scpTime = timeCOAPoly(ref.rowCol.row, ref.rowCol.col);
+    const double scpTime = timeCOAPoly(0, 0);
 
     Vector3 arpPos = arpPoly(scpTime);
     PolyXYZ arpVelPoly = arpPoly.derivative();
@@ -330,7 +328,7 @@ void Utilities::setCollectionValues(Poly2D timeCOAPoly,
         PolyXYZ arpPoly, ReferencePoint ref, const Vector3* row,
         const Vector3* col, Collection* collection)
 {
-    double scpTime = timeCOAPoly(ref.rowCol.row, ref.rowCol.col);
+    const double scpTime = timeCOAPoly(0, 0);
 
     Vector3 arpPos = arpPoly(scpTime);
     PolyXYZ arpVelPoly = arpPoly.derivative();
