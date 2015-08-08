@@ -39,32 +39,26 @@
   <section>
     <title>Downloading the Library</title>
 
-    <para>The <emphasis>six</emphasis> library is currently distributed with
-    limited-access from our subversion repository, located at <ulink
-    url="https://wush.net/svn/gdais-oss/">https://wush.net/svn/gdais-oss</ulink>.
-    The repository internally links to the GD-AIS
-    <emphasis>CODA-OSS</emphasis> and<emphasis> NITRO</emphasis> projects on
-    Sourceforge.net, using <emphasis>svn:externals</emphasis> properties.
+    <para>The <emphasis>six</emphasis> library is currently distributed via
+    NGA's GitHub page, located at <ulink
+    url="https://github.com/ngageoint/six-library">https://github.com/ngageoint/six-library</ulink>.
+    The repository internally links to the MDA-IS
+    <emphasis>CODA-OSS</emphasis> and <emphasis>NITRO</emphasis> projects on
+    GitHub, using the <emphasis>git</emphasis> subtree merge strategy.
     Several <emphasis>CODA-OSS</emphasis> modules are used as a portable
     runtime, and <emphasis>NITRO</emphasis> is used to read and write NITF
-    files. When a user does a checkout from the subversion repository,
-    subversion will automatically anonymously check out the
-    <emphasis>CODA-OSS</emphasis> dependencies for and put them in the proper
-    place in the sandbox.</para>
+    files. When a user does a clone from the git repository, the <emphasis>CODA-OSS</emphasis>
+    and <emphasis>NITRO</emphasis> dependencies are already present as they have been merged
+    into the <emphasis>six</emphasis> repository itself.</para>
 
-    <para>To checkout the repository, the user must have a login for that
-    site. The library may also be packaged as a compressed source bundle, or
-    in some cases as a binary. In order to checkout the code from subversion,
-    a subversion client must be installed. On Unix, the <emphasis>svn
-    </emphasis>command does the job. To check out the repository from the top,
-    execute the following command:</para>
+    <para>Stable source code releases, with release notes, are provided intermittently on the <ulink url="https://github.com/ngageoint/six-library/releases">Releases</ulink> page.</para>
 
-    <programlisting>$ svn co https://wush.net/svn/gdais-oss/trunk gdais-oss</programlisting>
+    <para>The latest source code can be obtained via the <ulink url="https://github.com/ngageoint/six-library/archive/master.zip">Download Zip</ulink> button on the main page.</para>
 
-    <para>You will be prompted for your username and password. If your
-    username on the server is different from your system, hit return when
-    prompted for a password and you will be prompted for an alternate username
-    and password.</para>
+    <para>To clone the repository, a git client must be installed.  On Unix, the <emphasis>git</emphasis>
+    command does the job.  Execute the following command:</para>
+
+    <programlisting>$ git clone https://github.com/ngageoint/six-library.git</programlisting>
   </section>
 
   <section>
@@ -101,9 +95,9 @@
       installation. <emphasis>Waf</emphasis> is a cross-platform Python tool that
       enables developers to build the code in a standard way.
       The version of <emphasis>Waf</emphasis> bundled with the codebase is
-      1.7.9 and requires Python 2.6 or higher, but will not work with
+      1.7.9 and requires Python 2.7 or higher, but will not work with
       Python 3.x. The most recent release of Python 2.x is recommended
-      (currently Python 2.7.3).</para>
+      (currently Python 2.7.10).</para>
       
       <para>In order to build on Windows, you will need a <emphasis>Visual
       Studio Compiler</emphasis> installed. <emphasis>Microsoft Visual Studio C++
@@ -115,7 +109,7 @@
       within a plain DOS shell (cmd.exe) without running this bat file
       normally works as well.</para>
 
-      <para>To build, first get a complete checkout. Tools such as TortoiseSVN
+      <para>To build, first get a complete checkout. Tools such as TortoiseGit
       make it easy to check out code from the repository on Windows. Once you
       have a sandbox, and can run Python on your Windows machine, you are
       ready to build from a DOS shell. The first step is to run <emphasis>waf
@@ -135,11 +129,11 @@
       important configure-time flags you can use to customize your build.</para>
 
       <programlisting>
-      &gt;cd C:\dev\gdais-oss\modules
+      &gt;cd C:\dev\six\modules
       
       &gt;python waf configure --prefix=install
-Setting top to                           : C:\dev\gdais-oss\modules
-Setting out to                           : C:\dev\gdais-oss\modules\target
+Setting top to                           : C:\dev\six\modules
+Setting out to                           : C:\dev\six\modules\target
 Platform                                 : win32
 Checking for 'msvc' (c compiler)         : C:\Program Files (x86)\Microsoft Visu
 al Studio 11.0\VC\BIN\x86_amd64\CL.exe
@@ -406,7 +400,7 @@ Building local lib
       <programlisting>$ ./waf configure --prefix=install
 ...
 'configure' finished successfully (3.438s)
-Waf: Leaving directory `/home/user/gdais-oss/trunk/modules/target'
+Waf: Leaving directory `/home/user/six-user/trunk/modules/target'
 $ ./waf
 ...
 'build' finished successfully (32.147s)
@@ -555,7 +549,7 @@ $ ./waf install
       identifying the location of <emphasis>Expat</emphasis>, if it is not in 
       the sytem path.</para>
 
-      <para>The <emphasis>NITRO</emphasis> library is GD-AIS software that
+      <para>The <emphasis>NITRO</emphasis> library is MDA-IS software that
       aims to be a complete implementation of the NITF MIL-STD2500C. It is
       cross-platform, widely-used, and under active development and
       maintenance. The <emphasis>NITRO</emphasis> C library is bundled
@@ -1182,21 +1176,15 @@ for (unsigned int i = 0; i &lt; sources.size(); ++i)
     LGPL requires that you submit your changes back to the copyright
     holders.</para>
 
-    <para>Software defects should be reported using the Trac issue tracker
+    <para>Software defects should be reported using the GitHub Issues page
     (currently <ulink
-    url="https://wush.net/trac/gdais-oss/">https://wush.net/trac/gdais-oss/</ulink>)
+    url="https://github.com/ngageoint/six-library/issues">https://github.com/ngageoint/six-library/issues</ulink>)
     available at the current project hosting location. To post an issue, you
-    must currently have a valid login. If you are using a guest account,
-    please provide us with a name and email or phone contact information in
-    the issue. When reporting a bug, try to be as specific as possible when
+    must login to GitHub first. When reporting a bug, try to be as specific as possible when
     describing the problem. Please also provide sample code. If the code in
     question is on a different network, or non-disclosable, please attempt to
     make a short, concise example that would replicate the problem you are
-    seeing. We do not currently have an email group for help or discussion. If
-    you email the POC for the SIDD development effort, we will make every
-    attempt to your request properly. Otherwise please post an issue on the
-    Trac under the category "help." Please check the FAQ page before
-    posting.</para>
+    seeing. We do not currently have an email group for help or discussion.</para>
   </section>
   
   <?hard-pagebreak?>
