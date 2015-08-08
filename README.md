@@ -12,7 +12,7 @@ The SIX library is a cross-platform C++ API for reading and writing NGA's comple
 
 It is available as open-source software under the Lesser GNU Public License (LGPL). This license is commonly used in the open-source community, and allows applications that are not open source to make use of the library without penalty. As with other open source projects, the library is available as-is, with no warranty. 
 
-See the [manual](https://github.com/ngageoint/six-library/blob/master/docs/six-docbook.pdf) for detailed information including build instructions and API documentation.
+See the [manual](https://github.com/ngageoint/six-library/blob/master/docs/six-manual.pdf) for detailed information including build instructions and API documentation.
 
 The latest version of the library is available at https://github.com/ngageoint/six-library.git.
 
