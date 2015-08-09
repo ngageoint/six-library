@@ -135,8 +135,7 @@ void NITFWriteControl::initialize(Container* container)
 
     DataType dataType = mContainer->getDataType();
     std::string name = mInfos[0]->getData()->getName();
-    std::string fileTitle = FmtX("%s: %s", six::toString(dataType).c_str(),
-                                 name.c_str());
+    std::string fileTitle = six::toString(dataType) + ": " + name;
     fileTitle = fileTitle.substr(0, NITF_FTITLE_SZ); //truncate past 80
     mRecord.getHeader().getFileTitle().set(fileTitle);
 
@@ -162,7 +161,7 @@ void NITFWriteControl::initialize(Container* container)
         // NITRO wants to see this, not our corners object
         double corners[4][2];
 
-        std::string targetId = "";
+        std::string targetId;
 
         // TODO: Subclass to get this?
         // if (info->getData()->getDataType() == DataType::DERIVED)
