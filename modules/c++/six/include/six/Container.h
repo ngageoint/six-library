@@ -23,11 +23,12 @@
 #define __SIX_CONTAINER_H__
 
 #include <memory>
-#include "six/Data.h"
-#include "six/Utilities.h"
+#include <vector>
+#include <utility>
 
 #include <mem/ScopedCloneablePtr.h>
-
+#include <six/Legend.h>
+#include <six/Data.h>
 
 namespace six
 {
@@ -83,6 +84,12 @@ public:
     void addData(std::auto_ptr<Data> data);
 
     /*!
+     * Same as above but also supports passing in a legend.  Only valid for
+     * derived data.
+     */
+    void addData(std::auto_ptr<Data> data, std::auto_ptr<Legend> legend);
+
+    /*!
      *  Set the data item at location i.  If there is an item in the
      *  slot already, we delete it.
      *
@@ -97,7 +104,7 @@ public:
      */
     Data* getData(size_t i)
     {
-        return mData[i].get();
+        return mData[i].first.get();
     }
 
     /*!
@@ -106,7 +113,7 @@ public:
      */
     const Data* getData(size_t i) const
     {
-        return mData[i].get();
+        return mData[i].first.get();
     }
 
     /*!
@@ -123,10 +130,23 @@ public:
     void removeData(const Data* data);
 
 protected:
-    typedef std::vector<mem::ScopedCloneablePtr<Data> > DataVec;
+    typedef std::pair<mem::ScopedCloneablePtr<Data>,
+    		          mem::ScopedCopyablePtr<Legend> > DataPair;
 
-    DataVec mData;
+    typedef std::vector<DataPair> DataVec;
+
     DataType mDataType;
+    DataVec mData;
+
+private:
+    static
+    mem::ScopedCopyablePtr<Legend> nullLegend()
+    {
+    	return mem::ScopedCopyablePtr<Legend>(NULL);
+    }
+
+    void addData(std::auto_ptr<Data> data,
+    	         mem::ScopedCopyablePtr<Legend> legend);
 };
 }
 

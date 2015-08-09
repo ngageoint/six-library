@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <algorithm>
 
 #include <six/Container.h>
 
@@ -39,10 +38,28 @@ void Container::addData(Data* data)
     addData(std::auto_ptr<Data>(data));
 }
 
-void Container::addData(std::auto_ptr<Data> data)
+void Container::addData(std::auto_ptr<Data> data,
+    	                mem::ScopedCopyablePtr<Legend> legend)
 {
 	mem::ScopedCloneablePtr<Data> cloneableData(data.release());
-    mData.push_back(cloneableData);
+	mData.push_back(DataPair(cloneableData, legend));
+}
+
+void Container::addData(std::auto_ptr<Data> data)
+{
+	addData(data, nullLegend());
+}
+
+void Container::addData(std::auto_ptr<Data> data, std::auto_ptr<Legend> legend)
+{
+	if (data->getDataType() != DataType::DERIVED)
+	{
+		throw except::Exception(Ctxt(
+				"Legends can only be associated with derived data"));
+	}
+
+	mem::ScopedCopyablePtr<Legend> copyableLegend(legend.release());
+	addData(data, copyableLegend);
 }
 
 void Container::setData(size_t i, Data* data)
@@ -52,14 +69,14 @@ void Container::setData(size_t i, Data* data)
         throw except::Exception(Ctxt("Cannot set a non-existent segment!"));
     }
 
-    mData[i].reset(data);
+    mData[i] = DataPair(mem::ScopedCloneablePtr<Data>(data), nullLegend());
 }
 
 void Container::removeData(const Data* data)
 {
 	for (DataVec::iterator iter = mData.begin(); iter != mData.end(); ++iter)
 	{
-		if (iter->get() == data)
+		if (iter->first.get() == data)
 		{
 			mData.erase(iter);
 			break;
