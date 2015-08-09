@@ -202,7 +202,7 @@ public:
 
     //! Utility that generates a key for the given field, with optional prefix and index
     static std::string generateFieldKey(const std::string& field,
-            std::string prefix = "", int index = -1);
+            const std::string& prefix = "", int index = -1);
 
 protected:
     Data* data;

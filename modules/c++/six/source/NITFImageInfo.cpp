@@ -323,7 +323,7 @@ std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
 }
 
 std::string NITFImageInfo::generateFieldKey(const std::string& field,
-        std::string prefix, int index)
+        const std::string& prefix, int index)
 {
     std::ostringstream s;
     s << prefix << field;
