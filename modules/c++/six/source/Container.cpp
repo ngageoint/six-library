@@ -19,32 +19,19 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/Container.h"
+#include <algorithm>
 
-using namespace six;
+#include <six/Container.h>
 
-Container::Container(const Container& c)
+namespace six
 {
-    cleanup();
-    mDataType = c.mDataType;
-    for (ConstDataIterator p = c.mData.begin(); p != c.mData.end(); ++p)
-    {
-        addData((*p)->clone());
-    }
+Container::Container(DataType dataType) :
+    mDataType(dataType)
+{
 }
 
-Container& Container::operator=(const Container& c)
+Container::~Container()
 {
-    if (&c != this)
-    {
-        cleanup();
-        mDataType = c.mDataType;
-        for (ConstDataIterator p = c.mData.begin(); p != c.mData.end(); ++p)
-        {
-            addData((*p)->clone());
-        }
-    }
-    return *this;
 }
 
 void Container::addData(Data* data)
@@ -54,8 +41,8 @@ void Container::addData(Data* data)
 
 void Container::addData(std::auto_ptr<Data> data)
 {
-    mData.push_back(data.get());
-    data.release();
+	mem::ScopedCloneablePtr<Data> cloneableData(data.release());
+    mData.push_back(cloneableData);
 }
 
 void Container::setData(size_t i, Data* data)
@@ -65,37 +52,38 @@ void Container::setData(size_t i, Data* data)
         throw except::Exception(Ctxt("Cannot set a non-existent segment!"));
     }
 
-    delete mData[i];
-    mData[i] = data;
+    mData[i].reset(data);
 }
 
-/*!
- *  We need to go through the list and eliminate any
- *  data references as well.
- *
- */
 void Container::removeData(const Data* data)
 {
-    for (DataIterator iter = mData.begin(); iter != mData.end(); ++iter)
-    {
-        if (*iter == data)
-        {
-            mData.erase(iter);
-            break;
-        }
-    }
+	for (DataVec::iterator iter = mData.begin(); iter != mData.end(); ++iter)
+	{
+		if (iter->get() == data)
+		{
+			mData.erase(iter);
+			break;
+		}
+	}
 }
 
-Container::~Container()
+Data* Container::getData(const std::string& iid, size_t numImages)
 {
-    cleanup();
-}
-
-void Container::cleanup()
-{
-    for (size_t ii = 0; ii < mData.size(); ++ii)
+    if (!str::startsWith(iid, "SICD") && !str::startsWith(iid, "SIDD") &&
+        iid.length() >= 7)
     {
-        delete mData[ii];
+        throw except::Exception(Ctxt(
+                "This is not a properly formed IID1 field"));
     }
-    mData.clear();
+
+    //! Index is 1-based except for SICDs with one image segment --
+    //  In this case it's 0-based
+    size_t dataID = str::toType<size_t>(iid.substr(4, 6));
+    if (str::startsWith(iid, "SICD") && numImages > 1)
+    {
+        --dataID;
+    }
+
+    return getData(dataID);
+}
 }
