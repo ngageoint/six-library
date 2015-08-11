@@ -611,7 +611,7 @@ void DerivedXMLParser::parseGeographicTargetFromXML(
 {
     parseGeographicCoverageFromXML(
             getFirstAndOnly(geographicAndTargetXML, "GeographicCoverage"),
-            geographicAndTarget->geographicCoverage.get());
+            &geographicAndTarget->geographicCoverage);
 
     // optional to unbounded
     std::vector<XMLElem> targetInfosXML;
@@ -1267,11 +1267,11 @@ XMLElem DerivedXMLParser::convertGeographicTargetToXML(
 
     convertGeographicCoverageToXML(
             "GeographicCoverage", 
-            geographicAndTarget->geographicCoverage.get(),
+            &geographicAndTarget->geographicCoverage,
             geographicAndTargetXML);
 
     // optional to unbounded
-    for (std::vector<mem::ScopedCloneablePtr<TargetInformation> >::
+    for (std::vector<mem::ScopedCopyablePtr<TargetInformation> >::
             const_iterator it = geographicAndTarget->targetInformation.begin();
             it != geographicAndTarget->targetInformation.end(); ++it)
     {
@@ -1340,7 +1340,7 @@ XMLElem DerivedXMLParser::convertGeographicCoverageToXML(
     else
     {
         //loop over SubRegions
-        for (std::vector<mem::ScopedCloneablePtr<GeographicCoverage> >::
+        for (std::vector<mem::ScopedCopyablePtr<GeographicCoverage> >::
                 const_iterator it = geoCoverage->subRegion.begin(); 
                 it != geoCoverage->subRegion.end(); ++it)
         {

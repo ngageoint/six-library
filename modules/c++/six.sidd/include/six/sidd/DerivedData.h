@@ -69,7 +69,7 @@ struct DerivedData: public Data
      *  Contains generic and extensible targeting and geographic
      *  region information.
      */
-    mem::ScopedCloneablePtr<GeographicAndTarget> geographicAndTarget;
+    mem::ScopedCopyablePtr<GeographicAndTarget> geographicAndTarget;
 
     /*!
      *  Contains the meta-data necessary for performing
@@ -189,7 +189,7 @@ struct DerivedData: public Data
      */
     virtual LatLonCorners getImageCorners() const
     {
-        return geographicAndTarget->geographicCoverage->footprint;
+        return geographicAndTarget->geographicCoverage.footprint;
     }
 
     /*!
@@ -198,7 +198,7 @@ struct DerivedData: public Data
      */
     virtual void setImageCorners(const LatLonCorners& imageCorners)
     {
-        geographicAndTarget->geographicCoverage->footprint = imageCorners;
+        geographicAndTarget->geographicCoverage.footprint = imageCorners;
     }
 
     /*!

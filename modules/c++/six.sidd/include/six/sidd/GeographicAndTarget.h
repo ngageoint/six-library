@@ -53,10 +53,6 @@ struct TargetInformation
      * terrain, etc.
      */
     ParameterCollection targetInformationExtensions;
-
-
-    //!  Clone any sub-objects if vectors are not empty
-    TargetInformation* clone() const;
 };
 
 /*!
@@ -80,9 +76,6 @@ struct GeographicInformation
      *  Country identifier for this geographic region.
      */
     ParameterCollection geographicInformationExtensions;
-
-    //!  Clone this element and its children
-    GeographicInformation* clone() const;
 };
 
 //! Note that subRegion and geographicInformation are mutually exclusive!
@@ -96,6 +89,9 @@ struct GeographicInformation
 class GeographicCoverage
 {
 public:
+    //!  Constructor requires a RegionType to properly initialize
+    GeographicCoverage(RegionType regionType);
+
     //!  This identifier determines if we are doing SubRegion or nesting
     RegionType regionType;
 
@@ -109,17 +105,10 @@ public:
     LatLonCorners footprint;
 
     //!  SIDD SubRegion info, mutually exclusive with geographicInformation
-    std::vector<mem::ScopedCloneablePtr<GeographicCoverage> > subRegion;
+    std::vector<mem::ScopedCopyablePtr<GeographicCoverage> > subRegion;
 
     //!  SIDD: GeographicInfo, mutually exclusive with SubRegion
-    mem::ScopedCloneablePtr<GeographicInformation> geographicInformation;
-
-    //!  Constructor requires a RegionType to properly initialize
-    GeographicCoverage(RegionType regionType);
-
-    //!  Carefully clones the sub-regions and geo information section
-    GeographicCoverage* clone() const;
-
+    mem::ScopedCopyablePtr<GeographicInformation> geographicInformation;
 };
 
 /*!
@@ -133,23 +122,17 @@ public:
 class GeographicAndTarget
 {
 public:
+    //!  Constructor requires a RegionType to properly initialize
+    GeographicAndTarget(RegionType regionType);
+
     //!  SIDD GeographicCoverage: Provides geo coverage information
-    mem::ScopedCloneablePtr<GeographicCoverage> geographicCoverage;
+    GeographicCoverage geographicCoverage;
 
     //!  (Optional, Unbounded) Provides target specific geo information
-    std::vector<mem::ScopedCloneablePtr<TargetInformation> > targetInformation;
-
-    //!  Constructor, auto-initializes coverage object
-    GeographicAndTarget(RegionType regionType) :
-        geographicCoverage(new GeographicCoverage(regionType))
-    {
-    }
-
-    //!  Clones geo coverage and any targets
-    GeographicAndTarget* clone() const;
+    std::vector<mem::ScopedCopyablePtr<TargetInformation> > targetInformation;
 };
+}
+}
 
-}
-}
 #endif
 
