@@ -24,9 +24,10 @@
 
 #include <memory>
 
-#include "six/Types.h"
-#include "six/Init.h"
-#include "six/ParameterCollection.h"
+#include <mem/ScopedCopyablePtr.h>
+#include <six/Types.h>
+#include <six/Init.h>
+#include <six/ParameterCollection.h>
 
 namespace six
 {
@@ -40,11 +41,11 @@ namespace sidd
  */
 struct TargetInformation
 {
-    //! SIDD Identifier set (min occurs zero, max unbounded)
+    //! SIDD Identifier set (min occurs one, max unbounded)
     ParameterCollection identifiers;
 
-    //! SIDD Footprint: target footprint as defined by polygonal shape
-    LatLonCorners footprint;
+    //! (Optional) SIDD Footprint: target footprint as defined by polygonal shape
+    mem::ScopedCopyablePtr<LatLonCorners> footprint;
 
     /*! 
      * (Optional) SIDD TargetInformationExtension

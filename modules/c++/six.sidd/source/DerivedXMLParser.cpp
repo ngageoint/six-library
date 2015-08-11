@@ -633,7 +633,10 @@ void DerivedXMLParser::parseGeographicTargetFromXML(
         // optional
         XMLElem tmpXML = getOptional(targetInfosXML[i], "Footprint");
         if (tmpXML)
-            common().parseFootprint(tmpXML, "Vertex", ti->footprint);
+        {
+            ti->footprint.reset(new six::LatLonCorners());
+            common().parseFootprint(tmpXML, "Vertex", *ti->footprint);
+        }
 
         // optional
         common().parseParameters(targetInfosXML[i], 
@@ -1275,11 +1278,14 @@ XMLElem DerivedXMLParser::convertGeographicTargetToXML(
         TargetInformation* ti = (*it).get();
         XMLElem tiXML = newElement("TargetInformation", geographicAndTargetXML);
 
-        // 0 to unbounded
+        // 1 to unbounded
         common().addParameters("Identifier", ti->identifiers, tiXML);
 
         // optional
-        createFootprint("Footprint", "Vertex", ti->footprint, tiXML);
+        if (ti->footprint.get())
+        {
+            createFootprint("Footprint", "Vertex", *ti->footprint, tiXML);
+        }
 
         // optional to unbounded
         common().addParameters("TargetInformationExtension",
