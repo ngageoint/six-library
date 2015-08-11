@@ -226,7 +226,7 @@ void cropSIDD(const std::string& inPathname,
             data->measurement->pixelFootprint.col = aoiDims.col;
 
             six::LatLonCorners& corners =
-                    data->geographicAndTarget->geographicCoverage->footprint;
+                    data->geographicAndTarget->geographicCoverage.footprint;
             corners.upperLeft = pixelToLatLon(aoiOffset.row, aoiOffset.col);
             corners.upperRight = pixelToLatLon(aoiOffset.row, lastCol);
             corners.lowerRight = pixelToLatLon(lastRow, lastCol);

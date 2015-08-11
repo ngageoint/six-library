@@ -21,19 +21,10 @@
  */
 #include "six/sidd/GeographicAndTarget.h"
 
-using namespace six;
-using namespace six::sidd;
-
-TargetInformation* TargetInformation::clone() const
+namespace six
 {
-    return new TargetInformation(*this);
-}
-
-GeographicInformation* GeographicInformation::clone() const
+namespace sidd
 {
-    return new GeographicInformation(*this);
-}
-
 GeographicCoverage::GeographicCoverage(RegionType rt) :
     regionType(rt)
 {
@@ -42,13 +33,9 @@ GeographicCoverage::GeographicCoverage(RegionType rt) :
         geographicInformation.reset(new GeographicInformation());
 }
 
-GeographicCoverage* GeographicCoverage::clone() const
+GeographicAndTarget::GeographicAndTarget(RegionType regionType) :
+    geographicCoverage(regionType)
 {
-    return new GeographicCoverage(*this);
 }
-
-GeographicAndTarget* GeographicAndTarget::clone() const
-{
-    return new GeographicAndTarget(*this);
 }
-
+}

@@ -611,7 +611,7 @@ void DerivedXMLParser::parseGeographicTargetFromXML(
 {
     parseGeographicCoverageFromXML(
             getFirstAndOnly(geographicAndTargetXML, "GeographicCoverage"),
-            geographicAndTarget->geographicCoverage.get());
+            &geographicAndTarget->geographicCoverage);
 
     // optional to unbounded
     std::vector<XMLElem> targetInfosXML;
@@ -633,7 +633,10 @@ void DerivedXMLParser::parseGeographicTargetFromXML(
         // optional
         XMLElem tmpXML = getOptional(targetInfosXML[i], "Footprint");
         if (tmpXML)
-            common().parseFootprint(tmpXML, "Vertex", ti->footprint);
+        {
+            ti->footprint.reset(new six::LatLonCorners());
+            common().parseFootprint(tmpXML, "Vertex", *ti->footprint);
+        }
 
         // optional
         common().parseParameters(targetInfosXML[i], 
@@ -1264,22 +1267,25 @@ XMLElem DerivedXMLParser::convertGeographicTargetToXML(
 
     convertGeographicCoverageToXML(
             "GeographicCoverage", 
-            geographicAndTarget->geographicCoverage.get(),
+            &geographicAndTarget->geographicCoverage,
             geographicAndTargetXML);
 
     // optional to unbounded
-    for (std::vector<mem::ScopedCloneablePtr<TargetInformation> >::
+    for (std::vector<mem::ScopedCopyablePtr<TargetInformation> >::
             const_iterator it = geographicAndTarget->targetInformation.begin();
             it != geographicAndTarget->targetInformation.end(); ++it)
     {
         TargetInformation* ti = (*it).get();
         XMLElem tiXML = newElement("TargetInformation", geographicAndTargetXML);
 
-        // 0 to unbounded
+        // 1 to unbounded
         common().addParameters("Identifier", ti->identifiers, tiXML);
 
         // optional
-        createFootprint("Footprint", "Vertex", ti->footprint, tiXML);
+        if (ti->footprint.get())
+        {
+            createFootprint("Footprint", "Vertex", *ti->footprint, tiXML);
+        }
 
         // optional to unbounded
         common().addParameters("TargetInformationExtension",
@@ -1334,7 +1340,7 @@ XMLElem DerivedXMLParser::convertGeographicCoverageToXML(
     else
     {
         //loop over SubRegions
-        for (std::vector<mem::ScopedCloneablePtr<GeographicCoverage> >::
+        for (std::vector<mem::ScopedCopyablePtr<GeographicCoverage> >::
                 const_iterator it = geoCoverage->subRegion.begin(); 
                 it != geoCoverage->subRegion.end(); ++it)
         {
