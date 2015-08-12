@@ -1,9 +1,11 @@
-#include "six/Parameter.h"
-#include "six/ParameterCollection.h"
+#include <except/Exception.h>
+#include <six/Parameter.h>
+#include <six/ParameterCollection.h>
 
-#include <import/except.h>
-
-size_t six::ParameterCollection::findParameterIndex(const std::string& paramName) const
+namespace six
+{
+size_t
+ParameterCollection::findParameterIndex(const std::string& paramName) const
 {
     for(size_t ii = 0; ii < mParams.size(); ++ii)
     {
@@ -13,11 +15,13 @@ size_t six::ParameterCollection::findParameterIndex(const std::string& paramName
         }
     }
 
-    throw except::Exception("No parameter with name \"" + paramName 
-        + "\" found in this collection");
+    throw except::NoSuchKeyException(Ctxt(
+        "No parameter with name \"" + paramName
+        + "\" found in this collection"));
 }
 
-bool six::ParameterCollection::containsParameter(const std::string& paramName) const
+bool
+ParameterCollection::containsParameter(const std::string& paramName) const
 {
     for(size_t ii = 0; ii < mParams.size(); ++ii)
     {
@@ -28,4 +32,5 @@ bool six::ParameterCollection::containsParameter(const std::string& paramName) c
     }
 
     return false;
+}
 }
