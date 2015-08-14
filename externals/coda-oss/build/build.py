@@ -1165,20 +1165,32 @@ def configure(self):
 
     # Dirty fix to get around libpath problems..
     if re.match(winRegex, sys_platform):
-        real_cmd_and_log = self.cmd_and_log
-        def wrap_cmd_and_log(*k, **kw):
-            sout = real_cmd_and_log(*k, **kw)
-            if sout:
-                lines=sout.splitlines()
-                if not lines[0]:lines=lines[1:]
-                for line in lines[1:]:
-                    if line.startswith('LIB='):
-                        for i in line[4:].split(';'):
-                            if i:
-                                if not os.path.exists(i):
-                                    self.fatal('libpath does not exist')
-            return sout
-        self.cmd_and_log = wrap_cmd_and_log
+        # NOTE: Previously there was a workaround here (present until 6f20120)
+        #       where we overrode cmd_and_log and had it error out if one of the
+        #       paths in libpath did not exist (Kyle added this in 8cc3578).
+        #       If you ever have to restore this, there was another spot below
+        #       where we restored to the old cmd_and_log again.
+        #       I assume this was to support more of the weird interactions we
+        #       used to have with the Windows SDK and VS Express, especially
+        #       when someone tried to build from a vanilla command prompt... I
+        #       think this logic forced waf not to pick that configuration.
+        #       The problem is that, with Visual Studio 2015 Express, you end
+        #       up with incomplete stuff in LIB because you have incomplete
+        #       stuff in LIBPATH (and waf-print-msvc.bat mashes those together)
+        #       because vcvarsx86_amd64.bat, when it doesn't have WindowsSdkDir,
+        #       sets LIBPATH to include WindowsLibPath (which is set to an
+        #       incomplete path by vcvarsqueryregistry.bat) and ExtensionSDKDir
+        #       (which is an empty path for me... would potentially be set by
+        #       vcvarsqueryregistry.bat in certain cases).  This is ok - waf
+        #       will find and use VS 2015 Express fine if you just leave it
+        #       alone.  It's possible this is going to break some old versions
+        #       of VS Express and/or Windows SDK, but the upside is that
+        #       starting with VS 2012 Express, it ships with a 64-bit
+        #       cross-compiler so hopefully these have largely faded out.
+        #       I'm wondering if this also explains other weirdness I'd seen
+        #       in the past where waf, with a VS Pro installation, wouldn't pick
+        #       the real x64 target sometimes (we used to have to prefer
+        #       x86_amd64 over x64 in MSVC_TARGETS to work around that).
         
         # If we're in the Windows SDK or VS command prompt, having these set can mess things up.
         env_lib = self.environ.get('LIB', None)
@@ -1192,9 +1204,7 @@ def configure(self):
             # x86_amd64 - this is a 32-bit compiler that cross-compiles to
             # 64-bit.  VS 2012 Express ships with this one, and earlier VS
             # Express versions can get this via the Windows SDK.
-            # TODO: Temporary hack - see #357
-            #self.env['MSVC_TARGETS'] = ['x64', 'x86_amd64']
-            self.env['MSVC_TARGETS'] = ['x86_amd64', 'x64']
+            self.env['MSVC_TARGETS'] = ['x64', 'x86_amd64']
 
             # Look for 32-bit msvc if we don't find 64-bit.
             if not Options.options.enable64:
@@ -1213,9 +1223,8 @@ def configure(self):
     self.load('compiler_cxx')
     self.load('waf_unit_test')
 
-    # Reset cmd_and_log
+    # Reset LIB and CL
     if re.match(winRegex, sys_platform):
-        self.cmd_and_log = real_cmd_and_log
         if env_lib is not None: self.environ['LIB'] = env_lib
         if env_cl is not None: os.environ['CL'] = env_cl
 
