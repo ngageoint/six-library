@@ -4928,6 +4928,78 @@ class ScopedCloneableDirectionParameters(_object):
 ScopedCloneableDirectionParameters_swigregister = _six_sicd.ScopedCloneableDirectionParameters_swigregister
 ScopedCloneableDirectionParameters_swigregister(ScopedCloneableDirectionParameters)
 
+class ScopedCloneableAreaPlane(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::AreaPlane)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableAreaPlane, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableAreaPlane, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCloneablePtr<(six::sicd::AreaPlane)> self, AreaPlane ptr=None) -> ScopedCloneableAreaPlane
+        __init__(mem::ScopedCloneablePtr<(six::sicd::AreaPlane)> self) -> ScopedCloneableAreaPlane
+        __init__(mem::ScopedCloneablePtr<(six::sicd::AreaPlane)> self, ScopedCloneableAreaPlane rhs) -> ScopedCloneableAreaPlane
+        """
+        this = _six_sicd.new_ScopedCloneableAreaPlane(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCloneableAreaPlane self) -> AreaPlane"""
+        return _six_sicd.ScopedCloneableAreaPlane_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCloneableAreaPlane self) -> AreaPlane"""
+        return _six_sicd.ScopedCloneableAreaPlane___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCloneableAreaPlane self) -> AreaPlane"""
+        return _six_sicd.ScopedCloneableAreaPlane___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCloneableAreaPlane self, AreaPlane ptr=None)
+        reset(ScopedCloneableAreaPlane self)
+        """
+        return _six_sicd.ScopedCloneableAreaPlane_reset(self, ptr)
+
+    __swig_destroy__ = _six_sicd.delete_ScopedCloneableAreaPlane
+    __del__ = lambda self: None
+
+    def clone(self):
+        """clone(ScopedCloneableAreaPlane self) -> AreaPlane"""
+        return _six_sicd.ScopedCloneableAreaPlane_clone(self)
+
+    __swig_setmethods__["referencePoint"] = _six_sicd.ScopedCloneableAreaPlane_referencePoint_set
+    __swig_getmethods__["referencePoint"] = _six_sicd.ScopedCloneableAreaPlane_referencePoint_get
+    if _newclass:
+        referencePoint = _swig_property(_six_sicd.ScopedCloneableAreaPlane_referencePoint_get, _six_sicd.ScopedCloneableAreaPlane_referencePoint_set)
+    __swig_setmethods__["xDirection"] = _six_sicd.ScopedCloneableAreaPlane_xDirection_set
+    __swig_getmethods__["xDirection"] = _six_sicd.ScopedCloneableAreaPlane_xDirection_get
+    if _newclass:
+        xDirection = _swig_property(_six_sicd.ScopedCloneableAreaPlane_xDirection_get, _six_sicd.ScopedCloneableAreaPlane_xDirection_set)
+    __swig_setmethods__["yDirection"] = _six_sicd.ScopedCloneableAreaPlane_yDirection_set
+    __swig_getmethods__["yDirection"] = _six_sicd.ScopedCloneableAreaPlane_yDirection_get
+    if _newclass:
+        yDirection = _swig_property(_six_sicd.ScopedCloneableAreaPlane_yDirection_get, _six_sicd.ScopedCloneableAreaPlane_yDirection_set)
+    __swig_setmethods__["segmentList"] = _six_sicd.ScopedCloneableAreaPlane_segmentList_set
+    __swig_getmethods__["segmentList"] = _six_sicd.ScopedCloneableAreaPlane_segmentList_get
+    if _newclass:
+        segmentList = _swig_property(_six_sicd.ScopedCloneableAreaPlane_segmentList_get, _six_sicd.ScopedCloneableAreaPlane_segmentList_set)
+    __swig_setmethods__["orientation"] = _six_sicd.ScopedCloneableAreaPlane_orientation_set
+    __swig_getmethods__["orientation"] = _six_sicd.ScopedCloneableAreaPlane_orientation_get
+    if _newclass:
+        orientation = _swig_property(_six_sicd.ScopedCloneableAreaPlane_orientation_get, _six_sicd.ScopedCloneableAreaPlane_orientation_set)
+ScopedCloneableAreaPlane_swigregister = _six_sicd.ScopedCloneableAreaPlane_swigregister
+ScopedCloneableAreaPlane_swigregister(ScopedCloneableAreaPlane)
+
 class ScopedCloneableAreaDirectionParameters(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::AreaDirectionParameters)> class"""
     __swig_setmethods__ = {}

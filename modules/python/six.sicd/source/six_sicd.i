@@ -141,6 +141,7 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 
 %template(ScopedCloneableDirectionParameters) mem::ScopedCloneablePtr<six::sicd::DirectionParameters>;
 
+%template(ScopedCloneableAreaPlane)               mem::ScopedCloneablePtr<six::sicd::AreaPlane>;
 %template(ScopedCloneableAreaDirectionParameters) mem::ScopedCloneablePtr<six::sicd::AreaDirectionParameters>;
 %template(ScopedCloneableSegment)                 mem::ScopedCloneablePtr<six::sicd::Segment>;
 %template(ScopedCloneableTxStep)                  mem::ScopedCloneablePtr<six::sicd::TxStep>;
