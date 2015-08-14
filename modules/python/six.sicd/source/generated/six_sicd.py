@@ -4502,6 +4502,77 @@ class ScopedCopyableGainAndPhasePolys(_object):
 ScopedCopyableGainAndPhasePolys_swigregister = _six_sicd.ScopedCopyableGainAndPhasePolys_swigregister
 ScopedCopyableGainAndPhasePolys_swigregister(ScopedCopyableGainAndPhasePolys)
 
+class ScopedCopyabledMatchType(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::MatchType)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyabledMatchType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyabledMatchType, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self, MatchType ptr=None) -> ScopedCopyabledMatchType
+        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self) -> ScopedCopyabledMatchType
+        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self, ScopedCopyabledMatchType rhs) -> ScopedCopyabledMatchType
+        """
+        this = _six_sicd.new_ScopedCopyabledMatchType(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyabledMatchType self) -> MatchType"""
+        return _six_sicd.ScopedCopyabledMatchType_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyabledMatchType self) -> MatchType"""
+        return _six_sicd.ScopedCopyabledMatchType___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyabledMatchType self) -> MatchType"""
+        return _six_sicd.ScopedCopyabledMatchType___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyabledMatchType self, MatchType ptr=None)
+        reset(ScopedCopyabledMatchType self)
+        """
+        return _six_sicd.ScopedCopyabledMatchType_reset(self, ptr)
+
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyabledMatchType
+    __del__ = lambda self: None
+    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCopyabledMatchType_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCopyabledMatchType_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_sicd.ScopedCopyabledMatchType_collectorName_get, _six_sicd.ScopedCopyabledMatchType_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCopyabledMatchType_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCopyabledMatchType_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_sicd.ScopedCopyabledMatchType_illuminatorName_get, _six_sicd.ScopedCopyabledMatchType_illuminatorName_set)
+    __swig_setmethods__["matchType"] = _six_sicd.ScopedCopyabledMatchType_matchType_set
+    __swig_getmethods__["matchType"] = _six_sicd.ScopedCopyabledMatchType_matchType_get
+    if _newclass:
+        matchType = _swig_property(_six_sicd.ScopedCopyabledMatchType_matchType_get, _six_sicd.ScopedCopyabledMatchType_matchType_set)
+    __swig_setmethods__["typeID"] = _six_sicd.ScopedCopyabledMatchType_typeID_set
+    __swig_getmethods__["typeID"] = _six_sicd.ScopedCopyabledMatchType_typeID_get
+    if _newclass:
+        typeID = _swig_property(_six_sicd.ScopedCopyabledMatchType_typeID_get, _six_sicd.ScopedCopyabledMatchType_typeID_set)
+    __swig_setmethods__["currentIndex"] = _six_sicd.ScopedCopyabledMatchType_currentIndex_set
+    __swig_getmethods__["currentIndex"] = _six_sicd.ScopedCopyabledMatchType_currentIndex_get
+    if _newclass:
+        currentIndex = _swig_property(_six_sicd.ScopedCopyabledMatchType_currentIndex_get, _six_sicd.ScopedCopyabledMatchType_currentIndex_set)
+    __swig_setmethods__["matchCollects"] = _six_sicd.ScopedCopyabledMatchType_matchCollects_set
+    __swig_getmethods__["matchCollects"] = _six_sicd.ScopedCopyabledMatchType_matchCollects_get
+    if _newclass:
+        matchCollects = _swig_property(_six_sicd.ScopedCopyabledMatchType_matchCollects_get, _six_sicd.ScopedCopyabledMatchType_matchCollects_set)
+ScopedCopyabledMatchType_swigregister = _six_sicd.ScopedCopyabledMatchType_swigregister
+ScopedCopyabledMatchType_swigregister(ScopedCopyabledMatchType)
+
 class ScopedCopyableWeightType(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::WeightType)> class"""
     __swig_setmethods__ = {}
@@ -7260,7 +7331,7 @@ class VectorScopedCopyableMatchType(_object):
 
 
     def pop(self):
-        """pop(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type"""
+        """pop(VectorScopedCopyableMatchType self) -> ScopedCopyabledMatchType"""
         return _six_sicd.VectorScopedCopyableMatchType_pop(self)
 
 
@@ -7293,7 +7364,7 @@ class VectorScopedCopyableMatchType(_object):
     def __getitem__(self, *args):
         """
         __getitem__(VectorScopedCopyableMatchType self, PySliceObject * slice) -> VectorScopedCopyableMatchType
-        __getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const &
+        __getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i) -> ScopedCopyabledMatchType
         """
         return _six_sicd.VectorScopedCopyableMatchType___getitem__(self, *args)
 
@@ -7302,13 +7373,13 @@ class VectorScopedCopyableMatchType(_object):
         """
         __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice, VectorScopedCopyableMatchType v)
         __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
-        __setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const & x)
+        __setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i, ScopedCopyabledMatchType x)
         """
         return _six_sicd.VectorScopedCopyableMatchType___setitem__(self, *args)
 
 
     def append(self, x):
-        """append(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const & x)"""
+        """append(VectorScopedCopyableMatchType self, ScopedCopyabledMatchType x)"""
         return _six_sicd.VectorScopedCopyableMatchType_append(self, x)
 
 
@@ -7375,7 +7446,7 @@ class VectorScopedCopyableMatchType(_object):
         __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self) -> VectorScopedCopyableMatchType
         __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, VectorScopedCopyableMatchType arg2) -> VectorScopedCopyableMatchType
         __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type size) -> VectorScopedCopyableMatchType
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type size, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const & value) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type size, ScopedCopyabledMatchType value) -> VectorScopedCopyableMatchType
         """
         this = _six_sicd.new_VectorScopedCopyableMatchType(*args)
         try:
@@ -7384,37 +7455,37 @@ class VectorScopedCopyableMatchType(_object):
             self.this = this
 
     def push_back(self, x):
-        """push_back(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const & x)"""
+        """push_back(VectorScopedCopyableMatchType self, ScopedCopyabledMatchType x)"""
         return _six_sicd.VectorScopedCopyableMatchType_push_back(self, x)
 
 
     def front(self):
-        """front(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const &"""
+        """front(VectorScopedCopyableMatchType self) -> ScopedCopyabledMatchType"""
         return _six_sicd.VectorScopedCopyableMatchType_front(self)
 
 
     def back(self):
-        """back(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const &"""
+        """back(VectorScopedCopyableMatchType self) -> ScopedCopyabledMatchType"""
         return _six_sicd.VectorScopedCopyableMatchType_back(self)
 
 
     def assign(self, n, x):
-        """assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const & x)"""
+        """assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, ScopedCopyabledMatchType x)"""
         return _six_sicd.VectorScopedCopyableMatchType_assign(self, n, x)
 
 
     def resize(self, *args):
         """
         resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type new_size)
-        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type new_size, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const & x)
+        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type new_size, ScopedCopyabledMatchType x)
         """
         return _six_sicd.VectorScopedCopyableMatchType_resize(self, *args)
 
 
     def insert(self, *args):
         """
-        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const & x) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator
-        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::value_type const & x)
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, ScopedCopyabledMatchType x) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, ScopedCopyabledMatchType x)
         """
         return _six_sicd.VectorScopedCopyableMatchType_insert(self, *args)
 

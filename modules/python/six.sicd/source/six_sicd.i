@@ -133,6 +133,8 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 %template(ScopedCopyableHalfPowerBeamwidths)    mem::ScopedCopyablePtr<six::sicd::HalfPowerBeamwidths>;
 %template(ScopedCopyableGainAndPhasePolys)      mem::ScopedCopyablePtr<six::sicd::GainAndPhasePolys>;
 
+%template(ScopedCopyabledMatchType)             mem::ScopedCopyablePtr<six::sicd::MatchType>;
+
 %template(ScopedCopyableWeightType)             mem::ScopedCopyablePtr<six::sicd::WeightType>;
 
 %template(VectorPolyXYZ)                        std::vector<PolyXYZ>;
