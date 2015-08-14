@@ -43,6 +43,11 @@
         strStream << *self;
         return strStream.str();
     }
+    
+    math::linear::VectorN<2, double> __deepcopy__(PyObject* memo)
+    {
+        return math::linear::VectorN<2, double>(*$self);
+    }
 
     // helper method to facilitate creating a numpy array from Vector2
     // v = ml.Vector2([1.0, 1.0])
@@ -65,6 +70,11 @@
         std::ostringstream strStream;
         strStream << *self;
         return strStream.str();
+    }
+
+    math::linear::VectorN<3, double> __deepcopy__(PyObject* memo)
+    {
+        return math::linear::VectorN<3, double>(*$self);
     }
 
     // helper method to facilitate creating a numpy array from Vector3
