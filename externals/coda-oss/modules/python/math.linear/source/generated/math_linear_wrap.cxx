@@ -4839,6 +4839,9 @@ SWIG_From_std_string  (const std::string& s)
   return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
 
+SWIGINTERN math::linear::VectorN< 2,double > math_linear_VectorN_Sl_2_Sc_double_Sg____deepcopy__(math::linear::VectorN< 2,double > *self,PyObject *memo){
+        return math::linear::VectorN<2, double>(*self);
+    }
 SWIGINTERN std::vector< double,std::allocator< double > > math_linear_VectorN_Sl_2_Sc_double_Sg__vals(math::linear::VectorN< 2,double > *self){
         return self->matrix().col(0);
     }
@@ -4848,6 +4851,9 @@ SWIGINTERN std::string math_linear_VectorN_Sl_3_Sc_double_Sg____str__(math::line
         std::ostringstream strStream;
         strStream << *self;
         return strStream.str();
+    }
+SWIGINTERN math::linear::VectorN< 3,double > math_linear_VectorN_Sl_3_Sc_double_Sg____deepcopy__(math::linear::VectorN< 3,double > *self,PyObject *memo){
+        return math::linear::VectorN<3, double>(*self);
     }
 SWIGINTERN std::vector< double,std::allocator< double > > math_linear_VectorN_Sl_3_Sc_double_Sg__vals(math::linear::VectorN< 3,double > *self){
         return self->matrix().col(0);
@@ -17854,6 +17860,61 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Vector2___deepcopy__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 2,double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___deepcopy__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___deepcopy__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
+  arg2 = obj1;
+  {
+    try
+    {
+      result = math_linear_VectorN_Sl_2_Sc_double_Sg____deepcopy__(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 2,double >(static_cast< const math::linear::VectorN< 2,double >& >(result))), SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Vector2_vals(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
@@ -20034,6 +20095,61 @@ SWIGINTERN PyObject *_wrap_Vector3___str__(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
   }
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector3___deepcopy__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 3,double > *arg1 = (math::linear::VectorN< 3,double > *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 3,double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector3___deepcopy__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector3___deepcopy__" "', argument " "1"" of type '" "math::linear::VectorN< 3,double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 3,double > * >(argp1);
+  arg2 = obj1;
+  {
+    try
+    {
+      result = math_linear_VectorN_Sl_3_Sc_double_Sg____deepcopy__(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 3,double >(static_cast< const math::linear::VectorN< 3,double >& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -26426,6 +26542,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Vector2___getitem__", _wrap_Vector2___getitem__, METH_VARARGS, (char *)"Vector2___getitem__(Vector2 self, long i) -> double"},
 	 { (char *)"Vector2___setitem__", _wrap_Vector2___setitem__, METH_VARARGS, (char *)"Vector2___setitem__(Vector2 self, long i, double val)"},
 	 { (char *)"Vector2___str__", _wrap_Vector2___str__, METH_VARARGS, (char *)"Vector2___str__(Vector2 self) -> std::string"},
+	 { (char *)"Vector2___deepcopy__", _wrap_Vector2___deepcopy__, METH_VARARGS, (char *)"Vector2___deepcopy__(Vector2 self, PyObject * memo) -> Vector2"},
 	 { (char *)"Vector2_vals", _wrap_Vector2_vals, METH_VARARGS, (char *)"Vector2_vals(Vector2 self) -> std_vector_double"},
 	 { (char *)"Vector2_swigregister", Vector2_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Vector3", _wrap_new_Vector3, METH_VARARGS, (char *)"\n"
@@ -26469,6 +26586,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Vector3___getitem__", _wrap_Vector3___getitem__, METH_VARARGS, (char *)"Vector3___getitem__(Vector3 self, long i) -> double"},
 	 { (char *)"Vector3___setitem__", _wrap_Vector3___setitem__, METH_VARARGS, (char *)"Vector3___setitem__(Vector3 self, long i, double val)"},
 	 { (char *)"Vector3___str__", _wrap_Vector3___str__, METH_VARARGS, (char *)"Vector3___str__(Vector3 self) -> std::string"},
+	 { (char *)"Vector3___deepcopy__", _wrap_Vector3___deepcopy__, METH_VARARGS, (char *)"Vector3___deepcopy__(Vector3 self, PyObject * memo) -> Vector3"},
 	 { (char *)"Vector3_vals", _wrap_Vector3_vals, METH_VARARGS, (char *)"Vector3_vals(Vector3 self) -> std_vector_double"},
 	 { (char *)"Vector3_swigregister", Vector3_swigregister, METH_VARARGS, NULL},
 	 { (char *)"cross", _wrap_cross, METH_VARARGS, (char *)"\n"

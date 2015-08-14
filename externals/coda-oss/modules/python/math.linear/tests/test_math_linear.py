@@ -25,6 +25,7 @@
 """
 import sys
 import numpy as np
+from copy import deepcopy
 from coda.math_linear import *
 
 if __name__ == '__main__':
@@ -39,6 +40,15 @@ if __name__ == '__main__':
     print "Vector2:"
     print vec2
 
+    # Test deep copy
+    vec2_copy = deepcopy(vec2)
+    if vec2_copy[0] != 100 or vec2_copy[1] != 200:
+        sys.exit('Vector2 did not perform a deep copy')
+    
+    vec2_copy[0] = 300
+    if vec2[0] != 100:
+        sys.exit('Vector2 did not perform a deep copy')
+
     ####################################
     # VectorN<3, double> Bindings Test #
     ####################################
@@ -49,6 +59,14 @@ if __name__ == '__main__':
     vec3[2] = 30
     print "Vector3:"
     print vec3
+    
+    vec3_copy = deepcopy(vec3)
+    if vec3_copy[0] != 10 or vec3_copy[1] != 20 or vec3_copy[2] != 30:
+        sys.exit('Vector3 did not perform a deep copy')
+    
+    vec3_copy[0] = 40
+    if vec3[0] != 10:
+        sys.exit('Vector3 did not perform a deep copy')
 
     ################################
     # Vector<double> Bindings Test #

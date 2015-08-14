@@ -4641,6 +4641,9 @@ SWIG_From_std_string  (const std::string& s)
   return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
 
+SWIGINTERN math::poly::OneD< double > math_poly_OneD_Sl_double_Sg____deepcopy__(math::poly::OneD< double > *self,PyObject *memo){
+        return math::poly::OneD<double>(*self);
+    }
 SWIGINTERN double math_poly_TwoD_Sl_double_Sg____getitem__(math::poly::TwoD< double > *self,PyObject *inObj){
         if (!PyTuple_Check(inObj))
         {
@@ -4682,6 +4685,9 @@ SWIGINTERN std::string math_poly_TwoD_Sl_double_Sg____str__(math::poly::TwoD< do
         ostr << *self;
         return ostr.str();
     }
+SWIGINTERN math::poly::TwoD< double > math_poly_TwoD_Sl_double_Sg____deepcopy__(math::poly::TwoD< double > *self,PyObject *memo){
+        return math::poly::TwoD<double>(*self);
+    }
 SWIGINTERN Vector3 math_poly_OneD_Sl_Vector3_Sg____getitem__(math::poly::OneD< Vector3 > *self,long i){ 
             return (*self)[i]; 
         }
@@ -4692,6 +4698,9 @@ SWIGINTERN std::string math_poly_OneD_Sl_Vector3_Sg____str__(math::poly::OneD< V
             std::ostringstream ostr;
             ostr << *self;
             return ostr.str();
+        }
+SWIGINTERN math::poly::OneD< Vector3 > math_poly_OneD_Sl_Vector3_Sg____deepcopy__(math::poly::OneD< Vector3 > *self,PyObject *memo){
+            return math::poly::OneD<Vector3>(*self);
         }
 SWIGINTERN swig::SwigPyIterator *std_vector_Sl_double_Sg__iterator(std::vector< double > *self,PyObject **PYTHON_SELF){
       return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
@@ -7268,6 +7277,61 @@ SWIGINTERN PyObject *_wrap_Poly1D___str__(PyObject *SWIGUNUSEDPARM(self), PyObje
     }
   }
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Poly1D___deepcopy__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___deepcopy__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___deepcopy__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
+  arg2 = obj1;
+  {
+    try
+    {
+      result = math_poly_OneD_Sl_double_Sg____deepcopy__(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -10132,6 +10196,61 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Poly2D___deepcopy__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::TwoD< double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___deepcopy__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___deepcopy__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
+  arg2 = obj1;
+  {
+    try
+    {
+      result = math_poly_TwoD_Sl_double_Sg____deepcopy__(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_Poly2D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
@@ -12781,6 +12900,61 @@ SWIGINTERN PyObject *_wrap_PolyVector3___str__(PyObject *SWIGUNUSEDPARM(self), P
     }
   }
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___deepcopy__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< Vector3 > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___deepcopy__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___deepcopy__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  arg2 = obj1;
+  {
+    try
+    {
+      result = math_poly_OneD_Sl_Vector3_Sg____deepcopy__(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< Vector3 >(static_cast< const math::poly::OneD< Vector3 >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -16331,6 +16505,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Poly1D___getitem__", _wrap_Poly1D___getitem__, METH_VARARGS, (char *)"Poly1D___getitem__(Poly1D self, long i) -> double"},
 	 { (char *)"Poly1D___setitem__", _wrap_Poly1D___setitem__, METH_VARARGS, (char *)"Poly1D___setitem__(Poly1D self, long i, double val)"},
 	 { (char *)"Poly1D___str__", _wrap_Poly1D___str__, METH_VARARGS, (char *)"Poly1D___str__(Poly1D self) -> std::string"},
+	 { (char *)"Poly1D___deepcopy__", _wrap_Poly1D___deepcopy__, METH_VARARGS, (char *)"Poly1D___deepcopy__(Poly1D self, PyObject * memo) -> Poly1D"},
 	 { (char *)"delete_Poly1D", _wrap_delete_Poly1D, METH_VARARGS, (char *)"delete_Poly1D(Poly1D self)"},
 	 { (char *)"Poly1D_swigregister", Poly1D_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Poly2D_coeffs", _wrap_Poly2D_coeffs, METH_VARARGS, (char *)"Poly2D_coeffs(Poly2D self) -> std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > &"},
@@ -16385,6 +16560,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Poly2D___getitem__", _wrap_Poly2D___getitem__, METH_VARARGS, (char *)"Poly2D___getitem__(Poly2D self, PyObject * inObj) -> double"},
 	 { (char *)"Poly2D___setitem__", _wrap_Poly2D___setitem__, METH_VARARGS, (char *)"Poly2D___setitem__(Poly2D self, PyObject * inObj, double val)"},
 	 { (char *)"Poly2D___str__", _wrap_Poly2D___str__, METH_VARARGS, (char *)"Poly2D___str__(Poly2D self) -> std::string"},
+	 { (char *)"Poly2D___deepcopy__", _wrap_Poly2D___deepcopy__, METH_VARARGS, (char *)"Poly2D___deepcopy__(Poly2D self, PyObject * memo) -> Poly2D"},
 	 { (char *)"delete_Poly2D", _wrap_delete_Poly2D, METH_VARARGS, (char *)"delete_Poly2D(Poly2D self)"},
 	 { (char *)"Poly2D_swigregister", Poly2D_swigregister, METH_VARARGS, NULL},
 	 { (char *)"fit", _wrap_fit, METH_VARARGS, (char *)"\n"
@@ -16429,6 +16605,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolyVector3___getitem__", _wrap_PolyVector3___getitem__, METH_VARARGS, (char *)"PolyVector3___getitem__(PolyVector3 self, long i) -> Vector3"},
 	 { (char *)"PolyVector3___setitem__", _wrap_PolyVector3___setitem__, METH_VARARGS, (char *)"PolyVector3___setitem__(PolyVector3 self, long i, Vector3 val)"},
 	 { (char *)"PolyVector3___str__", _wrap_PolyVector3___str__, METH_VARARGS, (char *)"PolyVector3___str__(PolyVector3 self) -> std::string"},
+	 { (char *)"PolyVector3___deepcopy__", _wrap_PolyVector3___deepcopy__, METH_VARARGS, (char *)"PolyVector3___deepcopy__(PolyVector3 self, PyObject * memo) -> PolyVector3"},
 	 { (char *)"delete_PolyVector3", _wrap_delete_PolyVector3, METH_VARARGS, (char *)"delete_PolyVector3(PolyVector3 self)"},
 	 { (char *)"PolyVector3_swigregister", PolyVector3_swigregister, METH_VARARGS, NULL},
 	 { (char *)"StdVectorDouble_iterator", _wrap_StdVectorDouble_iterator, METH_VARARGS, (char *)"StdVectorDouble_iterator(std_vector_double self) -> SwigPyIterator"},

@@ -265,6 +265,11 @@ class Poly1D(_object):
         """__str__(Poly1D self) -> std::string"""
         return _math_poly.Poly1D___str__(self)
 
+
+    def __deepcopy__(self, memo):
+        """__deepcopy__(Poly1D self, PyObject * memo) -> Poly1D"""
+        return _math_poly.Poly1D___deepcopy__(self, memo)
+
     __swig_destroy__ = _math_poly.delete_Poly1D
     __del__ = lambda self: None
 Poly1D_swigregister = _math_poly.Poly1D_swigregister
@@ -456,6 +461,11 @@ class Poly2D(_object):
         """__str__(Poly2D self) -> std::string"""
         return _math_poly.Poly2D___str__(self)
 
+
+    def __deepcopy__(self, memo):
+        """__deepcopy__(Poly2D self, PyObject * memo) -> Poly2D"""
+        return _math_poly.Poly2D___deepcopy__(self, memo)
+
     __swig_destroy__ = _math_poly.delete_Poly2D
     __del__ = lambda self: None
 Poly2D_swigregister = _math_poly.Poly2D_swigregister
@@ -606,6 +616,11 @@ class PolyVector3(_object):
     def __str__(self):
         """__str__(PolyVector3 self) -> std::string"""
         return _math_poly.PolyVector3___str__(self)
+
+
+    def __deepcopy__(self, memo):
+        """__deepcopy__(PolyVector3 self, PyObject * memo) -> PolyVector3"""
+        return _math_poly.PolyVector3___deepcopy__(self, memo)
 
     __swig_destroy__ = _math_poly.delete_PolyVector3
     __del__ = lambda self: None
