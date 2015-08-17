@@ -34,8 +34,7 @@ namespace six
  * This is a legend associated with a SIDD product
  * See section 2.4.3 of SIDD Volume 2
  *
- * Caller puts it in the Container but then I think we'll need to add this into
- * NITFImageInfo to give NITFWriteControl the chance to write it out
+ * TODO: Have started adding this in NITFWriteControl.cpp - see legend section
  */
 struct Legend
 {

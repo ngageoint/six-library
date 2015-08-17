@@ -117,6 +117,15 @@ public:
     }
 
     /*!
+     *  Get the legend, if present, living in the ith slot.
+     *  \return The legend
+     */
+    const Legend* getLegend(size_t i) const
+    {
+    	return mData[i].second.get();
+    }
+
+    /*!
      *  Get the item from the ImageSubheader field IID1.
      *  \return The data
      */

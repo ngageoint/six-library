@@ -22,9 +22,9 @@
 #ifndef __SIX_NITF_IMAGE_INFO_H__
 #define __SIX_NITF_IMAGE_INFO_H__
 
-#include "six/Data.h"
-#include "six/Utilities.h"
-#include "six/NITFSegmentInfo.h"
+#include <six/Data.h>
+#include <six/Utilities.h>
+#include <six/NITFSegmentInfo.h>
 
 namespace six
 {
@@ -45,9 +45,10 @@ class NITFImageInfo
 {
 public:
 
-    NITFImageInfo(Data* d, size_t maxRows = Constants::ILOC_MAX,
-            sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
-            bool computeSegments = false) :
+    NITFImageInfo(Data* d,
+    		      size_t maxRows = Constants::ILOC_MAX,
+                  sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
+                  bool computeSegments = false) :
         data(d), startIndex(0), numRowsLimit(maxRows), maxProductSize(maxSize)
     {
         productSize = (sys::Uint64_T) data->getNumBytesPerPixel()
@@ -167,7 +168,7 @@ public:
     }
 
     // Currently punts on LU
-    std::vector<nitf::BandInfo> getBandInfo();
+    std::vector<nitf::BandInfo> getBandInfo() const;
 
     //!  File security classification system
     static const char CLSY[];

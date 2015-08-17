@@ -190,7 +190,7 @@ void NITFImageInfo::compute()
 }
 
 // Currently punts on LU
-std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo()
+std::vector<nitf::BandInfo> NITFImageInfo::getBandInfo() const
 {
     std::vector < nitf::BandInfo > bands;
 
