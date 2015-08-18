@@ -925,6 +925,11 @@ class Vector2(_object):
         return _math_linear.Vector2___str__(self)
 
 
+    def __deepcopy__(self, memo):
+        """__deepcopy__(Vector2 self, PyObject * memo) -> Vector2"""
+        return _math_linear.Vector2___deepcopy__(self, memo)
+
+
     def vals(self):
         """vals(Vector2 self) -> std_vector_double"""
         return _math_linear.Vector2_vals(self)
@@ -1079,6 +1084,11 @@ class Vector3(_object):
     def __str__(self):
         """__str__(Vector3 self) -> std::string"""
         return _math_linear.Vector3___str__(self)
+
+
+    def __deepcopy__(self, memo):
+        """__deepcopy__(Vector3 self, PyObject * memo) -> Vector3"""
+        return _math_linear.Vector3___deepcopy__(self, memo)
 
 
     def vals(self):

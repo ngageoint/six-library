@@ -65,6 +65,11 @@ typedef math::linear::Vector<double> VectorDouble;
         ostr << *self;
         return ostr.str();
     }
+
+    math::poly::OneD<double> __deepcopy__(PyObject* memo)
+    {
+        return math::poly::OneD<double>(*$self);
+    }
 }
 
 %include "math/poly/TwoD.h"
@@ -119,6 +124,11 @@ typedef math::linear::Vector<double> VectorDouble;
         ostr << *self;
         return ostr.str();
     }
+
+    math::poly::TwoD<double> __deepcopy__(PyObject* memo)
+    {
+        return math::poly::TwoD<double>(*$self);
+    }
 }
 
 %include "math/poly/Fit.h"
@@ -144,6 +154,11 @@ typedef math::linear::Vector<double> VectorDouble;
             std::ostringstream ostr;
             ostr << *self;
             return ostr.str();
+        }
+
+        math::poly::OneD<Vector3> __deepcopy__(PyObject* memo)
+        {
+            return math::poly::OneD<Vector3>(*$self);
         }
 };
 
