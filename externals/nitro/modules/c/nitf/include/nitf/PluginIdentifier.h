@@ -15,7 +15,7 @@
 /*! The TRE plugin key is dependent on the NITF library version. Thus, only
  * plugins built with the same version of the library will be loaded
  */
-#define NITF_PLUGIN_TRE_KEY             "TRE:"NITF_LIB_VERSION
+#define NITF_PLUGIN_TRE_KEY             "TRE:" NITF_LIB_VERSION
 #define NITF_PLUGIN_COMPRESSION_KEY     "COMPRESSION"
 #define NITF_PLUGIN_DECOMPRESSION_KEY   "DECOMPRESSION"
 
