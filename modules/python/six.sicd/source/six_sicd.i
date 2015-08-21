@@ -112,7 +112,8 @@ SCOPED_CLONEABLE(six::sicd, ImageData)
 SCOPED_CLONEABLE(six::sicd, GeoData)
 SCOPED_CLONEABLE(six::sicd, Grid)
 SCOPED_COPYABLE(six::sicd, Timeline)
-SCOPED_CLONEABLE(six::sicd, Position)
+SCOPED_COPYABLE(six::sicd, Position)
+SCOPED_COPYABLE(six::sicd, RcvAPC)
 SCOPED_CLONEABLE(six::sicd, RadarCollection)
 SCOPED_COPYABLE(six::sicd, ImageFormation)
 SCOPED_COPYABLE(six::sicd, SCPCOA)
@@ -134,7 +135,7 @@ SCOPED_COPYABLE(six::sicd, GainAndPhasePolys)
 SCOPED_COPYABLE(six::sicd, MatchType)
 SCOPED_COPYABLE(six::sicd, WeightType)
 
-%template(VectorPolyXYZ) std::vector<PolyXYZ>;
+%template(VectorPolyXYZ) std::vector<math::poly::OneD<Vector3> >;
 
 SCOPED_CLONEABLE(six::sicd, DirectionParameters)
 

@@ -763,17 +763,12 @@ class RcvAPC(_object):
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_RcvAPC
-    __del__ = lambda self: None
-
-    def clone(self):
-        """clone(RcvAPC self) -> RcvAPC"""
-        return _six_sicd.RcvAPC_clone(self)
-
     __swig_setmethods__["rcvAPCPolys"] = _six_sicd.RcvAPC_rcvAPCPolys_set
     __swig_getmethods__["rcvAPCPolys"] = _six_sicd.RcvAPC_rcvAPCPolys_get
     if _newclass:
         rcvAPCPolys = _swig_property(_six_sicd.RcvAPC_rcvAPCPolys_get, _six_sicd.RcvAPC_rcvAPCPolys_set)
+    __swig_destroy__ = _six_sicd.delete_RcvAPC
+    __del__ = lambda self: None
 RcvAPC_swigregister = _six_sicd.RcvAPC_swigregister
 RcvAPC_swigregister(RcvAPC)
 
@@ -810,11 +805,6 @@ class Position(_object):
             self.this = this
     __swig_destroy__ = _six_sicd.delete_Position
     __del__ = lambda self: None
-
-    def clone(self):
-        """clone(Position self) -> Position"""
-        return _six_sicd.Position_clone(self)
-
 Position_swigregister = _six_sicd.Position_swigregister
 Position_swigregister(Position)
 
@@ -2912,78 +2902,128 @@ ScopedCopyableTimeline_swigregister(ScopedCopyableTimeline)
 def makeScopedCopyableTimeline():
     """makeScopedCopyableTimeline() -> ScopedCopyableTimeline"""
     return _six_sicd.makeScopedCopyableTimeline()
-class ScopedCloneablePosition(_object):
-    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::Position)> class"""
+class ScopedCopyablePosition(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::Position)> class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneablePosition, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyablePosition, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneablePosition, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyablePosition, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCloneablePtr<(six::sicd::Position)> self, Position ptr=None) -> ScopedCloneablePosition
-        __init__(mem::ScopedCloneablePtr<(six::sicd::Position)> self) -> ScopedCloneablePosition
-        __init__(mem::ScopedCloneablePtr<(six::sicd::Position)> self, ScopedCloneablePosition rhs) -> ScopedCloneablePosition
+        __init__(mem::ScopedCopyablePtr<(six::sicd::Position)> self, Position ptr=None) -> ScopedCopyablePosition
+        __init__(mem::ScopedCopyablePtr<(six::sicd::Position)> self) -> ScopedCopyablePosition
+        __init__(mem::ScopedCopyablePtr<(six::sicd::Position)> self, ScopedCopyablePosition rhs) -> ScopedCopyablePosition
         """
-        this = _six_sicd.new_ScopedCloneablePosition(*args)
+        this = _six_sicd.new_ScopedCopyablePosition(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def get(self):
-        """get(ScopedCloneablePosition self) -> Position"""
-        return _six_sicd.ScopedCloneablePosition_get(self)
+        """get(ScopedCopyablePosition self) -> Position"""
+        return _six_sicd.ScopedCopyablePosition_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCloneablePosition self) -> Position"""
-        return _six_sicd.ScopedCloneablePosition___ref__(self)
+        """__ref__(ScopedCopyablePosition self) -> Position"""
+        return _six_sicd.ScopedCopyablePosition___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCloneablePosition self) -> Position"""
-        return _six_sicd.ScopedCloneablePosition___deref__(self)
+        """__deref__(ScopedCopyablePosition self) -> Position"""
+        return _six_sicd.ScopedCopyablePosition___deref__(self)
 
 
     def reset(self, ptr=None):
         """
-        reset(ScopedCloneablePosition self, Position ptr=None)
-        reset(ScopedCloneablePosition self)
+        reset(ScopedCopyablePosition self, Position ptr=None)
+        reset(ScopedCopyablePosition self)
         """
-        return _six_sicd.ScopedCloneablePosition_reset(self, ptr)
+        return _six_sicd.ScopedCopyablePosition_reset(self, ptr)
 
-    __swig_destroy__ = _six_sicd.delete_ScopedCloneablePosition
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyablePosition
     __del__ = lambda self: None
-    __swig_setmethods__["arpPoly"] = _six_sicd.ScopedCloneablePosition_arpPoly_set
-    __swig_getmethods__["arpPoly"] = _six_sicd.ScopedCloneablePosition_arpPoly_get
+    __swig_setmethods__["arpPoly"] = _six_sicd.ScopedCopyablePosition_arpPoly_set
+    __swig_getmethods__["arpPoly"] = _six_sicd.ScopedCopyablePosition_arpPoly_get
     if _newclass:
-        arpPoly = _swig_property(_six_sicd.ScopedCloneablePosition_arpPoly_get, _six_sicd.ScopedCloneablePosition_arpPoly_set)
-    __swig_setmethods__["grpPoly"] = _six_sicd.ScopedCloneablePosition_grpPoly_set
-    __swig_getmethods__["grpPoly"] = _six_sicd.ScopedCloneablePosition_grpPoly_get
+        arpPoly = _swig_property(_six_sicd.ScopedCopyablePosition_arpPoly_get, _six_sicd.ScopedCopyablePosition_arpPoly_set)
+    __swig_setmethods__["grpPoly"] = _six_sicd.ScopedCopyablePosition_grpPoly_set
+    __swig_getmethods__["grpPoly"] = _six_sicd.ScopedCopyablePosition_grpPoly_get
     if _newclass:
-        grpPoly = _swig_property(_six_sicd.ScopedCloneablePosition_grpPoly_get, _six_sicd.ScopedCloneablePosition_grpPoly_set)
-    __swig_setmethods__["txAPCPoly"] = _six_sicd.ScopedCloneablePosition_txAPCPoly_set
-    __swig_getmethods__["txAPCPoly"] = _six_sicd.ScopedCloneablePosition_txAPCPoly_get
+        grpPoly = _swig_property(_six_sicd.ScopedCopyablePosition_grpPoly_get, _six_sicd.ScopedCopyablePosition_grpPoly_set)
+    __swig_setmethods__["txAPCPoly"] = _six_sicd.ScopedCopyablePosition_txAPCPoly_set
+    __swig_getmethods__["txAPCPoly"] = _six_sicd.ScopedCopyablePosition_txAPCPoly_get
     if _newclass:
-        txAPCPoly = _swig_property(_six_sicd.ScopedCloneablePosition_txAPCPoly_get, _six_sicd.ScopedCloneablePosition_txAPCPoly_set)
-    __swig_setmethods__["rcvAPC"] = _six_sicd.ScopedCloneablePosition_rcvAPC_set
-    __swig_getmethods__["rcvAPC"] = _six_sicd.ScopedCloneablePosition_rcvAPC_get
+        txAPCPoly = _swig_property(_six_sicd.ScopedCopyablePosition_txAPCPoly_get, _six_sicd.ScopedCopyablePosition_txAPCPoly_set)
+    __swig_setmethods__["rcvAPC"] = _six_sicd.ScopedCopyablePosition_rcvAPC_set
+    __swig_getmethods__["rcvAPC"] = _six_sicd.ScopedCopyablePosition_rcvAPC_get
     if _newclass:
-        rcvAPC = _swig_property(_six_sicd.ScopedCloneablePosition_rcvAPC_get, _six_sicd.ScopedCloneablePosition_rcvAPC_set)
-
-    def clone(self):
-        """clone(ScopedCloneablePosition self) -> Position"""
-        return _six_sicd.ScopedCloneablePosition_clone(self)
-
-ScopedCloneablePosition_swigregister = _six_sicd.ScopedCloneablePosition_swigregister
-ScopedCloneablePosition_swigregister(ScopedCloneablePosition)
+        rcvAPC = _swig_property(_six_sicd.ScopedCopyablePosition_rcvAPC_get, _six_sicd.ScopedCopyablePosition_rcvAPC_set)
+ScopedCopyablePosition_swigregister = _six_sicd.ScopedCopyablePosition_swigregister
+ScopedCopyablePosition_swigregister(ScopedCopyablePosition)
 
 
-def makeScopedCloneablePosition():
-    """makeScopedCloneablePosition() -> ScopedCloneablePosition"""
-    return _six_sicd.makeScopedCloneablePosition()
+def makeScopedCopyablePosition():
+    """makeScopedCopyablePosition() -> ScopedCopyablePosition"""
+    return _six_sicd.makeScopedCopyablePosition()
+class ScopedCopyableRcvAPC(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::RcvAPC)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableRcvAPC, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableRcvAPC, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::sicd::RcvAPC)> self, RcvAPC ptr=None) -> ScopedCopyableRcvAPC
+        __init__(mem::ScopedCopyablePtr<(six::sicd::RcvAPC)> self) -> ScopedCopyableRcvAPC
+        __init__(mem::ScopedCopyablePtr<(six::sicd::RcvAPC)> self, ScopedCopyableRcvAPC rhs) -> ScopedCopyableRcvAPC
+        """
+        this = _six_sicd.new_ScopedCopyableRcvAPC(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableRcvAPC self) -> RcvAPC"""
+        return _six_sicd.ScopedCopyableRcvAPC_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableRcvAPC self) -> RcvAPC"""
+        return _six_sicd.ScopedCopyableRcvAPC___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableRcvAPC self) -> RcvAPC"""
+        return _six_sicd.ScopedCopyableRcvAPC___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableRcvAPC self, RcvAPC ptr=None)
+        reset(ScopedCopyableRcvAPC self)
+        """
+        return _six_sicd.ScopedCopyableRcvAPC_reset(self, ptr)
+
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableRcvAPC
+    __del__ = lambda self: None
+    __swig_setmethods__["rcvAPCPolys"] = _six_sicd.ScopedCopyableRcvAPC_rcvAPCPolys_set
+    __swig_getmethods__["rcvAPCPolys"] = _six_sicd.ScopedCopyableRcvAPC_rcvAPCPolys_get
+    if _newclass:
+        rcvAPCPolys = _swig_property(_six_sicd.ScopedCopyableRcvAPC_rcvAPCPolys_get, _six_sicd.ScopedCopyableRcvAPC_rcvAPCPolys_set)
+ScopedCopyableRcvAPC_swigregister = _six_sicd.ScopedCopyableRcvAPC_swigregister
+ScopedCopyableRcvAPC_swigregister(ScopedCopyableRcvAPC)
+
+
+def makeScopedCopyableRcvAPC():
+    """makeScopedCopyableRcvAPC() -> ScopedCopyableRcvAPC"""
+    return _six_sicd.makeScopedCopyableRcvAPC()
 class ScopedCloneableRadarCollection(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::RadarCollection)> class"""
     __swig_setmethods__ = {}
@@ -4557,7 +4597,7 @@ def makeScopedCopyableWeightType():
     """makeScopedCopyableWeightType() -> ScopedCopyableWeightType"""
     return _six_sicd.makeScopedCopyableWeightType()
 class VectorPolyXYZ(_object):
-    """Proxy of C++ std::vector<(PolyXYZ)> class"""
+    """Proxy of C++ std::vector<(math::poly::OneD<(Vector3)>)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, VectorPolyXYZ, name, value)
     __swig_getmethods__ = {}
@@ -4582,36 +4622,36 @@ class VectorPolyXYZ(_object):
 
 
     def __len__(self):
-        """__len__(VectorPolyXYZ self) -> std::vector< PolyXYZ >::size_type"""
+        """__len__(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type"""
         return _six_sicd.VectorPolyXYZ___len__(self)
 
 
     def pop(self):
-        """pop(VectorPolyXYZ self) -> std::vector< PolyXYZ >::value_type"""
+        """pop(VectorPolyXYZ self) -> PolyVector3"""
         return _six_sicd.VectorPolyXYZ_pop(self)
 
 
     def __getslice__(self, i, j):
-        """__getslice__(VectorPolyXYZ self, std::vector< PolyXYZ >::difference_type i, std::vector< PolyXYZ >::difference_type j) -> VectorPolyXYZ"""
+        """__getslice__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type j) -> VectorPolyXYZ"""
         return _six_sicd.VectorPolyXYZ___getslice__(self, i, j)
 
 
     def __setslice__(self, *args):
         """
-        __setslice__(VectorPolyXYZ self, std::vector< PolyXYZ >::difference_type i, std::vector< PolyXYZ >::difference_type j, VectorPolyXYZ v)
-        __setslice__(VectorPolyXYZ self, std::vector< PolyXYZ >::difference_type i, std::vector< PolyXYZ >::difference_type j)
+        __setslice__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type j, VectorPolyXYZ v)
+        __setslice__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type j)
         """
         return _six_sicd.VectorPolyXYZ___setslice__(self, *args)
 
 
     def __delslice__(self, i, j):
-        """__delslice__(VectorPolyXYZ self, std::vector< PolyXYZ >::difference_type i, std::vector< PolyXYZ >::difference_type j)"""
+        """__delslice__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type j)"""
         return _six_sicd.VectorPolyXYZ___delslice__(self, i, j)
 
 
     def __delitem__(self, *args):
         """
-        __delitem__(VectorPolyXYZ self, std::vector< PolyXYZ >::difference_type i)
+        __delitem__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i)
         __delitem__(VectorPolyXYZ self, PySliceObject * slice)
         """
         return _six_sicd.VectorPolyXYZ___delitem__(self, *args)
@@ -4620,7 +4660,7 @@ class VectorPolyXYZ(_object):
     def __getitem__(self, *args):
         """
         __getitem__(VectorPolyXYZ self, PySliceObject * slice) -> VectorPolyXYZ
-        __getitem__(VectorPolyXYZ self, std::vector< PolyXYZ >::difference_type i) -> std::vector< PolyXYZ >::value_type const &
+        __getitem__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i) -> PolyVector3
         """
         return _six_sicd.VectorPolyXYZ___getitem__(self, *args)
 
@@ -4629,13 +4669,13 @@ class VectorPolyXYZ(_object):
         """
         __setitem__(VectorPolyXYZ self, PySliceObject * slice, VectorPolyXYZ v)
         __setitem__(VectorPolyXYZ self, PySliceObject * slice)
-        __setitem__(VectorPolyXYZ self, std::vector< PolyXYZ >::difference_type i, std::vector< PolyXYZ >::value_type const & x)
+        __setitem__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i, PolyVector3 x)
         """
         return _six_sicd.VectorPolyXYZ___setitem__(self, *args)
 
 
     def append(self, x):
-        """append(VectorPolyXYZ self, std::vector< PolyXYZ >::value_type const & x)"""
+        """append(VectorPolyXYZ self, PolyVector3 x)"""
         return _six_sicd.VectorPolyXYZ_append(self, x)
 
 
@@ -4645,7 +4685,7 @@ class VectorPolyXYZ(_object):
 
 
     def size(self):
-        """size(VectorPolyXYZ self) -> std::vector< PolyXYZ >::size_type"""
+        """size(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type"""
         return _six_sicd.VectorPolyXYZ_size(self)
 
 
@@ -4660,27 +4700,27 @@ class VectorPolyXYZ(_object):
 
 
     def get_allocator(self):
-        """get_allocator(VectorPolyXYZ self) -> std::vector< PolyXYZ >::allocator_type"""
+        """get_allocator(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::allocator_type"""
         return _six_sicd.VectorPolyXYZ_get_allocator(self)
 
 
     def begin(self):
-        """begin(VectorPolyXYZ self) -> std::vector< PolyXYZ >::iterator"""
+        """begin(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator"""
         return _six_sicd.VectorPolyXYZ_begin(self)
 
 
     def end(self):
-        """end(VectorPolyXYZ self) -> std::vector< PolyXYZ >::iterator"""
+        """end(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator"""
         return _six_sicd.VectorPolyXYZ_end(self)
 
 
     def rbegin(self):
-        """rbegin(VectorPolyXYZ self) -> std::vector< PolyXYZ >::reverse_iterator"""
+        """rbegin(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::reverse_iterator"""
         return _six_sicd.VectorPolyXYZ_rbegin(self)
 
 
     def rend(self):
-        """rend(VectorPolyXYZ self) -> std::vector< PolyXYZ >::reverse_iterator"""
+        """rend(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::reverse_iterator"""
         return _six_sicd.VectorPolyXYZ_rend(self)
 
 
@@ -4691,18 +4731,18 @@ class VectorPolyXYZ(_object):
 
     def erase(self, *args):
         """
-        erase(VectorPolyXYZ self, std::vector< PolyXYZ >::iterator pos) -> std::vector< PolyXYZ >::iterator
-        erase(VectorPolyXYZ self, std::vector< PolyXYZ >::iterator first, std::vector< PolyXYZ >::iterator last) -> std::vector< PolyXYZ >::iterator
+        erase(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator pos) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator
+        erase(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator first, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator last) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator
         """
         return _six_sicd.VectorPolyXYZ_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(PolyXYZ)> self) -> VectorPolyXYZ
-        __init__(std::vector<(PolyXYZ)> self, VectorPolyXYZ arg2) -> VectorPolyXYZ
-        __init__(std::vector<(PolyXYZ)> self, std::vector< PolyXYZ >::size_type size) -> VectorPolyXYZ
-        __init__(std::vector<(PolyXYZ)> self, std::vector< PolyXYZ >::size_type size, std::vector< PolyXYZ >::value_type const & value) -> VectorPolyXYZ
+        __init__(std::vector<(math::poly::OneD<(Vector3)>)> self) -> VectorPolyXYZ
+        __init__(std::vector<(math::poly::OneD<(Vector3)>)> self, VectorPolyXYZ arg2) -> VectorPolyXYZ
+        __init__(std::vector<(math::poly::OneD<(Vector3)>)> self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type size) -> VectorPolyXYZ
+        __init__(std::vector<(math::poly::OneD<(Vector3)>)> self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type size, PolyVector3 value) -> VectorPolyXYZ
         """
         this = _six_sicd.new_VectorPolyXYZ(*args)
         try:
@@ -4711,48 +4751,48 @@ class VectorPolyXYZ(_object):
             self.this = this
 
     def push_back(self, x):
-        """push_back(VectorPolyXYZ self, std::vector< PolyXYZ >::value_type const & x)"""
+        """push_back(VectorPolyXYZ self, PolyVector3 x)"""
         return _six_sicd.VectorPolyXYZ_push_back(self, x)
 
 
     def front(self):
-        """front(VectorPolyXYZ self) -> std::vector< PolyXYZ >::value_type const &"""
+        """front(VectorPolyXYZ self) -> PolyVector3"""
         return _six_sicd.VectorPolyXYZ_front(self)
 
 
     def back(self):
-        """back(VectorPolyXYZ self) -> std::vector< PolyXYZ >::value_type const &"""
+        """back(VectorPolyXYZ self) -> PolyVector3"""
         return _six_sicd.VectorPolyXYZ_back(self)
 
 
     def assign(self, n, x):
-        """assign(VectorPolyXYZ self, std::vector< PolyXYZ >::size_type n, std::vector< PolyXYZ >::value_type const & x)"""
+        """assign(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type n, PolyVector3 x)"""
         return _six_sicd.VectorPolyXYZ_assign(self, n, x)
 
 
     def resize(self, *args):
         """
-        resize(VectorPolyXYZ self, std::vector< PolyXYZ >::size_type new_size)
-        resize(VectorPolyXYZ self, std::vector< PolyXYZ >::size_type new_size, std::vector< PolyXYZ >::value_type const & x)
+        resize(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type new_size)
+        resize(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type new_size, PolyVector3 x)
         """
         return _six_sicd.VectorPolyXYZ_resize(self, *args)
 
 
     def insert(self, *args):
         """
-        insert(VectorPolyXYZ self, std::vector< PolyXYZ >::iterator pos, std::vector< PolyXYZ >::value_type const & x) -> std::vector< PolyXYZ >::iterator
-        insert(VectorPolyXYZ self, std::vector< PolyXYZ >::iterator pos, std::vector< PolyXYZ >::size_type n, std::vector< PolyXYZ >::value_type const & x)
+        insert(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator pos, PolyVector3 x) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator
+        insert(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator pos, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type n, PolyVector3 x)
         """
         return _six_sicd.VectorPolyXYZ_insert(self, *args)
 
 
     def reserve(self, n):
-        """reserve(VectorPolyXYZ self, std::vector< PolyXYZ >::size_type n)"""
+        """reserve(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type n)"""
         return _six_sicd.VectorPolyXYZ_reserve(self, n)
 
 
     def capacity(self):
-        """capacity(VectorPolyXYZ self) -> std::vector< PolyXYZ >::size_type"""
+        """capacity(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type"""
         return _six_sicd.VectorPolyXYZ_capacity(self)
 
     __swig_destroy__ = _six_sicd.delete_VectorPolyXYZ

@@ -452,13 +452,13 @@ XMLElem ComplexXMLParser::convertPositionToXML(
         common().createPolyXYZ("GRPPoly", position->grpPoly, positionXML);
     if (!Init::isUndefined<PolyXYZ>(position->txAPCPoly))
         common().createPolyXYZ("TxAPCPoly", position->txAPCPoly, positionXML);
-    if (position->rcvAPC && !position->rcvAPC->rcvAPCPolys.empty())
+    if (position->rcvAPC.get() && !position->rcvAPC->rcvAPCPolys.empty())
     {
-        unsigned int numPolys = position->rcvAPC->rcvAPCPolys.size();
+        size_t numPolys = position->rcvAPC->rcvAPCPolys.size();
         XMLElem rcvXML = newElement("RcvAPC", positionXML);
         setAttribute(rcvXML, "size", str::toString(numPolys));
 
-        for (unsigned int i = 0; i < numPolys; ++i)
+        for (size_t i = 0; i < numPolys; ++i)
         {
             PolyXYZ xyz = position->rcvAPC->rcvAPCPolys[i];
             XMLElem xyzXML = common().createPolyXYZ("RcvAPCPoly", xyz, rcvXML);
@@ -1296,7 +1296,7 @@ void ComplexXMLParser::parsePositionFromXML(
     if (tmpElem)
     {
         //optional
-        position->rcvAPC = new RcvAPC();
+        position->rcvAPC.reset(new RcvAPC());
 
         //TODO make sure there is at least one
         std::vector < XMLElem > polysXML;

@@ -30,6 +30,7 @@ from coda.xml_lite import *
 from coda.coda_io import *
 from coda.coda_types import *
 from coda.math_poly import *
+from coda.math_linear import *
 
 import pdb
 
@@ -155,10 +156,10 @@ grid.col.weightType.windowName = 'UNIFORM'
 cmplx.grid = grid
 
 ### Timeline ###
-timeline = makeScopedCloneableTimeline()
+timeline = makeScopedCopyableTimeline()
 timeline.collectStart = DateTime()
 timeline.collectDuration = 5
-timeline.interPulsePeriod = InterPulsePeriod()
+timeline.interPulsePeriod = makeScopedCopyableInterPulsePeriod()
 
 timelineSet = TimelineSet()
 timelineSet.tStart = 1
@@ -168,14 +169,28 @@ timelineSet.interPulsePeriodEnd = 4
 timelineSet.interPulsePeriodPoly = Poly1D(3)
 for i in range(4):
     timelineSet.interPulsePeriodPoly[i] = i * 10
-timeline.interPulsePeriod.sets.push_back(timelineSet)
 
-pdb.set_trace()
+timeline.interPulsePeriod.sets.push_back(timelineSet)
 
 cmplx.timeline = timeline
 
 ### Position ###
-position = makeScopedCloneablePosition()
+position = makeScopedCopyablePosition()
+position.arpPoly = PolyVector3(3)
+position.grpPoly = PolyVector3(3)
+position.txAPCPoly = PolyVector3(3)
+for i in range(4):
+    for j in range(3):
+        position.arpPoly[i][j] = i + j
+        position.grpPoly[i][j] = i + j
+        position.txAPCPoly[i][j] = i + j
+
+position.rcvAPC = makeScopedCopyableRcvAPC()
+rcvAPCPoly = PolyVector3(3)
+for i in range(4):
+    for j in range(3):
+        rcvAPCPoly[i][j] = i * 5 + j
+position.rcvAPC.rcvAPCPolys.push_back(rcvAPCPoly)
 
 cmplx.position = position
 
