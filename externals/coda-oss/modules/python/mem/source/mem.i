@@ -78,3 +78,33 @@ mem::ScopedCloneablePtr< namespace##::##type > makeScopedCloneable##type()
 
 mem::ScopedCloneablePtr< namespace##::##type > makeScopedCloneable##type();
 %enddef
+
+/*
+ * Permits renaming the python type, copyable
+ */
+%define SCOPED_COPYABLE_RENAME(namespace, CppType, PyType)
+%template(ScopedCopyable##PyType) mem::ScopedCopyablePtr<namespace##::##CppType>;
+%{
+mem::ScopedCopyablePtr< namespace##::##CppType > makeScopedCopyable##PyType()
+{
+    return mem::ScopedCopyablePtr< namespace##::##CppType >(new namespace##::##CppType ());
+} 
+%}
+
+mem::ScopedCopyablePtr< namespace##::##CppType > makeScopedCopyable##PyType();
+%enddef
+
+/*
+ * Permits renaming the python type, cloneable
+ */
+%define SCOPED_CLONEABLE_RENAME(namespace, CppType, PyType)
+%template(ScopedCloneable##PyType) mem::ScopedCloneablePtr<namespace##::##CppType>;
+%{
+mem::ScopedCloneablePtr< namespace##::##CppType > makeScopedCloneable##PyType()
+{
+    return mem::ScopedCloneablePtr< namespace##::##CppType >(new namespace##::##CppType ());
+} 
+%}
+
+mem::ScopedCloneablePtr< namespace##::##CppType > makeScopedClonable##PyType();
+%enddef
