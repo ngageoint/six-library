@@ -90,8 +90,9 @@ except AttributeError:
     _newclass = 0
 
 
-import coda.types
+import coda.coda_types
 import coda.coda_sys
+import coda.mem
 class SampleType(_object):
     """Proxy of C++ cphd::SampleType class"""
     __swig_setmethods__ = {}
@@ -1803,7 +1804,7 @@ VBM.toBuffer = toBuffer
 
 import numpy
 import multiprocessing
-from coda.types import RowColSizeT
+from coda.coda_types import RowColSizeT
 
 def read(self,
          channel = 0,
@@ -1830,6 +1831,314 @@ def read(self,
     
 Wideband.read = read
 
+class ScopedCopyableDwellTimeParameters(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(cphd::DwellTimeParameters)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableDwellTimeParameters, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableDwellTimeParameters, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(cphd::DwellTimeParameters)> self, DwellTimeParameters ptr=None) -> ScopedCopyableDwellTimeParameters
+        __init__(mem::ScopedCopyablePtr<(cphd::DwellTimeParameters)> self) -> ScopedCopyableDwellTimeParameters
+        __init__(mem::ScopedCopyablePtr<(cphd::DwellTimeParameters)> self, ScopedCopyableDwellTimeParameters rhs) -> ScopedCopyableDwellTimeParameters
+        """
+        this = _cphd.new_ScopedCopyableDwellTimeParameters(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
+        return _cphd.ScopedCopyableDwellTimeParameters_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
+        return _cphd.ScopedCopyableDwellTimeParameters___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
+        return _cphd.ScopedCopyableDwellTimeParameters___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableDwellTimeParameters self, DwellTimeParameters ptr=None)
+        reset(ScopedCopyableDwellTimeParameters self)
+        """
+        return _cphd.ScopedCopyableDwellTimeParameters_reset(self, ptr)
+
+    __swig_destroy__ = _cphd.delete_ScopedCopyableDwellTimeParameters
+    __del__ = lambda self: None
+
+    def __eq__(self, other):
+        """__eq__(ScopedCopyableDwellTimeParameters self, DwellTimeParameters other) -> bool"""
+        return _cphd.ScopedCopyableDwellTimeParameters___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(ScopedCopyableDwellTimeParameters self, DwellTimeParameters other) -> bool"""
+        return _cphd.ScopedCopyableDwellTimeParameters___ne__(self, other)
+
+    __swig_setmethods__["codTimePoly"] = _cphd.ScopedCopyableDwellTimeParameters_codTimePoly_set
+    __swig_getmethods__["codTimePoly"] = _cphd.ScopedCopyableDwellTimeParameters_codTimePoly_get
+    if _newclass:
+        codTimePoly = _swig_property(_cphd.ScopedCopyableDwellTimeParameters_codTimePoly_get, _cphd.ScopedCopyableDwellTimeParameters_codTimePoly_set)
+    __swig_setmethods__["dwellTimePoly"] = _cphd.ScopedCopyableDwellTimeParameters_dwellTimePoly_set
+    __swig_getmethods__["dwellTimePoly"] = _cphd.ScopedCopyableDwellTimeParameters_dwellTimePoly_get
+    if _newclass:
+        dwellTimePoly = _swig_property(_cphd.ScopedCopyableDwellTimeParameters_dwellTimePoly_get, _cphd.ScopedCopyableDwellTimeParameters_dwellTimePoly_set)
+ScopedCopyableDwellTimeParameters_swigregister = _cphd.ScopedCopyableDwellTimeParameters_swigregister
+ScopedCopyableDwellTimeParameters_swigregister(ScopedCopyableDwellTimeParameters)
+
+
+def makeCopyableDwellTimeParameters():
+    """makeCopyableDwellTimeParameters() -> ScopedCopyableDwellTimeParameters"""
+    return _cphd.makeCopyableDwellTimeParameters()
+class ScopedCopyableAreaPlane(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(cphd::AreaPlane)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableAreaPlane, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableAreaPlane, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(cphd::AreaPlane)> self, AreaPlane ptr=None) -> ScopedCopyableAreaPlane
+        __init__(mem::ScopedCopyablePtr<(cphd::AreaPlane)> self) -> ScopedCopyableAreaPlane
+        __init__(mem::ScopedCopyablePtr<(cphd::AreaPlane)> self, ScopedCopyableAreaPlane rhs) -> ScopedCopyableAreaPlane
+        """
+        this = _cphd.new_ScopedCopyableAreaPlane(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableAreaPlane self) -> AreaPlane"""
+        return _cphd.ScopedCopyableAreaPlane_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableAreaPlane self) -> AreaPlane"""
+        return _cphd.ScopedCopyableAreaPlane___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableAreaPlane self) -> AreaPlane"""
+        return _cphd.ScopedCopyableAreaPlane___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableAreaPlane self, AreaPlane ptr=None)
+        reset(ScopedCopyableAreaPlane self)
+        """
+        return _cphd.ScopedCopyableAreaPlane_reset(self, ptr)
+
+    __swig_destroy__ = _cphd.delete_ScopedCopyableAreaPlane
+    __del__ = lambda self: None
+
+    def __eq__(self, other):
+        """__eq__(ScopedCopyableAreaPlane self, AreaPlane other) -> bool"""
+        return _cphd.ScopedCopyableAreaPlane___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(ScopedCopyableAreaPlane self, AreaPlane other) -> bool"""
+        return _cphd.ScopedCopyableAreaPlane___ne__(self, other)
+
+    __swig_setmethods__["referencePoint"] = _cphd.ScopedCopyableAreaPlane_referencePoint_set
+    __swig_getmethods__["referencePoint"] = _cphd.ScopedCopyableAreaPlane_referencePoint_get
+    if _newclass:
+        referencePoint = _swig_property(_cphd.ScopedCopyableAreaPlane_referencePoint_get, _cphd.ScopedCopyableAreaPlane_referencePoint_set)
+    __swig_setmethods__["xDirection"] = _cphd.ScopedCopyableAreaPlane_xDirection_set
+    __swig_getmethods__["xDirection"] = _cphd.ScopedCopyableAreaPlane_xDirection_get
+    if _newclass:
+        xDirection = _swig_property(_cphd.ScopedCopyableAreaPlane_xDirection_get, _cphd.ScopedCopyableAreaPlane_xDirection_set)
+    __swig_setmethods__["yDirection"] = _cphd.ScopedCopyableAreaPlane_yDirection_set
+    __swig_getmethods__["yDirection"] = _cphd.ScopedCopyableAreaPlane_yDirection_get
+    if _newclass:
+        yDirection = _swig_property(_cphd.ScopedCopyableAreaPlane_yDirection_get, _cphd.ScopedCopyableAreaPlane_yDirection_set)
+    __swig_setmethods__["dwellTime"] = _cphd.ScopedCopyableAreaPlane_dwellTime_set
+    __swig_getmethods__["dwellTime"] = _cphd.ScopedCopyableAreaPlane_dwellTime_get
+    if _newclass:
+        dwellTime = _swig_property(_cphd.ScopedCopyableAreaPlane_dwellTime_get, _cphd.ScopedCopyableAreaPlane_dwellTime_set)
+ScopedCopyableAreaPlane_swigregister = _cphd.ScopedCopyableAreaPlane_swigregister
+ScopedCopyableAreaPlane_swigregister(ScopedCopyableAreaPlane)
+
+
+def makeCopyableAreaPlane():
+    """makeCopyableAreaPlane() -> ScopedCopyableAreaPlane"""
+    return _cphd.makeCopyableAreaPlane()
+class ScopedCopyableFxParameters(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(cphd::FxParameters)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableFxParameters, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableFxParameters, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(cphd::FxParameters)> self, FxParameters ptr=None) -> ScopedCopyableFxParameters
+        __init__(mem::ScopedCopyablePtr<(cphd::FxParameters)> self) -> ScopedCopyableFxParameters
+        __init__(mem::ScopedCopyablePtr<(cphd::FxParameters)> self, ScopedCopyableFxParameters rhs) -> ScopedCopyableFxParameters
+        """
+        this = _cphd.new_ScopedCopyableFxParameters(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableFxParameters self) -> FxParameters"""
+        return _cphd.ScopedCopyableFxParameters_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableFxParameters self) -> FxParameters"""
+        return _cphd.ScopedCopyableFxParameters___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableFxParameters self) -> FxParameters"""
+        return _cphd.ScopedCopyableFxParameters___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableFxParameters self, FxParameters ptr=None)
+        reset(ScopedCopyableFxParameters self)
+        """
+        return _cphd.ScopedCopyableFxParameters_reset(self, ptr)
+
+    __swig_destroy__ = _cphd.delete_ScopedCopyableFxParameters
+    __del__ = lambda self: None
+
+    def __eq__(self, other):
+        """__eq__(ScopedCopyableFxParameters self, FxParameters other) -> bool"""
+        return _cphd.ScopedCopyableFxParameters___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(ScopedCopyableFxParameters self, FxParameters other) -> bool"""
+        return _cphd.ScopedCopyableFxParameters___ne__(self, other)
+
+    __swig_setmethods__["Fx0"] = _cphd.ScopedCopyableFxParameters_Fx0_set
+    __swig_getmethods__["Fx0"] = _cphd.ScopedCopyableFxParameters_Fx0_get
+    if _newclass:
+        Fx0 = _swig_property(_cphd.ScopedCopyableFxParameters_Fx0_get, _cphd.ScopedCopyableFxParameters_Fx0_set)
+    __swig_setmethods__["FxSS"] = _cphd.ScopedCopyableFxParameters_FxSS_set
+    __swig_getmethods__["FxSS"] = _cphd.ScopedCopyableFxParameters_FxSS_get
+    if _newclass:
+        FxSS = _swig_property(_cphd.ScopedCopyableFxParameters_FxSS_get, _cphd.ScopedCopyableFxParameters_FxSS_set)
+    __swig_setmethods__["Fx1"] = _cphd.ScopedCopyableFxParameters_Fx1_set
+    __swig_getmethods__["Fx1"] = _cphd.ScopedCopyableFxParameters_Fx1_get
+    if _newclass:
+        Fx1 = _swig_property(_cphd.ScopedCopyableFxParameters_Fx1_get, _cphd.ScopedCopyableFxParameters_Fx1_set)
+    __swig_setmethods__["Fx2"] = _cphd.ScopedCopyableFxParameters_Fx2_set
+    __swig_getmethods__["Fx2"] = _cphd.ScopedCopyableFxParameters_Fx2_get
+    if _newclass:
+        Fx2 = _swig_property(_cphd.ScopedCopyableFxParameters_Fx2_get, _cphd.ScopedCopyableFxParameters_Fx2_set)
+ScopedCopyableFxParameters_swigregister = _cphd.ScopedCopyableFxParameters_swigregister
+ScopedCopyableFxParameters_swigregister(ScopedCopyableFxParameters)
+
+
+def makeCopyableFxParameters():
+    """makeCopyableFxParameters() -> ScopedCopyableFxParameters"""
+    return _cphd.makeCopyableFxParameters()
+class ScopedCopyableAntenna(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(cphd::Antenna)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableAntenna, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableAntenna, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(cphd::Antenna)> self, Antenna ptr=None) -> ScopedCopyableAntenna
+        __init__(mem::ScopedCopyablePtr<(cphd::Antenna)> self) -> ScopedCopyableAntenna
+        __init__(mem::ScopedCopyablePtr<(cphd::Antenna)> self, ScopedCopyableAntenna rhs) -> ScopedCopyableAntenna
+        """
+        this = _cphd.new_ScopedCopyableAntenna(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableAntenna self) -> Antenna"""
+        return _cphd.ScopedCopyableAntenna_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableAntenna self) -> Antenna"""
+        return _cphd.ScopedCopyableAntenna___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableAntenna self) -> Antenna"""
+        return _cphd.ScopedCopyableAntenna___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableAntenna self, Antenna ptr=None)
+        reset(ScopedCopyableAntenna self)
+        """
+        return _cphd.ScopedCopyableAntenna_reset(self, ptr)
+
+    __swig_destroy__ = _cphd.delete_ScopedCopyableAntenna
+    __del__ = lambda self: None
+
+    def __eq__(self, other):
+        """__eq__(ScopedCopyableAntenna self, Antenna other) -> bool"""
+        return _cphd.ScopedCopyableAntenna___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(ScopedCopyableAntenna self, Antenna other) -> bool"""
+        return _cphd.ScopedCopyableAntenna___ne__(self, other)
+
+    __swig_setmethods__["numTxAnt"] = _cphd.ScopedCopyableAntenna_numTxAnt_set
+    __swig_getmethods__["numTxAnt"] = _cphd.ScopedCopyableAntenna_numTxAnt_get
+    if _newclass:
+        numTxAnt = _swig_property(_cphd.ScopedCopyableAntenna_numTxAnt_get, _cphd.ScopedCopyableAntenna_numTxAnt_set)
+    __swig_setmethods__["numRcvAnt"] = _cphd.ScopedCopyableAntenna_numRcvAnt_set
+    __swig_getmethods__["numRcvAnt"] = _cphd.ScopedCopyableAntenna_numRcvAnt_get
+    if _newclass:
+        numRcvAnt = _swig_property(_cphd.ScopedCopyableAntenna_numRcvAnt_get, _cphd.ScopedCopyableAntenna_numRcvAnt_set)
+    __swig_setmethods__["numTWAnt"] = _cphd.ScopedCopyableAntenna_numTWAnt_set
+    __swig_getmethods__["numTWAnt"] = _cphd.ScopedCopyableAntenna_numTWAnt_get
+    if _newclass:
+        numTWAnt = _swig_property(_cphd.ScopedCopyableAntenna_numTWAnt_get, _cphd.ScopedCopyableAntenna_numTWAnt_set)
+    __swig_setmethods__["tx"] = _cphd.ScopedCopyableAntenna_tx_set
+    __swig_getmethods__["tx"] = _cphd.ScopedCopyableAntenna_tx_get
+    if _newclass:
+        tx = _swig_property(_cphd.ScopedCopyableAntenna_tx_get, _cphd.ScopedCopyableAntenna_tx_set)
+    __swig_setmethods__["rcv"] = _cphd.ScopedCopyableAntenna_rcv_set
+    __swig_getmethods__["rcv"] = _cphd.ScopedCopyableAntenna_rcv_get
+    if _newclass:
+        rcv = _swig_property(_cphd.ScopedCopyableAntenna_rcv_get, _cphd.ScopedCopyableAntenna_rcv_set)
+    __swig_setmethods__["twoWay"] = _cphd.ScopedCopyableAntenna_twoWay_set
+    __swig_getmethods__["twoWay"] = _cphd.ScopedCopyableAntenna_twoWay_get
+    if _newclass:
+        twoWay = _swig_property(_cphd.ScopedCopyableAntenna_twoWay_get, _cphd.ScopedCopyableAntenna_twoWay_set)
+ScopedCopyableAntenna_swigregister = _cphd.ScopedCopyableAntenna_swigregister
+ScopedCopyableAntenna_swigregister(ScopedCopyableAntenna)
+
+
+def makeCopyableAntenna():
+    """makeCopyableAntenna() -> ScopedCopyableAntenna"""
+    return _cphd.makeCopyableAntenna()
 # This file is compatible with both classic and new-style classes.
 
 

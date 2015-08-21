@@ -24,6 +24,7 @@
 
 %feature("autodoc", "1");
 %import "types.i"
+%import "mem.i"
 
 %{
 #include "import/cphd.h"
@@ -155,6 +156,7 @@ def read(self,
 Wideband.read = read
 %}
 
-
-
-
+SCOPED_COPYABLE(cphd,DwellTimeParameters);
+SCOPED_COPYABLE(cphd,AreaPlane);
+SCOPED_COPYABLE(cphd,FxParameters);
+SCOPED_COPYABLE(cphd,Antenna);

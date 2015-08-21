@@ -2934,93 +2934,94 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_allocator_type swig_types[0]
-#define SWIGTYPE_p_char swig_types[1]
-#define SWIGTYPE_p_cphd__Antenna swig_types[2]
-#define SWIGTYPE_p_cphd__AreaPlane swig_types[3]
-#define SWIGTYPE_p_cphd__ArraySize swig_types[4]
-#define SWIGTYPE_p_cphd__CPHDReader swig_types[5]
-#define SWIGTYPE_p_cphd__Channel swig_types[6]
-#define SWIGTYPE_p_cphd__ChannelParameters swig_types[7]
-#define SWIGTYPE_p_cphd__Data swig_types[8]
-#define SWIGTYPE_p_cphd__DomainType swig_types[9]
-#define SWIGTYPE_p_cphd__DwellTimeParameters swig_types[10]
-#define SWIGTYPE_p_cphd__FileHeader swig_types[11]
-#define SWIGTYPE_p_cphd__FxParameters swig_types[12]
-#define SWIGTYPE_p_cphd__Global swig_types[13]
-#define SWIGTYPE_p_cphd__ImageArea swig_types[14]
-#define SWIGTYPE_p_cphd__Metadata swig_types[15]
-#define SWIGTYPE_p_cphd__PhaseSGN swig_types[16]
-#define SWIGTYPE_p_cphd__SRP swig_types[17]
-#define SWIGTYPE_p_cphd__SRPType swig_types[18]
-#define SWIGTYPE_p_cphd__SampleType swig_types[19]
-#define SWIGTYPE_p_cphd__TOAParameters swig_types[20]
-#define SWIGTYPE_p_cphd__VBM swig_types[21]
-#define SWIGTYPE_p_cphd__VectorParameters swig_types[22]
-#define SWIGTYPE_p_cphd__Wideband swig_types[23]
-#define SWIGTYPE_p_difference_type swig_types[24]
-#define SWIGTYPE_p_int swig_types[25]
-#define SWIGTYPE_p_int16_t swig_types[26]
-#define SWIGTYPE_p_int32_t swig_types[27]
-#define SWIGTYPE_p_int64_t swig_types[28]
-#define SWIGTYPE_p_int8_t swig_types[29]
-#define SWIGTYPE_p_io__SeekableInputStream swig_types[30]
-#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[31]
-#define SWIGTYPE_p_mem__BufferViewT_sys__ubyte_t swig_types[32]
-#define SWIGTYPE_p_mem__ScopedArrayT_sys__ubyte_t swig_types[33]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t swig_types[34]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t swig_types[35]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t swig_types[36]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t swig_types[37]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t swig_types[38]
-#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[39]
-#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[40]
-#define SWIGTYPE_p_off_t swig_types[41]
-#define SWIGTYPE_p_pid_t swig_types[42]
-#define SWIGTYPE_p_six__BooleanType swig_types[43]
-#define SWIGTYPE_p_six__CollectType swig_types[44]
-#define SWIGTYPE_p_six__DataType swig_types[45]
-#define SWIGTYPE_p_six__DateTime swig_types[46]
-#define SWIGTYPE_p_six__FFTSign swig_types[47]
-#define SWIGTYPE_p_six__LatLon swig_types[48]
-#define SWIGTYPE_p_six__LatLonAlt swig_types[49]
-#define SWIGTYPE_p_six__LatLonAltCorners swig_types[50]
-#define SWIGTYPE_p_six__LatLonCorners swig_types[51]
-#define SWIGTYPE_p_six__Poly1D swig_types[52]
-#define SWIGTYPE_p_six__Poly2D swig_types[53]
-#define SWIGTYPE_p_six__PolyXYZ swig_types[54]
-#define SWIGTYPE_p_six__RadarModeType swig_types[55]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[56]
-#define SWIGTYPE_p_six__UByte swig_types[57]
-#define SWIGTYPE_p_six__Vector3 swig_types[58]
-#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[59]
-#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[60]
-#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[61]
-#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[62]
-#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[63]
-#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[64]
-#define SWIGTYPE_p_size_t swig_types[65]
-#define SWIGTYPE_p_size_type swig_types[66]
-#define SWIGTYPE_p_ssize_t swig_types[67]
-#define SWIGTYPE_p_std__ostream swig_types[68]
-#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[69]
-#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[70]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[71]
-#define SWIGTYPE_p_std__vectorT_six__PolyXYZ_std__allocatorT_six__PolyXYZ_t_t swig_types[72]
-#define SWIGTYPE_p_std__vectorT_six__Vector3_std__allocatorT_six__Vector3_t_t swig_types[73]
-#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[74]
-#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[75]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[76]
-#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[77]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[78]
-#define SWIGTYPE_p_uint16_t swig_types[79]
-#define SWIGTYPE_p_uint32_t swig_types[80]
-#define SWIGTYPE_p_uint64_t swig_types[81]
-#define SWIGTYPE_p_uint8_t swig_types[82]
-#define SWIGTYPE_p_unsigned_char swig_types[83]
-#define SWIGTYPE_p_value_type swig_types[84]
-static swig_type_info *swig_types[86];
-static swig_module_info swig_module = {swig_types, 85, 0, 0, 0, 0};
+#define SWIGTYPE_p_T swig_types[0]
+#define SWIGTYPE_p_allocator_type swig_types[1]
+#define SWIGTYPE_p_char swig_types[2]
+#define SWIGTYPE_p_cphd__Antenna swig_types[3]
+#define SWIGTYPE_p_cphd__AreaPlane swig_types[4]
+#define SWIGTYPE_p_cphd__ArraySize swig_types[5]
+#define SWIGTYPE_p_cphd__CPHDReader swig_types[6]
+#define SWIGTYPE_p_cphd__Channel swig_types[7]
+#define SWIGTYPE_p_cphd__ChannelParameters swig_types[8]
+#define SWIGTYPE_p_cphd__Data swig_types[9]
+#define SWIGTYPE_p_cphd__DomainType swig_types[10]
+#define SWIGTYPE_p_cphd__DwellTimeParameters swig_types[11]
+#define SWIGTYPE_p_cphd__FileHeader swig_types[12]
+#define SWIGTYPE_p_cphd__FxParameters swig_types[13]
+#define SWIGTYPE_p_cphd__Global swig_types[14]
+#define SWIGTYPE_p_cphd__ImageArea swig_types[15]
+#define SWIGTYPE_p_cphd__Metadata swig_types[16]
+#define SWIGTYPE_p_cphd__PhaseSGN swig_types[17]
+#define SWIGTYPE_p_cphd__SRP swig_types[18]
+#define SWIGTYPE_p_cphd__SRPType swig_types[19]
+#define SWIGTYPE_p_cphd__SampleType swig_types[20]
+#define SWIGTYPE_p_cphd__TOAParameters swig_types[21]
+#define SWIGTYPE_p_cphd__VBM swig_types[22]
+#define SWIGTYPE_p_cphd__VectorParameters swig_types[23]
+#define SWIGTYPE_p_cphd__Wideband swig_types[24]
+#define SWIGTYPE_p_difference_type swig_types[25]
+#define SWIGTYPE_p_int swig_types[26]
+#define SWIGTYPE_p_int16_t swig_types[27]
+#define SWIGTYPE_p_int32_t swig_types[28]
+#define SWIGTYPE_p_int64_t swig_types[29]
+#define SWIGTYPE_p_int8_t swig_types[30]
+#define SWIGTYPE_p_io__SeekableInputStream swig_types[31]
+#define SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t swig_types[32]
+#define SWIGTYPE_p_mem__BufferViewT_unsigned_char_t swig_types[33]
+#define SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t swig_types[34]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t swig_types[35]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t swig_types[36]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t swig_types[37]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t swig_types[38]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t swig_types[39]
+#define SWIGTYPE_p_mem__SharedPtrT_io__SeekableInputStream_t swig_types[40]
+#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[41]
+#define SWIGTYPE_p_off_t swig_types[42]
+#define SWIGTYPE_p_pid_t swig_types[43]
+#define SWIGTYPE_p_six__BooleanType swig_types[44]
+#define SWIGTYPE_p_six__CollectType swig_types[45]
+#define SWIGTYPE_p_six__DataType swig_types[46]
+#define SWIGTYPE_p_six__DateTime swig_types[47]
+#define SWIGTYPE_p_six__FFTSign swig_types[48]
+#define SWIGTYPE_p_six__LatLon swig_types[49]
+#define SWIGTYPE_p_six__LatLonAlt swig_types[50]
+#define SWIGTYPE_p_six__LatLonAltCorners swig_types[51]
+#define SWIGTYPE_p_six__LatLonCorners swig_types[52]
+#define SWIGTYPE_p_six__Poly1D swig_types[53]
+#define SWIGTYPE_p_six__Poly2D swig_types[54]
+#define SWIGTYPE_p_six__PolyXYZ swig_types[55]
+#define SWIGTYPE_p_six__RadarModeType swig_types[56]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[57]
+#define SWIGTYPE_p_six__UByte swig_types[58]
+#define SWIGTYPE_p_six__Vector3 swig_types[59]
+#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[60]
+#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[61]
+#define SWIGTYPE_p_six__sicd__CollectionInformation swig_types[62]
+#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[63]
+#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[64]
+#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[65]
+#define SWIGTYPE_p_size_t swig_types[66]
+#define SWIGTYPE_p_size_type swig_types[67]
+#define SWIGTYPE_p_ssize_t swig_types[68]
+#define SWIGTYPE_p_std__ostream swig_types[69]
+#define SWIGTYPE_p_std__vectorT_cphd__ArraySize_std__allocatorT_cphd__ArraySize_t_t swig_types[70]
+#define SWIGTYPE_p_std__vectorT_cphd__ChannelParameters_std__allocatorT_cphd__ChannelParameters_t_t swig_types[71]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[72]
+#define SWIGTYPE_p_std__vectorT_six__PolyXYZ_std__allocatorT_six__PolyXYZ_t_t swig_types[73]
+#define SWIGTYPE_p_std__vectorT_six__Vector3_std__allocatorT_six__Vector3_t_t swig_types[74]
+#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[75]
+#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[76]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[77]
+#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[78]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[79]
+#define SWIGTYPE_p_uint16_t swig_types[80]
+#define SWIGTYPE_p_uint32_t swig_types[81]
+#define SWIGTYPE_p_uint64_t swig_types[82]
+#define SWIGTYPE_p_uint8_t swig_types[83]
+#define SWIGTYPE_p_unsigned_char swig_types[84]
+#define SWIGTYPE_p_value_type swig_types[85]
+static swig_type_info *swig_types[87];
+static swig_module_info swig_module = {swig_types, 86, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4727,6 +4728,30 @@ SWIGINTERN void cphd_Wideband_readImpl(cphd::Wideband *self,size_t channel,size_
                     dims,
                     reinterpret_cast<void*>(data));
     }
+
+mem::ScopedCopyablePtr< cphd::DwellTimeParameters > makeCopyableDwellTimeParameters()
+{
+    return mem::ScopedCopyablePtr< cphd::DwellTimeParameters >(new cphd::DwellTimeParameters ());
+} 
+
+
+mem::ScopedCopyablePtr< cphd::AreaPlane > makeCopyableAreaPlane()
+{
+    return mem::ScopedCopyablePtr< cphd::AreaPlane >(new cphd::AreaPlane ());
+} 
+
+
+mem::ScopedCopyablePtr< cphd::FxParameters > makeCopyableFxParameters()
+{
+    return mem::ScopedCopyablePtr< cphd::FxParameters >(new cphd::FxParameters ());
+} 
+
+
+mem::ScopedCopyablePtr< cphd::Antenna > makeCopyableAntenna()
+{
+    return mem::ScopedCopyablePtr< cphd::Antenna >(new cphd::Antenna ());
+} 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -8465,10 +8490,10 @@ fail:
 SWIGINTERN PyObject *_wrap_AreaPlane_dwellTime_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::AreaPlane *arg1 = (cphd::AreaPlane *) 0 ;
-  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > arg2 ;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg2 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
+  void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8479,20 +8504,12 @@ SWIGINTERN PyObject *_wrap_AreaPlane_dwellTime_set(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AreaPlane_dwellTime_set" "', argument " "1"" of type '" "cphd::AreaPlane *""'"); 
   }
   arg1 = reinterpret_cast< cphd::AreaPlane * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AreaPlane_dwellTime_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters >""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AreaPlane_dwellTime_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters >""'");
-    } else {
-      mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * temp = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AreaPlane_dwellTime_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *""'"); 
   }
-  if (arg1) (arg1)->dwellTime = arg2;
+  arg2 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp2);
+  if (arg1) (arg1)->dwellTime = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -8506,7 +8523,7 @@ SWIGINTERN PyObject *_wrap_AreaPlane_dwellTime_get(PyObject *SWIGUNUSEDPARM(self
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > result;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:AreaPlane_dwellTime_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__AreaPlane, 0 |  0 );
@@ -8514,8 +8531,8 @@ SWIGINTERN PyObject *_wrap_AreaPlane_dwellTime_get(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AreaPlane_dwellTime_get" "', argument " "1"" of type '" "cphd::AreaPlane *""'"); 
   }
   arg1 = reinterpret_cast< cphd::AreaPlane * >(argp1);
-  result =  ((arg1)->dwellTime);
-  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::DwellTimeParameters >(static_cast< const mem::ScopedCopyablePtr< cphd::DwellTimeParameters >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, SWIG_POINTER_OWN |  0 );
+  result = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *)& ((arg1)->dwellTime);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -8731,10 +8748,10 @@ fail:
 SWIGINTERN PyObject *_wrap_ImageArea_plane_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::ImageArea *arg1 = (cphd::ImageArea *) 0 ;
-  mem::ScopedCopyablePtr< cphd::AreaPlane > arg2 ;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg2 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
+  void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8745,20 +8762,12 @@ SWIGINTERN PyObject *_wrap_ImageArea_plane_set(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ImageArea_plane_set" "', argument " "1"" of type '" "cphd::ImageArea *""'"); 
   }
   arg1 = reinterpret_cast< cphd::ImageArea * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ImageArea_plane_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane >""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ImageArea_plane_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane >""'");
-    } else {
-      mem::ScopedCopyablePtr< cphd::AreaPlane > * temp = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ImageArea_plane_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
   }
-  if (arg1) (arg1)->plane = arg2;
+  arg2 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp2);
+  if (arg1) (arg1)->plane = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -8772,7 +8781,7 @@ SWIGINTERN PyObject *_wrap_ImageArea_plane_get(PyObject *SWIGUNUSEDPARM(self), P
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  mem::ScopedCopyablePtr< cphd::AreaPlane > result;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:ImageArea_plane_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__ImageArea, 0 |  0 );
@@ -8780,8 +8789,8 @@ SWIGINTERN PyObject *_wrap_ImageArea_plane_get(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ImageArea_plane_get" "', argument " "1"" of type '" "cphd::ImageArea *""'"); 
   }
   arg1 = reinterpret_cast< cphd::ImageArea * >(argp1);
-  result =  ((arg1)->plane);
-  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::AreaPlane >(static_cast< const mem::ScopedCopyablePtr< cphd::AreaPlane >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, SWIG_POINTER_OWN |  0 );
+  result = (mem::ScopedCopyablePtr< cphd::AreaPlane > *)& ((arg1)->plane);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -12544,10 +12553,10 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_fxParameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::VectorParameters *arg1 = (cphd::VectorParameters *) 0 ;
-  mem::ScopedCopyablePtr< cphd::FxParameters > arg2 ;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg2 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
+  void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -12558,20 +12567,12 @@ SWIGINTERN PyObject *_wrap_VectorParameters_fxParameters_set(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorParameters_fxParameters_set" "', argument " "1"" of type '" "cphd::VectorParameters *""'"); 
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_fxParameters_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters >""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_fxParameters_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters >""'");
-    } else {
-      mem::ScopedCopyablePtr< cphd::FxParameters > * temp = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_fxParameters_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
   }
-  if (arg1) (arg1)->fxParameters = arg2;
+  arg2 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp2);
+  if (arg1) (arg1)->fxParameters = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -12585,7 +12586,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_fxParameters_get(PyObject *SWIGUNUSE
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  mem::ScopedCopyablePtr< cphd::FxParameters > result;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_fxParameters_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__VectorParameters, 0 |  0 );
@@ -12593,8 +12594,8 @@ SWIGINTERN PyObject *_wrap_VectorParameters_fxParameters_get(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorParameters_fxParameters_get" "', argument " "1"" of type '" "cphd::VectorParameters *""'"); 
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
-  result =  ((arg1)->fxParameters);
-  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::FxParameters >(static_cast< const mem::ScopedCopyablePtr< cphd::FxParameters >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, SWIG_POINTER_OWN |  0 );
+  result = (mem::ScopedCopyablePtr< cphd::FxParameters > *)& ((arg1)->fxParameters);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -12604,10 +12605,10 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_toaParameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::VectorParameters *arg1 = (cphd::VectorParameters *) 0 ;
-  mem::ScopedCopyablePtr< cphd::TOAParameters > arg2 ;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg2 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
+  void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -12618,20 +12619,12 @@ SWIGINTERN PyObject *_wrap_VectorParameters_toaParameters_set(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorParameters_toaParameters_set" "', argument " "1"" of type '" "cphd::VectorParameters *""'"); 
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_toaParameters_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters >""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_toaParameters_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters >""'");
-    } else {
-      mem::ScopedCopyablePtr< cphd::TOAParameters > * temp = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_toaParameters_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > *""'"); 
   }
-  if (arg1) (arg1)->toaParameters = arg2;
+  arg2 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp2);
+  if (arg1) (arg1)->toaParameters = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -12645,7 +12638,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_toaParameters_get(PyObject *SWIGUNUS
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  mem::ScopedCopyablePtr< cphd::TOAParameters > result;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_toaParameters_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__VectorParameters, 0 |  0 );
@@ -12653,8 +12646,8 @@ SWIGINTERN PyObject *_wrap_VectorParameters_toaParameters_get(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorParameters_toaParameters_get" "', argument " "1"" of type '" "cphd::VectorParameters *""'"); 
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
-  result =  ((arg1)->toaParameters);
-  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::TOAParameters >(static_cast< const mem::ScopedCopyablePtr< cphd::TOAParameters >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, SWIG_POINTER_OWN |  0 );
+  result = (mem::ScopedCopyablePtr< cphd::TOAParameters > *)& ((arg1)->toaParameters);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -13264,10 +13257,10 @@ fail:
 SWIGINTERN PyObject *_wrap_Metadata_antenna_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::Metadata *arg1 = (cphd::Metadata *) 0 ;
-  mem::ScopedCopyablePtr< cphd::Antenna > arg2 ;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg2 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
+  void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -13278,20 +13271,12 @@ SWIGINTERN PyObject *_wrap_Metadata_antenna_set(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Metadata_antenna_set" "', argument " "1"" of type '" "cphd::Metadata *""'"); 
   }
   arg1 = reinterpret_cast< cphd::Metadata * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Metadata_antenna_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna >""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Metadata_antenna_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna >""'");
-    } else {
-      mem::ScopedCopyablePtr< cphd::Antenna > * temp = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Metadata_antenna_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
   }
-  if (arg1) (arg1)->antenna = arg2;
+  arg2 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp2);
+  if (arg1) (arg1)->antenna = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -13305,7 +13290,7 @@ SWIGINTERN PyObject *_wrap_Metadata_antenna_get(PyObject *SWIGUNUSEDPARM(self), 
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  mem::ScopedCopyablePtr< cphd::Antenna > result;
+  mem::ScopedCopyablePtr< cphd::Antenna > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:Metadata_antenna_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Metadata, 0 |  0 );
@@ -13313,8 +13298,8 @@ SWIGINTERN PyObject *_wrap_Metadata_antenna_get(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Metadata_antenna_get" "', argument " "1"" of type '" "cphd::Metadata *""'"); 
   }
   arg1 = reinterpret_cast< cphd::Metadata * >(argp1);
-  result =  ((arg1)->antenna);
-  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::Antenna >(static_cast< const mem::ScopedCopyablePtr< cphd::Antenna >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, SWIG_POINTER_OWN |  0 );
+  result = (mem::ScopedCopyablePtr< cphd::Antenna > *)& ((arg1)->antenna);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -17099,7 +17084,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "Wideband_read" "', argument " "7"" of type '" "size_t""'");
   } 
   arg7 = static_cast< size_t >(val7);
-  res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_mem__BufferViewT_sys__ubyte_t,  0  | 0);
+  res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t,  0  | 0);
   if (!SWIG_IsOK(res8)) {
     SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
   }
@@ -17186,7 +17171,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "Wideband_read" "', argument " "7"" of type '" "size_t""'");
   } 
   arg7 = static_cast< size_t >(val7);
-  res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_mem__ScopedArrayT_sys__ubyte_t,  0 );
+  res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t,  0 );
   if (!SWIG_IsOK(res8)) {
     SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::ScopedArray< sys::ubyte > &""'"); 
   }
@@ -17289,7 +17274,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "Wideband_read" "', argument " "8"" of type '" "size_t""'");
   } 
   arg8 = static_cast< size_t >(val8);
-  res9 = SWIG_ConvertPtr(obj8, &argp9, SWIGTYPE_p_mem__BufferViewT_sys__ubyte_t,  0  | 0);
+  res9 = SWIG_ConvertPtr(obj8, &argp9, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t,  0  | 0);
   if (!SWIG_IsOK(res9)) {
     SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "Wideband_read" "', argument " "9"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
   }
@@ -17453,7 +17438,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
                   _v = SWIG_CheckState(res);
                 }
                 if (_v) {
-                  int res = SWIG_ConvertPtr(argv[7], 0, SWIGTYPE_p_mem__BufferViewT_sys__ubyte_t, 0);
+                  int res = SWIG_ConvertPtr(argv[7], 0, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t, 0);
                   _v = SWIG_CheckState(res);
                   if (_v) {
                     return _wrap_Wideband_read__SWIG_0(self, args);
@@ -17503,7 +17488,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
                 }
                 if (_v) {
                   void *vptr = 0;
-                  int res = SWIG_ConvertPtr(argv[7], &vptr, SWIGTYPE_p_mem__ScopedArrayT_sys__ubyte_t, 0);
+                  int res = SWIG_ConvertPtr(argv[7], &vptr, SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t, 0);
                   _v = SWIG_CheckState(res);
                   if (_v) {
                     return _wrap_Wideband_read__SWIG_1(self, args);
@@ -17609,7 +17594,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
                     _v = SWIG_CheckState(res);
                   }
                   if (_v) {
-                    int res = SWIG_ConvertPtr(argv[8], 0, SWIGTYPE_p_mem__BufferViewT_sys__ubyte_t, 0);
+                    int res = SWIG_ConvertPtr(argv[8], 0, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t, 0);
                     _v = SWIG_CheckState(res);
                     if (_v) {
                       int res = SWIG_ConvertPtr(argv[9], 0, SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t, 0);
@@ -18485,6 +18470,2358 @@ SWIGINTERN PyObject *CPHDReader_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableDwellTimeParameters__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::DwellTimeParameters *arg1 = (cphd::DwellTimeParameters *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableDwellTimeParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__DwellTimeParameters, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableDwellTimeParameters" "', argument " "1"" of type '" "cphd::DwellTimeParameters *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::DwellTimeParameters * >(argp1);
+  result = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *)new mem::ScopedCopyablePtr< cphd::DwellTimeParameters >(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableDwellTimeParameters__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCopyableDwellTimeParameters")) SWIG_fail;
+  result = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *)new mem::ScopedCopyablePtr< cphd::DwellTimeParameters >();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableDwellTimeParameters__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableDwellTimeParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableDwellTimeParameters" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCopyableDwellTimeParameters" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  result = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *)new mem::ScopedCopyablePtr< cphd::DwellTimeParameters >((mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableDwellTimeParameters(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCopyableDwellTimeParameters__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__DwellTimeParameters, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableDwellTimeParameters__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableDwellTimeParameters__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCopyableDwellTimeParameters'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::DwellTimeParameters >::ScopedCopyablePtr(cphd::DwellTimeParameters *)\n"
+    "    mem::ScopedCopyablePtr< cphd::DwellTimeParameters >::ScopedCopyablePtr()\n"
+    "    mem::ScopedCopyablePtr< cphd::DwellTimeParameters >::ScopedCopyablePtr(mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::DwellTimeParameters *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableDwellTimeParameters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  result = (cphd::DwellTimeParameters *)((mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const *)arg1)->get();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__DwellTimeParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::DwellTimeParameters *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableDwellTimeParameters___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters___ref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  result = (cphd::DwellTimeParameters *) &((mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const *)arg1)->operator *();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__DwellTimeParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::DwellTimeParameters *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableDwellTimeParameters___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters___deref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  result = (cphd::DwellTimeParameters *)((mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const *)arg1)->operator ->();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__DwellTimeParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  cphd::DwellTimeParameters *arg2 = (cphd::DwellTimeParameters *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableDwellTimeParameters_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_cphd__DwellTimeParameters, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableDwellTimeParameters_reset" "', argument " "2"" of type '" "cphd::DwellTimeParameters *""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::DwellTimeParameters * >(argp2);
+  (arg1)->reset(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableDwellTimeParameters_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters_reset(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCopyableDwellTimeParameters_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_cphd__DwellTimeParameters, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCopyableDwellTimeParameters_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCopyableDwellTimeParameters_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::DwellTimeParameters >::reset(cphd::DwellTimeParameters *)\n"
+    "    mem::ScopedCopyablePtr< cphd::DwellTimeParameters >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCopyableDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCopyableDwellTimeParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCopyableDwellTimeParameters" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  cphd::DwellTimeParameters *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableDwellTimeParameters___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters___eq__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__DwellTimeParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableDwellTimeParameters___eq__" "', argument " "2"" of type '" "cphd::DwellTimeParameters const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableDwellTimeParameters___eq__" "', argument " "2"" of type '" "cphd::DwellTimeParameters const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::DwellTimeParameters * >(argp2);
+  result = (bool)(*arg1)->operator ==((cphd::DwellTimeParameters const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  cphd::DwellTimeParameters *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableDwellTimeParameters___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters___ne__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__DwellTimeParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableDwellTimeParameters___ne__" "', argument " "2"" of type '" "cphd::DwellTimeParameters const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableDwellTimeParameters___ne__" "', argument " "2"" of type '" "cphd::DwellTimeParameters const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::DwellTimeParameters * >(argp2);
+  result = (bool)(*arg1)->operator !=((cphd::DwellTimeParameters const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters_codTimePoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  cphd::Poly2D arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableDwellTimeParameters_codTimePoly_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters_codTimePoly_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__Poly2D,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableDwellTimeParameters_codTimePoly_set" "', argument " "2"" of type '" "cphd::Poly2D""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableDwellTimeParameters_codTimePoly_set" "', argument " "2"" of type '" "cphd::Poly2D""'");
+    } else {
+      cphd::Poly2D * temp = reinterpret_cast< cphd::Poly2D * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  if (arg1) (*arg1)->codTimePoly = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters_codTimePoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::Poly2D result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableDwellTimeParameters_codTimePoly_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters_codTimePoly_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  result =  ((*arg1)->codTimePoly);
+  resultobj = SWIG_NewPointerObj((new cphd::Poly2D(static_cast< const cphd::Poly2D& >(result))), SWIGTYPE_p_six__Poly2D, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters_dwellTimePoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  cphd::Poly2D arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableDwellTimeParameters_dwellTimePoly_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters_dwellTimePoly_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__Poly2D,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableDwellTimeParameters_dwellTimePoly_set" "', argument " "2"" of type '" "cphd::Poly2D""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableDwellTimeParameters_dwellTimePoly_set" "', argument " "2"" of type '" "cphd::Poly2D""'");
+    } else {
+      cphd::Poly2D * temp = reinterpret_cast< cphd::Poly2D * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  if (arg1) (*arg1)->dwellTimePoly = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableDwellTimeParameters_dwellTimePoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::Poly2D result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableDwellTimeParameters_dwellTimePoly_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableDwellTimeParameters_dwellTimePoly_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp1);
+  result =  ((*arg1)->dwellTimePoly);
+  resultobj = SWIG_NewPointerObj((new cphd::Poly2D(static_cast< const cphd::Poly2D& >(result))), SWIGTYPE_p_six__Poly2D, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedCopyableDwellTimeParameters_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeCopyableDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeCopyableDwellTimeParameters")) SWIG_fail;
+  result = makeCopyableDwellTimeParameters();
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::DwellTimeParameters >(static_cast< const mem::ScopedCopyablePtr< cphd::DwellTimeParameters >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableAreaPlane__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::AreaPlane *arg1 = (cphd::AreaPlane *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableAreaPlane",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__AreaPlane, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableAreaPlane" "', argument " "1"" of type '" "cphd::AreaPlane *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::AreaPlane * >(argp1);
+  result = (mem::ScopedCopyablePtr< cphd::AreaPlane > *)new mem::ScopedCopyablePtr< cphd::AreaPlane >(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableAreaPlane__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCopyableAreaPlane")) SWIG_fail;
+  result = (mem::ScopedCopyablePtr< cphd::AreaPlane > *)new mem::ScopedCopyablePtr< cphd::AreaPlane >();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableAreaPlane__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableAreaPlane",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableAreaPlane" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCopyableAreaPlane" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  result = (mem::ScopedCopyablePtr< cphd::AreaPlane > *)new mem::ScopedCopyablePtr< cphd::AreaPlane >((mem::ScopedCopyablePtr< cphd::AreaPlane > const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableAreaPlane(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCopyableAreaPlane__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__AreaPlane, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableAreaPlane__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableAreaPlane__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCopyableAreaPlane'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::AreaPlane >::ScopedCopyablePtr(cphd::AreaPlane *)\n"
+    "    mem::ScopedCopyablePtr< cphd::AreaPlane >::ScopedCopyablePtr()\n"
+    "    mem::ScopedCopyablePtr< cphd::AreaPlane >::ScopedCopyablePtr(mem::ScopedCopyablePtr< cphd::AreaPlane > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::AreaPlane *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAreaPlane_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  result = (cphd::AreaPlane *)((mem::ScopedCopyablePtr< cphd::AreaPlane > const *)arg1)->get();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__AreaPlane, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::AreaPlane *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAreaPlane___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane___ref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  result = (cphd::AreaPlane *) &((mem::ScopedCopyablePtr< cphd::AreaPlane > const *)arg1)->operator *();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__AreaPlane, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::AreaPlane *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAreaPlane___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane___deref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  result = (cphd::AreaPlane *)((mem::ScopedCopyablePtr< cphd::AreaPlane > const *)arg1)->operator ->();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__AreaPlane, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  cphd::AreaPlane *arg2 = (cphd::AreaPlane *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAreaPlane_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_cphd__AreaPlane, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAreaPlane_reset" "', argument " "2"" of type '" "cphd::AreaPlane *""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::AreaPlane * >(argp2);
+  (arg1)->reset(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAreaPlane_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_reset(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCopyableAreaPlane_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_cphd__AreaPlane, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCopyableAreaPlane_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCopyableAreaPlane_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::AreaPlane >::reset(cphd::AreaPlane *)\n"
+    "    mem::ScopedCopyablePtr< cphd::AreaPlane >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCopyableAreaPlane(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCopyableAreaPlane",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCopyableAreaPlane" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  cphd::AreaPlane *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAreaPlane___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane___eq__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__AreaPlane,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAreaPlane___eq__" "', argument " "2"" of type '" "cphd::AreaPlane const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableAreaPlane___eq__" "', argument " "2"" of type '" "cphd::AreaPlane const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::AreaPlane * >(argp2);
+  result = (bool)(*arg1)->operator ==((cphd::AreaPlane const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  cphd::AreaPlane *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAreaPlane___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane___ne__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__AreaPlane,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAreaPlane___ne__" "', argument " "2"" of type '" "cphd::AreaPlane const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableAreaPlane___ne__" "', argument " "2"" of type '" "cphd::AreaPlane const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::AreaPlane * >(argp2);
+  result = (bool)(*arg1)->operator !=((cphd::AreaPlane const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_referencePoint_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  six::ReferencePoint arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAreaPlane_referencePoint_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_referencePoint_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__ReferencePoint,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAreaPlane_referencePoint_set" "', argument " "2"" of type '" "six::ReferencePoint""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableAreaPlane_referencePoint_set" "', argument " "2"" of type '" "six::ReferencePoint""'");
+    } else {
+      six::ReferencePoint * temp = reinterpret_cast< six::ReferencePoint * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  if (arg1) (*arg1)->referencePoint = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_referencePoint_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::ReferencePoint result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAreaPlane_referencePoint_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_referencePoint_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  result =  ((*arg1)->referencePoint);
+  resultobj = SWIG_NewPointerObj((new six::ReferencePoint(static_cast< const six::ReferencePoint& >(result))), SWIGTYPE_p_six__ReferencePoint, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_xDirection_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  cphd::AreaDirectionParameters arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAreaPlane_xDirection_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_xDirection_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__sicd__AreaDirectionParameters,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAreaPlane_xDirection_set" "', argument " "2"" of type '" "cphd::AreaDirectionParameters""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableAreaPlane_xDirection_set" "', argument " "2"" of type '" "cphd::AreaDirectionParameters""'");
+    } else {
+      cphd::AreaDirectionParameters * temp = reinterpret_cast< cphd::AreaDirectionParameters * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  if (arg1) (*arg1)->xDirection = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_xDirection_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::AreaDirectionParameters result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAreaPlane_xDirection_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_xDirection_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  result =  ((*arg1)->xDirection);
+  resultobj = SWIG_NewPointerObj((new cphd::AreaDirectionParameters(static_cast< const cphd::AreaDirectionParameters& >(result))), SWIGTYPE_p_six__sicd__AreaDirectionParameters, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_yDirection_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  cphd::AreaDirectionParameters arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAreaPlane_yDirection_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_yDirection_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__sicd__AreaDirectionParameters,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAreaPlane_yDirection_set" "', argument " "2"" of type '" "cphd::AreaDirectionParameters""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableAreaPlane_yDirection_set" "', argument " "2"" of type '" "cphd::AreaDirectionParameters""'");
+    } else {
+      cphd::AreaDirectionParameters * temp = reinterpret_cast< cphd::AreaDirectionParameters * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  if (arg1) (*arg1)->yDirection = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_yDirection_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::AreaDirectionParameters result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAreaPlane_yDirection_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_yDirection_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  result =  ((*arg1)->yDirection);
+  resultobj = SWIG_NewPointerObj((new cphd::AreaDirectionParameters(static_cast< const cphd::AreaDirectionParameters& >(result))), SWIGTYPE_p_six__sicd__AreaDirectionParameters, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_dwellTime_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *arg2 = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAreaPlane_dwellTime_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_dwellTime_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAreaPlane_dwellTime_set" "', argument " "2"" of type '" "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *""'"); 
+  }
+  arg2 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::DwellTimeParameters > * >(argp2);
+  if (arg1) (*arg1)->dwellTime = *arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAreaPlane_dwellTime_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > *arg1 = (mem::ScopedCopyablePtr< cphd::AreaPlane > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAreaPlane_dwellTime_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAreaPlane_dwellTime_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::AreaPlane > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::AreaPlane > * >(argp1);
+  result = (mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *)& ((*arg1)->dwellTime);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedCopyableAreaPlane_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeCopyableAreaPlane(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::AreaPlane > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeCopyableAreaPlane")) SWIG_fail;
+  result = makeCopyableAreaPlane();
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::AreaPlane >(static_cast< const mem::ScopedCopyablePtr< cphd::AreaPlane >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableFxParameters__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::FxParameters *arg1 = (cphd::FxParameters *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableFxParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__FxParameters, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableFxParameters" "', argument " "1"" of type '" "cphd::FxParameters *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::FxParameters * >(argp1);
+  result = (mem::ScopedCopyablePtr< cphd::FxParameters > *)new mem::ScopedCopyablePtr< cphd::FxParameters >(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableFxParameters__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCopyableFxParameters")) SWIG_fail;
+  result = (mem::ScopedCopyablePtr< cphd::FxParameters > *)new mem::ScopedCopyablePtr< cphd::FxParameters >();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableFxParameters__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableFxParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableFxParameters" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCopyableFxParameters" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  result = (mem::ScopedCopyablePtr< cphd::FxParameters > *)new mem::ScopedCopyablePtr< cphd::FxParameters >((mem::ScopedCopyablePtr< cphd::FxParameters > const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableFxParameters(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCopyableFxParameters__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__FxParameters, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableFxParameters__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableFxParameters__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCopyableFxParameters'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::FxParameters >::ScopedCopyablePtr(cphd::FxParameters *)\n"
+    "    mem::ScopedCopyablePtr< cphd::FxParameters >::ScopedCopyablePtr()\n"
+    "    mem::ScopedCopyablePtr< cphd::FxParameters >::ScopedCopyablePtr(mem::ScopedCopyablePtr< cphd::FxParameters > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::FxParameters *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableFxParameters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  result = (cphd::FxParameters *)((mem::ScopedCopyablePtr< cphd::FxParameters > const *)arg1)->get();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__FxParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::FxParameters *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableFxParameters___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters___ref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  result = (cphd::FxParameters *) &((mem::ScopedCopyablePtr< cphd::FxParameters > const *)arg1)->operator *();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__FxParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::FxParameters *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableFxParameters___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters___deref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  result = (cphd::FxParameters *)((mem::ScopedCopyablePtr< cphd::FxParameters > const *)arg1)->operator ->();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__FxParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  cphd::FxParameters *arg2 = (cphd::FxParameters *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableFxParameters_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_cphd__FxParameters, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableFxParameters_reset" "', argument " "2"" of type '" "cphd::FxParameters *""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::FxParameters * >(argp2);
+  (arg1)->reset(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableFxParameters_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_reset(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCopyableFxParameters_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_cphd__FxParameters, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCopyableFxParameters_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCopyableFxParameters_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::FxParameters >::reset(cphd::FxParameters *)\n"
+    "    mem::ScopedCopyablePtr< cphd::FxParameters >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCopyableFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCopyableFxParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCopyableFxParameters" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  cphd::FxParameters *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableFxParameters___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters___eq__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__FxParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableFxParameters___eq__" "', argument " "2"" of type '" "cphd::FxParameters const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableFxParameters___eq__" "', argument " "2"" of type '" "cphd::FxParameters const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::FxParameters * >(argp2);
+  result = (bool)(*arg1)->operator ==((cphd::FxParameters const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  cphd::FxParameters *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableFxParameters___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters___ne__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__FxParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableFxParameters___ne__" "', argument " "2"" of type '" "cphd::FxParameters const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableFxParameters___ne__" "', argument " "2"" of type '" "cphd::FxParameters const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::FxParameters * >(argp2);
+  result = (bool)(*arg1)->operator !=((cphd::FxParameters const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_Fx0_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableFxParameters_Fx0_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_Fx0_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCopyableFxParameters_Fx0_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  if (arg1) (*arg1)->Fx0 = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_Fx0_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableFxParameters_Fx0_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_Fx0_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  result =  ((*arg1)->Fx0);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_FxSS_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableFxParameters_FxSS_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_FxSS_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCopyableFxParameters_FxSS_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  if (arg1) (*arg1)->FxSS = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_FxSS_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableFxParameters_FxSS_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_FxSS_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  result =  ((*arg1)->FxSS);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_Fx1_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableFxParameters_Fx1_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_Fx1_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCopyableFxParameters_Fx1_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  if (arg1) (*arg1)->Fx1 = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_Fx1_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableFxParameters_Fx1_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_Fx1_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  result =  ((*arg1)->Fx1);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_Fx2_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableFxParameters_Fx2_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_Fx2_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCopyableFxParameters_Fx2_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  if (arg1) (*arg1)->Fx2 = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableFxParameters_Fx2_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::FxParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableFxParameters_Fx2_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableFxParameters_Fx2_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::FxParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::FxParameters > * >(argp1);
+  result =  ((*arg1)->Fx2);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedCopyableFxParameters_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeCopyableFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::FxParameters > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeCopyableFxParameters")) SWIG_fail;
+  result = makeCopyableFxParameters();
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::FxParameters >(static_cast< const mem::ScopedCopyablePtr< cphd::FxParameters >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__FxParameters_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableAntenna__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::Antenna *arg1 = (cphd::Antenna *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::Antenna > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableAntenna",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Antenna, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableAntenna" "', argument " "1"" of type '" "cphd::Antenna *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::Antenna * >(argp1);
+  result = (mem::ScopedCopyablePtr< cphd::Antenna > *)new mem::ScopedCopyablePtr< cphd::Antenna >(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableAntenna__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCopyableAntenna")) SWIG_fail;
+  result = (mem::ScopedCopyablePtr< cphd::Antenna > *)new mem::ScopedCopyablePtr< cphd::Antenna >();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableAntenna__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::Antenna > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableAntenna",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableAntenna" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCopyableAntenna" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result = (mem::ScopedCopyablePtr< cphd::Antenna > *)new mem::ScopedCopyablePtr< cphd::Antenna >((mem::ScopedCopyablePtr< cphd::Antenna > const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableAntenna(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCopyableAntenna__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__Antenna, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableAntenna__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableAntenna__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCopyableAntenna'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::Antenna >::ScopedCopyablePtr(cphd::Antenna *)\n"
+    "    mem::ScopedCopyablePtr< cphd::Antenna >::ScopedCopyablePtr()\n"
+    "    mem::ScopedCopyablePtr< cphd::Antenna >::ScopedCopyablePtr(mem::ScopedCopyablePtr< cphd::Antenna > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::Antenna *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result = (cphd::Antenna *)((mem::ScopedCopyablePtr< cphd::Antenna > const *)arg1)->get();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__Antenna, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::Antenna *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna___ref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result = (cphd::Antenna *) &((mem::ScopedCopyablePtr< cphd::Antenna > const *)arg1)->operator *();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__Antenna, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::Antenna *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna___deref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result = (cphd::Antenna *)((mem::ScopedCopyablePtr< cphd::Antenna > const *)arg1)->operator ->();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__Antenna, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  cphd::Antenna *arg2 = (cphd::Antenna *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAntenna_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_cphd__Antenna, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAntenna_reset" "', argument " "2"" of type '" "cphd::Antenna *""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::Antenna * >(argp2);
+  (arg1)->reset(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_reset(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCopyableAntenna_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_cphd__Antenna, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCopyableAntenna_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCopyableAntenna_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::Antenna >::reset(cphd::Antenna *)\n"
+    "    mem::ScopedCopyablePtr< cphd::Antenna >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCopyableAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCopyableAntenna",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCopyableAntenna" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  cphd::Antenna *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAntenna___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna___eq__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__Antenna,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAntenna___eq__" "', argument " "2"" of type '" "cphd::Antenna const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableAntenna___eq__" "', argument " "2"" of type '" "cphd::Antenna const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::Antenna * >(argp2);
+  result = (bool)(*arg1)->operator ==((cphd::Antenna const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  cphd::Antenna *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAntenna___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna___ne__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__Antenna,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAntenna___ne__" "', argument " "2"" of type '" "cphd::Antenna const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableAntenna___ne__" "', argument " "2"" of type '" "cphd::Antenna const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::Antenna * >(argp2);
+  result = (bool)(*arg1)->operator !=((cphd::Antenna const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_numTxAnt_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAntenna_numTxAnt_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_numTxAnt_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCopyableAntenna_numTxAnt_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  if (arg1) (*arg1)->numTxAnt = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_numTxAnt_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna_numTxAnt_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_numTxAnt_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result =  ((*arg1)->numTxAnt);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_numRcvAnt_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAntenna_numRcvAnt_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_numRcvAnt_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCopyableAntenna_numRcvAnt_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  if (arg1) (*arg1)->numRcvAnt = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_numRcvAnt_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna_numRcvAnt_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_numRcvAnt_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result =  ((*arg1)->numRcvAnt);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_numTWAnt_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAntenna_numTWAnt_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_numTWAnt_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCopyableAntenna_numTWAnt_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  if (arg1) (*arg1)->numTWAnt = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_numTWAnt_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna_numTWAnt_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_numTWAnt_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result =  ((*arg1)->numTWAnt);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_tx_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *arg2 = (std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAntenna_tx_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_tx_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAntenna_tx_set" "', argument " "2"" of type '" "std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * >(argp2);
+  if (arg1) (*arg1)->tx = *arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_tx_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna_tx_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_tx_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result = (std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *)& ((*arg1)->tx);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_rcv_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *arg2 = (std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAntenna_rcv_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_rcv_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAntenna_rcv_set" "', argument " "2"" of type '" "std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * >(argp2);
+  if (arg1) (*arg1)->rcv = *arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_rcv_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna_rcv_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_rcv_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result = (std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *)& ((*arg1)->rcv);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_twoWay_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *arg2 = (std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableAntenna_twoWay_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_twoWay_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableAntenna_twoWay_set" "', argument " "2"" of type '" "std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * >(argp2);
+  if (arg1) (*arg1)->twoWay = *arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableAntenna_twoWay_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > *arg1 = (mem::ScopedCopyablePtr< cphd::Antenna > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableAntenna_twoWay_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableAntenna_twoWay_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::Antenna > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::Antenna > * >(argp1);
+  result = (std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *)& ((*arg1)->twoWay);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedCopyableAntenna_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeCopyableAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::Antenna > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeCopyableAntenna")) SWIG_fail;
+  result = makeCopyableAntenna();
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::Antenna >(static_cast< const mem::ScopedCopyablePtr< cphd::Antenna >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__Antenna_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"new_SampleType", _wrap_new_SampleType, METH_VARARGS, (char *)"\n"
@@ -18623,8 +20960,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AreaPlane_xDirection_get", _wrap_AreaPlane_xDirection_get, METH_VARARGS, (char *)"AreaPlane_xDirection_get(AreaPlane self) -> cphd::AreaDirectionParameters"},
 	 { (char *)"AreaPlane_yDirection_set", _wrap_AreaPlane_yDirection_set, METH_VARARGS, (char *)"AreaPlane_yDirection_set(AreaPlane self, cphd::AreaDirectionParameters yDirection)"},
 	 { (char *)"AreaPlane_yDirection_get", _wrap_AreaPlane_yDirection_get, METH_VARARGS, (char *)"AreaPlane_yDirection_get(AreaPlane self) -> cphd::AreaDirectionParameters"},
-	 { (char *)"AreaPlane_dwellTime_set", _wrap_AreaPlane_dwellTime_set, METH_VARARGS, (char *)"AreaPlane_dwellTime_set(AreaPlane self, mem::ScopedCopyablePtr< cphd::DwellTimeParameters > dwellTime)"},
-	 { (char *)"AreaPlane_dwellTime_get", _wrap_AreaPlane_dwellTime_get, METH_VARARGS, (char *)"AreaPlane_dwellTime_get(AreaPlane self) -> mem::ScopedCopyablePtr< cphd::DwellTimeParameters >"},
+	 { (char *)"AreaPlane_dwellTime_set", _wrap_AreaPlane_dwellTime_set, METH_VARARGS, (char *)"AreaPlane_dwellTime_set(AreaPlane self, ScopedCopyableDwellTimeParameters dwellTime)"},
+	 { (char *)"AreaPlane_dwellTime_get", _wrap_AreaPlane_dwellTime_get, METH_VARARGS, (char *)"AreaPlane_dwellTime_get(AreaPlane self) -> ScopedCopyableDwellTimeParameters"},
 	 { (char *)"delete_AreaPlane", _wrap_delete_AreaPlane, METH_VARARGS, (char *)"delete_AreaPlane(AreaPlane self)"},
 	 { (char *)"AreaPlane_swigregister", AreaPlane_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ImageArea", _wrap_new_ImageArea, METH_VARARGS, (char *)"new_ImageArea() -> ImageArea"},
@@ -18632,8 +20969,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ImageArea___ne__", _wrap_ImageArea___ne__, METH_VARARGS, (char *)"ImageArea___ne__(ImageArea self, ImageArea other) -> bool"},
 	 { (char *)"ImageArea_acpCorners_set", _wrap_ImageArea_acpCorners_set, METH_VARARGS, (char *)"ImageArea_acpCorners_set(ImageArea self, cphd::LatLonAltCorners acpCorners)"},
 	 { (char *)"ImageArea_acpCorners_get", _wrap_ImageArea_acpCorners_get, METH_VARARGS, (char *)"ImageArea_acpCorners_get(ImageArea self) -> cphd::LatLonAltCorners"},
-	 { (char *)"ImageArea_plane_set", _wrap_ImageArea_plane_set, METH_VARARGS, (char *)"ImageArea_plane_set(ImageArea self, mem::ScopedCopyablePtr< cphd::AreaPlane > plane)"},
-	 { (char *)"ImageArea_plane_get", _wrap_ImageArea_plane_get, METH_VARARGS, (char *)"ImageArea_plane_get(ImageArea self) -> mem::ScopedCopyablePtr< cphd::AreaPlane >"},
+	 { (char *)"ImageArea_plane_set", _wrap_ImageArea_plane_set, METH_VARARGS, (char *)"ImageArea_plane_set(ImageArea self, ScopedCopyableAreaPlane plane)"},
+	 { (char *)"ImageArea_plane_get", _wrap_ImageArea_plane_get, METH_VARARGS, (char *)"ImageArea_plane_get(ImageArea self) -> ScopedCopyableAreaPlane"},
 	 { (char *)"delete_ImageArea", _wrap_delete_ImageArea, METH_VARARGS, (char *)"delete_ImageArea(ImageArea self)"},
 	 { (char *)"ImageArea_swigregister", ImageArea_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Global", _wrap_new_Global, METH_VARARGS, (char *)"new_Global() -> Global"},
@@ -18773,10 +21110,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorParameters_tropoSRP_get", _wrap_VectorParameters_tropoSRP_get, METH_VARARGS, (char *)"VectorParameters_tropoSRP_get(VectorParameters self) -> sys::Off_T"},
 	 { (char *)"VectorParameters_ampSF_set", _wrap_VectorParameters_ampSF_set, METH_VARARGS, (char *)"VectorParameters_ampSF_set(VectorParameters self, sys::Off_T ampSF)"},
 	 { (char *)"VectorParameters_ampSF_get", _wrap_VectorParameters_ampSF_get, METH_VARARGS, (char *)"VectorParameters_ampSF_get(VectorParameters self) -> sys::Off_T"},
-	 { (char *)"VectorParameters_fxParameters_set", _wrap_VectorParameters_fxParameters_set, METH_VARARGS, (char *)"VectorParameters_fxParameters_set(VectorParameters self, mem::ScopedCopyablePtr< cphd::FxParameters > fxParameters)"},
-	 { (char *)"VectorParameters_fxParameters_get", _wrap_VectorParameters_fxParameters_get, METH_VARARGS, (char *)"VectorParameters_fxParameters_get(VectorParameters self) -> mem::ScopedCopyablePtr< cphd::FxParameters >"},
-	 { (char *)"VectorParameters_toaParameters_set", _wrap_VectorParameters_toaParameters_set, METH_VARARGS, (char *)"VectorParameters_toaParameters_set(VectorParameters self, mem::ScopedCopyablePtr< cphd::TOAParameters > toaParameters)"},
-	 { (char *)"VectorParameters_toaParameters_get", _wrap_VectorParameters_toaParameters_get, METH_VARARGS, (char *)"VectorParameters_toaParameters_get(VectorParameters self) -> mem::ScopedCopyablePtr< cphd::TOAParameters >"},
+	 { (char *)"VectorParameters_fxParameters_set", _wrap_VectorParameters_fxParameters_set, METH_VARARGS, (char *)"VectorParameters_fxParameters_set(VectorParameters self, ScopedCopyableFxParameters fxParameters)"},
+	 { (char *)"VectorParameters_fxParameters_get", _wrap_VectorParameters_fxParameters_get, METH_VARARGS, (char *)"VectorParameters_fxParameters_get(VectorParameters self) -> ScopedCopyableFxParameters"},
+	 { (char *)"VectorParameters_toaParameters_set", _wrap_VectorParameters_toaParameters_set, METH_VARARGS, (char *)"VectorParameters_toaParameters_set(VectorParameters self, mem::ScopedCopyablePtr< cphd::TOAParameters > * toaParameters)"},
+	 { (char *)"VectorParameters_toaParameters_get", _wrap_VectorParameters_toaParameters_get, METH_VARARGS, (char *)"VectorParameters_toaParameters_get(VectorParameters self) -> mem::ScopedCopyablePtr< cphd::TOAParameters > *"},
 	 { (char *)"delete_VectorParameters", _wrap_delete_VectorParameters, METH_VARARGS, (char *)"delete_VectorParameters(VectorParameters self)"},
 	 { (char *)"VectorParameters_swigregister", VectorParameters_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Metadata", _wrap_new_Metadata, METH_VARARGS, (char *)"new_Metadata() -> Metadata"},
@@ -18800,8 +21137,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Metadata_channel_get", _wrap_Metadata_channel_get, METH_VARARGS, (char *)"Metadata_channel_get(Metadata self) -> Channel"},
 	 { (char *)"Metadata_srp_set", _wrap_Metadata_srp_set, METH_VARARGS, (char *)"Metadata_srp_set(Metadata self, SRP srp)"},
 	 { (char *)"Metadata_srp_get", _wrap_Metadata_srp_get, METH_VARARGS, (char *)"Metadata_srp_get(Metadata self) -> SRP"},
-	 { (char *)"Metadata_antenna_set", _wrap_Metadata_antenna_set, METH_VARARGS, (char *)"Metadata_antenna_set(Metadata self, mem::ScopedCopyablePtr< cphd::Antenna > antenna)"},
-	 { (char *)"Metadata_antenna_get", _wrap_Metadata_antenna_get, METH_VARARGS, (char *)"Metadata_antenna_get(Metadata self) -> mem::ScopedCopyablePtr< cphd::Antenna >"},
+	 { (char *)"Metadata_antenna_set", _wrap_Metadata_antenna_set, METH_VARARGS, (char *)"Metadata_antenna_set(Metadata self, ScopedCopyableAntenna antenna)"},
+	 { (char *)"Metadata_antenna_get", _wrap_Metadata_antenna_get, METH_VARARGS, (char *)"Metadata_antenna_get(Metadata self) -> ScopedCopyableAntenna"},
 	 { (char *)"Metadata_vectorParameters_set", _wrap_Metadata_vectorParameters_set, METH_VARARGS, (char *)"Metadata_vectorParameters_set(Metadata self, VectorParameters vectorParameters)"},
 	 { (char *)"Metadata_vectorParameters_get", _wrap_Metadata_vectorParameters_get, METH_VARARGS, (char *)"Metadata_vectorParameters_get(Metadata self) -> VectorParameters"},
 	 { (char *)"Metadata___eq__", _wrap_Metadata___eq__, METH_VARARGS, (char *)"Metadata___eq__(Metadata self, Metadata other) -> bool"},
@@ -18947,12 +21284,113 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CPHDReader_getWideband", _wrap_CPHDReader_getWideband, METH_VARARGS, (char *)"CPHDReader_getWideband(CPHDReader self) -> Wideband"},
 	 { (char *)"delete_CPHDReader", _wrap_delete_CPHDReader, METH_VARARGS, (char *)"delete_CPHDReader(CPHDReader self)"},
 	 { (char *)"CPHDReader_swigregister", CPHDReader_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ScopedCopyableDwellTimeParameters", _wrap_new_ScopedCopyableDwellTimeParameters, METH_VARARGS, (char *)"\n"
+		"ScopedCopyableDwellTimeParameters(DwellTimeParameters ptr=None)\n"
+		"ScopedCopyableDwellTimeParameters()\n"
+		"new_ScopedCopyableDwellTimeParameters(ScopedCopyableDwellTimeParameters rhs) -> ScopedCopyableDwellTimeParameters\n"
+		""},
+	 { (char *)"ScopedCopyableDwellTimeParameters_get", _wrap_ScopedCopyableDwellTimeParameters_get, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters_get(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"},
+	 { (char *)"ScopedCopyableDwellTimeParameters___ref__", _wrap_ScopedCopyableDwellTimeParameters___ref__, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters___ref__(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"},
+	 { (char *)"ScopedCopyableDwellTimeParameters___deref__", _wrap_ScopedCopyableDwellTimeParameters___deref__, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters___deref__(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"},
+	 { (char *)"ScopedCopyableDwellTimeParameters_reset", _wrap_ScopedCopyableDwellTimeParameters_reset, METH_VARARGS, (char *)"\n"
+		"reset(DwellTimeParameters ptr=None)\n"
+		"ScopedCopyableDwellTimeParameters_reset(ScopedCopyableDwellTimeParameters self)\n"
+		""},
+	 { (char *)"delete_ScopedCopyableDwellTimeParameters", _wrap_delete_ScopedCopyableDwellTimeParameters, METH_VARARGS, (char *)"delete_ScopedCopyableDwellTimeParameters(ScopedCopyableDwellTimeParameters self)"},
+	 { (char *)"ScopedCopyableDwellTimeParameters___eq__", _wrap_ScopedCopyableDwellTimeParameters___eq__, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters___eq__(ScopedCopyableDwellTimeParameters self, DwellTimeParameters other) -> bool"},
+	 { (char *)"ScopedCopyableDwellTimeParameters___ne__", _wrap_ScopedCopyableDwellTimeParameters___ne__, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters___ne__(ScopedCopyableDwellTimeParameters self, DwellTimeParameters other) -> bool"},
+	 { (char *)"ScopedCopyableDwellTimeParameters_codTimePoly_set", _wrap_ScopedCopyableDwellTimeParameters_codTimePoly_set, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters_codTimePoly_set(ScopedCopyableDwellTimeParameters self, cphd::Poly2D codTimePoly)"},
+	 { (char *)"ScopedCopyableDwellTimeParameters_codTimePoly_get", _wrap_ScopedCopyableDwellTimeParameters_codTimePoly_get, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters_codTimePoly_get(ScopedCopyableDwellTimeParameters self) -> cphd::Poly2D"},
+	 { (char *)"ScopedCopyableDwellTimeParameters_dwellTimePoly_set", _wrap_ScopedCopyableDwellTimeParameters_dwellTimePoly_set, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters_dwellTimePoly_set(ScopedCopyableDwellTimeParameters self, cphd::Poly2D dwellTimePoly)"},
+	 { (char *)"ScopedCopyableDwellTimeParameters_dwellTimePoly_get", _wrap_ScopedCopyableDwellTimeParameters_dwellTimePoly_get, METH_VARARGS, (char *)"ScopedCopyableDwellTimeParameters_dwellTimePoly_get(ScopedCopyableDwellTimeParameters self) -> cphd::Poly2D"},
+	 { (char *)"ScopedCopyableDwellTimeParameters_swigregister", ScopedCopyableDwellTimeParameters_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeCopyableDwellTimeParameters", _wrap_makeCopyableDwellTimeParameters, METH_VARARGS, (char *)"makeCopyableDwellTimeParameters() -> ScopedCopyableDwellTimeParameters"},
+	 { (char *)"new_ScopedCopyableAreaPlane", _wrap_new_ScopedCopyableAreaPlane, METH_VARARGS, (char *)"\n"
+		"ScopedCopyableAreaPlane(AreaPlane ptr=None)\n"
+		"ScopedCopyableAreaPlane()\n"
+		"new_ScopedCopyableAreaPlane(ScopedCopyableAreaPlane rhs) -> ScopedCopyableAreaPlane\n"
+		""},
+	 { (char *)"ScopedCopyableAreaPlane_get", _wrap_ScopedCopyableAreaPlane_get, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_get(ScopedCopyableAreaPlane self) -> AreaPlane"},
+	 { (char *)"ScopedCopyableAreaPlane___ref__", _wrap_ScopedCopyableAreaPlane___ref__, METH_VARARGS, (char *)"ScopedCopyableAreaPlane___ref__(ScopedCopyableAreaPlane self) -> AreaPlane"},
+	 { (char *)"ScopedCopyableAreaPlane___deref__", _wrap_ScopedCopyableAreaPlane___deref__, METH_VARARGS, (char *)"ScopedCopyableAreaPlane___deref__(ScopedCopyableAreaPlane self) -> AreaPlane"},
+	 { (char *)"ScopedCopyableAreaPlane_reset", _wrap_ScopedCopyableAreaPlane_reset, METH_VARARGS, (char *)"\n"
+		"reset(AreaPlane ptr=None)\n"
+		"ScopedCopyableAreaPlane_reset(ScopedCopyableAreaPlane self)\n"
+		""},
+	 { (char *)"delete_ScopedCopyableAreaPlane", _wrap_delete_ScopedCopyableAreaPlane, METH_VARARGS, (char *)"delete_ScopedCopyableAreaPlane(ScopedCopyableAreaPlane self)"},
+	 { (char *)"ScopedCopyableAreaPlane___eq__", _wrap_ScopedCopyableAreaPlane___eq__, METH_VARARGS, (char *)"ScopedCopyableAreaPlane___eq__(ScopedCopyableAreaPlane self, AreaPlane other) -> bool"},
+	 { (char *)"ScopedCopyableAreaPlane___ne__", _wrap_ScopedCopyableAreaPlane___ne__, METH_VARARGS, (char *)"ScopedCopyableAreaPlane___ne__(ScopedCopyableAreaPlane self, AreaPlane other) -> bool"},
+	 { (char *)"ScopedCopyableAreaPlane_referencePoint_set", _wrap_ScopedCopyableAreaPlane_referencePoint_set, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_referencePoint_set(ScopedCopyableAreaPlane self, six::ReferencePoint referencePoint)"},
+	 { (char *)"ScopedCopyableAreaPlane_referencePoint_get", _wrap_ScopedCopyableAreaPlane_referencePoint_get, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_referencePoint_get(ScopedCopyableAreaPlane self) -> six::ReferencePoint"},
+	 { (char *)"ScopedCopyableAreaPlane_xDirection_set", _wrap_ScopedCopyableAreaPlane_xDirection_set, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_xDirection_set(ScopedCopyableAreaPlane self, cphd::AreaDirectionParameters xDirection)"},
+	 { (char *)"ScopedCopyableAreaPlane_xDirection_get", _wrap_ScopedCopyableAreaPlane_xDirection_get, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_xDirection_get(ScopedCopyableAreaPlane self) -> cphd::AreaDirectionParameters"},
+	 { (char *)"ScopedCopyableAreaPlane_yDirection_set", _wrap_ScopedCopyableAreaPlane_yDirection_set, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_yDirection_set(ScopedCopyableAreaPlane self, cphd::AreaDirectionParameters yDirection)"},
+	 { (char *)"ScopedCopyableAreaPlane_yDirection_get", _wrap_ScopedCopyableAreaPlane_yDirection_get, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_yDirection_get(ScopedCopyableAreaPlane self) -> cphd::AreaDirectionParameters"},
+	 { (char *)"ScopedCopyableAreaPlane_dwellTime_set", _wrap_ScopedCopyableAreaPlane_dwellTime_set, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_dwellTime_set(ScopedCopyableAreaPlane self, ScopedCopyableDwellTimeParameters dwellTime)"},
+	 { (char *)"ScopedCopyableAreaPlane_dwellTime_get", _wrap_ScopedCopyableAreaPlane_dwellTime_get, METH_VARARGS, (char *)"ScopedCopyableAreaPlane_dwellTime_get(ScopedCopyableAreaPlane self) -> ScopedCopyableDwellTimeParameters"},
+	 { (char *)"ScopedCopyableAreaPlane_swigregister", ScopedCopyableAreaPlane_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeCopyableAreaPlane", _wrap_makeCopyableAreaPlane, METH_VARARGS, (char *)"makeCopyableAreaPlane() -> ScopedCopyableAreaPlane"},
+	 { (char *)"new_ScopedCopyableFxParameters", _wrap_new_ScopedCopyableFxParameters, METH_VARARGS, (char *)"\n"
+		"ScopedCopyableFxParameters(FxParameters ptr=None)\n"
+		"ScopedCopyableFxParameters()\n"
+		"new_ScopedCopyableFxParameters(ScopedCopyableFxParameters rhs) -> ScopedCopyableFxParameters\n"
+		""},
+	 { (char *)"ScopedCopyableFxParameters_get", _wrap_ScopedCopyableFxParameters_get, METH_VARARGS, (char *)"ScopedCopyableFxParameters_get(ScopedCopyableFxParameters self) -> FxParameters"},
+	 { (char *)"ScopedCopyableFxParameters___ref__", _wrap_ScopedCopyableFxParameters___ref__, METH_VARARGS, (char *)"ScopedCopyableFxParameters___ref__(ScopedCopyableFxParameters self) -> FxParameters"},
+	 { (char *)"ScopedCopyableFxParameters___deref__", _wrap_ScopedCopyableFxParameters___deref__, METH_VARARGS, (char *)"ScopedCopyableFxParameters___deref__(ScopedCopyableFxParameters self) -> FxParameters"},
+	 { (char *)"ScopedCopyableFxParameters_reset", _wrap_ScopedCopyableFxParameters_reset, METH_VARARGS, (char *)"\n"
+		"reset(FxParameters ptr=None)\n"
+		"ScopedCopyableFxParameters_reset(ScopedCopyableFxParameters self)\n"
+		""},
+	 { (char *)"delete_ScopedCopyableFxParameters", _wrap_delete_ScopedCopyableFxParameters, METH_VARARGS, (char *)"delete_ScopedCopyableFxParameters(ScopedCopyableFxParameters self)"},
+	 { (char *)"ScopedCopyableFxParameters___eq__", _wrap_ScopedCopyableFxParameters___eq__, METH_VARARGS, (char *)"ScopedCopyableFxParameters___eq__(ScopedCopyableFxParameters self, FxParameters other) -> bool"},
+	 { (char *)"ScopedCopyableFxParameters___ne__", _wrap_ScopedCopyableFxParameters___ne__, METH_VARARGS, (char *)"ScopedCopyableFxParameters___ne__(ScopedCopyableFxParameters self, FxParameters other) -> bool"},
+	 { (char *)"ScopedCopyableFxParameters_Fx0_set", _wrap_ScopedCopyableFxParameters_Fx0_set, METH_VARARGS, (char *)"ScopedCopyableFxParameters_Fx0_set(ScopedCopyableFxParameters self, size_t Fx0)"},
+	 { (char *)"ScopedCopyableFxParameters_Fx0_get", _wrap_ScopedCopyableFxParameters_Fx0_get, METH_VARARGS, (char *)"ScopedCopyableFxParameters_Fx0_get(ScopedCopyableFxParameters self) -> size_t"},
+	 { (char *)"ScopedCopyableFxParameters_FxSS_set", _wrap_ScopedCopyableFxParameters_FxSS_set, METH_VARARGS, (char *)"ScopedCopyableFxParameters_FxSS_set(ScopedCopyableFxParameters self, size_t FxSS)"},
+	 { (char *)"ScopedCopyableFxParameters_FxSS_get", _wrap_ScopedCopyableFxParameters_FxSS_get, METH_VARARGS, (char *)"ScopedCopyableFxParameters_FxSS_get(ScopedCopyableFxParameters self) -> size_t"},
+	 { (char *)"ScopedCopyableFxParameters_Fx1_set", _wrap_ScopedCopyableFxParameters_Fx1_set, METH_VARARGS, (char *)"ScopedCopyableFxParameters_Fx1_set(ScopedCopyableFxParameters self, size_t Fx1)"},
+	 { (char *)"ScopedCopyableFxParameters_Fx1_get", _wrap_ScopedCopyableFxParameters_Fx1_get, METH_VARARGS, (char *)"ScopedCopyableFxParameters_Fx1_get(ScopedCopyableFxParameters self) -> size_t"},
+	 { (char *)"ScopedCopyableFxParameters_Fx2_set", _wrap_ScopedCopyableFxParameters_Fx2_set, METH_VARARGS, (char *)"ScopedCopyableFxParameters_Fx2_set(ScopedCopyableFxParameters self, size_t Fx2)"},
+	 { (char *)"ScopedCopyableFxParameters_Fx2_get", _wrap_ScopedCopyableFxParameters_Fx2_get, METH_VARARGS, (char *)"ScopedCopyableFxParameters_Fx2_get(ScopedCopyableFxParameters self) -> size_t"},
+	 { (char *)"ScopedCopyableFxParameters_swigregister", ScopedCopyableFxParameters_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeCopyableFxParameters", _wrap_makeCopyableFxParameters, METH_VARARGS, (char *)"makeCopyableFxParameters() -> ScopedCopyableFxParameters"},
+	 { (char *)"new_ScopedCopyableAntenna", _wrap_new_ScopedCopyableAntenna, METH_VARARGS, (char *)"\n"
+		"ScopedCopyableAntenna(Antenna ptr=None)\n"
+		"ScopedCopyableAntenna()\n"
+		"new_ScopedCopyableAntenna(ScopedCopyableAntenna rhs) -> ScopedCopyableAntenna\n"
+		""},
+	 { (char *)"ScopedCopyableAntenna_get", _wrap_ScopedCopyableAntenna_get, METH_VARARGS, (char *)"ScopedCopyableAntenna_get(ScopedCopyableAntenna self) -> Antenna"},
+	 { (char *)"ScopedCopyableAntenna___ref__", _wrap_ScopedCopyableAntenna___ref__, METH_VARARGS, (char *)"ScopedCopyableAntenna___ref__(ScopedCopyableAntenna self) -> Antenna"},
+	 { (char *)"ScopedCopyableAntenna___deref__", _wrap_ScopedCopyableAntenna___deref__, METH_VARARGS, (char *)"ScopedCopyableAntenna___deref__(ScopedCopyableAntenna self) -> Antenna"},
+	 { (char *)"ScopedCopyableAntenna_reset", _wrap_ScopedCopyableAntenna_reset, METH_VARARGS, (char *)"\n"
+		"reset(Antenna ptr=None)\n"
+		"ScopedCopyableAntenna_reset(ScopedCopyableAntenna self)\n"
+		""},
+	 { (char *)"delete_ScopedCopyableAntenna", _wrap_delete_ScopedCopyableAntenna, METH_VARARGS, (char *)"delete_ScopedCopyableAntenna(ScopedCopyableAntenna self)"},
+	 { (char *)"ScopedCopyableAntenna___eq__", _wrap_ScopedCopyableAntenna___eq__, METH_VARARGS, (char *)"ScopedCopyableAntenna___eq__(ScopedCopyableAntenna self, Antenna other) -> bool"},
+	 { (char *)"ScopedCopyableAntenna___ne__", _wrap_ScopedCopyableAntenna___ne__, METH_VARARGS, (char *)"ScopedCopyableAntenna___ne__(ScopedCopyableAntenna self, Antenna other) -> bool"},
+	 { (char *)"ScopedCopyableAntenna_numTxAnt_set", _wrap_ScopedCopyableAntenna_numTxAnt_set, METH_VARARGS, (char *)"ScopedCopyableAntenna_numTxAnt_set(ScopedCopyableAntenna self, size_t numTxAnt)"},
+	 { (char *)"ScopedCopyableAntenna_numTxAnt_get", _wrap_ScopedCopyableAntenna_numTxAnt_get, METH_VARARGS, (char *)"ScopedCopyableAntenna_numTxAnt_get(ScopedCopyableAntenna self) -> size_t"},
+	 { (char *)"ScopedCopyableAntenna_numRcvAnt_set", _wrap_ScopedCopyableAntenna_numRcvAnt_set, METH_VARARGS, (char *)"ScopedCopyableAntenna_numRcvAnt_set(ScopedCopyableAntenna self, size_t numRcvAnt)"},
+	 { (char *)"ScopedCopyableAntenna_numRcvAnt_get", _wrap_ScopedCopyableAntenna_numRcvAnt_get, METH_VARARGS, (char *)"ScopedCopyableAntenna_numRcvAnt_get(ScopedCopyableAntenna self) -> size_t"},
+	 { (char *)"ScopedCopyableAntenna_numTWAnt_set", _wrap_ScopedCopyableAntenna_numTWAnt_set, METH_VARARGS, (char *)"ScopedCopyableAntenna_numTWAnt_set(ScopedCopyableAntenna self, size_t numTWAnt)"},
+	 { (char *)"ScopedCopyableAntenna_numTWAnt_get", _wrap_ScopedCopyableAntenna_numTWAnt_get, METH_VARARGS, (char *)"ScopedCopyableAntenna_numTWAnt_get(ScopedCopyableAntenna self) -> size_t"},
+	 { (char *)"ScopedCopyableAntenna_tx_set", _wrap_ScopedCopyableAntenna_tx_set, METH_VARARGS, (char *)"ScopedCopyableAntenna_tx_set(ScopedCopyableAntenna self, std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * tx)"},
+	 { (char *)"ScopedCopyableAntenna_tx_get", _wrap_ScopedCopyableAntenna_tx_get, METH_VARARGS, (char *)"ScopedCopyableAntenna_tx_get(ScopedCopyableAntenna self) -> std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *"},
+	 { (char *)"ScopedCopyableAntenna_rcv_set", _wrap_ScopedCopyableAntenna_rcv_set, METH_VARARGS, (char *)"ScopedCopyableAntenna_rcv_set(ScopedCopyableAntenna self, std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * rcv)"},
+	 { (char *)"ScopedCopyableAntenna_rcv_get", _wrap_ScopedCopyableAntenna_rcv_get, METH_VARARGS, (char *)"ScopedCopyableAntenna_rcv_get(ScopedCopyableAntenna self) -> std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *"},
+	 { (char *)"ScopedCopyableAntenna_twoWay_set", _wrap_ScopedCopyableAntenna_twoWay_set, METH_VARARGS, (char *)"ScopedCopyableAntenna_twoWay_set(ScopedCopyableAntenna self, std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > * twoWay)"},
+	 { (char *)"ScopedCopyableAntenna_twoWay_get", _wrap_ScopedCopyableAntenna_twoWay_get, METH_VARARGS, (char *)"ScopedCopyableAntenna_twoWay_get(ScopedCopyableAntenna self) -> std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *"},
+	 { (char *)"ScopedCopyableAntenna_swigregister", ScopedCopyableAntenna_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeCopyableAntenna", _wrap_makeCopyableAntenna, METH_VARARGS, (char *)"makeCopyableAntenna() -> ScopedCopyableAntenna"},
 	 { NULL, NULL, 0, NULL }
 };
 
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static swig_type_info _swigt__p_T = {"_p_T", "T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd__Antenna = {"_p_cphd__Antenna", "cphd::Antenna *", 0, 0, (void*)0, 0};
@@ -18985,8 +21423,8 @@ static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t
 static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__SeekableInputStream = {"_p_io__SeekableInputStream", "io::SeekableInputStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__BufferViewT_std__complexT_float_t_t = {"_p_mem__BufferViewT_std__complexT_float_t_t", "mem::BufferView< std::complex< float > > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_mem__BufferViewT_sys__ubyte_t = {"_p_mem__BufferViewT_sys__ubyte_t", "mem::BufferView< sys::ubyte > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_mem__ScopedArrayT_sys__ubyte_t = {"_p_mem__ScopedArrayT_sys__ubyte_t", "mem::ScopedArray< sys::ubyte > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__BufferViewT_unsigned_char_t = {"_p_mem__BufferViewT_unsigned_char_t", "mem::BufferView< sys::ubyte > *|mem::BufferView< unsigned char > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__ScopedArrayT_unsigned_char_t = {"_p_mem__ScopedArrayT_unsigned_char_t", "mem::ScopedArray< sys::ubyte > *|mem::ScopedArray< unsigned char > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd__Antenna_t = {"_p_mem__ScopedCopyablePtrT_cphd__Antenna_t", "mem::ScopedCopyablePtr< cphd::Antenna > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t = {"_p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t", "mem::ScopedCopyablePtr< cphd::AreaPlane > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t = {"_p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t", "mem::ScopedCopyablePtr< cphd::DwellTimeParameters > *", 0, 0, (void*)0, 0};
@@ -19040,6 +21478,7 @@ static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned c
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
+  &_swigt__p_T,
   &_swigt__p_allocator_type,
   &_swigt__p_char,
   &_swigt__p_cphd__Antenna,
@@ -19072,8 +21511,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_int8_t,
   &_swigt__p_io__SeekableInputStream,
   &_swigt__p_mem__BufferViewT_std__complexT_float_t_t,
-  &_swigt__p_mem__BufferViewT_sys__ubyte_t,
-  &_swigt__p_mem__ScopedArrayT_sys__ubyte_t,
+  &_swigt__p_mem__BufferViewT_unsigned_char_t,
+  &_swigt__p_mem__ScopedArrayT_unsigned_char_t,
   &_swigt__p_mem__ScopedCopyablePtrT_cphd__Antenna_t,
   &_swigt__p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t,
   &_swigt__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t,
@@ -19127,6 +21566,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_value_type,
 };
 
+static swig_cast_info _swigc__p_T[] = {  {&_swigt__p_T, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cphd__Antenna[] = {  {&_swigt__p_cphd__Antenna, 0, 0, 0},{0, 0, 0, 0}};
@@ -19159,8 +21599,8 @@ static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_int8_t[] = {  {&_swigt__p_int8_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__SeekableInputStream[] = {  {&_swigt__p_io__SeekableInputStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__BufferViewT_std__complexT_float_t_t[] = {  {&_swigt__p_mem__BufferViewT_std__complexT_float_t_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_mem__BufferViewT_sys__ubyte_t[] = {  {&_swigt__p_mem__BufferViewT_sys__ubyte_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_mem__ScopedArrayT_sys__ubyte_t[] = {  {&_swigt__p_mem__ScopedArrayT_sys__ubyte_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mem__BufferViewT_unsigned_char_t[] = {  {&_swigt__p_mem__BufferViewT_unsigned_char_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mem__ScopedArrayT_unsigned_char_t[] = {  {&_swigt__p_mem__ScopedArrayT_unsigned_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd__Antenna_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_cphd__Antenna_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -19214,6 +21654,7 @@ static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
+  _swigc__p_T,
   _swigc__p_allocator_type,
   _swigc__p_char,
   _swigc__p_cphd__Antenna,
@@ -19246,8 +21687,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_int8_t,
   _swigc__p_io__SeekableInputStream,
   _swigc__p_mem__BufferViewT_std__complexT_float_t_t,
-  _swigc__p_mem__BufferViewT_sys__ubyte_t,
-  _swigc__p_mem__ScopedArrayT_sys__ubyte_t,
+  _swigc__p_mem__BufferViewT_unsigned_char_t,
+  _swigc__p_mem__ScopedArrayT_unsigned_char_t,
   _swigc__p_mem__ScopedCopyablePtrT_cphd__Antenna_t,
   _swigc__p_mem__ScopedCopyablePtrT_cphd__AreaPlane_t,
   _swigc__p_mem__ScopedCopyablePtrT_cphd__DwellTimeParameters_t,
