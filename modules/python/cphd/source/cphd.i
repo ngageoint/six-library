@@ -23,14 +23,24 @@
 %module(package="pysix") cphd
 
 %feature("autodoc", "1");
+
+%include "std_string.i"
+%include "std_vector.i"
+
 %import "types.i"
 %import "mem.i"
+%import "six_sicd.i"
+%import "six.i"
+%import "math_poly.i"
+%import "math_linear.i"
+%import "scene.i"
 
 %{
 #include "import/cphd.h"
 %}
 
-%include "std_string.i"
+
+%rename(CphdAntenna) cphd::Antenna;
 
 %include "cphd/Types.h"
 %include "cphd/Enums.h"
@@ -156,7 +166,12 @@ def read(self,
 Wideband.read = read
 %}
 
+%template(VectorArraySize) std::vector<cphd::ArraySize>;
+%template(VectorVector3) std::vector<six::Vector3>;
+%template(VectorPolyXYZ) std::vector<six::PolyXYZ>;
+
 SCOPED_COPYABLE(cphd,DwellTimeParameters);
 SCOPED_COPYABLE(cphd,AreaPlane);
 SCOPED_COPYABLE(cphd,FxParameters);
-SCOPED_COPYABLE(cphd,Antenna);
+SCOPED_COPYABLE_RENAME(cphd,Antenna,CphdAntenna);
+

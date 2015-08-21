@@ -90,9 +90,122 @@ except AttributeError:
     _newclass = 0
 
 
+class SwigPyIterator(_object):
+    """Proxy of C++ swig::SwigPyIterator class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SwigPyIterator, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SwigPyIterator, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _cphd.delete_SwigPyIterator
+    __del__ = lambda self: None
+
+    def value(self):
+        """value(SwigPyIterator self) -> PyObject *"""
+        return _cphd.SwigPyIterator_value(self)
+
+
+    def incr(self, n=1):
+        """
+        incr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
+        incr(SwigPyIterator self) -> SwigPyIterator
+        """
+        return _cphd.SwigPyIterator_incr(self, n)
+
+
+    def decr(self, n=1):
+        """
+        decr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
+        decr(SwigPyIterator self) -> SwigPyIterator
+        """
+        return _cphd.SwigPyIterator_decr(self, n)
+
+
+    def distance(self, x):
+        """distance(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t"""
+        return _cphd.SwigPyIterator_distance(self, x)
+
+
+    def equal(self, x):
+        """equal(SwigPyIterator self, SwigPyIterator x) -> bool"""
+        return _cphd.SwigPyIterator_equal(self, x)
+
+
+    def copy(self):
+        """copy(SwigPyIterator self) -> SwigPyIterator"""
+        return _cphd.SwigPyIterator_copy(self)
+
+
+    def next(self):
+        """next(SwigPyIterator self) -> PyObject *"""
+        return _cphd.SwigPyIterator_next(self)
+
+
+    def __next__(self):
+        """__next__(SwigPyIterator self) -> PyObject *"""
+        return _cphd.SwigPyIterator___next__(self)
+
+
+    def previous(self):
+        """previous(SwigPyIterator self) -> PyObject *"""
+        return _cphd.SwigPyIterator_previous(self)
+
+
+    def advance(self, n):
+        """advance(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
+        return _cphd.SwigPyIterator_advance(self, n)
+
+
+    def __eq__(self, x):
+        """__eq__(SwigPyIterator self, SwigPyIterator x) -> bool"""
+        return _cphd.SwigPyIterator___eq__(self, x)
+
+
+    def __ne__(self, x):
+        """__ne__(SwigPyIterator self, SwigPyIterator x) -> bool"""
+        return _cphd.SwigPyIterator___ne__(self, x)
+
+
+    def __iadd__(self, n):
+        """__iadd__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
+        return _cphd.SwigPyIterator___iadd__(self, n)
+
+
+    def __isub__(self, n):
+        """__isub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
+        return _cphd.SwigPyIterator___isub__(self, n)
+
+
+    def __add__(self, n):
+        """__add__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
+        return _cphd.SwigPyIterator___add__(self, n)
+
+
+    def __sub__(self, *args):
+        """
+        __sub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator
+        __sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t
+        """
+        return _cphd.SwigPyIterator___sub__(self, *args)
+
+    def __iter__(self):
+        return self
+SwigPyIterator_swigregister = _cphd.SwigPyIterator_swigregister
+SwigPyIterator_swigregister(SwigPyIterator)
+
 import coda.coda_types
 import coda.coda_sys
 import coda.mem
+import pysix.six_sicd
+import coda.math_poly
+import coda.math_linear
+import coda.coda_except
+import six_base
+import pysix.scene
+import coda.coda_io
 class SampleType(_object):
     """Proxy of C++ cphd::SampleType class"""
     __swig_setmethods__ = {}
@@ -403,7 +516,7 @@ class FileHeader(_object):
             self.this = this
 
     def isCPHD(inStream):
-        """isCPHD(io::SeekableInputStream & inStream) -> bool"""
+        """isCPHD(SeekableInputStream inStream) -> bool"""
         return _cphd.FileHeader_isCPHD(inStream)
 
     if _newclass:
@@ -411,7 +524,7 @@ class FileHeader(_object):
     __swig_getmethods__["isCPHD"] = lambda x: isCPHD
 
     def readVersion(inStream):
-        """readVersion(io::SeekableInputStream & inStream) -> std::string"""
+        """readVersion(SeekableInputStream inStream) -> std::string"""
         return _cphd.FileHeader_readVersion(inStream)
 
     if _newclass:
@@ -419,7 +532,7 @@ class FileHeader(_object):
     __swig_getmethods__["readVersion"] = lambda x: readVersion
 
     def read(self, inStream):
-        """read(FileHeader self, io::SeekableInputStream & inStream)"""
+        """read(FileHeader self, SeekableInputStream inStream)"""
         return _cphd.FileHeader_read(self, inStream)
 
 
@@ -542,11 +655,11 @@ FileHeader.SECTION_TERMINATOR = _cphd.cvar.FileHeader_SECTION_TERMINATOR
 FileHeader.MAX_HEADER_SIZE = _cphd.cvar.FileHeader_MAX_HEADER_SIZE
 
 def FileHeader_isCPHD(inStream):
-    """FileHeader_isCPHD(io::SeekableInputStream & inStream) -> bool"""
+    """FileHeader_isCPHD(SeekableInputStream inStream) -> bool"""
     return _cphd.FileHeader_isCPHD(inStream)
 
 def FileHeader_readVersion(inStream):
-    """FileHeader_readVersion(io::SeekableInputStream & inStream) -> std::string"""
+    """FileHeader_readVersion(SeekableInputStream inStream) -> std::string"""
     return _cphd.FileHeader_readVersion(inStream)
 
 class DwellTimeParameters(_object):
@@ -879,59 +992,59 @@ class SRP(_object):
 SRP_swigregister = _cphd.SRP_swigregister
 SRP_swigregister(SRP)
 
-class Antenna(_object):
+class CphdAntenna(_object):
     """Proxy of C++ cphd::Antenna class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Antenna, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CphdAntenna, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, Antenna, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CphdAntenna, name)
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(cphd::Antenna self) -> Antenna"""
-        this = _cphd.new_Antenna()
+        """__init__(cphd::Antenna self) -> CphdAntenna"""
+        this = _cphd.new_CphdAntenna()
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def __eq__(self, other):
-        """__eq__(Antenna self, Antenna other) -> bool"""
-        return _cphd.Antenna___eq__(self, other)
+        """__eq__(CphdAntenna self, CphdAntenna other) -> bool"""
+        return _cphd.CphdAntenna___eq__(self, other)
 
 
     def __ne__(self, other):
-        """__ne__(Antenna self, Antenna other) -> bool"""
-        return _cphd.Antenna___ne__(self, other)
+        """__ne__(CphdAntenna self, CphdAntenna other) -> bool"""
+        return _cphd.CphdAntenna___ne__(self, other)
 
-    __swig_setmethods__["numTxAnt"] = _cphd.Antenna_numTxAnt_set
-    __swig_getmethods__["numTxAnt"] = _cphd.Antenna_numTxAnt_get
+    __swig_setmethods__["numTxAnt"] = _cphd.CphdAntenna_numTxAnt_set
+    __swig_getmethods__["numTxAnt"] = _cphd.CphdAntenna_numTxAnt_get
     if _newclass:
-        numTxAnt = _swig_property(_cphd.Antenna_numTxAnt_get, _cphd.Antenna_numTxAnt_set)
-    __swig_setmethods__["numRcvAnt"] = _cphd.Antenna_numRcvAnt_set
-    __swig_getmethods__["numRcvAnt"] = _cphd.Antenna_numRcvAnt_get
+        numTxAnt = _swig_property(_cphd.CphdAntenna_numTxAnt_get, _cphd.CphdAntenna_numTxAnt_set)
+    __swig_setmethods__["numRcvAnt"] = _cphd.CphdAntenna_numRcvAnt_set
+    __swig_getmethods__["numRcvAnt"] = _cphd.CphdAntenna_numRcvAnt_get
     if _newclass:
-        numRcvAnt = _swig_property(_cphd.Antenna_numRcvAnt_get, _cphd.Antenna_numRcvAnt_set)
-    __swig_setmethods__["numTWAnt"] = _cphd.Antenna_numTWAnt_set
-    __swig_getmethods__["numTWAnt"] = _cphd.Antenna_numTWAnt_get
+        numRcvAnt = _swig_property(_cphd.CphdAntenna_numRcvAnt_get, _cphd.CphdAntenna_numRcvAnt_set)
+    __swig_setmethods__["numTWAnt"] = _cphd.CphdAntenna_numTWAnt_set
+    __swig_getmethods__["numTWAnt"] = _cphd.CphdAntenna_numTWAnt_get
     if _newclass:
-        numTWAnt = _swig_property(_cphd.Antenna_numTWAnt_get, _cphd.Antenna_numTWAnt_set)
-    __swig_setmethods__["tx"] = _cphd.Antenna_tx_set
-    __swig_getmethods__["tx"] = _cphd.Antenna_tx_get
+        numTWAnt = _swig_property(_cphd.CphdAntenna_numTWAnt_get, _cphd.CphdAntenna_numTWAnt_set)
+    __swig_setmethods__["tx"] = _cphd.CphdAntenna_tx_set
+    __swig_getmethods__["tx"] = _cphd.CphdAntenna_tx_get
     if _newclass:
-        tx = _swig_property(_cphd.Antenna_tx_get, _cphd.Antenna_tx_set)
-    __swig_setmethods__["rcv"] = _cphd.Antenna_rcv_set
-    __swig_getmethods__["rcv"] = _cphd.Antenna_rcv_get
+        tx = _swig_property(_cphd.CphdAntenna_tx_get, _cphd.CphdAntenna_tx_set)
+    __swig_setmethods__["rcv"] = _cphd.CphdAntenna_rcv_set
+    __swig_getmethods__["rcv"] = _cphd.CphdAntenna_rcv_get
     if _newclass:
-        rcv = _swig_property(_cphd.Antenna_rcv_get, _cphd.Antenna_rcv_set)
-    __swig_setmethods__["twoWay"] = _cphd.Antenna_twoWay_set
-    __swig_getmethods__["twoWay"] = _cphd.Antenna_twoWay_get
+        rcv = _swig_property(_cphd.CphdAntenna_rcv_get, _cphd.CphdAntenna_rcv_set)
+    __swig_setmethods__["twoWay"] = _cphd.CphdAntenna_twoWay_set
+    __swig_getmethods__["twoWay"] = _cphd.CphdAntenna_twoWay_get
     if _newclass:
-        twoWay = _swig_property(_cphd.Antenna_twoWay_get, _cphd.Antenna_twoWay_set)
-    __swig_destroy__ = _cphd.delete_Antenna
+        twoWay = _swig_property(_cphd.CphdAntenna_twoWay_get, _cphd.CphdAntenna_twoWay_set)
+    __swig_destroy__ = _cphd.delete_CphdAntenna
     __del__ = lambda self: None
-Antenna_swigregister = _cphd.Antenna_swigregister
-Antenna_swigregister(Antenna)
+CphdAntenna_swigregister = _cphd.CphdAntenna_swigregister
+CphdAntenna_swigregister(CphdAntenna)
 
 class FxParameters(_object):
     """Proxy of C++ cphd::FxParameters class"""
@@ -1403,7 +1516,7 @@ def __lshift__(*args):
     __lshift__(std::ostream & os, ChannelParameters d) -> std::ostream
     __lshift__(std::ostream & os, Channel d) -> std::ostream
     __lshift__(std::ostream & os, SRP d) -> std::ostream
-    __lshift__(std::ostream & os, Antenna d) -> std::ostream
+    __lshift__(std::ostream & os, CphdAntenna d) -> std::ostream
     __lshift__(std::ostream & os, FxParameters d) -> std::ostream
     __lshift__(std::ostream & os, TOAParameters d) -> std::ostream
     __lshift__(std::ostream & os, VectorParameters d) -> std::ostream
@@ -1439,7 +1552,7 @@ class VBM(_object):
 
 
     def getTxPos(self, channel, vector):
-        """getTxPos(VBM self, size_t channel, size_t vector) -> cphd::Vector3"""
+        """getTxPos(VBM self, size_t channel, size_t vector) -> Vector3"""
         return _cphd.VBM_getTxPos(self, channel, vector)
 
 
@@ -1449,7 +1562,7 @@ class VBM(_object):
 
 
     def getRcvPos(self, channel, vector):
-        """getRcvPos(VBM self, size_t channel, size_t vector) -> cphd::Vector3"""
+        """getRcvPos(VBM self, size_t channel, size_t vector) -> Vector3"""
         return _cphd.VBM_getRcvPos(self, channel, vector)
 
 
@@ -1459,7 +1572,7 @@ class VBM(_object):
 
 
     def getSRPPos(self, channel, vector):
-        """getSRPPos(VBM self, size_t channel, size_t vector) -> cphd::Vector3"""
+        """getSRPPos(VBM self, size_t channel, size_t vector) -> Vector3"""
         return _cphd.VBM_getSRPPos(self, channel, vector)
 
 
@@ -1509,7 +1622,7 @@ class VBM(_object):
 
 
     def setTxPos(self, value, channel, vector):
-        """setTxPos(VBM self, cphd::Vector3 const & value, size_t channel, size_t vector)"""
+        """setTxPos(VBM self, Vector3 value, size_t channel, size_t vector)"""
         return _cphd.VBM_setTxPos(self, value, channel, vector)
 
 
@@ -1519,7 +1632,7 @@ class VBM(_object):
 
 
     def setRcvPos(self, value, channel, vector):
-        """setRcvPos(VBM self, cphd::Vector3 const & value, size_t channel, size_t vector)"""
+        """setRcvPos(VBM self, Vector3 value, size_t channel, size_t vector)"""
         return _cphd.VBM_setRcvPos(self, value, channel, vector)
 
 
@@ -1529,7 +1642,7 @@ class VBM(_object):
 
 
     def setSRPPos(self, value, channel, vector):
-        """setSRPPos(VBM self, cphd::Vector3 const & value, size_t channel, size_t vector)"""
+        """setSRPPos(VBM self, Vector3 value, size_t channel, size_t vector)"""
         return _cphd.VBM_setSRPPos(self, value, channel, vector)
 
 
@@ -1609,7 +1722,7 @@ class VBM(_object):
 
 
     def load(self, inStream, startVBM, sizeVBM, numThreads):
-        """load(VBM self, io::SeekableInputStream & inStream, sys::Off_T startVBM, sys::Off_T sizeVBM, size_t numThreads) -> sys::Off_T"""
+        """load(VBM self, SeekableInputStream inStream, sys::Off_T startVBM, sys::Off_T sizeVBM, size_t numThreads) -> sys::Off_T"""
         return _cphd.VBM_load(self, inStream, startVBM, sizeVBM, numThreads)
 
 
@@ -1674,7 +1787,7 @@ class Wideband(_object):
         """
         read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::BufferView< sys::ubyte > const & data)
         read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::ScopedArray< sys::ubyte > & data)
-        read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, std::vector< double,std::allocator< double > > const & vectorScaleFactors, size_t numThreads, mem::BufferView< sys::ubyte > const & scratch, mem::BufferView< std::complex< float > > const & data)
+        read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, std_vector_double vectorScaleFactors, size_t numThreads, mem::BufferView< sys::ubyte > const & scratch, mem::BufferView< std::complex< float > > const & data)
         read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, RowColSizeT dims, void * data)
         """
         return _cphd.Wideband_read(self, *args)
@@ -1831,6 +1944,414 @@ def read(self,
     
 Wideband.read = read
 
+class VectorArraySize(_object):
+    """Proxy of C++ std::vector<(cphd::ArraySize)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorArraySize, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorArraySize, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorArraySize self) -> SwigPyIterator"""
+        return _cphd.VectorArraySize_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorArraySize self) -> bool"""
+        return _cphd.VectorArraySize___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorArraySize self) -> bool"""
+        return _cphd.VectorArraySize___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorArraySize self) -> std::vector< cphd::ArraySize >::size_type"""
+        return _cphd.VectorArraySize___len__(self)
+
+
+    def pop(self):
+        """pop(VectorArraySize self) -> ArraySize"""
+        return _cphd.VectorArraySize_pop(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i, std::vector< cphd::ArraySize >::difference_type j) -> VectorArraySize"""
+        return _cphd.VectorArraySize___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i, std::vector< cphd::ArraySize >::difference_type j, VectorArraySize v)
+        __setslice__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i, std::vector< cphd::ArraySize >::difference_type j)
+        """
+        return _cphd.VectorArraySize___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i, std::vector< cphd::ArraySize >::difference_type j)"""
+        return _cphd.VectorArraySize___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i)
+        __delitem__(VectorArraySize self, PySliceObject * slice)
+        """
+        return _cphd.VectorArraySize___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorArraySize self, PySliceObject * slice) -> VectorArraySize
+        __getitem__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i) -> ArraySize
+        """
+        return _cphd.VectorArraySize___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorArraySize self, PySliceObject * slice, VectorArraySize v)
+        __setitem__(VectorArraySize self, PySliceObject * slice)
+        __setitem__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i, ArraySize x)
+        """
+        return _cphd.VectorArraySize___setitem__(self, *args)
+
+
+    def append(self, x):
+        """append(VectorArraySize self, ArraySize x)"""
+        return _cphd.VectorArraySize_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorArraySize self) -> bool"""
+        return _cphd.VectorArraySize_empty(self)
+
+
+    def size(self):
+        """size(VectorArraySize self) -> std::vector< cphd::ArraySize >::size_type"""
+        return _cphd.VectorArraySize_size(self)
+
+
+    def clear(self):
+        """clear(VectorArraySize self)"""
+        return _cphd.VectorArraySize_clear(self)
+
+
+    def swap(self, v):
+        """swap(VectorArraySize self, VectorArraySize v)"""
+        return _cphd.VectorArraySize_swap(self, v)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorArraySize self) -> std::vector< cphd::ArraySize >::allocator_type"""
+        return _cphd.VectorArraySize_get_allocator(self)
+
+
+    def begin(self):
+        """begin(VectorArraySize self) -> std::vector< cphd::ArraySize >::iterator"""
+        return _cphd.VectorArraySize_begin(self)
+
+
+    def end(self):
+        """end(VectorArraySize self) -> std::vector< cphd::ArraySize >::iterator"""
+        return _cphd.VectorArraySize_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorArraySize self) -> std::vector< cphd::ArraySize >::reverse_iterator"""
+        return _cphd.VectorArraySize_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorArraySize self) -> std::vector< cphd::ArraySize >::reverse_iterator"""
+        return _cphd.VectorArraySize_rend(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorArraySize self)"""
+        return _cphd.VectorArraySize_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorArraySize self, std::vector< cphd::ArraySize >::iterator pos) -> std::vector< cphd::ArraySize >::iterator
+        erase(VectorArraySize self, std::vector< cphd::ArraySize >::iterator first, std::vector< cphd::ArraySize >::iterator last) -> std::vector< cphd::ArraySize >::iterator
+        """
+        return _cphd.VectorArraySize_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(cphd::ArraySize)> self) -> VectorArraySize
+        __init__(std::vector<(cphd::ArraySize)> self, VectorArraySize arg2) -> VectorArraySize
+        __init__(std::vector<(cphd::ArraySize)> self, std::vector< cphd::ArraySize >::size_type size) -> VectorArraySize
+        __init__(std::vector<(cphd::ArraySize)> self, std::vector< cphd::ArraySize >::size_type size, ArraySize value) -> VectorArraySize
+        """
+        this = _cphd.new_VectorArraySize(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorArraySize self, ArraySize x)"""
+        return _cphd.VectorArraySize_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorArraySize self) -> ArraySize"""
+        return _cphd.VectorArraySize_front(self)
+
+
+    def back(self):
+        """back(VectorArraySize self) -> ArraySize"""
+        return _cphd.VectorArraySize_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorArraySize self, std::vector< cphd::ArraySize >::size_type n, ArraySize x)"""
+        return _cphd.VectorArraySize_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorArraySize self, std::vector< cphd::ArraySize >::size_type new_size)
+        resize(VectorArraySize self, std::vector< cphd::ArraySize >::size_type new_size, ArraySize x)
+        """
+        return _cphd.VectorArraySize_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorArraySize self, std::vector< cphd::ArraySize >::iterator pos, ArraySize x) -> std::vector< cphd::ArraySize >::iterator
+        insert(VectorArraySize self, std::vector< cphd::ArraySize >::iterator pos, std::vector< cphd::ArraySize >::size_type n, ArraySize x)
+        """
+        return _cphd.VectorArraySize_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorArraySize self, std::vector< cphd::ArraySize >::size_type n)"""
+        return _cphd.VectorArraySize_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorArraySize self) -> std::vector< cphd::ArraySize >::size_type"""
+        return _cphd.VectorArraySize_capacity(self)
+
+    __swig_destroy__ = _cphd.delete_VectorArraySize
+    __del__ = lambda self: None
+VectorArraySize_swigregister = _cphd.VectorArraySize_swigregister
+VectorArraySize_swigregister(VectorArraySize)
+
+class VectorVector3(_object):
+    """Proxy of C++ std::vector<(six::Vector3)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorVector3, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorVector3, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorVector3 self) -> SwigPyIterator"""
+        return _cphd.VectorVector3_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorVector3 self) -> bool"""
+        return _cphd.VectorVector3___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorVector3 self) -> bool"""
+        return _cphd.VectorVector3___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
+        return _cphd.VectorVector3___len__(self)
+
+
+    def pop(self):
+        """pop(VectorVector3 self) -> Vector3"""
+        return _cphd.VectorVector3_pop(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j) -> VectorVector3"""
+        return _cphd.VectorVector3___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j, VectorVector3 v)
+        __setslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)
+        """
+        return _cphd.VectorVector3___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)"""
+        return _cphd.VectorVector3___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i)
+        __delitem__(VectorVector3 self, PySliceObject * slice)
+        """
+        return _cphd.VectorVector3___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorVector3 self, PySliceObject * slice) -> VectorVector3
+        __getitem__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i) -> Vector3
+        """
+        return _cphd.VectorVector3___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorVector3 self, PySliceObject * slice, VectorVector3 v)
+        __setitem__(VectorVector3 self, PySliceObject * slice)
+        __setitem__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, Vector3 x)
+        """
+        return _cphd.VectorVector3___setitem__(self, *args)
+
+
+    def append(self, x):
+        """append(VectorVector3 self, Vector3 x)"""
+        return _cphd.VectorVector3_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorVector3 self) -> bool"""
+        return _cphd.VectorVector3_empty(self)
+
+
+    def size(self):
+        """size(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
+        return _cphd.VectorVector3_size(self)
+
+
+    def clear(self):
+        """clear(VectorVector3 self)"""
+        return _cphd.VectorVector3_clear(self)
+
+
+    def swap(self, v):
+        """swap(VectorVector3 self, VectorVector3 v)"""
+        return _cphd.VectorVector3_swap(self, v)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::allocator_type"""
+        return _cphd.VectorVector3_get_allocator(self)
+
+
+    def begin(self):
+        """begin(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"""
+        return _cphd.VectorVector3_begin(self)
+
+
+    def end(self):
+        """end(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"""
+        return _cphd.VectorVector3_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"""
+        return _cphd.VectorVector3_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"""
+        return _cphd.VectorVector3_rend(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorVector3 self)"""
+        return _cphd.VectorVector3_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator pos) -> std::vector< math::linear::VectorN< 3,double > >::iterator
+        erase(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator first, std::vector< math::linear::VectorN< 3,double > >::iterator last) -> std::vector< math::linear::VectorN< 3,double > >::iterator
+        """
+        return _cphd.VectorVector3_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(six::Vector3)> self) -> VectorVector3
+        __init__(std::vector<(six::Vector3)> self, VectorVector3 arg2) -> VectorVector3
+        __init__(std::vector<(six::Vector3)> self, std::vector< math::linear::VectorN< 3,double > >::size_type size) -> VectorVector3
+        __init__(std::vector<(six::Vector3)> self, std::vector< math::linear::VectorN< 3,double > >::size_type size, Vector3 value) -> VectorVector3
+        """
+        this = _cphd.new_VectorVector3(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorVector3 self, Vector3 x)"""
+        return _cphd.VectorVector3_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorVector3 self) -> Vector3"""
+        return _cphd.VectorVector3_front(self)
+
+
+    def back(self):
+        """back(VectorVector3 self) -> Vector3"""
+        return _cphd.VectorVector3_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)"""
+        return _cphd.VectorVector3_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type new_size)
+        resize(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type new_size, Vector3 x)
+        """
+        return _cphd.VectorVector3_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator pos, Vector3 x) -> std::vector< math::linear::VectorN< 3,double > >::iterator
+        insert(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator pos, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)
+        """
+        return _cphd.VectorVector3_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type n)"""
+        return _cphd.VectorVector3_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
+        return _cphd.VectorVector3_capacity(self)
+
+    __swig_destroy__ = _cphd.delete_VectorVector3
+    __del__ = lambda self: None
+VectorVector3_swigregister = _cphd.VectorVector3_swigregister
+VectorVector3_swigregister(VectorVector3)
+
 class ScopedCopyableDwellTimeParameters(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::DwellTimeParameters)> class"""
     __swig_setmethods__ = {}
@@ -1897,9 +2418,9 @@ ScopedCopyableDwellTimeParameters_swigregister = _cphd.ScopedCopyableDwellTimePa
 ScopedCopyableDwellTimeParameters_swigregister(ScopedCopyableDwellTimeParameters)
 
 
-def makeCopyableDwellTimeParameters():
-    """makeCopyableDwellTimeParameters() -> ScopedCopyableDwellTimeParameters"""
-    return _cphd.makeCopyableDwellTimeParameters()
+def makeScopedCopyableDwellTimeParameters():
+    """makeScopedCopyableDwellTimeParameters() -> ScopedCopyableDwellTimeParameters"""
+    return _cphd.makeScopedCopyableDwellTimeParameters()
 class ScopedCopyableAreaPlane(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::AreaPlane)> class"""
     __swig_setmethods__ = {}
@@ -1974,9 +2495,9 @@ ScopedCopyableAreaPlane_swigregister = _cphd.ScopedCopyableAreaPlane_swigregiste
 ScopedCopyableAreaPlane_swigregister(ScopedCopyableAreaPlane)
 
 
-def makeCopyableAreaPlane():
-    """makeCopyableAreaPlane() -> ScopedCopyableAreaPlane"""
-    return _cphd.makeCopyableAreaPlane()
+def makeScopedCopyableAreaPlane():
+    """makeScopedCopyableAreaPlane() -> ScopedCopyableAreaPlane"""
+    return _cphd.makeScopedCopyableAreaPlane()
 class ScopedCopyableFxParameters(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::FxParameters)> class"""
     __swig_setmethods__ = {}
@@ -2051,94 +2572,94 @@ ScopedCopyableFxParameters_swigregister = _cphd.ScopedCopyableFxParameters_swigr
 ScopedCopyableFxParameters_swigregister(ScopedCopyableFxParameters)
 
 
-def makeCopyableFxParameters():
-    """makeCopyableFxParameters() -> ScopedCopyableFxParameters"""
-    return _cphd.makeCopyableFxParameters()
-class ScopedCopyableAntenna(_object):
+def makeScopedCopyableFxParameters():
+    """makeScopedCopyableFxParameters() -> ScopedCopyableFxParameters"""
+    return _cphd.makeScopedCopyableFxParameters()
+class ScopedCopyableCphdAntenna(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::Antenna)> class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableAntenna, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableCphdAntenna, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableAntenna, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableCphdAntenna, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCopyablePtr<(cphd::Antenna)> self, Antenna ptr=None) -> ScopedCopyableAntenna
-        __init__(mem::ScopedCopyablePtr<(cphd::Antenna)> self) -> ScopedCopyableAntenna
-        __init__(mem::ScopedCopyablePtr<(cphd::Antenna)> self, ScopedCopyableAntenna rhs) -> ScopedCopyableAntenna
+        __init__(mem::ScopedCopyablePtr<(cphd::Antenna)> self, CphdAntenna ptr=None) -> ScopedCopyableCphdAntenna
+        __init__(mem::ScopedCopyablePtr<(cphd::Antenna)> self) -> ScopedCopyableCphdAntenna
+        __init__(mem::ScopedCopyablePtr<(cphd::Antenna)> self, ScopedCopyableCphdAntenna rhs) -> ScopedCopyableCphdAntenna
         """
-        this = _cphd.new_ScopedCopyableAntenna(*args)
+        this = _cphd.new_ScopedCopyableCphdAntenna(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def get(self):
-        """get(ScopedCopyableAntenna self) -> Antenna"""
-        return _cphd.ScopedCopyableAntenna_get(self)
+        """get(ScopedCopyableCphdAntenna self) -> CphdAntenna"""
+        return _cphd.ScopedCopyableCphdAntenna_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCopyableAntenna self) -> Antenna"""
-        return _cphd.ScopedCopyableAntenna___ref__(self)
+        """__ref__(ScopedCopyableCphdAntenna self) -> CphdAntenna"""
+        return _cphd.ScopedCopyableCphdAntenna___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCopyableAntenna self) -> Antenna"""
-        return _cphd.ScopedCopyableAntenna___deref__(self)
+        """__deref__(ScopedCopyableCphdAntenna self) -> CphdAntenna"""
+        return _cphd.ScopedCopyableCphdAntenna___deref__(self)
 
 
     def reset(self, ptr=None):
         """
-        reset(ScopedCopyableAntenna self, Antenna ptr=None)
-        reset(ScopedCopyableAntenna self)
+        reset(ScopedCopyableCphdAntenna self, CphdAntenna ptr=None)
+        reset(ScopedCopyableCphdAntenna self)
         """
-        return _cphd.ScopedCopyableAntenna_reset(self, ptr)
+        return _cphd.ScopedCopyableCphdAntenna_reset(self, ptr)
 
-    __swig_destroy__ = _cphd.delete_ScopedCopyableAntenna
+    __swig_destroy__ = _cphd.delete_ScopedCopyableCphdAntenna
     __del__ = lambda self: None
 
     def __eq__(self, other):
-        """__eq__(ScopedCopyableAntenna self, Antenna other) -> bool"""
-        return _cphd.ScopedCopyableAntenna___eq__(self, other)
+        """__eq__(ScopedCopyableCphdAntenna self, CphdAntenna other) -> bool"""
+        return _cphd.ScopedCopyableCphdAntenna___eq__(self, other)
 
 
     def __ne__(self, other):
-        """__ne__(ScopedCopyableAntenna self, Antenna other) -> bool"""
-        return _cphd.ScopedCopyableAntenna___ne__(self, other)
+        """__ne__(ScopedCopyableCphdAntenna self, CphdAntenna other) -> bool"""
+        return _cphd.ScopedCopyableCphdAntenna___ne__(self, other)
 
-    __swig_setmethods__["numTxAnt"] = _cphd.ScopedCopyableAntenna_numTxAnt_set
-    __swig_getmethods__["numTxAnt"] = _cphd.ScopedCopyableAntenna_numTxAnt_get
+    __swig_setmethods__["numTxAnt"] = _cphd.ScopedCopyableCphdAntenna_numTxAnt_set
+    __swig_getmethods__["numTxAnt"] = _cphd.ScopedCopyableCphdAntenna_numTxAnt_get
     if _newclass:
-        numTxAnt = _swig_property(_cphd.ScopedCopyableAntenna_numTxAnt_get, _cphd.ScopedCopyableAntenna_numTxAnt_set)
-    __swig_setmethods__["numRcvAnt"] = _cphd.ScopedCopyableAntenna_numRcvAnt_set
-    __swig_getmethods__["numRcvAnt"] = _cphd.ScopedCopyableAntenna_numRcvAnt_get
+        numTxAnt = _swig_property(_cphd.ScopedCopyableCphdAntenna_numTxAnt_get, _cphd.ScopedCopyableCphdAntenna_numTxAnt_set)
+    __swig_setmethods__["numRcvAnt"] = _cphd.ScopedCopyableCphdAntenna_numRcvAnt_set
+    __swig_getmethods__["numRcvAnt"] = _cphd.ScopedCopyableCphdAntenna_numRcvAnt_get
     if _newclass:
-        numRcvAnt = _swig_property(_cphd.ScopedCopyableAntenna_numRcvAnt_get, _cphd.ScopedCopyableAntenna_numRcvAnt_set)
-    __swig_setmethods__["numTWAnt"] = _cphd.ScopedCopyableAntenna_numTWAnt_set
-    __swig_getmethods__["numTWAnt"] = _cphd.ScopedCopyableAntenna_numTWAnt_get
+        numRcvAnt = _swig_property(_cphd.ScopedCopyableCphdAntenna_numRcvAnt_get, _cphd.ScopedCopyableCphdAntenna_numRcvAnt_set)
+    __swig_setmethods__["numTWAnt"] = _cphd.ScopedCopyableCphdAntenna_numTWAnt_set
+    __swig_getmethods__["numTWAnt"] = _cphd.ScopedCopyableCphdAntenna_numTWAnt_get
     if _newclass:
-        numTWAnt = _swig_property(_cphd.ScopedCopyableAntenna_numTWAnt_get, _cphd.ScopedCopyableAntenna_numTWAnt_set)
-    __swig_setmethods__["tx"] = _cphd.ScopedCopyableAntenna_tx_set
-    __swig_getmethods__["tx"] = _cphd.ScopedCopyableAntenna_tx_get
+        numTWAnt = _swig_property(_cphd.ScopedCopyableCphdAntenna_numTWAnt_get, _cphd.ScopedCopyableCphdAntenna_numTWAnt_set)
+    __swig_setmethods__["tx"] = _cphd.ScopedCopyableCphdAntenna_tx_set
+    __swig_getmethods__["tx"] = _cphd.ScopedCopyableCphdAntenna_tx_get
     if _newclass:
-        tx = _swig_property(_cphd.ScopedCopyableAntenna_tx_get, _cphd.ScopedCopyableAntenna_tx_set)
-    __swig_setmethods__["rcv"] = _cphd.ScopedCopyableAntenna_rcv_set
-    __swig_getmethods__["rcv"] = _cphd.ScopedCopyableAntenna_rcv_get
+        tx = _swig_property(_cphd.ScopedCopyableCphdAntenna_tx_get, _cphd.ScopedCopyableCphdAntenna_tx_set)
+    __swig_setmethods__["rcv"] = _cphd.ScopedCopyableCphdAntenna_rcv_set
+    __swig_getmethods__["rcv"] = _cphd.ScopedCopyableCphdAntenna_rcv_get
     if _newclass:
-        rcv = _swig_property(_cphd.ScopedCopyableAntenna_rcv_get, _cphd.ScopedCopyableAntenna_rcv_set)
-    __swig_setmethods__["twoWay"] = _cphd.ScopedCopyableAntenna_twoWay_set
-    __swig_getmethods__["twoWay"] = _cphd.ScopedCopyableAntenna_twoWay_get
+        rcv = _swig_property(_cphd.ScopedCopyableCphdAntenna_rcv_get, _cphd.ScopedCopyableCphdAntenna_rcv_set)
+    __swig_setmethods__["twoWay"] = _cphd.ScopedCopyableCphdAntenna_twoWay_set
+    __swig_getmethods__["twoWay"] = _cphd.ScopedCopyableCphdAntenna_twoWay_get
     if _newclass:
-        twoWay = _swig_property(_cphd.ScopedCopyableAntenna_twoWay_get, _cphd.ScopedCopyableAntenna_twoWay_set)
-ScopedCopyableAntenna_swigregister = _cphd.ScopedCopyableAntenna_swigregister
-ScopedCopyableAntenna_swigregister(ScopedCopyableAntenna)
+        twoWay = _swig_property(_cphd.ScopedCopyableCphdAntenna_twoWay_get, _cphd.ScopedCopyableCphdAntenna_twoWay_set)
+ScopedCopyableCphdAntenna_swigregister = _cphd.ScopedCopyableCphdAntenna_swigregister
+ScopedCopyableCphdAntenna_swigregister(ScopedCopyableCphdAntenna)
 
 
-def makeCopyableAntenna():
-    """makeCopyableAntenna() -> ScopedCopyableAntenna"""
-    return _cphd.makeCopyableAntenna()
+def makeScopedCopyableCphdAntenna():
+    """makeScopedCopyableCphdAntenna() -> ScopedCopyableCphdAntenna"""
+    return _cphd.makeScopedCopyableCphdAntenna()
 # This file is compatible with both classic and new-style classes.
 
 

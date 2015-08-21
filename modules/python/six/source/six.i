@@ -143,3 +143,4 @@ def setValue(self, *args):
 
 %template(VectorString) std::vector<std::string>;
 %template(LatLonCorners) six::Corners<scene::LatLon>;
+%template(LatLonAltCorners) six::Corners<scene::LatLonAlt>;

@@ -4000,6 +4000,59 @@ class LatLonCorners(_object):
 LatLonCorners_swigregister = _six_base.LatLonCorners_swigregister
 LatLonCorners_swigregister(LatLonCorners)
 
+class LatLonAltCorners(_object):
+    """Proxy of C++ six::Corners<(scene::LatLonAlt)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LatLonAltCorners, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, LatLonAltCorners, name)
+    __repr__ = _swig_repr
+    NUM_CORNERS = _six_base.LatLonAltCorners_NUM_CORNERS
+    UPPER_LEFT = _six_base.LatLonAltCorners_UPPER_LEFT
+    FIRST_ROW_FIRST_COL = _six_base.LatLonAltCorners_FIRST_ROW_FIRST_COL
+    UPPER_RIGHT = _six_base.LatLonAltCorners_UPPER_RIGHT
+    FIRST_ROW_LAST_COL = _six_base.LatLonAltCorners_FIRST_ROW_LAST_COL
+    LOWER_RIGHT = _six_base.LatLonAltCorners_LOWER_RIGHT
+    LAST_ROW_LAST_COL = _six_base.LatLonAltCorners_LAST_ROW_LAST_COL
+    LOWER_LEFT = _six_base.LatLonAltCorners_LOWER_LEFT
+    LAST_ROW_FIRST_COL = _six_base.LatLonAltCorners_LAST_ROW_FIRST_COL
+
+    def getCorner(self, *args):
+        """
+        getCorner(LatLonAltCorners self, size_t idx) -> LatLonAlt
+        getCorner(LatLonAltCorners self, size_t idx) -> LatLonAlt
+        """
+        return _six_base.LatLonAltCorners_getCorner(self, *args)
+
+    __swig_setmethods__["upperLeft"] = _six_base.LatLonAltCorners_upperLeft_set
+    __swig_getmethods__["upperLeft"] = _six_base.LatLonAltCorners_upperLeft_get
+    if _newclass:
+        upperLeft = _swig_property(_six_base.LatLonAltCorners_upperLeft_get, _six_base.LatLonAltCorners_upperLeft_set)
+    __swig_setmethods__["upperRight"] = _six_base.LatLonAltCorners_upperRight_set
+    __swig_getmethods__["upperRight"] = _six_base.LatLonAltCorners_upperRight_get
+    if _newclass:
+        upperRight = _swig_property(_six_base.LatLonAltCorners_upperRight_get, _six_base.LatLonAltCorners_upperRight_set)
+    __swig_setmethods__["lowerRight"] = _six_base.LatLonAltCorners_lowerRight_set
+    __swig_getmethods__["lowerRight"] = _six_base.LatLonAltCorners_lowerRight_get
+    if _newclass:
+        lowerRight = _swig_property(_six_base.LatLonAltCorners_lowerRight_get, _six_base.LatLonAltCorners_lowerRight_set)
+    __swig_setmethods__["lowerLeft"] = _six_base.LatLonAltCorners_lowerLeft_set
+    __swig_getmethods__["lowerLeft"] = _six_base.LatLonAltCorners_lowerLeft_get
+    if _newclass:
+        lowerLeft = _swig_property(_six_base.LatLonAltCorners_lowerLeft_get, _six_base.LatLonAltCorners_lowerLeft_set)
+
+    def __init__(self):
+        """__init__(six::Corners<(scene::LatLonAlt)> self) -> LatLonAltCorners"""
+        this = _six_base.new_LatLonAltCorners()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_LatLonAltCorners
+    __del__ = lambda self: None
+LatLonAltCorners_swigregister = _six_base.LatLonAltCorners_swigregister
+LatLonAltCorners_swigregister(LatLonAltCorners)
+
 # This file is compatible with both classic and new-style classes.
 
 
