@@ -45,6 +45,10 @@ if __name__ == '__main__':
     data = cphd.Data()
     data.sampleType.value = cphd.SampleType.RE32F_IM32F
     data.arraySize.push_back(cphd.ArraySize(2,2))
+    data.numCPHDChannels = 2
+    data.numBytesVBP = 30
+    metadata.data = data
+
 
     #
     # Global.h checks
@@ -56,7 +60,10 @@ if __name__ == '__main__':
     glob.domainType.value = cphd.DomainType.TOA
     glob.phaseSGN.value   = cphd.PhaseSGN.MINUS_1
     glob.refFrequencyIndex = 1
-    glob.collectionDuration = 0.5
+    glob.collectStart = six.DateTime()
+    glob.collectionDuration = 200
+    glob.txTime1 = 4
+    glob.txTime2 = 204
 
     # LatLonAltCorners for our image area
 
@@ -70,9 +77,9 @@ if __name__ == '__main__':
 
     # fill in our imageArea with some stuff
 
-    imArea = cphd.ImageArea()
-    imArea.acpCorners = llac
-    imArea.plane = cphd.makeScopedCopyableAreaPlane()
+    glob.imageArea = cphd.ImageArea()
+    glob.imageArea.acpCorners = llac
+    glob.imageArea.plane = cphd.makeScopedCopyableAreaPlane()
    
     # reference point
 
@@ -83,42 +90,38 @@ if __name__ == '__main__':
     refPt.rowCol.row = 3
     refPt.rowCol.col = 4
     refPt.name = 'name'
-    imArea.plane.referencePoint = refPt
+    glob.imageArea.plane.referencePoint = refPt
 
     # direction parameters
 
-    imArea.plane.xDirection.unitVector[0] = 1
-    imArea.plane.xDirection.unitVector[1] = 0
-    imArea.plane.xDirection.unitVector[2] = 0
-    imArea.plane.xDirection.spacing = 2
-    imArea.plane.xDirection.elements = 3
-    imArea.plane.xDirection.first = 4
+    glob.imageArea.plane.xDirection.unitVector[0] = 1
+    glob.imageArea.plane.xDirection.unitVector[1] = 0
+    glob.imageArea.plane.xDirection.unitVector[2] = 0
+    glob.imageArea.plane.xDirection.spacing = 2
+    glob.imageArea.plane.xDirection.elements = 3
+    glob.imageArea.plane.xDirection.first = 4
 
-    imArea.plane.yDirection.unitVector[0] = 0
-    imArea.plane.yDirection.unitVector[1] = 1
-    imArea.plane.yDirection.unitVector[2] = 0 
-    imArea.plane.yDirection.spacing = 2
-    imArea.plane.yDirection.elements = 3
-    imArea.plane.yDirection.first = 4
+    glob.imageArea.plane.yDirection.unitVector[0] = 0
+    glob.imageArea.plane.yDirection.unitVector[1] = 1
+    glob.imageArea.plane.yDirection.unitVector[2] = 0 
+    glob.imageArea.plane.yDirection.spacing = 2
+    glob.imageArea.plane.yDirection.elements = 3
+    glob.imageArea.plane.yDirection.first = 4
 
     # dwell time parameters
 
-    dt = cphd.makeScopedCopyableDwellTimeParameters()
-    dt.codTimePoly = math_poly.Poly2D(1,1)
-    dt.codTimePoly[0,0] = 0
-    dt.codTimePoly[0,1] = 0
-    dt.codTimePoly[1,0] = 0
-    dt.codTimePoly[1,1] = 0
+    glob.imageArea.plane.dwellTime = cphd.makeScopedCopyableDwellTimeParameters()
+    glob.imageArea.plane.dwellTime.codTimePoly = math_poly.Poly2D(1,1)
+    glob.imageArea.plane.dwellTime.codTimePoly[0,0] = 2
+    glob.imageArea.plane.dwellTime.codTimePoly[0,1] = 4
+    glob.imageArea.plane.dwellTime.codTimePoly[1,0] = 4
+    glob.imageArea.plane.dwellTime.codTimePoly[1,1] = 4
 
-    dt.dwellTimePoly = math_poly.Poly2D(1,1)
-    dt.dwellTimePoly[0,0] = 0
-    dt.dwellTimePoly[0,1] = 0
-    dt.dwellTimePoly[1,0] = 0
-    dt.dwellTimePoly[1,1] = 0
-
-    imArea.plane.dwellTime = dt
-
-    glob.imageArea = imArea
+    glob.imageArea.plane.dwellTime.dwellTimePoly = math_poly.Poly2D(1,1)
+    glob.imageArea.plane.dwellTime.dwellTimePoly[0,0] = 3
+    glob.imageArea.plane.dwellTime.dwellTimePoly[0,1] = 5
+    glob.imageArea.plane.dwellTime.dwellTimePoly[1,0] = 5
+    glob.imageArea.plane.dwellTime.dwellTimePoly[1,1] = 5
 
     metadata._global = glob # i guess 'global' is a keyword
 
@@ -137,12 +140,8 @@ if __name__ == '__main__':
     srp.srpPT.push_back(v3)
 
     pv3 = math_poly.PolyVector3(1) # aka PolyXYZ
-    pv3[0][0] = 3
-    pv3[0][1] = 4
-    pv3[0][2] = 5
-    pv3[1][0] = 6
-    pv3[1][1] = 7
-    pv3[1][2] = 8
+    pv3[0] = v3 
+    pv3[1] = v3 
     srp.srpPVTPoly.push_back(pv3)
 
     srp.srpPVVPoly.push_back(pv3)
@@ -176,6 +175,10 @@ if __name__ == '__main__':
     metadata.antenna.numRcvAnt = 0
     metadata.antenna.numTWAnt = 2
     for i in range(2):
+        testV3 = math_linear.Vector3()
+        testV3[0] = i+5
+        testV3[1] = i+6
+        testV3[2] = i+7
         ap = six_sicd.AntennaParameters()
         ap.electricalBoresight = six_sicd.makeScopedCopyableElectricalBoresight()
         ap.electricalBoresight.dcxPoly = math_poly.Poly1D(1)
@@ -186,33 +189,25 @@ if __name__ == '__main__':
         ap.electricalBoresight.dcyPoly[1] = i
         ap.frequencyZero = 33
         ap.xAxisPoly = math_poly.PolyVector3(1)
-        ap.xAxisPoly[0][0] = 3
-        ap.xAxisPoly[0][1] = 4
-        ap.xAxisPoly[0][2] = 5
-        ap.xAxisPoly[1][0] = 6
-        ap.xAxisPoly[1][1] = 7
-        ap.xAxisPoly[1][2] = 8        
+        ap.xAxisPoly[0] = testV3
+        ap.xAxisPoly[1] = testV3
         ap.yAxisPoly = math_poly.PolyVector3(1)       
-        ap.yAxisPoly[0][0] = 3                        
-        ap.yAxisPoly[0][1] = 4                        
-        ap.yAxisPoly[0][2] = 5                        
-        ap.yAxisPoly[1][0] = 6                        
-        ap.yAxisPoly[1][1] = 7                        
-        ap.yAxisPoly[1][2] = 8                        
+        ap.yAxisPoly[0] = testV3 
+        ap.yAxisPoly[1] = testV3
         ap.halfPowerBeamwidths = six_sicd.makeScopedCopyableHalfPowerBeamwidths()
         ap.halfPowerBeamwidths.dcx = 3
         ap.halfPowerBeamwidths.dcy = i
         ap.array = six_sicd.makeScopedCopyableGainAndPhasePolys()
         ap.array.gainPoly = math_poly.Poly2D(1,1)
-        ap.array.gainPoly[0,0] = i
-        ap.array.gainPoly[0,1] = i
-        ap.array.gainPoly[1,0] = i
-        ap.array.gainPoly[1,1] = i 
+        ap.array.gainPoly[0,0] = i+5
+        ap.array.gainPoly[0,1] = 2
+        ap.array.gainPoly[1,0] = i+5
+        ap.array.gainPoly[1,1] = i+5
         ap.array.phasePoly = math_poly.Poly2D(1,1)
-        ap.array.phasePoly[0,0] = i
-        ap.array.phasePoly[0,1] = i
-        ap.array.phasePoly[1,0] = i
-        ap.array.phasePoly[1,1] = i
+        ap.array.phasePoly[0,0] = i+5
+        ap.array.phasePoly[0,1] = i+5
+        ap.array.phasePoly[1,0] = 3
+        ap.array.phasePoly[1,1] = i+5
 
         ap.element = ap.array
 
@@ -243,17 +238,8 @@ if __name__ == '__main__':
     else:
         print "Wrong domain type"
 
-    numVec = coda_types.VectorSizeT()
-    numVec.push_back(100)
-    numVec.push_back(100)
-    numVec.push_back(100)
-    vbm = cphd.VBM(3,
-           numVec,
-           True,
-           True,
-           True,
-           metadata.getDomainType()
-           ) 
+
+
 
     vecParam = cphd.VectorParameters()
     vecParam.txTime = 4
@@ -265,4 +251,28 @@ if __name__ == '__main__':
     vecParam.tropoSRP = 4
     vecParam.ampSF = 4
     vecParam.fxParameters = cphd.makeScopedCopyableFxParameters()
+    vecParam.fxParameters.Fx0 = 1
+    vecParam.fxParameters.FxSS = 2
+    vecParam.fxParameters.Fx1 = 3
+    vecParam.fxParameters.Fx2 = 3
     vecParam.toaParameters = cphd.makeScopedCopyableTOAParameters()
+    vecParam.toaParameters.deltaTOA0 = 0
+    vecParam.toaParameters.toaSS = 3
+
+    metadata.vectorParameters = vecParam
+    
+    print metadata
+
+    numVec = coda_types.VectorSizeT()
+    numVec.push_back(100)
+    numVec.push_back(100)
+    numVec.push_back(100)
+    vbm = cphd.VBM(3,
+           numVec,
+           True,
+           True,
+           True,
+           metadata.getDomainType()
+           ) 
+    vbm.updateVectorParameters(vecParam)
+#    print vbm
