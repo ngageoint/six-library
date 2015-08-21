@@ -22,6 +22,7 @@
 #ifndef __SIX_POSITION_H__
 #define __SIX_POSITION_H__
 
+#include <mem/ScopedCopyablePtr.h>
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -42,16 +43,6 @@ struct RcvAPC
     //!  Constructor
     RcvAPC()
     {
-    }
-
-    //!  Destructor
-    ~RcvAPC()
-    {
-    }
-    //!  Clone this object
-    RcvAPC* clone() const
-    {
-        return new RcvAPC(*this);
     }
 
     std::vector<PolyXYZ> rcvAPCPolys;
@@ -89,22 +80,10 @@ struct Position
      *  (Optional) Receive aperture phase center.
      *
      */
-    RcvAPC* rcvAPC;
+    mem::ScopedCopyablePtr<RcvAPC> rcvAPC;
     
-    //!  Constructor, optional rcvAPC set to NULL
-    Position() :
-        rcvAPC(NULL)
-    {
-	// Initialize other optional elements
-        arpPoly = Init::undefined<PolyXYZ>();
-    	grpPoly = Init::undefined<PolyXYZ>();
-    	txAPCPoly = Init::undefined<PolyXYZ>();
-    }
-    //!  Destroy, including rcvAPC if not NULL
-    ~Position();
-
-    //!  Copy, including rcvAPC if not NULL
-    Position* clone() const;
+    //!  Constructor
+    Position();
 
 };
 

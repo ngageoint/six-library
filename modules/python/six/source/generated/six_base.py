@@ -202,6 +202,7 @@ import coda.coda_except
 import coda.math_poly
 import coda.math_linear
 import pysix.scene
+import coda.mem
 class DateTime(_object):
     """Proxy of C++ nitf::DateTime class"""
     __swig_setmethods__ = {}
@@ -4053,6 +4054,572 @@ class LatLonAltCorners(_object):
 LatLonAltCorners_swigregister = _six_base.LatLonAltCorners_swigregister
 LatLonAltCorners_swigregister(LatLonAltCorners)
 
+class ScopedCopyableRadiometric(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::Radiometric)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableRadiometric, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableRadiometric, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::Radiometric)> self, Radiometric ptr=None) -> ScopedCopyableRadiometric
+        __init__(mem::ScopedCopyablePtr<(six::Radiometric)> self) -> ScopedCopyableRadiometric
+        __init__(mem::ScopedCopyablePtr<(six::Radiometric)> self, ScopedCopyableRadiometric rhs) -> ScopedCopyableRadiometric
+        """
+        this = _six_base.new_ScopedCopyableRadiometric(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableRadiometric self) -> Radiometric"""
+        return _six_base.ScopedCopyableRadiometric_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableRadiometric self) -> Radiometric"""
+        return _six_base.ScopedCopyableRadiometric___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableRadiometric self) -> Radiometric"""
+        return _six_base.ScopedCopyableRadiometric___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableRadiometric self, Radiometric ptr=None)
+        reset(ScopedCopyableRadiometric self)
+        """
+        return _six_base.ScopedCopyableRadiometric_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableRadiometric
+    __del__ = lambda self: None
+    __swig_getmethods__["NL_ABSOLUTE"] = _six_base.ScopedCopyableRadiometric_NL_ABSOLUTE_get
+    if _newclass:
+        NL_ABSOLUTE = _swig_property(_six_base.ScopedCopyableRadiometric_NL_ABSOLUTE_get)
+    __swig_getmethods__["NL_RELATIVE"] = _six_base.ScopedCopyableRadiometric_NL_RELATIVE_get
+    if _newclass:
+        NL_RELATIVE = _swig_property(_six_base.ScopedCopyableRadiometric_NL_RELATIVE_get)
+    __swig_setmethods__["noiseLevel"] = _six_base.ScopedCopyableRadiometric_noiseLevel_set
+    __swig_getmethods__["noiseLevel"] = _six_base.ScopedCopyableRadiometric_noiseLevel_get
+    if _newclass:
+        noiseLevel = _swig_property(_six_base.ScopedCopyableRadiometric_noiseLevel_get, _six_base.ScopedCopyableRadiometric_noiseLevel_set)
+    __swig_setmethods__["rcsSFPoly"] = _six_base.ScopedCopyableRadiometric_rcsSFPoly_set
+    __swig_getmethods__["rcsSFPoly"] = _six_base.ScopedCopyableRadiometric_rcsSFPoly_get
+    if _newclass:
+        rcsSFPoly = _swig_property(_six_base.ScopedCopyableRadiometric_rcsSFPoly_get, _six_base.ScopedCopyableRadiometric_rcsSFPoly_set)
+    __swig_setmethods__["betaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_betaZeroSFPoly_set
+    __swig_getmethods__["betaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_betaZeroSFPoly_get
+    if _newclass:
+        betaZeroSFPoly = _swig_property(_six_base.ScopedCopyableRadiometric_betaZeroSFPoly_get, _six_base.ScopedCopyableRadiometric_betaZeroSFPoly_set)
+    __swig_setmethods__["sigmaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_sigmaZeroSFPoly_set
+    __swig_getmethods__["sigmaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_sigmaZeroSFPoly_get
+    if _newclass:
+        sigmaZeroSFPoly = _swig_property(_six_base.ScopedCopyableRadiometric_sigmaZeroSFPoly_get, _six_base.ScopedCopyableRadiometric_sigmaZeroSFPoly_set)
+    __swig_setmethods__["sigmaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_set
+    __swig_getmethods__["sigmaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_get
+    if _newclass:
+        sigmaZeroSFIncidenceMap = _swig_property(_six_base.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_get, _six_base.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_set)
+    __swig_setmethods__["gammaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFPoly_set
+    __swig_getmethods__["gammaZeroSFPoly"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFPoly_get
+    if _newclass:
+        gammaZeroSFPoly = _swig_property(_six_base.ScopedCopyableRadiometric_gammaZeroSFPoly_get, _six_base.ScopedCopyableRadiometric_gammaZeroSFPoly_set)
+    __swig_setmethods__["gammaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set
+    __swig_getmethods__["gammaZeroSFIncidenceMap"] = _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get
+    if _newclass:
+        gammaZeroSFIncidenceMap = _swig_property(_six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get, _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set)
+ScopedCopyableRadiometric_swigregister = _six_base.ScopedCopyableRadiometric_swigregister
+ScopedCopyableRadiometric_swigregister(ScopedCopyableRadiometric)
+
+
+def makeScopedCopyableRadiometric():
+    """makeScopedCopyableRadiometric() -> ScopedCopyableRadiometric"""
+    return _six_base.makeScopedCopyableRadiometric()
+class ScopedCopyableErrorStatistics(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::ErrorStatistics)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableErrorStatistics, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableErrorStatistics, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::ErrorStatistics)> self, ErrorStatistics ptr=None) -> ScopedCopyableErrorStatistics
+        __init__(mem::ScopedCopyablePtr<(six::ErrorStatistics)> self) -> ScopedCopyableErrorStatistics
+        __init__(mem::ScopedCopyablePtr<(six::ErrorStatistics)> self, ScopedCopyableErrorStatistics rhs) -> ScopedCopyableErrorStatistics
+        """
+        this = _six_base.new_ScopedCopyableErrorStatistics(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
+        return _six_base.ScopedCopyableErrorStatistics_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
+        return _six_base.ScopedCopyableErrorStatistics___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
+        return _six_base.ScopedCopyableErrorStatistics___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableErrorStatistics self, ErrorStatistics ptr=None)
+        reset(ScopedCopyableErrorStatistics self)
+        """
+        return _six_base.ScopedCopyableErrorStatistics_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableErrorStatistics
+    __del__ = lambda self: None
+    __swig_setmethods__["compositeSCP"] = _six_base.ScopedCopyableErrorStatistics_compositeSCP_set
+    __swig_getmethods__["compositeSCP"] = _six_base.ScopedCopyableErrorStatistics_compositeSCP_get
+    if _newclass:
+        compositeSCP = _swig_property(_six_base.ScopedCopyableErrorStatistics_compositeSCP_get, _six_base.ScopedCopyableErrorStatistics_compositeSCP_set)
+    __swig_setmethods__["components"] = _six_base.ScopedCopyableErrorStatistics_components_set
+    __swig_getmethods__["components"] = _six_base.ScopedCopyableErrorStatistics_components_get
+    if _newclass:
+        components = _swig_property(_six_base.ScopedCopyableErrorStatistics_components_get, _six_base.ScopedCopyableErrorStatistics_components_set)
+    __swig_setmethods__["additionalParameters"] = _six_base.ScopedCopyableErrorStatistics_additionalParameters_set
+    __swig_getmethods__["additionalParameters"] = _six_base.ScopedCopyableErrorStatistics_additionalParameters_get
+    if _newclass:
+        additionalParameters = _swig_property(_six_base.ScopedCopyableErrorStatistics_additionalParameters_get, _six_base.ScopedCopyableErrorStatistics_additionalParameters_set)
+ScopedCopyableErrorStatistics_swigregister = _six_base.ScopedCopyableErrorStatistics_swigregister
+ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
+
+
+def makeScopedCopyableErrorStatistics():
+    """makeScopedCopyableErrorStatistics() -> ScopedCopyableErrorStatistics"""
+    return _six_base.makeScopedCopyableErrorStatistics()
+class ScopedCopyablePosVelError(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::PosVelError)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyablePosVelError, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyablePosVelError, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::PosVelError)> self, PosVelError ptr=None) -> ScopedCopyablePosVelError
+        __init__(mem::ScopedCopyablePtr<(six::PosVelError)> self) -> ScopedCopyablePosVelError
+        __init__(mem::ScopedCopyablePtr<(six::PosVelError)> self, ScopedCopyablePosVelError rhs) -> ScopedCopyablePosVelError
+        """
+        this = _six_base.new_ScopedCopyablePosVelError(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyablePosVelError self) -> PosVelError"""
+        return _six_base.ScopedCopyablePosVelError_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyablePosVelError self) -> PosVelError"""
+        return _six_base.ScopedCopyablePosVelError___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyablePosVelError self) -> PosVelError"""
+        return _six_base.ScopedCopyablePosVelError___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyablePosVelError self, PosVelError ptr=None)
+        reset(ScopedCopyablePosVelError self)
+        """
+        return _six_base.ScopedCopyablePosVelError_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyablePosVelError
+    __del__ = lambda self: None
+    __swig_setmethods__["frame"] = _six_base.ScopedCopyablePosVelError_frame_set
+    __swig_getmethods__["frame"] = _six_base.ScopedCopyablePosVelError_frame_get
+    if _newclass:
+        frame = _swig_property(_six_base.ScopedCopyablePosVelError_frame_get, _six_base.ScopedCopyablePosVelError_frame_set)
+    __swig_setmethods__["p1"] = _six_base.ScopedCopyablePosVelError_p1_set
+    __swig_getmethods__["p1"] = _six_base.ScopedCopyablePosVelError_p1_get
+    if _newclass:
+        p1 = _swig_property(_six_base.ScopedCopyablePosVelError_p1_get, _six_base.ScopedCopyablePosVelError_p1_set)
+    __swig_setmethods__["p2"] = _six_base.ScopedCopyablePosVelError_p2_set
+    __swig_getmethods__["p2"] = _six_base.ScopedCopyablePosVelError_p2_get
+    if _newclass:
+        p2 = _swig_property(_six_base.ScopedCopyablePosVelError_p2_get, _six_base.ScopedCopyablePosVelError_p2_set)
+    __swig_setmethods__["p3"] = _six_base.ScopedCopyablePosVelError_p3_set
+    __swig_getmethods__["p3"] = _six_base.ScopedCopyablePosVelError_p3_get
+    if _newclass:
+        p3 = _swig_property(_six_base.ScopedCopyablePosVelError_p3_get, _six_base.ScopedCopyablePosVelError_p3_set)
+    __swig_setmethods__["v1"] = _six_base.ScopedCopyablePosVelError_v1_set
+    __swig_getmethods__["v1"] = _six_base.ScopedCopyablePosVelError_v1_get
+    if _newclass:
+        v1 = _swig_property(_six_base.ScopedCopyablePosVelError_v1_get, _six_base.ScopedCopyablePosVelError_v1_set)
+    __swig_setmethods__["v2"] = _six_base.ScopedCopyablePosVelError_v2_set
+    __swig_getmethods__["v2"] = _six_base.ScopedCopyablePosVelError_v2_get
+    if _newclass:
+        v2 = _swig_property(_six_base.ScopedCopyablePosVelError_v2_get, _six_base.ScopedCopyablePosVelError_v2_set)
+    __swig_setmethods__["v3"] = _six_base.ScopedCopyablePosVelError_v3_set
+    __swig_getmethods__["v3"] = _six_base.ScopedCopyablePosVelError_v3_get
+    if _newclass:
+        v3 = _swig_property(_six_base.ScopedCopyablePosVelError_v3_get, _six_base.ScopedCopyablePosVelError_v3_set)
+    __swig_setmethods__["corrCoefs"] = _six_base.ScopedCopyablePosVelError_corrCoefs_set
+    __swig_getmethods__["corrCoefs"] = _six_base.ScopedCopyablePosVelError_corrCoefs_get
+    if _newclass:
+        corrCoefs = _swig_property(_six_base.ScopedCopyablePosVelError_corrCoefs_get, _six_base.ScopedCopyablePosVelError_corrCoefs_set)
+    __swig_setmethods__["positionDecorr"] = _six_base.ScopedCopyablePosVelError_positionDecorr_set
+    __swig_getmethods__["positionDecorr"] = _six_base.ScopedCopyablePosVelError_positionDecorr_get
+    if _newclass:
+        positionDecorr = _swig_property(_six_base.ScopedCopyablePosVelError_positionDecorr_get, _six_base.ScopedCopyablePosVelError_positionDecorr_set)
+ScopedCopyablePosVelError_swigregister = _six_base.ScopedCopyablePosVelError_swigregister
+ScopedCopyablePosVelError_swigregister(ScopedCopyablePosVelError)
+
+
+def makeScopedCopyablePosVelError():
+    """makeScopedCopyablePosVelError() -> ScopedCopyablePosVelError"""
+    return _six_base.makeScopedCopyablePosVelError()
+class ScopedCopyableRadarSensor(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::RadarSensor)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableRadarSensor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableRadarSensor, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::RadarSensor)> self, RadarSensor ptr=None) -> ScopedCopyableRadarSensor
+        __init__(mem::ScopedCopyablePtr<(six::RadarSensor)> self) -> ScopedCopyableRadarSensor
+        __init__(mem::ScopedCopyablePtr<(six::RadarSensor)> self, ScopedCopyableRadarSensor rhs) -> ScopedCopyableRadarSensor
+        """
+        this = _six_base.new_ScopedCopyableRadarSensor(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableRadarSensor self) -> RadarSensor"""
+        return _six_base.ScopedCopyableRadarSensor_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableRadarSensor self) -> RadarSensor"""
+        return _six_base.ScopedCopyableRadarSensor___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableRadarSensor self) -> RadarSensor"""
+        return _six_base.ScopedCopyableRadarSensor___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableRadarSensor self, RadarSensor ptr=None)
+        reset(ScopedCopyableRadarSensor self)
+        """
+        return _six_base.ScopedCopyableRadarSensor_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableRadarSensor
+    __del__ = lambda self: None
+    __swig_setmethods__["rangeBias"] = _six_base.ScopedCopyableRadarSensor_rangeBias_set
+    __swig_getmethods__["rangeBias"] = _six_base.ScopedCopyableRadarSensor_rangeBias_get
+    if _newclass:
+        rangeBias = _swig_property(_six_base.ScopedCopyableRadarSensor_rangeBias_get, _six_base.ScopedCopyableRadarSensor_rangeBias_set)
+    __swig_setmethods__["clockFreqSF"] = _six_base.ScopedCopyableRadarSensor_clockFreqSF_set
+    __swig_getmethods__["clockFreqSF"] = _six_base.ScopedCopyableRadarSensor_clockFreqSF_get
+    if _newclass:
+        clockFreqSF = _swig_property(_six_base.ScopedCopyableRadarSensor_clockFreqSF_get, _six_base.ScopedCopyableRadarSensor_clockFreqSF_set)
+    __swig_setmethods__["transmitFreqSF"] = _six_base.ScopedCopyableRadarSensor_transmitFreqSF_set
+    __swig_getmethods__["transmitFreqSF"] = _six_base.ScopedCopyableRadarSensor_transmitFreqSF_get
+    if _newclass:
+        transmitFreqSF = _swig_property(_six_base.ScopedCopyableRadarSensor_transmitFreqSF_get, _six_base.ScopedCopyableRadarSensor_transmitFreqSF_set)
+    __swig_setmethods__["rangeBiasDecorr"] = _six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_set
+    __swig_getmethods__["rangeBiasDecorr"] = _six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_get
+    if _newclass:
+        rangeBiasDecorr = _swig_property(_six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_get, _six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_set)
+ScopedCopyableRadarSensor_swigregister = _six_base.ScopedCopyableRadarSensor_swigregister
+ScopedCopyableRadarSensor_swigregister(ScopedCopyableRadarSensor)
+
+
+def makeScopedCopyableRadarSensor():
+    """makeScopedCopyableRadarSensor() -> ScopedCopyableRadarSensor"""
+    return _six_base.makeScopedCopyableRadarSensor()
+class ScopedCopyableTropoError(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::TropoError)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableTropoError, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableTropoError, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::TropoError)> self, TropoError ptr=None) -> ScopedCopyableTropoError
+        __init__(mem::ScopedCopyablePtr<(six::TropoError)> self) -> ScopedCopyableTropoError
+        __init__(mem::ScopedCopyablePtr<(six::TropoError)> self, ScopedCopyableTropoError rhs) -> ScopedCopyableTropoError
+        """
+        this = _six_base.new_ScopedCopyableTropoError(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableTropoError self) -> TropoError"""
+        return _six_base.ScopedCopyableTropoError_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableTropoError self) -> TropoError"""
+        return _six_base.ScopedCopyableTropoError___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableTropoError self) -> TropoError"""
+        return _six_base.ScopedCopyableTropoError___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableTropoError self, TropoError ptr=None)
+        reset(ScopedCopyableTropoError self)
+        """
+        return _six_base.ScopedCopyableTropoError_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableTropoError
+    __del__ = lambda self: None
+    __swig_setmethods__["tropoRangeVertical"] = _six_base.ScopedCopyableTropoError_tropoRangeVertical_set
+    __swig_getmethods__["tropoRangeVertical"] = _six_base.ScopedCopyableTropoError_tropoRangeVertical_get
+    if _newclass:
+        tropoRangeVertical = _swig_property(_six_base.ScopedCopyableTropoError_tropoRangeVertical_get, _six_base.ScopedCopyableTropoError_tropoRangeVertical_set)
+    __swig_setmethods__["tropoRangeSlant"] = _six_base.ScopedCopyableTropoError_tropoRangeSlant_set
+    __swig_getmethods__["tropoRangeSlant"] = _six_base.ScopedCopyableTropoError_tropoRangeSlant_get
+    if _newclass:
+        tropoRangeSlant = _swig_property(_six_base.ScopedCopyableTropoError_tropoRangeSlant_get, _six_base.ScopedCopyableTropoError_tropoRangeSlant_set)
+    __swig_setmethods__["tropoRangeDecorr"] = _six_base.ScopedCopyableTropoError_tropoRangeDecorr_set
+    __swig_getmethods__["tropoRangeDecorr"] = _six_base.ScopedCopyableTropoError_tropoRangeDecorr_get
+    if _newclass:
+        tropoRangeDecorr = _swig_property(_six_base.ScopedCopyableTropoError_tropoRangeDecorr_get, _six_base.ScopedCopyableTropoError_tropoRangeDecorr_set)
+ScopedCopyableTropoError_swigregister = _six_base.ScopedCopyableTropoError_swigregister
+ScopedCopyableTropoError_swigregister(ScopedCopyableTropoError)
+
+
+def makeScopedCopyableTropoError():
+    """makeScopedCopyableTropoError() -> ScopedCopyableTropoError"""
+    return _six_base.makeScopedCopyableTropoError()
+class ScopedCopyableIonoError(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::IonoError)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableIonoError, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableIonoError, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::IonoError)> self, IonoError ptr=None) -> ScopedCopyableIonoError
+        __init__(mem::ScopedCopyablePtr<(six::IonoError)> self) -> ScopedCopyableIonoError
+        __init__(mem::ScopedCopyablePtr<(six::IonoError)> self, ScopedCopyableIonoError rhs) -> ScopedCopyableIonoError
+        """
+        this = _six_base.new_ScopedCopyableIonoError(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableIonoError self) -> IonoError"""
+        return _six_base.ScopedCopyableIonoError_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableIonoError self) -> IonoError"""
+        return _six_base.ScopedCopyableIonoError___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableIonoError self) -> IonoError"""
+        return _six_base.ScopedCopyableIonoError___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableIonoError self, IonoError ptr=None)
+        reset(ScopedCopyableIonoError self)
+        """
+        return _six_base.ScopedCopyableIonoError_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableIonoError
+    __del__ = lambda self: None
+    __swig_setmethods__["ionoRangeVertical"] = _six_base.ScopedCopyableIonoError_ionoRangeVertical_set
+    __swig_getmethods__["ionoRangeVertical"] = _six_base.ScopedCopyableIonoError_ionoRangeVertical_get
+    if _newclass:
+        ionoRangeVertical = _swig_property(_six_base.ScopedCopyableIonoError_ionoRangeVertical_get, _six_base.ScopedCopyableIonoError_ionoRangeVertical_set)
+    __swig_setmethods__["ionoRangeRateVertical"] = _six_base.ScopedCopyableIonoError_ionoRangeRateVertical_set
+    __swig_getmethods__["ionoRangeRateVertical"] = _six_base.ScopedCopyableIonoError_ionoRangeRateVertical_get
+    if _newclass:
+        ionoRangeRateVertical = _swig_property(_six_base.ScopedCopyableIonoError_ionoRangeRateVertical_get, _six_base.ScopedCopyableIonoError_ionoRangeRateVertical_set)
+    __swig_setmethods__["ionoRgRgRateCC"] = _six_base.ScopedCopyableIonoError_ionoRgRgRateCC_set
+    __swig_getmethods__["ionoRgRgRateCC"] = _six_base.ScopedCopyableIonoError_ionoRgRgRateCC_get
+    if _newclass:
+        ionoRgRgRateCC = _swig_property(_six_base.ScopedCopyableIonoError_ionoRgRgRateCC_get, _six_base.ScopedCopyableIonoError_ionoRgRgRateCC_set)
+    __swig_setmethods__["ionoRangeVertDecorr"] = _six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_set
+    __swig_getmethods__["ionoRangeVertDecorr"] = _six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_get
+    if _newclass:
+        ionoRangeVertDecorr = _swig_property(_six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_get, _six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_set)
+ScopedCopyableIonoError_swigregister = _six_base.ScopedCopyableIonoError_swigregister
+ScopedCopyableIonoError_swigregister(ScopedCopyableIonoError)
+
+
+def makeScopedCopyableIonoError():
+    """makeScopedCopyableIonoError() -> ScopedCopyableIonoError"""
+    return _six_base.makeScopedCopyableIonoError()
+class ScopedCopyableCompositeSCP(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::CompositeSCP)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableCompositeSCP, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableCompositeSCP, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::CompositeSCP)> self, CompositeSCP ptr=None) -> ScopedCopyableCompositeSCP
+        __init__(mem::ScopedCopyablePtr<(six::CompositeSCP)> self) -> ScopedCopyableCompositeSCP
+        __init__(mem::ScopedCopyablePtr<(six::CompositeSCP)> self, ScopedCopyableCompositeSCP rhs) -> ScopedCopyableCompositeSCP
+        """
+        this = _six_base.new_ScopedCopyableCompositeSCP(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
+        return _six_base.ScopedCopyableCompositeSCP_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
+        return _six_base.ScopedCopyableCompositeSCP___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
+        return _six_base.ScopedCopyableCompositeSCP___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableCompositeSCP self, CompositeSCP ptr=None)
+        reset(ScopedCopyableCompositeSCP self)
+        """
+        return _six_base.ScopedCopyableCompositeSCP_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableCompositeSCP
+    __del__ = lambda self: None
+    __swig_setmethods__["scpType"] = _six_base.ScopedCopyableCompositeSCP_scpType_set
+    __swig_getmethods__["scpType"] = _six_base.ScopedCopyableCompositeSCP_scpType_get
+    if _newclass:
+        scpType = _swig_property(_six_base.ScopedCopyableCompositeSCP_scpType_get, _six_base.ScopedCopyableCompositeSCP_scpType_set)
+    __swig_setmethods__["xErr"] = _six_base.ScopedCopyableCompositeSCP_xErr_set
+    __swig_getmethods__["xErr"] = _six_base.ScopedCopyableCompositeSCP_xErr_get
+    if _newclass:
+        xErr = _swig_property(_six_base.ScopedCopyableCompositeSCP_xErr_get, _six_base.ScopedCopyableCompositeSCP_xErr_set)
+    __swig_setmethods__["yErr"] = _six_base.ScopedCopyableCompositeSCP_yErr_set
+    __swig_getmethods__["yErr"] = _six_base.ScopedCopyableCompositeSCP_yErr_get
+    if _newclass:
+        yErr = _swig_property(_six_base.ScopedCopyableCompositeSCP_yErr_get, _six_base.ScopedCopyableCompositeSCP_yErr_set)
+    __swig_setmethods__["xyErr"] = _six_base.ScopedCopyableCompositeSCP_xyErr_set
+    __swig_getmethods__["xyErr"] = _six_base.ScopedCopyableCompositeSCP_xyErr_get
+    if _newclass:
+        xyErr = _swig_property(_six_base.ScopedCopyableCompositeSCP_xyErr_get, _six_base.ScopedCopyableCompositeSCP_xyErr_set)
+ScopedCopyableCompositeSCP_swigregister = _six_base.ScopedCopyableCompositeSCP_swigregister
+ScopedCopyableCompositeSCP_swigregister(ScopedCopyableCompositeSCP)
+
+
+def makeScopedCopyableCompositeSCP():
+    """makeScopedCopyableCompositeSCP() -> ScopedCopyableCompositeSCP"""
+    return _six_base.makeScopedCopyableCompositeSCP()
+class ScopedCopyableComponents(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::Components)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableComponents, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableComponents, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::Components)> self, Components ptr=None) -> ScopedCopyableComponents
+        __init__(mem::ScopedCopyablePtr<(six::Components)> self) -> ScopedCopyableComponents
+        __init__(mem::ScopedCopyablePtr<(six::Components)> self, ScopedCopyableComponents rhs) -> ScopedCopyableComponents
+        """
+        this = _six_base.new_ScopedCopyableComponents(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableComponents self) -> Components"""
+        return _six_base.ScopedCopyableComponents_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableComponents self) -> Components"""
+        return _six_base.ScopedCopyableComponents___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableComponents self) -> Components"""
+        return _six_base.ScopedCopyableComponents___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableComponents self, Components ptr=None)
+        reset(ScopedCopyableComponents self)
+        """
+        return _six_base.ScopedCopyableComponents_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableComponents
+    __del__ = lambda self: None
+    __swig_setmethods__["posVelError"] = _six_base.ScopedCopyableComponents_posVelError_set
+    __swig_getmethods__["posVelError"] = _six_base.ScopedCopyableComponents_posVelError_get
+    if _newclass:
+        posVelError = _swig_property(_six_base.ScopedCopyableComponents_posVelError_get, _six_base.ScopedCopyableComponents_posVelError_set)
+    __swig_setmethods__["radarSensor"] = _six_base.ScopedCopyableComponents_radarSensor_set
+    __swig_getmethods__["radarSensor"] = _six_base.ScopedCopyableComponents_radarSensor_get
+    if _newclass:
+        radarSensor = _swig_property(_six_base.ScopedCopyableComponents_radarSensor_get, _six_base.ScopedCopyableComponents_radarSensor_set)
+    __swig_setmethods__["tropoError"] = _six_base.ScopedCopyableComponents_tropoError_set
+    __swig_getmethods__["tropoError"] = _six_base.ScopedCopyableComponents_tropoError_get
+    if _newclass:
+        tropoError = _swig_property(_six_base.ScopedCopyableComponents_tropoError_get, _six_base.ScopedCopyableComponents_tropoError_set)
+    __swig_setmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_set
+    __swig_getmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_get
+    if _newclass:
+        ionoError = _swig_property(_six_base.ScopedCopyableComponents_ionoError_get, _six_base.ScopedCopyableComponents_ionoError_set)
+ScopedCopyableComponents_swigregister = _six_base.ScopedCopyableComponents_swigregister
+ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
+
+
+def makeScopedCopyableComponents():
+    """makeScopedCopyableComponents() -> ScopedCopyableComponents"""
+    return _six_base.makeScopedCopyableComponents()
 # This file is compatible with both classic and new-style classes.
 
 

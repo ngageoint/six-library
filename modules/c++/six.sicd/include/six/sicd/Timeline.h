@@ -22,6 +22,7 @@
 #ifndef __SIX_TIMELINE_H__
 #define __SIX_TIMELINE_H__
 
+#include <mem/ScopedCopyablePtr.h>
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -39,6 +40,9 @@ namespace sicd
  */
 struct TimelineSet
 {
+    //!  Constructor
+    TimelineSet();
+
     //! Start time for the period relative to collect start
     double tStart;
 
@@ -56,19 +60,6 @@ struct TimelineSet
      *  Starting tStart to tEnd
      */
     Poly1D interPulsePeriodPoly;
-
-    //!  Constructor
-    TimelineSet();
-    
-    //!  Destructor
-    ~TimelineSet() {}
-
-    //!  Clone this object
-    TimelineSet* clone() const
-    {
-        return new TimelineSet(*this);
-    }
-
 };
 
 /*!
@@ -85,14 +76,9 @@ struct InterPulsePeriod
     InterPulsePeriod()
     {
     }
-    //!  Destrucctor.  Goes through sets and deletes every item
-    ~InterPulsePeriod();
 
-    //!  Clone this object and its underlying TimelineSets
-    InterPulsePeriod* clone() const;
-    
     //!  Vector of TimelineSet objects
-    std::vector<TimelineSet*> sets;
+    std::vector<TimelineSet> sets;
 };
 
 /*!
@@ -107,6 +93,9 @@ struct InterPulsePeriod
  */
 struct Timeline
 {
+    //! Constructor
+    Timeline();
+
     //! Collection date/time UTC, measured from collection start
     DateTime collectStart;
 
@@ -114,22 +103,7 @@ struct Timeline
     double collectDuration;
 
     //! Optional IPP parameter description
-    InterPulsePeriod* interPulsePeriod;
-
-    //! Constructor
-    Timeline() :
-        interPulsePeriod(NULL)
-    {
-        collectStart = Init::undefined<DateTime>();
-        collectDuration = Init::undefined<double>();
-
-    }
-    //!  Delete optional interPulsePeriod if non-null
-    ~Timeline();
-
-    //! Clones object and underlying interPulsePeriod if non-null
-    Timeline* clone() const;
-
+    mem::ScopedCopyablePtr<InterPulsePeriod> interPulsePeriod;
 };
 }
 }

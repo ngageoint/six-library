@@ -21,21 +21,15 @@
  */
 #include "six/sicd/Position.h"
 
-using namespace six;
-using namespace six::sicd;
-
-Position::~Position()
+namespace six
 {
-    if (rcvAPC)
-        delete rcvAPC;
-}
-
-Position* Position::clone() const
+namespace sicd
 {
-    Position* p = new Position(*this);
-    if (rcvAPC)
-        p->rcvAPC = rcvAPC->clone();
-    return p;
+Position::Position() :
+    arpPoly(Init::undefined<PolyXYZ>()),
+    grpPoly(Init::undefined<PolyXYZ>()),
+    txAPCPoly(Init::undefined<PolyXYZ>())
+{
 }
-        
-
+}
+}
