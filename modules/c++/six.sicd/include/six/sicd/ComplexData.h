@@ -87,7 +87,7 @@ public:
     mem::ScopedCloneablePtr<Grid> grid;
 
     //!  This block describes the imaging collection timeline
-    mem::ScopedCloneablePtr<Timeline> timeline;
+    mem::ScopedCopyablePtr<Timeline> timeline;
 
     //!  Describes the platform and the ground ref positions vs. time
     mem::ScopedCloneablePtr<Position> position;

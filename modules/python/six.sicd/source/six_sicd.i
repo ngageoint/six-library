@@ -111,7 +111,7 @@ SCOPED_CLONEABLE(six::sicd, ImageCreation)
 SCOPED_CLONEABLE(six::sicd, ImageData)
 SCOPED_CLONEABLE(six::sicd, GeoData)
 SCOPED_CLONEABLE(six::sicd, Grid)
-SCOPED_CLONEABLE(six::sicd, Timeline)
+SCOPED_COPYABLE(six::sicd, Timeline)
 SCOPED_CLONEABLE(six::sicd, Position)
 SCOPED_CLONEABLE(six::sicd, RadarCollection)
 SCOPED_COPYABLE(six::sicd, ImageFormation)
@@ -161,7 +161,7 @@ SCOPED_COPYABLE(six::sicd, RMAT)
 SCOPED_COPYABLE(six::sicd, RMCR)
 SCOPED_COPYABLE(six::sicd, INCA)
 
-%template(VectorTimelineSet)                       std::vector<six::sicd::TimelineSet*>;
+SCOPED_COPYABLE(six::sicd, InterPulsePeriod)
 
 %{
     void getWidebandData(const std::string& sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long arrayBuffer)

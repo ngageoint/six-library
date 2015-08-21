@@ -659,6 +659,14 @@ class TimelineSet(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, TimelineSet, name)
     __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::sicd::TimelineSet self) -> TimelineSet"""
+        this = _six_sicd.new_TimelineSet()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
     __swig_setmethods__["tStart"] = _six_sicd.TimelineSet_tStart_set
     __swig_getmethods__["tStart"] = _six_sicd.TimelineSet_tStart_get
     if _newclass:
@@ -679,21 +687,8 @@ class TimelineSet(_object):
     __swig_getmethods__["interPulsePeriodPoly"] = _six_sicd.TimelineSet_interPulsePeriodPoly_get
     if _newclass:
         interPulsePeriodPoly = _swig_property(_six_sicd.TimelineSet_interPulsePeriodPoly_get, _six_sicd.TimelineSet_interPulsePeriodPoly_set)
-
-    def __init__(self):
-        """__init__(six::sicd::TimelineSet self) -> TimelineSet"""
-        this = _six_sicd.new_TimelineSet()
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
     __swig_destroy__ = _six_sicd.delete_TimelineSet
     __del__ = lambda self: None
-
-    def clone(self):
-        """clone(TimelineSet self) -> TimelineSet"""
-        return _six_sicd.TimelineSet_clone(self)
-
 TimelineSet_swigregister = _six_sicd.TimelineSet_swigregister
 TimelineSet_swigregister(TimelineSet)
 
@@ -712,17 +707,12 @@ class InterPulsePeriod(_object):
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_InterPulsePeriod
-    __del__ = lambda self: None
-
-    def clone(self):
-        """clone(InterPulsePeriod self) -> InterPulsePeriod"""
-        return _six_sicd.InterPulsePeriod_clone(self)
-
     __swig_setmethods__["sets"] = _six_sicd.InterPulsePeriod_sets_set
     __swig_getmethods__["sets"] = _six_sicd.InterPulsePeriod_sets_get
     if _newclass:
         sets = _swig_property(_six_sicd.InterPulsePeriod_sets_get, _six_sicd.InterPulsePeriod_sets_set)
+    __swig_destroy__ = _six_sicd.delete_InterPulsePeriod
+    __del__ = lambda self: None
 InterPulsePeriod_swigregister = _six_sicd.InterPulsePeriod_swigregister
 InterPulsePeriod_swigregister(InterPulsePeriod)
 
@@ -733,6 +723,14 @@ class Timeline(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, Timeline, name)
     __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::sicd::Timeline self) -> Timeline"""
+        this = _six_sicd.new_Timeline()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
     __swig_setmethods__["collectStart"] = _six_sicd.Timeline_collectStart_set
     __swig_getmethods__["collectStart"] = _six_sicd.Timeline_collectStart_get
     if _newclass:
@@ -745,21 +743,8 @@ class Timeline(_object):
     __swig_getmethods__["interPulsePeriod"] = _six_sicd.Timeline_interPulsePeriod_get
     if _newclass:
         interPulsePeriod = _swig_property(_six_sicd.Timeline_interPulsePeriod_get, _six_sicd.Timeline_interPulsePeriod_set)
-
-    def __init__(self):
-        """__init__(six::sicd::Timeline self) -> Timeline"""
-        this = _six_sicd.new_Timeline()
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
     __swig_destroy__ = _six_sicd.delete_Timeline
     __del__ = lambda self: None
-
-    def clone(self):
-        """clone(Timeline self) -> Timeline"""
-        return _six_sicd.Timeline_clone(self)
-
 Timeline_swigregister = _six_sicd.Timeline_swigregister
 Timeline_swigregister(Timeline)
 
@@ -2920,11 +2905,6 @@ class ScopedCloneableTimeline(_object):
     __swig_getmethods__["interPulsePeriod"] = _six_sicd.ScopedCloneableTimeline_interPulsePeriod_get
     if _newclass:
         interPulsePeriod = _swig_property(_six_sicd.ScopedCloneableTimeline_interPulsePeriod_get, _six_sicd.ScopedCloneableTimeline_interPulsePeriod_set)
-
-    def clone(self):
-        """clone(ScopedCloneableTimeline self) -> Timeline"""
-        return _six_sicd.ScopedCloneableTimeline_clone(self)
-
 ScopedCloneableTimeline_swigregister = _six_sicd.ScopedCloneableTimeline_swigregister
 ScopedCloneableTimeline_swigregister(ScopedCloneableTimeline)
 
@@ -7399,210 +7379,61 @@ ScopedCopyableINCA_swigregister(ScopedCopyableINCA)
 def makeScopedCopyableINCA():
     """makeScopedCopyableINCA() -> ScopedCopyableINCA"""
     return _six_sicd.makeScopedCopyableINCA()
-class VectorTimelineSet(_object):
-    """Proxy of C++ std::vector<(p.six::sicd::TimelineSet)> class"""
+class ScopedCopyableInterPulsePeriod(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::InterPulsePeriod)> class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorTimelineSet, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableInterPulsePeriod, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, VectorTimelineSet, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableInterPulsePeriod, name)
     __repr__ = _swig_repr
-
-    def iterator(self):
-        """iterator(VectorTimelineSet self) -> SwigPyIterator"""
-        return _six_sicd.VectorTimelineSet_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self):
-        """__nonzero__(VectorTimelineSet self) -> bool"""
-        return _six_sicd.VectorTimelineSet___nonzero__(self)
-
-
-    def __bool__(self):
-        """__bool__(VectorTimelineSet self) -> bool"""
-        return _six_sicd.VectorTimelineSet___bool__(self)
-
-
-    def __len__(self):
-        """__len__(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet * >::size_type"""
-        return _six_sicd.VectorTimelineSet___len__(self)
-
-
-    def pop(self):
-        """pop(VectorTimelineSet self) -> TimelineSet"""
-        return _six_sicd.VectorTimelineSet_pop(self)
-
-
-    def __getslice__(self, i, j):
-        """__getslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::difference_type i, std::vector< six::sicd::TimelineSet * >::difference_type j) -> VectorTimelineSet"""
-        return _six_sicd.VectorTimelineSet___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args):
-        """
-        __setslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::difference_type i, std::vector< six::sicd::TimelineSet * >::difference_type j, VectorTimelineSet v)
-        __setslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::difference_type i, std::vector< six::sicd::TimelineSet * >::difference_type j)
-        """
-        return _six_sicd.VectorTimelineSet___setslice__(self, *args)
-
-
-    def __delslice__(self, i, j):
-        """__delslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::difference_type i, std::vector< six::sicd::TimelineSet * >::difference_type j)"""
-        return _six_sicd.VectorTimelineSet___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args):
-        """
-        __delitem__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::difference_type i)
-        __delitem__(VectorTimelineSet self, PySliceObject * slice)
-        """
-        return _six_sicd.VectorTimelineSet___delitem__(self, *args)
-
-
-    def __getitem__(self, *args):
-        """
-        __getitem__(VectorTimelineSet self, PySliceObject * slice) -> VectorTimelineSet
-        __getitem__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::difference_type i) -> TimelineSet
-        """
-        return _six_sicd.VectorTimelineSet___getitem__(self, *args)
-
-
-    def __setitem__(self, *args):
-        """
-        __setitem__(VectorTimelineSet self, PySliceObject * slice, VectorTimelineSet v)
-        __setitem__(VectorTimelineSet self, PySliceObject * slice)
-        __setitem__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::difference_type i, TimelineSet x)
-        """
-        return _six_sicd.VectorTimelineSet___setitem__(self, *args)
-
-
-    def append(self, x):
-        """append(VectorTimelineSet self, TimelineSet x)"""
-        return _six_sicd.VectorTimelineSet_append(self, x)
-
-
-    def empty(self):
-        """empty(VectorTimelineSet self) -> bool"""
-        return _six_sicd.VectorTimelineSet_empty(self)
-
-
-    def size(self):
-        """size(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet * >::size_type"""
-        return _six_sicd.VectorTimelineSet_size(self)
-
-
-    def clear(self):
-        """clear(VectorTimelineSet self)"""
-        return _six_sicd.VectorTimelineSet_clear(self)
-
-
-    def swap(self, v):
-        """swap(VectorTimelineSet self, VectorTimelineSet v)"""
-        return _six_sicd.VectorTimelineSet_swap(self, v)
-
-
-    def get_allocator(self):
-        """get_allocator(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet * >::allocator_type"""
-        return _six_sicd.VectorTimelineSet_get_allocator(self)
-
-
-    def begin(self):
-        """begin(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet * >::iterator"""
-        return _six_sicd.VectorTimelineSet_begin(self)
-
-
-    def end(self):
-        """end(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet * >::iterator"""
-        return _six_sicd.VectorTimelineSet_end(self)
-
-
-    def rbegin(self):
-        """rbegin(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet * >::reverse_iterator"""
-        return _six_sicd.VectorTimelineSet_rbegin(self)
-
-
-    def rend(self):
-        """rend(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet * >::reverse_iterator"""
-        return _six_sicd.VectorTimelineSet_rend(self)
-
-
-    def pop_back(self):
-        """pop_back(VectorTimelineSet self)"""
-        return _six_sicd.VectorTimelineSet_pop_back(self)
-
-
-    def erase(self, *args):
-        """
-        erase(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::iterator pos) -> std::vector< six::sicd::TimelineSet * >::iterator
-        erase(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::iterator first, std::vector< six::sicd::TimelineSet * >::iterator last) -> std::vector< six::sicd::TimelineSet * >::iterator
-        """
-        return _six_sicd.VectorTimelineSet_erase(self, *args)
-
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(p.six::sicd::TimelineSet)> self) -> VectorTimelineSet
-        __init__(std::vector<(p.six::sicd::TimelineSet)> self, VectorTimelineSet arg2) -> VectorTimelineSet
-        __init__(std::vector<(p.six::sicd::TimelineSet)> self, std::vector< six::sicd::TimelineSet * >::size_type size) -> VectorTimelineSet
-        __init__(std::vector<(p.six::sicd::TimelineSet)> self, std::vector< six::sicd::TimelineSet * >::size_type size, TimelineSet value) -> VectorTimelineSet
+        __init__(mem::ScopedCopyablePtr<(six::sicd::InterPulsePeriod)> self, InterPulsePeriod ptr=None) -> ScopedCopyableInterPulsePeriod
+        __init__(mem::ScopedCopyablePtr<(six::sicd::InterPulsePeriod)> self) -> ScopedCopyableInterPulsePeriod
+        __init__(mem::ScopedCopyablePtr<(six::sicd::InterPulsePeriod)> self, ScopedCopyableInterPulsePeriod rhs) -> ScopedCopyableInterPulsePeriod
         """
-        this = _six_sicd.new_VectorTimelineSet(*args)
+        this = _six_sicd.new_ScopedCopyableInterPulsePeriod(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def push_back(self, x):
-        """push_back(VectorTimelineSet self, TimelineSet x)"""
-        return _six_sicd.VectorTimelineSet_push_back(self, x)
+    def get(self):
+        """get(ScopedCopyableInterPulsePeriod self) -> InterPulsePeriod"""
+        return _six_sicd.ScopedCopyableInterPulsePeriod_get(self)
 
 
-    def front(self):
-        """front(VectorTimelineSet self) -> TimelineSet"""
-        return _six_sicd.VectorTimelineSet_front(self)
+    def __ref__(self):
+        """__ref__(ScopedCopyableInterPulsePeriod self) -> InterPulsePeriod"""
+        return _six_sicd.ScopedCopyableInterPulsePeriod___ref__(self)
 
 
-    def back(self):
-        """back(VectorTimelineSet self) -> TimelineSet"""
-        return _six_sicd.VectorTimelineSet_back(self)
+    def __deref__(self):
+        """__deref__(ScopedCopyableInterPulsePeriod self) -> InterPulsePeriod"""
+        return _six_sicd.ScopedCopyableInterPulsePeriod___deref__(self)
 
 
-    def assign(self, n, x):
-        """assign(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::size_type n, TimelineSet x)"""
-        return _six_sicd.VectorTimelineSet_assign(self, n, x)
-
-
-    def resize(self, *args):
+    def reset(self, ptr=None):
         """
-        resize(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::size_type new_size)
-        resize(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::size_type new_size, TimelineSet x)
+        reset(ScopedCopyableInterPulsePeriod self, InterPulsePeriod ptr=None)
+        reset(ScopedCopyableInterPulsePeriod self)
         """
-        return _six_sicd.VectorTimelineSet_resize(self, *args)
+        return _six_sicd.ScopedCopyableInterPulsePeriod_reset(self, ptr)
 
-
-    def insert(self, *args):
-        """
-        insert(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::iterator pos, TimelineSet x) -> std::vector< six::sicd::TimelineSet * >::iterator
-        insert(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::iterator pos, std::vector< six::sicd::TimelineSet * >::size_type n, TimelineSet x)
-        """
-        return _six_sicd.VectorTimelineSet_insert(self, *args)
-
-
-    def reserve(self, n):
-        """reserve(VectorTimelineSet self, std::vector< six::sicd::TimelineSet * >::size_type n)"""
-        return _six_sicd.VectorTimelineSet_reserve(self, n)
-
-
-    def capacity(self):
-        """capacity(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet * >::size_type"""
-        return _six_sicd.VectorTimelineSet_capacity(self)
-
-    __swig_destroy__ = _six_sicd.delete_VectorTimelineSet
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableInterPulsePeriod
     __del__ = lambda self: None
-VectorTimelineSet_swigregister = _six_sicd.VectorTimelineSet_swigregister
-VectorTimelineSet_swigregister(VectorTimelineSet)
+    __swig_setmethods__["sets"] = _six_sicd.ScopedCopyableInterPulsePeriod_sets_set
+    __swig_getmethods__["sets"] = _six_sicd.ScopedCopyableInterPulsePeriod_sets_get
+    if _newclass:
+        sets = _swig_property(_six_sicd.ScopedCopyableInterPulsePeriod_sets_get, _six_sicd.ScopedCopyableInterPulsePeriod_sets_set)
+ScopedCopyableInterPulsePeriod_swigregister = _six_sicd.ScopedCopyableInterPulsePeriod_swigregister
+ScopedCopyableInterPulsePeriod_swigregister(ScopedCopyableInterPulsePeriod)
 
+
+def makeScopedCopyableInterPulsePeriod():
+    """makeScopedCopyableInterPulsePeriod() -> ScopedCopyableInterPulsePeriod"""
+    return _six_sicd.makeScopedCopyableInterPulsePeriod()
 
 def getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer):
     """getWidebandData(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long arrayBuffer)"""

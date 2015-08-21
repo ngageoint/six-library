@@ -419,23 +419,23 @@ XMLElem ComplexXMLParser::convertTimelineToXML(
     createDateTime("CollectStart", timeline->collectStart, timelineXML);
     createDouble("CollectDuration", timeline->collectDuration, timelineXML);
 
-    if (timeline->interPulsePeriod)
+    if (timeline->interPulsePeriod.get())
     {
         XMLElem ippXML = newElement("IPP", timelineXML);
-        unsigned int setSize = timeline->interPulsePeriod->sets.size();
-        ippXML->attribute("size") = str::toString<int>(setSize);
+        size_t setSize = timeline->interPulsePeriod->sets.size();
+        ippXML->attribute("size") = str::toString<size_t>(setSize);
 
-        for (unsigned int i = 0; i < setSize; ++i)
+        for (size_t i = 0; i < setSize; ++i)
         {
-            TimelineSet* timelineSet = timeline->interPulsePeriod->sets[i];
+            const TimelineSet& timelineSet = timeline->interPulsePeriod->sets[i];
             XMLElem setXML = newElement("Set", ippXML);
             setXML->attribute("index") = str::toString<int>(i + 1);
 
-            createDouble("TStart", timelineSet->tStart, setXML);
-            createDouble("TEnd", timelineSet->tEnd, setXML);
-            createInt("IPPStart", timelineSet->interPulsePeriodStart, setXML);
-            createInt("IPPEnd", timelineSet->interPulsePeriodEnd, setXML);
-            common().createPoly1D("IPPPoly", timelineSet->interPulsePeriodPoly, setXML);
+            createDouble("TStart", timelineSet.tStart, setXML);
+            createDouble("TEnd", timelineSet.tEnd, setXML);
+            createInt("IPPStart", timelineSet.interPulsePeriodStart, setXML);
+            createInt("IPPEnd", timelineSet.interPulsePeriodEnd, setXML);
+            common().createPoly1D("IPPPoly", timelineSet.interPulsePeriodPoly, setXML);
         }
     }
 
@@ -1241,7 +1241,7 @@ void ComplexXMLParser::parseTimelineFromXML(
     XMLElem ippXML = getOptional(timelineXML, "IPP");
     if (ippXML)
     {
-        timeline->interPulsePeriod = new InterPulsePeriod();
+        timeline->interPulsePeriod.reset(new InterPulsePeriod());
         //TODO make sure there is at least one
         std::vector < XMLElem > setsXML;
         ippXML->getElementsByTagName("Set", setsXML);
@@ -1249,20 +1249,25 @@ void ComplexXMLParser::parseTimelineFromXML(
                 != setsXML.end(); ++it)
         {
             // Use the first set that is already available.
-            TimelineSet* ts = new TimelineSet();
-            parseDouble(getFirstAndOnly(*it, "TStart"), ts->tStart);
-            parseDouble(getFirstAndOnly(*it, "TEnd"), ts->tEnd);
+            timeline->interPulsePeriod->sets.resize(
+                    timeline->interPulsePeriod->sets.size() + 1);
+            TimelineSet& ts(timeline->interPulsePeriod->sets.back());
+
+            parseDouble(getFirstAndOnly(*it, "TStart"), ts.tStart);
+            parseDouble(getFirstAndOnly(*it, "TEnd"), ts.tEnd);
             parseInt(getFirstAndOnly(*it, "IPPStart"),
-                     ts->interPulsePeriodStart);
-            parseInt(getFirstAndOnly(*it, "IPPEnd"), ts->interPulsePeriodEnd);
+                     ts.interPulsePeriodStart);
+            parseInt(getFirstAndOnly(*it, "IPPEnd"), ts.interPulsePeriodEnd);
             common().parsePoly1D(getFirstAndOnly(*it, "IPPPoly"),
-                        ts->interPulsePeriodPoly);
-            timeline->interPulsePeriod->sets.push_back(ts);
+                        ts.interPulsePeriodPoly);
         }
 
         // Required to have at least one timeline set.
-        if (timeline->interPulsePeriod->sets.size() == 0)
-            timeline->interPulsePeriod->sets.push_back(new TimelineSet());
+        // TODO: Does it really make sense to do this?
+        if (timeline->interPulsePeriod->sets.empty())
+        {
+            timeline->interPulsePeriod->sets.resize(1);
+        }
     }
 }
 
