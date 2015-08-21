@@ -762,7 +762,7 @@ XMLElem ComplexXMLParser::convertPFAToXML(
     createDouble("Krg2", pfa->krg2, pfaXML);
     createDouble("Kaz1", pfa->kaz1, pfaXML);
     createDouble("Kaz2", pfa->kaz2, pfaXML);
-    if (pfa->slowTimeDeskew)
+    if (pfa->slowTimeDeskew.get())
     {
         XMLElem stdXML = newElement("STDeskew", pfaXML);
         require(createBooleanType("Applied", pfa->slowTimeDeskew->applied,
@@ -1608,7 +1608,7 @@ void ComplexXMLParser::parsePFAFromXML(
     XMLElem deskewXML = getOptional(pfaXML, "STDeskew");
     if (deskewXML)
     {
-        pfa->slowTimeDeskew = new SlowTimeDeskew();
+        pfa->slowTimeDeskew.reset(new SlowTimeDeskew());
         parseBooleanType(getFirstAndOnly(deskewXML, "Applied"),
                          pfa->slowTimeDeskew->applied);
 

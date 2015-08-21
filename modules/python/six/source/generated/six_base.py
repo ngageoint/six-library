@@ -2875,6 +2875,160 @@ class Init(_object):
 Init_swigregister = _six_base.Init_swigregister
 Init_swigregister(Init)
 
+class Parameter(_object):
+    """Proxy of C++ six::Parameter class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Parameter, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Parameter, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _six_base.delete_Parameter
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(six::Parameter self) -> Parameter
+        __init__(six::Parameter self, Parameter other) -> Parameter
+        """
+        this = _six_base.new_Parameter(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def str(self):
+        """str(Parameter self) -> std::string"""
+        return _six_base.Parameter_str(self)
+
+
+    def getName(self):
+        """getName(Parameter self) -> std::string"""
+        return _six_base.Parameter_getName(self)
+
+
+    def setName(self, name):
+        """setName(Parameter self, std::string name)"""
+        return _six_base.Parameter_setName(self, name)
+
+
+    def __eq__(self, o):
+        """__eq__(Parameter self, Parameter o) -> bool"""
+        return _six_base.Parameter___eq__(self, o)
+
+
+    def __ne__(self, o):
+        """__ne__(Parameter self, Parameter o) -> bool"""
+        return _six_base.Parameter___ne__(self, o)
+
+    def setValue(self, *args):
+        if len(args) != 1:
+            raise RuntimeError("Parameter.setValue takes exactly one argument")
+        new_tuple = (str(args[0]), )
+        return _six_base.Parameter_setValue(self, str(args[0]))
+
+
+
+    def __str__(self):
+        """__str__(Parameter self) -> std::string"""
+        return _six_base.Parameter___str__(self)
+
+
+    def __int__(self):
+        """__int__(Parameter self) -> long"""
+        return _six_base.Parameter___int__(self)
+
+
+    def __float__(self):
+        """__float__(Parameter self) -> double"""
+        return _six_base.Parameter___float__(self)
+
+Parameter_swigregister = _six_base.Parameter_swigregister
+Parameter_swigregister(Parameter)
+
+class ParameterCollection(_object):
+    """Proxy of C++ six::ParameterCollection class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ParameterCollection, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ParameterCollection, name)
+    __repr__ = _swig_repr
+
+    def findParameterIndex(self, paramName):
+        """findParameterIndex(ParameterCollection self, std::string const & paramName) -> size_t"""
+        return _six_base.ParameterCollection_findParameterIndex(self, paramName)
+
+
+    def findParameter(self, paramName):
+        """findParameter(ParameterCollection self, std::string const & paramName) -> Parameter"""
+        return _six_base.ParameterCollection_findParameter(self, paramName)
+
+
+    def containsParameter(self, paramName):
+        """containsParameter(ParameterCollection self, std::string const & paramName) -> bool"""
+        return _six_base.ParameterCollection_containsParameter(self, paramName)
+
+
+    def at(self, *args):
+        """
+        at(ParameterCollection self, size_t i) -> Parameter
+        at(ParameterCollection self, size_t i) -> Parameter
+        """
+        return _six_base.ParameterCollection_at(self, *args)
+
+
+    def push_back(self, p):
+        """push_back(ParameterCollection self, Parameter p)"""
+        return _six_base.ParameterCollection_push_back(self, p)
+
+
+    def size(self):
+        """size(ParameterCollection self) -> size_t"""
+        return _six_base.ParameterCollection_size(self)
+
+
+    def empty(self):
+        """empty(ParameterCollection self) -> bool"""
+        return _six_base.ParameterCollection_empty(self)
+
+
+    def front(self, *args):
+        """
+        front(ParameterCollection self) -> Parameter
+        front(ParameterCollection self) -> Parameter
+        """
+        return _six_base.ParameterCollection_front(self, *args)
+
+
+    def back(self, *args):
+        """
+        back(ParameterCollection self) -> Parameter
+        back(ParameterCollection self) -> Parameter
+        """
+        return _six_base.ParameterCollection_back(self, *args)
+
+
+    def __getitem__(self, i):
+        """__getitem__(ParameterCollection self, size_t i) -> Parameter"""
+        return _six_base.ParameterCollection___getitem__(self, i)
+
+
+    def __setitem__(self, i, v):
+        """__setitem__(ParameterCollection self, size_t i, Parameter v)"""
+        return _six_base.ParameterCollection___setitem__(self, i, v)
+
+
+    def __init__(self):
+        """__init__(six::ParameterCollection self) -> ParameterCollection"""
+        this = _six_base.new_ParameterCollection()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_ParameterCollection
+    __del__ = lambda self: None
+ParameterCollection_swigregister = _six_base.ParameterCollection_swigregister
+ParameterCollection_swigregister(ParameterCollection)
+
 class Classification(_object):
     """Proxy of C++ six::Classification class"""
     __swig_setmethods__ = {}
@@ -3340,160 +3494,6 @@ Radiometric_swigregister = _six_base.Radiometric_swigregister
 Radiometric_swigregister(Radiometric)
 Radiometric.NL_ABSOLUTE = _six_base.cvar.Radiometric_NL_ABSOLUTE
 Radiometric.NL_RELATIVE = _six_base.cvar.Radiometric_NL_RELATIVE
-
-class Parameter(_object):
-    """Proxy of C++ six::Parameter class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Parameter, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, Parameter, name)
-    __repr__ = _swig_repr
-    __swig_destroy__ = _six_base.delete_Parameter
-    __del__ = lambda self: None
-
-    def __init__(self, *args):
-        """
-        __init__(six::Parameter self) -> Parameter
-        __init__(six::Parameter self, Parameter other) -> Parameter
-        """
-        this = _six_base.new_Parameter(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def str(self):
-        """str(Parameter self) -> std::string"""
-        return _six_base.Parameter_str(self)
-
-
-    def getName(self):
-        """getName(Parameter self) -> std::string"""
-        return _six_base.Parameter_getName(self)
-
-
-    def setName(self, name):
-        """setName(Parameter self, std::string name)"""
-        return _six_base.Parameter_setName(self, name)
-
-
-    def __eq__(self, o):
-        """__eq__(Parameter self, Parameter o) -> bool"""
-        return _six_base.Parameter___eq__(self, o)
-
-
-    def __ne__(self, o):
-        """__ne__(Parameter self, Parameter o) -> bool"""
-        return _six_base.Parameter___ne__(self, o)
-
-    def setValue(self, *args):
-        if len(args) != 1:
-            raise RuntimeError("Parameter.setValue takes exactly one argument")
-        new_tuple = (str(args[0]), )
-        return _six_base.Parameter_setValue(self, str(args[0]))
-
-
-
-    def __str__(self):
-        """__str__(Parameter self) -> std::string"""
-        return _six_base.Parameter___str__(self)
-
-
-    def __int__(self):
-        """__int__(Parameter self) -> long"""
-        return _six_base.Parameter___int__(self)
-
-
-    def __float__(self):
-        """__float__(Parameter self) -> double"""
-        return _six_base.Parameter___float__(self)
-
-Parameter_swigregister = _six_base.Parameter_swigregister
-Parameter_swigregister(Parameter)
-
-class ParameterCollection(_object):
-    """Proxy of C++ six::ParameterCollection class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ParameterCollection, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ParameterCollection, name)
-    __repr__ = _swig_repr
-
-    def findParameterIndex(self, paramName):
-        """findParameterIndex(ParameterCollection self, std::string const & paramName) -> size_t"""
-        return _six_base.ParameterCollection_findParameterIndex(self, paramName)
-
-
-    def findParameter(self, paramName):
-        """findParameter(ParameterCollection self, std::string const & paramName) -> Parameter"""
-        return _six_base.ParameterCollection_findParameter(self, paramName)
-
-
-    def containsParameter(self, paramName):
-        """containsParameter(ParameterCollection self, std::string const & paramName) -> bool"""
-        return _six_base.ParameterCollection_containsParameter(self, paramName)
-
-
-    def at(self, *args):
-        """
-        at(ParameterCollection self, size_t i) -> Parameter
-        at(ParameterCollection self, size_t i) -> Parameter
-        """
-        return _six_base.ParameterCollection_at(self, *args)
-
-
-    def push_back(self, p):
-        """push_back(ParameterCollection self, Parameter p)"""
-        return _six_base.ParameterCollection_push_back(self, p)
-
-
-    def size(self):
-        """size(ParameterCollection self) -> size_t"""
-        return _six_base.ParameterCollection_size(self)
-
-
-    def empty(self):
-        """empty(ParameterCollection self) -> bool"""
-        return _six_base.ParameterCollection_empty(self)
-
-
-    def front(self, *args):
-        """
-        front(ParameterCollection self) -> Parameter
-        front(ParameterCollection self) -> Parameter
-        """
-        return _six_base.ParameterCollection_front(self, *args)
-
-
-    def back(self, *args):
-        """
-        back(ParameterCollection self) -> Parameter
-        back(ParameterCollection self) -> Parameter
-        """
-        return _six_base.ParameterCollection_back(self, *args)
-
-
-    def __getitem__(self, i):
-        """__getitem__(ParameterCollection self, size_t i) -> Parameter"""
-        return _six_base.ParameterCollection___getitem__(self, i)
-
-
-    def __setitem__(self, i, v):
-        """__setitem__(ParameterCollection self, size_t i, Parameter v)"""
-        return _six_base.ParameterCollection___setitem__(self, i, v)
-
-
-    def __init__(self):
-        """__init__(six::ParameterCollection self) -> ParameterCollection"""
-        this = _six_base.new_ParameterCollection()
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-    __swig_destroy__ = _six_base.delete_ParameterCollection
-    __del__ = lambda self: None
-ParameterCollection_swigregister = _six_base.ParameterCollection_swigregister
-ParameterCollection_swigregister(ParameterCollection)
 
 class Data(_object):
     """Proxy of C++ six::Data class"""
@@ -4202,6 +4202,117 @@ ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
 def makeScopedCopyableErrorStatistics():
     """makeScopedCopyableErrorStatistics() -> ScopedCopyableErrorStatistics"""
     return _six_base.makeScopedCopyableErrorStatistics()
+class ScopedCopyableCorrCoefs(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::CorrCoefs)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableCorrCoefs, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableCorrCoefs, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::CorrCoefs)> self, CorrCoefs ptr=None) -> ScopedCopyableCorrCoefs
+        __init__(mem::ScopedCopyablePtr<(six::CorrCoefs)> self) -> ScopedCopyableCorrCoefs
+        __init__(mem::ScopedCopyablePtr<(six::CorrCoefs)> self, ScopedCopyableCorrCoefs rhs) -> ScopedCopyableCorrCoefs
+        """
+        this = _six_base.new_ScopedCopyableCorrCoefs(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableCorrCoefs self) -> CorrCoefs"""
+        return _six_base.ScopedCopyableCorrCoefs_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableCorrCoefs self) -> CorrCoefs"""
+        return _six_base.ScopedCopyableCorrCoefs___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableCorrCoefs self) -> CorrCoefs"""
+        return _six_base.ScopedCopyableCorrCoefs___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableCorrCoefs self, CorrCoefs ptr=None)
+        reset(ScopedCopyableCorrCoefs self)
+        """
+        return _six_base.ScopedCopyableCorrCoefs_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableCorrCoefs
+    __del__ = lambda self: None
+    __swig_setmethods__["p1p2"] = _six_base.ScopedCopyableCorrCoefs_p1p2_set
+    __swig_getmethods__["p1p2"] = _six_base.ScopedCopyableCorrCoefs_p1p2_get
+    if _newclass:
+        p1p2 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p1p2_get, _six_base.ScopedCopyableCorrCoefs_p1p2_set)
+    __swig_setmethods__["p1p3"] = _six_base.ScopedCopyableCorrCoefs_p1p3_set
+    __swig_getmethods__["p1p3"] = _six_base.ScopedCopyableCorrCoefs_p1p3_get
+    if _newclass:
+        p1p3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p1p3_get, _six_base.ScopedCopyableCorrCoefs_p1p3_set)
+    __swig_setmethods__["p1v1"] = _six_base.ScopedCopyableCorrCoefs_p1v1_set
+    __swig_getmethods__["p1v1"] = _six_base.ScopedCopyableCorrCoefs_p1v1_get
+    if _newclass:
+        p1v1 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p1v1_get, _six_base.ScopedCopyableCorrCoefs_p1v1_set)
+    __swig_setmethods__["p1v2"] = _six_base.ScopedCopyableCorrCoefs_p1v2_set
+    __swig_getmethods__["p1v2"] = _six_base.ScopedCopyableCorrCoefs_p1v2_get
+    if _newclass:
+        p1v2 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p1v2_get, _six_base.ScopedCopyableCorrCoefs_p1v2_set)
+    __swig_setmethods__["p1v3"] = _six_base.ScopedCopyableCorrCoefs_p1v3_set
+    __swig_getmethods__["p1v3"] = _six_base.ScopedCopyableCorrCoefs_p1v3_get
+    if _newclass:
+        p1v3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p1v3_get, _six_base.ScopedCopyableCorrCoefs_p1v3_set)
+    __swig_setmethods__["p2p3"] = _six_base.ScopedCopyableCorrCoefs_p2p3_set
+    __swig_getmethods__["p2p3"] = _six_base.ScopedCopyableCorrCoefs_p2p3_get
+    if _newclass:
+        p2p3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p2p3_get, _six_base.ScopedCopyableCorrCoefs_p2p3_set)
+    __swig_setmethods__["p2v1"] = _six_base.ScopedCopyableCorrCoefs_p2v1_set
+    __swig_getmethods__["p2v1"] = _six_base.ScopedCopyableCorrCoefs_p2v1_get
+    if _newclass:
+        p2v1 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p2v1_get, _six_base.ScopedCopyableCorrCoefs_p2v1_set)
+    __swig_setmethods__["p2v2"] = _six_base.ScopedCopyableCorrCoefs_p2v2_set
+    __swig_getmethods__["p2v2"] = _six_base.ScopedCopyableCorrCoefs_p2v2_get
+    if _newclass:
+        p2v2 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p2v2_get, _six_base.ScopedCopyableCorrCoefs_p2v2_set)
+    __swig_setmethods__["p2v3"] = _six_base.ScopedCopyableCorrCoefs_p2v3_set
+    __swig_getmethods__["p2v3"] = _six_base.ScopedCopyableCorrCoefs_p2v3_get
+    if _newclass:
+        p2v3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p2v3_get, _six_base.ScopedCopyableCorrCoefs_p2v3_set)
+    __swig_setmethods__["p3v1"] = _six_base.ScopedCopyableCorrCoefs_p3v1_set
+    __swig_getmethods__["p3v1"] = _six_base.ScopedCopyableCorrCoefs_p3v1_get
+    if _newclass:
+        p3v1 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p3v1_get, _six_base.ScopedCopyableCorrCoefs_p3v1_set)
+    __swig_setmethods__["p3v2"] = _six_base.ScopedCopyableCorrCoefs_p3v2_set
+    __swig_getmethods__["p3v2"] = _six_base.ScopedCopyableCorrCoefs_p3v2_get
+    if _newclass:
+        p3v2 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p3v2_get, _six_base.ScopedCopyableCorrCoefs_p3v2_set)
+    __swig_setmethods__["p3v3"] = _six_base.ScopedCopyableCorrCoefs_p3v3_set
+    __swig_getmethods__["p3v3"] = _six_base.ScopedCopyableCorrCoefs_p3v3_get
+    if _newclass:
+        p3v3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_p3v3_get, _six_base.ScopedCopyableCorrCoefs_p3v3_set)
+    __swig_setmethods__["v1v2"] = _six_base.ScopedCopyableCorrCoefs_v1v2_set
+    __swig_getmethods__["v1v2"] = _six_base.ScopedCopyableCorrCoefs_v1v2_get
+    if _newclass:
+        v1v2 = _swig_property(_six_base.ScopedCopyableCorrCoefs_v1v2_get, _six_base.ScopedCopyableCorrCoefs_v1v2_set)
+    __swig_setmethods__["v1v3"] = _six_base.ScopedCopyableCorrCoefs_v1v3_set
+    __swig_getmethods__["v1v3"] = _six_base.ScopedCopyableCorrCoefs_v1v3_get
+    if _newclass:
+        v1v3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_v1v3_get, _six_base.ScopedCopyableCorrCoefs_v1v3_set)
+    __swig_setmethods__["v2v3"] = _six_base.ScopedCopyableCorrCoefs_v2v3_set
+    __swig_getmethods__["v2v3"] = _six_base.ScopedCopyableCorrCoefs_v2v3_get
+    if _newclass:
+        v2v3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_v2v3_get, _six_base.ScopedCopyableCorrCoefs_v2v3_set)
+ScopedCopyableCorrCoefs_swigregister = _six_base.ScopedCopyableCorrCoefs_swigregister
+ScopedCopyableCorrCoefs_swigregister(ScopedCopyableCorrCoefs)
+
+
+def makeScopedCopyableCorrCoefs():
+    """makeScopedCopyableCorrCoefs() -> ScopedCopyableCorrCoefs"""
+    return _six_base.makeScopedCopyableCorrCoefs()
 class ScopedCopyablePosVelError(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::PosVelError)> class"""
     __swig_setmethods__ = {}

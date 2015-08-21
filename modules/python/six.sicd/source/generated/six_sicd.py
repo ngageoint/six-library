@@ -1849,13 +1849,6 @@ class SlowTimeDeskew(_object):
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_SlowTimeDeskew
-    __del__ = lambda self: None
-
-    def clone(self):
-        """clone(SlowTimeDeskew self) -> SlowTimeDeskew"""
-        return _six_sicd.SlowTimeDeskew_clone(self)
-
     __swig_setmethods__["applied"] = _six_sicd.SlowTimeDeskew_applied_set
     __swig_getmethods__["applied"] = _six_sicd.SlowTimeDeskew_applied_get
     if _newclass:
@@ -1864,6 +1857,8 @@ class SlowTimeDeskew(_object):
     __swig_getmethods__["slowTimeDeskewPhasePoly"] = _six_sicd.SlowTimeDeskew_slowTimeDeskewPhasePoly_get
     if _newclass:
         slowTimeDeskewPhasePoly = _swig_property(_six_sicd.SlowTimeDeskew_slowTimeDeskewPhasePoly_get, _six_sicd.SlowTimeDeskew_slowTimeDeskewPhasePoly_set)
+    __swig_destroy__ = _six_sicd.delete_SlowTimeDeskew
+    __del__ = lambda self: None
 SlowTimeDeskew_swigregister = _six_sicd.SlowTimeDeskew_swigregister
 SlowTimeDeskew_swigregister(SlowTimeDeskew)
 
@@ -1882,13 +1877,6 @@ class PFA(_object):
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_PFA
-    __del__ = lambda self: None
-
-    def clone(self):
-        """clone(PFA self) -> PFA"""
-        return _six_sicd.PFA_clone(self)
-
     __swig_setmethods__["focusPlaneNormal"] = _six_sicd.PFA_focusPlaneNormal_set
     __swig_getmethods__["focusPlaneNormal"] = _six_sicd.PFA_focusPlaneNormal_get
     if _newclass:
@@ -1929,6 +1917,8 @@ class PFA(_object):
     __swig_getmethods__["slowTimeDeskew"] = _six_sicd.PFA_slowTimeDeskew_get
     if _newclass:
         slowTimeDeskew = _swig_property(_six_sicd.PFA_slowTimeDeskew_get, _six_sicd.PFA_slowTimeDeskew_set)
+    __swig_destroy__ = _six_sicd.delete_PFA
+    __del__ = lambda self: None
 PFA_swigregister = _six_sicd.PFA_swigregister
 PFA_swigregister(PFA)
 
@@ -3452,102 +3442,156 @@ ScopedCopyableMatchInformation_swigregister(ScopedCopyableMatchInformation)
 def makeScopedCopyableMatchInformation():
     """makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"""
     return _six_sicd.makeScopedCopyableMatchInformation()
-class ScopedCloneablePFA(_object):
-    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::PFA)> class"""
+class ScopedCopyableSlowTimeDeskew(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::SlowTimeDeskew)> class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneablePFA, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableSlowTimeDeskew, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneablePFA, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableSlowTimeDeskew, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCloneablePtr<(six::sicd::PFA)> self, PFA ptr=None) -> ScopedCloneablePFA
-        __init__(mem::ScopedCloneablePtr<(six::sicd::PFA)> self) -> ScopedCloneablePFA
-        __init__(mem::ScopedCloneablePtr<(six::sicd::PFA)> self, ScopedCloneablePFA rhs) -> ScopedCloneablePFA
+        __init__(mem::ScopedCopyablePtr<(six::sicd::SlowTimeDeskew)> self, SlowTimeDeskew ptr=None) -> ScopedCopyableSlowTimeDeskew
+        __init__(mem::ScopedCopyablePtr<(six::sicd::SlowTimeDeskew)> self) -> ScopedCopyableSlowTimeDeskew
+        __init__(mem::ScopedCopyablePtr<(six::sicd::SlowTimeDeskew)> self, ScopedCopyableSlowTimeDeskew rhs) -> ScopedCopyableSlowTimeDeskew
         """
-        this = _six_sicd.new_ScopedCloneablePFA(*args)
+        this = _six_sicd.new_ScopedCopyableSlowTimeDeskew(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def get(self):
-        """get(ScopedCloneablePFA self) -> PFA"""
-        return _six_sicd.ScopedCloneablePFA_get(self)
+        """get(ScopedCopyableSlowTimeDeskew self) -> SlowTimeDeskew"""
+        return _six_sicd.ScopedCopyableSlowTimeDeskew_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCloneablePFA self) -> PFA"""
-        return _six_sicd.ScopedCloneablePFA___ref__(self)
+        """__ref__(ScopedCopyableSlowTimeDeskew self) -> SlowTimeDeskew"""
+        return _six_sicd.ScopedCopyableSlowTimeDeskew___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCloneablePFA self) -> PFA"""
-        return _six_sicd.ScopedCloneablePFA___deref__(self)
+        """__deref__(ScopedCopyableSlowTimeDeskew self) -> SlowTimeDeskew"""
+        return _six_sicd.ScopedCopyableSlowTimeDeskew___deref__(self)
 
 
     def reset(self, ptr=None):
         """
-        reset(ScopedCloneablePFA self, PFA ptr=None)
-        reset(ScopedCloneablePFA self)
+        reset(ScopedCopyableSlowTimeDeskew self, SlowTimeDeskew ptr=None)
+        reset(ScopedCopyableSlowTimeDeskew self)
         """
-        return _six_sicd.ScopedCloneablePFA_reset(self, ptr)
+        return _six_sicd.ScopedCopyableSlowTimeDeskew_reset(self, ptr)
 
-    __swig_destroy__ = _six_sicd.delete_ScopedCloneablePFA
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableSlowTimeDeskew
     __del__ = lambda self: None
-
-    def clone(self):
-        """clone(ScopedCloneablePFA self) -> PFA"""
-        return _six_sicd.ScopedCloneablePFA_clone(self)
-
-    __swig_setmethods__["focusPlaneNormal"] = _six_sicd.ScopedCloneablePFA_focusPlaneNormal_set
-    __swig_getmethods__["focusPlaneNormal"] = _six_sicd.ScopedCloneablePFA_focusPlaneNormal_get
+    __swig_setmethods__["applied"] = _six_sicd.ScopedCopyableSlowTimeDeskew_applied_set
+    __swig_getmethods__["applied"] = _six_sicd.ScopedCopyableSlowTimeDeskew_applied_get
     if _newclass:
-        focusPlaneNormal = _swig_property(_six_sicd.ScopedCloneablePFA_focusPlaneNormal_get, _six_sicd.ScopedCloneablePFA_focusPlaneNormal_set)
-    __swig_setmethods__["imagePlaneNormal"] = _six_sicd.ScopedCloneablePFA_imagePlaneNormal_set
-    __swig_getmethods__["imagePlaneNormal"] = _six_sicd.ScopedCloneablePFA_imagePlaneNormal_get
+        applied = _swig_property(_six_sicd.ScopedCopyableSlowTimeDeskew_applied_get, _six_sicd.ScopedCopyableSlowTimeDeskew_applied_set)
+    __swig_setmethods__["slowTimeDeskewPhasePoly"] = _six_sicd.ScopedCopyableSlowTimeDeskew_slowTimeDeskewPhasePoly_set
+    __swig_getmethods__["slowTimeDeskewPhasePoly"] = _six_sicd.ScopedCopyableSlowTimeDeskew_slowTimeDeskewPhasePoly_get
     if _newclass:
-        imagePlaneNormal = _swig_property(_six_sicd.ScopedCloneablePFA_imagePlaneNormal_get, _six_sicd.ScopedCloneablePFA_imagePlaneNormal_set)
-    __swig_setmethods__["polarAngleRefTime"] = _six_sicd.ScopedCloneablePFA_polarAngleRefTime_set
-    __swig_getmethods__["polarAngleRefTime"] = _six_sicd.ScopedCloneablePFA_polarAngleRefTime_get
-    if _newclass:
-        polarAngleRefTime = _swig_property(_six_sicd.ScopedCloneablePFA_polarAngleRefTime_get, _six_sicd.ScopedCloneablePFA_polarAngleRefTime_set)
-    __swig_setmethods__["polarAnglePoly"] = _six_sicd.ScopedCloneablePFA_polarAnglePoly_set
-    __swig_getmethods__["polarAnglePoly"] = _six_sicd.ScopedCloneablePFA_polarAnglePoly_get
-    if _newclass:
-        polarAnglePoly = _swig_property(_six_sicd.ScopedCloneablePFA_polarAnglePoly_get, _six_sicd.ScopedCloneablePFA_polarAnglePoly_set)
-    __swig_setmethods__["spatialFrequencyScaleFactorPoly"] = _six_sicd.ScopedCloneablePFA_spatialFrequencyScaleFactorPoly_set
-    __swig_getmethods__["spatialFrequencyScaleFactorPoly"] = _six_sicd.ScopedCloneablePFA_spatialFrequencyScaleFactorPoly_get
-    if _newclass:
-        spatialFrequencyScaleFactorPoly = _swig_property(_six_sicd.ScopedCloneablePFA_spatialFrequencyScaleFactorPoly_get, _six_sicd.ScopedCloneablePFA_spatialFrequencyScaleFactorPoly_set)
-    __swig_setmethods__["krg1"] = _six_sicd.ScopedCloneablePFA_krg1_set
-    __swig_getmethods__["krg1"] = _six_sicd.ScopedCloneablePFA_krg1_get
-    if _newclass:
-        krg1 = _swig_property(_six_sicd.ScopedCloneablePFA_krg1_get, _six_sicd.ScopedCloneablePFA_krg1_set)
-    __swig_setmethods__["krg2"] = _six_sicd.ScopedCloneablePFA_krg2_set
-    __swig_getmethods__["krg2"] = _six_sicd.ScopedCloneablePFA_krg2_get
-    if _newclass:
-        krg2 = _swig_property(_six_sicd.ScopedCloneablePFA_krg2_get, _six_sicd.ScopedCloneablePFA_krg2_set)
-    __swig_setmethods__["kaz1"] = _six_sicd.ScopedCloneablePFA_kaz1_set
-    __swig_getmethods__["kaz1"] = _six_sicd.ScopedCloneablePFA_kaz1_get
-    if _newclass:
-        kaz1 = _swig_property(_six_sicd.ScopedCloneablePFA_kaz1_get, _six_sicd.ScopedCloneablePFA_kaz1_set)
-    __swig_setmethods__["kaz2"] = _six_sicd.ScopedCloneablePFA_kaz2_set
-    __swig_getmethods__["kaz2"] = _six_sicd.ScopedCloneablePFA_kaz2_get
-    if _newclass:
-        kaz2 = _swig_property(_six_sicd.ScopedCloneablePFA_kaz2_get, _six_sicd.ScopedCloneablePFA_kaz2_set)
-    __swig_setmethods__["slowTimeDeskew"] = _six_sicd.ScopedCloneablePFA_slowTimeDeskew_set
-    __swig_getmethods__["slowTimeDeskew"] = _six_sicd.ScopedCloneablePFA_slowTimeDeskew_get
-    if _newclass:
-        slowTimeDeskew = _swig_property(_six_sicd.ScopedCloneablePFA_slowTimeDeskew_get, _six_sicd.ScopedCloneablePFA_slowTimeDeskew_set)
-ScopedCloneablePFA_swigregister = _six_sicd.ScopedCloneablePFA_swigregister
-ScopedCloneablePFA_swigregister(ScopedCloneablePFA)
+        slowTimeDeskewPhasePoly = _swig_property(_six_sicd.ScopedCopyableSlowTimeDeskew_slowTimeDeskewPhasePoly_get, _six_sicd.ScopedCopyableSlowTimeDeskew_slowTimeDeskewPhasePoly_set)
+ScopedCopyableSlowTimeDeskew_swigregister = _six_sicd.ScopedCopyableSlowTimeDeskew_swigregister
+ScopedCopyableSlowTimeDeskew_swigregister(ScopedCopyableSlowTimeDeskew)
 
 
-def makeScopedCloneablePFA():
-    """makeScopedCloneablePFA() -> ScopedCloneablePFA"""
-    return _six_sicd.makeScopedCloneablePFA()
+def makeScopedCopyableSlowTimeDeskew():
+    """makeScopedCopyableSlowTimeDeskew() -> ScopedCopyableSlowTimeDeskew"""
+    return _six_sicd.makeScopedCopyableSlowTimeDeskew()
+class ScopedCopyablePFA(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::PFA)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyablePFA, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyablePFA, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::sicd::PFA)> self, PFA ptr=None) -> ScopedCopyablePFA
+        __init__(mem::ScopedCopyablePtr<(six::sicd::PFA)> self) -> ScopedCopyablePFA
+        __init__(mem::ScopedCopyablePtr<(six::sicd::PFA)> self, ScopedCopyablePFA rhs) -> ScopedCopyablePFA
+        """
+        this = _six_sicd.new_ScopedCopyablePFA(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyablePFA self) -> PFA"""
+        return _six_sicd.ScopedCopyablePFA_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyablePFA self) -> PFA"""
+        return _six_sicd.ScopedCopyablePFA___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyablePFA self) -> PFA"""
+        return _six_sicd.ScopedCopyablePFA___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyablePFA self, PFA ptr=None)
+        reset(ScopedCopyablePFA self)
+        """
+        return _six_sicd.ScopedCopyablePFA_reset(self, ptr)
+
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyablePFA
+    __del__ = lambda self: None
+    __swig_setmethods__["focusPlaneNormal"] = _six_sicd.ScopedCopyablePFA_focusPlaneNormal_set
+    __swig_getmethods__["focusPlaneNormal"] = _six_sicd.ScopedCopyablePFA_focusPlaneNormal_get
+    if _newclass:
+        focusPlaneNormal = _swig_property(_six_sicd.ScopedCopyablePFA_focusPlaneNormal_get, _six_sicd.ScopedCopyablePFA_focusPlaneNormal_set)
+    __swig_setmethods__["imagePlaneNormal"] = _six_sicd.ScopedCopyablePFA_imagePlaneNormal_set
+    __swig_getmethods__["imagePlaneNormal"] = _six_sicd.ScopedCopyablePFA_imagePlaneNormal_get
+    if _newclass:
+        imagePlaneNormal = _swig_property(_six_sicd.ScopedCopyablePFA_imagePlaneNormal_get, _six_sicd.ScopedCopyablePFA_imagePlaneNormal_set)
+    __swig_setmethods__["polarAngleRefTime"] = _six_sicd.ScopedCopyablePFA_polarAngleRefTime_set
+    __swig_getmethods__["polarAngleRefTime"] = _six_sicd.ScopedCopyablePFA_polarAngleRefTime_get
+    if _newclass:
+        polarAngleRefTime = _swig_property(_six_sicd.ScopedCopyablePFA_polarAngleRefTime_get, _six_sicd.ScopedCopyablePFA_polarAngleRefTime_set)
+    __swig_setmethods__["polarAnglePoly"] = _six_sicd.ScopedCopyablePFA_polarAnglePoly_set
+    __swig_getmethods__["polarAnglePoly"] = _six_sicd.ScopedCopyablePFA_polarAnglePoly_get
+    if _newclass:
+        polarAnglePoly = _swig_property(_six_sicd.ScopedCopyablePFA_polarAnglePoly_get, _six_sicd.ScopedCopyablePFA_polarAnglePoly_set)
+    __swig_setmethods__["spatialFrequencyScaleFactorPoly"] = _six_sicd.ScopedCopyablePFA_spatialFrequencyScaleFactorPoly_set
+    __swig_getmethods__["spatialFrequencyScaleFactorPoly"] = _six_sicd.ScopedCopyablePFA_spatialFrequencyScaleFactorPoly_get
+    if _newclass:
+        spatialFrequencyScaleFactorPoly = _swig_property(_six_sicd.ScopedCopyablePFA_spatialFrequencyScaleFactorPoly_get, _six_sicd.ScopedCopyablePFA_spatialFrequencyScaleFactorPoly_set)
+    __swig_setmethods__["krg1"] = _six_sicd.ScopedCopyablePFA_krg1_set
+    __swig_getmethods__["krg1"] = _six_sicd.ScopedCopyablePFA_krg1_get
+    if _newclass:
+        krg1 = _swig_property(_six_sicd.ScopedCopyablePFA_krg1_get, _six_sicd.ScopedCopyablePFA_krg1_set)
+    __swig_setmethods__["krg2"] = _six_sicd.ScopedCopyablePFA_krg2_set
+    __swig_getmethods__["krg2"] = _six_sicd.ScopedCopyablePFA_krg2_get
+    if _newclass:
+        krg2 = _swig_property(_six_sicd.ScopedCopyablePFA_krg2_get, _six_sicd.ScopedCopyablePFA_krg2_set)
+    __swig_setmethods__["kaz1"] = _six_sicd.ScopedCopyablePFA_kaz1_set
+    __swig_getmethods__["kaz1"] = _six_sicd.ScopedCopyablePFA_kaz1_get
+    if _newclass:
+        kaz1 = _swig_property(_six_sicd.ScopedCopyablePFA_kaz1_get, _six_sicd.ScopedCopyablePFA_kaz1_set)
+    __swig_setmethods__["kaz2"] = _six_sicd.ScopedCopyablePFA_kaz2_set
+    __swig_getmethods__["kaz2"] = _six_sicd.ScopedCopyablePFA_kaz2_get
+    if _newclass:
+        kaz2 = _swig_property(_six_sicd.ScopedCopyablePFA_kaz2_get, _six_sicd.ScopedCopyablePFA_kaz2_set)
+    __swig_setmethods__["slowTimeDeskew"] = _six_sicd.ScopedCopyablePFA_slowTimeDeskew_set
+    __swig_getmethods__["slowTimeDeskew"] = _six_sicd.ScopedCopyablePFA_slowTimeDeskew_get
+    if _newclass:
+        slowTimeDeskew = _swig_property(_six_sicd.ScopedCopyablePFA_slowTimeDeskew_get, _six_sicd.ScopedCopyablePFA_slowTimeDeskew_set)
+ScopedCopyablePFA_swigregister = _six_sicd.ScopedCopyablePFA_swigregister
+ScopedCopyablePFA_swigregister(ScopedCopyablePFA)
+
+
+def makeScopedCopyablePFA():
+    """makeScopedCopyablePFA() -> ScopedCopyablePFA"""
+    return _six_sicd.makeScopedCopyablePFA()
 class ScopedCopyableRMA(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::RMA)> class"""
     __swig_setmethods__ = {}

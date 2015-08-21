@@ -115,7 +115,7 @@ public:
 
     //!  (Optional/Choice) Polar Format Algorithm params -- if this is set,
     //          rma should remain NULL.
-    mem::ScopedCloneablePtr<PFA> pfa;
+    mem::ScopedCopyablePtr<PFA> pfa;
 
     //!  (Optional/Choice) Range Migration Algorithm params -- if this is
     //          set, pfa should remain NULL.

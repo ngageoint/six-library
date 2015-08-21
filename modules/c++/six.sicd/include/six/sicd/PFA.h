@@ -40,21 +40,7 @@ namespace sicd
 struct SlowTimeDeskew
 {
     //!  Constructor
-    SlowTimeDeskew()
-    {
-        applied = Init::undefined<BooleanType>();
-    }
-
-    //!  Destructor
-    ~SlowTimeDeskew()
-    {
-    }
-
-    //!  Make a copy
-    SlowTimeDeskew* clone() const
-    {
-        return new SlowTimeDeskew(*this);
-    }
+    SlowTimeDeskew();
 
     //! Was slow time deskew phase function applied?
     BooleanType applied;
@@ -76,25 +62,8 @@ struct SlowTimeDeskew
  */
 struct PFA
 {
-
     //!  Constructor, nothing defined
-    PFA() :
-        slowTimeDeskew(NULL)
-    {
-        focusPlaneNormal = Init::undefined<Vector3>();
-        imagePlaneNormal = Init::undefined<Vector3>();
-        polarAngleRefTime = Init::undefined<double>();
-        krg1 = Init::undefined<double>();
-        krg2 = Init::undefined<double>();
-        kaz1 = Init::undefined<double>();
-        kaz2 = Init::undefined<double>();
-    }
-
-    //!  Destructor
-    ~PFA();
-
-    //!  Copy this object
-    PFA* clone() const;
+    PFA();
 
     /*!
      *  SICD FPN parameter.
@@ -144,7 +113,7 @@ struct PFA
     double kaz2;
 
     //! SICD STDeskew parameter
-    SlowTimeDeskew* slowTimeDeskew;
+    mem::ScopedCopyablePtr<SlowTimeDeskew> slowTimeDeskew;
 
 };
 

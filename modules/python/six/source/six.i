@@ -86,11 +86,11 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %include "six/Enums.h"
 %include "six/Types.h"
 %include "six/Init.h"
+%include "six/Parameter.h"
+%include "six/ParameterCollection.h"
 %include "six/Classification.h"
 %include "six/ErrorStatistics.h"
 %include "six/Radiometric.h"
-%include "six/Parameter.h"
-%include "six/ParameterCollection.h"
 %include "six/Data.h"
 %include "six/XMLControl.h"
 %include "six/Utilities.h"
@@ -151,6 +151,7 @@ def setValue(self, *args):
 
 SCOPED_COPYABLE(six, Radiometric)
 SCOPED_COPYABLE(six, ErrorStatistics)
+SCOPED_COPYABLE(six, CorrCoefs)
 SCOPED_COPYABLE(six, PosVelError)
 SCOPED_COPYABLE(six, RadarSensor)
 SCOPED_COPYABLE(six, TropoError)

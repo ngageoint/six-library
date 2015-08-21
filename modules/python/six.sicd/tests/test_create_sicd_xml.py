@@ -50,6 +50,7 @@ collectionInfo.countryCodes.push_back('US')
 param = Parameter()
 param.setName('Collection Param')
 param.setValue('334')
+#pdb.set_trace()
 collectionInfo.parameters.push_back(param)
 param.setValue('335')
 collectionInfo.parameters.push_back(param)
@@ -500,6 +501,174 @@ antenna.twoWay.electricalBoresightFrequencyShift = BooleanType('IS_TRUE')
 antenna.twoWay.mainlobeFrequencyDilation = BooleanType('IS_TRUE')
 
 cmplx.antenna = antenna
+
+### Error Statistics ###
+errorStats = makeScopedCopyableErrorStatistics()
+errorStats.compositeSCP = makeScopedCopyableCompositeSCP()
+errorStats.compositeSCP.xErr = 12
+errorStats.compositeSCP.yErr = 34
+errorStats.compositeSCP.xyErr = 56
+
+errorStats.components = makeScopedCopyableComponents()
+
+errorStats.components.posVelError = makeScopedCopyablePosVelError()
+errorStats.components.posVelError.frame = FrameType('ECF')
+
+errorStats.components.posVelError.p1 = 10
+errorStats.components.posVelError.p2 = 20
+errorStats.components.posVelError.p3 = 30
+errorStats.components.posVelError.v1 = 40
+errorStats.components.posVelError.v2 = 50
+errorStats.components.posVelError.v3 = 60
+
+errorStats.components.posVelError.corrCoefs = makeScopedCopyableCorrCoefs()
+errorStats.components.posVelError.corrCoefs.p1p2 = 1
+errorStats.components.posVelError.corrCoefs.p1p3 = 2
+errorStats.components.posVelError.corrCoefs.p1v1 = 3
+errorStats.components.posVelError.corrCoefs.p1v2 = 4
+errorStats.components.posVelError.corrCoefs.p1v3 = 5
+errorStats.components.posVelError.corrCoefs.p2p3 = 6
+errorStats.components.posVelError.corrCoefs.p2v1 = 7
+errorStats.components.posVelError.corrCoefs.p2v2 = 8
+errorStats.components.posVelError.corrCoefs.p2v3 = 9
+errorStats.components.posVelError.corrCoefs.p3v1 = 10
+errorStats.components.posVelError.corrCoefs.p3v2 = 11
+errorStats.components.posVelError.corrCoefs.p3v3 = 12
+errorStats.components.posVelError.corrCoefs.v1v2 = 13
+errorStats.components.posVelError.corrCoefs.v1v3 = 14
+errorStats.components.posVelError.corrCoefs.v2v3 = 15
+
+errorStats.components.posVelError.positionDecorr = DecorrType(20, 30)
+
+errorStats.components.radarSensor = makeScopedCopyableRadarSensor()
+errorStats.components.radarSensor.rangeBias = 100
+errorStats.components.radarSensor.clockFreqSF = 200
+errorStats.components.radarSensor.transmitFreqSF = 300
+errorStats.components.radarSensor.rangeBiasDecorr = DecorrType(40, 50)
+
+errorStats.components.tropoError = makeScopedCopyableTropoError()
+errorStats.components.tropoError.tropoRangeVertical = 1000
+errorStats.components.tropoError.tropoRangeSlant = 2000
+errorStats.components.tropoError.tropoRangeDecorr = DecorrType(1, 2)
+
+errorStats.components.ionoError = makeScopedCopyableIonoError()
+errorStats.components.ionoError.ionoRangeVertical = 3
+errorStats.components.ionoError.ionoRangeRateVertical = 4
+errorStats.components.ionoError.ionoRgRgRateCC = 5
+errorStats.components.ionoError.ionoRangeVertDecorr = DecorrType(6, 7)
+
+param.setName('Some error param')
+param.setValue('Some error value')
+errorStats.additionalParameters.push_back(param)
+
+cmplx.errorStatistics = errorStats
+
+### Match Information ###
+matchInfo = makeScopedCopyableMatchInformation()
+
+matchType = makeScopedCopyableMatchType()
+matchType.collectorName = 'Collector'
+matchType.illuminatorName = 'Illuminator'
+matchType.matchType.push_back('Some match type')
+matchType.typeID = 'COHERENT'
+matchType.currentIndex = 9
+
+matchCollect = MatchCollect()
+matchCollect.coreName = 'Some name'
+matchCollect.matchIndex = 13
+
+param.setName('Match param')
+param.setValue('Match val')
+matchCollect.parameters.push_back(param)
+
+matchType.matchCollects.push_back(matchCollect)
+
+matchInfo.types.push_back(matchType)
+
+cmplx.matchInformation = matchInfo
+
+### PFA ###
+
+pfa = makeScopedCopyablePFA()
+for i in range(3):
+    pfa.focusPlaneNormal[i] = i * 2
+    pfa.imagePlaneNormal[i] = i * 3
+pfa.polarAngleRefTime = 12
+
+pfa.polarAnglePoly = Poly1D(3)
+pfa.spatialFrequencyScaleFactorPoly = Poly1D(3)
+for i in range(4):
+    pfa.polarAnglePoly[i] = i
+    pfa.spatialFrequencyScaleFactorPoly[i] = i * i
+
+pfa.krg1 = 1189
+pfa.krg2 = 1131
+pfa.kaz1 = 120779
+pfa.kaz2 = 12681
+pfa.slowTimeDeskew = makeScopedCopyableSlowTimeDeskew()
+pfa.slowTimeDeskew.applied = BooleanType('IS_TRUE')
+pfa.slowTimeDeskew.slowTimeDeskewPhasePoly = Poly2D(3, 3)
+for i in range(4):
+    for j in range(4):
+        pfa.slowTimeDeskew.slowTimeDeskewPhasePoly[(i, j)] = 44 * i + j
+
+cmplx.pfa = pfa
+
+### RMA ###
+
+rma = makeScopedCopyableRMA()
+rma.algoType = RMAlgoType('OMEGA_K')
+rma.rmat = makeScopedCopyableRMAT()
+rma.rmat.refTime = 12
+for i in range(3):
+    rma.rmat.refPos[i] = i
+    rma.rmat.refVel[i] = i + 1
+rma.rmat.distRefLinePoly = Poly1D(3)
+for i in range(4):
+    rma.rmat.distRefLinePoly[i] = i * 5
+rma.rmat.cosDCACOAPoly = Poly2D(3, 3)
+for i in range(4):
+    for j in range(4):
+        rma.rmat.cosDCACOAPoly[(i, j)] = i + j
+rma.rmat.kx1 = 1
+rma.rmat.kx2 = 2
+rma.rmat.ky1 = 3
+rma.rmat.ky2 = 4
+rma.rmat.dopConeAngleRef = 5
+
+# Just make this one anyway to make sure it works
+rmcr = makeScopedCopyableRMCR()
+for i in range(3):
+    rmcr.refPos[i] = i
+    rmcr.refVel[i] = i * 2
+rmcr.dopConeAngleRef = 9
+
+# Just make this one anyway to make sure it works
+inca = makeScopedCopyableINCA()
+inca.timeCAPoly = Poly1D(3)
+for i in range(3):
+    inca.timeCAPoly[i] = i
+inca.rangeCA = 5
+inca.freqZero = 10
+inca.dopplerRateScaleFactorPoly = Poly2D(3, 3)
+inca.dopplerCentroidPoly = Poly2D(3, 3)
+for i in range(4):
+    for j in range(4):
+        inca.dopplerRateScaleFactorPoly[(i, j)] = 9 * i
+        inca.dopplerCentroidPoly[(i, j)] = 10 * i
+inca.dopplerCentroidCOA = BooleanType('IS_TRUE')
+
+# Don't actually assign RMA to cmplx since we're using PFA
+
+### RgAzComp ###
+
+rgAzComp = makeScopedCopyableRgAzComp()
+rgAzComp.azSF = 123
+rgAzComp.kazPoly = Poly1D(3)
+for i in range(4):
+    rgAzComp.kazPoly[i] = i * 100
+
+# Don't actually assign RgAzComp to cmplx since we're using PFA
 
 ### Now format it as XML ###
 vs = VectorString()
