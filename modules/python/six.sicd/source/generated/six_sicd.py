@@ -203,8 +203,8 @@ import six_base
 import coda.coda_types
 import coda.coda_sys
 import pysix.scene
-import coda.coda_io
 import coda.mem
+import coda.coda_io
 
 def getComplexData(sicdPathname, schemaPaths):
     """getComplexData(std::string const & sicdPathname, VectorString schemaPaths) -> ComplexData"""
@@ -2544,6 +2544,10 @@ class ScopedCloneableCollectionInformation(_object):
 ScopedCloneableCollectionInformation_swigregister = _six_sicd.ScopedCloneableCollectionInformation_swigregister
 ScopedCloneableCollectionInformation_swigregister(ScopedCloneableCollectionInformation)
 
+
+def makeScopedCloneableCollectionInformation():
+    """makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"""
+    return _six_sicd.makeScopedCloneableCollectionInformation()
 class ScopedCloneableImageCreation(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::ImageCreation)> class"""
     __swig_setmethods__ = {}
@@ -2612,6 +2616,10 @@ class ScopedCloneableImageCreation(_object):
 ScopedCloneableImageCreation_swigregister = _six_sicd.ScopedCloneableImageCreation_swigregister
 ScopedCloneableImageCreation_swigregister(ScopedCloneableImageCreation)
 
+
+def makeScopedCloneableImageCreation():
+    """makeScopedCloneableImageCreation() -> ScopedCloneableImageCreation"""
+    return _six_sicd.makeScopedCloneableImageCreation()
 class ScopedCloneableImageData(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::ImageData)> class"""
     __swig_setmethods__ = {}
@@ -2700,6 +2708,10 @@ class ScopedCloneableImageData(_object):
 ScopedCloneableImageData_swigregister = _six_sicd.ScopedCloneableImageData_swigregister
 ScopedCloneableImageData_swigregister(ScopedCloneableImageData)
 
+
+def makeScopedCloneableImageData():
+    """makeScopedCloneableImageData() -> ScopedCloneableImageData"""
+    return _six_sicd.makeScopedCloneableImageData()
 class ScopedCloneableGeoData(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::GeoData)> class"""
     __swig_setmethods__ = {}
@@ -2772,6 +2784,10 @@ class ScopedCloneableGeoData(_object):
 ScopedCloneableGeoData_swigregister = _six_sicd.ScopedCloneableGeoData_swigregister
 ScopedCloneableGeoData_swigregister(ScopedCloneableGeoData)
 
+
+def makeScopedCloneableGeoData():
+    """makeScopedCloneableGeoData() -> ScopedCloneableGeoData"""
+    return _six_sicd.makeScopedCloneableGeoData()
 class ScopedCloneableGrid(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::Grid)> class"""
     __swig_setmethods__ = {}
@@ -2844,6 +2860,10 @@ class ScopedCloneableGrid(_object):
 ScopedCloneableGrid_swigregister = _six_sicd.ScopedCloneableGrid_swigregister
 ScopedCloneableGrid_swigregister(ScopedCloneableGrid)
 
+
+def makeScopedCloneableGrid():
+    """makeScopedCloneableGrid() -> ScopedCloneableGrid"""
+    return _six_sicd.makeScopedCloneableGrid()
 class ScopedCloneableTimeline(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::Timeline)> class"""
     __swig_setmethods__ = {}
@@ -2908,6 +2928,10 @@ class ScopedCloneableTimeline(_object):
 ScopedCloneableTimeline_swigregister = _six_sicd.ScopedCloneableTimeline_swigregister
 ScopedCloneableTimeline_swigregister(ScopedCloneableTimeline)
 
+
+def makeScopedCloneableTimeline():
+    """makeScopedCloneableTimeline() -> ScopedCloneableTimeline"""
+    return _six_sicd.makeScopedCloneableTimeline()
 class ScopedCloneablePosition(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::Position)> class"""
     __swig_setmethods__ = {}
@@ -2976,6 +3000,10 @@ class ScopedCloneablePosition(_object):
 ScopedCloneablePosition_swigregister = _six_sicd.ScopedCloneablePosition_swigregister
 ScopedCloneablePosition_swigregister(ScopedCloneablePosition)
 
+
+def makeScopedCloneablePosition():
+    """makeScopedCloneablePosition() -> ScopedCloneablePosition"""
+    return _six_sicd.makeScopedCloneablePosition()
 class ScopedCloneableRadarCollection(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::RadarCollection)> class"""
     __swig_setmethods__ = {}
@@ -3068,6 +3096,10 @@ class ScopedCloneableRadarCollection(_object):
 ScopedCloneableRadarCollection_swigregister = _six_sicd.ScopedCloneableRadarCollection_swigregister
 ScopedCloneableRadarCollection_swigregister(ScopedCloneableRadarCollection)
 
+
+def makeScopedCloneableRadarCollection():
+    """makeScopedCloneableRadarCollection() -> ScopedCloneableRadarCollection"""
+    return _six_sicd.makeScopedCloneableRadarCollection()
 class ScopedCopyableImageFormation(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::ImageFormation)> class"""
     __swig_setmethods__ = {}
@@ -3171,6 +3203,10 @@ class ScopedCopyableImageFormation(_object):
 ScopedCopyableImageFormation_swigregister = _six_sicd.ScopedCopyableImageFormation_swigregister
 ScopedCopyableImageFormation_swigregister(ScopedCopyableImageFormation)
 
+
+def makeScopedCopyableImageFormation():
+    """makeScopedCopyableImageFormation() -> ScopedCopyableImageFormation"""
+    return _six_sicd.makeScopedCopyableImageFormation()
 class ScopedCopyableSCPCOA(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::SCPCOA)> class"""
     __swig_setmethods__ = {}
@@ -3274,87 +3310,10 @@ class ScopedCopyableSCPCOA(_object):
 ScopedCopyableSCPCOA_swigregister = _six_sicd.ScopedCopyableSCPCOA_swigregister
 ScopedCopyableSCPCOA_swigregister(ScopedCopyableSCPCOA)
 
-class ScopedCopyableRadiometric(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::Radiometric)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableRadiometric, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableRadiometric, name)
-    __repr__ = _swig_repr
 
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::Radiometric)> self, Radiometric ptr=None) -> ScopedCopyableRadiometric
-        __init__(mem::ScopedCopyablePtr<(six::Radiometric)> self) -> ScopedCopyableRadiometric
-        __init__(mem::ScopedCopyablePtr<(six::Radiometric)> self, ScopedCopyableRadiometric rhs) -> ScopedCopyableRadiometric
-        """
-        this = _six_sicd.new_ScopedCopyableRadiometric(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyableRadiometric self) -> Radiometric"""
-        return _six_sicd.ScopedCopyableRadiometric_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyableRadiometric self) -> Radiometric"""
-        return _six_sicd.ScopedCopyableRadiometric___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyableRadiometric self) -> Radiometric"""
-        return _six_sicd.ScopedCopyableRadiometric___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyableRadiometric self, Radiometric ptr=None)
-        reset(ScopedCopyableRadiometric self)
-        """
-        return _six_sicd.ScopedCopyableRadiometric_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableRadiometric
-    __del__ = lambda self: None
-    __swig_getmethods__["NL_ABSOLUTE"] = _six_sicd.ScopedCopyableRadiometric_NL_ABSOLUTE_get
-    if _newclass:
-        NL_ABSOLUTE = _swig_property(_six_sicd.ScopedCopyableRadiometric_NL_ABSOLUTE_get)
-    __swig_getmethods__["NL_RELATIVE"] = _six_sicd.ScopedCopyableRadiometric_NL_RELATIVE_get
-    if _newclass:
-        NL_RELATIVE = _swig_property(_six_sicd.ScopedCopyableRadiometric_NL_RELATIVE_get)
-    __swig_setmethods__["noiseLevel"] = _six_sicd.ScopedCopyableRadiometric_noiseLevel_set
-    __swig_getmethods__["noiseLevel"] = _six_sicd.ScopedCopyableRadiometric_noiseLevel_get
-    if _newclass:
-        noiseLevel = _swig_property(_six_sicd.ScopedCopyableRadiometric_noiseLevel_get, _six_sicd.ScopedCopyableRadiometric_noiseLevel_set)
-    __swig_setmethods__["rcsSFPoly"] = _six_sicd.ScopedCopyableRadiometric_rcsSFPoly_set
-    __swig_getmethods__["rcsSFPoly"] = _six_sicd.ScopedCopyableRadiometric_rcsSFPoly_get
-    if _newclass:
-        rcsSFPoly = _swig_property(_six_sicd.ScopedCopyableRadiometric_rcsSFPoly_get, _six_sicd.ScopedCopyableRadiometric_rcsSFPoly_set)
-    __swig_setmethods__["betaZeroSFPoly"] = _six_sicd.ScopedCopyableRadiometric_betaZeroSFPoly_set
-    __swig_getmethods__["betaZeroSFPoly"] = _six_sicd.ScopedCopyableRadiometric_betaZeroSFPoly_get
-    if _newclass:
-        betaZeroSFPoly = _swig_property(_six_sicd.ScopedCopyableRadiometric_betaZeroSFPoly_get, _six_sicd.ScopedCopyableRadiometric_betaZeroSFPoly_set)
-    __swig_setmethods__["sigmaZeroSFPoly"] = _six_sicd.ScopedCopyableRadiometric_sigmaZeroSFPoly_set
-    __swig_getmethods__["sigmaZeroSFPoly"] = _six_sicd.ScopedCopyableRadiometric_sigmaZeroSFPoly_get
-    if _newclass:
-        sigmaZeroSFPoly = _swig_property(_six_sicd.ScopedCopyableRadiometric_sigmaZeroSFPoly_get, _six_sicd.ScopedCopyableRadiometric_sigmaZeroSFPoly_set)
-    __swig_setmethods__["sigmaZeroSFIncidenceMap"] = _six_sicd.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_set
-    __swig_getmethods__["sigmaZeroSFIncidenceMap"] = _six_sicd.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_get
-    if _newclass:
-        sigmaZeroSFIncidenceMap = _swig_property(_six_sicd.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_get, _six_sicd.ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_set)
-    __swig_setmethods__["gammaZeroSFPoly"] = _six_sicd.ScopedCopyableRadiometric_gammaZeroSFPoly_set
-    __swig_getmethods__["gammaZeroSFPoly"] = _six_sicd.ScopedCopyableRadiometric_gammaZeroSFPoly_get
-    if _newclass:
-        gammaZeroSFPoly = _swig_property(_six_sicd.ScopedCopyableRadiometric_gammaZeroSFPoly_get, _six_sicd.ScopedCopyableRadiometric_gammaZeroSFPoly_set)
-    __swig_setmethods__["gammaZeroSFIncidenceMap"] = _six_sicd.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set
-    __swig_getmethods__["gammaZeroSFIncidenceMap"] = _six_sicd.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get
-    if _newclass:
-        gammaZeroSFIncidenceMap = _swig_property(_six_sicd.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get, _six_sicd.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set)
-ScopedCopyableRadiometric_swigregister = _six_sicd.ScopedCopyableRadiometric_swigregister
-ScopedCopyableRadiometric_swigregister(ScopedCopyableRadiometric)
-
+def makeScopedCopyableSCPCOA():
+    """makeScopedCopyableSCPCOA() -> ScopedCopyableSCPCOA"""
+    return _six_sicd.makeScopedCopyableSCPCOA()
 class ScopedCopyableAntenna(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::Antenna)> class"""
     __swig_setmethods__ = {}
@@ -3414,65 +3373,10 @@ class ScopedCopyableAntenna(_object):
 ScopedCopyableAntenna_swigregister = _six_sicd.ScopedCopyableAntenna_swigregister
 ScopedCopyableAntenna_swigregister(ScopedCopyableAntenna)
 
-class ScopedCopyableErrorStatistics(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::ErrorStatistics)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableErrorStatistics, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableErrorStatistics, name)
-    __repr__ = _swig_repr
 
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::ErrorStatistics)> self, ErrorStatistics ptr=None) -> ScopedCopyableErrorStatistics
-        __init__(mem::ScopedCopyablePtr<(six::ErrorStatistics)> self) -> ScopedCopyableErrorStatistics
-        __init__(mem::ScopedCopyablePtr<(six::ErrorStatistics)> self, ScopedCopyableErrorStatistics rhs) -> ScopedCopyableErrorStatistics
-        """
-        this = _six_sicd.new_ScopedCopyableErrorStatistics(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
-        return _six_sicd.ScopedCopyableErrorStatistics_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
-        return _six_sicd.ScopedCopyableErrorStatistics___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
-        return _six_sicd.ScopedCopyableErrorStatistics___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyableErrorStatistics self, ErrorStatistics ptr=None)
-        reset(ScopedCopyableErrorStatistics self)
-        """
-        return _six_sicd.ScopedCopyableErrorStatistics_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableErrorStatistics
-    __del__ = lambda self: None
-    __swig_setmethods__["compositeSCP"] = _six_sicd.ScopedCopyableErrorStatistics_compositeSCP_set
-    __swig_getmethods__["compositeSCP"] = _six_sicd.ScopedCopyableErrorStatistics_compositeSCP_get
-    if _newclass:
-        compositeSCP = _swig_property(_six_sicd.ScopedCopyableErrorStatistics_compositeSCP_get, _six_sicd.ScopedCopyableErrorStatistics_compositeSCP_set)
-    __swig_setmethods__["components"] = _six_sicd.ScopedCopyableErrorStatistics_components_set
-    __swig_getmethods__["components"] = _six_sicd.ScopedCopyableErrorStatistics_components_get
-    if _newclass:
-        components = _swig_property(_six_sicd.ScopedCopyableErrorStatistics_components_get, _six_sicd.ScopedCopyableErrorStatistics_components_set)
-    __swig_setmethods__["additionalParameters"] = _six_sicd.ScopedCopyableErrorStatistics_additionalParameters_set
-    __swig_getmethods__["additionalParameters"] = _six_sicd.ScopedCopyableErrorStatistics_additionalParameters_get
-    if _newclass:
-        additionalParameters = _swig_property(_six_sicd.ScopedCopyableErrorStatistics_additionalParameters_get, _six_sicd.ScopedCopyableErrorStatistics_additionalParameters_set)
-ScopedCopyableErrorStatistics_swigregister = _six_sicd.ScopedCopyableErrorStatistics_swigregister
-ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
-
+def makeScopedCopyableAntenna():
+    """makeScopedCopyableAntenna() -> ScopedCopyableAntenna"""
+    return _six_sicd.makeScopedCopyableAntenna()
 class ScopedCopyableMatchInformation(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::MatchInformation)> class"""
     __swig_setmethods__ = {}
@@ -3524,6 +3428,10 @@ class ScopedCopyableMatchInformation(_object):
 ScopedCopyableMatchInformation_swigregister = _six_sicd.ScopedCopyableMatchInformation_swigregister
 ScopedCopyableMatchInformation_swigregister(ScopedCopyableMatchInformation)
 
+
+def makeScopedCopyableMatchInformation():
+    """makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"""
+    return _six_sicd.makeScopedCopyableMatchInformation()
 class ScopedCloneablePFA(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::PFA)> class"""
     __swig_setmethods__ = {}
@@ -3616,6 +3524,10 @@ class ScopedCloneablePFA(_object):
 ScopedCloneablePFA_swigregister = _six_sicd.ScopedCloneablePFA_swigregister
 ScopedCloneablePFA_swigregister(ScopedCloneablePFA)
 
+
+def makeScopedCloneablePFA():
+    """makeScopedCloneablePFA() -> ScopedCloneablePFA"""
+    return _six_sicd.makeScopedCloneablePFA()
 class ScopedCopyableRMA(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::RMA)> class"""
     __swig_setmethods__ = {}
@@ -3679,6 +3591,10 @@ class ScopedCopyableRMA(_object):
 ScopedCopyableRMA_swigregister = _six_sicd.ScopedCopyableRMA_swigregister
 ScopedCopyableRMA_swigregister(ScopedCopyableRMA)
 
+
+def makeScopedCopyableRMA():
+    """makeScopedCopyableRMA() -> ScopedCopyableRMA"""
+    return _six_sicd.makeScopedCopyableRMA()
 class ScopedCopyableRgAzComp(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::RgAzComp)> class"""
     __swig_setmethods__ = {}
@@ -3734,6 +3650,10 @@ class ScopedCopyableRgAzComp(_object):
 ScopedCopyableRgAzComp_swigregister = _six_sicd.ScopedCopyableRgAzComp_swigregister
 ScopedCopyableRgAzComp_swigregister(ScopedCopyableRgAzComp)
 
+
+def makeScopedCopyableRgAzComp():
+    """makeScopedCopyableRgAzComp() -> ScopedCopyableRgAzComp"""
+    return _six_sicd.makeScopedCopyableRgAzComp()
 class ScopedCloneableGeoInfo(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::GeoInfo)> class"""
     __swig_setmethods__ = {}
@@ -3802,6 +3722,10 @@ class ScopedCloneableGeoInfo(_object):
 ScopedCloneableGeoInfo_swigregister = _six_sicd.ScopedCloneableGeoInfo_swigregister
 ScopedCloneableGeoInfo_swigregister(ScopedCloneableGeoInfo)
 
+
+def makeScopedCloneableGeoInfo():
+    """makeScopedCloneableGeoInfo() -> ScopedCloneableGeoInfo"""
+    return _six_sicd.makeScopedCloneableGeoInfo()
 class VectorScopedCloneableGeoInfo(_object):
     """Proxy of C++ std::vector<(mem::ScopedCloneablePtr<(six::sicd::GeoInfo)>)> class"""
     __swig_setmethods__ = {}
@@ -4307,6 +4231,10 @@ class ScopedCopyableAntennaParameters(_object):
 ScopedCopyableAntennaParameters_swigregister = _six_sicd.ScopedCopyableAntennaParameters_swigregister
 ScopedCopyableAntennaParameters_swigregister(ScopedCopyableAntennaParameters)
 
+
+def makeScopedCopyableAntennaParameters():
+    """makeScopedCopyableAntennaParameters() -> ScopedCopyableAntennaParameters"""
+    return _six_sicd.makeScopedCopyableAntennaParameters()
 class ScopedCopyableElectricalBoresight(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::ElectricalBoresight)> class"""
     __swig_setmethods__ = {}
@@ -4372,6 +4300,10 @@ class ScopedCopyableElectricalBoresight(_object):
 ScopedCopyableElectricalBoresight_swigregister = _six_sicd.ScopedCopyableElectricalBoresight_swigregister
 ScopedCopyableElectricalBoresight_swigregister(ScopedCopyableElectricalBoresight)
 
+
+def makeScopedCopyableElectricalBoresight():
+    """makeScopedCopyableElectricalBoresight() -> ScopedCopyableElectricalBoresight"""
+    return _six_sicd.makeScopedCopyableElectricalBoresight()
 class ScopedCopyableHalfPowerBeamwidths(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::HalfPowerBeamwidths)> class"""
     __swig_setmethods__ = {}
@@ -4437,6 +4369,10 @@ class ScopedCopyableHalfPowerBeamwidths(_object):
 ScopedCopyableHalfPowerBeamwidths_swigregister = _six_sicd.ScopedCopyableHalfPowerBeamwidths_swigregister
 ScopedCopyableHalfPowerBeamwidths_swigregister(ScopedCopyableHalfPowerBeamwidths)
 
+
+def makeScopedCopyableHalfPowerBeamwidths():
+    """makeScopedCopyableHalfPowerBeamwidths() -> ScopedCopyableHalfPowerBeamwidths"""
+    return _six_sicd.makeScopedCopyableHalfPowerBeamwidths()
 class ScopedCopyableGainAndPhasePolys(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::GainAndPhasePolys)> class"""
     __swig_setmethods__ = {}
@@ -4502,77 +4438,85 @@ class ScopedCopyableGainAndPhasePolys(_object):
 ScopedCopyableGainAndPhasePolys_swigregister = _six_sicd.ScopedCopyableGainAndPhasePolys_swigregister
 ScopedCopyableGainAndPhasePolys_swigregister(ScopedCopyableGainAndPhasePolys)
 
-class ScopedCopyabledMatchType(_object):
+
+def makeScopedCopyableGainAndPhasePolys():
+    """makeScopedCopyableGainAndPhasePolys() -> ScopedCopyableGainAndPhasePolys"""
+    return _six_sicd.makeScopedCopyableGainAndPhasePolys()
+class ScopedCopyableMatchType(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::MatchType)> class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyabledMatchType, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableMatchType, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyabledMatchType, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableMatchType, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self, MatchType ptr=None) -> ScopedCopyabledMatchType
-        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self) -> ScopedCopyabledMatchType
-        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self, ScopedCopyabledMatchType rhs) -> ScopedCopyabledMatchType
+        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self, MatchType ptr=None) -> ScopedCopyableMatchType
+        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self) -> ScopedCopyableMatchType
+        __init__(mem::ScopedCopyablePtr<(six::sicd::MatchType)> self, ScopedCopyableMatchType rhs) -> ScopedCopyableMatchType
         """
-        this = _six_sicd.new_ScopedCopyabledMatchType(*args)
+        this = _six_sicd.new_ScopedCopyableMatchType(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def get(self):
-        """get(ScopedCopyabledMatchType self) -> MatchType"""
-        return _six_sicd.ScopedCopyabledMatchType_get(self)
+        """get(ScopedCopyableMatchType self) -> MatchType"""
+        return _six_sicd.ScopedCopyableMatchType_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCopyabledMatchType self) -> MatchType"""
-        return _six_sicd.ScopedCopyabledMatchType___ref__(self)
+        """__ref__(ScopedCopyableMatchType self) -> MatchType"""
+        return _six_sicd.ScopedCopyableMatchType___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCopyabledMatchType self) -> MatchType"""
-        return _six_sicd.ScopedCopyabledMatchType___deref__(self)
+        """__deref__(ScopedCopyableMatchType self) -> MatchType"""
+        return _six_sicd.ScopedCopyableMatchType___deref__(self)
 
 
     def reset(self, ptr=None):
         """
-        reset(ScopedCopyabledMatchType self, MatchType ptr=None)
-        reset(ScopedCopyabledMatchType self)
+        reset(ScopedCopyableMatchType self, MatchType ptr=None)
+        reset(ScopedCopyableMatchType self)
         """
-        return _six_sicd.ScopedCopyabledMatchType_reset(self, ptr)
+        return _six_sicd.ScopedCopyableMatchType_reset(self, ptr)
 
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyabledMatchType
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableMatchType
     __del__ = lambda self: None
-    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCopyabledMatchType_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCopyabledMatchType_collectorName_get
+    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCopyableMatchType_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCopyableMatchType_collectorName_get
     if _newclass:
-        collectorName = _swig_property(_six_sicd.ScopedCopyabledMatchType_collectorName_get, _six_sicd.ScopedCopyabledMatchType_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCopyabledMatchType_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCopyabledMatchType_illuminatorName_get
+        collectorName = _swig_property(_six_sicd.ScopedCopyableMatchType_collectorName_get, _six_sicd.ScopedCopyableMatchType_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCopyableMatchType_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCopyableMatchType_illuminatorName_get
     if _newclass:
-        illuminatorName = _swig_property(_six_sicd.ScopedCopyabledMatchType_illuminatorName_get, _six_sicd.ScopedCopyabledMatchType_illuminatorName_set)
-    __swig_setmethods__["matchType"] = _six_sicd.ScopedCopyabledMatchType_matchType_set
-    __swig_getmethods__["matchType"] = _six_sicd.ScopedCopyabledMatchType_matchType_get
+        illuminatorName = _swig_property(_six_sicd.ScopedCopyableMatchType_illuminatorName_get, _six_sicd.ScopedCopyableMatchType_illuminatorName_set)
+    __swig_setmethods__["matchType"] = _six_sicd.ScopedCopyableMatchType_matchType_set
+    __swig_getmethods__["matchType"] = _six_sicd.ScopedCopyableMatchType_matchType_get
     if _newclass:
-        matchType = _swig_property(_six_sicd.ScopedCopyabledMatchType_matchType_get, _six_sicd.ScopedCopyabledMatchType_matchType_set)
-    __swig_setmethods__["typeID"] = _six_sicd.ScopedCopyabledMatchType_typeID_set
-    __swig_getmethods__["typeID"] = _six_sicd.ScopedCopyabledMatchType_typeID_get
+        matchType = _swig_property(_six_sicd.ScopedCopyableMatchType_matchType_get, _six_sicd.ScopedCopyableMatchType_matchType_set)
+    __swig_setmethods__["typeID"] = _six_sicd.ScopedCopyableMatchType_typeID_set
+    __swig_getmethods__["typeID"] = _six_sicd.ScopedCopyableMatchType_typeID_get
     if _newclass:
-        typeID = _swig_property(_six_sicd.ScopedCopyabledMatchType_typeID_get, _six_sicd.ScopedCopyabledMatchType_typeID_set)
-    __swig_setmethods__["currentIndex"] = _six_sicd.ScopedCopyabledMatchType_currentIndex_set
-    __swig_getmethods__["currentIndex"] = _six_sicd.ScopedCopyabledMatchType_currentIndex_get
+        typeID = _swig_property(_six_sicd.ScopedCopyableMatchType_typeID_get, _six_sicd.ScopedCopyableMatchType_typeID_set)
+    __swig_setmethods__["currentIndex"] = _six_sicd.ScopedCopyableMatchType_currentIndex_set
+    __swig_getmethods__["currentIndex"] = _six_sicd.ScopedCopyableMatchType_currentIndex_get
     if _newclass:
-        currentIndex = _swig_property(_six_sicd.ScopedCopyabledMatchType_currentIndex_get, _six_sicd.ScopedCopyabledMatchType_currentIndex_set)
-    __swig_setmethods__["matchCollects"] = _six_sicd.ScopedCopyabledMatchType_matchCollects_set
-    __swig_getmethods__["matchCollects"] = _six_sicd.ScopedCopyabledMatchType_matchCollects_get
+        currentIndex = _swig_property(_six_sicd.ScopedCopyableMatchType_currentIndex_get, _six_sicd.ScopedCopyableMatchType_currentIndex_set)
+    __swig_setmethods__["matchCollects"] = _six_sicd.ScopedCopyableMatchType_matchCollects_set
+    __swig_getmethods__["matchCollects"] = _six_sicd.ScopedCopyableMatchType_matchCollects_get
     if _newclass:
-        matchCollects = _swig_property(_six_sicd.ScopedCopyabledMatchType_matchCollects_get, _six_sicd.ScopedCopyabledMatchType_matchCollects_set)
-ScopedCopyabledMatchType_swigregister = _six_sicd.ScopedCopyabledMatchType_swigregister
-ScopedCopyabledMatchType_swigregister(ScopedCopyabledMatchType)
+        matchCollects = _swig_property(_six_sicd.ScopedCopyableMatchType_matchCollects_get, _six_sicd.ScopedCopyableMatchType_matchCollects_set)
+ScopedCopyableMatchType_swigregister = _six_sicd.ScopedCopyableMatchType_swigregister
+ScopedCopyableMatchType_swigregister(ScopedCopyableMatchType)
 
+
+def makeScopedCopyableMatchType():
+    """makeScopedCopyableMatchType() -> ScopedCopyableMatchType"""
+    return _six_sicd.makeScopedCopyableMatchType()
 class ScopedCopyableWeightType(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::WeightType)> class"""
     __swig_setmethods__ = {}
@@ -4628,6 +4572,10 @@ class ScopedCopyableWeightType(_object):
 ScopedCopyableWeightType_swigregister = _six_sicd.ScopedCopyableWeightType_swigregister
 ScopedCopyableWeightType_swigregister(ScopedCopyableWeightType)
 
+
+def makeScopedCopyableWeightType():
+    """makeScopedCopyableWeightType() -> ScopedCopyableWeightType"""
+    return _six_sicd.makeScopedCopyableWeightType()
 class VectorPolyXYZ(_object):
     """Proxy of C++ std::vector<(PolyXYZ)> class"""
     __swig_setmethods__ = {}
@@ -4928,6 +4876,10 @@ class ScopedCloneableDirectionParameters(_object):
 ScopedCloneableDirectionParameters_swigregister = _six_sicd.ScopedCloneableDirectionParameters_swigregister
 ScopedCloneableDirectionParameters_swigregister(ScopedCloneableDirectionParameters)
 
+
+def makeScopedCloneableDirectionParameters():
+    """makeScopedCloneableDirectionParameters() -> ScopedCloneableDirectionParameters"""
+    return _six_sicd.makeScopedCloneableDirectionParameters()
 class ScopedCloneableAreaPlane(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::AreaPlane)> class"""
     __swig_setmethods__ = {}
@@ -5000,6 +4952,10 @@ class ScopedCloneableAreaPlane(_object):
 ScopedCloneableAreaPlane_swigregister = _six_sicd.ScopedCloneableAreaPlane_swigregister
 ScopedCloneableAreaPlane_swigregister(ScopedCloneableAreaPlane)
 
+
+def makeScopedCloneableAreaPlane():
+    """makeScopedCloneableAreaPlane() -> ScopedCloneableAreaPlane"""
+    return _six_sicd.makeScopedCloneableAreaPlane()
 class ScopedCloneableAreaDirectionParameters(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::AreaDirectionParameters)> class"""
     __swig_setmethods__ = {}
@@ -5078,6 +5034,10 @@ class ScopedCloneableAreaDirectionParameters(_object):
 ScopedCloneableAreaDirectionParameters_swigregister = _six_sicd.ScopedCloneableAreaDirectionParameters_swigregister
 ScopedCloneableAreaDirectionParameters_swigregister(ScopedCloneableAreaDirectionParameters)
 
+
+def makeScopedCloneableAreaDirectionParameters():
+    """makeScopedCloneableAreaDirectionParameters() -> ScopedCloneableAreaDirectionParameters"""
+    return _six_sicd.makeScopedCloneableAreaDirectionParameters()
 class ScopedCloneableSegment(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::Segment)> class"""
     __swig_setmethods__ = {}
@@ -5160,6 +5120,10 @@ class ScopedCloneableSegment(_object):
 ScopedCloneableSegment_swigregister = _six_sicd.ScopedCloneableSegment_swigregister
 ScopedCloneableSegment_swigregister(ScopedCloneableSegment)
 
+
+def makeScopedCloneableSegment():
+    """makeScopedCloneableSegment() -> ScopedCloneableSegment"""
+    return _six_sicd.makeScopedCloneableSegment()
 class ScopedCloneableTxStep(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::TxStep)> class"""
     __swig_setmethods__ = {}
@@ -5220,6 +5184,10 @@ class ScopedCloneableTxStep(_object):
 ScopedCloneableTxStep_swigregister = _six_sicd.ScopedCloneableTxStep_swigregister
 ScopedCloneableTxStep_swigregister(ScopedCloneableTxStep)
 
+
+def makeScopedCloneableTxStep():
+    """makeScopedCloneableTxStep() -> ScopedCloneableTxStep"""
+    return _six_sicd.makeScopedCloneableTxStep()
 class ScopedCloneableWaveformParameters(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::WaveformParameters)> class"""
     __swig_setmethods__ = {}
@@ -5312,6 +5280,10 @@ class ScopedCloneableWaveformParameters(_object):
 ScopedCloneableWaveformParameters_swigregister = _six_sicd.ScopedCloneableWaveformParameters_swigregister
 ScopedCloneableWaveformParameters_swigregister(ScopedCloneableWaveformParameters)
 
+
+def makeScopedCloneableWaveformParameters():
+    """makeScopedCloneableWaveformParameters() -> ScopedCloneableWaveformParameters"""
+    return _six_sicd.makeScopedCloneableWaveformParameters()
 class ScopedCloneableArea(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::Area)> class"""
     __swig_setmethods__ = {}
@@ -5372,6 +5344,10 @@ class ScopedCloneableArea(_object):
 ScopedCloneableArea_swigregister = _six_sicd.ScopedCloneableArea_swigregister
 ScopedCloneableArea_swigregister(ScopedCloneableArea)
 
+
+def makeScopedCloneableArea():
+    """makeScopedCloneableArea() -> ScopedCloneableArea"""
+    return _six_sicd.makeScopedCloneableArea()
 class ScopedCloneableChannelParameters(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::ChannelParameters)> class"""
     __swig_setmethods__ = {}
@@ -5432,6 +5408,10 @@ class ScopedCloneableChannelParameters(_object):
 ScopedCloneableChannelParameters_swigregister = _six_sicd.ScopedCloneableChannelParameters_swigregister
 ScopedCloneableChannelParameters_swigregister(ScopedCloneableChannelParameters)
 
+
+def makeScopedCloneableChannelParameters():
+    """makeScopedCloneableChannelParameters() -> ScopedCloneableChannelParameters"""
+    return _six_sicd.makeScopedCloneableChannelParameters()
 class VectorScopedCloneableWaveformParameters(_object):
     """Proxy of C++ std::vector<(mem::ScopedCloneablePtr<(six::sicd::WaveformParameters)>)> class"""
     __swig_setmethods__ = {}
@@ -6511,6 +6491,10 @@ class ScopedCopyableRcvChannelProcessed(_object):
 ScopedCopyableRcvChannelProcessed_swigregister = _six_sicd.ScopedCopyableRcvChannelProcessed_swigregister
 ScopedCopyableRcvChannelProcessed_swigregister(ScopedCopyableRcvChannelProcessed)
 
+
+def makeScopedCopyableRcvChannelProcessed():
+    """makeScopedCopyableRcvChannelProcessed() -> ScopedCopyableRcvChannelProcessed"""
+    return _six_sicd.makeScopedCopyableRcvChannelProcessed()
 class VectorProcessing(_object):
     """Proxy of C++ std::vector<(six::sicd::Processing)> class"""
     __swig_setmethods__ = {}
@@ -6774,400 +6758,10 @@ class ScopedCopyablePolarizationCalibration(_object):
 ScopedCopyablePolarizationCalibration_swigregister = _six_sicd.ScopedCopyablePolarizationCalibration_swigregister
 ScopedCopyablePolarizationCalibration_swigregister(ScopedCopyablePolarizationCalibration)
 
-class ScopedCopyablePosVelError(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::PosVelError)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyablePosVelError, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyablePosVelError, name)
-    __repr__ = _swig_repr
 
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::PosVelError)> self, PosVelError ptr=None) -> ScopedCopyablePosVelError
-        __init__(mem::ScopedCopyablePtr<(six::PosVelError)> self) -> ScopedCopyablePosVelError
-        __init__(mem::ScopedCopyablePtr<(six::PosVelError)> self, ScopedCopyablePosVelError rhs) -> ScopedCopyablePosVelError
-        """
-        this = _six_sicd.new_ScopedCopyablePosVelError(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyablePosVelError self) -> PosVelError"""
-        return _six_sicd.ScopedCopyablePosVelError_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyablePosVelError self) -> PosVelError"""
-        return _six_sicd.ScopedCopyablePosVelError___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyablePosVelError self) -> PosVelError"""
-        return _six_sicd.ScopedCopyablePosVelError___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyablePosVelError self, PosVelError ptr=None)
-        reset(ScopedCopyablePosVelError self)
-        """
-        return _six_sicd.ScopedCopyablePosVelError_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyablePosVelError
-    __del__ = lambda self: None
-    __swig_setmethods__["frame"] = _six_sicd.ScopedCopyablePosVelError_frame_set
-    __swig_getmethods__["frame"] = _six_sicd.ScopedCopyablePosVelError_frame_get
-    if _newclass:
-        frame = _swig_property(_six_sicd.ScopedCopyablePosVelError_frame_get, _six_sicd.ScopedCopyablePosVelError_frame_set)
-    __swig_setmethods__["p1"] = _six_sicd.ScopedCopyablePosVelError_p1_set
-    __swig_getmethods__["p1"] = _six_sicd.ScopedCopyablePosVelError_p1_get
-    if _newclass:
-        p1 = _swig_property(_six_sicd.ScopedCopyablePosVelError_p1_get, _six_sicd.ScopedCopyablePosVelError_p1_set)
-    __swig_setmethods__["p2"] = _six_sicd.ScopedCopyablePosVelError_p2_set
-    __swig_getmethods__["p2"] = _six_sicd.ScopedCopyablePosVelError_p2_get
-    if _newclass:
-        p2 = _swig_property(_six_sicd.ScopedCopyablePosVelError_p2_get, _six_sicd.ScopedCopyablePosVelError_p2_set)
-    __swig_setmethods__["p3"] = _six_sicd.ScopedCopyablePosVelError_p3_set
-    __swig_getmethods__["p3"] = _six_sicd.ScopedCopyablePosVelError_p3_get
-    if _newclass:
-        p3 = _swig_property(_six_sicd.ScopedCopyablePosVelError_p3_get, _six_sicd.ScopedCopyablePosVelError_p3_set)
-    __swig_setmethods__["v1"] = _six_sicd.ScopedCopyablePosVelError_v1_set
-    __swig_getmethods__["v1"] = _six_sicd.ScopedCopyablePosVelError_v1_get
-    if _newclass:
-        v1 = _swig_property(_six_sicd.ScopedCopyablePosVelError_v1_get, _six_sicd.ScopedCopyablePosVelError_v1_set)
-    __swig_setmethods__["v2"] = _six_sicd.ScopedCopyablePosVelError_v2_set
-    __swig_getmethods__["v2"] = _six_sicd.ScopedCopyablePosVelError_v2_get
-    if _newclass:
-        v2 = _swig_property(_six_sicd.ScopedCopyablePosVelError_v2_get, _six_sicd.ScopedCopyablePosVelError_v2_set)
-    __swig_setmethods__["v3"] = _six_sicd.ScopedCopyablePosVelError_v3_set
-    __swig_getmethods__["v3"] = _six_sicd.ScopedCopyablePosVelError_v3_get
-    if _newclass:
-        v3 = _swig_property(_six_sicd.ScopedCopyablePosVelError_v3_get, _six_sicd.ScopedCopyablePosVelError_v3_set)
-    __swig_setmethods__["corrCoefs"] = _six_sicd.ScopedCopyablePosVelError_corrCoefs_set
-    __swig_getmethods__["corrCoefs"] = _six_sicd.ScopedCopyablePosVelError_corrCoefs_get
-    if _newclass:
-        corrCoefs = _swig_property(_six_sicd.ScopedCopyablePosVelError_corrCoefs_get, _six_sicd.ScopedCopyablePosVelError_corrCoefs_set)
-    __swig_setmethods__["positionDecorr"] = _six_sicd.ScopedCopyablePosVelError_positionDecorr_set
-    __swig_getmethods__["positionDecorr"] = _six_sicd.ScopedCopyablePosVelError_positionDecorr_get
-    if _newclass:
-        positionDecorr = _swig_property(_six_sicd.ScopedCopyablePosVelError_positionDecorr_get, _six_sicd.ScopedCopyablePosVelError_positionDecorr_set)
-ScopedCopyablePosVelError_swigregister = _six_sicd.ScopedCopyablePosVelError_swigregister
-ScopedCopyablePosVelError_swigregister(ScopedCopyablePosVelError)
-
-class ScopedCopyableRadarSensor(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::RadarSensor)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableRadarSensor, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableRadarSensor, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::RadarSensor)> self, RadarSensor ptr=None) -> ScopedCopyableRadarSensor
-        __init__(mem::ScopedCopyablePtr<(six::RadarSensor)> self) -> ScopedCopyableRadarSensor
-        __init__(mem::ScopedCopyablePtr<(six::RadarSensor)> self, ScopedCopyableRadarSensor rhs) -> ScopedCopyableRadarSensor
-        """
-        this = _six_sicd.new_ScopedCopyableRadarSensor(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyableRadarSensor self) -> RadarSensor"""
-        return _six_sicd.ScopedCopyableRadarSensor_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyableRadarSensor self) -> RadarSensor"""
-        return _six_sicd.ScopedCopyableRadarSensor___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyableRadarSensor self) -> RadarSensor"""
-        return _six_sicd.ScopedCopyableRadarSensor___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyableRadarSensor self, RadarSensor ptr=None)
-        reset(ScopedCopyableRadarSensor self)
-        """
-        return _six_sicd.ScopedCopyableRadarSensor_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableRadarSensor
-    __del__ = lambda self: None
-    __swig_setmethods__["rangeBias"] = _six_sicd.ScopedCopyableRadarSensor_rangeBias_set
-    __swig_getmethods__["rangeBias"] = _six_sicd.ScopedCopyableRadarSensor_rangeBias_get
-    if _newclass:
-        rangeBias = _swig_property(_six_sicd.ScopedCopyableRadarSensor_rangeBias_get, _six_sicd.ScopedCopyableRadarSensor_rangeBias_set)
-    __swig_setmethods__["clockFreqSF"] = _six_sicd.ScopedCopyableRadarSensor_clockFreqSF_set
-    __swig_getmethods__["clockFreqSF"] = _six_sicd.ScopedCopyableRadarSensor_clockFreqSF_get
-    if _newclass:
-        clockFreqSF = _swig_property(_six_sicd.ScopedCopyableRadarSensor_clockFreqSF_get, _six_sicd.ScopedCopyableRadarSensor_clockFreqSF_set)
-    __swig_setmethods__["transmitFreqSF"] = _six_sicd.ScopedCopyableRadarSensor_transmitFreqSF_set
-    __swig_getmethods__["transmitFreqSF"] = _six_sicd.ScopedCopyableRadarSensor_transmitFreqSF_get
-    if _newclass:
-        transmitFreqSF = _swig_property(_six_sicd.ScopedCopyableRadarSensor_transmitFreqSF_get, _six_sicd.ScopedCopyableRadarSensor_transmitFreqSF_set)
-    __swig_setmethods__["rangeBiasDecorr"] = _six_sicd.ScopedCopyableRadarSensor_rangeBiasDecorr_set
-    __swig_getmethods__["rangeBiasDecorr"] = _six_sicd.ScopedCopyableRadarSensor_rangeBiasDecorr_get
-    if _newclass:
-        rangeBiasDecorr = _swig_property(_six_sicd.ScopedCopyableRadarSensor_rangeBiasDecorr_get, _six_sicd.ScopedCopyableRadarSensor_rangeBiasDecorr_set)
-ScopedCopyableRadarSensor_swigregister = _six_sicd.ScopedCopyableRadarSensor_swigregister
-ScopedCopyableRadarSensor_swigregister(ScopedCopyableRadarSensor)
-
-class ScopedCopyableTropoError(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::TropoError)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableTropoError, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableTropoError, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::TropoError)> self, TropoError ptr=None) -> ScopedCopyableTropoError
-        __init__(mem::ScopedCopyablePtr<(six::TropoError)> self) -> ScopedCopyableTropoError
-        __init__(mem::ScopedCopyablePtr<(six::TropoError)> self, ScopedCopyableTropoError rhs) -> ScopedCopyableTropoError
-        """
-        this = _six_sicd.new_ScopedCopyableTropoError(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyableTropoError self) -> TropoError"""
-        return _six_sicd.ScopedCopyableTropoError_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyableTropoError self) -> TropoError"""
-        return _six_sicd.ScopedCopyableTropoError___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyableTropoError self) -> TropoError"""
-        return _six_sicd.ScopedCopyableTropoError___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyableTropoError self, TropoError ptr=None)
-        reset(ScopedCopyableTropoError self)
-        """
-        return _six_sicd.ScopedCopyableTropoError_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableTropoError
-    __del__ = lambda self: None
-    __swig_setmethods__["tropoRangeVertical"] = _six_sicd.ScopedCopyableTropoError_tropoRangeVertical_set
-    __swig_getmethods__["tropoRangeVertical"] = _six_sicd.ScopedCopyableTropoError_tropoRangeVertical_get
-    if _newclass:
-        tropoRangeVertical = _swig_property(_six_sicd.ScopedCopyableTropoError_tropoRangeVertical_get, _six_sicd.ScopedCopyableTropoError_tropoRangeVertical_set)
-    __swig_setmethods__["tropoRangeSlant"] = _six_sicd.ScopedCopyableTropoError_tropoRangeSlant_set
-    __swig_getmethods__["tropoRangeSlant"] = _six_sicd.ScopedCopyableTropoError_tropoRangeSlant_get
-    if _newclass:
-        tropoRangeSlant = _swig_property(_six_sicd.ScopedCopyableTropoError_tropoRangeSlant_get, _six_sicd.ScopedCopyableTropoError_tropoRangeSlant_set)
-    __swig_setmethods__["tropoRangeDecorr"] = _six_sicd.ScopedCopyableTropoError_tropoRangeDecorr_set
-    __swig_getmethods__["tropoRangeDecorr"] = _six_sicd.ScopedCopyableTropoError_tropoRangeDecorr_get
-    if _newclass:
-        tropoRangeDecorr = _swig_property(_six_sicd.ScopedCopyableTropoError_tropoRangeDecorr_get, _six_sicd.ScopedCopyableTropoError_tropoRangeDecorr_set)
-ScopedCopyableTropoError_swigregister = _six_sicd.ScopedCopyableTropoError_swigregister
-ScopedCopyableTropoError_swigregister(ScopedCopyableTropoError)
-
-class ScopedCopyableIonoError(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::IonoError)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableIonoError, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableIonoError, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::IonoError)> self, IonoError ptr=None) -> ScopedCopyableIonoError
-        __init__(mem::ScopedCopyablePtr<(six::IonoError)> self) -> ScopedCopyableIonoError
-        __init__(mem::ScopedCopyablePtr<(six::IonoError)> self, ScopedCopyableIonoError rhs) -> ScopedCopyableIonoError
-        """
-        this = _six_sicd.new_ScopedCopyableIonoError(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyableIonoError self) -> IonoError"""
-        return _six_sicd.ScopedCopyableIonoError_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyableIonoError self) -> IonoError"""
-        return _six_sicd.ScopedCopyableIonoError___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyableIonoError self) -> IonoError"""
-        return _six_sicd.ScopedCopyableIonoError___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyableIonoError self, IonoError ptr=None)
-        reset(ScopedCopyableIonoError self)
-        """
-        return _six_sicd.ScopedCopyableIonoError_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableIonoError
-    __del__ = lambda self: None
-    __swig_setmethods__["ionoRangeVertical"] = _six_sicd.ScopedCopyableIonoError_ionoRangeVertical_set
-    __swig_getmethods__["ionoRangeVertical"] = _six_sicd.ScopedCopyableIonoError_ionoRangeVertical_get
-    if _newclass:
-        ionoRangeVertical = _swig_property(_six_sicd.ScopedCopyableIonoError_ionoRangeVertical_get, _six_sicd.ScopedCopyableIonoError_ionoRangeVertical_set)
-    __swig_setmethods__["ionoRangeRateVertical"] = _six_sicd.ScopedCopyableIonoError_ionoRangeRateVertical_set
-    __swig_getmethods__["ionoRangeRateVertical"] = _six_sicd.ScopedCopyableIonoError_ionoRangeRateVertical_get
-    if _newclass:
-        ionoRangeRateVertical = _swig_property(_six_sicd.ScopedCopyableIonoError_ionoRangeRateVertical_get, _six_sicd.ScopedCopyableIonoError_ionoRangeRateVertical_set)
-    __swig_setmethods__["ionoRgRgRateCC"] = _six_sicd.ScopedCopyableIonoError_ionoRgRgRateCC_set
-    __swig_getmethods__["ionoRgRgRateCC"] = _six_sicd.ScopedCopyableIonoError_ionoRgRgRateCC_get
-    if _newclass:
-        ionoRgRgRateCC = _swig_property(_six_sicd.ScopedCopyableIonoError_ionoRgRgRateCC_get, _six_sicd.ScopedCopyableIonoError_ionoRgRgRateCC_set)
-    __swig_setmethods__["ionoRangeVertDecorr"] = _six_sicd.ScopedCopyableIonoError_ionoRangeVertDecorr_set
-    __swig_getmethods__["ionoRangeVertDecorr"] = _six_sicd.ScopedCopyableIonoError_ionoRangeVertDecorr_get
-    if _newclass:
-        ionoRangeVertDecorr = _swig_property(_six_sicd.ScopedCopyableIonoError_ionoRangeVertDecorr_get, _six_sicd.ScopedCopyableIonoError_ionoRangeVertDecorr_set)
-ScopedCopyableIonoError_swigregister = _six_sicd.ScopedCopyableIonoError_swigregister
-ScopedCopyableIonoError_swigregister(ScopedCopyableIonoError)
-
-class ScopedCopyableCompositeSCP(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::CompositeSCP)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableCompositeSCP, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableCompositeSCP, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::CompositeSCP)> self, CompositeSCP ptr=None) -> ScopedCopyableCompositeSCP
-        __init__(mem::ScopedCopyablePtr<(six::CompositeSCP)> self) -> ScopedCopyableCompositeSCP
-        __init__(mem::ScopedCopyablePtr<(six::CompositeSCP)> self, ScopedCopyableCompositeSCP rhs) -> ScopedCopyableCompositeSCP
-        """
-        this = _six_sicd.new_ScopedCopyableCompositeSCP(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
-        return _six_sicd.ScopedCopyableCompositeSCP_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
-        return _six_sicd.ScopedCopyableCompositeSCP___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
-        return _six_sicd.ScopedCopyableCompositeSCP___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyableCompositeSCP self, CompositeSCP ptr=None)
-        reset(ScopedCopyableCompositeSCP self)
-        """
-        return _six_sicd.ScopedCopyableCompositeSCP_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableCompositeSCP
-    __del__ = lambda self: None
-    __swig_setmethods__["scpType"] = _six_sicd.ScopedCopyableCompositeSCP_scpType_set
-    __swig_getmethods__["scpType"] = _six_sicd.ScopedCopyableCompositeSCP_scpType_get
-    if _newclass:
-        scpType = _swig_property(_six_sicd.ScopedCopyableCompositeSCP_scpType_get, _six_sicd.ScopedCopyableCompositeSCP_scpType_set)
-    __swig_setmethods__["xErr"] = _six_sicd.ScopedCopyableCompositeSCP_xErr_set
-    __swig_getmethods__["xErr"] = _six_sicd.ScopedCopyableCompositeSCP_xErr_get
-    if _newclass:
-        xErr = _swig_property(_six_sicd.ScopedCopyableCompositeSCP_xErr_get, _six_sicd.ScopedCopyableCompositeSCP_xErr_set)
-    __swig_setmethods__["yErr"] = _six_sicd.ScopedCopyableCompositeSCP_yErr_set
-    __swig_getmethods__["yErr"] = _six_sicd.ScopedCopyableCompositeSCP_yErr_get
-    if _newclass:
-        yErr = _swig_property(_six_sicd.ScopedCopyableCompositeSCP_yErr_get, _six_sicd.ScopedCopyableCompositeSCP_yErr_set)
-    __swig_setmethods__["xyErr"] = _six_sicd.ScopedCopyableCompositeSCP_xyErr_set
-    __swig_getmethods__["xyErr"] = _six_sicd.ScopedCopyableCompositeSCP_xyErr_get
-    if _newclass:
-        xyErr = _swig_property(_six_sicd.ScopedCopyableCompositeSCP_xyErr_get, _six_sicd.ScopedCopyableCompositeSCP_xyErr_set)
-ScopedCopyableCompositeSCP_swigregister = _six_sicd.ScopedCopyableCompositeSCP_swigregister
-ScopedCopyableCompositeSCP_swigregister(ScopedCopyableCompositeSCP)
-
-class ScopedCopyableComponents(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::Components)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableComponents, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableComponents, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::Components)> self, Components ptr=None) -> ScopedCopyableComponents
-        __init__(mem::ScopedCopyablePtr<(six::Components)> self) -> ScopedCopyableComponents
-        __init__(mem::ScopedCopyablePtr<(six::Components)> self, ScopedCopyableComponents rhs) -> ScopedCopyableComponents
-        """
-        this = _six_sicd.new_ScopedCopyableComponents(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def get(self):
-        """get(ScopedCopyableComponents self) -> Components"""
-        return _six_sicd.ScopedCopyableComponents_get(self)
-
-
-    def __ref__(self):
-        """__ref__(ScopedCopyableComponents self) -> Components"""
-        return _six_sicd.ScopedCopyableComponents___ref__(self)
-
-
-    def __deref__(self):
-        """__deref__(ScopedCopyableComponents self) -> Components"""
-        return _six_sicd.ScopedCopyableComponents___deref__(self)
-
-
-    def reset(self, ptr=None):
-        """
-        reset(ScopedCopyableComponents self, Components ptr=None)
-        reset(ScopedCopyableComponents self)
-        """
-        return _six_sicd.ScopedCopyableComponents_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableComponents
-    __del__ = lambda self: None
-    __swig_setmethods__["posVelError"] = _six_sicd.ScopedCopyableComponents_posVelError_set
-    __swig_getmethods__["posVelError"] = _six_sicd.ScopedCopyableComponents_posVelError_get
-    if _newclass:
-        posVelError = _swig_property(_six_sicd.ScopedCopyableComponents_posVelError_get, _six_sicd.ScopedCopyableComponents_posVelError_set)
-    __swig_setmethods__["radarSensor"] = _six_sicd.ScopedCopyableComponents_radarSensor_set
-    __swig_getmethods__["radarSensor"] = _six_sicd.ScopedCopyableComponents_radarSensor_get
-    if _newclass:
-        radarSensor = _swig_property(_six_sicd.ScopedCopyableComponents_radarSensor_get, _six_sicd.ScopedCopyableComponents_radarSensor_set)
-    __swig_setmethods__["tropoError"] = _six_sicd.ScopedCopyableComponents_tropoError_set
-    __swig_getmethods__["tropoError"] = _six_sicd.ScopedCopyableComponents_tropoError_get
-    if _newclass:
-        tropoError = _swig_property(_six_sicd.ScopedCopyableComponents_tropoError_get, _six_sicd.ScopedCopyableComponents_tropoError_set)
-    __swig_setmethods__["ionoError"] = _six_sicd.ScopedCopyableComponents_ionoError_set
-    __swig_getmethods__["ionoError"] = _six_sicd.ScopedCopyableComponents_ionoError_get
-    if _newclass:
-        ionoError = _swig_property(_six_sicd.ScopedCopyableComponents_ionoError_get, _six_sicd.ScopedCopyableComponents_ionoError_set)
-ScopedCopyableComponents_swigregister = _six_sicd.ScopedCopyableComponents_swigregister
-ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
-
+def makeScopedCopyablePolarizationCalibration():
+    """makeScopedCopyablePolarizationCalibration() -> ScopedCopyablePolarizationCalibration"""
+    return _six_sicd.makeScopedCopyablePolarizationCalibration()
 class VectorMatchCollect(_object):
     """Proxy of C++ std::vector<(six::sicd::MatchCollect)> class"""
     __swig_setmethods__ = {}
@@ -7403,7 +6997,7 @@ class VectorScopedCopyableMatchType(_object):
 
 
     def pop(self):
-        """pop(VectorScopedCopyableMatchType self) -> ScopedCopyabledMatchType"""
+        """pop(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
         return _six_sicd.VectorScopedCopyableMatchType_pop(self)
 
 
@@ -7436,7 +7030,7 @@ class VectorScopedCopyableMatchType(_object):
     def __getitem__(self, *args):
         """
         __getitem__(VectorScopedCopyableMatchType self, PySliceObject * slice) -> VectorScopedCopyableMatchType
-        __getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i) -> ScopedCopyabledMatchType
+        __getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i) -> ScopedCopyableMatchType
         """
         return _six_sicd.VectorScopedCopyableMatchType___getitem__(self, *args)
 
@@ -7445,13 +7039,13 @@ class VectorScopedCopyableMatchType(_object):
         """
         __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice, VectorScopedCopyableMatchType v)
         __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
-        __setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i, ScopedCopyabledMatchType x)
+        __setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::difference_type i, ScopedCopyableMatchType x)
         """
         return _six_sicd.VectorScopedCopyableMatchType___setitem__(self, *args)
 
 
     def append(self, x):
-        """append(VectorScopedCopyableMatchType self, ScopedCopyabledMatchType x)"""
+        """append(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
         return _six_sicd.VectorScopedCopyableMatchType_append(self, x)
 
 
@@ -7518,7 +7112,7 @@ class VectorScopedCopyableMatchType(_object):
         __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self) -> VectorScopedCopyableMatchType
         __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, VectorScopedCopyableMatchType arg2) -> VectorScopedCopyableMatchType
         __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type size) -> VectorScopedCopyableMatchType
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type size, ScopedCopyabledMatchType value) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::sicd::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type size, ScopedCopyableMatchType value) -> VectorScopedCopyableMatchType
         """
         this = _six_sicd.new_VectorScopedCopyableMatchType(*args)
         try:
@@ -7527,37 +7121,37 @@ class VectorScopedCopyableMatchType(_object):
             self.this = this
 
     def push_back(self, x):
-        """push_back(VectorScopedCopyableMatchType self, ScopedCopyabledMatchType x)"""
+        """push_back(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
         return _six_sicd.VectorScopedCopyableMatchType_push_back(self, x)
 
 
     def front(self):
-        """front(VectorScopedCopyableMatchType self) -> ScopedCopyabledMatchType"""
+        """front(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
         return _six_sicd.VectorScopedCopyableMatchType_front(self)
 
 
     def back(self):
-        """back(VectorScopedCopyableMatchType self) -> ScopedCopyabledMatchType"""
+        """back(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
         return _six_sicd.VectorScopedCopyableMatchType_back(self)
 
 
     def assign(self, n, x):
-        """assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, ScopedCopyabledMatchType x)"""
+        """assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, ScopedCopyableMatchType x)"""
         return _six_sicd.VectorScopedCopyableMatchType_assign(self, n, x)
 
 
     def resize(self, *args):
         """
         resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type new_size)
-        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type new_size, ScopedCopyabledMatchType x)
+        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type new_size, ScopedCopyableMatchType x)
         """
         return _six_sicd.VectorScopedCopyableMatchType_resize(self, *args)
 
 
     def insert(self, *args):
         """
-        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, ScopedCopyabledMatchType x) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator
-        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, ScopedCopyabledMatchType x)
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, ScopedCopyableMatchType x) -> std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::sicd::MatchType > >::size_type n, ScopedCopyableMatchType x)
         """
         return _six_sicd.VectorScopedCopyableMatchType_insert(self, *args)
 
@@ -7663,6 +7257,10 @@ class ScopedCopyableRMAT(_object):
 ScopedCopyableRMAT_swigregister = _six_sicd.ScopedCopyableRMAT_swigregister
 ScopedCopyableRMAT_swigregister(ScopedCopyableRMAT)
 
+
+def makeScopedCopyableRMAT():
+    """makeScopedCopyableRMAT() -> ScopedCopyableRMAT"""
+    return _six_sicd.makeScopedCopyableRMAT()
 class ScopedCopyableRMCR(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::RMCR)> class"""
     __swig_setmethods__ = {}
@@ -7722,6 +7320,10 @@ class ScopedCopyableRMCR(_object):
 ScopedCopyableRMCR_swigregister = _six_sicd.ScopedCopyableRMCR_swigregister
 ScopedCopyableRMCR_swigregister(ScopedCopyableRMCR)
 
+
+def makeScopedCopyableRMCR():
+    """makeScopedCopyableRMCR() -> ScopedCopyableRMCR"""
+    return _six_sicd.makeScopedCopyableRMCR()
 class ScopedCopyableINCA(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::INCA)> class"""
     __swig_setmethods__ = {}
@@ -7793,6 +7395,10 @@ class ScopedCopyableINCA(_object):
 ScopedCopyableINCA_swigregister = _six_sicd.ScopedCopyableINCA_swigregister
 ScopedCopyableINCA_swigregister(ScopedCopyableINCA)
 
+
+def makeScopedCopyableINCA():
+    """makeScopedCopyableINCA() -> ScopedCopyableINCA"""
+    return _six_sicd.makeScopedCopyableINCA()
 class VectorTimelineSet(_object):
     """Proxy of C++ std::vector<(p.six::sicd::TimelineSet)> class"""
     __swig_setmethods__ = {}

@@ -60,6 +60,7 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %import "math_poly.i"
 %import "math_linear.i"
 %import "scene.i"
+%import "mem.i"
 
 /* parametric elt-size array */
 /* will probably want it eventually, but it looks like six.sicd doesn't use it */
@@ -141,5 +142,17 @@ def setValue(self, *args):
     }
 };
 
+/* We need this because SWIG cannot do it itself, for some reason */
+/* TODO: write script to generate all of these instantiations for us? */
+
 %template(VectorString) std::vector<std::string>;
 %template(LatLonCorners) six::Corners<scene::LatLon>;
+
+SCOPED_COPYABLE(six, Radiometric)
+SCOPED_COPYABLE(six, ErrorStatistics)
+SCOPED_COPYABLE(six, PosVelError)
+SCOPED_COPYABLE(six, RadarSensor)
+SCOPED_COPYABLE(six, TropoError)
+SCOPED_COPYABLE(six, IonoError)
+SCOPED_COPYABLE(six, CompositeSCP)
+SCOPED_COPYABLE(six, Components)
