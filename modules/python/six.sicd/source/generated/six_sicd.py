@@ -6782,6 +6782,109 @@ ScopedCopyablePolarizationCalibration_swigregister(ScopedCopyablePolarizationCal
 def makeScopedCopyablePolarizationCalibration():
     """makeScopedCopyablePolarizationCalibration() -> ScopedCopyablePolarizationCalibration"""
     return _six_sicd.makeScopedCopyablePolarizationCalibration()
+class ScopedCopyableDistortion(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::Distortion)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableDistortion, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableDistortion, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::sicd::Distortion)> self, Distortion ptr=None) -> ScopedCopyableDistortion
+        __init__(mem::ScopedCopyablePtr<(six::sicd::Distortion)> self) -> ScopedCopyableDistortion
+        __init__(mem::ScopedCopyablePtr<(six::sicd::Distortion)> self, ScopedCopyableDistortion rhs) -> ScopedCopyableDistortion
+        """
+        this = _six_sicd.new_ScopedCopyableDistortion(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableDistortion self) -> Distortion"""
+        return _six_sicd.ScopedCopyableDistortion_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableDistortion self) -> Distortion"""
+        return _six_sicd.ScopedCopyableDistortion___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableDistortion self) -> Distortion"""
+        return _six_sicd.ScopedCopyableDistortion___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableDistortion self, Distortion ptr=None)
+        reset(ScopedCopyableDistortion self)
+        """
+        return _six_sicd.ScopedCopyableDistortion_reset(self, ptr)
+
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableDistortion
+    __del__ = lambda self: None
+    __swig_setmethods__["calibrationDate"] = _six_sicd.ScopedCopyableDistortion_calibrationDate_set
+    __swig_getmethods__["calibrationDate"] = _six_sicd.ScopedCopyableDistortion_calibrationDate_get
+    if _newclass:
+        calibrationDate = _swig_property(_six_sicd.ScopedCopyableDistortion_calibrationDate_get, _six_sicd.ScopedCopyableDistortion_calibrationDate_set)
+    __swig_setmethods__["a"] = _six_sicd.ScopedCopyableDistortion_a_set
+    __swig_getmethods__["a"] = _six_sicd.ScopedCopyableDistortion_a_get
+    if _newclass:
+        a = _swig_property(_six_sicd.ScopedCopyableDistortion_a_get, _six_sicd.ScopedCopyableDistortion_a_set)
+    __swig_setmethods__["f1"] = _six_sicd.ScopedCopyableDistortion_f1_set
+    __swig_getmethods__["f1"] = _six_sicd.ScopedCopyableDistortion_f1_get
+    if _newclass:
+        f1 = _swig_property(_six_sicd.ScopedCopyableDistortion_f1_get, _six_sicd.ScopedCopyableDistortion_f1_set)
+    __swig_setmethods__["q1"] = _six_sicd.ScopedCopyableDistortion_q1_set
+    __swig_getmethods__["q1"] = _six_sicd.ScopedCopyableDistortion_q1_get
+    if _newclass:
+        q1 = _swig_property(_six_sicd.ScopedCopyableDistortion_q1_get, _six_sicd.ScopedCopyableDistortion_q1_set)
+    __swig_setmethods__["q2"] = _six_sicd.ScopedCopyableDistortion_q2_set
+    __swig_getmethods__["q2"] = _six_sicd.ScopedCopyableDistortion_q2_get
+    if _newclass:
+        q2 = _swig_property(_six_sicd.ScopedCopyableDistortion_q2_get, _six_sicd.ScopedCopyableDistortion_q2_set)
+    __swig_setmethods__["f2"] = _six_sicd.ScopedCopyableDistortion_f2_set
+    __swig_getmethods__["f2"] = _six_sicd.ScopedCopyableDistortion_f2_get
+    if _newclass:
+        f2 = _swig_property(_six_sicd.ScopedCopyableDistortion_f2_get, _six_sicd.ScopedCopyableDistortion_f2_set)
+    __swig_setmethods__["q3"] = _six_sicd.ScopedCopyableDistortion_q3_set
+    __swig_getmethods__["q3"] = _six_sicd.ScopedCopyableDistortion_q3_get
+    if _newclass:
+        q3 = _swig_property(_six_sicd.ScopedCopyableDistortion_q3_get, _six_sicd.ScopedCopyableDistortion_q3_set)
+    __swig_setmethods__["q4"] = _six_sicd.ScopedCopyableDistortion_q4_set
+    __swig_getmethods__["q4"] = _six_sicd.ScopedCopyableDistortion_q4_get
+    if _newclass:
+        q4 = _swig_property(_six_sicd.ScopedCopyableDistortion_q4_get, _six_sicd.ScopedCopyableDistortion_q4_set)
+    __swig_setmethods__["gainErrorA"] = _six_sicd.ScopedCopyableDistortion_gainErrorA_set
+    __swig_getmethods__["gainErrorA"] = _six_sicd.ScopedCopyableDistortion_gainErrorA_get
+    if _newclass:
+        gainErrorA = _swig_property(_six_sicd.ScopedCopyableDistortion_gainErrorA_get, _six_sicd.ScopedCopyableDistortion_gainErrorA_set)
+    __swig_setmethods__["gainErrorF1"] = _six_sicd.ScopedCopyableDistortion_gainErrorF1_set
+    __swig_getmethods__["gainErrorF1"] = _six_sicd.ScopedCopyableDistortion_gainErrorF1_get
+    if _newclass:
+        gainErrorF1 = _swig_property(_six_sicd.ScopedCopyableDistortion_gainErrorF1_get, _six_sicd.ScopedCopyableDistortion_gainErrorF1_set)
+    __swig_setmethods__["gainErrorF2"] = _six_sicd.ScopedCopyableDistortion_gainErrorF2_set
+    __swig_getmethods__["gainErrorF2"] = _six_sicd.ScopedCopyableDistortion_gainErrorF2_get
+    if _newclass:
+        gainErrorF2 = _swig_property(_six_sicd.ScopedCopyableDistortion_gainErrorF2_get, _six_sicd.ScopedCopyableDistortion_gainErrorF2_set)
+    __swig_setmethods__["phaseErrorF1"] = _six_sicd.ScopedCopyableDistortion_phaseErrorF1_set
+    __swig_getmethods__["phaseErrorF1"] = _six_sicd.ScopedCopyableDistortion_phaseErrorF1_get
+    if _newclass:
+        phaseErrorF1 = _swig_property(_six_sicd.ScopedCopyableDistortion_phaseErrorF1_get, _six_sicd.ScopedCopyableDistortion_phaseErrorF1_set)
+    __swig_setmethods__["phaseErrorF2"] = _six_sicd.ScopedCopyableDistortion_phaseErrorF2_set
+    __swig_getmethods__["phaseErrorF2"] = _six_sicd.ScopedCopyableDistortion_phaseErrorF2_get
+    if _newclass:
+        phaseErrorF2 = _swig_property(_six_sicd.ScopedCopyableDistortion_phaseErrorF2_get, _six_sicd.ScopedCopyableDistortion_phaseErrorF2_set)
+ScopedCopyableDistortion_swigregister = _six_sicd.ScopedCopyableDistortion_swigregister
+ScopedCopyableDistortion_swigregister(ScopedCopyableDistortion)
+
+
+def makeScopedCopyableDistortion():
+    """makeScopedCopyableDistortion() -> ScopedCopyableDistortion"""
+    return _six_sicd.makeScopedCopyableDistortion()
 class VectorMatchCollect(_object):
     """Proxy of C++ std::vector<(six::sicd::MatchCollect)> class"""
     __swig_setmethods__ = {}

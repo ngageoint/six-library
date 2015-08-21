@@ -194,7 +194,138 @@ position.rcvAPC.rcvAPCPolys.push_back(rcvAPCPoly)
 
 cmplx.position = position
 
-# Now format it as XML
+### Radar Collection ###
+radarCollection = makeScopedCloneableRadarCollection()
+radarCollection.refFrequencyIndex = 1
+radarCollection.txFrequencyMin = -99
+radarCollection.txFrequencyMax = 99
+radarCollection.txPolarization = PolarizationSequenceType('V')
+
+txStep = makeScopedCloneableTxStep()
+txStep.waveformIndex = 1
+txStep.txPolarization = PolarizationType('V')
+radarCollection.txSequence.push_back(txStep)
+
+wfParams = makeScopedCloneableWaveformParameters()
+wfParams.txPulseLength = 11
+wfParams.txRFBandwidth = 22
+wfParams.txFrequencyStart = 33
+wfParams.txFMRate = 44
+wfParams.rcvDemodType = DemodType('STRETCH')
+wfParams.rcvWindowLength = 55
+wfParams.adcSampleRate = 66
+wfParams.rcvIFBandwidth = 77
+wfParams.rcvFrequencyStart = 88
+wfParams.rcvFMRate = 99
+radarCollection.waveform.push_back(wfParams)
+
+chanParams = makeScopedCloneableChannelParameters()
+chanParams.txRcvPolarization = DualPolarizationType('V_V')
+chanParams.rcvAPCIndex = 47
+radarCollection.rcvChannels.push_back(chanParams)
+
+area = makeScopedCloneableArea()
+area.acpCorners.upperLeft = LatLonAlt(1, 2, 3)
+area.acpCorners.upperRight = LatLonAlt(4, 5, 6)
+area.acpCorners.lowerRight = LatLonAlt(7, 8, 9)
+area.acpCorners.lowerLeft = LatLonAlt(10, 11, 12)
+
+areaPlane = makeScopedCloneableAreaPlane()
+for i in range(3):
+    areaPlane.referencePoint.ecef[i] = i * 10
+areaPlane.referencePoint.rowCol.row = 12
+areaPlane.referencePoint.rowCol.col = 34
+areaPlane.referencePoint.name = 'My ref point'
+
+xDir = makeScopedCloneableAreaDirectionParameters()
+for i in range(3):
+    xDir.unitVector[i] = i * 10
+xDir.spacing = 11
+xDir.elements = 500
+xDir.first = 4
+areaPlane.xDirection = xDir
+
+yDir = makeScopedCloneableAreaDirectionParameters()
+for i in range(3):
+    yDir.unitVector[i] = i * 10
+yDir.spacing = 11
+yDir.elements = 500
+yDir.first = 4
+areaPlane.yDirection = yDir
+
+segment = makeScopedCloneableSegment()
+segment.startLine = 10
+segment.startSample = 20
+segment.endLine = 30
+segment.endSample = 40
+segment.identifier = 'My segment'
+areaPlane.segmentList.push_back(segment)
+
+areaPlane.orientation = OrientationType('UP')
+
+area.plane = areaPlane
+
+radarCollection.area = area
+
+param.setName('Radar param')
+param.setValue('Some radar val')
+radarCollection.parameters.push_back(param)
+
+cmplx.radarCollection = radarCollection
+
+### Image Formation ###
+imageFormation = makeScopedCopyableImageFormation()
+imageFormation.segmentIdentifier = 'AA'
+
+rcvChannelProcessed = makeScopedCopyableRcvChannelProcessed()
+rcvChannelProcessed.numChannelsProcessed = 1
+rcvChannelProcessed.prfScaleFactor = 99
+rcvChannelProcessed.channelIndex.push_back(123)
+imageFormation.rcvChannelProcessed = rcvChannelProcessed
+
+imageFormation.txRcvPolarizationProc = DualPolarizationType('V_V')
+imageFormation.imageFormationAlgorithm = ImageFormationType('PFA')
+imageFormation.tStartProc = 57
+imageFormation.tEndProc = 68
+imageFormation.txFrequencyProcMin = 789
+imageFormation.txFrequencyProcMax = 1111
+imageFormation.slowTimeBeamCompensation = SlowTimeBeamCompensationType('GLOBAL')
+imageFormation.imageBeamCompensation = ImageBeamCompensationType('SV')
+imageFormation.azimuthAutofocus = AutofocusType('GLOBAL')
+imageFormation.rangeAutofocus = AutofocusType('GLOBAL')
+
+processing = Processing()
+processing.type = 'Some type'
+processing.applied = BooleanType('IS_TRUE')
+param.setName('Processing param')
+param.setValue('Processing value')
+processing.parameters.push_back(param)
+imageFormation.processing.push_back(processing)
+
+polCal = makeScopedCopyablePolarizationCalibration()
+polCal.hvAngleCompensationApplied = BooleanType('IS_TRUE')
+polCal.distortionCorrectionApplied = BooleanType('IS_TRUE')
+polCal.distortion = makeScopedCopyableDistortion()
+polCal.distortion.calibrationDate = DateTime()
+polCal.distortion.a = 55
+polCal.distortion.f1 = 1 + 2j
+polCal.distortion.q1 = 3 + 4j
+polCal.distortion.q2 = 5 + 6j
+polCal.distortion.f2 = 7 + 8j
+polCal.distortion.q3 = 9 + 10j
+polCal.distortion.q4 = 11 + 12j
+polCal.distortion.gainErrorA = 9
+polCal.distortion.gainErrorF1 = 10
+polCal.distortion.gainErrorF2 = 15
+polCal.distortion.phaseErrorF1 = 99
+polCal.distortion.phaseErrorF2 = 45
+
+imageFormation.polarizationCalibration = polCal
+
+cmplx.imageFormation = imageFormation
+
+
+### Now format it as XML ###
 vs = VectorString()
 vs.push_back(os.environ['SIX_SCHEMA_PATH'])
   

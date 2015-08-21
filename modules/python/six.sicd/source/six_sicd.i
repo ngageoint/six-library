@@ -154,6 +154,7 @@ SCOPED_CLONEABLE(six::sicd, ChannelParameters)
 SCOPED_COPYABLE(six::sicd, RcvChannelProcessed)
 %template(VectorProcessing)                        std::vector<six::sicd::Processing>;
 SCOPED_COPYABLE(six::sicd, PolarizationCalibration)
+SCOPED_COPYABLE(six::sicd, Distortion)
 
 %template(VectorMatchCollect)                      std::vector<six::sicd::MatchCollect>;
 %template(VectorScopedCopyableMatchType)           std::vector<mem::ScopedCopyablePtr<six::sicd::MatchType> >;
