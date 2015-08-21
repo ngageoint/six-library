@@ -196,8 +196,8 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _cphd.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import coda.coda_types
 import coda.coda_sys
+import coda.coda_types
 import coda.mem
 import pysix.six_sicd
 import coda.math_poly
@@ -1537,8 +1537,8 @@ class VBM(_object):
         """
         __init__(cphd::VBM self) -> VBM
         __init__(cphd::VBM self, Data data, VectorParameters vp) -> VBM
-        __init__(cphd::VBM self, size_t numChannels, std::vector< size_t,std::allocator< size_t > > const & numVectors, bool srpTimeEnabled, bool tropoSrpEnabled, bool ampSFEnabled, DomainType domainType) -> VBM
-        __init__(cphd::VBM self, size_t numChannels, std::vector< size_t,std::allocator< size_t > > const & numVectors, bool srpTimeEnabled, bool tropoSrpEnabled, bool ampSFEnabled, DomainType domainType, std::vector< void const *,std::allocator< void const * > > const & data) -> VBM
+        __init__(cphd::VBM self, size_t numChannels, VectorSizeT numVectors, bool srpTimeEnabled, bool tropoSrpEnabled, bool ampSFEnabled, DomainType domainType) -> VBM
+        __init__(cphd::VBM self, size_t numChannels, VectorSizeT numVectors, bool srpTimeEnabled, bool tropoSrpEnabled, bool ampSFEnabled, DomainType domainType, std::vector< void const *,std::allocator< void const * > > const & data) -> VBM
         """
         this = _cphd.new_VBM(*args)
         try:
@@ -2983,6 +2983,75 @@ ScopedCopyableFxParameters_swigregister(ScopedCopyableFxParameters)
 def makeScopedCopyableFxParameters():
     """makeScopedCopyableFxParameters() -> ScopedCopyableFxParameters"""
     return _cphd.makeScopedCopyableFxParameters()
+class ScopedCopyableTOAParameters(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(cphd::TOAParameters)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableTOAParameters, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableTOAParameters, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(cphd::TOAParameters)> self, TOAParameters ptr=None) -> ScopedCopyableTOAParameters
+        __init__(mem::ScopedCopyablePtr<(cphd::TOAParameters)> self) -> ScopedCopyableTOAParameters
+        __init__(mem::ScopedCopyablePtr<(cphd::TOAParameters)> self, ScopedCopyableTOAParameters rhs) -> ScopedCopyableTOAParameters
+        """
+        this = _cphd.new_ScopedCopyableTOAParameters(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCopyableTOAParameters self) -> TOAParameters"""
+        return _cphd.ScopedCopyableTOAParameters_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCopyableTOAParameters self) -> TOAParameters"""
+        return _cphd.ScopedCopyableTOAParameters___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCopyableTOAParameters self) -> TOAParameters"""
+        return _cphd.ScopedCopyableTOAParameters___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCopyableTOAParameters self, TOAParameters ptr=None)
+        reset(ScopedCopyableTOAParameters self)
+        """
+        return _cphd.ScopedCopyableTOAParameters_reset(self, ptr)
+
+    __swig_destroy__ = _cphd.delete_ScopedCopyableTOAParameters
+    __del__ = lambda self: None
+
+    def __eq__(self, other):
+        """__eq__(ScopedCopyableTOAParameters self, TOAParameters other) -> bool"""
+        return _cphd.ScopedCopyableTOAParameters___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(ScopedCopyableTOAParameters self, TOAParameters other) -> bool"""
+        return _cphd.ScopedCopyableTOAParameters___ne__(self, other)
+
+    __swig_setmethods__["deltaTOA0"] = _cphd.ScopedCopyableTOAParameters_deltaTOA0_set
+    __swig_getmethods__["deltaTOA0"] = _cphd.ScopedCopyableTOAParameters_deltaTOA0_get
+    if _newclass:
+        deltaTOA0 = _swig_property(_cphd.ScopedCopyableTOAParameters_deltaTOA0_get, _cphd.ScopedCopyableTOAParameters_deltaTOA0_set)
+    __swig_setmethods__["toaSS"] = _cphd.ScopedCopyableTOAParameters_toaSS_set
+    __swig_getmethods__["toaSS"] = _cphd.ScopedCopyableTOAParameters_toaSS_get
+    if _newclass:
+        toaSS = _swig_property(_cphd.ScopedCopyableTOAParameters_toaSS_get, _cphd.ScopedCopyableTOAParameters_toaSS_set)
+ScopedCopyableTOAParameters_swigregister = _cphd.ScopedCopyableTOAParameters_swigregister
+ScopedCopyableTOAParameters_swigregister(ScopedCopyableTOAParameters)
+
+
+def makeScopedCopyableTOAParameters():
+    """makeScopedCopyableTOAParameters() -> ScopedCopyableTOAParameters"""
+    return _cphd.makeScopedCopyableTOAParameters()
 class ScopedCopyableCphdAntenna(_object):
     """Proxy of C++ mem::ScopedCopyablePtr<(cphd::Antenna)> class"""
     __swig_setmethods__ = {}

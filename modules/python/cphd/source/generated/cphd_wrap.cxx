@@ -3030,23 +3030,22 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[90]
 #define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[91]
 #define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[92]
-#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[93]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[94]
-#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[95]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[96]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[97]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[98]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[99]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[100]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[101]
-#define SWIGTYPE_p_uint16_t swig_types[102]
-#define SWIGTYPE_p_uint32_t swig_types[103]
-#define SWIGTYPE_p_uint64_t swig_types[104]
-#define SWIGTYPE_p_uint8_t swig_types[105]
-#define SWIGTYPE_p_unsigned_char swig_types[106]
-#define SWIGTYPE_p_value_type swig_types[107]
-static swig_type_info *swig_types[109];
-static swig_module_info swig_module = {swig_types, 108, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[93]
+#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[94]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[95]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[96]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[97]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[98]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[99]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[100]
+#define SWIGTYPE_p_uint16_t swig_types[101]
+#define SWIGTYPE_p_uint32_t swig_types[102]
+#define SWIGTYPE_p_uint64_t swig_types[103]
+#define SWIGTYPE_p_uint8_t swig_types[104]
+#define SWIGTYPE_p_unsigned_char swig_types[105]
+#define SWIGTYPE_p_value_type swig_types[106]
+static swig_type_info *swig_types[108];
+static swig_module_info swig_module = {swig_types, 107, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4881,6 +4880,36 @@ SWIGINTERN std::string cphd_Metadata___str__(cphd::Metadata *self){
         return out.str();
     }
 
+namespace swig {
+  template <> struct traits<size_t > {
+    typedef value_category category;
+    static const char* type_name() { return"size_t"; }
+  };  
+  template <>  struct traits_asval<size_t > {   
+    typedef size_t value_type;
+    static int asval(PyObject *obj, value_type *val) { 
+      return SWIG_AsVal_size_t (obj, val);
+    }
+  };
+  template <>  struct traits_from<size_t > {
+    typedef size_t value_type;
+    static PyObject *from(const value_type& val) {
+      return SWIG_From_size_t  (val);
+    }
+  };
+}
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<size_t, std::allocator< size_t > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "size_t" "," "std::allocator< size_t >" " >";
+	  }
+	};
+      }
+    
+
 SWIGINTERN int
 SWIG_AsVal_bool (PyObject *obj, bool *val)
 {
@@ -5383,6 +5412,12 @@ mem::ScopedCopyablePtr< cphd::AreaPlane > makeScopedCopyableAreaPlane()
 mem::ScopedCopyablePtr< cphd::FxParameters > makeScopedCopyableFxParameters()
 {
     return mem::ScopedCopyablePtr< cphd::FxParameters >(new cphd::FxParameters ());
+} 
+
+
+mem::ScopedCopyablePtr< cphd::TOAParameters > makeScopedCopyableTOAParameters()
+{
+    return mem::ScopedCopyablePtr< cphd::TOAParameters >(new cphd::TOAParameters ());
 } 
 
 
@@ -11012,12 +11047,6 @@ SWIGINTERN PyObject *_wrap_FileHeader_set__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   sys::Off_T arg4 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
-  void *argp4 ;
-  int res4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -11031,43 +11060,13 @@ SWIGINTERN PyObject *_wrap_FileHeader_set__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileHeader_set" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_set" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
-    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "FileHeader_set" "', argument " "3"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_set" "', argument " "3"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
+    arg3 = PyInt_AsSsize_t(obj2);
   }
   {
-    res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "FileHeader_set" "', argument " "4"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp4) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_set" "', argument " "4"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp4);
-      arg4 = *temp;
-      if (SWIG_IsNewObj(res4)) delete temp;
-    }
+    arg4 = PyInt_AsSsize_t(obj3);
   }
   {
     try
@@ -11132,14 +11131,17 @@ SWIGINTERN PyObject *_wrap_FileHeader_set(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__FileHeader, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_off_t, 0);
-      _v = SWIG_CheckState(res);
+      {
+        _v = PyInt_Check(argv[1]) ? 1 : 0;
+      }
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_off_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          _v = PyInt_Check(argv[2]) ? 1 : 0;
+        }
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_off_t, 0);
-          _v = SWIG_CheckState(res);
+          {
+            _v = PyInt_Check(argv[3]) ? 1 : 0;
+          }
           if (_v) {
             return _wrap_FileHeader_set__SWIG_1(self, args);
           }
@@ -11163,8 +11165,6 @@ SWIGINTERN PyObject *_wrap_FileHeader_setXMLsize(PyObject *SWIGUNUSEDPARM(self),
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -11175,17 +11175,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setXMLsize(PyObject *SWIGUNUSEDPARM(self),
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileHeader_setXMLsize" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_setXMLsize" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -11231,8 +11221,6 @@ SWIGINTERN PyObject *_wrap_FileHeader_setVBMsize(PyObject *SWIGUNUSEDPARM(self),
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -11243,17 +11231,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setVBMsize(PyObject *SWIGUNUSEDPARM(self),
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileHeader_setVBMsize" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_setVBMsize" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -11299,8 +11277,6 @@ SWIGINTERN PyObject *_wrap_FileHeader_setCPHDsize(PyObject *SWIGUNUSEDPARM(self)
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -11311,17 +11287,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setCPHDsize(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileHeader_setCPHDsize" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_setCPHDsize" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -11367,8 +11333,6 @@ SWIGINTERN PyObject *_wrap_FileHeader_setXMLoffset(PyObject *SWIGUNUSEDPARM(self
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -11379,17 +11343,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setXMLoffset(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileHeader_setXMLoffset" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_setXMLoffset" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -11435,8 +11389,6 @@ SWIGINTERN PyObject *_wrap_FileHeader_setVBMoffset(PyObject *SWIGUNUSEDPARM(self
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -11447,17 +11399,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setVBMoffset(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileHeader_setVBMoffset" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_setVBMoffset" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -11503,8 +11445,6 @@ SWIGINTERN PyObject *_wrap_FileHeader_setCPHDoffset(PyObject *SWIGUNUSEDPARM(sel
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -11515,17 +11455,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setCPHDoffset(PyObject *SWIGUNUSEDPARM(sel
   }
   arg1 = reinterpret_cast< cphd::FileHeader * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileHeader_setCPHDoffset" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileHeader_setCPHDoffset" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -11610,7 +11540,9 @@ SWIGINTERN PyObject *_wrap_FileHeader_getXMLsize(PyObject *SWIGUNUSEDPARM(self),
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -11662,7 +11594,9 @@ SWIGINTERN PyObject *_wrap_FileHeader_getVBMsize(PyObject *SWIGUNUSEDPARM(self),
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -11714,7 +11648,9 @@ SWIGINTERN PyObject *_wrap_FileHeader_getCPHDsize(PyObject *SWIGUNUSEDPARM(self)
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -11766,7 +11702,9 @@ SWIGINTERN PyObject *_wrap_FileHeader_getXMLoffset(PyObject *SWIGUNUSEDPARM(self
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -11818,7 +11756,9 @@ SWIGINTERN PyObject *_wrap_FileHeader_getVBMoffset(PyObject *SWIGUNUSEDPARM(self
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -11870,7 +11810,9 @@ SWIGINTERN PyObject *_wrap_FileHeader_getCPHDoffset(PyObject *SWIGUNUSEDPARM(sel
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -11922,7 +11864,9 @@ SWIGINTERN PyObject *_wrap_FileHeader_getPadBytes(PyObject *SWIGUNUSEDPARM(self)
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20029,7 +19973,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txTimeOffset(PyObject *SWIGUNUSEDPAR
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20081,7 +20027,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txPosOffset(PyObject *SWIGUNUSEDPARM
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20133,7 +20081,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvTimeOffset(PyObject *SWIGUNUSEDPA
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20185,7 +20135,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvPosOffset(PyObject *SWIGUNUSEDPAR
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20237,7 +20189,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpTimeOffset(PyObject *SWIGUNUSEDPA
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20289,7 +20243,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpPosOffset(PyObject *SWIGUNUSEDPAR
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20341,7 +20297,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRPOffset(PyObject *SWIGUNUSEDP
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20393,7 +20351,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_ampSFOffset(PyObject *SWIGUNUSEDPARM
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20445,7 +20405,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_Fx0Offset(PyObject *SWIGUNUSEDPARM(s
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20497,7 +20459,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_FxSSOffset(PyObject *SWIGUNUSEDPARM(
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20549,7 +20513,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_Fx1Offset(PyObject *SWIGUNUSEDPARM(s
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20601,7 +20567,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_Fx2Offset(PyObject *SWIGUNUSEDPARM(s
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20653,7 +20621,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_deltaTOA0Offset(PyObject *SWIGUNUSED
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20705,7 +20675,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_toaSSOffset(PyObject *SWIGUNUSEDPARM
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -20897,8 +20869,6 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txTime_set(PyObject *SWIGUNUSEDPARM(
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -20909,17 +20879,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txTime_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_txTime_set" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_txTime_set" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -21004,7 +20964,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txTime_get(PyObject *SWIGUNUSEDPARM(
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -21017,8 +20979,6 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txPos_set(PyObject *SWIGUNUSEDPARM(s
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -21029,17 +20989,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txPos_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_txPos_set" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_txPos_set" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -21124,7 +21074,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txPos_get(PyObject *SWIGUNUSEDPARM(s
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -21137,8 +21089,6 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvTime_set(PyObject *SWIGUNUSEDPARM
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -21149,17 +21099,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvTime_set(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_rcvTime_set" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_rcvTime_set" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -21244,7 +21184,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvTime_get(PyObject *SWIGUNUSEDPARM
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -21257,8 +21199,6 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvPos_set(PyObject *SWIGUNUSEDPARM(
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -21269,17 +21209,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvPos_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_rcvPos_set" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_rcvPos_set" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -21364,7 +21294,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvPos_get(PyObject *SWIGUNUSEDPARM(
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -21377,8 +21309,6 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpTime_set(PyObject *SWIGUNUSEDPARM
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -21389,17 +21319,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpTime_set(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_srpTime_set" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_srpTime_set" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -21484,7 +21404,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpTime_get(PyObject *SWIGUNUSEDPARM
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -21497,8 +21419,6 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpPos_set(PyObject *SWIGUNUSEDPARM(
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -21509,17 +21429,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpPos_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_srpPos_set" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_srpPos_set" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -21604,7 +21514,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpPos_get(PyObject *SWIGUNUSEDPARM(
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -21617,8 +21529,6 @@ SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRP_set(PyObject *SWIGUNUSEDPAR
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -21629,17 +21539,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRP_set(PyObject *SWIGUNUSEDPAR
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_tropoSRP_set" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_tropoSRP_set" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -21724,7 +21624,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRP_get(PyObject *SWIGUNUSEDPAR
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -21737,8 +21639,6 @@ SWIGINTERN PyObject *_wrap_VectorParameters_ampSF_set(PyObject *SWIGUNUSEDPARM(s
   sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -21749,17 +21649,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_ampSF_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< cphd::VectorParameters * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorParameters_ampSF_set" "', argument " "2"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorParameters_ampSF_set" "', argument " "2"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+    arg2 = PyInt_AsSsize_t(obj1);
   }
   {
     try
@@ -21844,7 +21734,9 @@ SWIGINTERN PyObject *_wrap_VectorParameters_ampSF_get(PyObject *SWIGUNUSEDPARM(s
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -25970,8 +25862,7 @@ SWIGINTERN PyObject *_wrap_new_VBM__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObj
   cphd::DomainType arg6 ;
   size_t val1 ;
   int ecode1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   bool val3 ;
   int ecode3 = 0 ;
   bool val4 ;
@@ -25994,14 +25885,17 @@ SWIGINTERN PyObject *_wrap_new_VBM__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VBM" "', argument " "1"" of type '" "size_t""'");
   } 
   arg1 = static_cast< size_t >(val1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VBM" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+  {
+    std::vector<size_t,std::allocator< size_t > > *ptr = (std::vector<size_t,std::allocator< size_t > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VBM" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VBM" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VBM" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< size_t,std::allocator< size_t > > * >(argp2);
   ecode3 = SWIG_AsVal_bool(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_VBM" "', argument " "3"" of type '" "bool""'");
@@ -26062,8 +25956,10 @@ SWIGINTERN PyObject *_wrap_new_VBM__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__VBM, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -26079,8 +25975,7 @@ SWIGINTERN PyObject *_wrap_new_VBM__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObj
   std::vector< void const *,std::allocator< void const * > > *arg7 = 0 ;
   size_t val1 ;
   int ecode1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   bool val3 ;
   int ecode3 = 0 ;
   bool val4 ;
@@ -26106,14 +26001,17 @@ SWIGINTERN PyObject *_wrap_new_VBM__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VBM" "', argument " "1"" of type '" "size_t""'");
   } 
   arg1 = static_cast< size_t >(val1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VBM" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+  {
+    std::vector<size_t,std::allocator< size_t > > *ptr = (std::vector<size_t,std::allocator< size_t > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VBM" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VBM" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
+    }
+    arg2 = ptr;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VBM" "', argument " "2"" of type '" "std::vector< size_t,std::allocator< size_t > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< size_t,std::allocator< size_t > > * >(argp2);
   ecode3 = SWIG_AsVal_bool(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_VBM" "', argument " "3"" of type '" "bool""'");
@@ -26182,8 +26080,10 @@ SWIGINTERN PyObject *_wrap_new_VBM__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__VBM, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -26220,7 +26120,7 @@ SWIGINTERN PyObject *_wrap_new_VBM(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0);
+      int res = swig::asptr(argv[1], (std::vector<size_t,std::allocator< size_t > >**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -26256,7 +26156,7 @@ SWIGINTERN PyObject *_wrap_new_VBM(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0);
+      int res = swig::asptr(argv[1], (std::vector<size_t,std::allocator< size_t > >**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -28767,10 +28667,6 @@ SWIGINTERN PyObject *_wrap_VBM_load(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
-  void *argp4 ;
-  int res4 = 0 ;
   size_t val5 ;
   int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
@@ -28795,30 +28691,10 @@ SWIGINTERN PyObject *_wrap_VBM_load(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   }
   arg2 = reinterpret_cast< io::SeekableInputStream * >(argp2);
   {
-    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VBM_load" "', argument " "3"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VBM_load" "', argument " "3"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
+    arg3 = PyInt_AsSsize_t(obj2);
   }
   {
-    res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VBM_load" "', argument " "4"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp4) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VBM_load" "', argument " "4"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp4);
-      arg4 = *temp;
-      if (SWIG_IsNewObj(res4)) delete temp;
-    }
+    arg4 = PyInt_AsSsize_t(obj3);
   }
   ecode5 = SWIG_AsVal_size_t(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -28856,7 +28732,9 @@ SWIGINTERN PyObject *_wrap_VBM_load(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -29507,10 +29385,6 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   int res1 = SWIG_OLDOBJ ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
-  void *argp4 ;
-  int res4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -29538,30 +29412,10 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   }
   arg2 = reinterpret_cast< cphd::Data * >(argp2);
   {
-    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_Wideband" "', argument " "3"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "3"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
+    arg3 = PyInt_AsSsize_t(obj2);
   }
   {
-    res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_Wideband" "', argument " "4"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp4) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "4"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp4);
-      arg4 = *temp;
-      if (SWIG_IsNewObj(res4)) delete temp;
-    }
+    arg4 = PyInt_AsSsize_t(obj3);
   }
   {
     try
@@ -29613,10 +29467,6 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
-  void *argp4 ;
-  int res4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -29646,30 +29496,10 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   }
   arg2 = reinterpret_cast< cphd::Data * >(argp2);
   {
-    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_Wideband" "', argument " "3"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "3"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
+    arg3 = PyInt_AsSsize_t(obj2);
   }
   {
-    res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_off_t,  0  | 0);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_Wideband" "', argument " "4"" of type '" "sys::Off_T""'"); 
-    }  
-    if (!argp4) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "4"" of type '" "sys::Off_T""'");
-    } else {
-      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp4);
-      arg4 = *temp;
-      if (SWIG_IsNewObj(res4)) delete temp;
-    }
+    arg4 = PyInt_AsSsize_t(obj3);
   }
   {
     try
@@ -29727,11 +29557,13 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__Data, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_off_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          _v = PyInt_Check(argv[2]) ? 1 : 0;
+        }
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_off_t, 0);
-          _v = SWIG_CheckState(res);
+          {
+            _v = PyInt_Check(argv[3]) ? 1 : 0;
+          }
           if (_v) {
             return _wrap_new_Wideband__SWIG_1(self, args);
           }
@@ -29747,11 +29579,13 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_cphd__Data, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_off_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          _v = PyInt_Check(argv[2]) ? 1 : 0;
+        }
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_off_t, 0);
-          _v = SWIG_CheckState(res);
+          {
+            _v = PyInt_Check(argv[3]) ? 1 : 0;
+          }
           if (_v) {
             return _wrap_new_Wideband__SWIG_0(self, args);
           }
@@ -29841,7 +29675,9 @@ SWIGINTERN PyObject *_wrap_Wideband_getFileOffset(PyObject *SWIGUNUSEDPARM(self)
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -31608,7 +31444,9 @@ SWIGINTERN PyObject *_wrap_CPHDReader_getFileOffset(PyObject *SWIGUNUSEDPARM(sel
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_off_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromSsize_t(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -48267,6 +48105,960 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableTOAParameters__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::TOAParameters *arg1 = (cphd::TOAParameters *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableTOAParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__TOAParameters, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableTOAParameters" "', argument " "1"" of type '" "cphd::TOAParameters *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::TOAParameters * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCopyablePtr< cphd::TOAParameters > *)new mem::ScopedCopyablePtr< cphd::TOAParameters >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableTOAParameters__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCopyableTOAParameters")) SWIG_fail;
+  {
+    try
+    {
+      result = (mem::ScopedCopyablePtr< cphd::TOAParameters > *)new mem::ScopedCopyablePtr< cphd::TOAParameters >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableTOAParameters__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableTOAParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableTOAParameters" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCopyableTOAParameters" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCopyablePtr< cphd::TOAParameters > *)new mem::ScopedCopyablePtr< cphd::TOAParameters >((mem::ScopedCopyablePtr< cphd::TOAParameters > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableTOAParameters(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCopyableTOAParameters__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_cphd__TOAParameters, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableTOAParameters__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableTOAParameters__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCopyableTOAParameters'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::TOAParameters >::ScopedCopyablePtr(cphd::TOAParameters *)\n"
+    "    mem::ScopedCopyablePtr< cphd::TOAParameters >::ScopedCopyablePtr()\n"
+    "    mem::ScopedCopyablePtr< cphd::TOAParameters >::ScopedCopyablePtr(mem::ScopedCopyablePtr< cphd::TOAParameters > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::TOAParameters *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableTOAParameters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      result = (cphd::TOAParameters *)((mem::ScopedCopyablePtr< cphd::TOAParameters > const *)arg1)->get();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__TOAParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::TOAParameters *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableTOAParameters___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters___ref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      result = (cphd::TOAParameters *) &((mem::ScopedCopyablePtr< cphd::TOAParameters > const *)arg1)->operator *();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__TOAParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::TOAParameters *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableTOAParameters___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters___deref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      result = (cphd::TOAParameters *)((mem::ScopedCopyablePtr< cphd::TOAParameters > const *)arg1)->operator ->();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_cphd__TOAParameters, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  cphd::TOAParameters *arg2 = (cphd::TOAParameters *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableTOAParameters_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_cphd__TOAParameters, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableTOAParameters_reset" "', argument " "2"" of type '" "cphd::TOAParameters *""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::TOAParameters * >(argp2);
+  {
+    try
+    {
+      (arg1)->reset(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableTOAParameters_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      (arg1)->reset();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters_reset(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCopyableTOAParameters_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_cphd__TOAParameters, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCopyableTOAParameters_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCopyableTOAParameters_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< cphd::TOAParameters >::reset(cphd::TOAParameters *)\n"
+    "    mem::ScopedCopyablePtr< cphd::TOAParameters >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCopyableTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCopyableTOAParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCopyableTOAParameters" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  cphd::TOAParameters *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableTOAParameters___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters___eq__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__TOAParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableTOAParameters___eq__" "', argument " "2"" of type '" "cphd::TOAParameters const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableTOAParameters___eq__" "', argument " "2"" of type '" "cphd::TOAParameters const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::TOAParameters * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator ==((cphd::TOAParameters const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  cphd::TOAParameters *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableTOAParameters___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters___ne__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_cphd__TOAParameters,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableTOAParameters___ne__" "', argument " "2"" of type '" "cphd::TOAParameters const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableTOAParameters___ne__" "', argument " "2"" of type '" "cphd::TOAParameters const &""'"); 
+  }
+  arg2 = reinterpret_cast< cphd::TOAParameters * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator !=((cphd::TOAParameters const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters_deltaTOA0_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableTOAParameters_deltaTOA0_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters_deltaTOA0_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCopyableTOAParameters_deltaTOA0_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->deltaTOA0 = arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters_deltaTOA0_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableTOAParameters_deltaTOA0_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters_deltaTOA0_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      result =  ((*arg1)->deltaTOA0);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters_toaSS_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableTOAParameters_toaSS_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters_toaSS_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ScopedCopyableTOAParameters_toaSS_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->toaSS = arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableTOAParameters_toaSS_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > *arg1 = (mem::ScopedCopyablePtr< cphd::TOAParameters > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableTOAParameters_toaSS_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableTOAParameters_toaSS_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< cphd::TOAParameters > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< cphd::TOAParameters > * >(argp1);
+  {
+    try
+    {
+      result =  ((*arg1)->toaSS);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedCopyableTOAParameters_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeScopedCopyableTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< cphd::TOAParameters > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeScopedCopyableTOAParameters")) SWIG_fail;
+  {
+    try
+    {
+      result = makeScopedCopyableTOAParameters();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< cphd::TOAParameters >(static_cast< const mem::ScopedCopyablePtr< cphd::TOAParameters >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_cphd__TOAParameters_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_ScopedCopyableCphdAntenna__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd::Antenna *arg1 = (cphd::Antenna *) 0 ;
@@ -49986,8 +50778,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorParameters_ampSF_get", _wrap_VectorParameters_ampSF_get, METH_VARARGS, (char *)"VectorParameters_ampSF_get(VectorParameters self) -> sys::Off_T"},
 	 { (char *)"VectorParameters_fxParameters_set", _wrap_VectorParameters_fxParameters_set, METH_VARARGS, (char *)"VectorParameters_fxParameters_set(VectorParameters self, ScopedCopyableFxParameters fxParameters)"},
 	 { (char *)"VectorParameters_fxParameters_get", _wrap_VectorParameters_fxParameters_get, METH_VARARGS, (char *)"VectorParameters_fxParameters_get(VectorParameters self) -> ScopedCopyableFxParameters"},
-	 { (char *)"VectorParameters_toaParameters_set", _wrap_VectorParameters_toaParameters_set, METH_VARARGS, (char *)"VectorParameters_toaParameters_set(VectorParameters self, mem::ScopedCopyablePtr< cphd::TOAParameters > * toaParameters)"},
-	 { (char *)"VectorParameters_toaParameters_get", _wrap_VectorParameters_toaParameters_get, METH_VARARGS, (char *)"VectorParameters_toaParameters_get(VectorParameters self) -> mem::ScopedCopyablePtr< cphd::TOAParameters > *"},
+	 { (char *)"VectorParameters_toaParameters_set", _wrap_VectorParameters_toaParameters_set, METH_VARARGS, (char *)"VectorParameters_toaParameters_set(VectorParameters self, ScopedCopyableTOAParameters toaParameters)"},
+	 { (char *)"VectorParameters_toaParameters_get", _wrap_VectorParameters_toaParameters_get, METH_VARARGS, (char *)"VectorParameters_toaParameters_get(VectorParameters self) -> ScopedCopyableTOAParameters"},
 	 { (char *)"delete_VectorParameters", _wrap_delete_VectorParameters, METH_VARARGS, (char *)"delete_VectorParameters(VectorParameters self)"},
 	 { (char *)"VectorParameters_swigregister", VectorParameters_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Metadata", _wrap_new_Metadata, METH_VARARGS, (char *)"new_Metadata() -> Metadata"},
@@ -50071,8 +50863,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_VBM", _wrap_new_VBM, METH_VARARGS, (char *)"\n"
 		"VBM()\n"
 		"VBM(Data data, VectorParameters vp)\n"
-		"VBM(size_t numChannels, std::vector< size_t,std::allocator< size_t > > const & numVectors, bool srpTimeEnabled, bool tropoSrpEnabled, bool ampSFEnabled, DomainType domainType)\n"
-		"new_VBM(size_t numChannels, std::vector< size_t,std::allocator< size_t > > const & numVectors, bool srpTimeEnabled, bool tropoSrpEnabled, bool ampSFEnabled, DomainType domainType, std::vector< void const *,std::allocator< void const * > > const & data) -> VBM\n"
+		"VBM(size_t numChannels, VectorSizeT numVectors, bool srpTimeEnabled, bool tropoSrpEnabled, bool ampSFEnabled, DomainType domainType)\n"
+		"new_VBM(size_t numChannels, VectorSizeT numVectors, bool srpTimeEnabled, bool tropoSrpEnabled, bool ampSFEnabled, DomainType domainType, std::vector< void const *,std::allocator< void const * > > const & data) -> VBM\n"
 		""},
 	 { (char *)"VBM_getTxTime", _wrap_VBM_getTxTime, METH_VARARGS, (char *)"VBM_getTxTime(VBM self, size_t channel, size_t vector) -> double"},
 	 { (char *)"VBM_getTxPos", _wrap_VBM_getTxPos, METH_VARARGS, (char *)"VBM_getTxPos(VBM self, size_t channel, size_t vector) -> Vector3"},
@@ -50473,6 +51265,27 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableFxParameters_Fx2_get", _wrap_ScopedCopyableFxParameters_Fx2_get, METH_VARARGS, (char *)"ScopedCopyableFxParameters_Fx2_get(ScopedCopyableFxParameters self) -> size_t"},
 	 { (char *)"ScopedCopyableFxParameters_swigregister", ScopedCopyableFxParameters_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCopyableFxParameters", _wrap_makeScopedCopyableFxParameters, METH_VARARGS, (char *)"makeScopedCopyableFxParameters() -> ScopedCopyableFxParameters"},
+	 { (char *)"new_ScopedCopyableTOAParameters", _wrap_new_ScopedCopyableTOAParameters, METH_VARARGS, (char *)"\n"
+		"ScopedCopyableTOAParameters(TOAParameters ptr=None)\n"
+		"ScopedCopyableTOAParameters()\n"
+		"new_ScopedCopyableTOAParameters(ScopedCopyableTOAParameters rhs) -> ScopedCopyableTOAParameters\n"
+		""},
+	 { (char *)"ScopedCopyableTOAParameters_get", _wrap_ScopedCopyableTOAParameters_get, METH_VARARGS, (char *)"ScopedCopyableTOAParameters_get(ScopedCopyableTOAParameters self) -> TOAParameters"},
+	 { (char *)"ScopedCopyableTOAParameters___ref__", _wrap_ScopedCopyableTOAParameters___ref__, METH_VARARGS, (char *)"ScopedCopyableTOAParameters___ref__(ScopedCopyableTOAParameters self) -> TOAParameters"},
+	 { (char *)"ScopedCopyableTOAParameters___deref__", _wrap_ScopedCopyableTOAParameters___deref__, METH_VARARGS, (char *)"ScopedCopyableTOAParameters___deref__(ScopedCopyableTOAParameters self) -> TOAParameters"},
+	 { (char *)"ScopedCopyableTOAParameters_reset", _wrap_ScopedCopyableTOAParameters_reset, METH_VARARGS, (char *)"\n"
+		"reset(TOAParameters ptr=None)\n"
+		"ScopedCopyableTOAParameters_reset(ScopedCopyableTOAParameters self)\n"
+		""},
+	 { (char *)"delete_ScopedCopyableTOAParameters", _wrap_delete_ScopedCopyableTOAParameters, METH_VARARGS, (char *)"delete_ScopedCopyableTOAParameters(ScopedCopyableTOAParameters self)"},
+	 { (char *)"ScopedCopyableTOAParameters___eq__", _wrap_ScopedCopyableTOAParameters___eq__, METH_VARARGS, (char *)"ScopedCopyableTOAParameters___eq__(ScopedCopyableTOAParameters self, TOAParameters other) -> bool"},
+	 { (char *)"ScopedCopyableTOAParameters___ne__", _wrap_ScopedCopyableTOAParameters___ne__, METH_VARARGS, (char *)"ScopedCopyableTOAParameters___ne__(ScopedCopyableTOAParameters self, TOAParameters other) -> bool"},
+	 { (char *)"ScopedCopyableTOAParameters_deltaTOA0_set", _wrap_ScopedCopyableTOAParameters_deltaTOA0_set, METH_VARARGS, (char *)"ScopedCopyableTOAParameters_deltaTOA0_set(ScopedCopyableTOAParameters self, size_t deltaTOA0)"},
+	 { (char *)"ScopedCopyableTOAParameters_deltaTOA0_get", _wrap_ScopedCopyableTOAParameters_deltaTOA0_get, METH_VARARGS, (char *)"ScopedCopyableTOAParameters_deltaTOA0_get(ScopedCopyableTOAParameters self) -> size_t"},
+	 { (char *)"ScopedCopyableTOAParameters_toaSS_set", _wrap_ScopedCopyableTOAParameters_toaSS_set, METH_VARARGS, (char *)"ScopedCopyableTOAParameters_toaSS_set(ScopedCopyableTOAParameters self, size_t toaSS)"},
+	 { (char *)"ScopedCopyableTOAParameters_toaSS_get", _wrap_ScopedCopyableTOAParameters_toaSS_get, METH_VARARGS, (char *)"ScopedCopyableTOAParameters_toaSS_get(ScopedCopyableTOAParameters self) -> size_t"},
+	 { (char *)"ScopedCopyableTOAParameters_swigregister", ScopedCopyableTOAParameters_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeScopedCopyableTOAParameters", _wrap_makeScopedCopyableTOAParameters, METH_VARARGS, (char *)"makeScopedCopyableTOAParameters() -> ScopedCopyableTOAParameters"},
 	 { (char *)"new_ScopedCopyableCphdAntenna", _wrap_new_ScopedCopyableCphdAntenna, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableCphdAntenna(CphdAntenna ptr=None)\n"
 		"ScopedCopyableCphdAntenna()\n"
@@ -50607,7 +51420,6 @@ static swig_type_info _swigt__p_std__vectorT_cphd__ChannelParameters_std__alloca
 static swig_type_info _swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t = {"_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t", "std::vector< math::linear::VectorN< 3,double > > *|std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *|std::vector< cphd::Vector3,std::allocator< cphd::Vector3 > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t = {"_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t", "std::vector< math::poly::OneD< Vector3 >,std::allocator< math::poly::OneD< Vector3 > > > *|std::vector< cphd::PolyXYZ,std::allocator< cphd::PolyXYZ > > *|std::vector< math::poly::OneD< math::linear::VectorN< 3,double > >,std::allocator< math::poly::OneD< math::linear::VectorN< 3,double > > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t = {"_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t", "std::vector< cphd::AntennaParameters,std::allocator< cphd::AntennaParameters > > *|std::vector< six::sicd::AntennaParameters > *|std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t = {"_p_std__vectorT_size_t_std__allocatorT_size_t_t_t", "std::vector< size_t,std::allocator< size_t > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t = {"_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t", "std::vector< unsigned char,std::allocator< unsigned char > > *|std::vector< sys::ubyte,std::allocator< sys::ubyte > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t = {"_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t", "std::vector< void const *,std::allocator< void const * > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
@@ -50717,7 +51529,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t,
   &_swigt__p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t,
   &_swigt__p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t,
-  &_swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t,
   &_swigt__p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t,
   &_swigt__p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t,
   &_swigt__p_swig__SwigPyIterator,
@@ -50827,7 +51638,6 @@ static swig_cast_info _swigc__p_std__vectorT_cphd__ChannelParameters_std__alloca
 static swig_cast_info _swigc__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t[] = {  {&_swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t[] = {  {&_swigt__p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t[] = {  {&_swigt__p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_size_t_std__allocatorT_size_t_t_t[] = {  {&_swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t[] = {  {&_swigt__p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t[] = {  {&_swigt__p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
@@ -50937,7 +51747,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t,
   _swigc__p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t,
   _swigc__p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t,
-  _swigc__p_std__vectorT_size_t_std__allocatorT_size_t_t_t,
   _swigc__p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t,
   _swigc__p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t,
   _swigc__p_swig__SwigPyIterator,

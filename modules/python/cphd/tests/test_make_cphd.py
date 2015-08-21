@@ -255,3 +255,14 @@ if __name__ == '__main__':
            metadata.getDomainType()
            ) 
 
+    vecParam = cphd.VectorParameters()
+    vecParam.txTime = 4
+    vecParam.txPos = 4
+    vecParam.rcvTime = 4
+    vecParam.rcvPos = 4
+    vecParam.srpTime = 4
+    vecParam.srpPos = 4
+    vecParam.tropoSRP = 4
+    vecParam.ampSF = 4
+    vecParam.fxParameters = cphd.makeScopedCopyableFxParameters()
+    vecParam.toaParameters = cphd.makeScopedCopyableTOAParameters()

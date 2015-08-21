@@ -27,6 +27,7 @@
 %include "std_string.i"
 %include "std_vector.i"
 
+%import "sys.i"
 %import "types.i"
 %import "mem.i"
 %import "six_sicd.i"
@@ -177,5 +178,6 @@ Wideband.read = read
 SCOPED_COPYABLE(cphd,DwellTimeParameters);
 SCOPED_COPYABLE(cphd,AreaPlane);
 SCOPED_COPYABLE(cphd,FxParameters);
+SCOPED_COPYABLE(cphd,TOAParameters);
 SCOPED_COPYABLE_RENAME(cphd,Antenna,CphdAntenna);
 
