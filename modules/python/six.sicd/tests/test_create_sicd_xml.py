@@ -23,6 +23,8 @@
 #
 
 import os
+import filecmp
+
 from pysix.scene import *
 from pysix.six_sicd import *
 from pysix.six_base import *
@@ -32,8 +34,7 @@ from coda.coda_types import *
 from coda.math_poly import *
 from coda.math_linear import *
 
-import pdb
-
+# Build up a giant ComplexData from scratch with everything populated
 cmplx = ComplexData()
 
 ### Collection Information ###
@@ -581,9 +582,13 @@ param.setName('Match param')
 param.setValue('Match val')
 matchCollect.parameters.push_back(param)
 
-matchType.matchCollects.push_back(matchCollect)
+# MatchType's constructor (perhaps unintuitively) sizes this vector to one
+# right off the bat since it's mandatory
+matchType.matchCollects[0] = matchCollect
 
-matchInfo.types.push_back(matchType)
+# MatchInformation's constructor (perhaps unintuitively) sizes this vector
+# to one right off the bat since it's mandatory
+matchInfo.types[0] = matchType
 
 cmplx.matchInformation = matchInfo
 
@@ -670,12 +675,44 @@ for i in range(4):
 
 # Don't actually assign RgAzComp to cmplx since we're using PFA
 
-### Now format it as XML ###
+### Now format it as XML and write it out to a file ###
 vs = VectorString()
 vs.push_back(os.environ['SIX_SCHEMA_PATH'])
   
 xml_ctrl = ComplexXMLControl()
-fos = FileOutputStream('test_create_sicd.xml')
-#out_doc = xml_ctrl.toXML(cmplx, vs)
-#root = out_doc.getRootElement()
-#root.prettyPrint(fos)
+origPathname = 'test_create_sicd.xml'
+fos = FileOutputStream(origPathname)
+out_doc = xml_ctrl.toXML(cmplx, vs)
+root = out_doc.getRootElement()
+root.prettyPrint(fos)
+
+# If we made it to here, all the Python bindings must be present and what we
+# wrote out must have passed schema validation
+# We can't tell if for some reason some of the XML just didn't get written
+# out though
+
+### Now read it back in again ###
+
+fis = FileInputStream(origPathname)
+xmlparser = MinidomParser()
+xmlparser.preserveCharacterData(True)
+xmlparser.parse(fis)
+in_doc = xmlparser.getDocument()
+
+data = xml_ctrl.fromXML(in_doc, vs) 
+cmplxReadBackIn = asComplexData(data)
+
+# And then write it out one more time #
+newPathname = 'test_create_sicd_rt.xml'
+fos = FileOutputStream(newPathname)
+out_doc = xml_ctrl.toXML(cmplxReadBackIn, vs)
+root = out_doc.getRootElement()
+root.prettyPrint(fos)
+
+# These should match #
+if filecmp.cmp(origPathname, newPathname):
+    print 'Round trip succeeded!'
+else:
+    print 'Round trip failed'
+
+# If we made it to here, the read side appears to be working properly too
