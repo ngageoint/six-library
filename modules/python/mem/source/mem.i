@@ -38,3 +38,43 @@ using namespace mem;
 %include "mem/ScopedCopyablePtr.h"
 %include "mem/ScopedCloneablePtr.h"
 
+/*
+ * When you have a mem::ScopedCopyablePtr of a particular type, use this
+ * macro to have Swig generate bindings for this as well as a function to
+ * make it.  For example, if you have
+ * mem::ScopedCopyablePtr<myNamespace::MyType>
+ * Swig will generate a ScopedCopyableMyType object and a
+ * makeCopyableMyType() function to make it.  Note that you need to do
+ * foo = makeCopyableMyType()
+ * rather than
+ * foo = ScopedCopyableMyType()
+ * to get proper behavior.
+ * Use like this in your Swig interface file:
+ * SCOPED_COPYABLE(myNamespace, MyType)
+ */
+%define SCOPED_COPYABLE(namespace, type)
+%template(ScopedCopyable##type) mem::ScopedCopyablePtr<namespace##::##type>;
+%{
+mem::ScopedCopyablePtr< namespace##::##type > makeCopyable##type()
+{
+    return mem::ScopedCopyablePtr< namespace##::##type >(new namespace##::##type ());
+} 
+%}
+
+mem::ScopedCopyablePtr< namespace##::##type > makeCopyable##type();
+%enddef
+
+/*
+ * Same as above but for ScopedCloneablePtr
+ */
+%define SCOPED_CLONEABLE(namespace, type)
+%template(ScopedCloneable##type) mem::ScopedCloneablePtr<namespace##::##type>;
+%{
+mem::ScopedCloneablePtr< namespace##::##type > makeCloneable##type()
+{
+    return mem::ScopedCloneablePtr< namespace##::##type >(new namespace##::##type ());
+} 
+%}
+
+mem::ScopedCloneablePtr< namespace##::##type > makeCloneable##type();
+%enddef
