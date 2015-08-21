@@ -162,6 +162,7 @@ SCOPED_COPYABLE(six::sicd, RMCR)
 SCOPED_COPYABLE(six::sicd, INCA)
 
 SCOPED_COPYABLE(six::sicd, InterPulsePeriod)
+%template(VectorTimelineSet)                       std::vector<six::sicd::TimelineSet>;
 
 %{
     void getWidebandData(const std::string& sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long arrayBuffer)

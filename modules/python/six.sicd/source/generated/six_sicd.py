@@ -7434,6 +7434,210 @@ ScopedCopyableInterPulsePeriod_swigregister(ScopedCopyableInterPulsePeriod)
 def makeScopedCopyableInterPulsePeriod():
     """makeScopedCopyableInterPulsePeriod() -> ScopedCopyableInterPulsePeriod"""
     return _six_sicd.makeScopedCopyableInterPulsePeriod()
+class VectorTimelineSet(_object):
+    """Proxy of C++ std::vector<(six::sicd::TimelineSet)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorTimelineSet, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorTimelineSet, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(VectorTimelineSet self) -> SwigPyIterator"""
+        return _six_sicd.VectorTimelineSet_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(VectorTimelineSet self) -> bool"""
+        return _six_sicd.VectorTimelineSet___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(VectorTimelineSet self) -> bool"""
+        return _six_sicd.VectorTimelineSet___bool__(self)
+
+
+    def __len__(self):
+        """__len__(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::size_type"""
+        return _six_sicd.VectorTimelineSet___len__(self)
+
+
+    def pop(self):
+        """pop(VectorTimelineSet self) -> TimelineSet"""
+        return _six_sicd.VectorTimelineSet_pop(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i, std::vector< six::sicd::TimelineSet >::difference_type j) -> VectorTimelineSet"""
+        return _six_sicd.VectorTimelineSet___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i, std::vector< six::sicd::TimelineSet >::difference_type j, VectorTimelineSet v)
+        __setslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i, std::vector< six::sicd::TimelineSet >::difference_type j)
+        """
+        return _six_sicd.VectorTimelineSet___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i, std::vector< six::sicd::TimelineSet >::difference_type j)"""
+        return _six_sicd.VectorTimelineSet___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i)
+        __delitem__(VectorTimelineSet self, PySliceObject * slice)
+        """
+        return _six_sicd.VectorTimelineSet___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(VectorTimelineSet self, PySliceObject * slice) -> VectorTimelineSet
+        __getitem__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i) -> TimelineSet
+        """
+        return _six_sicd.VectorTimelineSet___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(VectorTimelineSet self, PySliceObject * slice, VectorTimelineSet v)
+        __setitem__(VectorTimelineSet self, PySliceObject * slice)
+        __setitem__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i, TimelineSet x)
+        """
+        return _six_sicd.VectorTimelineSet___setitem__(self, *args)
+
+
+    def append(self, x):
+        """append(VectorTimelineSet self, TimelineSet x)"""
+        return _six_sicd.VectorTimelineSet_append(self, x)
+
+
+    def empty(self):
+        """empty(VectorTimelineSet self) -> bool"""
+        return _six_sicd.VectorTimelineSet_empty(self)
+
+
+    def size(self):
+        """size(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::size_type"""
+        return _six_sicd.VectorTimelineSet_size(self)
+
+
+    def clear(self):
+        """clear(VectorTimelineSet self)"""
+        return _six_sicd.VectorTimelineSet_clear(self)
+
+
+    def swap(self, v):
+        """swap(VectorTimelineSet self, VectorTimelineSet v)"""
+        return _six_sicd.VectorTimelineSet_swap(self, v)
+
+
+    def get_allocator(self):
+        """get_allocator(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::allocator_type"""
+        return _six_sicd.VectorTimelineSet_get_allocator(self)
+
+
+    def begin(self):
+        """begin(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::iterator"""
+        return _six_sicd.VectorTimelineSet_begin(self)
+
+
+    def end(self):
+        """end(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::iterator"""
+        return _six_sicd.VectorTimelineSet_end(self)
+
+
+    def rbegin(self):
+        """rbegin(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::reverse_iterator"""
+        return _six_sicd.VectorTimelineSet_rbegin(self)
+
+
+    def rend(self):
+        """rend(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::reverse_iterator"""
+        return _six_sicd.VectorTimelineSet_rend(self)
+
+
+    def pop_back(self):
+        """pop_back(VectorTimelineSet self)"""
+        return _six_sicd.VectorTimelineSet_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::iterator pos) -> std::vector< six::sicd::TimelineSet >::iterator
+        erase(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::iterator first, std::vector< six::sicd::TimelineSet >::iterator last) -> std::vector< six::sicd::TimelineSet >::iterator
+        """
+        return _six_sicd.VectorTimelineSet_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(six::sicd::TimelineSet)> self) -> VectorTimelineSet
+        __init__(std::vector<(six::sicd::TimelineSet)> self, VectorTimelineSet arg2) -> VectorTimelineSet
+        __init__(std::vector<(six::sicd::TimelineSet)> self, std::vector< six::sicd::TimelineSet >::size_type size) -> VectorTimelineSet
+        __init__(std::vector<(six::sicd::TimelineSet)> self, std::vector< six::sicd::TimelineSet >::size_type size, TimelineSet value) -> VectorTimelineSet
+        """
+        this = _six_sicd.new_VectorTimelineSet(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(VectorTimelineSet self, TimelineSet x)"""
+        return _six_sicd.VectorTimelineSet_push_back(self, x)
+
+
+    def front(self):
+        """front(VectorTimelineSet self) -> TimelineSet"""
+        return _six_sicd.VectorTimelineSet_front(self)
+
+
+    def back(self):
+        """back(VectorTimelineSet self) -> TimelineSet"""
+        return _six_sicd.VectorTimelineSet_back(self)
+
+
+    def assign(self, n, x):
+        """assign(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::size_type n, TimelineSet x)"""
+        return _six_sicd.VectorTimelineSet_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::size_type new_size)
+        resize(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::size_type new_size, TimelineSet x)
+        """
+        return _six_sicd.VectorTimelineSet_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::iterator pos, TimelineSet x) -> std::vector< six::sicd::TimelineSet >::iterator
+        insert(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::iterator pos, std::vector< six::sicd::TimelineSet >::size_type n, TimelineSet x)
+        """
+        return _six_sicd.VectorTimelineSet_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::size_type n)"""
+        return _six_sicd.VectorTimelineSet_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::size_type"""
+        return _six_sicd.VectorTimelineSet_capacity(self)
+
+    __swig_destroy__ = _six_sicd.delete_VectorTimelineSet
+    __del__ = lambda self: None
+VectorTimelineSet_swigregister = _six_sicd.VectorTimelineSet_swigregister
+VectorTimelineSet_swigregister(VectorTimelineSet)
+
 
 def getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer):
     """getWidebandData(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long arrayBuffer)"""
