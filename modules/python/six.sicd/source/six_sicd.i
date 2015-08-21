@@ -106,72 +106,66 @@ six::sicd::ComplexData * asComplexData(six::Data* data);
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
 
-%template(ScopedCloneableCollectionInformation) mem::ScopedCloneablePtr<six::sicd::CollectionInformation>;
-%template(ScopedCloneableImageCreation)         mem::ScopedCloneablePtr<six::sicd::ImageCreation>;
-%template(ScopedCloneableImageData)             mem::ScopedCloneablePtr<six::sicd::ImageData>;
-%template(ScopedCloneableGeoData)               mem::ScopedCloneablePtr<six::sicd::GeoData>;
-%template(ScopedCloneableGrid)                  mem::ScopedCloneablePtr<six::sicd::Grid>;
-%template(ScopedCloneableTimeline)              mem::ScopedCloneablePtr<six::sicd::Timeline>;
-%template(ScopedCloneablePosition)              mem::ScopedCloneablePtr<six::sicd::Position>;
-%template(ScopedCloneableRadarCollection)       mem::ScopedCloneablePtr<six::sicd::RadarCollection>;
-%template(ScopedCopyableImageFormation)         mem::ScopedCopyablePtr<six::sicd::ImageFormation>;
-%template(ScopedCopyableSCPCOA)                 mem::ScopedCopyablePtr<six::sicd::SCPCOA>;
-%template(ScopedCopyableRadiometric)            mem::ScopedCopyablePtr<six::Radiometric>;
-%template(ScopedCopyableAntenna)                mem::ScopedCopyablePtr<six::sicd::Antenna>;
-%template(ScopedCopyableErrorStatistics)        mem::ScopedCopyablePtr<six::ErrorStatistics>;
-%template(ScopedCopyableMatchInformation)       mem::ScopedCopyablePtr<six::sicd::MatchInformation>;
-%template(ScopedCloneablePFA)                   mem::ScopedCloneablePtr<six::sicd::PFA>;
-%template(ScopedCopyableRMA)                    mem::ScopedCopyablePtr<six::sicd::RMA>;
-%template(ScopedCopyableRgAzComp)               mem::ScopedCopyablePtr<six::sicd::RgAzComp>;
+SCOPED_CLONEABLE(six::sicd, CollectionInformation)
+SCOPED_CLONEABLE(six::sicd, ImageCreation)
+SCOPED_CLONEABLE(six::sicd, ImageData)
+SCOPED_CLONEABLE(six::sicd, GeoData)
+SCOPED_CLONEABLE(six::sicd, Grid)
+SCOPED_COPYABLE(six::sicd, Timeline)
+SCOPED_COPYABLE(six::sicd, Position)
+SCOPED_COPYABLE(six::sicd, RcvAPC)
+SCOPED_CLONEABLE(six::sicd, RadarCollection)
+SCOPED_COPYABLE(six::sicd, ImageFormation)
+SCOPED_COPYABLE(six::sicd, SCPCOA)
+SCOPED_COPYABLE(six::sicd, Antenna)
+SCOPED_COPYABLE(six::sicd, MatchInformation)
+SCOPED_COPYABLE(six::sicd, SlowTimeDeskew)
+SCOPED_COPYABLE(six::sicd, PFA)
+SCOPED_COPYABLE(six::sicd, RMA)
+SCOPED_COPYABLE(six::sicd, RgAzComp)
 
-%template(ScopedCloneableGeoInfo)               mem::ScopedCloneablePtr<six::sicd::GeoInfo>;
-%template(VectorScopedCloneableGeoInfo)         std::vector<mem::ScopedCloneablePtr<six::sicd::GeoInfo> >;
-%template(VectorLatLon)                         std::vector<scene::LatLon>;
+SCOPED_CLONEABLE(six::sicd, GeoInfo) 
+%template(VectorScopedCloneableGeoInfo) std::vector<mem::ScopedCloneablePtr<six::sicd::GeoInfo> >;
+%template(VectorLatLon) std::vector<scene::LatLon>;
 
-%template(ScopedCopyableAntennaParameters)      mem::ScopedCopyablePtr<six::sicd::AntennaParameters>;
-%template(ScopedCopyableElectricalBoresight)    mem::ScopedCopyablePtr<six::sicd::ElectricalBoresight>;
-%template(ScopedCopyableHalfPowerBeamwidths)    mem::ScopedCopyablePtr<six::sicd::HalfPowerBeamwidths>;
-%template(ScopedCopyableGainAndPhasePolys)      mem::ScopedCopyablePtr<six::sicd::GainAndPhasePolys>;
+SCOPED_COPYABLE(six::sicd, AntennaParameters)
+SCOPED_COPYABLE(six::sicd, ElectricalBoresight)
+SCOPED_COPYABLE(six::sicd, HalfPowerBeamwidths)
+SCOPED_COPYABLE(six::sicd, GainAndPhasePolys)
 
-%template(ScopedCopyabledMatchType)             mem::ScopedCopyablePtr<six::sicd::MatchType>;
+SCOPED_COPYABLE(six::sicd, MatchType)
+SCOPED_COPYABLE(six::sicd, WeightType)
 
-%template(ScopedCopyableWeightType)             mem::ScopedCopyablePtr<six::sicd::WeightType>;
+%template(VectorPolyXYZ) std::vector<math::poly::OneD<Vector3> >;
 
-%template(VectorPolyXYZ)                        std::vector<PolyXYZ>;
+SCOPED_CLONEABLE(six::sicd, DirectionParameters)
 
-%template(ScopedCloneableDirectionParameters) mem::ScopedCloneablePtr<six::sicd::DirectionParameters>;
-
-%template(ScopedCloneableAreaPlane)               mem::ScopedCloneablePtr<six::sicd::AreaPlane>;
-%template(ScopedCloneableAreaDirectionParameters) mem::ScopedCloneablePtr<six::sicd::AreaDirectionParameters>;
-%template(ScopedCloneableSegment)                 mem::ScopedCloneablePtr<six::sicd::Segment>;
-%template(ScopedCloneableTxStep)                  mem::ScopedCloneablePtr<six::sicd::TxStep>;
-%template(ScopedCloneableWaveformParameters)      mem::ScopedCloneablePtr<six::sicd::WaveformParameters>;
-%template(ScopedCloneableArea)                    mem::ScopedCloneablePtr<six::sicd::Area>;
-%template(ScopedCloneableChannelParameters)       mem::ScopedCloneablePtr<six::sicd::ChannelParameters>;
+SCOPED_CLONEABLE(six::sicd, AreaPlane)
+SCOPED_CLONEABLE(six::sicd, AreaDirectionParameters)
+SCOPED_CLONEABLE(six::sicd, Segment)
+SCOPED_CLONEABLE(six::sicd, TxStep)
+SCOPED_CLONEABLE(six::sicd, WaveformParameters)
+SCOPED_CLONEABLE(six::sicd, Area)
+SCOPED_CLONEABLE(six::sicd, ChannelParameters)
 %template(VectorScopedCloneableWaveformParameters) std::vector<mem::ScopedCloneablePtr<six::sicd::WaveformParameters> >;
 %template(VectorScopedCloneableTxStep)             std::vector<mem::ScopedCloneablePtr<six::sicd::TxStep> >;
 %template(vectorScopedClonableSegment)             std::vector<mem::ScopedCloneablePtr<six::sicd::Segment> >;
-%template(VectorScopedCloneableChannelParameters)   std::vector<mem::ScopedCloneablePtr<six::sicd::ChannelParameters> >;
-%template(VectorInt)                            std::vector<int>;
-%template(ScopedCopyableRcvChannelProcessed)    mem::ScopedCopyablePtr<six::sicd::RcvChannelProcessed>;
-%template(VectorProcessing)                     std::vector<six::sicd::Processing>;
-%template(ScopedCopyablePolarizationCalibration) mem::ScopedCopyablePtr<six::sicd::PolarizationCalibration>;
+%template(VectorScopedCloneableChannelParameters)  std::vector<mem::ScopedCloneablePtr<six::sicd::ChannelParameters> >;
+%template(VectorInt)                               std::vector<int>;
+SCOPED_COPYABLE(six::sicd, RcvChannelProcessed)
+%template(VectorProcessing)                        std::vector<six::sicd::Processing>;
+SCOPED_COPYABLE(six::sicd, PolarizationCalibration)
+SCOPED_COPYABLE(six::sicd, Distortion)
 
-%template(ScopedCopyablePosVelError)            mem::ScopedCopyablePtr<six::PosVelError>;
-%template(ScopedCopyableRadarSensor)            mem::ScopedCopyablePtr<six::RadarSensor>;
-%template(ScopedCopyableTropoError)             mem::ScopedCopyablePtr<six::TropoError>;
-%template(ScopedCopyableIonoError)              mem::ScopedCopyablePtr<six::IonoError>;
-%template(ScopedCopyableCompositeSCP)           mem::ScopedCopyablePtr<six::CompositeSCP>;
-%template(ScopedCopyableComponents)             mem::ScopedCopyablePtr<six::Components>;
+%template(VectorMatchCollect)                      std::vector<six::sicd::MatchCollect>;
+%template(VectorScopedCopyableMatchType)           std::vector<mem::ScopedCopyablePtr<six::sicd::MatchType> >;
 
-%template(VectorMatchCollect)                   std::vector<six::sicd::MatchCollect>;
-%template(VectorScopedCopyableMatchType)        std::vector<mem::ScopedCopyablePtr<six::sicd::MatchType> >;
+SCOPED_COPYABLE(six::sicd, RMAT)
+SCOPED_COPYABLE(six::sicd, RMCR)
+SCOPED_COPYABLE(six::sicd, INCA)
 
-%template(ScopedCopyableRMAT)                   mem::ScopedCopyablePtr<six::sicd::RMAT>;
-%template(ScopedCopyableRMCR)                   mem::ScopedCopyablePtr<six::sicd::RMCR>;
-%template(ScopedCopyableINCA)                   mem::ScopedCopyablePtr<six::sicd::INCA>;
-
-%template(VectorTimelineSet)                    std::vector<six::sicd::TimelineSet*>;
+SCOPED_COPYABLE(six::sicd, InterPulsePeriod)
+%template(VectorTimelineSet)                       std::vector<six::sicd::TimelineSet>;
 
 %{
     void getWidebandData(const std::string& sicdPathname, const std::vector<std::string>& schemaPaths, six::sicd::ComplexData* complexData, long arrayBuffer)
@@ -198,4 +192,3 @@ def read(inputPathname, schemaPaths = VectorString()):
     
     return widebandData, complexData
 %}
-

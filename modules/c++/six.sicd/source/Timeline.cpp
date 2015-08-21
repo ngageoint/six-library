@@ -21,47 +21,22 @@
  */
 #include "six/sicd/Timeline.h"
 
-using namespace six;
-using namespace six::sicd;
-
-TimelineSet::TimelineSet()
+namespace six
 {
-    tStart = Init::undefined<double>();
-    tEnd = Init::undefined<double>();
-    interPulsePeriodStart = Init::undefined<int>();
-    interPulsePeriodEnd = Init::undefined<int>();
-}
-InterPulsePeriod::~InterPulsePeriod()
+namespace sicd
 {
-    for (unsigned int i = 0; i < sets.size(); ++i)
-    {
-        TimelineSet* set = sets[i];
-        delete set;
-    }
-}
-InterPulsePeriod* InterPulsePeriod::clone() const
+TimelineSet::TimelineSet() :
+    tStart(Init::undefined<double>()),
+    tEnd(Init::undefined<double>()),
+    interPulsePeriodStart(Init::undefined<int>()),
+    interPulsePeriodEnd(Init::undefined<int>())
 {
-    InterPulsePeriod* ipp = new InterPulsePeriod;
-    
-    for (unsigned int i = 0; i < sets.size(); ++i)
-    {
-        TimelineSet* set = sets[i];
-        ipp->sets.push_back( set->clone() );
-    }
-    return ipp;
-    
-}
-Timeline::~Timeline()
-{
-    if (interPulsePeriod)
-        delete interPulsePeriod;
 }
 
-Timeline* Timeline::clone() const
+Timeline::Timeline() :
+    collectStart(Init::undefined<DateTime>()),
+    collectDuration(Init::undefined<double>())
 {
-    Timeline* tl = new Timeline(*this);
-    if (interPulsePeriod)
-        tl->interPulsePeriod = interPulsePeriod->clone();
-    return tl;
 }
-
+}
+}

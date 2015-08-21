@@ -60,6 +60,7 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %import "math_poly.i"
 %import "math_linear.i"
 %import "scene.i"
+%import "mem.i"
 
 /* parametric elt-size array */
 /* will probably want it eventually, but it looks like six.sicd doesn't use it */
@@ -85,11 +86,11 @@ six::Data * parseDataNoAutoPtr(const XMLControlRegistry& xmlReg,
 %include "six/Enums.h"
 %include "six/Types.h"
 %include "six/Init.h"
+%include "six/Parameter.h"
+%include "six/ParameterCollection.h"
 %include "six/Classification.h"
 %include "six/ErrorStatistics.h"
 %include "six/Radiometric.h"
-%include "six/Parameter.h"
-%include "six/ParameterCollection.h"
 %include "six/Data.h"
 %include "six/XMLControl.h"
 %include "six/Utilities.h"
@@ -141,5 +142,19 @@ def setValue(self, *args):
     }
 };
 
+/* We need this because SWIG cannot do it itself, for some reason */
+/* TODO: write script to generate all of these instantiations for us? */
+
 %template(VectorString) std::vector<std::string>;
 %template(LatLonCorners) six::Corners<scene::LatLon>;
+%template(LatLonAltCorners) six::Corners<scene::LatLonAlt>;
+
+SCOPED_COPYABLE(six, Radiometric)
+SCOPED_COPYABLE(six, ErrorStatistics)
+SCOPED_COPYABLE(six, CorrCoefs)
+SCOPED_COPYABLE(six, PosVelError)
+SCOPED_COPYABLE(six, RadarSensor)
+SCOPED_COPYABLE(six, TropoError)
+SCOPED_COPYABLE(six, IonoError)
+SCOPED_COPYABLE(six, CompositeSCP)
+SCOPED_COPYABLE(six, Components)

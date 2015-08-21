@@ -21,33 +21,24 @@
  */
 #include "six/sicd/PFA.h"
 
-using namespace six;
-using namespace six::sicd;
-
-
-PFA::~PFA()
+namespace six
 {
-    if (slowTimeDeskew)
-        delete slowTimeDeskew;
+namespace sicd
+{
+SlowTimeDeskew::SlowTimeDeskew() :
+    applied(Init::undefined<BooleanType>())
+{
 }
 
-PFA* PFA::clone() const
+PFA::PFA() :
+    focusPlaneNormal(Init::undefined<Vector3>()),
+    imagePlaneNormal(Init::undefined<Vector3>()),
+    polarAngleRefTime(Init::undefined<double>()),
+    krg1(Init::undefined<double>()),
+    krg2(Init::undefined<double>()),
+    kaz1(Init::undefined<double>()),
+    kaz2(Init::undefined<double>())
 {
-    PFA* pfa = new PFA();
-    pfa->focusPlaneNormal = focusPlaneNormal;
-    pfa->imagePlaneNormal = imagePlaneNormal;
-    pfa->polarAngleRefTime = polarAngleRefTime;
-    pfa->polarAnglePoly = polarAnglePoly;
-    pfa->spatialFrequencyScaleFactorPoly = 
-        spatialFrequencyScaleFactorPoly;
-    pfa->krg1 = krg1;
-    pfa->krg2 = krg2;
-    pfa->kaz1 = kaz1;
-    pfa->kaz2 = kaz2;
-    
-    if (slowTimeDeskew)
-        pfa->slowTimeDeskew = slowTimeDeskew->clone();
-
-    return pfa;
 }
-
+}
+}

@@ -45,7 +45,7 @@ using namespace mem;
  * mem::ScopedCopyablePtr<myNamespace::MyType>
  * Swig will generate a ScopedCopyableMyType object and a
  * makeCopyableMyType() function to make it.  Note that you need to do
- * foo = makeCopyableMyType()
+ * foo = makeScopedCopyableMyType()
  * rather than
  * foo = ScopedCopyableMyType()
  * to get proper behavior.
@@ -55,13 +55,13 @@ using namespace mem;
 %define SCOPED_COPYABLE(namespace, type)
 %template(ScopedCopyable##type) mem::ScopedCopyablePtr<namespace##::##type>;
 %{
-mem::ScopedCopyablePtr< namespace##::##type > makeCopyable##type()
+mem::ScopedCopyablePtr< namespace##::##type > makeScopedCopyable##type()
 {
     return mem::ScopedCopyablePtr< namespace##::##type >(new namespace##::##type ());
 } 
 %}
 
-mem::ScopedCopyablePtr< namespace##::##type > makeCopyable##type();
+mem::ScopedCopyablePtr< namespace##::##type > makeScopedCopyable##type();
 %enddef
 
 /*
@@ -70,11 +70,11 @@ mem::ScopedCopyablePtr< namespace##::##type > makeCopyable##type();
 %define SCOPED_CLONEABLE(namespace, type)
 %template(ScopedCloneable##type) mem::ScopedCloneablePtr<namespace##::##type>;
 %{
-mem::ScopedCloneablePtr< namespace##::##type > makeCloneable##type()
+mem::ScopedCloneablePtr< namespace##::##type > makeScopedCloneable##type()
 {
     return mem::ScopedCloneablePtr< namespace##::##type >(new namespace##::##type ());
 } 
 %}
 
-mem::ScopedCloneablePtr< namespace##::##type > makeCloneable##type();
+mem::ScopedCloneablePtr< namespace##::##type > makeScopedCloneable##type();
 %enddef

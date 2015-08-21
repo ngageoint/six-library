@@ -419,23 +419,23 @@ XMLElem ComplexXMLParser::convertTimelineToXML(
     createDateTime("CollectStart", timeline->collectStart, timelineXML);
     createDouble("CollectDuration", timeline->collectDuration, timelineXML);
 
-    if (timeline->interPulsePeriod)
+    if (timeline->interPulsePeriod.get())
     {
         XMLElem ippXML = newElement("IPP", timelineXML);
-        unsigned int setSize = timeline->interPulsePeriod->sets.size();
-        ippXML->attribute("size") = str::toString<int>(setSize);
+        size_t setSize = timeline->interPulsePeriod->sets.size();
+        ippXML->attribute("size") = str::toString<size_t>(setSize);
 
-        for (unsigned int i = 0; i < setSize; ++i)
+        for (size_t i = 0; i < setSize; ++i)
         {
-            TimelineSet* timelineSet = timeline->interPulsePeriod->sets[i];
+            const TimelineSet& timelineSet = timeline->interPulsePeriod->sets[i];
             XMLElem setXML = newElement("Set", ippXML);
             setXML->attribute("index") = str::toString<int>(i + 1);
 
-            createDouble("TStart", timelineSet->tStart, setXML);
-            createDouble("TEnd", timelineSet->tEnd, setXML);
-            createInt("IPPStart", timelineSet->interPulsePeriodStart, setXML);
-            createInt("IPPEnd", timelineSet->interPulsePeriodEnd, setXML);
-            common().createPoly1D("IPPPoly", timelineSet->interPulsePeriodPoly, setXML);
+            createDouble("TStart", timelineSet.tStart, setXML);
+            createDouble("TEnd", timelineSet.tEnd, setXML);
+            createInt("IPPStart", timelineSet.interPulsePeriodStart, setXML);
+            createInt("IPPEnd", timelineSet.interPulsePeriodEnd, setXML);
+            common().createPoly1D("IPPPoly", timelineSet.interPulsePeriodPoly, setXML);
         }
     }
 
@@ -452,13 +452,13 @@ XMLElem ComplexXMLParser::convertPositionToXML(
         common().createPolyXYZ("GRPPoly", position->grpPoly, positionXML);
     if (!Init::isUndefined<PolyXYZ>(position->txAPCPoly))
         common().createPolyXYZ("TxAPCPoly", position->txAPCPoly, positionXML);
-    if (position->rcvAPC && !position->rcvAPC->rcvAPCPolys.empty())
+    if (position->rcvAPC.get() && !position->rcvAPC->rcvAPCPolys.empty())
     {
-        unsigned int numPolys = position->rcvAPC->rcvAPCPolys.size();
+        size_t numPolys = position->rcvAPC->rcvAPCPolys.size();
         XMLElem rcvXML = newElement("RcvAPC", positionXML);
         setAttribute(rcvXML, "size", str::toString(numPolys));
 
-        for (unsigned int i = 0; i < numPolys; ++i)
+        for (size_t i = 0; i < numPolys; ++i)
         {
             PolyXYZ xyz = position->rcvAPC->rcvAPCPolys[i];
             XMLElem xyzXML = common().createPolyXYZ("RcvAPCPoly", xyz, rcvXML);
@@ -762,7 +762,7 @@ XMLElem ComplexXMLParser::convertPFAToXML(
     createDouble("Krg2", pfa->krg2, pfaXML);
     createDouble("Kaz1", pfa->kaz1, pfaXML);
     createDouble("Kaz2", pfa->kaz2, pfaXML);
-    if (pfa->slowTimeDeskew)
+    if (pfa->slowTimeDeskew.get())
     {
         XMLElem stdXML = newElement("STDeskew", pfaXML);
         require(createBooleanType("Applied", pfa->slowTimeDeskew->applied,
@@ -1241,7 +1241,7 @@ void ComplexXMLParser::parseTimelineFromXML(
     XMLElem ippXML = getOptional(timelineXML, "IPP");
     if (ippXML)
     {
-        timeline->interPulsePeriod = new InterPulsePeriod();
+        timeline->interPulsePeriod.reset(new InterPulsePeriod());
         //TODO make sure there is at least one
         std::vector < XMLElem > setsXML;
         ippXML->getElementsByTagName("Set", setsXML);
@@ -1249,20 +1249,25 @@ void ComplexXMLParser::parseTimelineFromXML(
                 != setsXML.end(); ++it)
         {
             // Use the first set that is already available.
-            TimelineSet* ts = new TimelineSet();
-            parseDouble(getFirstAndOnly(*it, "TStart"), ts->tStart);
-            parseDouble(getFirstAndOnly(*it, "TEnd"), ts->tEnd);
+            timeline->interPulsePeriod->sets.resize(
+                    timeline->interPulsePeriod->sets.size() + 1);
+            TimelineSet& ts(timeline->interPulsePeriod->sets.back());
+
+            parseDouble(getFirstAndOnly(*it, "TStart"), ts.tStart);
+            parseDouble(getFirstAndOnly(*it, "TEnd"), ts.tEnd);
             parseInt(getFirstAndOnly(*it, "IPPStart"),
-                     ts->interPulsePeriodStart);
-            parseInt(getFirstAndOnly(*it, "IPPEnd"), ts->interPulsePeriodEnd);
+                     ts.interPulsePeriodStart);
+            parseInt(getFirstAndOnly(*it, "IPPEnd"), ts.interPulsePeriodEnd);
             common().parsePoly1D(getFirstAndOnly(*it, "IPPPoly"),
-                        ts->interPulsePeriodPoly);
-            timeline->interPulsePeriod->sets.push_back(ts);
+                        ts.interPulsePeriodPoly);
         }
 
         // Required to have at least one timeline set.
-        if (timeline->interPulsePeriod->sets.size() == 0)
-            timeline->interPulsePeriod->sets.push_back(new TimelineSet());
+        // TODO: Does it really make sense to do this?
+        if (timeline->interPulsePeriod->sets.empty())
+        {
+            timeline->interPulsePeriod->sets.resize(1);
+        }
     }
 }
 
@@ -1291,7 +1296,7 @@ void ComplexXMLParser::parsePositionFromXML(
     if (tmpElem)
     {
         //optional
-        position->rcvAPC = new RcvAPC();
+        position->rcvAPC.reset(new RcvAPC());
 
         //TODO make sure there is at least one
         std::vector < XMLElem > polysXML;
@@ -1603,7 +1608,7 @@ void ComplexXMLParser::parsePFAFromXML(
     XMLElem deskewXML = getOptional(pfaXML, "STDeskew");
     if (deskewXML)
     {
-        pfa->slowTimeDeskew = new SlowTimeDeskew();
+        pfa->slowTimeDeskew.reset(new SlowTimeDeskew());
         parseBooleanType(getFirstAndOnly(deskewXML, "Applied"),
                          pfa->slowTimeDeskew->applied);
 
