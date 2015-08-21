@@ -2849,69 +2849,69 @@ ScopedCloneableGrid_swigregister(ScopedCloneableGrid)
 def makeScopedCloneableGrid():
     """makeScopedCloneableGrid() -> ScopedCloneableGrid"""
     return _six_sicd.makeScopedCloneableGrid()
-class ScopedCloneableTimeline(_object):
-    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::Timeline)> class"""
+class ScopedCopyableTimeline(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::Timeline)> class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableTimeline, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableTimeline, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableTimeline, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableTimeline, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCloneablePtr<(six::sicd::Timeline)> self, Timeline ptr=None) -> ScopedCloneableTimeline
-        __init__(mem::ScopedCloneablePtr<(six::sicd::Timeline)> self) -> ScopedCloneableTimeline
-        __init__(mem::ScopedCloneablePtr<(six::sicd::Timeline)> self, ScopedCloneableTimeline rhs) -> ScopedCloneableTimeline
+        __init__(mem::ScopedCopyablePtr<(six::sicd::Timeline)> self, Timeline ptr=None) -> ScopedCopyableTimeline
+        __init__(mem::ScopedCopyablePtr<(six::sicd::Timeline)> self) -> ScopedCopyableTimeline
+        __init__(mem::ScopedCopyablePtr<(six::sicd::Timeline)> self, ScopedCopyableTimeline rhs) -> ScopedCopyableTimeline
         """
-        this = _six_sicd.new_ScopedCloneableTimeline(*args)
+        this = _six_sicd.new_ScopedCopyableTimeline(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def get(self):
-        """get(ScopedCloneableTimeline self) -> Timeline"""
-        return _six_sicd.ScopedCloneableTimeline_get(self)
+        """get(ScopedCopyableTimeline self) -> Timeline"""
+        return _six_sicd.ScopedCopyableTimeline_get(self)
 
 
     def __ref__(self):
-        """__ref__(ScopedCloneableTimeline self) -> Timeline"""
-        return _six_sicd.ScopedCloneableTimeline___ref__(self)
+        """__ref__(ScopedCopyableTimeline self) -> Timeline"""
+        return _six_sicd.ScopedCopyableTimeline___ref__(self)
 
 
     def __deref__(self):
-        """__deref__(ScopedCloneableTimeline self) -> Timeline"""
-        return _six_sicd.ScopedCloneableTimeline___deref__(self)
+        """__deref__(ScopedCopyableTimeline self) -> Timeline"""
+        return _six_sicd.ScopedCopyableTimeline___deref__(self)
 
 
     def reset(self, ptr=None):
         """
-        reset(ScopedCloneableTimeline self, Timeline ptr=None)
-        reset(ScopedCloneableTimeline self)
+        reset(ScopedCopyableTimeline self, Timeline ptr=None)
+        reset(ScopedCopyableTimeline self)
         """
-        return _six_sicd.ScopedCloneableTimeline_reset(self, ptr)
+        return _six_sicd.ScopedCopyableTimeline_reset(self, ptr)
 
-    __swig_destroy__ = _six_sicd.delete_ScopedCloneableTimeline
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableTimeline
     __del__ = lambda self: None
-    __swig_setmethods__["collectStart"] = _six_sicd.ScopedCloneableTimeline_collectStart_set
-    __swig_getmethods__["collectStart"] = _six_sicd.ScopedCloneableTimeline_collectStart_get
+    __swig_setmethods__["collectStart"] = _six_sicd.ScopedCopyableTimeline_collectStart_set
+    __swig_getmethods__["collectStart"] = _six_sicd.ScopedCopyableTimeline_collectStart_get
     if _newclass:
-        collectStart = _swig_property(_six_sicd.ScopedCloneableTimeline_collectStart_get, _six_sicd.ScopedCloneableTimeline_collectStart_set)
-    __swig_setmethods__["collectDuration"] = _six_sicd.ScopedCloneableTimeline_collectDuration_set
-    __swig_getmethods__["collectDuration"] = _six_sicd.ScopedCloneableTimeline_collectDuration_get
+        collectStart = _swig_property(_six_sicd.ScopedCopyableTimeline_collectStart_get, _six_sicd.ScopedCopyableTimeline_collectStart_set)
+    __swig_setmethods__["collectDuration"] = _six_sicd.ScopedCopyableTimeline_collectDuration_set
+    __swig_getmethods__["collectDuration"] = _six_sicd.ScopedCopyableTimeline_collectDuration_get
     if _newclass:
-        collectDuration = _swig_property(_six_sicd.ScopedCloneableTimeline_collectDuration_get, _six_sicd.ScopedCloneableTimeline_collectDuration_set)
-    __swig_setmethods__["interPulsePeriod"] = _six_sicd.ScopedCloneableTimeline_interPulsePeriod_set
-    __swig_getmethods__["interPulsePeriod"] = _six_sicd.ScopedCloneableTimeline_interPulsePeriod_get
+        collectDuration = _swig_property(_six_sicd.ScopedCopyableTimeline_collectDuration_get, _six_sicd.ScopedCopyableTimeline_collectDuration_set)
+    __swig_setmethods__["interPulsePeriod"] = _six_sicd.ScopedCopyableTimeline_interPulsePeriod_set
+    __swig_getmethods__["interPulsePeriod"] = _six_sicd.ScopedCopyableTimeline_interPulsePeriod_get
     if _newclass:
-        interPulsePeriod = _swig_property(_six_sicd.ScopedCloneableTimeline_interPulsePeriod_get, _six_sicd.ScopedCloneableTimeline_interPulsePeriod_set)
-ScopedCloneableTimeline_swigregister = _six_sicd.ScopedCloneableTimeline_swigregister
-ScopedCloneableTimeline_swigregister(ScopedCloneableTimeline)
+        interPulsePeriod = _swig_property(_six_sicd.ScopedCopyableTimeline_interPulsePeriod_get, _six_sicd.ScopedCopyableTimeline_interPulsePeriod_set)
+ScopedCopyableTimeline_swigregister = _six_sicd.ScopedCopyableTimeline_swigregister
+ScopedCopyableTimeline_swigregister(ScopedCopyableTimeline)
 
 
-def makeScopedCloneableTimeline():
-    """makeScopedCloneableTimeline() -> ScopedCloneableTimeline"""
-    return _six_sicd.makeScopedCloneableTimeline()
+def makeScopedCopyableTimeline():
+    """makeScopedCopyableTimeline() -> ScopedCopyableTimeline"""
+    return _six_sicd.makeScopedCopyableTimeline()
 class ScopedCloneablePosition(_object):
     """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::Position)> class"""
     __swig_setmethods__ = {}
