@@ -23,7 +23,9 @@
 #
 
 # In general, if functionality in CPHD is borrowed from six.sicd,
-# refer to six.sicd's test script for verification
+# refer to six.sicd's test script for more verification
+
+# The numbers used here don't correspond to anything at all
 
 from pysix import cphd
 import pysix.six_base as six
@@ -37,53 +39,105 @@ import sys
 import multiprocessing
 
 if __name__ == '__main__':
-    m = cphd.Metadata()
+    metadata = cphd.Metadata()
 
-    d = cphd.Data()
-    d.sampleType.value = cphd.SampleType.RE32F_IM32F
+    # Data.h checks
+    data = cphd.Data()
+    data.sampleType.value = cphd.SampleType.RE32F_IM32F
+    data.arraySize.push_back(cphd.ArraySize(2,2))
 
-#   TODO
-#    d.arraySize
+    #
+    # Global.h checks
+    #
 
-    g = cphd.Global()
-    g.domainType.value = cphd.DomainType.TOA
-    g.phaseSGN.value   = cphd.PhaseSGN.MINUS_1
-    g.refFrequencyIndex = 1
-    g.collectionDuration = 0.5
+    glob = cphd.Global()
 
-    lla = scene.LatLonAlt()
-    lla.setAlt(1)
-    lla.setLat(45)
-    lla.setLon(23)
+    # simple stuff first
+    glob.domainType.value = cphd.DomainType.TOA
+    glob.phaseSGN.value   = cphd.PhaseSGN.MINUS_1
+    glob.refFrequencyIndex = 1
+    glob.collectionDuration = 0.5
+
+    # LatLonAltCorners for our image area
+
+    lla = scene.LatLonAlt(45,23,1)
 
     llac = six.LatLonAltCorners()
-    llac.lowerLeft = lla
+    llac.upperLeft = scene.LatLonAlt(11,22,1)
+    llac.upperRight = scene.LatLonAlt(22,33,2)
+    llac.lowerRight = scene.LatLonAlt(33,44,3)
+    llac.lowerLeft = scene.LatLonAlt(44,55,4)
+
+    # fill in our imageArea with some stuff
 
     imArea = cphd.ImageArea()
     imArea.acpCorners = llac
     imArea.plane = cphd.makeScopedCopyableAreaPlane()
-    
+   
+    # reference point
+
     refPt = six.ReferencePoint()
+    refPt.ecef[0] = 10
+    refPt.ecef[1] = 20
+    refPt.ecef[2] = 30
     refPt.rowCol.row = 3
     refPt.rowCol.col = 4
+    refPt.name = 'name'
     imArea.plane.referencePoint = refPt
 
+    # direction parameters
+
+    imArea.plane.xDirection.unitVector[0] = 1
+    imArea.plane.xDirection.unitVector[1] = 0
+    imArea.plane.xDirection.unitVector[2] = 0
+    imArea.plane.xDirection.spacing = 2
+    imArea.plane.xDirection.elements = 3
+    imArea.plane.xDirection.first = 4
+
+    imArea.plane.yDirection.unitVector[0] = 0
+    imArea.plane.yDirection.unitVector[1] = 1
+    imArea.plane.yDirection.unitVector[2] = 0 
+    imArea.plane.yDirection.spacing = 2
+    imArea.plane.yDirection.elements = 3
+    imArea.plane.yDirection.first = 4
+
+    # dwell time parameters
+
     dt = cphd.makeScopedCopyableDwellTimeParameters()
-    dt.codTimePoly = math_poly.Poly2D(2,2)
-    dt.codTimePoly[1,1] = 2
+    dt.codTimePoly = math_poly.Poly2D(1,1)
+    dt.codTimePoly[0,0] = 0
+    dt.codTimePoly[0,1] = 0
+    dt.codTimePoly[1,0] = 0
+    dt.codTimePoly[1,1] = 0
+
+    dt.dwellTimePoly = math_poly.Poly2D(1,1)
+    dt.dwellTimePoly[0,0] = 0
+    dt.dwellTimePoly[0,1] = 0
+    dt.dwellTimePoly[1,0] = 0
+    dt.dwellTimePoly[1,1] = 0
+
     imArea.plane.dwellTime = dt
 
-    g.imageArea = imArea
-    m._global = g # i guess 'global' is a keyword
+    glob.imageArea = imArea
 
-    s = cphd.SRP()
+    metadata._global = glob # i guess 'global' is a keyword
+
+    #
+    # Now for SRP.h
+    #
+
+    srp = cphd.SRP()
     v3 = math_linear.Vector3()
     v3[1] = 99
-    s.srpPT.push_back(v3)
+    srp.srpPT.push_back(v3)
     pv3 = math_poly.PolyVector3() # aka PolyXYZ
-    s.srpPVTPoly.push_back(pv3)
+    srp.srpPVTPoly.push_back(pv3)
 
-    m.srp = s
+    metadata.srp = srp
+
+    #
+    # Channel.h
+    #
 
     channel = cphd.Channel()
     cp = cphd.ChannelParameters()
@@ -92,19 +146,23 @@ if __name__ == '__main__':
     cp.fxCtrNom = 4
     channel.parameters.push_back(cp)
     
-    m.channel = channel
+    metadata.channel = channel
   
-    m.antenna = cphd.makeScopedCopyableCphdAntenna()
+    #
+    # Antenna.h
+    #
+
+    metadata.antenna = cphd.makeScopedCopyableCphdAntenna()
     ap = six_sicd.AntennaParameters()
     ap.electricalBoresight = six_sicd.makeScopedCopyableElectricalBoresight()
     ap.electricalBoresight.dcxPoly = math_poly.Poly1D(2)
     ap.electricalBoresight.dcxPoly[1] = 3
-    m.antenna.twoWay.push_back(ap)
+    metadata.antenna.twoWay.push_back(ap)
 
-    m.collectionInformation.collectorName = "test"
-    m.collectionInformation.coreName = "test"
+    metadata.collectionInformation.collectorName = "test"
+    metadata.collectionInformation.coreName = "test"
 
-    if m.isTOA():
+    if metadata.isTOA():
         pass
     else:
         print "Wrong domain type"
@@ -118,6 +176,6 @@ if __name__ == '__main__':
            True,
            True,
            True,
-           m.getDomainType()
+           metadata.getDomainType()
            ) 
 
