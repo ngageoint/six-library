@@ -127,11 +127,25 @@ if __name__ == '__main__':
     #
 
     srp = cphd.SRP()
+    srp.numSRPs = 1
+    srp.srpType.value = cphd.SRPType.PVTPOLY
     v3 = math_linear.Vector3()
+    v3[0] = 89
     v3[1] = 99
+    v3[2] = 109
     srp.srpPT.push_back(v3)
-    pv3 = math_poly.PolyVector3() # aka PolyXYZ
+    srp.srpPT.push_back(v3)
+
+    pv3 = math_poly.PolyVector3(1) # aka PolyXYZ
+    pv3[0][0] = 3
+    pv3[0][1] = 4
+    pv3[0][2] = 5
+    pv3[1][0] = 6
+    pv3[1][1] = 7
+    pv3[1][2] = 8
     srp.srpPVTPoly.push_back(pv3)
+
+    srp.srpPVVPoly.push_back(pv3)
 
     metadata.srp = srp
 
@@ -142,8 +156,13 @@ if __name__ == '__main__':
     channel = cphd.Channel()
     cp = cphd.ChannelParameters()
     cp.srpIndex = 23
+    cp.nomTOARateSF = 30
+    cp.bwSavedNom = 33
     cp.toaSavedNom = 2
     cp.fxCtrNom = 4
+    cp.txAntIndex = 7
+    cp.rcvAntIndex = 9
+    cp.twAntIndex = 13
     channel.parameters.push_back(cp)
     
     metadata.channel = channel
@@ -153,14 +172,71 @@ if __name__ == '__main__':
     #
 
     metadata.antenna = cphd.makeScopedCopyableCphdAntenna()
-    ap = six_sicd.AntennaParameters()
-    ap.electricalBoresight = six_sicd.makeScopedCopyableElectricalBoresight()
-    ap.electricalBoresight.dcxPoly = math_poly.Poly1D(2)
-    ap.electricalBoresight.dcxPoly[1] = 3
-    metadata.antenna.twoWay.push_back(ap)
+    metadata.antenna.numTxAnt = 0
+    metadata.antenna.numRcvAnt = 0
+    metadata.antenna.numTWAnt = 2
+    for i in range(2):
+        ap = six_sicd.AntennaParameters()
+        ap.electricalBoresight = six_sicd.makeScopedCopyableElectricalBoresight()
+        ap.electricalBoresight.dcxPoly = math_poly.Poly1D(1)
+        ap.electricalBoresight.dcxPoly[0] = 2
+        ap.electricalBoresight.dcxPoly[1] = 3
+        ap.electricalBoresight.dcyPoly = math_poly.Poly1D(1)
+        ap.electricalBoresight.dcyPoly[0] = 2
+        ap.electricalBoresight.dcyPoly[1] = i
+        ap.frequencyZero = 33
+        ap.xAxisPoly = math_poly.PolyVector3(1)
+        ap.xAxisPoly[0][0] = 3
+        ap.xAxisPoly[0][1] = 4
+        ap.xAxisPoly[0][2] = 5
+        ap.xAxisPoly[1][0] = 6
+        ap.xAxisPoly[1][1] = 7
+        ap.xAxisPoly[1][2] = 8        
+        ap.yAxisPoly = math_poly.PolyVector3(1)       
+        ap.yAxisPoly[0][0] = 3                        
+        ap.yAxisPoly[0][1] = 4                        
+        ap.yAxisPoly[0][2] = 5                        
+        ap.yAxisPoly[1][0] = 6                        
+        ap.yAxisPoly[1][1] = 7                        
+        ap.yAxisPoly[1][2] = 8                        
+        ap.halfPowerBeamwidths = six_sicd.makeScopedCopyableHalfPowerBeamwidths()
+        ap.halfPowerBeamwidths.dcx = 3
+        ap.halfPowerBeamwidths.dcy = i
+        ap.array = six_sicd.makeScopedCopyableGainAndPhasePolys()
+        ap.array.gainPoly = math_poly.Poly2D(1,1)
+        ap.array.gainPoly[0,0] = i
+        ap.array.gainPoly[0,1] = i
+        ap.array.gainPoly[1,0] = i
+        ap.array.gainPoly[1,1] = i 
+        ap.array.phasePoly = math_poly.Poly2D(1,1)
+        ap.array.phasePoly[0,0] = i
+        ap.array.phasePoly[0,1] = i
+        ap.array.phasePoly[1,0] = i
+        ap.array.phasePoly[1,1] = i
+
+        ap.element = ap.array
+
+        ap.electricalBoresightFrequencyShift.value = six.BooleanType.IS_TRUE
+        ap.mainlobeFrequencyDilation.value = six.BooleanType.IS_TRUE
+        
+        metadata.antenna.twoWay.push_back(ap)
+
+    #
+    # Collection information 
+    #
 
     metadata.collectionInformation.collectorName = "test"
     metadata.collectionInformation.coreName = "test"
+    metadata.collectionInformation.illuminatorName = "a"
+    metadata.collectionInformation.collectType.value = six.CollectType.MONOSTATIC
+    metadata.collectionInformation.radarMode.value = six.RadarModeType.STRIPMAP
+    metadata.collectionInformation.radarModeID = "something"
+    metadata.collectionInformation.classification.level = "UNCLASSIFIED"
+
+    param = six.Parameter()
+    param.setName('Number of things seen')
+    param.setValue(2)
+    metadata.collectionInformation.parameters.push_back(param)
 
     if metadata.isTOA():
         pass
